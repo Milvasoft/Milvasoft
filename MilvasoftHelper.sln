@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30621.155
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MilvasoftHelper", "MilvasoftHelper\MilvasoftHelper.csproj", "{95120EBC-5F8E-4459-B117-60BD1654A78F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MilvasoftHelper.MapperImplementation", "MapperImplementation\MilvasoftHelper.MapperImplementation.csproj", "{4DF919DE-5473-4F21-838B-6616E1C9816A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,10 +11,10 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{95120EBC-5F8E-4459-B117-60BD1654A78F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{95120EBC-5F8E-4459-B117-60BD1654A78F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{95120EBC-5F8E-4459-B117-60BD1654A78F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{95120EBC-5F8E-4459-B117-60BD1654A78F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4DF919DE-5473-4F21-838B-6616E1C9816A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4DF919DE-5473-4F21-838B-6616E1C9816A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4DF919DE-5473-4F21-838B-6616E1C9816A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4DF919DE-5473-4F21-838B-6616E1C9816A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
