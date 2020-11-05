@@ -192,7 +192,6 @@ namespace Milvasoft.FormFileOperations
             return file;
         }
 
-
         /// <summary>
         /// <para><b>EN: </b>Removes the folder the image is in.</para> 
         /// <para><b>TR: </b>Görüntünün bulunduğu klasörü kaldırır.</para> 
