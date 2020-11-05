@@ -1,7 +1,7 @@
 ﻿using Mapster;
-using MilvasoftHelper.MapperImplementation.Implementation;
+using Milvasoft.MapperImplementation.Implementation;
 
-namespace MilvasoftHelper.MapperImplementation.MilvasoftMapster
+namespace Milvasoft.MapperImplementation.MilvasoftMapster
 {
     /// <summary>
     /// <para><b>EN: </b>Class written instead of manual mapping. It is written to map DTO class object to entity class.</para>

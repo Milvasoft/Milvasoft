@@ -1,0 +1,38 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Http" Version="2.2.2" />
+    <PackageReference Include="Microsoft.AspNetCore.Http.Features" Version="3.1.9" />
+    <PackageReference Include="System.Collections" Version="4.3.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Icon\Folders-Videos-icon.png">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
+  </ItemGroup>
+
+	<PropertyGroup>
+
+		<PackageId>Milvasoft.FormFileOperations</PackageId>
+		<RepositoryUrl>https://github.com/Milvasoft/FileOperationsLibrary</RepositoryUrl>
+		<RepositoryType>git</RepositoryType>
+		<PackageProjectUrl>https://github.com/Milvasoft/FileOperationsLibrary</PackageProjectUrl>
+		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+		<Authors>Milvasoft Corporation</Authors>
+		<Product>Milvasoft.FormFileOperations</Product>
+		<Description>File operations for IFormFile files.</Description>
+		<PackageTags>file,operations,IFormFile,savetopath</PackageTags>
+		<Copyright>Milvasoft Yazılım Bilişim Araştırma Geliştirme Danışmanlık Sanayi ve Ticaret Ltd.Şti.</Copyright>
+		<Version>1.0.0</Version>		
+		<PackageIcon>Folders-Videos-icon.png</PackageIcon>
+
+
+	</PropertyGroup>
+
+</Project>

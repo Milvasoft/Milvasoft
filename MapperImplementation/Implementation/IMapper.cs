@@ -1,4 +1,4 @@
-﻿namespace MilvasoftHelper.MapperImplementation.Implementation
+﻿namespace Milvasoft.MapperImplementation.Implementation
 {
     /// <summary>
     /// <para><b>EN: </b>Responsible interface for mapping from the source object to the object we want to access</para>

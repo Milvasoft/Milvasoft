@@ -1,7 +1,7 @@
 ﻿using Mapster;
-using MilvasoftHelper.MapperImplementation.Implementation;
+using Milvasoft.MapperImplementation.Implementation;
 
-namespace MilvasoftHelper.MapperImplementation.MilvasoftMapster
+namespace Milvasoft.MapperImplementation.MilvasoftMapster
 {
     //MTL bu sınıf hiç bir yerde kullanılmıyorki neden yazılmış anlamış değilim
 
