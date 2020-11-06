@@ -1,11 +1,15 @@
-name: .NET Core
+name: FormFileOperations
 
 on:
   push:
     branches: [ master ]
+    paths: 
+      - 'Milvasoft.FormFileOperations/**'
+
   pull_request:
     branches: [ master ]
-
+    paths: 
+      - 'Milvasoft.FormFileOperations/**'
 jobs:
   build:
 
