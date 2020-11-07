@@ -17,7 +17,7 @@ namespace Milvasoft.Helpers
         /// </summary>
         /// <param name="contentList"></param>
         /// <returns></returns>
-        public static MultipleObjectResponse<T> GetArrayResponseForGetAll<T>(this List<T> contentList, string successMessage, string errorMessage = null)
+        public static MultipleObjectResponse<T> GetArrayResponseForGetAll<T>(this List<T> contentList, string successMessage, string errorMessage)
         {
             MultipleObjectResponse<T> response = new MultipleObjectResponse<T>();
             response.StatusCode = MilvasoftStatusCodes.Status200OK;
@@ -38,7 +38,7 @@ namespace Milvasoft.Helpers
         /// </summary>
         /// <param name="content"></param>
         /// <returns></returns>
-        public static SingleObjectResponse<T> GetSingleObjectResponseForGetById<T>(this T content, string successMessage, string errorMessage = null)
+        public static SingleObjectResponse<T> GetSingleObjectResponseForGetById<T>(this T content, string successMessage, string errorMessage)
         {
             SingleObjectResponse<T> response = new SingleObjectResponse<T> { StatusCode = MilvasoftStatusCodes.Status200OK, Success = true };
             response.Message = successMessage;
@@ -56,7 +56,7 @@ namespace Milvasoft.Helpers
         /// </summary>
         /// <param name="paginationDTO"></param>
         /// <returns></returns>
-        public static IActionResult ReturnReportResponse<T>(this PaginationDTO<T> paginationDTO, string successMessage, string errorMessage = null)
+        public static IActionResult ReturnReportResponse<T>(this PaginationDTO<T> paginationDTO, string successMessage, string errorMessage)
         {
             SingleObjectResponse<PaginationDTO<T>> response = new SingleObjectResponse<PaginationDTO<T>> { StatusCode = MilvasoftStatusCodes.Status200OK };
             response.Message = successMessage;
@@ -74,7 +74,7 @@ namespace Milvasoft.Helpers
         /// </summary>
         /// <param name="paginationDTO"></param>
         /// <returns></returns>
-        public static IActionResult ReturnInstantReportResponse<T>(this PaginationDTO<T> paginationDTO, string successMessage, string errorMessage = null)
+        public static IActionResult ReturnInstantReportResponse<T>(this PaginationDTO<T> paginationDTO, string successMessage, string errorMessage)
         {
             SingleObjectResponse<PaginationDTO<T>> response = new SingleObjectResponse<PaginationDTO<T>> { StatusCode = MilvasoftStatusCodes.Status200OK };
             response.Message = successMessage;
@@ -93,7 +93,10 @@ namespace Milvasoft.Helpers
         /// <param name="asyncTask"></param>
         /// <param name="idList"></param>
         /// <returns></returns>
-        public static async Task<MultipleObjectResponse<T>> GetArrayResponseForDeleteAsync<T, TKey>(this ConfiguredTaskAwaitable asyncTask, IEnumerable<TKey> idList, string successMessage, string errorMessage = null) where TKey : struct
+        public static async Task<MultipleObjectResponse<T>> GetArrayResponseForDeleteAsync<T, TKey>(this ConfiguredTaskAwaitable asyncTask, 
+                                                                                                        IEnumerable<TKey> idList, 
+                                                                                                            string successMessage,
+                                                                                                                string errorMessage) where TKey : struct
         {
             MultipleObjectResponse<T> response = new MultipleObjectResponse<T>();
             if (idList.IsNullOrEmpty())

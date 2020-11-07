@@ -3,7 +3,7 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 
-namespace Opsiyon.API.Extensions
+namespace Milvasoft.Helpers
 {
     public static class NetworkUtil
     {

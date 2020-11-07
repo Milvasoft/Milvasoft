@@ -2,7 +2,7 @@
 
 namespace Milvasoft.Helpers
 {
-    public static class General
+    public static class CommonHelper
     {
         /// <summary>
         /// Checks if there is a property named <paramref name="propertyName"/> in the properties of <b>typeof(<typeparamref name="T"/>)</b>. 
