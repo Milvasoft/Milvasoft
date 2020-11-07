@@ -812,7 +812,7 @@
             <para> Date added to database for dto.</para>
             </summary>
         </member>
-        <member name="P:Milvasoft.Helpers.Models.BaseDTO`1.UpdatedDate">
+        <member name="P:Milvasoft.Helpers.Models.BaseDTO`1.LastUpdatedDate">
             <summary> 
             <para> Update date in database for dto.</para>
             </summary>
@@ -1130,62 +1130,123 @@
             <param name="baseResponse"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.Response.GetArrayResponseForGetAll``1(System.Collections.Generic.List{``0},System.String,System.String)">
+        <member name="T:Milvasoft.Helpers.Response">
             <summary>
-            <para> Controller configuration. </para>
+            <para>Helper class to generate the same type of response.</para>
+            <para>All methods return <see cref="T:Milvasoft.Helpers.Models.Response.BaseResponse"/> type in ActionResult. Base response can be <see cref="T:Milvasoft.Helpers.Models.Response.SingleObjectResponse`1" /> or <see cref="T:Milvasoft.Helpers.Models.Response.MultipleObjectResponse`1"/></para>
+            <para>All methods return HTTP status code 200 OK.</para>
             </summary>
-            <param name="contentList"></param>
-            <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.Response.GetSingleObjectResponseForGetById``1(``0,System.String,System.String)">
+        <member name="F:Milvasoft.Helpers.Response._defaultErrorMessage">
             <summary>
-            <para> Controller configuration. </para>
+            Default error message : "An error occured while processing"
             </summary>
+        </member>
+        <member name="M:Milvasoft.Helpers.Response.ReturnArrayResponseForGetAll``1(System.Collections.Generic.List{``0},System.String,System.String)">
+            <summary>
+            <para> Return <see cref="T:Milvasoft.Helpers.Models.Response.MultipleObjectResponse`1"/> in <see cref="T:Microsoft.AspNetCore.Mvc.ActionResult"/>. </para>
+            <para> If <paramref name="contentList"/> isn't null or empty, sets the <see cref="T:Milvasoft.Helpers.Models.Response.MultipleObjectResponse`1"/>.Message to <paramref name="successMessage"/>. </para>
+            <para> Otherwise if <paramref name="errorMessage"/> is null sets the <see cref="T:Milvasoft.Helpers.Models.Response.MultipleObjectResponse`1"/>.Message to <b><see cref="F:Milvasoft.Helpers.Response._defaultErrorMessage"/></b>. </para>
+            <para> Otherwise sets the <see cref="T:Milvasoft.Helpers.Models.Response.MultipleObjectResponse`1"/>.Message to <paramref name="errorMessage"/>. </para>
+            <para> Also in this conditions sets the <see cref="T:Milvasoft.Helpers.Models.Response.MultipleObjectResponse`1"/>.StatusCode to <see cref="F:Milvasoft.Helpers.MilvasoftStatusCodes.Status204NoContent"/>
+                    and <see cref="T:Milvasoft.Helpers.Models.Response.MultipleObjectResponse`1"/>.Success to true. Reason to be considered the <see cref="T:Milvasoft.Helpers.Models.Response.MultipleObjectResponse`1"/>.Success true is request was successful.  </para>
+            </summary>
+            
+            <param name="contentList"></param>
+            <param name="successMessage"></param>
+            <param name="errorMessage"></param>
+            <returns> <see cref="T:Milvasoft.Helpers.Models.Response.MultipleObjectResponse`1"/> in 200 OK <see cref="T:Microsoft.AspNetCore.Mvc.ActionResult"/> </returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.Response.ReturnSingleObjectResponseForGetById``1(``0,System.String,System.String)">
+            <summary>
+            <para> Return <see cref="T:Milvasoft.Helpers.Models.Response.SingleObjectResponse`1"/> in <see cref="T:Microsoft.AspNetCore.Mvc.ActionResult"/>. </para>
+            <para> If <paramref name="content"/> isn't null, sets the <see cref="T:Milvasoft.Helpers.Models.Response.SingleObjectResponse`1"/>.Message to <paramref name="successMessage"/>. </para>
+            <para> Otherwise if <paramref name="errorMessage"/> is null sets the <see cref="T:Milvasoft.Helpers.Models.Response.SingleObjectResponse`1"/>.Message to <b><see cref="F:Milvasoft.Helpers.Response._defaultErrorMessage"/></b>. </para>
+            <para> Otherwise sets the <see cref="T:Milvasoft.Helpers.Models.Response.SingleObjectResponse`1"/>.Message to <paramref name="errorMessage"/>. </para>
+            <para> Also in this conditions sets the <see cref="T:Milvasoft.Helpers.Models.Response.SingleObjectResponse`1"/>.StatusCode to <see cref="F:Milvasoft.Helpers.MilvasoftStatusCodes.Status204NoContent"/>
+                    and <see cref="T:Milvasoft.Helpers.Models.Response.SingleObjectResponse`1"/>.Success to true. Reason to be considered the <see cref="T:Milvasoft.Helpers.Models.Response.SingleObjectResponse`1"/>.Success true is request was successful.  </para>
+            </summary>
+            
             <param name="content"></param>
-            <returns></returns>
+            <param name="successMessage"></param>
+            <param name="errorMessage"></param>
+            <returns> <see cref="T:Milvasoft.Helpers.Models.Response.SingleObjectResponse`1"/> in 200 OK <see cref="T:Microsoft.AspNetCore.Mvc.ActionResult"/> </returns>
         </member>
         <member name="M:Milvasoft.Helpers.Response.ReturnReportResponse``1(Milvasoft.Helpers.Models.PaginationDTO{``0},System.String,System.String)">
             <summary>
-            <para> Controller configuration. </para>
+            <para> Return <paramref name="paginationDTO"/> in <see cref="T:Milvasoft.Helpers.Models.Response.SingleObjectResponse`1"/>. </para>
+            <para> If <paramref name="paginationDTO"/>.DTOList isn't null or empty, sets the <see cref="T:Milvasoft.Helpers.Models.Response.SingleObjectResponse`1"/>.Message to <paramref name="successMessage"/>. </para>
+            <para> Otherwise if <paramref name="errorMessage"/> is null sets the <see cref="T:Milvasoft.Helpers.Models.Response.SingleObjectResponse`1"/>.Message to <b><see cref="F:Milvasoft.Helpers.Response._defaultErrorMessage"/></b>. </para>
+            <para> Otherwise sets the <see cref="T:Milvasoft.Helpers.Models.Response.SingleObjectResponse`1"/>.Message to <paramref name="errorMessage"/>. </para>
+            <para> Also in this conditions sets the <see cref="T:Milvasoft.Helpers.Models.Response.SingleObjectResponse`1"/>.StatusCode to <see cref="F:Milvasoft.Helpers.MilvasoftStatusCodes.Status204NoContent"/>
+                    and <see cref="T:Milvasoft.Helpers.Models.Response.SingleObjectResponse`1"/>.Success to true. Reason to be considered the <see cref="T:Milvasoft.Helpers.Models.Response.SingleObjectResponse`1"/>.Success true is request was successful.  </para>
             </summary>
+            
             <param name="paginationDTO"></param>
-            <returns></returns>
+            <param name="successMessage"></param>
+            <param name="errorMessage"></param>
+            <returns>  <see cref="T:Milvasoft.Helpers.Models.Response.SingleObjectResponse`1"/> in 200 OK <see cref="T:Microsoft.AspNetCore.Mvc.ActionResult"/> </returns>
         </member>
         <member name="M:Milvasoft.Helpers.Response.ReturnInstantReportResponse``1(Milvasoft.Helpers.Models.PaginationDTO{``0},System.String,System.String)">
             <summary>
-            <para> Controller configuration </para>
+            <para> Return <paramref name="paginationDTO"/> in <see cref="T:Milvasoft.Helpers.Models.Response.SingleObjectResponse`1"/>. </para>
+            <para> If <paramref name="paginationDTO"/>.DTOList isn't null or empty, sets the <see cref="T:Milvasoft.Helpers.Models.Response.SingleObjectResponse`1"/>.Message to <paramref name="successMessage"/>. </para>
+            <para> Otherwise if <paramref name="errorMessage"/> is null sets the <see cref="T:Milvasoft.Helpers.Models.Response.SingleObjectResponse`1"/>.Message to <b><see cref="F:Milvasoft.Helpers.Response._defaultErrorMessage"/></b>. </para>
+            <para> Otherwise sets the <see cref="T:Milvasoft.Helpers.Models.Response.SingleObjectResponse`1"/>.Message to <paramref name="errorMessage"/>. </para>
+            <para> Also in this conditions sets the <see cref="T:Milvasoft.Helpers.Models.Response.SingleObjectResponse`1"/>.StatusCode to <see cref="F:Milvasoft.Helpers.MilvasoftStatusCodes.Status204NoContent"/>
+                    and <see cref="T:Milvasoft.Helpers.Models.Response.SingleObjectResponse`1"/>.Success to true. Reason to be considered the <see cref="T:Milvasoft.Helpers.Models.Response.SingleObjectResponse`1"/>.Success true is request was successful.  </para>
             </summary>
+            
             <param name="paginationDTO"></param>
-            <returns></returns>
+            <param name="successMessage"></param>
+            <param name="errorMessage"></param>
+            <returns> <see cref="T:Milvasoft.Helpers.Models.Response.SingleObjectResponse`1"/> in 200 OK <see cref="T:Microsoft.AspNetCore.Mvc.ActionResult"/> </returns>
         </member>
-        <member name="M:Milvasoft.Helpers.Response.GetArrayResponseForDeleteAsync``2(System.Runtime.CompilerServices.ConfiguredTaskAwaitable,System.Collections.Generic.IEnumerable{``1},System.String,System.String)">
+        <member name="M:Milvasoft.Helpers.Response.ReturnArrayResponseForDeleteAsync``2(System.Runtime.CompilerServices.ConfiguredTaskAwaitable,System.Collections.Generic.IEnumerable{``1},System.String,System.String)">
             <summary>
-            <para> Controller configuration. </para>
+            <para> Run the <paramref name="asyncTask"/> then return <see cref="T:Milvasoft.Helpers.Models.Response.MultipleObjectResponse`1"/>. </para>
+            <para> If <paramref name="asyncTask"/> is success sets the <paramref name="successMessage"/> to <see cref="T:Milvasoft.Helpers.Models.Response.MultipleObjectResponse`1"/>.Message.
+                   Otherwise you should throw exception and cut the request pipeline in <paramref name="asyncTask"/>. </para>
             </summary>
+            
             <param name="asyncTask"></param>
             <param name="idList"></param>
-            <returns></returns>
+            <param name="successMessage"></param>
+            <param name="errorMessage"></param>
+            <returns>  <see cref="T:Milvasoft.Helpers.Models.Response.MultipleObjectResponse`1"/> in 200 OK <see cref="T:Microsoft.AspNetCore.Mvc.ActionResult"/> </returns>
         </member>
-        <member name="M:Milvasoft.Helpers.Response.GetSingleResponseForDeleteAsync``1(System.Runtime.CompilerServices.ConfiguredTaskAwaitable,System.String)">
+        <member name="M:Milvasoft.Helpers.Response.ReturnSingleResponseForDeleteAsync``1(System.Runtime.CompilerServices.ConfiguredTaskAwaitable,System.String)">
             <summary>
-            <para> Controller configuration. </para>
+            <para> Run the <paramref name="asyncTask"/> then return <see cref="T:Milvasoft.Helpers.Models.Response.SingleObjectResponse`1"/>. </para>
+            <para> If <paramref name="asyncTask"/> is success sets the <paramref name="successMessage"/> to <see cref="T:Milvasoft.Helpers.Models.Response.SingleObjectResponse`1"/>.Message.
+                   Otherwise you should throw exception and cut the request pipeline in <paramref name="asyncTask"/>. </para>
             </summary>
+            
             <param name="asyncTask"></param>
-            <returns></returns>
+            <param name="successMessage"></param>
+            <returns>  <see cref="T:Milvasoft.Helpers.Models.Response.SingleObjectResponse`1"/> in 200 OK <see cref="T:Microsoft.AspNetCore.Mvc.ActionResult"/> </returns>
         </member>
-        <member name="M:Milvasoft.Helpers.Response.GetSingleObjectResponseForAddOrUpdateAsync``1(System.Runtime.CompilerServices.ConfiguredTaskAwaitable,System.String)">
+        <member name="M:Milvasoft.Helpers.Response.ReturnSingleObjectResponseForAddOrUpdateAsync``1(System.Runtime.CompilerServices.ConfiguredTaskAwaitable,System.String)">
             <summary>
-            <para> Controller configuration. </para>
+            <para> Run the <paramref name="asyncTask"/> then return <see cref="T:Milvasoft.Helpers.Models.Response.SingleObjectResponse`1"/>. </para>
+            <para> If <paramref name="asyncTask"/> is success sets the <paramref name="successMessage"/> to <see cref="T:Milvasoft.Helpers.Models.Response.SingleObjectResponse`1"/>.Message.
+                   Otherwise you should throw exception and cut the request pipeline in <paramref name="asyncTask"/>. </para>
             </summary>
+            
             <param name="asyncTask"></param>
-            <returns></returns>
+            <param name="successMessage"></param>
+            <returns> <see cref="T:Milvasoft.Helpers.Models.Response.SingleObjectResponse`1"/> in 200 OK <see cref="T:Microsoft.AspNetCore.Mvc.ActionResult"/> </returns>
         </member>
-        <member name="M:Milvasoft.Helpers.Response.GetSingleObjectResponseForSpecifedProcessAsync``1(System.Runtime.CompilerServices.ConfiguredTaskAwaitable,System.String)">
+        <member name="M:Milvasoft.Helpers.Response.ReturnSingleObjectResponseForSpecifedProcessAsync``1(System.Runtime.CompilerServices.ConfiguredTaskAwaitable,System.String)">
             <summary>
-            <para> Controller configuration. </para>
+            <para> Run the <paramref name="asyncTask"/> then return <see cref="T:Milvasoft.Helpers.Models.Response.SingleObjectResponse`1"/>. </para>
+            <para> If <paramref name="asyncTask"/> is success sets the <paramref name="successMessage"/> to <see cref="T:Milvasoft.Helpers.Models.Response.SingleObjectResponse`1"/>.Message.
+                   Otherwise you should throw exception and cut the request pipeline in <paramref name="asyncTask"/>. </para>
             </summary>
+            
             <param name="asyncTask"></param>
-            <returns></returns>
+            <param name="successMessage"></param>
+            <returns>  <see cref="T:Milvasoft.Helpers.Models.Response.SingleObjectResponse`1"/> in 200 OK <see cref="T:Microsoft.AspNetCore.Mvc.ActionResult"/> </returns>
         </member>
     </members>
 </doc>

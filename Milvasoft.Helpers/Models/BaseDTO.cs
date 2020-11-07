@@ -20,7 +20,7 @@ namespace Milvasoft.Helpers.Models
         /// <summary> 
         /// <para> Update date in database for dto.</para>
         /// </summary>
-        public DateTime? UpdatedDate { get; set; }
+        public DateTime? LastUpdatedDate { get; set; }
 
     }
 }
