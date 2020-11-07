@@ -145,8 +145,11 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
         /// <param name="tokenName"> Token Type </param>
         /// <param name="cachedTokenDictionary"> Dictionary params : Key = userName of <typeparamref name="TUser"/>. Value = JWT security Token as string. </param>
         /// <returns></returns>
-        public async Task RemoveExpiredTokensAsync<TUser, TKey>(UserManager<TUser> userManager, string loginProvider, string tokenName, Dictionary<string, string> cachedTokenDictionary = null) where TUser : IdentityUser<TKey>
-                                                                                                                                       where TKey : IEquatable<TKey>
+        public async Task RemoveExpiredTokensAsync<TUser, TKey>(UserManager<TUser> userManager,
+                                                                string loginProvider,
+                                                                string tokenName,
+                                                                Dictionary<string, string> cachedTokenDictionary = null) where TUser : IdentityUser<TKey>
+                                                                                                                         where TKey : IEquatable<TKey>
         {
             JwtSecurityTokenHandler tokenHandler = new JwtSecurityTokenHandler();
 
@@ -155,7 +158,7 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
             if (!PropertyExists<TContext>(userTokensString))
                 throw new ArgumentException($"Type of {typeof(TContext)}'s properties doesn't contain '{userTokensString}'.");
 
-            var userTokens = (List<IdentityUserToken<TKey>>)_dbContext.GetType().GetProperty(userTokensString).GetValue(_dbContext, null);
+            var userTokens = (DbSet<IdentityUserToken<TKey>>)_dbContext.GetType().GetProperty(userTokensString).GetValue(_dbContext, null);
 
             foreach (var userToken in userTokens)
             {
