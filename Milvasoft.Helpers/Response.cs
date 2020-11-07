@@ -33,7 +33,7 @@ namespace Milvasoft.Helpers
         /// <param name="successMessage"></param>
         /// <param name="errorMessage"></param>
         /// <returns> <see cref="MultipleObjectResponse{T}"/> in 200 OK <see cref="ActionResult"/> </returns>
-        public static ActionResult<MultipleObjectResponse<T>> ReturnArrayResponseForGetAll<T>(this List<T> contentList, string successMessage, string errorMessage = null)
+        public static IActionResult ReturnArrayResponseForGetAll<T>(this List<T> contentList, string successMessage, string errorMessage = null)
         {
             MultipleObjectResponse<T> response = new MultipleObjectResponse<T>();
             response.StatusCode = MilvasoftStatusCodes.Status200OK;
@@ -62,7 +62,7 @@ namespace Milvasoft.Helpers
         /// <param name="successMessage"></param>
         /// <param name="errorMessage"></param>
         /// <returns> <see cref="SingleObjectResponse{T}"/> in 200 OK <see cref="ActionResult"/> </returns>
-        public static ActionResult<SingleObjectResponse<T>> ReturnSingleObjectResponseForGetById<T>(this T content, string successMessage, string errorMessage = null)
+        public static IActionResult ReturnSingleObjectResponseForGetById<T>(this T content, string successMessage, string errorMessage = null)
         {
             SingleObjectResponse<T> response = new SingleObjectResponse<T> { StatusCode = MilvasoftStatusCodes.Status200OK, Success = true };
             response.Message = successMessage;
@@ -88,7 +88,7 @@ namespace Milvasoft.Helpers
         /// <param name="successMessage"></param>
         /// <param name="errorMessage"></param>
         /// <returns>  <see cref="SingleObjectResponse{PaginationDTO}"/> in 200 OK <see cref="ActionResult"/> </returns>
-        public static ActionResult ReturnReportResponse<T>(this PaginationDTO<T> paginationDTO, string successMessage, string errorMessage = null)
+        public static IActionResult ReturnReportResponse<T>(this PaginationDTO<T> paginationDTO, string successMessage, string errorMessage = null)
         {
             SingleObjectResponse<PaginationDTO<T>> response = new SingleObjectResponse<PaginationDTO<T>> { StatusCode = MilvasoftStatusCodes.Status200OK };
             response.Message = successMessage;
@@ -114,7 +114,7 @@ namespace Milvasoft.Helpers
         /// <param name="successMessage"></param>
         /// <param name="errorMessage"></param>
         /// <returns> <see cref="SingleObjectResponse{PaginationDTO}"/> in 200 OK <see cref="ActionResult"/> </returns>
-        public static ActionResult ReturnInstantReportResponse<T>(this PaginationDTO<T> paginationDTO, string successMessage, string errorMessage = null)
+        public static IActionResult ReturnInstantReportResponse<T>(this PaginationDTO<T> paginationDTO, string successMessage, string errorMessage = null)
         {
             SingleObjectResponse<PaginationDTO<T>> response = new SingleObjectResponse<PaginationDTO<T>> { StatusCode = MilvasoftStatusCodes.Status200OK };
 
@@ -140,7 +140,7 @@ namespace Milvasoft.Helpers
         /// <param name="successMessage"></param>
         /// <param name="errorMessage"></param>
         /// <returns>  <see cref="MultipleObjectResponse{T}"/> in 200 OK <see cref="ActionResult"/> </returns>
-        public static async Task<ActionResult<MultipleObjectResponse<T>>> ReturnArrayResponseForDeleteAsync<T, TKey>(this ConfiguredTaskAwaitable asyncTask,
+        public static async Task<IActionResult> ReturnArrayResponseForDeleteAsync<T, TKey>(this ConfiguredTaskAwaitable asyncTask,
                                                                                                                      IEnumerable<TKey> idList,
                                                                                                                      string successMessage,
                                                                                                                      string errorMessage = null) where TKey : struct
@@ -171,7 +171,7 @@ namespace Milvasoft.Helpers
         /// <param name="asyncTask"></param>
         /// <param name="successMessage"></param>
         /// <returns>  <see cref="SingleObjectResponse{T}"/> in 200 OK <see cref="ActionResult"/> </returns>
-        public static async Task<ActionResult<SingleObjectResponse<T>>> ReturnSingleResponseForDeleteAsync<T>(this ConfiguredTaskAwaitable asyncTask, string successMessage)
+        public static async Task<IActionResult> ReturnSingleResponseForDeleteAsync<T>(this ConfiguredTaskAwaitable asyncTask, string successMessage)
         {
             SingleObjectResponse<T> response = new SingleObjectResponse<T>();
             {
@@ -194,7 +194,7 @@ namespace Milvasoft.Helpers
         /// <param name="asyncTask"></param>
         /// <param name="successMessage"></param>
         /// <returns> <see cref="SingleObjectResponse{T}"/> in 200 OK <see cref="ActionResult"/> </returns>
-        public static async Task<ActionResult<SingleObjectResponse<T>>> ReturnSingleObjectResponseForAddOrUpdateAsync<T>(this ConfiguredTaskAwaitable asyncTask, string successMessage)
+        public static async Task<IActionResult> ReturnSingleObjectResponseForAddOrUpdateAsync<T>(this ConfiguredTaskAwaitable asyncTask, string successMessage)
         {
             SingleObjectResponse<T> response = new SingleObjectResponse<T>();
 
@@ -216,7 +216,7 @@ namespace Milvasoft.Helpers
         /// <param name="asyncTask"></param>
         /// <param name="successMessage"></param>
         /// <returns>  <see cref="SingleObjectResponse{T}"/> in 200 OK <see cref="ActionResult"/> </returns>
-        public static async Task<ActionResult<SingleObjectResponse<T>>> ReturnSingleObjectResponseForSpecifedProcessAsync<T>(this ConfiguredTaskAwaitable asyncTask, string successMessage)
+        public static async Task<IActionResult> ReturnSingleObjectResponseForSpecifedProcessAsync<T>(this ConfiguredTaskAwaitable asyncTask, string successMessage)
         {
             SingleObjectResponse<T> response = new SingleObjectResponse<T>();
 
