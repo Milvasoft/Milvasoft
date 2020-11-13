@@ -86,38 +86,19 @@ namespace Milvasoft.Helpers
         /// <summary>
         /// Sends request by <paramref name="httpRequestMessage"/>.
         /// </summary>
-        /// <typeparam name="T"></typeparam>
         /// <param name="httpRequestMessage"></param>
         /// <param name="httpClient"></param>
-        /// <returns> ObjectResponse </returns>
-        public static async Task<TReturn> SendRequestDeserializeSingle<T,TReturn>(this HttpClient httpClient, HttpRequestMessage httpRequestMessage)
+        /// <typeparam name="TReturn"></typeparam>
+        /// <returns> <typeparamref name="TReturn"/> </returns>
+        public static async Task<TReturn> SendRequestDeserialize<TReturn>(this HttpClient httpClient, HttpRequestMessage httpRequestMessage)
         {
             var response = await httpClient.SendAsync(httpRequestMessage).ConfigureAwait(false);
 
             var contentString = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
 
-            var responseObject = JsonConvert.DeserializeObject<TReturn>(contentString);
-
-            return responseObject;
+            return JsonConvert.DeserializeObject<TReturn>(contentString);
         }
 
-        /// <summary>
-        /// Sends request by <paramref name="httpRequestMessage"/>.
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="httpRequestMessage"></param>
-        /// <param name="httpClient"></param>
-        /// <returns> ObjectResponse </returns>
-        public static async Task<TReturn> SendRequestDeserializeMultiple<T, TReturn>(this HttpClient httpClient, HttpRequestMessage httpRequestMessage)
-        {
-            var response = await httpClient.SendAsync(httpRequestMessage).ConfigureAwait(false);
-
-            var contentString = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-
-            var responseObject = JsonConvert.DeserializeObject<TReturn>(contentString);
-
-            return responseObject;
-        }
 
         /// <summary>
         /// Checks <paramref name="propertyName"/> exists in <paramref name="jObject"/>.
