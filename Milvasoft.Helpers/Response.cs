@@ -158,7 +158,7 @@ namespace Milvasoft.Helpers
             {
                 await asyncTask;
 
-                response.Message = successMessage
+                response.Message = successMessage;
             }
 
             return new OkObjectResult(response);
