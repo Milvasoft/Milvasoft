@@ -98,6 +98,7 @@ namespace Milvasoft.Helpers
                 response.StatusCode = MilvasoftStatusCodes.Status204NoContent;
                 response.Success = true;
             }
+            response.Result = paginationDTO;
             return new OkObjectResult(response);
         }
 
@@ -126,6 +127,7 @@ namespace Milvasoft.Helpers
                 response.StatusCode = MilvasoftStatusCodes.Status204NoContent;
                 response.Success = true;
             }
+            response.Result = paginationDTO;
             return new OkObjectResult(response);
         }
 
@@ -156,7 +158,7 @@ namespace Milvasoft.Helpers
             {
                 await asyncTask;
 
-                response.Message = successMessage;
+                response.Message = successMessage
             }
 
             return new OkObjectResult(response);

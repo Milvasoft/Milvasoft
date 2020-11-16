@@ -1046,23 +1046,14 @@
             <param name="httpClient"></param>
             <returns> ObjectResponse </returns>
         </member>
-        <member name="M:Milvasoft.Helpers.Request.SendRequestDeserializeSingle``2(System.Net.Http.HttpClient,System.Net.Http.HttpRequestMessage)">
+        <member name="M:Milvasoft.Helpers.Request.SendRequestDeserialize``1(System.Net.Http.HttpClient,System.Net.Http.HttpRequestMessage)">
             <summary>
             Sends request by <paramref name="httpRequestMessage"/>.
             </summary>
-            <typeparam name="T"></typeparam>
             <param name="httpRequestMessage"></param>
             <param name="httpClient"></param>
-            <returns> ObjectResponse </returns>
-        </member>
-        <member name="M:Milvasoft.Helpers.Request.SendRequestDeserializeMultiple``2(System.Net.Http.HttpClient,System.Net.Http.HttpRequestMessage)">
-            <summary>
-            Sends request by <paramref name="httpRequestMessage"/>.
-            </summary>
-            <typeparam name="T"></typeparam>
-            <param name="httpRequestMessage"></param>
-            <param name="httpClient"></param>
-            <returns> ObjectResponse </returns>
+            <typeparam name="TReturn"></typeparam>
+            <returns> <typeparamref name="TReturn"/> </returns>
         </member>
         <member name="M:Milvasoft.Helpers.Request.PropertyExists(Newtonsoft.Json.Linq.JObject,System.String)">
             <summary>
