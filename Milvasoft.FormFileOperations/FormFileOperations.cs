@@ -18,40 +18,40 @@ namespace Milvasoft.FormFileOperations
         /// <summary>
         /// <para> Allowed file extensions for media files. </para>
         /// </summary>
-        public static ILookup<FileTypes, string> DefaultAllowedExtensions { get; } = new Dictionary<FileTypes, string>
+        public static ILookup<FileType, string> DefaultAllowedExtensions { get; } = new Dictionary<FileType, string>
         {
-           {FileTypes.Image, ".ai"},                {FileTypes.Video, ".3g2"},             {FileTypes.Audio, ".aif"},                       {FileTypes.EMail, ".email"},
-           {FileTypes.Image, ".bmp"},               {FileTypes.Video, ".3gp"},             {FileTypes.Audio, ".cda"},                       {FileTypes.EMail, ".eml"},
-           {FileTypes.Image, ".gif"},               {FileTypes.Video, ".avi"},             {FileTypes.Audio, ".mid"},                       {FileTypes.EMail, ".emlx"},
-           {FileTypes.Image, ".ico"},               {FileTypes.Video, ".avi"},             {FileTypes.Audio, ".mp3"},                       {FileTypes.EMail, ".msg"},
-           {FileTypes.Image, ".jpeg"},              {FileTypes.Video, ".h264"},            {FileTypes.Audio, ".mpa"},                       {FileTypes.EMail, ".oft"},
-           {FileTypes.Image, ".jpg"},               {FileTypes.Video, ".m4v"},             {FileTypes.Audio, ".ogg"},                       {FileTypes.EMail, ".ost"},
-           {FileTypes.Image, ".png"},               {FileTypes.Video, ".mkv"},             {FileTypes.Audio, ".wav"},                       {FileTypes.EMail, ".pst"},
-           {FileTypes.Image, ".ps"},                {FileTypes.Video, ".mov"},             {FileTypes.Audio, ".wma"},                       {FileTypes.EMail, ".vcf"},
-           {FileTypes.Image, ".svg"},               {FileTypes.Video, ".mp4"},             {FileTypes.Audio, ".wpl"},
-           {FileTypes.Image, ".tif"},               {FileTypes.Video, ".mpg"},
-           {FileTypes.Image, ".tiff"},              {FileTypes.Video, ".mpeg"},
-                                                    {FileTypes.Video, ".wmv"},
+           {FileType.Image, ".ai"},                {FileType.Video, ".3g2"},             {FileType.Audio, ".aif"},                       {FileType.EMail, ".email"},
+           {FileType.Image, ".bmp"},               {FileType.Video, ".3gp"},             {FileType.Audio, ".cda"},                       {FileType.EMail, ".eml"},
+           {FileType.Image, ".gif"},               {FileType.Video, ".avi"},             {FileType.Audio, ".mid"},                       {FileType.EMail, ".emlx"},
+           {FileType.Image, ".ico"},               {FileType.Video, ".avi"},             {FileType.Audio, ".mp3"},                       {FileType.EMail, ".msg"},
+           {FileType.Image, ".jpeg"},              {FileType.Video, ".h264"},            {FileType.Audio, ".mpa"},                       {FileType.EMail, ".oft"},
+           {FileType.Image, ".jpg"},               {FileType.Video, ".m4v"},             {FileType.Audio, ".ogg"},                       {FileType.EMail, ".ost"},
+           {FileType.Image, ".png"},               {FileType.Video, ".mkv"},             {FileType.Audio, ".wav"},                       {FileType.EMail, ".pst"},
+           {FileType.Image, ".ps"},                {FileType.Video, ".mov"},             {FileType.Audio, ".wma"},                       {FileType.EMail, ".vcf"},
+           {FileType.Image, ".svg"},               {FileType.Video, ".mp4"},             {FileType.Audio, ".wpl"},
+           {FileType.Image, ".tif"},               {FileType.Video, ".mpg"},
+           {FileType.Image, ".tiff"},              {FileType.Video, ".mpeg"},
+                                                    {FileType.Video, ".wmv"},
 
 
 
-           {FileTypes.Document, ".doc"},           {FileTypes.Compressed, ".7z"},          {FileTypes.InternetRelated, ".ai"},              {FileTypes.Font, ".fnt"},
-           {FileTypes.Document, ".docx"},          {FileTypes.Compressed, ".arj"},         {FileTypes.InternetRelated, ".bmp"},             {FileTypes.Font, ".fon"},
-           {FileTypes.Document, ".odt"},           {FileTypes.Compressed, ".deb"},         {FileTypes.InternetRelated, ".gif"},             {FileTypes.Font, ".otf"},
-           {FileTypes.Document, ".pdf"},           {FileTypes.Compressed, ".pkg"},         {FileTypes.InternetRelated, ".ico"},             {FileTypes.Font, ".ttf"},
-           {FileTypes.Document, ".rtf"},           {FileTypes.Compressed, ".rar"},         {FileTypes.InternetRelated, ".jpeg"},
-           {FileTypes.Document, ".tex"},           {FileTypes.Compressed, ".rpm"},         {FileTypes.InternetRelated, ".jpg"},
-           {FileTypes.Document, ".txt"},           {FileTypes.Compressed, ".zip"},         {FileTypes.InternetRelated, ".png"},
-           {FileTypes.Document, ".wpd"},                                                   {FileTypes.InternetRelated, ".ps"},
-           {FileTypes.Document, ".ods"},                                                   {FileTypes.InternetRelated, ".psd"},
-           {FileTypes.Document, ".xls"},                                                   {FileTypes.InternetRelated, ".svg"},
-           {FileTypes.Document, ".xlsm"},                                                  {FileTypes.InternetRelated, ".tif"},
-           {FileTypes.Document, ".xlsx"},                                                  {FileTypes.InternetRelated, ".tiff"},
-           {FileTypes.Document, ".key"},
-           {FileTypes.Document, ".odp"},
-           {FileTypes.Document, ".pps"},
-           {FileTypes.Document, ".ppt"},
-           {FileTypes.Document, ".pptx"},
+           {FileType.Document, ".doc"},           {FileType.Compressed, ".7z"},          {FileType.InternetRelated, ".ai"},              {FileType.Font, ".fnt"},
+           {FileType.Document, ".docx"},          {FileType.Compressed, ".arj"},         {FileType.InternetRelated, ".bmp"},             {FileType.Font, ".fon"},
+           {FileType.Document, ".odt"},           {FileType.Compressed, ".deb"},         {FileType.InternetRelated, ".gif"},             {FileType.Font, ".otf"},
+           {FileType.Document, ".pdf"},           {FileType.Compressed, ".pkg"},         {FileType.InternetRelated, ".ico"},             {FileType.Font, ".ttf"},
+           {FileType.Document, ".rtf"},           {FileType.Compressed, ".rar"},         {FileType.InternetRelated, ".jpeg"},
+           {FileType.Document, ".tex"},           {FileType.Compressed, ".rpm"},         {FileType.InternetRelated, ".jpg"},
+           {FileType.Document, ".txt"},           {FileType.Compressed, ".zip"},         {FileType.InternetRelated, ".png"},
+           {FileType.Document, ".wpd"},                                                   {FileType.InternetRelated, ".ps"},
+           {FileType.Document, ".ods"},                                                   {FileType.InternetRelated, ".psd"},
+           {FileType.Document, ".xls"},                                                   {FileType.InternetRelated, ".svg"},
+           {FileType.Document, ".xlsm"},                                                  {FileType.InternetRelated, ".tif"},
+           {FileType.Document, ".xlsx"},                                                  {FileType.InternetRelated, ".tiff"},
+           {FileType.Document, ".key"},
+           {FileType.Document, ".odp"},
+           {FileType.Document, ".pps"},
+           {FileType.Document, ".ppt"},
+           {FileType.Document, ".pptx"},
         }.ToLookup(i => i.Key, i => i.Value);
 
 
@@ -64,7 +64,7 @@ namespace Milvasoft.FormFileOperations
         /// 
         /// <remarks>
         /// 
-        /// <para> Don't forget validate file with <see cref="ValidateFile(IFormFile, FileTypes, long, List{string})"/>, before use this method.</para>
+        /// <para> Don't forget validate file with <see cref="ValidateFile(IFormFile, FileType, long, List{string})"/>, before use this method.</para>
         /// 
         /// </remarks>
         /// 
@@ -127,7 +127,7 @@ namespace Milvasoft.FormFileOperations
         /// <param name="file"> Uploaded file. </param>
         /// <param name="fileType"> Uploaded file type. (e.g image,video,sound..) </param>
         /// <param name="maxFileSize"> Maximum file size in bytes of uploaded file. </param>
-        public static FileValidationResult ValidateFile(this IFormFile file, FileTypes fileType, long maxFileSize, List<string> allowedFileExtensions)
+        public static FileValidationResult ValidateFile(this IFormFile file, FileType fileType, long maxFileSize, List<string> allowedFileExtensions)
         {
             if (file == null) return FileValidationResult.NullFile;
 
@@ -173,7 +173,7 @@ namespace Milvasoft.FormFileOperations
         /// </summary>
         /// <param name="path"></param>
         /// <returns></returns>
-        public static async Task<IFormFile> GetFileFromPathAsync(string path,FileTypes fileType)
+        public static async Task<IFormFile> GetFileFromPathAsync(string path,FileType fileType)
         {
             var memory = new MemoryStream();
             if (string.IsNullOrEmpty(path))
@@ -284,7 +284,7 @@ namespace Milvasoft.FormFileOperations
         /// </summary>
         /// <param name="fileType"></param>
         /// <returns></returns>
-        private static List<string> GetDefaultFileExtensions(FileTypes fileType)
+        private static List<string> GetDefaultFileExtensions(FileType fileType)
         {
             return DefaultAllowedExtensions.Where(i => i.Key == fileType).Select(i => i.First()).ToList();
         }

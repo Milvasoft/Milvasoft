@@ -3,7 +3,7 @@
     /// <summary>
     /// <para> File types.</para>
     /// </summary>
-    public enum FileTypes
+    public enum FileType
     {
         /// <summary> 
         /// <para>File Type Image</para>
