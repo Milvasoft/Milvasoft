@@ -2,6 +2,7 @@
 using Milvasoft.Helpers.Extensions;
 using Milvasoft.Helpers.Models;
 using Milvasoft.Helpers.Models.Response;
+using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
@@ -165,6 +166,40 @@ namespace Milvasoft.Helpers
         }
 
         /// <summary>
+        /// <para> Run the <paramref name="asyncTask"/> then return <see cref="MultipleObjectResponse{T}"/>. </para>
+        /// <para> If <paramref name="asyncTask"/> is success sets the <paramref name="successMessage"/> to <see cref="MultipleObjectResponse{T}"/>.Message.
+        ///        Otherwise you should throw exception and cut the request pipeline in <paramref name="asyncTask"/>. </para>
+        /// </summary>
+        /// 
+        /// <param name="asyncTask"></param>
+        /// <param name="idList"></param>
+        /// <param name="successMessage"></param>
+        /// <param name="errorMessage"></param>
+        /// <returns>  <see cref="MultipleObjectResponse{T}"/> in 200 OK <see cref="ActionResult"/> </returns>
+        public static async Task<IActionResult> ReturnArrayResponseForDeleteAsync<T, TKey>(this ConfiguredTaskAwaitable<IEnumerable<T>> asyncTask,
+                                                                                                                     IEnumerable<TKey> idList,
+                                                                                                                     string successMessage,
+                                                                                                                     string errorMessage = null) where TKey : struct
+        {
+            MultipleObjectResponse<T> response = new MultipleObjectResponse<T>();
+            if (idList.IsNullOrEmpty())
+            {
+                response.Message = string.IsNullOrEmpty(errorMessage) ? _defaultErrorMessage : errorMessage;
+                response.StatusCode = MilvasoftStatusCodes.Status500InternalServerError;
+                response.Success = false;
+            }
+            else
+            {
+                var result = await asyncTask;
+
+                response.Result = result;
+                response.Message = successMessage;
+            }
+
+            return new OkObjectResult(response);
+        }
+
+        /// <summary>
         /// <para> Run the <paramref name="asyncTask"/> then return <see cref="SingleObjectResponse{T}"/>. </para>
         /// <para> If <paramref name="asyncTask"/> is success sets the <paramref name="successMessage"/> to <see cref="SingleObjectResponse{T}"/>.Message.
         ///        Otherwise you should throw exception and cut the request pipeline in <paramref name="asyncTask"/>. </para>
@@ -179,6 +214,54 @@ namespace Milvasoft.Helpers
             {
                 await asyncTask;
 
+                response.Success = true;
+                response.Message = successMessage;
+                response.StatusCode = MilvasoftStatusCodes.Status200OK;
+            }
+
+            return new OkObjectResult(response);
+        }
+
+        /// <summary>
+        /// <para> Run the <paramref name="asyncTask"/> then return <see cref="SingleObjectResponse{T}"/>. </para>
+        /// <para> If <paramref name="asyncTask"/> is success sets the <paramref name="successMessage"/> to <see cref="SingleObjectResponse{T}"/>.Message.
+        ///        Otherwise you should throw exception and cut the request pipeline in <paramref name="asyncTask"/>. </para>
+        /// </summary>
+        /// 
+        /// <param name="asyncTask"></param>
+        /// <param name="successMessage"></param>
+        /// <returns>  <see cref="SingleObjectResponse{T}"/> in 200 OK <see cref="ActionResult"/> </returns>
+        public static async Task<IActionResult> ReturnSingleResponseForDeleteAsync<T>(this ConfiguredTaskAwaitable<T> asyncTask, string successMessage)
+        {
+            SingleObjectResponse<T> response = new SingleObjectResponse<T>();
+            {
+                var result = await asyncTask;
+
+                response.Result = result;
+                response.Success = true;
+                response.Message = successMessage;
+                response.StatusCode = MilvasoftStatusCodes.Status200OK;
+            }
+
+            return new OkObjectResult(response);
+        }
+
+        /// <summary>
+        /// <para> Run the <paramref name="asyncTask"/> then return <see cref="SingleObjectResponse{T}"/>. </para>
+        /// <para> If <paramref name="asyncTask"/> is success sets the <paramref name="successMessage"/> to <see cref="SingleObjectResponse{T}"/>.Message.
+        ///        Otherwise you should throw exception and cut the request pipeline in <paramref name="asyncTask"/>. </para>
+        /// </summary>
+        /// 
+        /// <param name="asyncTask"></param>
+        /// <param name="successMessage"></param>
+        /// <returns>  <see cref="SingleObjectResponse{T}"/> in 200 OK <see cref="ActionResult"/> </returns>
+        public static async Task<IActionResult> ReturnSingleResponseForDeleteAsync<T>(this ConfiguredTaskAwaitable<object> asyncTask, string successMessage)
+        {
+            SingleObjectResponse<object> response = new SingleObjectResponse<object>();
+            {
+                var result = await asyncTask;
+
+                response.Result = result;
                 response.Success = true;
                 response.Message = successMessage;
                 response.StatusCode = MilvasoftStatusCodes.Status200OK;
@@ -217,6 +300,123 @@ namespace Milvasoft.Helpers
         /// 
         /// <param name="asyncTask"></param>
         /// <param name="successMessage"></param>
+        /// <returns> <see cref="SingleObjectResponse{T}"/> in 200 OK <see cref="ActionResult"/> </returns>
+        public static async Task<IActionResult> ReturnSingleObjectResponseForAddOrUpdateAsync<T>(this ConfiguredTaskAwaitable<object> asyncTask, string successMessage)
+        {
+            SingleObjectResponse<object> response = new SingleObjectResponse<object>();
+
+            var result = await asyncTask;
+
+            response.Result = result;
+            response.Success = true;
+            response.Message = successMessage;
+            response.StatusCode = MilvasoftStatusCodes.Status200OK;
+
+            return new OkObjectResult(response);
+        }
+
+        /// <summary>
+        /// <para> Run the <paramref name="asyncTask"/> then return <see cref="SingleObjectResponse{T}"/>. </para>
+        /// <para> If <paramref name="asyncTask"/> is success sets the <paramref name="successMessage"/> to <see cref="SingleObjectResponse{T}"/>.Message.
+        ///        Otherwise you should throw exception and cut the request pipeline in <paramref name="asyncTask"/>. </para>
+        /// </summary>
+        /// 
+        /// <param name="asyncTask"></param>
+        /// <param name="successMessage"></param>
+        /// <returns> <see cref="SingleObjectResponse{T}"/> in 200 OK <see cref="ActionResult"/> </returns>
+        public static async Task<IActionResult> ReturnSingleObjectResponseForAddOrUpdateAsync<T>(this ConfiguredTaskAwaitable<T> asyncTask, string successMessage)
+        {
+            SingleObjectResponse<T> response = new SingleObjectResponse<T>();
+
+            var result = await asyncTask;
+
+            response.Result = result;
+            response.Success = true;
+            response.Message = successMessage;
+            response.StatusCode = MilvasoftStatusCodes.Status200OK;
+
+            return new OkObjectResult(response);
+        }
+
+        /// <summary>
+        /// <para> Run the <paramref name="asyncTask"/> then return <see cref="SingleObjectResponse{T}"/>. </para>
+        /// <para> If <paramref name="asyncTask"/> is success sets the <paramref name="successMessage"/> to <see cref="SingleObjectResponse{T}"/>.Message.
+        ///        Otherwise you should throw exception and cut the request pipeline in <paramref name="asyncTask"/>. </para>
+        /// </summary>
+        /// 
+        /// <param name="asyncTask"></param>
+        /// <param name="successMessage"></param>
+        /// <returns> <see cref="SingleObjectResponse{T}"/> in 200 OK <see cref="ActionResult"/> </returns>
+        public static async Task<IActionResult> ReturnSingleObjectResponseForAddOrUpdateAsync<T>(this ConfiguredTaskAwaitable<Guid> asyncTask, string successMessage)
+        {
+            SingleObjectResponse<Guid> response = new SingleObjectResponse<Guid>();
+
+            var result = await asyncTask;
+
+            response.Result = result;
+            response.Success = true;
+            response.Message = successMessage;
+            response.StatusCode = MilvasoftStatusCodes.Status200OK;
+
+            return new OkObjectResult(response);
+        }
+
+
+        /// <summary>
+        /// <para> Run the <paramref name="asyncTask"/> then return <see cref="SingleObjectResponse{T}"/>. </para>
+        /// <para> If <paramref name="asyncTask"/> is success sets the <paramref name="successMessage"/> to <see cref="SingleObjectResponse{T}"/>.Message.
+        ///        Otherwise you should throw exception and cut the request pipeline in <paramref name="asyncTask"/>. </para>
+        /// </summary>
+        /// 
+        /// <param name="asyncTask"></param>
+        /// <param name="successMessage"></param>
+        /// <returns> <see cref="SingleObjectResponse{T}"/> in 200 OK <see cref="ActionResult"/> </returns>
+        public static async Task<IActionResult> ReturnSingleObjectResponseForAddOrUpdateAsync<T>(this ConfiguredTaskAwaitable<int> asyncTask, string successMessage)
+        {
+            SingleObjectResponse<int> response = new SingleObjectResponse<int>();
+
+            var result = await asyncTask;
+
+            response.Result = result;
+            response.Success = true;
+            response.Message = successMessage;
+            response.StatusCode = MilvasoftStatusCodes.Status200OK;
+
+            return new OkObjectResult(response);
+        }
+
+        /// <summary>
+        /// <para> Run the <paramref name="asyncTask"/> then return <see cref="SingleObjectResponse{T}"/>. </para>
+        /// <para> If <paramref name="asyncTask"/> is success sets the <paramref name="successMessage"/> to <see cref="SingleObjectResponse{T}"/>.Message.
+        ///        Otherwise you should throw exception and cut the request pipeline in <paramref name="asyncTask"/>. </para>
+        /// </summary>
+        /// 
+        /// <param name="asyncTask"></param>
+        /// <param name="successMessage"></param>
+        /// <returns> <see cref="SingleObjectResponse{T}"/> in 200 OK <see cref="ActionResult"/> </returns>
+        public static async Task<IActionResult> ReturnSingleObjectResponseForAddOrUpdateAsync<T>(this ConfiguredTaskAwaitable<sbyte> asyncTask, string successMessage)
+        {
+            SingleObjectResponse<sbyte> response = new SingleObjectResponse<sbyte>();
+
+            var result = await asyncTask;
+
+            response.Result = result;
+            response.Success = true;
+            response.Message = successMessage;
+            response.StatusCode = MilvasoftStatusCodes.Status200OK;
+
+            return new OkObjectResult(response);
+        }
+
+
+        /// <summary>
+        /// <para> Run the <paramref name="asyncTask"/> then return <see cref="SingleObjectResponse{T}"/>. </para>
+        /// <para> If <paramref name="asyncTask"/> is success sets the <paramref name="successMessage"/> to <see cref="SingleObjectResponse{T}"/>.Message.
+        ///        Otherwise you should throw exception and cut the request pipeline in <paramref name="asyncTask"/>. </para>
+        /// </summary>
+        /// 
+        /// <param name="asyncTask"></param>
+        /// <param name="successMessage"></param>
         /// <returns>  <see cref="SingleObjectResponse{T}"/> in 200 OK <see cref="ActionResult"/> </returns>
         public static async Task<IActionResult> ReturnSingleObjectResponseForSpecifedProcessAsync<T>(this ConfiguredTaskAwaitable asyncTask, string successMessage)
         {
@@ -231,6 +431,52 @@ namespace Milvasoft.Helpers
             return new OkObjectResult(response);
         }
 
+
+        /// <summary>
+        /// <para> Run the <paramref name="asyncTask"/> then return <see cref="SingleObjectResponse{T}"/>. </para>
+        /// <para> If <paramref name="asyncTask"/> is success sets the <paramref name="successMessage"/> to <see cref="SingleObjectResponse{T}"/>.Message.
+        ///        Otherwise you should throw exception and cut the request pipeline in <paramref name="asyncTask"/>. </para>
+        /// </summary>
+        /// 
+        /// <param name="asyncTask"></param>
+        /// <param name="successMessage"></param>
+        /// <returns>  <see cref="SingleObjectResponse{T}"/> in 200 OK <see cref="ActionResult"/> </returns>
+        public static async Task<IActionResult> ReturnSingleObjectResponseForSpecifedProcessAsync<T>(this ConfiguredTaskAwaitable<T> asyncTask, string successMessage)
+        {
+            SingleObjectResponse<T> response = new SingleObjectResponse<T>();
+
+            var result = await asyncTask;
+
+            response.Result = result;
+            response.Success = true;
+            response.Message = successMessage;
+            response.StatusCode = MilvasoftStatusCodes.Status200OK;
+
+            return new OkObjectResult(response);
+        }
+
+        /// <summary>
+        /// <para> Run the <paramref name="asyncTask"/> then return <see cref="SingleObjectResponse{T}"/>. </para>
+        /// <para> If <paramref name="asyncTask"/> is success sets the <paramref name="successMessage"/> to <see cref="SingleObjectResponse{T}"/>.Message.
+        ///        Otherwise you should throw exception and cut the request pipeline in <paramref name="asyncTask"/>. </para>
+        /// </summary>
+        /// 
+        /// <param name="asyncTask"></param>
+        /// <param name="successMessage"></param>
+        /// <returns>  <see cref="SingleObjectResponse{T}"/> in 200 OK <see cref="ActionResult"/> </returns>
+        public static async Task<IActionResult> ReturnSingleObjectResponseForSpecifedProcessAsync<T>(this ConfiguredTaskAwaitable<object> asyncTask, string successMessage)
+        {
+            SingleObjectResponse<object> response = new SingleObjectResponse<object>();
+
+            var result = await asyncTask;
+
+            response.Result = result;
+            response.Success = true;
+            response.Message = successMessage;
+            response.StatusCode = MilvasoftStatusCodes.Status200OK;
+
+            return new OkObjectResult(response);
+        }
 
     }
 }

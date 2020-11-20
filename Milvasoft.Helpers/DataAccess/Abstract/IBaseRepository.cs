@@ -109,6 +109,39 @@ namespace Milvasoft.Helpers.DataAccess.Abstract
                                                                                                                bool orderByAscending,
                                                                                                                Expression<Func<TEntity, bool>> conditionExpression = null);
 
+        /// <summary>
+        /// <para> Gets entities as ordered with <paramref name="orderByPropertyName"/>.
+        ///       If the condition is requested, it also provides that condition.</para> 
+        ///       
+        /// </summary>
+        /// 
+        /// <exception cref="ArgumentException"> Throwns when type of <typeparamref name="TEntity"/>'s properties doesn't contain '<paramref name="orderByPropertyName"/>'. </exception>
+        /// 
+        /// <param name="orderByPropertyName"></param>
+        /// <param name="orderByAscending"></param>
+        /// <param name="conditionExpression"></param>
+        /// <returns></returns>
+        Task<IEnumerable<TEntity>> GetAsOrderedAsync(string orderByPropertyName,
+                                                                          bool orderByAscending,
+                                                                          Expression<Func<TEntity, bool>> conditionExpression = null);
+
+        /// <summary>
+        /// <para> Gets entities as ordered with <paramref name="orderByPropertyName"/>.
+        ///        If the condition is requested, it also provides that condition.</para> 
+        ///        
+        /// </summary>
+        /// 
+        /// <exception cref="ArgumentException"> Throwns when type of <typeparamref name="TEntity"/>'s properties doesn't contain '<paramref name="orderByPropertyName"/>'. </exception>
+        ///
+        /// <param name="includes"></param>
+        /// <param name="orderByPropertyName"></param>
+        /// <param name="orderByAscending"></param>
+        /// <param name="conditionExpression"></param>
+        /// <returns></returns>
+        Task<IEnumerable<TEntity>> GetAsOrderedAsync(Func<IIncludable<TEntity>, IIncludable> includes,
+                                                                          string orderByPropertyName,
+                                                                          bool orderByAscending,
+                                                                          Expression<Func<TEntity, bool>> conditionExpression = null);
 
         /// <summary>
         /// <para> Returns one entity by entity Id from database asynchronously.</para> 
@@ -187,6 +220,47 @@ namespace Milvasoft.Helpers.DataAccess.Abstract
         /// <param name="entities"></param>
         /// <returns></returns>
         Task DeleteAsync(IEnumerable<TEntity> entities);
+
+        /// <summary>
+        /// Groups entities with <paramref name="groupByPropertyName"/> and returns the key grouped and the number of items grouped with this key.
+        /// </summary>
+        /// <param name="groupByPropertyName"></param>
+        /// <param name="conditionExpression"></param>
+        /// <returns></returns>
+        Task<List<Tuple<object, int>>> GetGroupedAndCountAsync(string groupByPropertyName, Expression<Func<TEntity, bool>> conditionExpression = null);
+
+        /// <summary>
+        /// Get max value of entities.
+        /// </summary>
+        /// <param name="conditionExpression"></param>
+        /// <returns></returns>
+        Task<TEntity> GetMaxAsync(Expression<Func<TEntity, bool>> conditionExpression = null);
+
+        /// <summary>
+        /// Get max value of entities. With includes.
+        /// </summary>
+        /// <param name="includes"></param>
+        /// <param name="conditionExpression"></param>
+        /// <returns></returns>
+        Task<TEntity> GetMaxAsync(Func<IIncludable<TEntity>, IIncludable> includes, Expression<Func<TEntity, bool>> conditionExpression = null);
+
+        /// <summary>
+        /// Gets max value of <typeparamref name="TEntity"/>'s property in entities.
+        /// </summary>
+        /// <param name="groupByPropertyName"></param>
+        /// <param name="conditionExpression"></param>
+        /// <returns></returns>
+        Task<object> GetMaxAsync(string groupByPropertyName, Expression<Func<TEntity, bool>> conditionExpression = null);
+
+        /// <summary>
+        /// Gets max value of <typeparamref name="TEntity"/>'s property in entities. With includes.
+        /// </summary>
+        /// <param name="includes"></param>
+        /// <param name="groupByPropertyName"></param>
+        /// <param name="conditionExpression"></param>
+        /// <returns></returns>
+        Task<object> GetMaxAsync(Func<IIncludable<TEntity>, IIncludable> includes, string groupByPropertyName, Expression<Func<TEntity, bool>> conditionExpression = null);
+
 
     }
 }

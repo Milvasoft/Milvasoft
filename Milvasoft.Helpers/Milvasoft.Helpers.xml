@@ -133,6 +133,35 @@
              <param name="conditionExpression"></param>
              <returns></returns>
         </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.GetAsOrderedAsync(System.String,System.Boolean,System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
+            <summary>
+            <para> Gets entities as ordered with <paramref name="orderByPropertyName"/>.
+                  If the condition is requested, it also provides that condition.</para> 
+                  
+            </summary>
+            
+            <exception cref="T:System.ArgumentException"> Throwns when type of <typeparamref name="TEntity"/>'s properties doesn't contain '<paramref name="orderByPropertyName"/>'. </exception>
+            
+            <param name="orderByPropertyName"></param>
+            <param name="orderByAscending"></param>
+            <param name="conditionExpression"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.GetAsOrderedAsync(System.Func{Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable{`0},Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable},System.String,System.Boolean,System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
+             <summary>
+             <para> Gets entities as ordered with <paramref name="orderByPropertyName"/>.
+                    If the condition is requested, it also provides that condition.</para> 
+                    
+             </summary>
+             
+             <exception cref="T:System.ArgumentException"> Throwns when type of <typeparamref name="TEntity"/>'s properties doesn't contain '<paramref name="orderByPropertyName"/>'. </exception>
+            
+             <param name="includes"></param>
+             <param name="orderByPropertyName"></param>
+             <param name="orderByAscending"></param>
+             <param name="conditionExpression"></param>
+             <returns></returns>
+        </member>
         <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.GetByIdAsync(`1)">
             <summary>
             <para> Returns one entity by entity Id from database asynchronously.</para> 
@@ -209,6 +238,46 @@
             <para> Deletes multiple entity from database asynchronously. </para> 
             </summary>
             <param name="entities"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.GetGroupedAndCountAsync(System.String,System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
+            <summary>
+            Groups entities with <paramref name="groupByPropertyName"/> and returns the key grouped and the number of items grouped with this key.
+            </summary>
+            <param name="groupByPropertyName"></param>
+            <param name="conditionExpression"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.GetMaxAsync(System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
+            <summary>
+            Get max value of entities.
+            </summary>
+            <param name="conditionExpression"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.GetMaxAsync(System.Func{Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable{`0},Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable},System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
+            <summary>
+            Get max value of entities. With includes.
+            </summary>
+            <param name="includes"></param>
+            <param name="conditionExpression"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.GetMaxAsync(System.String,System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
+            <summary>
+            Gets max value of <typeparamref name="TEntity"/>'s property in entities.
+            </summary>
+            <param name="groupByPropertyName"></param>
+            <param name="conditionExpression"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.GetMaxAsync(System.Func{Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable{`0},Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable},System.String,System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
+            <summary>
+            Gets max value of <typeparamref name="TEntity"/>'s property in entities. With includes.
+            </summary>
+            <param name="includes"></param>
+            <param name="groupByPropertyName"></param>
+            <param name="conditionExpression"></param>
             <returns></returns>
         </member>
         <member name="T:Milvasoft.Helpers.DataAccess.Abstract.IContextRepository`1">
@@ -404,6 +473,35 @@
              <param name="conditionExpression"></param>
              <returns></returns>
         </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.GetAsOrderedAsync(System.String,System.Boolean,System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
+            <summary>
+            <para> Gets entities as ordered with <paramref name="orderByPropertyName"/>.
+                  If the condition is requested, it also provides that condition.</para> 
+                  
+            </summary>
+            
+            <exception cref="T:System.ArgumentException"> Throwns when type of <typeparamref name="TEntity"/>'s properties doesn't contain '<paramref name="orderByPropertyName"/>'. </exception>
+            
+            <param name="orderByPropertyName"></param>
+            <param name="orderByAscending"></param>
+            <param name="conditionExpression"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.GetAsOrderedAsync(System.Func{Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable{`0},Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable},System.String,System.Boolean,System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
+             <summary>
+             <para> Gets entities as ordered with <paramref name="orderByPropertyName"/>.
+                    If the condition is requested, it also provides that condition.</para> 
+                    
+             </summary>
+             
+             <exception cref="T:System.ArgumentException"> Throwns when type of <typeparamref name="TEntity"/>'s properties doesn't contain '<paramref name="orderByPropertyName"/>'. </exception>
+            
+             <param name="includes"></param>
+             <param name="orderByPropertyName"></param>
+             <param name="orderByAscending"></param>
+             <param name="conditionExpression"></param>
+             <returns></returns>
+        </member>
         <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.GetByIdAsync(`1)">
              <summary>
             <para> Returns one entity by entity Id from database asynchronously.</para> 
@@ -480,6 +578,46 @@
             <para> Deletes multiple entity from database asynchronously. </para> 
             </summary>
             <param name="entities"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.GetGroupedAndCountAsync(System.String,System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
+            <summary>
+            Groups entities with <paramref name="groupByPropertyName"/> and returns the key grouped and the number of items grouped with this key.
+            </summary>
+            <param name="groupByPropertyName"></param>
+            <param name="conditionExpression"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.GetMaxAsync(System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
+            <summary>
+            Get max value of entities.
+            </summary>
+            <param name="conditionExpression"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.GetMaxAsync(System.Func{Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable{`0},Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable},System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
+            <summary>
+            Get max value of entities. With includes.
+            </summary>
+            <param name="includes"></param>
+            <param name="conditionExpression"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.GetMaxAsync(System.String,System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
+            <summary>
+            Gets max value of <typeparamref name="TEntity"/>'s property in entities.
+            </summary>
+            <param name="groupByPropertyName"></param>
+            <param name="conditionExpression"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.GetMaxAsync(System.Func{Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable{`0},Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable},System.String,System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
+            <summary>
+            Gets max value of <typeparamref name="TEntity"/>'s property in entities. With includes.
+            </summary>
+            <param name="includes"></param>
+            <param name="groupByPropertyName"></param>
+            <param name="conditionExpression"></param>
             <returns></returns>
         </member>
         <member name="T:Milvasoft.Helpers.DataAccess.Concrete.ContextRepository`1">
@@ -1206,7 +1344,42 @@
             <param name="errorMessage"></param>
             <returns>  <see cref="T:Milvasoft.Helpers.Models.Response.MultipleObjectResponse`1"/> in 200 OK <see cref="T:Microsoft.AspNetCore.Mvc.ActionResult"/> </returns>
         </member>
+        <member name="M:Milvasoft.Helpers.Response.ReturnArrayResponseForDeleteAsync``2(System.Runtime.CompilerServices.ConfiguredTaskAwaitable{System.Collections.Generic.IEnumerable{``0}},System.Collections.Generic.IEnumerable{``1},System.String,System.String)">
+            <summary>
+            <para> Run the <paramref name="asyncTask"/> then return <see cref="T:Milvasoft.Helpers.Models.Response.MultipleObjectResponse`1"/>. </para>
+            <para> If <paramref name="asyncTask"/> is success sets the <paramref name="successMessage"/> to <see cref="T:Milvasoft.Helpers.Models.Response.MultipleObjectResponse`1"/>.Message.
+                   Otherwise you should throw exception and cut the request pipeline in <paramref name="asyncTask"/>. </para>
+            </summary>
+            
+            <param name="asyncTask"></param>
+            <param name="idList"></param>
+            <param name="successMessage"></param>
+            <param name="errorMessage"></param>
+            <returns>  <see cref="T:Milvasoft.Helpers.Models.Response.MultipleObjectResponse`1"/> in 200 OK <see cref="T:Microsoft.AspNetCore.Mvc.ActionResult"/> </returns>
+        </member>
         <member name="M:Milvasoft.Helpers.Response.ReturnSingleResponseForDeleteAsync``1(System.Runtime.CompilerServices.ConfiguredTaskAwaitable,System.String)">
+            <summary>
+            <para> Run the <paramref name="asyncTask"/> then return <see cref="T:Milvasoft.Helpers.Models.Response.SingleObjectResponse`1"/>. </para>
+            <para> If <paramref name="asyncTask"/> is success sets the <paramref name="successMessage"/> to <see cref="T:Milvasoft.Helpers.Models.Response.SingleObjectResponse`1"/>.Message.
+                   Otherwise you should throw exception and cut the request pipeline in <paramref name="asyncTask"/>. </para>
+            </summary>
+            
+            <param name="asyncTask"></param>
+            <param name="successMessage"></param>
+            <returns>  <see cref="T:Milvasoft.Helpers.Models.Response.SingleObjectResponse`1"/> in 200 OK <see cref="T:Microsoft.AspNetCore.Mvc.ActionResult"/> </returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.Response.ReturnSingleResponseForDeleteAsync``1(System.Runtime.CompilerServices.ConfiguredTaskAwaitable{``0},System.String)">
+            <summary>
+            <para> Run the <paramref name="asyncTask"/> then return <see cref="T:Milvasoft.Helpers.Models.Response.SingleObjectResponse`1"/>. </para>
+            <para> If <paramref name="asyncTask"/> is success sets the <paramref name="successMessage"/> to <see cref="T:Milvasoft.Helpers.Models.Response.SingleObjectResponse`1"/>.Message.
+                   Otherwise you should throw exception and cut the request pipeline in <paramref name="asyncTask"/>. </para>
+            </summary>
+            
+            <param name="asyncTask"></param>
+            <param name="successMessage"></param>
+            <returns>  <see cref="T:Milvasoft.Helpers.Models.Response.SingleObjectResponse`1"/> in 200 OK <see cref="T:Microsoft.AspNetCore.Mvc.ActionResult"/> </returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.Response.ReturnSingleResponseForDeleteAsync``1(System.Runtime.CompilerServices.ConfiguredTaskAwaitable{System.Object},System.String)">
             <summary>
             <para> Run the <paramref name="asyncTask"/> then return <see cref="T:Milvasoft.Helpers.Models.Response.SingleObjectResponse`1"/>. </para>
             <para> If <paramref name="asyncTask"/> is success sets the <paramref name="successMessage"/> to <see cref="T:Milvasoft.Helpers.Models.Response.SingleObjectResponse`1"/>.Message.
@@ -1228,7 +1401,84 @@
             <param name="successMessage"></param>
             <returns> <see cref="T:Milvasoft.Helpers.Models.Response.SingleObjectResponse`1"/> in 200 OK <see cref="T:Microsoft.AspNetCore.Mvc.ActionResult"/> </returns>
         </member>
+        <member name="M:Milvasoft.Helpers.Response.ReturnSingleObjectResponseForAddOrUpdateAsync``1(System.Runtime.CompilerServices.ConfiguredTaskAwaitable{System.Object},System.String)">
+            <summary>
+            <para> Run the <paramref name="asyncTask"/> then return <see cref="T:Milvasoft.Helpers.Models.Response.SingleObjectResponse`1"/>. </para>
+            <para> If <paramref name="asyncTask"/> is success sets the <paramref name="successMessage"/> to <see cref="T:Milvasoft.Helpers.Models.Response.SingleObjectResponse`1"/>.Message.
+                   Otherwise you should throw exception and cut the request pipeline in <paramref name="asyncTask"/>. </para>
+            </summary>
+            
+            <param name="asyncTask"></param>
+            <param name="successMessage"></param>
+            <returns> <see cref="T:Milvasoft.Helpers.Models.Response.SingleObjectResponse`1"/> in 200 OK <see cref="T:Microsoft.AspNetCore.Mvc.ActionResult"/> </returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.Response.ReturnSingleObjectResponseForAddOrUpdateAsync``1(System.Runtime.CompilerServices.ConfiguredTaskAwaitable{``0},System.String)">
+            <summary>
+            <para> Run the <paramref name="asyncTask"/> then return <see cref="T:Milvasoft.Helpers.Models.Response.SingleObjectResponse`1"/>. </para>
+            <para> If <paramref name="asyncTask"/> is success sets the <paramref name="successMessage"/> to <see cref="T:Milvasoft.Helpers.Models.Response.SingleObjectResponse`1"/>.Message.
+                   Otherwise you should throw exception and cut the request pipeline in <paramref name="asyncTask"/>. </para>
+            </summary>
+            
+            <param name="asyncTask"></param>
+            <param name="successMessage"></param>
+            <returns> <see cref="T:Milvasoft.Helpers.Models.Response.SingleObjectResponse`1"/> in 200 OK <see cref="T:Microsoft.AspNetCore.Mvc.ActionResult"/> </returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.Response.ReturnSingleObjectResponseForAddOrUpdateAsync``1(System.Runtime.CompilerServices.ConfiguredTaskAwaitable{System.Guid},System.String)">
+            <summary>
+            <para> Run the <paramref name="asyncTask"/> then return <see cref="T:Milvasoft.Helpers.Models.Response.SingleObjectResponse`1"/>. </para>
+            <para> If <paramref name="asyncTask"/> is success sets the <paramref name="successMessage"/> to <see cref="T:Milvasoft.Helpers.Models.Response.SingleObjectResponse`1"/>.Message.
+                   Otherwise you should throw exception and cut the request pipeline in <paramref name="asyncTask"/>. </para>
+            </summary>
+            
+            <param name="asyncTask"></param>
+            <param name="successMessage"></param>
+            <returns> <see cref="T:Milvasoft.Helpers.Models.Response.SingleObjectResponse`1"/> in 200 OK <see cref="T:Microsoft.AspNetCore.Mvc.ActionResult"/> </returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.Response.ReturnSingleObjectResponseForAddOrUpdateAsync``1(System.Runtime.CompilerServices.ConfiguredTaskAwaitable{System.Int32},System.String)">
+            <summary>
+            <para> Run the <paramref name="asyncTask"/> then return <see cref="T:Milvasoft.Helpers.Models.Response.SingleObjectResponse`1"/>. </para>
+            <para> If <paramref name="asyncTask"/> is success sets the <paramref name="successMessage"/> to <see cref="T:Milvasoft.Helpers.Models.Response.SingleObjectResponse`1"/>.Message.
+                   Otherwise you should throw exception and cut the request pipeline in <paramref name="asyncTask"/>. </para>
+            </summary>
+            
+            <param name="asyncTask"></param>
+            <param name="successMessage"></param>
+            <returns> <see cref="T:Milvasoft.Helpers.Models.Response.SingleObjectResponse`1"/> in 200 OK <see cref="T:Microsoft.AspNetCore.Mvc.ActionResult"/> </returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.Response.ReturnSingleObjectResponseForAddOrUpdateAsync``1(System.Runtime.CompilerServices.ConfiguredTaskAwaitable{System.SByte},System.String)">
+            <summary>
+            <para> Run the <paramref name="asyncTask"/> then return <see cref="T:Milvasoft.Helpers.Models.Response.SingleObjectResponse`1"/>. </para>
+            <para> If <paramref name="asyncTask"/> is success sets the <paramref name="successMessage"/> to <see cref="T:Milvasoft.Helpers.Models.Response.SingleObjectResponse`1"/>.Message.
+                   Otherwise you should throw exception and cut the request pipeline in <paramref name="asyncTask"/>. </para>
+            </summary>
+            
+            <param name="asyncTask"></param>
+            <param name="successMessage"></param>
+            <returns> <see cref="T:Milvasoft.Helpers.Models.Response.SingleObjectResponse`1"/> in 200 OK <see cref="T:Microsoft.AspNetCore.Mvc.ActionResult"/> </returns>
+        </member>
         <member name="M:Milvasoft.Helpers.Response.ReturnSingleObjectResponseForSpecifedProcessAsync``1(System.Runtime.CompilerServices.ConfiguredTaskAwaitable,System.String)">
+            <summary>
+            <para> Run the <paramref name="asyncTask"/> then return <see cref="T:Milvasoft.Helpers.Models.Response.SingleObjectResponse`1"/>. </para>
+            <para> If <paramref name="asyncTask"/> is success sets the <paramref name="successMessage"/> to <see cref="T:Milvasoft.Helpers.Models.Response.SingleObjectResponse`1"/>.Message.
+                   Otherwise you should throw exception and cut the request pipeline in <paramref name="asyncTask"/>. </para>
+            </summary>
+            
+            <param name="asyncTask"></param>
+            <param name="successMessage"></param>
+            <returns>  <see cref="T:Milvasoft.Helpers.Models.Response.SingleObjectResponse`1"/> in 200 OK <see cref="T:Microsoft.AspNetCore.Mvc.ActionResult"/> </returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.Response.ReturnSingleObjectResponseForSpecifedProcessAsync``1(System.Runtime.CompilerServices.ConfiguredTaskAwaitable{``0},System.String)">
+            <summary>
+            <para> Run the <paramref name="asyncTask"/> then return <see cref="T:Milvasoft.Helpers.Models.Response.SingleObjectResponse`1"/>. </para>
+            <para> If <paramref name="asyncTask"/> is success sets the <paramref name="successMessage"/> to <see cref="T:Milvasoft.Helpers.Models.Response.SingleObjectResponse`1"/>.Message.
+                   Otherwise you should throw exception and cut the request pipeline in <paramref name="asyncTask"/>. </para>
+            </summary>
+            
+            <param name="asyncTask"></param>
+            <param name="successMessage"></param>
+            <returns>  <see cref="T:Milvasoft.Helpers.Models.Response.SingleObjectResponse`1"/> in 200 OK <see cref="T:Microsoft.AspNetCore.Mvc.ActionResult"/> </returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.Response.ReturnSingleObjectResponseForSpecifedProcessAsync``1(System.Runtime.CompilerServices.ConfiguredTaskAwaitable{System.Object},System.String)">
             <summary>
             <para> Run the <paramref name="asyncTask"/> then return <see cref="T:Milvasoft.Helpers.Models.Response.SingleObjectResponse`1"/>. </para>
             <para> If <paramref name="asyncTask"/> is success sets the <paramref name="successMessage"/> to <see cref="T:Milvasoft.Helpers.Models.Response.SingleObjectResponse`1"/>.Message.

@@ -236,6 +236,95 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
             return (entities: repo, pageCount: estimatedCountOfRanges);
         }
 
+        /// <summary>
+        /// <para> Gets entities as ordered with <paramref name="orderByPropertyName"/>.
+        ///       If the condition is requested, it also provides that condition.</para> 
+        ///       
+        /// </summary>
+        /// 
+        /// <exception cref="ArgumentException"> Throwns when type of <typeparamref name="TEntity"/>'s properties doesn't contain '<paramref name="orderByPropertyName"/>'. </exception>
+        /// 
+        /// <param name="orderByPropertyName"></param>
+        /// <param name="orderByAscending"></param>
+        /// <param name="conditionExpression"></param>
+        /// <returns></returns>
+        public virtual async Task<IEnumerable<TEntity>> GetAsOrderedAsync(string orderByPropertyName,
+                                                                          bool orderByAscending,
+                                                                          Expression<Func<TEntity, bool>> conditionExpression = null)
+        {
+            List<TEntity> repo;
+
+
+            var entityType = typeof(TEntity);
+
+            if (!CommonHelper.PropertyExists<TEntity>(orderByPropertyName))
+                throw new ArgumentException($"Type of {entityType}'s properties doesn't contain '{orderByPropertyName}'.");
+
+            ParameterExpression paramterExpression = Expression.Parameter(entityType, "i");
+            Expression orderByProperty = Expression.Property(paramterExpression, orderByPropertyName);
+
+            Expression<Func<TEntity, object>> predicate = Expression.Lambda<Func<TEntity, object>>(Expression.Convert(Expression.Property(paramterExpression, orderByPropertyName), typeof(object)), paramterExpression);
+
+            var dataCount = await _dbContext.Set<TEntity>().Where(conditionExpression ?? (entity => true)).CountAsync();
+
+            if (orderByAscending)
+                repo = await _dbContext.Set<TEntity>().Where(conditionExpression ?? (entity => true))
+                                                       .OrderBy(predicate)
+                                                           .ToListAsync().ConfigureAwait(false);
+            else
+                repo = await _dbContext.Set<TEntity>().Where(conditionExpression ?? (entity => true))
+                                                       .OrderByDescending(predicate)
+                                                            .ToListAsync().ConfigureAwait(false);
+
+            return repo;
+        }
+
+        /// <summary>
+        /// <para> Gets entities as ordered with <paramref name="orderByPropertyName"/>.
+        ///        If the condition is requested, it also provides that condition.</para> 
+        ///        
+        /// </summary>
+        /// 
+        /// <exception cref="ArgumentException"> Throwns when type of <typeparamref name="TEntity"/>'s properties doesn't contain '<paramref name="orderByPropertyName"/>'. </exception>
+        ///
+        /// <param name="includes"></param>
+        /// <param name="orderByPropertyName"></param>
+        /// <param name="orderByAscending"></param>
+        /// <param name="conditionExpression"></param>
+        /// <returns></returns>
+        public virtual async Task<IEnumerable<TEntity>> GetAsOrderedAsync(Func<IIncludable<TEntity>, IIncludable> includes,
+                                                                           string orderByPropertyName,
+                                                                           bool orderByAscending,
+                                                                           Expression<Func<TEntity, bool>> conditionExpression = null)
+        {
+            List<TEntity> repo;
+
+            var entityType = typeof(TEntity);
+
+            if (!CommonHelper.PropertyExists<TEntity>(orderByPropertyName))
+                throw new ArgumentException($"Type of {entityType}'s properties doesn't contain '{orderByPropertyName}'.");
+
+
+            ParameterExpression paramterExpression = Expression.Parameter(entityType, "i");
+            Expression orderByProperty = Expression.Property(paramterExpression, orderByPropertyName);
+
+            Expression<Func<TEntity, object>> predicate = Expression.Lambda<Func<TEntity, object>>(Expression.Convert(Expression.Property(paramterExpression, orderByPropertyName), typeof(object)), paramterExpression);
+
+            var dataCount = await _dbContext.Set<TEntity>().Where(conditionExpression ?? (entity => true)).CountAsync();
+
+            if (orderByAscending)
+                repo = (await _dbContext.Set<TEntity>().Where(conditionExpression ?? (entity => true))
+                                                        .OrderBy(predicate)
+                                                           .IncludeMultiple(includes)
+                                                                .ToListAsync().ConfigureAwait(false));
+            else
+                repo = (await _dbContext.Set<TEntity>().Where(conditionExpression ?? (entity => true))
+                                                         .OrderByDescending(predicate)
+                                                             .IncludeMultiple(includes)
+                                                                   .ToListAsync().ConfigureAwait(false));
+
+            return repo;
+        }
 
         /// <summary>
         ///<para> Returns one entity by entity Id from database asynchronously.</para> 
@@ -359,6 +448,103 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
             await _dbContext.SaveChangesAsync().ConfigureAwait(false);
         }
 
+        /// <summary>
+        /// Groups entities with <paramref name="groupByPropertyName"/> and returns the key grouped and the number of items grouped with this key.
+        /// </summary>
+        /// <param name="groupByPropertyName"></param>
+        /// <param name="conditionExpression"></param>
+        /// <returns></returns>
+        public virtual async Task<List<Tuple<object, int>>> GetGroupedAndCountAsync(string groupByPropertyName, Expression<Func<TEntity, bool>> conditionExpression = null)
+        {
+            var entityType = typeof(TEntity);
+
+            if (!CommonHelper.PropertyExists<TEntity>(groupByPropertyName))
+                throw new ArgumentException($"Type of {entityType}'s properties doesn't contain '{groupByPropertyName}'.");
+
+
+            ParameterExpression paramterExpression = Expression.Parameter(entityType, "i");
+            Expression orderByProperty = Expression.Property(paramterExpression, groupByPropertyName);
+
+            Expression<Func<TEntity, object>> predicate = Expression.Lambda<Func<TEntity, object>>(Expression.Convert(Expression.Property(paramterExpression, groupByPropertyName), typeof(object)), paramterExpression);
+
+            return (await _dbContext.Set<TEntity>().Where(conditionExpression ?? (entity => true))
+                                                           .GroupBy(predicate)
+                                                           .Select(b => Tuple.Create(b.Key, b.Count())).ToListAsync().ConfigureAwait(false));
+        }
+
+        /// <summary>
+        /// Get max value of entities.
+        /// </summary>
+        /// <param name="conditionExpression"></param>
+        /// <returns></returns>
+        public virtual async Task<TEntity> GetMaxAsync(Expression<Func<TEntity, bool>> conditionExpression = null)
+        {
+            return (await _dbContext.Set<TEntity>().Where(conditionExpression ?? (entity => true))
+                                                          .MaxAsync().ConfigureAwait(false));
+        }
+
+        /// <summary>
+        /// Get max value of entities. With includes.
+        /// </summary>
+        /// <param name="includes"></param>
+        /// <param name="conditionExpression"></param>
+        /// <returns></returns>
+        public virtual async Task<TEntity> GetMaxAsync(Func<IIncludable<TEntity>, IIncludable> includes, Expression<Func<TEntity, bool>> conditionExpression = null)
+        {
+            return (await _dbContext.Set<TEntity>().Where(conditionExpression ?? (entity => true))
+                                                      .IncludeMultiple(includes)
+                                                          .MaxAsync().ConfigureAwait(false));
+        }
+
+        /// <summary>
+        /// Gets max value of <typeparamref name="TEntity"/>'s property in entities.
+        /// </summary>
+        /// <param name="groupByPropertyName"></param>
+        /// <param name="conditionExpression"></param>
+        /// <returns></returns>
+        public virtual async Task<object> GetMaxAsync(string groupByPropertyName, Expression<Func<TEntity, bool>> conditionExpression = null)
+        {
+            var entityType = typeof(TEntity);
+
+            if (!CommonHelper.PropertyExists<TEntity>(groupByPropertyName))
+                throw new ArgumentException($"Type of {entityType}'s properties doesn't contain '{groupByPropertyName}'.");
+
+
+            ParameterExpression paramterExpression = Expression.Parameter(entityType, "i");
+            Expression orderByProperty = Expression.Property(paramterExpression, groupByPropertyName);
+
+            Expression<Func<TEntity, object>> predicate = Expression.Lambda<Func<TEntity, object>>(Expression.Convert(Expression.Property(paramterExpression, groupByPropertyName), typeof(object)), paramterExpression);
+
+
+            return (await _dbContext.Set<TEntity>().Where(conditionExpression ?? (entity => true))
+                                                          .MaxAsync(predicate).ConfigureAwait(false));
+        }
+
+        /// <summary>
+        /// Gets max value of <typeparamref name="TEntity"/>'s property in entities. With includes.
+        /// </summary>
+        /// <param name="includes"></param>
+        /// <param name="groupByPropertyName"></param>
+        /// <param name="conditionExpression"></param>
+        /// <returns></returns>
+        public virtual async Task<object> GetMaxAsync(Func<IIncludable<TEntity>, IIncludable> includes, string groupByPropertyName, Expression<Func<TEntity, bool>> conditionExpression = null)
+        {
+            var entityType = typeof(TEntity);
+
+            if (!CommonHelper.PropertyExists<TEntity>(groupByPropertyName))
+                throw new ArgumentException($"Type of {entityType}'s properties doesn't contain '{groupByPropertyName}'.");
+
+            ParameterExpression paramterExpression = Expression.Parameter(entityType, "i");
+            Expression orderByProperty = Expression.Property(paramterExpression, groupByPropertyName);
+
+            Expression<Func<TEntity, object>> predicate = Expression.Lambda<Func<TEntity, object>>(Expression.Convert(Expression.Property(paramterExpression, groupByPropertyName), typeof(object)), paramterExpression);
+
+            return (await _dbContext.Set<TEntity>().Where(conditionExpression ?? (entity => true))
+                                                         .IncludeMultiple(includes)
+                                                            .MaxAsync(predicate).ConfigureAwait(false));
+        }
+
+        //TODO EntityFrameworkQueryableExtensions methods will be added here.
 
         #region Private Helper Methods
         private void InitalizeEdit(TEntity entity)
