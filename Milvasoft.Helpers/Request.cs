@@ -37,7 +37,7 @@ namespace Milvasoft.Helpers
                 Method = httpMethod
             };
 
-            if (headers.Length! >= 0)
+            if (headers != null && headers.Length > 0)
                 for (int i = 0; i < headers.Length; i++)
                     requestMessage.Headers.Add(headers[i].Key, headers[i].Value);
 
@@ -56,12 +56,17 @@ namespace Milvasoft.Helpers
         {
             var response = await httpClient.SendAsync(httpRequestMessage).ConfigureAwait(false);
 
-            var contentString = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+            if (response.IsSuccessStatusCode)
+            {
+                var contentString = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
 
-            JObject responseObject = (JObject)JsonConvert.DeserializeObject(contentString);
+                JObject responseObject = (JObject)JsonConvert.DeserializeObject(contentString);
 
-            if (!responseObject.PropertyExists("errorCodes")) return responseObject.ToObject<SingleObjectResponse<T>>();
-            else return responseObject.ToObject<ExceptionResponse>();
+                if (!responseObject.PropertyExists("errorCodes")) return responseObject.ToObject<SingleObjectResponse<T>>();
+                else return responseObject.ToObject<ExceptionResponse>();
+            }
+
+            return response;
         }
 
         /// <summary>
@@ -74,13 +79,16 @@ namespace Milvasoft.Helpers
         public static async Task<object> SendRequestDeserializeMultiple<T>(this HttpClient httpClient, HttpRequestMessage httpRequestMessage)
         {
             var response = await httpClient.SendAsync(httpRequestMessage).ConfigureAwait(false);
+            if (response.IsSuccessStatusCode)
+            {
+                var contentString = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
 
-            var contentString = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+                JObject responseObject = (JObject)JsonConvert.DeserializeObject(contentString);
 
-            JObject responseObject = (JObject)JsonConvert.DeserializeObject(contentString);
-
-            if (!responseObject.PropertyExists("errorCodes")) return responseObject.ToObject<MultipleObjectResponse<T>>();
-            else return responseObject.ToObject<ExceptionResponse>();
+                if (!responseObject.PropertyExists("errorCodes")) return responseObject.ToObject<MultipleObjectResponse<T>>();
+                else return responseObject.ToObject<ExceptionResponse>();
+            }
+            return response;
         }
 
         /// <summary>
