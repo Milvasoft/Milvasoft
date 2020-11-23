@@ -19,14 +19,39 @@ namespace Milvasoft.Helpers
         /// <summary>
         /// Creates HTTP request message.
         /// </summary>
-        /// <param name="content"></param>
         /// <param name="encoding"></param>
         /// <param name="mediaType"> etc "json" </param>
         /// <param name="httpMethod"></param>
         /// <param name="url"></param>
         /// <param name="headers"></param>
         /// <returns> HttpRequestMessage </returns>
-        public static HttpRequestMessage CreateRequestMessage(this HttpMethod httpMethod, Encoding encoding, string mediaType, string url, object content = null, params KeyValuePair<string, string>[] headers)
+        public static HttpRequestMessage CreateRequestMessage(this HttpMethod httpMethod, Encoding encoding, string mediaType, string url, params KeyValuePair<string, string>[] headers)
+        {
+            var requestMessage = new HttpRequestMessage
+            {
+                Content = new StringContent(null, encoding, "application/json-" + httpMethod.ToString() + $"+{mediaType}"),
+                RequestUri = new Uri(url),
+                Method = httpMethod
+            };
+
+            if (headers != null && headers.Length > 0)
+                for (int i = 0; i < headers.Length; i++)
+                    requestMessage.Headers.Add(headers[i].Key, headers[i].Value);
+
+            return requestMessage;
+        }
+
+        /// <summary>
+        /// Creates HTTP request message.
+        /// </summary>
+        /// <param name="encoding"></param>
+        /// <param name="mediaType"> etc "json" </param>
+        /// <param name="httpMethod"></param>
+        /// <param name="url"></param>
+        /// <param name="content"></param>
+        /// <param name="headers"></param>
+        /// <returns> HttpRequestMessage </returns>
+        public static HttpRequestMessage CreateRequestMessage(this HttpMethod httpMethod, Encoding encoding, string mediaType, string url, object content , params KeyValuePair<string, string>[] headers)
         {
             var json = JsonConvert.SerializeObject(content);
 
@@ -35,6 +60,37 @@ namespace Milvasoft.Helpers
                 Content = new StringContent(json, encoding, "application/json-" + httpMethod.ToString() + $"+{mediaType}"),
                 RequestUri = new Uri(url),
                 Method = httpMethod
+            };
+
+            if (headers != null && headers.Length > 0)
+                for (int i = 0; i < headers.Length; i++)
+                    requestMessage.Headers.Add(headers[i].Key, headers[i].Value);
+
+            return requestMessage;
+        }
+
+
+        /// <summary>
+        /// Creates HTTP request message.
+        /// </summary>
+        /// <param name="encoding"></param>
+        /// <param name="mediaType"> etc "json" </param>
+        /// <param name="httpMethod"></param>
+        /// <param name="url"></param>
+        /// <param name="content"></param>
+        /// <param name="version"></param>
+        /// <param name="headers"></param>
+        /// <returns> HttpRequestMessage </returns>
+        public static HttpRequestMessage CreateRequestMessage(this HttpMethod httpMethod, Encoding encoding, string mediaType, string url, object content , Version version , params KeyValuePair<string, string>[] headers)
+        {
+            var json = JsonConvert.SerializeObject(content);
+
+            var requestMessage = new HttpRequestMessage
+            {
+                Content = new StringContent(json, encoding, "application/json-" + httpMethod.ToString() + $"+{mediaType}"),
+                RequestUri = new Uri(url),
+                Method = httpMethod,
+                Version = version != null ? version : new Version(1, 0)
             };
 
             if (headers != null && headers.Length > 0)
