@@ -73,6 +73,12 @@ namespace Milvasoft.Helpers.DataAccess.Abstract
                                                    string tokenName,
                                                    Dictionary<string, string> cachedTokenDictionary = null) where TUser : IdentityUser<TKey>
                                                                                                             where TKey : IEquatable<TKey>;
-        
-        }
+
+        /// <summary>
+        /// Gets requested DbSet by <typeparamref name="TEntity"/>.
+        /// </summary>
+        /// <typeparam name="TEntity"></typeparam>
+        /// <returns></returns>
+        DbSet<TEntity> GetDbSet<TEntity>() where TEntity : class;
+    }
 }

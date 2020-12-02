@@ -1,7 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Milvasoft.Helpers.DataAccess.Concrete;
 using Milvasoft.Helpers.DataAccess.IncludeLibrary;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
@@ -228,6 +230,174 @@ namespace Milvasoft.Helpers.DataAccess.Abstract
         /// <param name="conditionExpression"></param>
         /// <returns></returns>
         Task<List<Tuple<object, int>>> GetGroupedAndCountAsync(string groupByPropertyName, Expression<Func<TEntity, bool>> conditionExpression = null);
+
+
+        /// <summary>
+        /// Gets grouped entities from database with <paramref name="groupedClause"/>.
+        /// 
+        /// <para><b>Example use;</b></para>
+        /// <code>
+        /// 
+        ///   <para> var dbSet = _contextRepository.GetDbSet{Poco}();  <see cref="ContextRepository{TContext}.GetDbSet{TEntity}"></see> </para>
+        /// 
+        ///   <para> var groupByClause =<para> from poco in dbSet </para>                                                                     </para>
+        ///   <para>                           group poco by new { poco.Id,  poco.PocoCode } into groupedPocos                                </para>       
+        ///   <para>                           select new PocoDTO                                                                             </para>
+        ///   <para>                           {                                                                                              </para>
+        ///   <para>                                Id = groupedPocos.Key.Id,                                                                 </para>
+        ///   <para>                                PocoCode = groupedPocos.Key.PocoCode,                                                     </para>
+        ///   <para>                                PocoCount = groupedPocos.Sum(p=>p.Count)                                                  </para>
+        ///   <para>                           };                                                                                             </para>
+        ///                        
+        ///   <para> var result = await _pocoRepository.GetGroupedAsync{PocoDTO}(groupByClause).ConfigureAwait(false);                        </para>
+        ///    
+        /// </code>
+        /// 
+        /// </summary>
+        /// 
+        /// 
+        /// 
+        /// <typeparam name="TReturn"></typeparam>
+        /// <param name="groupedClause"></param>
+        /// <param name="conditionExpression"></param>
+        /// <returns></returns>
+        Task<List<TReturn>> GetAsGroupedAsync<TReturn>(IQueryable<TReturn> groupedClause, Expression<Func<TReturn, bool>> conditionExpression = null);
+
+        /// <summary>
+        /// Gets grouped entities with condition from database with <paramref name="groupedClause"/>.
+        /// 
+        /// <para><b>Example use;</b></para>
+        /// <code>
+        /// 
+        ///   <para> Func{IQueryablePocoDTO>} groupByClauseFunc = () => <para>  from poco in _contextRepository.GetDbSet{Poco}() </para>                                       </para>
+        ///   <para>                                                            group poco by new { poco.Id,  poco.PocoCode } into groupedPocos                                </para>       
+        ///   <para>                                                            select new PocoDTO                                                                             </para>
+        ///   <para>                                                            {                                                                                              </para>
+        ///   <para>                                                                 Id = groupedPocos.Key.Id,                                                                 </para>
+        ///   <para>                                                                 PocoCode = groupedPocos.Key.PocoCode,                                                     </para>
+        ///   <para>                                                                 PocoCount = groupedPocos.Sum(p=>p.Count)                                                  </para>
+        ///   <para>                                                            };                                                                                             </para>
+        ///                        
+        ///   <para> var result = await _pocoRepository.GetGroupedAsync{PocoDTO}(groupByClauseFunc).ConfigureAwait(false);                                                     </para>
+        ///    
+        /// </code>
+        /// 
+        /// </summary>
+        /// 
+        /// 
+        /// 
+        /// <typeparam name="TReturn"></typeparam>
+        /// <param name="conditionExpression"></param>
+        /// <param name="groupedClause"></param>
+        /// <returns></returns>
+        Task<List<TReturn>> GetAsGroupedAsync<TReturn>(Func<IQueryable<TReturn>> groupedClause, Expression<Func<TReturn, bool>> conditionExpression = null);
+
+        /// <summary>
+        /// Gets grouped entities with condition from database with <paramref name="groupedClause"/>.
+        /// 
+        /// <para><b>Example use;</b></para>
+        /// <code>
+        /// 
+        ///   <para> Func{IQueryablePocoDTO>} groupByClauseFunc = () => <para>  from poco in _contextRepository.GetDbSet{Poco}() </para>                                       </para>
+        ///   <para>                                                            group poco by new { poco.Id,  poco.PocoCode } into groupedPocos                                </para>       
+        ///   <para>                                                            select new PocoDTO                                                                             </para>
+        ///   <para>                                                            {                                                                                              </para>
+        ///   <para>                                                                 Id = groupedPocos.Key.Id,                                                                 </para>
+        ///   <para>                                                                 PocoCode = groupedPocos.Key.PocoCode,                                                     </para>
+        ///   <para>                                                                 PocoCount = groupedPocos.Sum(p=>p.Count)                                                  </para>
+        ///   <para>                                                            };                                                                                             </para>
+        ///                        
+        ///   <para> var result = await _pocoRepository.GetGroupedAsync{PocoDTO}(1, 10, groupByClauseFunc).ConfigureAwait(false);                                              </para>
+        ///    
+        /// </code>
+        /// 
+        /// </summary>
+        /// 
+        /// 
+        /// 
+        /// <typeparam name="TReturn"></typeparam>
+        /// <param name="requestedPageNumber"></param>
+        /// <param name="countOfRequestedRecordsInPage"></param>
+        /// <param name="conditionExpression"></param>
+        /// <param name="groupedClause"></param>
+        /// <returns></returns>
+        Task<(IEnumerable<TReturn> entities, int pageCount)> GetAsGroupedAndPaginatedAsync<TReturn>(int requestedPageNumber,
+                                                                                                                int countOfRequestedRecordsInPage,
+                                                                                                                Func<IQueryable<TReturn>> groupedClause,
+                                                                                                                Expression<Func<TReturn, bool>> conditionExpression = null);
+
+
+        /// <summary>
+        /// Gets grouped entities with condition from database with <paramref name="groupedClause"/>.
+        /// 
+        /// <para><b>Example use;</b></para>
+        /// <code>
+        /// 
+        ///   <para> Func{IQueryablePocoDTO>} groupByClauseFunc = () => <para>  from poco in _contextRepository.GetDbSet{Poco}() </para>                                       </para>
+        ///   <para>                                                            group poco by new { poco.Id,  poco.PocoCode } into groupedPocos                                </para>       
+        ///   <para>                                                            select new PocoDTO                                                                             </para>
+        ///   <para>                                                            {                                                                                              </para>
+        ///   <para>                                                                 Id = groupedPocos.Key.Id,                                                                 </para>
+        ///   <para>                                                                 PocoCode = groupedPocos.Key.PocoCode,                                                     </para>
+        ///   <para>                                                                 PocoCount = groupedPocos.Sum(p=>p.Count)                                                  </para>
+        ///   <para>                                                            };                                                                                             </para>
+        ///                        
+        ///   <para> var result = await _pocoRepository.GetGroupedAsync{PocoDTO}(1, 10, "PocoCode", false, groupByClauseFunc).ConfigureAwait(false);                           </para>
+        ///    
+        /// </code>
+        /// 
+        /// </summary>
+        /// 
+        /// 
+        /// 
+        /// <typeparam name="TReturn"></typeparam>
+        /// <param name="requestedPageNumber"></param>
+        /// <param name="countOfRequestedRecordsInPage"></param>
+        /// <param name="orderByPropertyName"></param>
+        /// <param name="orderByAscending"></param>
+        /// <param name="conditionExpression"></param>
+        /// <param name="groupedClause"></param>
+        /// <returns></returns>
+        Task<(IEnumerable<TReturn> entities, int pageCount)> GetAsGroupedAndPaginatedAndOrderedAsync<TReturn>(int requestedPageNumber,
+                                                                                                                          int countOfRequestedRecordsInPage,
+                                                                                                                          string orderByPropertyName,
+                                                                                                                          bool orderByAscending,
+                                                                                                                          Func<IQueryable<TReturn>> groupedClause,
+                                                                                                                          Expression<Func<TReturn, bool>> conditionExpression = null);
+
+        /// <summary>
+        /// Gets grouped entities with condition from database with <paramref name="groupedClause"/>.
+        /// 
+        /// <para><b>Example use;</b></para>
+        /// <code>
+        /// 
+        ///   <para> Func{IQueryablePocoDTO>} groupByClauseFunc = () => <para>  from poco in _contextRepository.GetDbSet{Poco}() </para>                                       </para>
+        ///   <para>                                                            group poco by new { poco.Id,  poco.PocoCode } into groupedPocos                                </para>       
+        ///   <para>                                                            select new PocoDTO                                                                             </para>
+        ///   <para>                                                            {                                                                                              </para>
+        ///   <para>                                                                 Id = groupedPocos.Key.Id,                                                                 </para>
+        ///   <para>                                                                 PocoCode = groupedPocos.Key.PocoCode,                                                     </para>
+        ///   <para>                                                                 PocoCount = groupedPocos.Sum(p=>p.Count)                                                  </para>
+        ///   <para>                                                            };                                                                                             </para>
+        ///                        
+        ///   <para> var result = await _pocoRepository.GetGroupedAsync{PocoDTO}("PocoCode", false, groupByClauseFunc).ConfigureAwait(false);                                  </para>
+        ///    
+        /// </code>
+        /// 
+        /// </summary>
+        /// 
+        /// 
+        /// 
+        /// <typeparam name="TReturn"></typeparam>
+        /// <param name="orderByPropertyName"></param>
+        /// <param name="orderByAscending"></param>
+        /// <param name="conditionExpression"></param>
+        /// <param name="groupedClause"></param>
+        /// <returns></returns>
+        Task<IEnumerable<TReturn>> GetAsGroupedAnOrderedAsync<TReturn>(string orderByPropertyName,
+                                                                                   bool orderByAscending,
+                                                                                   Func<IQueryable<TReturn>> groupedClause,
+                                                                                   Expression<Func<TReturn, bool>> conditionExpression = null);
 
         /// <summary>
         /// Get max value of entities.
