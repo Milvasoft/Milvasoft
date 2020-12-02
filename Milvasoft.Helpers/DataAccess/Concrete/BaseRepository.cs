@@ -70,6 +70,9 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
                                                                                                       int countOfRequestedRecordsInPage,
                                                                                                       Expression<Func<TEntity, bool>> conditionExpression = null)
         {
+            if (requestedPageNumber == 0) throw new ArgumentOutOfRangeException($"Requested page count cannot be 0. Page count must be greater than 0.");
+            if (countOfRequestedRecordsInPage <= 0) throw new ArgumentOutOfRangeException($"Count of requested recordc count cannot be 0 or less. Requested record count must be greater than 0.");
+
             var dataCount = await _dbContext.Set<TEntity>().Where(conditionExpression ?? (entity => true)).CountAsync().ConfigureAwait(false);
 
             var repo = await _dbContext.Set<TEntity>().Where(conditionExpression ?? (entity => true)).Skip((requestedPageNumber - 1) * countOfRequestedRecordsInPage).Take(countOfRequestedRecordsInPage).ToListAsync().ConfigureAwait(false);
@@ -101,6 +104,9 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
                                                                                                       Func<IIncludable<TEntity>, IIncludable> includes,
                                                                                                       Expression<Func<TEntity, bool>> conditionExpression = null)
         {
+            if (requestedPageNumber == 0) throw new ArgumentOutOfRangeException($"Requested page count cannot be 0. Page count must be greater than 0.");
+            if (countOfRequestedRecordsInPage <= 0) throw new ArgumentOutOfRangeException($"Count of requested recordc count cannot be 0 or less. Requested record count must be greater than 0.");
+
             var dataCount = await _dbContext.Set<TEntity>().Where(conditionExpression ?? (entity => true)).CountAsync().ConfigureAwait(false);
             var repo = await _dbContext.Set<TEntity>().Where(conditionExpression ?? (entity => true)).IncludeMultiple(includes).Skip((requestedPageNumber - 1) * countOfRequestedRecordsInPage).Take(countOfRequestedRecordsInPage).ToListAsync().ConfigureAwait(false);
 
@@ -135,8 +141,10 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
                                                                                                                 bool orderByAscending,
                                                                                                                 Expression<Func<TEntity, bool>> conditionExpression = null)
         {
-            List<TEntity> repo;
+            if (requestedPageNumber <= 0) throw new ArgumentOutOfRangeException($"Requested page count cannot be 0. Page count must be greater than 0.");
+            if (countOfRequestedRecordsInPage <= 0) throw new ArgumentOutOfRangeException($"Count of requested recordc count cannot be 0 or less. Requested record count must be greater than 0.");
 
+            List<TEntity> repo;
 
             var entityType = typeof(TEntity);
 
@@ -196,13 +204,15 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
                                                                                                                 bool orderByAscending,
                                                                                                                 Expression<Func<TEntity, bool>> conditionExpression = null)
         {
+            if (requestedPageNumber == 0) throw new ArgumentOutOfRangeException($"Requested page count cannot be 0. Page count must be greater than 0.");
+            if (countOfRequestedRecordsInPage <= 0) throw new ArgumentOutOfRangeException($"Count of requested recordc count cannot be 0 or less. Requested record count must be greater than 0.");
+
             List<TEntity> repo;
 
             var entityType = typeof(TEntity);
 
             if (!CommonHelper.PropertyExists<TEntity>(orderByPropertyName))
                 throw new ArgumentException($"Type of {entityType}'s properties doesn't contain '{orderByPropertyName}'.");
-
 
             ParameterExpression paramterExpression = Expression.Parameter(entityType, "i");
             Expression orderByProperty = Expression.Property(paramterExpression, orderByPropertyName);
@@ -473,6 +483,66 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
         }
 
         /// <summary>
+        /// Gets grouped entities from database with <paramref name="groupedClause"/>.
+        /// 
+        /// <para><b>Example use;</b></para>
+        /// <code>
+        /// 
+        ///   <para> var dbSet = _contextRepository.GetDbSet{Poco}();  <see cref="ContextRepository{TContext}.GetDbSet{TEntity}"></see> </para>
+        /// 
+        ///   <para> var groupByClause =<para> from poco in dbSet </para>                                                                     </para>
+        ///   <para>                           group poco by new { poco.Id,  poco.PocoCode } into groupedPocos                                </para>       
+        ///   <para>                           select new PocoDTO                                                                             </para>
+        ///   <para>                           {                                                                                              </para>
+        ///   <para>                                Id = groupedPocos.Key.Id,                                                                 </para>
+        ///   <para>                                PocoCode = groupedPocos.Key.PocoCode,                                                     </para>
+        ///   <para>                                PocoCount = groupedPocos.Sum(p=>p.Count)                                                  </para>
+        ///   <para>                           };                                                                                             </para>
+        ///                        
+        ///   <para> var result = await _pocoRepository.GetGroupedAsync{PocoDTO}(groupByClause).ConfigureAwait(false);                        </para>
+        ///    
+        /// </code>
+        /// 
+        /// </summary>
+        /// 
+        /// 
+        /// 
+        /// <typeparam name="TReturn"></typeparam>
+        /// <param name="groupedClause"></param>
+        /// <returns></returns>
+        public async Task<List<TReturn>> GetGroupedAsync<TReturn>(IQueryable<TReturn> groupedClause) => (await groupedClause.ToListAsync().ConfigureAwait(false));
+
+        /// <summary>
+        /// Gets grouped entities with condition from database with <paramref name="groupedClause"/>.
+        /// 
+        /// <para><b>Example use;</b></para>
+        /// <code>
+        /// 
+        ///   <para> Func{IQueryablePocoDTO>} groupByClauseFunc = () => <para>  from poco in _contextRepository.GetDbSet{Poco}() </para>                                       </para>
+        ///   <para>                                                            group poco by new { poco.Id,  poco.PocoCode } into groupedPocos                                </para>       
+        ///   <para>                                                            select new PocoDTO                                                                             </para>
+        ///   <para>                                                            {                                                                                              </para>
+        ///   <para>                                                                 Id = groupedPocos.Key.Id,                                                                 </para>
+        ///   <para>                                                                 PocoCode = groupedPocos.Key.PocoCode,                                                     </para>
+        ///   <para>                                                                 PocoCount = groupedPocos.Sum(p=>p.Count)                                                  </para>
+        ///   <para>                                                            };                                                                                             </para>
+        ///                        
+        ///   <para> var result = await _pocoRepository.GetGroupedAsync{PocoDTO}(groupByClauseFunc).ConfigureAwait(false);                                                     </para>
+        ///    
+        /// </code>
+        /// 
+        /// </summary>
+        /// 
+        /// 
+        /// 
+        /// <typeparam name="TReturn"></typeparam>
+        /// <param name="conditionExpression"></param>
+        /// <param name="groupedClause"></param>
+        /// <returns></returns>
+        public async Task<List<TReturn>> GetGroupedAsync<TReturn>(Func<IQueryable<TReturn>> groupedClause, Expression<Func<TReturn, bool>> conditionExpression = null) 
+            => await groupedClause.Invoke().Where(conditionExpression ?? (entity => true)).ToListAsync().ConfigureAwait(false);
+
+        /// <summary>
         /// Get max value of entities.
         /// </summary>
         /// <param name="conditionExpression"></param>
@@ -495,6 +565,7 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
                                                       .IncludeMultiple(includes)
                                                           .MaxAsync().ConfigureAwait(false));
         }
+
 
         /// <summary>
         /// Gets max value of <typeparamref name="TEntity"/>'s property in entities.

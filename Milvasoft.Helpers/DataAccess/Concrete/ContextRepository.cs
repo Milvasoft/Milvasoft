@@ -2,10 +2,12 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Milvasoft.Helpers.DataAccess.Abstract;
+using Milvasoft.Helpers.DataAccess.IncludeLibrary;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Reflection;
 using System.Threading.Tasks;
 
@@ -172,6 +174,45 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
                 }
             }
         }
+
+        /// <summary>
+        /// Gets requested contents by <typeparamref name="TEntity"/> DbSet.
+        /// </summary>
+        /// <typeparam name="TEntity"></typeparam>
+        /// <returns></returns>
+        public async Task<List<TEntity>> GetRequiredContents<TEntity>() where TEntity : class => await _dbContext.Set<TEntity>().ToListAsync().ConfigureAwait(false);
+
+        /// <summary>
+        /// Gets requested contents by <paramref name="type"/> DbSet.
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        public async Task<object> GetRequiredContents(Type type)
+        {
+            var dbSet = this.GetType().GetMethod("Set").MakeGenericMethod(type).Invoke(this, null);
+
+            var whereMethods = typeof(Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions)
+                .GetMethods(BindingFlags.Static | BindingFlags.Public)
+                .Where(mi => mi.Name == "ToListAsync");
+
+            MethodInfo whereMethod = whereMethods.FirstOrDefault();
+
+            whereMethod = whereMethod.MakeGenericMethod(type);
+
+            var ret = (Task)whereMethod.Invoke(dbSet, new object[] { dbSet, null });
+            await ret.ConfigureAwait(false);
+
+            var resultProperty = ret.GetType().GetProperty("Result");
+            return resultProperty.GetValue(ret);
+        }
+
+        /// <summary>
+        /// Gets requested DbSet by <typeparamref name="TEntity"/>.
+        /// </summary>
+        /// <typeparam name="TEntity"></typeparam>
+        /// <returns></returns>
+        public DbSet<TEntity> GetDbSet<TEntity>() where TEntity : class => _dbContext.Set<TEntity>();
+
         private static bool PropertyExists<T>(string propertyName)
         {
             return typeof(T).GetProperty(propertyName, BindingFlags.IgnoreCase |
