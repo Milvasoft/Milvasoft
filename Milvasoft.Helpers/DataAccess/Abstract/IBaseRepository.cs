@@ -33,7 +33,7 @@ namespace Milvasoft.Helpers.DataAccess.Abstract
         /// <param name="includes"></param>
         /// <param name="conditionExpression"></param>
         /// <returns></returns>
-        Task<IEnumerable<TEntity>> GetFirstOrDefaultAsync(Func<IIncludable<TEntity>, IIncludable> includes, Expression<Func<TEntity, bool>> conditionExpression = null);
+        Task<TEntity> GetFirstOrDefaultAsync(Func<IIncludable<TEntity>, IIncludable> includes, Expression<Func<TEntity, bool>> conditionExpression = null);
 
         /// <summary>
         /// <para> Returns all entities which IsDeleted condition is true from database asynchronously. If the condition is requested, it also provides that condition.</para> 
