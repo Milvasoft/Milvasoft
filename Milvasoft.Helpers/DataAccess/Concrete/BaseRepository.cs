@@ -33,16 +33,31 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
             _dbContext = dbContext;
         }
 
+
         /// <summary>
         /// <para> Returns all entities which IsDeleted condition is true from database asynchronously. If the condition is requested, it also provides that condition.</para> 
         /// </summary>
         /// <param name="conditionExpression"></param>
         /// <returns></returns>
-        public virtual async Task<IEnumerable<TEntity>> GetAllAsync(Expression<Func<TEntity, bool>> conditionExpression = null)
-        {
-            var result = await _dbContext.Set<TEntity>().Where(conditionExpression ?? (entity => true)).ToListAsync().ConfigureAwait(false);
-            return result;
-        }
+        public virtual async Task<TEntity> GetFirstOrDefaultAsync(Expression<Func<TEntity, bool>> conditionExpression = null) 
+            => await _dbContext.Set<TEntity>().Where(conditionExpression ?? (entity => true)).FirstOrDefaultAsync().ConfigureAwait(false);
+
+        /// <summary>
+        /// <para> Returns all entities which IsDeleted condition is true with includes from database asynchronously. If the condition is requested, it also provides that condition.</para> 
+        /// </summary>
+        /// <param name="includes"></param>
+        /// <param name="conditionExpression"></param>
+        /// <returns></returns>
+        public virtual async Task<IEnumerable<TEntity>> GetFirstOrDefaultAsync(Func<IIncludable<TEntity>, IIncludable> includes, Expression<Func<TEntity, bool>> conditionExpression = null) 
+            => await _dbContext.Set<TEntity>().Where(conditionExpression ?? (entity => true)).IncludeMultiple(includes).ToListAsync().ConfigureAwait(false);
+
+        /// <summary>
+        /// <para> Returns all entities which IsDeleted condition is true from database asynchronously. If the condition is requested, it also provides that condition.</para> 
+        /// </summary>
+        /// <param name="conditionExpression"></param>
+        /// <returns></returns>
+        public virtual async Task<IEnumerable<TEntity>> GetAllAsync(Expression<Func<TEntity, bool>> conditionExpression = null) 
+            => await _dbContext.Set<TEntity>().Where(conditionExpression ?? (entity => true)).ToListAsync().ConfigureAwait(false);
 
         /// <summary>
         /// <para> Returns all entities which IsDeleted condition is true with specified includes from database asynchronously. If the condition is requested, it also provides that condition.</para> 
@@ -50,10 +65,8 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
         /// <param name="includes"></param>
         /// <param name="conditionExpression"></param>
         /// <returns></returns>
-        public virtual async Task<IEnumerable<TEntity>> GetAllAsync(Func<IIncludable<TEntity>, IIncludable> includes, Expression<Func<TEntity, bool>> conditionExpression = null)
-        {
-            return await _dbContext.Set<TEntity>().Where(conditionExpression ?? (entity => true)).IncludeMultiple(includes).ToListAsync().ConfigureAwait(false);
-        }
+        public virtual async Task<IEnumerable<TEntity>> GetAllAsync(Func<IIncludable<TEntity>, IIncludable> includes, Expression<Func<TEntity, bool>> conditionExpression = null) 
+            => await _dbContext.Set<TEntity>().Where(conditionExpression ?? (entity => true)).IncludeMultiple(includes).ToListAsync().ConfigureAwait(false);
 
         /// <summary>
         /// <para> Creates asynchronously a shallow copy of a range of entity's which IsDeleted property is true, in the source List of TEntity with requested count and range. 
