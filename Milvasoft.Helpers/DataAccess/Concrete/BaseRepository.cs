@@ -524,7 +524,7 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
         /// <param name="groupedClause"></param>
         /// <param name="conditionExpression"></param>
         /// <returns></returns>
-        public async Task<List<TReturn>> GetAsGroupedAsync<TReturn>(IQueryable<TReturn> groupedClause, Expression<Func<TReturn, bool>> conditionExpression = null) 
+        public virtual async Task<List<TReturn>> GetAsGroupedAsync<TReturn>(IQueryable<TReturn> groupedClause, Expression<Func<TReturn, bool>> conditionExpression = null) 
             => (await groupedClause.Where(conditionExpression ?? (entity => true)).ToListAsync().ConfigureAwait(false));
 
         /// <summary>
@@ -554,7 +554,7 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
         /// <param name="conditionExpression"></param>
         /// <param name="groupedClause"></param>
         /// <returns></returns>
-        public async Task<List<TReturn>> GetAsGroupedAsync<TReturn>(Func<IQueryable<TReturn>> groupedClause, Expression<Func<TReturn, bool>> conditionExpression = null)
+        public virtual async Task<List<TReturn>> GetAsGroupedAsync<TReturn>(Func<IQueryable<TReturn>> groupedClause, Expression<Func<TReturn, bool>> conditionExpression = null)
             => await groupedClause.Invoke().Where(conditionExpression ?? (entity => true)).ToListAsync().ConfigureAwait(false);
 
         /// <summary>
@@ -586,7 +586,7 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
         /// <param name="conditionExpression"></param>
         /// <param name="groupedClause"></param>
         /// <returns></returns>
-        public async Task<(IEnumerable<TReturn> entities, int pageCount)> GetAsGroupedAndPaginatedAsync<TReturn>(int requestedPageNumber,
+        public virtual async Task<(IEnumerable<TReturn> entities, int pageCount)> GetAsGroupedAndPaginatedAsync<TReturn>(int requestedPageNumber,
                                                                                                                  int countOfRequestedRecordsInPage,
                                                                                                                  Func<IQueryable<TReturn>> groupedClause,
                                                                                                                  Expression<Func<TReturn, bool>> conditionExpression = null)
@@ -638,7 +638,7 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
         /// <param name="conditionExpression"></param>
         /// <param name="groupedClause"></param>
         /// <returns></returns>
-        public async Task<(IEnumerable<TReturn> entities, int pageCount)> GetAsGroupedAndPaginatedAndOrderedAsync<TReturn>(int requestedPageNumber,
+        public virtual async Task<(IEnumerable<TReturn> entities, int pageCount)> GetAsGroupedAndPaginatedAndOrderedAsync<TReturn>(int requestedPageNumber,
                                                                                                                            int countOfRequestedRecordsInPage,
                                                                                                                            string orderByPropertyName,
                                                                                                                            bool orderByAscending,
@@ -714,7 +714,7 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
         /// <param name="conditionExpression"></param>
         /// <param name="groupedClause"></param>
         /// <returns></returns>
-        public async Task<IEnumerable<TReturn>> GetAsGroupedAnOrderedAsync<TReturn>(string orderByPropertyName,
+        public virtual async Task<IEnumerable<TReturn>> GetAsGroupedAnOrderedAsync<TReturn>(string orderByPropertyName,
                                                                                     bool orderByAscending,
                                                                                     Func<IQueryable<TReturn>> groupedClause,
                                                                                     Expression<Func<TReturn, bool>> conditionExpression = null)
@@ -767,14 +767,13 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
                                                           .MaxAsync().ConfigureAwait(false));
         }
 
-
         /// <summary>
         /// Gets max value of <typeparamref name="TEntity"/>'s property in entities.
         /// </summary>
         /// <param name="groupByPropertyName"></param>
         /// <param name="conditionExpression"></param>
         /// <returns></returns>
-        public virtual async Task<object> GetMaxAsync(string groupByPropertyName, Expression<Func<TEntity, bool>> conditionExpression = null)
+        public virtual async Task<object> GetMaxOfGroupedAsync(string groupByPropertyName, Expression<Func<TEntity, bool>> conditionExpression = null)
         {
             var entityType = typeof(TEntity);
 
@@ -799,7 +798,7 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
         /// <param name="groupByPropertyName"></param>
         /// <param name="conditionExpression"></param>
         /// <returns></returns>
-        public virtual async Task<object> GetMaxAsync(Func<IIncludable<TEntity>, IIncludable> includes, string groupByPropertyName, Expression<Func<TEntity, bool>> conditionExpression = null)
+        public virtual async Task<object> GetMaxOfGroupedAsync(Func<IIncludable<TEntity>, IIncludable> includes, string groupByPropertyName, Expression<Func<TEntity, bool>> conditionExpression = null)
         {
             var entityType = typeof(TEntity);
 
@@ -814,6 +813,17 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
             return (await _dbContext.Set<TEntity>().Where(conditionExpression ?? (entity => true))
                                                          .IncludeMultiple(includes)
                                                             .MaxAsync(predicate).ConfigureAwait(false));
+        }
+
+        /// <summary>
+        /// Get count of entities.
+        /// </summary>
+        /// <param name="conditionExpression"></param>
+        /// <returns></returns>
+        public virtual async Task<int> GetCountAsync(Expression<Func<TEntity, bool>> conditionExpression = null)
+        {
+            return (await _dbContext.Set<TEntity>().Where(conditionExpression ?? (entity => true))
+                                                          .CountAsync().ConfigureAwait(false));
         }
 
         //TODO EntityFrameworkQueryableExtensions methods will be added here.
