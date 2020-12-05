@@ -432,19 +432,18 @@ namespace Milvasoft.Helpers.DataAccess.Abstract
         /// <summary>
         /// Gets max value of <typeparamref name="TEntity"/>'s property in entities.
         /// </summary>
-        /// <param name="groupByPropertyName"></param>
+        /// <param name="maxPropertyName"></param>
         /// <param name="conditionExpression"></param>
         /// <returns></returns>
-        Task<object> GetMaxOfGroupedAsync(string groupByPropertyName, Expression<Func<TEntity, bool>> conditionExpression = null);
+        Task<object> GetMaxOfPropertyAsync(string maxPropertyName, Expression<Func<TEntity, bool>> conditionExpression = null);
 
         /// <summary>
-        /// Gets max value of <typeparamref name="TEntity"/>'s property in entities. With includes.
+        /// Gets max value of <typeparamref name="TEntity"/>'s property in entities.
         /// </summary>
-        /// <param name="includes"></param>
-        /// <param name="groupByPropertyName"></param>
+        /// <param name="maxProperty"></param>
         /// <param name="conditionExpression"></param>
         /// <returns></returns>
-        Task<object> GetMaxOfGroupedAsync(Func<IIncludable<TEntity>, IIncludable> includes, string groupByPropertyName, Expression<Func<TEntity, bool>> conditionExpression = null);
+        Task<object> GetMaxOfPropertyAsync(Expression<Func<TEntity, bool>> maxProperty, Expression<Func<TEntity, bool>> conditionExpression = null);
 
         /// <summary>
         /// Get count of entities.

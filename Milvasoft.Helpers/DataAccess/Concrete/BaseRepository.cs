@@ -770,21 +770,21 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
         /// <summary>
         /// Gets max value of <typeparamref name="TEntity"/>'s property in entities.
         /// </summary>
-        /// <param name="groupByPropertyName"></param>
+        /// <param name="maxPropertyName"></param>
         /// <param name="conditionExpression"></param>
         /// <returns></returns>
-        public virtual async Task<object> GetMaxOfGroupedAsync(string groupByPropertyName, Expression<Func<TEntity, bool>> conditionExpression = null)
+        public virtual async Task<object> GetMaxOfPropertyAsync(string maxPropertyName, Expression<Func<TEntity, bool>> conditionExpression = null)
         {
             var entityType = typeof(TEntity);
 
-            if (!CommonHelper.PropertyExists<TEntity>(groupByPropertyName))
-                throw new ArgumentException($"Type of {entityType}'s properties doesn't contain '{groupByPropertyName}'.");
+            if (!CommonHelper.PropertyExists<TEntity>(maxPropertyName))
+                throw new ArgumentException($"Type of {entityType}'s properties doesn't contain '{maxPropertyName}'.");
 
 
             ParameterExpression paramterExpression = Expression.Parameter(entityType, "i");
-            Expression orderByProperty = Expression.Property(paramterExpression, groupByPropertyName);
+            Expression orderByProperty = Expression.Property(paramterExpression, maxPropertyName);
 
-            Expression<Func<TEntity, object>> predicate = Expression.Lambda<Func<TEntity, object>>(Expression.Convert(Expression.Property(paramterExpression, groupByPropertyName), typeof(object)), paramterExpression);
+            Expression<Func<TEntity, object>> predicate = Expression.Lambda<Func<TEntity, object>>(Expression.Convert(Expression.Property(paramterExpression, maxPropertyName), typeof(object)), paramterExpression);
 
 
             return (await _dbContext.Set<TEntity>().Where(conditionExpression ?? (entity => true))
@@ -792,27 +792,15 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
         }
 
         /// <summary>
-        /// Gets max value of <typeparamref name="TEntity"/>'s property in entities. With includes.
+        /// Gets max value of <typeparamref name="TEntity"/>'s property in entities.
         /// </summary>
-        /// <param name="includes"></param>
-        /// <param name="groupByPropertyName"></param>
+        /// <param name="maxProperty"></param>
         /// <param name="conditionExpression"></param>
         /// <returns></returns>
-        public virtual async Task<object> GetMaxOfGroupedAsync(Func<IIncludable<TEntity>, IIncludable> includes, string groupByPropertyName, Expression<Func<TEntity, bool>> conditionExpression = null)
+        public virtual async Task<object> GetMaxOfPropertyAsync(Expression<Func<TEntity, bool>> maxProperty, Expression<Func<TEntity, bool>> conditionExpression = null)
         {
-            var entityType = typeof(TEntity);
-
-            if (!CommonHelper.PropertyExists<TEntity>(groupByPropertyName))
-                throw new ArgumentException($"Type of {entityType}'s properties doesn't contain '{groupByPropertyName}'.");
-
-            ParameterExpression paramterExpression = Expression.Parameter(entityType, "i");
-            Expression orderByProperty = Expression.Property(paramterExpression, groupByPropertyName);
-
-            Expression<Func<TEntity, object>> predicate = Expression.Lambda<Func<TEntity, object>>(Expression.Convert(Expression.Property(paramterExpression, groupByPropertyName), typeof(object)), paramterExpression);
-
             return (await _dbContext.Set<TEntity>().Where(conditionExpression ?? (entity => true))
-                                                         .IncludeMultiple(includes)
-                                                            .MaxAsync(predicate).ConfigureAwait(false));
+                                                          .MaxAsync(maxProperty).ConfigureAwait(false));
         }
 
         /// <summary>
