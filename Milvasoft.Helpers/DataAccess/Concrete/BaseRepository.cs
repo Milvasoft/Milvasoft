@@ -84,7 +84,7 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
                                                                                                       Expression<Func<TEntity, bool>> conditionExpression = null)
         {
             if (requestedPageNumber == 0) throw new ArgumentOutOfRangeException($"Requested page count cannot be 0. Page count must be greater than 0.");
-            if (countOfRequestedRecordsInPage <= 0) throw new ArgumentOutOfRangeException($"Count of requested recordc count cannot be 0 or less. Requested record count must be greater than 0.");
+            if (countOfRequestedRecordsInPage <= 0) throw new ArgumentOutOfRangeException($"Count of requested record count cannot be 0 or less. Requested record count must be greater than 0.");
 
             var dataCount = await _dbContext.Set<TEntity>().Where(conditionExpression ?? (entity => true)).CountAsync().ConfigureAwait(false);
 
@@ -94,7 +94,7 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
 
             int estimatedCountOfRanges = Convert.ToInt32(Math.Ceiling(actualPageCount));
 
-            if (requestedPageNumber > estimatedCountOfRanges)
+            if (estimatedCountOfRanges != 0 && requestedPageNumber > estimatedCountOfRanges)
                 throw new ArgumentOutOfRangeException($"Requested page count is more than actual page count. Maximum page count must be {actualPageCount}.");
 
             return (entities: repo, pageCount: estimatedCountOfRanges);
@@ -118,7 +118,7 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
                                                                                                       Expression<Func<TEntity, bool>> conditionExpression = null)
         {
             if (requestedPageNumber == 0) throw new ArgumentOutOfRangeException($"Requested page count cannot be 0. Page count must be greater than 0.");
-            if (countOfRequestedRecordsInPage <= 0) throw new ArgumentOutOfRangeException($"Count of requested recordc count cannot be 0 or less. Requested record count must be greater than 0.");
+            if (countOfRequestedRecordsInPage <= 0) throw new ArgumentOutOfRangeException($"Count of requested record count cannot be 0 or less. Requested record count must be greater than 0.");
 
             var dataCount = await _dbContext.Set<TEntity>().Where(conditionExpression ?? (entity => true)).CountAsync().ConfigureAwait(false);
             var repo = await _dbContext.Set<TEntity>().Where(conditionExpression ?? (entity => true)).IncludeMultiple(includes).Skip((requestedPageNumber - 1) * countOfRequestedRecordsInPage).Take(countOfRequestedRecordsInPage).ToListAsync().ConfigureAwait(false);
@@ -127,7 +127,7 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
 
             int estimatedCountOfRanges = Convert.ToInt32(Math.Ceiling(actualPageCount));
 
-            if (requestedPageNumber > estimatedCountOfRanges)
+            if (estimatedCountOfRanges != 0 && requestedPageNumber > estimatedCountOfRanges)
                 throw new ArgumentOutOfRangeException($"Requested page count is more than actual page count. Maximum page count must be {actualPageCount}.");
 
             return (entities: repo, pageCount: estimatedCountOfRanges);
@@ -155,7 +155,7 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
                                                                                                                 Expression<Func<TEntity, bool>> conditionExpression = null)
         {
             if (requestedPageNumber <= 0) throw new ArgumentOutOfRangeException($"Requested page count cannot be 0. Page count must be greater than 0.");
-            if (countOfRequestedRecordsInPage <= 0) throw new ArgumentOutOfRangeException($"Count of requested recordc count cannot be 0 or less. Requested record count must be greater than 0.");
+            if (countOfRequestedRecordsInPage <= 0) throw new ArgumentOutOfRangeException($"Count of requested record count cannot be 0 or less. Requested record count must be greater than 0.");
 
             List<TEntity> repo;
 
@@ -164,10 +164,10 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
             if (!CommonHelper.PropertyExists<TEntity>(orderByPropertyName))
                 throw new ArgumentException($"Type of {entityType}'s properties doesn't contain '{orderByPropertyName}'.");
 
-            ParameterExpression paramterExpression = Expression.Parameter(entityType, "i");
-            Expression orderByProperty = Expression.Property(paramterExpression, orderByPropertyName);
+            ParameterExpression parameterExpression = Expression.Parameter(entityType, "i");
+            Expression orderByProperty = Expression.Property(parameterExpression, orderByPropertyName);
 
-            Expression<Func<TEntity, object>> predicate = Expression.Lambda<Func<TEntity, object>>(Expression.Convert(Expression.Property(paramterExpression, orderByPropertyName), typeof(object)), paramterExpression);
+            Expression<Func<TEntity, object>> predicate = Expression.Lambda<Func<TEntity, object>>(Expression.Convert(Expression.Property(parameterExpression, orderByPropertyName), typeof(object)), parameterExpression);
 
             var dataCount = await _dbContext.Set<TEntity>().Where(conditionExpression ?? (entity => true)).CountAsync();
 
@@ -188,7 +188,7 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
 
             int estimatedCountOfRanges = Convert.ToInt32(Math.Ceiling(actualPageCount));
 
-            if (requestedPageNumber > estimatedCountOfRanges)
+            if (estimatedCountOfRanges != 0 && requestedPageNumber > estimatedCountOfRanges)
                 throw new ArgumentOutOfRangeException($"Requested page count is more than actual page count. Maximum page count must be {actualPageCount}.");
 
             return (entities: repo, pageCount: estimatedCountOfRanges);
@@ -218,7 +218,7 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
                                                                                                                 Expression<Func<TEntity, bool>> conditionExpression = null)
         {
             if (requestedPageNumber == 0) throw new ArgumentOutOfRangeException($"Requested page count cannot be 0. Page count must be greater than 0.");
-            if (countOfRequestedRecordsInPage <= 0) throw new ArgumentOutOfRangeException($"Count of requested recordc count cannot be 0 or less. Requested record count must be greater than 0.");
+            if (countOfRequestedRecordsInPage <= 0) throw new ArgumentOutOfRangeException($"Count of requested record count cannot be 0 or less. Requested record count must be greater than 0.");
 
             List<TEntity> repo;
 
@@ -227,10 +227,10 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
             if (!CommonHelper.PropertyExists<TEntity>(orderByPropertyName))
                 throw new ArgumentException($"Type of {entityType}'s properties doesn't contain '{orderByPropertyName}'.");
 
-            ParameterExpression paramterExpression = Expression.Parameter(entityType, "i");
-            Expression orderByProperty = Expression.Property(paramterExpression, orderByPropertyName);
+            ParameterExpression parameterExpression = Expression.Parameter(entityType, "i");
+            Expression orderByProperty = Expression.Property(parameterExpression, orderByPropertyName);
 
-            Expression<Func<TEntity, object>> predicate = Expression.Lambda<Func<TEntity, object>>(Expression.Convert(Expression.Property(paramterExpression, orderByPropertyName), typeof(object)), paramterExpression);
+            Expression<Func<TEntity, object>> predicate = Expression.Lambda<Func<TEntity, object>>(Expression.Convert(Expression.Property(parameterExpression, orderByPropertyName), typeof(object)), parameterExpression);
 
             var dataCount = await _dbContext.Set<TEntity>().Where(conditionExpression ?? (entity => true)).CountAsync();
 
@@ -253,7 +253,7 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
 
             int estimatedCountOfRanges = Convert.ToInt32(Math.Ceiling(actualPageCount));
 
-            if (requestedPageNumber > estimatedCountOfRanges)
+            if (estimatedCountOfRanges != 0 && requestedPageNumber > estimatedCountOfRanges)
                 throw new ArgumentOutOfRangeException("Requested page count is more than actual page count.");
 
             return (entities: repo, pageCount: estimatedCountOfRanges);
@@ -283,10 +283,10 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
             if (!CommonHelper.PropertyExists<TEntity>(orderByPropertyName))
                 throw new ArgumentException($"Type of {entityType}'s properties doesn't contain '{orderByPropertyName}'.");
 
-            ParameterExpression paramterExpression = Expression.Parameter(entityType, "i");
-            Expression orderByProperty = Expression.Property(paramterExpression, orderByPropertyName);
+            ParameterExpression parameterExpression = Expression.Parameter(entityType, "i");
+            Expression orderByProperty = Expression.Property(parameterExpression, orderByPropertyName);
 
-            Expression<Func<TEntity, object>> predicate = Expression.Lambda<Func<TEntity, object>>(Expression.Convert(Expression.Property(paramterExpression, orderByPropertyName), typeof(object)), paramterExpression);
+            Expression<Func<TEntity, object>> predicate = Expression.Lambda<Func<TEntity, object>>(Expression.Convert(Expression.Property(parameterExpression, orderByPropertyName), typeof(object)), parameterExpression);
 
             var dataCount = await _dbContext.Set<TEntity>().Where(conditionExpression ?? (entity => true)).CountAsync();
 
@@ -328,10 +328,10 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
                 throw new ArgumentException($"Type of {entityType}'s properties doesn't contain '{orderByPropertyName}'.");
 
 
-            ParameterExpression paramterExpression = Expression.Parameter(entityType, "i");
-            Expression orderByProperty = Expression.Property(paramterExpression, orderByPropertyName);
+            ParameterExpression parameterExpression = Expression.Parameter(entityType, "i");
+            Expression orderByProperty = Expression.Property(parameterExpression, orderByPropertyName);
 
-            Expression<Func<TEntity, object>> predicate = Expression.Lambda<Func<TEntity, object>>(Expression.Convert(Expression.Property(paramterExpression, orderByPropertyName), typeof(object)), paramterExpression);
+            Expression<Func<TEntity, object>> predicate = Expression.Lambda<Func<TEntity, object>>(Expression.Convert(Expression.Property(parameterExpression, orderByPropertyName), typeof(object)), parameterExpression);
 
             var dataCount = await _dbContext.Set<TEntity>().Where(conditionExpression ?? (entity => true)).CountAsync();
 
@@ -485,10 +485,10 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
                 throw new ArgumentException($"Type of {entityType}'s properties doesn't contain '{groupByPropertyName}'.");
 
 
-            ParameterExpression paramterExpression = Expression.Parameter(entityType, "i");
-            Expression orderByProperty = Expression.Property(paramterExpression, groupByPropertyName);
+            ParameterExpression parameterExpression = Expression.Parameter(entityType, "i");
+            Expression orderByProperty = Expression.Property(parameterExpression, groupByPropertyName);
 
-            Expression<Func<TEntity, object>> predicate = Expression.Lambda<Func<TEntity, object>>(Expression.Convert(Expression.Property(paramterExpression, groupByPropertyName), typeof(object)), paramterExpression);
+            Expression<Func<TEntity, object>> predicate = Expression.Lambda<Func<TEntity, object>>(Expression.Convert(Expression.Property(parameterExpression, groupByPropertyName), typeof(object)), parameterExpression);
 
             return (await _dbContext.Set<TEntity>().Where(conditionExpression ?? (entity => true))
                                                            .GroupBy(predicate)
@@ -655,10 +655,10 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
             if (!CommonHelper.PropertyExists<TReturn>(orderByPropertyName))
                 throw new ArgumentException($"Type of {entityType}'s properties doesn't contain '{orderByPropertyName}'.");
 
-            ParameterExpression paramterExpression = Expression.Parameter(entityType, "i");
-            Expression orderByProperty = Expression.Property(paramterExpression, orderByPropertyName);
+            ParameterExpression parameterExpression = Expression.Parameter(entityType, "i");
+            Expression orderByProperty = Expression.Property(parameterExpression, orderByPropertyName);
 
-            Expression<Func<TReturn, object>> predicate = Expression.Lambda<Func<TReturn, object>>(Expression.Convert(Expression.Property(paramterExpression, orderByPropertyName), typeof(object)), paramterExpression);
+            Expression<Func<TReturn, object>> predicate = Expression.Lambda<Func<TReturn, object>>(Expression.Convert(Expression.Property(parameterExpression, orderByPropertyName), typeof(object)), parameterExpression);
 
             var dataCount = await groupedClause.Invoke().Where(conditionExpression ?? (entity => true)).CountAsync().ConfigureAwait(false);
             if (orderByAscending)
@@ -726,10 +726,10 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
             if (!CommonHelper.PropertyExists<TReturn>(orderByPropertyName))
                 throw new ArgumentException($"Type of {entityType}'s properties doesn't contain '{orderByPropertyName}'.");
 
-            ParameterExpression paramterExpression = Expression.Parameter(entityType, "i");
-            Expression orderByProperty = Expression.Property(paramterExpression, orderByPropertyName);
+            ParameterExpression parameterExpression = Expression.Parameter(entityType, "i");
+            Expression orderByProperty = Expression.Property(parameterExpression, orderByPropertyName);
 
-            Expression<Func<TReturn, object>> predicate = Expression.Lambda<Func<TReturn, object>>(Expression.Convert(Expression.Property(paramterExpression, orderByPropertyName), typeof(object)), paramterExpression);
+            Expression<Func<TReturn, object>> predicate = Expression.Lambda<Func<TReturn, object>>(Expression.Convert(Expression.Property(parameterExpression, orderByPropertyName), typeof(object)), parameterExpression);
 
             var dataCount = await groupedClause.Invoke().Where(conditionExpression ?? (entity => true)).CountAsync().ConfigureAwait(false);
             if (orderByAscending)
@@ -781,10 +781,10 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
                 throw new ArgumentException($"Type of {entityType}'s properties doesn't contain '{maxPropertyName}'.");
 
 
-            ParameterExpression paramterExpression = Expression.Parameter(entityType, "i");
-            Expression orderByProperty = Expression.Property(paramterExpression, maxPropertyName);
+            ParameterExpression parameterExpression = Expression.Parameter(entityType, "i");
+            Expression orderByProperty = Expression.Property(parameterExpression, maxPropertyName);
 
-            Expression<Func<TEntity, object>> predicate = Expression.Lambda<Func<TEntity, object>>(Expression.Convert(Expression.Property(paramterExpression, maxPropertyName), typeof(object)), paramterExpression);
+            Expression<Func<TEntity, object>> predicate = Expression.Lambda<Func<TEntity, object>>(Expression.Convert(Expression.Property(parameterExpression, maxPropertyName), typeof(object)), parameterExpression);
 
 
             return (await _dbContext.Set<TEntity>().Where(conditionExpression ?? (entity => true))
@@ -797,7 +797,7 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
         /// <param name="maxProperty"></param>
         /// <param name="conditionExpression"></param>
         /// <returns></returns>
-        public virtual async Task<object> GetMaxOfPropertyAsync(Expression<Func<TEntity, bool>> maxProperty, Expression<Func<TEntity, bool>> conditionExpression = null)
+        public virtual async Task<object> GetMaxOfPropertyAsync<TProperty>(Expression<Func<TEntity, TProperty>> maxProperty, Expression<Func<TEntity, bool>> conditionExpression = null)
         {
             return (await _dbContext.Set<TEntity>().Where(conditionExpression ?? (entity => true))
                                                           .MaxAsync(maxProperty).ConfigureAwait(false));

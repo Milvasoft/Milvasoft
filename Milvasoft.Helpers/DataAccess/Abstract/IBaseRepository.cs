@@ -443,7 +443,7 @@ namespace Milvasoft.Helpers.DataAccess.Abstract
         /// <param name="maxProperty"></param>
         /// <param name="conditionExpression"></param>
         /// <returns></returns>
-        Task<object> GetMaxOfPropertyAsync(Expression<Func<TEntity, bool>> maxProperty, Expression<Func<TEntity, bool>> conditionExpression = null);
+        Task<object> GetMaxOfPropertyAsync<TProperty>(Expression<Func<TEntity, TProperty>> maxProperty, Expression<Func<TEntity, bool>> conditionExpression = null);
 
         /// <summary>
         /// Get count of entities.
