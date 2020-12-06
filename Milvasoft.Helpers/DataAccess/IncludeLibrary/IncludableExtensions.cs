@@ -21,7 +21,7 @@ namespace Milvasoft.Helpers.DataAccess.IncludeLibrary
         public static IIncludable<TEntity, TProperty> Include<TEntity, TProperty>(this IIncludable<TEntity> includes,
                                                                                   Expression<Func<TEntity, TProperty>> propertySelector) where TEntity : class
         {
-            var result = ((Includable<TEntity>)includes).Input.IgnoreQueryFilters()
+            var result = ((Includable<TEntity>)includes).Input
                 .Include(propertySelector);
             return new Includable<TEntity, TProperty>(result);
         }

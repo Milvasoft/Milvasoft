@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Linq;
 
 namespace Milvasoft.Helpers.DataAccess.IncludeLibrary
@@ -27,7 +28,7 @@ namespace Milvasoft.Helpers.DataAccess.IncludeLibrary
                 return query;
 
             var includable = (Includable<T>)includes(new Includable<T>(query));
-            return includable.Input;
+            return includable.Input.IgnoreQueryFilters();
         }
     }
 }
