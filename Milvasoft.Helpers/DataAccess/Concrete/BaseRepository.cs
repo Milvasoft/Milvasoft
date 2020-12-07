@@ -851,7 +851,7 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
         private Expression<Func<TEntity, bool>> CreateConditionExpression(Expression<Func<TEntity, bool>> conditionExpression = null)
         {
             Expression<Func<TEntity, bool>> mainExpression = null;
-            if (GetSoftDeletedEntities)
+            if (!GetSoftDeletedEntities)
             {
                 var softDeleteExpression = CreateIsDeletedFalseExpression();
                 mainExpression = softDeleteExpression.Append(conditionExpression, ExpressionType.AndAlso);
