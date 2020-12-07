@@ -48,10 +48,10 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
         public virtual Expression<Func<TEntity, bool>> CreateIsDeletedFalseExpression()
         {
             var entityType = typeof(TEntity);
-            if (entityType.IsAssignableFrom(typeof(IBaseIndelibleEntity<TKey>)))
+            if (entityType.BaseType.Name == typeof(BaseIndelibleEntity<TKey>).Name)
             {
                 var parameter = Expression.Parameter(entityType, "entity");
-                var filterExpression = Expression.Equal(Expression.Property(parameter, entityType.GetType().GetProperty("IsDeleted")), Expression.Constant(false, typeof(bool)));
+                var filterExpression = Expression.Equal(Expression.Property(parameter, entityType.GetProperty("IsDeleted")), Expression.Constant(false, typeof(bool)));
                 return Expression.Lambda<Func<TEntity, bool>>(filterExpression, parameter);
             }
             else return null;
