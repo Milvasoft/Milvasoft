@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Milvasoft.Helpers.DataAccess.Abstract;
 using Milvasoft.Helpers.DataAccess.IncludeLibrary;
+using Milvasoft.Helpers.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,6 +26,13 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
         protected TContext _dbContext;
 
         /// <summary>
+        /// Gets or sets GetSoftDeletedEntities. Default is false.
+        /// If value is true, all methods returns all entities.
+        /// If value is false, all methods returns entities which only "IsDeleted" property's value is false.
+        /// </summary>
+        public bool GetSoftDeletedEntities { get; set; } = false;
+
+        /// <summary>
         /// Constructor of BaseRepository for <paramref name="dbContext"/> injection.
         /// </summary>
         /// <param name="dbContext"></param>
@@ -33,14 +41,29 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
             _dbContext = dbContext;
         }
 
+        /// <summary>
+        /// Gets <b>entity => entity.IsDeleted == false</b> expression, if <typeparamref name="TEntity"/> is assignable from <see cref="IBaseIndelibleEntity{TKey}"/>.
+        /// </summary>
+        /// <returns></returns>
+        public virtual Expression<Func<TEntity, bool>> CreateIsDeletedFalseExpression()
+        {
+            var entityType = typeof(TEntity);
+            if (entityType.IsAssignableFrom(typeof(IBaseIndelibleEntity<TKey>)))
+            {
+                var parameter = Expression.Parameter(entityType, "entity");
+                var filterExpression = Expression.Equal(Expression.Property(parameter, entityType.GetType().GetProperty("IsDeleted")), Expression.Constant(false, typeof(bool)));
+                return Expression.Lambda<Func<TEntity, bool>>(filterExpression, parameter);
+            }
+            else return null;
+        }
 
         /// <summary>
         /// <para> Returns all entities which IsDeleted condition is true from database asynchronously. If the condition is requested, it also provides that condition.</para> 
         /// </summary>
         /// <param name="conditionExpression"></param>
         /// <returns></returns>
-        public virtual async Task<TEntity> GetFirstOrDefaultAsync(Expression<Func<TEntity, bool>> conditionExpression = null) 
-            => await _dbContext.Set<TEntity>().Where(conditionExpression ?? (entity => true)).FirstOrDefaultAsync().ConfigureAwait(false);
+        public virtual async Task<TEntity> GetFirstOrDefaultAsync(Expression<Func<TEntity, bool>> conditionExpression = null)
+            => await _dbContext.Set<TEntity>().Where(CreateConditionExpression(conditionExpression) ?? (entity => true)).FirstOrDefaultAsync().ConfigureAwait(false);
 
         /// <summary>
         /// <para> Returns all entities which IsDeleted condition is true with includes from database asynchronously. If the condition is requested, it also provides that condition.</para> 
@@ -48,16 +71,16 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
         /// <param name="includes"></param>
         /// <param name="conditionExpression"></param>
         /// <returns></returns>
-        public virtual async Task<TEntity> GetFirstOrDefaultAsync(Func<IIncludable<TEntity>, IIncludable> includes, Expression<Func<TEntity, bool>> conditionExpression = null) 
-            => await _dbContext.Set<TEntity>().Where(conditionExpression ?? (entity => true)).IncludeMultiple(includes).FirstOrDefaultAsync().ConfigureAwait(false);
+        public virtual async Task<TEntity> GetFirstOrDefaultAsync(Func<IIncludable<TEntity>, IIncludable> includes, Expression<Func<TEntity, bool>> conditionExpression = null)
+            => await _dbContext.Set<TEntity>().Where(CreateConditionExpression(conditionExpression) ?? (entity => true)).IncludeMultiple(includes).FirstOrDefaultAsync().ConfigureAwait(false);
 
         /// <summary>
         /// <para> Returns all entities which IsDeleted condition is true from database asynchronously. If the condition is requested, it also provides that condition.</para> 
         /// </summary>
         /// <param name="conditionExpression"></param>
         /// <returns></returns>
-        public virtual async Task<IEnumerable<TEntity>> GetAllAsync(Expression<Func<TEntity, bool>> conditionExpression = null) 
-            => await _dbContext.Set<TEntity>().Where(conditionExpression ?? (entity => true)).ToListAsync().ConfigureAwait(false);
+        public virtual async Task<IEnumerable<TEntity>> GetAllAsync(Expression<Func<TEntity, bool>> conditionExpression = null)
+            => await _dbContext.Set<TEntity>().Where(CreateConditionExpression(conditionExpression) ?? (entity => true)).ToListAsync().ConfigureAwait(false);
 
         /// <summary>
         /// <para> Returns all entities which IsDeleted condition is true with specified includes from database asynchronously. If the condition is requested, it also provides that condition.</para> 
@@ -65,8 +88,8 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
         /// <param name="includes"></param>
         /// <param name="conditionExpression"></param>
         /// <returns></returns>
-        public virtual async Task<IEnumerable<TEntity>> GetAllAsync(Func<IIncludable<TEntity>, IIncludable> includes, Expression<Func<TEntity, bool>> conditionExpression = null) 
-            => await _dbContext.Set<TEntity>().Where(conditionExpression ?? (entity => true)).IncludeMultiple(includes).ToListAsync().ConfigureAwait(false);
+        public virtual async Task<IEnumerable<TEntity>> GetAllAsync(Func<IIncludable<TEntity>, IIncludable> includes, Expression<Func<TEntity, bool>> conditionExpression = null)
+            => await _dbContext.Set<TEntity>().Where(CreateConditionExpression(conditionExpression) ?? (entity => true)).IncludeMultiple(includes).ToListAsync().ConfigureAwait(false);
 
         /// <summary>
         /// <para> Creates asynchronously a shallow copy of a range of entity's which IsDeleted property is true, in the source List of TEntity with requested count and range. 
@@ -83,12 +106,15 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
                                                                                                       int countOfRequestedRecordsInPage,
                                                                                                       Expression<Func<TEntity, bool>> conditionExpression = null)
         {
+
+
             if (requestedPageNumber == 0) throw new ArgumentOutOfRangeException($"Requested page count cannot be 0. Page count must be greater than 0.");
             if (countOfRequestedRecordsInPage <= 0) throw new ArgumentOutOfRangeException($"Count of requested record count cannot be 0 or less. Requested record count must be greater than 0.");
 
-            var dataCount = await _dbContext.Set<TEntity>().Where(conditionExpression ?? (entity => true)).CountAsync().ConfigureAwait(false);
+            var condition = CreateConditionExpression(conditionExpression);
+            var dataCount = await _dbContext.Set<TEntity>().Where(condition ?? (entity => true)).CountAsync().ConfigureAwait(false);
 
-            var repo = await _dbContext.Set<TEntity>().Where(conditionExpression ?? (entity => true)).Skip((requestedPageNumber - 1) * countOfRequestedRecordsInPage).Take(countOfRequestedRecordsInPage).ToListAsync().ConfigureAwait(false);
+            var repo = await _dbContext.Set<TEntity>().Where(condition ?? (entity => true)).Skip((requestedPageNumber - 1) * countOfRequestedRecordsInPage).Take(countOfRequestedRecordsInPage).ToListAsync().ConfigureAwait(false);
 
             var actualPageCount = (Convert.ToDouble(dataCount) / Convert.ToDouble(countOfRequestedRecordsInPage));
 
@@ -120,8 +146,9 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
             if (requestedPageNumber == 0) throw new ArgumentOutOfRangeException($"Requested page count cannot be 0. Page count must be greater than 0.");
             if (countOfRequestedRecordsInPage <= 0) throw new ArgumentOutOfRangeException($"Count of requested record count cannot be 0 or less. Requested record count must be greater than 0.");
 
-            var dataCount = await _dbContext.Set<TEntity>().Where(conditionExpression ?? (entity => true)).CountAsync().ConfigureAwait(false);
-            var repo = await _dbContext.Set<TEntity>().Where(conditionExpression ?? (entity => true)).IncludeMultiple(includes).Skip((requestedPageNumber - 1) * countOfRequestedRecordsInPage).Take(countOfRequestedRecordsInPage).ToListAsync().ConfigureAwait(false);
+            var condition = CreateConditionExpression(conditionExpression);
+            var dataCount = await _dbContext.Set<TEntity>().Where(condition ?? (entity => true)).CountAsync().ConfigureAwait(false);
+            var repo = await _dbContext.Set<TEntity>().Where(condition ?? (entity => true)).IncludeMultiple(includes).Skip((requestedPageNumber - 1) * countOfRequestedRecordsInPage).Take(countOfRequestedRecordsInPage).ToListAsync().ConfigureAwait(false);
 
             var actualPageCount = (Convert.ToDouble(dataCount) / Convert.ToDouble(countOfRequestedRecordsInPage));
 
@@ -158,7 +185,6 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
             if (countOfRequestedRecordsInPage <= 0) throw new ArgumentOutOfRangeException($"Count of requested record count cannot be 0 or less. Requested record count must be greater than 0.");
 
             List<TEntity> repo;
-
             var entityType = typeof(TEntity);
 
             if (!CommonHelper.PropertyExists<TEntity>(orderByPropertyName))
@@ -169,16 +195,17 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
 
             Expression<Func<TEntity, object>> predicate = Expression.Lambda<Func<TEntity, object>>(Expression.Convert(Expression.Property(parameterExpression, orderByPropertyName), typeof(object)), parameterExpression);
 
-            var dataCount = await _dbContext.Set<TEntity>().Where(conditionExpression ?? (entity => true)).CountAsync();
+            var condition = CreateConditionExpression(conditionExpression);
+            var dataCount = await _dbContext.Set<TEntity>().Where(condition ?? (entity => true)).CountAsync();
 
             if (orderByAscending)
-                repo = await _dbContext.Set<TEntity>().Where(conditionExpression ?? (entity => true))
+                repo = await _dbContext.Set<TEntity>().Where(condition ?? (entity => true))
                                                        .OrderBy(predicate)
                                                         .Skip((requestedPageNumber - 1) * countOfRequestedRecordsInPage)
                                                             .Take(countOfRequestedRecordsInPage)
                                                                     .ToListAsync().ConfigureAwait(false);
             else
-                repo = await _dbContext.Set<TEntity>().Where(conditionExpression ?? (entity => true))
+                repo = await _dbContext.Set<TEntity>().Where(condition ?? (entity => true))
                                                        .OrderByDescending(predicate)
                                                         .Skip((requestedPageNumber - 1) * countOfRequestedRecordsInPage)
                                                             .Take(countOfRequestedRecordsInPage)
@@ -232,17 +259,18 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
 
             Expression<Func<TEntity, object>> predicate = Expression.Lambda<Func<TEntity, object>>(Expression.Convert(Expression.Property(parameterExpression, orderByPropertyName), typeof(object)), parameterExpression);
 
-            var dataCount = await _dbContext.Set<TEntity>().Where(conditionExpression ?? (entity => true)).CountAsync();
+            var condition = CreateConditionExpression(conditionExpression);
+            var dataCount = await _dbContext.Set<TEntity>().Where(condition ?? (entity => true)).CountAsync();
 
             if (orderByAscending)
-                repo = (await _dbContext.Set<TEntity>().Where(conditionExpression ?? (entity => true))
+                repo = (await _dbContext.Set<TEntity>().Where(condition ?? (entity => true))
                                                         .OrderBy(predicate)
                                                           .Skip((requestedPageNumber - 1) * countOfRequestedRecordsInPage)
                                                             .Take(countOfRequestedRecordsInPage)
                                                                   .IncludeMultiple(includes)
                                                                       .ToListAsync().ConfigureAwait(false));
             else
-                repo = (await _dbContext.Set<TEntity>().Where(conditionExpression ?? (entity => true))
+                repo = (await _dbContext.Set<TEntity>().Where(condition ?? (entity => true))
                                                          .OrderByDescending(predicate)
                                                           .Skip((requestedPageNumber - 1) * countOfRequestedRecordsInPage)
                                                             .Take(countOfRequestedRecordsInPage)
@@ -287,15 +315,15 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
             Expression orderByProperty = Expression.Property(parameterExpression, orderByPropertyName);
 
             Expression<Func<TEntity, object>> predicate = Expression.Lambda<Func<TEntity, object>>(Expression.Convert(Expression.Property(parameterExpression, orderByPropertyName), typeof(object)), parameterExpression);
-
-            var dataCount = await _dbContext.Set<TEntity>().Where(conditionExpression ?? (entity => true)).CountAsync();
+            var condition = CreateConditionExpression(conditionExpression);
+            var dataCount = await _dbContext.Set<TEntity>().Where(condition ?? (entity => true)).CountAsync();
 
             if (orderByAscending)
-                repo = await _dbContext.Set<TEntity>().Where(conditionExpression ?? (entity => true))
+                repo = await _dbContext.Set<TEntity>().Where(condition ?? (entity => true))
                                                        .OrderBy(predicate)
                                                            .ToListAsync().ConfigureAwait(false);
             else
-                repo = await _dbContext.Set<TEntity>().Where(conditionExpression ?? (entity => true))
+                repo = await _dbContext.Set<TEntity>().Where(condition ?? (entity => true))
                                                        .OrderByDescending(predicate)
                                                             .ToListAsync().ConfigureAwait(false);
 
@@ -333,15 +361,17 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
 
             Expression<Func<TEntity, object>> predicate = Expression.Lambda<Func<TEntity, object>>(Expression.Convert(Expression.Property(parameterExpression, orderByPropertyName), typeof(object)), parameterExpression);
 
-            var dataCount = await _dbContext.Set<TEntity>().Where(conditionExpression ?? (entity => true)).CountAsync();
+            var condition = CreateConditionExpression(conditionExpression);
+
+            var dataCount = await _dbContext.Set<TEntity>().Where(condition ?? (entity => true)).CountAsync();
 
             if (orderByAscending)
-                repo = (await _dbContext.Set<TEntity>().Where(conditionExpression ?? (entity => true))
+                repo = (await _dbContext.Set<TEntity>().Where(condition ?? (entity => true))
                                                         .OrderBy(predicate)
                                                            .IncludeMultiple(includes)
                                                                 .ToListAsync().ConfigureAwait(false));
             else
-                repo = (await _dbContext.Set<TEntity>().Where(conditionExpression ?? (entity => true))
+                repo = (await _dbContext.Set<TEntity>().Where(condition ?? (entity => true))
                                                          .OrderByDescending(predicate)
                                                              .IncludeMultiple(includes)
                                                                    .ToListAsync().ConfigureAwait(false));
@@ -490,7 +520,7 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
 
             Expression<Func<TEntity, object>> predicate = Expression.Lambda<Func<TEntity, object>>(Expression.Convert(Expression.Property(parameterExpression, groupByPropertyName), typeof(object)), parameterExpression);
 
-            return (await _dbContext.Set<TEntity>().Where(conditionExpression ?? (entity => true))
+            return (await _dbContext.Set<TEntity>().Where(CreateConditionExpression(conditionExpression) ?? (entity => true))
                                                            .GroupBy(predicate)
                                                            .Select(b => Tuple.Create(b.Key, b.Count())).ToListAsync().ConfigureAwait(false));
         }
@@ -524,7 +554,7 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
         /// <param name="groupedClause"></param>
         /// <param name="conditionExpression"></param>
         /// <returns></returns>
-        public virtual async Task<List<TReturn>> GetAsGroupedAsync<TReturn>(IQueryable<TReturn> groupedClause, Expression<Func<TReturn, bool>> conditionExpression = null) 
+        public virtual async Task<List<TReturn>> GetAsGroupedAsync<TReturn>(IQueryable<TReturn> groupedClause, Expression<Func<TReturn, bool>> conditionExpression = null)
             => (await groupedClause.Where(conditionExpression ?? (entity => true)).ToListAsync().ConfigureAwait(false));
 
         /// <summary>
@@ -750,7 +780,7 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
         /// <returns></returns>
         public virtual async Task<TEntity> GetMaxAsync(Expression<Func<TEntity, bool>> conditionExpression = null)
         {
-            return (await _dbContext.Set<TEntity>().Where(conditionExpression ?? (entity => true))
+            return (await _dbContext.Set<TEntity>().Where(CreateConditionExpression(conditionExpression) ?? (entity => true))
                                                           .MaxAsync().ConfigureAwait(false));
         }
 
@@ -762,7 +792,7 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
         /// <returns></returns>
         public virtual async Task<TEntity> GetMaxAsync(Func<IIncludable<TEntity>, IIncludable> includes, Expression<Func<TEntity, bool>> conditionExpression = null)
         {
-            return (await _dbContext.Set<TEntity>().Where(conditionExpression ?? (entity => true))
+            return (await _dbContext.Set<TEntity>().Where(CreateConditionExpression(conditionExpression) ?? (entity => true))
                                                       .IncludeMultiple(includes)
                                                           .MaxAsync().ConfigureAwait(false));
         }
@@ -787,7 +817,7 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
             Expression<Func<TEntity, object>> predicate = Expression.Lambda<Func<TEntity, object>>(Expression.Convert(Expression.Property(parameterExpression, maxPropertyName), typeof(object)), parameterExpression);
 
 
-            return (await _dbContext.Set<TEntity>().Where(conditionExpression ?? (entity => true))
+            return (await _dbContext.Set<TEntity>().Where(CreateConditionExpression(conditionExpression) ?? (entity => true))
                                                           .MaxAsync(predicate).ConfigureAwait(false));
         }
 
@@ -799,7 +829,7 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
         /// <returns></returns>
         public virtual async Task<object> GetMaxOfPropertyAsync<TProperty>(Expression<Func<TEntity, TProperty>> maxProperty, Expression<Func<TEntity, bool>> conditionExpression = null)
         {
-            return (await _dbContext.Set<TEntity>().Where(conditionExpression ?? (entity => true))
+            return (await _dbContext.Set<TEntity>().Where(CreateConditionExpression(conditionExpression) ?? (entity => true))
                                                           .MaxAsync(maxProperty).ConfigureAwait(false));
         }
 
@@ -810,13 +840,31 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
         /// <returns></returns>
         public virtual async Task<int> GetCountAsync(Expression<Func<TEntity, bool>> conditionExpression = null)
         {
-            return (await _dbContext.Set<TEntity>().Where(conditionExpression ?? (entity => true))
+            return (await _dbContext.Set<TEntity>().Where(CreateConditionExpression(conditionExpression) ?? (entity => true))
                                                           .CountAsync().ConfigureAwait(false));
         }
 
         //TODO EntityFrameworkQueryableExtensions methods will be added here.
 
         #region Private Helper Methods
+
+        private Expression<Func<TEntity, bool>> CreateConditionExpression(Expression<Func<TEntity, bool>> conditionExpression = null)
+        {
+            Expression<Func<TEntity, bool>> mainExpression = null;
+            if (GetSoftDeletedEntities)
+            {
+                var softDeleteExpression = CreateIsDeletedFalseExpression();
+                mainExpression = softDeleteExpression.Append(conditionExpression, ExpressionType.AndAlso);
+            }
+            else
+            {
+                mainExpression = conditionExpression;
+            }
+            return mainExpression;
+        }
+
+
+
         private void InitalizeEdit(TEntity entity)
         {
             var localEntity = _dbContext.Set<TEntity>().Local.FirstOrDefault(e => e.Id.Equals(entity.Id));

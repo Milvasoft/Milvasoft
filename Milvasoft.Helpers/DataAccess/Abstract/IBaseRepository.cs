@@ -21,6 +21,12 @@ namespace Milvasoft.Helpers.DataAccess.Abstract
     {
 
         /// <summary>
+        /// Gets <b>entity => entity.IsDeleted == false</b> expression, if <typeparamref name="TEntity"/> is assignable from <see cref="IBaseIndelibleEntity{TKey}"/>.
+        /// </summary>
+        /// <returns></returns>
+        Expression<Func<TEntity, bool>> CreateIsDeletedFalseExpression();
+
+        /// <summary>
         /// <para> Returns all entities which IsDeleted condition is true from database asynchronously. If the condition is requested, it also provides that condition.</para> 
         /// </summary>
         /// <param name="conditionExpression"></param>
