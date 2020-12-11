@@ -77,6 +77,12 @@
             <typeparam name="TKey"></typeparam>
             <typeparam name="TContext"></typeparam>
         </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.CreateIsDeletedFalseExpression">
+            <summary>
+            Gets <b>entity => entity.IsDeleted == false</b> expression, if <typeparamref name="TEntity"/> is assignable from <see cref="T:Milvasoft.Helpers.DataAccess.Abstract.IBaseIndelibleEntity`1"/>.
+            </summary>
+            <returns></returns>
+        </member>
         <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.GetFirstOrDefaultAsync(System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
             <summary>
             <para> Returns all entities which IsDeleted condition is true from database asynchronously. If the condition is requested, it also provides that condition.</para> 
@@ -123,7 +129,7 @@
         <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.GetAsPaginatedAsync(System.Int32,System.Int32,System.Func{Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable{`0},Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable},System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
              <summary>
              <para> Creates asynchronously a shallow copy of a range of entity's which IsDeleted property is true, in the source List of TEntity with requested count,range and includes.
-                    If the condition is requested, it also provides that condition.</para> 
+                   If the condition is requested, it also provides that condition.</para> 
              </summary>
             
              <exception cref="T:System.ArgumentNullException"> Throwns when <paramref name="requestedPageNumber"/> more than actual page number. </exception>
@@ -169,6 +175,39 @@
              <param name="conditionExpression"></param>
              <returns></returns>
         </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.GetAsPaginatedAndOrderedAsync(System.Int32,System.Int32,System.Linq.Expressions.Expression{System.Func{`0,System.Object}},System.Boolean,System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
+            <summary>
+            <para> Creates asynchronously a shallow copy of a range of entity's which IsDeleted property is true, in the source List of TEntity with requested count and range.
+                  If the condition is requested, it also provides that condition.</para> 
+                  
+            </summary>
+            
+            <exception cref="T:System.ArgumentNullException"> Throwns when <paramref name="requestedPageNumber"/> more than actual page number. </exception>
+            
+            <param name="requestedPageNumber"></param>
+            <param name="countOfRequestedRecordsInPage"></param>
+            <param name="orderByKeySelector"></param>
+            <param name="orderByAscending"></param>
+            <param name="conditionExpression"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.GetAsPaginatedAndOrderedAsync(System.Int32,System.Int32,System.Func{Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable{`0},Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable},System.Linq.Expressions.Expression{System.Func{`0,System.Object}},System.Boolean,System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
+             <summary>
+             <para> Creates asynchronously a shallow copy of a range of entity's which IsDeleted property is true, in the source List of TEntity with requested count,range and includes.
+                    If the condition is requested, it also provides that condition.</para> 
+                    
+             </summary>
+             
+             <exception cref="T:System.ArgumentNullException"> Throwns when <paramref name="requestedPageNumber"/> more than actual page number. </exception>
+            
+             <param name="requestedPageNumber"></param>
+             <param name="countOfRequestedRecordsInPage"></param>
+             <param name="includes"></param>
+             <param name="orderByKeySelector"></param>
+             <param name="orderByAscending"></param>
+             <param name="conditionExpression"></param>
+             <returns></returns>
+        </member>
         <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.GetAsOrderedAsync(System.String,System.Boolean,System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
             <summary>
             <para> Gets entities as ordered with <paramref name="orderByPropertyName"/>.
@@ -189,11 +228,36 @@
                     If the condition is requested, it also provides that condition.</para> 
                     
              </summary>
-             
-             <exception cref="T:System.ArgumentException"> Throwns when type of <typeparamref name="TEntity"/>'s properties doesn't contain '<paramref name="orderByPropertyName"/>'. </exception>
             
+             <exception cref="T:System.ArgumentException"> Throwns when type of <typeparamref name="TEntity"/>'s properties doesn't contain '<paramref name="orderByPropertyName"/>'. </exception>
+             
              <param name="includes"></param>
              <param name="orderByPropertyName"></param>
+             <param name="orderByAscending"></param>
+             <param name="conditionExpression"></param>
+             <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.GetAsOrderedAsync(System.Linq.Expressions.Expression{System.Func{`0,System.Object}},System.Boolean,System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
+            <summary>
+            <para> Gets entities as ordered with <paramref name="orderByKeySelector"/>.
+                  If the condition is requested, it also provides that condition.</para> 
+                  
+            </summary>
+            
+            <param name="orderByKeySelector"></param>
+            <param name="orderByAscending"></param>
+            <param name="conditionExpression"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.GetAsOrderedAsync(System.Func{Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable{`0},Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable},System.Linq.Expressions.Expression{System.Func{`0,System.Object}},System.Boolean,System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
+             <summary>
+             <para> Gets entities as ordered with <paramref name="orderByKeySelector"/>.
+                    If the condition is requested, it also provides that condition.</para> 
+                    
+             </summary>
+            
+             <param name="includes"></param>
+             <param name="orderByKeySelector"></param>
              <param name="orderByAscending"></param>
              <param name="conditionExpression"></param>
              <returns></returns>
@@ -594,11 +658,24 @@
             DbContext object.
             </summary>
         </member>
+        <member name="P:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.GetSoftDeletedEntities">
+            <summary>
+            Gets or sets GetSoftDeletedEntities. Default is false.
+            If value is true, all methods returns all entities.
+            If value is false, all methods returns entities which only "IsDeleted" property's value is false.
+            </summary>
+        </member>
         <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.#ctor(`2)">
             <summary>
             Constructor of BaseRepository for <paramref name="dbContext"/> injection.
             </summary>
             <param name="dbContext"></param>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.CreateIsDeletedFalseExpression">
+            <summary>
+            Gets <b>entity => entity.IsDeleted == false</b> expression, if <typeparamref name="TEntity"/> is assignable from <see cref="T:Milvasoft.Helpers.DataAccess.Abstract.IBaseIndelibleEntity`1"/>.
+            </summary>
+            <returns></returns>
         </member>
         <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.GetFirstOrDefaultAsync(System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
             <summary>
@@ -692,6 +769,39 @@
              <param name="conditionExpression"></param>
              <returns></returns>
         </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.GetAsPaginatedAndOrderedAsync(System.Int32,System.Int32,System.Linq.Expressions.Expression{System.Func{`0,System.Object}},System.Boolean,System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
+            <summary>
+            <para> Creates asynchronously a shallow copy of a range of entity's which IsDeleted property is true, in the source List of TEntity with requested count and range.
+                  If the condition is requested, it also provides that condition.</para> 
+                  
+            </summary>
+            
+            <exception cref="T:System.ArgumentNullException"> Throwns when <paramref name="requestedPageNumber"/> more than actual page number. </exception>
+            
+            <param name="requestedPageNumber"></param>
+            <param name="countOfRequestedRecordsInPage"></param>
+            <param name="orderByKeySelector"></param>
+            <param name="orderByAscending"></param>
+            <param name="conditionExpression"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.GetAsPaginatedAndOrderedAsync(System.Int32,System.Int32,System.Func{Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable{`0},Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable},System.Linq.Expressions.Expression{System.Func{`0,System.Object}},System.Boolean,System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
+             <summary>
+             <para> Creates asynchronously a shallow copy of a range of entity's which IsDeleted property is true, in the source List of TEntity with requested count,range and includes.
+                    If the condition is requested, it also provides that condition.</para> 
+                    
+             </summary>
+             
+             <exception cref="T:System.ArgumentNullException"> Throwns when <paramref name="requestedPageNumber"/> more than actual page number. </exception>
+            
+             <param name="requestedPageNumber"></param>
+             <param name="countOfRequestedRecordsInPage"></param>
+             <param name="includes"></param>
+             <param name="orderByKeySelector"></param>
+             <param name="orderByAscending"></param>
+             <param name="conditionExpression"></param>
+             <returns></returns>
+        </member>
         <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.GetAsOrderedAsync(System.String,System.Boolean,System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
             <summary>
             <para> Gets entities as ordered with <paramref name="orderByPropertyName"/>.
@@ -712,11 +822,36 @@
                     If the condition is requested, it also provides that condition.</para> 
                     
              </summary>
-             
-             <exception cref="T:System.ArgumentException"> Throwns when type of <typeparamref name="TEntity"/>'s properties doesn't contain '<paramref name="orderByPropertyName"/>'. </exception>
             
+             <exception cref="T:System.ArgumentException"> Throwns when type of <typeparamref name="TEntity"/>'s properties doesn't contain '<paramref name="orderByPropertyName"/>'. </exception>
+             
              <param name="includes"></param>
              <param name="orderByPropertyName"></param>
+             <param name="orderByAscending"></param>
+             <param name="conditionExpression"></param>
+             <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.GetAsOrderedAsync(System.Linq.Expressions.Expression{System.Func{`0,System.Object}},System.Boolean,System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
+            <summary>
+            <para> Gets entities as ordered with <paramref name="orderByKeySelector"/>.
+                  If the condition is requested, it also provides that condition.</para> 
+                  
+            </summary>
+            
+            <param name="orderByKeySelector"></param>
+            <param name="orderByAscending"></param>
+            <param name="conditionExpression"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.GetAsOrderedAsync(System.Func{Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable{`0},Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable},System.Linq.Expressions.Expression{System.Func{`0,System.Object}},System.Boolean,System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
+             <summary>
+             <para> Gets entities as ordered with <paramref name="orderByKeySelector"/>.
+                    If the condition is requested, it also provides that condition.</para> 
+                    
+             </summary>
+            
+             <param name="includes"></param>
+             <param name="orderByKeySelector"></param>
              <param name="orderByAscending"></param>
              <param name="conditionExpression"></param>
              <returns></returns>

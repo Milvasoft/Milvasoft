@@ -56,6 +56,8 @@ namespace Milvasoft.Helpers.DataAccess.Abstract
         /// <returns></returns>
         Task<IEnumerable<TEntity>> GetAllAsync(Func<IIncludable<TEntity>, IIncludable> includes, Expression<Func<TEntity, bool>> conditionExpression = null);
 
+        #region Pagination And Order
+
         /// <summary>
         /// <para> Creates asynchronously a shallow copy of a range of entity's which IsDeleted property is true, in the source List of TEntity with requested count and range. 
         ///       If the condition is requested, it also provides that condition.</para> 
@@ -73,7 +75,7 @@ namespace Milvasoft.Helpers.DataAccess.Abstract
 
         /// <summary>
         /// <para> Creates asynchronously a shallow copy of a range of entity's which IsDeleted property is true, in the source List of TEntity with requested count,range and includes.
-        ///        If the condition is requested, it also provides that condition.</para> 
+        ///       If the condition is requested, it also provides that condition.</para> 
         /// </summary>
         ///
         /// <exception cref="ArgumentNullException"> Throwns when <paramref name="requestedPageNumber"/> more than actual page number. </exception>
@@ -133,6 +135,48 @@ namespace Milvasoft.Helpers.DataAccess.Abstract
                                                                                                                Expression<Func<TEntity, bool>> conditionExpression = null);
 
         /// <summary>
+        /// <para> Creates asynchronously a shallow copy of a range of entity's which IsDeleted property is true, in the source List of TEntity with requested count and range.
+        ///       If the condition is requested, it also provides that condition.</para> 
+        ///       
+        /// </summary>
+        /// 
+        /// <exception cref="ArgumentNullException"> Throwns when <paramref name="requestedPageNumber"/> more than actual page number. </exception>
+        /// 
+        /// <param name="requestedPageNumber"></param>
+        /// <param name="countOfRequestedRecordsInPage"></param>
+        /// <param name="orderByKeySelector"></param>
+        /// <param name="orderByAscending"></param>
+        /// <param name="conditionExpression"></param>
+        /// <returns></returns>
+        Task<(IEnumerable<TEntity> entities, int pageCount)> GetAsPaginatedAndOrderedAsync(int requestedPageNumber,
+                                                                                                               int countOfRequestedRecordsInPage,
+                                                                                                               Expression<Func<TEntity, object>> orderByKeySelector,
+                                                                                                               bool orderByAscending,
+                                                                                                               Expression<Func<TEntity, bool>> conditionExpression = null);
+
+        /// <summary>
+        /// <para> Creates asynchronously a shallow copy of a range of entity's which IsDeleted property is true, in the source List of TEntity with requested count,range and includes.
+        ///        If the condition is requested, it also provides that condition.</para> 
+        ///        
+        /// </summary>
+        /// 
+        /// <exception cref="ArgumentNullException"> Throwns when <paramref name="requestedPageNumber"/> more than actual page number. </exception>
+        ///
+        /// <param name="requestedPageNumber"></param>
+        /// <param name="countOfRequestedRecordsInPage"></param>
+        /// <param name="includes"></param>
+        /// <param name="orderByKeySelector"></param>
+        /// <param name="orderByAscending"></param>
+        /// <param name="conditionExpression"></param>
+        /// <returns></returns>
+        Task<(IEnumerable<TEntity> entities, int pageCount)> GetAsPaginatedAndOrderedAsync(int requestedPageNumber,
+                                                                                                               int countOfRequestedRecordsInPage,
+                                                                                                               Func<IIncludable<TEntity>, IIncludable> includes,
+                                                                                                               Expression<Func<TEntity, object>> orderByKeySelector,
+                                                                                                               bool orderByAscending,
+                                                                                                               Expression<Func<TEntity, bool>> conditionExpression = null);
+
+        /// <summary>
         /// <para> Gets entities as ordered with <paramref name="orderByPropertyName"/>.
         ///       If the condition is requested, it also provides that condition.</para> 
         ///       
@@ -145,26 +189,58 @@ namespace Milvasoft.Helpers.DataAccess.Abstract
         /// <param name="conditionExpression"></param>
         /// <returns></returns>
         Task<IEnumerable<TEntity>> GetAsOrderedAsync(string orderByPropertyName,
-                                                                          bool orderByAscending,
-                                                                          Expression<Func<TEntity, bool>> conditionExpression = null);
+                                                                         bool orderByAscending,
+                                                                         Expression<Func<TEntity, bool>> conditionExpression = null);
 
         /// <summary>
         /// <para> Gets entities as ordered with <paramref name="orderByPropertyName"/>.
         ///        If the condition is requested, it also provides that condition.</para> 
         ///        
         /// </summary>
-        /// 
-        /// <exception cref="ArgumentException"> Throwns when type of <typeparamref name="TEntity"/>'s properties doesn't contain '<paramref name="orderByPropertyName"/>'. </exception>
         ///
+        /// <exception cref="ArgumentException"> Throwns when type of <typeparamref name="TEntity"/>'s properties doesn't contain '<paramref name="orderByPropertyName"/>'. </exception>
+        /// 
         /// <param name="includes"></param>
         /// <param name="orderByPropertyName"></param>
         /// <param name="orderByAscending"></param>
         /// <param name="conditionExpression"></param>
         /// <returns></returns>
         Task<IEnumerable<TEntity>> GetAsOrderedAsync(Func<IIncludable<TEntity>, IIncludable> includes,
-                                                                          string orderByPropertyName,
-                                                                          bool orderByAscending,
-                                                                          Expression<Func<TEntity, bool>> conditionExpression = null);
+                                                                         string orderByPropertyName,
+                                                                         bool orderByAscending,
+                                                                         Expression<Func<TEntity, bool>> conditionExpression = null);
+
+        /// <summary>
+        /// <para> Gets entities as ordered with <paramref name="orderByKeySelector"/>.
+        ///       If the condition is requested, it also provides that condition.</para> 
+        ///       
+        /// </summary>
+        /// 
+        /// <param name="orderByKeySelector"></param>
+        /// <param name="orderByAscending"></param>
+        /// <param name="conditionExpression"></param>
+        /// <returns></returns>
+        Task<IEnumerable<TEntity>> GetAsOrderedAsync(Expression<Func<TEntity, object>> orderByKeySelector,
+                                                                         bool orderByAscending,
+                                                                         Expression<Func<TEntity, bool>> conditionExpression = null);
+
+        /// <summary>
+        /// <para> Gets entities as ordered with <paramref name="orderByKeySelector"/>.
+        ///        If the condition is requested, it also provides that condition.</para> 
+        ///        
+        /// </summary>
+        ///
+        /// <param name="includes"></param>
+        /// <param name="orderByKeySelector"></param>
+        /// <param name="orderByAscending"></param>
+        /// <param name="conditionExpression"></param>
+        /// <returns></returns>
+        Task<IEnumerable<TEntity>> GetAsOrderedAsync(Func<IIncludable<TEntity>, IIncludable> includes,
+                                                                         Expression<Func<TEntity, object>> orderByKeySelector,
+                                                                         bool orderByAscending,
+                                                                         Expression<Func<TEntity, bool>> conditionExpression = null);
+
+        #endregion
 
         /// <summary>
         /// <para> Returns one entity by entity Id from database asynchronously.</para> 

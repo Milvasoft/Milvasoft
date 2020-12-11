@@ -91,6 +91,8 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
         public virtual async Task<IEnumerable<TEntity>> GetAllAsync(Func<IIncludable<TEntity>, IIncludable> includes, Expression<Func<TEntity, bool>> conditionExpression = null)
             => await _dbContext.Set<TEntity>().Where(CreateConditionExpression(conditionExpression) ?? (entity => true)).IncludeMultiple(includes).ToListAsync().ConfigureAwait(false);
 
+        #region Pagination And Order
+
         /// <summary>
         /// <para> Creates asynchronously a shallow copy of a range of entity's which IsDeleted property is true, in the source List of TEntity with requested count and range. 
         ///       If the condition is requested, it also provides that condition.</para> 
@@ -193,7 +195,7 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
             ParameterExpression parameterExpression = Expression.Parameter(entityType, "i");
             Expression orderByProperty = Expression.Property(parameterExpression, orderByPropertyName);
 
-            Expression<Func<TEntity, object>> predicate = Expression.Lambda<Func<TEntity, object>>(Expression.Convert(Expression.Property(parameterExpression, orderByPropertyName), typeof(object)), parameterExpression);
+            Expression<Func<TEntity, object>> predicate = Expression.Lambda<Func<TEntity, object>>(Expression.Convert(orderByProperty, typeof(object)), parameterExpression);
 
             var condition = CreateConditionExpression(conditionExpression);
             var dataCount = await _dbContext.Set<TEntity>().Where(condition ?? (entity => true)).CountAsync();
@@ -257,7 +259,7 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
             ParameterExpression parameterExpression = Expression.Parameter(entityType, "i");
             Expression orderByProperty = Expression.Property(parameterExpression, orderByPropertyName);
 
-            Expression<Func<TEntity, object>> predicate = Expression.Lambda<Func<TEntity, object>>(Expression.Convert(Expression.Property(parameterExpression, orderByPropertyName), typeof(object)), parameterExpression);
+            Expression<Func<TEntity, object>> predicate = Expression.Lambda<Func<TEntity, object>>(Expression.Convert(orderByProperty, typeof(object)), parameterExpression);
 
             var condition = CreateConditionExpression(conditionExpression);
             var dataCount = await _dbContext.Set<TEntity>().Where(condition ?? (entity => true)).CountAsync();
@@ -288,6 +290,113 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
         }
 
         /// <summary>
+        /// <para> Creates asynchronously a shallow copy of a range of entity's which IsDeleted property is true, in the source List of TEntity with requested count and range.
+        ///       If the condition is requested, it also provides that condition.</para> 
+        ///       
+        /// </summary>
+        /// 
+        /// <exception cref="ArgumentNullException"> Throwns when <paramref name="requestedPageNumber"/> more than actual page number. </exception>
+        /// 
+        /// <param name="requestedPageNumber"></param>
+        /// <param name="countOfRequestedRecordsInPage"></param>
+        /// <param name="orderByKeySelector"></param>
+        /// <param name="orderByAscending"></param>
+        /// <param name="conditionExpression"></param>
+        /// <returns></returns>
+        public virtual async Task<(IEnumerable<TEntity> entities, int pageCount)> GetAsPaginatedAndOrderedAsync(int requestedPageNumber,
+                                                                                                                int countOfRequestedRecordsInPage,
+                                                                                                                Expression<Func<TEntity, object>> orderByKeySelector,
+                                                                                                                bool orderByAscending,
+                                                                                                                Expression<Func<TEntity, bool>> conditionExpression = null)
+        {
+            if (requestedPageNumber <= 0) throw new ArgumentOutOfRangeException($"Requested page count cannot be 0. Page count must be greater than 0.");
+            if (countOfRequestedRecordsInPage <= 0) throw new ArgumentOutOfRangeException($"Count of requested record count cannot be 0 or less. Requested record count must be greater than 0.");
+
+            List<TEntity> repo;
+
+            var condition = CreateConditionExpression(conditionExpression);
+            var dataCount = await _dbContext.Set<TEntity>().Where(condition ?? (entity => true)).CountAsync();
+
+            if (orderByAscending)
+                repo = await _dbContext.Set<TEntity>().Where(condition ?? (entity => true))
+                                                       .OrderBy(orderByKeySelector)
+                                                        .Skip((requestedPageNumber - 1) * countOfRequestedRecordsInPage)
+                                                            .Take(countOfRequestedRecordsInPage)
+                                                                    .ToListAsync().ConfigureAwait(false);
+            else
+                repo = await _dbContext.Set<TEntity>().Where(condition ?? (entity => true))
+                                                       .OrderByDescending(orderByKeySelector)
+                                                        .Skip((requestedPageNumber - 1) * countOfRequestedRecordsInPage)
+                                                            .Take(countOfRequestedRecordsInPage)
+                                                                    .ToListAsync().ConfigureAwait(false);
+
+            var actualPageCount = (Convert.ToDouble(dataCount) / Convert.ToDouble(countOfRequestedRecordsInPage));
+
+            int estimatedCountOfRanges = Convert.ToInt32(Math.Ceiling(actualPageCount));
+
+            if (estimatedCountOfRanges != 0 && requestedPageNumber > estimatedCountOfRanges)
+                throw new ArgumentOutOfRangeException($"Requested page count is more than actual page count. Maximum page count must be {actualPageCount}.");
+
+            return (entities: repo, pageCount: estimatedCountOfRanges);
+        }
+
+        /// <summary>
+        /// <para> Creates asynchronously a shallow copy of a range of entity's which IsDeleted property is true, in the source List of TEntity with requested count,range and includes.
+        ///        If the condition is requested, it also provides that condition.</para> 
+        ///        
+        /// </summary>
+        /// 
+        /// <exception cref="ArgumentNullException"> Throwns when <paramref name="requestedPageNumber"/> more than actual page number. </exception>
+        ///
+        /// <param name="requestedPageNumber"></param>
+        /// <param name="countOfRequestedRecordsInPage"></param>
+        /// <param name="includes"></param>
+        /// <param name="orderByKeySelector"></param>
+        /// <param name="orderByAscending"></param>
+        /// <param name="conditionExpression"></param>
+        /// <returns></returns>
+        public virtual async Task<(IEnumerable<TEntity> entities, int pageCount)> GetAsPaginatedAndOrderedAsync(int requestedPageNumber,
+                                                                                                                int countOfRequestedRecordsInPage,
+                                                                                                                Func<IIncludable<TEntity>, IIncludable> includes,
+                                                                                                                Expression<Func<TEntity, object>> orderByKeySelector,
+                                                                                                                bool orderByAscending,
+                                                                                                                Expression<Func<TEntity, bool>> conditionExpression = null)
+        {
+            if (requestedPageNumber == 0) throw new ArgumentOutOfRangeException($"Requested page count cannot be 0. Page count must be greater than 0.");
+            if (countOfRequestedRecordsInPage <= 0) throw new ArgumentOutOfRangeException($"Count of requested record count cannot be 0 or less. Requested record count must be greater than 0.");
+
+            List<TEntity> repo;
+
+            var condition = CreateConditionExpression(conditionExpression);
+            var dataCount = await _dbContext.Set<TEntity>().Where(condition ?? (entity => true)).CountAsync();
+
+            if (orderByAscending)
+                repo = (await _dbContext.Set<TEntity>().Where(condition ?? (entity => true))
+                                                        .OrderBy(orderByKeySelector)
+                                                          .Skip((requestedPageNumber - 1) * countOfRequestedRecordsInPage)
+                                                            .Take(countOfRequestedRecordsInPage)
+                                                                  .IncludeMultiple(includes)
+                                                                      .ToListAsync().ConfigureAwait(false));
+            else
+                repo = (await _dbContext.Set<TEntity>().Where(condition ?? (entity => true))
+                                                         .OrderByDescending(orderByKeySelector)
+                                                          .Skip((requestedPageNumber - 1) * countOfRequestedRecordsInPage)
+                                                            .Take(countOfRequestedRecordsInPage)
+                                                                  .IncludeMultiple(includes)
+                                                                      .ToListAsync().ConfigureAwait(false));
+
+            var actualPageCount = (Convert.ToDouble(dataCount) / Convert.ToDouble(countOfRequestedRecordsInPage));
+
+            int estimatedCountOfRanges = Convert.ToInt32(Math.Ceiling(actualPageCount));
+
+            if (estimatedCountOfRanges != 0 && requestedPageNumber > estimatedCountOfRanges)
+                throw new ArgumentOutOfRangeException("Requested page count is more than actual page count.");
+
+            return (entities: repo, pageCount: estimatedCountOfRanges);
+        }
+
+
+        /// <summary>
         /// <para> Gets entities as ordered with <paramref name="orderByPropertyName"/>.
         ///       If the condition is requested, it also provides that condition.</para> 
         ///       
@@ -305,7 +414,6 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
         {
             List<TEntity> repo;
 
-
             var entityType = typeof(TEntity);
 
             if (!CommonHelper.PropertyExists<TEntity>(orderByPropertyName))
@@ -314,7 +422,8 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
             ParameterExpression parameterExpression = Expression.Parameter(entityType, "i");
             Expression orderByProperty = Expression.Property(parameterExpression, orderByPropertyName);
 
-            Expression<Func<TEntity, object>> predicate = Expression.Lambda<Func<TEntity, object>>(Expression.Convert(Expression.Property(parameterExpression, orderByPropertyName), typeof(object)), parameterExpression);
+            Expression<Func<TEntity, object>> predicate = Expression.Lambda<Func<TEntity, object>>(Expression.Convert(orderByProperty, typeof(object)), parameterExpression);
+
             var condition = CreateConditionExpression(conditionExpression);
             var dataCount = await _dbContext.Set<TEntity>().Where(condition ?? (entity => true)).CountAsync();
 
@@ -335,18 +444,18 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
         ///        If the condition is requested, it also provides that condition.</para> 
         ///        
         /// </summary>
-        /// 
-        /// <exception cref="ArgumentException"> Throwns when type of <typeparamref name="TEntity"/>'s properties doesn't contain '<paramref name="orderByPropertyName"/>'. </exception>
         ///
+        /// <exception cref="ArgumentException"> Throwns when type of <typeparamref name="TEntity"/>'s properties doesn't contain '<paramref name="orderByPropertyName"/>'. </exception>
+        /// 
         /// <param name="includes"></param>
         /// <param name="orderByPropertyName"></param>
         /// <param name="orderByAscending"></param>
         /// <param name="conditionExpression"></param>
         /// <returns></returns>
         public virtual async Task<IEnumerable<TEntity>> GetAsOrderedAsync(Func<IIncludable<TEntity>, IIncludable> includes,
-                                                                           string orderByPropertyName,
-                                                                           bool orderByAscending,
-                                                                           Expression<Func<TEntity, bool>> conditionExpression = null)
+                                                                          string orderByPropertyName,
+                                                                          bool orderByAscending,
+                                                                          Expression<Func<TEntity, bool>> conditionExpression = null)
         {
             List<TEntity> repo;
 
@@ -355,11 +464,11 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
             if (!CommonHelper.PropertyExists<TEntity>(orderByPropertyName))
                 throw new ArgumentException($"Type of {entityType}'s properties doesn't contain '{orderByPropertyName}'.");
 
-
             ParameterExpression parameterExpression = Expression.Parameter(entityType, "i");
             Expression orderByProperty = Expression.Property(parameterExpression, orderByPropertyName);
 
-            Expression<Func<TEntity, object>> predicate = Expression.Lambda<Func<TEntity, object>>(Expression.Convert(Expression.Property(parameterExpression, orderByPropertyName), typeof(object)), parameterExpression);
+            Expression<Func<TEntity, object>> predicate = Expression.Lambda<Func<TEntity, object>>(Expression.Convert(orderByProperty, typeof(object)), parameterExpression);
+
 
             var condition = CreateConditionExpression(conditionExpression);
 
@@ -378,6 +487,77 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
 
             return repo;
         }
+
+        /// <summary>
+        /// <para> Gets entities as ordered with <paramref name="orderByKeySelector"/>.
+        ///       If the condition is requested, it also provides that condition.</para> 
+        ///       
+        /// </summary>
+        /// 
+        /// <param name="orderByKeySelector"></param>
+        /// <param name="orderByAscending"></param>
+        /// <param name="conditionExpression"></param>
+        /// <returns></returns>
+        public virtual async Task<IEnumerable<TEntity>> GetAsOrderedAsync(Expression<Func<TEntity, object>> orderByKeySelector,
+                                                                          bool orderByAscending,
+                                                                          Expression<Func<TEntity, bool>> conditionExpression = null)
+        {
+            List<TEntity> repo;
+
+            var condition = CreateConditionExpression(conditionExpression);
+            var dataCount = await _dbContext.Set<TEntity>().Where(condition ?? (entity => true)).CountAsync();
+
+            if (orderByAscending)
+                repo = await _dbContext.Set<TEntity>().Where(condition ?? (entity => true))
+                                                       .OrderBy(orderByKeySelector)
+                                                           .ToListAsync().ConfigureAwait(false);
+            else
+                repo = await _dbContext.Set<TEntity>().Where(condition ?? (entity => true))
+                                                       .OrderByDescending(orderByKeySelector)
+                                                            .ToListAsync().ConfigureAwait(false);
+
+            return repo;
+        }
+
+        /// <summary>
+        /// <para> Gets entities as ordered with <paramref name="orderByKeySelector"/>.
+        ///        If the condition is requested, it also provides that condition.</para> 
+        ///        
+        /// </summary>
+        ///
+        /// <param name="includes"></param>
+        /// <param name="orderByKeySelector"></param>
+        /// <param name="orderByAscending"></param>
+        /// <param name="conditionExpression"></param>
+        /// <returns></returns>
+        public virtual async Task<IEnumerable<TEntity>> GetAsOrderedAsync(Func<IIncludable<TEntity>, IIncludable> includes,
+                                                                          Expression<Func<TEntity, object>> orderByKeySelector,
+                                                                          bool orderByAscending,
+                                                                          Expression<Func<TEntity, bool>> conditionExpression = null)
+        {
+            List<TEntity> repo;
+
+            var condition = CreateConditionExpression(conditionExpression);
+
+            var dataCount = await _dbContext.Set<TEntity>().Where(condition ?? (entity => true)).CountAsync();
+
+            if (orderByAscending)
+                repo = (await _dbContext.Set<TEntity>().Where(condition ?? (entity => true))
+                                                        .OrderBy(orderByKeySelector)
+                                                           .IncludeMultiple(includes)
+                                                                .ToListAsync().ConfigureAwait(false));
+            else
+                repo = (await _dbContext.Set<TEntity>().Where(condition ?? (entity => true))
+                                                         .OrderByDescending(orderByKeySelector)
+                                                             .IncludeMultiple(includes)
+                                                                   .ToListAsync().ConfigureAwait(false));
+
+            return repo;
+        }
+
+        #endregion
+
+
 
         /// <summary>
         ///<para> Returns one entity by entity Id from database asynchronously.</para> 

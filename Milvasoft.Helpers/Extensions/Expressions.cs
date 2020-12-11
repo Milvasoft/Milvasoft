@@ -87,6 +87,7 @@ namespace Milvasoft.Helpers.Extensions
         /// <para><b>TR: </b>Bu doğru döküm ile ifadeden doğru döküm ve evcil hayvan özelliğini belirler.</para>
         /// </summary>
         /// <typeparam name="T"></typeparam>
+        /// <typeparam name="TPropertyType"></typeparam>
         /// <param name="expression"></param>
         /// <returns></returns>
         public static MemberInfo GetPropertyInfo<T, TPropertyType>(this Expression<Func<T, TPropertyType>> expression)
@@ -107,6 +108,7 @@ namespace Milvasoft.Helpers.Extensions
         /// <para><b>TR: </b>Bu doğru döküm ile ifadeden doğru döküm ve evcil hayvan özellik adını belirler.</para>
         /// </summary>
         /// <typeparam name="T"></typeparam>
+        /// <typeparam name="TPropertyType"></typeparam>
         /// <param name="expression"></param>
         /// <returns></returns>
         public static string GetPropertyName<T, TPropertyType>(this Expression<Func<T, TPropertyType>> expression)
@@ -121,8 +123,6 @@ namespace Milvasoft.Helpers.Extensions
                 return ((MemberExpression)op).Member.Name;
             }
         }
-
-       
 
     }
 }
