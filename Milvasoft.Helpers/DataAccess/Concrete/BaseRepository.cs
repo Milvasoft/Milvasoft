@@ -123,7 +123,7 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
             int estimatedCountOfRanges = Convert.ToInt32(Math.Ceiling(actualPageCount));
 
             if (estimatedCountOfRanges != 0 && requestedPageNumber > estimatedCountOfRanges)
-                throw new ArgumentOutOfRangeException($"Requested page count is more than actual page count. Maximum page count must be {actualPageCount}.");
+                throw new ArgumentOutOfRangeException($"Requested page count is more than actual page count. Maximum page count must be {estimatedCountOfRanges}.");
 
             return (entities: repo, pageCount: estimatedCountOfRanges);
         }
@@ -157,7 +157,7 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
             int estimatedCountOfRanges = Convert.ToInt32(Math.Ceiling(actualPageCount));
 
             if (estimatedCountOfRanges != 0 && requestedPageNumber > estimatedCountOfRanges)
-                throw new ArgumentOutOfRangeException($"Requested page count is more than actual page count. Maximum page count must be {actualPageCount}.");
+                throw new ArgumentOutOfRangeException($"Requested page count is more than actual page count. Maximum page count must be {estimatedCountOfRanges}.");
 
             return (entities: repo, pageCount: estimatedCountOfRanges);
         }
@@ -218,7 +218,7 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
             int estimatedCountOfRanges = Convert.ToInt32(Math.Ceiling(actualPageCount));
 
             if (estimatedCountOfRanges != 0 && requestedPageNumber > estimatedCountOfRanges)
-                throw new ArgumentOutOfRangeException($"Requested page count is more than actual page count. Maximum page count must be {actualPageCount}.");
+                throw new ArgumentOutOfRangeException($"Requested page count is more than actual page count. Maximum page count must be {estimatedCountOfRanges}.");
 
             return (entities: repo, pageCount: estimatedCountOfRanges);
         }
@@ -284,7 +284,7 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
             int estimatedCountOfRanges = Convert.ToInt32(Math.Ceiling(actualPageCount));
 
             if (estimatedCountOfRanges != 0 && requestedPageNumber > estimatedCountOfRanges)
-                throw new ArgumentOutOfRangeException("Requested page count is more than actual page count.");
+                throw new ArgumentOutOfRangeException($"Requested page count is more than actual page count. Maximum page count must be {estimatedCountOfRanges}.");
 
             return (entities: repo, pageCount: estimatedCountOfRanges);
         }
@@ -335,7 +335,7 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
             int estimatedCountOfRanges = Convert.ToInt32(Math.Ceiling(actualPageCount));
 
             if (estimatedCountOfRanges != 0 && requestedPageNumber > estimatedCountOfRanges)
-                throw new ArgumentOutOfRangeException($"Requested page count is more than actual page count. Maximum page count must be {actualPageCount}.");
+                throw new ArgumentOutOfRangeException($"Requested page count is more than actual page count. Maximum page count must be {estimatedCountOfRanges}.");
 
             return (entities: repo, pageCount: estimatedCountOfRanges);
         }
@@ -390,7 +390,7 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
             int estimatedCountOfRanges = Convert.ToInt32(Math.Ceiling(actualPageCount));
 
             if (estimatedCountOfRanges != 0 && requestedPageNumber > estimatedCountOfRanges)
-                throw new ArgumentOutOfRangeException("Requested page count is more than actual page count.");
+                throw new ArgumentOutOfRangeException($"Requested page count is more than actual page count. Maximum page count must be {estimatedCountOfRanges}.");
 
             return (entities: repo, pageCount: estimatedCountOfRanges);
         }
