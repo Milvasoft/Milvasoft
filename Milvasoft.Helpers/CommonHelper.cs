@@ -37,6 +37,9 @@ namespace Milvasoft.Helpers
         /// <summary>
         /// Creates order by key selector by <paramref name="orderByPropertyName"/>.
         /// </summary>
+        /// 
+        /// <exception cref="ArgumentException"> Throwns when type of <typeparamref name="T"/>'s properties doesn't contain '<paramref name="orderByPropertyName"/>'. </exception>
+        /// 
         /// <typeparam name="T"></typeparam>
         /// <param name="orderByPropertyName"></param>
         /// <returns></returns>
@@ -45,7 +48,7 @@ namespace Milvasoft.Helpers
             var entityType = typeof(T);
 
             if (!PropertyExists<T>(orderByPropertyName))
-                throw new ArgumentException($"Type of {entityType}'s properties doesn't contain '{orderByPropertyName}'.");
+                throw new ArgumentException($"Type of {entityType.Name}'s properties doesn't contain '{orderByPropertyName}'.");
 
             ParameterExpression parameterExpression = Expression.Parameter(entityType, "i");
             Expression orderByProperty = Expression.Property(parameterExpression, orderByPropertyName);

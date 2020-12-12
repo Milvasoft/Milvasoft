@@ -24,7 +24,7 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
         /// DbContext object.
         /// </summary>
         protected TContext _dbContext;
-
+        //TODO summary'e yazılan exception lar düzeltilecek.
         /// <summary>
         /// Gets or sets GetSoftDeletedEntities. Default is false.
         /// If value is true, all methods returns all entities.
@@ -48,7 +48,7 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
         public virtual Expression<Func<TEntity, bool>> CreateIsDeletedFalseExpression()
         {
             var entityType = typeof(TEntity);
-            if (entityType.BaseType.Name == typeof(BaseIndelibleEntity<TKey>).Name)
+            if (typeof(BaseIndelibleEntity<TKey>).IsAssignableFrom(entityType.BaseType))
             {
                 var parameter = Expression.Parameter(entityType, "entity");
                 var filterExpression = Expression.Equal(Expression.Property(parameter, entityType.GetProperty("IsDeleted")), Expression.Constant(false, typeof(bool)));
@@ -98,7 +98,7 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
         ///       If the condition is requested, it also provides that condition.</para> 
         /// </summary>
         /// 
-        /// <exception cref="ArgumentNullException"> Throwns when <paramref name="requestedPageNumber"/> more than actual page number. </exception>
+        /// <exception cref="ArgumentOutOfRangeException"> Throwns when <paramref name="requestedPageNumber"/> more than actual page number. </exception>
         /// 
         /// <param name="requestedPageNumber"></param>
         /// <param name="countOfRequestedRecordsInPage"></param>
@@ -133,7 +133,7 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
         ///       If the condition is requested, it also provides that condition.</para> 
         /// </summary>
         ///
-        /// <exception cref="ArgumentNullException"> Throwns when <paramref name="requestedPageNumber"/> more than actual page number. </exception>
+        /// <exception cref="ArgumentOutOfRangeException"> Throwns when <paramref name="requestedPageNumber"/> more than actual page number. </exception>
         ///
         /// <param name="requestedPageNumber"></param>
         /// <param name="countOfRequestedRecordsInPage"></param>
@@ -169,7 +169,7 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
         /// </summary>
         /// 
         /// <exception cref="ArgumentException"> Throwns when type of <typeparamref name="TEntity"/>'s properties doesn't contain '<paramref name="orderByPropertyName"/>'. </exception>
-        /// <exception cref="ArgumentNullException"> Throwns when <paramref name="requestedPageNumber"/> more than actual page number. </exception>
+        /// <exception cref="ArgumentOutOfRangeException"> Throwns when <paramref name="requestedPageNumber"/> more than actual page number. </exception>
         /// 
         /// <param name="requestedPageNumber"></param>
         /// <param name="countOfRequestedRecordsInPage"></param>
@@ -190,7 +190,7 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
             var entityType = typeof(TEntity);
 
             if (!CommonHelper.PropertyExists<TEntity>(orderByPropertyName))
-                throw new ArgumentException($"Type of {entityType}'s properties doesn't contain '{orderByPropertyName}'.");
+                throw new ArgumentException($"Type of {entityType.Name}'s properties doesn't contain '{orderByPropertyName}'.");
 
             ParameterExpression parameterExpression = Expression.Parameter(entityType, "i");
             Expression orderByProperty = Expression.Property(parameterExpression, orderByPropertyName);
@@ -230,7 +230,7 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
         /// </summary>
         /// 
         /// <exception cref="ArgumentException"> Throwns when type of <typeparamref name="TEntity"/>'s properties doesn't contain '<paramref name="orderByPropertyName"/>'. </exception>
-        /// <exception cref="ArgumentNullException"> Throwns when <paramref name="requestedPageNumber"/> more than actual page number. </exception>
+        /// <exception cref="ArgumentOutOfRangeException"> Throwns when <paramref name="requestedPageNumber"/> more than actual page number. </exception>
         ///
         /// <param name="requestedPageNumber"></param>
         /// <param name="countOfRequestedRecordsInPage"></param>
@@ -254,7 +254,7 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
             var entityType = typeof(TEntity);
 
             if (!CommonHelper.PropertyExists<TEntity>(orderByPropertyName))
-                throw new ArgumentException($"Type of {entityType}'s properties doesn't contain '{orderByPropertyName}'.");
+                throw new ArgumentException($"Type of {entityType.Name}'s properties doesn't contain '{orderByPropertyName}'.");
 
             ParameterExpression parameterExpression = Expression.Parameter(entityType, "i");
             Expression orderByProperty = Expression.Property(parameterExpression, orderByPropertyName);
@@ -295,7 +295,7 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
         ///       
         /// </summary>
         /// 
-        /// <exception cref="ArgumentNullException"> Throwns when <paramref name="requestedPageNumber"/> more than actual page number. </exception>
+        /// <exception cref="ArgumentOutOfRangeException"> Throwns when <paramref name="requestedPageNumber"/> more than actual page number. </exception>
         /// 
         /// <param name="requestedPageNumber"></param>
         /// <param name="countOfRequestedRecordsInPage"></param>
@@ -346,7 +346,7 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
         ///        
         /// </summary>
         /// 
-        /// <exception cref="ArgumentNullException"> Throwns when <paramref name="requestedPageNumber"/> more than actual page number. </exception>
+        /// <exception cref="ArgumentOutOfRangeException"> Throwns when <paramref name="requestedPageNumber"/> more than actual page number. </exception>
         ///
         /// <param name="requestedPageNumber"></param>
         /// <param name="countOfRequestedRecordsInPage"></param>
@@ -417,7 +417,7 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
             var entityType = typeof(TEntity);
 
             if (!CommonHelper.PropertyExists<TEntity>(orderByPropertyName))
-                throw new ArgumentException($"Type of {entityType}'s properties doesn't contain '{orderByPropertyName}'.");
+                throw new ArgumentException($"Type of {entityType.Name}'s properties doesn't contain '{orderByPropertyName}'.");
 
             ParameterExpression parameterExpression = Expression.Parameter(entityType, "i");
             Expression orderByProperty = Expression.Property(parameterExpression, orderByPropertyName);
@@ -462,7 +462,7 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
             var entityType = typeof(TEntity);
 
             if (!CommonHelper.PropertyExists<TEntity>(orderByPropertyName))
-                throw new ArgumentException($"Type of {entityType}'s properties doesn't contain '{orderByPropertyName}'.");
+                throw new ArgumentException($"Type of {entityType.Name}'s properties doesn't contain '{orderByPropertyName}'.");
 
             ParameterExpression parameterExpression = Expression.Parameter(entityType, "i");
             Expression orderByProperty = Expression.Property(parameterExpression, orderByPropertyName);
