@@ -29,15 +29,15 @@ namespace Milvasoft.Helpers.Extensions
             }
 
 
-            ParameterExpression paramterExpression = Expression.Parameter(typeof(T));
+            var paramterExpression = Expression.Parameter(typeof(T));
 
             Expression orderByProperty = Expression.Property(paramterExpression, propertyName);
 
-            LambdaExpression lambda = Expression.Lambda(orderByProperty, paramterExpression);
+            var lambda = Expression.Lambda(orderByProperty, paramterExpression);
 
-            MethodInfo genericMethod = OrderByMethod.MakeGenericMethod(typeof(T), orderByProperty.Type);
+            var genericMethod = OrderByMethod.MakeGenericMethod(typeof(T), orderByProperty.Type);
 
-            object ret = genericMethod.Invoke(null, new object[] { source, lambda });
+            var ret = genericMethod.Invoke(null, new object[] { source, lambda });
 
             return (IQueryable<T>)ret;
         }
@@ -51,15 +51,15 @@ namespace Milvasoft.Helpers.Extensions
                 return null;
             }
 
-            ParameterExpression paramterExpression = Expression.Parameter(typeof(T));
+            var paramterExpression = Expression.Parameter(typeof(T));
 
             Expression orderByProperty = Expression.Property(paramterExpression, propertyName);
 
-            LambdaExpression lambda = Expression.Lambda(orderByProperty, paramterExpression);
+            var lambda = Expression.Lambda(orderByProperty, paramterExpression);
 
-            MethodInfo genericMethod = OrderByDescendingMethod.MakeGenericMethod(typeof(T), orderByProperty.Type);
+            var genericMethod = OrderByDescendingMethod.MakeGenericMethod(typeof(T), orderByProperty.Type);
 
-            object ret = genericMethod.Invoke(null, new object[] { source, lambda });
+            var ret = genericMethod.Invoke(null, new object[] { source, lambda });
 
             return (IQueryable<T>)ret;
         }

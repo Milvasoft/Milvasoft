@@ -11,15 +11,13 @@ namespace Milvasoft.Helpers.Extensions.Helpers
         {
             ParameterReplacements = new Dictionary<ParameterExpression, ParameterExpression>();
 
-            for (int i = 0; i != fromParameters.Count && i != toParameters.Count; i++)
+            for (var i = 0; i != fromParameters.Count && i != toParameters.Count; i++)
             { ParameterReplacements.Add(fromParameters[i], toParameters[i]); }
         }
 
         protected override Expression VisitParameter(ParameterExpression node)
         {
-            ParameterExpression replacement;
-
-            if (ParameterReplacements.TryGetValue(node, out replacement))
+            if (ParameterReplacements.TryGetValue(node, out var replacement))
             { node = replacement; }
 
             return base.VisitParameter(node);

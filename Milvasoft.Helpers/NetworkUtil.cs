@@ -15,7 +15,7 @@ namespace Milvasoft.Helpers
         /// <returns>a string array containing all the IP addresses of the server machine</returns>
         public static async Task<IPAddress[]> GetIPAddressesAsync()
         {
-            IPHostEntry ipHostInfo = await Dns.GetHostEntryAsync(Dns.GetHostName()).ConfigureAwait(false); // `Dns.Resolve()` method is deprecated.
+            var ipHostInfo = await Dns.GetHostEntryAsync(Dns.GetHostName()).ConfigureAwait(false); // `Dns.Resolve()` method is deprecated.
             return ipHostInfo.AddressList;
         }
 
@@ -59,7 +59,7 @@ namespace Milvasoft.Helpers
         /// <returns>a string array containing all the IP addresses of the server machine</returns>
         public static IPAddress[] GetIPAddresses()
         {
-            IPHostEntry ipHostInfo = Dns.GetHostEntry(Dns.GetHostName()); // `Dns.Resolve()` method is deprecated.
+            var ipHostInfo = Dns.GetHostEntry(Dns.GetHostName()); // `Dns.Resolve()` method is deprecated.
             return ipHostInfo.AddressList;
         }
 

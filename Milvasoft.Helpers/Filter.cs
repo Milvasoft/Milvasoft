@@ -81,10 +81,10 @@ namespace Milvasoft.Helpers
             var entityType = typeof(T);
             var propertyName = dateProperty.GetPropertyName();
 
-            ParameterExpression parameterExpression = Expression.Parameter(entityType, "i");
+            var parameterExpression = Expression.Parameter(entityType, "i");
             Expression orderByProperty = Expression.Property(parameterExpression, propertyName);
 
-            Expression<Func<T, DateTime>> prop = Expression.Lambda<Func<T, DateTime>>(Expression.Convert(Expression.Property(parameterExpression, propertyName), typeof(DateTime)), parameterExpression);
+            var prop = Expression.Lambda<Func<T, DateTime>>(Expression.Convert(Expression.Property(parameterExpression, propertyName), typeof(DateTime)), parameterExpression);
 
             Expression<Func<DateTime>> dateLowerExpression = () => dateLowerValue.Value;
             var greaterThanOrEqualBinaryExpression = Expression.GreaterThanOrEqual(prop.Body, dateLowerExpression.Body);
@@ -147,10 +147,10 @@ namespace Milvasoft.Helpers
             var entityType = typeof(T);
             var propertyName = dateProperty.GetPropertyName();
 
-            ParameterExpression parameterExpression = Expression.Parameter(entityType, "i");
+            var parameterExpression = Expression.Parameter(entityType, "i");
             Expression orderByProperty = Expression.Property(parameterExpression, propertyName);
 
-            Expression<Func<T, DateTime>> prop = Expression.Lambda<Func<T, DateTime>>(Expression.Convert(Expression.Property(parameterExpression, propertyName), typeof(DateTime)), parameterExpression);
+            var prop = Expression.Lambda<Func<T, DateTime>>(Expression.Convert(Expression.Property(parameterExpression, propertyName), typeof(DateTime)), parameterExpression);
 
             Expression<Func<DateTime>> dateLowerExpression = () => dateLowerValue.Value;
             var greaterThanOrEqualBinaryExpression = Expression.GreaterThanOrEqual(prop.Body, dateLowerExpression.Body);

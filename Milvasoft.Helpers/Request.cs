@@ -35,7 +35,7 @@ namespace Milvasoft.Helpers
             };
 
             if (headers != null && headers.Length > 0)
-                for (int i = 0; i < headers.Length; i++)
+                for (var i = 0; i < headers.Length; i++)
                     requestMessage.Headers.Add(headers[i].Key, headers[i].Value);
 
             return requestMessage;
@@ -63,7 +63,7 @@ namespace Milvasoft.Helpers
             };
 
             if (headers != null && headers.Length > 0)
-                for (int i = 0; i < headers.Length; i++)
+                for (var i = 0; i < headers.Length; i++)
                     requestMessage.Headers.Add(headers[i].Key, headers[i].Value);
 
             return requestMessage;
@@ -94,7 +94,7 @@ namespace Milvasoft.Helpers
             };
 
             if (headers != null && headers.Length > 0)
-                for (int i = 0; i < headers.Length; i++)
+                for (var i = 0; i < headers.Length; i++)
                     requestMessage.Headers.Add(headers[i].Key, headers[i].Value);
 
             return requestMessage;
@@ -116,7 +116,7 @@ namespace Milvasoft.Helpers
             {
                 var contentString = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
 
-                JObject responseObject = (JObject)JsonConvert.DeserializeObject(contentString);
+                var responseObject = (JObject)JsonConvert.DeserializeObject(contentString);
 
                 if (!responseObject.PropertyExists("errorCodes")) return responseObject.ToObject<SingleObjectResponse<T>>();
                 else return responseObject.ToObject<ExceptionResponse>();
@@ -139,7 +139,7 @@ namespace Milvasoft.Helpers
             {
                 var contentString = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
 
-                JObject responseObject = (JObject)JsonConvert.DeserializeObject(contentString);
+                var responseObject = (JObject)JsonConvert.DeserializeObject(contentString);
 
                 if (!responseObject.PropertyExists("errorCodes")) return responseObject.ToObject<MultipleObjectResponse<T>>();
                 else return responseObject.ToObject<ExceptionResponse>();
@@ -201,13 +201,13 @@ namespace Milvasoft.Helpers
         {
             query = query == "" ? query : "?" + query;
             hash = hash == "" ? hash : "#" + hash;
-            string requestUrl = $"{protocol}://{hostName}:{port}/{pathName}{query}{hash}";
+            var requestUrl = $"{protocol}://{hostName}:{port}/{pathName}{query}{hash}";
 
             // Create new Regex.
-            Regex regex = new Regex(@"^(ht|f)tp(s?)\:\/\/[0-9a-zA-Z]([-.\w]*[0-9a-zA-Z])*(:(0-9)*)*(\/?)([a-zA-Z0-9\-\.\?\,\'\/\\\+&%\$#_]*)?$");
+            var regex = new Regex(@"^(ht|f)tp(s?)\:\/\/[0-9a-zA-Z]([-.\w]*[0-9a-zA-Z])*(:(0-9)*)*(\/?)([a-zA-Z0-9\-\.\?\,\'\/\\\+&%\$#_]*)?$");
 
             // Call Match on Regex instance.
-            Match match = regex.Match(requestUrl);
+            var match = regex.Match(requestUrl);
 
             try
             {
@@ -249,13 +249,13 @@ namespace Milvasoft.Helpers
         {
             query = query == "" ? query : "?" + query;
             hash = hash == "" ? hash : "#" + hash;
-            string requestUrl = $"{address}/{pathName}{query}{hash}";
+            var requestUrl = $"{address}/{pathName}{query}{hash}";
 
             // Create new Regex.
-            Regex regex = new Regex(@"^(ht|f)tp(s?)\:\/\/[0-9a-zA-Z]([-.\w]*[0-9a-zA-Z])*(:(0-9)*)*(\/?)([a-zA-Z0-9\-\.\?\,\'\/\\\+&%\$#_]*)?$");
+            var regex = new Regex(@"^(ht|f)tp(s?)\:\/\/[0-9a-zA-Z]([-.\w]*[0-9a-zA-Z])*(:(0-9)*)*(\/?)([a-zA-Z0-9\-\.\?\,\'\/\\\+&%\$#_]*)?$");
 
             // Call Match on Regex instance.
-            Match match = regex.Match(requestUrl);
+            var match = regex.Match(requestUrl);
 
             try
             {
@@ -284,7 +284,7 @@ namespace Milvasoft.Helpers
 
         private static KeyValuePair<string, string> GetProperty(JObject objects, string propertyKey, params string[] propertyNames)
         {
-            JToken token = objects[propertyNames.First()];
+            var token = objects[propertyNames.First()];
             foreach (var name in propertyNames.Skip(1))
                 token = token[0][name];
             return new KeyValuePair<string, string>(propertyKey, (string)token);

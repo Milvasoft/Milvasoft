@@ -36,7 +36,7 @@ namespace Milvasoft.Helpers
         /// <returns> <see cref="MultipleObjectResponse{T}"/> in 200 OK <see cref="ActionResult"/> </returns>
         public static IActionResult ReturnArrayResponseForGetAll<T>(this List<T> contentList, string successMessage, string errorMessage = null)
         {
-            MultipleObjectResponse<T> response = new MultipleObjectResponse<T>();
+            var response = new MultipleObjectResponse<T>();
             response.StatusCode = MilvasoftStatusCodes.Status200OK;
             response.Message = successMessage;
             if (contentList.IsNullOrEmpty())
@@ -65,7 +65,7 @@ namespace Milvasoft.Helpers
         /// <returns> <see cref="SingleObjectResponse{T}"/> in 200 OK <see cref="ActionResult"/> </returns>
         public static IActionResult ReturnSingleObjectResponseForGetById<T>(this T content, string successMessage, string errorMessage = null)
         {
-            SingleObjectResponse<T> response = new SingleObjectResponse<T> { StatusCode = MilvasoftStatusCodes.Status200OK, Success = true };
+            var response = new SingleObjectResponse<T> { StatusCode = MilvasoftStatusCodes.Status200OK, Success = true };
             response.Message = successMessage;
             if (content == null)
             {
@@ -91,7 +91,7 @@ namespace Milvasoft.Helpers
         /// <returns>  <see cref="SingleObjectResponse{PaginationDTO}"/> in 200 OK <see cref="ActionResult"/> </returns>
         public static IActionResult ReturnReportResponse<T>(this PaginationDTO<T> paginationDTO, string successMessage, string errorMessage = null)
         {
-            SingleObjectResponse<PaginationDTO<T>> response = new SingleObjectResponse<PaginationDTO<T>> { StatusCode = MilvasoftStatusCodes.Status200OK };
+            var response = new SingleObjectResponse<PaginationDTO<T>> { StatusCode = MilvasoftStatusCodes.Status200OK };
             response.Message = successMessage;
             if (paginationDTO.DTOList.IsNullOrEmpty())
             {
@@ -118,7 +118,7 @@ namespace Milvasoft.Helpers
         /// <returns> <see cref="SingleObjectResponse{PaginationDTO}"/> in 200 OK <see cref="ActionResult"/> </returns>
         public static IActionResult ReturnInstantReportResponse<T>(this PaginationDTO<T> paginationDTO, string successMessage, string errorMessage = null)
         {
-            SingleObjectResponse<PaginationDTO<T>> response = new SingleObjectResponse<PaginationDTO<T>> { StatusCode = MilvasoftStatusCodes.Status200OK };
+            var response = new SingleObjectResponse<PaginationDTO<T>> { StatusCode = MilvasoftStatusCodes.Status200OK };
 
             response.Message = successMessage;
 
@@ -148,7 +148,7 @@ namespace Milvasoft.Helpers
                                                                                                                      string successMessage,
                                                                                                                      string errorMessage = null) where TKey : struct
         {
-            MultipleObjectResponse<T> response = new MultipleObjectResponse<T>();
+            var response = new MultipleObjectResponse<T>();
             if (idList.IsNullOrEmpty())
             {
                 response.Message = string.IsNullOrEmpty(errorMessage) ? _defaultErrorMessage : errorMessage;
@@ -181,7 +181,7 @@ namespace Milvasoft.Helpers
                                                                                                                      string successMessage,
                                                                                                                      string errorMessage = null) where TKey : struct
         {
-            MultipleObjectResponse<T> response = new MultipleObjectResponse<T>();
+            var response = new MultipleObjectResponse<T>();
             if (idList.IsNullOrEmpty())
             {
                 response.Message = string.IsNullOrEmpty(errorMessage) ? _defaultErrorMessage : errorMessage;
@@ -210,7 +210,7 @@ namespace Milvasoft.Helpers
         /// <returns>  <see cref="SingleObjectResponse{T}"/> in 200 OK <see cref="ActionResult"/> </returns>
         public static async Task<IActionResult> ReturnSingleResponseForDeleteAsync<T>(this ConfiguredTaskAwaitable asyncTask, string successMessage)
         {
-            SingleObjectResponse<T> response = new SingleObjectResponse<T>();
+            var response = new SingleObjectResponse<T>();
             {
                 await asyncTask;
 
@@ -233,7 +233,7 @@ namespace Milvasoft.Helpers
         /// <returns>  <see cref="SingleObjectResponse{T}"/> in 200 OK <see cref="ActionResult"/> </returns>
         public static async Task<IActionResult> ReturnSingleResponseForDeleteAsync<T>(this ConfiguredTaskAwaitable<T> asyncTask, string successMessage)
         {
-            SingleObjectResponse<T> response = new SingleObjectResponse<T>();
+            var response = new SingleObjectResponse<T>();
             {
                 var result = await asyncTask;
 
@@ -257,7 +257,7 @@ namespace Milvasoft.Helpers
         /// <returns>  <see cref="SingleObjectResponse{T}"/> in 200 OK <see cref="ActionResult"/> </returns>
         public static async Task<IActionResult> ReturnSingleResponseForDeleteAsync<T>(this ConfiguredTaskAwaitable<object> asyncTask, string successMessage)
         {
-            SingleObjectResponse<object> response = new SingleObjectResponse<object>();
+            var response = new SingleObjectResponse<object>();
             {
                 var result = await asyncTask;
 
@@ -281,7 +281,7 @@ namespace Milvasoft.Helpers
         /// <returns> <see cref="SingleObjectResponse{T}"/> in 200 OK <see cref="ActionResult"/> </returns>
         public static async Task<IActionResult> ReturnSingleObjectResponseForAddOrUpdateAsync<T>(this ConfiguredTaskAwaitable asyncTask, string successMessage)
         {
-            SingleObjectResponse<T> response = new SingleObjectResponse<T>();
+            var response = new SingleObjectResponse<T>();
 
             await asyncTask;
 
@@ -303,7 +303,7 @@ namespace Milvasoft.Helpers
         /// <returns> <see cref="SingleObjectResponse{T}"/> in 200 OK <see cref="ActionResult"/> </returns>
         public static async Task<IActionResult> ReturnSingleObjectResponseForAddOrUpdateAsync<T>(this ConfiguredTaskAwaitable<object> asyncTask, string successMessage)
         {
-            SingleObjectResponse<object> response = new SingleObjectResponse<object>();
+            var response = new SingleObjectResponse<object>();
 
             var result = await asyncTask;
 
@@ -326,7 +326,7 @@ namespace Milvasoft.Helpers
         /// <returns> <see cref="SingleObjectResponse{T}"/> in 200 OK <see cref="ActionResult"/> </returns>
         public static async Task<IActionResult> ReturnSingleObjectResponseForAddOrUpdateAsync<T>(this ConfiguredTaskAwaitable<T> asyncTask, string successMessage)
         {
-            SingleObjectResponse<T> response = new SingleObjectResponse<T>();
+            var response = new SingleObjectResponse<T>();
 
             var result = await asyncTask;
 
@@ -349,7 +349,7 @@ namespace Milvasoft.Helpers
         /// <returns> <see cref="SingleObjectResponse{T}"/> in 200 OK <see cref="ActionResult"/> </returns>
         public static async Task<IActionResult> ReturnSingleObjectResponseForAddOrUpdateAsync<T>(this ConfiguredTaskAwaitable<Guid> asyncTask, string successMessage)
         {
-            SingleObjectResponse<Guid> response = new SingleObjectResponse<Guid>();
+            var response = new SingleObjectResponse<Guid>();
 
             var result = await asyncTask;
 
@@ -373,7 +373,7 @@ namespace Milvasoft.Helpers
         /// <returns> <see cref="SingleObjectResponse{T}"/> in 200 OK <see cref="ActionResult"/> </returns>
         public static async Task<IActionResult> ReturnSingleObjectResponseForAddOrUpdateAsync<T>(this ConfiguredTaskAwaitable<int> asyncTask, string successMessage)
         {
-            SingleObjectResponse<int> response = new SingleObjectResponse<int>();
+            var response = new SingleObjectResponse<int>();
 
             var result = await asyncTask;
 
@@ -396,7 +396,7 @@ namespace Milvasoft.Helpers
         /// <returns> <see cref="SingleObjectResponse{T}"/> in 200 OK <see cref="ActionResult"/> </returns>
         public static async Task<IActionResult> ReturnSingleObjectResponseForAddOrUpdateAsync<T>(this ConfiguredTaskAwaitable<sbyte> asyncTask, string successMessage)
         {
-            SingleObjectResponse<sbyte> response = new SingleObjectResponse<sbyte>();
+            var response = new SingleObjectResponse<sbyte>();
 
             var result = await asyncTask;
 
@@ -420,7 +420,7 @@ namespace Milvasoft.Helpers
         /// <returns>  <see cref="SingleObjectResponse{T}"/> in 200 OK <see cref="ActionResult"/> </returns>
         public static async Task<IActionResult> ReturnSingleObjectResponseForSpecifedProcessAsync<T>(this ConfiguredTaskAwaitable asyncTask, string successMessage)
         {
-            SingleObjectResponse<T> response = new SingleObjectResponse<T>();
+            var response = new SingleObjectResponse<T>();
 
             await asyncTask;
 
@@ -443,7 +443,7 @@ namespace Milvasoft.Helpers
         /// <returns>  <see cref="SingleObjectResponse{T}"/> in 200 OK <see cref="ActionResult"/> </returns>
         public static async Task<IActionResult> ReturnSingleObjectResponseForSpecifedProcessAsync<T>(this ConfiguredTaskAwaitable<T> asyncTask, string successMessage)
         {
-            SingleObjectResponse<T> response = new SingleObjectResponse<T>();
+            var response = new SingleObjectResponse<T>();
 
             var result = await asyncTask;
 
@@ -466,7 +466,7 @@ namespace Milvasoft.Helpers
         /// <returns>  <see cref="SingleObjectResponse{T}"/> in 200 OK <see cref="ActionResult"/> </returns>
         public static async Task<IActionResult> ReturnSingleObjectResponseForSpecifedProcessAsync<T>(this ConfiguredTaskAwaitable<object> asyncTask, string successMessage)
         {
-            SingleObjectResponse<object> response = new SingleObjectResponse<object>();
+            var response = new SingleObjectResponse<object>();
 
             var result = await asyncTask;
 

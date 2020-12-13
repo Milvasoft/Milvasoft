@@ -56,7 +56,7 @@ namespace Milvasoft.Helpers.Extensions
         /// and the left and right properties set to the specified values</returns>
         public static Expression<Func<T, bool>> AndAlso<T>(this Expression<Func<T, bool>> left, Expression<Func<T, bool>> right)
         {
-            Expression<Func<T, bool>> combined = Expression.Lambda<Func<T, bool>>(
+            var combined = Expression.Lambda<Func<T, bool>>(
                 Expression.AndAlso(
                     left.Body,
                     new ExpressionParameterReplacer(right.Parameters, left.Parameters).Visit(right.Body)
@@ -73,7 +73,7 @@ namespace Milvasoft.Helpers.Extensions
         /// and the left and right properties set to the specified values</returns>
         public static Expression<Func<T, bool>> OrElse<T>(this Expression<Func<T, bool>> left, Expression<Func<T, bool>> right)
         {
-            Expression<Func<T, bool>> combined = Expression.Lambda<Func<T, bool>>(
+            var combined = Expression.Lambda<Func<T, bool>>(
                 Expression.OrElse(
                     left.Body,
                     new ExpressionParameterReplacer(right.Parameters, left.Parameters).Visit(right.Body)

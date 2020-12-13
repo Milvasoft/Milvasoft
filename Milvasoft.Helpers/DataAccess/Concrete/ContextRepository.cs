@@ -151,9 +151,9 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
                                                                 Dictionary<string, string> cachedTokenDictionary = null) where TUser : IdentityUser<TKey>
                                                                                                                          where TKey : IEquatable<TKey>
         {
-            JwtSecurityTokenHandler tokenHandler = new JwtSecurityTokenHandler();
+            var tokenHandler = new JwtSecurityTokenHandler();
 
-            string userTokensString = "UserTokens";
+            var userTokensString = "UserTokens";
 
             if (!PropertyExists<TContext>(userTokensString))
                 throw new ArgumentException($"Type of {typeof(TContext)}'s properties doesn't contain '{userTokensString}'.");
@@ -193,7 +193,7 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
                 .GetMethods(BindingFlags.Static | BindingFlags.Public)
                 .Where(mi => mi.Name == "ToListAsync");
 
-            MethodInfo whereMethod = whereMethods.FirstOrDefault();
+            var whereMethod = whereMethods.FirstOrDefault();
 
             whereMethod = whereMethod.MakeGenericMethod(type);
 

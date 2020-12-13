@@ -50,7 +50,7 @@ namespace Milvasoft.Helpers
             if (!PropertyExists<T>(orderByPropertyName))
                 throw new ArgumentException($"Type of {entityType.Name}'s properties doesn't contain '{orderByPropertyName}'.");
 
-            ParameterExpression parameterExpression = Expression.Parameter(entityType, "i");
+            var parameterExpression = Expression.Parameter(entityType, "i");
             Expression orderByProperty = Expression.Property(parameterExpression, orderByPropertyName);
 
             return Expression.Lambda<Func<T, object>>(Expression.Convert(orderByProperty, typeof(object)), parameterExpression);
