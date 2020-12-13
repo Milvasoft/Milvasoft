@@ -63,7 +63,7 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
         /// <param name="conditionExpression"></param>
         /// <returns></returns>
         public virtual async Task<TEntity> GetFirstOrDefaultAsync(Expression<Func<TEntity, bool>> conditionExpression = null)
-            => await _dbContext.Set<TEntity>().Where(CreateConditionExpression(conditionExpression) ?? (entity => true)).FirstOrDefaultAsync().ConfigureAwait(false);
+            => await _dbContext.Set<TEntity>().FirstOrDefaultAsync(CreateConditionExpression(conditionExpression) ?? (entity => true)).ConfigureAwait(false);
 
         /// <summary>
         /// <para> Returns all entities which IsDeleted condition is true with includes from database asynchronously. If the condition is requested, it also provides that condition.</para> 
@@ -72,7 +72,24 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
         /// <param name="conditionExpression"></param>
         /// <returns></returns>
         public virtual async Task<TEntity> GetFirstOrDefaultAsync(Func<IIncludable<TEntity>, IIncludable> includes, Expression<Func<TEntity, bool>> conditionExpression = null)
-            => await _dbContext.Set<TEntity>().Where(CreateConditionExpression(conditionExpression) ?? (entity => true)).IncludeMultiple(includes).FirstOrDefaultAsync().ConfigureAwait(false);
+            => await _dbContext.Set<TEntity>().IncludeMultiple(includes).FirstOrDefaultAsync(CreateConditionExpression(conditionExpression) ?? (entity => true)).ConfigureAwait(false);
+
+        /// <summary>
+        /// <para> Returns all entities which IsDeleted condition is true from database asynchronously. If the condition is requested, it also provides that condition.</para> 
+        /// </summary>
+        /// <param name="conditionExpression"></param>
+        /// <returns></returns>
+        public virtual async Task<TEntity> GetSingleOrDefaultAsync(Expression<Func<TEntity, bool>> conditionExpression = null)
+            => await _dbContext.Set<TEntity>().SingleOrDefaultAsync(CreateConditionExpression(conditionExpression) ?? (entity => true)).ConfigureAwait(false);
+
+        /// <summary>
+        /// <para> Returns all entities which IsDeleted condition is true with includes from database asynchronously. If the condition is requested, it also provides that condition.</para> 
+        /// </summary>
+        /// <param name="includes"></param>
+        /// <param name="conditionExpression"></param>
+        /// <returns></returns>
+        public virtual async Task<TEntity> GetSingleOrDefaultAsync(Func<IIncludable<TEntity>, IIncludable> includes, Expression<Func<TEntity, bool>> conditionExpression = null)
+            => await _dbContext.Set<TEntity>().IncludeMultiple(includes).SingleOrDefaultAsync(CreateConditionExpression(conditionExpression) ?? (entity => true)).ConfigureAwait(false);
 
         /// <summary>
         /// <para> Returns all entities which IsDeleted condition is true from database asynchronously. If the condition is requested, it also provides that condition.</para> 
@@ -566,7 +583,9 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
         /// <returns> The entity found or null. </returns>
         public virtual async Task<TEntity> GetByIdAsync(TKey id)
         {
-            var entity = await _dbContext.Set<TEntity>().FindAsync(id).ConfigureAwait(false);
+            Expression<Func<TEntity, bool>> idCondition = i => i.Id.Equals(id);
+            var mainCondition = idCondition.Append(CreateIsDeletedFalseExpression(),ExpressionType.AndAlso);
+            var entity = await _dbContext.Set<TEntity>().SingleOrDefaultAsync(mainCondition).ConfigureAwait(false);
             return entity;
         }
 
@@ -580,7 +599,9 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
         /// <returns> The entity. </returns>
         public virtual async Task<TEntity> GetRequiredByIdAsync(TKey id)
         {
-            var entity = (await _dbContext.Set<TEntity>().FindAsync(id).ConfigureAwait(false)) ?? throw new ArgumentNullException();
+            Expression<Func<TEntity, bool>> idCondition = i => i.Id.Equals(id);
+            var mainCondition = idCondition.Append(CreateIsDeletedFalseExpression(), ExpressionType.AndAlso);
+            var entity = (await _dbContext.Set<TEntity>().SingleAsync(mainCondition).ConfigureAwait(false));
             return entity;
         }
 
@@ -592,7 +613,9 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
         /// <returns> The entity found or null. </returns>
         public virtual async Task<TEntity> GetByIdAsync(TKey id, Func<IIncludable<TEntity>, IIncludable> includes)
         {
-            var entity = await _dbContext.Set<TEntity>().Where(entity => entity.Id.Equals(id)).IncludeMultiple(includes).FirstOrDefaultAsync().ConfigureAwait(false);
+            Expression<Func<TEntity, bool>> idCondition = i => i.Id.Equals(id);
+            var mainCondition = idCondition.Append(CreateIsDeletedFalseExpression(), ExpressionType.AndAlso);
+            var entity = await _dbContext.Set<TEntity>().IncludeMultiple(includes).SingleOrDefaultAsync(mainCondition).ConfigureAwait(false);
             return entity;
         }
 
@@ -607,7 +630,9 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
         /// <returns> The entity. </returns>
         public virtual async Task<TEntity> GetRequiredByIdAsync(TKey id, Func<IIncludable<TEntity>, IIncludable> includes)
         {
-            var entity = await _dbContext.Set<TEntity>().Where(entity => entity.Id.Equals(id)).IncludeMultiple(includes).FirstAsync().ConfigureAwait(false);
+            Expression<Func<TEntity, bool>> idCondition = i => i.Id.Equals(id);
+            var mainCondition = idCondition.Append(CreateIsDeletedFalseExpression(), ExpressionType.AndAlso);
+            var entity = await _dbContext.Set<TEntity>().IncludeMultiple(includes).SingleAsync(mainCondition).ConfigureAwait(false);
             return entity;
         }
 
@@ -1030,7 +1055,7 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
 
         private Expression<Func<TEntity, bool>> CreateConditionExpression(Expression<Func<TEntity, bool>> conditionExpression = null)
         {
-            Expression<Func<TEntity, bool>> mainExpression = null;
+            Expression<Func<TEntity, bool>> mainExpression;
             if (!GetSoftDeletedEntities)
             {
                 var softDeleteExpression = CreateIsDeletedFalseExpression();

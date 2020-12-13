@@ -33,6 +33,17 @@
             <param name="propertyName"></param>
             <returns></returns>
         </member>
+        <member name="M:Milvasoft.Helpers.CommonHelper.CreateOrderByKeySelector``1(System.String)">
+            <summary>
+            Creates order by key selector by <paramref name="orderByPropertyName"/>.
+            </summary>
+            
+            <exception cref="T:System.ArgumentException"> Throwns when type of <typeparamref name="T"/>'s properties doesn't contain '<paramref name="orderByPropertyName"/>'. </exception>
+            
+            <typeparam name="T"></typeparam>
+            <param name="orderByPropertyName"></param>
+            <returns></returns>
+        </member>
         <member name="T:Milvasoft.Helpers.DataAccess.Abstract.IBaseEntity`1">
             <summary>
             <para>  Base interface for abstraction. </para>
@@ -91,6 +102,21 @@
             <returns></returns>
         </member>
         <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.GetFirstOrDefaultAsync(System.Func{Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable{`0},Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable},System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
+            <summary>
+            <para> Returns all entities which IsDeleted condition is true with includes from database asynchronously. If the condition is requested, it also provides that condition.</para> 
+            </summary>
+            <param name="includes"></param>
+            <param name="conditionExpression"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.GetSingleOrDefaultAsync(System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
+            <summary>
+            <para> Returns all entities which IsDeleted condition is true from database asynchronously. If the condition is requested, it also provides that condition.</para> 
+            </summary>
+            <param name="conditionExpression"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.GetSingleOrDefaultAsync(System.Func{Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable{`0},Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable},System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
             <summary>
             <para> Returns all entities which IsDeleted condition is true with includes from database asynchronously. If the condition is requested, it also provides that condition.</para> 
             </summary>
@@ -692,6 +718,21 @@
             <param name="conditionExpression"></param>
             <returns></returns>
         </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.GetSingleOrDefaultAsync(System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
+            <summary>
+            <para> Returns all entities which IsDeleted condition is true from database asynchronously. If the condition is requested, it also provides that condition.</para> 
+            </summary>
+            <param name="conditionExpression"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.GetSingleOrDefaultAsync(System.Func{Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable{`0},Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable},System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
+            <summary>
+            <para> Returns all entities which IsDeleted condition is true with includes from database asynchronously. If the condition is requested, it also provides that condition.</para> 
+            </summary>
+            <param name="includes"></param>
+            <param name="conditionExpression"></param>
+            <returns></returns>
+        </member>
         <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.GetAllAsync(System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
             <summary>
             <para> Returns all entities which IsDeleted condition is true from database asynchronously. If the condition is requested, it also provides that condition.</para> 
@@ -713,7 +754,7 @@
                   If the condition is requested, it also provides that condition.</para> 
             </summary>
             
-            <exception cref="T:System.ArgumentNullException"> Throwns when <paramref name="requestedPageNumber"/> more than actual page number. </exception>
+            <exception cref="T:System.ArgumentOutOfRangeException"> Throwns when <paramref name="requestedPageNumber"/> more than actual page number. </exception>
             
             <param name="requestedPageNumber"></param>
             <param name="countOfRequestedRecordsInPage"></param>
@@ -726,7 +767,7 @@
                    If the condition is requested, it also provides that condition.</para> 
              </summary>
             
-             <exception cref="T:System.ArgumentNullException"> Throwns when <paramref name="requestedPageNumber"/> more than actual page number. </exception>
+             <exception cref="T:System.ArgumentOutOfRangeException"> Throwns when <paramref name="requestedPageNumber"/> more than actual page number. </exception>
             
              <param name="requestedPageNumber"></param>
              <param name="countOfRequestedRecordsInPage"></param>
@@ -742,7 +783,7 @@
             </summary>
             
             <exception cref="T:System.ArgumentException"> Throwns when type of <typeparamref name="TEntity"/>'s properties doesn't contain '<paramref name="orderByPropertyName"/>'. </exception>
-            <exception cref="T:System.ArgumentNullException"> Throwns when <paramref name="requestedPageNumber"/> more than actual page number. </exception>
+            <exception cref="T:System.ArgumentOutOfRangeException"> Throwns when <paramref name="requestedPageNumber"/> more than actual page number. </exception>
             
             <param name="requestedPageNumber"></param>
             <param name="countOfRequestedRecordsInPage"></param>
@@ -759,7 +800,7 @@
              </summary>
              
              <exception cref="T:System.ArgumentException"> Throwns when type of <typeparamref name="TEntity"/>'s properties doesn't contain '<paramref name="orderByPropertyName"/>'. </exception>
-             <exception cref="T:System.ArgumentNullException"> Throwns when <paramref name="requestedPageNumber"/> more than actual page number. </exception>
+             <exception cref="T:System.ArgumentOutOfRangeException"> Throwns when <paramref name="requestedPageNumber"/> more than actual page number. </exception>
             
              <param name="requestedPageNumber"></param>
              <param name="countOfRequestedRecordsInPage"></param>
@@ -776,7 +817,7 @@
                   
             </summary>
             
-            <exception cref="T:System.ArgumentNullException"> Throwns when <paramref name="requestedPageNumber"/> more than actual page number. </exception>
+            <exception cref="T:System.ArgumentOutOfRangeException"> Throwns when <paramref name="requestedPageNumber"/> more than actual page number. </exception>
             
             <param name="requestedPageNumber"></param>
             <param name="countOfRequestedRecordsInPage"></param>
@@ -792,7 +833,7 @@
                     
              </summary>
              
-             <exception cref="T:System.ArgumentNullException"> Throwns when <paramref name="requestedPageNumber"/> more than actual page number. </exception>
+             <exception cref="T:System.ArgumentOutOfRangeException"> Throwns when <paramref name="requestedPageNumber"/> more than actual page number. </exception>
             
              <param name="requestedPageNumber"></param>
              <param name="countOfRequestedRecordsInPage"></param>
@@ -1365,6 +1406,7 @@
             <para><b>TR: </b>Bu doğru döküm ile ifadeden doğru döküm ve evcil hayvan özelliğini belirler.</para>
             </summary>
             <typeparam name="T"></typeparam>
+            <typeparam name="TPropertyType"></typeparam>
             <param name="expression"></param>
             <returns></returns>
         </member>
@@ -1374,6 +1416,7 @@
             <para><b>TR: </b>Bu doğru döküm ile ifadeden doğru döküm ve evcil hayvan özellik adını belirler.</para>
             </summary>
             <typeparam name="T"></typeparam>
+            <typeparam name="TPropertyType"></typeparam>
             <param name="expression"></param>
             <returns></returns>
         </member>
