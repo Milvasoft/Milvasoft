@@ -584,7 +584,7 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
         public virtual async Task<TEntity> GetByIdAsync(TKey id)
         {
             Expression<Func<TEntity, bool>> idCondition = i => i.Id.Equals(id);
-            var mainCondition = idCondition.Append(CreateIsDeletedFalseExpression(),ExpressionType.AndAlso);
+            var mainCondition = idCondition.Append(CreateIsDeletedFalseExpression(), ExpressionType.AndAlso);
             var entity = await _dbContext.Set<TEntity>().SingleOrDefaultAsync(mainCondition).ConfigureAwait(false);
             return entity;
         }
@@ -1047,6 +1047,18 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
         {
             return (await _dbContext.Set<TEntity>().Where(CreateConditionExpression(conditionExpression) ?? (entity => true))
                                                           .CountAsync().ConfigureAwait(false));
+        }
+
+        /// <summary>
+        /// Replaces existing entities(<paramref name="oldEntities"/>) with new entities(<paramref name="newEntities"/>).
+        /// </summary>
+        /// <param name="oldEntities"></param>
+        /// <param name="newEntities"></param>
+        /// <returns></returns>
+        public virtual async Task ReplaceOldsWithNewsAsync(IEnumerable<TEntity> oldEntities, IEnumerable<TEntity> newEntities)
+        {
+            await DeleteAsync(oldEntities).ConfigureAwait(false);
+            await AddRangeAsync(newEntities).ConfigureAwait(false);
         }
 
         //TODO EntityFrameworkQueryableExtensions methods will be added here.

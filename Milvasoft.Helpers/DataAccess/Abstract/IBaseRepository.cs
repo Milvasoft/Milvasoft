@@ -549,6 +549,12 @@ namespace Milvasoft.Helpers.DataAccess.Abstract
         /// <returns></returns>
         Task<int> GetCountAsync(Expression<Func<TEntity, bool>> conditionExpression = null);
 
-
+        /// <summary>
+        /// Replaces existing entities(<paramref name="oldEntities"/>) with new entities(<paramref name="newEntities"/>).
+        /// </summary>
+        /// <param name="oldEntities"></param>
+        /// <param name="newEntities"></param>
+        /// <returns></returns>
+        Task ReplaceOldsWithNewsAsync(IEnumerable<TEntity> oldEntities, IEnumerable<TEntity> newEntities);
     }
 }
