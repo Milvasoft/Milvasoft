@@ -78,13 +78,13 @@ namespace Milvasoft.Helpers.DataAccess.Abstract
         ///       If the condition is requested, it also provides that condition.</para> 
         /// </summary>
         /// 
-        /// <exception cref="ArgumentNullException"> Throwns when <paramref name="requestedPageNumber"/> more than actual page number. </exception>
+        /// <exception cref="ArgumentOutOfRangeException"> Throwns when <paramref name="requestedPageNumber"/> more than actual page number. </exception>
         /// 
         /// <param name="requestedPageNumber"></param>
         /// <param name="countOfRequestedRecordsInPage"></param>
         /// <param name="conditionExpression"></param>
         /// <returns></returns>
-        Task<(IEnumerable<TEntity> entities, int pageCount)> GetAsPaginatedAsync(int requestedPageNumber,
+        Task<(IEnumerable<TEntity> entities, int pageCount, int totalDataCount)> GetAsPaginatedAsync(int requestedPageNumber,
                                                                                                      int countOfRequestedRecordsInPage,
                                                                                                      Expression<Func<TEntity, bool>> conditionExpression = null);
 
@@ -93,14 +93,14 @@ namespace Milvasoft.Helpers.DataAccess.Abstract
         ///       If the condition is requested, it also provides that condition.</para> 
         /// </summary>
         ///
-        /// <exception cref="ArgumentNullException"> Throwns when <paramref name="requestedPageNumber"/> more than actual page number. </exception>
+        /// <exception cref="ArgumentOutOfRangeException"> Throwns when <paramref name="requestedPageNumber"/> more than actual page number. </exception>
         ///
         /// <param name="requestedPageNumber"></param>
         /// <param name="countOfRequestedRecordsInPage"></param>
         /// <param name="includes"></param>
         /// <param name="conditionExpression"></param>
         /// <returns></returns>
-        Task<(IEnumerable<TEntity> entities, int pageCount)> GetAsPaginatedAsync(int requestedPageNumber,
+        Task<(IEnumerable<TEntity> entities, int pageCount, int totalDataCount)> GetAsPaginatedAsync(int requestedPageNumber,
                                                                                                      int countOfRequestedRecordsInPage,
                                                                                                      Func<IIncludable<TEntity>, IIncludable> includes,
                                                                                                      Expression<Func<TEntity, bool>> conditionExpression = null);
@@ -112,7 +112,7 @@ namespace Milvasoft.Helpers.DataAccess.Abstract
         /// </summary>
         /// 
         /// <exception cref="ArgumentException"> Throwns when type of <typeparamref name="TEntity"/>'s properties doesn't contain '<paramref name="orderByPropertyName"/>'. </exception>
-        /// <exception cref="ArgumentNullException"> Throwns when <paramref name="requestedPageNumber"/> more than actual page number. </exception>
+        /// <exception cref="ArgumentOutOfRangeException"> Throwns when <paramref name="requestedPageNumber"/> more than actual page number. </exception>
         /// 
         /// <param name="requestedPageNumber"></param>
         /// <param name="countOfRequestedRecordsInPage"></param>
@@ -120,7 +120,7 @@ namespace Milvasoft.Helpers.DataAccess.Abstract
         /// <param name="orderByAscending"></param>
         /// <param name="conditionExpression"></param>
         /// <returns></returns>
-        Task<(IEnumerable<TEntity> entities, int pageCount)> GetAsPaginatedAndOrderedAsync(int requestedPageNumber,
+        Task<(IEnumerable<TEntity> entities, int pageCount, int totalDataCount)> GetAsPaginatedAndOrderedAsync(int requestedPageNumber,
                                                                                                                int countOfRequestedRecordsInPage,
                                                                                                                string orderByPropertyName,
                                                                                                                bool orderByAscending,
@@ -133,7 +133,7 @@ namespace Milvasoft.Helpers.DataAccess.Abstract
         /// </summary>
         /// 
         /// <exception cref="ArgumentException"> Throwns when type of <typeparamref name="TEntity"/>'s properties doesn't contain '<paramref name="orderByPropertyName"/>'. </exception>
-        /// <exception cref="ArgumentNullException"> Throwns when <paramref name="requestedPageNumber"/> more than actual page number. </exception>
+        /// <exception cref="ArgumentOutOfRangeException"> Throwns when <paramref name="requestedPageNumber"/> more than actual page number. </exception>
         ///
         /// <param name="requestedPageNumber"></param>
         /// <param name="countOfRequestedRecordsInPage"></param>
@@ -142,7 +142,7 @@ namespace Milvasoft.Helpers.DataAccess.Abstract
         /// <param name="orderByAscending"></param>
         /// <param name="conditionExpression"></param>
         /// <returns></returns>
-        Task<(IEnumerable<TEntity> entities, int pageCount)> GetAsPaginatedAndOrderedAsync(int requestedPageNumber,
+        Task<(IEnumerable<TEntity> entities, int pageCount, int totalDataCount)> GetAsPaginatedAndOrderedAsync(int requestedPageNumber,
                                                                                                                int countOfRequestedRecordsInPage,
                                                                                                                Func<IIncludable<TEntity>, IIncludable> includes,
                                                                                                                string orderByPropertyName,
@@ -155,7 +155,7 @@ namespace Milvasoft.Helpers.DataAccess.Abstract
         ///       
         /// </summary>
         /// 
-        /// <exception cref="ArgumentNullException"> Throwns when <paramref name="requestedPageNumber"/> more than actual page number. </exception>
+        /// <exception cref="ArgumentOutOfRangeException"> Throwns when <paramref name="requestedPageNumber"/> more than actual page number. </exception>
         /// 
         /// <param name="requestedPageNumber"></param>
         /// <param name="countOfRequestedRecordsInPage"></param>
@@ -163,7 +163,7 @@ namespace Milvasoft.Helpers.DataAccess.Abstract
         /// <param name="orderByAscending"></param>
         /// <param name="conditionExpression"></param>
         /// <returns></returns>
-        Task<(IEnumerable<TEntity> entities, int pageCount)> GetAsPaginatedAndOrderedAsync(int requestedPageNumber,
+        Task<(IEnumerable<TEntity> entities, int pageCount, int totalDataCount)> GetAsPaginatedAndOrderedAsync(int requestedPageNumber,
                                                                                                                int countOfRequestedRecordsInPage,
                                                                                                                Expression<Func<TEntity, object>> orderByKeySelector,
                                                                                                                bool orderByAscending,
@@ -175,7 +175,7 @@ namespace Milvasoft.Helpers.DataAccess.Abstract
         ///        
         /// </summary>
         /// 
-        /// <exception cref="ArgumentNullException"> Throwns when <paramref name="requestedPageNumber"/> more than actual page number. </exception>
+        /// <exception cref="ArgumentOutOfRangeException"> Throwns when <paramref name="requestedPageNumber"/> more than actual page number. </exception>
         ///
         /// <param name="requestedPageNumber"></param>
         /// <param name="countOfRequestedRecordsInPage"></param>
@@ -184,12 +184,13 @@ namespace Milvasoft.Helpers.DataAccess.Abstract
         /// <param name="orderByAscending"></param>
         /// <param name="conditionExpression"></param>
         /// <returns></returns>
-        Task<(IEnumerable<TEntity> entities, int pageCount)> GetAsPaginatedAndOrderedAsync(int requestedPageNumber,
+        Task<(IEnumerable<TEntity> entities, int pageCount, int totalDataCount)> GetAsPaginatedAndOrderedAsync(int requestedPageNumber,
                                                                                                                int countOfRequestedRecordsInPage,
                                                                                                                Func<IIncludable<TEntity>, IIncludable> includes,
                                                                                                                Expression<Func<TEntity, object>> orderByKeySelector,
                                                                                                                bool orderByAscending,
                                                                                                                Expression<Func<TEntity, bool>> conditionExpression = null);
+
 
         /// <summary>
         /// <para> Gets entities as ordered with <paramref name="orderByPropertyName"/>.
@@ -204,24 +205,6 @@ namespace Milvasoft.Helpers.DataAccess.Abstract
         /// <param name="conditionExpression"></param>
         /// <returns></returns>
         Task<IEnumerable<TEntity>> GetAsOrderedAsync(string orderByPropertyName,
-                                                                         bool orderByAscending,
-                                                                         Expression<Func<TEntity, bool>> conditionExpression = null);
-
-        /// <summary>
-        /// <para> Gets entities as ordered with <paramref name="orderByPropertyName"/>.
-        ///        If the condition is requested, it also provides that condition.</para> 
-        ///        
-        /// </summary>
-        ///
-        /// <exception cref="ArgumentException"> Throwns when type of <typeparamref name="TEntity"/>'s properties doesn't contain '<paramref name="orderByPropertyName"/>'. </exception>
-        /// 
-        /// <param name="includes"></param>
-        /// <param name="orderByPropertyName"></param>
-        /// <param name="orderByAscending"></param>
-        /// <param name="conditionExpression"></param>
-        /// <returns></returns>
-        Task<IEnumerable<TEntity>> GetAsOrderedAsync(Func<IIncludable<TEntity>, IIncludable> includes,
-                                                                         string orderByPropertyName,
                                                                          bool orderByAscending,
                                                                          Expression<Func<TEntity, bool>> conditionExpression = null);
 

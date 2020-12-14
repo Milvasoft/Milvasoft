@@ -121,7 +121,7 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
         /// <param name="countOfRequestedRecordsInPage"></param>
         /// <param name="conditionExpression"></param>
         /// <returns></returns>
-        public virtual async Task<(IEnumerable<TEntity> entities, int pageCount)> GetAsPaginatedAsync(int requestedPageNumber,
+        public virtual async Task<(IEnumerable<TEntity> entities, int pageCount, int totalDataCount)> GetAsPaginatedAsync(int requestedPageNumber,
                                                                                                       int countOfRequestedRecordsInPage,
                                                                                                       Expression<Func<TEntity, bool>> conditionExpression = null)
         {
@@ -142,7 +142,7 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
             if (estimatedCountOfRanges != 0 && requestedPageNumber > estimatedCountOfRanges)
                 throw new ArgumentOutOfRangeException($"Requested page count is more than actual page count. Maximum page count must be {estimatedCountOfRanges}.");
 
-            return (entities: repo, pageCount: estimatedCountOfRanges);
+            return (entities: repo, pageCount: estimatedCountOfRanges, totalDataCount: dataCount);
         }
 
         /// <summary>
@@ -157,7 +157,7 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
         /// <param name="includes"></param>
         /// <param name="conditionExpression"></param>
         /// <returns></returns>
-        public virtual async Task<(IEnumerable<TEntity> entities, int pageCount)> GetAsPaginatedAsync(int requestedPageNumber,
+        public virtual async Task<(IEnumerable<TEntity> entities, int pageCount, int totalDataCount)> GetAsPaginatedAsync(int requestedPageNumber,
                                                                                                       int countOfRequestedRecordsInPage,
                                                                                                       Func<IIncludable<TEntity>, IIncludable> includes,
                                                                                                       Expression<Func<TEntity, bool>> conditionExpression = null)
@@ -176,7 +176,7 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
             if (estimatedCountOfRanges != 0 && requestedPageNumber > estimatedCountOfRanges)
                 throw new ArgumentOutOfRangeException($"Requested page count is more than actual page count. Maximum page count must be {estimatedCountOfRanges}.");
 
-            return (entities: repo, pageCount: estimatedCountOfRanges);
+            return (entities: repo, pageCount: estimatedCountOfRanges, totalDataCount: dataCount);
         }
 
         /// <summary>
@@ -194,7 +194,7 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
         /// <param name="orderByAscending"></param>
         /// <param name="conditionExpression"></param>
         /// <returns></returns>
-        public virtual async Task<(IEnumerable<TEntity> entities, int pageCount)> GetAsPaginatedAndOrderedAsync(int requestedPageNumber,
+        public virtual async Task<(IEnumerable<TEntity> entities, int pageCount, int totalDataCount)> GetAsPaginatedAndOrderedAsync(int requestedPageNumber,
                                                                                                                 int countOfRequestedRecordsInPage,
                                                                                                                 string orderByPropertyName,
                                                                                                                 bool orderByAscending,
@@ -237,7 +237,7 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
             if (estimatedCountOfRanges != 0 && requestedPageNumber > estimatedCountOfRanges)
                 throw new ArgumentOutOfRangeException($"Requested page count is more than actual page count. Maximum page count must be {estimatedCountOfRanges}.");
 
-            return (entities: repo, pageCount: estimatedCountOfRanges);
+            return (entities: repo, pageCount: estimatedCountOfRanges, totalDataCount: dataCount);
         }
 
         /// <summary>
@@ -256,7 +256,7 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
         /// <param name="orderByAscending"></param>
         /// <param name="conditionExpression"></param>
         /// <returns></returns>
-        public virtual async Task<(IEnumerable<TEntity> entities, int pageCount)> GetAsPaginatedAndOrderedAsync(int requestedPageNumber,
+        public virtual async Task<(IEnumerable<TEntity> entities, int pageCount, int totalDataCount)> GetAsPaginatedAndOrderedAsync(int requestedPageNumber,
                                                                                                                 int countOfRequestedRecordsInPage,
                                                                                                                 Func<IIncludable<TEntity>, IIncludable> includes,
                                                                                                                 string orderByPropertyName,
@@ -303,7 +303,7 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
             if (estimatedCountOfRanges != 0 && requestedPageNumber > estimatedCountOfRanges)
                 throw new ArgumentOutOfRangeException($"Requested page count is more than actual page count. Maximum page count must be {estimatedCountOfRanges}.");
 
-            return (entities: repo, pageCount: estimatedCountOfRanges);
+            return (entities: repo, pageCount: estimatedCountOfRanges, totalDataCount: dataCount);
         }
 
         /// <summary>
@@ -320,7 +320,7 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
         /// <param name="orderByAscending"></param>
         /// <param name="conditionExpression"></param>
         /// <returns></returns>
-        public virtual async Task<(IEnumerable<TEntity> entities, int pageCount)> GetAsPaginatedAndOrderedAsync(int requestedPageNumber,
+        public virtual async Task<(IEnumerable<TEntity> entities, int pageCount, int totalDataCount)> GetAsPaginatedAndOrderedAsync(int requestedPageNumber,
                                                                                                                 int countOfRequestedRecordsInPage,
                                                                                                                 Expression<Func<TEntity, object>> orderByKeySelector,
                                                                                                                 bool orderByAscending,
@@ -354,7 +354,7 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
             if (estimatedCountOfRanges != 0 && requestedPageNumber > estimatedCountOfRanges)
                 throw new ArgumentOutOfRangeException($"Requested page count is more than actual page count. Maximum page count must be {estimatedCountOfRanges}.");
 
-            return (entities: repo, pageCount: estimatedCountOfRanges);
+            return (entities: repo, pageCount: estimatedCountOfRanges, totalDataCount: dataCount);
         }
 
         /// <summary>
@@ -372,7 +372,7 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
         /// <param name="orderByAscending"></param>
         /// <param name="conditionExpression"></param>
         /// <returns></returns>
-        public virtual async Task<(IEnumerable<TEntity> entities, int pageCount)> GetAsPaginatedAndOrderedAsync(int requestedPageNumber,
+        public virtual async Task<(IEnumerable<TEntity> entities, int pageCount, int totalDataCount)> GetAsPaginatedAndOrderedAsync(int requestedPageNumber,
                                                                                                                 int countOfRequestedRecordsInPage,
                                                                                                                 Func<IIncludable<TEntity>, IIncludable> includes,
                                                                                                                 Expression<Func<TEntity, object>> orderByKeySelector,
@@ -409,7 +409,7 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
             if (estimatedCountOfRanges != 0 && requestedPageNumber > estimatedCountOfRanges)
                 throw new ArgumentOutOfRangeException($"Requested page count is more than actual page count. Maximum page count must be {estimatedCountOfRanges}.");
 
-            return (entities: repo, pageCount: estimatedCountOfRanges);
+            return (entities: repo, pageCount: estimatedCountOfRanges, totalDataCount: dataCount);
         }
 
 

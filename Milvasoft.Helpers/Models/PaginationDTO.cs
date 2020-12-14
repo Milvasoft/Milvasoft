@@ -8,12 +8,18 @@ namespace Milvasoft.Helpers.Models
     public class PaginationDTO<TEntity>
     {
         /// <summary>
-        /// <para> Items in page. </para>
+        /// Items in page. 
         /// </summary>
         public List<TEntity> DTOList { get; set; }
+
         /// <summary>
-        /// <para> Page count information. </para>
+        /// Page count information.
         /// </summary>
         public int PageCount { get; set; }
+
+        /// <summary>
+        /// Total data count of all pages.
+        /// </summary>
+        public int TotalDataCount { get; set; }
     }
 }
