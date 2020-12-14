@@ -1055,11 +1055,26 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
         /// <param name="oldEntities"></param>
         /// <param name="newEntities"></param>
         /// <returns></returns>
-        public virtual async Task ReplaceOldsWithNewsAsync(IEnumerable<TEntity> oldEntities, IEnumerable<TEntity> newEntities)
+        public virtual async Task ReplaceOldsWithNewsInSeperateDatabaseProcessAsync(IEnumerable<TEntity> oldEntities, IEnumerable<TEntity> newEntities)
         {
             await DeleteAsync(oldEntities).ConfigureAwait(false);
             await AddRangeAsync(newEntities).ConfigureAwait(false);
         }
+
+        /// <summary>
+        /// Replaces existing entities(<paramref name="oldEntities"/>) with new entities(<paramref name="newEntities"/>).
+        /// </summary>
+        /// <param name="oldEntities"></param>
+        /// <param name="newEntities"></param>
+        /// <returns></returns>
+        public virtual async Task ReplaceOldsWithNewsAsync(IEnumerable<TEntity> oldEntities, IEnumerable<TEntity> newEntities)
+        {
+            InitalizeEdit(oldEntities);
+            _dbContext.RemoveRange(oldEntities);
+            _dbContext.Set<TEntity>().AddRange(newEntities);
+            await _dbContext.SaveChangesAsync().ConfigureAwait(false);
+        }
+
 
         //TODO EntityFrameworkQueryableExtensions methods will be added here.
 
