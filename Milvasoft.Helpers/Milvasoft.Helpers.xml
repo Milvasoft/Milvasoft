@@ -145,7 +145,7 @@
                   If the condition is requested, it also provides that condition.</para> 
             </summary>
             
-            <exception cref="T:System.ArgumentNullException"> Throwns when <paramref name="requestedPageNumber"/> more than actual page number. </exception>
+            <exception cref="T:System.ArgumentOutOfRangeException"> Throwns when <paramref name="requestedPageNumber"/> more than actual page number. </exception>
             
             <param name="requestedPageNumber"></param>
             <param name="countOfRequestedRecordsInPage"></param>
@@ -158,7 +158,7 @@
                    If the condition is requested, it also provides that condition.</para> 
              </summary>
             
-             <exception cref="T:System.ArgumentNullException"> Throwns when <paramref name="requestedPageNumber"/> more than actual page number. </exception>
+             <exception cref="T:System.ArgumentOutOfRangeException"> Throwns when <paramref name="requestedPageNumber"/> more than actual page number. </exception>
             
              <param name="requestedPageNumber"></param>
              <param name="countOfRequestedRecordsInPage"></param>
@@ -174,7 +174,7 @@
             </summary>
             
             <exception cref="T:System.ArgumentException"> Throwns when type of <typeparamref name="TEntity"/>'s properties doesn't contain '<paramref name="orderByPropertyName"/>'. </exception>
-            <exception cref="T:System.ArgumentNullException"> Throwns when <paramref name="requestedPageNumber"/> more than actual page number. </exception>
+            <exception cref="T:System.ArgumentOutOfRangeException"> Throwns when <paramref name="requestedPageNumber"/> more than actual page number. </exception>
             
             <param name="requestedPageNumber"></param>
             <param name="countOfRequestedRecordsInPage"></param>
@@ -191,7 +191,7 @@
              </summary>
              
              <exception cref="T:System.ArgumentException"> Throwns when type of <typeparamref name="TEntity"/>'s properties doesn't contain '<paramref name="orderByPropertyName"/>'. </exception>
-             <exception cref="T:System.ArgumentNullException"> Throwns when <paramref name="requestedPageNumber"/> more than actual page number. </exception>
+             <exception cref="T:System.ArgumentOutOfRangeException"> Throwns when <paramref name="requestedPageNumber"/> more than actual page number. </exception>
             
              <param name="requestedPageNumber"></param>
              <param name="countOfRequestedRecordsInPage"></param>
@@ -208,7 +208,7 @@
                   
             </summary>
             
-            <exception cref="T:System.ArgumentNullException"> Throwns when <paramref name="requestedPageNumber"/> more than actual page number. </exception>
+            <exception cref="T:System.ArgumentOutOfRangeException"> Throwns when <paramref name="requestedPageNumber"/> more than actual page number. </exception>
             
             <param name="requestedPageNumber"></param>
             <param name="countOfRequestedRecordsInPage"></param>
@@ -224,7 +224,7 @@
                     
              </summary>
              
-             <exception cref="T:System.ArgumentNullException"> Throwns when <paramref name="requestedPageNumber"/> more than actual page number. </exception>
+             <exception cref="T:System.ArgumentOutOfRangeException"> Throwns when <paramref name="requestedPageNumber"/> more than actual page number. </exception>
             
              <param name="requestedPageNumber"></param>
              <param name="countOfRequestedRecordsInPage"></param>
@@ -247,21 +247,6 @@
             <param name="orderByAscending"></param>
             <param name="conditionExpression"></param>
             <returns></returns>
-        </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.GetAsOrderedAsync(System.Func{Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable{`0},Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable},System.String,System.Boolean,System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
-             <summary>
-             <para> Gets entities as ordered with <paramref name="orderByPropertyName"/>.
-                    If the condition is requested, it also provides that condition.</para> 
-                    
-             </summary>
-            
-             <exception cref="T:System.ArgumentException"> Throwns when type of <typeparamref name="TEntity"/>'s properties doesn't contain '<paramref name="orderByPropertyName"/>'. </exception>
-             
-             <param name="includes"></param>
-             <param name="orderByPropertyName"></param>
-             <param name="orderByAscending"></param>
-             <param name="conditionExpression"></param>
-             <returns></returns>
         </member>
         <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.GetAsOrderedAsync(System.Linq.Expressions.Expression{System.Func{`0,System.Object}},System.Boolean,System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
             <summary>
@@ -565,6 +550,22 @@
             Get count of entities.
             </summary>
             <param name="conditionExpression"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.ReplaceOldsWithNewsAsync(System.Collections.Generic.IEnumerable{`0},System.Collections.Generic.IEnumerable{`0})">
+            <summary>
+            Replaces existing entities(<paramref name="oldEntities"/>) with new entities(<paramref name="newEntities"/>).
+            </summary>
+            <param name="oldEntities"></param>
+            <param name="newEntities"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.ReplaceOldsWithNewsInSeperateDatabaseProcessAsync(System.Collections.Generic.IEnumerable{`0},System.Collections.Generic.IEnumerable{`0})">
+            <summary>
+            Replaces existing entities(<paramref name="oldEntities"/>) with new entities(<paramref name="newEntities"/>).
+            </summary>
+            <param name="oldEntities"></param>
+            <param name="newEntities"></param>
             <returns></returns>
         </member>
         <member name="T:Milvasoft.Helpers.DataAccess.Abstract.IContextRepository`1">
@@ -1176,6 +1177,22 @@
             <param name="conditionExpression"></param>
             <returns></returns>
         </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.ReplaceOldsWithNewsInSeperateDatabaseProcessAsync(System.Collections.Generic.IEnumerable{`0},System.Collections.Generic.IEnumerable{`0})">
+            <summary>
+            Replaces existing entities(<paramref name="oldEntities"/>) with new entities(<paramref name="newEntities"/>).
+            </summary>
+            <param name="oldEntities"></param>
+            <param name="newEntities"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.ReplaceOldsWithNewsAsync(System.Collections.Generic.IEnumerable{`0},System.Collections.Generic.IEnumerable{`0})">
+            <summary>
+            Replaces existing entities(<paramref name="oldEntities"/>) with new entities(<paramref name="newEntities"/>).
+            </summary>
+            <param name="oldEntities"></param>
+            <param name="newEntities"></param>
+            <returns></returns>
+        </member>
         <member name="T:Milvasoft.Helpers.DataAccess.Concrete.ContextRepository`1">
             <summary>
             Helper repository for general DbContext(<typeparamref name="TContext"/>) operations.
@@ -1541,12 +1558,17 @@
         </member>
         <member name="P:Milvasoft.Helpers.Models.PaginationDTO`1.DTOList">
             <summary>
-            <para> Items in page. </para>
+            Items in page. 
             </summary>
         </member>
         <member name="P:Milvasoft.Helpers.Models.PaginationDTO`1.PageCount">
             <summary>
-            <para> Page count information. </para>
+            Page count information.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.Models.PaginationDTO`1.TotalDataCount">
+            <summary>
+            Total data count of all pages.
             </summary>
         </member>
         <member name="T:Milvasoft.Helpers.Models.Response.BaseResponse">
