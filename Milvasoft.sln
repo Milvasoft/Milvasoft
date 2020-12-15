@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30621.155
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Milvasoft.MapperImplementation", "MapperImplementation\Milvasoft.MapperImplementation.csproj", "{4DF919DE-5473-4F21-838B-6616E1C9816A}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Milvasoft.FormFileOperations", "Milvasoft.FormFileOperations\Milvasoft.FormFileOperations.csproj", "{A8C2D977-81A8-4D3D-8AC0-ED193A56E635}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Milvasoft.Helpers", "Milvasoft.Helpers\Milvasoft.Helpers.csproj", "{49A1B0F8-BAC8-433A-A5B8-737E28A5AFA6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Milvasoft.Helpers", "Milvasoft.Helpers\Milvasoft.Helpers.csproj", "{49A1B0F8-BAC8-433A-A5B8-737E28A5AFA6}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Milvasoft.MapperImplementation", "Milvasoft.MapperImplementation\Milvasoft.MapperImplementation.csproj", "{EA3F7D18-28CB-42DD-ACE7-6BB1C6801450}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,10 +15,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{4DF919DE-5473-4F21-838B-6616E1C9816A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4DF919DE-5473-4F21-838B-6616E1C9816A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{4DF919DE-5473-4F21-838B-6616E1C9816A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{4DF919DE-5473-4F21-838B-6616E1C9816A}.Release|Any CPU.Build.0 = Release|Any CPU
 		{A8C2D977-81A8-4D3D-8AC0-ED193A56E635}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{A8C2D977-81A8-4D3D-8AC0-ED193A56E635}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A8C2D977-81A8-4D3D-8AC0-ED193A56E635}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -27,6 +23,10 @@ Global
 		{49A1B0F8-BAC8-433A-A5B8-737E28A5AFA6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{49A1B0F8-BAC8-433A-A5B8-737E28A5AFA6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{49A1B0F8-BAC8-433A-A5B8-737E28A5AFA6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EA3F7D18-28CB-42DD-ACE7-6BB1C6801450}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EA3F7D18-28CB-42DD-ACE7-6BB1C6801450}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EA3F7D18-28CB-42DD-ACE7-6BB1C6801450}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EA3F7D18-28CB-42DD-ACE7-6BB1C6801450}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

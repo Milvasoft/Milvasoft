@@ -41,19 +41,6 @@
             <param name="ignoreNullValues"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.MapperImplementation.Implementation.IMapper.Map``2(``0,System.Int32,System.Boolean,System.Boolean,System.Linq.Expressions.Expression{System.Func{``1,System.Object}}[])">
-            <summary>
-            Responsible for mapping from the source object to the object we want to map.
-            </summary>
-            <typeparam name="TSource"></typeparam>
-            <typeparam name="TDestination"></typeparam>
-            <param name="source"></param>
-            <param name="ignoredMembers"></param>
-            <param name="maxDepth"></param>
-            <param name="preserveReference"></param>
-            <param name="ignoreNullValues"></param>
-            <returns></returns>
-        </member>
         <member name="T:Milvasoft.MapperImplementation.MilvasoftMapster.Mapper">
             <summary>
             Class written instead of manual mapping. It is written to map DTO class object to entity class.
@@ -87,19 +74,6 @@
             <param name="source"></param>
             <param name="ignoredMembers"></param>
             <param name="maxDepth"></param>
-            <param name="ignoreNullValues"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Milvasoft.MapperImplementation.MilvasoftMapster.Mapper.Map``2(``0,System.Int32,System.Boolean,System.Boolean,System.Linq.Expressions.Expression{System.Func{``1,System.Object}}[])">
-            <summary>
-            Responsible for mapping from the source object to the object we want to map.
-            </summary>
-            <typeparam name="TSource"></typeparam>
-            <typeparam name="TDestination"></typeparam>
-            <param name="source"></param>
-            <param name="ignoredMembers"></param>
-            <param name="maxDepth"></param>
-            <param name="preserveReference"></param>
             <param name="ignoreNullValues"></param>
             <returns></returns>
         </member>
