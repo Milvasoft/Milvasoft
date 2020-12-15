@@ -1,4 +1,4 @@
-name: Helpers
+name: MapperImplementation
 
 on:
  push:
