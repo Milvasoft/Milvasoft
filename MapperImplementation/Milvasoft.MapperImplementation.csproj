@@ -2,21 +2,8 @@
 
 	<PropertyGroup>
 		<TargetFramework>netcoreapp3.1</TargetFramework>
-		<GenerateDocumentationFile>true</GenerateDocumentationFile>
-		<Authors>Milvasoft Corporation</Authors>
-		<Company>Milvasoft Corporation</Company>
-		<Product>Milvasoft.MapperImplementation</Product>
-		<Description>Implementation  helper for mappers.</Description>
-		<Copyright>Milvasoft Yazılım Bilişim Araştırma Geliştirme Danışmanlık Sanayi ve Ticaret Ltd.Şti.</Copyright>
-		<PackageProjectUrl>https://github.com/Milvasoft/Milvasoft/tree/master/Milvasoft.MapperImplementation</PackageProjectUrl>
 		<PackageIcon>milvalogo.png</PackageIcon>
-		<RepositoryUrl>https://github.com/Milvasoft/Milvasoft/tree/master/Milvasoft.MapperImplementation</RepositoryUrl>
-		<RepositoryType>git</RepositoryType>
-		<PackageTags>helper,milvasoft,mapper,mapster,automapper</PackageTags>
-	</PropertyGroup>
-
-	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-		<DocumentationFile>..\MapperImplementation\Milvasoft.MapperImplementation.xml</DocumentationFile>
+		<GenerateDocumentationFile>true</GenerateDocumentationFile>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -24,10 +11,41 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <None Update="Milvasoft.MapperImplementation.xml">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </None>
-	  <None Include="Icon\milvalogo.png" />
+		<None Include="Icon\milvalogo.png">
+			<Pack>True</Pack>
+			<PackagePath></PackagePath>
+		</None>
 	</ItemGroup>
 
+	<ItemGroup>
+		<None Update="Milvasoft.MapperImplementation.xml">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+	</ItemGroup>
+
+
+	<PropertyGroup>
+
+		<PackageId>Milvasoft.MapperImplementation</PackageId>
+		<RepositoryUrl>https://github.com/Milvasoft/Milvasoft/tree/master/Milvasoft.MapperImplementation</RepositoryUrl>
+		<RepositoryType>git</RepositoryType>
+		<PackageProjectUrl>https://github.com/Milvasoft/Milvasoft/tree/master/Milvasoft.MapperImplementation</PackageProjectUrl>
+		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+		<Authors>Milvasoft Corporation</Authors>
+		<Product>Milvasoft.Helpers</Product>
+		<Description>Implementation  helper for mappers.</Description>
+		<PackageTags>helper,milvasoft,mapper,mapster,automapper</PackageTags>
+		<Copyright>Milvasoft Yazılım Bilişim Araştırma Geliştirme Danışmanlık Sanayi ve Ticaret Ltd.Şti.</Copyright>
+		<Version>1.0.0</Version>
+		<PackageIcon>milvalogo.png</PackageIcon>
+
+	</PropertyGroup>
+	
+	
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+		<DocumentationFile>..\MapperImplementation\Milvasoft.MapperImplementation.xml</DocumentationFile>
+	</PropertyGroup>
+
+	
+	
 </Project>
