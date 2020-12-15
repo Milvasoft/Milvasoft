@@ -104,8 +104,28 @@
             <param name="basePath"></param>
             <param name="folderNameCreator"></param>
             <param name="propertyName"></param>
-            <param name="maxFileLength"></param>
-            <param name="fileTypeEnum"></param>
+            <returns> Completed Task </returns>
+        </member>
+        <member name="M:Milvasoft.FormFileOperations.FormFileOperations.SaveFilesToPathAsync``1(System.Collections.Generic.List{Microsoft.AspNetCore.Http.IFormFile},``0,System.String,Milvasoft.FormFileOperations.FormFileOperations.FilesFolderNameCreator,System.String)">
+            <summary>
+            <para><b>EN: </b>Save uploaded IFormFile file to physical file path. Target Path will be : "<paramref name ="basePath"></paramref>/<b><paramref name="folderNameCreator"/>()</b>/<paramref name="entity"></paramref>.<paramref name="propertyName"/>"</para>
+            <para><b>TR: </b>Yüklenen IFormFile dosyasını fiziksel bir dosya yoluna kaydedin. Hedef Yol: <paramref name ="basePath"></paramref>/<b><paramref name="folderNameCreator"/>()</b>/<paramref name ="entity"></paramref>.<paramref name="propertyName"/>" olacaktır</para>
+            </summary>
+            
+            <para><b>Remarks:</b></para>
+            
+            <remarks>
+            
+            <para> Don't forget validate file with <see cref="M:Milvasoft.FormFileOperations.FormFileOperations.ValidateFile(Microsoft.AspNetCore.Http.IFormFile,Milvasoft.FormFileOperations.Enums.FileType,System.Int64,System.Collections.Generic.List{System.String})"/>, before use this method.</para>
+            
+            </remarks>
+            
+            <typeparam name="TEntity"></typeparam>
+            <param name="files"> Uploaded file in entity. </param>
+            <param name="entity"></param>
+            <param name="basePath"></param>
+            <param name="folderNameCreator"></param>
+            <param name="propertyName"></param>
             <returns> Completed Task </returns>
         </member>
         <member name="M:Milvasoft.FormFileOperations.FormFileOperations.ValidateFile(Microsoft.AspNetCore.Http.IFormFile,Milvasoft.FormFileOperations.Enums.FileType,System.Int64,System.Collections.Generic.List{System.String})">
@@ -116,6 +136,7 @@
             <param name="file"> Uploaded file. </param>
             <param name="fileType"> Uploaded file type. (e.g image,video,sound..) </param>
             <param name="maxFileSize"> Maximum file size in bytes of uploaded file. </param>
+            <param name="allowedFileExtensions"> Allowed file extensions for <paramref name="fileType"/>. </param>
         </member>
         <member name="M:Milvasoft.FormFileOperations.FormFileOperations.GetFileUrlPathSectionFromFilePath(System.String,System.String)">
             <summary>
@@ -132,14 +153,61 @@
             <para><b>TR: </b>İstenen yolda görüntü dosyasını alır.</para>
             </summary>
             <param name="path"></param>
+            <param name="fileType"></param>
             <returns></returns>
         </member>
         <member name="M:Milvasoft.FormFileOperations.FormFileOperations.RemoveDirectoryFileIsIn(System.String)">
             <summary>
-            <para><b>EN: </b>Removes the folder the image is in.</para> 
-            <para><b>TR: </b>Görüntünün bulunduğu klasörü kaldırır.</para> 
+            <para><b>EN: </b> Removes the folder the file is in.</para> 
+            <para><b>TR: </b> Dosyanın bulunduğu klasörü kaldırır.</para> 
             </summary>
             <param name="filePath"></param>
+        </member>
+        <member name="M:Milvasoft.FormFileOperations.FormFileOperations.RemoveFileByPath(System.String)">
+            <summary>
+            <para><b>EN: </b> Removes file.</para> 
+            <para><b>TR: </b> Dosyayı siler.</para> 
+            </summary>
+            <param name="filePath"></param>
+        </member>
+        <member name="M:Milvasoft.FormFileOperations.FormFileOperations.RemoveFilesByPath(System.Collections.Generic.List{System.String})">
+            <summary>
+            <para><b>EN: </b> Removes file.</para> 
+            <para><b>TR: </b> Dosyayı siler.</para> 
+            </summary>
+            <param name="filePaths"></param>
+        </member>
+        <member name="M:Milvasoft.FormFileOperations.FormFileOperations.RemoveFilesInFolder(System.String)">
+            <summary>
+            Delete all files in directory on <paramref name="folderPath"/>.
+            </summary>
+            <param name="folderPath"></param>
+        </member>
+        <member name="M:Milvasoft.FormFileOperations.FormFileOperations.RemoveFilesInFolder(System.String,System.Collections.Generic.List{System.String})">
+            <summary>
+            Delete matching files in directory on <paramref name="folderPath"/>.
+            </summary>
+            <param name="folderPath"></param>
+            <param name="fileNames"> File names should contains extension. </param>
+        </member>
+        <member name="M:Milvasoft.FormFileOperations.FormFileOperations.RemoveDirectoriesInFolder(System.String)">
+            <summary>
+            Delete all directories in directory on <paramref name="folderPath"/>.
+            </summary>
+            <param name="folderPath"></param>
+        </member>
+        <member name="M:Milvasoft.FormFileOperations.FormFileOperations.RemoveDirectoriesInFolder(System.String,System.Collections.Generic.List{System.String})">
+            <summary>
+            Delete matching directories in directory on <paramref name="folderPath"/>.
+            </summary>
+            <param name="folderPath"></param>
+            <param name="directoryNames"></param>
+        </member>
+        <member name="M:Milvasoft.FormFileOperations.FormFileOperations.RemoveDirectoriesAndFolder(System.String)">
+            <summary>
+            Delete all files and directories in directory on <paramref name="folderPath"/>.
+            </summary>
+            <param name="folderPath"></param>
         </member>
         <member name="M:Milvasoft.FormFileOperations.FormFileOperations.RenameFolderAndFileName(System.String,System.Guid)">
             <summary>
@@ -193,6 +261,12 @@
             <param name="s">The string to encode.</param>
             <param name="encodeSpaceAsPlus">If true, spaces will be encoded as + signs. Otherwise, they'll be encoded as %20.</param>
             <returns>The encoded URL.</returns>
+        </member>
+        <member name="M:Milvasoft.FormFileOperations.FormFileOperations.IsNullOrEmpty(System.Collections.IEnumerable)">
+            <summary>
+            <para><b>EN: </b>Checks whether or not collection is null or empty. Assumes collection can be safely enumerated multiple times.</para>
+            <para><b>TR: </b>Koleksiyonun boş veya boş olup olmadığını denetler. Koleksiyonun birden çok kez güvenli bir şekilde numaralandırılabileceğini varsayar.</para>
+            </summary>
         </member>
     </members>
 </doc>

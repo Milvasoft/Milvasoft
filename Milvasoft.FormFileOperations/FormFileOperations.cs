@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http.Internal;
 using Milvasoft.FormFileOperations.Enums;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -74,8 +75,6 @@ namespace Milvasoft.FormFileOperations
         /// <param name="basePath"></param>
         /// <param name="folderNameCreator"></param>
         /// <param name="propertyName"></param>
-        /// <param name="maxFileLength"></param>
-        /// <param name="fileTypeEnum"></param>
         /// <returns> Completed Task </returns>
         public static async Task<string> SaveFileToPathAsync<TEntity>(this IFormFile file,
                                                                                 TEntity entity,
@@ -121,12 +120,84 @@ namespace Milvasoft.FormFileOperations
         }
 
         /// <summary>
+        /// <para><b>EN: </b>Save uploaded IFormFile file to physical file path. Target Path will be : "<paramref name ="basePath"></paramref>/<b><paramref name="folderNameCreator"/>()</b>/<paramref name="entity"></paramref>.<paramref name="propertyName"/>"</para>
+        /// <para><b>TR: </b>Yüklenen IFormFile dosyasını fiziksel bir dosya yoluna kaydedin. Hedef Yol: <paramref name ="basePath"></paramref>/<b><paramref name="folderNameCreator"/>()</b>/<paramref name ="entity"></paramref>.<paramref name="propertyName"/>" olacaktır</para>
+        /// </summary>
+        /// 
+        /// <para><b>Remarks:</b></para>
+        /// 
+        /// <remarks>
+        /// 
+        /// <para> Don't forget validate file with <see cref="ValidateFile(IFormFile, FileType, long, List{string})"/>, before use this method.</para>
+        /// 
+        /// </remarks>
+        /// 
+        /// <typeparam name="TEntity"></typeparam>
+        /// <param name="files"> Uploaded file in entity. </param>
+        /// <param name="entity"></param>
+        /// <param name="basePath"></param>
+        /// <param name="folderNameCreator"></param>
+        /// <param name="propertyName"></param>
+        /// <returns> Completed Task </returns>
+        public static async Task<List<string>> SaveFilesToPathAsync<TEntity>(this List<IFormFile> files,
+                                                                                TEntity entity,
+                                                                                    string basePath,
+                                                                                        FilesFolderNameCreator folderNameCreator,
+                                                                                            string propertyName)
+        {
+            if (files.IsNullOrEmpty()) throw new ArgumentNullException("Files list cannot be empty!");
+            //Gets file extension.
+            var fileExtension = Path.GetExtension(files.First().FileName);
+
+            //Gets the class name. E.g. If class is ProductDTO then sets the value of this variable as "Product".
+            var folderNameOfClass = folderNameCreator.Invoke(entity.GetType());
+
+            //We combined the name of this class (folderNameOfClass) with the path of the basePath folder. So we created the path of the folder belonging to this class.
+            var folderPathOfClass = Path.Combine(basePath, folderNameOfClass);
+
+            //If there is no such folder in this path (folderPathOfClass), we created it.
+            if (!Directory.Exists(folderPathOfClass))
+                Directory.CreateDirectory(folderPathOfClass);
+
+            //Since each data belonging to this class (folderNameOfClass) will have a separate folder, we received the Id of the data sent.
+            var folderNameOfItem = PropertyExists<TEntity>(propertyName) ? entity.GetType().GetProperty(propertyName).GetValue(entity, null).ToString() : throw new ArgumentException($"Type of {entity.GetType().Name}'s properties doesn't contain '{propertyName}'.");
+
+            //We created the path to the folder of this Id (folderNameOfItem).
+            var folderPathOfItem = Path.Combine(folderPathOfClass, folderNameOfItem);
+
+            //If there is no such folder in this path (folderPathOfItem), we created it.
+            if (!Directory.Exists(folderPathOfItem))
+                Directory.CreateDirectory(folderPathOfItem);
+
+            DirectoryInfo directory = new DirectoryInfo(folderPathOfItem);
+
+            var directoryFiles = directory.GetFiles();
+            int markerNo = directoryFiles.IsNullOrEmpty() ? 1 : directoryFiles.Max(fileInDir => Convert.ToInt32(Path.GetFileNameWithoutExtension(fileInDir.FullName).Split('_')[1]));
+
+            var folderPaths = new List<string>();
+            foreach (var item in files)
+            {
+                var fileNameWithExtension = $"{folderNameOfItem}_{markerNo}{fileExtension}";
+                var filePathOfItem = Path.Combine(folderPathOfItem, fileNameWithExtension);
+                using (var fileStream = new FileStream(filePathOfItem, FileMode.Create))
+                {
+                    await item.CopyToAsync(fileStream).ConfigureAwait(false);
+                }
+                folderPaths.Add(filePathOfItem);
+                markerNo++;
+            }
+
+            return folderPaths;
+        }
+
+        /// <summary>
         /// <para><b>EN: </b>Checks that the file compatible the upload rules.</para>
         /// <para><b>TR: </b>Dosyanın yükleme kurallarıyla uyumlu olup olmadığını kontrol eder.</para>
         /// </summary>
         /// <param name="file"> Uploaded file. </param>
         /// <param name="fileType"> Uploaded file type. (e.g image,video,sound..) </param>
         /// <param name="maxFileSize"> Maximum file size in bytes of uploaded file. </param>
+        /// <param name="allowedFileExtensions"> Allowed file extensions for <paramref name="fileType"/>. </param>
         public static FileValidationResult ValidateFile(this IFormFile file, FileType fileType, long maxFileSize, List<string> allowedFileExtensions)
         {
             if (file == null) return FileValidationResult.NullFile;
@@ -172,8 +243,9 @@ namespace Milvasoft.FormFileOperations
         /// <para><b>TR: </b>İstenen yolda görüntü dosyasını alır.</para>
         /// </summary>
         /// <param name="path"></param>
+        /// <param name="fileType"></param>
         /// <returns></returns>
-        public static async Task<IFormFile> GetFileFromPathAsync(string path,FileType fileType)
+        public static async Task<IFormFile> GetFileFromPathAsync(string path, FileType fileType)
         {
             var memory = new MemoryStream();
             if (string.IsNullOrEmpty(path))
@@ -193,14 +265,109 @@ namespace Milvasoft.FormFileOperations
         }
 
         /// <summary>
-        /// <para><b>EN: </b>Removes the folder the image is in.</para> 
-        /// <para><b>TR: </b>Görüntünün bulunduğu klasörü kaldırır.</para> 
+        /// <para><b>EN: </b> Removes the folder the file is in.</para> 
+        /// <para><b>TR: </b> Dosyanın bulunduğu klasörü kaldırır.</para> 
         /// </summary>
         /// <param name="filePath"></param>
         public static void RemoveDirectoryFileIsIn(string filePath)
         {
             if (File.Exists(filePath)) Directory.Delete(Path.GetDirectoryName(filePath), true);
         }
+
+        /// <summary>
+        /// <para><b>EN: </b> Removes file.</para> 
+        /// <para><b>TR: </b> Dosyayı siler.</para> 
+        /// </summary>
+        /// <param name="filePath"></param>
+        public static void RemoveFileByPath(string filePath)
+        {
+            if (File.Exists(filePath)) File.Delete(filePath);
+        }
+
+        /// <summary>
+        /// <para><b>EN: </b> Removes file.</para> 
+        /// <para><b>TR: </b> Dosyayı siler.</para> 
+        /// </summary>
+        /// <param name="filePaths"></param>
+        public static void RemoveFilesByPath(List<string> filePaths)
+        {
+            foreach (var filePath in filePaths)
+            {
+                if (File.Exists(filePath)) File.Delete(filePath);
+            }
+        }
+
+        /// <summary>
+        /// Delete all files in directory on <paramref name="folderPath"/>.
+        /// </summary>
+        /// <param name="folderPath"></param>
+        public static void RemoveFilesInFolder(string folderPath)
+        {
+            DirectoryInfo directory = new DirectoryInfo(folderPath);
+
+            foreach (FileInfo file in directory.EnumerateFiles())
+            {
+                file.Delete();
+            }
+        }
+
+        /// <summary>
+        /// Delete matching files in directory on <paramref name="folderPath"/>.
+        /// </summary>
+        /// <param name="folderPath"></param>
+        /// <param name="fileNames"> File names should contains extension. </param>
+        public static void RemoveFilesInFolder(string folderPath, List<string> fileNames)
+        {
+            DirectoryInfo directory = new DirectoryInfo(folderPath);
+
+            foreach (FileInfo file in directory.EnumerateFiles())
+                if (fileNames.Contains(file.Name))
+                    file.Delete();
+        }
+
+        /// <summary>
+        /// Delete all directories in directory on <paramref name="folderPath"/>.
+        /// </summary>
+        /// <param name="folderPath"></param>
+        public static void RemoveDirectoriesInFolder(string folderPath)
+        {
+            DirectoryInfo directory = new DirectoryInfo(folderPath);
+
+            foreach (DirectoryInfo dir in directory.EnumerateDirectories())
+            {
+                dir.Delete(true);
+            }
+        }
+
+        /// <summary>
+        /// Delete matching directories in directory on <paramref name="folderPath"/>.
+        /// </summary>
+        /// <param name="folderPath"></param>
+        /// <param name="directoryNames"></param>
+        public static void RemoveDirectoriesInFolder(string folderPath, List<string> directoryNames)
+        {
+            DirectoryInfo directory = new DirectoryInfo(folderPath);
+
+            foreach (DirectoryInfo dir in directory.EnumerateDirectories())
+                if (directoryNames.Contains(dir.Name))
+                    dir.Delete(true);
+        }
+
+        /// <summary>
+        /// Delete all files and directories in directory on <paramref name="folderPath"/>.
+        /// </summary>
+        /// <param name="folderPath"></param>
+        public static void RemoveDirectoriesAndFolder(string folderPath)
+        {
+            DirectoryInfo directory = new DirectoryInfo(folderPath);
+
+            foreach (FileInfo file in directory.EnumerateFiles())
+                file.Delete();
+
+            foreach (DirectoryInfo dir in directory.EnumerateDirectories())
+                dir.Delete(true);
+        }
+
 
         /// <summary>
         /// <para><b>EN: </b>It is used to change the folder and name information of the uploaded file.</para>
@@ -373,12 +540,19 @@ namespace Milvasoft.FormFileOperations
                 return Uri.EscapeUriString(s);
 
             // pick out all %-hex-hex matches and avoid double-encoding 
-            return Regex.Replace(s, "(.*?)((%[0-9A-Fa-f]{2})|$)", c => {
+            return Regex.Replace(s, "(.*?)((%[0-9A-Fa-f]{2})|$)", c =>
+            {
                 var a = c.Groups[1].Value; // group 1 is a sequence with no %-encoding - encode illegal characters
                 var b = c.Groups[2].Value; // group 2 is a valid 3-character %-encoded sequence - leave it alone!
                 return Uri.EscapeUriString(a) + b;
             });
         }
+
+        /// <summary>
+        /// <para><b>EN: </b>Checks whether or not collection is null or empty. Assumes collection can be safely enumerated multiple times.</para>
+        /// <para><b>TR: </b>Koleksiyonun boş veya boş olup olmadığını denetler. Koleksiyonun birden çok kez güvenli bir şekilde numaralandırılabileceğini varsayar.</para>
+        /// </summary>
+        private static bool IsNullOrEmpty(this IEnumerable @this) => @this == null || @this.GetEnumerator().MoveNext() == false;
 
         #endregion
     }
