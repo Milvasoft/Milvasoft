@@ -49,12 +49,41 @@ namespace Milvasoft.MapperImplementation.MilvasoftMapster
         /// <param name="maxDepth"></param>
         /// <param name="ignoreNullValues"></param>
         /// <returns></returns>
-        public TDestination Map<TSource, TDestination>(TSource source, int maxDepth, bool ignoreNullValues = false, params Expression<Func<TDestination, object>>[] ignoredMembers)
+        public TDestination Map<TSource, TDestination>(TSource source,
+                                                       int maxDepth,
+                                                       bool ignoreNullValues = false,
+                                                       params Expression<Func<TDestination, object>>[] ignoredMembers)
         {
             TypeAdapterConfig<TSource, TDestination>.NewConfig()
                       .Ignore(ignoredMembers)
                       .IgnoreNullValues(ignoreNullValues)
                       .PreserveReference(true)
+                      .MaxDepth(maxDepth);
+            return source.Adapt<TDestination>();
+        }
+
+
+        /// <summary>
+        /// Responsible for mapping from the source object to the object we want to map.
+        /// </summary>
+        /// <typeparam name="TSource"></typeparam>
+        /// <typeparam name="TDestination"></typeparam>
+        /// <param name="source"></param>
+        /// <param name="ignoredMembers"></param>
+        /// <param name="maxDepth"></param>
+        /// <param name="preserveReference"></param>
+        /// <param name="ignoreNullValues"></param>
+        /// <returns></returns>
+        public TDestination Map<TSource, TDestination>(TSource source,
+                                                       int maxDepth,
+                                                       bool preserveReference,
+                                                       bool ignoreNullValues = false,
+                                                       params Expression<Func<TDestination, object>>[] ignoredMembers)
+        {
+            TypeAdapterConfig<TSource, TDestination>.NewConfig()
+                      .Ignore(ignoredMembers)
+                      .IgnoreNullValues(ignoreNullValues)
+                      .PreserveReference(preserveReference)
                       .MaxDepth(maxDepth);
             return source.Adapt<TDestination>();
         }
