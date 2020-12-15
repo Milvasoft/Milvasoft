@@ -11,7 +11,7 @@ namespace Milvasoft.MapperImplementation.MilvasoftMapster
     public class Mapper : IMapper
     {
         /// <summary>
-        /// 
+        /// Responsible for mapping from the source object to the object we want to map.
         /// </summary>
         /// <typeparam name="TSource"></typeparam>
         /// <typeparam name="TDestination"></typeparam>
@@ -24,7 +24,7 @@ namespace Milvasoft.MapperImplementation.MilvasoftMapster
         }
 
         /// <summary>
-        /// 
+        /// Responsible for mapping from the source object to the object we want to map.
         /// </summary>
         /// <typeparam name="TSource"></typeparam>
         /// <typeparam name="TDestination"></typeparam>
@@ -40,7 +40,7 @@ namespace Milvasoft.MapperImplementation.MilvasoftMapster
         }
 
         /// <summary>
-        /// Responsible for mapping from the source object to the object we want to access.
+        /// Responsible for mapping from the source object to the object we want to map.
         /// </summary>
         /// <typeparam name="TSource"></typeparam>
         /// <typeparam name="TDestination"></typeparam>
@@ -58,10 +58,6 @@ namespace Milvasoft.MapperImplementation.MilvasoftMapster
                       .MaxDepth(maxDepth);
             return source.Adapt<TDestination>();
         }
-
-
-
-
 
     }
 }

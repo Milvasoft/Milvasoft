@@ -1,4 +1,7 @@
-﻿namespace Milvasoft.MapperImplementation.Implementation
+﻿using System;
+using System.Linq.Expressions;
+
+namespace Milvasoft.MapperImplementation.Implementation
 {
     /// <summary>
     /// <para><b>EN: </b>Responsible interface for mapping from the source object to the object we want to access</para>
@@ -7,17 +10,34 @@
     public interface IMapper
     {
         /// <summary>
-        /// <para><b>EN: </b>TDestination: The object we want to reach for us, TSource: The object that we will display as the source. For example: I want to map an entity object to a dto object, in this case "TDestination" should be a "dto" object, and "TSource" should be an "entity" object.</para>
-        /// <para><b>TR: </b>TDestination : Bizim için ulaşmak istediğimiz nesne, TSource : Kaynak olarak göstereceğimiz nesne.Örn : Bir entity nesnesini dto nesnesine maplemek istiyorum, bu durumda “TDestination” bir “dto” nesnesi, “TSource” ise bir “entity” nesnesi olmalıdır.</para>
+        /// Responsible for mapping from the source object to the object we want to map.
         /// </summary>
-        TDestination Map<TDestination>(object source, int maxDepth = 2);
-
-        /// <summary>
-        /// <para><b>EN: </b>Responsible for mapping from the source object to the object we want to access</para>
-        /// <para><b>TR: </b>Kaynak nesneden ulaşmak istediğimiz nesneye mapleme işlemini yapmakta sorumlu metot</para>
-        /// </summary>
+        /// <typeparam name="TSource"></typeparam>
+        /// <typeparam name="TDestination"></typeparam>
+        /// <param name="source"></param>
+        /// <returns></returns>
         TDestination Map<TSource, TDestination>(TSource source);
 
-        TDestination Map<TDestination>(object source);
+        /// <summary>
+        /// Responsible for mapping from the source object to the object we want to map.
+        /// </summary>
+        /// <typeparam name="TSource"></typeparam>
+        /// <typeparam name="TDestination"></typeparam>
+        /// <param name="source"></param>
+        /// <param name="ignoredMembers"></param>
+        /// <returns></returns>
+        TDestination Map<TSource, TDestination>(TSource source, Expression<Func<TDestination, object>> ignoredMembers);
+
+        /// <summary>
+        /// Responsible for mapping from the source object to the object we want to map.
+        /// </summary>
+        /// <typeparam name="TSource"></typeparam>
+        /// <typeparam name="TDestination"></typeparam>
+        /// <param name="source"></param>
+        /// <param name="ignoredMembers"></param>
+        /// <param name="maxDepth"></param>
+        /// <param name="ignoreNullValues"></param>
+        /// <returns></returns>
+        TDestination Map<TSource, TDestination>(TSource source, int maxDepth, bool ignoreNullValues = false, params Expression<Func<TDestination, object>>[] ignoredMembers);
     }
 }

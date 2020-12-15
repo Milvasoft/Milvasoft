@@ -10,47 +10,72 @@
             <para><b>TR: </b>Kaynak nesneden ulaşmak istediğimiz nesneye mapleme işlemini yapmakta sorumlu inteface</para>
             </summary>
         </member>
-        <member name="M:Milvasoft.MapperImplementation.Implementation.IMapper.Map``1(System.Object,System.Int32)">
-            <summary>
-            <para><b>EN: </b>TDestination: The object we want to reach for us, TSource: The object that we will display as the source. For example: I want to map an entity object to a dto object, in this case "TDestination" should be a "dto" object, and "TSource" should be an "entity" object.</para>
-            <para><b>TR: </b>TDestination : Bizim için ulaşmak istediğimiz nesne, TSource : Kaynak olarak göstereceğimiz nesne.Örn : Bir entity nesnesini dto nesnesine maplemek istiyorum, bu durumda “TDestination” bir “dto” nesnesi, “TSource” ise bir “entity” nesnesi olmalıdır.</para>
-            </summary>
-        </member>
         <member name="M:Milvasoft.MapperImplementation.Implementation.IMapper.Map``2(``0)">
             <summary>
-            <para><b>EN: </b>Responsible for mapping from the source object to the object we want to access</para>
-            <para><b>TR: </b>Kaynak nesneden ulaşmak istediğimiz nesneye mapleme işlemini yapmakta sorumlu metot</para>
+            Responsible for mapping from the source object to the object we want to map.
             </summary>
+            <typeparam name="TSource"></typeparam>
+            <typeparam name="TDestination"></typeparam>
+            <param name="source"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.MapperImplementation.Implementation.IMapper.Map``2(``0,System.Linq.Expressions.Expression{System.Func{``1,System.Object}})">
+            <summary>
+            Responsible for mapping from the source object to the object we want to map.
+            </summary>
+            <typeparam name="TSource"></typeparam>
+            <typeparam name="TDestination"></typeparam>
+            <param name="source"></param>
+            <param name="ignoredMembers"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.MapperImplementation.Implementation.IMapper.Map``2(``0,System.Int32,System.Boolean,System.Linq.Expressions.Expression{System.Func{``1,System.Object}}[])">
+            <summary>
+            Responsible for mapping from the source object to the object we want to map.
+            </summary>
+            <typeparam name="TSource"></typeparam>
+            <typeparam name="TDestination"></typeparam>
+            <param name="source"></param>
+            <param name="ignoredMembers"></param>
+            <param name="maxDepth"></param>
+            <param name="ignoreNullValues"></param>
+            <returns></returns>
         </member>
         <member name="T:Milvasoft.MapperImplementation.MilvasoftMapster.Mapper">
             <summary>
-            <para><b>EN: </b>Class written instead of manual mapping. It is written to map DTO class object to entity class.</para>
-            <para><b>TR: </b>Kaynak nesneden ulaşmak istediğimiz nesneye mapleme işlemini yapmakta sorumlu. DTO sınıfı nesnesini entity sınıfına maplemek için yazılmıştır</para>
+            Class written instead of manual mapping. It is written to map DTO class object to entity class.
             </summary>
         </member>
         <member name="M:Milvasoft.MapperImplementation.MilvasoftMapster.Mapper.Map``2(``0)">
             <summary>
-            <para><b>EN: </b>TDestination: The object we want to reach for us, TSource: The object that we will display as the source. For example: I want to map an entity object to a dto object, in this case "TDestination" should be a "dto" object, and "TSource" should be an "entity" object.</para>
-            <para><b>TR: </b>TDestination : Bizim için ulaşmak istediğimiz nesne, TSource : Kaynak olarak göstereceğimiz nesne.Örn : Bir entity nesnesini dto nesnesine maplemek istiyorum, bu durumda “TDestination” bir “dto” nesnesi, “TSource” ise bir “entity” nesnesi olmalıdır.</para>
+            Responsible for mapping from the source object to the object we want to map.
             </summary>
+            <typeparam name="TSource"></typeparam>
+            <typeparam name="TDestination"></typeparam>
+            <param name="source"></param>
+            <returns></returns>
         </member>
-        <member name="M:Milvasoft.MapperImplementation.MilvasoftMapster.Mapper.Map``1(System.Object,System.Int32)">
+        <member name="M:Milvasoft.MapperImplementation.MilvasoftMapster.Mapper.Map``2(``0,System.Linq.Expressions.Expression{System.Func{``1,System.Object}})">
             <summary>
-            <para><b>EN: </b>Responsible for mapping from the source object to the object we want to access</para>
-            <para><b>TR: </b>Kaynak nesneden ulaşmak istediğimiz nesneye mapleme işlemini yapmakta sorumlu metot</para>
+            Responsible for mapping from the source object to the object we want to map.
             </summary>
+            <typeparam name="TSource"></typeparam>
+            <typeparam name="TDestination"></typeparam>
+            <param name="source"></param>
+            <param name="ignoredMembers"></param>
+            <returns></returns>
         </member>
-        <member name="T:Milvasoft.MapperImplementation.MilvasoftMapster.TestMapper">
+        <member name="M:Milvasoft.MapperImplementation.MilvasoftMapster.Mapper.Map``2(``0,System.Int32,System.Boolean,System.Linq.Expressions.Expression{System.Func{``1,System.Object}}[])">
             <summary>
-            <para><b>EN: </b>The mapping operation made to the object we want to access from the source object, written for use in test classes</para>
-            <para><b>TR: </b>Test sınıflarında kullanılmak üzere yazılmış Kaynak nesneden ulaşmak istediğimiz nesneye yapılan maplemi işlemi</para>
+            Responsible for mapping from the source object to the object we want to map.
             </summary>
-        </member>
-        <member name="M:Milvasoft.MapperImplementation.MilvasoftMapster.TestMapper.Map``1(System.Object,System.Int32)">
-            <summary>
-            <para><b>EN: </b>Responsible for mapping from the source object to the object we want to access</para>
-            <para><b>TR: </b>Kaynak nesneden ulaşmak istediğimiz nesneye mapleme işlemini yapmakta sorumlu</para>
-            </summary>
+            <typeparam name="TSource"></typeparam>
+            <typeparam name="TDestination"></typeparam>
+            <param name="source"></param>
+            <param name="ignoredMembers"></param>
+            <param name="maxDepth"></param>
+            <param name="ignoreNullValues"></param>
+            <returns></returns>
         </member>
     </members>
 </doc>
