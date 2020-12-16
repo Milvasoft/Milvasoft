@@ -208,13 +208,13 @@ namespace Milvasoft.FormFileOperations
             var fileExtension = Path.GetExtension(file.FileName);
 
             if (!allowedFileExtensions.Contains(fileExtension))
-                return FileValidationResult.FileSizeTooBig;
+                return FileValidationResult.InvalidFileExtension;
 
             // Get length of file in bytes
             long fileSizeInBytes = file.Length;
 
             if (fileSizeInBytes > maxFileSize)
-                return FileValidationResult.InvalidFileExtension;
+                return FileValidationResult.FileSizeTooBig;
 
             return FileValidationResult.Valid;
         }
