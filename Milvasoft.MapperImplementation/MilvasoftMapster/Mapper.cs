@@ -19,7 +19,7 @@ namespace Milvasoft.MapperImplementation.MilvasoftMapster
         /// <returns></returns>
         public TDestination Map<TSource, TDestination>(TSource source)
         {
-            TypeAdapterConfig<TSource, TDestination>.NewConfig();
+            TypeAdapterConfig<TSource, TDestination>.NewConfig().PreserveReference(true);
             return source.Adapt<TDestination>();
         }
 

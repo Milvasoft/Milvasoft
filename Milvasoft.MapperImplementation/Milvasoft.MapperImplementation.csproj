@@ -43,7 +43,7 @@
 	
 	
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-		<DocumentationFile>..\MapperImplementation\Milvasoft.MapperImplementation.xml</DocumentationFile>
+		<DocumentationFile>..\Milvasoft.MapperImplementation\Milvasoft.MapperImplementation.xml</DocumentationFile>
 	</PropertyGroup>
 
 	
