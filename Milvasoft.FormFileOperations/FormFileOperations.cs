@@ -77,10 +77,10 @@ namespace Milvasoft.FormFileOperations
         /// <param name="propertyName"></param>
         /// <returns> Completed Task </returns>
         public static async Task<string> SaveFileToPathAsync<TEntity>(this IFormFile file,
-                                                                                TEntity entity,
-                                                                                    string basePath,
-                                                                                        FilesFolderNameCreator folderNameCreator,
-                                                                                            string propertyName)
+                                                                      TEntity entity,
+                                                                      string basePath,
+                                                                      FilesFolderNameCreator folderNameCreator,
+                                                                      string propertyName)
         {
             //Gets file extension.
             var fileExtension = Path.GetExtension(file.FileName);
@@ -140,10 +140,81 @@ namespace Milvasoft.FormFileOperations
         /// <param name="propertyName"></param>
         /// <returns> Completed Task </returns>
         public static async Task<List<string>> SaveFilesToPathAsync<TEntity>(this List<IFormFile> files,
-                                                                                TEntity entity,
-                                                                                    string basePath,
-                                                                                        FilesFolderNameCreator folderNameCreator,
-                                                                                            string propertyName)
+                                                                             TEntity entity,
+                                                                             string basePath,
+                                                                             FilesFolderNameCreator folderNameCreator,
+                                                                             string propertyName)
+        {
+            if (files.IsNullOrEmpty()) throw new ArgumentNullException("Files list cannot be empty!");
+            //Gets file extension.
+            var fileExtension = Path.GetExtension(files.First().FileName);
+
+            //Gets the class name. E.g. If class is ProductDTO then sets the value of this variable as "Product".
+            var folderNameOfClass = folderNameCreator.Invoke(entity.GetType());
+
+            //We combined the name of this class (folderNameOfClass) with the path of the basePath folder. So we created the path of the folder belonging to this class.
+            var folderPathOfClass = Path.Combine(basePath, folderNameOfClass);
+
+            //If there is no such folder in this path (folderPathOfClass), we created it.
+            if (!Directory.Exists(folderPathOfClass))
+                Directory.CreateDirectory(folderPathOfClass);
+
+            //Since each data belonging to this class (folderNameOfClass) will have a separate folder, we received the Id of the data sent.
+            var folderNameOfItem = PropertyExists<TEntity>(propertyName) ? entity.GetType().GetProperty(propertyName).GetValue(entity, null).ToString() : throw new ArgumentException($"Type of {entity.GetType().Name}'s properties doesn't contain '{propertyName}'.");
+
+            //We created the path to the folder of this Id (folderNameOfItem).
+            var folderPathOfItem = Path.Combine(folderPathOfClass, folderNameOfItem);
+
+            //If there is no such folder in this path (folderPathOfItem), we created it.
+            if (!Directory.Exists(folderPathOfItem))
+                Directory.CreateDirectory(folderPathOfItem);
+
+            DirectoryInfo directory = new DirectoryInfo(folderPathOfItem);
+
+            var directoryFiles = directory.GetFiles();
+            int markerNo = directoryFiles.IsNullOrEmpty() ? 1 : directoryFiles.Max(fileInDir => Convert.ToInt32(Path.GetFileNameWithoutExtension(fileInDir.FullName).Split('_')[1]));
+
+            var folderPaths = new List<string>();
+            foreach (var item in files)
+            {
+                var fileNameWithExtension = $"{folderNameOfItem}_{markerNo}{fileExtension}";
+                var filePathOfItem = Path.Combine(folderPathOfItem, fileNameWithExtension);
+                using (var fileStream = new FileStream(filePathOfItem, FileMode.Create))
+                {
+                    await item.CopyToAsync(fileStream).ConfigureAwait(false);
+                }
+                folderPaths.Add(filePathOfItem);
+                markerNo++;
+            }
+
+            return folderPaths;
+        }
+
+        /// <summary>
+        /// <para><b>EN: </b>Save uploaded IFormFile file to physical file path. Target Path will be : "<paramref name ="basePath"></paramref>/<b><paramref name="folderNameCreator"/>()</b>/<paramref name="entity"></paramref>.<paramref name="propertyName"/>"</para>
+        /// <para><b>TR: </b>Yüklenen IFormFile dosyasını fiziksel bir dosya yoluna kaydedin. Hedef Yol: <paramref name ="basePath"></paramref>/<b><paramref name="folderNameCreator"/>()</b>/<paramref name ="entity"></paramref>.<paramref name="propertyName"/>" olacaktır</para>
+        /// </summary>
+        /// 
+        /// <para><b>Remarks:</b></para>
+        /// 
+        /// <remarks>
+        /// 
+        /// <para> Don't forget validate file with <see cref="ValidateFile(IFormFile, FileType, long, List{string})"/>, before use this method.</para>
+        /// 
+        /// </remarks>
+        /// 
+        /// <typeparam name="TEntity"></typeparam>
+        /// <param name="files"> Uploaded file in entity. </param>
+        /// <param name="entity"></param>
+        /// <param name="basePath"></param>
+        /// <param name="folderNameCreator"></param>
+        /// <param name="propertyName"></param>
+        /// <returns> Completed Task </returns>
+        public static async Task<List<string>> SaveFilesToPathAsync<TEntity>(this IFormFileCollection files,
+                                                                             TEntity entity,
+                                                                             string basePath,
+                                                                             FilesFolderNameCreator folderNameCreator,
+                                                                             string propertyName)
         {
             if (files.IsNullOrEmpty()) throw new ArgumentNullException("Files list cannot be empty!");
             //Gets file extension.
