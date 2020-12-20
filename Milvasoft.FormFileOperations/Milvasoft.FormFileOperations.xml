@@ -128,6 +128,28 @@
             <param name="propertyName"></param>
             <returns> Completed Task </returns>
         </member>
+        <member name="M:Milvasoft.FormFileOperations.FormFileOperations.SaveFilesToPathAsync``1(Microsoft.AspNetCore.Http.IFormFileCollection,``0,System.String,Milvasoft.FormFileOperations.FormFileOperations.FilesFolderNameCreator,System.String)">
+            <summary>
+            <para><b>EN: </b>Save uploaded IFormFile file to physical file path. Target Path will be : "<paramref name ="basePath"></paramref>/<b><paramref name="folderNameCreator"/>()</b>/<paramref name="entity"></paramref>.<paramref name="propertyName"/>"</para>
+            <para><b>TR: </b>Yüklenen IFormFile dosyasını fiziksel bir dosya yoluna kaydedin. Hedef Yol: <paramref name ="basePath"></paramref>/<b><paramref name="folderNameCreator"/>()</b>/<paramref name ="entity"></paramref>.<paramref name="propertyName"/>" olacaktır</para>
+            </summary>
+            
+            <para><b>Remarks:</b></para>
+            
+            <remarks>
+            
+            <para> Don't forget validate file with <see cref="M:Milvasoft.FormFileOperations.FormFileOperations.ValidateFile(Microsoft.AspNetCore.Http.IFormFile,Milvasoft.FormFileOperations.Enums.FileType,System.Int64,System.Collections.Generic.List{System.String})"/>, before use this method.</para>
+            
+            </remarks>
+            
+            <typeparam name="TEntity"></typeparam>
+            <param name="files"> Uploaded file in entity. </param>
+            <param name="entity"></param>
+            <param name="basePath"></param>
+            <param name="folderNameCreator"></param>
+            <param name="propertyName"></param>
+            <returns> Completed Task </returns>
+        </member>
         <member name="M:Milvasoft.FormFileOperations.FormFileOperations.ValidateFile(Microsoft.AspNetCore.Http.IFormFile,Milvasoft.FormFileOperations.Enums.FileType,System.Int64,System.Collections.Generic.List{System.String})">
             <summary>
             <para><b>EN: </b>Checks that the file compatible the upload rules.</para>

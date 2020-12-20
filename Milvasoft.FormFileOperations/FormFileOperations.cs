@@ -303,8 +303,9 @@ namespace Milvasoft.FormFileOperations
                 return string.Empty;
 
             var fileNameWithExtension = Path.GetFileName(originalFilePath);
-            var fileNameWithoutExtension = Path.GetFileNameWithoutExtension(originalFilePath);
-            var parentFolderNameOfOriginalFile = Directory.GetParent(originalFilePath).Parent.Name;
+            var parentDirectory = Directory.GetParent(originalFilePath);
+            var fileNameWithoutExtension = parentDirectory.Name;
+            var parentFolderNameOfOriginalFile = parentDirectory.Parent.Name;
 
             return Combine(requestPath, parentFolderNameOfOriginalFile, fileNameWithoutExtension, fileNameWithExtension);
         }
