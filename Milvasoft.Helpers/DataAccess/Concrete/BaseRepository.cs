@@ -1075,6 +1075,17 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
             await _dbContext.SaveChangesAsync().ConfigureAwait(false);
         }
 
+        /// <summary>
+        /// Removes all entities from database.
+        /// </summary>
+        /// <returns></returns>
+        public virtual async Task RemoveAllAsync()
+        {
+            var entities = _dbContext.Set<TEntity>().AsEnumerable();
+            InitalizeEdit(entities);
+            _dbContext.RemoveRange(entities);
+            await _dbContext.SaveChangesAsync().ConfigureAwait(false);
+        }
 
         //TODO EntityFrameworkQueryableExtensions methods will be added here.
 

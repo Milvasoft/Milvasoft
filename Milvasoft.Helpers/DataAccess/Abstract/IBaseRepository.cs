@@ -547,5 +547,12 @@ namespace Milvasoft.Helpers.DataAccess.Abstract
         /// <param name="newEntities"></param>
         /// <returns></returns>
         Task ReplaceOldsWithNewsInSeperateDatabaseProcessAsync(IEnumerable<TEntity> oldEntities, IEnumerable<TEntity> newEntities);
+
+        /// <summary>
+        /// Removes all entities from database.
+        /// </summary>
+        /// <returns></returns>
+        Task RemoveAllAsync();
+
     }
 }

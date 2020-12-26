@@ -65,9 +65,9 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
         /// Applies transaction process to requested function.
         /// </summary>
         /// <param name="function"></param>
-        /// <param name="rollBackFunction"></param>
+        /// <param name="rollbackFunction"></param>
         /// <returns></returns>
-        public async Task ApplyTransactionAsync(Func<Task> function, Func<Task> rollBackFunction)
+        public async Task ApplyTransactionAsync(Func<Task> function, Func<Task> rollbackFunction)
         {
             var executionStrategy = _dbContext.Database.CreateExecutionStrategy();
             await executionStrategy.ExecuteAsync(async () =>
@@ -81,7 +81,7 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
                 catch (Exception exception)
                 {
                     await transaction.RollbackAsync().ConfigureAwait(false);
-                    await rollBackFunction().ConfigureAwait(false);
+                    await rollbackFunction().ConfigureAwait(false);
                     throw exception;
                 }
             });
@@ -91,9 +91,9 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
         /// Applies transaction process to requested function.
         /// </summary>
         /// <param name="function"></param>
-        /// <param name="rollBackFunction"></param>
+        /// <param name="rollbackFunction"></param>
         /// <returns></returns>
-        public async Task ApplyTransactionAsync(Func<Task> function, Action rollBackFunction)
+        public async Task ApplyTransactionAsync(Func<Task> function, Action rollbackFunction)
         {
             var executionStrategy = _dbContext.Database.CreateExecutionStrategy();
             await executionStrategy.ExecuteAsync(async () =>
@@ -107,7 +107,7 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
                 catch (Exception exception)
                 {
                     await transaction.RollbackAsync().ConfigureAwait(false);
-                    rollBackFunction();
+                    rollbackFunction();
                     throw exception;
                 }
             });
