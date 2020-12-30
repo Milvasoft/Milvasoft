@@ -4,6 +4,377 @@
         <name>Milvasoft.Helpers</name>
     </assembly>
     <members>
+        <member name="T:Milvasoft.Helpers.Attributes.ActionFilter.ControllerFilterAttribute">
+            <summary>
+            Provides the attribute validation exclude opportunity.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.Attributes.ActionFilter.ControllerFilterAttribute.DisabledProperties">
+            <summary>
+            Defines the features will be cancelled required.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.Attributes.ActionFilter.ControllerFilterAttribute.DisabledNestedProperties">
+            <summary>
+            Defines the features will be cancelled required. 
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.Attributes.ActionFilter.ControllerFilterAttribute.AssemblyTypeForNestedProps">
+            <summary>
+            Assembly type for disable nested type prop validations.
+            </summary>
+        </member>
+        <member name="M:Milvasoft.Helpers.Attributes.ActionFilter.ControllerFilterAttribute.OnActionExecuting(Microsoft.AspNetCore.Mvc.Filters.ActionExecutingContext)">
+            <summary>
+            Performs when action executing.
+            </summary>
+            <param name="context"></param>
+        </member>
+        <member name="M:Milvasoft.Helpers.Attributes.ActionFilter.ControllerFilterAttribute.GetProperties(System.String)">
+            <summary>
+            Gets properties.
+            </summary>
+            <param name="props"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Milvasoft.Helpers.Attributes.ActionFilter.PreventStringInjectionForParametersAttribute">
+            <summary>
+            Specifies that the class or method that this attribute is applied to requires the specified prevent string injection attacks and min/max length checks.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.Attributes.ActionFilter.PreventStringInjectionForParametersAttribute.MaximumLength">
+            <summary>
+            Gets the maximum acceptable length of the string
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.Attributes.ActionFilter.PreventStringInjectionForParametersAttribute.MinimumLength">
+            <summary>
+            Gets or sets the minimum acceptable length of the string
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.Attributes.ActionFilter.PreventStringInjectionForParametersAttribute.ResourceType">
+            <summary>
+            Dummy class type for resource location.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.Attributes.ActionFilter.PreventStringInjectionForParametersAttribute.BlackList">
+            <summary>
+            Black list for string injections.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.Attributes.ActionFilter.PreventStringInjectionForParametersAttribute.MailContent">
+            <summary>
+            If injection attack exist. Validation method will be send mail. 
+            If has value mail will be send.
+            </summary>
+        </member>
+        <member name="M:Milvasoft.Helpers.Attributes.ActionFilter.PreventStringInjectionForParametersAttribute.#ctor(System.Int32,System.Int32)">
+            <summary>
+            Constructor that accepts the maximum length of the string.
+            </summary>
+            <param name="minimumLength">The minimum length, inclusive.  It may not be negative.</param>
+            <param name="maximumLength">The maximum length, inclusive.  It may not be negative.</param>
+        </member>
+        <member name="M:Milvasoft.Helpers.Attributes.ActionFilter.PreventStringInjectionForParametersAttribute.OnActionExecuting(Microsoft.AspNetCore.Mvc.Filters.ActionExecutingContext)">
+            <summary>
+            Performs when action executing.
+            </summary>
+            <param name="context"></param>
+        </member>
+        <member name="T:Milvasoft.Helpers.Attributes.ActionFilter.ValidateIdParameterAttribute">
+            <summary>
+            Specifies that the class or method that this attribute is applied to requires the specified the valid id.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.Attributes.ActionFilter.ValidateIdParameterAttribute.EntityName">
+            <summary>
+            Gets or sets error message content.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.Attributes.ActionFilter.ValidateIdParameterAttribute.ResourceType">
+            <summary>
+            Dummy class type for resource location.
+            </summary>
+        </member>
+        <member name="M:Milvasoft.Helpers.Attributes.ActionFilter.ValidateIdParameterAttribute.OnActionExecuting(Microsoft.AspNetCore.Mvc.Filters.ActionExecutingContext)">
+            <summary>
+            Performs when action executing.
+            </summary>
+            <param name="context"></param>
+        </member>
+        <member name="T:Milvasoft.Helpers.Attributes.Validation.MilvasoftRegularExpressionAttribute">
+            <summary>
+            Specifies that the class or property that this attribute is applied to requires the specified must match the localized regex.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.Attributes.Validation.MilvasoftRegularExpressionAttribute.MemberNameLocalizerKey">
+            <summary>
+            Gets or sets the error message spesific content
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.Attributes.Validation.MilvasoftRegularExpressionAttribute.ExampleFormatLocalizerKey">
+            <summary>
+            Gets or sets localized examle regex format.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.Attributes.Validation.MilvasoftRegularExpressionAttribute.IsRequired">
+            <summary>
+            Gets or sets property is required.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.Attributes.Validation.MilvasoftRegularExpressionAttribute.ResourceType">
+            <summary>
+            Dummy class type for resource location.
+            </summary>
+        </member>
+        <member name="M:Milvasoft.Helpers.Attributes.Validation.MilvasoftRegularExpressionAttribute.#ctor">
+            <summary>
+            Constructor that accepts the maximum length of the string.
+            </summary>
+        </member>
+        <member name="M:Milvasoft.Helpers.Attributes.Validation.MilvasoftRegularExpressionAttribute.#ctor(System.String)">
+            <summary>
+            Constructor that accepts the maximum length of the string.
+            </summary>
+            <param name="pattern"></param>
+        </member>
+        <member name="M:Milvasoft.Helpers.Attributes.Validation.MilvasoftRegularExpressionAttribute.IsValid(System.Object,System.ComponentModel.DataAnnotations.ValidationContext)">
+            <summary>
+            Determines whether the specified value of the object is valid.
+            </summary>
+            <param name="value"></param>
+            <param name="context"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Milvasoft.Helpers.Attributes.Validation.MinDecimalValueAttribute">
+            <summary>
+            Determines minimum decimal value.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.Attributes.Validation.MinDecimalValueAttribute.LocalizerKey">
+            <summary>
+            Gets or sets the error message spesific content
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.Attributes.Validation.MinDecimalValueAttribute.FullMessage">
+            <summary>
+            Gets or sets the full error message spesific content.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.Attributes.Validation.MinDecimalValueAttribute.MinValue">
+            <summary>
+            Minimum decimal value of requested validate scope.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.Attributes.Validation.MinDecimalValueAttribute.ResourceType">
+            <summary>
+            Dummy class type for resource location.
+            </summary>
+        </member>
+        <member name="M:Milvasoft.Helpers.Attributes.Validation.MinDecimalValueAttribute.#ctor">
+            <summary>
+            Constructor of atrribute.
+            </summary>
+        </member>
+        <member name="M:Milvasoft.Helpers.Attributes.Validation.MinDecimalValueAttribute.#ctor(System.Int32)">
+            <summary>
+            Constructor of atrribute.
+            </summary>
+            <param name="minValue"></param>
+        </member>
+        <member name="M:Milvasoft.Helpers.Attributes.Validation.MinDecimalValueAttribute.#ctor(System.Int32,System.String)">
+            <summary>
+            Constructor of atrribute.
+            </summary>
+            <param name="minValue"></param>
+            <param name="localizedPropertyName"></param>
+        </member>
+        <member name="M:Milvasoft.Helpers.Attributes.Validation.MinDecimalValueAttribute.IsValid(System.Object,System.ComponentModel.DataAnnotations.ValidationContext)">
+            <summary>
+            Determines whether the specified value of the object is valid.
+            </summary>
+            
+            <param name="value"></param>
+            <param name="context"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Milvasoft.Helpers.Attributes.Validation.PreventListStringInjectionAttribute">
+            <summary>
+            Specifies that the class or property that this attribute is applied to requires the specified prevent string injection attacks and min/max length checks.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.Attributes.Validation.PreventListStringInjectionAttribute.MemberNameLocalizerKey">
+            <summary>
+            Gets or sets the error message spesific content
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.Attributes.Validation.PreventListStringInjectionAttribute.MaximumLength">
+            <summary>
+            Gets the maximum acceptable length of the string
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.Attributes.Validation.PreventListStringInjectionAttribute.MinimumLength">
+            <summary>
+            Gets or sets the minimum acceptable length of the string
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.Attributes.Validation.PreventListStringInjectionAttribute.ResourceType">
+            <summary>
+            Dummy class type for resource location.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.Attributes.Validation.PreventListStringInjectionAttribute.BlackList">
+            <summary>
+            Black list for string injections.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.Attributes.Validation.PreventListStringInjectionAttribute.MailContent">
+            <summary>
+            If injection attack exist. Validation method will be send mail. 
+            If has value mail will be send.
+            </summary>
+        </member>
+        <member name="M:Milvasoft.Helpers.Attributes.Validation.PreventListStringInjectionAttribute.#ctor(System.Int32,System.String)">
+            <summary>
+            Constructor that accepts the maximum length of the string.
+            </summary>
+            <param name="maximumLength">The maximum length, inclusive.  It may not be negative.</param>
+            <param name="localizedPropertyName"></param>
+        </member>
+        <member name="M:Milvasoft.Helpers.Attributes.Validation.PreventListStringInjectionAttribute.#ctor(System.Int32)">
+            <summary>
+            Constructor that accepts the maximum length of the string.
+            </summary>
+            <param name="maximumLength">The maximum length, inclusive.  It may not be negative.</param>
+        </member>
+        <member name="M:Milvasoft.Helpers.Attributes.Validation.PreventListStringInjectionAttribute.#ctor(System.Int32,System.Int32,System.String)">
+            <summary>
+            Constructor that accepts the maximum length of the string.
+            </summary>
+            <param name="minimumLength">The minimum length, inclusive.  It may not be negative.</param>
+            <param name="maximumLength">The maximum length, inclusive.  It may not be negative.</param>
+            <param name="localizedPropertyName"></param>
+        </member>
+        <member name="M:Milvasoft.Helpers.Attributes.Validation.PreventListStringInjectionAttribute.#ctor(System.Int32,System.Int32)">
+            <summary>
+            Constructor that accepts the maximum length of the string.
+            </summary>
+            <param name="minimumLength">The minimum length, inclusive.  It may not be negative.</param>
+            <param name="maximumLength">The maximum length, inclusive.  It may not be negative.</param>
+        </member>
+        <member name="M:Milvasoft.Helpers.Attributes.Validation.PreventListStringInjectionAttribute.IsValid(System.Object,System.ComponentModel.DataAnnotations.ValidationContext)">
+            <summary>
+            Determines whether the specified value of the object is valid.
+            </summary>
+            <param name="value"></param>
+            <param name="context"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Milvasoft.Helpers.Attributes.Validation.PreventStringInjectionAttribute">
+            <summary>
+            Specifies that the class or property that this attribute is applied to requires the specified prevent string injection attacks and min/max length checks.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.Attributes.Validation.PreventStringInjectionAttribute.MemberNameLocalizerKey">
+            <summary>
+            Gets or sets the error message spesific content
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.Attributes.Validation.PreventStringInjectionAttribute.MaximumLength">
+            <summary>
+            Gets the maximum acceptable length of the string
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.Attributes.Validation.PreventStringInjectionAttribute.MinimumLength">
+            <summary>
+            Gets or sets the minimum acceptable length of the string
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.Attributes.Validation.PreventStringInjectionAttribute.ResourceType">
+            <summary>
+            Dummy class type for resource location.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.Attributes.Validation.PreventStringInjectionAttribute.BlackList">
+            <summary>
+            Black list for string injections.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.Attributes.Validation.PreventStringInjectionAttribute.MailContent">
+            <summary>
+            If injection attack exist. Validation method will be send mail. 
+            If has value mail will be send.
+            </summary>
+        </member>
+        <member name="M:Milvasoft.Helpers.Attributes.Validation.PreventStringInjectionAttribute.#ctor(System.Int32,System.String)">
+            <summary>
+            Constructor that accepts the maximum length of the string.
+            </summary>
+            <param name="maximumLength">The maximum length, inclusive.  It may not be negative.</param>
+            <param name="localizedPropertyName"></param>
+        </member>
+        <member name="M:Milvasoft.Helpers.Attributes.Validation.PreventStringInjectionAttribute.#ctor(System.Int32)">
+            <summary>
+            Constructor that accepts the maximum length of the string.
+            </summary>
+            <param name="maximumLength">The maximum length, inclusive.  It may not be negative.</param>
+        </member>
+        <member name="M:Milvasoft.Helpers.Attributes.Validation.PreventStringInjectionAttribute.#ctor(System.Int32,System.Int32,System.String)">
+            <summary>
+            Constructor that accepts the maximum length of the string.
+            </summary>
+            <param name="minimumLength">The minimum length, inclusive.  It may not be negative.</param>
+            <param name="maximumLength">The maximum length, inclusive.  It may not be negative.</param>
+            <param name="localizedPropertyName"></param>
+        </member>
+        <member name="M:Milvasoft.Helpers.Attributes.Validation.PreventStringInjectionAttribute.#ctor(System.Int32,System.Int32)">
+            <summary>
+            Constructor that accepts the maximum length of the string.
+            </summary>
+            <param name="minimumLength">The minimum length, inclusive.  It may not be negative.</param>
+            <param name="maximumLength">The maximum length, inclusive.  It may not be negative.</param>
+        </member>
+        <member name="M:Milvasoft.Helpers.Attributes.Validation.PreventStringInjectionAttribute.IsValid(System.Object,System.ComponentModel.DataAnnotations.ValidationContext)">
+            <summary>
+            Determines whether the specified value of the object is valid.
+            </summary>
+            <param name="value"></param>
+            <param name="context"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Milvasoft.Helpers.Attributes.Validation.ValidateIdPropertyAttribute">
+            <summary>
+            Specifies that the class or property that this attribute is applied to requires the specified the valid id.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.Attributes.Validation.ValidateIdPropertyAttribute.MemberNameLocalizerKey">
+            <summary>
+            Gets or sets member name localizer key.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.Attributes.Validation.ValidateIdPropertyAttribute.ErrorMessageLocalizerKey">
+            <summary>
+            Gets or sets error message localizer key.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.Attributes.Validation.ValidateIdPropertyAttribute.DontCheckNullable">
+            <summary>
+            If this is true, validation method won't check list is null.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.Attributes.Validation.ValidateIdPropertyAttribute.ResourceType">
+            <summary>
+            Dummy class type for resource location.
+            </summary>
+        </member>
+        <member name="M:Milvasoft.Helpers.Attributes.Validation.ValidateIdPropertyAttribute.IsValid(System.Object,System.ComponentModel.DataAnnotations.ValidationContext)">
+            <summary>
+            Determines whether the specified value of the object is valid.
+            </summary>
+            <param name="value"></param>
+            <param name="context"></param>
+            <returns></returns>
+        </member>
         <member name="T:Milvasoft.Helpers.CommonHelper">
             <summary>
             Common Helper class.
@@ -42,6 +413,19 @@
             
             <typeparam name="T"></typeparam>
             <param name="orderByPropertyName"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.CommonHelper.EnsureLegalLengths(System.Int32,System.Int32,Microsoft.Extensions.Localization.IStringLocalizer)">
+            <summary>
+            Checks that MinimumLength and MaximumLength have legal values.  Throws InvalidOperationException if not.
+            </summary>
+        </member>
+        <member name="M:Milvasoft.Helpers.CommonHelper.GetDesciption``1(``0)">
+            <summary>
+            Gets enum description.
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="enumValue"></param>
             <returns></returns>
         </member>
         <member name="T:Milvasoft.Helpers.DataAccess.Abstract.IBaseEntity`1">
@@ -566,6 +950,12 @@
             </summary>
             <param name="oldEntities"></param>
             <param name="newEntities"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.RemoveAllAsync">
+            <summary>
+            Removes all entities from database.
+            </summary>
             <returns></returns>
         </member>
         <member name="T:Milvasoft.Helpers.DataAccess.Abstract.IContextRepository`1">
@@ -1193,6 +1583,12 @@
             <param name="newEntities"></param>
             <returns></returns>
         </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.RemoveAllAsync">
+            <summary>
+            Removes all entities from database.
+            </summary>
+            <returns></returns>
+        </member>
         <member name="T:Milvasoft.Helpers.DataAccess.Concrete.ContextRepository`1">
             <summary>
             Helper repository for general DbContext(<typeparamref name="TContext"/>) operations.
@@ -1228,7 +1624,7 @@
             Applies transaction process to requested function.
             </summary>
             <param name="function"></param>
-            <param name="rollBackFunction"></param>
+            <param name="rollbackFunction"></param>
             <returns></returns>
         </member>
         <member name="M:Milvasoft.Helpers.DataAccess.Concrete.ContextRepository`1.ApplyTransactionAsync(System.Func{System.Threading.Tasks.Task},System.Action)">
@@ -1236,7 +1632,7 @@
             Applies transaction process to requested function.
             </summary>
             <param name="function"></param>
-            <param name="rollBackFunction"></param>
+            <param name="rollbackFunction"></param>
             <returns></returns>
         </member>
         <member name="M:Milvasoft.Helpers.DataAccess.Concrete.ContextRepository`1.InitializeUpdating``2(``0)">
@@ -1255,9 +1651,11 @@
             
             <para> Your DbContext(<typeparamref name="TContext"/>) must inherit from <see cref="T:Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityDbContext"/>. </para>
             <para> Your DbContext(<typeparamref name="TContext"/>) must contain <see cref="T:Microsoft.AspNetCore.Identity.IdentityUserToken`1"/> DbSet of name "UserTokens". </para>
+            <para> Your DbContext(<typeparamref name="TContext"/>) must contain <see cref="T:Microsoft.AspNetCore.Identity.IdentityUser`1"/> DbSet of name "Users". </para>
             
             </remarks>
             
+            <exception cref="T:System.ArgumentException"> Throwns when type of <typeparamref name="TContext"/>'s properties doesn't contain <see cref="T:Microsoft.AspNetCore.Identity.IdentityUser`1"/> of name 'Users'. </exception>
             <exception cref="T:System.ArgumentException"> Throwns when type of <typeparamref name="TContext"/>'s properties doesn't contain <see cref="T:Microsoft.AspNetCore.Identity.IdentityUserToken`1"/> of name 'UserTokens'. </exception>
             
             <param name="userManager"> User manager </param>
@@ -1388,6 +1786,824 @@
              <param name="query"></param>
              <param name="includes"></param>
              <returns></returns>
+        </member>
+        <member name="T:Milvasoft.Helpers.Enums.MailSubject">
+            <summary>
+            Mail subjects.
+            </summary>
+        </member>
+        <member name="F:Milvasoft.Helpers.Enums.MailSubject.Error">
+            <summary>
+            The enum that should be sent for error messages.
+            </summary>
+        </member>
+        <member name="F:Milvasoft.Helpers.Enums.MailSubject.Hack">
+            <summary>
+            The enum that should be sent for hack warning.
+            </summary>
+        </member>
+        <member name="F:Milvasoft.Helpers.Enums.MailSubject.ShutDown">
+            <summary>
+            The enum that should be sent for hack warning.
+            </summary>
+        </member>
+        <member name="T:Milvasoft.Helpers.Exceptions.AddingNewEntityWithExistsIdException">
+            <summary>
+            <para><b>EN: </b>The exception that is thrown when attempt to add an entity with Id the repository contains an entity with the same Id.</para>
+            <para><b>TR: </b>Depo kimliğine sahip bir varlık ekleme girişiminde bulunulduğunda ortaya çıkan istisna, aynı kimliğe sahip bir varlık içerir.</para>
+            </summary>
+        </member>
+        <member name="M:Milvasoft.Helpers.Exceptions.AddingNewEntityWithExistsIdException.#ctor(Microsoft.Extensions.Localization.IStringLocalizer)">
+            <summary>
+            Initializes a new instance of the <c>ABKExceptionLibrary.AddingNewEntityWithExistsIdException</c> class.
+            </summary>
+        </member>
+        <member name="M:Milvasoft.Helpers.Exceptions.AddingNewEntityWithExistsIdException.#ctor(System.String)">
+            <summary>
+            <para><b>EN: </b>Initializes a new instance of the <c>ABKExceptionLibrary.AddingNewEntityWithExistsIdException</c> class with a specified error message.</para>
+            <para><b>TR: </b>Belirtilen bir hata mesajı ile <c> ABKExceptionLibrary.AddingNewEntityWithExistsIdException </c> sınıfının yeni bir örneğini başlatır.</para>
+            </summary>
+            <summary>
+            
+            </summary>
+            <param name="customMessage"></param>
+        </member>
+        <member name="M:Milvasoft.Helpers.Exceptions.AddingNewEntityWithExistsIdException.#ctor(System.String,System.Exception)">
+            <summary>
+            <para><b>EN: </b>Initializes a new instance of the <c>ABKExceptionLibrary.AddingNewEntityWithExistsIdException</c> class with a specified error message and a reference to the inner exception that is the cause of this exception.</para>
+            <para><b>TR: </b>Belirtilen bir hata mesajıyla <c> ABKExceptionLibrary.AddingNewEntityWithExistsIdException </c> sınıfının yeni bir örneğini ve bu istisnanın nedeni olan iç özel duruma bir başvuruyu başlatır.</para>
+            </summary>
+            <param name="customMessage"></param>
+            <param name="innerException"></param>
+        </member>
+        <member name="T:Milvasoft.Helpers.Exceptions.CannotFindEntityException">
+            <summary>
+            <para><b>EN: </b>The exception that is thrown when attempt to search for an entity not found in the Repository.</para>
+            <para><b>TR: </b>Havuzda bulunmayan bir varlığı arama girişiminde bulunulduğunda ortaya çıkan istisna.</para>
+            </summary>
+        </member>
+        <member name="M:Milvasoft.Helpers.Exceptions.CannotFindEntityException.#ctor(Microsoft.Extensions.Localization.IStringLocalizer)">
+            <summary>
+            <para><b>EN: </b>Initializes a new instance of the <c>ABKExceptionLibrary.CannotFindEntityException</c> class with defined default message by constructor.</para>
+            <para><b>TR: </b>Yapıcı tarafından tanımlanan varsayılan mesajla <c> ABKException Library.Canot Find EntityException </c> sınıfının yeni bir örneğini başlatır.</para>
+            </summary>
+        </member>
+        <member name="M:Milvasoft.Helpers.Exceptions.CannotFindEntityException.#ctor(System.String)">
+            <summary>
+            <para><b>EN: </b>Initializes a new instance of the <c>ABKExceptionLibrary.CannotFindEntityException</c> class with an entity id not found in the Repository. The spesific message of base class uses this invalid id when does not send a specific message.</para>
+            <para><b>TR: </b>Havuzda bulunmayan bir varlık kimliğiyle <c> ABKExceptionLibrary.CannotFindEntityException </c> sınıfının yeni bir örneğini başlatır. Temel sınıfın özel mesajı, belirli bir mesaj göndermediğinde bu geçersiz kimliği kullanır.</para>
+            </summary>
+            <param name="customMessage"></param>
+        </member>
+        <member name="M:Milvasoft.Helpers.Exceptions.CannotFindEntityException.#ctor(System.String,System.Exception)">
+            <summary>
+            <para><b>EN: </b>Initializes a new instance of the <c>ABKExceptionLibrary.CannotFindEntityException</c> class with an entity id not found in the Repository. The spesific message of base class uses this invalid id when does not send a specific message.</para>
+            <para><b>TR: </b>Havuzda bulunmayan bir varlık kimliğiyle <c> ABKExceptionLibrary.CannotFindEntityException </c> sınıfının yeni bir örneğini başlatır. Temel sınıfın özel mesajı, belirli bir mesaj göndermediğinde bu geçersiz kimliği kullanır.</para>
+            </summary>
+            <param name="customMessage"></param>
+            <param name="innerException"></param>
+        </member>
+        <member name="T:Milvasoft.Helpers.Exceptions.CannotFindEnumByIdException">
+            <summary>
+            <para><b>EN: </b>The exception that is thrown when attempt to get enum by invalid id.</para>
+            <para><b>TR: </b>Geçersiz id ile numaralandırma girişiminde bulunulduğunda ortaya çıkan istisna.</para>
+            </summary>
+        </member>
+        <member name="M:Milvasoft.Helpers.Exceptions.CannotFindEnumByIdException.#ctor(Microsoft.Extensions.Localization.IStringLocalizer)">
+            <summary>
+            <para><b>EN: </b>Initializes a new instance of the <c>ABKExceptionLibrary.CannotFindEnumByIdException</c> class.</para>
+            <para><b>TR: </b><c> ABKExceptionLibrary.CannotFindEnumByIdException </c> sınıfının yeni bir örneğini başlatır.</para>
+            </summary>
+        </member>
+        <member name="M:Milvasoft.Helpers.Exceptions.CannotFindEnumByIdException.#ctor(System.String)">
+            <summary>
+            <para><b>EN: </b>Initializes a new instance of the <c>ABKExceptionLibrary.CannotFindEnumByIdException</c> class  with a specified error message and a reference to the inner exception that is the cause of this exception.</para>
+            <para><b>TR: </b>Belirtilen bir hata mesajıyla <c> ABKExceptionLibrary.CannotFindEnumByIdException </c> sınıfının yeni bir örneğini ve bu istisnanın nedeni olan iç özel duruma bir başvuruyu başlatır.</para>
+            </summary>
+            <param name="customMessage"></param>
+        </member>
+        <member name="M:Milvasoft.Helpers.Exceptions.CannotFindEnumByIdException.#ctor(System.String,System.Exception)">
+            <summary>
+            <para><b>EN: </b>Initializes a new instance of the <c>ABKExceptionLibrary.CannotFindEnumByIdException</c> class  with a specified error message and a reference to the inner exception that is the cause of this exception.</para>
+            <para><b>TR: </b>Belirtilen bir hata mesajıyla <c> ABKExceptionLibrary.CannotFindEnumByIdException </c> sınıfının yeni bir örneğini ve bu istisnanın nedeni olan iç özel duruma bir başvuruyu başlatır.</para>
+            </summary>
+            <param name="customMessage"></param>s
+            <param name="innerException"></param>
+        </member>
+        <member name="T:Milvasoft.Helpers.Exceptions.CannotStartRedisServerException">
+            <summary>
+            <para><b>EN: </b>Exception class to be thrown when Redis Server fails to start</para>
+            <para><b>TR: </b>Redis Sunucu başlatılamadığı durumlarda fırlatılacak istisna sınıfı</para>
+            </summary>
+        </member>
+        <member name="M:Milvasoft.Helpers.Exceptions.CannotStartRedisServerException.#ctor(Microsoft.Extensions.Localization.IStringLocalizer)">
+            <summary>
+            <para><b>EN: </b>Initializes a new instance of the <c>ABKExceptionLibrary.CannotStartRedisServer</c> class.</para>
+            <para><b>TR: </b><c> ABKExceptionLibrary.CannotStartRedisServer </c> sınıfının yeni bir örneğini başlatır.</para>
+            </summary>
+        </member>
+        <member name="M:Milvasoft.Helpers.Exceptions.CannotStartRedisServerException.#ctor(System.String)">
+            <summary>
+            <para><b>EN: </b>Initializes a new instance of the <c>ABKExceptionLibrary.CannotStartRedisServer</c> class  with a specified error message.</para>
+            <para><b>TR: </b>Belirtilen bir hata mesajıyla <c> ABKExceptionLibrary.CannotStartRedisServer </c> sınıfının yeni bir örneğini başlatır.</para>
+            </summary>
+            <param name="customMessage"></param>
+        </member>
+        <member name="M:Milvasoft.Helpers.Exceptions.CannotStartRedisServerException.#ctor(System.String,System.Exception)">
+            <summary>
+            <para><b>EN: </b>Initializes a new instance of the <c>ABKExceptionLibrary.CannotStartRedisServer</c> class  with a specified error message.</para>
+            <para><b>TR: </b>Belirtilen bir hata mesajıyla <c> ABKExceptionLibrary.CannotStartRedisServer </c> sınıfının yeni bir örneğini başlatır.</para>
+            </summary>
+            <param name="message"></param>
+            <param name="innerException"></param>
+        </member>
+        <member name="T:Milvasoft.Helpers.Exceptions.CannotUpdateOrDeleteDefaultRecordException">
+            <summary>
+            <para><b>EN: </b>The exception that is thrown when attempt to add an unstockable product to Product Stock table.</para>
+            <para><b>TR: </b>Stoklanamayan bir ürünü Ürün Stoku tablosuna eklemeye çalıştığınızda ortaya çıkan istisna.</para>
+            </summary>
+        </member>
+        <member name="M:Milvasoft.Helpers.Exceptions.CannotUpdateOrDeleteDefaultRecordException.#ctor(Microsoft.Extensions.Localization.IStringLocalizer)">
+            <summary>
+            <para><b>EN: </b>Initializes a new instance of the <c>ABKExceptionLibrary.CannotBeAddedProductToStockException</c> class with defined default message by constructor.</para>
+            <para><b>TR: </b>Yapıcı tarafından tanımlanan varsayılan mesajla <c> ABKExceptionLibrary.CannotBeAddedProductToStockException </c> sınıfının yeni bir örneğini başlatır.</para>
+            </summary>
+        </member>
+        <member name="M:Milvasoft.Helpers.Exceptions.CannotUpdateOrDeleteDefaultRecordException.#ctor(System.String)">
+            <summary>
+            <para><b>EN: </b>Initializes a new instance of the <c>ABKExceptionLibrary.CannotBeAddedProductToStockException</c> class with defined default message by constructor.</para>
+            <para><b>TR: </b>Yapıcı tarafından tanımlanan varsayılan mesajla <c> ABKExceptionLibrary.CannotBeAddedProductToStockException </c> sınıfının yeni bir örneğini başlatır.</para>
+            </summary>
+            <param name="customMessage"></param>
+        </member>
+        <member name="M:Milvasoft.Helpers.Exceptions.CannotUpdateOrDeleteDefaultRecordException.#ctor(System.String,System.Exception)">
+            <summary>
+            <para><b>EN: </b>Initializes a new instance of the <c>ABKExceptionLibrary.CannotBeAddedProductToStockException</c> class with defined default message by constructor.</para>
+            <para><b>TR: </b>Yapıcı tarafından tanımlanan varsayılan mesajla <c> ABKExceptionLibrary.CannotBeAddedProductToStockException </c> sınıfının yeni bir örneğini başlatır.</para>
+            </summary>
+            <param name="customMessage"></param>
+            <param name="innerException"></param>
+        </member>
+        <member name="M:Milvasoft.Helpers.Exceptions.DeletingEntityWithRelationsException.#ctor(Microsoft.Extensions.Localization.IStringLocalizer)">
+            <summary>
+            <para><b>EN: </b>Initializes a new instance of the <c>ABKExceptionLibrary.DeletingEntityWithRelationsException</c> class.</para>
+            <para><b>TR: </b><c> ABKExceptionLibrary.DeletingEntityWithRelationsException </c> sınıfının yeni bir örneğini başlatır.</para>
+            </summary>
+        </member>
+        <member name="M:Milvasoft.Helpers.Exceptions.DeletingEntityWithRelationsException.#ctor(System.String)">
+            <summary>
+            <para><b>EN: </b>Initializes a new instance of the <c>ABKExceptionLibrary.DeletingEntityWithRelationsException</c> class  with a specified error message.</para>
+            <para><b>TR: </b>Belirtilen bir hata mesajıyla <c> ABKExceptionLibrary.DeletingEntityWithRelationsException </c> sınıfının yeni bir örneğini başlatır.</para>
+            </summary>
+            <param name="customMessage"></param>
+        </member>
+        <member name="M:Milvasoft.Helpers.Exceptions.DeletingEntityWithRelationsException.#ctor(System.String,System.Exception)">
+            <summary>
+            <para><b>EN: </b>Initializes a new instance of the <c>ABKExceptionLibrary.DeletingEntityWithRelationsException</c> class</para>
+            <para><b>TR: </b><c> ABKExceptionLibrary.DeletingEntityWithRelationsException </c> sınıfının yeni bir örneğini başlatır</para>
+            </summary>
+            <param name="customMessage"></param>
+            <param name="innerException"></param>
+        </member>
+        <member name="T:Milvasoft.Helpers.Exceptions.DeletingInvalidEntityException">
+            <summary>
+            <para><b>EN: </b>The exception that is thrown when attempt to delete an entity that is not in the Repository.</para>
+            <para><b>TR: </b>Havuzda olmayan bir varlığı silmeye çalışırken ortaya çıkan istisna.</para>
+            </summary>
+        </member>
+        <member name="M:Milvasoft.Helpers.Exceptions.DeletingInvalidEntityException.#ctor(Microsoft.Extensions.Localization.IStringLocalizer)">
+            <summary>
+            <para><b>EN: </b>Initializes a new instance of the <c>ABKExceptionLibrary.DeletingInvalidEntityException</c> class  with an entity id not found in the Repository. The spesific message of base class uses this invalid id when does not send a specific message.</para>
+            <para><b>TR: </b>Havuzda bulunmayan bir varlık kimliğiyle <c> ABKExceptionLibrary.DeletingInvalidEntityException </c> sınıfının yeni bir örneğini başlatır. Temel sınıfın özel mesajı, belirli bir mesaj göndermediğinde bu geçersiz kimliği kullanır.</para>
+            </summary>
+            <param name="localizer"></param>
+        </member>
+        <member name="M:Milvasoft.Helpers.Exceptions.DeletingInvalidEntityException.#ctor(System.String)">
+            <summary>
+            <para><b>EN: </b>Initializes a new instance of the <c>ABKExceptionLibrary.DeletingInvalidEntityException</c> class with a specified error message.</para>
+            <para><b>TR: </b>Belirtilen bir hata mesajıyla <c> ABKExceptionLibrary.DeletingInvalidEntityException </c> sınıfının yeni bir örneğini başlatır.</para>
+            </summary>
+            <param name="customMessage"></param>
+        </member>
+        <member name="M:Milvasoft.Helpers.Exceptions.DeletingInvalidEntityException.#ctor(System.String,System.Exception)">
+            <summary>
+            <para><b>EN: </b>Initializes a new instance of the <c>ABKExceptionLibrary.DeletingInvalidEntityException</c> class  with a specified error message and a reference to the inner exception that is the cause of this exception.</para>
+            <para><b>TR: </b>Initializes a new instance of the <c>ABKExceptionLibrary.DeletingInvalidEntityException</c> class  with a specified error message and a reference to the inner exception that is the cause of this exception.</para>
+            </summary>
+            <param name="customMessage"></param>
+            <param name="innerException"></param>
+        </member>
+        <member name="T:Milvasoft.Helpers.Exceptions.EmptyListException">
+            <summary>
+            <para><b>EN: </b> The exception that is thrown when attempt to do process on empty list.</para>
+            <para><b>TR: </b>Boş listede işlem yapılmaya çalışıldığında ortaya çıkan istisna.</para>
+            </summary>
+        </member>
+        <member name="M:Milvasoft.Helpers.Exceptions.EmptyListException.#ctor(Microsoft.Extensions.Localization.IStringLocalizer)">
+            <summary>
+            <para><b>EN: </b>Initializes a new instance of the <c>ABKExceptionLibrary.EmptyListException</c> class with defined default message by constructor.</para>
+            <para><b>TR: </b>Yapıcı tarafından tanımlanan varsayılan mesajla <c> ABKExceptionLibrary.EmptyListException </c> sınıfının yeni bir örneğini başlatır.</para>
+            </summary>
+        </member>
+        <member name="M:Milvasoft.Helpers.Exceptions.EmptyListException.#ctor(System.String)">
+            <summary>
+            <para><b>EN: </b>Initializes a new instance of the <c>ABKExceptionLibrary.EmptyListException</c> class  with a specified error message.</para>
+            <para><b>TR: </b>Belirtilen bir hata mesajıyla <c> ABKExceptionLibrary.EmptyListException </c> sınıfının yeni bir örneğini başlatır.</para>
+            </summary>
+            <param name="customMessage"></param>
+        </member>
+        <member name="M:Milvasoft.Helpers.Exceptions.EmptyListException.#ctor(System.String,System.Exception)">
+            <summary>
+            <para><b>EN: </b>Initializes a new instance of the <c>ABKExceptionLibrary.EmptyListException</c> class  with a specified error message and a reference to the inner exception that is the cause of this exception.</para>
+            <para><b>TR: </b>Belirtilen bir hata iletisiyle <c> ABKExceptionLibrary.EmptyListException </c> sınıfının yeni bir örneğini ve bu istisnanın nedeni olan iç özel duruma bir başvuruyu başlatır.</para>
+            </summary>
+            <param name="customMessage"></param>
+            <param name="innerException"></param>
+        </member>
+        <member name="T:Milvasoft.Helpers.Exceptions.ExpiredDemoException">
+            <summary>
+            <para><b>EN: </b>The exception that is thrown when attempt to do operation with null objects.</para>
+            <para><b>TR: </b>Boş nesnelerle işlem yapılmaya çalışıldığında ortaya çıkan istisna.</para>
+            </summary>
+        </member>
+        <member name="M:Milvasoft.Helpers.Exceptions.ExpiredDemoException.#ctor(Microsoft.Extensions.Localization.IStringLocalizer)">
+            <summary>
+            <para><b>EN: </b>Initializes a new instance of the <c>ABKExceptionLibrary.NullParameterException</c> class.</para>
+            <para><b>TR: </b><c> ABKExceptionLibrary.NullParameterException </c> sınıfının yeni bir örneğini başlatır.</para>
+            </summary>
+        </member>
+        <member name="M:Milvasoft.Helpers.Exceptions.ExpiredDemoException.#ctor(System.String)">
+            <summary>
+            <para><b>EN: </b>Initializes a new instance of the <c>ABKExceptionLibrary.NullParameterException</c> class  with a specified error message.</para>
+            <para><b>TR: </b>Belirtilen bir hata mesajıyla <c> ABKExceptionLibrary.NullParameterException </c> sınıfının yeni bir örneğini başlatır.</para>
+            </summary>
+            <param name="customMessage"></param>
+        </member>
+        <member name="M:Milvasoft.Helpers.Exceptions.ExpiredDemoException.#ctor(System.String,System.Exception)">
+            <summary>
+            <para><b>EN: </b> Initializes a new instance of the <c>ABKExceptionLibrary.NullParameterException</c> class  with a specified error message and a reference to the inner exception that is the cause of this exception.</para>
+            <para><b>TR: </b><c> ABKExceptionLibrary.NullParameterException </c> sınıfının yeni bir örneğini, belirtilen bir hata iletisiyle ve bu istisnanın nedeni olan iç özel duruma bir başvuruyla nitelleştirir.</para>
+            </summary>
+            <param name="customMessage"></param>
+            <param name="innerException"></param>
+        </member>
+        <member name="T:Milvasoft.Helpers.Exceptions.FeatureNotImplementedException">
+            <summary>
+            <para><b>EN: </b>Exception to be thrown for out of stock items</para>
+            <para><b>TR: </b>Stokda kalmayan ürünler için fırlatılacak olan istisna</para>
+            </summary>
+        </member>
+        <member name="M:Milvasoft.Helpers.Exceptions.FeatureNotImplementedException.#ctor(Microsoft.Extensions.Localization.IStringLocalizer)">
+            <summary>
+            
+            </summary>
+            <param name="stringLocalizer"></param>
+        </member>
+        <member name="M:Milvasoft.Helpers.Exceptions.FeatureNotImplementedException.#ctor(System.String)">
+            <summary>
+            
+            </summary>
+            <param name="message"></param>
+        </member>
+        <member name="M:Milvasoft.Helpers.Exceptions.FeatureNotImplementedException.#ctor(System.String,System.Exception)">
+            <summary>
+            
+            </summary>
+            <param name="message"></param>
+            <param name="exception"></param>
+        </member>
+        <member name="T:Milvasoft.Helpers.Exceptions.InvalidLicenceException">
+            <summary>
+            <para><b>EN: </b>The exception that is thrown when attempt to do operation with null objects.</para>
+            <para><b>TR: </b>Boş nesnelerle işlem yapılmaya çalışıldığında ortaya çıkan istisna.</para>
+            </summary>
+        </member>
+        <member name="M:Milvasoft.Helpers.Exceptions.InvalidLicenceException.#ctor(Microsoft.Extensions.Localization.IStringLocalizer)">
+            <summary>
+            <para><b>EN: </b>Initializes a new instance of the <c>ABKExceptionLibrary.NullParameterException</c> class.</para>
+            <para><b>TR: </b><c> ABKExceptionLibrary.NullParameterException </c> sınıfının yeni bir örneğini başlatır.</para>
+            </summary>
+        </member>
+        <member name="M:Milvasoft.Helpers.Exceptions.InvalidLicenceException.#ctor(System.String)">
+            <summary>
+            <para><b>EN: </b>Initializes a new instance of the <c>ABKExceptionLibrary.NullParameterException</c> class  with a specified error message.</para>
+            <para><b>TR: </b>Belirtilen bir hata mesajıyla <c> ABKExceptionLibrary.NullParameterException </c> sınıfının yeni bir örneğini başlatır.</para>
+            </summary>
+            <param name="customMessage"></param>
+        </member>
+        <member name="M:Milvasoft.Helpers.Exceptions.InvalidLicenceException.#ctor(System.String,System.Exception)">
+            <summary>
+            <para><b>EN: </b> Initializes a new instance of the <c>ABKExceptionLibrary.NullParameterException</c> class  with a specified error message and a reference to the inner exception that is the cause of this exception.</para>
+            <para><b>TR: </b><c> ABKExceptionLibrary.NullParameterException </c> sınıfının yeni bir örneğini, belirtilen bir hata iletisiyle ve bu istisnanın nedeni olan iç özel duruma bir başvuruyla nitelleştirir.</para>
+            </summary>
+            <param name="customMessage"></param>
+            <param name="innerException"></param>
+        </member>
+        <member name="T:Milvasoft.Helpers.Exceptions.InvalidNumericValueException">
+            <summary>
+            <para><b>EN: </b>The exception that is thrown when attempt to process invalid numeric value in the conditions of situation.</para>
+            <para><b>TR: </b>Durum koşullarında geçersiz sayısal değeri işlemeye çalışırken ortaya çıkan istisna.</para>
+            </summary>
+        </member>
+        <member name="M:Milvasoft.Helpers.Exceptions.InvalidNumericValueException.#ctor(Microsoft.Extensions.Localization.IStringLocalizer)">
+            <summary>
+            <para><b>EN: </b>Initializes a new instance of the <c>ABKExceptionLibrary.InvalidNumericValueException</c> class.</para>
+            <para><b>TR: </b><c> ABKExceptionLibrary.InvalidNumericValueException </c> sınıfının yeni bir örneğini başlatır.</para>
+            </summary>
+        </member>
+        <member name="M:Milvasoft.Helpers.Exceptions.InvalidNumericValueException.#ctor(Microsoft.Extensions.Localization.IStringLocalizer,System.Decimal)">
+            <summary>
+            <para><b>EN: </b>Initializes a new instance of the <c>ABKExceptionLibrary.InvalidNumericValueException</c> class  with invalid value. The spesific message of base class uses this invalid value when does not send a specific message.</para>
+            <para><b>TR: </b>Geçersiz değere sahip <c> ABKExceptionLibrary.InvalidNumericValueException </c> sınıfının yeni bir örneğini başlatır. Temel sınıfın özel mesajı, belirli bir mesaj göndermediğinde bu geçersiz değeri kullanır.</para>
+            </summary>
+            <param name="invalidValue"></param>
+            <param name="localizer"></param>
+        </member>
+        <member name="M:Milvasoft.Helpers.Exceptions.InvalidNumericValueException.#ctor(System.String)">
+            <summary>
+            <para><b>EN: </b>Initializes a new instance of the <c>ABKExceptionLibrary.InvalidNumericValueException</c> class  with a specified error message.</para>
+            <para><b>TR: </b>Belirtilen bir hata mesajıyla <c> ABKExceptionLibrary.InvalidNumericValueException </c> sınıfının yeni bir örneğini başlatır.</para>
+            </summary>
+            <param name="customMessage"></param>
+        </member>
+        <member name="M:Milvasoft.Helpers.Exceptions.InvalidNumericValueException.#ctor(System.String,System.Exception)">
+            <summary>
+            <para><b>EN: </b>Initializes a new instance of the <c>ABKExceptionLibrary.InvalidNumericValueException</c> class  with invalid value. The spesific message of base class uses this invalid value when does not send a specific message.</para>
+            <para><b>TR: </b>Geçersiz değere sahip <c> ABKExceptionLibrary.InvalidNumericValueException </c> sınıfının yeni bir örneğini başlatır. Temel sınıfın özel mesajı, belirli bir mesaj göndermediğinde bu geçersiz değeri kullanır.</para>
+            </summary>
+            <param name="customMessage"></param>
+            <param name="innerException"></param>
+        </member>
+        <member name="T:Milvasoft.Helpers.Exceptions.InvalidParameterException">
+            <summary>
+            <para><b>EN: </b>The exception that is thrown when attempt to get enum by invalid id.</para>
+            <para><b>TR: </b>Geçersiz id ile numaralandırma girişiminde bulunulduğunda ortaya çıkan istisna.</para>
+            </summary>
+        </member>
+        <member name="M:Milvasoft.Helpers.Exceptions.InvalidParameterException.#ctor(Microsoft.Extensions.Localization.IStringLocalizer)">
+            <summary>
+            <para><b>EN: </b>Initializes a new instance of the <c>InvalidParameter.CannotStartRedisServer</c> class.</para>
+            <para><b>TR: </b><c> ABKExceptionLibrary.InvalidParameter </c> sınıfının yeni bir örneğini başlatır.</para>
+            </summary>
+        </member>
+        <member name="M:Milvasoft.Helpers.Exceptions.InvalidParameterException.#ctor(Microsoft.Extensions.Localization.IStringLocalizer,System.String)">
+            <summary>
+            <para><b>EN: </b>Initializes a new instance of the <c>ABKExceptionLibrary.InvalidParameter</c> class  with a specified error message.</para>
+            <para><b>TR: </b>Belirtilen bir hata mesajıyla <c> ABKExceptionLibrary.InvalidParameter </c> sınıfının yeni bir örneğini başlatır.</para>
+            </summary>
+            <param name="message"></param>
+            <param name="localizer"></param>
+        </member>
+        <member name="M:Milvasoft.Helpers.Exceptions.InvalidParameterException.#ctor(System.String)">
+            <summary>
+            <para><b>EN: </b>Initializes a new instance of the <c>ABKExceptionLibrary.AddingNewEntityWithExistsIdException</c> class with a specified error message.</para>
+            <para><b>TR: </b>Belirtilen bir hata mesajı ile <c> ABKExceptionLibrary.AddingNewEntityWithExistsIdException </c> sınıfının yeni bir örneğini başlatır.</para>
+            </summary>
+            <summary>
+            
+            </summary>
+            <param name="customMessage"></param>
+        </member>
+        <member name="M:Milvasoft.Helpers.Exceptions.InvalidParameterException.#ctor(System.String,System.Exception)">
+            <summary>
+            <para><b>EN: </b>Initializes a new instance of the <c>ABKExceptionLibrary.InvalidParameter</c> class  with a specified error message.</para>
+            <para><b>TR: </b>Belirtilen bir hata mesajıyla <c> ABKExceptionLibrary.InvalidParameter </c> sınıfının yeni bir örneğini başlatır.</para>
+            </summary>
+            <param name="message"></param>
+            <param name="innerException"></param>
+        </member>
+        <member name="T:Milvasoft.Helpers.Exceptions.InvalidRelatedProcessException">
+            <summary>
+            <para><b>EN: </b>The exception that is thrown when attempt to do operation with null objects.</para>
+            <para><b>TR: </b>Boş nesnelerle işlem yapılmaya çalışıldığında ortaya çıkan istisna.</para>
+            </summary>
+        </member>
+        <member name="M:Milvasoft.Helpers.Exceptions.InvalidRelatedProcessException.#ctor(Microsoft.Extensions.Localization.IStringLocalizer)">
+            <summary>
+            <para><b>EN: </b>Initializes a new instance of the <c>ABKExceptionLibrary.NullParameterException</c> class.</para>
+            <para><b>TR: </b><c> ABKExceptionLibrary.NullParameterException </c> sınıfının yeni bir örneğini başlatır.</para>
+            </summary>
+        </member>
+        <member name="M:Milvasoft.Helpers.Exceptions.InvalidRelatedProcessException.#ctor(System.String)">
+            <summary>
+            <para><b>EN: </b>Initializes a new instance of the <c>ABKExceptionLibrary.NullParameterException</c> class  with a specified error message.</para>
+            <para><b>TR: </b>Belirtilen bir hata mesajıyla <c> ABKExceptionLibrary.NullParameterException </c> sınıfının yeni bir örneğini başlatır.</para>
+            </summary>
+            <param name="customMessage"></param>
+        </member>
+        <member name="M:Milvasoft.Helpers.Exceptions.InvalidRelatedProcessException.#ctor(System.String,System.Exception)">
+            <summary>
+            <para><b>EN: </b> Initializes a new instance of the <c>ABKExceptionLibrary.NullParameterException</c> class  with a specified error message and a reference to the inner exception that is the cause of this exception.</para>
+            <para><b>TR: </b><c> ABKExceptionLibrary.NullParameterException </c> sınıfının yeni bir örneğini, belirtilen bir hata iletisiyle ve bu istisnanın nedeni olan iç özel duruma bir başvuruyla nitelleştirir.</para>
+            </summary>
+            <param name="customMessage"></param>
+            <param name="innerException"></param>
+        </member>
+        <member name="T:Milvasoft.Helpers.Exceptions.InvalidStringExpressionException">
+            <summary>
+            <para><b>EN: </b>The exception that is thrown when attempt to do operations with unsupported string by process.</para>
+            <para><b>TR: </b>İşlem bazında desteklenmeyen dizge ile işlemler yapılmaya çalışıldığında ortaya çıkan istisna.</para>
+            </summary>
+        </member>
+        <member name="M:Milvasoft.Helpers.Exceptions.InvalidStringExpressionException.#ctor(Microsoft.Extensions.Localization.IStringLocalizer)">
+            <summary>
+            <para><b>EN: </b>Initializes a new instance of the <c>ABKExceptionLibrary.InvalidStringExpressionException</c> class.</para>
+            <para><b>TR: </b><c> ABKExceptionLibrary.InvalidStringExpressionException </c> sınıfının yeni bir örneğini başlatır.</para>
+            </summary>
+        </member>
+        <member name="M:Milvasoft.Helpers.Exceptions.InvalidStringExpressionException.#ctor(System.String)">
+            <summary>
+            <para><b>EN: </b>Initializes a new instance of the <c>ABKExceptionLibrary.InvalidStringExpressionException</c> class.</para>
+            <para><b>TR: </b><c> ABKExceptionLibrary.InvalidStringExpressionException </c> sınıfının yeni bir örneğini başlatır.</para>
+            </summary>
+            <param name="customMessage"></param>
+        </member>
+        <member name="M:Milvasoft.Helpers.Exceptions.InvalidStringExpressionException.#ctor(System.String,System.Exception)">
+            <summary>
+            <para><b>EN: </b>Initializes a new instance of the <c>ABKExceptionLibrary.InvalidStringExpressionException</c> class  with a specified error message and a reference to the inner exception that is the cause of this exception.</para>
+            <para><b>TR: </b>Belirtilen bir hata iletisiyle <c> ABKExceptionLibrary.InvalidStringExpressionException </c> sınıfının yeni bir örneğini ve bu istisnanın nedeni olan iç özel duruma bir başvuruyu başlatır.</para>
+            </summary>
+            <param name="customMessage"></param>
+            <param name="innerException"></param>
+        </member>
+        <member name="M:Milvasoft.Helpers.Exceptions.MilvasoftBaseException.#ctor(Microsoft.Extensions.Localization.IStringLocalizer)">
+            <summary>
+            <para><b>EN: </b> Initializes a new instance of the <c>Milvasoft.Helpers.Exceptions.AddingNewEntityWithExistsIdException</c> class  with a specified error message.</para>
+            <para><b>TR: </b><c> Milvasoft.Helpers.Exceptions.AddingNewEntityWithExistsIdException </c> sınıfının yeni bir örneğini belirtilen bir hata mesajıyla başlatır.</para>
+            </summary>
+            <param name="localizer"></param>
+        </member>
+        <member name="M:Milvasoft.Helpers.Exceptions.MilvasoftBaseException.#ctor(System.String)">
+            <summary>
+            <para><b>EN: </b> Initializes a new instance of the <c>Milvasoft.Helpers.Exceptions.AddingNewEntityWithExistsIdException</c> class  with a specified error message.</para>
+            <para><b>TR: </b><c> Milvasoft.Helpers.Exceptions.AddingNewEntityWithExistsIdException </c> sınıfının yeni bir örneğini belirtilen bir hata mesajıyla başlatır.</para>
+            </summary>
+            <param name="customMessage"></param>
+        </member>
+        <member name="M:Milvasoft.Helpers.Exceptions.MilvasoftBaseException.#ctor(System.String,System.Exception)">
+            <summary>
+            <para><b>EN: </b> Initializes a new instance of the <c>Milvasoft.Helpers.Exceptions.AddingNewEntityWithExistsIdException</c> class  with a specified error message and a reference to the inner exception that is the cause of this exception.</para>
+            <para><b>TR: </b>Belirtilen bir hata mesajıyla <c> Milvasoft.Helpers.Exceptions.AddingNewEntityWithExistsIdException </c> sınıfının yeni bir örneğini ve bu istisnanın nedeni olan iç özel duruma bir başvuruyu başlatır.</para>
+            </summary>
+            <param name="customMessage"></param>
+            <param name="innerException"></param>
+        </member>
+        <member name="P:Milvasoft.Helpers.Exceptions.MilvasoftBaseException.ErrorCode">
+            <summary>
+            <para><b>EN: </b>Defines error code.</para>
+            <para><b>TR: </b>Hata kodunu tanımlar.</para>
+            </summary>
+        </member>
+        <member name="T:Milvasoft.Helpers.Exceptions.MilvasoftExceptionCode">
+            <summary>
+            <para><b>EN: </b>Defines the OpsiyonErrorCode.</para>
+            <para><b>TR: </b>OpsiyonErrorCode'u tanımlar.</para>
+            </summary>
+        </member>
+        <member name="F:Milvasoft.Helpers.Exceptions.MilvasoftExceptionCode.UnknownError">
+            <summary>
+            <para><b>EN: </b> Defines the UnknownError.</para>
+            <para><b>TR: </b>UnknownError'yi tanımlar.</para>
+            </summary>
+        </member>
+        <member name="F:Milvasoft.Helpers.Exceptions.MilvasoftExceptionCode.CannotFindEntity">
+            <summary>
+            <para><b>EN: </b> Defines the CannotFindEntity.</para>
+            <para><b>TR: </b>CannotFindEntity'yi tanımlar.</para>
+            </summary>
+        </member>
+        <member name="F:Milvasoft.Helpers.Exceptions.MilvasoftExceptionCode.AddingNewEntityWithExsistId">
+            <summary>
+            <para><b>EN: </b> Defines the AddingNewEntityWithExsistId.</para>
+            <para><b>TR: </b>AddingNewEntityWithExsistId'yi tanımlar.</para>
+            </summary>
+        </member>
+        <member name="F:Milvasoft.Helpers.Exceptions.MilvasoftExceptionCode.CannotBeAddedProductToStock">
+            <summary>
+            <para><b>EN: </b> Defines the CannotBeAddedProduct.</para>
+            <para><b>TR: </b>CannotBeAddedProduct'yi tanımlar.</para>
+            </summary>
+        </member>
+        <member name="F:Milvasoft.Helpers.Exceptions.MilvasoftExceptionCode.CannotAddTheEntitiesToAllOfRepositories">
+            <summary>
+            <para><b>EN: </b> Defines the CannotAddTheEntitiesToAllOfRepositories.</para>
+            <para><b>TR: </b>CannotAddTheEntitiesToAllOfRepositories'yi tanımlar.</para>
+            </summary>
+        </member>
+        <member name="F:Milvasoft.Helpers.Exceptions.MilvasoftExceptionCode.CannotFindEnumById">
+            <summary>
+            <para><b>EN: </b> Defines the CannotFindEnumById.</para>
+            <para><b>TR: </b>CannotFindEnumById'yi tanımlar.</para>
+            </summary>
+        </member>
+        <member name="F:Milvasoft.Helpers.Exceptions.MilvasoftExceptionCode.CannotStartRedisServer">
+            <summary>
+            <para><b>EN: </b> Defines the CannotStartRedisServer.</para>
+            <para><b>TR: </b>CannotStartRedisServer'yi tanımlar.</para>
+            </summary>
+        </member>
+        <member name="F:Milvasoft.Helpers.Exceptions.MilvasoftExceptionCode.DeletingEntityWithRelations">
+            <summary>
+            <para><b>EN: </b> Defines the DeletingEntityWithRelations.</para>
+            <para><b>TR: </b>DeletingEntityWithRelations'yi tanımlar.</para>
+            </summary>
+        </member>
+        <member name="F:Milvasoft.Helpers.Exceptions.MilvasoftExceptionCode.DeletingInvalidEntity">
+            <summary>
+            <para><b>EN: </b> Defines the DeletingInvalidEntity.</para>
+            <para><b>TR: </b>DeletingInvalidEntity'yi tanımlar.</para>
+            </summary>
+        </member>
+        <member name="F:Milvasoft.Helpers.Exceptions.MilvasoftExceptionCode.DeletingSupplierWithDebt">
+            <summary>
+            <para><b>EN: </b> Defines the DeletingSupplierWithDebt.</para>
+            <para><b>TR: </b>DeletingSupplierWithDebt'yi tanımlar.</para>
+            </summary>
+        </member>
+        <member name="F:Milvasoft.Helpers.Exceptions.MilvasoftExceptionCode.EmptyList">
+            <summary>
+            <para><b>EN: </b> Defines the EmptyList.</para>
+            <para><b>TR: </b>EmptyList'yi tanımlar.</para>
+            </summary>
+        </member>
+        <member name="F:Milvasoft.Helpers.Exceptions.MilvasoftExceptionCode.InvalidNumericValue">
+            <summary>
+            <para><b>EN: </b> Defines the InvalidNumericValue.</para>
+            <para><b>TR: </b>InvalidNumericValue'yi tanımlar.</para>
+            </summary>
+        </member>
+        <member name="F:Milvasoft.Helpers.Exceptions.MilvasoftExceptionCode.InvalidParameter">
+            <summary>
+            <para><b>EN: </b> Defines the InvalidParameter.</para>
+            <para><b>TR: </b>InvalidParameter'yi tanımlar.</para>
+            </summary>
+        </member>
+        <member name="F:Milvasoft.Helpers.Exceptions.MilvasoftExceptionCode.InvalidStringExpression">
+            <summary>
+            <para><b>EN: </b> Defines the InvalidStringExpression.</para>
+            <para><b>TR: </b>InvalidStringExpression'yi tanımlar.</para>
+            </summary>
+        </member>
+        <member name="F:Milvasoft.Helpers.Exceptions.MilvasoftExceptionCode.NullParameter">
+            <summary>
+            <para><b>EN: </b> Defines the NullParameter.</para>
+            <para><b>TR: </b>NullParameter'yi tanımlar.</para>
+            </summary>
+        </member>
+        <member name="F:Milvasoft.Helpers.Exceptions.MilvasoftExceptionCode.UnknownStockType">
+            <summary>
+            <para><b>EN: </b> Defines the UnknownStockType.</para>
+            <para><b>TR: </b>UnknownStockType'yi tanımlar.</para>
+            </summary>
+        </member>
+        <member name="F:Milvasoft.Helpers.Exceptions.MilvasoftExceptionCode.UpdatingInvalidEntity">
+            <summary>
+            <para><b>EN: </b> Defines the UpdatingInvalidEntity.</para>
+            <para><b>TR: </b>UpdatingInvalidEntity'yi tanımlar.</para>
+            </summary>
+        </member>
+        <member name="F:Milvasoft.Helpers.Exceptions.MilvasoftExceptionCode.NotLoggedInUser">
+            <summary>
+            Defines the NotLoggedInUserException.
+            </summary>
+        </member>
+        <member name="F:Milvasoft.Helpers.Exceptions.MilvasoftExceptionCode.AnotherLoginExists">
+            <summary>
+            Defines the NotLoggedInUserException.
+            </summary>
+        </member>
+        <member name="F:Milvasoft.Helpers.Exceptions.MilvasoftExceptionCode.OldVersion">
+            <summary>
+            <para><b>EN: </b> Defines the UpdatingInvalidEntity.</para>
+            <para><b>TR: </b>UpdatingInvalidEntity'yi tanımlar.</para>
+            </summary>
+        </member>
+        <member name="F:Milvasoft.Helpers.Exceptions.MilvasoftExceptionCode.InvalidLicence">
+            <summary>
+            <para><b>EN: </b> Defines the UpdatingInvalidEntity.</para>
+            <para><b>TR: </b>UpdatingInvalidEntity'yi tanımlar.</para>
+            </summary>
+        </member>
+        <member name="F:Milvasoft.Helpers.Exceptions.MilvasoftExceptionCode.ExpiredDemo">
+            <summary>
+            <para><b>EN: </b> Defines the UpdatingInvalidEntity.</para>
+            <para><b>TR: </b>UpdatingInvalidEntity'yi tanımlar.</para>
+            </summary>
+        </member>
+        <member name="F:Milvasoft.Helpers.Exceptions.MilvasoftExceptionCode.NeedForceOperation">
+            <summary>
+            <para><b>EN: </b>Defines the NeedForceOperation.</para>
+            <para><b>TR: </b>NeedForceOperation'yi tanımlar.</para>
+            </summary>
+        </member>
+        <member name="F:Milvasoft.Helpers.Exceptions.MilvasoftExceptionCode.OutOfStock">
+            <summary>
+            <para><b>EN: </b>Defines the NeedForceOperation.</para>
+            <para><b>TR: </b>NeedForceOperation'yi tanımlar.</para>
+            </summary>
+        </member>
+        <member name="F:Milvasoft.Helpers.Exceptions.MilvasoftExceptionCode.InvalidMateralDeficit">
+            <summary>
+            <para><b>EN: </b>Defines the NeedForceOperation.</para>
+            <para><b>TR: </b>NeedForceOperation'yi tanımlar.</para>
+            </summary>
+        </member>
+        <member name="F:Milvasoft.Helpers.Exceptions.MilvasoftExceptionCode.CannotUpdateOrDeleteDefaultRecord">
+            <summary>
+            <para><b>EN: </b> Defines the CannotUpdateOrDeleteDefaultRecord.</para>
+            <para><b>TR: </b> CannotUpdateOrDeleteDefaultRecord'yi tanımlar.</para>
+            </summary>
+        </member>
+        <member name="F:Milvasoft.Helpers.Exceptions.MilvasoftExceptionCode.ValidationError">
+            <summary>
+            <para><b>EN: </b> Defines the CannotUpdateOrDeleteDefaultRecord.</para>
+            <para><b>TR: </b> CannotUpdateOrDeleteDefaultRecord'yi tanımlar.</para>
+            </summary>
+        </member>
+        <member name="F:Milvasoft.Helpers.Exceptions.MilvasoftExceptionCode.GeneralException">
+            <summary>
+            <para><b>EN: </b> Defines the CannotUpdateOrDeleteDefaultRecord.</para>
+            <para><b>TR: </b> CannotUpdateOrDeleteDefaultRecord'yi tanımlar.</para>
+            </summary>
+        </member>
+        <member name="F:Milvasoft.Helpers.Exceptions.MilvasoftExceptionCode.InvalidRelatedProcess">
+            <summary>
+            <para><b>EN: </b> Defines the CannotUpdateOrDeleteDefaultRecord.</para>
+            <para><b>TR: </b> CannotUpdateOrDeleteDefaultRecord'yi tanımlar.</para>
+            </summary>
+        </member>
+        <member name="F:Milvasoft.Helpers.Exceptions.MilvasoftExceptionCode.FeatureNotImplementedException">
+            <summary>
+            <para><b>EN: </b> Defines the CannotUpdateOrDeleteDefaultRecord.</para>
+            <para><b>TR: </b> CannotUpdateOrDeleteDefaultRecord'yi tanımlar.</para>
+            </summary>
+        </member>
+        <member name="T:Milvasoft.Helpers.Exceptions.MilvasoftValidationException">
+            <summary>
+            <para><b>EN: </b>The exception that is thrown when attempt to add an entity with Id the repository contains an entity with the same Id.</para>
+            <para><b>TR: </b>Depo kimliğine sahip bir varlık ekleme girişiminde bulunulduğunda ortaya çıkan istisna, aynı kimliğe sahip bir varlık içerir.</para>
+            </summary>
+        </member>
+        <member name="M:Milvasoft.Helpers.Exceptions.MilvasoftValidationException.#ctor(Microsoft.Extensions.Localization.IStringLocalizer)">
+            <summary>
+            Initializes a new instance of the <c>ABKExceptionLibrary.AddingNewEntityWithExistsIdException</c> class.
+            </summary>
+        </member>
+        <member name="M:Milvasoft.Helpers.Exceptions.MilvasoftValidationException.#ctor(System.String)">
+            <summary>
+            <para><b>EN: </b>Initializes a new instance of the <c>ABKExceptionLibrary.AddingNewEntityWithExistsIdException</c> class with a specified error message.</para>
+            <para><b>TR: </b>Belirtilen bir hata mesajı ile <c> ABKExceptionLibrary.AddingNewEntityWithExistsIdException </c> sınıfının yeni bir örneğini başlatır.</para>
+            </summary>
+            <summary>
+            
+            </summary>
+            <param name="customMessage"></param>
+        </member>
+        <member name="M:Milvasoft.Helpers.Exceptions.MilvasoftValidationException.#ctor(System.String,System.Exception)">
+            <summary>
+            <para><b>EN: </b>Initializes a new instance of the <c>ABKExceptionLibrary.AddingNewEntityWithExistsIdException</c> class with a specified error message and a reference to the inner exception that is the cause of this exception.</para>
+            <para><b>TR: </b>Belirtilen bir hata mesajıyla <c> ABKExceptionLibrary.AddingNewEntityWithExistsIdException </c> sınıfının yeni bir örneğini ve bu istisnanın nedeni olan iç özel duruma bir başvuruyu başlatır.</para>
+            </summary>
+            <param name="customMessage"></param>
+            <param name="innerException"></param>
+        </member>
+        <member name="T:Milvasoft.Helpers.Exceptions.NeedForceOperationException">
+            <summary>
+            <para><b>EN: </b>The exception that is thrown when attempt to search for an entity not found in the Repository.</para>
+            <para><b>TR: </b>Havuzda bulunmayan bir varlığı arama girişiminde bulunulduğunda ortaya çıkan istisna.</para>
+            </summary>
+        </member>
+        <member name="M:Milvasoft.Helpers.Exceptions.NeedForceOperationException.#ctor(Microsoft.Extensions.Localization.IStringLocalizer)">
+            <summary>
+            <para><b>EN: </b>Initializes a new instance of the <c>ABKExceptionLibrary.NeedForceOperationException</c> class with defined default message by constructor.</para>
+            <para><b>TR: </b>Yapıcı tarafından tanımlanan varsayılan mesajla <c> ABKException Library.Canot Find EntityException </c> sınıfının yeni bir örneğini başlatır.</para>
+            </summary>
+        </member>
+        <member name="M:Milvasoft.Helpers.Exceptions.NeedForceOperationException.#ctor(System.String)">
+            <summary>
+            <para><b>EN: </b>Initializes a new instance of the <c>ABKExceptionLibrary.NeedForceOperationException</c> class with an entity id not found in the Repository. The spesific message of base class uses this invalid id when does not send a specific message.</para>
+            <para><b>TR: </b>Havuzda bulunmayan bir varlık kimliğiyle <c> ABKExceptionLibrary.NeedForceOperationException </c> sınıfının yeni bir örneğini başlatır. Temel sınıfın özel mesajı, belirli bir mesaj göndermediğinde bu geçersiz kimliği kullanır.</para>
+            </summary>
+            <param name="customMessage"></param>
+        </member>
+        <member name="M:Milvasoft.Helpers.Exceptions.NeedForceOperationException.#ctor(System.String,System.Exception)">
+            <summary>
+            <para><b>EN: </b>Initializes a new instance of the <c>ABKExceptionLibrary.NeedForceOperationException</c> class with an entity id not found in the Repository. The spesific message of base class uses this invalid id when does not send a specific message.</para>
+            <para><b>TR: </b>Havuzda bulunmayan bir varlık kimliğiyle <c> ABKExceptionLibrary.NeedForceOperationException </c> sınıfının yeni bir örneğini başlatır. Temel sınıfın özel mesajı, belirli bir mesaj göndermediğinde bu geçersiz kimliği kullanır.</para>
+            </summary>
+            <param name="customMessage"></param>
+            <param name="innerException"></param>
+        </member>
+        <member name="T:Milvasoft.Helpers.Exceptions.NullParameterException">
+            <summary>
+            <para><b>EN: </b>The exception that is thrown when attempt to do operation with null objects.</para>
+            <para><b>TR: </b>Boş nesnelerle işlem yapılmaya çalışıldığında ortaya çıkan istisna.</para>
+            </summary>
+        </member>
+        <member name="M:Milvasoft.Helpers.Exceptions.NullParameterException.#ctor(Microsoft.Extensions.Localization.IStringLocalizer)">
+            <summary>
+            <para><b>EN: </b>Initializes a new instance of the <c>ABKExceptionLibrary.NullParameterException</c> class.</para>
+            <para><b>TR: </b><c> ABKExceptionLibrary.NullParameterException </c> sınıfının yeni bir örneğini başlatır.</para>
+            </summary>
+        </member>
+        <member name="M:Milvasoft.Helpers.Exceptions.NullParameterException.#ctor(System.String)">
+            <summary>
+            <para><b>EN: </b>Initializes a new instance of the <c>ABKExceptionLibrary.NullParameterException</c> class  with a specified error message.</para>
+            <para><b>TR: </b>Belirtilen bir hata mesajıyla <c> ABKExceptionLibrary.NullParameterException </c> sınıfının yeni bir örneğini başlatır.</para>
+            </summary>
+            <param name="customMessage"></param>
+        </member>
+        <member name="M:Milvasoft.Helpers.Exceptions.NullParameterException.#ctor(System.String,System.Exception)">
+            <summary>
+            <para><b>EN: </b> Initializes a new instance of the <c>ABKExceptionLibrary.NullParameterException</c> class  with a specified error message and a reference to the inner exception that is the cause of this exception.</para>
+            <para><b>TR: </b><c> ABKExceptionLibrary.NullParameterException </c> sınıfının yeni bir örneğini, belirtilen bir hata iletisiyle ve bu istisnanın nedeni olan iç özel duruma bir başvuruyla nitelleştirir.</para>
+            </summary>
+            <param name="customMessage"></param>
+            <param name="innerException"></param>
+        </member>
+        <member name="T:Milvasoft.Helpers.Exceptions.OldVersionException">
+            <summary>
+            <para><b>EN: </b>The exception that is thrown when attempt to do operation with null objects.</para>
+            <para><b>TR: </b>Boş nesnelerle işlem yapılmaya çalışıldığında ortaya çıkan istisna.</para>
+            </summary>
+        </member>
+        <member name="M:Milvasoft.Helpers.Exceptions.OldVersionException.#ctor(Microsoft.Extensions.Localization.IStringLocalizer)">
+            <summary>
+            <para><b>EN: </b>Initializes a new instance of the <c>ABKExceptionLibrary.NullParameterException</c> class.</para>
+            <para><b>TR: </b><c> ABKExceptionLibrary.NullParameterException </c> sınıfının yeni bir örneğini başlatır.</para>
+            </summary>
+        </member>
+        <member name="M:Milvasoft.Helpers.Exceptions.OldVersionException.#ctor(System.String)">
+            <summary>
+            <para><b>EN: </b>Initializes a new instance of the <c>ABKExceptionLibrary.NullParameterException</c> class  with a specified error message.</para>
+            <para><b>TR: </b>Belirtilen bir hata mesajıyla <c> ABKExceptionLibrary.NullParameterException </c> sınıfının yeni bir örneğini başlatır.</para>
+            </summary>
+            <param name="customMessage"></param>
+        </member>
+        <member name="M:Milvasoft.Helpers.Exceptions.OldVersionException.#ctor(System.String,System.Exception)">
+            <summary>
+            <para><b>EN: </b> Initializes a new instance of the <c>ABKExceptionLibrary.NullParameterException</c> class  with a specified error message and a reference to the inner exception that is the cause of this exception.</para>
+            <para><b>TR: </b><c> ABKExceptionLibrary.NullParameterException </c> sınıfının yeni bir örneğini, belirtilen bir hata iletisiyle ve bu istisnanın nedeni olan iç özel duruma bir başvuruyla nitelleştirir.</para>
+            </summary>
+            <param name="customMessage"></param>
+            <param name="innerException"></param>
+        </member>
+        <member name="T:Milvasoft.Helpers.Exceptions.OpsiyonGeneralException">
+            <summary>
+            <para><b>EN: </b>The exception that is thrown when attempt to add an entity with Id the repository contains an entity with the same Id.</para>
+            <para><b>TR: </b>Depo kimliğine sahip bir varlık ekleme girişiminde bulunulduğunda ortaya çıkan istisna, aynı kimliğe sahip bir varlık içerir.</para>
+            </summary>
+        </member>
+        <member name="M:Milvasoft.Helpers.Exceptions.OpsiyonGeneralException.#ctor(Microsoft.Extensions.Localization.IStringLocalizer)">
+            <summary>
+            Initializes a new instance of the <c>ABKExceptionLibrary.AddingNewEntityWithExistsIdException</c> class.
+            </summary>
+        </member>
+        <member name="M:Milvasoft.Helpers.Exceptions.OpsiyonGeneralException.#ctor(System.String)">
+            <summary>
+            <para><b>EN: </b>Initializes a new instance of the <c>ABKExceptionLibrary.AddingNewEntityWithExistsIdException</c> class with a specified error message.</para>
+            <para><b>TR: </b>Belirtilen bir hata mesajı ile <c> ABKExceptionLibrary.AddingNewEntityWithExistsIdException </c> sınıfının yeni bir örneğini başlatır.</para>
+            </summary>
+            <summary>
+            
+            </summary>
+            <param name="customMessage"></param>
+        </member>
+        <member name="M:Milvasoft.Helpers.Exceptions.OpsiyonGeneralException.#ctor(System.String,System.Exception)">
+            <summary>
+            <para><b>EN: </b>Initializes a new instance of the <c>ABKExceptionLibrary.AddingNewEntityWithExistsIdException</c> class with a specified error message and a reference to the inner exception that is the cause of this exception.</para>
+            <para><b>TR: </b>Belirtilen bir hata mesajıyla <c> ABKExceptionLibrary.AddingNewEntityWithExistsIdException </c> sınıfının yeni bir örneğini ve bu istisnanın nedeni olan iç özel duruma bir başvuruyu başlatır.</para>
+            </summary>
+            <param name="customMessage"></param>
+            <param name="innerException"></param>
+        </member>
+        <member name="T:Milvasoft.Helpers.Exceptions.UpdatingInvalidEntityException">
+            <summary>
+            <para><b>EN: </b>The exception that is thrown when attempt to update an entity that is not in the Repository.</para>
+            <para><b>TR: </b>Havuzda olmayan bir varlığı güncelleme girişiminde bulunulduğunda ortaya çıkan istisna.</para>
+            </summary>
+        </member>
+        <member name="M:Milvasoft.Helpers.Exceptions.UpdatingInvalidEntityException.#ctor(Microsoft.Extensions.Localization.IStringLocalizer)">
+            <summary>
+            <para><b>EN: </b>Initializes a new instance of the <c>ABKExceptionLibrary.UpdatingInvalidEntityException</c> class with an entity id not found in the Repository. The spesific message of base class uses this invalid id when does not send a specific message.</para>
+            <para><b>TR: </b>Depoda bulunmayan bir varlık kimliğiyle <c> ABKExceptionLibrary.UpdatingInvalidEntityException </c> sınıfının yeni bir örneğini başlatır. Temel sınıfın özel mesajı, belirli bir mesaj göndermediğinde bu geçersiz kimliği kullanır.</para>
+            </summary>
+            <param name="localizer"></param>
+        </member>
+        <member name="M:Milvasoft.Helpers.Exceptions.UpdatingInvalidEntityException.#ctor(System.String)">
+            <summary>
+            <para><b>EN: </b>Initializes a new instance of the <c>ABKExceptionLibrary.UpdatingInvalidEntityException</c> class with a specified error message.</para>
+            <para><b>TR: </b>Belirtilen bir hata mesajıyla <c> ABKExceptionLibrary.UpdatingInvalidEntityException </c> sınıfının yeni bir örneğini başlatır.</para>
+            </summary>
+            <param name="customMessage"></param>
+        </member>
+        <member name="M:Milvasoft.Helpers.Exceptions.UpdatingInvalidEntityException.#ctor(System.String,System.Exception)">
+            <summary>
+            <para><b>EN: </b>Initializes a new instance of the <c>ABKExceptionLibrary.UpdatingInvalidEntityException</c> class  with a specified error message and a reference to the inner exception that is the cause of this exception.</para>
+            <para><b>TR: </b>Belirtilen bir hata mesajıyla <c> ABKExceptionLibrary.UpdatingInvalidEntityException </c> sınıfının yeni bir örneğini ve bu istisnanın nedeni olan iç özel duruma bir başvuruyu başlatır.</para>
+            </summary>
+            <param name="customMessage"></param>
+            <param name="innerException"></param>
         </member>
         <member name="M:Milvasoft.Helpers.Extensions.Expressions.Append``1(System.Linq.Expressions.Expression{System.Func{``0,System.Boolean}},System.Linq.Expressions.Expression{System.Func{``0,System.Boolean}},System.Linq.Expressions.ExpressionType)">
             <summary>
@@ -1531,6 +2747,37 @@
             <param name="requestedProperties"></param>
             <returns> Mapped <paramref name="maxValuesObject"/> </returns>
         </member>
+        <member name="T:Milvasoft.Helpers.MilvasoftMail">
+            <summary>
+            Provides send mail.
+            </summary>
+        </member>
+        <member name="M:Milvasoft.Helpers.MilvasoftMail.OpsiyonSendMail(System.String,System.String,System.String,System.Net.NetworkCredential,System.Int32,System.String,System.String,System.Boolean)">
+            <summary>
+            Provides send mail.
+            </summary>
+            <param name="from"></param>
+            <param name="to"></param>
+            <param name="subject"></param>
+            <param name="networkCredential"></param>
+            <param name="smtpPort"></param>
+            <param name="smtpHost"></param>
+            <param name="body"></param>
+            <param name="isBodyHtml"></param>
+        </member>
+        <member name="M:Milvasoft.Helpers.MilvasoftMail.OpsiyonSendMail(System.String,System.String,Milvasoft.Helpers.Enums.MailSubject,System.Net.NetworkCredential,System.Int32,System.String,System.String,System.Boolean)">
+            <summary>
+            Provides send mail.
+            </summary>
+            <param name="from"></param>
+            <param name="to"></param>
+            <param name="subject"></param>
+            <param name="networkCredential"></param>
+            <param name="smtpPort"></param>
+            <param name="smtpHost"></param>
+            <param name="body"></param>
+            <param name="isBodyHtml"></param>
+        </member>
         <member name="T:Milvasoft.Helpers.Models.BaseDTO`1">
             <summary>
             <para> Base dto for all of deletable dtos. All deletable dtos have this values.</para>
@@ -1549,6 +2796,24 @@
         <member name="P:Milvasoft.Helpers.Models.BaseDTO`1.LastUpdatedDate">
             <summary> 
             <para> Update date in database for dto.</para>
+            </summary>
+        </member>
+        <member name="T:Milvasoft.Helpers.Models.InvalidString">
+            <summary>
+            <para><b>EN: </b> Invalid strings for prevent hacking or someting ;)  </para>
+            <para><b>TR: </b> Hacking veya başka bir şeyi önlemek için geçersiz string değerler ;) </para>
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.Models.InvalidString.Name">
+            <summary>
+             <para><b>EN: </b> Name of invalid string.  </para>
+             <para><b>TR: </b> Geçersiz string'in adı. </para>
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.Models.InvalidString.Values">
+            <summary>
+            <para><b>EN: </b> Invalid values.  </para>
+            <para><b>TR: </b> Geçersiz değerler. </para>
             </summary>
         </member>
         <member name="T:Milvasoft.Helpers.Models.PaginationDTO`1">
@@ -2113,6 +3378,48 @@
             <param name="asyncTask"></param>
             <param name="successMessage"></param>
             <returns>  <see cref="T:Milvasoft.Helpers.Models.Response.SingleObjectResponse`1"/> in 200 OK <see cref="T:Microsoft.AspNetCore.Mvc.ActionResult"/> </returns>
+        </member>
+        <member name="T:Milvasoft.DependencyInjection.IMilvasoftLogger">
+            <summary>
+            Logger interface for DI.
+            </summary>
+        </member>
+        <member name="M:Milvasoft.DependencyInjection.IMilvasoftLogger.LogInfo(System.String)">
+            <summary>
+            <para><b>EN: </b>Saves the log at info level.</para>
+            <para><b>TR: </b>Log kaydını info seviyesinde kaydeder.</para>
+            </summary>
+        </member>
+        <member name="M:Milvasoft.DependencyInjection.IMilvasoftLogger.LogWarning(System.String)">
+            <summary>
+            <para><b>EN: </b>Saves the log at warn level.</para>
+            <para><b>TR: </b>Log kaydını debug warn kaydeder.</para>s
+            </summary>
+        </member>
+        <member name="M:Milvasoft.DependencyInjection.IMilvasoftLogger.LogDebug(System.String)">
+            <summary>
+            <para><b>EN: </b>Saves the log at debug level.</para>
+            <para><b>TR: </b>Log kaydını debug seviyesinde kaydeder.</para>
+            </summary>
+        </member>
+        <member name="M:Milvasoft.DependencyInjection.IMilvasoftLogger.LogError(System.String)">
+            <summary>
+            <para><b>EN: </b>Saves the log at error level.</para>
+            <para><b>TR: </b>Log kaydını error seviyesinde kaydeder.</para>
+            </summary>
+        </member>
+        <member name="M:Milvasoft.DependencyInjection.IMilvasoftLogger.LogFatal(System.String)">
+            <summary>
+            Saves the log at fatal level.
+            </summary>
+            <param name="message"></param>
+        </member>
+        <member name="M:Milvasoft.DependencyInjection.IMilvasoftLogger.LogFatal(System.String,Milvasoft.Helpers.Enums.MailSubject)">
+            <summary>
+            Saves the log at fatal level. And sends mail to producer.
+            </summary>
+            <param name="message"></param>
+            <param name="mailSubject"></param>
         </member>
     </members>
 </doc>

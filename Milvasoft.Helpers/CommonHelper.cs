@@ -1,4 +1,8 @@
-﻿using System;
+﻿using Microsoft.Extensions.Localization;
+using Milvasoft.Helpers.Exceptions;
+using Milvasoft.Helpers.Extensions;
+using System;
+using System.ComponentModel;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
@@ -62,5 +66,43 @@ namespace Milvasoft.Helpers
                 obj = prop.GetValue(obj, null);
             return obj;
         }
+
+        /// <summary>
+        /// Checks that MinimumLength and MaximumLength have legal values.  Throws InvalidOperationException if not.
+        /// </summary>
+        public static void EnsureLegalLengths(int maxLength, int minLength , IStringLocalizer stringLocalizer)
+        {
+            if (maxLength < 0) throw new MilvasoftValidationException(stringLocalizer["PreventStringInjectionMaxLengthException"]);
+            if (minLength < 0) throw new MilvasoftValidationException(stringLocalizer["PreventStringInjectionMinLengthException"]);
+            if (maxLength <= minLength) throw new MilvasoftValidationException(stringLocalizer["PreventStringInjectionMinLengthBigThanMaxLengthException", minLength, maxLength]);
+        }
+
+        /// <summary>
+        /// Gets enum description.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="enumValue"></param>
+        /// <returns></returns>
+        public static string GetDesciption<T>(this T enumValue) where T : struct, IConvertible
+        {
+            if (!typeof(T).IsEnum)
+                return null;
+
+            var desription = enumValue.ToString();
+            var fieldInfo = enumValue.GetType().GetField(enumValue.ToString());
+
+            if (fieldInfo != null)
+            {
+                var attrs = fieldInfo.GetCustomAttributes(typeof(DescriptionAttribute), true);
+
+                if (!attrs.IsNullOrEmpty())
+                {
+                    desription = ((DescriptionAttribute)attrs.First()).Description;
+                }
+            }
+
+            return desription;
+        }
+
     }
 }
