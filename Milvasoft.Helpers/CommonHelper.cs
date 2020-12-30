@@ -70,11 +70,17 @@ namespace Milvasoft.Helpers
         /// <summary>
         /// Checks that MinimumLength and MaximumLength have legal values.  Throws InvalidOperationException if not.
         /// </summary>
-        public static void EnsureLegalLengths(int maxLength, int minLength , IStringLocalizer stringLocalizer)
+        public static void EnsureLegalLengths(int maxLength, int minLength , IStringLocalizer stringLocalizer = null)
         {
-            if (maxLength < 0) throw new MilvasoftValidationException(stringLocalizer["PreventStringInjectionMaxLengthException"]);
-            if (minLength < 0) throw new MilvasoftValidationException(stringLocalizer["PreventStringInjectionMinLengthException"]);
-            if (maxLength <= minLength) throw new MilvasoftValidationException(stringLocalizer["PreventStringInjectionMinLengthBigThanMaxLengthException", minLength, maxLength]);
+            if (maxLength < 0) throw new MilvasoftValidationException(stringLocalizer != null 
+                                                                      ? stringLocalizer["PreventStringInjectionMaxLengthException"] 
+                                                                      : "Please enter a valid value for the maximum character length.");
+            if (minLength < 0) throw new MilvasoftValidationException(stringLocalizer != null 
+                                                                      ? stringLocalizer["PreventStringInjectionMinLengthException"] 
+                                                                      : "Please enter a valid value for the minimum character length.");
+            if (maxLength <= minLength) throw new MilvasoftValidationException(stringLocalizer != null
+                                                                               ? stringLocalizer["PreventStringInjectionMinLengthBigThanMaxLengthException", minLength, maxLength]
+                                                                               : $"The minimum value ({minLength}) you entered is greater than the maximum value ({maxLength}). Please enter a valid range of values.");
         }
 
         /// <summary>

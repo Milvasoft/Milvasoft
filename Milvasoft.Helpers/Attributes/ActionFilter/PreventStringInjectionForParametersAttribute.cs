@@ -22,7 +22,13 @@ namespace Milvasoft.Helpers.Attributes.ActionFilter
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
     public class PreventStringInjectionForParametersAttribute : ActionFilterAttribute
     {
+
         #region Properties
+
+        /// <summary>
+        /// Gets or sets the error message spesific content
+        /// </summary>
+        public string MemberNameLocalizerKey { get; set; }
 
         /// <summary>
         /// Gets the maximum acceptable length of the string
@@ -38,11 +44,6 @@ namespace Milvasoft.Helpers.Attributes.ActionFilter
         /// Dummy class type for resource location.
         /// </summary>
         public Type ResourceType { get; set; }
-
-        /// <summary>
-        /// Black list for string injections.
-        /// </summary>
-        public List<InvalidString> BlackList { get; set; }
 
         /// <summary>
         /// If injection attack exist. Validation method will be send mail. 
@@ -70,12 +71,14 @@ namespace Milvasoft.Helpers.Attributes.ActionFilter
         /// <param name="context"></param>
         public override void OnActionExecuting(ActionExecutingContext context)
         {
-            var milvasoftLogger = context.HttpContext.RequestServices.GetRequiredService<IMilvasoftLogger>();
+            IStringLocalizer sharedLocalizer = null;
+            if (ResourceType != null)
+            {
+                var localizerFactory = context.HttpContext.RequestServices.GetService<IStringLocalizerFactory>();
 
-            var localizerFactory = context.HttpContext.RequestServices.GetRequiredService<IStringLocalizerFactory>();
-
-            var assemblyName = new AssemblyName(ResourceType.GetTypeInfo().Assembly.FullName);
-            var sharedLocalizer = localizerFactory.Create("SharedResource", assemblyName.Name);
+                var assemblyName = new AssemblyName(ResourceType.GetTypeInfo().Assembly.FullName);
+                sharedLocalizer = localizerFactory.Create("SharedResource", assemblyName.Name);
+            }
 
             async Task<ActionExecutingContext> RewriteResponseAsync(string errorMessage)
             {
@@ -109,7 +112,7 @@ namespace Milvasoft.Helpers.Attributes.ActionFilter
                     if (actionArgument.Value is string)
                     {
                         var stringValue = actionArgument.Value.ToString();
-                        var localizedPropName = actionArgument.Key;
+                        var localizedPropName = MemberNameLocalizerKey ?? actionArgument.Key;
 
                         // Automatically pass if value is null. RequiredAttribute should be used to assert a value is not null.
                         // We expect a cast exception if a non-string was passed in.
@@ -118,24 +121,34 @@ namespace Milvasoft.Helpers.Attributes.ActionFilter
 
                         if (!lengthResult)
                         {
-                            base.OnActionExecuting(RewriteResponseAsync(sharedLocalizer["PreventStringInjectionLengthResultNotTrue", localizedPropName, MinimumLength, MaximumLength]).Result);
+                            base.OnActionExecuting(RewriteResponseAsync(sharedLocalizer != null
+                                                                        ? sharedLocalizer["PreventStringInjectionLengthResultNotTrue", localizedPropName, MinimumLength, MaximumLength]
+                                                                        : $"{localizedPropName} must have a character length in the range {MinimumLength} to {MaximumLength}.").Result);
                         }
                         if (!string.IsNullOrEmpty(stringValue))
                         {
-                            if (!BlackList.IsNullOrEmpty())
-                                foreach (var invalidString in BlackList)
+                            var blackList = context.HttpContext.RequestServices.GetService<List<InvalidString>>();
+
+                            if (!blackList.IsNullOrEmpty())
+                                foreach (var invalidString in blackList)
                                     foreach (var invalidStringValue in invalidString.Values)
                                         if (stringValue.Contains(invalidStringValue))
                                         {
-                                            if (!string.IsNullOrEmpty(MailContent))
+                                            var milvasoftLogger = context.HttpContext.RequestServices.GetService<IMilvasoftLogger>();
+
+                                            if (!string.IsNullOrEmpty(MailContent) && milvasoftLogger != null)
                                                 milvasoftLogger.LogFatal(MailContent, MailSubject.Hack);
 
-                                            base.OnActionExecuting(RewriteResponseAsync(sharedLocalizer["PreventStringInjectionContainsForbiddenWordError", localizedPropName]).Result);
+                                            base.OnActionExecuting(RewriteResponseAsync(sharedLocalizer != null
+                                                                                        ? sharedLocalizer["PreventStringInjectionContainsForbiddenWordError", localizedPropName]
+                                                                                        : $"{localizedPropName} contains invalid words.").Result);
                                         }
                         }
                         if (MinimumLength > 0 && (stringValue?.Length ?? 0) < MinimumLength)
                         {
-                            base.OnActionExecuting(RewriteResponseAsync(sharedLocalizer["PreventStringInjectionBellowMin", localizedPropName, MinimumLength]).Result);
+                            base.OnActionExecuting(RewriteResponseAsync(sharedLocalizer != null
+                                                                        ? sharedLocalizer["PreventStringInjectionBellowMin", localizedPropName, MinimumLength]
+                                                                        : $"{localizedPropName} is below the minimum character limit. Please enter at least {MinimumLength} characters.").Result);
                         }
                     }
                 }

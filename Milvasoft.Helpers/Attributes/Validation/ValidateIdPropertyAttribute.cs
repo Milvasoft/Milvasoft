@@ -15,6 +15,13 @@ namespace Milvasoft.Helpers.Attributes.Validation
     [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field, AllowMultiple = false)]
     public class ValidateIdPropertyAttribute : ValidationAttribute
     {
+
+        #region Fields
+
+        private readonly Type _resourceType = null;
+
+        #endregion
+
         #region Properties
 
         /// <summary>
@@ -32,13 +39,21 @@ namespace Milvasoft.Helpers.Attributes.Validation
         /// </summary>
         public bool DontCheckNullable { get; set; }
 
-        /// <summary>
-        /// Dummy class type for resource location.
-        /// </summary>
-        public Type ResourceType { get; set; }
-
         #endregion
 
+        /// <summary>
+        /// Constructor of <see cref="ValidateIdPropertyAttribute"/>.
+        /// </summary>
+        public ValidateIdPropertyAttribute() { }
+
+        /// <summary>
+        /// Constructor of <see cref="ValidateIdPropertyAttribute"/> for localization.
+        /// </summary>
+        /// <param name="resourceType"></param>
+        public ValidateIdPropertyAttribute(Type resourceType)
+        {
+            _resourceType = resourceType;
+        }
 
         /// <summary>
         /// Determines whether the specified value of the object is valid.
@@ -50,20 +65,27 @@ namespace Milvasoft.Helpers.Attributes.Validation
         {
             if (value != null)
             {
-                var localizerFactory = context.GetRequiredService<IStringLocalizerFactory>();
+                IStringLocalizer sharedLocalizer;
+                string localizedRelationName;
+                string errorMessage;
 
-                var assemblyName = new AssemblyName(ResourceType.GetTypeInfo().Assembly.FullName);
-                var sharedLocalizer = localizerFactory.Create("SharedResource", assemblyName.Name);
+                if (_resourceType != null)
+                {
+                    var localizerFactory = context.GetService<IStringLocalizerFactory>();
 
-                var localizedRelationName = sharedLocalizer[MemberNameLocalizerKey ?? $"LocalizedEntityName{context.MemberName.Substring(0, context.MemberName.Length - 2)}"].ToString().ToLowerInvariant();
+                    var assemblyName = new AssemblyName(_resourceType.GetTypeInfo().Assembly.FullName);
+                    sharedLocalizer = localizerFactory.Create("SharedResource", assemblyName.Name);
+
+                    localizedRelationName = sharedLocalizer[MemberNameLocalizerKey ?? $"LocalizedEntityName{context.MemberName.Substring(0, context.MemberName.Length - 2)}"].ToString().ToLowerInvariant();
+                    errorMessage = sharedLocalizer["ValidationIdPropertyError", localizedRelationName];
+                }
+                else errorMessage = $"Please enter a valid {context.MemberName}";
+
                 var propertyValue = value;
 
-                var httpContext = context.GetRequiredService<IHttpContextAccessor>().HttpContext;
+                var httpContext = context.GetService<IHttpContextAccessor>().HttpContext;
 
                 var valueType = propertyValue.GetType();
-
-                var errorMessage = sharedLocalizer["ValidationIdPropertyError", localizedRelationName];
-
 
                 if (valueType == typeof(Guid))
                 {
@@ -75,7 +97,7 @@ namespace Milvasoft.Helpers.Attributes.Validation
 
                     if (guidParameter == default || guidParameter == Guid.Empty || !regexMatchResult)
                     {
-                        ErrorMessage = sharedLocalizer["ValidationIdPropertyError", localizedRelationName];
+                        ErrorMessage = errorMessage;
                         httpContext.Items[context.MemberName] = ErrorMessage;
                         return new ValidationResult(FormatErrorMessage(""));
                     }

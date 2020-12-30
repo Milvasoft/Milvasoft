@@ -13,6 +13,13 @@ namespace Milvasoft.Helpers.Attributes.Validation
     [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field, AllowMultiple = false)]
     public class MilvasoftRegularExpressionAttribute : RegularExpressionAttribute
     {
+
+        #region Fields
+
+        private readonly Type _resourceType = null;
+
+        #endregion
+
         #region Properties
 
         /// <summary>
@@ -47,6 +54,14 @@ namespace Milvasoft.Helpers.Attributes.Validation
         /// <summary>
         /// Constructor that accepts the maximum length of the string.
         /// </summary>
+        public MilvasoftRegularExpressionAttribute(Type resourceType) : base(@"^()$")
+        {
+            _resourceType = resourceType;
+        }
+
+        /// <summary>
+        /// Constructor that accepts the maximum length of the string.
+        /// </summary>
         /// <param name="pattern"></param>
         public MilvasoftRegularExpressionAttribute(string pattern) : base(pattern) { }
 
@@ -62,13 +77,14 @@ namespace Milvasoft.Helpers.Attributes.Validation
         /// <returns></returns>
         protected override ValidationResult IsValid(object value, ValidationContext context)
         {
-            var localizerFactory = context.GetRequiredService<IStringLocalizerFactory>();
+            var localizerFactory = context.GetService<IStringLocalizerFactory>();
 
-            var assemblyName = new AssemblyName(ResourceType.GetTypeInfo().Assembly.FullName);
+            var assemblyName = new AssemblyName(_resourceType.GetTypeInfo().Assembly.FullName);
             var sharedLocalizer = localizerFactory.Create("SharedResource", assemblyName.Name);
 
             var localizedPropName = sharedLocalizer[$"Localized{MemberNameLocalizerKey ?? context.MemberName}"];
-            var httpContext = context.GetRequiredService<IHttpContextAccessor>().HttpContext;//TODO http contexte items eklenecek mi ?
+
+            var httpContext = context.GetService<IHttpContextAccessor>().HttpContext;//TODO http contexte items eklenecek mi ?
 
             if (IsRequired)
             {

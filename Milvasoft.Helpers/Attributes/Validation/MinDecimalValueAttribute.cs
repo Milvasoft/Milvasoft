@@ -12,6 +12,13 @@ namespace Milvasoft.Helpers.Attributes.Validation
     [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field, AllowMultiple = false)]
     public class MinDecimalValueAttribute : ValidationAttribute
     {
+
+        #region Fields
+
+        private readonly Type _resourceType = null;
+
+        #endregion
+
         #region Properties
 
         /// <summary>
@@ -29,11 +36,6 @@ namespace Milvasoft.Helpers.Attributes.Validation
         /// </summary>
         public int MinValue { get; } = -1;
 
-        /// <summary>
-        /// Dummy class type for resource location.
-        /// </summary>
-        public Type ResourceType { get; set; }
-
         #endregion
 
 
@@ -43,6 +45,15 @@ namespace Milvasoft.Helpers.Attributes.Validation
         /// Constructor of atrribute.
         /// </summary>
         public MinDecimalValueAttribute() { }
+
+        /// <summary>
+        /// Constructor of atrribute.
+        /// </summary>
+        /// <param name="resourceType"></param>
+        public MinDecimalValueAttribute(Type resourceType)
+        {
+            _resourceType = resourceType;
+        }
 
         /// <summary>
         /// Constructor of atrribute.
@@ -57,12 +68,13 @@ namespace Milvasoft.Helpers.Attributes.Validation
         /// Constructor of atrribute.
         /// </summary>
         /// <param name="minValue"></param>
-        /// <param name="localizedPropertyName"></param>
-        public MinDecimalValueAttribute(int minValue, string localizedPropertyName)
+        /// <param name="resourceType"></param>
+        public MinDecimalValueAttribute(int minValue, Type resourceType)
         {
             MinValue = minValue;
-            LocalizerKey = localizedPropertyName;
+            _resourceType = resourceType;
         }
+
 
         #endregion
 
@@ -76,16 +88,25 @@ namespace Milvasoft.Helpers.Attributes.Validation
         /// <returns></returns>
         protected override ValidationResult IsValid(object value, ValidationContext context)
         {
-            var localizerFactory = context.GetRequiredService<IStringLocalizerFactory>();
+            IStringLocalizer sharedLocalizer;
+            string localizedPropName;
+            string errorMessage;
 
-            var assemblyName = new AssemblyName(ResourceType.GetTypeInfo().Assembly.FullName);
-            var sharedLocalizer = localizerFactory.Create("SharedResource", assemblyName.Name);
+            if (_resourceType != null)
+            {
+                var localizerFactory = context.GetService<IStringLocalizerFactory>();
 
-            var localizedPropName = sharedLocalizer[LocalizerKey != null ? LocalizerKey : $"Localized{context.MemberName}"];
+                var assemblyName = new AssemblyName(_resourceType.GetTypeInfo().Assembly.FullName);
+                sharedLocalizer = localizerFactory.Create("SharedResource", assemblyName.Name);
+
+                localizedPropName = sharedLocalizer[LocalizerKey != null ? LocalizerKey : $"Localized{context.MemberName}"];
+                errorMessage = FullMessage ? sharedLocalizer[LocalizerKey] : sharedLocalizer["MinDecimalValueException", localizedPropName];
+            }
+            else errorMessage = $"Please enter a valid {context.MemberName}.";
 
             if (Convert.ToInt32(value) <= MinValue)
             {
-                ErrorMessage = FullMessage ? localizedPropName : sharedLocalizer["MinDecimalValueException", localizedPropName];
+                ErrorMessage = errorMessage;
                 return new ValidationResult(FormatErrorMessage(""));
             }
 

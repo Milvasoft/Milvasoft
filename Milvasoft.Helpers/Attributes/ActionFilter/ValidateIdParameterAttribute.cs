@@ -19,6 +19,12 @@ namespace Milvasoft.Helpers.Attributes.ActionFilter
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
     public class ValidateIdParameterAttribute : ActionFilterAttribute
     {
+        #region Fields
+
+        private readonly Type _resourceType = null;
+
+        #endregion
+
         /// <summary>
         /// Gets or sets error message content.
         /// </summary>
@@ -35,11 +41,6 @@ namespace Milvasoft.Helpers.Attributes.ActionFilter
         /// <param name="context"></param>
         public override void OnActionExecuting(ActionExecutingContext context)
         {
-            var localizerFactory = context.HttpContext.RequestServices.GetRequiredService<IStringLocalizerFactory>();
-
-            var assemblyName = new AssemblyName(ResourceType.GetTypeInfo().Assembly.FullName);
-            var sharedLocalizer = localizerFactory.Create("SharedResource", assemblyName.Name);
-
             async Task<ActionExecutingContext> RewriteResponseAsync(string errorMessage)
             {
                 var validationResponse = new ExceptionResponse
@@ -61,17 +62,29 @@ namespace Milvasoft.Helpers.Attributes.ActionFilter
                 return context;
             };
 
-            var message = EntityName != null
-                          ? sharedLocalizer["ValidationIdPropertyError", sharedLocalizer[$"LocalizedEntityName{EntityName}"]]
-                          : sharedLocalizer["ValidationIdParameterGeneralError"];
-
+          
             if (context.ActionArguments.Count != 0)
             {
+                IStringLocalizer sharedLocalizer = null;
+                if (ResourceType != null)
+                {
+                    var localizerFactory = context.HttpContext.RequestServices.GetService<IStringLocalizerFactory>();
+
+                    var assemblyName = new AssemblyName(ResourceType.GetTypeInfo().Assembly.FullName);
+                    sharedLocalizer = localizerFactory.Create("SharedResource", assemblyName.Name);
+                }
+
+                var message = sharedLocalizer != null
+                         ? EntityName != null
+                               ? sharedLocalizer["ValidationIdPropertyError", sharedLocalizer[$"LocalizedEntityName{EntityName}"]]
+                               : sharedLocalizer["ValidationIdParameterGeneralError"]
+                         : EntityName != null
+                               ? $"Please select a valid {EntityName}."
+                               : "Please enter all required parameters completely.";
+
+
                 foreach (var actionArgument in context.ActionArguments)
                 {
-                    var modelName = string.IsNullOrEmpty(EntityName) ? actionArgument.Key : EntityName;
-                    var propName = sharedLocalizer[modelName];
-
                     if (actionArgument.Key.Contains("Id") || actionArgument.Key.Contains("id"))
                     {
                         var parameterValue = actionArgument.Value;

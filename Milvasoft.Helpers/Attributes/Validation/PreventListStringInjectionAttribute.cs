@@ -18,7 +18,6 @@ namespace Milvasoft.Helpers.Attributes.Validation
     [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field, AllowMultiple = false)]
     public class PreventListStringInjectionAttribute : ValidationAttribute
     {
-
         #region Properties 
 
         /// <summary>
@@ -36,16 +35,10 @@ namespace Milvasoft.Helpers.Attributes.Validation
         /// </summary>
         public int MinimumLength { get; private set; } = 0;
 
-
         /// <summary>
         /// Dummy class type for resource location.
         /// </summary>
-        public Type ResourceType { get; set; }
-
-        /// <summary>
-        /// Black list for string injections.
-        /// </summary>
-        public List<InvalidString> BlackList { get; set; }
+        public Type ResourceType { get; set; } = null;
 
         /// <summary>
         /// If injection attack exist. Validation method will be send mail. 
@@ -113,22 +106,24 @@ namespace Milvasoft.Helpers.Attributes.Validation
         {
             if (value != null)
             {
-                var milvasoftLogger = context.GetRequiredService<IMilvasoftLogger>();
+                var httpContext = context.GetService<IHttpContextAccessor>().HttpContext;
 
-                var httpContext = context.GetRequiredService<IHttpContextAccessor>().HttpContext;
+                IStringLocalizer sharedLocalizer = null;
+                string localizedPropName;
+                if (ResourceType != null)
+                {
+                    var localizerFactory = context.GetService<IStringLocalizerFactory>();
 
-                var localizerFactory = context.GetRequiredService<IStringLocalizerFactory>();
+                    var assemblyName = new AssemblyName(ResourceType.GetTypeInfo().Assembly.FullName);
+                    sharedLocalizer = localizerFactory.Create("SharedResource", assemblyName.Name);
+                    localizedPropName = sharedLocalizer[MemberNameLocalizerKey ?? $"Localized{context.MemberName}"];
+                }
+                else localizedPropName = context.MemberName;
 
-                var assemblyName = new AssemblyName(ResourceType.GetTypeInfo().Assembly.FullName);
-                var sharedLocalizer = localizerFactory.Create("SharedResource", assemblyName.Name);
+
 
                 // Check the lengths for legality
-
-
                 CommonHelper.EnsureLegalLengths(MaximumLength, MinimumLength, sharedLocalizer);
-
-                var localizedPropName = context.MemberName;
-
 
                 var stringList = ((List<string>)value);
 
@@ -141,29 +136,44 @@ namespace Milvasoft.Helpers.Attributes.Validation
 
                     if (!lengthResult)
                     {
-                        ErrorMessage = sharedLocalizer["PreventStringInjectionLengthResultNotTrue", localizedPropName, MinimumLength, MaximumLength];
+                        ErrorMessage = sharedLocalizer != null
+                             ? sharedLocalizer["PreventStringInjectionLengthResultNotTrue", localizedPropName, MinimumLength, MaximumLength]
+                             : $"{localizedPropName} must have a character length in the range {MinimumLength} to {MaximumLength}.";
+
                         httpContext.Items[context.MemberName] = ErrorMessage;
+
                         return new ValidationResult(FormatErrorMessage(""));
                     }
 
                     if (!string.IsNullOrEmpty(stringValue))
                     {
-                        if (!BlackList.IsNullOrEmpty())
-                            foreach (var invalidString in BlackList)
+                        var blackList = context.GetService<List<InvalidString>>();
+
+                        if (!blackList.IsNullOrEmpty())
+                            foreach (var invalidString in blackList)
                                 foreach (var invalidStringValue in invalidString.Values)
                                     if (stringValue.Contains(invalidStringValue))
                                     {
-                                        if (!string.IsNullOrEmpty(MailContent))
+                                        var milvasoftLogger = context.GetService<IMilvasoftLogger>();
+
+                                        if (!string.IsNullOrEmpty(MailContent) && milvasoftLogger != null)
                                             milvasoftLogger.LogFatal(MailContent, MailSubject.Hack);
 
-                                        ErrorMessage = sharedLocalizer["PreventStringInjectionContainsForbiddenWordError", localizedPropName];
+                                        ErrorMessage = sharedLocalizer != null
+                                                       ? sharedLocalizer["PreventStringInjectionContainsForbiddenWordError", localizedPropName]
+                                                       : $"{localizedPropName} contains invalid words.";
+
                                         return new ValidationResult(FormatErrorMessage(""));
                                     }
                     }
                     if (MinimumLength > 0 && (stringValue?.Length ?? 0) < MinimumLength)
                     {
-                        ErrorMessage = sharedLocalizer["PreventStringInjectionBellowMin", localizedPropName, MinimumLength];
+                        ErrorMessage = sharedLocalizer != null
+                                ? sharedLocalizer["PreventStringInjectionBellowMin", localizedPropName, MinimumLength]
+                                : $"{localizedPropName} is below the minimum character limit. Please enter at least {MinimumLength} characters.";
+
                         httpContext.Items[context.MemberName] = ErrorMessage;
+
                         return new ValidationResult(FormatErrorMessage(""));
                     }
 
