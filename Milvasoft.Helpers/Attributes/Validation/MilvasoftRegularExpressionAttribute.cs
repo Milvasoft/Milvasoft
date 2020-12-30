@@ -37,11 +37,6 @@ namespace Milvasoft.Helpers.Attributes.Validation
         /// </summary>
         public bool IsRequired { get; set; } = true;
 
-        /// <summary>
-        /// Dummy class type for resource location.
-        /// </summary>
-        public Type ResourceType { get; set; }
-
         #endregion
 
         #region Constructors

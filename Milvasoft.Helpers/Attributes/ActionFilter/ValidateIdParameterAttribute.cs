@@ -19,6 +19,7 @@ namespace Milvasoft.Helpers.Attributes.ActionFilter
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
     public class ValidateIdParameterAttribute : ActionFilterAttribute
     {
+
         #region Fields
 
         private readonly Type _resourceType = null;
@@ -31,9 +32,18 @@ namespace Milvasoft.Helpers.Attributes.ActionFilter
         public string EntityName { get; set; }
 
         /// <summary>
-        /// Dummy class type for resource location.
+        /// Constructor of <see cref="ValidateIdParameterAttribute"/> for localization.
         /// </summary>
-        public Type ResourceType { get; set; }
+        public ValidateIdParameterAttribute() { }
+
+        /// <summary>
+        /// Constructor of <see cref="ValidateIdParameterAttribute"/> for localization.
+        /// </summary>
+        /// <param name="resourceType"></param>
+        public ValidateIdParameterAttribute(Type resourceType)
+        {
+            _resourceType = resourceType;
+        }
 
         /// <summary>
         /// Performs when action executing.
@@ -62,15 +72,15 @@ namespace Milvasoft.Helpers.Attributes.ActionFilter
                 return context;
             };
 
-          
+
             if (context.ActionArguments.Count != 0)
             {
                 IStringLocalizer sharedLocalizer = null;
-                if (ResourceType != null)
+                if (_resourceType != null)
                 {
                     var localizerFactory = context.HttpContext.RequestServices.GetService<IStringLocalizerFactory>();
 
-                    var assemblyName = new AssemblyName(ResourceType.GetTypeInfo().Assembly.FullName);
+                    var assemblyName = new AssemblyName(_resourceType.GetTypeInfo().Assembly.FullName);
                     sharedLocalizer = localizerFactory.Create("SharedResource", assemblyName.Name);
                 }
 
@@ -100,7 +110,7 @@ namespace Milvasoft.Helpers.Attributes.ActionFilter
                                                                                       + "{3}[0-9a-fA-F]{12}[}]?$");
 
                             if (guidParameter == default || guidParameter == Guid.Empty || !regexMatchResult)
-                                base.OnActionExecuting(RewriteResponseAsync(message).Result); 
+                                base.OnActionExecuting(RewriteResponseAsync(message).Result);
                         }
                         else if (valueType == typeof(int))
                         {
