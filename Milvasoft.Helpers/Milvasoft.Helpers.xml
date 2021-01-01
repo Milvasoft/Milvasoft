@@ -24,6 +24,11 @@
             Assembly type for disable nested type prop validations.
             </summary>
         </member>
+        <member name="P:Milvasoft.Helpers.Attributes.ActionFilter.ControllerFilterAttribute.DTOFolderAssemblyName">
+            <summary>
+            Folder assembly name for disable nested type prop validations.
+            </summary>
+        </member>
         <member name="M:Milvasoft.Helpers.Attributes.ActionFilter.ControllerFilterAttribute.OnActionExecuting(Microsoft.AspNetCore.Mvc.Filters.ActionExecutingContext)">
             <summary>
             Performs when action executing.
@@ -42,6 +47,11 @@
             Specifies that the class or method that this attribute is applied to requires the specified prevent string injection attacks and min/max length checks.
             </summary>
         </member>
+        <member name="P:Milvasoft.Helpers.Attributes.ActionFilter.PreventStringInjectionForParametersAttribute.MemberNameLocalizerKey">
+            <summary>
+            Gets or sets the error message spesific content
+            </summary>
+        </member>
         <member name="P:Milvasoft.Helpers.Attributes.ActionFilter.PreventStringInjectionForParametersAttribute.MaximumLength">
             <summary>
             Gets the maximum acceptable length of the string
@@ -55,11 +65,6 @@
         <member name="P:Milvasoft.Helpers.Attributes.ActionFilter.PreventStringInjectionForParametersAttribute.ResourceType">
             <summary>
             Dummy class type for resource location.
-            </summary>
-        </member>
-        <member name="P:Milvasoft.Helpers.Attributes.ActionFilter.PreventStringInjectionForParametersAttribute.BlackList">
-            <summary>
-            Black list for string injections.
             </summary>
         </member>
         <member name="P:Milvasoft.Helpers.Attributes.ActionFilter.PreventStringInjectionForParametersAttribute.MailContent">
@@ -91,10 +96,16 @@
             Gets or sets error message content.
             </summary>
         </member>
-        <member name="P:Milvasoft.Helpers.Attributes.ActionFilter.ValidateIdParameterAttribute.ResourceType">
+        <member name="M:Milvasoft.Helpers.Attributes.ActionFilter.ValidateIdParameterAttribute.#ctor">
             <summary>
-            Dummy class type for resource location.
+            Constructor of <see cref="T:Milvasoft.Helpers.Attributes.ActionFilter.ValidateIdParameterAttribute"/> for localization.
             </summary>
+        </member>
+        <member name="M:Milvasoft.Helpers.Attributes.ActionFilter.ValidateIdParameterAttribute.#ctor(System.Type)">
+            <summary>
+            Constructor of <see cref="T:Milvasoft.Helpers.Attributes.ActionFilter.ValidateIdParameterAttribute"/> for localization.
+            </summary>
+            <param name="resourceType"></param>
         </member>
         <member name="M:Milvasoft.Helpers.Attributes.ActionFilter.ValidateIdParameterAttribute.OnActionExecuting(Microsoft.AspNetCore.Mvc.Filters.ActionExecutingContext)">
             <summary>
@@ -122,12 +133,12 @@
             Gets or sets property is required.
             </summary>
         </member>
-        <member name="P:Milvasoft.Helpers.Attributes.Validation.MilvasoftRegularExpressionAttribute.ResourceType">
+        <member name="M:Milvasoft.Helpers.Attributes.Validation.MilvasoftRegularExpressionAttribute.#ctor">
             <summary>
-            Dummy class type for resource location.
+            Constructor that accepts the maximum length of the string.
             </summary>
         </member>
-        <member name="M:Milvasoft.Helpers.Attributes.Validation.MilvasoftRegularExpressionAttribute.#ctor">
+        <member name="M:Milvasoft.Helpers.Attributes.Validation.MilvasoftRegularExpressionAttribute.#ctor(System.Type)">
             <summary>
             Constructor that accepts the maximum length of the string.
             </summary>
@@ -166,15 +177,16 @@
             Minimum decimal value of requested validate scope.
             </summary>
         </member>
-        <member name="P:Milvasoft.Helpers.Attributes.Validation.MinDecimalValueAttribute.ResourceType">
-            <summary>
-            Dummy class type for resource location.
-            </summary>
-        </member>
         <member name="M:Milvasoft.Helpers.Attributes.Validation.MinDecimalValueAttribute.#ctor">
             <summary>
             Constructor of atrribute.
             </summary>
+        </member>
+        <member name="M:Milvasoft.Helpers.Attributes.Validation.MinDecimalValueAttribute.#ctor(System.Type)">
+            <summary>
+            Constructor of atrribute.
+            </summary>
+            <param name="resourceType"></param>
         </member>
         <member name="M:Milvasoft.Helpers.Attributes.Validation.MinDecimalValueAttribute.#ctor(System.Int32)">
             <summary>
@@ -182,12 +194,12 @@
             </summary>
             <param name="minValue"></param>
         </member>
-        <member name="M:Milvasoft.Helpers.Attributes.Validation.MinDecimalValueAttribute.#ctor(System.Int32,System.String)">
+        <member name="M:Milvasoft.Helpers.Attributes.Validation.MinDecimalValueAttribute.#ctor(System.Int32,System.Type)">
             <summary>
             Constructor of atrribute.
             </summary>
             <param name="minValue"></param>
-            <param name="localizedPropertyName"></param>
+            <param name="resourceType"></param>
         </member>
         <member name="M:Milvasoft.Helpers.Attributes.Validation.MinDecimalValueAttribute.IsValid(System.Object,System.ComponentModel.DataAnnotations.ValidationContext)">
             <summary>
@@ -221,11 +233,6 @@
         <member name="P:Milvasoft.Helpers.Attributes.Validation.PreventListStringInjectionAttribute.ResourceType">
             <summary>
             Dummy class type for resource location.
-            </summary>
-        </member>
-        <member name="P:Milvasoft.Helpers.Attributes.Validation.PreventListStringInjectionAttribute.BlackList">
-            <summary>
-            Black list for string injections.
             </summary>
         </member>
         <member name="P:Milvasoft.Helpers.Attributes.Validation.PreventListStringInjectionAttribute.MailContent">
@@ -290,42 +297,22 @@
             Gets or sets the minimum acceptable length of the string
             </summary>
         </member>
-        <member name="P:Milvasoft.Helpers.Attributes.Validation.PreventStringInjectionAttribute.ResourceType">
-            <summary>
-            Dummy class type for resource location.
-            </summary>
-        </member>
-        <member name="P:Milvasoft.Helpers.Attributes.Validation.PreventStringInjectionAttribute.BlackList">
-            <summary>
-            Black list for string injections.
-            </summary>
-        </member>
         <member name="P:Milvasoft.Helpers.Attributes.Validation.PreventStringInjectionAttribute.MailContent">
             <summary>
             If injection attack exist. Validation method will be send mail. 
             If has value mail will be send.
             </summary>
         </member>
-        <member name="M:Milvasoft.Helpers.Attributes.Validation.PreventStringInjectionAttribute.#ctor(System.Int32,System.String)">
+        <member name="P:Milvasoft.Helpers.Attributes.Validation.PreventStringInjectionAttribute.ResourceType">
             <summary>
-            Constructor that accepts the maximum length of the string.
+            Dummy class type for resource location.
             </summary>
-            <param name="maximumLength">The maximum length, inclusive.  It may not be negative.</param>
-            <param name="localizedPropertyName"></param>
         </member>
         <member name="M:Milvasoft.Helpers.Attributes.Validation.PreventStringInjectionAttribute.#ctor(System.Int32)">
             <summary>
             Constructor that accepts the maximum length of the string.
             </summary>
             <param name="maximumLength">The maximum length, inclusive.  It may not be negative.</param>
-        </member>
-        <member name="M:Milvasoft.Helpers.Attributes.Validation.PreventStringInjectionAttribute.#ctor(System.Int32,System.Int32,System.String)">
-            <summary>
-            Constructor that accepts the maximum length of the string.
-            </summary>
-            <param name="minimumLength">The minimum length, inclusive.  It may not be negative.</param>
-            <param name="maximumLength">The maximum length, inclusive.  It may not be negative.</param>
-            <param name="localizedPropertyName"></param>
         </member>
         <member name="M:Milvasoft.Helpers.Attributes.Validation.PreventStringInjectionAttribute.#ctor(System.Int32,System.Int32)">
             <summary>
@@ -362,10 +349,16 @@
             If this is true, validation method won't check list is null.
             </summary>
         </member>
-        <member name="P:Milvasoft.Helpers.Attributes.Validation.ValidateIdPropertyAttribute.ResourceType">
+        <member name="M:Milvasoft.Helpers.Attributes.Validation.ValidateIdPropertyAttribute.#ctor">
             <summary>
-            Dummy class type for resource location.
+            Constructor of <see cref="T:Milvasoft.Helpers.Attributes.Validation.ValidateIdPropertyAttribute"/>.
             </summary>
+        </member>
+        <member name="M:Milvasoft.Helpers.Attributes.Validation.ValidateIdPropertyAttribute.#ctor(System.Type)">
+            <summary>
+            Constructor of <see cref="T:Milvasoft.Helpers.Attributes.Validation.ValidateIdPropertyAttribute"/> for localization.
+            </summary>
+            <param name="resourceType"></param>
         </member>
         <member name="M:Milvasoft.Helpers.Attributes.Validation.ValidateIdPropertyAttribute.IsValid(System.Object,System.ComponentModel.DataAnnotations.ValidationContext)">
             <summary>
@@ -426,6 +419,13 @@
             </summary>
             <typeparam name="T"></typeparam>
             <param name="enumValue"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.CommonHelper.ToGuid(System.Int32)">
+            <summary>
+            This method return int value to guid value. For DataStore and Test projects.
+            </summary>
+            <param name="value"></param>
             <returns></returns>
         </member>
         <member name="T:Milvasoft.Helpers.DataAccess.Abstract.IBaseEntity`1">
@@ -2780,22 +2780,37 @@
         </member>
         <member name="T:Milvasoft.Helpers.Models.BaseDTO`1">
             <summary>
-            <para> Base dto for all of deletable dtos. All deletable dtos have this values.</para>
+            Base dto for all of deletable dtos. All deletable dtos have this values.
             </summary>
         </member>
         <member name="P:Milvasoft.Helpers.Models.BaseDTO`1.Id">
             <summary>
-            <para> Unique key. Represents primary key.</para>    
+            Unique key. Represents primary key.
             </summary>    
         </member>
         <member name="P:Milvasoft.Helpers.Models.BaseDTO`1.InsertedDate">
             <summary> 
-            <para> Date added to database for dto.</para>
+            Date added to database for dto.
             </summary>
         </member>
         <member name="P:Milvasoft.Helpers.Models.BaseDTO`1.LastUpdatedDate">
             <summary> 
-            <para> Update date in database for dto.</para>
+            Update date in database for dto.
+            </summary>
+        </member>
+        <member name="T:Milvasoft.Helpers.Models.BaseIndelibleDTO`1">
+            <summary>
+            Base DTO for all of indelible entities. All indelible DTOs have this values.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.Models.BaseIndelibleDTO`1.DeletedDate">
+            <summary>
+            Delete date in database for entity.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.Models.BaseIndelibleDTO`1.IsDeleted">
+            <summary>
+            State of entity in the database. Default value is true.
             </summary>
         </member>
         <member name="T:Milvasoft.Helpers.Models.InvalidString">
@@ -3378,6 +3393,79 @@
             <param name="asyncTask"></param>
             <param name="successMessage"></param>
             <returns>  <see cref="T:Milvasoft.Helpers.Models.Response.SingleObjectResponse`1"/> in 200 OK <see cref="T:Microsoft.AspNetCore.Mvc.ActionResult"/> </returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.Response.GetErrorMessageForGetAll(Microsoft.Extensions.Localization.IStringLocalizer,System.String)">
+            <summary>
+            Gets error messages for get all operation.
+            </summary>
+            <param name="localizer"></param>
+            <param name="keyContent"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.Response.GetSuccessMessageForGetAll(Microsoft.Extensions.Localization.IStringLocalizer,System.String,System.Int32)">
+            <summary>
+            Gets error messages for get all operation.
+            </summary>
+            <param name="localizer"></param>
+            <param name="keyContent"></param>
+            <param name="recordCount"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.Response.GetErrorMessageForFiltering(Microsoft.Extensions.Localization.IStringLocalizer,System.String)">
+            <summary>
+            Gets error messages for get all and filtering operation.
+            </summary>
+            <param name="localizer"></param>
+            <param name="keyContent"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.Response.GetErrorMessageForGetById(Microsoft.Extensions.Localization.IStringLocalizer,System.String)">
+            <summary>
+            Gets error messages for get by id operation.
+            </summary>
+            <param name="localizer"></param>
+            <param name="keyContent"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.Response.GetSuccessMessageForAdd(Microsoft.Extensions.Localization.IStringLocalizer,System.String)">
+            <summary>
+            Gets success messages for adding operation.
+            </summary>
+            <param name="localizer"></param>
+            <param name="keyContent"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.Response.GetSuccessMessageForUpdate(Microsoft.Extensions.Localization.IStringLocalizer,System.String)">
+            <summary>
+            Gets success messages for updating operation.
+            </summary>
+            <param name="localizer"></param>
+            <param name="keyContent"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.Response.GetErrorMessageForDelete(Microsoft.Extensions.Localization.IStringLocalizer,System.String)">
+            <summary>
+            Gets error messages for deleting operation.
+            </summary>
+            <param name="localizer"></param>
+            <param name="keyContent"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.Response.GetSucccesMessageForDelete(Microsoft.Extensions.Localization.IStringLocalizer,System.String)">
+            <summary>
+            Gets success messages for deleting operation.
+            </summary>
+            <param name="localizer"></param>
+            <param name="keyContent"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.Response.GetMessageForSpecifiedProcess(Microsoft.Extensions.Localization.IStringLocalizer,System.String)">
+            <summary>
+            Gets success messages for get all operation.
+            </summary>
+            <param name="localizer"></param>
+            <param name="keyContent"></param>
+            <returns></returns>
         </member>
         <member name="T:Milvasoft.DependencyInjection.IMilvasoftLogger">
             <summary>

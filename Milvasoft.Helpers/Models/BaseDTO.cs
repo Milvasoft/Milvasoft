@@ -3,22 +3,22 @@
 namespace Milvasoft.Helpers.Models
 {
     /// <summary>
-    /// <para> Base dto for all of deletable dtos. All deletable dtos have this values.</para>
+    /// Base dto for all of deletable dtos. All deletable dtos have this values.
     /// </summary>
     public class BaseDTO<TKey>
     {
         /// <summary>
-        /// <para> Unique key. Represents primary key.</para>    
+        /// Unique key. Represents primary key.
         /// </summary>    
         public TKey Id { get; set; }
 
         /// <summary> 
-        /// <para> Date added to database for dto.</para>
+        /// Date added to database for dto.
         /// </summary>
         public DateTime InsertedDate { get; set; }
 
         /// <summary> 
-        /// <para> Update date in database for dto.</para>
+        /// Update date in database for dto.
         /// </summary>
         public DateTime? LastUpdatedDate { get; set; }
 
