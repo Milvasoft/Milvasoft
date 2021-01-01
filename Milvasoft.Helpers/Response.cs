@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Localization;
 using Milvasoft.Helpers.Extensions;
 using Milvasoft.Helpers.Models;
 using Milvasoft.Helpers.Models.Response;
@@ -477,6 +478,117 @@ namespace Milvasoft.Helpers
 
             return new OkObjectResult(response);
         }
+
+
+        #region Response Message Helpers
+
+        /// <summary>
+        /// Gets error messages for get all operation.
+        /// </summary>
+        /// <param name="localizer"></param>
+        /// <param name="keyContent"></param>
+        /// <returns></returns>
+        public static string GetErrorMessageForGetAll(this IStringLocalizer localizer, string keyContent)
+        {
+            var localizedEntityName = localizer[$"LocalizedEntityName{keyContent}"].ToString().ToLowerInvariant();
+            return localizer["NoEntityWasFound", localizedEntityName];
+        }
+
+        /// <summary>
+        /// Gets error messages for get all operation.
+        /// </summary>
+        /// <param name="localizer"></param>
+        /// <param name="keyContent"></param>
+        /// <param name="recordCount"></param>
+        /// <returns></returns>
+        public static string GetSuccessMessageForGetAll(this IStringLocalizer localizer, string keyContent, int recordCount)
+        {
+            var localizedEntityName = localizer[$"LocalizedEntityName{keyContent}"].ToString();
+            return localizer["GetAllSuccessMessage", localizedEntityName, recordCount];
+        }
+
+        /// <summary>
+        /// Gets error messages for get all and filtering operation.
+        /// </summary>
+        /// <param name="localizer"></param>
+        /// <param name="keyContent"></param>
+        /// <returns></returns>
+        public static string GetErrorMessageForFiltering(this IStringLocalizer localizer, string keyContent)
+        {
+            var localizedEntityName = localizer[$"LocalizedEntityName{keyContent}"].ToString().ToLowerInvariant();
+            return localizer["FilteredWasNotFound", localizedEntityName];
+        }
+
+        /// <summary>
+        /// Gets error messages for get by id operation.
+        /// </summary>
+        /// <param name="localizer"></param>
+        /// <param name="keyContent"></param>
+        /// <returns></returns>
+        public static string GetErrorMessageForGetById(this IStringLocalizer localizer, string keyContent)
+        {
+            var localizedEntityName = localizer[$"LocalizedEntityName{keyContent}"].ToString().ToUpperInVariantFirst();
+            return localizer["ControllersSingleObjectWasNotFound", localizedEntityName];
+        }
+
+        /// <summary>
+        /// Gets success messages for adding operation.
+        /// </summary>
+        /// <param name="localizer"></param>
+        /// <param name="keyContent"></param>
+        /// <returns></returns>
+        public static string GetSuccessMessageForAdd(this IStringLocalizer localizer, string keyContent)
+        {
+            var localizedEntityName = localizer[$"LocalizedEntityName{keyContent}"].ToString().ToUpperInVariantFirst();
+            return localizer["SuccessfullyAdded", localizedEntityName];
+        }
+
+        /// <summary>
+        /// Gets success messages for updating operation.
+        /// </summary>
+        /// <param name="localizer"></param>
+        /// <param name="keyContent"></param>
+        /// <returns></returns>
+        public static string GetSuccessMessageForUpdate(this IStringLocalizer localizer, string keyContent)
+        {
+            var localizedEntityName = localizer[$"LocalizedEntityName{keyContent}"].ToString().ToUpperInVariantFirst();
+            return localizer["SuccessfullyUpdated", localizedEntityName];
+        }
+
+        /// <summary>
+        /// Gets error messages for deleting operation.
+        /// </summary>
+        /// <param name="localizer"></param>
+        /// <param name="keyContent"></param>
+        /// <returns></returns>
+        public static string GetErrorMessageForDelete(this IStringLocalizer localizer, string keyContent)
+        {
+            var localizedEntityName = localizer[$"LocalizedEntityName{keyContent}"].ToString().ToLowerInVariantFirst();
+            return localizer["NoEntityToBeDeleted", localizedEntityName];
+        }
+
+        /// <summary>
+        /// Gets success messages for deleting operation.
+        /// </summary>
+        /// <param name="localizer"></param>
+        /// <param name="keyContent"></param>
+        /// <returns></returns>
+        public static string GetSucccesMessageForDelete(this IStringLocalizer localizer, string keyContent)
+        {
+            var localizedEntityName = localizer[$"LocalizedEntityName{keyContent}"].ToString().ToUpperInVariantFirst();
+            return localizer["SuccessfullyDeleted", localizedEntityName];
+        }
+
+        /// <summary>
+        /// Gets success messages for get all operation.
+        /// </summary>
+        /// <param name="localizer"></param>
+        /// <param name="keyContent"></param>
+        /// <returns></returns>
+        public static string GetMessageForSpecifiedProcess(this IStringLocalizer localizer, string keyContent) => localizer[keyContent].ToString();
+
+        #endregion
+
 
     }
 }

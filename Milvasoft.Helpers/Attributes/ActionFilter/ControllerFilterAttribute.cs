@@ -35,6 +35,11 @@ namespace Milvasoft.Helpers.Attributes.ActionFilter
         /// </summary>
         public Type AssemblyTypeForNestedProps { get; set; }
 
+        /// <summary>
+        /// Folder assembly name for disable nested type prop validations.
+        /// </summary>
+        public string DTOFolderAssemblyName{ get; set; }
+
         #endregion
 
         /// <summary>
@@ -86,21 +91,22 @@ namespace Milvasoft.Helpers.Attributes.ActionFilter
                     {
                         var assembly = Assembly.GetAssembly(AssemblyTypeForNestedProps);
 
-                        var dtoType = assembly.GetExportedTypes().ToList().FirstOrDefault(i => i.FullName.Contains("Opsiyon.API.DTOs")
+                        var dtoType = assembly?.GetExportedTypes()?.ToList()?.FirstOrDefault(i => i.FullName.Contains(DTOFolderAssemblyName)
                                                                                                     && (i.Name == $"{nestedProp}DTO"
-                                                                                                    || i.Name == $"{nestedProp.Remove(nestedProp.Length - 1, 1)}DTO"));
-
-                        var dtoProps = dtoType.GetProperties().ToList();
-
-                        dtoProps.RemoveAll(i => i.Name.Contains("Id"));
-
-                        foreach (var entityProp in dtoProps)
+                                                                                                         || i.Name == $"{nestedProp.Remove(nestedProp.Length - 1, 1)}DTO"));
+                        if (dtoType != null)
                         {
-                            if (entityProp.CustomAttributes.Count() != 0)
-                                if (httpContext.Items[entityProp.Name] != null)
-                                    errors.Remove(httpContext.Items[entityProp.Name].ToString());
-                        }
+                            var dtoProps = dtoType.GetProperties().ToList();
 
+                            dtoProps.RemoveAll(i => i.Name.Contains("Id"));
+
+                            foreach (var entityProp in dtoProps)
+                            {
+                                if (entityProp.CustomAttributes.Count() != 0)
+                                    if (httpContext.Items[entityProp.Name] != null)
+                                        errors.Remove(httpContext.Items[entityProp.Name].ToString());
+                            }
+                        }
                     }
                 }
 
