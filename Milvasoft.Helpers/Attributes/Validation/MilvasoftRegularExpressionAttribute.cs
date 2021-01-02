@@ -77,49 +77,61 @@ namespace Milvasoft.Helpers.Attributes.Validation
             var assemblyName = new AssemblyName(_resourceType.GetTypeInfo().Assembly.FullName);
             var sharedLocalizer = localizerFactory.Create("SharedResource", assemblyName.Name);
 
-            var localizedPropName = sharedLocalizer[$"Localized{MemberNameLocalizerKey ?? context.MemberName}"];
+            var localizedPropName = sharedLocalizer == null ? context.MemberName : sharedLocalizer[$"Localized{MemberNameLocalizerKey ?? context.MemberName}"];
 
             var httpContext = context.GetService<IHttpContextAccessor>().HttpContext;//TODO http contexte items eklenecek mi ?
 
-            if (IsRequired)
+            if (sharedLocalizer != null)
             {
-                if (value != null && !string.IsNullOrEmpty(value.ToString()))
+                if (IsRequired)
                 {
-                    var localizedPattern = sharedLocalizer[$"RegexPattern{MemberNameLocalizerKey ?? context.MemberName}"];
+                    if (value != null && !string.IsNullOrEmpty(value.ToString()))
+                    {
+                        var localizedPattern = sharedLocalizer[$"RegexPattern{MemberNameLocalizerKey ?? context.MemberName}"];
 
-                    if (RegexMatcher.MatchRegex(value.ToString(), sharedLocalizer[localizedPattern]))
-                        return ValidationResult.Success;
+                        if (RegexMatcher.MatchRegex(value.ToString(), sharedLocalizer[localizedPattern]))
+                            return ValidationResult.Success;
+                        else
+                        {
+                            var exampleFormat = sharedLocalizer[ExampleFormatLocalizerKey ?? $"RegexExample{context.MemberName}"];
+                            ErrorMessage = sharedLocalizer["RegexErrorMessage", localizedPropName, exampleFormat];
+                            return new ValidationResult(FormatErrorMessage(""));
+                        }
+                    }
                     else
                     {
-                        var exampleFormat = sharedLocalizer[ExampleFormatLocalizerKey ?? $"RegexExample{context.MemberName}"];
-                        ErrorMessage = sharedLocalizer["RegexErrorMessage", localizedPropName, exampleFormat];
+                        ErrorMessage = sharedLocalizer["PropertyIsRequired", localizedPropName];
                         return new ValidationResult(FormatErrorMessage(""));
                     }
                 }
                 else
                 {
-                    ErrorMessage = sharedLocalizer["PropertyIsRequired", localizedPropName];
-                    return new ValidationResult(FormatErrorMessage(""));
+                    if (value != null && !string.IsNullOrEmpty(value.ToString()))
+                    {
+                        var localizedPattern = sharedLocalizer[$"RegexPattern{MemberNameLocalizerKey ?? context.MemberName}"];
+
+                        if (RegexMatcher.MatchRegex(value.ToString(), sharedLocalizer[localizedPattern]))
+                            return ValidationResult.Success;
+                        else
+                        {
+                            var exampleFormat = sharedLocalizer[ExampleFormatLocalizerKey ?? $"RegexExample{context.MemberName}"];
+                            ErrorMessage = sharedLocalizer["RegexErrorMessage", localizedPropName, exampleFormat];
+                            return new ValidationResult(FormatErrorMessage(""));
+                        }
+                    }
+                    else
+                    {
+                        return ValidationResult.Success;
+                    }
                 }
             }
             else
             {
-                if (value != null && !string.IsNullOrEmpty(value.ToString()))
-                {
-                    var localizedPattern = sharedLocalizer[$"RegexPattern{MemberNameLocalizerKey ?? context.MemberName}"];
-
-                    if (RegexMatcher.MatchRegex(value.ToString(), sharedLocalizer[localizedPattern]))
-                        return ValidationResult.Success;
-                    else
-                    {
-                        var exampleFormat = sharedLocalizer[ExampleFormatLocalizerKey ?? $"RegexExample{context.MemberName}"];
-                        ErrorMessage = sharedLocalizer["RegexErrorMessage", localizedPropName, exampleFormat];
-                        return new ValidationResult(FormatErrorMessage(""));
-                    }
-                }
+                if (base.IsValid(value)) return ValidationResult.Success;
                 else
                 {
-                    return ValidationResult.Success;
+                    ErrorMessage = $"Please enter a valid{context.MemberName}";
+                    return new ValidationResult(FormatErrorMessage(""));
                 }
             }
 
