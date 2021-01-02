@@ -145,7 +145,8 @@ namespace Milvasoft.FormFileOperations
                                                                              FilesFolderNameCreator folderNameCreator,
                                                                              string propertyName)
         {
-            if (files.IsNullOrEmpty()) throw new ArgumentNullException("Files list cannot be empty!");
+            if (files.IsNullOrEmpty()) throw new ArgumentNullException("Files list cannot be empty!");//TODO return null or empty list?
+
             //Gets file extension.
             var fileExtension = Path.GetExtension(files.First().FileName);
 
@@ -320,12 +321,15 @@ namespace Milvasoft.FormFileOperations
         public static async Task<IFormFile> GetFileFromPathAsync(string path, FileType fileType)
         {
             var memory = new MemoryStream();
+
             if (string.IsNullOrEmpty(path))
                 return null;
+
             using (var stream = new FileStream(path, FileMode.Open))
             {
                 await stream.CopyToAsync(memory).ConfigureAwait(false);
             }
+
             memory.Position = 0;
 
             var file = new FormFile(memory, 0, memory.Length, fileType.ToString(), Path.GetFileName(path))
@@ -333,6 +337,7 @@ namespace Milvasoft.FormFileOperations
                 Headers = new HeaderDictionary(),
                 ContentType = GetContentType(path)
             };
+
             return file;
         }
 
@@ -363,10 +368,9 @@ namespace Milvasoft.FormFileOperations
         /// <param name="filePaths"></param>
         public static void RemoveFilesByPath(List<string> filePaths)
         {
-            foreach (var filePath in filePaths)
-            {
-                if (File.Exists(filePath)) File.Delete(filePath);
-            }
+            if (!filePaths.IsNullOrEmpty())
+                foreach (var filePath in filePaths)
+                    if (File.Exists(filePath)) File.Delete(filePath);
         }
 
         /// <summary>
@@ -377,10 +381,11 @@ namespace Milvasoft.FormFileOperations
         {
             DirectoryInfo directory = new DirectoryInfo(folderPath);
 
-            foreach (FileInfo file in directory.EnumerateFiles())
-            {
-                file.Delete();
-            }
+            var files = directory != null ? directory.EnumerateFiles() : null;
+
+            if (!files.IsNullOrEmpty())
+                foreach (FileInfo file in files)
+                    file.Delete();
         }
 
         /// <summary>
@@ -392,9 +397,13 @@ namespace Milvasoft.FormFileOperations
         {
             DirectoryInfo directory = new DirectoryInfo(folderPath);
 
-            foreach (FileInfo file in directory.EnumerateFiles())
-                if (fileNames.Contains(file.Name))
-                    file.Delete();
+            var files = directory != null ? directory.EnumerateFiles() : null;
+
+            if (!files.IsNullOrEmpty())
+                foreach (FileInfo file in files)
+                    if (!fileNames.IsNullOrEmpty())
+                        if (fileNames.Contains(file.Name))
+                            file.Delete();
         }
 
         /// <summary>
@@ -405,10 +414,11 @@ namespace Milvasoft.FormFileOperations
         {
             DirectoryInfo directory = new DirectoryInfo(folderPath);
 
-            foreach (DirectoryInfo dir in directory.EnumerateDirectories())
-            {
-                dir.Delete(true);
-            }
+            var directories = directory != null ? directory.EnumerateDirectories() : null;
+
+            if (!directories.IsNullOrEmpty())
+                foreach (DirectoryInfo dir in directories)
+                    dir.Delete(true);
         }
 
         /// <summary>
@@ -419,10 +429,13 @@ namespace Milvasoft.FormFileOperations
         public static void RemoveDirectoriesInFolder(string folderPath, List<string> directoryNames)
         {
             DirectoryInfo directory = new DirectoryInfo(folderPath);
+            var directories = directory != null ? directory.EnumerateDirectories() : null;
 
-            foreach (DirectoryInfo dir in directory.EnumerateDirectories())
-                if (directoryNames.Contains(dir.Name))
-                    dir.Delete(true);
+            if (!directories.IsNullOrEmpty())
+                foreach (DirectoryInfo dir in directory.EnumerateDirectories())
+                    if (!directoryNames.IsNullOrEmpty())
+                        if (directoryNames.Contains(dir.Name))
+                            dir.Delete(true);
         }
 
         /// <summary>
@@ -433,11 +446,15 @@ namespace Milvasoft.FormFileOperations
         {
             DirectoryInfo directory = new DirectoryInfo(folderPath);
 
-            foreach (FileInfo file in directory.EnumerateFiles())
-                file.Delete();
+            if (directory != null)
+            {
+                foreach (FileInfo file in directory.EnumerateFiles())
+                    file.Delete();
 
-            foreach (DirectoryInfo dir in directory.EnumerateDirectories())
-                dir.Delete(true);
+                foreach (DirectoryInfo dir in directory.EnumerateDirectories())
+                    dir.Delete(true);
+            }
+
         }
 
 
@@ -450,15 +467,22 @@ namespace Milvasoft.FormFileOperations
         public static string RenameFolderAndFileName(string oldPath, Guid newId)
         {
             var oldFolderPath = Directory.GetParent(oldPath).FullName;
+
             if (!Directory.Exists(oldFolderPath))
                 return "";
 
             var parentFolderPathOfOriginalFile = Directory.GetParent(oldPath).Parent.FullName;
+
             var newFolderPath = Path.Combine(parentFolderPathOfOriginalFile, $"{newId}");
+
             var newFilePath = Path.Combine(newFolderPath, $"{newId}{Path.GetExtension(oldPath)}");
+
             Directory.CreateDirectory(newFolderPath);
+
             File.Move(oldPath, newFilePath);
+
             Directory.Delete(oldFolderPath, true);
+
             return newFilePath;
         }
 
