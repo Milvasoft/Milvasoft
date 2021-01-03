@@ -27,15 +27,13 @@ namespace Milvasoft.Helpers.Identity.Concrete
     /// <typeparam name="TRole"></typeparam>
     /// <typeparam name="TKey"></typeparam>
     /// <typeparam name="TLoginResultDTO"></typeparam>
-    /// <typeparam name="TSignUpDTO"></typeparam>
-    public class IdentityOperations<TUserManager, TDbContext, TLocalizer, TUser, TRole, TKey, TLoginResultDTO, TSignUpDTO> : IIdentityOperations<TUserManager, TDbContext, TLocalizer, TUser, TRole, TKey, TLoginResultDTO, TSignUpDTO>
+    public class IdentityOperations<TUserManager, TDbContext, TLocalizer, TUser, TRole, TKey, TLoginResultDTO> : IIdentityOperations<TUserManager, TDbContext, TLocalizer, TUser, TRole, TKey, TLoginResultDTO>
        where TUser : IdentityUser<TKey>, IBaseIndelibleEntity<Guid>, new()
        where TRole : IdentityRole<TKey>
        where TKey : IEquatable<TKey>
        where TDbContext : IdentityDbContext<TUser, TRole, TKey>
        where TUserManager : UserManager<TUser>
        where TLoginResultDTO : class, ILoginResultDTO, new()
-       where TSignUpDTO : class, ISignUpDTO
        where TLocalizer : IStringLocalizer
     {
 
@@ -99,7 +97,7 @@ namespace Milvasoft.Helpers.Identity.Concrete
         /// <param name="userValidation"></param>
         /// <returns></returns>
         public virtual async Task<TLoginResultDTO> SignInAsync(ILoginDTO loginDTO,
-                                                               IIdentityOperations<TUserManager, TDbContext, TLocalizer, TUser, TRole, TKey, TLoginResultDTO, TSignUpDTO>.UserValidation userValidation)
+                                                               IIdentityOperations<TUserManager, TDbContext, TLocalizer, TUser, TRole, TKey, TLoginResultDTO>.UserValidation userValidation)
         {
             TUser user = new TUser();
 
@@ -152,7 +150,7 @@ namespace Milvasoft.Helpers.Identity.Concrete
         /// <returns></returns>
         public virtual async Task<TLoginResultDTO> SignInAsync(ILoginDTO loginDTO,
                                                                bool isUserType,
-                                                               IIdentityOperations<TUserManager, TDbContext, TLocalizer, TUser, TRole, TKey, TLoginResultDTO, TSignUpDTO>.UserValidationByUserType userValidationByUserType)
+                                                               IIdentityOperations<TUserManager, TDbContext, TLocalizer, TUser, TRole, TKey, TLoginResultDTO>.UserValidationByUserType userValidationByUserType)
         {
             TUser user = new TUser();
 

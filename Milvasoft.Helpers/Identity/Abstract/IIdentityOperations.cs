@@ -22,14 +22,13 @@ namespace Milvasoft.Helpers.Identity.Abstract
     /// <typeparam name="TKey"></typeparam>
     /// <typeparam name="TLoginResultDTO"></typeparam>
     /// <typeparam name="TSignUpDTO"></typeparam>
-    public interface IIdentityOperations<TUserManager, TDbContext, TLocalizer, TUser, TRole, TKey, TLoginResultDTO, TSignUpDTO>
+    public interface IIdentityOperations<TUserManager, TDbContext, TLocalizer, TUser, TRole, TKey, TLoginResultDTO>
        where TUser : IdentityUser<TKey>, IBaseIndelibleEntity<Guid>, new()
        where TRole : IdentityRole<TKey>
        where TKey : IEquatable<TKey>
        where TDbContext : IdentityDbContext<TUser, TRole, TKey>
        where TUserManager : UserManager<TUser>
        where TLoginResultDTO : class, ILoginResultDTO, new()
-       where TSignUpDTO : class, ISignUpDTO
        where TLocalizer : IStringLocalizer
     {
         #region Properties
