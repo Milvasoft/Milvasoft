@@ -1,188 +1,164 @@
 ﻿namespace Milvasoft.Helpers.Exceptions
 {
     /// <summary>
-    /// <para><b>EN: </b>Defines the OpsiyonErrorCode.</para>
-    /// <para><b>TR: </b>OpsiyonErrorCode'u tanımlar.</para>
+    /// Defines the MilvasoftExceptionCode.
     /// </summary>
     public enum MilvasoftExceptionCode
     {
         /// <summary>
-        /// <para><b>EN: </b> Defines the UnknownError.</para>
-        /// <para><b>TR: </b>UnknownError'yi tanımlar.</para>
+        /// Defines the UnknownError.
         /// </summary>
         UnknownError = 0,
 
         /// <summary>
-        /// <para><b>EN: </b> Defines the CannotFindEntity.</para>
-        /// <para><b>TR: </b>CannotFindEntity'yi tanımlar.</para>
+        /// Defines the CannotFindEntity.
         /// </summary>
         CannotFindEntity = 1,
 
         /// <summary>
-        /// <para><b>EN: </b> Defines the AddingNewEntityWithExsistId.</para>
-        /// <para><b>TR: </b>AddingNewEntityWithExsistId'yi tanımlar.</para>
+        /// Defines the AddingNewEntityWithExsistId.
         /// </summary>
         AddingNewEntityWithExsistId = 2,
 
         /// <summary>
-        /// <para><b>EN: </b> Defines the CannotBeAddedProduct.</para>
-        /// <para><b>TR: </b>CannotBeAddedProduct'yi tanımlar.</para>
+        /// Defines the CannotBeAddedProductToStock.
         /// </summary>
         CannotBeAddedProductToStock = 3,
 
         /// <summary>
-        /// <para><b>EN: </b> Defines the CannotAddTheEntitiesToAllOfRepositories.</para>
-        /// <para><b>TR: </b>CannotAddTheEntitiesToAllOfRepositories'yi tanımlar.</para>
+        /// Defines the CannotAddTheEntitiesToAllOfRepositories.
         /// </summary>
         CannotAddTheEntitiesToAllOfRepositories = 4,
 
         /// <summary>
-        /// <para><b>EN: </b> Defines the CannotFindEnumById.</para>
-        /// <para><b>TR: </b>CannotFindEnumById'yi tanımlar.</para>
+        /// Defines the CannotFindEnumById.
         /// </summary>
         CannotFindEnumById = 5,
 
         /// <summary>
-        /// <para><b>EN: </b> Defines the CannotStartRedisServer.</para>
-        /// <para><b>TR: </b>CannotStartRedisServer'yi tanımlar.</para>
+        /// Defines the CannotStartRedisServer.
         /// </summary>
         CannotStartRedisServer = 6,
 
         /// <summary>
-        /// <para><b>EN: </b> Defines the DeletingEntityWithRelations.</para>
-        /// <para><b>TR: </b>DeletingEntityWithRelations'yi tanımlar.</para>
+        /// Defines the DeletingEntityWithRelations.
         /// </summary>
         DeletingEntityWithRelations = 7,
 
         /// <summary>
-        /// <para><b>EN: </b> Defines the DeletingInvalidEntity.</para>
-        /// <para><b>TR: </b>DeletingInvalidEntity'yi tanımlar.</para>
+        /// Defines the DeletingInvalidEntity.
         /// </summary>
         DeletingInvalidEntity = 8,
 
         /// <summary>
-        /// <para><b>EN: </b> Defines the DeletingSupplierWithDebt.</para>
-        /// <para><b>TR: </b>DeletingSupplierWithDebt'yi tanımlar.</para>
+        /// Defines the DeletingSupplierWithDebt.
         /// </summary>
         DeletingSupplierWithDebt = 9,
 
         /// <summary>
-        /// <para><b>EN: </b> Defines the EmptyList.</para>
-        /// <para><b>TR: </b>EmptyList'yi tanımlar.</para>
+        /// Defines the EmptyList.
         /// </summary>
         EmptyList = 10,
 
         /// <summary>
-        /// <para><b>EN: </b> Defines the InvalidNumericValue.</para>
-        /// <para><b>TR: </b>InvalidNumericValue'yi tanımlar.</para>
+        /// Defines the InvalidNumericValue.
         /// </summary>
         InvalidNumericValue = 11,
 
         /// <summary>
-        /// <para><b>EN: </b> Defines the InvalidParameter.</para>
-        /// <para><b>TR: </b>InvalidParameter'yi tanımlar.</para>
+        /// Defines the InvalidParameter.
         /// </summary>
         InvalidParameter = 12,
 
         /// <summary>
-        /// <para><b>EN: </b> Defines the InvalidStringExpression.</para>
-        /// <para><b>TR: </b>InvalidStringExpression'yi tanımlar.</para>
+        /// Defines the InvalidStringExpression.
         /// </summary>
         InvalidStringExpression = 13,
 
         /// <summary>
-        /// <para><b>EN: </b> Defines the NullParameter.</para>
-        /// <para><b>TR: </b>NullParameter'yi tanımlar.</para>
+        /// Defines the NullParameter.
         /// </summary>
         NullParameter = 14,
 
         /// <summary>
-        /// <para><b>EN: </b> Defines the UnknownStockType.</para>
-        /// <para><b>TR: </b>UnknownStockType'yi tanımlar.</para>
+        /// Defines the UnknownStockType.
         /// </summary>
         UnknownStockType = 15,
 
         /// <summary>
-        /// <para><b>EN: </b> Defines the UpdatingInvalidEntity.</para>
-        /// <para><b>TR: </b>UpdatingInvalidEntity'yi tanımlar.</para>
+        /// Defines the UpdatingInvalidEntity.
         /// </summary>
         UpdatingInvalidEntity = 16,
 
         /// <summary>
-        /// Defines the NotLoggedInUserException.
+        /// Defines the NotLoggedInUser.
         /// </summary>
         NotLoggedInUser = 17,
 
         /// <summary>
-        /// Defines the NotLoggedInUserException.
+        /// Defines the AnotherLoginExists.
         /// </summary>
         AnotherLoginExists = 18,
 
         /// <summary>
-        /// <para><b>EN: </b> Defines the UpdatingInvalidEntity.</para>
-        /// <para><b>TR: </b>UpdatingInvalidEntity'yi tanımlar.</para>
+        /// Defines the OldVersion.
         /// </summary>
         OldVersion = 19,
 
         /// <summary>
-        /// <para><b>EN: </b> Defines the UpdatingInvalidEntity.</para>
-        /// <para><b>TR: </b>UpdatingInvalidEntity'yi tanımlar.</para>
+        /// Defines the InvalidLicence.
         /// </summary>
         InvalidLicence = 20,
 
         /// <summary>
-        /// <para><b>EN: </b> Defines the UpdatingInvalidEntity.</para>
-        /// <para><b>TR: </b>UpdatingInvalidEntity'yi tanımlar.</para>
+        /// Defines the ExpiredDemo.
         /// </summary>
         ExpiredDemo = 21,
 
         /// <summary>
-        /// <para><b>EN: </b>Defines the NeedForceOperation.</para>
-        /// <para><b>TR: </b>NeedForceOperation'yi tanımlar.</para>
+        /// Defines the NeedForceOperation.
         /// </summary>
         NeedForceOperation = 22,
 
         /// <summary>
-        /// <para><b>EN: </b>Defines the NeedForceOperation.</para>
-        /// <para><b>TR: </b>NeedForceOperation'yi tanımlar.</para>
+        /// Defines the OutOfStock.
         /// </summary>
         OutOfStock = 23,
 
         /// <summary>
-        /// <para><b>EN: </b>Defines the NeedForceOperation.</para>
-        /// <para><b>TR: </b>NeedForceOperation'yi tanımlar.</para>
+        /// Defines the InvalidMateralDeficit.
         /// </summary>
         InvalidMateralDeficit = 24,
 
         /// <summary>
-        /// <para><b>EN: </b> Defines the CannotUpdateOrDeleteDefaultRecord.</para>
-        /// <para><b>TR: </b> CannotUpdateOrDeleteDefaultRecord'yi tanımlar.</para>
+        /// Defines the CannotUpdateOrDeleteDefaultRecord.
         /// </summary>
         CannotUpdateOrDeleteDefaultRecord = 25,
 
         /// <summary>
-        /// <para><b>EN: </b> Defines the CannotUpdateOrDeleteDefaultRecord.</para>
-        /// <para><b>TR: </b> CannotUpdateOrDeleteDefaultRecord'yi tanımlar.</para>
+        /// Defines the ValidationError.
         /// </summary>
         ValidationError = 26,
 
         /// <summary>
-        /// <para><b>EN: </b> Defines the CannotUpdateOrDeleteDefaultRecord.</para>
-        /// <para><b>TR: </b> CannotUpdateOrDeleteDefaultRecord'yi tanımlar.</para>
+        /// Defines the GeneralException.
         /// </summary>
         GeneralException = 27,
 
         /// <summary>
-        /// <para><b>EN: </b> Defines the CannotUpdateOrDeleteDefaultRecord.</para>
-        /// <para><b>TR: </b> CannotUpdateOrDeleteDefaultRecord'yi tanımlar.</para>
+        /// Defines the InvalidRelatedProcess.
         /// </summary>
         InvalidRelatedProcess = 28,
 
         /// <summary>
-        /// <para><b>EN: </b> Defines the CannotUpdateOrDeleteDefaultRecord.</para>
-        /// <para><b>TR: </b> CannotUpdateOrDeleteDefaultRecord'yi tanımlar.</para>
+        /// Defines the FeatureNotImplementedException.
         /// </summary>
-        FeatureNotImplementedException = 29
+        FeatureNotImplementedException = 29,
+
+        /// <summary>
+        /// Defines the IdentityResultException.
+        /// </summary>
+        IdentityResultException = 30
 
     }
 }
