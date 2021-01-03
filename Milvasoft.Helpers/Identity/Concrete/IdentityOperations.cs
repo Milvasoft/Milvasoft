@@ -95,9 +95,11 @@ namespace Milvasoft.Helpers.Identity.Concrete
         /// </summary>
         /// <param name="loginDTO"></param>
         /// <param name="userValidation"></param>
+        /// <param name="tokenExpiredDate"></param>
         /// <returns></returns>
         public virtual async Task<TLoginResultDTO> SignInAsync(ILoginDTO loginDTO,
-                                                               IIdentityOperations<TUserManager, TDbContext, TLocalizer, TUser, TRole, TKey, TLoginResultDTO>.UserValidation userValidation)
+                                                               IIdentityOperations<TUserManager, TDbContext, TLocalizer, TUser, TRole, TKey, TLoginResultDTO>.UserValidation userValidation,
+                                                               DateTime tokenExpiredDate)
         {
             TUser user = new TUser();
 
@@ -114,7 +116,7 @@ namespace Milvasoft.Helpers.Identity.Concrete
             if (signInResult.Succeeded)
             {
                 //Token username,IsPersonnel ve rollere göre üretilir
-                loginResult.Token = await GenerateTokenWithRoleAsync(user: user).ConfigureAwait(false);
+                loginResult.Token = await GenerateTokenWithRoleAsync(user: user, tokenExpiredDate).ConfigureAwait(false);
 
                 //Bu kullanici daha once token almissa o token silinip yerine yeni alinmis token yazilir.
                 if (SignedInUsers.SignedInUserTokens.ContainsKey(user.UserName))
@@ -147,10 +149,12 @@ namespace Milvasoft.Helpers.Identity.Concrete
         /// <param name="loginDTO"></param>
         /// <param name="isUserType"></param>
         /// <param name="userValidationByUserType"></param>
+        /// <param name="tokenExpiredDate"></param>
         /// <returns></returns>
         public virtual async Task<TLoginResultDTO> SignInAsync(ILoginDTO loginDTO,
                                                                bool isUserType,
-                                                               IIdentityOperations<TUserManager, TDbContext, TLocalizer, TUser, TRole, TKey, TLoginResultDTO>.UserValidationByUserType userValidationByUserType)
+                                                               IIdentityOperations<TUserManager, TDbContext, TLocalizer, TUser, TRole, TKey, TLoginResultDTO>.UserValidationByUserType userValidationByUserType,
+                                                               DateTime tokenExpiredDate)
         {
             TUser user = new TUser();
 
@@ -167,7 +171,7 @@ namespace Milvasoft.Helpers.Identity.Concrete
             if (signInResult.Succeeded)
             {
                 //Token username,IsPersonnel ve rollere göre üretilir
-                loginResult.Token = await GenerateTokenWithRoleAsync(user: user).ConfigureAwait(false);
+                loginResult.Token = await GenerateTokenWithRoleAsync(user: user, tokenExpiredDate).ConfigureAwait(false);
 
                 //Bu kullanici daha once token almissa o token silinip yerine yeni alinmis token yazilir.
                 if (SignedInUsers.SignedInUserTokens.ContainsKey(user.UserName))
@@ -441,12 +445,13 @@ namespace Milvasoft.Helpers.Identity.Concrete
         /// Roll is added according to user type and token is produced.
         /// </summary>
         /// <param name="user"></param>
+        /// <param name="tokenExpiredDate"></param>
         /// <returns></returns>
-        public virtual async Task<string> GenerateTokenWithRoleAsync(TUser user)
+        public virtual async Task<string> GenerateTokenWithRoleAsync(TUser user,DateTime tokenExpiredDate)
         {
             var roles = await _userManager.GetRolesAsync(user).ConfigureAwait(false);
 
-            string newToken = GenerateToken(username: user.UserName, roles: roles);
+            string newToken = GenerateToken(username: user.UserName, roles: roles, tokenExpiredDate);
 
             _contextRepository.InitializeUpdating<TUser, Guid>(user);
 
@@ -468,7 +473,7 @@ namespace Milvasoft.Helpers.Identity.Concrete
         /// <summary>
         /// If Authentication is successful, JWT tokens are generated.
         /// </summary>
-        public virtual string GenerateToken(string username, IList<string> roles)
+        public virtual string GenerateToken(string username, IList<string> roles, DateTime tokenExpiredDate)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
 
@@ -478,10 +483,8 @@ namespace Milvasoft.Helpers.Identity.Concrete
             //Kullanıcını UserName 'i tokena claim olarak ekleniyor
             claimsIdentityList.AddClaim(new Claim(ClaimTypes.Name, username));
 
-            var expiredTime = DateTime.Now.AddDays(1);
-
             //Kullanıcını UserName 'i tokena claim olarak ekleniyor
-            claimsIdentityList.AddClaim(new Claim(ClaimTypes.Expired, value: expiredTime.ToString()));
+            claimsIdentityList.AddClaim(new Claim(ClaimTypes.Expired, value: tokenExpiredDate.ToString()));
 
             //Token üretimi için gerekli bilgiler , _tokenManagement => appsettings.json dosyasını okur
             var tokenDescriptor = new SecurityTokenDescriptor
@@ -489,7 +492,7 @@ namespace Milvasoft.Helpers.Identity.Concrete
                 Subject = claimsIdentityList,
                 Issuer = _tokenManagement.Issuer,
                 Audience = _tokenManagement.Audience,
-                Expires = expiredTime,
+                Expires = tokenExpiredDate,
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(Encoding.ASCII.GetBytes(_tokenManagement.Secret)), SecurityAlgorithms.HmacSha256Signature)
             };
 

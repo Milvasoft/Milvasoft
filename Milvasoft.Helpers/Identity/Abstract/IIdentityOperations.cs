@@ -67,8 +67,9 @@ namespace Milvasoft.Helpers.Identity.Abstract
         /// </summary>
         /// <param name="loginDTO"></param>
         /// <param name="userValidation"></param>
+        /// <param name="tokenExpiredDate"></param>
         /// <returns></returns>
-        Task<TLoginResultDTO> SignInAsync(ILoginDTO loginDTO, UserValidation userValidation);
+        Task<TLoginResultDTO> SignInAsync(ILoginDTO loginDTO, UserValidation userValidation,DateTime tokenExpiredDate);
 
         /// <summary>
         /// Signs in for incoming user. Returns a token if login informations are valid or the user is not lockedout. Otherwise returns the error list.
@@ -76,8 +77,9 @@ namespace Milvasoft.Helpers.Identity.Abstract
         /// <param name="loginDTO"></param>
         /// <param name="isUserType"></param>
         /// <param name="userValidationByUserType"></param>
+        /// <param name="tokenExpiredDate"></param>
         /// <returns></returns>
-        Task<TLoginResultDTO> SignInAsync(ILoginDTO loginDTO, bool isUserType, UserValidationByUserType userValidationByUserType);
+        Task<TLoginResultDTO> SignInAsync(ILoginDTO loginDTO, bool isUserType, UserValidationByUserType userValidationByUserType, DateTime tokenExpiredDate);
 
         /// <summary>
         /// Signs out from database. Returns null if already signed out.
@@ -155,13 +157,14 @@ namespace Milvasoft.Helpers.Identity.Abstract
         /// Roll is added according to user type and token is produced.
         /// </summary>
         /// <param name="user"></param>
+        /// <param name="tokenExpiredDate"></param>
         /// <returns></returns>
-        Task<string> GenerateTokenWithRoleAsync(TUser user);
+        Task<string> GenerateTokenWithRoleAsync(TUser user, DateTime tokenExpiredDate);
 
         /// <summary>
         /// If Authentication is successful, JWT tokens are generated.
         /// </summary>
-        string GenerateToken(string username, IList<string> roles);
+        string GenerateToken(string username, IList<string> roles, DateTime tokenExpiredDate);
 
         /// <summary>
         /// Decode Process of Token returns the time inside by Decoding the Token
