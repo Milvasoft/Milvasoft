@@ -4,35 +4,32 @@ using System;
 namespace Milvasoft.Helpers.Exceptions
 {
     /// <summary>
-    /// <para><b>EN: </b>The exception that is thrown when attempt to get enum by invalid id.</para>
-    /// <para><b>TR: </b>Geçersiz id ile numaralandırma girişiminde bulunulduğunda ortaya çıkan istisna.</para>
+    /// The exception that is thrown when attempt to get enum by invalid id.
     /// </summary>
     public class InvalidParameterException : MilvasoftBaseException
     {
         /// <summary>
-        /// <para><b>EN: </b>Initializes a new instance of the <c>InvalidParameter.CannotStartRedisServer</c> class.</para>
-        /// <para><b>TR: </b><c> ABKExceptionLibrary.InvalidParameter </c> sınıfının yeni bir örneğini başlatır.</para>
+        /// Initializes a new instance of the <see cref="InvalidParameterException"/> class.
         /// </summary>
+        /// <param name="localizer"></param>
         public InvalidParameterException(IStringLocalizer localizer) : base(localizer["InvalidParameterException"])
         {
             ErrorCode = (int)MilvasoftExceptionCode.InvalidParameter;
         }
 
         /// <summary>
-        /// <para><b>EN: </b>Initializes a new instance of the <c>ABKExceptionLibrary.InvalidParameter</c> class  with a specified error message.</para>
-        /// <para><b>TR: </b>Belirtilen bir hata mesajıyla <c> ABKExceptionLibrary.InvalidParameter </c> sınıfının yeni bir örneğini başlatır.</para>
+        /// Initializes a new instance of the <see cref="InvalidParameterException"/> class  with a specified error message.
         /// </summary>
-        /// <param name="message"></param>
+        /// <param name="customMessage"></param>
         /// <param name="localizer"></param>
-        public InvalidParameterException(IStringLocalizer localizer, string message) : base(localizer["InvalidParameterException", message])
+        public InvalidParameterException(IStringLocalizer localizer, string customMessage) : base(localizer["InvalidParameterException", customMessage])
         {
             ErrorCode = (int)MilvasoftExceptionCode.InvalidParameter;
         }
 
 
         /// <summary>
-        /// <para><b>EN: </b>Initializes a new instance of the <c>ABKExceptionLibrary.AddingNewEntityWithExistsIdException</c> class with a specified error message.</para>
-        /// <para><b>TR: </b>Belirtilen bir hata mesajı ile <c> ABKExceptionLibrary.AddingNewEntityWithExistsIdException </c> sınıfının yeni bir örneğini başlatır.</para>
+        /// Initializes a new instance of the <see cref="InvalidParameterException"/> class with a specified error message.
         /// </summary>
         /// <summary>
         /// 
@@ -44,12 +41,11 @@ namespace Milvasoft.Helpers.Exceptions
         }
 
         /// <summary>
-        /// <para><b>EN: </b>Initializes a new instance of the <c>ABKExceptionLibrary.InvalidParameter</c> class  with a specified error message.</para>
-        /// <para><b>TR: </b>Belirtilen bir hata mesajıyla <c> ABKExceptionLibrary.InvalidParameter </c> sınıfının yeni bir örneğini başlatır.</para>
+        /// Initializes a new instance of the <see cref="InvalidParameterException"/> class  with a specified error message.
         /// </summary>
-        /// <param name="message"></param>
+        /// <param name="customMessage"></param>
         /// <param name="innerException"></param>
-        public InvalidParameterException(string message, Exception innerException) : base("Message : " + $"{message}" + " Inner Exception : " + $"{innerException}")
+        public InvalidParameterException(string customMessage, Exception innerException) : base("Message : " + $"{customMessage}" + " Inner Exception : " + $"{innerException}")
         {
             ErrorCode = (int)MilvasoftExceptionCode.InvalidParameter;
         }

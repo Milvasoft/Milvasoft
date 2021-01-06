@@ -116,7 +116,7 @@ namespace Milvasoft.Helpers.Attributes.ActionFilter
                             errors.Remove(httpContext.Items[prop].ToString());
 
                 if (!errors.IsNullOrEmpty())
-                    base.OnActionExecuting(RewriteResponseAsync(string.Join(",", errors)).Result);
+                    base.OnActionExecuting(RewriteResponseAsync(string.Join("~", errors)).Result);
             }
         }
 

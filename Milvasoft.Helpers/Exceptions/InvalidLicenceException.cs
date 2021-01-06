@@ -4,23 +4,21 @@ using System;
 namespace Milvasoft.Helpers.Exceptions
 {
     /// <summary>
-    /// <para><b>EN: </b>The exception that is thrown when attempt to do operation with null objects.</para>
-    /// <para><b>TR: </b>Boş nesnelerle işlem yapılmaya çalışıldığında ortaya çıkan istisna.</para>
+    /// The exception that is thrown when attempt to do operation with null objects.
     /// </summary>
     public class InvalidLicenceException : MilvasoftBaseException
     {
         /// <summary>
-        /// <para><b>EN: </b>Initializes a new instance of the <c>ABKExceptionLibrary.NullParameterException</c> class.</para>
-        /// <para><b>TR: </b><c> ABKExceptionLibrary.NullParameterException </c> sınıfının yeni bir örneğini başlatır.</para>
+        /// Initializes a new instance of the <see cref="InvalidLicenceException"/> class.
         /// </summary>
+        /// <param name="localizer"></param>
         public InvalidLicenceException(IStringLocalizer localizer) : base(localizer["InvalidLicenceException"])
         {
             ErrorCode = (int)MilvasoftExceptionCode.InvalidLicence;
         }
 
         /// <summary>
-        /// <para><b>EN: </b>Initializes a new instance of the <c>ABKExceptionLibrary.NullParameterException</c> class  with a specified error message.</para>
-        /// <para><b>TR: </b>Belirtilen bir hata mesajıyla <c> ABKExceptionLibrary.NullParameterException </c> sınıfının yeni bir örneğini başlatır.</para>
+        /// Initializes a new instance of the <see cref="InvalidLicenceException"/> class  with a specified error message.
         /// </summary>
         /// <param name="customMessage"></param>
         public InvalidLicenceException(string customMessage) : base(customMessage)
@@ -29,8 +27,7 @@ namespace Milvasoft.Helpers.Exceptions
         }
 
         /// <summary>
-        /// <para><b>EN: </b> Initializes a new instance of the <c>ABKExceptionLibrary.NullParameterException</c> class  with a specified error message and a reference to the inner exception that is the cause of this exception.</para>
-        /// <para><b>TR: </b><c> ABKExceptionLibrary.NullParameterException </c> sınıfının yeni bir örneğini, belirtilen bir hata iletisiyle ve bu istisnanın nedeni olan iç özel duruma bir başvuruyla nitelleştirir.</para>
+        /// Initializes a new instance of the <see cref="InvalidLicenceException"/> class  with a specified error message and a reference to the inner exception that is the cause of this exception.
         /// </summary>
         /// <param name="customMessage"></param>
         /// <param name="innerException"></param>

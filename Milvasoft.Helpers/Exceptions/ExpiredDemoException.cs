@@ -4,23 +4,21 @@ using System;
 namespace Milvasoft.Helpers.Exceptions
 {
     /// <summary>
-    /// <para><b>EN: </b>The exception that is thrown when attempt to do operation with null objects.</para>
-    /// <para><b>TR: </b>Boş nesnelerle işlem yapılmaya çalışıldığında ortaya çıkan istisna.</para>
+    /// The exception that is thrown when attempt to do operation with null objects.
     /// </summary>
     public class ExpiredDemoException : MilvasoftBaseException
     {
         /// <summary>
-        /// <para><b>EN: </b>Initializes a new instance of the <c>ABKExceptionLibrary.NullParameterException</c> class.</para>
-        /// <para><b>TR: </b><c> ABKExceptionLibrary.NullParameterException </c> sınıfının yeni bir örneğini başlatır.</para>
+        /// Initializes a new instance of the <see cref="ExpiredDemoException"/> class.
         /// </summary>
+        /// <param name="localizer"></param>
         public ExpiredDemoException(IStringLocalizer localizer) : base(localizer["ExpiredDemoException"])
         {
             ErrorCode = (int)MilvasoftExceptionCode.ExpiredDemo;
         }
 
         /// <summary>
-        /// <para><b>EN: </b>Initializes a new instance of the <c>ABKExceptionLibrary.NullParameterException</c> class  with a specified error message.</para>
-        /// <para><b>TR: </b>Belirtilen bir hata mesajıyla <c> ABKExceptionLibrary.NullParameterException </c> sınıfının yeni bir örneğini başlatır.</para>
+        /// Initializes a new instance of the <see cref="ExpiredDemoException"/> class  with a specified error message.
         /// </summary>
         /// <param name="customMessage"></param>
         public ExpiredDemoException(string customMessage) : base(customMessage)
@@ -29,8 +27,7 @@ namespace Milvasoft.Helpers.Exceptions
         }
 
         /// <summary>
-        /// <para><b>EN: </b> Initializes a new instance of the <c>ABKExceptionLibrary.NullParameterException</c> class  with a specified error message and a reference to the inner exception that is the cause of this exception.</para>
-        /// <para><b>TR: </b><c> ABKExceptionLibrary.NullParameterException </c> sınıfının yeni bir örneğini, belirtilen bir hata iletisiyle ve bu istisnanın nedeni olan iç özel duruma bir başvuruyla nitelleştirir.</para>
+        /// Initializes a new instance of the <see cref="ExpiredDemoException"/> class  with a specified error message and a reference to the inner exception that is the cause of this exception.
         /// </summary>
         /// <param name="customMessage"></param>
         /// <param name="innerException"></param>

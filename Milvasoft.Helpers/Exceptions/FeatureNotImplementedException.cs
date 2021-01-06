@@ -4,35 +4,34 @@ using System;
 namespace Milvasoft.Helpers.Exceptions
 {
     /// <summary>
-    /// <para><b>EN: </b>Exception to be thrown for out of stock items</para>
-    /// <para><b>TR: </b>Stokda kalmayan ürünler için fırlatılacak olan istisna</para>
+    /// The exception that is thrown when attempt to do operation with not implemented method.
     /// </summary>
     public class FeatureNotImplementedException : MilvasoftBaseException
     {
         /// <summary>
-        /// 
+        /// Initializes a new instance of the <see cref="FeatureNotImplementedException"/> class.
         /// </summary>
-        /// <param name="stringLocalizer"></param>
-        public FeatureNotImplementedException(IStringLocalizer stringLocalizer) : base(stringLocalizer["FeatureNotImplementedException"])
+        /// <param name="localizer"></param>
+        public FeatureNotImplementedException(IStringLocalizer localizer) : base(localizer["FeatureNotImplementedException"])
         {
             ErrorCode = (int)MilvasoftExceptionCode.FeatureNotImplementedException;
         }
 
         /// <summary>
-        /// 
+        /// Initializes a new instance of the <see cref="FeatureNotImplementedException"/> class  with a specified error message.
         /// </summary>
-        /// <param name="message"></param>
-        public FeatureNotImplementedException(string message) : base(message)
+        /// <param name="customMessage"></param>
+        public FeatureNotImplementedException(string customMessage) : base(customMessage)
         {
             ErrorCode = (int)MilvasoftExceptionCode.FeatureNotImplementedException;
         }
 
         /// <summary>
-        /// 
+        /// Initializes a new instance of the <see cref="FeatureNotImplementedException"/> class  with a specified error message and a reference to the inner exception that is the cause of this exception.
         /// </summary>
-        /// <param name="message"></param>
+        /// <param name="customMessage"></param>
         /// <param name="exception"></param>
-        public FeatureNotImplementedException(string message, Exception exception):base(message, exception)
+        public FeatureNotImplementedException(string customMessage, Exception exception) : base(customMessage, exception)
         {
             ErrorCode = (int)MilvasoftExceptionCode.FeatureNotImplementedException;
         }

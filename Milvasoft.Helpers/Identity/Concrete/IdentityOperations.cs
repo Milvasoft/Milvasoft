@@ -447,7 +447,7 @@ namespace Milvasoft.Helpers.Identity.Concrete
         /// <param name="user"></param>
         /// <param name="tokenExpiredDate"></param>
         /// <returns></returns>
-        public virtual async Task<string> GenerateTokenWithRoleAsync(TUser user,DateTime tokenExpiredDate)
+        public virtual async Task<string> GenerateTokenWithRoleAsync(TUser user, DateTime tokenExpiredDate)
         {
             var roles = await _userManager.GetRolesAsync(user).ConfigureAwait(false);
 

@@ -3,20 +3,22 @@ using System;
 
 namespace Milvasoft.Helpers.Exceptions
 {
+    /// <summary>
+    /// The exception that is thrown when attempt to deleting invalid entities.
+    /// </summary>
     public class DeletingEntityWithRelationsException : MilvasoftBaseException
     {
         /// <summary>
-        /// <para><b>EN: </b>Initializes a new instance of the <c>ABKExceptionLibrary.DeletingEntityWithRelationsException</c> class.</para>
-        /// <para><b>TR: </b><c> ABKExceptionLibrary.DeletingEntityWithRelationsException </c> sınıfının yeni bir örneğini başlatır.</para>
+        /// Initializes a new instance of the <see cref="DeletingEntityWithRelationsException"/> class.
         /// </summary>
+        /// <param name="localizer"></param>
         public DeletingEntityWithRelationsException(IStringLocalizer localizer) : base(localizer["DeletingEntityWithRelationsException"])
         {
             ErrorCode = (int)MilvasoftExceptionCode.DeletingEntityWithRelations;
         }
 
         /// <summary>
-        /// <para><b>EN: </b>Initializes a new instance of the <c>ABKExceptionLibrary.DeletingEntityWithRelationsException</c> class  with a specified error message.</para>
-        /// <para><b>TR: </b>Belirtilen bir hata mesajıyla <c> ABKExceptionLibrary.DeletingEntityWithRelationsException </c> sınıfının yeni bir örneğini başlatır.</para>
+        /// Initializes a new instance of the <see cref="DeletingEntityWithRelationsException"/> class  with a specified error message.
         /// </summary>
         /// <param name="customMessage"></param>
         public DeletingEntityWithRelationsException(string customMessage) : base(customMessage)
@@ -25,8 +27,7 @@ namespace Milvasoft.Helpers.Exceptions
         }
 
         /// <summary>
-        /// <para><b>EN: </b>Initializes a new instance of the <c>ABKExceptionLibrary.DeletingEntityWithRelationsException</c> class</para>
-        /// <para><b>TR: </b><c> ABKExceptionLibrary.DeletingEntityWithRelationsException </c> sınıfının yeni bir örneğini başlatır</para>
+        /// Initializes a new instance of the <see cref="DeletingEntityWithRelationsException"/> class.
         /// </summary>
         /// <param name="customMessage"></param>
         /// <param name="innerException"></param>

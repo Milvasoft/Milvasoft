@@ -4,15 +4,14 @@ using System;
 namespace Milvasoft.Helpers.Exceptions
 {
     /// <summary>
-    /// <para><b>EN: </b>The exception that is thrown when attempt to update an entity that is not in the Repository.</para>
-    /// <para><b>TR: </b>Havuzda olmayan bir varlığı güncelleme girişiminde bulunulduğunda ortaya çıkan istisna.</para>
+    /// The exception that is thrown when attempt to update an entity that is not in the Repository.
     /// </summary>
     public class UpdatingInvalidEntityException : MilvasoftBaseException
     {
 
         /// <summary>
-        /// <para><b>EN: </b>Initializes a new instance of the <c>ABKExceptionLibrary.UpdatingInvalidEntityException</c> class with an entity id not found in the Repository. The spesific message of base class uses this invalid id when does not send a specific message.</para>
-        /// <para><b>TR: </b>Depoda bulunmayan bir varlık kimliğiyle <c> ABKExceptionLibrary.UpdatingInvalidEntityException </c> sınıfının yeni bir örneğini başlatır. Temel sınıfın özel mesajı, belirli bir mesaj göndermediğinde bu geçersiz kimliği kullanır.</para>
+        /// Initializes a new instance of the <see cref="UpdatingInvalidEntityException"/> class with an entity id not found in the Repository. 
+        /// The spesific message of base class uses this invalid id when does not send a specific message.
         /// </summary>
         /// <param name="localizer"></param>
         public UpdatingInvalidEntityException(IStringLocalizer localizer) : base(localizer["UpdatingInvalidEntityException"])
@@ -21,8 +20,7 @@ namespace Milvasoft.Helpers.Exceptions
         }
 
         /// <summary>
-        /// <para><b>EN: </b>Initializes a new instance of the <c>ABKExceptionLibrary.UpdatingInvalidEntityException</c> class with a specified error message.</para>
-        /// <para><b>TR: </b>Belirtilen bir hata mesajıyla <c> ABKExceptionLibrary.UpdatingInvalidEntityException </c> sınıfının yeni bir örneğini başlatır.</para>
+        /// Initializes a new instance of the <see cref="UpdatingInvalidEntityException"/> class with a specified error message.
         /// </summary>
         /// <param name="customMessage"></param>
         public UpdatingInvalidEntityException(string customMessage) : base(customMessage)
@@ -31,8 +29,7 @@ namespace Milvasoft.Helpers.Exceptions
         }
 
         /// <summary>
-        /// <para><b>EN: </b>Initializes a new instance of the <c>ABKExceptionLibrary.UpdatingInvalidEntityException</c> class  with a specified error message and a reference to the inner exception that is the cause of this exception.</para>
-        /// <para><b>TR: </b>Belirtilen bir hata mesajıyla <c> ABKExceptionLibrary.UpdatingInvalidEntityException </c> sınıfının yeni bir örneğini ve bu istisnanın nedeni olan iç özel duruma bir başvuruyu başlatır.</para>
+        /// Initializes a new instance of the <see cref="UpdatingInvalidEntityException"/> class  with a specified error message and a reference to the inner exception that is the cause of this exception.
         /// </summary>
         /// <param name="customMessage"></param>
         /// <param name="innerException"></param>

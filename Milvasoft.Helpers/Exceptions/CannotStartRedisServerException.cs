@@ -4,23 +4,21 @@ using System;
 namespace Milvasoft.Helpers.Exceptions
 {
     /// <summary>
-    /// <para><b>EN: </b>Exception class to be thrown when Redis Server fails to start</para>
-    /// <para><b>TR: </b>Redis Sunucu başlatılamadığı durumlarda fırlatılacak istisna sınıfı</para>
+    /// Exception class to be thrown when Redis Server fails to start.
     /// </summary>
     public class CannotStartRedisServerException : MilvasoftBaseException
     {
         /// <summary>
-        /// <para><b>EN: </b>Initializes a new instance of the <c>ABKExceptionLibrary.CannotStartRedisServer</c> class.</para>
-        /// <para><b>TR: </b><c> ABKExceptionLibrary.CannotStartRedisServer </c> sınıfının yeni bir örneğini başlatır.</para>
+        /// Initializes a new instance of the <see cref="CannotStartRedisServerException"/> class.
         /// </summary>
-        public CannotStartRedisServerException(IStringLocalizer localizer) : base(localizer)
+        /// <param name="localizer"></param>
+        public CannotStartRedisServerException(IStringLocalizer localizer) : base(localizer["CannotStartRedisServerException"])
         {
             ErrorCode = (int)MilvasoftExceptionCode.CannotStartRedisServer;
         }
 
         /// <summary>
-        /// <para><b>EN: </b>Initializes a new instance of the <c>ABKExceptionLibrary.CannotStartRedisServer</c> class  with a specified error message.</para>
-        /// <para><b>TR: </b>Belirtilen bir hata mesajıyla <c> ABKExceptionLibrary.CannotStartRedisServer </c> sınıfının yeni bir örneğini başlatır.</para>
+        /// Initializes a new instance of the <see cref="CannotStartRedisServerException"/> class  with a specified error message.
         /// </summary>
         /// <param name="customMessage"></param>
         public CannotStartRedisServerException(string customMessage) : base(customMessage)
@@ -29,8 +27,7 @@ namespace Milvasoft.Helpers.Exceptions
         }
 
         /// <summary>
-        /// <para><b>EN: </b>Initializes a new instance of the <c>ABKExceptionLibrary.CannotStartRedisServer</c> class  with a specified error message.</para>
-        /// <para><b>TR: </b>Belirtilen bir hata mesajıyla <c> ABKExceptionLibrary.CannotStartRedisServer </c> sınıfının yeni bir örneğini başlatır.</para>
+        /// Initializes a new instance of the <see cref="CannotStartRedisServerException"/> class  with a specified error message.
         /// </summary>
         /// <param name="message"></param>
         /// <param name="innerException"></param>

@@ -4,23 +4,21 @@ using System;
 namespace Milvasoft.Helpers.Exceptions
 {
     /// <summary>
-    /// <para><b>EN: </b>The exception that is thrown when attempt to get enum by invalid id.</para>
-    /// <para><b>TR: </b>Geçersiz id ile numaralandırma girişiminde bulunulduğunda ortaya çıkan istisna.</para>
+    /// The exception that is thrown when attempt to get enum by invalid id.
     /// </summary>
     public class CannotFindEnumByIdException : MilvasoftBaseException
     {
         /// <summary>
-        /// <para><b>EN: </b>Initializes a new instance of the <c>ABKExceptionLibrary.CannotFindEnumByIdException</c> class.</para>
-        /// <para><b>TR: </b><c> ABKExceptionLibrary.CannotFindEnumByIdException </c> sınıfının yeni bir örneğini başlatır.</para>
+        /// Initializes a new instance of the <see cref="CannotFindEnumByIdException"/> class.
         /// </summary>
+        /// <param name="localizer"></param>
         public CannotFindEnumByIdException(IStringLocalizer localizer) : base(localizer)
         {
             ErrorCode = (int)MilvasoftExceptionCode.CannotFindEnumById;
         }
 
         /// <summary>
-        /// <para><b>EN: </b>Initializes a new instance of the <c>ABKExceptionLibrary.CannotFindEnumByIdException</c> class  with a specified error message and a reference to the inner exception that is the cause of this exception.</para>
-        /// <para><b>TR: </b>Belirtilen bir hata mesajıyla <c> ABKExceptionLibrary.CannotFindEnumByIdException </c> sınıfının yeni bir örneğini ve bu istisnanın nedeni olan iç özel duruma bir başvuruyu başlatır.</para>
+        /// Initializes a new instance of the <see cref="CannotFindEnumByIdException"/> class with a specified error message and a reference to the inner exception that is the cause of this exception.
         /// </summary>
         /// <param name="customMessage"></param>
         public CannotFindEnumByIdException(string customMessage) : base(customMessage)
@@ -29,8 +27,7 @@ namespace Milvasoft.Helpers.Exceptions
         }
 
         /// <summary>
-        /// <para><b>EN: </b>Initializes a new instance of the <c>ABKExceptionLibrary.CannotFindEnumByIdException</c> class  with a specified error message and a reference to the inner exception that is the cause of this exception.</para>
-        /// <para><b>TR: </b>Belirtilen bir hata mesajıyla <c> ABKExceptionLibrary.CannotFindEnumByIdException </c> sınıfının yeni bir örneğini ve bu istisnanın nedeni olan iç özel duruma bir başvuruyu başlatır.</para>
+        /// Initializes a new instance of the <see cref="CannotFindEnumByIdException"/> class with a specified error message and a reference to the inner exception that is the cause of this exception.
         /// </summary>
         /// <param name="customMessage"></param>s
         /// <param name="innerException"></param>

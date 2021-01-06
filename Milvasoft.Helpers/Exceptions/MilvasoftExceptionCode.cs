@@ -8,7 +8,7 @@
         /// <summary>
         /// Defines the UnknownError.
         /// </summary>
-        UnknownError = 0,
+        BaseException = 0,
 
         /// <summary>
         /// Defines the CannotFindEntity.
