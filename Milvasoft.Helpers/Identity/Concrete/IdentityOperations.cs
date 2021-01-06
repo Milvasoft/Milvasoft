@@ -465,7 +465,7 @@ namespace Milvasoft.Helpers.Identity.Concrete
                                                                                            tokenValue: newToken).ConfigureAwait(false);
 
             if (!identityResult.Succeeded)
-                throw new OpsiyonGeneralException(_localizer);
+                throw new IdentityResultException(_localizer);
 
             return newToken;
         }
