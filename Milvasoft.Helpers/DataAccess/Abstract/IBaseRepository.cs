@@ -241,11 +241,13 @@ namespace Milvasoft.Helpers.DataAccess.Abstract
         #endregion
 
         /// <summary>
-        /// <para> Returns one entity by entity Id from database asynchronously.</para> 
+        ///<para> Returns one entity by entity Id from database asynchronously.</para> 
         /// </summary>
         /// <param name="id"></param>
+        /// <param name=""></param>
+        /// <param name="conditionExpression"></param>
         /// <returns> The entity found or null. </returns>
-        Task<TEntity> GetByIdAsync(TKey id);
+        Task<TEntity> GetByIdAsync(TKey id, Expression<Func<TEntity, bool>> conditionExpression = null);
 
         /// <summary>
         /// <para> Returns one entity by entity Id from database asynchronously. </para> 
@@ -254,16 +256,18 @@ namespace Milvasoft.Helpers.DataAccess.Abstract
         /// <exception cref="ArgumentNullException"> Throwns when no entity found. </exception>
         /// 
         /// <param name="id"></param>
+        /// <param name="conditionExpression"></param>
         /// <returns> The entity. </returns>
-        Task<TEntity> GetRequiredByIdAsync(TKey id);
+        Task<TEntity> GetRequiredByIdAsync(TKey id, Expression<Func<TEntity, bool>> conditionExpression = null);
 
         /// <summary>
         /// <para> Returns one entity which IsDeleted condition is true by entity Id with includes from database asynchronously. If the condition is requested, it also provides that condition.</para> 
         /// </summary>
         /// <param name="id"></param>
         /// <param name="includes"></param>
+        /// <param name="conditionExpression"></param>
         /// <returns> The entity found or null. </returns>
-        Task<TEntity> GetByIdAsync(TKey id, Func<IIncludable<TEntity>, IIncludable> includes);
+        Task<TEntity> GetByIdAsync(TKey id, Func<IIncludable<TEntity>, IIncludable> includes, Expression<Func<TEntity, bool>> conditionExpression = null);
 
         /// <summary>
         /// <para> Returns one entity which IsDeleted condition is true by entity Id with includes from database asynchronously. If the condition is requested, it also provides that condition.</para> 
@@ -273,8 +277,9 @@ namespace Milvasoft.Helpers.DataAccess.Abstract
         /// 
         /// <param name="id"></param>
         /// <param name="includes"></param>
+        /// <param name="conditionExpression"></param>
         /// <returns> The entity. </returns>
-        Task<TEntity> GetRequiredByIdAsync(TKey id, Func<IIncludable<TEntity>, IIncludable> includes);
+        Task<TEntity> GetRequiredByIdAsync(TKey id, Func<IIncludable<TEntity>, IIncludable> includes, Expression<Func<TEntity, bool>> conditionExpression = null);
 
         /// <summary>
         /// <para> Adds single entity to database asynchronously.</para> 

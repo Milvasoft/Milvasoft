@@ -580,11 +580,14 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
         ///<para> Returns one entity by entity Id from database asynchronously.</para> 
         /// </summary>
         /// <param name="id"></param>
+        /// <param name=""></param>
+        /// <param name="conditionExpression"></param>
         /// <returns> The entity found or null. </returns>
-        public virtual async Task<TEntity> GetByIdAsync(TKey id)
+        public virtual async Task<TEntity> GetByIdAsync(TKey id, Expression<Func<TEntity, bool>> conditionExpression = null)
         {
             Expression<Func<TEntity, bool>> idCondition = i => i.Id.Equals(id);
             var mainCondition = idCondition.Append(CreateIsDeletedFalseExpression(), ExpressionType.AndAlso);
+            mainCondition = mainCondition.Append(conditionExpression, ExpressionType.AndAlso);
             var entity = await _dbContext.Set<TEntity>().SingleOrDefaultAsync(mainCondition).ConfigureAwait(false);
             return entity;
         }
@@ -596,11 +599,13 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
         /// <exception cref="ArgumentNullException"> Throwns when no entity found. </exception>
         /// 
         /// <param name="id"></param>
+        /// <param name="conditionExpression"></param>
         /// <returns> The entity. </returns>
-        public virtual async Task<TEntity> GetRequiredByIdAsync(TKey id)
+        public virtual async Task<TEntity> GetRequiredByIdAsync(TKey id, Expression<Func<TEntity, bool>> conditionExpression = null)
         {
             Expression<Func<TEntity, bool>> idCondition = i => i.Id.Equals(id);
             var mainCondition = idCondition.Append(CreateIsDeletedFalseExpression(), ExpressionType.AndAlso);
+            mainCondition = mainCondition.Append(conditionExpression, ExpressionType.AndAlso);
             var entity = (await _dbContext.Set<TEntity>().SingleAsync(mainCondition).ConfigureAwait(false));
             return entity;
         }
@@ -610,11 +615,13 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
         /// </summary>
         /// <param name="id"></param>
         /// <param name="includes"></param>
+        /// <param name="conditionExpression"></param>
         /// <returns> The entity found or null. </returns>
-        public virtual async Task<TEntity> GetByIdAsync(TKey id, Func<IIncludable<TEntity>, IIncludable> includes)
+        public virtual async Task<TEntity> GetByIdAsync(TKey id, Func<IIncludable<TEntity>, IIncludable> includes, Expression<Func<TEntity, bool>> conditionExpression = null)
         {
             Expression<Func<TEntity, bool>> idCondition = i => i.Id.Equals(id);
             var mainCondition = idCondition.Append(CreateIsDeletedFalseExpression(), ExpressionType.AndAlso);
+            mainCondition = mainCondition.Append(conditionExpression, ExpressionType.AndAlso);
             var entity = await _dbContext.Set<TEntity>().IncludeMultiple(includes).SingleOrDefaultAsync(mainCondition).ConfigureAwait(false);
             return entity;
         }
@@ -627,11 +634,13 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
         /// 
         /// <param name="id"></param>
         /// <param name="includes"></param>
+        /// <param name="conditionExpression"></param>
         /// <returns> The entity. </returns>
-        public virtual async Task<TEntity> GetRequiredByIdAsync(TKey id, Func<IIncludable<TEntity>, IIncludable> includes)
+        public virtual async Task<TEntity> GetRequiredByIdAsync(TKey id, Func<IIncludable<TEntity>, IIncludable> includes, Expression<Func<TEntity, bool>> conditionExpression = null)
         {
             Expression<Func<TEntity, bool>> idCondition = i => i.Id.Equals(id);
             var mainCondition = idCondition.Append(CreateIsDeletedFalseExpression(), ExpressionType.AndAlso);
+            mainCondition = mainCondition.Append(conditionExpression, ExpressionType.AndAlso);
             var entity = await _dbContext.Set<TEntity>().IncludeMultiple(includes).SingleAsync(mainCondition).ConfigureAwait(false);
             return entity;
         }

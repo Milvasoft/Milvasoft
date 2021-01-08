@@ -289,7 +289,7 @@ namespace Milvasoft.Helpers.Identity.Concrete
 
             if (!exist) throw new UpdatingInvalidEntityException(_localizer["IncorrectOldPassword"]);
 
-            return await _userManager.ChangePasswordAsync(user, newPassword, newPassword).ConfigureAwait(false);
+            return await _userManager.ChangePasswordAsync(user, currentPassword, newPassword).ConfigureAwait(false);
         }
 
         /// <summary>
