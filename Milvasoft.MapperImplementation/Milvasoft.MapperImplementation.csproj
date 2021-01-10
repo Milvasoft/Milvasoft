@@ -1,13 +1,13 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFramework>netcoreapp3.1</TargetFramework>
+		<TargetFramework>net5.0</TargetFramework>
 		<PackageIcon>milvalogo.png</PackageIcon>
 		<GenerateDocumentationFile>true</GenerateDocumentationFile>
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Mapster" Version="7.0.0" />
+		<PackageReference Include="Mapster" Version="7.0.1" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -36,7 +36,7 @@
 		<Description>Implementation  helper for mappers.</Description>
 		<PackageTags>helper,milvasoft,mapper,mapster,automapper</PackageTags>
 		<Copyright>Milvasoft Yazılım Bilişim Araştırma Geliştirme Danışmanlık Sanayi ve Ticaret Ltd.Şti.</Copyright>
-		<Version>1.0.0</Version>
+		<Version>5.0.0</Version>
 		<PackageIcon>milvalogo.png</PackageIcon>
 
 	</PropertyGroup>

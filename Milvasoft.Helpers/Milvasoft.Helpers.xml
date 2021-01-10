@@ -472,6 +472,20 @@
             <typeparam name="TKey"></typeparam>
             <typeparam name="TContext"></typeparam>
         </member>
+        <member name="P:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.GetSoftDeletedEntities">
+            <summary>
+            Gets or sets GetSoftDeletedEntities. Default is false.
+            If value is true, all methods returns all entities.
+            If value is false, all methods returns entities which only "IsDeleted" property's value is false.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.ResetSoftDeleteState">
+            <summary>
+            Gets or sets ResetSoftDeleteState. Default is true.
+            If value is true, resets 'GetSoftDeletedEntities' property value to false after when every conditional method invoked. 
+            Otherwise 
+            </summary>
+        </member>
         <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.CreateIsDeletedFalseExpression">
             <summary>
             Gets <b>entity => entity.IsDeleted == false</b> expression, if <typeparamref name="TEntity"/> is assignable from <see cref="T:Milvasoft.Helpers.DataAccess.Abstract.IBaseIndelibleEntity`1"/>.
@@ -657,14 +671,16 @@
              <param name="conditionExpression"></param>
              <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.GetByIdAsync(`1)">
-            <summary>
+        <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.GetByIdAsync(`1,System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
+             <summary>
             <para> Returns one entity by entity Id from database asynchronously.</para> 
-            </summary>
-            <param name="id"></param>
-            <returns> The entity found or null. </returns>
+             </summary>
+             <param name="id"></param>
+             <param name=""></param>
+             <param name="conditionExpression"></param>
+             <returns> The entity found or null. </returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.GetRequiredByIdAsync(`1)">
+        <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.GetRequiredByIdAsync(`1,System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
             <summary>
             <para> Returns one entity by entity Id from database asynchronously. </para> 
             </summary>
@@ -672,17 +688,19 @@
             <exception cref="T:System.ArgumentNullException"> Throwns when no entity found. </exception>
             
             <param name="id"></param>
+            <param name="conditionExpression"></param>
             <returns> The entity. </returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.GetByIdAsync(`1,System.Func{Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable{`0},Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable})">
+        <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.GetByIdAsync(`1,System.Func{Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable{`0},Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable},System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
             <summary>
             <para> Returns one entity which IsDeleted condition is true by entity Id with includes from database asynchronously. If the condition is requested, it also provides that condition.</para> 
             </summary>
             <param name="id"></param>
             <param name="includes"></param>
+            <param name="conditionExpression"></param>
             <returns> The entity found or null. </returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.GetRequiredByIdAsync(`1,System.Func{Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable{`0},Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable})">
+        <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.GetRequiredByIdAsync(`1,System.Func{Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable{`0},Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable},System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
             <summary>
             <para> Returns one entity which IsDeleted condition is true by entity Id with includes from database asynchronously. If the condition is requested, it also provides that condition.</para> 
             </summary>
@@ -691,6 +709,7 @@
             
             <param name="id"></param>
             <param name="includes"></param>
+            <param name="conditionExpression"></param>
             <returns> The entity. </returns>
         </member>
         <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.AddAsync(`0)">
@@ -1082,6 +1101,13 @@
             If value is false, all methods returns entities which only "IsDeleted" property's value is false.
             </summary>
         </member>
+        <member name="P:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.ResetSoftDeleteState">
+            <summary>
+            Gets or sets ResetSoftDeleteState. Default is true.
+            If value is true, resets 'GetSoftDeletedEntities' property value to false after when every conditional method invoked. 
+            Otherwise 
+            </summary>
+        </member>
         <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.#ctor(`2)">
             <summary>
             Constructor of BaseRepository for <paramref name="dbContext"/> injection.
@@ -1288,14 +1314,16 @@
              <param name="conditionExpression"></param>
              <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.GetByIdAsync(`1)">
+        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.GetByIdAsync(`1,System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
              <summary>
             <para> Returns one entity by entity Id from database asynchronously.</para> 
              </summary>
              <param name="id"></param>
+             <param name=""></param>
+             <param name="conditionExpression"></param>
              <returns> The entity found or null. </returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.GetRequiredByIdAsync(`1)">
+        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.GetRequiredByIdAsync(`1,System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
             <summary>
             <para> Returns one entity by entity Id from database asynchronously. </para> 
             </summary>
@@ -1303,17 +1331,19 @@
             <exception cref="T:System.ArgumentNullException"> Throwns when no entity found. </exception>
             
             <param name="id"></param>
+            <param name="conditionExpression"></param>
             <returns> The entity. </returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.GetByIdAsync(`1,System.Func{Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable{`0},Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable})">
+        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.GetByIdAsync(`1,System.Func{Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable{`0},Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable},System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
             <summary>
             <para> Returns one entity which IsDeleted condition is true by entity Id with includes from database asynchronously. If the condition is requested, it also provides that condition.</para> 
             </summary>
             <param name="id"></param>
             <param name="includes"></param>
+            <param name="conditionExpression"></param>
             <returns> The entity found or null. </returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.GetRequiredByIdAsync(`1,System.Func{Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable{`0},Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable})">
+        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.GetRequiredByIdAsync(`1,System.Func{Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable{`0},Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable},System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
             <summary>
             <para> Returns one entity which IsDeleted condition is true by entity Id with includes from database asynchronously. If the condition is requested, it also provides that condition.</para> 
             </summary>
@@ -1322,6 +1352,7 @@
             
             <param name="id"></param>
             <param name="includes"></param>
+            <param name="conditionExpression"></param>
             <returns> The entity. </returns>
         </member>
         <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.AddAsync(`0)">

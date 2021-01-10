@@ -20,17 +20,42 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
                                                                                                              where TKey : IEquatable<TKey>
                                                                                                              where TContext : DbContext
     {
+        //TODO summary'e yazılan exception lar düzeltilecek.
+
+        #region Protected Properties
+
         /// <summary>
         /// DbContext object.
         /// </summary>
         protected TContext _dbContext;
-        //TODO summary'e yazılan exception lar düzeltilecek.
+
+        #endregion
+
+        #region Private Properties
+
         /// <summary>
         /// Gets or sets GetSoftDeletedEntities. Default is false.
         /// If value is true, all methods returns all entities.
         /// If value is false, all methods returns entities which only "IsDeleted" property's value is false.
         /// </summary>
-        public bool GetSoftDeletedEntities { get; set; } = false;
+        private bool GetSoftDeletedEntities
+        {
+            get => IBaseRepository<TEntity, TKey, TContext>.GetSoftDeletedEntities;
+            set { IBaseRepository<TEntity, TKey, TContext>.GetSoftDeletedEntities = value; }
+        }
+
+        /// <summary>
+        /// Gets or sets ResetSoftDeleteState. Default is true.
+        /// If value is true, resets 'GetSoftDeletedEntities' property value to false after when every conditional method invoked. 
+        /// Otherwise 
+        /// </summary>
+        private bool ResetSoftDeleteState
+        {
+            get => IBaseRepository<TEntity, TKey, TContext>.ResetSoftDeleteState;
+            init { IBaseRepository<TEntity, TKey, TContext>.ResetSoftDeleteState = value; }
+        }
+
+        #endregion
 
         /// <summary>
         /// Constructor of BaseRepository for <paramref name="dbContext"/> injection.
@@ -39,7 +64,9 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
         public BaseRepository(TContext dbContext)
         {
             _dbContext = dbContext;
+            ResetSoftDeleteState = true;
         }
+
 
         /// <summary>
         /// Gets <b>entity => entity.IsDeleted == false</b> expression, if <typeparamref name="TEntity"/> is assignable from <see cref="IBaseIndelibleEntity{TKey}"/>.
@@ -1103,6 +1130,8 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
         private Expression<Func<TEntity, bool>> CreateConditionExpression(Expression<Func<TEntity, bool>> conditionExpression = null)
         {
             Expression<Func<TEntity, bool>> mainExpression;
+
+            //Step in when GetSoftDeletedEntities is false
             if (!GetSoftDeletedEntities)
             {
                 var softDeleteExpression = CreateIsDeletedFalseExpression();
@@ -1111,6 +1140,7 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
             else
             {
                 mainExpression = conditionExpression;
+                if (ResetSoftDeleteState) GetSoftDeletedEntities = false;
             }
             return mainExpression;
         }

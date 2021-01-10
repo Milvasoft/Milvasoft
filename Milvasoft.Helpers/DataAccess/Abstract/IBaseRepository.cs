@@ -19,6 +19,20 @@ namespace Milvasoft.Helpers.DataAccess.Abstract
                                                               where TKey : IEquatable<TKey>
                                                               where TContext : DbContext
     {
+        /// <summary>
+        /// Gets or sets GetSoftDeletedEntities. Default is false.
+        /// If value is true, all methods returns all entities.
+        /// If value is false, all methods returns entities which only "IsDeleted" property's value is false.
+        /// </summary>
+        public static bool GetSoftDeletedEntities { get; set; }
+
+        /// <summary>
+        /// Gets or sets ResetSoftDeleteState. Default is true.
+        /// If value is true, resets 'GetSoftDeletedEntities' property value to false after when every conditional method invoked. 
+        /// Otherwise 
+        /// </summary>
+        public static bool ResetSoftDeleteState { get; set; }
+
 
         /// <summary>
         /// Gets <b>entity => entity.IsDeleted == false</b> expression, if <typeparamref name="TEntity"/> is assignable from <see cref="IBaseIndelibleEntity{TKey}"/>.
