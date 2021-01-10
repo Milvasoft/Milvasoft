@@ -27,7 +27,7 @@ namespace Milvasoft.MapperImplementation.Implementation
         /// <param name="ignoredMembers"></param>
         /// <returns></returns>
         TDestination Map<TSource, TDestination>(TSource source, Expression<Func<TDestination, object>> ignoredMembers);
-
+         
         /// <summary>
         /// Responsible for mapping from the source object to the object we want to map.
         /// </summary>

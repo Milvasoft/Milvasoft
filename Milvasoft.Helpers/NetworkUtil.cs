@@ -46,7 +46,7 @@ namespace Milvasoft.Helpers
         /// <returns>TRUE if the IP address is registered, FALSE otherwise</returns>
         public static async Task<bool> HasIPAddressAsync(string ipAddress)
         {
-            return await HasIPAddressAsync(IPAddress.Parse(ipAddress)).ConfigureAwait(false);
+            return await HasIPAddressAsync(IPAddress.Parse(ipAddress)).ConfigureAwait(false); 
         }
 
         #endregion

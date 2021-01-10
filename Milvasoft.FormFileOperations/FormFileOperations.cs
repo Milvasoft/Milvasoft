@@ -482,7 +482,7 @@ namespace Milvasoft.FormFileOperations
             File.Move(oldPath, newFilePath);
 
             Directory.Delete(oldFolderPath, true);
-
+             
             return newFilePath;
         }
 
