@@ -88,29 +88,33 @@ namespace Milvasoft.Helpers.Attributes.Validation
         /// <returns></returns>
         protected override ValidationResult IsValid(object value, ValidationContext context)
         {
-            IStringLocalizer sharedLocalizer;
-            string localizedPropName;
-            string errorMessage;
-
-            if (_resourceType != null)
+            if (value != null)
             {
-                var localizerFactory = context.GetService<IStringLocalizerFactory>();
+                IStringLocalizer sharedLocalizer;
+                string localizedPropName;
+                string errorMessage;
 
-                var assemblyName = new AssemblyName(_resourceType.GetTypeInfo().Assembly.FullName);
-                sharedLocalizer = localizerFactory.Create("SharedResource", assemblyName.Name);
+                if (_resourceType != null)
+                {
+                    var localizerFactory = context.GetService<IStringLocalizerFactory>();
 
-                localizedPropName = sharedLocalizer[LocalizerKey != null ? LocalizerKey : $"Localized{context.MemberName}"];
-                errorMessage = FullMessage ? sharedLocalizer[LocalizerKey] : sharedLocalizer["MinDecimalValueException", localizedPropName];
-            }
-            else errorMessage = $"Please enter a valid {context.MemberName}.";
+                    var assemblyName = new AssemblyName(_resourceType.GetTypeInfo().Assembly.FullName);
+                    sharedLocalizer = localizerFactory.Create("SharedResource", assemblyName.Name);
 
-            if (Convert.ToInt32(value) <= MinValue)
-            {
-                ErrorMessage = errorMessage;
-                return new ValidationResult(FormatErrorMessage(""));
+                    localizedPropName = sharedLocalizer[LocalizerKey != null ? LocalizerKey : $"Localized{context.MemberName}"];
+                    errorMessage = FullMessage ? sharedLocalizer[LocalizerKey] : sharedLocalizer["MinDecimalValueException", localizedPropName];
+                }
+                else errorMessage = $"Please enter a valid {context.MemberName}.";
+
+                if (Convert.ToInt32(value) <= MinValue)
+                {
+                    ErrorMessage = errorMessage;
+                    return new ValidationResult(FormatErrorMessage(""));
+                }
             }
 
             return ValidationResult.Success;
+
         }
     }
 }

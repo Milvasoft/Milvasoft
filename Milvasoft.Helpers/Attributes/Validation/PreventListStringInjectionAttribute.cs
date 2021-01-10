@@ -120,8 +120,6 @@ namespace Milvasoft.Helpers.Attributes.Validation
                 }
                 else localizedPropName = context.MemberName;
 
-
-
                 // Check the lengths for legality
                 CommonHelper.EnsureLegalLengths(MaximumLength, MinimumLength, sharedLocalizer);
 

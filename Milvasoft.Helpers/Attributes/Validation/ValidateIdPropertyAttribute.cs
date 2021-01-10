@@ -128,6 +128,17 @@ namespace Milvasoft.Helpers.Attributes.Validation
                         return new ValidationResult(FormatErrorMessage(""));
                     }
                 }
+                else if (valueType == typeof(int?))
+                {
+                    var intParameter = (int?)propertyValue;
+
+                    if (intParameter <= 0)
+                    {
+                        ErrorMessage = errorMessage;
+                        httpContext.Items[context.MemberName] = ErrorMessage;
+                        return new ValidationResult(FormatErrorMessage(""));
+                    }
+                }
                 else if (valueType.GetGenericArguments()[0] == typeof(Guid))
                 {
                     var guidParameters = (List<Guid>)propertyValue;
@@ -147,6 +158,28 @@ namespace Milvasoft.Helpers.Attributes.Validation
                                                                                       + "{3}[0-9a-fA-F]{12}[}]?$");
 
                             if (guidParameter == default || guidParameter == Guid.Empty || !regexMatchResult)
+                            {
+                                ErrorMessage = errorMessage;
+                                httpContext.Items[context.MemberName] = ErrorMessage;
+                                return new ValidationResult(FormatErrorMessage(""));
+                            }
+                        }
+                }
+                else if (valueType.GetGenericArguments()[0] == typeof(int))
+                {
+                    var intParameters = (List<int>)propertyValue;
+
+                    if (!DontCheckNullable && intParameters.IsNullOrEmpty())
+                    {
+                        ErrorMessage = errorMessage;
+                        httpContext.Items[context.MemberName] = ErrorMessage;
+                        return new ValidationResult(FormatErrorMessage(""));
+                    }
+
+                    if (!intParameters.IsNullOrEmpty())
+                        foreach (var intParameter in intParameters)
+                        {
+                            if (intParameter <= 0)
                             {
                                 ErrorMessage = errorMessage;
                                 httpContext.Items[context.MemberName] = ErrorMessage;

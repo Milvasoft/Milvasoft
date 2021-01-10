@@ -28,7 +28,7 @@ namespace Milvasoft.Helpers.DataAccess.IncludeLibrary
                 return query;
 
             var includable = (Includable<T>)includes(new Includable<T>(query));
-            return includable.Input.IgnoreQueryFilters();
+            return includable.Input;
         }
     }
 }
