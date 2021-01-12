@@ -2837,9 +2837,9 @@
             Login and sign up processes are happens with this dto.
             </summary>
         </member>
-        <member name="P:Milvasoft.Helpers.Identity.Abstract.ILoginDTO.Username">
+        <member name="P:Milvasoft.Helpers.Identity.Abstract.ILoginDTO.UserName">
             <summary>
-            Username of user.
+            UserName of user.
             </summary>
         </member>
         <member name="P:Milvasoft.Helpers.Identity.Abstract.ILoginDTO.Email">
@@ -2862,9 +2862,9 @@
             Login and sign up processes are happens with this dto.
             </summary>
         </member>
-        <member name="P:Milvasoft.Helpers.Identity.Abstract.ISignUpDTO.Username">
+        <member name="P:Milvasoft.Helpers.Identity.Abstract.ISignUpDTO.UserName">
             <summary>
-            Username of user.
+            UserName of user.
             </summary>
         </member>
         <member name="P:Milvasoft.Helpers.Identity.Abstract.ISignUpDTO.Email">

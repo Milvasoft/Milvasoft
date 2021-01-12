@@ -355,7 +355,7 @@ namespace Milvasoft.Helpers.Identity.Concrete
 
             var loginResult = new TLoginResultDTO { ErrorMessages = new List<IdentityError>() };
 
-            if (loginDTO.Username == null && loginDTO.Email == null)
+            if (loginDTO.UserName == null && loginDTO.Email == null)
                 throw new NullParameterException(_localizer["PleaseEnterEmailOrUsername"]);
 
             //Kullanici adi veya email ile kullanici dogrulama
@@ -363,9 +363,9 @@ namespace Milvasoft.Helpers.Identity.Concrete
 
             var userNotFound = true;
 
-            if (loginDTO.Username != null)
+            if (loginDTO.UserName != null)
             {
-                user = _userManager.FindByNameAsync(userName: loginDTO.Username).Result;
+                user = _userManager.FindByNameAsync(userName: loginDTO.UserName).Result;
 
                 userNotFound = user == null;
 

@@ -31,7 +31,7 @@ namespace Milvasoft.Helpers.Identity.Concrete
             if (int.TryParse(user.UserName[0].ToString(), out int _)) 
                 errors.Add(new IdentityError { Code = "UserNameNumberStartWith", Description = _localizer["UserValidationUserNameNumberStartWith"] });
 
-            //Username is between 3 and 25 characters
+            //UserName is between 3 and 25 characters
             if (user.UserName.Length < 3 && user.UserName.Length > 25)
                 errors.Add(new IdentityError { Code = "UserNameLength", Description = _localizer["UserValidationUserNameLength"] });
 

@@ -6,9 +6,9 @@
     public interface ISignUpDTO
     {
         /// <summary>
-        /// Username of user.
+        /// UserName of user.
         /// </summary>
-        public string Username { get; set; }
+        public string UserName { get; set; }
 
         /// <summary>
         /// Email of user.
