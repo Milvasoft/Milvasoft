@@ -767,6 +767,17 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
         }
 
         /// <summary>
+        /// Groups entities with <paramref name="keySelector"/> and returns the key grouped and the number of items grouped with this key.
+        /// </summary>
+        /// <param name="keySelector"></param>
+        /// <param name="conditionExpression"></param>
+        /// <returns></returns>
+        public virtual async Task<List<Tuple<object, int>>> GetGroupedAndCountAsync(Expression<Func<TEntity, object>> keySelector, Expression<Func<TEntity, bool>> conditionExpression = null)
+            => await _dbContext.Set<TEntity>().Where(CreateConditionExpression(conditionExpression) ?? (entity => true))
+                                              .GroupBy(keySelector)
+                                              .Select(b => Tuple.Create(b.Key, b.Count())).ToListAsync().ConfigureAwait(false);
+
+        /// <summary>
         /// Gets grouped entities from database with <paramref name="groupedClause"/>.
         /// 
         /// <para><b>Example use;</b></para>

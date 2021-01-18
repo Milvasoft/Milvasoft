@@ -178,6 +178,14 @@
             <param name="fileType"></param>
             <returns></returns>
         </member>
+        <member name="M:Milvasoft.FormFileOperations.FormFileOperations.ConvertToFormFile(System.String)">
+            <summary>
+            <para><b>EN: </b>Gets image file in requested path.</para>
+            <para><b>TR: </b>İstenen yolda görüntü dosyasını alır.</para>
+            </summary>
+            <param name="milvaBase64"></param>
+            <returns></returns>
+        </member>
         <member name="M:Milvasoft.FormFileOperations.FormFileOperations.RemoveDirectoryFileIsIn(System.String)">
             <summary>
             <para><b>EN: </b> Removes the folder the file is in.</para> 

@@ -1405,6 +1405,14 @@
             <param name="conditionExpression"></param>
             <returns></returns>
         </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.GetGroupedAndCountAsync(System.Linq.Expressions.Expression{System.Func{`0,System.Object}},System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
+            <summary>
+            Groups entities with <paramref name="keySelector"/> and returns the key grouped and the number of items grouped with this key.
+            </summary>
+            <param name="keySelector"></param>
+            <param name="conditionExpression"></param>
+            <returns></returns>
+        </member>
         <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.GetAsGroupedAsync``1(System.Linq.IQueryable{``0},System.Linq.Expressions.Expression{System.Func{``0,System.Boolean}})">
             <summary>
             Gets grouped entities from database with <paramref name="groupedClause"/>.
@@ -3482,6 +3490,22 @@
             <returns></returns>
         </member>
         <member name="M:Milvasoft.Helpers.RegexMatcher.MatchRegex(System.String,System.String)">
+            <summary>
+            Checks if <paramref name="input"/> matches <paramref name="regexString"/>.
+            </summary>
+            <param name="input"></param>
+            <param name="regexString"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.RegexMatcher.GetMatchResult(System.Text.RegularExpressions.Regex,System.String)">
+            <summary>
+            Checks if <paramref name="input"/> matches <paramref name="regex"/>.
+            </summary>
+            <param name="regex"></param>
+            <param name="input"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.RegexMatcher.GetMatchResult(System.String,System.String)">
             <summary>
             Checks if <paramref name="input"/> matches <paramref name="regexString"/>.
             </summary>

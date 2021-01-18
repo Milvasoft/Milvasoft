@@ -12,12 +12,22 @@ using System.Threading.Tasks;
 
 namespace Milvasoft.FormFileOperations
 {
+    /// <summary>
+    /// <see cref="IFormFile"/> operations for .NET Core.
+    /// </summary>
     public static class FormFileOperations
     {
+        #region Public Properties
+
+        /// <summary>
+        /// File name creator delegate.
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
         public delegate string FilesFolderNameCreator(Type type);
 
         /// <summary>
-        /// <para> Allowed file extensions for media files. </para>
+        /// Allowed file extensions for media files.
         /// </summary>
         public static ILookup<FileType, string> DefaultAllowedExtensions { get; } = new Dictionary<FileType, string>
         {
@@ -55,10 +65,13 @@ namespace Milvasoft.FormFileOperations
            {FileType.Document, ".pptx"},
         }.ToLookup(i => i.Key, i => i.Value);
 
+        #endregion
+
+        //TODO SaveFileToPathAsync and SaveFilesToPathAsync method's overloads will be added for save file from data uri formatted base64 string.
 
         /// <summary>
-        /// <para><b>EN: </b>Save uploaded IFormFile file to physical file path. Target Path will be : "<paramref name ="basePath"></paramref>/<b><paramref name="folderNameCreator"/>()</b>/<paramref name="entity"></paramref>.<paramref name="propertyName"/>"</para>
-        /// <para><b>TR: </b>Yüklenen IFormFile dosyasını fiziksel bir dosya yoluna kaydedin. Hedef Yol: <paramref name ="basePath"></paramref>/<b><paramref name="folderNameCreator"/>()</b>/<paramref name ="entity"></paramref>.<paramref name="propertyName"/>" olacaktır</para>
+        /// Saves uploaded IFormFile file to physical file path.
+        /// Target Path will be : "<paramref name ="basePath"></paramref>/<b><paramref name="folderNameCreator"/>()</b>/<paramref name="entity"></paramref>.<paramref name="propertyName"/>"
         /// </summary>
         /// 
         /// <para><b>Remarks:</b></para>
@@ -120,15 +133,15 @@ namespace Milvasoft.FormFileOperations
         }
 
         /// <summary>
-        /// <para><b>EN: </b>Save uploaded IFormFile file to physical file path. Target Path will be : "<paramref name ="basePath"></paramref>/<b><paramref name="folderNameCreator"/>()</b>/<paramref name="entity"></paramref>.<paramref name="propertyName"/>"</para>
-        /// <para><b>TR: </b>Yüklenen IFormFile dosyasını fiziksel bir dosya yoluna kaydedin. Hedef Yol: <paramref name ="basePath"></paramref>/<b><paramref name="folderNameCreator"/>()</b>/<paramref name ="entity"></paramref>.<paramref name="propertyName"/>" olacaktır</para>
+        /// Saves uploaded IFormFile files to physical file path.
+        /// Target Path will be : "<paramref name ="basePath"></paramref>/<b><paramref name="folderNameCreator"/>()</b>/<paramref name="entity"></paramref>.<paramref name="propertyName"/>"
         /// </summary>
         /// 
         /// <para><b>Remarks:</b></para>
         /// 
         /// <remarks>
         /// 
-        /// <para> Don't forget validate file with <see cref="ValidateFile(IFormFile, FileType, long, List{string})"/>, before use this method.</para>
+        /// <para> Don't forget validate files with <see cref="ValidateFile(IFormFile, FileType, long, List{string})"/>, before use this method.</para>
         /// 
         /// </remarks>
         /// 
@@ -192,15 +205,15 @@ namespace Milvasoft.FormFileOperations
         }
 
         /// <summary>
-        /// <para><b>EN: </b>Save uploaded IFormFile file to physical file path. Target Path will be : "<paramref name ="basePath"></paramref>/<b><paramref name="folderNameCreator"/>()</b>/<paramref name="entity"></paramref>.<paramref name="propertyName"/>"</para>
-        /// <para><b>TR: </b>Yüklenen IFormFile dosyasını fiziksel bir dosya yoluna kaydedin. Hedef Yol: <paramref name ="basePath"></paramref>/<b><paramref name="folderNameCreator"/>()</b>/<paramref name ="entity"></paramref>.<paramref name="propertyName"/>" olacaktır</para>
+        /// Saves uploaded IFormFile files to physical file path. 
+        /// Target Path will be : "<paramref name ="basePath"></paramref>/<b><paramref name="folderNameCreator"/>()</b>/<paramref name="entity"></paramref>.<paramref name="propertyName"/>"
         /// </summary>
         /// 
         /// <para><b>Remarks:</b></para>
         /// 
         /// <remarks>
         /// 
-        /// <para> Don't forget validate file with <see cref="ValidateFile(IFormFile, FileType, long, List{string})"/>, before use this method.</para>
+        /// <para> Don't forget validate files with <see cref="ValidateFile(IFormFile, FileType, long, List{string})"/>, before use this method.</para>
         /// 
         /// </remarks>
         /// 
@@ -263,8 +276,7 @@ namespace Milvasoft.FormFileOperations
         }
 
         /// <summary>
-        /// <para><b>EN: </b>Checks that the file compatible the upload rules.</para>
-        /// <para><b>TR: </b>Dosyanın yükleme kurallarıyla uyumlu olup olmadığını kontrol eder.</para>
+        /// Checks that the file compatible the upload rules.
         /// </summary>
         /// <param name="file"> Uploaded file. </param>
         /// <param name="fileType"> Uploaded file type. (e.g image,video,sound..) </param>
@@ -292,8 +304,7 @@ namespace Milvasoft.FormFileOperations
         }
 
         /// <summary>
-        /// <para><b>EN: </b>Returns the path of the uploaded file.</para>
-        /// <para><b>TR: </b>Yüklenen dosyanın yolunu döndürür.</para>
+        /// Returns the path of the uploaded file.
         /// </summary>
         /// <param name="originalFilePath"> Uploaded file. </param>
         /// <param name="requestPath"> Request path section. (e.g. api/ImageLibrary) </param>
@@ -312,18 +323,17 @@ namespace Milvasoft.FormFileOperations
         }
 
         /// <summary>
-        /// <para><b>EN: </b>Gets image file in requested path.</para>
-        /// <para><b>TR: </b>İstenen yolda görüntü dosyasını alır.</para>
+        /// Gets file as <see cref="IFormFile"/> from requested path.
         /// </summary>
         /// <param name="path"></param>
         /// <param name="fileType"></param>
         /// <returns></returns>
         public static async Task<IFormFile> GetFileFromPathAsync(string path, FileType fileType)
         {
-            var memory = new MemoryStream();
-
             if (string.IsNullOrEmpty(path))
                 return null;
+
+            var memory = new MemoryStream();
 
             using (var stream = new FileStream(path, FileMode.Open))
             {
@@ -342,8 +352,35 @@ namespace Milvasoft.FormFileOperations
         }
 
         /// <summary>
-        /// <para><b>EN: </b> Removes the folder the file is in.</para> 
-        /// <para><b>TR: </b> Dosyanın bulunduğu klasörü kaldırır.</para> 
+        /// Converts data URI formatted base64 string to IFormFile.
+        /// </summary>
+        /// <param name="milvaBase64"></param>
+        /// <returns></returns>
+        public static IFormFile ConvertToFormFile(string milvaBase64)
+        {
+            var base64String = milvaBase64.Split(";base64,")[1];
+
+            var contentType = GetContentType(milvaBase64);
+
+            var fileType = contentType.Split('/')[0];
+            var fileExtension = contentType.Split('/')[1];
+
+            var array = Convert.FromBase64String(base64String);
+
+            using var memory = new MemoryStream(array)
+            {
+                Position = 0
+            };
+
+            return new FormFile(memory, 0, memory.Length, fileType, $"File.{fileExtension}")
+            {
+                Headers = new HeaderDictionary(),
+                ContentType = contentType
+            };
+        }
+
+        /// <summary>
+        /// Removes the folder the file is in.
         /// </summary>
         /// <param name="filePath"></param>
         public static void RemoveDirectoryFileIsIn(string filePath)
@@ -352,8 +389,7 @@ namespace Milvasoft.FormFileOperations
         }
 
         /// <summary>
-        /// <para><b>EN: </b> Removes file.</para> 
-        /// <para><b>TR: </b> Dosyayı siler.</para> 
+        /// Removes file.
         /// </summary>
         /// <param name="filePath"></param>
         public static void RemoveFileByPath(string filePath)
@@ -362,8 +398,7 @@ namespace Milvasoft.FormFileOperations
         }
 
         /// <summary>
-        /// <para><b>EN: </b> Removes file.</para> 
-        /// <para><b>TR: </b> Dosyayı siler.</para> 
+        /// Removes file.
         /// </summary>
         /// <param name="filePaths"></param>
         public static void RemoveFilesByPath(List<string> filePaths)
@@ -457,10 +492,8 @@ namespace Milvasoft.FormFileOperations
 
         }
 
-
         /// <summary>
-        /// <para><b>EN: </b>It is used to change the folder and name information of the uploaded file.</para>
-        /// <para><b>TR: </b>Yüklenen dosyanın klasör ve isim bilgisini değiştirmeye yarar</para>
+        /// It is used to change the folder and name information of the uploaded file.
         /// </summary>
         /// <param name="oldPath"> Old file path. </param>
         /// <param name="newId"> New id of item. </param>
@@ -482,7 +515,7 @@ namespace Milvasoft.FormFileOperations
             File.Move(oldPath, newFilePath);
 
             Directory.Delete(oldFolderPath, true);
-             
+
             return newFilePath;
         }
 
@@ -490,8 +523,7 @@ namespace Milvasoft.FormFileOperations
         #region Private Helper Methods
 
         /// <summary>
-        /// <para><b>EN: </b>Allows learning of the file type.</para>
-        /// <para><b>TR: </b>Dosya tipinin ögrenilmesini saglar.</para>
+        /// Allows learning of the file type.
         /// </summary>
         /// <param name="path"></param>
         /// <returns></returns>
@@ -503,8 +535,7 @@ namespace Milvasoft.FormFileOperations
         }
 
         /// <summary>
-        /// <para><b>EN: </b>File types to be accepted.</para>
-        /// <para><b>TR: </b>Kabul edilecn dosya tipleri.</para>
+        /// File types to be accepted.
         /// </summary>
         private static Dictionary<string, string> GetMimeTypes()
         {
@@ -565,9 +596,8 @@ namespace Milvasoft.FormFileOperations
         }
 
         /// <summary>
-		/// <para>Basically a Path.Combine for URLs. Ensures exactly one '/' separates each segment,and exactly on '&amp;' separates each query parameter.
-		///		  URL-encodes illegal characters but not reserved characters.</para>
-		/// 
+		/// Basically a Path.Combine for URLs. Ensures exactly one '/' separates each segment,and exactly on '&amp;' separates each query parameter.
+		///	URL-encodes illegal characters but not reserved characters.
 		/// </summary>
 		/// <param name="parts">URL parts to combine.</param>
 		private static string Combine(params string[] parts)
@@ -615,7 +645,8 @@ namespace Milvasoft.FormFileOperations
         }
 
         /// <summary>
-        /// <para> URL-encodes characters in a string that are neither reserved nor unreserved. Avoids encoding reserved characters such as '/' and '?'. Avoids encoding '%' if it begins a %-hex-hex sequence (i.e. avoids double-encoding).</para>
+        /// URL-encodes characters in a string that are neither reserved nor unreserved. 
+        /// Avoids encoding reserved characters such as '/' and '?'. Avoids encoding '%' if it begins a %-hex-hex sequence (i.e. avoids double-encoding).
         /// </summary>
         /// <param name="s">The string to encode.</param>
         /// <param name="encodeSpaceAsPlus">If true, spaces will be encoded as + signs. Otherwise, they'll be encoded as %20.</param>
@@ -645,8 +676,7 @@ namespace Milvasoft.FormFileOperations
         }
 
         /// <summary>
-        /// <para><b>EN: </b>Checks whether or not collection is null or empty. Assumes collection can be safely enumerated multiple times.</para>
-        /// <para><b>TR: </b>Koleksiyonun boş veya boş olup olmadığını denetler. Koleksiyonun birden çok kez güvenli bir şekilde numaralandırılabileceğini varsayar.</para>
+        /// Checks whether or not collection is null or empty. Assumes collection can be safely enumerated multiple times.
         /// </summary>
         private static bool IsNullOrEmpty(this IEnumerable @this) => @this == null || @this.GetEnumerator().MoveNext() == false;
 
