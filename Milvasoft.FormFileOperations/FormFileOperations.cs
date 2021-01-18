@@ -358,26 +358,32 @@ namespace Milvasoft.FormFileOperations
         /// <returns></returns>
         public static IFormFile ConvertToFormFile(string milvaBase64)
         {
-            var base64String = milvaBase64.Split(";base64,")[1];
+            var base64String = milvaBase64.Split(";base64,")?[1];
 
-            var contentType = GetContentType(milvaBase64);
+            var regex = @"[^:]\w+\/[\w-+\d.]+(?=;|,)";
 
-            var fileType = contentType.Split('/')[0];
-            var fileExtension = contentType.Split('/')[1];
+            var contentType = GetExtension(base64String,regex);
+
+            var splittedContentType = contentType.Split('/');
+
+            var fileType = splittedContentType?[0];
+
+            var fileExtension = splittedContentType?[1];
 
             var array = Convert.FromBase64String(base64String);
 
-            using var memory = new MemoryStream(array)
+            using var memoryStream = new MemoryStream(array)
             {
                 Position = 0
             };
 
-            return new FormFile(memory, 0, memory.Length, fileType, $"File.{fileExtension}")
+            return new FormFile(memoryStream, 0, memoryStream.Length, fileType, $"File.{fileExtension}")
             {
                 Headers = new HeaderDictionary(),
                 ContentType = contentType
             };
         }
+
 
         /// <summary>
         /// Removes the folder the file is in.
@@ -533,6 +539,14 @@ namespace Milvasoft.FormFileOperations
             var ext = Path.GetExtension(path).ToLowerInvariant();
             return types[ext];
         }
+
+        /// <summary>
+        /// Checks if <paramref name="input"/> matches <paramref name="regexString"/>.
+        /// </summary>
+        /// <param name="input"></param>
+        /// <param name="regexString"></param>
+        /// <returns></returns>
+        private static string GetExtension(string input, string regexString) => new Regex(regexString).Match(input).Captures?.FirstOrDefault()?.Value;
 
         /// <summary>
         /// File types to be accepted.
