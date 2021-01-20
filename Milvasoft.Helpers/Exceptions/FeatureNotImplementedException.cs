@@ -14,7 +14,7 @@ namespace Milvasoft.Helpers.Exceptions
         /// <param name="localizer"></param>
         public FeatureNotImplementedException(IStringLocalizer localizer) : base(localizer["FeatureNotImplementedException"])
         {
-            ErrorCode = (int)MilvasoftExceptionCode.FeatureNotImplementedException;
+            ErrorCode = (int)MilvasoftExceptionCode.FeatureNotImplemented;
         }
 
         /// <summary>
@@ -23,7 +23,7 @@ namespace Milvasoft.Helpers.Exceptions
         /// <param name="customMessage"></param>
         public FeatureNotImplementedException(string customMessage) : base(customMessage)
         {
-            ErrorCode = (int)MilvasoftExceptionCode.FeatureNotImplementedException;
+            ErrorCode = (int)MilvasoftExceptionCode.FeatureNotImplemented;
         }
 
         /// <summary>
@@ -33,7 +33,7 @@ namespace Milvasoft.Helpers.Exceptions
         /// <param name="exception"></param>
         public FeatureNotImplementedException(string customMessage, Exception exception) : base(customMessage, exception)
         {
-            ErrorCode = (int)MilvasoftExceptionCode.FeatureNotImplementedException;
+            ErrorCode = (int)MilvasoftExceptionCode.FeatureNotImplemented;
         }
     }
 }

@@ -153,7 +153,7 @@ namespace Milvasoft.Helpers
             if (idList.IsNullOrEmpty())
             {
                 response.Message = string.IsNullOrEmpty(errorMessage) ? _defaultErrorMessage : errorMessage;
-                response.StatusCode = MilvasoftStatusCodes.Status500InternalServerError;
+                response.StatusCode = MilvasoftStatusCodes.Status600Exception;
                 response.Success = false;
             }
             else
@@ -186,7 +186,7 @@ namespace Milvasoft.Helpers
             if (idList.IsNullOrEmpty())
             {
                 response.Message = string.IsNullOrEmpty(errorMessage) ? _defaultErrorMessage : errorMessage;
-                response.StatusCode = MilvasoftStatusCodes.Status500InternalServerError;
+                response.StatusCode = MilvasoftStatusCodes.Status600Exception;
                 response.Success = false;
             }
             else

@@ -1,4 +1,6 @@
-﻿using Milvasoft.Helpers.Models.Response;
+﻿using Milvasoft.Helpers.Exceptions;
+using Milvasoft.Helpers.Models;
+using Milvasoft.Helpers.Models.Response;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
@@ -51,7 +53,7 @@ namespace Milvasoft.Helpers
         /// <param name="content"></param>
         /// <param name="headers"></param>
         /// <returns> HttpRequestMessage </returns>
-        public static HttpRequestMessage CreateRequestMessage(this HttpMethod httpMethod, Encoding encoding, string mediaType, string url, object content , params KeyValuePair<string, string>[] headers)
+        public static HttpRequestMessage CreateRequestMessage(this HttpMethod httpMethod, Encoding encoding, string mediaType, string url, object content, params KeyValuePair<string, string>[] headers)
         {
             var json = JsonConvert.SerializeObject(content);
 
@@ -81,7 +83,7 @@ namespace Milvasoft.Helpers
         /// <param name="version"></param>
         /// <param name="headers"></param>
         /// <returns> HttpRequestMessage </returns>
-        public static HttpRequestMessage CreateRequestMessage(this HttpMethod httpMethod, Encoding encoding, string mediaType, string url, object content , Version version , params KeyValuePair<string, string>[] headers)
+        public static HttpRequestMessage CreateRequestMessage(this HttpMethod httpMethod, Encoding encoding, string mediaType, string url, object content, Version version, params KeyValuePair<string, string>[] headers)
         {
             var json = JsonConvert.SerializeObject(content);
 
@@ -121,8 +123,7 @@ namespace Milvasoft.Helpers
                 if (!responseObject.PropertyExists("errorCodes")) return responseObject.ToObject<SingleObjectResponse<T>>();
                 else return responseObject.ToObject<ExceptionResponse>();
             }
-
-            return response;
+            else throw new CannotGetResponseException("An error occured.");
         }
 
         /// <summary>
@@ -144,7 +145,7 @@ namespace Milvasoft.Helpers
                 if (!responseObject.PropertyExists("errorCodes")) return responseObject.ToObject<MultipleObjectResponse<T>>();
                 else return responseObject.ToObject<ExceptionResponse>();
             }
-            return response;
+            else throw new CannotGetResponseException("An error occured.");
         }
 
         /// <summary>
@@ -161,6 +162,56 @@ namespace Milvasoft.Helpers
             var contentString = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
 
             return JsonConvert.DeserializeObject<TReturn>(contentString);
+        }
+
+
+
+        /// <summary>
+        /// Sends request by <paramref name="httpRequestMessage"/>. Gets response as => <see cref="SingleObjectResponse{CommunicationModel{{T,TKey}}}"/>
+        /// <para><b> If you want to use the "ErrorCodes" property, change the return value to (ExceptionResponse) where necessary.</b></para> 
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <typeparam name="TKey"></typeparam>
+        /// <param name="httpRequestMessage"></param>
+        /// <param name="httpClient"></param>
+        /// <returns> ObjectResponse </returns>
+        public static async Task<object> SendRequestDeserializeSingle<T, TKey>(this HttpClient httpClient, HttpRequestMessage httpRequestMessage) where TKey : IEquatable<TKey>
+        {
+            var response = await httpClient.SendAsync(httpRequestMessage).ConfigureAwait(false);
+
+            if (response.IsSuccessStatusCode)
+            {
+                var contentString = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+
+                var responseObject = (JObject)JsonConvert.DeserializeObject(contentString);
+
+                if (!responseObject.PropertyExists("errorCodes")) return responseObject.ToObject<SingleObjectResponse<CommunicationModel<T, TKey>>>();
+                else return responseObject.ToObject<ExceptionResponse>();
+            }
+            else throw new CannotGetResponseException("An error occured.");
+        }
+
+        /// <summary>
+        /// Sends request by <paramref name="httpRequestMessage"/>. Gets response as => <see cref="MultipleObjectResponse{CommunicationModel{{T,TKey}}}"/>
+        /// </summary> 
+        /// <typeparam name="T"></typeparam>
+        /// <typeparam name="TKey"></typeparam>
+        /// <param name="httpRequestMessage"></param>
+        /// <param name="httpClient"></param>
+        /// <returns> ObjectResponse </returns>
+        public static async Task<object> SendRequestDeserializeMultiple<T, TKey>(this HttpClient httpClient, HttpRequestMessage httpRequestMessage) where TKey : IEquatable<TKey>
+        {
+            var response = await httpClient.SendAsync(httpRequestMessage).ConfigureAwait(false);
+            if (response.IsSuccessStatusCode)
+            {
+                var contentString = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+
+                var responseObject = (JObject)JsonConvert.DeserializeObject(contentString);
+
+                if (!responseObject.PropertyExists("errorCodes")) return responseObject.ToObject<MultipleObjectResponse<CommunicationModel<T, TKey>>>();
+                else return responseObject.ToObject<ExceptionResponse>();
+            }
+            else throw new CannotGetResponseException("An error occured.");
         }
 
 
