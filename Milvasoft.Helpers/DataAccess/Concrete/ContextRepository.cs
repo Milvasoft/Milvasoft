@@ -159,10 +159,10 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
 
             var usersString = "Users";
 
-            if (!PropertyExists<TContext>(usersString))
+            if (!CommonHelper.PropertyExists<TContext>(usersString))
                 throw new ArgumentException($"Type of {typeof(TContext)}'s properties doesn't contain '{usersString}'.");
 
-            if (!PropertyExists<TContext>(userTokensString))
+            if (!CommonHelper.PropertyExists<TContext>(userTokensString))
                 throw new ArgumentException($"Type of {typeof(TContext)}'s properties doesn't contain '{userTokensString}'.");
 
             var userTokens = (DbSet<IdentityUserToken<TKey>>)_dbContext.GetType().GetProperty(userTokensString).GetValue(_dbContext, null);
@@ -219,12 +219,6 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
         /// <typeparam name="TEntity"></typeparam>
         /// <returns></returns>
         public DbSet<TEntity> GetDbSet<TEntity>() where TEntity : class => _dbContext.Set<TEntity>();
-
-        private static bool PropertyExists<T>(string propertyName)
-        {
-            return typeof(T).GetProperty(propertyName, BindingFlags.IgnoreCase |
-                                                       BindingFlags.Public | BindingFlags.Instance) != null;
-        }
 
     }
 }

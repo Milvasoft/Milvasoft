@@ -26,51 +26,10 @@ namespace Milvasoft.FormFileOperations
         /// <returns></returns>
         public delegate string FilesFolderNameCreator(Type type);
 
-        /// <summary>
-        /// Allowed file extensions for media files.
-        /// </summary>
-        public static ILookup<FileType, string> DefaultAllowedExtensions { get; } = new Dictionary<FileType, string>
-        {
-           {FileType.Image, ".ai"},                {FileType.Video, ".3g2"},             {FileType.Audio, ".aif"},                       {FileType.EMail, ".email"},
-           {FileType.Image, ".bmp"},               {FileType.Video, ".3gp"},             {FileType.Audio, ".cda"},                       {FileType.EMail, ".eml"},
-           {FileType.Image, ".gif"},               {FileType.Video, ".avi"},             {FileType.Audio, ".mid"},                       {FileType.EMail, ".emlx"},
-           {FileType.Image, ".ico"},               {FileType.Video, ".avi"},             {FileType.Audio, ".mp3"},                       {FileType.EMail, ".msg"},
-           {FileType.Image, ".jpeg"},              {FileType.Video, ".h264"},            {FileType.Audio, ".mpa"},                       {FileType.EMail, ".oft"},
-           {FileType.Image, ".jpg"},               {FileType.Video, ".m4v"},             {FileType.Audio, ".ogg"},                       {FileType.EMail, ".ost"},
-           {FileType.Image, ".png"},               {FileType.Video, ".mkv"},             {FileType.Audio, ".wav"},                       {FileType.EMail, ".pst"},
-           {FileType.Image, ".ps"},                {FileType.Video, ".mov"},             {FileType.Audio, ".wma"},                       {FileType.EMail, ".vcf"},
-           {FileType.Image, ".svg"},               {FileType.Video, ".mp4"},             {FileType.Audio, ".wpl"},
-           {FileType.Image, ".tif"},               {FileType.Video, ".mpg"},
-           {FileType.Image, ".tiff"},              {FileType.Video, ".mpeg"},
-                                                    {FileType.Video, ".wmv"},
-
-
-
-           {FileType.Document, ".doc"},           {FileType.Compressed, ".7z"},          {FileType.InternetRelated, ".ai"},              {FileType.Font, ".fnt"},
-           {FileType.Document, ".docx"},          {FileType.Compressed, ".arj"},         {FileType.InternetRelated, ".bmp"},             {FileType.Font, ".fon"},
-           {FileType.Document, ".odt"},           {FileType.Compressed, ".deb"},         {FileType.InternetRelated, ".gif"},             {FileType.Font, ".otf"},
-           {FileType.Document, ".pdf"},           {FileType.Compressed, ".pkg"},         {FileType.InternetRelated, ".ico"},             {FileType.Font, ".ttf"},
-           {FileType.Document, ".rtf"},           {FileType.Compressed, ".rar"},         {FileType.InternetRelated, ".jpeg"},
-           {FileType.Document, ".tex"},           {FileType.Compressed, ".rpm"},         {FileType.InternetRelated, ".jpg"},
-           {FileType.Document, ".txt"},           {FileType.Compressed, ".zip"},         {FileType.InternetRelated, ".png"},
-           {FileType.Document, ".wpd"},                                                   {FileType.InternetRelated, ".ps"},
-           {FileType.Document, ".ods"},                                                   {FileType.InternetRelated, ".psd"},
-           {FileType.Document, ".xls"},                                                   {FileType.InternetRelated, ".svg"},
-           {FileType.Document, ".xlsm"},                                                  {FileType.InternetRelated, ".tif"},
-           {FileType.Document, ".xlsx"},                                                  {FileType.InternetRelated, ".tiff"},
-           {FileType.Document, ".key"},
-           {FileType.Document, ".odp"},
-           {FileType.Document, ".pps"},
-           {FileType.Document, ".ppt"},
-           {FileType.Document, ".pptx"},
-        }.ToLookup(i => i.Key, i => i.Value);
-
         #endregion
 
-        //TODO SaveFileToPathAsync and SaveFilesToPathAsync method's overloads will be added for save file from data uri formatted base64 string.
-
         /// <summary>
-        /// Saves uploaded IFormFile file to physical file path.
+        /// Saves uploaded IFormFile file to physical file path. If <paramref name="file"/>.Lenght is lower or equal than 0 then returns empty string.
         /// Target Path will be : "<paramref name ="basePath"></paramref>/<b><paramref name="folderNameCreator"/>()</b>/<paramref name="entity"></paramref>.<paramref name="propertyName"/>"
         /// </summary>
         /// 
@@ -95,6 +54,8 @@ namespace Milvasoft.FormFileOperations
                                                                       FilesFolderNameCreator folderNameCreator,
                                                                       string propertyName)
         {
+            if (file.Length <= 0) return "";
+
             //Gets file extension.
             var fileExtension = Path.GetExtension(file.FileName);
 
@@ -137,11 +98,11 @@ namespace Milvasoft.FormFileOperations
             {
                 Directory.Delete(folderPathOfItem, true);
                 throw;
-            }           
+            }
         }
 
         /// <summary>
-        /// Saves uploaded IFormFile files to physical file path.
+        /// Saves uploaded IFormFile files to physical file path. If file list is null or empty returns empty <see cref="List{string}"/> 
         /// Target Path will be : "<paramref name ="basePath"></paramref>/<b><paramref name="folderNameCreator"/>()</b>/<paramref name="entity"></paramref>.<paramref name="propertyName"/>"
         /// </summary>
         /// 
@@ -166,7 +127,7 @@ namespace Milvasoft.FormFileOperations
                                                                              FilesFolderNameCreator folderNameCreator,
                                                                              string propertyName)
         {
-            if (files.IsNullOrEmpty()) throw new ArgumentNullException("Files list cannot be empty!");//TODO return null or empty list?
+            if (files.IsNullOrEmpty()) return new List<string>();
 
             //Gets file extension.
             var fileExtension = Path.GetExtension(files.First().FileName);
@@ -176,7 +137,7 @@ namespace Milvasoft.FormFileOperations
 
             //We combined the name of this class (folderNameOfClass) with the path of the basePath folder. So we created the path of the folder belonging to this class.
             var folderPathOfClass = Path.Combine(basePath, folderNameOfClass);
-         
+
             //Since each data belonging to this class (folderNameOfClass) will have a separate folder, we received the Id of the data sent.
             var folderNameOfItem = PropertyExists<TEntity>(propertyName) ? entity.GetType().GetProperty(propertyName).GetValue(entity, null).ToString() : throw new ArgumentException($"Type of {entity.GetType().Name}'s properties doesn't contain '{propertyName}'.");
 
@@ -218,11 +179,11 @@ namespace Milvasoft.FormFileOperations
                 Directory.Delete(folderPathOfClass);
                 Directory.Delete(folderPathOfItem);
                 throw;
-            }           
+            }
         }
 
         /// <summary>
-        /// Saves uploaded IFormFile files to physical file path. 
+        /// Saves uploaded IFormFile files to physical file path. If file list is null or empty returns empty <see cref="List{string}"/> 
         /// Target Path will be : "<paramref name ="basePath"></paramref>/<b><paramref name="folderNameCreator"/>()</b>/<paramref name="entity"></paramref>.<paramref name="propertyName"/>"
         /// </summary>
         /// 
@@ -247,7 +208,7 @@ namespace Milvasoft.FormFileOperations
                                                                              FilesFolderNameCreator folderNameCreator,
                                                                              string propertyName)
         {
-            if (files.IsNullOrEmpty()) throw new ArgumentNullException("Files list cannot be empty!");
+            if (files.IsNullOrEmpty()) return new List<string>();
             //Gets file extension.
             var fileExtension = Path.GetExtension(files.First().FileName);
 
@@ -256,7 +217,7 @@ namespace Milvasoft.FormFileOperations
 
             //We combined the name of this class (folderNameOfClass) with the path of the basePath folder. So we created the path of the folder belonging to this class.
             var folderPathOfClass = Path.Combine(basePath, folderNameOfClass);
-          
+
             //Since each data belonging to this class (folderNameOfClass) will have a separate folder, we received the Id of the data sent.
             var folderNameOfItem = PropertyExists<TEntity>(propertyName) ? entity.GetType().GetProperty(propertyName).GetValue(entity, null).ToString() : throw new ArgumentException($"Type of {entity.GetType().Name}'s properties doesn't contain '{propertyName}'.");
 
@@ -299,7 +260,7 @@ namespace Milvasoft.FormFileOperations
                 Directory.Delete(folderPathOfItem);
                 throw;
             }
-           
+
         }
 
         /// <summary>
@@ -389,7 +350,7 @@ namespace Milvasoft.FormFileOperations
 
             var regex = @"[^:]\w+\/[\w-+\d.]+(?=;|,)";
 
-            var contentType = GetExtension(base64String,regex);
+            var contentType = GetExtension(base64String, regex);
 
             var splittedContentType = contentType.Split('/');
 
@@ -410,7 +371,6 @@ namespace Milvasoft.FormFileOperations
                 ContentType = contentType
             };
         }
-
 
         /// <summary>
         /// Removes the folder the file is in.
@@ -560,12 +520,7 @@ namespace Milvasoft.FormFileOperations
         /// </summary>
         /// <param name="path"></param>
         /// <returns></returns>
-        private static string GetContentType(string path)
-        {
-            var types = GetMimeTypes();
-            var ext = Path.GetExtension(path).ToLowerInvariant();
-            return types[ext];
-        }
+        private static string GetContentType(string path) => GetMimeTypes()[Path.GetExtension(path).ToLowerInvariant()];
 
         /// <summary>
         /// Checks if <paramref name="input"/> matches <paramref name="regexString"/>.
@@ -621,7 +576,41 @@ namespace Milvasoft.FormFileOperations
         /// <returns></returns>
         private static List<string> GetDefaultFileExtensions(FileType fileType)
         {
-            return DefaultAllowedExtensions.Where(i => i.Key == fileType).Select(i => i.First()).ToList();
+            return new Dictionary<FileType, string>
+            {
+               {FileType.Image, ".ai"},                {FileType.Video, ".3g2"},             {FileType.Audio, ".aif"},                       {FileType.EMail, ".email"},
+               {FileType.Image, ".bmp"},               {FileType.Video, ".3gp"},             {FileType.Audio, ".cda"},                       {FileType.EMail, ".eml"},
+               {FileType.Image, ".gif"},               {FileType.Video, ".avi"},             {FileType.Audio, ".mid"},                       {FileType.EMail, ".emlx"},
+               {FileType.Image, ".ico"},               {FileType.Video, ".avi"},             {FileType.Audio, ".mp3"},                       {FileType.EMail, ".msg"},
+               {FileType.Image, ".jpeg"},              {FileType.Video, ".h264"},            {FileType.Audio, ".mpa"},                       {FileType.EMail, ".oft"},
+               {FileType.Image, ".jpg"},               {FileType.Video, ".m4v"},             {FileType.Audio, ".ogg"},                       {FileType.EMail, ".ost"},
+               {FileType.Image, ".png"},               {FileType.Video, ".mkv"},             {FileType.Audio, ".wav"},                       {FileType.EMail, ".pst"},
+               {FileType.Image, ".ps"},                {FileType.Video, ".mov"},             {FileType.Audio, ".wma"},                       {FileType.EMail, ".vcf"},
+               {FileType.Image, ".svg"},               {FileType.Video, ".mp4"},             {FileType.Audio, ".wpl"},
+               {FileType.Image, ".tif"},               {FileType.Video, ".mpg"},
+               {FileType.Image, ".tiff"},              {FileType.Video, ".mpeg"},
+                                                        {FileType.Video, ".wmv"},
+
+
+
+               {FileType.Document, ".doc"},           {FileType.Compressed, ".7z"},          {FileType.InternetRelated, ".ai"},              {FileType.Font, ".fnt"},
+               {FileType.Document, ".docx"},          {FileType.Compressed, ".arj"},         {FileType.InternetRelated, ".bmp"},             {FileType.Font, ".fon"},
+               {FileType.Document, ".odt"},           {FileType.Compressed, ".deb"},         {FileType.InternetRelated, ".gif"},             {FileType.Font, ".otf"},
+               {FileType.Document, ".pdf"},           {FileType.Compressed, ".pkg"},         {FileType.InternetRelated, ".ico"},             {FileType.Font, ".ttf"},
+               {FileType.Document, ".rtf"},           {FileType.Compressed, ".rar"},         {FileType.InternetRelated, ".jpeg"},
+               {FileType.Document, ".tex"},           {FileType.Compressed, ".rpm"},         {FileType.InternetRelated, ".jpg"},
+               {FileType.Document, ".txt"},           {FileType.Compressed, ".zip"},         {FileType.InternetRelated, ".png"},
+               {FileType.Document, ".wpd"},                                                  {FileType.InternetRelated, ".ps"},
+               {FileType.Document, ".ods"},                                                  {FileType.InternetRelated, ".psd"},
+               {FileType.Document, ".xls"},                                                  {FileType.InternetRelated, ".svg"},
+               {FileType.Document, ".xlsm"},                                                 {FileType.InternetRelated, ".tif"},
+               {FileType.Document, ".xlsx"},                                                 {FileType.InternetRelated, ".tiff"},
+               {FileType.Document, ".key"},
+               {FileType.Document, ".odp"},
+               {FileType.Document, ".pps"},
+               {FileType.Document, ".ppt"},
+               {FileType.Document, ".pptx"},
+            }.ToLookup(i => i.Key, i => i.Value).Where(i => i.Key == fileType).Select(i => i.First()).ToList();
         }
 
         /// <summary>
@@ -630,11 +619,9 @@ namespace Milvasoft.FormFileOperations
         /// <typeparam name="T"></typeparam>
         /// <param name="propertyName"></param>
         /// <returns></returns>
-        private static bool PropertyExists<T>(string propertyName)
-        {
-            return typeof(T).GetProperty(propertyName, BindingFlags.IgnoreCase |
-                                                       BindingFlags.Public | BindingFlags.Instance) != null;
-        }
+        private static bool PropertyExists<T>(string propertyName) => typeof(T).GetProperty(propertyName, BindingFlags.IgnoreCase |
+                                                                                                          BindingFlags.Public |
+                                                                                                          BindingFlags.Instance) != null;
 
         /// <summary>
 		/// Basically a Path.Combine for URLs. Ensures exactly one '/' separates each segment,and exactly on '&amp;' separates each query parameter.

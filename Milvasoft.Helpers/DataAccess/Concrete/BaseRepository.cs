@@ -149,28 +149,26 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
         /// <param name="conditionExpression"></param>
         /// <returns></returns>
         public virtual async Task<(IEnumerable<TEntity> entities, int pageCount, int totalDataCount)> GetAsPaginatedAsync(int requestedPageNumber,
-                                                                                                      int countOfRequestedRecordsInPage,
-                                                                                                      Expression<Func<TEntity, bool>> conditionExpression = null)
+                                                                                                                          int countOfRequestedRecordsInPage,
+                                                                                                                          Expression<Func<TEntity, bool>> conditionExpression = null)
         {
-
-
-            if (requestedPageNumber == 0) throw new ArgumentOutOfRangeException($"Requested page count cannot be 0. Page count must be greater than 0.");
-            if (countOfRequestedRecordsInPage <= 0) throw new ArgumentOutOfRangeException($"Count of requested record count cannot be 0 or less. Requested record count must be greater than 0.");
+            ValidatePaginationParameters(requestedPageNumber, countOfRequestedRecordsInPage);
 
             var condition = CreateConditionExpression(conditionExpression);
-            var dataCount = await _dbContext.Set<TEntity>().Where(condition ?? (entity => true)).CountAsync().ConfigureAwait(false);
 
-            var repo = await _dbContext.Set<TEntity>().Where(condition ?? (entity => true)).Skip((requestedPageNumber - 1) * countOfRequestedRecordsInPage).Take(countOfRequestedRecordsInPage).ToListAsync().ConfigureAwait(false);
+            var totalDataCount = await GetCountAsync(conditionExpression).ConfigureAwait(false);
 
-            var actualPageCount = (Convert.ToDouble(dataCount) / Convert.ToDouble(countOfRequestedRecordsInPage));
+            var repo = await _dbContext.Set<TEntity>().Where(condition ?? (entity => true))
+                                                      .Skip((requestedPageNumber - 1) * countOfRequestedRecordsInPage)
+                                                      .Take(countOfRequestedRecordsInPage)
+                                                      .ToListAsync().ConfigureAwait(false);
 
-            var estimatedCountOfRanges = Convert.ToInt32(Math.Ceiling(actualPageCount));
+            var estimatedCountOfPages = CalculatePageCountAndCompareWithRequested(totalDataCount, countOfRequestedRecordsInPage, requestedPageNumber);
 
-            if (estimatedCountOfRanges != 0 && requestedPageNumber > estimatedCountOfRanges)
-                throw new ArgumentOutOfRangeException($"Requested page count is more than actual page count. Maximum page count must be {estimatedCountOfRanges}.");
-
-            return (entities: repo, pageCount: estimatedCountOfRanges, totalDataCount: dataCount);
+            return (entities: repo, pageCount: estimatedCountOfPages, totalDataCount: totalDataCount);
         }
+
+
 
         /// <summary>
         /// <para> Creates asynchronously a shallow copy of a range of entity's which IsDeleted property is true, in the source List of TEntity with requested count,range and includes.
@@ -185,25 +183,25 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
         /// <param name="conditionExpression"></param>
         /// <returns></returns>
         public virtual async Task<(IEnumerable<TEntity> entities, int pageCount, int totalDataCount)> GetAsPaginatedAsync(int requestedPageNumber,
-                                                                                                      int countOfRequestedRecordsInPage,
-                                                                                                      Func<IIncludable<TEntity>, IIncludable> includes,
-                                                                                                      Expression<Func<TEntity, bool>> conditionExpression = null)
+                                                                                                                          int countOfRequestedRecordsInPage,
+                                                                                                                          Func<IIncludable<TEntity>, IIncludable> includes,
+                                                                                                                          Expression<Func<TEntity, bool>> conditionExpression = null)
         {
-            if (requestedPageNumber == 0) throw new ArgumentOutOfRangeException($"Requested page count cannot be 0. Page count must be greater than 0.");
-            if (countOfRequestedRecordsInPage <= 0) throw new ArgumentOutOfRangeException($"Count of requested record count cannot be 0 or less. Requested record count must be greater than 0.");
+            ValidatePaginationParameters(requestedPageNumber, countOfRequestedRecordsInPage);
 
             var condition = CreateConditionExpression(conditionExpression);
-            var dataCount = await _dbContext.Set<TEntity>().Where(condition ?? (entity => true)).CountAsync().ConfigureAwait(false);
-            var repo = await _dbContext.Set<TEntity>().Where(condition ?? (entity => true)).IncludeMultiple(includes).Skip((requestedPageNumber - 1) * countOfRequestedRecordsInPage).Take(countOfRequestedRecordsInPage).ToListAsync().ConfigureAwait(false);
 
-            var actualPageCount = (Convert.ToDouble(dataCount) / Convert.ToDouble(countOfRequestedRecordsInPage));
+            var totalDataCount = await GetCountAsync(conditionExpression).ConfigureAwait(false);
 
-            var estimatedCountOfRanges = Convert.ToInt32(Math.Ceiling(actualPageCount));
+            var repo = await _dbContext.Set<TEntity>().Where(condition ?? (entity => true))
+                                                      .IncludeMultiple(includes)
+                                                      .Skip((requestedPageNumber - 1) * countOfRequestedRecordsInPage)
+                                                      .Take(countOfRequestedRecordsInPage)
+                                                      .ToListAsync().ConfigureAwait(false);
 
-            if (estimatedCountOfRanges != 0 && requestedPageNumber > estimatedCountOfRanges)
-                throw new ArgumentOutOfRangeException($"Requested page count is more than actual page count. Maximum page count must be {estimatedCountOfRanges}.");
+            var estimatedCountOfPages = CalculatePageCountAndCompareWithRequested(totalDataCount, countOfRequestedRecordsInPage, requestedPageNumber);
 
-            return (entities: repo, pageCount: estimatedCountOfRanges, totalDataCount: dataCount);
+            return (entities: repo, pageCount: estimatedCountOfPages, totalDataCount: totalDataCount);
         }
 
         /// <summary>
@@ -222,49 +220,39 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
         /// <param name="conditionExpression"></param>
         /// <returns></returns>
         public virtual async Task<(IEnumerable<TEntity> entities, int pageCount, int totalDataCount)> GetAsPaginatedAndOrderedAsync(int requestedPageNumber,
-                                                                                                                int countOfRequestedRecordsInPage,
-                                                                                                                string orderByPropertyName,
-                                                                                                                bool orderByAscending,
-                                                                                                                Expression<Func<TEntity, bool>> conditionExpression = null)
+                                                                                                                                    int countOfRequestedRecordsInPage,
+                                                                                                                                    string orderByPropertyName,
+                                                                                                                                    bool orderByAscending,
+                                                                                                                                    Expression<Func<TEntity, bool>> conditionExpression = null)
         {
-            if (requestedPageNumber <= 0) throw new ArgumentOutOfRangeException($"Requested page count cannot be 0. Page count must be greater than 0.");
-            if (countOfRequestedRecordsInPage <= 0) throw new ArgumentOutOfRangeException($"Count of requested record count cannot be 0 or less. Requested record count must be greater than 0.");
+            ValidatePaginationParameters(requestedPageNumber, countOfRequestedRecordsInPage);
 
-            List<TEntity> repo;
             var entityType = typeof(TEntity);
 
-            if (!CommonHelper.PropertyExists<TEntity>(orderByPropertyName))
-                throw new ArgumentException($"Type of {entityType.Name}'s properties doesn't contain '{orderByPropertyName}'.");
+            CheckProperty(orderByPropertyName, entityType);
 
-            var parameterExpression = Expression.Parameter(entityType, "i");
-            Expression orderByProperty = Expression.Property(parameterExpression, orderByPropertyName);
-
-            var predicate = Expression.Lambda<Func<TEntity, object>>(Expression.Convert(orderByProperty, typeof(object)), parameterExpression);
+            var predicate = CreateObjectPredicate(entityType, orderByPropertyName);
 
             var condition = CreateConditionExpression(conditionExpression);
-            var dataCount = await _dbContext.Set<TEntity>().Where(condition ?? (entity => true)).CountAsync();
 
-            if (orderByAscending)
-                repo = await _dbContext.Set<TEntity>().Where(condition ?? (entity => true))
-                                                       .OrderBy(predicate)
-                                                        .Skip((requestedPageNumber - 1) * countOfRequestedRecordsInPage)
-                                                            .Take(countOfRequestedRecordsInPage)
-                                                                    .ToListAsync().ConfigureAwait(false);
-            else
-                repo = await _dbContext.Set<TEntity>().Where(condition ?? (entity => true))
+            var totalDataCount = await GetCountAsync(conditionExpression).ConfigureAwait(false);
+
+            List<TEntity> repo;
+
+            if (orderByAscending) repo = await _dbContext.Set<TEntity>().Where(condition ?? (entity => true))
+                                                                        .OrderBy(predicate)
+                                                                        .Skip((requestedPageNumber - 1) * countOfRequestedRecordsInPage)
+                                                                        .Take(countOfRequestedRecordsInPage)
+                                                                        .ToListAsync().ConfigureAwait(false);
+            else repo = await _dbContext.Set<TEntity>().Where(condition ?? (entity => true))
                                                        .OrderByDescending(predicate)
-                                                        .Skip((requestedPageNumber - 1) * countOfRequestedRecordsInPage)
-                                                            .Take(countOfRequestedRecordsInPage)
-                                                                    .ToListAsync().ConfigureAwait(false);
+                                                       .Skip((requestedPageNumber - 1) * countOfRequestedRecordsInPage)
+                                                       .Take(countOfRequestedRecordsInPage)
+                                                       .ToListAsync().ConfigureAwait(false);
 
-            var actualPageCount = (Convert.ToDouble(dataCount) / Convert.ToDouble(countOfRequestedRecordsInPage));
+            var estimatedCountOfPages = CalculatePageCountAndCompareWithRequested(totalDataCount, countOfRequestedRecordsInPage, requestedPageNumber);
 
-            var estimatedCountOfRanges = Convert.ToInt32(Math.Ceiling(actualPageCount));
-
-            if (estimatedCountOfRanges != 0 && requestedPageNumber > estimatedCountOfRanges)
-                throw new ArgumentOutOfRangeException($"Requested page count is more than actual page count. Maximum page count must be {estimatedCountOfRanges}.");
-
-            return (entities: repo, pageCount: estimatedCountOfRanges, totalDataCount: dataCount);
+            return (entities: repo, pageCount: estimatedCountOfPages, totalDataCount: totalDataCount);
         }
 
         /// <summary>
@@ -284,53 +272,42 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
         /// <param name="conditionExpression"></param>
         /// <returns></returns>
         public virtual async Task<(IEnumerable<TEntity> entities, int pageCount, int totalDataCount)> GetAsPaginatedAndOrderedAsync(int requestedPageNumber,
-                                                                                                                int countOfRequestedRecordsInPage,
-                                                                                                                Func<IIncludable<TEntity>, IIncludable> includes,
-                                                                                                                string orderByPropertyName,
-                                                                                                                bool orderByAscending,
-                                                                                                                Expression<Func<TEntity, bool>> conditionExpression = null)
+                                                                                                                                    int countOfRequestedRecordsInPage,
+                                                                                                                                    Func<IIncludable<TEntity>, IIncludable> includes,
+                                                                                                                                    string orderByPropertyName,
+                                                                                                                                    bool orderByAscending,
+                                                                                                                                    Expression<Func<TEntity, bool>> conditionExpression = null)
         {
-            if (requestedPageNumber == 0) throw new ArgumentOutOfRangeException($"Requested page count cannot be 0. Page count must be greater than 0.");
-            if (countOfRequestedRecordsInPage <= 0) throw new ArgumentOutOfRangeException($"Count of requested record count cannot be 0 or less. Requested record count must be greater than 0.");
-
-            List<TEntity> repo;
+            ValidatePaginationParameters(requestedPageNumber, countOfRequestedRecordsInPage);
 
             var entityType = typeof(TEntity);
 
-            if (!CommonHelper.PropertyExists<TEntity>(orderByPropertyName))
-                throw new ArgumentException($"Type of {entityType.Name}'s properties doesn't contain '{orderByPropertyName}'.");
+            CheckProperty(orderByPropertyName, entityType);
 
-            var parameterExpression = Expression.Parameter(entityType, "i");
-            Expression orderByProperty = Expression.Property(parameterExpression, orderByPropertyName);
-
-            var predicate = Expression.Lambda<Func<TEntity, object>>(Expression.Convert(orderByProperty, typeof(object)), parameterExpression);
+            var predicate = CreateObjectPredicate(entityType, orderByPropertyName);
 
             var condition = CreateConditionExpression(conditionExpression);
-            var dataCount = await _dbContext.Set<TEntity>().Where(condition ?? (entity => true)).CountAsync();
 
-            if (orderByAscending)
-                repo = (await _dbContext.Set<TEntity>().Where(condition ?? (entity => true))
-                                                        .OrderBy(predicate)
-                                                          .Skip((requestedPageNumber - 1) * countOfRequestedRecordsInPage)
-                                                            .Take(countOfRequestedRecordsInPage)
-                                                                  .IncludeMultiple(includes)
-                                                                      .ToListAsync().ConfigureAwait(false));
-            else
-                repo = (await _dbContext.Set<TEntity>().Where(condition ?? (entity => true))
-                                                         .OrderByDescending(predicate)
-                                                          .Skip((requestedPageNumber - 1) * countOfRequestedRecordsInPage)
-                                                            .Take(countOfRequestedRecordsInPage)
-                                                                  .IncludeMultiple(includes)
-                                                                      .ToListAsync().ConfigureAwait(false));
+            var totalDataCount = await GetCountAsync(conditionExpression).ConfigureAwait(false);
 
-            var actualPageCount = (Convert.ToDouble(dataCount) / Convert.ToDouble(countOfRequestedRecordsInPage));
+            List<TEntity> repo;
 
-            var estimatedCountOfRanges = Convert.ToInt32(Math.Ceiling(actualPageCount));
+            if (orderByAscending) repo = (await _dbContext.Set<TEntity>().Where(condition ?? (entity => true))
+                                                                         .OrderBy(predicate)
+                                                                         .Skip((requestedPageNumber - 1) * countOfRequestedRecordsInPage)
+                                                                         .Take(countOfRequestedRecordsInPage)
+                                                                         .IncludeMultiple(includes)
+                                                                         .ToListAsync().ConfigureAwait(false));
+            else repo = (await _dbContext.Set<TEntity>().Where(condition ?? (entity => true))
+                                                        .OrderByDescending(predicate)
+                                                        .Skip((requestedPageNumber - 1) * countOfRequestedRecordsInPage)
+                                                        .Take(countOfRequestedRecordsInPage)
+                                                        .IncludeMultiple(includes)
+                                                        .ToListAsync().ConfigureAwait(false));
 
-            if (estimatedCountOfRanges != 0 && requestedPageNumber > estimatedCountOfRanges)
-                throw new ArgumentOutOfRangeException($"Requested page count is more than actual page count. Maximum page count must be {estimatedCountOfRanges}.");
+            var estimatedCountOfPages = CalculatePageCountAndCompareWithRequested(totalDataCount, countOfRequestedRecordsInPage, requestedPageNumber);
 
-            return (entities: repo, pageCount: estimatedCountOfRanges, totalDataCount: dataCount);
+            return (entities: repo, pageCount: estimatedCountOfPages, totalDataCount: totalDataCount);
         }
 
         /// <summary>
@@ -348,40 +325,33 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
         /// <param name="conditionExpression"></param>
         /// <returns></returns>
         public virtual async Task<(IEnumerable<TEntity> entities, int pageCount, int totalDataCount)> GetAsPaginatedAndOrderedAsync(int requestedPageNumber,
-                                                                                                                int countOfRequestedRecordsInPage,
-                                                                                                                Expression<Func<TEntity, object>> orderByKeySelector,
-                                                                                                                bool orderByAscending,
-                                                                                                                Expression<Func<TEntity, bool>> conditionExpression = null)
+                                                                                                                                    int countOfRequestedRecordsInPage,
+                                                                                                                                    Expression<Func<TEntity, object>> orderByKeySelector,
+                                                                                                                                    bool orderByAscending,
+                                                                                                                                    Expression<Func<TEntity, bool>> conditionExpression = null)
         {
-            if (requestedPageNumber <= 0) throw new ArgumentOutOfRangeException($"Requested page count cannot be 0. Page count must be greater than 0.");
-            if (countOfRequestedRecordsInPage <= 0) throw new ArgumentOutOfRangeException($"Count of requested record count cannot be 0 or less. Requested record count must be greater than 0.");
+            ValidatePaginationParameters(requestedPageNumber, countOfRequestedRecordsInPage);
+
+            var condition = CreateConditionExpression(conditionExpression);
+
+            var totalDataCount = await GetCountAsync(conditionExpression).ConfigureAwait(false);
 
             List<TEntity> repo;
 
-            var condition = CreateConditionExpression(conditionExpression);
-            var dataCount = await _dbContext.Set<TEntity>().Where(condition ?? (entity => true)).CountAsync();
-
-            if (orderByAscending)
-                repo = await _dbContext.Set<TEntity>().Where(condition ?? (entity => true))
-                                                       .OrderBy(orderByKeySelector)
-                                                        .Skip((requestedPageNumber - 1) * countOfRequestedRecordsInPage)
-                                                            .Take(countOfRequestedRecordsInPage)
-                                                                    .ToListAsync().ConfigureAwait(false);
-            else
-                repo = await _dbContext.Set<TEntity>().Where(condition ?? (entity => true))
+            if (orderByAscending) repo = await _dbContext.Set<TEntity>().Where(condition ?? (entity => true))
+                                                                        .OrderBy(orderByKeySelector)
+                                                                        .Skip((requestedPageNumber - 1) * countOfRequestedRecordsInPage)
+                                                                        .Take(countOfRequestedRecordsInPage)
+                                                                        .ToListAsync().ConfigureAwait(false);
+            else repo = await _dbContext.Set<TEntity>().Where(condition ?? (entity => true))
                                                        .OrderByDescending(orderByKeySelector)
-                                                        .Skip((requestedPageNumber - 1) * countOfRequestedRecordsInPage)
-                                                            .Take(countOfRequestedRecordsInPage)
-                                                                    .ToListAsync().ConfigureAwait(false);
+                                                       .Skip((requestedPageNumber - 1) * countOfRequestedRecordsInPage)
+                                                       .Take(countOfRequestedRecordsInPage)
+                                                       .ToListAsync().ConfigureAwait(false);
 
-            var actualPageCount = (Convert.ToDouble(dataCount) / Convert.ToDouble(countOfRequestedRecordsInPage));
+            var estimatedCountOfPages = CalculatePageCountAndCompareWithRequested(totalDataCount, countOfRequestedRecordsInPage, requestedPageNumber);
 
-            var estimatedCountOfRanges = Convert.ToInt32(Math.Ceiling(actualPageCount));
-
-            if (estimatedCountOfRanges != 0 && requestedPageNumber > estimatedCountOfRanges)
-                throw new ArgumentOutOfRangeException($"Requested page count is more than actual page count. Maximum page count must be {estimatedCountOfRanges}.");
-
-            return (entities: repo, pageCount: estimatedCountOfRanges, totalDataCount: dataCount);
+            return (entities: repo, pageCount: estimatedCountOfPages, totalDataCount: totalDataCount);
         }
 
         /// <summary>
@@ -400,45 +370,37 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
         /// <param name="conditionExpression"></param>
         /// <returns></returns>
         public virtual async Task<(IEnumerable<TEntity> entities, int pageCount, int totalDataCount)> GetAsPaginatedAndOrderedAsync(int requestedPageNumber,
-                                                                                                                int countOfRequestedRecordsInPage,
-                                                                                                                Func<IIncludable<TEntity>, IIncludable> includes,
-                                                                                                                Expression<Func<TEntity, object>> orderByKeySelector,
-                                                                                                                bool orderByAscending,
-                                                                                                                Expression<Func<TEntity, bool>> conditionExpression = null)
+                                                                                                                                    int countOfRequestedRecordsInPage,
+                                                                                                                                    Func<IIncludable<TEntity>, IIncludable> includes,
+                                                                                                                                    Expression<Func<TEntity, object>> orderByKeySelector,
+                                                                                                                                    bool orderByAscending,
+                                                                                                                                    Expression<Func<TEntity, bool>> conditionExpression = null)
         {
-            if (requestedPageNumber == 0) throw new ArgumentOutOfRangeException($"Requested page count cannot be 0. Page count must be greater than 0.");
-            if (countOfRequestedRecordsInPage <= 0) throw new ArgumentOutOfRangeException($"Count of requested record count cannot be 0 or less. Requested record count must be greater than 0.");
+            ValidatePaginationParameters(requestedPageNumber, countOfRequestedRecordsInPage);
+
+            var condition = CreateConditionExpression(conditionExpression);
+
+            var totalDataCount = await GetCountAsync(conditionExpression).ConfigureAwait(false);
 
             List<TEntity> repo;
 
-            var condition = CreateConditionExpression(conditionExpression);
-            var dataCount = await _dbContext.Set<TEntity>().Where(condition ?? (entity => true)).CountAsync();
+            if (orderByAscending) repo = (await _dbContext.Set<TEntity>().Where(condition ?? (entity => true))
+                                                                         .OrderBy(orderByKeySelector)
+                                                                         .Skip((requestedPageNumber - 1) * countOfRequestedRecordsInPage)
+                                                                         .Take(countOfRequestedRecordsInPage)
+                                                                         .IncludeMultiple(includes)
+                                                                         .ToListAsync().ConfigureAwait(false));
+            else repo = (await _dbContext.Set<TEntity>().Where(condition ?? (entity => true))
+                                                        .OrderByDescending(orderByKeySelector)
+                                                        .Skip((requestedPageNumber - 1) * countOfRequestedRecordsInPage)
+                                                        .Take(countOfRequestedRecordsInPage)
+                                                        .IncludeMultiple(includes)
+                                                        .ToListAsync().ConfigureAwait(false));
 
-            if (orderByAscending)
-                repo = (await _dbContext.Set<TEntity>().Where(condition ?? (entity => true))
-                                                        .OrderBy(orderByKeySelector)
-                                                          .Skip((requestedPageNumber - 1) * countOfRequestedRecordsInPage)
-                                                            .Take(countOfRequestedRecordsInPage)
-                                                                  .IncludeMultiple(includes)
-                                                                      .ToListAsync().ConfigureAwait(false));
-            else
-                repo = (await _dbContext.Set<TEntity>().Where(condition ?? (entity => true))
-                                                         .OrderByDescending(orderByKeySelector)
-                                                          .Skip((requestedPageNumber - 1) * countOfRequestedRecordsInPage)
-                                                            .Take(countOfRequestedRecordsInPage)
-                                                                  .IncludeMultiple(includes)
-                                                                      .ToListAsync().ConfigureAwait(false));
+            var estimatedCountOfPages = CalculatePageCountAndCompareWithRequested(totalDataCount, countOfRequestedRecordsInPage, requestedPageNumber);
 
-            var actualPageCount = (Convert.ToDouble(dataCount) / Convert.ToDouble(countOfRequestedRecordsInPage));
-
-            var estimatedCountOfRanges = Convert.ToInt32(Math.Ceiling(actualPageCount));
-
-            if (estimatedCountOfRanges != 0 && requestedPageNumber > estimatedCountOfRanges)
-                throw new ArgumentOutOfRangeException($"Requested page count is more than actual page count. Maximum page count must be {estimatedCountOfRanges}.");
-
-            return (entities: repo, pageCount: estimatedCountOfRanges, totalDataCount: dataCount);
+            return (entities: repo, pageCount: estimatedCountOfPages, totalDataCount: totalDataCount);
         }
-
 
         /// <summary>
         /// <para> Gets entities as ordered with <paramref name="orderByPropertyName"/>.
@@ -456,29 +418,24 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
                                                                           bool orderByAscending,
                                                                           Expression<Func<TEntity, bool>> conditionExpression = null)
         {
-            List<TEntity> repo;
-
             var entityType = typeof(TEntity);
 
-            if (!CommonHelper.PropertyExists<TEntity>(orderByPropertyName))
-                throw new ArgumentException($"Type of {entityType.Name}'s properties doesn't contain '{orderByPropertyName}'.");
+            CheckProperty(orderByPropertyName, entityType);
 
-            var parameterExpression = Expression.Parameter(entityType, "i");
-            Expression orderByProperty = Expression.Property(parameterExpression, orderByPropertyName);
-
-            var predicate = Expression.Lambda<Func<TEntity, object>>(Expression.Convert(orderByProperty, typeof(object)), parameterExpression);
+            var predicate = CreateObjectPredicate(entityType, orderByPropertyName);
 
             var condition = CreateConditionExpression(conditionExpression);
-            var dataCount = await _dbContext.Set<TEntity>().Where(condition ?? (entity => true)).CountAsync();
 
-            if (orderByAscending)
-                repo = await _dbContext.Set<TEntity>().Where(condition ?? (entity => true))
-                                                       .OrderBy(predicate)
-                                                           .ToListAsync().ConfigureAwait(false);
-            else
-                repo = await _dbContext.Set<TEntity>().Where(condition ?? (entity => true))
+            var totalDataCount = await GetCountAsync(conditionExpression).ConfigureAwait(false);
+
+            List<TEntity> repo;
+
+            if (orderByAscending) repo = await _dbContext.Set<TEntity>().Where(condition ?? (entity => true))
+                                                                        .OrderBy(predicate)
+                                                                        .ToListAsync().ConfigureAwait(false);
+            else repo = await _dbContext.Set<TEntity>().Where(condition ?? (entity => true))
                                                        .OrderByDescending(predicate)
-                                                            .ToListAsync().ConfigureAwait(false);
+                                                       .ToListAsync().ConfigureAwait(false);
 
             return repo;
         }
@@ -501,33 +458,26 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
                                                                           bool orderByAscending,
                                                                           Expression<Func<TEntity, bool>> conditionExpression = null)
         {
-            List<TEntity> repo;
-
             var entityType = typeof(TEntity);
 
-            if (!CommonHelper.PropertyExists<TEntity>(orderByPropertyName))
-                throw new ArgumentException($"Type of {entityType.Name}'s properties doesn't contain '{orderByPropertyName}'.");
+            CheckProperty(orderByPropertyName, entityType);
 
-            var parameterExpression = Expression.Parameter(entityType, "i");
-            Expression orderByProperty = Expression.Property(parameterExpression, orderByPropertyName);
-
-            var predicate = Expression.Lambda<Func<TEntity, object>>(Expression.Convert(orderByProperty, typeof(object)), parameterExpression);
-
+            var predicate = CreateObjectPredicate(entityType, orderByPropertyName);
 
             var condition = CreateConditionExpression(conditionExpression);
 
-            var dataCount = await _dbContext.Set<TEntity>().Where(condition ?? (entity => true)).CountAsync();
+            var totalDataCount = await GetCountAsync(conditionExpression).ConfigureAwait(false);
 
-            if (orderByAscending)
-                repo = (await _dbContext.Set<TEntity>().Where(condition ?? (entity => true))
-                                                        .OrderBy(predicate)
-                                                           .IncludeMultiple(includes)
-                                                                .ToListAsync().ConfigureAwait(false));
-            else
-                repo = (await _dbContext.Set<TEntity>().Where(condition ?? (entity => true))
-                                                         .OrderByDescending(predicate)
-                                                             .IncludeMultiple(includes)
-                                                                   .ToListAsync().ConfigureAwait(false));
+            List<TEntity> repo;
+
+            if (orderByAscending) repo = (await _dbContext.Set<TEntity>().Where(condition ?? (entity => true))
+                                                                         .OrderBy(predicate)
+                                                                         .IncludeMultiple(includes)
+                                                                         .ToListAsync().ConfigureAwait(false));
+            else repo = (await _dbContext.Set<TEntity>().Where(condition ?? (entity => true))
+                                                        .OrderByDescending(predicate)
+                                                        .IncludeMultiple(includes)
+                                                        .ToListAsync().ConfigureAwait(false));
 
             return repo;
         }
@@ -546,19 +496,18 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
                                                                           bool orderByAscending,
                                                                           Expression<Func<TEntity, bool>> conditionExpression = null)
         {
+            var condition = CreateConditionExpression(conditionExpression);
+
+            var totalDataCount = await GetCountAsync(conditionExpression).ConfigureAwait(false);
+
             List<TEntity> repo;
 
-            var condition = CreateConditionExpression(conditionExpression);
-            var dataCount = await _dbContext.Set<TEntity>().Where(condition ?? (entity => true)).CountAsync();
-
-            if (orderByAscending)
-                repo = await _dbContext.Set<TEntity>().Where(condition ?? (entity => true))
-                                                       .OrderBy(orderByKeySelector)
-                                                           .ToListAsync().ConfigureAwait(false);
-            else
-                repo = await _dbContext.Set<TEntity>().Where(condition ?? (entity => true))
+            if (orderByAscending) repo = await _dbContext.Set<TEntity>().Where(condition ?? (entity => true))
+                                                                        .OrderBy(orderByKeySelector)
+                                                                        .ToListAsync().ConfigureAwait(false);
+            else repo = await _dbContext.Set<TEntity>().Where(condition ?? (entity => true))
                                                        .OrderByDescending(orderByKeySelector)
-                                                            .ToListAsync().ConfigureAwait(false);
+                                                       .ToListAsync().ConfigureAwait(false);
 
             return repo;
         }
@@ -579,28 +528,25 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
                                                                           bool orderByAscending,
                                                                           Expression<Func<TEntity, bool>> conditionExpression = null)
         {
-            List<TEntity> repo;
-
             var condition = CreateConditionExpression(conditionExpression);
 
-            var dataCount = await _dbContext.Set<TEntity>().Where(condition ?? (entity => true)).CountAsync();
+            var totalDataCount = await GetCountAsync(conditionExpression).ConfigureAwait(false);
 
-            if (orderByAscending)
-                repo = (await _dbContext.Set<TEntity>().Where(condition ?? (entity => true))
-                                                        .OrderBy(orderByKeySelector)
-                                                           .IncludeMultiple(includes)
-                                                                .ToListAsync().ConfigureAwait(false));
-            else
-                repo = (await _dbContext.Set<TEntity>().Where(condition ?? (entity => true))
-                                                         .OrderByDescending(orderByKeySelector)
-                                                             .IncludeMultiple(includes)
-                                                                   .ToListAsync().ConfigureAwait(false));
+            List<TEntity> repo;
+
+            if (orderByAscending) repo = (await _dbContext.Set<TEntity>().Where(condition ?? (entity => true))
+                                                                         .OrderBy(orderByKeySelector)
+                                                                         .IncludeMultiple(includes)
+                                                                         .ToListAsync().ConfigureAwait(false));
+            else repo = (await _dbContext.Set<TEntity>().Where(condition ?? (entity => true))
+                                                        .OrderByDescending(orderByKeySelector)
+                                                        .IncludeMultiple(includes)
+                                                        .ToListAsync().ConfigureAwait(false));
 
             return repo;
         }
 
         #endregion
-
 
 
         /// <summary>
@@ -612,11 +558,9 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
         /// <returns> The entity found or null. </returns>
         public virtual async Task<TEntity> GetByIdAsync(TKey id, Expression<Func<TEntity, bool>> conditionExpression = null)
         {
-            Expression<Func<TEntity, bool>> idCondition = i => i.Id.Equals(id);
-            var mainCondition = idCondition.Append(CreateIsDeletedFalseExpression(), ExpressionType.AndAlso);
-            mainCondition = mainCondition.Append(conditionExpression, ExpressionType.AndAlso);
-            var entity = await _dbContext.Set<TEntity>().SingleOrDefaultAsync(mainCondition).ConfigureAwait(false);
-            return entity;
+            var mainCondition = CreateKeyEqualityExpression(id, conditionExpression);
+
+            return await _dbContext.Set<TEntity>().SingleOrDefaultAsync(mainCondition).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -630,11 +574,9 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
         /// <returns> The entity. </returns>
         public virtual async Task<TEntity> GetRequiredByIdAsync(TKey id, Expression<Func<TEntity, bool>> conditionExpression = null)
         {
-            Expression<Func<TEntity, bool>> idCondition = i => i.Id.Equals(id);
-            var mainCondition = idCondition.Append(CreateIsDeletedFalseExpression(), ExpressionType.AndAlso);
-            mainCondition = mainCondition.Append(conditionExpression, ExpressionType.AndAlso);
-            var entity = (await _dbContext.Set<TEntity>().SingleAsync(mainCondition).ConfigureAwait(false));
-            return entity;
+            var mainCondition = CreateKeyEqualityExpression(id, conditionExpression);
+
+            return (await _dbContext.Set<TEntity>().SingleAsync(mainCondition).ConfigureAwait(false));
         }
 
         /// <summary>
@@ -644,13 +586,13 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
         /// <param name="includes"></param>
         /// <param name="conditionExpression"></param>
         /// <returns> The entity found or null. </returns>
-        public virtual async Task<TEntity> GetByIdAsync(TKey id, Func<IIncludable<TEntity>, IIncludable> includes, Expression<Func<TEntity, bool>> conditionExpression = null)
+        public virtual async Task<TEntity> GetByIdAsync(TKey id,
+                                                        Func<IIncludable<TEntity>, IIncludable> includes,
+                                                        Expression<Func<TEntity, bool>> conditionExpression = null)
         {
-            Expression<Func<TEntity, bool>> idCondition = i => i.Id.Equals(id);
-            var mainCondition = idCondition.Append(CreateIsDeletedFalseExpression(), ExpressionType.AndAlso);
-            mainCondition = mainCondition.Append(conditionExpression, ExpressionType.AndAlso);
-            var entity = await _dbContext.Set<TEntity>().IncludeMultiple(includes).SingleOrDefaultAsync(mainCondition).ConfigureAwait(false);
-            return entity;
+            var mainCondition = CreateKeyEqualityExpression(id, conditionExpression);
+
+            return await _dbContext.Set<TEntity>().IncludeMultiple(includes).SingleOrDefaultAsync(mainCondition).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -663,13 +605,13 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
         /// <param name="includes"></param>
         /// <param name="conditionExpression"></param>
         /// <returns> The entity. </returns>
-        public virtual async Task<TEntity> GetRequiredByIdAsync(TKey id, Func<IIncludable<TEntity>, IIncludable> includes, Expression<Func<TEntity, bool>> conditionExpression = null)
+        public virtual async Task<TEntity> GetRequiredByIdAsync(TKey id,
+                                                                Func<IIncludable<TEntity>, IIncludable> includes,
+                                                                Expression<Func<TEntity, bool>> conditionExpression = null)
         {
-            Expression<Func<TEntity, bool>> idCondition = i => i.Id.Equals(id);
-            var mainCondition = idCondition.Append(CreateIsDeletedFalseExpression(), ExpressionType.AndAlso);
-            mainCondition = mainCondition.Append(conditionExpression, ExpressionType.AndAlso);
-            var entity = await _dbContext.Set<TEntity>().IncludeMultiple(includes).SingleAsync(mainCondition).ConfigureAwait(false);
-            return entity;
+            var mainCondition = CreateKeyEqualityExpression(id, conditionExpression);
+
+            return await _dbContext.Set<TEntity>().IncludeMultiple(includes).SingleAsync(mainCondition).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -752,18 +694,14 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
         {
             var entityType = typeof(TEntity);
 
-            if (!CommonHelper.PropertyExists<TEntity>(groupByPropertyName))
-                throw new ArgumentException($"Type of {entityType}'s properties doesn't contain '{groupByPropertyName}'.");
+            CheckProperty(groupByPropertyName, entityType);
 
-
-            var parameterExpression = Expression.Parameter(entityType, "i");
-            Expression orderByProperty = Expression.Property(parameterExpression, groupByPropertyName);
-
-            var predicate = Expression.Lambda<Func<TEntity, object>>(Expression.Convert(Expression.Property(parameterExpression, groupByPropertyName), typeof(object)), parameterExpression);
+            var predicate = CreateObjectPredicate(entityType, groupByPropertyName);
 
             return (await _dbContext.Set<TEntity>().Where(CreateConditionExpression(conditionExpression) ?? (entity => true))
-                                                           .GroupBy(predicate)
-                                                           .Select(b => Tuple.Create(b.Key, b.Count())).ToListAsync().ConfigureAwait(false));
+                                                   .GroupBy(predicate)
+                                                   .Select(b => Tuple.Create(b.Key, b.Count()))
+                                                   .ToListAsync().ConfigureAwait(false));
         }
 
         /// <summary>
@@ -775,7 +713,8 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
         public virtual async Task<List<Tuple<object, int>>> GetGroupedAndCountAsync(Expression<Func<TEntity, object>> keySelector, Expression<Func<TEntity, bool>> conditionExpression = null)
             => await _dbContext.Set<TEntity>().Where(CreateConditionExpression(conditionExpression) ?? (entity => true))
                                               .GroupBy(keySelector)
-                                              .Select(b => Tuple.Create(b.Key, b.Count())).ToListAsync().ConfigureAwait(false);
+                                              .Select(b => Tuple.Create(b.Key, b.Count()))
+                                              .ToListAsync().ConfigureAwait(false);
 
         /// <summary>
         /// Gets grouped entities from database with <paramref name="groupedClause"/>.
@@ -807,7 +746,7 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
         /// <param name="conditionExpression"></param>
         /// <returns></returns>
         public virtual async Task<List<TReturn>> GetAsGroupedAsync<TReturn>(IQueryable<TReturn> groupedClause, Expression<Func<TReturn, bool>> conditionExpression = null)
-            => (await groupedClause.Where(conditionExpression ?? (entity => true)).ToListAsync().ConfigureAwait(false));
+            => await groupedClause.Where(conditionExpression ?? (entity => true)).ToListAsync().ConfigureAwait(false);
 
         /// <summary>
         /// Gets grouped entities with condition from database with <paramref name="groupedClause"/>.
@@ -873,21 +812,16 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
                                                                                                                  Func<IQueryable<TReturn>> groupedClause,
                                                                                                                  Expression<Func<TReturn, bool>> conditionExpression = null)
         {
-            if (requestedPageNumber == 0) throw new ArgumentOutOfRangeException($"Requested page count cannot be 0. Page count must be greater than 0.");
-            if (countOfRequestedRecordsInPage <= 0) throw new ArgumentOutOfRangeException($"Count of requested recordc count cannot be 0 or less. Requested record count must be greater than 0.");
-            var dataCount = await groupedClause.Invoke().Where(conditionExpression ?? (entity => true)).CountAsync().ConfigureAwait(false);
+            ValidatePaginationParameters(requestedPageNumber, countOfRequestedRecordsInPage);
+
+            var totalDataCount = await groupedClause.Invoke().Where(conditionExpression ?? (entity => true)).CountAsync().ConfigureAwait(false);
+
             var repo = await groupedClause.Invoke().Where(conditionExpression ?? (entity => true)).Skip((requestedPageNumber - 1) * countOfRequestedRecordsInPage).Take(countOfRequestedRecordsInPage).ToListAsync().ConfigureAwait(false);
 
-            var actualPageCount = (Convert.ToDouble(dataCount) / Convert.ToDouble(countOfRequestedRecordsInPage));
+            var estimatedCountOfPages = CalculatePageCountAndCompareWithRequested(totalDataCount, countOfRequestedRecordsInPage, requestedPageNumber);
 
-            var estimatedCountOfRanges = Convert.ToInt32(Math.Ceiling(actualPageCount));
-
-            if (requestedPageNumber > estimatedCountOfRanges)
-                throw new ArgumentOutOfRangeException($"Requested page count is more than actual page count. Maximum page count must be {actualPageCount}.");
-
-            return (entities: repo, pageCount: estimatedCountOfRanges);
+            return (entities: repo, pageCount: estimatedCountOfPages);
         }
-
 
         /// <summary>
         /// Gets grouped entities with condition from database with <paramref name="groupedClause"/>.
@@ -921,16 +855,13 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
         /// <param name="groupedClause"></param>
         /// <returns></returns>
         public virtual async Task<(IEnumerable<TReturn> entities, int pageCount)> GetAsGroupedAndPaginatedAndOrderedAsync<TReturn>(int requestedPageNumber,
-                                                                                                                           int countOfRequestedRecordsInPage,
-                                                                                                                           string orderByPropertyName,
-                                                                                                                           bool orderByAscending,
-                                                                                                                           Func<IQueryable<TReturn>> groupedClause,
-                                                                                                                           Expression<Func<TReturn, bool>> conditionExpression = null)
+                                                                                                                                   int countOfRequestedRecordsInPage,
+                                                                                                                                   string orderByPropertyName,
+                                                                                                                                   bool orderByAscending,
+                                                                                                                                   Func<IQueryable<TReturn>> groupedClause,
+                                                                                                                                   Expression<Func<TReturn, bool>> conditionExpression = null)
         {
-            if (requestedPageNumber <= 0) throw new ArgumentOutOfRangeException($"Requested page count cannot be 0. Page count must be greater than 0.");
-            if (countOfRequestedRecordsInPage <= 0) throw new ArgumentOutOfRangeException($"Count of requested recordc count cannot be 0 or less. Requested record count must be greater than 0.");
-
-            List<TReturn> repo;
+            ValidatePaginationParameters(requestedPageNumber, countOfRequestedRecordsInPage);
 
             var entityType = typeof(TReturn);
 
@@ -938,33 +869,29 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
                 throw new ArgumentException($"Type of {entityType}'s properties doesn't contain '{orderByPropertyName}'.");
 
             var parameterExpression = Expression.Parameter(entityType, "i");
+
             Expression orderByProperty = Expression.Property(parameterExpression, orderByPropertyName);
 
-            var predicate = Expression.Lambda<Func<TReturn, object>>(Expression.Convert(Expression.Property(parameterExpression, orderByPropertyName), typeof(object)), parameterExpression);
+            var predicate = Expression.Lambda<Func<TReturn, object>>(Expression.Convert(orderByProperty, typeof(object)), parameterExpression);
 
-            var dataCount = await groupedClause.Invoke().Where(conditionExpression ?? (entity => true)).CountAsync().ConfigureAwait(false);
-            if (orderByAscending)
-                repo = await groupedClause.Invoke().Where(conditionExpression ?? (entity => true))
-                                                       .OrderBy(predicate)
-                                                        .Skip((requestedPageNumber - 1) * countOfRequestedRecordsInPage)
-                                                            .Take(countOfRequestedRecordsInPage)
-                                                                    .ToListAsync().ConfigureAwait(false);
-            else
-                repo = await groupedClause.Invoke().Where(conditionExpression ?? (entity => true))
-                                                       .OrderByDescending(predicate)
-                                                        .Skip((requestedPageNumber - 1) * countOfRequestedRecordsInPage)
-                                                            .Take(countOfRequestedRecordsInPage)
-                                                                    .ToListAsync().ConfigureAwait(false);
+            var totalDataCount = await groupedClause.Invoke().Where(conditionExpression ?? (entity => true)).CountAsync().ConfigureAwait(false);
 
+            List<TReturn> repo;
 
-            var actualPageCount = (Convert.ToDouble(dataCount) / Convert.ToDouble(countOfRequestedRecordsInPage));
+            if (orderByAscending) repo = await groupedClause.Invoke().Where(conditionExpression ?? (entity => true))
+                                                                     .OrderBy(predicate)
+                                                                     .Skip((requestedPageNumber - 1) * countOfRequestedRecordsInPage)
+                                                                     .Take(countOfRequestedRecordsInPage)
+                                                                     .ToListAsync().ConfigureAwait(false);
+            else  repo = await groupedClause.Invoke().Where(conditionExpression ?? (entity => true))
+                                                     .OrderByDescending(predicate)
+                                                     .Skip((requestedPageNumber - 1) * countOfRequestedRecordsInPage)
+                                                     .Take(countOfRequestedRecordsInPage)
+                                                     .ToListAsync().ConfigureAwait(false);
 
-            var estimatedCountOfRanges = Convert.ToInt32(Math.Ceiling(actualPageCount));
+            var estimatedCountOfPages = CalculatePageCountAndCompareWithRequested(totalDataCount, countOfRequestedRecordsInPage, requestedPageNumber);
 
-            if (requestedPageNumber > estimatedCountOfRanges)
-                throw new ArgumentOutOfRangeException($"Requested page count is more than actual page count. Maximum page count must be {actualPageCount}.");
-
-            return (entities: repo, pageCount: estimatedCountOfRanges);
+            return (entities: repo, pageCount: estimatedCountOfPages);
         }
 
         /// <summary>
@@ -1001,19 +928,21 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
                                                                                     Func<IQueryable<TReturn>> groupedClause,
                                                                                     Expression<Func<TReturn, bool>> conditionExpression = null)
         {
-            List<TReturn> repo;
-
             var entityType = typeof(TReturn);
 
             if (!CommonHelper.PropertyExists<TReturn>(orderByPropertyName))
                 throw new ArgumentException($"Type of {entityType}'s properties doesn't contain '{orderByPropertyName}'.");
 
             var parameterExpression = Expression.Parameter(entityType, "i");
+
             Expression orderByProperty = Expression.Property(parameterExpression, orderByPropertyName);
 
-            var predicate = Expression.Lambda<Func<TReturn, object>>(Expression.Convert(Expression.Property(parameterExpression, orderByPropertyName), typeof(object)), parameterExpression);
+            var predicate = Expression.Lambda<Func<TReturn, object>>(Expression.Convert(orderByProperty, typeof(object)), parameterExpression);
 
-            var dataCount = await groupedClause.Invoke().Where(conditionExpression ?? (entity => true)).CountAsync().ConfigureAwait(false);
+            var totalDataCount = await groupedClause.Invoke().Where(conditionExpression ?? (entity => true)).CountAsync().ConfigureAwait(false);
+
+            List<TReturn> repo;
+
             if (orderByAscending)
                 repo = await groupedClause.Invoke().Where(conditionExpression ?? (entity => true))
                                                        .OrderBy(predicate)
@@ -1033,7 +962,7 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
         public virtual async Task<TEntity> GetMaxAsync(Expression<Func<TEntity, bool>> conditionExpression = null)
         {
             return (await _dbContext.Set<TEntity>().Where(CreateConditionExpression(conditionExpression) ?? (entity => true))
-                                                          .MaxAsync().ConfigureAwait(false));
+                                                   .MaxAsync().ConfigureAwait(false));
         }
 
         /// <summary>
@@ -1045,8 +974,8 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
         public virtual async Task<TEntity> GetMaxAsync(Func<IIncludable<TEntity>, IIncludable> includes, Expression<Func<TEntity, bool>> conditionExpression = null)
         {
             return (await _dbContext.Set<TEntity>().Where(CreateConditionExpression(conditionExpression) ?? (entity => true))
-                                                      .IncludeMultiple(includes)
-                                                          .MaxAsync().ConfigureAwait(false));
+                                                   .IncludeMultiple(includes)
+                                                   .MaxAsync().ConfigureAwait(false));
         }
 
         /// <summary>
@@ -1062,15 +991,14 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
             if (!CommonHelper.PropertyExists<TEntity>(maxPropertyName))
                 throw new ArgumentException($"Type of {entityType}'s properties doesn't contain '{maxPropertyName}'.");
 
-
             var parameterExpression = Expression.Parameter(entityType, "i");
+
             Expression orderByProperty = Expression.Property(parameterExpression, maxPropertyName);
 
-            var predicate = Expression.Lambda<Func<TEntity, object>>(Expression.Convert(Expression.Property(parameterExpression, maxPropertyName), typeof(object)), parameterExpression);
-
+            var predicate = Expression.Lambda<Func<TEntity, object>>(Expression.Convert(orderByProperty, typeof(object)), parameterExpression);
 
             return (await _dbContext.Set<TEntity>().Where(CreateConditionExpression(conditionExpression) ?? (entity => true))
-                                                          .MaxAsync(predicate).ConfigureAwait(false));
+                                                   .MaxAsync(predicate).ConfigureAwait(false));
         }
 
         /// <summary>
@@ -1082,7 +1010,7 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
         public virtual async Task<object> GetMaxOfPropertyAsync<TProperty>(Expression<Func<TEntity, TProperty>> maxProperty, Expression<Func<TEntity, bool>> conditionExpression = null)
         {
             return (await _dbContext.Set<TEntity>().Where(CreateConditionExpression(conditionExpression) ?? (entity => true))
-                                                          .MaxAsync(maxProperty).ConfigureAwait(false));
+                                                   .MaxAsync(maxProperty).ConfigureAwait(false));
         }
 
         /// <summary>
@@ -1138,6 +1066,46 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
 
         #region Private Helper Methods
 
+        private Expression<Func<TEntity, bool>> CreateKeyEqualityExpression(TKey key, Expression<Func<TEntity, bool>> conditionExpression = null)
+        {
+            Expression<Func<TEntity, bool>> idCondition = i => i.Id.Equals(key);
+            var mainCondition = idCondition.Append(CreateIsDeletedFalseExpression(), ExpressionType.AndAlso);
+            return mainCondition.Append(conditionExpression, ExpressionType.AndAlso);
+        }
+
+        private Expression<Func<TEntity, object>> CreateObjectPredicate(Type entityType, string propertyName)
+        {
+            var parameterExpression = Expression.Parameter(entityType, "i");
+
+            Expression orderByProperty = Expression.Property(parameterExpression, propertyName);
+
+            return Expression.Lambda<Func<TEntity, object>>(Expression.Convert(orderByProperty, typeof(object)), parameterExpression);
+        }
+
+        private void CheckProperty(string propertyName, Type entityType)
+        {
+            if (!CommonHelper.PropertyExists<TEntity>(propertyName))
+                throw new ArgumentException($"Type of {entityType.Name}'s properties doesn't contain '{propertyName}'.");
+        }
+
+        private int CalculatePageCountAndCompareWithRequested(int totalDataCount, int countOfRequestedRecordsInPage, int requestedPageNumber)
+        {
+            var actualPageCount = (Convert.ToDouble(totalDataCount) / Convert.ToDouble(countOfRequestedRecordsInPage));
+
+            var estimatedCountOfPages = Convert.ToInt32(Math.Ceiling(actualPageCount));
+
+            if (estimatedCountOfPages != 0 && requestedPageNumber > estimatedCountOfPages)
+                throw new ArgumentOutOfRangeException($"Requested page count is more than actual page count. Maximum page count must be {estimatedCountOfPages}.");
+
+            return estimatedCountOfPages;
+        }
+
+        private void ValidatePaginationParameters(int requestedPageNumber, int countOfRequestedRecordsInPage)
+        {
+            if (requestedPageNumber <= 0) throw new ArgumentOutOfRangeException($"Requested page count cannot be 0. Page count must be greater than 0.");
+            if (countOfRequestedRecordsInPage <= 0) throw new ArgumentOutOfRangeException($"Count of requested record count cannot be 0 or less. Requested record count must be greater than 0.");
+        }
+
         private Expression<Func<TEntity, bool>> CreateConditionExpression(Expression<Func<TEntity, bool>> conditionExpression = null)
         {
             Expression<Func<TEntity, bool>> mainExpression;
@@ -1155,8 +1123,6 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
             }
             return mainExpression;
         }
-
-
 
         private void InitalizeEdit(TEntity entity)
         {
