@@ -153,12 +153,17 @@
         /// <summary>
         /// Defines the FeatureNotImplementedException.
         /// </summary>
-        FeatureNotImplementedException = 29,
+        FeatureNotImplemented = 29,
 
         /// <summary>
         /// Defines the IdentityResultException.
         /// </summary>
-        IdentityResultException = 30
+        IdentityResult = 30,
+
+        /// <summary>
+        /// Defines the IdentityResultException.
+        /// </summary>
+        CannotGetResponse = 31
 
     }
 }

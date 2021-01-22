@@ -1,5 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System;
+﻿using System;
 using System.Linq;
 
 namespace Milvasoft.Helpers.DataAccess.IncludeLibrary

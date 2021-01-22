@@ -1405,6 +1405,14 @@
             <param name="conditionExpression"></param>
             <returns></returns>
         </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.GetGroupedAndCountAsync(System.Linq.Expressions.Expression{System.Func{`0,System.Object}},System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
+            <summary>
+            Groups entities with <paramref name="keySelector"/> and returns the key grouped and the number of items grouped with this key.
+            </summary>
+            <param name="keySelector"></param>
+            <param name="conditionExpression"></param>
+            <returns></returns>
+        </member>
         <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.GetAsGroupedAsync``1(System.Linq.IQueryable{``0},System.Linq.Expressions.Expression{System.Func{``0,System.Boolean}})">
             <summary>
             Gets grouped entities from database with <paramref name="groupedClause"/>.
@@ -1912,6 +1920,30 @@
             <param name="customMessage"></param>s
             <param name="innerException"></param>
         </member>
+        <member name="T:Milvasoft.Helpers.Exceptions.CannotGetResponseException">
+            <summary>
+            The exception that is thrown when attempt to get enum by invalid id.
+            </summary>
+        </member>
+        <member name="M:Milvasoft.Helpers.Exceptions.CannotGetResponseException.#ctor(Microsoft.Extensions.Localization.IStringLocalizer)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Milvasoft.Helpers.Exceptions.CannotFindEnumByIdException"/> class.
+            </summary>
+            <param name="localizer"></param>
+        </member>
+        <member name="M:Milvasoft.Helpers.Exceptions.CannotGetResponseException.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Milvasoft.Helpers.Exceptions.CannotFindEnumByIdException"/> class with a specified error message and a reference to the inner exception that is the cause of this exception.
+            </summary>
+            <param name="customMessage"></param>
+        </member>
+        <member name="M:Milvasoft.Helpers.Exceptions.CannotGetResponseException.#ctor(System.String,System.Exception)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Milvasoft.Helpers.Exceptions.CannotFindEnumByIdException"/> class with a specified error message and a reference to the inner exception that is the cause of this exception.
+            </summary>
+            <param name="customMessage"></param>s
+            <param name="innerException"></param>
+        </member>
         <member name="T:Milvasoft.Helpers.Exceptions.CannotStartRedisServerException">
             <summary>
             Exception class to be thrown when Redis Server fails to start.
@@ -2406,12 +2438,17 @@
             Defines the InvalidRelatedProcess.
             </summary>
         </member>
-        <member name="F:Milvasoft.Helpers.Exceptions.MilvasoftExceptionCode.FeatureNotImplementedException">
+        <member name="F:Milvasoft.Helpers.Exceptions.MilvasoftExceptionCode.FeatureNotImplemented">
             <summary>
             Defines the FeatureNotImplementedException.
             </summary>
         </member>
-        <member name="F:Milvasoft.Helpers.Exceptions.MilvasoftExceptionCode.IdentityResultException">
+        <member name="F:Milvasoft.Helpers.Exceptions.MilvasoftExceptionCode.IdentityResult">
+            <summary>
+            Defines the IdentityResultException.
+            </summary>
+        </member>
+        <member name="F:Milvasoft.Helpers.Exceptions.MilvasoftExceptionCode.CannotGetResponse">
             <summary>
             Defines the IdentityResultException.
             </summary>
@@ -3273,6 +3310,24 @@
             State of entity in the database. Default value is true.
             </summary>
         </member>
+        <member name="T:Milvasoft.Helpers.Models.CommunicationModel`2">
+            <summary>
+            Standart communication model. 
+            For example, it can be used when you have two APIs communicating in a project and these APIs often need the same key when communicating.
+            </summary>
+            <typeparam name="T"></typeparam>
+            <typeparam name="TKey"></typeparam>
+        </member>
+        <member name="P:Milvasoft.Helpers.Models.CommunicationModel`2.TransmittedModel">
+            <summary>
+            Model transmitted during communication
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.Models.CommunicationModel`2.TransmittedId">
+            <summary>
+            Key that must always be transmitted during communication.
+            </summary>
+        </member>
         <member name="T:Milvasoft.Helpers.Models.InvalidString">
             <summary>
             <para><b>EN: </b> Invalid strings for prevent hacking or someting ;)  </para>
@@ -3489,6 +3544,22 @@
             <param name="regexString"></param>
             <returns></returns>
         </member>
+        <member name="M:Milvasoft.Helpers.RegexMatcher.GetMatchResult(System.Text.RegularExpressions.Regex,System.String)">
+            <summary>
+            Checks if <paramref name="input"/> matches <paramref name="regex"/>.
+            </summary>
+            <param name="regex"></param>
+            <param name="input"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.RegexMatcher.GetMatchResult(System.String,System.String)">
+            <summary>
+            Checks if <paramref name="input"/> matches <paramref name="regexString"/>.
+            </summary>
+            <param name="input"></param>
+            <param name="regexString"></param>
+            <returns></returns>
+        </member>
         <member name="T:Milvasoft.Helpers.Request">
             <summary>
             Helper class for request processes.
@@ -3557,6 +3628,27 @@
             <param name="httpClient"></param>
             <typeparam name="TReturn"></typeparam>
             <returns> <typeparamref name="TReturn"/> </returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.Request.SendRequestDeserializeSingle``2(System.Net.Http.HttpClient,System.Net.Http.HttpRequestMessage)">
+            <summary>
+            Sends request by <paramref name="httpRequestMessage"/>. Gets response as => <see cref="!:SingleObjectResponse&lt;CommunicationModel&lt;&lt;T,TKey&gt;&gt;&gt;"/>
+            <para><b> If you want to use the "ErrorCodes" property, change the return value to (ExceptionResponse) where necessary.</b></para> 
+            </summary>
+            <typeparam name="T"></typeparam>
+            <typeparam name="TKey"></typeparam>
+            <param name="httpRequestMessage"></param>
+            <param name="httpClient"></param>
+            <returns> ObjectResponse </returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.Request.SendRequestDeserializeMultiple``2(System.Net.Http.HttpClient,System.Net.Http.HttpRequestMessage)">
+            <summary>
+            Sends request by <paramref name="httpRequestMessage"/>. Gets response as => <see cref="!:MultipleObjectResponse&lt;CommunicationModel&lt;&lt;T,TKey&gt;&gt;&gt;"/>
+            </summary> 
+            <typeparam name="T"></typeparam>
+            <typeparam name="TKey"></typeparam>
+            <param name="httpRequestMessage"></param>
+            <param name="httpClient"></param>
+            <returns> ObjectResponse </returns>
         </member>
         <member name="M:Milvasoft.Helpers.Request.PropertyExists(Newtonsoft.Json.Linq.JObject,System.String)">
             <summary>

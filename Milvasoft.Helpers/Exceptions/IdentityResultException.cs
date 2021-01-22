@@ -14,7 +14,7 @@ namespace Milvasoft.Helpers.Exceptions
         /// <param name="localizer"></param>
         public IdentityResultException(IStringLocalizer localizer) : base(localizer["InvalidParameterException"])
         {
-            ErrorCode = (int)MilvasoftExceptionCode.IdentityResultException;
+            ErrorCode = (int)MilvasoftExceptionCode.IdentityResult;
         }
 
         /// <summary>
@@ -24,7 +24,7 @@ namespace Milvasoft.Helpers.Exceptions
         /// <param name="localizer"></param>
         public IdentityResultException(IStringLocalizer localizer, string customMessage) : base(localizer["InvalidParameterException", customMessage])
         {
-            ErrorCode = (int)MilvasoftExceptionCode.IdentityResultException;
+            ErrorCode = (int)MilvasoftExceptionCode.IdentityResult;
         }
 
 
@@ -34,7 +34,7 @@ namespace Milvasoft.Helpers.Exceptions
         /// <param name="customMessage"></param>
         public IdentityResultException(string customMessage) : base(customMessage)
         {
-            ErrorCode = (int)MilvasoftExceptionCode.IdentityResultException;
+            ErrorCode = (int)MilvasoftExceptionCode.IdentityResult;
         }
 
         /// <summary>
@@ -44,7 +44,7 @@ namespace Milvasoft.Helpers.Exceptions
         /// <param name="innerException"></param>
         public IdentityResultException(string customMessage, Exception innerException) : base("Message : " + $"{customMessage}" + " Inner Exception : " + $"{innerException}")
         {
-            ErrorCode = (int)MilvasoftExceptionCode.IdentityResultException;
+            ErrorCode = (int)MilvasoftExceptionCode.IdentityResult;
         }
     }
 }

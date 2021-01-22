@@ -3,6 +3,8 @@ using System;
 
 namespace Milvasoft.Helpers.Exceptions
 {
+    //TODO kütüphaneden fırlayan hatalar milvasoftbaseexceptionlardan olacak.
+
     /// <summary>
     /// Base exception class.
     /// </summary>

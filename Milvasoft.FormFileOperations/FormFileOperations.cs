@@ -12,53 +12,25 @@ using System.Threading.Tasks;
 
 namespace Milvasoft.FormFileOperations
 {
+    /// <summary>
+    /// <see cref="IFormFile"/> operations for .NET Core.
+    /// </summary>
     public static class FormFileOperations
     {
+        #region Public Properties
+
+        /// <summary>
+        /// File name creator delegate.
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
         public delegate string FilesFolderNameCreator(Type type);
 
-        /// <summary>
-        /// <para> Allowed file extensions for media files. </para>
-        /// </summary>
-        public static ILookup<FileType, string> DefaultAllowedExtensions { get; } = new Dictionary<FileType, string>
-        {
-           {FileType.Image, ".ai"},                {FileType.Video, ".3g2"},             {FileType.Audio, ".aif"},                       {FileType.EMail, ".email"},
-           {FileType.Image, ".bmp"},               {FileType.Video, ".3gp"},             {FileType.Audio, ".cda"},                       {FileType.EMail, ".eml"},
-           {FileType.Image, ".gif"},               {FileType.Video, ".avi"},             {FileType.Audio, ".mid"},                       {FileType.EMail, ".emlx"},
-           {FileType.Image, ".ico"},               {FileType.Video, ".avi"},             {FileType.Audio, ".mp3"},                       {FileType.EMail, ".msg"},
-           {FileType.Image, ".jpeg"},              {FileType.Video, ".h264"},            {FileType.Audio, ".mpa"},                       {FileType.EMail, ".oft"},
-           {FileType.Image, ".jpg"},               {FileType.Video, ".m4v"},             {FileType.Audio, ".ogg"},                       {FileType.EMail, ".ost"},
-           {FileType.Image, ".png"},               {FileType.Video, ".mkv"},             {FileType.Audio, ".wav"},                       {FileType.EMail, ".pst"},
-           {FileType.Image, ".ps"},                {FileType.Video, ".mov"},             {FileType.Audio, ".wma"},                       {FileType.EMail, ".vcf"},
-           {FileType.Image, ".svg"},               {FileType.Video, ".mp4"},             {FileType.Audio, ".wpl"},
-           {FileType.Image, ".tif"},               {FileType.Video, ".mpg"},
-           {FileType.Image, ".tiff"},              {FileType.Video, ".mpeg"},
-                                                    {FileType.Video, ".wmv"},
-
-
-
-           {FileType.Document, ".doc"},           {FileType.Compressed, ".7z"},          {FileType.InternetRelated, ".ai"},              {FileType.Font, ".fnt"},
-           {FileType.Document, ".docx"},          {FileType.Compressed, ".arj"},         {FileType.InternetRelated, ".bmp"},             {FileType.Font, ".fon"},
-           {FileType.Document, ".odt"},           {FileType.Compressed, ".deb"},         {FileType.InternetRelated, ".gif"},             {FileType.Font, ".otf"},
-           {FileType.Document, ".pdf"},           {FileType.Compressed, ".pkg"},         {FileType.InternetRelated, ".ico"},             {FileType.Font, ".ttf"},
-           {FileType.Document, ".rtf"},           {FileType.Compressed, ".rar"},         {FileType.InternetRelated, ".jpeg"},
-           {FileType.Document, ".tex"},           {FileType.Compressed, ".rpm"},         {FileType.InternetRelated, ".jpg"},
-           {FileType.Document, ".txt"},           {FileType.Compressed, ".zip"},         {FileType.InternetRelated, ".png"},
-           {FileType.Document, ".wpd"},                                                   {FileType.InternetRelated, ".ps"},
-           {FileType.Document, ".ods"},                                                   {FileType.InternetRelated, ".psd"},
-           {FileType.Document, ".xls"},                                                   {FileType.InternetRelated, ".svg"},
-           {FileType.Document, ".xlsm"},                                                  {FileType.InternetRelated, ".tif"},
-           {FileType.Document, ".xlsx"},                                                  {FileType.InternetRelated, ".tiff"},
-           {FileType.Document, ".key"},
-           {FileType.Document, ".odp"},
-           {FileType.Document, ".pps"},
-           {FileType.Document, ".ppt"},
-           {FileType.Document, ".pptx"},
-        }.ToLookup(i => i.Key, i => i.Value);
-
+        #endregion
 
         /// <summary>
-        /// <para><b>EN: </b>Save uploaded IFormFile file to physical file path. Target Path will be : "<paramref name ="basePath"></paramref>/<b><paramref name="folderNameCreator"/>()</b>/<paramref name="entity"></paramref>.<paramref name="propertyName"/>"</para>
-        /// <para><b>TR: </b>Yüklenen IFormFile dosyasını fiziksel bir dosya yoluna kaydedin. Hedef Yol: <paramref name ="basePath"></paramref>/<b><paramref name="folderNameCreator"/>()</b>/<paramref name ="entity"></paramref>.<paramref name="propertyName"/>" olacaktır</para>
+        /// Saves uploaded IFormFile file to physical file path. If <paramref name="file"/>.Lenght is lower or equal than 0 then returns empty string.
+        /// Target Path will be : "<paramref name ="basePath"></paramref>/<b><paramref name="folderNameCreator"/>()</b>/<paramref name="entity"></paramref>.<paramref name="propertyName"/>"
         /// </summary>
         /// 
         /// <para><b>Remarks:</b></para>
@@ -82,6 +54,8 @@ namespace Milvasoft.FormFileOperations
                                                                       FilesFolderNameCreator folderNameCreator,
                                                                       string propertyName)
         {
+            if (file.Length <= 0) return "";
+
             //Gets file extension.
             var fileExtension = Path.GetExtension(file.FileName);
 
@@ -101,34 +75,42 @@ namespace Milvasoft.FormFileOperations
             //We created the path to the folder of this Id (folderNameOfItem).
             var folderPathOfItem = Path.Combine(folderPathOfClass, folderNameOfItem);
 
-            //If there is no such folder in this path (folderPathOfItem), we created it.
-            if (!Directory.Exists(folderPathOfItem))
-                Directory.CreateDirectory(folderPathOfItem);
-            else
+            try
+            {
+                //If there is no such folder in this path (folderPathOfItem), we created it.
+                if (!Directory.Exists(folderPathOfItem))
+                    Directory.CreateDirectory(folderPathOfItem);
+                else
+                {
+                    Directory.Delete(folderPathOfItem, true);
+                    Directory.CreateDirectory(folderPathOfItem);
+                }
+                var fileNameWithExtension = $"{folderNameOfItem}{fileExtension}";
+                var filePathOfItem = Path.Combine(folderPathOfItem, fileNameWithExtension);
+                using (var fileStream = new FileStream(filePathOfItem, FileMode.Create))
+                {
+                    await file.CopyToAsync(fileStream).ConfigureAwait(false);
+                }
+
+                return filePathOfItem;
+            }
+            catch (Exception)
             {
                 Directory.Delete(folderPathOfItem, true);
-                Directory.CreateDirectory(folderPathOfItem);
+                throw;
             }
-            var fileNameWithExtension = $"{folderNameOfItem}{fileExtension}";
-            var filePathOfItem = Path.Combine(folderPathOfItem, fileNameWithExtension);
-            using (var fileStream = new FileStream(filePathOfItem, FileMode.Create))
-            {
-                await file.CopyToAsync(fileStream).ConfigureAwait(false);
-            }
-
-            return filePathOfItem;
         }
 
         /// <summary>
-        /// <para><b>EN: </b>Save uploaded IFormFile file to physical file path. Target Path will be : "<paramref name ="basePath"></paramref>/<b><paramref name="folderNameCreator"/>()</b>/<paramref name="entity"></paramref>.<paramref name="propertyName"/>"</para>
-        /// <para><b>TR: </b>Yüklenen IFormFile dosyasını fiziksel bir dosya yoluna kaydedin. Hedef Yol: <paramref name ="basePath"></paramref>/<b><paramref name="folderNameCreator"/>()</b>/<paramref name ="entity"></paramref>.<paramref name="propertyName"/>" olacaktır</para>
+        /// Saves uploaded IFormFile files to physical file path. If file list is null or empty returns empty <see cref="List{string}"/> 
+        /// Target Path will be : "<paramref name ="basePath"></paramref>/<b><paramref name="folderNameCreator"/>()</b>/<paramref name="entity"></paramref>.<paramref name="propertyName"/>"
         /// </summary>
         /// 
         /// <para><b>Remarks:</b></para>
         /// 
         /// <remarks>
         /// 
-        /// <para> Don't forget validate file with <see cref="ValidateFile(IFormFile, FileType, long, List{string})"/>, before use this method.</para>
+        /// <para> Don't forget validate files with <see cref="ValidateFile(IFormFile, FileType, long, List{string})"/>, before use this method.</para>
         /// 
         /// </remarks>
         /// 
@@ -145,7 +127,7 @@ namespace Milvasoft.FormFileOperations
                                                                              FilesFolderNameCreator folderNameCreator,
                                                                              string propertyName)
         {
-            if (files.IsNullOrEmpty()) throw new ArgumentNullException("Files list cannot be empty!");//TODO return null or empty list?
+            if (files.IsNullOrEmpty()) return new List<string>();
 
             //Gets file extension.
             var fileExtension = Path.GetExtension(files.First().FileName);
@@ -156,51 +138,60 @@ namespace Milvasoft.FormFileOperations
             //We combined the name of this class (folderNameOfClass) with the path of the basePath folder. So we created the path of the folder belonging to this class.
             var folderPathOfClass = Path.Combine(basePath, folderNameOfClass);
 
-            //If there is no such folder in this path (folderPathOfClass), we created it.
-            if (!Directory.Exists(folderPathOfClass))
-                Directory.CreateDirectory(folderPathOfClass);
-
             //Since each data belonging to this class (folderNameOfClass) will have a separate folder, we received the Id of the data sent.
             var folderNameOfItem = PropertyExists<TEntity>(propertyName) ? entity.GetType().GetProperty(propertyName).GetValue(entity, null).ToString() : throw new ArgumentException($"Type of {entity.GetType().Name}'s properties doesn't contain '{propertyName}'.");
 
             //We created the path to the folder of this Id (folderNameOfItem).
             var folderPathOfItem = Path.Combine(folderPathOfClass, folderNameOfItem);
 
-            //If there is no such folder in this path (folderPathOfItem), we created it.
-            if (!Directory.Exists(folderPathOfItem))
-                Directory.CreateDirectory(folderPathOfItem);
-
-            DirectoryInfo directory = new DirectoryInfo(folderPathOfItem);
-
-            var directoryFiles = directory.GetFiles();
-            int markerNo = directoryFiles.IsNullOrEmpty() ? 1 : directoryFiles.Max(fileInDir => Convert.ToInt32(Path.GetFileNameWithoutExtension(fileInDir.FullName).Split('_')[1]));
-
-            var folderPaths = new List<string>();
-            foreach (var item in files)
+            try
             {
-                var fileNameWithExtension = $"{folderNameOfItem}_{markerNo}{fileExtension}";
-                var filePathOfItem = Path.Combine(folderPathOfItem, fileNameWithExtension);
-                using (var fileStream = new FileStream(filePathOfItem, FileMode.Create))
-                {
-                    await item.CopyToAsync(fileStream).ConfigureAwait(false);
-                }
-                folderPaths.Add(filePathOfItem);
-                markerNo++;
-            }
+                //If there is no such folder in this path (folderPathOfClass), we created it.
+                if (!Directory.Exists(folderPathOfClass))
+                    Directory.CreateDirectory(folderPathOfClass);
 
-            return folderPaths;
+                //If there is no such folder in this path (folderPathOfItem), we created it.
+                if (!Directory.Exists(folderPathOfItem))
+                    Directory.CreateDirectory(folderPathOfItem);
+
+                DirectoryInfo directory = new DirectoryInfo(folderPathOfItem);
+
+                var directoryFiles = directory.GetFiles();
+                int markerNo = directoryFiles.IsNullOrEmpty() ? 1 : directoryFiles.Max(fileInDir => Convert.ToInt32(Path.GetFileNameWithoutExtension(fileInDir.FullName).Split('_')[1]));
+
+                var folderPaths = new List<string>();
+                foreach (var item in files)
+                {
+                    var fileNameWithExtension = $"{folderNameOfItem}_{markerNo}{fileExtension}";
+                    var filePathOfItem = Path.Combine(folderPathOfItem, fileNameWithExtension);
+                    using (var fileStream = new FileStream(filePathOfItem, FileMode.Create))
+                    {
+                        await item.CopyToAsync(fileStream).ConfigureAwait(false);
+                    }
+                    folderPaths.Add(filePathOfItem);
+                    markerNo++;
+                }
+
+                return folderPaths;
+            }
+            catch (Exception)
+            {
+                Directory.Delete(folderPathOfClass);
+                Directory.Delete(folderPathOfItem);
+                throw;
+            }
         }
 
         /// <summary>
-        /// <para><b>EN: </b>Save uploaded IFormFile file to physical file path. Target Path will be : "<paramref name ="basePath"></paramref>/<b><paramref name="folderNameCreator"/>()</b>/<paramref name="entity"></paramref>.<paramref name="propertyName"/>"</para>
-        /// <para><b>TR: </b>Yüklenen IFormFile dosyasını fiziksel bir dosya yoluna kaydedin. Hedef Yol: <paramref name ="basePath"></paramref>/<b><paramref name="folderNameCreator"/>()</b>/<paramref name ="entity"></paramref>.<paramref name="propertyName"/>" olacaktır</para>
+        /// Saves uploaded IFormFile files to physical file path. If file list is null or empty returns empty <see cref="List{string}"/> 
+        /// Target Path will be : "<paramref name ="basePath"></paramref>/<b><paramref name="folderNameCreator"/>()</b>/<paramref name="entity"></paramref>.<paramref name="propertyName"/>"
         /// </summary>
         /// 
         /// <para><b>Remarks:</b></para>
         /// 
         /// <remarks>
         /// 
-        /// <para> Don't forget validate file with <see cref="ValidateFile(IFormFile, FileType, long, List{string})"/>, before use this method.</para>
+        /// <para> Don't forget validate files with <see cref="ValidateFile(IFormFile, FileType, long, List{string})"/>, before use this method.</para>
         /// 
         /// </remarks>
         /// 
@@ -217,7 +208,7 @@ namespace Milvasoft.FormFileOperations
                                                                              FilesFolderNameCreator folderNameCreator,
                                                                              string propertyName)
         {
-            if (files.IsNullOrEmpty()) throw new ArgumentNullException("Files list cannot be empty!");
+            if (files.IsNullOrEmpty()) return new List<string>();
             //Gets file extension.
             var fileExtension = Path.GetExtension(files.First().FileName);
 
@@ -227,44 +218,53 @@ namespace Milvasoft.FormFileOperations
             //We combined the name of this class (folderNameOfClass) with the path of the basePath folder. So we created the path of the folder belonging to this class.
             var folderPathOfClass = Path.Combine(basePath, folderNameOfClass);
 
-            //If there is no such folder in this path (folderPathOfClass), we created it.
-            if (!Directory.Exists(folderPathOfClass))
-                Directory.CreateDirectory(folderPathOfClass);
-
             //Since each data belonging to this class (folderNameOfClass) will have a separate folder, we received the Id of the data sent.
             var folderNameOfItem = PropertyExists<TEntity>(propertyName) ? entity.GetType().GetProperty(propertyName).GetValue(entity, null).ToString() : throw new ArgumentException($"Type of {entity.GetType().Name}'s properties doesn't contain '{propertyName}'.");
 
             //We created the path to the folder of this Id (folderNameOfItem).
             var folderPathOfItem = Path.Combine(folderPathOfClass, folderNameOfItem);
 
-            //If there is no such folder in this path (folderPathOfItem), we created it.
-            if (!Directory.Exists(folderPathOfItem))
-                Directory.CreateDirectory(folderPathOfItem);
-
-            DirectoryInfo directory = new DirectoryInfo(folderPathOfItem);
-
-            var directoryFiles = directory.GetFiles();
-            int markerNo = directoryFiles.IsNullOrEmpty() ? 1 : directoryFiles.Max(fileInDir => Convert.ToInt32(Path.GetFileNameWithoutExtension(fileInDir.FullName).Split('_')[1]));
-
-            var folderPaths = new List<string>();
-            foreach (var item in files)
+            try
             {
-                var fileNameWithExtension = $"{folderNameOfItem}_{markerNo}{fileExtension}";
-                var filePathOfItem = Path.Combine(folderPathOfItem, fileNameWithExtension);
-                using (var fileStream = new FileStream(filePathOfItem, FileMode.Create))
+                //If there is no such folder in this path (folderPathOfClass), we created it.
+                if (!Directory.Exists(folderPathOfClass))
+                    Directory.CreateDirectory(folderPathOfClass);
+
+                //If there is no such folder in this path (folderPathOfItem), we created it.
+                if (!Directory.Exists(folderPathOfItem))
+                    Directory.CreateDirectory(folderPathOfItem);
+
+                DirectoryInfo directory = new DirectoryInfo(folderPathOfItem);
+
+                var directoryFiles = directory.GetFiles();
+                int markerNo = directoryFiles.IsNullOrEmpty() ? 1 : directoryFiles.Max(fileInDir => Convert.ToInt32(Path.GetFileNameWithoutExtension(fileInDir.FullName).Split('_')[1]));
+
+                var folderPaths = new List<string>();
+                foreach (var item in files)
                 {
-                    await item.CopyToAsync(fileStream).ConfigureAwait(false);
+                    var fileNameWithExtension = $"{folderNameOfItem}_{markerNo}{fileExtension}";
+                    var filePathOfItem = Path.Combine(folderPathOfItem, fileNameWithExtension);
+                    using (var fileStream = new FileStream(filePathOfItem, FileMode.Create))
+                    {
+                        await item.CopyToAsync(fileStream).ConfigureAwait(false);
+                    }
+                    folderPaths.Add(filePathOfItem);
+                    markerNo++;
                 }
-                folderPaths.Add(filePathOfItem);
-                markerNo++;
+
+                return folderPaths;
+            }
+            catch (Exception)
+            {
+                Directory.Delete(folderPathOfClass);
+                Directory.Delete(folderPathOfItem);
+                throw;
             }
 
-            return folderPaths;
         }
 
         /// <summary>
-        /// <para><b>EN: </b>Checks that the file compatible the upload rules.</para>
-        /// <para><b>TR: </b>Dosyanın yükleme kurallarıyla uyumlu olup olmadığını kontrol eder.</para>
+        /// Checks that the file compatible the upload rules.
         /// </summary>
         /// <param name="file"> Uploaded file. </param>
         /// <param name="fileType"> Uploaded file type. (e.g image,video,sound..) </param>
@@ -292,8 +292,7 @@ namespace Milvasoft.FormFileOperations
         }
 
         /// <summary>
-        /// <para><b>EN: </b>Returns the path of the uploaded file.</para>
-        /// <para><b>TR: </b>Yüklenen dosyanın yolunu döndürür.</para>
+        /// Returns the path of the uploaded file.
         /// </summary>
         /// <param name="originalFilePath"> Uploaded file. </param>
         /// <param name="requestPath"> Request path section. (e.g. api/ImageLibrary) </param>
@@ -312,18 +311,17 @@ namespace Milvasoft.FormFileOperations
         }
 
         /// <summary>
-        /// <para><b>EN: </b>Gets image file in requested path.</para>
-        /// <para><b>TR: </b>İstenen yolda görüntü dosyasını alır.</para>
+        /// Gets file as <see cref="IFormFile"/> from requested path.
         /// </summary>
         /// <param name="path"></param>
         /// <param name="fileType"></param>
         /// <returns></returns>
         public static async Task<IFormFile> GetFileFromPathAsync(string path, FileType fileType)
         {
-            var memory = new MemoryStream();
-
             if (string.IsNullOrEmpty(path))
                 return null;
+
+            var memory = new MemoryStream();
 
             using (var stream = new FileStream(path, FileMode.Open))
             {
@@ -342,8 +340,40 @@ namespace Milvasoft.FormFileOperations
         }
 
         /// <summary>
-        /// <para><b>EN: </b> Removes the folder the file is in.</para> 
-        /// <para><b>TR: </b> Dosyanın bulunduğu klasörü kaldırır.</para> 
+        /// Converts data URI formatted base64 string to IFormFile.
+        /// </summary>
+        /// <param name="milvaBase64"></param>
+        /// <returns></returns>
+        public static IFormFile ConvertToFormFile(string milvaBase64)
+        {
+            var base64String = milvaBase64.Split(";base64,")?[1];
+
+            var regex = @"[^:]\w+\/[\w-+\d.]+(?=;|,)";
+
+            var contentType = GetExtension(base64String, regex);
+
+            var splittedContentType = contentType.Split('/');
+
+            var fileType = splittedContentType?[0];
+
+            var fileExtension = splittedContentType?[1];
+
+            var array = Convert.FromBase64String(base64String);
+
+            using var memoryStream = new MemoryStream(array)
+            {
+                Position = 0
+            };
+
+            return new FormFile(memoryStream, 0, memoryStream.Length, fileType, $"File.{fileExtension}")
+            {
+                Headers = new HeaderDictionary(),
+                ContentType = contentType
+            };
+        }
+
+        /// <summary>
+        /// Removes the folder the file is in.
         /// </summary>
         /// <param name="filePath"></param>
         public static void RemoveDirectoryFileIsIn(string filePath)
@@ -352,8 +382,7 @@ namespace Milvasoft.FormFileOperations
         }
 
         /// <summary>
-        /// <para><b>EN: </b> Removes file.</para> 
-        /// <para><b>TR: </b> Dosyayı siler.</para> 
+        /// Removes file.
         /// </summary>
         /// <param name="filePath"></param>
         public static void RemoveFileByPath(string filePath)
@@ -362,8 +391,7 @@ namespace Milvasoft.FormFileOperations
         }
 
         /// <summary>
-        /// <para><b>EN: </b> Removes file.</para> 
-        /// <para><b>TR: </b> Dosyayı siler.</para> 
+        /// Removes file.
         /// </summary>
         /// <param name="filePaths"></param>
         public static void RemoveFilesByPath(List<string> filePaths)
@@ -457,10 +485,8 @@ namespace Milvasoft.FormFileOperations
 
         }
 
-
         /// <summary>
-        /// <para><b>EN: </b>It is used to change the folder and name information of the uploaded file.</para>
-        /// <para><b>TR: </b>Yüklenen dosyanın klasör ve isim bilgisini değiştirmeye yarar</para>
+        /// It is used to change the folder and name information of the uploaded file.
         /// </summary>
         /// <param name="oldPath"> Old file path. </param>
         /// <param name="newId"> New id of item. </param>
@@ -482,7 +508,7 @@ namespace Milvasoft.FormFileOperations
             File.Move(oldPath, newFilePath);
 
             Directory.Delete(oldFolderPath, true);
-             
+
             return newFilePath;
         }
 
@@ -490,21 +516,22 @@ namespace Milvasoft.FormFileOperations
         #region Private Helper Methods
 
         /// <summary>
-        /// <para><b>EN: </b>Allows learning of the file type.</para>
-        /// <para><b>TR: </b>Dosya tipinin ögrenilmesini saglar.</para>
+        /// Allows learning of the file type.
         /// </summary>
         /// <param name="path"></param>
         /// <returns></returns>
-        private static string GetContentType(string path)
-        {
-            var types = GetMimeTypes();
-            var ext = Path.GetExtension(path).ToLowerInvariant();
-            return types[ext];
-        }
+        private static string GetContentType(string path) => GetMimeTypes()[Path.GetExtension(path).ToLowerInvariant()];
 
         /// <summary>
-        /// <para><b>EN: </b>File types to be accepted.</para>
-        /// <para><b>TR: </b>Kabul edilecn dosya tipleri.</para>
+        /// Checks if <paramref name="input"/> matches <paramref name="regexString"/>.
+        /// </summary>
+        /// <param name="input"></param>
+        /// <param name="regexString"></param>
+        /// <returns></returns>
+        private static string GetExtension(string input, string regexString) => new Regex(regexString).Match(input).Captures?.FirstOrDefault()?.Value;
+
+        /// <summary>
+        /// File types to be accepted.
         /// </summary>
         private static Dictionary<string, string> GetMimeTypes()
         {
@@ -549,7 +576,41 @@ namespace Milvasoft.FormFileOperations
         /// <returns></returns>
         private static List<string> GetDefaultFileExtensions(FileType fileType)
         {
-            return DefaultAllowedExtensions.Where(i => i.Key == fileType).Select(i => i.First()).ToList();
+            return new Dictionary<FileType, string>
+            {
+               {FileType.Image, ".ai"},                {FileType.Video, ".3g2"},             {FileType.Audio, ".aif"},                       {FileType.EMail, ".email"},
+               {FileType.Image, ".bmp"},               {FileType.Video, ".3gp"},             {FileType.Audio, ".cda"},                       {FileType.EMail, ".eml"},
+               {FileType.Image, ".gif"},               {FileType.Video, ".avi"},             {FileType.Audio, ".mid"},                       {FileType.EMail, ".emlx"},
+               {FileType.Image, ".ico"},               {FileType.Video, ".avi"},             {FileType.Audio, ".mp3"},                       {FileType.EMail, ".msg"},
+               {FileType.Image, ".jpeg"},              {FileType.Video, ".h264"},            {FileType.Audio, ".mpa"},                       {FileType.EMail, ".oft"},
+               {FileType.Image, ".jpg"},               {FileType.Video, ".m4v"},             {FileType.Audio, ".ogg"},                       {FileType.EMail, ".ost"},
+               {FileType.Image, ".png"},               {FileType.Video, ".mkv"},             {FileType.Audio, ".wav"},                       {FileType.EMail, ".pst"},
+               {FileType.Image, ".ps"},                {FileType.Video, ".mov"},             {FileType.Audio, ".wma"},                       {FileType.EMail, ".vcf"},
+               {FileType.Image, ".svg"},               {FileType.Video, ".mp4"},             {FileType.Audio, ".wpl"},
+               {FileType.Image, ".tif"},               {FileType.Video, ".mpg"},
+               {FileType.Image, ".tiff"},              {FileType.Video, ".mpeg"},
+                                                        {FileType.Video, ".wmv"},
+
+
+
+               {FileType.Document, ".doc"},           {FileType.Compressed, ".7z"},          {FileType.InternetRelated, ".ai"},              {FileType.Font, ".fnt"},
+               {FileType.Document, ".docx"},          {FileType.Compressed, ".arj"},         {FileType.InternetRelated, ".bmp"},             {FileType.Font, ".fon"},
+               {FileType.Document, ".odt"},           {FileType.Compressed, ".deb"},         {FileType.InternetRelated, ".gif"},             {FileType.Font, ".otf"},
+               {FileType.Document, ".pdf"},           {FileType.Compressed, ".pkg"},         {FileType.InternetRelated, ".ico"},             {FileType.Font, ".ttf"},
+               {FileType.Document, ".rtf"},           {FileType.Compressed, ".rar"},         {FileType.InternetRelated, ".jpeg"},
+               {FileType.Document, ".tex"},           {FileType.Compressed, ".rpm"},         {FileType.InternetRelated, ".jpg"},
+               {FileType.Document, ".txt"},           {FileType.Compressed, ".zip"},         {FileType.InternetRelated, ".png"},
+               {FileType.Document, ".wpd"},                                                  {FileType.InternetRelated, ".ps"},
+               {FileType.Document, ".ods"},                                                  {FileType.InternetRelated, ".psd"},
+               {FileType.Document, ".xls"},                                                  {FileType.InternetRelated, ".svg"},
+               {FileType.Document, ".xlsm"},                                                 {FileType.InternetRelated, ".tif"},
+               {FileType.Document, ".xlsx"},                                                 {FileType.InternetRelated, ".tiff"},
+               {FileType.Document, ".key"},
+               {FileType.Document, ".odp"},
+               {FileType.Document, ".pps"},
+               {FileType.Document, ".ppt"},
+               {FileType.Document, ".pptx"},
+            }.ToLookup(i => i.Key, i => i.Value).Where(i => i.Key == fileType).Select(i => i.First()).ToList();
         }
 
         /// <summary>
@@ -558,16 +619,13 @@ namespace Milvasoft.FormFileOperations
         /// <typeparam name="T"></typeparam>
         /// <param name="propertyName"></param>
         /// <returns></returns>
-        private static bool PropertyExists<T>(string propertyName)
-        {
-            return typeof(T).GetProperty(propertyName, BindingFlags.IgnoreCase |
-                                                       BindingFlags.Public | BindingFlags.Instance) != null;
-        }
+        private static bool PropertyExists<T>(string propertyName) => typeof(T).GetProperty(propertyName, BindingFlags.IgnoreCase |
+                                                                                                          BindingFlags.Public |
+                                                                                                          BindingFlags.Instance) != null;
 
         /// <summary>
-		/// <para>Basically a Path.Combine for URLs. Ensures exactly one '/' separates each segment,and exactly on '&amp;' separates each query parameter.
-		///		  URL-encodes illegal characters but not reserved characters.</para>
-		/// 
+		/// Basically a Path.Combine for URLs. Ensures exactly one '/' separates each segment,and exactly on '&amp;' separates each query parameter.
+		///	URL-encodes illegal characters but not reserved characters.
 		/// </summary>
 		/// <param name="parts">URL parts to combine.</param>
 		private static string Combine(params string[] parts)
@@ -615,7 +673,8 @@ namespace Milvasoft.FormFileOperations
         }
 
         /// <summary>
-        /// <para> URL-encodes characters in a string that are neither reserved nor unreserved. Avoids encoding reserved characters such as '/' and '?'. Avoids encoding '%' if it begins a %-hex-hex sequence (i.e. avoids double-encoding).</para>
+        /// URL-encodes characters in a string that are neither reserved nor unreserved. 
+        /// Avoids encoding reserved characters such as '/' and '?'. Avoids encoding '%' if it begins a %-hex-hex sequence (i.e. avoids double-encoding).
         /// </summary>
         /// <param name="s">The string to encode.</param>
         /// <param name="encodeSpaceAsPlus">If true, spaces will be encoded as + signs. Otherwise, they'll be encoded as %20.</param>
@@ -645,8 +704,7 @@ namespace Milvasoft.FormFileOperations
         }
 
         /// <summary>
-        /// <para><b>EN: </b>Checks whether or not collection is null or empty. Assumes collection can be safely enumerated multiple times.</para>
-        /// <para><b>TR: </b>Koleksiyonun boş veya boş olup olmadığını denetler. Koleksiyonun birden çok kez güvenli bir şekilde numaralandırılabileceğini varsayar.</para>
+        /// Checks whether or not collection is null or empty. Assumes collection can be safely enumerated multiple times.
         /// </summary>
         private static bool IsNullOrEmpty(this IEnumerable @this) => @this == null || @this.GetEnumerator().MoveNext() == false;
 
