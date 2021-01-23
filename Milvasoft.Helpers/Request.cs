@@ -31,7 +31,7 @@ namespace Milvasoft.Helpers
         {
             var requestMessage = new HttpRequestMessage
             {
-                Content = new StringContent(null, encoding, "application/json-" + httpMethod.ToString() + $"+{mediaType}"),
+                Content = new StringContent("", encoding, "application/json-" + httpMethod.ToString() + $"+{mediaType}"),
                 RequestUri = new Uri(url),
                 Method = httpMethod
             };
