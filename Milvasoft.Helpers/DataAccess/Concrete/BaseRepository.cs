@@ -883,11 +883,11 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
                                                                      .Skip((requestedPageNumber - 1) * countOfRequestedRecordsInPage)
                                                                      .Take(countOfRequestedRecordsInPage)
                                                                      .ToListAsync().ConfigureAwait(false);
-            else  repo = await groupedClause.Invoke().Where(conditionExpression ?? (entity => true))
-                                                     .OrderByDescending(predicate)
-                                                     .Skip((requestedPageNumber - 1) * countOfRequestedRecordsInPage)
-                                                     .Take(countOfRequestedRecordsInPage)
-                                                     .ToListAsync().ConfigureAwait(false);
+            else repo = await groupedClause.Invoke().Where(conditionExpression ?? (entity => true))
+                                                    .OrderByDescending(predicate)
+                                                    .Skip((requestedPageNumber - 1) * countOfRequestedRecordsInPage)
+                                                    .Take(countOfRequestedRecordsInPage)
+                                                    .ToListAsync().ConfigureAwait(false);
 
             var estimatedCountOfPages = CalculatePageCountAndCompareWithRequested(totalDataCount, countOfRequestedRecordsInPage, requestedPageNumber);
 
@@ -1032,8 +1032,10 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
         /// <returns></returns>
         public virtual async Task ReplaceOldsWithNewsInSeperateDatabaseProcessAsync(IEnumerable<TEntity> oldEntities, IEnumerable<TEntity> newEntities)
         {
-            await DeleteAsync(oldEntities).ConfigureAwait(false);
-            await AddRangeAsync(newEntities).ConfigureAwait(false);
+            if (!oldEntities.IsNullOrEmpty())
+                await DeleteAsync(oldEntities).ConfigureAwait(false);
+            if (!newEntities.IsNullOrEmpty())
+                await AddRangeAsync(newEntities).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -1044,10 +1046,16 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
         /// <returns></returns>
         public virtual async Task ReplaceOldsWithNewsAsync(IEnumerable<TEntity> oldEntities, IEnumerable<TEntity> newEntities)
         {
-            InitalizeEdit(oldEntities);
-            _dbContext.RemoveRange(oldEntities);
-            _dbContext.Set<TEntity>().AddRange(newEntities);
-            await _dbContext.SaveChangesAsync().ConfigureAwait(false);
+            if (!oldEntities.IsNullOrEmpty())
+            {
+                InitalizeEdit(oldEntities);
+                _dbContext.RemoveRange(oldEntities);
+            }
+            if (!newEntities.IsNullOrEmpty())
+            {
+                _dbContext.Set<TEntity>().AddRange(newEntities);
+                await _dbContext.SaveChangesAsync().ConfigureAwait(false);
+            }             
         }
 
         /// <summary>
