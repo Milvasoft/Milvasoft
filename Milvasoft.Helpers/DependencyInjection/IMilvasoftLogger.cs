@@ -8,26 +8,22 @@ namespace Milvasoft.DependencyInjection
     public interface IMilvasoftLogger
     {
         /// <summary>
-        /// <para><b>EN: </b>Saves the log at info level.</para>
-        /// <para><b>TR: </b>Log kaydını info seviyesinde kaydeder.</para>
+        /// Saves the log at info level.
         /// </summary>
         void LogInfo(string message);
 
         /// <summary>
-        /// <para><b>EN: </b>Saves the log at warn level.</para>
-        /// <para><b>TR: </b>Log kaydını debug warn kaydeder.</para>s
+        /// Saves the log at warn level.
         /// </summary>
         void LogWarning(string message);
 
         /// <summary>
-        /// <para><b>EN: </b>Saves the log at debug level.</para>
-        /// <para><b>TR: </b>Log kaydını debug seviyesinde kaydeder.</para>
+        /// Saves the log at debug level.
         /// </summary>
         void LogDebug(string message);
 
         /// <summary>
-        /// <para><b>EN: </b>Saves the log at error level.</para>
-        /// <para><b>TR: </b>Log kaydını error seviyesinde kaydeder.</para>
+        /// Saves the log at error level.
         /// </summary>
         void LogError(string message);
 

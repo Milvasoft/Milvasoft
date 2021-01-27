@@ -5,6 +5,9 @@ using System.Reflection;
 
 namespace Milvasoft.Helpers.Extensions
 {
+    /// <summary>
+    /// Expression extensions.
+    /// </summary>
     public static class Expressions
     {
         /// <summary>
@@ -83,8 +86,7 @@ namespace Milvasoft.Helpers.Extensions
         }
 
         /// <summary>
-        /// <para><b>EN: </b>Determines the right casting and pets property from expression with this right casting.</para>
-        /// <para><b>TR: </b>Bu doğru döküm ile ifadeden doğru döküm ve evcil hayvan özelliğini belirler.</para>
+        /// Determines the right casting and pets property from expression with this right casting.
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <typeparam name="TPropertyType"></typeparam>
@@ -104,8 +106,7 @@ namespace Milvasoft.Helpers.Extensions
         }
 
         /// <summary>
-        /// <para><b>EN: </b>Determines the right casting and pets property name from expression with this right casting.</para>
-        /// <para><b>TR: </b>Bu doğru döküm ile ifadeden doğru döküm ve evcil hayvan özellik adını belirler.</para>
+        /// Determines the right casting and pets property name from expression with this right casting.
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <typeparam name="TPropertyType"></typeparam>

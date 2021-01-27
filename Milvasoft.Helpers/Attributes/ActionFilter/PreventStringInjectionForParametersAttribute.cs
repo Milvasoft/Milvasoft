@@ -8,6 +8,7 @@ using Milvasoft.Helpers.Enums;
 using Milvasoft.Helpers.Extensions;
 using Milvasoft.Helpers.Models;
 using Milvasoft.Helpers.Models.Response;
+using Milvasoft.Helpers.Utils;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -77,7 +78,7 @@ namespace Milvasoft.Helpers.Attributes.ActionFilter
                 var localizerFactory = context.HttpContext.RequestServices.GetService<IStringLocalizerFactory>();
 
                 var assemblyName = new AssemblyName(ResourceType.GetTypeInfo().Assembly.FullName);
-                sharedLocalizer = localizerFactory.Create("SharedResource", assemblyName.Name);
+                sharedLocalizer = localizerFactory.Create(ResourceType.Name, assemblyName.Name);
             }
 
             async Task<ActionExecutingContext> RewriteResponseAsync(string errorMessage)
@@ -122,7 +123,7 @@ namespace Milvasoft.Helpers.Attributes.ActionFilter
                         if (!lengthResult)
                         {
                             base.OnActionExecuting(RewriteResponseAsync(sharedLocalizer != null
-                                                                        ? sharedLocalizer["PreventStringInjectionLengthResultNotTrue", localizedPropName, MinimumLength, MaximumLength]
+                                                                        ? sharedLocalizer[LocalizerKeys.PreventStringInjectionLengthResultNotTrue, localizedPropName, MinimumLength, MaximumLength]
                                                                         : $"{localizedPropName} must have a character length in the range {MinimumLength} to {MaximumLength}.").Result);
                         }
                         if (!string.IsNullOrEmpty(stringValue))
@@ -140,14 +141,14 @@ namespace Milvasoft.Helpers.Attributes.ActionFilter
                                                 milvasoftLogger.LogFatal(MailContent, MailSubject.Hack);
 
                                             base.OnActionExecuting(RewriteResponseAsync(sharedLocalizer != null
-                                                                                        ? sharedLocalizer["PreventStringInjectionContainsForbiddenWordError", localizedPropName]
+                                                                                        ? sharedLocalizer[LocalizerKeys.PreventStringInjectionContainsForbiddenWordError, localizedPropName]
                                                                                         : $"{localizedPropName} contains invalid words.").Result);
                                         }
                         }
                         if (MinimumLength > 0 && (stringValue?.Length ?? 0) < MinimumLength)
                         {
                             base.OnActionExecuting(RewriteResponseAsync(sharedLocalizer != null
-                                                                        ? sharedLocalizer["PreventStringInjectionBellowMin", localizedPropName, MinimumLength]
+                                                                        ? sharedLocalizer[LocalizerKeys.PreventStringInjectionBellowMin, localizedPropName, MinimumLength]
                                                                         : $"{localizedPropName} is below the minimum character limit. Please enter at least {MinimumLength} characters.").Result);
                         }
                     }

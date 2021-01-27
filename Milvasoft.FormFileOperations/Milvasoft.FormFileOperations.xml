@@ -6,77 +6,77 @@
     <members>
         <member name="T:Milvasoft.FormFileOperations.Enums.FileType">
             <summary>
-            <para> File types.</para>
+             File types.
             </summary>
         </member>
         <member name="F:Milvasoft.FormFileOperations.Enums.FileType.Image">
             <summary> 
-            <para>File Type Image</para>
+            File Type Image
             </summary>
         </member>
         <member name="F:Milvasoft.FormFileOperations.Enums.FileType.Video">
             <summary> 
-            <para>File Type Video</para>
+            File Type Video
             </summary>
         </member>
         <member name="F:Milvasoft.FormFileOperations.Enums.FileType.ARModel">
             <summary>
-            <para>File Type ARModel</para>          
+            File Type ARModel       
             </summary>
         </member>
         <member name="F:Milvasoft.FormFileOperations.Enums.FileType.Audio">
             <summary> 
-            <para>File Type Audio</para>
+            File Type Audio
             </summary>
         </member>
         <member name="F:Milvasoft.FormFileOperations.Enums.FileType.Document">
             <summary> 
-            <para>File Type Document</para>
+            File Type Document
             </summary>
         </member>
         <member name="F:Milvasoft.FormFileOperations.Enums.FileType.Compressed">
             <summary> 
-            <para>File Type Compressed</para>
+            File Type Compressed
             </summary>
         </member>
         <member name="F:Milvasoft.FormFileOperations.Enums.FileType.EMail">
             <summary> 
-            <para>File Type EMail</para>
+            File Type EMail
             </summary>
         </member>
         <member name="F:Milvasoft.FormFileOperations.Enums.FileType.Font">
             <summary> 
-            <para>File Type Font</para>
+            File Type Font
             </summary>
         </member>
         <member name="F:Milvasoft.FormFileOperations.Enums.FileType.InternetRelated">
             <summary> 
-            <para>File Type InternetRelated</para>
+            File Type InternetRelated
             </summary>
         </member>
         <member name="T:Milvasoft.FormFileOperations.Enums.FileValidationResult">
             <summary>
-            <para> File validation results. </para>
+            File validation results. 
             </summary>
         </member>
         <member name="F:Milvasoft.FormFileOperations.Enums.FileValidationResult.Valid">
             <summary> 
-            <para>Valid file result.</para>
+            Valid file result.
             </summary>
         </member>
         <member name="F:Milvasoft.FormFileOperations.Enums.FileValidationResult.FileSizeTooBig">
             <summary> 
-            <para>File size too big result.</para>
+            File size too big result.
             </summary>
         </member>
         <member name="F:Milvasoft.FormFileOperations.Enums.FileValidationResult.InvalidFileExtension">
             <summary> 
-            <para>Invalid file extension result.</para>
+            Invalid file extension result.
             </summary>
         </member>
         <member name="F:Milvasoft.FormFileOperations.Enums.FileValidationResult.NullFile">
             <summary> 
-            <para>Invalid file extension result.</para>
+            Invalid file extension result.
             </summary>
         </member>
         <member name="T:Milvasoft.FormFileOperations.FormFileOperations">
@@ -91,14 +91,9 @@
             <param name="type"></param>
             <returns></returns>
         </member>
-        <member name="P:Milvasoft.FormFileOperations.FormFileOperations.DefaultAllowedExtensions">
-            <summary>
-            Allowed file extensions for media files.
-            </summary>
-        </member>
         <member name="M:Milvasoft.FormFileOperations.FormFileOperations.SaveFileToPathAsync``1(Microsoft.AspNetCore.Http.IFormFile,``0,System.String,Milvasoft.FormFileOperations.FormFileOperations.FilesFolderNameCreator,System.String)">
             <summary>
-            Saves uploaded IFormFile file to physical file path.
+            Saves uploaded IFormFile file to physical file path. If <paramref name="file"/>.Lenght is lower or equal than 0 then returns empty string.
             Target Path will be : "<paramref name ="basePath"></paramref>/<b><paramref name="folderNameCreator"/>()</b>/<paramref name="entity"></paramref>.<paramref name="propertyName"/>"
             </summary>
             
@@ -120,7 +115,7 @@
         </member>
         <member name="M:Milvasoft.FormFileOperations.FormFileOperations.SaveFilesToPathAsync``1(System.Collections.Generic.List{Microsoft.AspNetCore.Http.IFormFile},``0,System.String,Milvasoft.FormFileOperations.FormFileOperations.FilesFolderNameCreator,System.String)">
             <summary>
-            Saves uploaded IFormFile files to physical file path.
+            Saves uploaded IFormFile files to physical file path. If file list is null or empty returns empty <see cref="!:List&lt;string&gt;"/> 
             Target Path will be : "<paramref name ="basePath"></paramref>/<b><paramref name="folderNameCreator"/>()</b>/<paramref name="entity"></paramref>.<paramref name="propertyName"/>"
             </summary>
             
@@ -142,7 +137,7 @@
         </member>
         <member name="M:Milvasoft.FormFileOperations.FormFileOperations.SaveFilesToPathAsync``1(Microsoft.AspNetCore.Http.IFormFileCollection,``0,System.String,Milvasoft.FormFileOperations.FormFileOperations.FilesFolderNameCreator,System.String)">
             <summary>
-            Saves uploaded IFormFile files to physical file path. 
+            Saves uploaded IFormFile files to physical file path. If file list is null or empty returns empty <see cref="!:List&lt;string&gt;"/> 
             Target Path will be : "<paramref name ="basePath"></paramref>/<b><paramref name="folderNameCreator"/>()</b>/<paramref name="entity"></paramref>.<paramref name="propertyName"/>"
             </summary>
             

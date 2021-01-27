@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 namespace Milvasoft.Helpers.DataAccess.Abstract
 {
     /// <summary>
-    /// <para>  Base repository for concrete repositories. All repositories must be have this methods. </para> 
+    /// Base repository for concrete repositories. All repositories must be have this methods.
     /// </summary>
     /// <typeparam name="TEntity"></typeparam>
     /// <typeparam name="TKey"></typeparam>
@@ -24,14 +24,14 @@ namespace Milvasoft.Helpers.DataAccess.Abstract
         /// If value is true, all methods returns all entities.
         /// If value is false, all methods returns entities which only "IsDeleted" property's value is false.
         /// </summary>
-        public static bool GetSoftDeletedEntities { get; set; }
+        public static bool GetSoftDeletedEntities { get; set; } = false;
 
         /// <summary>
         /// Gets or sets ResetSoftDeleteState. Default is true.
         /// If value is true, resets 'GetSoftDeletedEntities' property value to false after when every conditional method invoked. 
         /// Otherwise 
         /// </summary>
-        public static bool ResetSoftDeleteState { get; set; }
+        public static bool ResetSoftDeleteState { get; set; } = true;
 
 
         /// <summary>
@@ -41,14 +41,14 @@ namespace Milvasoft.Helpers.DataAccess.Abstract
         Expression<Func<TEntity, bool>> CreateIsDeletedFalseExpression();
 
         /// <summary>
-        /// <para> Returns all entities which IsDeleted condition is true from database asynchronously. If the condition is requested, it also provides that condition.</para> 
+        ///  Returns all entities which IsDeleted condition is true from database asynchronously. If the condition is requested, it also provides that condition.
         /// </summary>
         /// <param name="conditionExpression"></param>
         /// <returns></returns>
         Task<TEntity> GetFirstOrDefaultAsync(Expression<Func<TEntity, bool>> conditionExpression = null);
 
         /// <summary>
-        /// <para> Returns all entities which IsDeleted condition is true with includes from database asynchronously. If the condition is requested, it also provides that condition.</para> 
+        ///  Returns all entities which IsDeleted condition is true with includes from database asynchronously. If the condition is requested, it also provides that condition.
         /// </summary>
         /// <param name="includes"></param>
         /// <param name="conditionExpression"></param>
@@ -56,14 +56,14 @@ namespace Milvasoft.Helpers.DataAccess.Abstract
         Task<TEntity> GetFirstOrDefaultAsync(Func<IIncludable<TEntity>, IIncludable> includes, Expression<Func<TEntity, bool>> conditionExpression = null);
 
         /// <summary>
-        /// <para> Returns all entities which IsDeleted condition is true from database asynchronously. If the condition is requested, it also provides that condition.</para> 
+        ///  Returns all entities which IsDeleted condition is true from database asynchronously. If the condition is requested, it also provides that condition.
         /// </summary>
         /// <param name="conditionExpression"></param>
         /// <returns></returns>
         Task<TEntity> GetSingleOrDefaultAsync(Expression<Func<TEntity, bool>> conditionExpression = null);
 
         /// <summary>
-        /// <para> Returns all entities which IsDeleted condition is true with includes from database asynchronously. If the condition is requested, it also provides that condition.</para> 
+        ///  Returns all entities which IsDeleted condition is true with includes from database asynchronously. If the condition is requested, it also provides that condition.
         /// </summary>
         /// <param name="includes"></param>
         /// <param name="conditionExpression"></param>
@@ -71,14 +71,14 @@ namespace Milvasoft.Helpers.DataAccess.Abstract
         Task<TEntity> GetSingleOrDefaultAsync(Func<IIncludable<TEntity>, IIncludable> includes, Expression<Func<TEntity, bool>> conditionExpression = null);
 
         /// <summary>
-        /// <para> Returns all entities which IsDeleted condition is true from database asynchronously. If the condition is requested, it also provides that condition.</para> 
+        ///  Returns all entities which IsDeleted condition is true from database asynchronously. If the condition is requested, it also provides that condition.
         /// </summary>
         /// <param name="conditionExpression"></param>
         /// <returns></returns>
         Task<IEnumerable<TEntity>> GetAllAsync(Expression<Func<TEntity, bool>> conditionExpression = null);
 
         /// <summary>
-        /// <para> Returns all entities which IsDeleted condition is true with specified includes from database asynchronously. If the condition is requested, it also provides that condition.</para> 
+        ///  Returns all entities which IsDeleted condition is true with specified includes from database asynchronously. If the condition is requested, it also provides that condition.
         /// </summary>
         /// <param name="includes"></param>
         /// <param name="conditionExpression"></param>
@@ -88,8 +88,8 @@ namespace Milvasoft.Helpers.DataAccess.Abstract
         #region Pagination And Order
 
         /// <summary>
-        /// <para> Creates asynchronously a shallow copy of a range of entity's which IsDeleted property is true, in the source List of TEntity with requested count and range. 
-        ///       If the condition is requested, it also provides that condition.</para> 
+        ///  Creates asynchronously a shallow copy of a range of entity's which IsDeleted property is true, in the source List of TEntity with requested count and range. 
+        ///       If the condition is requested, it also provides that condition.
         /// </summary>
         /// 
         /// <exception cref="ArgumentOutOfRangeException"> Throwns when <paramref name="requestedPageNumber"/> more than actual page number. </exception>
@@ -103,8 +103,8 @@ namespace Milvasoft.Helpers.DataAccess.Abstract
                                                                                                      Expression<Func<TEntity, bool>> conditionExpression = null);
 
         /// <summary>
-        /// <para> Creates asynchronously a shallow copy of a range of entity's which IsDeleted property is true, in the source List of TEntity with requested count,range and includes.
-        ///       If the condition is requested, it also provides that condition.</para> 
+        ///  Creates asynchronously a shallow copy of a range of entity's which IsDeleted property is true, in the source List of TEntity with requested count,range and includes.
+        ///       If the condition is requested, it also provides that condition.
         /// </summary>
         ///
         /// <exception cref="ArgumentOutOfRangeException"> Throwns when <paramref name="requestedPageNumber"/> more than actual page number. </exception>
@@ -120,8 +120,8 @@ namespace Milvasoft.Helpers.DataAccess.Abstract
                                                                                                      Expression<Func<TEntity, bool>> conditionExpression = null);
 
         /// <summary>
-        /// <para> Creates asynchronously a shallow copy of a range of entity's which IsDeleted property is true, in the source List of TEntity with requested count and range.
-        ///       If the condition is requested, it also provides that condition.</para> 
+        ///  Creates asynchronously a shallow copy of a range of entity's which IsDeleted property is true, in the source List of TEntity with requested count and range.
+        ///       If the condition is requested, it also provides that condition.
         ///       
         /// </summary>
         /// 
@@ -141,8 +141,8 @@ namespace Milvasoft.Helpers.DataAccess.Abstract
                                                                                                                Expression<Func<TEntity, bool>> conditionExpression = null);
 
         /// <summary>
-        /// <para> Creates asynchronously a shallow copy of a range of entity's which IsDeleted property is true, in the source List of TEntity with requested count,range and includes.
-        ///        If the condition is requested, it also provides that condition.</para> 
+        ///  Creates asynchronously a shallow copy of a range of entity's which IsDeleted property is true, in the source List of TEntity with requested count,range and includes.
+        ///        If the condition is requested, it also provides that condition.
         ///        
         /// </summary>
         /// 
@@ -164,8 +164,8 @@ namespace Milvasoft.Helpers.DataAccess.Abstract
                                                                                                                Expression<Func<TEntity, bool>> conditionExpression = null);
 
         /// <summary>
-        /// <para> Creates asynchronously a shallow copy of a range of entity's which IsDeleted property is true, in the source List of TEntity with requested count and range.
-        ///       If the condition is requested, it also provides that condition.</para> 
+        ///  Creates asynchronously a shallow copy of a range of entity's which IsDeleted property is true, in the source List of TEntity with requested count and range.
+        ///       If the condition is requested, it also provides that condition.
         ///       
         /// </summary>
         /// 
@@ -184,8 +184,8 @@ namespace Milvasoft.Helpers.DataAccess.Abstract
                                                                                                                Expression<Func<TEntity, bool>> conditionExpression = null);
 
         /// <summary>
-        /// <para> Creates asynchronously a shallow copy of a range of entity's which IsDeleted property is true, in the source List of TEntity with requested count,range and includes.
-        ///        If the condition is requested, it also provides that condition.</para> 
+        ///  Creates asynchronously a shallow copy of a range of entity's which IsDeleted property is true, in the source List of TEntity with requested count,range and includes.
+        ///        If the condition is requested, it also provides that condition.
         ///        
         /// </summary>
         /// 
@@ -205,10 +205,9 @@ namespace Milvasoft.Helpers.DataAccess.Abstract
                                                                                                                bool orderByAscending,
                                                                                                                Expression<Func<TEntity, bool>> conditionExpression = null);
 
-
         /// <summary>
-        /// <para> Gets entities as ordered with <paramref name="orderByPropertyName"/>.
-        ///       If the condition is requested, it also provides that condition.</para> 
+        ///  Gets entities as ordered with <paramref name="orderByPropertyName"/>.
+        ///       If the condition is requested, it also provides that condition.
         ///       
         /// </summary>
         /// 
@@ -219,12 +218,12 @@ namespace Milvasoft.Helpers.DataAccess.Abstract
         /// <param name="conditionExpression"></param>
         /// <returns></returns>
         Task<IEnumerable<TEntity>> GetAsOrderedAsync(string orderByPropertyName,
-                                                                         bool orderByAscending,
-                                                                         Expression<Func<TEntity, bool>> conditionExpression = null);
+                                                     bool orderByAscending,
+                                                     Expression<Func<TEntity, bool>> conditionExpression = null);
 
         /// <summary>
-        /// <para> Gets entities as ordered with <paramref name="orderByKeySelector"/>.
-        ///       If the condition is requested, it also provides that condition.</para> 
+        ///  Gets entities as ordered with <paramref name="orderByKeySelector"/>.
+        ///       If the condition is requested, it also provides that condition.
         ///       
         /// </summary>
         /// 
@@ -233,12 +232,12 @@ namespace Milvasoft.Helpers.DataAccess.Abstract
         /// <param name="conditionExpression"></param>
         /// <returns></returns>
         Task<IEnumerable<TEntity>> GetAsOrderedAsync(Expression<Func<TEntity, object>> orderByKeySelector,
-                                                                         bool orderByAscending,
-                                                                         Expression<Func<TEntity, bool>> conditionExpression = null);
+                                                     bool orderByAscending,
+                                                     Expression<Func<TEntity, bool>> conditionExpression = null);
 
         /// <summary>
-        /// <para> Gets entities as ordered with <paramref name="orderByKeySelector"/>.
-        ///        If the condition is requested, it also provides that condition.</para> 
+        ///  Gets entities as ordered with <paramref name="orderByKeySelector"/>.
+        ///        If the condition is requested, it also provides that condition.
         ///        
         /// </summary>
         ///
@@ -248,14 +247,14 @@ namespace Milvasoft.Helpers.DataAccess.Abstract
         /// <param name="conditionExpression"></param>
         /// <returns></returns>
         Task<IEnumerable<TEntity>> GetAsOrderedAsync(Func<IIncludable<TEntity>, IIncludable> includes,
-                                                                         Expression<Func<TEntity, object>> orderByKeySelector,
-                                                                         bool orderByAscending,
-                                                                         Expression<Func<TEntity, bool>> conditionExpression = null);
+                                                     Expression<Func<TEntity, object>> orderByKeySelector,
+                                                     bool orderByAscending,
+                                                     Expression<Func<TEntity, bool>> conditionExpression = null);
 
         #endregion
 
         /// <summary>
-        ///<para> Returns one entity by entity Id from database asynchronously.</para> 
+        /// Returns one entity by entity Id from database asynchronously.
         /// </summary>
         /// <param name="id"></param>
         /// <param name=""></param>
@@ -264,7 +263,7 @@ namespace Milvasoft.Helpers.DataAccess.Abstract
         Task<TEntity> GetByIdAsync(TKey id, Expression<Func<TEntity, bool>> conditionExpression = null);
 
         /// <summary>
-        /// <para> Returns one entity by entity Id from database asynchronously. </para> 
+        ///  Returns one entity by entity Id from database asynchronously. 
         /// </summary>
         /// 
         /// <exception cref="ArgumentNullException"> Throwns when no entity found. </exception>
@@ -275,7 +274,7 @@ namespace Milvasoft.Helpers.DataAccess.Abstract
         Task<TEntity> GetRequiredByIdAsync(TKey id, Expression<Func<TEntity, bool>> conditionExpression = null);
 
         /// <summary>
-        /// <para> Returns one entity which IsDeleted condition is true by entity Id with includes from database asynchronously. If the condition is requested, it also provides that condition.</para> 
+        ///  Returns one entity which IsDeleted condition is true by entity Id with includes from database asynchronously. If the condition is requested, it also provides that condition.
         /// </summary>
         /// <param name="id"></param>
         /// <param name="includes"></param>
@@ -284,7 +283,7 @@ namespace Milvasoft.Helpers.DataAccess.Abstract
         Task<TEntity> GetByIdAsync(TKey id, Func<IIncludable<TEntity>, IIncludable> includes, Expression<Func<TEntity, bool>> conditionExpression = null);
 
         /// <summary>
-        /// <para> Returns one entity which IsDeleted condition is true by entity Id with includes from database asynchronously. If the condition is requested, it also provides that condition.</para> 
+        ///  Returns one entity which IsDeleted condition is true by entity Id with includes from database asynchronously. If the condition is requested, it also provides that condition.
         /// </summary>
         /// 
         /// <exception cref="ArgumentNullException"> Throwns when no entity found. </exception>
@@ -296,42 +295,42 @@ namespace Milvasoft.Helpers.DataAccess.Abstract
         Task<TEntity> GetRequiredByIdAsync(TKey id, Func<IIncludable<TEntity>, IIncludable> includes, Expression<Func<TEntity, bool>> conditionExpression = null);
 
         /// <summary>
-        /// <para> Adds single entity to database asynchronously.</para> 
+        ///  Adds single entity to database asynchronously.
         /// </summary>
         /// <param name="entity"></param>
         /// <returns></returns>
         Task AddAsync(TEntity entity);
 
         /// <summary>
-        /// <para> Adds multiple entities to database asynchronously.</para> 
+        ///  Adds multiple entities to database asynchronously.
         /// </summary>
         /// <param name="entities"></param>
         /// <returns></returns>
         Task AddRangeAsync(IEnumerable<TEntity> entities);
 
         /// <summary>
-        /// <para> Updates specified entity in database asynchronously.</para> 
+        ///  Updates specified entity in database asynchronously.
         /// </summary>
         /// <param name="entity"></param>
         /// <returns></returns>
         Task UpdateAsync(TEntity entity);
 
         /// <summary>
-        /// <para> Updates multiple entities in database asynchronously.</para> 
+        ///  Updates multiple entities in database asynchronously.
         /// </summary>
         /// <param name="entities"></param>
         /// <returns></returns>
         Task UpdateAsync(IEnumerable<TEntity> entities);
 
         /// <summary>
-        /// <para> Deletes single entity from database asynchronously..</para> 
+        ///  Deletes single entity from database asynchronously..
         /// </summary>
         /// <param name="entity"></param>
         /// <returns></returns>
         Task DeleteAsync(TEntity entity);
 
         /// <summary>
-        /// <para> Deletes multiple entity from database asynchronously. </para> 
+        ///  Deletes multiple entity from database asynchronously. 
         /// </summary>
         /// <param name="entities"></param>
         /// <returns></returns>
@@ -345,25 +344,24 @@ namespace Milvasoft.Helpers.DataAccess.Abstract
         /// <returns></returns>
         Task<List<Tuple<object, int>>> GetGroupedAndCountAsync(string groupByPropertyName, Expression<Func<TEntity, bool>> conditionExpression = null);
 
-
         /// <summary>
         /// Gets grouped entities from database with <paramref name="groupedClause"/>.
         /// 
-        /// <para><b>Example use;</b></para>
+        /// <para> <b>Example use;</b></para>
         /// <code>
         /// 
-        ///   <para> var dbSet = _contextRepository.GetDbSet{Poco}();  <see cref="ContextRepository{TContext}.GetDbSet{TEntity}"></see> </para>
+        /// <para>   var dbSet = _contextRepository.GetDbSet{Poco}();  <see cref="ContextRepository{TContext}.GetDbSet{TEntity}"></see> </para>
         /// 
-        ///   <para> var groupByClause =<para> from poco in dbSet </para>                                                                     </para>
-        ///   <para>                           group poco by new { poco.Id,  poco.PocoCode } into groupedPocos                                </para>       
-        ///   <para>                           select new PocoDTO                                                                             </para>
-        ///   <para>                           {                                                                                              </para>
-        ///   <para>                                Id = groupedPocos.Key.Id,                                                                 </para>
-        ///   <para>                                PocoCode = groupedPocos.Key.PocoCode,                                                     </para>
-        ///   <para>                                PocoCount = groupedPocos.Sum(p=>p.Count)                                                  </para>
-        ///   <para>                           };                                                                                             </para>
+        /// <para>   var groupByClause = from poco in dbSet                                                                             </para>
+        ///                              group poco by new { poco.Id,  poco.PocoCode } into groupedPocos                                      
+        /// <para>                       select new PocoDTO                                                                             </para>
+        /// <para>                       {                                                                                              </para>
+        /// <para>                            Id = groupedPocos.Key.Id,                                                                 </para>
+        /// <para>                            PocoCode = groupedPocos.Key.PocoCode,                                                     </para>
+        /// <para>                            PocoCount = groupedPocos.Sum(p=>p.Count)                                                  </para>
+        /// <para>                       };                                                                                             </para>
         ///                        
-        ///   <para> var result = await _pocoRepository.GetGroupedAsync{PocoDTO}(groupByClause).ConfigureAwait(false);                        </para>
+        /// <para>   var result = await _pocoRepository.GetGroupedAsync{PocoDTO}(groupByClause).ConfigureAwait(false);                  </para>
         ///    
         /// </code>
         /// 
@@ -380,19 +378,19 @@ namespace Milvasoft.Helpers.DataAccess.Abstract
         /// <summary>
         /// Gets grouped entities with condition from database with <paramref name="groupedClause"/>.
         /// 
-        /// <para><b>Example use;</b></para>
+        /// <para> <b>Example use;</b></para>
         /// <code>
         /// 
-        ///   <para> Func{IQueryablePocoDTO>} groupByClauseFunc = () => <para>  from poco in _contextRepository.GetDbSet{Poco}() </para>                                       </para>
-        ///   <para>                                                            group poco by new { poco.Id,  poco.PocoCode } into groupedPocos                                </para>       
-        ///   <para>                                                            select new PocoDTO                                                                             </para>
-        ///   <para>                                                            {                                                                                              </para>
-        ///   <para>                                                                 Id = groupedPocos.Key.Id,                                                                 </para>
-        ///   <para>                                                                 PocoCode = groupedPocos.Key.PocoCode,                                                     </para>
-        ///   <para>                                                                 PocoCount = groupedPocos.Sum(p=>p.Count)                                                  </para>
-        ///   <para>                                                            };                                                                                             </para>
+        /// <para>   Func{IQueryablePocoDTO>} groupByClauseFunc = () =>   from poco in _contextRepository.GetDbSet{Poco}()                                       </para>
+        ///                                                               group poco by new { poco.Id,  poco.PocoCode } into groupedPocos                                      
+        /// <para>                                                        select new PocoDTO                                                                     </para>
+        /// <para>                                                        {                                                                                      </para>
+        /// <para>                                                             Id = groupedPocos.Key.Id,                                                         </para>
+        /// <para>                                                             PocoCode = groupedPocos.Key.PocoCode,                                             </para>
+        /// <para>                                                             PocoCount = groupedPocos.Sum(p=>p.Count)                                          </para>
+        /// <para>                                                        };                                                                                     </para>
         ///                        
-        ///   <para> var result = await _pocoRepository.GetGroupedAsync{PocoDTO}(groupByClauseFunc).ConfigureAwait(false);                                                     </para>
+        /// <para>   var result = await _pocoRepository.GetGroupedAsync{PocoDTO}(groupByClauseFunc).ConfigureAwait(false);                                       </para>
         ///    
         /// </code>
         /// 
@@ -409,19 +407,19 @@ namespace Milvasoft.Helpers.DataAccess.Abstract
         /// <summary>
         /// Gets grouped entities with condition from database with <paramref name="groupedClause"/>.
         /// 
-        /// <para><b>Example use;</b></para>
+        /// <para> <b>Example use;</b></para>
         /// <code>
         /// 
-        ///   <para> Func{IQueryablePocoDTO>} groupByClauseFunc = () => <para>  from poco in _contextRepository.GetDbSet{Poco}() </para>                                       </para>
-        ///   <para>                                                            group poco by new { poco.Id,  poco.PocoCode } into groupedPocos                                </para>       
-        ///   <para>                                                            select new PocoDTO                                                                             </para>
-        ///   <para>                                                            {                                                                                              </para>
-        ///   <para>                                                                 Id = groupedPocos.Key.Id,                                                                 </para>
-        ///   <para>                                                                 PocoCode = groupedPocos.Key.PocoCode,                                                     </para>
-        ///   <para>                                                                 PocoCount = groupedPocos.Sum(p=>p.Count)                                                  </para>
-        ///   <para>                                                            };                                                                                             </para>
+        /// <para>   Func{IQueryablePocoDTO>} groupByClauseFunc = () =>   from poco in _contextRepository.GetDbSet{Poco}()                                       </para>
+        ///                                                               group poco by new { poco.Id,  poco.PocoCode } into groupedPocos                                      
+        /// <para>                                                              select new PocoDTO                                                               </para>
+        /// <para>                                                              {                                                                                </para>
+        /// <para>                                                                   Id = groupedPocos.Key.Id,                                                   </para>
+        /// <para>                                                                   PocoCode = groupedPocos.Key.PocoCode,                                       </para>
+        /// <para>                                                                   PocoCount = groupedPocos.Sum(p=>p.Count)                                    </para>
+        /// <para>                                                              };                                                                               </para>
         ///                        
-        ///   <para> var result = await _pocoRepository.GetGroupedAsync{PocoDTO}(1, 10, groupByClauseFunc).ConfigureAwait(false);                                              </para>
+        /// <para>   var result = await _pocoRepository.GetGroupedAsync{PocoDTO}(1, 10, groupByClauseFunc).ConfigureAwait(false);                                </para>
         ///    
         /// </code>
         /// 
@@ -436,27 +434,27 @@ namespace Milvasoft.Helpers.DataAccess.Abstract
         /// <param name="groupedClause"></param>
         /// <returns></returns>
         Task<(IEnumerable<TReturn> entities, int pageCount)> GetAsGroupedAndPaginatedAsync<TReturn>(int requestedPageNumber,
-                                                                                                                int countOfRequestedRecordsInPage,
-                                                                                                                Func<IQueryable<TReturn>> groupedClause,
-                                                                                                                Expression<Func<TReturn, bool>> conditionExpression = null);
+                                                                                                    int countOfRequestedRecordsInPage,
+                                                                                                    Func<IQueryable<TReturn>> groupedClause,
+                                                                                                    Expression<Func<TReturn, bool>> conditionExpression = null);
 
 
         /// <summary>
         /// Gets grouped entities with condition from database with <paramref name="groupedClause"/>.
         /// 
-        /// <para><b>Example use;</b></para>
+        /// <b>Example use;</b></para>
         /// <code>
         /// 
-        ///   <para> Func{IQueryablePocoDTO>} groupByClauseFunc = () => <para>  from poco in _contextRepository.GetDbSet{Poco}() </para>                                       </para>
-        ///   <para>                                                            group poco by new { poco.Id,  poco.PocoCode } into groupedPocos                                </para>       
-        ///   <para>                                                            select new PocoDTO                                                                             </para>
-        ///   <para>                                                            {                                                                                              </para>
-        ///   <para>                                                                 Id = groupedPocos.Key.Id,                                                                 </para>
-        ///   <para>                                                                 PocoCode = groupedPocos.Key.PocoCode,                                                     </para>
-        ///   <para>                                                                 PocoCount = groupedPocos.Sum(p=>p.Count)                                                  </para>
-        ///   <para>                                                            };                                                                                             </para>
+        ///    Func{IQueryablePocoDTO>} groupByClauseFunc = () =>   from poco in _contextRepository.GetDbSet{Poco}()                                       </para>
+        ///                                                               group poco by new { poco.Id,  poco.PocoCode } into groupedPocos                                      
+        ///                                                               select new PocoDTO                                                                             </para>
+        ///                                                               {                                                                                              </para>
+        ///                                                                    Id = groupedPocos.Key.Id,                                                                 </para>
+        ///                                                                    PocoCode = groupedPocos.Key.PocoCode,                                                     </para>
+        ///                                                                    PocoCount = groupedPocos.Sum(p=>p.Count)                                                  </para>
+        ///                                                               };                                                                                             </para>
         ///                        
-        ///   <para> var result = await _pocoRepository.GetGroupedAsync{PocoDTO}(1, 10, "PocoCode", false, groupByClauseFunc).ConfigureAwait(false);                           </para>
+        ///    var result = await _pocoRepository.GetGroupedAsync{PocoDTO}(1, 10, "PocoCode", false, groupByClauseFunc).ConfigureAwait(false);                           </para>
         ///    
         /// </code>
         /// 
@@ -473,28 +471,28 @@ namespace Milvasoft.Helpers.DataAccess.Abstract
         /// <param name="groupedClause"></param>
         /// <returns></returns>
         Task<(IEnumerable<TReturn> entities, int pageCount)> GetAsGroupedAndPaginatedAndOrderedAsync<TReturn>(int requestedPageNumber,
-                                                                                                                          int countOfRequestedRecordsInPage,
-                                                                                                                          string orderByPropertyName,
-                                                                                                                          bool orderByAscending,
-                                                                                                                          Func<IQueryable<TReturn>> groupedClause,
-                                                                                                                          Expression<Func<TReturn, bool>> conditionExpression = null);
+                                                                                                              int countOfRequestedRecordsInPage,
+                                                                                                              string orderByPropertyName,
+                                                                                                              bool orderByAscending,
+                                                                                                              Func<IQueryable<TReturn>> groupedClause,
+                                                                                                              Expression<Func<TReturn, bool>> conditionExpression = null);
 
         /// <summary>
         /// Gets grouped entities with condition from database with <paramref name="groupedClause"/>.
         /// 
-        /// <para><b>Example use;</b></para>
+        /// <para> <b>Example use;</b></para>
         /// <code>
         /// 
-        ///   <para> Func{IQueryablePocoDTO>} groupByClauseFunc = () => <para>  from poco in _contextRepository.GetDbSet{Poco}() </para>                                       </para>
-        ///   <para>                                                            group poco by new { poco.Id,  poco.PocoCode } into groupedPocos                                </para>       
-        ///   <para>                                                            select new PocoDTO                                                                             </para>
-        ///   <para>                                                            {                                                                                              </para>
-        ///   <para>                                                                 Id = groupedPocos.Key.Id,                                                                 </para>
-        ///   <para>                                                                 PocoCode = groupedPocos.Key.PocoCode,                                                     </para>
-        ///   <para>                                                                 PocoCount = groupedPocos.Sum(p=>p.Count)                                                  </para>
-        ///   <para>                                                            };                                                                                             </para>
+        /// <para>   Func{IQueryablePocoDTO>} groupByClauseFunc = () =>   from poco in _contextRepository.GetDbSet{Poco}()                                       </para>
+        ///                                                               group poco by new { poco.Id,  poco.PocoCode } into groupedPocos                                      
+        /// <para>                                                        select new PocoDTO                                                                     </para>
+        /// <para>                                                        {                                                                                      </para>
+        /// <para>                                                             Id = groupedPocos.Key.Id,                                                         </para>
+        /// <para>                                                             PocoCode = groupedPocos.Key.PocoCode,                                             </para>
+        /// <para>                                                             PocoCount = groupedPocos.Sum(p=>p.Count)                                          </para>
+        /// <para>                                                        };                                                                                     </para>
         ///                        
-        ///   <para> var result = await _pocoRepository.GetGroupedAsync{PocoDTO}("PocoCode", false, groupByClauseFunc).ConfigureAwait(false);                                  </para>
+        /// <para>   var result = await _pocoRepository.GetGroupedAsync{PocoDTO}("PocoCode", false, groupByClauseFunc).ConfigureAwait(false);                    </para>
         ///    
         /// </code>
         /// 
@@ -509,9 +507,9 @@ namespace Milvasoft.Helpers.DataAccess.Abstract
         /// <param name="groupedClause"></param>
         /// <returns></returns>
         Task<IEnumerable<TReturn>> GetAsGroupedAnOrderedAsync<TReturn>(string orderByPropertyName,
-                                                                                   bool orderByAscending,
-                                                                                   Func<IQueryable<TReturn>> groupedClause,
-                                                                                   Expression<Func<TReturn, bool>> conditionExpression = null);
+                                                                       bool orderByAscending,
+                                                                       Func<IQueryable<TReturn>> groupedClause,
+                                                                       Expression<Func<TReturn, bool>> conditionExpression = null);
 
         /// <summary>
         /// Get max value of entities.

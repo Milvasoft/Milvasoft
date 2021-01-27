@@ -7,23 +7,38 @@ namespace Milvasoft.Helpers.Extensions
 {
     public static class GenericCollection
     {
-        /// <summary>
-        /// <para><b>EN: </b>Checks whether or not collection is null or empty. Assumes collection can be safely enumerated multiple times.</para>
-        /// <para><b>TR: </b>Koleksiyonun boş veya boş olup olmadığını denetler. Koleksiyonun birden çok kez güvenli bir şekilde numaralandırılabileceğini varsayar.</para>
-        /// </summary>
-        public static bool IsNullOrEmpty(this IEnumerable @this) => @this == null || @this.GetEnumerator().MoveNext() == false;
-
         private static readonly MethodInfo OrderByMethod = typeof(Queryable).GetMethods().Single(method => method.Name == "OrderBy" && method.GetParameters().Length == 2);
 
         private static readonly MethodInfo OrderByDescendingMethod = typeof(Queryable).GetMethods().Single(method => method.Name == "OrderByDescending" && method.GetParameters().Length == 2);
 
-        public static bool PropertyExists<T>(this IQueryable<T> source, string propertyName) => typeof(T).GetProperty(propertyName, BindingFlags.IgnoreCase | BindingFlags.Public | BindingFlags.Instance) != null;
+        /// <summary>
+        /// Checks whether or not collection is null or empty. Assumes collection can be safely enumerated multiple times.
+        /// </summary>
+        public static bool IsNullOrEmpty(this IEnumerable @this) => @this == null || @this.GetEnumerator().MoveNext() == false;
 
+        /// <summary>
+        /// Checks whether property exists.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="source"></param>
+        /// <param name="propertyName"></param>
+        /// <returns></returns>
+        public static bool PropertyExists<T>(this IQueryable<T> source, string propertyName) => typeof(T).GetProperty(propertyName, BindingFlags.IgnoreCase
+                                                                                                                                    | BindingFlags.Public
+                                                                                                                                    | BindingFlags.Instance) != null;
+
+        /// <summary>
+        /// Order <paramref name="source"/> by <paramref name="propertyName"/>
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="source"></param>
+        /// <param name="propertyName"></param>
+        /// <returns></returns>
         public static IQueryable<T> OrderByProperty<T>(this IQueryable<T> source, string propertyName)
         {
             if (typeof(T).GetProperty(propertyName, BindingFlags.IgnoreCase
-                                                        | BindingFlags.Public
-                                                            | BindingFlags.Instance) == null)
+                                                    | BindingFlags.Public
+                                                    | BindingFlags.Instance) == null)
             {
                 return null;
             }
@@ -42,6 +57,13 @@ namespace Milvasoft.Helpers.Extensions
             return (IQueryable<T>)ret;
         }
 
+        /// <summary>
+        /// Order by descending <paramref name="source"/>, by <paramref name="propertyName"/>
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="source"></param>
+        /// <param name="propertyName"></param>
+        /// <returns></returns>
         public static IQueryable<T> OrderByPropertyDescending<T>(this IQueryable<T> source, string propertyName)
         {
             if (typeof(T).GetProperty(propertyName, BindingFlags.IgnoreCase

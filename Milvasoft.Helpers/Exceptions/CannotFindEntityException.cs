@@ -4,7 +4,7 @@ using System;
 namespace Milvasoft.Helpers.Exceptions
 {
     /// <summary>
-    /// <para><b>EN: </b>The exception that is thrown when attempt to search for an entity not found in the Repository.</para>
+    /// The exception that is thrown when attempt to search for an entity not found in the Repository.
     /// </summary>
     public class CannotFindEntityException : MilvasoftBaseException
     {

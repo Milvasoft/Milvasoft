@@ -34,6 +34,11 @@ namespace Milvasoft.Helpers.Identity.Abstract
         #region Properties
 
         /// <summary>
+        /// Use white list when token based authentication for extra security. If its true performs operations on <see cref="SignedInUsers.SignedInUserTokens"/>.
+        /// </summary>
+        public static bool UseWhiteList { get; set; } = true;
+
+        /// <summary>
         /// The authentication scheme for the provider the token is associated with.
         /// </summary>
         public string LoginProvider { get; set; }
@@ -69,7 +74,7 @@ namespace Milvasoft.Helpers.Identity.Abstract
         /// <param name="userValidation"></param>
         /// <param name="tokenExpiredDate"></param>
         /// <returns></returns>
-        Task<TLoginResultDTO> SignInAsync(ILoginDTO loginDTO, UserValidation userValidation,DateTime tokenExpiredDate);
+        Task<TLoginResultDTO> SignInAsync(ILoginDTO loginDTO, UserValidation userValidation, DateTime tokenExpiredDate);
 
         /// <summary>
         /// Signs in for incoming user. Returns a token if login informations are valid or the user is not lockedout. Otherwise returns the error list.

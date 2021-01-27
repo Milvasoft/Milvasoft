@@ -31,7 +31,7 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
         }
 
         /// <summary>
-        ///<para> Executes sql query to database asynchronously.(e.g. trigger, event). </para> 
+        /// Executes sql query to database asynchronously.(e.g. trigger, event).
         /// </summary>
         /// <param name="query"></param>
         /// <returns></returns>
@@ -114,7 +114,7 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
         }
 
         /// <summary>
-        /// <para> User update process. </para>
+        /// User update process.
         /// </summary>
         public void InitializeUpdating<TEntity, TKey>(TEntity entity) where TEntity : class, IBaseEntity<TKey>
                                                                       where TKey : IEquatable<TKey>

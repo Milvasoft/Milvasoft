@@ -6,6 +6,9 @@ using System.Linq.Expressions;
 
 namespace Milvasoft.Helpers
 {
+    /// <summary>
+    /// Helper for filtering.
+    /// </summary>
     public static class Filter
     {
         /// <summary>

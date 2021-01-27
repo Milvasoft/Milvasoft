@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Localization;
 using Milvasoft.Helpers.Extensions;
 using Milvasoft.Helpers.Models.Response;
+using Milvasoft.Helpers.Utils;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -81,13 +82,13 @@ namespace Milvasoft.Helpers.Attributes.ActionFilter
                     var localizerFactory = context.HttpContext.RequestServices.GetService<IStringLocalizerFactory>();
 
                     var assemblyName = new AssemblyName(_resourceType.GetTypeInfo().Assembly.FullName);
-                    sharedLocalizer = localizerFactory.Create("SharedResource", assemblyName.Name);
+                    sharedLocalizer = localizerFactory.Create(_resourceType.Name, assemblyName.Name);
                 }
 
                 var message = sharedLocalizer != null
                          ? EntityName != null
-                               ? sharedLocalizer["ValidationIdPropertyError", sharedLocalizer[$"LocalizedEntityName{EntityName}"]]
-                               : sharedLocalizer["ValidationIdParameterGeneralError"]
+                               ? sharedLocalizer[LocalizerKeys.ValidationIdPropertyError, sharedLocalizer[LocalizerKeys.LocalizedEntityName + EntityName]]
+                               : sharedLocalizer[LocalizerKeys.ValidationIdParameterGeneralError]
                          : EntityName != null
                                ? $"Please select a valid {EntityName}."
                                : "Please enter all required parameters completely.";

@@ -1,8 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
+using Milvasoft.Helpers.Enums;
 using Milvasoft.Helpers.Extensions;
 using Milvasoft.Helpers.Models;
 using Milvasoft.Helpers.Models.Response;
+using Milvasoft.Helpers.Utils;
 using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
@@ -12,37 +14,69 @@ namespace Milvasoft.Helpers
 {
     /// <summary>
     /// <para>Helper class to generate the same type of response.</para>
-    /// <para>All methods return <see cref="BaseResponse"/> type in ActionResult. Base response can be <see cref="SingleObjectResponse{T}" /> or <see cref="MultipleObjectResponse{T}"/></para>
+    /// <para>All methods return <see cref="BaseResponse"/> type in ActionResult. Base response can be <see cref="ObjectResponse{T}" /> or <see cref="ObjectResponse{T}"/></para>
     /// <para>All methods return HTTP status code 200 OK.</para>
     /// </summary>
     public static class Response
     {
         /// <summary>
-        /// Default error message : "An error occured while processing"
+        /// <para> Return <paramref name="paginationDTO"/> in <see cref="ObjectResponse{T}"/>. </para>
+        /// <para> If <paramref name="paginationDTO"/>.DTOList isn't null or empty, sets the <see cref="ObjectResponse{T}"/>.Message to <paramref name="successMessage"/>. </para>
+        /// <para> Otherwise if <paramref name="errorMessage"/> is null sets the <see cref="ObjectResponse{T}"/>.Message to <b><see cref="LocalizerKeys.DefaultErrorMessage"/></b>. </para>
+        /// <para> Otherwise sets the <see cref="ObjectResponse{T}"/>.Message to <paramref name="errorMessage"/>. </para>
+        /// <para> Also in this conditions sets the <see cref="ObjectResponse{T}"/>.StatusCode to <see cref="MilvasoftStatusCodes.Status204NoContent"/>
+        ///         and <see cref="ObjectResponse{T}"/>.Success to true. Reason to be considered the <see cref="ObjectResponse{T}"/>.Success true is request was successful.  </para>
         /// </summary>
-        public static string _defaultErrorMessage = "An error occured while processing";
+        /// 
+        /// <param name="paginationDTO"></param>
+        /// <param name="successMessage"></param>
+        /// <param name="errorMessage"></param>
+        /// <returns>  <see cref="ObjectResponse{PaginationDTO}"/> in 200 OK <see cref="ActionResult"/> </returns>
+        public static IActionResult GetPaginationResponse<T>(this PaginationDTO<T> paginationDTO,
+                                                             string successMessage,
+                                                             string errorMessage = null)
+        {
+            var response = new ObjectResponse<PaginationDTO<T>> { StatusCode = MilvasoftStatusCodes.Status200OK };
+
+            response.Message = successMessage;
+
+            if (paginationDTO.DTOList.IsNullOrEmpty())
+            {
+                response.Message = string.IsNullOrEmpty(errorMessage) ? LocalizerKeys.DefaultErrorMessage : errorMessage;
+                response.StatusCode = MilvasoftStatusCodes.Status204NoContent;
+                response.Success = true;
+            }
+
+            response.Result = paginationDTO;
+
+            return new OkObjectResult(response);
+        }
 
         /// <summary>
-        /// <para> Return <see cref="MultipleObjectResponse{T}"/> in <see cref="ActionResult"/>. </para>
-        /// <para> If <paramref name="contentList"/> isn't null or empty, sets the <see cref="MultipleObjectResponse{T}"/>.Message to <paramref name="successMessage"/>. </para>
-        /// <para> Otherwise if <paramref name="errorMessage"/> is null sets the <see cref="MultipleObjectResponse{T}"/>.Message to <b><see cref="_defaultErrorMessage"/></b>. </para>
-        /// <para> Otherwise sets the <see cref="MultipleObjectResponse{T}"/>.Message to <paramref name="errorMessage"/>. </para>
-        /// <para> Also in this conditions sets the <see cref="MultipleObjectResponse{T}"/>.StatusCode to <see cref="MilvasoftStatusCodes.Status204NoContent"/>
-        ///         and <see cref="MultipleObjectResponse{T}"/>.Success to true. Reason to be considered the <see cref="MultipleObjectResponse{T}"/>.Success true is request was successful.  </para>
+        /// <para> Return <see cref="ObjectResponse{T}"/> in <see cref="ActionResult"/>. </para>
+        /// <para> If <paramref name="contentList"/> isn't null or empty, sets the <see cref="ObjectResponse{T}"/>.Message to <paramref name="successMessage"/>. </para>
+        /// <para> Otherwise if <paramref name="errorMessage"/> is null sets the <see cref="ObjectResponse{T}"/>.Message to <b><see cref="LocalizerKeys.DefaultErrorMessage"/></b>. </para>
+        /// <para> Otherwise sets the <see cref="ObjectResponse{T}"/>.Message to <paramref name="errorMessage"/>. </para>
+        /// <para> Also in this conditions sets the <see cref="ObjectResponse{T}"/>.StatusCode to <see cref="MilvasoftStatusCodes.Status204NoContent"/>
+        ///         and <see cref="ObjectResponse{T}"/>.Success to true. Reason to be considered the <see cref="ObjectResponse{T}"/>.Success true is request was successful.  </para>
         /// </summary>
         /// 
         /// <param name="contentList"></param>
         /// <param name="successMessage"></param>
         /// <param name="errorMessage"></param>
-        /// <returns> <see cref="MultipleObjectResponse{T}"/> in 200 OK <see cref="ActionResult"/> </returns>
-        public static IActionResult ReturnArrayResponseForGetAll<T>(this List<T> contentList, string successMessage, string errorMessage = null)
+        /// <returns> <see cref="ObjectResponse{T}"/> in 200 OK <see cref="ActionResult"/> </returns>
+        public static IActionResult GetObjectResponse<T>(this List<T> contentList,
+                                                         string successMessage,
+                                                         string errorMessage = null)
         {
-            var response = new MultipleObjectResponse<T>();
+            var response = new ObjectResponse<List<T>>();
+
             response.StatusCode = MilvasoftStatusCodes.Status200OK;
             response.Message = successMessage;
+
             if (contentList.IsNullOrEmpty())
             {
-                response.Message = string.IsNullOrEmpty(errorMessage) ? _defaultErrorMessage : errorMessage;
+                response.Message = string.IsNullOrEmpty(errorMessage) ? LocalizerKeys.DefaultErrorMessage : errorMessage;
                 response.StatusCode = MilvasoftStatusCodes.Status204NoContent;
                 response.Success = true;
             }
@@ -52,25 +86,27 @@ namespace Milvasoft.Helpers
         }
 
         /// <summary>
-        /// <para> Return <see cref="SingleObjectResponse{T}"/> in <see cref="ActionResult"/>. </para>
-        /// <para> If <paramref name="content"/> isn't null, sets the <see cref="SingleObjectResponse{T}"/>.Message to <paramref name="successMessage"/>. </para>
-        /// <para> Otherwise if <paramref name="errorMessage"/> is null sets the <see cref="SingleObjectResponse{T}"/>.Message to <b><see cref="_defaultErrorMessage"/></b>. </para>
-        /// <para> Otherwise sets the <see cref="SingleObjectResponse{T}"/>.Message to <paramref name="errorMessage"/>. </para>
-        /// <para> Also in this conditions sets the <see cref="SingleObjectResponse{T}"/>.StatusCode to <see cref="MilvasoftStatusCodes.Status204NoContent"/>
-        ///         and <see cref="SingleObjectResponse{T}"/>.Success to true. Reason to be considered the <see cref="SingleObjectResponse{T}"/>.Success true is request was successful.  </para>
+        /// <para> Return <see cref="ObjectResponse{T}"/> in <see cref="ActionResult"/>. </para>
+        /// <para> If <paramref name="content"/> isn't null, sets the <see cref="ObjectResponse{T}"/>.Message to <paramref name="successMessage"/>. </para>
+        /// <para> Otherwise if <paramref name="errorMessage"/> is null sets the <see cref="ObjectResponse{T}"/>.Message to <b><see cref="LocalizerKeys.DefaultErrorMessage"/></b>. </para>
+        /// <para> Otherwise sets the <see cref="ObjectResponse{T}"/>.Message to <paramref name="errorMessage"/>. </para>
+        /// <para> Also in this conditions sets the <see cref="ObjectResponse{T}"/>.StatusCode to <see cref="MilvasoftStatusCodes.Status204NoContent"/>
+        ///         and <see cref="ObjectResponse{T}"/>.Success to true. Reason to be considered the <see cref="ObjectResponse{T}"/>.Success true is request was successful.  </para>
         /// </summary>
         /// 
         /// <param name="content"></param>
         /// <param name="successMessage"></param>
         /// <param name="errorMessage"></param>
-        /// <returns> <see cref="SingleObjectResponse{T}"/> in 200 OK <see cref="ActionResult"/> </returns>
-        public static IActionResult ReturnSingleObjectResponseForGetById<T>(this T content, string successMessage, string errorMessage = null)
+        /// <returns> <see cref="ObjectResponse{T}"/> in 200 OK <see cref="ActionResult"/> </returns>
+        public static IActionResult GetObjectResponse<T>(this T content,
+                                                         string successMessage,
+                                                         string errorMessage = null)
         {
-            var response = new SingleObjectResponse<T> { StatusCode = MilvasoftStatusCodes.Status200OK, Success = true };
+            var response = new ObjectResponse<T> { StatusCode = MilvasoftStatusCodes.Status200OK, Success = true };
             response.Message = successMessage;
             if (content == null)
             {
-                response.Message = string.IsNullOrEmpty(errorMessage) ? _defaultErrorMessage : errorMessage;
+                response.Message = string.IsNullOrEmpty(errorMessage) ? LocalizerKeys.DefaultErrorMessage : errorMessage;
                 response.StatusCode = MilvasoftStatusCodes.Status204NoContent;
             }
             response.Result = content;
@@ -78,64 +114,8 @@ namespace Milvasoft.Helpers
         }
 
         /// <summary>
-        /// <para> Return <paramref name="paginationDTO"/> in <see cref="SingleObjectResponse{T}"/>. </para>
-        /// <para> If <paramref name="paginationDTO"/>.DTOList isn't null or empty, sets the <see cref="SingleObjectResponse{T}"/>.Message to <paramref name="successMessage"/>. </para>
-        /// <para> Otherwise if <paramref name="errorMessage"/> is null sets the <see cref="SingleObjectResponse{T}"/>.Message to <b><see cref="_defaultErrorMessage"/></b>. </para>
-        /// <para> Otherwise sets the <see cref="SingleObjectResponse{T}"/>.Message to <paramref name="errorMessage"/>. </para>
-        /// <para> Also in this conditions sets the <see cref="SingleObjectResponse{T}"/>.StatusCode to <see cref="MilvasoftStatusCodes.Status204NoContent"/>
-        ///         and <see cref="SingleObjectResponse{T}"/>.Success to true. Reason to be considered the <see cref="SingleObjectResponse{T}"/>.Success true is request was successful.  </para>
-        /// </summary>
-        /// 
-        /// <param name="paginationDTO"></param>
-        /// <param name="successMessage"></param>
-        /// <param name="errorMessage"></param>
-        /// <returns>  <see cref="SingleObjectResponse{PaginationDTO}"/> in 200 OK <see cref="ActionResult"/> </returns>
-        public static IActionResult ReturnReportResponse<T>(this PaginationDTO<T> paginationDTO, string successMessage, string errorMessage = null)
-        {
-            var response = new SingleObjectResponse<PaginationDTO<T>> { StatusCode = MilvasoftStatusCodes.Status200OK };
-            response.Message = successMessage;
-            if (paginationDTO.DTOList.IsNullOrEmpty())
-            {
-                response.Message = string.IsNullOrEmpty(errorMessage) ? _defaultErrorMessage : errorMessage;
-                response.StatusCode = MilvasoftStatusCodes.Status204NoContent;
-                response.Success = true;
-            }
-            response.Result = paginationDTO;
-            return new OkObjectResult(response);
-        }
-
-        /// <summary>
-        /// <para> Return <paramref name="paginationDTO"/> in <see cref="SingleObjectResponse{T}"/>. </para>
-        /// <para> If <paramref name="paginationDTO"/>.DTOList isn't null or empty, sets the <see cref="SingleObjectResponse{T}"/>.Message to <paramref name="successMessage"/>. </para>
-        /// <para> Otherwise if <paramref name="errorMessage"/> is null sets the <see cref="SingleObjectResponse{T}"/>.Message to <b><see cref="_defaultErrorMessage"/></b>. </para>
-        /// <para> Otherwise sets the <see cref="SingleObjectResponse{T}"/>.Message to <paramref name="errorMessage"/>. </para>
-        /// <para> Also in this conditions sets the <see cref="SingleObjectResponse{T}"/>.StatusCode to <see cref="MilvasoftStatusCodes.Status204NoContent"/>
-        ///         and <see cref="SingleObjectResponse{T}"/>.Success to true. Reason to be considered the <see cref="SingleObjectResponse{T}"/>.Success true is request was successful.  </para>
-        /// </summary>
-        /// 
-        /// <param name="paginationDTO"></param>
-        /// <param name="successMessage"></param>
-        /// <param name="errorMessage"></param>
-        /// <returns> <see cref="SingleObjectResponse{PaginationDTO}"/> in 200 OK <see cref="ActionResult"/> </returns>
-        public static IActionResult ReturnInstantReportResponse<T>(this PaginationDTO<T> paginationDTO, string successMessage, string errorMessage = null)
-        {
-            var response = new SingleObjectResponse<PaginationDTO<T>> { StatusCode = MilvasoftStatusCodes.Status200OK };
-
-            response.Message = successMessage;
-
-            if (paginationDTO.DTOList.IsNullOrEmpty())
-            {
-                response.Message = string.IsNullOrEmpty(errorMessage) ? _defaultErrorMessage : errorMessage;
-                response.StatusCode = MilvasoftStatusCodes.Status204NoContent;
-                response.Success = true;
-            }
-            response.Result = paginationDTO;
-            return new OkObjectResult(response);
-        }
-
-        /// <summary>
-        /// <para> Run the <paramref name="asyncTask"/> then return <see cref="MultipleObjectResponse{T}"/>. </para>
-        /// <para> If <paramref name="asyncTask"/> is success sets the <paramref name="successMessage"/> to <see cref="MultipleObjectResponse{T}"/>.Message.
+        /// <para> Run the <paramref name="asyncTask"/> then return <see cref="ObjectResponse{T}"/>. </para>
+        /// <para> If <paramref name="asyncTask"/> is success sets the <paramref name="successMessage"/> to <see cref="ObjectResponse{T}"/>.Message.
         ///        Otherwise you should throw exception and cut the request pipeline in <paramref name="asyncTask"/>. </para>
         /// </summary>
         /// 
@@ -143,16 +123,17 @@ namespace Milvasoft.Helpers
         /// <param name="idList"></param>
         /// <param name="successMessage"></param>
         /// <param name="errorMessage"></param>
-        /// <returns>  <see cref="MultipleObjectResponse{T}"/> in 200 OK <see cref="ActionResult"/> </returns>
-        public static async Task<IActionResult> ReturnArrayResponseForDeleteAsync<T, TKey>(this ConfiguredTaskAwaitable asyncTask,
-                                                                                                                     IEnumerable<TKey> idList,
-                                                                                                                     string successMessage,
-                                                                                                                     string errorMessage = null) where TKey : struct
+        /// <returns>  <see cref="ObjectResponse{T}"/> in 200 OK <see cref="ActionResult"/> </returns>
+        public static async Task<IActionResult> GetObjectResponse<T, TKey>(this ConfiguredTaskAwaitable asyncTask,
+                                                                           IEnumerable<TKey> idList,
+                                                                           string successMessage,
+                                                                           string errorMessage = null) where TKey : struct
         {
-            var response = new MultipleObjectResponse<T>();
+            var response = new ObjectResponse<T>();
+
             if (idList.IsNullOrEmpty())
             {
-                response.Message = string.IsNullOrEmpty(errorMessage) ? _defaultErrorMessage : errorMessage;
+                response.Message = string.IsNullOrEmpty(errorMessage) ? LocalizerKeys.DefaultErrorMessage : errorMessage;
                 response.StatusCode = MilvasoftStatusCodes.Status600Exception;
                 response.Success = false;
             }
@@ -167,8 +148,8 @@ namespace Milvasoft.Helpers
         }
 
         /// <summary>
-        /// <para> Run the <paramref name="asyncTask"/> then return <see cref="MultipleObjectResponse{T}"/>. </para>
-        /// <para> If <paramref name="asyncTask"/> is success sets the <paramref name="successMessage"/> to <see cref="MultipleObjectResponse{T}"/>.Message.
+        /// <para> Run the <paramref name="asyncTask"/> then return <see cref="ObjectResponse{T}"/>. </para>
+        /// <para> If <paramref name="asyncTask"/> is success sets the <paramref name="successMessage"/> to <see cref="ObjectResponse{T}"/>.Message.
         ///        Otherwise you should throw exception and cut the request pipeline in <paramref name="asyncTask"/>. </para>
         /// </summary>
         /// 
@@ -176,16 +157,17 @@ namespace Milvasoft.Helpers
         /// <param name="idList"></param>
         /// <param name="successMessage"></param>
         /// <param name="errorMessage"></param>
-        /// <returns>  <see cref="MultipleObjectResponse{T}"/> in 200 OK <see cref="ActionResult"/> </returns>
-        public static async Task<IActionResult> ReturnArrayResponseForDeleteAsync<T, TKey>(this ConfiguredTaskAwaitable<IEnumerable<T>> asyncTask,
-                                                                                                                     IEnumerable<TKey> idList,
-                                                                                                                     string successMessage,
-                                                                                                                     string errorMessage = null) where TKey : struct
+        /// <returns>  <see cref="ObjectResponse{T}"/> in 200 OK <see cref="ActionResult"/> </returns>
+        public static async Task<IActionResult> GetObjectResponse<T, TKey>(this ConfiguredTaskAwaitable<IEnumerable<T>> asyncTask,
+                                                                           IEnumerable<TKey> idList,
+                                                                           string successMessage,
+                                                                           string errorMessage = null) where TKey : struct
         {
-            var response = new MultipleObjectResponse<T>();
+            var response = new ObjectResponse<IEnumerable<T>>();
+
             if (idList.IsNullOrEmpty())
             {
-                response.Message = string.IsNullOrEmpty(errorMessage) ? _defaultErrorMessage : errorMessage;
+                response.Message = string.IsNullOrEmpty(errorMessage) ? LocalizerKeys.DefaultErrorMessage : errorMessage;
                 response.StatusCode = MilvasoftStatusCodes.Status600Exception;
                 response.Success = false;
             }
@@ -201,17 +183,17 @@ namespace Milvasoft.Helpers
         }
 
         /// <summary>
-        /// <para> Run the <paramref name="asyncTask"/> then return <see cref="SingleObjectResponse{T}"/>. </para>
-        /// <para> If <paramref name="asyncTask"/> is success sets the <paramref name="successMessage"/> to <see cref="SingleObjectResponse{T}"/>.Message.
+        /// <para> Run the <paramref name="asyncTask"/> then return <see cref="ObjectResponse{T}"/>. </para>
+        /// <para> If <paramref name="asyncTask"/> is success sets the <paramref name="successMessage"/> to <see cref="ObjectResponse{T}"/>.Message.
         ///        Otherwise you should throw exception and cut the request pipeline in <paramref name="asyncTask"/>. </para>
         /// </summary>
         /// 
         /// <param name="asyncTask"></param>
         /// <param name="successMessage"></param>
-        /// <returns>  <see cref="SingleObjectResponse{T}"/> in 200 OK <see cref="ActionResult"/> </returns>
-        public static async Task<IActionResult> ReturnSingleResponseForDeleteAsync<T>(this ConfiguredTaskAwaitable asyncTask, string successMessage)
+        /// <returns>  <see cref="ObjectResponse{T}"/> in 200 OK <see cref="ActionResult"/> </returns>
+        public static async Task<IActionResult> GetObjectResponseAsync<T>(this ConfiguredTaskAwaitable asyncTask, string successMessage)
         {
-            var response = new SingleObjectResponse<T>();
+            var response = new ObjectResponse<T>();
             {
                 await asyncTask;
 
@@ -224,17 +206,17 @@ namespace Milvasoft.Helpers
         }
 
         /// <summary>
-        /// <para> Run the <paramref name="asyncTask"/> then return <see cref="SingleObjectResponse{T}"/>. </para>
-        /// <para> If <paramref name="asyncTask"/> is success sets the <paramref name="successMessage"/> to <see cref="SingleObjectResponse{T}"/>.Message.
+        /// <para> Run the <paramref name="asyncTask"/> then return <see cref="ObjectResponse{T}"/>. </para>
+        /// <para> If <paramref name="asyncTask"/> is success sets the <paramref name="successMessage"/> to <see cref="ObjectResponse{T}"/>.Message.
         ///        Otherwise you should throw exception and cut the request pipeline in <paramref name="asyncTask"/>. </para>
         /// </summary>
         /// 
         /// <param name="asyncTask"></param>
         /// <param name="successMessage"></param>
-        /// <returns>  <see cref="SingleObjectResponse{T}"/> in 200 OK <see cref="ActionResult"/> </returns>
-        public static async Task<IActionResult> ReturnSingleResponseForDeleteAsync<T>(this ConfiguredTaskAwaitable<T> asyncTask, string successMessage)
+        /// <returns>  <see cref="ObjectResponse{T}"/> in 200 OK <see cref="ActionResult"/> </returns>
+        public static async Task<IActionResult> GetObjectResponseAsync<T>(this ConfiguredTaskAwaitable<T> asyncTask, string successMessage)
         {
-            var response = new SingleObjectResponse<T>();
+            var response = new ObjectResponse<T>();
             {
                 var result = await asyncTask;
 
@@ -248,17 +230,17 @@ namespace Milvasoft.Helpers
         }
 
         /// <summary>
-        /// <para> Run the <paramref name="asyncTask"/> then return <see cref="SingleObjectResponse{T}"/>. </para>
-        /// <para> If <paramref name="asyncTask"/> is success sets the <paramref name="successMessage"/> to <see cref="SingleObjectResponse{T}"/>.Message.
+        /// <para> Run the <paramref name="asyncTask"/> then return <see cref="ObjectResponse{T}"/>. </para>
+        /// <para> If <paramref name="asyncTask"/> is success sets the <paramref name="successMessage"/> to <see cref="ObjectResponse{T}"/>.Message.
         ///        Otherwise you should throw exception and cut the request pipeline in <paramref name="asyncTask"/>. </para>
         /// </summary>
         /// 
         /// <param name="asyncTask"></param>
         /// <param name="successMessage"></param>
-        /// <returns>  <see cref="SingleObjectResponse{T}"/> in 200 OK <see cref="ActionResult"/> </returns>
-        public static async Task<IActionResult> ReturnSingleResponseForDeleteAsync<T>(this ConfiguredTaskAwaitable<object> asyncTask, string successMessage)
+        /// <returns>  <see cref="ObjectResponse{T}"/> in 200 OK <see cref="ActionResult"/> </returns>
+        public static async Task<IActionResult> GetObjectResponseAsync<T>(this ConfiguredTaskAwaitable<object> asyncTask, string successMessage)
         {
-            var response = new SingleObjectResponse<object>();
+            var response = new ObjectResponse<object>();
             {
                 var result = await asyncTask;
 
@@ -272,39 +254,17 @@ namespace Milvasoft.Helpers
         }
 
         /// <summary>
-        /// <para> Run the <paramref name="asyncTask"/> then return <see cref="SingleObjectResponse{T}"/>. </para>
-        /// <para> If <paramref name="asyncTask"/> is success sets the <paramref name="successMessage"/> to <see cref="SingleObjectResponse{T}"/>.Message.
+        /// <para> Run the <paramref name="asyncTask"/> then return <see cref="ObjectResponse{T}"/>. </para>
+        /// <para> If <paramref name="asyncTask"/> is success sets the <paramref name="successMessage"/> to <see cref="ObjectResponse{T}"/>.Message.
         ///        Otherwise you should throw exception and cut the request pipeline in <paramref name="asyncTask"/>. </para>
         /// </summary>
         /// 
         /// <param name="asyncTask"></param>
         /// <param name="successMessage"></param>
-        /// <returns> <see cref="SingleObjectResponse{T}"/> in 200 OK <see cref="ActionResult"/> </returns>
-        public static async Task<IActionResult> ReturnSingleObjectResponseForAddOrUpdateAsync<T>(this ConfiguredTaskAwaitable asyncTask, string successMessage)
+        /// <returns> <see cref="ObjectResponse{T}"/> in 200 OK <see cref="ActionResult"/> </returns>
+        public static async Task<IActionResult> GetObjectResponseAsync<T>(this ConfiguredTaskAwaitable<Guid> asyncTask, string successMessage)
         {
-            var response = new SingleObjectResponse<T>();
-
-            await asyncTask;
-
-            response.Success = true;
-            response.Message = successMessage;
-            response.StatusCode = MilvasoftStatusCodes.Status200OK;
-
-            return new OkObjectResult(response);
-        }
-
-        /// <summary>
-        /// <para> Run the <paramref name="asyncTask"/> then return <see cref="SingleObjectResponse{T}"/>. </para>
-        /// <para> If <paramref name="asyncTask"/> is success sets the <paramref name="successMessage"/> to <see cref="SingleObjectResponse{T}"/>.Message.
-        ///        Otherwise you should throw exception and cut the request pipeline in <paramref name="asyncTask"/>. </para>
-        /// </summary>
-        /// 
-        /// <param name="asyncTask"></param>
-        /// <param name="successMessage"></param>
-        /// <returns> <see cref="SingleObjectResponse{T}"/> in 200 OK <see cref="ActionResult"/> </returns>
-        public static async Task<IActionResult> ReturnSingleObjectResponseForAddOrUpdateAsync<T>(this ConfiguredTaskAwaitable<object> asyncTask, string successMessage)
-        {
-            var response = new SingleObjectResponse<object>();
+            var response = new ObjectResponse<Guid>();
 
             var result = await asyncTask;
 
@@ -317,17 +277,17 @@ namespace Milvasoft.Helpers
         }
 
         /// <summary>
-        /// <para> Run the <paramref name="asyncTask"/> then return <see cref="SingleObjectResponse{T}"/>. </para>
-        /// <para> If <paramref name="asyncTask"/> is success sets the <paramref name="successMessage"/> to <see cref="SingleObjectResponse{T}"/>.Message.
+        /// <para> Run the <paramref name="asyncTask"/> then return <see cref="ObjectResponse{T}"/>. </para>
+        /// <para> If <paramref name="asyncTask"/> is success sets the <paramref name="successMessage"/> to <see cref="ObjectResponse{T}"/>.Message.
         ///        Otherwise you should throw exception and cut the request pipeline in <paramref name="asyncTask"/>. </para>
         /// </summary>
         /// 
         /// <param name="asyncTask"></param>
         /// <param name="successMessage"></param>
-        /// <returns> <see cref="SingleObjectResponse{T}"/> in 200 OK <see cref="ActionResult"/> </returns>
-        public static async Task<IActionResult> ReturnSingleObjectResponseForAddOrUpdateAsync<T>(this ConfiguredTaskAwaitable<T> asyncTask, string successMessage)
+        /// <returns> <see cref="ObjectResponse{T}"/> in 200 OK <see cref="ActionResult"/> </returns>
+        public static async Task<IActionResult> GetObjectResponseAsync<T>(this ConfiguredTaskAwaitable<int> asyncTask, string successMessage)
         {
-            var response = new SingleObjectResponse<T>();
+            var response = new ObjectResponse<int>();
 
             var result = await asyncTask;
 
@@ -340,134 +300,17 @@ namespace Milvasoft.Helpers
         }
 
         /// <summary>
-        /// <para> Run the <paramref name="asyncTask"/> then return <see cref="SingleObjectResponse{T}"/>. </para>
-        /// <para> If <paramref name="asyncTask"/> is success sets the <paramref name="successMessage"/> to <see cref="SingleObjectResponse{T}"/>.Message.
+        /// <para> Run the <paramref name="asyncTask"/> then return <see cref="ObjectResponse{T}"/>. </para>
+        /// <para> If <paramref name="asyncTask"/> is success sets the <paramref name="successMessage"/> to <see cref="ObjectResponse{T}"/>.Message.
         ///        Otherwise you should throw exception and cut the request pipeline in <paramref name="asyncTask"/>. </para>
         /// </summary>
         /// 
         /// <param name="asyncTask"></param>
         /// <param name="successMessage"></param>
-        /// <returns> <see cref="SingleObjectResponse{T}"/> in 200 OK <see cref="ActionResult"/> </returns>
-        public static async Task<IActionResult> ReturnSingleObjectResponseForAddOrUpdateAsync<T>(this ConfiguredTaskAwaitable<Guid> asyncTask, string successMessage)
+        /// <returns> <see cref="ObjectResponse{T}"/> in 200 OK <see cref="ActionResult"/> </returns>
+        public static async Task<IActionResult> GetObjectResponseAsync<T>(this ConfiguredTaskAwaitable<sbyte> asyncTask, string successMessage)
         {
-            var response = new SingleObjectResponse<Guid>();
-
-            var result = await asyncTask;
-
-            response.Result = result;
-            response.Success = true;
-            response.Message = successMessage;
-            response.StatusCode = MilvasoftStatusCodes.Status200OK;
-
-            return new OkObjectResult(response);
-        }
-
-
-        /// <summary>
-        /// <para> Run the <paramref name="asyncTask"/> then return <see cref="SingleObjectResponse{T}"/>. </para>
-        /// <para> If <paramref name="asyncTask"/> is success sets the <paramref name="successMessage"/> to <see cref="SingleObjectResponse{T}"/>.Message.
-        ///        Otherwise you should throw exception and cut the request pipeline in <paramref name="asyncTask"/>. </para>
-        /// </summary>
-        /// 
-        /// <param name="asyncTask"></param>
-        /// <param name="successMessage"></param>
-        /// <returns> <see cref="SingleObjectResponse{T}"/> in 200 OK <see cref="ActionResult"/> </returns>
-        public static async Task<IActionResult> ReturnSingleObjectResponseForAddOrUpdateAsync<T>(this ConfiguredTaskAwaitable<int> asyncTask, string successMessage)
-        {
-            var response = new SingleObjectResponse<int>();
-
-            var result = await asyncTask;
-
-            response.Result = result;
-            response.Success = true;
-            response.Message = successMessage;
-            response.StatusCode = MilvasoftStatusCodes.Status200OK;
-
-            return new OkObjectResult(response);
-        }
-
-        /// <summary>
-        /// <para> Run the <paramref name="asyncTask"/> then return <see cref="SingleObjectResponse{T}"/>. </para>
-        /// <para> If <paramref name="asyncTask"/> is success sets the <paramref name="successMessage"/> to <see cref="SingleObjectResponse{T}"/>.Message.
-        ///        Otherwise you should throw exception and cut the request pipeline in <paramref name="asyncTask"/>. </para>
-        /// </summary>
-        /// 
-        /// <param name="asyncTask"></param>
-        /// <param name="successMessage"></param>
-        /// <returns> <see cref="SingleObjectResponse{T}"/> in 200 OK <see cref="ActionResult"/> </returns>
-        public static async Task<IActionResult> ReturnSingleObjectResponseForAddOrUpdateAsync<T>(this ConfiguredTaskAwaitable<sbyte> asyncTask, string successMessage)
-        {
-            var response = new SingleObjectResponse<sbyte>();
-
-            var result = await asyncTask;
-
-            response.Result = result;
-            response.Success = true;
-            response.Message = successMessage;
-            response.StatusCode = MilvasoftStatusCodes.Status200OK;
-
-            return new OkObjectResult(response);
-        }
-
-
-        /// <summary>
-        /// <para> Run the <paramref name="asyncTask"/> then return <see cref="SingleObjectResponse{T}"/>. </para>
-        /// <para> If <paramref name="asyncTask"/> is success sets the <paramref name="successMessage"/> to <see cref="SingleObjectResponse{T}"/>.Message.
-        ///        Otherwise you should throw exception and cut the request pipeline in <paramref name="asyncTask"/>. </para>
-        /// </summary>
-        /// 
-        /// <param name="asyncTask"></param>
-        /// <param name="successMessage"></param>
-        /// <returns>  <see cref="SingleObjectResponse{T}"/> in 200 OK <see cref="ActionResult"/> </returns>
-        public static async Task<IActionResult> ReturnSingleObjectResponseForSpecifedProcessAsync<T>(this ConfiguredTaskAwaitable asyncTask, string successMessage)
-        {
-            var response = new SingleObjectResponse<T>();
-
-            await asyncTask;
-
-            response.Success = true;
-            response.Message = successMessage;
-            response.StatusCode = MilvasoftStatusCodes.Status200OK;
-
-            return new OkObjectResult(response);
-        }
-
-
-        /// <summary>
-        /// <para> Run the <paramref name="asyncTask"/> then return <see cref="SingleObjectResponse{T}"/>. </para>
-        /// <para> If <paramref name="asyncTask"/> is success sets the <paramref name="successMessage"/> to <see cref="SingleObjectResponse{T}"/>.Message.
-        ///        Otherwise you should throw exception and cut the request pipeline in <paramref name="asyncTask"/>. </para>
-        /// </summary>
-        /// 
-        /// <param name="asyncTask"></param>
-        /// <param name="successMessage"></param>
-        /// <returns>  <see cref="SingleObjectResponse{T}"/> in 200 OK <see cref="ActionResult"/> </returns>
-        public static async Task<IActionResult> ReturnSingleObjectResponseForSpecifedProcessAsync<T>(this ConfiguredTaskAwaitable<T> asyncTask, string successMessage)
-        {
-            var response = new SingleObjectResponse<T>();
-
-            var result = await asyncTask;
-
-            response.Result = result;
-            response.Success = true;
-            response.Message = successMessage;
-            response.StatusCode = MilvasoftStatusCodes.Status200OK;
-
-            return new OkObjectResult(response);
-        }
-
-        /// <summary>
-        /// <para> Run the <paramref name="asyncTask"/> then return <see cref="SingleObjectResponse{T}"/>. </para>
-        /// <para> If <paramref name="asyncTask"/> is success sets the <paramref name="successMessage"/> to <see cref="SingleObjectResponse{T}"/>.Message.
-        ///        Otherwise you should throw exception and cut the request pipeline in <paramref name="asyncTask"/>. </para>
-        /// </summary>
-        /// 
-        /// <param name="asyncTask"></param>
-        /// <param name="successMessage"></param>
-        /// <returns>  <see cref="SingleObjectResponse{T}"/> in 200 OK <see cref="ActionResult"/> </returns>
-        public static async Task<IActionResult> ReturnSingleObjectResponseForSpecifedProcessAsync<T>(this ConfiguredTaskAwaitable<object> asyncTask, string successMessage)
-        {
-            var response = new SingleObjectResponse<object>();
+            var response = new ObjectResponse<sbyte>();
 
             var result = await asyncTask;
 
@@ -483,112 +326,108 @@ namespace Milvasoft.Helpers
         #region Response Message Helpers
 
         /// <summary>
-        /// Gets error messages for get all operation.
+        /// Gets error messages according to <paramref name="operation"/>.
+        /// <paramref name="keyContent"/> will combine with <see cref="LocalizerKeys.LocalizedEntityName"/> except <paramref name="operation"/> is <see cref="CrudOperation.Specific"/>. 
+        /// Return message determined by <paramref name="operation"/>.
+        /// For messages see <see cref="LocalizerKeys"/>.
         /// </summary>
         /// <param name="localizer"></param>
         /// <param name="keyContent"></param>
+        /// <param name="operation"></param>
         /// <returns></returns>
-        public static string GetErrorMessageForGetAll(this IStringLocalizer localizer, string keyContent)
+        public static string GetErrorMessage(this IStringLocalizer localizer, string keyContent, CrudOperation operation)
         {
-            var localizedEntityName = localizer[$"LocalizedEntityName{keyContent}"].ToString().ToLowerInvariant();
-            return localizer["NoEntityWasFound", localizedEntityName];
+            string localizedEntityName;
+
+            switch (operation)
+            {
+                case CrudOperation.Add:
+                    localizedEntityName = localizer[LocalizerKeys.LocalizedEntityName + keyContent].ToString().ToLowerInVariantFirst();
+                    return localizer[LocalizerKeys.ErrorMessageForAdd, localizedEntityName];
+
+                case CrudOperation.Update:
+                    localizedEntityName = localizer[LocalizerKeys.LocalizedEntityName + keyContent].ToString().ToLowerInVariantFirst();
+                    return localizer[LocalizerKeys.ErrorMessageForUpdate, localizedEntityName];
+
+                case CrudOperation.Delete:
+                    localizedEntityName = localizer[LocalizerKeys.LocalizedEntityName + keyContent].ToString().ToLowerInVariantFirst();
+                    return localizer[LocalizerKeys.ErrorMessageForDelete, localizedEntityName];
+
+                case CrudOperation.GetById:
+                    localizedEntityName = localizer[LocalizerKeys.LocalizedEntityName + keyContent].ToString().ToUpperInVariantFirst();
+                    return localizer[LocalizerKeys.ErrorMessageForGetById, localizedEntityName];
+
+                case CrudOperation.GetAll:
+                    localizedEntityName = localizer[LocalizerKeys.LocalizedEntityName + keyContent].ToString().ToLowerInvariant();
+                    return localizer[LocalizerKeys.ErrorMessageForGetAll, localizedEntityName];
+
+                case CrudOperation.Filtering:
+                    localizedEntityName = localizer[LocalizerKeys.LocalizedEntityName + keyContent].ToString().ToLowerInvariant();
+                    return localizer[LocalizerKeys.ErrorMessageForFiltering, localizedEntityName];
+
+                case CrudOperation.Specific:
+                    return localizer[keyContent].ToString();       
+                    
+                default:
+                    return "";
+            }
         }
 
         /// <summary>
-        /// Gets error messages for get all operation.
+        /// Gets success messages according to <paramref name="operation"/>.
+        /// <paramref name="keyContent"/> will combine with <see cref="LocalizerKeys.LocalizedEntityName"/> except <paramref name="operation"/> is <see cref="CrudOperation.Specific"/>. 
+        /// Return message determined by <paramref name="operation"/>.
+        /// For messages see <see cref="LocalizerKeys"/>.
         /// </summary>
         /// <param name="localizer"></param>
         /// <param name="keyContent"></param>
         /// <param name="recordCount"></param>
+        /// <param name="operation"></param>
         /// <returns></returns>
-        public static string GetSuccessMessageForGetAll(this IStringLocalizer localizer, string keyContent, int recordCount)
+        public static string GetSuccessMessage(this IStringLocalizer localizer,
+                                               string keyContent,
+                                               CrudOperation operation,
+                                               int? recordCount = null)
         {
-            var localizedEntityName = localizer[$"LocalizedEntityName{keyContent}"].ToString();
-            return localizer["GetAllSuccessMessage", localizedEntityName, recordCount];
-        }
+            string localizedEntityName;
 
-        /// <summary>
-        /// Gets error messages for get all and filtering operation.
-        /// </summary>
-        /// <param name="localizer"></param>
-        /// <param name="keyContent"></param>
-        /// <returns></returns>
-        public static string GetErrorMessageForFiltering(this IStringLocalizer localizer, string keyContent)
-        {
-            var localizedEntityName = localizer[$"LocalizedEntityName{keyContent}"].ToString().ToLowerInvariant();
-            return localizer["FilteredWasNotFound", localizedEntityName];
-        }
+            switch (operation)
+            {
+                case CrudOperation.Add:
+                    localizedEntityName = localizer[LocalizerKeys.LocalizedEntityName + keyContent].ToString().ToUpperInVariantFirst();
+                    return localizer[LocalizerKeys.SuccessMessageForAdd, localizedEntityName];
 
-        /// <summary>
-        /// Gets error messages for get by id operation.
-        /// </summary>
-        /// <param name="localizer"></param>
-        /// <param name="keyContent"></param>
-        /// <returns></returns>
-        public static string GetErrorMessageForGetById(this IStringLocalizer localizer, string keyContent)
-        {
-            var localizedEntityName = localizer[$"LocalizedEntityName{keyContent}"].ToString().ToUpperInVariantFirst();
-            return localizer["ControllersSingleObjectWasNotFound", localizedEntityName];
-        }
+                case CrudOperation.Update:
+                    localizedEntityName = localizer[LocalizerKeys.LocalizedEntityName + keyContent].ToString().ToUpperInVariantFirst();
+                    return localizer[LocalizerKeys.SuccessMessageForUpdate, localizedEntityName];
 
-        /// <summary>
-        /// Gets success messages for adding operation.
-        /// </summary>
-        /// <param name="localizer"></param>
-        /// <param name="keyContent"></param>
-        /// <returns></returns>
-        public static string GetSuccessMessageForAdd(this IStringLocalizer localizer, string keyContent)
-        {
-            var localizedEntityName = localizer[$"LocalizedEntityName{keyContent}"].ToString().ToUpperInVariantFirst();
-            return localizer["SuccessfullyAdded", localizedEntityName];
-        }
+                case CrudOperation.Delete:
+                    localizedEntityName = localizer[LocalizerKeys.LocalizedEntityName + keyContent].ToString().ToUpperInVariantFirst();
+                    return localizer[LocalizerKeys.SuccessMessageForDelete, localizedEntityName];
 
-        /// <summary>
-        /// Gets success messages for updating operation.
-        /// </summary>
-        /// <param name="localizer"></param>
-        /// <param name="keyContent"></param>
-        /// <returns></returns>
-        public static string GetSuccessMessageForUpdate(this IStringLocalizer localizer, string keyContent)
-        {
-            var localizedEntityName = localizer[$"LocalizedEntityName{keyContent}"].ToString().ToUpperInVariantFirst();
-            return localizer["SuccessfullyUpdated", localizedEntityName];
-        }
+                case CrudOperation.GetById:
+                    localizedEntityName = localizer[LocalizerKeys.LocalizedEntityName + keyContent].ToString();
+                    return localizer[LocalizerKeys.SuccessMessageForGetById, localizedEntityName, recordCount];
 
-        /// <summary>
-        /// Gets error messages for deleting operation.
-        /// </summary>
-        /// <param name="localizer"></param>
-        /// <param name="keyContent"></param>
-        /// <returns></returns>
-        public static string GetErrorMessageForDelete(this IStringLocalizer localizer, string keyContent)
-        {
-            var localizedEntityName = localizer[$"LocalizedEntityName{keyContent}"].ToString().ToLowerInVariantFirst();
-            return localizer["NoEntityToBeDeleted", localizedEntityName];
-        }
+                case CrudOperation.GetAll:
+                    localizedEntityName = localizer[LocalizerKeys.LocalizedEntityName + keyContent].ToString();
+                    return localizer[LocalizerKeys.SuccessMessageForGetAll, localizedEntityName, recordCount.GetValueOrDefault()];
 
-        /// <summary>
-        /// Gets success messages for deleting operation.
-        /// </summary>
-        /// <param name="localizer"></param>
-        /// <param name="keyContent"></param>
-        /// <returns></returns>
-        public static string GetSucccesMessageForDelete(this IStringLocalizer localizer, string keyContent)
-        {
-            var localizedEntityName = localizer[$"LocalizedEntityName{keyContent}"].ToString().ToUpperInVariantFirst();
-            return localizer["SuccessfullyDeleted", localizedEntityName];
-        }
+                case CrudOperation.Filtering:
+                    localizedEntityName = localizer[LocalizerKeys.LocalizedEntityName + keyContent].ToString();
+                    return localizer[LocalizerKeys.SuccessMessageForFiltering, localizedEntityName, recordCount];
 
-        /// <summary>
-        /// Gets success messages for get all operation.
-        /// </summary>
-        /// <param name="localizer"></param>
-        /// <param name="keyContent"></param>
-        /// <returns></returns>
-        public static string GetMessageForSpecifiedProcess(this IStringLocalizer localizer, string keyContent) => localizer[keyContent].ToString();
+                case CrudOperation.Specific:
+                    return localizer[keyContent].ToString();
+
+                default:
+                    return "";
+            }
+        }
 
         #endregion
 
-
     }
+
+
 }

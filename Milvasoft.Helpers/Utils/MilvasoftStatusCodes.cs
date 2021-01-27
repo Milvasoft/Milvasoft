@@ -1,5 +1,8 @@
-﻿namespace Milvasoft.Helpers
+﻿namespace Milvasoft.Helpers.Utils
 {
+    /// <summary>
+    /// Http status codes.
+    /// </summary>
     public static class MilvasoftStatusCodes 
     {
         public const int Status100Continue = 100;

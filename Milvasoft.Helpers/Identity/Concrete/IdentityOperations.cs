@@ -46,6 +46,17 @@ namespace Milvasoft.Helpers.Identity.Concrete
         private readonly TLocalizer _localizer;
         private readonly string _userName;
 
+        /// <summary>
+        /// Gets or sets GetSoftDeletedEntities. Default is false.
+        /// If value is true, all methods returns all entities.
+        /// If value is false, all methods returns entities which only "IsDeleted" property's value is false.
+        /// </summary>
+        private bool _useWhiteList
+        {
+            get => IIdentityOperations<TUserManager, TDbContext, TLocalizer, TUser, TRole, TKey, TLoginResultDTO>.UseWhiteList;
+            set { IIdentityOperations<TUserManager, TDbContext, TLocalizer, TUser, TRole, TKey, TLoginResultDTO>.UseWhiteList = value; }
+        }
+
         #endregion
 
         #region Properties
@@ -64,13 +75,11 @@ namespace Milvasoft.Helpers.Identity.Concrete
 
 
         /// <summary>
-        /// <para><b>EN: </b> Performs constructor injection for repository interfaces used in this service.</para>
-        /// <para><b>TR: </b> Bu hizmette kullanılan depo arabirimleri için yapıcı enjeksiyonu gerçekleştirir.</para>
+        /// Performs constructor injection for repository interfaces used in this service.
         /// </summary>
         /// <param name="userManager"></param>
         /// <param name="signInManager"></param>
         /// <param name="tokenManagement"></param>
-        /// <param name="httpClient"></param>
         /// <param name="contextRepository"></param>
         /// <param name="localizer"></param>
         /// <param name="httpContextAccessor"></param>
@@ -118,11 +127,15 @@ namespace Milvasoft.Helpers.Identity.Concrete
                 //Token username,IsPersonnel ve rollere göre üretilir
                 loginResult.Token = await GenerateTokenWithRoleAsync(user: user, tokenExpiredDate).ConfigureAwait(false);
 
-                //Bu kullanici daha once token almissa o token silinip yerine yeni alinmis token yazilir.
-                if (SignedInUsers.SignedInUserTokens.ContainsKey(user.UserName))
-                    SignedInUsers.SignedInUserTokens.Remove(user.UserName);
+                if (_useWhiteList)
+                {
+                    //Bu kullanici daha once token almissa o token silinip yerine yeni alinmis token yazilir.
+                    if (SignedInUsers.SignedInUserTokens.ContainsKey(user.UserName))
+                        SignedInUsers.SignedInUserTokens.Remove(user.UserName);
 
-                SignedInUsers.SignedInUserTokens.Add(user.UserName, loginResult.Token);
+                    SignedInUsers.SignedInUserTokens.Add(user.UserName, loginResult.Token);
+                }
+
 
                 return loginResult;
             }
@@ -173,11 +186,14 @@ namespace Milvasoft.Helpers.Identity.Concrete
                 //Token username,IsPersonnel ve rollere göre üretilir
                 loginResult.Token = await GenerateTokenWithRoleAsync(user: user, tokenExpiredDate).ConfigureAwait(false);
 
-                //Bu kullanici daha once token almissa o token silinip yerine yeni alinmis token yazilir.
-                if (SignedInUsers.SignedInUserTokens.ContainsKey(user.UserName))
-                    SignedInUsers.SignedInUserTokens.Remove(user.UserName);
+                if (_useWhiteList)
+                {
+                    //Bu kullanici daha once token almissa o token silinip yerine yeni alinmis token yazilir.
+                    if (SignedInUsers.SignedInUserTokens.ContainsKey(user.UserName))
+                        SignedInUsers.SignedInUserTokens.Remove(user.UserName);
 
-                SignedInUsers.SignedInUserTokens.Add(user.UserName, loginResult.Token);
+                    SignedInUsers.SignedInUserTokens.Add(user.UserName, loginResult.Token);
+                }
 
                 return loginResult;
             }
@@ -215,8 +231,11 @@ namespace Milvasoft.Helpers.Identity.Concrete
             await _contextRepository.ApplyTransactionAsync(async () =>
             {
 
-                if (SignedInUsers.SignedInUserTokens.ContainsKey(user.UserName))
-                    SignedInUsers.SignedInUserTokens.Remove(user.UserName);
+                if (_useWhiteList)
+                {
+                    if (SignedInUsers.SignedInUserTokens.ContainsKey(user.UserName))
+                        SignedInUsers.SignedInUserTokens.Remove(user.UserName);
+                }
 
                 _contextRepository.InitializeUpdating<TUser, Guid>(user);
 

@@ -13,7 +13,7 @@ namespace Milvasoft.Helpers.DataAccess.Abstract
     public interface IContextRepository<TContext> where TContext : DbContext
     {
         /// <summary>
-        /// <para> Executes sql query to database asynchronously.(e.g. trigger, event) </para> 
+        /// Executes sql query to database asynchronously.(e.g. trigger, event)
         /// </summary>
         /// <param name="query"></param>
         /// <returns></returns>
@@ -43,7 +43,7 @@ namespace Milvasoft.Helpers.DataAccess.Abstract
         Task ApplyTransactionAsync(Func<Task> function, Func<Task> rollbackFunction);
 
         /// <summary>
-        /// <para> User update process. </para>
+        /// User update process.
         /// </summary>
         void InitializeUpdating<TEntity, TKey>(TEntity entity) where TEntity : class, IBaseEntity<TKey>
                                                                where TKey : IEquatable<TKey>;

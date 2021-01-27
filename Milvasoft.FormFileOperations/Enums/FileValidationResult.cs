@@ -1,24 +1,24 @@
 ﻿namespace Milvasoft.FormFileOperations.Enums
 {
     /// <summary>
-    /// <para> File validation results. </para>
+    /// File validation results. 
     /// </summary>
     public enum FileValidationResult
     {
         /// <summary> 
-        /// <para>Valid file result.</para>
+        /// Valid file result.
         /// </summary>
         Valid = 1,
         /// <summary> 
-        /// <para>File size too big result.</para>
+        /// File size too big result.
         /// </summary>
         FileSizeTooBig = 2,
         /// <summary> 
-        /// <para>Invalid file extension result.</para>
+        /// Invalid file extension result.
         /// </summary>
-        InvalidFileExtension =3,
+        InvalidFileExtension = 3,
         /// <summary> 
-        /// <para>Invalid file extension result.</para>
+        /// Invalid file extension result.
         /// </summary>
         NullFile = 4
     }

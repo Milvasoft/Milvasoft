@@ -99,7 +99,7 @@ namespace Milvasoft.Helpers.Attributes.Validation
                     var localizerFactory = context.GetService<IStringLocalizerFactory>();
 
                     var assemblyName = new AssemblyName(_resourceType.GetTypeInfo().Assembly.FullName);
-                    sharedLocalizer = localizerFactory.Create("SharedResource", assemblyName.Name);
+                    sharedLocalizer = localizerFactory.Create(_resourceType.Name, assemblyName.Name);
 
                     localizedPropName = sharedLocalizer[LocalizerKey != null ? LocalizerKey : $"Localized{context.MemberName}"];
                     errorMessage = FullMessage ? sharedLocalizer[LocalizerKey] : sharedLocalizer["MinDecimalValueException", localizedPropName];

@@ -4,17 +4,17 @@ namespace Milvasoft.Helpers.DataAccess.Abstract
 {
 
     /// <summary>
-    /// <para> Base entity for all of indelible entities. All indelible entities have this values.</para>
+    /// Base entity for all of indelible entities. All indelible entities have this values.
     /// </summary>
     public interface IBaseIndelibleEntity<TKey> : IBaseEntity<TKey> where TKey : IEquatable<TKey>
     {
         /// <summary>
-        /// <para> Gets or sets the DeletedDate. </para>
+        /// Gets or sets the DeletedDate. 
         /// </summary>
         public DateTime? DeletedDate { get; set; }
 
         /// <summary>
-        /// <para> Gets or sets a value indicating whether IsDeleted.</para>
+        /// Gets or sets a value indicating whether IsDeleted.
         /// </summary>
         public bool IsDeleted { get; set; }
     }

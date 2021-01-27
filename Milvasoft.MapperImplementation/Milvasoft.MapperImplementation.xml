@@ -6,8 +6,7 @@
     <members>
         <member name="T:Milvasoft.MapperImplementation.Implementation.IMapper">
             <summary>
-            <para><b>EN: </b>Responsible interface for mapping from the source object to the object we want to access</para>
-            <para><b>TR: </b>Kaynak nesneden ulaşmak istediğimiz nesneye mapleme işlemini yapmakta sorumlu inteface</para>
+            Responsible interface for mapping from the source object to the object we want to access
             </summary>
         </member>
         <member name="M:Milvasoft.MapperImplementation.Implementation.IMapper.Map``2(``0)">

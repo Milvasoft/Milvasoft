@@ -1,44 +1,44 @@
 ﻿namespace Milvasoft.FormFileOperations.Enums
 {
     /// <summary>
-    /// <para> File types.</para>
+    ///  File types.
     /// </summary>
     public enum FileType
     {
         /// <summary> 
-        /// <para>File Type Image</para>
+        /// File Type Image
         /// </summary>
         Image,
         /// <summary> 
-        /// <para>File Type Video</para>
+        /// File Type Video
         /// </summary>
         Video,
         /// <summary>
-        /// <para>File Type ARModel</para>          
+        /// File Type ARModel       
         /// </summary>
         ARModel,
         /// <summary> 
-        /// <para>File Type Audio</para>
+        /// File Type Audio
         /// </summary>
         Audio,
         /// <summary> 
-        /// <para>File Type Document</para>
+        /// File Type Document
         /// </summary>
         Document,
         /// <summary> 
-        /// <para>File Type Compressed</para>
+        /// File Type Compressed
         /// </summary>
         Compressed,
         /// <summary> 
-        /// <para>File Type EMail</para>
+        /// File Type EMail
         /// </summary>
         EMail,
         /// <summary> 
-        /// <para>File Type Font</para>
+        /// File Type Font
         /// </summary>
         Font,
         /// <summary> 
-        /// <para>File Type InternetRelated</para>
+        /// File Type InternetRelated
         /// </summary>
         InternetRelated
     }

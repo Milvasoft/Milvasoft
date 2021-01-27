@@ -408,12 +408,20 @@
             <param name="orderByPropertyName"></param>
             <returns></returns>
         </member>
+        <member name="M:Milvasoft.Helpers.CommonHelper.GetPropertyValue(System.Object,System.String)">
+            <summary>
+            Provides get nested property value.
+            </summary>
+            <param name="obj"></param>
+            <param name="propertyName"></param>
+            <returns></returns>
+        </member>
         <member name="M:Milvasoft.Helpers.CommonHelper.EnsureLegalLengths(System.Int32,System.Int32,Microsoft.Extensions.Localization.IStringLocalizer)">
             <summary>
             Checks that MinimumLength and MaximumLength have legal values.  Throws InvalidOperationException if not.
             </summary>
         </member>
-        <member name="M:Milvasoft.Helpers.CommonHelper.GetDesciption``1(``0)">
+        <member name="M:Milvasoft.Helpers.CommonHelper.GetEnumDesciption``1(``0)">
             <summary>
             Gets enum description.
             </summary>
@@ -423,50 +431,50 @@
         </member>
         <member name="M:Milvasoft.Helpers.CommonHelper.ToGuid(System.Int32)">
             <summary>
-            This method return int value to guid value. For DataStore and Test projects.
+            This method return int value to guid value.
             </summary>
             <param name="value"></param>
             <returns></returns>
         </member>
         <member name="T:Milvasoft.Helpers.DataAccess.Abstract.IBaseEntity`1">
             <summary>
-            <para>  Base interface for abstraction. </para>
+            Base interface for abstraction. 
             </summary>
             <typeparam name="TKey"></typeparam>
         </member>
         <member name="P:Milvasoft.Helpers.DataAccess.Abstract.IBaseEntity`1.Id">
             <summary>
-            <para> Primary Key for entity. </para>
+            Primary Key for entity. 
             </summary>
         </member>
         <member name="P:Milvasoft.Helpers.DataAccess.Abstract.IBaseEntity`1.InsertedDate">
             <summary>
-            <para> Date added to database for entity. </para>
+            Date added to database for entity. 
             </summary>
         </member>
         <member name="P:Milvasoft.Helpers.DataAccess.Abstract.IBaseEntity`1.LastUpdatedDate">
             <summary>
-            <para> Update date in database for entity. </para>
+            Update date in database for entity. 
             </summary>
         </member>
         <member name="T:Milvasoft.Helpers.DataAccess.Abstract.IBaseIndelibleEntity`1">
             <summary>
-            <para> Base entity for all of indelible entities. All indelible entities have this values.</para>
+            Base entity for all of indelible entities. All indelible entities have this values.
             </summary>
         </member>
         <member name="P:Milvasoft.Helpers.DataAccess.Abstract.IBaseIndelibleEntity`1.DeletedDate">
             <summary>
-            <para> Gets or sets the DeletedDate. </para>
+            Gets or sets the DeletedDate. 
             </summary>
         </member>
         <member name="P:Milvasoft.Helpers.DataAccess.Abstract.IBaseIndelibleEntity`1.IsDeleted">
             <summary>
-            <para> Gets or sets a value indicating whether IsDeleted.</para>
+            Gets or sets a value indicating whether IsDeleted.
             </summary>
         </member>
         <member name="T:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3">
             <summary>
-            <para>  Base repository for concrete repositories. All repositories must be have this methods. </para> 
+            Base repository for concrete repositories. All repositories must be have this methods.
             </summary>
             <typeparam name="TEntity"></typeparam>
             <typeparam name="TKey"></typeparam>
@@ -494,14 +502,14 @@
         </member>
         <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.GetFirstOrDefaultAsync(System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
             <summary>
-            <para> Returns all entities which IsDeleted condition is true from database asynchronously. If the condition is requested, it also provides that condition.</para> 
+             Returns all entities which IsDeleted condition is true from database asynchronously. If the condition is requested, it also provides that condition.
             </summary>
             <param name="conditionExpression"></param>
             <returns></returns>
         </member>
         <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.GetFirstOrDefaultAsync(System.Func{Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable{`0},Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable},System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
             <summary>
-            <para> Returns all entities which IsDeleted condition is true with includes from database asynchronously. If the condition is requested, it also provides that condition.</para> 
+             Returns all entities which IsDeleted condition is true with includes from database asynchronously. If the condition is requested, it also provides that condition.
             </summary>
             <param name="includes"></param>
             <param name="conditionExpression"></param>
@@ -509,14 +517,14 @@
         </member>
         <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.GetSingleOrDefaultAsync(System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
             <summary>
-            <para> Returns all entities which IsDeleted condition is true from database asynchronously. If the condition is requested, it also provides that condition.</para> 
+             Returns all entities which IsDeleted condition is true from database asynchronously. If the condition is requested, it also provides that condition.
             </summary>
             <param name="conditionExpression"></param>
             <returns></returns>
         </member>
         <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.GetSingleOrDefaultAsync(System.Func{Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable{`0},Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable},System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
             <summary>
-            <para> Returns all entities which IsDeleted condition is true with includes from database asynchronously. If the condition is requested, it also provides that condition.</para> 
+             Returns all entities which IsDeleted condition is true with includes from database asynchronously. If the condition is requested, it also provides that condition.
             </summary>
             <param name="includes"></param>
             <param name="conditionExpression"></param>
@@ -524,14 +532,14 @@
         </member>
         <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.GetAllAsync(System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
             <summary>
-            <para> Returns all entities which IsDeleted condition is true from database asynchronously. If the condition is requested, it also provides that condition.</para> 
+             Returns all entities which IsDeleted condition is true from database asynchronously. If the condition is requested, it also provides that condition.
             </summary>
             <param name="conditionExpression"></param>
             <returns></returns>
         </member>
         <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.GetAllAsync(System.Func{Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable{`0},Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable},System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
             <summary>
-            <para> Returns all entities which IsDeleted condition is true with specified includes from database asynchronously. If the condition is requested, it also provides that condition.</para> 
+             Returns all entities which IsDeleted condition is true with specified includes from database asynchronously. If the condition is requested, it also provides that condition.
             </summary>
             <param name="includes"></param>
             <param name="conditionExpression"></param>
@@ -539,8 +547,8 @@
         </member>
         <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.GetAsPaginatedAsync(System.Int32,System.Int32,System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
             <summary>
-            <para> Creates asynchronously a shallow copy of a range of entity's which IsDeleted property is true, in the source List of TEntity with requested count and range. 
-                  If the condition is requested, it also provides that condition.</para> 
+             Creates asynchronously a shallow copy of a range of entity's which IsDeleted property is true, in the source List of TEntity with requested count and range. 
+                  If the condition is requested, it also provides that condition.
             </summary>
             
             <exception cref="T:System.ArgumentOutOfRangeException"> Throwns when <paramref name="requestedPageNumber"/> more than actual page number. </exception>
@@ -552,8 +560,8 @@
         </member>
         <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.GetAsPaginatedAsync(System.Int32,System.Int32,System.Func{Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable{`0},Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable},System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
              <summary>
-             <para> Creates asynchronously a shallow copy of a range of entity's which IsDeleted property is true, in the source List of TEntity with requested count,range and includes.
-                   If the condition is requested, it also provides that condition.</para> 
+              Creates asynchronously a shallow copy of a range of entity's which IsDeleted property is true, in the source List of TEntity with requested count,range and includes.
+                   If the condition is requested, it also provides that condition.
              </summary>
             
              <exception cref="T:System.ArgumentOutOfRangeException"> Throwns when <paramref name="requestedPageNumber"/> more than actual page number. </exception>
@@ -566,8 +574,8 @@
         </member>
         <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.GetAsPaginatedAndOrderedAsync(System.Int32,System.Int32,System.String,System.Boolean,System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
             <summary>
-            <para> Creates asynchronously a shallow copy of a range of entity's which IsDeleted property is true, in the source List of TEntity with requested count and range.
-                  If the condition is requested, it also provides that condition.</para> 
+             Creates asynchronously a shallow copy of a range of entity's which IsDeleted property is true, in the source List of TEntity with requested count and range.
+                  If the condition is requested, it also provides that condition.
                   
             </summary>
             
@@ -583,8 +591,8 @@
         </member>
         <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.GetAsPaginatedAndOrderedAsync(System.Int32,System.Int32,System.Func{Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable{`0},Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable},System.String,System.Boolean,System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
              <summary>
-             <para> Creates asynchronously a shallow copy of a range of entity's which IsDeleted property is true, in the source List of TEntity with requested count,range and includes.
-                    If the condition is requested, it also provides that condition.</para> 
+              Creates asynchronously a shallow copy of a range of entity's which IsDeleted property is true, in the source List of TEntity with requested count,range and includes.
+                    If the condition is requested, it also provides that condition.
                     
              </summary>
              
@@ -601,8 +609,8 @@
         </member>
         <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.GetAsPaginatedAndOrderedAsync(System.Int32,System.Int32,System.Linq.Expressions.Expression{System.Func{`0,System.Object}},System.Boolean,System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
             <summary>
-            <para> Creates asynchronously a shallow copy of a range of entity's which IsDeleted property is true, in the source List of TEntity with requested count and range.
-                  If the condition is requested, it also provides that condition.</para> 
+             Creates asynchronously a shallow copy of a range of entity's which IsDeleted property is true, in the source List of TEntity with requested count and range.
+                  If the condition is requested, it also provides that condition.
                   
             </summary>
             
@@ -617,8 +625,8 @@
         </member>
         <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.GetAsPaginatedAndOrderedAsync(System.Int32,System.Int32,System.Func{Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable{`0},Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable},System.Linq.Expressions.Expression{System.Func{`0,System.Object}},System.Boolean,System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
              <summary>
-             <para> Creates asynchronously a shallow copy of a range of entity's which IsDeleted property is true, in the source List of TEntity with requested count,range and includes.
-                    If the condition is requested, it also provides that condition.</para> 
+              Creates asynchronously a shallow copy of a range of entity's which IsDeleted property is true, in the source List of TEntity with requested count,range and includes.
+                    If the condition is requested, it also provides that condition.
                     
              </summary>
              
@@ -634,8 +642,8 @@
         </member>
         <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.GetAsOrderedAsync(System.String,System.Boolean,System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
             <summary>
-            <para> Gets entities as ordered with <paramref name="orderByPropertyName"/>.
-                  If the condition is requested, it also provides that condition.</para> 
+             Gets entities as ordered with <paramref name="orderByPropertyName"/>.
+                  If the condition is requested, it also provides that condition.
                   
             </summary>
             
@@ -648,8 +656,8 @@
         </member>
         <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.GetAsOrderedAsync(System.Linq.Expressions.Expression{System.Func{`0,System.Object}},System.Boolean,System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
             <summary>
-            <para> Gets entities as ordered with <paramref name="orderByKeySelector"/>.
-                  If the condition is requested, it also provides that condition.</para> 
+             Gets entities as ordered with <paramref name="orderByKeySelector"/>.
+                  If the condition is requested, it also provides that condition.
                   
             </summary>
             
@@ -660,8 +668,8 @@
         </member>
         <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.GetAsOrderedAsync(System.Func{Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable{`0},Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable},System.Linq.Expressions.Expression{System.Func{`0,System.Object}},System.Boolean,System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
              <summary>
-             <para> Gets entities as ordered with <paramref name="orderByKeySelector"/>.
-                    If the condition is requested, it also provides that condition.</para> 
+              Gets entities as ordered with <paramref name="orderByKeySelector"/>.
+                    If the condition is requested, it also provides that condition.
                     
              </summary>
             
@@ -672,17 +680,17 @@
              <returns></returns>
         </member>
         <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.GetByIdAsync(`1,System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
-             <summary>
-            <para> Returns one entity by entity Id from database asynchronously.</para> 
-             </summary>
-             <param name="id"></param>
-             <param name=""></param>
-             <param name="conditionExpression"></param>
-             <returns> The entity found or null. </returns>
+            <summary>
+            Returns one entity by entity Id from database asynchronously.
+            </summary>
+            <param name="id"></param>
+            <param name=""></param>
+            <param name="conditionExpression"></param>
+            <returns> The entity found or null. </returns>
         </member>
         <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.GetRequiredByIdAsync(`1,System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
             <summary>
-            <para> Returns one entity by entity Id from database asynchronously. </para> 
+             Returns one entity by entity Id from database asynchronously. 
             </summary>
             
             <exception cref="T:System.ArgumentNullException"> Throwns when no entity found. </exception>
@@ -693,7 +701,7 @@
         </member>
         <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.GetByIdAsync(`1,System.Func{Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable{`0},Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable},System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
             <summary>
-            <para> Returns one entity which IsDeleted condition is true by entity Id with includes from database asynchronously. If the condition is requested, it also provides that condition.</para> 
+             Returns one entity which IsDeleted condition is true by entity Id with includes from database asynchronously. If the condition is requested, it also provides that condition.
             </summary>
             <param name="id"></param>
             <param name="includes"></param>
@@ -702,7 +710,7 @@
         </member>
         <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.GetRequiredByIdAsync(`1,System.Func{Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable{`0},Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable},System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
             <summary>
-            <para> Returns one entity which IsDeleted condition is true by entity Id with includes from database asynchronously. If the condition is requested, it also provides that condition.</para> 
+             Returns one entity which IsDeleted condition is true by entity Id with includes from database asynchronously. If the condition is requested, it also provides that condition.
             </summary>
             
             <exception cref="T:System.ArgumentNullException"> Throwns when no entity found. </exception>
@@ -714,42 +722,42 @@
         </member>
         <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.AddAsync(`0)">
             <summary>
-            <para> Adds single entity to database asynchronously.</para> 
+             Adds single entity to database asynchronously.
             </summary>
             <param name="entity"></param>
             <returns></returns>
         </member>
         <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.AddRangeAsync(System.Collections.Generic.IEnumerable{`0})">
             <summary>
-            <para> Adds multiple entities to database asynchronously.</para> 
+             Adds multiple entities to database asynchronously.
             </summary>
             <param name="entities"></param>
             <returns></returns>
         </member>
         <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.UpdateAsync(`0)">
             <summary>
-            <para> Updates specified entity in database asynchronously.</para> 
+             Updates specified entity in database asynchronously.
             </summary>
             <param name="entity"></param>
             <returns></returns>
         </member>
         <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.UpdateAsync(System.Collections.Generic.IEnumerable{`0})">
             <summary>
-            <para> Updates multiple entities in database asynchronously.</para> 
+             Updates multiple entities in database asynchronously.
             </summary>
             <param name="entities"></param>
             <returns></returns>
         </member>
         <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.DeleteAsync(`0)">
             <summary>
-            <para> Deletes single entity from database asynchronously..</para> 
+             Deletes single entity from database asynchronously..
             </summary>
             <param name="entity"></param>
             <returns></returns>
         </member>
         <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.DeleteAsync(System.Collections.Generic.IEnumerable{`0})">
             <summary>
-            <para> Deletes multiple entity from database asynchronously. </para> 
+             Deletes multiple entity from database asynchronously. 
             </summary>
             <param name="entities"></param>
             <returns></returns>
@@ -766,21 +774,21 @@
             <summary>
             Gets grouped entities from database with <paramref name="groupedClause"/>.
             
-            <para><b>Example use;</b></para>
+            <para> <b>Example use;</b></para>
             <code>
             
-              <para> var dbSet = _contextRepository.GetDbSet{Poco}();  <see cref="M:Milvasoft.Helpers.DataAccess.Concrete.ContextRepository`1.GetDbSet``1"></see> </para>
+            <para>   var dbSet = _contextRepository.GetDbSet{Poco}();  <see cref="M:Milvasoft.Helpers.DataAccess.Concrete.ContextRepository`1.GetDbSet``1"></see> </para>
             
-              <para> var groupByClause =<para> from poco in dbSet </para>                                                                     </para>
-              <para>                           group poco by new { poco.Id,  poco.PocoCode } into groupedPocos                                </para>       
-              <para>                           select new PocoDTO                                                                             </para>
-              <para>                           {                                                                                              </para>
-              <para>                                Id = groupedPocos.Key.Id,                                                                 </para>
-              <para>                                PocoCode = groupedPocos.Key.PocoCode,                                                     </para>
-              <para>                                PocoCount = groupedPocos.Sum(p=>p.Count)                                                  </para>
-              <para>                           };                                                                                             </para>
+            <para>   var groupByClause = from poco in dbSet                                                                             </para>
+                                         group poco by new { poco.Id,  poco.PocoCode } into groupedPocos                                      
+            <para>                       select new PocoDTO                                                                             </para>
+            <para>                       {                                                                                              </para>
+            <para>                            Id = groupedPocos.Key.Id,                                                                 </para>
+            <para>                            PocoCode = groupedPocos.Key.PocoCode,                                                     </para>
+            <para>                            PocoCount = groupedPocos.Sum(p=>p.Count)                                                  </para>
+            <para>                       };                                                                                             </para>
                                    
-              <para> var result = await _pocoRepository.GetGroupedAsync{PocoDTO}(groupByClause).ConfigureAwait(false);                        </para>
+            <para>   var result = await _pocoRepository.GetGroupedAsync{PocoDTO}(groupByClause).ConfigureAwait(false);                  </para>
                
             </code>
             
@@ -797,19 +805,19 @@
             <summary>
             Gets grouped entities with condition from database with <paramref name="groupedClause"/>.
             
-            <para><b>Example use;</b></para>
+            <para> <b>Example use;</b></para>
             <code>
             
-              <para> Func{IQueryablePocoDTO>} groupByClauseFunc = () => <para>  from poco in _contextRepository.GetDbSet{Poco}() </para>                                       </para>
-              <para>                                                            group poco by new { poco.Id,  poco.PocoCode } into groupedPocos                                </para>       
-              <para>                                                            select new PocoDTO                                                                             </para>
-              <para>                                                            {                                                                                              </para>
-              <para>                                                                 Id = groupedPocos.Key.Id,                                                                 </para>
-              <para>                                                                 PocoCode = groupedPocos.Key.PocoCode,                                                     </para>
-              <para>                                                                 PocoCount = groupedPocos.Sum(p=>p.Count)                                                  </para>
-              <para>                                                            };                                                                                             </para>
+            <para>   Func{IQueryablePocoDTO>} groupByClauseFunc = () =>   from poco in _contextRepository.GetDbSet{Poco}()                                       </para>
+                                                                          group poco by new { poco.Id,  poco.PocoCode } into groupedPocos                                      
+            <para>                                                        select new PocoDTO                                                                     </para>
+            <para>                                                        {                                                                                      </para>
+            <para>                                                             Id = groupedPocos.Key.Id,                                                         </para>
+            <para>                                                             PocoCode = groupedPocos.Key.PocoCode,                                             </para>
+            <para>                                                             PocoCount = groupedPocos.Sum(p=>p.Count)                                          </para>
+            <para>                                                        };                                                                                     </para>
                                    
-              <para> var result = await _pocoRepository.GetGroupedAsync{PocoDTO}(groupByClauseFunc).ConfigureAwait(false);                                                     </para>
+            <para>   var result = await _pocoRepository.GetGroupedAsync{PocoDTO}(groupByClauseFunc).ConfigureAwait(false);                                       </para>
                
             </code>
             
@@ -826,19 +834,19 @@
             <summary>
             Gets grouped entities with condition from database with <paramref name="groupedClause"/>.
             
-            <para><b>Example use;</b></para>
+            <para> <b>Example use;</b></para>
             <code>
             
-              <para> Func{IQueryablePocoDTO>} groupByClauseFunc = () => <para>  from poco in _contextRepository.GetDbSet{Poco}() </para>                                       </para>
-              <para>                                                            group poco by new { poco.Id,  poco.PocoCode } into groupedPocos                                </para>       
-              <para>                                                            select new PocoDTO                                                                             </para>
-              <para>                                                            {                                                                                              </para>
-              <para>                                                                 Id = groupedPocos.Key.Id,                                                                 </para>
-              <para>                                                                 PocoCode = groupedPocos.Key.PocoCode,                                                     </para>
-              <para>                                                                 PocoCount = groupedPocos.Sum(p=>p.Count)                                                  </para>
-              <para>                                                            };                                                                                             </para>
+            <para>   Func{IQueryablePocoDTO>} groupByClauseFunc = () =>   from poco in _contextRepository.GetDbSet{Poco}()                                       </para>
+                                                                          group poco by new { poco.Id,  poco.PocoCode } into groupedPocos                                      
+            <para>                                                              select new PocoDTO                                                               </para>
+            <para>                                                              {                                                                                </para>
+            <para>                                                                   Id = groupedPocos.Key.Id,                                                   </para>
+            <para>                                                                   PocoCode = groupedPocos.Key.PocoCode,                                       </para>
+            <para>                                                                   PocoCount = groupedPocos.Sum(p=>p.Count)                                    </para>
+            <para>                                                              };                                                                               </para>
                                    
-              <para> var result = await _pocoRepository.GetGroupedAsync{PocoDTO}(1, 10, groupByClauseFunc).ConfigureAwait(false);                                              </para>
+            <para>   var result = await _pocoRepository.GetGroupedAsync{PocoDTO}(1, 10, groupByClauseFunc).ConfigureAwait(false);                                </para>
                
             </code>
             
@@ -853,56 +861,24 @@
             <param name="groupedClause"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.GetAsGroupedAndPaginatedAndOrderedAsync``1(System.Int32,System.Int32,System.String,System.Boolean,System.Func{System.Linq.IQueryable{``0}},System.Linq.Expressions.Expression{System.Func{``0,System.Boolean}})">
-            <summary>
-            Gets grouped entities with condition from database with <paramref name="groupedClause"/>.
-            
-            <para><b>Example use;</b></para>
-            <code>
-            
-              <para> Func{IQueryablePocoDTO>} groupByClauseFunc = () => <para>  from poco in _contextRepository.GetDbSet{Poco}() </para>                                       </para>
-              <para>                                                            group poco by new { poco.Id,  poco.PocoCode } into groupedPocos                                </para>       
-              <para>                                                            select new PocoDTO                                                                             </para>
-              <para>                                                            {                                                                                              </para>
-              <para>                                                                 Id = groupedPocos.Key.Id,                                                                 </para>
-              <para>                                                                 PocoCode = groupedPocos.Key.PocoCode,                                                     </para>
-              <para>                                                                 PocoCount = groupedPocos.Sum(p=>p.Count)                                                  </para>
-              <para>                                                            };                                                                                             </para>
-                                   
-              <para> var result = await _pocoRepository.GetGroupedAsync{PocoDTO}(1, 10, "PocoCode", false, groupByClauseFunc).ConfigureAwait(false);                           </para>
-               
-            </code>
-            
-            </summary>
-            
-            
-            
-            <typeparam name="TReturn"></typeparam>
-            <param name="requestedPageNumber"></param>
-            <param name="countOfRequestedRecordsInPage"></param>
-            <param name="orderByPropertyName"></param>
-            <param name="orderByAscending"></param>
-            <param name="conditionExpression"></param>
-            <param name="groupedClause"></param>
-            <returns></returns>
-        </member>
+        <!-- Badly formed XML comment ignored for member "M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.GetAsGroupedAndPaginatedAndOrderedAsync``1(System.Int32,System.Int32,System.String,System.Boolean,System.Func{System.Linq.IQueryable{``0}},System.Linq.Expressions.Expression{System.Func{``0,System.Boolean}})" -->
         <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.GetAsGroupedAnOrderedAsync``1(System.String,System.Boolean,System.Func{System.Linq.IQueryable{``0}},System.Linq.Expressions.Expression{System.Func{``0,System.Boolean}})">
             <summary>
             Gets grouped entities with condition from database with <paramref name="groupedClause"/>.
             
-            <para><b>Example use;</b></para>
+            <para> <b>Example use;</b></para>
             <code>
             
-              <para> Func{IQueryablePocoDTO>} groupByClauseFunc = () => <para>  from poco in _contextRepository.GetDbSet{Poco}() </para>                                       </para>
-              <para>                                                            group poco by new { poco.Id,  poco.PocoCode } into groupedPocos                                </para>       
-              <para>                                                            select new PocoDTO                                                                             </para>
-              <para>                                                            {                                                                                              </para>
-              <para>                                                                 Id = groupedPocos.Key.Id,                                                                 </para>
-              <para>                                                                 PocoCode = groupedPocos.Key.PocoCode,                                                     </para>
-              <para>                                                                 PocoCount = groupedPocos.Sum(p=>p.Count)                                                  </para>
-              <para>                                                            };                                                                                             </para>
+            <para>   Func{IQueryablePocoDTO>} groupByClauseFunc = () =>   from poco in _contextRepository.GetDbSet{Poco}()                                       </para>
+                                                                          group poco by new { poco.Id,  poco.PocoCode } into groupedPocos                                      
+            <para>                                                        select new PocoDTO                                                                     </para>
+            <para>                                                        {                                                                                      </para>
+            <para>                                                             Id = groupedPocos.Key.Id,                                                         </para>
+            <para>                                                             PocoCode = groupedPocos.Key.PocoCode,                                             </para>
+            <para>                                                             PocoCount = groupedPocos.Sum(p=>p.Count)                                          </para>
+            <para>                                                        };                                                                                     </para>
                                    
-              <para> var result = await _pocoRepository.GetGroupedAsync{PocoDTO}("PocoCode", false, groupByClauseFunc).ConfigureAwait(false);                                  </para>
+            <para>   var result = await _pocoRepository.GetGroupedAsync{PocoDTO}("PocoCode", false, groupByClauseFunc).ConfigureAwait(false);                    </para>
                
             </code>
             
@@ -984,7 +960,7 @@
         </member>
         <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IContextRepository`1.ExecuteQueryAsync(System.String)">
             <summary>
-            <para> Executes sql query to database asynchronously.(e.g. trigger, event) </para> 
+            Executes sql query to database asynchronously.(e.g. trigger, event)
             </summary>
             <param name="query"></param>
             <returns></returns>
@@ -1014,7 +990,7 @@
         </member>
         <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IContextRepository`1.InitializeUpdating``2(``0)">
             <summary>
-            <para> User update process. </para>
+            User update process.
             </summary>
         </member>
         <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IContextRepository`1.RemoveExpiredTokensAsync``2(Microsoft.AspNetCore.Identity.UserManager{``0},System.String,System.String,System.Collections.Generic.Dictionary{System.String,System.String})">
@@ -1048,42 +1024,42 @@
         </member>
         <member name="T:Milvasoft.Helpers.DataAccess.Concrete.BaseEntity`1">
             <summary>
-            <para> Base entity for all of erasable entities. All erasable entities have this values. </para>
+            Base entity for all of erasable entities. All erasable entities have this values. 
             </summary>
         </member>
         <member name="P:Milvasoft.Helpers.DataAccess.Concrete.BaseEntity`1.Id">
             <summary>
-            <para> Unique database key. Represents primary key.</para>
+            Unique database key. Represents primary key.
             </summary>
         </member>
         <member name="P:Milvasoft.Helpers.DataAccess.Concrete.BaseEntity`1.InsertedDate">
             <summary>
-            <para> Date added to database for entity.</para>
+            Date added to database for entity.
             </summary>
         </member>
         <member name="P:Milvasoft.Helpers.DataAccess.Concrete.BaseEntity`1.LastUpdatedDate">
             <summary>
-            <para> Update date in database for entity.</para>
+            Update date in database for entity.
             </summary>
         </member>
         <member name="T:Milvasoft.Helpers.DataAccess.Concrete.BaseIndelibleEntity`1">
             <summary>
-            <para> Base entity for all of indelible entities. All indelible entities have this values. </para>
+            Base entity for all of indelible entities. All indelible entities have this values.
             </summary>
         </member>
         <member name="P:Milvasoft.Helpers.DataAccess.Concrete.BaseIndelibleEntity`1.DeletedDate">
             <summary>
-            <para> Delete date in database for entity. </para>
+            Delete date in database for entity.
             </summary>
         </member>
         <member name="P:Milvasoft.Helpers.DataAccess.Concrete.BaseIndelibleEntity`1.IsDeleted">
             <summary>
-            <para> State of entity in the database. Default value is true. </para>
+            State of entity in the database. Default value is true.
             </summary>
         </member>
         <member name="T:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3">
             <summary>
-            <para> Base repository for concrete repositories. All Ops!yon repositories must be have this methods. </para> 
+             Base repository for concrete repositories. All Ops!yon repositories must be have this methods.
             </summary>
             <typeparam name="TEntity"></typeparam>
             <typeparam name="TKey"></typeparam>
@@ -1120,55 +1096,16 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.GetFirstOrDefaultAsync(System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
-            <summary>
-            <para> Returns all entities which IsDeleted condition is true from database asynchronously. If the condition is requested, it also provides that condition.</para> 
-            </summary>
-            <param name="conditionExpression"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.GetFirstOrDefaultAsync(System.Func{Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable{`0},Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable},System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
-            <summary>
-            <para> Returns all entities which IsDeleted condition is true with includes from database asynchronously. If the condition is requested, it also provides that condition.</para> 
-            </summary>
-            <param name="includes"></param>
-            <param name="conditionExpression"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.GetSingleOrDefaultAsync(System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
-            <summary>
-            <para> Returns all entities which IsDeleted condition is true from database asynchronously. If the condition is requested, it also provides that condition.</para> 
-            </summary>
-            <param name="conditionExpression"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.GetSingleOrDefaultAsync(System.Func{Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable{`0},Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable},System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
-            <summary>
-            <para> Returns all entities which IsDeleted condition is true with includes from database asynchronously. If the condition is requested, it also provides that condition.</para> 
-            </summary>
-            <param name="includes"></param>
-            <param name="conditionExpression"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.GetAllAsync(System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
-            <summary>
-            <para> Returns all entities which IsDeleted condition is true from database asynchronously. If the condition is requested, it also provides that condition.</para> 
-            </summary>
-            <param name="conditionExpression"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.GetAllAsync(System.Func{Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable{`0},Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable},System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
-            <summary>
-            <para> Returns all entities which IsDeleted condition is true with specified includes from database asynchronously. If the condition is requested, it also provides that condition.</para> 
-            </summary>
-            <param name="includes"></param>
-            <param name="conditionExpression"></param>
-            <returns></returns>
-        </member>
+        <!-- Badly formed XML comment ignored for member "M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.GetFirstOrDefaultAsync(System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})" -->
+        <!-- Badly formed XML comment ignored for member "M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.GetFirstOrDefaultAsync(System.Func{Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable{`0},Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable},System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})" -->
+        <!-- Badly formed XML comment ignored for member "M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.GetSingleOrDefaultAsync(System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})" -->
+        <!-- Badly formed XML comment ignored for member "M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.GetSingleOrDefaultAsync(System.Func{Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable{`0},Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable},System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})" -->
+        <!-- Badly formed XML comment ignored for member "M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.GetAllAsync(System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})" -->
+        <!-- Badly formed XML comment ignored for member "M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.GetAllAsync(System.Func{Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable{`0},Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable},System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})" -->
         <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.GetAsPaginatedAsync(System.Int32,System.Int32,System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
             <summary>
-            <para> Creates asynchronously a shallow copy of a range of entity's which IsDeleted property is true, in the source List of TEntity with requested count and range. 
-                  If the condition is requested, it also provides that condition.</para> 
+             Creates asynchronously a shallow copy of a range of entity's which IsDeleted property is true, in the source List of TEntity with requested count and range. 
+                  If the condition is requested, it also provides that condition.
             </summary>
             
             <exception cref="T:System.ArgumentOutOfRangeException"> Throwns when <paramref name="requestedPageNumber"/> more than actual page number. </exception>
@@ -1180,8 +1117,8 @@
         </member>
         <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.GetAsPaginatedAsync(System.Int32,System.Int32,System.Func{Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable{`0},Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable},System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
              <summary>
-             <para> Creates asynchronously a shallow copy of a range of entity's which IsDeleted property is true, in the source List of TEntity with requested count,range and includes.
-                   If the condition is requested, it also provides that condition.</para> 
+              Creates asynchronously a shallow copy of a range of entity's which IsDeleted property is true, in the source List of TEntity with requested count,range and includes.
+                   If the condition is requested, it also provides that condition.
              </summary>
             
              <exception cref="T:System.ArgumentOutOfRangeException"> Throwns when <paramref name="requestedPageNumber"/> more than actual page number. </exception>
@@ -1194,8 +1131,8 @@
         </member>
         <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.GetAsPaginatedAndOrderedAsync(System.Int32,System.Int32,System.String,System.Boolean,System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
             <summary>
-            <para> Creates asynchronously a shallow copy of a range of entity's which IsDeleted property is true, in the source List of TEntity with requested count and range.
-                  If the condition is requested, it also provides that condition.</para> 
+             Creates asynchronously a shallow copy of a range of entity's which IsDeleted property is true, in the source List of TEntity with requested count and range.
+                  If the condition is requested, it also provides that condition.
                   
             </summary>
             
@@ -1211,8 +1148,8 @@
         </member>
         <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.GetAsPaginatedAndOrderedAsync(System.Int32,System.Int32,System.Func{Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable{`0},Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable},System.String,System.Boolean,System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
              <summary>
-             <para> Creates asynchronously a shallow copy of a range of entity's which IsDeleted property is true, in the source List of TEntity with requested count,range and includes.
-                    If the condition is requested, it also provides that condition.</para> 
+              Creates asynchronously a shallow copy of a range of entity's which IsDeleted property is true, in the source List of TEntity with requested count,range and includes.
+                    If the condition is requested, it also provides that condition.
                     
              </summary>
              
@@ -1229,8 +1166,8 @@
         </member>
         <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.GetAsPaginatedAndOrderedAsync(System.Int32,System.Int32,System.Linq.Expressions.Expression{System.Func{`0,System.Object}},System.Boolean,System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
             <summary>
-            <para> Creates asynchronously a shallow copy of a range of entity's which IsDeleted property is true, in the source List of TEntity with requested count and range.
-                  If the condition is requested, it also provides that condition.</para> 
+             Creates asynchronously a shallow copy of a range of entity's which IsDeleted property is true, in the source List of TEntity with requested count and range.
+                  If the condition is requested, it also provides that condition.
                   
             </summary>
             
@@ -1245,8 +1182,8 @@
         </member>
         <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.GetAsPaginatedAndOrderedAsync(System.Int32,System.Int32,System.Func{Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable{`0},Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable},System.Linq.Expressions.Expression{System.Func{`0,System.Object}},System.Boolean,System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
              <summary>
-             <para> Creates asynchronously a shallow copy of a range of entity's which IsDeleted property is true, in the source List of TEntity with requested count,range and includes.
-                    If the condition is requested, it also provides that condition.</para> 
+              Creates asynchronously a shallow copy of a range of entity's which IsDeleted property is true, in the source List of TEntity with requested count,range and includes.
+                    If the condition is requested, it also provides that condition.
                     
              </summary>
              
@@ -1262,8 +1199,8 @@
         </member>
         <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.GetAsOrderedAsync(System.String,System.Boolean,System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
             <summary>
-            <para> Gets entities as ordered with <paramref name="orderByPropertyName"/>.
-                  If the condition is requested, it also provides that condition.</para> 
+             Gets entities as ordered with <paramref name="orderByPropertyName"/>.
+                  If the condition is requested, it also provides that condition.
                   
             </summary>
             
@@ -1276,8 +1213,8 @@
         </member>
         <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.GetAsOrderedAsync(System.Func{Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable{`0},Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable},System.String,System.Boolean,System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
              <summary>
-             <para> Gets entities as ordered with <paramref name="orderByPropertyName"/>.
-                    If the condition is requested, it also provides that condition.</para> 
+              Gets entities as ordered with <paramref name="orderByPropertyName"/>.
+                    If the condition is requested, it also provides that condition.
                     
              </summary>
             
@@ -1291,8 +1228,8 @@
         </member>
         <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.GetAsOrderedAsync(System.Linq.Expressions.Expression{System.Func{`0,System.Object}},System.Boolean,System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
             <summary>
-            <para> Gets entities as ordered with <paramref name="orderByKeySelector"/>.
-                  If the condition is requested, it also provides that condition.</para> 
+             Gets entities as ordered with <paramref name="orderByKeySelector"/>.
+                  If the condition is requested, it also provides that condition.
                   
             </summary>
             
@@ -1303,8 +1240,8 @@
         </member>
         <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.GetAsOrderedAsync(System.Func{Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable{`0},Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable},System.Linq.Expressions.Expression{System.Func{`0,System.Object}},System.Boolean,System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
              <summary>
-             <para> Gets entities as ordered with <paramref name="orderByKeySelector"/>.
-                    If the condition is requested, it also provides that condition.</para> 
+              Gets entities as ordered with <paramref name="orderByKeySelector"/>.
+                    If the condition is requested, it also provides that condition.
                     
              </summary>
             
@@ -1315,17 +1252,17 @@
              <returns></returns>
         </member>
         <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.GetByIdAsync(`1,System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
-             <summary>
-            <para> Returns one entity by entity Id from database asynchronously.</para> 
-             </summary>
-             <param name="id"></param>
-             <param name=""></param>
-             <param name="conditionExpression"></param>
-             <returns> The entity found or null. </returns>
+            <summary>
+            Returns one entity by entity Id from database asynchronously.
+            </summary>
+            <param name="id"></param>
+            <param name=""></param>
+            <param name="conditionExpression"></param>
+            <returns> The entity found or null. </returns>
         </member>
         <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.GetRequiredByIdAsync(`1,System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
             <summary>
-            <para> Returns one entity by entity Id from database asynchronously. </para> 
+             Returns one entity by entity Id from database asynchronously.
             </summary>
             
             <exception cref="T:System.ArgumentNullException"> Throwns when no entity found. </exception>
@@ -1336,7 +1273,7 @@
         </member>
         <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.GetByIdAsync(`1,System.Func{Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable{`0},Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable},System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
             <summary>
-            <para> Returns one entity which IsDeleted condition is true by entity Id with includes from database asynchronously. If the condition is requested, it also provides that condition.</para> 
+             Returns one entity which IsDeleted condition is true by entity Id with includes from database asynchronously. If the condition is requested, it also provides that condition. 
             </summary>
             <param name="id"></param>
             <param name="includes"></param>
@@ -1345,7 +1282,7 @@
         </member>
         <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.GetRequiredByIdAsync(`1,System.Func{Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable{`0},Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable},System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
             <summary>
-            <para> Returns one entity which IsDeleted condition is true by entity Id with includes from database asynchronously. If the condition is requested, it also provides that condition.</para> 
+             Returns one entity which IsDeleted condition is true by entity Id with includes from database asynchronously. If the condition is requested, it also provides that condition. 
             </summary>
             
             <exception cref="T:System.ArgumentNullException"> Throwns when no entity found. </exception>
@@ -1357,42 +1294,42 @@
         </member>
         <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.AddAsync(`0)">
             <summary>
-            <para> Adds single entity to database asynchronously.</para> 
+             Adds single entity to database asynchronously. 
             </summary>
             <param name="entity"></param>
             <returns></returns>
         </member>
         <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.AddRangeAsync(System.Collections.Generic.IEnumerable{`0})">
             <summary>
-            <para> Adds multiple entities to database asynchronously.</para> 
+             Adds multiple entities to database asynchronously. 
             </summary>
             <param name="entities"></param>
             <returns></returns>
         </member>
         <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.UpdateAsync(`0)">
             <summary>
-            <para> Updates specified entity in database asynchronously.</para> 
+             Updates specified entity in database asynchronously.
             </summary>
             <param name="entity"></param>
             <returns></returns>
         </member>
         <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.UpdateAsync(System.Collections.Generic.IEnumerable{`0})">
             <summary>
-            <para> Updates multiple entities in database asynchronously.</para> 
+             Updates multiple entities in database asynchronously.
             </summary>
             <param name="entities"></param>
             <returns></returns>
         </member>
         <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.DeleteAsync(`0)">
             <summary>
-            <para> Deletes single entity from database asynchronously..</para> 
+             Deletes single entity from database asynchronously.
             </summary>
             <param name="entity"></param>
             <returns></returns>
         </member>
         <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.DeleteAsync(System.Collections.Generic.IEnumerable{`0})">
             <summary>
-            <para> Deletes multiple entity from database asynchronously. </para> 
+             Deletes multiple entity from database asynchronously.
             </summary>
             <param name="entities"></param>
             <returns></returns>
@@ -1417,21 +1354,21 @@
             <summary>
             Gets grouped entities from database with <paramref name="groupedClause"/>.
             
-            <para><b>Example use;</b></para>
+            <para> <b>Example use;</b></para>
             <code>
             
-              <para> var dbSet = _contextRepository.GetDbSet{Poco}();  <see cref="M:Milvasoft.Helpers.DataAccess.Concrete.ContextRepository`1.GetDbSet``1"></see> </para>
+            <para>   var dbSet = _contextRepository.GetDbSet{Poco}();  <see cref="M:Milvasoft.Helpers.DataAccess.Concrete.ContextRepository`1.GetDbSet``1"></see> </para>
             
-              <para> var groupByClause =<para> from poco in dbSet </para>                                                                     </para>
-              <para>                           group poco by new { poco.Id,  poco.PocoCode } into groupedPocos                                </para>       
-              <para>                           select new PocoDTO                                                                             </para>
-              <para>                           {                                                                                              </para>
-              <para>                                Id = groupedPocos.Key.Id,                                                                 </para>
-              <para>                                PocoCode = groupedPocos.Key.PocoCode,                                                     </para>
-              <para>                                PocoCount = groupedPocos.Sum(p=>p.Count)                                                  </para>
-              <para>                           };                                                                                             </para>
+            <para>   var groupByClause = from poco in dbSet                                                                             </para>
+                                         group poco by new { poco.Id,  poco.PocoCode } into groupedPocos                                      
+            <para>                       select new PocoDTO                                                                             </para>
+            <para>                       {                                                                                              </para>
+            <para>                            Id = groupedPocos.Key.Id,                                                                 </para>
+            <para>                            PocoCode = groupedPocos.Key.PocoCode,                                                     </para>
+            <para>                            PocoCount = groupedPocos.Sum(p=>p.Count)                                                  </para>
+            <para>                       };                                                                                             </para>
                                    
-              <para> var result = await _pocoRepository.GetGroupedAsync{PocoDTO}(groupByClause).ConfigureAwait(false);                        </para>
+            <para>   var result = await _pocoRepository.GetGroupedAsync{PocoDTO}(groupByClause).ConfigureAwait(false);                  </para>
                
             </code>
             
@@ -1448,19 +1385,19 @@
             <summary>
             Gets grouped entities with condition from database with <paramref name="groupedClause"/>.
             
-            <para><b>Example use;</b></para>
+            <para> <b>Example use;</b></para>
             <code>
             
-              <para> Func{IQueryablePocoDTO>} groupByClauseFunc = () => <para>  from poco in _contextRepository.GetDbSet{Poco}() </para>                                       </para>
-              <para>                                                            group poco by new { poco.Id,  poco.PocoCode } into groupedPocos                                </para>       
-              <para>                                                            select new PocoDTO                                                                             </para>
-              <para>                                                            {                                                                                              </para>
-              <para>                                                                 Id = groupedPocos.Key.Id,                                                                 </para>
-              <para>                                                                 PocoCode = groupedPocos.Key.PocoCode,                                                     </para>
-              <para>                                                                 PocoCount = groupedPocos.Sum(p=>p.Count)                                                  </para>
-              <para>                                                            };                                                                                             </para>
+            <para>   Func{IQueryablePocoDTO>} groupByClauseFunc = () =>   from poco in _contextRepository.GetDbSet{Poco}()                                       </para>
+                                                                          group poco by new { poco.Id,  poco.PocoCode } into groupedPocos                                      
+            <para>                                                        select new PocoDTO                                                                     </para>
+            <para>                                                        {                                                                                      </para>
+            <para>                                                             Id = groupedPocos.Key.Id,                                                         </para>
+            <para>                                                             PocoCode = groupedPocos.Key.PocoCode,                                             </para>
+            <para>                                                             PocoCount = groupedPocos.Sum(p=>p.Count)                                          </para>
+            <para>                                                        };                                                                                     </para>
                                    
-              <para> var result = await _pocoRepository.GetGroupedAsync{PocoDTO}(groupByClauseFunc).ConfigureAwait(false);                                                     </para>
+            <para>   var result = await _pocoRepository.GetGroupedAsync{PocoDTO}(groupByClauseFunc).ConfigureAwait(false);                                       </para>
                
             </code>
             
@@ -1477,19 +1414,19 @@
             <summary>
             Gets grouped entities with condition from database with <paramref name="groupedClause"/>.
             
-            <para><b>Example use;</b></para>
+            <para> <b>Example use;</b></para>
             <code>
             
-              <para> Func{IQueryablePocoDTO>} groupByClauseFunc = () => <para>  from poco in _contextRepository.GetDbSet{Poco}() </para>                                       </para>
-              <para>                                                            group poco by new { poco.Id,  poco.PocoCode } into groupedPocos                                </para>       
-              <para>                                                            select new PocoDTO                                                                             </para>
-              <para>                                                            {                                                                                              </para>
-              <para>                                                                 Id = groupedPocos.Key.Id,                                                                 </para>
-              <para>                                                                 PocoCode = groupedPocos.Key.PocoCode,                                                     </para>
-              <para>                                                                 PocoCount = groupedPocos.Sum(p=>p.Count)                                                  </para>
-              <para>                                                            };                                                                                             </para>
+            <para>   Func{IQueryablePocoDTO>} groupByClauseFunc = () =>   from poco in _contextRepository.GetDbSet{Poco}()                                       </para>
+                                                                          group poco by new { poco.Id,  poco.PocoCode } into groupedPocos                                      
+            <para>                                                              select new PocoDTO                                                               </para>
+            <para>                                                              {                                                                                </para>
+            <para>                                                                   Id = groupedPocos.Key.Id,                                                   </para>
+            <para>                                                                   PocoCode = groupedPocos.Key.PocoCode,                                       </para>
+            <para>                                                                   PocoCount = groupedPocos.Sum(p=>p.Count)                                    </para>
+            <para>                                                              };                                                                               </para>
                                    
-              <para> var result = await _pocoRepository.GetGroupedAsync{PocoDTO}(1, 10, groupByClauseFunc).ConfigureAwait(false);                                              </para>
+            <para>   var result = await _pocoRepository.GetGroupedAsync{PocoDTO}(1, 10, groupByClauseFunc).ConfigureAwait(false);                                </para>
                
             </code>
             
@@ -1504,56 +1441,24 @@
             <param name="groupedClause"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.GetAsGroupedAndPaginatedAndOrderedAsync``1(System.Int32,System.Int32,System.String,System.Boolean,System.Func{System.Linq.IQueryable{``0}},System.Linq.Expressions.Expression{System.Func{``0,System.Boolean}})">
-            <summary>
-            Gets grouped entities with condition from database with <paramref name="groupedClause"/>.
-            
-            <para><b>Example use;</b></para>
-            <code>
-            
-              <para> Func{IQueryablePocoDTO>} groupByClauseFunc = () => <para>  from poco in _contextRepository.GetDbSet{Poco}() </para>                                       </para>
-              <para>                                                            group poco by new { poco.Id,  poco.PocoCode } into groupedPocos                                </para>       
-              <para>                                                            select new PocoDTO                                                                             </para>
-              <para>                                                            {                                                                                              </para>
-              <para>                                                                 Id = groupedPocos.Key.Id,                                                                 </para>
-              <para>                                                                 PocoCode = groupedPocos.Key.PocoCode,                                                     </para>
-              <para>                                                                 PocoCount = groupedPocos.Sum(p=>p.Count)                                                  </para>
-              <para>                                                            };                                                                                             </para>
-                                   
-              <para> var result = await _pocoRepository.GetGroupedAsync{PocoDTO}(1, 10, "PocoCode", false, groupByClauseFunc).ConfigureAwait(false);                           </para>
-               
-            </code>
-            
-            </summary>
-            
-            
-            
-            <typeparam name="TReturn"></typeparam>
-            <param name="requestedPageNumber"></param>
-            <param name="countOfRequestedRecordsInPage"></param>
-            <param name="orderByPropertyName"></param>
-            <param name="orderByAscending"></param>
-            <param name="conditionExpression"></param>
-            <param name="groupedClause"></param>
-            <returns></returns>
-        </member>
+        <!-- Badly formed XML comment ignored for member "M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.GetAsGroupedAndPaginatedAndOrderedAsync``1(System.Int32,System.Int32,System.String,System.Boolean,System.Func{System.Linq.IQueryable{``0}},System.Linq.Expressions.Expression{System.Func{``0,System.Boolean}})" -->
         <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.GetAsGroupedAnOrderedAsync``1(System.String,System.Boolean,System.Func{System.Linq.IQueryable{``0}},System.Linq.Expressions.Expression{System.Func{``0,System.Boolean}})">
             <summary>
             Gets grouped entities with condition from database with <paramref name="groupedClause"/>.
             
-            <para><b>Example use;</b></para>
+            <para> <b>Example use;</b></para>
             <code>
             
-              <para> Func{IQueryablePocoDTO>} groupByClauseFunc = () => <para>  from poco in _contextRepository.GetDbSet{Poco}() </para>                                       </para>
-              <para>                                                            group poco by new { poco.Id,  poco.PocoCode } into groupedPocos                                </para>       
-              <para>                                                            select new PocoDTO                                                                             </para>
-              <para>                                                            {                                                                                              </para>
-              <para>                                                                 Id = groupedPocos.Key.Id,                                                                 </para>
-              <para>                                                                 PocoCode = groupedPocos.Key.PocoCode,                                                     </para>
-              <para>                                                                 PocoCount = groupedPocos.Sum(p=>p.Count)                                                  </para>
-              <para>                                                            };                                                                                             </para>
+            <para>   Func{IQueryablePocoDTO>} groupByClauseFunc = () =>   from poco in _contextRepository.GetDbSet{Poco}()                                       </para>
+                                                                          group poco by new { poco.Id,  poco.PocoCode } into groupedPocos                                      
+            <para>                                                        select new PocoDTO                                                                     </para>
+            <para>                                                        {                                                                                      </para>
+            <para>                                                             Id = groupedPocos.Key.Id,                                                         </para>
+            <para>                                                             PocoCode = groupedPocos.Key.PocoCode,                                             </para>
+            <para>                                                             PocoCount = groupedPocos.Sum(p=>p.Count)                                          </para>
+            <para>                                                        };                                                                                     </para>
                                    
-              <para> var result = await _pocoRepository.GetGroupedAsync{PocoDTO}("PocoCode", false, groupByClauseFunc).ConfigureAwait(false);                                  </para>
+            <para>   var result = await _pocoRepository.GetGroupedAsync{PocoDTO}("PocoCode", false, groupByClauseFunc).ConfigureAwait(false);                    </para>
                
             </code>
             
@@ -1645,11 +1550,11 @@
             <param name="dbContext"></param>
         </member>
         <member name="M:Milvasoft.Helpers.DataAccess.Concrete.ContextRepository`1.ExecuteQueryAsync(System.String)">
-             <summary>
-            <para> Executes sql query to database asynchronously.(e.g. trigger, event). </para> 
-             </summary>
-             <param name="query"></param>
-             <returns></returns>
+            <summary>
+            Executes sql query to database asynchronously.(e.g. trigger, event).
+            </summary>
+            <param name="query"></param>
+            <returns></returns>
         </member>
         <member name="M:Milvasoft.Helpers.DataAccess.Concrete.ContextRepository`1.ApplyTransactionAsync(System.Func{System.Threading.Tasks.Task})">
             <summary>
@@ -1676,7 +1581,7 @@
         </member>
         <member name="M:Milvasoft.Helpers.DataAccess.Concrete.ContextRepository`1.InitializeUpdating``2(``0)">
             <summary>
-            <para> User update process. </para>
+            User update process.
             </summary>
         </member>
         <member name="M:Milvasoft.Helpers.DataAccess.Concrete.ContextRepository`1.RemoveExpiredTokensAsync``2(Microsoft.AspNetCore.Identity.UserManager{``0},System.String,System.String,System.Collections.Generic.Dictionary{System.String,System.String})">
@@ -1725,40 +1630,35 @@
             <returns></returns>
         </member>
         <member name="T:Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable">
-             <summary>
-            <para><b>EN: </b> Supports queryable Include/ThenInclude chaining operators.</para> 
-            <para><b>TR: </b>Sorgulanabilir Include / ThenInclude zincirleme operatörlerini destekler.</para> 
-             </summary>
+            <summary>
+            Supports queryable Include/ThenInclude chaining operators. 
+            </summary>
         </member>
         <member name="T:Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable`1">
-             <summary>
-            <para><b>EN: </b>Supports queryable Include/ThenInclude chaining operators.</para> 
-            <para><b>TR: </b>Sorgulanabilir Include / ThenInclude zincirleme operatörlerini destekler.</para> 
-             </summary>
-             <typeparam name="TEntity"></typeparam>
+            <summary>
+            Supports queryable Include/ThenInclude chaining operators.
+            </summary>
+            <typeparam name="TEntity"></typeparam>
         </member>
         <member name="T:Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable`2">
-             <summary>
-            <para><b>EN: </b>Supports queryable Include/ThenInclude chaining operators.</para> 
-            <para><b>TR: </b>Sorgulanabilir Include / ThenInclude zincirleme operatörlerini destekler.</para> 
-             </summary>
-             <typeparam name="TEntity"></typeparam>
-             <typeparam name="TProperty"></typeparam>
+            <summary>
+            Supports queryable Include/ThenInclude chaining operators.
+            </summary>
+            <typeparam name="TEntity"></typeparam>
+            <typeparam name="TProperty"></typeparam>
         </member>
         <member name="T:Milvasoft.Helpers.DataAccess.IncludeLibrary.Includable`1">
-             <summary>
-            <para><b>EN: </b> Supports queryable Include/ThenInclude chaining operators.</para> 
-            <para><b>TR: </b>Sorgulanabilir Include / ThenInclude zincirleme operatörlerini destekler.</para> 
-             </summary>
-             <typeparam name="TEntity"></typeparam>
+            <summary>
+            Supports queryable Include/ThenInclude chaining operators.
+            </summary>
+            <typeparam name="TEntity"></typeparam>
         </member>
         <member name="T:Milvasoft.Helpers.DataAccess.IncludeLibrary.Includable`2">
-             <summary>
-            <para><b>EN: </b>Supports queryable Include/ThenInclude chaining operators.</para> 
-            <para><b>TR: </b>Sorgulanabilir Include / ThenInclude zincirleme operatörlerini destekler.</para> 
-             </summary>
-             <typeparam name="TEntity"></typeparam>
-             <typeparam name="TProperty"></typeparam>
+            <summary>
+            Supports queryable Include/ThenInclude chaining operators.
+            </summary>
+            <typeparam name="TEntity"></typeparam>
+            <typeparam name="TProperty"></typeparam>
         </member>
         <member name="T:Milvasoft.Helpers.DataAccess.IncludeLibrary.IncludableExtensions">
             <summary>
@@ -1814,17 +1714,56 @@
             </summary>
         </member>
         <member name="M:Milvasoft.Helpers.DataAccess.IncludeLibrary.IncludeMultipleClass.IncludeMultiple``1(System.Linq.IQueryable{``0},System.Func{Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable{``0},Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable})">
-             <summary>
-            <para><b>EN: </b> Supports queryable Include/ThenInclude chaining operators.</para> 
-            <para><b>TR: </b>Sorgulanabilir Include / ThenInclude zincirleme operatörlerini destekler.</para> 
-             </summary>
-             <example>
-             var personnelTable = _personnelTableRepository.GetAllWithIncludes(i => i.Include(p=>p.personnel).Include(p=>p.tableSetting));
-             </example>
-             <typeparam name="T"></typeparam>
-             <param name="query"></param>
-             <param name="includes"></param>
-             <returns></returns>
+            <summary>
+            Supports queryable Include/ThenInclude chaining operators.
+            </summary>
+            <example>
+            var personnelTable = _personnelTableRepository.GetAllWithIncludes(i => i.Include(p=>p.personnel).Include(p=>p.tableSetting));
+            </example>
+            <typeparam name="T"></typeparam>
+            <param name="query"></param>
+            <param name="includes"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Milvasoft.Helpers.Enums.CrudOperation">
+            <summary>
+            CRUD operation enum.
+            </summary>
+        </member>
+        <member name="F:Milvasoft.Helpers.Enums.CrudOperation.Add">
+            <summary>
+            Add operation
+            </summary>
+        </member>
+        <member name="F:Milvasoft.Helpers.Enums.CrudOperation.Update">
+            <summary>
+            Update operation
+            </summary>
+        </member>
+        <member name="F:Milvasoft.Helpers.Enums.CrudOperation.Delete">
+            <summary>
+            Delete operation
+            </summary>
+        </member>
+        <member name="F:Milvasoft.Helpers.Enums.CrudOperation.GetById">
+            <summary>
+            GetById operation
+            </summary>
+        </member>
+        <member name="F:Milvasoft.Helpers.Enums.CrudOperation.GetAll">
+            <summary>
+            GetAll operation
+            </summary>
+        </member>
+        <member name="F:Milvasoft.Helpers.Enums.CrudOperation.Filtering">
+            <summary>
+            Filtering operation
+            </summary>
+        </member>
+        <member name="F:Milvasoft.Helpers.Enums.CrudOperation.Specific">
+            <summary>
+            Specific operation
+            </summary>
         </member>
         <member name="T:Milvasoft.Helpers.Enums.MailSubject">
             <summary>
@@ -1844,6 +1783,11 @@
         <member name="F:Milvasoft.Helpers.Enums.MailSubject.ShutDown">
             <summary>
             The enum that should be sent for hack warning.
+            </summary>
+        </member>
+        <member name="F:Milvasoft.Helpers.Enums.MailSubject.Information">
+            <summary>
+            The enum that should be sent for information.
             </summary>
         </member>
         <member name="T:Milvasoft.Helpers.Exceptions.AddingNewEntityWithExistsIdException">
@@ -1872,7 +1816,7 @@
         </member>
         <member name="T:Milvasoft.Helpers.Exceptions.CannotFindEntityException">
             <summary>
-            <para><b>EN: </b>The exception that is thrown when attempt to search for an entity not found in the Repository.</para>
+            The exception that is thrown when attempt to search for an entity not found in the Repository.
             </summary>
         </member>
         <member name="M:Milvasoft.Helpers.Exceptions.CannotFindEntityException.#ctor(Microsoft.Extensions.Localization.IStringLocalizer)">
@@ -2175,7 +2119,7 @@
         </member>
         <member name="M:Milvasoft.Helpers.Exceptions.InvalidNumericValueException.#ctor(Microsoft.Extensions.Localization.IStringLocalizer)">
             <summary>
-            <para><b>EN: </b>Initializes a new instance of the <see cref="T:Milvasoft.Helpers.Exceptions.InvalidNumericValueException"/> class.</para>
+            Initializes a new instance of the <see cref="T:Milvasoft.Helpers.Exceptions.InvalidNumericValueException"/> class.
             </summary>
             <param name="localizer"></param>
         </member>
@@ -2576,6 +2520,11 @@
             <param name="customMessage"></param>
             <param name="innerException"></param>
         </member>
+        <member name="T:Milvasoft.Helpers.Extensions.Expressions">
+            <summary>
+            Expression extensions.
+            </summary>
+        </member>
         <member name="M:Milvasoft.Helpers.Extensions.Expressions.Append``1(System.Linq.Expressions.Expression{System.Func{``0,System.Boolean}},System.Linq.Expressions.Expression{System.Func{``0,System.Boolean}},System.Linq.Expressions.ExpressionType)">
             <summary>
             Appends <paramref name="right"/> to <paramref name="left"/>.
@@ -2606,8 +2555,7 @@
         </member>
         <member name="M:Milvasoft.Helpers.Extensions.Expressions.GetPropertyInfo``2(System.Linq.Expressions.Expression{System.Func{``0,``1}})">
             <summary>
-            <para><b>EN: </b>Determines the right casting and pets property from expression with this right casting.</para>
-            <para><b>TR: </b>Bu doğru döküm ile ifadeden doğru döküm ve evcil hayvan özelliğini belirler.</para>
+            Determines the right casting and pets property from expression with this right casting.
             </summary>
             <typeparam name="T"></typeparam>
             <typeparam name="TPropertyType"></typeparam>
@@ -2616,8 +2564,7 @@
         </member>
         <member name="M:Milvasoft.Helpers.Extensions.Expressions.GetPropertyName``2(System.Linq.Expressions.Expression{System.Func{``0,``1}})">
             <summary>
-            <para><b>EN: </b>Determines the right casting and pets property name from expression with this right casting.</para>
-            <para><b>TR: </b>Bu doğru döküm ile ifadeden doğru döküm ve evcil hayvan özellik adını belirler.</para>
+            Determines the right casting and pets property name from expression with this right casting.
             </summary>
             <typeparam name="T"></typeparam>
             <typeparam name="TPropertyType"></typeparam>
@@ -2626,8 +2573,72 @@
         </member>
         <member name="M:Milvasoft.Helpers.Extensions.GenericCollection.IsNullOrEmpty(System.Collections.IEnumerable)">
             <summary>
-            <para><b>EN: </b>Checks whether or not collection is null or empty. Assumes collection can be safely enumerated multiple times.</para>
-            <para><b>TR: </b>Koleksiyonun boş veya boş olup olmadığını denetler. Koleksiyonun birden çok kez güvenli bir şekilde numaralandırılabileceğini varsayar.</para>
+            Checks whether or not collection is null or empty. Assumes collection can be safely enumerated multiple times.
+            </summary>
+        </member>
+        <member name="M:Milvasoft.Helpers.Extensions.GenericCollection.PropertyExists``1(System.Linq.IQueryable{``0},System.String)">
+            <summary>
+            Checks whether property exists.
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="source"></param>
+            <param name="propertyName"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.Extensions.GenericCollection.OrderByProperty``1(System.Linq.IQueryable{``0},System.String)">
+            <summary>
+            Order <paramref name="source"/> by <paramref name="propertyName"/>
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="source"></param>
+            <param name="propertyName"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.Extensions.GenericCollection.OrderByPropertyDescending``1(System.Linq.IQueryable{``0},System.String)">
+            <summary>
+            Order by descending <paramref name="source"/>, by <paramref name="propertyName"/>
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="source"></param>
+            <param name="propertyName"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Milvasoft.Helpers.Extensions.Strings">
+            <summary>
+            String extensions.
+            </summary>
+        </member>
+        <member name="M:Milvasoft.Helpers.Extensions.Strings.ToUpperFirst(System.String)">
+            <summary>
+            Uppercases the first letter of the word.
+            </summary>
+            <param name="str"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.Extensions.Strings.ToUpperInVariantFirst(System.String)">
+            <summary>
+            Uppercases the first letter of the word using the casing rules of the invariant culture.
+            </summary>
+            <param name="str"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.Extensions.Strings.ToLowerFirst(System.String)">
+            <summary>
+            Lowercases the first letter of the word.
+            </summary>
+            <param name="str"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.Extensions.Strings.ToLowerInVariantFirst(System.String)">
+            <summary>
+            Lowercases the first letter of the word using the casing rules of the invariant culture.
+            </summary>
+            <param name="str"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Milvasoft.Helpers.Filter">
+            <summary>
+            Helper for filtering.
             </summary>
         </member>
         <member name="M:Milvasoft.Helpers.Filter.FilterByDate``1(System.Collections.Generic.IEnumerable{``0},System.Nullable{System.DateTime},System.Nullable{System.DateTime},System.Linq.Expressions.Expression{System.Func{``0,System.Nullable{System.DateTime}}})">
@@ -2730,6 +2741,11 @@
             <typeparam name="TKey"></typeparam>
             <typeparam name="TLoginResultDTO"></typeparam>
             <typeparam name="TSignUpDTO"></typeparam>
+        </member>
+        <member name="P:Milvasoft.Helpers.Identity.Abstract.IIdentityOperations`7.UseWhiteList">
+            <summary>
+            Use white list when token based authentication for extra security. If its true performs operations on <see cref="P:Milvasoft.Helpers.Identity.Concrete.SignedInUsers.SignedInUserTokens"/>.
+            </summary>
         </member>
         <member name="P:Milvasoft.Helpers.Identity.Abstract.IIdentityOperations`7.LoginProvider">
             <summary>
@@ -2931,6 +2947,13 @@
             <typeparam name="TKey"></typeparam>
             <typeparam name="TLoginResultDTO"></typeparam>
         </member>
+        <member name="P:Milvasoft.Helpers.Identity.Concrete.IdentityOperations`7._useWhiteList">
+            <summary>
+            Gets or sets GetSoftDeletedEntities. Default is false.
+            If value is true, all methods returns all entities.
+            If value is false, all methods returns entities which only "IsDeleted" property's value is false.
+            </summary>
+        </member>
         <member name="P:Milvasoft.Helpers.Identity.Concrete.IdentityOperations`7.LoginProvider">
             <summary>
             The authentication scheme for the provider the token is associated with.
@@ -2943,13 +2966,11 @@
         </member>
         <member name="M:Milvasoft.Helpers.Identity.Concrete.IdentityOperations`7.#ctor(`0,Microsoft.AspNetCore.Identity.SignInManager{`3},Milvasoft.Helpers.Identity.Concrete.ITokenManagement,Milvasoft.Helpers.DataAccess.Abstract.IContextRepository{`1},`2,Microsoft.AspNetCore.Http.IHttpContextAccessor)">
             <summary>
-            <para><b>EN: </b> Performs constructor injection for repository interfaces used in this service.</para>
-            <para><b>TR: </b> Bu hizmette kullanılan depo arabirimleri için yapıcı enjeksiyonu gerçekleştirir.</para>
+            Performs constructor injection for repository interfaces used in this service.
             </summary>
             <param name="userManager"></param>
             <param name="signInManager"></param>
             <param name="tokenManagement"></param>
-            <param name="httpClient"></param>
             <param name="contextRepository"></param>
             <param name="localizer"></param>
             <param name="httpContextAccessor"></param>
@@ -3330,25 +3351,22 @@
         </member>
         <member name="T:Milvasoft.Helpers.Models.InvalidString">
             <summary>
-            <para><b>EN: </b> Invalid strings for prevent hacking or someting ;)  </para>
-            <para><b>TR: </b> Hacking veya başka bir şeyi önlemek için geçersiz string değerler ;) </para>
+            Invalid strings for prevent hacking or someting ;)
             </summary>
         </member>
         <member name="P:Milvasoft.Helpers.Models.InvalidString.Name">
             <summary>
-             <para><b>EN: </b> Name of invalid string.  </para>
-             <para><b>TR: </b> Geçersiz string'in adı. </para>
+            Name of invalid string.
             </summary>
         </member>
         <member name="P:Milvasoft.Helpers.Models.InvalidString.Values">
             <summary>
-            <para><b>EN: </b> Invalid values.  </para>
-            <para><b>TR: </b> Geçersiz değerler. </para>
+            Invalid values.
             </summary>
         </member>
         <member name="T:Milvasoft.Helpers.Models.PaginationDTO`1">
             <summary>
-            <para> Stores pagination information. </para>
+            Stores pagination information.
             </summary>
         </member>
         <member name="P:Milvasoft.Helpers.Models.PaginationDTO`1.DTOList">
@@ -3368,8 +3386,7 @@
         </member>
         <member name="T:Milvasoft.Helpers.Models.Response.BaseResponse">
             <summary>
-            <para><b>EN: </b>Base response model for API responses.</para>
-            <para><b>TR: </b>API yanıtları için temel yanıt modeli.</para>
+            Base response model for API responses.
             </summary>
         </member>
         <member name="P:Milvasoft.Helpers.Models.Response.BaseResponse.Success">
@@ -3382,91 +3399,60 @@
         </member>
         <member name="P:Milvasoft.Helpers.Models.Response.BaseResponse.Message">
             <summary>
-            <para> Default: İşlem başarılı!! </para>
+            <para> Default: Process Successful! </para>
             <para> Message of response. </para>
             </summary>
         </member>
         <member name="P:Milvasoft.Helpers.Models.Response.BaseResponse.StatusCode">
             <summary>
-            <para> Default = <see cref="F:Milvasoft.Helpers.MilvasoftStatusCodes.Status200OK"/> </para>
+            <para> Default = <see cref="F:Milvasoft.Helpers.Utils.MilvasoftStatusCodes.Status200OK"/> </para>
             <para> Http status code of response. </para>
             </summary>
         </member>
         <member name="T:Milvasoft.Helpers.Models.Response.ExceptionResponse">
             <summary>
-            <para><b>EN: </b>Model of Exception.</para>
-            <para><b>TR: </b>İstisna Modeli.</para>
+            Model of Exception.
             </summary>
         </member>
         <member name="P:Milvasoft.Helpers.Models.Response.ExceptionResponse.Result">
             <summary>
-            <para><b>EN: </b>Result of request.</para>
-            <para><b>TR: </b>Talebin sonucu.</para>
+            Result of request.
             </summary>
         </member>
         <member name="P:Milvasoft.Helpers.Models.Response.ExceptionResponse.ErrorCodes">
             <summary>
-            <para><b>EN: </b>Error codes of request, if exists.</para>
-            <para><b>TR: </b>Varsa, isteğin hata kodları.</para>
+            Error codes of request, if exists.
             </summary>
         </member>
-        <member name="T:Milvasoft.Helpers.Models.Response.MultipleObjectResponse`1">
+        <member name="T:Milvasoft.Helpers.Models.Response.ObjectResponse`1">
             <summary>
-            <para><b>EN: </b>Response model for requests that return a multiple object(List).</para>
-            <para><b>TR: </b>Birden çok nesne (Liste) döndüren istekler için yanıt modeli.</para>
+            Response model for requests that return a object.
             </summary>
             <typeparam name="TEntity"></typeparam>
         </member>
-        <member name="P:Milvasoft.Helpers.Models.Response.MultipleObjectResponse`1.Result">
+        <member name="P:Milvasoft.Helpers.Models.Response.ObjectResponse`1.Result">
             <summary>
-            <para><b>EN: </b>Result list. </para>
-            <para><b>TR: </b>Sonuç listesi.</para>
-            </summary>
-        </member>
-        <member name="T:Milvasoft.Helpers.Models.Response.SingleObjectResponse`1">
-            <summary>
-            <para><b>EN: </b> Response model for requests that return a single object.</para>
-            <para><b>TR: </b>Tek bir nesne döndüren istekler için yanıt modeli.</para>
-            </summary>
-            <typeparam name="TEntity"></typeparam>
-        </member>
-        <member name="P:Milvasoft.Helpers.Models.Response.SingleObjectResponse`1.Result">
-            <summary>
-            <para><b>EN: </b>Result object.</para>
-            <para><b>TR: </b>Sonuç nesnesi.</para>
+            Result object.
             </summary>
         </member>
         <member name="T:Milvasoft.Helpers.Models.Response.ValidationError">
             <summary>
-            <para><b>EN: </b> Validation error model for property.</para>
-            <para><b>TR: </b>Mülk için doğrulama hata modeli.</para>
+            Validation error model for property.
             </summary>
         </member>
         <member name="P:Milvasoft.Helpers.Models.Response.ValidationError.ValidationFieldName">
             <value>
-            <para><b>EN: </b>Property where validation error occurred. </para>
-            <para><b>TR: </b>Doğrulama hatasının oluştuğu mülk.</para>
+            Property where validation error occurred.
             </value>
         </member>
         <member name="P:Milvasoft.Helpers.Models.Response.ValidationError.ErrorMessageList">
             <value>
-            <para><b>EN: </b>Property's validation error messages</para>
-            <para><b>TR: </b>Mülkün doğrulama hata mesajları</para>
+            Property's validation error messages.
             </value>
         </member>
-        <member name="T:Milvasoft.Helpers.Models.Response.ValidationResponse">
+        <member name="T:Milvasoft.Helpers.NetworkUtil">
             <summary>
-            <para> Response model for requests that return a validation error.</para>
-            </summary>
-        </member>
-        <member name="P:Milvasoft.Helpers.Models.Response.ValidationResponse.Result">
-            <summary>
-            <para> Result of request </para>
-            </summary>
-        </member>
-        <member name="P:Milvasoft.Helpers.Models.Response.ValidationResponse.ErrorCodes">
-            <summary>
-            <para> Error codes of request, if exists. </para>
+            Provides access network statistics.
             </summary>
         </member>
         <member name="M:Milvasoft.Helpers.NetworkUtil.GetIPAddressesAsync">
@@ -3601,64 +3587,6 @@
             <param name="headers"></param>
             <returns> HttpRequestMessage </returns>
         </member>
-        <member name="M:Milvasoft.Helpers.Request.SendRequestDeserializeSingle``1(System.Net.Http.HttpClient,System.Net.Http.HttpRequestMessage)">
-            <summary>
-            Sends request by <paramref name="httpRequestMessage"/>.
-            <para><b> If you want to use the "ErrorCodes" property, change the return value to (ExceptionResponse) where necessary.</b></para> 
-            </summary>
-            <typeparam name="T"></typeparam>
-            <param name="httpRequestMessage"></param>
-            <param name="httpClient"></param>
-            <returns> ObjectResponse </returns>
-        </member>
-        <member name="M:Milvasoft.Helpers.Request.SendRequestDeserializeMultiple``1(System.Net.Http.HttpClient,System.Net.Http.HttpRequestMessage)">
-            <summary>
-            Sends request by <paramref name="httpRequestMessage"/>.
-            </summary>
-            <typeparam name="T"></typeparam>
-            <param name="httpRequestMessage"></param>
-            <param name="httpClient"></param>
-            <returns> ObjectResponse </returns>
-        </member>
-        <member name="M:Milvasoft.Helpers.Request.SendRequestDeserialize``1(System.Net.Http.HttpClient,System.Net.Http.HttpRequestMessage)">
-            <summary>
-            Sends request by <paramref name="httpRequestMessage"/>.
-            </summary>
-            <param name="httpRequestMessage"></param>
-            <param name="httpClient"></param>
-            <typeparam name="TReturn"></typeparam>
-            <returns> <typeparamref name="TReturn"/> </returns>
-        </member>
-        <member name="M:Milvasoft.Helpers.Request.SendRequestDeserializeSingle``2(System.Net.Http.HttpClient,System.Net.Http.HttpRequestMessage)">
-            <summary>
-            Sends request by <paramref name="httpRequestMessage"/>. Gets response as => <see cref="!:SingleObjectResponse&lt;CommunicationModel&lt;&lt;T,TKey&gt;&gt;&gt;"/>
-            <para><b> If you want to use the "ErrorCodes" property, change the return value to (ExceptionResponse) where necessary.</b></para> 
-            </summary>
-            <typeparam name="T"></typeparam>
-            <typeparam name="TKey"></typeparam>
-            <param name="httpRequestMessage"></param>
-            <param name="httpClient"></param>
-            <returns> ObjectResponse </returns>
-        </member>
-        <member name="M:Milvasoft.Helpers.Request.SendRequestDeserializeMultiple``2(System.Net.Http.HttpClient,System.Net.Http.HttpRequestMessage)">
-            <summary>
-            Sends request by <paramref name="httpRequestMessage"/>. Gets response as => <see cref="!:MultipleObjectResponse&lt;CommunicationModel&lt;&lt;T,TKey&gt;&gt;&gt;"/>
-            </summary> 
-            <typeparam name="T"></typeparam>
-            <typeparam name="TKey"></typeparam>
-            <param name="httpRequestMessage"></param>
-            <param name="httpClient"></param>
-            <returns> ObjectResponse </returns>
-        </member>
-        <member name="M:Milvasoft.Helpers.Request.PropertyExists(Newtonsoft.Json.Linq.JObject,System.String)">
-            <summary>
-            Checks <paramref name="propertyName"/> exists in <paramref name="jObject"/>.
-            </summary>
-            <typeparam name="T"></typeparam>
-            <param name="propertyName"></param>
-            <param name="jObject"></param>
-            <returns></returns>
-        </member>
         <member name="M:Milvasoft.Helpers.Request.CreateRequestUrl(System.String,System.String,System.String,System.String,System.String,System.String)">
             <summary>
             <b>Makes reques url from requested params.</b> <para> For more detailed information of URL Sections, please refer to the remarks section where the method is described.</para>
@@ -3666,7 +3594,7 @@
             
             Remarks:
             
-              https: //www.milvasoft.com:444/api/v1/products/product?id=1
+              https://www.milvasoft.com:444/api/v1/products/product?id=1
               _____   ________________  ___ _______________________  ____  
                 |             |          |              |              |   
               protocol        |          |           pathName        query 
@@ -3692,7 +3620,7 @@
             
             Remarks:
             
-              https: //www.milvasoft.com:444/api/v1/products/product?id=1
+              https://www.milvasoft.com:444/api/v1/products/product?id=1
               _________________________  ___ _______________________  ____  
                            |              |              |              |   
                         address           |           pathName        query 
@@ -3709,6 +3637,64 @@
             <param name="hash"></param>
             <returns></returns>
         </member>
+        <member name="M:Milvasoft.Helpers.Request.SendRequestDeserializeSingle``1(System.Net.Http.HttpClient,System.Net.Http.HttpRequestMessage)">
+            <summary>
+            Sends request by <paramref name="httpRequestMessage"/>.
+            <para><b> If you want to use the "ErrorCodes" property, change the return value to (ExceptionResponse) where necessary.</b></para> 
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="httpRequestMessage"></param>
+            <param name="httpClient"></param>
+            <returns> ObjectResponse </returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.Request.SendRequestDeserializeMultiple``1(System.Net.Http.HttpClient,System.Net.Http.HttpRequestMessage)">
+            <summary>
+            Sends request by <paramref name="httpRequestMessage"/>. Gets response as => <see cref="!:ObjectResponse&lt;IEnumerable&lt;T&gt;&gt;"/>
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="httpRequestMessage"></param>
+            <param name="httpClient"></param>
+            <returns> ObjectResponse </returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.Request.SendRequestDeserialize``1(System.Net.Http.HttpClient,System.Net.Http.HttpRequestMessage)">
+            <summary>
+            Sends request by <paramref name="httpRequestMessage"/>.
+            </summary>
+            <param name="httpRequestMessage"></param>
+            <param name="httpClient"></param>
+            <typeparam name="TReturn"></typeparam>
+            <returns> <typeparamref name="TReturn"/> </returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.Request.SendRequestDeserializeSingle``2(System.Net.Http.HttpClient,System.Net.Http.HttpRequestMessage)">
+            <summary>
+            Sends request by <paramref name="httpRequestMessage"/>. Gets response as => <see cref="!:ObjectResponse&lt;CommunicationModel&lt;&lt;IEnumerable&lt;T&gt;,TKey&gt;&gt;&gt;"/>
+            <para><b> If you want to use the "ErrorCodes" property, change the return value to (ExceptionResponse) where necessary.</b></para> 
+            </summary>
+            <typeparam name="T"></typeparam>
+            <typeparam name="TKey"></typeparam>
+            <param name="httpRequestMessage"></param>
+            <param name="httpClient"></param>
+            <returns> ObjectResponse </returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.Request.SendRequestDeserializeMultiple``2(System.Net.Http.HttpClient,System.Net.Http.HttpRequestMessage)">
+            <summary>
+            Sends request by <paramref name="httpRequestMessage"/>. Gets response as => <see cref="!:ObjectResponse&lt;CommunicationModel&lt;&lt;T,TKey&gt;&gt;&gt;"/>
+            </summary> 
+            <typeparam name="T"></typeparam>
+            <typeparam name="TKey"></typeparam>
+            <param name="httpRequestMessage"></param>
+            <param name="httpClient"></param>
+            <returns> ObjectResponse </returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.Request.PropertyExists(Newtonsoft.Json.Linq.JObject,System.String)">
+            <summary>
+            Checks <paramref name="propertyName"/> exists in <paramref name="jObject"/>.
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="propertyName"></param>
+            <param name="jObject"></param>
+            <returns></returns>
+        </member>
         <member name="M:Milvasoft.Helpers.Request.IsSuccessStatusCode(Milvasoft.Helpers.Models.Response.BaseResponse)">
             <summary>
             Determines <paramref name="baseResponse"/>'s status code success or fail.
@@ -3719,79 +3705,59 @@
         <member name="T:Milvasoft.Helpers.Response">
             <summary>
             <para>Helper class to generate the same type of response.</para>
-            <para>All methods return <see cref="T:Milvasoft.Helpers.Models.Response.BaseResponse"/> type in ActionResult. Base response can be <see cref="T:Milvasoft.Helpers.Models.Response.SingleObjectResponse`1" /> or <see cref="T:Milvasoft.Helpers.Models.Response.MultipleObjectResponse`1"/></para>
+            <para>All methods return <see cref="T:Milvasoft.Helpers.Models.Response.BaseResponse"/> type in ActionResult. Base response can be <see cref="T:Milvasoft.Helpers.Models.Response.ObjectResponse`1" /> or <see cref="T:Milvasoft.Helpers.Models.Response.ObjectResponse`1"/></para>
             <para>All methods return HTTP status code 200 OK.</para>
             </summary>
         </member>
-        <member name="F:Milvasoft.Helpers.Response._defaultErrorMessage">
+        <member name="M:Milvasoft.Helpers.Response.GetPaginationResponse``1(Milvasoft.Helpers.Models.PaginationDTO{``0},System.String,System.String)">
             <summary>
-            Default error message : "An error occured while processing"
+            <para> Return <paramref name="paginationDTO"/> in <see cref="T:Milvasoft.Helpers.Models.Response.ObjectResponse`1"/>. </para>
+            <para> If <paramref name="paginationDTO"/>.DTOList isn't null or empty, sets the <see cref="T:Milvasoft.Helpers.Models.Response.ObjectResponse`1"/>.Message to <paramref name="successMessage"/>. </para>
+            <para> Otherwise if <paramref name="errorMessage"/> is null sets the <see cref="T:Milvasoft.Helpers.Models.Response.ObjectResponse`1"/>.Message to <b><see cref="F:Milvasoft.Helpers.Utils.LocalizerKeys.DefaultErrorMessage"/></b>. </para>
+            <para> Otherwise sets the <see cref="T:Milvasoft.Helpers.Models.Response.ObjectResponse`1"/>.Message to <paramref name="errorMessage"/>. </para>
+            <para> Also in this conditions sets the <see cref="T:Milvasoft.Helpers.Models.Response.ObjectResponse`1"/>.StatusCode to <see cref="F:Milvasoft.Helpers.Utils.MilvasoftStatusCodes.Status204NoContent"/>
+                    and <see cref="T:Milvasoft.Helpers.Models.Response.ObjectResponse`1"/>.Success to true. Reason to be considered the <see cref="T:Milvasoft.Helpers.Models.Response.ObjectResponse`1"/>.Success true is request was successful.  </para>
             </summary>
+            
+            <param name="paginationDTO"></param>
+            <param name="successMessage"></param>
+            <param name="errorMessage"></param>
+            <returns>  <see cref="T:Milvasoft.Helpers.Models.Response.ObjectResponse`1"/> in 200 OK <see cref="T:Microsoft.AspNetCore.Mvc.ActionResult"/> </returns>
         </member>
-        <member name="M:Milvasoft.Helpers.Response.ReturnArrayResponseForGetAll``1(System.Collections.Generic.List{``0},System.String,System.String)">
+        <member name="M:Milvasoft.Helpers.Response.GetObjectResponse``1(System.Collections.Generic.List{``0},System.String,System.String)">
             <summary>
-            <para> Return <see cref="T:Milvasoft.Helpers.Models.Response.MultipleObjectResponse`1"/> in <see cref="T:Microsoft.AspNetCore.Mvc.ActionResult"/>. </para>
-            <para> If <paramref name="contentList"/> isn't null or empty, sets the <see cref="T:Milvasoft.Helpers.Models.Response.MultipleObjectResponse`1"/>.Message to <paramref name="successMessage"/>. </para>
-            <para> Otherwise if <paramref name="errorMessage"/> is null sets the <see cref="T:Milvasoft.Helpers.Models.Response.MultipleObjectResponse`1"/>.Message to <b><see cref="F:Milvasoft.Helpers.Response._defaultErrorMessage"/></b>. </para>
-            <para> Otherwise sets the <see cref="T:Milvasoft.Helpers.Models.Response.MultipleObjectResponse`1"/>.Message to <paramref name="errorMessage"/>. </para>
-            <para> Also in this conditions sets the <see cref="T:Milvasoft.Helpers.Models.Response.MultipleObjectResponse`1"/>.StatusCode to <see cref="F:Milvasoft.Helpers.MilvasoftStatusCodes.Status204NoContent"/>
-                    and <see cref="T:Milvasoft.Helpers.Models.Response.MultipleObjectResponse`1"/>.Success to true. Reason to be considered the <see cref="T:Milvasoft.Helpers.Models.Response.MultipleObjectResponse`1"/>.Success true is request was successful.  </para>
+            <para> Return <see cref="T:Milvasoft.Helpers.Models.Response.ObjectResponse`1"/> in <see cref="T:Microsoft.AspNetCore.Mvc.ActionResult"/>. </para>
+            <para> If <paramref name="contentList"/> isn't null or empty, sets the <see cref="T:Milvasoft.Helpers.Models.Response.ObjectResponse`1"/>.Message to <paramref name="successMessage"/>. </para>
+            <para> Otherwise if <paramref name="errorMessage"/> is null sets the <see cref="T:Milvasoft.Helpers.Models.Response.ObjectResponse`1"/>.Message to <b><see cref="F:Milvasoft.Helpers.Utils.LocalizerKeys.DefaultErrorMessage"/></b>. </para>
+            <para> Otherwise sets the <see cref="T:Milvasoft.Helpers.Models.Response.ObjectResponse`1"/>.Message to <paramref name="errorMessage"/>. </para>
+            <para> Also in this conditions sets the <see cref="T:Milvasoft.Helpers.Models.Response.ObjectResponse`1"/>.StatusCode to <see cref="F:Milvasoft.Helpers.Utils.MilvasoftStatusCodes.Status204NoContent"/>
+                    and <see cref="T:Milvasoft.Helpers.Models.Response.ObjectResponse`1"/>.Success to true. Reason to be considered the <see cref="T:Milvasoft.Helpers.Models.Response.ObjectResponse`1"/>.Success true is request was successful.  </para>
             </summary>
             
             <param name="contentList"></param>
             <param name="successMessage"></param>
             <param name="errorMessage"></param>
-            <returns> <see cref="T:Milvasoft.Helpers.Models.Response.MultipleObjectResponse`1"/> in 200 OK <see cref="T:Microsoft.AspNetCore.Mvc.ActionResult"/> </returns>
+            <returns> <see cref="T:Milvasoft.Helpers.Models.Response.ObjectResponse`1"/> in 200 OK <see cref="T:Microsoft.AspNetCore.Mvc.ActionResult"/> </returns>
         </member>
-        <member name="M:Milvasoft.Helpers.Response.ReturnSingleObjectResponseForGetById``1(``0,System.String,System.String)">
+        <member name="M:Milvasoft.Helpers.Response.GetObjectResponse``1(``0,System.String,System.String)">
             <summary>
-            <para> Return <see cref="T:Milvasoft.Helpers.Models.Response.SingleObjectResponse`1"/> in <see cref="T:Microsoft.AspNetCore.Mvc.ActionResult"/>. </para>
-            <para> If <paramref name="content"/> isn't null, sets the <see cref="T:Milvasoft.Helpers.Models.Response.SingleObjectResponse`1"/>.Message to <paramref name="successMessage"/>. </para>
-            <para> Otherwise if <paramref name="errorMessage"/> is null sets the <see cref="T:Milvasoft.Helpers.Models.Response.SingleObjectResponse`1"/>.Message to <b><see cref="F:Milvasoft.Helpers.Response._defaultErrorMessage"/></b>. </para>
-            <para> Otherwise sets the <see cref="T:Milvasoft.Helpers.Models.Response.SingleObjectResponse`1"/>.Message to <paramref name="errorMessage"/>. </para>
-            <para> Also in this conditions sets the <see cref="T:Milvasoft.Helpers.Models.Response.SingleObjectResponse`1"/>.StatusCode to <see cref="F:Milvasoft.Helpers.MilvasoftStatusCodes.Status204NoContent"/>
-                    and <see cref="T:Milvasoft.Helpers.Models.Response.SingleObjectResponse`1"/>.Success to true. Reason to be considered the <see cref="T:Milvasoft.Helpers.Models.Response.SingleObjectResponse`1"/>.Success true is request was successful.  </para>
+            <para> Return <see cref="T:Milvasoft.Helpers.Models.Response.ObjectResponse`1"/> in <see cref="T:Microsoft.AspNetCore.Mvc.ActionResult"/>. </para>
+            <para> If <paramref name="content"/> isn't null, sets the <see cref="T:Milvasoft.Helpers.Models.Response.ObjectResponse`1"/>.Message to <paramref name="successMessage"/>. </para>
+            <para> Otherwise if <paramref name="errorMessage"/> is null sets the <see cref="T:Milvasoft.Helpers.Models.Response.ObjectResponse`1"/>.Message to <b><see cref="F:Milvasoft.Helpers.Utils.LocalizerKeys.DefaultErrorMessage"/></b>. </para>
+            <para> Otherwise sets the <see cref="T:Milvasoft.Helpers.Models.Response.ObjectResponse`1"/>.Message to <paramref name="errorMessage"/>. </para>
+            <para> Also in this conditions sets the <see cref="T:Milvasoft.Helpers.Models.Response.ObjectResponse`1"/>.StatusCode to <see cref="F:Milvasoft.Helpers.Utils.MilvasoftStatusCodes.Status204NoContent"/>
+                    and <see cref="T:Milvasoft.Helpers.Models.Response.ObjectResponse`1"/>.Success to true. Reason to be considered the <see cref="T:Milvasoft.Helpers.Models.Response.ObjectResponse`1"/>.Success true is request was successful.  </para>
             </summary>
             
             <param name="content"></param>
             <param name="successMessage"></param>
             <param name="errorMessage"></param>
-            <returns> <see cref="T:Milvasoft.Helpers.Models.Response.SingleObjectResponse`1"/> in 200 OK <see cref="T:Microsoft.AspNetCore.Mvc.ActionResult"/> </returns>
+            <returns> <see cref="T:Milvasoft.Helpers.Models.Response.ObjectResponse`1"/> in 200 OK <see cref="T:Microsoft.AspNetCore.Mvc.ActionResult"/> </returns>
         </member>
-        <member name="M:Milvasoft.Helpers.Response.ReturnReportResponse``1(Milvasoft.Helpers.Models.PaginationDTO{``0},System.String,System.String)">
+        <member name="M:Milvasoft.Helpers.Response.GetObjectResponse``2(System.Runtime.CompilerServices.ConfiguredTaskAwaitable,System.Collections.Generic.IEnumerable{``1},System.String,System.String)">
             <summary>
-            <para> Return <paramref name="paginationDTO"/> in <see cref="T:Milvasoft.Helpers.Models.Response.SingleObjectResponse`1"/>. </para>
-            <para> If <paramref name="paginationDTO"/>.DTOList isn't null or empty, sets the <see cref="T:Milvasoft.Helpers.Models.Response.SingleObjectResponse`1"/>.Message to <paramref name="successMessage"/>. </para>
-            <para> Otherwise if <paramref name="errorMessage"/> is null sets the <see cref="T:Milvasoft.Helpers.Models.Response.SingleObjectResponse`1"/>.Message to <b><see cref="F:Milvasoft.Helpers.Response._defaultErrorMessage"/></b>. </para>
-            <para> Otherwise sets the <see cref="T:Milvasoft.Helpers.Models.Response.SingleObjectResponse`1"/>.Message to <paramref name="errorMessage"/>. </para>
-            <para> Also in this conditions sets the <see cref="T:Milvasoft.Helpers.Models.Response.SingleObjectResponse`1"/>.StatusCode to <see cref="F:Milvasoft.Helpers.MilvasoftStatusCodes.Status204NoContent"/>
-                    and <see cref="T:Milvasoft.Helpers.Models.Response.SingleObjectResponse`1"/>.Success to true. Reason to be considered the <see cref="T:Milvasoft.Helpers.Models.Response.SingleObjectResponse`1"/>.Success true is request was successful.  </para>
-            </summary>
-            
-            <param name="paginationDTO"></param>
-            <param name="successMessage"></param>
-            <param name="errorMessage"></param>
-            <returns>  <see cref="T:Milvasoft.Helpers.Models.Response.SingleObjectResponse`1"/> in 200 OK <see cref="T:Microsoft.AspNetCore.Mvc.ActionResult"/> </returns>
-        </member>
-        <member name="M:Milvasoft.Helpers.Response.ReturnInstantReportResponse``1(Milvasoft.Helpers.Models.PaginationDTO{``0},System.String,System.String)">
-            <summary>
-            <para> Return <paramref name="paginationDTO"/> in <see cref="T:Milvasoft.Helpers.Models.Response.SingleObjectResponse`1"/>. </para>
-            <para> If <paramref name="paginationDTO"/>.DTOList isn't null or empty, sets the <see cref="T:Milvasoft.Helpers.Models.Response.SingleObjectResponse`1"/>.Message to <paramref name="successMessage"/>. </para>
-            <para> Otherwise if <paramref name="errorMessage"/> is null sets the <see cref="T:Milvasoft.Helpers.Models.Response.SingleObjectResponse`1"/>.Message to <b><see cref="F:Milvasoft.Helpers.Response._defaultErrorMessage"/></b>. </para>
-            <para> Otherwise sets the <see cref="T:Milvasoft.Helpers.Models.Response.SingleObjectResponse`1"/>.Message to <paramref name="errorMessage"/>. </para>
-            <para> Also in this conditions sets the <see cref="T:Milvasoft.Helpers.Models.Response.SingleObjectResponse`1"/>.StatusCode to <see cref="F:Milvasoft.Helpers.MilvasoftStatusCodes.Status204NoContent"/>
-                    and <see cref="T:Milvasoft.Helpers.Models.Response.SingleObjectResponse`1"/>.Success to true. Reason to be considered the <see cref="T:Milvasoft.Helpers.Models.Response.SingleObjectResponse`1"/>.Success true is request was successful.  </para>
-            </summary>
-            
-            <param name="paginationDTO"></param>
-            <param name="successMessage"></param>
-            <param name="errorMessage"></param>
-            <returns> <see cref="T:Milvasoft.Helpers.Models.Response.SingleObjectResponse`1"/> in 200 OK <see cref="T:Microsoft.AspNetCore.Mvc.ActionResult"/> </returns>
-        </member>
-        <member name="M:Milvasoft.Helpers.Response.ReturnArrayResponseForDeleteAsync``2(System.Runtime.CompilerServices.ConfiguredTaskAwaitable,System.Collections.Generic.IEnumerable{``1},System.String,System.String)">
-            <summary>
-            <para> Run the <paramref name="asyncTask"/> then return <see cref="T:Milvasoft.Helpers.Models.Response.MultipleObjectResponse`1"/>. </para>
-            <para> If <paramref name="asyncTask"/> is success sets the <paramref name="successMessage"/> to <see cref="T:Milvasoft.Helpers.Models.Response.MultipleObjectResponse`1"/>.Message.
+            <para> Run the <paramref name="asyncTask"/> then return <see cref="T:Milvasoft.Helpers.Models.Response.ObjectResponse`1"/>. </para>
+            <para> If <paramref name="asyncTask"/> is success sets the <paramref name="successMessage"/> to <see cref="T:Milvasoft.Helpers.Models.Response.ObjectResponse`1"/>.Message.
                    Otherwise you should throw exception and cut the request pipeline in <paramref name="asyncTask"/>. </para>
             </summary>
             
@@ -3799,12 +3765,12 @@
             <param name="idList"></param>
             <param name="successMessage"></param>
             <param name="errorMessage"></param>
-            <returns>  <see cref="T:Milvasoft.Helpers.Models.Response.MultipleObjectResponse`1"/> in 200 OK <see cref="T:Microsoft.AspNetCore.Mvc.ActionResult"/> </returns>
+            <returns>  <see cref="T:Milvasoft.Helpers.Models.Response.ObjectResponse`1"/> in 200 OK <see cref="T:Microsoft.AspNetCore.Mvc.ActionResult"/> </returns>
         </member>
-        <member name="M:Milvasoft.Helpers.Response.ReturnArrayResponseForDeleteAsync``2(System.Runtime.CompilerServices.ConfiguredTaskAwaitable{System.Collections.Generic.IEnumerable{``0}},System.Collections.Generic.IEnumerable{``1},System.String,System.String)">
+        <member name="M:Milvasoft.Helpers.Response.GetObjectResponse``2(System.Runtime.CompilerServices.ConfiguredTaskAwaitable{System.Collections.Generic.IEnumerable{``0}},System.Collections.Generic.IEnumerable{``1},System.String,System.String)">
             <summary>
-            <para> Run the <paramref name="asyncTask"/> then return <see cref="T:Milvasoft.Helpers.Models.Response.MultipleObjectResponse`1"/>. </para>
-            <para> If <paramref name="asyncTask"/> is success sets the <paramref name="successMessage"/> to <see cref="T:Milvasoft.Helpers.Models.Response.MultipleObjectResponse`1"/>.Message.
+            <para> Run the <paramref name="asyncTask"/> then return <see cref="T:Milvasoft.Helpers.Models.Response.ObjectResponse`1"/>. </para>
+            <para> If <paramref name="asyncTask"/> is success sets the <paramref name="successMessage"/> to <see cref="T:Milvasoft.Helpers.Models.Response.ObjectResponse`1"/>.Message.
                    Otherwise you should throw exception and cut the request pipeline in <paramref name="asyncTask"/>. </para>
             </summary>
             
@@ -3812,212 +3778,108 @@
             <param name="idList"></param>
             <param name="successMessage"></param>
             <param name="errorMessage"></param>
-            <returns>  <see cref="T:Milvasoft.Helpers.Models.Response.MultipleObjectResponse`1"/> in 200 OK <see cref="T:Microsoft.AspNetCore.Mvc.ActionResult"/> </returns>
+            <returns>  <see cref="T:Milvasoft.Helpers.Models.Response.ObjectResponse`1"/> in 200 OK <see cref="T:Microsoft.AspNetCore.Mvc.ActionResult"/> </returns>
         </member>
-        <member name="M:Milvasoft.Helpers.Response.ReturnSingleResponseForDeleteAsync``1(System.Runtime.CompilerServices.ConfiguredTaskAwaitable,System.String)">
+        <member name="M:Milvasoft.Helpers.Response.GetObjectResponseAsync``1(System.Runtime.CompilerServices.ConfiguredTaskAwaitable,System.String)">
             <summary>
-            <para> Run the <paramref name="asyncTask"/> then return <see cref="T:Milvasoft.Helpers.Models.Response.SingleObjectResponse`1"/>. </para>
-            <para> If <paramref name="asyncTask"/> is success sets the <paramref name="successMessage"/> to <see cref="T:Milvasoft.Helpers.Models.Response.SingleObjectResponse`1"/>.Message.
+            <para> Run the <paramref name="asyncTask"/> then return <see cref="T:Milvasoft.Helpers.Models.Response.ObjectResponse`1"/>. </para>
+            <para> If <paramref name="asyncTask"/> is success sets the <paramref name="successMessage"/> to <see cref="T:Milvasoft.Helpers.Models.Response.ObjectResponse`1"/>.Message.
                    Otherwise you should throw exception and cut the request pipeline in <paramref name="asyncTask"/>. </para>
             </summary>
             
             <param name="asyncTask"></param>
             <param name="successMessage"></param>
-            <returns>  <see cref="T:Milvasoft.Helpers.Models.Response.SingleObjectResponse`1"/> in 200 OK <see cref="T:Microsoft.AspNetCore.Mvc.ActionResult"/> </returns>
+            <returns>  <see cref="T:Milvasoft.Helpers.Models.Response.ObjectResponse`1"/> in 200 OK <see cref="T:Microsoft.AspNetCore.Mvc.ActionResult"/> </returns>
         </member>
-        <member name="M:Milvasoft.Helpers.Response.ReturnSingleResponseForDeleteAsync``1(System.Runtime.CompilerServices.ConfiguredTaskAwaitable{``0},System.String)">
+        <member name="M:Milvasoft.Helpers.Response.GetObjectResponseAsync``1(System.Runtime.CompilerServices.ConfiguredTaskAwaitable{``0},System.String)">
             <summary>
-            <para> Run the <paramref name="asyncTask"/> then return <see cref="T:Milvasoft.Helpers.Models.Response.SingleObjectResponse`1"/>. </para>
-            <para> If <paramref name="asyncTask"/> is success sets the <paramref name="successMessage"/> to <see cref="T:Milvasoft.Helpers.Models.Response.SingleObjectResponse`1"/>.Message.
+            <para> Run the <paramref name="asyncTask"/> then return <see cref="T:Milvasoft.Helpers.Models.Response.ObjectResponse`1"/>. </para>
+            <para> If <paramref name="asyncTask"/> is success sets the <paramref name="successMessage"/> to <see cref="T:Milvasoft.Helpers.Models.Response.ObjectResponse`1"/>.Message.
                    Otherwise you should throw exception and cut the request pipeline in <paramref name="asyncTask"/>. </para>
             </summary>
             
             <param name="asyncTask"></param>
             <param name="successMessage"></param>
-            <returns>  <see cref="T:Milvasoft.Helpers.Models.Response.SingleObjectResponse`1"/> in 200 OK <see cref="T:Microsoft.AspNetCore.Mvc.ActionResult"/> </returns>
+            <returns>  <see cref="T:Milvasoft.Helpers.Models.Response.ObjectResponse`1"/> in 200 OK <see cref="T:Microsoft.AspNetCore.Mvc.ActionResult"/> </returns>
         </member>
-        <member name="M:Milvasoft.Helpers.Response.ReturnSingleResponseForDeleteAsync``1(System.Runtime.CompilerServices.ConfiguredTaskAwaitable{System.Object},System.String)">
+        <member name="M:Milvasoft.Helpers.Response.GetObjectResponseAsync``1(System.Runtime.CompilerServices.ConfiguredTaskAwaitable{System.Object},System.String)">
             <summary>
-            <para> Run the <paramref name="asyncTask"/> then return <see cref="T:Milvasoft.Helpers.Models.Response.SingleObjectResponse`1"/>. </para>
-            <para> If <paramref name="asyncTask"/> is success sets the <paramref name="successMessage"/> to <see cref="T:Milvasoft.Helpers.Models.Response.SingleObjectResponse`1"/>.Message.
+            <para> Run the <paramref name="asyncTask"/> then return <see cref="T:Milvasoft.Helpers.Models.Response.ObjectResponse`1"/>. </para>
+            <para> If <paramref name="asyncTask"/> is success sets the <paramref name="successMessage"/> to <see cref="T:Milvasoft.Helpers.Models.Response.ObjectResponse`1"/>.Message.
                    Otherwise you should throw exception and cut the request pipeline in <paramref name="asyncTask"/>. </para>
             </summary>
             
             <param name="asyncTask"></param>
             <param name="successMessage"></param>
-            <returns>  <see cref="T:Milvasoft.Helpers.Models.Response.SingleObjectResponse`1"/> in 200 OK <see cref="T:Microsoft.AspNetCore.Mvc.ActionResult"/> </returns>
+            <returns>  <see cref="T:Milvasoft.Helpers.Models.Response.ObjectResponse`1"/> in 200 OK <see cref="T:Microsoft.AspNetCore.Mvc.ActionResult"/> </returns>
         </member>
-        <member name="M:Milvasoft.Helpers.Response.ReturnSingleObjectResponseForAddOrUpdateAsync``1(System.Runtime.CompilerServices.ConfiguredTaskAwaitable,System.String)">
+        <member name="M:Milvasoft.Helpers.Response.GetObjectResponseAsync``1(System.Runtime.CompilerServices.ConfiguredTaskAwaitable{System.Guid},System.String)">
             <summary>
-            <para> Run the <paramref name="asyncTask"/> then return <see cref="T:Milvasoft.Helpers.Models.Response.SingleObjectResponse`1"/>. </para>
-            <para> If <paramref name="asyncTask"/> is success sets the <paramref name="successMessage"/> to <see cref="T:Milvasoft.Helpers.Models.Response.SingleObjectResponse`1"/>.Message.
+            <para> Run the <paramref name="asyncTask"/> then return <see cref="T:Milvasoft.Helpers.Models.Response.ObjectResponse`1"/>. </para>
+            <para> If <paramref name="asyncTask"/> is success sets the <paramref name="successMessage"/> to <see cref="T:Milvasoft.Helpers.Models.Response.ObjectResponse`1"/>.Message.
                    Otherwise you should throw exception and cut the request pipeline in <paramref name="asyncTask"/>. </para>
             </summary>
             
             <param name="asyncTask"></param>
             <param name="successMessage"></param>
-            <returns> <see cref="T:Milvasoft.Helpers.Models.Response.SingleObjectResponse`1"/> in 200 OK <see cref="T:Microsoft.AspNetCore.Mvc.ActionResult"/> </returns>
+            <returns> <see cref="T:Milvasoft.Helpers.Models.Response.ObjectResponse`1"/> in 200 OK <see cref="T:Microsoft.AspNetCore.Mvc.ActionResult"/> </returns>
         </member>
-        <member name="M:Milvasoft.Helpers.Response.ReturnSingleObjectResponseForAddOrUpdateAsync``1(System.Runtime.CompilerServices.ConfiguredTaskAwaitable{System.Object},System.String)">
+        <member name="M:Milvasoft.Helpers.Response.GetObjectResponseAsync``1(System.Runtime.CompilerServices.ConfiguredTaskAwaitable{System.Int32},System.String)">
             <summary>
-            <para> Run the <paramref name="asyncTask"/> then return <see cref="T:Milvasoft.Helpers.Models.Response.SingleObjectResponse`1"/>. </para>
-            <para> If <paramref name="asyncTask"/> is success sets the <paramref name="successMessage"/> to <see cref="T:Milvasoft.Helpers.Models.Response.SingleObjectResponse`1"/>.Message.
+            <para> Run the <paramref name="asyncTask"/> then return <see cref="T:Milvasoft.Helpers.Models.Response.ObjectResponse`1"/>. </para>
+            <para> If <paramref name="asyncTask"/> is success sets the <paramref name="successMessage"/> to <see cref="T:Milvasoft.Helpers.Models.Response.ObjectResponse`1"/>.Message.
                    Otherwise you should throw exception and cut the request pipeline in <paramref name="asyncTask"/>. </para>
             </summary>
             
             <param name="asyncTask"></param>
             <param name="successMessage"></param>
-            <returns> <see cref="T:Milvasoft.Helpers.Models.Response.SingleObjectResponse`1"/> in 200 OK <see cref="T:Microsoft.AspNetCore.Mvc.ActionResult"/> </returns>
+            <returns> <see cref="T:Milvasoft.Helpers.Models.Response.ObjectResponse`1"/> in 200 OK <see cref="T:Microsoft.AspNetCore.Mvc.ActionResult"/> </returns>
         </member>
-        <member name="M:Milvasoft.Helpers.Response.ReturnSingleObjectResponseForAddOrUpdateAsync``1(System.Runtime.CompilerServices.ConfiguredTaskAwaitable{``0},System.String)">
+        <member name="M:Milvasoft.Helpers.Response.GetObjectResponseAsync``1(System.Runtime.CompilerServices.ConfiguredTaskAwaitable{System.SByte},System.String)">
             <summary>
-            <para> Run the <paramref name="asyncTask"/> then return <see cref="T:Milvasoft.Helpers.Models.Response.SingleObjectResponse`1"/>. </para>
-            <para> If <paramref name="asyncTask"/> is success sets the <paramref name="successMessage"/> to <see cref="T:Milvasoft.Helpers.Models.Response.SingleObjectResponse`1"/>.Message.
+            <para> Run the <paramref name="asyncTask"/> then return <see cref="T:Milvasoft.Helpers.Models.Response.ObjectResponse`1"/>. </para>
+            <para> If <paramref name="asyncTask"/> is success sets the <paramref name="successMessage"/> to <see cref="T:Milvasoft.Helpers.Models.Response.ObjectResponse`1"/>.Message.
                    Otherwise you should throw exception and cut the request pipeline in <paramref name="asyncTask"/>. </para>
             </summary>
             
             <param name="asyncTask"></param>
             <param name="successMessage"></param>
-            <returns> <see cref="T:Milvasoft.Helpers.Models.Response.SingleObjectResponse`1"/> in 200 OK <see cref="T:Microsoft.AspNetCore.Mvc.ActionResult"/> </returns>
+            <returns> <see cref="T:Milvasoft.Helpers.Models.Response.ObjectResponse`1"/> in 200 OK <see cref="T:Microsoft.AspNetCore.Mvc.ActionResult"/> </returns>
         </member>
-        <member name="M:Milvasoft.Helpers.Response.ReturnSingleObjectResponseForAddOrUpdateAsync``1(System.Runtime.CompilerServices.ConfiguredTaskAwaitable{System.Guid},System.String)">
+        <member name="M:Milvasoft.Helpers.Response.GetErrorMessage(Microsoft.Extensions.Localization.IStringLocalizer,System.String,Milvasoft.Helpers.Enums.CrudOperation)">
             <summary>
-            <para> Run the <paramref name="asyncTask"/> then return <see cref="T:Milvasoft.Helpers.Models.Response.SingleObjectResponse`1"/>. </para>
-            <para> If <paramref name="asyncTask"/> is success sets the <paramref name="successMessage"/> to <see cref="T:Milvasoft.Helpers.Models.Response.SingleObjectResponse`1"/>.Message.
-                   Otherwise you should throw exception and cut the request pipeline in <paramref name="asyncTask"/>. </para>
-            </summary>
-            
-            <param name="asyncTask"></param>
-            <param name="successMessage"></param>
-            <returns> <see cref="T:Milvasoft.Helpers.Models.Response.SingleObjectResponse`1"/> in 200 OK <see cref="T:Microsoft.AspNetCore.Mvc.ActionResult"/> </returns>
-        </member>
-        <member name="M:Milvasoft.Helpers.Response.ReturnSingleObjectResponseForAddOrUpdateAsync``1(System.Runtime.CompilerServices.ConfiguredTaskAwaitable{System.Int32},System.String)">
-            <summary>
-            <para> Run the <paramref name="asyncTask"/> then return <see cref="T:Milvasoft.Helpers.Models.Response.SingleObjectResponse`1"/>. </para>
-            <para> If <paramref name="asyncTask"/> is success sets the <paramref name="successMessage"/> to <see cref="T:Milvasoft.Helpers.Models.Response.SingleObjectResponse`1"/>.Message.
-                   Otherwise you should throw exception and cut the request pipeline in <paramref name="asyncTask"/>. </para>
-            </summary>
-            
-            <param name="asyncTask"></param>
-            <param name="successMessage"></param>
-            <returns> <see cref="T:Milvasoft.Helpers.Models.Response.SingleObjectResponse`1"/> in 200 OK <see cref="T:Microsoft.AspNetCore.Mvc.ActionResult"/> </returns>
-        </member>
-        <member name="M:Milvasoft.Helpers.Response.ReturnSingleObjectResponseForAddOrUpdateAsync``1(System.Runtime.CompilerServices.ConfiguredTaskAwaitable{System.SByte},System.String)">
-            <summary>
-            <para> Run the <paramref name="asyncTask"/> then return <see cref="T:Milvasoft.Helpers.Models.Response.SingleObjectResponse`1"/>. </para>
-            <para> If <paramref name="asyncTask"/> is success sets the <paramref name="successMessage"/> to <see cref="T:Milvasoft.Helpers.Models.Response.SingleObjectResponse`1"/>.Message.
-                   Otherwise you should throw exception and cut the request pipeline in <paramref name="asyncTask"/>. </para>
-            </summary>
-            
-            <param name="asyncTask"></param>
-            <param name="successMessage"></param>
-            <returns> <see cref="T:Milvasoft.Helpers.Models.Response.SingleObjectResponse`1"/> in 200 OK <see cref="T:Microsoft.AspNetCore.Mvc.ActionResult"/> </returns>
-        </member>
-        <member name="M:Milvasoft.Helpers.Response.ReturnSingleObjectResponseForSpecifedProcessAsync``1(System.Runtime.CompilerServices.ConfiguredTaskAwaitable,System.String)">
-            <summary>
-            <para> Run the <paramref name="asyncTask"/> then return <see cref="T:Milvasoft.Helpers.Models.Response.SingleObjectResponse`1"/>. </para>
-            <para> If <paramref name="asyncTask"/> is success sets the <paramref name="successMessage"/> to <see cref="T:Milvasoft.Helpers.Models.Response.SingleObjectResponse`1"/>.Message.
-                   Otherwise you should throw exception and cut the request pipeline in <paramref name="asyncTask"/>. </para>
-            </summary>
-            
-            <param name="asyncTask"></param>
-            <param name="successMessage"></param>
-            <returns>  <see cref="T:Milvasoft.Helpers.Models.Response.SingleObjectResponse`1"/> in 200 OK <see cref="T:Microsoft.AspNetCore.Mvc.ActionResult"/> </returns>
-        </member>
-        <member name="M:Milvasoft.Helpers.Response.ReturnSingleObjectResponseForSpecifedProcessAsync``1(System.Runtime.CompilerServices.ConfiguredTaskAwaitable{``0},System.String)">
-            <summary>
-            <para> Run the <paramref name="asyncTask"/> then return <see cref="T:Milvasoft.Helpers.Models.Response.SingleObjectResponse`1"/>. </para>
-            <para> If <paramref name="asyncTask"/> is success sets the <paramref name="successMessage"/> to <see cref="T:Milvasoft.Helpers.Models.Response.SingleObjectResponse`1"/>.Message.
-                   Otherwise you should throw exception and cut the request pipeline in <paramref name="asyncTask"/>. </para>
-            </summary>
-            
-            <param name="asyncTask"></param>
-            <param name="successMessage"></param>
-            <returns>  <see cref="T:Milvasoft.Helpers.Models.Response.SingleObjectResponse`1"/> in 200 OK <see cref="T:Microsoft.AspNetCore.Mvc.ActionResult"/> </returns>
-        </member>
-        <member name="M:Milvasoft.Helpers.Response.ReturnSingleObjectResponseForSpecifedProcessAsync``1(System.Runtime.CompilerServices.ConfiguredTaskAwaitable{System.Object},System.String)">
-            <summary>
-            <para> Run the <paramref name="asyncTask"/> then return <see cref="T:Milvasoft.Helpers.Models.Response.SingleObjectResponse`1"/>. </para>
-            <para> If <paramref name="asyncTask"/> is success sets the <paramref name="successMessage"/> to <see cref="T:Milvasoft.Helpers.Models.Response.SingleObjectResponse`1"/>.Message.
-                   Otherwise you should throw exception and cut the request pipeline in <paramref name="asyncTask"/>. </para>
-            </summary>
-            
-            <param name="asyncTask"></param>
-            <param name="successMessage"></param>
-            <returns>  <see cref="T:Milvasoft.Helpers.Models.Response.SingleObjectResponse`1"/> in 200 OK <see cref="T:Microsoft.AspNetCore.Mvc.ActionResult"/> </returns>
-        </member>
-        <member name="M:Milvasoft.Helpers.Response.GetErrorMessageForGetAll(Microsoft.Extensions.Localization.IStringLocalizer,System.String)">
-            <summary>
-            Gets error messages for get all operation.
+            Gets error messages according to <paramref name="operation"/>.
+            <paramref name="keyContent"/> will combine with <see cref="F:Milvasoft.Helpers.Utils.LocalizerKeys.LocalizedEntityName"/> except <paramref name="operation"/> is <see cref="F:Milvasoft.Helpers.Enums.CrudOperation.Specific"/>. 
+            Return message determined by <paramref name="operation"/>.
+            For messages see <see cref="T:Milvasoft.Helpers.Utils.LocalizerKeys"/>.
             </summary>
             <param name="localizer"></param>
             <param name="keyContent"></param>
+            <param name="operation"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.Response.GetSuccessMessageForGetAll(Microsoft.Extensions.Localization.IStringLocalizer,System.String,System.Int32)">
+        <member name="M:Milvasoft.Helpers.Response.GetSuccessMessage(Microsoft.Extensions.Localization.IStringLocalizer,System.String,Milvasoft.Helpers.Enums.CrudOperation,System.Nullable{System.Int32})">
             <summary>
-            Gets error messages for get all operation.
+            Gets success messages according to <paramref name="operation"/>.
+            <paramref name="keyContent"/> will combine with <see cref="F:Milvasoft.Helpers.Utils.LocalizerKeys.LocalizedEntityName"/> except <paramref name="operation"/> is <see cref="F:Milvasoft.Helpers.Enums.CrudOperation.Specific"/>. 
+            Return message determined by <paramref name="operation"/>.
+            For messages see <see cref="T:Milvasoft.Helpers.Utils.LocalizerKeys"/>.
             </summary>
             <param name="localizer"></param>
             <param name="keyContent"></param>
             <param name="recordCount"></param>
+            <param name="operation"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.Response.GetErrorMessageForFiltering(Microsoft.Extensions.Localization.IStringLocalizer,System.String)">
+        <member name="T:Milvasoft.Helpers.Utils.LocalizerKeys">
             <summary>
-            Gets error messages for get all and filtering operation.
+            Localizer message keys
             </summary>
-            <param name="localizer"></param>
-            <param name="keyContent"></param>
-            <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.Response.GetErrorMessageForGetById(Microsoft.Extensions.Localization.IStringLocalizer,System.String)">
+        <member name="T:Milvasoft.Helpers.Utils.MilvasoftStatusCodes">
             <summary>
-            Gets error messages for get by id operation.
+            Http status codes.
             </summary>
-            <param name="localizer"></param>
-            <param name="keyContent"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Milvasoft.Helpers.Response.GetSuccessMessageForAdd(Microsoft.Extensions.Localization.IStringLocalizer,System.String)">
-            <summary>
-            Gets success messages for adding operation.
-            </summary>
-            <param name="localizer"></param>
-            <param name="keyContent"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Milvasoft.Helpers.Response.GetSuccessMessageForUpdate(Microsoft.Extensions.Localization.IStringLocalizer,System.String)">
-            <summary>
-            Gets success messages for updating operation.
-            </summary>
-            <param name="localizer"></param>
-            <param name="keyContent"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Milvasoft.Helpers.Response.GetErrorMessageForDelete(Microsoft.Extensions.Localization.IStringLocalizer,System.String)">
-            <summary>
-            Gets error messages for deleting operation.
-            </summary>
-            <param name="localizer"></param>
-            <param name="keyContent"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Milvasoft.Helpers.Response.GetSucccesMessageForDelete(Microsoft.Extensions.Localization.IStringLocalizer,System.String)">
-            <summary>
-            Gets success messages for deleting operation.
-            </summary>
-            <param name="localizer"></param>
-            <param name="keyContent"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Milvasoft.Helpers.Response.GetMessageForSpecifiedProcess(Microsoft.Extensions.Localization.IStringLocalizer,System.String)">
-            <summary>
-            Gets success messages for get all operation.
-            </summary>
-            <param name="localizer"></param>
-            <param name="keyContent"></param>
-            <returns></returns>
         </member>
         <member name="T:Milvasoft.DependencyInjection.IMilvasoftLogger">
             <summary>
@@ -4026,26 +3888,22 @@
         </member>
         <member name="M:Milvasoft.DependencyInjection.IMilvasoftLogger.LogInfo(System.String)">
             <summary>
-            <para><b>EN: </b>Saves the log at info level.</para>
-            <para><b>TR: </b>Log kaydını info seviyesinde kaydeder.</para>
+            Saves the log at info level.
             </summary>
         </member>
         <member name="M:Milvasoft.DependencyInjection.IMilvasoftLogger.LogWarning(System.String)">
             <summary>
-            <para><b>EN: </b>Saves the log at warn level.</para>
-            <para><b>TR: </b>Log kaydını debug warn kaydeder.</para>s
+            Saves the log at warn level.
             </summary>
         </member>
         <member name="M:Milvasoft.DependencyInjection.IMilvasoftLogger.LogDebug(System.String)">
             <summary>
-            <para><b>EN: </b>Saves the log at debug level.</para>
-            <para><b>TR: </b>Log kaydını debug seviyesinde kaydeder.</para>
+            Saves the log at debug level.
             </summary>
         </member>
         <member name="M:Milvasoft.DependencyInjection.IMilvasoftLogger.LogError(System.String)">
             <summary>
-            <para><b>EN: </b>Saves the log at error level.</para>
-            <para><b>TR: </b>Log kaydını error seviyesinde kaydeder.</para>
+            Saves the log at error level.
             </summary>
         </member>
         <member name="M:Milvasoft.DependencyInjection.IMilvasoftLogger.LogFatal(System.String)">

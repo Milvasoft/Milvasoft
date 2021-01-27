@@ -4,8 +4,7 @@ using System.Linq.Expressions;
 namespace Milvasoft.MapperImplementation.Implementation
 {
     /// <summary>
-    /// <para><b>EN: </b>Responsible interface for mapping from the source object to the object we want to access</para>
-    /// <para><b>TR: </b>Kaynak nesneden ulaşmak istediğimiz nesneye mapleme işlemini yapmakta sorumlu inteface</para>
+    /// Responsible interface for mapping from the source object to the object we want to access
     /// </summary>
     public interface IMapper
     {

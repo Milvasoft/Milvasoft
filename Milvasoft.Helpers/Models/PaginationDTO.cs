@@ -3,7 +3,7 @@
 namespace Milvasoft.Helpers.Models
 {
     /// <summary>
-    /// <para> Stores pagination information. </para>
+    /// Stores pagination information.
     /// </summary>
     public class PaginationDTO<TEntity>
     {

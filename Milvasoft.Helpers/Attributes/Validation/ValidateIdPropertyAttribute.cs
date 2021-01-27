@@ -74,7 +74,7 @@ namespace Milvasoft.Helpers.Attributes.Validation
                     var localizerFactory = context.GetService<IStringLocalizerFactory>();
 
                     var assemblyName = new AssemblyName(_resourceType.GetTypeInfo().Assembly.FullName);
-                    sharedLocalizer = localizerFactory.Create("SharedResource", assemblyName.Name);
+                    sharedLocalizer = localizerFactory.Create(_resourceType.Name, assemblyName.Name);
 
                     localizedRelationName = sharedLocalizer[MemberNameLocalizerKey ?? $"LocalizedEntityName{context.MemberName.Substring(0, context.MemberName.Length - 2)}"].ToString().ToLowerInvariant();
                     errorMessage = sharedLocalizer["ValidationIdPropertyError", localizedRelationName];

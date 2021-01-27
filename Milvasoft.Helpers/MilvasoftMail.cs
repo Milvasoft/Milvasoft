@@ -59,7 +59,7 @@ namespace Milvasoft.Helpers
                                            string body,
                                            bool isBodyHtml = false)
         {
-            MailMessage mailMessage = new MailMessage(from, to, CommonHelper.GetDesciption(subject), body);
+            MailMessage mailMessage = new MailMessage(from, to, CommonHelper.GetEnumDesciption(subject), body);
             mailMessage.IsBodyHtml = isBodyHtml;
 
 

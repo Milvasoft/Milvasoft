@@ -20,7 +20,9 @@ namespace Milvasoft.Helpers
         /// <typeparam name="T"></typeparam>
         /// <param name="propertyName"></param>
         /// <returns></returns>
-        public static bool PropertyExists<T>(string propertyName) => typeof(T).GetProperty(propertyName, BindingFlags.IgnoreCase | BindingFlags.Public | BindingFlags.Instance) != null;
+        public static bool PropertyExists<T>(string propertyName) => typeof(T).GetProperty(propertyName, BindingFlags.IgnoreCase
+                                                                                                       | BindingFlags.Public
+                                                                                                       | BindingFlags.Instance) != null;
 
         /// <summary>
         /// Checks if there is a property named <paramref name="propertyName"/> in the properties of <b><paramref name="content"/></b>. 
@@ -28,7 +30,9 @@ namespace Milvasoft.Helpers
         /// <param name="content"></param>
         /// <param name="propertyName"></param>
         /// <returns></returns>
-        public static bool PropertyExists(object content, string propertyName) => content.GetType().GetProperty(propertyName, BindingFlags.IgnoreCase | BindingFlags.Public | BindingFlags.Instance) != null;
+        public static bool PropertyExists(object content, string propertyName) => content.GetType().GetProperty(propertyName, BindingFlags.IgnoreCase
+                                                                                                                              | BindingFlags.Public
+                                                                                                                              | BindingFlags.Instance) != null;
 
         /// <summary>
         /// Checks if there is a property named <paramref name="propertyName"/> in the properties of <b><paramref name="type"/></b>. 
@@ -36,7 +40,9 @@ namespace Milvasoft.Helpers
         /// <param name="type"></param>
         /// <param name="propertyName"></param>
         /// <returns></returns>
-        public static bool PropertyExists(Type type, string propertyName) => type.GetProperty(propertyName, BindingFlags.IgnoreCase | BindingFlags.Public | BindingFlags.Instance) != null;
+        public static bool PropertyExists(Type type, string propertyName) => type.GetProperty(propertyName, BindingFlags.IgnoreCase
+                                                                                                            | BindingFlags.Public
+                                                                                                            | BindingFlags.Instance) != null;
 
         /// <summary>
         /// Creates order by key selector by <paramref name="orderByPropertyName"/>.
@@ -60,6 +66,12 @@ namespace Milvasoft.Helpers
             return Expression.Lambda<Func<T, object>>(Expression.Convert(orderByProperty, typeof(object)), parameterExpression);
         }
 
+        /// <summary>
+        /// Provides get nested property value.
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <param name="propertyName"></param>
+        /// <returns></returns>
         public static object GetPropertyValue(object obj, string propertyName)
         {
             foreach (var prop in propertyName.Split('.').Select(propName => obj.GetType().GetProperty(propName)))
@@ -75,9 +87,11 @@ namespace Milvasoft.Helpers
             if (maxLength < 0) throw new MilvasoftValidationException(stringLocalizer != null 
                                                                       ? stringLocalizer["PreventStringInjectionMaxLengthException"] 
                                                                       : "Please enter a valid value for the maximum character length.");
+
             if (minLength < 0) throw new MilvasoftValidationException(stringLocalizer != null 
                                                                       ? stringLocalizer["PreventStringInjectionMinLengthException"] 
                                                                       : "Please enter a valid value for the minimum character length.");
+
             if (maxLength <= minLength) throw new MilvasoftValidationException(stringLocalizer != null
                                                                                ? stringLocalizer["PreventStringInjectionMinLengthBigThanMaxLengthException", minLength, maxLength]
                                                                                : $"The minimum value ({minLength}) you entered is greater than the maximum value ({maxLength}). Please enter a valid range of values.");
@@ -89,12 +103,13 @@ namespace Milvasoft.Helpers
         /// <typeparam name="T"></typeparam>
         /// <param name="enumValue"></param>
         /// <returns></returns>
-        public static string GetDesciption<T>(this T enumValue) where T : struct, IConvertible
+        public static string GetEnumDesciption<T>(this T enumValue) where T : struct, IConvertible
         {
             if (!typeof(T).IsEnum)
                 return null;
 
             var desription = enumValue.ToString();
+
             var fieldInfo = enumValue.GetType().GetField(enumValue.ToString());
 
             if (fieldInfo != null)
@@ -102,16 +117,14 @@ namespace Milvasoft.Helpers
                 var attrs = fieldInfo.GetCustomAttributes(typeof(DescriptionAttribute), true);
 
                 if (!attrs.IsNullOrEmpty())
-                {
                     desription = ((DescriptionAttribute)attrs.First()).Description;
-                }
             }
 
             return desription;
         }
 
         /// <summary>
-        /// This method return int value to guid value. For DataStore and Test projects.
+        /// This method return int value to guid value.
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>

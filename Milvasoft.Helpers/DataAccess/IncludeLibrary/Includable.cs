@@ -5,29 +5,25 @@ using System.Linq;
 namespace Milvasoft.Helpers.DataAccess.IncludeLibrary
 {
     /// <summary>
-    ///<para><b>EN: </b> Supports queryable Include/ThenInclude chaining operators.</para> 
-    ///<para><b>TR: </b>Sorgulanabilir Include / ThenInclude zincirleme operatörlerini destekler.</para> 
+    /// Supports queryable Include/ThenInclude chaining operators. 
     /// </summary>
     public interface IIncludable { }
 
     /// <summary>
-    ///<para><b>EN: </b>Supports queryable Include/ThenInclude chaining operators.</para> 
-    ///<para><b>TR: </b>Sorgulanabilir Include / ThenInclude zincirleme operatörlerini destekler.</para> 
+    /// Supports queryable Include/ThenInclude chaining operators.
     /// </summary>
     /// <typeparam name="TEntity"></typeparam>
     public interface IIncludable<out TEntity> : IIncludable { }
 
     /// <summary>
-    ///<para><b>EN: </b>Supports queryable Include/ThenInclude chaining operators.</para> 
-    ///<para><b>TR: </b>Sorgulanabilir Include / ThenInclude zincirleme operatörlerini destekler.</para> 
+    /// Supports queryable Include/ThenInclude chaining operators.
     /// </summary>
     /// <typeparam name="TEntity"></typeparam>
     /// <typeparam name="TProperty"></typeparam>
     public interface IIncludable<out TEntity, out TProperty> : IIncludable<TEntity> { }
 
     /// <summary>
-    ///<para><b>EN: </b> Supports queryable Include/ThenInclude chaining operators.</para> 
-    ///<para><b>TR: </b>Sorgulanabilir Include / ThenInclude zincirleme operatörlerini destekler.</para> 
+    /// Supports queryable Include/ThenInclude chaining operators.
     /// </summary>
     /// <typeparam name="TEntity"></typeparam>
     internal class Includable<TEntity> : IIncludable<TEntity> where TEntity : class
@@ -42,8 +38,7 @@ namespace Milvasoft.Helpers.DataAccess.IncludeLibrary
     }
 
     /// <summary>
-    ///<para><b>EN: </b>Supports queryable Include/ThenInclude chaining operators.</para> 
-    ///<para><b>TR: </b>Sorgulanabilir Include / ThenInclude zincirleme operatörlerini destekler.</para> 
+    /// Supports queryable Include/ThenInclude chaining operators.
     /// </summary>
     /// <typeparam name="TEntity"></typeparam>
     /// <typeparam name="TProperty"></typeparam>

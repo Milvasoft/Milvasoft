@@ -21,6 +21,11 @@ namespace Milvasoft.Helpers.Enums
         /// The enum that should be sent for hack warning.
         /// </summary>
         [Description("Application shutdown warning!")]
-        ShutDown
+        ShutDown,
+        /// <summary>
+        /// The enum that should be sent for information.
+        /// </summary>
+        [Description("Information")]
+        Information
     }
 }

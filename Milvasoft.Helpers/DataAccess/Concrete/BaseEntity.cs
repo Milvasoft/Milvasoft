@@ -6,24 +6,24 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace Milvasoft.Helpers.DataAccess.Concrete
 {
     /// <summary>
-    /// <para> Base entity for all of erasable entities. All erasable entities have this values. </para>
+    /// Base entity for all of erasable entities. All erasable entities have this values. 
     /// </summary>
     public abstract class BaseEntity<TKey> : IBaseEntity<TKey> where TKey : IEquatable<TKey>
     {
         /// <summary>
-        /// <para> Unique database key. Represents primary key.</para>
+        /// Unique database key. Represents primary key.
         /// </summary>
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public TKey Id { get; set; }
 
         /// <summary>
-        /// <para> Date added to database for entity.</para>
+        /// Date added to database for entity.
         /// </summary>
         public DateTime InsertedDate { get; set; } = DateTime.Now;
 
         /// <summary>
-        /// <para> Update date in database for entity.</para>
+        /// Update date in database for entity.
         /// </summary>
         public DateTime? LastUpdatedDate { get; set; }
 

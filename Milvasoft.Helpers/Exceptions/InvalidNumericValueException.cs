@@ -9,7 +9,7 @@ namespace Milvasoft.Helpers.Exceptions
     public class InvalidNumericValueException : MilvasoftBaseException
     {
         /// <summary>
-        /// <para><b>EN: </b>Initializes a new instance of the <see cref="InvalidNumericValueException"/> class.</para>
+        /// Initializes a new instance of the <see cref="InvalidNumericValueException"/> class.
         /// </summary>
         /// <param name="localizer"></param>
         public InvalidNumericValueException(IStringLocalizer localizer) : base(localizer["InvalidNumericValueException"])

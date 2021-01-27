@@ -9,8 +9,7 @@ namespace Milvasoft.Helpers.DataAccess.IncludeLibrary
     public static class IncludeMultipleClass
     {
         /// <summary>
-        ///<para><b>EN: </b> Supports queryable Include/ThenInclude chaining operators.</para> 
-        ///<para><b>TR: </b>Sorgulanabilir Include / ThenInclude zincirleme operatörlerini destekler.</para> 
+        /// Supports queryable Include/ThenInclude chaining operators.
         /// </summary>
         /// <example>
         /// var personnelTable = _personnelTableRepository.GetAllWithIncludes(i => i.Include(p=>p.personnel).Include(p=>p.tableSetting));
@@ -19,9 +18,7 @@ namespace Milvasoft.Helpers.DataAccess.IncludeLibrary
         /// <param name="query"></param>
         /// <param name="includes"></param>
         /// <returns></returns>
-        public static IQueryable<T> IncludeMultiple<T>(this IQueryable<T> query,
-       Func<IIncludable<T>, IIncludable> includes)
-       where T : class
+        public static IQueryable<T> IncludeMultiple<T>(this IQueryable<T> query, Func<IIncludable<T>, IIncludable> includes) where T : class
         {
             if (includes == null)
                 return query;

@@ -89,7 +89,7 @@ namespace Milvasoft.Helpers.Attributes.Validation
                 var localizerFactory = context.GetService<IStringLocalizerFactory>();
 
                 var assemblyName = new AssemblyName(ResourceType.GetTypeInfo().Assembly.FullName);
-                sharedLocalizer = localizerFactory.Create("SharedResource", assemblyName.Name);
+                sharedLocalizer = localizerFactory.Create(ResourceType.Name, assemblyName.Name);
                 localizedPropName = sharedLocalizer[MemberNameLocalizerKey ?? $"Localized{context.MemberName}"];
             }
             else localizedPropName = context.MemberName;

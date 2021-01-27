@@ -1,10 +1,10 @@
-﻿using Newtonsoft.Json;
+﻿using Milvasoft.Helpers.Utils;
+using Newtonsoft.Json;
 
 namespace Milvasoft.Helpers.Models.Response
 {
     /// <summary>
-    /// <para><b>EN: </b>Base response model for API responses.</para>
-    /// <para><b>TR: </b>API yanıtları için temel yanıt modeli.</para>
+    /// Base response model for API responses.
     /// </summary>
     public abstract class BaseResponse
     {
@@ -18,7 +18,7 @@ namespace Milvasoft.Helpers.Models.Response
         public bool Success { get; set; } = true;
 
         /// <summary>
-        /// <para> Default: İşlem başarılı!! </para>
+        /// <para> Default: Process Successful! </para>
         /// <para> Message of response. </para>
         /// </summary>
         [JsonProperty("message")]
