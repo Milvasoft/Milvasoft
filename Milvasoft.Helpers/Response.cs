@@ -124,7 +124,7 @@ namespace Milvasoft.Helpers
         /// <param name="successMessage"></param>
         /// <param name="errorMessage"></param>
         /// <returns>  <see cref="ObjectResponse{T}"/> in 200 OK <see cref="ActionResult"/> </returns>
-        public static async Task<IActionResult> GetObjectResponse<T, TKey>(this ConfiguredTaskAwaitable asyncTask,
+        public static async Task<IActionResult> GetObjectResponseAsync<T, TKey>(this ConfiguredTaskAwaitable asyncTask,
                                                                            IEnumerable<TKey> idList,
                                                                            string successMessage,
                                                                            string errorMessage = null) where TKey : struct
@@ -158,7 +158,7 @@ namespace Milvasoft.Helpers
         /// <param name="successMessage"></param>
         /// <param name="errorMessage"></param>
         /// <returns>  <see cref="ObjectResponse{T}"/> in 200 OK <see cref="ActionResult"/> </returns>
-        public static async Task<IActionResult> GetObjectResponse<T, TKey>(this ConfiguredTaskAwaitable<IEnumerable<T>> asyncTask,
+        public static async Task<IActionResult> GetObjectResponseAsync<T, TKey>(this ConfiguredTaskAwaitable<IEnumerable<T>> asyncTask,
                                                                            IEnumerable<TKey> idList,
                                                                            string successMessage,
                                                                            string errorMessage = null) where TKey : struct
