@@ -3270,7 +3270,97 @@
             Provides send mail.
             </summary>
         </member>
-        <member name="M:Milvasoft.Helpers.MilvasoftMail.OpsiyonSendMail(System.String,System.String,System.String,System.Net.NetworkCredential,System.Int32,System.String,System.String,System.Boolean)">
+        <member name="P:Milvasoft.Helpers.MilvasoftMail.From">
+            <summary>
+            Gets or sets mail sender.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.MilvasoftMail.NetworkCredential">
+            <summary>
+            Gets or sets mail sender credentials.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.MilvasoftMail.SmtpPort">
+            <summary>
+            Gets or sets Port of mail sender.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.MilvasoftMail.SmtpHost">
+            <summary>
+            Gets or sets Host of mail sender.
+            </summary>
+        </member>
+        <member name="M:Milvasoft.Helpers.MilvasoftMail.#ctor(System.String,System.Net.NetworkCredential,System.Int32,System.String)">
+            <summary>
+            Initializes mail sending operation default values.
+            </summary>
+            <param name="from"></param>
+            <param name="networkCredential"></param>
+            <param name="smtpPort"></param>
+            <param name="smtpHost"></param>
+        </member>
+        <member name="M:Milvasoft.Helpers.MilvasoftMail.OpsiyonSendMailAsync(System.String,System.String,System.String,System.Boolean)">
+            <summary>
+            Provides send mail.
+            </summary>
+            <param name="to"></param>
+            <param name="subject"></param>
+            <param name="body"></param>
+            <param name="isBodyHtml"></param>
+        </member>
+        <member name="M:Milvasoft.Helpers.MilvasoftMail.OpsiyonSendMailAsync(System.String,Milvasoft.Helpers.Enums.MailSubject,System.String,System.Boolean)">
+            <summary>
+            Provides send mail.
+            </summary>
+            <param name="to"></param>
+            <param name="subject"></param>
+            <param name="body"></param>
+            <param name="isBodyHtml"></param>
+        </member>
+        <member name="M:Milvasoft.Helpers.MilvasoftMail.OpsiyonSendMailAsync(System.String,System.String,System.String,System.String,System.Net.Mime.ContentType,System.Boolean)">
+            <summary>
+            Provides send mail with attachment.
+            </summary>
+            <param name="to"></param>
+            <param name="subject"></param>
+            <param name="body"></param>
+            <param name="filePath"></param>
+            <param name="contentType"></param>
+            <param name="isBodyHtml"></param>
+        </member>
+        <member name="M:Milvasoft.Helpers.MilvasoftMail.OpsiyonSendMailAsync(System.String,System.String,System.String,System.Collections.Generic.List{System.Net.Mail.Attachment},System.Boolean)">
+            <summary>
+            Provides send mail with attachment.
+            </summary>
+            <param name="to"></param>
+            <param name="subject"></param>
+            <param name="body"></param>
+            <param name="attachments"></param>
+            <param name="isBodyHtml"></param>
+        </member>
+        <member name="M:Milvasoft.Helpers.MilvasoftMail.OpsiyonSendMailAsync(System.String,System.String,System.String,System.String,System.String,System.Boolean)">
+            <summary>
+            Provides send mail with attachment.
+            </summary>
+            <param name="to"></param>
+            <param name="subject"></param>
+            <param name="body"></param>
+            <param name="base64String"> Data uri formatted base64 string.</param>
+            <param name="attachmentName"></param>
+            <param name="isBodyHtml"></param>
+        </member>
+        <member name="M:Milvasoft.Helpers.MilvasoftMail.OpsiyonSendMailAsync(System.String,Milvasoft.Helpers.Enums.MailSubject,System.String,System.String,System.Net.Mime.ContentType,System.Boolean)">
+            <summary>
+            Provides send mail with attachment.
+            </summary>
+            <param name="to"></param>
+            <param name="subject"></param>
+            <param name="body"></param>
+            <param name="filePath"></param>
+            <param name="contentType"></param>
+            <param name="isBodyHtml"></param>
+        </member>
+        <member name="M:Milvasoft.Helpers.MilvasoftMail.OpsiyonSendMail(System.String,System.String,System.String,System.Boolean)">
             <summary>
             Provides send mail.
             </summary>
@@ -3283,7 +3373,21 @@
             <param name="body"></param>
             <param name="isBodyHtml"></param>
         </member>
-        <member name="M:Milvasoft.Helpers.MilvasoftMail.OpsiyonSendMail(System.String,System.String,Milvasoft.Helpers.Enums.MailSubject,System.Net.NetworkCredential,System.Int32,System.String,System.String,System.Boolean)">
+        <member name="M:Milvasoft.Helpers.MilvasoftMail.OpsiyonSendMail(System.String,System.String,System.String,System.String,System.Boolean)">
+            <summary>
+            Provides send mail with attachment.
+            </summary>
+            <param name="from"></param>
+            <param name="to"></param>
+            <param name="subject"></param>
+            <param name="networkCredential"></param>
+            <param name="smtpPort"></param>
+            <param name="smtpHost"></param>
+            <param name="body"></param>
+            <param name="filePath"></param>
+            <param name="isBodyHtml"></param>
+        </member>
+        <member name="M:Milvasoft.Helpers.MilvasoftMail.OpsiyonSendMail(System.String,Milvasoft.Helpers.Enums.MailSubject,System.String,System.Boolean)">
             <summary>
             Provides send mail.
             </summary>
@@ -3754,7 +3858,7 @@
             <param name="errorMessage"></param>
             <returns> <see cref="T:Milvasoft.Helpers.Models.Response.ObjectResponse`1"/> in 200 OK <see cref="T:Microsoft.AspNetCore.Mvc.ActionResult"/> </returns>
         </member>
-        <member name="M:Milvasoft.Helpers.Response.GetObjectResponse``2(System.Runtime.CompilerServices.ConfiguredTaskAwaitable,System.Collections.Generic.IEnumerable{``1},System.String,System.String)">
+        <member name="M:Milvasoft.Helpers.Response.GetObjectResponseAsync``2(System.Runtime.CompilerServices.ConfiguredTaskAwaitable,System.Collections.Generic.IEnumerable{``1},System.String,System.String)">
             <summary>
             <para> Run the <paramref name="asyncTask"/> then return <see cref="T:Milvasoft.Helpers.Models.Response.ObjectResponse`1"/>. </para>
             <para> If <paramref name="asyncTask"/> is success sets the <paramref name="successMessage"/> to <see cref="T:Milvasoft.Helpers.Models.Response.ObjectResponse`1"/>.Message.
@@ -3767,7 +3871,7 @@
             <param name="errorMessage"></param>
             <returns>  <see cref="T:Milvasoft.Helpers.Models.Response.ObjectResponse`1"/> in 200 OK <see cref="T:Microsoft.AspNetCore.Mvc.ActionResult"/> </returns>
         </member>
-        <member name="M:Milvasoft.Helpers.Response.GetObjectResponse``2(System.Runtime.CompilerServices.ConfiguredTaskAwaitable{System.Collections.Generic.IEnumerable{``0}},System.Collections.Generic.IEnumerable{``1},System.String,System.String)">
+        <member name="M:Milvasoft.Helpers.Response.GetObjectResponseAsync``2(System.Runtime.CompilerServices.ConfiguredTaskAwaitable{System.Collections.Generic.IEnumerable{``0}},System.Collections.Generic.IEnumerable{``1},System.String,System.String)">
             <summary>
             <para> Run the <paramref name="asyncTask"/> then return <see cref="T:Milvasoft.Helpers.Models.Response.ObjectResponse`1"/>. </para>
             <para> If <paramref name="asyncTask"/> is success sets the <paramref name="successMessage"/> to <see cref="T:Milvasoft.Helpers.Models.Response.ObjectResponse`1"/>.Message.
