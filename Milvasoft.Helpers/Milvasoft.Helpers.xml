@@ -3990,6 +3990,11 @@
             Logger interface for DI.
             </summary>
         </member>
+        <member name="M:Milvasoft.DependencyInjection.IMilvasoftLogger.LogVerbose(System.String)">
+            <summary>
+            Saves the log at verbose level.
+            </summary>
+        </member>
         <member name="M:Milvasoft.DependencyInjection.IMilvasoftLogger.LogInfo(System.String)">
             <summary>
             Saves the log at info level.
@@ -4016,7 +4021,28 @@
             </summary>
             <param name="message"></param>
         </member>
+        <member name="M:Milvasoft.DependencyInjection.IMilvasoftLogger.LogFatal(System.String,System.String)">
+            <summary>
+            Saves the log at fatal level. And sends mail to producer.
+            </summary>
+            <param name="message"></param>
+            <param name="mailSubject"></param>
+        </member>
+        <member name="M:Milvasoft.DependencyInjection.IMilvasoftLogger.LogFatalAsync(System.String,System.String)">
+            <summary>
+            Saves the log at fatal level. And sends mail to producer.
+            </summary>
+            <param name="message"></param>
+            <param name="mailSubject"></param>
+        </member>
         <member name="M:Milvasoft.DependencyInjection.IMilvasoftLogger.LogFatal(System.String,Milvasoft.Helpers.Enums.MailSubject)">
+            <summary>
+            Saves the log at fatal level. And sends mail to producer.
+            </summary>
+            <param name="message"></param>
+            <param name="mailSubject"></param>
+        </member>
+        <member name="M:Milvasoft.DependencyInjection.IMilvasoftLogger.LogFatalAsync(System.String,Milvasoft.Helpers.Enums.MailSubject)">
             <summary>
             Saves the log at fatal level. And sends mail to producer.
             </summary>
