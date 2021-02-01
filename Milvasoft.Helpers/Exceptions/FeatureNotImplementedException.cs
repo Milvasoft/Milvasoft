@@ -6,7 +6,7 @@ namespace Milvasoft.Helpers.Exceptions
     /// <summary>
     /// The exception that is thrown when attempt to do operation with not implemented method.
     /// </summary>
-    public class FeatureNotImplementedException : MilvasoftBaseException
+    public class FeatureNotImplementedException : MilvaBaseException
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="FeatureNotImplementedException"/> class.
@@ -14,7 +14,7 @@ namespace Milvasoft.Helpers.Exceptions
         /// <param name="localizer"></param>
         public FeatureNotImplementedException(IStringLocalizer localizer) : base(localizer["FeatureNotImplementedException"])
         {
-            ErrorCode = (int)MilvasoftExceptionCode.FeatureNotImplemented;
+            ErrorCode = (int)MilvaExceptionCode.FeatureNotImplemented;
         }
 
         /// <summary>
@@ -23,7 +23,7 @@ namespace Milvasoft.Helpers.Exceptions
         /// <param name="customMessage"></param>
         public FeatureNotImplementedException(string customMessage) : base(customMessage)
         {
-            ErrorCode = (int)MilvasoftExceptionCode.FeatureNotImplemented;
+            ErrorCode = (int)MilvaExceptionCode.FeatureNotImplemented;
         }
 
         /// <summary>
@@ -33,7 +33,7 @@ namespace Milvasoft.Helpers.Exceptions
         /// <param name="exception"></param>
         public FeatureNotImplementedException(string customMessage, Exception exception) : base(customMessage, exception)
         {
-            ErrorCode = (int)MilvasoftExceptionCode.FeatureNotImplemented;
+            ErrorCode = (int)MilvaExceptionCode.FeatureNotImplemented;
         }
     }
 }

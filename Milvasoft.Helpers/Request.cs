@@ -345,7 +345,6 @@ namespace Milvasoft.Helpers
         /// <summary>
         /// Checks <paramref name="propertyName"/> exists in <paramref name="jObject"/>.
         /// </summary>
-        /// <typeparam name="T"></typeparam>
         /// <param name="propertyName"></param>
         /// <param name="jObject"></param>
         /// <returns></returns>

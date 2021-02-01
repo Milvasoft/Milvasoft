@@ -6,7 +6,7 @@ namespace Milvasoft.Helpers.Exceptions
     /// <summary>
     /// The exception that is thrown when attempt to update an entity that is not in the Repository.
     /// </summary>
-    public class UpdatingInvalidEntityException : MilvasoftBaseException
+    public class UpdatingInvalidEntityException : MilvaBaseException
     {
 
         /// <summary>
@@ -16,7 +16,7 @@ namespace Milvasoft.Helpers.Exceptions
         /// <param name="localizer"></param>
         public UpdatingInvalidEntityException(IStringLocalizer localizer) : base(localizer["UpdatingInvalidEntityException"])
         {
-            ErrorCode = (int)MilvasoftExceptionCode.UpdatingInvalidEntity;
+            ErrorCode = (int)MilvaExceptionCode.UpdatingInvalidEntity;
         }
 
         /// <summary>
@@ -25,7 +25,7 @@ namespace Milvasoft.Helpers.Exceptions
         /// <param name="customMessage"></param>
         public UpdatingInvalidEntityException(string customMessage) : base(customMessage)
         {
-            ErrorCode = (int)MilvasoftExceptionCode.UpdatingInvalidEntity;
+            ErrorCode = (int)MilvaExceptionCode.UpdatingInvalidEntity;
         }
 
         /// <summary>
@@ -35,7 +35,7 @@ namespace Milvasoft.Helpers.Exceptions
         /// <param name="innerException"></param>
         public UpdatingInvalidEntityException(string customMessage, Exception innerException) : base(customMessage, innerException)
         {
-            ErrorCode = (int)MilvasoftExceptionCode.UpdatingInvalidEntity;
+            ErrorCode = (int)MilvaExceptionCode.UpdatingInvalidEntity;
         }
 
     }

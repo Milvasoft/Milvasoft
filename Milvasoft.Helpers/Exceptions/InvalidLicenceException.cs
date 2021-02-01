@@ -6,7 +6,7 @@ namespace Milvasoft.Helpers.Exceptions
     /// <summary>
     /// The exception that is thrown when attempt to do operation with null objects.
     /// </summary>
-    public class InvalidLicenceException : MilvasoftBaseException
+    public class InvalidLicenceException : MilvaBaseException
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="InvalidLicenceException"/> class.
@@ -14,7 +14,7 @@ namespace Milvasoft.Helpers.Exceptions
         /// <param name="localizer"></param>
         public InvalidLicenceException(IStringLocalizer localizer) : base(localizer["InvalidLicenceException"])
         {
-            ErrorCode = (int)MilvasoftExceptionCode.InvalidLicence;
+            ErrorCode = (int)MilvaExceptionCode.InvalidLicence;
         }
 
         /// <summary>
@@ -23,7 +23,7 @@ namespace Milvasoft.Helpers.Exceptions
         /// <param name="customMessage"></param>
         public InvalidLicenceException(string customMessage) : base(customMessage)
         {
-            ErrorCode = (int)MilvasoftExceptionCode.InvalidLicence;
+            ErrorCode = (int)MilvaExceptionCode.InvalidLicence;
         }
 
         /// <summary>
@@ -33,7 +33,7 @@ namespace Milvasoft.Helpers.Exceptions
         /// <param name="innerException"></param>
         public InvalidLicenceException(string customMessage, Exception innerException) : base(customMessage, innerException)
         {
-            ErrorCode = (int)MilvasoftExceptionCode.InvalidLicence;
+            ErrorCode = (int)MilvaExceptionCode.InvalidLicence;
         }
     }
 }

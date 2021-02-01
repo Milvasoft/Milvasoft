@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 using Microsoft.IdentityModel.Tokens;
 using Milvasoft.Helpers.DataAccess.Abstract;
+using Milvasoft.Helpers.DataAccess.Abstract.Entity;
 using Milvasoft.Helpers.Exceptions;
 using Milvasoft.Helpers.Identity.Abstract;
 using System;
@@ -28,9 +29,9 @@ namespace Milvasoft.Helpers.Identity.Concrete
     /// <typeparam name="TKey"></typeparam>
     /// <typeparam name="TLoginResultDTO"></typeparam>
     public class IdentityOperations<TUserManager, TDbContext, TLocalizer, TUser, TRole, TKey, TLoginResultDTO> : IIdentityOperations<TUserManager, TDbContext, TLocalizer, TUser, TRole, TKey, TLoginResultDTO>
-       where TUser : IdentityUser<TKey>, IBaseIndelibleEntity<Guid>, new()
+       where TUser : IdentityUser<TKey>, IFullAuditable<TKey>, new()
        where TRole : IdentityRole<TKey>
-       where TKey : IEquatable<TKey>
+       where TKey : struct, IEquatable<TKey>
        where TDbContext : IdentityDbContext<TUser, TRole, TKey>
        where TUserManager : UserManager<TUser>
        where TLoginResultDTO : class, ILoginResultDTO, new()
@@ -237,7 +238,7 @@ namespace Milvasoft.Helpers.Identity.Concrete
                         SignedInUsers.SignedInUserTokens.Remove(user.UserName);
                 }
 
-                _contextRepository.InitializeUpdating<TUser, Guid>(user);
+                _contextRepository.InitializeUpdating<TUser, TKey>(user);
 
                 identityResult = await _userManager.RemoveAuthenticationTokenAsync(user, LoginProvider, TokenName);
 
@@ -419,7 +420,7 @@ namespace Milvasoft.Helpers.Identity.Concrete
 
             if (userLocked && DateTime.Now > user.LockoutEnd.Value.DateTime)
             {
-                _contextRepository.InitializeUpdating<TUser, Guid>(user);
+                _contextRepository.InitializeUpdating<TUser, TKey>(user);
 
                 //Locklanmış kullanıcının süresini sıfırlıyoruz
                 await _userManager.SetLockoutEndDateAsync(user, null).ConfigureAwait(false);
@@ -472,11 +473,11 @@ namespace Milvasoft.Helpers.Identity.Concrete
 
             string newToken = GenerateToken(username: user.UserName, roles: roles, tokenExpiredDate);
 
-            _contextRepository.InitializeUpdating<TUser, Guid>(user);
+            _contextRepository.InitializeUpdating<TUser, TKey>(user);
 
             await _userManager.RemoveAuthenticationTokenAsync(user, LoginProvider, TokenName).ConfigureAwait(false);
 
-            _contextRepository.InitializeUpdating<TUser, Guid>(user);
+            _contextRepository.InitializeUpdating<TUser, TKey>(user);
 
             IdentityResult identityResult = await _userManager.SetAuthenticationTokenAsync(user: user,
                                                                                            loginProvider: LoginProvider,//Token nerede kullanılcak

@@ -6,7 +6,7 @@ namespace Milvasoft.Helpers.Exceptions
     /// <summary>
     /// The exception that is thrown when attempt to do operation with null objects.
     /// </summary>
-    public class InvalidRelatedProcessException : MilvasoftBaseException
+    public class InvalidRelatedProcessException : MilvaBaseException
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="InvalidRelatedProcessException"/> class.
@@ -14,7 +14,7 @@ namespace Milvasoft.Helpers.Exceptions
         /// <param name="localizer"></param>
         public InvalidRelatedProcessException(IStringLocalizer localizer) : base(localizer["InvalidRelatedProcess"])
         {
-            ErrorCode = (int)MilvasoftExceptionCode.InvalidRelatedProcess;
+            ErrorCode = (int)MilvaExceptionCode.InvalidRelatedProcess;
         }
 
         /// <summary>
@@ -23,7 +23,7 @@ namespace Milvasoft.Helpers.Exceptions
         /// <param name="customMessage"></param>
         public InvalidRelatedProcessException(string customMessage) : base(customMessage)
         {
-            ErrorCode = (int)MilvasoftExceptionCode.InvalidRelatedProcess;
+            ErrorCode = (int)MilvaExceptionCode.InvalidRelatedProcess;
         }
 
         /// <summary>
@@ -33,7 +33,7 @@ namespace Milvasoft.Helpers.Exceptions
         /// <param name="innerException"></param>
         public InvalidRelatedProcessException(string customMessage, Exception innerException) : base(customMessage, innerException)
         {
-            ErrorCode = (int)MilvasoftExceptionCode.InvalidRelatedProcess;
+            ErrorCode = (int)MilvaExceptionCode.InvalidRelatedProcess;
         }
     }
 }

@@ -25,11 +25,11 @@ namespace Milvasoft.Helpers.Models.Response
         public string Message { get; set; } = "Process Successful!";
 
         /// <summary>
-        /// <para> Default = <see cref="MilvasoftStatusCodes.Status200OK"/> </para>
+        /// <para> Default = <see cref="MilvaStatusCodes.Status200OK"/> </para>
         /// <para> Http status code of response. </para>
         /// </summary>
         [JsonProperty("statusCode")]
-        public int StatusCode { get; set; } = MilvasoftStatusCodes.Status200OK;
+        public int StatusCode { get; set; } = MilvaStatusCodes.Status200OK;
 
     }
 }

@@ -11,7 +11,7 @@ namespace Milvasoft.Helpers.Attributes.Validation
     /// Specifies that the class or property that this attribute is applied to requires the specified must match the localized regex.
     /// </summary>
     [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field, AllowMultiple = false)]
-    public class MilvasoftRegularExpressionAttribute : RegularExpressionAttribute
+    public class MilvaRegexAttribute : RegularExpressionAttribute
     {
 
         #region Fields
@@ -44,12 +44,12 @@ namespace Milvasoft.Helpers.Attributes.Validation
         /// <summary>
         /// Constructor that accepts the maximum length of the string.
         /// </summary>
-        public MilvasoftRegularExpressionAttribute() : base(@"^()$") { }
+        public MilvaRegexAttribute() : base(@"^()$") { }
 
         /// <summary>
         /// Constructor that accepts the maximum length of the string.
         /// </summary>
-        public MilvasoftRegularExpressionAttribute(Type resourceType) : base(@"^()$")
+        public MilvaRegexAttribute(Type resourceType) : base(@"^()$")
         {
             _resourceType = resourceType;
         }
@@ -58,7 +58,7 @@ namespace Milvasoft.Helpers.Attributes.Validation
         /// Constructor that accepts the maximum length of the string.
         /// </summary>
         /// <param name="pattern"></param>
-        public MilvasoftRegularExpressionAttribute(string pattern) : base(pattern) { }
+        public MilvaRegexAttribute(string pattern) : base(pattern) { }
 
         #endregion
 

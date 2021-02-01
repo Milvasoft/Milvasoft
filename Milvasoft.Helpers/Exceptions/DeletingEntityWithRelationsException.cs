@@ -6,7 +6,7 @@ namespace Milvasoft.Helpers.Exceptions
     /// <summary>
     /// The exception that is thrown when attempt to deleting invalid entities.
     /// </summary>
-    public class DeletingEntityWithRelationsException : MilvasoftBaseException
+    public class DeletingEntityWithRelationsException : MilvaBaseException
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="DeletingEntityWithRelationsException"/> class.
@@ -14,7 +14,7 @@ namespace Milvasoft.Helpers.Exceptions
         /// <param name="localizer"></param>
         public DeletingEntityWithRelationsException(IStringLocalizer localizer) : base(localizer["DeletingEntityWithRelationsException"])
         {
-            ErrorCode = (int)MilvasoftExceptionCode.DeletingEntityWithRelations;
+            ErrorCode = (int)MilvaExceptionCode.DeletingEntityWithRelations;
         }
 
         /// <summary>
@@ -23,7 +23,7 @@ namespace Milvasoft.Helpers.Exceptions
         /// <param name="customMessage"></param>
         public DeletingEntityWithRelationsException(string customMessage) : base(customMessage)
         {
-            ErrorCode = (int)MilvasoftExceptionCode.DeletingEntityWithRelations;
+            ErrorCode = (int)MilvaExceptionCode.DeletingEntityWithRelations;
         }
 
         /// <summary>
@@ -33,7 +33,7 @@ namespace Milvasoft.Helpers.Exceptions
         /// <param name="innerException"></param>
         public DeletingEntityWithRelationsException(string customMessage, Exception innerException) : base(customMessage, innerException)
         {
-            ErrorCode = (int)MilvasoftExceptionCode.DeletingEntityWithRelations;
+            ErrorCode = (int)MilvaExceptionCode.DeletingEntityWithRelations;
         }
     }
 }

@@ -6,7 +6,7 @@ namespace Milvasoft.Helpers.Exceptions
     /// <summary>
     /// The exception that is thrown when attempt to get enum by invalid id.
     /// </summary>
-    public class CannotGetResponseException : MilvasoftBaseException
+    public class CannotGetResponseException : MilvaBaseException
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="CannotFindEnumByIdException"/> class.
@@ -14,7 +14,7 @@ namespace Milvasoft.Helpers.Exceptions
         /// <param name="localizer"></param>
         public CannotGetResponseException(IStringLocalizer localizer) : base(localizer)
         {
-            ErrorCode = (int)MilvasoftExceptionCode.CannotGetResponse;
+            ErrorCode = (int)MilvaExceptionCode.CannotGetResponse;
         }
 
         /// <summary>
@@ -23,7 +23,7 @@ namespace Milvasoft.Helpers.Exceptions
         /// <param name="customMessage"></param>
         public CannotGetResponseException(string customMessage) : base(customMessage)
         {
-            ErrorCode = (int)MilvasoftExceptionCode.CannotGetResponse;
+            ErrorCode = (int)MilvaExceptionCode.CannotGetResponse;
         }
 
         /// <summary>
@@ -33,7 +33,7 @@ namespace Milvasoft.Helpers.Exceptions
         /// <param name="innerException"></param>
         public CannotGetResponseException(string customMessage, Exception innerException) : base(customMessage, innerException)
         {
-            ErrorCode = (int)MilvasoftExceptionCode.CannotGetResponse;
+            ErrorCode = (int)MilvaExceptionCode.CannotGetResponse;
         }
     }
 }

@@ -10,7 +10,7 @@ namespace Milvasoft.Helpers.Attributes.Validation
     /// Determines minimum decimal value.
     /// </summary>
     [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field, AllowMultiple = false)]
-    public class MinDecimalValueAttribute : ValidationAttribute
+    public class ValidateDecimalAttribute : ValidationAttribute
     {
 
         #region Fields
@@ -44,13 +44,13 @@ namespace Milvasoft.Helpers.Attributes.Validation
         /// <summary>
         /// Constructor of atrribute.
         /// </summary>
-        public MinDecimalValueAttribute() { }
+        public ValidateDecimalAttribute() { }
 
         /// <summary>
         /// Constructor of atrribute.
         /// </summary>
         /// <param name="resourceType"></param>
-        public MinDecimalValueAttribute(Type resourceType)
+        public ValidateDecimalAttribute(Type resourceType)
         {
             _resourceType = resourceType;
         }
@@ -59,7 +59,7 @@ namespace Milvasoft.Helpers.Attributes.Validation
         /// Constructor of atrribute.
         /// </summary>
         /// <param name="minValue"></param>
-        public MinDecimalValueAttribute(int minValue)
+        public ValidateDecimalAttribute(int minValue)
         {
             MinValue = minValue;
         }
@@ -69,7 +69,7 @@ namespace Milvasoft.Helpers.Attributes.Validation
         /// </summary>
         /// <param name="minValue"></param>
         /// <param name="resourceType"></param>
-        public MinDecimalValueAttribute(int minValue, Type resourceType)
+        public ValidateDecimalAttribute(int minValue, Type resourceType)
         {
             MinValue = minValue;
             _resourceType = resourceType;

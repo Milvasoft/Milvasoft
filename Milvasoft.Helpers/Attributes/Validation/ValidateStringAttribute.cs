@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Localization;
-using Milvasoft.DependencyInjection;
+using Milvasoft.Helpers.DependencyInjection;
 using Milvasoft.Helpers.Enums;
 using Milvasoft.Helpers.Extensions;
 using Milvasoft.Helpers.Models;
@@ -16,7 +16,7 @@ namespace Milvasoft.Helpers.Attributes.Validation
     /// Specifies that the class or property that this attribute is applied to requires the specified prevent string injection attacks and min/max length checks.
     /// </summary>
     [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field, AllowMultiple = false)]
-    public class PreventStringInjectionAttribute : ValidationAttribute
+    public class ValidateStringAttribute : ValidationAttribute
     {
 
         #region Properties
@@ -55,7 +55,7 @@ namespace Milvasoft.Helpers.Attributes.Validation
         /// Constructor that accepts the maximum length of the string.
         /// </summary>
         /// <param name="maximumLength">The maximum length, inclusive.  It may not be negative.</param>
-        public PreventStringInjectionAttribute(int maximumLength)
+        public ValidateStringAttribute(int maximumLength)
         {
             MaximumLength = maximumLength;
         }
@@ -65,7 +65,7 @@ namespace Milvasoft.Helpers.Attributes.Validation
         /// </summary>
         /// <param name="minimumLength">The minimum length, inclusive.  It may not be negative.</param>
         /// <param name="maximumLength">The maximum length, inclusive.  It may not be negative.</param>
-        public PreventStringInjectionAttribute(int minimumLength, int maximumLength)
+        public ValidateStringAttribute(int minimumLength, int maximumLength)
         {
             MaximumLength = maximumLength;
             MinimumLength = minimumLength;
@@ -128,7 +128,7 @@ namespace Milvasoft.Helpers.Attributes.Validation
                         foreach (var invalidStringValue in invalidString.Values)
                             if (stringValue.ToLowerInvariant().Contains(invalidStringValue))
                             {
-                                var milvasoftLogger = context.GetService<IMilvasoftLogger>();
+                                var milvasoftLogger = context.GetService<IMilvaLogger>();
 
                                 if (!string.IsNullOrEmpty(MailContent) && milvasoftLogger != null)
                                     milvasoftLogger.LogFatal(MailContent, MailSubject.Hack);

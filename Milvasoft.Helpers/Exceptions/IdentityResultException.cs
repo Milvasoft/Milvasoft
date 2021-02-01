@@ -6,7 +6,7 @@ namespace Milvasoft.Helpers.Exceptions
     /// <summary>
     /// The exception that is thrown when identity exceptions.
     /// </summary>
-    public class IdentityResultException : MilvasoftBaseException
+    public class IdentityResultException : MilvaBaseException
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="IdentityResultException"/> class.
@@ -14,7 +14,7 @@ namespace Milvasoft.Helpers.Exceptions
         /// <param name="localizer"></param>
         public IdentityResultException(IStringLocalizer localizer) : base(localizer["InvalidParameterException"])
         {
-            ErrorCode = (int)MilvasoftExceptionCode.IdentityResult;
+            ErrorCode = (int)MilvaExceptionCode.IdentityResult;
         }
 
         /// <summary>
@@ -24,7 +24,7 @@ namespace Milvasoft.Helpers.Exceptions
         /// <param name="localizer"></param>
         public IdentityResultException(IStringLocalizer localizer, string customMessage) : base(localizer["InvalidParameterException", customMessage])
         {
-            ErrorCode = (int)MilvasoftExceptionCode.IdentityResult;
+            ErrorCode = (int)MilvaExceptionCode.IdentityResult;
         }
 
 
@@ -34,7 +34,7 @@ namespace Milvasoft.Helpers.Exceptions
         /// <param name="customMessage"></param>
         public IdentityResultException(string customMessage) : base(customMessage)
         {
-            ErrorCode = (int)MilvasoftExceptionCode.IdentityResult;
+            ErrorCode = (int)MilvaExceptionCode.IdentityResult;
         }
 
         /// <summary>
@@ -44,7 +44,7 @@ namespace Milvasoft.Helpers.Exceptions
         /// <param name="innerException"></param>
         public IdentityResultException(string customMessage, Exception innerException) : base("Message : " + $"{customMessage}" + " Inner Exception : " + $"{innerException}")
         {
-            ErrorCode = (int)MilvasoftExceptionCode.IdentityResult;
+            ErrorCode = (int)MilvaExceptionCode.IdentityResult;
         }
     }
 }

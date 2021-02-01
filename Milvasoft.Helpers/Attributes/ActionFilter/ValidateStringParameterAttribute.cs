@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Localization;
-using Milvasoft.DependencyInjection;
+using Milvasoft.Helpers.DependencyInjection;
 using Milvasoft.Helpers.Enums;
 using Milvasoft.Helpers.Extensions;
 using Milvasoft.Helpers.Models;
@@ -21,7 +21,7 @@ namespace Milvasoft.Helpers.Attributes.ActionFilter
     /// Specifies that the class or method that this attribute is applied to requires the specified prevent string injection attacks and min/max length checks.
     /// </summary>
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
-    public class PreventStringInjectionForParametersAttribute : ActionFilterAttribute
+    public class ValidateStringParameterAttribute : ActionFilterAttribute
     {
 
         #region Properties
@@ -60,7 +60,7 @@ namespace Milvasoft.Helpers.Attributes.ActionFilter
         /// </summary>
         /// <param name="minimumLength">The minimum length, inclusive.  It may not be negative.</param>
         /// <param name="maximumLength">The maximum length, inclusive.  It may not be negative.</param>
-        public PreventStringInjectionForParametersAttribute(int minimumLength, int maximumLength)
+        public ValidateStringParameterAttribute(int minimumLength, int maximumLength)
         {
             MaximumLength = maximumLength;
             MinimumLength = minimumLength;
@@ -89,14 +89,14 @@ namespace Milvasoft.Helpers.Attributes.ActionFilter
                 {
                     Success = false,
                     Message = localizedErrorMessage,
-                    StatusCode = MilvasoftStatusCodes.Status400BadRequest,
+                    StatusCode = MilvaStatusCodes.Status400BadRequest,
                     Result = new object(),
                     ErrorCodes = new List<int>()
                 };
                 var json = JsonConvert.SerializeObject(validationResponse);
                 context.HttpContext.Response.ContentType = "application/json";
-                context.HttpContext.Items.Add(new KeyValuePair<object, object>("StatusCode", MilvasoftStatusCodes.Status600Exception));
-                context.HttpContext.Response.StatusCode = MilvasoftStatusCodes.Status200OK;
+                context.HttpContext.Items.Add(new KeyValuePair<object, object>("StatusCode", MilvaStatusCodes.Status600Exception));
+                context.HttpContext.Response.StatusCode = MilvaStatusCodes.Status200OK;
                 await context.HttpContext.Response.WriteAsync(json).ConfigureAwait(false);
 
                 context.Result = new BadRequestResult();
@@ -135,7 +135,7 @@ namespace Milvasoft.Helpers.Attributes.ActionFilter
                                     foreach (var invalidStringValue in invalidString.Values)
                                         if (stringValue.Contains(invalidStringValue))
                                         {
-                                            var milvasoftLogger = context.HttpContext.RequestServices.GetService<IMilvasoftLogger>();
+                                            var milvasoftLogger = context.HttpContext.RequestServices.GetService<IMilvaLogger>();
 
                                             if (!string.IsNullOrEmpty(MailContent) && milvasoftLogger != null)
                                                 milvasoftLogger.LogFatal(MailContent, MailSubject.Hack);

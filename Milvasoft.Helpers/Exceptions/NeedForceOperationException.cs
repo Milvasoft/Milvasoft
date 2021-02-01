@@ -6,7 +6,7 @@ namespace Milvasoft.Helpers.Exceptions
     /// <summary>
     /// The exception that is thrown when attempt to search for an entity not found in the Repository.
     /// </summary>
-    public class NeedForceOperationException : MilvasoftBaseException
+    public class NeedForceOperationException : MilvaBaseException
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="NeedForceOperationException"/> class with defined default message by constructor.
@@ -14,7 +14,7 @@ namespace Milvasoft.Helpers.Exceptions
         /// <param name="localizer"></param>
         public NeedForceOperationException(IStringLocalizer localizer) : base(localizer["NeedForceOperationException"])
         {
-            ErrorCode = (int)MilvasoftExceptionCode.NeedForceOperation;
+            ErrorCode = (int)MilvaExceptionCode.NeedForceOperation;
         }
 
         /// <summary>
@@ -24,7 +24,7 @@ namespace Milvasoft.Helpers.Exceptions
         /// <param name="customMessage"></param>
         public NeedForceOperationException(string customMessage) : base(customMessage)
         {
-            ErrorCode = (int)MilvasoftExceptionCode.NeedForceOperation;
+            ErrorCode = (int)MilvaExceptionCode.NeedForceOperation;
         }
 
         /// <summary>
@@ -35,7 +35,7 @@ namespace Milvasoft.Helpers.Exceptions
         /// <param name="innerException"></param>
         public NeedForceOperationException(string customMessage, Exception innerException) : base(customMessage, innerException)
         {
-            ErrorCode = (int)MilvasoftExceptionCode.NeedForceOperation;
+            ErrorCode = (int)MilvaExceptionCode.NeedForceOperation;
         }
     }
 }

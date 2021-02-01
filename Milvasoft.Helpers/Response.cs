@@ -24,7 +24,7 @@ namespace Milvasoft.Helpers
         /// <para> If <paramref name="paginationDTO"/>.DTOList isn't null or empty, sets the <see cref="ObjectResponse{T}"/>.Message to <paramref name="successMessage"/>. </para>
         /// <para> Otherwise if <paramref name="errorMessage"/> is null sets the <see cref="ObjectResponse{T}"/>.Message to <b><see cref="LocalizerKeys.DefaultErrorMessage"/></b>. </para>
         /// <para> Otherwise sets the <see cref="ObjectResponse{T}"/>.Message to <paramref name="errorMessage"/>. </para>
-        /// <para> Also in this conditions sets the <see cref="ObjectResponse{T}"/>.StatusCode to <see cref="MilvasoftStatusCodes.Status204NoContent"/>
+        /// <para> Also in this conditions sets the <see cref="ObjectResponse{T}"/>.StatusCode to <see cref="MilvaStatusCodes.Status204NoContent"/>
         ///         and <see cref="ObjectResponse{T}"/>.Success to true. Reason to be considered the <see cref="ObjectResponse{T}"/>.Success true is request was successful.  </para>
         /// </summary>
         /// 
@@ -36,14 +36,14 @@ namespace Milvasoft.Helpers
                                                              string successMessage,
                                                              string errorMessage = null)
         {
-            var response = new ObjectResponse<PaginationDTO<T>> { StatusCode = MilvasoftStatusCodes.Status200OK };
+            var response = new ObjectResponse<PaginationDTO<T>> { StatusCode = MilvaStatusCodes.Status200OK };
 
             response.Message = successMessage;
 
             if (paginationDTO.DTOList.IsNullOrEmpty())
             {
                 response.Message = string.IsNullOrEmpty(errorMessage) ? LocalizerKeys.DefaultErrorMessage : errorMessage;
-                response.StatusCode = MilvasoftStatusCodes.Status204NoContent;
+                response.StatusCode = MilvaStatusCodes.Status204NoContent;
                 response.Success = true;
             }
 
@@ -57,7 +57,7 @@ namespace Milvasoft.Helpers
         /// <para> If <paramref name="contentList"/> isn't null or empty, sets the <see cref="ObjectResponse{T}"/>.Message to <paramref name="successMessage"/>. </para>
         /// <para> Otherwise if <paramref name="errorMessage"/> is null sets the <see cref="ObjectResponse{T}"/>.Message to <b><see cref="LocalizerKeys.DefaultErrorMessage"/></b>. </para>
         /// <para> Otherwise sets the <see cref="ObjectResponse{T}"/>.Message to <paramref name="errorMessage"/>. </para>
-        /// <para> Also in this conditions sets the <see cref="ObjectResponse{T}"/>.StatusCode to <see cref="MilvasoftStatusCodes.Status204NoContent"/>
+        /// <para> Also in this conditions sets the <see cref="ObjectResponse{T}"/>.StatusCode to <see cref="MilvaStatusCodes.Status204NoContent"/>
         ///         and <see cref="ObjectResponse{T}"/>.Success to true. Reason to be considered the <see cref="ObjectResponse{T}"/>.Success true is request was successful.  </para>
         /// </summary>
         /// 
@@ -71,13 +71,13 @@ namespace Milvasoft.Helpers
         {
             var response = new ObjectResponse<List<T>>();
 
-            response.StatusCode = MilvasoftStatusCodes.Status200OK;
+            response.StatusCode = MilvaStatusCodes.Status200OK;
             response.Message = successMessage;
 
             if (contentList.IsNullOrEmpty())
             {
                 response.Message = string.IsNullOrEmpty(errorMessage) ? LocalizerKeys.DefaultErrorMessage : errorMessage;
-                response.StatusCode = MilvasoftStatusCodes.Status204NoContent;
+                response.StatusCode = MilvaStatusCodes.Status204NoContent;
                 response.Success = true;
             }
             response.Result = contentList;
@@ -90,7 +90,7 @@ namespace Milvasoft.Helpers
         /// <para> If <paramref name="content"/> isn't null, sets the <see cref="ObjectResponse{T}"/>.Message to <paramref name="successMessage"/>. </para>
         /// <para> Otherwise if <paramref name="errorMessage"/> is null sets the <see cref="ObjectResponse{T}"/>.Message to <b><see cref="LocalizerKeys.DefaultErrorMessage"/></b>. </para>
         /// <para> Otherwise sets the <see cref="ObjectResponse{T}"/>.Message to <paramref name="errorMessage"/>. </para>
-        /// <para> Also in this conditions sets the <see cref="ObjectResponse{T}"/>.StatusCode to <see cref="MilvasoftStatusCodes.Status204NoContent"/>
+        /// <para> Also in this conditions sets the <see cref="ObjectResponse{T}"/>.StatusCode to <see cref="MilvaStatusCodes.Status204NoContent"/>
         ///         and <see cref="ObjectResponse{T}"/>.Success to true. Reason to be considered the <see cref="ObjectResponse{T}"/>.Success true is request was successful.  </para>
         /// </summary>
         /// 
@@ -102,12 +102,12 @@ namespace Milvasoft.Helpers
                                                          string successMessage,
                                                          string errorMessage = null)
         {
-            var response = new ObjectResponse<T> { StatusCode = MilvasoftStatusCodes.Status200OK, Success = true };
+            var response = new ObjectResponse<T> { StatusCode = MilvaStatusCodes.Status200OK, Success = true };
             response.Message = successMessage;
             if (content == null)
             {
                 response.Message = string.IsNullOrEmpty(errorMessage) ? LocalizerKeys.DefaultErrorMessage : errorMessage;
-                response.StatusCode = MilvasoftStatusCodes.Status204NoContent;
+                response.StatusCode = MilvaStatusCodes.Status204NoContent;
             }
             response.Result = content;
             return new OkObjectResult(response);
@@ -134,7 +134,7 @@ namespace Milvasoft.Helpers
             if (idList.IsNullOrEmpty())
             {
                 response.Message = string.IsNullOrEmpty(errorMessage) ? LocalizerKeys.DefaultErrorMessage : errorMessage;
-                response.StatusCode = MilvasoftStatusCodes.Status600Exception;
+                response.StatusCode = MilvaStatusCodes.Status600Exception;
                 response.Success = false;
             }
             else
@@ -168,7 +168,7 @@ namespace Milvasoft.Helpers
             if (idList.IsNullOrEmpty())
             {
                 response.Message = string.IsNullOrEmpty(errorMessage) ? LocalizerKeys.DefaultErrorMessage : errorMessage;
-                response.StatusCode = MilvasoftStatusCodes.Status600Exception;
+                response.StatusCode = MilvaStatusCodes.Status600Exception;
                 response.Success = false;
             }
             else
@@ -199,7 +199,7 @@ namespace Milvasoft.Helpers
 
                 response.Success = true;
                 response.Message = successMessage;
-                response.StatusCode = MilvasoftStatusCodes.Status200OK;
+                response.StatusCode = MilvaStatusCodes.Status200OK;
             }
 
             return new OkObjectResult(response);
@@ -223,7 +223,7 @@ namespace Milvasoft.Helpers
                 response.Result = result;
                 response.Success = true;
                 response.Message = successMessage;
-                response.StatusCode = MilvasoftStatusCodes.Status200OK;
+                response.StatusCode = MilvaStatusCodes.Status200OK;
             }
 
             return new OkObjectResult(response);
@@ -247,7 +247,7 @@ namespace Milvasoft.Helpers
                 response.Result = result;
                 response.Success = true;
                 response.Message = successMessage;
-                response.StatusCode = MilvasoftStatusCodes.Status200OK;
+                response.StatusCode = MilvaStatusCodes.Status200OK;
             }
 
             return new OkObjectResult(response);
@@ -271,7 +271,7 @@ namespace Milvasoft.Helpers
             response.Result = result;
             response.Success = true;
             response.Message = successMessage;
-            response.StatusCode = MilvasoftStatusCodes.Status200OK;
+            response.StatusCode = MilvaStatusCodes.Status200OK;
 
             return new OkObjectResult(response);
         }
@@ -294,7 +294,7 @@ namespace Milvasoft.Helpers
             response.Result = result;
             response.Success = true;
             response.Message = successMessage;
-            response.StatusCode = MilvasoftStatusCodes.Status200OK;
+            response.StatusCode = MilvaStatusCodes.Status200OK;
 
             return new OkObjectResult(response);
         }
@@ -317,7 +317,7 @@ namespace Milvasoft.Helpers
             response.Result = result;
             response.Success = true;
             response.Message = successMessage;
-            response.StatusCode = MilvasoftStatusCodes.Status200OK;
+            response.StatusCode = MilvaStatusCodes.Status200OK;
 
             return new OkObjectResult(response);
         }

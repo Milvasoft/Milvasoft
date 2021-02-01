@@ -6,7 +6,7 @@ namespace Milvasoft.Helpers.Exceptions
     /// <summary>
     /// The exception that is thrown when attempt to get enum by invalid id.
     /// </summary>
-    public class InvalidParameterException : MilvasoftBaseException
+    public class InvalidParameterException : MilvaBaseException
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="InvalidParameterException"/> class.
@@ -14,7 +14,7 @@ namespace Milvasoft.Helpers.Exceptions
         /// <param name="localizer"></param>
         public InvalidParameterException(IStringLocalizer localizer) : base(localizer["InvalidParameterException"])
         {
-            ErrorCode = (int)MilvasoftExceptionCode.InvalidParameter;
+            ErrorCode = (int)MilvaExceptionCode.InvalidParameter;
         }
 
         /// <summary>
@@ -24,7 +24,7 @@ namespace Milvasoft.Helpers.Exceptions
         /// <param name="localizer"></param>
         public InvalidParameterException(IStringLocalizer localizer, string customMessage) : base(localizer["InvalidParameterException", customMessage])
         {
-            ErrorCode = (int)MilvasoftExceptionCode.InvalidParameter;
+            ErrorCode = (int)MilvaExceptionCode.InvalidParameter;
         }
 
 
@@ -37,7 +37,7 @@ namespace Milvasoft.Helpers.Exceptions
         /// <param name="customMessage"></param>
         public InvalidParameterException(string customMessage) : base(customMessage)
         {
-            ErrorCode = (int)MilvasoftExceptionCode.InvalidParameter;
+            ErrorCode = (int)MilvaExceptionCode.InvalidParameter;
         }
 
         /// <summary>
@@ -47,7 +47,7 @@ namespace Milvasoft.Helpers.Exceptions
         /// <param name="innerException"></param>
         public InvalidParameterException(string customMessage, Exception innerException) : base("Message : " + $"{customMessage}" + " Inner Exception : " + $"{innerException}")
         {
-            ErrorCode = (int)MilvasoftExceptionCode.InvalidParameter;
+            ErrorCode = (int)MilvaExceptionCode.InvalidParameter;
         }
     }
 }

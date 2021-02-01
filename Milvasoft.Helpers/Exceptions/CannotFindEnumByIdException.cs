@@ -6,7 +6,7 @@ namespace Milvasoft.Helpers.Exceptions
     /// <summary>
     /// The exception that is thrown when attempt to get enum by invalid id.
     /// </summary>
-    public class CannotFindEnumByIdException : MilvasoftBaseException
+    public class CannotFindEnumByIdException : MilvaBaseException
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="CannotFindEnumByIdException"/> class.
@@ -14,7 +14,7 @@ namespace Milvasoft.Helpers.Exceptions
         /// <param name="localizer"></param>
         public CannotFindEnumByIdException(IStringLocalizer localizer) : base(localizer)
         {
-            ErrorCode = (int)MilvasoftExceptionCode.CannotFindEnumById;
+            ErrorCode = (int)MilvaExceptionCode.CannotFindEnumById;
         }
 
         /// <summary>
@@ -23,7 +23,7 @@ namespace Milvasoft.Helpers.Exceptions
         /// <param name="customMessage"></param>
         public CannotFindEnumByIdException(string customMessage) : base(customMessage)
         {
-            ErrorCode = (int)MilvasoftExceptionCode.CannotFindEnumById;
+            ErrorCode = (int)MilvaExceptionCode.CannotFindEnumById;
         }
 
         /// <summary>
@@ -33,7 +33,7 @@ namespace Milvasoft.Helpers.Exceptions
         /// <param name="innerException"></param>
         public CannotFindEnumByIdException(string customMessage, Exception innerException) : base(customMessage, innerException)
         {
-            ErrorCode = (int)MilvasoftExceptionCode.CannotFindEnumById;
+            ErrorCode = (int)MilvaExceptionCode.CannotFindEnumById;
         }
     }
 }

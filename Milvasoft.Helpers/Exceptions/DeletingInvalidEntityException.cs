@@ -6,7 +6,7 @@ namespace Milvasoft.Helpers.Exceptions
     /// <summary>
     /// The exception that is thrown when attempt to delete an entity that is not in the Repository.
     /// </summary>
-    public class DeletingInvalidEntityException : MilvasoftBaseException
+    public class DeletingInvalidEntityException : MilvaBaseException
     {
         /// <summary>
         /// Initializes a new instance of the <c>ABKExceptionLibrary.DeletingInvalidEntityException</c> class  with an entity id not found in the Repository. 
@@ -15,7 +15,7 @@ namespace Milvasoft.Helpers.Exceptions
         /// <param name="localizer"></param>
         public DeletingInvalidEntityException(IStringLocalizer localizer) : base(localizer["DeletingInvalidEntityException"])
         {
-            ErrorCode = (int)MilvasoftExceptionCode.DeletingInvalidEntity;
+            ErrorCode = (int)MilvaExceptionCode.DeletingInvalidEntity;
         }
 
         /// <summary>
@@ -24,7 +24,7 @@ namespace Milvasoft.Helpers.Exceptions
         /// <param name="customMessage"></param>
         public DeletingInvalidEntityException(string customMessage) : base(customMessage)
         {
-            ErrorCode = (int)MilvasoftExceptionCode.DeletingInvalidEntity;
+            ErrorCode = (int)MilvaExceptionCode.DeletingInvalidEntity;
         }
 
         /// <summary>
@@ -34,7 +34,7 @@ namespace Milvasoft.Helpers.Exceptions
         /// <param name="innerException"></param>
         public DeletingInvalidEntityException(string customMessage, Exception innerException) : base(customMessage, innerException)
         {
-            ErrorCode = (int)MilvasoftExceptionCode.DeletingInvalidEntity;
+            ErrorCode = (int)MilvaExceptionCode.DeletingInvalidEntity;
         }
     }
 }

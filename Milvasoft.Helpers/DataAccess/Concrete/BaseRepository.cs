@@ -1,5 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Milvasoft.Helpers.DataAccess.Abstract;
+using Milvasoft.Helpers.DataAccess.Abstract.Entity;
+using Milvasoft.Helpers.DataAccess.Concrete.Entity;
 using Milvasoft.Helpers.DataAccess.IncludeLibrary;
 using Milvasoft.Helpers.Extensions;
 using System;
@@ -17,7 +19,7 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
     /// <typeparam name="TKey"></typeparam>
     /// <typeparam name="TContext"></typeparam>
     public abstract class BaseRepository<TEntity, TKey, TContext> : IBaseRepository<TEntity, TKey, TContext> where TEntity : class, IBaseEntity<TKey>
-                                                                                                             where TKey : IEquatable<TKey>
+                                                                                                             where TKey : struct, IEquatable<TKey>
                                                                                                              where TContext : DbContext
     {
         //TODO EntityFrameworkQueryableExtensions methods will be added here.
@@ -70,13 +72,13 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
 
 
         /// <summary>
-        /// Gets <b>entity => entity.IsDeleted == false</b> expression, if <typeparamref name="TEntity"/> is assignable from <see cref="IBaseIndelibleEntity{TKey}"/>.
+        /// Gets <b>entity => entity.IsDeleted == false</b> expression, if <typeparamref name="TEntity"/> is assignable from <see cref="FullAuditableEntity{TKey}"/>.
         /// </summary>
         /// <returns></returns>
         public virtual Expression<Func<TEntity, bool>> CreateIsDeletedFalseExpression()
         {
             var entityType = typeof(TEntity);
-            if (typeof(BaseIndelibleEntity<TKey>).IsAssignableFrom(entityType.BaseType))
+            if (typeof(FullAuditableEntity<TKey>).IsAssignableFrom(entityType.BaseType) || typeof(IFullAuditable<TKey>).IsAssignableFrom(entityType.BaseType))
             {
                 var parameter = Expression.Parameter(entityType, "entity");
                 var filterExpression = Expression.Equal(Expression.Property(parameter, entityType.GetProperty("IsDeleted")), Expression.Constant(false, typeof(bool)));
@@ -86,7 +88,7 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
         }
 
         /// <summary>
-        ///  Returns all entities which IsDeleted condition is true from database asynchronously. If the condition is requested, it also provides that condition.</para> 
+        ///  Returns all entities which IsDeleted condition is true from database asynchronously. If the condition is requested, it also provides that condition.
         /// </summary>
         /// <param name="conditionExpression"></param>
         /// <returns></returns>
@@ -94,7 +96,7 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
             => await _dbContext.Set<TEntity>().FirstOrDefaultAsync(CreateConditionExpression(conditionExpression) ?? (entity => true)).ConfigureAwait(false);
 
         /// <summary>
-        ///  Returns all entities which IsDeleted condition is true with includes from database asynchronously. If the condition is requested, it also provides that condition.</para> 
+        ///  Returns all entities which IsDeleted condition is true with includes from database asynchronously. If the condition is requested, it also provides that condition. 
         /// </summary>
         /// <param name="includes"></param>
         /// <param name="conditionExpression"></param>
@@ -103,7 +105,7 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
             => await _dbContext.Set<TEntity>().IncludeMultiple(includes).FirstOrDefaultAsync(CreateConditionExpression(conditionExpression) ?? (entity => true)).ConfigureAwait(false);
 
         /// <summary>
-        ///  Returns all entities which IsDeleted condition is true from database asynchronously. If the condition is requested, it also provides that condition.</para> 
+        ///  Returns all entities which IsDeleted condition is true from database asynchronously. If the condition is requested, it also provides that condition.
         /// </summary>
         /// <param name="conditionExpression"></param>
         /// <returns></returns>
@@ -111,7 +113,7 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
             => await _dbContext.Set<TEntity>().SingleOrDefaultAsync(CreateConditionExpression(conditionExpression) ?? (entity => true)).ConfigureAwait(false);
 
         /// <summary>
-        ///  Returns all entities which IsDeleted condition is true with includes from database asynchronously. If the condition is requested, it also provides that condition.</para> 
+        ///  Returns all entities which IsDeleted condition is true with includes from database asynchronously. If the condition is requested, it also provides that condition.
         /// </summary>
         /// <param name="includes"></param>
         /// <param name="conditionExpression"></param>
@@ -120,7 +122,7 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
             => await _dbContext.Set<TEntity>().IncludeMultiple(includes).SingleOrDefaultAsync(CreateConditionExpression(conditionExpression) ?? (entity => true)).ConfigureAwait(false);
 
         /// <summary>
-        ///  Returns all entities which IsDeleted condition is true from database asynchronously. If the condition is requested, it also provides that condition.</para> 
+        ///  Returns all entities which IsDeleted condition is true from database asynchronously. If the condition is requested, it also provides that condition.
         /// </summary>
         /// <param name="conditionExpression"></param>
         /// <returns></returns>
@@ -128,7 +130,7 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
             => await _dbContext.Set<TEntity>().Where(CreateConditionExpression(conditionExpression) ?? (entity => true)).ToListAsync().ConfigureAwait(false);
 
         /// <summary>
-        ///  Returns all entities which IsDeleted condition is true with specified includes from database asynchronously. If the condition is requested, it also provides that condition.</para> 
+        ///  Returns all entities which IsDeleted condition is true with specified includes from database asynchronously. If the condition is requested, it also provides that condition.
         /// </summary>
         /// <param name="includes"></param>
         /// <param name="conditionExpression"></param>
@@ -168,8 +170,6 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
 
             return (entities: repo, pageCount: estimatedCountOfPages, totalDataCount: totalDataCount);
         }
-
-
 
         /// <summary>
         ///  Creates asynchronously a shallow copy of a range of entity's which IsDeleted property is true, in the source List of TEntity with requested count,range and includes.
@@ -554,7 +554,6 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
         /// Returns one entity by entity Id from database asynchronously.
         /// </summary>
         /// <param name="id"></param>
-        /// <param name=""></param>
         /// <param name="conditionExpression"></param>
         /// <returns> The entity found or null. </returns>
         public virtual async Task<TEntity> GetByIdAsync(TKey id, Expression<Func<TEntity, bool>> conditionExpression = null)
@@ -827,19 +826,19 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
         /// <summary>
         /// Gets grouped entities with condition from database with <paramref name="groupedClause"/>.
         /// 
-        /// <b>Example use;</b></para>
+        /// <para> <b>Example use;</b></para>
         /// <code>
         /// 
-        ///    Func{IQueryablePocoDTO>} groupByClauseFunc = () =>   from poco in _contextRepository.GetDbSet{Poco}()                                       </para>
+        /// <para>   Func{IQueryablePocoDTO>} groupByClauseFunc = () =>   from poco in _contextRepository.GetDbSet{Poco}()                                                    </para>
         ///                                                               group poco by new { poco.Id,  poco.PocoCode } into groupedPocos                                      
-        ///                                                               select new PocoDTO                                                                             </para>
-        ///                                                               {                                                                                              </para>
-        ///                                                                    Id = groupedPocos.Key.Id,                                                                 </para>
-        ///                                                                    PocoCode = groupedPocos.Key.PocoCode,                                                     </para>
-        ///                                                                    PocoCount = groupedPocos.Sum(p=>p.Count)                                                  </para>
-        ///                                                               };                                                                                             </para>
+        /// <para>                                                              select new PocoDTO                                                                             </para>
+        /// <para>                                                              {                                                                                              </para>
+        /// <para>                                                                   Id = groupedPocos.Key.Id,                                                                 </para>
+        /// <para>                                                                   PocoCode = groupedPocos.Key.PocoCode,                                                     </para>
+        /// <para>                                                                   PocoCount = groupedPocos.Sum(p=>p.Count)                                                  </para>
+        /// <para>                                                              };                                                                                             </para>
         ///                        
-        ///    var result = await _pocoRepository.GetGroupedAsync{PocoDTO}(1, 10, "PocoCode", false, groupByClauseFunc).ConfigureAwait(false);                           </para>
+        /// <para>   var result = await _pocoRepository.GetGroupedAsync{PocoDTO}(1, 10, "PocoCode", false, groupByClauseFunc).ConfigureAwait(false);                           </para>
         ///    
         /// </code>
         /// 
@@ -1056,7 +1055,7 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
             {
                 _dbContext.Set<TEntity>().AddRange(newEntities);
                 await _dbContext.SaveChangesAsync().ConfigureAwait(false);
-            }             
+            }
         }
 
         /// <summary>
@@ -1070,6 +1069,7 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
             _dbContext.RemoveRange(entities);
             await _dbContext.SaveChangesAsync().ConfigureAwait(false);
         }
+
 
         #region Private Helper Methods
 

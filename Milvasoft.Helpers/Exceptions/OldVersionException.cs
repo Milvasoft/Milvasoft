@@ -6,7 +6,7 @@ namespace Milvasoft.Helpers.Exceptions
     /// <summary>
     /// The exception that is thrown when attempt to do operation with null objects.
     /// </summary>
-    public class OldVersionException : MilvasoftBaseException
+    public class OldVersionException : MilvaBaseException
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="OldVersionException"/> class.
@@ -14,7 +14,7 @@ namespace Milvasoft.Helpers.Exceptions
         /// <param name="localizer"></param>
         public OldVersionException(IStringLocalizer localizer) : base(localizer["OldVersionException"])
         {
-            ErrorCode = (int)MilvasoftExceptionCode.OldVersion;
+            ErrorCode = (int)MilvaExceptionCode.OldVersion;
         }
 
         /// <summary>
@@ -23,7 +23,7 @@ namespace Milvasoft.Helpers.Exceptions
         /// <param name="customMessage"></param>
         public OldVersionException(string customMessage) : base(customMessage)
         {
-            ErrorCode = (int)MilvasoftExceptionCode.OldVersion;
+            ErrorCode = (int)MilvaExceptionCode.OldVersion;
         }
 
         /// <summary>
@@ -33,7 +33,7 @@ namespace Milvasoft.Helpers.Exceptions
         /// <param name="innerException"></param>
         public OldVersionException(string customMessage, Exception innerException) : base(customMessage, innerException)
         {
-            ErrorCode = (int)MilvasoftExceptionCode.OldVersion;
+            ErrorCode = (int)MilvaExceptionCode.OldVersion;
         }
     }
 }

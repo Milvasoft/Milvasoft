@@ -6,7 +6,7 @@ namespace Milvasoft.Helpers.Exceptions
     /// <summary>
     /// The exception that is thrown when attempt to search for an entity not found in the Repository.
     /// </summary>
-    public class CannotFindEntityException : MilvasoftBaseException
+    public class CannotFindEntityException : MilvaBaseException
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="CannotFindEntityException"/> class with defined default message by constructor.
@@ -14,7 +14,7 @@ namespace Milvasoft.Helpers.Exceptions
         /// <param name="localizer"></param>
         public CannotFindEntityException(IStringLocalizer localizer) : base(localizer["CannotFindEntityException"])
         {
-            ErrorCode = (int)MilvasoftExceptionCode.CannotFindEntity;
+            ErrorCode = (int)MilvaExceptionCode.CannotFindEntity;
         }
 
         /// <summary>
@@ -24,7 +24,7 @@ namespace Milvasoft.Helpers.Exceptions
         /// <param name="customMessage"></param>
         public CannotFindEntityException(string customMessage) : base(customMessage)
         {
-            ErrorCode = (int)MilvasoftExceptionCode.CannotFindEntity;
+            ErrorCode = (int)MilvaExceptionCode.CannotFindEntity;
         }
 
         /// <summary>
@@ -35,7 +35,7 @@ namespace Milvasoft.Helpers.Exceptions
         /// <param name="innerException"></param>
         public CannotFindEntityException(string customMessage, Exception innerException) : base(customMessage, innerException)
         {
-            ErrorCode = (int)MilvasoftExceptionCode.CannotFindEntity;
+            ErrorCode = (int)MilvaExceptionCode.CannotFindEntity;
         }
     }
 }

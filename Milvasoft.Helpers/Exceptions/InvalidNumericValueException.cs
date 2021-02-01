@@ -6,7 +6,7 @@ namespace Milvasoft.Helpers.Exceptions
     /// <summary>
     /// The exception that is thrown when attempt to process invalid numeric value in the conditions of situation.
     /// </summary>
-    public class InvalidNumericValueException : MilvasoftBaseException
+    public class InvalidNumericValueException : MilvaBaseException
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="InvalidNumericValueException"/> class.
@@ -14,7 +14,7 @@ namespace Milvasoft.Helpers.Exceptions
         /// <param name="localizer"></param>
         public InvalidNumericValueException(IStringLocalizer localizer) : base(localizer["InvalidNumericValueException"])
         {
-            ErrorCode = (int)MilvasoftExceptionCode.InvalidNumericValue;
+            ErrorCode = (int)MilvaExceptionCode.InvalidNumericValue;
         }
 
         /// <summary>
@@ -25,7 +25,7 @@ namespace Milvasoft.Helpers.Exceptions
         /// <param name="localizer"></param>
         public InvalidNumericValueException(IStringLocalizer localizer, decimal invalidValue) : base(localizer["InvalidNumericValueException", invalidValue.ToString("{0:0.##}")])
         {
-            ErrorCode = (int)MilvasoftExceptionCode.InvalidNumericValue;
+            ErrorCode = (int)MilvaExceptionCode.InvalidNumericValue;
         }
 
         /// <summary>
@@ -34,7 +34,7 @@ namespace Milvasoft.Helpers.Exceptions
         /// <param name="customMessage"></param>
         public InvalidNumericValueException(string customMessage) : base(customMessage)
         {
-            ErrorCode = (int)MilvasoftExceptionCode.InvalidNumericValue;
+            ErrorCode = (int)MilvaExceptionCode.InvalidNumericValue;
         }
 
         /// <summary>
@@ -45,7 +45,7 @@ namespace Milvasoft.Helpers.Exceptions
         /// <param name="innerException"></param>
         public InvalidNumericValueException(string customMessage, Exception innerException) : base(customMessage, innerException)
         {
-            ErrorCode = (int)MilvasoftExceptionCode.InvalidNumericValue;
+            ErrorCode = (int)MilvaExceptionCode.InvalidNumericValue;
         }
     }
 }

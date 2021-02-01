@@ -6,7 +6,7 @@ namespace Milvasoft.Helpers.Exceptions
     /// <summary>
     /// The exception that is thrown when attempt to do operation with null objects.
     /// </summary>
-    public class ExpiredDemoException : MilvasoftBaseException
+    public class ExpiredDemoException : MilvaBaseException
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="ExpiredDemoException"/> class.
@@ -14,7 +14,7 @@ namespace Milvasoft.Helpers.Exceptions
         /// <param name="localizer"></param>
         public ExpiredDemoException(IStringLocalizer localizer) : base(localizer["ExpiredDemoException"])
         {
-            ErrorCode = (int)MilvasoftExceptionCode.ExpiredDemo;
+            ErrorCode = (int)MilvaExceptionCode.ExpiredDemo;
         }
 
         /// <summary>
@@ -23,7 +23,7 @@ namespace Milvasoft.Helpers.Exceptions
         /// <param name="customMessage"></param>
         public ExpiredDemoException(string customMessage) : base(customMessage)
         {
-            ErrorCode = (int)MilvasoftExceptionCode.ExpiredDemo;
+            ErrorCode = (int)MilvaExceptionCode.ExpiredDemo;
         }
 
         /// <summary>
@@ -33,7 +33,7 @@ namespace Milvasoft.Helpers.Exceptions
         /// <param name="innerException"></param>
         public ExpiredDemoException(string customMessage, Exception innerException) : base(customMessage, innerException)
         {
-            ErrorCode = (int)MilvasoftExceptionCode.ExpiredDemo;
+            ErrorCode = (int)MilvaExceptionCode.ExpiredDemo;
         }
     }
 }

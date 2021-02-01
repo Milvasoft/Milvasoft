@@ -17,7 +17,7 @@ namespace Milvasoft.Helpers.Attributes.ActionFilter
     /// <summary>
     /// Provides the attribute validation exclude opportunity.
     /// </summary>
-    public class ControllerFilterAttribute : ActionFilterAttribute
+    public class ValidationFilterAttribute : ActionFilterAttribute
     {
         #region Properties
 
@@ -55,15 +55,15 @@ namespace Milvasoft.Helpers.Attributes.ActionFilter
                 {
                     Success = false,
                     Message = message,
-                    StatusCode = MilvasoftStatusCodes.Status600Exception,
+                    StatusCode = MilvaStatusCodes.Status600Exception,
                     Result = new object(),
                     ErrorCodes = new List<int>()
                 };
                 var json = JsonConvert.SerializeObject(validationResponse);
 
                 context.HttpContext.Response.ContentType = "application/json";
-                context.HttpContext.Items.Add(new KeyValuePair<object, object>("StatusCode", MilvasoftStatusCodes.Status600Exception));
-                context.HttpContext.Response.StatusCode = MilvasoftStatusCodes.Status200OK;
+                context.HttpContext.Items.Add(new KeyValuePair<object, object>("StatusCode", MilvaStatusCodes.Status600Exception));
+                context.HttpContext.Response.StatusCode = MilvaStatusCodes.Status200OK;
                 await context.HttpContext.Response.WriteAsync(json).ConfigureAwait(false);
 
                 context.Result = new OkResult();

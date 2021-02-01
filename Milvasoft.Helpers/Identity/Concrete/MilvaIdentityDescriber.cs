@@ -7,7 +7,7 @@ namespace Milvasoft.Helpers.Identity.Concrete
     /// <summary>
     /// Provides localized identity error messages. All error's code is nameof(<see cref="IdentityError"/>) method. (e.g. Code = "DefaultError")
     /// </summary>
-    public class MilvasoftIdentityDescriber<TLocalizer> : IdentityErrorDescriber where TLocalizer : IStringLocalizer
+    public class MilvaIdentityDescriber<TLocalizer> : IdentityErrorDescriber where TLocalizer : IStringLocalizer
     {
         private readonly TLocalizer _localizer;
 
@@ -15,7 +15,7 @@ namespace Milvasoft.Helpers.Identity.Concrete
         /// Constructor for localizer dependenct injection.
         /// </summary>
         /// <param name="localizer"></param>
-        public MilvasoftIdentityDescriber(TLocalizer localizer) => _localizer = localizer;
+        public MilvaIdentityDescriber(TLocalizer localizer) => _localizer = localizer;
 
         /// <summary>
         /// An unknown failure has occurred. Localizer Key : IdentityDefaultError

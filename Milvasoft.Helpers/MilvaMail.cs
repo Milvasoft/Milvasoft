@@ -15,7 +15,7 @@ namespace Milvasoft.Helpers
     /// <summary>
     /// Provides send mail.
     /// </summary>
-    public class MilvasoftMail
+    public class MilvaMail
     {
         /// <summary>
         /// Gets or sets mail sender.
@@ -44,7 +44,7 @@ namespace Milvasoft.Helpers
         /// <param name="networkCredential"></param>
         /// <param name="smtpPort"></param>
         /// <param name="smtpHost"></param>
-        public MilvasoftMail(string from, NetworkCredential networkCredential, int smtpPort, string smtpHost)
+        public MilvaMail(string from, NetworkCredential networkCredential, int smtpPort, string smtpHost)
         {
             From = from;
             NetworkCredential = networkCredential;

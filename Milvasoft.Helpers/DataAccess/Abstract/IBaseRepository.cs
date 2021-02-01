@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Milvasoft.Helpers.DataAccess.Abstract.Entity;
 using Milvasoft.Helpers.DataAccess.Concrete;
 using Milvasoft.Helpers.DataAccess.IncludeLibrary;
 using System;
@@ -16,7 +17,7 @@ namespace Milvasoft.Helpers.DataAccess.Abstract
     /// <typeparam name="TKey"></typeparam>
     /// <typeparam name="TContext"></typeparam>
     public interface IBaseRepository<TEntity, TKey, TContext> where TEntity : IBaseEntity<TKey>
-                                                              where TKey : IEquatable<TKey>
+                                                              where TKey : struct, IEquatable<TKey>
                                                               where TContext : DbContext
     {
         /// <summary>
@@ -35,7 +36,7 @@ namespace Milvasoft.Helpers.DataAccess.Abstract
 
 
         /// <summary>
-        /// Gets <b>entity => entity.IsDeleted == false</b> expression, if <typeparamref name="TEntity"/> is assignable from <see cref="IBaseIndelibleEntity{TKey}"/>.
+        /// Gets <b>entity => entity.IsDeleted == false</b> expression, if <typeparamref name="TEntity"/> is assignable from <see cref="IFullAuditable{TKey}"/>.
         /// </summary>
         /// <returns></returns>
         Expression<Func<TEntity, bool>> CreateIsDeletedFalseExpression();
@@ -257,7 +258,6 @@ namespace Milvasoft.Helpers.DataAccess.Abstract
         /// Returns one entity by entity Id from database asynchronously.
         /// </summary>
         /// <param name="id"></param>
-        /// <param name=""></param>
         /// <param name="conditionExpression"></param>
         /// <returns> The entity found or null. </returns>
         Task<TEntity> GetByIdAsync(TKey id, Expression<Func<TEntity, bool>> conditionExpression = null);
@@ -442,19 +442,19 @@ namespace Milvasoft.Helpers.DataAccess.Abstract
         /// <summary>
         /// Gets grouped entities with condition from database with <paramref name="groupedClause"/>.
         /// 
-        /// <b>Example use;</b></para>
+        /// <para><b>Example use;</b></para>
         /// <code>
         /// 
-        ///    Func{IQueryablePocoDTO>} groupByClauseFunc = () =>   from poco in _contextRepository.GetDbSet{Poco}()                                       </para>
+        /// <para>   Func{IQueryablePocoDTO>} groupByClauseFunc = () =>   from poco in _contextRepository.GetDbSet{Poco}()                                       </para>
         ///                                                               group poco by new { poco.Id,  poco.PocoCode } into groupedPocos                                      
-        ///                                                               select new PocoDTO                                                                             </para>
-        ///                                                               {                                                                                              </para>
-        ///                                                                    Id = groupedPocos.Key.Id,                                                                 </para>
-        ///                                                                    PocoCode = groupedPocos.Key.PocoCode,                                                     </para>
-        ///                                                                    PocoCount = groupedPocos.Sum(p=>p.Count)                                                  </para>
-        ///                                                               };                                                                                             </para>
-        ///                        
-        ///    var result = await _pocoRepository.GetGroupedAsync{PocoDTO}(1, 10, "PocoCode", false, groupByClauseFunc).ConfigureAwait(false);                           </para>
+        /// <para>                                                              select new PocoDTO                                                                             </para>
+        /// <para>                                                              {                                                                                              </para>
+        /// <para>                                                                   Id = groupedPocos.Key.Id,                                                                 </para>
+        /// <para>                                                                   PocoCode = groupedPocos.Key.PocoCode,                                                     </para>
+        /// <para>                                                                   PocoCount = groupedPocos.Sum(p=>p.Count)                                                  </para>
+        /// <para>                                                              };                                                                                             </para>
+        ///                      
+        /// <para>   var result = await _pocoRepository.GetGroupedAsync{PocoDTO}(1, 10, "PocoCode", false, groupByClauseFunc).ConfigureAwait(false);                           </para>
         ///    
         /// </code>
         /// 

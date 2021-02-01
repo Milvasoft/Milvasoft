@@ -10,7 +10,7 @@ namespace Milvasoft.Helpers.Identity.Concrete
     /// <summary>
     /// Provides an abstraction for user validation.
     /// </summary>
-    public class MilvasoftUserValidation<TUser,TLocalizer> : IUserValidator<TUser> where TUser : IdentityUser<Guid> where TLocalizer : IStringLocalizer
+    public class MilvaUserValidation<TUser,TLocalizer> : IUserValidator<TUser> where TUser : IdentityUser<Guid> where TLocalizer : IStringLocalizer
     {
         private readonly TLocalizer _localizer;
 
@@ -18,7 +18,7 @@ namespace Milvasoft.Helpers.Identity.Concrete
         /// Constructor for localizer dependenct injection.
         /// </summary>
         /// <param name="localizer"></param>
-        public MilvasoftUserValidation(TLocalizer localizer) => _localizer = localizer;
+        public MilvaUserValidation(TLocalizer localizer) => _localizer = localizer;
 
         /// <summary>
         /// Validates the specified user as an asynchronous operation.

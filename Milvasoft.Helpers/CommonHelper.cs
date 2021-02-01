@@ -84,15 +84,15 @@ namespace Milvasoft.Helpers
         /// </summary>
         public static void EnsureLegalLengths(int maxLength, int minLength , IStringLocalizer stringLocalizer = null)
         {
-            if (maxLength < 0) throw new MilvasoftValidationException(stringLocalizer != null 
+            if (maxLength < 0) throw new MilvaValidationException(stringLocalizer != null 
                                                                       ? stringLocalizer["PreventStringInjectionMaxLengthException"] 
                                                                       : "Please enter a valid value for the maximum character length.");
 
-            if (minLength < 0) throw new MilvasoftValidationException(stringLocalizer != null 
+            if (minLength < 0) throw new MilvaValidationException(stringLocalizer != null 
                                                                       ? stringLocalizer["PreventStringInjectionMinLengthException"] 
                                                                       : "Please enter a valid value for the minimum character length.");
 
-            if (maxLength <= minLength) throw new MilvasoftValidationException(stringLocalizer != null
+            if (maxLength <= minLength) throw new MilvaValidationException(stringLocalizer != null
                                                                                ? stringLocalizer["PreventStringInjectionMinLengthBigThanMaxLengthException", minLength, maxLength]
                                                                                : $"The minimum value ({minLength}) you entered is greater than the maximum value ({maxLength}). Please enter a valid range of values.");
         }

@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Milvasoft.Helpers.DataAccess.Abstract;
+using Milvasoft.Helpers.DataAccess.Abstract.Entity;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
@@ -116,8 +117,8 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
         /// <summary>
         /// User update process.
         /// </summary>
-        public void InitializeUpdating<TEntity, TKey>(TEntity entity) where TEntity : class, IBaseEntity<TKey>
-                                                                      where TKey : IEquatable<TKey>
+        public void InitializeUpdating<TEntity, TKey>(TEntity entity) where TEntity : class, IAuditable<TKey>
+                                                                      where TKey : struct, IEquatable<TKey>
         {
             var localEntity = _dbContext.Set<TEntity>().Local.FirstOrDefault(u => u.Id.Equals(entity.Id));
             if (localEntity == null)
@@ -151,7 +152,7 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
                                                                 string loginProvider,
                                                                 string tokenName,
                                                                 Dictionary<string, string> cachedTokenDictionary = null) where TUser : IdentityUser<TKey>
-                                                                                                                         where TKey : IEquatable<TKey>
+                                                                                                                         where TKey : struct, IEquatable<TKey>
         {
             var tokenHandler = new JwtSecurityTokenHandler();
 

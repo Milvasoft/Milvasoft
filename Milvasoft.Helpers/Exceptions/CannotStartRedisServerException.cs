@@ -6,7 +6,7 @@ namespace Milvasoft.Helpers.Exceptions
     /// <summary>
     /// Exception class to be thrown when Redis Server fails to start.
     /// </summary>
-    public class CannotStartRedisServerException : MilvasoftBaseException
+    public class CannotStartRedisServerException : MilvaBaseException
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="CannotStartRedisServerException"/> class.
@@ -14,7 +14,7 @@ namespace Milvasoft.Helpers.Exceptions
         /// <param name="localizer"></param>
         public CannotStartRedisServerException(IStringLocalizer localizer) : base(localizer["CannotStartRedisServerException"])
         {
-            ErrorCode = (int)MilvasoftExceptionCode.CannotStartRedisServer;
+            ErrorCode = (int)MilvaExceptionCode.CannotStartRedisServer;
         }
 
         /// <summary>
@@ -23,7 +23,7 @@ namespace Milvasoft.Helpers.Exceptions
         /// <param name="customMessage"></param>
         public CannotStartRedisServerException(string customMessage) : base(customMessage)
         {
-            ErrorCode = (int)MilvasoftExceptionCode.CannotStartRedisServer;
+            ErrorCode = (int)MilvaExceptionCode.CannotStartRedisServer;
         }
 
         /// <summary>
@@ -33,7 +33,7 @@ namespace Milvasoft.Helpers.Exceptions
         /// <param name="innerException"></param>
         public CannotStartRedisServerException(string message, Exception innerException) : base(message, innerException)
         {
-            ErrorCode = (int)MilvasoftExceptionCode.CannotStartRedisServer;
+            ErrorCode = (int)MilvaExceptionCode.CannotStartRedisServer;
         }
     }
 }

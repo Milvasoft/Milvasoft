@@ -3,7 +3,7 @@
     /// <summary>
     /// Http status codes.
     /// </summary>
-    public static class MilvasoftStatusCodes 
+    public static class MilvaStatusCodes 
     {
         public const int Status100Continue = 100;
         public const int Status412PreconditionFailed = 412;

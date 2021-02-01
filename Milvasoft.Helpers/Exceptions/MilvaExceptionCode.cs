@@ -3,7 +3,7 @@
     /// <summary>
     /// Defines the MilvasoftExceptionCode.
     /// </summary>
-    public enum MilvasoftExceptionCode
+    public enum MilvaExceptionCode
     {
         /// <summary>
         /// Defines the UnknownError.

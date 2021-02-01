@@ -1,12 +1,12 @@
 ﻿using Milvasoft.Helpers.Enums;
 using System.Threading.Tasks;
 
-namespace Milvasoft.DependencyInjection
+namespace Milvasoft.Helpers.DependencyInjection
 {
     /// <summary>
     /// Logger interface for DI.
     /// </summary>
-    public interface IMilvasoftLogger
+    public interface IMilvaLogger
     {
         /// <summary>
         /// Saves the log at verbose level.

@@ -6,7 +6,7 @@ namespace Milvasoft.Helpers.Exceptions
     /// <summary>
     /// The exception that is thrown when attempt to do process on empty list.
     /// </summary>
-    public class EmptyListException : MilvasoftBaseException
+    public class EmptyListException : MilvaBaseException
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="EmptyListException"/> class with defined default message by constructor.
@@ -14,7 +14,7 @@ namespace Milvasoft.Helpers.Exceptions
         /// <param name="localizer"></param>
         public EmptyListException(IStringLocalizer localizer) : base(localizer["EmptyListException"])
         {
-            ErrorCode = (int)MilvasoftExceptionCode.EmptyList;
+            ErrorCode = (int)MilvaExceptionCode.EmptyList;
         }
 
         /// <summary>
@@ -23,7 +23,7 @@ namespace Milvasoft.Helpers.Exceptions
         /// <param name="customMessage"></param>
         public EmptyListException(string customMessage) : base(customMessage)
         {
-            ErrorCode = (int)MilvasoftExceptionCode.EmptyList;
+            ErrorCode = (int)MilvaExceptionCode.EmptyList;
         }
 
         /// <summary>
@@ -33,7 +33,7 @@ namespace Milvasoft.Helpers.Exceptions
         /// <param name="innerException"></param>
         public EmptyListException(string customMessage, Exception innerException) : base(customMessage, innerException)
         {
-            ErrorCode = (int)MilvasoftExceptionCode.EmptyList;
+            ErrorCode = (int)MilvaExceptionCode.EmptyList;
         }
     }
 }

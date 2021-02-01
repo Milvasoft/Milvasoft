@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
-using Milvasoft.Helpers.DataAccess.Abstract;
+using Milvasoft.Helpers.DataAccess.Abstract.Entity;
 using Milvasoft.Helpers.Exceptions;
 using Milvasoft.Helpers.Identity.Concrete;
 using System;
@@ -21,11 +21,10 @@ namespace Milvasoft.Helpers.Identity.Abstract
     /// <typeparam name="TRole"></typeparam>
     /// <typeparam name="TKey"></typeparam>
     /// <typeparam name="TLoginResultDTO"></typeparam>
-    /// <typeparam name="TSignUpDTO"></typeparam>
-    public interface IIdentityOperations<TUserManager, TDbContext, TLocalizer, TUser, TRole, TKey, TLoginResultDTO>
-       where TUser : IdentityUser<TKey>, IBaseIndelibleEntity<Guid>, new()
+    public interface IIdentityOperations<TUserManager, TDbContext, TLocalizer, TUser, TRole, TKey, TLoginResultDTO> 
+       where TKey : struct, IEquatable<TKey>
+       where TUser : IdentityUser<TKey>, IFullAuditable<TKey>, new()
        where TRole : IdentityRole<TKey>
-       where TKey : IEquatable<TKey>
        where TDbContext : IdentityDbContext<TUser, TRole, TKey>
        where TUserManager : UserManager<TUser>
        where TLoginResultDTO : class, ILoginResultDTO, new()

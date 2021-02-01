@@ -6,7 +6,7 @@ namespace Milvasoft.Helpers.Exceptions
     /// <summary>
     /// The exception that is thrown when attempt to do operation with null objects.
     /// </summary>
-    public class NullParameterException : MilvasoftBaseException
+    public class NullParameterException : MilvaBaseException
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="NullParameterException"/> class.
@@ -14,7 +14,7 @@ namespace Milvasoft.Helpers.Exceptions
         /// <param name="localizer"></param>
         public NullParameterException(IStringLocalizer localizer) : base(localizer["NullParameterException"])
         {
-            ErrorCode = (int)MilvasoftExceptionCode.NullParameter;
+            ErrorCode = (int)MilvaExceptionCode.NullParameter;
         }
 
         /// <summary>
@@ -23,7 +23,7 @@ namespace Milvasoft.Helpers.Exceptions
         /// <param name="customMessage"></param>
         public NullParameterException(string customMessage) : base(customMessage)
         {
-            ErrorCode = (int)MilvasoftExceptionCode.NullParameter;
+            ErrorCode = (int)MilvaExceptionCode.NullParameter;
         }
 
         /// <summary>
@@ -33,7 +33,7 @@ namespace Milvasoft.Helpers.Exceptions
         /// <param name="innerException"></param>
         public NullParameterException(string customMessage, Exception innerException) : base(customMessage, innerException)
         {
-            ErrorCode = (int)MilvasoftExceptionCode.NullParameter;
+            ErrorCode = (int)MilvaExceptionCode.NullParameter;
         }
     }
 }
