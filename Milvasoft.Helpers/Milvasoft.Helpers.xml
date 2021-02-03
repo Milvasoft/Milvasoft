@@ -495,26 +495,28 @@
             Last modification date of entity.
             </summary>
         </member>
-        <member name="T:Milvasoft.Helpers.DataAccess.Abstract.Entity.IAuditable`2">
+        <member name="T:Milvasoft.Helpers.DataAccess.Abstract.Entity.IAuditable`3">
             <summary>
             Adds navigation properties to <see cref="T:Milvasoft.Helpers.DataAccess.Abstract.Entity.IAuditable`1"/> interface for user.
             </summary>
             <typeparam name="TKey">Primary key of the user</typeparam>
             <typeparam name="TUser">Type of the user</typeparam>
+            <typeparam name="TUserKey">Type of the user</typeparam>
         </member>
-        <member name="P:Milvasoft.Helpers.DataAccess.Abstract.Entity.IAuditable`2.LastModifierUser">
+        <member name="P:Milvasoft.Helpers.DataAccess.Abstract.Entity.IAuditable`3.LastModifierUser">
             <summary>
             Reference to the last modifier user of this entity.
             </summary>
         </member>
-        <member name="T:Milvasoft.Helpers.DataAccess.Abstract.Entity.IAuditableWithCustomUser`2">
+        <member name="T:Milvasoft.Helpers.DataAccess.Abstract.Entity.IAuditableWithCustomUser`3">
             <summary>
             Adds navigation properties to <see cref="T:Milvasoft.Helpers.DataAccess.Abstract.Entity.IAuditable`1"/> interface for custom user.
             </summary>
             <typeparam name="TKey">Primary key of the user</typeparam>
             <typeparam name="TUser">Type of the user</typeparam>
+            <typeparam name="TUserKey">Type of the user</typeparam>
         </member>
-        <member name="P:Milvasoft.Helpers.DataAccess.Abstract.Entity.IAuditableWithCustomUser`2.LastModifierUser">
+        <member name="P:Milvasoft.Helpers.DataAccess.Abstract.Entity.IAuditableWithCustomUser`3.LastModifierUser">
             <summary>
             Reference to the last modifier user of this entity.
             </summary>
@@ -558,26 +560,28 @@
             Creation date of entity.
             </summary>
         </member>
-        <member name="T:Milvasoft.Helpers.DataAccess.Abstract.Entity.ICreationAuditable`2">
+        <member name="T:Milvasoft.Helpers.DataAccess.Abstract.Entity.ICreationAuditable`3">
             <summary>
             Adds navigation properties to <see cref="T:Milvasoft.Helpers.DataAccess.Abstract.Entity.ICreationAuditable`1"/> interface for user.
             </summary>
             <typeparam name="TKey">Key of the user</typeparam>
             <typeparam name="TUser">Type of the user</typeparam>
+            <typeparam name="TUserKey">Type of the user</typeparam>
         </member>
-        <member name="P:Milvasoft.Helpers.DataAccess.Abstract.Entity.ICreationAuditable`2.CreatorUser">
+        <member name="P:Milvasoft.Helpers.DataAccess.Abstract.Entity.ICreationAuditable`3.CreatorUser">
             <summary>
             Reference to the creator user of this entity.
             </summary>
         </member>
-        <member name="T:Milvasoft.Helpers.DataAccess.Abstract.Entity.ICreationAuditableWithCustomUser`2">
+        <member name="T:Milvasoft.Helpers.DataAccess.Abstract.Entity.ICreationAuditableWithCustomUser`3">
             <summary>
             Adds navigation properties to <see cref="T:Milvasoft.Helpers.DataAccess.Abstract.Entity.ICreationAuditable`1"/> interface for user.
             </summary>
             <typeparam name="TKey">Key of the user</typeparam>
             <typeparam name="TUser">Type of the user</typeparam>
+            <typeparam name="TUserKey">Type of the user</typeparam>
         </member>
-        <member name="P:Milvasoft.Helpers.DataAccess.Abstract.Entity.ICreationAuditableWithCustomUser`2.CreatorUser">
+        <member name="P:Milvasoft.Helpers.DataAccess.Abstract.Entity.ICreationAuditableWithCustomUser`3.CreatorUser">
             <summary>
             Reference to the creator user of this entity.
             </summary>
@@ -599,19 +603,21 @@
             </summary>
             <typeparam name="TKey"></typeparam>
         </member>
-        <member name="T:Milvasoft.Helpers.DataAccess.Abstract.Entity.IFullAuditable`2">
+        <member name="T:Milvasoft.Helpers.DataAccess.Abstract.Entity.IFullAuditable`3">
             <summary>
             Adds navigation properties to <see cref="T:Milvasoft.Helpers.DataAccess.Abstract.Entity.IFullAuditable`1"/> interface for user.
             </summary>
             <typeparam name="TKey">Key of the user</typeparam>
             <typeparam name="TUser">Type of the user</typeparam>
+            <typeparam name="TUserKey">Type of the user</typeparam>
         </member>
-        <member name="T:Milvasoft.Helpers.DataAccess.Abstract.Entity.IFullAuditableWithCustomUser`2">
+        <member name="T:Milvasoft.Helpers.DataAccess.Abstract.Entity.IFullAuditableWithCustomUser`3">
             <summary>
             Adds navigation properties to <see cref="T:Milvasoft.Helpers.DataAccess.Abstract.Entity.IFullAuditable`1"/> interface for user.
             </summary>
             <typeparam name="TKey">Key of the user</typeparam>
             <typeparam name="TUser">Type of the user</typeparam>
+            <typeparam name="TUserKey">Type of the user</typeparam>
         </member>
         <member name="T:Milvasoft.Helpers.DataAccess.Abstract.Entity.IFullAuditableWithoutUser`1">
             <summary>
@@ -1857,36 +1863,38 @@
             Last modifier of entity.
             </summary>
         </member>
-        <member name="T:Milvasoft.Helpers.DataAccess.Concrete.Entity.AuditableEntity`2">
+        <member name="T:Milvasoft.Helpers.DataAccess.Concrete.Entity.AuditableEntity`3">
             <summary>
             This class can be used to simplify implementing <see cref="T:Milvasoft.Helpers.DataAccess.Abstract.Entity.IAuditable`1"/>.
             </summary>
             <typeparam name="TKey">Type of the primary key of the entity</typeparam>
             <typeparam name="TUser">Type of the user</typeparam>
+            <typeparam name="TUserKey">Type of the user</typeparam>
         </member>
-        <member name="P:Milvasoft.Helpers.DataAccess.Concrete.Entity.AuditableEntity`2.CreatorUser">
+        <member name="P:Milvasoft.Helpers.DataAccess.Concrete.Entity.AuditableEntity`3.CreatorUser">
             <summary>
             Reference to the creator user of this entity.
             </summary>
         </member>
-        <member name="P:Milvasoft.Helpers.DataAccess.Concrete.Entity.AuditableEntity`2.LastModifierUser">
+        <member name="P:Milvasoft.Helpers.DataAccess.Concrete.Entity.AuditableEntity`3.LastModifierUser">
             <summary>
             Reference to the last modifier user of this entity.
             </summary>
         </member>
-        <member name="T:Milvasoft.Helpers.DataAccess.Concrete.Entity.AuditableEntityWithCustomUser`2">
+        <member name="T:Milvasoft.Helpers.DataAccess.Concrete.Entity.AuditableEntityWithCustomUser`3">
             <summary>
             This class can be used to simplify implementing <see cref="T:Milvasoft.Helpers.DataAccess.Abstract.Entity.IAuditable`1"/>.
             </summary>
             <typeparam name="TKey">Type of the primary key of the entity</typeparam>
             <typeparam name="TUser">Type of the user</typeparam>
+            <typeparam name="TUserKey">Type of the user</typeparam>
         </member>
-        <member name="P:Milvasoft.Helpers.DataAccess.Concrete.Entity.AuditableEntityWithCustomUser`2.CreatorUser">
+        <member name="P:Milvasoft.Helpers.DataAccess.Concrete.Entity.AuditableEntityWithCustomUser`3.CreatorUser">
             <summary>
             Reference to the creator user of this entity.
             </summary>
         </member>
-        <member name="P:Milvasoft.Helpers.DataAccess.Concrete.Entity.AuditableEntityWithCustomUser`2.LastModifierUser">
+        <member name="P:Milvasoft.Helpers.DataAccess.Concrete.Entity.AuditableEntityWithCustomUser`3.LastModifierUser">
             <summary>
             Reference to the last modifier user of this entity.
             </summary>
@@ -1948,26 +1956,28 @@
             Creator of entity.
             </summary>
         </member>
-        <member name="T:Milvasoft.Helpers.DataAccess.Concrete.Entity.CreationAuditableEntity`2">
+        <member name="T:Milvasoft.Helpers.DataAccess.Concrete.Entity.CreationAuditableEntity`3">
             <summary>
-            This class can be used to simplify implementing <see cref="T:Milvasoft.Helpers.DataAccess.Abstract.Entity.ICreationAuditable`2"/>.
+            This class can be used to simplify implementing <see cref="T:Milvasoft.Helpers.DataAccess.Abstract.Entity.ICreationAuditable`3"/>.
             </summary>
             <typeparam name="TKey">Type of the primary key of the entity</typeparam>
             <typeparam name="TUser">Type of the user</typeparam>
+            <typeparam name="TUserKey">Type of the user</typeparam>
         </member>
-        <member name="P:Milvasoft.Helpers.DataAccess.Concrete.Entity.CreationAuditableEntity`2.CreatorUser">
+        <member name="P:Milvasoft.Helpers.DataAccess.Concrete.Entity.CreationAuditableEntity`3.CreatorUser">
             <summary>
             Reference to the creator user of this entity.
             </summary>
         </member>
-        <member name="T:Milvasoft.Helpers.DataAccess.Concrete.Entity.CreationAuditableEntityEntityWithCustomUser`2">
+        <member name="T:Milvasoft.Helpers.DataAccess.Concrete.Entity.CreationAuditableEntityEntityWithCustomUser`3">
             <summary>
-            This class can be used to simplify implementing <see cref="T:Milvasoft.Helpers.DataAccess.Abstract.Entity.ICreationAuditableWithCustomUser`2"/>.
+            This class can be used to simplify implementing <see cref="T:Milvasoft.Helpers.DataAccess.Abstract.Entity.ICreationAuditableWithCustomUser`3"/>.
             </summary>
             <typeparam name="TKey">Type of the primary key of the entity</typeparam>
             <typeparam name="TUser">Type of the user</typeparam>
+            <typeparam name="TUserKey">Type of the user</typeparam>
         </member>
-        <member name="P:Milvasoft.Helpers.DataAccess.Concrete.Entity.CreationAuditableEntityEntityWithCustomUser`2.CreatorUser">
+        <member name="P:Milvasoft.Helpers.DataAccess.Concrete.Entity.CreationAuditableEntityEntityWithCustomUser`3.CreatorUser">
             <summary>
             Reference to the creator user of this entity.
             </summary>
@@ -2002,56 +2012,56 @@
             Gets or sets a value indicating whether IsDeleted.
             </summary>
         </member>
-        <member name="T:Milvasoft.Helpers.DataAccess.Concrete.Entity.FullAuditableEntity`2">
+        <member name="T:Milvasoft.Helpers.DataAccess.Concrete.Entity.FullAuditableEntity`3">
             <summary>
-            Implements <see cref="T:Milvasoft.Helpers.DataAccess.Abstract.Entity.IFullAuditable`2"/> to be a base class for full-audited entities.
+            Implements <see cref="T:Milvasoft.Helpers.DataAccess.Abstract.Entity.IFullAuditable`3"/> to be a base class for full-audited entities.
             </summary>
             <typeparam name="TKey">Type of the primary key of the entity</typeparam>
             <typeparam name="TUser">Type of the user</typeparam>
         </member>
-        <member name="P:Milvasoft.Helpers.DataAccess.Concrete.Entity.FullAuditableEntity`2.DeletionDate">
+        <member name="P:Milvasoft.Helpers.DataAccess.Concrete.Entity.FullAuditableEntity`3.DeletionDate">
             <summary>
             Deletion time of this entity.
             </summary>
         </member>
-        <member name="P:Milvasoft.Helpers.DataAccess.Concrete.Entity.FullAuditableEntity`2.DeleterUserId">
+        <member name="P:Milvasoft.Helpers.DataAccess.Concrete.Entity.FullAuditableEntity`3.DeleterUserId">
             <summary>
             Which user deleted this entity?
             </summary>
         </member>
-        <member name="P:Milvasoft.Helpers.DataAccess.Concrete.Entity.FullAuditableEntity`2.DeleterUser">
+        <member name="P:Milvasoft.Helpers.DataAccess.Concrete.Entity.FullAuditableEntity`3.DeleterUser">
             <summary>
             Reference to the deleter user of this entity.
             </summary>
         </member>
-        <member name="P:Milvasoft.Helpers.DataAccess.Concrete.Entity.FullAuditableEntity`2.IsDeleted">
+        <member name="P:Milvasoft.Helpers.DataAccess.Concrete.Entity.FullAuditableEntity`3.IsDeleted">
             <summary>
             Is this entity Deleted?
             </summary>
         </member>
-        <member name="T:Milvasoft.Helpers.DataAccess.Concrete.Entity.FullAuditableEntityWithCustomUser`2">
+        <member name="T:Milvasoft.Helpers.DataAccess.Concrete.Entity.FullAuditableEntityWithCustomUser`3">
             <summary>
-            Implements <see cref="T:Milvasoft.Helpers.DataAccess.Abstract.Entity.IFullAuditableWithCustomUser`2"/> to be a base class for full-audited entities.
+            Implements <see cref="T:Milvasoft.Helpers.DataAccess.Abstract.Entity.IFullAuditableWithCustomUser`3"/> to be a base class for full-audited entities.
             </summary>
             <typeparam name="TKey">Type of the primary key of the entity</typeparam>
             <typeparam name="TUser">Type of the user</typeparam>
         </member>
-        <member name="P:Milvasoft.Helpers.DataAccess.Concrete.Entity.FullAuditableEntityWithCustomUser`2.DeletionDate">
+        <member name="P:Milvasoft.Helpers.DataAccess.Concrete.Entity.FullAuditableEntityWithCustomUser`3.DeletionDate">
             <summary>
             Deletion time of this entity.
             </summary>
         </member>
-        <member name="P:Milvasoft.Helpers.DataAccess.Concrete.Entity.FullAuditableEntityWithCustomUser`2.DeleterUserId">
+        <member name="P:Milvasoft.Helpers.DataAccess.Concrete.Entity.FullAuditableEntityWithCustomUser`3.DeleterUserId">
             <summary>
             Which user deleted this entity?
             </summary>
         </member>
-        <member name="P:Milvasoft.Helpers.DataAccess.Concrete.Entity.FullAuditableEntityWithCustomUser`2.DeleterUser">
+        <member name="P:Milvasoft.Helpers.DataAccess.Concrete.Entity.FullAuditableEntityWithCustomUser`3.DeleterUser">
             <summary>
             Reference to the deleter user of this entity.
             </summary>
         </member>
-        <member name="P:Milvasoft.Helpers.DataAccess.Concrete.Entity.FullAuditableEntityWithCustomUser`2.IsDeleted">
+        <member name="P:Milvasoft.Helpers.DataAccess.Concrete.Entity.FullAuditableEntityWithCustomUser`3.IsDeleted">
             <summary>
             Is this entity Deleted?
             </summary>

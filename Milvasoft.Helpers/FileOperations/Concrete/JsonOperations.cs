@@ -1530,7 +1530,7 @@ namespace Milvasoft.Helpers.FileOperations.Concrete
             {
                 cryptoStream.FlushFinalBlock();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 throw new ArgumentException("Incorrect key.");
             }
@@ -1568,9 +1568,9 @@ namespace Milvasoft.Helpers.FileOperations.Concrete
             {
                 cryptoStream.FlushFinalBlock();
             }
-            catch (CryptographicException ex)
+            catch (CryptographicException)
             {
-                throw ex;
+                throw;
             }
 
             await File.WriteAllBytesAsync(filePath, memStream.ToArray()).ConfigureAwait(false);
@@ -1602,7 +1602,7 @@ namespace Milvasoft.Helpers.FileOperations.Concrete
             {
                 cryptoStream.FlushFinalBlock();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 throw new ArgumentException("Incorrect key.");
             }
@@ -1640,9 +1640,9 @@ namespace Milvasoft.Helpers.FileOperations.Concrete
             {
                 cryptoStream.FlushFinalBlock();
             }
-            catch (CryptographicException ex)
+            catch (CryptographicException)
             {
-                throw ex;
+                throw;
             }
 
             File.WriteAllBytes(filePath, memStream.ToArray());

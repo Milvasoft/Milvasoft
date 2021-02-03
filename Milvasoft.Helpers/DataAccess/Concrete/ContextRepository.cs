@@ -54,10 +54,10 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
                     await function().ConfigureAwait(false);
                     await transaction.CommitAsync().ConfigureAwait(false);
                 }
-                catch (Exception exception)
+                catch (Exception)
                 {
                     await transaction.RollbackAsync().ConfigureAwait(false);
-                    throw exception;
+                    throw;
                 }
             });
         }
@@ -79,11 +79,11 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
                     await function().ConfigureAwait(false);
                     await transaction.CommitAsync().ConfigureAwait(false);
                 }
-                catch (Exception exception)
+                catch (Exception)
                 {
                     await transaction.RollbackAsync().ConfigureAwait(false);
                     await rollbackFunction().ConfigureAwait(false);
-                    throw exception;
+                    throw;
                 }
             });
         }
@@ -105,11 +105,11 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
                     await function().ConfigureAwait(false);
                     await transaction.CommitAsync().ConfigureAwait(false);
                 }
-                catch (Exception exception)
+                catch (Exception)
                 {
                     await transaction.RollbackAsync().ConfigureAwait(false);
                     rollbackFunction();
-                    throw exception;
+                    throw;
                 }
             });
         }

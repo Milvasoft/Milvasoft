@@ -5,12 +5,12 @@ namespace Milvasoft.Helpers.DataAccess.Abstract.Entity.Auditing
     /// <summary>
     /// Determines entity has creator.
     /// </summary>
-    /// <typeparam name="TKey"></typeparam>
-    public interface IHasCreator<TKey> where TKey : struct, IEquatable<TKey>
+    /// <typeparam name="TUserKey"></typeparam>
+    public interface IHasCreator<TUserKey> where TUserKey : struct, IEquatable<TUserKey>
     {
         /// <summary>
         /// Creator of entity.
         /// </summary>
-        TKey? CreatorUserId { get; set; }
+        TUserKey? CreatorUserId { get; set; }
     }
 }

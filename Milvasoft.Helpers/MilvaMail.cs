@@ -261,12 +261,8 @@ namespace Milvasoft.Helpers
         /// <summary>
         /// Provides send mail.
         /// </summary>
-        /// <param name="from"></param>
         /// <param name="to"></param>
         /// <param name="subject"></param>
-        /// <param name="networkCredential"></param>
-        /// <param name="smtpPort"></param>
-        /// <param name="smtpHost"></param>
         /// <param name="body"></param>
         /// <param name="isBodyHtml"></param>
         public void OpsiyonSendMail(string to,
@@ -277,12 +273,8 @@ namespace Milvasoft.Helpers
         /// <summary>
         /// Provides send mail with attachment.
         /// </summary>
-        /// <param name="from"></param>
         /// <param name="to"></param>
         /// <param name="subject"></param>
-        /// <param name="networkCredential"></param>
-        /// <param name="smtpPort"></param>
-        /// <param name="smtpHost"></param>
         /// <param name="body"></param>
         /// <param name="filePath"></param>
         /// <param name="isBodyHtml"></param>
@@ -295,12 +287,8 @@ namespace Milvasoft.Helpers
         /// <summary>
         /// Provides send mail.
         /// </summary>
-        /// <param name="from"></param>
         /// <param name="to"></param>
         /// <param name="subject"></param>
-        /// <param name="networkCredential"></param>
-        /// <param name="smtpPort"></param>
-        /// <param name="smtpHost"></param>
         /// <param name="body"></param>
         /// <param name="isBodyHtml"></param>
         public void OpsiyonSendMail(string to,

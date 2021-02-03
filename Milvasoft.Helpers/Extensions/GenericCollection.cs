@@ -5,6 +5,9 @@ using System.Reflection;
 
 namespace Milvasoft.Helpers.Extensions
 {
+    /// <summary>
+    /// Generic collection helper extension methods.
+    /// </summary>
     public static class GenericCollection
     {
         private static readonly MethodInfo OrderByMethod = typeof(Queryable).GetMethods().Single(method => method.Name == "OrderBy" && method.GetParameters().Length == 2);

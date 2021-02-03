@@ -8,7 +8,18 @@ namespace Milvasoft.Helpers.DataAccess.Abstract.Entity
     /// Determines entity is fully auditable with user information.
     /// </summary>
     /// <typeparam name="TKey"></typeparam>
-    public interface IFullAuditable<TKey> : IAuditable<TKey>, IHasDeletionDate, IHasDeleter<TKey> where TKey : struct, IEquatable<TKey>
+    public interface IFullAuditable<TKey> : IAuditable<TKey>, IHasDeletionDate where TKey : struct, IEquatable<TKey>
+    {
+    }
+
+    /// <summary>
+    /// Determines entity is fully auditable with user information.
+    /// </summary>
+    /// <typeparam name="TKey"></typeparam>
+    /// <typeparam name="TUserKey"></typeparam>
+    public interface IFullAuditable<TUserKey, TKey> : IAuditable<TKey>, IHasDeletionDate, IHasDeleter<TUserKey>
+        where TKey : struct, IEquatable<TKey>
+        where TUserKey : struct, IEquatable<TUserKey>
     {
     }
 
@@ -17,9 +28,11 @@ namespace Milvasoft.Helpers.DataAccess.Abstract.Entity
     /// </summary>
     /// <typeparam name="TKey">Key of the user</typeparam>
     /// <typeparam name="TUser">Type of the user</typeparam>
-    public interface IFullAuditable<TUser, TKey> : IAuditable<TUser, TKey>, IFullAuditable<TKey>
-        where TUser : IdentityUser<TKey>
+    /// <typeparam name="TUserKey">Type of the user</typeparam>
+    public interface IFullAuditable<TUser, TUserKey, TKey> : IFullAuditable<TUserKey, TKey>, IAuditable<TUser, TUserKey, TKey>
+        where TUser : IdentityUser<TUserKey>
         where TKey : struct, IEquatable<TKey>
+        where TUserKey : struct, IEquatable<TUserKey>
     {
     }
 
@@ -28,9 +41,11 @@ namespace Milvasoft.Helpers.DataAccess.Abstract.Entity
     /// </summary>
     /// <typeparam name="TKey">Key of the user</typeparam>
     /// <typeparam name="TUser">Type of the user</typeparam>
-    public interface IFullAuditableWithCustomUser<TUser, TKey> : IFullAuditable<TKey>, IAuditableWithCustomUser<TUser, TKey>
-        where TUser : IBaseEntity<TKey>
+    /// <typeparam name="TUserKey">Type of the user</typeparam>
+    public interface IFullAuditableWithCustomUser<TUser, TUserKey, TKey> : IFullAuditable<TUserKey, TKey>, IAuditableWithCustomUser<TUser, TUserKey, TKey>
+        where TUser : IBaseEntity<TUserKey>
         where TKey : struct, IEquatable<TKey>
+        where TUserKey : struct, IEquatable<TUserKey>
     {
     }
 
