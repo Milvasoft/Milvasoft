@@ -101,24 +101,24 @@ namespace Milvasoft.Helpers.DataAccess.MilvaContext
         /// <param name="modelBuilder"></param>
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            #region TUser.Set_ForeignKeys
+            //#region TUser.Set_ForeignKeys
 
-            modelBuilder.Entity<TUser>()
-                .HasOne(p => p.DeleterUser)
-                .WithMany()
-                .HasForeignKey(p => p.DeleterUserId);
+            //modelBuilder.Entity<TUser>()
+            //    .HasOne(p => p.DeleterUser)
+            //    .WithMany()
+            //    .HasForeignKey(p => p.DeleterUserId);
 
-            modelBuilder.Entity<TUser>()
-                .HasOne(p => p.CreatorUser)
-                .WithMany()
-                .HasForeignKey(p => p.CreatorUserId);
+            //modelBuilder.Entity<TUser>()
+            //    .HasOne(p => p.CreatorUser)
+            //    .WithMany()
+            //    .HasForeignKey(p => p.CreatorUserId);
 
-            modelBuilder.Entity<TUser>()
-                .HasOne(p => p.LastModifierUser)
-                .WithMany()
-                .HasForeignKey(p => p.LastModifierUserId);
+            //modelBuilder.Entity<TUser>()
+            //    .HasOne(p => p.LastModifierUser)
+            //    .WithMany()
+            //    .HasForeignKey(p => p.LastModifierUserId);
 
-            #endregion
+            //#endregion
 
             base.OnModelCreating(modelBuilder);
         }
