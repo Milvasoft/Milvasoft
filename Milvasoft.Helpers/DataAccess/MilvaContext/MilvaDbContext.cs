@@ -335,12 +335,12 @@ namespace Milvasoft.Helpers.DataAccess.MilvaContext
                         if (AuditConfiguration.AuditModificationDate)
                         {
                             if (entry.Metadata.GetProperties().Any(prop => prop.Name == EntityPropertyNames.LastModificationDate))
-                                AuditDate(entry, EntityPropertyNames.CreationDate);
+                                AuditDate(entry, EntityPropertyNames.LastModificationDate);
                         }
                         if (AuditConfiguration.AuditModifier)
                         {
                             if (entry.Metadata.GetProperties().Any(prop => prop.Name == EntityPropertyNames.LastModifierUserId))
-                                AuditPerformerUser(entry, EntityPropertyNames.CreatorUserId);
+                                AuditPerformerUser(entry, EntityPropertyNames.LastModifierUserId);
                         }
                         break;
                     case EntityState.Deleted:

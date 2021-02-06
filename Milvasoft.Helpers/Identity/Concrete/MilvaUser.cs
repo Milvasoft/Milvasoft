@@ -20,10 +20,10 @@ namespace Milvasoft.Helpers.Identity.Concrete
         /// </summary>
         public TKey? CreatorUserId { get; set; }
 
-        ///// <summary>
-        ///// Navigation property of creator user.
-        ///// </summary>
-        //public virtual MilvaUser<TKey> CreatorUser { get; set; }
+        /// <summary>
+        /// Navigation property of creator user.
+        /// </summary>
+        public virtual MilvaUser<TKey> CreatorUser { get; set; }
 
         /// <summary>
         /// Last modificationd date of user.
@@ -35,10 +35,10 @@ namespace Milvasoft.Helpers.Identity.Concrete
         /// </summary>
         public TKey? LastModifierUserId { get; set; }
 
-        ///// <summary>
-        ///// Navigation property of last modifier user.
-        ///// </summary>
-        //public virtual MilvaUser<TKey> LastModifierUser { get; set; }
+        /// <summary>
+        /// Navigation property of last modifier user.
+        /// </summary>
+        public virtual MilvaUser<TKey> LastModifierUser { get; set; }
 
         /// <summary>
         /// Deletion date of user.
@@ -50,10 +50,10 @@ namespace Milvasoft.Helpers.Identity.Concrete
         /// </summary>
         public TKey? DeleterUserId { get; set; }
 
-        ///// <summary>
-        ///// Navigation property of deleter user.
-        ///// </summary>
-        //public virtual MilvaUser<TKey> DeleterUser { get; set; }
+        /// <summary>
+        /// Navigation property of deleter user.
+        /// </summary>
+        public virtual MilvaUser<TKey> DeleterUser { get; set; }
 
         /// <summary>
         /// Gets or sets wheter user is deleted.
