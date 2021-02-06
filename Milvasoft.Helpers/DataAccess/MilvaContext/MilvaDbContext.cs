@@ -34,9 +34,24 @@ namespace Milvasoft.Helpers.DataAccess.MilvaContext
     where TRole : IdentityRole<TKey>
     where TKey : struct, IEquatable<TKey>
     {
-        private readonly TUser _currentUser;
-        private IAuditConfiguration _auditConfiguration;
-        private static AsyncLocal<bool> _ignoreSoftDelete = new AsyncLocal<bool>();
+        #region Protected Properties
+
+        /// <summary>
+        /// Current user.
+        /// </summary>
+        protected readonly TUser CurrentUser;
+
+        /// <summary>
+        /// Audit configuration.
+        /// </summary>
+        protected IAuditConfiguration AuditConfiguration;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        protected static AsyncLocal<bool> IgnoreSoftDelete = new AsyncLocal<bool>();
+
+        #endregion
 
         /// <summary>
         /// Cunstructor of <c cref="MilvaDbContext{TUser, TRole, TKey}"></c>.
@@ -52,11 +67,10 @@ namespace Milvasoft.Helpers.DataAccess.MilvaContext
         {
             var userName = httpContextAccessor.HttpContext.User?.Identity?.Name;
             if (!string.IsNullOrEmpty(userName))
-            {
-                _currentUser = userManager.FindByNameAsync(httpContextAccessor.HttpContext.User.Identity.Name).Result;
-            }
-            _auditConfiguration = auditConfiguration;
-            _ignoreSoftDelete.Value = false;
+                CurrentUser = userManager.FindByNameAsync(httpContextAccessor.HttpContext.User.Identity.Name).Result;
+
+            AuditConfiguration = auditConfiguration;
+            IgnoreSoftDelete.Value = false;
         }
 
         /// <summary>
@@ -84,21 +98,18 @@ namespace Milvasoft.Helpers.DataAccess.MilvaContext
 
             #endregion
 
-            modelBuilder.ConfigureDecimalProperties();
-            modelBuilder.AddIndexToIndelibleEntities();
-            modelBuilder.ConfigureDefaultValue();
             base.OnModelCreating(modelBuilder);
         }
 
         /// <summary>
         /// Ignores soft delete for next process.
         /// </summary>
-        public static void IgnoreSoftDeleteForNextProcess() => _ignoreSoftDelete.Value = true;
+        public static void IgnoreSoftDeleteForNextProcess() => IgnoreSoftDelete.Value = true;
 
         /// <summary>
         /// Activate soft delete.
         /// </summary>
-        public static void ActivateSoftDelete() => _ignoreSoftDelete.Value = false;
+        public static void ActivateSoftDelete() => IgnoreSoftDelete.Value = false;
 
         /// <summary>
         /// Overrided the SaveChanges method for soft deleting.
@@ -123,6 +134,7 @@ namespace Milvasoft.Helpers.DataAccess.MilvaContext
 
         /// <summary>
         /// Gets requested contents by <paramref name="type"/> DbSet.
+        /// If this method gets soft deleted entities please override <see cref="CreateIsDeletedFalseExpression{TEntity}"/> method your own condition.
         /// </summary>
         /// <param name="type"></param>
         /// <returns></returns>
@@ -156,6 +168,7 @@ namespace Milvasoft.Helpers.DataAccess.MilvaContext
 
         /// <summary>
         /// Gets requested contents by <typeparamref name="TEntity"/> DbSet.
+        /// If this method gets soft deleted entities please override <see cref="CreateIsDeletedFalseExpression{TEntity}"/> method your own condition.
         /// </summary>
         /// <returns></returns>
         public async Task<List<TEntity>> GetRequiredContentsAsync<TEntity>() where TEntity : class
@@ -163,6 +176,7 @@ namespace Milvasoft.Helpers.DataAccess.MilvaContext
 
         /// <summary>
         /// Gets the requested <typeparamref name="TEntity"/>'s property's(<paramref name="propName"/>) max value.
+        /// If this method gets soft deleted entities please override <see cref="CreateIsDeletedFalseExpression{TEntity}"/> method your own condition.
         /// </summary>
         /// <typeparam name="TEntity"></typeparam>
         /// <param name="propName"></param>
@@ -175,22 +189,27 @@ namespace Milvasoft.Helpers.DataAccess.MilvaContext
                 throw new InvalidParameterException($"Type of {entityType}'s properties doesn't contain '{propName}'.");
 
             ParameterExpression parameterExpression = Expression.Parameter(entityType, "i");
-            Expression<Func<TEntity, decimal>> predicate = Expression.Lambda<Func<TEntity, decimal>>(Expression.Convert(Expression.Property(parameterExpression, propName), typeof(decimal)), parameterExpression);
+            Expression<Func<TEntity, decimal>> predicate = Expression.Lambda<Func<TEntity, decimal>>(Expression.Convert(Expression.Property(parameterExpression, propName),
+                                                                                                                        typeof(decimal)), parameterExpression);
 
             return await this.Set<TEntity>().Where(CreateIsDeletedFalseExpression<TEntity>()).IncludeLang(this).MaxAsync(predicate).ConfigureAwait(false);
         }
 
 
-        #region Private Methods
+        #region Protected Methods
 
         /// <summary>
         /// Gets <b>entity => entity.IsDeleted == false</b> expression, if <typeparamref name="TEntity"/> is assignable from <see cref="IFullAuditable{TKey}"/>.
         /// </summary>
         /// <returns></returns>
-        private Expression<Func<TEntity, bool>> CreateIsDeletedFalseExpression<TEntity>()
+        protected virtual Expression<Func<TEntity, bool>> CreateIsDeletedFalseExpression<TEntity>()
         {
             var entityType = typeof(TEntity);
-            if (entityType.BaseType.Name == typeof(FullAuditableEntity<>).Name)
+            if (entityType.BaseType.Name == typeof(FullAuditableEntity<>).Name 
+                || typeof(FullAuditableEntity<TKey>).IsAssignableFrom(entityType.BaseType)
+                || typeof(FullAuditableEntity<>).IsAssignableFrom(entityType.BaseType)
+                || typeof(FullAuditableEntity<>).IsAssignableFrom(entityType)
+                || typeof(FullAuditableEntity<TKey>).IsAssignableFrom(entityType))
             {
                 var parameter = Expression.Parameter(entityType, "entity");
                 var filterExpression = Expression.Equal(Expression.Property(parameter, entityType.GetProperty(EntityPropertyNames.IsDeleted)), Expression.Constant(false, typeof(bool)));
@@ -203,7 +222,7 @@ namespace Milvasoft.Helpers.DataAccess.MilvaContext
         /// Soft delete operation.
         /// </summary>
         /// <param name="entry"></param>
-        private void SoftDelete(EntityEntry entry)
+        protected virtual void SoftDelete(EntityEntry entry)
         {
             AuditDeletion(entry);
 
@@ -220,24 +239,27 @@ namespace Milvasoft.Helpers.DataAccess.MilvaContext
         /// Entity auditing for delete. 
         /// </summary>
         /// <param name="entry"></param>
-        private void AuditDeletion(EntityEntry entry)
+        protected virtual void AuditDeletion(EntityEntry entry)
         {
             if (!entry.Metadata.GetProperties().Any(x => x.Name == EntityPropertyNames.IsDeleted))
                 return;
 
             entry.State = EntityState.Modified;
 
+            //Change "IsDeleted" property value.
             entry.Property(EntityPropertyNames.IsDeleted).CurrentValue = true;
             entry.Property(EntityPropertyNames.IsDeleted).IsModified = true;
 
+            //Change "DeletionDate" property value.
             entry.Property(EntityPropertyNames.DeletionDate).CurrentValue = DateTime.Now;
             entry.Property(EntityPropertyNames.DeletionDate).IsModified = true;
 
             if (entry.Metadata.GetProperties().Any(prop => prop.Name == EntityPropertyNames.DeleterUserId))
             {
-                if (_auditConfiguration.AuditDeleter)
+                if (AuditConfiguration.AuditDeleter)
                 {
-                    entry.Property(EntityPropertyNames.DeleterUserId).CurrentValue = _currentUser?.Id;
+                    //Change "DeleterUserId" property value.
+                    entry.Property(EntityPropertyNames.DeleterUserId).CurrentValue = CurrentUser?.Id;
                     entry.Property(EntityPropertyNames.DeleterUserId).IsModified = true;
                 }
             }
@@ -248,7 +270,7 @@ namespace Milvasoft.Helpers.DataAccess.MilvaContext
         /// </summary>
         /// <param name="entry"></param>
         /// <param name="propertyName"></param>
-        private void AuditDate(EntityEntry entry, string propertyName)
+        protected virtual void AuditDate(EntityEntry entry, string propertyName)
         {
             entry.Property(propertyName).CurrentValue = DateTime.Now;
             entry.Property(propertyName).IsModified = true;
@@ -259,41 +281,41 @@ namespace Milvasoft.Helpers.DataAccess.MilvaContext
         /// </summary>
         /// <param name="entry"></param>
         /// <param name="propertyName"></param>
-        private void AuditPerformerUser(EntityEntry entry, string propertyName)
+        protected virtual void AuditPerformerUser(EntityEntry entry, string propertyName)
         {
-            entry.Property(propertyName).CurrentValue = _currentUser?.Id;
+            entry.Property(propertyName).CurrentValue = CurrentUser?.Id;
             entry.Property(propertyName).IsModified = true;
         }
 
         /// <summary>
-        /// Provides auditing entities by <see cref="_auditConfiguration"/>.
-        /// If deletion process happens then sets the <see cref="_ignoreSoftDelete"/> variable to true at the end of process.
+        /// Provides auditing entities by <see cref="AuditConfiguration"/>.
+        /// If deletion process happens then sets the <see cref="IgnoreSoftDelete"/> variable to true at the end of process.
         /// </summary>
-        private void AuditEntites()
+        protected virtual void AuditEntites()
         {
             foreach (var entry in ChangeTracker.Entries())
             {
                 switch (entry.State)
                 {
                     case EntityState.Added:
-                        if (_auditConfiguration.AuditCreationDate)
+                        if (AuditConfiguration.AuditCreationDate)
                         {
                             if (entry.Metadata.GetProperties().Any(prop => prop.Name == EntityPropertyNames.CreationDate))
                                 AuditDate(entry, EntityPropertyNames.CreationDate);
                         }
-                        if (_auditConfiguration.AuditCreator)
+                        if (AuditConfiguration.AuditCreator)
                         {
                             if (entry.Metadata.GetProperties().Any(prop => prop.Name == EntityPropertyNames.CreatorUserId))
                                 AuditPerformerUser(entry, EntityPropertyNames.CreatorUserId);
                         }
                         break;
                     case EntityState.Modified:
-                        if (_auditConfiguration.AuditModificationDate)
+                        if (AuditConfiguration.AuditModificationDate)
                         {
                             if (entry.Metadata.GetProperties().Any(prop => prop.Name == EntityPropertyNames.LastModificationDate))
                                 AuditDate(entry, EntityPropertyNames.CreationDate);
                         }
-                        if (_auditConfiguration.AuditModifier)
+                        if (AuditConfiguration.AuditModifier)
                         {
                             if (entry.Metadata.GetProperties().Any(prop => prop.Name == EntityPropertyNames.LastModifierUserId))
                                 AuditPerformerUser(entry, EntityPropertyNames.CreatorUserId);
@@ -302,16 +324,16 @@ namespace Milvasoft.Helpers.DataAccess.MilvaContext
                     case EntityState.Deleted:
                         if (entry.Metadata.GetProperties().Any(prop => prop.Name == EntityPropertyNames.IsDeleted))
                         {
-                            if (!_ignoreSoftDelete.Value)
+                            if (!IgnoreSoftDelete.Value)
                                 SoftDelete(entry);
                         }
-                        _ignoreSoftDelete.Value = false;
+                        IgnoreSoftDelete.Value = false;
                         break;
                     default:
                         break;
                 }
             }
-           
+
         }
 
         #endregion

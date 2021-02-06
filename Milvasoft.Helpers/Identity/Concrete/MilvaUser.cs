@@ -1,10 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Milvasoft.Helpers.DataAccess.Abstract.Entity;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Milvasoft.Helpers.Identity.Concrete
 {
@@ -12,7 +8,7 @@ namespace Milvasoft.Helpers.Identity.Concrete
     /// Milva user.
     /// </summary>
     /// <typeparam name="TKey"></typeparam>
-    public class MilvaUser<TKey> : IdentityUser<TKey>, IFullAuditable<TKey> where TKey : struct, IEquatable<TKey>
+    public abstract class MilvaUser<TKey> : IdentityUser<TKey>, IFullAuditable<TKey> where TKey : struct, IEquatable<TKey>
     {
         /// <summary>
         /// Creation date of user.

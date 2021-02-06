@@ -2305,6 +2305,21 @@
             <typeparam name="TRole"></typeparam>
             <typeparam name="TKey"></typeparam>
         </member>
+        <member name="F:Milvasoft.Helpers.DataAccess.MilvaContext.MilvaDbContext`3.CurrentUser">
+            <summary>
+            Current user.
+            </summary>
+        </member>
+        <member name="F:Milvasoft.Helpers.DataAccess.MilvaContext.MilvaDbContext`3.AuditConfiguration">
+            <summary>
+            Audit configuration.
+            </summary>
+        </member>
+        <member name="F:Milvasoft.Helpers.DataAccess.MilvaContext.MilvaDbContext`3.IgnoreSoftDelete">
+            <summary>
+            
+            </summary>
+        </member>
         <member name="M:Milvasoft.Helpers.DataAccess.MilvaContext.MilvaDbContext`3.#ctor(Microsoft.EntityFrameworkCore.DbContextOptions{Milvasoft.Helpers.DataAccess.MilvaContext.MilvaDbContext{`0,`1,`2}},Microsoft.AspNetCore.Identity.UserManager{`0},Microsoft.AspNetCore.Http.IHttpContextAccessor,Milvasoft.Helpers.DependencyInjection.IAuditConfiguration)">
             <summary>
             Cunstructor of <c cref="T:Milvasoft.Helpers.DataAccess.MilvaContext.MilvaDbContext`3"></c>.
@@ -2346,6 +2361,7 @@
         <member name="M:Milvasoft.Helpers.DataAccess.MilvaContext.MilvaDbContext`3.GetRequiredContents(System.Type)">
             <summary>
             Gets requested contents by <paramref name="type"/> DbSet.
+            If this method gets soft deleted entities please override <see cref="M:Milvasoft.Helpers.DataAccess.MilvaContext.MilvaDbContext`3.CreateIsDeletedFalseExpression``1"/> method your own condition.
             </summary>
             <param name="type"></param>
             <returns></returns>
@@ -2353,12 +2369,14 @@
         <member name="M:Milvasoft.Helpers.DataAccess.MilvaContext.MilvaDbContext`3.GetRequiredContentsAsync``1">
             <summary>
             Gets requested contents by <typeparamref name="TEntity"/> DbSet.
+            If this method gets soft deleted entities please override <see cref="M:Milvasoft.Helpers.DataAccess.MilvaContext.MilvaDbContext`3.CreateIsDeletedFalseExpression``1"/> method your own condition.
             </summary>
             <returns></returns>
         </member>
         <member name="M:Milvasoft.Helpers.DataAccess.MilvaContext.MilvaDbContext`3.GetMaxValueAsync``1(System.String)">
             <summary>
             Gets the requested <typeparamref name="TEntity"/>'s property's(<paramref name="propName"/>) max value.
+            If this method gets soft deleted entities please override <see cref="M:Milvasoft.Helpers.DataAccess.MilvaContext.MilvaDbContext`3.CreateIsDeletedFalseExpression``1"/> method your own condition.
             </summary>
             <typeparam name="TEntity"></typeparam>
             <param name="propName"></param>
@@ -2398,8 +2416,8 @@
         </member>
         <member name="M:Milvasoft.Helpers.DataAccess.MilvaContext.MilvaDbContext`3.AuditEntites">
             <summary>
-            Provides auditing entities by <see cref="F:Milvasoft.Helpers.DataAccess.MilvaContext.MilvaDbContext`3._auditConfiguration"/>.
-            If deletion process happens then sets the <see cref="F:Milvasoft.Helpers.DataAccess.MilvaContext.MilvaDbContext`3._ignoreSoftDelete"/> variable to true at the end of process.
+            Provides auditing entities by <see cref="F:Milvasoft.Helpers.DataAccess.MilvaContext.MilvaDbContext`3.AuditConfiguration"/>.
+            If deletion process happens then sets the <see cref="F:Milvasoft.Helpers.DataAccess.MilvaContext.MilvaDbContext`3.IgnoreSoftDelete"/> variable to true at the end of process.
             </summary>
         </member>
         <member name="T:Milvasoft.Helpers.DataAccess.MilvaContext.MilvaDbContextExtensions">

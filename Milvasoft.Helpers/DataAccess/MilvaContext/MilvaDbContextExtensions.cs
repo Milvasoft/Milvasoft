@@ -1,7 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Milvasoft.Helpers.DataAccess.Attributes;
-using Milvasoft.Helpers.DataAccess.Concrete;
 using Milvasoft.Helpers.DataAccess.Concrete.Entity;
 using System;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -16,7 +14,6 @@ namespace Milvasoft.Helpers.DataAccess.MilvaContext
     /// </summary>
     public static class MilvaDbContextExtensions
     {
-
         /// <summary>
         /// Adds an index for each indelible entity for IsDeleted property.
         /// </summary>
@@ -94,7 +91,6 @@ namespace Milvasoft.Helpers.DataAccess.MilvaContext
             }
         }
 
-
         /// <summary>
         /// Configures the decimal property of entities with decimal properties in decimal (18.2) format.
         /// </summary>
@@ -133,6 +129,7 @@ namespace Milvasoft.Helpers.DataAccess.MilvaContext
 
         /// <summary>
         /// Allows to all entities associated with deletions to be Included to the entity(s) to be included in the process.
+        /// Entities must be contains "Langs" navigation property for include process. (e.g. ProductLangs)
         /// </summary>
         /// <param name="source"></param>
         /// <param name="context"></param>

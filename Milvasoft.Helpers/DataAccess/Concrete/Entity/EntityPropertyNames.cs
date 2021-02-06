@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Milvasoft.Helpers.DataAccess.Concrete.Entity
+﻿namespace Milvasoft.Helpers.DataAccess.Concrete.Entity
 {
     /// <summary>
     /// Auditing property names.
