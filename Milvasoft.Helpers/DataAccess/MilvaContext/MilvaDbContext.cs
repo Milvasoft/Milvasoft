@@ -59,17 +59,15 @@ namespace Milvasoft.Helpers.DataAccess.MilvaContext
         /// Cunstructor of <c cref="MilvaDbContext{TUser, TRole, TKey}"></c>.
         /// </summary>
         /// <param name="options"></param>
-        /// <param name="userManager"></param>
         /// <param name="httpContextAccessor"></param>
         /// <param name="auditConfiguration"></param>
         public MilvaDbContext(DbContextOptions options,
-                              UserManager<TUser> userManager,
                               IHttpContextAccessor httpContextAccessor,
                               IAuditConfiguration auditConfiguration) : base(options)
         {
             var userName = httpContextAccessor.HttpContext.User?.Identity?.Name;
             if (!string.IsNullOrEmpty(userName))
-                CurrentUser = userManager.FindByNameAsync(httpContextAccessor.HttpContext.User.Identity.Name).Result;
+                CurrentUser = Users.FirstOrDefaultAsync(i => i.UserName == httpContextAccessor.HttpContext.User.Identity.Name).Result;
 
             AuditConfiguration = auditConfiguration;
             IgnoreSoftDelete.Value = false;
@@ -79,17 +77,15 @@ namespace Milvasoft.Helpers.DataAccess.MilvaContext
         /// Cunstructor of <c cref="MilvaDbContext{TUser, TRole, TKey}"></c>.
         /// </summary>
         /// <param name="options"></param>
-        /// <param name="userManager"></param>
         /// <param name="httpContextAccessor"></param>
         /// <param name="auditConfiguration"></param>
         public MilvaDbContext(DbContextOptions<MilvaDbContext<TUser, TRole, TKey>> options,
-                              UserManager<TUser> userManager,
                               IHttpContextAccessor httpContextAccessor,
                               IAuditConfiguration auditConfiguration) : base(options)
         {
             var userName = httpContextAccessor.HttpContext.User?.Identity?.Name;
             if (!string.IsNullOrEmpty(userName))
-                CurrentUser = userManager.FindByNameAsync(httpContextAccessor.HttpContext.User.Identity.Name).Result;
+                CurrentUser = Users.FirstOrDefaultAsync(i => i.UserName == httpContextAccessor.HttpContext.User.Identity.Name).Result;
 
             AuditConfiguration = auditConfiguration;
             IgnoreSoftDelete.Value = false;
@@ -231,7 +227,7 @@ namespace Milvasoft.Helpers.DataAccess.MilvaContext
         protected virtual Expression<Func<TEntity, bool>> CreateIsDeletedFalseExpression<TEntity>()
         {
             var entityType = typeof(TEntity);
-            if (entityType.BaseType.Name == typeof(FullAuditableEntity<>).Name 
+            if (entityType.BaseType.Name == typeof(FullAuditableEntity<>).Name
                 || typeof(FullAuditableEntity<TKey>).IsAssignableFrom(entityType.BaseType)
                 || typeof(FullAuditableEntity<>).IsAssignableFrom(entityType.BaseType)
                 || typeof(FullAuditableEntity<>).IsAssignableFrom(entityType)
