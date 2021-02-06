@@ -31,7 +31,7 @@ namespace Milvasoft.Helpers.DataAccess.MilvaContext
     /// <typeparam name="TKey"></typeparam>
     public abstract class MilvaDbContext<TUser, TRole, TKey> : IdentityDbContext<TUser, TRole, TKey>
     where TUser : MilvaUser<TKey>
-    where TRole : IdentityRole<TKey>
+    where TRole : MilvaRole<TKey>
     where TKey : struct, IEquatable<TKey>
     {
         #region Protected Properties
