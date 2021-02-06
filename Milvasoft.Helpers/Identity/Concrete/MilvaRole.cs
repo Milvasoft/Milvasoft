@@ -18,7 +18,7 @@ namespace Milvasoft.Helpers.Identity.Concrete
         /// <summary>
         /// Creator of user.
         /// </summary>
-        public Guid? CreatorUserId { get; set; }
+        public TKey? CreatorUserId { get; set; }
 
         /// <summary>
         /// Last modificationd date of user.
@@ -28,7 +28,7 @@ namespace Milvasoft.Helpers.Identity.Concrete
         /// <summary>
         /// Last Modifier User of user.
         /// </summary>
-        public Guid? LastModifierUserId { get; set; }
+        public TKey? LastModifierUserId { get; set; }
 
         /// <summary>
         /// Deletion date of user.
@@ -38,7 +38,7 @@ namespace Milvasoft.Helpers.Identity.Concrete
         /// <summary>
         /// Deleter of user.
         /// </summary>
-        public Guid? DeleterUserId { get; set; }
+        public TKey? DeleterUserId { get; set; }
 
         /// <summary>
         /// Gets or sets wheter user is deleted.

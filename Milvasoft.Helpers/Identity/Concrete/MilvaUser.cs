@@ -18,7 +18,7 @@ namespace Milvasoft.Helpers.Identity.Concrete
         /// <summary>
         /// Creator of user.
         /// </summary>
-        public Guid? CreatorUserId { get; set; }
+        public TKey? CreatorUserId { get; set; }
 
         /// <summary>
         /// Navigation property of creator user.
@@ -33,7 +33,7 @@ namespace Milvasoft.Helpers.Identity.Concrete
         /// <summary>
         /// Last Modifier User of user.
         /// </summary>
-        public Guid? LastModifierUserId { get; set; }
+        public TKey? LastModifierUserId { get; set; }
 
         /// <summary>
         /// Navigation property of last modifier user.
@@ -48,7 +48,7 @@ namespace Milvasoft.Helpers.Identity.Concrete
         /// <summary>
         /// Deleter of user.
         /// </summary>
-        public Guid? DeleterUserId { get; set; }
+        public TKey? DeleterUserId { get; set; }
 
         /// <summary>
         /// Navigation property of deleter user.
