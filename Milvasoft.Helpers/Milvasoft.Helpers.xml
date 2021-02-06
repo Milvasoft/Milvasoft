@@ -2320,6 +2320,15 @@
             
             </summary>
         </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.MilvaContext.MilvaDbContext`3.#ctor(Microsoft.EntityFrameworkCore.DbContextOptions,Microsoft.AspNetCore.Identity.UserManager{`0},Microsoft.AspNetCore.Http.IHttpContextAccessor,Milvasoft.Helpers.DependencyInjection.IAuditConfiguration)">
+            <summary>
+            Cunstructor of <c cref="T:Milvasoft.Helpers.DataAccess.MilvaContext.MilvaDbContext`3"></c>.
+            </summary>
+            <param name="options"></param>
+            <param name="userManager"></param>
+            <param name="httpContextAccessor"></param>
+            <param name="auditConfiguration"></param>
+        </member>
         <member name="M:Milvasoft.Helpers.DataAccess.MilvaContext.MilvaDbContext`3.#ctor(Microsoft.EntityFrameworkCore.DbContextOptions{Milvasoft.Helpers.DataAccess.MilvaContext.MilvaDbContext{`0,`1,`2}},Microsoft.AspNetCore.Identity.UserManager{`0},Microsoft.AspNetCore.Http.IHttpContextAccessor,Milvasoft.Helpers.DependencyInjection.IAuditConfiguration)">
             <summary>
             Cunstructor of <c cref="T:Milvasoft.Helpers.DataAccess.MilvaContext.MilvaDbContext`3"></c>.
@@ -2465,6 +2474,7 @@
         <member name="M:Milvasoft.Helpers.DataAccess.MilvaContext.MilvaDbContextExtensions.IncludeLang``1(System.Linq.IQueryable{``0},Microsoft.EntityFrameworkCore.DbContext)">
             <summary>
             Allows to all entities associated with deletions to be Included to the entity(s) to be included in the process.
+            Entities must be contains "Langs" navigation property for include process. (e.g. ProductLangs)
             </summary>
             <param name="source"></param>
             <param name="context"></param>
