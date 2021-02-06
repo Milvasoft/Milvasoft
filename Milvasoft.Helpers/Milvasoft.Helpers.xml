@@ -440,7 +440,7 @@
             <summary>
             Determines entity has creator.
             </summary>
-            <typeparam name="TKey"></typeparam>
+            <typeparam name="TUserKey"></typeparam>
         </member>
         <member name="P:Milvasoft.Helpers.DataAccess.Abstract.Entity.Auditing.IHasCreator`1.CreatorUserId">
             <summary>
@@ -451,7 +451,7 @@
             <summary>
             Determines entity has deleter.
             </summary>
-            <typeparam name="TKey"></typeparam>
+            <typeparam name="TUserKey"></typeparam>
         </member>
         <member name="P:Milvasoft.Helpers.DataAccess.Abstract.Entity.Auditing.IHasDeleter`1.DeleterUserId">
             <summary>
@@ -477,7 +477,7 @@
             <summary>
             Determines entity has modifier.
             </summary>
-            <typeparam name="TKey"></typeparam>
+            <typeparam name="TUserKey"></typeparam>
         </member>
         <member name="P:Milvasoft.Helpers.DataAccess.Abstract.Entity.Auditing.IHasModifier`1.LastModifierUserId">
             <summary>
@@ -491,6 +491,18 @@
             <typeparam name="TKey"></typeparam>
         </member>
         <member name="P:Milvasoft.Helpers.DataAccess.Abstract.Entity.IAuditable`1.LastModificationDate">
+            <summary>
+            Last modification date of entity.
+            </summary>
+        </member>
+        <member name="T:Milvasoft.Helpers.DataAccess.Abstract.Entity.IAuditable`2">
+            <summary>
+            Determines entity is auditable with modifier and modification date.
+            </summary>
+            <typeparam name="TKey"></typeparam>
+            <typeparam name="TUserKey"></typeparam>
+        </member>
+        <member name="P:Milvasoft.Helpers.DataAccess.Abstract.Entity.IAuditable`2.LastModificationDate">
             <summary>
             Last modification date of entity.
             </summary>
@@ -560,6 +572,18 @@
             Creation date of entity.
             </summary>
         </member>
+        <member name="T:Milvasoft.Helpers.DataAccess.Abstract.Entity.ICreationAuditable`2">
+            <summary>
+            Determines entity's creation is auditable with user information.
+            </summary>
+            <typeparam name="TKey"></typeparam>
+            <typeparam name="TUserKey"></typeparam>
+        </member>
+        <member name="P:Milvasoft.Helpers.DataAccess.Abstract.Entity.ICreationAuditable`2.CreationDate">
+            <summary>
+            Creation date of entity.
+            </summary>
+        </member>
         <member name="T:Milvasoft.Helpers.DataAccess.Abstract.Entity.ICreationAuditable`3">
             <summary>
             Adds navigation properties to <see cref="T:Milvasoft.Helpers.DataAccess.Abstract.Entity.ICreationAuditable`1"/> interface for user.
@@ -602,6 +626,13 @@
             Determines entity is fully auditable with user information.
             </summary>
             <typeparam name="TKey"></typeparam>
+        </member>
+        <member name="T:Milvasoft.Helpers.DataAccess.Abstract.Entity.IFullAuditable`2">
+            <summary>
+            Determines entity is fully auditable with user information.
+            </summary>
+            <typeparam name="TKey"></typeparam>
+            <typeparam name="TUserKey"></typeparam>
         </member>
         <member name="T:Milvasoft.Helpers.DataAccess.Abstract.Entity.IFullAuditable`3">
             <summary>
@@ -1205,6 +1236,22 @@
             </summary>
             <typeparam name="TEntity"></typeparam>
             <returns></returns>
+        </member>
+        <member name="T:Milvasoft.Helpers.DataAccess.Attributes.MilvaDefaultValueAttribute">
+            <summary>
+            Attribute for adding default value in context level.
+            </summary>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.Attributes.MilvaDefaultValueAttribute.#ctor(System.Object)">
+            <summary>
+            Specifies this property has a default value upon creation.
+            </summary>
+            <param name="defaultValue">The default value of the property.</param>
+        </member>
+        <member name="P:Milvasoft.Helpers.DataAccess.Attributes.MilvaDefaultValueAttribute.DefaultValue">
+            <summary>
+            Default value of tagged property.
+            </summary>
         </member>
         <member name="T:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3">
             <summary>
@@ -1852,6 +1899,7 @@
             <summary>
             Determines entity's is auditable with modifier and modification date.
             </summary>
+            <typeparam name="TKey">Type of the user</typeparam>
         </member>
         <member name="P:Milvasoft.Helpers.DataAccess.Concrete.Entity.AuditableEntity`1.LastModificationDate">
             <summary>
@@ -1859,6 +1907,23 @@
             </summary>
         </member>
         <member name="P:Milvasoft.Helpers.DataAccess.Concrete.Entity.AuditableEntity`1.LastModifierUserId">
+            <summary>
+            Last modifier of entity.
+            </summary>
+        </member>
+        <member name="T:Milvasoft.Helpers.DataAccess.Concrete.Entity.AuditableEntity`2">
+            <summary>
+            Determines entity's is auditable with modifier and modification date.
+            </summary>
+            <typeparam name="TKey">Type of the user</typeparam>
+            <typeparam name="TUserKey">Type of the user</typeparam>
+        </member>
+        <member name="P:Milvasoft.Helpers.DataAccess.Concrete.Entity.AuditableEntity`2.LastModificationDate">
+            <summary>
+            Last modification date of entity.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.DataAccess.Concrete.Entity.AuditableEntity`2.LastModifierUserId">
             <summary>
             Last modifier of entity.
             </summary>
@@ -1903,6 +1968,7 @@
             <summary>
             Determines entity's is auditable with modifier and modification date.
             </summary>
+            <typeparam name="TKey">Type of the user</typeparam>
         </member>
         <member name="P:Milvasoft.Helpers.DataAccess.Concrete.Entity.AuditableEntityWithoutUser`1.LastModificationDate">
             <summary>
@@ -1945,13 +2011,26 @@
             <summary>
             Determines entity's creation is auditable.
             </summary>
+            <typeparam name="TKey">Type of the user</typeparam>
         </member>
         <member name="P:Milvasoft.Helpers.DataAccess.Concrete.Entity.CreationAuditableEntity`1.CreationDate">
             <summary>
             Creation date of entity.
             </summary>
         </member>
-        <member name="P:Milvasoft.Helpers.DataAccess.Concrete.Entity.CreationAuditableEntity`1.CreatorUserId">
+        <member name="T:Milvasoft.Helpers.DataAccess.Concrete.Entity.CreationAuditableEntity`2">
+            <summary>
+            Determines entity's creation is auditable.
+            </summary>
+            <typeparam name="TKey">Type of the user</typeparam>
+            <typeparam name="TUserKey">Type of the user</typeparam>
+        </member>
+        <member name="P:Milvasoft.Helpers.DataAccess.Concrete.Entity.CreationAuditableEntity`2.CreationDate">
+            <summary>
+            Creation date of entity.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.DataAccess.Concrete.Entity.CreationAuditableEntity`2.CreatorUserId">
             <summary>
             Creator of entity.
             </summary>
@@ -1986,28 +2065,52 @@
             <summary>
             Determines entity's creation is auditable without user.
             </summary>
+            <typeparam name="TKey">Type of the user</typeparam>
         </member>
         <member name="P:Milvasoft.Helpers.DataAccess.Concrete.Entity.CreationAuditableEntityWithoutUser`1.CreationDate">
             <summary>
             Creation date of entity.
             </summary>
         </member>
+        <member name="T:Milvasoft.Helpers.DataAccess.Concrete.Entity.EntityPropertyNames">
+            <summary>
+            Auditing property names.
+            </summary>
+        </member>
         <member name="T:Milvasoft.Helpers.DataAccess.Concrete.Entity.FullAuditableEntity`1">
             <summary>
             Determines entity is fully auditable soft deletable entity.
             </summary>
+            <typeparam name="TKey">Type of the user</typeparam>
         </member>
         <member name="P:Milvasoft.Helpers.DataAccess.Concrete.Entity.FullAuditableEntity`1.DeletionDate">
             <summary>
             Deletion date of entity.
             </summary>
         </member>
-        <member name="P:Milvasoft.Helpers.DataAccess.Concrete.Entity.FullAuditableEntity`1.DeleterUserId">
+        <member name="P:Milvasoft.Helpers.DataAccess.Concrete.Entity.FullAuditableEntity`1.IsDeleted">
+            <summary>
+            Gets or sets a value indicating whether IsDeleted.
+            </summary>
+        </member>
+        <member name="T:Milvasoft.Helpers.DataAccess.Concrete.Entity.FullAuditableEntity`2">
+            <summary>
+            Determines entity is fully auditable soft deletable entity.
+            </summary>
+            <typeparam name="TKey">Type of the user</typeparam>
+            <typeparam name="TUserKey">Type of the user</typeparam>
+        </member>
+        <member name="P:Milvasoft.Helpers.DataAccess.Concrete.Entity.FullAuditableEntity`2.DeletionDate">
+            <summary>
+            Deletion date of entity.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.DataAccess.Concrete.Entity.FullAuditableEntity`2.DeleterUserId">
             <summary>
             Deleter of entity.
             </summary>er
         </member>
-        <member name="P:Milvasoft.Helpers.DataAccess.Concrete.Entity.FullAuditableEntity`1.IsDeleted">
+        <member name="P:Milvasoft.Helpers.DataAccess.Concrete.Entity.FullAuditableEntity`2.IsDeleted">
             <summary>
             Gets or sets a value indicating whether IsDeleted.
             </summary>
@@ -2018,6 +2121,7 @@
             </summary>
             <typeparam name="TKey">Type of the primary key of the entity</typeparam>
             <typeparam name="TUser">Type of the user</typeparam>
+            <typeparam name="TUserKey">Type of the user</typeparam>
         </member>
         <member name="P:Milvasoft.Helpers.DataAccess.Concrete.Entity.FullAuditableEntity`3.DeletionDate">
             <summary>
@@ -2045,6 +2149,7 @@
             </summary>
             <typeparam name="TKey">Type of the primary key of the entity</typeparam>
             <typeparam name="TUser">Type of the user</typeparam>
+            <typeparam name="TUserKey">Type of the user</typeparam>
         </member>
         <member name="P:Milvasoft.Helpers.DataAccess.Concrete.Entity.FullAuditableEntityWithCustomUser`3.DeletionDate">
             <summary>
@@ -2070,6 +2175,7 @@
             <summary>
             Determines entity is fully auditable without user.
             </summary>
+            <typeparam name="TKey">Type of the user</typeparam>
         </member>
         <member name="P:Milvasoft.Helpers.DataAccess.Concrete.Entity.FullAuditableEntityWithoutUser`1.DeletionDate">
             <summary>
@@ -2176,6 +2282,209 @@
             <param name="query"></param>
             <param name="includes"></param>
             <returns></returns>
+        </member>
+        <member name="T:Milvasoft.Helpers.DataAccess.MilvaContext.AuditConfiguration">
+            <summary>
+            Entity auditing configuration. You can register this configuration in startup as singleton.
+            </summary>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.MilvaContext.AuditConfiguration.#ctor(System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean)">
+            <summary>
+            Entity auditing configuration. You can register this configuration in startup as singleton.
+            </summary>
+        </member>
+        <member name="T:Milvasoft.Helpers.DataAccess.MilvaContext.MilvaDbContext`3">
+            <summary>
+            This class handles all database operations.
+            </summary>
+            
+            <remarks>
+            <para> You must register <see cref="T:Milvasoft.Helpers.DependencyInjection.IAuditConfiguration"/> in your application startup. </para>
+            </remarks>
+            <typeparam name="TUser"></typeparam>
+            <typeparam name="TRole"></typeparam>
+            <typeparam name="TKey"></typeparam>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.MilvaContext.MilvaDbContext`3.#ctor(Microsoft.EntityFrameworkCore.DbContextOptions{Milvasoft.Helpers.DataAccess.MilvaContext.MilvaDbContext{`0,`1,`2}},Microsoft.AspNetCore.Identity.UserManager{`0},Microsoft.AspNetCore.Http.IHttpContextAccessor,Milvasoft.Helpers.DependencyInjection.IAuditConfiguration)">
+            <summary>
+            Cunstructor of <c cref="T:Milvasoft.Helpers.DataAccess.MilvaContext.MilvaDbContext`3"></c>.
+            </summary>
+            <param name="options"></param>
+            <param name="userManager"></param>
+            <param name="httpContextAccessor"></param>
+            <param name="auditConfiguration"></param>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.MilvaContext.MilvaDbContext`3.OnModelCreating(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <summary>
+            Overrided the OnModelCreating for custom configurations to database.
+            </summary>
+            <param name="modelBuilder"></param>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.MilvaContext.MilvaDbContext`3.IgnoreSoftDeleteForNextProcess">
+            <summary>
+            Ignores soft delete for next process.
+            </summary>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.MilvaContext.MilvaDbContext`3.ActivateSoftDelete">
+            <summary>
+            Activate soft delete.
+            </summary>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.MilvaContext.MilvaDbContext`3.SaveChanges">
+            <summary>
+            Overrided the SaveChanges method for soft deleting.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.MilvaContext.MilvaDbContext`3.SaveChangesAsync(System.Threading.CancellationToken)">
+            <summary>
+            Overrided the SaveChangesAsync method for soft deleting.
+            </summary>
+            <param name="cancellationToken"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.MilvaContext.MilvaDbContext`3.GetRequiredContents(System.Type)">
+            <summary>
+            Gets requested contents by <paramref name="type"/> DbSet.
+            </summary>
+            <param name="type"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.MilvaContext.MilvaDbContext`3.GetRequiredContentsAsync``1">
+            <summary>
+            Gets requested contents by <typeparamref name="TEntity"/> DbSet.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.MilvaContext.MilvaDbContext`3.GetMaxValueAsync``1(System.String)">
+            <summary>
+            Gets the requested <typeparamref name="TEntity"/>'s property's(<paramref name="propName"/>) max value.
+            </summary>
+            <typeparam name="TEntity"></typeparam>
+            <param name="propName"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.MilvaContext.MilvaDbContext`3.CreateIsDeletedFalseExpression``1">
+            <summary>
+            Gets <b>entity => entity.IsDeleted == false</b> expression, if <typeparamref name="TEntity"/> is assignable from <see cref="T:Milvasoft.Helpers.DataAccess.Abstract.Entity.IFullAuditable`1"/>.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.MilvaContext.MilvaDbContext`3.SoftDelete(Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry)">
+            <summary>
+            Soft delete operation.
+            </summary>
+            <param name="entry"></param>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.MilvaContext.MilvaDbContext`3.AuditDeletion(Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry)">
+            <summary>
+            Entity auditing for delete. 
+            </summary>
+            <param name="entry"></param>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.MilvaContext.MilvaDbContext`3.AuditDate(Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry,System.String)">
+            <summary>
+            Entity auditing by date. 
+            </summary>
+            <param name="entry"></param>
+            <param name="propertyName"></param>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.MilvaContext.MilvaDbContext`3.AuditPerformerUser(Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry,System.String)">
+            <summary>
+            Entity auditing by performer user.
+            </summary>
+            <param name="entry"></param>
+            <param name="propertyName"></param>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.MilvaContext.MilvaDbContext`3.AuditEntites">
+            <summary>
+            Provides auditing entities by <see cref="F:Milvasoft.Helpers.DataAccess.MilvaContext.MilvaDbContext`3._auditConfiguration"/>.
+            If deletion process happens then sets the <see cref="F:Milvasoft.Helpers.DataAccess.MilvaContext.MilvaDbContext`3._ignoreSoftDelete"/> variable to true at the end of process.
+            </summary>
+        </member>
+        <member name="T:Milvasoft.Helpers.DataAccess.MilvaContext.MilvaDbContextExtensions">
+            <summary>
+            Extension methods for <c cref="T:Milvasoft.Helpers.DataAccess.MilvaContext.MilvaDbContext`3"></c>.
+            </summary>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.MilvaContext.MilvaDbContextExtensions.AddIndexToIndelibleEntities(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <summary>
+            Adds an index for each indelible entity for IsDeleted property.
+            </summary>
+            <param name="modelBuilder"></param>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.MilvaContext.MilvaDbContextExtensions.ConfigureDefaultValue(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <summary>
+            Configures primary keys start index.
+            </summary>
+            <param name="modelBuilder"></param>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.MilvaContext.MilvaDbContextExtensions.FilterDeletedEntities(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <summary>
+            Enable the query filter for indelible entities.
+            </summary>
+            <param name="modelBuilder"></param>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.MilvaContext.MilvaDbContextExtensions.IgnoreDefaultRecords(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <summary>
+            Enable the query filter for indelible entities.
+            </summary>
+            <param name="modelBuilder"></param>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.MilvaContext.MilvaDbContextExtensions.ConfigureDecimalProperties(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <summary>
+            Configures the decimal property of entities with decimal properties in decimal (18.2) format.
+            </summary>
+            <param name="modelBuilder"></param>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.MilvaContext.MilvaDbContextExtensions.IncludeAll``1(System.Linq.IQueryable{``0},Microsoft.EntityFrameworkCore.DbContext)">
+            <summary>
+            Allows to all entities associated with deletions to be Included to the entity(s) to be included in the process.
+            </summary>
+            <param name="source"></param>
+            <param name="context"></param>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.MilvaContext.MilvaDbContextExtensions.IncludeLang``1(System.Linq.IQueryable{``0},Microsoft.EntityFrameworkCore.DbContext)">
+            <summary>
+            Allows to all entities associated with deletions to be Included to the entity(s) to be included in the process.
+            </summary>
+            <param name="source"></param>
+            <param name="context"></param>
+        </member>
+        <member name="T:Milvasoft.Helpers.DependencyInjection.IAuditConfiguration">
+            <summary>
+            Configuration for entity auditing. You can register this configuration in startup as singleton.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.DependencyInjection.IAuditConfiguration.AuditCreationDate">
+            <summary>
+            Determines whether the entity auditing by the creation date.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.DependencyInjection.IAuditConfiguration.AuditCreator">
+            <summary>
+            Determines whether the entity auditing by the creator.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.DependencyInjection.IAuditConfiguration.AuditModificationDate">
+            <summary>
+            Determines whether the entity auditing by the modification date.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.DependencyInjection.IAuditConfiguration.AuditModifier">
+            <summary>
+            Determines whether the entity auditing by the modifier.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.DependencyInjection.IAuditConfiguration.AuditDeletionDate">
+            <summary>
+            Determines whether the entity auditing by the deletion date.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.DependencyInjection.IAuditConfiguration.AuditDeleter">
+            <summary>
+            Determines whether the entity auditing by the deleter.
+            </summary>
         </member>
         <member name="T:Milvasoft.Helpers.DependencyInjection.IMapper">
             <summary>
@@ -3176,6 +3485,11 @@
             <param name="expression"></param>
             <returns></returns>
         </member>
+        <member name="T:Milvasoft.Helpers.Extensions.GenericCollection">
+            <summary>
+            Generic collection helper extension methods.
+            </summary>
+        </member>
         <member name="M:Milvasoft.Helpers.Extensions.GenericCollection.IsNullOrEmpty(System.Collections.IEnumerable)">
             <summary>
             Checks whether or not collection is null or empty. Assumes collection can be safely enumerated multiple times.
@@ -3207,6 +3521,25 @@
             <param name="source"></param>
             <param name="propertyName"></param>
             <returns></returns>
+        </member>
+        <member name="T:Milvasoft.Helpers.Extensions.Helpers.ExpressionParameterReplacer">
+            <summary>
+            Expression parameter replacer for expression builder.
+            </summary>
+        </member>
+        <member name="M:Milvasoft.Helpers.Extensions.Helpers.ExpressionParameterReplacer.#ctor(System.Collections.Generic.IList{System.Linq.Expressions.ParameterExpression},System.Collections.Generic.IList{System.Linq.Expressions.ParameterExpression})">
+            <summary>
+            Constructor of <see cref="T:Milvasoft.Helpers.Extensions.Helpers.ExpressionParameterReplacer"/>
+            </summary>
+            <param name="fromParameters"></param>
+            <param name="toParameters"></param>
+        </member>
+        <member name="M:Milvasoft.Helpers.Extensions.Helpers.ExpressionParameterReplacer.VisitParameter(System.Linq.Expressions.ParameterExpression)">
+            <summary>
+            Visits the <see cref="T:System.Linq.Expressions.ParameterExpression"/>.
+            </summary>
+            <param name="node"> The expression to visit. </param>
+            <returns> The modified expression, if it or any subexpression was modified; otherwise, returns the original expression.</returns>
         </member>
         <member name="T:Milvasoft.Helpers.Extensions.Strings">
             <summary>
@@ -5746,6 +6079,51 @@
             Password of user.
             </summary>
         </member>
+        <member name="T:Milvasoft.Helpers.Identity.Concrete.ILoginResultDTO">
+            <summary>
+            Login result DTO for DI.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.Identity.Concrete.ILoginResultDTO.ErrorMessages">
+            <summary>
+            Error messages of result.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.Identity.Concrete.ILoginResultDTO.Token">
+            <summary>
+            If result is success sets the token.
+            </summary>
+        </member>
+        <member name="T:Milvasoft.Helpers.Identity.Concrete.ITokenManagement">
+            <summary>
+            Token management DTO for DI.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.Identity.Concrete.ITokenManagement.Secret">
+            <summary>
+            Gets or sets Secret key of token.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.Identity.Concrete.ITokenManagement.Issuer">
+            <summary>
+            Gets or sets Authorization issuer.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.Identity.Concrete.ITokenManagement.Audience">
+            <summary>
+            Gets or sets Authorization audience.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.Identity.Concrete.ITokenManagement.AccessExpiration">
+            <summary>
+            Gets or sets AccessExpiration of token.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.Identity.Concrete.ITokenManagement.RefreshExpiration">
+            <summary>
+            Gets or sets RefreshExpiration of token.
+            </summary>
+        </member>
         <member name="T:Milvasoft.Helpers.Identity.Concrete.IdentityOperations`7">
             <summary>
             Provides Identity operations like sign in, sign out.
@@ -6050,6 +6428,62 @@
             <param name="role"></param>
             <returns></returns>
         </member>
+        <member name="T:Milvasoft.Helpers.Identity.Concrete.MilvaUser`1">
+            <summary>
+            Milva user.
+            </summary>
+            <typeparam name="TKey"></typeparam>
+        </member>
+        <member name="P:Milvasoft.Helpers.Identity.Concrete.MilvaUser`1.CreationDate">
+            <summary>
+            Creation date of user.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.Identity.Concrete.MilvaUser`1.CreatorUserId">
+            <summary>
+            Creator of user.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.Identity.Concrete.MilvaUser`1.CreatorUser">
+            <summary>
+            Navigation property of creator user.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.Identity.Concrete.MilvaUser`1.LastModificationDate">
+            <summary>
+            Last modificationd date of user.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.Identity.Concrete.MilvaUser`1.LastModifierUserId">
+            <summary>
+            Last Modifier User of user.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.Identity.Concrete.MilvaUser`1.LastModifierUser">
+            <summary>
+            Navigation property of last modifier user.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.Identity.Concrete.MilvaUser`1.DeletionDate">
+            <summary>
+            Deletion date of user.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.Identity.Concrete.MilvaUser`1.DeleterUserId">
+            <summary>
+            Deleter of user.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.Identity.Concrete.MilvaUser`1.DeleterUser">
+            <summary>
+            Navigation property of deleter user.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.Identity.Concrete.MilvaUser`1.IsDeleted">
+            <summary>
+            Gets or sets wheter user is deleted.
+            </summary>
+        </member>
         <member name="T:Milvasoft.Helpers.Identity.Concrete.MilvaUserValidation`2">
             <summary>
             Provides an abstraction for user validation.
@@ -6076,32 +6510,32 @@
             UserName and token pairs for each logged in user.
             </summary>
         </member>
-        <member name="T:Milvasoft.Helpers.MilvaMail">
+        <member name="T:Milvasoft.Helpers.MilvaMailSender">
             <summary>
             Provides send mail.
             </summary>
         </member>
-        <member name="P:Milvasoft.Helpers.MilvaMail.From">
+        <member name="P:Milvasoft.Helpers.MilvaMailSender.From">
             <summary>
             Gets or sets mail sender.
             </summary>
         </member>
-        <member name="P:Milvasoft.Helpers.MilvaMail.NetworkCredential">
+        <member name="P:Milvasoft.Helpers.MilvaMailSender.NetworkCredential">
             <summary>
             Gets or sets mail sender credentials.
             </summary>
         </member>
-        <member name="P:Milvasoft.Helpers.MilvaMail.SmtpPort">
+        <member name="P:Milvasoft.Helpers.MilvaMailSender.SmtpPort">
             <summary>
             Gets or sets Port of mail sender.
             </summary>
         </member>
-        <member name="P:Milvasoft.Helpers.MilvaMail.SmtpHost">
+        <member name="P:Milvasoft.Helpers.MilvaMailSender.SmtpHost">
             <summary>
             Gets or sets Host of mail sender.
             </summary>
         </member>
-        <member name="M:Milvasoft.Helpers.MilvaMail.#ctor(System.String,System.Net.NetworkCredential,System.Int32,System.String)">
+        <member name="M:Milvasoft.Helpers.MilvaMailSender.#ctor(System.String,System.Net.NetworkCredential,System.Int32,System.String)">
             <summary>
             Initializes mail sending operation default values.
             </summary>
@@ -6110,7 +6544,7 @@
             <param name="smtpPort"></param>
             <param name="smtpHost"></param>
         </member>
-        <member name="M:Milvasoft.Helpers.MilvaMail.OpsiyonSendMailAsync(System.String,System.String,System.String,System.Boolean)">
+        <member name="M:Milvasoft.Helpers.MilvaMailSender.MilvaSendMailAsync(System.String,System.String,System.String,System.Boolean)">
             <summary>
             Provides send mail.
             </summary>
@@ -6119,7 +6553,7 @@
             <param name="body"></param>
             <param name="isBodyHtml"></param>
         </member>
-        <member name="M:Milvasoft.Helpers.MilvaMail.OpsiyonSendMailAsync(System.String,Milvasoft.Helpers.Enums.MailSubject,System.String,System.Boolean)">
+        <member name="M:Milvasoft.Helpers.MilvaMailSender.MilvaSendMailAsync(System.String,Milvasoft.Helpers.Enums.MailSubject,System.String,System.Boolean)">
             <summary>
             Provides send mail.
             </summary>
@@ -6128,7 +6562,7 @@
             <param name="body"></param>
             <param name="isBodyHtml"></param>
         </member>
-        <member name="M:Milvasoft.Helpers.MilvaMail.OpsiyonSendMailAsync(System.String,System.String,System.String,System.String,System.Net.Mime.ContentType,System.Boolean)">
+        <member name="M:Milvasoft.Helpers.MilvaMailSender.MilvaSendMailAsync(System.String,System.String,System.String,System.String,System.Net.Mime.ContentType,System.Boolean)">
             <summary>
             Provides send mail with attachment.
             </summary>
@@ -6139,7 +6573,7 @@
             <param name="contentType"></param>
             <param name="isBodyHtml"></param>
         </member>
-        <member name="M:Milvasoft.Helpers.MilvaMail.OpsiyonSendMailAsync(System.String,System.String,System.String,System.Collections.Generic.List{System.Net.Mail.Attachment},System.Boolean)">
+        <member name="M:Milvasoft.Helpers.MilvaMailSender.MilvaSendMailAsync(System.String,System.String,System.String,System.Collections.Generic.List{System.Net.Mail.Attachment},System.Boolean)">
             <summary>
             Provides send mail with attachment.
             </summary>
@@ -6149,7 +6583,7 @@
             <param name="attachments"></param>
             <param name="isBodyHtml"></param>
         </member>
-        <member name="M:Milvasoft.Helpers.MilvaMail.OpsiyonSendMailAsync(System.String,System.String,System.String,System.String,System.String,System.Boolean)">
+        <member name="M:Milvasoft.Helpers.MilvaMailSender.MilvaSendMailAsync(System.String,System.String,System.String,System.String,System.String,System.Boolean)">
             <summary>
             Provides send mail with attachment.
             </summary>
@@ -6160,7 +6594,7 @@
             <param name="attachmentName"></param>
             <param name="isBodyHtml"></param>
         </member>
-        <member name="M:Milvasoft.Helpers.MilvaMail.OpsiyonSendMailAsync(System.String,Milvasoft.Helpers.Enums.MailSubject,System.String,System.String,System.Net.Mime.ContentType,System.Boolean)">
+        <member name="M:Milvasoft.Helpers.MilvaMailSender.MilvaSendMailAsync(System.String,Milvasoft.Helpers.Enums.MailSubject,System.String,System.String,System.Net.Mime.ContentType,System.Boolean)">
             <summary>
             Provides send mail with attachment.
             </summary>
@@ -6171,43 +6605,31 @@
             <param name="contentType"></param>
             <param name="isBodyHtml"></param>
         </member>
-        <member name="M:Milvasoft.Helpers.MilvaMail.OpsiyonSendMail(System.String,System.String,System.String,System.Boolean)">
+        <member name="M:Milvasoft.Helpers.MilvaMailSender.MilvaSendMail(System.String,System.String,System.String,System.Boolean)">
             <summary>
             Provides send mail.
             </summary>
-            <param name="from"></param>
             <param name="to"></param>
             <param name="subject"></param>
-            <param name="networkCredential"></param>
-            <param name="smtpPort"></param>
-            <param name="smtpHost"></param>
             <param name="body"></param>
             <param name="isBodyHtml"></param>
         </member>
-        <member name="M:Milvasoft.Helpers.MilvaMail.OpsiyonSendMail(System.String,System.String,System.String,System.String,System.Boolean)">
+        <member name="M:Milvasoft.Helpers.MilvaMailSender.MilvaSendMail(System.String,System.String,System.String,System.String,System.Boolean)">
             <summary>
             Provides send mail with attachment.
             </summary>
-            <param name="from"></param>
             <param name="to"></param>
             <param name="subject"></param>
-            <param name="networkCredential"></param>
-            <param name="smtpPort"></param>
-            <param name="smtpHost"></param>
             <param name="body"></param>
             <param name="filePath"></param>
             <param name="isBodyHtml"></param>
         </member>
-        <member name="M:Milvasoft.Helpers.MilvaMail.OpsiyonSendMail(System.String,Milvasoft.Helpers.Enums.MailSubject,System.String,System.Boolean)">
+        <member name="M:Milvasoft.Helpers.MilvaMailSender.MilvaSendMail(System.String,Milvasoft.Helpers.Enums.MailSubject,System.String,System.Boolean)">
             <summary>
             Provides send mail.
             </summary>
-            <param name="from"></param>
             <param name="to"></param>
             <param name="subject"></param>
-            <param name="networkCredential"></param>
-            <param name="smtpPort"></param>
-            <param name="smtpHost"></param>
             <param name="body"></param>
             <param name="isBodyHtml"></param>
         </member>

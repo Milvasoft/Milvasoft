@@ -15,7 +15,7 @@ namespace Milvasoft.Helpers
     /// <summary>
     /// Provides send mail.
     /// </summary>
-    public class MilvaMail
+    public class MilvaMailSender
     {
         /// <summary>
         /// Gets or sets mail sender.
@@ -44,7 +44,7 @@ namespace Milvasoft.Helpers
         /// <param name="networkCredential"></param>
         /// <param name="smtpPort"></param>
         /// <param name="smtpHost"></param>
-        public MilvaMail(string from, NetworkCredential networkCredential, int smtpPort, string smtpHost)
+        public MilvaMailSender(string from, NetworkCredential networkCredential, int smtpPort, string smtpHost)
         {
             From = from;
             NetworkCredential = networkCredential;
@@ -61,7 +61,7 @@ namespace Milvasoft.Helpers
         /// <param name="subject"></param>
         /// <param name="body"></param>
         /// <param name="isBodyHtml"></param>
-        public async Task OpsiyonSendMailAsync(string to,
+        public async Task MilvaSendMailAsync(string to,
                                                string subject,
                                                string body,
                                                bool isBodyHtml = false) => await SendMailAsync(to, subject, body, isBodyHtml).ConfigureAwait(false);
@@ -73,7 +73,7 @@ namespace Milvasoft.Helpers
         /// <param name="subject"></param>
         /// <param name="body"></param>
         /// <param name="isBodyHtml"></param>
-        public async Task OpsiyonSendMailAsync(string to,
+        public async Task MilvaSendMailAsync(string to,
                                                MailSubject subject,
                                                string body,
                                                bool isBodyHtml = false) => await SendMailAsync(to, CommonHelper.GetEnumDesciption(subject), body, isBodyHtml).ConfigureAwait(false);
@@ -89,7 +89,7 @@ namespace Milvasoft.Helpers
         /// <param name="filePath"></param>
         /// <param name="contentType"></param>
         /// <param name="isBodyHtml"></param>
-        public async Task OpsiyonSendMailAsync(string to,
+        public async Task MilvaSendMailAsync(string to,
                                                string subject,
                                                string body,
                                                string filePath,
@@ -104,7 +104,7 @@ namespace Milvasoft.Helpers
         /// <param name="body"></param>
         /// <param name="attachments"></param>
         /// <param name="isBodyHtml"></param>
-        public async Task OpsiyonSendMailAsync(string to,
+        public async Task MilvaSendMailAsync(string to,
                                                string subject,
                                                string body,
                                                List<Attachment> attachments,
@@ -138,7 +138,7 @@ namespace Milvasoft.Helpers
         /// <param name="base64String"> Data uri formatted base64 string.</param>
         /// <param name="attachmentName"></param>
         /// <param name="isBodyHtml"></param>
-        public async Task OpsiyonSendMailAsync(string to,
+        public async Task MilvaSendMailAsync(string to,
                                                string subject,
                                                string body,
                                                string base64String,
@@ -193,7 +193,7 @@ namespace Milvasoft.Helpers
         /// <param name="filePath"></param>
         /// <param name="contentType"></param>
         /// <param name="isBodyHtml"></param>
-        public async Task OpsiyonSendMailAsync(string to,
+        public async Task MilvaSendMailAsync(string to,
                                                MailSubject subject,
                                                string body,
                                                string filePath,
@@ -265,7 +265,7 @@ namespace Milvasoft.Helpers
         /// <param name="subject"></param>
         /// <param name="body"></param>
         /// <param name="isBodyHtml"></param>
-        public void OpsiyonSendMail(string to,
+        public void MilvaSendMail(string to,
                                     string subject,
                                     string body,
                                     bool isBodyHtml = false) => SendMail(to, subject, body, isBodyHtml);
@@ -278,7 +278,7 @@ namespace Milvasoft.Helpers
         /// <param name="body"></param>
         /// <param name="filePath"></param>
         /// <param name="isBodyHtml"></param>
-        public void OpsiyonSendMail(string to,
+        public void MilvaSendMail(string to,
                                     string subject,
                                     string body,
                                     string filePath,
@@ -291,7 +291,7 @@ namespace Milvasoft.Helpers
         /// <param name="subject"></param>
         /// <param name="body"></param>
         /// <param name="isBodyHtml"></param>
-        public void OpsiyonSendMail(string to,
+        public void MilvaSendMail(string to,
                                     MailSubject subject,
                                     string body,
                                     bool isBodyHtml = false) => SendMail(to, CommonHelper.GetEnumDesciption(subject), body, isBodyHtml);

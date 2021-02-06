@@ -5,6 +5,7 @@ namespace Milvasoft.Helpers.Models
     /// <summary>
     /// Base dto for all of deletable dtos. All deletable dtos have this values.
     /// </summary>
+    [Obsolete("This class will removed in next versions. Please use Auditable entities in Milvasoft.Helpers.DataAccess instead.")]
     public class BaseDTO<TKey>
     {
         /// <summary>
