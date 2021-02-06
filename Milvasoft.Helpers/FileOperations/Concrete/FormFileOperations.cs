@@ -160,7 +160,7 @@ namespace Milvasoft.Helpers.FileOperations.Concrete
 
                 var directoryFiles = directory.GetFiles();
                 int markerNo = directoryFiles.IsNullOrEmpty() ? 1 : directoryFiles.Max(fileInDir => Convert.ToInt32(Path.GetFileNameWithoutExtension(fileInDir.FullName).Split('_')[1]));
-
+                markerNo++;
                 var folderPaths = new List<string>();
                 foreach (var item in files)
                 {
@@ -240,7 +240,7 @@ namespace Milvasoft.Helpers.FileOperations.Concrete
 
                 var directoryFiles = directory.GetFiles();
                 int markerNo = directoryFiles.IsNullOrEmpty() ? 1 : directoryFiles.Max(fileInDir => Convert.ToInt32(Path.GetFileNameWithoutExtension(fileInDir.FullName).Split('_')[1]));
-
+                markerNo++;
                 var folderPaths = new List<string>();
                 foreach (var item in files)
                 {
