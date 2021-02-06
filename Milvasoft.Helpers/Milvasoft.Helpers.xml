@@ -642,6 +642,11 @@
             <typeparam name="TUser">Type of the user</typeparam>
             <typeparam name="TUserKey">Type of the user</typeparam>
         </member>
+        <member name="P:Milvasoft.Helpers.DataAccess.Abstract.Entity.IFullAuditable`3.DeleterUser">
+            <summary>
+            Reference to the last modifier user of this entity.
+            </summary>
+        </member>
         <member name="T:Milvasoft.Helpers.DataAccess.Abstract.Entity.IFullAuditableWithCustomUser`3">
             <summary>
             Adds navigation properties to <see cref="T:Milvasoft.Helpers.DataAccess.Abstract.Entity.IFullAuditable`1"/> interface for user.
@@ -649,6 +654,11 @@
             <typeparam name="TKey">Key of the user</typeparam>
             <typeparam name="TUser">Type of the user</typeparam>
             <typeparam name="TUserKey">Type of the user</typeparam>
+        </member>
+        <member name="P:Milvasoft.Helpers.DataAccess.Abstract.Entity.IFullAuditableWithCustomUser`3.DeleterUser">
+            <summary>
+            Reference to the last modifier user of this entity.
+            </summary>
         </member>
         <member name="T:Milvasoft.Helpers.DataAccess.Abstract.Entity.IFullAuditableWithoutUser`1">
             <summary>

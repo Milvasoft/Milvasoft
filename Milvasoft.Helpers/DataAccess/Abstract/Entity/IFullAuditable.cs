@@ -35,6 +35,10 @@ namespace Milvasoft.Helpers.DataAccess.Abstract.Entity
         where TKey : struct, IEquatable<TKey>
         where TUserKey : struct, IEquatable<TUserKey>
     {
+        /// <summary>
+        /// Reference to the last modifier user of this entity.
+        /// </summary>
+        TUser DeleterUser { get; set; }
     }
 
     /// <summary>
@@ -48,6 +52,10 @@ namespace Milvasoft.Helpers.DataAccess.Abstract.Entity
         where TKey : struct, IEquatable<TKey>
         where TUserKey : struct, IEquatable<TUserKey>
     {
+        /// <summary>
+        /// Reference to the last modifier user of this entity.
+        /// </summary>
+        TUser DeleterUser { get; set; }
     }
 
     /// <summary>

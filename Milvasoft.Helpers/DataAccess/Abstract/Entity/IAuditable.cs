@@ -38,7 +38,7 @@ namespace Milvasoft.Helpers.DataAccess.Abstract.Entity
     /// <typeparam name="TKey">Primary key of the user</typeparam>
     /// <typeparam name="TUser">Type of the user</typeparam>
     /// <typeparam name="TUserKey">Type of the user</typeparam>
-    public interface IAuditable<TUser, TUserKey, TKey> : IAuditable<TKey>, ICreationAuditable<TUser, TUserKey, TKey>
+    public interface IAuditable<TUser, TUserKey, TKey> : IAuditable<TUserKey,TKey>, ICreationAuditable<TUser, TUserKey, TKey>
         where TUser : MilvaUser<TUserKey>
         where TKey : struct, IEquatable<TKey>
         where TUserKey : struct, IEquatable<TUserKey>
@@ -55,7 +55,7 @@ namespace Milvasoft.Helpers.DataAccess.Abstract.Entity
     /// <typeparam name="TKey">Primary key of the user</typeparam>
     /// <typeparam name="TUser">Type of the user</typeparam>
     /// <typeparam name="TUserKey">Type of the user</typeparam>
-    public interface IAuditableWithCustomUser<TUser, TUserKey, TKey> : IAuditable<TKey>, ICreationAuditableWithCustomUser<TUser, TUserKey, TKey>
+    public interface IAuditableWithCustomUser<TUser, TUserKey, TKey> : IAuditable<TUserKey,TKey>, ICreationAuditableWithCustomUser<TUser, TUserKey, TKey>
         where TUser : IBaseEntity<TUserKey>
         where TKey : struct, IEquatable<TKey>
         where TUserKey : struct, IEquatable<TUserKey>

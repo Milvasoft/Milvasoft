@@ -8,7 +8,7 @@ namespace Milvasoft.Helpers.Identity.Concrete
     /// Milva user.
     /// </summary>
     /// <typeparam name="TKey"></typeparam>
-    public abstract class MilvaUser<TKey> : IdentityUser<TKey>, IFullAuditable<TKey> where TKey : struct, IEquatable<TKey>
+    public abstract class MilvaUser<TKey> : IdentityUser<TKey>, IFullAuditable<MilvaUser<TKey>,TKey,TKey> where TKey : struct, IEquatable<TKey>
     {
         /// <summary>
         /// Creation date of user.
