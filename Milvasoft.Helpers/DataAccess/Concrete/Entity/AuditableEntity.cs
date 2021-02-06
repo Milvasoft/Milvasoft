@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Milvasoft.Helpers.DataAccess.Abstract.Entity;
+using Milvasoft.Helpers.Identity.Concrete;
 using System;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -49,7 +50,7 @@ namespace Milvasoft.Helpers.DataAccess.Concrete.Entity
     /// <typeparam name="TUser">Type of the user</typeparam>
     /// <typeparam name="TUserKey">Type of the user</typeparam>
     public abstract class AuditableEntity<TUser, TUserKey, TKey> : AuditableEntity<TUserKey, TKey>, IAuditable<TUser, TUserKey, TKey>
-        where TUser : IdentityUser<TUserKey>
+        where TUser : MilvaUser<TUserKey>
         where TKey : struct, IEquatable<TKey>
         where TUserKey : struct, IEquatable<TUserKey>
     {

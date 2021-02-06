@@ -10,7 +10,10 @@ namespace Milvasoft.Helpers.Identity.Concrete
     /// <summary>
     /// Provides an abstraction for user validation.
     /// </summary>
-    public class MilvaUserValidation<TUser,TLocalizer> : IUserValidator<TUser> where TUser : IdentityUser<Guid> where TLocalizer : IStringLocalizer
+    public class MilvaUserValidation<TUser, TKey, TLocalizer> : IUserValidator<TUser>
+        where TUser : MilvaUser<TKey>
+        where TKey : struct, IEquatable<TKey>
+        where TLocalizer : IStringLocalizer
     {
         private readonly TLocalizer _localizer;
 
@@ -28,7 +31,7 @@ namespace Milvasoft.Helpers.Identity.Concrete
             List<IdentityError> errors = new List<IdentityError>();
 
             //Checking that the username does not start with a numeric expression
-            if (int.TryParse(user.UserName[0].ToString(), out int _)) 
+            if (int.TryParse(user.UserName[0].ToString(), out int _))
                 errors.Add(new IdentityError { Code = "UserNameNumberStartWith", Description = _localizer["UserValidationUserNameNumberStartWith"] });
 
             //UserName is between 3 and 25 characters

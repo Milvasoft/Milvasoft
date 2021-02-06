@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Milvasoft.Helpers.DataAccess.Abstract;
 using Milvasoft.Helpers.DataAccess.Abstract.Entity;
+using Milvasoft.Helpers.Identity.Concrete;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
@@ -151,7 +152,7 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
         public async Task RemoveExpiredTokensAsync<TUser, TKey>(UserManager<TUser> userManager,
                                                                 string loginProvider,
                                                                 string tokenName,
-                                                                Dictionary<string, string> cachedTokenDictionary = null) where TUser : IdentityUser<TKey>
+                                                                Dictionary<string, string> cachedTokenDictionary = null) where TUser : MilvaUser<TKey>
                                                                                                                          where TKey : struct, IEquatable<TKey>
         {
             var tokenHandler = new JwtSecurityTokenHandler();

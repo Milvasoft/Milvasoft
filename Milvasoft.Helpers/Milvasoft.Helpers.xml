@@ -2320,21 +2320,19 @@
             
             </summary>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.MilvaContext.MilvaDbContext`3.#ctor(Microsoft.EntityFrameworkCore.DbContextOptions,Microsoft.AspNetCore.Identity.UserManager{`0},Microsoft.AspNetCore.Http.IHttpContextAccessor,Milvasoft.Helpers.DependencyInjection.IAuditConfiguration)">
+        <member name="M:Milvasoft.Helpers.DataAccess.MilvaContext.MilvaDbContext`3.#ctor(Microsoft.EntityFrameworkCore.DbContextOptions,Microsoft.AspNetCore.Http.IHttpContextAccessor,Milvasoft.Helpers.DependencyInjection.IAuditConfiguration)">
             <summary>
             Cunstructor of <c cref="T:Milvasoft.Helpers.DataAccess.MilvaContext.MilvaDbContext`3"></c>.
             </summary>
             <param name="options"></param>
-            <param name="userManager"></param>
             <param name="httpContextAccessor"></param>
             <param name="auditConfiguration"></param>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.MilvaContext.MilvaDbContext`3.#ctor(Microsoft.EntityFrameworkCore.DbContextOptions{Milvasoft.Helpers.DataAccess.MilvaContext.MilvaDbContext{`0,`1,`2}},Microsoft.AspNetCore.Identity.UserManager{`0},Microsoft.AspNetCore.Http.IHttpContextAccessor,Milvasoft.Helpers.DependencyInjection.IAuditConfiguration)">
+        <member name="M:Milvasoft.Helpers.DataAccess.MilvaContext.MilvaDbContext`3.#ctor(Microsoft.EntityFrameworkCore.DbContextOptions{Milvasoft.Helpers.DataAccess.MilvaContext.MilvaDbContext{`0,`1,`2}},Microsoft.AspNetCore.Http.IHttpContextAccessor,Milvasoft.Helpers.DependencyInjection.IAuditConfiguration)">
             <summary>
             Cunstructor of <c cref="T:Milvasoft.Helpers.DataAccess.MilvaContext.MilvaDbContext`3"></c>.
             </summary>
             <param name="options"></param>
-            <param name="userManager"></param>
             <param name="httpContextAccessor"></param>
             <param name="auditConfiguration"></param>
         </member>
@@ -6456,6 +6454,47 @@
             <param name="role"></param>
             <returns></returns>
         </member>
+        <member name="T:Milvasoft.Helpers.Identity.Concrete.MilvaRole`1">
+            <summary>
+            Milva user.
+            </summary>
+            <typeparam name="TKey"></typeparam>
+        </member>
+        <member name="P:Milvasoft.Helpers.Identity.Concrete.MilvaRole`1.CreationDate">
+            <summary>
+            Creation date of user.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.Identity.Concrete.MilvaRole`1.CreatorUserId">
+            <summary>
+            Creator of user.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.Identity.Concrete.MilvaRole`1.LastModificationDate">
+            <summary>
+            Last modificationd date of user.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.Identity.Concrete.MilvaRole`1.LastModifierUserId">
+            <summary>
+            Last Modifier User of user.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.Identity.Concrete.MilvaRole`1.DeletionDate">
+            <summary>
+            Deletion date of user.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.Identity.Concrete.MilvaRole`1.DeleterUserId">
+            <summary>
+            Deleter of user.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.Identity.Concrete.MilvaRole`1.IsDeleted">
+            <summary>
+            Gets or sets wheter user is deleted.
+            </summary>
+        </member>
         <member name="T:Milvasoft.Helpers.Identity.Concrete.MilvaUser`1">
             <summary>
             Milva user.
@@ -6512,18 +6551,18 @@
             Gets or sets wheter user is deleted.
             </summary>
         </member>
-        <member name="T:Milvasoft.Helpers.Identity.Concrete.MilvaUserValidation`2">
+        <member name="T:Milvasoft.Helpers.Identity.Concrete.MilvaUserValidation`3">
             <summary>
             Provides an abstraction for user validation.
             </summary>
         </member>
-        <member name="M:Milvasoft.Helpers.Identity.Concrete.MilvaUserValidation`2.#ctor(`1)">
+        <member name="M:Milvasoft.Helpers.Identity.Concrete.MilvaUserValidation`3.#ctor(`2)">
             <summary>
             Constructor for localizer dependenct injection.
             </summary>
             <param name="localizer"></param>
         </member>
-        <member name="M:Milvasoft.Helpers.Identity.Concrete.MilvaUserValidation`2.ValidateAsync(Microsoft.AspNetCore.Identity.UserManager{`0},`0)">
+        <member name="M:Milvasoft.Helpers.Identity.Concrete.MilvaUserValidation`3.ValidateAsync(Microsoft.AspNetCore.Identity.UserManager{`0},`0)">
             <summary>
             Validates the specified user as an asynchronous operation.
             </summary>
