@@ -65,9 +65,9 @@ namespace Milvasoft.Helpers.DataAccess.MilvaContext
                               IHttpContextAccessor httpContextAccessor,
                               IAuditConfiguration auditConfiguration) : base(options)
         {
-            var userName = httpContextAccessor.HttpContext.User?.Identity?.Name;
+            var userName = httpContextAccessor?.HttpContext?.User?.Identity?.Name;
             if (!string.IsNullOrEmpty(userName))
-                CurrentUser = Users.FirstOrDefaultAsync(i => i.UserName == httpContextAccessor.HttpContext.User.Identity.Name).Result;
+                CurrentUser = Users.FirstOrDefaultAsync(i => i.UserName == userName).Result;
 
             AuditConfiguration = auditConfiguration;
             IgnoreSoftDelete.Value = false;
@@ -83,9 +83,9 @@ namespace Milvasoft.Helpers.DataAccess.MilvaContext
                               IHttpContextAccessor httpContextAccessor,
                               IAuditConfiguration auditConfiguration) : base(options)
         {
-            var userName = httpContextAccessor.HttpContext.User?.Identity?.Name;
+            var userName = httpContextAccessor?.HttpContext?.User?.Identity?.Name;
             if (!string.IsNullOrEmpty(userName))
-                CurrentUser = Users.FirstOrDefaultAsync(i => i.UserName == httpContextAccessor.HttpContext.User.Identity.Name).Result;
+                CurrentUser = Users.FirstOrDefaultAsync(i => i.UserName == userName).Result;
 
             AuditConfiguration = auditConfiguration;
             IgnoreSoftDelete.Value = false;
