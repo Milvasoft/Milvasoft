@@ -23,7 +23,7 @@ namespace Milvasoft.Helpers.Identity.Abstract
     /// <typeparam name="TLoginResultDTO"></typeparam>
     public interface IIdentityOperations<TUserManager, TDbContext, TLocalizer, TUser, TRole, TKey, TLoginResultDTO> 
        where TKey : struct, IEquatable<TKey>
-       where TUser : MilvaUser<TKey>, new()
+       where TUser : IdentityUser<TKey>, IFullAuditable<TKey>, new()
        where TRole : IdentityRole<TKey>
        where TDbContext : IdentityDbContext<TUser, TRole, TKey>
        where TUserManager : UserManager<TUser>

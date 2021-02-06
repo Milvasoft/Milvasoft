@@ -73,7 +73,7 @@ namespace Milvasoft.Helpers.DataAccess.Abstract
         Task RemoveExpiredTokensAsync<TUser, TKey>(UserManager<TUser> userManager,
                                                    string loginProvider,
                                                    string tokenName,
-                                                   Dictionary<string, string> cachedTokenDictionary = null) where TUser : MilvaUser<TKey>
+                                                   Dictionary<string, string> cachedTokenDictionary = null) where TUser : IdentityUser<TKey>, IFullAuditable<TKey>
                                                                                                             where TKey : struct, IEquatable<TKey>;
 
         /// <summary>

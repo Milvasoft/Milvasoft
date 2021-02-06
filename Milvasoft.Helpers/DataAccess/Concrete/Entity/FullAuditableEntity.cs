@@ -55,7 +55,7 @@ namespace Milvasoft.Helpers.DataAccess.Concrete.Entity
     /// <typeparam name="TUser">Type of the user</typeparam>
     /// <typeparam name="TUserKey">Type of the user</typeparam>
     public abstract class FullAuditableEntity<TUser, TUserKey, TKey> : AuditableEntity<TUser, TUserKey, TKey>, IFullAuditable<TUser, TUserKey, TKey>
-        where TUser : MilvaUser<TUserKey>
+        where TUser : IdentityUser<TUserKey>
         where TKey : struct, IEquatable<TKey>
         where TUserKey : struct, IEquatable<TUserKey>
     {

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Localization;
+using Milvasoft.Helpers.DataAccess.Abstract.Entity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +12,7 @@ namespace Milvasoft.Helpers.Identity.Concrete
     /// Provides an abstraction for user validation.
     /// </summary>
     public class MilvaUserValidation<TUser, TKey, TLocalizer> : IUserValidator<TUser>
-        where TUser : MilvaUser<TKey>
+        where TUser : IdentityUser<TKey>, IFullAuditable<TKey>
         where TKey : struct, IEquatable<TKey>
         where TLocalizer : IStringLocalizer
     {

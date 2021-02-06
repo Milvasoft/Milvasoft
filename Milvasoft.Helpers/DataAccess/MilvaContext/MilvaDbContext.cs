@@ -18,7 +18,6 @@ using System.Threading.Tasks;
 
 namespace Milvasoft.Helpers.DataAccess.MilvaContext
 {
-
     /// <summary>
     /// This class handles all database operations.
     /// </summary>
@@ -29,17 +28,17 @@ namespace Milvasoft.Helpers.DataAccess.MilvaContext
     /// <typeparam name="TUser"></typeparam>
     /// <typeparam name="TRole"></typeparam>
     /// <typeparam name="TKey"></typeparam>
-    public abstract class MilvaDbContext<TUser, TRole, TKey> : IdentityDbContext<TUser, TRole, TKey>
-    where TUser : MilvaUser<TKey>
-    where TRole : MilvaRole<TKey>
-    where TKey : struct, IEquatable<TKey>
+    public abstract class MilvaDbContextBase<TUser, TRole, TKey> : IdentityDbContext<TUser, TRole, TKey>
+        where TUser : IdentityUser<TKey>, IFullAuditable<TKey>
+        where TRole : IdentityRole<TKey>, IFullAuditable<TKey>
+        where TKey : struct, IEquatable<TKey>
     {
         #region Protected Properties
 
         /// <summary>
         /// Current user.
         /// </summary>
-        protected readonly TUser CurrentUser;
+        protected TUser CurrentUser;
 
         /// <summary>
         /// Audit configuration.
@@ -47,7 +46,7 @@ namespace Milvasoft.Helpers.DataAccess.MilvaContext
         protected IAuditConfiguration AuditConfiguration;
 
         /// <summary>
-        /// 
+        /// If its true ignores soft delete.
         /// </summary>
         protected static AsyncLocal<bool> IgnoreSoftDelete = new AsyncLocal<bool>();
 
@@ -56,14 +55,14 @@ namespace Milvasoft.Helpers.DataAccess.MilvaContext
         #region Constructors
 
         /// <summary>
-        /// Cunstructor of <c cref="MilvaDbContext{TUser, TRole, TKey}"></c>.
+        /// Cunstructor of <see cref="MilvaDbContext{TUser, TRole, TKey}"></see>.
         /// </summary>
         /// <param name="options"></param>
         /// <param name="httpContextAccessor"></param>
         /// <param name="auditConfiguration"></param>
-        public MilvaDbContext(DbContextOptions options,
-                              IHttpContextAccessor httpContextAccessor,
-                              IAuditConfiguration auditConfiguration) : base(options)
+        public MilvaDbContextBase(DbContextOptions options,
+                                  IHttpContextAccessor httpContextAccessor,
+                                  IAuditConfiguration auditConfiguration) : base(options)
         {
             var userName = httpContextAccessor?.HttpContext?.User?.Identity?.Name;
             if (!string.IsNullOrEmpty(userName))
@@ -74,14 +73,14 @@ namespace Milvasoft.Helpers.DataAccess.MilvaContext
         }
 
         /// <summary>
-        /// Cunstructor of <c cref="MilvaDbContext{TUser, TRole, TKey}"></c>.
+        /// Cunstructor of <see cref="MilvaDbContext{TUser, TRole, TKey}"></see>.
         /// </summary>
         /// <param name="options"></param>
         /// <param name="httpContextAccessor"></param>
         /// <param name="auditConfiguration"></param>
-        public MilvaDbContext(DbContextOptions<MilvaDbContext<TUser, TRole, TKey>> options,
-                              IHttpContextAccessor httpContextAccessor,
-                              IAuditConfiguration auditConfiguration) : base(options)
+        public MilvaDbContextBase(DbContextOptions<MilvaDbContextBase<TUser, TRole, TKey>> options,
+                                  IHttpContextAccessor httpContextAccessor,
+                                  IAuditConfiguration auditConfiguration) : base(options)
         {
             var userName = httpContextAccessor?.HttpContext?.User?.Identity?.Name;
             if (!string.IsNullOrEmpty(userName))
@@ -93,33 +92,12 @@ namespace Milvasoft.Helpers.DataAccess.MilvaContext
 
         #endregion
 
-
-
         /// <summary>
         /// Overrided the OnModelCreating for custom configurations to database.
         /// </summary>
         /// <param name="modelBuilder"></param>
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            //#region TUser.Set_ForeignKeys
-
-            //modelBuilder.Entity<TUser>()
-            //    .HasOne(p => p.DeleterUser)
-            //    .WithMany()
-            //    .HasForeignKey(p => p.DeleterUserId);
-
-            //modelBuilder.Entity<TUser>()
-            //    .HasOne(p => p.CreatorUser)
-            //    .WithMany()
-            //    .HasForeignKey(p => p.CreatorUserId);
-
-            //modelBuilder.Entity<TUser>()
-            //    .HasOne(p => p.LastModifierUser)
-            //    .WithMany()
-            //    .HasForeignKey(p => p.LastModifierUserId);
-
-            //#endregion
-
             base.OnModelCreating(modelBuilder);
         }
 
@@ -359,6 +337,94 @@ namespace Milvasoft.Helpers.DataAccess.MilvaContext
         }
 
         #endregion
+    }
+
+
+    /// <summary>
+    /// This class handles all database operations.
+    /// </summary>
+    /// 
+    /// <remarks>
+    /// <para> You must register <see cref="IAuditConfiguration"/> in your application startup. </para>
+    /// </remarks>
+    /// <typeparam name="TUser"></typeparam>
+    /// <typeparam name="TRole"></typeparam>
+    /// <typeparam name="TKey"></typeparam>
+    public abstract class MilvaDbContext<TUser, TRole, TKey> : MilvaDbContextBase<TUser, TRole, TKey>
+        where TUser : IdentityUser<TKey>, IFullAuditable<TKey>, IFullAuditable<TUser, TKey, TKey>
+        where TRole : IdentityRole<TKey>, IFullAuditable<TKey>, IFullAuditable<TUser, TKey, TKey>
+        where TKey : struct, IEquatable<TKey>
+    {
+
+
+        #region Constructors
+
+        /// <summary>
+        /// Cunstructor of <see cref="MilvaDbContext{TUser, TRole, TKey}"></see>.
+        /// </summary>
+        /// <param name="options"></param>
+        /// <param name="httpContextAccessor"></param>
+        /// <param name="auditConfiguration"></param>
+        public MilvaDbContext(DbContextOptions options,
+                              IHttpContextAccessor httpContextAccessor,
+                              IAuditConfiguration auditConfiguration) : base(options, httpContextAccessor, auditConfiguration)
+        {
+            var userName = httpContextAccessor?.HttpContext?.User?.Identity?.Name;
+            if (!string.IsNullOrEmpty(userName))
+                CurrentUser = Users.FirstOrDefaultAsync(i => i.UserName == userName).Result;
+
+            AuditConfiguration = auditConfiguration;
+            IgnoreSoftDelete.Value = false;
+        }
+
+        /// <summary>
+        /// Cunstructor of <see cref="MilvaDbContext{TUser, TRole, TKey}"></see>.
+        /// </summary>
+        /// <param name="options"></param>
+        /// <param name="httpContextAccessor"></param>
+        /// <param name="auditConfiguration"></param>
+        public MilvaDbContext(DbContextOptions<MilvaDbContext<TUser, TRole, TKey>> options,
+                              IHttpContextAccessor httpContextAccessor,
+                              IAuditConfiguration auditConfiguration) : base(options, httpContextAccessor, auditConfiguration)
+        {
+            var userName = httpContextAccessor?.HttpContext?.User?.Identity?.Name;
+            if (!string.IsNullOrEmpty(userName))
+                CurrentUser = Users.FirstOrDefaultAsync(i => i.UserName == userName).Result;
+
+            AuditConfiguration = auditConfiguration;
+            IgnoreSoftDelete.Value = false;
+        }
+
+        #endregion
+
+        /// <summary>
+        /// Overrided the OnModelCreating for custom configurations to database.
+        /// </summary>
+        /// <param name="modelBuilder"></param>
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            #region TUser.Set_ForeignKeys
+
+            modelBuilder.Entity<TUser>()
+                .HasOne(p => p.DeleterUser)
+                .WithMany()
+                .HasForeignKey(p => p.DeleterUserId);
+
+            modelBuilder.Entity<TUser>()
+                .HasOne(p => p.CreatorUser)
+                .WithMany()
+                .HasForeignKey(p => p.CreatorUserId);
+
+            modelBuilder.Entity<TUser>()
+                .HasOne(p => p.LastModifierUser)
+                .WithMany()
+                .HasForeignKey(p => p.LastModifierUserId);
+
+            #endregion
+        }
+
     }
 
 }
