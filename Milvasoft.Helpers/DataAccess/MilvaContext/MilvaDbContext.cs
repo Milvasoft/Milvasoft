@@ -327,13 +327,13 @@ namespace Milvasoft.Helpers.DataAccess.MilvaContext
                             if (!IgnoreSoftDelete.Value)
                                 SoftDelete(entry);
                         }
-                        IgnoreSoftDelete.Value = false;
                         break;
                     default:
                         break;
                 }
             }
 
+            IgnoreSoftDelete.Value = false;
         }
 
         #endregion
