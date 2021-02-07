@@ -159,8 +159,10 @@ namespace Milvasoft.Helpers.FileOperations.Concrete
                 DirectoryInfo directory = new DirectoryInfo(folderPathOfItem);
 
                 var directoryFiles = directory.GetFiles();
-                int markerNo = directoryFiles.IsNullOrEmpty() ? 1 : directoryFiles.Max(fileInDir => Convert.ToInt32(Path.GetFileNameWithoutExtension(fileInDir.FullName).Split('_')[1]));
-                markerNo++;
+                int markerNo = directoryFiles.IsNullOrEmpty() 
+                                ? 1 
+                                : (directoryFiles.Max(fileInDir => Convert.ToInt32(Path.GetFileNameWithoutExtension(fileInDir.FullName).Split('_')[1])) + 1);
+
                 var folderPaths = new List<string>();
                 foreach (var item in files)
                 {
@@ -590,9 +592,9 @@ namespace Milvasoft.Helpers.FileOperations.Concrete
                {FileType.Image, ".png"},               {FileType.Video, ".mp4"},             {FileType.Audio, ".wav"},                       {FileType.EMail, ".pst"},
                {FileType.Image, ".ps"},                {FileType.Video, ".mpg"},             {FileType.Audio, ".wma"},                       {FileType.EMail, ".vcf"},
                {FileType.Image, ".svg"},               {FileType.Video, ".mpeg"},            {FileType.Audio, ".wpl"},
-               {FileType.Image, ".tif"},               {FileType.Video, ".wmv"},                             
-               {FileType.Image, ".tiff"},                                           
-                                                                                    
+               {FileType.Image, ".tif"},               {FileType.Video, ".wmv"},
+               {FileType.Image, ".tiff"},
+
 
 
 
