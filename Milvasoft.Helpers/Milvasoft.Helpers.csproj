@@ -44,7 +44,7 @@
 		<Description>Helpers classes for projects.</Description>
 		<PackageTags>helper,milvasoft,extensions,filter,request,response</PackageTags>
 		<Copyright>Milvasoft Yazılım Bilişim Araştırma Geliştirme Danışmanlık Sanayi ve Ticaret Ltd.Şti.</Copyright>
-		<Version>6.0.15</Version>
+		<Version>6.0.16</Version>
 		<PackageIcon>milvalogo.png</PackageIcon>
 
 	</PropertyGroup>

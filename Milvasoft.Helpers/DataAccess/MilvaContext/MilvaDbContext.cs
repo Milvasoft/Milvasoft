@@ -205,7 +205,7 @@ namespace Milvasoft.Helpers.DataAccess.MilvaContext
         protected virtual Expression<Func<TEntity, bool>> CreateIsDeletedFalseExpression<TEntity>()
         {
             var entityType = typeof(TEntity);
-            if (entityType.BaseType.Name == typeof(FullAuditableEntity<>).Name
+            if (GetBaseName(entityType.BaseType.Name).Equals(GetBaseName(typeof(FullAuditableEntity<>).Name))
                 || typeof(FullAuditableEntity<TKey>).IsAssignableFrom(entityType.BaseType)
                 || typeof(FullAuditableEntity<>).IsAssignableFrom(entityType.BaseType)
                 || typeof(FullAuditableEntity<>).IsAssignableFrom(entityType)
@@ -216,6 +216,11 @@ namespace Milvasoft.Helpers.DataAccess.MilvaContext
                 return Expression.Lambda<Func<TEntity, bool>>(filterExpression, parameter);
             }
             else return null;
+
+            String GetBaseName(String name)
+            {
+                return name.Split("`")[0];
+            }
         }
 
         /// <summary>
