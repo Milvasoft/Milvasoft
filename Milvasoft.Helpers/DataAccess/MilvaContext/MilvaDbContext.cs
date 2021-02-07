@@ -172,7 +172,7 @@ namespace Milvasoft.Helpers.DataAccess.MilvaContext
         /// </summary>
         /// <returns></returns>
         public async Task<List<TEntity>> GetRequiredContentsAsync<TEntity>() where TEntity : class
-            => await this.Set<TEntity>().Where(CreateIsDeletedFalseExpression<TEntity>()).IncludeLang(this).ToListAsync().ConfigureAwait(false);
+            => await this.Set<TEntity>().Where(CreateIsDeletedFalseExpression<TEntity>() ?? (entity => true)).IncludeLang(this).ToListAsync().ConfigureAwait(false);
 
         /// <summary>
         /// Gets the requested <typeparamref name="TEntity"/>'s property's(<paramref name="propName"/>) max value.
@@ -192,7 +192,7 @@ namespace Milvasoft.Helpers.DataAccess.MilvaContext
             Expression<Func<TEntity, decimal>> predicate = Expression.Lambda<Func<TEntity, decimal>>(Expression.Convert(Expression.Property(parameterExpression, propName),
                                                                                                                         typeof(decimal)), parameterExpression);
 
-            return await this.Set<TEntity>().Where(CreateIsDeletedFalseExpression<TEntity>()).IncludeLang(this).MaxAsync(predicate).ConfigureAwait(false);
+            return await this.Set<TEntity>().Where(CreateIsDeletedFalseExpression<TEntity>() ?? (entity => true)).IncludeLang(this).MaxAsync(predicate).ConfigureAwait(false);
         }
 
 
