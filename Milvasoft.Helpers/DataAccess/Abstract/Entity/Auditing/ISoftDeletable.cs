@@ -5,7 +5,7 @@ namespace Milvasoft.Helpers.DataAccess.Abstract.Entity.Auditing
     /// <summary>
     /// Determines entity has deletion date.
     /// </summary>
-    public interface IHasDeletionDate
+    public interface ISoftDeletable
     {
         /// <summary>
         /// Deletion date of entity.

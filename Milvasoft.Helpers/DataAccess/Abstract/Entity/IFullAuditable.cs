@@ -9,7 +9,7 @@ namespace Milvasoft.Helpers.DataAccess.Abstract.Entity
     /// Determines entity is fully auditable with user information.
     /// </summary>
     /// <typeparam name="TKey"></typeparam>
-    public interface IFullAuditable<TKey> : IAuditable<TKey>, IHasDeletionDate where TKey : struct, IEquatable<TKey>
+    public interface IFullAuditable<TKey> : IAuditable<TKey>, ISoftDeletable where TKey : struct, IEquatable<TKey>
     {
     }
 
@@ -18,7 +18,7 @@ namespace Milvasoft.Helpers.DataAccess.Abstract.Entity
     /// </summary>
     /// <typeparam name="TKey"></typeparam>
     /// <typeparam name="TUserKey"></typeparam>
-    public interface IFullAuditable<TUserKey, TKey> : IAuditable<TKey>, IHasDeletionDate, IHasDeleter<TUserKey>
+    public interface IFullAuditable<TUserKey, TKey> : IAuditable<TKey>, ISoftDeletable, IHasDeleter<TUserKey>
         where TKey : struct, IEquatable<TKey>
         where TUserKey : struct, IEquatable<TUserKey>
     {
@@ -62,7 +62,7 @@ namespace Milvasoft.Helpers.DataAccess.Abstract.Entity
     /// Determines entity is fully auditable.
     /// </summary>
     /// <typeparam name="TKey"></typeparam>
-    public interface IFullAuditableWithoutUser<TKey> : IAuditableWithoutUser<TKey>, IHasDeletionDate
+    public interface IFullAuditableWithoutUser<TKey> : IAuditableWithoutUser<TKey>, ISoftDeletable
     {
     }
 }

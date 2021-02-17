@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Milvasoft.Helpers.DataAccess.Abstract.Entity;
+using Milvasoft.Helpers.DataAccess.Abstract.Entity.Auditing;
 using Milvasoft.Helpers.DataAccess.Concrete.Entity;
 using Milvasoft.Helpers.DependencyInjection;
 using Milvasoft.Helpers.Exceptions;
@@ -205,22 +206,13 @@ namespace Milvasoft.Helpers.DataAccess.MilvaContext
         protected virtual Expression<Func<TEntity, bool>> CreateIsDeletedFalseExpression<TEntity>()
         {
             var entityType = typeof(TEntity);
-            if (GetBaseName(entityType.BaseType.Name).Equals(GetBaseName(typeof(FullAuditableEntity<>).Name))
-                || typeof(FullAuditableEntity<TKey>).IsAssignableFrom(entityType.BaseType)
-                || typeof(FullAuditableEntity<>).IsAssignableFrom(entityType.BaseType)
-                || typeof(FullAuditableEntity<>).IsAssignableFrom(entityType)
-                || typeof(FullAuditableEntity<TKey>).IsAssignableFrom(entityType))
+            if (typeof(ISoftDeletable).IsAssignableFrom(entityType))
             {
                 var parameter = Expression.Parameter(entityType, "entity");
                 var filterExpression = Expression.Equal(Expression.Property(parameter, entityType.GetProperty(EntityPropertyNames.IsDeleted)), Expression.Constant(false, typeof(bool)));
                 return Expression.Lambda<Func<TEntity, bool>>(filterExpression, parameter);
             }
             else return null;
-
-            String GetBaseName(String name)
-            {
-                return name.Split("`")[0];
-            }
         }
 
         /// <summary>

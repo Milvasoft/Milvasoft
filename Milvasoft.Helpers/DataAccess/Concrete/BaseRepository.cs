@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Milvasoft.Helpers.DataAccess.Abstract;
 using Milvasoft.Helpers.DataAccess.Abstract.Entity;
+using Milvasoft.Helpers.DataAccess.Abstract.Entity.Auditing;
 using Milvasoft.Helpers.DataAccess.Concrete.Entity;
 using Milvasoft.Helpers.DataAccess.IncludeLibrary;
 using Milvasoft.Helpers.Extensions;
@@ -78,7 +79,7 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
         public virtual Expression<Func<TEntity, bool>> CreateIsDeletedFalseExpression()
         {
             var entityType = typeof(TEntity);
-            if (typeof(FullAuditableEntity<TKey>).IsAssignableFrom(entityType.BaseType) || typeof(IFullAuditable<TKey>).IsAssignableFrom(entityType.BaseType))
+            if (typeof(ISoftDeletable).IsAssignableFrom(entityType))
             {
                 var parameter = Expression.Parameter(entityType, "entity");
                 var filterExpression = Expression.Equal(Expression.Property(parameter, entityType.GetProperty("IsDeleted")), Expression.Constant(false, typeof(bool)));

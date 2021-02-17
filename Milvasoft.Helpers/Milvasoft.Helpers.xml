@@ -458,21 +458,6 @@
             Deleter of entity.
             </summary>er
         </member>
-        <member name="T:Milvasoft.Helpers.DataAccess.Abstract.Entity.Auditing.IHasDeletionDate">
-            <summary>
-            Determines entity has deletion date.
-            </summary>
-        </member>
-        <member name="P:Milvasoft.Helpers.DataAccess.Abstract.Entity.Auditing.IHasDeletionDate.DeletionDate">
-            <summary>
-            Deletion date of entity.
-            </summary>
-        </member>
-        <member name="P:Milvasoft.Helpers.DataAccess.Abstract.Entity.Auditing.IHasDeletionDate.IsDeleted">
-            <summary>
-            Gets or sets a value indicating whether IsDeleted.
-            </summary>
-        </member>
         <member name="T:Milvasoft.Helpers.DataAccess.Abstract.Entity.Auditing.IHasModifier`1">
             <summary>
             Determines entity has modifier.
@@ -482,6 +467,21 @@
         <member name="P:Milvasoft.Helpers.DataAccess.Abstract.Entity.Auditing.IHasModifier`1.LastModifierUserId">
             <summary>
             Last modifier of entity.
+            </summary>
+        </member>
+        <member name="T:Milvasoft.Helpers.DataAccess.Abstract.Entity.Auditing.ISoftDeletable">
+            <summary>
+            Determines entity has deletion date.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.DataAccess.Abstract.Entity.Auditing.ISoftDeletable.DeletionDate">
+            <summary>
+            Deletion date of entity.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.DataAccess.Abstract.Entity.Auditing.ISoftDeletable.IsDeleted">
+            <summary>
+            Gets or sets a value indicating whether IsDeleted.
             </summary>
         </member>
         <member name="T:Milvasoft.Helpers.DataAccess.Abstract.Entity.IAuditable`1">
@@ -2327,7 +2327,7 @@
         </member>
         <member name="F:Milvasoft.Helpers.DataAccess.MilvaContext.MilvaDbContextBase`3.IgnoreSoftDelete">
             <summary>
-            
+            If its true ignores soft delete.
             </summary>
         </member>
         <member name="M:Milvasoft.Helpers.DataAccess.MilvaContext.MilvaDbContextBase`3.#ctor(Microsoft.EntityFrameworkCore.DbContextOptions,Microsoft.AspNetCore.Http.IHttpContextAccessor,Milvasoft.Helpers.DependencyInjection.IAuditConfiguration)">
