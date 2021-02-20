@@ -1158,7 +1158,7 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
                 foreach (var entity in localEntities)
                     _dbContext.Entry(entity).State = EntityState.Detached;
             }
-            foreach (var entity in localEntities)
+            foreach (var entity in entities)
                 _dbContext.Entry(entity).State = EntityState.Modified;
         }
 
