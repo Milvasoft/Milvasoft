@@ -1131,22 +1131,35 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
             }
             return mainExpression;
         }
-
+        
+        /// <summary>
+        /// For configure entity state. Change tracking.
+        /// </summary>
+        /// <param name="entity"></param>
         private void InitalizeEdit(TEntity entity)
         {
-            var localEntity = _dbContext.Set<TEntity>().Local.FirstOrDefault(e => e.Id.Equals(entity.Id));
-            if (localEntity == null)
-                return;
-            _dbContext.Entry(localEntity).State = EntityState.Detached;
+            var local = _dbContext.Set<TEntity>().Local.FirstOrDefault(entry => entry.Id.Equals(entity.Id));
+            if (local != null)
+            {
+                _dbContext.Entry(local).State = EntityState.Detached;
+            }
+            _dbContext.Entry(entity).State = EntityState.Modified;
         }
 
+        /// <summary>
+        /// For configure entity state. Change tracking.
+        /// </summary>
+        /// <param name="entities"></param>
         private void InitalizeEdit(IEnumerable<TEntity> entities)
         {
             var localEntities = _dbContext.Set<TEntity>().Local.Where(e => entities.Any(en => en.Id.Equals(e.Id)));
             if (!localEntities?.Any() ?? false)
-                return;
+            {
+                foreach (var entity in localEntities)
+                    _dbContext.Entry(entity).State = EntityState.Detached;
+            }
             foreach (var entity in localEntities)
-                _dbContext.Entry(entity).State = EntityState.Detached;
+                _dbContext.Entry(entity).State = EntityState.Modified;
         }
 
         #endregion
