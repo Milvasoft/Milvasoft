@@ -1263,6 +1263,11 @@
             Default value of tagged property.
             </summary>
         </member>
+        <member name="T:Milvasoft.Helpers.DataAccess.Attributes.MilvaEncryptedAttribute">
+            <summary>
+            Specifies that the value field value should be encrypted.
+            </summary>
+        </member>
         <member name="T:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3">
             <summary>
              Base repository for concrete repositories. All Ops!yon repositories must be have this methods.
@@ -1808,6 +1813,18 @@
             Removes all entities from database.
             </summary>
             <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.InitalizeEdit(`0)">
+            <summary>
+            For configure entity state. Change tracking.
+            </summary>
+            <param name="entity"></param>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.InitalizeEdit(System.Collections.Generic.IEnumerable{`0})">
+            <summary>
+            For configure entity state. Change tracking.
+            </summary>
+            <param name="entities"></param>
         </member>
         <member name="T:Milvasoft.Helpers.DataAccess.Concrete.ContextRepository`1">
             <summary>
@@ -2471,49 +2488,56 @@
             </summary>
             <param name="modelBuilder"></param>
         </member>
-        <member name="T:Milvasoft.Helpers.DataAccess.MilvaContext.MilvaDbContextExtensions">
+        <member name="T:Milvasoft.Helpers.DataAccess.MilvaContext.MilvaModelBuilderExtensions">
             <summary>
             Extension methods for <c cref="T:Milvasoft.Helpers.DataAccess.MilvaContext.MilvaDbContext`3"></c>.
             </summary>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.MilvaContext.MilvaDbContextExtensions.AddIndexToIndelibleEntities(Microsoft.EntityFrameworkCore.ModelBuilder)">
+        <member name="M:Milvasoft.Helpers.DataAccess.MilvaContext.MilvaModelBuilderExtensions.UseEncryption(Microsoft.EntityFrameworkCore.ModelBuilder,Milvasoft.Helpers.Encryption.Abstract.IMilvaEncryptionProvider)">
+            <summary>
+            Adds an index for each indelible entity for IsDeleted property.
+            </summary>
+            <param name="modelBuilder"></param>
+            <param name="encryptionProvider"></param>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.MilvaContext.MilvaModelBuilderExtensions.AddIndexToIndelibleEntities(Microsoft.EntityFrameworkCore.ModelBuilder)">
             <summary>
             Adds an index for each indelible entity for IsDeleted property.
             </summary>
             <param name="modelBuilder"></param>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.MilvaContext.MilvaDbContextExtensions.ConfigureDefaultValue(Microsoft.EntityFrameworkCore.ModelBuilder)">
+        <member name="M:Milvasoft.Helpers.DataAccess.MilvaContext.MilvaModelBuilderExtensions.ConfigureDefaultValue(Microsoft.EntityFrameworkCore.ModelBuilder)">
             <summary>
             Configures primary keys start index.
             </summary>
             <param name="modelBuilder"></param>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.MilvaContext.MilvaDbContextExtensions.FilterDeletedEntities(Microsoft.EntityFrameworkCore.ModelBuilder)">
+        <member name="M:Milvasoft.Helpers.DataAccess.MilvaContext.MilvaModelBuilderExtensions.FilterDeletedEntities(Microsoft.EntityFrameworkCore.ModelBuilder)">
             <summary>
             Enable the query filter for indelible entities.
             </summary>
             <param name="modelBuilder"></param>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.MilvaContext.MilvaDbContextExtensions.IgnoreDefaultRecords(Microsoft.EntityFrameworkCore.ModelBuilder)">
+        <member name="M:Milvasoft.Helpers.DataAccess.MilvaContext.MilvaModelBuilderExtensions.IgnoreDefaultRecords(Microsoft.EntityFrameworkCore.ModelBuilder)">
             <summary>
             Enable the query filter for indelible entities.
             </summary>
             <param name="modelBuilder"></param>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.MilvaContext.MilvaDbContextExtensions.ConfigureDecimalProperties(Microsoft.EntityFrameworkCore.ModelBuilder)">
+        <member name="M:Milvasoft.Helpers.DataAccess.MilvaContext.MilvaModelBuilderExtensions.ConfigureDecimalProperties(Microsoft.EntityFrameworkCore.ModelBuilder)">
             <summary>
             Configures the decimal property of entities with decimal properties in decimal (18.2) format.
             </summary>
             <param name="modelBuilder"></param>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.MilvaContext.MilvaDbContextExtensions.IncludeAll``1(System.Linq.IQueryable{``0},Microsoft.EntityFrameworkCore.DbContext)">
+        <member name="M:Milvasoft.Helpers.DataAccess.MilvaContext.MilvaModelBuilderExtensions.IncludeAll``1(System.Linq.IQueryable{``0},Microsoft.EntityFrameworkCore.DbContext)">
             <summary>
             Allows to all entities associated with deletions to be Included to the entity(s) to be included in the process.
             </summary>
             <param name="source"></param>
             <param name="context"></param>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.MilvaContext.MilvaDbContextExtensions.IncludeLang``1(System.Linq.IQueryable{``0},Microsoft.EntityFrameworkCore.DbContext)">
+        <member name="M:Milvasoft.Helpers.DataAccess.MilvaContext.MilvaModelBuilderExtensions.IncludeLang``1(System.Linq.IQueryable{``0},Microsoft.EntityFrameworkCore.DbContext)">
             <summary>
             Allows to all entities associated with deletions to be Included to the entity(s) to be included in the process.
             Entities must be contains "Langs" navigation property for include process. (e.g. ProductLangs)
@@ -2708,6 +2732,168 @@
             </summary>
             <param name="message"></param>
             <param name="mailSubject"></param>
+        </member>
+        <member name="T:Milvasoft.Helpers.Encryption.Abstract.IMilvaEncryptionProvider">
+            <summary>
+            Provides file encryption and decryption with AES Algorithm. Milvasoft Corporation is not responsible of possible data loss.
+            </summary>
+        </member>
+        <member name="M:Milvasoft.Helpers.Encryption.Abstract.IMilvaEncryptionProvider.EncryptFileAsync(System.String)">
+            <summary>
+            Encrypt file in <paramref name="filePath"/> with AES Algorithm and key.
+            !!! Milvasoft Corporation is not responsible of possible data loss.
+            </summary>
+            <param name="filePath"></param>
+        </member>
+        <member name="M:Milvasoft.Helpers.Encryption.Abstract.IMilvaEncryptionProvider.DecryptFileAsync(System.String)">
+            <summary>
+            Decrypt file in <paramref name="filePath"/> with AES Algorithm and key.
+            !!! Milvasoft Corporation is not responsible of possible data loss.
+            </summary>
+            <param name="filePath"></param>
+        </member>
+        <member name="M:Milvasoft.Helpers.Encryption.Abstract.IMilvaEncryptionProvider.Encrypt(System.String)">
+            <summary>
+            Encrypt <paramref name="value"/> with AES Algorithm and key.
+            !!! Milvasoft Corporation is not responsible of possible data loss.
+            </summary>
+            <param name="value"></param>
+        </member>
+        <member name="M:Milvasoft.Helpers.Encryption.Abstract.IMilvaEncryptionProvider.Decrypt(System.String)">
+            <summary>
+            Decrypt <paramref name="value"/> with AES Algorithm and key.
+            !!! Milvasoft Corporation is not responsible of possible data loss.
+            </summary>
+            <param name="value"></param>
+        </member>
+        <member name="M:Milvasoft.Helpers.Encryption.Abstract.IMilvaEncryptionProvider.EncryptFile(System.String)">
+            <summary>
+            Encrypt file in <paramref name="filePath"/> with key.
+            !!! Milvasoft Corporation is not responsible of possible data loss.
+            </summary>
+            <param name="filePath"></param>
+        </member>
+        <member name="M:Milvasoft.Helpers.Encryption.Abstract.IMilvaEncryptionProvider.DecryptFile(System.String)">
+            <summary>
+            Decrypt file in <paramref name="filePath"/> with key.
+            !!! Milvasoft Corporation is not responsible of possible data loss.
+            </summary>
+            <param name="filePath"></param>
+        </member>
+        <member name="T:Milvasoft.Helpers.Encryption.Concrete.MilvaEncryptionConverter">
+            <summary>
+            Defines the internal encryption converter for string values.
+            </summary>
+        </member>
+        <member name="M:Milvasoft.Helpers.Encryption.Concrete.MilvaEncryptionConverter.#ctor(Milvasoft.Helpers.Encryption.Abstract.IMilvaEncryptionProvider,Microsoft.EntityFrameworkCore.Storage.ValueConversion.ConverterMappingHints)">
+            <summary>
+            Creates a new <see cref="T:Milvasoft.Helpers.Encryption.Concrete.MilvaEncryptionConverter"/> instance.
+            </summary>
+            <param name="encryptionProvider">Encryption provider</param>
+            <param name="mappingHints">Entity Framework mapping hints</param>
+        </member>
+        <member name="T:Milvasoft.Helpers.Encryption.Concrete.MilvaEncryptionProvider">
+            <summary>
+            Provides file encryption and decryption with AES Algorithm. Milvasoft Corporation is not responsible of possible data loss.
+            </summary>
+        </member>
+        <member name="F:Milvasoft.Helpers.Encryption.Concrete.MilvaEncryptionProvider.AesBlockSize">
+            <summary>
+            AES block size constant.
+            </summary>
+        </member>
+        <member name="F:Milvasoft.Helpers.Encryption.Concrete.MilvaEncryptionProvider.InitializationVectorSize">
+            <summary>
+            Initialization vector size constant.(IV)
+            </summary>
+        </member>
+        <member name="M:Milvasoft.Helpers.Encryption.Concrete.MilvaEncryptionProvider.#ctor(System.String,System.Security.Cryptography.CipherMode,System.Security.Cryptography.PaddingMode)">
+            <summary>
+            Creates a new <see cref="T:Milvasoft.Helpers.Encryption.Concrete.MilvaEncryptionProvider"/> instance.
+            </summary>
+            <param name="key"> Must be between 128-256 bit.</param>
+            <param name="mode"></param>
+            <param name="padding"></param>
+        </member>
+        <member name="M:Milvasoft.Helpers.Encryption.Concrete.MilvaEncryptionProvider.EncryptFileAsync(System.String)">
+            <summary>
+            Encrypt file in <paramref name="filePath"/> with AES Algorithm and key.
+            !!! Milvasoft Corporation is not responsible of possible data loss.
+            </summary>
+            <param name="filePath"></param>
+        </member>
+        <member name="M:Milvasoft.Helpers.Encryption.Concrete.MilvaEncryptionProvider.DecryptFileAsync(System.String)">
+            <summary>
+            Decrypt file in <paramref name="filePath"/> with AES Algorithm and key.
+            !!! Milvasoft Corporation is not responsible of possible data loss.
+            </summary>
+            <param name="filePath"></param>
+        </member>
+        <member name="M:Milvasoft.Helpers.Encryption.Concrete.MilvaEncryptionProvider.EncryptFileAsync(System.String,System.Text.Encoding)">
+            <summary>
+            Encrypt file in <paramref name="filePath"/> with AES Algorithm and key.
+            !!! Milvasoft Corporation is not responsible of possible data loss.
+            </summary>
+            <param name="filePath"></param>
+            <param name="encoding"> e.g. <see cref="P:System.Text.Encoding.UTF8"/></param>
+        </member>
+        <member name="M:Milvasoft.Helpers.Encryption.Concrete.MilvaEncryptionProvider.DecryptFileAsync(System.String,System.Text.Encoding)">
+            <summary>
+            Decrypt file in <paramref name="filePath"/> with AES Algorithm and key.
+            !!! Milvasoft Corporation is not responsible of possible data loss.
+            </summary>
+            <param name="filePath"></param>
+            <param name="encoding"> e.g. <see cref="P:System.Text.Encoding.UTF8"/></param>
+        </member>
+        <member name="M:Milvasoft.Helpers.Encryption.Concrete.MilvaEncryptionProvider.Encrypt(System.String)">
+            <summary>
+            Encrypt <paramref name="value"/> with AES Algorithm and key.
+            !!! Milvasoft Corporation is not responsible of possible data loss.
+            </summary>
+            <param name="value"></param>
+        </member>
+        <member name="M:Milvasoft.Helpers.Encryption.Concrete.MilvaEncryptionProvider.Decrypt(System.String)">
+            <summary>
+            Decrypt <paramref name="value"/> with AES Algorithm and key.
+            !!! Milvasoft Corporation is not responsible of possible data loss.
+            </summary>
+            <param name="value"></param>
+        </member>
+        <member name="M:Milvasoft.Helpers.Encryption.Concrete.MilvaEncryptionProvider.EncryptFile(System.String)">
+            <summary>
+            Encrypt file in <paramref name="filePath"/> with AES Algorithm and key.
+            !!! Milvasoft Corporation is not responsible of possible data loss.
+            </summary>
+            <param name="filePath"></param>
+        </member>
+        <member name="M:Milvasoft.Helpers.Encryption.Concrete.MilvaEncryptionProvider.DecryptFile(System.String)">
+            <summary>
+            Decrypt file in <paramref name="filePath"/> with AES Algorithm and key.
+            !!! Milvasoft Corporation is not responsible of possible data loss.
+            </summary>
+            <param name="filePath"></param>
+        </member>
+        <member name="M:Milvasoft.Helpers.Encryption.Concrete.MilvaEncryptionProvider.EncryptFile(System.String,System.Text.Encoding)">
+            <summary>
+            Encrypt file in <paramref name="filePath"/> with AES Algorithm and key.
+            !!! Milvasoft Corporation is not responsible of possible data loss.
+            </summary>
+            <param name="filePath"></param>
+            <param name="encoding"> e.g. <see cref="P:System.Text.Encoding.UTF8"/></param>
+        </member>
+        <member name="M:Milvasoft.Helpers.Encryption.Concrete.MilvaEncryptionProvider.DecryptFile(System.String,System.Text.Encoding)">
+            <summary>
+            Decrypt file in <paramref name="filePath"/> with AES Algorithm and key.
+            !!! Milvasoft Corporation is not responsible of possible data loss.
+            </summary>
+            <param name="filePath"></param>
+            <param name="encoding"> e.g. <see cref="P:System.Text.Encoding.UTF8"/></param>
+        </member>
+        <member name="M:Milvasoft.Helpers.Encryption.Concrete.MilvaEncryptionProvider.CreateCryptographyProvider">
+            <summary>
+            Creates an AES cryptography provider.
+            </summary>
+            <returns></returns>
         </member>
         <member name="T:Milvasoft.Helpers.Enums.CrudOperation">
             <summary>
@@ -2989,6 +3175,30 @@
         <member name="M:Milvasoft.Helpers.Exceptions.EmptyListException.#ctor(System.String,System.Exception)">
             <summary>
             Initializes a new instance of the <see cref="T:Milvasoft.Helpers.Exceptions.EmptyListException"/> class  with a specified error message and a reference to the inner exception that is the cause of this exception.
+            </summary>
+            <param name="customMessage"></param>
+            <param name="innerException"></param>
+        </member>
+        <member name="T:Milvasoft.Helpers.Exceptions.EncryptionException">
+            <summary>
+            The exception that is thrown when any encryption error.
+            </summary>
+        </member>
+        <member name="M:Milvasoft.Helpers.Exceptions.EncryptionException.#ctor(Microsoft.Extensions.Localization.IStringLocalizer)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Milvasoft.Helpers.Exceptions.EncryptionException"/> class.
+            </summary>
+            <param name="localizer"></param>
+        </member>
+        <member name="M:Milvasoft.Helpers.Exceptions.EncryptionException.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Milvasoft.Helpers.Exceptions.EncryptionException"/> class with a specified error message.
+            </summary>
+            <param name="customMessage"></param>
+        </member>
+        <member name="M:Milvasoft.Helpers.Exceptions.EncryptionException.#ctor(System.String,System.Exception)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Milvasoft.Helpers.Exceptions.EncryptionException"/> class with a specified error message and a reference to the inner exception that is the cause of this exception.
             </summary>
             <param name="customMessage"></param>
             <param name="innerException"></param>
@@ -3381,6 +3591,11 @@
             Defines the IdentityResultException.
             </summary>
         </member>
+        <member name="F:Milvasoft.Helpers.Exceptions.MilvaExceptionCode.EncryptionError">
+            <summary>
+            Defines the IdentityResultException.
+            </summary>
+        </member>
         <member name="T:Milvasoft.Helpers.Exceptions.MilvaValidationException">
             <summary>
             The exception that is thrown when attempt to add an entity with Id the repository contains an entity with the same Id.
@@ -3643,79 +3858,6 @@
             </summary>
             <param name="str"></param>
             <returns></returns>
-        </member>
-        <member name="T:Milvasoft.Helpers.FileOperations.Abstract.ICryptoOperations">
-            <summary>
-            Provides file encryption and decryption with AES Algorithm. Milvasoft Corporation is not responsible of possible data loss.
-            </summary>
-        </member>
-        <member name="M:Milvasoft.Helpers.FileOperations.Abstract.ICryptoOperations.EncryptFileAsync(System.String,System.String)">
-            <summary>
-            Encrypt file in <paramref name="filePath"/> with AES Algorithm and <paramref name="key"/>.
-            !!! Milvasoft Corporation is not responsible of possible data loss.
-            </summary>
-            
-            <remarks>
-            
-            <para><b>Remarks:</b></para>
-            
-            <para><paramref name="key"/> must be between 128-256 bit.</para>
-            
-            </remarks>
-            
-            <param name="filePath"></param>
-            <param name="key"></param>
-        </member>
-        <member name="M:Milvasoft.Helpers.FileOperations.Abstract.ICryptoOperations.DecryptFileAsync(System.String,System.String)">
-            <summary>
-            Decrypt file in <paramref name="filePath"/> with AES Algorithm and <paramref name="key"/>.
-            !!! Milvasoft Corporation is not responsible of possible data loss.
-            </summary>
-            
-            <remarks>
-            
-            <para><b>Remarks:</b></para>
-            
-            <para><paramref name="key"/> must be between 128-256 bit.</para>
-            
-            </remarks>
-            
-            <param name="filePath"></param>
-            <param name="key"></param>
-        </member>
-        <member name="M:Milvasoft.Helpers.FileOperations.Abstract.ICryptoOperations.EncryptFile(System.String,System.String)">
-            <summary>
-            Encrypt file in <paramref name="filePath"/> with <paramref name="key"/>.
-            !!! Milvasoft Corporation is not responsible of possible data loss.
-            </summary>
-            
-            <remarks>
-            
-            <para><b>Remarks:</b></para>
-            
-            <para><paramref name="key"/> must be between 128-256 bit.</para>
-            
-            </remarks>
-            
-            <param name="filePath"></param>
-            <param name="key"></param>
-        </member>
-        <member name="M:Milvasoft.Helpers.FileOperations.Abstract.ICryptoOperations.DecryptFile(System.String,System.String)">
-            <summary>
-            Decrypt file in <paramref name="filePath"/> with <paramref name="key"/>.
-            !!! Milvasoft Corporation is not responsible of possible data loss.
-            </summary>
-            
-            <remarks>
-            
-            <para><b>Remarks:</b></para>
-            
-            <para><paramref name="key"/> must be between 128-256 bit.</para>
-            
-            </remarks>
-            
-            <param name="filePath"></param>
-            <param name="key"></param>
         </member>
         <member name="T:Milvasoft.Helpers.FileOperations.Abstract.IJsonOperations">
             <summary>
@@ -4582,79 +4724,6 @@
             <typeparam name="T"></typeparam>
             <param name="lastId"></param>
             <param name="contentList"></param>
-        </member>
-        <member name="T:Milvasoft.Helpers.FileOperations.Concrete.CryptoOperations">
-            <summary>
-            Provides file encryption and decryption with AES Algorithm. Milvasoft Corporation is not responsible of possible data loss.
-            </summary>
-        </member>
-        <member name="M:Milvasoft.Helpers.FileOperations.Concrete.CryptoOperations.EncryptFileAsync(System.String,System.String)">
-            <summary>
-            Encrypt file in <paramref name="filePath"/> with AES Algorithm and <paramref name="key"/>.
-            !!! Milvasoft Corporation is not responsible of possible data loss.
-            </summary>
-            
-            <remarks>
-            
-            <para><b>Remarks:</b></para>
-            
-            <para><paramref name="key"/> must be between 128-256 bit.</para>
-            
-            </remarks>
-            
-            <param name="filePath"></param>
-            <param name="key"></param>
-        </member>
-        <member name="M:Milvasoft.Helpers.FileOperations.Concrete.CryptoOperations.DecryptFileAsync(System.String,System.String)">
-            <summary>
-            Decrypt file in <paramref name="filePath"/> with AES Algorithm and <paramref name="key"/>.
-            !!! Milvasoft Corporation is not responsible of possible data loss.
-            </summary>
-            
-            <remarks>
-            
-            <para><b>Remarks:</b></para>
-            
-            <para><paramref name="key"/> must be between 128-256 bit.</para>
-            
-            </remarks>
-            
-            <param name="filePath"></param>
-            <param name="key"></param>
-        </member>
-        <member name="M:Milvasoft.Helpers.FileOperations.Concrete.CryptoOperations.EncryptFile(System.String,System.String)">
-            <summary>
-            Encrypt file in <paramref name="filePath"/> with <paramref name="key"/>.
-            !!! Milvasoft Corporation is not responsible of possible data loss.
-            </summary>
-            
-            <remarks>
-            
-            <para><b>Remarks:</b></para>
-            
-            <para><paramref name="key"/> must be between 128-256 bit.</para>
-            
-            </remarks>
-            
-            <param name="filePath"></param>
-            <param name="key"></param>
-        </member>
-        <member name="M:Milvasoft.Helpers.FileOperations.Concrete.CryptoOperations.DecryptFile(System.String,System.String)">
-            <summary>
-            Decrypt file in <paramref name="filePath"/> with <paramref name="key"/>.
-            !!! Milvasoft Corporation is not responsible of possible data loss.
-            </summary>
-            
-            <remarks>
-            
-            <para><b>Remarks:</b></para>
-            
-            <para><paramref name="key"/> must be between 128-256 bit.</para>
-            
-            </remarks>
-            
-            <param name="filePath"></param>
-            <param name="key"></param>
         </member>
         <member name="T:Milvasoft.Helpers.FileOperations.Concrete.FormFileOperations">
             <summary>

@@ -8,7 +8,6 @@ using Milvasoft.Helpers.DataAccess.Abstract.Entity.Auditing;
 using Milvasoft.Helpers.DataAccess.Concrete.Entity;
 using Milvasoft.Helpers.DependencyInjection;
 using Milvasoft.Helpers.Exceptions;
-using Milvasoft.Helpers.Identity.Concrete;
 using System;
 using System.Collections.Generic;
 using System.Linq;

@@ -19,16 +19,20 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <None Include="Icon\milvalogo.png">
+	  <None Update="Milvasoft.Helpers.xml">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Update="Resources\milvalogo.png">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Include="Resources\milvalogo.png">
 	    <Pack>True</Pack>
 	    <PackagePath></PackagePath>
 	  </None>
 	</ItemGroup>
 
 	<ItemGroup>
-	  <None Update="Milvasoft.Helpers.xml">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </None>
+	  <Folder Include="DataAccess\Encryption\" />
 	</ItemGroup>
 
 
@@ -44,7 +48,7 @@
 		<Description>Helpers classes for projects. Please contribute for improvements. </Description>
 		<PackageTags>json,file,image,helper,milvasoft,extensions,filter,request,response</PackageTags>
 		<Copyright>Milvasoft Yazılım Bilişim Araştırma Geliştirme Danışmanlık Sanayi ve Ticaret Ltd.Şti.</Copyright>
-		<Version>6.0.21</Version>
+		<Version>6.1.0</Version>
 		<PackageIcon>milvalogo.png</PackageIcon>
 
 	</PropertyGroup>

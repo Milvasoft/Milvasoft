@@ -1,0 +1,24 @@
+version: '3.1'
+
+services:
+    todoappdb:
+        container_name: todoappdb
+        image: mysql
+        command: --default-authentication-plugin=mysql_native_password
+        restart: always
+        environment: 
+            MYSQL_ROOT_PASSWORD: root
+            MYSQL_DATABASE: tododemodb
+        volumes:
+            - /mysql:/var/lib/mysql       
+
+    tododemoapp:
+        container_name: tododemoapp
+        image: milvasoft/tododemoapp
+        restart: always
+        depends_on: 
+            - todoappdb
+        links:
+            - todoappdb  
+        ports: 
+            - 5003:5003    

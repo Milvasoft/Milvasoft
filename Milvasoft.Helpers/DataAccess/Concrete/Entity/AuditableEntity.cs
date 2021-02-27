@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Milvasoft.Helpers.DataAccess.Abstract.Entity;
-using Milvasoft.Helpers.Identity.Concrete;
 using System;
 using System.ComponentModel.DataAnnotations.Schema;
 

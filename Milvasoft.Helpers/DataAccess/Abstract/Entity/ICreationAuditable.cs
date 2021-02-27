@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Milvasoft.Helpers.DataAccess.Abstract.Entity.Auditing;
-using Milvasoft.Helpers.Identity.Concrete;
 using System;
 
 namespace Milvasoft.Helpers.DataAccess.Abstract.Entity

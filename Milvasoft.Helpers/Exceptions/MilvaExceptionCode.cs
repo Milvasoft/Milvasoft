@@ -163,7 +163,12 @@
         /// <summary>
         /// Defines the IdentityResultException.
         /// </summary>
-        CannotGetResponse = 31
+        CannotGetResponse = 31,
+
+        /// <summary>
+        /// Defines the IdentityResultException.
+        /// </summary>
+        EncryptionError = 32
 
     }
 }

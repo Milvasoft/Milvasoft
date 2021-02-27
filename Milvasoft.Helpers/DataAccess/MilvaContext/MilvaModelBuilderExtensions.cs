@@ -1,6 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Milvasoft.Helpers.DataAccess.Attributes;
 using Milvasoft.Helpers.DataAccess.Concrete.Entity;
+using Milvasoft.Helpers.Encryption.Abstract;
+using Milvasoft.Helpers.Encryption.Concrete;
+using Milvasoft.Helpers.Exceptions;
 using System;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
@@ -12,8 +16,45 @@ namespace Milvasoft.Helpers.DataAccess.MilvaContext
     /// <summary>
     /// Extension methods for <c cref="MilvaDbContext{TUser, TRole, TKey}"></c>.
     /// </summary>
-    public static class MilvaDbContextExtensions
+    public static class MilvaModelBuilderExtensions
     {
+
+        /// <summary>
+        /// Adds an index for each indelible entity for IsDeleted property.
+        /// </summary>
+        /// <param name="modelBuilder"></param>
+        /// <param name="encryptionProvider"></param>
+        public static void UseEncryption(this ModelBuilder modelBuilder, IMilvaEncryptionProvider encryptionProvider)
+        {
+            if (modelBuilder is null)
+            {
+                throw new InvalidParameterException("The given model builder cannot be null");
+            }
+
+            if (encryptionProvider is null)
+            {
+                throw new InvalidParameterException("Cannot initialize encryption with a null provider.");
+            }
+
+            var encryptionConverter = new MilvaEncryptionConverter(encryptionProvider);
+
+            foreach (IMutableEntityType entityType in modelBuilder.Model.GetEntityTypes())
+            {
+                foreach (IMutableProperty property in entityType.GetProperties())
+                {
+                    if (property.ClrType == typeof(string) /* && !IsDiscriminator(property)*/)
+                    {
+                        object[] attributes = property.PropertyInfo.GetCustomAttributes(typeof(MilvaEncryptedAttribute), false);
+
+                        if (attributes.Any())
+                        {
+                            property.SetValueConverter(encryptionConverter);
+                        }
+                    }
+                }
+            }
+        }
+
         /// <summary>
         /// Adds an index for each indelible entity for IsDeleted property.
         /// </summary>

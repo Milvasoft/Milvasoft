@@ -1,0 +1,284 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Milvasoft.SampleAPI</name>
+    </assembly>
+    <members>
+        <member name="M:Milvasoft.SampleAPI.Controllers.CategoriesController.GetEntitiesAsync">
+            <summary>
+            Gets all categories.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Data.Abstract.IGenericRepository`1.GetEntitiesAsync(System.Linq.Expressions.Expression{System.Func{`0,System.Object}})">
+            <summary>
+            Gets all entities from database.
+            If <paramref name="include"/> is provided, returns with joined tables.
+            </summary>
+            <param name="include"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Data.Abstract.IGenericRepository`1.GetEntityAsync(System.Guid,System.Linq.Expressions.Expression{System.Func{`0,System.Object}})">
+            <summary>
+            Gets single entity by <paramref name="id"/>.
+            If <paramref name="include"/> is provided, returns with joined tables.
+            </summary>
+            <param name="id"></param>
+            <param name="include"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Data.Abstract.IGenericRepository`1.AddAsync(`0)">
+            <summary>
+            Addd <paramref name="entity"/> to database.
+            </summary>
+            <param name="entity"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Data.Abstract.IGenericRepository`1.UpdateAsync(`0)">
+            <summary>
+            Updates requested <paramref name="entity"/> in database.
+            </summary>
+            <param name="entity"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Data.Abstract.IGenericRepository`1.DeleteAsync(`0)">
+            <summary>
+            Deletes requested <paramref name="entity"/> from database.
+            </summary>
+            <param name="entity"></param>
+            <returns></returns>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.TodoDTO.Content">
+            <summary>
+            User defined task content.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.TodoDTO.ReminMeDate">
+            <summary>
+            Remind date of task.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.TodoDTO.DueDate">
+            <summary>
+            Due date of task.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.TodoDTO.CategoryId">
+            <summary>
+            Foreing key of category.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.TodoDTO.Category">
+            <summary>
+            Navigation property of category.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.Entity.Todo.Content">
+            <summary>
+            User defined task content.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.Entity.Todo.ReminMeDate">
+            <summary>
+            Remind date of task.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.Entity.Todo.DueDate">
+            <summary>
+            Due date of task.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.Entity.Todo.IsFavorite">
+            <summary>
+            Fovarite check
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.Entity.Todo.CategoryId">
+            <summary>
+            Foreing key of category.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.Entity.Todo.Category">
+            <summary>
+            Navigation property of category.
+            </summary>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Seed.SeedData.ToGuid(System.Int32)">
+            <summary>
+            This method return int value to guid value.
+            </summary>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Services.Abstract.IBaseService`1.GetEntitiesAsync">
+            <summary>
+            Get all entities from database.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Services.Abstract.IBaseService`1.GetEntityAsync(System.Guid)">
+            <summary>
+            Get one entity by id.
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Services.Abstract.IBaseService`1.AddEntityAsync(`0)">
+            <summary>
+            Adds single entity to database.
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Services.Abstract.IBaseService`1.UpdateEntityAsync(`0)">
+            <summary>
+            Updates single entity in database.
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Services.Abstract.IBaseService`1.DeleteEntityAsync(System.Guid)">
+            <summary>
+            Deletes single entity from database.
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Services.Abstract.IBaseService`1.MarkAsIsFavoriteAsync(System.Guid,System.Boolean)">
+            <summary>
+            Sended favorites as mark.
+            </summary>
+            <param name="id"></param>
+            <param name="isFavorite"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Milvasoft.SampleAPI.Services.Concrete.CategoryService">
+            <summary>
+            Provides category task crud operations. 
+            </summary>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.CategoryService.#ctor(Milvasoft.SampleAPI.Data.Abstract.IGenericRepository{Milvasoft.SampleAPI.Entity.Category})">
+            <summary>
+            Constructor of category service.
+            </summary>
+            <param name="categoryRepository"></param>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.CategoryService.GetEntitiesAsync">
+            <summary>
+            Get all categories from database.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.CategoryService.GetEntityAsync(System.Guid)">
+            <summary>
+            Get one category by id.
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.CategoryService.AddEntityAsync(Milvasoft.SampleAPI.DTOs.CategoryDTO)">
+            <summary>
+            Addd <paramref name="categoryDTO"/> to database.
+            </summary>
+            <param name="categoryDTO"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.CategoryService.UpdateEntityAsync(Milvasoft.SampleAPI.DTOs.CategoryDTO)">
+            <summary>
+            Updates requested <paramref name="categoryDTO"/> in database.
+            </summary>
+            <param name="categoryDTO"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.CategoryService.DeleteEntityAsync(System.Guid)">
+            <summary>
+            Deletes requested category whoose id equals to <paramref name="id"/> from database.
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Milvasoft.SampleAPI.Services.Concrete.TodoService">
+            <summary>
+            Provides todo task crud operations. 
+            </summary>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.TodoService.#ctor(Milvasoft.SampleAPI.Data.Abstract.IGenericRepository{Milvasoft.SampleAPI.Entity.Todo})">
+            <summary>
+            Constructor of todo service.
+            </summary>
+            <param name="todoRepository"></param>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.TodoService.GetEntitiesAsync">
+            <summary>
+            Get all todos from database.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.TodoService.GetEntityAsync(System.Guid)">
+            <summary>
+            Get one todo by id.
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.TodoService.AddEntityAsync(Milvasoft.SampleAPI.DTOs.TodoDTO)">
+            <summary>
+            Addd <paramref name="todoDTO"/> to database.
+            </summary>
+            <param name="todoDTO"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.TodoService.UpdateEntityAsync(Milvasoft.SampleAPI.DTOs.TodoDTO)">
+            <summary>
+            Updates requested <paramref name="todoDTO"/> in database.
+            </summary>
+            <param name="todoDTO"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.TodoService.DeleteEntityAsync(System.Guid)">
+            <summary>
+            Deletes requested todo whoose id equals to <paramref name="id"/> from database.
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.TodoService.MarkAsIsFavoriteAsync(System.Guid,System.Boolean)">
+            <summary>
+            Sended favorites as mark.
+            </summary>
+            <param name="id"></param>
+            <param name="isFavorite"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Milvasoft.SampleAPI.Startup">
+            <summary>
+            Configuration class of project.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.Startup.Configuration">
+            <summary>
+            Gets or sets configuration object.
+            </summary>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Startup.#ctor(Microsoft.Extensions.Configuration.IConfiguration)">
+            <summary>
+            Creates a new <see cref="T:Milvasoft.SampleAPI.Startup"/> instances.
+            </summary>
+            <param name="configuration"></param>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Startup.ConfigureServices(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+            <summary>
+            This method gets called by the runtime. Use this method to add services to the container.
+            For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
+            </summary>
+            <param name="services"></param>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Startup.Configure(Microsoft.AspNetCore.Builder.IApplicationBuilder,Microsoft.AspNetCore.Hosting.IWebHostEnvironment)">
+            <summary>
+            This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+            </summary>
+            <param name="app"></param>
+            <param name="env"></param>
+        </member>
+    </members>
+</doc>
