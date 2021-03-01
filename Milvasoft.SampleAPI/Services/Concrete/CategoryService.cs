@@ -58,7 +58,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
             var category = await _categoryRepository.GetEntityAsync(id, i => i.Todos).ConfigureAwait(false);
 
             if (category == null)
-                throw new InvalidParameterException("Veritabanında varolmayan bir kayda erişmeye çalışıyorsunuz.");
+                throw new MilvaUserFriendlyException("Veritabanında varolmayan bir kayda erişmeye çalışıyorsunuz.");
 
             return new CategoryDTO
             {
@@ -110,7 +110,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
             var toBeUpdatedCategory = await _categoryRepository.GetEntityAsync(categoryDTO.Id).ConfigureAwait(false);
 
             if (toBeUpdatedCategory == null)
-                throw new InvalidParameterException("Veritabanında varolmayan bir kaydı güncellemeye çalışıyorsunuz.");
+                throw new MilvaUserFriendlyException("Veritabanında varolmayan bir kaydı güncellemeye çalışıyorsunuz.");
 
             toBeUpdatedCategory.Id = categoryDTO.Id;
             toBeUpdatedCategory.Name = categoryDTO.Name;
@@ -127,12 +127,12 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         public async Task DeleteEntityAsync(Guid id)
         {
             if (id == Guid.Empty)
-                throw new InvalidParameterException("Veritabanında varolmayan bir kaydı silmeye çalışıyorsunuz.");
+                throw new MilvaUserFriendlyException("Veritabanında varolmayan bir kaydı silmeye çalışıyorsunuz.");
 
             var toBeDeletedCategory = await _categoryRepository.GetEntityAsync(id).ConfigureAwait(false);
 
             if (toBeDeletedCategory == null)
-                throw new InvalidParameterException("Veritabanında varolmayan bir kaydı güncellemeye çalışıyorsunuz.");
+                throw new MilvaUserFriendlyException("Veritabanında varolmayan bir kaydı güncellemeye çalışıyorsunuz.");
 
             await _categoryRepository.DeleteAsync(toBeDeletedCategory).ConfigureAwait(false);
         }

@@ -249,7 +249,7 @@ namespace Milvasoft.Helpers
                 if (!responseObject.PropertyExists("errorCodes")) return responseObject.ToObject<ObjectResponse<T>>();
                 else return responseObject.ToObject<ExceptionResponse>();
             }
-            else throw new CannotGetResponseException("An error occured.");
+            else throw new MilvaUserFriendlyException("An error occured.");
         }
 
         /// <summary>
@@ -271,7 +271,7 @@ namespace Milvasoft.Helpers
                 if (!responseObject.PropertyExists("errorCodes")) return responseObject.ToObject<ObjectResponse<IEnumerable<T>>>();
                 else return responseObject.ToObject<ExceptionResponse>();
             }
-            else throw new CannotGetResponseException("An error occured.");
+            else throw new MilvaUserFriendlyException("An error occured.");
         }
 
         /// <summary>
@@ -312,7 +312,7 @@ namespace Milvasoft.Helpers
                 if (!responseObject.PropertyExists("errorCodes")) return responseObject.ToObject<ObjectResponse<CommunicationModel<T, TKey>>>();
                 else return responseObject.ToObject<ExceptionResponse>();
             }
-            else throw new CannotGetResponseException("An error occured.");
+            else throw new MilvaUserFriendlyException("An error occured.");
         }
 
         /// <summary>
@@ -335,7 +335,7 @@ namespace Milvasoft.Helpers
                 if (!responseObject.PropertyExists("errorCodes")) return responseObject.ToObject<ObjectResponse<CommunicationModel<IEnumerable<T>, TKey>>>();
                 else return responseObject.ToObject<ExceptionResponse>();
             }
-            else throw new CannotGetResponseException("An error occured.");
+            else throw new MilvaUserFriendlyException("An error occured.");
         }
 
         #endregion

@@ -104,7 +104,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
             var toBeUpdatedTodo = await _todoRepository.GetEntityAsync(todoDTO.Id).ConfigureAwait(false);
 
             if (toBeUpdatedTodo == null)
-                throw new InvalidParameterException("Veritabanında varolmayan bir kaydı güncellemeye çalışıyorsunuz.");
+                throw new MilvaUserFriendlyException("Veritabanında varolmayan bir kaydı güncellemeye çalışıyorsunuz.");
 
             toBeUpdatedTodo.Id = todoDTO.Id;
             toBeUpdatedTodo.Content = todoDTO.Content;
@@ -125,12 +125,12 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         public async Task DeleteEntityAsync(Guid id)
         {
             if(id == Guid.Empty)
-                throw new InvalidParameterException("Veritabanında varolmayan bir kaydı silmeye çalışıyorsunuz.");
+                throw new MilvaUserFriendlyException("Veritabanında varolmayan bir kaydı silmeye çalışıyorsunuz.");
 
             var toBeDeletedTodo = await _todoRepository.GetEntityAsync(id).ConfigureAwait(false);
 
             if (toBeDeletedTodo == null)
-                throw new InvalidParameterException("Veritabanında varolmayan bir kaydı güncellemeye çalışıyorsunuz.");
+                throw new MilvaUserFriendlyException("Veritabanında varolmayan bir kaydı güncellemeye çalışıyorsunuz.");
 
             await _todoRepository.DeleteAsync(toBeDeletedTodo).ConfigureAwait(false);
         }

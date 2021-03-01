@@ -270,7 +270,7 @@ namespace Milvasoft.Helpers.Identity.Concrete
         /// <returns></returns>
         public async Task ResetPasswordAsync(string newPassword)
         {
-            var currentUser = await _userManager.Users.FirstOrDefaultAsync(p => p.UserName == _userName).ConfigureAwait(false) ?? throw new CannotFindEntityException(_localizer["CannotFindUserWithThisToken"]);
+            var currentUser = await _userManager.Users.FirstOrDefaultAsync(p => p.UserName == _userName).ConfigureAwait(false) ?? throw new MilvaUserFriendlyException(_localizer["CannotFindUserWithThisToken"]);
 
             var authenticationToken = await _userManager.GetAuthenticationTokenAsync(currentUser, LoginProvider, TokenName).ConfigureAwait(false);
 
@@ -287,11 +287,11 @@ namespace Milvasoft.Helpers.Identity.Concrete
         /// <returns></returns>
         public async Task<IdentityResult> ChangeCurrentUserPasswordAsync(string oldPassword, string newPassword)
         {
-            var user = await _userManager.FindByNameAsync(_userName).ConfigureAwait(false) ?? throw new CannotFindEntityException(_localizer["CannotFindUserWithThisToken"]);
+            var user = await _userManager.FindByNameAsync(_userName).ConfigureAwait(false) ?? throw new MilvaUserFriendlyException(_localizer["CannotFindUserWithThisToken"]);
 
             bool exist = await _userManager.CheckPasswordAsync(user, oldPassword).ConfigureAwait(false);
 
-            if (!exist) throw new UpdatingInvalidEntityException(_localizer["IncorrectOldPassword"]);
+            if (!exist) throw new MilvaUserFriendlyException(_localizer["IncorrectOldPassword"]);
 
             return await _userManager.ChangePasswordAsync(user, oldPassword, newPassword).ConfigureAwait(false);
         }
@@ -307,7 +307,7 @@ namespace Milvasoft.Helpers.Identity.Concrete
         {
             bool exist = await _userManager.CheckPasswordAsync(user, currentPassword).ConfigureAwait(false);
 
-            if (!exist) throw new UpdatingInvalidEntityException(_localizer["IncorrectOldPassword"]);
+            if (!exist) throw new MilvaUserFriendlyException(_localizer["IncorrectOldPassword"]);
 
             return await _userManager.ChangePasswordAsync(user, currentPassword, newPassword).ConfigureAwait(false);
         }
@@ -344,7 +344,7 @@ namespace Milvasoft.Helpers.Identity.Concrete
                 var stringBuilder = new StringBuilder();
 
                 stringBuilder.AppendJoin(',', identityResult.Errors.Select(i => i.Description));
-                throw new IdentityResultException(stringBuilder.ToString());
+                throw new MilvaUserFriendlyException(stringBuilder.ToString());
             }
         }
 
@@ -376,7 +376,7 @@ namespace Milvasoft.Helpers.Identity.Concrete
             var loginResult = new TLoginResultDTO { ErrorMessages = new List<IdentityError>() };
 
             if (loginDTO.UserName == null && loginDTO.Email == null)
-                throw new NullParameterException(_localizer["PleaseEnterEmailOrUsername"]);
+                throw new MilvaUserFriendlyException(_localizer["PleaseEnterEmailOrUsername"]);
 
             //Kullanici adi veya email ile kullanici dogrulama
             #region User Validation
@@ -485,7 +485,7 @@ namespace Milvasoft.Helpers.Identity.Concrete
                                                                                            tokenValue: newToken).ConfigureAwait(false);
 
             if (!identityResult.Succeeded)
-                throw new IdentityResultException(_localizer);
+                throw new MilvaUserFriendlyException(_localizer);
 
             return newToken;
         }
