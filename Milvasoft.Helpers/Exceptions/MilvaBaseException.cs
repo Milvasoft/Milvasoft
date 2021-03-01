@@ -11,15 +11,15 @@ namespace Milvasoft.Helpers.Exceptions
         /// <summary>
         /// Defines error code.
         /// </summary>
-        public int ErrorCode { get; set; }
+        public int ExceptionCode { get; set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MilvaBaseException"/> class  with a specified error message.
         /// </summary>
         /// <param name="localizer"></param>
-        public MilvaBaseException(IStringLocalizer localizer) : base(localizer["MilvasoftBaseException"])
+        public MilvaBaseException(IStringLocalizer localizer) : base(localizer[nameof(MilvaBaseException)])
         {
-            ErrorCode = ErrorCode != 0 ? ErrorCode : (int)MilvaExceptionCode.BaseException;
+            ExceptionCode = ExceptionCode != 0 ? ExceptionCode : (int)MilvaExceptionCode.BaseException;
         }
 
         /// <summary>
@@ -28,7 +28,7 @@ namespace Milvasoft.Helpers.Exceptions
         /// <param name="customMessage"></param>
         public MilvaBaseException(string customMessage) : base(customMessage)
         {
-            ErrorCode = ErrorCode != 0 ? ErrorCode : (int)MilvaExceptionCode.BaseException;
+            ExceptionCode = ExceptionCode != 0 ? ExceptionCode : (int)MilvaExceptionCode.BaseException;
         }
 
         /// <summary>
@@ -38,7 +38,7 @@ namespace Milvasoft.Helpers.Exceptions
         /// <param name="innerException"></param>
         public MilvaBaseException(string customMessage, Exception innerException) : base(customMessage, innerException)
         {
-            ErrorCode = ErrorCode != 0 ? ErrorCode : (int)MilvaExceptionCode.BaseException;
+            ExceptionCode = ExceptionCode != 0 ? ExceptionCode : (int)MilvaExceptionCode.BaseException;
         }
     }
 }

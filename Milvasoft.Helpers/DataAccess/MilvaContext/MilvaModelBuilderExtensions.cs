@@ -27,14 +27,10 @@ namespace Milvasoft.Helpers.DataAccess.MilvaContext
         public static void UseEncryption(this ModelBuilder modelBuilder, IMilvaEncryptionProvider encryptionProvider)
         {
             if (modelBuilder is null)
-            {
-                throw new InvalidParameterException("The given model builder cannot be null");
-            }
+                throw new MilvaDeveloperException("The given model builder cannot be null");
 
             if (encryptionProvider is null)
-            {
-                throw new InvalidParameterException("Cannot initialize encryption with a null provider.");
-            }
+                throw new MilvaDeveloperException("Cannot initialize encryption with a null provider.");
 
             var encryptionConverter = new MilvaEncryptionConverter(encryptionProvider);
 
@@ -47,11 +43,27 @@ namespace Milvasoft.Helpers.DataAccess.MilvaContext
                         object[] attributes = property.PropertyInfo.GetCustomAttributes(typeof(MilvaEncryptedAttribute), false);
 
                         if (attributes.Any())
-                        {
                             property.SetValueConverter(encryptionConverter);
-                        }
                     }
                 }
+            }
+        }
+
+        /// <summary>
+        /// For PostgreSql, makes string properties for Turkish character compatible.
+        /// </summary>
+        /// <param name="modelBuilder"></param>
+        public static void ConfigureStringProperties(this ModelBuilder modelBuilder)
+        {
+            var entitiesHasDecimalProperty = modelBuilder.Model.GetEntityTypes().Where(prop => prop.ClrType.GetProperties().Any(p => p.PropertyType.IsAssignableFrom(typeof(string))));
+
+            foreach (var entityType in entitiesHasDecimalProperty)
+            {
+                var properties = entityType.ClrType.GetProperties().Where(p => p.PropertyType.IsAssignableFrom(typeof(string))
+                                                                                && !p.CustomAttributes.Any(cA => cA.AttributeType.IsAssignableFrom(typeof(NotMappedAttribute))));
+
+                foreach (var prop in properties)
+                    modelBuilder.Entity(entityType.ClrType).Property(prop.Name).UseCollation("tr-TR-x-icu");
             }
         }
 

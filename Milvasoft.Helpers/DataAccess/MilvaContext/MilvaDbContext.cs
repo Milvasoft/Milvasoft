@@ -142,7 +142,7 @@ namespace Milvasoft.Helpers.DataAccess.MilvaContext
         {
             string propName = $"{type.Name}Langs";
             if (!CommonHelper.PropertyExists(type, propName))
-                throw new NullParameterException($"Type of {type}'s properties doesn't contain '{propName}'.");
+                throw new MilvaDeveloperException($"Type of {type}'s properties doesn't contain '{propName}'.");
 
             ParameterExpression paramterExpression = Expression.Parameter(type, "i");
             Expression orderByProperty = Expression.Property(paramterExpression, propName);
@@ -186,7 +186,7 @@ namespace Milvasoft.Helpers.DataAccess.MilvaContext
             var entityType = typeof(TEntity);
 
             if (!CommonHelper.PropertyExists<TEntity>(propName))
-                throw new InvalidParameterException($"Type of {entityType}'s properties doesn't contain '{propName}'.");
+                throw new MilvaDeveloperException($"Type of {entityType}'s properties doesn't contain '{propName}'.");
 
             ParameterExpression parameterExpression = Expression.Parameter(entityType, "i");
             Expression<Func<TEntity, decimal>> predicate = Expression.Lambda<Func<TEntity, decimal>>(Expression.Convert(Expression.Property(parameterExpression, propName),

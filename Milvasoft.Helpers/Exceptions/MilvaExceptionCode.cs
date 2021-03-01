@@ -3,7 +3,7 @@
     /// <summary>
     /// Defines the MilvasoftExceptionCode.
     /// </summary>
-    public enum MilvaExceptionCode
+    public enum MilvaExceptionCode : int
     {
         /// <summary>
         /// Defines the UnknownError.
@@ -13,132 +13,132 @@
         /// <summary>
         /// Defines the CannotFindEntity.
         /// </summary>
-        CannotFindEntity = 1,
+        CannotFindEntityException = 1,
 
         /// <summary>
         /// Defines the AddingNewEntityWithExsistId.
         /// </summary>
-        AddingNewEntityWithExsistId = 2,
+        AddingNewEntityWithExistsIdException = 2,
 
         /// <summary>
         /// Defines the CannotBeAddedProductToStock.
         /// </summary>
-        CannotBeAddedProductToStock = 3,
+        CannotBeAddedProductToStockException = 3,
 
         /// <summary>
         /// Defines the CannotAddTheEntitiesToAllOfRepositories.
         /// </summary>
-        CannotAddTheEntitiesToAllOfRepositories = 4,
+        CannotAddTheEntitiesToAllOfRepositoriesException = 4,
 
         /// <summary>
         /// Defines the CannotFindEnumById.
         /// </summary>
-        CannotFindEnumById = 5,
+        CannotFindEnumByIdExceptionException = 5,
 
         /// <summary>
         /// Defines the CannotStartRedisServer.
         /// </summary>
-        CannotStartRedisServer = 6,
+        CannotStartRedisServerException = 6,
 
         /// <summary>
         /// Defines the DeletingEntityWithRelations.
         /// </summary>
-        DeletingEntityWithRelations = 7,
+        DeletingEntityWithRelationsException = 7,
 
         /// <summary>
         /// Defines the DeletingInvalidEntity.
         /// </summary>
-        DeletingInvalidEntity = 8,
+        DeletingInvalidEntityException = 8,
 
         /// <summary>
         /// Defines the DeletingSupplierWithDebt.
         /// </summary>
-        DeletingSupplierWithDebt = 9,
+        DeletingSupplierWithDebtException = 9,
 
         /// <summary>
         /// Defines the EmptyList.
         /// </summary>
-        EmptyList = 10,
+        EmptyListException = 10,
 
         /// <summary>
         /// Defines the InvalidNumericValue.
         /// </summary>
-        InvalidNumericValue = 11,
+        InvalidNumericValueException = 11,
 
         /// <summary>
         /// Defines the InvalidParameter.
         /// </summary>
-        InvalidParameter = 12,
+        InvalidParameterException = 12,
 
         /// <summary>
         /// Defines the InvalidStringExpression.
         /// </summary>
-        InvalidStringExpression = 13,
+        InvalidStringExpressionException = 13,
 
         /// <summary>
         /// Defines the NullParameter.
         /// </summary>
-        NullParameter = 14,
+        NullParameterException = 14,
 
         /// <summary>
         /// Defines the UnknownStockType.
         /// </summary>
-        UnknownStockType = 15,
+        UnknownStockTypeException = 15,
 
         /// <summary>
         /// Defines the UpdatingInvalidEntity.
         /// </summary>
-        UpdatingInvalidEntity = 16,
+        UpdatingInvalidEntityException = 16,
 
         /// <summary>
         /// Defines the NotLoggedInUser.
         /// </summary>
-        NotLoggedInUser = 17,
+        NotLoggedInUserException = 17,
 
         /// <summary>
         /// Defines the AnotherLoginExists.
         /// </summary>
-        AnotherLoginExists = 18,
+        AnotherLoginExistsException = 18,
 
         /// <summary>
         /// Defines the OldVersion.
         /// </summary>
-        OldVersion = 19,
+        OldVersionException = 19,
 
         /// <summary>
         /// Defines the InvalidLicence.
         /// </summary>
-        InvalidLicence = 20,
+        InvalidLicenceException = 20,
 
         /// <summary>
         /// Defines the ExpiredDemo.
         /// </summary>
-        ExpiredDemo = 21,
+        ExpiredDemoException = 21,
 
         /// <summary>
         /// Defines the NeedForceOperation.
         /// </summary>
-        NeedForceOperation = 22,
+        NeedForceOperationException = 22,
 
         /// <summary>
         /// Defines the OutOfStock.
         /// </summary>
-        OutOfStock = 23,
+        OutOfStockException = 23,
 
         /// <summary>
         /// Defines the InvalidMateralDeficit.
         /// </summary>
-        InvalidMateralDeficit = 24,
+        InvalidMateralDeficitException = 24,
 
         /// <summary>
         /// Defines the CannotUpdateOrDeleteDefaultRecord.
         /// </summary>
-        CannotUpdateOrDeleteDefaultRecord = 25,
+        CannotUpdateOrDeleteDefaultRecordException = 25,
 
         /// <summary>
         /// Defines the ValidationError.
         /// </summary>
-        ValidationError = 26,
+        ValidationErrorException = 26,
 
         /// <summary>
         /// Defines the GeneralException.
@@ -148,27 +148,26 @@
         /// <summary>
         /// Defines the InvalidRelatedProcess.
         /// </summary>
-        InvalidRelatedProcess = 28,
+        InvalidRelatedProcessException = 28,
 
         /// <summary>
         /// Defines the FeatureNotImplementedException.
         /// </summary>
-        FeatureNotImplemented = 29,
+        FeatureNotImplementedException = 29,
 
         /// <summary>
         /// Defines the IdentityResultException.
         /// </summary>
-        IdentityResult = 30,
+        IdentityResultException = 30,
 
         /// <summary>
         /// Defines the IdentityResultException.
         /// </summary>
-        CannotGetResponse = 31,
+        CannotGetResponseException = 31,
 
         /// <summary>
         /// Defines the IdentityResultException.
         /// </summary>
-        EncryptionError = 32
-
+        EncryptionErrorException = 32
     }
 }
