@@ -14,7 +14,7 @@ namespace Milvasoft.Helpers.Exceptions
         /// <param name="localizer"></param>
         public MilvaValidationException(IStringLocalizer localizer) : base(localizer[nameof(MilvaValidationException)])
         {
-            ExceptionCode = (int)MilvaExceptionCode.ValidationErrorException;
+            ExceptionCode = MilvaExceptionCode.ValidationErrorException;
         }
 
         /// <summary>
@@ -23,7 +23,7 @@ namespace Milvasoft.Helpers.Exceptions
         /// <param name="customMessage"></param>
         public MilvaValidationException(string customMessage) : base(customMessage)
         {
-            ExceptionCode = (int)MilvaExceptionCode.ValidationErrorException;
+            ExceptionCode = MilvaExceptionCode.ValidationErrorException;
         }
 
         /// <summary>
@@ -33,7 +33,7 @@ namespace Milvasoft.Helpers.Exceptions
         /// <param name="innerException"></param>
         public MilvaValidationException(string customMessage, Exception innerException) : base(customMessage, innerException)
         {
-            ExceptionCode = (int)MilvaExceptionCode.ValidationErrorException;
+            ExceptionCode = MilvaExceptionCode.ValidationErrorException;
         }
     }
 }

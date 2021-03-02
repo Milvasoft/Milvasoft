@@ -161,13 +161,28 @@
         IdentityResultException = 30,
 
         /// <summary>
-        /// Defines the IdentityResultException.
+        /// Defines the CannotGetResponseException.
         /// </summary>
         CannotGetResponseException = 31,
 
         /// <summary>
-        /// Defines the IdentityResultException.
+        /// Defines the EncryptionErrorException.
         /// </summary>
-        EncryptionErrorException = 32
+        EncryptionErrorException = 32,
+
+        /// <summary>
+        /// Defines the WrongPaginationParamsException.
+        /// </summary>
+        WrongPaginationParamsException = 33,
+
+        /// <summary>
+        /// Defines the WrongPaginationParamsException.
+        /// </summary>
+        WrongRequestedPageNumberException = 34,
+
+        /// <summary>
+        /// Defines the WrongPaginationParamsException.
+        /// </summary>
+        WrongRequestedItemCountException = 35
     }
 }

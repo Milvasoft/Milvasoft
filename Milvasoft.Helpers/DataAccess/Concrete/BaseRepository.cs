@@ -4,6 +4,7 @@ using Milvasoft.Helpers.DataAccess.Abstract.Entity;
 using Milvasoft.Helpers.DataAccess.Abstract.Entity.Auditing;
 using Milvasoft.Helpers.DataAccess.Concrete.Entity;
 using Milvasoft.Helpers.DataAccess.IncludeLibrary;
+using Milvasoft.Helpers.Exceptions;
 using Milvasoft.Helpers.Extensions;
 using System;
 using System.Collections.Generic;
@@ -82,7 +83,7 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
             if (typeof(ISoftDeletable).IsAssignableFrom(entityType))
             {
                 var parameter = Expression.Parameter(entityType, "entity");
-                var filterExpression = Expression.Equal(Expression.Property(parameter, entityType.GetProperty("IsDeleted")), Expression.Constant(false, typeof(bool)));
+                var filterExpression = Expression.Equal(Expression.Property(parameter, entityType.GetProperty(EntityPropertyNames.IsDeleted)), Expression.Constant(false, typeof(bool)));
                 return Expression.Lambda<Func<TEntity, bool>>(filterExpression, parameter);
             }
             else return null;
@@ -1103,15 +1104,20 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
             var estimatedCountOfPages = Convert.ToInt32(Math.Ceiling(actualPageCount));
 
             if (estimatedCountOfPages != 0 && requestedPageNumber > estimatedCountOfPages)
-                throw new ArgumentOutOfRangeException($"Requested page count is more than actual page count. Maximum page count must be {estimatedCountOfPages}.");
+                throw new MilvaUserFriendlyException($"Requested page count is more than actual page count. Maximum page count must be {estimatedCountOfPages}.",
+                                                     MilvaExceptionCode.WrongPaginationParamsException)
+                { ExceptionObject = estimatedCountOfPages };
 
             return estimatedCountOfPages;
         }
 
         private void ValidatePaginationParameters(int requestedPageNumber, int countOfRequestedRecordsInPage)
         {
-            if (requestedPageNumber <= 0) throw new ArgumentOutOfRangeException($"Requested page count cannot be 0. Page count must be greater than 0.");
-            if (countOfRequestedRecordsInPage <= 0) throw new ArgumentOutOfRangeException($"Count of requested record count cannot be 0 or less. Requested record count must be greater than 0.");
+            if (requestedPageNumber <= 0) throw new MilvaUserFriendlyException($"Requested page count cannot be 0. Page count must be greater than 0.",
+                                                                               MilvaExceptionCode.WrongRequestedPageNumberException);
+
+            if (countOfRequestedRecordsInPage <= 0) throw new MilvaUserFriendlyException($"Count of requested record count cannot be 0 or less. Requested record count must be greater than 0.",
+                                                                                         MilvaExceptionCode.WrongRequestedItemCountException);
         }
 
         private Expression<Func<TEntity, bool>> CreateConditionExpression(Expression<Func<TEntity, bool>> conditionExpression = null)
@@ -1131,7 +1137,7 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
             }
             return mainExpression;
         }
-        
+
         /// <summary>
         /// For configure entity state. Change tracking.
         /// </summary>

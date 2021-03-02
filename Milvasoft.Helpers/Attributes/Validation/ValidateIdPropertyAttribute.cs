@@ -2,6 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Localization;
 using Milvasoft.Helpers.Extensions;
+using Milvasoft.Helpers.Utils;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -71,25 +72,20 @@ namespace Milvasoft.Helpers.Attributes.Validation
 
                 if (_resourceType != null)
                 {
-                    var localizerFactory = context.GetService<IStringLocalizerFactory>();
+                    sharedLocalizer = context.GetLocalizerInstance(_resourceType);
 
-                    var assemblyName = new AssemblyName(_resourceType.GetTypeInfo().Assembly.FullName);
-                    sharedLocalizer = localizerFactory.Create(_resourceType.Name, assemblyName.Name);
-
-                    localizedRelationName = sharedLocalizer[MemberNameLocalizerKey ?? $"LocalizedEntityName{context.MemberName.Substring(0, context.MemberName.Length - 2)}"].ToString().ToLowerInvariant();
-                    errorMessage = sharedLocalizer["ValidationIdPropertyError", localizedRelationName];
+                    localizedRelationName = sharedLocalizer[MemberNameLocalizerKey ?? $"{LocalizerKeys.LocalizedEntityName}{context.MemberName.Substring(0, context.MemberName.Length - 2)}"].ToString().ToLowerInvariant();
+                    errorMessage = sharedLocalizer[LocalizerKeys.ValidationIdPropertyError, localizedRelationName];
                 }
-                else errorMessage = $"Please enter a valid {context.MemberName}";
-
-                var propertyValue = value;
+                else errorMessage = $"{LocalizerKeys.PleaseEnterAValid} {context.MemberName}";
 
                 var httpContext = context.GetService<IHttpContextAccessor>().HttpContext;
 
-                var valueType = propertyValue.GetType();
+                var valueType = value.GetType();
 
                 if (valueType == typeof(Guid))
                 {
-                    var guidParameter = (Guid)propertyValue;
+                    var guidParameter = (Guid)value;
 
                     var regexMatchResult = guidParameter.ToString().MatchRegex("^[{]?[0-9a-fA-F]{8}"
                                                                               + "-([0-9a-fA-F]{4}-)"
@@ -104,7 +100,7 @@ namespace Milvasoft.Helpers.Attributes.Validation
                 }
                 else if (valueType == typeof(Guid?))
                 {
-                    var guidParameter = (Guid?)propertyValue;
+                    var guidParameter = (Guid?)value;
 
                     var regexMatchResult = guidParameter.ToString().MatchRegex("^[{]?[0-9a-fA-F]{8}"
                                                                               + "-([0-9a-fA-F]{4}-)"
@@ -119,7 +115,7 @@ namespace Milvasoft.Helpers.Attributes.Validation
                 }
                 else if (valueType == typeof(int))
                 {
-                    var intParameter = (int)propertyValue;
+                    var intParameter = (int)value;
 
                     if (intParameter <= 0)
                     {
@@ -130,7 +126,7 @@ namespace Milvasoft.Helpers.Attributes.Validation
                 }
                 else if (valueType == typeof(int?))
                 {
-                    var intParameter = (int?)propertyValue;
+                    var intParameter = (int?)value;
 
                     if (intParameter <= 0)
                     {
@@ -141,7 +137,7 @@ namespace Milvasoft.Helpers.Attributes.Validation
                 }
                 else if (valueType.GetGenericArguments()[0] == typeof(Guid))
                 {
-                    var guidParameters = (List<Guid>)propertyValue;
+                    var guidParameters = (List<Guid>)value;
 
                     if (!DontCheckNullable && guidParameters.IsNullOrEmpty())
                     {
@@ -167,7 +163,7 @@ namespace Milvasoft.Helpers.Attributes.Validation
                 }
                 else if (valueType.GetGenericArguments()[0] == typeof(int))
                 {
-                    var intParameters = (List<int>)propertyValue;
+                    var intParameters = (List<int>)value;
 
                     if (!DontCheckNullable && intParameters.IsNullOrEmpty())
                     {

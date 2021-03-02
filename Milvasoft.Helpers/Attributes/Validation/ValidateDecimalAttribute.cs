@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Localization;
+using Milvasoft.Helpers.Utils;
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.Reflection;
@@ -37,7 +38,6 @@ namespace Milvasoft.Helpers.Attributes.Validation
         public int MinValue { get; } = -1;
 
         #endregion
-
 
         #region Constructors
 
@@ -78,7 +78,6 @@ namespace Milvasoft.Helpers.Attributes.Validation
 
         #endregion
 
-
         /// <summary>
         /// Determines whether the specified value of the object is valid.
         /// </summary>
@@ -96,15 +95,12 @@ namespace Milvasoft.Helpers.Attributes.Validation
 
                 if (_resourceType != null)
                 {
-                    var localizerFactory = context.GetService<IStringLocalizerFactory>();
+                    sharedLocalizer = context.GetLocalizerInstance(_resourceType);
 
-                    var assemblyName = new AssemblyName(_resourceType.GetTypeInfo().Assembly.FullName);
-                    sharedLocalizer = localizerFactory.Create(_resourceType.Name, assemblyName.Name);
-
-                    localizedPropName = sharedLocalizer[LocalizerKey != null ? LocalizerKey : $"Localized{context.MemberName}"];
-                    errorMessage = FullMessage ? sharedLocalizer[LocalizerKey] : sharedLocalizer["MinDecimalValueException", localizedPropName];
+                    localizedPropName = sharedLocalizer[LocalizerKey != null ? LocalizerKey : $"{LocalizerKeys.Localized}{context.MemberName}"];
+                    errorMessage = FullMessage ? sharedLocalizer[LocalizerKey] : sharedLocalizer[LocalizerKeys.MinDecimalValueException, localizedPropName];
                 }
-                else errorMessage = $"Please enter a valid {context.MemberName}.";
+                else errorMessage = $"{LocalizerKeys.PleaseEnterAValid} {context.MemberName}.";
 
                 if (Convert.ToInt32(value) <= MinValue)
                 {

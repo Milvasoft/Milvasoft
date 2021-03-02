@@ -9,9 +9,15 @@ namespace Milvasoft.Helpers.Exceptions
     public abstract class MilvaBaseException : Exception
     {
         /// <summary>
-        /// Defines error code.
+        /// Gets or sets error code.
         /// </summary>
-        public int ExceptionCode { get; set; }
+        public MilvaExceptionCode ExceptionCode { get; set; }
+
+        /// <summary>
+        /// Gets or sets object of exception.
+        /// Default value is null.
+        /// </summary>
+        public object ExceptionObject { get; set; } = null;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MilvaBaseException"/> class  with a specified error message.

@@ -70,10 +70,7 @@ namespace Milvasoft.Helpers.Attributes.Validation
         /// <returns></returns>
         protected override ValidationResult IsValid(object value, ValidationContext context)
         {
-            var localizerFactory = context.GetService<IStringLocalizerFactory>();
-
-            var assemblyName = new AssemblyName(_resourceType.GetTypeInfo().Assembly.FullName);
-            var sharedLocalizer = localizerFactory.Create(_resourceType.Name, assemblyName.Name);
+            var sharedLocalizer = context.GetLocalizerInstance(_resourceType);
 
             var localizedPropName = sharedLocalizer == null ? context.MemberName : sharedLocalizer[$"{LocalizerKeys.Localized}{MemberNameLocalizerKey ?? context.MemberName}"];
 
@@ -126,7 +123,7 @@ namespace Milvasoft.Helpers.Attributes.Validation
                 if (base.IsValid(value)) return ValidationResult.Success;
                 else
                 {
-                    ErrorMessage = $"Please enter a valid{context.MemberName}";
+                    ErrorMessage = $"{LocalizerKeys.PleaseEnterAValid} {context.MemberName}";
                     return new ValidationResult(FormatErrorMessage(""));
                 }
             }

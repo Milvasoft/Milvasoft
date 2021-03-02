@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 using Milvasoft.Helpers.DataAccess.Abstract.Entity;
-using Milvasoft.Helpers.Exceptions;
 using Milvasoft.Helpers.Identity.Concrete;
 using System;
 using System.Collections.Generic;

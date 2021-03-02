@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Localization;
 using Milvasoft.Helpers.DataAccess.Abstract.Entity;
+using Milvasoft.Helpers.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -33,15 +34,15 @@ namespace Milvasoft.Helpers.Identity.Concrete
 
             //Checking that the username does not start with a numeric expression
             if (int.TryParse(user.UserName[0].ToString(), out int _))
-                errors.Add(new IdentityError { Code = "UserNameNumberStartWith", Description = _localizer["UserValidationUserNameNumberStartWith"] });
+                errors.Add(new IdentityError { Code = "UserNameNumberStartWith", Description = _localizer[LocalizerKeys.UserValidationUserNameNumberStartWith] });
 
             //UserName is between 3 and 25 characters
             if (user.UserName.Length < 3 && user.UserName.Length > 25)
-                errors.Add(new IdentityError { Code = "UserNameLength", Description = _localizer["UserValidationUserNameLength"] });
+                errors.Add(new IdentityError { Code = "UserNameLength", Description = _localizer[LocalizerKeys.UserValidationUserNameLength] });
 
             //Control that the email does not exceed 70 characters
             if (user.Email?.Length > 70)
-                errors.Add(new IdentityError { Code = "EmailLength", Description = _localizer["UserValidationEmailLength"] });
+                errors.Add(new IdentityError { Code = "EmailLength", Description = _localizer[LocalizerKeys.UserValidationEmailLength] });
 
             if (!errors.Any())
                 return Task.FromResult(IdentityResult.Success);

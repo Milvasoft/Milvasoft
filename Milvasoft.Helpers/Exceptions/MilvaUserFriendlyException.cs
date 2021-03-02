@@ -14,7 +14,7 @@ namespace Milvasoft.Helpers.Exceptions
         /// <param name="localizer"></param>
         public MilvaUserFriendlyException(IStringLocalizer localizer) : base(localizer[nameof(MilvaUserFriendlyException)])
         {
-            ExceptionCode = (int)MilvaExceptionCode.BaseException;
+            ExceptionCode = MilvaExceptionCode.BaseException;
         }
 
         /// <summary>
@@ -23,7 +23,7 @@ namespace Milvasoft.Helpers.Exceptions
         /// <param name="customMessage"></param>
         public MilvaUserFriendlyException(string customMessage) : base(customMessage)
         {
-            ExceptionCode = (int)MilvaExceptionCode.BaseException;
+            ExceptionCode = MilvaExceptionCode.BaseException;
         }
 
         /// <summary>
@@ -33,7 +33,7 @@ namespace Milvasoft.Helpers.Exceptions
         /// <param name="innerException"></param>
         public MilvaUserFriendlyException(string customMessage, Exception innerException) : base(customMessage, innerException)
         {
-            ExceptionCode = (int)MilvaExceptionCode.BaseException;
+            ExceptionCode = MilvaExceptionCode.BaseException;
         }
 
         /// <summary>
@@ -43,7 +43,7 @@ namespace Milvasoft.Helpers.Exceptions
         /// <param name="milvaExceptionCode"></param>
         public MilvaUserFriendlyException(IStringLocalizer localizer, MilvaExceptionCode milvaExceptionCode) : base(localizer[milvaExceptionCode.ToString()])
         {
-            ExceptionCode = (int)milvaExceptionCode;
+            ExceptionCode = milvaExceptionCode;
         }
 
         /// <summary>
@@ -53,7 +53,7 @@ namespace Milvasoft.Helpers.Exceptions
         /// <param name="milvaExceptionCode"></param>
         public MilvaUserFriendlyException(string customMessage, MilvaExceptionCode milvaExceptionCode) : base(customMessage)
         {
-            ExceptionCode = (int)milvaExceptionCode;
+            ExceptionCode = milvaExceptionCode;
         }
 
         /// <summary>
@@ -64,7 +64,7 @@ namespace Milvasoft.Helpers.Exceptions
         /// <param name="innerException"></param>
         public MilvaUserFriendlyException(string customMessage, MilvaExceptionCode milvaExceptionCode, Exception innerException) : base(customMessage, innerException)
         {
-            ExceptionCode = (int)milvaExceptionCode;
+            ExceptionCode = milvaExceptionCode;
         }
     }
 }

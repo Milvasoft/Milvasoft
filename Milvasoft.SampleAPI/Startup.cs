@@ -4,7 +4,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
-using Milvasoft.Helpers.Encryption.Concrete;
 using Milvasoft.SampleAPI.Data;
 using Milvasoft.SampleAPI.Data.Abstract;
 using Milvasoft.SampleAPI.Data.Concrete;

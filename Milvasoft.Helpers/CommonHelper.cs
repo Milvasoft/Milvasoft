@@ -1,6 +1,8 @@
-﻿using Microsoft.Extensions.Localization;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Localization;
 using Milvasoft.Helpers.Exceptions;
 using Milvasoft.Helpers.Extensions;
+using Milvasoft.Helpers.Utils;
 using System;
 using System.ComponentModel;
 using System.Linq;
@@ -82,18 +84,18 @@ namespace Milvasoft.Helpers
         /// <summary>
         /// Checks that MinimumLength and MaximumLength have legal values.  Throws InvalidOperationException if not.
         /// </summary>
-        public static void EnsureLegalLengths(int maxLength, int minLength , IStringLocalizer stringLocalizer = null)
+        public static void EnsureLegalLengths(int maxLength, int minLength, IStringLocalizer stringLocalizer = null)
         {
-            if (maxLength < 0) throw new MilvaValidationException(stringLocalizer != null 
-                                                                      ? stringLocalizer["PreventStringInjectionMaxLengthException"] 
+            if (maxLength < 0) throw new MilvaValidationException(stringLocalizer != null
+                                                                      ? stringLocalizer[LocalizerKeys.PreventStringInjectionMaxLengthException]
                                                                       : "Please enter a valid value for the maximum character length.");
 
-            if (minLength < 0) throw new MilvaValidationException(stringLocalizer != null 
-                                                                      ? stringLocalizer["PreventStringInjectionMinLengthException"] 
+            if (minLength < 0) throw new MilvaValidationException(stringLocalizer != null
+                                                                      ? stringLocalizer[LocalizerKeys.PreventStringInjectionMinLengthException]
                                                                       : "Please enter a valid value for the minimum character length.");
 
             if (maxLength <= minLength) throw new MilvaValidationException(stringLocalizer != null
-                                                                               ? stringLocalizer["PreventStringInjectionMinLengthBigThanMaxLengthException", minLength, maxLength]
+                                                                               ? stringLocalizer[LocalizerKeys.PreventStringInjectionMinLengthBigThanMaxLengthException, minLength, maxLength]
                                                                                : $"The minimum value ({minLength}) you entered is greater than the maximum value ({maxLength}). Please enter a valid range of values.");
         }
 
@@ -133,6 +135,70 @@ namespace Milvasoft.Helpers
             byte[] bytes = new byte[16];
             BitConverter.GetBytes(value).CopyTo(bytes, 0);
             return new Guid(bytes);
+        }
+
+        /// <summary>
+        /// Creates localizer instance if IStringLocalizerFactory registered to service collection.
+        /// </summary>
+        /// <typeparam name="TSource"></typeparam>
+        /// <param name="serviceProvider"></param>
+        /// <returns></returns>
+        public static IStringLocalizer GetRequiredLocalizerInstance<TSource>(this IServiceProvider serviceProvider)
+        {
+            var localizerFactory = serviceProvider.GetRequiredService<IStringLocalizerFactory>();
+
+            var resourceType = typeof(TSource);
+
+            var assemblyName = new AssemblyName(resourceType.GetTypeInfo().Assembly.FullName);
+
+            return localizerFactory.Create(resourceType.Name, assemblyName.Name);
+        }
+
+        /// <summary>
+        /// Creates localizer instance if IStringLocalizerFactory registered to service collection.
+        /// </summary>
+        /// <typeparam name="TSource"></typeparam>
+        /// <param name="serviceProvider"></param>
+        /// <returns></returns>
+        public static IStringLocalizer GetLocalizerInstance<TSource>(this IServiceProvider serviceProvider)
+        {
+            var localizerFactory = serviceProvider.GetService<IStringLocalizerFactory>();
+
+            var resourceType = typeof(TSource);
+
+            var assemblyName = new AssemblyName(resourceType.GetTypeInfo().Assembly.FullName);
+
+            return localizerFactory.Create(resourceType.Name, assemblyName.Name);
+        }
+
+        /// <summary>
+        /// Creates localizer instance if IStringLocalizerFactory registered to service collection.
+        /// </summary>
+        /// <param name="serviceProvider"></param>
+        /// <param name="resourceType"></param>
+        /// <returns></returns>
+        public static IStringLocalizer GetRequiredLocalizerInstance(this IServiceProvider serviceProvider, Type resourceType)
+        {
+            var localizerFactory = serviceProvider.GetRequiredService<IStringLocalizerFactory>();
+
+            var assemblyName = new AssemblyName(resourceType.GetTypeInfo().Assembly.FullName);
+
+            return localizerFactory.Create(resourceType.Name, assemblyName.Name);
+        }
+
+        /// <summary>
+        /// Creates localizer instance if IStringLocalizerFactory registered to service collection.
+        /// </summary>
+        /// <param name="serviceProvider"></param>
+        /// <param name="resourceType"></param>
+        /// <returns></returns>
+        public static IStringLocalizer GetLocalizerInstance(this IServiceProvider serviceProvider, Type resourceType)
+        {
+            var localizerFactory = serviceProvider.GetService<IStringLocalizerFactory>();
+
+            var assemblyName = new AssemblyName(resourceType.GetTypeInfo().Assembly.FullName);
+
+            return localizerFactory.Create(resourceType.Name, assemblyName.Name);
         }
 
     }

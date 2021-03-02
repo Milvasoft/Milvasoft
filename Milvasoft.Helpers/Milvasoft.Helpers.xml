@@ -249,73 +249,6 @@
             <param name="context"></param>
             <returns></returns>
         </member>
-        <member name="T:Milvasoft.Helpers.Attributes.Validation.ValidateListStringAttribute">
-            <summary>
-            Specifies that the class or property that this attribute is applied to requires the specified prevent string injection attacks and min/max length checks.
-            </summary>
-        </member>
-        <member name="P:Milvasoft.Helpers.Attributes.Validation.ValidateListStringAttribute.MemberNameLocalizerKey">
-            <summary>
-            Gets or sets the error message spesific content
-            </summary>
-        </member>
-        <member name="P:Milvasoft.Helpers.Attributes.Validation.ValidateListStringAttribute.MaximumLength">
-            <summary>
-            Gets the maximum acceptable length of the string
-            </summary>
-        </member>
-        <member name="P:Milvasoft.Helpers.Attributes.Validation.ValidateListStringAttribute.MinimumLength">
-            <summary>
-            Gets or sets the minimum acceptable length of the string
-            </summary>
-        </member>
-        <member name="P:Milvasoft.Helpers.Attributes.Validation.ValidateListStringAttribute.ResourceType">
-            <summary>
-            Dummy class type for resource location.
-            </summary>
-        </member>
-        <member name="P:Milvasoft.Helpers.Attributes.Validation.ValidateListStringAttribute.MailContent">
-            <summary>
-            If injection attack exist. Validation method will be send mail. 
-            If has value mail will be send.
-            </summary>
-        </member>
-        <member name="M:Milvasoft.Helpers.Attributes.Validation.ValidateListStringAttribute.#ctor(System.Int32,System.String)">
-            <summary>
-            Constructor that accepts the maximum length of the string.
-            </summary>
-            <param name="maximumLength">The maximum length, inclusive.  It may not be negative.</param>
-            <param name="localizedPropertyName"></param>
-        </member>
-        <member name="M:Milvasoft.Helpers.Attributes.Validation.ValidateListStringAttribute.#ctor(System.Int32)">
-            <summary>
-            Constructor that accepts the maximum length of the string.
-            </summary>
-            <param name="maximumLength">The maximum length, inclusive.  It may not be negative.</param>
-        </member>
-        <member name="M:Milvasoft.Helpers.Attributes.Validation.ValidateListStringAttribute.#ctor(System.Int32,System.Int32,System.String)">
-            <summary>
-            Constructor that accepts the maximum length of the string.
-            </summary>
-            <param name="minimumLength">The minimum length, inclusive.  It may not be negative.</param>
-            <param name="maximumLength">The maximum length, inclusive.  It may not be negative.</param>
-            <param name="localizedPropertyName"></param>
-        </member>
-        <member name="M:Milvasoft.Helpers.Attributes.Validation.ValidateListStringAttribute.#ctor(System.Int32,System.Int32)">
-            <summary>
-            Constructor that accepts the maximum length of the string.
-            </summary>
-            <param name="minimumLength">The minimum length, inclusive.  It may not be negative.</param>
-            <param name="maximumLength">The maximum length, inclusive.  It may not be negative.</param>
-        </member>
-        <member name="M:Milvasoft.Helpers.Attributes.Validation.ValidateListStringAttribute.IsValid(System.Object,System.ComponentModel.DataAnnotations.ValidationContext)">
-            <summary>
-            Determines whether the specified value of the object is valid.
-            </summary>
-            <param name="value"></param>
-            <param name="context"></param>
-            <returns></returns>
-        </member>
         <member name="T:Milvasoft.Helpers.Attributes.Validation.ValidateStringAttribute">
             <summary>
             Specifies that the class or property that this attribute is applied to requires the specified prevent string injection attacks and min/max length checks.
@@ -359,6 +292,21 @@
             </summary>
             <param name="minimumLength">The minimum length, inclusive.  It may not be negative.</param>
             <param name="maximumLength">The maximum length, inclusive.  It may not be negative.</param>
+        </member>
+        <member name="M:Milvasoft.Helpers.Attributes.Validation.ValidateStringAttribute.#ctor(System.Int32,System.String)">
+            <summary>
+            Constructor that accepts the maximum length of the string.
+            </summary>
+            <param name="maximumLength">The maximum length, inclusive.  It may not be negative.</param>
+            <param name="memberNameLocalizerKey"></param>
+        </member>
+        <member name="M:Milvasoft.Helpers.Attributes.Validation.ValidateStringAttribute.#ctor(System.Int32,System.Int32,System.String)">
+            <summary>
+            Constructor that accepts the maximum length of the string.
+            </summary>
+            <param name="minimumLength">The minimum length, inclusive.  It may not be negative.</param>
+            <param name="maximumLength">The maximum length, inclusive.  It may not be negative.</param>
+            <param name="memberNameLocalizerKey"></param>
         </member>
         <member name="M:Milvasoft.Helpers.Attributes.Validation.ValidateStringAttribute.IsValid(System.Object,System.ComponentModel.DataAnnotations.ValidationContext)">
             <summary>
@@ -434,6 +382,38 @@
             This method return int value to guid value.
             </summary>
             <param name="value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.CommonHelper.GetRequiredLocalizerInstance``1(System.IServiceProvider)">
+            <summary>
+            Creates localizer instance if IStringLocalizerFactory registered to service collection.
+            </summary>
+            <typeparam name="TSource"></typeparam>
+            <param name="serviceProvider"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.CommonHelper.GetLocalizerInstance``1(System.IServiceProvider)">
+            <summary>
+            Creates localizer instance if IStringLocalizerFactory registered to service collection.
+            </summary>
+            <typeparam name="TSource"></typeparam>
+            <param name="serviceProvider"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.CommonHelper.GetRequiredLocalizerInstance(System.IServiceProvider,System.Type)">
+            <summary>
+            Creates localizer instance if IStringLocalizerFactory registered to service collection.
+            </summary>
+            <param name="serviceProvider"></param>
+            <param name="resourceType"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.CommonHelper.GetLocalizerInstance(System.IServiceProvider,System.Type)">
+            <summary>
+            Creates localizer instance if IStringLocalizerFactory registered to service collection.
+            </summary>
+            <param name="serviceProvider"></param>
+            <param name="resourceType"></param>
             <returns></returns>
         </member>
         <member name="T:Milvasoft.Helpers.DataAccess.Abstract.Entity.Auditing.IHasCreator`1">
@@ -2973,7 +2953,13 @@
         </member>
         <member name="P:Milvasoft.Helpers.Exceptions.MilvaBaseException.ExceptionCode">
             <summary>
-            Defines error code.
+            Gets or sets error code.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.Exceptions.MilvaBaseException.ExceptionObject">
+            <summary>
+            Gets or sets object of exception.
+            Default value is null.
             </summary>
         </member>
         <member name="M:Milvasoft.Helpers.Exceptions.MilvaBaseException.#ctor(Microsoft.Extensions.Localization.IStringLocalizer)">
@@ -3181,12 +3167,27 @@
         </member>
         <member name="F:Milvasoft.Helpers.Exceptions.MilvaExceptionCode.CannotGetResponseException">
             <summary>
-            Defines the IdentityResultException.
+            Defines the CannotGetResponseException.
             </summary>
         </member>
         <member name="F:Milvasoft.Helpers.Exceptions.MilvaExceptionCode.EncryptionErrorException">
             <summary>
-            Defines the IdentityResultException.
+            Defines the EncryptionErrorException.
+            </summary>
+        </member>
+        <member name="F:Milvasoft.Helpers.Exceptions.MilvaExceptionCode.WrongPaginationParamsException">
+            <summary>
+            Defines the WrongPaginationParamsException.
+            </summary>
+        </member>
+        <member name="F:Milvasoft.Helpers.Exceptions.MilvaExceptionCode.WrongRequestedPageNumberException">
+            <summary>
+            Defines the WrongPaginationParamsException.
+            </summary>
+        </member>
+        <member name="F:Milvasoft.Helpers.Exceptions.MilvaExceptionCode.WrongRequestedItemCountException">
+            <summary>
+            Defines the WrongPaginationParamsException.
             </summary>
         </member>
         <member name="T:Milvasoft.Helpers.Exceptions.MilvaUserFriendlyException">
@@ -5919,7 +5920,7 @@
         </member>
         <member name="M:Milvasoft.Helpers.Identity.Concrete.IdentityOperations`7.ThrowErrorMessagesIfNotSuccess(Microsoft.AspNetCore.Identity.IdentityResult)">
             <summary>
-            If <paramref name="identityResult"/> is not succeeded throwns <see cref="!:InvalidParameterException"/>.
+            If <paramref name="identityResult"/> is not succeeded throwns <see cref="T:Milvasoft.Helpers.Exceptions.MilvaUserFriendlyException"/>.
             </summary>
             <param name="identityResult"></param>
         </member>

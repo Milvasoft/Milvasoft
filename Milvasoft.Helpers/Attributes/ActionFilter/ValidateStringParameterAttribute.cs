@@ -74,12 +74,7 @@ namespace Milvasoft.Helpers.Attributes.ActionFilter
         {
             IStringLocalizer sharedLocalizer = null;
             if (ResourceType != null)
-            {
-                var localizerFactory = context.HttpContext.RequestServices.GetService<IStringLocalizerFactory>();
-
-                var assemblyName = new AssemblyName(ResourceType.GetTypeInfo().Assembly.FullName);
-                sharedLocalizer = localizerFactory.Create(ResourceType.Name, assemblyName.Name);
-            }
+                sharedLocalizer = context.HttpContext.RequestServices.GetLocalizerInstance(ResourceType);
 
             async Task<ActionExecutingContext> RewriteResponseAsync(string errorMessage)
             {

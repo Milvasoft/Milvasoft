@@ -53,11 +53,16 @@
 
         #endregion
 
+        #region Attributes
 
-
+        public const string PleaseEnterAValid = "Please enter a valid";
         public const string PreventStringInjectionLengthResultNotTrue = "PreventStringInjectionLengthResultNotTrue";
         public const string PreventStringInjectionContainsForbiddenWordError = "PreventStringInjectionContainsForbiddenWordError";
         public const string PreventStringInjectionBellowMin = "PreventStringInjectionBellowMin";
+        public const string PreventStringInjectionMaxLengthException = "PreventStringInjectionMaxLengthException";
+        public const string PreventStringInjectionMinLengthException = "PreventStringInjectionMinLengthException";
+        public const string PreventStringInjectionMinLengthBigThanMaxLengthException = "PreventStringInjectionMinLengthBigThanMaxLengthException";
+        public const string MinDecimalValueException = "MinDecimalValueException";
         public const string ValidationIdPropertyError = "ValidationIdPropertyError";
         public const string ValidationIdParameterGeneralError = "ValidationIdParameterGeneralError";
         public const string RegexErrorMessage = "RegexErrorMessage";
@@ -65,6 +70,29 @@
         public const string RegexPattern = "RegexPattern";
         public const string PropertyIsRequired = "PropertyIsRequired";
 
+        #endregion
+
+        #region Identity
+
+        public const string RequiresTwoFactor = "RequiresTwoFactor";
+        public const string NotAllowed = "NotAllowed";
+        public const string CannotFindUserWithThisToken = "CannotFindUserWithThisToken";
+        public const string IncorrectOldPassword = "IncorrectOldPassword";
+        public const string Hours = "Hours";
+        public const string Minutes = "Minutes";
+        public const string Seconds = "Seconds";
+        public const string Locked = "Locked";
+        public const string PleaseEnterEmailOrUsername = "PleaseEnterEmailOrUsername";
+        public const string InvalidUserName = "InvalidUserName";
+        public const string InvalidEmail = "InvalidEmail";
+        public const string InvalidLogin = "InvalidLogin";
+        public const string LockWarning = "LockWarning";
+        public const string UserValidationUserNameNumberStartWith = "UserValidationUserNameNumberStartWith";
+        public const string UserValidationUserNameLength = "UserValidationUserNameLength";
+        public const string UserValidationEmailLength = "UserValidationEmailLength";
+
+        #endregion
+        
 
     }
 }

@@ -77,20 +77,16 @@ namespace Milvasoft.Helpers.Attributes.ActionFilter
             if (context.ActionArguments.Count != 0)
             {
                 IStringLocalizer sharedLocalizer = null;
-                if (_resourceType != null)
-                {
-                    var localizerFactory = context.HttpContext.RequestServices.GetService<IStringLocalizerFactory>();
 
-                    var assemblyName = new AssemblyName(_resourceType.GetTypeInfo().Assembly.FullName);
-                    sharedLocalizer = localizerFactory.Create(_resourceType.Name, assemblyName.Name);
-                }
+                if (_resourceType != null)
+                    sharedLocalizer = context.HttpContext.RequestServices.GetLocalizerInstance(_resourceType);
 
                 var message = sharedLocalizer != null
                          ? EntityName != null
                                ? sharedLocalizer[LocalizerKeys.ValidationIdPropertyError, sharedLocalizer[LocalizerKeys.LocalizedEntityName + EntityName]]
                                : sharedLocalizer[LocalizerKeys.ValidationIdParameterGeneralError]
                          : EntityName != null
-                               ? $"Please select a valid {EntityName}."
+                               ? $"{LocalizerKeys.PleaseEnterAValid} {EntityName}."
                                : "Please enter all required parameters completely.";
 
 

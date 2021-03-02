@@ -8,6 +8,7 @@ using Milvasoft.Helpers.DataAccess.Abstract;
 using Milvasoft.Helpers.DataAccess.Abstract.Entity;
 using Milvasoft.Helpers.Exceptions;
 using Milvasoft.Helpers.Identity.Abstract;
+using Milvasoft.Helpers.Utils;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
@@ -29,7 +30,7 @@ namespace Milvasoft.Helpers.Identity.Concrete
     /// <typeparam name="TKey"></typeparam>
     /// <typeparam name="TLoginResultDTO"></typeparam>
     public class IdentityOperations<TUserManager, TDbContext, TLocalizer, TUser, TRole, TKey, TLoginResultDTO> : IIdentityOperations<TUserManager, TDbContext, TLocalizer, TUser, TRole, TKey, TLoginResultDTO>
-       where TUser : IdentityUser<TKey>, IFullAuditable<TKey>,new()
+       where TUser : IdentityUser<TKey>, IFullAuditable<TKey>, new()
        where TRole : IdentityRole<TKey>
        where TKey : struct, IEquatable<TKey>
        where TDbContext : IdentityDbContext<TUser, TRole, TKey>
@@ -147,10 +148,10 @@ namespace Milvasoft.Helpers.Identity.Concrete
             await _userManager.AccessFailedAsync(user).ConfigureAwait(false);
 
             if (signInResult.RequiresTwoFactor)
-                loginResult.ErrorMessages.Add(new IdentityError { Code = "RequiresTwoFactor", Description = _localizer["RequiresTwoFactor"] });
+                loginResult.ErrorMessages.Add(new IdentityError { Code = LocalizerKeys.RequiresTwoFactor, Description = _localizer[LocalizerKeys.RequiresTwoFactor] });
 
             if (signInResult.IsNotAllowed)
-                loginResult.ErrorMessages.Add(new IdentityError { Code = "NotAllowed", Description = _localizer["NotAllowed"] });
+                loginResult.ErrorMessages.Add(new IdentityError { Code = LocalizerKeys.NotAllowed, Description = _localizer[LocalizerKeys.NotAllowed] });
 
             #endregion
 
@@ -205,10 +206,10 @@ namespace Milvasoft.Helpers.Identity.Concrete
             await _userManager.AccessFailedAsync(user).ConfigureAwait(false);
 
             if (signInResult.RequiresTwoFactor)
-                loginResult.ErrorMessages.Add(new IdentityError { Code = "RequiresTwoFactor", Description = _localizer["RequiresTwoFactor"] });
+                loginResult.ErrorMessages.Add(new IdentityError { Code = LocalizerKeys.RequiresTwoFactor, Description = _localizer[LocalizerKeys.RequiresTwoFactor] });
 
             if (signInResult.IsNotAllowed)
-                loginResult.ErrorMessages.Add(new IdentityError { Code = "NotAllowed", Description = _localizer["NotAllowed"] });
+                loginResult.ErrorMessages.Add(new IdentityError { Code = LocalizerKeys.NotAllowed, Description = _localizer[LocalizerKeys.NotAllowed] });
 
             #endregion
 
@@ -270,7 +271,8 @@ namespace Milvasoft.Helpers.Identity.Concrete
         /// <returns></returns>
         public async Task ResetPasswordAsync(string newPassword)
         {
-            var currentUser = await _userManager.Users.FirstOrDefaultAsync(p => p.UserName == _userName).ConfigureAwait(false) ?? throw new MilvaUserFriendlyException(_localizer["CannotFindUserWithThisToken"]);
+            var currentUser = await _userManager.Users.FirstOrDefaultAsync(p => p.UserName == _userName).ConfigureAwait(false)
+                              ?? throw new MilvaUserFriendlyException(_localizer[LocalizerKeys.CannotFindUserWithThisToken]);
 
             var authenticationToken = await _userManager.GetAuthenticationTokenAsync(currentUser, LoginProvider, TokenName).ConfigureAwait(false);
 
@@ -287,11 +289,11 @@ namespace Milvasoft.Helpers.Identity.Concrete
         /// <returns></returns>
         public async Task<IdentityResult> ChangeCurrentUserPasswordAsync(string oldPassword, string newPassword)
         {
-            var user = await _userManager.FindByNameAsync(_userName).ConfigureAwait(false) ?? throw new MilvaUserFriendlyException(_localizer["CannotFindUserWithThisToken"]);
+            var user = await _userManager.FindByNameAsync(_userName).ConfigureAwait(false) ?? throw new MilvaUserFriendlyException(_localizer[LocalizerKeys.CannotFindUserWithThisToken]);
 
             bool exist = await _userManager.CheckPasswordAsync(user, oldPassword).ConfigureAwait(false);
 
-            if (!exist) throw new MilvaUserFriendlyException(_localizer["IncorrectOldPassword"]);
+            if (!exist) throw new MilvaUserFriendlyException(_localizer[LocalizerKeys.IncorrectOldPassword]);
 
             return await _userManager.ChangePasswordAsync(user, oldPassword, newPassword).ConfigureAwait(false);
         }
@@ -307,7 +309,7 @@ namespace Milvasoft.Helpers.Identity.Concrete
         {
             bool exist = await _userManager.CheckPasswordAsync(user, currentPassword).ConfigureAwait(false);
 
-            if (!exist) throw new MilvaUserFriendlyException(_localizer["IncorrectOldPassword"]);
+            if (!exist) throw new MilvaUserFriendlyException(_localizer[LocalizerKeys.IncorrectOldPassword]);
 
             return await _userManager.ChangePasswordAsync(user, currentPassword, newPassword).ConfigureAwait(false);
         }
@@ -334,7 +336,7 @@ namespace Milvasoft.Helpers.Identity.Concrete
         #region Helper Methods
 
         /// <summary>
-        /// If <paramref name="identityResult"/> is not succeeded throwns <see cref="InvalidParameterException"/>.
+        /// If <paramref name="identityResult"/> is not succeeded throwns <see cref="MilvaUserFriendlyException"/>.
         /// </summary>
         /// <param name="identityResult"></param>
         public virtual void ThrowErrorMessagesIfNotSuccess(IdentityResult identityResult)
@@ -361,12 +363,12 @@ namespace Milvasoft.Helpers.Identity.Concrete
                 var remainingLockoutEnd = lockoutEnd - DateTime.Now;
 
                 var reminingLockoutEndString = remainingLockoutEnd.Hours > 0
-                                                ? _localizer["Hours", remainingLockoutEnd.Hours]
+                                                ? _localizer[LocalizerKeys.Hours, remainingLockoutEnd.Hours]
                                                 : remainingLockoutEnd.Minutes > 0
-                                                     ? _localizer["Minutes", remainingLockoutEnd.Minutes]
-                                                     : _localizer["Seconds", remainingLockoutEnd.Seconds];
+                                                     ? _localizer[LocalizerKeys.Minutes, remainingLockoutEnd.Minutes]
+                                                     : _localizer[LocalizerKeys.Seconds, remainingLockoutEnd.Seconds];
 
-                return new IdentityError { Code = "Locked", Description = _localizer["Locked", reminingLockoutEndString] };
+                return new IdentityError { Code = LocalizerKeys.Locked, Description = _localizer[LocalizerKeys.Locked, reminingLockoutEndString] };
             }
 
             int accessFailedCountLimit = 5;
@@ -376,7 +378,7 @@ namespace Milvasoft.Helpers.Identity.Concrete
             var loginResult = new TLoginResultDTO { ErrorMessages = new List<IdentityError>() };
 
             if (loginDTO.UserName == null && loginDTO.Email == null)
-                throw new MilvaUserFriendlyException(_localizer["PleaseEnterEmailOrUsername"]);
+                throw new MilvaUserFriendlyException(_localizer[LocalizerKeys.PleaseEnterEmailOrUsername]);
 
             //Kullanici adi veya email ile kullanici dogrulama
             #region User Validation
@@ -391,7 +393,7 @@ namespace Milvasoft.Helpers.Identity.Concrete
 
                 if (userNotFound)
                 {
-                    loginResult.ErrorMessages.Add(new IdentityError { Code = "InvalidUserName", Description = _localizer["InvalidUserName"] });
+                    loginResult.ErrorMessages.Add(new IdentityError { Code = LocalizerKeys.InvalidUserName, Description = _localizer[LocalizerKeys.InvalidUserName] });
                     return (user, loginResult);
                 }
             }
@@ -404,14 +406,14 @@ namespace Milvasoft.Helpers.Identity.Concrete
 
                 if (userNotFound)
                 {
-                    loginResult.ErrorMessages.Add(new IdentityError { Code = "InvalidEmail", Description = _localizer["InvalidEmail"] });
+                    loginResult.ErrorMessages.Add(new IdentityError { Code = LocalizerKeys.InvalidEmail, Description = _localizer[LocalizerKeys.InvalidEmail] });
                     return (user, loginResult);
                 }
             }
 
             if (userNotFound)
             {
-                loginResult.ErrorMessages.Add(new IdentityError { Code = "InvalidLogin", Description = _localizer["InvalidLogin"] });
+                loginResult.ErrorMessages.Add(new IdentityError { Code = LocalizerKeys.InvalidLogin, Description = _localizer[LocalizerKeys.InvalidLogin] });
 
                 return (user, loginResult);
             }
@@ -449,9 +451,9 @@ namespace Milvasoft.Helpers.Identity.Concrete
                     return (user, loginResult);
                 }
 
-                var lockWarningMessage = _localizer["LockWarning", accessFailedCountLimit - user.AccessFailedCount];
+                var lockWarningMessage = _localizer[LocalizerKeys.LockWarning, accessFailedCountLimit - user.AccessFailedCount];
 
-                loginResult.ErrorMessages.Add(new IdentityError { Code = "InvalidLogin", Description = lockWarningMessage });
+                loginResult.ErrorMessages.Add(new IdentityError { Code = LocalizerKeys.InvalidLogin, Description = lockWarningMessage });
 
                 return (user, loginResult);
             }
