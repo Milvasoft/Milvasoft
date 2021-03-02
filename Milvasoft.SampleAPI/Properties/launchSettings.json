@@ -11,6 +11,7 @@
     "IIS Express": {
       "commandName": "IISExpress",
       "launchBrowser": true,
+      "launchUrl": "https://localhost:44334/swagger",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
@@ -18,11 +19,12 @@
     "Milvasoft.SampleAPI": {
       "commandName": "Project",
       "launchBrowser": true,
+      "launchUrl": "https://localhost:5004/swagger",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
       "dotnetRunMessages": "true",
-      "applicationUrl": "https://localhost:5001;http://localhost:5000"
+      "applicationUrl": "https://localhost:5004;http://localhost:5003"
     },
     "Docker": {
       "commandName": "Docker",

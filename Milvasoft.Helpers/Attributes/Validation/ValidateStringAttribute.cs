@@ -108,7 +108,7 @@ namespace Milvasoft.Helpers.Attributes.Validation
         {
             var valueType = value.GetType();
 
-            if (valueType.GetGenericArguments()[0] == typeof(string))
+            if (typeof(List<string>).IsAssignableFrom(valueType) || valueType.IsAssignableTo(typeof(List<string>)))
             {
                 var stringList = (List<string>)value;
 

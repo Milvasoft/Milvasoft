@@ -16,7 +16,7 @@ namespace Milvasoft.SampleAPI
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>()
-                              .UseUrls("http://0.0.0.0:5003");
+                              .UseUrls("http://0.0.0.0:5003", "https://0.0.0.0:5004");
                 });
     }
 }
