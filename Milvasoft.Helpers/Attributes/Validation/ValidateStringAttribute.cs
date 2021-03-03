@@ -106,21 +106,21 @@ namespace Milvasoft.Helpers.Attributes.Validation
         /// <returns></returns>
         protected override ValidationResult IsValid(object value, ValidationContext context)
         {
+            if (value == null) value = "";
+
             var valueType = value.GetType();
 
             if (typeof(List<string>).IsAssignableFrom(valueType) || valueType.IsAssignableTo(typeof(List<string>)))
             {
-                var stringList = (List<string>)value;
+                var stringList = value != null ? (List<string>)value : null;
 
                 if (!stringList.IsNullOrEmpty())
                     foreach (var stringValue in stringList)
-                    {
                         return GetValidationResult(stringValue, context);
-                    }
             }
             else
             {
-                var stringValue = (string)value;
+                var stringValue = value != null ? (string)value : null;
 
                 return GetValidationResult(stringValue, context);
             }
