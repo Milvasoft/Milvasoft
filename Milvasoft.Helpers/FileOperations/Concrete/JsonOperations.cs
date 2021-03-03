@@ -1,4 +1,5 @@
-﻿using Milvasoft.Helpers.FileOperations.Abstract;
+﻿using Milvasoft.Helpers.Encryption.Concrete;
+using Milvasoft.Helpers.FileOperations.Abstract;
 using Newtonsoft.Json;
 using System;
 using System.Collections;
@@ -1506,74 +1507,20 @@ namespace Milvasoft.Helpers.FileOperations.Concrete
 
         private async Task<string> DecryptAndReadAsync(string filePath, string key)
         {
-            var plainContent = await File.ReadAllBytesAsync(filePath).ConfigureAwait(false);
-            //byte[] plainContent = Encoding.ASCII.GetBytes(content);
+            var encryptionProvider = new MilvaEncryptionProvider(key);
 
-            using var algorithm = new AesCryptoServiceProvider();
+            var inputValue = await File.ReadAllTextAsync(filePath).ConfigureAwait(false);
 
-            var keyBytes = Encoding.UTF8.GetBytes(key);
-
-            if (keyBytes.Length != 16) throw new ArgumentOutOfRangeException("Key is not proper length. Key bit length must be 16.");
-
-            algorithm.IV = keyBytes;
-            algorithm.Key = keyBytes;
-            algorithm.Mode = CipherMode.CBC;
-            algorithm.Padding = PaddingMode.PKCS7;
-
-            using var memStream = new MemoryStream();
-
-            using var cryptoStream = new CryptoStream(memStream, algorithm.CreateDecryptor(), CryptoStreamMode.Write);
-
-            cryptoStream.Write(plainContent, 0, plainContent.Length);
-
-            try
-            {
-                cryptoStream.FlushFinalBlock();
-            }
-            catch (Exception)
-            {
-                throw new ArgumentException("Incorrect key.");
-            }
-
-            using var streamReader = new StreamReader(memStream);
-
-            memStream.Position = 0;
-
-            return streamReader.ReadToEnd();
+            return encryptionProvider.Decrypt(inputValue);
         }
 
         private async Task EncryptAndWriteAsync(string filePath, string content, string key)
         {
-            //var plainContent = await File.ReadAllBytesAsync(filePath).ConfigureAwait(false);
-            byte[] plainContent = Encoding.ASCII.GetBytes(content);
+            var encryptionProvider = new MilvaEncryptionProvider(key);
 
-            using var algorithm = new AesCryptoServiceProvider();
+            var encryptedContent = encryptionProvider.Encrypt(content);
 
-            var keyBytes = Encoding.UTF8.GetBytes(key);
-
-            if (keyBytes.Length != 16) throw new ArgumentOutOfRangeException("Key is not proper length. Key bit length must be 16.");
-
-            algorithm.IV = keyBytes;
-            algorithm.Key = keyBytes;
-            algorithm.Mode = CipherMode.CBC;
-            algorithm.Padding = PaddingMode.PKCS7;
-
-            using var memStream = new MemoryStream();
-
-            using var cryptoStream = new CryptoStream(memStream, algorithm.CreateEncryptor(), CryptoStreamMode.Write);
-
-            cryptoStream.Write(plainContent, 0, plainContent.Length);
-
-            try
-            {
-                cryptoStream.FlushFinalBlock();
-            }
-            catch (CryptographicException)
-            {
-                throw;
-            }
-
-            await File.WriteAllBytesAsync(filePath, memStream.ToArray()).ConfigureAwait(false);
+            await File.WriteAllTextAsync(filePath, encryptedContent, Encoding.UTF8).ConfigureAwait(false);
         }
 
         private string DecryptAndRead(string filePath, string key)
