@@ -85,12 +85,14 @@ namespace Milvasoft.Helpers.Identity.Concrete
         /// <param name="contextRepository"></param>
         /// <param name="localizer"></param>
         /// <param name="httpContextAccessor"></param>
+        /// <param name="useWhiteList"></param>
         public IdentityOperations(TUserManager userManager,
                                   SignInManager<TUser> signInManager,
                                   ITokenManagement tokenManagement,
                                   IContextRepository<TDbContext> contextRepository,
                                   TLocalizer localizer,
-                                  IHttpContextAccessor httpContextAccessor)
+                                  IHttpContextAccessor httpContextAccessor,
+                                  bool useWhiteList)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -98,6 +100,7 @@ namespace Milvasoft.Helpers.Identity.Concrete
             _localizer = localizer;
             _contextRepository = contextRepository;
             _userName = httpContextAccessor.HttpContext.User.Identity.Name;
+            _useWhiteList = useWhiteList;
         }
 
 
