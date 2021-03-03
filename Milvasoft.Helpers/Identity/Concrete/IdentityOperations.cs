@@ -359,7 +359,7 @@ namespace Milvasoft.Helpers.Identity.Concrete
         /// <param name="loginDTO"></param>
         /// <param name="user"></param>
         /// <returns></returns>
-        public virtual async Task<(TUser tUser, TLoginResultDTO loginResult)> ValidateUser(ILoginDTO loginDTO, TUser user)
+        public virtual async Task<(TUser tUser, TLoginResultDTO loginResult)> ValidateUserAsync(ILoginDTO loginDTO, TUser user)
         {
             IdentityError GetLockedError(DateTime lockoutEnd)
             {

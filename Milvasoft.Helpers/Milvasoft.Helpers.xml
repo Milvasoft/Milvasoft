@@ -5674,11 +5674,11 @@
         </member>
         <member name="M:Milvasoft.Helpers.Identity.Abstract.IIdentityOperations`7.ThrowErrorMessagesIfNotSuccess(Microsoft.AspNetCore.Identity.IdentityResult)">
             <summary>
-            If <paramref name="identityResult"/> is not succeeded throwns <see cref="!:InvalidParameterException"/>.
+            If <paramref name="identityResult"/> is not succeeded throwns <see cref="T:Milvasoft.Helpers.Exceptions.MilvaUserFriendlyException"/>.
             </summary>
             <param name="identityResult"></param>
         </member>
-        <member name="M:Milvasoft.Helpers.Identity.Abstract.IIdentityOperations`7.ValidateUser(Milvasoft.Helpers.Identity.Abstract.ILoginDTO,`3)">
+        <member name="M:Milvasoft.Helpers.Identity.Abstract.IIdentityOperations`7.ValidateUserAsync(Milvasoft.Helpers.Identity.Abstract.ILoginDTO,`3)">
             <summary>
             Validating user to login.
             </summary>
@@ -5833,7 +5833,7 @@
             The name of token.
             </summary>
         </member>
-        <member name="M:Milvasoft.Helpers.Identity.Concrete.IdentityOperations`7.#ctor(`0,Microsoft.AspNetCore.Identity.SignInManager{`3},Milvasoft.Helpers.Identity.Concrete.ITokenManagement,Milvasoft.Helpers.DataAccess.Abstract.IContextRepository{`1},`2,Microsoft.AspNetCore.Http.IHttpContextAccessor)">
+        <member name="M:Milvasoft.Helpers.Identity.Concrete.IdentityOperations`7.#ctor(`0,Microsoft.AspNetCore.Identity.SignInManager{`3},Milvasoft.Helpers.Identity.Concrete.ITokenManagement,Milvasoft.Helpers.DataAccess.Abstract.IContextRepository{`1},`2,Microsoft.AspNetCore.Http.IHttpContextAccessor,System.Boolean)">
             <summary>
             Performs constructor injection for repository interfaces used in this service.
             </summary>
@@ -5843,6 +5843,7 @@
             <param name="contextRepository"></param>
             <param name="localizer"></param>
             <param name="httpContextAccessor"></param>
+            <param name="useWhiteList"></param>
         </member>
         <member name="M:Milvasoft.Helpers.Identity.Concrete.IdentityOperations`7.SignInAsync(Milvasoft.Helpers.Identity.Abstract.ILoginDTO,Milvasoft.Helpers.Identity.Abstract.IIdentityOperations{`0,`1,`2,`3,`4,`5,`6}.UserValidation,System.DateTime)">
             <summary>
@@ -5924,7 +5925,7 @@
             </summary>
             <param name="identityResult"></param>
         </member>
-        <member name="M:Milvasoft.Helpers.Identity.Concrete.IdentityOperations`7.ValidateUser(Milvasoft.Helpers.Identity.Abstract.ILoginDTO,`3)">
+        <member name="M:Milvasoft.Helpers.Identity.Concrete.IdentityOperations`7.ValidateUserAsync(Milvasoft.Helpers.Identity.Abstract.ILoginDTO,`3)">
             <summary>
             Validating user to login.
             </summary>

@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 using Milvasoft.Helpers.DataAccess.Abstract.Entity;
+using Milvasoft.Helpers.Exceptions;
 using Milvasoft.Helpers.Identity.Concrete;
 using System;
 using System.Collections.Generic;
@@ -143,7 +144,7 @@ namespace Milvasoft.Helpers.Identity.Abstract
         #region Helper Methods
 
         /// <summary>
-        /// If <paramref name="identityResult"/> is not succeeded throwns <see cref="InvalidParameterException"/>.
+        /// If <paramref name="identityResult"/> is not succeeded throwns <see cref="MilvaUserFriendlyException"/>.
         /// </summary>
         /// <param name="identityResult"></param>
         void ThrowErrorMessagesIfNotSuccess(IdentityResult identityResult);
@@ -154,7 +155,7 @@ namespace Milvasoft.Helpers.Identity.Abstract
         /// <param name="loginDTO"></param>
         /// <param name="user"></param>
         /// <returns></returns>
-        Task<(TUser tUser, TLoginResultDTO loginResult)> ValidateUser(ILoginDTO loginDTO, TUser user);
+        Task<(TUser tUser, TLoginResultDTO loginResult)> ValidateUserAsync(ILoginDTO loginDTO, TUser user);
 
         /// <summary>
         /// Roll is added according to user type and token is produced.
