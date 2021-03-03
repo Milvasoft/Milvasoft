@@ -117,7 +117,7 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
         /// <summary>
         /// User update process.
         /// </summary>
-        public void InitializeUpdating<TEntity, TKey>(TEntity entity) where TEntity : class, IAuditable<TKey>
+        public void InitializeUpdating<TEntity, TKey>(TEntity entity) where TEntity : class, IBaseEntity<TKey>
                                                                       where TKey : struct, IEquatable<TKey>
         {
             var localEntity = _dbContext.Set<TEntity>().Local.FirstOrDefault(u => u.Id.Equals(entity.Id));
@@ -151,7 +151,7 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
         public async Task RemoveExpiredTokensAsync<TUser, TKey>(UserManager<TUser> userManager,
                                                                 string loginProvider,
                                                                 string tokenName,
-                                                                Dictionary<string, string> cachedTokenDictionary = null) where TUser : IdentityUser<TKey>, IFullAuditable<TKey>
+                                                                Dictionary<string, string> cachedTokenDictionary = null) where TUser : IdentityUser<TKey>, IBaseEntity<TKey>
                                                                                                                          where TKey : struct, IEquatable<TKey>
         {
             var tokenHandler = new JwtSecurityTokenHandler();

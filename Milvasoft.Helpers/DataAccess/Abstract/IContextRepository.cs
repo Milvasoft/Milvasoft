@@ -46,7 +46,7 @@ namespace Milvasoft.Helpers.DataAccess.Abstract
         /// <summary>
         /// User update process.
         /// </summary>
-        void InitializeUpdating<TEntity, TKey>(TEntity entity) where TEntity : class, IAuditable<TKey>
+        void InitializeUpdating<TEntity, TKey>(TEntity entity) where TEntity : class, IBaseEntity<TKey>
                                                                where TKey : struct, IEquatable<TKey>;
 
         /// <summary>
@@ -72,7 +72,7 @@ namespace Milvasoft.Helpers.DataAccess.Abstract
         Task RemoveExpiredTokensAsync<TUser, TKey>(UserManager<TUser> userManager,
                                                    string loginProvider,
                                                    string tokenName,
-                                                   Dictionary<string, string> cachedTokenDictionary = null) where TUser : IdentityUser<TKey>, IFullAuditable<TKey>
+                                                   Dictionary<string, string> cachedTokenDictionary = null) where TUser : IdentityUser<TKey>, IBaseEntity<TKey>
                                                                                                             where TKey : struct, IEquatable<TKey>;
 
         /// <summary>

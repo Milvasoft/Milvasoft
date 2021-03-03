@@ -30,7 +30,7 @@ namespace Milvasoft.Helpers.Identity.Concrete
     /// <typeparam name="TKey"></typeparam>
     /// <typeparam name="TLoginResultDTO"></typeparam>
     public class IdentityOperations<TUserManager, TDbContext, TLocalizer, TUser, TRole, TKey, TLoginResultDTO> : IIdentityOperations<TUserManager, TDbContext, TLocalizer, TUser, TRole, TKey, TLoginResultDTO>
-       where TUser : IdentityUser<TKey>, IFullAuditable<TKey>, new()
+       where TUser : IdentityUser<TKey>, IBaseEntity<TKey>, new()
        where TRole : IdentityRole<TKey>
        where TKey : struct, IEquatable<TKey>
        where TDbContext : IdentityDbContext<TUser, TRole, TKey>
