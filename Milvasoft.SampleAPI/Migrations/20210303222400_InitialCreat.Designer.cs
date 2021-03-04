@@ -2,15 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Milvasoft.SampleAPI.Data;
 
 namespace Milvasoft.SampleAPI.Migrations
 {
     [DbContext(typeof(TodoAppDbContext))]
-    partial class TodoAppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210303222400_InitialCreat")]
+    partial class InitialCreat
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

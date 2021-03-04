@@ -1,0 +1,180 @@
+﻿.swagger-ui .info a {
+    font-size: 14px;
+    transition: all .4s;
+    font-family: sans-serif;
+    color: #e09520;
+}
+
+.swagger-ui .topbar .download-url-wrapper .select-label select {
+    flex: 2;
+    width: 100%;
+    border: 2px solid #e09520;
+    outline: none;
+    box-shadow: none;
+    background: #e09520;
+}
+
+.swagger-ui .info .title small {
+    font-size: 10px;
+    position: relative;
+    top: -5px;
+    display: inline-block;
+    margin: 0 0 0 5px;
+    padding: 2px 4px;
+    vertical-align: super;
+    border-radius: 57px;
+    background: #e09520;
+}
+
+
+.swagger-ui .opblock.opblock-get {
+    border-color: #DBD56E;
+    background: rgba(219,213,110,.4);
+}
+
+    .swagger-ui .opblock.opblock-get .opblock-summary-method {
+        background: #DBD56E;
+    }
+
+
+.swagger-ui .opblock.opblock-post {
+    border-color: #88AB75;
+    background: rgba(136,171,117,.4);
+}
+
+    .swagger-ui .opblock.opblock-post .opblock-summary-method {
+        background: #88AB75;
+    }
+
+
+.swagger-ui .opblock.opblock-patch {
+    border-color: #2D93AD;
+    background: rgba(45,147,173,.4);
+}
+
+    .swagger-ui .opblock.opblock-patch .opblock-summary-method {
+        background: #2D93AD;
+    }
+
+.swagger-ui .opblock.opblock-put {
+    border-color: #7D7C84;
+    background: rgba(125,124,132,.4);
+}
+
+    .swagger-ui .opblock.opblock-put .opblock-summary-method {
+        background: #7D7C84;
+    }
+
+.swagger-ui .opblock.opblock-delete {
+    border-color: #DE8F6E;
+    background: rgba(222,143,110,.4);
+}
+
+    .swagger-ui .opblock.opblock-delete .opblock-summary-method {
+        background: #DE8F6E;
+    }
+
+.swagger-ui {
+    background: white !important;
+}
+
+    .swagger-ui .scheme-container {
+        margin: 0 0 20px;
+        padding: 30px 0;
+        background: #e09520;
+        box-shadow: 0 1px 2px 0 rgba(0,0,0,.15);
+    }
+
+
+    .swagger-ui .btn.authorize {
+        line-height: 1;
+        display: inline;
+        color: black;
+        border-color: black;
+        background-color: transparent;
+    }
+
+        .swagger-ui .btn.authorize svg {
+            fill: black;
+        }
+
+
+
+    .swagger-ui .opblock .opblock-summary-path {
+        flex-shrink: 0;
+        font-size: 15px;
+        max-width: calc(100% - 110px - 15rem);
+        color: black;
+        font-weight: bold;
+    }
+
+    .swagger-ui .opblock .opblock-summary-description {
+        font-size: 13px;
+        flex: 1 1 auto;
+        word-break: break-word;
+        font-family: sans-serif;
+        color: white;
+        font-weight: bold;
+    }
+
+    .swagger-ui .opblock-description-wrapper p, .swagger-ui .opblock-external-docs-wrapper p, .swagger-ui .opblock-title_normal p {
+        font-size: 14px;
+        margin: 0;
+        font-family: sans-serif;
+        color: black;
+    }
+
+    .swagger-ui .parameter__name {
+        font-size: 16px;
+        font-weight: 400;
+        margin-right: .75em;
+        font-family: sans-serif;
+        color: black;
+    }
+/**/
+    .swagger-ui .opblock-tag {
+        font-size: 24px;
+        margin: 0 0 5px;
+        font-family: sans-serif;
+        color: black;
+    }
+
+    .swagger-ui .no-margin {
+        height: auto;
+        border: 1px solid white;
+        border-radius: 10px;
+        margin: 0;
+        padding: 20px;
+    }
+
+
+    .swagger-ui .model-box {
+        padding: 10px;
+        display: inline-block;
+        border-radius: 4px;
+        background: #DDC9B4 !important;
+    }
+    .swagger-ui .model-title {
+        font-size: 17px;
+        font-family: sans-serif;
+        color: black;
+    }
+    .swagger-ui table.model tr.description {
+        color: black;
+        font-weight: 400;
+    }
+
+    .swagger-ui .dialog-ux .modal-ux {
+        position: absolute;
+        z-index: 9999;
+        top: 50%;
+        left: 50%;
+        width: 100%;
+        min-width: 300px;
+        max-width: 650px;
+        transform: translate(-50%,-50%);
+        border: 1px solid #ebebeb;
+        border-radius: 4px;
+        background: #fff;
+        box-shadow: 0 10px 30px 0 rgba(0,0,0,.2);
+    }

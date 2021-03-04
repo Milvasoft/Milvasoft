@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Localization;
 using Milvasoft.Helpers.Extensions;
 using Milvasoft.Helpers.Models.Response;
@@ -9,7 +8,6 @@ using Milvasoft.Helpers.Utils;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Reflection;
 using System.Threading.Tasks;
 
 namespace Milvasoft.Helpers.Attributes.ActionFilter

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Milvasoft.SampleAPI.DTOs;
 using Milvasoft.SampleAPI.Services.Abstract;
 using System;
@@ -22,6 +23,7 @@ namespace Milvasoft.SampleAPI.Controllers
         /// Gets all categories.
         /// </summary>
         /// <returns></returns>
+        [Authorize]
         [HttpGet]
         public async Task<IActionResult> GetEntitiesAsync()
         {

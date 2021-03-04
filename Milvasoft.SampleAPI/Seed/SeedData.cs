@@ -50,19 +50,19 @@ namespace Milvasoft.SampleAPI.Seed
                                          b.SchemaBehavior(MySqlSchemaBehavior.Ignore);
                                      }).UseQueryTrackingBehavior(NO_TRACKING);
 
-            using (var context = new TodoAppDbContext(optionsBuilder.Options))
-            {
-                await context.Database.MigrateAsync().ConfigureAwait(false);
+            //using (var context = new TodoAppDbContext(optionsBuilder.Options,))
+            //{
+            //    await context.Database.MigrateAsync().ConfigureAwait(false);
 
-                var dbSet = context.Set<TEntity>();
+            //    var dbSet = context.Set<TEntity>();
 
-                var allEntities = await dbSet.ToListAsync().ConfigureAwait(false);
-                dbSet.RemoveRange(allEntities);
-                //await context.SaveChangesAsync().ConfigureAwait(false);
+            //    var allEntities = await dbSet.ToListAsync().ConfigureAwait(false);
+            //    dbSet.RemoveRange(allEntities);
+            //    //await context.SaveChangesAsync().ConfigureAwait(false);
 
-                await dbSet.AddRangeAsync(entities).ConfigureAwait(false);
-                await context.SaveChangesAsync().ConfigureAwait(false);
-            }
+            //    await dbSet.AddRangeAsync(entities).ConfigureAwait(false);
+            //    await context.SaveChangesAsync().ConfigureAwait(false);
+            //}
         }
 
         private static async Task ResetCategories()
