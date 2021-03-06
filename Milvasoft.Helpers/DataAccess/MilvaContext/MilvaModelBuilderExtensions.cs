@@ -80,7 +80,7 @@ namespace Milvasoft.Helpers.DataAccess.MilvaContext
         }
 
         /// <summary>
-        /// Configures primary keys start index.
+        /// Configures default value for update database.
         /// </summary>
         /// <param name="modelBuilder"></param>
         public static void ConfigureDefaultValue(this ModelBuilder modelBuilder)

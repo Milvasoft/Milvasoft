@@ -8,6 +8,9 @@ namespace Milvasoft.SampleAPI.Entity
         [MilvaEncrypted]
         public string Name { get; set; }
 
+        [MilvaDefaultValue("Default value added.")]
+        public string Description { get; set; }
+
         public List<Todo> Todos { get; set; }
     }
 }

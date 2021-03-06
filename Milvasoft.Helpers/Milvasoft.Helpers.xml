@@ -2494,7 +2494,7 @@
         </member>
         <member name="M:Milvasoft.Helpers.DataAccess.MilvaContext.MilvaModelBuilderExtensions.ConfigureDefaultValue(Microsoft.EntityFrameworkCore.ModelBuilder)">
             <summary>
-            Configures primary keys start index.
+            Configures default value for update database.
             </summary>
             <param name="modelBuilder"></param>
         </member>
