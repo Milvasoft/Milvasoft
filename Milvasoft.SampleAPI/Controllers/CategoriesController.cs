@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Milvasoft.SampleAPI.DTOs;
 using Milvasoft.SampleAPI.Services.Abstract;
@@ -13,7 +14,6 @@ namespace Milvasoft.SampleAPI.Controllers
     {
         private IBaseService<CategoryDTO> _categoryService;
 
-
         public CategoriesController(IBaseService<CategoryDTO> categoryService)
         {
             _categoryService = categoryService;
@@ -23,7 +23,7 @@ namespace Milvasoft.SampleAPI.Controllers
         /// Gets all categories.
         /// </summary>
         /// <returns></returns>
-        [Authorize]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [HttpGet]
         public async Task<IActionResult> GetEntitiesAsync()
         {

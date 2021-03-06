@@ -123,8 +123,6 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// Signs in for incoming user. Returns a token if login informations are valid or the user is not lockedout. Otherwise returns the error list.
         /// </summary>
         /// <param name="loginDTO"></param>
-        /// <param name="userValidation"></param>
-        /// <param name="tokenExpiredDate"></param>
         /// <returns></returns>
         public virtual async Task<LoginResultDTO> SignInAsync(ILoginDTO loginDTO)
         {
@@ -143,7 +141,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
             if (signInResult.Succeeded)
             {
                 //Token username,IsPersonnel ve rollere göre üretilir
-                loginResult.Token = await GenerateTokenWithRoleAsync(user: user, DateTime.Now.AddDays(999999)).ConfigureAwait(false);
+                loginResult.Token = await GenerateTokenWithRoleAsync(user: user, DateTime.Now.AddHours(9)).ConfigureAwait(false);
 
                 return loginResult;
             }

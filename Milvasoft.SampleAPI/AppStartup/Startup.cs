@@ -65,9 +65,9 @@ namespace Milvasoft.SampleAPI.AppStartup
         /// <param name="env"></param>
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            app.UseRouting();
-
             app.ConfigureLocalization();
+
+            app.UseExceptionHandlerMiddleware();
 
             app.UseMilvaGeneralMiddleware();
 
@@ -80,8 +80,6 @@ namespace Milvasoft.SampleAPI.AppStartup
             app.UseAuthentication();
 
             app.UseAuthorization();
-
-            app.UseExceptionHandlerMiddleware();
 
             app.UseEndpoints(endpoints =>
             {

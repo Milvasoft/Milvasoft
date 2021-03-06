@@ -583,8 +583,6 @@
             Signs in for incoming user. Returns a token if login informations are valid or the user is not lockedout. Otherwise returns the error list.
             </summary>
             <param name="loginDTO"></param>
-            <param name="userValidation"></param>
-            <param name="tokenExpiredDate"></param>
             <returns></returns>
         </member>
         <member name="M:Milvasoft.SampleAPI.Services.Concrete.AccountService.SignOutAsync">

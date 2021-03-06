@@ -310,9 +310,7 @@ namespace Milvasoft.SampleAPI.AppStartup
                     {
                         var accessToken = context.SecurityToken as JwtSecurityToken;
                         if (string.IsNullOrEmpty(context.Principal.Identity.Name)
-                            || accessToken is null
-                            || !SignedInUsers.SignedInUserTokens.ContainsKey(context.Principal.Identity.Name)
-                            || SignedInUsers.SignedInUserTokens[context.Principal.Identity.Name] != accessToken.RawData)
+                            || accessToken is null)
                             context.Fail(localizer["Unauthorized"]);
 
 
