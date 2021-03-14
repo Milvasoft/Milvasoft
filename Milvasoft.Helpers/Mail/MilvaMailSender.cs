@@ -10,12 +10,12 @@ using System.Net.Mime;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace Milvasoft.Helpers
+namespace Milvasoft.Helpers.Mail
 {
     /// <summary>
     /// Provides send mail.
     /// </summary>
-    public class MilvaMailSender
+    public class MilvaMailSender : IMilvaMailSender
     {
         /// <summary>
         /// Gets or sets mail sender.
@@ -62,9 +62,9 @@ namespace Milvasoft.Helpers
         /// <param name="body"></param>
         /// <param name="isBodyHtml"></param>
         public async Task MilvaSendMailAsync(string to,
-                                               string subject,
-                                               string body,
-                                               bool isBodyHtml = false) => await SendMailAsync(to, subject, body, isBodyHtml).ConfigureAwait(false);
+                                             string subject,
+                                             string body,
+                                             bool isBodyHtml = false) => await SendMailAsync(to, subject, body, isBodyHtml).ConfigureAwait(false);
      
         /// <summary>
         /// Provides send mail.
@@ -74,9 +74,9 @@ namespace Milvasoft.Helpers
         /// <param name="body"></param>
         /// <param name="isBodyHtml"></param>
         public async Task MilvaSendMailAsync(string to,
-                                               MailSubject subject,
-                                               string body,
-                                               bool isBodyHtml = false) => await SendMailAsync(to, CommonHelper.GetEnumDesciption(subject), body, isBodyHtml).ConfigureAwait(false);
+                                             MailSubject subject,
+                                             string body,
+                                             bool isBodyHtml = false) => await SendMailAsync(to, CommonHelper.GetEnumDesciption(subject), body, isBodyHtml).ConfigureAwait(false);
 
         #region Send With Attachment
 
@@ -90,11 +90,11 @@ namespace Milvasoft.Helpers
         /// <param name="contentType"></param>
         /// <param name="isBodyHtml"></param>
         public async Task MilvaSendMailAsync(string to,
-                                               string subject,
-                                               string body,
-                                               string filePath,
-                                               ContentType contentType,
-                                               bool isBodyHtml = false) => await SendMailWithFileAsync(to, subject, body, isBodyHtml, filePath, contentType).ConfigureAwait(false);
+                                             string subject,
+                                             string body,
+                                             string filePath,
+                                             ContentType contentType,
+                                             bool isBodyHtml = false) => await SendMailWithFileAsync(to, subject, body, isBodyHtml, filePath, contentType).ConfigureAwait(false);
 
         /// <summary>
         /// Provides send mail with attachment.
@@ -105,10 +105,10 @@ namespace Milvasoft.Helpers
         /// <param name="attachments"></param>
         /// <param name="isBodyHtml"></param>
         public async Task MilvaSendMailAsync(string to,
-                                               string subject,
-                                               string body,
-                                               List<Attachment> attachments,
-                                               bool isBodyHtml = false)
+                                             string subject,
+                                             string body,
+                                             List<Attachment> attachments,
+                                             bool isBodyHtml = false)
         {
             using var mailMessage = new MailMessage(From, to, subject, body)
             {
@@ -139,11 +139,11 @@ namespace Milvasoft.Helpers
         /// <param name="attachmentName"></param>
         /// <param name="isBodyHtml"></param>
         public async Task MilvaSendMailAsync(string to,
-                                               string subject,
-                                               string body,
-                                               string base64String,
-                                               string attachmentName,
-                                               bool isBodyHtml = false)
+                                             string subject,
+                                             string body,
+                                             string base64String,
+                                             string attachmentName,
+                                             bool isBodyHtml = false)
         {
             var base64 = base64String.Split(";base64,")?[1];
 
@@ -194,16 +194,16 @@ namespace Milvasoft.Helpers
         /// <param name="contentType"></param>
         /// <param name="isBodyHtml"></param>
         public async Task MilvaSendMailAsync(string to,
-                                               MailSubject subject,
-                                               string body,
-                                               string filePath,
-                                               ContentType contentType,
-                                               bool isBodyHtml = false) => await SendMailWithFileAsync(to,
-                                                                                                       CommonHelper.GetEnumDesciption(subject),
-                                                                                                       body,
-                                                                                                       isBodyHtml,
-                                                                                                       filePath,
-                                                                                                       contentType).ConfigureAwait(false);
+                                             MailSubject subject,
+                                             string body,
+                                             string filePath,
+                                             ContentType contentType,
+                                             bool isBodyHtml = false) => await SendMailWithFileAsync(to,
+                                                                                                     CommonHelper.GetEnumDesciption(subject),
+                                                                                                     body,
+                                                                                                     isBodyHtml,
+                                                                                                     filePath,
+                                                                                                     contentType).ConfigureAwait(false);
 
         #endregion
 
@@ -266,9 +266,9 @@ namespace Milvasoft.Helpers
         /// <param name="body"></param>
         /// <param name="isBodyHtml"></param>
         public void MilvaSendMail(string to,
-                                    string subject,
-                                    string body,
-                                    bool isBodyHtml = false) => SendMail(to, subject, body, isBodyHtml);
+                                  string subject,
+                                  string body,
+                                  bool isBodyHtml = false) => SendMail(to, subject, body, isBodyHtml);
 
         /// <summary>
         /// Provides send mail with attachment.
@@ -279,10 +279,10 @@ namespace Milvasoft.Helpers
         /// <param name="filePath"></param>
         /// <param name="isBodyHtml"></param>
         public void MilvaSendMail(string to,
-                                    string subject,
-                                    string body,
-                                    string filePath,
-                                    bool isBodyHtml = false) => SendMailWithFile(to, subject, body, isBodyHtml, filePath);
+                                  string subject,
+                                  string body,
+                                  string filePath,
+                                  bool isBodyHtml = false) => SendMailWithFile(to, subject, body, isBodyHtml, filePath);
 
         /// <summary>
         /// Provides send mail.
@@ -292,9 +292,10 @@ namespace Milvasoft.Helpers
         /// <param name="body"></param>
         /// <param name="isBodyHtml"></param>
         public void MilvaSendMail(string to,
-                                    MailSubject subject,
-                                    string body,
-                                    bool isBodyHtml = false) => SendMail(to, CommonHelper.GetEnumDesciption(subject), body, isBodyHtml);
+                                  MailSubject subject,
+                                  string body,
+                                  bool isBodyHtml = false) => SendMail(to, CommonHelper.GetEnumDesciption(subject), body, isBodyHtml);
+
 
         #region Private Methods
 
