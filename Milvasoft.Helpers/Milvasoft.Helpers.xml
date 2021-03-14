@@ -6135,6 +6135,11 @@
             UserName and token pairs for each logged in user.
             </summary>
         </member>
+        <member name="T:Milvasoft.Helpers.Mail.IMilvaMailSender">
+            <summary>
+            Provides send mail.
+            </summary>
+        </member>
         <member name="M:Milvasoft.Helpers.Mail.IMilvaMailSender.MilvaSendMailAsync(System.String,System.String,System.String,System.Boolean)">
             <summary>
             Provides send mail.

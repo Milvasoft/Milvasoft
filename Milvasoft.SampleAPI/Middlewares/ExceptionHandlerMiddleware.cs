@@ -93,21 +93,22 @@ namespace Milvasoft.SampleAPI.Middlewares
 
                     //SendExceptionMail(ex);
                 }
+                if (!context.Response.HasStarted)
+                {
+                    var response = new ExceptionResponse();
+                    response.Message = message;
+                    response.StatusCode = MilvaStatusCodes.Status600Exception;
+                    response.Success = false;
+                    response.Result = new object();
+                    response.ErrorCodes = errorCodes;
+                    var json = JsonConvert.SerializeObject(response);
+                    context.Response.ContentType = "application/json";
+                    context.Items.Remove("ActionContent");
+                    context.Response.StatusCode = MilvaStatusCodes.Status200OK;
+                    await context.Response.WriteAsync(json);
+                }
             }
-            if (!context.Response.HasStarted)
-            {
-                var response = new ExceptionResponse();
-                response.Message = message;
-                response.StatusCode = MilvaStatusCodes.Status600Exception;
-                response.Success = false;
-                response.Result = new object();
-                response.ErrorCodes = errorCodes;
-                var json = JsonConvert.SerializeObject(response);
-                context.Response.ContentType = "application/json";
-                context.Items.Remove("ActionContent");
-                context.Response.StatusCode = MilvaStatusCodes.Status200OK;
-                await context.Response.WriteAsync(json);
-            }
+           
         }
     }
 }
