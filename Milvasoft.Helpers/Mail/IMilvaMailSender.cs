@@ -9,7 +9,10 @@ using System.Threading.Tasks;
 
 namespace Milvasoft.Helpers.Mail
 {
-    interface IMilvaMailSender
+    /// <summary>
+    /// Provides send mail.
+    /// </summary>
+    public interface IMilvaMailSender
     {
         #region Async
 
