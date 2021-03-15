@@ -223,6 +223,12 @@
             <param name="entity"></param>
             <returns></returns>
         </member>
+        <member name="M:Milvasoft.SampleAPI.Data.Concrete.BaseRepo`3.#ctor(`2)">
+            <summary>
+            Constructor of <c>BillRepository</c> class.
+            </summary>
+            <param name="dbContext"></param>
+        </member>
         <member name="T:Milvasoft.SampleAPI.DTOs.IdentityDTOs.LoginDTO">
             <summary>
             Login and sign up processes are happens with this dto.
@@ -682,7 +688,7 @@
             Provides category task crud operations. 
             </summary>
         </member>
-        <member name="M:Milvasoft.SampleAPI.Services.Concrete.CategoryService.#ctor(Milvasoft.SampleAPI.Data.Abstract.IGenericRepository{Milvasoft.SampleAPI.Entity.Category})">
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.CategoryService.#ctor(Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository{Milvasoft.SampleAPI.Entity.Category,System.Guid,Milvasoft.SampleAPI.Data.TodoAppDbContext})">
             <summary>
             Constructor of category service.
             </summary>

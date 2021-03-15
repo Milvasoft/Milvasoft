@@ -140,8 +140,8 @@ namespace Milvasoft.SampleAPI.AppStartup
         /// <param name="services"></param>
         public static void ConfigureDependencyInjection(this IServiceCollection services)
         {
-            services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
-            services.AddScoped<IContextRepository<TodoAppDbContext>,ContextRepository<TodoAppDbContext>>();
+            services.AddScoped(typeof(IBaseRepository<,,>), typeof(BaseRepo<,,>));
+            services.AddScoped<IContextRepository<TodoAppDbContext>, ContextRepository<TodoAppDbContext>>();
 
             #region Services
 
@@ -165,9 +165,10 @@ namespace Milvasoft.SampleAPI.AppStartup
         {
             services.AddDbContext<TodoAppDbContext>(opt =>
             {
-                
-                opt.UseMySql(configuration.GetConnectionString("MySqlConnection"),
-                                     new MySqlServerVersion(new Version(8, 0, 21)),
+                var connectionString = configuration.GetConnectionString("MySqlConnection");
+
+                opt.UseMySql(configuration.GetConnectionString(connectionString),
+                                     ServerVersion.AutoDetect(connectionString),
                                      mySqlOptionsAction: b =>
                                      {
                                          b.EnableRetryOnFailure();

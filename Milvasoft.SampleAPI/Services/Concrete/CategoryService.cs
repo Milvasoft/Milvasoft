@@ -1,5 +1,8 @@
-﻿using Milvasoft.Helpers.Exceptions;
+﻿using Milvasoft.Helpers.DataAccess.Abstract;
+using Milvasoft.Helpers.DataAccess.IncludeLibrary;
+using Milvasoft.Helpers.Exceptions;
 using Milvasoft.Helpers.Extensions;
+using Milvasoft.SampleAPI.Data;
 using Milvasoft.SampleAPI.Data.Abstract;
 using Milvasoft.SampleAPI.DTOs;
 using Milvasoft.SampleAPI.Entity;
@@ -16,13 +19,13 @@ namespace Milvasoft.SampleAPI.Services.Concrete
     /// </summary>
     public class CategoryService : IBaseService<CategoryDTO>
     {
-        private readonly IGenericRepository<Category> _categoryRepository;
+        private readonly IBaseRepository<Category, Guid, TodoAppDbContext> _categoryRepository;
 
         /// <summary>
         /// Constructor of category service.
         /// </summary>
         /// <param name="categoryRepository"></param>
-        public CategoryService(IGenericRepository<Category> categoryRepository)
+        public CategoryService(IBaseRepository<Category, Guid, TodoAppDbContext> categoryRepository)
         {
             _categoryRepository = categoryRepository;
         }
@@ -33,7 +36,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// <returns></returns>
         public async Task<List<CategoryDTO>> GetEntitiesAsync()
         {
-            var categories = await _categoryRepository.GetEntitiesAsync(i => i.Todos).ConfigureAwait(false);
+            var categories = await _categoryRepository.GetAllAsync(i => i.Include(i=>i.Todos)).ConfigureAwait(false);
 
             var categoryDTOList = from category in categories
                                   select new CategoryDTO
@@ -55,7 +58,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// <returns></returns>
         public async Task<CategoryDTO> GetEntityAsync(Guid id)
         {
-            var category = await _categoryRepository.GetEntityAsync(id, i => i.Todos).ConfigureAwait(false);
+            var category = await _categoryRepository.GetByIdAsync(id, i => i.Include(i => i.Todos)).ConfigureAwait(false);
 
             if (category == null)
                 throw new MilvaUserFriendlyException("Veritabanında varolmayan bir kayda erişmeye çalışıyorsunuz.");
@@ -95,8 +98,8 @@ namespace Milvasoft.SampleAPI.Services.Concrete
                 Name = categoryDTO.Name,
                 CreationDate = DateTime.Now
             };
-
-            return await _categoryRepository.AddAsync(category).ConfigureAwait(false);
+            return Guid.Empty;
+            //return await _categoryRepository.AddAsync(category).ConfigureAwait(false);
 
         }
 
@@ -107,7 +110,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// <returns></returns>
         public async Task UpdateEntityAsync(CategoryDTO categoryDTO)
         {
-            var toBeUpdatedCategory = await _categoryRepository.GetEntityAsync(categoryDTO.Id).ConfigureAwait(false);
+            var toBeUpdatedCategory = await _categoryRepository.GetByIdAsync(categoryDTO.Id).ConfigureAwait(false);
 
             if (toBeUpdatedCategory == null)
                 throw new MilvaUserFriendlyException("Veritabanında varolmayan bir kaydı güncellemeye çalışıyorsunuz.");
@@ -129,7 +132,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
             if (id == Guid.Empty)
                 throw new MilvaUserFriendlyException("Veritabanında varolmayan bir kaydı silmeye çalışıyorsunuz.");
 
-            var toBeDeletedCategory = await _categoryRepository.GetEntityAsync(id).ConfigureAwait(false);
+            var toBeDeletedCategory = await _categoryRepository.GetByIdAsync(id).ConfigureAwait(false);
 
             if (toBeDeletedCategory == null)
                 throw new MilvaUserFriendlyException("Veritabanında varolmayan bir kaydı güncellemeye çalışıyorsunuz.");

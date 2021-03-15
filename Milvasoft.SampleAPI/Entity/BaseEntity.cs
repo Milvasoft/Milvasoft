@@ -1,10 +1,11 @@
-﻿using System;
+﻿using Milvasoft.Helpers.DataAccess.Abstract.Entity;
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Milvasoft.SampleAPI.Entity
 {
-    public abstract class BaseEntity
+    public abstract class BaseEntity : IBaseEntity<Guid>
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
