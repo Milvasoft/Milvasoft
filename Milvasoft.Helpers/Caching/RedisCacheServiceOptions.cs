@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using StackExchange.Redis;
 
-namespace Milvasoft.Helpers.Caching.Redis
+namespace Milvasoft.Helpers.Caching
 {
     /// <summary>
     /// The options relevant to a set of redis connections
@@ -9,7 +9,7 @@ namespace Milvasoft.Helpers.Caching.Redis
     public class RedisCacheServiceOptions
     {
         /// <summary>
-        /// Specifies the lifetime of a <see cref="IMilvaCacheService"/>.
+        /// Specifies the lifetime of a <see cref="IRedisCacheService"/>.
         /// </summary>
         public ServiceLifetime Lifetime { get; set; } = ServiceLifetime.Scoped;
 

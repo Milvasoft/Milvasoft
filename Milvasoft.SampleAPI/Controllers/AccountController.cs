@@ -23,9 +23,9 @@ namespace Milvasoft.SampleAPI.Controllers
     {
         private readonly IAccountService _accountService;
         private readonly IStringLocalizer<SharedResource> _sharedLocalizer;
-        private readonly IMilvaCacheService _cacheServer;
+        private readonly IRedisCacheService _cacheServer;
 
-        public AccountController(IAccountService accountService, IStringLocalizer<SharedResource> sharedLocalizer, IMilvaCacheService cacheServer)
+        public AccountController(IAccountService accountService, IStringLocalizer<SharedResource> sharedLocalizer, IRedisCacheService cacheServer)
         {
             _accountService = accountService;
             _sharedLocalizer = sharedLocalizer;

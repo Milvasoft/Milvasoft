@@ -1,15 +1,14 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using Milvasoft.Helpers.Caching.Redis;
 
 namespace Milvasoft.Helpers.Caching
 {
     /// <summary>
-    /// <see cref="IServiceCollection"/> extension for adding <see cref="IMilvaCacheService"/>.
+    /// <see cref="IServiceCollection"/> extension for adding <see cref="IRedisCacheService"/>.
     /// </summary>
     public static class ServiceCollectionExtension
     {
         /// <summary>
-        /// Adds <see cref="IMilvaCacheService"/> to <see cref="IServiceCollection"/> by <see cref="RedisCacheServiceOptions.Lifetime"/>.
+        /// Adds <see cref="IRedisCacheService"/> to <see cref="IServiceCollection"/> by <see cref="RedisCacheServiceOptions.Lifetime"/>.
         /// </summary>
         /// <param name="services"></param>
         /// <param name="options"></param>
@@ -21,11 +20,11 @@ namespace Milvasoft.Helpers.Caching
             switch (options.Lifetime)
             {
                 case ServiceLifetime.Singleton:
-                    return services.AddSingleton<IMilvaCacheService, RedisCacheService>();
+                    return services.AddSingleton<IRedisCacheService, RedisCacheService>();
                 case ServiceLifetime.Scoped:
-                    return services.AddScoped<IMilvaCacheService, RedisCacheService>();
+                    return services.AddScoped<IRedisCacheService, RedisCacheService>();
                 case ServiceLifetime.Transient:
-                    return services.AddTransient<IMilvaCacheService, RedisCacheService>();
+                    return services.AddTransient<IRedisCacheService, RedisCacheService>();
             }
 
             return services;

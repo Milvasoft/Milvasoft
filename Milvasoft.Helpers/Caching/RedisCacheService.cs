@@ -2,12 +2,12 @@
 using System;
 using System.Threading.Tasks;
 
-namespace Milvasoft.Helpers.Caching.Redis
+namespace Milvasoft.Helpers.Caching
 {
     /// <summary>
     /// Provides redis cache operations.
     /// </summary>
-    public class RedisCacheService : IMilvaCacheService
+    public class RedisCacheService : IRedisCacheService
     {
         private ConnectionMultiplexer _client;
         private readonly ConfigurationOptions _options;
@@ -33,22 +33,28 @@ namespace Milvasoft.Helpers.Caching.Redis
         #region Async
 
         /// <summary>
-        /// Connects redis database.
+        /// Connects redis database if there is no connection. Otherwise this method does nothing.
         /// </summary>
         /// <returns></returns>
-        public async Task ConnectAsync() => _client = await ConnectionMultiplexer.ConnectAsync(_options).ConfigureAwait(false);
+        public async Task ConnectAsync()
+        {
+            if (!IsConnected())
+                _client = await ConnectionMultiplexer.ConnectAsync(_options).ConfigureAwait(false);
+        }
 
         /// <summary>
         /// Close all connections.
+        /// If connection exists, closes the connection.
+        /// If connection not exists, disposes client object.
         /// </summary>
         /// <returns></returns>
         public async Task DisconnectAsync()
         {
-            if (_client != null && _client.IsConnected)
+            if (_client != null && IsConnected())
             {
                 await _client.CloseAsync().ConfigureAwait(false);
             }
-            else if (_client != null && !_client.IsConnected)
+            else if (_client != null && !IsConnected())
             {
                 _client.Dispose();
             }

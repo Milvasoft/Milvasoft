@@ -6,7 +6,7 @@ namespace Milvasoft.Helpers.Caching
     /// <summary>
     /// Provides caching operations.
     /// </summary>
-    public interface IMilvaCacheService
+    public interface IRedisCacheService
     {
         /// <summary>
         /// Gets redis client connection state.
@@ -17,13 +17,15 @@ namespace Milvasoft.Helpers.Caching
         #region Async
 
         /// <summary>
-        /// Connects redis database.
+        /// Connects redis database if there is no connection. Otherwise this method does nothing.
         /// </summary>
         /// <returns></returns>
         Task ConnectAsync();
 
         /// <summary>
         /// Close all connections.
+        /// If connection exists, closes the connection.
+        /// If connection not exists, disposes client object.
         /// </summary>
         /// <returns></returns>
         Task DisconnectAsync();
@@ -93,13 +95,15 @@ namespace Milvasoft.Helpers.Caching
         #region Sync
 
         /// <summary>
-        /// Connects redis database.
+        /// Connects redis database if there is no connection. Otherwise this method does nothing.
         /// </summary>
         /// <returns></returns>
         public void Connect();
 
         /// <summary>
         /// Close all connections.
+        /// If connection exists, closes the connection.
+        /// If connection not exists, disposes client object.
         /// </summary>
         /// <returns></returns>
         public void Disconnect();
