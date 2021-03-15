@@ -165,6 +165,7 @@ namespace Milvasoft.SampleAPI.AppStartup
         {
             services.AddDbContext<TodoAppDbContext>(opt =>
             {
+                
                 opt.UseMySql(configuration.GetConnectionString("MySqlConnection"),
                                      new MySqlServerVersion(new Version(8, 0, 21)),
                                      mySqlOptionsAction: b =>
@@ -204,8 +205,8 @@ namespace Milvasoft.SampleAPI.AppStartup
                 options.SwaggerDoc("v1.0", new OpenApiInfo
                 {
                     Version = "v1.0",
-                    Title = "Sample App ",
-                    Description = "Sample for for Milvasoft.Helpers Library",
+                    Title = "Milvasoft.Helpers Sample API",
+                    Description = "Sample API for Milvasoft.Helpers Library",
                     TermsOfService = new Uri("https://milvasoft.com"),
                     Contact = new OpenApiContact { Name = "Milvasoft Corporation", Email = "info@milvasoft.com", Url = new Uri("https://milvasoft.com") },
                     License = new OpenApiLicense { Name = "MIT", Url = new Uri("https://opensource.org/licenses/MIT") }

@@ -8,8 +8,10 @@ using System.Threading.Tasks;
 
 namespace Milvasoft.SampleAPI.Controllers
 {
-    [Route("[controller]")]
     [ApiController]
+    [ApiVersion("1.0")]
+    [ApiExplorerSettings(GroupName = "v1.0")]
+    [Route("sampleapi/[controller]")]
     public class CategoriesController : ControllerBase
     {
         private IBaseService<CategoryDTO> _categoryService;

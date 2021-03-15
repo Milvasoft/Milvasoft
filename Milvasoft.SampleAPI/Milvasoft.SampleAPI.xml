@@ -161,7 +161,7 @@
             </remarks>
             
             <returns></returns>
-            <param name="userId"></param>
+            <param name="loginDTO"></param>
             <returns></returns>
         </member>
         <member name="M:Milvasoft.SampleAPI.Controllers.AccountController.SignOutCustomerAsync">

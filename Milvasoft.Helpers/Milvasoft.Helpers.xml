@@ -316,6 +316,346 @@
             <param name="context"></param>
             <returns></returns>
         </member>
+        <member name="T:Milvasoft.Helpers.Caching.IMilvaCacheService">
+            <summary>
+            Provides caching operations.
+            </summary>
+        </member>
+        <member name="M:Milvasoft.Helpers.Caching.IMilvaCacheService.IsConnected">
+            <summary>
+            Gets redis client connection state.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.Caching.IMilvaCacheService.ConnectAsync">
+            <summary>
+            Connects redis database.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.Caching.IMilvaCacheService.DisconnectAsync">
+            <summary>
+            Close all connections.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.Caching.IMilvaCacheService.GetAsync``1(System.String)">
+            <summary>
+            Gets <paramref name="key"/>'s value.
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="key"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.Caching.IMilvaCacheService.GetAsync(System.String)">
+            <summary>
+            Gets <paramref name="key"/>'s value.
+            </summary>
+            <param name="key"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.Caching.IMilvaCacheService.SetAsync(System.String,System.Object)">
+            <summary>
+            Sets <paramref name="value"/> with <paramref name="key"/>.
+            </summary>
+            <param name="key"></param>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.Caching.IMilvaCacheService.SetAsync(System.String,System.Object,System.Nullable{System.TimeSpan})">
+            <summary>
+            Sets <paramref name="value"/> to <paramref name="key"/> with <paramref name="expiration"/>.
+            </summary>
+            <param name="key"></param>
+            <param name="value"></param>
+            <param name="expiration"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.Caching.IMilvaCacheService.RemoveAsync(System.String)">
+            <summary>
+            Removes <paramref name="key"/> and value.
+            </summary>
+            <param name="key"></param>
+        </member>
+        <member name="M:Milvasoft.Helpers.Caching.IMilvaCacheService.KeyExistsAsync(System.String)">
+            <summary>
+            Checks if there is a <paramref name="key"/> in database. 
+            </summary>
+            <param name="key"></param>
+        </member>
+        <member name="M:Milvasoft.Helpers.Caching.IMilvaCacheService.KeyExpireAsync(System.String,System.TimeSpan)">
+            <summary>
+            Sets timeout on <paramref name="key"/>.
+            </summary>
+            <param name="key"></param>
+            <param name="expiration"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.Caching.IMilvaCacheService.KeyExpireAsync(System.String,System.Nullable{System.DateTime})">
+            <summary>
+            Sets timeout on <paramref name="key"/>.
+            </summary>
+            <param name="key"></param>
+            <param name="expiration"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.Caching.IMilvaCacheService.Connect">
+            <summary>
+            Connects redis database.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.Caching.IMilvaCacheService.Disconnect">
+            <summary>
+            Close all connections.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.Caching.IMilvaCacheService.Get``1(System.String)">
+            <summary>
+            Gets <paramref name="key"/>'s value.
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="key"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.Caching.IMilvaCacheService.Get(System.String)">
+            <summary>
+            Gets <paramref name="key"/>'s value.
+            </summary>
+            <param name="key"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.Caching.IMilvaCacheService.Set(System.String,System.String)">
+            <summary>
+            Sets <paramref name="value"/> with <paramref name="key"/>.
+            </summary>
+            <param name="key"></param>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.Caching.IMilvaCacheService.Set``1(System.String,``0)">
+            <summary>
+            Sets <paramref name="value"/> with <paramref name="key"/>.
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="key"></param>
+            <param name="value"></param>
+        </member>
+        <member name="M:Milvasoft.Helpers.Caching.IMilvaCacheService.Set(System.String,System.Object,System.TimeSpan)">
+            <summary>
+            Sets <paramref name="value"/> to <paramref name="key"/> with <paramref name="expiration"/>.
+            </summary>
+            <param name="key"></param>
+            <param name="value"></param>
+            <param name="expiration"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.Caching.IMilvaCacheService.Remove(System.String)">
+            <summary>
+            Removes <paramref name="key"/> and value.
+            </summary>
+            <param name="key"></param>
+        </member>
+        <member name="M:Milvasoft.Helpers.Caching.IMilvaCacheService.KeyExists(System.String)">
+            <summary>
+            Checks if there is a <paramref name="key"/> in database. 
+            </summary>
+            <param name="key"></param>
+        </member>
+        <member name="T:Milvasoft.Helpers.Caching.Redis.RedisCacheService">
+            <summary>
+            Provides redis cache operations.
+            </summary>
+        </member>
+        <member name="M:Milvasoft.Helpers.Caching.Redis.RedisCacheService.#ctor(Milvasoft.Helpers.Caching.Redis.RedisCacheServiceOptions)">
+            <summary>
+            Initializes new instance of <see cref="T:Milvasoft.Helpers.Caching.Redis.RedisCacheService"/> with <paramref name="cacheServiceOptions"/>.
+            </summary>
+            <param name="cacheServiceOptions"></param>
+        </member>
+        <member name="M:Milvasoft.Helpers.Caching.Redis.RedisCacheService.IsConnected">
+            <summary>
+            Gets redis client connection state.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.Caching.Redis.RedisCacheService.ConnectAsync">
+            <summary>
+            Connects redis database.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.Caching.Redis.RedisCacheService.DisconnectAsync">
+            <summary>
+            Close all connections.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.Caching.Redis.RedisCacheService.GetAsync``1(System.String)">
+            <summary>
+            Gets <paramref name="key"/>'s value.
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="key"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.Caching.Redis.RedisCacheService.GetAsync(System.String)">
+            <summary>
+            Gets <paramref name="key"/>'s value.
+            </summary>
+            <param name="key"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.Caching.Redis.RedisCacheService.SetAsync(System.String,System.Object)">
+            <summary>
+            Sets <paramref name="value"/> with <paramref name="key"/>.
+            </summary>
+            <param name="key"></param>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.Caching.Redis.RedisCacheService.SetAsync(System.String,System.Object,System.Nullable{System.TimeSpan})">
+            <summary>
+            Sets <paramref name="value"/> to <paramref name="key"/> with <paramref name="expiration"/>.
+            </summary>
+            <param name="key"></param>
+            <param name="value"></param>
+            <param name="expiration"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.Caching.Redis.RedisCacheService.RemoveAsync(System.String)">
+            <summary>
+            Removes <paramref name="key"/> and value.
+            </summary>
+            <param name="key"></param>
+        </member>
+        <member name="M:Milvasoft.Helpers.Caching.Redis.RedisCacheService.KeyExistsAsync(System.String)">
+            <summary>
+            Checks if there is a <paramref name="key"/> in database. 
+            </summary>
+            <param name="key"></param>
+        </member>
+        <member name="M:Milvasoft.Helpers.Caching.Redis.RedisCacheService.KeyExpireAsync(System.String,System.TimeSpan)">
+            <summary>
+            Sets timeout on <paramref name="key"/>.
+            </summary>
+            <param name="key"></param>
+            <param name="expiration"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.Caching.Redis.RedisCacheService.KeyExpireAsync(System.String,System.Nullable{System.DateTime})">
+            <summary>
+            Sets timeout on <paramref name="key"/>.
+            </summary>
+            <param name="key"></param>
+            <param name="expiration"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.Caching.Redis.RedisCacheService.Connect">
+            <summary>
+            Connects redis database.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.Caching.Redis.RedisCacheService.Disconnect">
+            <summary>
+            Close all connections.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.Caching.Redis.RedisCacheService.Get``1(System.String)">
+            <summary>
+            Gets <paramref name="key"/>'s value.
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="key"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.Caching.Redis.RedisCacheService.Get(System.String)">
+            <summary>
+            Gets <paramref name="key"/>'s value.
+            </summary>
+            <param name="key"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.Caching.Redis.RedisCacheService.Set(System.String,System.String)">
+            <summary>
+            Sets <paramref name="value"/> with <paramref name="key"/>.
+            </summary>
+            <param name="key"></param>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.Caching.Redis.RedisCacheService.Set``1(System.String,``0)">
+            <summary>
+            Sets <paramref name="value"/> with <paramref name="key"/>.
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="key"></param>
+            <param name="value"></param>
+        </member>
+        <member name="M:Milvasoft.Helpers.Caching.Redis.RedisCacheService.Set(System.String,System.Object,System.TimeSpan)">
+            <summary>
+            Sets <paramref name="value"/> to <paramref name="key"/> with <paramref name="expiration"/>.
+            </summary>
+            <param name="key"></param>
+            <param name="value"></param>
+            <param name="expiration"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.Caching.Redis.RedisCacheService.Remove(System.String)">
+            <summary>
+            Removes <paramref name="key"/> and value.
+            </summary>
+            <param name="key"></param>
+        </member>
+        <member name="M:Milvasoft.Helpers.Caching.Redis.RedisCacheService.KeyExists(System.String)">
+            <summary>
+            Checks if there is a <paramref name="key"/> in database. 
+            </summary>
+            <param name="key"></param>
+        </member>
+        <member name="T:Milvasoft.Helpers.Caching.Redis.RedisCacheServiceOptions">
+            <summary>
+            The options relevant to a set of redis connections
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.Caching.Redis.RedisCacheServiceOptions.Lifetime">
+            <summary>
+            Specifies the lifetime of a <see cref="T:Milvasoft.Helpers.Caching.IMilvaCacheService"/>.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.Caching.Redis.RedisCacheServiceOptions.ConnectWhenCreatingNewInstance">
+            <summary>
+            Determines object creation option.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.Caching.Redis.RedisCacheServiceOptions.ConfigurationOptions">
+            <summary>
+            Redis configurations.
+            </summary>
+        </member>
+        <member name="M:Milvasoft.Helpers.Caching.Redis.RedisCacheServiceOptions.#ctor(System.String)">
+            <summary>
+            Initializes new instance of <see cref="T:Milvasoft.Helpers.Caching.Redis.RedisCacheServiceOptions"/>.
+            <paramref name="connectionString"/> will be added in <see cref="P:StackExchange.Redis.ConfigurationOptions.EndPoints"/>.
+            </summary>
+            <param name="connectionString"></param>
+        </member>
+        <member name="T:Milvasoft.Helpers.Caching.ServiceCollectionExtension">
+            <summary>
+            <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/> extension for adding <see cref="T:Milvasoft.Helpers.Caching.IMilvaCacheService"/>.
+            </summary>
+        </member>
+        <member name="M:Milvasoft.Helpers.Caching.ServiceCollectionExtension.AddMilvaRedisCaching(Microsoft.Extensions.DependencyInjection.IServiceCollection,Milvasoft.Helpers.Caching.Redis.RedisCacheServiceOptions)">
+            <summary>
+            Adds <see cref="T:Milvasoft.Helpers.Caching.IMilvaCacheService"/> to <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/> by <see cref="P:Milvasoft.Helpers.Caching.Redis.RedisCacheServiceOptions.Lifetime"/>.
+            </summary>
+            <param name="services"></param>
+            <param name="options"></param>
+            <returns></returns>
+        </member>
         <member name="T:Milvasoft.Helpers.CommonHelper">
             <summary>
             Common Helper class.
@@ -414,6 +754,21 @@
             </summary>
             <param name="serviceProvider"></param>
             <param name="resourceType"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.CommonHelper.ToJson(System.Object)">
+            <summary>
+            Converts <paramref name="value"/> to <see cref="T:System.String"/>.
+            </summary>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.CommonHelper.ToObject``1(System.String)">
+            <summary>
+            Converts <paramref name="value"/> to <typeparamref name="T"/>.
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="value"></param>
             <returns></returns>
         </member>
         <member name="T:Milvasoft.Helpers.DataAccess.Abstract.Entity.Auditing.IHasCreator`1">

@@ -15,6 +15,7 @@
 		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.2" />
 		<PackageReference Include="Microsoft.Extensions.Localization.Abstractions" Version="5.0.2" />
 		<PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+		<PackageReference Include="StackExchange.Redis" Version="2.2.4" />
 		<PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.8.0" />
 	</ItemGroup>
 
@@ -44,7 +45,7 @@
 		<Description>Helpers classes for projects. Please contribute for improvements. </Description>
 		<PackageTags>json,file,image,helper,milvasoft,extensions,filter,request,response</PackageTags>
 		<Copyright>Milvasoft Yazılım Bilişim Araştırma Geliştirme Danışmanlık Sanayi ve Ticaret Ltd.Şti.</Copyright>
-		<Version>6.1.9</Version>
+		<Version>6.2.0</Version>
 		<PackageIcon>milvalogo.png</PackageIcon>
 
 	</PropertyGroup>

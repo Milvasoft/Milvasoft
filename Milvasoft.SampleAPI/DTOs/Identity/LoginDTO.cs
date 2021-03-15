@@ -1,5 +1,4 @@
-﻿using Milvasoft.Helpers.Attributes.Validation;
-using Milvasoft.Helpers.Identity.Abstract;
+﻿using Milvasoft.Helpers.Identity.Abstract;
 using Milvasoft.SampleAPI.Utils.Attributes.ValidationAttributes;
 
 namespace Milvasoft.SampleAPI.DTOs.IdentityDTOs

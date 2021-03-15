@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
+using Milvasoft.Helpers.Caching;
 using Milvasoft.Helpers.Extensions;
 using Milvasoft.Helpers.Models.Response;
 using Milvasoft.Helpers.Utils;
@@ -17,16 +18,33 @@ namespace Milvasoft.SampleAPI.Controllers
     [ApiController]
     [ApiVersion("1.0")]
     [ApiExplorerSettings(GroupName = "v1.0")]
-    [Route("obk-api/[controller]")]
+    [Route("sampleapi/[controller]")]
     public class AccountController : ControllerBase
     {
         private readonly IAccountService _accountService;
         private readonly IStringLocalizer<SharedResource> _sharedLocalizer;
+        private readonly IMilvaCacheService _cacheServer;
 
-        public AccountController(IAccountService accountService, IStringLocalizer<SharedResource> sharedLocalizer)
+        public AccountController(IAccountService accountService, IStringLocalizer<SharedResource> sharedLocalizer, IMilvaCacheService cacheServer)
         {
             _accountService = accountService;
             _sharedLocalizer = sharedLocalizer;
+            _cacheServer = cacheServer;
+        }
+
+        [HttpGet("CacheDemo")]
+        [AllowAnonymous]
+        public async Task<IActionResult> Get()
+        {
+            await _cacheServer.ConnectAsync();
+
+            if (_cacheServer.IsConnected())
+            {
+                await _cacheServer.SetAsync("lemon", "lemonate").ConfigureAwait(false);
+
+                return Ok(await _cacheServer.GetAsync("lemon").ConfigureAwait(false));
+            }
+            else return Ok("Error when connecting redis server.");
         }
 
         /// <summary>
@@ -86,7 +104,7 @@ namespace Milvasoft.SampleAPI.Controllers
         /// </remarks>
         /// 
         /// <returns></returns>
-        /// <param name="userId"></param>
+        /// <param name="loginDTO"></param>
         /// <returns></returns>
         [HttpPost("SignIn")]
         [AllowAnonymous]

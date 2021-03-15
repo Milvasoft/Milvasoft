@@ -3,6 +3,7 @@ using Microsoft.Extensions.Localization;
 using Milvasoft.Helpers.Exceptions;
 using Milvasoft.Helpers.Extensions;
 using Milvasoft.Helpers.Utils;
+using Newtonsoft.Json;
 using System;
 using System.ComponentModel;
 using System.Linq;
@@ -199,6 +200,27 @@ namespace Milvasoft.Helpers
             var assemblyName = new AssemblyName(resourceType.GetTypeInfo().Assembly.FullName);
 
             return localizerFactory.Create(resourceType.Name, assemblyName.Name);
+        }
+
+        /// <summary>
+        /// Converts <paramref name="value"/> to <see cref="string"/>.
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public static string ToJson(this object value)
+        {
+            return JsonConvert.SerializeObject(value);
+        }
+
+        /// <summary>
+        /// Converts <paramref name="value"/> to <typeparamref name="T"/>.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public static T ToObject<T>(this string value) where T : class
+        {
+            return string.IsNullOrEmpty(value) ? null : JsonConvert.DeserializeObject<T>(value);
         }
 
     }

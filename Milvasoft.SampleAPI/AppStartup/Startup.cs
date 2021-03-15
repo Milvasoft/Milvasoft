@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Milvasoft.Helpers.Caching;
+using Milvasoft.Helpers.Caching.Redis;
 using Milvasoft.Helpers.FileOperations.Abstract;
 using Milvasoft.Helpers.FileOperations.Concrete;
 using Milvasoft.SampleAPI.Data;
@@ -44,6 +46,17 @@ namespace Milvasoft.SampleAPI.AppStartup
         public void ConfigureServices(IServiceCollection services)
         {
             services.ConfigureMVC();
+
+            var cacheOptions = new RedisCacheServiceOptions("127.0.0.1:6379")
+            {
+                Lifetime = ServiceLifetime.Scoped,
+                ConnectWhenCreatingNewInstance = false
+            };
+
+            cacheOptions.ConfigurationOptions.AbortOnConnectFail = false;
+            cacheOptions.ConfigurationOptions.ConnectTimeout = 2000;
+
+            services.AddMilvaRedisCaching(cacheOptions);
 
             services.AddLocalization(options => options.ResourcesPath = "Resources");
 
@@ -97,7 +110,7 @@ namespace Milvasoft.SampleAPI.AppStartup
 
             #endregion
 
-            app.ConfigureSwagger();     
+            app.ConfigureSwagger();
         }
     }
 }
