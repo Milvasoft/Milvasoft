@@ -167,13 +167,13 @@ namespace Milvasoft.SampleAPI.AppStartup
             {
                 var connectionString = configuration.GetConnectionString("MySqlConnection");
 
-                opt.UseMySql(configuration.GetConnectionString(connectionString),
-                                     ServerVersion.AutoDetect(connectionString),
-                                     mySqlOptionsAction: b =>
-                                     {
-                                         b.EnableRetryOnFailure();
-                                         b.SchemaBehavior(MySqlSchemaBehavior.Ignore);
-                                     }).UseQueryTrackingBehavior(NO_TRACKING);
+                opt.UseMySql(connectionString,
+                             ServerVersion.AutoDetect(connectionString),
+                             mySqlOptionsAction: b =>
+                             {
+                                 b.EnableRetryOnFailure();
+                                 b.SchemaBehavior(MySqlSchemaBehavior.Ignore);
+                             }).UseQueryTrackingBehavior(NO_TRACKING);
 
             }).AddSingleton<IAuditConfiguration>(new AuditConfiguration(true, true, true, true, true, true));
         }
