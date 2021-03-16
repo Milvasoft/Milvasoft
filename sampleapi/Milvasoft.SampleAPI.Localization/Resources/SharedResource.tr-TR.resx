@@ -1,0 +1,1305 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="AccountTimeOut" xml:space="preserve">
+    <value>Oturumunuz zaman aşımına uğradı.</value>
+  </data>
+  <data name="ActionDELETE" xml:space="preserve">
+    <value>Silindi</value>
+  </data>
+  <data name="ActionPOST" xml:space="preserve">
+    <value>Eklendi</value>
+  </data>
+  <data name="ActionPUT" xml:space="preserve">
+    <value>Güncellendi</value>
+  </data>
+  <data name="AddingNewEntityWithExistsIdException" xml:space="preserve">
+    <value>Varolan veri kimliği ile aynı veri kimliğine sahip bir veri ekleyemezsiniz!</value>
+  </data>
+  <data name="AdminChangedRollCallTypes" xml:space="preserve">
+    <value>Yetkili kişi personellerin yoklama çizelgelerindeki yoklama durumlarını güncelledi.</value>
+  </data>
+  <data name="AlreadyLoggedOutMessage" xml:space="preserve">
+    <value>Zaten sistemden çıkış yapılmış.</value>
+  </data>
+  <data name="AnyEntityWasNotFound" xml:space="preserve">
+    <value>Herhangi bir {0} bulunamadı.</value>
+  </data>
+  <data name="AppStoppedSuccessfully" xml:space="preserve">
+    <value>Uygulama başarıyla durduruldu.</value>
+  </data>
+  <data name="CannotBeAddedProductToStockException" xml:space="preserve">
+    <value>Bu ürünün stoğu eklenemez çünkü ürün stoklanabilir değil!</value>
+  </data>
+  <data name="CannotDeleteOrUpdateDefaultRecords" xml:space="preserve">
+    <value>Veritabanındaki varsayılan verileri güncelleyemez veya silemezsiniz.</value>
+  </data>
+  <data name="CannotFindCasualtiesByMaterial" xml:space="preserve">
+    <value>Materyale ait zayiat bilgisi bulunamadı.</value>
+  </data>
+  <data name="CannotFindCasualtiesByProduct" xml:space="preserve">
+    <value>Ürüne ait zayiat bilgisi bulunamadı.</value>
+  </data>
+  <data name="CannotFindEntityException" xml:space="preserve">
+    <value>Bu işlemi yaparken erişmeye çalıştığınız veri bulunamadı. Veri daha önceden silinmiş olabilir. Lütfen işleminizi kontrol ediniz. Sorun çözülmezse Milvasoft teknik ekibi ile iletişime geçiniz.</value>
+  </data>
+  <data name="CannotFindEnumByIdException" xml:space="preserve">
+    <value>Enum bulunamadı.</value>
+  </data>
+  <data name="CannotStartRedisServerException" xml:space="preserve">
+    <value>Redis server başlatılamadı.</value>
+  </data>
+  <data name="CashUpSuccessful" xml:space="preserve">
+    <value>Gün sonu alma işlemi başarıyla gerçekleştirildi.</value>
+  </data>
+  <data name="ClosedTableBill" xml:space="preserve">
+    <value>Masanın gün içindeki geçmiş bilgileri</value>
+  </data>
+  <data name="ControllersSingleObjectWasNotFound" xml:space="preserve">
+    <value>{0} bulunamadı.</value>
+  </data>
+  <data name="CouldBeLiked" xml:space="preserve">
+    <value>Üzgünüz! Beğenebileceğiniz bir ürün bulamadık.</value>
+  </data>
+  <data name="CustomCustomerPaymentPaidLogMessage" xml:space="preserve">
+    <value>Özel müşterinin ödemesi ödendi olarak işaretlendi.</value>
+  </data>
+  <data name="CustomCustomerPaymentSuccessfully" xml:space="preserve">
+    <value>Özel müşterinin ödemesi başarıyla gerçekleştirildi.</value>
+  </data>
+  <data name="DebtPaymentPlanLogMessage" xml:space="preserve">
+    <value>Borcun ödeme planı ödendi.</value>
+  </data>
+  <data name="DebtPaymentPlansLogMessage" xml:space="preserve">
+    <value>Borç ödeme planları ödendi.</value>
+  </data>
+  <data name="DebtsPaidLogMessage" xml:space="preserve">
+    <value>Borçlar ödendi.</value>
+  </data>
+  <data name="DebtSuccessfullyPaid" xml:space="preserve">
+    <value>Borç başarıyla ödendi.</value>
+  </data>
+  <data name="DeletingEntityWithRelationsException" xml:space="preserve">
+    <value>Bir ilişkisi olan verileri silmeye çalışıyorsunuz.</value>
+  </data>
+  <data name="DeletingInvalidEntityException" xml:space="preserve">
+    <value>Geçersiz silme işlemi!</value>
+  </data>
+  <data name="DeletingSupplierWithDebtExcepiton" xml:space="preserve">
+    <value>{0} adlı tedarikçiye ait ödenmemiş borç(lar) bulunmaktadır. </value>
+  </data>
+  <data name="DiscountAppliedSuccesstully" xml:space="preserve">
+    <value>İndirim başarıyla uygulandı.</value>
+  </data>
+  <data name="EarlyPaymentWasCompletedSuccessfully" xml:space="preserve">
+    <value>Erken ödeme işlemi başarıyla tamamlandı.</value>
+  </data>
+  <data name="EmptyListException" xml:space="preserve">
+    <value>En az bir öğe seçilmelidir.</value>
+  </data>
+  <data name="ExpenseDescription" xml:space="preserve">
+    <value>{0}  {1}  {2} ₺'den alındı.</value>
+  </data>
+  <data name="ExpiredDemoException" xml:space="preserve">
+    <value>Demo süreniz bitmiştir lütfen Milvasoft ile iletişime geçin.</value>
+  </data>
+  <data name="FeatureNotImplementedException" xml:space="preserve">
+    <value>Bu özellik henüz kullanımda değil.</value>
+  </data>
+  <data name="FeedbackFlagStatusLogMessage" xml:space="preserve">
+    <value>Müşteri geri bildiriminin bayrak durumu değiştirildi.</value>
+  </data>
+  <data name="FeedbackSeenStatusLogMessage" xml:space="preserve">
+    <value>Müşteri geri bildiriminin görüldü durumu değiştirildi.</value>
+  </data>
+  <data name="FileIsTooBigMessage" xml:space="preserve">
+    <value>Dosya boyutu çok büyük. Lütfen {0} MB veya daha küçük boyutlu bir dosya yükleyin.</value>
+  </data>
+  <data name="FilteringErrorMessage" xml:space="preserve">
+    <value>Arama kriterlerine uygun bir {0} bulunamadı.</value>
+  </data>
+  <data name="Forbidden" xml:space="preserve">
+    <value>Erişim izniniz yok.</value>
+  </data>
+  <data name="IdentityConcurrencyFailure" xml:space="preserve">
+    <value>Eşzamanlılık hatası, veri değiştirildi.</value>
+  </data>
+  <data name="IdentityDefaultError" xml:space="preserve">
+    <value>Bilinmeyen bir hata meydana geldi.</value>
+  </data>
+  <data name="IdentityDuplicateEmail" xml:space="preserve">
+    <value>Bu email hesabına sahip başka bir kullanıcı bulunuyor.</value>
+  </data>
+  <data name="IdentityDuplicateRoleName" xml:space="preserve">
+    <value>Bu rol zaten var.</value>
+  </data>
+  <data name="IdentityDuplicateUsername" xml:space="preserve">
+    <value>Bu kullanıcı adına sahip başka bir kullanıcı bulunuyor.</value>
+  </data>
+  <data name="IdentityInvalidEmail" xml:space="preserve">
+    <value>Geçersiz email hesabı girdiniz.</value>
+  </data>
+  <data name="IdentityInvalidRoleName" xml:space="preserve">
+    <value>Geçersiz bir rol adı girdiniz.</value>
+  </data>
+  <data name="IdentityInvalidToken" xml:space="preserve">
+    <value>Geçersiz kimlik bilgisi.</value>
+  </data>
+  <data name="IdentityInvalidUsername" xml:space="preserve">
+    <value>Geçersiz bir kullanıcı adı girdiniz.</value>
+  </data>
+  <data name="IdentityLoginAlreadyAssociated" xml:space="preserve">
+    <value>Bu kullanıcı zaten giriş yapmış.</value>
+  </data>
+  <data name="IdentityPasswordMismatch" xml:space="preserve">
+    <value>Yanlış şifre girdiniz.</value>
+  </data>
+  <data name="IdentityPasswordRequiresDigit" xml:space="preserve">
+    <value>Şifre en az bir rakam içermelidir.</value>
+  </data>
+  <data name="IdentityPasswordRequiresLower" xml:space="preserve">
+    <value>Şifre en az bir küçük harf içermelidir.</value>
+  </data>
+  <data name="IdentityPasswordRequiresNonAlphanumeric" xml:space="preserve">
+    <value>Parola en az bir alfanümerik karakter içermelidir.</value>
+  </data>
+  <data name="IdentityPasswordRequiresUniqueChars" xml:space="preserve">
+    <value>Parola en az bir özel karakter içermelidir.</value>
+  </data>
+  <data name="IdentityPasswordRequiresUpper" xml:space="preserve">
+    <value>Şifre en az bir büyük harf içermelidir.</value>
+  </data>
+  <data name="IdentityPasswordTooShort" xml:space="preserve">
+    <value>Şifre uzunluğu çok kısa.</value>
+  </data>
+  <data name="IdentityRecoveryCodeRedemptionFailed" xml:space="preserve">
+    <value>Kurtarma başarısız oldu.</value>
+  </data>
+  <data name="IdentityResultException" xml:space="preserve">
+    <value>Kullanıcı işlemlerinde bir hata gerçekleşti.</value>
+  </data>
+  <data name="IdentityUserAlreadyHasPassword" xml:space="preserve">
+    <value>Kullanıcının zaten bir şifresi var.</value>
+  </data>
+  <data name="IdentityUserAlreadyInRole" xml:space="preserve">
+    <value>Kullanıcı zaten bu role atanmış.</value>
+  </data>
+  <data name="IdentityUserLockoutNotEnabled" xml:space="preserve">
+    <value>Bu kullanıcı için kilitleme etkinleştirilmedi.</value>
+  </data>
+  <data name="IdentityUserNotInRole" xml:space="preserve">
+    <value>Kullanıcı bu role atanmamış.</value>
+  </data>
+  <data name="InstantReportFilteredWasNotFound" xml:space="preserve">
+    <value>Arama kriterlerine uygun bir anlık {0} bulunamadı.</value>
+  </data>
+  <data name="InstantReportWantedWasNotFound" xml:space="preserve">
+    <value>Anlık {0} bulunamadı.</value>
+  </data>
+  <data name="InstitutionSuccessfullyRated" xml:space="preserve">
+    <value>İşletme başarıyla oylandı. Değerlendirmeniz için teşekkürler.</value>
+  </data>
+  <data name="InvalidItemRangeException" xml:space="preserve">
+    <value>Lütfen geçerli bir 'listelenecek eleman' sayısı giriniz.</value>
+  </data>
+  <data name="InvalidLicenceException" xml:space="preserve">
+    <value>Geçersiz lisans!</value>
+  </data>
+  <data name="InvalidNumericValueException" xml:space="preserve">
+    <value>Girilen {0} sayısal değeri bu işlem için geçersiz bir değerdir.</value>
+  </data>
+  <data name="InvalidPageIndexException" xml:space="preserve">
+    <value>Lütfen geçerli bir sayfa numarası giriniz.</value>
+  </data>
+  <data name="InvalidPageIndexMessage" xml:space="preserve">
+    <value>İstenen sayfa sayısı 0 olamaz. Sayfa sayısı 0'dan büyük olmalıdır.</value>
+  </data>
+  <data name="InvalidParameterException" xml:space="preserve">
+    <value>Veride hata bulundu. Lütfen Milvasoft yetkilileri ile iletişime geçiniz.</value>
+  </data>
+  <data name="InvalidRelatedProcess" xml:space="preserve">
+    <value>İşlemi yapmaya çalıştığınız verilerin ilişkili olduğu bir veri bulunmakta.</value>
+  </data>
+  <data name="InvalidRequestedItemCountMessage" xml:space="preserve">
+    <value>İstenen kayıt sayısının sayısı 0 veya daha az olamaz. İstenen kayıt sayısı 0'dan büyük olmalıdır.</value>
+  </data>
+  <data name="LocalizedAccountNo" xml:space="preserve">
+    <value>Hesap numarası</value>
+  </data>
+  <data name="LocalizedActivity" xml:space="preserve">
+    <value>Kullanıcı aktivitesi</value>
+  </data>
+  <data name="LocalizedAddress" xml:space="preserve">
+    <value>Adres</value>
+  </data>
+  <data name="LocalizedAmount" xml:space="preserve">
+    <value>Tutar</value>
+  </data>
+  <data name="LocalizedAmountInnerLimit" xml:space="preserve">
+    <value>Ara limit</value>
+  </data>
+  <data name="LocalizedAmountLowerLimit" xml:space="preserve">
+    <value>Alt limit</value>
+  </data>
+  <data name="LocalizedAmountLowerValue" xml:space="preserve">
+    <value>Miktar minimum değer</value>
+  </data>
+  <data name="LocalizedAmountOfPaid" xml:space="preserve">
+    <value>Ödenen tutar</value>
+  </data>
+  <data name="LocalizedAmountOfPaidLowerValue" xml:space="preserve">
+    <value>Ödenen miktar minimum değer</value>
+  </data>
+  <data name="LocalizedAmountOfPaidTopValue" xml:space="preserve">
+    <value>Ödenen miktar maksimum değer</value>
+  </data>
+  <data name="LocalizedAmountToBePaid" xml:space="preserve">
+    <value>Ödenecek tutar</value>
+  </data>
+  <data name="LocalizedAmountTopValue" xml:space="preserve">
+    <value>Miktar maksimum değer</value>
+  </data>
+  <data name="LocalizedAnnouncement" xml:space="preserve">
+    <value>Duyuru</value>
+  </data>
+  <data name="LocalizedBankAccountIBANNo" xml:space="preserve">
+    <value>Banka hesabı IBAN numarası</value>
+  </data>
+  <data name="LocalizedBankAccountName" xml:space="preserve">
+    <value>Banka hesap adı</value>
+  </data>
+  <data name="LocalizedBankAccountNo" xml:space="preserve">
+    <value>Banka hesap numarası</value>
+  </data>
+  <data name="LocalizedBillReport" xml:space="preserve">
+    <value>Hesap raporu</value>
+  </data>
+  <data name="LocalizedBrand" xml:space="preserve">
+    <value>Marka</value>
+  </data>
+  <data name="LocalizedCancelDescription" xml:space="preserve">
+    <value>İptal edilmiş siparişin açıklaması</value>
+  </data>
+  <data name="LocalizedCanceledOrderedReport" xml:space="preserve">
+    <value>İptal edilen sipariş raporu</value>
+  </data>
+  <data name="LocalizedCard" xml:space="preserve">
+    <value>Kart</value>
+  </data>
+  <data name="LocalizedCardName" xml:space="preserve">
+    <value>Kart adı</value>
+  </data>
+  <data name="LocalizedCasualtieAmount" xml:space="preserve">
+    <value>Zayiat miktarı</value>
+  </data>
+  <data name="LocalizedCasualtiesCount" xml:space="preserve">
+    <value>Zayiat adedi</value>
+  </data>
+  <data name="LocalizedCasulitiesDescription" xml:space="preserve">
+    <value>Zayiat açıklaması</value>
+  </data>
+  <data name="LocalizedCompanyName" xml:space="preserve">
+    <value>Firma adı</value>
+  </data>
+  <data name="LocalizedConnectionIpAddress" xml:space="preserve">
+    <value>Bağlantı ip adresi</value>
+  </data>
+  <data name="LocalizedConnectionPort" xml:space="preserve">
+    <value>Bağlantı portu</value>
+  </data>
+  <data name="LocalizedCostAmount" xml:space="preserve">
+    <value>Maliyet tutarı</value>
+  </data>
+  <data name="LocalizedCount" xml:space="preserve">
+    <value>Adet</value>
+  </data>
+  <data name="LocalizedCountLowerLimit" xml:space="preserve">
+    <value>Adet alt limit</value>
+  </data>
+  <data name="LocalizedCountLowerValue" xml:space="preserve">
+    <value>Adet minimum değer</value>
+  </data>
+  <data name="LocalizedCountry" xml:space="preserve">
+    <value>Ülke</value>
+  </data>
+  <data name="LocalizedCountTopValue" xml:space="preserve">
+    <value>Adet maksimum değer</value>
+  </data>
+  <data name="LocalizedCustomCustomer" xml:space="preserve">
+    <value>Özel müşteri</value>
+  </data>
+  <data name="LocalizedCustomCustomerPayment" xml:space="preserve">
+    <value>Özel müşteri ödemesi</value>
+  </data>
+  <data name="LocalizedCustomer" xml:space="preserve">
+    <value>Müşteri</value>
+  </data>
+  <data name="LocalizedCustomerName" xml:space="preserve">
+    <value>Müşteri adı</value>
+  </data>
+  <data name="LocalizedDailyCountLowerValue" xml:space="preserve">
+    <value>Günlük sayı minimum değer</value>
+  </data>
+  <data name="LocalizedDailyCountTopValue" xml:space="preserve">
+    <value>Günlük sayı maksimum değer</value>
+  </data>
+  <data name="LocalizedDailyOrderingCount" xml:space="preserve">
+    <value>Günlük sipariş sayısı</value>
+  </data>
+  <data name="LocalizedDebt" xml:space="preserve">
+    <value>Borç</value>
+  </data>
+  <data name="LocalizedDebtAmoundOwed" xml:space="preserve">
+    <value>Borçlu olunan miktar</value>
+  </data>
+  <data name="LocalizedDebtDescription" xml:space="preserve">
+    <value>Borç açıklaması</value>
+  </data>
+  <data name="LocalizedDebtName" xml:space="preserve">
+    <value>Borçlu olunan kişinin adı</value>
+  </data>
+  <data name="LocalizedDebtPaid" xml:space="preserve">
+    <value>ödenmiş borç</value>
+  </data>
+  <data name="LocalizedDebtSurname" xml:space="preserve">
+    <value>Borçlu olunan kişinin soyadı</value>
+  </data>
+  <data name="LocalizedDebtToName" xml:space="preserve">
+    <value>Borçlu olunan kişi adı</value>
+  </data>
+  <data name="LocalizedDebtToSurname" xml:space="preserve">
+    <value>Borçlu olunan kişi soyadı</value>
+  </data>
+  <data name="LocalizedDeferredDifference" xml:space="preserve">
+    <value>Vade farkı</value>
+  </data>
+  <data name="LocalizedDensity" xml:space="preserve">
+    <value>Yoğunluk derecesi</value>
+  </data>
+  <data name="LocalizedDescription" xml:space="preserve">
+    <value>Açıklama</value>
+  </data>
+  <data name="LocalizedDiscountAmount" xml:space="preserve">
+    <value>İndirim tutarı</value>
+  </data>
+  <data name="LocalizedDiscountAmountForPaid" xml:space="preserve">
+    <value>İndirimli ödenen tutar</value>
+  </data>
+  <data name="LocalizedDiscountAmountForPayment" xml:space="preserve">
+    <value>İndirimli ödeme tutarı</value>
+  </data>
+  <data name="LocalizedDiscountAmountOfSales" xml:space="preserve">
+    <value>Satışlardaki indirim</value>
+  </data>
+  <data name="LocalizedDiscountedPaymentPrice" xml:space="preserve">
+    <value>İndirimli ödeme tutarı</value>
+  </data>
+  <data name="LocalizedDiscountFactor" xml:space="preserve">
+    <value>İndirim oranı</value>
+  </data>
+  <data name="LocalizedDiscountPercent" xml:space="preserve">
+    <value>İndirim yüzdesi</value>
+  </data>
+  <data name="LocalizedDisplayName" xml:space="preserve">
+    <value>Rol adı</value>
+  </data>
+  <data name="LocalizedDistrict" xml:space="preserve">
+    <value>İlçe</value>
+  </data>
+  <data name="LocalizedDownPayment" xml:space="preserve">
+    <value>Ön ödeme</value>
+  </data>
+  <data name="LocalizedEmail" xml:space="preserve">
+    <value>Email</value>
+  </data>
+  <data name="LocalizedEmail1" xml:space="preserve">
+    <value>Email</value>
+  </data>
+  <data name="LocalizedEmail2" xml:space="preserve">
+    <value>Ek email</value>
+  </data>
+  <data name="LocalizedEmail3" xml:space="preserve">
+    <value>Ek email</value>
+  </data>
+  <data name="LocalizedEndorsementAmount" xml:space="preserve">
+    <value>Ciro tutarı</value>
+  </data>
+  <data name="LocalizedExpense" xml:space="preserve">
+    <value>Gider</value>
+  </data>
+  <data name="LocalizedExpenseAmount" xml:space="preserve">
+    <value>Gider tutarı</value>
+  </data>
+  <data name="LocalizedExpenseRevenueReport" xml:space="preserve">
+    <value>Gelir-Gider raporu</value>
+  </data>
+  <data name="LocalizedFeedback" xml:space="preserve">
+    <value>Geri bildirim</value>
+  </data>
+  <data name="LocalizedGeneralSetting" xml:space="preserve">
+    <value>Genel ayar</value>
+  </data>
+  <data name="LocalizedGlobalToken" xml:space="preserve">
+    <value>Global kimlik bilgileri</value>
+  </data>
+  <data name="LocalizedHappyHour" xml:space="preserve">
+    <value>Happy hour</value>
+  </data>
+  <data name="LocalizedHighSendMinute" xml:space="preserve">
+    <value>Gönderim süresi (çok yoğun)</value>
+  </data>
+  <data name="LocalizedIBANNO" xml:space="preserve">
+    <value>IBAN numarası</value>
+  </data>
+  <data name="LocalizedImageUrl" xml:space="preserve">
+    <value>Göreselin url adresi</value>
+  </data>
+  <data name="LocalizedInstallmentCount" xml:space="preserve">
+    <value>Taksit sayısı</value>
+  </data>
+  <data name="LocalizedInstitutionName" xml:space="preserve">
+    <value>İşletme adı</value>
+  </data>
+  <data name="LocalizedInstitutionType" xml:space="preserve">
+    <value>İşletme türü</value>
+  </data>
+  <data name="RegexExamplePhoneNumber" xml:space="preserve">
+    <value>0 505 010 79 85</value>
+  </data>
+  <data name="LocalizedIpAdress" xml:space="preserve">
+    <value>Ip adresi</value>
+  </data>
+  <data name="LocalizedIsoCode" xml:space="preserve">
+    <value>Iso kodu</value>
+  </data>
+  <data name="LocalizedKitchenDepartment" xml:space="preserve">
+    <value>Mutfak departmanı</value>
+  </data>
+  <data name="LocalizedKitchenPersonnel" xml:space="preserve">
+    <value>Mutfak personeli</value>
+  </data>
+  <data name="LocalizedKitchenPersonnelPerformanceReport" xml:space="preserve">
+    <value>Mutfak personeli performans raporu</value>
+  </data>
+  <data name="LocalizedLanguageName" xml:space="preserve">
+    <value>Dil ismi</value>
+  </data>
+  <data name="LocalizedLeastSold" xml:space="preserve">
+    <value>En az satılan değeri</value>
+  </data>
+  <data name="LocalizedLocalVersion" xml:space="preserve">
+    <value>Lokal versiyon numarası</value>
+  </data>
+  <data name="LocalizedLocationUrl" xml:space="preserve">
+    <value>Konum bilgisi url adresi</value>
+  </data>
+  <data name="LocalizedLogoUrl" xml:space="preserve">
+    <value>Logo url adresi</value>
+  </data>
+  <data name="LocalizedLowSendMinute" xml:space="preserve">
+    <value>Gönderim süresi (normal)</value>
+  </data>
+  <data name="LocalizedManagerName" xml:space="preserve">
+    <value>Yönetici adı</value>
+  </data>
+  <data name="LocalizedMaterial" xml:space="preserve">
+    <value>Materyal</value>
+  </data>
+  <data name="LocalizedMaterialAmount" xml:space="preserve">
+    <value>Miktar</value>
+  </data>
+  <data name="LocalizedMaterialAmountLowerValue" xml:space="preserve">
+    <value>Materyal miktarı minimum değer</value>
+  </data>
+  <data name="LocalizedMaterialAmountTopValue" xml:space="preserve">
+    <value>Materyal miktarı maksimum değer</value>
+  </data>
+  <data name="LocalizedMaterialCasualtie" xml:space="preserve">
+    <value>Materyal kaybı</value>
+  </data>
+  <data name="LocalizedMaterialCasualtiesReport" xml:space="preserve">
+    <value>Stok zayiat raporu</value>
+  </data>
+  <data name="LocalizedMaterialDeficitReport" xml:space="preserve">
+    <value>Stok açığı raporu</value>
+  </data>
+  <data name="LocalizedMaterialDescription" xml:space="preserve">
+    <value>Materyal açıklaması</value>
+  </data>
+  <data name="LocalizedMaterialName" xml:space="preserve">
+    <value>Materyal ismi</value>
+  </data>
+  <data name="LocalizedMatrisLocation" xml:space="preserve">
+    <value>Masanın dizilimdeki yeri</value>
+  </data>
+  <data name="LocalizedMediumSendMinute" xml:space="preserve">
+    <value>Gönderim süresi (yoğun)</value>
+  </data>
+  <data name="LocalizedMenu" xml:space="preserve">
+    <value>Menü</value>
+  </data>
+  <data name="LocalizedMessage" xml:space="preserve">
+    <value>Mesaj</value>
+  </data>
+  <data name="LocalizedMilvasoftPassword" xml:space="preserve">
+    <value>Milvasoft şifresi</value>
+  </data>
+  <data name="LocalizedName" xml:space="preserve">
+    <value>İsim</value>
+  </data>
+  <data name="LocalizedNewPassword" xml:space="preserve">
+    <value>Yeni şifre</value>
+  </data>
+  <data name="LocalizedNumber" xml:space="preserve">
+    <value>Numara</value>
+  </data>
+  <data name="LocalizedNumberOfOrderTypeTransactions" xml:space="preserve">
+    <value>Sipariş tipine göre satılan adet</value>
+  </data>
+  <data name="LocalizedNumberOfPeople" xml:space="preserve">
+    <value>Kişi sayısı</value>
+  </data>
+  <data name="LocalizedNumberOfSales" xml:space="preserve">
+    <value>Satış adedi</value>
+  </data>
+  <data name="LocalizedNumberOfSalesLowerValue" xml:space="preserve">
+    <value>Satış sayısı minimum değeri</value>
+  </data>
+  <data name="LocalizedNumberOfSalesTopValue" xml:space="preserve">
+    <value>Satış sayısı maksimum değeri</value>
+  </data>
+  <data name="LocalizedOldPassword" xml:space="preserve">
+    <value>Eski şifre</value>
+  </data>
+  <data name="LocalizedOrderBasketsCount" xml:space="preserve">
+    <value>Sipariş sepeti sayısı</value>
+  </data>
+  <data name="LocalizedOrderedReport" xml:space="preserve">
+    <value>Sipariş raporu</value>
+  </data>
+  <data name="LocalizedOutOfSaleRevenue" xml:space="preserve">
+    <value>Satış dışı gelir</value>
+  </data>
+  <data name="LocalizedOutOfSaleRevenueAmount" xml:space="preserve">
+    <value>Satış dışı gelirlerden elde edilen tutar</value>
+  </data>
+  <data name="LocalizedOwnerName" xml:space="preserve">
+    <value>Kart sahibin adı</value>
+  </data>
+  <data name="LocalizedPaidAmount" xml:space="preserve">
+    <value>Ödenen miktar</value>
+  </data>
+  <data name="LocalizedPassword" xml:space="preserve">
+    <value>Parola</value>
+  </data>
+  <data name="LocalizedPay" xml:space="preserve">
+    <value>Maaş tutarı</value>
+  </data>
+  <data name="LocalizedPayLowerValue" xml:space="preserve">
+    <value>Maaş minimum değer</value>
+  </data>
+  <data name="LocalizedPayment" xml:space="preserve">
+    <value>Ödeme</value>
+  </data>
+  <data name="LocalizedPaymentAmount" xml:space="preserve">
+    <value>Ödeme miktarı</value>
+  </data>
+  <data name="LocalizedPaymentAmountLowerValue" xml:space="preserve">
+    <value>Ödenen miktar minimum değer</value>
+  </data>
+  <data name="LocalizedPaymentAmountTopValue" xml:space="preserve">
+    <value>Ödenen miktar maksimum değer</value>
+  </data>
+  <data name="LocalizedPaymentDescription" xml:space="preserve">
+    <value>Ödeme açıklaması</value>
+  </data>
+  <data name="LocalizedPaymentPlanName" xml:space="preserve">
+    <value>Ödeme planı ismi</value>
+  </data>
+  <data name="LocalizedPaymentPrice" xml:space="preserve">
+    <value>Ödeme tutarı</value>
+  </data>
+  <data name="LocalizedPaymentType" xml:space="preserve">
+    <value>Ödeme türü</value>
+  </data>
+  <data name="LocalizedPayTopValue" xml:space="preserve">
+    <value>Maaş maksimum değer</value>
+  </data>
+  <data name="LocalizedPersonnel" xml:space="preserve">
+    <value>Personel</value>
+  </data>
+  <data name="LocalizedPersonnelCount" xml:space="preserve">
+    <value>Personel sayısı</value>
+  </data>
+  <data name="LocalizedPersonnelName" xml:space="preserve">
+    <value>Personel adı</value>
+  </data>
+  <data name="LocalizedPersonnelPerformanceReport" xml:space="preserve">
+    <value>Personel performans raporu</value>
+  </data>
+  <data name="LocalizedPersonnelSurname" xml:space="preserve">
+    <value>Personel soyadı</value>
+  </data>
+  <data name="LocalizedPhoneNumber" xml:space="preserve">
+    <value>Telefon numarası</value>
+  </data>
+  <data name="LocalizedPhoneNumber1" xml:space="preserve">
+    <value>Telefon numarası</value>
+  </data>
+  <data name="LocalizedPhoneNumber2" xml:space="preserve">
+    <value> Ek telefon numarası</value>
+  </data>
+  <data name="LocalizedPhoneNumber3" xml:space="preserve">
+    <value> Ek telefon numarası</value>
+  </data>
+  <data name="LocalizedPoint" xml:space="preserve">
+    <value>Puan</value>
+  </data>
+  <data name="LocalizedPollCount" xml:space="preserve">
+    <value>Anket sayısı</value>
+  </data>
+  <data name="LocalizedPosition" xml:space="preserve">
+    <value>Pozisyon</value>
+  </data>
+  <data name="LocalizedPositions" xml:space="preserve">
+    <value>Pozisyon(lar)</value>
+  </data>
+  <data name="LocalizedPrice" xml:space="preserve">
+    <value>Fiyat</value>
+  </data>
+  <data name="LocalizedPriceLowerValue" xml:space="preserve">
+    <value>Fiyat minimum değer</value>
+  </data>
+  <data name="LocalizedPriceTopValue" xml:space="preserve">
+    <value>Fiyat maximum değer</value>
+  </data>
+  <data name="LocalizedProduct" xml:space="preserve">
+    <value>Ürün</value>
+  </data>
+  <data name="LocalizedProductCost" xml:space="preserve">
+    <value>Ürün maliyeti</value>
+  </data>
+  <data name="LocalizedProductCostLowerValue" xml:space="preserve">
+    <value>Ürün maliyeti minimum değer</value>
+  </data>
+  <data name="LocalizedProductCostTopValue" xml:space="preserve">
+    <value>Ürün maliyeti maksimum değer</value>
+  </data>
+  <data name="LocalizedProductCount" xml:space="preserve">
+    <value>Ürün sayısı</value>
+  </data>
+  <data name="LocalizedProductCountLowerValue" xml:space="preserve">
+    <value>Ürün adedi minimum değer</value>
+  </data>
+  <data name="LocalizedProductCountTopValue" xml:space="preserve">
+    <value>Ürün adedi maksimum değer</value>
+  </data>
+  <data name="LocalizedProductDescription" xml:space="preserve">
+    <value>Ürün açıklaması</value>
+  </data>
+  <data name="LocalizedProductName" xml:space="preserve">
+    <value>Ürün ismi</value>
+  </data>
+  <data name="LocalizedProductProfitOrLossAmount" xml:space="preserve">
+    <value>Ürün satışından elde edilen kâr/zarar tutarı</value>
+  </data>
+  <data name="LocalizedProductRate" xml:space="preserve">
+    <value>Ürün puanı</value>
+  </data>
+  <data name="LocalizedProfilePhotoPath" xml:space="preserve">
+    <value>Profil resmi dosyası yolu</value>
+  </data>
+  <data name="LocalizedProfitFromSales" xml:space="preserve">
+    <value>Satışlardan elde edilen kâr</value>
+  </data>
+  <data name="LocalizedProfitFromSalesLowerValue" xml:space="preserve">
+    <value>Satışlardan elde edilen kâr minimum değer</value>
+  </data>
+  <data name="LocalizedProfitFromSalesTopValue" xml:space="preserve">
+    <value>Satışlardan elde edilen kâr maksimum değer</value>
+  </data>
+  <data name="LocalizedProfitMargin" xml:space="preserve">
+    <value>Kâr marjı</value>
+  </data>
+  <data name="LocalizedProfitMarginLowerValue" xml:space="preserve">
+    <value>Kâr marjı minimum değer</value>
+  </data>
+  <data name="LocalizedProfitMarginTopValue" xml:space="preserve">
+    <value>Kâr marjı maksimum değer</value>
+  </data>
+  <data name="LocalizedProfitRate" xml:space="preserve">
+    <value>Kâr oranı</value>
+  </data>
+  <data name="LocalizedProfitRateLowerValue" xml:space="preserve">
+    <value>Kâr oranı minimum değer</value>
+  </data>
+  <data name="LocalizedProfitRateTopValue" xml:space="preserve">
+    <value>Kâr oranı maksimum değer</value>
+  </data>
+  <data name="LocalizedQrString" xml:space="preserve">
+    <value>Qr metni</value>
+  </data>
+  <data name="LocalizedRate" xml:space="preserve">
+    <value>Puan</value>
+  </data>
+  <data name="LocalizedRemainingAmount" xml:space="preserve">
+    <value>Kalan tutar</value>
+  </data>
+  <data name="LocalizedRemainingAmountLowerValue" xml:space="preserve">
+    <value>Kalan miktar minimum değer</value>
+  </data>
+  <data name="LocalizedRemainingAmountTopValue" xml:space="preserve">
+    <value>Kalan miktar maksimum değer</value>
+  </data>
+  <data name="LocalizedReminder" xml:space="preserve">
+    <value>Hatırlatıcı</value>
+  </data>
+  <data name="LocalizedRevenueExpenseDeficit" xml:space="preserve">
+    <value>Gelir-gider farkı</value>
+  </data>
+  <data name="LocalizedRoleName" xml:space="preserve">
+    <value>Rol adı</value>
+  </data>
+  <data name="LocalizedSaleRevenueAmount" xml:space="preserve">
+    <value>Satışlarden elde edilen gelir</value>
+  </data>
+  <data name="LocalizedScenarioName" xml:space="preserve">
+    <value>Senaryo adı</value>
+  </data>
+  <data name="LocalizedSecret" xml:space="preserve">
+    <value>Gizli anahtar</value>
+  </data>
+  <data name="LocalizedService" xml:space="preserve">
+    <value>Servis</value>
+  </data>
+  <data name="LocalizedServiceRate" xml:space="preserve">
+    <value>Hizmet puanı</value>
+  </data>
+  <data name="LocalizedShift" xml:space="preserve">
+    <value>Vardiya</value>
+  </data>
+  <data name="LocalizedShiftType" xml:space="preserve">
+    <value>Vardiya tipi</value>
+  </data>
+  <data name="LocalizedSoldCount" xml:space="preserve">
+    <value>Satış adedi</value>
+  </data>
+  <data name="LocalizedSoldCountLowerValue" xml:space="preserve">
+    <value>Satış sayısı minimum değer</value>
+  </data>
+  <data name="LocalizedSoldCountTopValue" xml:space="preserve">
+    <value>Satış sayısı maksimum değer</value>
+  </data>
+  <data name="LocalizedSolveDescription" xml:space="preserve">
+    <value>Çözüm açıklaması</value>
+  </data>
+  <data name="LocalizedSpeed" xml:space="preserve">
+    <value>Hız</value>
+  </data>
+  <data name="LocalizedSpeedRate" xml:space="preserve">
+    <value>Hız puanı</value>
+  </data>
+  <data name="LocalizedState" xml:space="preserve">
+    <value>Durum</value>
+  </data>
+  <data name="LocalizedStock" xml:space="preserve">
+    <value>Stok</value>
+  </data>
+  <data name="LocalizedStockReport" xml:space="preserve">
+    <value>Stok raporu</value>
+  </data>
+  <data name="LocalizedSubstationCount" xml:space="preserve">
+    <value>Bayi sayısı</value>
+  </data>
+  <data name="LocalizedSupplier" xml:space="preserve">
+    <value>Tedarikçi</value>
+  </data>
+  <data name="LocalizedSurname" xml:space="preserve">
+    <value>Soyadı</value>
+  </data>
+  <data name="LocalizedTable" xml:space="preserve">
+    <value>Masa</value>
+  </data>
+  <data name="LocalizedTableGroup" xml:space="preserve">
+    <value>Masa grubu</value>
+  </data>
+  <data name="LocalizedTableName" xml:space="preserve">
+    <value>Masa adı</value>
+  </data>
+  <data name="LocalizedTableNumber" xml:space="preserve">
+    <value>Masa numarası</value>
+  </data>
+  <data name="LocalizedTableOrderBasket" xml:space="preserve">
+    <value>Masa sipariş sepeti</value>
+  </data>
+  <data name="LocalizedTableOrderBasketCount" xml:space="preserve">
+    <value>Masa sepetindeki sipariş sayısı</value>
+  </data>
+  <data name="LocalizedTableSequence" xml:space="preserve">
+    <value>Masanın dizilimdeki yeri</value>
+  </data>
+  <data name="LocalizedTaste" xml:space="preserve">
+    <value>Lezzet</value>
+  </data>
+  <data name="LocalizedTasteRate" xml:space="preserve">
+    <value>Lezzet puanı</value>
+  </data>
+  <data name="LocalizedTaxNo" xml:space="preserve">
+    <value>Vergi numarası</value>
+  </data>
+  <data name="LocalizedTaxOfficeName" xml:space="preserve">
+    <value>Vergi dairesi adı</value>
+  </data>
+  <data name="LocalizedTitle" xml:space="preserve">
+    <value>Başlık</value>
+  </data>
+  <data name="LocalizedToken" xml:space="preserve">
+    <value>Kimlik bilgileri</value>
+  </data>
+  <data name="LocalizedTopMenuDescription" xml:space="preserve">
+    <value>Üst menü açıklaması</value>
+  </data>
+  <data name="LocalizedTopMenuName" xml:space="preserve">
+    <value>Üst menü adı</value>
+  </data>
+  <data name="LocalizedTotalAmount" xml:space="preserve">
+    <value>Toplam tutar</value>
+  </data>
+  <data name="LocalizedTotalAmountLowerValue" xml:space="preserve">
+    <value>Toplam miktar minimum değer</value>
+  </data>
+  <data name="LocalizedTotalAmountTopValue" xml:space="preserve">
+    <value>Toplam miktar maksimum değer</value>
+  </data>
+  <data name="LocalizedTotalPayment" xml:space="preserve">
+    <value>Toplam ödeme</value>
+  </data>
+  <data name="LocalizedTotalProfitOrLossAmount" xml:space="preserve">
+    <value>Kâr/zarar tutarı</value>
+  </data>
+  <data name="LocalizedUnit" xml:space="preserve">
+    <value>Birim</value>
+  </data>
+  <data name="LocalizedUnitName" xml:space="preserve">
+    <value>Birim adı</value>
+  </data>
+  <data name="LocalizedUnitPrice" xml:space="preserve">
+    <value>Birim fiyat</value>
+  </data>
+  <data name="LocalizedUnitPriceLowerValue" xml:space="preserve">
+    <value>Birim fiyat minimum değer</value>
+  </data>
+  <data name="LocalizedUnitPriceTopValue" xml:space="preserve">
+    <value>Birim fiyat maksimum değer</value>
+  </data>
+  <data name="LocalizedUser" xml:space="preserve">
+    <value>Kullanıcı</value>
+  </data>
+  <data name="LocalizedUserName" xml:space="preserve">
+    <value>Kullanıcı adı</value>
+  </data>
+  <data name="LocalizedWebSiteAddress" xml:space="preserve">
+    <value>Web site adresi</value>
+  </data>
+  <data name="LoggedInOtherInstitution" xml:space="preserve">
+    <value>Başka bir işletmede bu hesap ile oturum açılmış. Şifrenizi değiştirmek için lütfen mail kutunuzu kontrol edin. Diğer oturumunuz kapatılacaktır.</value>
+  </data>
+  <data name="LoginCustomerErrorMessageFromAPI" xml:space="preserve">
+    <value>Bir problem oluştu. Hata mesajı: {0}</value>
+  </data>
+  <data name="MaterialCasualtyDescription" xml:space="preserve">
+    <value>{0} zaiyatı </value>
+  </data>
+  <data name="MaterialProductRelationLogMessage" xml:space="preserve">
+    <value>Materyal ve ürün ilişkisi güncellendi.</value>
+  </data>
+  <data name="MilvaBaseException" xml:space="preserve">
+    <value>Beklenmeyen bir hata ile karşılaşıldı lütfen tekrar deneyiniz. Eğer sorun çözülmezse lütfen Milvasoft teknik ekibi ile iletişime geçiniz.</value>
+  </data>
+  <data name="MinDecimalValueException" xml:space="preserve">
+    <value>Lütfen geçerli bir {0} girin.</value>
+  </data>
+  <data name="MissingHeaderException" xml:space="preserve">
+    <value>{0} Header bilgisini giriniz!</value>
+  </data>
+  <data name="NeedForceOperationException" xml:space="preserve">
+    <value>Bu işlem onay gerektiriyor. Bu işlem sonucunda olası bir veri kaybı oluşabilir. Yine de devam etmek ister misiniz?</value>
+  </data>
+  <data name="DeleteErrorMessage" xml:space="preserve">
+    <value>Silinecek herhangi bir {0} bulunamadı.</value>
+  </data>
+  <data name="GetAllErrorMessage" xml:space="preserve">
+    <value>Herhangi bir {0} bulunamadı.</value>
+  </data>
+  <data name="NullParameterException" xml:space="preserve">
+    <value>Bazı verileri eksik gönderdiniz. Eğer bir hata yapmadığınızı düşünüyorsanız lütfen Milvasoft teknik ekibi ile iletişime geçin.</value>
+  </data>
+  <data name="NumberOfOrderTypeTransactionsLowerValue" xml:space="preserve">
+    <value>Sipariş tipine göre sipariş sayısı minimum değer</value>
+  </data>
+  <data name="NumberOfOrderTypeTransactionsTopValue" xml:space="preserve">
+    <value>Sipariş tipine göre sipariş sayısı maksimum değer</value>
+  </data>
+  <data name="OldVersionException" xml:space="preserve">
+    <value>Ops!yon'un eski sürümünü kullanıyorsunuz. Lütfen son sürüme güncelleyin veya Milvasoft ile iletişime geçin.</value>
+  </data>
+  <data name="OpenTablesExistsException" xml:space="preserve">
+    <value>Açık masalar bulunmakta. Gün sonu işleminden önce lütfen bu masaları kapatınız.</value>
+  </data>
+  <data name="OrdersSuccessfullyRated" xml:space="preserve">
+    <value>Ürünler başarıyla puanlandı.</value>
+  </data>
+  <data name="OrderTransferSuccessfullyCompleted" xml:space="preserve">
+    <value>Sipariş transfer işlemi başarıyla gerçekleşti.</value>
+  </data>
+  <data name="OutOfRangePageCountMessage" xml:space="preserve">
+    <value>İstenen sayfa sayısı oluşan sayfa sayısından fazla. Maksimum sayfa sayısı {0} olmalıdır.</value>
+  </data>
+  <data name="OverlappingShiftMessage" xml:space="preserve">
+    <value>Vardiya saatleri çakışıyor, lütfen kontrol ediniz.</value>
+  </data>
+  <data name="PersonnelMarkedToOwnRollCallLogMessage" xml:space="preserve">
+    <value>Personel yoklamasını geldim olarak işaretledi.</value>
+  </data>
+  <data name="PersonnelPayPaidLogMessage" xml:space="preserve">
+    <value>Personel maaşı ödendi.</value>
+  </data>
+  <data name="PersonnelPictureUpdatedSuccessfully" xml:space="preserve">
+    <value>Profil resmi başarıyla güncellendi.</value>
+  </data>
+  <data name="PersonnelPremiumPaidLogMessage" xml:space="preserve">
+    <value>Personele prim verildi.</value>
+  </data>
+  <data name="PersonnelPremiumSuccessfullyPaid" xml:space="preserve">
+    <value>Personelin primi başarıyla ödendi.</value>
+  </data>
+  <data name="PersonnelSalarySuccessfullyPaid" xml:space="preserve">
+    <value>Personelin maaşı başarıyla ödendi.</value>
+  </data>
+  <data name="PersonnelShiftRelationLogMessage" xml:space="preserve">
+    <value>Personele vardiya atandı.</value>
+  </data>
+  <data name="PersonnelShiftUpdateLogMessage" xml:space="preserve">
+    <value>Personelin vardiya(ları) güncellendi.</value>
+  </data>
+  <data name="PersonnelSuccessfullyChangePassword" xml:space="preserve">
+    <value>Şifre başarıyla güncellendi.</value>
+  </data>
+  <data name="PleaseEnterAValidValue" xml:space="preserve">
+    <value>Lütfen geçerli bir değer girin.</value>
+  </data>
+  <data name="PleaseEnterPersonnelInformation" xml:space="preserve">
+    <value>Lütfen personel bilgilerini eksiksiz giriniz.</value>
+  </data>
+  <data name="PleaseEnterValidCustomerInfo" xml:space="preserve">
+    <value>Lütfen geçerli bir müşteri bilgisi giriniz.</value>
+  </data>
+  <data name="PleaseSelectCard" xml:space="preserve">
+    <value>Lütfen bir kart seçiniz.</value>
+  </data>
+  <data name="PreventStringInjectionBellowMin" xml:space="preserve">
+    <value>{0}, minimum karakter sınırının altında. Lütfen en az {1} karakter girin.</value>
+  </data>
+  <data name="PreventStringInjectionContainsForbiddenWordError" xml:space="preserve">
+    <value>{0}, geçersiz kelime içeriyor.</value>
+  </data>
+  <data name="PreventStringInjectionLengthResultNotTrue" xml:space="preserve">
+    <value>{0}, {1} ile {2} aralığında bir karakter uzunluğuna sahip olmalıdır.</value>
+  </data>
+  <data name="PreventStringInjectionMaxLengthException" xml:space="preserve">
+    <value>Lütfen maksimum karakter uzunluğu için geçerli bir değer girin.</value>
+  </data>
+  <data name="PreventStringInjectionMinLengthBigThanMaxLengthException" xml:space="preserve">
+    <value>Girdiğiniz minimum değer({0}) maksimum değerden({1}) büyük. Lütfen geçerli bir değer aralığı girin.</value>
+  </data>
+  <data name="PreventStringInjectionMinLengthException" xml:space="preserve">
+    <value>Lütfen minimum karakter uzunluğu için geçerli bir değer girin.</value>
+  </data>
+  <data name="ProcessCompletedSuccessfully" xml:space="preserve">
+    <value>İşlem başarıyla gerçekleşti.</value>
+  </data>
+  <data name="ProductMenuRelationLogMessage" xml:space="preserve">
+    <value>Ürün ve menü ilişkisi güncellendi.</value>
+  </data>
+  <data name="PropertyIsRequired" xml:space="preserve">
+    <value>{0} girilmesi zorunludur.</value>
+  </data>
+  <data name="RegexErrorMessage" xml:space="preserve">
+    <value>{0}, düzgün formatta değil. Lütfen şu formatta girin: {1}</value>
+  </data>
+  <data name="RegexExampleAccountNo" xml:space="preserve">
+    <value>7975-777666</value>
+  </data>
+  <data name="RegexExampleCreditCardNo" xml:space="preserve">
+    <value>1234 1234 1234 1234</value>
+  </data>
+  <data name="RegexExampleEmail" xml:space="preserve">
+    <value>ornek@milvasoft.com</value>
+  </data>
+  <data name="RegexExampleIBANNO" xml:space="preserve">
+    <value>33 0006 1005 1978 6457 8413 26</value>
+  </data>
+  <data name="RegexExampleIsoCode" xml:space="preserve">
+    <value>tr-TR</value>
+  </data>
+  <data name="RegexPatternAccountNo" xml:space="preserve">
+    <value>^((\d{4})-(\d{6}))$</value>
+  </data>
+  <data name="RegexPatternCreditCardNo" xml:space="preserve">
+    <value>^((\d{4}) (\d{4}) (\d{4}) (\d{4}))$</value>
+  </data>
+  <data name="RegexPatternEmail" xml:space="preserve">
+    <value>^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$</value>
+  </data>
+  <data name="RegexPatternIBANNO" xml:space="preserve">
+    <value>^((\d{2}) (\d{4}) (\d{4}) (\d{4}) (\d{4}) (\d{4}) (\d{2}))$</value>
+  </data>
+  <data name="RegexPatternIsoCode" xml:space="preserve">
+    <value>^[a-z]{2}-[a-zA-Z]{2}$</value>
+  </data>
+  <data name="RegexPatternPhoneNumber" xml:space="preserve">
+    <value>^(0 (\d{3}) (\d{3}) (\d{2}) (\d{2}))$</value>
+  </data>
+  <data name="ReportPreparedSuccessfully" xml:space="preserve">
+    <value>Rapor başarıyla oluşturuldu.</value>
+  </data>
+  <data name="RolesUpdatedSuccessfully" xml:space="preserve">
+    <value>Kullanıcı rolleri başarıyla güncellendi.</value>
+  </data>
+  <data name="SelectedProductsAddedToTable" xml:space="preserve">
+    <value>Seçilen ürünler masaya başarıyla eklendi.</value>
+  </data>
+  <data name="SelectedSupplierNotFound" xml:space="preserve">
+    <value>Seçtiğiniz tedarikçi bulunamadı. Bu işlemi yaparken seçtiğiniz tedarikçi silinmiş olabilir. Lütfen kontrol ediniz. Sorun çözülmezse Milvaosoft Teknik Ekibi ile iletişime geçebilirsiniz.</value>
+  </data>
+  <data name="SignUpCustomerErrorMessageFromAPI" xml:space="preserve">
+    <value>Kayıt sırasında bir problem oluştu. Hata mesajı: {0}</value>
+  </data>
+  <data name="StockCashUpSuccessful" xml:space="preserve">
+    <value>Stok aktarım işlemi başarıyla gerçekleştirildi.</value>
+  </data>
+  <data name="AddSuccessMessage" xml:space="preserve">
+    <value>{0} başarıyla eklendi.</value>
+  </data>
+  <data name="DeleteSuccessMessage" xml:space="preserve">
+    <value>{0} başarıyla silindi.</value>
+  </data>
+  <data name="SuccessfullyGetMaxValues" xml:space="preserve">
+    <value>Maksimum değerler başarıyla elde edildi.</value>
+  </data>
+  <data name="SuccessfullyLoginMessage" xml:space="preserve">
+    <value>Başarıyla giriş yapıldı.</value>
+  </data>
+  <data name="SuccessfullyLoguotMessage" xml:space="preserve">
+    <value>Başarıyla çıkış yapıldı.</value>
+  </data>
+  <data name="SuccessfullyOperationMessage" xml:space="preserve">
+    <value>İşlem başarıyla gerçekleşti.</value>
+  </data>
+  <data name="UpdateSuccessMessage" xml:space="preserve">
+    <value>{0} başarıyla güncellendi.</value>
+  </data>
+  <data name="SuccessfullyUpdatedMaterialDeficitBaskets" xml:space="preserve">
+    <value>Sepetinizde bulunan istenmeyen materyaller başarıyla güncellendi.</value>
+  </data>
+  <data name="TableClosedSuccessfully" xml:space="preserve">
+    <value>Masa başarıyla kapandı.</value>
+  </data>
+  <data name="TableSettingGroupRelationLogMessage" xml:space="preserve">
+    <value>Masa ve masa grubu ilişkisi güncellendi.</value>
+  </data>
+  <data name="TableTakeBackClosedTable" xml:space="preserve">
+    <value>Kapanmış hesap başarıyla geri alındı.</value>
+  </data>
+  <data name="TableTakeBackEarlyPaymentSuccessfully" xml:space="preserve">
+    <value>Erken ödenmiş siparişler başarıyla geri alındı.</value>
+  </data>
+  <data name="TableTransferSuccessfullyCompleted" xml:space="preserve">
+    <value>Masa transfer işlemi başarıyla gerçekleşti.</value>
+  </data>
+  <data name="TableUpdateClosedBill" xml:space="preserve">
+    <value>Kapanmış hesap başarıyla güncellendi.</value>
+  </data>
+  <data name="TableUpdateOrderedEarlyPaid" xml:space="preserve">
+    <value>Erken ödenmiş sipariş(ler) başarıyla güncellendi.</value>
+  </data>
+  <data name="TakeBackCustomCustomerPayment" xml:space="preserve">
+    <value>Özel müşteri ödemesi başarıyla geri alındı.</value>
+  </data>
+  <data name="Unauthorized" xml:space="preserve">
+    <value>Geçersiz kimlik bilgileri nedeniyle erişim engellendi.</value>
+  </data>
+  <data name="UnauthorizedPaymentTypeMessage" xml:space="preserve">
+    <value>Bu işlemi yapmaya yetkiniz yok!</value>
+  </data>
+  <data name="UnknownLoginProblemMessage" xml:space="preserve">
+    <value>Giriş yapılamadı. Bilinmeyen bir problem oluştu.</value>
+  </data>
+  <data name="UnknownLogoutProblemMessage" xml:space="preserve">
+    <value>Çıkış yapılamadı. Bilinmeyen bir problem oluştu.</value>
+  </data>
+  <data name="UnsupportedFileTypeMessage" xml:space="preserve">
+    <value>Bu dosya türü desteklenmiyor. Lütfen geçerli bir dosya türü yükleyin. Desteklenen dosya türleri: {0}.</value>
+  </data>
+  <data name="UpdatedPersonnelRolesLogMessage" xml:space="preserve">
+    <value>Personelin rolleri güncellendi.</value>
+  </data>
+  <data name="UpdatedTableMatrisLocation" xml:space="preserve">
+    <value>Masaların yerleşik konumu başarıyla güncellendi.</value>
+  </data>
+  <data name="UpdateStockIsNullOrEmptyException" xml:space="preserve">
+    <value>En az bir stok seçmelisiniz.</value>
+  </data>
+  <data name="UpdatingInvalidEntityException" xml:space="preserve">
+    <value>Güncelleme işlemi başarısız.</value>
+  </data>
+  <data name="UserValidationEmailLength" xml:space="preserve">
+    <value>Mail adresi en fazla {0} karakter içerebilir.</value>
+  </data>
+  <data name="UserValidationUserNameLength" xml:space="preserve">
+    <value>Kullanıcı adı en az {0}, en fazla {1} karakter içerebilir.</value>
+  </data>
+  <data name="UserValidationUserNameNumberStartWith" xml:space="preserve">
+    <value>Kullanıcı adı sayısal bir karakter ile başlayamaz.</value>
+  </data>
+  <data name="MilvaValidationException" xml:space="preserve">
+    <value>Geçersiz model değeri. Lütfen geçerli bir model değeri giriniz.</value>
+  </data>
+  <data name="ValidationIdParameterGeneralError" xml:space="preserve">
+    <value>Lütfen gerekli olan bütün parametreleri eksiksiz girin.</value>
+  </data>
+  <data name="ValidationIdPropertyError" xml:space="preserve">
+    <value>Lütfen geçerli bir {0} seçin.</value>
+  </data>
+  <data name="VideoUploadSuccess" xml:space="preserve">
+    <value>Video başarıyla yüklendi!</value>
+  </data>
+  <data name="WantedWasNotFound" xml:space="preserve">
+    <value>{0} bulunamadı.</value>
+  </data>
+  <data name="MilvaUserFriendlyException" xml:space="preserve">
+    <value>Bir hata oluştu. Hata, yanlış parametre veya url ile ilgili olabilir. Lütfen istek parametrelerini veya url'yi kontrol edin</value>
+  </data>
+  <data name="MiddlewareGeneralErrorMessage" xml:space="preserve">
+    <value>Bir hata oluştu. Hata, yanlış parametre veya url ile ilgili olabilir. Lütfen istek parametrelerini veya url'yi kontrol edin.</value>
+  </data>
+  <data name="WrongPaginationParamsException" xml:space="preserve">
+    <value>İstenen sayfa sayısı, oluşturulan sayfa sayfasından fazla. Maksimum sayfa sayısı {0} olmalıdır.</value>
+  </data>
+</root>
