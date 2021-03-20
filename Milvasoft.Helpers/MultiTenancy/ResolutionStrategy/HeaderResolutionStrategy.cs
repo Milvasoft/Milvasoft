@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Milvasoft.Helpers.MultiTenancy.EntityBase;
 using System.Threading.Tasks;
 
 namespace Milvasoft.Helpers.MultiTenancy.ResolutionStrategy
@@ -6,7 +7,7 @@ namespace Milvasoft.Helpers.MultiTenancy.ResolutionStrategy
     /// <summary>
     /// Resolve the header to a tenant identifier
     /// </summary>
-    public class HeaderResolutionStrategy : ITenantResolutionStrategy<string>
+    public class HeaderResolutionStrategy : ITenantResolutionStrategy<TenantId>
     {
         /// <summary>
         /// Header key.
@@ -28,11 +29,11 @@ namespace Milvasoft.Helpers.MultiTenancy.ResolutionStrategy
         /// Get the tenant identifier from header.
         /// </summary>
         /// <returns></returns>
-        public async Task<string> GetTenantIdentifierAsync()
+        public async Task<TenantId> GetTenantIdentifierAsync()
         {
             var keyExist = await Task.FromResult(_httpContextAccessor.HttpContext.Request.Headers.ContainsKey(HeaderKey));
 
-            return keyExist ? await Task.FromResult(_httpContextAccessor.HttpContext.Request.Headers["HeaderKey"]) : "";
+            return keyExist ? await Task.FromResult(TenantId.Parse(_httpContextAccessor.HttpContext.Request.Headers["HeaderKey"])) : TenantId.Empty;
         }
     }
 }

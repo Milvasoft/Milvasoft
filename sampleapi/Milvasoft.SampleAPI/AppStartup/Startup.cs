@@ -6,6 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Milvasoft.Helpers.Caching;
 using Milvasoft.Helpers.FileOperations.Abstract;
 using Milvasoft.Helpers.FileOperations.Concrete;
+using Milvasoft.Helpers.MultiTenancy.EntityBase;
 using Milvasoft.SampleAPI.Data;
 using Milvasoft.SampleAPI.Middlewares;
 

@@ -9,6 +9,11 @@ namespace Milvasoft.Helpers.MultiTenancy.EntityBase
     /// </summary>
     public struct TenantId : IEquatable<TenantId>
     {
+        /// <summary>
+        /// Creates an empty <see cref="TenantId"/> instance.
+        /// </summary>
+        public static readonly TenantId Empty = new();
+
         private string _tenancyName;
         private int _branchNo;
         private string _hash;
@@ -42,13 +47,16 @@ namespace Milvasoft.Helpers.MultiTenancy.EntityBase
         }
 
         /// <summary>
+        /// Creates new instance of <see cref="TenantId"/>.
+        /// </summary>
+        /// <param name="tenantIdString"></param>
+        public TenantId(string tenantIdString) => this = Parse(tenantIdString);
+
+        /// <summary>
         /// Combines Tenancy Name and BranchNo into a hash code.
         /// </summary>
         /// <returns></returns>
-        public override int GetHashCode()
-        {
-            return HashCode.Combine(TenancyName, BranchNo);
-        }
+        public override int GetHashCode() => HashCode.Combine(TenancyName, BranchNo);
 
         /// <summary>
         /// Returns hash.
@@ -165,7 +173,7 @@ namespace Milvasoft.Helpers.MultiTenancy.EntityBase
         /// <returns></returns>
         public static bool operator !=(TenantId a, TenantId b) => !(a == b);
 
-        public static TenantId ToTenantId(string str)
+        public static TenantId Parse(string str)
         {
             if (TryParse(str))
             {
