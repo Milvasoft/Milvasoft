@@ -14,7 +14,7 @@ namespace Milvasoft.Helpers.Identity.Concrete
     /// </summary>
     public class MilvaUserValidation<TUser, TKey, TLocalizer> : IUserValidator<TUser>
         where TUser : IdentityUser<TKey>, IEntityBase<TKey>
-        where TKey : struct, IEquatable<TKey>
+        where TKey :  IEquatable<TKey>
         where TLocalizer : IStringLocalizer
     {
         private readonly TLocalizer _localizer;

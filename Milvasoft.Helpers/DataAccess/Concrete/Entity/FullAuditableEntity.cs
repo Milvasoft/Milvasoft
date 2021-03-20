@@ -9,7 +9,7 @@ namespace Milvasoft.Helpers.DataAccess.Concrete.Entity
     /// Determines entity is fully auditable soft deletable entity.
     /// </summary>
     /// <typeparam name="TKey">Type of the user</typeparam>
-    public abstract class FullAuditableEntity<TKey> : AuditableEntity<TKey>, IFullAuditable<TKey> where TKey : struct, IEquatable<TKey>
+    public abstract class FullAuditableEntity<TKey> : AuditableEntity<TKey>, IFullAuditable<TKey> where TKey :  IEquatable<TKey>
     {
         /// <summary>
         /// Deletion date of entity.
@@ -28,8 +28,8 @@ namespace Milvasoft.Helpers.DataAccess.Concrete.Entity
     /// <typeparam name="TKey">Type of the user</typeparam>
     /// <typeparam name="TUserKey">Type of the user</typeparam>
     public abstract class FullAuditableEntity<TUserKey, TKey> : AuditableEntity<TUserKey, TKey>, IFullAuditable<TUserKey, TKey>
-        where TKey : struct, IEquatable<TKey>
-        where TUserKey : struct, IEquatable<TUserKey>
+        where TKey :  IEquatable<TKey>
+        where TUserKey :  IEquatable<TUserKey>
     {
         /// <summary>
         /// Deletion date of entity.
@@ -55,8 +55,8 @@ namespace Milvasoft.Helpers.DataAccess.Concrete.Entity
     /// <typeparam name="TUserKey">Type of the user</typeparam>
     public abstract class FullAuditableEntity<TUser, TUserKey, TKey> : AuditableEntity<TUser, TUserKey, TKey>, IFullAuditable<TUser, TUserKey, TKey>
         where TUser : IdentityUser<TUserKey>
-        where TKey : struct, IEquatable<TKey>
-        where TUserKey : struct, IEquatable<TUserKey>
+        where TKey :  IEquatable<TKey>
+        where TUserKey :  IEquatable<TUserKey>
     {
         /// <summary>
         /// Deletion time of this entity.
@@ -88,8 +88,8 @@ namespace Milvasoft.Helpers.DataAccess.Concrete.Entity
     /// <typeparam name="TUserKey">Type of the user</typeparam>
     public abstract class FullAuditableEntityWithCustomUser<TUser, TUserKey, TKey> : AuditableEntityWithCustomUser<TUser, TUserKey, TKey>, IFullAuditableWithCustomUser<TUser, TUserKey, TKey>
         where TUser : IBaseEntity<TUserKey>
-        where TKey : struct, IEquatable<TKey>
-        where TUserKey : struct, IEquatable<TUserKey>
+        where TKey :  IEquatable<TKey>
+        where TUserKey :  IEquatable<TUserKey>
     {
         /// <summary>
         /// Deletion time of this entity.

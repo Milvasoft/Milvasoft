@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Milvasoft.Helpers.DataAccess.Abstract.Entity;
 using System;
-using System.Collections.Generic;
 
 namespace Milvasoft.SampleAPI.Entity
 {

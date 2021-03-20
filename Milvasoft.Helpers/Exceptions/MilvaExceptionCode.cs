@@ -183,6 +183,11 @@
         /// <summary>
         /// Defines the WrongPaginationParamsException.
         /// </summary>
-        WrongRequestedItemCountException = 35
+        WrongRequestedItemCountException = 35,
+
+        /// <summary>
+        /// Defines the TenancyNameRequired.
+        /// </summary>
+        TenancyNameRequired = 36
     }
 }

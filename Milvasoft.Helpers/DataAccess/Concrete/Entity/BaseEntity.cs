@@ -8,14 +8,14 @@ namespace Milvasoft.Helpers.DataAccess.Concrete.Entity
     /// <summary>
     /// Base entity for all of entities.
     /// </summary>
-    public abstract class BaseEntity<TKey> : IBaseEntity<TKey> where TKey : struct, IEquatable<TKey>
+    public abstract class BaseEntity<TKey> : IBaseEntity<TKey> where TKey :  IEquatable<TKey>
     {
         /// <summary>
         /// Unique identifier for this entity.
         /// </summary>
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public TKey Id { get; set; }
+        public virtual TKey Id { get; set; }
 
         /// <summary>
         /// Returns this instance of "<see cref="Type"/>.Name <see cref="BaseEntity{TKey}"/>.Id" as string.
@@ -35,7 +35,7 @@ namespace Milvasoft.Helpers.DataAccess.Concrete.Entity
         /// </summary>
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public TKey Id { get; set; }
+        public virtual TKey Id { get; set; }
 
         /// <summary>
         /// Returns this instance of "<see cref="Type"/>.Name <see cref="BaseEntity{TKey}"/>.Id" as string.

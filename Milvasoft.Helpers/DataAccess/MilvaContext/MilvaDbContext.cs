@@ -31,7 +31,7 @@ namespace Milvasoft.Helpers.DataAccess.MilvaContext
     public abstract class MilvaDbContextBase<TUser, TRole, TKey> : IdentityDbContext<TUser, TRole, TKey>
         where TUser : IdentityUser<TKey>, IFullAuditable<TKey>
         where TRole : IdentityRole<TKey>, IFullAuditable<TKey>
-        where TKey : struct, IEquatable<TKey>
+        where TKey :  IEquatable<TKey>
     {
         #region Protected Properties
 
@@ -255,7 +255,7 @@ namespace Milvasoft.Helpers.DataAccess.MilvaContext
                 if (AuditConfiguration.AuditDeleter)
                 {
                     //Change "DeleterUserId" property value.
-                    entry.Property(EntityPropertyNames.DeleterUserId).CurrentValue = CurrentUser?.Id;
+                    entry.Property(EntityPropertyNames.DeleterUserId).CurrentValue = CurrentUser != null ? CurrentUser.Id : null;
                     entry.Property(EntityPropertyNames.DeleterUserId).IsModified = true;
                 }
             }
@@ -279,7 +279,7 @@ namespace Milvasoft.Helpers.DataAccess.MilvaContext
         /// <param name="propertyName"></param>
         protected virtual void AuditPerformerUser(EntityEntry entry, string propertyName)
         {
-            entry.Property(propertyName).CurrentValue = CurrentUser?.Id;
+            entry.Property(propertyName).CurrentValue = CurrentUser != null ? CurrentUser.Id : null;
             entry.Property(propertyName).IsModified = true;
         }
 

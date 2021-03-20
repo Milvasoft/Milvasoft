@@ -6,7 +6,7 @@ namespace Milvasoft.Helpers.DataAccess.Abstract.Entity.Auditing
     /// Determines entity has deleter.
     /// </summary>
     /// <typeparam name="TUserKey"></typeparam>
-    public interface IHasDeleter<TUserKey> where TUserKey : struct, IEquatable<TUserKey>
+    public interface IHasDeleter<TUserKey> where TUserKey :  IEquatable<TUserKey>
     {
         /// <summary>
         /// Deleter of entity.

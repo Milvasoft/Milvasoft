@@ -10,7 +10,7 @@ namespace Milvasoft.Helpers.DataAccess.Concrete.Entity
     /// </summary>
     /// <typeparam name="TKey">Type of the user</typeparam>
     public abstract class CreationAuditableEntity<TKey> : BaseEntity<TKey>, ICreationAuditable<TKey>
-        where TKey : struct, IEquatable<TKey>
+        where TKey :  IEquatable<TKey>
     {
         /// <summary>
         /// Creation date of entity.
@@ -25,8 +25,8 @@ namespace Milvasoft.Helpers.DataAccess.Concrete.Entity
     /// <typeparam name="TKey">Type of the user</typeparam>
     /// <typeparam name="TUserKey">Type of the user</typeparam>
     public abstract class CreationAuditableEntity<TUserKey, TKey> : BaseEntity<TKey>, ICreationAuditable<TUserKey, TKey>
-        where TKey : struct, IEquatable<TKey>
-        where TUserKey : struct, IEquatable<TUserKey>
+        where TKey :  IEquatable<TKey>
+        where TUserKey :  IEquatable<TUserKey>
     {
         /// <summary>
         /// Creation date of entity.
@@ -48,8 +48,8 @@ namespace Milvasoft.Helpers.DataAccess.Concrete.Entity
     /// <typeparam name="TUserKey">Type of the user</typeparam>
     public abstract class CreationAuditableEntity<TUser, TUserKey, TKey> : CreationAuditableEntity<TUserKey, TKey>, ICreationAuditable<TUser, TUserKey, TKey>
         where TUser : IdentityUser<TUserKey>
-        where TKey : struct, IEquatable<TKey>
-        where TUserKey : struct, IEquatable<TUserKey>
+        where TKey :  IEquatable<TKey>
+        where TUserKey :  IEquatable<TUserKey>
     {
         /// <summary>
         /// Reference to the creator user of this entity.
@@ -66,8 +66,8 @@ namespace Milvasoft.Helpers.DataAccess.Concrete.Entity
     /// <typeparam name="TUserKey">Type of the user</typeparam>
     public abstract class CreationAuditableEntityEntityWithCustomUser<TUser, TUserKey, TKey> : CreationAuditableEntity<TUserKey, TKey>, ICreationAuditableWithCustomUser<TUser, TUserKey, TKey>
         where TUser : IBaseEntity<TUserKey>
-        where TKey : struct, IEquatable<TKey>
-        where TUserKey : struct, IEquatable<TUserKey>
+        where TKey :  IEquatable<TKey>
+        where TUserKey :  IEquatable<TUserKey>
     {
         /// <summary>
         /// Reference to the creator user of this entity.

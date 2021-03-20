@@ -3551,6 +3551,11 @@
             Defines the WrongPaginationParamsException.
             </summary>
         </member>
+        <member name="F:Milvasoft.Helpers.Exceptions.MilvaExceptionCode.TenancyNameRequired">
+            <summary>
+            Defines the TenancyNameRequired.
+            </summary>
+        </member>
         <member name="T:Milvasoft.Helpers.Exceptions.MilvaUserFriendlyException">
             <summary>
             The exception that is thrown when attempt to add an entity with Id the repository contains an entity with the same Id.
@@ -3760,6 +3765,34 @@
             </summary>
             <param name="str"></param>
             <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.Extensions.Strings.GetByteArray(System.String)">
+            <summary>
+            Gets <paramref name="str"/>'s bytes.
+            </summary>
+            <param name="str"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.Extensions.Strings.GetString(System.Byte[])">
+            <summary>
+            Gets string from <paramref name="array"/>.
+            </summary>
+            <param name="array"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.Extensions.Strings.HashToByteArray(System.String)">
+            <summary>
+            Hashes <paramref name="str"/> with <see cref="T:System.Security.Cryptography.SHA256"/>
+            </summary>
+            <param name="str"></param>
+            <returns> Hashed <paramref name="str"/> as byte content. </returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.Extensions.Strings.HashToString(System.String)">
+            <summary>
+            Hashes <paramref name="str"/> with <see cref="T:System.Security.Cryptography.SHA256"/>
+            </summary>
+            <param name="str"></param>
+            <returns> Hashed <paramref name="str"/> as string. </returns>
         </member>
         <member name="T:Milvasoft.Helpers.FileOperations.Abstract.IJsonOperations">
             <summary>
@@ -6831,6 +6864,216 @@
             <value>
             Property's validation error messages.
             </value>
+        </member>
+        <member name="T:Milvasoft.Helpers.MultiTenancy.EntityBase.IMilvaTenantBase">
+            <summary>
+            Tenant base.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.MultiTenancy.EntityBase.IMilvaTenantBase.TenancyName">
+            <summary>
+            Display name of the Tenant.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.MultiTenancy.EntityBase.IMilvaTenantBase.Name">
+            <summary>
+            Display name of the Tenant.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.MultiTenancy.EntityBase.IMilvaTenantBase.ConnectionString">
+            <summary>
+            ENCRYPTED connection string of the tenant database.
+            Can be null if this tenant is stored in host database.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.MultiTenancy.EntityBase.IMilvaTenantBase.IsActive">
+            <summary>
+            Is this tenant active?
+            If as tenant is not active, no user of this tenant can use the application.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.MultiTenancy.EntityBase.MilvaTenant`2.Id">
+            <summary>
+            Id of tenant.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.MultiTenancy.EntityBase.MilvaTenant`2.BranchNo">
+            <summary>
+            Display name of the Tenant.
+            </summary>
+        </member>
+        <member name="M:Milvasoft.Helpers.MultiTenancy.EntityBase.MilvaTenant`2.#ctor(System.String,System.Int32,System.String)">
+            <summary>
+            Creates a new tenant.
+            </summary>
+            <param name="tenancyName">UNIQUE name of this Tenant</param>
+            <param name="branchNo"></param>
+            <param name="name">Display name of the Tenant</param>
+        </member>
+        <member name="T:Milvasoft.Helpers.MultiTenancy.EntityBase.MilvaTenantBase`1">
+            <summary>
+            Tenant base.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.MultiTenancy.EntityBase.MilvaTenantBase`1.TenancyName">
+            <summary>
+            Display name of the Tenant.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.MultiTenancy.EntityBase.MilvaTenantBase`1.Name">
+            <summary>
+            Display name of the Tenant.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.MultiTenancy.EntityBase.MilvaTenantBase`1.ConnectionString">
+            <summary>
+            ENCRYPTED connection string of the tenant database.
+            Can be null if this tenant is stored in host database.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.MultiTenancy.EntityBase.MilvaTenantBase`1.IsActive">
+            <summary>
+            Is this tenant active?
+            If as tenant is not active, no user of this tenant can use the application.
+            </summary>
+        </member>
+        <member name="T:Milvasoft.Helpers.MultiTenancy.EntityBase.TenantId">
+            <summary>
+            Fully unique tenant id.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.MultiTenancy.EntityBase.TenantId.TenancyName">
+            <summary>
+            Unique tenancy name of tenant.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.MultiTenancy.EntityBase.TenantId.BranchNo">
+            <summary>
+            Branch no of Tenant.
+            </summary>
+        </member>
+        <member name="M:Milvasoft.Helpers.MultiTenancy.EntityBase.TenantId.#ctor(System.String,System.Int32)">
+            <summary>
+            Creates new instance of <see cref="T:Milvasoft.Helpers.MultiTenancy.EntityBase.TenantId"/>.
+            </summary>
+            <param name="tenancyName"></param>
+            <param name="branchNo"></param>
+        </member>
+        <member name="M:Milvasoft.Helpers.MultiTenancy.EntityBase.TenantId.GetHashCode">
+            <summary>
+            Combines Tenancy Name and BranchNo into a hash code.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.MultiTenancy.EntityBase.TenantId.GetHashString">
+            <summary>
+            Returns hash.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.MultiTenancy.EntityBase.TenantId.Equals(System.Object)">
+            <summary>
+            Compares hashes.
+            </summary>
+            <param name="other"></param>
+            <returns> If both hash are equals returns true, othewise false. </returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.MultiTenancy.EntityBase.TenantId.Equals(Milvasoft.Helpers.MultiTenancy.EntityBase.TenantId)">
+            <summary>
+            Compares hashes.
+            </summary>
+            <param name="other"></param>
+            <returns> If both hash are equals returns true, othewise false. </returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.MultiTenancy.EntityBase.TenantId.TenancyNameEquals(Milvasoft.Helpers.MultiTenancy.EntityBase.TenantId)">
+            <summary>
+            Compares <see cref="P:Milvasoft.Helpers.MultiTenancy.EntityBase.TenantId.TenancyName"/> with <paramref name="other"/>.TenancyName.
+            </summary>
+            <param name="other"></param>
+            <returns> If both TenancyName are equals returns true, othewise false. </returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.MultiTenancy.EntityBase.TenantId.BranchNoEquals(Milvasoft.Helpers.MultiTenancy.EntityBase.TenantId)">
+            <summary>
+            Compares <see cref="P:Milvasoft.Helpers.MultiTenancy.EntityBase.TenantId.BranchNo"/> with <paramref name="other"/>.BranchNo.
+            </summary>
+            <param name="other"></param>
+            <returns> If both BranchNo are equals returns true, othewise false. </returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.MultiTenancy.EntityBase.TenantId.ToString">
+            <summary>
+            Returns Tenancy Name and Branch No with '_' seperator 
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.MultiTenancy.EntityBase.TenantId.ToString(System.String)">
+            <summary>
+            <para>Supported formats : G , H </para>
+            <para>G returns tenancyName and branchNo with '_' seperator</para>
+            <para>H returns tenancyName and branchNo and hash with '_' seperator</para>
+            </summary>
+            <param name="format"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.MultiTenancy.EntityBase.TenantId.op_Equality(Milvasoft.Helpers.MultiTenancy.EntityBase.TenantId,Milvasoft.Helpers.MultiTenancy.EntityBase.TenantId)">
+            <summary>
+            Indicates whether the values of two specified <see cref="T:Milvasoft.Helpers.MultiTenancy.EntityBase.TenantId"/> objects are equal.
+            </summary>
+            <param name="a"></param>
+            <param name="b"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.MultiTenancy.EntityBase.TenantId.op_Inequality(Milvasoft.Helpers.MultiTenancy.EntityBase.TenantId,Milvasoft.Helpers.MultiTenancy.EntityBase.TenantId)">
+            <summary>
+            Indicates whether the values of two specified <see cref="T:Milvasoft.Helpers.MultiTenancy.EntityBase.TenantId"/> objects are not equal.
+            </summary>
+            <param name="a"></param>
+            <param name="b"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Milvasoft.Helpers.MultiTenancy.ResolutionStrategy.HeaderResolutionStrategy">
+            <summary>
+            Resolve the header to a tenant identifier
+            </summary>
+        </member>
+        <member name="F:Milvasoft.Helpers.MultiTenancy.ResolutionStrategy.HeaderResolutionStrategy.HeaderKey">
+            <summary>
+            Header key.
+            </summary>
+        </member>
+        <member name="M:Milvasoft.Helpers.MultiTenancy.ResolutionStrategy.HeaderResolutionStrategy.#ctor(Microsoft.AspNetCore.Http.IHttpContextAccessor)">
+            <summary>
+            Creates new instance of <see cref="T:Milvasoft.Helpers.MultiTenancy.ResolutionStrategy.HostResolutionStrategy"/>
+            </summary>
+            <param name="httpContextAccessor"></param>
+        </member>
+        <member name="M:Milvasoft.Helpers.MultiTenancy.ResolutionStrategy.HeaderResolutionStrategy.GetTenantIdentifierAsync">
+            <summary>
+            Get the tenant identifier from header.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Milvasoft.Helpers.MultiTenancy.ResolutionStrategy.HostResolutionStrategy">
+            <summary>
+            Resolve the host to a tenant identifier
+            </summary>
+        </member>
+        <member name="M:Milvasoft.Helpers.MultiTenancy.ResolutionStrategy.HostResolutionStrategy.#ctor(Microsoft.AspNetCore.Http.IHttpContextAccessor)">
+            <summary>
+            Creates new instance of <see cref="T:Milvasoft.Helpers.MultiTenancy.ResolutionStrategy.HostResolutionStrategy"/>
+            </summary>
+            <param name="httpContextAccessor"></param>
+        </member>
+        <member name="M:Milvasoft.Helpers.MultiTenancy.ResolutionStrategy.HostResolutionStrategy.GetTenantIdentifierAsync">
+            <summary>
+            Get the tenant identifier from host.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.MultiTenancy.ResolutionStrategy.ITenantResolutionStrategy`1.GetTenantIdentifierAsync">
+            <summary>
+            Get the tenant identifier
+            </summary>
+            <returns></returns>
         </member>
         <member name="T:Milvasoft.Helpers.NetworkUtil">
             <summary>

@@ -6,7 +6,7 @@ namespace Milvasoft.Helpers.DataAccess.Abstract.Entity.Auditing
     /// Determines entity has modifier.
     /// </summary>
     /// <typeparam name="TUserKey"></typeparam>
-    public interface IHasModifier<TUserKey> where TUserKey : struct, IEquatable<TUserKey>
+    public interface IHasModifier<TUserKey> where TUserKey :  IEquatable<TUserKey>
     {
         /// <summary>
         /// Last modifier of entity.

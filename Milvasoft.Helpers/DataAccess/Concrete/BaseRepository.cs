@@ -21,7 +21,7 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
     /// <typeparam name="TKey"></typeparam>
     /// <typeparam name="TContext"></typeparam>
     public abstract class BaseRepository<TEntity, TKey, TContext> : IBaseRepository<TEntity, TKey, TContext> where TEntity : class, IBaseEntity<TKey>
-                                                                                                             where TKey : struct, IEquatable<TKey>
+                                                                                                             where TKey :  IEquatable<TKey>
                                                                                                              where TContext : DbContext
     {
         //TODO EntityFrameworkQueryableExtensions methods will be added here.
