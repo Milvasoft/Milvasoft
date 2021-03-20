@@ -1,7 +1,6 @@
 ﻿using Milvasoft.Helpers.Exceptions;
 using Milvasoft.Helpers.Extensions;
 using System;
-using System.Globalization;
 
 namespace Milvasoft.Helpers.MultiTenancy.EntityBase
 {

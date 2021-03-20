@@ -1,5 +1,4 @@
-﻿using Milvasoft.Helpers.MultiTenancy.EntityBase;
-using System;
+﻿using System;
 using System.Threading.Tasks;
 
 namespace Milvasoft.Helpers.MultiTenancy.ResolutionStrategy
