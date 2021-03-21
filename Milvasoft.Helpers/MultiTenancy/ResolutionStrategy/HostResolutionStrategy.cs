@@ -6,7 +6,7 @@ namespace Milvasoft.Helpers.MultiTenancy.ResolutionStrategy
     /// <summary>
     /// Resolve the host to a tenant identifier
     /// </summary>
-    public class HostResolutionStrategy
+    public class HostResolutionStrategy : ITenantResolutionStrategy<string>
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
 

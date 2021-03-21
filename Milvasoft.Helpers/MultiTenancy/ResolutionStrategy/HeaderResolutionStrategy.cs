@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Milvasoft.Helpers.MultiTenancy.EntityBase;
+using Milvasoft.Helpers.MultiTenancy.Utils;
 using System.Threading.Tasks;
 
 namespace Milvasoft.Helpers.MultiTenancy.ResolutionStrategy
@@ -12,7 +13,7 @@ namespace Milvasoft.Helpers.MultiTenancy.ResolutionStrategy
         /// <summary>
         /// Header key.
         /// </summary>
-        public string HeaderKey = "X-Tenant";
+        public string HeaderKey = TenancyConstants.HttpContextTenantKey;
 
         private readonly IHttpContextAccessor _httpContextAccessor;
 

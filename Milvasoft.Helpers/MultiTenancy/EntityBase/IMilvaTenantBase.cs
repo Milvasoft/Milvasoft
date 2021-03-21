@@ -1,9 +1,12 @@
-﻿namespace Milvasoft.Helpers.MultiTenancy.EntityBase
+﻿using Milvasoft.Helpers.DataAccess.Abstract.Entity;
+using System;
+
+namespace Milvasoft.Helpers.MultiTenancy.EntityBase
 {
     /// <summary>
     /// Tenant base.
     /// </summary>
-    public interface IMilvaTenantBase
+    public interface IMilvaTenantBase<TKey> : IFullAuditable<TKey> where TKey : IEquatable<TKey>
     {
         /// <summary>
         /// Display name of the Tenant.

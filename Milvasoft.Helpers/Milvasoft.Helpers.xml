@@ -6865,32 +6865,105 @@
             Property's validation error messages.
             </value>
         </member>
-        <member name="T:Milvasoft.Helpers.MultiTenancy.EntityBase.IMilvaTenantBase">
+        <member name="T:Milvasoft.Helpers.MultiTenancy.Accessor.ITenantAccessor`2">
+            <summary>
+            Tenant accessor for easy access.
+            </summary>
+            <typeparam name="TTenant"></typeparam>
+            <typeparam name="TKey"></typeparam>
+        </member>
+        <member name="P:Milvasoft.Helpers.MultiTenancy.Accessor.ITenantAccessor`2.Tenant">
+            <summary>
+            Accessed tenant from <see cref="T:Microsoft.AspNetCore.Http.HttpContext"/>
+            </summary>
+        </member>
+        <member name="T:Milvasoft.Helpers.MultiTenancy.Accessor.TenantAccessor`2">
+            <summary>
+            Tenant accessor for easy access.
+            </summary>
+            <typeparam name="TTenant"></typeparam>
+            <typeparam name="TKey"></typeparam>
+        </member>
+        <member name="M:Milvasoft.Helpers.MultiTenancy.Accessor.TenantAccessor`2.#ctor(Microsoft.AspNetCore.Http.IHttpContextAccessor)">
+            <summary>
+            Creates new instance of <see cref="T:Milvasoft.Helpers.MultiTenancy.Accessor.TenantAccessor`2"/>.
+            </summary>
+            <param name="httpContextAccessor"></param>
+        </member>
+        <member name="P:Milvasoft.Helpers.MultiTenancy.Accessor.TenantAccessor`2.Tenant">
+            <summary>
+            Accessed tenant from <see cref="T:Microsoft.AspNetCore.Http.HttpContext"/>.
+            </summary>
+        </member>
+        <member name="T:Milvasoft.Helpers.MultiTenancy.Builder.TenantBuilder`2">
+            <summary>
+            Configure tenant services.
+            </summary>
+        </member>
+        <member name="M:Milvasoft.Helpers.MultiTenancy.Builder.TenantBuilder`2.#ctor(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+            <summary>
+            Creates new instance of <see cref="T:Milvasoft.Helpers.MultiTenancy.Builder.TenantBuilder`2"/>.
+            Registers <see cref="T:Milvasoft.Helpers.MultiTenancy.Service.TenantService`2"/> to <see cref="T:Milvasoft.Helpers.MultiTenancy.Service.ITenantService`2"/> as <see cref="F:Microsoft.Extensions.DependencyInjection.ServiceLifetime.Transient"/>
+            </summary>
+            <param name="services"></param>
+        </member>
+        <member name="M:Milvasoft.Helpers.MultiTenancy.Builder.TenantBuilder`2.WithResolutionStrategy``1(Microsoft.Extensions.DependencyInjection.ServiceLifetime)">
+            <summary>
+            Registers the tenant resolver implementation.
+            </summary>
+            <typeparam name="TResolutionStrategy"></typeparam>
+            <param name="lifetime"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.MultiTenancy.Builder.TenantBuilder`2.WithStore``1(Microsoft.Extensions.DependencyInjection.ServiceLifetime)">
+            <summary>
+            Registers the tenant store implementation.
+            </summary>
+            <typeparam name="TStore"></typeparam>
+            <param name="lifetime"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.MultiTenancy.Builder.TenantBuilder`2.WithPerTenantOptions``1(System.Action{``0,`0})">
+            <summary>
+            Registers tenant specific options.
+            </summary>
+            <typeparam name="TOptions">Type of options we are apply configuration to</typeparam>
+            <param name="tenantConfig">Action to configure options for a tenant</param>
+            <returns></returns>
+        </member>
+        <member name="T:Milvasoft.Helpers.MultiTenancy.EntityBase.IMilvaTenantBase`1">
             <summary>
             Tenant base.
             </summary>
         </member>
-        <member name="P:Milvasoft.Helpers.MultiTenancy.EntityBase.IMilvaTenantBase.TenancyName">
+        <member name="P:Milvasoft.Helpers.MultiTenancy.EntityBase.IMilvaTenantBase`1.TenancyName">
             <summary>
             Display name of the Tenant.
             </summary>
         </member>
-        <member name="P:Milvasoft.Helpers.MultiTenancy.EntityBase.IMilvaTenantBase.Name">
+        <member name="P:Milvasoft.Helpers.MultiTenancy.EntityBase.IMilvaTenantBase`1.Name">
             <summary>
             Display name of the Tenant.
             </summary>
         </member>
-        <member name="P:Milvasoft.Helpers.MultiTenancy.EntityBase.IMilvaTenantBase.ConnectionString">
+        <member name="P:Milvasoft.Helpers.MultiTenancy.EntityBase.IMilvaTenantBase`1.ConnectionString">
             <summary>
             ENCRYPTED connection string of the tenant database.
             Can be null if this tenant is stored in host database.
             </summary>
         </member>
-        <member name="P:Milvasoft.Helpers.MultiTenancy.EntityBase.IMilvaTenantBase.IsActive">
+        <member name="P:Milvasoft.Helpers.MultiTenancy.EntityBase.IMilvaTenantBase`1.IsActive">
             <summary>
             Is this tenant active?
             If as tenant is not active, no user of this tenant can use the application.
             </summary>
+        </member>
+        <member name="T:Milvasoft.Helpers.MultiTenancy.EntityBase.MilvaTenant`2">
+            <summary>
+            Represents a Tenant of the application.
+            </summary>
+            <typeparam name="TUser"></typeparam>
+            <typeparam name="TUserKey"></typeparam>
         </member>
         <member name="P:Milvasoft.Helpers.MultiTenancy.EntityBase.MilvaTenant`2.Id">
             <summary>
@@ -6902,6 +6975,31 @@
             Display name of the Tenant.
             </summary>
         </member>
+        <member name="P:Milvasoft.Helpers.MultiTenancy.EntityBase.MilvaTenant`2.SubscriptionExpireDate">
+            <summary>
+            Represents Tenant's subscription expire date.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.MultiTenancy.EntityBase.MilvaTenant`2.DeleterUser">
+            <summary>
+            Deleter user navigation property.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.MultiTenancy.EntityBase.MilvaTenant`2.LastModifierUser">
+            <summary>
+            Modifier user navigation property.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.MultiTenancy.EntityBase.MilvaTenant`2.CreatorUser">
+            <summary>
+            Creator user navigation property.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.MultiTenancy.EntityBase.MilvaTenant`2.Items">
+            <summary>
+            Gets or sets additional tenant items.
+            </summary>
+        </member>
         <member name="M:Milvasoft.Helpers.MultiTenancy.EntityBase.MilvaTenant`2.#ctor(System.String,System.Int32,System.String)">
             <summary>
             Creates a new tenant.
@@ -6910,28 +7008,30 @@
             <param name="branchNo"></param>
             <param name="name">Display name of the Tenant</param>
         </member>
-        <member name="T:Milvasoft.Helpers.MultiTenancy.EntityBase.MilvaTenantBase`1">
+        <member name="T:Milvasoft.Helpers.MultiTenancy.EntityBase.MilvaTenantBase`2">
             <summary>
             Tenant base.
             </summary>
+            <typeparam name="TKey"> Your key must override ToString() method correctly to block exceptions in <see cref="T:Milvasoft.Helpers.MultiTenancy.LifetimeManagement.MultiTenantContainer`2"/>. </typeparam>
+            <typeparam name="TUserKey"></typeparam>
         </member>
-        <member name="P:Milvasoft.Helpers.MultiTenancy.EntityBase.MilvaTenantBase`1.TenancyName">
+        <member name="P:Milvasoft.Helpers.MultiTenancy.EntityBase.MilvaTenantBase`2.TenancyName">
             <summary>
             Display name of the Tenant.
             </summary>
         </member>
-        <member name="P:Milvasoft.Helpers.MultiTenancy.EntityBase.MilvaTenantBase`1.Name">
+        <member name="P:Milvasoft.Helpers.MultiTenancy.EntityBase.MilvaTenantBase`2.Name">
             <summary>
             Display name of the Tenant.
             </summary>
         </member>
-        <member name="P:Milvasoft.Helpers.MultiTenancy.EntityBase.MilvaTenantBase`1.ConnectionString">
+        <member name="P:Milvasoft.Helpers.MultiTenancy.EntityBase.MilvaTenantBase`2.ConnectionString">
             <summary>
             ENCRYPTED connection string of the tenant database.
             Can be null if this tenant is stored in host database.
             </summary>
         </member>
-        <member name="P:Milvasoft.Helpers.MultiTenancy.EntityBase.MilvaTenantBase`1.IsActive">
+        <member name="P:Milvasoft.Helpers.MultiTenancy.EntityBase.MilvaTenantBase`2.IsActive">
             <summary>
             Is this tenant active?
             If as tenant is not active, no user of this tenant can use the application.
@@ -6940,6 +7040,11 @@
         <member name="T:Milvasoft.Helpers.MultiTenancy.EntityBase.TenantId">
             <summary>
             Fully unique tenant id.
+            </summary>
+        </member>
+        <member name="F:Milvasoft.Helpers.MultiTenancy.EntityBase.TenantId.Empty">
+            <summary>
+            Creates an empty <see cref="T:Milvasoft.Helpers.MultiTenancy.EntityBase.TenantId"/> instance.
             </summary>
         </member>
         <member name="P:Milvasoft.Helpers.MultiTenancy.EntityBase.TenantId.TenancyName">
@@ -7036,6 +7141,397 @@
             <param name="b"></param>
             <returns></returns>
         </member>
+        <member name="T:Milvasoft.Helpers.MultiTenancy.Extensions.ApplicationBuilderExtensions">
+            <summary>
+            Provides registration of custom tenant middlewares.
+            </summary>
+        </member>
+        <member name="M:Milvasoft.Helpers.MultiTenancy.Extensions.ApplicationBuilderExtensions.UseMultiTenancy``2(Microsoft.AspNetCore.Builder.IApplicationBuilder)">
+            <summary>
+            Use the Tenant Middleware to process the request
+            </summary>
+            <typeparam name="TTenant"></typeparam>
+            <typeparam name="TKey"></typeparam>
+            <param name="builder"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.MultiTenancy.Extensions.ApplicationBuilderExtensions.UseMultiTenantContainer``2(Microsoft.AspNetCore.Builder.IApplicationBuilder)">
+            <summary>
+            Use the Tenant Container for tenant based lifetime management.
+            </summary>
+            <typeparam name="TTenant"></typeparam>
+            <typeparam name="TKey"></typeparam>
+            <param name="builder"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.MultiTenancy.Extensions.ApplicationBuilderExtensions.UseMultiTenantAuthentication(Microsoft.AspNetCore.Builder.IApplicationBuilder)">
+            <summary>
+            Use the Tenant Auth to process the authentication handlers
+            </summary>
+            <param name="builder"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Milvasoft.Helpers.MultiTenancy.Extensions.ContainerBuilderExtensions">
+            <summary>
+            Provides registration of tenant options.
+            </summary>
+        </member>
+        <member name="M:Milvasoft.Helpers.MultiTenancy.Extensions.ContainerBuilderExtensions.RegisterTenantOptions``3(Autofac.ContainerBuilder,System.Action{``0,``1})">
+            <summary>
+            Registers tenant specific options.
+            </summary>
+            <typeparam name="TOptions">Type of options we are apply configuration to</typeparam>
+            <typeparam name="TTenant">Type of options we are apply configuration to</typeparam>
+            <typeparam name="TKey">Type of options we are apply configuration to</typeparam>
+            <param name="builder"></param>
+            <param name="tenantConfig">Action to configure options for a tenant</param>
+            <returns></returns>
+        </member>
+        <member name="T:Milvasoft.Helpers.MultiTenancy.Extensions.HttpContextExtensions">
+            <summary>
+            Extensions to HttpContext to make multi-tenancy easier to use
+            </summary>
+        </member>
+        <member name="M:Milvasoft.Helpers.MultiTenancy.Extensions.HttpContextExtensions.GetTenant``2(Microsoft.AspNetCore.Http.HttpContext)">
+            <summary>
+            Returns the current tenant
+            </summary>
+            <typeparam name="TTenant"></typeparam>
+            <typeparam name="TKey"></typeparam>
+            <param name="context"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Milvasoft.Helpers.MultiTenancy.Extensions.ServiceCollectionExtensions">
+            <summary>
+            Provides registration of custom tenant services.
+            </summary>
+        </member>
+        <member name="M:Milvasoft.Helpers.MultiTenancy.Extensions.ServiceCollectionExtensions.AddMultiTenancy``2(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+            <summary>
+            Add the services (application specific tenant class)
+            </summary>
+            <param name="services"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Milvasoft.Helpers.MultiTenancy.LifetimeManagement.MultiTenantContainer`2">
+            <summary>
+             Creates, wires dependencies and manages lifetime for a set of components. 
+            </summary>
+            <typeparam name="TTenant"></typeparam>
+            <typeparam name="TKey"></typeparam>
+        </member>
+        <member name="E:Milvasoft.Helpers.MultiTenancy.LifetimeManagement.MultiTenantContainer`2.ChildLifetimeScopeBeginning">
+            <summary>
+            Initializes a new instance of the <see cref="T:Autofac.Core.Lifetime.LifetimeScopeBeginningEventArgs"/> class.
+            </summary>
+        </member>
+        <member name="E:Milvasoft.Helpers.MultiTenancy.LifetimeManagement.MultiTenantContainer`2.CurrentScopeEnding">
+            <summary>
+            Describes when a lifetime scope is ending.
+            </summary>
+        </member>
+        <member name="E:Milvasoft.Helpers.MultiTenancy.LifetimeManagement.MultiTenantContainer`2.ResolveOperationBeginning">
+            <summary>
+            Initializes a new instance of the <see cref="T:Autofac.Core.Resolving.ResolveOperationBeginningEventArgs"/> class.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.MultiTenancy.LifetimeManagement.MultiTenantContainer`2.DiagnosticSource">
+            <summary>
+            Gets the <see cref="T:System.Diagnostics.DiagnosticListener"/> to which trace events should be written.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.MultiTenancy.LifetimeManagement.MultiTenantContainer`2.Disposer">
+            <summary>
+            Gets the disposer associated with this <see cref="T:Autofac.ILifetimeScope"/>. Component instances can be associated with it manually if required.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.MultiTenancy.LifetimeManagement.MultiTenantContainer`2.Tag">
+            <summary>
+            Gets the tag applied to the <see cref="T:Autofac.ILifetimeScope"/>.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.MultiTenancy.LifetimeManagement.MultiTenantContainer`2.ComponentRegistry">
+            <summary>
+            Gets the associated services with the components that provide them.
+            </summary>
+        </member>
+        <member name="M:Milvasoft.Helpers.MultiTenancy.LifetimeManagement.MultiTenantContainer`2.#ctor(Autofac.IContainer,System.Action{`0,Autofac.ContainerBuilder})">
+            <summary>
+            Creates new instance of <see cref="T:Milvasoft.Helpers.MultiTenancy.LifetimeManagement.MultiTenantContainer`2"/>
+            </summary>
+            <param name="applicationContainer"></param>
+            <param name="containerConfiguration"></param>
+        </member>
+        <member name="M:Milvasoft.Helpers.MultiTenancy.LifetimeManagement.MultiTenantContainer`2.GetCurrentTenant">
+            <summary>
+            Get the current tenant from the application container.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.MultiTenancy.LifetimeManagement.MultiTenantContainer`2.GetCurrentTenantScope">
+            <summary>
+            Get the scope of the current tenant.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.MultiTenancy.LifetimeManagement.MultiTenantContainer`2.GetTenantScope(System.String)">
+            <summary>
+            Get (configure on missing).
+            </summary>
+            <param name="tenantId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.MultiTenancy.LifetimeManagement.MultiTenantContainer`2.Dispose">
+            <summary>
+            Disposes application contaner.
+            </summary>
+        </member>
+        <member name="M:Milvasoft.Helpers.MultiTenancy.LifetimeManagement.MultiTenantContainer`2.BeginLifetimeScope">
+            <summary>
+             Begin a new nested scope. Component instances created via the new scope will be disposed along with it.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.MultiTenancy.LifetimeManagement.MultiTenantContainer`2.BeginLifetimeScope(System.Object)">
+            <summary>
+            Begin a new nested scope. Component instances created via the new scope will be disposed along with it.
+            </summary>
+            <param name="tag"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.MultiTenancy.LifetimeManagement.MultiTenantContainer`2.BeginLifetimeScope(System.Action{Autofac.ContainerBuilder})">
+            <summary>
+            Begin a new nested scope, with additional components available to it. Component instances created via the new scope will be disposed along with it.
+            </summary>
+            <param name="configurationAction"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.MultiTenancy.LifetimeManagement.MultiTenantContainer`2.BeginLifetimeScope(System.Object,System.Action{Autofac.ContainerBuilder})">
+            <summary>
+            Begin a new nested scope, with additional components available to it. Component instances created via the new scope will be disposed along with it.
+            </summary>
+            <param name="tag"></param>
+            <param name="configurationAction"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.MultiTenancy.LifetimeManagement.MultiTenantContainer`2.ResolveComponent(Autofac.ResolveRequest)">
+            <summary>
+            Resolve an instance of the provided registration within the context.
+            </summary>
+            <param name="request"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.MultiTenancy.LifetimeManagement.MultiTenantContainer`2.DisposeAsync">
+            <summary>
+            Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources asynchronously.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Milvasoft.Helpers.MultiTenancy.LifetimeManagement.MultiTenantServiceProviderFactory`2">
+            <summary>
+            Registration for custom service provider.
+            </summary>
+            <typeparam name="TTenant"></typeparam>
+            <typeparam name="TKey"></typeparam>
+        </member>
+        <member name="F:Milvasoft.Helpers.MultiTenancy.LifetimeManagement.MultiTenantServiceProviderFactory`2._tenantServicesConfiguration">
+            <summary>
+            Gets or sets tenant services configuration.
+            </summary>
+        </member>
+        <member name="M:Milvasoft.Helpers.MultiTenancy.LifetimeManagement.MultiTenantServiceProviderFactory`2.#ctor(System.Action{`0,Autofac.ContainerBuilder})">
+            <summary>
+            Initializes new instance of <see cref="T:Milvasoft.Helpers.MultiTenancy.LifetimeManagement.MultiTenantServiceProviderFactory`2"/>
+            </summary>
+            <param name="tenantSerivcesConfiguration"></param>
+        </member>
+        <member name="M:Milvasoft.Helpers.MultiTenancy.LifetimeManagement.MultiTenantServiceProviderFactory`2.CreateBuilder(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+            <summary>
+            Create a builder populated with global services.
+            </summary>
+            <param name="services"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.MultiTenancy.LifetimeManagement.MultiTenantServiceProviderFactory`2.CreateServiceProvider(Autofac.ContainerBuilder)">
+            <summary>
+            Create our serivce provider.
+            </summary>
+            <param name="containerBuilder"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Milvasoft.Helpers.MultiTenancy.Middleware.MultitenantContainerMiddleware`2">
+            <summary>
+            Sets the lifetime to current tenant scope.
+            </summary>
+            <typeparam name="TTenant"></typeparam>
+            <typeparam name="TKey"></typeparam>
+        </member>
+        <member name="M:Milvasoft.Helpers.MultiTenancy.Middleware.MultitenantContainerMiddleware`2.#ctor(Microsoft.AspNetCore.Http.RequestDelegate)">
+            <summary>
+            Initializes new instance of <see cref="T:Milvasoft.Helpers.MultiTenancy.Middleware.MultitenantContainerMiddleware`2"/>
+            </summary>
+            <param name="next"></param>
+        </member>
+        <member name="M:Milvasoft.Helpers.MultiTenancy.Middleware.MultitenantContainerMiddleware`2.Invoke(Microsoft.AspNetCore.Http.HttpContext,System.Func{Milvasoft.Helpers.MultiTenancy.LifetimeManagement.MultiTenantContainer{`0,`1}})">
+            <summary>
+            Invokes the method or constructor reflected by this MethodInfo instance.
+            </summary>
+            <param name="context"></param>
+            <param name="multiTenantContainerAccessor"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Milvasoft.Helpers.MultiTenancy.Middleware.TenantAuthMiddleware">
+            <summary>
+            AuthenticationMiddleware.cs from framework with injection point moved
+            </summary>
+        </member>
+        <member name="M:Milvasoft.Helpers.MultiTenancy.Middleware.TenantAuthMiddleware.#ctor(Microsoft.AspNetCore.Http.RequestDelegate)">
+            <summary>
+            Initializes new instance of <see cref="T:Milvasoft.Helpers.MultiTenancy.Middleware.TenantAuthMiddleware"/>
+            </summary>
+            <param name="next"></param>
+        </member>
+        <member name="M:Milvasoft.Helpers.MultiTenancy.Middleware.TenantAuthMiddleware.Invoke(Microsoft.AspNetCore.Http.HttpContext,Microsoft.AspNetCore.Authentication.IAuthenticationSchemeProvider)">
+            <summary>
+            Invokes the method or constructor reflected by this MethodInfo instance.
+            </summary>
+            <param name="context"></param>
+            <param name="Schemes"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Milvasoft.Helpers.MultiTenancy.Middleware.TenantMiddleware`2">
+            <summary>
+            If request items not contains Tenant object. Sets the tenant object into items.
+            </summary>
+            <typeparam name="TTenant"></typeparam>
+            <typeparam name="TKey"></typeparam>
+        </member>
+        <member name="M:Milvasoft.Helpers.MultiTenancy.Middleware.TenantMiddleware`2.#ctor(Microsoft.AspNetCore.Http.RequestDelegate)">
+            <summary>
+            Initializes new instance of <see cref="T:Milvasoft.Helpers.MultiTenancy.Middleware.TenantMiddleware`2"/>
+            </summary>
+            <param name="next"></param>
+        </member>
+        <member name="M:Milvasoft.Helpers.MultiTenancy.Middleware.TenantMiddleware`2.Invoke(Microsoft.AspNetCore.Http.HttpContext)">
+            <summary>
+            Invokes the method or constructor reflected by this MethodInfo instance.
+            </summary>
+            <param name="context"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Milvasoft.Helpers.MultiTenancy.Options.TenantOptions`1">
+            <summary>
+            Makes IOptions tenant aware.
+            </summary>
+        </member>
+        <member name="M:Milvasoft.Helpers.MultiTenancy.Options.TenantOptions`1.#ctor(Microsoft.Extensions.Options.IOptionsFactory{`0},Microsoft.Extensions.Options.IOptionsMonitorCache{`0})">
+            <summary>
+            Initializes new instance of <see cref="T:Milvasoft.Helpers.MultiTenancy.Options.TenantOptions`1"/>
+            </summary>
+            <param name="factory"></param>
+            <param name="cache"></param>
+        </member>
+        <member name="P:Milvasoft.Helpers.MultiTenancy.Options.TenantOptions`1.Value">
+            <summary>
+            Options Value.
+            </summary>
+        </member>
+        <member name="M:Milvasoft.Helpers.MultiTenancy.Options.TenantOptions`1.Get(System.String)">
+            <summary>
+            Adds a key/value pair to the <see cref="T:System.Collections.Concurrent.ConcurrentDictionary`2"/>      
+            if the key does not already exist. Returns the new value, or the existing value
+            if the key exists.
+            </summary>
+            <param name="name"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Milvasoft.Helpers.MultiTenancy.Options.TenantOptionsCache`3">
+            <summary>
+            Tenant aware options cache
+            </summary>
+            <typeparam name="TOptions"></typeparam>
+            <typeparam name="TTenant"></typeparam>
+            <typeparam name="TKey"></typeparam>
+        </member>
+        <member name="M:Milvasoft.Helpers.MultiTenancy.Options.TenantOptionsCache`3.#ctor(Milvasoft.Helpers.MultiTenancy.Accessor.ITenantAccessor{`1,`2})">
+            <summary>
+            Initializes new instance of <see cref="T:Milvasoft.Helpers.MultiTenancy.Options.TenantOptionsCache`3"/>
+            </summary>
+            <param name="tenantAccessor"></param>
+        </member>
+        <member name="M:Milvasoft.Helpers.MultiTenancy.Options.TenantOptionsCache`3.Clear">
+            <summary>
+            Clears tenant options cache.
+            </summary>
+        </member>
+        <member name="M:Milvasoft.Helpers.MultiTenancy.Options.TenantOptionsCache`3.GetOrAdd(System.String,System.Func{`0})">
+            <summary>
+            Adds a key/value pair to the <see cref="T:System.Collections.Concurrent.ConcurrentDictionary`2"/>      
+            if the key does not already exist. Returns the new value, or the existing value
+            if the key exists.
+            </summary>
+            <param name="name"></param>
+            <param name="createOptions"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.MultiTenancy.Options.TenantOptionsCache`3.TryAdd(System.String,`0)">
+            <summary>
+            Tries to adds a new option to the cache, will return false if the name already exists.
+            </summary>
+            <param name="name"></param>
+            <param name="options"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.MultiTenancy.Options.TenantOptionsCache`3.TryRemove(System.String)">
+            <summary>
+            Try to remove an options instance.
+            </summary>
+            <param name="name"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Milvasoft.Helpers.MultiTenancy.Options.TenantOptionsCacheDictionary`2">
+            <summary>
+            Dictionary of tenant specific options caches.
+            </summary>
+            <typeparam name="TOptions"></typeparam>
+            <typeparam name="TKey"></typeparam>
+        </member>
+        <member name="F:Milvasoft.Helpers.MultiTenancy.Options.TenantOptionsCacheDictionary`2._tenantSpecificOptionCaches">
+            <summary>
+            Caches stored in memory.
+            </summary>
+        </member>
+        <member name="M:Milvasoft.Helpers.MultiTenancy.Options.TenantOptionsCacheDictionary`2.Get(`1)">
+            <summary>
+            Gets options for specific tenant (create if not exists).
+            </summary>
+            <param name="tenantId"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Milvasoft.Helpers.MultiTenancy.Options.TenantOptionsFactory`3">
+            <summary>
+            Create a new options instance with configuration applied
+            </summary>
+            <typeparam name="TOptions"></typeparam>
+            <typeparam name="TTenant"></typeparam>
+            <typeparam name="TKey"></typeparam>
+        </member>
+        <member name="M:Milvasoft.Helpers.MultiTenancy.Options.TenantOptionsFactory`3.#ctor(System.Collections.Generic.IEnumerable{Microsoft.Extensions.Options.IConfigureOptions{`0}},System.Collections.Generic.IEnumerable{Microsoft.Extensions.Options.IPostConfigureOptions{`0}},System.Action{`0,`1},Milvasoft.Helpers.MultiTenancy.Accessor.ITenantAccessor{`1,`2})">
+            <summary>
+            Initializes new instance of <see cref="T:Milvasoft.Helpers.MultiTenancy.Options.TenantOptionsFactory`3"/>
+            </summary>
+            <param name="setups"></param>
+            <param name="postConfigures"></param>
+            <param name="tenantConfig"></param>
+            <param name="tenantAccessor"></param>
+        </member>
+        <member name="M:Milvasoft.Helpers.MultiTenancy.Options.TenantOptionsFactory`3.Create(System.String)">
+            <summary>
+            Creates a new options instance.
+            </summary>
+            <param name="name"></param>
+            <returns></returns>
+        </member>
         <member name="T:Milvasoft.Helpers.MultiTenancy.ResolutionStrategy.HeaderResolutionStrategy">
             <summary>
             Resolve the header to a tenant identifier
@@ -7080,6 +7576,75 @@
             Get the tenant identifier
             </summary>
             <returns></returns>
+        </member>
+        <member name="T:Milvasoft.Helpers.MultiTenancy.Service.ITenantService`2">
+            <summary>
+            Tenant access service.
+            </summary>
+            <typeparam name="TTenant"></typeparam>
+            <typeparam name="TKey"></typeparam>
+        </member>
+        <member name="M:Milvasoft.Helpers.MultiTenancy.Service.ITenantService`2.GetTenantAsync">
+            <summary>
+            Gets the current tenant.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Milvasoft.Helpers.MultiTenancy.Service.TenantService`2">
+            <summary>
+            Tenant access service.
+            </summary>
+            <typeparam name="TTenant"></typeparam>
+            <typeparam name="TKey"></typeparam>
+        </member>
+        <member name="M:Milvasoft.Helpers.MultiTenancy.Service.TenantService`2.#ctor(Milvasoft.Helpers.MultiTenancy.ResolutionStrategy.ITenantResolutionStrategy{`1},Milvasoft.Helpers.MultiTenancy.Store.ITenantStore{`0,`1})">
+            <summary>
+            Creates new instances of <see cref="T:Milvasoft.Helpers.MultiTenancy.Service.TenantService`2"/>
+            </summary>
+            <param name="tenantResolutionStrategy"></param>
+            <param name="tenantStore"></param>
+        </member>
+        <member name="M:Milvasoft.Helpers.MultiTenancy.Service.TenantService`2.GetTenantAsync">
+            <summary>
+            Gets the current tenant.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Milvasoft.Helpers.MultiTenancy.Store.InMemoryTenantStore`2">
+            <summary>
+            Cached tenant store.
+            </summary>
+        </member>
+        <member name="M:Milvasoft.Helpers.MultiTenancy.Store.InMemoryTenantStore`2.#ctor(Milvasoft.Helpers.Caching.IRedisCacheService)">
+            <summary>
+            Creates new instance of <see cref="T:Milvasoft.Helpers.MultiTenancy.Store.InMemoryTenantStore`2"/>
+            </summary>
+            <param name="redisCacheService"></param>
+        </member>
+        <member name="M:Milvasoft.Helpers.MultiTenancy.Store.InMemoryTenantStore`2.GetTenantAsync(`1)">
+            <summary>
+            Returns a tenant according to <paramref name="identifier"/>.
+            </summary>
+            <param name="identifier"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.MultiTenancy.Store.InMemoryTenantStore`2.SetTenantAsync(`1,`0)">
+            <summary>
+            Sets a tenant with a given identifier.
+            </summary>
+            <param name="identifier"></param>
+            <param name="tenant"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Milvasoft.Helpers.MultiTenancy.Utils.TenancyConstants">
+            <summary>
+            Tenancy contants.
+            </summary>
+        </member>
+        <member name="F:Milvasoft.Helpers.MultiTenancy.Utils.TenancyConstants.HttpContextTenantKey">
+            <summary>
+            Header tenant key.
+            </summary>
         </member>
         <member name="T:Milvasoft.Helpers.NetworkUtil">
             <summary>

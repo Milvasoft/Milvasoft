@@ -1,4 +1,5 @@
 ﻿using Milvasoft.Helpers.DataAccess.Concrete.Entity;
+using Milvasoft.Helpers.MultiTenancy.LifetimeManagement;
 using System;
 
 namespace Milvasoft.Helpers.MultiTenancy.EntityBase
@@ -6,7 +7,9 @@ namespace Milvasoft.Helpers.MultiTenancy.EntityBase
     /// <summary>
     /// Tenant base.
     /// </summary>
-    public abstract class MilvaTenantBase<TKey> : FullAuditableEntity<TKey>, IMilvaTenantBase where TKey :  IEquatable<TKey>
+    /// <typeparam name="TKey"> Your key must override ToString() method correctly to block exceptions in <see cref="MultiTenantContainer{TTenant, TKey}"/>. </typeparam>
+    /// <typeparam name="TUserKey"></typeparam>
+    public abstract class MilvaTenantBase<TUserKey, TKey> : FullAuditableEntity<TUserKey, TKey>, IMilvaTenantBase<TKey> where TKey : IEquatable<TKey> where TUserKey : IEquatable<TUserKey>
     {
         /// <summary>
         /// Display name of the Tenant.
