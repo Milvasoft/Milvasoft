@@ -19,7 +19,7 @@ namespace Milvasoft.Helpers.MultiTenancy.Extensions
         /// <returns></returns>
         public static TTenant GetTenant<TTenant, TKey>(this HttpContext context)
             where TTenant : class, IMilvaTenantBase<TKey>
-            where TKey : IEquatable<TKey>
+            where TKey : struct, IEquatable<TKey>
         {
             if (!context.Items.ContainsKey(TenancyConstants.HttpContextTenantKey))
                 return null;

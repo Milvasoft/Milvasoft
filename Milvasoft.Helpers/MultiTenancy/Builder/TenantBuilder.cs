@@ -16,7 +16,7 @@ namespace Milvasoft.Helpers.MultiTenancy.Builder
     /// </summary>
     public class TenantBuilder<TTenant, TKey>
     where TTenant : class, IMilvaTenantBase<TKey>
-    where TKey : IEquatable<TKey>
+    where TKey : struct, IEquatable<TKey>
     {
         private readonly IServiceCollection _services;
 

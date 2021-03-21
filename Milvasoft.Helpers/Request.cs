@@ -299,7 +299,7 @@ namespace Milvasoft.Helpers
         /// <param name="httpRequestMessage"></param>
         /// <param name="httpClient"></param>
         /// <returns> ObjectResponse </returns>
-        public static async Task<object> SendRequestDeserializeSingle<T, TKey>(this HttpClient httpClient, HttpRequestMessage httpRequestMessage) where TKey : IEquatable<TKey>
+        public static async Task<object> SendRequestDeserializeSingle<T, TKey>(this HttpClient httpClient, HttpRequestMessage httpRequestMessage) where TKey : struct, IEquatable<TKey>
         {
             var response = await httpClient.SendAsync(httpRequestMessage).ConfigureAwait(false);
 
@@ -323,7 +323,7 @@ namespace Milvasoft.Helpers
         /// <param name="httpRequestMessage"></param>
         /// <param name="httpClient"></param>
         /// <returns> ObjectResponse </returns>
-        public static async Task<object> SendRequestDeserializeMultiple<T, TKey>(this HttpClient httpClient, HttpRequestMessage httpRequestMessage) where TKey : IEquatable<TKey>
+        public static async Task<object> SendRequestDeserializeMultiple<T, TKey>(this HttpClient httpClient, HttpRequestMessage httpRequestMessage) where TKey : struct, IEquatable<TKey>
         {
             var response = await httpClient.SendAsync(httpRequestMessage).ConfigureAwait(false);
             if (response.IsSuccessStatusCode)

@@ -8,7 +8,7 @@ namespace Milvasoft.Helpers.DataAccess.Concrete.Entity
     /// <summary>
     /// Base entity for all of entities.
     /// </summary>
-    public abstract class BaseEntity<TKey> : IBaseEntity<TKey> where TKey :  IEquatable<TKey>
+    public abstract class BaseEntity<TKey> : IBaseEntity<TKey> where TKey : struct, IEquatable<TKey>
     {
         /// <summary>
         /// Unique identifier for this entity.

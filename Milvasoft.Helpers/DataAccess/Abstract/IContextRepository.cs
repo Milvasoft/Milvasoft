@@ -47,7 +47,7 @@ namespace Milvasoft.Helpers.DataAccess.Abstract
         /// User update process.
         /// </summary>
         void InitializeUpdating<TEntity, TKey>(TEntity entity) where TEntity : class, IBaseEntity<TKey>
-                                                               where TKey :  IEquatable<TKey>;
+                                                               where TKey : struct, IEquatable<TKey>;
 
         /// <summary>
         /// <para> Removes expired tokens from the system. </para>
@@ -73,7 +73,7 @@ namespace Milvasoft.Helpers.DataAccess.Abstract
                                                    string loginProvider,
                                                    string tokenName,
                                                    Dictionary<string, string> cachedTokenDictionary = null) where TUser : IdentityUser<TKey>, IBaseEntity<TKey>
-                                                                                                            where TKey :  IEquatable<TKey>;
+                                                                                                            where TKey : struct, IEquatable<TKey>;
 
         /// <summary>
         /// Gets requested DbSet by <typeparamref name="TEntity"/>.

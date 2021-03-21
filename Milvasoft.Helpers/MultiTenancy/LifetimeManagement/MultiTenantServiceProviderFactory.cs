@@ -13,7 +13,7 @@ namespace Milvasoft.Helpers.MultiTenancy.LifetimeManagement
     /// <typeparam name="TKey"></typeparam>
     public class MultiTenantServiceProviderFactory<TTenant,TKey> : IServiceProviderFactory<ContainerBuilder> 
         where TTenant : class, IMilvaTenantBase<TKey>
-        where TKey : IEquatable<TKey>
+        where TKey : struct, IEquatable<TKey>
     {
 
         /// <summary>

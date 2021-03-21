@@ -16,9 +16,9 @@ namespace Milvasoft.Helpers.MultiTenancy.LifetimeManagement
     /// </summary>
     /// <typeparam name="TTenant"></typeparam>
     /// <typeparam name="TKey"></typeparam>
-    public class MultiTenantContainer<TTenant, TKey> :  IContainer
+    public class MultiTenantContainer<TTenant, TKey> : IContainer
         where TTenant : class, IMilvaTenantBase<TKey>
-        where TKey : IEquatable<TKey>
+        where TKey : struct, IEquatable<TKey>
     {
         #region Fields
 
@@ -72,7 +72,7 @@ namespace Milvasoft.Helpers.MultiTenancy.LifetimeManagement
         /// Gets the associated services with the components that provide them.
         /// </summary>
         public IComponentRegistry ComponentRegistry => GetCurrentTenantScope().ComponentRegistry;
-        
+
         #endregion
 
 
@@ -100,7 +100,7 @@ namespace Milvasoft.Helpers.MultiTenancy.LifetimeManagement
         public ILifetimeScope GetCurrentTenantScope()
         {
             var currentTenant = GetCurrentTenant();
-            return GetTenantScope(currentTenant != null ? currentTenant.Id.ToString() : "");
+            return GetTenantScope(currentTenant?.Id.ToString());
         }
 
         /// <summary>

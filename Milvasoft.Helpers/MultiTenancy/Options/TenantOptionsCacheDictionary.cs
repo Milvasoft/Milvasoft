@@ -9,7 +9,7 @@ namespace Milvasoft.Helpers.MultiTenancy.Options
     /// </summary>
     /// <typeparam name="TOptions"></typeparam>
     /// <typeparam name="TKey"></typeparam>
-    public class TenantOptionsCacheDictionary<TOptions, TKey> where TOptions : class where TKey : IEquatable<TKey>
+    public class TenantOptionsCacheDictionary<TOptions, TKey> where TOptions : class where TKey : struct, IEquatable<TKey>
     {
         /// <summary>
         /// Caches stored in memory.

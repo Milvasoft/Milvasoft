@@ -11,7 +11,7 @@ namespace Milvasoft.Helpers.MultiTenancy.Accessor
     /// <typeparam name="TKey"></typeparam>
     public interface ITenantAccessor<TTenant,TKey>
         where TTenant : class, IMilvaTenantBase<TKey>
-    where TKey : IEquatable<TKey>
+    where TKey : struct, IEquatable<TKey>
     {
         /// <summary>
         /// Accessed tenant from <see cref="HttpContext"/>

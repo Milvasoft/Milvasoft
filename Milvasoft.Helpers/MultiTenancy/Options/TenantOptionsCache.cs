@@ -15,7 +15,7 @@ namespace Milvasoft.Helpers.MultiTenancy.Options
     public class TenantOptionsCache<TOptions, TTenant, TKey> : IOptionsMonitorCache<TOptions>
         where TOptions : class
         where TTenant : class, IMilvaTenantBase<TKey>
-        where TKey : IEquatable<TKey>
+        where TKey : struct, IEquatable<TKey>
     {
 
         private readonly ITenantAccessor<TTenant,TKey> _tenantAccessor;

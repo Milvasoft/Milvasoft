@@ -6,7 +6,7 @@ namespace Milvasoft.Helpers.MultiTenancy.EntityBase
     /// <summary>
     /// Tenant base.
     /// </summary>
-    public interface IMilvaTenantBase<TKey> : IFullAuditable<TKey> where TKey : IEquatable<TKey>
+    public interface IMilvaTenantBase<TKey> : IFullAuditable<TKey> where TKey : struct, IEquatable<TKey>
     {
         /// <summary>
         /// Display name of the Tenant.

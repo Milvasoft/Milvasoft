@@ -17,7 +17,7 @@ namespace Milvasoft.Helpers.MultiTenancy.Extensions
         /// <returns></returns>
         public static TenantBuilder<TTenant, TKey> AddMultiTenancy<TTenant, TKey>(this IServiceCollection services)
             where TTenant : class, IMilvaTenantBase<TKey>
-            where TKey : IEquatable<TKey>
+            where TKey : struct, IEquatable<TKey>
             => new TenantBuilder<TTenant, TKey>(services);
     }
 }

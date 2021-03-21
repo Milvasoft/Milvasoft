@@ -8,7 +8,7 @@ namespace Milvasoft.Helpers.DataAccess.Abstract.Entity
     /// Determines entity's creation is auditable with user information.
     /// </summary>
     /// <typeparam name="TKey"></typeparam>
-    public interface ICreationAuditable<TKey> : IBaseEntity<TKey> where TKey :  IEquatable<TKey>
+    public interface ICreationAuditable<TKey> : IBaseEntity<TKey> where TKey : struct, IEquatable<TKey>
     {
         /// <summary>
         /// Creation date of entity.
@@ -21,9 +21,9 @@ namespace Milvasoft.Helpers.DataAccess.Abstract.Entity
     /// </summary>
     /// <typeparam name="TKey"></typeparam>
     /// <typeparam name="TUserKey"></typeparam>
-    public interface ICreationAuditable<TUserKey,TKey> : IBaseEntity<TKey>, IHasCreator<TUserKey> 
-        where TKey :  IEquatable<TKey>
-        where TUserKey :  IEquatable<TUserKey>
+    public interface ICreationAuditable<TUserKey, TKey> : IBaseEntity<TKey>, IHasCreator<TUserKey>
+        where TKey : struct, IEquatable<TKey>
+        where TUserKey : struct, IEquatable<TUserKey>
     {
         /// <summary>
         /// Creation date of entity.
@@ -37,10 +37,10 @@ namespace Milvasoft.Helpers.DataAccess.Abstract.Entity
     /// <typeparam name="TKey">Key of the user</typeparam>
     /// <typeparam name="TUser">Type of the user</typeparam>
     /// <typeparam name="TUserKey">Type of the user</typeparam>
-    public interface ICreationAuditable<TUser, TUserKey, TKey> : ICreationAuditable<TUserKey,TKey>
+    public interface ICreationAuditable<TUser, TUserKey, TKey> : ICreationAuditable<TUserKey, TKey>
         where TUser : IdentityUser<TUserKey>
-        where TKey :  IEquatable<TKey>
-        where TUserKey :  IEquatable<TUserKey>
+        where TKey : struct, IEquatable<TKey>
+        where TUserKey : struct, IEquatable<TUserKey>
     {
         /// <summary>
         /// Reference to the creator user of this entity.
@@ -54,10 +54,10 @@ namespace Milvasoft.Helpers.DataAccess.Abstract.Entity
     /// <typeparam name="TKey">Key of the user</typeparam>
     /// <typeparam name="TUser">Type of the user</typeparam>
     /// <typeparam name="TUserKey">Type of the user</typeparam>
-    public interface ICreationAuditableWithCustomUser<TUser, TUserKey, TKey> : ICreationAuditable<TUserKey,TKey>
+    public interface ICreationAuditableWithCustomUser<TUser, TUserKey, TKey> : ICreationAuditable<TUserKey, TKey>
         where TUser : IBaseEntity<TUserKey>
-        where TKey :  IEquatable<TKey>
-        where TUserKey :  IEquatable<TUserKey>
+        where TKey : struct, IEquatable<TKey>
+        where TUserKey : struct, IEquatable<TUserKey>
     {
         /// <summary>
         /// Reference to the creator user of this entity.

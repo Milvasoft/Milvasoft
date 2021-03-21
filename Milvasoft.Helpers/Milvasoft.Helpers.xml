@@ -788,6 +788,16 @@
             Creator of entity.
             </summary>
         </member>
+        <member name="T:Milvasoft.Helpers.DataAccess.Abstract.Entity.Auditing.IHasCreator">
+            <summary>
+            Determines entity has creator.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.DataAccess.Abstract.Entity.Auditing.IHasCreator.CreatorUserId">
+            <summary>
+            Creator of entity.
+            </summary>
+        </member>
         <member name="T:Milvasoft.Helpers.DataAccess.Abstract.Entity.Auditing.IHasDeleter`1">
             <summary>
             Determines entity has deleter.
@@ -799,6 +809,16 @@
             Deleter of entity.
             </summary>er
         </member>
+        <member name="T:Milvasoft.Helpers.DataAccess.Abstract.Entity.Auditing.IHasDeleter">
+            <summary>
+            Determines entity has deleter.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.DataAccess.Abstract.Entity.Auditing.IHasDeleter.DeleterUserId">
+            <summary>
+            Deleter of entity.
+            </summary>er
+        </member>
         <member name="T:Milvasoft.Helpers.DataAccess.Abstract.Entity.Auditing.IHasModifier`1">
             <summary>
             Determines entity has modifier.
@@ -806,6 +826,16 @@
             <typeparam name="TUserKey"></typeparam>
         </member>
         <member name="P:Milvasoft.Helpers.DataAccess.Abstract.Entity.Auditing.IHasModifier`1.LastModifierUserId">
+            <summary>
+            Last modifier of entity.
+            </summary>
+        </member>
+        <member name="T:Milvasoft.Helpers.DataAccess.Abstract.Entity.Auditing.IHasModifier">
+            <summary>
+            Determines entity has modifier.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.DataAccess.Abstract.Entity.Auditing.IHasModifier.LastModifierUserId">
             <summary>
             Last modifier of entity.
             </summary>
@@ -890,6 +920,11 @@
             Defines interface for base entity type. All entities in the system must implement this interface.
             </summary>
             <typeparam name="TKey"></typeparam>
+        </member>
+        <member name="T:Milvasoft.Helpers.DataAccess.Abstract.Entity.IBaseEntity">
+            <summary>
+            Defines interface for base entity type. All entities in the system must implement this interface.
+            </summary>
         </member>
         <member name="T:Milvasoft.Helpers.DataAccess.Abstract.Entity.IEntityBase`1">
             <summary>
@@ -2836,14 +2871,14 @@
         </member>
         <member name="M:Milvasoft.Helpers.DataAccess.MilvaContext.MilvaModelBuilderExtensions.UseAnnotationEncryption(Microsoft.EntityFrameworkCore.ModelBuilder,Milvasoft.Helpers.Encryption.Abstract.IMilvaEncryptionProvider)">
             <summary>
-            Adds an index for each indelible entity for IsDeleted property.
+            Adds value converter(<see cref="T:Milvasoft.Helpers.Encryption.Concrete.MilvaEncryptionConverter"/>) to string properties which marked with <see cref="T:Milvasoft.Helpers.DataAccess.Attributes.MilvaEncryptedAttribute"/>.
             </summary>
             <param name="modelBuilder"></param>
             <param name="encryptionProvider"></param>
         </member>
         <member name="M:Milvasoft.Helpers.DataAccess.MilvaContext.MilvaModelBuilderExtensions.UseEncryption(Microsoft.EntityFrameworkCore.ModelBuilder,Milvasoft.Helpers.Encryption.Abstract.IMilvaEncryptionProvider)">
             <summary>
-            Adds an index for each indelible entity for IsDeleted property.
+            Adds value converter(<see cref="T:Milvasoft.Helpers.Encryption.Concrete.MilvaEncryptionConverter"/>) to all strings properties.
             </summary>
             <param name="modelBuilder"></param>
             <param name="encryptionProvider"></param>

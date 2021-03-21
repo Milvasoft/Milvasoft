@@ -23,7 +23,7 @@ namespace Milvasoft.Helpers.MultiTenancy.Extensions
         public static ContainerBuilder RegisterTenantOptions<TOptions, TTenant, TKey>(this ContainerBuilder builder, Action<TOptions, TTenant> tenantConfig)
             where TOptions : class, new()
            where TTenant : class, IMilvaTenantBase<TKey>
-            where TKey : IEquatable<TKey>
+            where TKey : struct, IEquatable<TKey>
         {
             builder.RegisterType<TenantOptionsCache<TOptions, TTenant, TKey>>()
                 .As<IOptionsMonitorCache<TOptions>>()

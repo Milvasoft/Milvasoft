@@ -12,7 +12,7 @@ namespace Milvasoft.Helpers.MultiTenancy.EntityBase
     /// <typeparam name="TUserKey"></typeparam>
     public abstract class MilvaTenant<TUser, TUserKey> : MilvaTenantBase<TUserKey, TenantId>, IFullAuditable<TUser, TUserKey, TenantId>
     where TUser : IdentityUser<TUserKey>
-    where TUserKey : IEquatable<TUserKey>
+    where TUserKey : struct, IEquatable<TUserKey>
     {
         private string _tenancyName;
         private int _branchNo;

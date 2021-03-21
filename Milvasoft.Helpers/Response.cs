@@ -161,7 +161,7 @@ namespace Milvasoft.Helpers
         public static async Task<IActionResult> GetObjectResponseAsync<T, TKey>(this ConfiguredTaskAwaitable<IEnumerable<T>> asyncTask,
                                                                            IEnumerable<TKey> idList,
                                                                            string successMessage,
-                                                                           string errorMessage = null) where TKey : IEquatable<TKey>
+                                                                           string errorMessage = null) where TKey : struct, IEquatable<TKey>
         {
             var response = new ObjectResponse<IEnumerable<T>>();
 

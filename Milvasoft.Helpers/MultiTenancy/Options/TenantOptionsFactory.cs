@@ -15,7 +15,7 @@ namespace Milvasoft.Helpers.MultiTenancy.Options
     internal class TenantOptionsFactory<TOptions, TTenant, TKey> : IOptionsFactory<TOptions>
         where TOptions : class, new()
         where TTenant : class, IMilvaTenantBase<TKey>
-        where TKey : IEquatable<TKey>
+        where TKey : struct, IEquatable<TKey>
     {
 
         private readonly IEnumerable<IConfigureOptions<TOptions>> _setups;

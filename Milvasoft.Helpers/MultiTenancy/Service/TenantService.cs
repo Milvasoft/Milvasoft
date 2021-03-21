@@ -13,7 +13,7 @@ namespace Milvasoft.Helpers.MultiTenancy.Service
     /// <typeparam name="TKey"></typeparam>
     public class TenantService<TTenant, TKey>
     where TTenant : class, IMilvaTenantBase<TKey>
-    where TKey : IEquatable<TKey>
+    where TKey : struct, IEquatable<TKey>
     {
         private readonly ITenantResolutionStrategy<TKey> _tenantResolutionStrategy;
         private readonly ITenantStore<TTenant, TKey> _tenantStore;

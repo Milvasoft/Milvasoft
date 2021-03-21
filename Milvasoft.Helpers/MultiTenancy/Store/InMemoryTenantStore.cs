@@ -10,7 +10,7 @@ namespace Milvasoft.Helpers.MultiTenancy.Store
     /// Cached tenant store.
     /// </summary>
     public class InMemoryTenantStore<TTenant, TKey> : ITenantStore<TTenant, TKey>
-        where TKey : IEquatable<TKey>
+        where TKey : struct, IEquatable<TKey>
         where TTenant : class, IMilvaTenantBase<TKey>, new()
     {
         private readonly IRedisCacheService _redisCacheService;

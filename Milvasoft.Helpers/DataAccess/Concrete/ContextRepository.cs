@@ -118,7 +118,7 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
         /// User update process.
         /// </summary>
         public void InitializeUpdating<TEntity, TKey>(TEntity entity) where TEntity : class, IBaseEntity<TKey>
-                                                                      where TKey :  IEquatable<TKey>
+                                                                      where TKey : struct, IEquatable<TKey>
         {
             var localEntity = _dbContext.Set<TEntity>().Local.FirstOrDefault(u => u.Id.Equals(entity.Id));
             if (localEntity == null)
@@ -152,7 +152,7 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
                                                                 string loginProvider,
                                                                 string tokenName,
                                                                 Dictionary<string, string> cachedTokenDictionary = null) where TUser : IdentityUser<TKey>, IBaseEntity<TKey>
-                                                                                                                         where TKey :  IEquatable<TKey>
+                                                                                                                         where TKey : struct, IEquatable<TKey>
         {
             var tokenHandler = new JwtSecurityTokenHandler();
 

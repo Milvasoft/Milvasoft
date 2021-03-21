@@ -19,7 +19,7 @@ namespace Milvasoft.Helpers.MultiTenancy.Extensions
         /// <returns></returns>
         public static IApplicationBuilder UseMultiTenancy<TTenant, TKey>(this IApplicationBuilder builder)
             where TTenant : class, IMilvaTenantBase<TKey>
-            where TKey : IEquatable<TKey>
+            where TKey : struct, IEquatable<TKey>
             => builder.UseMiddleware<TenantMiddleware<TTenant, TKey>>();
 
         /// <summary>
@@ -31,7 +31,7 @@ namespace Milvasoft.Helpers.MultiTenancy.Extensions
         /// <returns></returns>
         public static IApplicationBuilder UseMultiTenantContainer<TTenant, TKey>(this IApplicationBuilder builder)
             where TTenant : class, IMilvaTenantBase<TKey>
-            where TKey : IEquatable<TKey>
+            where TKey : struct, IEquatable<TKey>
                  => builder.UseMiddleware<MultitenantContainerMiddleware<TTenant, TKey>>();
 
         /// <summary>

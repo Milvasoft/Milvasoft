@@ -8,7 +8,7 @@ namespace Milvasoft.Helpers.DataAccess.Abstract.Entity
     /// Determines entity is fully auditable with user information.
     /// </summary>
     /// <typeparam name="TKey"></typeparam>
-    public interface IFullAuditable<TKey> : IAuditable<TKey>, ISoftDeletable where TKey :  IEquatable<TKey>
+    public interface IFullAuditable<TKey> : IAuditable<TKey>, ISoftDeletable where TKey : struct, IEquatable<TKey>
     {
     }
 
@@ -18,8 +18,8 @@ namespace Milvasoft.Helpers.DataAccess.Abstract.Entity
     /// <typeparam name="TKey"></typeparam>
     /// <typeparam name="TUserKey"></typeparam>
     public interface IFullAuditable<TUserKey, TKey> : IAuditable<TKey>, ISoftDeletable, IHasDeleter<TUserKey>
-        where TKey :  IEquatable<TKey>
-        where TUserKey :  IEquatable<TUserKey>
+        where TKey : struct, IEquatable<TKey>
+        where TUserKey : struct, IEquatable<TUserKey>
     {
     }
 
@@ -31,8 +31,8 @@ namespace Milvasoft.Helpers.DataAccess.Abstract.Entity
     /// <typeparam name="TUserKey">Type of the user</typeparam>
     public interface IFullAuditable<TUser, TUserKey, TKey> : IFullAuditable<TUserKey, TKey>, IAuditable<TUser, TUserKey, TKey>
         where TUser : IdentityUser<TUserKey>
-        where TKey :  IEquatable<TKey>
-        where TUserKey :  IEquatable<TUserKey>
+        where TKey : struct, IEquatable<TKey>
+        where TUserKey : struct, IEquatable<TUserKey>
     {
         /// <summary>
         /// Reference to the last modifier user of this entity.
@@ -48,8 +48,8 @@ namespace Milvasoft.Helpers.DataAccess.Abstract.Entity
     /// <typeparam name="TUserKey">Type of the user</typeparam>
     public interface IFullAuditableWithCustomUser<TUser, TUserKey, TKey> : IFullAuditable<TUserKey, TKey>, IAuditableWithCustomUser<TUser, TUserKey, TKey>
         where TUser : IBaseEntity<TUserKey>
-        where TKey :  IEquatable<TKey>
-        where TUserKey :  IEquatable<TUserKey>
+        where TKey : struct, IEquatable<TKey>
+        where TUserKey : struct, IEquatable<TUserKey>
     {
         /// <summary>
         /// Reference to the last modifier user of this entity.
