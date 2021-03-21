@@ -20,11 +20,11 @@ namespace Milvasoft.Helpers.DataAccess.MilvaContext
     {
 
         /// <summary>
-        /// Adds an index for each indelible entity for IsDeleted property.
+        /// Adds value converter(<see cref="MilvaEncryptionConverter"/>) to string properties which marked with <see cref="MilvaEncryptedAttribute"/>.
         /// </summary>
         /// <param name="modelBuilder"></param>
         /// <param name="encryptionProvider"></param>
-        public static void UseEncryption(this ModelBuilder modelBuilder, IMilvaEncryptionProvider encryptionProvider)
+        public static void UseAnnotationEncryption(this ModelBuilder modelBuilder, IMilvaEncryptionProvider encryptionProvider)
         {
             if (modelBuilder is null)
                 throw new MilvaDeveloperException("The given model builder cannot be null");
@@ -44,6 +44,33 @@ namespace Milvasoft.Helpers.DataAccess.MilvaContext
 
                         if (attributes.Any())
                             property.SetValueConverter(encryptionConverter);
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Adds value converter(<see cref="MilvaEncryptionConverter"/>) to all strings properties.
+        /// </summary>
+        /// <param name="modelBuilder"></param>
+        /// <param name="encryptionProvider"></param>
+        public static void UseEncryption(this ModelBuilder modelBuilder, IMilvaEncryptionProvider encryptionProvider)
+        {
+            if (modelBuilder is null)
+                throw new MilvaDeveloperException("The given model builder cannot be null");
+
+            if (encryptionProvider is null)
+                throw new MilvaDeveloperException("Cannot initialize encryption with a null provider.");
+
+            var encryptionConverter = new MilvaEncryptionConverter(encryptionProvider);
+
+            foreach (IMutableEntityType entityType in modelBuilder.Model.GetEntityTypes())
+            {
+                foreach (IMutableProperty property in entityType.GetProperties())
+                {
+                    if (property.ClrType == typeof(string) /* && !IsDiscriminator(property)*/)
+                    {
+                        property.SetValueConverter(encryptionConverter);
                     }
                 }
             }

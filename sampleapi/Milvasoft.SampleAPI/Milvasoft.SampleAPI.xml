@@ -459,7 +459,6 @@
             <param name="contextRepository"></param>
             <param name="localizer"></param>
             <param name="httpContextAccessor"></param>
-            <param name="useWhiteList"></param>
         </member>
         <member name="M:Milvasoft.SampleAPI.Services.Concrete.AccountService.SignUpAsync(Milvasoft.SampleAPI.DTOs.AccountDTOs.SignUpDTO)">
             <summary>

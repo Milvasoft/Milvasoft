@@ -64,7 +64,6 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// <param name="contextRepository"></param>
         /// <param name="localizer"></param>
         /// <param name="httpContextAccessor"></param>
-        /// <param name="useWhiteList"></param>
         public AccountService(UserManager<AppUser> userManager,
                               SignInManager<AppUser> signInManager,
                               TokenManagement tokenManagement,
