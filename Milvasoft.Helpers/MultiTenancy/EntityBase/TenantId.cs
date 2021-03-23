@@ -1,12 +1,17 @@
 ﻿using Milvasoft.Helpers.Exceptions;
 using Milvasoft.Helpers.Extensions;
+using Newtonsoft.Json;
 using System;
+using System.ComponentModel;
+using System.Runtime.InteropServices;
 
 namespace Milvasoft.Helpers.MultiTenancy.EntityBase
 {
     /// <summary>
     /// Fully unique tenant id.
     /// </summary>
+    [TypeConverter(typeof(TenantIdTypeConverter))]
+    [Serializable]
     public struct TenantId : IEquatable<TenantId>
     {
         /// <summary>
@@ -31,6 +36,12 @@ namespace Milvasoft.Helpers.MultiTenancy.EntityBase
         /// <summary>
         /// Creates new instance of <see cref="TenantId"/>.
         /// </summary>
+        /// <param name="tenantIdString"></param>
+        public TenantId(string tenantIdString) => this = Parse(tenantIdString);
+
+        /// <summary>
+        /// Creates new instance of <see cref="TenantId"/>.
+        /// </summary>
         /// <param name="tenancyName"></param>
         /// <param name="branchNo"></param>
         public TenantId(string tenancyName, int branchNo)
@@ -44,13 +55,7 @@ namespace Milvasoft.Helpers.MultiTenancy.EntityBase
             _tenancyName = tenancyName.ToLowerInvariant();
             _branchNo = branchNo;
             _hash = $"{tenancyName}_{branchNo}".HashToString();
-        }
-
-        /// <summary>
-        /// Creates new instance of <see cref="TenantId"/>.
-        /// </summary>
-        /// <param name="tenantIdString"></param>
-        public TenantId(string tenantIdString) => this = Parse(tenantIdString);
+        } 
 
         /// <summary>
         /// Combines Tenancy Name and BranchNo into a hash code.
@@ -171,7 +176,7 @@ namespace Milvasoft.Helpers.MultiTenancy.EntityBase
         {
             var splittedArray = str.Split('_');
 
-            if (splittedArray.Length! >= 2) return false;
+            if (splittedArray.Length < 2) return false;
 
             if (string.IsNullOrEmpty(splittedArray[0]) || string.IsNullOrEmpty(splittedArray[1]))
                 return false;

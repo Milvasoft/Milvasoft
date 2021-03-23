@@ -7105,18 +7105,18 @@
             Branch no of Tenant.
             </summary>
         </member>
+        <member name="M:Milvasoft.Helpers.MultiTenancy.EntityBase.TenantId.#ctor(System.String)">
+            <summary>
+            Creates new instance of <see cref="T:Milvasoft.Helpers.MultiTenancy.EntityBase.TenantId"/>.
+            </summary>
+            <param name="tenantIdString"></param>
+        </member>
         <member name="M:Milvasoft.Helpers.MultiTenancy.EntityBase.TenantId.#ctor(System.String,System.Int32)">
             <summary>
             Creates new instance of <see cref="T:Milvasoft.Helpers.MultiTenancy.EntityBase.TenantId"/>.
             </summary>
             <param name="tenancyName"></param>
             <param name="branchNo"></param>
-        </member>
-        <member name="M:Milvasoft.Helpers.MultiTenancy.EntityBase.TenantId.#ctor(System.String)">
-            <summary>
-            Creates new instance of <see cref="T:Milvasoft.Helpers.MultiTenancy.EntityBase.TenantId"/>.
-            </summary>
-            <param name="tenantIdString"></param>
         </member>
         <member name="M:Milvasoft.Helpers.MultiTenancy.EntityBase.TenantId.GetHashCode">
             <summary>
