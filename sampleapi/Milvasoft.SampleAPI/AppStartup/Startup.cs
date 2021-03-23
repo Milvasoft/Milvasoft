@@ -7,6 +7,7 @@ using Milvasoft.Helpers.Caching;
 using Milvasoft.Helpers.FileOperations.Abstract;
 using Milvasoft.Helpers.FileOperations.Concrete;
 using Milvasoft.SampleAPI.Data;
+using Milvasoft.SampleAPI.Data.Utils;
 using Milvasoft.SampleAPI.Middlewares;
 
 namespace Milvasoft.SampleAPI.AppStartup
@@ -97,6 +98,7 @@ namespace Milvasoft.SampleAPI.AppStartup
                 endpoints.MapControllerRoute("Default", "{controller=Todo}/{action=GetTodos}/{id?}");
             });
 
+            app.ConfigureSwagger();
 
             #region Seed
 
@@ -104,9 +106,9 @@ namespace Milvasoft.SampleAPI.AppStartup
 
             dbContext.Database.MigrateAsync().Wait();
 
-            #endregion
+            app.ResetDatabaseAsync().Wait();
 
-            app.ConfigureSwagger();
+            #endregion
         }
     }
 }
