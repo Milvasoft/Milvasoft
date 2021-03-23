@@ -5,6 +5,7 @@ using Milvasoft.Helpers.DataAccess.Concrete.Entity;
 using Milvasoft.Helpers.Encryption.Abstract;
 using Milvasoft.Helpers.Encryption.Concrete;
 using Milvasoft.Helpers.Exceptions;
+using Milvasoft.Helpers.MultiTenancy.EntityBase;
 using System;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
@@ -18,6 +19,22 @@ namespace Milvasoft.Helpers.DataAccess.MilvaContext
     /// </summary>
     public static class MilvaModelBuilderExtensions
     {
+        /// <summary>
+        /// Adds <see cref="TenantId"/> converters to <see cref="TenantId"/> typed properties.
+        /// </summary>
+        /// <param name="modelBuilder"></param>
+        public static void UseTenantId(this ModelBuilder modelBuilder)
+        {
+            if (modelBuilder is null)
+                throw new MilvaDeveloperException("The given model builder cannot be null");
+
+            var tenantIdConverter = new TenantIdStringConverter();
+
+            foreach (IMutableEntityType entityType in modelBuilder.Model.GetEntityTypes())
+                foreach (IMutableProperty property in entityType.GetProperties())
+                    if (property.ClrType == typeof(TenantId))
+                        property.SetValueConverter(tenantIdConverter);
+        }
 
         /// <summary>
         /// Adds value converter(<see cref="MilvaEncryptionConverter"/>) to string properties which marked with <see cref="MilvaEncryptedAttribute"/>.
@@ -65,15 +82,9 @@ namespace Milvasoft.Helpers.DataAccess.MilvaContext
             var encryptionConverter = new MilvaEncryptionConverter(encryptionProvider);
 
             foreach (IMutableEntityType entityType in modelBuilder.Model.GetEntityTypes())
-            {
                 foreach (IMutableProperty property in entityType.GetProperties())
-                {
                     if (property.ClrType == typeof(string) /* && !IsDiscriminator(property)*/)
-                    {
                         property.SetValueConverter(encryptionConverter);
-                    }
-                }
-            }
         }
 
         /// <summary>

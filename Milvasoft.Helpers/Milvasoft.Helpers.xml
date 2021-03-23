@@ -2869,6 +2869,12 @@
             Extension methods for <c cref="T:Milvasoft.Helpers.DataAccess.MilvaContext.MilvaDbContext`3"></c>.
             </summary>
         </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.MilvaContext.MilvaModelBuilderExtensions.UseTenantId(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <summary>
+            Adds <see cref="T:Milvasoft.Helpers.MultiTenancy.EntityBase.TenantId"/> converters to <see cref="T:Milvasoft.Helpers.MultiTenancy.EntityBase.TenantId"/> typed properties.
+            </summary>
+            <param name="modelBuilder"></param>
+        </member>
         <member name="M:Milvasoft.Helpers.DataAccess.MilvaContext.MilvaModelBuilderExtensions.UseAnnotationEncryption(Microsoft.EntityFrameworkCore.ModelBuilder,Milvasoft.Helpers.Encryption.Abstract.IMilvaEncryptionProvider)">
             <summary>
             Adds value converter(<see cref="T:Milvasoft.Helpers.Encryption.Concrete.MilvaEncryptionConverter"/>) to string properties which marked with <see cref="T:Milvasoft.Helpers.DataAccess.Attributes.MilvaEncryptedAttribute"/>.
@@ -7167,6 +7173,25 @@
             <param name="format"></param>
             <returns></returns>
         </member>
+        <member name="M:Milvasoft.Helpers.MultiTenancy.EntityBase.TenantId.Parse(System.String)">
+            <summary>
+            Parses <paramref name="str"/> to <see cref="T:Milvasoft.Helpers.MultiTenancy.EntityBase.TenantId"/>.
+            </summary>
+            <param name="str"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.MultiTenancy.EntityBase.TenantId.op_Implicit(Milvasoft.Helpers.MultiTenancy.EntityBase.TenantId)~System.String">
+            <summary>
+            Provides implicit casting.
+            </summary>
+            <param name="tenantId"></param>
+        </member>
+        <member name="M:Milvasoft.Helpers.MultiTenancy.EntityBase.TenantId.op_Explicit(System.String)~Milvasoft.Helpers.MultiTenancy.EntityBase.TenantId">
+            <summary>
+            Provides explicit casting.
+            </summary>
+            <param name="tenantId"></param>
+        </member>
         <member name="M:Milvasoft.Helpers.MultiTenancy.EntityBase.TenantId.op_Equality(Milvasoft.Helpers.MultiTenancy.EntityBase.TenantId,Milvasoft.Helpers.MultiTenancy.EntityBase.TenantId)">
             <summary>
             Indicates whether the values of two specified <see cref="T:Milvasoft.Helpers.MultiTenancy.EntityBase.TenantId"/> objects are equal.
@@ -7182,6 +7207,58 @@
             <param name="a"></param>
             <param name="b"></param>
             <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.MultiTenancy.EntityBase.TenantId.op_LessThan(Milvasoft.Helpers.MultiTenancy.EntityBase.TenantId,Milvasoft.Helpers.MultiTenancy.EntityBase.TenantId)">
+            <summary>
+            Indicates whether the values of <paramref name="a"/>.BranchNo are smaller than <paramref name="b"/>.
+            </summary>
+            <param name="a"></param>
+            <param name="b"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.MultiTenancy.EntityBase.TenantId.op_GreaterThan(Milvasoft.Helpers.MultiTenancy.EntityBase.TenantId,Milvasoft.Helpers.MultiTenancy.EntityBase.TenantId)">
+            <summary>
+            Indicates whether the values of <paramref name="a"/>.BranchNo are bigger than <paramref name="b"/>.
+            </summary>
+            <param name="a"></param>
+            <param name="b"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.MultiTenancy.EntityBase.TenantId.op_LessThanOrEqual(Milvasoft.Helpers.MultiTenancy.EntityBase.TenantId,Milvasoft.Helpers.MultiTenancy.EntityBase.TenantId)">
+            <summary>
+            Indicates whether the values of <paramref name="a"/>.BranchNo are smaller or equal than <paramref name="b"/>.
+            </summary>
+            <param name="a"></param>
+            <param name="b"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.MultiTenancy.EntityBase.TenantId.op_GreaterThanOrEqual(Milvasoft.Helpers.MultiTenancy.EntityBase.TenantId,Milvasoft.Helpers.MultiTenancy.EntityBase.TenantId)">
+            <summary>
+            Indicates whether the values of <paramref name="a"/>.BranchNo are bigger or equal than <paramref name="b"/>.
+            </summary>
+            <param name="a"></param>
+            <param name="b"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.MultiTenancy.EntityBase.TenantId.op_Increment(Milvasoft.Helpers.MultiTenancy.EntityBase.TenantId)">
+            <summary>
+            Increases <paramref name="tenantId"/>.BranchNo.
+            </summary>
+            <param name="tenantId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.MultiTenancy.EntityBase.TenantId.op_Decrement(Milvasoft.Helpers.MultiTenancy.EntityBase.TenantId)">
+            <summary>
+            Decreases <paramref name="tenantId"/>.BranchNo.
+            </summary>
+            <param name="tenantId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.MultiTenancy.EntityBase.TenantIdStringConverter.#ctor(Microsoft.EntityFrameworkCore.Storage.ValueConversion.ConverterMappingHints)">
+            <summary>
+            Creates a new <see cref="T:Milvasoft.Helpers.MultiTenancy.EntityBase.TenantIdStringConverter"/> instance.
+            </summary>
+            <param name="mappingHints">Entity Framework mapping hints</param>
         </member>
         <member name="T:Milvasoft.Helpers.MultiTenancy.Extensions.ApplicationBuilderExtensions">
             <summary>

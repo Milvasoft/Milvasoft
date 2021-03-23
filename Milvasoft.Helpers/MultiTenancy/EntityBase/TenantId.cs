@@ -152,27 +152,10 @@ namespace Milvasoft.Helpers.MultiTenancy.EntityBase
         }
 
         /// <summary>
-        /// Indicates whether the values of two specified <see cref="TenantId"/> objects are equal.
+        /// Parses <paramref name="str"/> to <see cref="TenantId"/>.
         /// </summary>
-        /// <param name="a"></param>
-        /// <param name="b"></param>
+        /// <param name="str"></param>
         /// <returns></returns>
-        public static bool operator ==(TenantId a, TenantId b)
-        {
-            if (a._hash != b._hash)
-                return false;
-
-            return true;
-        }
-
-        /// <summary>
-        /// Indicates whether the values of two specified <see cref="TenantId"/> objects are not equal.
-        /// </summary>
-        /// <param name="a"></param>
-        /// <param name="b"></param>
-        /// <returns></returns>
-        public static bool operator !=(TenantId a, TenantId b) => !(a == b);
-
         public static TenantId Parse(string str)
         {
             if (TryParse(str))
@@ -203,6 +186,112 @@ namespace Milvasoft.Helpers.MultiTenancy.EntityBase
             }
 
             return true;
+        }
+
+        /// <summary>
+        /// Provides implicit casting.
+        /// </summary>
+        /// <param name="tenantId"></param>
+        public static implicit operator string(TenantId tenantId) => tenantId.ToString();
+
+        /// <summary>
+        /// Provides explicit casting.
+        /// </summary>
+        /// <param name="tenantId"></param>
+        public static explicit operator TenantId(string tenantId)
+        {
+            if (!TryParse(tenantId))
+                throw new MilvaDeveloperException("Cannot explicit casting because of invalid format.");
+
+            return Parse(tenantId);
+        }
+
+        /// <summary>
+        /// Indicates whether the values of two specified <see cref="TenantId"/> objects are equal.
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <returns></returns>
+        public static bool operator ==(TenantId a, TenantId b)
+        {
+            if (a._hash != b._hash)
+                return false;
+
+            return true;
+        }
+
+        /// <summary>
+        /// Indicates whether the values of two specified <see cref="TenantId"/> objects are not equal.
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <returns></returns>
+        public static bool operator !=(TenantId a, TenantId b) => !(a == b);
+
+        /// <summary>
+        /// Indicates whether the values of <paramref name="a"/>.BranchNo are smaller than <paramref name="b"/>.
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <returns></returns>
+        public static bool operator <(TenantId a, TenantId b)
+        {
+            if (a.BranchNo > b.BranchNo)
+                return false;
+
+            return true;
+        }
+
+        /// <summary>
+        /// Indicates whether the values of <paramref name="a"/>.BranchNo are bigger than <paramref name="b"/>.
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <returns></returns>
+        public static bool operator >(TenantId a, TenantId b) => !(a <= b);
+
+        /// <summary>
+        /// Indicates whether the values of <paramref name="a"/>.BranchNo are smaller or equal than <paramref name="b"/>.
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <returns></returns>
+        public static bool operator <=(TenantId a, TenantId b)
+        {
+            if (a.BranchNo > b.BranchNo)
+                return false;
+
+            return true;
+        }
+
+        /// <summary>
+        /// Indicates whether the values of <paramref name="a"/>.BranchNo are bigger or equal than <paramref name="b"/>.
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <returns></returns>
+        public static bool operator >=(TenantId a, TenantId b) => !(a <= b);
+
+        /// <summary>
+        /// Increases <paramref name="tenantId"/>.BranchNo.
+        /// </summary>
+        /// <param name="tenantId"></param>
+        /// <returns></returns>
+        public static TenantId operator ++(TenantId tenantId)
+        {
+            tenantId._branchNo++;
+            return tenantId;
+        }
+
+        /// <summary>
+        /// Decreases <paramref name="tenantId"/>.BranchNo.
+        /// </summary>
+        /// <param name="tenantId"></param>
+        /// <returns></returns>
+        public static TenantId operator --(TenantId tenantId)
+        {
+            tenantId._branchNo--;
+            return tenantId;
         }
     }
 }
