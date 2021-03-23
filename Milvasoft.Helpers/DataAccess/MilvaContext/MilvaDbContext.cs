@@ -98,6 +98,7 @@ namespace Milvasoft.Helpers.DataAccess.MilvaContext
         /// <param name="modelBuilder"></param>
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.UseTenantId();
             base.OnModelCreating(modelBuilder);
         }
 
