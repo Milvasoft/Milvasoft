@@ -6989,7 +6989,7 @@
             Display name of the Tenant.
             </summary>
         </member>
-        <member name="P:Milvasoft.Helpers.MultiTenancy.EntityBase.IMilvaTenantBase`1.DisplayName">
+        <member name="P:Milvasoft.Helpers.MultiTenancy.EntityBase.IMilvaTenantBase`1.Name">
             <summary>
             Display name of the Tenant.
             </summary>
@@ -7016,6 +7016,11 @@
         <member name="P:Milvasoft.Helpers.MultiTenancy.EntityBase.MilvaTenant`2.Id">
             <summary>
             Id of tenant.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.MultiTenancy.EntityBase.MilvaTenant`2.TenancyName">
+            <summary>
+            Tenancy name of tenant.
             </summary>
         </member>
         <member name="P:Milvasoft.Helpers.MultiTenancy.EntityBase.MilvaTenant`2.BranchNo">
@@ -7048,13 +7053,12 @@
             Gets or sets additional tenant items.
             </summary>
         </member>
-        <member name="M:Milvasoft.Helpers.MultiTenancy.EntityBase.MilvaTenant`2.#ctor(System.String,System.Int32,System.String)">
+        <member name="M:Milvasoft.Helpers.MultiTenancy.EntityBase.MilvaTenant`2.#ctor(System.String,System.Int32)">
             <summary>
             Creates a new tenant.
             </summary>
             <param name="tenancyName">UNIQUE name of this Tenant</param>
             <param name="branchNo"></param>
-            <param name="name">Display name of the Tenant</param>
         </member>
         <member name="T:Milvasoft.Helpers.MultiTenancy.EntityBase.MilvaTenantBase`2">
             <summary>
@@ -7065,10 +7069,10 @@
         </member>
         <member name="P:Milvasoft.Helpers.MultiTenancy.EntityBase.MilvaTenantBase`2.TenancyName">
             <summary>
-            Tenancy name of tenant..
+            Tenancy name of tenant.
             </summary>
         </member>
-        <member name="P:Milvasoft.Helpers.MultiTenancy.EntityBase.MilvaTenantBase`2.DisplayName">
+        <member name="P:Milvasoft.Helpers.MultiTenancy.EntityBase.MilvaTenantBase`2.Name">
             <summary>
             Display name of the Tenant.
             </summary>
@@ -7254,11 +7258,56 @@
             <param name="tenantId"></param>
             <returns></returns>
         </member>
+        <member name="T:Milvasoft.Helpers.MultiTenancy.EntityBase.TenantIdStringConverter">
+            <summary>
+            Converts <see cref="T:Milvasoft.Helpers.MultiTenancy.EntityBase.TenantId"/> to <see cref="T:System.String"/> or <see cref="T:System.String"/> to <see cref="T:Milvasoft.Helpers.MultiTenancy.EntityBase.TenantId"/>.
+            </summary>
+        </member>
         <member name="M:Milvasoft.Helpers.MultiTenancy.EntityBase.TenantIdStringConverter.#ctor(Microsoft.EntityFrameworkCore.Storage.ValueConversion.ConverterMappingHints)">
             <summary>
             Creates a new <see cref="T:Milvasoft.Helpers.MultiTenancy.EntityBase.TenantIdStringConverter"/> instance.
             </summary>
             <param name="mappingHints">Entity Framework mapping hints</param>
+        </member>
+        <member name="T:Milvasoft.Helpers.MultiTenancy.EntityBase.TenantIdTypeConverter">
+            <summary>
+            Provides a type converter to convert string objects to and from <see cref="T:Milvasoft.Helpers.MultiTenancy.EntityBase.TenantId"/>.
+            </summary>
+        </member>
+        <member name="M:Milvasoft.Helpers.MultiTenancy.EntityBase.TenantIdTypeConverter.CanConvertFrom(System.ComponentModel.ITypeDescriptorContext,System.Type)">
+            <summary>
+            Determines <paramref name="sourceType"/> can convert from string.
+            </summary>
+            <param name="context"></param>
+            <param name="sourceType"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.MultiTenancy.EntityBase.TenantIdTypeConverter.ConvertFrom(System.ComponentModel.ITypeDescriptorContext,System.Globalization.CultureInfo,System.Object)">
+            <summary>
+            Converts <paramref name="value"/>(<see cref="T:System.String"/>) to <see cref="T:Milvasoft.Helpers.MultiTenancy.EntityBase.TenantId"/>.
+            </summary>
+            <param name="context"></param>
+            <param name="culture"></param>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.MultiTenancy.EntityBase.TenantIdTypeConverter.CanConvertTo(System.ComponentModel.ITypeDescriptorContext,System.Type)">
+            <summary>
+            Determines <paramref name="destinationType"/> can convert to string.
+            </summary>
+            <param name="context"></param>
+            <param name="destinationType"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.MultiTenancy.EntityBase.TenantIdTypeConverter.ConvertTo(System.ComponentModel.ITypeDescriptorContext,System.Globalization.CultureInfo,System.Object,System.Type)">
+            <summary>
+            Converts the given value object to the specified type, using the specified context and culture information.
+            </summary>
+            <param name="context"></param>
+            <param name="culture"></param>
+            <param name="value"></param>
+            <param name="destinationType"></param>
+            <returns></returns>
         </member>
         <member name="T:Milvasoft.Helpers.MultiTenancy.Extensions.ApplicationBuilderExtensions">
             <summary>

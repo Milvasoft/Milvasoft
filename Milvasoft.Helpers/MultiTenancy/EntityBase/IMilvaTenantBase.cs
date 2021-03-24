@@ -16,7 +16,7 @@ namespace Milvasoft.Helpers.MultiTenancy.EntityBase
         /// <summary>
         /// Display name of the Tenant.
         /// </summary>
-        string DisplayName { get; set; }
+        string Name { get; set; }
 
         /// <summary>
         /// ENCRYPTED connection string of the tenant database.
