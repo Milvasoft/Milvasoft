@@ -9,31 +9,24 @@ namespace Milvasoft.Helpers.Exceptions
     public class MilvaValidationException : MilvaBaseException
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="MilvaValidationException"/> class.
+        /// Initializes a new instance of the <see cref="MilvaValidationException"/> class with a specified error message.
         /// </summary>
-        /// <param name="localizer"></param>
-        public MilvaValidationException(IStringLocalizer localizer) : base(localizer[nameof(MilvaValidationException)])
-        {
-            ExceptionCode = MilvaExceptionCode.ValidationErrorException;
-        }
+        public MilvaValidationException() : base($"{MilvaException.Validation}Exception") 
+            => ExceptionCode = (int)MilvaException.Validation;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MilvaValidationException"/> class with a specified error message.
         /// </summary>
-        /// <param name="customMessage"></param>
-        public MilvaValidationException(string customMessage) : base(customMessage)
-        {
-            ExceptionCode = MilvaExceptionCode.ValidationErrorException;
-        }
+        /// <param name="messageOrLocalizerKey"></param>
+        public MilvaValidationException(string messageOrLocalizerKey) : base(messageOrLocalizerKey) 
+            => ExceptionCode = (int)MilvaException.Validation;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MilvaValidationException"/> class with a specified error message and a reference to the inner exception that is the cause of this exception.
         /// </summary>
-        /// <param name="customMessage"></param>
+        /// <param name="messageOrLocalizerKey"></param>
         /// <param name="innerException"></param>
-        public MilvaValidationException(string customMessage, Exception innerException) : base(customMessage, innerException)
-        {
-            ExceptionCode = MilvaExceptionCode.ValidationErrorException;
-        }
+        public MilvaValidationException(string messageOrLocalizerKey, Exception innerException) : base(messageOrLocalizerKey, innerException) 
+            => ExceptionCode = (int)MilvaException.Validation;
     }
 }

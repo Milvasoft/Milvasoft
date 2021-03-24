@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Milvasoft.Helpers.Caching;
+using Milvasoft.Helpers.Exceptions;
 using Milvasoft.Helpers.FileOperations.Abstract;
 using Milvasoft.Helpers.FileOperations.Concrete;
 using Milvasoft.SampleAPI.Data;
@@ -17,7 +18,6 @@ namespace Milvasoft.SampleAPI.AppStartup
     /// </summary>
     public class Startup
     {
-
         /// <summary>
         /// Gets or sets configuration object.
         /// </summary>
@@ -69,6 +69,7 @@ namespace Milvasoft.SampleAPI.AppStartup
 
             services.ConfigureSwagger();
         }
+
 
         /// <summary>
         /// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

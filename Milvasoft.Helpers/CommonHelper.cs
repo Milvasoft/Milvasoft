@@ -222,6 +222,5 @@ namespace Milvasoft.Helpers
         {
             return string.IsNullOrEmpty(value) ? null : JsonConvert.DeserializeObject<T>(value);
         }
-
     }
 }

@@ -45,7 +45,7 @@ namespace Milvasoft.Helpers.MultiTenancy.EntityBase
         public TenantId(string tenancyName, int branchNo)
         {
             if (string.IsNullOrEmpty(tenancyName))
-                throw new MilvaUserFriendlyException("Tenancy name cannot be empty.", MilvaExceptionCode.TenancyNameRequired);
+                throw new MilvaUserFriendlyException("Tenancy name cannot be empty.", MilvaException.TenancyNameRequired);
 
             if (branchNo <= 0)
                 throw new MilvaDeveloperException("Branch No cannot be 0 or less.");

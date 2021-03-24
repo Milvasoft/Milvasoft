@@ -3371,23 +3371,22 @@
             Default value is null.
             </summary>
         </member>
-        <member name="M:Milvasoft.Helpers.Exceptions.MilvaBaseException.#ctor(Microsoft.Extensions.Localization.IStringLocalizer)">
+        <member name="M:Milvasoft.Helpers.Exceptions.MilvaBaseException.#ctor">
             <summary>
-            Initializes a new instance of the <see cref="T:Milvasoft.Helpers.Exceptions.MilvaBaseException"/> class  with a specified error message.
+            Initializes a new instance of the <see cref="T:Milvasoft.Helpers.Exceptions.MilvaBaseException"/> class with a specified error message.
             </summary>
-            <param name="localizer"></param>
         </member>
         <member name="M:Milvasoft.Helpers.Exceptions.MilvaBaseException.#ctor(System.String)">
             <summary>
             Initializes a new instance of the <see cref="T:Milvasoft.Helpers.Exceptions.MilvaBaseException"/> class  with a specified error message.
             </summary>
-            <param name="customMessage"></param>
+            <param name="messageOrLocalizerKey"></param>
         </member>
         <member name="M:Milvasoft.Helpers.Exceptions.MilvaBaseException.#ctor(System.String,System.Exception)">
             <summary>
             Initializes a new instance of the <see cref="T:Milvasoft.Helpers.Exceptions.MilvaBaseException"/> class  with a specified error message and a reference to the inner exception that is the cause of this exception.
             </summary>
-            <param name="customMessage"></param>
+            <param name="messageOrLocalizerKey"></param>
             <param name="innerException"></param>
         </member>
         <member name="T:Milvasoft.Helpers.Exceptions.MilvaDeveloperException">
@@ -3395,213 +3394,182 @@
             The exception that is thrown when attempt to add an entity with Id the repository contains an entity with the same Id.
             </summary>
         </member>
-        <member name="M:Milvasoft.Helpers.Exceptions.MilvaDeveloperException.#ctor(Microsoft.Extensions.Localization.IStringLocalizer)">
+        <member name="M:Milvasoft.Helpers.Exceptions.MilvaDeveloperException.#ctor">
             <summary>
-            Initializes a new instance of the <see cref="T:Milvasoft.Helpers.Exceptions.MilvaValidationException"/> class.
+            Initializes a new instance of the <see cref="T:Milvasoft.Helpers.Exceptions.MilvaDeveloperException"/> class with a specified error message.
             </summary>
-            <param name="localizer"></param>
         </member>
         <member name="M:Milvasoft.Helpers.Exceptions.MilvaDeveloperException.#ctor(System.String)">
             <summary>
-            Initializes a new instance of the <see cref="T:Milvasoft.Helpers.Exceptions.MilvaValidationException"/> class with a specified error message.
+            Initializes a new instance of the <see cref="T:Milvasoft.Helpers.Exceptions.MilvaDeveloperException"/> class with a specified error message.
             </summary>
-            <param name="customMessage"></param>
+            <param name="messageOrLocalizerKey"></param>
         </member>
         <member name="M:Milvasoft.Helpers.Exceptions.MilvaDeveloperException.#ctor(System.String,System.Exception)">
             <summary>
-            Initializes a new instance of the <see cref="T:Milvasoft.Helpers.Exceptions.MilvaValidationException"/> class with a specified error message and a reference to the inner exception that is the cause of this exception.
+            Initializes a new instance of the <see cref="T:Milvasoft.Helpers.Exceptions.MilvaDeveloperException"/> class with a specified error message and a reference to the inner exception that is the cause of this exception.
             </summary>
-            <param name="customMessage"></param>
+            <param name="messageOrLocalizerKey"></param>
             <param name="innerException"></param>
         </member>
-        <member name="T:Milvasoft.Helpers.Exceptions.MilvaExceptionCode">
+        <member name="T:Milvasoft.Helpers.Exceptions.MilvaException">
             <summary>
-            Defines the MilvasoftExceptionCode.
+            Defines the Milvasoft Exception Codes.
             </summary>
         </member>
-        <member name="F:Milvasoft.Helpers.Exceptions.MilvaExceptionCode.BaseException">
+        <member name="F:Milvasoft.Helpers.Exceptions.MilvaException.Base">
             <summary>
             Defines the UnknownError.
             </summary>
         </member>
-        <member name="F:Milvasoft.Helpers.Exceptions.MilvaExceptionCode.CannotFindEntityException">
+        <member name="F:Milvasoft.Helpers.Exceptions.MilvaException.General">
             <summary>
             Defines the CannotFindEntity.
             </summary>
         </member>
-        <member name="F:Milvasoft.Helpers.Exceptions.MilvaExceptionCode.AddingNewEntityWithExistsIdException">
+        <member name="F:Milvasoft.Helpers.Exceptions.MilvaException.CannotFindEntity">
+            <summary>
+            Defines the CannotFindEntity.
+            </summary>
+        </member>
+        <member name="F:Milvasoft.Helpers.Exceptions.MilvaException.AddingNewEntityWithExistsId">
             <summary>
             Defines the AddingNewEntityWithExsistId.
             </summary>
         </member>
-        <member name="F:Milvasoft.Helpers.Exceptions.MilvaExceptionCode.CannotBeAddedProductToStockException">
+        <member name="F:Milvasoft.Helpers.Exceptions.MilvaException.Encryption">
             <summary>
-            Defines the CannotBeAddedProductToStock.
+            Defines the EncryptionError.
             </summary>
         </member>
-        <member name="F:Milvasoft.Helpers.Exceptions.MilvaExceptionCode.CannotAddTheEntitiesToAllOfRepositoriesException">
-            <summary>
-            Defines the CannotAddTheEntitiesToAllOfRepositories.
-            </summary>
-        </member>
-        <member name="F:Milvasoft.Helpers.Exceptions.MilvaExceptionCode.CannotFindEnumByIdExceptionException">
+        <member name="F:Milvasoft.Helpers.Exceptions.MilvaException.CannotFindEnumById">
             <summary>
             Defines the CannotFindEnumById.
             </summary>
         </member>
-        <member name="F:Milvasoft.Helpers.Exceptions.MilvaExceptionCode.CannotStartRedisServerException">
+        <member name="F:Milvasoft.Helpers.Exceptions.MilvaException.CannotStartRedisServer">
             <summary>
             Defines the CannotStartRedisServer.
             </summary>
         </member>
-        <member name="F:Milvasoft.Helpers.Exceptions.MilvaExceptionCode.DeletingEntityWithRelationsException">
+        <member name="F:Milvasoft.Helpers.Exceptions.MilvaException.DeletingEntityWithRelations">
             <summary>
             Defines the DeletingEntityWithRelations.
             </summary>
         </member>
-        <member name="F:Milvasoft.Helpers.Exceptions.MilvaExceptionCode.DeletingInvalidEntityException">
+        <member name="F:Milvasoft.Helpers.Exceptions.MilvaException.DeletingInvalidEntity">
             <summary>
             Defines the DeletingInvalidEntity.
             </summary>
         </member>
-        <member name="F:Milvasoft.Helpers.Exceptions.MilvaExceptionCode.DeletingSupplierWithDebtException">
+        <member name="F:Milvasoft.Helpers.Exceptions.MilvaException.TenancyNameRequired">
             <summary>
-            Defines the DeletingSupplierWithDebt.
+            Defines the TenancyNameRequired.
             </summary>
         </member>
-        <member name="F:Milvasoft.Helpers.Exceptions.MilvaExceptionCode.EmptyListException">
+        <member name="F:Milvasoft.Helpers.Exceptions.MilvaException.EmptyList">
             <summary>
             Defines the EmptyList.
             </summary>
         </member>
-        <member name="F:Milvasoft.Helpers.Exceptions.MilvaExceptionCode.InvalidNumericValueException">
+        <member name="F:Milvasoft.Helpers.Exceptions.MilvaException.InvalidNumericValue">
             <summary>
             Defines the InvalidNumericValue.
             </summary>
         </member>
-        <member name="F:Milvasoft.Helpers.Exceptions.MilvaExceptionCode.InvalidParameterException">
+        <member name="F:Milvasoft.Helpers.Exceptions.MilvaException.InvalidParameter">
             <summary>
             Defines the InvalidParameter.
             </summary>
         </member>
-        <member name="F:Milvasoft.Helpers.Exceptions.MilvaExceptionCode.InvalidStringExpressionException">
+        <member name="F:Milvasoft.Helpers.Exceptions.MilvaException.InvalidStringExpression">
             <summary>
             Defines the InvalidStringExpression.
             </summary>
         </member>
-        <member name="F:Milvasoft.Helpers.Exceptions.MilvaExceptionCode.NullParameterException">
+        <member name="F:Milvasoft.Helpers.Exceptions.MilvaException.NullParameter">
             <summary>
             Defines the NullParameter.
             </summary>
         </member>
-        <member name="F:Milvasoft.Helpers.Exceptions.MilvaExceptionCode.UnknownStockTypeException">
+        <member name="F:Milvasoft.Helpers.Exceptions.MilvaException.FeatureNotImplemented">
             <summary>
-            Defines the UnknownStockType.
+            Defines the FeatureNotImplemented.
             </summary>
         </member>
-        <member name="F:Milvasoft.Helpers.Exceptions.MilvaExceptionCode.UpdatingInvalidEntityException">
+        <member name="F:Milvasoft.Helpers.Exceptions.MilvaException.UpdatingInvalidEntity">
             <summary>
             Defines the UpdatingInvalidEntity.
             </summary>
         </member>
-        <member name="F:Milvasoft.Helpers.Exceptions.MilvaExceptionCode.NotLoggedInUserException">
+        <member name="F:Milvasoft.Helpers.Exceptions.MilvaException.NotLoggedInUser">
             <summary>
             Defines the NotLoggedInUser.
             </summary>
         </member>
-        <member name="F:Milvasoft.Helpers.Exceptions.MilvaExceptionCode.AnotherLoginExistsException">
+        <member name="F:Milvasoft.Helpers.Exceptions.MilvaException.AnotherLoginExists">
             <summary>
             Defines the AnotherLoginExists.
             </summary>
         </member>
-        <member name="F:Milvasoft.Helpers.Exceptions.MilvaExceptionCode.OldVersionException">
+        <member name="F:Milvasoft.Helpers.Exceptions.MilvaException.OldVersion">
             <summary>
             Defines the OldVersion.
             </summary>
         </member>
-        <member name="F:Milvasoft.Helpers.Exceptions.MilvaExceptionCode.InvalidLicenceException">
+        <member name="F:Milvasoft.Helpers.Exceptions.MilvaException.InvalidLicence">
             <summary>
             Defines the InvalidLicence.
             </summary>
         </member>
-        <member name="F:Milvasoft.Helpers.Exceptions.MilvaExceptionCode.ExpiredDemoException">
+        <member name="F:Milvasoft.Helpers.Exceptions.MilvaException.ExpiredDemo">
             <summary>
             Defines the ExpiredDemo.
             </summary>
         </member>
-        <member name="F:Milvasoft.Helpers.Exceptions.MilvaExceptionCode.NeedForceOperationException">
+        <member name="F:Milvasoft.Helpers.Exceptions.MilvaException.NeedForceOperation">
             <summary>
             Defines the NeedForceOperation.
             </summary>
         </member>
-        <member name="F:Milvasoft.Helpers.Exceptions.MilvaExceptionCode.OutOfStockException">
+        <member name="F:Milvasoft.Helpers.Exceptions.MilvaException.CannotGetResponse">
             <summary>
-            Defines the OutOfStock.
+            Defines the CannotGetResponse.
             </summary>
         </member>
-        <member name="F:Milvasoft.Helpers.Exceptions.MilvaExceptionCode.InvalidMateralDeficitException">
+        <member name="F:Milvasoft.Helpers.Exceptions.MilvaException.IdentityResult">
             <summary>
-            Defines the InvalidMateralDeficit.
+            Defines the IdentityResult.
             </summary>
         </member>
-        <member name="F:Milvasoft.Helpers.Exceptions.MilvaExceptionCode.CannotUpdateOrDeleteDefaultRecordException">
+        <member name="F:Milvasoft.Helpers.Exceptions.MilvaException.CannotUpdateOrDeleteDefaultRecord">
             <summary>
             Defines the CannotUpdateOrDeleteDefaultRecord.
             </summary>
         </member>
-        <member name="F:Milvasoft.Helpers.Exceptions.MilvaExceptionCode.ValidationErrorException">
+        <member name="F:Milvasoft.Helpers.Exceptions.MilvaException.Validation">
             <summary>
             Defines the ValidationError.
             </summary>
         </member>
-        <member name="F:Milvasoft.Helpers.Exceptions.MilvaExceptionCode.GeneralException">
-            <summary>
-            Defines the GeneralException.
-            </summary>
-        </member>
-        <member name="F:Milvasoft.Helpers.Exceptions.MilvaExceptionCode.InvalidRelatedProcessException">
+        <member name="F:Milvasoft.Helpers.Exceptions.MilvaException.InvalidRelatedProcess">
             <summary>
             Defines the InvalidRelatedProcess.
             </summary>
         </member>
-        <member name="F:Milvasoft.Helpers.Exceptions.MilvaExceptionCode.FeatureNotImplementedException">
+        <member name="F:Milvasoft.Helpers.Exceptions.MilvaException.WrongPaginationParams">
             <summary>
-            Defines the FeatureNotImplementedException.
+            Defines the WrongPaginationParams.
             </summary>
         </member>
-        <member name="F:Milvasoft.Helpers.Exceptions.MilvaExceptionCode.IdentityResultException">
+        <member name="F:Milvasoft.Helpers.Exceptions.MilvaException.WrongRequestedPageNumber">
             <summary>
-            Defines the IdentityResultException.
+            Defines the WrongPaginationParams.
             </summary>
         </member>
-        <member name="F:Milvasoft.Helpers.Exceptions.MilvaExceptionCode.CannotGetResponseException">
+        <member name="F:Milvasoft.Helpers.Exceptions.MilvaException.WrongRequestedItemCount">
             <summary>
-            Defines the CannotGetResponseException.
-            </summary>
-        </member>
-        <member name="F:Milvasoft.Helpers.Exceptions.MilvaExceptionCode.EncryptionErrorException">
-            <summary>
-            Defines the EncryptionErrorException.
-            </summary>
-        </member>
-        <member name="F:Milvasoft.Helpers.Exceptions.MilvaExceptionCode.WrongPaginationParamsException">
-            <summary>
-            Defines the WrongPaginationParamsException.
-            </summary>
-        </member>
-        <member name="F:Milvasoft.Helpers.Exceptions.MilvaExceptionCode.WrongRequestedPageNumberException">
-            <summary>
-            Defines the WrongPaginationParamsException.
-            </summary>
-        </member>
-        <member name="F:Milvasoft.Helpers.Exceptions.MilvaExceptionCode.WrongRequestedItemCountException">
-            <summary>
-            Defines the WrongPaginationParamsException.
-            </summary>
-        </member>
-        <member name="F:Milvasoft.Helpers.Exceptions.MilvaExceptionCode.TenancyNameRequired">
-            <summary>
-            Defines the TenancyNameRequired.
+            Defines the WrongPaginationParams.
             </summary>
         </member>
         <member name="T:Milvasoft.Helpers.Exceptions.MilvaUserFriendlyException">
@@ -3609,45 +3577,50 @@
             The exception that is thrown when attempt to add an entity with Id the repository contains an entity with the same Id.
             </summary>
         </member>
-        <member name="M:Milvasoft.Helpers.Exceptions.MilvaUserFriendlyException.#ctor(Microsoft.Extensions.Localization.IStringLocalizer)">
+        <member name="M:Milvasoft.Helpers.Exceptions.MilvaUserFriendlyException.#ctor">
             <summary>
-            Initializes a new instance of the <see cref="T:Milvasoft.Helpers.Exceptions.MilvaValidationException"/> class.
+            Initializes a new instance of the <see cref="T:Milvasoft.Helpers.Exceptions.MilvaUserFriendlyException"/> class with a specified error message.
             </summary>
-            <param name="localizer"></param>
         </member>
         <member name="M:Milvasoft.Helpers.Exceptions.MilvaUserFriendlyException.#ctor(System.String)">
             <summary>
-            Initializes a new instance of the <see cref="T:Milvasoft.Helpers.Exceptions.MilvaValidationException"/> class with a specified error message.
+            Initializes a new instance of the <see cref="T:Milvasoft.Helpers.Exceptions.MilvaUserFriendlyException"/> class with a specified error message.
             </summary>
-            <param name="customMessage"></param>
+            <param name="messageOrLocalizerKey"></param>
+        </member>
+        <member name="M:Milvasoft.Helpers.Exceptions.MilvaUserFriendlyException.#ctor(System.String,Milvasoft.Helpers.Exceptions.MilvaException)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Milvasoft.Helpers.Exceptions.MilvaUserFriendlyException"/> class with a specified error message.
+            </summary>
+            <param name="messageOrLocalizerKey"></param>
+            <param name="exceptionCode"></param>
+        </member>
+        <member name="M:Milvasoft.Helpers.Exceptions.MilvaUserFriendlyException.#ctor(System.String,System.Int32)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Milvasoft.Helpers.Exceptions.MilvaUserFriendlyException"/> class with a specified error message.
+            </summary>
+            <param name="messageOrLocalizerKey"></param>
+            <param name="exceptionCode"></param>
+        </member>
+        <member name="M:Milvasoft.Helpers.Exceptions.MilvaUserFriendlyException.#ctor(Milvasoft.Helpers.Exceptions.MilvaException)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Milvasoft.Helpers.Exceptions.MilvaUserFriendlyException"/> class with a specified error message.
+            </summary>
+            <param name="exceptionCode"></param>
         </member>
         <member name="M:Milvasoft.Helpers.Exceptions.MilvaUserFriendlyException.#ctor(System.String,System.Exception)">
             <summary>
-            Initializes a new instance of the <see cref="T:Milvasoft.Helpers.Exceptions.MilvaValidationException"/> class with a specified error message and a reference to the inner exception that is the cause of this exception.
+            Initializes a new instance of the <see cref="T:Milvasoft.Helpers.Exceptions.MilvaUserFriendlyException"/> class with a specified error message and a reference to the inner exception that is the cause of this exception.
             </summary>
-            <param name="customMessage"></param>
+            <param name="messageOrLocalizerKey"></param>
             <param name="innerException"></param>
         </member>
-        <member name="M:Milvasoft.Helpers.Exceptions.MilvaUserFriendlyException.#ctor(Microsoft.Extensions.Localization.IStringLocalizer,Milvasoft.Helpers.Exceptions.MilvaExceptionCode)">
+        <member name="M:Milvasoft.Helpers.Exceptions.MilvaUserFriendlyException.#ctor(System.String,System.Int32,System.Exception)">
             <summary>
-            Initializes a new instance of the <see cref="T:Milvasoft.Helpers.Exceptions.MilvaValidationException"/> class.
+            Initializes a new instance of the <see cref="T:Milvasoft.Helpers.Exceptions.MilvaUserFriendlyException"/> class with a specified error message and a reference to the inner exception that is the cause of this exception.
             </summary>
-            <param name="localizer"></param>
-            <param name="milvaExceptionCode"></param>
-        </member>
-        <member name="M:Milvasoft.Helpers.Exceptions.MilvaUserFriendlyException.#ctor(System.String,Milvasoft.Helpers.Exceptions.MilvaExceptionCode)">
-            <summary>
-            Initializes a new instance of the <see cref="T:Milvasoft.Helpers.Exceptions.MilvaValidationException"/> class with a specified error message.
-            </summary>
-            <param name="customMessage"></param>
-            <param name="milvaExceptionCode"></param>
-        </member>
-        <member name="M:Milvasoft.Helpers.Exceptions.MilvaUserFriendlyException.#ctor(System.String,Milvasoft.Helpers.Exceptions.MilvaExceptionCode,System.Exception)">
-            <summary>
-            Initializes a new instance of the <see cref="T:Milvasoft.Helpers.Exceptions.MilvaValidationException"/> class with a specified error message and a reference to the inner exception that is the cause of this exception.
-            </summary>
-            <param name="customMessage"></param>
-            <param name="milvaExceptionCode"></param>
+            <param name="messageOrLocalizerKey"></param>
+            <param name="exceptionCode"></param>
             <param name="innerException"></param>
         </member>
         <member name="T:Milvasoft.Helpers.Exceptions.MilvaValidationException">
@@ -3655,23 +3628,22 @@
             The exception that is thrown when attempt to add an entity with Id the repository contains an entity with the same Id.
             </summary>
         </member>
-        <member name="M:Milvasoft.Helpers.Exceptions.MilvaValidationException.#ctor(Microsoft.Extensions.Localization.IStringLocalizer)">
+        <member name="M:Milvasoft.Helpers.Exceptions.MilvaValidationException.#ctor">
             <summary>
-            Initializes a new instance of the <see cref="T:Milvasoft.Helpers.Exceptions.MilvaValidationException"/> class.
+            Initializes a new instance of the <see cref="T:Milvasoft.Helpers.Exceptions.MilvaValidationException"/> class with a specified error message.
             </summary>
-            <param name="localizer"></param>
         </member>
         <member name="M:Milvasoft.Helpers.Exceptions.MilvaValidationException.#ctor(System.String)">
             <summary>
             Initializes a new instance of the <see cref="T:Milvasoft.Helpers.Exceptions.MilvaValidationException"/> class with a specified error message.
             </summary>
-            <param name="customMessage"></param>
+            <param name="messageOrLocalizerKey"></param>
         </member>
         <member name="M:Milvasoft.Helpers.Exceptions.MilvaValidationException.#ctor(System.String,System.Exception)">
             <summary>
             Initializes a new instance of the <see cref="T:Milvasoft.Helpers.Exceptions.MilvaValidationException"/> class with a specified error message and a reference to the inner exception that is the cause of this exception.
             </summary>
-            <param name="customMessage"></param>
+            <param name="messageOrLocalizerKey"></param>
             <param name="innerException"></param>
         </member>
         <member name="T:Milvasoft.Helpers.Extensions.Expressions">

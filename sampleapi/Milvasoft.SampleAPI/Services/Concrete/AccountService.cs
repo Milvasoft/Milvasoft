@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 using Microsoft.IdentityModel.Tokens;
+using Milvasoft.Helpers;
 using Milvasoft.Helpers.DataAccess.Abstract;
 using Milvasoft.Helpers.Exceptions;
 using Milvasoft.Helpers.Identity.Abstract;
@@ -166,8 +167,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// <returns></returns>
         public virtual async Task<IdentityResult> SignOutAsync()
         {
-            var user = await _userManager.FindByNameAsync(_userName).ConfigureAwait(false) ?? throw new MilvaUserFriendlyException(_localizer, MilvaExceptionCode.CannotFindEntityException);
-
+            var user = await _userManager.FindByNameAsync(_userName).ConfigureAwait(false) ?? throw new MilvaUserFriendlyException(MilvaException.CannotFindEntity);
 
             if (await _userManager.GetAuthenticationTokenAsync(user, _loginProvider, _tokenType) == null)
                 return null;
@@ -420,7 +420,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
                                                                                            tokenValue: newToken).ConfigureAwait(false);
 
             if (!identityResult.Succeeded)
-                throw new MilvaUserFriendlyException(_localizer);
+                throw new MilvaUserFriendlyException();
 
             return newToken;
         }
