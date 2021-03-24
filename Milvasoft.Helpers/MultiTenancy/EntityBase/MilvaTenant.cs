@@ -27,12 +27,19 @@ namespace Milvasoft.Helpers.MultiTenancy.EntityBase
         }
 
         /// <summary>
+        /// Tenancy name of tenant.
+        /// </summary>
+        public override string TenancyName
+        {
+            get=> Id.TenancyName;
+        }
+
+        /// <summary>
         /// Display name of the Tenant.
         /// </summary>
         public virtual int BranchNo
         {
-            get => _branchNo;
-            set => _branchNo = value;
+            get => Id.BranchNo;
         }
 
         /// <summary>
@@ -65,12 +72,11 @@ namespace Milvasoft.Helpers.MultiTenancy.EntityBase
         /// </summary>
         /// <param name="tenancyName">UNIQUE name of this Tenant</param>
         /// <param name="branchNo"></param>
-        /// <param name="name">Display name of the Tenant</param>
-        protected MilvaTenant(string tenancyName, int branchNo, string name)
+        protected MilvaTenant(string tenancyName, int branchNo)
         {
             _tenancyName = tenancyName;
             _branchNo = branchNo;
-            Name = name;
+            Id = new TenantId(tenancyName, branchNo);
             IsActive = true;
         }
     }

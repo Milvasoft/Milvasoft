@@ -2,7 +2,6 @@
 using Microsoft.EntityFrameworkCore;
 using Milvasoft.Helpers.DataAccess.MilvaContext;
 using Milvasoft.Helpers.DependencyInjection;
-using Milvasoft.Helpers.Encryption.Abstract;
 using Milvasoft.Helpers.Encryption.Concrete;
 using Milvasoft.SampleAPI.Entity;
 using System;

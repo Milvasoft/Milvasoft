@@ -12,14 +12,14 @@ namespace Milvasoft.Helpers.MultiTenancy.EntityBase
     public abstract class MilvaTenantBase<TUserKey, TKey> : FullAuditableEntity<TUserKey, TKey>, IMilvaTenantBase<TKey> where TKey : struct, IEquatable<TKey> where TUserKey : struct, IEquatable<TUserKey>
     {
         /// <summary>
-        /// Display name of the Tenant.
+        /// Tenancy name of tenant..
         /// </summary>
         public virtual string TenancyName { get; set; }
 
         /// <summary>
         /// Display name of the Tenant.
         /// </summary>
-        public virtual string Name { get; set; }
+        public virtual string DisplayName { get; set; }
 
         /// <summary>
         /// ENCRYPTED connection string of the tenant database.

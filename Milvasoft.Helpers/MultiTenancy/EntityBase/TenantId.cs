@@ -1,9 +1,7 @@
 ﻿using Milvasoft.Helpers.Exceptions;
 using Milvasoft.Helpers.Extensions;
-using Newtonsoft.Json;
 using System;
 using System.ComponentModel;
-using System.Runtime.InteropServices;
 
 namespace Milvasoft.Helpers.MultiTenancy.EntityBase
 {

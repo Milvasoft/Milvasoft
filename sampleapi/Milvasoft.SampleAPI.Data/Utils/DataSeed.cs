@@ -5,8 +5,6 @@ using Milvasoft.Helpers;
 using Milvasoft.SampleAPI.Entity;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Milvasoft.SampleAPI.Data.Utils

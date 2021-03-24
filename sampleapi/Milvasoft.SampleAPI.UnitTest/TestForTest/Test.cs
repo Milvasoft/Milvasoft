@@ -1,10 +1,4 @@
-﻿using Milvasoft.SampleAPI.DTOs.AccountDTOs;
-using Milvasoft.SampleAPI.Services.Abstract;
-using Milvasoft.SampleAPI.UnitTest.TestHelpers;
-using System.Threading.Tasks;
-using Xunit;
-
-namespace Milvasoft.SampleAPI.UnitTest.TestForTest
+﻿namespace Milvasoft.SampleAPI.UnitTest.TestForTest
 {
     public class Test
     {

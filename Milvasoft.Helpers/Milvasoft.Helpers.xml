@@ -6989,7 +6989,7 @@
             Display name of the Tenant.
             </summary>
         </member>
-        <member name="P:Milvasoft.Helpers.MultiTenancy.EntityBase.IMilvaTenantBase`1.Name">
+        <member name="P:Milvasoft.Helpers.MultiTenancy.EntityBase.IMilvaTenantBase`1.DisplayName">
             <summary>
             Display name of the Tenant.
             </summary>
@@ -7065,10 +7065,10 @@
         </member>
         <member name="P:Milvasoft.Helpers.MultiTenancy.EntityBase.MilvaTenantBase`2.TenancyName">
             <summary>
-            Display name of the Tenant.
+            Tenancy name of tenant..
             </summary>
         </member>
-        <member name="P:Milvasoft.Helpers.MultiTenancy.EntityBase.MilvaTenantBase`2.Name">
+        <member name="P:Milvasoft.Helpers.MultiTenancy.EntityBase.MilvaTenantBase`2.DisplayName">
             <summary>
             Display name of the Tenant.
             </summary>

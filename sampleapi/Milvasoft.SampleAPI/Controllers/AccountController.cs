@@ -5,6 +5,7 @@ using Microsoft.Extensions.Localization;
 using Milvasoft.Helpers.Caching;
 using Milvasoft.Helpers.Extensions;
 using Milvasoft.Helpers.Models.Response;
+using Milvasoft.Helpers.MultiTenancy.EntityBase;
 using Milvasoft.Helpers.Utils;
 using Milvasoft.SampleAPI.DTOs.AccountDTOs;
 using Milvasoft.SampleAPI.Localization;
@@ -31,6 +32,13 @@ namespace Milvasoft.SampleAPI.Controllers
             _accountService = accountService;
             _sharedLocalizer = sharedLocalizer;
             _cacheServer = cacheServer;
+        }
+
+        [HttpGet("Tenant")]
+        [AllowAnonymous]
+        public async Task<IActionResult> Get(TenantId tenantId)
+        {
+            return Ok();
         }
 
         [HttpGet("CacheDemo")]

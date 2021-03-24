@@ -1,12 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Milvasoft.Helpers.MultiTenancy.EntityBase
 {
+    /// <summary>
+    /// Converts <see cref="TenantId"/> to <see cref="string"/> or <see cref="string"/> to <see cref="TenantId"/>.
+    /// </summary>
     public sealed class TenantIdStringConverter : ValueConverter<TenantId, string>
     {
         /// <summary>
@@ -14,8 +12,6 @@ namespace Milvasoft.Helpers.MultiTenancy.EntityBase
         /// </summary>
         /// <param name="mappingHints">Entity Framework mapping hints</param>
         public TenantIdStringConverter(ConverterMappingHints mappingHints = null)
-            : base(to => to.ToString(), from => TenantId.Parse(from), mappingHints)
-        {
-        }
+            : base(to => to.ToString(), from => TenantId.Parse(from), mappingHints) { }
     }
 }
