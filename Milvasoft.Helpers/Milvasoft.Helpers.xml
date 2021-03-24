@@ -4744,7 +4744,7 @@
         </member>
         <member name="M:Milvasoft.Helpers.FileOperations.Concrete.FormFileOperations.SaveFilesToPathAsync``1(System.Collections.Generic.List{Microsoft.AspNetCore.Http.IFormFile},``0,System.String,Milvasoft.Helpers.FileOperations.Concrete.FormFileOperations.FilesFolderNameCreator,System.String)">
             <summary>
-            Saves uploaded IFormFile files to physical file path. If file list is null or empty returns empty <see cref="!:List&lt;string&gt;"/> 
+            Saves uploaded IFormFile files to physical file path. If file list is null or empty returns empty <see cref="T:System.Collections.Generic.List`1"/> 
             Target Path will be : "<paramref name ="basePath"></paramref>/<b><paramref name="folderNameCreator"/>()</b>/<paramref name="entity"></paramref>.<paramref name="propertyName"/>"
             </summary>
             
@@ -4766,7 +4766,7 @@
         </member>
         <member name="M:Milvasoft.Helpers.FileOperations.Concrete.FormFileOperations.SaveFilesToPathAsync``1(Microsoft.AspNetCore.Http.IFormFileCollection,``0,System.String,Milvasoft.Helpers.FileOperations.Concrete.FormFileOperations.FilesFolderNameCreator,System.String)">
             <summary>
-            Saves uploaded IFormFile files to physical file path. If file list is null or empty returns empty <see cref="!:List&lt;string&gt;"/> 
+            Saves uploaded IFormFile files to physical file path. If file list is null or empty returns empty <see cref="T:System.Collections.Generic.List`1"/> 
             Target Path will be : "<paramref name ="basePath"></paramref>/<b><paramref name="folderNameCreator"/>()</b>/<paramref name="entity"></paramref>.<paramref name="propertyName"/>"
             </summary>
             
@@ -7184,6 +7184,14 @@
             <param name="str"></param>
             <returns></returns>
         </member>
+        <member name="M:Milvasoft.Helpers.MultiTenancy.EntityBase.TenantId.TryParse(System.String)">
+            <summary>
+            Converts the string representation of a <see cref="T:Milvasoft.Helpers.MultiTenancy.EntityBase.TenantId"/> to its string equivalent.
+            A return value indicates whether the conversion succeeded.
+            </summary>
+            <param name="str"></param>
+            <returns></returns>
+        </member>
         <member name="M:Milvasoft.Helpers.MultiTenancy.EntityBase.TenantId.op_Implicit(Milvasoft.Helpers.MultiTenancy.EntityBase.TenantId)~System.String">
             <summary>
             Provides implicit casting.
@@ -7390,17 +7398,17 @@
         </member>
         <member name="E:Milvasoft.Helpers.MultiTenancy.LifetimeManagement.MultiTenantContainer`2.ChildLifetimeScopeBeginning">
             <summary>
-            Initializes a new instance of the <see cref="T:Autofac.Core.Lifetime.LifetimeScopeBeginningEventArgs"/> class.
+            Fired when a new scope based on the current scope is beginning.
             </summary>
         </member>
         <member name="E:Milvasoft.Helpers.MultiTenancy.LifetimeManagement.MultiTenantContainer`2.CurrentScopeEnding">
             <summary>
-            Describes when a lifetime scope is ending.
+            Fired when this scope is ending.
             </summary>
         </member>
         <member name="E:Milvasoft.Helpers.MultiTenancy.LifetimeManagement.MultiTenantContainer`2.ResolveOperationBeginning">
             <summary>
-            Initializes a new instance of the <see cref="T:Autofac.Core.Resolving.ResolveOperationBeginningEventArgs"/> class.
+            Fired when a resolve operation is beginning in this scope.
             </summary>
         </member>
         <member name="P:Milvasoft.Helpers.MultiTenancy.LifetimeManagement.MultiTenantContainer`2.DiagnosticSource">
@@ -7739,6 +7747,12 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="T:Milvasoft.Helpers.MultiTenancy.ResolutionStrategy.ITenantResolutionStrategy`1">
+            <summary>
+            Abstraction for tenant resolution strategy.
+            </summary>
+            <typeparam name="TKey"></typeparam>
+        </member>
         <member name="M:Milvasoft.Helpers.MultiTenancy.ResolutionStrategy.ITenantResolutionStrategy`1.GetTenantIdentifierAsync">
             <summary>
             Get the tenant identifier
@@ -7802,6 +7816,20 @@
             </summary>
             <param name="identifier"></param>
             <param name="tenant"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Milvasoft.Helpers.MultiTenancy.Store.ITenantStore`2">
+            <summary>
+            Abstraction for tenant storage. 
+            </summary>
+            <typeparam name="TTenant"></typeparam>
+            <typeparam name="TKey"></typeparam>
+        </member>
+        <member name="M:Milvasoft.Helpers.MultiTenancy.Store.ITenantStore`2.GetTenantAsync(`1)">
+            <summary>
+            Gets tenant according to <paramref name="identifier"/>.
+            </summary>
+            <param name="identifier"></param>
             <returns></returns>
         </member>
         <member name="T:Milvasoft.Helpers.MultiTenancy.Utils.TenancyConstants">
@@ -8013,7 +8041,7 @@
         </member>
         <member name="M:Milvasoft.Helpers.Request.SendRequestDeserializeMultiple``1(System.Net.Http.HttpClient,System.Net.Http.HttpRequestMessage)">
             <summary>
-            Sends request by <paramref name="httpRequestMessage"/>. Gets response as => <see cref="!:ObjectResponse&lt;IEnumerable&lt;T&gt;&gt;"/>
+            Sends request by <paramref name="httpRequestMessage"/>. Gets response as => <see cref="T:Milvasoft.Helpers.Models.Response.ObjectResponse`1"/>
             </summary>
             <typeparam name="T"></typeparam>
             <param name="httpRequestMessage"></param>
@@ -8031,7 +8059,7 @@
         </member>
         <member name="M:Milvasoft.Helpers.Request.SendRequestDeserializeSingle``2(System.Net.Http.HttpClient,System.Net.Http.HttpRequestMessage)">
             <summary>
-            Sends request by <paramref name="httpRequestMessage"/>. Gets response as => <see cref="!:ObjectResponse&lt;CommunicationModel&lt;&lt;IEnumerable&lt;T&gt;,TKey&gt;&gt;&gt;"/>
+            Sends request by <paramref name="httpRequestMessage"/>. Gets response as => <see cref="T:Milvasoft.Helpers.Models.Response.ObjectResponse`1"/>
             <para><b> If you want to use the "ErrorCodes" property, change the return value to (ExceptionResponse) where necessary.</b></para> 
             </summary>
             <typeparam name="T"></typeparam>
@@ -8042,7 +8070,7 @@
         </member>
         <member name="M:Milvasoft.Helpers.Request.SendRequestDeserializeMultiple``2(System.Net.Http.HttpClient,System.Net.Http.HttpRequestMessage)">
             <summary>
-            Sends request by <paramref name="httpRequestMessage"/>. Gets response as => <see cref="!:ObjectResponse&lt;CommunicationModel&lt;&lt;T,TKey&gt;&gt;&gt;"/>
+            Sends request by <paramref name="httpRequestMessage"/>. Gets response as => <see cref="T:Milvasoft.Helpers.Models.Response.ObjectResponse`1"/>
             </summary> 
             <typeparam name="T"></typeparam>
             <typeparam name="TKey"></typeparam>

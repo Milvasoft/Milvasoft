@@ -170,6 +170,12 @@ namespace Milvasoft.Helpers.MultiTenancy.EntityBase
             else throw new MilvaDeveloperException("This string is not convertible to TenantId.");
         }
 
+        /// <summary>
+        /// Converts the string representation of a <see cref="TenantId"/> to its string equivalent.
+        /// A return value indicates whether the conversion succeeded.
+        /// </summary>
+        /// <param name="str"></param>
+        /// <returns></returns>
         public static bool TryParse(string str)
         {
             var splittedArray = str.Split('_');
@@ -178,7 +184,6 @@ namespace Milvasoft.Helpers.MultiTenancy.EntityBase
 
             if (string.IsNullOrEmpty(splittedArray[0]) || string.IsNullOrEmpty(splittedArray[1]))
                 return false;
-
             try
             {
                 Convert.ToInt32(splittedArray[1]);

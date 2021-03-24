@@ -253,7 +253,7 @@ namespace Milvasoft.Helpers
         }
 
         /// <summary>
-        /// Sends request by <paramref name="httpRequestMessage"/>. Gets response as => <see cref="ObjectResponse{IEnumerable{T}}"/>
+        /// Sends request by <paramref name="httpRequestMessage"/>. Gets response as => <see cref="ObjectResponse{IEnumerable}"/>
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="httpRequestMessage"></param>
@@ -291,7 +291,7 @@ namespace Milvasoft.Helpers
         }
 
         /// <summary>
-        /// Sends request by <paramref name="httpRequestMessage"/>. Gets response as => <see cref="ObjectResponse{CommunicationModel{{IEnumerable{T},TKey}}}"/>
+        /// Sends request by <paramref name="httpRequestMessage"/>. Gets response as => <see cref="ObjectResponse{CommunicationModel}"/>
         /// <para><b> If you want to use the "ErrorCodes" property, change the return value to (ExceptionResponse) where necessary.</b></para> 
         /// </summary>
         /// <typeparam name="T"></typeparam>
@@ -316,7 +316,7 @@ namespace Milvasoft.Helpers
         }
 
         /// <summary>
-        /// Sends request by <paramref name="httpRequestMessage"/>. Gets response as => <see cref="ObjectResponse{CommunicationModel{{T,TKey}}}"/>
+        /// Sends request by <paramref name="httpRequestMessage"/>. Gets response as => <see cref="ObjectResponse{CommunicationModel}"/>
         /// </summary> 
         /// <typeparam name="T"></typeparam>
         /// <typeparam name="TKey"></typeparam>

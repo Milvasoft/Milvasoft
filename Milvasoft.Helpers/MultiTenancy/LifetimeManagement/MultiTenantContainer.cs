@@ -37,21 +37,37 @@ namespace Milvasoft.Helpers.MultiTenancy.LifetimeManagement
         #endregion
 
         #region Properties
+#pragma warning disable CS0067 // The event '' is never used Milvasoft.Helpers
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="LifetimeScopeBeginningEventArgs"/> class.
+        /// Fired when a new scope based on the current scope is beginning.
         /// </summary>
-        public event EventHandler<LifetimeScopeBeginningEventArgs> ChildLifetimeScopeBeginning;
+        public event EventHandler<LifetimeScopeBeginningEventArgs> ChildLifetimeScopeBeginning
+        {
+            add { _applicationContainer.ChildLifetimeScopeBeginning += value; }
+            remove { _applicationContainer.ChildLifetimeScopeBeginning -= value; }
+        }
 
         /// <summary>
-        /// Describes when a lifetime scope is ending.
+        /// Fired when this scope is ending.
         /// </summary>
-        public event EventHandler<LifetimeScopeEndingEventArgs> CurrentScopeEnding;
+        public event EventHandler<LifetimeScopeEndingEventArgs> CurrentScopeEnding
+        {
+            add { _applicationContainer.CurrentScopeEnding += value; }
+            remove { _applicationContainer.CurrentScopeEnding -= value; }
+        }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ResolveOperationBeginningEventArgs"/> class.
+        /// Fired when a resolve operation is beginning in this scope.
         /// </summary>
-        public event EventHandler<ResolveOperationBeginningEventArgs> ResolveOperationBeginning;
+        public event EventHandler<ResolveOperationBeginningEventArgs> ResolveOperationBeginning
+        {
+            add { _applicationContainer.ResolveOperationBeginning += value; }
+            remove { _applicationContainer.ResolveOperationBeginning -= value; }
+        }
+
+#pragma warning disable CS0067 //The event '' is never used Milvasoft.Helpers
+
 
         /// <summary>
         /// Gets the <see cref="DiagnosticListener"/> to which trace events should be written.

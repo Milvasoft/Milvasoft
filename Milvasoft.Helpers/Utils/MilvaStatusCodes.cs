@@ -5,6 +5,7 @@
     /// </summary>
     public static class MilvaStatusCodes 
     {
+#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
         public const int Status100Continue = 100;
         public const int Status412PreconditionFailed = 412;
         public const int Status413RequestEntityTooLarge = 413;
@@ -71,5 +72,6 @@
         public const int Status409Conflict = 409;
         public const int Status511NetworkAuthenticationRequired = 511;
         public const int Status600Exception = 600;
+#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
     }
 }
