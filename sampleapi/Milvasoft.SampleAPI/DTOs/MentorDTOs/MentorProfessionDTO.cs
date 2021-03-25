@@ -1,6 +1,8 @@
 ﻿using Milvasoft.Helpers.DataAccess.Concrete.Entity;
 using Milvasoft.SampleAPI.DTOs.ProfessionDTOs;
 using Milvasoft.SampleAPI.Entity;
+using Milvasoft.SampleAPI.Utils.Attributes.ValidationAttributes;
+using Milvasoft.SampleAPI.Utils.Swagger;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,11 +20,13 @@ namespace Milvasoft.SampleAPI.DTOs.MentorDTOs
         /// <summary>
         /// Id of mentor.
         /// </summary>
+        [OValidateId]
         public Guid MentorId { get; set; }
 
         /// <summary>
         /// Mentor.
         /// </summary>
+        [SwaggerExclude]
         public virtual MentorDTO Mentor { get; set; }
 
 
@@ -30,11 +34,13 @@ namespace Milvasoft.SampleAPI.DTOs.MentorDTOs
         /// <summary>
         /// Id of profession.
         /// </summary>
+        [OValidateId]
         public Guid ProfessionId { get; set; }
 
         /// <summary>
         /// Profession.
         /// </summary>
+        [SwaggerExclude]
         public virtual ProfessionDTO Profession { get; set; }
     }
 }

@@ -1,6 +1,8 @@
 ﻿using Milvasoft.SampleAPI.DTOs.AssignmentDTOs;
 using Milvasoft.SampleAPI.Entity;
 using Milvasoft.SampleAPI.Entity.Enum;
+using Milvasoft.SampleAPI.Utils.Attributes.ValidationAttributes;
+using Milvasoft.SampleAPI.Utils.Swagger;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,11 +19,13 @@ namespace Milvasoft.SampleAPI.DTOs.StudentDTOs
         /// <summary>
         /// Student id.
         /// </summary>
+        [OValidateId]
         public Guid StudentId { get; set; }
 
         /// <summary>
         /// Student.
         /// </summary>
+        [SwaggerExclude]
         public virtual StudentDTO Student { get; set; }
 
 
@@ -29,11 +33,13 @@ namespace Milvasoft.SampleAPI.DTOs.StudentDTOs
         /// <summary>
         /// Assignment id.
         /// </summary>
+        [OValidateId]
         public Guid AssigmentId { get; set; }
 
         /// <summary>
         /// Assignment.
         /// </summary>
+        [SwaggerExclude]
         public virtual AssignmentDTO Assigment { get; set; }
 
 
@@ -52,11 +58,13 @@ namespace Milvasoft.SampleAPI.DTOs.StudentDTOs
         /// <summary>
         /// The mentor's description on the student's assignment.
         /// </summary>
+        [OValidateString(2000)]
         public string MentorDescription { get; set; }
 
         /// <summary>
         /// File path of assignment.
         /// </summary>
+        [OValidateString(2000)]
         public string AssigmentFilePath { get; set; }
 
         /// <summary>

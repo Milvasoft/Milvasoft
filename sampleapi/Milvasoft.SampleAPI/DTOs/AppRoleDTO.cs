@@ -3,16 +3,14 @@ using Milvasoft.Helpers.DataAccess.Abstract.Entity;
 using Milvasoft.SampleAPI.DTOs.MentorDTOs;
 using Milvasoft.SampleAPI.DTOs.StudentDTOs;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Milvasoft.SampleAPI.DTOs
 {
+
     /// <summary>
-    /// Application users.
+    /// Role for all users.
     /// </summary>
-    public class AppUserDTO : IdentityUser<Guid>, IFullAuditable<Guid>
+    public class AppRoleDTO : IdentityRole<Guid>, IFullAuditable<Guid>
     {
 
         /// <summary>

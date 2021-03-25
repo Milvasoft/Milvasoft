@@ -3,6 +3,7 @@ using Milvasoft.SampleAPI.DTOs.MentorDTOs;
 using Milvasoft.SampleAPI.DTOs.QuestionDTOs;
 using Milvasoft.SampleAPI.DTOs.StudentDTOs;
 using Milvasoft.SampleAPI.Entity;
+using Milvasoft.SampleAPI.Utils.Attributes.ValidationAttributes;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,6 +21,7 @@ namespace Milvasoft.SampleAPI.DTOs.ProfessionDTOs
         /// <summary>
         /// Name of profession.
         /// </summary>
+        [OValidateString(2,200)]
         public string Name { get; set; }
 
 
