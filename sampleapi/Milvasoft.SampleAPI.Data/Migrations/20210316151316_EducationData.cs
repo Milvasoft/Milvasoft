@@ -4,7 +4,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace Milvasoft.SampleAPI.Data.Migrations
 {
-    public partial class InitialCreate : Migration
+    public partial class EducationData : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

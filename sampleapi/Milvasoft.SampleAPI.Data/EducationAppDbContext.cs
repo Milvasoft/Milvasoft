@@ -28,7 +28,7 @@ namespace Milvasoft.SampleAPI.Data
         public DbSet<Profession> Professions { get; set; }
         public DbSet<Question> Questions { get; set; }
         public DbSet<Student> Students { get; set; }
-        public DbSet<StudentAssigment> StudentAssigments { get; set; }
+        public DbSet<StudentAssigmentDTO> StudentAssigments { get; set; }
         public DbSet<UsefulLink> UsefulLinks { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
