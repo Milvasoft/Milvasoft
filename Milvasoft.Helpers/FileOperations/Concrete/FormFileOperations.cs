@@ -158,8 +158,8 @@ namespace Milvasoft.Helpers.FileOperations.Concrete
                 DirectoryInfo directory = new DirectoryInfo(folderPathOfItem);
 
                 var directoryFiles = directory.GetFiles();
-                int markerNo = directoryFiles.IsNullOrEmpty() 
-                                ? 1 
+                int markerNo = directoryFiles.IsNullOrEmpty()
+                                ? 1
                                 : (directoryFiles.Max(fileInDir => Convert.ToInt32(Path.GetFileNameWithoutExtension(fileInDir.FullName).Split('_')[1])) + 1);
 
                 var folderPaths = new List<string>();

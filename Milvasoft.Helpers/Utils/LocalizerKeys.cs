@@ -26,7 +26,7 @@
         public const string SuccessMessageForFiltering = "FilteringSuccessMessage";
 
         #endregion
-       
+
         #region Identity Message Keys
 
         public const string IdentityDefaultError = "IdentityDefaultError";

@@ -31,7 +31,7 @@ namespace Milvasoft.Helpers.MultiTenancy.EntityBase
         /// </summary>
         public override string TenancyName
         {
-            get=> Id.TenancyName;
+            get => Id.TenancyName;
         }
 
         /// <summary>

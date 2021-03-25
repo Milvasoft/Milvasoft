@@ -33,7 +33,7 @@ namespace Milvasoft.SampleAPI.Entity
         /// <summary>
         /// Questions of profession.
         /// </summary>
-        public virtual IEnumerable<Question> Questions{ get; set; }
+        public virtual IEnumerable<Question> Questions { get; set; }
 
         /// <summary>
         /// Useful links of profession.

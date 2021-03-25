@@ -3,7 +3,7 @@
     /// <summary>
     /// Http status codes.
     /// </summary>
-    public static class MilvaStatusCodes 
+    public static class MilvaStatusCodes
     {
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
         public const int Status100Continue = 100;

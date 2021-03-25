@@ -3,7 +3,6 @@ using Milvasoft.Helpers.DataAccess.IncludeLibrary;
 using Milvasoft.SampleAPI.Data;
 using Milvasoft.SampleAPI.DTOs.AnnouncementDTOs;
 using Milvasoft.SampleAPI.DTOs.MentorDTOs;
-using Milvasoft.SampleAPI.DTOs.ProfessionDTOs;
 using Milvasoft.SampleAPI.DTOs.StudentDTOs;
 using Milvasoft.SampleAPI.Entity;
 using Milvasoft.SampleAPI.Services.Abstract;
@@ -38,14 +37,14 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// Get mentors for admin.
         /// </summary>
         /// <returns></returns>
-        public async Task<List<MentorDTO>> GetEntitiesForAdmin(MentorSpec spec=null)
+        public async Task<List<MentorDTO>> GetEntitiesForAdmin(MentorSpec spec = null)
         {
 
             Func<IIncludable<Mentor>, IIncludable> includes = i => i.Include(p => p.PublishedAnnouncements)
                                                                      .Include(s => s.Students)
                                                                      .Include(p => p.Professions);
 
-            var mentors = await _mentorRepository.GetAllAsync(includes,spec?.ToExpression()).ConfigureAwait(false);
+            var mentors = await _mentorRepository.GetAllAsync(includes, spec?.ToExpression()).ConfigureAwait(false);
 
             var mentorsDTO = from mentor in mentors
                              select new MentorDTO
@@ -56,17 +55,17 @@ namespace Milvasoft.SampleAPI.Services.Concrete
                                  AppUserId = mentor.Id,
                                  CreationDate = mentor.CreationDate,
                                  LastModificationDate = mentor.LastModificationDate,
-                                 Professions= mentor.Professions.CheckList(i=> mentor.Professions?.Select(pr=> new MentorProfessionDTO
+                                 Professions = mentor.Professions.CheckList(i => mentor.Professions?.Select(pr => new MentorProfessionDTO
                                  {
-                                     Id=pr.ProfessionId
+                                     Id = pr.ProfessionId
                                  })),
-                                 PublishedAnnouncements = mentor.PublishedAnnouncements.CheckList(i=> mentor.PublishedAnnouncements?.Select(pa=> new AnnouncementDTO
+                                 PublishedAnnouncements = mentor.PublishedAnnouncements.CheckList(i => mentor.PublishedAnnouncements?.Select(pa => new AnnouncementDTO
                                  {
-                                    Id=pa.Id
+                                     Id = pa.Id
                                  })),
-                                 Students = mentor.Students.CheckList(i=> mentor.Students?.Select(st=> new StudentDTO
+                                 Students = mentor.Students.CheckList(i => mentor.Students?.Select(st => new StudentDTO
                                  {
-                                     Id=st.Id
+                                     Id = st.Id
                                  }))
                              };
             return mentorsDTO.ToList();
@@ -76,14 +75,14 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// Get mentors for mentor.
         /// </summary>
         /// <returns></returns>
-        public async Task<List<MentorDTO>> GetEntitiesForMentor(MentorSpec spec=null)
+        public async Task<List<MentorDTO>> GetEntitiesForMentor(MentorSpec spec = null)
         {
 
             Func<IIncludable<Mentor>, IIncludable> includes = i => i.Include(p => p.PublishedAnnouncements)
                                                                      .Include(s => s.Students)
                                                                      .Include(p => p.Professions);
 
-            var mentors = await _mentorRepository.GetAllAsync(includes,spec?.ToExpression()).ConfigureAwait(false);
+            var mentors = await _mentorRepository.GetAllAsync(includes, spec?.ToExpression()).ConfigureAwait(false);
 
             var mentorsDTO = from mentor in mentors
                              select new MentorDTO
@@ -111,13 +110,13 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// Get mentors for student.
         /// </summary>
         /// <returns></returns>
-        public async Task<List<MentorDTO>> GetEntitiesForStudent(MentorSpec spec=null)
+        public async Task<List<MentorDTO>> GetEntitiesForStudent(MentorSpec spec = null)
         {
 
             Func<IIncludable<Mentor>, IIncludable> includes = i => i.Include(p => p.PublishedAnnouncements)
                                                                      .Include(p => p.Professions);
 
-            var mentors = await _mentorRepository.GetAllAsync(includes,spec?.ToExpression()).ConfigureAwait(false);
+            var mentors = await _mentorRepository.GetAllAsync(includes, spec?.ToExpression()).ConfigureAwait(false);
             var mentorsDTO = from mentor in mentors
                              select new MentorDTO
                              {
@@ -147,7 +146,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
                                                                      .Include(s => s.Students)
                                                                      .Include(p => p.Professions);
 
-            var mentor = await _mentorRepository.GetByIdAsync(id,includes).ConfigureAwait(false);
+            var mentor = await _mentorRepository.GetByIdAsync(id, includes).ConfigureAwait(false);
             return new MentorDTO
             {
                 Name = mentor.Name,
@@ -182,7 +181,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
                                                                      .Include(s => s.Students)
                                                                      .Include(p => p.Professions);
 
-            var mentor = await _mentorRepository.GetByIdAsync(id,includes).ConfigureAwait(false);
+            var mentor = await _mentorRepository.GetByIdAsync(id, includes).ConfigureAwait(false);
             return new MentorDTO
             {
                 Name = mentor.Name,
@@ -214,7 +213,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
             Func<IIncludable<Mentor>, IIncludable> includes = i => i.Include(p => p.PublishedAnnouncements)
                                                                     .Include(p => p.Professions);
 
-            var mentor = await _mentorRepository.GetByIdAsync(id,includes).ConfigureAwait(false);
+            var mentor = await _mentorRepository.GetByIdAsync(id, includes).ConfigureAwait(false);
             return new MentorDTO
             {
                 Name = mentor.Name,
@@ -247,7 +246,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
             };
             await _mentorRepository.AddAsync(mentor).ConfigureAwait(false);
         }
-       
+
         /// <summary>
         /// Update mentor.
         /// </summary>

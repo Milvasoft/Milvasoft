@@ -10,7 +10,7 @@ namespace Milvasoft.SampleAPI.Entity
     /// </summary>
     public class Mentor : FullAuditableEntity<Guid>
     {
-        
+
         /// <summary>
         /// Mentor name.
         /// </summary>

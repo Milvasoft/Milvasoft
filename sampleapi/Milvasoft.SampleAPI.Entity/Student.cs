@@ -11,7 +11,7 @@ namespace Milvasoft.SampleAPI.Entity
     /// </summary>
     public class Student : FullAuditableEntity<Guid>
     {
-        
+
         /// <summary>
         /// Student's name.
         /// </summary>
@@ -61,7 +61,7 @@ namespace Milvasoft.SampleAPI.Entity
         /// Gradution score of student.
         /// </summary>
         public int GraduationScore { get; set; }
-        
+
         /// <summary>
         /// The mentor's graduation thoughts of student.
         /// </summary>

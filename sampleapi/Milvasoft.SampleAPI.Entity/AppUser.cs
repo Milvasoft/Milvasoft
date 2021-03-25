@@ -68,6 +68,6 @@ namespace Milvasoft.SampleAPI.Entity
         /// <summary>
         /// Is the user student?
         /// </summary>
-        public virtual Student Student { get; set; } 
+        public virtual Student Student { get; set; }
     }
 }

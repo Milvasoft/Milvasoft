@@ -21,12 +21,12 @@ namespace Milvasoft.SampleAPI.Entity
         public virtual Mentor Mentor { get; set; }
 
 
-        
+
         /// <summary>
         /// Id of profession.
         /// </summary>
         public Guid ProfessionId { get; set; }
-        
+
         /// <summary>
         /// Profession.
         /// </summary>

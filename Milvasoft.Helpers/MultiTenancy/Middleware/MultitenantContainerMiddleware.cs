@@ -13,7 +13,7 @@ namespace Milvasoft.Helpers.MultiTenancy.Middleware
     /// <typeparam name="TTenant"></typeparam>
     /// <typeparam name="TKey"></typeparam>
     public class MultitenantContainerMiddleware<TTenant, TKey>
-    where TTenant : class,IMilvaTenantBase<TKey>
+    where TTenant : class, IMilvaTenantBase<TKey>
     where TKey : struct, IEquatable<TKey>
     {
         private readonly RequestDelegate next;

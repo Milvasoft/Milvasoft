@@ -1,12 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Milvasoft.API.DTOs;
 using Milvasoft.SampleAPI.DTOs.StudentDTOs;
-using Milvasoft.SampleAPI.Entity;
 using Milvasoft.SampleAPI.Services.Abstract;
 using Milvasoft.SampleAPI.Spec;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace Milvasoft.SampleAPI.Controllers
@@ -29,7 +25,7 @@ namespace Milvasoft.SampleAPI.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet("Students")]
-        public async Task <IActionResult> GetStudentForAdmin([FromBody] PaginationParamsWithSpec<StudentSpec> paginationParams)
+        public async Task<IActionResult> GetStudentForAdmin([FromBody] PaginationParamsWithSpec<StudentSpec> paginationParams)
         {
             var students = await _studentService.GetEntitiesForStudent(paginationParams.Spec).ConfigureAwait(false);
             return Ok(students);

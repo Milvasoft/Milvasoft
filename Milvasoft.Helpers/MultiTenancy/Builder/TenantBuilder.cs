@@ -67,7 +67,7 @@ namespace Milvasoft.Helpers.MultiTenancy.Builder
             where TOptions : class, new()
         {
             //Register the multi-tenant cache
-            _services.AddSingleton<IOptionsMonitorCache<TOptions>>(a => ActivatorUtilities.CreateInstance<TenantOptionsCache<TOptions, TTenant,TKey>>(a));
+            _services.AddSingleton<IOptionsMonitorCache<TOptions>>(a => ActivatorUtilities.CreateInstance<TenantOptionsCache<TOptions, TTenant, TKey>>(a));
 
             //Register the multi-tenant options factory
             _services.AddTransient<IOptionsFactory<TOptions>>(a => ActivatorUtilities.CreateInstance<TenantOptionsFactory<TOptions, TTenant, TKey>>(a, tenantConfig));

@@ -6,7 +6,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Threading.Tasks;
 
 namespace Milvasoft.SampleAPI.Spec
 {
@@ -54,14 +53,14 @@ namespace Milvasoft.SampleAPI.Spec
         /// <returns></returns>
         public Expression<Func<Mentor, bool>> ToExpression()
         {
-            
+
             Expression<Func<Mentor, bool>> mainPredicate = null;
             List<Expression<Func<Mentor, bool>>> predicates = new List<Expression<Func<Mentor, bool>>>();
 
-            if (!string.IsNullOrEmpty(Name)) predicates.Add(c => c.Name== Name);
-            if (!string.IsNullOrEmpty(Surname)) predicates.Add(c => c.Surname== Surname);
+            if (!string.IsNullOrEmpty(Name)) predicates.Add(c => c.Name == Name);
+            if (!string.IsNullOrEmpty(Surname)) predicates.Add(c => c.Surname == Surname);
 
-            if (!Professions.IsNullOrEmpty()) predicates.Add(c => c.Professions==Professions);
+            if (!Professions.IsNullOrEmpty()) predicates.Add(c => c.Professions == Professions);
 
             predicates?.ForEach(predicate => mainPredicate = mainPredicate.Append(predicate, ExpressionType.AndAlso));
             return mainPredicate;

@@ -1,20 +1,17 @@
-﻿using Milvasoft.Helpers.Attributes.Validation;
-using Milvasoft.Helpers.DataAccess.Abstract;
+﻿using Milvasoft.Helpers.DataAccess.Abstract;
+using Milvasoft.Helpers.DataAccess.IncludeLibrary;
 using Milvasoft.SampleAPI.Data;
+using Milvasoft.SampleAPI.DTOs.MentorDTOs;
 using Milvasoft.SampleAPI.DTOs.StudentDTOs;
 using Milvasoft.SampleAPI.Entity;
 using Milvasoft.SampleAPI.Services.Abstract;
+using Milvasoft.SampleAPI.Spec;
+using Milvasoft.SampleAPI.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-using Milvasoft.SampleAPI.Utils;
-using Milvasoft.SampleAPI.Spec;
-using Milvasoft.Helpers.DataAccess.IncludeLibrary;
-using Milvasoft.SampleAPI.DTOs.MentorDTOs;
-using Milvasoft.SampleAPI.DTOs.AssignmentDTOs;
-using Milvasoft.SampleAPI.DTOs;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
 
 namespace Milvasoft.SampleAPI.Services.Concrete
 {
@@ -43,13 +40,13 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// Get students for admin.
         /// </summary>
         /// <returns></returns>
-        public async Task<List<StudentDTO>> GetEntitiesForAdmin(StudentSpec spec=null)
+        public async Task<List<StudentDTO>> GetEntitiesForAdmin(StudentSpec spec = null)
         {
 
             Func<IIncludable<Student>, IIncludable> includes = i => i.Include(md => md.Mentor);
 
-            
-            var students = await _studentRepository.GetAllAsync(includes,spec?.ToExpression()).ConfigureAwait(false);
+
+            var students = await _studentRepository.GetAllAsync(includes, spec?.ToExpression()).ConfigureAwait(false);
 
             var studentDTOList = from student in students
                                  select new StudentDTO
@@ -81,14 +78,14 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// Get students for mentor.
         /// </summary>
         /// <returns></returns>
-        public async Task<List<StudentDTO>> GetEntitiesForMentor(StudentSpec spec=null)
+        public async Task<List<StudentDTO>> GetEntitiesForMentor(StudentSpec spec = null)
         {
 
             Func<IIncludable<Student>, IIncludable> includeMentor = i => i.Include(md => md.Mentor)
                                                                         .Include(assi => assi.OldAssignments);
 
 
-            var students = await _studentRepository.GetAllAsync(includeMentor,spec?.ToExpression()).ConfigureAwait(false);
+            var students = await _studentRepository.GetAllAsync(includeMentor, spec?.ToExpression()).ConfigureAwait(false);
 
             var studentDTOList = from student in students
                                  select new StudentDTO
@@ -103,15 +100,15 @@ namespace Milvasoft.SampleAPI.Services.Concrete
                                      GraduationStatus = student.GraduationStatus,
                                      GraduationScore = student.GraduationScore,
                                      MentorGraduationThoughts = student.MentorGraduationThoughts,
-                                     ProfessionId=student.ProfessionId,
-                                     Mentor = student.Mentor.CheckObject(i=> new MentorDTO 
+                                     ProfessionId = student.ProfessionId,
+                                     Mentor = student.Mentor.CheckObject(i => new MentorDTO
                                      {
-                                         Id=i.Id
+                                         Id = i.Id
                                      }),
                                      CurrentAssigmentDeliveryDate = student.CurrentAssigmentDeliveryDate,
-                                     OldAssignments = student.OldAssignments.CheckList(f=> student.OldAssignments?.Select(oa=>new StudentAssigmentDTO
+                                     OldAssignments = student.OldAssignments.CheckList(f => student.OldAssignments?.Select(oa => new StudentAssigmentDTO
                                      {
-                                         AssigmentId=oa.Assigment.Id,
+                                         AssigmentId = oa.Assigment.Id,
                                      }))
                                  };
 
@@ -123,7 +120,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// Get students for student.
         /// </summary>
         /// <returns></returns>
-        public async Task<List<StudentDTO>> GetEntitiesForStudent(StudentSpec spec=null)
+        public async Task<List<StudentDTO>> GetEntitiesForStudent(StudentSpec spec = null)
         {
 
             var students = await _studentRepository.GetAllAsync(spec?.ToExpression()).ConfigureAwait(false);
@@ -173,15 +170,15 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         public async Task<StudentDTO> GetEntityForAdmin(Guid id)
         {
             Func<IIncludable<Student>, IIncludable> includes = i => i.Include(md => md.Mentor);
-                                                                     
+
 
             Expression<Func<Student, bool>> condition = i => i.Id == id;
 
-            var student = await _studentRepository.GetByIdAsync(id,includes).ConfigureAwait(false);
+            var student = await _studentRepository.GetByIdAsync(id, includes).ConfigureAwait(false);
 
             return new StudentDTO
             {
-                Id=student.Id,
+                Id = student.Id,
                 Name = student.Name,
                 Surname = student.Surname,
                 University = student.University,
@@ -215,7 +212,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
             Func<IIncludable<Student>, IIncludable> includes = i => i.Include(md => md.Mentor)
                                                                      .Include(oa => oa.OldAssignments);
 
-            var student = await _studentRepository.GetByIdAsync(id,includes).ConfigureAwait(false);
+            var student = await _studentRepository.GetByIdAsync(id, includes).ConfigureAwait(false);
 
             return new StudentDTO
             {

@@ -9,7 +9,7 @@ namespace Milvasoft.SampleAPI.Services.Abstract
     /// Base services for all concrete services.
     /// </summary>
     /// <typeparam name="TDTO"></typeparam>
-    public interface IBaseService<TDTO,TSpec>
+    public interface IBaseService<TDTO, TSpec>
     {
         /// <summary>
         /// Get all entities for student from database.
@@ -41,7 +41,7 @@ namespace Milvasoft.SampleAPI.Services.Abstract
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        Task<TDTO> GetEntityForAdmin (Guid id);
+        Task<TDTO> GetEntityForAdmin(Guid id);
 
         /// <summary>
         /// Get one entity for mentor by id.

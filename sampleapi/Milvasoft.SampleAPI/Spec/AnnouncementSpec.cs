@@ -1,7 +1,4 @@
-﻿using Milvasoft.Helpers;
-using Milvasoft.Helpers.Exceptions;
-using Milvasoft.Helpers.Extensions;
-using Milvasoft.SampleAPI.AppStartup;
+﻿using Milvasoft.Helpers.Extensions;
 using Milvasoft.SampleAPI.Entity;
 using Milvasoft.SampleAPI.Spec.Abstract;
 using Milvasoft.SampleAPI.Utils;
@@ -9,7 +6,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Threading.Tasks;
 
 namespace Milvasoft.SampleAPI.Spec
 {
@@ -62,7 +58,7 @@ namespace Milvasoft.SampleAPI.Spec
             Expression<Func<Announcement, bool>> mainPredicate = null;
             List<Expression<Func<Announcement, bool>>> predicates = new List<Expression<Func<Announcement, bool>>>();
 
-            if (!string.IsNullOrEmpty(Title)) predicates.Add(a => a.Title== Title);
+            if (!string.IsNullOrEmpty(Title)) predicates.Add(a => a.Title == Title);
             if (!string.IsNullOrEmpty(Description)) predicates.Add(a => a.Description == Description);
             if (IsFixed.HasValue) predicates.Add(a => a.IsFixed == IsFixed);
 

@@ -1,13 +1,10 @@
 ﻿using Milvasoft.Helpers.DataAccess.Concrete.Entity;
 using Milvasoft.SampleAPI.DTOs.AnnouncementDTOs;
 using Milvasoft.SampleAPI.DTOs.StudentDTOs;
-using Milvasoft.SampleAPI.Entity;
 using Milvasoft.SampleAPI.Utils.Attributes.ValidationAttributes;
 using Milvasoft.SampleAPI.Utils.Swagger;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Milvasoft.SampleAPI.DTOs.MentorDTOs
 {
@@ -20,13 +17,13 @@ namespace Milvasoft.SampleAPI.DTOs.MentorDTOs
         /// <summary>
         /// Mentor name.
         /// </summary>
-        [OValidateString(2,100)]
+        [OValidateString(2, 100)]
         public string Name { get; set; }
 
         /// <summary>
         /// Mentor surname.
         /// </summary>
-        [OValidateString(2,100)]
+        [OValidateString(2, 100)]
         public string Surname { get; set; }
 
         /// <summary>

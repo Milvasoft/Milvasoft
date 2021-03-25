@@ -8,7 +8,6 @@ using Milvasoft.SampleAPI.Utils.Swagger;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace Milvasoft.SampleAPI.DTOs.StudentDTOs
 {
@@ -18,11 +17,11 @@ namespace Milvasoft.SampleAPI.DTOs.StudentDTOs
     /// </summary>
     public class StudentDTO : FullAuditableEntity<Guid>
     {
-        
+
         /// <summary>
         /// Student's name.
         /// </summary>
-        [OValidateString(2,200)]
+        [OValidateString(2, 200)]
         public string Name { get; set; }
 
         /// <summary>
@@ -143,11 +142,11 @@ namespace Milvasoft.SampleAPI.DTOs.StudentDTOs
         /// <summary>
         /// Number of previous failed assignments.
         /// </summary>
-        public int FailedAssignmentCount 
+        public int FailedAssignmentCount
         {
             get
             {
-                 return OldAssignments?.Count(i => i.Status == EducationStatus.Fail) ?? 0;
+                return OldAssignments?.Count(i => i.Status == EducationStatus.Fail) ?? 0;
             }
         }
     }

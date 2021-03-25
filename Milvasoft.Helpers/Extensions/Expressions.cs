@@ -49,7 +49,7 @@ namespace Milvasoft.Helpers.Extensions
             }
             else return left;
         }
-     
+
         /// <summary>
         /// Creates a lambda expression that represents a conditional AND operation
         /// </summary>

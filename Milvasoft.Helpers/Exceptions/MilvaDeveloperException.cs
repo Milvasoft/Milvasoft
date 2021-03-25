@@ -1,5 +1,4 @@
-﻿using Microsoft.Extensions.Localization;
-using System;
+﻿using System;
 
 namespace Milvasoft.Helpers.Exceptions
 {
@@ -11,7 +10,7 @@ namespace Milvasoft.Helpers.Exceptions
         /// <summary>
         /// Initializes a new instance of the <see cref="MilvaDeveloperException"/> class with a specified error message.
         /// </summary>
-        public MilvaDeveloperException() : base($"{MilvaException.Base}Exception") 
+        public MilvaDeveloperException() : base($"{MilvaException.Base}Exception")
             => ExceptionCode = (int)MilvaException.Base;
 
         /// <summary>
@@ -26,7 +25,7 @@ namespace Milvasoft.Helpers.Exceptions
         /// </summary>
         /// <param name="messageOrLocalizerKey"></param>
         /// <param name="innerException"></param>
-        public MilvaDeveloperException(string messageOrLocalizerKey, Exception innerException) : base(messageOrLocalizerKey, innerException) 
+        public MilvaDeveloperException(string messageOrLocalizerKey, Exception innerException) : base(messageOrLocalizerKey, innerException)
             => ExceptionCode = (int)MilvaException.Base;
     }
 }

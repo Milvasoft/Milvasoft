@@ -52,7 +52,7 @@ namespace Milvasoft.Helpers.DataAccess.IncludeLibrary
         /// <param name="includes"></param>
         /// <param name="propertySelector"></param>
         /// <returns></returns>
-        public static IIncludable<TEntity, TOtherProperty>ThenInclude<TEntity, TOtherProperty, TProperty>(this IIncludable<TEntity, IEnumerable<TProperty>> includes,
+        public static IIncludable<TEntity, TOtherProperty> ThenInclude<TEntity, TOtherProperty, TProperty>(this IIncludable<TEntity, IEnumerable<TProperty>> includes,
                                                                                                           Expression<Func<TProperty, TOtherProperty>> propertySelector) where TEntity : class
         {
             var result = ((Includable<TEntity, IEnumerable<TProperty>>)includes).IncludableInput.ThenInclude(propertySelector);

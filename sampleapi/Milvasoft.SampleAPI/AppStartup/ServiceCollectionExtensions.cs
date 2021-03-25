@@ -18,13 +18,10 @@ using Milvasoft.Helpers.Models.Response;
 using Milvasoft.Helpers.Utils;
 using Milvasoft.SampleAPI.Data;
 using Milvasoft.SampleAPI.Data.Repositories;
-using Milvasoft.SampleAPI.DTOs.StudentDTOs;
 using Milvasoft.SampleAPI.Entity;
 using Milvasoft.SampleAPI.Localization;
 using Milvasoft.SampleAPI.Services.Abstract;
 using Milvasoft.SampleAPI.Services.Concrete;
-using Milvasoft.SampleAPI.Spec;
-using Milvasoft.SampleAPI.Spec.Abstract;
 using Milvasoft.SampleAPI.Utils;
 using Milvasoft.SampleAPI.Utils.Swagger;
 using Newtonsoft.Json;
@@ -215,7 +212,7 @@ namespace Milvasoft.SampleAPI.AppStartup
                 options.OperationFilter<RequestHeaderFilter>();
                 options.OperationFilter<CustomAttributeOperationFilter>();
                 options.DocumentFilter<ReplaceVersionWithExactValueInPathFilter>();
-                
+
 
                 options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
                 {

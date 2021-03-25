@@ -15,7 +15,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
     /// <summary>
     /// Profession service.
     /// </summary>
-    public class ProfessionService : IBaseService<ProfessionDTO,ProfessionSpec>
+    public class ProfessionService : IBaseService<ProfessionDTO, ProfessionSpec>
     {
 
         private readonly IBaseRepository<Profession, Guid, EducationAppDbContext> _professionRepository;
@@ -43,12 +43,12 @@ namespace Milvasoft.SampleAPI.Services.Concrete
             var professionsDTO = from profession in professions
                                  select new ProfessionDTO
                                  {
-                                     Name=profession.Name,
-                                     CreationDate=profession.CreationDate,
-                                     CreatorUserId=profession.CreatorUserId,
-                                     Id=profession.Id,
-                                     LastModificationDate=profession.LastModificationDate,
-                                     LastModifierUserId=profession.LastModifierUserId
+                                     Name = profession.Name,
+                                     CreationDate = profession.CreationDate,
+                                     CreatorUserId = profession.CreatorUserId,
+                                     Id = profession.Id,
+                                     LastModificationDate = profession.LastModificationDate,
+                                     LastModifierUserId = profession.LastModifierUserId
                                  };
 
             return professionsDTO.ToList();

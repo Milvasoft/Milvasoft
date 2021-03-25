@@ -9,16 +9,12 @@ using Milvasoft.Helpers.FileOperations.Concrete;
 using Milvasoft.Helpers.FileOperations.Enums;
 using Milvasoft.SampleAPI.Data;
 using Milvasoft.SampleAPI.Entity;
-using Milvasoft.SampleAPI.Utils;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Reflection;
 using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace Milvasoft.SampleAPI.Utils
@@ -468,6 +464,6 @@ namespace Milvasoft.SampleAPI.Utils
 
         #endregion
 
-       
+
     }
 }

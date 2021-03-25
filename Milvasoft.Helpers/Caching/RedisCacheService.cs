@@ -37,7 +37,7 @@ namespace Milvasoft.Helpers.Caching
         /// </summary>
         /// <returns></returns>
         public async Task ConnectAsync()
-        {    
+        {
             if (!IsConnected())
                 _client = await ConnectionMultiplexer.ConnectAsync(_options).ConfigureAwait(false);
         }

@@ -1,5 +1,4 @@
 ﻿using Milvasoft.Helpers.Extensions;
-using Milvasoft.SampleAPI.DTOs.AssignmentDTOs;
 using Milvasoft.SampleAPI.Entity;
 using Milvasoft.SampleAPI.Spec.Abstract;
 using Milvasoft.SampleAPI.Utils;
@@ -7,7 +6,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Threading.Tasks;
 
 namespace Milvasoft.SampleAPI.Spec
 {
@@ -87,7 +85,7 @@ namespace Milvasoft.SampleAPI.Spec
 
             if (!string.IsNullOrEmpty(Title)) predicates.Add(c => c.Title == Title);
             if (!string.IsNullOrEmpty(Description)) predicates.Add(c => c.Description == Description);
-            if (!string.IsNullOrEmpty(Rules)) predicates.Add(c => c.Rules == Rules); 
+            if (!string.IsNullOrEmpty(Rules)) predicates.Add(c => c.Rules == Rules);
 
 
             if (Level.HasValue) predicates.Add(c => c.Level == Level);

@@ -2,13 +2,11 @@
 using Milvasoft.SampleAPI.Entity;
 using Milvasoft.SampleAPI.Entity.Enum;
 using Milvasoft.SampleAPI.Spec.Abstract;
-using Milvasoft.SampleAPI.Utils;
 using Milvasoft.SampleAPI.Utils.Attributes.ValidationAttributes;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Threading.Tasks;
 
 namespace Milvasoft.SampleAPI.Spec
 {
@@ -28,7 +26,7 @@ namespace Milvasoft.SampleAPI.Spec
         /// Student's name.
         /// </summary>
         [OValidateString(5000)]
-        public string Name { get=> _name; set=> _name=value?.ToUpper(); }
+        public string Name { get => _name; set => _name = value?.ToUpper(); }
 
         /// <summary>
         /// Student's surname.
@@ -57,7 +55,7 @@ namespace Milvasoft.SampleAPI.Spec
         /// </summary>
         public EducationStatus? GraduationStatus { get; set; }
 
-        
+
         /// <summary>
         /// Gradution score of student.
         /// </summary>
@@ -90,12 +88,12 @@ namespace Milvasoft.SampleAPI.Spec
             if (!Surname.IsNullOrEmpty()) entities = entities.Where(m => m.Surname.ToUpper().Contains(Surname));
             if (!University.IsNullOrEmpty()) entities = entities.Where(m => m.University.ToUpper().Contains(University));
 
-            if (Age.HasValue) entities.Where(m => m.Age==Age);
+            if (Age.HasValue) entities.Where(m => m.Age == Age);
             if (IsConfidentialityAgreementSigned.HasValue) entities.Where(m => m.IsConfidentialityAgreementSigned == IsConfidentialityAgreementSigned);
 
             if (MentorId.HasValue) entities = entities.Where(i => i.MentorId == MentorId);
             if (ProfessionId.HasValue) entities = entities.Where(i => i.ProfessionId == ProfessionId);
-            
+
 
             return entities.ToList();
 
@@ -111,9 +109,9 @@ namespace Milvasoft.SampleAPI.Spec
             Expression<Func<Student, bool>> mainPredicate = null;
             List<Expression<Func<Student, bool>>> predicates = new List<Expression<Func<Student, bool>>>();
 
-            if (!string.IsNullOrEmpty(Name)) predicates.Add(c => c.Name== Name);
-            if (!string.IsNullOrEmpty(Surname)) predicates.Add(c => c.Surname== Surname);
-            if (!string.IsNullOrEmpty(University)) predicates.Add(c => c.University== University);
+            if (!string.IsNullOrEmpty(Name)) predicates.Add(c => c.Name == Name);
+            if (!string.IsNullOrEmpty(Surname)) predicates.Add(c => c.Surname == Surname);
+            if (!string.IsNullOrEmpty(University)) predicates.Add(c => c.University == University);
 
             if (Age.HasValue) predicates.Add(c => c.Age == Age);
             if (IsConfidentialityAgreementSigned.HasValue) predicates.Add(c => c.IsConfidentialityAgreementSigned == IsConfidentialityAgreementSigned);

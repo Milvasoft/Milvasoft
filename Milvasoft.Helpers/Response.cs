@@ -127,7 +127,7 @@ namespace Milvasoft.Helpers
         public static async Task<IActionResult> GetObjectResponseAsync<T, TKey>(this ConfiguredTaskAwaitable asyncTask,
                                                                            IEnumerable<TKey> idList,
                                                                            string successMessage,
-                                                                           string errorMessage = null) where TKey :  IEquatable<TKey>
+                                                                           string errorMessage = null) where TKey : IEquatable<TKey>
         {
             var response = new ObjectResponse<T>();
 
@@ -366,8 +366,8 @@ namespace Milvasoft.Helpers
                     return localizer[LocalizerKeys.ErrorMessageForFiltering, localizedEntityName];
 
                 case CrudOperation.Specific:
-                    return localizer[keyContent].ToString();       
-                    
+                    return localizer[keyContent].ToString();
+
                 default:
                     return "";
             }

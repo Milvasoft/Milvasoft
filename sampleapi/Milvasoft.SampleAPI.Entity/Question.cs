@@ -38,7 +38,7 @@ namespace Milvasoft.SampleAPI.Entity
         /// Profession ıd of the question.
         /// </summary>
         public Guid ProfessionId { get; set; }
-        
+
         /// <summary>
         /// Profession of the question.
         /// </summary>

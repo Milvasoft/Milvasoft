@@ -26,8 +26,8 @@ namespace Opsiyon.API.Helpers.Swagger
 
                 foreach (var parameter in operation.Parameters)
                 {
-                    if(parameter.Schema?.Type == "string" )
-                        parameter.Description += parameter.Description != null 
+                    if (parameter.Schema?.Type == "string")
+                        parameter.Description += parameter.Description != null
                                                                         ? $"<br /> Minimum Length : {defaultValue.MinimumLength}" + $"<br /> Maximum Length : {defaultValue.MaximumLength}"
                                                                         : $"Minimum Length : {defaultValue.MinimumLength}" + $"<br /> Maximum Length : {defaultValue.MaximumLength}";
                 }

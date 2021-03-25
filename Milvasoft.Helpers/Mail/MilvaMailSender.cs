@@ -65,7 +65,7 @@ namespace Milvasoft.Helpers.Mail
                                              string subject,
                                              string body,
                                              bool isBodyHtml = false) => await SendMailAsync(to, subject, body, isBodyHtml).ConfigureAwait(false);
-     
+
         /// <summary>
         /// Provides send mail.
         /// </summary>

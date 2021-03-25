@@ -6,7 +6,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Threading.Tasks;
 
 namespace Milvasoft.SampleAPI.Spec
 {
@@ -85,13 +84,13 @@ namespace Milvasoft.SampleAPI.Spec
 
             if (!string.IsNullOrEmpty(Title)) predicates.Add(c => c.Title == Title);
             if (!string.IsNullOrEmpty(QuestionContent)) predicates.Add(c => c.QuestionContent == QuestionContent);
-            if (!string.IsNullOrEmpty(MentorReply)) predicates.Add(c => c.MentorReply== MentorReply);
+            if (!string.IsNullOrEmpty(MentorReply)) predicates.Add(c => c.MentorReply == MentorReply);
 
-            if (IsUseful.HasValue) predicates.Add(c => c.IsUseful== IsUseful);
+            if (IsUseful.HasValue) predicates.Add(c => c.IsUseful == IsUseful);
             if (WillShown.HasValue) predicates.Add(c => c.WillShown == WillShown);
             if (ProfessionId.HasValue) predicates.Add(c => c.ProfessionId == ProfessionId);
-            if (StudentId.HasValue) predicates.Add(c => c.StudentId== StudentId);
-            if (MentorId.HasValue) predicates.Add(c => c.MentorId== MentorId);
+            if (StudentId.HasValue) predicates.Add(c => c.StudentId == StudentId);
+            if (MentorId.HasValue) predicates.Add(c => c.MentorId == MentorId);
 
             predicates?.ForEach(predicate => mainPredicate = mainPredicate.Append(predicate, ExpressionType.AndAlso));
             return mainPredicate;

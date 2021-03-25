@@ -225,7 +225,7 @@ namespace Milvasoft.Helpers.Identity.Concrete
         /// <returns></returns>
         public virtual async Task<IdentityResult> SignOutAsync()
         {
-            var user = await _userManager.FindByNameAsync(_userName).ConfigureAwait(false) ?? throw new MilvaUserFriendlyException(MilvaException.CannotFindEntity); 
+            var user = await _userManager.FindByNameAsync(_userName).ConfigureAwait(false) ?? throw new MilvaUserFriendlyException(MilvaException.CannotFindEntity);
 
             if (await _userManager.GetAuthenticationTokenAsync(user, LoginProvider, TokenName) == null)
                 return null;

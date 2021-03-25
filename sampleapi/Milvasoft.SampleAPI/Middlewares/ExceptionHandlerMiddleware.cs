@@ -108,7 +108,7 @@ namespace Milvasoft.SampleAPI.Middlewares
                     await context.Response.WriteAsync(json);
                 }
             }
-           
+
         }
     }
 }

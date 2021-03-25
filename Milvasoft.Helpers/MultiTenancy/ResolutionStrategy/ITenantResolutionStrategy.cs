@@ -7,7 +7,7 @@ namespace Milvasoft.Helpers.MultiTenancy.ResolutionStrategy
     /// Abstraction for tenant resolution strategy.
     /// </summary>
     /// <typeparam name="TKey"></typeparam>
-    public interface ITenantResolutionStrategy<TKey> where TKey :  IEquatable<TKey>
+    public interface ITenantResolutionStrategy<TKey> where TKey : IEquatable<TKey>
     {
         /// <summary>
         /// Get the tenant identifier

@@ -18,14 +18,14 @@ namespace Milvasoft.Helpers.MultiTenancy.Options
         where TKey : struct, IEquatable<TKey>
     {
 
-        private readonly ITenantAccessor<TTenant,TKey> _tenantAccessor;
-        private readonly TenantOptionsCacheDictionary<TOptions,TKey> _tenantSpecificOptionsCache = new TenantOptionsCacheDictionary<TOptions, TKey>();
+        private readonly ITenantAccessor<TTenant, TKey> _tenantAccessor;
+        private readonly TenantOptionsCacheDictionary<TOptions, TKey> _tenantSpecificOptionsCache = new TenantOptionsCacheDictionary<TOptions, TKey>();
 
         /// <summary>
         /// Initializes new instance of <see cref="TenantOptionsCache{TOptions, TTenant, TKey}"/>
         /// </summary>
         /// <param name="tenantAccessor"></param>
-        public TenantOptionsCache(ITenantAccessor<TTenant,TKey> tenantAccessor)
+        public TenantOptionsCache(ITenantAccessor<TTenant, TKey> tenantAccessor)
         {
             _tenantAccessor = tenantAccessor;
         }

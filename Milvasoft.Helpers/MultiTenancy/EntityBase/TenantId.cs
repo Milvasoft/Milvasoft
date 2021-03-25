@@ -53,7 +53,7 @@ namespace Milvasoft.Helpers.MultiTenancy.EntityBase
             _tenancyName = tenancyName.ToLowerInvariant();
             _branchNo = branchNo;
             _hash = $"{tenancyName}_{branchNo}".HashToString();
-        } 
+        }
 
         /// <summary>
         /// Combines Tenancy Name and BranchNo into a hash code.

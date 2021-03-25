@@ -69,7 +69,7 @@ namespace Milvasoft.SampleAPI.UnitTest.TestHelpers
         private void ConfigureDatabase()
         {
             var connectionString = _configuration.GetConnectionString("PostgreConnection");
-            
+
             _services.AddEntityFrameworkNpgsql().AddDbContext<EducationAppDbContext>(opts =>
             {
                 opts.UseNpgsql(connectionString, b => b.MigrationsAssembly("Milvasoft.SampleAPI.Data").EnableRetryOnFailure()).UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);

@@ -1,5 +1,4 @@
 ﻿using Milvasoft.Helpers.DataAccess.Abstract;
-using Milvasoft.Helpers.DataAccess.IncludeLibrary;
 using Milvasoft.SampleAPI.Data;
 using Milvasoft.SampleAPI.DTOs.AssignmentDTOs;
 using Milvasoft.SampleAPI.Entity;
@@ -34,7 +33,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// Get all assignment by <paramref name="spec"/>
         /// </summary>
         /// <returns></returns>
-        public async Task<List<AssignmentDTO>> GetEntitiesForStudent(AssignmentSpec spec=null)
+        public async Task<List<AssignmentDTO>> GetEntitiesForStudent(AssignmentSpec spec = null)
         {
             var assignments = await _assignmentRepository.GetAllAsync(spec?.ToExpression()).ConfigureAwait(false);
 
@@ -42,14 +41,14 @@ namespace Milvasoft.SampleAPI.Services.Concrete
                                     select new AssignmentDTO
                                     {
                                         Title = assignment.Title,
-                                        Description=assignment.Description,
-                                        RemarksToStudent=assignment.RemarksToStudent,
-                                        RemarksToMentor=assignment.RemarksToMentor,
-                                        Level=assignment.Level,
-                                        Rules=assignment.Rules,
-                                        MaxDeliveryDay=assignment.MaxDeliveryDay,
-                                        ProfessionId=assignment.ProfessionId,
-                                        CreatorUser=assignment.CreatorUser
+                                        Description = assignment.Description,
+                                        RemarksToStudent = assignment.RemarksToStudent,
+                                        RemarksToMentor = assignment.RemarksToMentor,
+                                        Level = assignment.Level,
+                                        Rules = assignment.Rules,
+                                        MaxDeliveryDay = assignment.MaxDeliveryDay,
+                                        ProfessionId = assignment.ProfessionId,
+                                        CreatorUser = assignment.CreatorUser
                                     };
 
             return assignmentDTOList.ToList();
@@ -60,7 +59,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// Get assignments for admin by <paramref name="spec"/>
         /// </summary>
         /// <returns></returns>
-        public async Task<List<AssignmentDTO>> GetEntitiesForAdmin(AssignmentSpec spec=null)
+        public async Task<List<AssignmentDTO>> GetEntitiesForAdmin(AssignmentSpec spec = null)
         {
             var assignments = await _assignmentRepository.GetAllAsync(spec?.ToExpression()).ConfigureAwait(false);
 
@@ -89,7 +88,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// Get assignments for mentor by <paramref name="spec"/>
         /// </summary>
         /// <returns></returns>
-        public async Task<List<AssignmentDTO>> GetEntitiesForMentor(AssignmentSpec spec=null)
+        public async Task<List<AssignmentDTO>> GetEntitiesForMentor(AssignmentSpec spec = null)
         {
             var assignments = await _assignmentRepository.GetAllAsync(spec?.ToExpression()).ConfigureAwait(false);
 

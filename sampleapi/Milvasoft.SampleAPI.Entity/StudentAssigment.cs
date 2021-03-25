@@ -33,7 +33,7 @@ namespace Milvasoft.SampleAPI.Entity
         public virtual Assignment Assigment { get; set; }
 
 
-        
+
 
         /// <summary>
         /// Education status.

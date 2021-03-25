@@ -1,5 +1,4 @@
-﻿using Microsoft.Extensions.Localization;
-using System;
+﻿using System;
 
 namespace Milvasoft.Helpers.Exceptions
 {
@@ -18,7 +17,7 @@ namespace Milvasoft.Helpers.Exceptions
         /// Initializes a new instance of the <see cref="MilvaUserFriendlyException"/> class with a specified error message.
         /// </summary>
         /// <param name="messageOrLocalizerKey"></param>
-        public MilvaUserFriendlyException(string messageOrLocalizerKey) : base(messageOrLocalizerKey) 
+        public MilvaUserFriendlyException(string messageOrLocalizerKey) : base(messageOrLocalizerKey)
             => ExceptionCode = (int)MilvaException.Base;
 
         /// <summary>
@@ -26,7 +25,7 @@ namespace Milvasoft.Helpers.Exceptions
         /// </summary>
         /// <param name="messageOrLocalizerKey"></param>
         /// <param name="exceptionCode"></param>
-        public MilvaUserFriendlyException(string messageOrLocalizerKey, MilvaException exceptionCode) : base(messageOrLocalizerKey) 
+        public MilvaUserFriendlyException(string messageOrLocalizerKey, MilvaException exceptionCode) : base(messageOrLocalizerKey)
             => ExceptionCode = (int)exceptionCode;
 
         /// <summary>
@@ -34,14 +33,14 @@ namespace Milvasoft.Helpers.Exceptions
         /// </summary>
         /// <param name="messageOrLocalizerKey"></param>
         /// <param name="exceptionCode"></param>
-        public MilvaUserFriendlyException(string messageOrLocalizerKey, int exceptionCode) : base(messageOrLocalizerKey) 
+        public MilvaUserFriendlyException(string messageOrLocalizerKey, int exceptionCode) : base(messageOrLocalizerKey)
             => ExceptionCode = exceptionCode;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MilvaUserFriendlyException"/> class with a specified error message.
         /// </summary>
         /// <param name="exceptionCode"></param>
-        public MilvaUserFriendlyException(MilvaException exceptionCode) : base($"{exceptionCode}Exception") 
+        public MilvaUserFriendlyException(MilvaException exceptionCode) : base($"{exceptionCode}Exception")
             => ExceptionCode = (int)exceptionCode;
 
         /// <summary>
@@ -58,7 +57,7 @@ namespace Milvasoft.Helpers.Exceptions
         /// </summary>
         /// <param name="messageOrLocalizerKey"></param>
         /// <param name="innerException"></param>
-        public MilvaUserFriendlyException(string messageOrLocalizerKey, Exception innerException) : base(messageOrLocalizerKey, innerException) 
+        public MilvaUserFriendlyException(string messageOrLocalizerKey, Exception innerException) : base(messageOrLocalizerKey, innerException)
             => ExceptionCode = (int)MilvaException.Base;
 
         /// <summary>
@@ -67,7 +66,7 @@ namespace Milvasoft.Helpers.Exceptions
         /// <param name="messageOrLocalizerKey"></param>
         /// <param name="exceptionCode"></param>
         /// <param name="innerException"></param>
-        public MilvaUserFriendlyException(string messageOrLocalizerKey, int exceptionCode, Exception innerException) : base(messageOrLocalizerKey, innerException) 
+        public MilvaUserFriendlyException(string messageOrLocalizerKey, int exceptionCode, Exception innerException) : base(messageOrLocalizerKey, innerException)
             => ExceptionCode = exceptionCode;
     }
 }

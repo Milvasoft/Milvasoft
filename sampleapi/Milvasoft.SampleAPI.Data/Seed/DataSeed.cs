@@ -2,12 +2,10 @@
 using Microsoft.Extensions.DependencyInjection;
 using Milvasoft.Helpers.DataAccess.Abstract.Entity;
 using Milvasoft.SampleAPI.Entity;
-using Milvasoft.SampleAPI.Entity.Enum;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Milvasoft.SampleAPI.Data.Seed
@@ -159,7 +157,7 @@ namespace Milvasoft.SampleAPI.Data.Seed
                 }
             };
         }
-        
+
 
     }
 }

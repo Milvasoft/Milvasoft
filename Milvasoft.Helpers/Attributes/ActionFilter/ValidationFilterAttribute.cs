@@ -39,7 +39,7 @@ namespace Milvasoft.Helpers.Attributes.ActionFilter
         /// <summary>
         /// Folder assembly name for disable nested type prop validations.
         /// </summary>
-        public string DTOFolderAssemblyName{ get; set; }
+        public string DTOFolderAssemblyName { get; set; }
 
         #endregion
 

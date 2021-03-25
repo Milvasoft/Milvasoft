@@ -1,12 +1,9 @@
 ﻿using Milvasoft.Helpers.DataAccess.Abstract;
-using Milvasoft.Helpers.DataAccess.IncludeLibrary;
 using Milvasoft.SampleAPI.Data;
 using Milvasoft.SampleAPI.DTOs;
-using Milvasoft.SampleAPI.DTOs.ProfessionDTOs;
 using Milvasoft.SampleAPI.Entity;
 using Milvasoft.SampleAPI.Services.Abstract;
 using Milvasoft.SampleAPI.Spec;
-using Milvasoft.SampleAPI.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -49,7 +46,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
                                   Description = link.Description,
                                   Url = link.Url,
                                   ProfessionId = link.ProfessionId,
-                                  CreatorUser=link.CreatorUser  
+                                  CreatorUser = link.CreatorUser
                               };
 
             return linkDTOList.ToList();
@@ -73,9 +70,9 @@ namespace Milvasoft.SampleAPI.Services.Concrete
                                   Description = link.Description,
                                   Url = link.Url,
                                   ProfessionId = link.ProfessionId,
-                                  CreationDate=link.CreationDate,
-                                  CreatorUser=link.CreatorUser,
-                                  LastModificationDate=link.LastModificationDate
+                                  CreationDate = link.CreationDate,
+                                  CreatorUser = link.CreatorUser,
+                                  LastModificationDate = link.LastModificationDate
                               };
 
             return linkDTOList.ToList();
@@ -119,7 +116,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
                 Title = link.Title,
                 Description = link.Description,
                 Url = link.Url,
-                ProfessionId=link.ProfessionId
+                ProfessionId = link.ProfessionId
             };
 
         }
@@ -158,7 +155,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
                 Description = link.Description,
                 Url = link.Url,
                 ProfessionId = link.ProfessionId,
-                
+
             };
         }
 
@@ -172,10 +169,10 @@ namespace Milvasoft.SampleAPI.Services.Concrete
 
             var usefullink = new UsefulLink
             {
-                Title=educationDTO.Title,
-                Description=educationDTO.Description,
-                Url=educationDTO.Url,
-                ProfessionId=educationDTO.ProfessionId
+                Title = educationDTO.Title,
+                Description = educationDTO.Description,
+                Url = educationDTO.Url,
+                ProfessionId = educationDTO.ProfessionId
             };
 
             await _usefulLinkRepository.AddAsync(usefullink).ConfigureAwait(false);
