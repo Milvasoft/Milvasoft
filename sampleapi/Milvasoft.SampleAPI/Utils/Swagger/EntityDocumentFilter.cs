@@ -10,7 +10,7 @@ namespace Milvasoft.SampleAPI.Utils.Swagger
 	/// <para><b>EN: </b>Swagger document creation utility class</para>
 	/// <para><b>TR: </b>Swagger dokumanı oluşturmaya yardımcı sınıf</para>
 	/// </summary>
-    public class DocumentFilter : IDocumentFilter
+    public class EntityDocumentFilter : IDocumentFilter
     {
         /// <summary>
         /// <para><b>EN: </b> Applies filter on swagger document.</para>
@@ -25,8 +25,11 @@ namespace Milvasoft.SampleAPI.Utils.Swagger
             //Removing entities from document.
             foreach (var name in entityAssembly.DefinedTypes.Select(dt => dt.Name))
             {
-                context.SchemaRepository.Schemas.Remove(name);
-                swaggerDoc.Components.Schemas.Remove(name);
+                if (name != "EducationStatus")
+                {
+                    context.SchemaRepository.Schemas.Remove(name);
+                    swaggerDoc.Components.Schemas.Remove(name);
+                }
             }
 
             //foreach (var item in swaggerDoc.Components.Schemas)
@@ -52,7 +55,7 @@ namespace Milvasoft.SampleAPI.Utils.Swagger
             //swaggerDoc.Components.Examples.Clear();
 
             //Sorting operations of schemas. DTOs comes first, Specs comes second.
-            swaggerDoc.Components.Schemas.OrderByDescending(d => d.Key.Contains("DTO")).ToDictionary(pair => pair.Key, pair => pair.Value);
+            swaggerDoc.Components.Schemas = swaggerDoc.Components.Schemas.OrderByDescending(d => d.Key.Contains("DTO")).ThenBy(i => i.Key).ToDictionary(pair => pair.Key, pair => pair.Value);
         }
     }
 }

@@ -9,7 +9,7 @@ namespace Milvasoft.SampleAPI.Utils.Swagger
     /// <summary>
     /// Operation filter to add the requirement of the custom header
     /// </summary>
-    public class HeaderFilter : IOperationFilter
+    public class RequestHeaderFilter : IOperationFilter
     {
         public void Apply(OpenApiOperation operation, OperationFilterContext context)
         {

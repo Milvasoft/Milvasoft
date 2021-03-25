@@ -171,6 +171,25 @@
             </remarks>
             <returns></returns>
         </member>
+        <member name="M:Milvasoft.SampleAPI.Controllers.StudentController.#ctor(Milvasoft.SampleAPI.Services.Abstract.IStudentService)">
+            <summary>
+            Student controller constructor method.
+            </summary>
+            <param name="studentService"></param>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Controllers.StudentController.GetStudentForAdmin(Milvasoft.API.DTOs.PaginationParamsWithSpec{Milvasoft.SampleAPI.Spec.StudentSpec})">
+            <summary>
+            Get all student for admin.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Controllers.StudentController.AddStudent(Milvasoft.SampleAPI.DTOs.StudentDTOs.StudentDTO)">
+            <summary>
+            Add student to database.
+            </summary>
+            <param name="student"></param>
+            <returns></returns>
+        </member>
         <member name="T:Milvasoft.SampleAPI.DTOs.AccountDTOs.LoginDTO">
             <summary>
             Login and sign up processes are happens with this dto.
@@ -244,6 +263,581 @@
         <member name="P:Milvasoft.SampleAPI.DTOs.AccountDTOs.SignUpResultDTO.LocalAPIFailure">
             <summary>
             Determines Global API error or Local API error.
+            </summary>
+        </member>
+        <member name="T:Milvasoft.SampleAPI.DTOs.AnnouncementDTOs.AnnouncementDTO">
+            <summary>
+            Announcements for all students.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.AnnouncementDTOs.AnnouncementDTO.Title">
+            <summary>
+            Tittle of announcement.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.AnnouncementDTOs.AnnouncementDTO.Description">
+            <summary>
+            Description of announcement.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.AnnouncementDTOs.AnnouncementDTO.IsFixed">
+            <summary>
+            Is the announcement fixed?
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.AnnouncementDTOs.AnnouncementDTO.MentorId">
+            <summary>
+            ID of the announcement mentor.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.AnnouncementDTOs.AnnouncementDTO.PublisherMentor">
+            <summary>
+            Mentor of announcement.
+            </summary>
+        </member>
+        <member name="T:Milvasoft.SampleAPI.DTOs.AppRoleDTO">
+            <summary>
+            Role for all users.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.AppRoleDTO.PhotoPath">
+            <summary>
+            Photo path of users.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.AppRoleDTO.IsConfirmedUser">
+            <summary>
+            Is the user confirmed?
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.AppRoleDTO.IsMentor">
+            <summary>
+            Is the user a mentor?
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.AppRoleDTO.LastModificationDate">
+            <summary>
+            Last modification date of user information.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.AppRoleDTO.CreationDate">
+            <summary>
+            User creation date.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.AppRoleDTO.CreatorUserId">
+            <summary>
+            Id of the user who created the user.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.AppRoleDTO.LastModifierUserId">
+            <summary>
+            Id of last modified user.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.AppRoleDTO.DeletionDate">
+            <summary>
+            Deletion date.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.AppRoleDTO.IsDeleted">
+            <summary>
+            Can it be deleted?
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.AppRoleDTO.DeleterUserId">
+            <summary>
+            Id of the user who deleted.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.AppRoleDTO.Mentor">
+            <summary>
+            Is the user mentor?
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.AppRoleDTO.Student">
+            <summary>
+            Is the user student?
+            </summary>
+        </member>
+        <member name="T:Milvasoft.SampleAPI.DTOs.AppUserDTO">
+            <summary>
+            Application users.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.AppUserDTO.PhotoPath">
+            <summary>
+            Photo path of users.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.AppUserDTO.IsConfirmedUser">
+            <summary>
+            Is the user confirmed?
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.AppUserDTO.IsMentor">
+            <summary>
+            Is the user a mentor?
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.AppUserDTO.LastModificationDate">
+            <summary>
+            Last modification date of user information.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.AppUserDTO.CreationDate">
+            <summary>
+            User creation date.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.AppUserDTO.CreatorUserId">
+            <summary>
+            Id of the user who created the user.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.AppUserDTO.LastModifierUserId">
+            <summary>
+            Id of last modified user.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.AppUserDTO.DeletionDate">
+            <summary>
+            Deletion date.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.AppUserDTO.IsDeleted">
+            <summary>
+            Can it be deleted?
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.AppUserDTO.DeleterUserId">
+            <summary>
+            Id of the user who deleted.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.AppUserDTO.Mentor">
+            <summary>
+            Is the user mentor?
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.AppUserDTO.Student">
+            <summary>
+            Is the user student?
+            </summary>
+        </member>
+        <member name="T:Milvasoft.SampleAPI.DTOs.AssignmentDTOs.AssignmentDTO">
+            <summary>
+            Assignment for student.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.AssignmentDTOs.AssignmentDTO.Title">
+            <summary>
+            Tittle of assignment.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.AssignmentDTOs.AssignmentDTO.Description">
+            <summary>
+            Description of assignment.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.AssignmentDTOs.AssignmentDTO.RemarksToStudent">
+            <summary>
+            Remarks for student.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.AssignmentDTOs.AssignmentDTO.RemarksToMentor">
+            <summary>
+            Remarks for mentor.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.AssignmentDTOs.AssignmentDTO.Level">
+            <summary>
+            Difficulty level of the assignment.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.AssignmentDTOs.AssignmentDTO.Rules">
+            <summary>
+            Rules of assignment.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.AssignmentDTOs.AssignmentDTO.MaxDeliveryDay">
+            <summary> 
+            The maximum time that the assignment will be delivered.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.AssignmentDTOs.AssignmentDTO.ProfessionId">
+            <summary>
+            The profession Id of assignment.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.AssignmentDTOs.AssignmentDTO.Profession">
+            <summary>
+            The profession of assignment.
+            </summary>
+        </member>
+        <member name="T:Milvasoft.SampleAPI.DTOs.MentorDTOs.MentorDTO">
+            <summary>
+            Mentor DTO.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.MentorDTOs.MentorDTO.Name">
+            <summary>
+            Mentor name.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.MentorDTOs.MentorDTO.Surname">
+            <summary>
+            Mentor surname.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.MentorDTOs.MentorDTO.CVFilePath">
+            <summary>
+            CV path of mentor.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.MentorDTOs.MentorDTO.AppUserId">
+            <summary>
+            AppUser ID of mentor.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.MentorDTOs.MentorDTO.AppUser">
+            <summary>
+            AppUser of mentor.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.MentorDTOs.MentorDTO.PublishedAnnouncements">
+            <summary>
+            Announcements posted by the mentor.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.MentorDTOs.MentorDTO.Professions">
+            <summary>
+            Professions of a mentor.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.MentorDTOs.MentorDTO.Students">
+            <summary>
+            Students of a mentor.
+            </summary>
+        </member>
+        <member name="T:Milvasoft.SampleAPI.DTOs.MentorDTOs.MentorProfessionDTO">
+            <summary>
+            Mentor and profession relationship.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.MentorDTOs.MentorProfessionDTO.MentorId">
+            <summary>
+            Id of mentor.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.MentorDTOs.MentorProfessionDTO.Mentor">
+            <summary>
+            Mentor.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.MentorDTOs.MentorProfessionDTO.ProfessionId">
+            <summary>
+            Id of profession.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.MentorDTOs.MentorProfessionDTO.Profession">
+            <summary>
+            Profession.
+            </summary>
+        </member>
+        <member name="T:Milvasoft.SampleAPI.DTOs.ProfessionDTOs.ProfessionDTO">
+            <summary>
+            Profession entity.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.ProfessionDTOs.ProfessionDTO.Name">
+            <summary>
+            Name of profession.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.ProfessionDTOs.ProfessionDTO.Assignments">
+            <summary>
+            Assignments of profession.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.ProfessionDTOs.ProfessionDTO.MentorProfessions">
+            <summary>
+            Mentor profession relationship.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.ProfessionDTOs.ProfessionDTO.Students">
+            <summary>
+            Students of profession.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.ProfessionDTOs.ProfessionDTO.Questions">
+            <summary>
+            Questions of profession.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.ProfessionDTOs.ProfessionDTO.UsefulLinks">
+            <summary>
+            Useful links of profession.
+            </summary>
+        </member>
+        <member name="T:Milvasoft.SampleAPI.DTOs.QuestionDTOs.QuestionDTO">
+            <summary>
+            Questions asked by students.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.QuestionDTOs.QuestionDTO.Title">
+            <summary>
+            Tittle of question.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.QuestionDTOs.QuestionDTO.QuestionContent">
+            <summary>
+            Content of question.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.QuestionDTOs.QuestionDTO.MentorReply">
+            <summary>
+            The mentor's answer to the question.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.QuestionDTOs.QuestionDTO.IsUseful">
+            <summary>
+            Is the question useful?
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.QuestionDTOs.QuestionDTO.WillShown">
+            <summary>
+            Will the question be shown as a useful question?
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.QuestionDTOs.QuestionDTO.ProfessionId">
+            <summary>
+            Profession ıd of the question.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.QuestionDTOs.QuestionDTO.Profession">
+            <summary>
+            Profession of the question.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.QuestionDTOs.QuestionDTO.StudentId">
+            <summary>
+            Id of the student who asked the question.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.QuestionDTOs.QuestionDTO.Student">
+            <summary>
+            Student of the asked question.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.QuestionDTOs.QuestionDTO.MentorId">
+            <summary>
+            Id of the mentor answering the question.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.QuestionDTOs.QuestionDTO.Mentor">
+            <summary>
+            The mentor answering the question
+            </summary>
+        </member>
+        <member name="T:Milvasoft.SampleAPI.DTOs.StudentDTOs.StudentAssignmentDTO">
+            <summary>
+            Student assginment relationship.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.StudentDTOs.StudentAssignmentDTO.StudentId">
+            <summary>
+            Student id.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.StudentDTOs.StudentAssignmentDTO.Student">
+            <summary>
+            Student.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.StudentDTOs.StudentAssignmentDTO.AssigmentId">
+            <summary>
+            Assignment id.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.StudentDTOs.StudentAssignmentDTO.Assigment">
+            <summary>
+            Assignment.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.StudentDTOs.StudentAssignmentDTO.Status">
+            <summary>
+            Education status.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.StudentDTOs.StudentAssignmentDTO.MentorScore">
+            <summary>
+            The mentor's score on the student's assignment.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.StudentDTOs.StudentAssignmentDTO.MentorDescription">
+            <summary>
+            The mentor's description on the student's assignment.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.StudentDTOs.StudentAssignmentDTO.AssigmentFilePath">
+            <summary>
+            File path of assignment.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.StudentDTOs.StudentAssignmentDTO.ShouldDeliveryDate">
+            <summary>
+            The date the student should submit the assignment.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.StudentDTOs.StudentAssignmentDTO.StartedDate">
+            <summary>
+            Assignment start date.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.StudentDTOs.StudentAssignmentDTO.FinishedDate">
+            <summary>
+            Assignment finished date.
+            </summary>
+        </member>
+        <member name="T:Milvasoft.SampleAPI.DTOs.StudentDTOs.StudentDTO">
+            <summary>
+            Student DTO.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.StudentDTOs.StudentDTO.Name">
+            <summary>
+            Student's name.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.StudentDTOs.StudentDTO.Surname">
+            <summary>
+            Student's surname.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.StudentDTOs.StudentDTO.University">
+            <summary>
+            Student's university.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.StudentDTOs.StudentDTO.Age">
+            <summary>
+            Age of student.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.StudentDTOs.StudentDTO.Dream">
+            <summary>
+            Dream of student.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.StudentDTOs.StudentDTO.HomeAddress">
+            <summary>
+            Home adress of student.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.StudentDTOs.StudentDTO.MentorThoughts">
+            <summary>
+            The mentor's thoughts about the student.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.StudentDTOs.StudentDTO.IsConfidentialityAgreementSigned">
+            <summary>
+            Did the student sign the contract?
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.StudentDTOs.StudentDTO.GraduationStatus">
+            <summary>
+            Education status of student.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.StudentDTOs.StudentDTO.GraduationScore">
+            <summary>
+            Gradution score of student.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.StudentDTOs.StudentDTO.MentorGraduationThoughts">
+            <summary>
+            The mentor's graduation thoughts of student.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.StudentDTOs.StudentDTO.CurrentAssigmentDeliveryDate">
+            <summary>
+            Due date of current assignment.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.StudentDTOs.StudentDTO.AppUserId">
+            <summary>
+            AppUser id.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.StudentDTOs.StudentDTO.AppUser">
+            <summary>
+            AppUser of student.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.StudentDTOs.StudentDTO.ProfessionId">
+            <summary>
+            Profession id of student.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.StudentDTOs.StudentDTO.Profession">
+            <summary>
+            Profesion of student.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.StudentDTOs.StudentDTO.MentorId">
+            <summary>
+            Mentor ıd of student.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.StudentDTOs.StudentDTO.Mentor">
+            <summary>
+            Mentor of student.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.StudentDTOs.StudentDTO.OldAssignments">
+            <summary>
+            Old assignments of student.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.StudentDTOs.StudentDTO.SuccesAssignmentCount">
+            <summary>
+            Number of previous successful assignments.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.StudentDTOs.StudentDTO.FailedAssignmentCount">
+            <summary>
+            Number of previous failed assignments.
+            </summary>
+        </member>
+        <member name="T:Milvasoft.SampleAPI.DTOs.UsefulLinkDTO">
+            <summary>
+            Useful links.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.UsefulLinkDTO.Title">
+            <summary>
+            Tittle of link.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.UsefulLinkDTO.Description">
+            <summary>
+            Description of link.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.UsefulLinkDTO.Url">
+            <summary>
+            URL.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.UsefulLinkDTO.ProfessionId">
+            <summary>
+            Profession id of link.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.UsefulLinkDTO.Profession">
+            <summary>
+            Profession of link.
             </summary>
         </member>
         <member name="M:Milvasoft.SampleAPI.Middlewares.ExceptionHandlerMiddleware.#ctor(Microsoft.AspNetCore.Http.RequestDelegate)">
@@ -392,46 +986,77 @@
             Returns Claims in token for token decode
             </summary>
         </member>
-        <member name="M:Milvasoft.SampleAPI.Services.Abstract.IBaseService`1.GetEntitiesAsync">
+        <member name="T:Milvasoft.SampleAPI.Services.Abstract.IBaseService`2">
             <summary>
-            Get all entities from database.
+            Base services for all concrete services.
+            </summary>
+            <typeparam name="TDTO"></typeparam>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Services.Abstract.IBaseService`2.GetEntitiesForStudent(`1)">
+            <summary>
+            Get all entities for student from database.
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.SampleAPI.Services.Abstract.IBaseService`1.GetEntityAsync(System.Guid)">
+        <member name="M:Milvasoft.SampleAPI.Services.Abstract.IBaseService`2.GetEntitiesForAdmin(`1)">
+            <summary>
+            Get all entities for admin from database.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Services.Abstract.IBaseService`2.GetEntitiesForMentor(`1)">
+            <summary>
+            Get all entities for mentor from database.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Services.Abstract.IBaseService`2.GetEntityForStudent(System.Guid)">
             <summary>
             Get one entity by id.
             </summary>
             <param name="id"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.SampleAPI.Services.Abstract.IBaseService`1.AddEntityAsync(`0)">
+        <member name="M:Milvasoft.SampleAPI.Services.Abstract.IBaseService`2.GetEntityForAdmin(System.Guid)">
+            <summary>
+            Get one entity for admin by id.
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Services.Abstract.IBaseService`2.GetEntityForMentor(System.Guid)">
+            <summary>
+            Get one entity for mentor by id.
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Services.Abstract.IBaseService`2.AddEntityAsync(`0)">
             <summary>
             Adds single entity to database.
             </summary>
-            <param name="id"></param>
+            <param name="educationDTO"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.SampleAPI.Services.Abstract.IBaseService`1.UpdateEntityAsync(`0)">
+        <member name="M:Milvasoft.SampleAPI.Services.Abstract.IBaseService`2.UpdateEntityAsync(`0)">
             <summary>
             Updates single entity in database.
             </summary>
-            <param name="id"></param>
+            <param name="educationDTO"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.SampleAPI.Services.Abstract.IBaseService`1.DeleteEntityAsync(System.Guid)">
+        <member name="M:Milvasoft.SampleAPI.Services.Abstract.IBaseService`2.DeleteEntityAsync(System.Guid)">
             <summary>
             Deletes single entity from database.
             </summary>
             <param name="id"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.SampleAPI.Services.Abstract.IBaseService`1.MarkAsIsFavoriteAsync(System.Guid,System.Boolean)">
+        <member name="M:Milvasoft.SampleAPI.Services.Abstract.IBaseService`2.DeleteEntities(System.Collections.Generic.List{System.Guid})">
             <summary>
-            Sended favorites as mark.
+            Delete entities by <paramref name="ids"/>
             </summary>
-            <param name="id"></param>
-            <param name="isFavorite"></param>
+            <param name="ids"></param>
             <returns></returns>
         </member>
         <member name="T:Milvasoft.SampleAPI.Services.Concrete.AccountService">
@@ -567,6 +1192,879 @@
             <summary>
             Returns Claims in token for token decode
             </summary>
+        </member>
+        <member name="T:Milvasoft.SampleAPI.Services.Concrete.AnnouncementService">
+            <summary>
+            Announcement service.
+            </summary>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.AnnouncementService.#ctor(Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository{Milvasoft.SampleAPI.Entity.Announcement,System.Guid,Milvasoft.SampleAPI.Data.EducationAppDbContext})">
+            <summary>
+            Performs constructor injection for repository interfaces used in this service.
+            </summary>
+            <param name="announcementRepository"></param>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.AnnouncementService.GetEntitiesForStudent(Milvasoft.SampleAPI.Spec.AnnouncementSpec)">
+            <summary>
+            Get all announcement for student.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.AnnouncementService.GetEntitiesForAdmin(Milvasoft.SampleAPI.Spec.AnnouncementSpec)">
+            <summary>
+            Get all announcement for admin.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.AnnouncementService.GetEntitiesForMentor(Milvasoft.SampleAPI.Spec.AnnouncementSpec)">
+            <summary>
+            Get all announcement for mentor.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.AnnouncementService.GetEntityForAdmin(System.Guid)">
+            <summary>
+            Get announcement for admin by <paramref name="id"/>.
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.AnnouncementService.GetEntityForMentor(System.Guid)">
+            <summary>
+            Get entity for mentor by <paramref name="id"/>.
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.AnnouncementService.GetEntityForStudent(System.Guid)">
+            <summary>
+            Get announcement for student by <paramref name="id"/>.
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.AnnouncementService.AddEntityAsync(Milvasoft.SampleAPI.DTOs.AnnouncementDTOs.AnnouncementDTO)">
+            <summary>
+            Add new announcement.
+            </summary>
+            <param name="educationDTO"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.AnnouncementService.UpdateEntityAsync(Milvasoft.SampleAPI.DTOs.AnnouncementDTOs.AnnouncementDTO)">
+            <summary>
+            Update announcement.
+            </summary>
+            <param name="educationDTO"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.AnnouncementService.DeleteEntityAsync(System.Guid)">
+            <summary>
+            Delete announcement.
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.AnnouncementService.DeleteEntities(System.Collections.Generic.List{System.Guid})">
+            <summary>
+            Delete multiple announcement by <paramref name="ids"/>.
+            </summary>
+            <param name="ids"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Milvasoft.SampleAPI.Services.Concrete.AssignmentService">
+            <summary>
+            Assignment service.
+            </summary>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.AssignmentService.#ctor(Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository{Milvasoft.SampleAPI.Entity.Assignment,System.Guid,Milvasoft.SampleAPI.Data.EducationAppDbContext})">
+            <summary>
+            Performs constructor injection for repository interfaces used in this service.
+            </summary>
+            <param name="assignmentRepository"></param>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.AssignmentService.GetEntitiesForStudent(Milvasoft.SampleAPI.Spec.AssignmentSpec)">
+            <summary>
+            Get all assignment by <paramref name="spec"/>
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.AssignmentService.GetEntitiesForAdmin(Milvasoft.SampleAPI.Spec.AssignmentSpec)">
+            <summary>
+            Get assignments for admin by <paramref name="spec"/>
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.AssignmentService.GetEntitiesForMentor(Milvasoft.SampleAPI.Spec.AssignmentSpec)">
+            <summary>
+            Get assignments for mentor by <paramref name="spec"/>
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.AssignmentService.GetEntityForStudent(System.Guid)">
+            <summary>
+            Get assignment for student by <paramref name="id"/>
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.AssignmentService.GetEntityForAdmin(System.Guid)">
+            <summary>
+            Get assignment for admin by <paramref name="id"/>
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.AssignmentService.GetEntityForMentor(System.Guid)">
+            <summary>
+            Get assignment for mentor by <paramref name="id"/>
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.AssignmentService.AddEntityAsync(Milvasoft.SampleAPI.DTOs.AssignmentDTOs.AssignmentDTO)">
+            <summary>
+            Add assignment.
+            </summary>
+            <param name="educationDTO"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.AssignmentService.UpdateEntityAsync(Milvasoft.SampleAPI.DTOs.AssignmentDTOs.AssignmentDTO)">
+            <summary>
+            Update assignment.
+            </summary>
+            <param name="educationDTO"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.AssignmentService.DeleteEntityAsync(System.Guid)">
+            <summary>
+            Delete assignment.
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.AssignmentService.DeleteEntities(System.Collections.Generic.List{System.Guid})">
+            <summary>
+            Delete assignments by <paramref name="ids"/>
+            </summary>
+            <param name="ids"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Milvasoft.SampleAPI.Services.Concrete.MentorService">
+            <summary>
+            Mentor service. 
+            </summary>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.MentorService.#ctor(Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository{Milvasoft.SampleAPI.Entity.Mentor,System.Guid,Milvasoft.SampleAPI.Data.EducationAppDbContext})">
+            <summary>
+            Performs constructor injection for repository interfaces used in this service.
+            </summary>
+            <param name="mentorRepository"></param>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.MentorService.GetEntitiesForAdmin(Milvasoft.SampleAPI.Spec.MentorSpec)">
+            <summary>
+            Get mentors for admin.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.MentorService.GetEntitiesForMentor(Milvasoft.SampleAPI.Spec.MentorSpec)">
+            <summary>
+            Get mentors for mentor.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.MentorService.GetEntitiesForStudent(Milvasoft.SampleAPI.Spec.MentorSpec)">
+            <summary>
+            Get mentors for student.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.MentorService.GetEntityForAdmin(System.Guid)">
+            <summary>
+            Get mentor for admin by <paramref name="id"/>.
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.MentorService.GetEntityForMentor(System.Guid)">
+            <summary>
+            Get mentor for mentor by <paramref name="id"/>
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.MentorService.GetEntityForStudent(System.Guid)">
+            <summary>
+            Get mentor for student by <paramref name="id"/>
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.MentorService.AddEntityAsync(Milvasoft.SampleAPI.DTOs.MentorDTOs.MentorDTO)">
+            <summary>
+            Add mentor.
+            </summary>
+            <param name="educationDTO"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.MentorService.UpdateEntityAsync(Milvasoft.SampleAPI.DTOs.MentorDTOs.MentorDTO)">
+            <summary>
+            Update mentor.
+            </summary>
+            <param name="educationDTO"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.MentorService.DeleteEntities(System.Collections.Generic.List{System.Guid})">
+            <summary>
+            Delete mentors.
+            </summary>
+            <param name="ids"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.MentorService.DeleteEntityAsync(System.Guid)">
+            <summary>
+            Delete mentor.
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Milvasoft.SampleAPI.Services.Concrete.ProfessionService">
+            <summary>
+            Profession service.
+            </summary>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.ProfessionService.#ctor(Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository{Milvasoft.SampleAPI.Entity.Profession,System.Guid,Milvasoft.SampleAPI.Data.EducationAppDbContext})">
+            <summary>
+            Performs constructor injection for repository interfaces used in this service.
+            </summary>
+            <param name="professionRepository"></param>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.ProfessionService.GetEntitiesForAdmin(Milvasoft.SampleAPI.Spec.ProfessionSpec)">
+            <summary>
+            Get professions for admin.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.ProfessionService.GetEntitiesForMentor(Milvasoft.SampleAPI.Spec.ProfessionSpec)">
+            <summary>
+            Get professions for mentor.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.ProfessionService.GetEntitiesForStudent(Milvasoft.SampleAPI.Spec.ProfessionSpec)">
+            <summary>
+            Get professions for student.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.ProfessionService.GetEntityForAdmin(System.Guid)">
+            <summary>
+            Get profession for admin by <paramref name="id"/>.
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.ProfessionService.GetEntityForMentor(System.Guid)">
+            <summary>
+            Get profession for mentor by <paramref name="id"/>
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.ProfessionService.GetEntityForStudent(System.Guid)">
+            <summary>
+            Get profession for student by <paramref name="id"/>
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.ProfessionService.AddEntityAsync(Milvasoft.SampleAPI.DTOs.ProfessionDTOs.ProfessionDTO)">
+            <summary>
+            Add profession to database.
+            </summary>
+            <param name="educationDTO"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.ProfessionService.UpdateEntityAsync(Milvasoft.SampleAPI.DTOs.ProfessionDTOs.ProfessionDTO)">
+            <summary>
+            Update profession by <paramref name="educationDTO"/>.
+            </summary>
+            <param name="educationDTO"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.ProfessionService.DeleteEntities(System.Collections.Generic.List{System.Guid})">
+            <summary>
+            Delete professions by <paramref name="ids"/>.
+            </summary>
+            <param name="ids"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.ProfessionService.DeleteEntityAsync(System.Guid)">
+            <summary>
+            Delete profession by <paramref name="id"/>.
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Milvasoft.SampleAPI.Services.Concrete.QuestionService">
+            <summary>
+            Question service.
+            </summary>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.QuestionService.#ctor(Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository{Milvasoft.SampleAPI.Entity.Question,System.Guid,Milvasoft.SampleAPI.Data.EducationAppDbContext})">
+            <summary>
+            Performs constructor injection for repository interfaces used in this service.
+            </summary>
+            <param name="questionService"></param>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.QuestionService.GetEntitiesForAdmin(Milvasoft.SampleAPI.Spec.QuestionSpec)">
+            <summary>
+            Get all questions for admin.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.QuestionService.GetEntitiesForMentor(Milvasoft.SampleAPI.Spec.QuestionSpec)">
+            <summary>
+            Get all questions for admin.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.QuestionService.GetEntitiesForStudent(Milvasoft.SampleAPI.Spec.QuestionSpec)">
+            <summary>
+            Get all questions for student.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.QuestionService.GetEntityForAdmin(System.Guid)">
+            <summary>
+            Get student for admin.
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.QuestionService.GetEntityForMentor(System.Guid)">
+            <summary>
+            Get student for mentor.
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.QuestionService.GetEntityForStudent(System.Guid)">
+            <summary>
+            Get student for student.
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.QuestionService.AddEntityAsync(Milvasoft.SampleAPI.DTOs.QuestionDTOs.QuestionDTO)">
+            <summary>
+            Add student.
+            </summary>
+            <param name="educationDTO"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.QuestionService.DeleteEntities(System.Collections.Generic.List{System.Guid})">
+            <summary>
+            Delete students.
+            </summary>
+            <param name="ids"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.QuestionService.DeleteEntityAsync(System.Guid)">
+            <summary>
+            Delete student.
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.QuestionService.UpdateEntityAsync(Milvasoft.SampleAPI.DTOs.QuestionDTOs.QuestionDTO)">
+            <summary>
+            Update student.
+            </summary>
+            <param name="educationDTO"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.QuestionService.GetWillShowQuestions">
+            <summary>
+            If questions to show.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Milvasoft.SampleAPI.Services.Concrete.StudentService">
+            <summary>
+            Student service.
+            </summary>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.StudentService.#ctor(Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository{Milvasoft.SampleAPI.Entity.Student,System.Guid,Milvasoft.SampleAPI.Data.EducationAppDbContext})">
+            <summary>
+            Performs constructor injection for repository interfaces used in this service.
+            </summary>
+            <param name="studentRepository"></param>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.StudentService.GetEntitiesForAdmin(Milvasoft.SampleAPI.Spec.StudentSpec)">
+            <summary>
+            Get students for admin.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.StudentService.GetEntitiesForMentor(Milvasoft.SampleAPI.Spec.StudentSpec)">
+            <summary>
+            Get students for mentor.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.StudentService.GetEntitiesForStudent(Milvasoft.SampleAPI.Spec.StudentSpec)">
+            <summary>
+            Get students for student.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.StudentService.GetEntityForStudent(System.Guid)">
+            <summary>
+            Get student information by <paramref name="id"/> 
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.StudentService.GetEntityForAdmin(System.Guid)">
+            <summary>
+            Get student information for admin by <paramref name="id"/>
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.StudentService.GetEntityForMentor(System.Guid)">
+            <summary>
+            Get student information for mentor by <paramref name="id"/>.
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.StudentService.AddEntityAsync(Milvasoft.SampleAPI.DTOs.StudentDTOs.StudentDTO)">
+            <summary>
+            Add student to database.
+            </summary>
+            <param name="educationDTO"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.StudentService.UpdateEntityAsync(Milvasoft.SampleAPI.DTOs.StudentDTOs.StudentDTO)">
+            <summary>
+            Update student.
+            </summary>
+            <param name="educationDTO"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.StudentService.DeleteEntityAsync(System.Guid)">
+            <summary>
+            Delete student.
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.StudentService.DeleteEntities(System.Collections.Generic.List{System.Guid})">
+            <summary>
+            Delete students by <paramref name="ids"/>.
+            </summary>
+            <param name="ids"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Milvasoft.SampleAPI.Services.Concrete.UsefulLinkService">
+            <summary>
+            UsefulLink service.
+            </summary>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.UsefulLinkService.#ctor(Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository{Milvasoft.SampleAPI.Entity.UsefulLink,System.Guid,Milvasoft.SampleAPI.Data.EducationAppDbContext})">
+            <summary>
+            Performs constructor injection for repository interfaces used in this service.
+            </summary>
+            <param name="usefulLinkRepository"></param>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.UsefulLinkService.GetEntitiesForStudent(Milvasoft.SampleAPI.Spec.UsefulLinkSpec)">
+            <summary>
+            Get links for student.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.UsefulLinkService.GetEntitiesForAdmin(Milvasoft.SampleAPI.Spec.UsefulLinkSpec)">
+            <summary>
+            Get links for admin.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.UsefulLinkService.GetEntitiesForMentor(Milvasoft.SampleAPI.Spec.UsefulLinkSpec)">
+            <summary>
+            Get link for mentor.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.UsefulLinkService.GetEntityForStudent(System.Guid)">
+            <summary>
+            Get link by <paramref name="id"/>   
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.UsefulLinkService.GetEntityForAdmin(System.Guid)">
+            <summary>
+            Get useful link for admin by <paramref name="id"/>
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.UsefulLinkService.GetEntityForMentor(System.Guid)">
+            <summary>
+            Get useful link for mentor by <paramref name="id"/>
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.UsefulLinkService.AddEntityAsync(Milvasoft.SampleAPI.DTOs.UsefulLinkDTO)">
+            <summary>
+            Add link.
+            </summary>
+            <param name="educationDTO"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.UsefulLinkService.UpdateEntityAsync(Milvasoft.SampleAPI.DTOs.UsefulLinkDTO)">
+            <summary>
+            Update link.
+            </summary>
+            <param name="educationDTO"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.UsefulLinkService.DeleteEntityAsync(System.Guid)">
+            <summary>
+            Delete link.
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.UsefulLinkService.DeleteEntities(System.Collections.Generic.List{System.Guid})">
+            <summary>
+            Delete links by <paramref name="ids"/>
+            </summary>
+            <param name="ids"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Milvasoft.SampleAPI.Spec.Abstract.IBaseSpec`1">
+            <summary>
+            <para><b>EN: </b>Filtering <typeparamref name="TEntity"/> object lists.</para>
+            <para><b>TR: </b><typeparamref name="TEntity"/> nesne listelerini filtreleme.</para>
+            </summary>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Spec.Abstract.IBaseSpec`1.GetFilteredEntities(System.Collections.Generic.IEnumerable{`0})">
+            <summary>
+            <para><b>EN: </b>Filtering TEntity list by  with requested properties.</para>
+            <para><b>TR: </b>TEntity listesi, istenen özelliklere göre filtreleniyor.</para>
+            </summary>
+            <param name="entities"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Spec.Abstract.IBaseSpec`1.ToExpression">
+            <summary>
+            Converts spesifications to expression.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Milvasoft.SampleAPI.Spec.AnnouncementSpec">
+            <summary>
+            Filtering announcement object lists.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.Spec.AnnouncementSpec.Title">
+            <summary>
+            Tittle of announcement.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.Spec.AnnouncementSpec.Description">
+            <summary>
+            Description of announcement.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.Spec.AnnouncementSpec.IsFixed">
+            <summary>
+            Is the announcement fixed?
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.Spec.AnnouncementSpec.MentorId">
+            <summary>
+            ID of the announcement mentor.
+            </summary>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Spec.AnnouncementSpec.GetFilteredEntities(System.Collections.Generic.IEnumerable{Milvasoft.SampleAPI.Entity.Announcement})">
+            <summary>
+            Filtering Announcement list by  with requested properties.
+            </summary>
+            <param name="entities"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Spec.AnnouncementSpec.ToExpression">
+            <summary>
+            Converts spesifications to expression.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Milvasoft.SampleAPI.Spec.AssignmentSpec">
+            <summary>
+            Filtering assignment object lists.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.Spec.AssignmentSpec.Title">
+            <summary>
+            Tittle of assignment.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.Spec.AssignmentSpec.Description">
+            <summary>
+            Description of assignment.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.Spec.AssignmentSpec.RemarksToStudent">
+            <summary>
+            Remarks for student.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.Spec.AssignmentSpec.RemarksToMentor">
+            <summary>
+            Remarks for mentor.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.Spec.AssignmentSpec.Level">
+            <summary>
+            Difficulty level of the assignment.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.Spec.AssignmentSpec.Rules">
+            <summary>
+            Rules of assignment.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.Spec.AssignmentSpec.MaxDeliveryDay">
+            <summary> 
+            The maximum time that the assignment will be delivered.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.Spec.AssignmentSpec.ProfessionId">
+            <summary>
+            The profession Id of assignment.
+            </summary>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Spec.AssignmentSpec.GetFilteredEntities(System.Collections.Generic.IEnumerable{Milvasoft.SampleAPI.Entity.Assignment})">
+            <summary>
+            Filtering Assignment list by  with requested properties.
+            </summary>
+            <param name="entities"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Spec.AssignmentSpec.ToExpression">
+            <summary>
+            Converts spesifications to expression.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Milvasoft.SampleAPI.Spec.MentorSpec">
+            <summary>
+            Filtering profession object lists.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.Spec.MentorSpec.Name">
+            <summary>
+            Mentor name.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.Spec.MentorSpec.Surname">
+            <summary>
+            Mentor surname.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.Spec.MentorSpec.Professions">
+            <summary>
+            Professions of a mentor.
+            </summary>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Spec.MentorSpec.GetFilteredEntities(System.Collections.Generic.IEnumerable{Milvasoft.SampleAPI.Entity.Mentor})">
+            <summary>
+            Filtering Assignment list by  with requested properties.
+            </summary>
+            <param name="entities"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Spec.MentorSpec.ToExpression">
+            <summary>
+            Converts spesifications to expression.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Milvasoft.SampleAPI.Spec.ProfessionSpec">
+            <summary>
+            Filtering profession object lists.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.Spec.ProfessionSpec.Name">
+            <summary>
+            Name of profession.
+            </summary>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Spec.ProfessionSpec.GetFilteredEntities(System.Collections.Generic.IEnumerable{Milvasoft.SampleAPI.Entity.Profession})">
+            <summary>
+            Filtering profession list by  with requested properties.
+            </summary>
+            <param name="entities"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Spec.ProfessionSpec.ToExpression">
+            <summary>
+            Converts spesifications to expression.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Milvasoft.SampleAPI.Spec.QuestionSpec">
+            <summary>
+            Filtering question object lists.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.Spec.QuestionSpec.Title">
+            <summary>
+            Tittle of question.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.Spec.QuestionSpec.QuestionContent">
+            <summary>
+            Content of question.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.Spec.QuestionSpec.MentorReply">
+            <summary>
+            The mentor's answer to the question.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.Spec.QuestionSpec.IsUseful">
+            <summary>
+            Is the question useful?
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.Spec.QuestionSpec.WillShown">
+            <summary>
+            Will the question be shown as a useful question?
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.Spec.QuestionSpec.ProfessionId">
+            <summary>
+            Profession ıd of the question.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.Spec.QuestionSpec.StudentId">
+            <summary>
+            Id of the student who asked the question.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.Spec.QuestionSpec.MentorId">
+            <summary>
+            Id of the mentor answering the question.
+            </summary>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Spec.QuestionSpec.GetFilteredEntities(System.Collections.Generic.IEnumerable{Milvasoft.SampleAPI.Entity.Question})">
+            <summary>
+            Filtering question list by  with requested properties.
+            </summary>
+            <param name="entities"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Spec.QuestionSpec.ToExpression">
+            <summary>
+            Converts spesifications to expression.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Milvasoft.SampleAPI.Spec.StudentSpec">
+            <summary>
+            Filtering student object list.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.Spec.StudentSpec.Name">
+            <summary>
+            Student's name.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.Spec.StudentSpec.Surname">
+            <summary>
+            Student's surname.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.Spec.StudentSpec.University">
+            <summary>
+            Student's university.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.Spec.StudentSpec.Age">
+            <summary>
+            Age of student.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.Spec.StudentSpec.IsConfidentialityAgreementSigned">
+            <summary>
+            Did the student sign the contract?
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.Spec.StudentSpec.GraduationStatus">
+            <summary>
+            Education status of student.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.Spec.StudentSpec.GraduationScore">
+            <summary>
+            Gradution score of student.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.Spec.StudentSpec.ProfessionId">
+            <summary>
+            Profession id of student.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.Spec.StudentSpec.MentorId">
+            <summary>
+            Mentor id of student.
+            </summary>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Spec.StudentSpec.GetFilteredEntities(System.Collections.Generic.IEnumerable{Milvasoft.SampleAPI.Entity.Student})">
+            <summary>
+            Filtering question list by  with requested properties.
+            </summary>
+            <param name="entities"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Spec.StudentSpec.ToExpression">
+            <summary>
+            Converts spesifications to expression.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Milvasoft.SampleAPI.Spec.UsefulLinkSpec">
+            <summary>
+            Filtering Useful Link object list.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.Spec.UsefulLinkSpec.Title">
+            <summary>
+            Tittle of link.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.Spec.UsefulLinkSpec.ProfessionId">
+            <summary>
+            Profession id of link.
+            </summary>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Spec.UsefulLinkSpec.GetFilteredEntities(System.Collections.Generic.IEnumerable{Milvasoft.SampleAPI.Entity.UsefulLink})">
+            <summary>
+            Filtering question list by  with requested properties.
+            </summary>
+            <param name="entities"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Spec.UsefulLinkSpec.ToExpression">
+            <summary>
+            Converts spesifications to expression.
+            </summary>
+            <returns></returns>
         </member>
         <member name="T:Milvasoft.SampleAPI.Utils.AllowedFileExtensions">
             <summary>
@@ -771,13 +2269,241 @@
             
             </summary>
         </member>
-        <member name="T:Milvasoft.SampleAPI.Utils.Swagger.DocumentFilter">
+        <member name="T:Milvasoft.SampleAPI.Utils.HelperExtensions">
+            <summary>
+            Helper extensions methods for Ops!yon Project.
+            </summary>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Utils.HelperExtensions.SaveImageToServerAsync``2(Microsoft.AspNetCore.Http.IFormFile,``0,Microsoft.Extensions.Localization.IStringLocalizer)">
+            <summary>
+            <para><b>EN: </b>Save uploaded IFormFile file to server. Target Path will be : ".../wwwroot/Media Library/Image Library/<paramref name="entity"></paramref>.Id"</para>
+            <para><b>TR: </b>Yüklenen IFormFile dosyasını sunucuya kaydedin. Hedef Yol: "... / wwwroot / Media Library / Image Library / <paramref name =" entity "> </paramref> .Id" olacaktır</para>
+            </summary>
+            <typeparam name="TEntity"></typeparam>
+            <typeparam name="TKey"></typeparam>
+            <param name="file"> Uploaded file in entity. </param>
+            <param name="entity"></param>
+            <param name="stringLocalizer"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Utils.HelperExtensions.SaveVideoToServerAsync``2(Microsoft.AspNetCore.Http.IFormFile,``0,Microsoft.Extensions.Localization.IStringLocalizer)">
+            <summary>
+            <para><b>EN: </b>Save uploaded IFormFile file to server. Target Path will be : ".../wwwroot/Media Library/Image Library/<paramref name="entity"></paramref>.Id"</para>
+            <para><b>TR: </b>Yüklenen IFormFile dosyasını sunucuya kaydedin. Hedef Yol: "... / wwwroot / Media Library / Image Library / <paramref name =" entity "> </paramref> .Id" olacaktır</para>
+            </summary>
+            <typeparam name="TEntity"></typeparam>
+            <typeparam name="TKey"></typeparam>
+            <param name="file"> Uploaded file in entity. </param>
+            <param name="entity"></param>
+            <param name="stringLocalizer"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Utils.HelperExtensions.GetFileUrlFromPath(System.String,Milvasoft.Helpers.FileOperations.Enums.FileType)">
+            <summary>
+            <para><b>EN: </b>Returns the path of the uploaded file.</para>
+            <para><b>TR: </b>Yüklenen dosyanın yolunu döndürür.</para>
+            </summary>
+            <param name="originalImagePath"> Uploaded file. </param>
+            <param name="fileType"> Uploaded file type. (e.g image,video,sound) </param>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Utils.HelperExtensions.ConvertToFormFile(System.String)">
+            <summary>
+            Converts data URI formatted base64 string to IFormFile.
+            </summary>
+            <param name="milvaBase64"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Utils.HelperExtensions.GetLang``1(System.Collections.Generic.IEnumerable{``0},System.Linq.Expressions.Expression{System.Func{``0,System.String}})">
+            <summary>
+            <para><b>EN: </b>Ready mapping is done. For example, it is used to map the data in the Product class to the ProductDTO class.</para>
+            <para><b>TR: </b>Hazır mapleme işlemi yapılır. Örnegin Product sınıfındaki verileri ProductDTO sınıfına maplemeye yarar.</para>
+            </summary>
+            <param name="langs"></param>
+            <param name="propertyName"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Utils.HelperExtensions.GetLangs``2(System.Collections.Generic.IEnumerable{``0})">
+            <summary>
+            <para><b>EN: </b>Ready mapping is done. For example, it is used to map the data in the Product class to the ProductDTO class.</para>
+            <para><b>TR: </b>Hazır mapleme işlemi yapılır. Örnegin Product sınıfındaki verileri ProductDTO sınıfına maplemeye yarar.</para>
+            </summary>
+            <param name="langs"></param>
+            <returns></returns>
+        </member>
+        <member name="F:Milvasoft.SampleAPI.Utils.HelperExtensions.LanguageIdIsoPairs">
+            <summary>
+            Stores language id and iso code.
+            </summary>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Utils.HelperExtensions.GetLanguageId">
+            <summary>
+            <para><b>EN: </b>Gets language id from CultureInfo.CurrentCulture.</para>
+            <para><b>TR: </b>Dilin id'sini isteğin CultureInfo.CurrentCulture'den alır.</para>
+            </summary>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Utils.HelperExtensions.GetPaginationVariablesFromHeader(Microsoft.AspNetCore.Http.IHttpContextAccessor,Microsoft.Extensions.Localization.IStringLocalizer{Milvasoft.SampleAPI.Localization.SharedResource})">
+            <summary>
+            <para><b>EN: </b>Gets institution id from request's header. Then returns that id variable.</para>
+            <para><b>TR: </b> İşletme idsini request header'dan alır. Daha sonra bu kimliği geriye döndürür.</para>
+            </summary>
+            <param name="httpContextAccessor"></param>
+            <param name="localizer"></param>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Utils.HelperExtensions.CheckContentIsDefaultRecord(System.Int32,Microsoft.Extensions.Localization.IStringLocalizer)">
+            <summary>
+            Checks <paramref name="id"/> is default record id or not.
+            </summary>
+            
+            <exception cref="T:Milvasoft.Helpers.Exceptions.MilvaUserFriendlyException"> Throwns when <paramref name="id"/> is defult record id. </exception>
+            
+            <param name="id"></param>
+            <param name="stringLocalizer"></param>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Utils.HelperExtensions.CheckContentIsDefaultRecord(System.Collections.Generic.List{System.Int32},Microsoft.Extensions.Localization.IStringLocalizer)">
+            <summary>
+            Checks <paramref name="idList"/> contains default record or not.
+            </summary>
+            
+            <exception cref="T:Milvasoft.Helpers.Exceptions.MilvaUserFriendlyException"> Throwns when contents contains defult record id. </exception>
+            
+            <param name="idList"></param>
+            <param name="stringLocalizer"></param>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Utils.HelperExtensions.GetLangPropValue(System.Object,System.String,System.String,Microsoft.Extensions.Localization.IStringLocalizer)">
+            <summary>
+            Get langs property in runtime.
+            </summary>
+            <param name="obj"></param>
+            <param name="langPropName"></param>
+            <param name="requestedPropName"></param>
+            <param name="stringLocalizer"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Utils.HelperExtensions.GetLang``1(System.Collections.Generic.HashSet{``0},System.String)">
+            <summary>
+            <para><b>EN: </b>Ready mapping is done. For example, it is used to map the data in the Product class to the ProductDTO class.</para>
+            <para><b>TR: </b>Hazır mapleme işlemi yapılır. Örnegin Product sınıfındaki verileri ProductDTO sınıfına maplemeye yarar.</para>
+            </summary>
+            <param name="langs"></param>
+            <param name="propName"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Utils.HelperExtensions.CheckList``2(System.Collections.Generic.IEnumerable{``0},System.Func{System.Collections.Generic.IEnumerable{``0},System.Collections.Generic.IEnumerable{``1}})">
+            <summary>
+            Checks guid list. If list is null or empty return default(<typeparamref name="TDTO"/>). Otherwise invoke <paramref name="returnFunc"/>.
+            </summary>
+            <typeparam name="TEntity"></typeparam>
+            <typeparam name="TDTO"></typeparam>
+            <param name="toBeCheckedList"></param>
+            <param name="returnFunc"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Utils.HelperExtensions.CheckObject``2(``0,System.Func{``0,``1})">
+            <summary>
+            Checks guid object. If is null return default(<typeparamref name="TDTO"/>). Otherwise invoke <paramref name="returnFunc"/>.
+            </summary>
+            <typeparam name="TEntity"></typeparam>
+            <typeparam name="TDTO"></typeparam>
+            <param name="toBeCheckedObject"></param>
+            <param name="returnFunc"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Utils.HelperExtensions.PreparePaginationDTO``3(``0,System.Int32,System.Int32,System.String,System.Boolean,System.Linq.Expressions.Expression{System.Func{``1,System.Boolean}},System.Func{Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable{``1},Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable})">
+            <summary>
+            Prepares pagination dto according to pagination parameters.
+            </summary>
+            <typeparam name="TRepository"></typeparam>
+            <typeparam name="TEntity"></typeparam>
+            <typeparam name="TKey"></typeparam>
+            <param name="repository"></param>
+            <param name="pageIndex"></param>
+            <param name="requestedItemCount"></param>
+            <param name="orderByProperty"></param>
+            <param name="orderByAscending"></param>
+            <param name="condition"></param>
+            <param name="includes"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Utils.HelperExtensions.PreparePaginationDTO``3(``0,System.Int32,System.Int32,System.Linq.Expressions.Expression{System.Func{``1,System.Object}},System.Boolean,System.Linq.Expressions.Expression{System.Func{``1,System.Boolean}},System.Func{Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable{``1},Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable})">
+            <summary>
+            Prepares pagination dto according to pagination parameters.
+            </summary>
+            <typeparam name="TRepository"></typeparam>
+            <typeparam name="TEntity"></typeparam>
+            <typeparam name="TKey"></typeparam>
+            <param name="repository"></param>
+            <param name="pageIndex"></param>
+            <param name="requestedItemCount"></param>
+            <param name="orderByKeySelector"></param>
+            <param name="orderByAscending"></param>
+            <param name="condition"></param>
+            <param name="includes"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Utils.HelperExtensions.ThrowIfParameterIsNull(System.Object,System.String)">
+            <summary>
+            Throwns <see cref="T:Milvasoft.Helpers.Exceptions.MilvaUserFriendlyException"/> if <paramref name="parameterObject"/> is null.
+            </summary>
+            <param name="parameterObject"></param>
+            <param name="message"></param>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Utils.HelperExtensions.ThrowIfListIsNullOrEmpty(System.Collections.Generic.List{System.Object},System.String)">
+            <summary>
+            Throwns <see cref="T:Milvasoft.Helpers.Exceptions.MilvaUserFriendlyException"/> if <paramref name="list"/> is null or empty.
+            </summary>
+            <param name="list"></param>
+            <param name="message"></param>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Utils.HelperExtensions.ThrowIfParameterIsNullOrEmpty``1(System.Collections.Generic.List{``0},System.String)">
+            <summary>
+            Throwns <see cref="T:Milvasoft.Helpers.Exceptions.MilvaUserFriendlyException"/> if <paramref name="list"/> is null or empty.
+            </summary>
+            <param name="list"></param>
+            <param name="message"></param>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Utils.HelperExtensions.ThrowIfListIsNullOrEmpty(System.Collections.Generic.IEnumerable{System.Object},System.String)">
+            <summary>
+            Throwns <see cref="T:Milvasoft.Helpers.Exceptions.MilvaUserFriendlyException"/> if <paramref name="list"/> is null or empty.
+            </summary>
+            <param name="list"></param>
+            <param name="message"></param>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Utils.HelperExtensions.ThrowIfListIsNotNullOrEmpty(System.Collections.Generic.IEnumerable{System.Object},System.String)">
+            <summary>
+            Throwns <see cref="T:Milvasoft.Helpers.Exceptions.MilvaUserFriendlyException"/> if <paramref name="list"/> is not null or empty.
+            </summary>
+            <param name="list"></param>
+            <param name="message"></param>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Utils.HelperExtensions.ThrowIfNullForGuidObject``1(``0,System.String)">
+            <summary>
+            Throwns <see cref="T:Milvasoft.Helpers.Exceptions.MilvaUserFriendlyException"/> if <paramref name="entity"/> is null.
+            </summary>
+            <param name="entity"></param>
+            <param name="message"></param>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Utils.HelperExtensions.ThrowIfNullForIntObject``1(``0,System.String)">
+            <summary>
+            Throwns <see cref="T:Milvasoft.Helpers.Exceptions.MilvaUserFriendlyException"/> if <paramref name="entity"/> is null.
+            </summary>
+            <param name="entity"></param>
+            <param name="message"></param>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Utils.HelperExtensions.GetPropertyValue(System.Object,System.String)">
+            <summary>
+            Gets requested property value. Method faydalı bi iş için yazmıştım fakat unuttum.
+            </summary>
+            <param name="obj"></param>
+            <param name="propertyName"> e.g : ProductLangs.Name </param>
+            <returns></returns>
+        </member>
+        <member name="T:Milvasoft.SampleAPI.Utils.Swagger.EntityDocumentFilter">
             <summary>
             <para><b>EN: </b>Swagger document creation utility class</para>
             <para><b>TR: </b>Swagger dokumanı oluşturmaya yardımcı sınıf</para>
             </summary>
         </member>
-        <member name="M:Milvasoft.SampleAPI.Utils.Swagger.DocumentFilter.Apply(Microsoft.OpenApi.Models.OpenApiDocument,Swashbuckle.AspNetCore.SwaggerGen.DocumentFilterContext)">
+        <member name="M:Milvasoft.SampleAPI.Utils.Swagger.EntityDocumentFilter.Apply(Microsoft.OpenApi.Models.OpenApiDocument,Swashbuckle.AspNetCore.SwaggerGen.DocumentFilterContext)">
             <summary>
             <para><b>EN: </b> Applies filter on swagger document.</para>
             <para><b>TR: </b> Swagger dökümantasyonuna istenilen filtrelemeyi uygular. </para>
@@ -785,10 +2511,74 @@
             <param name="swaggerDoc"></param>
             <param name="context"></param>
         </member>
-        <member name="T:Milvasoft.SampleAPI.Utils.Swagger.HeaderFilter">
+        <member name="T:Milvasoft.SampleAPI.Utils.Swagger.RequestHeaderFilter">
             <summary>
             Operation filter to add the requirement of the custom header
             </summary>
+        </member>
+        <member name="T:Milvasoft.API.DTOs.PaginationParams">
+            <summary>
+            Paginatination params
+            </summary>
+        </member>
+        <member name="P:Milvasoft.API.DTOs.PaginationParams.PageIndex">
+            <summary>
+            Requested page number.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.API.DTOs.PaginationParams.RequestedItemCount">
+            <summary>
+            Requested item count in requested page.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.API.DTOs.PaginationParams.OrderByProperty">
+            <summary>
+            If order by column requested then Property name of entity.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.API.DTOs.PaginationParams.OrderByAscending">
+            <summary>
+            If order by column requested then ascending or descending.
+            </summary>
+        </member>
+        <member name="T:Milvasoft.API.DTOs.PaginationParamsWithSpec`1">
+            <summary>
+            Pagination parameters with specification object(<typeparamref name="TSpec"/>).
+            </summary>
+            <typeparam name="TSpec"></typeparam>
+        </member>
+        <member name="P:Milvasoft.API.DTOs.PaginationParamsWithSpec`1.Spec">
+            <summary>
+            Specification object.
+            </summary>
+        </member>
+        <member name="T:Opsiyon.API.Helpers.Swagger.CustomAttributeOperationFilter">
+            <summary>
+            <para><b>EN: </b>Swagger document creation utility class</para>
+            <para><b>TR: </b>Swagger dokumanı oluşturmaya yardımcı sınıf</para>
+            </summary>
+        </member>
+        <member name="M:Opsiyon.API.Helpers.Swagger.CustomAttributeOperationFilter.Apply(Microsoft.OpenApi.Models.OpenApiOperation,Swashbuckle.AspNetCore.SwaggerGen.OperationFilterContext)">
+            <summary>
+            <para><b>EN: </b> Applies filter on swagger document.</para>
+            <para><b>TR: </b> Swagger dökümantasyonuna istenilen filtrelemeyi uygular. </para>
+            </summary>
+            <param name="operation"></param>
+            <param name="context"></param>
+        </member>
+        <member name="T:Opsiyon.API.Helpers.Swagger.CustomAttributeSchemaFilter">
+            <summary>
+            <para><b>EN: </b>Swagger document creation utility class</para>
+            <para><b>TR: </b>Swagger dokumanı oluşturmaya yardımcı sınıf</para>
+            </summary>
+        </member>
+        <member name="M:Opsiyon.API.Helpers.Swagger.CustomAttributeSchemaFilter.Apply(Microsoft.OpenApi.Models.OpenApiSchema,Swashbuckle.AspNetCore.SwaggerGen.SchemaFilterContext)">
+            <summary>
+            <para><b>EN: </b> Applies filter on swagger document.</para>
+            <para><b>TR: </b> Swagger dökümantasyonuna istenilen filtrelemeyi uygular. </para>
+            </summary>
+            <param name="swaggerSchema"></param>
+            <param name="context"></param>
         </member>
     </members>
 </doc>
