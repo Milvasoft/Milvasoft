@@ -290,7 +290,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         public async Task DeleteEntityAsync(Guid id)
         {
 
-            var deletedMentor = await _mentorRepository.GetByIdAsync(id).ConfigureAwait(false);
+            var deletedMentor = await _mentorRepository.GetByIdAsync(id, i => i.Include(a => a.Professions)).ConfigureAwait(false);
 
             await _mentorRepository.DeleteAsync(deletedMentor).ConfigureAwait(false);
 

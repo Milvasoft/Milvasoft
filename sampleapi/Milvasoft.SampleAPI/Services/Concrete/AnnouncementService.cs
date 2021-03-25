@@ -28,9 +28,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// <param name="announcementRepository"></param>
         public AnnouncementService(IBaseRepository<Announcement, Guid, EducationAppDbContext> announcementRepository)
         {
-
             _announcementRepository = announcementRepository;
-
         }
 
         /// <summary>
@@ -39,26 +37,21 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// <returns></returns>
         public async Task<List<AnnouncementDTO>> GetEntitiesForStudent(AnnouncementSpec spec = null)
         {
-
             Func<IIncludable<Announcement>, IIncludable> includes = i => i.Include(md => md.PublisherMentor);
-
 
             var announcements = await _announcementRepository.GetAllAsync(includes, spec?.ToExpression()).ConfigureAwait(false);
 
-            var annoncemementDTOList = from announcement in announcements
-                                       select new AnnouncementDTO
-                                       {
-                                           Title = announcement.Title,
-                                           Description = announcement.Description,
-                                           PublisherMentor = announcement.PublisherMentor.CheckObject(i => new MentorDTO
-                                           {
-                                               Id = i.Id
-                                           }),
-                                           CreationDate = announcement.CreationDate,
-                                       };
-
-            return annoncemementDTOList.ToList();
-
+            return (from announcement in announcements
+                    select new AnnouncementDTO
+                    {
+                        Title = announcement.Title,
+                        Description = announcement.Description,
+                        PublisherMentor = announcement.PublisherMentor.CheckObject(i => new MentorDTO
+                        {
+                            Id = i.Id
+                        }),
+                        CreationDate = announcement.CreationDate,
+                    }).ToList();
         }
 
         /// <summary>
@@ -166,8 +159,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
                 PublisherMentor = announcement.PublisherMentor.CheckObject(i => new MentorDTO
                 {
                     Id = i.Id
-                }),
-                CreationDate = announcement.CreationDate
+                })
             };
         }
 
@@ -192,6 +184,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
                     Id = i.Id
                 }),
                 CreationDate = announcement.CreationDate,
+                LastModificationDate = announcement.LastModificationDate
             };
         }
 

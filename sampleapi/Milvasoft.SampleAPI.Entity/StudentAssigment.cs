@@ -9,7 +9,6 @@ namespace Milvasoft.SampleAPI.Entity
     /// </summary>
     public class StudentAssigmentDTO : EducationEntityBase
     {
-
         /// <summary>
         /// Student id.
         /// </summary>
@@ -20,8 +19,6 @@ namespace Milvasoft.SampleAPI.Entity
         /// </summary>
         public virtual Student Student { get; set; }
 
-
-
         /// <summary>
         /// Assignment id.
         /// </summary>
@@ -31,9 +28,6 @@ namespace Milvasoft.SampleAPI.Entity
         /// Assignment.
         /// </summary>
         public virtual Assignment Assigment { get; set; }
-
-
-
 
         /// <summary>
         /// Education status.
