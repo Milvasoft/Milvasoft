@@ -3,10 +3,12 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Localization;
 using Milvasoft.Helpers.Caching;
 using Milvasoft.Helpers.FileOperations.Abstract;
 using Milvasoft.Helpers.FileOperations.Concrete;
 using Milvasoft.SampleAPI.Data;
+using Milvasoft.SampleAPI.Localization;
 using Milvasoft.SampleAPI.Middlewares;
 
 namespace Milvasoft.SampleAPI.AppStartup
@@ -21,6 +23,8 @@ namespace Milvasoft.SampleAPI.AppStartup
         /// Gets or sets configuration object.
         /// </summary>
         public IConfiguration Configuration { get; set; }
+
+        public static IStringLocalizer<SharedResource> SharedStringLocalizer;
 
         public static IWebHostEnvironment WebHostEnvironment { get; set; }
         public static IJsonOperations _jsonOperations { get; set; }

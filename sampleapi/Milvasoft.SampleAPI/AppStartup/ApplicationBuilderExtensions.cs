@@ -24,7 +24,7 @@ namespace Milvasoft.SampleAPI.AppStartup
                    c.DefaultModelsExpandDepth(1);
                    c.DefaultModelRendering(ModelRendering.Model);
                    c.DocExpansion(DocExpansion.None);
-                   c.SwaggerEndpoint("/swagger/v1.0/swagger.json", "Milva Sample App v1");
+                   c.SwaggerEndpoint("/swagger/v1.0/swagger.json", "Milva Education App");
                    c.InjectStylesheet("/swagger-ui/custom.css");
                    c.InjectJavascript("/swagger-ui/custom.js");
                });

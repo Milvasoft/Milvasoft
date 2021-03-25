@@ -18,13 +18,17 @@ using Milvasoft.Helpers.Models.Response;
 using Milvasoft.Helpers.Utils;
 using Milvasoft.SampleAPI.Data;
 using Milvasoft.SampleAPI.Data.Repositories;
+using Milvasoft.SampleAPI.DTOs.StudentDTOs;
 using Milvasoft.SampleAPI.Entity;
 using Milvasoft.SampleAPI.Localization;
 using Milvasoft.SampleAPI.Services.Abstract;
 using Milvasoft.SampleAPI.Services.Concrete;
+using Milvasoft.SampleAPI.Spec;
+using Milvasoft.SampleAPI.Spec.Abstract;
 using Milvasoft.SampleAPI.Utils;
 using Milvasoft.SampleAPI.Utils.Swagger;
 using Newtonsoft.Json;
+using Opsiyon.API.Helpers.Swagger;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -141,8 +145,11 @@ namespace Milvasoft.SampleAPI.AppStartup
             #endregion
 
             #region Services
-
+            services.AddScoped<IMentorService, MentorService>();
+            services.AddScoped<IStudentService, StudentService>();
             services.AddScoped<IAccountService, AccountService>();
+            services.AddScoped<IUsefulLinkService, UsefulLinkService>();
+            services.AddScoped<IQuestionService, QuestionService>();
 
             #endregion
 
@@ -195,17 +202,21 @@ namespace Milvasoft.SampleAPI.AppStartup
                 options.SwaggerDoc("v1.0", new OpenApiInfo
                 {
                     Version = "v1.0",
-                    Title = "Milvasoft.Helpers Sample API",
-                    Description = "Sample API for Milvasoft.Helpers Library",
+                    Title = "Milvasoft Education",
+                    Description = "Education for Milvasoft Person",
                     TermsOfService = new Uri("https://milvasoft.com"),
                     Contact = new OpenApiContact { Name = "Milvasoft Corporation", Email = "info@milvasoft.com", Url = new Uri("https://milvasoft.com") },
                     License = new OpenApiLicense { Name = "MIT", Url = new Uri("https://opensource.org/licenses/MIT") }
                 });
 
+                //options.SchemaFilter<CustomAttributeSchemaFilter>();
                 //options.SchemaFilter<SwaggerExcludeFilter>();
-                //options.DocumentFilter<DocumentFilter>();
-                options.OperationFilter<HeaderFilter>();
+                options.DocumentFilter<EntityDocumentFilter>();
+                options.OperationFilter<RequestHeaderFilter>();
+                options.OperationFilter<CustomAttributeOperationFilter>();
                 options.DocumentFilter<ReplaceVersionWithExactValueInPathFilter>();
+                
+
                 options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
                 {
                     In = ParameterLocation.Header,
