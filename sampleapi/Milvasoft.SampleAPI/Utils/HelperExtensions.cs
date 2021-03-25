@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Localization;
 using Milvasoft.Helpers.DataAccess.Abstract;
 using Milvasoft.Helpers.DataAccess.Abstract.Entity;
 using Milvasoft.Helpers.DataAccess.Concrete.Entity;
@@ -8,10 +7,8 @@ using Milvasoft.Helpers.Exceptions;
 using Milvasoft.Helpers.Extensions;
 using Milvasoft.Helpers.FileOperations.Concrete;
 using Milvasoft.Helpers.FileOperations.Enums;
-using Milvasoft.SampleAPI.AppStartup;
 using Milvasoft.SampleAPI.Data;
 using Milvasoft.SampleAPI.Entity;
-using Milvasoft.SampleAPI.Localization;
 using Milvasoft.SampleAPI.Utils;
 using System;
 using System.Collections;
@@ -42,9 +39,8 @@ namespace Milvasoft.SampleAPI.Utils
         /// <typeparam name="TKey"></typeparam>
         /// <param name="file"> Uploaded file in entity. </param>
         /// <param name="entity"></param>
-        /// <param name="stringLocalizer"></param>
         /// <returns></returns>
-        public static async Task<string> SaveImageToServerAsync<TEntity, TKey>(this IFormFile file, TEntity entity, IStringLocalizer stringLocalizer) where TEntity : AuditableEntity<AppUser, Guid, TKey>
+        public static async Task<string> SaveImageToServerAsync<TEntity, TKey>(this IFormFile file, TEntity entity) where TEntity : AuditableEntity<AppUser, Guid, TKey>
                                                                                                                                                       where TKey : struct, IEquatable<TKey>
         {
             string basePath = GlobalConstants.ImageLibraryPath;
@@ -70,10 +66,10 @@ namespace Milvasoft.SampleAPI.Utils
                     double fileSizeInKB = fileSizeInBytes / 1024;
                     // Convert the KB to MegaBytes (1 MB = 1024 KBytes)
                     double fileSizeInMB = fileSizeInKB / 1024;
-                    throw new MilvaValidationException(stringLocalizer["FileIsTooBigMessage", fileSizeInMB.ToString("0.#")]);
+                    throw new MilvaUserFriendlyException("FileIsTooBigMessage", fileSizeInMB.ToString("0.#"));
                 case FileValidationResult.InvalidFileExtension:
                     var stringBuilder = new StringBuilder();
-                    throw new MilvaValidationException(stringLocalizer["UnsupportedFileTypeMessage", stringBuilder.AppendJoin(", ", allowedFileExtensions)]);
+                    throw new MilvaUserFriendlyException("UnsupportedFileTypeMessage", stringBuilder.AppendJoin(", ", allowedFileExtensions));
                 case FileValidationResult.NullFile:
                     return "";
             }
@@ -95,7 +91,7 @@ namespace Milvasoft.SampleAPI.Utils
         /// <param name="entity"></param>
         /// <param name="stringLocalizer"></param>
         /// <returns></returns>
-        public static async Task<string> SaveVideoToServerAsync<TEntity, TKey>(this IFormFile file, TEntity entity, IStringLocalizer stringLocalizer)
+        public static async Task<string> SaveVideoToServerAsync<TEntity, TKey>(this IFormFile file, TEntity entity)
         {
             string basePath = GlobalConstants.VideoLibraryPath;
 
@@ -120,10 +116,10 @@ namespace Milvasoft.SampleAPI.Utils
                     double fileSizeInKB = fileSizeInBytes / 1024;
                     // Convert the KB to MegaBytes (1 MB = 1024 KBytes)
                     double fileSizeInMB = fileSizeInKB / 1024;
-                    throw new MilvaUserFriendlyException(stringLocalizer["FileIsTooBigMessage", fileSizeInMB.ToString("0.#")]);
+                    throw new MilvaUserFriendlyException("FileIsTooBigMessage", fileSizeInMB.ToString("0.#"));
                 case FileValidationResult.InvalidFileExtension:
                     var stringBuilder = new StringBuilder();
-                    throw new MilvaUserFriendlyException(stringLocalizer["UnsupportedFileTypeMessage", stringBuilder.AppendJoin(", ", allowedFileExtensions)]);
+                    throw new MilvaUserFriendlyException("UnsupportedFileTypeMessage", stringBuilder.AppendJoin(", ", allowedFileExtensions));
                 case FileValidationResult.NullFile:
                     return "";
             }
@@ -210,203 +206,6 @@ namespace Milvasoft.SampleAPI.Utils
 
         #endregion
 
-        #region Language Helpers
-
-        private const string SystemLanguageIdString = "SystemLanguageId";
-
-        /// <summary>
-        /// <para><b>EN: </b>Ready mapping is done. For example, it is used to map the data in the Product class to the ProductDTO class.</para>
-        /// <para><b>TR: </b>Hazır mapleme işlemi yapılır. Örnegin Product sınıfındaki verileri ProductDTO sınıfına maplemeye yarar.</para>
-        /// </summary>
-        /// <param name="langs"></param>
-        /// <param name="propertyName"></param>
-        /// <returns></returns>
-        public static string GetLang<TEntity>(this IEnumerable<TEntity> langs, Expression<Func<TEntity, string>> propertyName)
-        {
-            var requestedLangId = GetLanguageId();
-
-            if (langs.IsNullOrEmpty()) return "";
-
-            var propName = propertyName.GetPropertyName();
-
-            TEntity requestedLang;
-
-            if (requestedLangId != GlobalConstants.DefaultLanguageId) requestedLang = langs.FirstOrDefault(lang => (int)lang.GetType().GetProperty(SystemLanguageIdString).GetValue(lang) == requestedLangId)
-                                                                                        ?? langs.FirstOrDefault(lang => (int)lang.GetType().GetProperty(SystemLanguageIdString).GetValue(lang) == GlobalConstants.DefaultLanguageId);
-
-            else requestedLang = langs.FirstOrDefault(lang => (int)lang.GetType().GetProperty(SystemLanguageIdString).GetValue(lang) == GlobalConstants.DefaultLanguageId);
-
-            requestedLang ??= langs.FirstOrDefault();
-
-            return requestedLang.GetType().GetProperty(propName).GetValue(requestedLang, null)?.ToString();
-        }
-
-        /// <summary>
-        /// <para><b>EN: </b>Ready mapping is done. For example, it is used to map the data in the Product class to the ProductDTO class.</para>
-        /// <para><b>TR: </b>Hazır mapleme işlemi yapılır. Örnegin Product sınıfındaki verileri ProductDTO sınıfına maplemeye yarar.</para>
-        /// </summary>
-        /// <param name="langs"></param>
-        /// <returns></returns>
-        public static IEnumerable<TDTO> GetLangs<TEntity, TDTO>(this IEnumerable<TEntity> langs) where TDTO : new()
-        {
-            if (langs.IsNullOrEmpty()) yield break;
-
-            foreach (var lang in langs)
-            {
-                TDTO dto = new TDTO();
-                foreach (var entityProp in lang.GetType().GetProperties())
-                {
-                    var dtoProp = dto.GetType().GetProperty(entityProp.Name);
-
-                    var entityPropValue = entityProp.GetValue(lang, null);
-
-                    if (entityProp.Name == SystemLanguageIdString) dtoProp.SetValue(dto, entityPropValue, null);
-
-                    else if (entityProp.PropertyType == typeof(string)) dtoProp.SetValue(dto, entityPropValue, null);
-                }
-                yield return dto;
-            }
-        }
-
-
-        /// <summary>
-        /// Stores language id and iso code.
-        /// </summary>
-        public static Dictionary<string, int> LanguageIdIsoPairs = new Dictionary<string, int>();
-
-        /// <summary>
-        /// <para><b>EN: </b>Gets language id from CultureInfo.CurrentCulture.</para>
-        /// <para><b>TR: </b>Dilin id'sini isteğin CultureInfo.CurrentCulture'den alır.</para>
-        /// </summary>
-        public static int GetLanguageId()
-        {
-            var culture = Thread.CurrentThread.CurrentCulture;
-            if (LanguageIdIsoPairs.ContainsKey(culture.Name))
-                return LanguageIdIsoPairs[culture.Name];
-            else
-                return GlobalConstants.DefaultLanguageId;
-        }
-
-        #endregion
-
-        #region HttpContextAccessor Helpers
-
-        /// <summary>
-        /// <para><b>EN: </b>Gets institution id from request's header. Then returns that id variable.</para>
-        /// <para><b>TR: </b> İşletme idsini request header'dan alır. Daha sonra bu kimliği geriye döndürür.</para>
-        /// </summary>
-        /// <param name="httpContextAccessor"></param>
-        /// <param name="localizer"></param>
-        public static (int pageIndex, int itemCount) GetPaginationVariablesFromHeader(this IHttpContextAccessor httpContextAccessor, IStringLocalizer<SharedResource> localizer)
-        {
-            if (httpContextAccessor.HttpContext.Request.Headers.Keys.Contains("pageindex") && httpContextAccessor.HttpContext.Request.Headers.Keys.Contains("itemcount"))
-            {
-                int pageIndex;
-                httpContextAccessor.HttpContext.Request.Headers.TryGetValue("pageindex", out var pageIndexValue);
-                if (!pageIndexValue.IsNullOrEmpty())
-                {
-                    pageIndex = Convert.ToInt32(pageIndexValue[0]);
-                    if (pageIndex <= GlobalConstants.Zero) throw new MilvaUserFriendlyException(localizer["InvalidPageIndexException"]);
-                }
-                else
-                    throw new MilvaUserFriendlyException(localizer["MissingHeaderException", "PageIndex"]);
-
-                int itemCount;
-                httpContextAccessor.HttpContext.Request.Headers.TryGetValue("itemcount", out var itemCountValue);
-                if (!itemCountValue.IsNullOrEmpty())
-                {
-                    itemCount = Convert.ToInt32(itemCountValue[0]);
-                    if (itemCount <= GlobalConstants.Zero) throw new MilvaUserFriendlyException(localizer["InvalidItemRangeException"]);
-                }
-                else
-                    throw new MilvaUserFriendlyException(localizer["MissingHeaderException", "ItemCount"]);
-
-                return (pageIndex: pageIndex, itemCount: itemCount);
-            }
-            else throw new MilvaUserFriendlyException(localizer["MissingHeaderException", "PageIndex,ItemCount"]);
-        }
-
-        #endregion
-
-        #region Default Record Check Helpers
-
-        /// <summary>
-        /// Checks <paramref name="id"/> is default record id or not.
-        /// </summary>
-        /// 
-        /// <exception cref="MilvaUserFriendlyException"> Throwns when <paramref name="id"/> is defult record id. </exception>
-        /// 
-        /// <param name="id"></param>
-        /// <param name="stringLocalizer"></param>
-        public static void CheckContentIsDefaultRecord(this int id, IStringLocalizer stringLocalizer)
-        {
-            if (id > GlobalConstants.Zero && id < 50) throw new MilvaUserFriendlyException(stringLocalizer, MilvaExceptionCode.CannotUpdateOrDeleteDefaultRecordException);
-        }
-
-        /// <summary>
-        /// Checks <paramref name="idList"/> contains default record or not.
-        /// </summary>
-        /// 
-        /// <exception cref="MilvaUserFriendlyException"> Throwns when contents contains defult record id. </exception>
-        /// 
-        /// <param name="idList"></param>
-        /// <param name="stringLocalizer"></param>
-        public static void CheckContentIsDefaultRecord(this List<int> idList, IStringLocalizer stringLocalizer)
-        {
-            if (idList.Any(i => i > GlobalConstants.Zero && i < 50)) throw new MilvaUserFriendlyException(stringLocalizer, MilvaExceptionCode.CannotUpdateOrDeleteDefaultRecordException);
-        }
-
-        #endregion
-
-        #region Reflection Helpers
-
-        /// <summary>
-        /// Get langs property in runtime.
-        /// </summary>
-        /// <param name="obj"></param>
-        /// <param name="langPropName"></param>
-        /// <param name="requestedPropName"></param>
-        /// <param name="stringLocalizer"></param>
-        /// <returns></returns>
-        public static dynamic GetLangPropValue(this object obj, string langPropName, string requestedPropName, IStringLocalizer stringLocalizer)
-        {
-            var langValues = obj.GetType().GetProperty(langPropName)?.GetValue(obj, null) ?? throw new MilvaUserFriendlyException(stringLocalizer, MilvaExceptionCode.InvalidParameterException);
-
-            var enumerator = langValues.GetType().GetMethod("GetEnumerator").Invoke(langValues, null);
-            enumerator.GetType().GetMethod("MoveNext").Invoke(enumerator, null);
-            var entityType = enumerator.GetType().GetProperty("Current").GetValue(enumerator, null).GetType();
-
-            MethodInfo langMethod = typeof(HelperExtensions).GetMethod("GetLang", BindingFlags.Static | BindingFlags.NonPublic).MakeGenericMethod(entityType);
-
-            return langMethod.Invoke(langValues, new object[] { langValues, requestedPropName });
-        }
-
-        /// <summary>
-        /// <para><b>EN: </b>Ready mapping is done. For example, it is used to map the data in the Product class to the ProductDTO class.</para>
-        /// <para><b>TR: </b>Hazır mapleme işlemi yapılır. Örnegin Product sınıfındaki verileri ProductDTO sınıfına maplemeye yarar.</para>
-        /// </summary>
-        /// <param name="langs"></param>
-        /// <param name="propName"></param>
-        /// <returns></returns>
-        private static string GetLang<TEntity>(this HashSet<TEntity> langs, string propName)
-        {
-            var requestedLangId = GetLanguageId();
-
-            if (langs.IsNullOrEmpty()) return "";
-
-            TEntity requestedLang;
-
-            if (requestedLangId != GlobalConstants.DefaultLanguageId) requestedLang = langs.FirstOrDefault(lang => (int)lang.GetType().GetProperty(SystemLanguageIdString).GetValue(lang) == requestedLangId)
-                                                                                        ?? langs.FirstOrDefault(lang => (int)lang.GetType().GetProperty(SystemLanguageIdString).GetValue(lang) == GlobalConstants.DefaultLanguageId);
-
-            else requestedLang = langs.FirstOrDefault(lang => (int)lang.GetType().GetProperty(SystemLanguageIdString).GetValue(lang) == GlobalConstants.DefaultLanguageId);
-
-            requestedLang ??= langs.FirstOrDefault();
-
-            return requestedLang.GetType().GetProperty(propName)?.GetValue(requestedLang, null)?.ToString();
-        }
-
-        #endregion
 
         #region IEnumerable Helpers
 
@@ -423,6 +222,7 @@ namespace Milvasoft.SampleAPI.Utils
          where TEntity : class, IBaseEntity<Guid>
          => toBeCheckedList.IsNullOrEmpty() ? new List<TDTO>() : returnFunc.Invoke(toBeCheckedList).ToList();
 
+
         /// <summary>
         /// Checks guid object. If is null return default(<typeparamref name="TDTO"/>). Otherwise invoke <paramref name="returnFunc"/>.
         /// </summary>
@@ -435,8 +235,6 @@ namespace Milvasoft.SampleAPI.Utils
           where TDTO : new()
           where TEntity : class, IBaseEntity<Guid>
        => toBeCheckedObject == null ? default : returnFunc.Invoke(toBeCheckedObject);
-
-       
 
         #endregion
 
@@ -530,18 +328,18 @@ namespace Milvasoft.SampleAPI.Utils
         /// Throwns <see cref="MilvaUserFriendlyException"/> if <paramref name="parameterObject"/> is null.
         /// </summary>
         /// <param name="parameterObject"></param>
-        /// <param name="message"></param>
-        public static void ThrowIfParameterIsNull(this object parameterObject, string message = null)
+        /// <param name="localizerKey"></param>
+        public static void ThrowIfParameterIsNull(this object parameterObject, string localizerKey = null)
         {
             if (parameterObject == null)
             {
-                if (string.IsNullOrEmpty(message))
+                if (string.IsNullOrEmpty(localizerKey))
                 {
-                    throw new MilvaUserFriendlyException(Startup.SharedStringLocalizer, MilvaExceptionCode.NullParameterException);
+                    throw new MilvaUserFriendlyException(MilvaException.NullParameter);
                 }
                 else
                 {
-                    throw new MilvaUserFriendlyException(message);
+                    throw new MilvaUserFriendlyException(localizerKey);
                 }
             }
         }
@@ -550,18 +348,18 @@ namespace Milvasoft.SampleAPI.Utils
         /// Throwns <see cref="MilvaUserFriendlyException"/> if <paramref name="list"/> is null or empty.
         /// </summary>
         /// <param name="list"></param>
-        /// <param name="message"></param>
-        public static void ThrowIfListIsNullOrEmpty(this List<object> list, string message = null)
+        /// <param name="localizerKey"></param>
+        public static void ThrowIfListIsNullOrEmpty(this List<object> list, string localizerKey = null)
         {
             if (list.IsNullOrEmpty())
             {
-                if (string.IsNullOrEmpty(message))
+                if (string.IsNullOrEmpty(localizerKey))
                 {
-                    throw new MilvaUserFriendlyException(Startup.SharedStringLocalizer, MilvaExceptionCode.CannotFindEntityException);
+                    throw new MilvaUserFriendlyException(MilvaException.CannotFindEntity);
                 }
                 else
                 {
-                    throw new MilvaUserFriendlyException(message);
+                    throw new MilvaUserFriendlyException(localizerKey);
                 }
             }
         }
@@ -570,18 +368,18 @@ namespace Milvasoft.SampleAPI.Utils
         /// Throwns <see cref="MilvaUserFriendlyException"/> if <paramref name="list"/> is null or empty.
         /// </summary>
         /// <param name="list"></param>
-        /// <param name="message"></param>
-        public static void ThrowIfParameterIsNullOrEmpty<T>(this List<T> list, string message = null) where T : IEquatable<T>
+        /// <param name="localizerKey"></param>
+        public static void ThrowIfParameterIsNullOrEmpty<T>(this List<T> list, string localizerKey = null) where T : IEquatable<T>
         {
             if (list.IsNullOrEmpty())
             {
-                if (string.IsNullOrEmpty(message))
+                if (string.IsNullOrEmpty(localizerKey))
                 {
-                    throw new MilvaUserFriendlyException(Startup.SharedStringLocalizer, MilvaExceptionCode.NullParameterException);
+                    throw new MilvaUserFriendlyException(MilvaException.NullParameter);
                 }
                 else
                 {
-                    throw new MilvaUserFriendlyException(message);
+                    throw new MilvaUserFriendlyException(localizerKey);
                 }
             }
         }
@@ -590,18 +388,18 @@ namespace Milvasoft.SampleAPI.Utils
         /// Throwns <see cref="MilvaUserFriendlyException"/> if <paramref name="list"/> is null or empty.
         /// </summary>
         /// <param name="list"></param>
-        /// <param name="message"></param>
-        public static void ThrowIfListIsNullOrEmpty(this IEnumerable<object> list, string message = null)
+        /// <param name="localizerKey"></param>
+        public static void ThrowIfListIsNullOrEmpty(this IEnumerable<object> list, string localizerKey = null)
         {
             if (list.IsNullOrEmpty())
             {
-                if (string.IsNullOrEmpty(message))
+                if (string.IsNullOrEmpty(localizerKey))
                 {
-                    throw new MilvaUserFriendlyException(Startup.SharedStringLocalizer, MilvaExceptionCode.CannotFindEntityException);
+                    throw new MilvaUserFriendlyException(MilvaException.CannotFindEntity);
                 }
                 else
                 {
-                    throw new MilvaUserFriendlyException(message);
+                    throw new MilvaUserFriendlyException(localizerKey);
                 }
             }
         }
@@ -617,7 +415,7 @@ namespace Milvasoft.SampleAPI.Utils
             {
                 if (string.IsNullOrEmpty(message))
                 {
-                    throw new MilvaUserFriendlyException(Startup.SharedStringLocalizer, MilvaExceptionCode.NullParameterException);
+                    throw new MilvaUserFriendlyException(MilvaException.NullParameter);
                 }
                 else
                 {
@@ -630,19 +428,19 @@ namespace Milvasoft.SampleAPI.Utils
         /// Throwns <see cref="MilvaUserFriendlyException"/> if <paramref name="entity"/> is null.
         /// </summary>
         /// <param name="entity"></param>
-        /// <param name="message"></param>
-        public static void ThrowIfNullForGuidObject<TEntity>(this TEntity entity, string message = null) where TEntity : class, IBaseEntity<Guid>
+        /// <param name="localizerKey"></param>
+        public static void ThrowIfNullForGuidObject<TEntity>(this TEntity entity, string localizerKey = null) where TEntity : class, IBaseEntity<Guid>
         {
 
             if (entity == null)
             {
-                if (string.IsNullOrEmpty(message))
+                if (string.IsNullOrEmpty(localizerKey))
                 {
-                    throw new MilvaUserFriendlyException(Startup.SharedStringLocalizer, MilvaExceptionCode.CannotFindEntityException);
+                    throw new MilvaUserFriendlyException(MilvaException.CannotFindEntity);
                 }
                 else
                 {
-                    throw new MilvaUserFriendlyException(message);
+                    throw new MilvaUserFriendlyException(localizerKey);
                 }
             }
         }
@@ -651,75 +449,25 @@ namespace Milvasoft.SampleAPI.Utils
         /// Throwns <see cref="MilvaUserFriendlyException"/> if <paramref name="entity"/> is null.
         /// </summary>
         /// <param name="entity"></param>
-        /// <param name="message"></param>
-        public static void ThrowIfNullForIntObject<TEntity>(this TEntity entity, string message = null) where TEntity : class, IBaseEntity<int>
+        /// <param name="localizerKey"></param>
+        public static void ThrowIfNullForIntObject<TEntity>(this TEntity entity, string localizerKey = null) where TEntity : class, IBaseEntity<int>
         {
 
             if (entity == null)
             {
-                if (string.IsNullOrEmpty(message))
+                if (string.IsNullOrEmpty(localizerKey))
                 {
-                    throw new MilvaUserFriendlyException(Startup.SharedStringLocalizer, MilvaExceptionCode.CannotFindEntityException);
+                    throw new MilvaUserFriendlyException(MilvaException.CannotFindEntity);
                 }
                 else
                 {
-                    throw new MilvaUserFriendlyException(message);
+                    throw new MilvaUserFriendlyException(localizerKey);
                 }
             }
         }
 
         #endregion
 
-        /// <summary>
-        /// Gets requested property value. Method faydalı bi iş için yazmıştım fakat unuttum.
-        /// </summary>
-        /// <param name="obj"></param>
-        /// <param name="propertyName"> e.g : ProductLangs.Name </param>
-        /// <returns></returns>
-        public static object GetPropertyValue(this object obj, string propertyName)
-        {
-            var propNames = propertyName.Split('.').ToList();
-
-            if (propNames.Count > 2) throw new MilvaUserFriendlyException(Startup.SharedStringLocalizer, MilvaExceptionCode.InvalidParameterException);
-
-            foreach (string propName in propNames)
-            {
-                if (typeof(IEnumerable).IsAssignableFrom(obj.GetType()))
-                {
-                    var count = (int)obj.GetType().GetProperty("Count").GetValue(obj, null);
-                    var enumerator = obj.GetType().GetMethod("GetEnumerator").Invoke(obj, null);
-                    List<object> listProp = new List<object>();
-                    for (int i = 0; i < count; i++)
-                    {
-                        if (i == GlobalConstants.Zero) enumerator.GetType().GetMethod("MoveNext").Invoke(enumerator, null);
-
-                        var currentValue = enumerator.GetType().GetProperty("Current").GetValue(enumerator, null);
-
-                        var isLangPropExist = currentValue.GetType().GetProperties().Any(i => i.Name == "SystemLanguageId");
-                        if (isLangPropExist)
-                        {
-                            var langId = (int)currentValue.GetType().GetProperty("SystemLanguageId").GetValue(currentValue, null);
-
-                            if (langId == HelperExtensions.GetLanguageId())
-                            {
-                                obj = currentValue.GetType().GetProperty(propName).GetValue(currentValue, null);
-                                break;
-                            }
-                        }
-                        else
-                        {
-                            listProp.Add(currentValue.GetType().GetProperty(propName).GetValue(currentValue, null));
-                        }
-
-                        enumerator.GetType().GetMethod("MoveNext").Invoke(enumerator, null);
-                    }
-                    return listProp;
-
-                }
-                else obj = obj.GetType().GetProperty(propName).GetValue(obj, null);
-            }
-
-            return obj;
-        }
+       
     }
 }
