@@ -48,8 +48,8 @@ namespace Milvasoft.Helpers.Exceptions
         /// Initializes a new instance of the <see cref="MilvaBaseException"/> class  with a specified error message.
         /// </summary>
         /// <param name="messageOrLocalizerKey"></param>
-        /// <param name="exceptionObject"></param>
-        public MilvaUserFriendlyException(string messageOrLocalizerKey, object exceptionObject) : base(messageOrLocalizerKey, exceptionObject)
+        /// <param name="exceptionObjects"></param>
+        public MilvaUserFriendlyException(string messageOrLocalizerKey, params object[] exceptionObjects) : base(messageOrLocalizerKey, exceptionObjects)
         {
         }
 
