@@ -3382,12 +3382,12 @@
             </summary>
             <param name="messageOrLocalizerKey"></param>
         </member>
-        <member name="M:Milvasoft.Helpers.Exceptions.MilvaBaseException.#ctor(System.String,System.Object)">
+        <member name="M:Milvasoft.Helpers.Exceptions.MilvaBaseException.#ctor(System.String,System.Object[])">
             <summary>
             Initializes a new instance of the <see cref="T:Milvasoft.Helpers.Exceptions.MilvaBaseException"/> class  with a specified error message.
             </summary>
             <param name="messageOrLocalizerKey"></param>
-            <param name="exceptionObject"></param>
+            <param name="exceptionObjects"></param>
         </member>
         <member name="M:Milvasoft.Helpers.Exceptions.MilvaBaseException.#ctor(System.String,System.Exception)">
             <summary>
@@ -3614,6 +3614,13 @@
             Initializes a new instance of the <see cref="T:Milvasoft.Helpers.Exceptions.MilvaUserFriendlyException"/> class with a specified error message.
             </summary>
             <param name="exceptionCode"></param>
+        </member>
+        <member name="M:Milvasoft.Helpers.Exceptions.MilvaUserFriendlyException.#ctor(System.String,System.Object[])">
+            <summary>
+            Initializes a new instance of the <see cref="T:Milvasoft.Helpers.Exceptions.MilvaBaseException"/> class  with a specified error message.
+            </summary>
+            <param name="messageOrLocalizerKey"></param>
+            <param name="exceptionObjects"></param>
         </member>
         <member name="M:Milvasoft.Helpers.Exceptions.MilvaUserFriendlyException.#ctor(System.String,System.Exception)">
             <summary>
