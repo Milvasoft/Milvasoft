@@ -8,7 +8,7 @@ namespace Milvasoft.Helpers.DataAccess.Abstract.Entity
     /// Determines entity is auditable with modifier and modification date.
     /// </summary>
     /// <typeparam name="TKey"></typeparam>
-    public interface IAuditable<TKey> : ICreationAuditable<TKey>where TKey : struct, IEquatable<TKey>
+    public interface IAuditable<TKey> : ICreationAuditable<TKey> where TKey : struct, IEquatable<TKey>
     {
         /// <summary>
         /// Last modification date of entity.
@@ -21,7 +21,7 @@ namespace Milvasoft.Helpers.DataAccess.Abstract.Entity
     /// </summary>
     /// <typeparam name="TKey"></typeparam>
     /// <typeparam name="TUserKey"></typeparam>
-    public interface IAuditable<TUserKey,TKey> : ICreationAuditable<TKey>, IHasModifier<TUserKey>
+    public interface IAuditable<TUserKey, TKey> : ICreationAuditable<TKey>, IHasModifier<TUserKey>
         where TKey : struct, IEquatable<TKey>
         where TUserKey : struct, IEquatable<TUserKey>
     {
@@ -37,7 +37,7 @@ namespace Milvasoft.Helpers.DataAccess.Abstract.Entity
     /// <typeparam name="TKey">Primary key of the user</typeparam>
     /// <typeparam name="TUser">Type of the user</typeparam>
     /// <typeparam name="TUserKey">Type of the user</typeparam>
-    public interface IAuditable<TUser, TUserKey, TKey> : IAuditable<TUserKey,TKey>, ICreationAuditable<TUser, TUserKey, TKey>
+    public interface IAuditable<TUser, TUserKey, TKey> : IAuditable<TUserKey, TKey>, ICreationAuditable<TUser, TUserKey, TKey>
         where TUser : IdentityUser<TUserKey>
         where TKey : struct, IEquatable<TKey>
         where TUserKey : struct, IEquatable<TUserKey>
@@ -54,7 +54,7 @@ namespace Milvasoft.Helpers.DataAccess.Abstract.Entity
     /// <typeparam name="TKey">Primary key of the user</typeparam>
     /// <typeparam name="TUser">Type of the user</typeparam>
     /// <typeparam name="TUserKey">Type of the user</typeparam>
-    public interface IAuditableWithCustomUser<TUser, TUserKey, TKey> : IAuditable<TUserKey,TKey>, ICreationAuditableWithCustomUser<TUser, TUserKey, TKey>
+    public interface IAuditableWithCustomUser<TUser, TUserKey, TKey> : IAuditable<TUserKey, TKey>, ICreationAuditableWithCustomUser<TUser, TUserKey, TKey>
         where TUser : IBaseEntity<TUserKey>
         where TKey : struct, IEquatable<TKey>
         where TUserKey : struct, IEquatable<TUserKey>

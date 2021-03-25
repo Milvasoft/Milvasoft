@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.Internal;
 using Milvasoft.Helpers.Extensions;
 using Milvasoft.Helpers.FileOperations.Enums;
 using Milvasoft.Helpers.Utils;
@@ -104,7 +103,7 @@ namespace Milvasoft.Helpers.FileOperations.Concrete
         }
 
         /// <summary>
-        /// Saves uploaded IFormFile files to physical file path. If file list is null or empty returns empty <see cref="List{string}"/> 
+        /// Saves uploaded IFormFile files to physical file path. If file list is null or empty returns empty <see cref="List{String}"/> 
         /// Target Path will be : "<paramref name ="basePath"></paramref>/<b><paramref name="folderNameCreator"/>()</b>/<paramref name="entity"></paramref>.<paramref name="propertyName"/>"
         /// </summary>
         /// 
@@ -187,7 +186,7 @@ namespace Milvasoft.Helpers.FileOperations.Concrete
         }
 
         /// <summary>
-        /// Saves uploaded IFormFile files to physical file path. If file list is null or empty returns empty <see cref="List{string}"/> 
+        /// Saves uploaded IFormFile files to physical file path. If file list is null or empty returns empty <see cref="List{String}"/> 
         /// Target Path will be : "<paramref name ="basePath"></paramref>/<b><paramref name="folderNameCreator"/>()</b>/<paramref name="entity"></paramref>.<paramref name="propertyName"/>"
         /// </summary>
         /// 

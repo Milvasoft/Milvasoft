@@ -5,6 +5,7 @@
     /// </summary>
     public static class LocalizerKeys
     {
+#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
         public const string LocalizedEntityName = "LocalizedEntityName";
         public const string Localized = "Localized";
 
@@ -92,7 +93,8 @@
         public const string UserValidationEmailLength = "UserValidationEmailLength";
 
         #endregion
-        
+
+#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
 
     }
 }

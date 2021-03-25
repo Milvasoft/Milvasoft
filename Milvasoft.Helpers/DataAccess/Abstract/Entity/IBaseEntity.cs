@@ -13,6 +13,13 @@ namespace Milvasoft.Helpers.DataAccess.Abstract.Entity
     /// <summary>
     /// Defines interface for base entity type. All entities in the system must implement this interface.
     /// </summary>
+    public interface IBaseEntity : IEntityBase<string>
+    {
+    }
+
+    /// <summary>
+    /// Defines interface for base entity type. All entities in the system must implement this interface.
+    /// </summary>
     /// <typeparam name="TKey"></typeparam>
     public interface IEntityBase<TKey>
     {

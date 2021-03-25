@@ -13,4 +13,15 @@ namespace Milvasoft.Helpers.DataAccess.Abstract.Entity.Auditing
         /// </summary>
         TUserKey? LastModifierUserId { get; set; }
     }
+
+    /// <summary>
+    /// Determines entity has modifier.
+    /// </summary>
+    public interface IHasModifier
+    {
+        /// <summary>
+        /// Last modifier of entity.
+        /// </summary>
+        string LastModifierUserId { get; set; }
+    }
 }

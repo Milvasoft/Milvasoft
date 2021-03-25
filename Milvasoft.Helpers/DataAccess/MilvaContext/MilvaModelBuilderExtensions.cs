@@ -5,6 +5,7 @@ using Milvasoft.Helpers.DataAccess.Concrete.Entity;
 using Milvasoft.Helpers.Encryption.Abstract;
 using Milvasoft.Helpers.Encryption.Concrete;
 using Milvasoft.Helpers.Exceptions;
+using Milvasoft.Helpers.MultiTenancy.EntityBase;
 using System;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
@@ -18,13 +19,39 @@ namespace Milvasoft.Helpers.DataAccess.MilvaContext
     /// </summary>
     public static class MilvaModelBuilderExtensions
     {
+        /// <summary>
+        /// Adds <see cref="TenantId"/> converters to <see cref="TenantId"/> typed properties.
+        /// </summary>
+        /// <param name="modelBuilder"></param>
+        public static ModelBuilder UseTenantId(this ModelBuilder modelBuilder)
+        {
+            var tenantIdConverter = new TenantIdStringConverter();
+
+            foreach (var entityType in modelBuilder.Model.GetEntityTypes())
+            {
+                var properties = entityType
+                    .ClrType
+                    .GetProperties()
+                    .Where(p => p.PropertyType == typeof(TenantId));
+
+                foreach (var property in properties)
+                {
+                    modelBuilder
+                        .Entity(entityType.Name)
+                        .Property(property.Name)
+                        .HasConversion(tenantIdConverter);
+                }
+            }
+
+            return modelBuilder;
+        }
 
         /// <summary>
-        /// Adds an index for each indelible entity for IsDeleted property.
+        /// Adds value converter(<see cref="MilvaEncryptionConverter"/>) to string properties which marked with <see cref="MilvaEncryptedAttribute"/>.
         /// </summary>
         /// <param name="modelBuilder"></param>
         /// <param name="encryptionProvider"></param>
-        public static void UseEncryption(this ModelBuilder modelBuilder, IMilvaEncryptionProvider encryptionProvider)
+        public static ModelBuilder UseAnnotationEncryption(this ModelBuilder modelBuilder, IMilvaEncryptionProvider encryptionProvider)
         {
             if (modelBuilder is null)
                 throw new MilvaDeveloperException("The given model builder cannot be null");
@@ -47,13 +74,36 @@ namespace Milvasoft.Helpers.DataAccess.MilvaContext
                     }
                 }
             }
+            return modelBuilder;
+        }
+
+        /// <summary>
+        /// Adds value converter(<see cref="MilvaEncryptionConverter"/>) to all strings properties.
+        /// </summary>
+        /// <param name="modelBuilder"></param>
+        /// <param name="encryptionProvider"></param>
+        public static ModelBuilder UseEncryption(this ModelBuilder modelBuilder, IMilvaEncryptionProvider encryptionProvider)
+        {
+            if (modelBuilder is null)
+                throw new MilvaDeveloperException("The given model builder cannot be null");
+
+            if (encryptionProvider is null)
+                throw new MilvaDeveloperException("Cannot initialize encryption with a null provider.");
+
+            var encryptionConverter = new MilvaEncryptionConverter(encryptionProvider);
+
+            foreach (IMutableEntityType entityType in modelBuilder.Model.GetEntityTypes())
+                foreach (IMutableProperty property in entityType.GetProperties())
+                    if (property.ClrType == typeof(string) /* && !IsDiscriminator(property)*/)
+                        property.SetValueConverter(encryptionConverter);
+            return modelBuilder;
         }
 
         /// <summary>
         /// For PostgreSql, makes string properties for Turkish character compatible.
         /// </summary>
         /// <param name="modelBuilder"></param>
-        public static void ConfigureStringProperties(this ModelBuilder modelBuilder)
+        public static ModelBuilder ConfigureStringProperties(this ModelBuilder modelBuilder)
         {
             var entitiesHasDecimalProperty = modelBuilder.Model.GetEntityTypes().Where(prop => prop.ClrType.GetProperties().Any(p => p.PropertyType.IsAssignableFrom(typeof(string))));
 
@@ -65,25 +115,28 @@ namespace Milvasoft.Helpers.DataAccess.MilvaContext
                 foreach (var prop in properties)
                     modelBuilder.Entity(entityType.ClrType).Property(prop.Name).UseCollation("tr-TR-x-icu");
             }
+            return modelBuilder;
         }
 
         /// <summary>
         /// Adds an index for each indelible entity for IsDeleted property.
         /// </summary>
         /// <param name="modelBuilder"></param>
-        public static void AddIndexToIndelibleEntities(this ModelBuilder modelBuilder)
+        public static ModelBuilder AddIndexToIndelibleEntities(this ModelBuilder modelBuilder)
         {
             var indelibleEntites = modelBuilder.Model.GetEntityTypes().Where(entityType => entityType.FindProperty(EntityPropertyNames.IsDeleted) != null);
 
             foreach (var entityType in indelibleEntites)
                 modelBuilder.Entity(entityType.ClrType).HasIndex(EntityPropertyNames.IsDeleted);
+
+            return modelBuilder;
         }
 
         /// <summary>
         /// Configures default value for update database.
         /// </summary>
         /// <param name="modelBuilder"></param>
-        public static void ConfigureDefaultValue(this ModelBuilder modelBuilder)
+        public static ModelBuilder ConfigureDefaultValue(this ModelBuilder modelBuilder)
         {
             foreach (var entityType in modelBuilder.Model.GetEntityTypes())
                 foreach (var property in entityType.GetProperties())
@@ -98,13 +151,14 @@ namespace Milvasoft.Helpers.DataAccess.MilvaContext
 
                     modelBuilder.Entity(entityType.ClrType).Property(property.Name).HasDefaultValue(defaultValue.DefaultValue);
                 }
+            return modelBuilder;
         }
 
         /// <summary>
         /// Enable the query filter for indelible entities.
         /// </summary>
         /// <param name="modelBuilder"></param>
-        public static void FilterDeletedEntities(this ModelBuilder modelBuilder)
+        public static ModelBuilder FilterDeletedEntities(this ModelBuilder modelBuilder)
         {
             var indelibleEntites = modelBuilder.Model.GetEntityTypes().Where(entityType => entityType.FindProperty(EntityPropertyNames.IsDeleted) != null);
 
@@ -120,13 +174,14 @@ namespace Milvasoft.Helpers.DataAccess.MilvaContext
 
                 entityType.SetQueryFilter(dynamicLambda);
             }
+            return modelBuilder;
         }
 
         /// <summary>
         /// Enable the query filter for indelible entities.
         /// </summary>
         /// <param name="modelBuilder"></param>
-        public static void IgnoreDefaultRecords(this ModelBuilder modelBuilder)
+        public static ModelBuilder IgnoreDefaultRecords(this ModelBuilder modelBuilder)
         {
             var indelibleEntites = modelBuilder.Model.GetEntityTypes().Where(entityType => entityType.FindProperty(EntityPropertyNames.Id) != null
                                                                                           && entityType.FindProperty(EntityPropertyNames.Id).PropertyInfo.PropertyType == typeof(int));
@@ -142,13 +197,14 @@ namespace Milvasoft.Helpers.DataAccess.MilvaContext
 
                 entityType.SetQueryFilter(dynamicLambda);
             }
+            return modelBuilder;
         }
 
         /// <summary>
         /// Configures the decimal property of entities with decimal properties in decimal (18.2) format.
         /// </summary>
         /// <param name="modelBuilder"></param>
-        public static void ConfigureDecimalProperties(this ModelBuilder modelBuilder)
+        public static ModelBuilder ConfigureDecimalProperties(this ModelBuilder modelBuilder)
         {
             var entitiesHasDecimalProperty = modelBuilder.Model.GetEntityTypes().Where(prop => prop.ClrType.GetProperties().Any(p => p.PropertyType.IsAssignableFrom(typeof(decimal))));
 
@@ -160,6 +216,8 @@ namespace Milvasoft.Helpers.DataAccess.MilvaContext
                 foreach (var prop in properties)
                     modelBuilder.Entity(entityType.ClrType).Property(prop.Name).HasColumnType("decimal(18,2)");
             }
+
+            return modelBuilder;
         }
         /// <summary>
         /// Allows to all entities associated with deletions to be Included to the entity(s) to be included in the process.

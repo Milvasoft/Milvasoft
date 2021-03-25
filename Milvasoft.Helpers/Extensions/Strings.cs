@@ -1,4 +1,6 @@
 ﻿using System.Linq;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace Milvasoft.Helpers.Extensions
 {
@@ -54,5 +56,34 @@ namespace Milvasoft.Helpers.Extensions
             else if (str.Length == 1) return str.First().ToString().ToLowerInvariant();
             else return str.First().ToString().ToLowerInvariant() + str.Substring(1);
         }
+
+        /// <summary>
+        /// Gets <paramref name="str"/>'s bytes.
+        /// </summary>
+        /// <param name="str"></param>
+        /// <returns></returns>
+        public static byte[] GetByteArray(this string str) => Encoding.ASCII.GetBytes(str);
+
+        /// <summary>
+        /// Gets string from <paramref name="array"/>.
+        /// </summary>
+        /// <param name="array"></param>
+        /// <returns></returns>
+        public static string GetString(this byte[] array) => Encoding.ASCII.GetString(array);
+
+        /// <summary>
+        /// Hashes <paramref name="str"/> with <see cref="SHA256"/>
+        /// </summary>
+        /// <param name="str"></param>
+        /// <returns> Hashed <paramref name="str"/> as byte content. </returns>
+        public static byte[] HashToByteArray(this string str) => SHA256.HashData(str.GetByteArray());
+
+        /// <summary>
+        /// Hashes <paramref name="str"/> with <see cref="SHA256"/>
+        /// </summary>
+        /// <param name="str"></param>
+        /// <returns> Hashed <paramref name="str"/> as string. </returns>
+        public static string HashToString(this string str) => SHA256.HashData(str.GetByteArray()).GetString();
+
     }
 }

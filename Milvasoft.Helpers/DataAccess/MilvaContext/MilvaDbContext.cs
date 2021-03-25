@@ -98,6 +98,7 @@ namespace Milvasoft.Helpers.DataAccess.MilvaContext
         /// <param name="modelBuilder"></param>
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.UseTenantId();
             base.OnModelCreating(modelBuilder);
         }
 
@@ -255,7 +256,7 @@ namespace Milvasoft.Helpers.DataAccess.MilvaContext
                 if (AuditConfiguration.AuditDeleter)
                 {
                     //Change "DeleterUserId" property value.
-                    entry.Property(EntityPropertyNames.DeleterUserId).CurrentValue = CurrentUser?.Id;
+                    entry.Property(EntityPropertyNames.DeleterUserId).CurrentValue = CurrentUser != null ? CurrentUser.Id : null;
                     entry.Property(EntityPropertyNames.DeleterUserId).IsModified = true;
                 }
             }

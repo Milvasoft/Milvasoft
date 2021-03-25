@@ -11,7 +11,7 @@ namespace Milvasoft.Helpers.Exceptions
         /// <summary>
         /// Gets or sets error code.
         /// </summary>
-        public MilvaExceptionCode ExceptionCode { get; set; }
+        public int ExceptionCode { get; set; }
 
         /// <summary>
         /// Gets or sets object of exception.
@@ -20,31 +20,34 @@ namespace Milvasoft.Helpers.Exceptions
         public object ExceptionObject { get; set; } = null;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="MilvaBaseException"/> class  with a specified error message.
+        /// Initializes a new instance of the <see cref="MilvaBaseException"/> class with a specified error message.
         /// </summary>
-        /// <param name="localizer"></param>
-        public MilvaBaseException(IStringLocalizer localizer) : base(localizer[nameof(MilvaBaseException)])
-        {
-            ExceptionCode = ExceptionCode != 0 ? ExceptionCode : (int)MilvaExceptionCode.BaseException;
-        }
+        public MilvaBaseException() { }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MilvaBaseException"/> class  with a specified error message.
         /// </summary>
-        /// <param name="customMessage"></param>
-        public MilvaBaseException(string customMessage) : base(customMessage)
+        /// <param name="messageOrLocalizerKey"></param>
+        public MilvaBaseException(string messageOrLocalizerKey) : base(messageOrLocalizerKey)
+            => ExceptionCode = ExceptionCode != 0 ? ExceptionCode : (int)MilvaException.Base;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MilvaBaseException"/> class  with a specified error message.
+        /// </summary>
+        /// <param name="messageOrLocalizerKey"></param>
+        /// <param name="exceptionObjects"></param>
+        public MilvaBaseException(string messageOrLocalizerKey, params object[] exceptionObjects) : base(messageOrLocalizerKey)
         {
-            ExceptionCode = ExceptionCode != 0 ? ExceptionCode : (int)MilvaExceptionCode.BaseException;
+            ExceptionObject = exceptionObjects;
+            ExceptionCode = ExceptionCode != 0 ? ExceptionCode : (int)MilvaException.Base;
         }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MilvaBaseException"/> class  with a specified error message and a reference to the inner exception that is the cause of this exception.
         /// </summary>
-        /// <param name="customMessage"></param>
+        /// <param name="messageOrLocalizerKey"></param>
         /// <param name="innerException"></param>
-        public MilvaBaseException(string customMessage, Exception innerException) : base(customMessage, innerException)
-        {
-            ExceptionCode = ExceptionCode != 0 ? ExceptionCode : (int)MilvaExceptionCode.BaseException;
-        }
+        public MilvaBaseException(string messageOrLocalizerKey, Exception innerException) : base(messageOrLocalizerKey, innerException)
+            => ExceptionCode = ExceptionCode != 0 ? ExceptionCode : (int)MilvaException.Base;
     }
 }

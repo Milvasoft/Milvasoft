@@ -8,7 +8,7 @@ namespace Milvasoft.Helpers.Models
     /// </summary>
     /// <typeparam name="T"></typeparam>
     /// <typeparam name="TKey"></typeparam>
-    public class CommunicationModel<T, TKey> where TKey : IEquatable<TKey>
+    public class CommunicationModel<T, TKey> where TKey : struct, IEquatable<TKey>
     {
         /// <summary>
         /// Model transmitted during communication

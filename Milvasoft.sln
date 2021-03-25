@@ -7,11 +7,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Milvasoft.Helpers", "Milvas
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Milvasoft.SampleAPI", "sampleapi\Milvasoft.SampleAPI\Milvasoft.SampleAPI.csproj", "{DF035BA8-A21F-4792-AA23-0267D193F498}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Milvasoft.SampleAPI.Entity", "sampleapi\Milvasoft.SampleAPI.Entity\Milvasoft.SampleAPI.Entity.csproj", "{A6A9DA8D-7D83-42B2-A513-17B62CC214B7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Milvasoft.SampleAPI.Entity", "sampleapi\Milvasoft.SampleAPI.Entity\Milvasoft.SampleAPI.Entity.csproj", "{A6A9DA8D-7D83-42B2-A513-17B62CC214B7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Milvasoft.SampleAPI.Data", "sampleapi\Milvasoft.SampleAPI.Data\Milvasoft.SampleAPI.Data.csproj", "{B6D21E53-6D20-4113-A172-3DAD65211F38}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Milvasoft.SampleAPI.Data", "sampleapi\Milvasoft.SampleAPI.Data\Milvasoft.SampleAPI.Data.csproj", "{B6D21E53-6D20-4113-A172-3DAD65211F38}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Milvasoft.SampleAPI.Localization", "sampleapi\Milvasoft.SampleAPI.Localization\Milvasoft.SampleAPI.Localization.csproj", "{A5C626D1-24C9-412F-B477-DFB48F1A6CF2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Milvasoft.SampleAPI.Localization", "sampleapi\Milvasoft.SampleAPI.Localization\Milvasoft.SampleAPI.Localization.csproj", "{A5C626D1-24C9-412F-B477-DFB48F1A6CF2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Milvasoft.SampleAPI.UnitTest", "sampleapi\Milvasoft.SampleAPI.UnitTest\Milvasoft.SampleAPI.UnitTest.csproj", "{98D28B2B-104E-41F3-B019-1B87DC7416AA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{A5C626D1-24C9-412F-B477-DFB48F1A6CF2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A5C626D1-24C9-412F-B477-DFB48F1A6CF2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A5C626D1-24C9-412F-B477-DFB48F1A6CF2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{98D28B2B-104E-41F3-B019-1B87DC7416AA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{98D28B2B-104E-41F3-B019-1B87DC7416AA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{98D28B2B-104E-41F3-B019-1B87DC7416AA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{98D28B2B-104E-41F3-B019-1B87DC7416AA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

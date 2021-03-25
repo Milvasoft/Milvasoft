@@ -249,11 +249,11 @@ namespace Milvasoft.Helpers
                 if (!responseObject.PropertyExists("errorCodes")) return responseObject.ToObject<ObjectResponse<T>>();
                 else return responseObject.ToObject<ExceptionResponse>();
             }
-            else throw new MilvaUserFriendlyException("An error occured.");
+            else throw new MilvaUserFriendlyException();
         }
 
         /// <summary>
-        /// Sends request by <paramref name="httpRequestMessage"/>. Gets response as => <see cref="ObjectResponse{IEnumerable{T}}"/>
+        /// Sends request by <paramref name="httpRequestMessage"/>. Gets response as => <see cref="ObjectResponse{IEnumerable}"/>
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="httpRequestMessage"></param>
@@ -271,7 +271,7 @@ namespace Milvasoft.Helpers
                 if (!responseObject.PropertyExists("errorCodes")) return responseObject.ToObject<ObjectResponse<IEnumerable<T>>>();
                 else return responseObject.ToObject<ExceptionResponse>();
             }
-            else throw new MilvaUserFriendlyException("An error occured.");
+            else throw new MilvaUserFriendlyException();
         }
 
         /// <summary>
@@ -291,7 +291,7 @@ namespace Milvasoft.Helpers
         }
 
         /// <summary>
-        /// Sends request by <paramref name="httpRequestMessage"/>. Gets response as => <see cref="ObjectResponse{CommunicationModel{{IEnumerable{T},TKey}}}"/>
+        /// Sends request by <paramref name="httpRequestMessage"/>. Gets response as => <see cref="ObjectResponse{CommunicationModel}"/>
         /// <para><b> If you want to use the "ErrorCodes" property, change the return value to (ExceptionResponse) where necessary.</b></para> 
         /// </summary>
         /// <typeparam name="T"></typeparam>
@@ -299,7 +299,7 @@ namespace Milvasoft.Helpers
         /// <param name="httpRequestMessage"></param>
         /// <param name="httpClient"></param>
         /// <returns> ObjectResponse </returns>
-        public static async Task<object> SendRequestDeserializeSingle<T, TKey>(this HttpClient httpClient, HttpRequestMessage httpRequestMessage) where TKey : IEquatable<TKey>
+        public static async Task<object> SendRequestDeserializeSingle<T, TKey>(this HttpClient httpClient, HttpRequestMessage httpRequestMessage) where TKey : struct, IEquatable<TKey>
         {
             var response = await httpClient.SendAsync(httpRequestMessage).ConfigureAwait(false);
 
@@ -312,18 +312,18 @@ namespace Milvasoft.Helpers
                 if (!responseObject.PropertyExists("errorCodes")) return responseObject.ToObject<ObjectResponse<CommunicationModel<T, TKey>>>();
                 else return responseObject.ToObject<ExceptionResponse>();
             }
-            else throw new MilvaUserFriendlyException("An error occured.");
+            else throw new MilvaUserFriendlyException();
         }
 
         /// <summary>
-        /// Sends request by <paramref name="httpRequestMessage"/>. Gets response as => <see cref="ObjectResponse{CommunicationModel{{T,TKey}}}"/>
+        /// Sends request by <paramref name="httpRequestMessage"/>. Gets response as => <see cref="ObjectResponse{CommunicationModel}"/>
         /// </summary> 
         /// <typeparam name="T"></typeparam>
         /// <typeparam name="TKey"></typeparam>
         /// <param name="httpRequestMessage"></param>
         /// <param name="httpClient"></param>
         /// <returns> ObjectResponse </returns>
-        public static async Task<object> SendRequestDeserializeMultiple<T, TKey>(this HttpClient httpClient, HttpRequestMessage httpRequestMessage) where TKey : IEquatable<TKey>
+        public static async Task<object> SendRequestDeserializeMultiple<T, TKey>(this HttpClient httpClient, HttpRequestMessage httpRequestMessage) where TKey : struct, IEquatable<TKey>
         {
             var response = await httpClient.SendAsync(httpRequestMessage).ConfigureAwait(false);
             if (response.IsSuccessStatusCode)
@@ -335,7 +335,7 @@ namespace Milvasoft.Helpers
                 if (!responseObject.PropertyExists("errorCodes")) return responseObject.ToObject<ObjectResponse<CommunicationModel<IEnumerable<T>, TKey>>>();
                 else return responseObject.ToObject<ExceptionResponse>();
             }
-            else throw new MilvaUserFriendlyException("An error occured.");
+            else throw new MilvaUserFriendlyException();
         }
 
         #endregion

@@ -3,12 +3,12 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Localization;
 using Milvasoft.Helpers.Caching;
+using Milvasoft.Helpers.Exceptions;
 using Milvasoft.Helpers.FileOperations.Abstract;
 using Milvasoft.Helpers.FileOperations.Concrete;
 using Milvasoft.SampleAPI.Data;
-using Milvasoft.SampleAPI.Localization;
+using Milvasoft.SampleAPI.Data.Utils;
 using Milvasoft.SampleAPI.Middlewares;
 
 namespace Milvasoft.SampleAPI.AppStartup
@@ -18,13 +18,10 @@ namespace Milvasoft.SampleAPI.AppStartup
     /// </summary>
     public class Startup
     {
-
         /// <summary>
         /// Gets or sets configuration object.
         /// </summary>
         public IConfiguration Configuration { get; set; }
-
-        public static IStringLocalizer<SharedResource> SharedStringLocalizer;
 
         public static IWebHostEnvironment WebHostEnvironment { get; set; }
         public static IJsonOperations _jsonOperations { get; set; }
@@ -73,6 +70,7 @@ namespace Milvasoft.SampleAPI.AppStartup
             services.ConfigureSwagger();
         }
 
+
         /// <summary>
         /// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         /// </summary>
@@ -101,6 +99,7 @@ namespace Milvasoft.SampleAPI.AppStartup
                 endpoints.MapControllerRoute("Default", "{controller=Todo}/{action=GetTodos}/{id?}");
             });
 
+            app.ConfigureSwagger();
 
             #region Seed
 
@@ -108,9 +107,9 @@ namespace Milvasoft.SampleAPI.AppStartup
 
             dbContext.Database.MigrateAsync().Wait();
 
-            #endregion
+            app.ResetDatabaseAsync().Wait();
 
-            app.ConfigureSwagger();
+            #endregion
         }
     }
 }

@@ -68,19 +68,19 @@ namespace Milvasoft.SampleAPI.Middlewares
                     message = userFriendlyEx.Message;
                     errorCodes.Add((int)userFriendlyEx.ExceptionCode);
 
-                    if (userFriendlyEx.ExceptionCode == MilvaExceptionCode.WrongPaginationParamsException)
+                    if (userFriendlyEx.ExceptionCode == (int)MilvaException.WrongPaginationParams)
                     {
                         message = sharedLocalizer["WrongPaginationParamsException", userFriendlyEx.ExceptionObject];
                     }
-                    else if (userFriendlyEx.ExceptionCode == MilvaExceptionCode.WrongRequestedPageNumberException)
+                    else if (userFriendlyEx.ExceptionCode == (int)MilvaException.WrongRequestedPageNumber)
                     {
                         message = sharedLocalizer["InvalidPageIndexMessage"];
                     }
-                    else if (userFriendlyEx.ExceptionCode == MilvaExceptionCode.WrongRequestedItemCountException)
+                    else if (userFriendlyEx.ExceptionCode == (int)MilvaException.WrongRequestedItemCount)
                     {
                         message = sharedLocalizer["InvalidRequestedItemCountMessage"];
                     }
-                    else if (userFriendlyEx.ExceptionCode == MilvaExceptionCode.CannotGetResponseException)
+                    else if (userFriendlyEx.ExceptionCode == (int)MilvaException.CannotGetResponse)
                     {
                         //SendExceptionMail(baseEx);
                     }

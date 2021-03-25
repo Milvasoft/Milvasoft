@@ -2,7 +2,6 @@
 using Microsoft.EntityFrameworkCore;
 using Milvasoft.Helpers.DataAccess.MilvaContext;
 using Milvasoft.Helpers.DependencyInjection;
-using Milvasoft.Helpers.Encryption.Abstract;
 using Milvasoft.Helpers.Encryption.Concrete;
 using Milvasoft.SampleAPI.Entity;
 using System;
@@ -12,13 +11,12 @@ namespace Milvasoft.SampleAPI.Data
     public class EducationAppDbContext : MilvaDbContextBase<AppUser, AppRole, Guid>
     {
         private const string _encryptionKey = "w!z%C*F-JaNdRgUk";
-        private readonly IMilvaEncryptionProvider _provider;
+        //private readonly IMilvaEncryptionProvider _provider;
 
         public EducationAppDbContext(DbContextOptions<EducationAppDbContext> options,
                                      IHttpContextAccessor httpContextAccessor,
                                      IAuditConfiguration auditConfiguration) : base(options, httpContextAccessor, auditConfiguration)
         {
-            _provider = new MilvaEncryptionProvider(_encryptionKey);
         }
 
         public DbSet<Announcement> Announcements { get; set; }
@@ -33,7 +31,7 @@ namespace Milvasoft.SampleAPI.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.UseEncryption(_provider);
+            modelBuilder.UseEncryption(new MilvaEncryptionProvider(_encryptionKey));
             base.OnModelCreating(modelBuilder);
         }
 

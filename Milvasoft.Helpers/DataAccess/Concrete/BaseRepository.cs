@@ -1104,8 +1104,7 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
             var estimatedCountOfPages = Convert.ToInt32(Math.Ceiling(actualPageCount));
 
             if (estimatedCountOfPages != 0 && requestedPageNumber > estimatedCountOfPages)
-                throw new MilvaUserFriendlyException($"Requested page count is more than actual page count. Maximum page count must be {estimatedCountOfPages}.",
-                                                     MilvaExceptionCode.WrongPaginationParamsException)
+                throw new MilvaUserFriendlyException(MilvaException.WrongPaginationParams)
                 { ExceptionObject = estimatedCountOfPages };
 
             return estimatedCountOfPages;
@@ -1113,11 +1112,9 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
 
         private void ValidatePaginationParameters(int requestedPageNumber, int countOfRequestedRecordsInPage)
         {
-            if (requestedPageNumber <= 0) throw new MilvaUserFriendlyException($"Requested page count cannot be 0. Page count must be greater than 0.",
-                                                                               MilvaExceptionCode.WrongRequestedPageNumberException);
+            if (requestedPageNumber <= 0) throw new MilvaUserFriendlyException(MilvaException.WrongRequestedPageNumber);
 
-            if (countOfRequestedRecordsInPage <= 0) throw new MilvaUserFriendlyException($"Count of requested record count cannot be 0 or less. Requested record count must be greater than 0.",
-                                                                                         MilvaExceptionCode.WrongRequestedItemCountException);
+            if (countOfRequestedRecordsInPage <= 0) throw new MilvaUserFriendlyException(MilvaException.WrongRequestedItemCount);
         }
 
         private Expression<Func<TEntity, bool>> CreateConditionExpression(Expression<Func<TEntity, bool>> conditionExpression = null)

@@ -13,4 +13,15 @@ namespace Milvasoft.Helpers.DataAccess.Abstract.Entity.Auditing
         /// </summary>
         TUserKey? CreatorUserId { get; set; }
     }
+
+    /// <summary>
+    /// Determines entity has creator.
+    /// </summary>
+    public interface IHasCreator
+    {
+        /// <summary>
+        /// Creator of entity.
+        /// </summary>
+        string CreatorUserId { get; set; }
+    }
 }

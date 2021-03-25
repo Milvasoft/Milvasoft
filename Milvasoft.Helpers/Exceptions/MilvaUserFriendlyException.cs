@@ -9,62 +9,65 @@ namespace Milvasoft.Helpers.Exceptions
     public class MilvaUserFriendlyException : MilvaBaseException
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="MilvaValidationException"/> class.
+        /// Initializes a new instance of the <see cref="MilvaUserFriendlyException"/> class with a specified error message.
         /// </summary>
-        /// <param name="localizer"></param>
-        public MilvaUserFriendlyException(IStringLocalizer localizer) : base(localizer[nameof(MilvaUserFriendlyException)])
+        public MilvaUserFriendlyException() : base($"{MilvaException.Base}Exception")
+            => ExceptionCode = (int)MilvaException.Base;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MilvaUserFriendlyException"/> class with a specified error message.
+        /// </summary>
+        /// <param name="messageOrLocalizerKey"></param>
+        public MilvaUserFriendlyException(string messageOrLocalizerKey) : base(messageOrLocalizerKey) 
+            => ExceptionCode = (int)MilvaException.Base;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MilvaUserFriendlyException"/> class with a specified error message.
+        /// </summary>
+        /// <param name="messageOrLocalizerKey"></param>
+        /// <param name="exceptionCode"></param>
+        public MilvaUserFriendlyException(string messageOrLocalizerKey, MilvaException exceptionCode) : base(messageOrLocalizerKey) 
+            => ExceptionCode = (int)exceptionCode;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MilvaUserFriendlyException"/> class with a specified error message.
+        /// </summary>
+        /// <param name="messageOrLocalizerKey"></param>
+        /// <param name="exceptionCode"></param>
+        public MilvaUserFriendlyException(string messageOrLocalizerKey, int exceptionCode) : base(messageOrLocalizerKey) 
+            => ExceptionCode = exceptionCode;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MilvaUserFriendlyException"/> class with a specified error message.
+        /// </summary>
+        /// <param name="exceptionCode"></param>
+        public MilvaUserFriendlyException(MilvaException exceptionCode) : base($"{exceptionCode}Exception") 
+            => ExceptionCode = (int)exceptionCode;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MilvaBaseException"/> class  with a specified error message.
+        /// </summary>
+        /// <param name="messageOrLocalizerKey"></param>
+        /// <param name="exceptionObjects"></param>
+        public MilvaUserFriendlyException(string messageOrLocalizerKey, params object[] exceptionObjects) : base(messageOrLocalizerKey, exceptionObjects)
         {
-            ExceptionCode = MilvaExceptionCode.BaseException;
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="MilvaValidationException"/> class with a specified error message.
+        /// Initializes a new instance of the <see cref="MilvaUserFriendlyException"/> class with a specified error message and a reference to the inner exception that is the cause of this exception.
         /// </summary>
-        /// <param name="customMessage"></param>
-        public MilvaUserFriendlyException(string customMessage) : base(customMessage)
-        {
-            ExceptionCode = MilvaExceptionCode.BaseException;
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="MilvaValidationException"/> class with a specified error message and a reference to the inner exception that is the cause of this exception.
-        /// </summary>
-        /// <param name="customMessage"></param>
+        /// <param name="messageOrLocalizerKey"></param>
         /// <param name="innerException"></param>
-        public MilvaUserFriendlyException(string customMessage, Exception innerException) : base(customMessage, innerException)
-        {
-            ExceptionCode = MilvaExceptionCode.BaseException;
-        }
+        public MilvaUserFriendlyException(string messageOrLocalizerKey, Exception innerException) : base(messageOrLocalizerKey, innerException) 
+            => ExceptionCode = (int)MilvaException.Base;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="MilvaValidationException"/> class.
+        /// Initializes a new instance of the <see cref="MilvaUserFriendlyException"/> class with a specified error message and a reference to the inner exception that is the cause of this exception.
         /// </summary>
-        /// <param name="localizer"></param>
-        /// <param name="milvaExceptionCode"></param>
-        public MilvaUserFriendlyException(IStringLocalizer localizer, MilvaExceptionCode milvaExceptionCode) : base(localizer[milvaExceptionCode.ToString()])
-        {
-            ExceptionCode = milvaExceptionCode;
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="MilvaValidationException"/> class with a specified error message.
-        /// </summary>
-        /// <param name="customMessage"></param>
-        /// <param name="milvaExceptionCode"></param>
-        public MilvaUserFriendlyException(string customMessage, MilvaExceptionCode milvaExceptionCode) : base(customMessage)
-        {
-            ExceptionCode = milvaExceptionCode;
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="MilvaValidationException"/> class with a specified error message and a reference to the inner exception that is the cause of this exception.
-        /// </summary>
-        /// <param name="customMessage"></param>
-        /// <param name="milvaExceptionCode"></param>
+        /// <param name="messageOrLocalizerKey"></param>
+        /// <param name="exceptionCode"></param>
         /// <param name="innerException"></param>
-        public MilvaUserFriendlyException(string customMessage, MilvaExceptionCode milvaExceptionCode, Exception innerException) : base(customMessage, innerException)
-        {
-            ExceptionCode = milvaExceptionCode;
-        }
+        public MilvaUserFriendlyException(string messageOrLocalizerKey, int exceptionCode, Exception innerException) : base(messageOrLocalizerKey, innerException) 
+            => ExceptionCode = exceptionCode;
     }
 }

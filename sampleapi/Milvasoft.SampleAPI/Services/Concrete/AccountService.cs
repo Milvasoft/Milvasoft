@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 using Microsoft.IdentityModel.Tokens;
+using Milvasoft.Helpers;
 using Milvasoft.Helpers.DataAccess.Abstract;
 using Milvasoft.Helpers.Exceptions;
 using Milvasoft.Helpers.Identity.Abstract;
@@ -64,7 +65,6 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// <param name="contextRepository"></param>
         /// <param name="localizer"></param>
         /// <param name="httpContextAccessor"></param>
-        /// <param name="useWhiteList"></param>
         public AccountService(UserManager<AppUser> userManager,
                               SignInManager<AppUser> signInManager,
                               TokenManagement tokenManagement,
@@ -167,8 +167,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// <returns></returns>
         public virtual async Task<IdentityResult> SignOutAsync()
         {
-            var user = await _userManager.FindByNameAsync(_userName).ConfigureAwait(false) ?? throw new MilvaUserFriendlyException(_localizer, MilvaExceptionCode.CannotFindEntityException);
-
+            var user = await _userManager.FindByNameAsync(_userName).ConfigureAwait(false) ?? throw new MilvaUserFriendlyException(MilvaException.CannotFindEntity);
 
             if (await _userManager.GetAuthenticationTokenAsync(user, _loginProvider, _tokenType) == null)
                 return null;
@@ -204,7 +203,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         public async Task ResetPasswordAsync(string newPassword)
         {
             var currentUser = await _userManager.Users.FirstOrDefaultAsync(p => p.UserName == _userName).ConfigureAwait(false)
-                              ?? throw new MilvaUserFriendlyException(_localizer["CannotFindUserWithThisToken"]);
+                              ?? throw new MilvaUserFriendlyException("CannotFindUserWithThisToken");
 
             var authenticationToken = await _userManager.GetAuthenticationTokenAsync(currentUser, _loginProvider, _tokenType).ConfigureAwait(false);
 
@@ -221,11 +220,11 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// <returns></returns>
         public async Task<IdentityResult> ChangeCurrentUserPasswordAsync(string oldPassword, string newPassword)
         {
-            var user = await _userManager.FindByNameAsync(_userName).ConfigureAwait(false) ?? throw new MilvaUserFriendlyException(_localizer["CannotFindUserWithThisToken"]);
+            var user = await _userManager.FindByNameAsync(_userName).ConfigureAwait(false) ?? throw new MilvaUserFriendlyException("CannotFindUserWithThisToken");
 
             bool exist = await _userManager.CheckPasswordAsync(user, oldPassword).ConfigureAwait(false);
 
-            if (!exist) throw new MilvaUserFriendlyException(_localizer["IncorrectOldPassword"]);
+            if (!exist) throw new MilvaUserFriendlyException("IncorrectOldPassword");
 
             return await _userManager.ChangePasswordAsync(user, oldPassword, newPassword).ConfigureAwait(false);
         }
@@ -241,7 +240,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         {
             bool exist = await _userManager.CheckPasswordAsync(user, currentPassword).ConfigureAwait(false);
 
-            if (!exist) throw new MilvaUserFriendlyException(_localizer["IncorrectOldPassword"]);
+            if (!exist) throw new MilvaUserFriendlyException("IncorrectOldPassword");
 
             return await _userManager.ChangePasswordAsync(user, currentPassword, newPassword).ConfigureAwait(false);
         }
@@ -310,7 +309,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
             var loginResult = new LoginResultDTO { ErrorMessages = new List<IdentityError>() };
 
             if (loginDTO.UserName == null && loginDTO.Email == null)
-                throw new MilvaUserFriendlyException(_localizer["PleaseEnterEmailOrUsername"]);
+                throw new MilvaUserFriendlyException("PleaseEnterEmailOrUsername");
 
             //Kullanici adi veya email ile kullanici dogrulama
             #region User Validation
@@ -421,7 +420,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
                                                                                            tokenValue: newToken).ConfigureAwait(false);
 
             if (!identityResult.Succeeded)
-                throw new MilvaUserFriendlyException(_localizer);
+                throw new MilvaUserFriendlyException();
 
             return newToken;
         }

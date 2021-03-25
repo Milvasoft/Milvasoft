@@ -9,6 +9,9 @@ namespace Milvasoft.SampleAPI.Utils.Swagger
     {
         public void Apply(OpenApiSchema schema, SchemaFilterContext context)
         {
+            //if (context.SchemaRepository.Schemas.ContainsKey("TenantId"))
+            //    context.SchemaRepository.Schemas["TenantId"].Type = "string";
+
             if (schema?.Properties == null)
             {
                 return;

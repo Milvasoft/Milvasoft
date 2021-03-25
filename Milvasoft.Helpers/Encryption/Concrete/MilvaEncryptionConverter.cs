@@ -6,7 +6,7 @@ namespace Milvasoft.Helpers.Encryption.Concrete
     /// <summary>
     /// Defines the internal encryption converter for string values.
     /// </summary>
-    sealed class MilvaEncryptionConverter : ValueConverter<string, string>
+    public sealed class MilvaEncryptionConverter : ValueConverter<string, string>
     {
         /// <summary>
         /// Creates a new <see cref="MilvaEncryptionConverter"/> instance.
