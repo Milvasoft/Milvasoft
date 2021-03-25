@@ -203,7 +203,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         public async Task ResetPasswordAsync(string newPassword)
         {
             var currentUser = await _userManager.Users.FirstOrDefaultAsync(p => p.UserName == _userName).ConfigureAwait(false)
-                              ?? throw new MilvaUserFriendlyException(_localizer["CannotFindUserWithThisToken"]);
+                              ?? throw new MilvaUserFriendlyException("CannotFindUserWithThisToken");
 
             var authenticationToken = await _userManager.GetAuthenticationTokenAsync(currentUser, _loginProvider, _tokenType).ConfigureAwait(false);
 
@@ -220,11 +220,11 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// <returns></returns>
         public async Task<IdentityResult> ChangeCurrentUserPasswordAsync(string oldPassword, string newPassword)
         {
-            var user = await _userManager.FindByNameAsync(_userName).ConfigureAwait(false) ?? throw new MilvaUserFriendlyException(_localizer["CannotFindUserWithThisToken"]);
+            var user = await _userManager.FindByNameAsync(_userName).ConfigureAwait(false) ?? throw new MilvaUserFriendlyException("CannotFindUserWithThisToken");
 
             bool exist = await _userManager.CheckPasswordAsync(user, oldPassword).ConfigureAwait(false);
 
-            if (!exist) throw new MilvaUserFriendlyException(_localizer["IncorrectOldPassword"]);
+            if (!exist) throw new MilvaUserFriendlyException("IncorrectOldPassword");
 
             return await _userManager.ChangePasswordAsync(user, oldPassword, newPassword).ConfigureAwait(false);
         }
@@ -240,7 +240,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         {
             bool exist = await _userManager.CheckPasswordAsync(user, currentPassword).ConfigureAwait(false);
 
-            if (!exist) throw new MilvaUserFriendlyException(_localizer["IncorrectOldPassword"]);
+            if (!exist) throw new MilvaUserFriendlyException("IncorrectOldPassword");
 
             return await _userManager.ChangePasswordAsync(user, currentPassword, newPassword).ConfigureAwait(false);
         }
@@ -309,7 +309,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
             var loginResult = new LoginResultDTO { ErrorMessages = new List<IdentityError>() };
 
             if (loginDTO.UserName == null && loginDTO.Email == null)
-                throw new MilvaUserFriendlyException(_localizer["PleaseEnterEmailOrUsername"]);
+                throw new MilvaUserFriendlyException("PleaseEnterEmailOrUsername");
 
             //Kullanici adi veya email ile kullanici dogrulama
             #region User Validation

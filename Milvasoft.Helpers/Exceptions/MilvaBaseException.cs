@@ -28,15 +28,26 @@ namespace Milvasoft.Helpers.Exceptions
         /// Initializes a new instance of the <see cref="MilvaBaseException"/> class  with a specified error message.
         /// </summary>
         /// <param name="messageOrLocalizerKey"></param>
-        public MilvaBaseException(string messageOrLocalizerKey) : base(messageOrLocalizerKey) 
+        public MilvaBaseException(string messageOrLocalizerKey) : base(messageOrLocalizerKey)
             => ExceptionCode = ExceptionCode != 0 ? ExceptionCode : (int)MilvaException.Base;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MilvaBaseException"/> class  with a specified error message.
+        /// </summary>
+        /// <param name="messageOrLocalizerKey"></param>
+        /// <param name="exceptionObject"></param>
+        public MilvaBaseException(string messageOrLocalizerKey, object exceptionObject) : base(messageOrLocalizerKey)
+        {
+            ExceptionObject = exceptionObject;
+            ExceptionCode = ExceptionCode != 0 ? ExceptionCode : (int)MilvaException.Base;
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MilvaBaseException"/> class  with a specified error message and a reference to the inner exception that is the cause of this exception.
         /// </summary>
         /// <param name="messageOrLocalizerKey"></param>
         /// <param name="innerException"></param>
-        public MilvaBaseException(string messageOrLocalizerKey, Exception innerException) : base(messageOrLocalizerKey, innerException) 
+        public MilvaBaseException(string messageOrLocalizerKey, Exception innerException) : base(messageOrLocalizerKey, innerException)
             => ExceptionCode = ExceptionCode != 0 ? ExceptionCode : (int)MilvaException.Base;
     }
 }
