@@ -29,19 +29,16 @@ namespace Milvasoft.SampleAPI.DTOs.MentorDTOs
         /// <summary>
         /// CV path of mentor.
         /// </summary>
-        [OValidateString(200)]
         public string CVFilePath { get; set; }
 
         /// <summary>
         /// AppUser ID of mentor.
         /// </summary>
-        [OValidateId]
         public Guid AppUserId { get; set; }
 
         /// <summary>
         /// AppUser of mentor.
         /// </summary>
-        [SwaggerExclude]
         public virtual AppUserDTO AppUser { get; set; }
 
         /// <summary>

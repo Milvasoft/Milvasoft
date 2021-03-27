@@ -1,23 +1,18 @@
 ﻿using Milvasoft.Helpers.DataAccess.Concrete.Entity;
-using Milvasoft.SampleAPI.DTOs.MentorDTOs;
-using Milvasoft.SampleAPI.DTOs.ProfessionDTOs;
-using Milvasoft.SampleAPI.Entity;
 using Milvasoft.SampleAPI.Entity.Enum;
 using Milvasoft.SampleAPI.Utils.Attributes.ValidationAttributes;
-using Milvasoft.SampleAPI.Utils.Swagger;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Milvasoft.SampleAPI.DTOs.StudentDTOs
 {
-
     /// <summary>
-    /// Student DTO.
+    /// UpdateStudentDTO for update student operations.
     /// </summary>
-    public class StudentDTO : FullAuditableEntity<Guid>
+    public class UpdateStudentDTO
     {
-
         /// <summary>
         /// Student's name.
         /// </summary>
@@ -70,6 +65,11 @@ namespace Milvasoft.SampleAPI.DTOs.StudentDTOs
         public EducationStatus GraduationStatus { get; set; }
 
         /// <summary>
+        /// Due date of current assignment.
+        /// </summary>
+        public DateTime CurrentAssigmentDeliveryDate { get; set; }
+
+        /// <summary>
         /// Gradution score of student.
         /// </summary>
         public int GraduationScore { get; set; }
@@ -81,49 +81,15 @@ namespace Milvasoft.SampleAPI.DTOs.StudentDTOs
         public string MentorGraduationThoughts { get; set; }
 
         /// <summary>
-        /// Due date of current assignment.
-        /// </summary>
-        public DateTime CurrentAssigmentDeliveryDate { get; set; }
-
-        /// <summary>
-        /// AppUser id.
-        /// </summary>
-        [OValidateId]
-        public Guid AppUserId { get; set; }
-
-        /// <summary>
-        /// AppUser of student.
-        /// </summary>
-        [SwaggerExclude]
-        public virtual AppUserDTO AppUser { get; set; }
-
-        /// <summary>
         /// Profession id of student.
         /// </summary>
         [OValidateId]
         public Guid ProfessionId { get; set; }
 
         /// <summary>
-        /// Profesion of student.
-        /// </summary>
-        [SwaggerExclude]
-        public virtual ProfessionDTO Profession { get; set; }
-
-        /// <summary>
         /// Mentor ıd of student.
         /// </summary>
         [OValidateId]
         public Guid MentorId { get; set; }
-
-        /// <summary>
-        /// Mentor of student.
-        /// </summary>
-        [SwaggerExclude]
-        public virtual MentorDTO Mentor { get; set; }
-
-        /// <summary>
-        /// Old assignments of student.
-        /// </summary>
-        public virtual List<StudentAssigmentDTO> OldAssignments { get; set; }
     }
 }

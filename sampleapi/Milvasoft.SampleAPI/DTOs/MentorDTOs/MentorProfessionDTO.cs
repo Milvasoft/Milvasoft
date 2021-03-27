@@ -11,7 +11,7 @@ namespace Milvasoft.SampleAPI.DTOs.MentorDTOs
     /// <summary>
     /// Mentor and profession relationship.
     /// </summary>
-    public class MentorProfessionDTO : AuditableEntity<AppUser, Guid, Guid>
+    public class MentorProfessionDTO : AuditableEntity<AppUserDTO, Guid, Guid>
     {
 
         /// <summary>
