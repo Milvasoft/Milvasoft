@@ -10,6 +10,6 @@ namespace Milvasoft.Helpers.Identity.Concrete
         /// <summary>
         /// UserName and token pairs for each logged in user.
         /// </summary>
-        public static Dictionary<string, string> SignedInUserTokens { get; set; } = new Dictionary<string, string>();
+        public static Dictionary<string, string> SignedInUserTokens { get; set; } = new();
     }
 }

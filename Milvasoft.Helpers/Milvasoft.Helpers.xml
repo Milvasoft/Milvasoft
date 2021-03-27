@@ -1050,19 +1050,18 @@
             <typeparam name="TKey"></typeparam>
             <typeparam name="TContext"></typeparam>
         </member>
-        <member name="P:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.GetSoftDeletedEntities">
+        <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.SoftDeleteState(System.Boolean)">
             <summary>
-            Gets or sets GetSoftDeletedEntities. Default is false.
-            If value is true, all methods returns all entities.
-            If value is false, all methods returns entities which only "IsDeleted" property's value is false.
+            Determines whether soft deleted entities in the database are fetched from the database.
+            <para><b>Default is false.</b></para>
             </summary>
+            <param name="state"></param>
         </member>
-        <member name="P:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.ResetSoftDeleteState">
+        <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.ResetSoftDeleteState(System.Boolean)">
             <summary>
-            Gets or sets ResetSoftDeleteState. Default is true.
-            If value is true, resets 'GetSoftDeletedEntities' property value to false after when every conditional method invoked. 
-            Otherwise 
+            Determines whether the default value of the variable that determines the status of deleted data in the database is assigned to the default value after database operation.
             </summary>
+            <param name="state"></param>
         </member>
         <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.CreateIsDeletedFalseExpression">
             <summary>
@@ -1657,19 +1656,18 @@
             DbContext object.
             </summary>
         </member>
-        <member name="P:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.GetSoftDeletedEntities">
+        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.SoftDeleteState(System.Boolean)">
             <summary>
-            Gets or sets GetSoftDeletedEntities. Default is false.
-            If value is true, all methods returns all entities.
-            If value is false, all methods returns entities which only "IsDeleted" property's value is false.
+            Determines whether soft deleted entities in the database are fetched from the database.
+            <para><b>Default is false.</b></para>
             </summary>
+            <param name="state"></param>
         </member>
-        <member name="P:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.ResetSoftDeleteState">
+        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.ResetSoftDeleteState(System.Boolean)">
             <summary>
-            Gets or sets ResetSoftDeleteState. Default is true.
-            If value is true, resets 'GetSoftDeletedEntities' property value to false after when every conditional method invoked. 
-            Otherwise 
+            Determines whether the default value of the variable that determines the status of deleted data in the database is assigned to the default value after database operation.
             </summary>
+            <param name="state"></param>
         </member>
         <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.#ctor(`2)">
             <summary>
@@ -5994,21 +5992,6 @@
             <typeparam name="TKey"></typeparam>
             <typeparam name="TLoginResultDTO"></typeparam>
         </member>
-        <member name="P:Milvasoft.Helpers.Identity.Abstract.IIdentityOperations`7.UseWhiteList">
-            <summary>
-            Use white list when token based authentication for extra security. If its true performs operations on <see cref="P:Milvasoft.Helpers.Identity.Concrete.SignedInUsers.SignedInUserTokens"/>.
-            </summary>
-        </member>
-        <member name="P:Milvasoft.Helpers.Identity.Abstract.IIdentityOperations`7.LoginProvider">
-            <summary>
-            The authentication scheme for the provider the token is associated with.
-            </summary>
-        </member>
-        <member name="P:Milvasoft.Helpers.Identity.Abstract.IIdentityOperations`7.TokenName">
-            <summary>
-            The name of token.
-            </summary>
-        </member>
         <member name="T:Milvasoft.Helpers.Identity.Abstract.IIdentityOperations`7.UserValidation">
             <summary>
             Delegate for user validation.
@@ -6222,6 +6205,16 @@
             Gets or sets Authorization audience.
             </summary>
         </member>
+        <member name="P:Milvasoft.Helpers.Identity.Concrete.ITokenManagement.LoginProvider">
+            <summary>
+            Gets or sets Authorization issuer.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.Identity.Concrete.ITokenManagement.TokenName">
+            <summary>
+            Gets or sets Authorization audience.
+            </summary>
+        </member>
         <member name="P:Milvasoft.Helpers.Identity.Concrete.ITokenManagement.AccessExpiration">
             <summary>
             Gets or sets AccessExpiration of token.
@@ -6244,19 +6237,19 @@
             <typeparam name="TKey"></typeparam>
             <typeparam name="TLoginResultDTO"></typeparam>
         </member>
-        <member name="P:Milvasoft.Helpers.Identity.Concrete.IdentityOperations`7._useWhiteList">
+        <member name="F:Milvasoft.Helpers.Identity.Concrete.IdentityOperations`7._useWhiteList">
             <summary>
             Gets or sets GetSoftDeletedEntities. Default is false.
             If value is true, all methods returns all entities.
             If value is false, all methods returns entities which only "IsDeleted" property's value is false.
             </summary>
         </member>
-        <member name="P:Milvasoft.Helpers.Identity.Concrete.IdentityOperations`7.LoginProvider">
+        <member name="F:Milvasoft.Helpers.Identity.Concrete.IdentityOperations`7._loginProvier">
             <summary>
             The authentication scheme for the provider the token is associated with.
             </summary>
         </member>
-        <member name="P:Milvasoft.Helpers.Identity.Concrete.IdentityOperations`7.TokenName">
+        <member name="F:Milvasoft.Helpers.Identity.Concrete.IdentityOperations`7._tokenName">
             <summary>
             The name of token.
             </summary>

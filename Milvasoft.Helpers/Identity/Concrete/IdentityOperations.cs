@@ -53,28 +53,18 @@ namespace Milvasoft.Helpers.Identity.Concrete
         /// If value is true, all methods returns all entities.
         /// If value is false, all methods returns entities which only "IsDeleted" property's value is false.
         /// </summary>
-        private bool _useWhiteList
-        {
-            get => IIdentityOperations<TUserManager, TDbContext, TLocalizer, TUser, TRole, TKey, TLoginResultDTO>.UseWhiteList;
-            set { IIdentityOperations<TUserManager, TDbContext, TLocalizer, TUser, TRole, TKey, TLoginResultDTO>.UseWhiteList = value; }
-        }
-
-        #endregion
-
-        #region Properties
+        private bool _useWhiteList = true;
 
         /// <summary>
         /// The authentication scheme for the provider the token is associated with.
         /// </summary>
-        public string LoginProvider { get; set; }
-
+        private readonly string _loginProvier = "";
         /// <summary>
         /// The name of token.
         /// </summary>
-        public string TokenName { get; set; }
+        private readonly string _tokenName = "";
 
         #endregion
-
 
         /// <summary>
         /// Performs constructor injection for repository interfaces used in this service.
@@ -101,8 +91,9 @@ namespace Milvasoft.Helpers.Identity.Concrete
             _contextRepository = contextRepository;
             _userName = httpContextAccessor.HttpContext.User.Identity.Name;
             _useWhiteList = useWhiteList;
+            _loginProvier = tokenManagement.LoginProvider;
+            _tokenName = tokenManagement.TokenName;
         }
-
 
         /// <summary>
         /// Signs in for incoming user. Returns a token if login informations are valid or the user is not lockedout. Otherwise returns the error list.
@@ -227,7 +218,7 @@ namespace Milvasoft.Helpers.Identity.Concrete
         {
             var user = await _userManager.FindByNameAsync(_userName).ConfigureAwait(false) ?? throw new MilvaUserFriendlyException(MilvaException.CannotFindEntity);
 
-            if (await _userManager.GetAuthenticationTokenAsync(user, LoginProvider, TokenName) == null)
+            if (await _userManager.GetAuthenticationTokenAsync(user, _loginProvier, _tokenName) == null)
                 return null;
 
             IdentityResult identityResult = null;
@@ -243,7 +234,7 @@ namespace Milvasoft.Helpers.Identity.Concrete
 
                 _contextRepository.InitializeUpdating<TUser, TKey>(user);
 
-                identityResult = await _userManager.RemoveAuthenticationTokenAsync(user, LoginProvider, TokenName);
+                identityResult = await _userManager.RemoveAuthenticationTokenAsync(user, _loginProvier, _tokenName);
 
                 await _signInManager.SignOutAsync();
 
@@ -276,7 +267,7 @@ namespace Milvasoft.Helpers.Identity.Concrete
             var currentUser = await _userManager.Users.FirstOrDefaultAsync(p => p.UserName == _userName).ConfigureAwait(false)
                               ?? throw new MilvaUserFriendlyException(LocalizerKeys.CannotFindUserWithThisToken);
 
-            var authenticationToken = await _userManager.GetAuthenticationTokenAsync(currentUser, LoginProvider, TokenName).ConfigureAwait(false);
+            var authenticationToken = await _userManager.GetAuthenticationTokenAsync(currentUser, _loginProvier, _tokenName).ConfigureAwait(false);
 
             var identityResult = await _userManager.ResetPasswordAsync(currentUser, authenticationToken, newPassword).ConfigureAwait(false);
 
@@ -479,13 +470,13 @@ namespace Milvasoft.Helpers.Identity.Concrete
 
             _contextRepository.InitializeUpdating<TUser, TKey>(user);
 
-            await _userManager.RemoveAuthenticationTokenAsync(user, LoginProvider, TokenName).ConfigureAwait(false);
+            await _userManager.RemoveAuthenticationTokenAsync(user, _loginProvier, _tokenName).ConfigureAwait(false);
 
             _contextRepository.InitializeUpdating<TUser, TKey>(user);
 
             IdentityResult identityResult = await _userManager.SetAuthenticationTokenAsync(user: user,
-                                                                                           loginProvider: LoginProvider,//Token nerede kullanılcak
-                                                                                           tokenName: TokenName,//Token tipi
+                                                                                           loginProvider: _loginProvier,//Token nerede kullanılcak
+                                                                                           tokenName: _tokenName,//Token tipi
                                                                                            tokenValue: newToken).ConfigureAwait(false);
 
             if (!identityResult.Succeeded)

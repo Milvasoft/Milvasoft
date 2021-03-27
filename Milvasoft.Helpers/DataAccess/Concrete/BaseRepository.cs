@@ -38,27 +38,23 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
 
         #region Private Properties
 
-        /// <summary>
-        /// Gets or sets GetSoftDeletedEntities. Default is false.
-        /// If value is true, all methods returns all entities.
-        /// If value is false, all methods returns entities which only "IsDeleted" property's value is false.
-        /// </summary>
-        private bool GetSoftDeletedEntities
-        {
-            get => IBaseRepository<TEntity, TKey, TContext>.GetSoftDeletedEntities;
-            set { IBaseRepository<TEntity, TKey, TContext>.GetSoftDeletedEntities = value; }
-        }
+        private bool _resetSoftDeleteState = true;
+        private bool _softDeleteState = false;
 
         /// <summary>
-        /// Gets or sets ResetSoftDeleteState. Default is true.
-        /// If value is true, resets 'GetSoftDeletedEntities' property value to false after when every conditional method invoked. 
-        /// Otherwise 
+        /// Determines whether soft deleted entities in the database are fetched from the database.
+        /// <para><b>Default is false.</b></para>
         /// </summary>
-        private bool ResetSoftDeleteState
-        {
-            get => IBaseRepository<TEntity, TKey, TContext>.ResetSoftDeleteState;
-            init { IBaseRepository<TEntity, TKey, TContext>.ResetSoftDeleteState = value; }
-        }
+        /// <param name="state"></param>
+        public void SoftDeleteState(bool state) => _softDeleteState = state;
+
+        /// <summary>
+        /// Determines whether the default value of the variable that determines the status of deleted data in the database is assigned to the default value after database operation.
+        /// </summary>
+        /// <param name="state"></param>
+        public void ResetSoftDeleteState(bool state) => _resetSoftDeleteState = state;
+
+
 
         #endregion
 
@@ -69,7 +65,6 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
         public BaseRepository(TContext dbContext)
         {
             _dbContext = dbContext;
-            ResetSoftDeleteState = true;
         }
 
 
@@ -1122,7 +1117,7 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
             Expression<Func<TEntity, bool>> mainExpression;
 
             //Step in when GetSoftDeletedEntities is false
-            if (!GetSoftDeletedEntities)
+            if (!_softDeleteState)
             {
                 var softDeleteExpression = CreateIsDeletedFalseExpression();
                 mainExpression = softDeleteExpression.Append(conditionExpression, ExpressionType.AndAlso);
@@ -1130,7 +1125,7 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
             else
             {
                 mainExpression = conditionExpression;
-                if (ResetSoftDeleteState) GetSoftDeletedEntities = false;
+                if (_resetSoftDeleteState) _softDeleteState = false;
             }
             return mainExpression;
         }

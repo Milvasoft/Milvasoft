@@ -33,21 +33,6 @@ namespace Milvasoft.Helpers.Identity.Abstract
         #region Properties
 
         /// <summary>
-        /// Use white list when token based authentication for extra security. If its true performs operations on <see cref="SignedInUsers.SignedInUserTokens"/>.
-        /// </summary>
-        public static bool UseWhiteList { get; set; } = true;
-
-        /// <summary>
-        /// The authentication scheme for the provider the token is associated with.
-        /// </summary>
-        public string LoginProvider { get; set; }
-
-        /// <summary>
-        /// The name of token.
-        /// </summary>
-        public string TokenName { get; set; }
-
-        /// <summary>
         /// Delegate for user validation.
         /// </summary>
         /// <param name="loginDTO"></param>

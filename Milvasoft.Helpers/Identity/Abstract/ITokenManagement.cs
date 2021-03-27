@@ -21,6 +21,16 @@
         public string Audience { get; set; }
 
         /// <summary>
+        /// Gets or sets Authorization issuer.
+        /// </summary>
+        public string LoginProvider { get; set; }
+
+        /// <summary>
+        /// Gets or sets Authorization audience.
+        /// </summary>
+        public string TokenName { get; set; }
+
+        /// <summary>
         /// Gets or sets AccessExpiration of token.
         /// </summary>
         public int AccessExpiration { get; set; }
