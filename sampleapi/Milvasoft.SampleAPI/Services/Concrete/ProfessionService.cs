@@ -67,7 +67,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
             var professionsDTO = from profession in professions
                                  select new ProfessionDTO
                                  {
-                                     Id=profession.Id,
+                                     Id = profession.Id,
                                      Name = profession.Name,
                                      CreationDate = profession.CreationDate,
                                      LastModificationDate = profession.LastModificationDate

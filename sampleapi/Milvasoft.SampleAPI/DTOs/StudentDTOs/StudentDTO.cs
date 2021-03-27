@@ -7,7 +7,6 @@ using Milvasoft.SampleAPI.Utils.Attributes.ValidationAttributes;
 using Milvasoft.SampleAPI.Utils.Swagger;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace Milvasoft.SampleAPI.DTOs.StudentDTOs
 {

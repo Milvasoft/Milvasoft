@@ -1,16 +1,12 @@
-﻿using Milvasoft.SampleAPI.Entity;
-using Milvasoft.SampleAPI.Utils.Attributes.ValidationAttributes;
+﻿using Milvasoft.SampleAPI.Utils.Attributes.ValidationAttributes;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Milvasoft.SampleAPI.DTOs.QuestionDTOs
 {
     /// <summary>
     /// AddQuestionDTO for add question operations.
     /// </summary>
-    public class AddQuestionDTO 
+    public class AddQuestionDTO
     {
         /// <summary>
         /// Tittle of question.

@@ -6,7 +6,7 @@ namespace Milvasoft.SampleAPI.Services.Abstract
     /// <summary>
     /// Announcement service interface.
     /// </summary>
-    public interface IAnnouncementService : IBaseService<AnnouncementDTO, AnnouncementSpec,AddAnnouncementDTO,UpdateAnnouncementDTO>
+    public interface IAnnouncementService : IBaseService<AnnouncementDTO, AnnouncementSpec, AddAnnouncementDTO, UpdateAnnouncementDTO>
     {
     }
 }

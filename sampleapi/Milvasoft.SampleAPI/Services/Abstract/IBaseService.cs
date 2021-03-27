@@ -9,7 +9,7 @@ namespace Milvasoft.SampleAPI.Services.Abstract
     /// Base services for all concrete services.
     /// </summary>
     /// <typeparam name="TDTO"></typeparam>
-    public interface IBaseService<TDTO, TSpec , TAddDTO, TUpdateDTO>
+    public interface IBaseService<TDTO, TSpec, TAddDTO, TUpdateDTO>
     {
         /// <summary>
         /// Get all entities for student from database.

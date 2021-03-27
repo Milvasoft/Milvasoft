@@ -2,7 +2,6 @@
 using Milvasoft.SampleAPI.DTOs.AnnouncementDTOs;
 using Milvasoft.SampleAPI.DTOs.StudentDTOs;
 using Milvasoft.SampleAPI.Utils.Attributes.ValidationAttributes;
-using Milvasoft.SampleAPI.Utils.Swagger;
 using System;
 using System.Collections.Generic;
 

@@ -6,7 +6,7 @@ namespace Milvasoft.SampleAPI.Services.Abstract
     /// <summary>
     /// Mentor service interface.
     /// </summary>
-    public interface IMentorService : IBaseService<MentorDTO, MentorSpec,AddMentorDTO,UpdateMentorDTO>
+    public interface IMentorService : IBaseService<MentorDTO, MentorSpec, AddMentorDTO, UpdateMentorDTO>
     {
     }
 }

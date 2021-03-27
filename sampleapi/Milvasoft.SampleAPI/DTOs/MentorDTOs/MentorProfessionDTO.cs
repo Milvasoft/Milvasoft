@@ -1,6 +1,5 @@
 ﻿using Milvasoft.Helpers.DataAccess.Concrete.Entity;
 using Milvasoft.SampleAPI.DTOs.ProfessionDTOs;
-using Milvasoft.SampleAPI.Entity;
 using Milvasoft.SampleAPI.Utils.Attributes.ValidationAttributes;
 using Milvasoft.SampleAPI.Utils.Swagger;
 using System;

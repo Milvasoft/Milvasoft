@@ -6,7 +6,7 @@ namespace Milvasoft.SampleAPI.Services.Abstract
     /// <summary>
     /// Student service inteface.
     /// </summary>
-    public interface IStudentService : IBaseService<StudentDTO, StudentSpec,AddStudentDTO,UpdateStudentDTO>
+    public interface IStudentService : IBaseService<StudentDTO, StudentSpec, AddStudentDTO, UpdateStudentDTO>
     {
 
     }

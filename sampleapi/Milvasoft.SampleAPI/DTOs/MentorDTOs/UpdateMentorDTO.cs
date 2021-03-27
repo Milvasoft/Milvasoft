@@ -1,16 +1,12 @@
-﻿using Milvasoft.Helpers.DataAccess.Concrete.Entity;
-using Milvasoft.SampleAPI.Utils.Attributes.ValidationAttributes;
+﻿using Milvasoft.SampleAPI.Utils.Attributes.ValidationAttributes;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Milvasoft.SampleAPI.DTOs.MentorDTOs
 {
     /// <summary>
     /// Update mentor DTO for update operations.
     /// </summary>
-    public class UpdateMentorDTO 
+    public class UpdateMentorDTO
     {
         public Guid Id { get; set; }
 

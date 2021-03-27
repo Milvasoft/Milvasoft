@@ -1,16 +1,11 @@
-﻿using Milvasoft.SampleAPI.Entity;
-using Milvasoft.SampleAPI.Utils.Attributes.ValidationAttributes;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using Milvasoft.SampleAPI.Utils.Attributes.ValidationAttributes;
 
 namespace Milvasoft.SampleAPI.DTOs.ProfessionDTOs
 {
     /// <summary>
     /// AddProfessionDTO for add operations.
     /// </summary>
-    public class AddProfessionDTO 
+    public class AddProfessionDTO
     {
         /// <summary>
         /// Name of profession.

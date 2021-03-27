@@ -1,9 +1,7 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using Milvasoft.Helpers;
 using Milvasoft.SampleAPI.Entity;
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -35,7 +33,7 @@ namespace Milvasoft.SampleAPI.Data.Utils
 
         private static async Task InitializeProfession()
         {
-            
+
         }
     }
 }
