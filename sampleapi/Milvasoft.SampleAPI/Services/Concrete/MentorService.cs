@@ -240,9 +240,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
             {
                 Name = educationDTO.Name,
                 Surname = educationDTO.Surname,
-                CVFilePath = educationDTO.CVFilePath,
-                CreationDate = educationDTO.CreationDate,
-                LastModificationDate = educationDTO.LastModificationDate
+                CVFilePath = educationDTO.CVFilePath
             };
             await _mentorRepository.AddAsync(mentor).ConfigureAwait(false);
         }
@@ -260,9 +258,6 @@ namespace Milvasoft.SampleAPI.Services.Concrete
 
             updatedMentor.Surname = educationDTO.Surname;
 
-            updatedMentor.LastModificationDate = DateTime.Now;
-
-            updatedMentor.LastModifierUserId = educationDTO.Id;
 
             await _mentorRepository.UpdateAsync(updatedMentor).ConfigureAwait(false);
 

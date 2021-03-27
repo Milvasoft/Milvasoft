@@ -10,24 +10,26 @@ namespace Milvasoft.SampleAPI.DTOs.AnnouncementDTOs
     /// <summary>
     /// UpdateAnnouncementDTO for update operations.
     /// </summary>
-    public class UpdateAnnouncementDTO 
+    public class UpdateAnnouncementDTO
     {
-            /// <summary>
-            /// Tittle of announcement.
-            /// </summary>
-            [OValidateString(200)]
-            public string Title { get; set; }
+        public Guid Id { get; set; }
 
-            /// <summary>
-            /// Description of announcement.
-            /// </summary>
-            [OValidateString(2000)]
-            public string Description { get; set; }
+        /// <summary>
+        /// Tittle of announcement.
+        /// </summary>
+        [OValidateString(200)]
+        public string Title { get; set; }
 
-            /// <summary>
-            /// Is the announcement fixed?
-            /// </summary>
-            public bool IsFixed { get; set; }
+        /// <summary>
+        /// Description of announcement.
+        /// </summary>
+        [OValidateString(2000)]
+        public string Description { get; set; }
 
-        }
+        /// <summary>
+        /// Is the announcement fixed?
+        /// </summary>
+        public bool IsFixed { get; set; }
+
     }
+}

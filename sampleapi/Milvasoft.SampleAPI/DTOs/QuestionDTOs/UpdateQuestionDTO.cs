@@ -12,6 +12,8 @@ namespace Milvasoft.SampleAPI.DTOs.QuestionDTOs
     /// </summary>
     public class UpdateQuestionDTO
     {
+        public Guid Id { get; set; }
+
         /// <summary>
         /// Tittle of question.
         /// </summary>

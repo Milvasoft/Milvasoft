@@ -1522,39 +1522,39 @@
             </summary>
             <typeparam name="TDTO"></typeparam>
         </member>
-        <member name="M:Milvasoft.SampleAPI.Services.Abstract.IBaseService`4.GetEntitiesForStudent(`1)">
+        <member name="M:Milvasoft.SampleAPI.Services.Abstract.IBaseService`4.GetEntitiesForStudentAsync(`1)">
             <summary>
             Get all entities for student from database.
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.SampleAPI.Services.Abstract.IBaseService`4.GetEntitiesForAdmin(`1)">
+        <member name="M:Milvasoft.SampleAPI.Services.Abstract.IBaseService`4.GetEntitiesForAdminAsync(`1)">
             <summary>
             Get all entities for admin from database.
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.SampleAPI.Services.Abstract.IBaseService`4.GetEntitiesForMentor(`1)">
+        <member name="M:Milvasoft.SampleAPI.Services.Abstract.IBaseService`4.GetEntitiesForMentorAsync(`1)">
             <summary>
             Get all entities for mentor from database.
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.SampleAPI.Services.Abstract.IBaseService`4.GetEntityForStudent(System.Guid)">
+        <member name="M:Milvasoft.SampleAPI.Services.Abstract.IBaseService`4.GetEntityForStudentAsync(System.Guid)">
             <summary>
             Get one entity by id.
             </summary>
             <param name="id"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.SampleAPI.Services.Abstract.IBaseService`4.GetEntityForAdmin(System.Guid)">
+        <member name="M:Milvasoft.SampleAPI.Services.Abstract.IBaseService`4.GetEntityForAdminAsync(System.Guid)">
             <summary>
             Get one entity for admin by id.
             </summary>
             <param name="id"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.SampleAPI.Services.Abstract.IBaseService`4.GetEntityForMentor(System.Guid)">
+        <member name="M:Milvasoft.SampleAPI.Services.Abstract.IBaseService`4.GetEntityForMentorAsync(System.Guid)">
             <summary>
             Get one entity for mentor by id.
             </summary>
@@ -1582,7 +1582,7 @@
             <param name="id"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.SampleAPI.Services.Abstract.IBaseService`4.DeleteEntities(System.Collections.Generic.List{System.Guid})">
+        <member name="M:Milvasoft.SampleAPI.Services.Abstract.IBaseService`4.DeleteEntitiesAsync(System.Collections.Generic.List{System.Guid})">
             <summary>
             Delete entities by <paramref name="ids"/>
             </summary>
@@ -1764,39 +1764,39 @@
             </summary>
             <param name="announcementRepository"></param>
         </member>
-        <member name="M:Milvasoft.SampleAPI.Services.Concrete.AnnouncementService.GetEntitiesForStudent(Milvasoft.SampleAPI.Spec.AnnouncementSpec)">
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.AnnouncementService.GetEntitiesForStudentAsync(Milvasoft.SampleAPI.Spec.AnnouncementSpec)">
             <summary>
             Get all announcement for student.
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.SampleAPI.Services.Concrete.AnnouncementService.GetEntitiesForAdmin(Milvasoft.SampleAPI.Spec.AnnouncementSpec)">
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.AnnouncementService.GetEntitiesForAdminAsync(Milvasoft.SampleAPI.Spec.AnnouncementSpec)">
             <summary>
             Get all announcement for admin.
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.SampleAPI.Services.Concrete.AnnouncementService.GetEntitiesForMentor(Milvasoft.SampleAPI.Spec.AnnouncementSpec)">
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.AnnouncementService.GetEntitiesForMentorAsync(Milvasoft.SampleAPI.Spec.AnnouncementSpec)">
             <summary>
             Get all announcement for mentor.
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.SampleAPI.Services.Concrete.AnnouncementService.GetEntityForAdmin(System.Guid)">
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.AnnouncementService.GetEntityForAdminAsync(System.Guid)">
             <summary>
             Get announcement for admin by <paramref name="id"/>.
             </summary>
             <param name="id"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.SampleAPI.Services.Concrete.AnnouncementService.GetEntityForMentor(System.Guid)">
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.AnnouncementService.GetEntityForMentorAsync(System.Guid)">
             <summary>
             Get entity for mentor by <paramref name="id"/>.
             </summary>
             <param name="id"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.SampleAPI.Services.Concrete.AnnouncementService.GetEntityForStudent(System.Guid)">
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.AnnouncementService.GetEntityForStudentAsync(System.Guid)">
             <summary>
             Get announcement for student by <paramref name="id"/>.
             </summary>
@@ -1824,7 +1824,7 @@
             <param name="id"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.SampleAPI.Services.Concrete.AnnouncementService.DeleteEntities(System.Collections.Generic.List{System.Guid})">
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.AnnouncementService.DeleteEntitiesAsync(System.Collections.Generic.List{System.Guid})">
             <summary>
             Delete multiple announcement by <paramref name="ids"/>.
             </summary>
@@ -1842,39 +1842,39 @@
             </summary>
             <param name="assignmentRepository"></param>
         </member>
-        <member name="M:Milvasoft.SampleAPI.Services.Concrete.AssignmentService.GetEntitiesForStudent(Milvasoft.SampleAPI.Spec.AssignmentSpec)">
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.AssignmentService.GetEntitiesForStudentAsync(Milvasoft.SampleAPI.Spec.AssignmentSpec)">
             <summary>
             Get all assignment by <paramref name="spec"/>
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.SampleAPI.Services.Concrete.AssignmentService.GetEntitiesForAdmin(Milvasoft.SampleAPI.Spec.AssignmentSpec)">
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.AssignmentService.GetEntitiesForAdminAsync(Milvasoft.SampleAPI.Spec.AssignmentSpec)">
             <summary>
             Get assignments for admin by <paramref name="spec"/>
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.SampleAPI.Services.Concrete.AssignmentService.GetEntitiesForMentor(Milvasoft.SampleAPI.Spec.AssignmentSpec)">
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.AssignmentService.GetEntitiesForMentorAsync(Milvasoft.SampleAPI.Spec.AssignmentSpec)">
             <summary>
             Get assignments for mentor by <paramref name="spec"/>
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.SampleAPI.Services.Concrete.AssignmentService.GetEntityForStudent(System.Guid)">
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.AssignmentService.GetEntityForStudentAsync(System.Guid)">
             <summary>
             Get assignment for student by <paramref name="id"/>
             </summary>
             <param name="id"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.SampleAPI.Services.Concrete.AssignmentService.GetEntityForAdmin(System.Guid)">
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.AssignmentService.GetEntityForAdminAsync(System.Guid)">
             <summary>
             Get assignment for admin by <paramref name="id"/>
             </summary>
             <param name="id"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.SampleAPI.Services.Concrete.AssignmentService.GetEntityForMentor(System.Guid)">
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.AssignmentService.GetEntityForMentorAsync(System.Guid)">
             <summary>
             Get assignment for mentor by <paramref name="id"/>
             </summary>
@@ -1902,7 +1902,7 @@
             <param name="id"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.SampleAPI.Services.Concrete.AssignmentService.DeleteEntities(System.Collections.Generic.List{System.Guid})">
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.AssignmentService.DeleteEntitiesAsync(System.Collections.Generic.List{System.Guid})">
             <summary>
             Delete assignments by <paramref name="ids"/>
             </summary>
@@ -1920,39 +1920,39 @@
             </summary>
             <param name="mentorRepository"></param>
         </member>
-        <member name="M:Milvasoft.SampleAPI.Services.Concrete.MentorService.GetEntitiesForAdmin(Milvasoft.SampleAPI.Spec.MentorSpec)">
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.MentorService.GetEntitiesForAdminAsync(Milvasoft.SampleAPI.Spec.MentorSpec)">
             <summary>
             Get mentors for admin.
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.SampleAPI.Services.Concrete.MentorService.GetEntitiesForMentor(Milvasoft.SampleAPI.Spec.MentorSpec)">
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.MentorService.GetEntitiesForMentorAsync(Milvasoft.SampleAPI.Spec.MentorSpec)">
             <summary>
             Get mentors for mentor.
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.SampleAPI.Services.Concrete.MentorService.GetEntitiesForStudent(Milvasoft.SampleAPI.Spec.MentorSpec)">
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.MentorService.GetEntitiesForStudentAsync(Milvasoft.SampleAPI.Spec.MentorSpec)">
             <summary>
             Get mentors for student.
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.SampleAPI.Services.Concrete.MentorService.GetEntityForAdmin(System.Guid)">
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.MentorService.GetEntityForAdminAsync(System.Guid)">
             <summary>
             Get mentor for admin by <paramref name="id"/>.
             </summary>
             <param name="id"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.SampleAPI.Services.Concrete.MentorService.GetEntityForMentor(System.Guid)">
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.MentorService.GetEntityForMentorAsync(System.Guid)">
             <summary>
             Get mentor for mentor by <paramref name="id"/>
             </summary>
             <param name="id"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.SampleAPI.Services.Concrete.MentorService.GetEntityForStudent(System.Guid)">
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.MentorService.GetEntityForStudentAsync(System.Guid)">
             <summary>
             Get mentor for student by <paramref name="id"/>
             </summary>
@@ -1973,7 +1973,7 @@
             <param name="educationDTO"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.SampleAPI.Services.Concrete.MentorService.DeleteEntities(System.Collections.Generic.List{System.Guid})">
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.MentorService.DeleteEntitiesAsync(System.Collections.Generic.List{System.Guid})">
             <summary>
             Delete mentors.
             </summary>
@@ -1998,71 +1998,71 @@
             </summary>
             <param name="professionRepository"></param>
         </member>
-        <member name="M:Milvasoft.SampleAPI.Services.Concrete.ProfessionService.GetEntitiesForAdmin(Milvasoft.SampleAPI.Spec.ProfessionSpec)">
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.ProfessionService.GetEntitiesForAdminAsync(Milvasoft.SampleAPI.Spec.ProfessionSpec)">
             <summary>
             Get professions for admin.
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.SampleAPI.Services.Concrete.ProfessionService.GetEntitiesForMentor(Milvasoft.SampleAPI.Spec.ProfessionSpec)">
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.ProfessionService.GetEntitiesForMentorAsync(Milvasoft.SampleAPI.Spec.ProfessionSpec)">
             <summary>
             Get professions for mentor.
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.SampleAPI.Services.Concrete.ProfessionService.GetEntitiesForStudent(Milvasoft.SampleAPI.Spec.ProfessionSpec)">
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.ProfessionService.GetEntitiesForStudentAsync(Milvasoft.SampleAPI.Spec.ProfessionSpec)">
             <summary>
             Get professions for student.
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.SampleAPI.Services.Concrete.ProfessionService.GetEntityForAdmin(System.Guid)">
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.ProfessionService.GetEntityForAdminAsync(System.Guid)">
             <summary>
-            Get profession for admin by <paramref name="id"/>.
+            Get profession for admin by <paramref name="professionId"/>.
             </summary>
-            <param name="id"></param>
+            <param name="professionId"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.SampleAPI.Services.Concrete.ProfessionService.GetEntityForMentor(System.Guid)">
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.ProfessionService.GetEntityForMentorAsync(System.Guid)">
             <summary>
-            Get profession for mentor by <paramref name="id"/>
+            Get profession for mentor by <paramref name="professionId"/>
             </summary>
-            <param name="id"></param>
+            <param name="professionId"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.SampleAPI.Services.Concrete.ProfessionService.GetEntityForStudent(System.Guid)">
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.ProfessionService.GetEntityForStudentAsync(System.Guid)">
             <summary>
-            Get profession for student by <paramref name="id"/>
+            Get profession for student by <paramref name="professionId"/>
             </summary>
-            <param name="id"></param>
+            <param name="professionId"></param>
             <returns></returns>
         </member>
         <member name="M:Milvasoft.SampleAPI.Services.Concrete.ProfessionService.AddEntityAsync(Milvasoft.SampleAPI.DTOs.ProfessionDTOs.AddProfessionDTO)">
             <summary>
             Add profession to database.
             </summary>
-            <param name="educationDTO"></param>
+            <param name="addProfessionDTO"></param>
             <returns></returns>
         </member>
         <member name="M:Milvasoft.SampleAPI.Services.Concrete.ProfessionService.UpdateEntityAsync(Milvasoft.SampleAPI.DTOs.ProfessionDTOs.UpdateProfessionDTO)">
             <summary>
-            Update profession by <paramref name="educationDTO"/>.
+            Update profession by <paramref name="addProfessionDTO"/>.
             </summary>
-            <param name="educationDTO"></param>
+            <param name="addProfessionDTO"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.SampleAPI.Services.Concrete.ProfessionService.DeleteEntities(System.Collections.Generic.List{System.Guid})">
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.ProfessionService.DeleteEntitiesAsync(System.Collections.Generic.List{System.Guid})">
             <summary>
-            Delete professions by <paramref name="ids"/>.
+            Delete professions by <paramref name="professionIds"/>.
             </summary>
-            <param name="ids"></param>
+            <param name="professionIds"></param>
             <returns></returns>
         </member>
         <member name="M:Milvasoft.SampleAPI.Services.Concrete.ProfessionService.DeleteEntityAsync(System.Guid)">
             <summary>
-            Delete profession by <paramref name="id"/>.
+            Delete profession by <paramref name="professionId"/>.
             </summary>
-            <param name="id"></param>
+            <param name="professionId"></param>
             <returns></returns>
         </member>
         <member name="T:Milvasoft.SampleAPI.Services.Concrete.QuestionService">
@@ -2076,39 +2076,39 @@
             </summary>
             <param name="questionService"></param>
         </member>
-        <member name="M:Milvasoft.SampleAPI.Services.Concrete.QuestionService.GetEntitiesForAdmin(Milvasoft.SampleAPI.Spec.QuestionSpec)">
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.QuestionService.GetEntitiesForAdminAsync(Milvasoft.SampleAPI.Spec.QuestionSpec)">
             <summary>
             Get all questions for admin.
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.SampleAPI.Services.Concrete.QuestionService.GetEntitiesForMentor(Milvasoft.SampleAPI.Spec.QuestionSpec)">
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.QuestionService.GetEntitiesForMentorAsync(Milvasoft.SampleAPI.Spec.QuestionSpec)">
             <summary>
             Get all questions for admin.
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.SampleAPI.Services.Concrete.QuestionService.GetEntitiesForStudent(Milvasoft.SampleAPI.Spec.QuestionSpec)">
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.QuestionService.GetEntitiesForStudentAsync(Milvasoft.SampleAPI.Spec.QuestionSpec)">
             <summary>
             Get all questions for student.
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.SampleAPI.Services.Concrete.QuestionService.GetEntityForAdmin(System.Guid)">
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.QuestionService.GetEntityForAdminAsync(System.Guid)">
             <summary>
             Get student for admin.
             </summary>
             <param name="id"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.SampleAPI.Services.Concrete.QuestionService.GetEntityForMentor(System.Guid)">
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.QuestionService.GetEntityForMentorAsync(System.Guid)">
             <summary>
             Get student for mentor.
             </summary>
             <param name="id"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.SampleAPI.Services.Concrete.QuestionService.GetEntityForStudent(System.Guid)">
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.QuestionService.GetEntityForStudentAsync(System.Guid)">
             <summary>
             Get student for student.
             </summary>
@@ -2129,7 +2129,7 @@
             <param name="educationDTO"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.SampleAPI.Services.Concrete.QuestionService.DeleteEntities(System.Collections.Generic.List{System.Guid})">
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.QuestionService.DeleteEntitiesAsync(System.Collections.Generic.List{System.Guid})">
             <summary>
             Delete students.
             </summary>
@@ -2160,39 +2160,39 @@
             </summary>
             <param name="studentRepository"></param>
         </member>
-        <member name="M:Milvasoft.SampleAPI.Services.Concrete.StudentService.GetEntitiesForAdmin(Milvasoft.SampleAPI.Spec.StudentSpec)">
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.StudentService.GetEntitiesForAdminAsync(Milvasoft.SampleAPI.Spec.StudentSpec)">
             <summary>
             Get students for admin.
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.SampleAPI.Services.Concrete.StudentService.GetEntitiesForMentor(Milvasoft.SampleAPI.Spec.StudentSpec)">
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.StudentService.GetEntitiesForMentorAsync(Milvasoft.SampleAPI.Spec.StudentSpec)">
             <summary>
             Get students for mentor.
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.SampleAPI.Services.Concrete.StudentService.GetEntitiesForStudent(Milvasoft.SampleAPI.Spec.StudentSpec)">
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.StudentService.GetEntitiesForStudentAsync(Milvasoft.SampleAPI.Spec.StudentSpec)">
             <summary>
             Get students for student.
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.SampleAPI.Services.Concrete.StudentService.GetEntityForStudent(System.Guid)">
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.StudentService.GetEntityForStudentAsync(System.Guid)">
             <summary>
             Get student information by <paramref name="id"/> 
             </summary>
             <param name="id"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.SampleAPI.Services.Concrete.StudentService.GetEntityForAdmin(System.Guid)">
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.StudentService.GetEntityForAdminAsync(System.Guid)">
             <summary>
             Get student information for admin by <paramref name="id"/>
             </summary>
             <param name="id"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.SampleAPI.Services.Concrete.StudentService.GetEntityForMentor(System.Guid)">
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.StudentService.GetEntityForMentorAsync(System.Guid)">
             <summary>
             Get student information for mentor by <paramref name="id"/>.
             </summary>
@@ -2220,7 +2220,7 @@
             <param name="id"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.SampleAPI.Services.Concrete.StudentService.DeleteEntities(System.Collections.Generic.List{System.Guid})">
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.StudentService.DeleteEntitiesAsync(System.Collections.Generic.List{System.Guid})">
             <summary>
             Delete students by <paramref name="ids"/>.
             </summary>
@@ -2238,39 +2238,39 @@
             </summary>
             <param name="usefulLinkRepository"></param>
         </member>
-        <member name="M:Milvasoft.SampleAPI.Services.Concrete.UsefulLinkService.GetEntitiesForStudent(Milvasoft.SampleAPI.Spec.UsefulLinkSpec)">
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.UsefulLinkService.GetEntitiesForStudentAsync(Milvasoft.SampleAPI.Spec.UsefulLinkSpec)">
             <summary>
             Get links for student.
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.SampleAPI.Services.Concrete.UsefulLinkService.GetEntitiesForAdmin(Milvasoft.SampleAPI.Spec.UsefulLinkSpec)">
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.UsefulLinkService.GetEntitiesForAdminAsync(Milvasoft.SampleAPI.Spec.UsefulLinkSpec)">
             <summary>
             Get links for admin.
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.SampleAPI.Services.Concrete.UsefulLinkService.GetEntitiesForMentor(Milvasoft.SampleAPI.Spec.UsefulLinkSpec)">
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.UsefulLinkService.GetEntitiesForMentorAsync(Milvasoft.SampleAPI.Spec.UsefulLinkSpec)">
             <summary>
             Get link for mentor.
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.SampleAPI.Services.Concrete.UsefulLinkService.GetEntityForStudent(System.Guid)">
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.UsefulLinkService.GetEntityForStudentAsync(System.Guid)">
             <summary>
             Get link by <paramref name="id"/>   
             </summary>
             <param name="id"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.SampleAPI.Services.Concrete.UsefulLinkService.GetEntityForAdmin(System.Guid)">
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.UsefulLinkService.GetEntityForAdminAsync(System.Guid)">
             <summary>
             Get useful link for admin by <paramref name="id"/>
             </summary>
             <param name="id"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.SampleAPI.Services.Concrete.UsefulLinkService.GetEntityForMentor(System.Guid)">
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.UsefulLinkService.GetEntityForMentorAsync(System.Guid)">
             <summary>
             Get useful link for mentor by <paramref name="id"/>
             </summary>
@@ -2298,7 +2298,7 @@
             <param name="id"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.SampleAPI.Services.Concrete.UsefulLinkService.DeleteEntities(System.Collections.Generic.List{System.Guid})">
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.UsefulLinkService.DeleteEntitiesAsync(System.Collections.Generic.List{System.Guid})">
             <summary>
             Delete links by <paramref name="ids"/>
             </summary>

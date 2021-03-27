@@ -198,7 +198,6 @@ namespace Milvasoft.SampleAPI.Services.Concrete
 
             var assignment = new Assignment
             {
-                Id = educationDTO.Id,
                 Title = educationDTO.Title,
                 Description = educationDTO.Description,
                 RemarksToStudent = educationDTO.RemarksToStudent,

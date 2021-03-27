@@ -13,6 +13,7 @@ namespace Milvasoft.SampleAPI.DTOs.StudentDTOs
     /// </summary>
     public class UpdateStudentDTO
     {
+        public Guid Id { get; set; }
         /// <summary>
         /// Student's name.
         /// </summary>

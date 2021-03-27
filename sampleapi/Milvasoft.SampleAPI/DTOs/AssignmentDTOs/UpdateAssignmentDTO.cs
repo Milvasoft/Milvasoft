@@ -12,6 +12,7 @@ namespace Milvasoft.SampleAPI.DTOs.AssignmentDTOs
     /// </summary>
     public class UpdateAssignmentDTO
     {
+        public Guid Id { get; set; }
         /// <summary>
         /// Tittle of assignment.
         /// </summary>
