@@ -171,6 +171,71 @@
             </remarks>
             <returns></returns>
         </member>
+        <member name="T:Milvasoft.SampleAPI.Controllers.MentorController">
+            <summary>
+            Provided Mentor operations.
+            </summary>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Controllers.MentorController.#ctor(Milvasoft.SampleAPI.Services.Abstract.IMentorService)">
+            <summary>
+            Mentor constructor method for injection.
+            </summary>
+            <param name="mentorService"></param>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Controllers.MentorController.GetStudentForAdmin(Milvasoft.API.DTOs.PaginationParamsWithSpec{Milvasoft.SampleAPI.Spec.MentorSpec})">
+            <summary>
+            The student list returns according to the <paramref name="paginationParams"/> sent.
+            </summary>
+            <param name="paginationParams"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Controllers.MentorController.AddStudent(Milvasoft.SampleAPI.DTOs.MentorDTOs.AddMentorDTO)">
+            <summary>
+            Add student to database .
+            </summary>
+            <param name="mentorDTO"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Milvasoft.SampleAPI.Controllers.ProfessionController">
+            <summary>
+            Provided profession operations.
+            </summary>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Controllers.ProfessionController.#ctor(Milvasoft.SampleAPI.Services.Abstract.IProfessionService)">
+            <summary>
+            ProfessionController concrete for injection.
+            </summary>
+            <param name="professionService"></param>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Controllers.ProfessionController.AddProfession(Milvasoft.SampleAPI.DTOs.ProfessionDTOs.AddProfessionDTO)">
+            <summary>
+            Add profession to database.
+            </summary>
+            <param name="profession"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Controllers.ProfessionController.GetProfession(Milvasoft.API.DTOs.PaginationParamsWithSpec{Milvasoft.SampleAPI.Spec.ProfessionSpec})">
+            <summary>
+            Get all profession.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Milvasoft.SampleAPI.Controllers.QuestionController">
+            <summary>
+            Provided Question operations.
+            </summary>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Controllers.QuestionController.#ctor(Milvasoft.SampleAPI.Services.Abstract.IQuestionService)">
+            <summary>
+            Question controller.
+            </summary>
+            <param name="questionService"></param>
+        </member>
+        <member name="T:Milvasoft.SampleAPI.Controllers.StudentController">
+            <summary>
+            Provided Student operations.
+            </summary>
+        </member>
         <member name="M:Milvasoft.SampleAPI.Controllers.StudentController.#ctor(Milvasoft.SampleAPI.Services.Abstract.IStudentService)">
             <summary>
             Student controller constructor method.
@@ -183,7 +248,7 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.SampleAPI.Controllers.StudentController.AddStudent(Milvasoft.SampleAPI.DTOs.StudentDTOs.StudentDTO)">
+        <member name="M:Milvasoft.SampleAPI.Controllers.StudentController.AddStudent(Milvasoft.SampleAPI.DTOs.StudentDTOs.AddStudentDTO)">
             <summary>
             Add student to database.
             </summary>
@@ -265,6 +330,31 @@
             Determines Global API error or Local API error.
             </summary>
         </member>
+        <member name="T:Milvasoft.SampleAPI.DTOs.AnnouncementDTOs.AddAnnouncementDTO">
+            <summary>
+            AddAnnouncementDTO for add operations.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.AnnouncementDTOs.AddAnnouncementDTO.Title">
+            <summary>
+            Tittle of announcement.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.AnnouncementDTOs.AddAnnouncementDTO.Description">
+            <summary>
+            Description of announcement.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.AnnouncementDTOs.AddAnnouncementDTO.IsFixed">
+            <summary>
+            Is the announcement fixed?
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.AnnouncementDTOs.AddAnnouncementDTO.MentorId">
+            <summary>
+            ID of the announcement mentor.
+            </summary>
+        </member>
         <member name="T:Milvasoft.SampleAPI.DTOs.AnnouncementDTOs.AnnouncementDTO">
             <summary>
             Announcements for all students.
@@ -293,6 +383,26 @@
         <member name="P:Milvasoft.SampleAPI.DTOs.AnnouncementDTOs.AnnouncementDTO.PublisherMentor">
             <summary>
             Mentor of announcement.
+            </summary>
+        </member>
+        <member name="T:Milvasoft.SampleAPI.DTOs.AnnouncementDTOs.UpdateAnnouncementDTO">
+            <summary>
+            UpdateAnnouncementDTO for update operations.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.AnnouncementDTOs.UpdateAnnouncementDTO.Title">
+            <summary>
+            Tittle of announcement.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.AnnouncementDTOs.UpdateAnnouncementDTO.Description">
+            <summary>
+            Description of announcement.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.AnnouncementDTOs.UpdateAnnouncementDTO.IsFixed">
+            <summary>
+            Is the announcement fixed?
             </summary>
         </member>
         <member name="T:Milvasoft.SampleAPI.DTOs.AppRoleDTO">
@@ -425,6 +535,51 @@
             Is the user student?
             </summary>
         </member>
+        <member name="T:Milvasoft.SampleAPI.DTOs.AssignmentDTOs.AddAssignmentDTO">
+            <summary>
+            AddAssignmentDTO for add operations.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.AssignmentDTOs.AddAssignmentDTO.Title">
+            <summary>
+            Tittle of assignment.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.AssignmentDTOs.AddAssignmentDTO.Description">
+            <summary>
+            Description of assignment.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.AssignmentDTOs.AddAssignmentDTO.RemarksToStudent">
+            <summary>
+            Remarks for student.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.AssignmentDTOs.AddAssignmentDTO.RemarksToMentor">
+            <summary>
+            Remarks for mentor.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.AssignmentDTOs.AddAssignmentDTO.Level">
+            <summary>
+            Difficulty level of the assignment.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.AssignmentDTOs.AddAssignmentDTO.Rules">
+            <summary>
+            Rules of assignment.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.AssignmentDTOs.AddAssignmentDTO.MaxDeliveryDay">
+            <summary> 
+            The maximum time that the assignment will be delivered.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.AssignmentDTOs.AddAssignmentDTO.ProfessionId">
+            <summary>
+            The profession Id of assignment.
+            </summary>
+        </member>
         <member name="T:Milvasoft.SampleAPI.DTOs.AssignmentDTOs.AssignmentDTO">
             <summary>
             Assignment for student.
@@ -473,6 +628,71 @@
         <member name="P:Milvasoft.SampleAPI.DTOs.AssignmentDTOs.AssignmentDTO.Profession">
             <summary>
             The profession of assignment.
+            </summary>
+        </member>
+        <member name="T:Milvasoft.SampleAPI.DTOs.AssignmentDTOs.UpdateAssignmentDTO">
+            <summary>
+            AddAssignmentDTO for add operations.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.AssignmentDTOs.UpdateAssignmentDTO.Title">
+            <summary>
+            Tittle of assignment.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.AssignmentDTOs.UpdateAssignmentDTO.Description">
+            <summary>
+            Description of assignment.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.AssignmentDTOs.UpdateAssignmentDTO.RemarksToStudent">
+            <summary>
+            Remarks for student.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.AssignmentDTOs.UpdateAssignmentDTO.RemarksToMentor">
+            <summary>
+            Remarks for mentor.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.AssignmentDTOs.UpdateAssignmentDTO.Level">
+            <summary>
+            Difficulty level of the assignment.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.AssignmentDTOs.UpdateAssignmentDTO.Rules">
+            <summary>
+            Rules of assignment.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.AssignmentDTOs.UpdateAssignmentDTO.MaxDeliveryDay">
+            <summary> 
+            The maximum time that the assignment will be delivered.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.AssignmentDTOs.UpdateAssignmentDTO.ProfessionId">
+            <summary>
+            The profession Id of assignment.
+            </summary>
+        </member>
+        <member name="T:Milvasoft.SampleAPI.DTOs.MentorDTOs.AddMentorDTO">
+            <summary>
+            Add mentor DTO for add operations.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.MentorDTOs.AddMentorDTO.Name">
+            <summary>
+            Mentor name.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.MentorDTOs.AddMentorDTO.Surname">
+            <summary>
+            Mentor surname.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.MentorDTOs.AddMentorDTO.CVFilePath">
+            <summary>
+            CV path of mentor.
             </summary>
         </member>
         <member name="T:Milvasoft.SampleAPI.DTOs.MentorDTOs.MentorDTO">
@@ -545,6 +765,36 @@
             Profession.
             </summary>
         </member>
+        <member name="T:Milvasoft.SampleAPI.DTOs.MentorDTOs.UpdateMentorDTO">
+            <summary>
+            Update mentor DTO for update operations.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.MentorDTOs.UpdateMentorDTO.Name">
+            <summary>
+            Mentor name.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.MentorDTOs.UpdateMentorDTO.Surname">
+            <summary>
+            Mentor surname.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.MentorDTOs.UpdateMentorDTO.CVFilePath">
+            <summary>
+            CV path of mentor.
+            </summary>
+        </member>
+        <member name="T:Milvasoft.SampleAPI.DTOs.ProfessionDTOs.AddProfessionDTO">
+            <summary>
+            AddProfessionDTO for add operations.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.ProfessionDTOs.AddProfessionDTO.Name">
+            <summary>
+            Name of profession.
+            </summary>
+        </member>
         <member name="T:Milvasoft.SampleAPI.DTOs.ProfessionDTOs.ProfessionDTO">
             <summary>
             Profession entity.
@@ -578,6 +828,56 @@
         <member name="P:Milvasoft.SampleAPI.DTOs.ProfessionDTOs.ProfessionDTO.UsefulLinks">
             <summary>
             Useful links of profession.
+            </summary>
+        </member>
+        <member name="T:Milvasoft.SampleAPI.DTOs.ProfessionDTOs.UpdateProfessionDTO">
+            <summary>
+            AddProfessionDTO for add operations.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.ProfessionDTOs.UpdateProfessionDTO.Name">
+            <summary>
+            Name of profession.
+            </summary>
+        </member>
+        <member name="T:Milvasoft.SampleAPI.DTOs.QuestionDTOs.AddQuestionDTO">
+            <summary>
+            AddQuestionDTO for add question operations.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.QuestionDTOs.AddQuestionDTO.Title">
+            <summary>
+            Tittle of question.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.QuestionDTOs.AddQuestionDTO.QuestionContent">
+            <summary>
+            Content of question.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.QuestionDTOs.AddQuestionDTO.MentorReply">
+            <summary>
+            The mentor's answer to the question.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.QuestionDTOs.AddQuestionDTO.IsUseful">
+            <summary>
+            Is the question useful?
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.QuestionDTOs.AddQuestionDTO.WillShown">
+            <summary>
+            Will the question be shown as a useful question?
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.QuestionDTOs.AddQuestionDTO.ProfessionId">
+            <summary>
+            Profession ıd of the question.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.QuestionDTOs.AddQuestionDTO.StudentId">
+            <summary>
+            Id of the student who asked the question.
             </summary>
         </member>
         <member name="T:Milvasoft.SampleAPI.DTOs.QuestionDTOs.QuestionDTO">
@@ -638,6 +938,111 @@
         <member name="P:Milvasoft.SampleAPI.DTOs.QuestionDTOs.QuestionDTO.Mentor">
             <summary>
             The mentor answering the question
+            </summary>
+        </member>
+        <member name="T:Milvasoft.SampleAPI.DTOs.QuestionDTOs.UpdateQuestionDTO">
+            <summary>
+            UpdateQuestionDTO for update question operations.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.QuestionDTOs.UpdateQuestionDTO.Title">
+            <summary>
+            Tittle of question.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.QuestionDTOs.UpdateQuestionDTO.QuestionContent">
+            <summary>
+            Content of question.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.QuestionDTOs.UpdateQuestionDTO.MentorReply">
+            <summary>
+            The mentor's answer to the question.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.QuestionDTOs.UpdateQuestionDTO.IsUseful">
+            <summary>
+            Is the question useful?
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.QuestionDTOs.UpdateQuestionDTO.WillShown">
+            <summary>
+            Will the question be shown as a useful question?
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.QuestionDTOs.UpdateQuestionDTO.ProfessionId">
+            <summary>
+            Profession ıd of the question.
+            </summary>
+        </member>
+        <member name="T:Milvasoft.SampleAPI.DTOs.StudentDTOs.AddStudentDTO">
+            <summary>
+            AddStudentDTO for add student operations.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.StudentDTOs.AddStudentDTO.Name">
+            <summary>
+            Student's name.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.StudentDTOs.AddStudentDTO.Surname">
+            <summary>
+            Student's surname.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.StudentDTOs.AddStudentDTO.University">
+            <summary>
+            Student's university.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.StudentDTOs.AddStudentDTO.Age">
+            <summary>
+            Age of student.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.StudentDTOs.AddStudentDTO.Dream">
+            <summary>
+            Dream of student.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.StudentDTOs.AddStudentDTO.HomeAddress">
+            <summary>
+            Home adress of student.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.StudentDTOs.AddStudentDTO.MentorThoughts">
+            <summary>
+            The mentor's thoughts about the student.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.StudentDTOs.AddStudentDTO.IsConfidentialityAgreementSigned">
+            <summary>
+            Did the student sign the contract?
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.StudentDTOs.AddStudentDTO.GraduationStatus">
+            <summary>
+            Education status of student.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.StudentDTOs.AddStudentDTO.GraduationScore">
+            <summary>
+            Gradution score of student.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.StudentDTOs.AddStudentDTO.MentorGraduationThoughts">
+            <summary>
+            The mentor's graduation thoughts of student.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.StudentDTOs.AddStudentDTO.ProfessionId">
+            <summary>
+            Profession id of student.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.StudentDTOs.AddStudentDTO.MentorId">
+            <summary>
+            Mentor ıd of student.
             </summary>
         </member>
         <member name="T:Milvasoft.SampleAPI.DTOs.StudentDTOs.StudentAssignmentDTO">
@@ -800,14 +1205,129 @@
             Old assignments of student.
             </summary>
         </member>
-        <member name="P:Milvasoft.SampleAPI.DTOs.StudentDTOs.StudentDTO.SuccesAssignmentCount">
+        <member name="T:Milvasoft.SampleAPI.DTOs.StudentDTOs.UpdateStudentDTO">
             <summary>
-            Number of previous successful assignments.
+            UpdateStudentDTO for update student operations.
             </summary>
         </member>
-        <member name="P:Milvasoft.SampleAPI.DTOs.StudentDTOs.StudentDTO.FailedAssignmentCount">
+        <member name="P:Milvasoft.SampleAPI.DTOs.StudentDTOs.UpdateStudentDTO.Name">
             <summary>
-            Number of previous failed assignments.
+            Student's name.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.StudentDTOs.UpdateStudentDTO.Surname">
+            <summary>
+            Student's surname.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.StudentDTOs.UpdateStudentDTO.University">
+            <summary>
+            Student's university.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.StudentDTOs.UpdateStudentDTO.Age">
+            <summary>
+            Age of student.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.StudentDTOs.UpdateStudentDTO.Dream">
+            <summary>
+            Dream of student.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.StudentDTOs.UpdateStudentDTO.HomeAddress">
+            <summary>
+            Home adress of student.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.StudentDTOs.UpdateStudentDTO.MentorThoughts">
+            <summary>
+            The mentor's thoughts about the student.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.StudentDTOs.UpdateStudentDTO.IsConfidentialityAgreementSigned">
+            <summary>
+            Did the student sign the contract?
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.StudentDTOs.UpdateStudentDTO.GraduationStatus">
+            <summary>
+            Education status of student.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.StudentDTOs.UpdateStudentDTO.CurrentAssigmentDeliveryDate">
+            <summary>
+            Due date of current assignment.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.StudentDTOs.UpdateStudentDTO.GraduationScore">
+            <summary>
+            Gradution score of student.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.StudentDTOs.UpdateStudentDTO.MentorGraduationThoughts">
+            <summary>
+            The mentor's graduation thoughts of student.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.StudentDTOs.UpdateStudentDTO.ProfessionId">
+            <summary>
+            Profession id of student.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.StudentDTOs.UpdateStudentDTO.MentorId">
+            <summary>
+            Mentor ıd of student.
+            </summary>
+        </member>
+        <member name="T:Milvasoft.SampleAPI.DTOs.UsefulLinkDTOs.AddUsefulLinkDTO">
+            <summary>
+            UpdateUsefulLinkDTO for add useful link operations.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.UsefulLinkDTOs.AddUsefulLinkDTO.Title">
+            <summary>
+            Tittle of link.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.UsefulLinkDTOs.AddUsefulLinkDTO.Description">
+            <summary>
+            Description of link.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.UsefulLinkDTOs.AddUsefulLinkDTO.Url">
+            <summary>
+            URL.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.UsefulLinkDTOs.AddUsefulLinkDTO.ProfessionId">
+            <summary>
+            Profession id of link.
+            </summary>
+        </member>
+        <member name="T:Milvasoft.SampleAPI.DTOs.UsefulLinkDTOs.UpdateUsefulLinkDTO">
+            <summary>
+            UpdateUsefulLinkDTO for update useful link operations.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.UsefulLinkDTOs.UpdateUsefulLinkDTO.Title">
+            <summary>
+            Tittle of link.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.UsefulLinkDTOs.UpdateUsefulLinkDTO.Description">
+            <summary>
+            Description of link.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.UsefulLinkDTOs.UpdateUsefulLinkDTO.Url">
+            <summary>
+            URL.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.UsefulLinkDTOs.UpdateUsefulLinkDTO.ProfessionId">
+            <summary>
+            Profession id of link.
             </summary>
         </member>
         <member name="T:Milvasoft.SampleAPI.DTOs.UsefulLinkDTO">
@@ -986,78 +1506,119 @@
             Returns Claims in token for token decode
             </summary>
         </member>
-        <member name="T:Milvasoft.SampleAPI.Services.Abstract.IBaseService`2">
+        <member name="T:Milvasoft.SampleAPI.Services.Abstract.IAnnouncementService">
+            <summary>
+            Announcement service interface.
+            </summary>
+        </member>
+        <member name="T:Milvasoft.SampleAPI.Services.Abstract.IAssignmentService">
+            <summary>
+            Assignment service interface.
+            </summary>
+        </member>
+        <member name="T:Milvasoft.SampleAPI.Services.Abstract.IBaseService`4">
             <summary>
             Base services for all concrete services.
             </summary>
             <typeparam name="TDTO"></typeparam>
         </member>
-        <member name="M:Milvasoft.SampleAPI.Services.Abstract.IBaseService`2.GetEntitiesForStudent(`1)">
+        <member name="M:Milvasoft.SampleAPI.Services.Abstract.IBaseService`4.GetEntitiesForStudent(`1)">
             <summary>
             Get all entities for student from database.
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.SampleAPI.Services.Abstract.IBaseService`2.GetEntitiesForAdmin(`1)">
+        <member name="M:Milvasoft.SampleAPI.Services.Abstract.IBaseService`4.GetEntitiesForAdmin(`1)">
             <summary>
             Get all entities for admin from database.
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.SampleAPI.Services.Abstract.IBaseService`2.GetEntitiesForMentor(`1)">
+        <member name="M:Milvasoft.SampleAPI.Services.Abstract.IBaseService`4.GetEntitiesForMentor(`1)">
             <summary>
             Get all entities for mentor from database.
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.SampleAPI.Services.Abstract.IBaseService`2.GetEntityForStudent(System.Guid)">
+        <member name="M:Milvasoft.SampleAPI.Services.Abstract.IBaseService`4.GetEntityForStudent(System.Guid)">
             <summary>
             Get one entity by id.
             </summary>
             <param name="id"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.SampleAPI.Services.Abstract.IBaseService`2.GetEntityForAdmin(System.Guid)">
+        <member name="M:Milvasoft.SampleAPI.Services.Abstract.IBaseService`4.GetEntityForAdmin(System.Guid)">
             <summary>
             Get one entity for admin by id.
             </summary>
             <param name="id"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.SampleAPI.Services.Abstract.IBaseService`2.GetEntityForMentor(System.Guid)">
+        <member name="M:Milvasoft.SampleAPI.Services.Abstract.IBaseService`4.GetEntityForMentor(System.Guid)">
             <summary>
             Get one entity for mentor by id.
             </summary>
             <param name="id"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.SampleAPI.Services.Abstract.IBaseService`2.AddEntityAsync(`0)">
+        <member name="M:Milvasoft.SampleAPI.Services.Abstract.IBaseService`4.AddEntityAsync(`2)">
             <summary>
             Adds single entity to database.
             </summary>
             <param name="educationDTO"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.SampleAPI.Services.Abstract.IBaseService`2.UpdateEntityAsync(`0)">
+        <member name="M:Milvasoft.SampleAPI.Services.Abstract.IBaseService`4.UpdateEntityAsync(`3)">
             <summary>
             Updates single entity in database.
             </summary>
             <param name="educationDTO"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.SampleAPI.Services.Abstract.IBaseService`2.DeleteEntityAsync(System.Guid)">
+        <member name="M:Milvasoft.SampleAPI.Services.Abstract.IBaseService`4.DeleteEntityAsync(System.Guid)">
             <summary>
             Deletes single entity from database.
             </summary>
             <param name="id"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.SampleAPI.Services.Abstract.IBaseService`2.DeleteEntities(System.Collections.Generic.List{System.Guid})">
+        <member name="M:Milvasoft.SampleAPI.Services.Abstract.IBaseService`4.DeleteEntities(System.Collections.Generic.List{System.Guid})">
             <summary>
             Delete entities by <paramref name="ids"/>
             </summary>
             <param name="ids"></param>
             <returns></returns>
+        </member>
+        <member name="T:Milvasoft.SampleAPI.Services.Abstract.IMentorService">
+            <summary>
+            Mentor service interface.
+            </summary>
+        </member>
+        <member name="T:Milvasoft.SampleAPI.Services.Abstract.IProfessionService">
+            <summary>
+            Profession service interface.
+            </summary>
+        </member>
+        <member name="T:Milvasoft.SampleAPI.Services.Abstract.IQuestionService">
+            <summary>
+            Question service inteface.
+            </summary>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Services.Abstract.IQuestionService.GetWillShowQuestions">
+            <summary>
+             Returns questions to display
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Milvasoft.SampleAPI.Services.Abstract.IStudentService">
+            <summary>
+            Student service inteface.
+            </summary>
+        </member>
+        <member name="T:Milvasoft.SampleAPI.Services.Abstract.IUsefulLinkService">
+            <summary>
+            UsefulLink service inteface.
+            </summary>
         </member>
         <member name="T:Milvasoft.SampleAPI.Services.Concrete.AccountService">
             <summary>
@@ -1242,14 +1803,14 @@
             <param name="id"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.SampleAPI.Services.Concrete.AnnouncementService.AddEntityAsync(Milvasoft.SampleAPI.DTOs.AnnouncementDTOs.AnnouncementDTO)">
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.AnnouncementService.AddEntityAsync(Milvasoft.SampleAPI.DTOs.AnnouncementDTOs.AddAnnouncementDTO)">
             <summary>
             Add new announcement.
             </summary>
             <param name="educationDTO"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.SampleAPI.Services.Concrete.AnnouncementService.UpdateEntityAsync(Milvasoft.SampleAPI.DTOs.AnnouncementDTOs.AnnouncementDTO)">
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.AnnouncementService.UpdateEntityAsync(Milvasoft.SampleAPI.DTOs.AnnouncementDTOs.UpdateAnnouncementDTO)">
             <summary>
             Update announcement.
             </summary>
@@ -1320,14 +1881,14 @@
             <param name="id"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.SampleAPI.Services.Concrete.AssignmentService.AddEntityAsync(Milvasoft.SampleAPI.DTOs.AssignmentDTOs.AssignmentDTO)">
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.AssignmentService.AddEntityAsync(Milvasoft.SampleAPI.DTOs.AssignmentDTOs.AddAssignmentDTO)">
             <summary>
             Add assignment.
             </summary>
             <param name="educationDTO"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.SampleAPI.Services.Concrete.AssignmentService.UpdateEntityAsync(Milvasoft.SampleAPI.DTOs.AssignmentDTOs.AssignmentDTO)">
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.AssignmentService.UpdateEntityAsync(Milvasoft.SampleAPI.DTOs.AssignmentDTOs.UpdateAssignmentDTO)">
             <summary>
             Update assignment.
             </summary>
@@ -1398,14 +1959,14 @@
             <param name="id"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.SampleAPI.Services.Concrete.MentorService.AddEntityAsync(Milvasoft.SampleAPI.DTOs.MentorDTOs.MentorDTO)">
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.MentorService.AddEntityAsync(Milvasoft.SampleAPI.DTOs.MentorDTOs.AddMentorDTO)">
             <summary>
             Add mentor.
             </summary>
             <param name="educationDTO"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.SampleAPI.Services.Concrete.MentorService.UpdateEntityAsync(Milvasoft.SampleAPI.DTOs.MentorDTOs.MentorDTO)">
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.MentorService.UpdateEntityAsync(Milvasoft.SampleAPI.DTOs.MentorDTOs.UpdateMentorDTO)">
             <summary>
             Update mentor.
             </summary>
@@ -1476,14 +2037,14 @@
             <param name="id"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.SampleAPI.Services.Concrete.ProfessionService.AddEntityAsync(Milvasoft.SampleAPI.DTOs.ProfessionDTOs.ProfessionDTO)">
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.ProfessionService.AddEntityAsync(Milvasoft.SampleAPI.DTOs.ProfessionDTOs.AddProfessionDTO)">
             <summary>
             Add profession to database.
             </summary>
             <param name="educationDTO"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.SampleAPI.Services.Concrete.ProfessionService.UpdateEntityAsync(Milvasoft.SampleAPI.DTOs.ProfessionDTOs.ProfessionDTO)">
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.ProfessionService.UpdateEntityAsync(Milvasoft.SampleAPI.DTOs.ProfessionDTOs.UpdateProfessionDTO)">
             <summary>
             Update profession by <paramref name="educationDTO"/>.
             </summary>
@@ -1554,9 +2115,16 @@
             <param name="id"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.SampleAPI.Services.Concrete.QuestionService.AddEntityAsync(Milvasoft.SampleAPI.DTOs.QuestionDTOs.QuestionDTO)">
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.QuestionService.AddEntityAsync(Milvasoft.SampleAPI.DTOs.QuestionDTOs.AddQuestionDTO)">
             <summary>
             Add student.
+            </summary>
+            <param name="educationDTO"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.QuestionService.UpdateEntityAsync(Milvasoft.SampleAPI.DTOs.QuestionDTOs.UpdateQuestionDTO)">
+            <summary>
+            Update student.
             </summary>
             <param name="educationDTO"></param>
             <returns></returns>
@@ -1573,13 +2141,6 @@
             Delete student.
             </summary>
             <param name="id"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Milvasoft.SampleAPI.Services.Concrete.QuestionService.UpdateEntityAsync(Milvasoft.SampleAPI.DTOs.QuestionDTOs.QuestionDTO)">
-            <summary>
-            Update student.
-            </summary>
-            <param name="educationDTO"></param>
             <returns></returns>
         </member>
         <member name="M:Milvasoft.SampleAPI.Services.Concrete.QuestionService.GetWillShowQuestions">
@@ -1638,14 +2199,14 @@
             <param name="id"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.SampleAPI.Services.Concrete.StudentService.AddEntityAsync(Milvasoft.SampleAPI.DTOs.StudentDTOs.StudentDTO)">
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.StudentService.AddEntityAsync(Milvasoft.SampleAPI.DTOs.StudentDTOs.AddStudentDTO)">
             <summary>
             Add student to database.
             </summary>
             <param name="educationDTO"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.SampleAPI.Services.Concrete.StudentService.UpdateEntityAsync(Milvasoft.SampleAPI.DTOs.StudentDTOs.StudentDTO)">
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.StudentService.UpdateEntityAsync(Milvasoft.SampleAPI.DTOs.StudentDTOs.UpdateStudentDTO)">
             <summary>
             Update student.
             </summary>
@@ -1716,14 +2277,14 @@
             <param name="id"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.SampleAPI.Services.Concrete.UsefulLinkService.AddEntityAsync(Milvasoft.SampleAPI.DTOs.UsefulLinkDTO)">
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.UsefulLinkService.AddEntityAsync(Milvasoft.SampleAPI.DTOs.UsefulLinkDTOs.AddUsefulLinkDTO)">
             <summary>
             Add link.
             </summary>
             <param name="educationDTO"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.SampleAPI.Services.Concrete.UsefulLinkService.UpdateEntityAsync(Milvasoft.SampleAPI.DTOs.UsefulLinkDTO)">
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.UsefulLinkService.UpdateEntityAsync(Milvasoft.SampleAPI.DTOs.UsefulLinkDTOs.UpdateUsefulLinkDTO)">
             <summary>
             Update link.
             </summary>
