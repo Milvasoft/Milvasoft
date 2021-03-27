@@ -5,8 +5,15 @@ using System.Threading.Tasks;
 
 namespace Milvasoft.SampleAPI.Services.Abstract
 {
-    public interface IQuestionService : IBaseService<QuestionDTO, QuestionSpec>
+    /// <summary>
+    /// Question service inteface.
+    /// </summary>
+    public interface IQuestionService : IBaseService<QuestionDTO, QuestionSpec,AddQuestionDTO,UpdateQuestionDTO>
     {
+        /// <summary>
+        ///  Returns questions to display
+        /// </summary>
+        /// <returns></returns>
         Task<List<QuestionDTO>> GetWillShowQuestions();
 
     }

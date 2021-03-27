@@ -40,7 +40,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// Get students for admin.
         /// </summary>
         /// <returns></returns>
-        public async Task<List<StudentDTO>> GetEntitiesForAdmin(StudentSpec spec = null)
+        public async Task<List<StudentDTO>> GetEntitiesForAdminAsync(StudentSpec spec = null)
         {
 
             Func<IIncludable<Student>, IIncludable> includes = i => i.Include(md => md.Mentor);
@@ -78,7 +78,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// Get students for mentor.
         /// </summary>
         /// <returns></returns>
-        public async Task<List<StudentDTO>> GetEntitiesForMentor(StudentSpec spec = null)
+        public async Task<List<StudentDTO>> GetEntitiesForMentorAsync(StudentSpec spec = null)
         {
 
             Func<IIncludable<Student>, IIncludable> includeMentor = i => i.Include(md => md.Mentor)
@@ -120,7 +120,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// Get students for student.
         /// </summary>
         /// <returns></returns>
-        public async Task<List<StudentDTO>> GetEntitiesForStudent(StudentSpec spec = null)
+        public async Task<List<StudentDTO>> GetEntitiesForStudentAsync(StudentSpec spec = null)
         {
 
             var students = await _studentRepository.GetAllAsync(spec?.ToExpression()).ConfigureAwait(false);
@@ -145,7 +145,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public async Task<StudentDTO> GetEntityForStudent(Guid id)
+        public async Task<StudentDTO> GetEntityForStudentAsync(Guid id)
         {
 
             var student = await _studentRepository.GetByIdAsync(id).ConfigureAwait(false);
@@ -167,7 +167,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public async Task<StudentDTO> GetEntityForAdmin(Guid id)
+        public async Task<StudentDTO> GetEntityForAdminAsync(Guid id)
         {
             Func<IIncludable<Student>, IIncludable> includes = i => i.Include(md => md.Mentor);
 
@@ -206,7 +206,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public async Task<StudentDTO> GetEntityForMentor(Guid id)
+        public async Task<StudentDTO> GetEntityForMentorAsync(Guid id)
         {
 
             Func<IIncludable<Student>, IIncludable> includes = i => i.Include(md => md.Mentor)
@@ -244,7 +244,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// </summary>
         /// <param name="educationDTO"></param>
         /// <returns></returns>
-        public async Task AddEntityAsync(StudentDTO educationDTO)
+        public async Task AddEntityAsync(AddStudentDTO educationDTO)
         {
 
             var newStudent = new Student
@@ -274,7 +274,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// </summary>
         /// <param name="educationDTO"></param>
         /// <returns></returns>
-        public async Task UpdateEntityAsync(StudentDTO educationDTO)
+        public async Task UpdateEntityAsync(UpdateStudentDTO educationDTO)
         {
 
             var updatedStudent = await _studentRepository.GetByIdAsync(educationDTO.Id).ConfigureAwait(false);
@@ -305,8 +305,6 @@ namespace Milvasoft.SampleAPI.Services.Concrete
 
             updatedStudent.MentorId = educationDTO.MentorId;
 
-            updatedStudent.OldAssignments = educationDTO.OldAssignments;
-
             updatedStudent.LastModificationDate = DateTime.Now;
 
             await _studentRepository.UpdateAsync(updatedStudent).ConfigureAwait(false);
@@ -332,7 +330,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// </summary>
         /// <param name="ids"></param>
         /// <returns></returns>
-        public async Task DeleteEntities(List<Guid> ids)
+        public async Task DeleteEntitiesAsync(List<Guid> ids)
         {
 
             var deletedStudents = await _studentRepository.GetAllAsync(i => ids.Select(p => p).Contains(i.Id)).ConfigureAwait(false);

@@ -3,7 +3,10 @@ using Milvasoft.SampleAPI.Spec;
 
 namespace Milvasoft.SampleAPI.Services.Abstract
 {
-    interface IAssignmentService : IBaseService<AssignmentDTO, AssignmentSpec>
+    /// <summary>
+    /// Assignment service interface.
+    /// </summary>
+    interface IAssignmentService : IBaseService<AssignmentDTO, AssignmentSpec,AddAssignmentDTO,UpdateAssignmentDTO>
     {
     }
 }

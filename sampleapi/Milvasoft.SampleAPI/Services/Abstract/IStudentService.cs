@@ -3,7 +3,10 @@ using Milvasoft.SampleAPI.Spec;
 
 namespace Milvasoft.SampleAPI.Services.Abstract
 {
-    public interface IStudentService : IBaseService<StudentDTO, StudentSpec>
+    /// <summary>
+    /// Student service inteface.
+    /// </summary>
+    public interface IStudentService : IBaseService<StudentDTO, StudentSpec,AddStudentDTO,UpdateStudentDTO>
     {
 
     }

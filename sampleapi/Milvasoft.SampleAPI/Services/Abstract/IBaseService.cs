@@ -9,60 +9,60 @@ namespace Milvasoft.SampleAPI.Services.Abstract
     /// Base services for all concrete services.
     /// </summary>
     /// <typeparam name="TDTO"></typeparam>
-    public interface IBaseService<TDTO, TSpec>
+    public interface IBaseService<TDTO, TSpec , TAddDTO, TUpdateDTO>
     {
         /// <summary>
         /// Get all entities for student from database.
         /// </summary>
         /// <returns></returns>
-        Task<List<TDTO>> GetEntitiesForStudent(TSpec spec);
+        Task<List<TDTO>> GetEntitiesForStudentAsync(TSpec spec);
 
         /// <summary>
         /// Get all entities for admin from database.
         /// </summary>
         /// <returns></returns>
-        Task<List<TDTO>> GetEntitiesForAdmin(TSpec spec);
+        Task<List<TDTO>> GetEntitiesForAdminAsync(TSpec spec);
 
         /// <summary>
         /// Get all entities for mentor from database.
         /// </summary>
         /// <returns></returns>
-        Task<List<TDTO>> GetEntitiesForMentor(TSpec spec);
+        Task<List<TDTO>> GetEntitiesForMentorAsync(TSpec spec);
 
         /// <summary>
         /// Get one entity by id.
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        Task<TDTO> GetEntityForStudent(Guid id);
+        Task<TDTO> GetEntityForStudentAsync(Guid id);
 
         /// <summary>
         /// Get one entity for admin by id.
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        Task<TDTO> GetEntityForAdmin(Guid id);
+        Task<TDTO> GetEntityForAdminAsync(Guid id);
 
         /// <summary>
         /// Get one entity for mentor by id.
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        Task<TDTO> GetEntityForMentor(Guid id);
+        Task<TDTO> GetEntityForMentorAsync(Guid id);
 
         /// <summary>
         /// Adds single entity to database.
         /// </summary>
         /// <param name="educationDTO"></param>
         /// <returns></returns>
-        Task AddEntityAsync(TDTO educationDTO);
+        Task AddEntityAsync(TAddDTO educationDTO);
 
         /// <summary>
         /// Updates single entity in database.
         /// </summary>
         /// <param name="educationDTO"></param>
         /// <returns></returns>
-        Task UpdateEntityAsync(TDTO educationDTO);
+        Task UpdateEntityAsync(TUpdateDTO educationDTO);
 
         /// <summary>
         /// Deletes single entity from database.
@@ -76,6 +76,6 @@ namespace Milvasoft.SampleAPI.Services.Abstract
         /// </summary>
         /// <param name="ids"></param>
         /// <returns></returns>
-        Task DeleteEntities(List<Guid> ids);
+        Task DeleteEntitiesAsync(List<Guid> ids);
     }
 }

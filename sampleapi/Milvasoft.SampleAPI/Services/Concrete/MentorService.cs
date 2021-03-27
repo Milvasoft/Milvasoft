@@ -37,7 +37,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// Get mentors for admin.
         /// </summary>
         /// <returns></returns>
-        public async Task<List<MentorDTO>> GetEntitiesForAdmin(MentorSpec spec = null)
+        public async Task<List<MentorDTO>> GetEntitiesForAdminAsync(MentorSpec spec = null)
         {
 
             Func<IIncludable<Mentor>, IIncludable> includes = i => i.Include(p => p.PublishedAnnouncements)
@@ -75,7 +75,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// Get mentors for mentor.
         /// </summary>
         /// <returns></returns>
-        public async Task<List<MentorDTO>> GetEntitiesForMentor(MentorSpec spec = null)
+        public async Task<List<MentorDTO>> GetEntitiesForMentorAsync(MentorSpec spec = null)
         {
 
             Func<IIncludable<Mentor>, IIncludable> includes = i => i.Include(p => p.PublishedAnnouncements)
@@ -110,7 +110,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// Get mentors for student.
         /// </summary>
         /// <returns></returns>
-        public async Task<List<MentorDTO>> GetEntitiesForStudent(MentorSpec spec = null)
+        public async Task<List<MentorDTO>> GetEntitiesForStudentAsync(MentorSpec spec = null)
         {
 
             Func<IIncludable<Mentor>, IIncludable> includes = i => i.Include(p => p.PublishedAnnouncements)
@@ -139,7 +139,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public async Task<MentorDTO> GetEntityForAdmin(Guid id)
+        public async Task<MentorDTO> GetEntityForAdminAsync(Guid id)
         {
 
             Func<IIncludable<Mentor>, IIncludable> includes = i => i.Include(p => p.PublishedAnnouncements)
@@ -174,7 +174,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public async Task<MentorDTO> GetEntityForMentor(Guid id)
+        public async Task<MentorDTO> GetEntityForMentorAsync(Guid id)
         {
 
             Func<IIncludable<Mentor>, IIncludable> includes = i => i.Include(p => p.PublishedAnnouncements)
@@ -207,7 +207,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public async Task<MentorDTO> GetEntityForStudent(Guid id)
+        public async Task<MentorDTO> GetEntityForStudentAsync(Guid id)
         {
 
             Func<IIncludable<Mentor>, IIncludable> includes = i => i.Include(p => p.PublishedAnnouncements)
@@ -234,7 +234,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// </summary>
         /// <param name="educationDTO"></param>
         /// <returns></returns>
-        public async Task AddEntityAsync(MentorDTO educationDTO)
+        public async Task AddEntityAsync(AddMentorDTO educationDTO)
         {
             var mentor = new Mentor
             {
@@ -252,7 +252,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// </summary>
         /// <param name="educationDTO"></param>
         /// <returns></returns>
-        public async Task UpdateEntityAsync(MentorDTO educationDTO)
+        public async Task UpdateEntityAsync(UpdateMentorDTO educationDTO)
         {
             var updatedMentor = await _mentorRepository.GetByIdAsync(educationDTO.Id).ConfigureAwait(false);
 
@@ -273,7 +273,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// </summary>
         /// <param name="ids"></param>
         /// <returns></returns>
-        public async Task DeleteEntities(List<Guid> ids)
+        public async Task DeleteEntitiesAsync(List<Guid> ids)
         {
 
             var mentors = await _mentorRepository.GetAllAsync(i => ids.Select(p => p).Contains(i.Id)).ConfigureAwait(false);

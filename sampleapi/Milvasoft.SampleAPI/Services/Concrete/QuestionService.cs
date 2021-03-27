@@ -37,7 +37,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// Get all questions for admin.
         /// </summary>
         /// <returns></returns>
-        public async Task<List<QuestionDTO>> GetEntitiesForAdmin(QuestionSpec spec)
+        public async Task<List<QuestionDTO>> GetEntitiesForAdminAsync(QuestionSpec spec)
         {
 
             Func<IIncludable<Question>, IIncludable> includes = i => i.Include(md => md.Mentor)
@@ -76,7 +76,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// Get all questions for admin.
         /// </summary>
         /// <returns></returns>
-        public async Task<List<QuestionDTO>> GetEntitiesForMentor(QuestionSpec spec)
+        public async Task<List<QuestionDTO>> GetEntitiesForMentorAsync(QuestionSpec spec)
         {
 
             Func<IIncludable<Question>, IIncludable> includes = i => i.Include(md => md.Mentor)
@@ -113,7 +113,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// Get all questions for student.
         /// </summary>
         /// <returns></returns>
-        public async Task<List<QuestionDTO>> GetEntitiesForStudent(QuestionSpec spec)
+        public async Task<List<QuestionDTO>> GetEntitiesForStudentAsync(QuestionSpec spec)
         {
 
             Func<IIncludable<Question>, IIncludable> includes = i => i.Include(md => md.Mentor)
@@ -147,7 +147,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public async Task<QuestionDTO> GetEntityForAdmin(Guid id)
+        public async Task<QuestionDTO> GetEntityForAdminAsync(Guid id)
         {
 
             Func<IIncludable<Question>, IIncludable> includes = i => i.Include(md => md.Mentor)
@@ -184,7 +184,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public async Task<QuestionDTO> GetEntityForMentor(Guid id)
+        public async Task<QuestionDTO> GetEntityForMentorAsync(Guid id)
         {
 
             Func<IIncludable<Question>, IIncludable> includes = i => i.Include(md => md.Mentor)
@@ -218,7 +218,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public async Task<QuestionDTO> GetEntityForStudent(Guid id)
+        public async Task<QuestionDTO> GetEntityForStudentAsync(Guid id)
         {
 
             Func<IIncludable<Question>, IIncludable> includes = i => i.Include(md => md.Mentor)
@@ -249,7 +249,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// </summary>
         /// <param name="educationDTO"></param>
         /// <returns></returns>
-        public async Task AddEntityAsync(QuestionDTO educationDTO)
+        public async Task AddEntityAsync(AddQuestionDTO educationDTO)
         {
             var question = new Question
             {
@@ -262,11 +262,23 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         }
 
         /// <summary>
+        /// Update student.
+        /// </summary>
+        /// <param name="educationDTO"></param>
+        /// <returns></returns>
+        public async Task UpdateEntityAsync(UpdateQuestionDTO educationDTO)
+        {
+
+            var updatedQuestion = await _questionService.GetByIdAsync(educationDTO.Id).ConfigureAwait(false);
+
+        }
+
+        /// <summary>
         /// Delete students.
         /// </summary>
         /// <param name="ids"></param>
         /// <returns></returns>
-        public async Task DeleteEntities(List<Guid> ids)
+        public async Task DeleteEntitiesAsync(List<Guid> ids)
         {
 
             var deletedQuestions = await _questionService.GetAllAsync(i => ids.Select(p => p).Contains(i.Id)).ConfigureAwait(false);
@@ -286,18 +298,6 @@ namespace Milvasoft.SampleAPI.Services.Concrete
             var deletedQuestion = await _questionService.GetByIdAsync(id).ConfigureAwait(false);
 
             await _questionService.DeleteAsync(deletedQuestion).ConfigureAwait(false);
-
-        }
-
-        /// <summary>
-        /// Update student.
-        /// </summary>
-        /// <param name="educationDTO"></param>
-        /// <returns></returns>
-        public async Task UpdateEntityAsync(QuestionDTO educationDTO)
-        {
-
-            var updatedQuestion = await _questionService.GetByIdAsync(educationDTO.Id).ConfigureAwait(false);
 
         }
 
