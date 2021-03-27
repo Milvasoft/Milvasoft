@@ -18,7 +18,7 @@ namespace Milvasoft.SampleAPI.Controllers
         [HttpGet("GetLinks")]
         public async Task<IActionResult> GetStudentForAdmin([FromBody] PaginationParamsWithSpec<UsefulLinkSpec> paginationParams)
         {
-            var links = await _userfulLinkService.GetEntitiesForStudent(paginationParams.Spec).ConfigureAwait(false);
+            var links = await _userfulLinkService.GetEntitiesForStudentAsync(paginationParams.Spec).ConfigureAwait(false);
             return Ok(links);
         }
     }
