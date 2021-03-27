@@ -33,7 +33,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// Get all assignment by <paramref name="spec"/>
         /// </summary>
         /// <returns></returns>
-        public async Task<List<AssignmentDTO>> GetEntitiesForStudent(AssignmentSpec spec = null)
+        public async Task<List<AssignmentDTO>> GetEntitiesForStudentAsync(AssignmentSpec spec = null)
         {
             var assignments = await _assignmentRepository.GetAllAsync(spec?.ToExpression()).ConfigureAwait(false);
 
@@ -59,7 +59,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// Get assignments for admin by <paramref name="spec"/>
         /// </summary>
         /// <returns></returns>
-        public async Task<List<AssignmentDTO>> GetEntitiesForAdmin(AssignmentSpec spec = null)
+        public async Task<List<AssignmentDTO>> GetEntitiesForAdminAsync(AssignmentSpec spec = null)
         {
             var assignments = await _assignmentRepository.GetAllAsync(spec?.ToExpression()).ConfigureAwait(false);
 
@@ -88,7 +88,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// Get assignments for mentor by <paramref name="spec"/>
         /// </summary>
         /// <returns></returns>
-        public async Task<List<AssignmentDTO>> GetEntitiesForMentor(AssignmentSpec spec = null)
+        public async Task<List<AssignmentDTO>> GetEntitiesForMentorAsync(AssignmentSpec spec = null)
         {
             var assignments = await _assignmentRepository.GetAllAsync(spec?.ToExpression()).ConfigureAwait(false);
 
@@ -117,7 +117,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public async Task<AssignmentDTO> GetEntityForStudent(Guid id)
+        public async Task<AssignmentDTO> GetEntityForStudentAsync(Guid id)
         {
 
             var assignment = await _assignmentRepository.GetByIdAsync(id).ConfigureAwait(false);
@@ -142,7 +142,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public async Task<AssignmentDTO> GetEntityForAdmin(Guid id)
+        public async Task<AssignmentDTO> GetEntityForAdminAsync(Guid id)
         {
             var assignment = await _assignmentRepository.GetByIdAsync(id).ConfigureAwait(false);
 
@@ -168,7 +168,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public async Task<AssignmentDTO> GetEntityForMentor(Guid id)
+        public async Task<AssignmentDTO> GetEntityForMentorAsync(Guid id)
         {
             var assignment = await _assignmentRepository.GetByIdAsync(id).ConfigureAwait(false);
 
@@ -193,7 +193,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// </summary>
         /// <param name="educationDTO"></param>
         /// <returns></returns>
-        public async Task AddEntityAsync(AssignmentDTO educationDTO)
+        public async Task AddEntityAsync(AddAssignmentDTO educationDTO)
         {
 
             var assignment = new Assignment
@@ -206,7 +206,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
                 Level = educationDTO.Level,
                 Rules = educationDTO.Rules,
                 MaxDeliveryDay = educationDTO.MaxDeliveryDay,
-                ProfessionId = educationDTO.ProfessionId,
+                ProfessionId = (Guid)educationDTO.ProfessionId,
                 CreationDate = DateTime.Now
             };
 
@@ -219,7 +219,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// </summary>
         /// <param name="educationDTO"></param>
         /// <returns></returns>
-        public async Task UpdateEntityAsync(AssignmentDTO educationDTO)
+        public async Task UpdateEntityAsync(UpdateAssignmentDTO educationDTO)
         {
 
             var updatedAssignment = await _assignmentRepository.GetByIdAsync(educationDTO.Id).ConfigureAwait(false);
@@ -234,7 +234,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
 
             updatedAssignment.MaxDeliveryDay = educationDTO.MaxDeliveryDay;
 
-            updatedAssignment.ProfessionId = educationDTO.ProfessionId;
+            updatedAssignment.ProfessionId = (Guid)educationDTO.ProfessionId;
 
             updatedAssignment.RemarksToMentor = educationDTO.RemarksToMentor;
 
@@ -262,7 +262,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// </summary>
         /// <param name="ids"></param>
         /// <returns></returns>
-        public async Task DeleteEntities(List<Guid> ids)
+        public async Task DeleteEntitiesAsync(List<Guid> ids)
         {
             var assignments = await _assignmentRepository.GetAllAsync(i => ids.Select(p => p).Contains(i.Id)).ConfigureAwait(false);
             await _assignmentRepository.DeleteAsync(assignments).ConfigureAwait(false);

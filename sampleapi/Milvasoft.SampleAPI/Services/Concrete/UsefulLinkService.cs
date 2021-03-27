@@ -1,6 +1,7 @@
 ﻿using Milvasoft.Helpers.DataAccess.Abstract;
 using Milvasoft.SampleAPI.Data;
 using Milvasoft.SampleAPI.DTOs;
+using Milvasoft.SampleAPI.DTOs.UsefulLinkDTOs;
 using Milvasoft.SampleAPI.Entity;
 using Milvasoft.SampleAPI.Services.Abstract;
 using Milvasoft.SampleAPI.Spec;
@@ -34,7 +35,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// Get links for student.
         /// </summary>
         /// <returns></returns>
-        public async Task<List<UsefulLinkDTO>> GetEntitiesForStudent(UsefulLinkSpec spec)
+        public async Task<List<UsefulLinkDTO>> GetEntitiesForStudentAsync(UsefulLinkSpec spec)
         {
 
             var links = await _usefulLinkRepository.GetAllAsync(spec?.ToExpression()).ConfigureAwait(false);
@@ -57,7 +58,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// Get links for admin.
         /// </summary>
         /// <returns></returns>
-        public async Task<List<UsefulLinkDTO>> GetEntitiesForAdmin(UsefulLinkSpec spec)
+        public async Task<List<UsefulLinkDTO>> GetEntitiesForAdminAsync(UsefulLinkSpec spec)
         {
 
             var links = await _usefulLinkRepository.GetAllAsync(spec?.ToExpression()).ConfigureAwait(false);
@@ -83,7 +84,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// Get link for mentor.
         /// </summary>
         /// <returns></returns>
-        public async Task<List<UsefulLinkDTO>> GetEntitiesForMentor(UsefulLinkSpec spec)
+        public async Task<List<UsefulLinkDTO>> GetEntitiesForMentorAsync(UsefulLinkSpec spec)
         {
 
             var links = await _usefulLinkRepository.GetAllAsync(spec?.ToExpression()).ConfigureAwait(false);
@@ -106,7 +107,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public async Task<UsefulLinkDTO> GetEntityForStudent(Guid id)
+        public async Task<UsefulLinkDTO> GetEntityForStudentAsync(Guid id)
         {
 
             var link = await _usefulLinkRepository.GetByIdAsync(id).ConfigureAwait(false);
@@ -126,7 +127,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public async Task<UsefulLinkDTO> GetEntityForAdmin(Guid id)
+        public async Task<UsefulLinkDTO> GetEntityForAdminAsync(Guid id)
         {
             var link = await _usefulLinkRepository.GetByIdAsync(id).ConfigureAwait(false);
 
@@ -145,7 +146,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public async Task<UsefulLinkDTO> GetEntityForMentor(Guid id)
+        public async Task<UsefulLinkDTO> GetEntityForMentorAsync(Guid id)
         {
             var link = await _usefulLinkRepository.GetByIdAsync(id).ConfigureAwait(false);
 
@@ -164,7 +165,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// </summary>
         /// <param name="educationDTO"></param>
         /// <returns></returns>
-        public async Task AddEntityAsync(UsefulLinkDTO educationDTO)
+        public async Task AddEntityAsync(AddUsefulLinkDTO educationDTO)
         {
 
             var usefullink = new UsefulLink
@@ -184,7 +185,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// </summary>
         /// <param name="educationDTO"></param>
         /// <returns></returns>
-        public async Task UpdateEntityAsync(UsefulLinkDTO educationDTO)
+        public async Task UpdateEntityAsync(UpdateUsefulLinkDTO educationDTO)
         {
 
             var updatedLink = await _usefulLinkRepository.GetByIdAsync(educationDTO.Id).ConfigureAwait(false);
@@ -218,7 +219,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// </summary>
         /// <param name="ids"></param>
         /// <returns></returns>
-        public async Task DeleteEntities(List<Guid> ids)
+        public async Task DeleteEntitiesAsync(List<Guid> ids)
         {
             var deletedLinks = await _usefulLinkRepository.GetAllAsync(i => ids.Select(p => p).Contains(i.Id)).ConfigureAwait(false);
             await _usefulLinkRepository.DeleteAsync(deletedLinks);

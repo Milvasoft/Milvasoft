@@ -7,6 +7,12 @@ using System.Threading.Tasks;
 
 namespace Milvasoft.SampleAPI.Controllers
 {
+    /// <summary>
+    /// Provided Student operations.
+    /// </summary>
+    [Route("api/v{version:apiVersion}/[controller]")]
+    [ApiController]
+    [ApiVersion("1.0")]
     public class StudentController : ControllerBase
     {
         private readonly IStudentService _studentService;
@@ -27,7 +33,7 @@ namespace Milvasoft.SampleAPI.Controllers
         [HttpGet("Students")]
         public async Task<IActionResult> GetStudentForAdmin([FromBody] PaginationParamsWithSpec<StudentSpec> paginationParams)
         {
-            var students = await _studentService.GetEntitiesForStudent(paginationParams.Spec).ConfigureAwait(false);
+            var students = await _studentService.GetEntitiesForStudentAsync(paginationParams.Spec).ConfigureAwait(false);
             return Ok(students);
         }
 
@@ -36,7 +42,8 @@ namespace Milvasoft.SampleAPI.Controllers
         /// </summary>
         /// <param name="student"></param>
         /// <returns></returns>
-        public async Task<IActionResult> AddStudent(StudentDTO student)
+        [HttpPost("Add")]
+        public async Task<IActionResult> AddStudent([FromBody] AddStudentDTO student)
         {
             await _studentService.AddEntityAsync(student).ConfigureAwait(false);
             return Ok();

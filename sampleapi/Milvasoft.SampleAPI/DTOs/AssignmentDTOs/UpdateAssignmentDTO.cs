@@ -1,18 +1,17 @@
-﻿using Milvasoft.SampleAPI.DTOs.ProfessionDTOs;
-using Milvasoft.SampleAPI.Entity;
+﻿using Milvasoft.SampleAPI.Entity;
 using Milvasoft.SampleAPI.Utils.Attributes.ValidationAttributes;
-using Milvasoft.SampleAPI.Utils.Swagger;
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Milvasoft.SampleAPI.DTOs.AssignmentDTOs
 {
-
     /// <summary>
-    /// Assignment for student.
+    /// AddAssignmentDTO for add operations.
     /// </summary>
-    public class AssignmentDTO : EducationEntityBase
+    public class UpdateAssignmentDTO
     {
-
         /// <summary>
         /// Tittle of assignment.
         /// </summary>
@@ -59,10 +58,5 @@ namespace Milvasoft.SampleAPI.DTOs.AssignmentDTOs
         [OValidateId]
         public Guid? ProfessionId { get; set; }
 
-        /// <summary>
-        /// The profession of assignment.
-        /// </summary>
-        [SwaggerExclude]
-        public virtual ProfessionDTO Profession { get; set; }
     }
 }

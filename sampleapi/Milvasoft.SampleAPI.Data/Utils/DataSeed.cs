@@ -35,17 +35,7 @@ namespace Milvasoft.SampleAPI.Data.Utils
 
         private static async Task InitializeProfession()
         {
-            var mentor = new List<Profession>
-            {
-                new Profession
-                {
-                    Id = 1.ToGuid(),
-                    Name = "Reset Deneme",
-                    CreationDate = DateTime.Now
-                }
-            };
-
-            await InitializeDataAsync(mentor).ConfigureAwait(false);
+            
         }
     }
 }

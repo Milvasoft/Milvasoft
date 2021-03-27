@@ -15,7 +15,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
     /// <summary>
     /// Profession service.
     /// </summary>
-    public class ProfessionService : IBaseService<ProfessionDTO, ProfessionSpec>
+    public class ProfessionService : IProfessionService
     {
 
         private readonly IBaseRepository<Profession, Guid, EducationAppDbContext> _professionRepository;
@@ -35,10 +35,10 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// Get professions for admin.
         /// </summary>
         /// <returns></returns>
-        public async Task<List<ProfessionDTO>> GetEntitiesForAdmin(ProfessionSpec spec)
+        public async Task<List<ProfessionDTO>> GetEntitiesForAdminAsync(ProfessionSpec professionSpec)
         {
 
-            var professions = await _professionRepository.GetAllAsync(spec?.ToExpression()).ConfigureAwait(false);
+            var professions = await _professionRepository.GetAllAsync(professionSpec?.ToExpression()).ConfigureAwait(false);
 
             var professionsDTO = from profession in professions
                                  select new ProfessionDTO
@@ -59,14 +59,15 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// Get professions for mentor.
         /// </summary>
         /// <returns></returns>
-        public async Task<List<ProfessionDTO>> GetEntitiesForMentor(ProfessionSpec spec)
+        public async Task<List<ProfessionDTO>> GetEntitiesForMentorAsync(ProfessionSpec professionSpec)
         {
 
-            var professions = await _professionRepository.GetAllAsync(spec?.ToExpression()).ConfigureAwait(false);
+            var professions = await _professionRepository.GetAllAsync(professionSpec?.ToExpression()).ConfigureAwait(false);
 
             var professionsDTO = from profession in professions
                                  select new ProfessionDTO
                                  {
+                                     Id=profession.Id,
                                      Name = profession.Name,
                                      CreationDate = profession.CreationDate,
                                      LastModificationDate = profession.LastModificationDate
@@ -80,10 +81,10 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// Get professions for student.
         /// </summary>
         /// <returns></returns>
-        public async Task<List<ProfessionDTO>> GetEntitiesForStudent(ProfessionSpec spec)
+        public async Task<List<ProfessionDTO>> GetEntitiesForStudentAsync(ProfessionSpec professionSpec)
         {
 
-            var professions = await _professionRepository.GetAllAsync(spec?.ToExpression()).ConfigureAwait(false);
+            var professions = await _professionRepository.GetAllAsync(professionSpec?.ToExpression()).ConfigureAwait(false);
 
             var professionsDTO = from profession in professions
                                  select new ProfessionDTO
@@ -96,14 +97,14 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         }
 
         /// <summary>
-        /// Get profession for admin by <paramref name="id"/>.
+        /// Get profession for admin by <paramref name="professionId"/>.
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="professionId"></param>
         /// <returns></returns>
-        public async Task<ProfessionDTO> GetEntityForAdmin(Guid id)
+        public async Task<ProfessionDTO> GetEntityForAdminAsync(Guid professionId)
         {
 
-            var profession = await _professionRepository.GetByIdAsync(id).ConfigureAwait(false);
+            var profession = await _professionRepository.GetByIdAsync(professionId).ConfigureAwait(false);
 
             return new ProfessionDTO
             {
@@ -118,14 +119,14 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         }
 
         /// <summary>
-        /// Get profession for mentor by <paramref name="id"/>
+        /// Get profession for mentor by <paramref name="professionId"/>
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="professionId"></param>
         /// <returns></returns>
-        public async Task<ProfessionDTO> GetEntityForMentor(Guid id)
+        public async Task<ProfessionDTO> GetEntityForMentorAsync(Guid professionId)
         {
 
-            var profession = await _professionRepository.GetByIdAsync(id).ConfigureAwait(false);
+            var profession = await _professionRepository.GetByIdAsync(professionId).ConfigureAwait(false);
 
             return new ProfessionDTO
             {
@@ -137,14 +138,14 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         }
 
         /// <summary>
-        /// Get profession for student by <paramref name="id"/>
+        /// Get profession for student by <paramref name="professionId"/>
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="professionId"></param>
         /// <returns></returns>
-        public async Task<ProfessionDTO> GetEntityForStudent(Guid id)
+        public async Task<ProfessionDTO> GetEntityForStudentAsync(Guid professionId)
         {
 
-            var profession = await _professionRepository.GetByIdAsync(id).ConfigureAwait(false);
+            var profession = await _professionRepository.GetByIdAsync(professionId).ConfigureAwait(false);
 
             return new ProfessionDTO
             {
@@ -155,16 +156,14 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// <summary>
         /// Add profession to database.
         /// </summary>
-        /// <param name="educationDTO"></param>
+        /// <param name="addProfessionDTO"></param>
         /// <returns></returns>
-        public async Task AddEntityAsync(ProfessionDTO educationDTO)
+        public async Task AddEntityAsync(AddProfessionDTO addProfessionDTO)
         {
 
             var profession = new Profession
             {
-                Name = educationDTO.Name,
-                CreationDate = DateTime.Now,
-                CreatorUserId = educationDTO.CreatorUserId,
+                Name = addProfessionDTO.Name,
             };
 
             await _professionRepository.AddAsync(profession).ConfigureAwait(false);
@@ -172,48 +171,44 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         }
 
         /// <summary>
-        /// Update profession by <paramref name="educationDTO"/>.
+        /// Update profession by <paramref name="addProfessionDTO"/>.
         /// </summary>
-        /// <param name="educationDTO"></param>
+        /// <param name="addProfessionDTO"></param>
         /// <returns></returns>
-        public async Task UpdateEntityAsync(ProfessionDTO educationDTO)
+        public async Task UpdateEntityAsync(UpdateProfessionDTO addProfessionDTO)
         {
 
-            var updatedProfession = await _professionRepository.GetByIdAsync(educationDTO.Id).ConfigureAwait(false);
+            var updatedProfession = await _professionRepository.GetByIdAsync(addProfessionDTO.Id).ConfigureAwait(false);
 
-            updatedProfession.Name = educationDTO.Name;
-
-            updatedProfession.LastModificationDate = DateTime.Now;
-
-            updatedProfession.LastModifierUserId = educationDTO.LastModifierUserId;
+            updatedProfession.Name = addProfessionDTO.Name;
 
             await _professionRepository.UpdateAsync(updatedProfession).ConfigureAwait(false);
 
         }
 
         /// <summary>
-        /// Delete professions by <paramref name="ids"/>.
+        /// Delete professions by <paramref name="professionIds"/>.
         /// </summary>
-        /// <param name="ids"></param>
+        /// <param name="professionIds"></param>
         /// <returns></returns>
-        public async Task DeleteEntities(List<Guid> ids)
+        public async Task DeleteEntitiesAsync(List<Guid> professionIds)
         {
 
-            var professions = await _professionRepository.GetAllAsync(i => ids.Select(p => p).Contains(i.Id)).ConfigureAwait(false);
+            var professions = await _professionRepository.GetAllAsync(i => professionIds.Select(p => p).Contains(i.Id)).ConfigureAwait(false);
 
             await _professionRepository.DeleteAsync(professions).ConfigureAwait(false);
 
         }
 
         /// <summary>
-        /// Delete profession by <paramref name="id"/>.
+        /// Delete profession by <paramref name="professionId"/>.
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="professionId"></param>
         /// <returns></returns>
-        public async Task DeleteEntityAsync(Guid id)
+        public async Task DeleteEntityAsync(Guid professionId)
         {
 
-            var deletedProfession = await _professionRepository.GetByIdAsync(id).ConfigureAwait(false);
+            var deletedProfession = await _professionRepository.GetByIdAsync(professionId).ConfigureAwait(false);
 
             await _professionRepository.DeleteAsync(deletedProfession).ConfigureAwait(false);
 

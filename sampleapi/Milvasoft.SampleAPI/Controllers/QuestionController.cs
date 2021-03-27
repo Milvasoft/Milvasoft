@@ -7,19 +7,29 @@ using System.Threading.Tasks;
 
 namespace Milvasoft.SampleAPI.Controllers
 {
+    /// <summary>
+    /// Provided Question operations.
+    /// </summary>
+    [Route("api/v{version:apiVersion}/[controller]")]
+    [ApiController]
+    [ApiVersion("1.0")]
     public class QuestionController : Controller
     {
         private readonly IQuestionService _questionService;
 
+        /// <summary>
+        /// Question controller.
+        /// </summary>
+        /// <param name="questionService"></param>
         public QuestionController(IQuestionService questionService)
         {
             _questionService = questionService;
         }
 
-        [HttpGet("QuestionForStudent")]
+        [HttpPatch("QuestionForStudent")]
         public async Task<IActionResult> GetStudentForStudent([FromBody] PaginationParamsWithSpec<QuestionSpec> paginationParams)
         {
-            var questions = await _questionService.GetEntitiesForStudent(paginationParams.Spec).ConfigureAwait(false);
+            var questions = await _questionService.GetEntitiesForStudentAsync(paginationParams.Spec).ConfigureAwait(false);
             return Ok(questions);
         }
         [HttpGet("WillShown")]
@@ -29,8 +39,9 @@ namespace Milvasoft.SampleAPI.Controllers
             return Ok(questions);
         }
         [HttpPost("Question")]
-        public async Task<IActionResult> AddQuestion(QuestionDTO newQuestion)
+        public async Task<IActionResult> AddQuestion([FromBody] AddQuestionDTO newQuestion)
         {
+            await _questionService.AddEntityAsync(newQuestion).ConfigureAwait(false);
             return Ok();
         }
     }
