@@ -37,15 +37,14 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// Get all questions for admin.
         /// </summary>
         /// <returns></returns>
-        public async Task<List<QuestionDTO>> GetEntitiesForAdminAsync(QuestionSpec spec)
+        public async Task<List<QuestionDTO>> GetEntitiesForAdminAsync(QuestionSpec questionSpec)
         {
-
             Func<IIncludable<Question>, IIncludable> includes = i => i.Include(md => md.Mentor)
                                                                      .Include(st => st.Student);
 
-            var questions = await _questionService.GetAllAsync(includes, spec?.ToExpression()).ConfigureAwait(false);
+            var questions = await _questionService.GetAllAsync(includes, questionSpec?.ToExpression()).ConfigureAwait(false);
 
-            var questionsDTOList = from question in questions
+            return(from question in questions
                                    select new QuestionDTO
                                    {
                                        Title = question.Title,
@@ -62,30 +61,23 @@ namespace Milvasoft.SampleAPI.Services.Concrete
                                        {
                                            Id = i.Id
                                        }),
-                                       CreationDate = question.CreationDate,
-                                       CreatorUser = question.CreatorUser,
-                                       LastModifierUser = question.LastModifierUser,
                                        Id = question.Id
-                                   };
-
-            return questionsDTOList.ToList();
-
+                                   }).ToList();
         }
 
         /// <summary>
         /// Get all questions for admin.
         /// </summary>
         /// <returns></returns>
-        public async Task<List<QuestionDTO>> GetEntitiesForMentorAsync(QuestionSpec spec)
+        public async Task<List<QuestionDTO>> GetEntitiesForMentorAsync(QuestionSpec questionSpec)
         {
-
             Func<IIncludable<Question>, IIncludable> includes = i => i.Include(md => md.Mentor)
                                                                      .Include(st => st.Student);
 
 
-            var questions = await _questionService.GetAllAsync(includes, spec?.ToExpression()).ConfigureAwait(false);
+            var questions = await _questionService.GetAllAsync(includes, questionSpec?.ToExpression()).ConfigureAwait(false);
 
-            var questionsDTOList = from question in questions
+            return (from question in questions
                                    select new QuestionDTO
                                    {
                                        Title = question.Title,
@@ -101,27 +93,22 @@ namespace Milvasoft.SampleAPI.Services.Concrete
                                        Student = question.Student.CheckObject(i => new StudentDTO
                                        {
                                            Id = i.Id
-                                       }),
-                                       CreationDate = question.CreationDate
-                                   };
-
-            return questionsDTOList.ToList();
-
+                                       })
+                                   }).ToList();
         }
 
         /// <summary>
         /// Get all questions for student.
         /// </summary>
         /// <returns></returns>
-        public async Task<List<QuestionDTO>> GetEntitiesForStudentAsync(QuestionSpec spec)
+        public async Task<List<QuestionDTO>> GetEntitiesForStudentAsync(QuestionSpec questionSpec)
         {
-
             Func<IIncludable<Question>, IIncludable> includes = i => i.Include(md => md.Mentor)
                                                                     .Include(st => st.Student);
 
-            var questions = await _questionService.GetAllAsync(includes, spec?.ToExpression()).ConfigureAwait(false);
+            var questions = await _questionService.GetAllAsync(includes, questionSpec?.ToExpression()).ConfigureAwait(false);
 
-            var questionsDTOList = from question in questions
+            return (from question in questions
                                    select new QuestionDTO
                                    {
                                        Title = question.Title,
@@ -136,24 +123,20 @@ namespace Milvasoft.SampleAPI.Services.Concrete
                                        {
                                            Id = i.Id
                                        })
-                                   };
-
-            return questionsDTOList.ToList();
-
+                                   }).ToList();
         }
 
         /// <summary>
         /// Get student for admin.
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="questionId"></param>
         /// <returns></returns>
-        public async Task<QuestionDTO> GetEntityForAdminAsync(Guid id)
+        public async Task<QuestionDTO> GetEntityForAdminAsync(Guid questionId)
         {
-
             Func<IIncludable<Question>, IIncludable> includes = i => i.Include(md => md.Mentor)
                                                                      .Include(st => st.Student);
 
-            var question = await _questionService.GetByIdAsync(id, includes).ConfigureAwait(false);
+            var question = await _questionService.GetByIdAsync(questionId, includes).ConfigureAwait(false);
 
             return new QuestionDTO
             {
@@ -176,21 +159,19 @@ namespace Milvasoft.SampleAPI.Services.Concrete
                 LastModifierUser = question.LastModifierUser,
                 Id = question.Id
             };
-
         }
 
         /// <summary>
         /// Get student for mentor.
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="questionId"></param>
         /// <returns></returns>
-        public async Task<QuestionDTO> GetEntityForMentorAsync(Guid id)
+        public async Task<QuestionDTO> GetEntityForMentorAsync(Guid questionId)
         {
-
             Func<IIncludable<Question>, IIncludable> includes = i => i.Include(md => md.Mentor)
                                                                      .Include(st => st.Student);
 
-            var question = await _questionService.GetByIdAsync(id, includes).ConfigureAwait(false);
+            var question = await _questionService.GetByIdAsync(questionId, includes).ConfigureAwait(false);
 
             return new QuestionDTO
             {
@@ -210,21 +191,19 @@ namespace Milvasoft.SampleAPI.Services.Concrete
                 }),
                 CreationDate = question.CreationDate
             };
-
         }
 
         /// <summary>
         /// Get student for student.
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="questionId"></param>
         /// <returns></returns>
-        public async Task<QuestionDTO> GetEntityForStudentAsync(Guid id)
+        public async Task<QuestionDTO> GetEntityForStudentAsync(Guid questionId)
         {
-
             Func<IIncludable<Question>, IIncludable> includes = i => i.Include(md => md.Mentor)
                                                                     .Include(st => st.Student);
 
-            var question = await _questionService.GetByIdAsync(id).ConfigureAwait(false);
+            var question = await _questionService.GetByIdAsync(questionId).ConfigureAwait(false);
 
             return new QuestionDTO
             {
@@ -241,22 +220,19 @@ namespace Milvasoft.SampleAPI.Services.Concrete
                     Id = i.Id
                 })
             };
-
         }
 
         /// <summary>
         /// Add student.
         /// </summary>
-        /// <param name="educationDTO"></param>
+        /// <param name="addQuestionDTO"></param>
         /// <returns></returns>
-        public async Task AddEntityAsync(AddQuestionDTO educationDTO)
+        public async Task AddEntityAsync(AddQuestionDTO addQuestionDTO)
         {
             var question = new Question
             {
-                Title = educationDTO.Title,
-                QuestionContent = educationDTO.QuestionContent,
-                CreationDate = DateTime.Now,
-                CreatorUserId = educationDTO.StudentId
+                Title = addQuestionDTO.Title,
+                QuestionContent = addQuestionDTO.QuestionContent,
             };
             await _questionService.AddAsync(question).ConfigureAwait(false);
         }
@@ -264,41 +240,43 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// <summary>
         /// Update student.
         /// </summary>
-        /// <param name="educationDTO"></param>
+        /// <param name="updateQuestionDTO"></param>
         /// <returns></returns>
-        public async Task UpdateEntityAsync(UpdateQuestionDTO educationDTO)
+        public async Task UpdateEntityAsync(UpdateQuestionDTO updateQuestionDTO)
         {
+            var updatedQuestion = await _questionService.GetByIdAsync(updateQuestionDTO.Id).ConfigureAwait(false);
 
-            var updatedQuestion = await _questionService.GetByIdAsync(educationDTO.Id).ConfigureAwait(false);
+            updatedQuestion.IsUseful = updateQuestionDTO.IsUseful;
+            updatedQuestion.MentorReply = updateQuestionDTO.MentorReply;
+            updatedQuestion.ProfessionId = updateQuestionDTO.ProfessionId;
+            updatedQuestion.QuestionContent = updateQuestionDTO.QuestionContent;
+            updatedQuestion.WillShown = updateQuestionDTO.WillShown;
 
+            await _questionService.UpdateAsync(updatedQuestion).ConfigureAwait(false);
         }
 
         /// <summary>
         /// Delete students.
         /// </summary>
-        /// <param name="ids"></param>
+        /// <param name="questionIds"></param>
         /// <returns></returns>
-        public async Task DeleteEntitiesAsync(List<Guid> ids)
+        public async Task DeleteEntitiesAsync(List<Guid> questionIds)
         {
-
-            var deletedQuestions = await _questionService.GetAllAsync(i => ids.Select(p => p).Contains(i.Id)).ConfigureAwait(false);
+            var deletedQuestions = await _questionService.GetAllAsync(i => questionIds.Select(p => p).Contains(i.Id)).ConfigureAwait(false);
 
             await _questionService.DeleteAsync(deletedQuestions).ConfigureAwait(false);
-
         }
 
         /// <summary>
         /// Delete student.
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="questionId"></param>
         /// <returns></returns>
-        public async Task DeleteEntityAsync(Guid id)
+        public async Task DeleteEntityAsync(Guid questionId)
         {
-
-            var deletedQuestion = await _questionService.GetByIdAsync(id).ConfigureAwait(false);
+            var deletedQuestion = await _questionService.GetByIdAsync(questionId).ConfigureAwait(false);
 
             await _questionService.DeleteAsync(deletedQuestion).ConfigureAwait(false);
-
         }
 
         /// <summary>
@@ -307,13 +285,12 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// <returns></returns>
         public async Task<List<QuestionDTO>> GetWillShowQuestions()
         {
-
             Func<IIncludable<Question>, IIncludable> includes = i => i.Include(md => md.Mentor)
                                                                     .Include(st => st.Student);
 
             var questions = await _questionService.GetAllAsync(i => i.WillShown).ConfigureAwait(false);
 
-            var questionDTOList = questions != null ? from question in questions
+            return (questions != null ? from question in questions
                                                       select new QuestionDTO
                                                       {
                                                           Title = question.Title,
@@ -328,8 +305,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
                                                           {
                                                               Id = i.Id
                                                           })
-                                                      } : null;
-            return questionDTOList.ToList();
+                                                      } : null).ToList();
         }
     }
 }
