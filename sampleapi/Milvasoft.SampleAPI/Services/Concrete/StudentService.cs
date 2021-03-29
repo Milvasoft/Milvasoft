@@ -1,5 +1,6 @@
 ﻿using Milvasoft.Helpers.DataAccess.Abstract;
 using Milvasoft.Helpers.DataAccess.IncludeLibrary;
+using Milvasoft.Helpers.Models;
 using Milvasoft.SampleAPI.Data;
 using Milvasoft.SampleAPI.DTOs.MentorDTOs;
 using Milvasoft.SampleAPI.DTOs.StudentDTOs;
@@ -39,90 +40,116 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// Get students for admin.
         /// </summary>
         /// <returns></returns>
-        public async Task<List<StudentDTO>> GetEntitiesForAdminAsync(StudentSpec studentSpec = null)
+        public async Task<PaginationDTO<StudentDTO>> GetEntitiesForAdminAsync(int pageIndex,
+                                                                               int requestedItemCount,
+                                                                               string orderByProperty = null,
+                                                                               bool orderByAscending = false, 
+                                                                               StudentSpec studentSpec = null)
         {
             Func<IIncludable<Student>, IIncludable> includes = i => i.Include(md => md.Mentor);
 
+            var (students, pageCount, totalDataCount) = await _studentRepository.PreparePaginationDTO<IBaseRepository<Student, Guid, EducationAppDbContext>, Student, Guid>
+                                                                                                                (pageIndex, requestedItemCount, orderByProperty, orderByAscending, studentSpec?.ToExpression(),includes).ConfigureAwait(false);
 
-            var students = await _studentRepository.GetAllAsync(includes, studentSpec?.ToExpression()).ConfigureAwait(false);
-
-            return (from student in students
-                                 select new StudentDTO
-                                 {
-                                     Name = student.Name,
-                                     Surname = student.Surname,
-                                     University = student.University,
-                                     Age = student.Age,
-                                     HomeAddress = student.HomeAddress,
-                                     MentorThoughts = student.MentorThoughts,
-                                     IsConfidentialityAgreementSigned = student.IsConfidentialityAgreementSigned,
-                                     GraduationStatus = student.GraduationStatus,
-                                     GraduationScore = student.GraduationScore,
-                                     MentorGraduationThoughts = student.MentorGraduationThoughts,
-                                     ProfessionId = student.ProfessionId,
-                                     Mentor = student.Mentor.CheckObject(i => new MentorDTO
-                                     {
-                                         Id = i.Id
-                                     })
-                                 }).ToList();
+            return new PaginationDTO<StudentDTO>
+            {
+                DTOList = students.CheckList(i => students.Select(student => new StudentDTO
+                {
+                    Name = student.Name,
+                    Surname = student.Surname,
+                    University = student.University,
+                    Age = student.Age,
+                    HomeAddress = student.HomeAddress,
+                    MentorThoughts = student.MentorThoughts,
+                    IsConfidentialityAgreementSigned = student.IsConfidentialityAgreementSigned,
+                    GraduationStatus = student.GraduationStatus,
+                    GraduationScore = student.GraduationScore,
+                    MentorGraduationThoughts = student.MentorGraduationThoughts,
+                    ProfessionId = student.ProfessionId,
+                    Mentor = student.Mentor.CheckObject(i => new MentorDTO
+                    {
+                        Id = i.Id
+                    })
+                })),
+                PageCount = pageCount,
+                TotalDataCount = totalDataCount
+            };
         }
 
         /// <summary>
         /// Get students for mentor.
         /// </summary>
         /// <returns></returns>
-        public async Task<List<StudentDTO>> GetEntitiesForMentorAsync(StudentSpec studentSpec = null)
+        public async Task<PaginationDTO<StudentDTO>> GetEntitiesForMentorAsync(int pageIndex,
+                                                                               int requestedItemCount,
+                                                                               string orderByProperty = null,
+                                                                               bool orderByAscending = false,
+                                                                               StudentSpec studentSpec = null)
         {
-            Func<IIncludable<Student>, IIncludable> includeMentor = i => i.Include(md => md.Mentor)
+            Func<IIncludable<Student>, IIncludable> includes = i => i.Include(md => md.Mentor)
                                                                         .Include(assi => assi.OldAssignments);
 
 
-            var students = await _studentRepository.GetAllAsync(includeMentor, studentSpec?.ToExpression()).ConfigureAwait(false);
+            var (students, pageCount, totalDataCount) = await _studentRepository.PreparePaginationDTO<IBaseRepository<Student, Guid, EducationAppDbContext>, Student, Guid>
+                                                                                                                (pageIndex, requestedItemCount, orderByProperty, orderByAscending, studentSpec?.ToExpression(),includes).ConfigureAwait(false);
 
-            return (from student in students
-                                 select new StudentDTO
-                                 {
-                                     Name = student.Name,
-                                     Surname = student.Surname,
-                                     University = student.University,
-                                     Age = student.Age,
-                                     Dream = student.Dream,
-                                     HomeAddress = student.HomeAddress,
-                                     MentorThoughts = student.MentorThoughts,
-                                     GraduationStatus = student.GraduationStatus,
-                                     GraduationScore = student.GraduationScore,
-                                     MentorGraduationThoughts = student.MentorGraduationThoughts,
-                                     ProfessionId = student.ProfessionId,
-                                     Mentor = student.Mentor.CheckObject(i => new MentorDTO
-                                     {
-                                         Id = i.Id
-                                     }),
-                                     CurrentAssigmentDeliveryDate = student.CurrentAssigmentDeliveryDate,
-                                     OldAssignments = student.OldAssignments.CheckList(f => student.OldAssignments?.Select(oa => new StudentAssigmentDTO
-                                     {
-                                         AssigmentId = oa.Assigment.Id,
-                                     }))
-                                 }).ToList();
+            return new PaginationDTO<StudentDTO>
+            {
+                DTOList = students.CheckList(i => students.Select(student => new StudentDTO
+                {
+                    Name = student.Name,
+                    Surname = student.Surname,
+                    University = student.University,
+                    Age = student.Age,
+                    Dream = student.Dream,
+                    HomeAddress = student.HomeAddress,
+                    MentorThoughts = student.MentorThoughts,
+                    GraduationStatus = student.GraduationStatus,
+                    GraduationScore = student.GraduationScore,
+                    MentorGraduationThoughts = student.MentorGraduationThoughts,
+                    ProfessionId = student.ProfessionId,
+                    Mentor = student.Mentor.CheckObject(i => new MentorDTO
+                    {
+                        Id = i.Id
+                    }),
+                    CurrentAssigmentDeliveryDate = student.CurrentAssigmentDeliveryDate,
+                    OldAssignments = student.OldAssignments.CheckList(f => student.OldAssignments?.Select(oa => new StudentAssigmentDTO
+                    {
+                        AssigmentId = oa.Assigment.Id,
+                    }))
+                })),
+                PageCount = pageCount,
+                TotalDataCount = totalDataCount
+            };
         }
 
         /// <summary>
         /// Get students for student.
         /// </summary>
         /// <returns></returns>
-        public async Task<List<StudentDTO>> GetEntitiesForStudentAsync(StudentSpec studentSpec = null)
+        public async Task<PaginationDTO<StudentDTO>> GetEntitiesForStudentAsync(int pageIndex,
+                                                                               int requestedItemCount,
+                                                                               string orderByProperty = null,
+                                                                               bool orderByAscending = false,
+                                                                               StudentSpec studentSpec = null)
         {
-            var students = await _studentRepository.GetAllAsync(studentSpec?.ToExpression()).ConfigureAwait(false);
+            var (students, pageCount, totalDataCount) = await _studentRepository.PreparePaginationDTO<IBaseRepository<Student, Guid, EducationAppDbContext>, Student, Guid>
+                                                                                                                (pageIndex, requestedItemCount, orderByProperty, orderByAscending, studentSpec?.ToExpression()).ConfigureAwait(false);
 
-            return (from student in students
-                                 select new StudentDTO
-                                 {
-                                     Name = student.Name,
-                                     Surname = student.Surname,
-                                     University = student.University,
-                                     Age = student.Age,
-                                     Dream = student.Dream,
-                                     HomeAddress = student.HomeAddress
-                                 }).ToList();
+            return new PaginationDTO<StudentDTO>
+            {
+                DTOList = students.CheckList(i => students.Select(student => new StudentDTO
+                {
+                    Name = student.Name,
+                    Surname = student.Surname,
+                    University = student.University,
+                    Age = student.Age,
+                    Dream = student.Dream,
+                    HomeAddress = student.HomeAddress
+                })),
+                PageCount = pageCount,
+                TotalDataCount = totalDataCount
+            };
         }
 
         /// <summary>

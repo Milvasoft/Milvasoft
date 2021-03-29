@@ -1,9 +1,11 @@
 ﻿using Milvasoft.Helpers.DataAccess.Abstract;
+using Milvasoft.Helpers.Models;
 using Milvasoft.SampleAPI.Data;
 using Milvasoft.SampleAPI.DTOs.ProfessionDTOs;
 using Milvasoft.SampleAPI.Entity;
 using Milvasoft.SampleAPI.Services.Abstract;
 using Milvasoft.SampleAPI.Spec;
+using Milvasoft.SampleAPI.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -35,53 +37,78 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// Get professions for admin.
         /// </summary>
         /// <returns></returns>
-        public async Task<List<ProfessionDTO>> GetEntitiesForAdminAsync(ProfessionSpec professionSpec)
+        public async Task<PaginationDTO<ProfessionDTO>> GetEntitiesForAdminAsync(int pageIndex,
+                                                                                 int requestedItemCount,
+                                                                                 string orderByProperty = null,
+                                                                                 bool orderByAscending = false, 
+                                                                                 ProfessionSpec professionSpec=null)
         {
-            var professions = await _professionRepository.GetAllAsync(professionSpec?.ToExpression()).ConfigureAwait(false);
+            var (professions, pageCount, totalDataCount) = await _professionRepository.PreparePaginationDTO<IBaseRepository<Profession, Guid, EducationAppDbContext>, Profession, Guid>
+                                                                                                                (pageIndex, requestedItemCount, orderByProperty, orderByAscending, professionSpec?.ToExpression()).ConfigureAwait(false);
 
-            return (from profession in professions
-                                 select new ProfessionDTO
-                                 {
-                                     Name = profession.Name,
-                                     CreationDate = profession.CreationDate,
-                                     CreatorUserId = profession.CreatorUserId,
-                                     Id = profession.Id,
-                                 }).ToList();
+            return new PaginationDTO<ProfessionDTO>
+            {
+                DTOList = professions.CheckList(i => professions.Select(profession => new ProfessionDTO
+                {
+                    Name = profession.Name,
+                    CreationDate = profession.CreationDate,
+                    CreatorUserId = profession.CreatorUserId,
+                    Id = profession.Id
+                })),
+                PageCount = pageCount,
+                TotalDataCount = totalDataCount
+            };
         }
 
         /// <summary>
         /// Get professions for mentor.
         /// </summary>
         /// <returns></returns>
-        public async Task<List<ProfessionDTO>> GetEntitiesForMentorAsync(ProfessionSpec professionSpec)
+        public async Task<PaginationDTO<ProfessionDTO>> GetEntitiesForMentorAsync(int pageIndex,
+                                                                                  int requestedItemCount,
+                                                                                  string orderByProperty = null,
+                                                                                  bool orderByAscending = false,
+                                                                                  ProfessionSpec professionSpec = null)
         {
-            var professions = await _professionRepository.GetAllAsync(professionSpec?.ToExpression()).ConfigureAwait(false);
+            var (professions, pageCount, totalDataCount) = await _professionRepository.PreparePaginationDTO<IBaseRepository<Profession, Guid, EducationAppDbContext>, Profession, Guid>
+                                                                                                                (pageIndex, requestedItemCount, orderByProperty, orderByAscending, professionSpec?.ToExpression()).ConfigureAwait(false);
 
-            return (from profession in professions
-                                 select new ProfessionDTO
-                                 {
-                                     Id = profession.Id,
-                                     Name = profession.Name,
-                                     CreationDate = profession.CreationDate,
-                                     LastModificationDate = profession.LastModificationDate
-                                 }).ToList();
+            return new PaginationDTO<ProfessionDTO>
+            {
+                DTOList = professions.CheckList(i => professions.Select(profession => new ProfessionDTO
+                {
+                    Id = profession.Id,
+                    Name = profession.Name,
+                    CreationDate = profession.CreationDate,
+                    LastModificationDate = profession.LastModificationDate
+                })),
+                PageCount = pageCount,
+                TotalDataCount = totalDataCount
+            };
         }
 
         /// <summary>
         /// Get professions for student.
         /// </summary>
         /// <returns></returns>
-        public async Task<List<ProfessionDTO>> GetEntitiesForStudentAsync(ProfessionSpec professionSpec)
+        public async Task<PaginationDTO<ProfessionDTO>> GetEntitiesForStudentAsync(int pageIndex,
+                                                                                   int requestedItemCount,
+                                                                                   string orderByProperty = null,
+                                                                                   bool orderByAscending = false,
+                                                                                   ProfessionSpec professionSpec = null)
         {
-            var professions = await _professionRepository.GetAllAsync(professionSpec?.ToExpression()).ConfigureAwait(false);
+            var (professions, pageCount, totalDataCount) = await _professionRepository.PreparePaginationDTO<IBaseRepository<Profession, Guid, EducationAppDbContext>, Profession, Guid>
+                                                                                                                (pageIndex, requestedItemCount, orderByProperty, orderByAscending, professionSpec?.ToExpression()).ConfigureAwait(false);
 
-            var professionsDTO = from profession in professions
-                                 select new ProfessionDTO
-                                 {
-                                     Name = profession.Name
-                                 };
-
-            return professionsDTO.ToList();
+            return new PaginationDTO<ProfessionDTO>
+            {
+                DTOList = professions.CheckList(i => professions.Select(profession => new ProfessionDTO
+                {
+                    Name = profession.Name
+                })),
+                PageCount = pageCount,
+                TotalDataCount = totalDataCount
+            };
         }
 
         /// <summary>

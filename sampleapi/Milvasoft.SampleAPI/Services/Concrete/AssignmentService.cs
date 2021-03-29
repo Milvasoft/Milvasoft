@@ -1,9 +1,11 @@
 ﻿using Milvasoft.Helpers.DataAccess.Abstract;
+using Milvasoft.Helpers.Models;
 using Milvasoft.SampleAPI.Data;
 using Milvasoft.SampleAPI.DTOs.AssignmentDTOs;
 using Milvasoft.SampleAPI.Entity;
 using Milvasoft.SampleAPI.Services.Abstract;
 using Milvasoft.SampleAPI.Spec;
+using Milvasoft.SampleAPI.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -32,70 +34,97 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// Get all assignment by <paramref name="assignmentSpec"/>
         /// </summary>
         /// <returns></returns>
-        public async Task<List<AssignmentDTO>> GetEntitiesForStudentAsync(AssignmentSpec assignmentSpec = null)
+        public async Task<PaginationDTO<AssignmentDTO>> GetEntitiesForStudentAsync(int pageIndex,
+                                                                                     int requestedItemCount,
+                                                                                     string orderByProperty = null,
+                                                                                     bool orderByAscending = false,
+                                                                                      AssignmentSpec assignmentSpec = null)
         {
-            var assignments = await _assignmentRepository.GetAllAsync(assignmentSpec?.ToExpression()).ConfigureAwait(false);
+            var (asssignments, pageCount, totalDataCount) = await _assignmentRepository.PreparePaginationDTO<IBaseRepository<Assignment, Guid, EducationAppDbContext>, Assignment, Guid>
+                                                                                                                (pageIndex, requestedItemCount, orderByProperty, orderByAscending, assignmentSpec?.ToExpression()).ConfigureAwait(false);
 
-            return (from assignment in assignments
-                                    select new AssignmentDTO
-                                    {
-                                        Title = assignment.Title,
-                                        Description = assignment.Description,
-                                        RemarksToStudent = assignment.RemarksToStudent,
-                                        RemarksToMentor = assignment.RemarksToMentor,
-                                        Level = assignment.Level,
-                                        Rules = assignment.Rules,
-                                        MaxDeliveryDay = assignment.MaxDeliveryDay,
-                                        ProfessionId = assignment.ProfessionId,
-                                        CreatorUser = assignment.CreatorUser
-                                    }).ToList();
+            return new PaginationDTO<AssignmentDTO>
+            {
+                DTOList = asssignments.CheckList(i => asssignments.Select(assignment => new AssignmentDTO
+                {
+                    Title = assignment.Title,
+                    Description = assignment.Description,
+                    RemarksToStudent = assignment.RemarksToStudent,
+                    RemarksToMentor = assignment.RemarksToMentor,
+                    Level = assignment.Level,
+                    Rules = assignment.Rules,
+                    MaxDeliveryDay = assignment.MaxDeliveryDay,
+                    ProfessionId = assignment.ProfessionId,
+                    CreatorUser = assignment.CreatorUser
+                })),
+                PageCount = pageCount,
+                TotalDataCount = totalDataCount
+            };
         }
 
         /// <summary>
         /// Get assignments for admin by <paramref name="assignmentSpec"/>
         /// </summary>
         /// <returns></returns>
-        public async Task<List<AssignmentDTO>> GetEntitiesForAdminAsync(AssignmentSpec assignmentSpec = null)
+        public async Task<PaginationDTO<AssignmentDTO>> GetEntitiesForAdminAsync(int pageIndex,
+                                                                                     int requestedItemCount,
+                                                                                     string orderByProperty = null,
+                                                                                     bool orderByAscending = false,
+                                                                                      AssignmentSpec assignmentSpec = null)
         {
-            var assignments = await _assignmentRepository.GetAllAsync(assignmentSpec?.ToExpression()).ConfigureAwait(false);
+            var (asssignments, pageCount, totalDataCount) = await _assignmentRepository.PreparePaginationDTO<IBaseRepository<Assignment, Guid, EducationAppDbContext>, Assignment, Guid>
+                                                                                                                 (pageIndex, requestedItemCount, orderByProperty, orderByAscending, assignmentSpec?.ToExpression()).ConfigureAwait(false);
 
-            return (from assignment in assignments
-                                    select new AssignmentDTO
-                                    {
-                                        Title = assignment.Title,
-                                        Description = assignment.Description,
-                                        RemarksToStudent = assignment.RemarksToStudent,
-                                        RemarksToMentor = assignment.RemarksToMentor,
-                                        Level = assignment.Level,
-                                        Rules = assignment.Rules,
-                                        MaxDeliveryDay = assignment.MaxDeliveryDay,
-                                        ProfessionId = assignment.ProfessionId,
-                                        CreatorUser = assignment.CreatorUser,
-                                        LastModifierUser = assignment.LastModifierUser
-                                    }).ToList();
+            return new PaginationDTO<AssignmentDTO>
+            {
+                DTOList = asssignments.CheckList(i => asssignments.Select(assignment => new AssignmentDTO
+                {
+                    Title = assignment.Title,
+                    Description = assignment.Description,
+                    RemarksToStudent = assignment.RemarksToStudent,
+                    RemarksToMentor = assignment.RemarksToMentor,
+                    Level = assignment.Level,
+                    Rules = assignment.Rules,
+                    MaxDeliveryDay = assignment.MaxDeliveryDay,
+                    ProfessionId = assignment.ProfessionId,
+                    CreatorUser = assignment.CreatorUser,
+                    LastModifierUser = assignment.LastModifierUser
+                })),
+                PageCount = pageCount,
+                TotalDataCount = totalDataCount
+            };
         }
 
         /// <summary>
         /// Get assignments for mentor by <paramref name="assignmentSpec"/>
         /// </summary>
         /// <returns></returns>
-        public async Task<List<AssignmentDTO>> GetEntitiesForMentorAsync(AssignmentSpec assignmentSpec = null)
+        public async Task<PaginationDTO<AssignmentDTO>> GetEntitiesForMentorAsync(int pageIndex,
+                                                                                     int requestedItemCount,
+                                                                                     string orderByProperty = null,
+                                                                                     bool orderByAscending = false,
+                                                                                      AssignmentSpec assignmentSpec = null)
         {
-            var assignments = await _assignmentRepository.GetAllAsync(assignmentSpec?.ToExpression()).ConfigureAwait(false);
+            var (asssignments, pageCount, totalDataCount) = await _assignmentRepository.PreparePaginationDTO<IBaseRepository<Assignment, Guid, EducationAppDbContext>, Assignment, Guid>
+                                                                                                                 (pageIndex, requestedItemCount, orderByProperty, orderByAscending, assignmentSpec?.ToExpression()).ConfigureAwait(false);
 
-            return (from assignment in assignments
-                                    select new AssignmentDTO
-                                    {
-                                        Title = assignment.Title,
-                                        Description = assignment.Description,
-                                        RemarksToStudent = assignment.RemarksToStudent,
-                                        RemarksToMentor = assignment.RemarksToMentor,
-                                        Level = assignment.Level,
-                                        Rules = assignment.Rules,
-                                        MaxDeliveryDay = assignment.MaxDeliveryDay,
-                                        ProfessionId = assignment.ProfessionId,
-                                        CreatorUser = assignment.CreatorUser
-                                    }).ToList();
+            return new PaginationDTO<AssignmentDTO>
+            {
+                DTOList = asssignments.CheckList(i => asssignments.Select(assignment => new AssignmentDTO
+                {
+                    Title = assignment.Title,
+                    Description = assignment.Description,
+                    RemarksToStudent = assignment.RemarksToStudent,
+                    RemarksToMentor = assignment.RemarksToMentor,
+                    Level = assignment.Level,
+                    Rules = assignment.Rules,
+                    MaxDeliveryDay = assignment.MaxDeliveryDay,
+                    ProfessionId = assignment.ProfessionId,
+                    CreatorUser = assignment.CreatorUser
+                })),
+                PageCount = pageCount,
+                TotalDataCount = totalDataCount
+            };
         }
 
         /// <summary>

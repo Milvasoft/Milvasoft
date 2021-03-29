@@ -1,5 +1,6 @@
 ﻿using Milvasoft.Helpers.DataAccess.Abstract;
 using Milvasoft.Helpers.DataAccess.IncludeLibrary;
+using Milvasoft.Helpers.Models;
 using Milvasoft.SampleAPI.Data;
 using Milvasoft.SampleAPI.DTOs.AnnouncementDTOs;
 using Milvasoft.SampleAPI.DTOs.MentorDTOs;
@@ -37,91 +38,119 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// Get mentors for admin.
         /// </summary>
         /// <returns></returns>
-        public async Task<List<MentorDTO>> GetEntitiesForAdminAsync(MentorSpec mentorSpec = null)
+        public async Task<PaginationDTO<MentorDTO>> GetEntitiesForAdminAsync(int pageIndex,
+                                                                             int requestedItemCount,
+                                                                             string orderByProperty = null,
+                                                                             bool orderByAscending = false, 
+                                                                             MentorSpec mentorSpec = null)
         {
             Func<IIncludable<Mentor>, IIncludable> includes = i => i.Include(p => p.PublishedAnnouncements)
                                                                      .Include(s => s.Students)
                                                                      .Include(p => p.Professions);
 
-            var mentors = await _mentorRepository.GetAllAsync(includes, mentorSpec?.ToExpression()).ConfigureAwait(false);
+            var (mentors, pageCount, totalDataCount) = await _mentorRepository.PreparePaginationDTO<IBaseRepository<Mentor, Guid, EducationAppDbContext>, Mentor, Guid>
+                                                                                                                (pageIndex, requestedItemCount, orderByProperty, orderByAscending, mentorSpec?.ToExpression(), includes).ConfigureAwait(false);
 
-            return (from mentor in mentors
-                             select new MentorDTO
-                             {
-                                 Name = mentor.Name,
-                                 Surname = mentor.Surname,
-                                 CVFilePath = mentor.CVFilePath,
-                                 Professions = mentor.Professions.CheckList(i => mentor.Professions?.Select(pr => new MentorProfessionDTO
-                                 {
-                                     Id = pr.ProfessionId
-                                 })),
-                                 PublishedAnnouncements = mentor.PublishedAnnouncements.CheckList(i => mentor.PublishedAnnouncements?.Select(pa => new AnnouncementDTO
-                                 {
-                                     Id = pa.Id
-                                 })),
-                                 Students = mentor.Students.CheckList(i => mentor.Students?.Select(st => new StudentDTO
-                                 {
-                                     Id = st.Id
-                                 }))
-                             }).ToList();
+            return new PaginationDTO<MentorDTO>
+            {
+                DTOList = mentors.CheckList(i => mentors.Select(mentor => new MentorDTO
+                {
+                    Name = mentor.Name,
+                    Surname = mentor.Surname,
+                    CVFilePath = mentor.CVFilePath,
+                    Professions = mentor.Professions.CheckList(i => mentor.Professions?.Select(pr => new MentorProfessionDTO
+                    {
+                        Id = pr.ProfessionId
+                    })),
+                    PublishedAnnouncements = mentor.PublishedAnnouncements.CheckList(i => mentor.PublishedAnnouncements?.Select(pa => new AnnouncementDTO
+                    {
+                        Id = pa.Id
+                    })),
+                    Students = mentor.Students.CheckList(i => mentor.Students?.Select(st => new StudentDTO
+                    {
+                        Id = st.Id
+                    }))
+                })),
+                PageCount = pageCount,
+                TotalDataCount = totalDataCount
+            };
         }
 
         /// <summary>
         /// Get mentors for mentor.
         /// </summary>
         /// <returns></returns>
-        public async Task<List<MentorDTO>> GetEntitiesForMentorAsync(MentorSpec mentorSpec = null)
+        public async Task<PaginationDTO<MentorDTO>> GetEntitiesForMentorAsync(int pageIndex,
+                                                                              int requestedItemCount,
+                                                                              string orderByProperty = null,
+                                                                              bool orderByAscending = false,
+                                                                              MentorSpec mentorSpec = null)
         {
             Func<IIncludable<Mentor>, IIncludable> includes = i => i.Include(p => p.PublishedAnnouncements)
                                                                      .Include(s => s.Students)
                                                                      .Include(p => p.Professions);
 
-            var mentors = await _mentorRepository.GetAllAsync(includes, mentorSpec?.ToExpression()).ConfigureAwait(false);
+            var (mentors, pageCount, totalDataCount) = await _mentorRepository.PreparePaginationDTO<IBaseRepository<Mentor, Guid, EducationAppDbContext>, Mentor, Guid>
+                                                                                                                (pageIndex, requestedItemCount, orderByProperty, orderByAscending, mentorSpec?.ToExpression(), includes).ConfigureAwait(false);
 
-           return (from mentor in mentors
-                             select new MentorDTO
-                             {
-                                 Name = mentor.Name,
-                                 Surname = mentor.Surname,
-                                 Professions = mentor.Professions.CheckList(i => mentor.Professions?.Select(pr => new MentorProfessionDTO
-                                 {
-                                     Id = pr.ProfessionId
-                                 })),
-                                 PublishedAnnouncements = mentor.PublishedAnnouncements.CheckList(i => mentor.PublishedAnnouncements?.Select(pa => new AnnouncementDTO
-                                 {
-                                     Id = pa.Id
-                                 })),
-                                 Students = mentor.Students.CheckList(i => mentor.Students?.Select(st => new StudentDTO
-                                 {
-                                     Id = st.Id
-                                 }))
-                             }).ToList();
+            return new PaginationDTO<MentorDTO>
+            {
+                DTOList = mentors.CheckList(i => mentors.Select(mentor => new MentorDTO
+                {
+                    Name = mentor.Name,
+                    Surname = mentor.Surname,
+                    Professions = mentor.Professions.CheckList(i => mentor.Professions?.Select(pr => new MentorProfessionDTO
+                    {
+                        Id = pr.ProfessionId
+                    })),
+                    PublishedAnnouncements = mentor.PublishedAnnouncements.CheckList(i => mentor.PublishedAnnouncements?.Select(pa => new AnnouncementDTO
+                    {
+                        Id = pa.Id
+                    })),
+                    Students = mentor.Students.CheckList(i => mentor.Students?.Select(st => new StudentDTO
+                    {
+                        Id = st.Id
+                    }))
+                })),
+                PageCount = pageCount,
+                TotalDataCount = totalDataCount
+            };
         }
 
         /// <summary>
         /// Get mentors for student.
         /// </summary>
         /// <returns></returns>
-        public async Task<List<MentorDTO>> GetEntitiesForStudentAsync(MentorSpec mentorSpec = null)
+        public async Task<PaginationDTO<MentorDTO>> GetEntitiesForStudentAsync(int pageIndex,
+                                                                               int requestedItemCount,
+                                                                               string orderByProperty = null,
+                                                                               bool orderByAscending = false,
+                                                                               MentorSpec mentorSpec = null)
         {
             Func<IIncludable<Mentor>, IIncludable> includes = i => i.Include(p => p.PublishedAnnouncements)
                                                                      .Include(p => p.Professions);
 
-            var mentors = await _mentorRepository.GetAllAsync(includes, mentorSpec?.ToExpression()).ConfigureAwait(false);
-            return (from mentor in mentors
-                             select new MentorDTO
-                             {
-                                 Name = mentor.Name,
-                                 Surname = mentor.Surname,
-                                 Professions = mentor.Professions.CheckList(i => mentor.Professions?.Select(pr => new MentorProfessionDTO
-                                 {
-                                     Id = pr.ProfessionId
-                                 })),
-                                 PublishedAnnouncements = mentor.PublishedAnnouncements.CheckList(i => mentor.PublishedAnnouncements?.Select(pa => new AnnouncementDTO
-                                 {
-                                     Id = pa.Id
-                                 }))
-                             }).ToList();
+            var (mentors, pageCount, totalDataCount) = await _mentorRepository.PreparePaginationDTO<IBaseRepository<Mentor, Guid, EducationAppDbContext>, Mentor, Guid>
+                                                                                                                (pageIndex, requestedItemCount, orderByProperty, orderByAscending, mentorSpec?.ToExpression(), includes).ConfigureAwait(false);
+
+            return new PaginationDTO<MentorDTO>
+            {
+                DTOList = mentors.CheckList(i => mentors.Select(mentor => new MentorDTO
+                {
+                    Name = mentor.Name,
+                    Surname = mentor.Surname,
+                    Professions = mentor.Professions.CheckList(i => mentor.Professions?.Select(pr => new MentorProfessionDTO
+                    {
+                        Id = pr.ProfessionId
+                    })),
+                    PublishedAnnouncements = mentor.PublishedAnnouncements.CheckList(i => mentor.PublishedAnnouncements?.Select(pa => new AnnouncementDTO
+                    {
+                        Id = pa.Id
+                    }))
+                })),
+                PageCount = pageCount,
+                TotalDataCount = totalDataCount
+            };
         }
 
         /// <summary>

@@ -1,5 +1,6 @@
 ﻿using Milvasoft.Helpers.DataAccess.Abstract;
 using Milvasoft.Helpers.DataAccess.IncludeLibrary;
+using Milvasoft.Helpers.Models;
 using Milvasoft.SampleAPI.Data;
 using Milvasoft.SampleAPI.DTOs.MentorDTOs;
 using Milvasoft.SampleAPI.DTOs.QuestionDTOs;
@@ -37,93 +38,120 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// Get all questions for admin.
         /// </summary>
         /// <returns></returns>
-        public async Task<List<QuestionDTO>> GetEntitiesForAdminAsync(QuestionSpec questionSpec)
+        public async Task<PaginationDTO<QuestionDTO>> GetEntitiesForAdminAsync(int pageIndex,
+                                                                               int requestedItemCount,
+                                                                               string orderByProperty = null,
+                                                                               bool orderByAscending = false, 
+                                                                               QuestionSpec questionSpec=null)
         {
             Func<IIncludable<Question>, IIncludable> includes = i => i.Include(md => md.Mentor)
                                                                      .Include(st => st.Student);
 
-            var questions = await _questionService.GetAllAsync(includes, questionSpec?.ToExpression()).ConfigureAwait(false);
+            var (questions, pageCount, totalDataCount) = await _questionService.PreparePaginationDTO<IBaseRepository<Question, Guid, EducationAppDbContext>, Question, Guid>
+                                                                                                                (pageIndex, requestedItemCount, orderByProperty, orderByAscending, questionSpec?.ToExpression(),includes).ConfigureAwait(false);
 
-            return(from question in questions
-                                   select new QuestionDTO
-                                   {
-                                       Title = question.Title,
-                                       QuestionContent = question.QuestionContent,
-                                       MentorReply = question.MentorReply,
-                                       IsUseful = question.IsUseful,
-                                       WillShown = question.WillShown,
-                                       ProfessionId = question.ProfessionId,
-                                       Mentor = question.Mentor.CheckObject(i => new MentorDTO
-                                       {
-                                           Id = (Guid)question.MentorId
-                                       }),
-                                       Student = question.Student.CheckObject(i => new StudentDTO
-                                       {
-                                           Id = i.Id
-                                       }),
-                                       Id = question.Id
-                                   }).ToList();
+            return new PaginationDTO<QuestionDTO>
+            {
+                DTOList = questions.CheckList(i => questions.Select(question=> new QuestionDTO
+                {
+                    Title = question.Title,
+                    QuestionContent = question.QuestionContent,
+                    MentorReply = question.MentorReply,
+                    IsUseful = question.IsUseful,
+                    WillShown = question.WillShown,
+                    ProfessionId = question.ProfessionId,
+                    Mentor = question.Mentor.CheckObject(i => new MentorDTO
+                    {
+                        Id = (Guid)question.MentorId
+                    }),
+                    Student = question.Student.CheckObject(i => new StudentDTO
+                    {
+                        Id = i.Id
+                    }),
+                    Id = question.Id
+                })),
+                PageCount = pageCount,
+                TotalDataCount = totalDataCount
+            };
         }
 
         /// <summary>
         /// Get all questions for admin.
         /// </summary>
         /// <returns></returns>
-        public async Task<List<QuestionDTO>> GetEntitiesForMentorAsync(QuestionSpec questionSpec)
+        public async Task<PaginationDTO<QuestionDTO>> GetEntitiesForMentorAsync(int pageIndex,
+                                                                                int requestedItemCount,
+                                                                                string orderByProperty = null,
+                                                                                bool orderByAscending = false,
+                                                                                QuestionSpec questionSpec = null)
         {
             Func<IIncludable<Question>, IIncludable> includes = i => i.Include(md => md.Mentor)
                                                                      .Include(st => st.Student);
 
 
-            var questions = await _questionService.GetAllAsync(includes, questionSpec?.ToExpression()).ConfigureAwait(false);
+            var (questions, pageCount, totalDataCount) = await _questionService.PreparePaginationDTO<IBaseRepository<Question, Guid, EducationAppDbContext>, Question, Guid>
+                                                                                                                 (pageIndex, requestedItemCount, orderByProperty, orderByAscending, questionSpec?.ToExpression(),includes).ConfigureAwait(false);
 
-            return (from question in questions
-                                   select new QuestionDTO
-                                   {
-                                       Title = question.Title,
-                                       QuestionContent = question.QuestionContent,
-                                       MentorReply = question.MentorReply,
-                                       IsUseful = question.IsUseful,
-                                       WillShown = question.WillShown,
-                                       ProfessionId = question.ProfessionId,
-                                       Mentor = question.Mentor.CheckObject(i => new MentorDTO
-                                       {
-                                           Id = (Guid)question.MentorId
-                                       }),
-                                       Student = question.Student.CheckObject(i => new StudentDTO
-                                       {
-                                           Id = i.Id
-                                       })
-                                   }).ToList();
+            return new PaginationDTO<QuestionDTO>
+            {
+                DTOList = questions.CheckList(i => questions.Select(question => new QuestionDTO
+                {
+                    Title = question.Title,
+                    QuestionContent = question.QuestionContent,
+                    MentorReply = question.MentorReply,
+                    IsUseful = question.IsUseful,
+                    WillShown = question.WillShown,
+                    ProfessionId = question.ProfessionId,
+                    Mentor = question.Mentor.CheckObject(i => new MentorDTO
+                    {
+                        Id = (Guid)question.MentorId
+                    }),
+                    Student = question.Student.CheckObject(i => new StudentDTO
+                    {
+                        Id = i.Id
+                    })
+                })),
+                PageCount = pageCount,
+                TotalDataCount = totalDataCount
+            };
         }
 
         /// <summary>
         /// Get all questions for student.
         /// </summary>
         /// <returns></returns>
-        public async Task<List<QuestionDTO>> GetEntitiesForStudentAsync(QuestionSpec questionSpec)
+        public async Task<PaginationDTO<QuestionDTO>> GetEntitiesForStudentAsync(int pageIndex,
+                                                                                 int requestedItemCount,
+                                                                                 string orderByProperty = null,
+                                                                                 bool orderByAscending = false,
+                                                                                 QuestionSpec questionSpec = null)
         {
             Func<IIncludable<Question>, IIncludable> includes = i => i.Include(md => md.Mentor)
                                                                     .Include(st => st.Student);
 
-            var questions = await _questionService.GetAllAsync(includes, questionSpec?.ToExpression()).ConfigureAwait(false);
+            var (questions, pageCount, totalDataCount) = await _questionService.PreparePaginationDTO<IBaseRepository<Question, Guid, EducationAppDbContext>, Question, Guid>
+                                                                                                                 (pageIndex, requestedItemCount, orderByProperty, orderByAscending, questionSpec?.ToExpression(),includes).ConfigureAwait(false);
 
-            return (from question in questions
-                                   select new QuestionDTO
-                                   {
-                                       Title = question.Title,
-                                       QuestionContent = question.QuestionContent,
-                                       MentorReply = question.MentorReply,
-                                       ProfessionId = question.ProfessionId,
-                                       Mentor = question.Mentor.CheckObject(i => new MentorDTO
-                                       {
-                                           Id = (Guid)question.MentorId
-                                       }),
-                                       Student = question.Student.CheckObject(i => new StudentDTO
-                                       {
-                                           Id = i.Id
-                                       })
-                                   }).ToList();
+            return new PaginationDTO<QuestionDTO>
+            {
+                DTOList = questions.CheckList(i => questions.Select(question => new QuestionDTO
+                {
+                    Title = question.Title,
+                    QuestionContent = question.QuestionContent,
+                    MentorReply = question.MentorReply,
+                    ProfessionId = question.ProfessionId,
+                    Mentor = question.Mentor.CheckObject(i => new MentorDTO
+                    {
+                        Id = (Guid)question.MentorId
+                    }),
+                    Student = question.Student.CheckObject(i => new StudentDTO
+                    {
+                        Id = i.Id
+                    })
+                })),
+                PageCount = pageCount,
+                TotalDataCount = totalDataCount
+            };
         }
 
         /// <summary>
@@ -291,21 +319,21 @@ namespace Milvasoft.SampleAPI.Services.Concrete
             var questions = await _questionService.GetAllAsync(i => i.WillShown).ConfigureAwait(false);
 
             return (questions != null ? from question in questions
-                                                      select new QuestionDTO
-                                                      {
-                                                          Title = question.Title,
-                                                          QuestionContent = question.QuestionContent,
-                                                          MentorReply = question.MentorReply,
-                                                          ProfessionId = question.ProfessionId,
-                                                          Mentor = question.Mentor.CheckObject(i => new MentorDTO
-                                                          {
-                                                              Id = (Guid)question.MentorId
-                                                          }),
-                                                          Student = question.Student.CheckObject(i => new StudentDTO
-                                                          {
-                                                              Id = i.Id
-                                                          })
-                                                      } : null).ToList();
+                                        select new QuestionDTO
+                                        {
+                                            Title = question.Title,
+                                            QuestionContent = question.QuestionContent,
+                                            MentorReply = question.MentorReply,
+                                            ProfessionId = question.ProfessionId,
+                                            Mentor = question.Mentor.CheckObject(i => new MentorDTO
+                                            {
+                                                Id = (Guid)question.MentorId
+                                            }),
+                                            Student = question.Student.CheckObject(i => new StudentDTO
+                                            {
+                                                Id = i.Id
+                                            })
+                                        } : null).ToList();
         }
     }
 }
