@@ -6,7 +6,7 @@ namespace Milvasoft.Helpers.MultiTenancy.EntityBase
     /// <summary>
     /// Tenant base.
     /// </summary>
-    public interface IMilvaTenantBase<TKey> : IFullAuditable<TKey> where TKey : struct, IEquatable<TKey>
+    public interface IMilvaTenantBase<TKey> : IBaseEntity<TKey> where TKey : struct, IEquatable<TKey>
     {
         /// <summary>
         /// Display name of the Tenant.
@@ -29,5 +29,12 @@ namespace Milvasoft.Helpers.MultiTenancy.EntityBase
         /// If as tenant is not active, no user of this tenant can use the application.
         /// </summary>
         bool IsActive { get; set; }
+    }
+
+    /// <summary>
+    /// Tenant base.
+    /// </summary>
+    public interface IMilvaBaseTenant<TKey> : IMilvaTenantBase<TKey>, IFullAuditable<TKey> where TKey : struct, IEquatable<TKey>
+    {
     }
 }

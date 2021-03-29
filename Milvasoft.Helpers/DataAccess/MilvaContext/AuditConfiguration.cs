@@ -10,5 +10,6 @@ namespace Milvasoft.Helpers.DataAccess.MilvaContext
                                      bool AuditModificationDate,
                                      bool AuditModifier,
                                      bool AuditDeletionDate,
-                                     bool AuditDeleter) : IAuditConfiguration { }
+                                     bool AuditDeleter) : IAuditConfiguration
+    { }
 }

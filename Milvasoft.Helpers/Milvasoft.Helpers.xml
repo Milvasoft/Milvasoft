@@ -6985,6 +6985,40 @@
             If as tenant is not active, no user of this tenant can use the application.
             </summary>
         </member>
+        <member name="T:Milvasoft.Helpers.MultiTenancy.EntityBase.IMilvaBaseTenant`1">
+            <summary>
+            Tenant base.
+            </summary>
+        </member>
+        <member name="T:Milvasoft.Helpers.MultiTenancy.EntityBase.MilvaBaseTenant`2">
+            <summary>
+            Tenant base.
+            </summary>
+            <typeparam name="TKey"> Your key must override ToString() method correctly to block exceptions in <see cref="T:Milvasoft.Helpers.MultiTenancy.LifetimeManagement.MultiTenantContainer`2"/>. </typeparam>
+            <typeparam name="TUserKey"></typeparam>
+        </member>
+        <member name="P:Milvasoft.Helpers.MultiTenancy.EntityBase.MilvaBaseTenant`2.TenancyName">
+            <summary>
+            Tenancy name of tenant.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.MultiTenancy.EntityBase.MilvaBaseTenant`2.Name">
+            <summary>
+            Display name of the Tenant.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.MultiTenancy.EntityBase.MilvaBaseTenant`2.ConnectionString">
+            <summary>
+            ENCRYPTED connection string of the tenant database.
+            Can be null if this tenant is stored in host database.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.MultiTenancy.EntityBase.MilvaBaseTenant`2.IsActive">
+            <summary>
+            Is this tenant active?
+            If as tenant is not active, no user of this tenant can use the application.
+            </summary>
+        </member>
         <member name="T:Milvasoft.Helpers.MultiTenancy.EntityBase.MilvaTenant`2">
             <summary>
             Represents a Tenant of the application.
@@ -7038,35 +7072,6 @@
             </summary>
             <param name="tenancyName">UNIQUE name of this Tenant</param>
             <param name="branchNo"></param>
-        </member>
-        <member name="T:Milvasoft.Helpers.MultiTenancy.EntityBase.MilvaTenantBase`2">
-            <summary>
-            Tenant base.
-            </summary>
-            <typeparam name="TKey"> Your key must override ToString() method correctly to block exceptions in <see cref="T:Milvasoft.Helpers.MultiTenancy.LifetimeManagement.MultiTenantContainer`2"/>. </typeparam>
-            <typeparam name="TUserKey"></typeparam>
-        </member>
-        <member name="P:Milvasoft.Helpers.MultiTenancy.EntityBase.MilvaTenantBase`2.TenancyName">
-            <summary>
-            Tenancy name of tenant.
-            </summary>
-        </member>
-        <member name="P:Milvasoft.Helpers.MultiTenancy.EntityBase.MilvaTenantBase`2.Name">
-            <summary>
-            Display name of the Tenant.
-            </summary>
-        </member>
-        <member name="P:Milvasoft.Helpers.MultiTenancy.EntityBase.MilvaTenantBase`2.ConnectionString">
-            <summary>
-            ENCRYPTED connection string of the tenant database.
-            Can be null if this tenant is stored in host database.
-            </summary>
-        </member>
-        <member name="P:Milvasoft.Helpers.MultiTenancy.EntityBase.MilvaTenantBase`2.IsActive">
-            <summary>
-            Is this tenant active?
-            If as tenant is not active, no user of this tenant can use the application.
-            </summary>
         </member>
         <member name="T:Milvasoft.Helpers.MultiTenancy.EntityBase.TenantId">
             <summary>
