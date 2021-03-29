@@ -10,7 +10,7 @@ namespace Milvasoft.Helpers.MultiTenancy.EntityBase
     /// </summary>
     /// <typeparam name="TUser"></typeparam>
     /// <typeparam name="TUserKey"></typeparam>
-    public abstract class MilvaTenant<TUser, TUserKey> : MilvaTenantBase<TUserKey, TenantId>, IFullAuditable<TUser, TUserKey, TenantId>
+    public abstract class MilvaTenant<TUser, TUserKey> : MilvaBaseTenant<TUserKey, TenantId>, IFullAuditable<TUser, TUserKey, TenantId>
     where TUser : IdentityUser<TUserKey>
     where TUserKey : struct, IEquatable<TUserKey>
     {
