@@ -8,6 +8,9 @@ namespace Milvasoft.SampleAPI.DTOs.AssignmentDTOs
     /// </summary>
     public class UpdateAssignmentDTO
     {
+        /// <summary>
+        /// Id of updated assignement.
+        /// </summary>
         public Guid Id { get; set; }
         /// <summary>
         /// Tittle of assignment.
@@ -53,7 +56,7 @@ namespace Milvasoft.SampleAPI.DTOs.AssignmentDTOs
         /// The profession Id of assignment.
         /// </summary>
         [OValidateId]
-        public Guid? ProfessionId { get; set; }
+        public Guid ProfessionId { get; set; }
 
     }
 }
