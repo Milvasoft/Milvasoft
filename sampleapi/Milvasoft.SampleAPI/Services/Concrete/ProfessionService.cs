@@ -1,9 +1,11 @@
 ﻿using Milvasoft.Helpers.DataAccess.Abstract;
+using Milvasoft.Helpers.Models;
 using Milvasoft.SampleAPI.Data;
 using Milvasoft.SampleAPI.DTOs.ProfessionDTOs;
 using Milvasoft.SampleAPI.Entity;
 using Milvasoft.SampleAPI.Services.Abstract;
 using Milvasoft.SampleAPI.Spec;
+using Milvasoft.SampleAPI.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -35,65 +37,78 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// Get professions for admin.
         /// </summary>
         /// <returns></returns>
-        public async Task<List<ProfessionDTO>> GetEntitiesForAdminAsync(ProfessionSpec professionSpec)
+        public async Task<PaginationDTO<ProfessionDTO>> GetEntitiesForAdminAsync(int pageIndex,
+                                                                                 int requestedItemCount,
+                                                                                 string orderByProperty = null,
+                                                                                 bool orderByAscending = false, 
+                                                                                 ProfessionSpec professionSpec=null)
         {
+            var (professions, pageCount, totalDataCount) = await _professionRepository.PreparePaginationDTO<IBaseRepository<Profession, Guid, EducationAppDbContext>, Profession, Guid>
+                                                                                                                (pageIndex, requestedItemCount, orderByProperty, orderByAscending, professionSpec?.ToExpression()).ConfigureAwait(false);
 
-            var professions = await _professionRepository.GetAllAsync(professionSpec?.ToExpression()).ConfigureAwait(false);
-
-            var professionsDTO = from profession in professions
-                                 select new ProfessionDTO
-                                 {
-                                     Name = profession.Name,
-                                     CreationDate = profession.CreationDate,
-                                     CreatorUserId = profession.CreatorUserId,
-                                     Id = profession.Id,
-                                     LastModificationDate = profession.LastModificationDate,
-                                     LastModifierUserId = profession.LastModifierUserId
-                                 };
-
-            return professionsDTO.ToList();
-
+            return new PaginationDTO<ProfessionDTO>
+            {
+                DTOList = professions.CheckList(i => professions.Select(profession => new ProfessionDTO
+                {
+                    Name = profession.Name,
+                    CreationDate = profession.CreationDate,
+                    CreatorUserId = profession.CreatorUserId,
+                    Id = profession.Id
+                })),
+                PageCount = pageCount,
+                TotalDataCount = totalDataCount
+            };
         }
 
         /// <summary>
         /// Get professions for mentor.
         /// </summary>
         /// <returns></returns>
-        public async Task<List<ProfessionDTO>> GetEntitiesForMentorAsync(ProfessionSpec professionSpec)
+        public async Task<PaginationDTO<ProfessionDTO>> GetEntitiesForMentorAsync(int pageIndex,
+                                                                                  int requestedItemCount,
+                                                                                  string orderByProperty = null,
+                                                                                  bool orderByAscending = false,
+                                                                                  ProfessionSpec professionSpec = null)
         {
+            var (professions, pageCount, totalDataCount) = await _professionRepository.PreparePaginationDTO<IBaseRepository<Profession, Guid, EducationAppDbContext>, Profession, Guid>
+                                                                                                                (pageIndex, requestedItemCount, orderByProperty, orderByAscending, professionSpec?.ToExpression()).ConfigureAwait(false);
 
-            var professions = await _professionRepository.GetAllAsync(professionSpec?.ToExpression()).ConfigureAwait(false);
-
-            var professionsDTO = from profession in professions
-                                 select new ProfessionDTO
-                                 {
-                                     Id = profession.Id,
-                                     Name = profession.Name,
-                                     CreationDate = profession.CreationDate,
-                                     LastModificationDate = profession.LastModificationDate
-                                 };
-
-            return professionsDTO.ToList();
-
+            return new PaginationDTO<ProfessionDTO>
+            {
+                DTOList = professions.CheckList(i => professions.Select(profession => new ProfessionDTO
+                {
+                    Id = profession.Id,
+                    Name = profession.Name,
+                    CreationDate = profession.CreationDate,
+                    LastModificationDate = profession.LastModificationDate
+                })),
+                PageCount = pageCount,
+                TotalDataCount = totalDataCount
+            };
         }
 
         /// <summary>
         /// Get professions for student.
         /// </summary>
         /// <returns></returns>
-        public async Task<List<ProfessionDTO>> GetEntitiesForStudentAsync(ProfessionSpec professionSpec)
+        public async Task<PaginationDTO<ProfessionDTO>> GetEntitiesForStudentAsync(int pageIndex,
+                                                                                   int requestedItemCount,
+                                                                                   string orderByProperty = null,
+                                                                                   bool orderByAscending = false,
+                                                                                   ProfessionSpec professionSpec = null)
         {
+            var (professions, pageCount, totalDataCount) = await _professionRepository.PreparePaginationDTO<IBaseRepository<Profession, Guid, EducationAppDbContext>, Profession, Guid>
+                                                                                                                (pageIndex, requestedItemCount, orderByProperty, orderByAscending, professionSpec?.ToExpression()).ConfigureAwait(false);
 
-            var professions = await _professionRepository.GetAllAsync(professionSpec?.ToExpression()).ConfigureAwait(false);
-
-            var professionsDTO = from profession in professions
-                                 select new ProfessionDTO
-                                 {
-                                     Name = profession.Name
-                                 };
-
-            return professionsDTO.ToList();
-
+            return new PaginationDTO<ProfessionDTO>
+            {
+                DTOList = professions.CheckList(i => professions.Select(profession => new ProfessionDTO
+                {
+                    Name = profession.Name
+                })),
+                PageCount = pageCount,
+                TotalDataCount = totalDataCount
+            };
         }
 
         /// <summary>
@@ -103,19 +118,16 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// <returns></returns>
         public async Task<ProfessionDTO> GetEntityForAdminAsync(Guid professionId)
         {
-
             var profession = await _professionRepository.GetByIdAsync(professionId).ConfigureAwait(false);
 
             return new ProfessionDTO
             {
                 Name = profession.Name,
                 CreationDate = profession.CreationDate,
-                CreatorUserId = profession.CreatorUserId,
                 Id = profession.Id,
                 LastModificationDate = profession.LastModificationDate,
                 LastModifierUserId = profession.LastModifierUserId
             };
-
         }
 
         /// <summary>
@@ -125,7 +137,6 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// <returns></returns>
         public async Task<ProfessionDTO> GetEntityForMentorAsync(Guid professionId)
         {
-
             var profession = await _professionRepository.GetByIdAsync(professionId).ConfigureAwait(false);
 
             return new ProfessionDTO
@@ -134,7 +145,6 @@ namespace Milvasoft.SampleAPI.Services.Concrete
                 CreationDate = profession.CreationDate,
                 LastModificationDate = profession.LastModificationDate
             };
-
         }
 
         /// <summary>
@@ -144,14 +154,12 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// <returns></returns>
         public async Task<ProfessionDTO> GetEntityForStudentAsync(Guid professionId)
         {
-
             var profession = await _professionRepository.GetByIdAsync(professionId).ConfigureAwait(false);
 
             return new ProfessionDTO
             {
                 Name = profession.Name
             };
-
         }
         /// <summary>
         /// Add profession to database.
@@ -160,14 +168,11 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// <returns></returns>
         public async Task AddEntityAsync(AddProfessionDTO addProfessionDTO)
         {
-
             var profession = new Profession
             {
                 Name = addProfessionDTO.Name,
             };
-
             await _professionRepository.AddAsync(profession).ConfigureAwait(false);
-
         }
 
         /// <summary>
@@ -177,13 +182,11 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// <returns></returns>
         public async Task UpdateEntityAsync(UpdateProfessionDTO addProfessionDTO)
         {
-
             var updatedProfession = await _professionRepository.GetByIdAsync(addProfessionDTO.Id).ConfigureAwait(false);
 
             updatedProfession.Name = addProfessionDTO.Name;
 
             await _professionRepository.UpdateAsync(updatedProfession).ConfigureAwait(false);
-
         }
 
         /// <summary>
@@ -193,11 +196,9 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// <returns></returns>
         public async Task DeleteEntitiesAsync(List<Guid> professionIds)
         {
-
             var professions = await _professionRepository.GetAllAsync(i => professionIds.Select(p => p).Contains(i.Id)).ConfigureAwait(false);
 
             await _professionRepository.DeleteAsync(professions).ConfigureAwait(false);
-
         }
 
         /// <summary>
@@ -207,12 +208,9 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// <returns></returns>
         public async Task DeleteEntityAsync(Guid professionId)
         {
-
             var deletedProfession = await _professionRepository.GetByIdAsync(professionId).ConfigureAwait(false);
 
             await _professionRepository.DeleteAsync(deletedProfession).ConfigureAwait(false);
-
         }
-
     }
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Milvasoft.Helpers.Models;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -15,19 +16,31 @@ namespace Milvasoft.SampleAPI.Services.Abstract
         /// Get all entities for student from database.
         /// </summary>
         /// <returns></returns>
-        Task<List<TDTO>> GetEntitiesForStudentAsync(TSpec spec);
+        Task<PaginationDTO<TDTO>> GetEntitiesForStudentAsync(int pageIndex,
+                                                    int requestedItemCount,
+                                                    string orderByProperty,
+                                                    bool orderByAscending,
+                                                    TSpec spec);
 
         /// <summary>
         /// Get all entities for admin from database.
         /// </summary>
         /// <returns></returns>
-        Task<List<TDTO>> GetEntitiesForAdminAsync(TSpec spec);
+        Task<PaginationDTO<TDTO>> GetEntitiesForAdminAsync(int pageIndex,
+                                                  int requestedItemCount,
+                                                  string orderByProperty,
+                                                  bool orderByAscending,
+                                                  TSpec spec);
 
         /// <summary>
         /// Get all entities for mentor from database.
         /// </summary>
         /// <returns></returns>
-        Task<List<TDTO>> GetEntitiesForMentorAsync(TSpec spec);
+        Task<PaginationDTO<TDTO>> GetEntitiesForMentorAsync(int pageIndex,
+                                                   int requestedItemCount,
+                                                   string orderByProperty,
+                                                   bool orderByAscending,
+                                                   TSpec spec);
 
         /// <summary>
         /// Get one entity by id.

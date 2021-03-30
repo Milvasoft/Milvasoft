@@ -29,7 +29,7 @@ namespace Milvasoft.SampleAPI.Controllers
         [HttpPatch("QuestionForStudent")]
         public async Task<IActionResult> GetStudentForStudent([FromBody] PaginationParamsWithSpec<QuestionSpec> paginationParams)
         {
-            var questions = await _questionService.GetEntitiesForStudentAsync(paginationParams.Spec).ConfigureAwait(false);
+            var questions = await _questionService.GetEntitiesForStudentAsync(paginationParams.PageIndex, paginationParams.RequestedItemCount, paginationParams.OrderByProperty, paginationParams.OrderByAscending, paginationParams.Spec).ConfigureAwait(false);
             return Ok(questions);
         }
         [HttpGet("WillShown")]

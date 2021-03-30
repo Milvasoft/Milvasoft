@@ -1,5 +1,6 @@
 ﻿using Milvasoft.Helpers.DataAccess.Abstract;
 using Milvasoft.Helpers.DataAccess.IncludeLibrary;
+using Milvasoft.Helpers.Models;
 using Milvasoft.SampleAPI.Data;
 using Milvasoft.SampleAPI.DTOs.MentorDTOs;
 using Milvasoft.SampleAPI.DTOs.StudentDTOs;
@@ -35,120 +36,130 @@ namespace Milvasoft.SampleAPI.Services.Concrete
 
         }
 
-
         /// <summary>
         /// Get students for admin.
         /// </summary>
         /// <returns></returns>
-        public async Task<List<StudentDTO>> GetEntitiesForAdminAsync(StudentSpec spec = null)
+        public async Task<PaginationDTO<StudentDTO>> GetEntitiesForAdminAsync(int pageIndex,
+                                                                               int requestedItemCount,
+                                                                               string orderByProperty = null,
+                                                                               bool orderByAscending = false, 
+                                                                               StudentSpec studentSpec = null)
         {
-
             Func<IIncludable<Student>, IIncludable> includes = i => i.Include(md => md.Mentor);
 
+            var (students, pageCount, totalDataCount) = await _studentRepository.PreparePaginationDTO<IBaseRepository<Student, Guid, EducationAppDbContext>, Student, Guid>
+                                                                                                                (pageIndex, requestedItemCount, orderByProperty, orderByAscending, studentSpec?.ToExpression(),includes).ConfigureAwait(false);
 
-            var students = await _studentRepository.GetAllAsync(includes, spec?.ToExpression()).ConfigureAwait(false);
-
-            var studentDTOList = from student in students
-                                 select new StudentDTO
-                                 {
-                                     Name = student.Name,
-                                     Surname = student.Surname,
-                                     University = student.University,
-                                     Age = student.Age,
-                                     HomeAddress = student.HomeAddress,
-                                     MentorThoughts = student.MentorThoughts,
-                                     IsConfidentialityAgreementSigned = student.IsConfidentialityAgreementSigned,
-                                     GraduationStatus = student.GraduationStatus,
-                                     GraduationScore = student.GraduationScore,
-                                     MentorGraduationThoughts = student.MentorGraduationThoughts,
-                                     ProfessionId = student.ProfessionId,
-                                     Mentor = student.Mentor.CheckObject(i => new MentorDTO
-                                     {
-                                         Id = i.Id
-                                     }),
-                                     CreationDate = student.CreationDate,
-                                     LastModificationDate = student.LastModificationDate,
-                                 };
-
-            return studentDTOList.ToList();
-
+            return new PaginationDTO<StudentDTO>
+            {
+                DTOList = students.CheckList(i => students.Select(student => new StudentDTO
+                {
+                    Name = student.Name,
+                    Surname = student.Surname,
+                    University = student.University,
+                    Age = student.Age,
+                    HomeAddress = student.HomeAddress,
+                    MentorThoughts = student.MentorThoughts,
+                    IsConfidentialityAgreementSigned = student.IsConfidentialityAgreementSigned,
+                    GraduationStatus = student.GraduationStatus,
+                    GraduationScore = student.GraduationScore,
+                    MentorGraduationThoughts = student.MentorGraduationThoughts,
+                    ProfessionId = student.ProfessionId,
+                    Mentor = student.Mentor.CheckObject(i => new MentorDTO
+                    {
+                        Id = i.Id
+                    })
+                })),
+                PageCount = pageCount,
+                TotalDataCount = totalDataCount
+            };
         }
 
         /// <summary>
         /// Get students for mentor.
         /// </summary>
         /// <returns></returns>
-        public async Task<List<StudentDTO>> GetEntitiesForMentorAsync(StudentSpec spec = null)
+        public async Task<PaginationDTO<StudentDTO>> GetEntitiesForMentorAsync(int pageIndex,
+                                                                               int requestedItemCount,
+                                                                               string orderByProperty = null,
+                                                                               bool orderByAscending = false,
+                                                                               StudentSpec studentSpec = null)
         {
-
-            Func<IIncludable<Student>, IIncludable> includeMentor = i => i.Include(md => md.Mentor)
+            Func<IIncludable<Student>, IIncludable> includes = i => i.Include(md => md.Mentor)
                                                                         .Include(assi => assi.OldAssignments);
 
 
-            var students = await _studentRepository.GetAllAsync(includeMentor, spec?.ToExpression()).ConfigureAwait(false);
+            var (students, pageCount, totalDataCount) = await _studentRepository.PreparePaginationDTO<IBaseRepository<Student, Guid, EducationAppDbContext>, Student, Guid>
+                                                                                                                (pageIndex, requestedItemCount, orderByProperty, orderByAscending, studentSpec?.ToExpression(),includes).ConfigureAwait(false);
 
-            var studentDTOList = from student in students
-                                 select new StudentDTO
-                                 {
-                                     Name = student.Name,
-                                     Surname = student.Surname,
-                                     University = student.University,
-                                     Age = student.Age,
-                                     Dream = student.Dream,
-                                     HomeAddress = student.HomeAddress,
-                                     MentorThoughts = student.MentorThoughts,
-                                     GraduationStatus = student.GraduationStatus,
-                                     GraduationScore = student.GraduationScore,
-                                     MentorGraduationThoughts = student.MentorGraduationThoughts,
-                                     ProfessionId = student.ProfessionId,
-                                     Mentor = student.Mentor.CheckObject(i => new MentorDTO
-                                     {
-                                         Id = i.Id
-                                     }),
-                                     CurrentAssigmentDeliveryDate = student.CurrentAssigmentDeliveryDate,
-                                     OldAssignments = student.OldAssignments.CheckList(f => student.OldAssignments?.Select(oa => new StudentAssigmentDTO
-                                     {
-                                         AssigmentId = oa.Assigment.Id,
-                                     }))
-                                 };
-
-            return studentDTOList.ToList();
-
+            return new PaginationDTO<StudentDTO>
+            {
+                DTOList = students.CheckList(i => students.Select(student => new StudentDTO
+                {
+                    Name = student.Name,
+                    Surname = student.Surname,
+                    University = student.University,
+                    Age = student.Age,
+                    Dream = student.Dream,
+                    HomeAddress = student.HomeAddress,
+                    MentorThoughts = student.MentorThoughts,
+                    GraduationStatus = student.GraduationStatus,
+                    GraduationScore = student.GraduationScore,
+                    MentorGraduationThoughts = student.MentorGraduationThoughts,
+                    ProfessionId = student.ProfessionId,
+                    Mentor = student.Mentor.CheckObject(i => new MentorDTO
+                    {
+                        Id = i.Id
+                    }),
+                    CurrentAssigmentDeliveryDate = student.CurrentAssigmentDeliveryDate,
+                    OldAssignments = student.OldAssignments.CheckList(f => student.OldAssignments?.Select(oa => new StudentAssigmentDTO
+                    {
+                        AssigmentId = oa.Assigment.Id,
+                    }))
+                })),
+                PageCount = pageCount,
+                TotalDataCount = totalDataCount
+            };
         }
 
         /// <summary>
         /// Get students for student.
         /// </summary>
         /// <returns></returns>
-        public async Task<List<StudentDTO>> GetEntitiesForStudentAsync(StudentSpec spec = null)
+        public async Task<PaginationDTO<StudentDTO>> GetEntitiesForStudentAsync(int pageIndex,
+                                                                               int requestedItemCount,
+                                                                               string orderByProperty = null,
+                                                                               bool orderByAscending = false,
+                                                                               StudentSpec studentSpec = null)
         {
+            var (students, pageCount, totalDataCount) = await _studentRepository.PreparePaginationDTO<IBaseRepository<Student, Guid, EducationAppDbContext>, Student, Guid>
+                                                                                                                (pageIndex, requestedItemCount, orderByProperty, orderByAscending, studentSpec?.ToExpression()).ConfigureAwait(false);
 
-            var students = await _studentRepository.GetAllAsync(spec?.ToExpression()).ConfigureAwait(false);
-
-            var studentDTOList = from student in students
-                                 select new StudentDTO
-                                 {
-                                     Name = student.Name,
-                                     Surname = student.Surname,
-                                     University = student.University,
-                                     Age = student.Age,
-                                     Dream = student.Dream,
-                                     HomeAddress = student.HomeAddress
-                                 };
-
-            return studentDTOList.ToList();
-
+            return new PaginationDTO<StudentDTO>
+            {
+                DTOList = students.CheckList(i => students.Select(student => new StudentDTO
+                {
+                    Name = student.Name,
+                    Surname = student.Surname,
+                    University = student.University,
+                    Age = student.Age,
+                    Dream = student.Dream,
+                    HomeAddress = student.HomeAddress
+                })),
+                PageCount = pageCount,
+                TotalDataCount = totalDataCount
+            };
         }
 
         /// <summary>
-        /// Get student information by <paramref name="id"/> 
+        /// Get student information by <paramref name="studenId"/> 
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="studenId"></param>
         /// <returns></returns>
-        public async Task<StudentDTO> GetEntityForStudentAsync(Guid id)
+        public async Task<StudentDTO> GetEntityForStudentAsync(Guid studenId)
         {
-
-            var student = await _studentRepository.GetByIdAsync(id).ConfigureAwait(false);
+            var student = await _studentRepository.GetByIdAsync(studenId).ConfigureAwait(false);
 
             return new StudentDTO
             {
@@ -159,22 +170,20 @@ namespace Milvasoft.SampleAPI.Services.Concrete
                 Dream = student.Dream,
                 HomeAddress = student.HomeAddress
             };
-
         }
 
         /// <summary>
-        /// Get student information for admin by <paramref name="id"/>
+        /// Get student information for admin by <paramref name="studenId"/>
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="studenId"></param>
         /// <returns></returns>
-        public async Task<StudentDTO> GetEntityForAdminAsync(Guid id)
+        public async Task<StudentDTO> GetEntityForAdminAsync(Guid studenId)
         {
             Func<IIncludable<Student>, IIncludable> includes = i => i.Include(md => md.Mentor);
 
+            Expression<Func<Student, bool>> condition = i => i.Id == studenId;
 
-            Expression<Func<Student, bool>> condition = i => i.Id == id;
-
-            var student = await _studentRepository.GetByIdAsync(id, includes).ConfigureAwait(false);
+            var student = await _studentRepository.GetByIdAsync(studenId, includes).ConfigureAwait(false);
 
             return new StudentDTO
             {
@@ -195,24 +204,22 @@ namespace Milvasoft.SampleAPI.Services.Concrete
                     Id = student.MentorId
                 }),
                 CreationDate = student.CreationDate,
-                LastModificationDate = student.LastModificationDate,
-                LastModifierUserId = student.LastModifierUserId,
+                LastModificationDate = student.LastModificationDate
             };
 
         }
 
         /// <summary>
-        /// Get student information for mentor by <paramref name="id"/>.
+        /// Get student information for mentor by <paramref name="studenId"/>.
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="studenId"></param>
         /// <returns></returns>
-        public async Task<StudentDTO> GetEntityForMentorAsync(Guid id)
+        public async Task<StudentDTO> GetEntityForMentorAsync(Guid studenId)
         {
-
             Func<IIncludable<Student>, IIncludable> includes = i => i.Include(md => md.Mentor)
                                                                      .Include(oa => oa.OldAssignments);
 
-            var student = await _studentRepository.GetByIdAsync(id, includes).ConfigureAwait(false);
+            var student = await _studentRepository.GetByIdAsync(studenId, includes).ConfigureAwait(false);
 
             return new StudentDTO
             {
@@ -242,101 +249,78 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// <summary>
         /// Add student to database.
         /// </summary>
-        /// <param name="educationDTO"></param>
+        /// <param name="addStudentDTO"></param>
         /// <returns></returns>
-        public async Task AddEntityAsync(AddStudentDTO educationDTO)
+        public async Task AddEntityAsync(AddStudentDTO addStudentDTO)
         {
-
             var newStudent = new Student
             {
-                Name = educationDTO.Name,
-                Surname = educationDTO.Surname,
-                University = educationDTO.University,
-                Age = educationDTO.Age,
-                Dream = educationDTO.Dream,
-                HomeAddress = educationDTO.HomeAddress,
-                MentorThoughts = educationDTO.MentorThoughts,
-                IsConfidentialityAgreementSigned = educationDTO.IsConfidentialityAgreementSigned,
-                GraduationStatus = educationDTO.GraduationStatus,
-                GraduationScore = educationDTO.GraduationScore,
-                MentorGraduationThoughts = educationDTO.MentorGraduationThoughts,
-                ProfessionId = educationDTO.ProfessionId,
-                MentorId = educationDTO.MentorId,
-                CreationDate = DateTime.Now
+                Name = addStudentDTO.Name,
+                Surname = addStudentDTO.Surname,
+                University = addStudentDTO.University,
+                Age = addStudentDTO.Age,
+                Dream = addStudentDTO.Dream,
+                HomeAddress = addStudentDTO.HomeAddress,
+                MentorThoughts = addStudentDTO.MentorThoughts,
+                IsConfidentialityAgreementSigned = addStudentDTO.IsConfidentialityAgreementSigned,
+                GraduationStatus = addStudentDTO.GraduationStatus,
+                GraduationScore = addStudentDTO.GraduationScore,
+                MentorGraduationThoughts = addStudentDTO.MentorGraduationThoughts,
+                ProfessionId = addStudentDTO.ProfessionId,
+                MentorId = addStudentDTO.MentorId
             };
 
             await _studentRepository.AddAsync(newStudent).ConfigureAwait(false);
-
         }
 
         /// <summary>
         /// Update student.
         /// </summary>
-        /// <param name="educationDTO"></param>
+        /// <param name="updateStudentDTO"></param>
         /// <returns></returns>
-        public async Task UpdateEntityAsync(UpdateStudentDTO educationDTO)
+        public async Task UpdateEntityAsync(UpdateStudentDTO updateStudentDTO)
         {
+            var updatedStudent = await _studentRepository.GetByIdAsync(updateStudentDTO.Id).ConfigureAwait(false);
 
-            var updatedStudent = await _studentRepository.GetByIdAsync(educationDTO.Id).ConfigureAwait(false);
-
-            updatedStudent.Name = educationDTO.Name;
-
-            updatedStudent.Surname = educationDTO.Surname;
-
-            updatedStudent.University = educationDTO.University;
-
-            updatedStudent.Age = educationDTO.Age;
-
-            updatedStudent.Dream = educationDTO.Dream;
-
-            updatedStudent.HomeAddress = educationDTO.HomeAddress;
-
-            updatedStudent.MentorThoughts = educationDTO.MentorThoughts;
-
-            updatedStudent.IsConfidentialityAgreementSigned = educationDTO.IsConfidentialityAgreementSigned;
-
-            updatedStudent.GraduationStatus = educationDTO.GraduationStatus;
-
-            updatedStudent.GraduationScore = educationDTO.GraduationScore;
-
-            updatedStudent.MentorGraduationThoughts = educationDTO.MentorGraduationThoughts;
-
-            updatedStudent.ProfessionId = educationDTO.ProfessionId;
-
-            updatedStudent.MentorId = educationDTO.MentorId;
-
-            updatedStudent.LastModificationDate = DateTime.Now;
+            updatedStudent.Name = updateStudentDTO.Name;
+            updatedStudent.Surname = updateStudentDTO.Surname;
+            updatedStudent.University = updateStudentDTO.University;
+            updatedStudent.Age = updateStudentDTO.Age;
+            updatedStudent.Dream = updateStudentDTO.Dream;
+            updatedStudent.HomeAddress = updateStudentDTO.HomeAddress;
+            updatedStudent.MentorThoughts = updateStudentDTO.MentorThoughts;
+            updatedStudent.IsConfidentialityAgreementSigned = updateStudentDTO.IsConfidentialityAgreementSigned;
+            updatedStudent.GraduationStatus = updateStudentDTO.GraduationStatus;
+            updatedStudent.GraduationScore = updateStudentDTO.GraduationScore;
+            updatedStudent.MentorGraduationThoughts = updateStudentDTO.MentorGraduationThoughts;
+            updatedStudent.ProfessionId = updateStudentDTO.ProfessionId;
+            updatedStudent.MentorId = updateStudentDTO.MentorId;
 
             await _studentRepository.UpdateAsync(updatedStudent).ConfigureAwait(false);
-
         }
 
         /// <summary>
         /// Delete student.
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="studentId"></param>
         /// <returns></returns>
-        public async Task DeleteEntityAsync(Guid id)
+        public async Task DeleteEntityAsync(Guid studentId)
         {
-
-            var student = await _studentRepository.GetByIdAsync(id).ConfigureAwait(false);
+            var student = await _studentRepository.GetByIdAsync(studentId).ConfigureAwait(false);
 
             await _studentRepository.DeleteAsync(student);
-
         }
 
         /// <summary>
-        /// Delete students by <paramref name="ids"/>.
+        /// Delete students by <paramref name="studentIds"/>.
         /// </summary>
-        /// <param name="ids"></param>
+        /// <param name="studentIds"></param>
         /// <returns></returns>
-        public async Task DeleteEntitiesAsync(List<Guid> ids)
+        public async Task DeleteEntitiesAsync(List<Guid> studentIds)
         {
-
-            var deletedStudents = await _studentRepository.GetAllAsync(i => ids.Select(p => p).Contains(i.Id)).ConfigureAwait(false);
+            var deletedStudents = await _studentRepository.GetAllAsync(i => studentIds.Select(p => p).Contains(i.Id)).ConfigureAwait(false);
 
             await _studentRepository.DeleteAsync(deletedStudents).ConfigureAwait(false);
-
         }
     }
 }

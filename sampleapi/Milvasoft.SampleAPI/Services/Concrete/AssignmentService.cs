@@ -1,9 +1,11 @@
 ﻿using Milvasoft.Helpers.DataAccess.Abstract;
+using Milvasoft.Helpers.Models;
 using Milvasoft.SampleAPI.Data;
 using Milvasoft.SampleAPI.DTOs.AssignmentDTOs;
 using Milvasoft.SampleAPI.Entity;
 using Milvasoft.SampleAPI.Services.Abstract;
 using Milvasoft.SampleAPI.Spec;
+using Milvasoft.SampleAPI.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,7 +19,6 @@ namespace Milvasoft.SampleAPI.Services.Concrete
     /// </summary>
     public class AssignmentService : IAssignmentService
     {
-
         private readonly IBaseRepository<Assignment, Guid, EducationAppDbContext> _assignmentRepository;
 
         /// <summary>
@@ -30,97 +31,110 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         }
 
         /// <summary>
-        /// Get all assignment by <paramref name="spec"/>
+        /// Get all assignment by <paramref name="assignmentSpec"/>
         /// </summary>
         /// <returns></returns>
-        public async Task<List<AssignmentDTO>> GetEntitiesForStudentAsync(AssignmentSpec spec = null)
+        public async Task<PaginationDTO<AssignmentDTO>> GetEntitiesForStudentAsync(int pageIndex,
+                                                                                     int requestedItemCount,
+                                                                                     string orderByProperty = null,
+                                                                                     bool orderByAscending = false,
+                                                                                      AssignmentSpec assignmentSpec = null)
         {
-            var assignments = await _assignmentRepository.GetAllAsync(spec?.ToExpression()).ConfigureAwait(false);
+            var (asssignments, pageCount, totalDataCount) = await _assignmentRepository.PreparePaginationDTO<IBaseRepository<Assignment, Guid, EducationAppDbContext>, Assignment, Guid>
+                                                                                                                (pageIndex, requestedItemCount, orderByProperty, orderByAscending, assignmentSpec?.ToExpression()).ConfigureAwait(false);
 
-            var assignmentDTOList = from assignment in assignments
-                                    select new AssignmentDTO
-                                    {
-                                        Title = assignment.Title,
-                                        Description = assignment.Description,
-                                        RemarksToStudent = assignment.RemarksToStudent,
-                                        RemarksToMentor = assignment.RemarksToMentor,
-                                        Level = assignment.Level,
-                                        Rules = assignment.Rules,
-                                        MaxDeliveryDay = assignment.MaxDeliveryDay,
-                                        ProfessionId = assignment.ProfessionId,
-                                        CreatorUser = assignment.CreatorUser
-                                    };
-
-            return assignmentDTOList.ToList();
-
+            return new PaginationDTO<AssignmentDTO>
+            {
+                DTOList = asssignments.CheckList(i => asssignments.Select(assignment => new AssignmentDTO
+                {
+                    Title = assignment.Title,
+                    Description = assignment.Description,
+                    RemarksToStudent = assignment.RemarksToStudent,
+                    RemarksToMentor = assignment.RemarksToMentor,
+                    Level = assignment.Level,
+                    Rules = assignment.Rules,
+                    MaxDeliveryDay = assignment.MaxDeliveryDay,
+                    ProfessionId = assignment.ProfessionId,
+                    CreatorUser = assignment.CreatorUser
+                })),
+                PageCount = pageCount,
+                TotalDataCount = totalDataCount
+            };
         }
 
         /// <summary>
-        /// Get assignments for admin by <paramref name="spec"/>
+        /// Get assignments for admin by <paramref name="assignmentSpec"/>
         /// </summary>
         /// <returns></returns>
-        public async Task<List<AssignmentDTO>> GetEntitiesForAdminAsync(AssignmentSpec spec = null)
+        public async Task<PaginationDTO<AssignmentDTO>> GetEntitiesForAdminAsync(int pageIndex,
+                                                                                     int requestedItemCount,
+                                                                                     string orderByProperty = null,
+                                                                                     bool orderByAscending = false,
+                                                                                      AssignmentSpec assignmentSpec = null)
         {
-            var assignments = await _assignmentRepository.GetAllAsync(spec?.ToExpression()).ConfigureAwait(false);
+            var (asssignments, pageCount, totalDataCount) = await _assignmentRepository.PreparePaginationDTO<IBaseRepository<Assignment, Guid, EducationAppDbContext>, Assignment, Guid>
+                                                                                                                 (pageIndex, requestedItemCount, orderByProperty, orderByAscending, assignmentSpec?.ToExpression()).ConfigureAwait(false);
 
-            var assignmentDTOList = from assignment in assignments
-                                    select new AssignmentDTO
-                                    {
-                                        Title = assignment.Title,
-                                        Description = assignment.Description,
-                                        RemarksToStudent = assignment.RemarksToStudent,
-                                        RemarksToMentor = assignment.RemarksToMentor,
-                                        Level = assignment.Level,
-                                        Rules = assignment.Rules,
-                                        MaxDeliveryDay = assignment.MaxDeliveryDay,
-                                        ProfessionId = assignment.ProfessionId,
-                                        CreationDate = assignment.CreationDate,
-                                        LastModificationDate = assignment.LastModificationDate,
-                                        CreatorUser = assignment.CreatorUser,
-                                        LastModifierUser = assignment.LastModifierUser
-                                    };
-
-            return assignmentDTOList.ToList();
-
+            return new PaginationDTO<AssignmentDTO>
+            {
+                DTOList = asssignments.CheckList(i => asssignments.Select(assignment => new AssignmentDTO
+                {
+                    Title = assignment.Title,
+                    Description = assignment.Description,
+                    RemarksToStudent = assignment.RemarksToStudent,
+                    RemarksToMentor = assignment.RemarksToMentor,
+                    Level = assignment.Level,
+                    Rules = assignment.Rules,
+                    MaxDeliveryDay = assignment.MaxDeliveryDay,
+                    ProfessionId = assignment.ProfessionId,
+                    CreatorUser = assignment.CreatorUser,
+                    LastModifierUser = assignment.LastModifierUser
+                })),
+                PageCount = pageCount,
+                TotalDataCount = totalDataCount
+            };
         }
 
         /// <summary>
-        /// Get assignments for mentor by <paramref name="spec"/>
+        /// Get assignments for mentor by <paramref name="assignmentSpec"/>
         /// </summary>
         /// <returns></returns>
-        public async Task<List<AssignmentDTO>> GetEntitiesForMentorAsync(AssignmentSpec spec = null)
+        public async Task<PaginationDTO<AssignmentDTO>> GetEntitiesForMentorAsync(int pageIndex,
+                                                                                     int requestedItemCount,
+                                                                                     string orderByProperty = null,
+                                                                                     bool orderByAscending = false,
+                                                                                      AssignmentSpec assignmentSpec = null)
         {
-            var assignments = await _assignmentRepository.GetAllAsync(spec?.ToExpression()).ConfigureAwait(false);
+            var (asssignments, pageCount, totalDataCount) = await _assignmentRepository.PreparePaginationDTO<IBaseRepository<Assignment, Guid, EducationAppDbContext>, Assignment, Guid>
+                                                                                                                 (pageIndex, requestedItemCount, orderByProperty, orderByAscending, assignmentSpec?.ToExpression()).ConfigureAwait(false);
 
-            var assignmentDTOList = from assignment in assignments
-                                    select new AssignmentDTO
-                                    {
-                                        Title = assignment.Title,
-                                        Description = assignment.Description,
-                                        RemarksToStudent = assignment.RemarksToStudent,
-                                        RemarksToMentor = assignment.RemarksToMentor,
-                                        Level = assignment.Level,
-                                        Rules = assignment.Rules,
-                                        MaxDeliveryDay = assignment.MaxDeliveryDay,
-                                        ProfessionId = assignment.ProfessionId,
-                                        CreationDate = assignment.CreationDate,
-                                        CreatorUser = assignment.CreatorUser,
-                                        LastModifierUser = assignment.LastModifierUser
-                                    };
-
-            return assignmentDTOList.ToList();
-
+            return new PaginationDTO<AssignmentDTO>
+            {
+                DTOList = asssignments.CheckList(i => asssignments.Select(assignment => new AssignmentDTO
+                {
+                    Title = assignment.Title,
+                    Description = assignment.Description,
+                    RemarksToStudent = assignment.RemarksToStudent,
+                    RemarksToMentor = assignment.RemarksToMentor,
+                    Level = assignment.Level,
+                    Rules = assignment.Rules,
+                    MaxDeliveryDay = assignment.MaxDeliveryDay,
+                    ProfessionId = assignment.ProfessionId,
+                    CreatorUser = assignment.CreatorUser
+                })),
+                PageCount = pageCount,
+                TotalDataCount = totalDataCount
+            };
         }
 
         /// <summary>
-        /// Get assignment for student by <paramref name="id"/>
+        /// Get assignment for student by <paramref name="assignmentId"/>
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="assignmentId"></param>
         /// <returns></returns>
-        public async Task<AssignmentDTO> GetEntityForStudentAsync(Guid id)
+        public async Task<AssignmentDTO> GetEntityForStudentAsync(Guid assignmentId)
         {
-
-            var assignment = await _assignmentRepository.GetByIdAsync(id).ConfigureAwait(false);
+            var assignment = await _assignmentRepository.GetByIdAsync(assignmentId).ConfigureAwait(false);
 
             return new AssignmentDTO
             {
@@ -134,17 +148,16 @@ namespace Milvasoft.SampleAPI.Services.Concrete
                 ProfessionId = assignment.ProfessionId,
                 CreatorUser = assignment.CreatorUser
             };
-
         }
 
         /// <summary>
-        /// Get assignment for admin by <paramref name="id"/>
+        /// Get assignment for admin by <paramref name="assignmentId"/>
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="assignmentId"></param>
         /// <returns></returns>
-        public async Task<AssignmentDTO> GetEntityForAdminAsync(Guid id)
+        public async Task<AssignmentDTO> GetEntityForAdminAsync(Guid assignmentId)
         {
-            var assignment = await _assignmentRepository.GetByIdAsync(id).ConfigureAwait(false);
+            var assignment = await _assignmentRepository.GetByIdAsync(assignmentId).ConfigureAwait(false);
 
             return new AssignmentDTO
             {
@@ -164,13 +177,13 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         }
 
         /// <summary>
-        /// Get assignment for mentor by <paramref name="id"/>
+        /// Get assignment for mentor by <paramref name="assignmentId"/>
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="assignmentId"></param>
         /// <returns></returns>
-        public async Task<AssignmentDTO> GetEntityForMentorAsync(Guid id)
+        public async Task<AssignmentDTO> GetEntityForMentorAsync(Guid assignmentId)
         {
-            var assignment = await _assignmentRepository.GetByIdAsync(id).ConfigureAwait(false);
+            var assignment = await _assignmentRepository.GetByIdAsync(assignmentId).ConfigureAwait(false);
 
             return new AssignmentDTO
             {
@@ -191,53 +204,47 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// <summary>
         /// Add assignment.
         /// </summary>
-        /// <param name="educationDTO"></param>
+        /// <param name="addAssignmentDTO"></param>
         /// <returns></returns>
-        public async Task AddEntityAsync(AddAssignmentDTO educationDTO)
+        public async Task AddEntityAsync(AddAssignmentDTO addAssignmentDTO)
         {
-
             var assignment = new Assignment
             {
-                Title = educationDTO.Title,
-                Description = educationDTO.Description,
-                RemarksToStudent = educationDTO.RemarksToStudent,
-                RemarksToMentor = educationDTO.RemarksToMentor,
-                Level = educationDTO.Level,
-                Rules = educationDTO.Rules,
-                MaxDeliveryDay = educationDTO.MaxDeliveryDay,
-                ProfessionId = (Guid)educationDTO.ProfessionId,
-                CreationDate = DateTime.Now
+                Title = addAssignmentDTO.Title,
+                Description = addAssignmentDTO.Description,
+                RemarksToStudent = addAssignmentDTO.RemarksToStudent,
+                RemarksToMentor = addAssignmentDTO.RemarksToMentor,
+                Level = addAssignmentDTO.Level,
+                Rules = addAssignmentDTO.Rules,
+                MaxDeliveryDay = addAssignmentDTO.MaxDeliveryDay,
+                ProfessionId = addAssignmentDTO.ProfessionId,
             };
 
             await _assignmentRepository.AddAsync(assignment).ConfigureAwait(false);
-
         }
 
         /// <summary>
         /// Update assignment.
         /// </summary>
-        /// <param name="educationDTO"></param>
+        /// <param name="updateAssignmentDTO"></param>
         /// <returns></returns>
-        public async Task UpdateEntityAsync(UpdateAssignmentDTO educationDTO)
+        public async Task UpdateEntityAsync(UpdateAssignmentDTO updateAssignmentDTO)
         {
+            var updatedAssignment = await _assignmentRepository.GetByIdAsync(updateAssignmentDTO.Id).ConfigureAwait(false);
 
-            var updatedAssignment = await _assignmentRepository.GetByIdAsync(educationDTO.Id).ConfigureAwait(false);
+            updatedAssignment.Title = updateAssignmentDTO.Title;
 
-            updatedAssignment.LastModificationDate = DateTime.Now;
+            updatedAssignment.Description = updateAssignmentDTO.Description;
 
-            updatedAssignment.Title = educationDTO.Title;
+            updatedAssignment.Level = updateAssignmentDTO.Level;
 
-            updatedAssignment.Description = educationDTO.Description;
+            updatedAssignment.MaxDeliveryDay = updateAssignmentDTO.MaxDeliveryDay;
 
-            updatedAssignment.Level = educationDTO.Level;
+            updatedAssignment.ProfessionId = updateAssignmentDTO.ProfessionId;
 
-            updatedAssignment.MaxDeliveryDay = educationDTO.MaxDeliveryDay;
+            updatedAssignment.RemarksToMentor = updateAssignmentDTO.RemarksToMentor;
 
-            updatedAssignment.ProfessionId = (Guid)educationDTO.ProfessionId;
-
-            updatedAssignment.RemarksToMentor = educationDTO.RemarksToMentor;
-
-            updatedAssignment.RemarksToStudent = educationDTO.RemarksToStudent;
+            updatedAssignment.RemarksToStudent = updateAssignmentDTO.RemarksToStudent;
 
             await _assignmentRepository.UpdateAsync(updatedAssignment).ConfigureAwait(false);
         }
@@ -245,25 +252,23 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// <summary>
         /// Delete assignment.
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="assignementId"></param>
         /// <returns></returns>
-        public async Task DeleteEntityAsync(Guid id)
+        public async Task DeleteEntityAsync(Guid assignementId)
         {
-
-            var deletedAssignment = await _assignmentRepository.GetByIdAsync(id).ConfigureAwait(false);
+            var deletedAssignment = await _assignmentRepository.GetByIdAsync(assignementId).ConfigureAwait(false);
 
             await _assignmentRepository.DeleteAsync(deletedAssignment);
-
         }
 
         /// <summary>
-        /// Delete assignments by <paramref name="ids"/>
+        /// Delete assignments by <paramref name="assignmentIds"/>
         /// </summary>
-        /// <param name="ids"></param>
+        /// <param name="assignmentIds"></param>
         /// <returns></returns>
-        public async Task DeleteEntitiesAsync(List<Guid> ids)
+        public async Task DeleteEntitiesAsync(List<Guid> assignmentIds)
         {
-            var assignments = await _assignmentRepository.GetAllAsync(i => ids.Select(p => p).Contains(i.Id)).ConfigureAwait(false);
+            var assignments = await _assignmentRepository.GetAllAsync(i => assignmentIds.Select(p => p).Contains(i.Id)).ConfigureAwait(false);
             await _assignmentRepository.DeleteAsync(assignments).ConfigureAwait(false);
         }
     }

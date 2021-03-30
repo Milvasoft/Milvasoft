@@ -52,7 +52,7 @@ namespace Milvasoft.SampleAPI.DTOs.AssignmentDTOs
         /// The profession Id of assignment.
         /// </summary>
         [OValidateId]
-        public Guid? ProfessionId { get; set; }
+        public Guid ProfessionId { get; set; }
 
     }
 }

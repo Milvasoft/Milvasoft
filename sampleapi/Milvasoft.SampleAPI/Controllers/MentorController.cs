@@ -35,7 +35,7 @@ namespace Milvasoft.SampleAPI.Controllers
         [HttpGet("Mentor")]
         public async Task<IActionResult> GetStudentForAdmin([FromBody] PaginationParamsWithSpec<MentorSpec> paginationParams)
         {
-            var students = await _mentorService.GetEntitiesForAdminAsync(paginationParams.Spec).ConfigureAwait(false);
+            var students = await _mentorService.GetEntitiesForAdminAsync(paginationParams.PageIndex,paginationParams.RequestedItemCount,paginationParams.OrderByProperty,paginationParams.OrderByAscending,paginationParams.Spec).ConfigureAwait(false);
 
             return Ok(students);
         }

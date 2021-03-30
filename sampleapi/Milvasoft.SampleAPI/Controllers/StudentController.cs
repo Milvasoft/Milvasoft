@@ -33,7 +33,7 @@ namespace Milvasoft.SampleAPI.Controllers
         [HttpGet("Students")]
         public async Task<IActionResult> GetStudentForAdmin([FromBody] PaginationParamsWithSpec<StudentSpec> paginationParams)
         {
-            var students = await _studentService.GetEntitiesForStudentAsync(paginationParams.Spec).ConfigureAwait(false);
+            var students = await _studentService.GetEntitiesForStudentAsync(paginationParams.PageIndex, paginationParams.RequestedItemCount, paginationParams.OrderByProperty, paginationParams.OrderByAscending, paginationParams.Spec).ConfigureAwait(false);
             return Ok(students);
         }
 
