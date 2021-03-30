@@ -4,6 +4,8 @@ using Milvasoft.SampleAPI.DTOs.MentorDTOs;
 using Milvasoft.SampleAPI.Services.Abstract;
 using Milvasoft.SampleAPI.Spec;
 using Milvasoft.SampleAPI.Utils.Attributes.ActionFilters;
+using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Milvasoft.SampleAPI.Controllers
@@ -14,6 +16,7 @@ namespace Milvasoft.SampleAPI.Controllers
     [Route("api/v{version:apiVersion}/[controller]")]
     [ApiController]
     [ApiVersion("1.0")]
+    [ApiExplorerSettings(GroupName = "v1.0")]
     public class MentorController : Controller
     {
         private readonly IMentorService _mentorService;
@@ -28,27 +31,142 @@ namespace Milvasoft.SampleAPI.Controllers
         }
 
         /// <summary>
-        /// The student list returns according to the <paramref name="paginationParams"/> sent.
+        /// Gets the all filtered mentors datas for mentor.
         /// </summary>
-        /// <param name="paginationParams"></param>
         /// <returns></returns>
-        [HttpGet("Mentor")]
-        public async Task<IActionResult> GetStudentForAdmin([FromBody] PaginationParamsWithSpec<MentorSpec> paginationParams)
+        //[Authorize(Roles = "Mentor")]
+        [HttpPatch("Mentor/Mentor")]
+        public async Task<IActionResult> GetMentorsForMentor([FromBody] PaginationParamsWithSpec<MentorSpec> paginationParams)
         {
-            var students = await _mentorService.GetEntitiesForAdminAsync(paginationParams.PageIndex,paginationParams.RequestedItemCount,paginationParams.OrderByProperty,paginationParams.OrderByAscending,paginationParams.Spec).ConfigureAwait(false);
-
-            return Ok(students);
+            var mentors = await _mentorService.GetEntitiesForMentorAsync(paginationParams.PageIndex,
+                                                                                 paginationParams.RequestedItemCount,
+                                                                                 paginationParams.OrderByProperty,
+                                                                                 paginationParams.OrderByAscending,
+                                                                                 paginationParams.Spec).ConfigureAwait(false);
+            return Ok(mentors);
         }
+
         /// <summary>
-        /// Add student to database .
+        /// Gets the all filtered mentors datas for admin.
         /// </summary>
-        /// <param name="mentorDTO"></param>
         /// <returns></returns>
-        [HttpPost("Mentor")]
-        [OValidationFilter]
-        public async Task<IActionResult> AddStudent([FromBody] AddMentorDTO mentorDTO)
+        //[Authorize(Roles = "Admin")]
+        [HttpPatch("Mentor/Admin")]
+        public async Task<IActionResult> GetMentorsForAdmn([FromBody] PaginationParamsWithSpec<MentorSpec> paginationParams)
         {
-            await _mentorService.AddEntityAsync(mentorDTO).ConfigureAwait(false);
+            var mentors = await _mentorService.GetEntitiesForAdminAsync(paginationParams.PageIndex,
+                                                                                 paginationParams.RequestedItemCount,
+                                                                                 paginationParams.OrderByProperty,
+                                                                                 paginationParams.OrderByAscending,
+                                                                                 paginationParams.Spec).ConfigureAwait(false);
+            return Ok(mentors);
+        }
+
+        /// <summary>
+        /// Gets the all filtered mentors datas for student.
+        /// </summary>
+        /// <returns></returns>
+        //[Authorize(Roles = "Student")]
+        [HttpPatch("Mentor/Student")]
+        public async Task<IActionResult> GetMentorsForStudent([FromBody] PaginationParamsWithSpec<MentorSpec> paginationParams)
+        {
+            var mentors = await _mentorService.GetEntitiesForStudentAsync(paginationParams.PageIndex,
+                                                                                 paginationParams.RequestedItemCount,
+                                                                                 paginationParams.OrderByProperty,
+                                                                                 paginationParams.OrderByAscending,
+                                                                                 paginationParams.Spec).ConfigureAwait(false);
+            return Ok(mentors);
+        }
+
+        /// <summary>
+        /// Gets the all filtered mentor datas for mentor.
+        /// </summary>
+        /// <returns></returns>
+        //[Authorize(Roles = "Mentor")]
+        [HttpPatch("Mentor/Mentor/{id}")]
+        public async Task<IActionResult> GetMentorForMentorbyId([FromBody] Guid id)
+        {
+            var mentor = await _mentorService.GetEntityForMentorAsync(id).ConfigureAwait(false);
+
+            return Ok(mentor);
+        }
+
+        /// <summary>
+        /// Gets the filtered mentor datas for admin.
+        /// </summary>
+        /// <returns></returns>
+        ///[Authorize(Roles = "Admin")]
+        [HttpPatch("Mentor/Admin/{id}")]
+        public async Task<IActionResult> GetMentorForAdminbyId([FromBody] Guid id)
+        {
+            var mentor = await _mentorService.GetEntityForAdminAsync(id).ConfigureAwait(false);
+
+            return Ok(mentor);
+        }
+
+        /// <summary>
+        /// Gets the filtered mentor datas for student.
+        /// </summary>
+        /// <returns></returns>
+        //[Authorize(Roles = "Student")]
+        [HttpPatch("Mentor/Student/{id}")]
+        public async Task<IActionResult> GetMentorForStudentbyId([FromBody] Guid id)
+        {
+            var mentor = await _mentorService.GetEntityForStudentAsync(id).ConfigureAwait(false);
+
+            return Ok(mentor);
+        }
+
+        /// <summary>
+        /// Add <b><paramref name="addMentor"/></b> data to database.
+        /// </summary>
+        /// <param name="addMentor"></param>
+        /// <returns></returns>
+       // [Authorize(Roles = "Admin")]
+        [HttpPost("AddMentor")]
+        [OValidationFilter(DisabledNestedProperties = "Name",DisabledProperties = "Name")]
+        public async Task<IActionResult> AddMentor([FromBody] AddMentorDTO addMentor)
+        {
+            await _mentorService.AddEntityAsync(addMentor).ConfigureAwait(false);
+            return Ok();
+        }
+
+        /// <summary>
+        /// Update <paramref name="updateMentor"/> data.
+        /// </summary>
+        /// <param name="updateMentor"></param>
+        /// <returns></returns>
+       // [Authorize(Roles = "Admin")]
+        [HttpPut("UpdateMentor")]
+        public async Task<IActionResult> UpdateMentor([FromBody] UpdateMentorDTO updateMentor)
+        {
+            await _mentorService.UpdateEntityAsync(updateMentor).ConfigureAwait(false);
+            return Ok();
+        }
+
+        /// <summary>
+        /// Delete mentor data by <paramref name="id"/>
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+       // [Authorize(Roles = "Admin")]
+        [HttpDelete("Mentor/Delete/{id}")]
+        public async Task<IActionResult> DeleteMentor(Guid id)
+        {
+            await _mentorService.DeleteEntityAsync(id).ConfigureAwait(false);
+            return Ok();
+        }
+
+        /// <summary>
+        /// Delete mentor data by <paramref name="ids"/>
+        /// </summary>
+        /// <param name="ids"></param>
+        /// <returns></returns>
+       // [Authorize(Roles = "Admin")]
+        [HttpDelete("Mentor/Deletes/{ids}")]
+        public async Task<IActionResult> DeleteMentors(List<Guid> ids)
+        {
+            await _mentorService.DeleteEntitiesAsync(ids).ConfigureAwait(false);
             return Ok();
         }
     }
