@@ -663,7 +663,7 @@ namespace Milvasoft.SampleAPI.Data.Migrations
                     b.ToTable("Students");
                 });
 
-            modelBuilder.Entity("Milvasoft.SampleAPI.Entity.StudentAssigment", b =>
+            modelBuilder.Entity("Milvasoft.SampleAPI.Entity.StudentAssigmentDTO", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -730,6 +730,59 @@ namespace Milvasoft.SampleAPI.Data.Migrations
                     b.HasIndex("StudentId");
 
                     b.ToTable("StudentAssigments");
+                });
+
+            modelBuilder.Entity("Milvasoft.SampleAPI.Entity.TestEntity", b =>
+                {
+                    b.Property<string>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("text");
+
+                    b.Property<string>("ConnectionString")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("CreationDate")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<Guid?>("CreatorUserId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid?>("DeleterUserId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime?>("DeletionDate")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("boolean");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean");
+
+                    b.Property<DateTime?>("LastModificationDate")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<Guid?>("LastModifierUserId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("SubscriptionExpireDate")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<string>("TenancyName")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CreatorUserId");
+
+                    b.HasIndex("DeleterUserId");
+
+                    b.HasIndex("LastModifierUserId");
+
+                    b.ToTable("TestEntities");
                 });
 
             modelBuilder.Entity("Milvasoft.SampleAPI.Entity.UsefulLink", b =>
@@ -1041,7 +1094,7 @@ namespace Milvasoft.SampleAPI.Data.Migrations
                     b.Navigation("Profession");
                 });
 
-            modelBuilder.Entity("Milvasoft.SampleAPI.Entity.StudentAssigment", b =>
+            modelBuilder.Entity("Milvasoft.SampleAPI.Entity.StudentAssigmentDTO", b =>
                 {
                     b.HasOne("Milvasoft.SampleAPI.Entity.Assignment", "Assigment")
                         .WithMany()
@@ -1076,6 +1129,27 @@ namespace Milvasoft.SampleAPI.Data.Migrations
                     b.Navigation("LastModifierUser");
 
                     b.Navigation("Student");
+                });
+
+            modelBuilder.Entity("Milvasoft.SampleAPI.Entity.TestEntity", b =>
+                {
+                    b.HasOne("Milvasoft.SampleAPI.Entity.AppUser", "CreatorUser")
+                        .WithMany()
+                        .HasForeignKey("CreatorUserId");
+
+                    b.HasOne("Milvasoft.SampleAPI.Entity.AppUser", "DeleterUser")
+                        .WithMany()
+                        .HasForeignKey("DeleterUserId");
+
+                    b.HasOne("Milvasoft.SampleAPI.Entity.AppUser", "LastModifierUser")
+                        .WithMany()
+                        .HasForeignKey("LastModifierUserId");
+
+                    b.Navigation("CreatorUser");
+
+                    b.Navigation("DeleterUser");
+
+                    b.Navigation("LastModifierUser");
                 });
 
             modelBuilder.Entity("Milvasoft.SampleAPI.Entity.UsefulLink", b =>

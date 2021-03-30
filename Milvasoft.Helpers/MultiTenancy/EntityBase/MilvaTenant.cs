@@ -17,24 +17,30 @@ namespace Milvasoft.Helpers.MultiTenancy.EntityBase
         private string _tenancyName;
         private int _branchNo;
 
+
         /// <summary>
         /// Id of tenant.
         /// </summary>
         public override TenantId Id
         {
             get => base.Id;
-            set => base.Id = new TenantId(_tenancyName, _branchNo);
         }
 
         /// <summary>
         /// Tenancy name of tenant.
         /// </summary>
-        public override string TenancyName => Id.TenancyName;
+        public override string TenancyName
+        {
+            get => _tenancyName;
+        }
 
         /// <summary>
         /// Display name of the Tenant.
         /// </summary>
-        public virtual int BranchNo => Id.BranchNo;
+        public virtual int BranchNo
+        {
+            get => _branchNo;
+        }
 
         /// <summary>
         /// Represents Tenant's subscription expire date.
@@ -59,11 +65,9 @@ namespace Milvasoft.Helpers.MultiTenancy.EntityBase
         /// <summary>
         /// Creates a new tenant.
         /// </summary>
-        public MilvaTenant()
+        protected MilvaTenant()
         {
             Id = TenantId.NewTenantId();
-            _tenancyName = Id.TenancyName;
-            _branchNo = Id.BranchNo;
             IsActive = true;
         }
 
@@ -74,9 +78,9 @@ namespace Milvasoft.Helpers.MultiTenancy.EntityBase
         /// <param name="branchNo"></param>
         protected MilvaTenant(string tenancyName, int branchNo)
         {
+            Id = new TenantId(tenancyName, branchNo);
             _tenancyName = tenancyName;
             _branchNo = branchNo;
-            Id = new TenantId(tenancyName, branchNo);
             IsActive = true;
         }
     }

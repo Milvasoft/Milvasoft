@@ -106,10 +106,6 @@ namespace Milvasoft.SampleAPI.AppStartup
 
             #region Seed
 
-            var dbContext = app.ApplicationServices.CreateScope().ServiceProvider.GetRequiredService<EducationAppDbContext>();
-
-            dbContext.Database.MigrateAsync().Wait();
-
             app.ResetDatabaseAsync().Wait();
 
             #endregion

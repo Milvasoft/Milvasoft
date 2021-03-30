@@ -7061,9 +7061,9 @@
             Creator user navigation property.
             </summary>
         </member>
-        <member name="P:Milvasoft.Helpers.MultiTenancy.EntityBase.MilvaTenant`2.Items">
+        <member name="M:Milvasoft.Helpers.MultiTenancy.EntityBase.MilvaTenant`2.#ctor">
             <summary>
-            Gets or sets additional tenant items.
+            Creates a new tenant.
             </summary>
         </member>
         <member name="M:Milvasoft.Helpers.MultiTenancy.EntityBase.MilvaTenant`2.#ctor(System.String,System.Int32)">
@@ -7105,6 +7105,12 @@
             </summary>
             <param name="tenancyName"></param>
             <param name="branchNo"></param>
+        </member>
+        <member name="M:Milvasoft.Helpers.MultiTenancy.EntityBase.TenantId.NewTenantId">
+            <summary>
+            Generates new unique tenant id.
+            </summary>
+            <returns></returns>
         </member>
         <member name="M:Milvasoft.Helpers.MultiTenancy.EntityBase.TenantId.GetHashCode">
             <summary>

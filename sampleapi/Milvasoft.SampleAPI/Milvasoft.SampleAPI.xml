@@ -1997,7 +1997,7 @@
             Profession service.
             </summary>
         </member>
-        <member name="M:Milvasoft.SampleAPI.Services.Concrete.ProfessionService.#ctor(Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository{Milvasoft.SampleAPI.Entity.Profession,System.Guid,Milvasoft.SampleAPI.Data.EducationAppDbContext})">
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.ProfessionService.#ctor(Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository{Milvasoft.SampleAPI.Entity.Profession,System.Guid,Milvasoft.SampleAPI.Data.EducationAppDbContext},Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository{Milvasoft.SampleAPI.Entity.TestEntity,Milvasoft.Helpers.MultiTenancy.EntityBase.TenantId,Milvasoft.SampleAPI.Data.EducationAppDbContext})">
             <summary>
             Performs constructor injection for repository interfaces used in this service.
             </summary>

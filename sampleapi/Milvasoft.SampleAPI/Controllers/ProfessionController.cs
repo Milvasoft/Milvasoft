@@ -27,6 +27,14 @@ namespace Milvasoft.SampleAPI.Controllers
             _professionService = professionService;
         }
 
+
+        [HttpGet("Test")]
+        public async Task<IActionResult> Test()
+        {
+            await _professionService.TestMethod().ConfigureAwait(false);
+            return Ok();
+        }
+
         /// <summary>
         /// Add profession to database.
         /// </summary>

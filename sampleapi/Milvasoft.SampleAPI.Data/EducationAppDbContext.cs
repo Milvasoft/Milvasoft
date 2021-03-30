@@ -28,10 +28,11 @@ namespace Milvasoft.SampleAPI.Data
         public DbSet<Student> Students { get; set; }
         public DbSet<StudentAssigmentDTO> StudentAssigments { get; set; }
         public DbSet<UsefulLink> UsefulLinks { get; set; }
+        public DbSet<TestEntity> TestEntities { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.UseEncryption(new MilvaEncryptionProvider(_encryptionKey));
+            //modelBuilder.UseEncryption(new MilvaEncryptionProvider(_encryptionKey));
             base.OnModelCreating(modelBuilder);
         }
 

@@ -1,10 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
-using System;
 
 namespace Milvasoft.SampleAPI.Data.Migrations
 {
-    public partial class EducationData : Migration
+    public partial class InitialCreate : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -161,6 +161,47 @@ namespace Milvasoft.SampleAPI.Data.Migrations
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Professions_AspNetUsers_LastModifierUserId",
+                        column: x => x.LastModifierUserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "TestEntities",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "text", nullable: false),
+                    CreationDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    CreatorUserId = table.Column<Guid>(type: "uuid", nullable: true),
+                    LastModificationDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
+                    LastModifierUserId = table.Column<Guid>(type: "uuid", nullable: true),
+                    DeletionDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
+                    DeleterUserId = table.Column<Guid>(type: "uuid", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "boolean", nullable: false),
+                    Name = table.Column<string>(type: "text", nullable: true),
+                    ConnectionString = table.Column<string>(type: "text", nullable: true),
+                    IsActive = table.Column<bool>(type: "boolean", nullable: false),
+                    TenancyName = table.Column<string>(type: "text", nullable: true),
+                    SubscriptionExpireDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_TestEntities", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_TestEntities_AspNetUsers_CreatorUserId",
+                        column: x => x.CreatorUserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_TestEntities_AspNetUsers_DeleterUserId",
+                        column: x => x.DeleterUserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_TestEntities_AspNetUsers_LastModifierUserId",
                         column: x => x.LastModifierUserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
@@ -801,6 +842,21 @@ namespace Milvasoft.SampleAPI.Data.Migrations
                 column: "ProfessionId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_TestEntities_CreatorUserId",
+                table: "TestEntities",
+                column: "CreatorUserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_TestEntities_DeleterUserId",
+                table: "TestEntities",
+                column: "DeleterUserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_TestEntities_LastModifierUserId",
+                table: "TestEntities",
+                column: "LastModifierUserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_UsefulLinks_CreatorUserId",
                 table: "UsefulLinks",
                 column: "CreatorUserId");
@@ -849,6 +905,9 @@ namespace Milvasoft.SampleAPI.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "StudentAssigments");
+
+            migrationBuilder.DropTable(
+                name: "TestEntities");
 
             migrationBuilder.DropTable(
                 name: "UsefulLinks");

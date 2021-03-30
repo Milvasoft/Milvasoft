@@ -1,5 +1,6 @@
 ﻿using Milvasoft.Helpers.DataAccess.Abstract;
 using Milvasoft.Helpers.Models;
+using Milvasoft.Helpers.MultiTenancy.EntityBase;
 using Milvasoft.SampleAPI.Data;
 using Milvasoft.SampleAPI.DTOs.ProfessionDTOs;
 using Milvasoft.SampleAPI.Entity;
@@ -21,16 +22,24 @@ namespace Milvasoft.SampleAPI.Services.Concrete
     {
 
         private readonly IBaseRepository<Profession, Guid, EducationAppDbContext> _professionRepository;
+        private readonly IBaseRepository<TestEntity, TenantId, EducationAppDbContext> _testRepository;
 
         /// <summary>
         /// Performs constructor injection for repository interfaces used in this service.
         /// </summary>
         /// <param name="professionRepository"></param>
-        public ProfessionService(IBaseRepository<Profession, Guid, EducationAppDbContext> professionRepository)
+        public ProfessionService(IBaseRepository<Profession, Guid, EducationAppDbContext> professionRepository, IBaseRepository<TestEntity, TenantId, EducationAppDbContext> testRepository)
         {
 
             _professionRepository = professionRepository;
+            _testRepository = testRepository;
+        }
 
+        public async Task TestMethod()
+        {
+            var tenantId = new TenantId("milvasoft", 4);
+
+            var entities = await _testRepository.GetAllAsync(i => i.TenancyName == tenantId.TenancyName);
         }
 
         /// <summary>

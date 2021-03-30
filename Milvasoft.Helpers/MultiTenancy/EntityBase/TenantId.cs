@@ -35,7 +35,22 @@ namespace Milvasoft.Helpers.MultiTenancy.EntityBase
         /// Creates new instance of <see cref="TenantId"/>.
         /// </summary>
         /// <param name="tenantIdString"></param>
-        public TenantId(string tenantIdString) => this = Parse(tenantIdString);
+        public TenantId(string tenantIdString)
+        {
+            if (TryParse(tenantIdString))
+            {
+                var splitted = tenantIdString.Split('_');
+
+                var tenancyName = splitted[0];
+
+                var branchNo = Convert.ToInt32(splitted[1]);
+
+                _tenancyName = tenancyName;
+                _branchNo = branchNo;
+                _hash = $"{tenancyName}_{branchNo}".HashToString();
+            }
+            else throw new MilvaDeveloperException("This string is not convertible to TenantId.");
+        }
 
         /// <summary>
         /// Creates new instance of <see cref="TenantId"/>.
