@@ -171,6 +171,158 @@
             </remarks>
             <returns></returns>
         </member>
+        <member name="T:Milvasoft.SampleAPI.Controllers.AnnouncementController">
+            <summary>
+            Provided announcement operations.
+            </summary>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Controllers.AnnouncementController.#ctor(Milvasoft.SampleAPI.Services.Abstract.IAnnouncementService)">
+            <summary>
+            Constructor of <c>AnnouncementController</c>.
+            </summary>
+            <param name="announcementService"></param>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Controllers.AnnouncementController.GetAnnouncementsForMentor(Milvasoft.API.DTOs.PaginationParamsWithSpec{Milvasoft.SampleAPI.Spec.AnnouncementSpec})">
+            <summary>
+            Gets the all filtered announcements datas for mentor.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Controllers.AnnouncementController.GetAnnouncementsForAdmn(Milvasoft.API.DTOs.PaginationParamsWithSpec{Milvasoft.SampleAPI.Spec.AnnouncementSpec})">
+            <summary>
+            Gets the all filtered announcements datas for admin.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Controllers.AnnouncementController.GetAnnouncementsForStudent(Milvasoft.API.DTOs.PaginationParamsWithSpec{Milvasoft.SampleAPI.Spec.AnnouncementSpec})">
+            <summary>
+            Gets the all filtered announcements datas for student.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Controllers.AnnouncementController.GetAnnouncementForMentorbyId(System.Guid)">
+            <summary>
+            Gets the all filtered announcement datas for mentor.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Controllers.AnnouncementController.GetAnnouncementForAdminbyId(System.Guid)">
+             <summary>
+             Gets the filtered announcement datas for admin.
+             </summary>
+             <returns></returns>
+            [Authorize(Roles = "Admin")]
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Controllers.AnnouncementController.GetAnnouncementForStudentbyId(System.Guid)">
+            <summary>
+            Gets the filtered announcement datas for student.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Controllers.AnnouncementController.AddAnnouncement(Milvasoft.SampleAPI.DTOs.AnnouncementDTOs.AddAnnouncementDTO)">
+            <summary>
+            Add <b><paramref name="addAnnouncement"/></b> data to database.
+            </summary>
+            <param name="addAnnouncement"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Controllers.AnnouncementController.UpdateAnnouncement(Milvasoft.SampleAPI.DTOs.AnnouncementDTOs.UpdateAnnouncementDTO)">
+            <summary>
+            Update <paramref name="updateAnnouncement"/> data.
+            </summary>
+            <param name="updateAnnouncement"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Controllers.AnnouncementController.DeleteAnnouncement(System.Guid)">
+            <summary>
+            Delete announcement data by <paramref name="id"/>
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Controllers.AnnouncementController.DeleteAnnouncements(System.Collections.Generic.List{System.Guid})">
+            <summary>
+            Delete announcement data by <paramref name="ids"/>
+            </summary>
+            <param name="ids"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Milvasoft.SampleAPI.Controllers.AssignmentController">
+            <summary>
+            Provided assignment operations.
+            </summary>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Controllers.AssignmentController.#ctor(Milvasoft.SampleAPI.Services.Abstract.IAssignmentService)">
+            <summary>
+            Constructor of <c>AssignmentConroller</c>.
+            </summary>
+            <param name="assignmentService"></param>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Controllers.AssignmentController.GetAssignmentsForMentor(Milvasoft.API.DTOs.PaginationParamsWithSpec{Milvasoft.SampleAPI.Spec.AssignmentSpec})">
+            <summary>
+            Gets the all filtered assignments datas for mentor.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Controllers.AssignmentController.GetAssignmentsForAdmn(Milvasoft.API.DTOs.PaginationParamsWithSpec{Milvasoft.SampleAPI.Spec.AssignmentSpec})">
+            <summary>
+            Gets the all filtered assignments datas for admin.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Controllers.AssignmentController.GetAssignmentsForStudent(Milvasoft.API.DTOs.PaginationParamsWithSpec{Milvasoft.SampleAPI.Spec.AssignmentSpec})">
+            <summary>
+            Gets the all filtered assignments datas for student.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Controllers.AssignmentController.GetAssignmentForMentorbyId(System.Guid)">
+            <summary>
+            Gets the all filtered assignment datas for mentor.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Controllers.AssignmentController.GetAssignmentForAdminbyId(System.Guid)">
+             <summary>
+             Gets the filtered assignment datas for admin.
+             </summary>
+             <returns></returns>
+            [Authorize(Roles = "Admin")]
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Controllers.AssignmentController.GetAssignmentForStudentbyId(System.Guid)">
+            <summary>
+            Gets the filtered assignment datas for student.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Controllers.AssignmentController.AddAssignment(Milvasoft.SampleAPI.DTOs.AssignmentDTOs.AddAssignmentDTO)">
+            <summary>
+            Add <b><paramref name="addAssignment"/></b> data to database.
+            </summary>
+            <param name="addAssignment"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Controllers.AssignmentController.UpdateAssignment(Milvasoft.SampleAPI.DTOs.AssignmentDTOs.UpdateAssignmentDTO)">
+            <summary>
+            Update <paramref name="updateAssignment"/> data.
+            </summary>
+            <param name="updateAssignment"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Controllers.AssignmentController.DeleteAssignment(System.Guid)">
+            <summary>
+            Delete assignment data by <paramref name="id"/>
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Controllers.AssignmentController.DeleteAssignment(System.Collections.Generic.List{System.Guid})">
+            <summary>
+            Delete assignment data by <paramref name="ids"/>
+            </summary>
+            <param name="ids"></param>
+            <returns></returns>
+        </member>
         <member name="T:Milvasoft.SampleAPI.Controllers.MentorController">
             <summary>
             Provided Mentor operations.
@@ -182,18 +334,69 @@
             </summary>
             <param name="mentorService"></param>
         </member>
-        <member name="M:Milvasoft.SampleAPI.Controllers.MentorController.GetStudentForAdmin(Milvasoft.API.DTOs.PaginationParamsWithSpec{Milvasoft.SampleAPI.Spec.MentorSpec})">
+        <member name="M:Milvasoft.SampleAPI.Controllers.MentorController.GetMentorsForMentor(Milvasoft.API.DTOs.PaginationParamsWithSpec{Milvasoft.SampleAPI.Spec.MentorSpec})">
             <summary>
-            The student list returns according to the <paramref name="paginationParams"/> sent.
+            Gets the all filtered mentors datas for mentor.
             </summary>
-            <param name="paginationParams"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.SampleAPI.Controllers.MentorController.AddStudent(Milvasoft.SampleAPI.DTOs.MentorDTOs.AddMentorDTO)">
+        <member name="M:Milvasoft.SampleAPI.Controllers.MentorController.GetMentorsForAdmn(Milvasoft.API.DTOs.PaginationParamsWithSpec{Milvasoft.SampleAPI.Spec.MentorSpec})">
             <summary>
-            Add student to database .
+            Gets the all filtered mentors datas for admin.
             </summary>
-            <param name="mentorDTO"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Controllers.MentorController.GetMentorsForStudent(Milvasoft.API.DTOs.PaginationParamsWithSpec{Milvasoft.SampleAPI.Spec.MentorSpec})">
+            <summary>
+            Gets the all filtered mentors datas for student.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Controllers.MentorController.GetMentorForMentorbyId(System.Guid)">
+            <summary>
+            Gets the all filtered mentor datas for mentor.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Controllers.MentorController.GetMentorForAdminbyId(System.Guid)">
+             <summary>
+             Gets the filtered mentor datas for admin.
+             </summary>
+             <returns></returns>
+            [Authorize(Roles = "Admin")]
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Controllers.MentorController.GetMentorForStudentbyId(System.Guid)">
+            <summary>
+            Gets the filtered mentor datas for student.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Controllers.MentorController.AddMentor(Milvasoft.SampleAPI.DTOs.MentorDTOs.AddMentorDTO)">
+            <summary>
+            Add <b><paramref name="addMentor"/></b> data to database.
+            </summary>
+            <param name="addMentor"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Controllers.MentorController.UpdateMentor(Milvasoft.SampleAPI.DTOs.MentorDTOs.UpdateMentorDTO)">
+            <summary>
+            Update <paramref name="updateMentor"/> data.
+            </summary>
+            <param name="updateMentor"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Controllers.MentorController.DeleteMentor(System.Guid)">
+            <summary>
+            Delete mentor data by <paramref name="id"/>
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Controllers.MentorController.DeleteMentors(System.Collections.Generic.List{System.Guid})">
+            <summary>
+            Delete mentor data by <paramref name="ids"/>
+            </summary>
+            <param name="ids"></param>
             <returns></returns>
         </member>
         <member name="T:Milvasoft.SampleAPI.Controllers.ProfessionController">
@@ -203,21 +406,73 @@
         </member>
         <member name="M:Milvasoft.SampleAPI.Controllers.ProfessionController.#ctor(Milvasoft.SampleAPI.Services.Abstract.IProfessionService)">
             <summary>
-            ProfessionController concrete for injection.
+            Constructor of <c>ProfessionController</c>.
             </summary>
             <param name="professionService"></param>
         </member>
-        <member name="M:Milvasoft.SampleAPI.Controllers.ProfessionController.AddProfession(Milvasoft.SampleAPI.DTOs.ProfessionDTOs.AddProfessionDTO)">
+        <member name="M:Milvasoft.SampleAPI.Controllers.ProfessionController.GetProfessionsForMentor(Milvasoft.API.DTOs.PaginationParamsWithSpec{Milvasoft.SampleAPI.Spec.ProfessionSpec})">
             <summary>
-            Add profession to database.
+            Gets the all filtered professions datas for mentor.
             </summary>
-            <param name="profession"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.SampleAPI.Controllers.ProfessionController.GetProfession(Milvasoft.API.DTOs.PaginationParamsWithSpec{Milvasoft.SampleAPI.Spec.ProfessionSpec})">
+        <member name="M:Milvasoft.SampleAPI.Controllers.ProfessionController.GetProfessionsForAdmin(Milvasoft.API.DTOs.PaginationParamsWithSpec{Milvasoft.SampleAPI.Spec.ProfessionSpec})">
             <summary>
-            Get all profession.
+            Gets the all filtered professions datas for admin.
             </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Controllers.ProfessionController.GetProfessionsForStudent(Milvasoft.API.DTOs.PaginationParamsWithSpec{Milvasoft.SampleAPI.Spec.ProfessionSpec})">
+            <summary>
+            Gets the all filtered professions datas for student.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Controllers.ProfessionController.GetProfessionForMentorbyId(System.Guid)">
+            <summary>
+            Gets the all filtered profession datas for mentor.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Controllers.ProfessionController.GetProfessionForAdminbyId(System.Guid)">
+             <summary>
+             Gets the filtered profession datas for admin.
+             </summary>
+             <returns></returns>
+            [Authorize(Roles = "Admin")]
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Controllers.ProfessionController.GetProfessionForStudentbyId(System.Guid)">
+            <summary>
+            Gets the filtered profession datas for student.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Controllers.ProfessionController.AddProfession(Milvasoft.SampleAPI.DTOs.ProfessionDTOs.AddProfessionDTO)">
+            <summary>
+            Add <b><paramref name="addProfession"/></b> data to database.
+            </summary>
+            <param name="addProfession"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Controllers.ProfessionController.UpdateProfession(Milvasoft.SampleAPI.DTOs.ProfessionDTOs.UpdateProfessionDTO)">
+            <summary>
+            Update <paramref name="updateProfession"/> data.
+            </summary>
+            <param name="updateProfession"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Controllers.ProfessionController.DeleteProfession(System.Guid)">
+            <summary>
+            Delete profession data by <paramref name="id"/>
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Controllers.ProfessionController.DeleteProfession(System.Collections.Generic.List{System.Guid})">
+            <summary>
+            Delete professions data by <paramref name="ids"/>
+            </summary>
+            <param name="ids"></param>
             <returns></returns>
         </member>
         <member name="T:Milvasoft.SampleAPI.Controllers.QuestionController">
@@ -227,9 +482,74 @@
         </member>
         <member name="M:Milvasoft.SampleAPI.Controllers.QuestionController.#ctor(Milvasoft.SampleAPI.Services.Abstract.IQuestionService)">
             <summary>
-            Question controller.
+            Constructor of <c>QuestionController</c>
             </summary>
             <param name="questionService"></param>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Controllers.QuestionController.GetQuestionsForMentor(Milvasoft.API.DTOs.PaginationParamsWithSpec{Milvasoft.SampleAPI.Spec.QuestionSpec})">
+            <summary>
+            Gets the all filtered questions datas for mentor.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Controllers.QuestionController.GetQuestionsForAdmin(Milvasoft.API.DTOs.PaginationParamsWithSpec{Milvasoft.SampleAPI.Spec.QuestionSpec})">
+            <summary>
+            Gets the all filtered questions datas for admin.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Controllers.QuestionController.GetQuestionsForStudent(Milvasoft.API.DTOs.PaginationParamsWithSpec{Milvasoft.SampleAPI.Spec.QuestionSpec})">
+            <summary>
+            Gets the all filtered questions datas for student.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Controllers.QuestionController.GetQuestionForMentorbyId(System.Guid)">
+            <summary>
+            Gets the all filtered question datas for mentor.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Controllers.QuestionController.GetQuestionForAdminbyId(System.Guid)">
+             <summary>
+             Gets the filtered question datas for admin.
+             </summary>
+             <returns></returns>
+            [Authorize(Roles = "Admin")]
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Controllers.QuestionController.GetQuestionForStudentbyId(System.Guid)">
+            <summary>
+            Gets the filtered question datas for student.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Controllers.QuestionController.AddQuestion(Milvasoft.SampleAPI.DTOs.QuestionDTOs.AddQuestionDTO)">
+            <summary>
+            Add <b><paramref name="addQuestion"/></b> data to database.
+            </summary>
+            <param name="addQuestion"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Controllers.QuestionController.UpdateQuestion(Milvasoft.SampleAPI.DTOs.QuestionDTOs.UpdateQuestionDTO)">
+            <summary>
+            Update <paramref name="updateQuestion"/> data.
+            </summary>
+            <param name="updateQuestion"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Controllers.QuestionController.DeleteQuestions(System.Guid)">
+            <summary>
+            Delete question data by <paramref name="id"/>
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Controllers.QuestionController.DeleteQuestions(System.Collections.Generic.List{System.Guid})">
+            <summary>
+            Delete professions data by <paramref name="ids"/>
+            </summary>
+            <param name="ids"></param>
+            <returns></returns>
         </member>
         <member name="T:Milvasoft.SampleAPI.Controllers.StudentController">
             <summary>
@@ -238,21 +558,149 @@
         </member>
         <member name="M:Milvasoft.SampleAPI.Controllers.StudentController.#ctor(Milvasoft.SampleAPI.Services.Abstract.IStudentService)">
             <summary>
-            Student controller constructor method.
+            Constructor of <c>StudentController</c>
             </summary>
             <param name="studentService"></param>
         </member>
-        <member name="M:Milvasoft.SampleAPI.Controllers.StudentController.GetStudentForAdmin(Milvasoft.API.DTOs.PaginationParamsWithSpec{Milvasoft.SampleAPI.Spec.StudentSpec})">
+        <member name="M:Milvasoft.SampleAPI.Controllers.StudentController.GetStudentsForMentor(Milvasoft.API.DTOs.PaginationParamsWithSpec{Milvasoft.SampleAPI.Spec.StudentSpec})">
             <summary>
-            Get all student for admin.
+            Gets the all filtered students datas for mentor.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Controllers.StudentController.GetStudentsForAdmin(Milvasoft.API.DTOs.PaginationParamsWithSpec{Milvasoft.SampleAPI.Spec.StudentSpec})">
+            <summary>
+            Gets the all filtered students datas for admin.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Controllers.StudentController.GetStudentsForStudent(Milvasoft.API.DTOs.PaginationParamsWithSpec{Milvasoft.SampleAPI.Spec.StudentSpec})">
+            <summary>
+            Gets the all filtered students datas for student.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Controllers.StudentController.GetStudentForMentorbyId(System.Guid)">
+            <summary>
+            Gets the all filtered student datas for mentor.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Controllers.StudentController.GetStudentForAdminbyId(System.Guid)">
+             <summary>
+             Gets the filtered student datas for admin.
+             </summary>
+             <returns></returns>
+            [Authorize(Roles = "Admin")]
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Controllers.StudentController.GetStudentForStudentbyId(System.Guid)">
+            <summary>
+            Gets the filtered student datas for student.
             </summary>
             <returns></returns>
         </member>
         <member name="M:Milvasoft.SampleAPI.Controllers.StudentController.AddStudent(Milvasoft.SampleAPI.DTOs.StudentDTOs.AddStudentDTO)">
             <summary>
-            Add student to database.
+            Add <b><paramref name="addStudent"/></b> data to database.
             </summary>
-            <param name="student"></param>
+            <param name="addStudent"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Controllers.StudentController.UpdateStudent(Milvasoft.SampleAPI.DTOs.StudentDTOs.UpdateStudentDTO)">
+            <summary>
+            Update <paramref name="updateStudent"/> data.
+            </summary>
+            <param name="updateStudent"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Controllers.StudentController.DeleteStudent(System.Guid)">
+            <summary>
+            Delete student data by <paramref name="id"/>
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Controllers.StudentController.DeleteStudents(System.Collections.Generic.List{System.Guid})">
+            <summary>
+            Delete professions data by <paramref name="ids"/>
+            </summary>
+            <param name="ids"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Milvasoft.SampleAPI.Controllers.UsefulLinkController">
+            <summary>
+            Provided link operations.
+            </summary>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Controllers.UsefulLinkController.#ctor(Milvasoft.SampleAPI.Services.Abstract.IUsefulLinkService)">
+            <summary>
+            Constructor of <c>UsefulLinkController</c>
+            </summary>
+            <param name="usefulLinkService"></param>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Controllers.UsefulLinkController.GetUsefulLinksForMentor(Milvasoft.API.DTOs.PaginationParamsWithSpec{Milvasoft.SampleAPI.Spec.UsefulLinkSpec})">
+            <summary>
+            Gets the all filtered usefulLinks datas for mentor.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Controllers.UsefulLinkController.GetUsefulLinksForAdmin(Milvasoft.API.DTOs.PaginationParamsWithSpec{Milvasoft.SampleAPI.Spec.UsefulLinkSpec})">
+            <summary>
+            Gets the all filtered usefulLinks datas for admin.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Controllers.UsefulLinkController.GetUsefulLinksForStudent(Milvasoft.API.DTOs.PaginationParamsWithSpec{Milvasoft.SampleAPI.Spec.UsefulLinkSpec})">
+            <summary>
+            Gets the all filtered usefulLinks datas for student.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Controllers.UsefulLinkController.GetUsefulLinkForMentorbyId(System.Guid)">
+            <summary>
+            Gets the all filtered usefulLink datas for mentor.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Controllers.UsefulLinkController.GetUsefulLinkAdminbyId(System.Guid)">
+             <summary>
+             Gets the filtered usefulLink datas for admin.
+             </summary>
+             <returns></returns>
+            [Authorize(Roles = "Admin")]
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Controllers.UsefulLinkController.GetUsefulLinkForStudentbyId(System.Guid)">
+            <summary>
+            Gets the filtered usefulLink datas for student.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Controllers.UsefulLinkController.AddUsefulLink(Milvasoft.SampleAPI.DTOs.UsefulLinkDTOs.AddUsefulLinkDTO)">
+            <summary>
+            Add <b><paramref name="addStudent"/></b> data to database.
+            </summary>
+            <param name="addStudent"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Controllers.UsefulLinkController.UpdateUsefulLink(Milvasoft.SampleAPI.DTOs.UsefulLinkDTOs.UpdateUsefulLinkDTO)">
+            <summary>
+            Update <paramref name="updateStudent"/> data.
+            </summary>
+            <param name="updateStudent"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Controllers.UsefulLinkController.DeleteUsefulLink(System.Guid)">
+            <summary>
+            Delete usefulLink data by <paramref name="id"/>
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Controllers.UsefulLinkController.DeleteUsefulLinks(System.Collections.Generic.List{System.Guid})">
+            <summary>
+            Delete usefulLink data by <paramref name="ids"/>
+            </summary>
+            <param name="ids"></param>
             <returns></returns>
         </member>
         <member name="T:Milvasoft.SampleAPI.DTOs.AccountDTOs.LoginDTO">
@@ -698,6 +1146,11 @@
         <member name="P:Milvasoft.SampleAPI.DTOs.MentorDTOs.AddMentorDTO.CVFilePath">
             <summary>
             CV path of mentor.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.MentorDTOs.AddMentorDTO.Professions">
+            <summary>
+            Profession ıd of mentor.
             </summary>
         </member>
         <member name="T:Milvasoft.SampleAPI.DTOs.MentorDTOs.MentorDTO">
@@ -1363,6 +1816,11 @@
         <member name="P:Milvasoft.SampleAPI.DTOs.UsefulLinkDTO.Profession">
             <summary>
             Profession of link.
+            </summary>
+        </member>
+        <member name="T:Milvasoft.SampleAPI.Middlewares.ExceptionHandlerMiddleware">
+            <summary>
+            Exception handler middleware.
             </summary>
         </member>
         <member name="M:Milvasoft.SampleAPI.Middlewares.ExceptionHandlerMiddleware.#ctor(Microsoft.AspNetCore.Http.RequestDelegate)">
@@ -2051,9 +2509,9 @@
         </member>
         <member name="M:Milvasoft.SampleAPI.Services.Concrete.ProfessionService.UpdateEntityAsync(Milvasoft.SampleAPI.DTOs.ProfessionDTOs.UpdateProfessionDTO)">
             <summary>
-            Update profession by <paramref name="addProfessionDTO"/>.
+            Update profession by <paramref name="updateProfessionDTO"/>.
             </summary>
-            <param name="addProfessionDTO"></param>
+            <param name="updateProfessionDTO"></param>
             <returns></returns>
         </member>
         <member name="M:Milvasoft.SampleAPI.Services.Concrete.ProfessionService.DeleteEntitiesAsync(System.Collections.Generic.List{System.Guid})">

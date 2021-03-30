@@ -4,6 +4,7 @@ using Milvasoft.Helpers.Models;
 using Milvasoft.SampleAPI.Data;
 using Milvasoft.SampleAPI.DTOs.AnnouncementDTOs;
 using Milvasoft.SampleAPI.DTOs.MentorDTOs;
+using Milvasoft.SampleAPI.DTOs.ProfessionDTOs;
 using Milvasoft.SampleAPI.DTOs.StudentDTOs;
 using Milvasoft.SampleAPI.Entity;
 using Milvasoft.SampleAPI.Services.Abstract;
@@ -257,7 +258,13 @@ namespace Milvasoft.SampleAPI.Services.Concrete
             {
                 Name = addMentorDTO.Name,
                 Surname = addMentorDTO.Surname,
-                CVFilePath = addMentorDTO.CVFilePath
+                CVFilePath = addMentorDTO.CVFilePath,
+                Professions= addMentorDTO.Professions != null ?
+                                     (from pp in addMentorDTO.Professions
+                                      select new MentorProfession
+                                      {
+                                          Id = pp.Id
+                                      }).ToList() : null,
             };
             await _mentorRepository.AddAsync(mentor).ConfigureAwait(false);
         }
