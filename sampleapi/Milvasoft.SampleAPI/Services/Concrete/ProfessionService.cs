@@ -185,15 +185,15 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         }
 
         /// <summary>
-        /// Update profession by <paramref name="addProfessionDTO"/>.
+        /// Update profession by <paramref name="updateProfessionDTO"/>.
         /// </summary>
-        /// <param name="addProfessionDTO"></param>
+        /// <param name="updateProfessionDTO"></param>
         /// <returns></returns>
-        public async Task UpdateEntityAsync(UpdateProfessionDTO addProfessionDTO)
+        public async Task UpdateEntityAsync(UpdateProfessionDTO updateProfessionDTO)
         {
-            var updatedProfession = await _professionRepository.GetByIdAsync(addProfessionDTO.Id).ConfigureAwait(false);
+            var updatedProfession = await _professionRepository.GetByIdAsync(updateProfessionDTO.Id).ConfigureAwait(false);
 
-            updatedProfession.Name = addProfessionDTO.Name;
+            updatedProfession.Name = updateProfessionDTO.Name;
 
             await _professionRepository.UpdateAsync(updatedProfession).ConfigureAwait(false);
         }

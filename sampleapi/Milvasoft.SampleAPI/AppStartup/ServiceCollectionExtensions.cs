@@ -148,6 +148,8 @@ namespace Milvasoft.SampleAPI.AppStartup
             services.AddScoped<IUsefulLinkService, UsefulLinkService>();
             services.AddScoped<IQuestionService, QuestionService>();
             services.AddScoped<IProfessionService, ProfessionService>();
+            services.AddScoped<IAnnouncementService, AnnouncementService>();
+            services.AddScoped<IAssignmentService, AssignmentService>();
 
             #endregion
 

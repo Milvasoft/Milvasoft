@@ -1,4 +1,7 @@
-﻿using Milvasoft.SampleAPI.Utils.Attributes.ValidationAttributes;
+﻿using Milvasoft.SampleAPI.DTOs.ProfessionDTOs;
+using Milvasoft.SampleAPI.Utils.Attributes.ValidationAttributes;
+using System;
+using System.Collections.Generic;
 
 namespace Milvasoft.SampleAPI.DTOs.MentorDTOs
 {
@@ -25,7 +28,8 @@ namespace Milvasoft.SampleAPI.DTOs.MentorDTOs
         public string CVFilePath { get; set; }
 
         /// <summary>
-        /// AppUser ID of mentor.
+        /// Profession ıd of mentor.
         /// </summary>
+        public List<AddProfessionDTO> Professions{ get; set; }
     }
 }
