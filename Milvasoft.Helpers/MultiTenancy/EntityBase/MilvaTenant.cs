@@ -29,18 +29,12 @@ namespace Milvasoft.Helpers.MultiTenancy.EntityBase
         /// <summary>
         /// Tenancy name of tenant.
         /// </summary>
-        public override string TenancyName
-        {
-            get => Id.TenancyName;
-        }
+        public override string TenancyName => Id.TenancyName;
 
         /// <summary>
         /// Display name of the Tenant.
         /// </summary>
-        public virtual int BranchNo
-        {
-            get => Id.BranchNo;
-        }
+        public virtual int BranchNo => Id.BranchNo;
 
         /// <summary>
         /// Represents Tenant's subscription expire date.
@@ -63,9 +57,15 @@ namespace Milvasoft.Helpers.MultiTenancy.EntityBase
         public TUser CreatorUser { get; set; }
 
         /// <summary>
-        /// Gets or sets additional tenant items.
+        /// Creates a new tenant.
         /// </summary>
-        public Dictionary<string, object> Items { get; private set; } = new Dictionary<string, object>();
+        public MilvaTenant()
+        {
+            Id = TenantId.NewTenantId();
+            _tenancyName = Id.TenancyName;
+            _branchNo = Id.BranchNo;
+            IsActive = true;
+        }
 
         /// <summary>
         /// Creates a new tenant.

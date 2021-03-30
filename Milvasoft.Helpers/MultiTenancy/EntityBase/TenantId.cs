@@ -56,6 +56,23 @@ namespace Milvasoft.Helpers.MultiTenancy.EntityBase
         }
 
         /// <summary>
+        /// Generates new unique tenant id.
+        /// </summary>
+        /// <returns></returns>
+        public static TenantId NewTenantId()
+        {
+            var guid = Guid.NewGuid();
+
+            string guidString = Convert.ToBase64String(guid.ToByteArray());
+
+            guidString = guidString.Replace("=", "");
+
+            guidString = guidString.Replace("+", "");
+
+            return new TenantId(guidString, 1);
+        }
+
+        /// <summary>
         /// Combines Tenancy Name and BranchNo into a hash code.
         /// </summary>
         /// <returns></returns>
@@ -74,14 +91,14 @@ namespace Milvasoft.Helpers.MultiTenancy.EntityBase
         /// <returns> If both hash are equals returns true, othewise false. </returns>
         public override bool Equals(object other)
         {
-            TenantId tId;
+            TenantId tenantId;
 
             // Check that o is a TenantId first
-            if (other == null || !(other is TenantId))
+            if (other == null || !(other is TenantId id))
                 return false;
-            else tId = (TenantId)other;
+            else tenantId = id;
 
-            if (tId._hash != GetHashString())
+            if (tenantId._hash != GetHashString())
                 return false;
 
             return true;
