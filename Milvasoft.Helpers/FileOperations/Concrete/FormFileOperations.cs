@@ -40,7 +40,7 @@ namespace Milvasoft.Helpers.FileOperations.Concrete
         /// 
         /// <remarks>
         /// 
-        /// <para> Don't forget validate file with <see cref="ValidateFile(IFormFile, FileType, long, List{string})"/>, before use this method.</para>
+        /// <para> Don't forget validate file with <see cref="ValidateFile(IFormFile, long, List{string}, FileType)"/>, before use this method.</para>
         /// 
         /// </remarks>
         /// 
@@ -115,7 +115,7 @@ namespace Milvasoft.Helpers.FileOperations.Concrete
         /// 
         /// <remarks>
         /// 
-        /// <para> Don't forget validate files with <see cref="ValidateFile(IFormFile, FileType, long, List{string})"/>, before use this method.</para>
+        /// <para> Don't forget validate files with <see cref="ValidateFile(IFormFile, long, List{string}, FileType)"/>, before use this method.</para>
         /// 
         /// </remarks>
         /// 
@@ -144,7 +144,7 @@ namespace Milvasoft.Helpers.FileOperations.Concrete
             var folderPathOfClass = Path.Combine(basePath, folderNameOfClass);
 
             //Since each data belonging to this class (folderNameOfClass) will have a separate folder, we received the Id of the data sent.
-            var folderNameOfItem = CommonHelper.PropertyExists<TEntity>(propertyName) 
+            var folderNameOfItem = CommonHelper.PropertyExists<TEntity>(propertyName)
                                     ? entity.GetType().GetProperty(propertyName).GetValue(entity, null).ToString()
                                     : throw new MilvaDeveloperException("PropertyNotExists");
 
@@ -202,7 +202,7 @@ namespace Milvasoft.Helpers.FileOperations.Concrete
         /// 
         /// <remarks>
         /// 
-        /// <para> Don't forget validate files with <see cref="ValidateFile(IFormFile, FileType, long, List{string})"/>, before use this method.</para>
+        /// <para> Don't forget validate files with <see cref="ValidateFile(IFormFile, long, List{string}, FileType)"/>, before use this method.</para>
         /// 
         /// </remarks>
         /// 
@@ -230,7 +230,7 @@ namespace Milvasoft.Helpers.FileOperations.Concrete
             var folderPathOfClass = Path.Combine(basePath, folderNameOfClass);
 
             //Since each data belonging to this class (folderNameOfClass) will have a separate folder, we received the Id of the data sent.
-            var folderNameOfItem = CommonHelper.PropertyExists<TEntity>(propertyName) 
+            var folderNameOfItem = CommonHelper.PropertyExists<TEntity>(propertyName)
                                     ? entity.GetType().GetProperty(propertyName).GetValue(entity, null).ToString()
                                     : throw new MilvaDeveloperException("PropertyNotExists");
 
@@ -289,12 +289,12 @@ namespace Milvasoft.Helpers.FileOperations.Concrete
         /// 
         /// <remarks>
         /// 
-        /// <para> Don't forget validate files with <see cref="ValidateFile(IFormFile, FileType, long, List{string})"/>, before use this method.</para>
+        /// <para> Don't forget validate files with <see cref="ValidateFile(IFormFile, long, List{string}, FileType)"/>, before use this method.</para>
         /// 
         /// </remarks>
         /// 
         /// <typeparam name="TEntity"></typeparam>
-        /// <typeparam name="TImageDTO"></typeparam>
+        /// <typeparam name="TFileDTO"></typeparam>
         /// <typeparam name="TFileEntity"></typeparam>
         /// <param name="fileDTOList"> Uploaded file in entity. </param>
         /// <param name="entity"></param>
@@ -302,12 +302,12 @@ namespace Milvasoft.Helpers.FileOperations.Concrete
         /// <param name="folderNameCreator"></param>
         /// <param name="propertyName"></param>
         /// <returns> Completed Task </returns>
-        public static async Task<List<TFileEntity>> SaveFilesToPathAsync<TEntity, TImageDTO, TFileEntity>(this List<TImageDTO> fileDTOList,
+        public static async Task<List<TFileEntity>> SaveFilesToPathAsync<TEntity, TFileDTO, TFileEntity>(this List<TFileDTO> fileDTOList,
                                                                                                           TEntity entity,
                                                                                                           string basePath,
                                                                                                           FilesFolderNameCreator folderNameCreator,
                                                                                                           string propertyName)
-        where TImageDTO : class, IFileDTO
+        where TFileDTO : class, IFileDTO
         where TFileEntity : class, IFileEntity, new()
         {
             if (fileDTOList.IsNullOrEmpty()) return new List<TFileEntity>();
@@ -322,55 +322,14 @@ namespace Milvasoft.Helpers.FileOperations.Concrete
 
                 if (file.Length <= 0) continue;
 
-                //Gets file extension.
-                var fileExtension = Path.GetExtension(file.FileName);
+                var path = await file.SaveFileToPathAsync(entity, basePath, folderNameCreator, propertyName).ConfigureAwait(false);
 
-                //Gets the class name. E.g. If class is ProductDTO then sets the value of this variable as "Product".
-                var folderNameOfClass = folderNameCreator.Invoke(entity.GetType());
-
-                //We combined the name of this class (folderNameOfClass) with the path of the basePath folder. So we created the path of the folder belonging to this class.
-                var folderPathOfClass = Path.Combine(basePath, folderNameOfClass);
-
-                //If there is no such folder in this path (folderPathOfClass), we created it.
-                if (!Directory.Exists(folderPathOfClass))
-                    Directory.CreateDirectory(folderPathOfClass);
-
-                //Since each data belonging to this class (folderNameOfClass) will have a separate folder, we received the Id of the data sent.
-                var folderNameOfItem = CommonHelper.PropertyExists<TEntity>(propertyName) 
-                                        ? entity.GetType().GetProperty(propertyName).GetValue(entity, null).ToString() 
-                                        : throw new MilvaDeveloperException("PropertyNotExists");
-
-                //We created the path to the folder of this Id (folderNameOfItem).
-                var folderPathOfItem = Path.Combine(folderPathOfClass, folderNameOfItem);
-
-                try
-                {
-                    //If there is no such folder in this path (folderPathOfItem), we created it.
-                    if (!Directory.Exists(folderPathOfItem))
-                        Directory.CreateDirectory(folderPathOfItem);
-                    else
-                    {
-                        Directory.Delete(folderPathOfItem, true);
-                        Directory.CreateDirectory(folderPathOfItem);
-                    }
-                    var fileNameWithExtension = $"{folderNameOfItem}{fileExtension}";
-                    var filePathOfItem = Path.Combine(folderPathOfItem, fileNameWithExtension);
-                    using (var fileStream = new FileStream(filePathOfItem, FileMode.Create))
-                    {
-                        await file.CopyToAsync(fileStream).ConfigureAwait(false);
-                    }
-
+                if (!string.IsNullOrEmpty(path))
                     fileEntities.Add(new TFileEntity
                     {
                         FileName = fileDTO.FileName,
-                        FilePath = filePathOfItem
+                        FilePath = path
                     });
-                }
-                catch (Exception)
-                {
-                    Directory.Delete(folderPathOfItem, true);
-                    throw;
-                }
             }
 
             return fileEntities;
@@ -384,7 +343,7 @@ namespace Milvasoft.Helpers.FileOperations.Concrete
         /// <param name="fileType"> Uploaded file type. (e.g image,video,sound..) </param>
         /// <param name="maxFileSize"> Maximum file size in bytes of uploaded file. </param>
         /// <param name="allowedFileExtensions"> Allowed file extensions for <paramref name="fileType"/>. </param>
-        public static FileValidationResult ValidateFile(this IFormFile file, FileType fileType, long maxFileSize, List<string> allowedFileExtensions)
+        public static FileValidationResult ValidateFile(this IFormFile file, long maxFileSize, List<string> allowedFileExtensions, FileType fileType = FileType.Document)
         {
             if (file == null) return FileValidationResult.NullFile;
 
@@ -403,6 +362,30 @@ namespace Milvasoft.Helpers.FileOperations.Concrete
 
             if (fileSizeInBytes > maxFileSize)
                 return FileValidationResult.FileSizeTooBig;
+
+            return FileValidationResult.Valid;
+        }
+
+        /// <summary>
+        /// Checks that the files compatible the upload rules. 
+        /// File extension validation is not case sensitive.
+        /// </summary>
+        /// <param name="files"> Uploaded files. </param>
+        /// <param name="fileType"> Uploaded file type. (e.g image,video,sound..) </param>
+        /// <param name="maxFileSize"> Maximum file size in bytes of uploaded file. </param>
+        /// <param name="allowedFileExtensions"> Allowed file extensions for <paramref name="fileType"/>. </param>
+        public static FileValidationResult ValidateFiles(this List<IFormFile> files, long maxFileSize, List<string> allowedFileExtensions, FileType fileType = FileType.Document)
+        {
+            if (files.IsNullOrEmpty())
+                return FileValidationResult.NullFile;
+
+            foreach (var file in files)
+            {
+                var validationResult = file.ValidateFile(maxFileSize, allowedFileExtensions, fileType);
+
+                if (validationResult != FileValidationResult.Valid)
+                    return validationResult;
+            }
 
             return FileValidationResult.Valid;
         }

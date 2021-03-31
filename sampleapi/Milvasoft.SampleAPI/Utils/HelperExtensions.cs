@@ -49,7 +49,7 @@ namespace Milvasoft.SampleAPI.Utils
 
             var allowedFileExtensions = GlobalConstants.AllowedFileExtensions.Find(i => i.FileType == FileType.Image.ToString()).AllowedExtensions;
 
-            var validationResult = file.ValidateFile(FileType.Image, maxFileLength, allowedFileExtensions);
+            var validationResult = file.ValidateFile(maxFileLength, allowedFileExtensions, FileType.Image);
 
             switch (validationResult)
             {
@@ -85,7 +85,6 @@ namespace Milvasoft.SampleAPI.Utils
         /// <typeparam name="TKey"></typeparam>
         /// <param name="file"> Uploaded file in entity. </param>
         /// <param name="entity"></param>
-        /// <param name="stringLocalizer"></param>
         /// <returns></returns>
         public static async Task<string> SaveVideoToServerAsync<TEntity, TKey>(this IFormFile file, TEntity entity)
         {
@@ -99,7 +98,7 @@ namespace Milvasoft.SampleAPI.Utils
 
             var allowedFileExtensions = GlobalConstants.AllowedFileExtensions.Find(i => i.FileType == FileType.Video.ToString()).AllowedExtensions;
 
-            var validationResult = file.ValidateFile(FileType.Video, maxFileLength, allowedFileExtensions);
+            var validationResult = file.ValidateFile(maxFileLength, allowedFileExtensions, FileType.Video);
 
             switch (validationResult)
             {

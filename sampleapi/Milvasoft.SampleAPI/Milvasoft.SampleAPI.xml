@@ -3312,7 +3312,6 @@
             <typeparam name="TKey"></typeparam>
             <param name="file"> Uploaded file in entity. </param>
             <param name="entity"></param>
-            <param name="stringLocalizer"></param>
             <returns></returns>
         </member>
         <member name="M:Milvasoft.SampleAPI.Utils.HelperExtensions.GetFileUrlFromPath(System.String,Milvasoft.Helpers.FileOperations.Enums.FileType)">

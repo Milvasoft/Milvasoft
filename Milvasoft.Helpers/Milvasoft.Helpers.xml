@@ -4714,7 +4714,7 @@
             
             <remarks>
             
-            <para> Don't forget validate file with <see cref="M:Milvasoft.Helpers.FileOperations.Concrete.FormFileOperations.ValidateFile(Microsoft.AspNetCore.Http.IFormFile,Milvasoft.Helpers.FileOperations.Enums.FileType,System.Int64,System.Collections.Generic.List{System.String})"/>, before use this method.</para>
+            <para> Don't forget validate file with <see cref="M:Milvasoft.Helpers.FileOperations.Concrete.FormFileOperations.ValidateFile(Microsoft.AspNetCore.Http.IFormFile,System.Int64,System.Collections.Generic.List{System.String},Milvasoft.Helpers.FileOperations.Enums.FileType)"/>, before use this method.</para>
             
             </remarks>
             
@@ -4736,7 +4736,7 @@
             
             <remarks>
             
-            <para> Don't forget validate files with <see cref="M:Milvasoft.Helpers.FileOperations.Concrete.FormFileOperations.ValidateFile(Microsoft.AspNetCore.Http.IFormFile,Milvasoft.Helpers.FileOperations.Enums.FileType,System.Int64,System.Collections.Generic.List{System.String})"/>, before use this method.</para>
+            <para> Don't forget validate files with <see cref="M:Milvasoft.Helpers.FileOperations.Concrete.FormFileOperations.ValidateFile(Microsoft.AspNetCore.Http.IFormFile,System.Int64,System.Collections.Generic.List{System.String},Milvasoft.Helpers.FileOperations.Enums.FileType)"/>, before use this method.</para>
             
             </remarks>
             
@@ -4758,7 +4758,7 @@
             
             <remarks>
             
-            <para> Don't forget validate files with <see cref="M:Milvasoft.Helpers.FileOperations.Concrete.FormFileOperations.ValidateFile(Microsoft.AspNetCore.Http.IFormFile,Milvasoft.Helpers.FileOperations.Enums.FileType,System.Int64,System.Collections.Generic.List{System.String})"/>, before use this method.</para>
+            <para> Don't forget validate files with <see cref="M:Milvasoft.Helpers.FileOperations.Concrete.FormFileOperations.ValidateFile(Microsoft.AspNetCore.Http.IFormFile,System.Int64,System.Collections.Generic.List{System.String},Milvasoft.Helpers.FileOperations.Enums.FileType)"/>, before use this method.</para>
             
             </remarks>
             
@@ -4780,12 +4780,12 @@
             
             <remarks>
             
-            <para> Don't forget validate files with <see cref="M:Milvasoft.Helpers.FileOperations.Concrete.FormFileOperations.ValidateFile(Microsoft.AspNetCore.Http.IFormFile,Milvasoft.Helpers.FileOperations.Enums.FileType,System.Int64,System.Collections.Generic.List{System.String})"/>, before use this method.</para>
+            <para> Don't forget validate files with <see cref="M:Milvasoft.Helpers.FileOperations.Concrete.FormFileOperations.ValidateFile(Microsoft.AspNetCore.Http.IFormFile,System.Int64,System.Collections.Generic.List{System.String},Milvasoft.Helpers.FileOperations.Enums.FileType)"/>, before use this method.</para>
             
             </remarks>
             
             <typeparam name="TEntity"></typeparam>
-            <typeparam name="TImageDTO"></typeparam>
+            <typeparam name="TFileDTO"></typeparam>
             <typeparam name="TFileEntity"></typeparam>
             <param name="fileDTOList"> Uploaded file in entity. </param>
             <param name="entity"></param>
@@ -4794,12 +4794,22 @@
             <param name="propertyName"></param>
             <returns> Completed Task </returns>
         </member>
-        <member name="M:Milvasoft.Helpers.FileOperations.Concrete.FormFileOperations.ValidateFile(Microsoft.AspNetCore.Http.IFormFile,Milvasoft.Helpers.FileOperations.Enums.FileType,System.Int64,System.Collections.Generic.List{System.String})">
+        <member name="M:Milvasoft.Helpers.FileOperations.Concrete.FormFileOperations.ValidateFile(Microsoft.AspNetCore.Http.IFormFile,System.Int64,System.Collections.Generic.List{System.String},Milvasoft.Helpers.FileOperations.Enums.FileType)">
             <summary>
             Checks that the file compatible the upload rules. 
             File extension validation is not case sensitive.
             </summary>
             <param name="file"> Uploaded file. </param>
+            <param name="fileType"> Uploaded file type. (e.g image,video,sound..) </param>
+            <param name="maxFileSize"> Maximum file size in bytes of uploaded file. </param>
+            <param name="allowedFileExtensions"> Allowed file extensions for <paramref name="fileType"/>. </param>
+        </member>
+        <member name="M:Milvasoft.Helpers.FileOperations.Concrete.FormFileOperations.ValidateFiles(System.Collections.Generic.List{Microsoft.AspNetCore.Http.IFormFile},System.Int64,System.Collections.Generic.List{System.String},Milvasoft.Helpers.FileOperations.Enums.FileType)">
+            <summary>
+            Checks that the files compatible the upload rules. 
+            File extension validation is not case sensitive.
+            </summary>
+            <param name="files"> Uploaded files. </param>
             <param name="fileType"> Uploaded file type. (e.g image,video,sound..) </param>
             <param name="maxFileSize"> Maximum file size in bytes of uploaded file. </param>
             <param name="allowedFileExtensions"> Allowed file extensions for <paramref name="fileType"/>. </param>
@@ -6813,6 +6823,36 @@
         <member name="P:Milvasoft.Helpers.Models.CommunicationModel`2.TransmittedId">
             <summary>
             Key that must always be transmitted during communication.
+            </summary>
+        </member>
+        <member name="T:Milvasoft.Helpers.Models.IFileDTO">
+            <summary>
+            Abstraction for multiple file upload process.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.Models.IFileDTO.FileName">
+            <summary>
+            Name of file.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.Models.IFileDTO.File">
+            <summary>
+            File.
+            </summary>
+        </member>
+        <member name="T:Milvasoft.Helpers.Models.IFileEntity">
+            <summary>
+             Abstraction for multiple file upload process.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.Models.IFileEntity.FileName">
+            <summary>
+            Name of file.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.Models.IFileEntity.FilePath">
+            <summary>
+            Path of file.
             </summary>
         </member>
         <member name="T:Milvasoft.Helpers.Models.InvalidString">
