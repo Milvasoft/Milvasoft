@@ -1818,11 +1818,6 @@
             Profession of link.
             </summary>
         </member>
-        <member name="T:Milvasoft.SampleAPI.Middlewares.ExceptionHandlerMiddleware">
-            <summary>
-            Exception handler middleware.
-            </summary>
-        </member>
         <member name="M:Milvasoft.SampleAPI.Middlewares.ExceptionHandlerMiddleware.#ctor(Microsoft.AspNetCore.Http.RequestDelegate)">
             <summary>
             Constructor of <c>ExceptionMiddleware</c> class.

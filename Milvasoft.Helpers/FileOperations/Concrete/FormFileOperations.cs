@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Milvasoft.Helpers.Exceptions;
 using Milvasoft.Helpers.Extensions;
 using Milvasoft.Helpers.FileOperations.Enums;
+using Milvasoft.Helpers.Models;
 using Milvasoft.Helpers.Utils;
 using System;
 using System.Collections.Generic;
@@ -71,7 +73,9 @@ namespace Milvasoft.Helpers.FileOperations.Concrete
                 Directory.CreateDirectory(folderPathOfClass);
 
             //Since each data belonging to this class (folderNameOfClass) will have a separate folder, we received the Id of the data sent.
-            var folderNameOfItem = CommonHelper.PropertyExists<TEntity>(propertyName) ? entity.GetType().GetProperty(propertyName).GetValue(entity, null).ToString() : throw new Exception($"{propertyName} özelliği bu sınıfta bulunmamaktadır.");
+            var folderNameOfItem = CommonHelper.PropertyExists<TEntity>(propertyName)
+                                    ? entity.GetType().GetProperty(propertyName).GetValue(entity, null).ToString()
+                                    : throw new MilvaDeveloperException("PropertyNotExists");
 
             //We created the path to the folder of this Id (folderNameOfItem).
             var folderPathOfItem = Path.Combine(folderPathOfClass, folderNameOfItem);
@@ -140,7 +144,9 @@ namespace Milvasoft.Helpers.FileOperations.Concrete
             var folderPathOfClass = Path.Combine(basePath, folderNameOfClass);
 
             //Since each data belonging to this class (folderNameOfClass) will have a separate folder, we received the Id of the data sent.
-            var folderNameOfItem = CommonHelper.PropertyExists<TEntity>(propertyName) ? entity.GetType().GetProperty(propertyName).GetValue(entity, null).ToString() : throw new ArgumentException($"Type of {entity.GetType().Name}'s properties doesn't contain '{propertyName}'.");
+            var folderNameOfItem = CommonHelper.PropertyExists<TEntity>(propertyName) 
+                                    ? entity.GetType().GetProperty(propertyName).GetValue(entity, null).ToString()
+                                    : throw new MilvaDeveloperException("PropertyNotExists");
 
             //We created the path to the folder of this Id (folderNameOfItem).
             var folderPathOfItem = Path.Combine(folderPathOfClass, folderNameOfItem);
@@ -158,11 +164,13 @@ namespace Milvasoft.Helpers.FileOperations.Concrete
                 DirectoryInfo directory = new DirectoryInfo(folderPathOfItem);
 
                 var directoryFiles = directory.GetFiles();
+
                 int markerNo = directoryFiles.IsNullOrEmpty()
                                 ? 1
                                 : (directoryFiles.Max(fileInDir => Convert.ToInt32(Path.GetFileNameWithoutExtension(fileInDir.FullName).Split('_')[1])) + 1);
 
                 var folderPaths = new List<string>();
+
                 foreach (var item in files)
                 {
                     var fileNameWithExtension = $"{folderNameOfItem}_{markerNo}{fileExtension}";
@@ -222,7 +230,9 @@ namespace Milvasoft.Helpers.FileOperations.Concrete
             var folderPathOfClass = Path.Combine(basePath, folderNameOfClass);
 
             //Since each data belonging to this class (folderNameOfClass) will have a separate folder, we received the Id of the data sent.
-            var folderNameOfItem = CommonHelper.PropertyExists<TEntity>(propertyName) ? entity.GetType().GetProperty(propertyName).GetValue(entity, null).ToString() : throw new ArgumentException($"Type of {entity.GetType().Name}'s properties doesn't contain '{propertyName}'.");
+            var folderNameOfItem = CommonHelper.PropertyExists<TEntity>(propertyName) 
+                                    ? entity.GetType().GetProperty(propertyName).GetValue(entity, null).ToString()
+                                    : throw new MilvaDeveloperException("PropertyNotExists");
 
             //We created the path to the folder of this Id (folderNameOfItem).
             var folderPathOfItem = Path.Combine(folderPathOfClass, folderNameOfItem);
@@ -240,9 +250,13 @@ namespace Milvasoft.Helpers.FileOperations.Concrete
                 DirectoryInfo directory = new DirectoryInfo(folderPathOfItem);
 
                 var directoryFiles = directory.GetFiles();
-                int markerNo = directoryFiles.IsNullOrEmpty() ? 1 : directoryFiles.Max(fileInDir => Convert.ToInt32(Path.GetFileNameWithoutExtension(fileInDir.FullName).Split('_')[1]));
-                markerNo++;
+
+                int markerNo = directoryFiles.IsNullOrEmpty()
+                                ? 1
+                                : (directoryFiles.Max(fileInDir => Convert.ToInt32(Path.GetFileNameWithoutExtension(fileInDir.FullName).Split('_')[1])) + 1);
+
                 var folderPaths = new List<string>();
+
                 foreach (var item in files)
                 {
                     var fileNameWithExtension = $"{folderNameOfItem}_{markerNo}{fileExtension}";
@@ -264,6 +278,102 @@ namespace Milvasoft.Helpers.FileOperations.Concrete
                 throw;
             }
 
+        }
+
+        /// <summary>
+        /// Saves uploaded IFormFile files to physical file path. If file list is null or empty returns empty <see cref="List{String}"/> 
+        /// Target Path will be : "<paramref name ="basePath"></paramref>/<b><paramref name="folderNameCreator"/>()</b>/<paramref name="entity"></paramref>.<paramref name="propertyName"/>"
+        /// </summary>
+        /// 
+        /// <para><b>Remarks:</b></para>
+        /// 
+        /// <remarks>
+        /// 
+        /// <para> Don't forget validate files with <see cref="ValidateFile(IFormFile, FileType, long, List{string})"/>, before use this method.</para>
+        /// 
+        /// </remarks>
+        /// 
+        /// <typeparam name="TEntity"></typeparam>
+        /// <typeparam name="TImageDTO"></typeparam>
+        /// <typeparam name="TFileEntity"></typeparam>
+        /// <param name="fileDTOList"> Uploaded file in entity. </param>
+        /// <param name="entity"></param>
+        /// <param name="basePath"></param>
+        /// <param name="folderNameCreator"></param>
+        /// <param name="propertyName"></param>
+        /// <returns> Completed Task </returns>
+        public static async Task<List<TFileEntity>> SaveFilesToPathAsync<TEntity, TImageDTO, TFileEntity>(this List<TImageDTO> fileDTOList,
+                                                                                                          TEntity entity,
+                                                                                                          string basePath,
+                                                                                                          FilesFolderNameCreator folderNameCreator,
+                                                                                                          string propertyName)
+        where TImageDTO : class, IFileDTO
+        where TFileEntity : class, IFileEntity, new()
+        {
+            if (fileDTOList.IsNullOrEmpty()) return new List<TFileEntity>();
+
+            var fileEntities = new List<TFileEntity>();
+
+            foreach (var fileDTO in fileDTOList)
+            {
+                if (fileDTO == null) continue;
+
+                var file = fileDTO.File;
+
+                if (file.Length <= 0) continue;
+
+                //Gets file extension.
+                var fileExtension = Path.GetExtension(file.FileName);
+
+                //Gets the class name. E.g. If class is ProductDTO then sets the value of this variable as "Product".
+                var folderNameOfClass = folderNameCreator.Invoke(entity.GetType());
+
+                //We combined the name of this class (folderNameOfClass) with the path of the basePath folder. So we created the path of the folder belonging to this class.
+                var folderPathOfClass = Path.Combine(basePath, folderNameOfClass);
+
+                //If there is no such folder in this path (folderPathOfClass), we created it.
+                if (!Directory.Exists(folderPathOfClass))
+                    Directory.CreateDirectory(folderPathOfClass);
+
+                //Since each data belonging to this class (folderNameOfClass) will have a separate folder, we received the Id of the data sent.
+                var folderNameOfItem = CommonHelper.PropertyExists<TEntity>(propertyName) 
+                                        ? entity.GetType().GetProperty(propertyName).GetValue(entity, null).ToString() 
+                                        : throw new MilvaDeveloperException("PropertyNotExists");
+
+                //We created the path to the folder of this Id (folderNameOfItem).
+                var folderPathOfItem = Path.Combine(folderPathOfClass, folderNameOfItem);
+
+                try
+                {
+                    //If there is no such folder in this path (folderPathOfItem), we created it.
+                    if (!Directory.Exists(folderPathOfItem))
+                        Directory.CreateDirectory(folderPathOfItem);
+                    else
+                    {
+                        Directory.Delete(folderPathOfItem, true);
+                        Directory.CreateDirectory(folderPathOfItem);
+                    }
+                    var fileNameWithExtension = $"{folderNameOfItem}{fileExtension}";
+                    var filePathOfItem = Path.Combine(folderPathOfItem, fileNameWithExtension);
+                    using (var fileStream = new FileStream(filePathOfItem, FileMode.Create))
+                    {
+                        await file.CopyToAsync(fileStream).ConfigureAwait(false);
+                    }
+
+                    fileEntities.Add(new TFileEntity
+                    {
+                        FileName = fileDTO.FileName,
+                        FilePath = filePathOfItem
+                    });
+                }
+                catch (Exception)
+                {
+                    Directory.Delete(folderPathOfItem, true);
+                    throw;
+                }
+            }
+
+            return fileEntities;
         }
 
         /// <summary>

@@ -4770,6 +4770,30 @@
             <param name="propertyName"></param>
             <returns> Completed Task </returns>
         </member>
+        <member name="M:Milvasoft.Helpers.FileOperations.Concrete.FormFileOperations.SaveFilesToPathAsync``3(System.Collections.Generic.List{``1},``0,System.String,Milvasoft.Helpers.FileOperations.Concrete.FormFileOperations.FilesFolderNameCreator,System.String)">
+            <summary>
+            Saves uploaded IFormFile files to physical file path. If file list is null or empty returns empty <see cref="T:System.Collections.Generic.List`1"/> 
+            Target Path will be : "<paramref name ="basePath"></paramref>/<b><paramref name="folderNameCreator"/>()</b>/<paramref name="entity"></paramref>.<paramref name="propertyName"/>"
+            </summary>
+            
+            <para><b>Remarks:</b></para>
+            
+            <remarks>
+            
+            <para> Don't forget validate files with <see cref="M:Milvasoft.Helpers.FileOperations.Concrete.FormFileOperations.ValidateFile(Microsoft.AspNetCore.Http.IFormFile,Milvasoft.Helpers.FileOperations.Enums.FileType,System.Int64,System.Collections.Generic.List{System.String})"/>, before use this method.</para>
+            
+            </remarks>
+            
+            <typeparam name="TEntity"></typeparam>
+            <typeparam name="TImageDTO"></typeparam>
+            <typeparam name="TFileEntity"></typeparam>
+            <param name="fileDTOList"> Uploaded file in entity. </param>
+            <param name="entity"></param>
+            <param name="basePath"></param>
+            <param name="folderNameCreator"></param>
+            <param name="propertyName"></param>
+            <returns> Completed Task </returns>
+        </member>
         <member name="M:Milvasoft.Helpers.FileOperations.Concrete.FormFileOperations.ValidateFile(Microsoft.AspNetCore.Http.IFormFile,Milvasoft.Helpers.FileOperations.Enums.FileType,System.Int64,System.Collections.Generic.List{System.String})">
             <summary>
             Checks that the file compatible the upload rules. 

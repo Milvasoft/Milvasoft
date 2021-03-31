@@ -45,7 +45,7 @@ namespace Milvasoft.Helpers.MultiTenancy.EntityBase
 
                 var branchNo = Convert.ToInt32(splitted[1]);
 
-                _tenancyName = tenancyName;
+                _tenancyName = tenancyName.ToLowerInvariant();
                 _branchNo = branchNo;
                 _hash = $"{tenancyName}_{branchNo}".HashToString();
             }
