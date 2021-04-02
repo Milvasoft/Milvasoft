@@ -94,29 +94,29 @@ namespace Milvasoft.Helpers.Caching
 
         /// <summary>
         /// It performs the requested redis action in try catch blocks. If redis client not connected, connects.
-        /// If an error occurs, it throws the <see cref="MilvaUserFriendlyException"/> error along with the message key. 
+        /// If an error occurs when performing action or connecting to redis, it throws the <see cref="MilvaUserFriendlyException"/> error along with the message key. 
         /// Fatal logging if <paramref name="milvaLogger"/> object is not null.
         /// </summary>
         /// <param name="action"></param>
         /// <param name="userFriendlyMessageLocalizerKey"></param>
         /// <param name="milvaLogger"></param>
         /// <returns></returns>
-        Task RedisAction(Func<Task> action,
-                         string userFriendlyMessageLocalizerKey,
-                         IMilvaLogger milvaLogger = null);
+        Task PerformRedisActionAsync(Func<Task> action,
+                                     string userFriendlyMessageLocalizerKey,
+                                     IMilvaLogger milvaLogger = null);
 
         /// <summary>
         /// It performs the requested redis action in try catch blocks. If redis client not connected, connects.
-        /// If an error occurs, it throws the <see cref="MilvaUserFriendlyException"/> error along with the message key. 
+        /// If an error occurs when performing action or connecting to redis, it throws the <see cref="MilvaUserFriendlyException"/> error along with the message key. 
         /// Fatal logging if <paramref name="milvaLogger"/> object is not null.
         /// </summary>
         /// <param name="action"></param>
         /// <param name="userFriendlyMessageLocalizerKey"></param>
         /// <param name="milvaLogger"></param>
         /// <returns></returns>
-        Task<T> RedisAction<T>(Func<Task<T>> action,
-                               string userFriendlyMessageLocalizerKey,
-                               IMilvaLogger milvaLogger = null);
+        Task<T> PerformRedisActionAsync<T>(Func<Task<T>> action,
+                                           string userFriendlyMessageLocalizerKey,
+                                           IMilvaLogger milvaLogger = null);
 
         #endregion
 

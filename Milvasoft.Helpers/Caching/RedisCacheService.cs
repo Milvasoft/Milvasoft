@@ -183,7 +183,7 @@ namespace Milvasoft.Helpers.Caching
         /// <param name="userFriendlyMessageLocalizerKey"></param>
         /// <param name="milvaLogger"></param>
         /// <returns></returns>
-        public async Task RedisAction(Func<Task> action, string userFriendlyMessageLocalizerKey, IMilvaLogger milvaLogger = null)
+        public async Task PerformRedisActionAsync(Func<Task> action, string userFriendlyMessageLocalizerKey, IMilvaLogger milvaLogger = null)
         {
             try
             {
@@ -213,7 +213,7 @@ namespace Milvasoft.Helpers.Caching
         /// <param name="userFriendlyMessageLocalizerKey"></param>
         /// <param name="milvaLogger"></param>
         /// <returns></returns>
-        public async Task<T> RedisAction<T>(Func<Task<T>> action, string userFriendlyMessageLocalizerKey, IMilvaLogger milvaLogger = null)
+        public async Task<T> PerformRedisActionAsync<T>(Func<Task<T>> action, string userFriendlyMessageLocalizerKey, IMilvaLogger milvaLogger = null)
         {
             try
             {
