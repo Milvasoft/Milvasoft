@@ -1,4 +1,7 @@
-﻿using StackExchange.Redis;
+﻿using Milvasoft.Helpers.DependencyInjection;
+using Milvasoft.Helpers.Enums;
+using Milvasoft.Helpers.Exceptions;
+using StackExchange.Redis;
 using System;
 using System.Threading.Tasks;
 
@@ -168,6 +171,66 @@ namespace Milvasoft.Helpers.Caching
             {
                 await _client.CloseAsync().ConfigureAwait(false);
                 _client = await ConnectionMultiplexer.ConnectAsync(_options).ConfigureAwait(false);
+            }
+        }
+
+        /// <summary>
+        /// It performs the requested redis action in try catch blocks. If redis client not connected, connects.
+        /// If an error occurs when performing action or connecting to redis, it throws the <see cref="MilvaUserFriendlyException"/> error along with the message key. 
+        /// Fatal logging if <paramref name="milvaLogger"/> object is not null.
+        /// </summary>
+        /// <param name="action"></param>
+        /// <param name="userFriendlyMessageLocalizerKey"></param>
+        /// <param name="milvaLogger"></param>
+        /// <returns></returns>
+        public async Task RedisAction(Func<Task> action, string userFriendlyMessageLocalizerKey, IMilvaLogger milvaLogger = null)
+        {
+            try
+            {
+                await ConnectAsync().ConfigureAwait(false);
+
+                if (IsConnected())
+                {
+                    await action().ConfigureAwait(false);
+                }
+                else throw new MilvaUserFriendlyException(userFriendlyMessageLocalizerKey);
+            }
+            catch (MilvaUserFriendlyException)
+            {
+                if (milvaLogger != null)
+                    milvaLogger.LogFatalAsync("Cannot reach redis server.", MailSubject.Error);
+
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// It performs the requested redis action in try catch blocks. If redis client not connected, connects.
+        /// If an error occurs when performing action or connecting to redis, it throws the <see cref="MilvaUserFriendlyException"/> error along with the message key. 
+        /// Fatal logging if <paramref name="milvaLogger"/> object is not null.
+        /// </summary>
+        /// <param name="action"></param>
+        /// <param name="userFriendlyMessageLocalizerKey"></param>
+        /// <param name="milvaLogger"></param>
+        /// <returns></returns>
+        public async Task<T> RedisAction<T>(Func<Task<T>> action, string userFriendlyMessageLocalizerKey, IMilvaLogger milvaLogger = null)
+        {
+            try
+            {
+                await ConnectAsync().ConfigureAwait(false);
+
+                if (IsConnected())
+                {
+                    return await action().ConfigureAwait(false);
+                }
+                else throw new MilvaUserFriendlyException(userFriendlyMessageLocalizerKey);
+            }
+            catch (MilvaUserFriendlyException)
+            {
+                if (milvaLogger != null)
+                    milvaLogger.LogFatalAsync("Cannot reach redis server.", MailSubject.Error);
+
+                throw;
             }
         }
 

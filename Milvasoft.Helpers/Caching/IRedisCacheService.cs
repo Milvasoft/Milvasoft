@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Milvasoft.Helpers.DependencyInjection;
+using Milvasoft.Helpers.Exceptions;
+using System;
 using System.Threading.Tasks;
 
 namespace Milvasoft.Helpers.Caching
@@ -89,6 +91,32 @@ namespace Milvasoft.Helpers.Caching
         /// <param name="expiration"></param>
         /// <returns></returns>
         Task<bool> KeyExpireAsync(string key, DateTime? expiration);
+
+        /// <summary>
+        /// It performs the requested redis action in try catch blocks. If redis client not connected, connects.
+        /// If an error occurs, it throws the <see cref="MilvaUserFriendlyException"/> error along with the message key. 
+        /// Fatal logging if <paramref name="milvaLogger"/> object is not null.
+        /// </summary>
+        /// <param name="action"></param>
+        /// <param name="userFriendlyMessageLocalizerKey"></param>
+        /// <param name="milvaLogger"></param>
+        /// <returns></returns>
+        Task RedisAction(Func<Task> action,
+                         string userFriendlyMessageLocalizerKey,
+                         IMilvaLogger milvaLogger = null);
+
+        /// <summary>
+        /// It performs the requested redis action in try catch blocks. If redis client not connected, connects.
+        /// If an error occurs, it throws the <see cref="MilvaUserFriendlyException"/> error along with the message key. 
+        /// Fatal logging if <paramref name="milvaLogger"/> object is not null.
+        /// </summary>
+        /// <param name="action"></param>
+        /// <param name="userFriendlyMessageLocalizerKey"></param>
+        /// <param name="milvaLogger"></param>
+        /// <returns></returns>
+        Task<T> RedisAction<T>(Func<Task<T>> action,
+                               string userFriendlyMessageLocalizerKey,
+                               IMilvaLogger milvaLogger = null);
 
         #endregion
 

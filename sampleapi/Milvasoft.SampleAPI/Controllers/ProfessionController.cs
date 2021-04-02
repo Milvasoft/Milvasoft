@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Milvasoft.API.DTOs;
 using Milvasoft.SampleAPI.DTOs.ProfessionDTOs;
 using Milvasoft.SampleAPI.Services.Abstract;

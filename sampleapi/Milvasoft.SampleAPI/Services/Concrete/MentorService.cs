@@ -4,7 +4,6 @@ using Milvasoft.Helpers.Models;
 using Milvasoft.SampleAPI.Data;
 using Milvasoft.SampleAPI.DTOs.AnnouncementDTOs;
 using Milvasoft.SampleAPI.DTOs.MentorDTOs;
-using Milvasoft.SampleAPI.DTOs.ProfessionDTOs;
 using Milvasoft.SampleAPI.DTOs.StudentDTOs;
 using Milvasoft.SampleAPI.Entity;
 using Milvasoft.SampleAPI.Services.Abstract;
@@ -42,7 +41,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         public async Task<PaginationDTO<MentorDTO>> GetEntitiesForAdminAsync(int pageIndex,
                                                                              int requestedItemCount,
                                                                              string orderByProperty = null,
-                                                                             bool orderByAscending = false, 
+                                                                             bool orderByAscending = false,
                                                                              MentorSpec mentorSpec = null)
         {
             Func<IIncludable<Mentor>, IIncludable> includes = i => i.Include(p => p.PublishedAnnouncements)
@@ -259,7 +258,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
                 Name = addMentorDTO.Name,
                 Surname = addMentorDTO.Surname,
                 CVFilePath = addMentorDTO.CVFilePath,
-                Professions= addMentorDTO.Professions != null ?
+                Professions = addMentorDTO.Professions != null ?
                                      (from pp in addMentorDTO.Professions
                                       select new MentorProfession
                                       {

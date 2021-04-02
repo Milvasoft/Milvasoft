@@ -125,9 +125,9 @@ namespace Milvasoft.Helpers
         /// <param name="errorMessage"></param>
         /// <returns>  <see cref="ObjectResponse{T}"/> in 200 OK <see cref="ActionResult"/> </returns>
         public static async Task<IActionResult> GetObjectResponseAsync<T, TKey>(this ConfiguredTaskAwaitable asyncTask,
-                                                                           IEnumerable<TKey> idList,
-                                                                           string successMessage,
-                                                                           string errorMessage = null) where TKey : IEquatable<TKey>
+                                                                                IEnumerable<TKey> idList,
+                                                                                string successMessage,
+                                                                                string errorMessage = null) where TKey : IEquatable<TKey>
         {
             var response = new ObjectResponse<T>();
 
@@ -159,9 +159,9 @@ namespace Milvasoft.Helpers
         /// <param name="errorMessage"></param>
         /// <returns>  <see cref="ObjectResponse{T}"/> in 200 OK <see cref="ActionResult"/> </returns>
         public static async Task<IActionResult> GetObjectResponseAsync<T, TKey>(this ConfiguredTaskAwaitable<IEnumerable<T>> asyncTask,
-                                                                           IEnumerable<TKey> idList,
-                                                                           string successMessage,
-                                                                           string errorMessage = null) where TKey : struct, IEquatable<TKey>
+                                                                                IEnumerable<TKey> idList,
+                                                                                string successMessage,
+                                                                                string errorMessage = null) where TKey : struct, IEquatable<TKey>
         {
             var response = new ObjectResponse<IEnumerable<T>>();
 

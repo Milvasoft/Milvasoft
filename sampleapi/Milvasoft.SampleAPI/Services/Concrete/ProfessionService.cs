@@ -49,8 +49,8 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         public async Task<PaginationDTO<ProfessionDTO>> GetEntitiesForAdminAsync(int pageIndex,
                                                                                  int requestedItemCount,
                                                                                  string orderByProperty = null,
-                                                                                 bool orderByAscending = false, 
-                                                                                 ProfessionSpec professionSpec=null)
+                                                                                 bool orderByAscending = false,
+                                                                                 ProfessionSpec professionSpec = null)
         {
             var (professions, pageCount, totalDataCount) = await _professionRepository.PreparePaginationDTO<IBaseRepository<Profession, Guid, EducationAppDbContext>, Profession, Guid>
                                                                                                                 (pageIndex, requestedItemCount, orderByProperty, orderByAscending, professionSpec?.ToExpression()).ConfigureAwait(false);

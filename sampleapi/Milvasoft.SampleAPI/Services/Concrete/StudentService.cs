@@ -43,13 +43,13 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         public async Task<PaginationDTO<StudentDTO>> GetEntitiesForAdminAsync(int pageIndex,
                                                                                int requestedItemCount,
                                                                                string orderByProperty = null,
-                                                                               bool orderByAscending = false, 
+                                                                               bool orderByAscending = false,
                                                                                StudentSpec studentSpec = null)
         {
             Func<IIncludable<Student>, IIncludable> includes = i => i.Include(md => md.Mentor);
 
             var (students, pageCount, totalDataCount) = await _studentRepository.PreparePaginationDTO<IBaseRepository<Student, Guid, EducationAppDbContext>, Student, Guid>
-                                                                                                                (pageIndex, requestedItemCount, orderByProperty, orderByAscending, studentSpec?.ToExpression(),includes).ConfigureAwait(false);
+                                                                                                                (pageIndex, requestedItemCount, orderByProperty, orderByAscending, studentSpec?.ToExpression(), includes).ConfigureAwait(false);
 
             return new PaginationDTO<StudentDTO>
             {
@@ -91,7 +91,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
 
 
             var (students, pageCount, totalDataCount) = await _studentRepository.PreparePaginationDTO<IBaseRepository<Student, Guid, EducationAppDbContext>, Student, Guid>
-                                                                                                                (pageIndex, requestedItemCount, orderByProperty, orderByAscending, studentSpec?.ToExpression(),includes).ConfigureAwait(false);
+                                                                                                                (pageIndex, requestedItemCount, orderByProperty, orderByAscending, studentSpec?.ToExpression(), includes).ConfigureAwait(false);
 
             return new PaginationDTO<StudentDTO>
             {

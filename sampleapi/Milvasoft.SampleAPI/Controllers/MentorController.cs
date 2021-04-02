@@ -124,7 +124,7 @@ namespace Milvasoft.SampleAPI.Controllers
         /// <returns></returns>
        // [Authorize(Roles = "Admin")]
         [HttpPost("AddMentor")]
-        [OValidationFilter(DisabledNestedProperties = "Name",DisabledProperties = "Name")]
+        [OValidationFilter(DisabledNestedProperties = "Name", DisabledProperties = "Name")]
         public async Task<IActionResult> AddMentor([FromBody] AddMentorDTO addMentor)
         {
             await _mentorService.AddEntityAsync(addMentor).ConfigureAwait(false);

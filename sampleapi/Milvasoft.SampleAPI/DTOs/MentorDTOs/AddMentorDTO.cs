@@ -1,6 +1,5 @@
 ﻿using Milvasoft.SampleAPI.DTOs.ProfessionDTOs;
 using Milvasoft.SampleAPI.Utils.Attributes.ValidationAttributes;
-using System;
 using System.Collections.Generic;
 
 namespace Milvasoft.SampleAPI.DTOs.MentorDTOs
@@ -30,6 +29,6 @@ namespace Milvasoft.SampleAPI.DTOs.MentorDTOs
         /// <summary>
         /// Profession ıd of mentor.
         /// </summary>
-        public List<AddProfessionDTO> Professions{ get; set; }
+        public List<AddProfessionDTO> Professions { get; set; }
     }
 }

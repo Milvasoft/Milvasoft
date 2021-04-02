@@ -38,8 +38,8 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         public async Task<PaginationDTO<UsefulLinkDTO>> GetEntitiesForStudentAsync(int pageIndex,
                                                                                int requestedItemCount,
                                                                                string orderByProperty = null,
-                                                                               bool orderByAscending = false, 
-                                                                               UsefulLinkSpec usefulLinkSpec=null)
+                                                                               bool orderByAscending = false,
+                                                                               UsefulLinkSpec usefulLinkSpec = null)
         {
             var (usefulLinks, pageCount, totalDataCount) = await _usefulLinkRepository.PreparePaginationDTO<IBaseRepository<UsefulLink, Guid, EducationAppDbContext>, UsefulLink, Guid>
                                                                                                                 (pageIndex, requestedItemCount, orderByProperty, orderByAscending, usefulLinkSpec?.ToExpression()).ConfigureAwait(false);

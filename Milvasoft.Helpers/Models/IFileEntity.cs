@@ -1,11 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Milvasoft.Helpers.Models
+﻿namespace Milvasoft.Helpers.Models
 {
     /// <summary>
     ///  Abstraction for multiple file upload process.

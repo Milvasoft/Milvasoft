@@ -41,18 +41,18 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         public async Task<PaginationDTO<QuestionDTO>> GetEntitiesForAdminAsync(int pageIndex,
                                                                                int requestedItemCount,
                                                                                string orderByProperty = null,
-                                                                               bool orderByAscending = false, 
-                                                                               QuestionSpec questionSpec=null)
+                                                                               bool orderByAscending = false,
+                                                                               QuestionSpec questionSpec = null)
         {
             Func<IIncludable<Question>, IIncludable> includes = i => i.Include(md => md.Mentor)
                                                                      .Include(st => st.Student);
 
             var (questions, pageCount, totalDataCount) = await _questionService.PreparePaginationDTO<IBaseRepository<Question, Guid, EducationAppDbContext>, Question, Guid>
-                                                                                                                (pageIndex, requestedItemCount, orderByProperty, orderByAscending, questionSpec?.ToExpression(),includes).ConfigureAwait(false);
+                                                                                                                (pageIndex, requestedItemCount, orderByProperty, orderByAscending, questionSpec?.ToExpression(), includes).ConfigureAwait(false);
 
             return new PaginationDTO<QuestionDTO>
             {
-                DTOList = questions.CheckList(i => questions.Select(question=> new QuestionDTO
+                DTOList = questions.CheckList(i => questions.Select(question => new QuestionDTO
                 {
                     Title = question.Title,
                     QuestionContent = question.QuestionContent,
@@ -90,7 +90,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
 
 
             var (questions, pageCount, totalDataCount) = await _questionService.PreparePaginationDTO<IBaseRepository<Question, Guid, EducationAppDbContext>, Question, Guid>
-                                                                                                                 (pageIndex, requestedItemCount, orderByProperty, orderByAscending, questionSpec?.ToExpression(),includes).ConfigureAwait(false);
+                                                                                                                 (pageIndex, requestedItemCount, orderByProperty, orderByAscending, questionSpec?.ToExpression(), includes).ConfigureAwait(false);
 
             return new PaginationDTO<QuestionDTO>
             {
@@ -130,7 +130,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
                                                                     .Include(st => st.Student);
 
             var (questions, pageCount, totalDataCount) = await _questionService.PreparePaginationDTO<IBaseRepository<Question, Guid, EducationAppDbContext>, Question, Guid>
-                                                                                                                 (pageIndex, requestedItemCount, orderByProperty, orderByAscending, questionSpec?.ToExpression(),includes).ConfigureAwait(false);
+                                                                                                                 (pageIndex, requestedItemCount, orderByProperty, orderByAscending, questionSpec?.ToExpression(), includes).ConfigureAwait(false);
 
             return new PaginationDTO<QuestionDTO>
             {
