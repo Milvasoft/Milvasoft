@@ -55,7 +55,7 @@ namespace Milvasoft.Helpers.Identity.Abstract
         /// <param name="userValidation"></param>
         /// <param name="tokenExpiredDate"></param>
         /// <returns></returns>
-        Task<TLoginResultDTO> SignInAsync(ILoginDTO loginDTO, UserValidation userValidation, DateTime tokenExpiredDate);
+        Task<TLoginResultDTO> LoginAsync(ILoginDTO loginDTO, UserValidation userValidation, DateTime tokenExpiredDate);
 
         /// <summary>
         /// Signs in for incoming user. Returns a token if login informations are valid or the user is not lockedout. Otherwise returns the error list.
@@ -65,13 +65,13 @@ namespace Milvasoft.Helpers.Identity.Abstract
         /// <param name="userValidationByUserType"></param>
         /// <param name="tokenExpiredDate"></param>
         /// <returns></returns>
-        Task<TLoginResultDTO> SignInAsync(ILoginDTO loginDTO, bool isUserType, UserValidationByUserType userValidationByUserType, DateTime tokenExpiredDate);
+        Task<TLoginResultDTO> LoginAsync(ILoginDTO loginDTO, bool isUserType, UserValidationByUserType userValidationByUserType, DateTime tokenExpiredDate);
 
         /// <summary>
         /// Signs out from database. Returns null if already signed out.
         /// </summary>
         /// <returns></returns>
-        Task<IdentityResult> SignOutAsync();
+        Task<IdentityResult> LogoutAsync();
 
         /// <summary>
         /// Delete user by <paramref name="userId"/>.

@@ -209,10 +209,7 @@ namespace Milvasoft.Helpers
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
-        public static string ToJson(this object value)
-        {
-            return JsonConvert.SerializeObject(value);
-        }
+        public static string ToJson(this object value) => JsonConvert.SerializeObject(value);
 
         /// <summary>
         /// Converts <paramref name="value"/> to <typeparamref name="T"/>.
@@ -221,9 +218,7 @@ namespace Milvasoft.Helpers
         /// <param name="value"></param>
         /// <returns></returns>
         public static T ToObject<T>(this string value) where T : class
-        {
-            return string.IsNullOrEmpty(value) ? null : JsonConvert.DeserializeObject<T>(value);
-        }
+            => string.IsNullOrEmpty(value) ? null : JsonConvert.DeserializeObject<T>(value);
 
         /// <summary>
         /// Append joins <see cref="IdentityResult.Errors"/>.Description with <paramref name="seperator"/>.
@@ -231,14 +226,8 @@ namespace Milvasoft.Helpers
         /// <param name="result"></param>
         /// <param name="seperator"></param>
         /// <returns></returns>
-        public static string DescriptionJoin(this IdentityResult result, char seperator = '~')
-        {
-            var stringBuilder = new StringBuilder();
-
-            stringBuilder.AppendJoin(seperator, result.Errors.Select(i => i.Description));
-
-            return stringBuilder.ToString();
-        }
+        public static string DescriptionJoin(this IdentityResult result, char seperator = '~') 
+            => string.Join(seperator, result.Errors.Select(i => i.Description));
 
         /// <summary>
         /// Append joins <see cref="IdentityResult.Errors"/>.Description with <paramref name="seperator"/>.
@@ -246,14 +235,8 @@ namespace Milvasoft.Helpers
         /// <param name="result"></param>
         /// <param name="seperator"></param>
         /// <returns></returns>
-        public static string DescriptionJoin(this IdentityResult result, string seperator)
-        {
-            var stringBuilder = new StringBuilder();
-
-            stringBuilder.AppendJoin(seperator, result.Errors.Select(i => i.Description));
-
-            return stringBuilder.ToString();
-        }
+        public static string DescriptionJoin(this IdentityResult result, string seperator) 
+            => string.Join(seperator, result.Errors.Select(i => i.Description));
 
 
         /// <summary>

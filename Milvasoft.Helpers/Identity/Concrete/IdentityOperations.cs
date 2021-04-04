@@ -96,15 +96,15 @@ namespace Milvasoft.Helpers.Identity.Concrete
         }
 
         /// <summary>
-        /// Signs in for incoming user. Returns a token if login informations are valid or the user is not lockedout. Otherwise returns the error list.
+        /// Login for incoming user. Returns a token if login informations are valid or the user is not lockedout. Otherwise returns the error list.
         /// </summary>
         /// <param name="loginDTO"></param>
         /// <param name="userValidation"></param>
         /// <param name="tokenExpiredDate"></param>
         /// <returns></returns>
-        public virtual async Task<TLoginResultDTO> SignInAsync(ILoginDTO loginDTO,
-                                                               IIdentityOperations<TUserManager, TDbContext, TLocalizer, TUser, TRole, TKey, TLoginResultDTO>.UserValidation userValidation,
-                                                               DateTime tokenExpiredDate)
+        public virtual async Task<TLoginResultDTO> LoginAsync(ILoginDTO loginDTO,
+                                                              IIdentityOperations<TUserManager, TDbContext, TLocalizer, TUser, TRole, TKey, TLoginResultDTO>.UserValidation userValidation,
+                                                              DateTime tokenExpiredDate)
         {
             TUser user = new();
 
@@ -153,17 +153,17 @@ namespace Milvasoft.Helpers.Identity.Concrete
         }
 
         /// <summary>
-        /// Signs in for incoming user. Returns a token if login informations are valid or the user is not lockedout. Otherwise returns the error list.
+        /// Login for incoming user. Returns a token if login informations are valid or the user is not lockedout. Otherwise returns the error list.
         /// </summary>
         /// <param name="loginDTO"></param>
         /// <param name="isUserType"></param>
         /// <param name="userValidationByUserType"></param>
         /// <param name="tokenExpiredDate"></param>
         /// <returns></returns>
-        public virtual async Task<TLoginResultDTO> SignInAsync(ILoginDTO loginDTO,
-                                                               bool isUserType,
-                                                               IIdentityOperations<TUserManager, TDbContext, TLocalizer, TUser, TRole, TKey, TLoginResultDTO>.UserValidationByUserType userValidationByUserType,
-                                                               DateTime tokenExpiredDate)
+        public virtual async Task<TLoginResultDTO> LoginAsync(ILoginDTO loginDTO,
+                                                              bool isUserType,
+                                                              IIdentityOperations<TUserManager, TDbContext, TLocalizer, TUser, TRole, TKey, TLoginResultDTO>.UserValidationByUserType userValidationByUserType,
+                                                              DateTime tokenExpiredDate)
         {
             TUser user = new TUser();
 
@@ -211,10 +211,10 @@ namespace Milvasoft.Helpers.Identity.Concrete
         }
 
         /// <summary>
-        /// Signs out from database. Returns null if already signed out.
+        /// Logout from database. Returns null if already signed out.
         /// </summary>
         /// <returns></returns>
-        public virtual async Task<IdentityResult> SignOutAsync()
+        public virtual async Task<IdentityResult> LogoutAsync()
         {
             var user = await _userManager.FindByNameAsync(_userName).ConfigureAwait(false) ?? throw new MilvaUserFriendlyException(MilvaException.CannotFindEntity);
 
