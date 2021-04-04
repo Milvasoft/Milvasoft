@@ -106,7 +106,7 @@ namespace Milvasoft.Helpers.Identity.Concrete
                                                                IIdentityOperations<TUserManager, TDbContext, TLocalizer, TUser, TRole, TKey, TLoginResultDTO>.UserValidation userValidation,
                                                                DateTime tokenExpiredDate)
         {
-            TUser user = new TUser();
+            TUser user = new();
 
             var (tUser, loginResult) = await userValidation.Invoke(loginDTO, user).ConfigureAwait(false);
 
@@ -254,7 +254,7 @@ namespace Milvasoft.Helpers.Identity.Concrete
 
             var identityResult = await _userManager.DeleteAsync(user);
 
-            ThrowErrorMessagesIfNotSuccess(identityResult);
+            identityResult.ThrowErrorMessagesIfNotSuccess();
         }
 
         /// <summary>
@@ -271,7 +271,7 @@ namespace Milvasoft.Helpers.Identity.Concrete
 
             var identityResult = await _userManager.ResetPasswordAsync(currentUser, authenticationToken, newPassword).ConfigureAwait(false);
 
-            ThrowErrorMessagesIfNotSuccess(identityResult);
+            identityResult.ThrowErrorMessagesIfNotSuccess();
         }
 
         /// <summary>
@@ -327,21 +327,6 @@ namespace Milvasoft.Helpers.Identity.Concrete
 
 
         #region Helper Methods
-
-        /// <summary>
-        /// If <paramref name="identityResult"/> is not succeeded throwns <see cref="MilvaUserFriendlyException"/>.
-        /// </summary>
-        /// <param name="identityResult"></param>
-        public virtual void ThrowErrorMessagesIfNotSuccess(IdentityResult identityResult)
-        {
-            if (!identityResult.Succeeded)
-            {
-                var stringBuilder = new StringBuilder();
-
-                stringBuilder.AppendJoin(',', identityResult.Errors.Select(i => i.Description));
-                throw new MilvaUserFriendlyException(stringBuilder.ToString());
-            }
-        }
 
         /// <summary>
         /// Validating user to login.

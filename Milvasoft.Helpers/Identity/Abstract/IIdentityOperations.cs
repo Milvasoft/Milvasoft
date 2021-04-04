@@ -2,11 +2,8 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 using Milvasoft.Helpers.DataAccess.Abstract.Entity;
-using Milvasoft.Helpers.Exceptions;
 using Milvasoft.Helpers.Identity.Concrete;
 using System;
-using System.Collections.Generic;
-using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace Milvasoft.Helpers.Identity.Abstract
@@ -124,48 +121,5 @@ namespace Milvasoft.Helpers.Identity.Abstract
         /// <param name="token"></param>
         /// <returns></returns>
         Task<IdentityResult> ChangePhoneNumberAsync(TUser user, string newPhoneNumber, string token);
-
-
-        #region Helper Methods
-
-        /// <summary>
-        /// If <paramref name="identityResult"/> is not succeeded throwns <see cref="MilvaUserFriendlyException"/>.
-        /// </summary>
-        /// <param name="identityResult"></param>
-        void ThrowErrorMessagesIfNotSuccess(IdentityResult identityResult);
-
-        /// <summary>
-        /// Validating user to login.
-        /// </summary>
-        /// <param name="loginDTO"></param>
-        /// <param name="user"></param>
-        /// <returns></returns>
-        Task<(TUser tUser, TLoginResultDTO loginResult)> ValidateUserAsync(ILoginDTO loginDTO, TUser user);
-
-        /// <summary>
-        /// Roll is added according to user type and token is produced.
-        /// </summary>
-        /// <param name="user"></param>
-        /// <param name="tokenExpiredDate"></param>
-        /// <returns></returns>
-        Task<string> GenerateTokenWithRoleAsync(TUser user, DateTime tokenExpiredDate);
-
-        /// <summary>
-        /// If Authentication is successful, JWT tokens are generated.
-        /// </summary>
-        string GenerateToken(string username, IList<string> roles, DateTime tokenExpiredDate);
-
-        /// <summary>
-        /// Decode Process of Token returns the time inside by Decoding the Token
-        /// </summary>
-        DateTime? ValidateTokenGetExpiredTime(string token);
-
-        /// <summary>
-        /// Returns Claims in token for token decode
-        /// </summary>
-        ClaimsPrincipal GetPrincipalForAccessToken(string token);
-
-        #endregion
-
     }
 }

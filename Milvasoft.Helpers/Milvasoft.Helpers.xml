@@ -821,6 +821,35 @@
             <param name="value"></param>
             <returns></returns>
         </member>
+        <member name="M:Milvasoft.Helpers.CommonHelper.DescriptionJoin(Microsoft.AspNetCore.Identity.IdentityResult,System.Char)">
+            <summary>
+            Append joins <see cref="P:Microsoft.AspNetCore.Identity.IdentityResult.Errors"/>.Description with <paramref name="seperator"/>.
+            </summary>
+            <param name="result"></param>
+            <param name="seperator"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.CommonHelper.DescriptionJoin(Microsoft.AspNetCore.Identity.IdentityResult,System.String)">
+            <summary>
+            Append joins <see cref="P:Microsoft.AspNetCore.Identity.IdentityResult.Errors"/>.Description with <paramref name="seperator"/>.
+            </summary>
+            <param name="result"></param>
+            <param name="seperator"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.CommonHelper.ThrowErrorMessagesIfNotSuccess(Microsoft.AspNetCore.Identity.IdentityResult)">
+            <summary>
+            If <paramref name="result"/> is not succeeded throwns <see cref="T:Milvasoft.Helpers.Exceptions.MilvaUserFriendlyException"/>.
+            </summary>
+            <param name="result"></param>
+        </member>
+        <member name="M:Milvasoft.Helpers.CommonHelper.ThrowErrorMessagesIfNotSuccess(Microsoft.AspNetCore.Identity.IdentityResult,System.Char)">
+            <summary>
+            If <paramref name="result"/> is not succeeded throwns <see cref="T:Milvasoft.Helpers.Exceptions.MilvaUserFriendlyException"/>.
+            </summary>
+            <param name="result"></param>
+            <param name="seperator"></param>
+        </member>
         <member name="T:Milvasoft.Helpers.DataAccess.Abstract.Entity.Auditing.IHasCreator`1">
             <summary>
             Determines entity has creator.
@@ -6161,43 +6190,6 @@
             <param name="token"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.Identity.Abstract.IIdentityOperations`7.ThrowErrorMessagesIfNotSuccess(Microsoft.AspNetCore.Identity.IdentityResult)">
-            <summary>
-            If <paramref name="identityResult"/> is not succeeded throwns <see cref="T:Milvasoft.Helpers.Exceptions.MilvaUserFriendlyException"/>.
-            </summary>
-            <param name="identityResult"></param>
-        </member>
-        <member name="M:Milvasoft.Helpers.Identity.Abstract.IIdentityOperations`7.ValidateUserAsync(Milvasoft.Helpers.Identity.Abstract.ILoginDTO,`3)">
-            <summary>
-            Validating user to login.
-            </summary>
-            <param name="loginDTO"></param>
-            <param name="user"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Milvasoft.Helpers.Identity.Abstract.IIdentityOperations`7.GenerateTokenWithRoleAsync(`3,System.DateTime)">
-            <summary>
-            Roll is added according to user type and token is produced.
-            </summary>
-            <param name="user"></param>
-            <param name="tokenExpiredDate"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Milvasoft.Helpers.Identity.Abstract.IIdentityOperations`7.GenerateToken(System.String,System.Collections.Generic.IList{System.String},System.DateTime)">
-            <summary>
-            If Authentication is successful, JWT tokens are generated.
-            </summary>
-        </member>
-        <member name="M:Milvasoft.Helpers.Identity.Abstract.IIdentityOperations`7.ValidateTokenGetExpiredTime(System.String)">
-            <summary>
-            Decode Process of Token returns the time inside by Decoding the Token
-            </summary>
-        </member>
-        <member name="M:Milvasoft.Helpers.Identity.Abstract.IIdentityOperations`7.GetPrincipalForAccessToken(System.String)">
-            <summary>
-            Returns Claims in token for token decode
-            </summary>
-        </member>
         <member name="T:Milvasoft.Helpers.Identity.Abstract.ILoginDTO">
             <summary>
             Login and sign up processes are happens with this dto.
@@ -6417,12 +6409,6 @@
             <param name="newPhoneNumber"></param>
             <param name="token"></param>
             <returns></returns>
-        </member>
-        <member name="M:Milvasoft.Helpers.Identity.Concrete.IdentityOperations`7.ThrowErrorMessagesIfNotSuccess(Microsoft.AspNetCore.Identity.IdentityResult)">
-            <summary>
-            If <paramref name="identityResult"/> is not succeeded throwns <see cref="T:Milvasoft.Helpers.Exceptions.MilvaUserFriendlyException"/>.
-            </summary>
-            <param name="identityResult"></param>
         </member>
         <member name="M:Milvasoft.Helpers.Identity.Concrete.IdentityOperations`7.ValidateUserAsync(Milvasoft.Helpers.Identity.Abstract.ILoginDTO,`3)">
             <summary>

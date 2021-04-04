@@ -18,8 +18,6 @@ namespace Milvasoft.Helpers.FileOperations.Concrete
     /// </summary>
     public static class FormFileOperations
     {
-        //TODO save file to path by filename methods will be added later.
-
         #region Public Properties
 
         /// <summary>

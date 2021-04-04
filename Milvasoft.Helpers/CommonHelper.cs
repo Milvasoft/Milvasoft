@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Localization;
 using Milvasoft.Helpers.Exceptions;
 using Milvasoft.Helpers.Extensions;
@@ -9,6 +10,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
+using System.Text;
 
 namespace Milvasoft.Helpers
 {
@@ -221,6 +223,58 @@ namespace Milvasoft.Helpers
         public static T ToObject<T>(this string value) where T : class
         {
             return string.IsNullOrEmpty(value) ? null : JsonConvert.DeserializeObject<T>(value);
+        }
+
+        /// <summary>
+        /// Append joins <see cref="IdentityResult.Errors"/>.Description with <paramref name="seperator"/>.
+        /// </summary>
+        /// <param name="result"></param>
+        /// <param name="seperator"></param>
+        /// <returns></returns>
+        public static string DescriptionJoin(this IdentityResult result, char seperator = '~')
+        {
+            var stringBuilder = new StringBuilder();
+
+            stringBuilder.AppendJoin(seperator, result.Errors.Select(i => i.Description));
+
+            return stringBuilder.ToString();
+        }
+
+        /// <summary>
+        /// Append joins <see cref="IdentityResult.Errors"/>.Description with <paramref name="seperator"/>.
+        /// </summary>
+        /// <param name="result"></param>
+        /// <param name="seperator"></param>
+        /// <returns></returns>
+        public static string DescriptionJoin(this IdentityResult result, string seperator)
+        {
+            var stringBuilder = new StringBuilder();
+
+            stringBuilder.AppendJoin(seperator, result.Errors.Select(i => i.Description));
+
+            return stringBuilder.ToString();
+        }
+
+
+        /// <summary>
+        /// If <paramref name="result"/> is not succeeded throwns <see cref="MilvaUserFriendlyException"/>.
+        /// </summary>
+        /// <param name="result"></param>
+        public static void ThrowErrorMessagesIfNotSuccess(this IdentityResult result)
+        {
+            if (!result.Succeeded)
+                throw new MilvaUserFriendlyException(result.DescriptionJoin());
+        }
+
+        /// <summary>
+        /// If <paramref name="result"/> is not succeeded throwns <see cref="MilvaUserFriendlyException"/>.
+        /// </summary>
+        /// <param name="result"></param>
+        /// <param name="seperator"></param>
+        public static void ThrowErrorMessagesIfNotSuccess(this IdentityResult result, char seperator)
+        {
+            if (!result.Succeeded)
+                throw new MilvaUserFriendlyException(result.DescriptionJoin(seperator));
         }
     }
 }

@@ -221,10 +221,6 @@ namespace Milvasoft.SampleAPI.UnitTest.TestHelpers
                     },
                     OnAuthenticationFailed = context =>
                     {
-                        //TODO daha önceden adamın tokenı vardı başka biri giriş yapıp yeni token aldı. Yani adamın tokenı artık whitelistte yok. 
-                        //Yani yapılacak kontrol şu : giriş yapılmak isterken fail olduysa eğer yani buraya girdiyse, girenin username'i whitelistte 
-                        //varsa fakat gönderdiği token whitelisttekinden farklıysa demekki yerine başkası girmiş. Hesabınıza başka bir yerden oturum açıldı hatası verilecek.
-                        //Token ve user hederdan alınacak. SingedInUsers listesi kontrol edilecek ve gerekli işlemler yapılacak.
                         if (context.Exception.GetType() == typeof(SecurityTokenExpiredException))
                         {
                             context.HttpContext.Items.Add("Token-Expired", "true");
