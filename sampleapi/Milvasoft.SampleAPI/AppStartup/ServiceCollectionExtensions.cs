@@ -167,6 +167,8 @@ namespace Milvasoft.SampleAPI.AppStartup
         {
             var connectionString = configuration.GetConnectionString("PostgreConnection");
 
+            //services.AddEntityFrameworkNpgsql().AddSingleton<IAuditConfiguration>(new AuditConfiguration(true, true, true, true, true, true));
+
             services.AddEntityFrameworkNpgsql().AddDbContext<EducationAppDbContext>(opts =>
             {
                 opts.UseNpgsql(connectionString, b => b.MigrationsAssembly("Milvasoft.SampleAPI.Data").EnableRetryOnFailure()).UseQueryTrackingBehavior(NO_TRACKING);
@@ -288,8 +290,6 @@ namespace Milvasoft.SampleAPI.AppStartup
         /// <param name="jSONFile"></param>
         private static void ConfigureJWT(this IServiceCollection services, IJsonOperations jSONFile)
         {
-            var localizer = services.BuildServiceProvider().GetRequiredService<IStringLocalizer<SharedResource>>();
-
             var tokenManagement = jSONFile.GetRequiredSingleContentCryptedFromJsonFileAsync<TokenManagement>(Path.Combine(GlobalConstants.RootPath, "StaticFiles", "JSON", "tokenmanagement.json"),
                                                                                                              GlobalConstants.MilvaKey,
                                                                                                              new CultureInfo("tr-TR")).Result;
@@ -313,7 +313,7 @@ namespace Milvasoft.SampleAPI.AppStartup
                         var accessToken = context.SecurityToken as JwtSecurityToken;
                         if (string.IsNullOrEmpty(context.Principal.Identity.Name)
                             || accessToken is null)
-                            context.Fail(localizer["Unauthorized"]);
+                            context.Fail(Startup.SharedStringLocalizer["Unauthorized"]);
 
 
                         return Task.CompletedTask;
@@ -322,7 +322,7 @@ namespace Milvasoft.SampleAPI.AppStartup
                     {
                         ExceptionResponse validationResponse = new ExceptionResponse()
                         {
-                            Message = localizer["Forbidden"],
+                            Message = Startup.SharedStringLocalizer["Forbidden"],
                             Success = false,
                             StatusCode = MilvaStatusCodes.Status403Forbidden
                         };
@@ -337,7 +337,7 @@ namespace Milvasoft.SampleAPI.AppStartup
 
                             if (context.HttpContext.Items.ContainsKey("Token-Expired"))
                             {
-                                validationResponse.Message = localizer["AccountTimeOut"];
+                                validationResponse.Message = Startup.SharedStringLocalizer["AccountTimeOut"];
                                 validationResponse.Success = false;
                                 validationResponse.StatusCode = MilvaStatusCodes.Status401Unauthorized;
 
@@ -345,7 +345,7 @@ namespace Milvasoft.SampleAPI.AppStartup
                             }
                             else
                             {
-                                validationResponse.Message = localizer["Unauthorized"];
+                                validationResponse.Message = Startup.SharedStringLocalizer["Unauthorized"];
                                 validationResponse.Success = false;
                                 validationResponse.StatusCode = MilvaStatusCodes.Status401Unauthorized;
 
@@ -360,7 +360,7 @@ namespace Milvasoft.SampleAPI.AppStartup
                             context.HttpContext.Response.StatusCode = MilvaStatusCodes.Status200OK;
                             context.HttpContext.Response.ContentType = "application/json";
 
-                            validationResponse.Message = localizer["Forbidden"];
+                            validationResponse.Message = Startup.SharedStringLocalizer["Forbidden"];
                             validationResponse.Success = false;
                             validationResponse.StatusCode = MilvaStatusCodes.Status403Forbidden;
 

@@ -193,6 +193,8 @@ namespace Milvasoft.Helpers.MultiTenancy.EntityBase
         /// <returns></returns>
         public static TenantId Parse(string str)
         {
+            if (string.IsNullOrEmpty(str)) throw new MilvaDeveloperException("This string is not convertible to TenantId.");
+
             if (TryParse(str))
             {
                 var splitted = str.Split('_');

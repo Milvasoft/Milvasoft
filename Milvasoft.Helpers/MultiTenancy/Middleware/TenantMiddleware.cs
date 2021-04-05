@@ -37,7 +37,10 @@ namespace Milvasoft.Helpers.MultiTenancy.Middleware
             if (!context.Items.ContainsKey(TenancyConstants.HttpContextTenantKey))
             {
                 var tenantService = context.RequestServices.GetService(typeof(ITenantService<TTenant, TKey>)) as ITenantService<TTenant, TKey>;
-                context.Items.Add(TenancyConstants.HttpContextTenantKey, await tenantService.GetTenantAsync());
+
+                var tenant = await tenantService.GetTenantAsync().ConfigureAwait(false);
+
+                context.Items.Add(TenancyConstants.HttpContextTenantKey, tenant);
             }
 
             //Continue processing

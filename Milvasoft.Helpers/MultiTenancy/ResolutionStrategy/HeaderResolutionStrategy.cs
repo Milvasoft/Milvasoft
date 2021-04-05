@@ -32,9 +32,9 @@ namespace Milvasoft.Helpers.MultiTenancy.ResolutionStrategy
         /// <returns></returns>
         public async Task<TenantId> GetTenantIdentifierAsync()
         {
-            var keyExist = await Task.FromResult(_httpContextAccessor.HttpContext.Request.Headers.ContainsKey(HeaderKey));
+            var keyExist = await Task.FromResult(_httpContextAccessor.HttpContext?.Request.Headers.ContainsKey(HeaderKey)).ConfigureAwait(false);
 
-            return keyExist ? await Task.FromResult(TenantId.Parse(_httpContextAccessor.HttpContext.Request.Headers["HeaderKey"])) : TenantId.Empty;
+            return keyExist.GetValueOrDefault() ? await Task.FromResult(TenantId.Parse(_httpContextAccessor.HttpContext?.Request.Headers[HeaderKey])) : TenantId.Empty;
         }
     }
 }

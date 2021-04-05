@@ -162,8 +162,8 @@
   <data name="CannotFindEnumByIdException" xml:space="preserve">
     <value>Enum bulunamadı.</value>
   </data>
-  <data name="CannotStartRedisServerException" xml:space="preserve">
-    <value>Redis server başlatılamadı.</value>
+  <data name="CannotReachRedisServerException" xml:space="preserve">
+    <value>Redis servera ulaşılamıyor.</value>
   </data>
   <data name="CashUpSuccessful" xml:space="preserve">
     <value>Gün sonu alma işlemi başarıyla gerçekleştirildi.</value>

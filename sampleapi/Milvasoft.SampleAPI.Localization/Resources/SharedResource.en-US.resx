@@ -162,8 +162,8 @@
   <data name="CannotFindEnumByIdException" xml:space="preserve">
     <value>Can not find enum.</value>
   </data>
-  <data name="CannotStartRedisServerException" xml:space="preserve">
-    <value>Cannot start redis server.</value>
+  <data name="CannotReachRedisServerException" xml:space="preserve">
+    <value>Cannot reach redis server.</value>
   </data>
   <data name="CashUpSuccessful" xml:space="preserve">
     <value>Cash up process is successfully completed.</value>

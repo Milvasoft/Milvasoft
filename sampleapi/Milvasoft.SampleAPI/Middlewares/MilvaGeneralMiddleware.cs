@@ -46,8 +46,20 @@ namespace Milvasoft.SampleAPI.Middlewares
 
                 httpContext.Response.StatusCode = 200;
                 httpContext.Response.ContentType = "application/json";
+
                 await httpContext.Response.WriteAsync(JsonConvert.SerializeObject(validationResponse)).ConfigureAwait(false);
             }
+
+            //var tenantService = httpContext.RequestServices.GetService(typeof(ITenantService<CachedTenant, TenantId>)) as ITenantService<CachedTenant, TenantId>;
+
+            //var tenant = await tenantService.GetTenantAsync();
+
+            //if (tenant == null && !(httpContext.Request.Path.StartsWithSegments("/swagger")))
+            //{
+            //    var localizer = httpContext.RequestServices.GetRequiredService<IStringLocalizer<SharedResource>>();
+
+            //    await ReturnResponse(localizer["Unauthorized"], MilvaStatusCodes.Status401Unauthorized).ConfigureAwait(false);
+            //}
 
             await _next.Invoke(httpContext).ConfigureAwait(false);
 

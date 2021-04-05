@@ -1,4 +1,4 @@
-﻿namespace Milvasoft.API.DTOs
+﻿namespace Milvasoft.SampleAPI.DTOs
 {
     /// <summary>
     /// Pagination parameters with specification object(<typeparamref name="TSpec"/>).

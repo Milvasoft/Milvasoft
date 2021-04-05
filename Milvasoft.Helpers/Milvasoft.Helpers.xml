@@ -331,6 +331,12 @@
             <summary>
             Connects redis database if there is no connection. Otherwise this method does nothing.
             </summary>
+            <returns> Returns connected status. </returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.Caching.IRedisCacheService.ConnectionRequireAsync">
+            <summary>
+            Connects redis database if there is no connection. Otherwise this method does nothing.
+            </summary>
             <returns></returns>
         </member>
         <member name="M:Milvasoft.Helpers.Caching.IRedisCacheService.DisconnectAsync">
@@ -507,6 +513,12 @@
             <returns></returns>
         </member>
         <member name="M:Milvasoft.Helpers.Caching.RedisCacheService.ConnectAsync">
+            <summary>
+            Connects redis database if there is no connection. Otherwise this method does nothing.
+            </summary>
+            <returns> Returns connected status. </returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.Caching.RedisCacheService.ConnectionRequireAsync">
             <summary>
             Connects redis database if there is no connection. Otherwise this method does nothing.
             </summary>
@@ -6116,7 +6128,7 @@
             <param name="isUserType"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.Identity.Abstract.IIdentityOperations`7.SignInAsync(Milvasoft.Helpers.Identity.Abstract.ILoginDTO,Milvasoft.Helpers.Identity.Abstract.IIdentityOperations{`0,`1,`2,`3,`4,`5,`6}.UserValidation,System.DateTime)">
+        <member name="M:Milvasoft.Helpers.Identity.Abstract.IIdentityOperations`7.LoginAsync(Milvasoft.Helpers.Identity.Abstract.ILoginDTO,Milvasoft.Helpers.Identity.Abstract.IIdentityOperations{`0,`1,`2,`3,`4,`5,`6}.UserValidation,System.DateTime)">
             <summary>
             Signs in for incoming user. Returns a token if login informations are valid or the user is not lockedout. Otherwise returns the error list.
             </summary>
@@ -6125,7 +6137,7 @@
             <param name="tokenExpiredDate"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.Identity.Abstract.IIdentityOperations`7.SignInAsync(Milvasoft.Helpers.Identity.Abstract.ILoginDTO,System.Boolean,Milvasoft.Helpers.Identity.Abstract.IIdentityOperations{`0,`1,`2,`3,`4,`5,`6}.UserValidationByUserType,System.DateTime)">
+        <member name="M:Milvasoft.Helpers.Identity.Abstract.IIdentityOperations`7.LoginAsync(Milvasoft.Helpers.Identity.Abstract.ILoginDTO,System.Boolean,Milvasoft.Helpers.Identity.Abstract.IIdentityOperations{`0,`1,`2,`3,`4,`5,`6}.UserValidationByUserType,System.DateTime)">
             <summary>
             Signs in for incoming user. Returns a token if login informations are valid or the user is not lockedout. Otherwise returns the error list.
             </summary>
@@ -6135,7 +6147,7 @@
             <param name="tokenExpiredDate"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.Identity.Abstract.IIdentityOperations`7.SignOutAsync">
+        <member name="M:Milvasoft.Helpers.Identity.Abstract.IIdentityOperations`7.LogoutAsync">
             <summary>
             Signs out from database. Returns null if already signed out.
             </summary>
@@ -6336,18 +6348,18 @@
             <param name="httpContextAccessor"></param>
             <param name="useWhiteList"></param>
         </member>
-        <member name="M:Milvasoft.Helpers.Identity.Concrete.IdentityOperations`7.SignInAsync(Milvasoft.Helpers.Identity.Abstract.ILoginDTO,Milvasoft.Helpers.Identity.Abstract.IIdentityOperations{`0,`1,`2,`3,`4,`5,`6}.UserValidation,System.DateTime)">
+        <member name="M:Milvasoft.Helpers.Identity.Concrete.IdentityOperations`7.LoginAsync(Milvasoft.Helpers.Identity.Abstract.ILoginDTO,Milvasoft.Helpers.Identity.Abstract.IIdentityOperations{`0,`1,`2,`3,`4,`5,`6}.UserValidation,System.DateTime)">
             <summary>
-            Signs in for incoming user. Returns a token if login informations are valid or the user is not lockedout. Otherwise returns the error list.
+            Login for incoming user. Returns a token if login informations are valid or the user is not lockedout. Otherwise returns the error list.
             </summary>
             <param name="loginDTO"></param>
             <param name="userValidation"></param>
             <param name="tokenExpiredDate"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.Identity.Concrete.IdentityOperations`7.SignInAsync(Milvasoft.Helpers.Identity.Abstract.ILoginDTO,System.Boolean,Milvasoft.Helpers.Identity.Abstract.IIdentityOperations{`0,`1,`2,`3,`4,`5,`6}.UserValidationByUserType,System.DateTime)">
+        <member name="M:Milvasoft.Helpers.Identity.Concrete.IdentityOperations`7.LoginAsync(Milvasoft.Helpers.Identity.Abstract.ILoginDTO,System.Boolean,Milvasoft.Helpers.Identity.Abstract.IIdentityOperations{`0,`1,`2,`3,`4,`5,`6}.UserValidationByUserType,System.DateTime)">
             <summary>
-            Signs in for incoming user. Returns a token if login informations are valid or the user is not lockedout. Otherwise returns the error list.
+            Login for incoming user. Returns a token if login informations are valid or the user is not lockedout. Otherwise returns the error list.
             </summary>
             <param name="loginDTO"></param>
             <param name="isUserType"></param>
@@ -6355,9 +6367,9 @@
             <param name="tokenExpiredDate"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.Identity.Concrete.IdentityOperations`7.SignOutAsync">
+        <member name="M:Milvasoft.Helpers.Identity.Concrete.IdentityOperations`7.LogoutAsync">
             <summary>
-            Signs out from database. Returns null if already signed out.
+            Logout from database. Returns null if already signed out.
             </summary>
             <returns></returns>
         </member>
@@ -7044,14 +7056,6 @@
             <param name="lifetime"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.MultiTenancy.Builder.TenantBuilder`2.WithPerTenantOptions``1(System.Action{``0,`0})">
-            <summary>
-            Registers tenant specific options.
-            </summary>
-            <typeparam name="TOptions">Type of options we are apply configuration to</typeparam>
-            <param name="tenantConfig">Action to configure options for a tenant</param>
-            <returns></returns>
-        </member>
         <member name="T:Milvasoft.Helpers.MultiTenancy.EntityBase.IMilvaTenantBase`1">
             <summary>
             Tenant base.
@@ -7495,6 +7499,15 @@
             Fired when a resolve operation is beginning in this scope.
             </summary>
         </member>
+        <member name="P:Milvasoft.Helpers.MultiTenancy.LifetimeManagement.MultiTenantContainer`2.ApplicationContainer">
+            <summary>
+            Gets the base application container.
+            </summary>
+            <value>
+            An <see cref="T:Autofac.IContainer"/> on which all tenant lifetime
+            scopes will be based.
+            </value>
+        </member>
         <member name="P:Milvasoft.Helpers.MultiTenancy.LifetimeManagement.MultiTenantContainer`2.DiagnosticSource">
             <summary>
             Gets the <see cref="T:System.Diagnostics.DiagnosticListener"/> to which trace events should be written.
@@ -7603,7 +7616,7 @@
             <summary>
             Initializes new instance of <see cref="T:Milvasoft.Helpers.MultiTenancy.LifetimeManagement.MultiTenantServiceProviderFactory`2"/>
             </summary>
-            <param name="tenantSerivcesConfiguration"></param>
+            <param name="tenantServicesConfiguration"></param>
         </member>
         <member name="M:Milvasoft.Helpers.MultiTenancy.LifetimeManagement.MultiTenantServiceProviderFactory`2.CreateBuilder(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
             <summary>
@@ -7876,25 +7889,25 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="T:Milvasoft.Helpers.MultiTenancy.Store.InMemoryTenantStore`2">
+        <member name="T:Milvasoft.Helpers.MultiTenancy.Store.CachedTenantStore`2">
             <summary>
             Cached tenant store.
             </summary>
         </member>
-        <member name="M:Milvasoft.Helpers.MultiTenancy.Store.InMemoryTenantStore`2.#ctor(Milvasoft.Helpers.Caching.IRedisCacheService)">
+        <member name="M:Milvasoft.Helpers.MultiTenancy.Store.CachedTenantStore`2.#ctor(Milvasoft.Helpers.Caching.IRedisCacheService)">
             <summary>
-            Creates new instance of <see cref="T:Milvasoft.Helpers.MultiTenancy.Store.InMemoryTenantStore`2"/>
+            Creates new instance of <see cref="T:Milvasoft.Helpers.MultiTenancy.Store.CachedTenantStore`2"/>
             </summary>
             <param name="redisCacheService"></param>
         </member>
-        <member name="M:Milvasoft.Helpers.MultiTenancy.Store.InMemoryTenantStore`2.GetTenantAsync(`1)">
+        <member name="M:Milvasoft.Helpers.MultiTenancy.Store.CachedTenantStore`2.GetTenantAsync(`1)">
             <summary>
             Returns a tenant according to <paramref name="identifier"/>.
             </summary>
             <param name="identifier"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.MultiTenancy.Store.InMemoryTenantStore`2.SetTenantAsync(`1,`0)">
+        <member name="M:Milvasoft.Helpers.MultiTenancy.Store.CachedTenantStore`2.SetTenantAsync(`1,`0)">
             <summary>
             Sets a tenant with a given identifier.
             </summary>

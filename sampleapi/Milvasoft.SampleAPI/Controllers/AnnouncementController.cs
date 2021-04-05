@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Milvasoft.API.DTOs;
+using Milvasoft.SampleAPI.DTOs;
 using Milvasoft.SampleAPI.DTOs.AnnouncementDTOs;
 using Milvasoft.SampleAPI.Services.Abstract;
 using Milvasoft.SampleAPI.Spec;
@@ -34,10 +34,10 @@ namespace Milvasoft.SampleAPI.Controllers
         public async Task<IActionResult> GetAnnouncementsForMentor([FromBody] PaginationParamsWithSpec<AnnouncementSpec> paginationParams)
         {
             var announcements = await _announcementService.GetEntitiesForMentorAsync(paginationParams.PageIndex,
-                                                                                 paginationParams.RequestedItemCount,
-                                                                                 paginationParams.OrderByProperty,
-                                                                                 paginationParams.OrderByAscending,
-                                                                                 paginationParams.Spec).ConfigureAwait(false);
+                                                                                     paginationParams.RequestedItemCount,
+                                                                                     paginationParams.OrderByProperty,
+                                                                                     paginationParams.OrderByAscending,
+                                                                                     paginationParams.Spec).ConfigureAwait(false);
             return Ok(announcements);
         }
 

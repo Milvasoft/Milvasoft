@@ -24,10 +24,10 @@ namespace Milvasoft.Helpers.MultiTenancy.LifetimeManagement
         /// <summary>
         /// Initializes new instance of <see cref="MultiTenantServiceProviderFactory{TTenant, TKey}"/>
         /// </summary>
-        /// <param name="tenantSerivcesConfiguration"></param>
-        public MultiTenantServiceProviderFactory(Action<TTenant, ContainerBuilder> tenantSerivcesConfiguration)
+        /// <param name="tenantServicesConfiguration"></param>
+        public MultiTenantServiceProviderFactory(Action<TTenant, ContainerBuilder> tenantServicesConfiguration)
         {
-            _tenantServicesConfiguration = tenantSerivcesConfiguration;
+            _tenantServicesConfiguration = tenantServicesConfiguration;
         }
 
         /// <summary>

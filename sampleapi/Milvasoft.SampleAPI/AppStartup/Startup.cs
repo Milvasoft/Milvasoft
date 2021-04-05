@@ -1,12 +1,21 @@
+using Autofac;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Localization;
 using Milvasoft.Helpers.Caching;
+using Milvasoft.Helpers.DependencyInjection;
 using Milvasoft.Helpers.FileOperations.Abstract;
 using Milvasoft.Helpers.FileOperations.Concrete;
-using Milvasoft.SampleAPI.Data.Utils;
+using Milvasoft.Helpers.MultiTenancy.EntityBase;
+using Milvasoft.Helpers.MultiTenancy.Extensions;
+using Milvasoft.Helpers.MultiTenancy.ResolutionStrategy;
+using Milvasoft.Helpers.MultiTenancy.Store;
+using Milvasoft.SampleAPI.Data;
+using Milvasoft.SampleAPI.DTOs;
 using Milvasoft.SampleAPI.Localization;
 using Milvasoft.SampleAPI.Middlewares;
 
@@ -45,6 +54,10 @@ namespace Milvasoft.SampleAPI.AppStartup
         /// <param name="services"></param>
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddMultiTenancy<CachedTenant, TenantId>()
+                 .WithResolutionStrategy<HeaderResolutionStrategy>()
+                 .WithStore<CachedTenantStore<CachedTenant, TenantId>>();
+
             services.ConfigureMVC();
 
             var cacheOptions = new RedisCacheServiceOptions("127.0.0.1:6379")
@@ -54,7 +67,9 @@ namespace Milvasoft.SampleAPI.AppStartup
             };
 
             cacheOptions.ConfigurationOptions.AbortOnConnectFail = false;
-            cacheOptions.ConfigurationOptions.ConnectTimeout = 2000;
+            cacheOptions.ConfigurationOptions.ConnectTimeout = 300;
+            cacheOptions.ConfigurationOptions.SyncTimeout = 300;
+            cacheOptions.ConfigurationOptions.ConnectRetry = 1;
 
             services.AddMilvaRedisCaching(cacheOptions);
 
@@ -69,8 +84,18 @@ namespace Milvasoft.SampleAPI.AppStartup
             services.ConfigureVersioning();
 
             services.ConfigureSwagger();
+
         }
 
+        public static void ConfigureMultitenantContainer(CachedTenant t, ContainerBuilder c)
+        {
+            c.Register(container =>
+            {
+                var optionsBuilder = new DbContextOptionsBuilder<EducationAppDbContext>();
+                optionsBuilder.UseNpgsql(t.ConnectionString, b => b.MigrationsAssembly("Milvasoft.SampleAPI.Data").EnableRetryOnFailure()).UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
+                return new EducationAppDbContext(optionsBuilder.Options, container.Resolve<IHttpContextAccessor>(), container.Resolve<IAuditConfiguration>());
+            }).SingleInstance();
+        }
 
         /// <summary>
         /// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -89,6 +114,8 @@ namespace Milvasoft.SampleAPI.AppStartup
 
             //app.UseHttpsRedirection();
 
+            app.UseMultiTenancy<CachedTenant, TenantId>().UseMultiTenantContainer<CachedTenant, TenantId>();
+
             app.UseRouting();
 
             app.UseAuthentication();
@@ -102,9 +129,10 @@ namespace Milvasoft.SampleAPI.AppStartup
 
             app.ConfigureSwagger();
 
+
             #region Seed
 
-            app.ResetDatabaseAsync().Wait();
+            //app.ResetDatabaseAsync().Wait();
 
             #endregion
         }

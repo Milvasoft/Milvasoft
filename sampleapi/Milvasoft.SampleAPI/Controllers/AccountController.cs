@@ -7,6 +7,7 @@ using Milvasoft.Helpers.Extensions;
 using Milvasoft.Helpers.Models.Response;
 using Milvasoft.Helpers.MultiTenancy.EntityBase;
 using Milvasoft.Helpers.Utils;
+using Milvasoft.SampleAPI.Data;
 using Milvasoft.SampleAPI.DTOs.AccountDTOs;
 using Milvasoft.SampleAPI.Localization;
 using Milvasoft.SampleAPI.Services.Abstract;
@@ -27,7 +28,7 @@ namespace Milvasoft.SampleAPI.Controllers
         private readonly IStringLocalizer<SharedResource> _sharedLocalizer;
         private readonly IRedisCacheService _cacheServer;
 
-        public AccountController(IAccountService accountService, IStringLocalizer<SharedResource> sharedLocalizer, IRedisCacheService cacheServer)
+        public AccountController(IAccountService accountService, IStringLocalizer<SharedResource> sharedLocalizer, IRedisCacheService cacheServer, EducationAppDbContext educationAppDbContext)
         {
             _accountService = accountService;
             _sharedLocalizer = sharedLocalizer;

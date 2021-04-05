@@ -10,7 +10,6 @@ using System.ComponentModel;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
-using System.Text;
 
 namespace Milvasoft.Helpers
 {
@@ -226,7 +225,7 @@ namespace Milvasoft.Helpers
         /// <param name="result"></param>
         /// <param name="seperator"></param>
         /// <returns></returns>
-        public static string DescriptionJoin(this IdentityResult result, char seperator = '~') 
+        public static string DescriptionJoin(this IdentityResult result, char seperator = '~')
             => string.Join(seperator, result.Errors.Select(i => i.Description));
 
         /// <summary>
@@ -235,7 +234,7 @@ namespace Milvasoft.Helpers
         /// <param name="result"></param>
         /// <param name="seperator"></param>
         /// <returns></returns>
-        public static string DescriptionJoin(this IdentityResult result, string seperator) 
+        public static string DescriptionJoin(this IdentityResult result, string seperator)
             => string.Join(seperator, result.Errors.Select(i => i.Description));
 
 

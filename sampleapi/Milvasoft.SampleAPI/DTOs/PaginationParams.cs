@@ -1,7 +1,7 @@
 ﻿
 using Milvasoft.SampleAPI.Utils.Attributes.ValidationAttributes;
 
-namespace Milvasoft.API.DTOs
+namespace Milvasoft.SampleAPI.DTOs
 {
     /// <summary>
     /// Paginatination params

@@ -1,6 +1,9 @@
-using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
+using Milvasoft.Helpers.MultiTenancy.EntityBase;
+using Milvasoft.Helpers.MultiTenancy.LifetimeManagement;
+using Milvasoft.SampleAPI.DTOs;
+using System;
 using System.Threading.Tasks;
 
 namespace Milvasoft.SampleAPI.AppStartup
@@ -9,7 +12,14 @@ namespace Milvasoft.SampleAPI.AppStartup
     {
         public static async Task Main(string[] args)
         {
-            await CreateWebHostBuilder(args).Build().RunAsync().ConfigureAwait(false);
+            try
+            {
+                await CreateWebHostBuilder(args).Build().RunAsync().ConfigureAwait(false);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
 
         /// <summary>
@@ -17,11 +27,15 @@ namespace Milvasoft.SampleAPI.AppStartup
         /// </summary>
         /// <param name="args"></param>
         /// <returns></returns>
-        public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
-             WebHost.CreateDefaultBuilder(args)
-                  .UseUrls(/*"https://0.0.0.0:5001",*/"http://0.0.0.0:5000")
-                  .UseWebRoot("wwwroot")
-                  .UseStartup<Startup>()
-                  .UseDefaultServiceProvider(options => options.ValidateScopes = false);
+        public static IHostBuilder CreateWebHostBuilder(string[] args) =>
+                  Host.CreateDefaultBuilder(args)
+                  .ConfigureWebHostDefaults(webBuilder =>
+                  {
+                      webBuilder.UseUrls(/*"https://0.0.0.0:5001",*/"http://0.0.0.0:5000")
+                                .UseWebRoot("wwwroot")
+                                .UseStartup<Startup>()
+                                .UseDefaultServiceProvider(options => options.ValidateScopes = false);
+                  }).UseServiceProviderFactory(new MultiTenantServiceProviderFactory<CachedTenant, TenantId>(Startup.ConfigureMultitenantContainer));
+
     }
 }

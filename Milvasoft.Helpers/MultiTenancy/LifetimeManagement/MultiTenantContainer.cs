@@ -22,21 +22,22 @@ namespace Milvasoft.Helpers.MultiTenancy.LifetimeManagement
     {
         #region Fields
 
-        //This is the base application container
-        private readonly IContainer _applicationContainer;
         //This action configures a container builder
         private readonly Action<TTenant, ContainerBuilder> _tenantContainerConfiguration;
 
         //This dictionary keeps track of all of the tenant scopes that we have created
         private readonly Dictionary<string, ILifetimeScope> _tenantLifetimeScopes = new();
 
-        private readonly object _lock = new object();
+        private readonly object _lock = new();
 
         private const string _multiTenantTag = "multitenantcontainer";
 
         #endregion
 
         #region Properties
+
+        #region Events
+
 #pragma warning disable CS0067 // The event '' is never used Milvasoft.Helpers
 
         /// <summary>
@@ -44,8 +45,8 @@ namespace Milvasoft.Helpers.MultiTenancy.LifetimeManagement
         /// </summary>
         public event EventHandler<LifetimeScopeBeginningEventArgs> ChildLifetimeScopeBeginning
         {
-            add { _applicationContainer.ChildLifetimeScopeBeginning += value; }
-            remove { _applicationContainer.ChildLifetimeScopeBeginning -= value; }
+            add { GetCurrentTenantScope().ChildLifetimeScopeBeginning += value; }
+            remove { GetCurrentTenantScope().ChildLifetimeScopeBeginning -= value; }
         }
 
         /// <summary>
@@ -53,8 +54,8 @@ namespace Milvasoft.Helpers.MultiTenancy.LifetimeManagement
         /// </summary>
         public event EventHandler<LifetimeScopeEndingEventArgs> CurrentScopeEnding
         {
-            add { _applicationContainer.CurrentScopeEnding += value; }
-            remove { _applicationContainer.CurrentScopeEnding -= value; }
+            add { GetCurrentTenantScope().CurrentScopeEnding += value; }
+            remove { GetCurrentTenantScope().CurrentScopeEnding -= value; }
         }
 
         /// <summary>
@@ -62,32 +63,52 @@ namespace Milvasoft.Helpers.MultiTenancy.LifetimeManagement
         /// </summary>
         public event EventHandler<ResolveOperationBeginningEventArgs> ResolveOperationBeginning
         {
-            add { _applicationContainer.ResolveOperationBeginning += value; }
-            remove { _applicationContainer.ResolveOperationBeginning -= value; }
+            add { GetCurrentTenantScope().ResolveOperationBeginning += value; }
+            remove { GetCurrentTenantScope().ResolveOperationBeginning -= value; }
         }
 
 #pragma warning disable CS0067 //The event '' is never used Milvasoft.Helpers
 
+        #endregion
+
+        /// <summary>
+        /// Gets the base application container.
+        /// </summary>
+        /// <value>
+        /// An <see cref="Autofac.IContainer"/> on which all tenant lifetime
+        /// scopes will be based.
+        /// </value>
+        public IContainer ApplicationContainer { get; private set; }
 
         /// <summary>
         /// Gets the <see cref="DiagnosticListener"/> to which trace events should be written.
         /// </summary>
-        public DiagnosticListener DiagnosticSource => _applicationContainer.DiagnosticSource;
+        public DiagnosticListener DiagnosticSource => ApplicationContainer.DiagnosticSource;
 
         /// <summary>
         /// Gets the disposer associated with this <see cref="ILifetimeScope"/>. Component instances can be associated with it manually if required.
         /// </summary>
-        public IDisposer Disposer => GetCurrentTenantScope().Disposer;
+        public IDisposer Disposer
+        {
+            get { return this.GetCurrentTenantScope().Disposer; }
+        }
+
 
         /// <summary>
         /// Gets the tag applied to the <see cref="ILifetimeScope"/>.
         /// </summary>
-        public object Tag => GetCurrentTenantScope().Tag;
+        public object Tag
+        {
+            get { return this.GetCurrentTenantScope().Tag; }
+        }
 
         /// <summary>
         /// Gets the associated services with the components that provide them.
         /// </summary>
-        public IComponentRegistry ComponentRegistry => GetCurrentTenantScope().ComponentRegistry;
+        public IComponentRegistry ComponentRegistry
+        {
+            get { return this.GetCurrentTenantScope().ComponentRegistry; }
+        }
 
         #endregion
 
@@ -100,14 +121,17 @@ namespace Milvasoft.Helpers.MultiTenancy.LifetimeManagement
         public MultiTenantContainer(IContainer applicationContainer, Action<TTenant, ContainerBuilder> containerConfiguration)
         {
             _tenantContainerConfiguration = containerConfiguration;
-            _applicationContainer = applicationContainer;
+            ApplicationContainer = applicationContainer;
         }
 
         /// <summary>
         /// Get the current tenant from the application container.
         /// </summary>
         /// <returns></returns>
-        private TTenant GetCurrentTenant() => _applicationContainer.Resolve<TenantService<TTenant, TKey>>().GetTenantAsync().GetAwaiter().GetResult();
+        private TTenant GetCurrentTenant()
+        {
+            return ApplicationContainer.Resolve<ITenantService<TTenant, TKey>>().GetTenantAsync().GetAwaiter().GetResult();
+        }
 
         /// <summary>
         /// Get the scope of the current tenant.
@@ -128,7 +152,7 @@ namespace Milvasoft.Helpers.MultiTenancy.LifetimeManagement
         {
             //If no tenant (e.g. early on in the pipeline, we just use the application container)
             if (tenantId == null)
-                return _applicationContainer;
+                return ApplicationContainer;
 
             //If we have created a lifetime for a tenant, return
             if (_tenantLifetimeScopes.ContainsKey(tenantId))
@@ -143,7 +167,7 @@ namespace Milvasoft.Helpers.MultiTenancy.LifetimeManagement
                 else
                 {
                     //This is a new tenant, configure a new lifetimescope for it using our tenant sensitive configuration method
-                    _tenantLifetimeScopes.Add(tenantId, _applicationContainer.BeginLifetimeScope(_multiTenantTag, a => _tenantContainerConfiguration(GetCurrentTenant(), a)));
+                    _tenantLifetimeScopes.Add(tenantId, ApplicationContainer.BeginLifetimeScope(_multiTenantTag, a => _tenantContainerConfiguration(GetCurrentTenant(), a)));
                     return _tenantLifetimeScopes[tenantId];
                 }
             }
@@ -158,7 +182,7 @@ namespace Milvasoft.Helpers.MultiTenancy.LifetimeManagement
             {
                 foreach (var scope in _tenantLifetimeScopes)
                     scope.Value.Dispose();
-                _applicationContainer.Dispose();
+                ApplicationContainer.Dispose();
             }
         }
 

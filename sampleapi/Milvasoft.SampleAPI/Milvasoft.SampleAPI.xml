@@ -182,19 +182,19 @@
             </summary>
             <param name="announcementService"></param>
         </member>
-        <member name="M:Milvasoft.SampleAPI.Controllers.AnnouncementController.GetAnnouncementsForMentor(Milvasoft.API.DTOs.PaginationParamsWithSpec{Milvasoft.SampleAPI.Spec.AnnouncementSpec})">
+        <member name="M:Milvasoft.SampleAPI.Controllers.AnnouncementController.GetAnnouncementsForMentor(Milvasoft.SampleAPI.DTOs.PaginationParamsWithSpec{Milvasoft.SampleAPI.Spec.AnnouncementSpec})">
             <summary>
             Gets the all filtered announcements datas for mentor.
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.SampleAPI.Controllers.AnnouncementController.GetAnnouncementsForAdmn(Milvasoft.API.DTOs.PaginationParamsWithSpec{Milvasoft.SampleAPI.Spec.AnnouncementSpec})">
+        <member name="M:Milvasoft.SampleAPI.Controllers.AnnouncementController.GetAnnouncementsForAdmn(Milvasoft.SampleAPI.DTOs.PaginationParamsWithSpec{Milvasoft.SampleAPI.Spec.AnnouncementSpec})">
             <summary>
             Gets the all filtered announcements datas for admin.
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.SampleAPI.Controllers.AnnouncementController.GetAnnouncementsForStudent(Milvasoft.API.DTOs.PaginationParamsWithSpec{Milvasoft.SampleAPI.Spec.AnnouncementSpec})">
+        <member name="M:Milvasoft.SampleAPI.Controllers.AnnouncementController.GetAnnouncementsForStudent(Milvasoft.SampleAPI.DTOs.PaginationParamsWithSpec{Milvasoft.SampleAPI.Spec.AnnouncementSpec})">
             <summary>
             Gets the all filtered announcements datas for student.
             </summary>
@@ -258,19 +258,19 @@
             </summary>
             <param name="assignmentService"></param>
         </member>
-        <member name="M:Milvasoft.SampleAPI.Controllers.AssignmentController.GetAssignmentsForMentor(Milvasoft.API.DTOs.PaginationParamsWithSpec{Milvasoft.SampleAPI.Spec.AssignmentSpec})">
+        <member name="M:Milvasoft.SampleAPI.Controllers.AssignmentController.GetAssignmentsForMentor(Milvasoft.SampleAPI.DTOs.PaginationParamsWithSpec{Milvasoft.SampleAPI.Spec.AssignmentSpec})">
             <summary>
             Gets the all filtered assignments datas for mentor.
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.SampleAPI.Controllers.AssignmentController.GetAssignmentsForAdmn(Milvasoft.API.DTOs.PaginationParamsWithSpec{Milvasoft.SampleAPI.Spec.AssignmentSpec})">
+        <member name="M:Milvasoft.SampleAPI.Controllers.AssignmentController.GetAssignmentsForAdmn(Milvasoft.SampleAPI.DTOs.PaginationParamsWithSpec{Milvasoft.SampleAPI.Spec.AssignmentSpec})">
             <summary>
             Gets the all filtered assignments datas for admin.
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.SampleAPI.Controllers.AssignmentController.GetAssignmentsForStudent(Milvasoft.API.DTOs.PaginationParamsWithSpec{Milvasoft.SampleAPI.Spec.AssignmentSpec})">
+        <member name="M:Milvasoft.SampleAPI.Controllers.AssignmentController.GetAssignmentsForStudent(Milvasoft.SampleAPI.DTOs.PaginationParamsWithSpec{Milvasoft.SampleAPI.Spec.AssignmentSpec})">
             <summary>
             Gets the all filtered assignments datas for student.
             </summary>
@@ -334,19 +334,19 @@
             </summary>
             <param name="mentorService"></param>
         </member>
-        <member name="M:Milvasoft.SampleAPI.Controllers.MentorController.GetMentorsForMentor(Milvasoft.API.DTOs.PaginationParamsWithSpec{Milvasoft.SampleAPI.Spec.MentorSpec})">
+        <member name="M:Milvasoft.SampleAPI.Controllers.MentorController.GetMentorsForMentor(Milvasoft.SampleAPI.DTOs.PaginationParamsWithSpec{Milvasoft.SampleAPI.Spec.MentorSpec})">
             <summary>
             Gets the all filtered mentors datas for mentor.
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.SampleAPI.Controllers.MentorController.GetMentorsForAdmn(Milvasoft.API.DTOs.PaginationParamsWithSpec{Milvasoft.SampleAPI.Spec.MentorSpec})">
+        <member name="M:Milvasoft.SampleAPI.Controllers.MentorController.GetMentorsForAdmn(Milvasoft.SampleAPI.DTOs.PaginationParamsWithSpec{Milvasoft.SampleAPI.Spec.MentorSpec})">
             <summary>
             Gets the all filtered mentors datas for admin.
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.SampleAPI.Controllers.MentorController.GetMentorsForStudent(Milvasoft.API.DTOs.PaginationParamsWithSpec{Milvasoft.SampleAPI.Spec.MentorSpec})">
+        <member name="M:Milvasoft.SampleAPI.Controllers.MentorController.GetMentorsForStudent(Milvasoft.SampleAPI.DTOs.PaginationParamsWithSpec{Milvasoft.SampleAPI.Spec.MentorSpec})">
             <summary>
             Gets the all filtered mentors datas for student.
             </summary>
@@ -410,19 +410,19 @@
             </summary>
             <param name="professionService"></param>
         </member>
-        <member name="M:Milvasoft.SampleAPI.Controllers.ProfessionController.GetProfessionsForMentor(Milvasoft.API.DTOs.PaginationParamsWithSpec{Milvasoft.SampleAPI.Spec.ProfessionSpec})">
+        <member name="M:Milvasoft.SampleAPI.Controllers.ProfessionController.GetProfessionsForMentor(Milvasoft.SampleAPI.DTOs.PaginationParamsWithSpec{Milvasoft.SampleAPI.Spec.ProfessionSpec})">
             <summary>
             Gets the all filtered professions datas for mentor.
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.SampleAPI.Controllers.ProfessionController.GetProfessionsForAdmin(Milvasoft.API.DTOs.PaginationParamsWithSpec{Milvasoft.SampleAPI.Spec.ProfessionSpec})">
+        <member name="M:Milvasoft.SampleAPI.Controllers.ProfessionController.GetProfessionsForAdmin(Milvasoft.SampleAPI.DTOs.PaginationParamsWithSpec{Milvasoft.SampleAPI.Spec.ProfessionSpec})">
             <summary>
             Gets the all filtered professions datas for admin.
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.SampleAPI.Controllers.ProfessionController.GetProfessionsForStudent(Milvasoft.API.DTOs.PaginationParamsWithSpec{Milvasoft.SampleAPI.Spec.ProfessionSpec})">
+        <member name="M:Milvasoft.SampleAPI.Controllers.ProfessionController.GetProfessionsForStudent(Milvasoft.SampleAPI.DTOs.PaginationParamsWithSpec{Milvasoft.SampleAPI.Spec.ProfessionSpec})">
             <summary>
             Gets the all filtered professions datas for student.
             </summary>
@@ -486,19 +486,19 @@
             </summary>
             <param name="questionService"></param>
         </member>
-        <member name="M:Milvasoft.SampleAPI.Controllers.QuestionController.GetQuestionsForMentor(Milvasoft.API.DTOs.PaginationParamsWithSpec{Milvasoft.SampleAPI.Spec.QuestionSpec})">
+        <member name="M:Milvasoft.SampleAPI.Controllers.QuestionController.GetQuestionsForMentor(Milvasoft.SampleAPI.DTOs.PaginationParamsWithSpec{Milvasoft.SampleAPI.Spec.QuestionSpec})">
             <summary>
             Gets the all filtered questions datas for mentor.
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.SampleAPI.Controllers.QuestionController.GetQuestionsForAdmin(Milvasoft.API.DTOs.PaginationParamsWithSpec{Milvasoft.SampleAPI.Spec.QuestionSpec})">
+        <member name="M:Milvasoft.SampleAPI.Controllers.QuestionController.GetQuestionsForAdmin(Milvasoft.SampleAPI.DTOs.PaginationParamsWithSpec{Milvasoft.SampleAPI.Spec.QuestionSpec})">
             <summary>
             Gets the all filtered questions datas for admin.
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.SampleAPI.Controllers.QuestionController.GetQuestionsForStudent(Milvasoft.API.DTOs.PaginationParamsWithSpec{Milvasoft.SampleAPI.Spec.QuestionSpec})">
+        <member name="M:Milvasoft.SampleAPI.Controllers.QuestionController.GetQuestionsForStudent(Milvasoft.SampleAPI.DTOs.PaginationParamsWithSpec{Milvasoft.SampleAPI.Spec.QuestionSpec})">
             <summary>
             Gets the all filtered questions datas for student.
             </summary>
@@ -562,19 +562,19 @@
             </summary>
             <param name="studentService"></param>
         </member>
-        <member name="M:Milvasoft.SampleAPI.Controllers.StudentController.GetStudentsForMentor(Milvasoft.API.DTOs.PaginationParamsWithSpec{Milvasoft.SampleAPI.Spec.StudentSpec})">
+        <member name="M:Milvasoft.SampleAPI.Controllers.StudentController.GetStudentsForMentor(Milvasoft.SampleAPI.DTOs.PaginationParamsWithSpec{Milvasoft.SampleAPI.Spec.StudentSpec})">
             <summary>
             Gets the all filtered students datas for mentor.
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.SampleAPI.Controllers.StudentController.GetStudentsForAdmin(Milvasoft.API.DTOs.PaginationParamsWithSpec{Milvasoft.SampleAPI.Spec.StudentSpec})">
+        <member name="M:Milvasoft.SampleAPI.Controllers.StudentController.GetStudentsForAdmin(Milvasoft.SampleAPI.DTOs.PaginationParamsWithSpec{Milvasoft.SampleAPI.Spec.StudentSpec})">
             <summary>
             Gets the all filtered students datas for admin.
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.SampleAPI.Controllers.StudentController.GetStudentsForStudent(Milvasoft.API.DTOs.PaginationParamsWithSpec{Milvasoft.SampleAPI.Spec.StudentSpec})">
+        <member name="M:Milvasoft.SampleAPI.Controllers.StudentController.GetStudentsForStudent(Milvasoft.SampleAPI.DTOs.PaginationParamsWithSpec{Milvasoft.SampleAPI.Spec.StudentSpec})">
             <summary>
             Gets the all filtered students datas for student.
             </summary>
@@ -638,19 +638,19 @@
             </summary>
             <param name="usefulLinkService"></param>
         </member>
-        <member name="M:Milvasoft.SampleAPI.Controllers.UsefulLinkController.GetUsefulLinksForMentor(Milvasoft.API.DTOs.PaginationParamsWithSpec{Milvasoft.SampleAPI.Spec.UsefulLinkSpec})">
+        <member name="M:Milvasoft.SampleAPI.Controllers.UsefulLinkController.GetUsefulLinksForMentor(Milvasoft.SampleAPI.DTOs.PaginationParamsWithSpec{Milvasoft.SampleAPI.Spec.UsefulLinkSpec})">
             <summary>
             Gets the all filtered usefulLinks datas for mentor.
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.SampleAPI.Controllers.UsefulLinkController.GetUsefulLinksForAdmin(Milvasoft.API.DTOs.PaginationParamsWithSpec{Milvasoft.SampleAPI.Spec.UsefulLinkSpec})">
+        <member name="M:Milvasoft.SampleAPI.Controllers.UsefulLinkController.GetUsefulLinksForAdmin(Milvasoft.SampleAPI.DTOs.PaginationParamsWithSpec{Milvasoft.SampleAPI.Spec.UsefulLinkSpec})">
             <summary>
             Gets the all filtered usefulLinks datas for admin.
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.SampleAPI.Controllers.UsefulLinkController.GetUsefulLinksForStudent(Milvasoft.API.DTOs.PaginationParamsWithSpec{Milvasoft.SampleAPI.Spec.UsefulLinkSpec})">
+        <member name="M:Milvasoft.SampleAPI.Controllers.UsefulLinkController.GetUsefulLinksForStudent(Milvasoft.SampleAPI.DTOs.PaginationParamsWithSpec{Milvasoft.SampleAPI.Spec.UsefulLinkSpec})">
             <summary>
             Gets the all filtered usefulLinks datas for student.
             </summary>
@@ -1128,6 +1128,56 @@
             The profession Id of assignment.
             </summary>
         </member>
+        <member name="T:Milvasoft.SampleAPI.DTOs.CachedTenant">
+            <summary>
+            Cached tenant model for distributed redis server.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.CachedTenant.Id">
+            <summary>
+            Id of tenant.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.CachedTenant.TenancyName">
+            <summary>
+            Name of tenant.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.CachedTenant.BranchNo">
+            <summary>
+            Branch number of tenant.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.CachedTenant.Name">
+            <summary>
+            Display name of tenant.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.CachedTenant.ConnectionString">
+            <summary>
+            Database connection string of tenant.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.CachedTenant.TableCount">
+            <summary>
+            Purchased table count of tenant.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.CachedTenant.SubscriptionExpireDate">
+            <summary>
+            Subscription expiration date of tenant.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.CachedTenant.IsActive">
+            <summary>
+            Determines tenant is active or not.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.CachedTenant.Modules">
+            <summary>
+            Purchased modules of tenant.
+            </summary>
+        </member>
         <member name="T:Milvasoft.SampleAPI.DTOs.MentorDTOs.AddMentorDTO">
             <summary>
             Add mentor DTO for add operations.
@@ -1241,6 +1291,42 @@
         <member name="P:Milvasoft.SampleAPI.DTOs.MentorDTOs.UpdateMentorDTO.CVFilePath">
             <summary>
             CV path of mentor.
+            </summary>
+        </member>
+        <member name="T:Milvasoft.SampleAPI.DTOs.PaginationParams">
+            <summary>
+            Paginatination params
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.PaginationParams.PageIndex">
+            <summary>
+            Requested page number.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.PaginationParams.RequestedItemCount">
+            <summary>
+            Requested item count in requested page.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.PaginationParams.OrderByProperty">
+            <summary>
+            If order by column requested then Property name of entity.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.PaginationParams.OrderByAscending">
+            <summary>
+            If order by column requested then ascending or descending.
+            </summary>
+        </member>
+        <member name="T:Milvasoft.SampleAPI.DTOs.PaginationParamsWithSpec`1">
+            <summary>
+            Pagination parameters with specification object(<typeparamref name="TSpec"/>).
+            </summary>
+            <typeparam name="TSpec"></typeparam>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.PaginationParamsWithSpec`1.Spec">
+            <summary>
+            Specification object.
             </summary>
         </member>
         <member name="T:Milvasoft.SampleAPI.DTOs.ProfessionDTOs.AddProfessionDTO">
@@ -3447,42 +3533,6 @@
         <member name="T:Milvasoft.SampleAPI.Utils.Swagger.RequestHeaderFilter">
             <summary>
             Operation filter to add the requirement of the custom header
-            </summary>
-        </member>
-        <member name="T:Milvasoft.API.DTOs.PaginationParams">
-            <summary>
-            Paginatination params
-            </summary>
-        </member>
-        <member name="P:Milvasoft.API.DTOs.PaginationParams.PageIndex">
-            <summary>
-            Requested page number.
-            </summary>
-        </member>
-        <member name="P:Milvasoft.API.DTOs.PaginationParams.RequestedItemCount">
-            <summary>
-            Requested item count in requested page.
-            </summary>
-        </member>
-        <member name="P:Milvasoft.API.DTOs.PaginationParams.OrderByProperty">
-            <summary>
-            If order by column requested then Property name of entity.
-            </summary>
-        </member>
-        <member name="P:Milvasoft.API.DTOs.PaginationParams.OrderByAscending">
-            <summary>
-            If order by column requested then ascending or descending.
-            </summary>
-        </member>
-        <member name="T:Milvasoft.API.DTOs.PaginationParamsWithSpec`1">
-            <summary>
-            Pagination parameters with specification object(<typeparamref name="TSpec"/>).
-            </summary>
-            <typeparam name="TSpec"></typeparam>
-        </member>
-        <member name="P:Milvasoft.API.DTOs.PaginationParamsWithSpec`1.Spec">
-            <summary>
-            Specification object.
             </summary>
         </member>
         <member name="T:Opsiyon.API.Helpers.Swagger.CustomAttributeOperationFilter">
