@@ -8,8 +8,15 @@ using System.Threading.Tasks;
 
 namespace Milvasoft.SampleAPI.AppStartup
 {
+    /// <summary>
+    /// The main entry point for the application.
+    /// </summary>
     public class Program
     {
+        /// <summary>
+        /// The main entry point for the application.
+        /// </summary>
+        /// <param name="args"></param>
         public static async Task Main(string[] args)
         {
             try

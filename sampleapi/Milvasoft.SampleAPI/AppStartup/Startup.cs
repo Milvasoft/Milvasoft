@@ -31,20 +31,31 @@ namespace Milvasoft.SampleAPI.AppStartup
         /// </summary>
         public IConfiguration Configuration { get; set; }
 
+        /// <summary>
+        /// Static <see cref="SharedResource"/> string localizer instance. Do not use this instance it if it is not essential.
+        /// </summary>
         public static IStringLocalizer<SharedResource> SharedStringLocalizer;
 
+        /// <summary>
+        /// Provides information about the web hosting environment an application is running in.
+        /// </summary>
         public static IWebHostEnvironment WebHostEnvironment { get; set; }
-        public static IJsonOperations _jsonOperations { get; set; }
+
+        /// <summary>
+        /// Provides add-edit-delete-get process json files that hold one list.
+        /// </summary>
+        public static IJsonOperations JsonOperations { get; set; }
 
         /// <summary>
         /// Creates a new <see cref="Startup"/> instances.
         /// </summary>
         /// <param name="configuration"></param>
+        /// <param name="env"></param>
         public Startup(IConfiguration configuration, IWebHostEnvironment env)
         {
             WebHostEnvironment = env;
             Configuration = configuration;
-            _jsonOperations = new JsonOperations();
+            JsonOperations = new JsonOperations();
         }
 
         /// <summary>
@@ -79,7 +90,7 @@ namespace Milvasoft.SampleAPI.AppStartup
 
             services.ConfigureDatabase(Configuration);
 
-            services.ConfigureIdentity(Configuration, _jsonOperations);
+            services.ConfigureIdentity(Configuration, JsonOperations);
 
             services.ConfigureVersioning();
 
@@ -87,6 +98,11 @@ namespace Milvasoft.SampleAPI.AppStartup
 
         }
 
+        /// <summary>
+        /// Configures tenant aware specifications.
+        /// </summary>
+        /// <param name="t"></param>
+        /// <param name="c"></param>
         public static void ConfigureMultitenantContainer(CachedTenant t, ContainerBuilder c)
         {
             c.Register(container =>

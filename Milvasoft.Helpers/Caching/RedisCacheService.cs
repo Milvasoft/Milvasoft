@@ -199,7 +199,7 @@ namespace Milvasoft.Helpers.Caching
             catch (MilvaUserFriendlyException)
             {
                 if (milvaLogger != null)
-                    milvaLogger.LogFatalAsync("Cannot reach redis server.", MailSubject.Error);
+                    _ = milvaLogger.LogFatalAsync("Cannot reach redis server.", MailSubject.Error);
 
                 throw;
             }
@@ -234,7 +234,7 @@ namespace Milvasoft.Helpers.Caching
             catch (MilvaUserFriendlyException)
             {
                 if (milvaLogger != null)
-                    milvaLogger.LogFatalAsync("Cannot reach redis server.", MailSubject.Error);
+                    _ = milvaLogger.LogFatalAsync("Cannot reach redis server.", MailSubject.Error);
 
                 throw;
             }
