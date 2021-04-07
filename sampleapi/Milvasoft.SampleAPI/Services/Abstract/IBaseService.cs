@@ -1,4 +1,5 @@
 ﻿using Milvasoft.Helpers.Models;
+using Milvasoft.SampleAPI.DTOs;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -9,59 +10,52 @@ namespace Milvasoft.SampleAPI.Services.Abstract
     /// <summary>
     /// Base services for all concrete services.
     /// </summary>
-    /// <typeparam name="TDTO"></typeparam>
-    public interface IBaseService<TDTO, TSpec, TAddDTO, TUpdateDTO>
+    /// <typeparam name="TAddDTO">DTO for add operations.</typeparam>
+    /// <typeparam name="TEntityForAdminDTO">Get entitiy or entities for admin.</typeparam>
+    /// <typeparam name="TEntityForMentorDTO">Get entity or entities for mentor.</typeparam>
+    /// <typeparam name="TEntityForStudentDTO">Get entity or entities for student.</typeparam>
+    /// <typeparam name="TSpec">Spec for filter operations.</typeparam>
+    /// <typeparam name="TUpdateDTO">DTO for update operations.</typeparam>
+    public interface IBaseService<TSpec, TAddDTO, TUpdateDTO,TEntityForStudentDTO,TEntityForMentorDTO,TEntityForAdminDTO>
     {
         /// <summary>
         /// Get all entities for student from database.
         /// </summary>
         /// <returns></returns>
-        Task<PaginationDTO<TDTO>> GetEntitiesForStudentAsync(int pageIndex,
-                                                    int requestedItemCount,
-                                                    string orderByProperty,
-                                                    bool orderByAscending,
-                                                    TSpec spec);
+        Task<PaginationDTO<TEntityForStudentDTO>> GetEntitiesForStudentAsync(PaginationParamsWithSpec<TSpec> paginationParams);
 
         /// <summary>
         /// Get all entities for admin from database.
         /// </summary>
         /// <returns></returns>
-        Task<PaginationDTO<TDTO>> GetEntitiesForAdminAsync(int pageIndex,
-                                                  int requestedItemCount,
-                                                  string orderByProperty,
-                                                  bool orderByAscending,
-                                                  TSpec spec);
+        Task<PaginationDTO<TEntityForAdminDTO>> GetEntitiesForAdminAsync(PaginationParamsWithSpec<TSpec> paginationParams);
 
         /// <summary>
         /// Get all entities for mentor from database.
         /// </summary>
         /// <returns></returns>
-        Task<PaginationDTO<TDTO>> GetEntitiesForMentorAsync(int pageIndex,
-                                                   int requestedItemCount,
-                                                   string orderByProperty,
-                                                   bool orderByAscending,
-                                                   TSpec spec);
+        Task<PaginationDTO<TEntityForMentorDTO>> GetEntitiesForMentorAsync(PaginationParamsWithSpec<TSpec> paginationParams);
 
         /// <summary>
         /// Get one entity by id.
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        Task<TDTO> GetEntityForStudentAsync(Guid id);
+        Task<TEntityForStudentDTO> GetEntityForStudentAsync(Guid id);
 
         /// <summary>
         /// Get one entity for admin by id.
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        Task<TDTO> GetEntityForAdminAsync(Guid id);
+        Task<TEntityForAdminDTO> GetEntityForAdminAsync(Guid id);
 
         /// <summary>
         /// Get one entity for mentor by id.
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        Task<TDTO> GetEntityForMentorAsync(Guid id);
+        Task<TEntityForMentorDTO> GetEntityForMentorAsync(Guid id);
 
         /// <summary>
         /// Adds single entity to database.

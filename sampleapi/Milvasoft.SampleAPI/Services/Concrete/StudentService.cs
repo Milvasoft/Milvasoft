@@ -2,6 +2,7 @@
 using Milvasoft.Helpers.DataAccess.IncludeLibrary;
 using Milvasoft.Helpers.Models;
 using Milvasoft.SampleAPI.Data;
+using Milvasoft.SampleAPI.DTOs;
 using Milvasoft.SampleAPI.DTOs.MentorDTOs;
 using Milvasoft.SampleAPI.DTOs.StudentDTOs;
 using Milvasoft.SampleAPI.Entity;
@@ -40,20 +41,21 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// Get students for admin.
         /// </summary>
         /// <returns></returns>
-        public async Task<PaginationDTO<StudentDTO>> GetEntitiesForAdminAsync(int pageIndex,
-                                                                               int requestedItemCount,
-                                                                               string orderByProperty = null,
-                                                                               bool orderByAscending = false,
-                                                                               StudentSpec studentSpec = null)
+        public async Task<PaginationDTO<StudentForAdminDTO>> GetEntitiesForAdminAsync(PaginationParamsWithSpec<StudentSpec> studentPaginationParams)
         {
             Func<IIncludable<Student>, IIncludable> includes = i => i.Include(md => md.Mentor);
 
             var (students, pageCount, totalDataCount) = await _studentRepository.PreparePaginationDTO<IBaseRepository<Student, Guid, EducationAppDbContext>, Student, Guid>
-                                                                                                                (pageIndex, requestedItemCount, orderByProperty, orderByAscending, studentSpec?.ToExpression(), includes).ConfigureAwait(false);
+                                                                                                                (studentPaginationParams.PageIndex,
+                                                                                                                studentPaginationParams.RequestedItemCount,
+                                                                                                                studentPaginationParams.OrderByProperty = null,
+                                                                                                                studentPaginationParams.OrderByAscending = false,
+                                                                                                                studentPaginationParams.Spec?.ToExpression(),
+                                                                                                                includes).ConfigureAwait(false);
 
-            return new PaginationDTO<StudentDTO>
+            return new PaginationDTO<StudentForAdminDTO>
             {
-                DTOList = students.CheckList(i => students.Select(student => new StudentDTO
+                DTOList = students.CheckList(i => students.Select(student => new StudentForAdminDTO
                 {
                     Name = student.Name,
                     Surname = student.Surname,
@@ -80,22 +82,23 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// Get students for mentor.
         /// </summary>
         /// <returns></returns>
-        public async Task<PaginationDTO<StudentDTO>> GetEntitiesForMentorAsync(int pageIndex,
-                                                                               int requestedItemCount,
-                                                                               string orderByProperty = null,
-                                                                               bool orderByAscending = false,
-                                                                               StudentSpec studentSpec = null)
+        public async Task<PaginationDTO<StudentForMentorDTO>> GetEntitiesForMentorAsync(PaginationParamsWithSpec<StudentSpec> studentPaginationParams)
         {
             Func<IIncludable<Student>, IIncludable> includes = i => i.Include(md => md.Mentor)
                                                                         .Include(assi => assi.OldAssignments);
 
 
             var (students, pageCount, totalDataCount) = await _studentRepository.PreparePaginationDTO<IBaseRepository<Student, Guid, EducationAppDbContext>, Student, Guid>
-                                                                                                                (pageIndex, requestedItemCount, orderByProperty, orderByAscending, studentSpec?.ToExpression(), includes).ConfigureAwait(false);
+                                                                                                                (studentPaginationParams.PageIndex,
+                                                                                                                studentPaginationParams.RequestedItemCount,
+                                                                                                                studentPaginationParams.OrderByProperty = null,
+                                                                                                                studentPaginationParams.OrderByAscending = false,
+                                                                                                                studentPaginationParams.Spec?.ToExpression(),
+                                                                                                                includes).ConfigureAwait(false);
 
-            return new PaginationDTO<StudentDTO>
+            return new PaginationDTO<StudentForMentorDTO>
             {
-                DTOList = students.CheckList(i => students.Select(student => new StudentDTO
+                DTOList = students.CheckList(i => students.Select(student => new StudentForMentorDTO
                 {
                     Name = student.Name,
                     Surname = student.Surname,
@@ -127,18 +130,18 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// Get students for student.
         /// </summary>
         /// <returns></returns>
-        public async Task<PaginationDTO<StudentDTO>> GetEntitiesForStudentAsync(int pageIndex,
-                                                                               int requestedItemCount,
-                                                                               string orderByProperty = null,
-                                                                               bool orderByAscending = false,
-                                                                               StudentSpec studentSpec = null)
+        public async Task<PaginationDTO<StudentForStudentDTO>> GetEntitiesForStudentAsync(PaginationParamsWithSpec<StudentSpec> studentPaginationParams)
         {
             var (students, pageCount, totalDataCount) = await _studentRepository.PreparePaginationDTO<IBaseRepository<Student, Guid, EducationAppDbContext>, Student, Guid>
-                                                                                                                (pageIndex, requestedItemCount, orderByProperty, orderByAscending, studentSpec?.ToExpression()).ConfigureAwait(false);
+                                                                                                                (studentPaginationParams.PageIndex,
+                                                                                                                studentPaginationParams.RequestedItemCount,
+                                                                                                                studentPaginationParams.OrderByProperty = null,
+                                                                                                                studentPaginationParams.OrderByAscending = false,
+                                                                                                                studentPaginationParams.Spec?.ToExpression()).ConfigureAwait(false);
 
-            return new PaginationDTO<StudentDTO>
+            return new PaginationDTO<StudentForStudentDTO>
             {
-                DTOList = students.CheckList(i => students.Select(student => new StudentDTO
+                DTOList = students.CheckList(i => students.Select(student => new StudentForStudentDTO
                 {
                     Name = student.Name,
                     Surname = student.Surname,
@@ -157,11 +160,11 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// </summary>
         /// <param name="studenId"></param>
         /// <returns></returns>
-        public async Task<StudentDTO> GetEntityForStudentAsync(Guid studenId)
+        public async Task<StudentForStudentDTO> GetEntityForStudentAsync(Guid studenId)
         {
             var student = await _studentRepository.GetByIdAsync(studenId).ConfigureAwait(false);
 
-            return new StudentDTO
+            return new StudentForStudentDTO
             {
                 Name = student.Name,
                 Surname = student.Surname,
@@ -177,7 +180,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// </summary>
         /// <param name="studenId"></param>
         /// <returns></returns>
-        public async Task<StudentDTO> GetEntityForAdminAsync(Guid studenId)
+        public async Task<StudentForAdminDTO> GetEntityForAdminAsync(Guid studenId)
         {
             Func<IIncludable<Student>, IIncludable> includes = i => i.Include(md => md.Mentor);
 
@@ -185,7 +188,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
 
             var student = await _studentRepository.GetByIdAsync(studenId, includes).ConfigureAwait(false);
 
-            return new StudentDTO
+            return new StudentForAdminDTO
             {
                 Id = student.Id,
                 Name = student.Name,
@@ -214,14 +217,14 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// </summary>
         /// <param name="studenId"></param>
         /// <returns></returns>
-        public async Task<StudentDTO> GetEntityForMentorAsync(Guid studenId)
+        public async Task<StudentForMentorDTO> GetEntityForMentorAsync(Guid studenId)
         {
             Func<IIncludable<Student>, IIncludable> includes = i => i.Include(md => md.Mentor)
                                                                      .Include(oa => oa.OldAssignments);
 
             var student = await _studentRepository.GetByIdAsync(studenId, includes).ConfigureAwait(false);
 
-            return new StudentDTO
+            return new StudentForMentorDTO
             {
                 Name = student.Name,
                 Surname = student.Surname,

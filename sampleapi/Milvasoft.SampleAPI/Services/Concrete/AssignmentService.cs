@@ -1,6 +1,7 @@
 ﻿using Milvasoft.Helpers.DataAccess.Abstract;
 using Milvasoft.Helpers.Models;
 using Milvasoft.SampleAPI.Data;
+using Milvasoft.SampleAPI.DTOs;
 using Milvasoft.SampleAPI.DTOs.AssignmentDTOs;
 using Milvasoft.SampleAPI.Entity;
 using Milvasoft.SampleAPI.Services.Abstract;
@@ -34,18 +35,18 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// Get all assignment by <paramref name="assignmentSpec"/>
         /// </summary>
         /// <returns></returns>
-        public async Task<PaginationDTO<AssignmentDTO>> GetEntitiesForStudentAsync(int pageIndex,
-                                                                                     int requestedItemCount,
-                                                                                     string orderByProperty = null,
-                                                                                     bool orderByAscending = false,
-                                                                                      AssignmentSpec assignmentSpec = null)
+        public async Task<PaginationDTO<AssignmentForStudentDTO>> GetEntitiesForStudentAsync(PaginationParamsWithSpec<AssignmentSpec> assignmentPaginationParams)
         {
             var (asssignments, pageCount, totalDataCount) = await _assignmentRepository.PreparePaginationDTO<IBaseRepository<Assignment, Guid, EducationAppDbContext>, Assignment, Guid>
-                                                                                                                (pageIndex, requestedItemCount, orderByProperty, orderByAscending, assignmentSpec?.ToExpression()).ConfigureAwait(false);
+                                                                                                                (assignmentPaginationParams.PageIndex,
+                                                                                                                assignmentPaginationParams.RequestedItemCount,
+                                                                                                                assignmentPaginationParams.OrderByProperty = null,
+                                                                                                                assignmentPaginationParams.OrderByAscending = false,
+                                                                                                                assignmentPaginationParams.Spec?.ToExpression()).ConfigureAwait(false);
 
-            return new PaginationDTO<AssignmentDTO>
+            return new PaginationDTO<AssignmentForStudentDTO>
             {
-                DTOList = asssignments.CheckList(i => asssignments.Select(assignment => new AssignmentDTO
+                DTOList = asssignments.CheckList(i => asssignments.Select(assignment => new AssignmentForStudentDTO
                 {
                     Title = assignment.Title,
                     Description = assignment.Description,
@@ -66,18 +67,18 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// Get assignments for admin by <paramref name="assignmentSpec"/>
         /// </summary>
         /// <returns></returns>
-        public async Task<PaginationDTO<AssignmentDTO>> GetEntitiesForAdminAsync(int pageIndex,
-                                                                                     int requestedItemCount,
-                                                                                     string orderByProperty = null,
-                                                                                     bool orderByAscending = false,
-                                                                                      AssignmentSpec assignmentSpec = null)
+        public async Task<PaginationDTO<AssignmentForAdminDTO>> GetEntitiesForAdminAsync(PaginationParamsWithSpec<AssignmentSpec> assignmentPaginationParams)
         {
             var (asssignments, pageCount, totalDataCount) = await _assignmentRepository.PreparePaginationDTO<IBaseRepository<Assignment, Guid, EducationAppDbContext>, Assignment, Guid>
-                                                                                                                 (pageIndex, requestedItemCount, orderByProperty, orderByAscending, assignmentSpec?.ToExpression()).ConfigureAwait(false);
+                                                                                                                 (assignmentPaginationParams.PageIndex,
+                                                                                                                assignmentPaginationParams.RequestedItemCount,
+                                                                                                                assignmentPaginationParams.OrderByProperty = null,
+                                                                                                                assignmentPaginationParams.OrderByAscending = false,
+                                                                                                                assignmentPaginationParams.Spec?.ToExpression()).ConfigureAwait(false);
 
-            return new PaginationDTO<AssignmentDTO>
+            return new PaginationDTO<AssignmentForAdminDTO>
             {
-                DTOList = asssignments.CheckList(i => asssignments.Select(assignment => new AssignmentDTO
+                DTOList = asssignments.CheckList(i => asssignments.Select(assignment => new AssignmentForAdminDTO
                 {
                     Title = assignment.Title,
                     Description = assignment.Description,
@@ -99,18 +100,18 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// Get assignments for mentor by <paramref name="assignmentSpec"/>
         /// </summary>
         /// <returns></returns>
-        public async Task<PaginationDTO<AssignmentDTO>> GetEntitiesForMentorAsync(int pageIndex,
-                                                                                     int requestedItemCount,
-                                                                                     string orderByProperty = null,
-                                                                                     bool orderByAscending = false,
-                                                                                      AssignmentSpec assignmentSpec = null)
+        public async Task<PaginationDTO<AssignmentForMentorDTO>> GetEntitiesForMentorAsync(PaginationParamsWithSpec<AssignmentSpec> assignmentPaginationParams)
         {
             var (asssignments, pageCount, totalDataCount) = await _assignmentRepository.PreparePaginationDTO<IBaseRepository<Assignment, Guid, EducationAppDbContext>, Assignment, Guid>
-                                                                                                                 (pageIndex, requestedItemCount, orderByProperty, orderByAscending, assignmentSpec?.ToExpression()).ConfigureAwait(false);
+                                                                                                                  (assignmentPaginationParams.PageIndex,
+                                                                                                                assignmentPaginationParams.RequestedItemCount,
+                                                                                                                assignmentPaginationParams.OrderByProperty = null,
+                                                                                                                assignmentPaginationParams.OrderByAscending = false,
+                                                                                                                assignmentPaginationParams.Spec?.ToExpression()).ConfigureAwait(false);
 
-            return new PaginationDTO<AssignmentDTO>
+            return new PaginationDTO<AssignmentForMentorDTO>
             {
-                DTOList = asssignments.CheckList(i => asssignments.Select(assignment => new AssignmentDTO
+                DTOList = asssignments.CheckList(i => asssignments.Select(assignment => new AssignmentForMentorDTO
                 {
                     Title = assignment.Title,
                     Description = assignment.Description,
@@ -132,11 +133,11 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// </summary>
         /// <param name="assignmentId"></param>
         /// <returns></returns>
-        public async Task<AssignmentDTO> GetEntityForStudentAsync(Guid assignmentId)
+        public async Task<AssignmentForStudentDTO> GetEntityForStudentAsync(Guid assignmentId)
         {
             var assignment = await _assignmentRepository.GetByIdAsync(assignmentId).ConfigureAwait(false);
 
-            return new AssignmentDTO
+            return new AssignmentForStudentDTO
             {
                 Title = assignment.Title,
                 Description = assignment.Description,
@@ -155,11 +156,11 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// </summary>
         /// <param name="assignmentId"></param>
         /// <returns></returns>
-        public async Task<AssignmentDTO> GetEntityForAdminAsync(Guid assignmentId)
+        public async Task<AssignmentForAdminDTO> GetEntityForAdminAsync(Guid assignmentId)
         {
             var assignment = await _assignmentRepository.GetByIdAsync(assignmentId).ConfigureAwait(false);
 
-            return new AssignmentDTO
+            return new AssignmentForAdminDTO
             {
                 Title = assignment.Title,
                 Description = assignment.Description,
@@ -181,11 +182,11 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// </summary>
         /// <param name="assignmentId"></param>
         /// <returns></returns>
-        public async Task<AssignmentDTO> GetEntityForMentorAsync(Guid assignmentId)
+        public async Task<AssignmentForMentorDTO> GetEntityForMentorAsync(Guid assignmentId)
         {
             var assignment = await _assignmentRepository.GetByIdAsync(assignmentId).ConfigureAwait(false);
 
-            return new AssignmentDTO
+            return new AssignmentForMentorDTO
             {
                 Title = assignment.Title,
                 Description = assignment.Description,

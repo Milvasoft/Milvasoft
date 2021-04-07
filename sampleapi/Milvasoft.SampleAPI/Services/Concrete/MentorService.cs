@@ -1,7 +1,10 @@
-﻿using Milvasoft.Helpers.DataAccess.Abstract;
+﻿using Microsoft.AspNetCore.Identity;
+using Milvasoft.Helpers.DataAccess.Abstract;
 using Milvasoft.Helpers.DataAccess.IncludeLibrary;
+using Milvasoft.Helpers.Exceptions;
 using Milvasoft.Helpers.Models;
 using Milvasoft.SampleAPI.Data;
+using Milvasoft.SampleAPI.DTOs;
 using Milvasoft.SampleAPI.DTOs.AnnouncementDTOs;
 using Milvasoft.SampleAPI.DTOs.MentorDTOs;
 using Milvasoft.SampleAPI.DTOs.StudentDTOs;
@@ -22,15 +25,17 @@ namespace Milvasoft.SampleAPI.Services.Concrete
     /// </summary>
     public class MentorService : IMentorService
     {
-
+        private readonly UserManager<AppUser> _userManager;
         private readonly IBaseRepository<Mentor, Guid, EducationAppDbContext> _mentorRepository;
 
         /// <summary>
         /// Performs constructor injection for repository interfaces used in this service.
         /// </summary>
         /// <param name="mentorRepository"></param>
-        public MentorService(IBaseRepository<Mentor, Guid, EducationAppDbContext> mentorRepository)
+        /// <param name="userManager"></param>
+        public MentorService(IBaseRepository<Mentor, Guid, EducationAppDbContext> mentorRepository, UserManager<AppUser> userManager)
         {
+            _userManager = userManager;
             _mentorRepository = mentorRepository;
         }
 
@@ -38,22 +43,23 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// Get mentors for admin.
         /// </summary>
         /// <returns></returns>
-        public async Task<PaginationDTO<MentorDTO>> GetEntitiesForAdminAsync(int pageIndex,
-                                                                             int requestedItemCount,
-                                                                             string orderByProperty = null,
-                                                                             bool orderByAscending = false,
-                                                                             MentorSpec mentorSpec = null)
+        public async Task<PaginationDTO<MentorForAdminDTO>> GetEntitiesForAdminAsync(PaginationParamsWithSpec<MentorSpec> mentorPaginationParams)
         {
             Func<IIncludable<Mentor>, IIncludable> includes = i => i.Include(p => p.PublishedAnnouncements)
                                                                      .Include(s => s.Students)
                                                                      .Include(p => p.Professions);
 
             var (mentors, pageCount, totalDataCount) = await _mentorRepository.PreparePaginationDTO<IBaseRepository<Mentor, Guid, EducationAppDbContext>, Mentor, Guid>
-                                                                                                                (pageIndex, requestedItemCount, orderByProperty, orderByAscending, mentorSpec?.ToExpression(), includes).ConfigureAwait(false);
+                                                                                                               (mentorPaginationParams.PageIndex,
+                                                                                                                mentorPaginationParams.RequestedItemCount,
+                                                                                                                mentorPaginationParams.OrderByProperty = null,
+                                                                                                                mentorPaginationParams.OrderByAscending = false,
+                                                                                                                mentorPaginationParams.Spec?.ToExpression(),
+                                                                                                                includes).ConfigureAwait(false);
 
-            return new PaginationDTO<MentorDTO>
+            return new PaginationDTO<MentorForAdminDTO>
             {
-                DTOList = mentors.CheckList(i => mentors.Select(mentor => new MentorDTO
+                DTOList = mentors.CheckList(i => mentors.Select(mentor => new MentorForAdminDTO
                 {
                     Name = mentor.Name,
                     Surname = mentor.Surname,
@@ -80,22 +86,23 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// Get mentors for mentor.
         /// </summary>
         /// <returns></returns>
-        public async Task<PaginationDTO<MentorDTO>> GetEntitiesForMentorAsync(int pageIndex,
-                                                                              int requestedItemCount,
-                                                                              string orderByProperty = null,
-                                                                              bool orderByAscending = false,
-                                                                              MentorSpec mentorSpec = null)
+        public async Task<PaginationDTO<MentorForMentorDTO>> GetEntitiesForMentorAsync(PaginationParamsWithSpec<MentorSpec> mentorPaginationParams)
         {
             Func<IIncludable<Mentor>, IIncludable> includes = i => i.Include(p => p.PublishedAnnouncements)
                                                                      .Include(s => s.Students)
                                                                      .Include(p => p.Professions);
 
             var (mentors, pageCount, totalDataCount) = await _mentorRepository.PreparePaginationDTO<IBaseRepository<Mentor, Guid, EducationAppDbContext>, Mentor, Guid>
-                                                                                                                (pageIndex, requestedItemCount, orderByProperty, orderByAscending, mentorSpec?.ToExpression(), includes).ConfigureAwait(false);
+                                                                                                                (mentorPaginationParams.PageIndex,
+                                                                                                                mentorPaginationParams.RequestedItemCount,
+                                                                                                                mentorPaginationParams.OrderByProperty = null,
+                                                                                                                mentorPaginationParams.OrderByAscending = false,
+                                                                                                                mentorPaginationParams.Spec?.ToExpression(),
+                                                                                                                includes).ConfigureAwait(false);
 
-            return new PaginationDTO<MentorDTO>
+            return new PaginationDTO<MentorForMentorDTO>
             {
-                DTOList = mentors.CheckList(i => mentors.Select(mentor => new MentorDTO
+                DTOList = mentors.CheckList(i => mentors.Select(mentor => new MentorForMentorDTO
                 {
                     Name = mentor.Name,
                     Surname = mentor.Surname,
@@ -121,21 +128,22 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// Get mentors for student.
         /// </summary>
         /// <returns></returns>
-        public async Task<PaginationDTO<MentorDTO>> GetEntitiesForStudentAsync(int pageIndex,
-                                                                               int requestedItemCount,
-                                                                               string orderByProperty = null,
-                                                                               bool orderByAscending = false,
-                                                                               MentorSpec mentorSpec = null)
+        public async Task<PaginationDTO<MentorForStudentDTO>> GetEntitiesForStudentAsync(PaginationParamsWithSpec<MentorSpec> mentorPaginationParams)
         {
             Func<IIncludable<Mentor>, IIncludable> includes = i => i.Include(p => p.PublishedAnnouncements)
                                                                      .Include(p => p.Professions);
 
             var (mentors, pageCount, totalDataCount) = await _mentorRepository.PreparePaginationDTO<IBaseRepository<Mentor, Guid, EducationAppDbContext>, Mentor, Guid>
-                                                                                                                (pageIndex, requestedItemCount, orderByProperty, orderByAscending, mentorSpec?.ToExpression(), includes).ConfigureAwait(false);
+                                                                                                                (mentorPaginationParams.PageIndex,
+                                                                                                                mentorPaginationParams.RequestedItemCount,
+                                                                                                                mentorPaginationParams.OrderByProperty = null,
+                                                                                                                mentorPaginationParams.OrderByAscending = false,
+                                                                                                                mentorPaginationParams.Spec?.ToExpression(),
+                                                                                                                includes).ConfigureAwait(false);
 
-            return new PaginationDTO<MentorDTO>
+            return new PaginationDTO<MentorForStudentDTO>
             {
-                DTOList = mentors.CheckList(i => mentors.Select(mentor => new MentorDTO
+                DTOList = mentors.CheckList(i => mentors.Select(mentor => new MentorForStudentDTO
                 {
                     Name = mentor.Name,
                     Surname = mentor.Surname,
@@ -158,14 +166,14 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// </summary>
         /// <param name="mentorId"></param>
         /// <returns></returns>
-        public async Task<MentorDTO> GetEntityForAdminAsync(Guid mentorId)
+        public async Task<MentorForAdminDTO> GetEntityForAdminAsync(Guid mentorId)
         {
             Func<IIncludable<Mentor>, IIncludable> includes = i => i.Include(p => p.PublishedAnnouncements)
                                                                      .Include(s => s.Students)
                                                                      .Include(p => p.Professions);
 
             var mentor = await _mentorRepository.GetByIdAsync(mentorId, includes).ConfigureAwait(false);
-            return new MentorDTO
+            return new MentorForAdminDTO
             {
                 Name = mentor.Name,
                 Surname = mentor.Surname,
@@ -192,7 +200,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// </summary>
         /// <param name="mentorId"></param>
         /// <returns></returns>
-        public async Task<MentorDTO> GetEntityForMentorAsync(Guid mentorId)
+        public async Task<MentorForMentorDTO> GetEntityForMentorAsync(Guid mentorId)
         {
 
             Func<IIncludable<Mentor>, IIncludable> includes = i => i.Include(p => p.PublishedAnnouncements)
@@ -200,14 +208,14 @@ namespace Milvasoft.SampleAPI.Services.Concrete
                                                                      .Include(p => p.Professions);
 
             var mentor = await _mentorRepository.GetByIdAsync(mentorId, includes).ConfigureAwait(false);
-            return new MentorDTO
+            return new MentorForMentorDTO
             {
                 Name = mentor.Name,
                 Surname = mentor.Surname,
-                CreationDate = mentor.CreationDate,
                 Professions = mentor.Professions.CheckList(i => mentor.Professions?.Select(pr => new MentorProfessionDTO
                 {
-                    Id = pr.ProfessionId
+                    ProfessionId = pr.ProfessionId
+                    
                 })),
                 PublishedAnnouncements = mentor.PublishedAnnouncements.CheckList(i => mentor.PublishedAnnouncements?.Select(pa => new AnnouncementDTO
                 {
@@ -225,13 +233,13 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// </summary>
         /// <param name="mentorId"></param>
         /// <returns></returns>
-        public async Task<MentorDTO> GetEntityForStudentAsync(Guid mentorId)
+        public async Task<MentorForStudentDTO> GetEntityForStudentAsync(Guid mentorId)
         {
             Func<IIncludable<Mentor>, IIncludable> includes = i => i.Include(p => p.PublishedAnnouncements)
                                                                     .Include(p => p.Professions);
 
             var mentor = await _mentorRepository.GetByIdAsync(mentorId, includes).ConfigureAwait(false);
-            return new MentorDTO
+            return new MentorForStudentDTO
             {
                 Name = mentor.Name,
                 Surname = mentor.Surname,
@@ -262,10 +270,38 @@ namespace Milvasoft.SampleAPI.Services.Concrete
                                      (from pp in addMentorDTO.Professions
                                       select new MentorProfession
                                       {
-                                          Id = pp.Id
+                                          ProfessionId=pp
                                       }).ToList() : null,
             };
-            await _mentorRepository.AddAsync(mentor).ConfigureAwait(false);
+            var appUser = new AppUser
+            {
+                UserName = addMentorDTO.UserName,
+                Email = addMentorDTO.Email,
+                PhoneNumber = addMentorDTO.PhoneNumber,
+                Mentor = mentor
+            };
+
+            await AddAsync(appUser, addMentorDTO.Password).ConfigureAwait(false);
+            
+
+
+        }
+
+        /// <summary>
+        /// Add appuser with mentor.
+        /// </summary>
+        /// <param name="user"></param>
+        /// <param name="password"></param>
+        /// <returns></returns>
+        private async Task AddAsync(AppUser user, string password)
+        {
+            if (user.Mentor == null)
+                throw new MilvaUserFriendlyException("PleaseEnterPersonnelInformation");
+
+            var result = await _userManager.CreateAsync(user, password);
+
+            if (!result.Succeeded)
+                throw new MilvaUserFriendlyException(string.Join("~", result.Errors.Select(m => m.Description)));
         }
 
         /// <summary>

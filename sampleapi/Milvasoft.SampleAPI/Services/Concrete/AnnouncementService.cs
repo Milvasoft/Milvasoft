@@ -2,6 +2,7 @@
 using Milvasoft.Helpers.DataAccess.IncludeLibrary;
 using Milvasoft.Helpers.Models;
 using Milvasoft.SampleAPI.Data;
+using Milvasoft.SampleAPI.DTOs;
 using Milvasoft.SampleAPI.DTOs.AnnouncementDTOs;
 using Milvasoft.SampleAPI.DTOs.MentorDTOs;
 using Milvasoft.SampleAPI.Entity;
@@ -36,20 +37,21 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// Get all announcement for student.
         /// </summary>
         /// <returns></returns>
-        public async Task<PaginationDTO<AnnouncementDTO>> GetEntitiesForStudentAsync(int pageIndex,
-                                                                                     int requestedItemCount,
-                                                                                     string orderByProperty = null,
-                                                                                     bool orderByAscending = false,
-                                                                                     AnnouncementSpec announcementSpec = null)
+        public async Task<PaginationDTO<AnnouncementForStudentDTO>> GetEntitiesForStudentAsync(PaginationParamsWithSpec<AnnouncementSpec> announcementPaginationParams)
         {
             Func<IIncludable<Announcement>, IIncludable> includes = i => i.Include(md => md.PublisherMentor);
 
             var (announcements, pageCount, totalDataCount) = await _announcementRepository.PreparePaginationDTO<IBaseRepository<Announcement, Guid, EducationAppDbContext>, Announcement, Guid>
-                                                                                                                (pageIndex, requestedItemCount, orderByProperty, orderByAscending, announcementSpec?.ToExpression(), includes).ConfigureAwait(false);
+                                                                                                                (announcementPaginationParams.PageIndex, 
+                                                                                                                announcementPaginationParams.RequestedItemCount, 
+                                                                                                                announcementPaginationParams.OrderByProperty=null, 
+                                                                                                                announcementPaginationParams.OrderByAscending=false, 
+                                                                                                                announcementPaginationParams.Spec?.ToExpression(),
+                                                                                                                includes).ConfigureAwait(false);
 
-            return new PaginationDTO<AnnouncementDTO>
+            return new PaginationDTO<AnnouncementForStudentDTO>
             {
-                DTOList = announcements.CheckList(i => announcements.Select(announcement => new AnnouncementDTO
+                DTOList = announcements.CheckList(i => announcements.Select(announcement => new AnnouncementForStudentDTO
                 {
                     Title = announcement.Title,
                     Description = announcement.Description,
@@ -67,30 +69,29 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// Get all announcement for admin.
         /// </summary>
         /// <returns></returns>
-        public async Task<PaginationDTO<AnnouncementDTO>> GetEntitiesForAdminAsync(int pageIndex,
-                                                                                   int requestedItemCount,
-                                                                                   string orderByProperty = null,
-                                                                                   bool orderByAscending = false,
-                                                                                   AnnouncementSpec announcementSpec = null)
+        public async Task<PaginationDTO<AnnouncementForAdminDTO>> GetEntitiesForAdminAsync(PaginationParamsWithSpec<AnnouncementSpec> announcementPaginationParams)
         {
             Func<IIncludable<Announcement>, IIncludable> includes = i => i.Include(md => md.PublisherMentor);
 
             var (announcements, pageCount, totalDataCount) = await _announcementRepository.PreparePaginationDTO<IBaseRepository<Announcement, Guid, EducationAppDbContext>, Announcement, Guid>
-                                                                                                                (pageIndex, requestedItemCount, orderByProperty, orderByAscending, announcementSpec?.ToExpression(), includes).ConfigureAwait(false);
+                                                                                                                (announcementPaginationParams.PageIndex,
+                                                                                                                announcementPaginationParams.RequestedItemCount,
+                                                                                                                announcementPaginationParams.OrderByProperty = null,
+                                                                                                                announcementPaginationParams.OrderByAscending = false,
+                                                                                                                announcementPaginationParams.Spec?.ToExpression(),
+                                                                                                                includes).ConfigureAwait(false);
 
-            return new PaginationDTO<AnnouncementDTO>
+            return new PaginationDTO<AnnouncementForAdminDTO>
             {
-                DTOList = announcements.CheckList(i => announcements.Select(announcement => new AnnouncementDTO
+                DTOList = announcements.CheckList(i => announcements.Select(announcement => new AnnouncementForAdminDTO
                 {
-                    Id = announcement.Id,
                     Title = announcement.Title,
                     Description = announcement.Description,
                     IsFixed = announcement.IsFixed,
                     PublisherMentor = announcement.PublisherMentor.CheckObject(i => new MentorDTO
                     {
                         Id = i.Id
-                    }),
-                    CreatorUserId = announcement.MentorId
+                    })
                 })),
                 PageCount = pageCount,
                 TotalDataCount = totalDataCount
@@ -101,20 +102,21 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// Get all announcement for mentor.
         /// </summary>
         /// <returns></returns>
-        public async Task<PaginationDTO<AnnouncementDTO>> GetEntitiesForMentorAsync(int pageIndex,
-                                                                                    int requestedItemCount,
-                                                                                    string orderByProperty = null,
-                                                                                    bool orderByAscending = false,
-                                                                                    AnnouncementSpec announcementSpec = null)
+        public async Task<PaginationDTO<AnnouncementForMentorDTO>> GetEntitiesForMentorAsync(PaginationParamsWithSpec<AnnouncementSpec> announcementPaginationParams)
         {
             Func<IIncludable<Announcement>, IIncludable> includes = i => i.Include(md => md.PublisherMentor);
 
             var (announcements, pageCount, totalDataCount) = await _announcementRepository.PreparePaginationDTO<IBaseRepository<Announcement, Guid, EducationAppDbContext>, Announcement, Guid>
-                                                                                                                (pageIndex, requestedItemCount, orderByProperty, orderByAscending, announcementSpec?.ToExpression(), includes).ConfigureAwait(false);
+                                                                                                                (announcementPaginationParams.PageIndex,
+                                                                                                                announcementPaginationParams.RequestedItemCount,
+                                                                                                                announcementPaginationParams.OrderByProperty = null,
+                                                                                                                announcementPaginationParams.OrderByAscending = false,
+                                                                                                                announcementPaginationParams.Spec?.ToExpression(),
+                                                                                                                includes).ConfigureAwait(false);
 
-            return new PaginationDTO<AnnouncementDTO>
+            return new PaginationDTO<AnnouncementForMentorDTO>
             {
-                DTOList = announcements.CheckList(i => announcements.Select(announcement => new AnnouncementDTO
+                DTOList = announcements.CheckList(i => announcements.Select(announcement => new AnnouncementForMentorDTO
                 {
                     Title = announcement.Title,
                     Description = announcement.Description,
@@ -134,25 +136,21 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// </summary>
         /// <param name="announcementId"></param>
         /// <returns></returns>
-        public async Task<AnnouncementDTO> GetEntityForAdminAsync(Guid announcementId)
+        public async Task<AnnouncementForAdminDTO> GetEntityForAdminAsync(Guid announcementId)
         {
             Func<IIncludable<Announcement>, IIncludable> includes = i => i.Include(md => md.PublisherMentor);
 
             var announcement = await _announcementRepository.GetByIdAsync(announcementId, includes).ConfigureAwait(false);
 
-            return new AnnouncementDTO
+            return new AnnouncementForAdminDTO
             {
-                Id = announcement.Id,
                 Title = announcement.Title,
                 Description = announcement.Description,
                 IsFixed = announcement.IsFixed,
                 PublisherMentor = announcement.PublisherMentor.CheckObject(i => new MentorDTO
                 {
                     Id = i.Id
-                }),
-                CreationDate = announcement.CreationDate,
-                CreatorUserId = announcement.MentorId,
-                LastModificationDate = announcement.LastModificationDate
+                })
             };
         }
 
@@ -161,13 +159,13 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// </summary>
         /// <param name="announcementId"></param>
         /// <returns></returns>
-        public async Task<AnnouncementDTO> GetEntityForMentorAsync(Guid announcementId)
+        public async Task<AnnouncementForMentorDTO> GetEntityForMentorAsync(Guid announcementId)
         {
             Func<IIncludable<Announcement>, IIncludable> includes = i => i.Include(md => md.PublisherMentor);
 
             var announcement = await _announcementRepository.GetByIdAsync(announcementId, includes).ConfigureAwait(false);
 
-            return new AnnouncementDTO
+            return new AnnouncementForMentorDTO
             {
                 Title = announcement.Title,
                 Description = announcement.Description,
@@ -184,22 +182,20 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// </summary>
         /// <param name="announcementId"></param>
         /// <returns></returns>
-        public async Task<AnnouncementDTO> GetEntityForStudentAsync(Guid announcementId)
+        public async Task<AnnouncementForStudentDTO> GetEntityForStudentAsync(Guid announcementId)
         {
             Func<IIncludable<Announcement>, IIncludable> includes = i => i.Include(md => md.PublisherMentor);
 
             var announcement = await _announcementRepository.GetByIdAsync(announcementId, includes).ConfigureAwait(false);
 
-            return new AnnouncementDTO
+            return new AnnouncementForStudentDTO
             {
                 Title = announcement.Title,
                 Description = announcement.Description,
                 PublisherMentor = announcement.PublisherMentor.CheckObject(i => new MentorDTO
                 {
                     Id = i.Id
-                }),
-                CreationDate = announcement.CreationDate,
-                LastModificationDate = announcement.LastModificationDate
+                })
             };
         }
 
