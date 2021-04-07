@@ -18,6 +18,17 @@
             <param name="app"></param>
             <returns></returns>
         </member>
+        <member name="T:Milvasoft.SampleAPI.AppStartup.Program">
+            <summary>
+            The main entry point for the application.
+            </summary>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.AppStartup.Program.Main(System.String[])">
+            <summary>
+            The main entry point for the application.
+            </summary>
+            <param name="args"></param>
+        </member>
         <member name="M:Milvasoft.SampleAPI.AppStartup.Program.CreateWebHostBuilder(System.String[])">
             <summary>
             Configures web api configurations.
@@ -95,11 +106,27 @@
             Gets or sets configuration object.
             </summary>
         </member>
+        <member name="F:Milvasoft.SampleAPI.AppStartup.Startup.SharedStringLocalizer">
+            <summary>
+            Static <see cref="T:Milvasoft.SampleAPI.Localization.SharedResource"/> string localizer instance. Do not use this instance it if it is not essential.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.AppStartup.Startup.WebHostEnvironment">
+            <summary>
+            Provides information about the web hosting environment an application is running in.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.AppStartup.Startup.JsonOperations">
+            <summary>
+            Provides add-edit-delete-get process json files that hold one list.
+            </summary>
+        </member>
         <member name="M:Milvasoft.SampleAPI.AppStartup.Startup.#ctor(Microsoft.Extensions.Configuration.IConfiguration,Microsoft.AspNetCore.Hosting.IWebHostEnvironment)">
             <summary>
             Creates a new <see cref="T:Milvasoft.SampleAPI.AppStartup.Startup"/> instances.
             </summary>
             <param name="configuration"></param>
+            <param name="env"></param>
         </member>
         <member name="M:Milvasoft.SampleAPI.AppStartup.Startup.ConfigureServices(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
             <summary>
@@ -107,6 +134,13 @@
             For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
             </summary>
             <param name="services"></param>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.AppStartup.Startup.ConfigureMultitenantContainer(Milvasoft.SampleAPI.DTOs.CachedTenant,Autofac.ContainerBuilder)">
+            <summary>
+            Configures tenant aware specifications.
+            </summary>
+            <param name="t"></param>
+            <param name="c"></param>
         </member>
         <member name="M:Milvasoft.SampleAPI.AppStartup.Startup.Configure(Microsoft.AspNetCore.Builder.IApplicationBuilder,Microsoft.AspNetCore.Hosting.IWebHostEnvironment)">
             <summary>

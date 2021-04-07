@@ -30,7 +30,7 @@ namespace Milvasoft.Helpers.Identity.Concrete
         /// </summary>
         public Task<IdentityResult> ValidateAsync(UserManager<TUser> manager, TUser user)
         {
-            List<IdentityError> errors = new List<IdentityError>();
+            List<IdentityError> errors = new();
 
             //Checking that the username does not start with a numeric expression
             if (int.TryParse(user.UserName[0].ToString(), out int _))

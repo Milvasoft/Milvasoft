@@ -833,35 +833,6 @@
             <param name="value"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.CommonHelper.DescriptionJoin(Microsoft.AspNetCore.Identity.IdentityResult,System.Char)">
-            <summary>
-            Append joins <see cref="P:Microsoft.AspNetCore.Identity.IdentityResult.Errors"/>.Description with <paramref name="seperator"/>.
-            </summary>
-            <param name="result"></param>
-            <param name="seperator"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Milvasoft.Helpers.CommonHelper.DescriptionJoin(Microsoft.AspNetCore.Identity.IdentityResult,System.String)">
-            <summary>
-            Append joins <see cref="P:Microsoft.AspNetCore.Identity.IdentityResult.Errors"/>.Description with <paramref name="seperator"/>.
-            </summary>
-            <param name="result"></param>
-            <param name="seperator"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Milvasoft.Helpers.CommonHelper.ThrowErrorMessagesIfNotSuccess(Microsoft.AspNetCore.Identity.IdentityResult)">
-            <summary>
-            If <paramref name="result"/> is not succeeded throwns <see cref="T:Milvasoft.Helpers.Exceptions.MilvaUserFriendlyException"/>.
-            </summary>
-            <param name="result"></param>
-        </member>
-        <member name="M:Milvasoft.Helpers.CommonHelper.ThrowErrorMessagesIfNotSuccess(Microsoft.AspNetCore.Identity.IdentityResult,System.Char)">
-            <summary>
-            If <paramref name="result"/> is not succeeded throwns <see cref="T:Milvasoft.Helpers.Exceptions.MilvaUserFriendlyException"/>.
-            </summary>
-            <param name="result"></param>
-            <param name="seperator"></param>
-        </member>
         <member name="T:Milvasoft.Helpers.DataAccess.Abstract.Entity.Auditing.IHasCreator`1">
             <summary>
             Determines entity has creator.
@@ -6306,6 +6277,58 @@
             <summary>
             Gets or sets RefreshExpiration of token.
             </summary>
+        </member>
+        <member name="T:Milvasoft.Helpers.Identity.Concrete.IdentityHelpers">
+            <summary>
+            Identity helpers.
+            </summary>
+        </member>
+        <member name="M:Milvasoft.Helpers.Identity.Concrete.IdentityHelpers.DescriptionJoin(Microsoft.AspNetCore.Identity.IdentityResult,System.Char)">
+            <summary>
+            Append joins <see cref="P:Microsoft.AspNetCore.Identity.IdentityResult.Errors"/>.Description with <paramref name="seperator"/>.
+            </summary>
+            <param name="result"></param>
+            <param name="seperator"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.Identity.Concrete.IdentityHelpers.DescriptionJoin(Microsoft.AspNetCore.Identity.IdentityResult,System.String)">
+            <summary>
+            Append joins <see cref="P:Microsoft.AspNetCore.Identity.IdentityResult.Errors"/>.Description with <paramref name="seperator"/>.
+            </summary>
+            <param name="result"></param>
+            <param name="seperator"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.Identity.Concrete.IdentityHelpers.ThrowErrorMessagesIfNotSuccess(Microsoft.AspNetCore.Identity.IdentityResult)">
+            <summary>
+            If <paramref name="result"/> is not succeeded throwns <see cref="T:Milvasoft.Helpers.Exceptions.MilvaUserFriendlyException"/>.
+            </summary>
+            <param name="result"></param>
+        </member>
+        <member name="M:Milvasoft.Helpers.Identity.Concrete.IdentityHelpers.ThrowErrorMessagesIfNotSuccess(Microsoft.AspNetCore.Identity.IdentityResult,System.Char)">
+            <summary>
+            If <paramref name="result"/> is not succeeded throwns <see cref="T:Milvasoft.Helpers.Exceptions.MilvaUserFriendlyException"/>.
+            </summary>
+            <param name="result"></param>
+            <param name="seperator"></param>
+        </member>
+        <member name="M:Milvasoft.Helpers.Identity.Concrete.IdentityHelpers.GenerateRandomPassword(System.Int32,System.Boolean,System.Boolean,System.Boolean,System.Boolean)">
+            <summary>
+            Generates random password.
+            </summary>
+            <param name="length"></param>
+            <param name="nonAlphanumeric"></param>
+            <param name="digit"></param>
+            <param name="lowercase"></param>
+            <param name="uppercase"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.Identity.Concrete.IdentityHelpers.GenerateRandomPassword(Microsoft.AspNetCore.Identity.PasswordOptions)">
+            <summary>
+            Generates random password according to <paramref name="passwordOptions"/>.
+            </summary>
+            <param name="passwordOptions"></param>
+            <returns></returns>
         </member>
         <member name="T:Milvasoft.Helpers.Identity.Concrete.IdentityOperations`7">
             <summary>
