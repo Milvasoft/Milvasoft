@@ -1,15 +1,17 @@
 ﻿using Milvasoft.SampleAPI.DTOs.MentorDTOs;
-using Milvasoft.SampleAPI.Entity;
 using Milvasoft.SampleAPI.Utils.Attributes.ValidationAttributes;
 using Milvasoft.SampleAPI.Utils.Swagger;
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Milvasoft.SampleAPI.DTOs.AnnouncementDTOs
 {
     /// <summary>
-    /// Announcements DTO.
+    /// Announcements for admin.
     /// </summary>
-    public class AnnouncementDTO : EducationEntityBase
+    public class AnnouncementForAdminDTO
     {
         /// <summary>
         /// Tittle of announcement.

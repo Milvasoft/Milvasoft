@@ -8,7 +8,7 @@ namespace Milvasoft.SampleAPI.DTOs.ProfessionDTOs
     /// </summary>
     public class AddProfessionDTO
     {
-        public Guid Id { get; set; }
+        
         /// <summary>
         /// Name of profession.
         /// </summary>

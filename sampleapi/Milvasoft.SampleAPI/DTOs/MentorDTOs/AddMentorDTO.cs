@@ -1,5 +1,6 @@
 ﻿using Milvasoft.SampleAPI.DTOs.ProfessionDTOs;
 using Milvasoft.SampleAPI.Utils.Attributes.ValidationAttributes;
+using System;
 using System.Collections.Generic;
 
 namespace Milvasoft.SampleAPI.DTOs.MentorDTOs
@@ -22,6 +23,27 @@ namespace Milvasoft.SampleAPI.DTOs.MentorDTOs
         public string Surname { get; set; }
 
         /// <summary>
+        /// User password.
+        /// </summary>
+        public string Password { get; set; }
+
+        /// <summary>
+        /// Username.
+        /// </summary>
+        public string UserName { get; set; }
+
+        /// <summary>
+        /// User email.
+        /// </summary>
+        public string Email { get; set; }
+
+        /// <summary>
+        /// User Phone number.
+        /// </summary>
+        public string PhoneNumber { get; set; }
+       
+
+        /// <summary>
         /// CV path of mentor.
         /// </summary>
         public string CVFilePath { get; set; }
@@ -29,6 +51,6 @@ namespace Milvasoft.SampleAPI.DTOs.MentorDTOs
         /// <summary>
         /// Profession ıd of mentor.
         /// </summary>
-        public List<AddProfessionDTO> Professions { get; set; }
+        public List<Guid> Professions { get; set; }
     }
 }
