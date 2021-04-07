@@ -33,11 +33,7 @@ namespace Milvasoft.SampleAPI.Controllers
         [HttpPatch("Announcement/Mentor")]
         public async Task<IActionResult> GetAnnouncementsForMentor([FromBody] PaginationParamsWithSpec<AnnouncementSpec> paginationParams)
         {
-            var announcements = await _announcementService.GetEntitiesForMentorAsync(paginationParams.PageIndex,
-                                                                                     paginationParams.RequestedItemCount,
-                                                                                     paginationParams.OrderByProperty,
-                                                                                     paginationParams.OrderByAscending,
-                                                                                     paginationParams.Spec).ConfigureAwait(false);
+            var announcements = await _announcementService.GetEntitiesForMentorAsync(paginationParams).ConfigureAwait(false);
             return Ok(announcements);
         }
 
@@ -49,11 +45,7 @@ namespace Milvasoft.SampleAPI.Controllers
         [HttpPatch("Announcement/Admin")]
         public async Task<IActionResult> GetAnnouncementsForAdmn([FromBody] PaginationParamsWithSpec<AnnouncementSpec> paginationParams)
         {
-            var announcements = await _announcementService.GetEntitiesForAdminAsync(paginationParams.PageIndex,
-                                                                                 paginationParams.RequestedItemCount,
-                                                                                 paginationParams.OrderByProperty,
-                                                                                 paginationParams.OrderByAscending,
-                                                                                 paginationParams.Spec).ConfigureAwait(false);
+            var announcements = await _announcementService.GetEntitiesForAdminAsync(paginationParams).ConfigureAwait(false);
             return Ok(announcements);
         }
 
@@ -65,11 +57,7 @@ namespace Milvasoft.SampleAPI.Controllers
         [HttpPatch("Announcement/Student")]
         public async Task<IActionResult> GetAnnouncementsForStudent([FromBody] PaginationParamsWithSpec<AnnouncementSpec> paginationParams)
         {
-            var announcements = await _announcementService.GetEntitiesForStudentAsync(paginationParams.PageIndex,
-                                                                                 paginationParams.RequestedItemCount,
-                                                                                 paginationParams.OrderByProperty,
-                                                                                 paginationParams.OrderByAscending,
-                                                                                 paginationParams.Spec).ConfigureAwait(false);
+            var announcements = await _announcementService.GetEntitiesForStudentAsync(paginationParams).ConfigureAwait(false);
             return Ok(announcements);
         }
 

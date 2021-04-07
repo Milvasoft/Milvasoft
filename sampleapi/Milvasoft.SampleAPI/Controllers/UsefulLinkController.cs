@@ -38,11 +38,7 @@ namespace Milvasoft.SampleAPI.Controllers
         [HttpPatch("Link/Mentor")]
         public async Task<IActionResult> GetUsefulLinksForMentor([FromBody] PaginationParamsWithSpec<UsefulLinkSpec> paginationParams)
         {
-            var usefulLinks = await _userfulLinkService.GetEntitiesForMentorAsync(paginationParams.PageIndex,
-                                                                                 paginationParams.RequestedItemCount,
-                                                                                 paginationParams.OrderByProperty,
-                                                                                 paginationParams.OrderByAscending,
-                                                                                 paginationParams.Spec).ConfigureAwait(false);
+            var usefulLinks = await _userfulLinkService.GetEntitiesForMentorAsync(paginationParams).ConfigureAwait(false);
             return Ok(usefulLinks);
         }
 
@@ -54,11 +50,7 @@ namespace Milvasoft.SampleAPI.Controllers
         [HttpPatch("Link/Admin")]
         public async Task<IActionResult> GetUsefulLinksForAdmin([FromBody] PaginationParamsWithSpec<UsefulLinkSpec> paginationParams)
         {
-            var usefulLinks = await _userfulLinkService.GetEntitiesForAdminAsync(paginationParams.PageIndex,
-                                                                                 paginationParams.RequestedItemCount,
-                                                                                 paginationParams.OrderByProperty,
-                                                                                 paginationParams.OrderByAscending,
-                                                                                 paginationParams.Spec).ConfigureAwait(false);
+            var usefulLinks = await _userfulLinkService.GetEntitiesForAdminAsync(paginationParams).ConfigureAwait(false);
             return Ok(usefulLinks);
         }
 
@@ -70,11 +62,7 @@ namespace Milvasoft.SampleAPI.Controllers
         [HttpPatch("Link/Student")]
         public async Task<IActionResult> GetUsefulLinksForStudent([FromBody] PaginationParamsWithSpec<UsefulLinkSpec> paginationParams)
         {
-            var usefulLinks = await _userfulLinkService.GetEntitiesForStudentAsync(paginationParams.PageIndex,
-                                                                                 paginationParams.RequestedItemCount,
-                                                                                 paginationParams.OrderByProperty,
-                                                                                 paginationParams.OrderByAscending,
-                                                                                 paginationParams.Spec).ConfigureAwait(false);
+            var usefulLinks = await _userfulLinkService.GetEntitiesForStudentAsync(paginationParams).ConfigureAwait(false);
             return Ok(usefulLinks);
         }
 

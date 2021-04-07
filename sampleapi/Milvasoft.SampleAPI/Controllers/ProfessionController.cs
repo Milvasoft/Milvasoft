@@ -45,11 +45,7 @@ namespace Milvasoft.SampleAPI.Controllers
         [HttpPatch("Profession/Mentor")]
         public async Task<IActionResult> GetProfessionsForMentor([FromBody] PaginationParamsWithSpec<ProfessionSpec> paginationParams)
         {
-            var professions = await _professionService.GetEntitiesForMentorAsync(paginationParams.PageIndex,
-                                                                                 paginationParams.RequestedItemCount,
-                                                                                 paginationParams.OrderByProperty,
-                                                                                 paginationParams.OrderByAscending,
-                                                                                 paginationParams.Spec).ConfigureAwait(false);
+            var professions = await _professionService.GetEntitiesForMentorAsync(paginationParams).ConfigureAwait(false);
             return Ok(professions);
         }
 
@@ -61,11 +57,7 @@ namespace Milvasoft.SampleAPI.Controllers
         [HttpPatch("Profession/Admin")]
         public async Task<IActionResult> GetProfessionsForAdmin([FromBody] PaginationParamsWithSpec<ProfessionSpec> paginationParams)
         {
-            var professions = await _professionService.GetEntitiesForAdminAsync(paginationParams.PageIndex,
-                                                                                 paginationParams.RequestedItemCount,
-                                                                                 paginationParams.OrderByProperty,
-                                                                                 paginationParams.OrderByAscending,
-                                                                                 paginationParams.Spec).ConfigureAwait(false);
+            var professions = await _professionService.GetEntitiesForAdminAsync(paginationParams).ConfigureAwait(false);
             return Ok(professions);
         }
 
@@ -77,11 +69,7 @@ namespace Milvasoft.SampleAPI.Controllers
         [HttpPatch("Profession/Student")]
         public async Task<IActionResult> GetProfessionsForStudent([FromBody] PaginationParamsWithSpec<ProfessionSpec> paginationParams)
         {
-            var professions = await _professionService.GetEntitiesForStudentAsync(paginationParams.PageIndex,
-                                                                                 paginationParams.RequestedItemCount,
-                                                                                 paginationParams.OrderByProperty,
-                                                                                 paginationParams.OrderByAscending,
-                                                                                 paginationParams.Spec).ConfigureAwait(false);
+            var professions = await _professionService.GetEntitiesForStudentAsync(paginationParams).ConfigureAwait(false);
             return Ok(professions);
         }
 

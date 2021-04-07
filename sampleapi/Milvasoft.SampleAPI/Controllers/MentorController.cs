@@ -38,11 +38,7 @@ namespace Milvasoft.SampleAPI.Controllers
         [HttpPatch("Mentor/Mentor")]
         public async Task<IActionResult> GetMentorsForMentor([FromBody] PaginationParamsWithSpec<MentorSpec> paginationParams)
         {
-            var mentors = await _mentorService.GetEntitiesForMentorAsync(paginationParams.PageIndex,
-                                                                                 paginationParams.RequestedItemCount,
-                                                                                 paginationParams.OrderByProperty,
-                                                                                 paginationParams.OrderByAscending,
-                                                                                 paginationParams.Spec).ConfigureAwait(false);
+            var mentors = await _mentorService.GetEntitiesForMentorAsync(paginationParams).ConfigureAwait(false);
             return Ok(mentors);
         }
 
@@ -54,11 +50,7 @@ namespace Milvasoft.SampleAPI.Controllers
         [HttpPatch("Mentor/Admin")]
         public async Task<IActionResult> GetMentorsForAdmn([FromBody] PaginationParamsWithSpec<MentorSpec> paginationParams)
         {
-            var mentors = await _mentorService.GetEntitiesForAdminAsync(paginationParams.PageIndex,
-                                                                                 paginationParams.RequestedItemCount,
-                                                                                 paginationParams.OrderByProperty,
-                                                                                 paginationParams.OrderByAscending,
-                                                                                 paginationParams.Spec).ConfigureAwait(false);
+            var mentors = await _mentorService.GetEntitiesForAdminAsync(paginationParams).ConfigureAwait(false);
             return Ok(mentors);
         }
 
@@ -70,11 +62,7 @@ namespace Milvasoft.SampleAPI.Controllers
         [HttpPatch("Mentor/Student")]
         public async Task<IActionResult> GetMentorsForStudent([FromBody] PaginationParamsWithSpec<MentorSpec> paginationParams)
         {
-            var mentors = await _mentorService.GetEntitiesForStudentAsync(paginationParams.PageIndex,
-                                                                                 paginationParams.RequestedItemCount,
-                                                                                 paginationParams.OrderByProperty,
-                                                                                 paginationParams.OrderByAscending,
-                                                                                 paginationParams.Spec).ConfigureAwait(false);
+            var mentors = await _mentorService.GetEntitiesForStudentAsync(paginationParams).ConfigureAwait(false);
             return Ok(mentors);
         }
 

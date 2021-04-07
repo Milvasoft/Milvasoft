@@ -33,11 +33,7 @@ namespace Milvasoft.SampleAPI.Controllers
         [HttpPatch("Assignment/Mentor")]
         public async Task<IActionResult> GetAssignmentsForMentor([FromBody] PaginationParamsWithSpec<AssignmentSpec> paginationParams)
         {
-            var assignments = await _assigmentService.GetEntitiesForMentorAsync(paginationParams.PageIndex,
-                                                                                 paginationParams.RequestedItemCount,
-                                                                                 paginationParams.OrderByProperty,
-                                                                                 paginationParams.OrderByAscending,
-                                                                                 paginationParams.Spec).ConfigureAwait(false);
+            var assignments = await _assigmentService.GetEntitiesForMentorAsync(paginationParams).ConfigureAwait(false);
             return Ok(assignments);
         }
 
@@ -49,11 +45,7 @@ namespace Milvasoft.SampleAPI.Controllers
         [HttpPatch("Assignment/Admin")]
         public async Task<IActionResult> GetAssignmentsForAdmn([FromBody] PaginationParamsWithSpec<AssignmentSpec> paginationParams)
         {
-            var assignments = await _assigmentService.GetEntitiesForAdminAsync(paginationParams.PageIndex,
-                                                                                 paginationParams.RequestedItemCount,
-                                                                                 paginationParams.OrderByProperty,
-                                                                                 paginationParams.OrderByAscending,
-                                                                                 paginationParams.Spec).ConfigureAwait(false);
+            var assignments = await _assigmentService.GetEntitiesForAdminAsync(paginationParams).ConfigureAwait(false);
             return Ok(assignments);
         }
 
@@ -65,11 +57,7 @@ namespace Milvasoft.SampleAPI.Controllers
         [HttpPatch("Assignment/Student")]
         public async Task<IActionResult> GetAssignmentsForStudent([FromBody] PaginationParamsWithSpec<AssignmentSpec> paginationParams)
         {
-            var assignments = await _assigmentService.GetEntitiesForStudentAsync(paginationParams.PageIndex,
-                                                                                 paginationParams.RequestedItemCount,
-                                                                                 paginationParams.OrderByProperty,
-                                                                                 paginationParams.OrderByAscending,
-                                                                                 paginationParams.Spec).ConfigureAwait(false);
+            var assignments = await _assigmentService.GetEntitiesForStudentAsync(paginationParams).ConfigureAwait(false);
             return Ok(assignments);
         }
 

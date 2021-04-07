@@ -37,11 +37,7 @@ namespace Milvasoft.SampleAPI.Controllers
         [HttpPatch("Student/Mentor")]
         public async Task<IActionResult> GetStudentsForMentor([FromBody] PaginationParamsWithSpec<StudentSpec> paginationParams)
         {
-            var students = await _studentService.GetEntitiesForMentorAsync(paginationParams.PageIndex,
-                                                                                 paginationParams.RequestedItemCount,
-                                                                                 paginationParams.OrderByProperty,
-                                                                                 paginationParams.OrderByAscending,
-                                                                                 paginationParams.Spec).ConfigureAwait(false);
+            var students = await _studentService.GetEntitiesForMentorAsync(paginationParams).ConfigureAwait(false);
             return Ok(students);
         }
 
@@ -53,11 +49,7 @@ namespace Milvasoft.SampleAPI.Controllers
         [HttpPatch("Student/Admin")]
         public async Task<IActionResult> GetStudentsForAdmin([FromBody] PaginationParamsWithSpec<StudentSpec> paginationParams)
         {
-            var students = await _studentService.GetEntitiesForAdminAsync(paginationParams.PageIndex,
-                                                                                 paginationParams.RequestedItemCount,
-                                                                                 paginationParams.OrderByProperty,
-                                                                                 paginationParams.OrderByAscending,
-                                                                                 paginationParams.Spec).ConfigureAwait(false);
+            var students = await _studentService.GetEntitiesForAdminAsync(paginationParams).ConfigureAwait(false);
             return Ok(students);
         }
 
@@ -69,11 +61,7 @@ namespace Milvasoft.SampleAPI.Controllers
         [HttpPatch("Student/Student")]
         public async Task<IActionResult> GetStudentsForStudent([FromBody] PaginationParamsWithSpec<StudentSpec> paginationParams)
         {
-            var students = await _studentService.GetEntitiesForStudentAsync(paginationParams.PageIndex,
-                                                                                 paginationParams.RequestedItemCount,
-                                                                                 paginationParams.OrderByProperty,
-                                                                                 paginationParams.OrderByAscending,
-                                                                                 paginationParams.Spec).ConfigureAwait(false);
+            var students = await _studentService.GetEntitiesForStudentAsync(paginationParams).ConfigureAwait(false);
             return Ok(students);
         }
 
