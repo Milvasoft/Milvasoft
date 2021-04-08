@@ -32,7 +32,7 @@ namespace Milvasoft.SampleAPI.Spec
         public List<Profession> GetFilteredEntities(IEnumerable<Profession> entities)
         {
 
-            entities.ThrowIfListIsNullOrEmpty();
+            if (!Name.IsNullOrEmpty()) entities = entities.Where(m => m.Name.ToUpper().Contains(Name));
 
             return entities.ToList();
 
@@ -52,7 +52,6 @@ namespace Milvasoft.SampleAPI.Spec
 
             predicates?.ForEach(predicate => mainPredicate = mainPredicate.Append(predicate, ExpressionType.AndAlso));
             return mainPredicate;
-
 
         }
     }

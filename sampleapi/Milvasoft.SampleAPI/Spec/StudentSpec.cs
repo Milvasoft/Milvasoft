@@ -83,7 +83,6 @@ namespace Milvasoft.SampleAPI.Spec
         public List<Student> GetFilteredEntities(IEnumerable<Student> entities)
         {
 
-
             if (!Name.IsNullOrEmpty()) entities = entities.Where(m => m.Name.ToUpper().Contains(Name));
             if (!Surname.IsNullOrEmpty()) entities = entities.Where(m => m.Surname.ToUpper().Contains(Surname));
             if (!University.IsNullOrEmpty()) entities = entities.Where(m => m.University.ToUpper().Contains(University));
