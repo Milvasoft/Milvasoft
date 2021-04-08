@@ -1432,14 +1432,14 @@
             Mentor surname.
             </summary>
         </member>
-        <member name="P:Milvasoft.SampleAPI.DTOs.MentorDTOs.AddMentorDTO.Password">
-            <summary>
-            User password.
-            </summary>
-        </member>
         <member name="P:Milvasoft.SampleAPI.DTOs.MentorDTOs.AddMentorDTO.UserName">
             <summary>
             Username.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.MentorDTOs.AddMentorDTO.Password">
+            <summary>
+            User password.
             </summary>
         </member>
         <member name="P:Milvasoft.SampleAPI.DTOs.MentorDTOs.AddMentorDTO.Email">
@@ -2006,6 +2006,26 @@
         <member name="P:Milvasoft.SampleAPI.DTOs.StudentDTOs.AddStudentDTO.Surname">
             <summary>
             Student's surname.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.StudentDTOs.AddStudentDTO.UserName">
+            <summary>
+            Username.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.StudentDTOs.AddStudentDTO.Password">
+            <summary>
+            User password.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.StudentDTOs.AddStudentDTO.Email">
+            <summary>
+            User email.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.StudentDTOs.AddStudentDTO.PhoneNumber">
+            <summary>
+            User Phone number.
             </summary>
         </member>
         <member name="P:Milvasoft.SampleAPI.DTOs.StudentDTOs.AddStudentDTO.University">
@@ -3356,11 +3376,12 @@
             Student service.
             </summary>
         </member>
-        <member name="M:Milvasoft.SampleAPI.Services.Concrete.StudentService.#ctor(Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository{Milvasoft.SampleAPI.Entity.Student,System.Guid,Milvasoft.SampleAPI.Data.EducationAppDbContext})">
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.StudentService.#ctor(Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository{Milvasoft.SampleAPI.Entity.Student,System.Guid,Milvasoft.SampleAPI.Data.EducationAppDbContext},Microsoft.AspNetCore.Identity.UserManager{Milvasoft.SampleAPI.Entity.AppUser})">
             <summary>
             Performs constructor injection for repository interfaces used in this service.
             </summary>
             <param name="studentRepository"></param>
+            <param name="userManager"></param>
         </member>
         <member name="M:Milvasoft.SampleAPI.Services.Concrete.StudentService.GetEntitiesForAdminAsync(Milvasoft.SampleAPI.DTOs.PaginationParamsWithSpec{Milvasoft.SampleAPI.Spec.StudentSpec})">
             <summary>
@@ -3406,6 +3427,14 @@
             Add student to database.
             </summary>
             <param name="addStudentDTO"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.StudentService.AddAsync(Milvasoft.SampleAPI.Entity.AppUser,System.String)">
+            <summary>
+            Add appuser with mentor.
+            </summary>
+            <param name="user"></param>
+            <param name="password"></param>
             <returns></returns>
         </member>
         <member name="M:Milvasoft.SampleAPI.Services.Concrete.StudentService.UpdateEntityAsync(Milvasoft.SampleAPI.DTOs.StudentDTOs.UpdateStudentDTO)">
@@ -3575,21 +3604,6 @@
             Tittle of assignment.
             </summary>
         </member>
-        <member name="P:Milvasoft.SampleAPI.Spec.AssignmentSpec.Description">
-            <summary>
-            Description of assignment.
-            </summary>
-        </member>
-        <member name="P:Milvasoft.SampleAPI.Spec.AssignmentSpec.RemarksToStudent">
-            <summary>
-            Remarks for student.
-            </summary>
-        </member>
-        <member name="P:Milvasoft.SampleAPI.Spec.AssignmentSpec.RemarksToMentor">
-            <summary>
-            Remarks for mentor.
-            </summary>
-        </member>
         <member name="P:Milvasoft.SampleAPI.Spec.AssignmentSpec.Level">
             <summary>
             Difficulty level of the assignment.
@@ -3638,11 +3652,6 @@
             Mentor surname.
             </summary>
         </member>
-        <member name="P:Milvasoft.SampleAPI.Spec.MentorSpec.Professions">
-            <summary>
-            Professions of a mentor.
-            </summary>
-        </member>
         <member name="M:Milvasoft.SampleAPI.Spec.MentorSpec.GetFilteredEntities(System.Collections.Generic.IEnumerable{Milvasoft.SampleAPI.Entity.Mentor})">
             <summary>
             Filtering Assignment list by  with requested properties.
@@ -3687,16 +3696,6 @@
         <member name="P:Milvasoft.SampleAPI.Spec.QuestionSpec.Title">
             <summary>
             Tittle of question.
-            </summary>
-        </member>
-        <member name="P:Milvasoft.SampleAPI.Spec.QuestionSpec.QuestionContent">
-            <summary>
-            Content of question.
-            </summary>
-        </member>
-        <member name="P:Milvasoft.SampleAPI.Spec.QuestionSpec.MentorReply">
-            <summary>
-            The mentor's answer to the question.
             </summary>
         </member>
         <member name="P:Milvasoft.SampleAPI.Spec.QuestionSpec.IsUseful">

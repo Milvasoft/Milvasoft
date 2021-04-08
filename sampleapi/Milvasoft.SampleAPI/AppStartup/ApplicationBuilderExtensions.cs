@@ -6,6 +6,9 @@ using System.Globalization;
 
 namespace Milvasoft.SampleAPI.AppStartup
 {
+    /// <summary>
+    /// Application builder.
+    /// </summary>
     public static class ApplicationBuilderExtensions
     {
         /// <summary>
