@@ -1,5 +1,7 @@
-﻿using Milvasoft.Helpers.DataAccess.Abstract;
+﻿using Microsoft.AspNetCore.Identity;
+using Milvasoft.Helpers.DataAccess.Abstract;
 using Milvasoft.Helpers.DataAccess.IncludeLibrary;
+using Milvasoft.Helpers.Exceptions;
 using Milvasoft.Helpers.Models;
 using Milvasoft.SampleAPI.Data;
 using Milvasoft.SampleAPI.DTOs;
@@ -23,16 +25,17 @@ namespace Milvasoft.SampleAPI.Services.Concrete
     /// </summary>
     public class StudentService : IStudentService
     {
-
+        private readonly UserManager<AppUser> _userManager;
         private readonly IBaseRepository<Student, Guid, EducationAppDbContext> _studentRepository;
 
         /// <summary>
         /// Performs constructor injection for repository interfaces used in this service.
         /// </summary>
         /// <param name="studentRepository"></param>
-        public StudentService(IBaseRepository<Student, Guid, EducationAppDbContext> studentRepository)
+        /// <param name="userManager"></param>
+        public StudentService(IBaseRepository<Student, Guid, EducationAppDbContext> studentRepository, UserManager<AppUser> userManager)
         {
-
+            _userManager = userManager;
             _studentRepository = studentRepository;
 
         }
@@ -272,8 +275,33 @@ namespace Milvasoft.SampleAPI.Services.Concrete
                 ProfessionId = addStudentDTO.ProfessionId,
                 MentorId = addStudentDTO.MentorId
             };
+            var appUser = new AppUser
+            {
+                UserName = addStudentDTO.UserName,
+                Email = addStudentDTO.Email,
+                PhoneNumber = addStudentDTO.PhoneNumber,
+                Student = newStudent
+            };
+            await AddAsync(appUser, addStudentDTO.Password).ConfigureAwait(false);
+        }
 
-            await _studentRepository.AddAsync(newStudent).ConfigureAwait(false);
+        /// <summary>
+        /// Add appuser with mentor.
+        /// </summary>
+        /// <param name="user"></param>
+        /// <param name="password"></param>
+        /// <returns></returns>
+        private async Task AddAsync(AppUser user, string password)
+        {
+            if (user.Student== null)
+                throw new MilvaUserFriendlyException("PleaseEnterPersonnelInformation");
+
+            user.Mentor = null;
+
+            var result = await _userManager.CreateAsync(user, password);
+
+            if (!result.Succeeded)
+                throw new MilvaUserFriendlyException(string.Join("~", result.Errors.Select(m => m.Description)));
         }
 
         /// <summary>

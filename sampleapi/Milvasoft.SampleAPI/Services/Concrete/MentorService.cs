@@ -182,7 +182,9 @@ namespace Milvasoft.SampleAPI.Services.Concrete
                 LastModificationDate = mentor.LastModificationDate,
                 Professions = mentor.Professions.CheckList(i => mentor.Professions?.Select(pr => new MentorProfessionDTO
                 {
-                    Id = pr.ProfessionId
+                    ProfessionId= pr.ProfessionId,
+                    MentorId=pr.MentorId,
+                    Id=pr.Id
                 })),
                 PublishedAnnouncements = mentor.PublishedAnnouncements.CheckList(i => mentor.PublishedAnnouncements?.Select(pa => new AnnouncementDTO
                 {
