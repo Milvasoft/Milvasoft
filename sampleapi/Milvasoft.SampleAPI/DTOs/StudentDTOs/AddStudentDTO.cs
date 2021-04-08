@@ -23,6 +23,26 @@ namespace Milvasoft.SampleAPI.DTOs.StudentDTOs
         public string Surname { get; set; }
 
         /// <summary>
+        /// Username.
+        /// </summary>
+        public string UserName { get; set; }
+
+        /// <summary>
+        /// User password.
+        /// </summary>
+        public string Password { get; set; }
+
+        /// <summary>
+        /// User email.
+        /// </summary>
+        public string Email { get; set; }
+
+        /// <summary>
+        /// User Phone number.
+        /// </summary>
+        public string PhoneNumber { get; set; }
+
+        /// <summary>
         /// Student's university.
         /// </summary>
         [OValidateString(2, 200)]

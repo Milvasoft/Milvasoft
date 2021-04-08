@@ -23,14 +23,14 @@ namespace Milvasoft.SampleAPI.DTOs.MentorDTOs
         public string Surname { get; set; }
 
         /// <summary>
-        /// User password.
-        /// </summary>
-        public string Password { get; set; }
-
-        /// <summary>
         /// Username.
         /// </summary>
         public string UserName { get; set; }
+
+        /// <summary>
+        /// User password.
+        /// </summary>
+        public string Password { get; set; }
 
         /// <summary>
         /// User email.
