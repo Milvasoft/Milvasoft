@@ -4,6 +4,11 @@
         <name>Milvasoft.SampleAPI</name>
     </assembly>
     <members>
+        <member name="T:Milvasoft.SampleAPI.AppStartup.ApplicationBuilderExtensions">
+            <summary>
+            Application builder.
+            </summary>
+        </member>
         <member name="M:Milvasoft.SampleAPI.AppStartup.ApplicationBuilderExtensions.ConfigureSwagger(Microsoft.AspNetCore.Builder.IApplicationBuilder)">
             <summary>
             Adds swagger documentation to pipeline.

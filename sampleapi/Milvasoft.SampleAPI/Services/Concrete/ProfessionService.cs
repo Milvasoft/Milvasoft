@@ -111,6 +111,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
                 
                 DTOList = professions.CheckList(i => professions.Select(profession => new ProfessionDTO
                 {
+                    Id=profession.Id,
                     Name = profession.Name
                 })),
                 PageCount = pageCount,

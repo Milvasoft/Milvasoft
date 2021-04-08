@@ -61,6 +61,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
             {
                 DTOList = mentors.CheckList(i => mentors.Select(mentor => new MentorForAdminDTO
                 {
+                    Id=mentor.Id,
                     Name = mentor.Name,
                     Surname = mentor.Surname,
                     CVFilePath = mentor.CVFilePath,
@@ -104,6 +105,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
             {
                 DTOList = mentors.CheckList(i => mentors.Select(mentor => new MentorForMentorDTO
                 {
+                    Id = mentor.Id,
                     Name = mentor.Name,
                     Surname = mentor.Surname,
                     Professions = mentor.Professions.CheckList(i => mentor.Professions?.Select(pr => new MentorProfessionDTO
@@ -175,6 +177,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
             var mentor = await _mentorRepository.GetByIdAsync(mentorId, includes).ConfigureAwait(false);
             return new MentorForAdminDTO
             {
+                Id = mentor.Id,
                 Name = mentor.Name,
                 Surname = mentor.Surname,
                 CVFilePath = mentor.CVFilePath,

@@ -105,6 +105,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
             {
                 DTOList = usefulLinks.CheckList(i => usefulLinks.Select(link => new UsefulLinkDTO
                 {
+                    Id=link.Id,
                     Title = link.Title,
                     Description = link.Description,
                     Url = link.Url,

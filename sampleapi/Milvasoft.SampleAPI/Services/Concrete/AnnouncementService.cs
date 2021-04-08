@@ -53,6 +53,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
             {
                 DTOList = announcements.CheckList(i => announcements.Select(announcement => new AnnouncementForStudentDTO
                 {
+                    Id=announcement.Id,
                     Title = announcement.Title,
                     Description = announcement.Description,
                     PublisherMentor = announcement.PublisherMentor.CheckObject(i => new MentorDTO
@@ -85,6 +86,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
             {
                 DTOList = announcements.CheckList(i => announcements.Select(announcement => new AnnouncementForAdminDTO
                 {
+                    Id = announcement.Id,
                     Title = announcement.Title,
                     Description = announcement.Description,
                     IsFixed = announcement.IsFixed,
@@ -118,6 +120,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
             {
                 DTOList = announcements.CheckList(i => announcements.Select(announcement => new AnnouncementForMentorDTO
                 {
+                    Id = announcement.Id,
                     Title = announcement.Title,
                     Description = announcement.Description,
                     IsFixed = announcement.IsFixed,

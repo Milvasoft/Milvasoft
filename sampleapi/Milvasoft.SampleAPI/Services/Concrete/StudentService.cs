@@ -60,6 +60,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
             {
                 DTOList = students.CheckList(i => students.Select(student => new StudentForAdminDTO
                 {
+                    Id=student.Id,
                     Name = student.Name,
                     Surname = student.Surname,
                     University = student.University,
@@ -103,6 +104,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
             {
                 DTOList = students.CheckList(i => students.Select(student => new StudentForMentorDTO
                 {
+                    Id=student.Id,
                     Name = student.Name,
                     Surname = student.Surname,
                     University = student.University,
@@ -116,6 +118,8 @@ namespace Milvasoft.SampleAPI.Services.Concrete
                     ProfessionId = student.ProfessionId,
                     Mentor = student.Mentor.CheckObject(i => new MentorDTO
                     {
+                        AppUserId=i.AppUserId,
+                        Name=i.Name,
                         Id = i.Id
                     }),
                     CurrentAssigmentDeliveryDate = student.CurrentAssigmentDeliveryDate,
@@ -146,6 +150,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
             {
                 DTOList = students.CheckList(i => students.Select(student => new StudentForStudentDTO
                 {
+                    Id=student.Id,
                     Name = student.Name,
                     Surname = student.Surname,
                     University = student.University,

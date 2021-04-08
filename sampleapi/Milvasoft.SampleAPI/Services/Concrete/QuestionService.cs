@@ -56,6 +56,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
             {
                 DTOList = questions.CheckList(i => questions.Select(question => new QuestionForAdminDTO
                 {
+                    Id = question.Id,
                     Title = question.Title,
                     QuestionContent = question.QuestionContent,
                     MentorReply = question.MentorReply,
@@ -69,8 +70,8 @@ namespace Milvasoft.SampleAPI.Services.Concrete
                     Student = question.Student.CheckObject(i => new StudentDTO
                     {
                         Id = i.Id
-                    }),
-                    Id = question.Id
+                    })
+                    
                 })),
                 PageCount = pageCount,
                 TotalDataCount = totalDataCount
@@ -99,6 +100,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
             {
                 DTOList = questions.CheckList(i => questions.Select(question => new QuestionForMentorDTO
                 {
+                    Id=question.Id,
                     Title = question.Title,
                     QuestionContent = question.QuestionContent,
                     MentorReply = question.MentorReply,
@@ -140,6 +142,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
             {
                 DTOList = questions.CheckList(i => questions.Select(question => new QuestionForStudentDTO
                 {
+                    Id=question.Id,
                     Title = question.Title,
                     QuestionContent = question.QuestionContent,
                     MentorReply = question.MentorReply,

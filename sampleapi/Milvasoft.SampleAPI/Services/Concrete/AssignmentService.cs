@@ -48,6 +48,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
             {
                 DTOList = asssignments.CheckList(i => asssignments.Select(assignment => new AssignmentForStudentDTO
                 {
+                    Id=assignment.Id,
                     Title = assignment.Title,
                     Description = assignment.Description,
                     RemarksToStudent = assignment.RemarksToStudent,
@@ -80,6 +81,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
             {
                 DTOList = asssignments.CheckList(i => asssignments.Select(assignment => new AssignmentForAdminDTO
                 {
+                    Id = assignment.Id,
                     Title = assignment.Title,
                     Description = assignment.Description,
                     RemarksToStudent = assignment.RemarksToStudent,
@@ -113,6 +115,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
             {
                 DTOList = asssignments.CheckList(i => asssignments.Select(assignment => new AssignmentForMentorDTO
                 {
+                    Id = assignment.Id,
                     Title = assignment.Title,
                     Description = assignment.Description,
                     RemarksToStudent = assignment.RemarksToStudent,
