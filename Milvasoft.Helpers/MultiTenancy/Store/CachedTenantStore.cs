@@ -1,4 +1,5 @@
-﻿using Milvasoft.Helpers.Caching;
+﻿using Microsoft.EntityFrameworkCore;
+using Milvasoft.Helpers.Caching;
 using Milvasoft.Helpers.MultiTenancy.EntityBase;
 using System;
 using System.Threading.Tasks;
@@ -6,7 +7,7 @@ using System.Threading.Tasks;
 namespace Milvasoft.Helpers.MultiTenancy.Store
 {
     /// <summary>
-    /// Cached tenant store.
+    /// Cached tenant store. Sample store for <see cref="ITenantStore{TTenant, TKey}"/>
     /// </summary>
     public class CachedTenantStore<TTenant, TKey> : ITenantStore<TTenant, TKey>
         where TKey : struct, IEquatable<TKey>
@@ -23,6 +24,18 @@ namespace Milvasoft.Helpers.MultiTenancy.Store
             _redisCacheService = redisCacheService;
             Task.WaitAll(_redisCacheService.ConnectAsync());
         }
+
+        /// <summary>
+        /// Creates new instance of <see cref="CachedTenantStore{TTenant, TKey}"/>
+        /// </summary>
+        /// <param name="redisCacheService"></param>
+        /// <param name="connectionString"></param>
+        public CachedTenantStore(IRedisCacheService redisCacheService, string connectionString)
+        {
+            _redisCacheService = redisCacheService;
+            Task.WaitAll(_redisCacheService.ConnectAsync());
+        }
+
         /// <summary>
         /// Returns a tenant according to <paramref name="identifier"/>.
         /// </summary>
@@ -48,20 +61,28 @@ namespace Milvasoft.Helpers.MultiTenancy.Store
             else return false;
         }
 
-        private async Task<bool> EnsureConnected()
+        //TODO LATER look later that.
+        /// <summary>
+        /// Returns a tenant according to <paramref name="identifier"/>.
+        /// </summary>
+        /// <param name="identifier"></param>
+        /// <param name="dbAction"></param>
+        /// <returns></returns>
+        public async Task<TTenant> GetTenantAsync(TKey identifier, Func<Task<TTenant>> dbAction)
         {
-            if (!_redisCacheService.IsConnected())
+            if (_redisCacheService.IsConnected())
+                return await _redisCacheService.GetAsync<TTenant>(identifier.ToString()).ConfigureAwait(false);
+            else
             {
                 try
                 {
-                    return await _redisCacheService.ConnectAsync().ConfigureAwait(false);
+                    return await dbAction().ConfigureAwait(false);
                 }
                 catch (Exception)
                 {
-                    return false;
+                    return null;
                 }
             }
-            else return true;
         }
     }
 }
