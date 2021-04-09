@@ -1,18 +1,18 @@
 ﻿using Milvasoft.Helpers.DataAccess.Concrete.Entity;
 using Milvasoft.SampleAPI.DTOs.AnnouncementDTOs;
-using Milvasoft.SampleAPI.DTOs.StudentDTOs;
 using Milvasoft.SampleAPI.Entity;
 using Milvasoft.SampleAPI.Utils.Attributes.ValidationAttributes;
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Milvasoft.SampleAPI.DTOs.MentorDTOs
 {
-
     /// <summary>
-    /// Mentor DTO.
+    /// Mentor entities for student.
     /// </summary>
-    public class MentorDTO : AuditableEntity<AppUser, Guid, Guid>
+    public class MentorForStudentDTO : AuditableEntity<AppUser, Guid, Guid>
     {
         /// <summary>
         /// Mentor name.
@@ -27,21 +27,6 @@ namespace Milvasoft.SampleAPI.DTOs.MentorDTOs
         public string Surname { get; set; }
 
         /// <summary>
-        /// CV path of mentor.
-        /// </summary>
-        public string CVFilePath { get; set; }
-
-        /// <summary>
-        /// AppUser ID of mentor.
-        /// </summary>
-        public Guid AppUserId { get; set; }
-
-        /// <summary>
-        /// AppUser of mentor.
-        /// </summary>
-        public virtual AppUserDTO AppUser { get; set; }
-
-        /// <summary>
         /// Announcements posted by the mentor.
         /// </summary>
         public virtual List<AnnouncementDTO> PublishedAnnouncements { get; set; }
@@ -50,10 +35,5 @@ namespace Milvasoft.SampleAPI.DTOs.MentorDTOs
         /// Professions of a mentor.
         /// </summary>
         public virtual List<MentorProfessionDTO> Professions { get; set; }
-
-        /// <summary>
-        /// Students of a mentor.
-        /// </summary>
-        public virtual List<StudentDTO> Students { get; set; }
     }
 }

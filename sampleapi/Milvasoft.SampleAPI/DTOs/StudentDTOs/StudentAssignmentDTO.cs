@@ -1,4 +1,5 @@
-﻿using Milvasoft.SampleAPI.DTOs.AssignmentDTOs;
+﻿using Milvasoft.Helpers.DataAccess.Concrete.Entity;
+using Milvasoft.SampleAPI.DTOs.AssignmentDTOs;
 using Milvasoft.SampleAPI.Entity;
 using Milvasoft.SampleAPI.Entity.Enum;
 using Milvasoft.SampleAPI.Utils.Attributes.ValidationAttributes;
@@ -10,7 +11,7 @@ namespace Milvasoft.SampleAPI.DTOs.StudentDTOs
     /// <summary>
     /// Student assginment relationship.
     /// </summary>
-    public class StudentAssignmentDTO : EducationEntityBase
+    public class StudentAssignmentDTO : AuditableEntity<AppUser, Guid, Guid>
     {
 
         /// <summary>
@@ -26,7 +27,6 @@ namespace Milvasoft.SampleAPI.DTOs.StudentDTOs
         public virtual StudentDTO Student { get; set; }
 
 
-
         /// <summary>
         /// Assignment id.
         /// </summary>
@@ -38,8 +38,6 @@ namespace Milvasoft.SampleAPI.DTOs.StudentDTOs
         /// </summary>
         [SwaggerExclude]
         public virtual AssignmentDTO Assigment { get; set; }
-
-
 
 
         /// <summary>

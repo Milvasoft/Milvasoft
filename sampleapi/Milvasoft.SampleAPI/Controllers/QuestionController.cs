@@ -37,11 +37,7 @@ namespace Milvasoft.SampleAPI.Controllers
         [HttpPatch("Question/Mentor")]
         public async Task<IActionResult> GetQuestionsForMentor([FromBody] PaginationParamsWithSpec<QuestionSpec> paginationParams)
         {
-            var questions = await _questionService.GetEntitiesForMentorAsync(paginationParams.PageIndex,
-                                                                                 paginationParams.RequestedItemCount,
-                                                                                 paginationParams.OrderByProperty,
-                                                                                 paginationParams.OrderByAscending,
-                                                                                 paginationParams.Spec).ConfigureAwait(false);
+            var questions = await _questionService.GetEntitiesForMentorAsync(paginationParams).ConfigureAwait(false);
             return Ok(questions);
         }
 
@@ -53,11 +49,7 @@ namespace Milvasoft.SampleAPI.Controllers
         [HttpPatch("Question/Admin")]
         public async Task<IActionResult> GetQuestionsForAdmin([FromBody] PaginationParamsWithSpec<QuestionSpec> paginationParams)
         {
-            var questions = await _questionService.GetEntitiesForAdminAsync(paginationParams.PageIndex,
-                                                                                 paginationParams.RequestedItemCount,
-                                                                                 paginationParams.OrderByProperty,
-                                                                                 paginationParams.OrderByAscending,
-                                                                                 paginationParams.Spec).ConfigureAwait(false);
+            var questions = await _questionService.GetEntitiesForAdminAsync(paginationParams).ConfigureAwait(false);
             return Ok(questions);
         }
 
@@ -69,11 +61,7 @@ namespace Milvasoft.SampleAPI.Controllers
         [HttpPatch("Question/Student")]
         public async Task<IActionResult> GetQuestionsForStudent([FromBody] PaginationParamsWithSpec<QuestionSpec> paginationParams)
         {
-            var questions = await _questionService.GetEntitiesForStudentAsync(paginationParams.PageIndex,
-                                                                                 paginationParams.RequestedItemCount,
-                                                                                 paginationParams.OrderByProperty,
-                                                                                 paginationParams.OrderByAscending,
-                                                                                 paginationParams.Spec).ConfigureAwait(false);
+            var questions = await _questionService.GetEntitiesForStudentAsync(paginationParams).ConfigureAwait(false);
             return Ok(questions);
         }
 

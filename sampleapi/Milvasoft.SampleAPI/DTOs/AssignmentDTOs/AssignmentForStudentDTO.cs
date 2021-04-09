@@ -1,19 +1,18 @@
 ﻿using Milvasoft.Helpers.DataAccess.Concrete.Entity;
-using Milvasoft.SampleAPI.DTOs.ProfessionDTOs;
 using Milvasoft.SampleAPI.Entity;
 using Milvasoft.SampleAPI.Utils.Attributes.ValidationAttributes;
-using Milvasoft.SampleAPI.Utils.Swagger;
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Milvasoft.SampleAPI.DTOs.AssignmentDTOs
 {
-
     /// <summary>
-    /// Assignment for student.
+    /// Assignment for Student.
     /// </summary>
-    public class AssignmentDTO : AuditableEntity<AppUser, Guid, Guid>
+    public class AssignmentForStudentDTO : AuditableEntity<AppUser, Guid, Guid>
     {
-
         /// <summary>
         /// Tittle of assignment.
         /// </summary>
@@ -59,11 +58,5 @@ namespace Milvasoft.SampleAPI.DTOs.AssignmentDTOs
         /// </summary>
         [OValidateId]
         public Guid? ProfessionId { get; set; }
-
-        /// <summary>
-        /// The profession of assignment.
-        /// </summary>
-        [SwaggerExclude]
-        public virtual ProfessionDTO Profession { get; set; }
     }
 }

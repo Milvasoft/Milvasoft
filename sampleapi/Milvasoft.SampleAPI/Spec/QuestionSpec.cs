@@ -21,16 +21,6 @@ namespace Milvasoft.SampleAPI.Spec
         public string Title { get; set; }
 
         /// <summary>
-        /// Content of question.
-        /// </summary>
-        public string QuestionContent { get; set; }
-
-        /// <summary>
-        /// The mentor's answer to the question.
-        /// </summary>
-        public string MentorReply { get; set; }
-
-        /// <summary>
         /// Is the question useful?
         /// </summary>
         public bool? IsUseful { get; set; }
@@ -66,10 +56,16 @@ namespace Milvasoft.SampleAPI.Spec
         public List<Question> GetFilteredEntities(IEnumerable<Question> entities)
         {
 
-            entities.ThrowIfListIsNullOrEmpty();
+            if (!Title.IsNullOrEmpty()) entities = entities.Where(m => m.Title.ToUpper().Contains(Title));
+
+            if (MentorId.HasValue) entities = entities.Where(i => i.MentorId == MentorId);
+            if (ProfessionId.HasValue) entities = entities.Where(i => i.ProfessionId == ProfessionId);
+            if (StudentId.HasValue) entities = entities.Where(i => i.StudentId == StudentId);
+
+            if (WillShown.HasValue) entities = entities.Where(i => i.WillShown == WillShown);
+            if (IsUseful.HasValue) entities = entities.Where(i => i.IsUseful == IsUseful);
 
             return entities.ToList();
-
         }
 
         /// <summary>
@@ -83,11 +79,10 @@ namespace Milvasoft.SampleAPI.Spec
             List<Expression<Func<Question, bool>>> predicates = new List<Expression<Func<Question, bool>>>();
 
             if (!string.IsNullOrEmpty(Title)) predicates.Add(c => c.Title == Title);
-            if (!string.IsNullOrEmpty(QuestionContent)) predicates.Add(c => c.QuestionContent == QuestionContent);
-            if (!string.IsNullOrEmpty(MentorReply)) predicates.Add(c => c.MentorReply == MentorReply);
 
             if (IsUseful.HasValue) predicates.Add(c => c.IsUseful == IsUseful);
             if (WillShown.HasValue) predicates.Add(c => c.WillShown == WillShown);
+
             if (ProfessionId.HasValue) predicates.Add(c => c.ProfessionId == ProfessionId);
             if (StudentId.HasValue) predicates.Add(c => c.StudentId == StudentId);
             if (MentorId.HasValue) predicates.Add(c => c.MentorId == MentorId);

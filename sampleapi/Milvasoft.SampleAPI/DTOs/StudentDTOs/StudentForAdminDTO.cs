@@ -1,15 +1,21 @@
-﻿using Milvasoft.SampleAPI.Entity.Enum;
+﻿using Milvasoft.Helpers.DataAccess.Concrete.Entity;
+using Milvasoft.SampleAPI.DTOs.MentorDTOs;
+using Milvasoft.SampleAPI.Entity;
+using Milvasoft.SampleAPI.Entity.Enum;
 using Milvasoft.SampleAPI.Utils.Attributes.ValidationAttributes;
+using Milvasoft.SampleAPI.Utils.Swagger;
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Milvasoft.SampleAPI.DTOs.StudentDTOs
 {
     /// <summary>
-    /// AddStudentDTO for add student operations.
+    /// Student entities for admin.
     /// </summary>
-    public class AddStudentDTO
+    public class StudentForAdminDTO : AuditableEntity<AppUser, Guid, Guid>
     {
-
         /// <summary>
         /// Student's name.
         /// </summary>
@@ -23,26 +29,6 @@ namespace Milvasoft.SampleAPI.DTOs.StudentDTOs
         public string Surname { get; set; }
 
         /// <summary>
-        /// Username.
-        /// </summary>
-        public string UserName { get; set; }
-
-        /// <summary>
-        /// User password.
-        /// </summary>
-        public string Password { get; set; }
-
-        /// <summary>
-        /// User email.
-        /// </summary>
-        public string Email { get; set; }
-
-        /// <summary>
-        /// User Phone number.
-        /// </summary>
-        public string PhoneNumber { get; set; }
-
-        /// <summary>
         /// Student's university.
         /// </summary>
         [OValidateString(2, 200)]
@@ -52,12 +38,6 @@ namespace Milvasoft.SampleAPI.DTOs.StudentDTOs
         /// Age of student.
         /// </summary>
         public int Age { get; set; }
-
-        /// <summary>
-        /// Dream of student.
-        /// </summary>
-        [OValidateString(2000)]
-        public string Dream { get; set; }
 
         /// <summary>
         /// Home adress of student.
@@ -99,10 +79,9 @@ namespace Milvasoft.SampleAPI.DTOs.StudentDTOs
         public Guid ProfessionId { get; set; }
 
         /// <summary>
-        /// Mentor ıd of student.
+        /// Mentor of student.
         /// </summary>
-        [OValidateId]
-        public Guid MentorId { get; set; }
-
+        [SwaggerExclude]
+        public virtual MentorDTO Mentor { get; set; }
     }
 }

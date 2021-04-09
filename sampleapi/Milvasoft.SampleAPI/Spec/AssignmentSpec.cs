@@ -24,21 +24,6 @@ namespace Milvasoft.SampleAPI.Spec
         public string Title { get; set; }
 
         /// <summary>
-        /// Description of assignment.
-        /// </summary>
-        public string Description { get; set; }
-
-        /// <summary>
-        /// Remarks for student.
-        /// </summary>
-        public string RemarksToStudent { get; set; }
-
-        /// <summary>
-        /// Remarks for mentor.
-        /// </summary>
-        public string RemarksToMentor { get; set; }
-
-        /// <summary>
         /// Difficulty level of the assignment.
         /// </summary>
         public int? Level { get; set; }
@@ -68,7 +53,13 @@ namespace Milvasoft.SampleAPI.Spec
         public List<Assignment> GetFilteredEntities(IEnumerable<Assignment> entities)
         {
 
-            entities.ThrowIfListIsNullOrEmpty();
+            if (!Title.IsNullOrEmpty()) entities = entities.Where(m => m.Title.ToUpper().Contains(Title));
+            if (!Rules.IsNullOrEmpty()) entities = entities.Where(m => m.Rules.ToUpper().Contains(Rules));
+
+            if (Level.HasValue) entities.Where(m => m.Level == Level);
+            if (MaxDeliveryDay.HasValue) entities.Where(m => m.MaxDeliveryDay == MaxDeliveryDay);
+
+            if (ProfessionId.HasValue) entities = entities.Where(i => i.ProfessionId == ProfessionId);
 
             return entities.ToList();
         }
@@ -84,7 +75,6 @@ namespace Milvasoft.SampleAPI.Spec
             List<Expression<Func<Assignment, bool>>> predicates = new List<Expression<Func<Assignment, bool>>>();
 
             if (!string.IsNullOrEmpty(Title)) predicates.Add(c => c.Title == Title);
-            if (!string.IsNullOrEmpty(Description)) predicates.Add(c => c.Description == Description);
             if (!string.IsNullOrEmpty(Rules)) predicates.Add(c => c.Rules == Rules);
 
 

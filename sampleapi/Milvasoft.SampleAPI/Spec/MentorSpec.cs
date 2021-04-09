@@ -27,11 +27,6 @@ namespace Milvasoft.SampleAPI.Spec
         /// </summary>
         public string Surname { get; set; }
 
-        /// <summary>
-        /// Professions of a mentor.
-        /// </summary>
-        public virtual IEnumerable<MentorProfession> Professions { get; set; }
-
         #endregion
 
         /// <summary>
@@ -42,7 +37,9 @@ namespace Milvasoft.SampleAPI.Spec
         public List<Mentor> GetFilteredEntities(IEnumerable<Mentor> entities)
         {
 
-            entities.ThrowIfListIsNullOrEmpty();
+            if (!Name.IsNullOrEmpty()) entities = entities.Where(m => m.Name.ToUpper().Contains(Name));
+            if (!Surname.IsNullOrEmpty()) entities = entities.Where(m => m.Surname.ToUpper().Contains(Surname));
+           
 
             return entities.ToList();
         }
@@ -59,8 +56,6 @@ namespace Milvasoft.SampleAPI.Spec
 
             if (!string.IsNullOrEmpty(Name)) predicates.Add(c => c.Name == Name);
             if (!string.IsNullOrEmpty(Surname)) predicates.Add(c => c.Surname == Surname);
-
-            if (!Professions.IsNullOrEmpty()) predicates.Add(c => c.Professions == Professions);
 
             predicates?.ForEach(predicate => mainPredicate = mainPredicate.Append(predicate, ExpressionType.AndAlso));
             return mainPredicate;

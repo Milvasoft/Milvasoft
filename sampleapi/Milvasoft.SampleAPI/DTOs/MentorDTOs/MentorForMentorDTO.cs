@@ -5,14 +5,15 @@ using Milvasoft.SampleAPI.Entity;
 using Milvasoft.SampleAPI.Utils.Attributes.ValidationAttributes;
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Milvasoft.SampleAPI.DTOs.MentorDTOs
 {
-
     /// <summary>
-    /// Mentor DTO.
+    /// Mentor entities for mentor.
     /// </summary>
-    public class MentorDTO : AuditableEntity<AppUser, Guid, Guid>
+    public class MentorForMentorDTO : AuditableEntity<AppUser, Guid, Guid>
     {
         /// <summary>
         /// Mentor name.
@@ -25,21 +26,6 @@ namespace Milvasoft.SampleAPI.DTOs.MentorDTOs
         /// </summary>
         [OValidateString(2, 100)]
         public string Surname { get; set; }
-
-        /// <summary>
-        /// CV path of mentor.
-        /// </summary>
-        public string CVFilePath { get; set; }
-
-        /// <summary>
-        /// AppUser ID of mentor.
-        /// </summary>
-        public Guid AppUserId { get; set; }
-
-        /// <summary>
-        /// AppUser of mentor.
-        /// </summary>
-        public virtual AppUserDTO AppUser { get; set; }
 
         /// <summary>
         /// Announcements posted by the mentor.

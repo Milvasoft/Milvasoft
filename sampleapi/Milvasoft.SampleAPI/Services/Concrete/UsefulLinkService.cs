@@ -35,19 +35,20 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// Get links for student.
         /// </summary>
         /// <returns></returns>
-        public async Task<PaginationDTO<UsefulLinkDTO>> GetEntitiesForStudentAsync(int pageIndex,
-                                                                               int requestedItemCount,
-                                                                               string orderByProperty = null,
-                                                                               bool orderByAscending = false,
-                                                                               UsefulLinkSpec usefulLinkSpec = null)
+        public async Task<PaginationDTO<UsefulLinkDTO>> GetEntitiesForStudentAsync(PaginationParamsWithSpec<UsefulLinkSpec> usefulLinkPaginationParams)
         {
             var (usefulLinks, pageCount, totalDataCount) = await _usefulLinkRepository.PreparePaginationDTO<IBaseRepository<UsefulLink, Guid, EducationAppDbContext>, UsefulLink, Guid>
-                                                                                                                (pageIndex, requestedItemCount, orderByProperty, orderByAscending, usefulLinkSpec?.ToExpression()).ConfigureAwait(false);
+                                                                                                                 (usefulLinkPaginationParams.PageIndex,
+                                                                                                                usefulLinkPaginationParams.RequestedItemCount,
+                                                                                                                usefulLinkPaginationParams.OrderByProperty = null,
+                                                                                                                usefulLinkPaginationParams.OrderByAscending = false,
+                                                                                                                usefulLinkPaginationParams.Spec?.ToExpression()).ConfigureAwait(false);
 
             return new PaginationDTO<UsefulLinkDTO>
             {
                 DTOList = usefulLinks.CheckList(i => usefulLinks.Select(link => new UsefulLinkDTO
                 {
+                    Id = link.Id,
                     Title = link.Title,
                     Description = link.Description,
                     Url = link.Url,
@@ -63,15 +64,14 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// Get links for admin.
         /// </summary>
         /// <returns></returns>
-        public async Task<PaginationDTO<UsefulLinkDTO>> GetEntitiesForAdminAsync(int pageIndex,
-                                                                               int requestedItemCount,
-                                                                               string orderByProperty = null,
-                                                                               bool orderByAscending = false,
-                                                                               UsefulLinkSpec usefulLinkSpec = null)
+        public async Task<PaginationDTO<UsefulLinkDTO>> GetEntitiesForAdminAsync(PaginationParamsWithSpec<UsefulLinkSpec> usefulLinkPaginationParams)
         {
             var (usefulLinks, pageCount, totalDataCount) = await _usefulLinkRepository.PreparePaginationDTO<IBaseRepository<UsefulLink, Guid, EducationAppDbContext>, UsefulLink, Guid>
-                                                                                                                (pageIndex, requestedItemCount, orderByProperty, orderByAscending, usefulLinkSpec?.ToExpression()).ConfigureAwait(false);
-
+                                                                                                                (usefulLinkPaginationParams.PageIndex,
+                                                                                                                usefulLinkPaginationParams.RequestedItemCount,
+                                                                                                                usefulLinkPaginationParams.OrderByProperty = null,
+                                                                                                                usefulLinkPaginationParams.OrderByAscending = false,
+                                                                                                                usefulLinkPaginationParams.Spec?.ToExpression()).ConfigureAwait(false);
             return new PaginationDTO<UsefulLinkDTO>
             {
                 DTOList = usefulLinks.CheckList(i => usefulLinks.Select(link => new UsefulLinkDTO
@@ -92,19 +92,20 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// Get link for mentor.
         /// </summary>
         /// <returns></returns>
-        public async Task<PaginationDTO<UsefulLinkDTO>> GetEntitiesForMentorAsync(int pageIndex,
-                                                                               int requestedItemCount,
-                                                                               string orderByProperty = null,
-                                                                               bool orderByAscending = false,
-                                                                               UsefulLinkSpec usefulLinkSpec = null)
+        public async Task<PaginationDTO<UsefulLinkDTO>> GetEntitiesForMentorAsync(PaginationParamsWithSpec<UsefulLinkSpec> usefulLinkPaginationParams)
         {
             var (usefulLinks, pageCount, totalDataCount) = await _usefulLinkRepository.PreparePaginationDTO<IBaseRepository<UsefulLink, Guid, EducationAppDbContext>, UsefulLink, Guid>
-                                                                                                                (pageIndex, requestedItemCount, orderByProperty, orderByAscending, usefulLinkSpec?.ToExpression()).ConfigureAwait(false);
+                                                                                                                 (usefulLinkPaginationParams.PageIndex,
+                                                                                                                usefulLinkPaginationParams.RequestedItemCount,
+                                                                                                                usefulLinkPaginationParams.OrderByProperty = null,
+                                                                                                                usefulLinkPaginationParams.OrderByAscending = false,
+                                                                                                                usefulLinkPaginationParams.Spec?.ToExpression()).ConfigureAwait(false);
 
             return new PaginationDTO<UsefulLinkDTO>
             {
                 DTOList = usefulLinks.CheckList(i => usefulLinks.Select(link => new UsefulLinkDTO
                 {
+                    Id=link.Id,
                     Title = link.Title,
                     Description = link.Description,
                     Url = link.Url,

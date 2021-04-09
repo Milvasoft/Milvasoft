@@ -4,13 +4,16 @@ using Milvasoft.SampleAPI.Entity;
 using Milvasoft.SampleAPI.Utils.Attributes.ValidationAttributes;
 using Milvasoft.SampleAPI.Utils.Swagger;
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Milvasoft.SampleAPI.DTOs.AnnouncementDTOs
 {
     /// <summary>
-    /// Announcements DTO.
+    /// Announcements for admin.
     /// </summary>
-    public class AnnouncementDTO : AuditableEntity<AppUser, Guid, Guid>
+    public class AnnouncementForAdminDTO : AuditableEntity<AppUser, Guid, Guid>
     {
         /// <summary>
         /// Tittle of announcement.

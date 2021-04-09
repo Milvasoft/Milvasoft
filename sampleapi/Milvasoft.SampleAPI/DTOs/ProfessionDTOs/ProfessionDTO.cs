@@ -1,9 +1,11 @@
-﻿using Milvasoft.SampleAPI.DTOs.AssignmentDTOs;
+﻿using Milvasoft.Helpers.DataAccess.Concrete.Entity;
+using Milvasoft.SampleAPI.DTOs.AssignmentDTOs;
 using Milvasoft.SampleAPI.DTOs.MentorDTOs;
 using Milvasoft.SampleAPI.DTOs.QuestionDTOs;
 using Milvasoft.SampleAPI.DTOs.StudentDTOs;
 using Milvasoft.SampleAPI.Entity;
 using Milvasoft.SampleAPI.Utils.Attributes.ValidationAttributes;
+using System;
 using System.Collections.Generic;
 
 namespace Milvasoft.SampleAPI.DTOs.ProfessionDTOs
@@ -12,9 +14,8 @@ namespace Milvasoft.SampleAPI.DTOs.ProfessionDTOs
     /// <summary>
     /// Profession entity.
     /// </summary>
-    public class ProfessionDTO : EducationEntityBase
+    public class ProfessionDTO : AuditableEntity<AppUser, Guid, Guid>
     {
-
         /// <summary>
         /// Name of profession.
         /// </summary>

@@ -2,6 +2,7 @@
 using Milvasoft.Helpers.DataAccess.IncludeLibrary;
 using Milvasoft.Helpers.Models;
 using Milvasoft.SampleAPI.Data;
+using Milvasoft.SampleAPI.DTOs;
 using Milvasoft.SampleAPI.DTOs.MentorDTOs;
 using Milvasoft.SampleAPI.DTOs.QuestionDTOs;
 using Milvasoft.SampleAPI.DTOs.StudentDTOs;
@@ -38,22 +39,24 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// Get all questions for admin.
         /// </summary>
         /// <returns></returns>
-        public async Task<PaginationDTO<QuestionDTO>> GetEntitiesForAdminAsync(int pageIndex,
-                                                                               int requestedItemCount,
-                                                                               string orderByProperty = null,
-                                                                               bool orderByAscending = false,
-                                                                               QuestionSpec questionSpec = null)
+        public async Task<PaginationDTO<QuestionForAdminDTO>> GetEntitiesForAdminAsync(PaginationParamsWithSpec<QuestionSpec> questionPaginationParams)
         {
             Func<IIncludable<Question>, IIncludable> includes = i => i.Include(md => md.Mentor)
                                                                      .Include(st => st.Student);
 
             var (questions, pageCount, totalDataCount) = await _questionService.PreparePaginationDTO<IBaseRepository<Question, Guid, EducationAppDbContext>, Question, Guid>
-                                                                                                                (pageIndex, requestedItemCount, orderByProperty, orderByAscending, questionSpec?.ToExpression(), includes).ConfigureAwait(false);
+                                                                                                                (questionPaginationParams.PageIndex,
+                                                                                                                questionPaginationParams.RequestedItemCount,
+                                                                                                                questionPaginationParams.OrderByProperty = null,
+                                                                                                                questionPaginationParams.OrderByAscending = false,
+                                                                                                                questionPaginationParams.Spec?.ToExpression(),
+                                                                                                                includes).ConfigureAwait(false);
 
-            return new PaginationDTO<QuestionDTO>
+            return new PaginationDTO<QuestionForAdminDTO>
             {
-                DTOList = questions.CheckList(i => questions.Select(question => new QuestionDTO
+                DTOList = questions.CheckList(i => questions.Select(question => new QuestionForAdminDTO
                 {
+                    Id = question.Id,
                     Title = question.Title,
                     QuestionContent = question.QuestionContent,
                     MentorReply = question.MentorReply,
@@ -67,8 +70,8 @@ namespace Milvasoft.SampleAPI.Services.Concrete
                     Student = question.Student.CheckObject(i => new StudentDTO
                     {
                         Id = i.Id
-                    }),
-                    Id = question.Id
+                    })
+                    
                 })),
                 PageCount = pageCount,
                 TotalDataCount = totalDataCount
@@ -79,23 +82,25 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// Get all questions for admin.
         /// </summary>
         /// <returns></returns>
-        public async Task<PaginationDTO<QuestionDTO>> GetEntitiesForMentorAsync(int pageIndex,
-                                                                                int requestedItemCount,
-                                                                                string orderByProperty = null,
-                                                                                bool orderByAscending = false,
-                                                                                QuestionSpec questionSpec = null)
+        public async Task<PaginationDTO<QuestionForMentorDTO>> GetEntitiesForMentorAsync(PaginationParamsWithSpec<QuestionSpec> questionPaginationParams)
         {
             Func<IIncludable<Question>, IIncludable> includes = i => i.Include(md => md.Mentor)
                                                                      .Include(st => st.Student);
 
 
             var (questions, pageCount, totalDataCount) = await _questionService.PreparePaginationDTO<IBaseRepository<Question, Guid, EducationAppDbContext>, Question, Guid>
-                                                                                                                 (pageIndex, requestedItemCount, orderByProperty, orderByAscending, questionSpec?.ToExpression(), includes).ConfigureAwait(false);
+                                                                                                                 (questionPaginationParams.PageIndex,
+                                                                                                                questionPaginationParams.RequestedItemCount,
+                                                                                                                questionPaginationParams.OrderByProperty = null,
+                                                                                                                questionPaginationParams.OrderByAscending = false,
+                                                                                                                questionPaginationParams.Spec?.ToExpression(),
+                                                                                                                includes).ConfigureAwait(false);
 
-            return new PaginationDTO<QuestionDTO>
+            return new PaginationDTO<QuestionForMentorDTO>
             {
-                DTOList = questions.CheckList(i => questions.Select(question => new QuestionDTO
+                DTOList = questions.CheckList(i => questions.Select(question => new QuestionForMentorDTO
                 {
+                    Id=question.Id,
                     Title = question.Title,
                     QuestionContent = question.QuestionContent,
                     MentorReply = question.MentorReply,
@@ -120,22 +125,24 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// Get all questions for student.
         /// </summary>
         /// <returns></returns>
-        public async Task<PaginationDTO<QuestionDTO>> GetEntitiesForStudentAsync(int pageIndex,
-                                                                                 int requestedItemCount,
-                                                                                 string orderByProperty = null,
-                                                                                 bool orderByAscending = false,
-                                                                                 QuestionSpec questionSpec = null)
+        public async Task<PaginationDTO<QuestionForStudentDTO>> GetEntitiesForStudentAsync(PaginationParamsWithSpec<QuestionSpec> questionPaginationParams)
         {
             Func<IIncludable<Question>, IIncludable> includes = i => i.Include(md => md.Mentor)
                                                                     .Include(st => st.Student);
 
             var (questions, pageCount, totalDataCount) = await _questionService.PreparePaginationDTO<IBaseRepository<Question, Guid, EducationAppDbContext>, Question, Guid>
-                                                                                                                 (pageIndex, requestedItemCount, orderByProperty, orderByAscending, questionSpec?.ToExpression(), includes).ConfigureAwait(false);
+                                                                                                                 (questionPaginationParams.PageIndex,
+                                                                                                                questionPaginationParams.RequestedItemCount,
+                                                                                                                questionPaginationParams.OrderByProperty = null,
+                                                                                                                questionPaginationParams.OrderByAscending = false,
+                                                                                                                questionPaginationParams.Spec?.ToExpression(),
+                                                                                                                includes).ConfigureAwait(false);
 
-            return new PaginationDTO<QuestionDTO>
+            return new PaginationDTO<QuestionForStudentDTO>
             {
-                DTOList = questions.CheckList(i => questions.Select(question => new QuestionDTO
+                DTOList = questions.CheckList(i => questions.Select(question => new QuestionForStudentDTO
                 {
+                    Id=question.Id,
                     Title = question.Title,
                     QuestionContent = question.QuestionContent,
                     MentorReply = question.MentorReply,
@@ -159,14 +166,14 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// </summary>
         /// <param name="questionId"></param>
         /// <returns></returns>
-        public async Task<QuestionDTO> GetEntityForAdminAsync(Guid questionId)
+        public async Task<QuestionForAdminDTO> GetEntityForAdminAsync(Guid questionId)
         {
             Func<IIncludable<Question>, IIncludable> includes = i => i.Include(md => md.Mentor)
                                                                      .Include(st => st.Student);
 
             var question = await _questionService.GetByIdAsync(questionId, includes).ConfigureAwait(false);
 
-            return new QuestionDTO
+            return new QuestionForAdminDTO
             {
                 Title = question.Title,
                 QuestionContent = question.QuestionContent,
@@ -194,14 +201,14 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// </summary>
         /// <param name="questionId"></param>
         /// <returns></returns>
-        public async Task<QuestionDTO> GetEntityForMentorAsync(Guid questionId)
+        public async Task<QuestionForMentorDTO> GetEntityForMentorAsync(Guid questionId)
         {
             Func<IIncludable<Question>, IIncludable> includes = i => i.Include(md => md.Mentor)
                                                                      .Include(st => st.Student);
 
             var question = await _questionService.GetByIdAsync(questionId, includes).ConfigureAwait(false);
 
-            return new QuestionDTO
+            return new QuestionForMentorDTO
             {
                 Title = question.Title,
                 QuestionContent = question.QuestionContent,
@@ -226,14 +233,14 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// </summary>
         /// <param name="questionId"></param>
         /// <returns></returns>
-        public async Task<QuestionDTO> GetEntityForStudentAsync(Guid questionId)
+        public async Task<QuestionForStudentDTO> GetEntityForStudentAsync(Guid questionId)
         {
             Func<IIncludable<Question>, IIncludable> includes = i => i.Include(md => md.Mentor)
                                                                     .Include(st => st.Student);
 
             var question = await _questionService.GetByIdAsync(questionId).ConfigureAwait(false);
 
-            return new QuestionDTO
+            return new QuestionForStudentDTO
             {
                 Title = question.Title,
                 QuestionContent = question.QuestionContent,

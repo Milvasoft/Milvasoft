@@ -2,6 +2,7 @@
 using Milvasoft.Helpers.Models;
 using Milvasoft.Helpers.MultiTenancy.EntityBase;
 using Milvasoft.SampleAPI.Data;
+using Milvasoft.SampleAPI.DTOs;
 using Milvasoft.SampleAPI.DTOs.ProfessionDTOs;
 using Milvasoft.SampleAPI.Entity;
 using Milvasoft.SampleAPI.Services.Abstract;
@@ -46,22 +47,20 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// Get professions for admin.
         /// </summary>
         /// <returns></returns>
-        public async Task<PaginationDTO<ProfessionDTO>> GetEntitiesForAdminAsync(int pageIndex,
-                                                                                 int requestedItemCount,
-                                                                                 string orderByProperty = null,
-                                                                                 bool orderByAscending = false,
-                                                                                 ProfessionSpec professionSpec = null)
+        public async Task<PaginationDTO<ProfessionDTO>> GetEntitiesForAdminAsync(PaginationParamsWithSpec<ProfessionSpec> professionPaginationParams)
         {
             var (professions, pageCount, totalDataCount) = await _professionRepository.PreparePaginationDTO<IBaseRepository<Profession, Guid, EducationAppDbContext>, Profession, Guid>
-                                                                                                                (pageIndex, requestedItemCount, orderByProperty, orderByAscending, professionSpec?.ToExpression()).ConfigureAwait(false);
+                                                                                                                (professionPaginationParams.PageIndex,
+                                                                                                                professionPaginationParams.RequestedItemCount,
+                                                                                                                professionPaginationParams.OrderByProperty = null,
+                                                                                                                professionPaginationParams.OrderByAscending = false,
+                                                                                                                professionPaginationParams.Spec?.ToExpression()).ConfigureAwait(false);
 
             return new PaginationDTO<ProfessionDTO>
             {
                 DTOList = professions.CheckList(i => professions.Select(profession => new ProfessionDTO
                 {
                     Name = profession.Name,
-                    CreationDate = profession.CreationDate,
-                    CreatorUserId = profession.CreatorUserId,
                     Id = profession.Id
                 })),
                 PageCount = pageCount,
@@ -73,23 +72,21 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// Get professions for mentor.
         /// </summary>
         /// <returns></returns>
-        public async Task<PaginationDTO<ProfessionDTO>> GetEntitiesForMentorAsync(int pageIndex,
-                                                                                  int requestedItemCount,
-                                                                                  string orderByProperty = null,
-                                                                                  bool orderByAscending = false,
-                                                                                  ProfessionSpec professionSpec = null)
+        public async Task<PaginationDTO<ProfessionDTO>> GetEntitiesForMentorAsync(PaginationParamsWithSpec<ProfessionSpec> professionPaginationParams)
         {
             var (professions, pageCount, totalDataCount) = await _professionRepository.PreparePaginationDTO<IBaseRepository<Profession, Guid, EducationAppDbContext>, Profession, Guid>
-                                                                                                                (pageIndex, requestedItemCount, orderByProperty, orderByAscending, professionSpec?.ToExpression()).ConfigureAwait(false);
+                                                                                                                (professionPaginationParams.PageIndex,
+                                                                                                                professionPaginationParams.RequestedItemCount,
+                                                                                                                professionPaginationParams.OrderByProperty = null,
+                                                                                                                professionPaginationParams.OrderByAscending = false,
+                                                                                                                professionPaginationParams.Spec?.ToExpression()).ConfigureAwait(false);
 
             return new PaginationDTO<ProfessionDTO>
             {
                 DTOList = professions.CheckList(i => professions.Select(profession => new ProfessionDTO
                 {
                     Id = profession.Id,
-                    Name = profession.Name,
-                    CreationDate = profession.CreationDate,
-                    LastModificationDate = profession.LastModificationDate
+                    Name = profession.Name
                 })),
                 PageCount = pageCount,
                 TotalDataCount = totalDataCount
@@ -100,19 +97,21 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// Get professions for student.
         /// </summary>
         /// <returns></returns>
-        public async Task<PaginationDTO<ProfessionDTO>> GetEntitiesForStudentAsync(int pageIndex,
-                                                                                   int requestedItemCount,
-                                                                                   string orderByProperty = null,
-                                                                                   bool orderByAscending = false,
-                                                                                   ProfessionSpec professionSpec = null)
+        public async Task<PaginationDTO<ProfessionDTO>> GetEntitiesForStudentAsync(PaginationParamsWithSpec<ProfessionSpec> professionPaginationParams)
         {
             var (professions, pageCount, totalDataCount) = await _professionRepository.PreparePaginationDTO<IBaseRepository<Profession, Guid, EducationAppDbContext>, Profession, Guid>
-                                                                                                                (pageIndex, requestedItemCount, orderByProperty, orderByAscending, professionSpec?.ToExpression()).ConfigureAwait(false);
+                                                                                                                (professionPaginationParams.PageIndex,
+                                                                                                                professionPaginationParams.RequestedItemCount,
+                                                                                                                professionPaginationParams.OrderByProperty = null,
+                                                                                                                professionPaginationParams.OrderByAscending = false,
+                                                                                                                professionPaginationParams.Spec?.ToExpression()).ConfigureAwait(false);
 
             return new PaginationDTO<ProfessionDTO>
             {
+                
                 DTOList = professions.CheckList(i => professions.Select(profession => new ProfessionDTO
                 {
+                    Id=profession.Id,
                     Name = profession.Name
                 })),
                 PageCount = pageCount,

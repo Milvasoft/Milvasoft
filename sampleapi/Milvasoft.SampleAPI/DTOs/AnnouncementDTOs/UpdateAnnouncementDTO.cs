@@ -8,6 +8,9 @@ namespace Milvasoft.SampleAPI.DTOs.AnnouncementDTOs
     /// </summary>
     public class UpdateAnnouncementDTO
     {
+        /// <summary>
+        /// Id of updated announcement.
+        /// </summary>
         public Guid Id { get; set; }
 
         /// <summary>

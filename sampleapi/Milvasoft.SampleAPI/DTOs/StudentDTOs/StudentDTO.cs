@@ -14,7 +14,7 @@ namespace Milvasoft.SampleAPI.DTOs.StudentDTOs
     /// <summary>
     /// Student DTO.
     /// </summary>
-    public class StudentDTO : FullAuditableEntity<Guid>
+    public class StudentDTO : AuditableEntity<AppUser, Guid, Guid>
     {
 
         /// <summary>
