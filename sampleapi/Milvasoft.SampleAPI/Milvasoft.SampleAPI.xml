@@ -952,6 +952,11 @@
             UpdateAnnouncementDTO for update operations.
             </summary>
         </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.AnnouncementDTOs.UpdateAnnouncementDTO.Id">
+            <summary>
+            Id of updated announcement.
+            </summary>
+        </member>
         <member name="P:Milvasoft.SampleAPI.DTOs.AnnouncementDTOs.UpdateAnnouncementDTO.Title">
             <summary>
             Tittle of announcement.
@@ -1235,6 +1240,11 @@
         <member name="P:Milvasoft.SampleAPI.DTOs.AssignmentDTOs.AssignmentForAdminDTO.ProfessionId">
             <summary>
             The profession Id of assignment.
+            </summary>
+        </member>
+        <member name="T:Milvasoft.SampleAPI.DTOs.AssignmentDTOs.AssignmentForMentorDTO">
+            <summary>
+            Assigments for mentor DTO.
             </summary>
         </member>
         <member name="P:Milvasoft.SampleAPI.DTOs.AssignmentDTOs.AssignmentForMentorDTO.Title">
@@ -1630,6 +1640,11 @@
         <member name="T:Milvasoft.SampleAPI.DTOs.MentorDTOs.UpdateMentorDTO">
             <summary>
             Update mentor DTO for update operations.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.MentorDTOs.UpdateMentorDTO.Id">
+            <summary>
+            Id of updated mentor.
             </summary>
         </member>
         <member name="P:Milvasoft.SampleAPI.DTOs.MentorDTOs.UpdateMentorDTO.Name">
@@ -2311,6 +2326,11 @@
         <member name="P:Milvasoft.SampleAPI.DTOs.StudentDTOs.StudentForAdminDTO.Mentor">
             <summary>
             Mentor of student.
+            </summary>
+        </member>
+        <member name="T:Milvasoft.SampleAPI.DTOs.StudentDTOs.StudentForMentorDTO">
+            <summary>
+            Student for admin DTO.
             </summary>
         </member>
         <member name="P:Milvasoft.SampleAPI.DTOs.StudentDTOs.StudentForMentorDTO.Name">
