@@ -1,4 +1,5 @@
-﻿using Milvasoft.SampleAPI.DTOs.MentorDTOs;
+﻿using Milvasoft.Helpers.DataAccess.Concrete.Entity;
+using Milvasoft.SampleAPI.DTOs.MentorDTOs;
 using Milvasoft.SampleAPI.Entity;
 using Milvasoft.SampleAPI.Utils.Attributes.ValidationAttributes;
 using Milvasoft.SampleAPI.Utils.Swagger;
@@ -9,7 +10,7 @@ namespace Milvasoft.SampleAPI.DTOs.AnnouncementDTOs
     /// <summary>
     /// Announcements DTO.
     /// </summary>
-    public class AnnouncementDTO : EducationEntityBase
+    public class AnnouncementDTO : AuditableEntity<AppUser, Guid, Guid>
     {
         /// <summary>
         /// Tittle of announcement.

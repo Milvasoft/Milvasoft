@@ -11,7 +11,10 @@ using System.Threading.Tasks;
 
 namespace Milvasoft.SampleAPI.DTOs.StudentDTOs
 {
-    public class StudentForMentorDTO : FullAuditableEntity<Guid>
+    /// <summary>
+    /// Student for admin DTO.
+    /// </summary>
+    public class StudentForMentorDTO : AuditableEntity<AppUser, Guid, Guid>
     {
         /// <summary>
         /// Student's name.

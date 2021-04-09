@@ -1,5 +1,6 @@
 ﻿using Milvasoft.Helpers.DataAccess.Concrete.Entity;
 using Milvasoft.SampleAPI.DTOs.MentorDTOs;
+using Milvasoft.SampleAPI.Entity;
 using Milvasoft.SampleAPI.Entity.Enum;
 using Milvasoft.SampleAPI.Utils.Attributes.ValidationAttributes;
 using Milvasoft.SampleAPI.Utils.Swagger;
@@ -13,7 +14,7 @@ namespace Milvasoft.SampleAPI.DTOs.StudentDTOs
     /// <summary>
     /// Student entities for admin.
     /// </summary>
-    public class StudentForAdminDTO : FullAuditableEntity<Guid>
+    public class StudentForAdminDTO : AuditableEntity<AppUser, Guid, Guid>
     {
         /// <summary>
         /// Student's name.

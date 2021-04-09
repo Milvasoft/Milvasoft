@@ -1,4 +1,5 @@
-﻿using Milvasoft.SampleAPI.Entity;
+﻿using Milvasoft.Helpers.DataAccess.Concrete.Entity;
+using Milvasoft.SampleAPI.Entity;
 using Milvasoft.SampleAPI.Utils.Attributes.ValidationAttributes;
 using System;
 using System.Collections.Generic;
@@ -10,7 +11,7 @@ namespace Milvasoft.SampleAPI.DTOs.AssignmentDTOs
     /// <summary>
     /// Assignment for admin.
     /// </summary>
-    public class AssignmentForAdminDTO : EducationEntityBase
+    public class AssignmentForAdminDTO : AuditableEntity<AppUser, Guid, Guid>
     {
         /// <summary>
         /// Tittle of assignment.

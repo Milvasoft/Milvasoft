@@ -1,4 +1,5 @@
-﻿using Milvasoft.SampleAPI.DTOs.MentorDTOs;
+﻿using Milvasoft.Helpers.DataAccess.Concrete.Entity;
+using Milvasoft.SampleAPI.DTOs.MentorDTOs;
 using Milvasoft.SampleAPI.DTOs.StudentDTOs;
 using Milvasoft.SampleAPI.Entity;
 using Milvasoft.SampleAPI.Utils.Attributes.ValidationAttributes;
@@ -13,7 +14,7 @@ namespace Milvasoft.SampleAPI.DTOs.QuestionDTOs
     /// <summary>
     /// Question entities for admin.
     /// </summary>
-    public class QuestionForAdminDTO : EducationEntityBase
+    public class QuestionForAdminDTO : AuditableEntity<AppUser, Guid, Guid>
     {
         /// <summary>
         /// Tittle of question.

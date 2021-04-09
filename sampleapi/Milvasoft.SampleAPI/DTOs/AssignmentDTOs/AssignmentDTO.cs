@@ -1,4 +1,5 @@
-﻿using Milvasoft.SampleAPI.DTOs.ProfessionDTOs;
+﻿using Milvasoft.Helpers.DataAccess.Concrete.Entity;
+using Milvasoft.SampleAPI.DTOs.ProfessionDTOs;
 using Milvasoft.SampleAPI.Entity;
 using Milvasoft.SampleAPI.Utils.Attributes.ValidationAttributes;
 using Milvasoft.SampleAPI.Utils.Swagger;
@@ -10,7 +11,7 @@ namespace Milvasoft.SampleAPI.DTOs.AssignmentDTOs
     /// <summary>
     /// Assignment for student.
     /// </summary>
-    public class AssignmentDTO : EducationEntityBase
+    public class AssignmentDTO : AuditableEntity<AppUser, Guid, Guid>
     {
 
         /// <summary>

@@ -1,4 +1,5 @@
 ﻿using Milvasoft.Helpers.DataAccess.Concrete.Entity;
+using Milvasoft.SampleAPI.Entity;
 using Milvasoft.SampleAPI.Utils.Attributes.ValidationAttributes;
 using System;
 using System.Collections.Generic;
@@ -10,7 +11,7 @@ namespace Milvasoft.SampleAPI.DTOs.StudentDTOs
     /// <summary>
     /// Student entities for other student.
     /// </summary>
-    public class StudentForStudentDTO : FullAuditableEntity<Guid>
+    public class StudentForStudentDTO  : AuditableEntity<AppUser, Guid, Guid>
     {
         /// <summary>
         /// Student's name.

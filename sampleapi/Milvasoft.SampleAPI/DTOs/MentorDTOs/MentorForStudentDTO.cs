@@ -1,5 +1,6 @@
 ﻿using Milvasoft.Helpers.DataAccess.Concrete.Entity;
 using Milvasoft.SampleAPI.DTOs.AnnouncementDTOs;
+using Milvasoft.SampleAPI.Entity;
 using Milvasoft.SampleAPI.Utils.Attributes.ValidationAttributes;
 using System;
 using System.Collections.Generic;
@@ -11,7 +12,7 @@ namespace Milvasoft.SampleAPI.DTOs.MentorDTOs
     /// <summary>
     /// Mentor entities for student.
     /// </summary>
-    public class MentorForStudentDTO : FullAuditableEntity<Guid>
+    public class MentorForStudentDTO : AuditableEntity<AppUser, Guid, Guid>
     {
         /// <summary>
         /// Mentor name.

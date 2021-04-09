@@ -13,7 +13,7 @@ namespace Milvasoft.SampleAPI.DTOs.MentorDTOs
     /// <summary>
     /// Mentor entities for mentor.
     /// </summary>
-    public class MentorForMentorDTO : EducationEntityBase
+    public class MentorForMentorDTO : AuditableEntity<AppUser, Guid, Guid>
     {
         /// <summary>
         /// Mentor name.

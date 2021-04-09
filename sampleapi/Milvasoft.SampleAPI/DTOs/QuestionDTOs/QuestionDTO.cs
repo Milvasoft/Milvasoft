@@ -1,4 +1,5 @@
-﻿using Milvasoft.SampleAPI.DTOs.MentorDTOs;
+﻿using Milvasoft.Helpers.DataAccess.Concrete.Entity;
+using Milvasoft.SampleAPI.DTOs.MentorDTOs;
 using Milvasoft.SampleAPI.DTOs.ProfessionDTOs;
 using Milvasoft.SampleAPI.DTOs.StudentDTOs;
 using Milvasoft.SampleAPI.Entity;
@@ -12,7 +13,7 @@ namespace Milvasoft.SampleAPI.DTOs.QuestionDTOs
     /// <summary>
     /// Questions asked by students.
     /// </summary>
-    public class QuestionDTO : EducationEntityBase
+    public class QuestionDTO : AuditableEntity<AppUser, Guid, Guid>
     {
 
         /// <summary>

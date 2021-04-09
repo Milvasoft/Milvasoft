@@ -1,4 +1,5 @@
-﻿using Milvasoft.SampleAPI.DTOs.ProfessionDTOs;
+﻿using Milvasoft.Helpers.DataAccess.Concrete.Entity;
+using Milvasoft.SampleAPI.DTOs.ProfessionDTOs;
 using Milvasoft.SampleAPI.Entity;
 using System;
 
@@ -8,9 +9,8 @@ namespace Milvasoft.SampleAPI.DTOs
     /// <summary>
     /// Useful links.
     /// </summary>
-    public class UsefulLinkDTO : EducationEntityBase
+    public class UsefulLinkDTO : AuditableEntity<AppUser, Guid, Guid>
     {
-
         /// <summary>
         /// Tittle of link.
         /// </summary>
