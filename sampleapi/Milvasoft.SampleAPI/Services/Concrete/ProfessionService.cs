@@ -108,10 +108,10 @@ namespace Milvasoft.SampleAPI.Services.Concrete
 
             return new PaginationDTO<ProfessionDTO>
             {
-                
+
                 DTOList = professions.CheckList(i => professions.Select(profession => new ProfessionDTO
                 {
-                    Id=profession.Id,
+                    Id = profession.Id,
                     Name = profession.Name
                 })),
                 PageCount = pageCount,

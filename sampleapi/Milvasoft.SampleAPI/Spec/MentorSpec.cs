@@ -1,7 +1,6 @@
 ﻿using Milvasoft.Helpers.Extensions;
 using Milvasoft.SampleAPI.Entity;
 using Milvasoft.SampleAPI.Spec.Abstract;
-using Milvasoft.SampleAPI.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -39,7 +38,7 @@ namespace Milvasoft.SampleAPI.Spec
 
             if (!Name.IsNullOrEmpty()) entities = entities.Where(m => m.Name.ToUpper().Contains(Name));
             if (!Surname.IsNullOrEmpty()) entities = entities.Where(m => m.Surname.ToUpper().Contains(Surname));
-           
+
 
             return entities.ToList();
         }
@@ -52,7 +51,7 @@ namespace Milvasoft.SampleAPI.Spec
         {
 
             Expression<Func<Mentor, bool>> mainPredicate = null;
-            List<Expression<Func<Mentor, bool>>> predicates = new List<Expression<Func<Mentor, bool>>>();
+            List<Expression<Func<Mentor, bool>>> predicates = new();
 
             if (!string.IsNullOrEmpty(Name)) predicates.Add(c => c.Name == Name);
             if (!string.IsNullOrEmpty(Surname)) predicates.Add(c => c.Surname == Surname);

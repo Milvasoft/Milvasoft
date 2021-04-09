@@ -53,7 +53,7 @@ namespace Milvasoft.SampleAPI.Middlewares
 
             string message = sharedLocalizer["MiddlewareGeneralErrorMessage"];
 
-            List<int> errorCodes = new List<int>();
+            List<int> errorCodes = new();
 
             try
             {
@@ -64,23 +64,13 @@ namespace Milvasoft.SampleAPI.Middlewares
             {
                 if (ex is MilvaUserFriendlyException userFriendlyEx)
                 {
-                    //var userFriendlyEx = (MilvaUserFriendlyException)ex;
-                    message = userFriendlyEx.Message;
-                    errorCodes.Add((int)userFriendlyEx.ExceptionCode);
+                    if (userFriendlyEx.ExceptionObject == null)
+                        message = sharedLocalizer[userFriendlyEx.Message];
+                    else message = sharedLocalizer[userFriendlyEx.Message, userFriendlyEx.ExceptionObject];
 
-                    if (userFriendlyEx.ExceptionCode == (int)MilvaException.WrongPaginationParams)
-                    {
-                        message = sharedLocalizer["WrongPaginationParamsException", userFriendlyEx.ExceptionObject];
-                    }
-                    else if (userFriendlyEx.ExceptionCode == (int)MilvaException.WrongRequestedPageNumber)
-                    {
-                        message = sharedLocalizer["InvalidPageIndexMessage"];
-                    }
-                    else if (userFriendlyEx.ExceptionCode == (int)MilvaException.WrongRequestedItemCount)
-                    {
-                        message = sharedLocalizer["InvalidRequestedItemCountMessage"];
-                    }
-                    else if (userFriendlyEx.ExceptionCode == (int)MilvaException.CannotGetResponse)
+                    errorCodes.Add(userFriendlyEx.ExceptionCode);
+
+                    if (userFriendlyEx.ExceptionCode == (int)MilvaException.CannotGetResponse)
                     {
                         //SendExceptionMail(baseEx);
                     }
@@ -93,23 +83,26 @@ namespace Milvasoft.SampleAPI.Middlewares
 
                     //SendExceptionMail(ex);
                 }
-                if (!context.Response.HasStarted)
-                {
-                    var response = new ExceptionResponse();
-                    response.Message = message;
-                    response.StatusCode = MilvaStatusCodes.Status600Exception;
-                    response.Success = false;
-                    response.Result = new object();
-                    response.ErrorCodes = errorCodes;
-                    var json = JsonConvert.SerializeObject(response);
-                    context.Response.ContentType = "application/json";
-                    context.Items.Remove("ActionContent");
-                    context.Response.StatusCode = MilvaStatusCodes.Status200OK;
-                    await context.Response.WriteAsync(json);
-                }
             }
 
+            if (!context.Response.HasStarted)
+            {
+                var response = new ExceptionResponse
+                {
+                    Message = message,
+                    StatusCode = MilvaStatusCodes.Status600Exception,
+                    Success = false,
+                    Result = new object(),
+                    ErrorCodes = errorCodes
+                };
+                var json = JsonConvert.SerializeObject(response);
+                context.Response.ContentType = "application/json";
+                context.Items.Remove("ActionContent");
+                context.Response.StatusCode = MilvaStatusCodes.Status200OK;
+                await context.Response.WriteAsync(json);
+            }
         }
     }
 }
+
 

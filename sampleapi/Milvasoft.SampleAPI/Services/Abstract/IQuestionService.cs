@@ -8,7 +8,7 @@ namespace Milvasoft.SampleAPI.Services.Abstract
     /// <summary>
     /// Question service inteface.
     /// </summary>
-    public interface IQuestionService : IBaseService<QuestionSpec, AddQuestionDTO, UpdateQuestionDTO,QuestionForStudentDTO,QuestionForMentorDTO,QuestionForAdminDTO>
+    public interface IQuestionService : IBaseService<QuestionSpec, AddQuestionDTO, UpdateQuestionDTO, QuestionForStudentDTO, QuestionForMentorDTO, QuestionForAdminDTO>
     {
         /// <summary>
         ///  Returns questions to display

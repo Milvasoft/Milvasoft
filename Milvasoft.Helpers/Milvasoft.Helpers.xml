@@ -7914,7 +7914,7 @@
         </member>
         <member name="T:Milvasoft.Helpers.MultiTenancy.Store.CachedTenantStore`2">
             <summary>
-            Cached tenant store.
+            Cached tenant store. Sample store for <see cref="T:Milvasoft.Helpers.MultiTenancy.Store.ITenantStore`2"/>
             </summary>
         </member>
         <member name="M:Milvasoft.Helpers.MultiTenancy.Store.CachedTenantStore`2.#ctor(Milvasoft.Helpers.Caching.IRedisCacheService)">
@@ -7922,6 +7922,13 @@
             Creates new instance of <see cref="T:Milvasoft.Helpers.MultiTenancy.Store.CachedTenantStore`2"/>
             </summary>
             <param name="redisCacheService"></param>
+        </member>
+        <member name="M:Milvasoft.Helpers.MultiTenancy.Store.CachedTenantStore`2.#ctor(Milvasoft.Helpers.Caching.IRedisCacheService,System.String)">
+            <summary>
+            Creates new instance of <see cref="T:Milvasoft.Helpers.MultiTenancy.Store.CachedTenantStore`2"/>
+            </summary>
+            <param name="redisCacheService"></param>
+            <param name="connectionString"></param>
         </member>
         <member name="M:Milvasoft.Helpers.MultiTenancy.Store.CachedTenantStore`2.GetTenantAsync(`1)">
             <summary>
@@ -7936,6 +7943,14 @@
             </summary>
             <param name="identifier"></param>
             <param name="tenant"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.MultiTenancy.Store.CachedTenantStore`2.GetTenantAsync(`1,System.Func{System.Threading.Tasks.Task{`0}})">
+            <summary>
+            Returns a tenant according to <paramref name="identifier"/>.
+            </summary>
+            <param name="identifier"></param>
+            <param name="dbAction"></param>
             <returns></returns>
         </member>
         <member name="T:Milvasoft.Helpers.MultiTenancy.Store.ITenantStore`2">

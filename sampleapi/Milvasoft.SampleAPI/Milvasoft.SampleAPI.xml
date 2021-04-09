@@ -2753,8 +2753,8 @@
             <summary>
             Base services for all concrete services.
             </summary>
-            <typeparam name="TAddDTO">DTO for add operations.</typeparam>
-            <typeparam name="TEntityForAdminDTO">Get entitiy or entities for admin.</typeparam>
+            <typeparam name="TAddDTO"> DTO for add operations.</typeparam>
+            <typeparam name="TEntityForAdminDTO"> DTO that returns when data is fetched for admin.</typeparam>
             <typeparam name="TEntityForMentorDTO">Get entity or entities for mentor.</typeparam>
             <typeparam name="TEntityForStudentDTO">Get entity or entities for student.</typeparam>
             <typeparam name="TSpec">Spec for filter operations.</typeparam>
@@ -3203,14 +3203,6 @@
             Add mentor.
             </summary>
             <param name="addMentorDTO"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Milvasoft.SampleAPI.Services.Concrete.MentorService.AddAsync(Milvasoft.SampleAPI.Entity.AppUser,System.String)">
-            <summary>
-            Add appuser with mentor.
-            </summary>
-            <param name="user"></param>
-            <param name="password"></param>
             <returns></returns>
         </member>
         <member name="M:Milvasoft.SampleAPI.Services.Concrete.MentorService.UpdateEntityAsync(Milvasoft.SampleAPI.DTOs.MentorDTOs.UpdateMentorDTO)">

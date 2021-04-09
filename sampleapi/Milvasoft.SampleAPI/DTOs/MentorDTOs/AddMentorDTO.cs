@@ -1,5 +1,4 @@
-﻿using Milvasoft.SampleAPI.DTOs.ProfessionDTOs;
-using Milvasoft.SampleAPI.Utils.Attributes.ValidationAttributes;
+﻿using Milvasoft.SampleAPI.Utils.Attributes.ValidationAttributes;
 using System;
 using System.Collections.Generic;
 
@@ -41,7 +40,7 @@ namespace Milvasoft.SampleAPI.DTOs.MentorDTOs
         /// User Phone number.
         /// </summary>
         public string PhoneNumber { get; set; }
-       
+
 
         /// <summary>
         /// CV path of mentor.

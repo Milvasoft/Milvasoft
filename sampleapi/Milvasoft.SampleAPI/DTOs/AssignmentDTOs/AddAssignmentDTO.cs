@@ -11,7 +11,7 @@ namespace Milvasoft.SampleAPI.DTOs.AssignmentDTOs
         /// <summary>
         /// Tittle of assignment.
         /// </summary>
-        [OValidateString(200)]
+        [OValidateString(10,200)]
         public string Title { get; set; }
 
         /// <summary>

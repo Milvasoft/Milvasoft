@@ -1,5 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Milvasoft.Helpers.Caching;
+﻿using Milvasoft.Helpers.Caching;
 using Milvasoft.Helpers.MultiTenancy.EntityBase;
 using System;
 using System.Threading.Tasks;

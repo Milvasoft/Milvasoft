@@ -2,6 +2,7 @@
 using Milvasoft.Helpers.DataAccess.Abstract;
 using Milvasoft.Helpers.DataAccess.IncludeLibrary;
 using Milvasoft.Helpers.Exceptions;
+using Milvasoft.Helpers.Identity.Concrete;
 using Milvasoft.Helpers.Models;
 using Milvasoft.SampleAPI.Data;
 using Milvasoft.SampleAPI.DTOs;
@@ -61,7 +62,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
             {
                 DTOList = mentors.CheckList(i => mentors.Select(mentor => new MentorForAdminDTO
                 {
-                    Id=mentor.Id,
+                    Id = mentor.Id,
                     Name = mentor.Name,
                     Surname = mentor.Surname,
                     CVFilePath = mentor.CVFilePath,
@@ -83,6 +84,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
             };
         }
 
+        //TODO OGZ DELETE
         /// <summary>
         /// Get mentors for mentor.
         /// </summary>
@@ -126,6 +128,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
             };
         }
 
+        //TODO OGZ DELETE
         /// <summary>
         /// Get mentors for student.
         /// </summary>
@@ -185,9 +188,9 @@ namespace Milvasoft.SampleAPI.Services.Concrete
                 LastModificationDate = mentor.LastModificationDate,
                 Professions = mentor.Professions.CheckList(i => mentor.Professions?.Select(pr => new MentorProfessionDTO
                 {
-                    ProfessionId= pr.ProfessionId,
-                    MentorId=pr.MentorId,
-                    Id=pr.Id
+                    ProfessionId = pr.ProfessionId,
+                    MentorId = pr.MentorId,
+                    Id = pr.Id
                 })),
                 PublishedAnnouncements = mentor.PublishedAnnouncements.CheckList(i => mentor.PublishedAnnouncements?.Select(pa => new AnnouncementDTO
                 {
@@ -200,6 +203,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
             };
         }
 
+        //TODO OGZ DELETE
         /// <summary>
         /// Get mentor for mentor by <paramref name="mentorId"/>
         /// </summary>
@@ -220,7 +224,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
                 Professions = mentor.Professions.CheckList(i => mentor.Professions?.Select(pr => new MentorProfessionDTO
                 {
                     ProfessionId = pr.ProfessionId
-                    
+
                 })),
                 PublishedAnnouncements = mentor.PublishedAnnouncements.CheckList(i => mentor.PublishedAnnouncements?.Select(pa => new AnnouncementDTO
                 {
@@ -233,6 +237,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
             };
         }
 
+        //TODO OGZ DELETE
         /// <summary>
         /// Get mentor for student by <paramref name="mentorId"/>
         /// </summary>
@@ -266,47 +271,35 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// <returns></returns>
         public async Task AddEntityAsync(AddMentorDTO addMentorDTO)
         {
-            var mentor = new Mentor
-            {
-                Name = addMentorDTO.Name,
-                Surname = addMentorDTO.Surname,
-                CVFilePath = addMentorDTO.CVFilePath,
-                Professions = addMentorDTO.Professions != null ?
-                                     (from pp in addMentorDTO.Professions
-                                      select new MentorProfession
-                                      {
-                                          ProfessionId=pp
-                                      }).ToList() : null,
-            };
+
+
             var appUser = new AppUser
             {
                 UserName = addMentorDTO.UserName,
                 Email = addMentorDTO.Email,
                 PhoneNumber = addMentorDTO.PhoneNumber,
-                Mentor = mentor
+                Mentor = new Mentor
+                {
+                    Name = addMentorDTO.Name,
+                    Surname = addMentorDTO.Surname,
+                    CVFilePath = addMentorDTO.CVFilePath,
+                    Professions = addMentorDTO.Professions != null ?
+                                     (from pp in addMentorDTO.Professions
+                                      select new MentorProfession
+                                      {
+                                          ProfessionId = pp
+                                      }).ToList() : null,
+                }
             };
 
-            await AddAsync(appUser, addMentorDTO.Password).ConfigureAwait(false);
-            
-
-
-        }
-
-        /// <summary>
-        /// Add appuser with mentor.
-        /// </summary>
-        /// <param name="user"></param>
-        /// <param name="password"></param>
-        /// <returns></returns>
-        private async Task AddAsync(AppUser user, string password)
-        {
-            if (user.Mentor == null)
+            if (appUser.Mentor == null)//TODO OGZ silinecek
                 throw new MilvaUserFriendlyException("PleaseEnterPersonnelInformation");
 
-            var result = await _userManager.CreateAsync(user, password);
+            var result = await _userManager.CreateAsync(appUser, addMentorDTO.Password);
+
 
             if (!result.Succeeded)
-                throw new MilvaUserFriendlyException(string.Join("~", result.Errors.Select(m => m.Description)));
+                throw new MilvaUserFriendlyException(result.DescriptionJoin());
         }
 
         /// <summary>
@@ -326,6 +319,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
             await _mentorRepository.UpdateAsync(updatedMentor).ConfigureAwait(false);
         }
 
+        //TODO OGZ DELETE
         /// <summary>
         /// Delete mentor.
         /// </summary>
@@ -345,9 +339,16 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// <returns></returns>
         public async Task DeleteEntitiesAsync(List<Guid> mentorIds)
         {
+            //TODO OGZ mentorIdList.IsNullOrEmpty() throw
+
             var mentors = await _mentorRepository.GetAllAsync(i => mentorIds.Select(p => p).Contains(i.Id)).ConfigureAwait(false);
 
+            //TODO OGZ mentors.IsNullOrEmpty() 
             await _mentorRepository.DeleteAsync(mentors).ConfigureAwait(false);
         }
+
+        #region Private Methods
+
+        #endregion
     }
 }

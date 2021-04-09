@@ -42,10 +42,10 @@ namespace Milvasoft.SampleAPI.Services.Concrete
             Func<IIncludable<Announcement>, IIncludable> includes = i => i.Include(md => md.PublisherMentor);
 
             var (announcements, pageCount, totalDataCount) = await _announcementRepository.PreparePaginationDTO<IBaseRepository<Announcement, Guid, EducationAppDbContext>, Announcement, Guid>
-                                                                                                                (announcementPaginationParams.PageIndex, 
-                                                                                                                announcementPaginationParams.RequestedItemCount, 
-                                                                                                                announcementPaginationParams.OrderByProperty=null, 
-                                                                                                                announcementPaginationParams.OrderByAscending=false, 
+                                                                                                                (announcementPaginationParams.PageIndex,
+                                                                                                                announcementPaginationParams.RequestedItemCount,
+                                                                                                                announcementPaginationParams.OrderByProperty = null,
+                                                                                                                announcementPaginationParams.OrderByAscending = false,
                                                                                                                 announcementPaginationParams.Spec?.ToExpression(),
                                                                                                                 includes).ConfigureAwait(false);
 
@@ -53,7 +53,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
             {
                 DTOList = announcements.CheckList(i => announcements.Select(announcement => new AnnouncementForStudentDTO
                 {
-                    Id=announcement.Id,
+                    Id = announcement.Id,
                     Title = announcement.Title,
                     Description = announcement.Description,
                     PublisherMentor = announcement.PublisherMentor.CheckObject(i => new MentorDTO

@@ -72,7 +72,7 @@ namespace Milvasoft.SampleAPI.Controllers
         /// <returns></returns>
         //[Authorize(Roles = "Mentor")]
         [HttpPatch("Mentor/{id}")]
-        public async Task<IActionResult> GetMentorForMentorbyId([FromBody] Guid id)
+        public async Task<IActionResult> GetMentorForMentorbyId(Guid id)
         {
             var mentor = await _mentorService.GetEntityForMentorAsync(id).ConfigureAwait(false);
 
@@ -97,7 +97,7 @@ namespace Milvasoft.SampleAPI.Controllers
         /// </summary>
         /// <returns></returns>
         //[Authorize(Roles = "Student")]
-        [HttpPatch("Student/{id}")]
+        [HttpPatch("Mentor/{id}/Students")]
         public async Task<IActionResult> GetMentorForStudentbyId([FromBody] Guid id)
         {
             var mentor = await _mentorService.GetEntityForStudentAsync(id).ConfigureAwait(false);
@@ -112,7 +112,7 @@ namespace Milvasoft.SampleAPI.Controllers
         /// <returns></returns>
        // [Authorize(Roles = "Admin")]
         [HttpPost("Mentor")]
-        [OValidationFilter(DisabledNestedProperties = "Name", DisabledProperties = "Name")]
+        [OValidationFilter]
         public async Task<IActionResult> AddMentor([FromBody] AddMentorDTO addMentor)
         {
             await _mentorService.AddEntityAsync(addMentor).ConfigureAwait(false);
@@ -151,7 +151,7 @@ namespace Milvasoft.SampleAPI.Controllers
         /// <param name="ids"></param>
         /// <returns></returns>
        // [Authorize(Roles = "Admin")]
-        [HttpDelete("{ids}")]
+        [HttpDelete]
         public async Task<IActionResult> DeleteMentors([FromBody] List<Guid> ids)
         {
             await _mentorService.DeleteEntitiesAsync(ids).ConfigureAwait(false);

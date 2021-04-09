@@ -48,7 +48,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
             {
                 DTOList = asssignments.CheckList(i => asssignments.Select(assignment => new AssignmentForStudentDTO
                 {
-                    Id=assignment.Id,
+                    Id = assignment.Id,
                     Title = assignment.Title,
                     Description = assignment.Description,
                     RemarksToStudent = assignment.RemarksToStudent,

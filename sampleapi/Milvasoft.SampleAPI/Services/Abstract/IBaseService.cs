@@ -10,13 +10,13 @@ namespace Milvasoft.SampleAPI.Services.Abstract
     /// <summary>
     /// Base services for all concrete services.
     /// </summary>
-    /// <typeparam name="TAddDTO">DTO for add operations.</typeparam>
-    /// <typeparam name="TEntityForAdminDTO">Get entitiy or entities for admin.</typeparam>
+    /// <typeparam name="TAddDTO"> DTO for add operations.</typeparam>
+    /// <typeparam name="TEntityForAdminDTO"> DTO that returns when data is fetched for admin.</typeparam>
     /// <typeparam name="TEntityForMentorDTO">Get entity or entities for mentor.</typeparam>
     /// <typeparam name="TEntityForStudentDTO">Get entity or entities for student.</typeparam>
     /// <typeparam name="TSpec">Spec for filter operations.</typeparam>
     /// <typeparam name="TUpdateDTO">DTO for update operations.</typeparam>
-    public interface IBaseService<TSpec, TAddDTO, TUpdateDTO,TEntityForStudentDTO,TEntityForMentorDTO,TEntityForAdminDTO>
+    public interface IBaseService<TSpec, TAddDTO, TUpdateDTO, TEntityForStudentDTO, TEntityForMentorDTO, TEntityForAdminDTO>
     {
         /// <summary>
         /// Get all entities for student from database.
