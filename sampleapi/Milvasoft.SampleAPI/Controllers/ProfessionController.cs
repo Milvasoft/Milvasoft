@@ -34,7 +34,7 @@ namespace Milvasoft.SampleAPI.Controllers
         public async Task<IActionResult> Test()
         {
             await _professionService.TestMethod().ConfigureAwait(false);
-            return Ok();
+            return Ok("Ok");
         }
 
         /// <summary>

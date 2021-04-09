@@ -44,9 +44,9 @@
 		<Authors>Milvasoft Corporation</Authors>
 		<Product>Milvasoft.Helpers</Product>
 		<Description>Helpers classes for projects. Please contribute for improvements. </Description>
-		<PackageTags>json,file,image,helper,milvasoft,extensions,filter,request,response</PackageTags>
+		<PackageTags>multitenancy,tenant,tenancy,json,file,image,helper,milvasoft,extensions,filter,request,response</PackageTags>
 		<Copyright>Milvasoft Yazılım Bilişim Araştırma Geliştirme Danışmanlık Sanayi ve Ticaret Ltd.Şti.</Copyright>
-		<Version>6.2.25</Version>
+		<Version>6.2.26</Version>
 		<PackageIcon>milvalogo.png</PackageIcon>
 
 	</PropertyGroup>

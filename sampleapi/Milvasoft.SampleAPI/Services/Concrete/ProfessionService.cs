@@ -1,5 +1,6 @@
 ﻿using Milvasoft.Helpers.DataAccess.Abstract;
 using Milvasoft.Helpers.Models;
+using Milvasoft.Helpers.MultiTenancy.Accessor;
 using Milvasoft.Helpers.MultiTenancy.EntityBase;
 using Milvasoft.SampleAPI.Data;
 using Milvasoft.SampleAPI.DTOs;
@@ -29,7 +30,11 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// Performs constructor injection for repository interfaces used in this service.
         /// </summary>
         /// <param name="professionRepository"></param>
-        public ProfessionService(IBaseRepository<Profession, Guid, EducationAppDbContext> professionRepository, IBaseRepository<TestEntity, TenantId, EducationAppDbContext> testRepository)
+        /// <param name="testRepository"></param>
+        /// <param name="tenantAccessor"></param>
+        public ProfessionService(IBaseRepository<Profession, Guid, EducationAppDbContext> professionRepository,
+                                 IBaseRepository<TestEntity, TenantId, EducationAppDbContext> testRepository,
+                                 ITenantAccessor<CachedTenant, TenantId> tenantAccessor) 
         {
 
             _professionRepository = professionRepository;

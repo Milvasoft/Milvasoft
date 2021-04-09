@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Milvasoft.Helpers.MultiTenancy.Accessor;
 using Milvasoft.Helpers.MultiTenancy.EntityBase;
 using Milvasoft.Helpers.MultiTenancy.ResolutionStrategy;
 using Milvasoft.Helpers.MultiTenancy.Service;
@@ -25,6 +26,7 @@ namespace Milvasoft.Helpers.MultiTenancy.Builder
         /// <param name="services"></param>
         public TenantBuilder(IServiceCollection services)
         {
+            services.AddTransient<ITenantAccessor<TTenant, TKey>, TenantAccessor<TTenant, TKey>>();
             services.AddTransient<ITenantService<TTenant, TKey>, TenantService<TTenant, TKey>>();
             _services = services;
         }

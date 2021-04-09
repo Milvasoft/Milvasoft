@@ -66,8 +66,8 @@ namespace Milvasoft.SampleAPI.AppStartup
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMultiTenancy<CachedTenant, TenantId>()
-                 .WithResolutionStrategy<HeaderResolutionStrategy>()
-                 .WithStore<CachedTenantStore<CachedTenant, TenantId>>();
+                    .WithResolutionStrategy<HeaderResolutionStrategy>()
+                    .WithStore<CachedTenantStore<CachedTenant, TenantId>>();
 
             services.ConfigureMVC();
 

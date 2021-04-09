@@ -99,6 +99,12 @@ namespace Milvasoft.Helpers.Caching
         Task<bool> KeyExpireAsync(string key, DateTime? expiration);
 
         /// <summary>
+        /// Flushs default database.
+        /// </summary>
+        /// <returns></returns>
+        Task FlushDatabaseAsync();
+
+        /// <summary>
         /// It performs the requested redis action in try catch blocks. If redis client not connected, connects.
         /// If an error occurs when performing action or connecting to redis, it throws the <see cref="MilvaUserFriendlyException"/> error along with the message key. 
         /// Fatal logging if <paramref name="milvaLogger"/> object is not null.

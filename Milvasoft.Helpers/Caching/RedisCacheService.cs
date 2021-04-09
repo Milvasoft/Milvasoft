@@ -3,6 +3,7 @@ using Milvasoft.Helpers.Enums;
 using Milvasoft.Helpers.Exceptions;
 using StackExchange.Redis;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Milvasoft.Helpers.Caching
@@ -86,6 +87,7 @@ namespace Milvasoft.Helpers.Caching
             return ((string)await _client.GetDatabase().StringGetAsync(key)).ToObject<T>();
         }
 
+
         /// <summary>
         /// Gets <paramref name="key"/>'s value.
         /// </summary>
@@ -161,17 +163,13 @@ namespace Milvasoft.Helpers.Caching
             return await _client.GetDatabase().KeyExpireAsync(key, expiration);
         }
 
-        private async Task CheckClientAndConnectIfNotAsync()
+        /// <summary>
+        /// Flushs default database.
+        /// </summary>
+        /// <returns></returns>
+        public async Task FlushDatabaseAsync()
         {
-            if (_client == null)
-            {
-                _client = await ConnectionMultiplexer.ConnectAsync(_options).ConfigureAwait(false);
-            }
-            else if (_client != null && !_client.IsConnected)
-            {
-                await _client.CloseAsync().ConfigureAwait(false);
-                _client = await ConnectionMultiplexer.ConnectAsync(_options).ConfigureAwait(false);
-            }
+            await _client.GetServer(_client.GetEndPoints().FirstOrDefault()).FlushDatabaseAsync().ConfigureAwait(false);
         }
 
         /// <summary>
@@ -241,6 +239,19 @@ namespace Milvasoft.Helpers.Caching
             finally
             {
                 await DisconnectAsync().ConfigureAwait(false);
+            }
+        }
+
+        private async Task CheckClientAndConnectIfNotAsync()
+        {
+            if (_client == null)
+            {
+                _client = await ConnectionMultiplexer.ConnectAsync(_options).ConfigureAwait(false);
+            }
+            else if (_client != null && !_client.IsConnected)
+            {
+                await _client.CloseAsync().ConfigureAwait(false);
+                _client = await ConnectionMultiplexer.ConnectAsync(_options).ConfigureAwait(false);
             }
         }
 
