@@ -55,6 +55,66 @@ namespace Milvasoft.Helpers.Encryption.Concrete
         #region Async Encryption
 
         /// <summary>
+        /// Encrypt <paramref name="value"/> with AES Algorithm and key.
+        /// !!! Milvasoft Corporation is not responsible of possible data loss.
+        /// </summary>
+        /// <param name="value"></param>
+        public async Task<string> EncryptAsync(string value)
+        {
+            byte[] inputValue = Encoding.UTF8.GetBytes(value);
+
+            using var aesProvider = CreateCryptographyProvider();
+
+            aesProvider.GenerateIV();
+
+            byte[] initializationVector = aesProvider.IV;
+
+            using ICryptoTransform encryptor = aesProvider.CreateEncryptor(_key, initializationVector);
+
+            using var memoryStream = new MemoryStream();
+
+            using (var cryptoStream = new CryptoStream(memoryStream, encryptor, CryptoStreamMode.Write))
+            {
+                await memoryStream.WriteAsync(initializationVector.AsMemory(0, initializationVector.Length)).ConfigureAwait(false);
+                await cryptoStream.WriteAsync(inputValue.AsMemory(0, inputValue.Length)).ConfigureAwait(false);
+                await cryptoStream.FlushFinalBlockAsync().ConfigureAwait(false);
+            }
+
+            return Convert.ToBase64String(memoryStream.ToArray());
+        }
+
+        /// <summary>
+        /// Decrypt <paramref name="value"/> with AES Algorithm and key.
+        /// !!! Milvasoft Corporation is not responsible of possible data loss.
+        /// </summary>
+        /// <param name="value"></param>
+        public async Task<string> DecryptAsync(string value)
+        {
+            byte[] inputValue = Convert.FromBase64String(value);
+
+            string outputValue;
+
+            using (var memoryStream = new MemoryStream(inputValue))
+            {
+                var initializationVector = new byte[InitializationVectorSize];
+
+                await memoryStream.ReadAsync(initializationVector.AsMemory(0, initializationVector.Length)).ConfigureAwait(false);
+
+                using AesCryptoServiceProvider aesProvider = CreateCryptographyProvider();
+
+                using ICryptoTransform decryptor = aesProvider.CreateDecryptor(_key, initializationVector);
+
+                using var cryptoStream = new CryptoStream(memoryStream, decryptor, CryptoStreamMode.Read);
+
+                using var reader = new StreamReader(cryptoStream);
+
+                outputValue = (await reader.ReadToEndAsync().ConfigureAwait(false)).Trim('\0');
+            }
+
+            return outputValue;
+        }
+
+        /// <summary>
         /// Encrypt file in <paramref name="filePath"/> with AES Algorithm and key.
         /// !!! Milvasoft Corporation is not responsible of possible data loss.
         /// </summary>
@@ -63,11 +123,10 @@ namespace Milvasoft.Helpers.Encryption.Concrete
         {
             var inputValue = await File.ReadAllTextAsync(filePath).ConfigureAwait(false);
 
-            var encryptedContent = Encrypt(inputValue);
+            var encryptedContent = await EncryptAsync(inputValue).ConfigureAwait(false);
 
             await File.WriteAllTextAsync(filePath, encryptedContent, Encoding.UTF8).ConfigureAwait(false);
         }
-
 
         /// <summary>
         /// Decrypt file in <paramref name="filePath"/> with AES Algorithm and key.
@@ -78,7 +137,7 @@ namespace Milvasoft.Helpers.Encryption.Concrete
         {
             var inputValue = await File.ReadAllTextAsync(filePath).ConfigureAwait(false);
 
-            var decryptedContent = Decrypt(inputValue);
+            var decryptedContent = await DecryptAsync(inputValue).ConfigureAwait(false);
 
             await File.WriteAllTextAsync(filePath, decryptedContent, Encoding.UTF8).ConfigureAwait(false);
         }
@@ -93,11 +152,10 @@ namespace Milvasoft.Helpers.Encryption.Concrete
         {
             var inputValue = await File.ReadAllTextAsync(filePath).ConfigureAwait(false);
 
-            var encryptedContent = Encrypt(inputValue);
+            var encryptedContent = await EncryptAsync(inputValue).ConfigureAwait(false);
 
             await File.WriteAllTextAsync(filePath, encryptedContent, encoding).ConfigureAwait(false);
         }
-
 
         /// <summary>
         /// Decrypt file in <paramref name="filePath"/> with AES Algorithm and key.
@@ -109,7 +167,7 @@ namespace Milvasoft.Helpers.Encryption.Concrete
         {
             var inputValue = await File.ReadAllTextAsync(filePath).ConfigureAwait(false);
 
-            var decryptedContent = Decrypt(inputValue);
+            var decryptedContent = await DecryptAsync(inputValue).ConfigureAwait(false);
 
             await File.WriteAllTextAsync(filePath, decryptedContent, encoding).ConfigureAwait(false);
         }
@@ -176,7 +234,7 @@ namespace Milvasoft.Helpers.Encryption.Concrete
             }
 
             return outputValue;
-        }
+        }  
 
         /// <summary>
         /// Encrypt file in <paramref name="filePath"/> with AES Algorithm and key.

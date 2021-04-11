@@ -10,6 +10,20 @@ namespace Milvasoft.Helpers.Encryption.Abstract
         #region Async Encryption
 
         /// <summary>
+        /// Encrypt <paramref name="value"/> with AES Algorithm and key.
+        /// !!! Milvasoft Corporation is not responsible of possible data loss.
+        /// </summary>
+        /// <param name="value"></param>
+        Task<string> EncryptAsync(string value);
+
+        /// <summary>
+        /// Decrypt <paramref name="value"/> with AES Algorithm and key.
+        /// !!! Milvasoft Corporation is not responsible of possible data loss.
+        /// </summary>
+        /// <param name="value"></param>
+        Task<string> DecryptAsync(string value);
+
+        /// <summary>
         /// Encrypt file in <paramref name="filePath"/> with AES Algorithm and key.
         /// !!! Milvasoft Corporation is not responsible of possible data loss.
         /// </summary>
