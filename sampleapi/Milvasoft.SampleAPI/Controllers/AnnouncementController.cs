@@ -33,7 +33,7 @@ namespace Milvasoft.SampleAPI.Controllers
         [HttpPatch("Announcement/Mentor")]
         public async Task<IActionResult> GetAnnouncementsForMentor([FromBody] PaginationParamsWithSpec<AnnouncementSpec> paginationParams)
         {
-            var announcements = await _announcementService.GetEntitiesForMentorAsync(paginationParams).ConfigureAwait(false);
+            var announcements = await _announcementService.GetAnnouncementForMentorAsync(paginationParams).ConfigureAwait(false);
             return Ok(announcements);
         }
 
@@ -45,7 +45,7 @@ namespace Milvasoft.SampleAPI.Controllers
         [HttpPatch("Announcement/Admin")]
         public async Task<IActionResult> GetAnnouncementsForAdmn([FromBody] PaginationParamsWithSpec<AnnouncementSpec> paginationParams)
         {
-            var announcements = await _announcementService.GetEntitiesForAdminAsync(paginationParams).ConfigureAwait(false);
+            var announcements = await _announcementService.GetAnnouncementForAdminAsync(paginationParams).ConfigureAwait(false);
             return Ok(announcements);
         }
 
@@ -57,7 +57,7 @@ namespace Milvasoft.SampleAPI.Controllers
         [HttpPatch("Announcement/Student")]
         public async Task<IActionResult> GetAnnouncementsForStudent([FromBody] PaginationParamsWithSpec<AnnouncementSpec> paginationParams)
         {
-            var announcements = await _announcementService.GetEntitiesForStudentAsync(paginationParams).ConfigureAwait(false);
+            var announcements = await _announcementService.GetAnnouncementForStudentAsync(paginationParams).ConfigureAwait(false);
             return Ok(announcements);
         }
 
@@ -69,7 +69,7 @@ namespace Milvasoft.SampleAPI.Controllers
         [HttpPatch("Announcement/Mentor/{id}")]
         public async Task<IActionResult> GetAnnouncementForMentorbyId([FromBody] Guid id)
         {
-            var announcement = await _announcementService.GetEntityForMentorAsync(id).ConfigureAwait(false);
+            var announcement = await _announcementService.GetAnnouncementForMentorAsync(id).ConfigureAwait(false);
 
             return Ok(announcement);
         }
@@ -82,7 +82,7 @@ namespace Milvasoft.SampleAPI.Controllers
         [HttpPatch("Announcement/Admin/{id}")]
         public async Task<IActionResult> GetAnnouncementForAdminbyId([FromBody] Guid id)
         {
-            var announcement = await _announcementService.GetEntityForAdminAsync(id).ConfigureAwait(false);
+            var announcement = await _announcementService.GetAnnouncementForAdminAsync(id).ConfigureAwait(false);
 
             return Ok(announcement);
         }
@@ -95,7 +95,7 @@ namespace Milvasoft.SampleAPI.Controllers
         [HttpPatch("Announcement/Student/{id}")]
         public async Task<IActionResult> GetAnnouncementForStudentbyId([FromBody] Guid id)
         {
-            var announcement = await _announcementService.GetEntityForStudentAsync(id).ConfigureAwait(false);
+            var announcement = await _announcementService.GetAnnouncementForStudentAsync(id).ConfigureAwait(false);
 
             return Ok(announcement);
         }
@@ -109,7 +109,7 @@ namespace Milvasoft.SampleAPI.Controllers
         [HttpPost("AddAnnouncements")]
         public async Task<IActionResult> AddAnnouncement([FromBody] AddAnnouncementDTO addAnnouncement)
         {
-            await _announcementService.AddEntityAsync(addAnnouncement).ConfigureAwait(false);
+            await _announcementService.AddAnnouncementAsync(addAnnouncement).ConfigureAwait(false);
             return Ok();
         }
 
@@ -122,20 +122,7 @@ namespace Milvasoft.SampleAPI.Controllers
         [HttpPut("UpdateAnnouncement")]
         public async Task<IActionResult> UpdateAnnouncement([FromBody] UpdateAnnouncementDTO updateAnnouncement)
         {
-            await _announcementService.UpdateEntityAsync(updateAnnouncement).ConfigureAwait(false);
-            return Ok();
-        }
-
-        /// <summary>
-        /// Delete announcement data by <paramref name="id"/>
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
-       // [Authorize(Roles = "Admin")]
-        [HttpDelete("Announcement/Delete/{id}")]
-        public async Task<IActionResult> DeleteAnnouncement(Guid id)
-        {
-            await _announcementService.DeleteEntityAsync(id).ConfigureAwait(false);
+            await _announcementService.UpdateAnnouncementAsync(updateAnnouncement).ConfigureAwait(false);
             return Ok();
         }
 
@@ -148,7 +135,7 @@ namespace Milvasoft.SampleAPI.Controllers
         [HttpDelete("Announcement/Deletes/{ids}")]
         public async Task<IActionResult> DeleteAnnouncements(List<Guid> ids)
         {
-            await _announcementService.DeleteEntitiesAsync(ids).ConfigureAwait(false);
+            await _announcementService.DeleteAnnouncementsAsync(ids).ConfigureAwait(false);
             return Ok();
         }
     }

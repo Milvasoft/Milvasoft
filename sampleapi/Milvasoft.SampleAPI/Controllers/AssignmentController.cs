@@ -33,7 +33,7 @@ namespace Milvasoft.SampleAPI.Controllers
         [HttpPatch("Assignment/Mentor")]
         public async Task<IActionResult> GetAssignmentsForMentor([FromBody] PaginationParamsWithSpec<AssignmentSpec> paginationParams)
         {
-            var assignments = await _assigmentService.GetEntitiesForMentorAsync(paginationParams).ConfigureAwait(false);
+            var assignments = await _assigmentService.GetAssignmentForMentorAsync(paginationParams).ConfigureAwait(false);
             return Ok(assignments);
         }
 
@@ -45,7 +45,7 @@ namespace Milvasoft.SampleAPI.Controllers
         [HttpPatch("Assignment/Admin")]
         public async Task<IActionResult> GetAssignmentsForAdmn([FromBody] PaginationParamsWithSpec<AssignmentSpec> paginationParams)
         {
-            var assignments = await _assigmentService.GetEntitiesForAdminAsync(paginationParams).ConfigureAwait(false);
+            var assignments = await _assigmentService.GetAssignmentForAdminAsync(paginationParams).ConfigureAwait(false);
             return Ok(assignments);
         }
 
@@ -57,7 +57,7 @@ namespace Milvasoft.SampleAPI.Controllers
         [HttpPatch("Assignment/Student")]
         public async Task<IActionResult> GetAssignmentsForStudent([FromBody] PaginationParamsWithSpec<AssignmentSpec> paginationParams)
         {
-            var assignments = await _assigmentService.GetEntitiesForStudentAsync(paginationParams).ConfigureAwait(false);
+            var assignments = await _assigmentService.GetAssignmentForStudentAsync(paginationParams).ConfigureAwait(false);
             return Ok(assignments);
         }
 
@@ -69,7 +69,7 @@ namespace Milvasoft.SampleAPI.Controllers
         [HttpPatch("Assignment/Mentor/{id}")]
         public async Task<IActionResult> GetAssignmentForMentorbyId([FromBody] Guid id)
         {
-            var assignment = await _assigmentService.GetEntityForMentorAsync(id).ConfigureAwait(false);
+            var assignment = await _assigmentService.GetAssignmentForMentorAsync(id).ConfigureAwait(false);
 
             return Ok(assignment);
         }
@@ -82,7 +82,7 @@ namespace Milvasoft.SampleAPI.Controllers
         [HttpPatch("Assignment/Admin/{id}")]
         public async Task<IActionResult> GetAssignmentForAdminbyId([FromBody] Guid id)
         {
-            var assignment = await _assigmentService.GetEntityForAdminAsync(id).ConfigureAwait(false);
+            var assignment = await _assigmentService.GetAssignmentForAdminAsync(id).ConfigureAwait(false);
 
             return Ok(assignment);
         }
@@ -95,7 +95,7 @@ namespace Milvasoft.SampleAPI.Controllers
         [HttpPatch("Assignment/Student/{id}")]
         public async Task<IActionResult> GetAssignmentForStudentbyId([FromBody] Guid id)
         {
-            var assignment = await _assigmentService.GetEntityForStudentAsync(id).ConfigureAwait(false);
+            var assignment = await _assigmentService.GetAssignmentForStudentAsync(id).ConfigureAwait(false);
 
             return Ok(assignment);
         }
@@ -109,7 +109,7 @@ namespace Milvasoft.SampleAPI.Controllers
         [HttpPost("AddAssignment")]
         public async Task<IActionResult> AddAssignment([FromBody] AddAssignmentDTO addAssignment)
         {
-            await _assigmentService.AddEntityAsync(addAssignment).ConfigureAwait(false);
+            await _assigmentService.AddAssignmentAsync(addAssignment).ConfigureAwait(false);
             return Ok();
         }
 
@@ -122,20 +122,7 @@ namespace Milvasoft.SampleAPI.Controllers
         [HttpPut("UpdateAssignment")]
         public async Task<IActionResult> UpdateAssignment([FromBody] UpdateAssignmentDTO updateAssignment)
         {
-            await _assigmentService.UpdateEntityAsync(updateAssignment).ConfigureAwait(false);
-            return Ok();
-        }
-
-        /// <summary>
-        /// Delete assignment data by <paramref name="id"/>
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
-       // [Authorize(Roles = "Admin")]
-        [HttpDelete("Assignment/Delete/{id}")]
-        public async Task<IActionResult> DeleteAssignment(Guid id)
-        {
-            await _assigmentService.DeleteEntityAsync(id).ConfigureAwait(false);
+            await _assigmentService.UpdateAssignmentAsync(updateAssignment).ConfigureAwait(false);
             return Ok();
         }
 
@@ -148,7 +135,7 @@ namespace Milvasoft.SampleAPI.Controllers
         [HttpDelete("Assignment/Deletes/{ids}")]
         public async Task<IActionResult> DeleteAssignment(List<Guid> ids)
         {
-            await _assigmentService.DeleteEntitiesAsync(ids).ConfigureAwait(false);
+            await _assigmentService.DeleteAssignmentAsync(ids).ConfigureAwait(false);
             return Ok();
         }
     }
