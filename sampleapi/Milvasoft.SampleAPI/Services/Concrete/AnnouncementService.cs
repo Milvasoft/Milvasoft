@@ -37,7 +37,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// Get all announcement for student.
         /// </summary>
         /// <returns></returns>
-        public async Task<PaginationDTO<AnnouncementForStudentDTO>> GetEntitiesForStudentAsync(PaginationParamsWithSpec<AnnouncementSpec> announcementPaginationParams)
+        public async Task<PaginationDTO<AnnouncementForStudentDTO>> GetAnnouncementForStudentAsync(PaginationParamsWithSpec<AnnouncementSpec> announcementPaginationParams)
         {
             Func<IIncludable<Announcement>, IIncludable> includes = i => i.Include(md => md.PublisherMentor);
 
@@ -70,7 +70,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// Get all announcement for admin.
         /// </summary>
         /// <returns></returns>
-        public async Task<PaginationDTO<AnnouncementForAdminDTO>> GetEntitiesForAdminAsync(PaginationParamsWithSpec<AnnouncementSpec> announcementPaginationParams)
+        public async Task<PaginationDTO<AnnouncementForAdminDTO>> GetAnnouncementForAdminAsync(PaginationParamsWithSpec<AnnouncementSpec> announcementPaginationParams)
         {
             Func<IIncludable<Announcement>, IIncludable> includes = i => i.Include(md => md.PublisherMentor);
 
@@ -104,7 +104,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// Get all announcement for mentor.
         /// </summary>
         /// <returns></returns>
-        public async Task<PaginationDTO<AnnouncementForMentorDTO>> GetEntitiesForMentorAsync(PaginationParamsWithSpec<AnnouncementSpec> announcementPaginationParams)
+        public async Task<PaginationDTO<AnnouncementForMentorDTO>> GetAnnouncementForMentorAsync(PaginationParamsWithSpec<AnnouncementSpec> announcementPaginationParams)
         {
             Func<IIncludable<Announcement>, IIncludable> includes = i => i.Include(md => md.PublisherMentor);
 
@@ -139,7 +139,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// </summary>
         /// <param name="announcementId"></param>
         /// <returns></returns>
-        public async Task<AnnouncementForAdminDTO> GetEntityForAdminAsync(Guid announcementId)
+        public async Task<AnnouncementForAdminDTO> GetAnnouncementForAdminAsync(Guid announcementId)
         {
             Func<IIncludable<Announcement>, IIncludable> includes = i => i.Include(md => md.PublisherMentor);
 
@@ -162,7 +162,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// </summary>
         /// <param name="announcementId"></param>
         /// <returns></returns>
-        public async Task<AnnouncementForMentorDTO> GetEntityForMentorAsync(Guid announcementId)
+        public async Task<AnnouncementForMentorDTO> GetAnnouncementForMentorAsync(Guid announcementId)
         {
             Func<IIncludable<Announcement>, IIncludable> includes = i => i.Include(md => md.PublisherMentor);
 
@@ -185,7 +185,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// </summary>
         /// <param name="announcementId"></param>
         /// <returns></returns>
-        public async Task<AnnouncementForStudentDTO> GetEntityForStudentAsync(Guid announcementId)
+        public async Task<AnnouncementForStudentDTO> GetAnnouncementForStudentAsync(Guid announcementId)
         {
             Func<IIncludable<Announcement>, IIncludable> includes = i => i.Include(md => md.PublisherMentor);
 
@@ -207,7 +207,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// </summary>
         /// <param name="addAnnouncementDTO"></param>
         /// <returns></returns>
-        public async Task AddEntityAsync(AddAnnouncementDTO addAnnouncementDTO)
+        public async Task AddAnnouncementAsync(AddAnnouncementDTO addAnnouncementDTO)
         {
             var newAnnnouncement = new Announcement
             {
@@ -225,7 +225,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// </summary>
         /// <param name="updateAnnouncementDTO"></param>
         /// <returns></returns>
-        public async Task UpdateEntityAsync(UpdateAnnouncementDTO updateAnnouncementDTO)
+        public async Task UpdateAnnouncementAsync(UpdateAnnouncementDTO updateAnnouncementDTO)
         {
             var updatedAnnouncement = await _announcementRepository.GetByIdAsync(updateAnnouncementDTO.Id).ConfigureAwait(false);
 
@@ -243,7 +243,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// </summary>
         /// <param name="announcementId"></param>
         /// <returns></returns>
-        public async Task DeleteEntityAsync(Guid announcementId)
+        public async Task DeleteAnnouncementAsync(Guid announcementId)
         {
             var deletedAnnouncement = await _announcementRepository.GetByIdAsync(announcementId).ConfigureAwait(false);
 
@@ -255,13 +255,11 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// </summary>
         /// <param name="announcementIds"></param>
         /// <returns></returns>
-        public async Task DeleteEntitiesAsync(List<Guid> announcementIds)
+        public async Task DeleteAnnouncementsAsync(List<Guid> announcementIds)
         {
             var deletedAnnouncement = await _announcementRepository.GetAllAsync(i => announcementIds.Select(p => p).Contains(i.Id)).ConfigureAwait(false);
 
             await _announcementRepository.DeleteAsync(deletedAnnouncement).ConfigureAwait(false);
         }
-
-
     }
 }

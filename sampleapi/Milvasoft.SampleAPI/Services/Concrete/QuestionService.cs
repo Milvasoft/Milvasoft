@@ -39,7 +39,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// Get all questions for admin.
         /// </summary>
         /// <returns></returns>
-        public async Task<PaginationDTO<QuestionForAdminDTO>> GetEntitiesForAdminAsync(PaginationParamsWithSpec<QuestionSpec> questionPaginationParams)
+        public async Task<PaginationDTO<QuestionForAdminDTO>> GetQuestionsForAdminAsync(PaginationParamsWithSpec<QuestionSpec> questionPaginationParams)
         {
             Func<IIncludable<Question>, IIncludable> includes = i => i.Include(md => md.Mentor)
                                                                      .Include(st => st.Student);
@@ -82,7 +82,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// Get all questions for admin.
         /// </summary>
         /// <returns></returns>
-        public async Task<PaginationDTO<QuestionForMentorDTO>> GetEntitiesForMentorAsync(PaginationParamsWithSpec<QuestionSpec> questionPaginationParams)
+        public async Task<PaginationDTO<QuestionForMentorDTO>> GetQuestionsForMentorAsync(PaginationParamsWithSpec<QuestionSpec> questionPaginationParams)
         {
             Func<IIncludable<Question>, IIncludable> includes = i => i.Include(md => md.Mentor)
                                                                      .Include(st => st.Student);
@@ -125,7 +125,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// Get all questions for student.
         /// </summary>
         /// <returns></returns>
-        public async Task<PaginationDTO<QuestionForStudentDTO>> GetEntitiesForStudentAsync(PaginationParamsWithSpec<QuestionSpec> questionPaginationParams)
+        public async Task<PaginationDTO<QuestionForStudentDTO>> GetQuestionsForStudentAsync(PaginationParamsWithSpec<QuestionSpec> questionPaginationParams)
         {
             Func<IIncludable<Question>, IIncludable> includes = i => i.Include(md => md.Mentor)
                                                                     .Include(st => st.Student);
@@ -166,7 +166,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// </summary>
         /// <param name="questionId"></param>
         /// <returns></returns>
-        public async Task<QuestionForAdminDTO> GetEntityForAdminAsync(Guid questionId)
+        public async Task<QuestionForAdminDTO> GetQuestionForAdminAsync(Guid questionId)
         {
             Func<IIncludable<Question>, IIncludable> includes = i => i.Include(md => md.Mentor)
                                                                      .Include(st => st.Student);
@@ -201,7 +201,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// </summary>
         /// <param name="questionId"></param>
         /// <returns></returns>
-        public async Task<QuestionForMentorDTO> GetEntityForMentorAsync(Guid questionId)
+        public async Task<QuestionForMentorDTO> GetQuestionForMentorAsync(Guid questionId)
         {
             Func<IIncludable<Question>, IIncludable> includes = i => i.Include(md => md.Mentor)
                                                                      .Include(st => st.Student);
@@ -233,7 +233,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// </summary>
         /// <param name="questionId"></param>
         /// <returns></returns>
-        public async Task<QuestionForStudentDTO> GetEntityForStudentAsync(Guid questionId)
+        public async Task<QuestionForStudentDTO> GetQuestionForStudentAsync(Guid questionId)
         {
             Func<IIncludable<Question>, IIncludable> includes = i => i.Include(md => md.Mentor)
                                                                     .Include(st => st.Student);
@@ -262,7 +262,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// </summary>
         /// <param name="addQuestionDTO"></param>
         /// <returns></returns>
-        public async Task AddEntityAsync(AddQuestionDTO addQuestionDTO)
+        public async Task AddQuestionAsync(AddQuestionDTO addQuestionDTO)
         {
             var question = new Question
             {
@@ -277,7 +277,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// </summary>
         /// <param name="updateQuestionDTO"></param>
         /// <returns></returns>
-        public async Task UpdateEntityAsync(UpdateQuestionDTO updateQuestionDTO)
+        public async Task UpdateQuestionAsync(UpdateQuestionDTO updateQuestionDTO)
         {
             var updatedQuestion = await _questionService.GetByIdAsync(updateQuestionDTO.Id).ConfigureAwait(false);
 
@@ -295,23 +295,11 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// </summary>
         /// <param name="questionIds"></param>
         /// <returns></returns>
-        public async Task DeleteEntitiesAsync(List<Guid> questionIds)
+        public async Task DeleteQuestionsAsync(List<Guid> questionIds)
         {
             var deletedQuestions = await _questionService.GetAllAsync(i => questionIds.Select(p => p).Contains(i.Id)).ConfigureAwait(false);
 
             await _questionService.DeleteAsync(deletedQuestions).ConfigureAwait(false);
-        }
-
-        /// <summary>
-        /// Delete student.
-        /// </summary>
-        /// <param name="questionId"></param>
-        /// <returns></returns>
-        public async Task DeleteEntityAsync(Guid questionId)
-        {
-            var deletedQuestion = await _questionService.GetByIdAsync(questionId).ConfigureAwait(false);
-
-            await _questionService.DeleteAsync(deletedQuestion).ConfigureAwait(false);
         }
 
         /// <summary>

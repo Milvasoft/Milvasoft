@@ -41,6 +41,10 @@ namespace Milvasoft.SampleAPI.Services.Concrete
             _testRepository = testRepository;
         }
 
+        /// <summary>
+        /// Test method.
+        /// </summary>
+        /// <returns></returns>
         public async Task TestMethod()
         {
             var tenantId = new TenantId("milvasoft", 4);
@@ -52,7 +56,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// Get professions for admin.
         /// </summary>
         /// <returns></returns>
-        public async Task<PaginationDTO<ProfessionDTO>> GetEntitiesForAdminAsync(PaginationParamsWithSpec<ProfessionSpec> professionPaginationParams)
+        public async Task<PaginationDTO<ProfessionDTO>> GetProfessionsForAdminAsync(PaginationParamsWithSpec<ProfessionSpec> professionPaginationParams)
         {
             var (professions, pageCount, totalDataCount) = await _professionRepository.PreparePaginationDTO<IBaseRepository<Profession, Guid, EducationAppDbContext>, Profession, Guid>
                                                                                                                 (professionPaginationParams.PageIndex,
@@ -77,7 +81,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// Get professions for mentor.
         /// </summary>
         /// <returns></returns>
-        public async Task<PaginationDTO<ProfessionDTO>> GetEntitiesForMentorAsync(PaginationParamsWithSpec<ProfessionSpec> professionPaginationParams)
+        public async Task<PaginationDTO<ProfessionDTO>> GetProfessionsForMentorAsync(PaginationParamsWithSpec<ProfessionSpec> professionPaginationParams)
         {
             var (professions, pageCount, totalDataCount) = await _professionRepository.PreparePaginationDTO<IBaseRepository<Profession, Guid, EducationAppDbContext>, Profession, Guid>
                                                                                                                 (professionPaginationParams.PageIndex,
@@ -102,7 +106,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// Get professions for student.
         /// </summary>
         /// <returns></returns>
-        public async Task<PaginationDTO<ProfessionDTO>> GetEntitiesForStudentAsync(PaginationParamsWithSpec<ProfessionSpec> professionPaginationParams)
+        public async Task<PaginationDTO<ProfessionDTO>> GetProfessionsForStudentAsync(PaginationParamsWithSpec<ProfessionSpec> professionPaginationParams)
         {
             var (professions, pageCount, totalDataCount) = await _professionRepository.PreparePaginationDTO<IBaseRepository<Profession, Guid, EducationAppDbContext>, Profession, Guid>
                                                                                                                 (professionPaginationParams.PageIndex,
@@ -129,7 +133,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// </summary>
         /// <param name="professionId"></param>
         /// <returns></returns>
-        public async Task<ProfessionDTO> GetEntityForAdminAsync(Guid professionId)
+        public async Task<ProfessionDTO> GetProfessionForAdminAsync(Guid professionId)
         {
             var profession = await _professionRepository.GetByIdAsync(professionId).ConfigureAwait(false);
 
@@ -148,7 +152,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// </summary>
         /// <param name="professionId"></param>
         /// <returns></returns>
-        public async Task<ProfessionDTO> GetEntityForMentorAsync(Guid professionId)
+        public async Task<ProfessionDTO> GetProfessionForMentorAsync(Guid professionId)
         {
             var profession = await _professionRepository.GetByIdAsync(professionId).ConfigureAwait(false);
 
@@ -165,7 +169,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// </summary>
         /// <param name="professionId"></param>
         /// <returns></returns>
-        public async Task<ProfessionDTO> GetEntityForStudentAsync(Guid professionId)
+        public async Task<ProfessionDTO> GetProfessionForStudentAsync(Guid professionId)
         {
             var profession = await _professionRepository.GetByIdAsync(professionId).ConfigureAwait(false);
 
@@ -179,7 +183,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// </summary>
         /// <param name="addProfessionDTO"></param>
         /// <returns></returns>
-        public async Task AddEntityAsync(AddProfessionDTO addProfessionDTO)
+        public async Task AddProfessionAsync(AddProfessionDTO addProfessionDTO)
         {
             var profession = new Profession
             {
@@ -193,7 +197,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// </summary>
         /// <param name="updateProfessionDTO"></param>
         /// <returns></returns>
-        public async Task UpdateEntityAsync(UpdateProfessionDTO updateProfessionDTO)
+        public async Task UpdateProfessionAsync(UpdateProfessionDTO updateProfessionDTO)
         {
             var updatedProfession = await _professionRepository.GetByIdAsync(updateProfessionDTO.Id).ConfigureAwait(false);
 
@@ -207,23 +211,12 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// </summary>
         /// <param name="professionIds"></param>
         /// <returns></returns>
-        public async Task DeleteEntitiesAsync(List<Guid> professionIds)
+        public async Task DeleteProfessionsAsync(List<Guid> professionIds)
         {
             var professions = await _professionRepository.GetAllAsync(i => professionIds.Select(p => p).Contains(i.Id)).ConfigureAwait(false);
 
             await _professionRepository.DeleteAsync(professions).ConfigureAwait(false);
         }
 
-        /// <summary>
-        /// Delete profession by <paramref name="professionId"/>.
-        /// </summary>
-        /// <param name="professionId"></param>
-        /// <returns></returns>
-        public async Task DeleteEntityAsync(Guid professionId)
-        {
-            var deletedProfession = await _professionRepository.GetByIdAsync(professionId).ConfigureAwait(false);
-
-            await _professionRepository.DeleteAsync(deletedProfession).ConfigureAwait(false);
-        }
     }
 }

@@ -44,7 +44,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// Get students for admin.
         /// </summary>
         /// <returns></returns>
-        public async Task<PaginationDTO<StudentForAdminDTO>> GetEntitiesForAdminAsync(PaginationParamsWithSpec<StudentSpec> studentPaginationParams)
+        public async Task<PaginationDTO<StudentForAdminDTO>> GetStudentsForAdminAsync(PaginationParamsWithSpec<StudentSpec> studentPaginationParams)
         {
             Func<IIncludable<Student>, IIncludable> includes = i => i.Include(md => md.Mentor);
 
@@ -86,7 +86,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// Get students for mentor.
         /// </summary>
         /// <returns></returns>
-        public async Task<PaginationDTO<StudentForMentorDTO>> GetEntitiesForMentorAsync(PaginationParamsWithSpec<StudentSpec> studentPaginationParams)
+        public async Task<PaginationDTO<StudentForMentorDTO>> GetStudentsForMentorAsync(PaginationParamsWithSpec<StudentSpec> studentPaginationParams)
         {
             Func<IIncludable<Student>, IIncludable> includes = i => i.Include(md => md.Mentor)
                                                                         .Include(assi => assi.OldAssignments);
@@ -133,62 +133,13 @@ namespace Milvasoft.SampleAPI.Services.Concrete
             };
         }
 
-        /// <summary>
-        /// Get students for student.
-        /// </summary>
-        /// <returns></returns>
-        public async Task<PaginationDTO<StudentForStudentDTO>> GetEntitiesForStudentAsync(PaginationParamsWithSpec<StudentSpec> studentPaginationParams)
-        {
-            var (students, pageCount, totalDataCount) = await _studentRepository.PreparePaginationDTO<IBaseRepository<Student, Guid, EducationAppDbContext>, Student, Guid>
-                                                                                                                (studentPaginationParams.PageIndex,
-                                                                                                                studentPaginationParams.RequestedItemCount,
-                                                                                                                studentPaginationParams.OrderByProperty = null,
-                                                                                                                studentPaginationParams.OrderByAscending = false,
-                                                                                                                studentPaginationParams.Spec?.ToExpression()).ConfigureAwait(false);
-
-            return new PaginationDTO<StudentForStudentDTO>
-            {
-                DTOList = students.CheckList(i => students.Select(student => new StudentForStudentDTO
-                {
-                    Id = student.Id,
-                    Name = student.Name,
-                    Surname = student.Surname,
-                    University = student.University,
-                    Age = student.Age,
-                    Dream = student.Dream,
-                    HomeAddress = student.HomeAddress
-                })),
-                PageCount = pageCount,
-                TotalDataCount = totalDataCount
-            };
-        }
-
-        /// <summary>
-        /// Get student information by <paramref name="studenId"/> 
-        /// </summary>
-        /// <param name="studenId"></param>
-        /// <returns></returns>
-        public async Task<StudentForStudentDTO> GetEntityForStudentAsync(Guid studenId)
-        {
-            var student = await _studentRepository.GetByIdAsync(studenId).ConfigureAwait(false);
-
-            return new StudentForStudentDTO
-            {
-                Name = student.Name,
-                Surname = student.Surname,
-                University = student.University,
-                Age = student.Age,
-                Dream = student.Dream,
-                HomeAddress = student.HomeAddress
-            };
-        }
 
         /// <summary>
         /// Get student information for admin by <paramref name="studenId"/>
         /// </summary>
         /// <param name="studenId"></param>
         /// <returns></returns>
-        public async Task<StudentForAdminDTO> GetEntityForAdminAsync(Guid studenId)
+        public async Task<StudentForAdminDTO> GetStudentForAdminAsync(Guid studenId)
         {
             Func<IIncludable<Student>, IIncludable> includes = i => i.Include(md => md.Mentor);
 
@@ -225,7 +176,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// </summary>
         /// <param name="studenId"></param>
         /// <returns></returns>
-        public async Task<StudentForMentorDTO> GetEntityForMentorAsync(Guid studenId)
+        public async Task<StudentForMentorDTO> GetStudentForMentorAsync(Guid studenId)
         {
             Func<IIncludable<Student>, IIncludable> includes = i => i.Include(md => md.Mentor)
                                                                      .Include(oa => oa.OldAssignments);
@@ -262,48 +213,34 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// </summary>
         /// <param name="addStudentDTO"></param>
         /// <returns></returns>
-        public async Task AddEntityAsync(AddStudentDTO addStudentDTO)
+        public async Task AddStudentAsync(AddStudentDTO addStudentDTO)
         {
-            var newStudent = new Student
-            {
-                Name = addStudentDTO.Name,
-                Surname = addStudentDTO.Surname,
-                University = addStudentDTO.University,
-                Age = addStudentDTO.Age,
-                Dream = addStudentDTO.Dream,
-                HomeAddress = addStudentDTO.HomeAddress,
-                MentorThoughts = addStudentDTO.MentorThoughts,
-                IsConfidentialityAgreementSigned = addStudentDTO.IsConfidentialityAgreementSigned,
-                GraduationStatus = addStudentDTO.GraduationStatus,
-                GraduationScore = addStudentDTO.GraduationScore,
-                MentorGraduationThoughts = addStudentDTO.MentorGraduationThoughts,
-                ProfessionId = addStudentDTO.ProfessionId,
-                MentorId = addStudentDTO.MentorId
-            };
             var appUser = new AppUser
             {
                 UserName = addStudentDTO.UserName,
                 Email = addStudentDTO.Email,
                 PhoneNumber = addStudentDTO.PhoneNumber,
-                Student = newStudent
-            };
-            await AddAsync(appUser, addStudentDTO.Password).ConfigureAwait(false);
-        }
+                Student = new Student
+                {
+                    Name = addStudentDTO.Name,
+                    Surname = addStudentDTO.Surname,
+                    University = addStudentDTO.University,
+                    Age = addStudentDTO.Age,
+                    Dream = addStudentDTO.Dream,
+                    HomeAddress = addStudentDTO.HomeAddress,
+                    MentorThoughts = addStudentDTO.MentorThoughts,
+                    IsConfidentialityAgreementSigned = addStudentDTO.IsConfidentialityAgreementSigned,
+                    GraduationStatus = addStudentDTO.GraduationStatus,
+                    GraduationScore = addStudentDTO.GraduationScore,
+                    MentorGraduationThoughts = addStudentDTO.MentorGraduationThoughts,
+                    ProfessionId = addStudentDTO.ProfessionId,
+                    MentorId = addStudentDTO.MentorId
+                }
+        };
+            
+            appUser.Mentor = null;
 
-        /// <summary>
-        /// Add appuser with mentor.
-        /// </summary>
-        /// <param name="user"></param>
-        /// <param name="password"></param>
-        /// <returns></returns>
-        private async Task AddAsync(AppUser user, string password)
-        {
-            if (user.Student == null)
-                throw new MilvaUserFriendlyException("PleaseEnterPersonnelInformation");
-
-            user.Mentor = null;
-
-            var result = await _userManager.CreateAsync(user, password);
+            var result = await _userManager.CreateAsync(appUser, addStudentDTO.Password);
 
             if (!result.Succeeded)
                 throw new MilvaUserFriendlyException(string.Join("~", result.Errors.Select(m => m.Description)));
@@ -314,7 +251,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// </summary>
         /// <param name="updateStudentDTO"></param>
         /// <returns></returns>
-        public async Task UpdateEntityAsync(UpdateStudentDTO updateStudentDTO)
+        public async Task UpdateStudentAsync(UpdateStudentDTO updateStudentDTO)
         {
             var updatedStudent = await _studentRepository.GetByIdAsync(updateStudentDTO.Id).ConfigureAwait(false);
 
@@ -336,23 +273,11 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         }
 
         /// <summary>
-        /// Delete student.
-        /// </summary>
-        /// <param name="studentId"></param>
-        /// <returns></returns>
-        public async Task DeleteEntityAsync(Guid studentId)
-        {
-            var student = await _studentRepository.GetByIdAsync(studentId).ConfigureAwait(false);
-
-            await _studentRepository.DeleteAsync(student);
-        }
-
-        /// <summary>
         /// Delete students by <paramref name="studentIds"/>.
         /// </summary>
         /// <param name="studentIds"></param>
         /// <returns></returns>
-        public async Task DeleteEntitiesAsync(List<Guid> studentIds)
+        public async Task DeleteStudentsAsync(List<Guid> studentIds)
         {
             var deletedStudents = await _studentRepository.GetAllAsync(i => studentIds.Select(p => p).Contains(i.Id)).ConfigureAwait(false);
 

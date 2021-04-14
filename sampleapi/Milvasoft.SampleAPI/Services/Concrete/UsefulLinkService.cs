@@ -35,7 +35,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// Get links for student.
         /// </summary>
         /// <returns></returns>
-        public async Task<PaginationDTO<UsefulLinkDTO>> GetEntitiesForStudentAsync(PaginationParamsWithSpec<UsefulLinkSpec> usefulLinkPaginationParams)
+        public async Task<PaginationDTO<UsefulLinkDTO>> GetUsefulLinksForStudentAsync(PaginationParamsWithSpec<UsefulLinkSpec> usefulLinkPaginationParams)
         {
             var (usefulLinks, pageCount, totalDataCount) = await _usefulLinkRepository.PreparePaginationDTO<IBaseRepository<UsefulLink, Guid, EducationAppDbContext>, UsefulLink, Guid>
                                                                                                                  (usefulLinkPaginationParams.PageIndex,
@@ -64,7 +64,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// Get links for admin.
         /// </summary>
         /// <returns></returns>
-        public async Task<PaginationDTO<UsefulLinkDTO>> GetEntitiesForAdminAsync(PaginationParamsWithSpec<UsefulLinkSpec> usefulLinkPaginationParams)
+        public async Task<PaginationDTO<UsefulLinkDTO>> GetUsefulLinksForAdminAsync(PaginationParamsWithSpec<UsefulLinkSpec> usefulLinkPaginationParams)
         {
             var (usefulLinks, pageCount, totalDataCount) = await _usefulLinkRepository.PreparePaginationDTO<IBaseRepository<UsefulLink, Guid, EducationAppDbContext>, UsefulLink, Guid>
                                                                                                                 (usefulLinkPaginationParams.PageIndex,
@@ -92,7 +92,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// Get link for mentor.
         /// </summary>
         /// <returns></returns>
-        public async Task<PaginationDTO<UsefulLinkDTO>> GetEntitiesForMentorAsync(PaginationParamsWithSpec<UsefulLinkSpec> usefulLinkPaginationParams)
+        public async Task<PaginationDTO<UsefulLinkDTO>> GetUsefulLinksForMentorAsync(PaginationParamsWithSpec<UsefulLinkSpec> usefulLinkPaginationParams)
         {
             var (usefulLinks, pageCount, totalDataCount) = await _usefulLinkRepository.PreparePaginationDTO<IBaseRepository<UsefulLink, Guid, EducationAppDbContext>, UsefulLink, Guid>
                                                                                                                  (usefulLinkPaginationParams.PageIndex,
@@ -121,7 +121,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// </summary>
         /// <param name="usefulLinkId"></param>
         /// <returns></returns>
-        public async Task<UsefulLinkDTO> GetEntityForStudentAsync(Guid usefulLinkId)
+        public async Task<UsefulLinkDTO> GetUsefulLinkForStudentAsync(Guid usefulLinkId)
         {
             var link = await _usefulLinkRepository.GetByIdAsync(usefulLinkId).ConfigureAwait(false);
 
@@ -140,7 +140,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// </summary>
         /// <param name="usefulLinkId"></param>
         /// <returns></returns>
-        public async Task<UsefulLinkDTO> GetEntityForAdminAsync(Guid usefulLinkId)
+        public async Task<UsefulLinkDTO> GetUsefulLinkForAdminAsync(Guid usefulLinkId)
         {
             var link = await _usefulLinkRepository.GetByIdAsync(usefulLinkId).ConfigureAwait(false);
 
@@ -159,7 +159,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// </summary>
         /// <param name="usefulLinkId"></param>
         /// <returns></returns>
-        public async Task<UsefulLinkDTO> GetEntityForMentorAsync(Guid usefulLinkId)
+        public async Task<UsefulLinkDTO> GetUsefulLinkForMentorAsync(Guid usefulLinkId)
         {
             var link = await _usefulLinkRepository.GetByIdAsync(usefulLinkId).ConfigureAwait(false);
 
@@ -178,7 +178,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// </summary>
         /// <param name="addUsefulLinkDTO"></param>
         /// <returns></returns>
-        public async Task AddEntityAsync(AddUsefulLinkDTO addUsefulLinkDTO)
+        public async Task AddUsefulLinkAsync(AddUsefulLinkDTO addUsefulLinkDTO)
         {
             var usefullink = new UsefulLink
             {
@@ -196,7 +196,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// </summary>
         /// <param name="addUsefulLinkDTO"></param>
         /// <returns></returns>
-        public async Task UpdateEntityAsync(UpdateUsefulLinkDTO addUsefulLinkDTO)
+        public async Task UpdateUsefulLinkAsync(UpdateUsefulLinkDTO addUsefulLinkDTO)
         {
             var updatedLink = await _usefulLinkRepository.GetByIdAsync(addUsefulLinkDTO.Id).ConfigureAwait(false);
 
@@ -210,23 +210,11 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         }
 
         /// <summary>
-        /// Delete link.
-        /// </summary>
-        /// <param name="usefulLinkId"></param>
-        /// <returns></returns>
-        public async Task DeleteEntityAsync(Guid usefulLinkId)
-        {
-            var deletedLink = await _usefulLinkRepository.GetByIdAsync(usefulLinkId).ConfigureAwait(false);
-
-            await _usefulLinkRepository.DeleteAsync(deletedLink).ConfigureAwait(false);
-        }
-
-        /// <summary>
         /// Delete links by <paramref name="usefulLinkIds"/>
         /// </summary>
         /// <param name="usefulLinkIds"></param>
         /// <returns></returns>
-        public async Task DeleteEntitiesAsync(List<Guid> usefulLinkIds)
+        public async Task DeleteUsefulLinksAsync(List<Guid> usefulLinkIds)
         {
             var deletedLinks = await _usefulLinkRepository.GetAllAsync(i => usefulLinkIds.Select(p => p).Contains(i.Id)).ConfigureAwait(false);
             await _usefulLinkRepository.DeleteAsync(deletedLinks);
