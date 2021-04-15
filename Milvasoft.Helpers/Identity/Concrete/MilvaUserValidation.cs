@@ -28,7 +28,7 @@ namespace Milvasoft.Helpers.Identity.Concrete
         /// <summary>
         /// Validates the specified user as an asynchronous operation.
         /// </summary>
-        public Task<IdentityResult> ValidateAsync(UserManager<TUser> manager, TUser user)
+        public virtual Task<IdentityResult> ValidateAsync(UserManager<TUser> manager, TUser user)
         {
             List<IdentityError> errors = new();
 
