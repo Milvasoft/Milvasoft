@@ -59,29 +59,5 @@ namespace Milvasoft.Helpers.MultiTenancy.Store
                 return await _redisCacheService.SetAsync(identifier.ToString(), tenant).ConfigureAwait(false);
             else return false;
         }
-
-        //TODO LATER look later that.
-        /// <summary>
-        /// Returns a tenant according to <paramref name="identifier"/>.
-        /// </summary>
-        /// <param name="identifier"></param>
-        /// <param name="dbAction"></param>
-        /// <returns></returns>
-        public async Task<TTenant> GetTenantAsync(TKey identifier, Func<Task<TTenant>> dbAction)
-        {
-            if (_redisCacheService.IsConnected())
-                return await _redisCacheService.GetAsync<TTenant>(identifier.ToString()).ConfigureAwait(false);
-            else
-            {
-                try
-                {
-                    return await dbAction().ConfigureAwait(false);
-                }
-                catch (Exception)
-                {
-                    return null;
-                }
-            }
-        }
     }
 }
