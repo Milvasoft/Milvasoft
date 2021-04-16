@@ -21,6 +21,17 @@ namespace Milvasoft.Helpers.Exceptions
             => ExceptionCode = (int)MilvaException.Base;
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="MilvaBaseException"/> class  with a specified error message.
+        /// </summary>
+        /// <param name="messageOrLocalizerKey"></param>
+        /// <param name="useLocalizerKey"></param>
+        public MilvaUserFriendlyException(string messageOrLocalizerKey, bool useLocalizerKey) : base(messageOrLocalizerKey)
+        {
+            ExceptionCode = ExceptionCode != 0 ? ExceptionCode : (int)MilvaException.Base;
+            UseLocalizerKey = useLocalizerKey;
+        }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="MilvaUserFriendlyException"/> class with a specified error message.
         /// </summary>
         /// <param name="messageOrLocalizerKey"></param>
@@ -50,6 +61,19 @@ namespace Milvasoft.Helpers.Exceptions
         /// <param name="exceptionObjects"></param>
         public MilvaUserFriendlyException(string messageOrLocalizerKey, params object[] exceptionObjects) : base(messageOrLocalizerKey, exceptionObjects)
         {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MilvaBaseException"/> class  with a specified error message.
+        /// </summary>
+        /// <param name="messageOrLocalizerKey"></param>
+        /// <param name="useLocalizerKey"></param>
+        /// <param name="exceptionObjects"></param>
+        public MilvaUserFriendlyException(string messageOrLocalizerKey, bool useLocalizerKey, params object[] exceptionObjects) : base(messageOrLocalizerKey)
+        {
+            ExceptionObject = exceptionObjects;
+            ExceptionCode = ExceptionCode != 0 ? ExceptionCode : (int)MilvaException.Base;
+            UseLocalizerKey = useLocalizerKey;
         }
 
         /// <summary>

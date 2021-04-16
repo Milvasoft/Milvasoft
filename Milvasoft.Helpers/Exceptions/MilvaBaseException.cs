@@ -19,6 +19,12 @@ namespace Milvasoft.Helpers.Exceptions
         public object ExceptionObject { get; set; } = null;
 
         /// <summary>
+        /// Variable for exception middleware.
+        /// Default value is null.
+        /// </summary>
+        public bool UseLocalizerKey { get; set; } = true;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="MilvaBaseException"/> class with a specified error message.
         /// </summary>
         public MilvaBaseException() { }
@@ -29,7 +35,7 @@ namespace Milvasoft.Helpers.Exceptions
         /// <param name="messageOrLocalizerKey"></param>
         public MilvaBaseException(string messageOrLocalizerKey) : base(messageOrLocalizerKey)
             => ExceptionCode = ExceptionCode != 0 ? ExceptionCode : (int)MilvaException.Base;
-
+    
         /// <summary>
         /// Initializes a new instance of the <see cref="MilvaBaseException"/> class  with a specified error message.
         /// </summary>

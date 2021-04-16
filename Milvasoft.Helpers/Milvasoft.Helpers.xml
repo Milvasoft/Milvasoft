@@ -407,6 +407,12 @@
             <param name="expiration"></param>
             <returns></returns>
         </member>
+        <member name="M:Milvasoft.Helpers.Caching.IRedisCacheService.FlushDatabaseAsync">
+            <summary>
+            Flushs default database.
+            </summary>
+            <returns></returns>
+        </member>
         <member name="M:Milvasoft.Helpers.Caching.IRedisCacheService.PerformRedisActionAsync(System.Func{System.Threading.Tasks.Task},System.String,Milvasoft.Helpers.DependencyInjection.IMilvaLogger)">
             <summary>
             It performs the requested redis action in try catch blocks. If redis client not connected, connects.
@@ -590,6 +596,12 @@
             </summary>
             <param name="key"></param>
             <param name="expiration"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.Caching.RedisCacheService.FlushDatabaseAsync">
+            <summary>
+            Flushs default database.
+            </summary>
             <returns></returns>
         </member>
         <member name="M:Milvasoft.Helpers.Caching.RedisCacheService.PerformRedisActionAsync(System.Func{System.Threading.Tasks.Task},System.String,Milvasoft.Helpers.DependencyInjection.IMilvaLogger)">
@@ -3187,6 +3199,20 @@
             Provides file encryption and decryption with AES Algorithm. Milvasoft Corporation is not responsible of possible data loss.
             </summary>
         </member>
+        <member name="M:Milvasoft.Helpers.Encryption.Abstract.IMilvaEncryptionProvider.EncryptAsync(System.String)">
+            <summary>
+            Encrypt <paramref name="value"/> with AES Algorithm and key.
+            !!! Milvasoft Corporation is not responsible of possible data loss.
+            </summary>
+            <param name="value"></param>
+        </member>
+        <member name="M:Milvasoft.Helpers.Encryption.Abstract.IMilvaEncryptionProvider.DecryptAsync(System.String)">
+            <summary>
+            Decrypt <paramref name="value"/> with AES Algorithm and key.
+            !!! Milvasoft Corporation is not responsible of possible data loss.
+            </summary>
+            <param name="value"></param>
+        </member>
         <member name="M:Milvasoft.Helpers.Encryption.Abstract.IMilvaEncryptionProvider.EncryptFileAsync(System.String)">
             <summary>
             Encrypt file in <paramref name="filePath"/> with AES Algorithm and key.
@@ -3263,6 +3289,20 @@
             <param name="key"> Must be between 128-256 bit.</param>
             <param name="mode"></param>
             <param name="padding"></param>
+        </member>
+        <member name="M:Milvasoft.Helpers.Encryption.Concrete.MilvaEncryptionProvider.EncryptAsync(System.String)">
+            <summary>
+            Encrypt <paramref name="value"/> with AES Algorithm and key.
+            !!! Milvasoft Corporation is not responsible of possible data loss.
+            </summary>
+            <param name="value"></param>
+        </member>
+        <member name="M:Milvasoft.Helpers.Encryption.Concrete.MilvaEncryptionProvider.DecryptAsync(System.String)">
+            <summary>
+            Decrypt <paramref name="value"/> with AES Algorithm and key.
+            !!! Milvasoft Corporation is not responsible of possible data loss.
+            </summary>
+            <param name="value"></param>
         </member>
         <member name="M:Milvasoft.Helpers.Encryption.Concrete.MilvaEncryptionProvider.EncryptFileAsync(System.String)">
             <summary>
@@ -3422,6 +3462,12 @@
         <member name="P:Milvasoft.Helpers.Exceptions.MilvaBaseException.ExceptionObject">
             <summary>
             Gets or sets object of exception.
+            Default value is null.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.Exceptions.MilvaBaseException.UseLocalizerKey">
+            <summary>
+            Variable for exception middleware.
             Default value is null.
             </summary>
         </member>
@@ -3649,6 +3695,13 @@
             </summary>
             <param name="messageOrLocalizerKey"></param>
         </member>
+        <member name="M:Milvasoft.Helpers.Exceptions.MilvaUserFriendlyException.#ctor(System.String,System.Boolean)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Milvasoft.Helpers.Exceptions.MilvaBaseException"/> class  with a specified error message.
+            </summary>
+            <param name="messageOrLocalizerKey"></param>
+            <param name="useLocalizerKey"></param>
+        </member>
         <member name="M:Milvasoft.Helpers.Exceptions.MilvaUserFriendlyException.#ctor(System.String,Milvasoft.Helpers.Exceptions.MilvaException)">
             <summary>
             Initializes a new instance of the <see cref="T:Milvasoft.Helpers.Exceptions.MilvaUserFriendlyException"/> class with a specified error message.
@@ -3674,6 +3727,14 @@
             Initializes a new instance of the <see cref="T:Milvasoft.Helpers.Exceptions.MilvaBaseException"/> class  with a specified error message.
             </summary>
             <param name="messageOrLocalizerKey"></param>
+            <param name="exceptionObjects"></param>
+        </member>
+        <member name="M:Milvasoft.Helpers.Exceptions.MilvaUserFriendlyException.#ctor(System.String,System.Boolean,System.Object[])">
+            <summary>
+            Initializes a new instance of the <see cref="T:Milvasoft.Helpers.Exceptions.MilvaBaseException"/> class  with a specified error message.
+            </summary>
+            <param name="messageOrLocalizerKey"></param>
+            <param name="useLocalizerKey"></param>
             <param name="exceptionObjects"></param>
         </member>
         <member name="M:Milvasoft.Helpers.Exceptions.MilvaUserFriendlyException.#ctor(System.String,System.Exception)">
@@ -7943,14 +8004,6 @@
             </summary>
             <param name="identifier"></param>
             <param name="tenant"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Milvasoft.Helpers.MultiTenancy.Store.CachedTenantStore`2.GetTenantAsync(`1,System.Func{System.Threading.Tasks.Task{`0}})">
-            <summary>
-            Returns a tenant according to <paramref name="identifier"/>.
-            </summary>
-            <param name="identifier"></param>
-            <param name="dbAction"></param>
             <returns></returns>
         </member>
         <member name="T:Milvasoft.Helpers.MultiTenancy.Store.ITenantStore`2">
