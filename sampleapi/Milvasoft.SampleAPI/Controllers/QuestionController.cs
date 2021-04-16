@@ -37,7 +37,7 @@ namespace Milvasoft.SampleAPI.Controllers
         [HttpPatch("Question/Mentor")]
         public async Task<IActionResult> GetQuestionsForMentor([FromBody] PaginationParamsWithSpec<QuestionSpec> paginationParams)
         {
-            var questions = await _questionService.GetEntitiesForMentorAsync(paginationParams).ConfigureAwait(false);
+            var questions = await _questionService.GetQuestionsForMentorAsync(paginationParams).ConfigureAwait(false);
             return Ok(questions);
         }
 
@@ -49,7 +49,7 @@ namespace Milvasoft.SampleAPI.Controllers
         [HttpPatch("Question/Admin")]
         public async Task<IActionResult> GetQuestionsForAdmin([FromBody] PaginationParamsWithSpec<QuestionSpec> paginationParams)
         {
-            var questions = await _questionService.GetEntitiesForAdminAsync(paginationParams).ConfigureAwait(false);
+            var questions = await _questionService.GetQuestionsForAdminAsync(paginationParams).ConfigureAwait(false);
             return Ok(questions);
         }
 
@@ -61,7 +61,7 @@ namespace Milvasoft.SampleAPI.Controllers
         [HttpPatch("Question/Student")]
         public async Task<IActionResult> GetQuestionsForStudent([FromBody] PaginationParamsWithSpec<QuestionSpec> paginationParams)
         {
-            var questions = await _questionService.GetEntitiesForStudentAsync(paginationParams).ConfigureAwait(false);
+            var questions = await _questionService.GetQuestionsForStudentAsync(paginationParams).ConfigureAwait(false);
             return Ok(questions);
         }
 
@@ -73,7 +73,7 @@ namespace Milvasoft.SampleAPI.Controllers
         [HttpPatch("Question/Mentor/{id}")]
         public async Task<IActionResult> GetQuestionForMentorbyId([FromBody] Guid id)
         {
-            var question = await _questionService.GetEntityForMentorAsync(id).ConfigureAwait(false);
+            var question = await _questionService.GetQuestionForMentorAsync(id).ConfigureAwait(false);
 
             return Ok(question);
         }
@@ -86,7 +86,7 @@ namespace Milvasoft.SampleAPI.Controllers
         [HttpPatch("Question/Admin/{id}")]
         public async Task<IActionResult> GetQuestionForAdminbyId([FromBody] Guid id)
         {
-            var question = await _questionService.GetEntityForAdminAsync(id).ConfigureAwait(false);
+            var question = await _questionService.GetQuestionForAdminAsync(id).ConfigureAwait(false);
 
             return Ok(question);
         }
@@ -99,7 +99,7 @@ namespace Milvasoft.SampleAPI.Controllers
         [HttpPatch("Question/Student/{id}")]
         public async Task<IActionResult> GetQuestionForStudentbyId([FromBody] Guid id)
         {
-            var question = await _questionService.GetEntityForStudentAsync(id).ConfigureAwait(false);
+            var question = await _questionService.GetQuestionForStudentAsync(id).ConfigureAwait(false);
 
             return Ok(question);
         }
@@ -113,7 +113,7 @@ namespace Milvasoft.SampleAPI.Controllers
         [HttpPost("AddQuestions")]
         public async Task<IActionResult> AddQuestion([FromBody] AddQuestionDTO addQuestion)
         {
-            await _questionService.AddEntityAsync(addQuestion).ConfigureAwait(false);
+            await _questionService.AddQuestionAsync(addQuestion).ConfigureAwait(false);
             return Ok();
         }
 
@@ -126,22 +126,10 @@ namespace Milvasoft.SampleAPI.Controllers
         [HttpPut("UpdateQuestion")]
         public async Task<IActionResult> UpdateQuestion([FromBody] UpdateQuestionDTO updateQuestion)
         {
-            await _questionService.UpdateEntityAsync(updateQuestion).ConfigureAwait(false);
+            await _questionService.UpdateQuestionAsync(updateQuestion).ConfigureAwait(false);
             return Ok();
         }
 
-        /// <summary>
-        /// Delete question data by <paramref name="id"/>
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
-       // [Authorize(Roles = "Admin")]
-        [HttpDelete("Question/Delete/{id}")]
-        public async Task<IActionResult> DeleteQuestions(Guid id)
-        {
-            await _questionService.DeleteEntityAsync(id).ConfigureAwait(false);
-            return Ok();
-        }
 
         /// <summary>
         /// Delete professions data by <paramref name="ids"/>
@@ -152,7 +140,7 @@ namespace Milvasoft.SampleAPI.Controllers
         [HttpDelete("Question/Deletes/{ids}")]
         public async Task<IActionResult> DeleteQuestions(List<Guid> ids)
         {
-            await _questionService.DeleteEntitiesAsync(ids).ConfigureAwait(false);
+            await _questionService.DeleteQuestionsAsync(ids).ConfigureAwait(false);
             return Ok();
         }
     }

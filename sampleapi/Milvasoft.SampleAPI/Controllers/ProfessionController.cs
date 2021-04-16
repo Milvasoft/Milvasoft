@@ -29,7 +29,10 @@ namespace Milvasoft.SampleAPI.Controllers
             _professionService = professionService;
         }
 
-
+        /// <summary>
+        /// Test controller.
+        /// </summary>
+        /// <returns></returns>
         [HttpGet("Test")]
         public async Task<IActionResult> Test()
         {
@@ -45,7 +48,7 @@ namespace Milvasoft.SampleAPI.Controllers
         [HttpPatch("Profession/Mentor")]
         public async Task<IActionResult> GetProfessionsForMentor([FromBody] PaginationParamsWithSpec<ProfessionSpec> paginationParams)
         {
-            var professions = await _professionService.GetEntitiesForMentorAsync(paginationParams).ConfigureAwait(false);
+            var professions = await _professionService.GetProfessionsForMentorAsync(paginationParams).ConfigureAwait(false);
             return Ok(professions);
         }
 
@@ -57,7 +60,7 @@ namespace Milvasoft.SampleAPI.Controllers
         [HttpPatch("Profession/Admin")]
         public async Task<IActionResult> GetProfessionsForAdmin([FromBody] PaginationParamsWithSpec<ProfessionSpec> paginationParams)
         {
-            var professions = await _professionService.GetEntitiesForAdminAsync(paginationParams).ConfigureAwait(false);
+            var professions = await _professionService.GetProfessionsForAdminAsync(paginationParams).ConfigureAwait(false);
             return Ok(professions);
         }
 
@@ -69,7 +72,7 @@ namespace Milvasoft.SampleAPI.Controllers
         [HttpPatch("Profession/Student")]
         public async Task<IActionResult> GetProfessionsForStudent([FromBody] PaginationParamsWithSpec<ProfessionSpec> paginationParams)
         {
-            var professions = await _professionService.GetEntitiesForStudentAsync(paginationParams).ConfigureAwait(false);
+            var professions = await _professionService.GetProfessionsForStudentAsync(paginationParams).ConfigureAwait(false);
             return Ok(professions);
         }
 
@@ -81,7 +84,7 @@ namespace Milvasoft.SampleAPI.Controllers
         [HttpPatch("Profession/Mentor/{id}")]
         public async Task<IActionResult> GetProfessionForMentorbyId([FromBody] Guid id)
         {
-            var professions = await _professionService.GetEntityForMentorAsync(id).ConfigureAwait(false);
+            var professions = await _professionService.GetProfessionForMentorAsync(id).ConfigureAwait(false);
 
             return Ok(professions);
         }
@@ -94,7 +97,7 @@ namespace Milvasoft.SampleAPI.Controllers
         [HttpPatch("Profession/Admin/{id}")]
         public async Task<IActionResult> GetProfessionForAdminbyId([FromBody] Guid id)
         {
-            var professions = await _professionService.GetEntityForAdminAsync(id).ConfigureAwait(false);
+            var professions = await _professionService.GetProfessionForAdminAsync(id).ConfigureAwait(false);
 
             return Ok(professions);
         }
@@ -107,7 +110,7 @@ namespace Milvasoft.SampleAPI.Controllers
         [HttpPatch("Profession/Student/{id}")]
         public async Task<IActionResult> GetProfessionForStudentbyId([FromBody] Guid id)
         {
-            var professions = await _professionService.GetEntityForStudentAsync(id).ConfigureAwait(false);
+            var professions = await _professionService.GetProfessionForStudentAsync(id).ConfigureAwait(false);
 
             return Ok(professions);
         }
@@ -121,7 +124,7 @@ namespace Milvasoft.SampleAPI.Controllers
         [HttpPost("AddProfessions")]
         public async Task<IActionResult> AddProfession([FromBody] AddProfessionDTO addProfession)
         {
-            await _professionService.AddEntityAsync(addProfession).ConfigureAwait(false);
+            await _professionService.AddProfessionAsync(addProfession).ConfigureAwait(false);
             return Ok();
         }
 
@@ -134,20 +137,7 @@ namespace Milvasoft.SampleAPI.Controllers
         [HttpPut("UpdateProfession")]
         public async Task<IActionResult> UpdateProfession([FromBody] UpdateProfessionDTO updateProfession)
         {
-            await _professionService.UpdateEntityAsync(updateProfession).ConfigureAwait(false);
-            return Ok();
-        }
-
-        /// <summary>
-        /// Delete profession data by <paramref name="id"/>
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
-       // [Authorize(Roles = "Admin")]
-        [HttpDelete("Profession/Delete/{id}")]
-        public async Task<IActionResult> DeleteProfession(Guid id)
-        {
-            await _professionService.DeleteEntityAsync(id).ConfigureAwait(false);
+            await _professionService.UpdateProfessionAsync(updateProfession).ConfigureAwait(false);
             return Ok();
         }
 
@@ -160,7 +150,7 @@ namespace Milvasoft.SampleAPI.Controllers
         [HttpDelete("Profession/Deletes/{ids}")]
         public async Task<IActionResult> DeleteProfession(List<Guid> ids)
         {
-            await _professionService.DeleteEntitiesAsync(ids).ConfigureAwait(false);
+            await _professionService.DeleteProfessionsAsync(ids).ConfigureAwait(false);
             return Ok();
         }
     }

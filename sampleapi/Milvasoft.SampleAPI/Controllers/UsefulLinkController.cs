@@ -38,7 +38,7 @@ namespace Milvasoft.SampleAPI.Controllers
         [HttpPatch("Link/Mentor")]
         public async Task<IActionResult> GetUsefulLinksForMentor([FromBody] PaginationParamsWithSpec<UsefulLinkSpec> paginationParams)
         {
-            var usefulLinks = await _userfulLinkService.GetEntitiesForMentorAsync(paginationParams).ConfigureAwait(false);
+            var usefulLinks = await _userfulLinkService.GetUsefulLinksForMentorAsync(paginationParams).ConfigureAwait(false);
             return Ok(usefulLinks);
         }
 
@@ -50,7 +50,7 @@ namespace Milvasoft.SampleAPI.Controllers
         [HttpPatch("Link/Admin")]
         public async Task<IActionResult> GetUsefulLinksForAdmin([FromBody] PaginationParamsWithSpec<UsefulLinkSpec> paginationParams)
         {
-            var usefulLinks = await _userfulLinkService.GetEntitiesForAdminAsync(paginationParams).ConfigureAwait(false);
+            var usefulLinks = await _userfulLinkService.GetUsefulLinksForAdminAsync(paginationParams).ConfigureAwait(false);
             return Ok(usefulLinks);
         }
 
@@ -62,7 +62,7 @@ namespace Milvasoft.SampleAPI.Controllers
         [HttpPatch("Link/Student")]
         public async Task<IActionResult> GetUsefulLinksForStudent([FromBody] PaginationParamsWithSpec<UsefulLinkSpec> paginationParams)
         {
-            var usefulLinks = await _userfulLinkService.GetEntitiesForStudentAsync(paginationParams).ConfigureAwait(false);
+            var usefulLinks = await _userfulLinkService.GetUsefulLinksForStudentAsync(paginationParams).ConfigureAwait(false);
             return Ok(usefulLinks);
         }
 
@@ -74,7 +74,7 @@ namespace Milvasoft.SampleAPI.Controllers
         [HttpPatch("Link/Mentor/{id}")]
         public async Task<IActionResult> GetUsefulLinkForMentorbyId([FromBody] Guid id)
         {
-            var usefulLink = await _userfulLinkService.GetEntityForMentorAsync(id).ConfigureAwait(false);
+            var usefulLink = await _userfulLinkService.GetUsefulLinkForMentorAsync(id).ConfigureAwait(false);
 
             return Ok(usefulLink);
         }
@@ -87,7 +87,7 @@ namespace Milvasoft.SampleAPI.Controllers
         [HttpPatch("Link/Admin/{id}")]
         public async Task<IActionResult> GetUsefulLinkAdminbyId([FromBody] Guid id)
         {
-            var usefulLink = await _userfulLinkService.GetEntityForAdminAsync(id).ConfigureAwait(false);
+            var usefulLink = await _userfulLinkService.GetUsefulLinkForAdminAsync(id).ConfigureAwait(false);
 
             return Ok(usefulLink);
         }
@@ -100,7 +100,7 @@ namespace Milvasoft.SampleAPI.Controllers
         [HttpPatch("Link/Student/{id}")]
         public async Task<IActionResult> GetUsefulLinkForStudentbyId([FromBody] Guid id)
         {
-            var usefulLink = await _userfulLinkService.GetEntityForStudentAsync(id).ConfigureAwait(false);
+            var usefulLink = await _userfulLinkService.GetUsefulLinkForStudentAsync(id).ConfigureAwait(false);
 
             return Ok(usefulLink);
         }
@@ -114,7 +114,7 @@ namespace Milvasoft.SampleAPI.Controllers
         [HttpPost("AddUsefulLink")]
         public async Task<IActionResult> AddUsefulLink([FromBody] AddUsefulLinkDTO addStudent)
         {
-            await _userfulLinkService.AddEntityAsync(addStudent).ConfigureAwait(false);
+            await _userfulLinkService.AddUsefulLinkAsync(addStudent).ConfigureAwait(false);
             return Ok();
         }
 
@@ -127,20 +127,7 @@ namespace Milvasoft.SampleAPI.Controllers
         [HttpPut("UpdateUsefulLink")]
         public async Task<IActionResult> UpdateUsefulLink([FromBody] UpdateUsefulLinkDTO updateStudent)
         {
-            await _userfulLinkService.UpdateEntityAsync(updateStudent).ConfigureAwait(false);
-            return Ok();
-        }
-
-        /// <summary>
-        /// Delete usefulLink data by <paramref name="id"/>
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
-       // [Authorize(Roles = "Admin")]
-        [HttpDelete("Link/Delete/{id}")]
-        public async Task<IActionResult> DeleteUsefulLink(Guid id)
-        {
-            await _userfulLinkService.DeleteEntityAsync(id).ConfigureAwait(false);
+            await _userfulLinkService.UpdateUsefulLinkAsync(updateStudent).ConfigureAwait(false);
             return Ok();
         }
 
@@ -153,7 +140,7 @@ namespace Milvasoft.SampleAPI.Controllers
         [HttpDelete("Link/Deletes/{ids}")]
         public async Task<IActionResult> DeleteUsefulLinks(List<Guid> ids)
         {
-            await _userfulLinkService.DeleteEntitiesAsync(ids).ConfigureAwait(false);
+            await _userfulLinkService.DeleteUsefulLinksAsync(ids).ConfigureAwait(false);
             return Ok();
         }
 

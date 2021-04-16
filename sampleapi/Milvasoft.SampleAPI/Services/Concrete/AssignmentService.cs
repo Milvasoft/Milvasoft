@@ -32,10 +32,10 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         }
 
         /// <summary>
-        /// Get all assignment by <paramref name="assignmentSpec"/>
+        /// Get all assignment by <paramref name="assignmentPaginationParams"/>
         /// </summary>
         /// <returns></returns>
-        public async Task<PaginationDTO<AssignmentForStudentDTO>> GetEntitiesForStudentAsync(PaginationParamsWithSpec<AssignmentSpec> assignmentPaginationParams)
+        public async Task<PaginationDTO<AssignmentForStudentDTO>> GetAssignmentForStudentAsync(PaginationParamsWithSpec<AssignmentSpec> assignmentPaginationParams)
         {
             var (asssignments, pageCount, totalDataCount) = await _assignmentRepository.PreparePaginationDTO<IBaseRepository<Assignment, Guid, EducationAppDbContext>, Assignment, Guid>
                                                                                                                 (assignmentPaginationParams.PageIndex,
@@ -65,10 +65,10 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         }
 
         /// <summary>
-        /// Get assignments for admin by <paramref name="assignmentSpec"/>
+        /// Get assignments for admin by <paramref name="assignmentPaginationParams"/>
         /// </summary>
         /// <returns></returns>
-        public async Task<PaginationDTO<AssignmentForAdminDTO>> GetEntitiesForAdminAsync(PaginationParamsWithSpec<AssignmentSpec> assignmentPaginationParams)
+        public async Task<PaginationDTO<AssignmentForAdminDTO>> GetAssignmentForAdminAsync(PaginationParamsWithSpec<AssignmentSpec> assignmentPaginationParams)
         {
             var (asssignments, pageCount, totalDataCount) = await _assignmentRepository.PreparePaginationDTO<IBaseRepository<Assignment, Guid, EducationAppDbContext>, Assignment, Guid>
                                                                                                                  (assignmentPaginationParams.PageIndex,
@@ -99,10 +99,10 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         }
 
         /// <summary>
-        /// Get assignments for mentor by <paramref name="assignmentSpec"/>
+        /// Get assignments for mentor by <paramref name="assignmentPaginationParams"/>
         /// </summary>
         /// <returns></returns>
-        public async Task<PaginationDTO<AssignmentForMentorDTO>> GetEntitiesForMentorAsync(PaginationParamsWithSpec<AssignmentSpec> assignmentPaginationParams)
+        public async Task<PaginationDTO<AssignmentForMentorDTO>> GetAssignmentForMentorAsync(PaginationParamsWithSpec<AssignmentSpec> assignmentPaginationParams)
         {
             var (asssignments, pageCount, totalDataCount) = await _assignmentRepository.PreparePaginationDTO<IBaseRepository<Assignment, Guid, EducationAppDbContext>, Assignment, Guid>
                                                                                                                   (assignmentPaginationParams.PageIndex,
@@ -136,7 +136,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// </summary>
         /// <param name="assignmentId"></param>
         /// <returns></returns>
-        public async Task<AssignmentForStudentDTO> GetEntityForStudentAsync(Guid assignmentId)
+        public async Task<AssignmentForStudentDTO> GetAssignmentForStudentAsync(Guid assignmentId)
         {
             var assignment = await _assignmentRepository.GetByIdAsync(assignmentId).ConfigureAwait(false);
 
@@ -159,7 +159,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// </summary>
         /// <param name="assignmentId"></param>
         /// <returns></returns>
-        public async Task<AssignmentForAdminDTO> GetEntityForAdminAsync(Guid assignmentId)
+        public async Task<AssignmentForAdminDTO> GetAssignmentForAdminAsync(Guid assignmentId)
         {
             var assignment = await _assignmentRepository.GetByIdAsync(assignmentId).ConfigureAwait(false);
 
@@ -185,7 +185,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// </summary>
         /// <param name="assignmentId"></param>
         /// <returns></returns>
-        public async Task<AssignmentForMentorDTO> GetEntityForMentorAsync(Guid assignmentId)
+        public async Task<AssignmentForMentorDTO> GetAssignmentForMentorAsync(Guid assignmentId)
         {
             var assignment = await _assignmentRepository.GetByIdAsync(assignmentId).ConfigureAwait(false);
 
@@ -210,7 +210,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// </summary>
         /// <param name="addAssignmentDTO"></param>
         /// <returns></returns>
-        public async Task AddEntityAsync(AddAssignmentDTO addAssignmentDTO)
+        public async Task AddAssignmentAsync(AddAssignmentDTO addAssignmentDTO)
         {
             var assignment = new Assignment
             {
@@ -232,7 +232,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// </summary>
         /// <param name="updateAssignmentDTO"></param>
         /// <returns></returns>
-        public async Task UpdateEntityAsync(UpdateAssignmentDTO updateAssignmentDTO)
+        public async Task UpdateAssignmentAsync(UpdateAssignmentDTO updateAssignmentDTO)
         {
             var updatedAssignment = await _assignmentRepository.GetByIdAsync(updateAssignmentDTO.Id).ConfigureAwait(false);
 
@@ -270,7 +270,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// </summary>
         /// <param name="assignmentIds"></param>
         /// <returns></returns>
-        public async Task DeleteEntitiesAsync(List<Guid> assignmentIds)
+        public async Task DeleteAssignmentAsync(List<Guid> assignmentIds)
         {
             var assignments = await _assignmentRepository.GetAllAsync(i => assignmentIds.Select(p => p).Contains(i.Id)).ConfigureAwait(false);
             await _assignmentRepository.DeleteAsync(assignments).ConfigureAwait(false);

@@ -31,18 +31,6 @@ namespace Milvasoft.SampleAPI.Controllers
         }
 
         /// <summary>
-        /// Gets the all filtered mentors datas for mentor.
-        /// </summary>
-        /// <returns></returns>
-        //[Authorize(Roles = "Mentor")]
-        [HttpPatch("Mentor")]
-        public async Task<IActionResult> GetMentorsForMentor([FromBody] PaginationParamsWithSpec<MentorSpec> paginationParams)
-        {
-            var mentors = await _mentorService.GetEntitiesForMentorAsync(paginationParams).ConfigureAwait(false);
-            return Ok(mentors);
-        }
-
-        /// <summary>
         /// Gets the all filtered mentors datas for admin.
         /// </summary>
         /// <returns></returns>
@@ -50,34 +38,10 @@ namespace Milvasoft.SampleAPI.Controllers
         [HttpPatch("Admin")]
         public async Task<IActionResult> GetMentorsForAdmn([FromBody] PaginationParamsWithSpec<MentorSpec> paginationParams)
         {
-            var mentors = await _mentorService.GetEntitiesForAdminAsync(paginationParams).ConfigureAwait(false);
+            var mentors = await _mentorService.GetMentorsForAdminAsync(paginationParams).ConfigureAwait(false);
             return Ok(mentors);
         }
 
-        /// <summary>
-        /// Gets the all filtered mentors datas for student.
-        /// </summary>
-        /// <returns></returns>
-        //[Authorize(Roles = "Student")]
-        [HttpPatch("Student")]
-        public async Task<IActionResult> GetMentorsForStudent([FromBody] PaginationParamsWithSpec<MentorSpec> paginationParams)
-        {
-            var mentors = await _mentorService.GetEntitiesForStudentAsync(paginationParams).ConfigureAwait(false);
-            return Ok(mentors);
-        }
-
-        /// <summary>
-        /// Gets the all filtered mentor datas for mentor.
-        /// </summary>
-        /// <returns></returns>
-        //[Authorize(Roles = "Mentor")]
-        [HttpPatch("Mentor/{id}")]
-        public async Task<IActionResult> GetMentorForMentorbyId(Guid id)
-        {
-            var mentor = await _mentorService.GetEntityForMentorAsync(id).ConfigureAwait(false);
-
-            return Ok(mentor);
-        }
 
         /// <summary>
         /// Gets the filtered mentor datas for admin.
@@ -87,23 +51,11 @@ namespace Milvasoft.SampleAPI.Controllers
         [HttpPatch("Admin/{id}")]
         public async Task<IActionResult> GetMentorForAdminbyId([FromBody] Guid id)
         {
-            var mentor = await _mentorService.GetEntityForAdminAsync(id).ConfigureAwait(false);
+            var mentor = await _mentorService.GetMentorForAdminAsync(id).ConfigureAwait(false);
 
             return Ok(mentor);
         }
 
-        /// <summary>
-        /// Gets the filtered mentor datas for student.
-        /// </summary>
-        /// <returns></returns>
-        //[Authorize(Roles = "Student")]
-        [HttpPatch("Mentor/{id}/Students")]
-        public async Task<IActionResult> GetMentorForStudentbyId([FromBody] Guid id)
-        {
-            var mentor = await _mentorService.GetEntityForStudentAsync(id).ConfigureAwait(false);
-
-            return Ok(mentor);
-        }
 
         /// <summary>
         /// Add <b><paramref name="addMentor"/></b> data to database.
@@ -115,7 +67,7 @@ namespace Milvasoft.SampleAPI.Controllers
         [OValidationFilter]
         public async Task<IActionResult> AddMentor([FromBody] AddMentorDTO addMentor)
         {
-            await _mentorService.AddEntityAsync(addMentor).ConfigureAwait(false);
+            await _mentorService.AddMentorAsync(addMentor).ConfigureAwait(false);
             return Ok();
         }
 
@@ -128,20 +80,7 @@ namespace Milvasoft.SampleAPI.Controllers
         [HttpPut("Mentor")]
         public async Task<IActionResult> UpdateMentor([FromBody] UpdateMentorDTO updateMentor)
         {
-            await _mentorService.UpdateEntityAsync(updateMentor).ConfigureAwait(false);
-            return Ok();
-        }
-
-        /// <summary>
-        /// Delete mentor data by <paramref name="id"/>
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
-       // [Authorize(Roles = "Admin")]
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteMentor(Guid id)
-        {
-            await _mentorService.DeleteEntityAsync(id).ConfigureAwait(false);
+            await _mentorService.UpdateMentorAsync(updateMentor).ConfigureAwait(false);
             return Ok();
         }
 
@@ -154,7 +93,7 @@ namespace Milvasoft.SampleAPI.Controllers
         [HttpDelete]
         public async Task<IActionResult> DeleteMentors([FromBody] List<Guid> ids)
         {
-            await _mentorService.DeleteEntitiesAsync(ids).ConfigureAwait(false);
+            await _mentorService.DeleteMentorsAsync(ids).ConfigureAwait(false);
             return Ok();
         }
     }

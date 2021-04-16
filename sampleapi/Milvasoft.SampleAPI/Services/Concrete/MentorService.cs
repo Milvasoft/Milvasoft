@@ -44,7 +44,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// Get mentors for admin.
         /// </summary>
         /// <returns></returns>
-        public async Task<PaginationDTO<MentorForAdminDTO>> GetEntitiesForAdminAsync(PaginationParamsWithSpec<MentorSpec> mentorPaginationParams)
+        public async Task<PaginationDTO<MentorForAdminDTO>> GetMentorsForAdminAsync(PaginationParamsWithSpec<MentorSpec> mentorPaginationParams)
         {
             Func<IIncludable<Mentor>, IIncludable> includes = i => i.Include(p => p.PublishedAnnouncements)
                                                                      .Include(s => s.Students)
@@ -84,94 +84,12 @@ namespace Milvasoft.SampleAPI.Services.Concrete
             };
         }
 
-        //TODO OGZ DELETE
-        /// <summary>
-        /// Get mentors for mentor.
-        /// </summary>
-        /// <returns></returns>
-        public async Task<PaginationDTO<MentorForMentorDTO>> GetEntitiesForMentorAsync(PaginationParamsWithSpec<MentorSpec> mentorPaginationParams)
-        {
-            Func<IIncludable<Mentor>, IIncludable> includes = i => i.Include(p => p.PublishedAnnouncements)
-                                                                     .Include(s => s.Students)
-                                                                     .Include(p => p.Professions);
-
-            var (mentors, pageCount, totalDataCount) = await _mentorRepository.PreparePaginationDTO<IBaseRepository<Mentor, Guid, EducationAppDbContext>, Mentor, Guid>
-                                                                                                                (mentorPaginationParams.PageIndex,
-                                                                                                                mentorPaginationParams.RequestedItemCount,
-                                                                                                                mentorPaginationParams.OrderByProperty = null,
-                                                                                                                mentorPaginationParams.OrderByAscending = false,
-                                                                                                                mentorPaginationParams.Spec?.ToExpression(),
-                                                                                                                includes).ConfigureAwait(false);
-
-            return new PaginationDTO<MentorForMentorDTO>
-            {
-                DTOList = mentors.CheckList(i => mentors.Select(mentor => new MentorForMentorDTO
-                {
-                    Id = mentor.Id,
-                    Name = mentor.Name,
-                    Surname = mentor.Surname,
-                    Professions = mentor.Professions.CheckList(i => mentor.Professions?.Select(pr => new MentorProfessionDTO
-                    {
-                        Id = pr.ProfessionId
-                    })),
-                    PublishedAnnouncements = mentor.PublishedAnnouncements.CheckList(i => mentor.PublishedAnnouncements?.Select(pa => new AnnouncementDTO
-                    {
-                        Id = pa.Id
-                    })),
-                    Students = mentor.Students.CheckList(i => mentor.Students?.Select(st => new StudentDTO
-                    {
-                        Id = st.Id
-                    }))
-                })),
-                PageCount = pageCount,
-                TotalDataCount = totalDataCount
-            };
-        }
-
-        //TODO OGZ DELETE
-        /// <summary>
-        /// Get mentors for student.
-        /// </summary>
-        /// <returns></returns>
-        public async Task<PaginationDTO<MentorForStudentDTO>> GetEntitiesForStudentAsync(PaginationParamsWithSpec<MentorSpec> mentorPaginationParams)
-        {
-            Func<IIncludable<Mentor>, IIncludable> includes = i => i.Include(p => p.PublishedAnnouncements)
-                                                                     .Include(p => p.Professions);
-
-            var (mentors, pageCount, totalDataCount) = await _mentorRepository.PreparePaginationDTO<IBaseRepository<Mentor, Guid, EducationAppDbContext>, Mentor, Guid>
-                                                                                                                (mentorPaginationParams.PageIndex,
-                                                                                                                mentorPaginationParams.RequestedItemCount,
-                                                                                                                mentorPaginationParams.OrderByProperty = null,
-                                                                                                                mentorPaginationParams.OrderByAscending = false,
-                                                                                                                mentorPaginationParams.Spec?.ToExpression(),
-                                                                                                                includes).ConfigureAwait(false);
-
-            return new PaginationDTO<MentorForStudentDTO>
-            {
-                DTOList = mentors.CheckList(i => mentors.Select(mentor => new MentorForStudentDTO
-                {
-                    Name = mentor.Name,
-                    Surname = mentor.Surname,
-                    Professions = mentor.Professions.CheckList(i => mentor.Professions?.Select(pr => new MentorProfessionDTO
-                    {
-                        Id = pr.ProfessionId
-                    })),
-                    PublishedAnnouncements = mentor.PublishedAnnouncements.CheckList(i => mentor.PublishedAnnouncements?.Select(pa => new AnnouncementDTO
-                    {
-                        Id = pa.Id
-                    }))
-                })),
-                PageCount = pageCount,
-                TotalDataCount = totalDataCount
-            };
-        }
-
         /// <summary>
         /// Get mentor for admin by <paramref name="mentorId"/>.
         /// </summary>
         /// <param name="mentorId"></param>
         /// <returns></returns>
-        public async Task<MentorForAdminDTO> GetEntityForAdminAsync(Guid mentorId)
+        public async Task<MentorForAdminDTO> GetMentorForAdminAsync(Guid mentorId)
         {
             Func<IIncludable<Mentor>, IIncludable> includes = i => i.Include(p => p.PublishedAnnouncements)
                                                                      .Include(s => s.Students)
@@ -203,76 +121,13 @@ namespace Milvasoft.SampleAPI.Services.Concrete
             };
         }
 
-        //TODO OGZ DELETE
-        /// <summary>
-        /// Get mentor for mentor by <paramref name="mentorId"/>
-        /// </summary>
-        /// <param name="mentorId"></param>
-        /// <returns></returns>
-        public async Task<MentorForMentorDTO> GetEntityForMentorAsync(Guid mentorId)
-        {
-
-            Func<IIncludable<Mentor>, IIncludable> includes = i => i.Include(p => p.PublishedAnnouncements)
-                                                                     .Include(s => s.Students)
-                                                                     .Include(p => p.Professions);
-
-            var mentor = await _mentorRepository.GetByIdAsync(mentorId, includes).ConfigureAwait(false);
-            return new MentorForMentorDTO
-            {
-                Name = mentor.Name,
-                Surname = mentor.Surname,
-                Professions = mentor.Professions.CheckList(i => mentor.Professions?.Select(pr => new MentorProfessionDTO
-                {
-                    ProfessionId = pr.ProfessionId
-
-                })),
-                PublishedAnnouncements = mentor.PublishedAnnouncements.CheckList(i => mentor.PublishedAnnouncements?.Select(pa => new AnnouncementDTO
-                {
-                    Id = pa.Id
-                })),
-                Students = mentor.Students.CheckList(i => mentor.Students?.Select(st => new StudentDTO
-                {
-                    Id = st.Id
-                }))
-            };
-        }
-
-        //TODO OGZ DELETE
-        /// <summary>
-        /// Get mentor for student by <paramref name="mentorId"/>
-        /// </summary>
-        /// <param name="mentorId"></param>
-        /// <returns></returns>
-        public async Task<MentorForStudentDTO> GetEntityForStudentAsync(Guid mentorId)
-        {
-            Func<IIncludable<Mentor>, IIncludable> includes = i => i.Include(p => p.PublishedAnnouncements)
-                                                                    .Include(p => p.Professions);
-
-            var mentor = await _mentorRepository.GetByIdAsync(mentorId, includes).ConfigureAwait(false);
-            return new MentorForStudentDTO
-            {
-                Name = mentor.Name,
-                Surname = mentor.Surname,
-                Professions = mentor.Professions.CheckList(i => mentor.Professions?.Select(pr => new MentorProfessionDTO
-                {
-                    Id = pr.ProfessionId
-                })),
-                PublishedAnnouncements = mentor.PublishedAnnouncements.CheckList(i => mentor.PublishedAnnouncements?.Select(pa => new AnnouncementDTO
-                {
-                    Id = pa.Id
-                }))
-            };
-        }
-
         /// <summary>
         /// Add mentor.
         /// </summary>
         /// <param name="addMentorDTO"></param>
         /// <returns></returns>
-        public async Task AddEntityAsync(AddMentorDTO addMentorDTO)
+        public async Task AddMentorAsync(AddMentorDTO addMentorDTO)
         {
-
-
             var appUser = new AppUser
             {
                 UserName = addMentorDTO.UserName,
@@ -292,11 +147,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
                 }
             };
 
-            if (appUser.Mentor == null)//TODO OGZ silinecek
-                throw new MilvaUserFriendlyException("PleaseEnterPersonnelInformation");
-
             var result = await _userManager.CreateAsync(appUser, addMentorDTO.Password);
-
 
             if (!result.Succeeded)
                 throw new MilvaUserFriendlyException(result.DescriptionJoin());
@@ -307,29 +158,16 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// </summary>
         /// <param name="updateMentorDTO"></param>
         /// <returns></returns>
-        public async Task UpdateEntityAsync(UpdateMentorDTO updateMentorDTO)
+        public async Task UpdateMentorAsync(UpdateMentorDTO updateMentorDTO)
         {
+            //TODO OGZ SUMMARY DÜZELTİLECEK.
             var updatedMentor = await _mentorRepository.GetByIdAsync(updateMentorDTO.Id).ConfigureAwait(false);
 
             updatedMentor.Name = updateMentorDTO.Name;
 
             updatedMentor.Surname = updateMentorDTO.Surname;
 
-
             await _mentorRepository.UpdateAsync(updatedMentor).ConfigureAwait(false);
-        }
-
-        //TODO OGZ DELETE
-        /// <summary>
-        /// Delete mentor.
-        /// </summary>
-        /// <param name="mentorId"></param>
-        /// <returns></returns>
-        public async Task DeleteEntityAsync(Guid mentorId)
-        {
-            var deletedMentor = await _mentorRepository.GetByIdAsync(mentorId, i => i.Include(a => a.Professions)).ConfigureAwait(false);
-
-            await _mentorRepository.DeleteAsync(deletedMentor).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -337,8 +175,9 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// </summary>
         /// <param name="mentorIds"></param>
         /// <returns></returns>
-        public async Task DeleteEntitiesAsync(List<Guid> mentorIds)
+        public async Task DeleteMentorsAsync(List<Guid> mentorIds)
         {
+            //TODO OGZ SUMMARY DÜZELTİLECEK.
             //TODO OGZ mentorIdList.IsNullOrEmpty() throw
 
             var mentors = await _mentorRepository.GetAllAsync(i => mentorIds.Select(p => p).Contains(i.Id)).ConfigureAwait(false);
@@ -348,7 +187,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         }
 
         #region Private Methods
-
+        //TODO OGZ PRİVATE METHODLAR BURAYA YAZILACAK.
         #endregion
     }
 }

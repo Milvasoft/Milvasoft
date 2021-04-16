@@ -37,7 +37,7 @@ namespace Milvasoft.SampleAPI.Controllers
         [HttpPatch("Student/Mentor")]
         public async Task<IActionResult> GetStudentsForMentor([FromBody] PaginationParamsWithSpec<StudentSpec> paginationParams)
         {
-            var students = await _studentService.GetEntitiesForMentorAsync(paginationParams).ConfigureAwait(false);
+            var students = await _studentService.GetStudentsForMentorAsync(paginationParams).ConfigureAwait(false);
             return Ok(students);
         }
 
@@ -49,19 +49,7 @@ namespace Milvasoft.SampleAPI.Controllers
         [HttpPatch("Student/Admin")]
         public async Task<IActionResult> GetStudentsForAdmin([FromBody] PaginationParamsWithSpec<StudentSpec> paginationParams)
         {
-            var students = await _studentService.GetEntitiesForAdminAsync(paginationParams).ConfigureAwait(false);
-            return Ok(students);
-        }
-
-        /// <summary>
-        /// Gets the all filtered students datas for student.
-        /// </summary>
-        /// <returns></returns>
-        //[Authorize(Roles = "Student")]
-        [HttpPatch("Student/Student")]
-        public async Task<IActionResult> GetStudentsForStudent([FromBody] PaginationParamsWithSpec<StudentSpec> paginationParams)
-        {
-            var students = await _studentService.GetEntitiesForStudentAsync(paginationParams).ConfigureAwait(false);
+            var students = await _studentService.GetStudentsForAdminAsync(paginationParams).ConfigureAwait(false);
             return Ok(students);
         }
 
@@ -73,7 +61,7 @@ namespace Milvasoft.SampleAPI.Controllers
         [HttpPatch("Student/Mentor/{id}")]
         public async Task<IActionResult> GetStudentForMentorbyId([FromBody] Guid id)
         {
-            var student = await _studentService.GetEntityForMentorAsync(id).ConfigureAwait(false);
+            var student = await _studentService.GetStudentForMentorAsync(id).ConfigureAwait(false);
 
             return Ok(student);
         }
@@ -86,20 +74,7 @@ namespace Milvasoft.SampleAPI.Controllers
         [HttpPatch("Student/Admin/{id}")]
         public async Task<IActionResult> GetStudentForAdminbyId([FromBody] Guid id)
         {
-            var student = await _studentService.GetEntityForAdminAsync(id).ConfigureAwait(false);
-
-            return Ok(student);
-        }
-
-        /// <summary>
-        /// Gets the filtered student datas for student.
-        /// </summary>
-        /// <returns></returns>
-        //[Authorize(Roles = "Student")]
-        [HttpPatch("Student/Student/{id}")]
-        public async Task<IActionResult> GetStudentForStudentbyId([FromBody] Guid id)
-        {
-            var student = await _studentService.GetEntityForStudentAsync(id).ConfigureAwait(false);
+            var student = await _studentService.GetStudentForAdminAsync(id).ConfigureAwait(false);
 
             return Ok(student);
         }
@@ -113,7 +88,7 @@ namespace Milvasoft.SampleAPI.Controllers
         [HttpPost("AddStudent")]
         public async Task<IActionResult> AddStudent([FromBody] AddStudentDTO addStudent)
         {
-            await _studentService.AddEntityAsync(addStudent).ConfigureAwait(false);
+            await _studentService.AddStudentAsync(addStudent).ConfigureAwait(false);
             return Ok();
         }
 
@@ -126,20 +101,7 @@ namespace Milvasoft.SampleAPI.Controllers
         [HttpPut("UpdateStudent")]
         public async Task<IActionResult> UpdateStudent([FromBody] UpdateStudentDTO updateStudent)
         {
-            await _studentService.UpdateEntityAsync(updateStudent).ConfigureAwait(false);
-            return Ok();
-        }
-
-        /// <summary>
-        /// Delete student data by <paramref name="id"/>
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
-       // [Authorize(Roles = "Admin")]
-        [HttpDelete("Student/Delete/{id}")]
-        public async Task<IActionResult> DeleteStudent(Guid id)
-        {
-            await _studentService.DeleteEntityAsync(id).ConfigureAwait(false);
+            await _studentService.UpdateStudentAsync(updateStudent).ConfigureAwait(false);
             return Ok();
         }
 
@@ -152,7 +114,7 @@ namespace Milvasoft.SampleAPI.Controllers
         [HttpDelete("Student/Deletes/{ids}")]
         public async Task<IActionResult> DeleteStudents(List<Guid> ids)
         {
-            await _studentService.DeleteEntitiesAsync(ids).ConfigureAwait(false);
+            await _studentService.DeleteStudentsAsync(ids).ConfigureAwait(false);
             return Ok();
         }
 
