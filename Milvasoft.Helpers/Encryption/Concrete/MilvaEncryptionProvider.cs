@@ -234,7 +234,7 @@ namespace Milvasoft.Helpers.Encryption.Concrete
             }
 
             return outputValue;
-        }  
+        }
 
         /// <summary>
         /// Encrypt file in <paramref name="filePath"/> with AES Algorithm and key.

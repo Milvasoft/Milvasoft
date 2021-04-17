@@ -238,7 +238,7 @@ namespace Milvasoft.Helpers
         /// <returns> ObjectResponse </returns>
         public static async Task<object> SendRequestDeserializeSingle<T>(this HttpClient httpClient, HttpRequestMessage httpRequestMessage)
         {
-            var response = await httpClient.SendAsync(httpRequestMessage).ConfigureAwait(false);
+            using var response = await httpClient.SendAsync(httpRequestMessage).ConfigureAwait(false);
 
             if (response.IsSuccessStatusCode)
             {
@@ -261,7 +261,8 @@ namespace Milvasoft.Helpers
         /// <returns> ObjectResponse </returns>
         public static async Task<object> SendRequestDeserializeMultiple<T>(this HttpClient httpClient, HttpRequestMessage httpRequestMessage)
         {
-            var response = await httpClient.SendAsync(httpRequestMessage).ConfigureAwait(false);
+            using var response = await httpClient.SendAsync(httpRequestMessage).ConfigureAwait(false);
+
             if (response.IsSuccessStatusCode)
             {
                 var contentString = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
@@ -283,7 +284,7 @@ namespace Milvasoft.Helpers
         /// <returns> <typeparamref name="TReturn"/> </returns>
         public static async Task<TReturn> SendRequestDeserialize<TReturn>(this HttpClient httpClient, HttpRequestMessage httpRequestMessage)
         {
-            var response = await httpClient.SendAsync(httpRequestMessage).ConfigureAwait(false);
+            using var response = await httpClient.SendAsync(httpRequestMessage).ConfigureAwait(false);
 
             var contentString = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
 
@@ -301,7 +302,7 @@ namespace Milvasoft.Helpers
         /// <returns> ObjectResponse </returns>
         public static async Task<object> SendRequestDeserializeSingle<T, TKey>(this HttpClient httpClient, HttpRequestMessage httpRequestMessage) where TKey : struct, IEquatable<TKey>
         {
-            var response = await httpClient.SendAsync(httpRequestMessage).ConfigureAwait(false);
+            using var response = await httpClient.SendAsync(httpRequestMessage).ConfigureAwait(false);
 
             if (response.IsSuccessStatusCode)
             {
@@ -325,7 +326,8 @@ namespace Milvasoft.Helpers
         /// <returns> ObjectResponse </returns>
         public static async Task<object> SendRequestDeserializeMultiple<T, TKey>(this HttpClient httpClient, HttpRequestMessage httpRequestMessage) where TKey : struct, IEquatable<TKey>
         {
-            var response = await httpClient.SendAsync(httpRequestMessage).ConfigureAwait(false);
+            using var response = await httpClient.SendAsync(httpRequestMessage).ConfigureAwait(false);
+
             if (response.IsSuccessStatusCode)
             {
                 var contentString = await response.Content.ReadAsStringAsync().ConfigureAwait(false);

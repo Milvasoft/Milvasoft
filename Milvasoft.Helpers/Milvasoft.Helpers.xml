@@ -6716,6 +6716,145 @@
             UserName and token pairs for each logged in user.
             </summary>
         </member>
+        <member name="T:Milvasoft.Helpers.Integration.Expo.PushNotification.ExpoClient">
+            <summary>
+            Expo client for push api requests.
+            </summary>
+        </member>
+        <member name="F:Milvasoft.Helpers.Integration.Expo.PushNotification.ExpoClient._httpHandler">
+            <summary>
+            Make this static to avoid socket saturation and limit concurrent server connections to 6, but only for instances of this class.
+            </summary>
+        </member>
+        <member name="M:Milvasoft.Helpers.Integration.Expo.PushNotification.ExpoClient.AddBearerAuthorizationHeader(System.String)">
+            <summary>
+            Adds Bearer authorization header value to <see cref="P:System.Net.Http.HttpClient.DefaultRequestHeaders"/>.
+            </summary>
+            <param name="token"></param>
+        </member>
+        <member name="M:Milvasoft.Helpers.Integration.Expo.PushNotification.ExpoClient.PushSendAsync(Milvasoft.Helpers.Integration.Expo.PushNotification.PushTicketRequest)">
+            <summary>
+            Sends <paramref name="pushTicketRequest"/> to expo push api and returns <see cref="T:Milvasoft.Helpers.Integration.Expo.PushNotification.PushTicketResponse"/>.
+            </summary>
+            <param name="pushTicketRequest"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.Integration.Expo.PushNotification.ExpoClient.PushGetReceiptsAsync(Milvasoft.Helpers.Integration.Expo.PushNotification.PushReceiptRequest)">
+            <summary>
+            Sends <paramref name="pushReceiptRequest"/> to expo push api and returns <see cref="T:Milvasoft.Helpers.Integration.Expo.PushNotification.PushReceiptResponse"/>.
+            </summary>
+            <param name="pushReceiptRequest"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.Integration.Expo.PushNotification.ExpoClient.PostAsync``2(``0,System.String)">
+            <summary>
+            Serailizes <paramref name="requestObj"/> and sends post request to <paramref name="path"/> and returns response as <typeparamref name="U"/>.
+            </summary>
+            <typeparam name="T"></typeparam>
+            <typeparam name="U"></typeparam>
+            <param name="requestObj"></param>
+            <param name="path"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Milvasoft.Helpers.Integration.Expo.PushNotification.PushDataObject">
+            <summary>
+            Expo api accepts only json objects. So that we use this class to serialize to be transferred data into <see cref="P:Milvasoft.Helpers.Integration.Expo.PushNotification.PushTicketRequest.PushData"/>.
+            </summary>
+        </member>
+        <member name="M:Milvasoft.Helpers.Integration.Expo.PushNotification.PushDataObject.#ctor(System.Object,System.SByte)">
+            <summary>
+            Initializes new instances of <see cref="T:Milvasoft.Helpers.Integration.Expo.PushNotification.PushDataObject"/>.
+            </summary>
+            <param name="data"></param>
+            <param name="notificationId"></param>
+        </member>
+        <member name="P:Milvasoft.Helpers.Integration.Expo.PushNotification.PushDataObject.Data">
+            <summary>
+            To be transferred data.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.Integration.Expo.PushNotification.PushDataObject.NotificationId">
+            <summary>
+            Notification type id for mobile application.
+            </summary>
+        </member>
+        <member name="T:Milvasoft.Helpers.Integration.Expo.PushNotification.PushTicketRequest">
+            <summary>
+            Model for expo push notification api send push notification.
+            </summary>
+        </member>
+        <member name="M:Milvasoft.Helpers.Integration.Expo.PushNotification.PushTicketRequest.#ctor(System.SByte)">
+            <summary>
+            Initializes new instance of <see cref="T:Milvasoft.Helpers.Integration.Expo.PushNotification.PushTicketRequest"/>
+            </summary>
+            <param name="notificationId"></param>
+        </member>
+        <member name="P:Milvasoft.Helpers.Integration.Expo.PushNotification.PushTicketRequest.PushTo">
+            <summary>
+            An Expo push token or an array of Expo push tokens specifying the recipient(s) of this message.
+            Platform : iOS and Android
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.Integration.Expo.PushNotification.PushTicketRequest.PushData">
+            <summary>
+            A JSON object delivered to your app. It may be up to about 4KiB; the total notification payload sent to Apple and Google must be at most 4KiB or else you will get a "Message Too Big" error.
+            Platform : iOS and Android
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.Integration.Expo.PushNotification.PushTicketRequest.PushTitle">
+            <summary>
+            The title to display in the notification. Often displayed above the notification body
+            Platform : iOS and Android
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.Integration.Expo.PushNotification.PushTicketRequest.PushBody">
+            <summary>
+            The message to display in the notification.
+            Platform : iOS and Android
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.Integration.Expo.PushNotification.PushTicketRequest.PushTTL">
+            <summary>
+            Time to Live: the number of seconds for which the message may be kept around for redelivery if it hasn't been delivered yet. Defaults to undefined in order to use the respective defaults of each provider (0 for iOS/APNs and 2419200 (4 weeks) for Android/FCM).
+            Platform : iOS and Android
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.Integration.Expo.PushNotification.PushTicketRequest.PushExpiration">
+            <summary>
+            Timestamp since the UNIX epoch specifying when the message expires. Same effect as ttl (ttl takes precedence over expiration).
+            Platform : iOS and Android
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.Integration.Expo.PushNotification.PushTicketRequest.PushPriority">
+            <summary>
+            The delivery priority of the message. Specify "default" or omit this field to use the default priority on each platform ("normal" on Android and "high" on iOS).
+            Platform : iOS and Android
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.Integration.Expo.PushNotification.PushTicketRequest.PushSubTitle">
+            <summary>
+            The subtitle to display in the notification below the title.
+            Platform : iOS 
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.Integration.Expo.PushNotification.PushTicketRequest.PushSound">
+            <summary>
+            Play a sound when the recipient receives this notification. Specify "default" to play the device's default notification sound, or omit this field to play no sound.
+            Platform : iOS
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.Integration.Expo.PushNotification.PushTicketRequest.PushBadgeCount">
+            <summary>
+            Number to display in the badge on the app icon. Specify zero to clear the badge.
+            Platform : iOS 
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.Integration.Expo.PushNotification.PushTicketRequest.PushChannelId">
+            <summary>
+            ID of the Notification Channel through which to display this notification. If an ID is specified but the corresponding channel does not exist on the device (i.e. has not yet been created by your app), the notification will not be displayed to the user.
+            Platform : Android
+            </summary>
+        </member>
         <member name="T:Milvasoft.Helpers.Mail.IMilvaMailSender">
             <summary>
             Provides send mail.

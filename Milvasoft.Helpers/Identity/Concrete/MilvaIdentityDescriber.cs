@@ -42,7 +42,7 @@ namespace Milvasoft.Helpers.Identity.Concrete
         /// </summary>
         /// <param name="userName"></param>
         /// <returns></returns>
-        public override IdentityError InvalidUserName(string userName) => new IdentityError { Code = nameof(InvalidUserName), Description = _localizer[LocalizerKeys.IdentityInvalidUsername] };
+        public override IdentityError InvalidUserName(string userName) => new IdentityError { Code = nameof(InvalidUserName), Description = _localizer[LocalizerKeys.IdentityInvalidUserName] };
 
         /// <summary>
         /// Invalid email. Localizer Key : IdentityInvalidEmail

@@ -11,7 +11,7 @@ namespace Milvasoft.SampleAPI.Services.Abstract
     /// <summary>
     /// Mentor service interface.
     /// </summary>
-    public interface IMentorService 
+    public interface IMentorService
     {
         /// <summary>
         /// Get all assignment for admin from database.
