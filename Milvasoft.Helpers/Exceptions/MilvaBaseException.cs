@@ -35,7 +35,7 @@ namespace Milvasoft.Helpers.Exceptions
         /// <param name="messageOrLocalizerKey"></param>
         public MilvaBaseException(string messageOrLocalizerKey) : base(messageOrLocalizerKey)
             => ExceptionCode = ExceptionCode != 0 ? ExceptionCode : (int)MilvaException.Base;
-    
+
         /// <summary>
         /// Initializes a new instance of the <see cref="MilvaBaseException"/> class  with a specified error message.
         /// </summary>

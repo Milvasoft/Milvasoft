@@ -236,8 +236,8 @@ namespace Milvasoft.SampleAPI.Services.Concrete
                     ProfessionId = addStudentDTO.ProfessionId,
                     MentorId = addStudentDTO.MentorId
                 }
-        };
-            
+            };
+
             appUser.Mentor = null;
 
             var result = await _userManager.CreateAsync(appUser, addStudentDTO.Password);

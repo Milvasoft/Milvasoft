@@ -11,7 +11,7 @@ namespace Milvasoft.SampleAPI.Services.Abstract
     /// <summary>
     /// Assignment service interface.
     /// </summary>
-    public interface IAssignmentService 
+    public interface IAssignmentService
     {
         /// <summary>
         /// Get all assignment for student from database.

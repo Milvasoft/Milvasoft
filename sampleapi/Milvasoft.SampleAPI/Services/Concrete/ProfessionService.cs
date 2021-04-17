@@ -34,7 +34,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// <param name="tenantAccessor"></param>
         public ProfessionService(IBaseRepository<Profession, Guid, EducationAppDbContext> professionRepository,
                                  IBaseRepository<TestEntity, TenantId, EducationAppDbContext> testRepository,
-                                 ITenantAccessor<CachedTenant, TenantId> tenantAccessor) 
+                                 ITenantAccessor<CachedTenant, TenantId> tenantAccessor)
         {
 
             _professionRepository = professionRepository;

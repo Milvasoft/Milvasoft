@@ -11,7 +11,7 @@ namespace Milvasoft.SampleAPI.Services.Abstract
     /// <summary>
     /// Profession service interface.
     /// </summary>
-    public interface IProfessionService 
+    public interface IProfessionService
     {
         /// <summary>
         /// Test method.
