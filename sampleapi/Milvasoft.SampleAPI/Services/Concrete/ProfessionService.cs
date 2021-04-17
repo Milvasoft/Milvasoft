@@ -56,14 +56,14 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// Get professions for admin.
         /// </summary>
         /// <returns></returns>
-        public async Task<PaginationDTO<ProfessionDTO>> GetProfessionsForAdminAsync(PaginationParamsWithSpec<ProfessionSpec> professionPaginationParams)
+        public async Task<PaginationDTO<ProfessionDTO>> GetProfessionsForAdminAsync(PaginationParamsWithSpec<ProfessionSpec> pagiantionParams)
         {
             var (professions, pageCount, totalDataCount) = await _professionRepository.PreparePaginationDTO<IBaseRepository<Profession, Guid, EducationAppDbContext>, Profession, Guid>
-                                                                                                                (professionPaginationParams.PageIndex,
-                                                                                                                professionPaginationParams.RequestedItemCount,
-                                                                                                                professionPaginationParams.OrderByProperty = null,
-                                                                                                                professionPaginationParams.OrderByAscending = false,
-                                                                                                                professionPaginationParams.Spec?.ToExpression()).ConfigureAwait(false);
+                                                                                                                (pagiantionParams.PageIndex,
+                                                                                                                pagiantionParams.RequestedItemCount,
+                                                                                                                pagiantionParams.OrderByProperty = null,
+                                                                                                                pagiantionParams.OrderByAscending = false,
+                                                                                                                pagiantionParams.Spec?.ToExpression()).ConfigureAwait(false);
 
             return new PaginationDTO<ProfessionDTO>
             {
@@ -81,14 +81,14 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// Get professions for mentor.
         /// </summary>
         /// <returns></returns>
-        public async Task<PaginationDTO<ProfessionDTO>> GetProfessionsForMentorAsync(PaginationParamsWithSpec<ProfessionSpec> professionPaginationParams)
+        public async Task<PaginationDTO<ProfessionDTO>> GetProfessionsForMentorAsync(PaginationParamsWithSpec<ProfessionSpec> pagiantionParams)
         {
             var (professions, pageCount, totalDataCount) = await _professionRepository.PreparePaginationDTO<IBaseRepository<Profession, Guid, EducationAppDbContext>, Profession, Guid>
-                                                                                                                (professionPaginationParams.PageIndex,
-                                                                                                                professionPaginationParams.RequestedItemCount,
-                                                                                                                professionPaginationParams.OrderByProperty = null,
-                                                                                                                professionPaginationParams.OrderByAscending = false,
-                                                                                                                professionPaginationParams.Spec?.ToExpression()).ConfigureAwait(false);
+                                                                                                                (pagiantionParams.PageIndex,
+                                                                                                                pagiantionParams.RequestedItemCount,
+                                                                                                                pagiantionParams.OrderByProperty = null,
+                                                                                                                pagiantionParams.OrderByAscending = false,
+                                                                                                                pagiantionParams.Spec?.ToExpression()).ConfigureAwait(false);
 
             return new PaginationDTO<ProfessionDTO>
             {
@@ -106,14 +106,14 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// Get professions for student.
         /// </summary>
         /// <returns></returns>
-        public async Task<PaginationDTO<ProfessionDTO>> GetProfessionsForStudentAsync(PaginationParamsWithSpec<ProfessionSpec> professionPaginationParams)
+        public async Task<PaginationDTO<ProfessionDTO>> GetProfessionsForStudentAsync(PaginationParamsWithSpec<ProfessionSpec> pagiantionParams)
         {
             var (professions, pageCount, totalDataCount) = await _professionRepository.PreparePaginationDTO<IBaseRepository<Profession, Guid, EducationAppDbContext>, Profession, Guid>
-                                                                                                                (professionPaginationParams.PageIndex,
-                                                                                                                professionPaginationParams.RequestedItemCount,
-                                                                                                                professionPaginationParams.OrderByProperty = null,
-                                                                                                                professionPaginationParams.OrderByAscending = false,
-                                                                                                                professionPaginationParams.Spec?.ToExpression()).ConfigureAwait(false);
+                                                                                                                (pagiantionParams.PageIndex,
+                                                                                                                pagiantionParams.RequestedItemCount,
+                                                                                                                pagiantionParams.OrderByProperty = null,
+                                                                                                                pagiantionParams.OrderByAscending = false,
+                                                                                                                pagiantionParams.Spec?.ToExpression()).ConfigureAwait(false);
 
             return new PaginationDTO<ProfessionDTO>
             {
@@ -137,6 +137,8 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         {
             var profession = await _professionRepository.GetByIdAsync(professionId).ConfigureAwait(false);
 
+            profession.ThrowIfNullForGuidObject();
+
             return new ProfessionDTO
             {
                 Name = profession.Name,
@@ -156,10 +158,13 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         {
             var profession = await _professionRepository.GetByIdAsync(professionId).ConfigureAwait(false);
 
+            profession.ThrowIfNullForGuidObject();
+
             return new ProfessionDTO
             {
                 Name = profession.Name,
                 CreationDate = profession.CreationDate,
+                Id=profession.Id,
                 LastModificationDate = profession.LastModificationDate
             };
         }
@@ -173,15 +178,18 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         {
             var profession = await _professionRepository.GetByIdAsync(professionId).ConfigureAwait(false);
 
+            profession.ThrowIfNullForGuidObject();
+
             return new ProfessionDTO
             {
                 Name = profession.Name
             };
         }
+
         /// <summary>
-        /// Add profession to database.
+        /// Maps <paramref name="addProfessionDTO"/> to <c><b>Profession</b></c>  object and adds that product to repository.
         /// </summary>
-        /// <param name="addProfessionDTO"></param>
+        /// <param name="addProfessionDTO">Profession to be added.</param>
         /// <returns></returns>
         public async Task AddProfessionAsync(AddProfessionDTO addProfessionDTO)
         {
@@ -193,17 +201,17 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         }
 
         /// <summary>
-        /// Update profession by <paramref name="updateProfessionDTO"/>.
+        /// Updates single profession which that equals <paramref name="updateProfessionDTO"/> in repository by <paramref name="updateProfessionDTO"/>'s properties.
         /// </summary>
-        /// <param name="updateProfessionDTO"></param>
+        /// <param name="updateProfessionDTO">Profession to be updated.</param>
         /// <returns></returns>
         public async Task UpdateProfessionAsync(UpdateProfessionDTO updateProfessionDTO)
         {
-            var updatedProfession = await _professionRepository.GetByIdAsync(updateProfessionDTO.Id).ConfigureAwait(false);
+            var toBeUpdatedProfession = await _professionRepository.GetByIdAsync(updateProfessionDTO.Id).ConfigureAwait(false);
 
-            updatedProfession.Name = updateProfessionDTO.Name;
+            toBeUpdatedProfession.Name = updateProfessionDTO.Name;
 
-            await _professionRepository.UpdateAsync(updatedProfession).ConfigureAwait(false);
+            await _professionRepository.UpdateAsync(toBeUpdatedProfession).ConfigureAwait(false);
         }
 
         /// <summary>
