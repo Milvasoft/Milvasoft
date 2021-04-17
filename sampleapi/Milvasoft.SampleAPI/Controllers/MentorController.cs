@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Milvasoft.Helpers;
 using Milvasoft.SampleAPI.DTOs;
 using Milvasoft.SampleAPI.DTOs.MentorDTOs;
 using Milvasoft.SampleAPI.Services.Abstract;
@@ -39,7 +40,7 @@ namespace Milvasoft.SampleAPI.Controllers
         public async Task<IActionResult> GetMentorsForAdmn([FromBody] PaginationParamsWithSpec<MentorSpec> paginationParams)
         {
             var mentors = await _mentorService.GetMentorsForAdminAsync(paginationParams).ConfigureAwait(false);
-            return Ok(mentors);
+            return mentors.GetObjectResponse("Success");
         }
 
 
@@ -49,11 +50,11 @@ namespace Milvasoft.SampleAPI.Controllers
         /// <returns></returns>
         ///[Authorize(Roles = "Admin")]
         [HttpPatch("Admin/{id}")]
-        public async Task<IActionResult> GetMentorForAdminbyId([FromBody] Guid id)
+        public async Task<IActionResult> GetMentorForAdminbyId( Guid id)
         {
             var mentor = await _mentorService.GetMentorForAdminAsync(id).ConfigureAwait(false);
 
-            return Ok(mentor);
+            return mentor.GetObjectResponse("Success");
         }
 
 
@@ -67,8 +68,7 @@ namespace Milvasoft.SampleAPI.Controllers
         [OValidationFilter]
         public async Task<IActionResult> AddMentor([FromBody] AddMentorDTO addMentor)
         {
-            await _mentorService.AddMentorAsync(addMentor).ConfigureAwait(false);
-            return Ok();
+            return await _mentorService.AddMentorAsync(addMentor).ConfigureAwait(false).GetObjectResponseAsync<AddMentorDTO>("Success"); 
         }
 
         /// <summary>
@@ -80,8 +80,7 @@ namespace Milvasoft.SampleAPI.Controllers
         [HttpPut("Mentor")]
         public async Task<IActionResult> UpdateMentor([FromBody] UpdateMentorDTO updateMentor)
         {
-            await _mentorService.UpdateMentorAsync(updateMentor).ConfigureAwait(false);
-            return Ok();
+            return await _mentorService.UpdateMentorAsync(updateMentor).ConfigureAwait(false).GetObjectResponseAsync<UpdateMentorDTO>("Success"); ;
         }
 
         /// <summary>
@@ -93,8 +92,7 @@ namespace Milvasoft.SampleAPI.Controllers
         [HttpDelete]
         public async Task<IActionResult> DeleteMentors([FromBody] List<Guid> ids)
         {
-            await _mentorService.DeleteMentorsAsync(ids).ConfigureAwait(false);
-            return Ok();
+            return await _mentorService.DeleteMentorsAsync(ids).ConfigureAwait(false).GetObjectResponseAsync<MentorDTO,Guid>(ids,"Success");
         }
     }
 }

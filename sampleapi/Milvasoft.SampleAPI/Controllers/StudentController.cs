@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Milvasoft.Helpers;
 using Milvasoft.SampleAPI.DTOs;
 using Milvasoft.SampleAPI.DTOs.StudentDTOs;
 using Milvasoft.SampleAPI.Services.Abstract;
@@ -34,11 +35,12 @@ namespace Milvasoft.SampleAPI.Controllers
         /// </summary>
         /// <returns></returns>
         //[Authorize(Roles = "Mentor")]
-        [HttpPatch("Student/Mentor")]
+        [HttpPatch("Mentor")]
         public async Task<IActionResult> GetStudentsForMentor([FromBody] PaginationParamsWithSpec<StudentSpec> paginationParams)
         {
             var students = await _studentService.GetStudentsForMentorAsync(paginationParams).ConfigureAwait(false);
-            return Ok(students);
+
+            return students.GetObjectResponse("Success");
         }
 
         /// <summary>
@@ -46,11 +48,12 @@ namespace Milvasoft.SampleAPI.Controllers
         /// </summary>
         /// <returns></returns>
         //[Authorize(Roles = "Admin")]
-        [HttpPatch("Student/Admin")]
+        [HttpPatch("Admin")]
         public async Task<IActionResult> GetStudentsForAdmin([FromBody] PaginationParamsWithSpec<StudentSpec> paginationParams)
         {
             var students = await _studentService.GetStudentsForAdminAsync(paginationParams).ConfigureAwait(false);
-            return Ok(students);
+
+            return students.GetObjectResponse("Success");
         }
 
         /// <summary>
@@ -58,12 +61,12 @@ namespace Milvasoft.SampleAPI.Controllers
         /// </summary>
         /// <returns></returns>
         //[Authorize(Roles = "Mentor")]
-        [HttpPatch("Student/Mentor/{id}")]
-        public async Task<IActionResult> GetStudentForMentorbyId([FromBody] Guid id)
+        [HttpPatch("Mentor/{id}")]
+        public async Task<IActionResult> GetStudentForMentorbyId(Guid id)
         {
             var student = await _studentService.GetStudentForMentorAsync(id).ConfigureAwait(false);
 
-            return Ok(student);
+            return student.GetObjectResponse("Success");
         }
 
         /// <summary>
@@ -71,12 +74,12 @@ namespace Milvasoft.SampleAPI.Controllers
         /// </summary>
         /// <returns></returns>
         ///[Authorize(Roles = "Admin")]
-        [HttpPatch("Student/Admin/{id}")]
-        public async Task<IActionResult> GetStudentForAdminbyId([FromBody] Guid id)
+        [HttpPatch("Admin/{id}")]
+        public async Task<IActionResult> GetStudentForAdminbyId(Guid id)
         {
             var student = await _studentService.GetStudentForAdminAsync(id).ConfigureAwait(false);
 
-            return Ok(student);
+            return student.GetObjectResponse("Success");
         }
 
         /// <summary>
@@ -85,11 +88,10 @@ namespace Milvasoft.SampleAPI.Controllers
         /// <param name="addStudent"></param>
         /// <returns></returns>
        // [Authorize(Roles = "Admin")]
-        [HttpPost("AddStudent")]
+        [HttpPost("Student")]
         public async Task<IActionResult> AddStudent([FromBody] AddStudentDTO addStudent)
         {
-            await _studentService.AddStudentAsync(addStudent).ConfigureAwait(false);
-            return Ok();
+            return await _studentService.AddStudentAsync(addStudent).ConfigureAwait(false).GetObjectResponseAsync<AddStudentDTO>("Success").ConfigureAwait(false);
         }
 
         /// <summary>
@@ -98,25 +100,25 @@ namespace Milvasoft.SampleAPI.Controllers
         /// <param name="updateStudent"></param>
         /// <returns></returns>
        // [Authorize(Roles = "Admin")]
-        [HttpPut("UpdateStudent")]
+        [HttpPut("Student")]
         public async Task<IActionResult> UpdateStudent([FromBody] UpdateStudentDTO updateStudent)
         {
-            await _studentService.UpdateStudentAsync(updateStudent).ConfigureAwait(false);
-            return Ok();
+            return await _studentService.UpdateStudentAsync(updateStudent).ConfigureAwait(false).GetObjectResponseAsync<UpdateStudentDTO>("Success").ConfigureAwait(false);
         }
+
 
         /// <summary>
         /// Delete professions data by <paramref name="ids"/>
         /// </summary>
         /// <param name="ids"></param>
         /// <returns></returns>
-       // [Authorize(Roles = "Admin")]
-        [HttpDelete("Student/Deletes/{ids}")]
-        public async Task<IActionResult> DeleteStudents(List<Guid> ids)
+        // [Authorize(Roles = "Admin")]
+        [HttpDelete("Delete")]
+        public async Task<IActionResult> DeleteStudents([FromBody] List<Guid> ids)
         {
-            await _studentService.DeleteStudentsAsync(ids).ConfigureAwait(false);
-            return Ok();
+            return await _studentService.DeleteStudentsAsync(ids).ConfigureAwait(false).GetObjectResponseAsync<StudentDTO,Guid>(ids,"Success");
         }
 
     }
+
 }

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Milvasoft.Helpers;
 using Milvasoft.SampleAPI.DTOs;
 using Milvasoft.SampleAPI.DTOs.AssignmentDTOs;
 using Milvasoft.SampleAPI.Services.Abstract;
@@ -30,11 +31,11 @@ namespace Milvasoft.SampleAPI.Controllers
         /// </summary>
         /// <returns></returns>
         //[Authorize(Roles = "Mentor")]
-        [HttpPatch("Assignment/Mentor")]
+        [HttpPatch("Mentor")]
         public async Task<IActionResult> GetAssignmentsForMentor([FromBody] PaginationParamsWithSpec<AssignmentSpec> paginationParams)
         {
             var assignments = await _assigmentService.GetAssignmentForMentorAsync(paginationParams).ConfigureAwait(false);
-            return Ok(assignments);
+            return assignments.GetObjectResponse("Success");
         }
 
         /// <summary>
@@ -42,11 +43,11 @@ namespace Milvasoft.SampleAPI.Controllers
         /// </summary>
         /// <returns></returns>
         //[Authorize(Roles = "Admin")]
-        [HttpPatch("Assignment/Admin")]
+        [HttpPatch("Admin")]
         public async Task<IActionResult> GetAssignmentsForAdmn([FromBody] PaginationParamsWithSpec<AssignmentSpec> paginationParams)
         {
             var assignments = await _assigmentService.GetAssignmentForAdminAsync(paginationParams).ConfigureAwait(false);
-            return Ok(assignments);
+            return assignments.GetObjectResponse("Success");
         }
 
         /// <summary>
@@ -54,11 +55,11 @@ namespace Milvasoft.SampleAPI.Controllers
         /// </summary>
         /// <returns></returns>
         //[Authorize(Roles = "Student")]
-        [HttpPatch("Assignment/Student")]
+        [HttpPatch("Student")]
         public async Task<IActionResult> GetAssignmentsForStudent([FromBody] PaginationParamsWithSpec<AssignmentSpec> paginationParams)
         {
             var assignments = await _assigmentService.GetAssignmentForStudentAsync(paginationParams).ConfigureAwait(false);
-            return Ok(assignments);
+            return assignments.GetObjectResponse("Success");
         }
 
         /// <summary>
@@ -66,12 +67,12 @@ namespace Milvasoft.SampleAPI.Controllers
         /// </summary>
         /// <returns></returns>
         //[Authorize(Roles = "Mentor")]
-        [HttpPatch("Assignment/Mentor/{id}")]
-        public async Task<IActionResult> GetAssignmentForMentorbyId([FromBody] Guid id)
+        [HttpPatch("Mentor/{id}")]
+        public async Task<IActionResult> GetAssignmentForMentorbyId( Guid id)
         {
             var assignment = await _assigmentService.GetAssignmentForMentorAsync(id).ConfigureAwait(false);
 
-            return Ok(assignment);
+            return assignment.GetObjectResponse("Success");
         }
 
         /// <summary>
@@ -79,12 +80,12 @@ namespace Milvasoft.SampleAPI.Controllers
         /// </summary>
         /// <returns></returns>
         ///[Authorize(Roles = "Admin")]
-        [HttpPatch("Assignment/Admin/{id}")]
-        public async Task<IActionResult> GetAssignmentForAdminbyId([FromBody] Guid id)
+        [HttpPatch("Admin/{id}")]
+        public async Task<IActionResult> GetAssignmentForAdminbyId(Guid id)
         {
             var assignment = await _assigmentService.GetAssignmentForAdminAsync(id).ConfigureAwait(false);
 
-            return Ok(assignment);
+            return assignment.GetObjectResponse("Success");
         }
 
         /// <summary>
@@ -92,12 +93,12 @@ namespace Milvasoft.SampleAPI.Controllers
         /// </summary>
         /// <returns></returns>
         //[Authorize(Roles = "Student")]
-        [HttpPatch("Assignment/Student/{id}")]
-        public async Task<IActionResult> GetAssignmentForStudentbyId([FromBody] Guid id)
+        [HttpPatch("Student/{id}")]
+        public async Task<IActionResult> GetAssignmentForStudentbyId( Guid id)
         {
             var assignment = await _assigmentService.GetAssignmentForStudentAsync(id).ConfigureAwait(false);
 
-            return Ok(assignment);
+            return assignment.GetObjectResponse("Success");
         }
 
         /// <summary>
@@ -106,11 +107,10 @@ namespace Milvasoft.SampleAPI.Controllers
         /// <param name="addAssignment"></param>
         /// <returns></returns>
        // [Authorize(Roles = "Admin")]
-        [HttpPost("AddAssignment")]
+        [HttpPost("Assignment")]
         public async Task<IActionResult> AddAssignment([FromBody] AddAssignmentDTO addAssignment)
-        {
-            await _assigmentService.AddAssignmentAsync(addAssignment).ConfigureAwait(false);
-            return Ok();
+        {   
+            return await _assigmentService.AddAssignmentAsync(addAssignment).ConfigureAwait(false).GetObjectResponseAsync<AddAssignmentDTO>("Success").ConfigureAwait(false);
         }
 
         /// <summary>
@@ -119,11 +119,10 @@ namespace Milvasoft.SampleAPI.Controllers
         /// <param name="updateAssignment"></param>
         /// <returns></returns>
        // [Authorize(Roles = "Admin")]
-        [HttpPut("UpdateAssignment")]
+        [HttpPut("Assignment")]
         public async Task<IActionResult> UpdateAssignment([FromBody] UpdateAssignmentDTO updateAssignment)
         {
-            await _assigmentService.UpdateAssignmentAsync(updateAssignment).ConfigureAwait(false);
-            return Ok();
+            return await _assigmentService.UpdateAssignmentAsync(updateAssignment).ConfigureAwait(false).GetObjectResponseAsync<UpdateAssignmentDTO>("Success").ConfigureAwait(false);
         }
 
         /// <summary>
@@ -132,11 +131,10 @@ namespace Milvasoft.SampleAPI.Controllers
         /// <param name="ids"></param>
         /// <returns></returns>
        // [Authorize(Roles = "Admin")]
-        [HttpDelete("Assignment/Deletes/{ids}")]
-        public async Task<IActionResult> DeleteAssignment(List<Guid> ids)
+        [HttpDelete("Delete")]
+        public async Task<IActionResult> DeleteAssignment([FromBody] List<Guid> ids)
         {
-            await _assigmentService.DeleteAssignmentAsync(ids).ConfigureAwait(false);
-            return Ok();
+            return await _assigmentService.DeleteAssignmentAsync(ids).ConfigureAwait(false).GetObjectResponseAsync<AssignmentDTO,Guid>(ids,"Success").ConfigureAwait(false);
         }
     }
 }
