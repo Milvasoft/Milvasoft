@@ -2808,6 +2808,12 @@
             <param name="id"></param>
             <returns></returns>
         </member>
+        <member name="M:Milvasoft.SampleAPI.Services.Abstract.IMentorService.GetCurrentUserProfile">
+            <summary>
+            Brings instant user's profile information.
+            </summary>
+            <returns></returns>
+        </member>
         <member name="M:Milvasoft.SampleAPI.Services.Abstract.IMentorService.AddMentorAsync(Milvasoft.SampleAPI.DTOs.MentorDTOs.AddMentorDTO)">
             <summary>
             Add assignment to database.
@@ -2820,6 +2826,13 @@
             Updates assignment in database.
             </summary>
             <param name="educationDTO"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Services.Abstract.IMentorService.UpdateCurrentMentorAsync(Milvasoft.SampleAPI.DTOs.MentorDTOs.UpdateMentorDTO)">
+            <summary>
+            The mentor can update himself.
+            </summary>
+            <param name="updateMentorDTO"></param>
             <returns></returns>
         </member>
         <member name="M:Milvasoft.SampleAPI.Services.Abstract.IMentorService.DeleteMentorsAsync(System.Collections.Generic.List{System.Guid})">
@@ -3002,18 +3015,31 @@
             <param name="id"></param>
             <returns></returns>
         </member>
+        <member name="M:Milvasoft.SampleAPI.Services.Abstract.IStudentService.GetCurrentUserProfile">
+            <summary>
+            Brings instant user's profile information.
+            </summary>
+            <returns></returns>
+        </member>
         <member name="M:Milvasoft.SampleAPI.Services.Abstract.IStudentService.AddStudentAsync(Milvasoft.SampleAPI.DTOs.StudentDTOs.AddStudentDTO)">
             <summary>
             Add student to database.
             </summary>
-            <param name="educationDTO"></param>
+            <param name="studentDTO"></param>
             <returns></returns>
         </member>
         <member name="M:Milvasoft.SampleAPI.Services.Abstract.IStudentService.UpdateStudentAsync(Milvasoft.SampleAPI.DTOs.StudentDTOs.UpdateStudentDTO)">
             <summary>
             Updates student in database.
             </summary>
-            <param name="educationDTO"></param>
+            <param name="studentDTO"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Services.Abstract.IStudentService.UpdateCurrentStudentAsync(Milvasoft.SampleAPI.DTOs.StudentDTOs.UpdateStudentDTO)">
+            <summary>
+            Updates the information of the logged in student.
+            </summary>
+            <param name="studentDTO"></param>
             <returns></returns>
         </member>
         <member name="M:Milvasoft.SampleAPI.Services.Abstract.IStudentService.DeleteStudentsAsync(System.Collections.Generic.List{System.Guid})">
@@ -3273,16 +3299,16 @@
         </member>
         <member name="M:Milvasoft.SampleAPI.Services.Concrete.AnnouncementService.AddAnnouncementAsync(Milvasoft.SampleAPI.DTOs.AnnouncementDTOs.AddAnnouncementDTO)">
             <summary>
-            Add new announcement.
+            Maps <paramref name="addAnnouncementDTO"/> to <c><b>Announcement</b></c>  object and adds that product to repository.
             </summary>
-            <param name="addAnnouncementDTO"></param>
+            <param name="addAnnouncementDTO">Announcement to be added.</param>
             <returns></returns>
         </member>
         <member name="M:Milvasoft.SampleAPI.Services.Concrete.AnnouncementService.UpdateAnnouncementAsync(Milvasoft.SampleAPI.DTOs.AnnouncementDTOs.UpdateAnnouncementDTO)">
             <summary>
-            Update announcement.
+            Updates single announcement which that equals <paramref name="updateAnnouncementDTO"/> in repository by <paramref name="updateAnnouncementDTO"/>'s properties.
             </summary>
-            <param name="updateAnnouncementDTO"></param>
+            <param name="updateAnnouncementDTO">Announcement to be updated.</param>
             <returns></returns>
         </member>
         <member name="M:Milvasoft.SampleAPI.Services.Concrete.AnnouncementService.DeleteAnnouncementAsync(System.Guid)">
@@ -3312,19 +3338,19 @@
         </member>
         <member name="M:Milvasoft.SampleAPI.Services.Concrete.AssignmentService.GetAssignmentForStudentAsync(Milvasoft.SampleAPI.DTOs.PaginationParamsWithSpec{Milvasoft.SampleAPI.Spec.AssignmentSpec})">
             <summary>
-            Get all assignment by <paramref name="assignmentPaginationParams"/>
+            Get all assignment by <paramref name="pagiantionParams"/>
             </summary>
             <returns></returns>
         </member>
         <member name="M:Milvasoft.SampleAPI.Services.Concrete.AssignmentService.GetAssignmentForAdminAsync(Milvasoft.SampleAPI.DTOs.PaginationParamsWithSpec{Milvasoft.SampleAPI.Spec.AssignmentSpec})">
             <summary>
-            Get assignments for admin by <paramref name="assignmentPaginationParams"/>
+            Get assignments for admin by <paramref name="pagiantionParams"/>
             </summary>
             <returns></returns>
         </member>
         <member name="M:Milvasoft.SampleAPI.Services.Concrete.AssignmentService.GetAssignmentForMentorAsync(Milvasoft.SampleAPI.DTOs.PaginationParamsWithSpec{Milvasoft.SampleAPI.Spec.AssignmentSpec})">
             <summary>
-            Get assignments for mentor by <paramref name="assignmentPaginationParams"/>
+            Get assignments for mentor by <paramref name="pagiantionParams"/>
             </summary>
             <returns></returns>
         </member>
@@ -3351,16 +3377,16 @@
         </member>
         <member name="M:Milvasoft.SampleAPI.Services.Concrete.AssignmentService.AddAssignmentAsync(Milvasoft.SampleAPI.DTOs.AssignmentDTOs.AddAssignmentDTO)">
             <summary>
-            Add assignment.
+            Maps <paramref name="addAssignmentDTO"/> to <c><b>Assignment</b></c>  object and adds that product to repository.
             </summary>
-            <param name="addAssignmentDTO"></param>
+            <param name="addAssignmentDTO">Assignment to be added.</param>
             <returns></returns>
         </member>
         <member name="M:Milvasoft.SampleAPI.Services.Concrete.AssignmentService.UpdateAssignmentAsync(Milvasoft.SampleAPI.DTOs.AssignmentDTOs.UpdateAssignmentDTO)">
             <summary>
-            Update assignment.
+            Updates single assignment which that equals <paramref name="updateAssignmentDTO"/> in repository by <paramref name="updateAssignmentDTO"/>'s properties.
             </summary>
-            <param name="updateAssignmentDTO"></param>
+            <param name="updateAssignmentDTO">Assignment to be updated.</param>
             <returns></returns>
         </member>
         <member name="M:Milvasoft.SampleAPI.Services.Concrete.AssignmentService.DeleteEntityAsync(System.Guid)">
@@ -3382,7 +3408,7 @@
             Mentor service. 
             </summary>
         </member>
-        <member name="M:Milvasoft.SampleAPI.Services.Concrete.MentorService.#ctor(Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository{Milvasoft.SampleAPI.Entity.Mentor,System.Guid,Milvasoft.SampleAPI.Data.EducationAppDbContext},Microsoft.AspNetCore.Identity.UserManager{Milvasoft.SampleAPI.Entity.AppUser})">
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.MentorService.#ctor(Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository{Milvasoft.SampleAPI.Entity.Mentor,System.Guid,Milvasoft.SampleAPI.Data.EducationAppDbContext},Microsoft.AspNetCore.Identity.UserManager{Milvasoft.SampleAPI.Entity.AppUser},Microsoft.AspNetCore.Http.IHttpContextAccessor)">
             <summary>
             Performs constructor injection for repository interfaces used in this service.
             </summary>
@@ -3402,16 +3428,29 @@
             <param name="mentorId"></param>
             <returns></returns>
         </member>
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.MentorService.GetCurrentUserProfile">
+            <summary>
+            Brings instant user's profile information.
+            </summary>
+            <returns></returns>
+        </member>
         <member name="M:Milvasoft.SampleAPI.Services.Concrete.MentorService.AddMentorAsync(Milvasoft.SampleAPI.DTOs.MentorDTOs.AddMentorDTO)">
             <summary>
-            Add mentor.
+            Maps <paramref name="addMentorDTO"/> to <c><b>Mentor</b></c>  object and adds that product to repository.
             </summary>
-            <param name="addMentorDTO"></param>
+            <param name="addMentorDTO">Mentor to be added.</param>
             <returns></returns>
         </member>
         <member name="M:Milvasoft.SampleAPI.Services.Concrete.MentorService.UpdateMentorAsync(Milvasoft.SampleAPI.DTOs.MentorDTOs.UpdateMentorDTO)">
             <summary>
-            Update mentor.
+            Updates single mentor which that equals <paramref name="updateMentorDTO"/> in repository by <paramref name="updateMentorDTO"/>'s properties.
+            </summary>
+            <param name="updateMentorDTO">Mentor to be updated.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.MentorService.UpdateCurrentMentorAsync(Milvasoft.SampleAPI.DTOs.MentorDTOs.UpdateMentorDTO)">
+            <summary>
+            The mentor can update himself.
             </summary>
             <param name="updateMentorDTO"></param>
             <returns></returns>
@@ -3483,16 +3522,16 @@
         </member>
         <member name="M:Milvasoft.SampleAPI.Services.Concrete.ProfessionService.AddProfessionAsync(Milvasoft.SampleAPI.DTOs.ProfessionDTOs.AddProfessionDTO)">
             <summary>
-            Add profession to database.
+            Maps <paramref name="addProfessionDTO"/> to <c><b>Profession</b></c>  object and adds that product to repository.
             </summary>
-            <param name="addProfessionDTO"></param>
+            <param name="addProfessionDTO">Profession to be added.</param>
             <returns></returns>
         </member>
         <member name="M:Milvasoft.SampleAPI.Services.Concrete.ProfessionService.UpdateProfessionAsync(Milvasoft.SampleAPI.DTOs.ProfessionDTOs.UpdateProfessionDTO)">
             <summary>
-            Update profession by <paramref name="updateProfessionDTO"/>.
+            Updates single profession which that equals <paramref name="updateProfessionDTO"/> in repository by <paramref name="updateProfessionDTO"/>'s properties.
             </summary>
-            <param name="updateProfessionDTO"></param>
+            <param name="updateProfessionDTO">Profession to be updated.</param>
             <returns></returns>
         </member>
         <member name="M:Milvasoft.SampleAPI.Services.Concrete.ProfessionService.DeleteProfessionsAsync(System.Collections.Generic.List{System.Guid})">
@@ -3554,16 +3593,16 @@
         </member>
         <member name="M:Milvasoft.SampleAPI.Services.Concrete.QuestionService.AddQuestionAsync(Milvasoft.SampleAPI.DTOs.QuestionDTOs.AddQuestionDTO)">
             <summary>
-            Add student.
+            Maps <paramref name="addQuestionDTO"/> to <c><b>Question</b></c>  object and adds that product to repository.
             </summary>
-            <param name="addQuestionDTO"></param>
+            <param name="addQuestionDTO">Question to be added.</param>
             <returns></returns>
         </member>
         <member name="M:Milvasoft.SampleAPI.Services.Concrete.QuestionService.UpdateQuestionAsync(Milvasoft.SampleAPI.DTOs.QuestionDTOs.UpdateQuestionDTO)">
             <summary>
-            Update student.
+            Updates single question which that equals <paramref name="updateQuestionDTO"/> in repository by <paramref name="updateQuestionDTO"/>'s properties.
             </summary>
-            <param name="updateQuestionDTO"></param>
+            <param name="updateQuestionDTO">Question to be updated.</param>
             <returns></returns>
         </member>
         <member name="M:Milvasoft.SampleAPI.Services.Concrete.QuestionService.DeleteQuestionsAsync(System.Collections.Generic.List{System.Guid})">
@@ -3584,7 +3623,7 @@
             Student service.
             </summary>
         </member>
-        <member name="M:Milvasoft.SampleAPI.Services.Concrete.StudentService.#ctor(Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository{Milvasoft.SampleAPI.Entity.Student,System.Guid,Milvasoft.SampleAPI.Data.EducationAppDbContext},Microsoft.AspNetCore.Identity.UserManager{Milvasoft.SampleAPI.Entity.AppUser})">
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.StudentService.#ctor(Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository{Milvasoft.SampleAPI.Entity.Student,System.Guid,Milvasoft.SampleAPI.Data.EducationAppDbContext},Microsoft.AspNetCore.Identity.UserManager{Milvasoft.SampleAPI.Entity.AppUser},Microsoft.AspNetCore.Http.IHttpContextAccessor)">
             <summary>
             Performs constructor injection for repository interfaces used in this service.
             </summary>
@@ -3605,28 +3644,41 @@
         </member>
         <member name="M:Milvasoft.SampleAPI.Services.Concrete.StudentService.GetStudentForAdminAsync(System.Guid)">
             <summary>
-            Get student information for admin by <paramref name="studenId"/>
+            Get student information for admin by <paramref name="studentId"/>
             </summary>
-            <param name="studenId"></param>
+            <param name="studentId"></param>
             <returns></returns>
         </member>
         <member name="M:Milvasoft.SampleAPI.Services.Concrete.StudentService.GetStudentForMentorAsync(System.Guid)">
             <summary>
-            Get student information for mentor by <paramref name="studenId"/>.
+            Get student information for mentor by <paramref name="studentId"/>.
             </summary>
-            <param name="studenId"></param>
+            <param name="studentId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.StudentService.GetCurrentUserProfile">
+            <summary>
+            Brings instant user's profile information.
+            </summary>
             <returns></returns>
         </member>
         <member name="M:Milvasoft.SampleAPI.Services.Concrete.StudentService.AddStudentAsync(Milvasoft.SampleAPI.DTOs.StudentDTOs.AddStudentDTO)">
             <summary>
-            Add student to database.
+            Maps <paramref name="addStudentDTO"/> to <c><b>Student</b></c>  object and adds that product to repository.
             </summary>
-            <param name="addStudentDTO"></param>
+            <param name="addStudentDTO">Student to be added.</param>
             <returns></returns>
         </member>
         <member name="M:Milvasoft.SampleAPI.Services.Concrete.StudentService.UpdateStudentAsync(Milvasoft.SampleAPI.DTOs.StudentDTOs.UpdateStudentDTO)">
             <summary>
-            Update student.
+            Updates single student which that equals <paramref name="updateStudentDTO"/> in repository by <paramref name="updateStudentDTO"/>'s properties.
+            </summary>
+            <param name="updateStudentDTO">Student to be updated.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.StudentService.UpdateCurrentStudentAsync(Milvasoft.SampleAPI.DTOs.StudentDTOs.UpdateStudentDTO)">
+            <summary>
+            The student can update himself.
             </summary>
             <param name="updateStudentDTO"></param>
             <returns></returns>
@@ -3690,16 +3742,16 @@
         </member>
         <member name="M:Milvasoft.SampleAPI.Services.Concrete.UsefulLinkService.AddUsefulLinkAsync(Milvasoft.SampleAPI.DTOs.UsefulLinkDTOs.AddUsefulLinkDTO)">
             <summary>
-            Add link.
+            Maps <paramref name="addUsefulLinkDTO"/> to <c><b>Useful Link</b></c>  object and adds that product to repository.
             </summary>
-            <param name="addUsefulLinkDTO"></param>
+            <param name="addUsefulLinkDTO">Useful Link to be added.</param>
             <returns></returns>
         </member>
         <member name="M:Milvasoft.SampleAPI.Services.Concrete.UsefulLinkService.UpdateUsefulLinkAsync(Milvasoft.SampleAPI.DTOs.UsefulLinkDTOs.UpdateUsefulLinkDTO)">
             <summary>
-            Update link.
+            Updates single link which that equals <paramref name="addUsefulLinkDTO"/> in repository by <paramref name="addUsefulLinkDTO"/>'s properties.
             </summary>
-            <param name="addUsefulLinkDTO"></param>
+            <param name="addUsefulLinkDTO">Link to be updated.</param>
             <returns></returns>
         </member>
         <member name="M:Milvasoft.SampleAPI.Services.Concrete.UsefulLinkService.DeleteUsefulLinksAsync(System.Collections.Generic.List{System.Guid})">
@@ -3736,22 +3788,22 @@
         </member>
         <member name="P:Milvasoft.SampleAPI.Spec.AnnouncementSpec.Title">
             <summary>
-            Tittle of announcement.
+            Filtering by Tittle of Announcement.
             </summary>
         </member>
         <member name="P:Milvasoft.SampleAPI.Spec.AnnouncementSpec.Description">
             <summary>
-            Description of announcement.
+            Filtering by Description of Announcement.
             </summary>
         </member>
         <member name="P:Milvasoft.SampleAPI.Spec.AnnouncementSpec.IsFixed">
             <summary>
-            Is the announcement fixed?
+            Filtering by IsFixed of Announcement.
             </summary>
         </member>
         <member name="P:Milvasoft.SampleAPI.Spec.AnnouncementSpec.MentorId">
             <summary>
-            ID of the announcement mentor.
+            Filtering by MentorId of Announcement.
             </summary>
         </member>
         <member name="M:Milvasoft.SampleAPI.Spec.AnnouncementSpec.GetFilteredEntities(System.Collections.Generic.IEnumerable{Milvasoft.SampleAPI.Entity.Announcement})">

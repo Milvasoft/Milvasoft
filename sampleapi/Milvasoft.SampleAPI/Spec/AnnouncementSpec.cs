@@ -15,24 +15,28 @@ namespace Milvasoft.SampleAPI.Spec
     /// </summary>
     public class AnnouncementSpec : IBaseSpec<Announcement>
     {
+        #region Fields
+        private string _tittle;
+        private string _description;
+        #endregion
         #region Props
         /// <summary>
-        /// Tittle of announcement.
+        /// Filtering by Tittle of Announcement.
         /// </summary>
-        public string Title { get; set; }
+        public string Title { get=> _tittle; set=> _tittle=value?.ToUpper(); }
 
         /// <summary>
-        /// Description of announcement.
+        /// Filtering by Description of Announcement.
         /// </summary>
-        public string Description { get; set; }
+        public string Description { get => _description; set => _description = value?.ToUpper(); }
 
         /// <summary>
-        /// Is the announcement fixed?
+        /// Filtering by IsFixed of Announcement.
         /// </summary>
         public bool? IsFixed { get; set; }
 
         /// <summary>
-        /// ID of the announcement mentor.
+        /// Filtering by MentorId of Announcement.
         /// </summary>
         public Guid? MentorId { get; set; }
 

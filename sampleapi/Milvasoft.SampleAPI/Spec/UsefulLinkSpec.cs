@@ -15,12 +15,16 @@ namespace Milvasoft.SampleAPI.Spec
     /// </summary>
     public class UsefulLinkSpec : IBaseSpec<UsefulLink>
     {
+        #region Fields
+        private string _tittle;
+        #endregion 
+
         #region Props
 
         /// <summary>
         /// Tittle of link.
         /// </summary>
-        public string Title { get; set; }
+        public string Title { get => _tittle; set => _tittle = value?.ToUpper(); }
 
         /// <summary>
         /// Profession id of link.

@@ -14,13 +14,15 @@ namespace Milvasoft.SampleAPI.Spec
     /// </summary>
     public class ProfessionSpec : IBaseSpec<Profession>
     {
-
+        #region Fields
+        private string _name;
+        #endregion
         #region Props
 
         /// <summary>
         /// Name of profession.
         /// </summary>
-        public string Name { get; set; }
+        public string Name { get => _name; set => _name = value?.ToUpper(); }
         #endregion
 
         /// <summary>
