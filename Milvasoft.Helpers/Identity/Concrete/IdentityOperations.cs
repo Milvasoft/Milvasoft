@@ -236,7 +236,8 @@ namespace Milvasoft.Helpers.Identity.Concrete
 
                 identityResult = await _userManager.RemoveAuthenticationTokenAsync(user, _loginProvier, _tokenName);
 
-                await _signInManager.SignOutAsync();
+                if (identityResult.Succeeded)
+                    await _signInManager.SignOutAsync().ConfigureAwait(false);
 
             }).ConfigureAwait(false);
 

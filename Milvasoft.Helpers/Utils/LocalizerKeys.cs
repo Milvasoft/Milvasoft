@@ -32,7 +32,7 @@
         public const string IdentityDefaultError = "IdentityDefaultError";
         public const string IdentityDuplicateUsername = "IdentityDuplicateUsername";
         public const string IdentityDuplicateEmail = "IdentityDuplicateEmail";
-        public const string IdentityInvalidUsername = "IdentityInvalidUsername";
+        public const string IdentityInvalidUserName = "IdentityInvalidUserName";
         public const string IdentityInvalidEmail = "IdentityInvalidEmail";
         public const string IdentityConcurrencyFailure = "IdentityConcurrencyFailure";
         public const string IdentityDuplicateRoleName = "IdentityDuplicateRoleName";
