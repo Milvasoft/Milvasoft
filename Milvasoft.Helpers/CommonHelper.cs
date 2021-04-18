@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Localization;
 using Milvasoft.Helpers.Exceptions;
 using Milvasoft.Helpers.Extensions;
@@ -164,6 +165,40 @@ namespace Milvasoft.Helpers
         public static IStringLocalizer GetLocalizerInstance<TSource>(this IServiceProvider serviceProvider)
         {
             var localizerFactory = serviceProvider.GetService<IStringLocalizerFactory>();
+
+            var resourceType = typeof(TSource);
+
+            var assemblyName = new AssemblyName(resourceType.GetTypeInfo().Assembly.FullName);
+
+            return localizerFactory.Create(resourceType.Name, assemblyName.Name);
+        }
+
+        /// <summary>
+        /// Creates localizer instance if IStringLocalizerFactory registered to service collection.
+        /// </summary>
+        /// <typeparam name="TSource"></typeparam>
+        /// <param name="context"></param>
+        /// <returns></returns>
+        public static IStringLocalizer GetRequiredLocalizerInstance<TSource>(this HttpContext context)
+        {
+            var localizerFactory = context.RequestServices.GetRequiredService<IStringLocalizerFactory>();
+
+            var resourceType = typeof(TSource);
+
+            var assemblyName = new AssemblyName(resourceType.GetTypeInfo().Assembly.FullName);
+
+            return localizerFactory.Create(resourceType.Name, assemblyName.Name);
+        }
+
+        /// <summary>
+        /// Creates localizer instance if IStringLocalizerFactory registered to service collection.
+        /// </summary>
+        /// <typeparam name="TSource"></typeparam>
+        /// <param name="context"></param>
+        /// <returns></returns>
+        public static IStringLocalizer GetLocalizerInstance<TSource>(this HttpContext context)
+        {
+            var localizerFactory = context.RequestServices.GetService<IStringLocalizerFactory>();
 
             var resourceType = typeof(TSource);
 

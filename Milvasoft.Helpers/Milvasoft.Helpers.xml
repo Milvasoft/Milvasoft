@@ -814,6 +814,22 @@
             <param name="serviceProvider"></param>
             <returns></returns>
         </member>
+        <member name="M:Milvasoft.Helpers.CommonHelper.GetRequiredLocalizerInstance``1(Microsoft.AspNetCore.Http.HttpContext)">
+            <summary>
+            Creates localizer instance if IStringLocalizerFactory registered to service collection.
+            </summary>
+            <typeparam name="TSource"></typeparam>
+            <param name="context"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.CommonHelper.GetLocalizerInstance``1(Microsoft.AspNetCore.Http.HttpContext)">
+            <summary>
+            Creates localizer instance if IStringLocalizerFactory registered to service collection.
+            </summary>
+            <typeparam name="TSource"></typeparam>
+            <param name="context"></param>
+            <returns></returns>
+        </member>
         <member name="M:Milvasoft.Helpers.CommonHelper.GetRequiredLocalizerInstance(System.IServiceProvider,System.Type)">
             <summary>
             Creates localizer instance if IStringLocalizerFactory registered to service collection.
