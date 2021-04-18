@@ -23,7 +23,7 @@ namespace Milvasoft.SampleAPI.Services.Abstract
         /// Get all students for mentor from database.
         /// </summary>
         /// <returns></returns>
-        Task<PaginationDTO<StudentForMentorDTO>> GetStudentsForMentorAsync(PaginationParamsWithSpec<StudentSpec> paginationParams);
+        Task<PaginationDTO<StudentForMentorDTO>> GetStudentsForCurrentMentorAsync(PaginationParamsWithSpec<StudentSpec> paginationParams);
 
         /// <summary>
         /// Fetches filtered student by id for admin.
