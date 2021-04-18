@@ -88,11 +88,9 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// Get students for mentor.
         /// </summary>
         /// <returns></returns>
-        public async Task<PaginationDTO<StudentForMentorDTO>> GetStudentsForCurrentMentorAsync(PaginationParamsWithSpec<StudentSpec> pagiantionParams)
+        public async Task<PaginationDTO<StudentForMentorDTO>> GetStudentsForMentorAsync(PaginationParamsWithSpec<StudentSpec> pagiantionParams)
         {
-            var mentor = await _userManager.FindByNameAsync(_loggedUser).ConfigureAwait(false);
-
-            Func<IIncludable<Student>, IIncludable> includes = i => i.Include(md => md.Mentor==mentor.Mentor)
+            Func<IIncludable<Student>, IIncludable> includes = i => i.Include(md => md.Mentor)
                                                                         .Include(assi => assi.OldAssignments);
 
 

@@ -548,7 +548,7 @@
             </summary>
             <param name="studentService"></param>
         </member>
-        <member name="M:Milvasoft.SampleAPI.Controllers.StudentController.GetStudentsForCurrentMentor(Milvasoft.SampleAPI.DTOs.PaginationParamsWithSpec{Milvasoft.SampleAPI.Spec.StudentSpec})">
+        <member name="M:Milvasoft.SampleAPI.Controllers.StudentController.GetStudentsForMentor(Milvasoft.SampleAPI.DTOs.PaginationParamsWithSpec{Milvasoft.SampleAPI.Spec.StudentSpec})">
             <summary>
             Gets the all filtered students datas for mentor.
             </summary>
@@ -2995,7 +2995,7 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.SampleAPI.Services.Abstract.IStudentService.GetStudentsForCurrentMentorAsync(Milvasoft.SampleAPI.DTOs.PaginationParamsWithSpec{Milvasoft.SampleAPI.Spec.StudentSpec})">
+        <member name="M:Milvasoft.SampleAPI.Services.Abstract.IStudentService.GetStudentsForMentorAsync(Milvasoft.SampleAPI.DTOs.PaginationParamsWithSpec{Milvasoft.SampleAPI.Spec.StudentSpec})">
             <summary>
             Get all students for mentor from database.
             </summary>
@@ -3636,7 +3636,7 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.SampleAPI.Services.Concrete.StudentService.GetStudentsForCurrentMentorAsync(Milvasoft.SampleAPI.DTOs.PaginationParamsWithSpec{Milvasoft.SampleAPI.Spec.StudentSpec})">
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.StudentService.GetStudentsForMentorAsync(Milvasoft.SampleAPI.DTOs.PaginationParamsWithSpec{Milvasoft.SampleAPI.Spec.StudentSpec})">
             <summary>
             Get students for mentor.
             </summary>

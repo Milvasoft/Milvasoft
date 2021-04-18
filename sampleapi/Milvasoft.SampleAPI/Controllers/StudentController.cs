@@ -36,9 +36,9 @@ namespace Milvasoft.SampleAPI.Controllers
         /// <returns></returns>
         //[Authorize(Roles = "Mentor")]
         [HttpPatch("Mentor")]
-        public async Task<IActionResult> GetStudentsForCurrentMentor([FromBody] PaginationParamsWithSpec<StudentSpec> paginationParams)
+        public async Task<IActionResult> GetStudentsForMentor([FromBody] PaginationParamsWithSpec<StudentSpec> paginationParams)
         {
-            var students = await _studentService.GetStudentsForCurrentMentorAsync(paginationParams).ConfigureAwait(false);
+            var students = await _studentService.GetStudentsForMentorAsync(paginationParams).ConfigureAwait(false);
 
             return students.GetObjectResponse("Success");
         }
