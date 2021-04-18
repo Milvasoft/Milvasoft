@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Milvasoft.Helpers.DataAccess.Abstract;
 using Milvasoft.Helpers.DataAccess.IncludeLibrary;
 using Milvasoft.Helpers.Exceptions;
@@ -28,14 +29,16 @@ namespace Milvasoft.SampleAPI.Services.Concrete
     {
         private readonly UserManager<AppUser> _userManager;
         private readonly IBaseRepository<Mentor, Guid, EducationAppDbContext> _mentorRepository;
+        private readonly string _loggedUser;
 
         /// <summary>
         /// Performs constructor injection for repository interfaces used in this service.
         /// </summary>
         /// <param name="mentorRepository"></param>
         /// <param name="userManager"></param>
-        public MentorService(IBaseRepository<Mentor, Guid, EducationAppDbContext> mentorRepository, UserManager<AppUser> userManager)
+        public MentorService(IBaseRepository<Mentor, Guid, EducationAppDbContext> mentorRepository, UserManager<AppUser> userManager,IHttpContextAccessor httpContextAccessor)
         {
+            _loggedUser = httpContextAccessor.HttpContext.User.Identity.Name;
             _userManager = userManager;
             _mentorRepository = mentorRepository;
         }
@@ -44,18 +47,18 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// Get mentors for admin.
         /// </summary>
         /// <returns></returns>
-        public async Task<PaginationDTO<MentorForAdminDTO>> GetMentorsForAdminAsync(PaginationParamsWithSpec<MentorSpec> mentorPaginationParams)
+        public async Task<PaginationDTO<MentorForAdminDTO>> GetMentorsForAdminAsync(PaginationParamsWithSpec<MentorSpec> pagiantionParams)
         {
             Func<IIncludable<Mentor>, IIncludable> includes = i => i.Include(p => p.PublishedAnnouncements)
                                                                      .Include(s => s.Students)
                                                                      .Include(p => p.Professions);
 
             var (mentors, pageCount, totalDataCount) = await _mentorRepository.PreparePaginationDTO<IBaseRepository<Mentor, Guid, EducationAppDbContext>, Mentor, Guid>
-                                                                                                               (mentorPaginationParams.PageIndex,
-                                                                                                                mentorPaginationParams.RequestedItemCount,
-                                                                                                                mentorPaginationParams.OrderByProperty = null,
-                                                                                                                mentorPaginationParams.OrderByAscending = false,
-                                                                                                                mentorPaginationParams.Spec?.ToExpression(),
+                                                                                                               (pagiantionParams.PageIndex,
+                                                                                                                pagiantionParams.RequestedItemCount,
+                                                                                                                pagiantionParams.OrderByProperty = null,
+                                                                                                                pagiantionParams.OrderByAscending = false,
+                                                                                                                pagiantionParams.Spec?.ToExpression(),
                                                                                                                 includes).ConfigureAwait(false);
 
             return new PaginationDTO<MentorForAdminDTO>
@@ -96,6 +99,9 @@ namespace Milvasoft.SampleAPI.Services.Concrete
                                                                      .Include(p => p.Professions);
 
             var mentor = await _mentorRepository.GetByIdAsync(mentorId, includes).ConfigureAwait(false);
+
+            mentor.ThrowIfNullForGuidObject();
+
             return new MentorForAdminDTO
             {
                 Id = mentor.Id,
@@ -122,9 +128,42 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         }
 
         /// <summary>
-        /// Add mentor.
+        /// Brings instant user's profile information.
         /// </summary>
-        /// <param name="addMentorDTO"></param>
+        /// <returns></returns>
+        public async Task<MentorForAdminDTO> GetCurrentUserProfile()
+        {
+            var currentMentor = await _userManager.FindByNameAsync(_loggedUser).ConfigureAwait(false);
+
+            return new MentorForAdminDTO
+            {
+                Name = currentMentor.Mentor.Name,
+                Surname = currentMentor.Mentor.Surname,
+                CVFilePath = currentMentor.Mentor.CVFilePath,
+                CreationDate = currentMentor.Mentor.CreationDate,
+                LastModificationDate = currentMentor.Mentor.LastModificationDate,
+                Professions = currentMentor.Mentor.Professions.CheckList(i => currentMentor.Mentor.Professions?.Select(pr => new MentorProfessionDTO
+                {
+                    ProfessionId = pr.ProfessionId,
+                    MentorId = pr.MentorId,
+                    Id = pr.Id
+                })),
+                PublishedAnnouncements = currentMentor.Mentor.PublishedAnnouncements.CheckList(i => currentMentor.Mentor.PublishedAnnouncements?.Select(pa => new AnnouncementDTO
+                {
+                    Id = pa.Id
+                })),
+                Students = currentMentor.Mentor.Students.CheckList(i => currentMentor.Mentor.Students?.Select(st => new StudentDTO
+                {
+                    Id = st.Id
+                }))
+
+            };
+        }
+
+        /// <summary>
+        /// Maps <paramref name="addMentorDTO"/> to <c><b>Mentor</b></c>  object and adds that product to repository.
+        /// </summary>
+        /// <param name="addMentorDTO">Mentor to be added.</param>
         /// <returns></returns>
         public async Task AddMentorAsync(AddMentorDTO addMentorDTO)
         {
@@ -154,20 +193,36 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         }
 
         /// <summary>
-        /// Update mentor.
+        /// Updates single mentor which that equals <paramref name="updateMentorDTO"/> in repository by <paramref name="updateMentorDTO"/>'s properties.
         /// </summary>
-        /// <param name="updateMentorDTO"></param>
+        /// <param name="updateMentorDTO">Mentor to be updated.</param>
         /// <returns></returns>
         public async Task UpdateMentorAsync(UpdateMentorDTO updateMentorDTO)
         {
-            //TODO OGZ SUMMARY DÜZELTİLECEK.
-            var updatedMentor = await _mentorRepository.GetByIdAsync(updateMentorDTO.Id).ConfigureAwait(false);
+            
+            var toBeUpdatedMentor = await _mentorRepository.GetByIdAsync(updateMentorDTO.Id).ConfigureAwait(false);
 
-            updatedMentor.Name = updateMentorDTO.Name;
+            toBeUpdatedMentor.Name = updateMentorDTO.Name;
 
-            updatedMentor.Surname = updateMentorDTO.Surname;
+            toBeUpdatedMentor.Surname = updateMentorDTO.Surname;
 
-            await _mentorRepository.UpdateAsync(updatedMentor).ConfigureAwait(false);
+            await _mentorRepository.UpdateAsync(toBeUpdatedMentor).ConfigureAwait(false);
+        }
+
+        /// <summary>
+        /// The mentor can update himself.
+        /// </summary>
+        /// <param name="updateMentorDTO"></param>
+        /// <returns></returns>
+        public async Task UpdateCurrentMentorAsync(UpdateMentorDTO updateMentorDTO)
+        {
+            var toBeUpdatedMentor = await _userManager.FindByNameAsync(_loggedUser).ConfigureAwait(false) ?? throw new MilvaUserFriendlyException("CannotFindUserWithThisToken");
+
+            toBeUpdatedMentor.Mentor.Name = updateMentorDTO.Name;
+            toBeUpdatedMentor.Mentor.Surname = updateMentorDTO.Surname;
+
+            await _mentorRepository.UpdateAsync(toBeUpdatedMentor.Mentor).ConfigureAwait(false);
+
         }
 
         /// <summary>

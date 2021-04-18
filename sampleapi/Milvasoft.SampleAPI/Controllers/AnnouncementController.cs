@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Milvasoft.Helpers;
 using Milvasoft.SampleAPI.DTOs;
 using Milvasoft.SampleAPI.DTOs.AnnouncementDTOs;
 using Milvasoft.SampleAPI.Services.Abstract;
@@ -30,11 +31,11 @@ namespace Milvasoft.SampleAPI.Controllers
         /// </summary>
         /// <returns></returns>
         //[Authorize(Roles = "Mentor")]
-        [HttpPatch("Announcement/Mentor")]
+        [HttpPatch("Mentor")]
         public async Task<IActionResult> GetAnnouncementsForMentor([FromBody] PaginationParamsWithSpec<AnnouncementSpec> paginationParams)
         {
             var announcements = await _announcementService.GetAnnouncementForMentorAsync(paginationParams).ConfigureAwait(false);
-            return Ok(announcements);
+            return announcements.GetObjectResponse("Success");
         }
 
         /// <summary>
@@ -42,11 +43,11 @@ namespace Milvasoft.SampleAPI.Controllers
         /// </summary>
         /// <returns></returns>
         //[Authorize(Roles = "Admin")]
-        [HttpPatch("Announcement/Admin")]
+        [HttpPatch("Admin")]
         public async Task<IActionResult> GetAnnouncementsForAdmn([FromBody] PaginationParamsWithSpec<AnnouncementSpec> paginationParams)
         {
             var announcements = await _announcementService.GetAnnouncementForAdminAsync(paginationParams).ConfigureAwait(false);
-            return Ok(announcements);
+            return announcements.GetObjectResponse("Success");
         }
 
         /// <summary>
@@ -54,11 +55,11 @@ namespace Milvasoft.SampleAPI.Controllers
         /// </summary>
         /// <returns></returns>
         //[Authorize(Roles = "Student")]
-        [HttpPatch("Announcement/Student")]
+        [HttpPatch("Student")]
         public async Task<IActionResult> GetAnnouncementsForStudent([FromBody] PaginationParamsWithSpec<AnnouncementSpec> paginationParams)
         {
             var announcements = await _announcementService.GetAnnouncementForStudentAsync(paginationParams).ConfigureAwait(false);
-            return Ok(announcements);
+            return announcements.GetObjectResponse("Success");
         }
 
         /// <summary>
@@ -66,12 +67,12 @@ namespace Milvasoft.SampleAPI.Controllers
         /// </summary>
         /// <returns></returns>
         //[Authorize(Roles = "Mentor")]
-        [HttpPatch("Announcement/Mentor/{id}")]
-        public async Task<IActionResult> GetAnnouncementForMentorbyId([FromBody] Guid id)
+        [HttpPatch("Mentor/{id}")]
+        public async Task<IActionResult> GetAnnouncementForMentorbyId(Guid id)
         {
             var announcement = await _announcementService.GetAnnouncementForMentorAsync(id).ConfigureAwait(false);
 
-            return Ok(announcement);
+            return announcement.GetObjectResponse("Success");
         }
 
         /// <summary>
@@ -79,12 +80,12 @@ namespace Milvasoft.SampleAPI.Controllers
         /// </summary>
         /// <returns></returns>
         ///[Authorize(Roles = "Admin")]
-        [HttpPatch("Announcement/Admin/{id}")]
-        public async Task<IActionResult> GetAnnouncementForAdminbyId([FromBody] Guid id)
+        [HttpPatch("Admin/{id}")]
+        public async Task<IActionResult> GetAnnouncementForAdminbyId(Guid id)
         {
             var announcement = await _announcementService.GetAnnouncementForAdminAsync(id).ConfigureAwait(false);
 
-            return Ok(announcement);
+            return announcement.GetObjectResponse("Success");
         }
 
         /// <summary>
@@ -92,12 +93,12 @@ namespace Milvasoft.SampleAPI.Controllers
         /// </summary>
         /// <returns></returns>
         //[Authorize(Roles = "Student")]
-        [HttpPatch("Announcement/Student/{id}")]
-        public async Task<IActionResult> GetAnnouncementForStudentbyId([FromBody] Guid id)
+        [HttpPatch("Student/{id}")]
+        public async Task<IActionResult> GetAnnouncementForStudentbyId(Guid id)
         {
             var announcement = await _announcementService.GetAnnouncementForStudentAsync(id).ConfigureAwait(false);
 
-            return Ok(announcement);
+            return announcement.GetObjectResponse("Success");
         }
 
         /// <summary>
@@ -106,11 +107,10 @@ namespace Milvasoft.SampleAPI.Controllers
         /// <param name="addAnnouncement"></param>
         /// <returns></returns>
        // [Authorize(Roles = "Admin")]
-        [HttpPost("AddAnnouncements")]
+        [HttpPost("Announcement")]
         public async Task<IActionResult> AddAnnouncement([FromBody] AddAnnouncementDTO addAnnouncement)
         {
-            await _announcementService.AddAnnouncementAsync(addAnnouncement).ConfigureAwait(false);
-            return Ok();
+            return await _announcementService.AddAnnouncementAsync(addAnnouncement).ConfigureAwait(false).GetObjectResponseAsync<AddAnnouncementDTO>("Success").ConfigureAwait(false); 
         }
 
         /// <summary>
@@ -119,11 +119,10 @@ namespace Milvasoft.SampleAPI.Controllers
         /// <param name="updateAnnouncement"></param>
         /// <returns></returns>
        // [Authorize(Roles = "Admin")]
-        [HttpPut("UpdateAnnouncement")]
+        [HttpPut("Announcement")]
         public async Task<IActionResult> UpdateAnnouncement([FromBody] UpdateAnnouncementDTO updateAnnouncement)
         {
-            await _announcementService.UpdateAnnouncementAsync(updateAnnouncement).ConfigureAwait(false);
-            return Ok();
+            return await _announcementService.UpdateAnnouncementAsync(updateAnnouncement).ConfigureAwait(false).GetObjectResponseAsync<UpdateAnnouncementDTO>("Success").ConfigureAwait(false);
         }
 
         /// <summary>
@@ -132,11 +131,10 @@ namespace Milvasoft.SampleAPI.Controllers
         /// <param name="ids"></param>
         /// <returns></returns>
        // [Authorize(Roles = "Admin")]
-        [HttpDelete("Announcement/Deletes/{ids}")]
-        public async Task<IActionResult> DeleteAnnouncements(List<Guid> ids)
+        [HttpDelete("Delete")]
+        public async Task<IActionResult> DeleteAnnouncements([FromBody] List<Guid> ids)
         {
-            await _announcementService.DeleteAnnouncementsAsync(ids).ConfigureAwait(false);
-            return Ok();
+            return await _announcementService.DeleteAnnouncementsAsync(ids).ConfigureAwait(false).GetObjectResponseAsync<AnnouncementDTO,Guid>(ids,"Success").ConfigureAwait(false);
         }
     }
 }

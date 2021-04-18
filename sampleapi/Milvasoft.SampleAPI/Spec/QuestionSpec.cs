@@ -13,11 +13,15 @@ namespace Milvasoft.SampleAPI.Spec
     /// </summary>
     public class QuestionSpec : IBaseSpec<Question>
     {
+        #region Fields
+        private string _tittle;
+        #endregion
+
         #region Props
         /// <summary>
         /// Tittle of question.
         /// </summary>
-        public string Title { get; set; }
+        public string Title { get => _tittle; set => _tittle = value?.ToUpper(); }
 
         /// <summary>
         /// Is the question useful?

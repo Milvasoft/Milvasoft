@@ -14,17 +14,22 @@ namespace Milvasoft.SampleAPI.Spec
     /// </summary>
     public class MentorSpec : IBaseSpec<Mentor>
     {
+        #region Fields
+        private string _name;
+        private string _surname;
+        #endregion
+
         #region Props
 
         /// <summary>
         /// Mentor name.
         /// </summary>
-        public string Name { get; set; }
+        public string Name { get => _name; set => _name = value?.ToUpper(); }
 
         /// <summary>
         /// Mentor surname.
         /// </summary>
-        public string Surname { get; set; }
+        public string Surname { get => _surname; set => _surname = value?.ToUpper(); }
 
         #endregion
 

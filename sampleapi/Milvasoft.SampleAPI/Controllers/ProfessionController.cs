@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Milvasoft.Helpers;
 using Milvasoft.SampleAPI.DTOs;
 using Milvasoft.SampleAPI.DTOs.ProfessionDTOs;
 using Milvasoft.SampleAPI.Services.Abstract;
@@ -45,11 +46,11 @@ namespace Milvasoft.SampleAPI.Controllers
         /// </summary>
         /// <returns></returns>
         //[Authorize(Roles = "Mentor")]
-        [HttpPatch("Profession/Mentor")]
+        [HttpPatch("Mentor")]
         public async Task<IActionResult> GetProfessionsForMentor([FromBody] PaginationParamsWithSpec<ProfessionSpec> paginationParams)
         {
             var professions = await _professionService.GetProfessionsForMentorAsync(paginationParams).ConfigureAwait(false);
-            return Ok(professions);
+            return professions.GetObjectResponse("Success");
         }
 
         /// <summary>
@@ -57,11 +58,11 @@ namespace Milvasoft.SampleAPI.Controllers
         /// </summary>
         /// <returns></returns>
         //[Authorize(Roles = "Admin")]
-        [HttpPatch("Profession/Admin")]
+        [HttpPatch("Admin")]
         public async Task<IActionResult> GetProfessionsForAdmin([FromBody] PaginationParamsWithSpec<ProfessionSpec> paginationParams)
         {
             var professions = await _professionService.GetProfessionsForAdminAsync(paginationParams).ConfigureAwait(false);
-            return Ok(professions);
+            return professions.GetObjectResponse("Success");
         }
 
         /// <summary>
@@ -69,11 +70,11 @@ namespace Milvasoft.SampleAPI.Controllers
         /// </summary>
         /// <returns></returns>
         //[Authorize(Roles = "Student")]
-        [HttpPatch("Profession/Student")]
+        [HttpPatch("Student")]
         public async Task<IActionResult> GetProfessionsForStudent([FromBody] PaginationParamsWithSpec<ProfessionSpec> paginationParams)
         {
             var professions = await _professionService.GetProfessionsForStudentAsync(paginationParams).ConfigureAwait(false);
-            return Ok(professions);
+            return professions.GetObjectResponse("Success");
         }
 
         /// <summary>
@@ -81,12 +82,12 @@ namespace Milvasoft.SampleAPI.Controllers
         /// </summary>
         /// <returns></returns>
         //[Authorize(Roles = "Mentor")]
-        [HttpPatch("Profession/Mentor/{id}")]
-        public async Task<IActionResult> GetProfessionForMentorbyId([FromBody] Guid id)
+        [HttpPatch("Mentor/{id}")]
+        public async Task<IActionResult> GetProfessionForMentorbyId(Guid id)
         {
             var professions = await _professionService.GetProfessionForMentorAsync(id).ConfigureAwait(false);
 
-            return Ok(professions);
+            return professions.GetObjectResponse("Success");
         }
 
         /// <summary>
@@ -94,12 +95,12 @@ namespace Milvasoft.SampleAPI.Controllers
         /// </summary>
         /// <returns></returns>
         ///[Authorize(Roles = "Admin")]
-        [HttpPatch("Profession/Admin/{id}")]
-        public async Task<IActionResult> GetProfessionForAdminbyId([FromBody] Guid id)
+        [HttpPatch("Admin/{id}")]
+        public async Task<IActionResult> GetProfessionForAdminbyId(Guid id)
         {
             var professions = await _professionService.GetProfessionForAdminAsync(id).ConfigureAwait(false);
 
-            return Ok(professions);
+            return professions.GetObjectResponse("Success");
         }
 
         /// <summary>
@@ -107,12 +108,12 @@ namespace Milvasoft.SampleAPI.Controllers
         /// </summary>
         /// <returns></returns>
         //[Authorize(Roles = "Student")]
-        [HttpPatch("Profession/Student/{id}")]
-        public async Task<IActionResult> GetProfessionForStudentbyId([FromBody] Guid id)
+        [HttpPatch("Student/{id}")]
+        public async Task<IActionResult> GetProfessionForStudentbyId(Guid id)
         {
             var professions = await _professionService.GetProfessionForStudentAsync(id).ConfigureAwait(false);
 
-            return Ok(professions);
+            return professions.GetObjectResponse("Success");
         }
 
         /// <summary>
@@ -121,11 +122,10 @@ namespace Milvasoft.SampleAPI.Controllers
         /// <param name="addProfession"></param>
         /// <returns></returns>
        // [Authorize(Roles = "Admin")]
-        [HttpPost("AddProfessions")]
+        [HttpPost("Profession")]
         public async Task<IActionResult> AddProfession([FromBody] AddProfessionDTO addProfession)
         {
-            await _professionService.AddProfessionAsync(addProfession).ConfigureAwait(false);
-            return Ok();
+            return await _professionService.AddProfessionAsync(addProfession).ConfigureAwait(false).GetObjectResponseAsync<AddProfessionDTO>("Success"); 
         }
 
         /// <summary>
@@ -134,11 +134,10 @@ namespace Milvasoft.SampleAPI.Controllers
         /// <param name="updateProfession"></param>
         /// <returns></returns>
        // [Authorize(Roles = "Admin")]
-        [HttpPut("UpdateProfession")]
+        [HttpPut("Profession")]
         public async Task<IActionResult> UpdateProfession([FromBody] UpdateProfessionDTO updateProfession)
         {
-            await _professionService.UpdateProfessionAsync(updateProfession).ConfigureAwait(false);
-            return Ok();
+             return  await _professionService.UpdateProfessionAsync(updateProfession).ConfigureAwait(false).GetObjectResponseAsync<UpdateProfessionDTO>("Success"); 
         }
 
         /// <summary>
@@ -147,11 +146,10 @@ namespace Milvasoft.SampleAPI.Controllers
         /// <param name="ids"></param>
         /// <returns></returns>
        // [Authorize(Roles = "Admin")]
-        [HttpDelete("Profession/Deletes/{ids}")]
-        public async Task<IActionResult> DeleteProfession(List<Guid> ids)
+        [HttpDelete("Delete")]
+        public async Task<IActionResult> DeleteProfession( [FromBody] List<Guid> ids)
         {
-            await _professionService.DeleteProfessionsAsync(ids).ConfigureAwait(false);
-            return Ok();
+           return await _professionService.DeleteProfessionsAsync(ids).ConfigureAwait(false).GetObjectResponseAsync<UpdateProfessionDTO,Guid>(ids,"Success"); 
         }
     }
 }

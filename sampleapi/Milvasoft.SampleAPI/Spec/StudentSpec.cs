@@ -17,7 +17,9 @@ namespace Milvasoft.SampleAPI.Spec
     public class StudentSpec : IBaseSpec<Student>
     {
         #region Fields
-        private string _name, _surname, _university;
+        private string _name;
+        private string _surname;
+        private string _university;
         #endregion
 
         #region Props

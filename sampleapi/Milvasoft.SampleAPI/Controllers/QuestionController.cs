@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Milvasoft.Helpers;
 using Milvasoft.SampleAPI.DTOs;
 using Milvasoft.SampleAPI.DTOs.QuestionDTOs;
 using Milvasoft.SampleAPI.Services.Abstract;
@@ -34,11 +35,11 @@ namespace Milvasoft.SampleAPI.Controllers
         /// </summary>
         /// <returns></returns>
         //[Authorize(Roles = "Mentor")]
-        [HttpPatch("Question/Mentor")]
+        [HttpPatch("Mentor")]
         public async Task<IActionResult> GetQuestionsForMentor([FromBody] PaginationParamsWithSpec<QuestionSpec> paginationParams)
         {
             var questions = await _questionService.GetQuestionsForMentorAsync(paginationParams).ConfigureAwait(false);
-            return Ok(questions);
+            return questions.GetObjectResponse("Success");
         }
 
         /// <summary>
@@ -46,11 +47,11 @@ namespace Milvasoft.SampleAPI.Controllers
         /// </summary>
         /// <returns></returns>
         //[Authorize(Roles = "Admin")]
-        [HttpPatch("Question/Admin")]
+        [HttpPatch("Admin")]
         public async Task<IActionResult> GetQuestionsForAdmin([FromBody] PaginationParamsWithSpec<QuestionSpec> paginationParams)
         {
             var questions = await _questionService.GetQuestionsForAdminAsync(paginationParams).ConfigureAwait(false);
-            return Ok(questions);
+            return questions.GetObjectResponse("Success");
         }
 
         /// <summary>
@@ -58,11 +59,11 @@ namespace Milvasoft.SampleAPI.Controllers
         /// </summary>
         /// <returns></returns>
         //[Authorize(Roles = "Student")]
-        [HttpPatch("Question/Student")]
+        [HttpPatch("Student")]
         public async Task<IActionResult> GetQuestionsForStudent([FromBody] PaginationParamsWithSpec<QuestionSpec> paginationParams)
         {
             var questions = await _questionService.GetQuestionsForStudentAsync(paginationParams).ConfigureAwait(false);
-            return Ok(questions);
+            return questions.GetObjectResponse("Success");
         }
 
         /// <summary>
@@ -70,12 +71,12 @@ namespace Milvasoft.SampleAPI.Controllers
         /// </summary>
         /// <returns></returns>
         //[Authorize(Roles = "Mentor")]
-        [HttpPatch("Question/Mentor/{id}")]
-        public async Task<IActionResult> GetQuestionForMentorbyId([FromBody] Guid id)
+        [HttpPatch("Mentor/{id}")]
+        public async Task<IActionResult> GetQuestionForMentorbyId(Guid id)
         {
             var question = await _questionService.GetQuestionForMentorAsync(id).ConfigureAwait(false);
 
-            return Ok(question);
+            return question.GetObjectResponse("Success"); 
         }
 
         /// <summary>
@@ -83,12 +84,12 @@ namespace Milvasoft.SampleAPI.Controllers
         /// </summary>
         /// <returns></returns>
         ///[Authorize(Roles = "Admin")]
-        [HttpPatch("Question/Admin/{id}")]
-        public async Task<IActionResult> GetQuestionForAdminbyId([FromBody] Guid id)
+        [HttpPatch("Admin/{id}")]
+        public async Task<IActionResult> GetQuestionForAdminbyId(Guid id)
         {
             var question = await _questionService.GetQuestionForAdminAsync(id).ConfigureAwait(false);
 
-            return Ok(question);
+            return question.GetObjectResponse("Success");
         }
 
         /// <summary>
@@ -96,12 +97,12 @@ namespace Milvasoft.SampleAPI.Controllers
         /// </summary>
         /// <returns></returns>
         //[Authorize(Roles = "Student")]
-        [HttpPatch("Question/Student/{id}")]
-        public async Task<IActionResult> GetQuestionForStudentbyId([FromBody] Guid id)
+        [HttpPatch("Student/{id}")]
+        public async Task<IActionResult> GetQuestionForStudentbyId(Guid id)
         {
             var question = await _questionService.GetQuestionForStudentAsync(id).ConfigureAwait(false);
 
-            return Ok(question);
+            return question.GetObjectResponse("Success");
         }
 
         /// <summary>
@@ -110,11 +111,10 @@ namespace Milvasoft.SampleAPI.Controllers
         /// <param name="addQuestion"></param>
         /// <returns></returns>
        // [Authorize(Roles = "Admin")]
-        [HttpPost("AddQuestions")]
+        [HttpPost("Question")]
         public async Task<IActionResult> AddQuestion([FromBody] AddQuestionDTO addQuestion)
         {
-            await _questionService.AddQuestionAsync(addQuestion).ConfigureAwait(false);
-            return Ok();
+            return await _questionService.AddQuestionAsync(addQuestion).ConfigureAwait(false).GetObjectResponseAsync<AddQuestionDTO>("Success").ConfigureAwait(false);
         }
 
         /// <summary>
@@ -123,11 +123,10 @@ namespace Milvasoft.SampleAPI.Controllers
         /// <param name="updateQuestion"></param>
         /// <returns></returns>
        // [Authorize(Roles = "Admin")]
-        [HttpPut("UpdateQuestion")]
+        [HttpPut("Question")]
         public async Task<IActionResult> UpdateQuestion([FromBody] UpdateQuestionDTO updateQuestion)
         {
-            await _questionService.UpdateQuestionAsync(updateQuestion).ConfigureAwait(false);
-            return Ok();
+            return await _questionService.UpdateQuestionAsync(updateQuestion).ConfigureAwait(false).GetObjectResponseAsync<UpdateQuestionDTO>("Success").ConfigureAwait(false);
         }
 
 
@@ -137,11 +136,10 @@ namespace Milvasoft.SampleAPI.Controllers
         /// <param name="ids"></param>
         /// <returns></returns>
        // [Authorize(Roles = "Admin")]
-        [HttpDelete("Question/Deletes/{ids}")]
-        public async Task<IActionResult> DeleteQuestions(List<Guid> ids)
+        [HttpDelete("Delete")]
+        public async Task<IActionResult> DeleteQuestions([FromBody]List<Guid> ids)
         {
-            await _questionService.DeleteQuestionsAsync(ids).ConfigureAwait(false);
-            return Ok();
+            return await _questionService.DeleteQuestionsAsync(ids).ConfigureAwait(false).GetObjectResponseAsync<QuestionDTO,Guid>(ids,"Success");
         }
     }
 }

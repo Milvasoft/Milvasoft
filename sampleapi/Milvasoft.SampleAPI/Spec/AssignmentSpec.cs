@@ -14,13 +14,16 @@ namespace Milvasoft.SampleAPI.Spec
     /// </summary>
     public class AssignmentSpec : IBaseSpec<Assignment>
     {
-
+        #region Fields
+        private string _tittle;
+        private string _rules;
+        #endregion
         #region Props
 
         /// <summary>
         /// Tittle of assignment.
         /// </summary>
-        public string Title { get; set; }
+        public string Title { get => _tittle; set => _tittle = value?.ToUpper(); }
 
         /// <summary>
         /// Difficulty level of the assignment.
@@ -30,7 +33,7 @@ namespace Milvasoft.SampleAPI.Spec
         /// <summary>
         /// Rules of assignment.
         /// </summary>
-        public string Rules { get; set; }
+        public string Rules { get => _tittle; set => _tittle = value?.ToUpper(); }
 
         /// <summary> 
         /// The maximum time that the assignment will be delivered.

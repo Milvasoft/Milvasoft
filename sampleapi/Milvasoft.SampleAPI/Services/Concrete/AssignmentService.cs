@@ -32,17 +32,17 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         }
 
         /// <summary>
-        /// Get all assignment by <paramref name="assignmentPaginationParams"/>
+        /// Get all assignment by <paramref name="pagiantionParams"/>
         /// </summary>
         /// <returns></returns>
-        public async Task<PaginationDTO<AssignmentForStudentDTO>> GetAssignmentForStudentAsync(PaginationParamsWithSpec<AssignmentSpec> assignmentPaginationParams)
+        public async Task<PaginationDTO<AssignmentForStudentDTO>> GetAssignmentForStudentAsync(PaginationParamsWithSpec<AssignmentSpec> pagiantionParams)
         {
             var (asssignments, pageCount, totalDataCount) = await _assignmentRepository.PreparePaginationDTO<IBaseRepository<Assignment, Guid, EducationAppDbContext>, Assignment, Guid>
-                                                                                                                (assignmentPaginationParams.PageIndex,
-                                                                                                                assignmentPaginationParams.RequestedItemCount,
-                                                                                                                assignmentPaginationParams.OrderByProperty = null,
-                                                                                                                assignmentPaginationParams.OrderByAscending = false,
-                                                                                                                assignmentPaginationParams.Spec?.ToExpression()).ConfigureAwait(false);
+                                                                                                                (pagiantionParams.PageIndex,
+                                                                                                                pagiantionParams.RequestedItemCount,
+                                                                                                                pagiantionParams.OrderByProperty = null,
+                                                                                                                pagiantionParams.OrderByAscending = false,
+                                                                                                                pagiantionParams.Spec?.ToExpression()).ConfigureAwait(false);
 
             return new PaginationDTO<AssignmentForStudentDTO>
             {
@@ -65,17 +65,17 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         }
 
         /// <summary>
-        /// Get assignments for admin by <paramref name="assignmentPaginationParams"/>
+        /// Get assignments for admin by <paramref name="pagiantionParams"/>
         /// </summary>
         /// <returns></returns>
-        public async Task<PaginationDTO<AssignmentForAdminDTO>> GetAssignmentForAdminAsync(PaginationParamsWithSpec<AssignmentSpec> assignmentPaginationParams)
+        public async Task<PaginationDTO<AssignmentForAdminDTO>> GetAssignmentForAdminAsync(PaginationParamsWithSpec<AssignmentSpec> pagiantionParams)
         {
             var (asssignments, pageCount, totalDataCount) = await _assignmentRepository.PreparePaginationDTO<IBaseRepository<Assignment, Guid, EducationAppDbContext>, Assignment, Guid>
-                                                                                                                 (assignmentPaginationParams.PageIndex,
-                                                                                                                assignmentPaginationParams.RequestedItemCount,
-                                                                                                                assignmentPaginationParams.OrderByProperty = null,
-                                                                                                                assignmentPaginationParams.OrderByAscending = false,
-                                                                                                                assignmentPaginationParams.Spec?.ToExpression()).ConfigureAwait(false);
+                                                                                                                 (pagiantionParams.PageIndex,
+                                                                                                                pagiantionParams.RequestedItemCount,
+                                                                                                                pagiantionParams.OrderByProperty = null,
+                                                                                                                pagiantionParams.OrderByAscending = false,
+                                                                                                                pagiantionParams.Spec?.ToExpression()).ConfigureAwait(false);
 
             return new PaginationDTO<AssignmentForAdminDTO>
             {
@@ -99,17 +99,17 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         }
 
         /// <summary>
-        /// Get assignments for mentor by <paramref name="assignmentPaginationParams"/>
+        /// Get assignments for mentor by <paramref name="pagiantionParams"/>
         /// </summary>
         /// <returns></returns>
-        public async Task<PaginationDTO<AssignmentForMentorDTO>> GetAssignmentForMentorAsync(PaginationParamsWithSpec<AssignmentSpec> assignmentPaginationParams)
+        public async Task<PaginationDTO<AssignmentForMentorDTO>> GetAssignmentForMentorAsync(PaginationParamsWithSpec<AssignmentSpec> pagiantionParams)
         {
             var (asssignments, pageCount, totalDataCount) = await _assignmentRepository.PreparePaginationDTO<IBaseRepository<Assignment, Guid, EducationAppDbContext>, Assignment, Guid>
-                                                                                                                  (assignmentPaginationParams.PageIndex,
-                                                                                                                assignmentPaginationParams.RequestedItemCount,
-                                                                                                                assignmentPaginationParams.OrderByProperty = null,
-                                                                                                                assignmentPaginationParams.OrderByAscending = false,
-                                                                                                                assignmentPaginationParams.Spec?.ToExpression()).ConfigureAwait(false);
+                                                                                                                  (pagiantionParams.PageIndex,
+                                                                                                                pagiantionParams.RequestedItemCount,
+                                                                                                                pagiantionParams.OrderByProperty = null,
+                                                                                                                pagiantionParams.OrderByAscending = false,
+                                                                                                                pagiantionParams.Spec?.ToExpression()).ConfigureAwait(false);
 
             return new PaginationDTO<AssignmentForMentorDTO>
             {
@@ -140,6 +140,8 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         {
             var assignment = await _assignmentRepository.GetByIdAsync(assignmentId).ConfigureAwait(false);
 
+            assignment.ThrowIfNullForGuidObject();
+
             return new AssignmentForStudentDTO
             {
                 Title = assignment.Title,
@@ -162,6 +164,8 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         public async Task<AssignmentForAdminDTO> GetAssignmentForAdminAsync(Guid assignmentId)
         {
             var assignment = await _assignmentRepository.GetByIdAsync(assignmentId).ConfigureAwait(false);
+
+            assignment.ThrowIfNullForGuidObject();
 
             return new AssignmentForAdminDTO
             {
@@ -189,6 +193,8 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         {
             var assignment = await _assignmentRepository.GetByIdAsync(assignmentId).ConfigureAwait(false);
 
+            assignment.ThrowIfNullForGuidObject();
+
             return new AssignmentForMentorDTO
             {
                 Title = assignment.Title,
@@ -206,9 +212,9 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         }
 
         /// <summary>
-        /// Add assignment.
+        /// Maps <paramref name="addAssignmentDTO"/> to <c><b>Assignment</b></c>  object and adds that product to repository.
         /// </summary>
-        /// <param name="addAssignmentDTO"></param>
+        /// <param name="addAssignmentDTO">Assignment to be added.</param>
         /// <returns></returns>
         public async Task AddAssignmentAsync(AddAssignmentDTO addAssignmentDTO)
         {
@@ -228,29 +234,29 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         }
 
         /// <summary>
-        /// Update assignment.
+        /// Updates single assignment which that equals <paramref name="updateAssignmentDTO"/> in repository by <paramref name="updateAssignmentDTO"/>'s properties.
         /// </summary>
-        /// <param name="updateAssignmentDTO"></param>
+        /// <param name="updateAssignmentDTO">Assignment to be updated.</param>
         /// <returns></returns>
         public async Task UpdateAssignmentAsync(UpdateAssignmentDTO updateAssignmentDTO)
         {
-            var updatedAssignment = await _assignmentRepository.GetByIdAsync(updateAssignmentDTO.Id).ConfigureAwait(false);
+            var toBeUpdatedAssignment = await _assignmentRepository.GetByIdAsync(updateAssignmentDTO.Id).ConfigureAwait(false);
 
-            updatedAssignment.Title = updateAssignmentDTO.Title;
+            toBeUpdatedAssignment.Title = updateAssignmentDTO.Title;
 
-            updatedAssignment.Description = updateAssignmentDTO.Description;
+            toBeUpdatedAssignment.Description = updateAssignmentDTO.Description;
 
-            updatedAssignment.Level = updateAssignmentDTO.Level;
+            toBeUpdatedAssignment.Level = updateAssignmentDTO.Level;
 
-            updatedAssignment.MaxDeliveryDay = updateAssignmentDTO.MaxDeliveryDay;
+            toBeUpdatedAssignment.MaxDeliveryDay = updateAssignmentDTO.MaxDeliveryDay;
 
-            updatedAssignment.ProfessionId = updateAssignmentDTO.ProfessionId;
+            toBeUpdatedAssignment.ProfessionId = updateAssignmentDTO.ProfessionId;
 
-            updatedAssignment.RemarksToMentor = updateAssignmentDTO.RemarksToMentor;
+            toBeUpdatedAssignment.RemarksToMentor = updateAssignmentDTO.RemarksToMentor;
 
-            updatedAssignment.RemarksToStudent = updateAssignmentDTO.RemarksToStudent;
+            toBeUpdatedAssignment.RemarksToStudent = updateAssignmentDTO.RemarksToStudent;
 
-            await _assignmentRepository.UpdateAsync(updatedAssignment).ConfigureAwait(false);
+            await _assignmentRepository.UpdateAsync(toBeUpdatedAssignment).ConfigureAwait(false);
         }
 
         /// <summary>

@@ -40,18 +40,31 @@ namespace Milvasoft.SampleAPI.Services.Abstract
         Task<StudentForMentorDTO> GetStudentForMentorAsync(Guid id);
 
         /// <summary>
+        /// Brings instant user's profile information.
+        /// </summary>
+        /// <returns></returns>
+        Task<StudentForMentorDTO> GetCurrentUserProfile();
+
+        /// <summary>
         /// Add student to database.
         /// </summary>
-        /// <param name="educationDTO"></param>
+        /// <param name="studentDTO"></param>
         /// <returns></returns>
-        Task AddStudentAsync(AddStudentDTO educationDTO);
+        Task AddStudentAsync(AddStudentDTO studentDTO);
 
         /// <summary>
         /// Updates student in database.
         /// </summary>
-        /// <param name="educationDTO"></param>
+        /// <param name="studentDTO"></param>
         /// <returns></returns>
-        Task UpdateStudentAsync(UpdateStudentDTO educationDTO);
+        Task UpdateStudentAsync(UpdateStudentDTO studentDTO);
+
+        /// <summary>
+        /// Updates the information of the logged in student.
+        /// </summary>
+        /// <param name="studentDTO"></param>
+        /// <returns></returns>
+        Task UpdateCurrentStudentAsync(UpdateStudentDTO studentDTO);
 
         /// <summary>
         /// Delete students by <paramref name="ids"/>

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Milvasoft.Helpers;
 using Milvasoft.SampleAPI.DTOs;
 using Milvasoft.SampleAPI.DTOs.UsefulLinkDTOs;
 using Milvasoft.SampleAPI.Services.Abstract;
@@ -35,11 +36,11 @@ namespace Milvasoft.SampleAPI.Controllers
         /// </summary>
         /// <returns></returns>
         //[Authorize(Roles = "Mentor")]
-        [HttpPatch("Link/Mentor")]
+        [HttpPatch("Mentor")]
         public async Task<IActionResult> GetUsefulLinksForMentor([FromBody] PaginationParamsWithSpec<UsefulLinkSpec> paginationParams)
         {
             var usefulLinks = await _userfulLinkService.GetUsefulLinksForMentorAsync(paginationParams).ConfigureAwait(false);
-            return Ok(usefulLinks);
+            return usefulLinks.GetObjectResponse("Success");
         }
 
         /// <summary>
@@ -47,11 +48,11 @@ namespace Milvasoft.SampleAPI.Controllers
         /// </summary>
         /// <returns></returns>
         //[Authorize(Roles = "Admin")]
-        [HttpPatch("Link/Admin")]
+        [HttpPatch("Admin")]
         public async Task<IActionResult> GetUsefulLinksForAdmin([FromBody] PaginationParamsWithSpec<UsefulLinkSpec> paginationParams)
         {
             var usefulLinks = await _userfulLinkService.GetUsefulLinksForAdminAsync(paginationParams).ConfigureAwait(false);
-            return Ok(usefulLinks);
+            return usefulLinks.GetObjectResponse("Success");
         }
 
         /// <summary>
@@ -59,11 +60,11 @@ namespace Milvasoft.SampleAPI.Controllers
         /// </summary>
         /// <returns></returns>
         //[Authorize(Roles = "Student")]
-        [HttpPatch("Link/Student")]
+        [HttpPatch("Student")]
         public async Task<IActionResult> GetUsefulLinksForStudent([FromBody] PaginationParamsWithSpec<UsefulLinkSpec> paginationParams)
         {
             var usefulLinks = await _userfulLinkService.GetUsefulLinksForStudentAsync(paginationParams).ConfigureAwait(false);
-            return Ok(usefulLinks);
+            return usefulLinks.GetObjectResponse("Success");
         }
 
         /// <summary>
@@ -71,12 +72,12 @@ namespace Milvasoft.SampleAPI.Controllers
         /// </summary>
         /// <returns></returns>
         //[Authorize(Roles = "Mentor")]
-        [HttpPatch("Link/Mentor/{id}")]
-        public async Task<IActionResult> GetUsefulLinkForMentorbyId([FromBody] Guid id)
+        [HttpPatch("Mentor/{id}")]
+        public async Task<IActionResult> GetUsefulLinkForMentorbyId( Guid id)
         {
             var usefulLink = await _userfulLinkService.GetUsefulLinkForMentorAsync(id).ConfigureAwait(false);
 
-            return Ok(usefulLink);
+            return usefulLink.GetObjectResponse("Success");
         }
 
         /// <summary>
@@ -84,12 +85,12 @@ namespace Milvasoft.SampleAPI.Controllers
         /// </summary>
         /// <returns></returns>
         ///[Authorize(Roles = "Admin")]
-        [HttpPatch("Link/Admin/{id}")]
-        public async Task<IActionResult> GetUsefulLinkAdminbyId([FromBody] Guid id)
+        [HttpPatch("Admin/{id}")]
+        public async Task<IActionResult> GetUsefulLinkAdminbyId(Guid id)
         {
             var usefulLink = await _userfulLinkService.GetUsefulLinkForAdminAsync(id).ConfigureAwait(false);
 
-            return Ok(usefulLink);
+            return usefulLink.GetObjectResponse("Success");
         }
 
         /// <summary>
@@ -97,12 +98,12 @@ namespace Milvasoft.SampleAPI.Controllers
         /// </summary>
         /// <returns></returns>
         //[Authorize(Roles = "Student")]
-        [HttpPatch("Link/Student/{id}")]
-        public async Task<IActionResult> GetUsefulLinkForStudentbyId([FromBody] Guid id)
+        [HttpPatch("Student/{id}")]
+        public async Task<IActionResult> GetUsefulLinkForStudentbyId( Guid id)
         {
             var usefulLink = await _userfulLinkService.GetUsefulLinkForStudentAsync(id).ConfigureAwait(false);
 
-            return Ok(usefulLink);
+            return usefulLink.GetObjectResponse("Success");
         }
 
         /// <summary>
@@ -111,11 +112,10 @@ namespace Milvasoft.SampleAPI.Controllers
         /// <param name="addStudent"></param>
         /// <returns></returns>
        // [Authorize(Roles = "Admin")]
-        [HttpPost("AddUsefulLink")]
+        [HttpPost("UsefulLink")]
         public async Task<IActionResult> AddUsefulLink([FromBody] AddUsefulLinkDTO addStudent)
         {
-            await _userfulLinkService.AddUsefulLinkAsync(addStudent).ConfigureAwait(false);
-            return Ok();
+             return  await _userfulLinkService.AddUsefulLinkAsync(addStudent).ConfigureAwait(false).GetObjectResponseAsync<AddUsefulLinkDTO>("Success");
         }
 
         /// <summary>
@@ -124,11 +124,10 @@ namespace Milvasoft.SampleAPI.Controllers
         /// <param name="updateStudent"></param>
         /// <returns></returns>
        // [Authorize(Roles = "Admin")]
-        [HttpPut("UpdateUsefulLink")]
+        [HttpPut("UsefulLink")]
         public async Task<IActionResult> UpdateUsefulLink([FromBody] UpdateUsefulLinkDTO updateStudent)
         {
-            await _userfulLinkService.UpdateUsefulLinkAsync(updateStudent).ConfigureAwait(false);
-            return Ok();
+            return await _userfulLinkService.UpdateUsefulLinkAsync(updateStudent).ConfigureAwait(false).GetObjectResponseAsync<UpdateUsefulLinkDTO>("Success");
         }
 
         /// <summary>
@@ -137,11 +136,10 @@ namespace Milvasoft.SampleAPI.Controllers
         /// <param name="ids"></param>
         /// <returns></returns>
        // [Authorize(Roles = "Admin")]
-        [HttpDelete("Link/Deletes/{ids}")]
-        public async Task<IActionResult> DeleteUsefulLinks(List<Guid> ids)
+        [HttpDelete("Delete")]
+        public async Task<IActionResult> DeleteUsefulLinks([FromBody] List<Guid> ids)
         {
-            await _userfulLinkService.DeleteUsefulLinksAsync(ids).ConfigureAwait(false);
-            return Ok();
+            return await _userfulLinkService.DeleteUsefulLinksAsync(ids).ConfigureAwait(false).GetObjectResponseAsync<UsefulLinkDTO, Guid>(ids, "Success"); 
         }
 
     }
