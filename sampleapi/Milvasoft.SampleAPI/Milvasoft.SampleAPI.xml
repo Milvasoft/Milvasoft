@@ -210,11 +210,6 @@
             </remarks>
             <returns></returns>
         </member>
-        <member name="T:Milvasoft.SampleAPI.Controllers.AnnouncementController">
-            <summary>
-            Provided announcement operations.
-            </summary>
-        </member>
         <member name="M:Milvasoft.SampleAPI.Controllers.AnnouncementController.#ctor(Milvasoft.SampleAPI.Services.Abstract.IAnnouncementService)">
             <summary>
             Constructor of <c>AnnouncementController</c>.
@@ -278,11 +273,6 @@
             </summary>
             <param name="ids"></param>
             <returns></returns>
-        </member>
-        <member name="T:Milvasoft.SampleAPI.Controllers.AssignmentController">
-            <summary>
-            Provided assignment operations.
-            </summary>
         </member>
         <member name="M:Milvasoft.SampleAPI.Controllers.AssignmentController.#ctor(Milvasoft.SampleAPI.Services.Abstract.IAssignmentService)">
             <summary>

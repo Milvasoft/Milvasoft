@@ -10,6 +10,10 @@ using System.Threading.Tasks;
 
 namespace Milvasoft.SampleAPI.Controllers
 {
+    [ApiController]
+    [ApiVersion("1.0")]
+    [ApiExplorerSettings(GroupName = "v1.0")]
+    [Route("sampleapi/[controller]")]
     /// <summary>
     /// Provided announcement operations.
     /// </summary>
