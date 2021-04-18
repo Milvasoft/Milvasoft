@@ -304,82 +304,71 @@ namespace Milvasoft.SampleAPI.AppStartup
                 x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
             }).AddJwtBearer(x =>
             {
+
+                IStringLocalizer<SharedResource> GetLocalizerInstance(HttpContext httpContext)
+                {
+                    return httpContext.RequestServices.GetRequiredService<IStringLocalizer<SharedResource>>();
+                }
+
+                Task ReturnResponse(HttpContext httpContext, string localizerKey, int statusCode)
+                {
+                    if (!httpContext.Response.HasStarted)
+                    {
+                        var localizer = GetLocalizerInstance(httpContext);
+
+                        ExceptionResponse validationResponse = new()
+                        {
+                            Message = localizer["Unauthorized"],
+                            Success = false,
+                            StatusCode = statusCode
+                        };
+
+                        httpContext.Response.ContentType = "application/json";
+                        httpContext.Response.StatusCode = MilvaStatusCodes.Status200OK;
+                        return httpContext.Response.WriteAsync(JsonConvert.SerializeObject(validationResponse));
+                    }
+                    return Task.CompletedTask;
+                }
+
                 x.Events = new JwtBearerEvents()
                 {
-
                     //Token içinde name kontrol etme
                     OnTokenValidated = (context) =>
                     {
-                        var accessToken = context.SecurityToken as JwtSecurityToken;
                         if (string.IsNullOrEmpty(context.Principal.Identity.Name)
-                            || accessToken is null)
-                            context.Fail(Startup.SharedStringLocalizer["Unauthorized"]);
+                            || context.SecurityToken is not JwtSecurityToken accessToken
+                            || !SignedInUsers.SignedInUserTokens.ContainsKey(context.Principal.Identity.Name)
+                            || SignedInUsers.SignedInUserTokens[context.Principal.Identity.Name] != accessToken.RawData)
+                        {
+                            var localizer = GetLocalizerInstance(context.HttpContext);
 
+                            context.Fail(localizer["Unauthorized"]);
+                        }
 
                         return Task.CompletedTask;
+                    },
+                    OnForbidden = context =>
+                    {
+                        return ReturnResponse(context.HttpContext, "Forbidden", MilvaStatusCodes.Status403Forbidden);
                     },
                     OnChallenge = context =>
                     {
-                        ExceptionResponse validationResponse = new ExceptionResponse()
-                        {
-                            Message = Startup.SharedStringLocalizer["Forbidden"],
-                            Success = false,
-                            StatusCode = MilvaStatusCodes.Status403Forbidden
-                        };
+                        // Skip the default logic.
+                        context.HandleResponse();
 
-                        if (context.HttpContext.Response.StatusCode == MilvaStatusCodes.Status401Unauthorized)
-                        {
-                            // Skip the default logic.
-                            context.HandleResponse();
-
-                            context.HttpContext.Response.StatusCode = MilvaStatusCodes.Status200OK;
-                            context.HttpContext.Response.ContentType = "application/json";
-
-                            if (context.HttpContext.Items.ContainsKey("Token-Expired"))
-                            {
-                                validationResponse.Message = Startup.SharedStringLocalizer["AccountTimeOut"];
-                                validationResponse.Success = false;
-                                validationResponse.StatusCode = MilvaStatusCodes.Status401Unauthorized;
-
-                                return context.Response.WriteAsync(JsonConvert.SerializeObject(validationResponse));
-                            }
-                            else
-                            {
-                                validationResponse.Message = Startup.SharedStringLocalizer["Unauthorized"];
-                                validationResponse.Success = false;
-                                validationResponse.StatusCode = MilvaStatusCodes.Status401Unauthorized;
-
-                                return context.Response.WriteAsync(JsonConvert.SerializeObject(validationResponse));
-                            }
-                        }
-                        else if (context.HttpContext.Response.StatusCode == MilvaStatusCodes.Status403Forbidden)
-                        {
-                            // Skip the default logic.
-                            context.HandleResponse();
-
-                            context.HttpContext.Response.StatusCode = MilvaStatusCodes.Status200OK;
-                            context.HttpContext.Response.ContentType = "application/json";
-
-                            validationResponse.Message = Startup.SharedStringLocalizer["Forbidden"];
-                            validationResponse.Success = false;
-                            validationResponse.StatusCode = MilvaStatusCodes.Status403Forbidden;
-
-                            return context.Response.WriteAsync(JsonConvert.SerializeObject(validationResponse));
-                        }
-
-                        return Task.CompletedTask;
+                        return ReturnResponse(context.HttpContext, "Unauthorized", MilvaStatusCodes.Status401Unauthorized);
                     },
                     OnAuthenticationFailed = context =>
                     {
-                        if (context.Exception.GetType() == typeof(SecurityTokenExpiredException))
-                        {
-                            context.HttpContext.Items.Add("Token-Expired", "true");
-                        }
-                        context.Response.StatusCode = MilvaStatusCodes.Status401Unauthorized;
-                        return Task.CompletedTask;
-                    }
+                        string localizerKey = "Unauthorized";
 
+                        if (context.Exception.GetType() == typeof(SecurityTokenExpiredException))
+                            localizerKey = "TokenExpired";
+
+                        return ReturnResponse(context.HttpContext, localizerKey, MilvaStatusCodes.Status401Unauthorized);
+                    }
                 };
+
                 x.RequireHttpsMetadata = false;
                 x.SaveToken = true;
                 x.TokenValidationParameters = new TokenValidationParameters
