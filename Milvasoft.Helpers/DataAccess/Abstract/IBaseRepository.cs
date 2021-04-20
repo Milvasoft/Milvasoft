@@ -16,7 +16,7 @@ namespace Milvasoft.Helpers.DataAccess.Abstract
     /// <typeparam name="TEntity"></typeparam>
     /// <typeparam name="TKey"></typeparam>
     /// <typeparam name="TContext"></typeparam>
-    public interface IBaseRepository<TEntity, TKey, TContext> where TEntity : IBaseEntity<TKey>
+    public interface IBaseRepository<TEntity, TKey, TContext> where TEntity : class, IBaseEntity<TKey>
                                                               where TKey : struct, IEquatable<TKey>
                                                               where TContext : DbContext
     {
