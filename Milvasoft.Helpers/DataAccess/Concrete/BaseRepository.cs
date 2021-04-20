@@ -592,6 +592,7 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
             return await _dbContext.Set<TEntity>().IncludeMultiple(includes).SingleOrDefaultAsync(mainCondition).ConfigureAwait(false);
         }
 
+
         /// <summary>
         ///  Returns one entity which IsDeleted condition is true by entity Id with includes from database asynchronously. If the condition is requested, it also provides that condition. 
         /// </summary>
@@ -1021,6 +1022,7 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
                                                           .CountAsync().ConfigureAwait(false));
         }
 
+
         /// <summary>
         /// Replaces existing entities(<paramref name="oldEntities"/>) with new entities(<paramref name="newEntities"/>).
         /// </summary>
@@ -1067,6 +1069,39 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
             await _dbContext.SaveChangesAsync().ConfigureAwait(false);
         }
 
+        /// <summary>
+        ///  Returns all entities which IsDeleted condition is true from database asynchronously. If the condition is requested, it also provides that condition.
+        /// </summary>
+        /// <param name="conditionExpression"></param>
+        /// <returns></returns>
+        public virtual async Task<bool> ExistsAsync(Expression<Func<TEntity, bool>> conditionExpression = null)
+            => await _dbContext.Set<TEntity>().FirstOrDefaultAsync(CreateConditionExpression(conditionExpression) ?? (entity => true)).ConfigureAwait(false) != null;
+
+        /// <summary>
+        ///  Returns one entity which IsDeleted condition is true by entity Id with includes from database asynchronously. If the condition is requested, it also provides that condition. 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns> The entity found or null. </returns>
+        public virtual async Task<bool> ExistsAsync(TKey id)
+        {
+            var mainCondition = CreateKeyEqualityExpression(id);
+
+            return await _dbContext.Set<TEntity>().SingleOrDefaultAsync(mainCondition).ConfigureAwait(false) != null;
+        }
+
+        /// <summary>
+        ///  Returns one entity which IsDeleted condition is true by entity Id with includes from database asynchronously. If the condition is requested, it also provides that condition. 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="includes"></param>
+        /// <param name="conditionExpression"></param>
+        /// <returns> The entity found or null. </returns>
+        public virtual async Task<bool> ExistsAsync(TKey id, Func<IIncludable<TEntity>, IIncludable> includes, Expression<Func<TEntity, bool>> conditionExpression = null)
+        {
+            var mainCondition = CreateKeyEqualityExpression(id, conditionExpression);
+
+            return await _dbContext.Set<TEntity>().IncludeMultiple(includes).SingleOrDefaultAsync(mainCondition).ConfigureAwait(false) != null;
+        }
 
         #region Private Helper Methods
 

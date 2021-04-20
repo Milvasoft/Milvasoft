@@ -569,5 +569,27 @@ namespace Milvasoft.Helpers.DataAccess.Abstract
         /// <returns></returns>
         Task RemoveAllAsync();
 
+        /// <summary>
+        ///  Returns all entities which IsDeleted condition is true from database asynchronously. If the condition is requested, it also provides that condition.
+        /// </summary>
+        /// <param name="conditionExpression"></param>
+        /// <returns></returns>
+        Task<bool> ExistsAsync(Expression<Func<TEntity, bool>> conditionExpression = null);
+
+        /// <summary>
+        ///  Returns one entity which IsDeleted condition is true by entity Id with includes from database asynchronously. If the condition is requested, it also provides that condition. 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns> The entity found or null. </returns>
+        Task<bool> ExistsAsync(TKey id);
+
+        /// <summary>
+        ///  Returns one entity which IsDeleted condition is true by entity Id with includes from database asynchronously. If the condition is requested, it also provides that condition. 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="includes"></param>
+        /// <param name="conditionExpression"></param>
+        /// <returns> The entity found or null. </returns>
+        Task<bool> ExistsAsync(TKey id, Func<IIncludable<TEntity>, IIncludable> includes, Expression<Func<TEntity, bool>> conditionExpression = null);
     }
 }
