@@ -13,6 +13,10 @@ namespace Milvasoft.SampleAPI.Controllers
     /// <summary>
     /// Provided announcement operations.
     /// </summary>
+    [ApiController]
+    [ApiVersion("1.0")]
+    [ApiExplorerSettings(GroupName = "v1.0")]
+    [Route("sampleapi/[controller]")]
     public class AnnouncementController : Controller
     {
         private readonly IAnnouncementService _announcementService;

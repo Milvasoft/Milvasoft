@@ -26,6 +26,11 @@ namespace Milvasoft.SampleAPI.DTOs.MentorDTOs
         public string Surname { get; set; }
 
         /// <summary>
+        /// CV path of mentor.
+        /// </summary>
+        public string CVFilePath { get; set; }
+
+        /// <summary>
         /// Announcements posted by the mentor.
         /// </summary>
         public virtual List<AnnouncementDTO> PublishedAnnouncements { get; set; }
@@ -38,6 +43,6 @@ namespace Milvasoft.SampleAPI.DTOs.MentorDTOs
         /// <summary>
         /// Students of a mentor.
         /// </summary>
-        public virtual List<StudentDTO> Students { get; set; }
+        public virtual List<StudentForMentorDTO> Students { get; set; }
     }
 }

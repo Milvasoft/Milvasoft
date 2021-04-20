@@ -29,16 +29,17 @@ namespace Milvasoft.SampleAPI.Services.Concrete
     {
         private readonly UserManager<AppUser> _userManager;
         private readonly IBaseRepository<Mentor, Guid, EducationAppDbContext> _mentorRepository;
-        private readonly string _loggedUser;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
         /// <summary>
         /// Performs constructor injection for repository interfaces used in this service.
         /// </summary>
         /// <param name="mentorRepository"></param>
         /// <param name="userManager"></param>
+        /// <param name="httpContextAccessor"
         public MentorService(IBaseRepository<Mentor, Guid, EducationAppDbContext> mentorRepository, UserManager<AppUser> userManager,IHttpContextAccessor httpContextAccessor)
         {
-            _loggedUser = httpContextAccessor.HttpContext.User.Identity.Name;
+            _httpContextAccessor = httpContextAccessor;
             _userManager = userManager;
             _mentorRepository = mentorRepository;
         }
@@ -60,6 +61,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
                                                                                                                 pagiantionParams.OrderByAscending = false,
                                                                                                                 pagiantionParams.Spec?.ToExpression(),
                                                                                                                 includes).ConfigureAwait(false);
+            mentors.ThrowIfListIsNullOrEmpty("Object is not found.");
 
             return new PaginationDTO<MentorForAdminDTO>
             {
@@ -131,29 +133,44 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// Brings instant user's profile information.
         /// </summary>
         /// <returns></returns>
-        public async Task<MentorForAdminDTO> GetCurrentUserProfile()
+        public async Task<MentorForMentorDTO> GetCurrentUserProfile()
         {
-            var currentMentor = await _userManager.FindByNameAsync(_loggedUser).ConfigureAwait(false);
+            var userName = _httpContextAccessor.HttpContext.User.Identity.Name;
+            Func<IIncludable<Mentor>, IIncludable> includes = i => i.Include(p => p.Students)
+                                                                    .Include(p=>p.Professions)
+                                                                    .Include(p=>p.PublishedAnnouncements);
+                                                                           
 
-            return new MentorForAdminDTO
+            var mentor = await _mentorRepository.GetFirstOrDefaultAsync(includes,p => p.AppUser.UserName == userName).ConfigureAwait(false);
+
+            mentor.ThrowIfNullForGuidObject("CannotGetSignedInUserInfo");
+
+            return new MentorForMentorDTO
             {
-                Name = currentMentor.Mentor.Name,
-                Surname = currentMentor.Mentor.Surname,
-                CVFilePath = currentMentor.Mentor.CVFilePath,
-                CreationDate = currentMentor.Mentor.CreationDate,
-                LastModificationDate = currentMentor.Mentor.LastModificationDate,
-                Professions = currentMentor.Mentor.Professions.CheckList(i => currentMentor.Mentor.Professions?.Select(pr => new MentorProfessionDTO
+                Name = mentor.Name,
+                Surname = mentor.Surname,
+                CVFilePath = mentor.CVFilePath,
+                CreationDate = mentor.CreationDate,
+                LastModificationDate = mentor.LastModificationDate,
+                Professions = mentor.Professions.CheckList(i => mentor.Professions?.Select(pr => new MentorProfessionDTO
                 {
-                    ProfessionId = pr.ProfessionId,
-                    MentorId = pr.MentorId,
-                    Id = pr.Id
+                    ProfessionId = pr.ProfessionId
                 })),
-                PublishedAnnouncements = currentMentor.Mentor.PublishedAnnouncements.CheckList(i => currentMentor.Mentor.PublishedAnnouncements?.Select(pa => new AnnouncementDTO
+                PublishedAnnouncements = mentor.PublishedAnnouncements.CheckList(i => mentor.PublishedAnnouncements?.Select(pa => new AnnouncementDTO
                 {
-                    Id = pa.Id
+                    Title=pa.Title,
+                    Description=pa.Description
                 })),
-                Students = currentMentor.Mentor.Students.CheckList(i => currentMentor.Mentor.Students?.Select(st => new StudentDTO
+                Students = mentor.Students.CheckList(i => mentor.Students?.Select(st => new StudentForMentorDTO
                 {
+                    Name=st.Name,
+                    Surname=st.Surname,
+                    Age=st.Age,
+                    GraduationScore=st.GraduationScore,
+                    GraduationStatus=st.GraduationStatus,
+                    ProfessionId=st.ProfessionId,
+                    CreationDate=st.CreationDate,
+                    CurrentAssigmentDeliveryDate=st.CurrentAssigmentDeliveryDate,
                     Id = st.Id
                 }))
 
@@ -199,8 +216,9 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// <returns></returns>
         public async Task UpdateMentorAsync(UpdateMentorDTO updateMentorDTO)
         {
-            
             var toBeUpdatedMentor = await _mentorRepository.GetByIdAsync(updateMentorDTO.Id).ConfigureAwait(false);
+
+            toBeUpdatedMentor.ThrowIfNullForGuidObject();
 
             toBeUpdatedMentor.Name = updateMentorDTO.Name;
 
@@ -216,7 +234,11 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// <returns></returns>
         public async Task UpdateCurrentMentorAsync(UpdateMentorDTO updateMentorDTO)
         {
+            var _loggedUser = _httpContextAccessor.HttpContext.User.Identity.Name;
+
             var toBeUpdatedMentor = await _userManager.FindByNameAsync(_loggedUser).ConfigureAwait(false) ?? throw new MilvaUserFriendlyException("CannotFindUserWithThisToken");
+
+            toBeUpdatedMentor.ThrowIfNullForGuidObject();
 
             toBeUpdatedMentor.Mentor.Name = updateMentorDTO.Name;
             toBeUpdatedMentor.Mentor.Surname = updateMentorDTO.Surname;
@@ -226,23 +248,19 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         }
 
         /// <summary>
-        /// Delete mentors.
+        /// Deletes the mentor whose id has been sent.
         /// </summary>
-        /// <param name="mentorIds"></param>
+        /// <param name="mentorIds">Id of the mentors to be deleted.</param>
         /// <returns></returns>
         public async Task DeleteMentorsAsync(List<Guid> mentorIds)
         {
-            //TODO OGZ SUMMARY DÜZELTİLECEK.
-            //TODO OGZ mentorIdList.IsNullOrEmpty() throw
+            mentorIds.ThrowIfParameterIsNullOrEmpty();
 
             var mentors = await _mentorRepository.GetAllAsync(i => mentorIds.Select(p => p).Contains(i.Id)).ConfigureAwait(false);
 
-            //TODO OGZ mentors.IsNullOrEmpty() 
+            mentors.ThrowIfListIsNullOrEmpty();
+
             await _mentorRepository.DeleteAsync(mentors).ConfigureAwait(false);
         }
-
-        #region Private Methods
-        //TODO OGZ PRİVATE METHODLAR BURAYA YAZILACAK.
-        #endregion
     }
 }

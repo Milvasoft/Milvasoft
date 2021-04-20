@@ -23,19 +23,7 @@ namespace Milvasoft.SampleAPI.Services.Abstract
         /// Get all profession for student from database.
         /// </summary>
         /// <returns></returns>
-        Task<PaginationDTO<ProfessionDTO>> GetProfessionsForStudentAsync(PaginationParamsWithSpec<ProfessionSpec> paginationParams);
-
-        /// <summary>
-        /// Get all profession for admin from database.
-        /// </summary>
-        /// <returns></returns>
-        Task<PaginationDTO<ProfessionDTO>> GetProfessionsForAdminAsync(PaginationParamsWithSpec<ProfessionSpec> paginationParams);
-
-        /// <summary>
-        /// Get all profession for mentor from database.
-        /// </summary>
-        /// <returns></returns>
-        Task<PaginationDTO<ProfessionDTO>> GetProfessionsForMentorAsync(PaginationParamsWithSpec<ProfessionSpec> paginationParams);
+        Task<PaginationDTO<ProfessionDTO>> GetProfessionsAsync(PaginationParamsWithSpec<ProfessionSpec> paginationParams);
 
         /// <summary>
         /// Fetches filtered profession by id for student.

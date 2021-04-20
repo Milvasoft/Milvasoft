@@ -30,7 +30,7 @@ namespace Milvasoft.SampleAPI.Services.Abstract
         /// Brings instant user's profile information.
         /// </summary>
         /// <returns></returns>
-        Task<MentorForAdminDTO> GetCurrentUserProfile();
+        Task<MentorForMentorDTO> GetCurrentUserProfile();
 
         /// <summary>
         /// Add assignment to database.

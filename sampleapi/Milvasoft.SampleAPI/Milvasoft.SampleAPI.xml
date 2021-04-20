@@ -279,11 +279,6 @@
             <param name="ids"></param>
             <returns></returns>
         </member>
-        <member name="T:Milvasoft.SampleAPI.Controllers.AssignmentController">
-            <summary>
-            Provided assignment operations.
-            </summary>
-        </member>
         <member name="M:Milvasoft.SampleAPI.Controllers.AssignmentController.#ctor(Milvasoft.SampleAPI.Services.Abstract.IAssignmentService)">
             <summary>
             Constructor of <c>AssignmentConroller</c>.
@@ -410,21 +405,9 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.SampleAPI.Controllers.ProfessionController.GetProfessionsForMentor(Milvasoft.SampleAPI.DTOs.PaginationParamsWithSpec{Milvasoft.SampleAPI.Spec.ProfessionSpec})">
+        <member name="M:Milvasoft.SampleAPI.Controllers.ProfessionController.GetProfessions(Milvasoft.SampleAPI.DTOs.PaginationParamsWithSpec{Milvasoft.SampleAPI.Spec.ProfessionSpec})">
             <summary>
             Gets the all filtered professions datas for mentor.
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:Milvasoft.SampleAPI.Controllers.ProfessionController.GetProfessionsForAdmin(Milvasoft.SampleAPI.DTOs.PaginationParamsWithSpec{Milvasoft.SampleAPI.Spec.ProfessionSpec})">
-            <summary>
-            Gets the all filtered professions datas for admin.
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:Milvasoft.SampleAPI.Controllers.ProfessionController.GetProfessionsForStudent(Milvasoft.SampleAPI.DTOs.PaginationParamsWithSpec{Milvasoft.SampleAPI.Spec.ProfessionSpec})">
-            <summary>
-            Gets the all filtered professions datas for student.
             </summary>
             <returns></returns>
         </member>
@@ -550,7 +533,7 @@
         </member>
         <member name="M:Milvasoft.SampleAPI.Controllers.StudentController.GetStudentsForMentor(Milvasoft.SampleAPI.DTOs.PaginationParamsWithSpec{Milvasoft.SampleAPI.Spec.StudentSpec})">
             <summary>
-            Gets the all filtered students datas for mentor.
+            Gets the all filtered students datas for log in mentor.
             </summary>
             <returns></returns>
         </member>
@@ -563,6 +546,12 @@
         <member name="M:Milvasoft.SampleAPI.Controllers.StudentController.GetStudentForMentorbyId(System.Guid)">
             <summary>
             Gets the all filtered student datas for mentor.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Controllers.StudentController.GetCurrentUserProfile">
+            <summary>
+            Brings the information of the student who is logged in.
             </summary>
             <returns></returns>
         </member>
@@ -1491,6 +1480,11 @@
         <member name="P:Milvasoft.SampleAPI.DTOs.MentorDTOs.MentorForMentorDTO.Surname">
             <summary>
             Mentor surname.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.MentorDTOs.MentorForMentorDTO.CVFilePath">
+            <summary>
+            CV path of mentor.
             </summary>
         </member>
         <member name="P:Milvasoft.SampleAPI.DTOs.MentorDTOs.MentorForMentorDTO.PublishedAnnouncements">
@@ -2853,21 +2847,9 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.SampleAPI.Services.Abstract.IProfessionService.GetProfessionsForStudentAsync(Milvasoft.SampleAPI.DTOs.PaginationParamsWithSpec{Milvasoft.SampleAPI.Spec.ProfessionSpec})">
+        <member name="M:Milvasoft.SampleAPI.Services.Abstract.IProfessionService.GetProfessionsAsync(Milvasoft.SampleAPI.DTOs.PaginationParamsWithSpec{Milvasoft.SampleAPI.Spec.ProfessionSpec})">
             <summary>
             Get all profession for student from database.
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:Milvasoft.SampleAPI.Services.Abstract.IProfessionService.GetProfessionsForAdminAsync(Milvasoft.SampleAPI.DTOs.PaginationParamsWithSpec{Milvasoft.SampleAPI.Spec.ProfessionSpec})">
-            <summary>
-            Get all profession for admin from database.
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:Milvasoft.SampleAPI.Services.Abstract.IProfessionService.GetProfessionsForMentorAsync(Milvasoft.SampleAPI.DTOs.PaginationParamsWithSpec{Milvasoft.SampleAPI.Spec.ProfessionSpec})">
-            <summary>
-            Get all profession for mentor from database.
             </summary>
             <returns></returns>
         </member>
@@ -2995,7 +2977,7 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.SampleAPI.Services.Abstract.IStudentService.GetStudentsForMentorAsync(Milvasoft.SampleAPI.DTOs.PaginationParamsWithSpec{Milvasoft.SampleAPI.Spec.StudentSpec})">
+        <member name="M:Milvasoft.SampleAPI.Services.Abstract.IStudentService.GetStudentsForCurrentMentorAsync(Milvasoft.SampleAPI.DTOs.PaginationParamsWithSpec{Milvasoft.SampleAPI.Spec.StudentSpec})">
             <summary>
             Get all students for mentor from database.
             </summary>
@@ -3252,16 +3234,19 @@
             Announcement service.
             </summary>
         </member>
-        <member name="M:Milvasoft.SampleAPI.Services.Concrete.AnnouncementService.#ctor(Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository{Milvasoft.SampleAPI.Entity.Announcement,System.Guid,Milvasoft.SampleAPI.Data.EducationAppDbContext})">
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.AnnouncementService.#ctor(Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository{Milvasoft.SampleAPI.Entity.Announcement,System.Guid,Milvasoft.SampleAPI.Data.EducationAppDbContext},Microsoft.AspNetCore.Identity.UserManager{Milvasoft.SampleAPI.Entity.AppUser},Microsoft.AspNetCore.Http.IHttpContextAccessor)">
             <summary>
             Performs constructor injection for repository interfaces used in this service.
             </summary>
             <param name="announcementRepository"></param>
+            <param name="httpContextAccessor"></param>
+            <param name="userManager"></param>
         </member>
         <member name="M:Milvasoft.SampleAPI.Services.Concrete.AnnouncementService.GetAnnouncementForStudentAsync(Milvasoft.SampleAPI.DTOs.PaginationParamsWithSpec{Milvasoft.SampleAPI.Spec.AnnouncementSpec})">
             <summary>
             Get all announcement for student.
             </summary>
+            <param name="pagiantionParams">Filter object.</param>
             <returns></returns>
         </member>
         <member name="M:Milvasoft.SampleAPI.Services.Concrete.AnnouncementService.GetAnnouncementForAdminAsync(Milvasoft.SampleAPI.DTOs.PaginationParamsWithSpec{Milvasoft.SampleAPI.Spec.AnnouncementSpec})">
@@ -3309,13 +3294,6 @@
             Updates single announcement which that equals <paramref name="updateAnnouncementDTO"/> in repository by <paramref name="updateAnnouncementDTO"/>'s properties.
             </summary>
             <param name="updateAnnouncementDTO">Announcement to be updated.</param>
-            <returns></returns>
-        </member>
-        <member name="M:Milvasoft.SampleAPI.Services.Concrete.AnnouncementService.DeleteAnnouncementAsync(System.Guid)">
-            <summary>
-            Delete announcement.
-            </summary>
-            <param name="announcementId"></param>
             <returns></returns>
         </member>
         <member name="M:Milvasoft.SampleAPI.Services.Concrete.AnnouncementService.DeleteAnnouncementsAsync(System.Collections.Generic.List{System.Guid})">
@@ -3408,13 +3386,7 @@
             Mentor service. 
             </summary>
         </member>
-        <member name="M:Milvasoft.SampleAPI.Services.Concrete.MentorService.#ctor(Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository{Milvasoft.SampleAPI.Entity.Mentor,System.Guid,Milvasoft.SampleAPI.Data.EducationAppDbContext},Microsoft.AspNetCore.Identity.UserManager{Milvasoft.SampleAPI.Entity.AppUser},Microsoft.AspNetCore.Http.IHttpContextAccessor)">
-            <summary>
-            Performs constructor injection for repository interfaces used in this service.
-            </summary>
-            <param name="mentorRepository"></param>
-            <param name="userManager"></param>
-        </member>
+        <!-- Badly formed XML comment ignored for member "M:Milvasoft.SampleAPI.Services.Concrete.MentorService.#ctor(Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository{Milvasoft.SampleAPI.Entity.Mentor,System.Guid,Milvasoft.SampleAPI.Data.EducationAppDbContext},Microsoft.AspNetCore.Identity.UserManager{Milvasoft.SampleAPI.Entity.AppUser},Microsoft.AspNetCore.Http.IHttpContextAccessor)" -->
         <member name="M:Milvasoft.SampleAPI.Services.Concrete.MentorService.GetMentorsForAdminAsync(Milvasoft.SampleAPI.DTOs.PaginationParamsWithSpec{Milvasoft.SampleAPI.Spec.MentorSpec})">
             <summary>
             Get mentors for admin.
@@ -3457,9 +3429,9 @@
         </member>
         <member name="M:Milvasoft.SampleAPI.Services.Concrete.MentorService.DeleteMentorsAsync(System.Collections.Generic.List{System.Guid})">
             <summary>
-            Delete mentors.
+            Deletes the mentor whose id has been sent.
             </summary>
-            <param name="mentorIds"></param>
+            <param name="mentorIds">Id of the mentors to be deleted.</param>
             <returns></returns>
         </member>
         <member name="T:Milvasoft.SampleAPI.Services.Concrete.ProfessionService">
@@ -3481,65 +3453,50 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.SampleAPI.Services.Concrete.ProfessionService.GetProfessionsForAdminAsync(Milvasoft.SampleAPI.DTOs.PaginationParamsWithSpec{Milvasoft.SampleAPI.Spec.ProfessionSpec})">
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.ProfessionService.GetProfessionsAsync(Milvasoft.SampleAPI.DTOs.PaginationParamsWithSpec{Milvasoft.SampleAPI.Spec.ProfessionSpec})">
             <summary>
-            Get professions for admin.
+            Get all filtered professions by <paramref name="pagiantionParams"/>
             </summary>
-            <returns></returns>
-        </member>
-        <member name="M:Milvasoft.SampleAPI.Services.Concrete.ProfessionService.GetProfessionsForMentorAsync(Milvasoft.SampleAPI.DTOs.PaginationParamsWithSpec{Milvasoft.SampleAPI.Spec.ProfessionSpec})">
-            <summary>
-            Get professions for mentor.
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:Milvasoft.SampleAPI.Services.Concrete.ProfessionService.GetProfessionsForStudentAsync(Milvasoft.SampleAPI.DTOs.PaginationParamsWithSpec{Milvasoft.SampleAPI.Spec.ProfessionSpec})">
-            <summary>
-            Get professions for student.
-            </summary>
-            <returns></returns>
+            <returns>Returns the filtered profession.</returns>
         </member>
         <member name="M:Milvasoft.SampleAPI.Services.Concrete.ProfessionService.GetProfessionForAdminAsync(System.Guid)">
             <summary>
             Get profession for admin by <paramref name="professionId"/>.
             </summary>
-            <param name="professionId"></param>
-            <returns></returns>
+            <param name="professionId">Profession id to display.</param>
+            <returns>Returns the profession to which the student sent her/his id.</returns>
         </member>
         <member name="M:Milvasoft.SampleAPI.Services.Concrete.ProfessionService.GetProfessionForMentorAsync(System.Guid)">
             <summary>
             Get profession for mentor by <paramref name="professionId"/>
             </summary>
-            <param name="professionId"></param>
-            <returns></returns>
+            <param name="professionId">Profession id to display.</param>
+            <returns>Returns the profession to which the student sent her/his id.</returns>
         </member>
         <member name="M:Milvasoft.SampleAPI.Services.Concrete.ProfessionService.GetProfessionForStudentAsync(System.Guid)">
             <summary>
             Get profession for student by <paramref name="professionId"/>
             </summary>
-            <param name="professionId"></param>
-            <returns></returns>
+            <param name="professionId">Profession id to display.</param>
+            <returns>Returns the profession to which the student sent her/his id.</returns>
         </member>
         <member name="M:Milvasoft.SampleAPI.Services.Concrete.ProfessionService.AddProfessionAsync(Milvasoft.SampleAPI.DTOs.ProfessionDTOs.AddProfessionDTO)">
             <summary>
             Maps <paramref name="addProfessionDTO"/> to <c><b>Profession</b></c>  object and adds that product to repository.
             </summary>
             <param name="addProfessionDTO">Profession to be added.</param>
-            <returns></returns>
         </member>
         <member name="M:Milvasoft.SampleAPI.Services.Concrete.ProfessionService.UpdateProfessionAsync(Milvasoft.SampleAPI.DTOs.ProfessionDTOs.UpdateProfessionDTO)">
             <summary>
             Updates single profession which that equals <paramref name="updateProfessionDTO"/> in repository by <paramref name="updateProfessionDTO"/>'s properties.
             </summary>
             <param name="updateProfessionDTO">Profession to be updated.</param>
-            <returns></returns>
         </member>
         <member name="M:Milvasoft.SampleAPI.Services.Concrete.ProfessionService.DeleteProfessionsAsync(System.Collections.Generic.List{System.Guid})">
             <summary>
-            Delete professions by <paramref name="professionIds"/>.
+            Deletes the professions whose id has been sent.
             </summary>
-            <param name="professionIds"></param>
-            <returns></returns>
+            <param name="professionIds">Professions to be deleted.</param>
         </member>
         <member name="T:Milvasoft.SampleAPI.Services.Concrete.QuestionService">
             <summary>
@@ -3572,21 +3529,21 @@
         </member>
         <member name="M:Milvasoft.SampleAPI.Services.Concrete.QuestionService.GetQuestionForAdminAsync(System.Guid)">
             <summary>
-            Get student for admin.
+            Get question for admin by <paramref name="questionId"/>.
             </summary>
             <param name="questionId"></param>
             <returns></returns>
         </member>
         <member name="M:Milvasoft.SampleAPI.Services.Concrete.QuestionService.GetQuestionForMentorAsync(System.Guid)">
             <summary>
-            Get student for mentor.
+            Get question for mentor by <paramref name="questionId"/>.
             </summary>
             <param name="questionId"></param>
             <returns></returns>
         </member>
         <member name="M:Milvasoft.SampleAPI.Services.Concrete.QuestionService.GetQuestionForStudentAsync(System.Guid)">
             <summary>
-            Get student for student.
+            Get question for student by <paramref name="questionId"/>.
             </summary>
             <param name="questionId"></param>
             <returns></returns>
@@ -3607,7 +3564,7 @@
         </member>
         <member name="M:Milvasoft.SampleAPI.Services.Concrete.QuestionService.DeleteQuestionsAsync(System.Collections.Generic.List{System.Guid})">
             <summary>
-            Delete students.
+            Delete question by <paramref name="questionIds"/>.
             </summary>
             <param name="questionIds"></param>
             <returns></returns>
@@ -3629,18 +3586,23 @@
             </summary>
             <param name="studentRepository"></param>
             <param name="userManager"></param>
+            <param name="httpContextAccessor"></param>
         </member>
         <member name="M:Milvasoft.SampleAPI.Services.Concrete.StudentService.GetStudentsForAdminAsync(Milvasoft.SampleAPI.DTOs.PaginationParamsWithSpec{Milvasoft.SampleAPI.Spec.StudentSpec})">
             <summary>
-            Get students for admin.
+            It will filter students according to the parameters sent in <paramref name="pagiantionParams"/>
             </summary>
-            <returns></returns>
+            <exception cref="T:System.ArgumentNullException">If <paramref name="pagiantionParams"/> is null, it is thrown.</exception>
+            <param name="pagiantionParams">Filtering object.</param>
+            <returns>Student information that can be seen by admin.</returns>
         </member>
-        <member name="M:Milvasoft.SampleAPI.Services.Concrete.StudentService.GetStudentsForMentorAsync(Milvasoft.SampleAPI.DTOs.PaginationParamsWithSpec{Milvasoft.SampleAPI.Spec.StudentSpec})">
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.StudentService.GetStudentsForCurrentMentorAsync(Milvasoft.SampleAPI.DTOs.PaginationParamsWithSpec{Milvasoft.SampleAPI.Spec.StudentSpec})">
             <summary>
-            Get students for mentor.
+            Brings the students of the mentor who has entered.
             </summary>
-            <returns></returns>
+             <exception cref="T:System.ArgumentNullException">If the mentor does not enter, it is thrown..</exception>
+            <param name="pagiantionParams">Filtering object.</param>
+            <returns>Brings the students for whom the mentor is responsible.</returns>
         </member>
         <member name="M:Milvasoft.SampleAPI.Services.Concrete.StudentService.GetStudentForAdminAsync(System.Guid)">
             <summary>
@@ -3651,7 +3613,7 @@
         </member>
         <member name="M:Milvasoft.SampleAPI.Services.Concrete.StudentService.GetStudentForMentorAsync(System.Guid)">
             <summary>
-            Get student information for mentor by <paramref name="studentId"/>.
+            Brings the student who gave the <paramref name="studentId"/> of the logged in mentor..
             </summary>
             <param name="studentId"></param>
             <returns></returns>

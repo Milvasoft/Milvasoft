@@ -14,10 +14,10 @@ namespace Milvasoft.SampleAPI.Controllers
     /// <summary>
     /// Provided Mentor operations.
     /// </summary>
-    [Route("api/v{version:apiVersion}/[controller]")]
     [ApiController]
     [ApiVersion("1.0")]
     [ApiExplorerSettings(GroupName = "v1.0")]
+    [Route("sampleapi/[controller]")]
     public class MentorController : Controller
     {
         private readonly IMentorService _mentorService;
@@ -54,6 +54,13 @@ namespace Milvasoft.SampleAPI.Controllers
         {
             var mentor = await _mentorService.GetMentorForAdminAsync(id).ConfigureAwait(false);
 
+            return mentor.GetObjectResponse("Success");
+        }
+
+        [HttpPatch("Mentor")]
+        public async Task<IActionResult> GetCurrentUser()
+        {
+            var mentor = await _mentorService.GetCurrentUserProfile().ConfigureAwait(false);
             return mentor.GetObjectResponse("Success");
         }
 

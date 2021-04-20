@@ -47,33 +47,9 @@ namespace Milvasoft.SampleAPI.Controllers
         /// <returns></returns>
         //[Authorize(Roles = "Mentor")]
         [HttpPatch("Mentor")]
-        public async Task<IActionResult> GetProfessionsForMentor([FromBody] PaginationParamsWithSpec<ProfessionSpec> paginationParams)
+        public async Task<IActionResult> GetProfessions([FromBody] PaginationParamsWithSpec<ProfessionSpec> paginationParams)
         {
-            var professions = await _professionService.GetProfessionsForMentorAsync(paginationParams).ConfigureAwait(false);
-            return professions.GetObjectResponse("Success");
-        }
-
-        /// <summary>
-        /// Gets the all filtered professions datas for admin.
-        /// </summary>
-        /// <returns></returns>
-        //[Authorize(Roles = "Admin")]
-        [HttpPatch("Admin")]
-        public async Task<IActionResult> GetProfessionsForAdmin([FromBody] PaginationParamsWithSpec<ProfessionSpec> paginationParams)
-        {
-            var professions = await _professionService.GetProfessionsForAdminAsync(paginationParams).ConfigureAwait(false);
-            return professions.GetObjectResponse("Success");
-        }
-
-        /// <summary>
-        /// Gets the all filtered professions datas for student.
-        /// </summary>
-        /// <returns></returns>
-        //[Authorize(Roles = "Student")]
-        [HttpPatch("Student")]
-        public async Task<IActionResult> GetProfessionsForStudent([FromBody] PaginationParamsWithSpec<ProfessionSpec> paginationParams)
-        {
-            var professions = await _professionService.GetProfessionsForStudentAsync(paginationParams).ConfigureAwait(false);
+            var professions = await _professionService.GetProfessionsAsync(paginationParams).ConfigureAwait(false);
             return professions.GetObjectResponse("Success");
         }
 
