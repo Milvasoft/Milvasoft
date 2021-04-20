@@ -278,6 +278,45 @@ namespace Milvasoft.SampleAPI.Utils
         /// <summary>
         /// Prepares pagination dto according to pagination parameters.
         /// </summary>
+        /// <typeparam name="TEntity"></typeparam>
+        /// <typeparam name="TKey"></typeparam>
+        /// <param name="repository"></param>
+        /// <param name="pageIndex"></param>
+        /// <param name="requestedItemCount"></param>
+        /// <param name="orderByProperty"></param>
+        /// <param name="orderByAscending"></param>
+        /// <param name="condition"></param>
+        /// <param name="includes"></param>
+        /// <returns></returns>
+        //TODO OĞuzhan üstteki ve alttaki methodu bu şekilde kullanabilirsin
+        public static async Task<(IEnumerable<TEntity> entities, int pageCount, int totalDataCount)> PreparePaginationDTO<TEntity, TKey>(this IBaseRepository<TEntity, TKey, EducationAppDbContext> repository,
+                                                                                                                                                      int pageIndex,
+                                                                                                                                                      int requestedItemCount,
+                                                                                                                                                      string orderByProperty = null,
+                                                                                                                                                      bool orderByAscending = false,
+                                                                                                                                                      Expression<Func<TEntity, bool>> condition = null,
+                                                                                                                                                      Func<IIncludable<TEntity>, IIncludable> includes = null)
+
+
+            where TKey : struct, IEquatable<TKey>
+            where TEntity : class, IBaseEntity<TKey>
+        {
+
+            return string.IsNullOrEmpty(orderByProperty) ? await repository.GetAsPaginatedAsync(pageIndex,
+                                                                                                requestedItemCount,
+                                                                                                includes,
+                                                                                                condition).ConfigureAwait(false)
+                                                              : await repository.GetAsPaginatedAndOrderedAsync(pageIndex,
+                                                                                                               requestedItemCount,
+                                                                                                               includes,
+                                                                                                               orderByProperty,
+                                                                                                               orderByAscending,
+                                                                                                               condition).ConfigureAwait(false);
+        }
+
+        /// <summary>
+        /// Prepares pagination dto according to pagination parameters.
+        /// </summary>
         /// <typeparam name="TRepository"></typeparam>
         /// <typeparam name="TEntity"></typeparam>
         /// <typeparam name="TKey"></typeparam>
