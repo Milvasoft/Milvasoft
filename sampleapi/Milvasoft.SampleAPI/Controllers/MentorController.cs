@@ -57,6 +57,13 @@ namespace Milvasoft.SampleAPI.Controllers
             return mentor.GetObjectResponse("Success");
         }
 
+        [HttpPatch("Mentor")]
+        public async Task<IActionResult> GetCurrentUser()
+        {
+            var mentor = await _mentorService.GetCurrentUserProfile().ConfigureAwait(false);
+            return mentor.GetObjectResponse("Success");
+        }
+
 
         /// <summary>
         /// Add <b><paramref name="addMentor"/></b> data to database.

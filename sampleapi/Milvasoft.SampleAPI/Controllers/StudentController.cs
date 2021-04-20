@@ -31,14 +31,14 @@ namespace Milvasoft.SampleAPI.Controllers
         }
 
         /// <summary>
-        /// Gets the all filtered students datas for mentor.
+        /// Gets the all filtered students datas for log in mentor.
         /// </summary>
         /// <returns></returns>
         //[Authorize(Roles = "Mentor")]
         [HttpPatch("Mentor")]
         public async Task<IActionResult> GetStudentsForMentor([FromBody] PaginationParamsWithSpec<StudentSpec> paginationParams)
         {
-            var students = await _studentService.GetStudentsForMentorAsync(paginationParams).ConfigureAwait(false);
+            var students = await _studentService.GetStudentsForCurrentMentorAsync(paginationParams).ConfigureAwait(false);
 
             return students.GetObjectResponse("Success");
         }
@@ -67,6 +67,18 @@ namespace Milvasoft.SampleAPI.Controllers
             var student = await _studentService.GetStudentForMentorAsync(id).ConfigureAwait(false);
 
             return student.GetObjectResponse("Success");
+        }
+
+        /// <summary>
+        /// Brings the information of the student who is logged in.
+        /// </summary>
+        /// <returns></returns>
+        [HttpPatch("Student")]
+        public async Task<IActionResult> GetCurrentUserProfile()
+        {
+            var currentStudent = await _studentService.GetCurrentUserProfile().ConfigureAwait(false);
+
+            return currentStudent.GetObjectResponse("Success");
         }
 
         /// <summary>
