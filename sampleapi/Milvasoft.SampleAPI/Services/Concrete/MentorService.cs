@@ -37,7 +37,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// <param name="mentorRepository"></param>
         /// <param name="userManager"></param>
         /// <param name="httpContextAccessor"
-        public MentorService(IBaseRepository<Mentor, Guid, EducationAppDbContext> mentorRepository, UserManager<AppUser> userManager,IHttpContextAccessor httpContextAccessor)
+        public MentorService(IBaseRepository<Mentor, Guid, EducationAppDbContext> mentorRepository, UserManager<AppUser> userManager, IHttpContextAccessor httpContextAccessor)
         {
             _httpContextAccessor = httpContextAccessor;
             _userManager = userManager;
@@ -137,11 +137,11 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         {
             var userName = _httpContextAccessor.HttpContext.User.Identity.Name;
             Func<IIncludable<Mentor>, IIncludable> includes = i => i.Include(p => p.Students)
-                                                                    .Include(p=>p.Professions)
-                                                                    .Include(p=>p.PublishedAnnouncements);
-                                                                           
+                                                                    .Include(p => p.Professions)
+                                                                    .Include(p => p.PublishedAnnouncements);
 
-            var mentor = await _mentorRepository.GetFirstOrDefaultAsync(includes,p => p.AppUser.UserName == userName).ConfigureAwait(false);
+
+            var mentor = await _mentorRepository.GetFirstOrDefaultAsync(includes, p => p.AppUser.UserName == userName).ConfigureAwait(false);
 
             mentor.ThrowIfNullForGuidObject("CannotGetSignedInUserInfo");
 
@@ -158,19 +158,19 @@ namespace Milvasoft.SampleAPI.Services.Concrete
                 })),
                 PublishedAnnouncements = mentor.PublishedAnnouncements.CheckList(i => mentor.PublishedAnnouncements?.Select(pa => new AnnouncementDTO
                 {
-                    Title=pa.Title,
-                    Description=pa.Description
+                    Title = pa.Title,
+                    Description = pa.Description
                 })),
                 Students = mentor.Students.CheckList(i => mentor.Students?.Select(st => new StudentForMentorDTO
                 {
-                    Name=st.Name,
-                    Surname=st.Surname,
-                    Age=st.Age,
-                    GraduationScore=st.GraduationScore,
-                    GraduationStatus=st.GraduationStatus,
-                    ProfessionId=st.ProfessionId,
-                    CreationDate=st.CreationDate,
-                    CurrentAssigmentDeliveryDate=st.CurrentAssigmentDeliveryDate,
+                    Name = st.Name,
+                    Surname = st.Surname,
+                    Age = st.Age,
+                    GraduationScore = st.GraduationScore,
+                    GraduationStatus = st.GraduationStatus,
+                    ProfessionId = st.ProfessionId,
+                    CreationDate = st.CreationDate,
+                    CurrentAssigmentDeliveryDate = st.CurrentAssigmentDeliveryDate,
                     Id = st.Id
                 }))
 

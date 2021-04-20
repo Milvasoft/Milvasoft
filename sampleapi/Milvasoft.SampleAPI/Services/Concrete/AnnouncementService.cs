@@ -36,7 +36,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         public AnnouncementService(IBaseRepository<Announcement, Guid, EducationAppDbContext> announcementRepository, UserManager<AppUser> userManager, IHttpContextAccessor httpContextAccessor)
         {
             _announcementRepository = announcementRepository;
-            _httpContextAccessor = httpContextAccessor ;
+            _httpContextAccessor = httpContextAccessor;
             _userManager = userManager;
         }
 
@@ -67,7 +67,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
                     PublisherMentor = announcement.PublisherMentor.CheckObject(i => new MentorDTO
                     {
                         Id = i.Id,
-                        Name=i.Name
+                        Name = i.Name
                     })
                 })),
                 PageCount = pageCount,

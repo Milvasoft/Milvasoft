@@ -128,7 +128,7 @@ namespace Milvasoft.SampleAPI.Controllers
         [HttpDelete("Delete")]
         public async Task<IActionResult> DeleteStudents([FromBody] List<Guid> ids)
         {
-            return await _studentService.DeleteStudentsAsync(ids).ConfigureAwait(false).GetObjectResponseAsync<StudentDTO,Guid>(ids,"Success");
+            return await _studentService.DeleteStudentsAsync(ids).ConfigureAwait(false).GetObjectResponseAsync<StudentDTO, Guid>(ids, "Success");
         }
 
     }

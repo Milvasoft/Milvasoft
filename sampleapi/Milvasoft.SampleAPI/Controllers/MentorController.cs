@@ -50,7 +50,7 @@ namespace Milvasoft.SampleAPI.Controllers
         /// <returns></returns>
         ///[Authorize(Roles = "Admin")]
         [HttpPatch("Admin/{id}")]
-        public async Task<IActionResult> GetMentorForAdminbyId( Guid id)
+        public async Task<IActionResult> GetMentorForAdminbyId(Guid id)
         {
             var mentor = await _mentorService.GetMentorForAdminAsync(id).ConfigureAwait(false);
 
@@ -75,7 +75,7 @@ namespace Milvasoft.SampleAPI.Controllers
         [OValidationFilter]
         public async Task<IActionResult> AddMentor([FromBody] AddMentorDTO addMentor)
         {
-            return await _mentorService.AddMentorAsync(addMentor).ConfigureAwait(false).GetObjectResponseAsync<AddMentorDTO>("Success"); 
+            return await _mentorService.AddMentorAsync(addMentor).ConfigureAwait(false).GetObjectResponseAsync<AddMentorDTO>("Success");
         }
 
         /// <summary>
@@ -99,7 +99,7 @@ namespace Milvasoft.SampleAPI.Controllers
         [HttpDelete]
         public async Task<IActionResult> DeleteMentors([FromBody] List<Guid> ids)
         {
-            return await _mentorService.DeleteMentorsAsync(ids).ConfigureAwait(false).GetObjectResponseAsync<MentorDTO,Guid>(ids,"Success");
+            return await _mentorService.DeleteMentorsAsync(ids).ConfigureAwait(false).GetObjectResponseAsync<MentorDTO, Guid>(ids, "Success");
         }
     }
 }

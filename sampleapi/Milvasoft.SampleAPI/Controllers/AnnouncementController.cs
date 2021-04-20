@@ -114,7 +114,7 @@ namespace Milvasoft.SampleAPI.Controllers
         [HttpPost("Announcement")]
         public async Task<IActionResult> AddAnnouncement([FromBody] AddAnnouncementDTO addAnnouncement)
         {
-            return await _announcementService.AddAnnouncementAsync(addAnnouncement).ConfigureAwait(false).GetObjectResponseAsync<AddAnnouncementDTO>("Success").ConfigureAwait(false); 
+            return await _announcementService.AddAnnouncementAsync(addAnnouncement).ConfigureAwait(false).GetObjectResponseAsync<AddAnnouncementDTO>("Success").ConfigureAwait(false);
         }
 
         /// <summary>
@@ -138,7 +138,7 @@ namespace Milvasoft.SampleAPI.Controllers
         [HttpDelete("Delete")]
         public async Task<IActionResult> DeleteAnnouncements([FromBody] List<Guid> ids)
         {
-            return await _announcementService.DeleteAnnouncementsAsync(ids).ConfigureAwait(false).GetObjectResponseAsync<AnnouncementDTO,Guid>(ids,"Success").ConfigureAwait(false);
+            return await _announcementService.DeleteAnnouncementsAsync(ids).ConfigureAwait(false).GetObjectResponseAsync<AnnouncementDTO, Guid>(ids, "Success").ConfigureAwait(false);
         }
     }
 }

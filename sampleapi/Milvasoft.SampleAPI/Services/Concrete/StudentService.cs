@@ -36,7 +36,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// <param name="studentRepository"></param>
         /// <param name="userManager"></param>
         /// <param name="httpContextAccessor"></param>
-        public StudentService(IBaseRepository<Student, Guid, EducationAppDbContext> studentRepository, UserManager<AppUser> userManager,IHttpContextAccessor httpContextAccessor)
+        public StudentService(IBaseRepository<Student, Guid, EducationAppDbContext> studentRepository, UserManager<AppUser> userManager, IHttpContextAccessor httpContextAccessor)
         {
             _userManager = userManager;
             _studentRepository = studentRepository;
@@ -115,7 +115,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
             var mentorStudents = from i in students
                                  where i.Mentor.AppUser.UserName == currentMentor.Mentor.AppUser.UserName
                                  select i;
-            
+
             return new PaginationDTO<StudentForMentorDTO>
             {
                 DTOList = mentorStudents.CheckList(i => mentorStudents.Select(mentorStudents => new StudentForMentorDTO
@@ -201,7 +201,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
             Func<IIncludable<Student>, IIncludable> includes = i => i.Include(md => md.Mentor)
                                                                      .Include(oa => oa.OldAssignments);
 
-            var student = await _studentRepository.GetByIdAsync(studentId, includes,i=>i.Mentor==currentMentor.Mentor).ConfigureAwait(false);
+            var student = await _studentRepository.GetByIdAsync(studentId, includes, i => i.Mentor == currentMentor.Mentor).ConfigureAwait(false);
 
             student.ThrowIfNullForGuidObject();
 

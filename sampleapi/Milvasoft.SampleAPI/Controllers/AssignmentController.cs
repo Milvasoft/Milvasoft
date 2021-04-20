@@ -72,7 +72,7 @@ namespace Milvasoft.SampleAPI.Controllers
         /// <returns></returns>
         //[Authorize(Roles = "Mentor")]
         [HttpPatch("Mentor/{id}")]
-        public async Task<IActionResult> GetAssignmentForMentorbyId( Guid id)
+        public async Task<IActionResult> GetAssignmentForMentorbyId(Guid id)
         {
             var assignment = await _assigmentService.GetAssignmentForMentorAsync(id).ConfigureAwait(false);
 
@@ -98,7 +98,7 @@ namespace Milvasoft.SampleAPI.Controllers
         /// <returns></returns>
         //[Authorize(Roles = "Student")]
         [HttpPatch("Student/{id}")]
-        public async Task<IActionResult> GetAssignmentForStudentbyId( Guid id)
+        public async Task<IActionResult> GetAssignmentForStudentbyId(Guid id)
         {
             var assignment = await _assigmentService.GetAssignmentForStudentAsync(id).ConfigureAwait(false);
 
@@ -113,7 +113,7 @@ namespace Milvasoft.SampleAPI.Controllers
        // [Authorize(Roles = "Admin")]
         [HttpPost("Assignment")]
         public async Task<IActionResult> AddAssignment([FromBody] AddAssignmentDTO addAssignment)
-        {   
+        {
             return await _assigmentService.AddAssignmentAsync(addAssignment).ConfigureAwait(false).GetObjectResponseAsync<AddAssignmentDTO>("Success").ConfigureAwait(false);
         }
 
@@ -138,7 +138,7 @@ namespace Milvasoft.SampleAPI.Controllers
         [HttpDelete("Delete")]
         public async Task<IActionResult> DeleteAssignment([FromBody] List<Guid> ids)
         {
-            return await _assigmentService.DeleteAssignmentAsync(ids).ConfigureAwait(false).GetObjectResponseAsync<AssignmentDTO,Guid>(ids,"Success").ConfigureAwait(false);
+            return await _assigmentService.DeleteAssignmentAsync(ids).ConfigureAwait(false).GetObjectResponseAsync<AssignmentDTO, Guid>(ids, "Success").ConfigureAwait(false);
         }
     }
 }

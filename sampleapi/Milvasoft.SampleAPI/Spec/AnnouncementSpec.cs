@@ -23,7 +23,7 @@ namespace Milvasoft.SampleAPI.Spec
         /// <summary>
         /// Filtering by Tittle of Announcement.
         /// </summary>
-        public string Title { get=> _tittle; set=> _tittle=value?.ToUpper(); }
+        public string Title { get => _tittle; set => _tittle = value?.ToUpper(); }
 
         /// <summary>
         /// Filtering by Description of Announcement.

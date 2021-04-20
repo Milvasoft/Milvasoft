@@ -101,7 +101,7 @@ namespace Milvasoft.SampleAPI.Controllers
         [HttpPost("Profession")]
         public async Task<IActionResult> AddProfession([FromBody] AddProfessionDTO addProfession)
         {
-            return await _professionService.AddProfessionAsync(addProfession).ConfigureAwait(false).GetObjectResponseAsync<AddProfessionDTO>("Success"); 
+            return await _professionService.AddProfessionAsync(addProfession).ConfigureAwait(false).GetObjectResponseAsync<AddProfessionDTO>("Success");
         }
 
         /// <summary>
@@ -113,7 +113,7 @@ namespace Milvasoft.SampleAPI.Controllers
         [HttpPut("Profession")]
         public async Task<IActionResult> UpdateProfession([FromBody] UpdateProfessionDTO updateProfession)
         {
-             return  await _professionService.UpdateProfessionAsync(updateProfession).ConfigureAwait(false).GetObjectResponseAsync<UpdateProfessionDTO>("Success"); 
+            return await _professionService.UpdateProfessionAsync(updateProfession).ConfigureAwait(false).GetObjectResponseAsync<UpdateProfessionDTO>("Success");
         }
 
         /// <summary>
@@ -123,9 +123,9 @@ namespace Milvasoft.SampleAPI.Controllers
         /// <returns></returns>
        // [Authorize(Roles = "Admin")]
         [HttpDelete("Delete")]
-        public async Task<IActionResult> DeleteProfession( [FromBody] List<Guid> ids)
+        public async Task<IActionResult> DeleteProfession([FromBody] List<Guid> ids)
         {
-           return await _professionService.DeleteProfessionsAsync(ids).ConfigureAwait(false).GetObjectResponseAsync<UpdateProfessionDTO,Guid>(ids,"Success"); 
+            return await _professionService.DeleteProfessionsAsync(ids).ConfigureAwait(false).GetObjectResponseAsync<UpdateProfessionDTO, Guid>(ids, "Success");
         }
     }
 }

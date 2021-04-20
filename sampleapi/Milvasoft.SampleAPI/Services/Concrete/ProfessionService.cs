@@ -113,7 +113,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
             {
                 Name = profession.Name,
                 CreationDate = profession.CreationDate,
-                Id=profession.Id,
+                Id = profession.Id,
                 LastModificationDate = profession.LastModificationDate
             };
         }

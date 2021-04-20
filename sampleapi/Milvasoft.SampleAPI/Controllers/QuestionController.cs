@@ -76,7 +76,7 @@ namespace Milvasoft.SampleAPI.Controllers
         {
             var question = await _questionService.GetQuestionForMentorAsync(id).ConfigureAwait(false);
 
-            return question.GetObjectResponse("Success"); 
+            return question.GetObjectResponse("Success");
         }
 
         /// <summary>
@@ -137,9 +137,9 @@ namespace Milvasoft.SampleAPI.Controllers
         /// <returns></returns>
        // [Authorize(Roles = "Admin")]
         [HttpDelete("Delete")]
-        public async Task<IActionResult> DeleteQuestions([FromBody]List<Guid> ids)
+        public async Task<IActionResult> DeleteQuestions([FromBody] List<Guid> ids)
         {
-            return await _questionService.DeleteQuestionsAsync(ids).ConfigureAwait(false).GetObjectResponseAsync<QuestionDTO,Guid>(ids,"Success");
+            return await _questionService.DeleteQuestionsAsync(ids).ConfigureAwait(false).GetObjectResponseAsync<QuestionDTO, Guid>(ids, "Success");
         }
     }
 }

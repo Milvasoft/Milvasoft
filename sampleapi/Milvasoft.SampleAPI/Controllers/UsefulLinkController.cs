@@ -73,7 +73,7 @@ namespace Milvasoft.SampleAPI.Controllers
         /// <returns></returns>
         //[Authorize(Roles = "Mentor")]
         [HttpPatch("Mentor/{id}")]
-        public async Task<IActionResult> GetUsefulLinkForMentorbyId( Guid id)
+        public async Task<IActionResult> GetUsefulLinkForMentorbyId(Guid id)
         {
             var usefulLink = await _userfulLinkService.GetUsefulLinkForMentorAsync(id).ConfigureAwait(false);
 
@@ -99,7 +99,7 @@ namespace Milvasoft.SampleAPI.Controllers
         /// <returns></returns>
         //[Authorize(Roles = "Student")]
         [HttpPatch("Student/{id}")]
-        public async Task<IActionResult> GetUsefulLinkForStudentbyId( Guid id)
+        public async Task<IActionResult> GetUsefulLinkForStudentbyId(Guid id)
         {
             var usefulLink = await _userfulLinkService.GetUsefulLinkForStudentAsync(id).ConfigureAwait(false);
 
@@ -115,7 +115,7 @@ namespace Milvasoft.SampleAPI.Controllers
         [HttpPost("UsefulLink")]
         public async Task<IActionResult> AddUsefulLink([FromBody] AddUsefulLinkDTO addStudent)
         {
-             return  await _userfulLinkService.AddUsefulLinkAsync(addStudent).ConfigureAwait(false).GetObjectResponseAsync<AddUsefulLinkDTO>("Success");
+            return await _userfulLinkService.AddUsefulLinkAsync(addStudent).ConfigureAwait(false).GetObjectResponseAsync<AddUsefulLinkDTO>("Success");
         }
 
         /// <summary>
@@ -139,7 +139,7 @@ namespace Milvasoft.SampleAPI.Controllers
         [HttpDelete("Delete")]
         public async Task<IActionResult> DeleteUsefulLinks([FromBody] List<Guid> ids)
         {
-            return await _userfulLinkService.DeleteUsefulLinksAsync(ids).ConfigureAwait(false).GetObjectResponseAsync<UsefulLinkDTO, Guid>(ids, "Success"); 
+            return await _userfulLinkService.DeleteUsefulLinksAsync(ids).ConfigureAwait(false).GetObjectResponseAsync<UsefulLinkDTO, Guid>(ids, "Success");
         }
 
     }
