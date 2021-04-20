@@ -4295,6 +4295,21 @@
             <param name="includes"></param>
             <returns></returns>
         </member>
+        <member name="M:Milvasoft.SampleAPI.Utils.HelperExtensions.PreparePaginationDTO``2(Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository{``0,``1,Milvasoft.SampleAPI.Data.EducationAppDbContext},System.Int32,System.Int32,System.String,System.Boolean,System.Linq.Expressions.Expression{System.Func{``0,System.Boolean}},System.Func{Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable{``0},Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable})">
+            <summary>
+            Prepares pagination dto according to pagination parameters.
+            </summary>
+            <typeparam name="TEntity"></typeparam>
+            <typeparam name="TKey"></typeparam>
+            <param name="repository"></param>
+            <param name="pageIndex"></param>
+            <param name="requestedItemCount"></param>
+            <param name="orderByProperty"></param>
+            <param name="orderByAscending"></param>
+            <param name="condition"></param>
+            <param name="includes"></param>
+            <returns></returns>
+        </member>
         <member name="M:Milvasoft.SampleAPI.Utils.HelperExtensions.PreparePaginationDTO``3(``0,System.Int32,System.Int32,System.Linq.Expressions.Expression{System.Func{``1,System.Object}},System.Boolean,System.Linq.Expressions.Expression{System.Func{``1,System.Boolean}},System.Func{Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable{``1},Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable})">
             <summary>
             Prepares pagination dto according to pagination parameters.

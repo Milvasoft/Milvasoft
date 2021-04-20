@@ -81,5 +81,12 @@ namespace Milvasoft.Helpers.DataAccess.Abstract
         /// <typeparam name="TEntity"></typeparam>
         /// <returns></returns>
         DbSet<TEntity> GetDbSet<TEntity>() where TEntity : class;
+
+        /// <summary>
+        /// Returns whether or not the entity that satisfies this condition exists. 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        Task<bool> ExistsAsync<TEntity, TKey>(TKey id) where TEntity : class, IBaseEntity<TKey> where TKey : struct, IEquatable<TKey>;
     }
 }

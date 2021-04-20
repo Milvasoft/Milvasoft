@@ -3,10 +3,14 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Milvasoft.Helpers.DataAccess.Abstract;
 using Milvasoft.Helpers.DataAccess.Abstract.Entity;
+using Milvasoft.Helpers.DataAccess.Abstract.Entity.Auditing;
+using Milvasoft.Helpers.DataAccess.Concrete.Entity;
+using Milvasoft.Helpers.Extensions;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Reflection;
 using System.Threading.Tasks;
 
@@ -220,6 +224,45 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
         /// <typeparam name="TEntity"></typeparam>
         /// <returns></returns>
         public DbSet<TEntity> GetDbSet<TEntity>() where TEntity : class => _dbContext.Set<TEntity>();
+
+        /// <summary>
+        /// Returns whether or not the entity that satisfies this condition exists. 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public virtual async Task<bool> ExistsAsync<TEntity, TKey>(TKey id)
+             where TEntity : class, IBaseEntity<TKey>
+             where TKey : struct, IEquatable<TKey>
+        {
+            var mainCondition = CreateKeyEqualityExpression<TEntity, TKey>(id);
+
+            return await _dbContext.Set<TEntity>().SingleOrDefaultAsync(mainCondition).ConfigureAwait(false) != null;
+        }
+
+        private static Expression<Func<TEntity, bool>> CreateKeyEqualityExpression<TEntity, TKey>(TKey key, Expression<Func<TEntity, bool>> conditionExpression = null)
+             where TEntity : class, IBaseEntity<TKey>
+             where TKey : struct, IEquatable<TKey>
+        {
+            Expression<Func<TEntity, bool>> idCondition = i => i.Id.Equals(key);
+            var mainCondition = idCondition.Append(CreateIsDeletedFalseExpression<TEntity>(), ExpressionType.AndAlso);
+            return mainCondition.Append(conditionExpression, ExpressionType.AndAlso);
+        }
+
+        /// <summary>
+        /// Gets <b>entity => entity.IsDeleted == false</b> expression, if <typeparamref name="TEntity"/> is assignable from <see cref="FullAuditableEntity{TKey}"/>.
+        /// </summary>
+        /// <returns></returns>
+        private static Expression<Func<TEntity, bool>> CreateIsDeletedFalseExpression<TEntity>()
+        {
+            var entityType = typeof(TEntity);
+            if (typeof(ISoftDeletable).IsAssignableFrom(entityType))
+            {
+                var parameter = Expression.Parameter(entityType, "entity");
+                var filterExpression = Expression.Equal(Expression.Property(parameter, entityType.GetProperty(EntityPropertyNames.IsDeleted)), Expression.Constant(false, typeof(bool)));
+                return Expression.Lambda<Func<TEntity, bool>>(filterExpression, parameter);
+            }
+            else return null;
+        }
 
     }
 }
