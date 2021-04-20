@@ -1,4 +1,6 @@
-﻿using Milvasoft.Helpers.DataAccess.Abstract;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
+using Milvasoft.Helpers.DataAccess.Abstract;
 using Milvasoft.Helpers.DataAccess.IncludeLibrary;
 using Milvasoft.Helpers.Models;
 using Milvasoft.SampleAPI.Data;
@@ -23,19 +25,25 @@ namespace Milvasoft.SampleAPI.Services.Concrete
     public class AnnouncementService : IAnnouncementService
     {
         private readonly IBaseRepository<Announcement, Guid, EducationAppDbContext> _announcementRepository;
-
+        private readonly UserManager<AppUser> _userManager;
+        private readonly IHttpContextAccessor _httpContextAccessor;
         /// <summary>
         /// Performs constructor injection for repository interfaces used in this service.
         /// </summary>
         /// <param name="announcementRepository"></param>
-        public AnnouncementService(IBaseRepository<Announcement, Guid, EducationAppDbContext> announcementRepository)
+        /// <param name="httpContextAccessor"></param>
+        /// <param name="userManager"></param>
+        public AnnouncementService(IBaseRepository<Announcement, Guid, EducationAppDbContext> announcementRepository, UserManager<AppUser> userManager, IHttpContextAccessor httpContextAccessor)
         {
             _announcementRepository = announcementRepository;
+            _httpContextAccessor = httpContextAccessor ;
+            _userManager = userManager;
         }
 
         /// <summary>
         /// Get all announcement for student.
         /// </summary>
+        /// <param name="pagiantionParams">Filter object.</param>
         /// <returns></returns>
         public async Task<PaginationDTO<AnnouncementForStudentDTO>> GetAnnouncementForStudentAsync(PaginationParamsWithSpec<AnnouncementSpec> pagiantionParams)
         {
@@ -58,7 +66,8 @@ namespace Milvasoft.SampleAPI.Services.Concrete
                     Description = announcement.Description,
                     PublisherMentor = announcement.PublisherMentor.CheckObject(i => new MentorDTO
                     {
-                        Id = i.Id
+                        Id = i.Id,
+                        Name=i.Name
                     })
                 })),
                 PageCount = pageCount,
@@ -215,6 +224,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// <returns></returns>
         public async Task AddAnnouncementAsync(AddAnnouncementDTO addAnnouncementDTO)
         {
+
             var newAnnnouncement = new Announcement
             {
                 Title = addAnnouncementDTO.Title,
@@ -242,18 +252,6 @@ namespace Milvasoft.SampleAPI.Services.Concrete
             toBeUpdatedAnnouncement.IsFixed = updateAnnouncementDTO.IsFixed;
 
             await _announcementRepository.UpdateAsync(toBeUpdatedAnnouncement).ConfigureAwait(false);
-        }
-
-        /// <summary>
-        /// Delete announcement.
-        /// </summary>
-        /// <param name="announcementId"></param>
-        /// <returns></returns>
-        public async Task DeleteAnnouncementAsync(Guid announcementId)
-        {
-            var deletedAnnouncement = await _announcementRepository.GetByIdAsync(announcementId).ConfigureAwait(false);
-
-            await _announcementRepository.DeleteAsync(deletedAnnouncement).ConfigureAwait(false);
         }
 
         /// <summary>

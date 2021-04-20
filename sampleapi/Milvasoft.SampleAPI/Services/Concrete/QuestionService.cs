@@ -162,7 +162,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         }
 
         /// <summary>
-        /// Get student for admin.
+        /// Get question for admin by <paramref name="questionId"/>.
         /// </summary>
         /// <param name="questionId"></param>
         /// <returns></returns>
@@ -199,7 +199,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         }
 
         /// <summary>
-        /// Get student for mentor.
+        /// Get question for mentor by <paramref name="questionId"/>.
         /// </summary>
         /// <param name="questionId"></param>
         /// <returns></returns>
@@ -233,7 +233,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         }
 
         /// <summary>
-        /// Get student for student.
+        /// Get question for student by <paramref name="questionId"/>.
         /// </summary>
         /// <param name="questionId"></param>
         /// <returns></returns>
@@ -297,7 +297,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         }
 
         /// <summary>
-        /// Delete students.
+        /// Delete question by <paramref name="questionIds"/>.
         /// </summary>
         /// <param name="questionIds"></param>
         /// <returns></returns>

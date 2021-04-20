@@ -35,6 +35,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// </summary>
         /// <param name="studentRepository"></param>
         /// <param name="userManager"></param>
+        /// <param name="httpContextAccessor"></param>
         public StudentService(IBaseRepository<Student, Guid, EducationAppDbContext> studentRepository, UserManager<AppUser> userManager,IHttpContextAccessor httpContextAccessor)
         {
             _userManager = userManager;
@@ -43,11 +44,15 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         }
 
         /// <summary>
-        /// Get students for admin.
+        /// It will filter students according to the parameters sent in <paramref name="pagiantionParams"/>
         /// </summary>
-        /// <returns></returns>
+        /// <exception cref="ArgumentNullException">If <paramref name="pagiantionParams"/> is null, it is thrown.</exception>
+        /// <param name="pagiantionParams">Filtering object.</param>
+        /// <returns>Student information that can be seen by admin.</returns>
         public async Task<PaginationDTO<StudentForAdminDTO>> GetStudentsForAdminAsync(PaginationParamsWithSpec<StudentSpec> pagiantionParams)
         {
+            pagiantionParams.ThrowIfParameterIsNull();
+
             Func<IIncludable<Student>, IIncludable> includes = i => i.Include(md => md.Mentor);
 
             var (students, pageCount, totalDataCount) = await _studentRepository.PreparePaginationDTO<IBaseRepository<Student, Guid, EducationAppDbContext>, Student, Guid>
@@ -85,11 +90,17 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         }
 
         /// <summary>
-        /// Get students for mentor.
+        /// Brings the students of the mentor who has entered.
         /// </summary>
-        /// <returns></returns>
-        public async Task<PaginationDTO<StudentForMentorDTO>> GetStudentsForMentorAsync(PaginationParamsWithSpec<StudentSpec> pagiantionParams)
+        ///  <exception cref="ArgumentNullException">If the mentor does not enter, it is thrown..</exception>
+        /// <param name="pagiantionParams">Filtering object.</param>
+        /// <returns>Brings the students for whom the mentor is responsible.</returns>
+        public async Task<PaginationDTO<StudentForMentorDTO>> GetStudentsForCurrentMentorAsync(PaginationParamsWithSpec<StudentSpec> pagiantionParams)
         {
+            var currentMentor = await _userManager.FindByNameAsync(_loggedUser).ConfigureAwait(false);
+
+            currentMentor.ThrowIfNullForGuidObject();
+
             Func<IIncludable<Student>, IIncludable> includes = i => i.Include(md => md.Mentor)
                                                                         .Include(assi => assi.OldAssignments);
 
@@ -101,31 +112,34 @@ namespace Milvasoft.SampleAPI.Services.Concrete
                                                                                                                 pagiantionParams.OrderByAscending = false,
                                                                                                                 pagiantionParams.Spec?.ToExpression(),
                                                                                                                 includes).ConfigureAwait(false);
-
+            var mentorStudents = from i in students
+                                 where i.Mentor.AppUser.UserName == currentMentor.Mentor.AppUser.UserName
+                                 select i;
+            
             return new PaginationDTO<StudentForMentorDTO>
             {
-                DTOList = students.CheckList(i => students.Select(student => new StudentForMentorDTO
+                DTOList = mentorStudents.CheckList(i => mentorStudents.Select(mentorStudents => new StudentForMentorDTO
                 {
-                    Id = student.Id,
-                    Name = student.Name,
-                    Surname = student.Surname,
-                    University = student.University,
-                    Age = student.Age,
-                    Dream = student.Dream,
-                    HomeAddress = student.HomeAddress,
-                    MentorThoughts = student.MentorThoughts,
-                    GraduationStatus = student.GraduationStatus,
-                    GraduationScore = student.GraduationScore,
-                    MentorGraduationThoughts = student.MentorGraduationThoughts,
-                    ProfessionId = student.ProfessionId,
-                    Mentor = student.Mentor.CheckObject(i => new MentorDTO
+                    Id = mentorStudents.Id,
+                    Name = mentorStudents.Name,
+                    Surname = mentorStudents.Surname,
+                    University = mentorStudents.University,
+                    Age = mentorStudents.Age,
+                    Dream = mentorStudents.Dream,
+                    HomeAddress = mentorStudents.HomeAddress,
+                    MentorThoughts = mentorStudents.MentorThoughts,
+                    GraduationStatus = mentorStudents.GraduationStatus,
+                    GraduationScore = mentorStudents.GraduationScore,
+                    MentorGraduationThoughts = mentorStudents.MentorGraduationThoughts,
+                    ProfessionId = mentorStudents.ProfessionId,
+                    Mentor = mentorStudents.Mentor.CheckObject(i => new MentorDTO
                     {
                         AppUserId = i.AppUserId,
                         Name = i.Name,
                         Id = i.Id
                     }),
-                    CurrentAssigmentDeliveryDate = student.CurrentAssigmentDeliveryDate,
-                    OldAssignments = student.OldAssignments.CheckList(f => student.OldAssignments?.Select(oa => new StudentAssigmentDTO
+                    CurrentAssigmentDeliveryDate = mentorStudents.CurrentAssigmentDeliveryDate,
+                    OldAssignments = mentorStudents.OldAssignments.CheckList(f => mentorStudents.OldAssignments?.Select(oa => new StudentAssigmentDTO
                     {
                         AssigmentId = oa.Assigment.Id,
                     }))
@@ -176,16 +190,18 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         }
 
         /// <summary>
-        /// Get student information for mentor by <paramref name="studentId"/>.
+        /// Brings the student who gave the <paramref name="studentId"/> of the logged in mentor..
         /// </summary>
         /// <param name="studentId"></param>
         /// <returns></returns>
         public async Task<StudentForMentorDTO> GetStudentForMentorAsync(Guid studentId)
         {
+            var currentMentor = await _userManager.FindByNameAsync(_loggedUser).ConfigureAwait(false);
+
             Func<IIncludable<Student>, IIncludable> includes = i => i.Include(md => md.Mentor)
                                                                      .Include(oa => oa.OldAssignments);
 
-            var student = await _studentRepository.GetByIdAsync(studentId, includes).ConfigureAwait(false);
+            var student = await _studentRepository.GetByIdAsync(studentId, includes,i=>i.Mentor==currentMentor.Mentor).ConfigureAwait(false);
 
             student.ThrowIfNullForGuidObject();
 
