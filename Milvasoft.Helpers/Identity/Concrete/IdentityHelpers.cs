@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Milvasoft.Helpers.Exceptions;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
@@ -18,7 +19,7 @@ namespace Milvasoft.Helpers.Identity.Concrete
         /// <param name="seperator"></param>
         /// <returns></returns>
         public static string DescriptionJoin(this IdentityResult result, char seperator = '~')
-            => string.Join(seperator, result.Errors.Select(i => i.Description));
+            => string.Join(seperator, result.Errors?.Select(i => i.Description));
 
         /// <summary>
         /// Append joins <see cref="IdentityResult.Errors"/>.Description with <paramref name="seperator"/>.
@@ -27,8 +28,25 @@ namespace Milvasoft.Helpers.Identity.Concrete
         /// <param name="seperator"></param>
         /// <returns></returns>
         public static string DescriptionJoin(this IdentityResult result, string seperator)
-            => string.Join(seperator, result.Errors.Select(i => i.Description));
+            => string.Join(seperator, result.Errors?.Select(i => i.Description));
 
+        /// <summary>
+        /// Append joins <see cref="IdentityResult.Errors"/>.Description with <paramref name="seperator"/>.
+        /// </summary>
+        /// <param name="errorList"></param>
+        /// <param name="seperator"></param>
+        /// <returns></returns>
+        public static string DescriptionJoin(this List<IdentityError> errorList, char seperator = '~')
+            => string.Join(seperator, errorList?.Select(i => i.Description));
+
+        /// <summary>
+        /// Append joins <see cref="IdentityResult.Errors"/>.Description with <paramref name="seperator"/>.
+        /// </summary>
+        /// <param name="errorList"></param>
+        /// <param name="seperator"></param>
+        /// <returns></returns>
+        public static string DescriptionJoin(this List<IdentityError> errorList, string seperator)
+            => string.Join(seperator, errorList?.Select(i => i.Description));
 
         /// <summary>
         /// If <paramref name="result"/> is not succeeded throwns <see cref="MilvaUserFriendlyException"/>.
