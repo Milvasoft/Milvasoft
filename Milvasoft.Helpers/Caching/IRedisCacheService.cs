@@ -25,12 +25,6 @@ namespace Milvasoft.Helpers.Caching
         Task<bool> ConnectAsync();
 
         /// <summary>
-        /// Connects redis database if there is no connection. Otherwise this method does nothing.
-        /// </summary>
-        /// <returns></returns>
-        Task ConnectionRequireAsync();
-
-        /// <summary>
         /// Close all connections.
         /// If connection exists, closes the connection.
         /// If connection not exists, disposes client object.

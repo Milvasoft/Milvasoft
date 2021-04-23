@@ -49,16 +49,6 @@ namespace Milvasoft.Helpers.Caching
         }
 
         /// <summary>
-        /// Connects redis database if there is no connection. Otherwise this method does nothing.
-        /// </summary>
-        /// <returns></returns>
-        public async Task ConnectionRequireAsync()
-        {
-            if (!IsConnected())
-                _client = await ConnectionMultiplexer.ConnectAsync(_options).ConfigureAwait(false);
-        }
-
-        /// <summary>
         /// Close all connections.
         /// If connection exists, closes the connection.
         /// If connection not exists, disposes client object.
@@ -84,6 +74,7 @@ namespace Milvasoft.Helpers.Caching
         /// <returns></returns>
         public async Task<T> GetAsync<T>(string key) where T : class
         {
+            await CheckClientAndConnectIfNotAsync().ConfigureAwait(false);
             return ((string)await _client.GetDatabase().StringGetAsync(key)).ToObject<T>();
         }
 
@@ -95,6 +86,7 @@ namespace Milvasoft.Helpers.Caching
         /// <returns></returns>
         public async Task<string> GetAsync(string key)
         {
+            await CheckClientAndConnectIfNotAsync().ConfigureAwait(false);
             return await _client.GetDatabase().StringGetAsync(key);
         }
 
@@ -106,6 +98,7 @@ namespace Milvasoft.Helpers.Caching
         /// <returns></returns>
         public async Task<bool> SetAsync(string key, object value)
         {
+            await CheckClientAndConnectIfNotAsync().ConfigureAwait(false);
             return await _client.GetDatabase().StringSetAsync(key, value.ToJson());
         }
 
@@ -118,6 +111,7 @@ namespace Milvasoft.Helpers.Caching
         /// <returns></returns>
         public async Task<bool> SetAsync(string key, object value, TimeSpan? expiration)
         {
+            await CheckClientAndConnectIfNotAsync().ConfigureAwait(false);
             return await _client.GetDatabase().StringSetAsync(key, value.ToJson(), expiration);
         }
 
@@ -127,6 +121,7 @@ namespace Milvasoft.Helpers.Caching
         /// <param name="key"></param>
         public async Task<bool> RemoveAsync(string key)
         {
+            await CheckClientAndConnectIfNotAsync().ConfigureAwait(false);
             return await _client.GetDatabase().KeyDeleteAsync(key);
         }
 
@@ -149,6 +144,7 @@ namespace Milvasoft.Helpers.Caching
         /// <returns></returns>
         public async Task<bool> KeyExpireAsync(string key, TimeSpan expiration)
         {
+            await CheckClientAndConnectIfNotAsync().ConfigureAwait(false);
             return await _client.GetDatabase().KeyExpireAsync(key, expiration);
         }
 
@@ -160,6 +156,7 @@ namespace Milvasoft.Helpers.Caching
         /// <returns></returns>
         public async Task<bool> KeyExpireAsync(string key, DateTime? expiration)
         {
+            await CheckClientAndConnectIfNotAsync().ConfigureAwait(false);
             return await _client.GetDatabase().KeyExpireAsync(key, expiration);
         }
 
@@ -169,6 +166,7 @@ namespace Milvasoft.Helpers.Caching
         /// <returns></returns>
         public async Task FlushDatabaseAsync()
         {
+            await CheckClientAndConnectIfNotAsync().ConfigureAwait(false);
             await _client.GetServer(_client.GetEndPoints().FirstOrDefault()).FlushDatabaseAsync().ConfigureAwait(false);
         }
 
@@ -185,8 +183,7 @@ namespace Milvasoft.Helpers.Caching
         {
             try
             {
-                if (!IsConnected())
-                    await ConnectAsync().ConfigureAwait(false);
+                await CheckClientAndConnectIfNotAsync().ConfigureAwait(false);
 
                 if (IsConnected())
                 {
@@ -220,8 +217,7 @@ namespace Milvasoft.Helpers.Caching
         {
             try
             {
-                if (!IsConnected())
-                    await ConnectAsync().ConfigureAwait(false);
+                await CheckClientAndConnectIfNotAsync().ConfigureAwait(false);
 
                 if (IsConnected())
                 {
