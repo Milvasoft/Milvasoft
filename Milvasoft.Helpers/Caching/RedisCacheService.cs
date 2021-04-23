@@ -44,7 +44,6 @@ namespace Milvasoft.Helpers.Caching
         {
             if (!IsConnected())
                 _client = await ConnectionMultiplexer.ConnectAsync(_options).ConfigureAwait(false);
-
             return IsConnected();
         }
 
@@ -166,8 +165,27 @@ namespace Milvasoft.Helpers.Caching
         /// <returns></returns>
         public async Task FlushDatabaseAsync()
         {
-            await CheckClientAndConnectIfNotAsync().ConfigureAwait(false);
-            await _client.GetServer(_client.GetEndPoints().FirstOrDefault()).FlushDatabaseAsync().ConfigureAwait(false);
+            _options.AllowAdmin = true;
+
+            var client = await ConnectionMultiplexer.ConnectAsync(_options).ConfigureAwait(false);
+
+            try
+            {
+                if (client?.IsConnected ?? false)
+                    await client.GetServer(client.GetEndPoints().FirstOrDefault()).FlushDatabaseAsync().ConfigureAwait(false);
+            }
+            catch (Exception)
+            {
+                throw new MilvaUserFriendlyException("RedisError");
+            }
+            finally
+            {
+                _options.AllowAdmin = false;
+
+                await client.CloseAsync().ConfigureAwait(false);
+
+                client.Dispose();
+            }
         }
 
         /// <summary>
