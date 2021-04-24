@@ -4,7 +4,7 @@ using System.Collections.Generic;
 namespace Milvasoft.Helpers.Integration.Expo.PushNotification
 {
     /// <summary>
-    /// Model for expo push notification api send push notification.
+    /// Model for expo push notification api send push notification. Max <see cref="PushTo"/> count is 100.
     /// </summary>
     [JsonObject(MemberSerialization.OptIn)]
     public class PushTicketRequest

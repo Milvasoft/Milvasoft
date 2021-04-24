@@ -21,14 +21,10 @@ namespace Milvasoft.Helpers.DataAccess.Abstract.Entity
     /// </summary>
     /// <typeparam name="TKey"></typeparam>
     /// <typeparam name="TUserKey"></typeparam>
-    public interface ICreationAuditable<TUserKey, TKey> : IBaseEntity<TKey>, IHasCreator<TUserKey>
+    public interface ICreationAuditable<TUserKey, TKey> : ICreationAuditable<TKey>, IHasCreator<TUserKey>
         where TKey : struct, IEquatable<TKey>
         where TUserKey : struct, IEquatable<TUserKey>
     {
-        /// <summary>
-        /// Creation date of entity.
-        /// </summary>
-        public DateTime CreationDate { get; set; }
     }
 
     /// <summary>

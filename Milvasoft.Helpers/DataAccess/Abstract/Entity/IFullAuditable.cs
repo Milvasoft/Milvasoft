@@ -17,7 +17,7 @@ namespace Milvasoft.Helpers.DataAccess.Abstract.Entity
     /// </summary>
     /// <typeparam name="TKey"></typeparam>
     /// <typeparam name="TUserKey"></typeparam>
-    public interface IFullAuditable<TUserKey, TKey> : IAuditable<TKey>, ISoftDeletable, IHasDeleter<TUserKey>
+    public interface IFullAuditable<TUserKey, TKey> : IFullAuditable<TKey>, IHasDeleter<TUserKey>
         where TKey : struct, IEquatable<TKey>
         where TUserKey : struct, IEquatable<TUserKey>
     {

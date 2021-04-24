@@ -333,12 +333,6 @@
             </summary>
             <returns> Returns connected status. </returns>
         </member>
-        <member name="M:Milvasoft.Helpers.Caching.IRedisCacheService.ConnectionRequireAsync">
-            <summary>
-            Connects redis database if there is no connection. Otherwise this method does nothing.
-            </summary>
-            <returns></returns>
-        </member>
         <member name="M:Milvasoft.Helpers.Caching.IRedisCacheService.DisconnectAsync">
             <summary>
             Close all connections.
@@ -523,12 +517,6 @@
             Connects redis database if there is no connection. Otherwise this method does nothing.
             </summary>
             <returns> Returns connected status. </returns>
-        </member>
-        <member name="M:Milvasoft.Helpers.Caching.RedisCacheService.ConnectionRequireAsync">
-            <summary>
-            Connects redis database if there is no connection. Otherwise this method does nothing.
-            </summary>
-            <returns></returns>
         </member>
         <member name="M:Milvasoft.Helpers.Caching.RedisCacheService.DisconnectAsync">
             <summary>
@@ -957,11 +945,6 @@
             <typeparam name="TKey"></typeparam>
             <typeparam name="TUserKey"></typeparam>
         </member>
-        <member name="P:Milvasoft.Helpers.DataAccess.Abstract.Entity.IAuditable`2.LastModificationDate">
-            <summary>
-            Last modification date of entity.
-            </summary>
-        </member>
         <member name="T:Milvasoft.Helpers.DataAccess.Abstract.Entity.IAuditable`3">
             <summary>
             Adds navigation properties to <see cref="T:Milvasoft.Helpers.DataAccess.Abstract.Entity.IAuditable`1"/> interface for user.
@@ -1038,11 +1021,6 @@
             </summary>
             <typeparam name="TKey"></typeparam>
             <typeparam name="TUserKey"></typeparam>
-        </member>
-        <member name="P:Milvasoft.Helpers.DataAccess.Abstract.Entity.ICreationAuditable`2.CreationDate">
-            <summary>
-            Creation date of entity.
-            </summary>
         </member>
         <member name="T:Milvasoft.Helpers.DataAccess.Abstract.Entity.ICreationAuditable`3">
             <summary>
@@ -6442,6 +6420,22 @@
             <param name="seperator"></param>
             <returns></returns>
         </member>
+        <member name="M:Milvasoft.Helpers.Identity.Concrete.IdentityHelpers.DescriptionJoin(System.Collections.Generic.List{Microsoft.AspNetCore.Identity.IdentityError},System.Char)">
+            <summary>
+            Append joins <see cref="P:Microsoft.AspNetCore.Identity.IdentityResult.Errors"/>.Description with <paramref name="seperator"/>.
+            </summary>
+            <param name="errorList"></param>
+            <param name="seperator"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.Identity.Concrete.IdentityHelpers.DescriptionJoin(System.Collections.Generic.List{Microsoft.AspNetCore.Identity.IdentityError},System.String)">
+            <summary>
+            Append joins <see cref="P:Microsoft.AspNetCore.Identity.IdentityResult.Errors"/>.Description with <paramref name="seperator"/>.
+            </summary>
+            <param name="errorList"></param>
+            <param name="seperator"></param>
+            <returns></returns>
+        </member>
         <member name="M:Milvasoft.Helpers.Identity.Concrete.IdentityHelpers.ThrowErrorMessagesIfNotSuccess(Microsoft.AspNetCore.Identity.IdentityResult)">
             <summary>
             If <paramref name="result"/> is not succeeded throwns <see cref="T:Milvasoft.Helpers.Exceptions.MilvaUserFriendlyException"/>.
@@ -6862,7 +6856,7 @@
         </member>
         <member name="T:Milvasoft.Helpers.Integration.Expo.PushNotification.PushTicketRequest">
             <summary>
-            Model for expo push notification api send push notification.
+            Model for expo push notification api send push notification. Max <see cref="P:Milvasoft.Helpers.Integration.Expo.PushNotification.PushTicketRequest.PushTo"/> count is 100.
             </summary>
         </member>
         <member name="M:Milvasoft.Helpers.Integration.Expo.PushNotification.PushTicketRequest.#ctor(System.SByte)">
