@@ -336,13 +336,14 @@ namespace Milvasoft.SampleAPI.AppStartup
                     OnTokenValidated = (context) =>
                     {
                         if (string.IsNullOrEmpty(context.Principal.Identity.Name)
-                            || context.SecurityToken is not JwtSecurityToken accessToken
-                            || !SignedInUsers.SignedInUserTokens.ContainsKey(context.Principal.Identity.Name)
-                            || SignedInUsers.SignedInUserTokens[context.Principal.Identity.Name] != accessToken.RawData)
+                            || context.SecurityToken is not JwtSecurityToken accessToken)
+                            //|| !SignedInUsers.SignedInUserTokens.ContainsKey(context.Principal.Identity.Name)
+                            //|| SignedInUsers.SignedInUserTokens[context.Principal.Identity.Name] != accessToken.RawData)
                         {
                             var localizer = GetLocalizerInstance(context.HttpContext);
 
                             context.Fail(localizer["Unauthorized"]);
+                            ReturnResponse(context.HttpContext, "Unauthorized", MilvaStatusCodes.Status401Unauthorized);
                         }
 
                         return Task.CompletedTask;
