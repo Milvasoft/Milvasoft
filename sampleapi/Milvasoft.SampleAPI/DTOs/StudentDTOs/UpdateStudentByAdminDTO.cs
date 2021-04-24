@@ -1,14 +1,17 @@
 ﻿using Milvasoft.SampleAPI.Entity.Enum;
 using Milvasoft.SampleAPI.Utils.Attributes.ValidationAttributes;
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Milvasoft.SampleAPI.DTOs.StudentDTOs
 {
     /// <summary>
-    /// UpdateStudentDTO for update student operations.
+    /// DTO to be used when the student needs to be updated by the admin.
     /// </summary>
-    public class UpdateStudentDTO
-    { 
+    public class UpdateStudentByAdminDTO
+    {
         /// <summary>
         /// Student's name.
         /// </summary>
@@ -33,16 +36,14 @@ namespace Milvasoft.SampleAPI.DTOs.StudentDTOs
         public int Age { get; set; }
 
         /// <summary>
-        /// Dream of student.
+        /// Did the student sign the contract?
         /// </summary>
-        [OValidateString(2000)]
-        public string Dream { get; set; }
+        public bool IsConfidentialityAgreementSigned { get; set; }
 
         /// <summary>
-        /// Home adress of student.
+        /// Mentor ıd of student.
         /// </summary>
-        [OValidateString(2000)]
-        public string HomeAddress { get; set; }
-
+        [OValidateId]
+        public Guid MentorId { get; set; }
     }
 }

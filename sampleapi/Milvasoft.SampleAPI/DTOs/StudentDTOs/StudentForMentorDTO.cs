@@ -1,5 +1,6 @@
 ﻿using Milvasoft.Helpers.DataAccess.Concrete.Entity;
 using Milvasoft.SampleAPI.DTOs.MentorDTOs;
+using Milvasoft.SampleAPI.DTOs.StudentAssignmentDTOs;
 using Milvasoft.SampleAPI.Entity;
 using Milvasoft.SampleAPI.Entity.Enum;
 using Milvasoft.SampleAPI.Utils.Attributes.ValidationAttributes;
@@ -31,6 +32,11 @@ namespace Milvasoft.SampleAPI.DTOs.StudentDTOs
         /// </summary>
         [OValidateString(2, 200)]
         public string University { get; set; }
+
+        /// <summary>
+        /// The student's starting level of homework.
+        /// </summary>
+        public int Level { get; set; }
 
         /// <summary>
         /// Age of student.
@@ -92,6 +98,6 @@ namespace Milvasoft.SampleAPI.DTOs.StudentDTOs
         /// <summary>
         /// Old assignments of student.
         /// </summary>
-        public virtual List<StudentAssigmentDTO> OldAssignments { get; set; }
+        public virtual List<StudentAssignmentDTO> OldAssignments { get; set; }
     }
 }

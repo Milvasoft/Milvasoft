@@ -9,11 +9,6 @@ namespace Milvasoft.SampleAPI.DTOs.MentorDTOs
     public class UpdateMentorDTO
     {
         /// <summary>
-        /// Id of updated mentor.
-        /// </summary>
-        public Guid Id { get; set; }
-
-        /// <summary>
         /// Mentor name.
         /// </summary>
         [OValidateString(2, 100)]

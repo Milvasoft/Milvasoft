@@ -23,6 +23,11 @@ namespace Milvasoft.SampleAPI.DTOs.StudentDTOs
         public string Surname { get; set; }
 
         /// <summary>
+        /// The student's starting level of homework.
+        /// </summary>
+        public int Level { get; set; }
+
+        /// <summary>
         /// Student's university.
         /// </summary>
         [OValidateString(2, 200)]

@@ -1,12 +1,13 @@
 ﻿using Milvasoft.Helpers.DataAccess.Concrete.Entity;
 using Milvasoft.SampleAPI.DTOs.AssignmentDTOs;
+using Milvasoft.SampleAPI.DTOs.StudentDTOs;
 using Milvasoft.SampleAPI.Entity;
 using Milvasoft.SampleAPI.Entity.Enum;
 using Milvasoft.SampleAPI.Utils.Attributes.ValidationAttributes;
 using Milvasoft.SampleAPI.Utils.Swagger;
 using System;
 
-namespace Milvasoft.SampleAPI.DTOs.StudentDTOs
+namespace Milvasoft.SampleAPI.DTOs.StudentAssignmentDTOs
 {
     /// <summary>
     /// Student assginment relationship.
@@ -26,7 +27,6 @@ namespace Milvasoft.SampleAPI.DTOs.StudentDTOs
         [SwaggerExclude]
         public virtual StudentDTO Student { get; set; }
 
-
         /// <summary>
         /// Assignment id.
         /// </summary>
@@ -38,7 +38,6 @@ namespace Milvasoft.SampleAPI.DTOs.StudentDTOs
         /// </summary>
         [SwaggerExclude]
         public virtual AssignmentDTO Assigment { get; set; }
-
 
         /// <summary>
         /// Education status.
@@ -76,5 +75,20 @@ namespace Milvasoft.SampleAPI.DTOs.StudentDTOs
         /// Assignment finished date.
         /// </summary>
         public DateTime FinishedDate { get; set; }
+
+        /// <summary>
+        /// The additional time the student asks for the mentor.
+        /// </summary>
+        public int AdditionalTime { get; set; }
+
+        /// <summary>
+        /// An explanation of why the student is asking for additional time.
+        /// </summary>
+        public string AdditionalTimeDescription { get; set; }
+
+        /// <summary>
+        /// The status of the student's homework approved by the mentor.
+        /// </summary>
+        public bool IsActive { get; set; }
     }
 }

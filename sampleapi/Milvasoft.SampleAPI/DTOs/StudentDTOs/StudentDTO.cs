@@ -30,6 +30,11 @@ namespace Milvasoft.SampleAPI.DTOs.StudentDTOs
         public string Surname { get; set; }
 
         /// <summary>
+        /// The student's starting level of homework.
+        /// </summary>
+        public int Level { get; set; }
+
+        /// <summary>
         /// Student's university.
         /// </summary>
         [OValidateString(2, 200)]
@@ -123,6 +128,6 @@ namespace Milvasoft.SampleAPI.DTOs.StudentDTOs
         /// <summary>
         /// Old assignments of student.
         /// </summary>
-        public virtual List<StudentAssigmentDTO> OldAssignments { get; set; }
+        public virtual List<StudentAssigment> OldAssignments { get; set; }
     }
 }

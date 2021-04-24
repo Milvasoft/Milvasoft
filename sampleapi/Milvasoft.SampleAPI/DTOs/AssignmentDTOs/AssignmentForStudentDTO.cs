@@ -29,12 +29,6 @@ namespace Milvasoft.SampleAPI.DTOs.AssignmentDTOs
         public string RemarksToStudent { get; set; }
 
         /// <summary>
-        /// Remarks for mentor.
-        /// </summary>
-        [OValidateString(2000)]
-        public string RemarksToMentor { get; set; }
-
-        /// <summary>
         /// Difficulty level of the assignment.
         /// </summary>
         public int Level { get; set; }

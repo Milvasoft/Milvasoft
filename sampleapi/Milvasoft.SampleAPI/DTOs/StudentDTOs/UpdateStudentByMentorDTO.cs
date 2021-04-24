@@ -1,15 +1,17 @@
 ﻿using Milvasoft.SampleAPI.Entity.Enum;
 using Milvasoft.SampleAPI.Utils.Attributes.ValidationAttributes;
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Milvasoft.SampleAPI.DTOs.StudentDTOs
 {
     /// <summary>
-    /// AddStudentDTO for add student operations.
+    /// DTO to be used in cases where the student needs to be updated by the mentor.
     /// </summary>
-    public class AddStudentDTO
+    public class UpdateStudentByMentorDTO
     {
-
         /// <summary>
         /// Student's name.
         /// </summary>
@@ -23,24 +25,9 @@ namespace Milvasoft.SampleAPI.DTOs.StudentDTOs
         public string Surname { get; set; }
 
         /// <summary>
-        /// Username.
+        /// The student's starting level of homework.
         /// </summary>
-        public string UserName { get; set; }
-
-        /// <summary>
-        /// User password.
-        /// </summary>
-        public string Password { get; set; }
-
-        /// <summary>
-        /// User email.
-        /// </summary>
-        public string Email { get; set; }
-
-        /// <summary>
-        /// User Phone number.
-        /// </summary>
-        public string PhoneNumber { get; set; }
+        public int Level { get; set; }
 
         /// <summary>
         /// Student's university.
@@ -49,20 +36,9 @@ namespace Milvasoft.SampleAPI.DTOs.StudentDTOs
         public string University { get; set; }
 
         /// <summary>
-        /// The student's starting level of homework.
-        /// </summary>
-        public int Level { get; set; }
-
-        /// <summary>
         /// Age of student.
         /// </summary>
         public int Age { get; set; }
-
-        /// <summary>
-        /// Dream of student.
-        /// </summary>
-        [OValidateString(2000)]
-        public string Dream { get; set; }
 
         /// <summary>
         /// Home adress of student.
@@ -77,14 +53,14 @@ namespace Milvasoft.SampleAPI.DTOs.StudentDTOs
         public string MentorThoughts { get; set; }
 
         /// <summary>
-        /// Did the student sign the contract?
-        /// </summary>
-        public bool IsConfidentialityAgreementSigned { get; set; }
-
-        /// <summary>
         /// Education status of student.
         /// </summary>
         public EducationStatus GraduationStatus { get; set; }
+
+        /// <summary>
+        /// Due date of current assignment.
+        /// </summary>
+        public DateTime CurrentAssigmentDeliveryDate { get; set; }
 
         /// <summary>
         /// Gradution score of student.
@@ -102,12 +78,5 @@ namespace Milvasoft.SampleAPI.DTOs.StudentDTOs
         /// </summary>
         [OValidateId]
         public Guid ProfessionId { get; set; }
-
-        /// <summary>
-        /// Mentor ıd of student.
-        /// </summary>
-        [OValidateId]
-        public Guid MentorId { get; set; }
-
     }
 }
