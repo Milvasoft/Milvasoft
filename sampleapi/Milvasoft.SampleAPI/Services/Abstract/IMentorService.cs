@@ -35,16 +35,17 @@ namespace Milvasoft.SampleAPI.Services.Abstract
         /// <summary>
         /// Add assignment to database.
         /// </summary>
-        /// <param name="educationDTO"></param>
+        /// <param name="addMentorDTO"></param>
         /// <returns></returns>
-        Task AddMentorAsync(AddMentorDTO educationDTO);
+        Task AddMentorAsync(AddMentorDTO addMentorDTO);
 
         /// <summary>
         /// Updates assignment in database.
         /// </summary>
-        /// <param name="educationDTO"></param>
+        /// <param name="updateMentorDTO"></param>
+        /// <param name="Id"></param>
         /// <returns></returns>
-        Task UpdateMentorAsync(UpdateMentorDTO educationDTO);
+        Task UpdateMentorByAdminAsync(UpdateMentorDTO updateMentorDTO,Guid Id);
 
         /// <summary>
         /// The mentor can update himself.

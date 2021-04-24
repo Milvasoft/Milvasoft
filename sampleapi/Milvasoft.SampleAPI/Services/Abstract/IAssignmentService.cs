@@ -13,6 +13,7 @@ namespace Milvasoft.SampleAPI.Services.Abstract
     /// </summary>
     public interface IAssignmentService
     {
+        #region CRUP Operations
         /// <summary>
         /// Get all assignment for student from database.
         /// </summary>
@@ -72,5 +73,12 @@ namespace Milvasoft.SampleAPI.Services.Abstract
         /// <param name="ids"></param>
         /// <returns></returns>
         Task DeleteAssignmentAsync(List<Guid> ids);
+        #endregion
+
+        /// <summary>
+        /// Brings homework suitable for the student's level.
+        /// </summary>
+        /// <returns></returns>
+        Task<AssignmentForStudentDTO> GetAvaibleAssignmentForCurrentStudent();
     }
 }

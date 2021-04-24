@@ -1,8 +1,12 @@
-﻿using Milvasoft.Helpers.DataAccess.Abstract;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
+using Milvasoft.Helpers.DataAccess.Abstract;
 using Milvasoft.Helpers.Models;
 using Milvasoft.SampleAPI.Data;
 using Milvasoft.SampleAPI.DTOs;
 using Milvasoft.SampleAPI.DTOs.AssignmentDTOs;
+using Milvasoft.SampleAPI.DTOs.StudentAssignmentDTOs;
+using Milvasoft.SampleAPI.DTOs.StudentDTOs;
 using Milvasoft.SampleAPI.Entity;
 using Milvasoft.SampleAPI.Services.Abstract;
 using Milvasoft.SampleAPI.Spec;
@@ -20,14 +24,21 @@ namespace Milvasoft.SampleAPI.Services.Concrete
     /// </summary>
     public class AssignmentService : IAssignmentService
     {
+        private readonly string _loggedUser;
+        private readonly UserManager<AppUser> _userManager;
         private readonly IBaseRepository<Assignment, Guid, EducationAppDbContext> _assignmentRepository;
+        private readonly IBaseRepository<StudentAssigment, Guid, EducationAppDbContext> _stuudentAssignmentRepository;
+
 
         /// <summary>
         /// Performs constructor injection for repository interfaces used in this service.
         /// </summary>
         /// <param name="assignmentRepository"></param>
-        public AssignmentService(IBaseRepository<Assignment, Guid, EducationAppDbContext> assignmentRepository)
+        public AssignmentService(IBaseRepository<Assignment, Guid, EducationAppDbContext> assignmentRepository, UserManager<AppUser> userManager, IHttpContextAccessor httpContextAccessor, IBaseRepository<StudentAssigment, Guid, EducationAppDbContext> studentAssignmentRepository)
         {
+            _stuudentAssignmentRepository = studentAssignmentRepository;
+            _userManager = userManager;
+            _loggedUser = httpContextAccessor.HttpContext.User.Identity.Name;
             _assignmentRepository = assignmentRepository;
         }
 
@@ -52,7 +63,6 @@ namespace Milvasoft.SampleAPI.Services.Concrete
                     Title = assignment.Title,
                     Description = assignment.Description,
                     RemarksToStudent = assignment.RemarksToStudent,
-                    RemarksToMentor = assignment.RemarksToMentor,
                     Level = assignment.Level,
                     Rules = assignment.Rules,
                     MaxDeliveryDay = assignment.MaxDeliveryDay,
@@ -147,7 +157,6 @@ namespace Milvasoft.SampleAPI.Services.Concrete
                 Title = assignment.Title,
                 Description = assignment.Description,
                 RemarksToStudent = assignment.RemarksToStudent,
-                RemarksToMentor = assignment.RemarksToMentor,
                 Level = assignment.Level,
                 Rules = assignment.Rules,
                 MaxDeliveryDay = assignment.MaxDeliveryDay,
@@ -260,18 +269,6 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         }
 
         /// <summary>
-        /// Delete assignment.
-        /// </summary>
-        /// <param name="assignementId"></param>
-        /// <returns></returns>
-        public async Task DeleteEntityAsync(Guid assignementId)
-        {
-            var deletedAssignment = await _assignmentRepository.GetByIdAsync(assignementId).ConfigureAwait(false);
-
-            await _assignmentRepository.DeleteAsync(deletedAssignment);
-        }
-
-        /// <summary>
         /// Delete assignments by <paramref name="assignmentIds"/>
         /// </summary>
         /// <param name="assignmentIds"></param>
@@ -281,5 +278,64 @@ namespace Milvasoft.SampleAPI.Services.Concrete
             var assignments = await _assignmentRepository.GetAllAsync(i => assignmentIds.Select(p => p).Contains(i.Id)).ConfigureAwait(false);
             await _assignmentRepository.DeleteAsync(assignments).ConfigureAwait(false);
         }
+
+        /// <summary>
+        /// Brings homework suitable for the student's level.
+        /// </summary>
+        /// <returns> Returns the appropriate assignment to the student.</returns>
+        public async Task<AssignmentForStudentDTO> GetAvaibleAssignmentForCurrentStudent()
+        {
+            var currentStudent = await _userManager.FindByNameAsync(_loggedUser).ConfigureAwait(false);
+
+            currentStudent.Student.ThrowIfNullForGuidObject("User is not student.");
+
+            int level = currentStudent.Student.Level;
+
+            Guid professionId = currentStudent.Student.ProfessionId;
+
+            var assignment = await _assignmentRepository.GetFirstOrDefaultAsync(i => i.Level == level && i.ProfessionId == professionId).ConfigureAwait(false);
+
+            return new AssignmentForStudentDTO
+            {
+                Id = assignment.Id,
+                Title = assignment.Title,
+                Description = assignment.Description,
+                RemarksToStudent = assignment.RemarksToStudent,
+                Level = assignment.Level,
+                Rules = assignment.Rules,
+                MaxDeliveryDay = assignment.MaxDeliveryDay,
+                ProfessionId = assignment.ProfessionId
+            };
+        }
+
+        /// <summary>
+        ///  The student takes the next assignment.
+        /// </summary>
+        /// <param name="Id"></param>
+        /// <param name="newAssignment"></param>
+        /// <returns></returns>
+        public async Task TakeAssignment(Guid Id,AddStudentAssignmentDTO newAssignment)
+        {
+            var currentStudent = await _userManager.FindByNameAsync(_loggedUser).ConfigureAwait(false);
+
+            currentStudent.Student.ThrowIfNullForGuidObject("User is not student.");
+
+            var toBeTakeAssignment = await _assignmentRepository.GetByIdAsync(Id).ConfigureAwait(false);
+
+            toBeTakeAssignment.ThrowIfNullForGuidObject();
+
+            var studentAssignment = new StudentAssigment
+            {
+                IsActive = false,
+                AssigmentId = toBeTakeAssignment.Id,
+                StudentId = currentStudent.Student.Id,
+                AdditionalTime=newAssignment.AdditionalTime,
+                AdditionalTimeDescription= newAssignment.AdditionalTimeDescription
+            };
+
+            await _stuudentAssignmentRepository.AddAsync(studentAssignment).ConfigureAwait(false);
+        }
+
+        
     }
 }

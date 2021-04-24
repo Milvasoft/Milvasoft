@@ -27,6 +27,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
     /// </summary>
     public class MentorService : IMentorService
     {
+        string userName;
         private readonly UserManager<AppUser> _userManager;
         private readonly IBaseRepository<Mentor, Guid, EducationAppDbContext> _mentorRepository;
         private readonly IHttpContextAccessor _httpContextAccessor;
@@ -39,7 +40,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// <param name="httpContextAccessor"
         public MentorService(IBaseRepository<Mentor, Guid, EducationAppDbContext> mentorRepository, UserManager<AppUser> userManager, IHttpContextAccessor httpContextAccessor)
         {
-            _httpContextAccessor = httpContextAccessor;
+            userName=httpContextAccessor.HttpContext.User.Identity.Name;
             _userManager = userManager;
             _mentorRepository = mentorRepository;
         }
@@ -135,7 +136,6 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// <returns></returns>
         public async Task<MentorForMentorDTO> GetCurrentUserProfile()
         {
-            var userName = _httpContextAccessor.HttpContext.User.Identity.Name;
             Func<IIncludable<Mentor>, IIncludable> includes = i => i.Include(p => p.Students)
                                                                     .Include(p => p.Professions)
                                                                     .Include(p => p.PublishedAnnouncements);
@@ -143,7 +143,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
 
             var mentor = await _mentorRepository.GetFirstOrDefaultAsync(includes, p => p.AppUser.UserName == userName).ConfigureAwait(false);
 
-            mentor.ThrowIfNullForGuidObject("CannotGetSignedInUserInfo");
+            
 
             return new MentorForMentorDTO
             {
@@ -213,16 +213,18 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// Updates single mentor which that equals <paramref name="updateMentorDTO"/> in repository by <paramref name="updateMentorDTO"/>'s properties.
         /// </summary>
         /// <param name="updateMentorDTO">Mentor to be updated.</param>
+        /// <param name="Id">Id of the to be updated mentor.</param>
         /// <returns></returns>
-        public async Task UpdateMentorAsync(UpdateMentorDTO updateMentorDTO)
+        public async Task UpdateMentorByAdminAsync(UpdateMentorDTO updateMentorDTO,Guid Id)
         {
-            var toBeUpdatedMentor = await _mentorRepository.GetByIdAsync(updateMentorDTO.Id).ConfigureAwait(false);
+            var toBeUpdatedMentor = await _mentorRepository.GetByIdAsync(Id).ConfigureAwait(false);
 
             toBeUpdatedMentor.ThrowIfNullForGuidObject();
 
             toBeUpdatedMentor.Name = updateMentorDTO.Name;
 
             toBeUpdatedMentor.Surname = updateMentorDTO.Surname;
+
 
             await _mentorRepository.UpdateAsync(toBeUpdatedMentor).ConfigureAwait(false);
         }

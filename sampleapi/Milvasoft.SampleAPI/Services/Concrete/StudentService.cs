@@ -6,7 +6,9 @@ using Milvasoft.Helpers.Exceptions;
 using Milvasoft.Helpers.Models;
 using Milvasoft.SampleAPI.Data;
 using Milvasoft.SampleAPI.DTOs;
+using Milvasoft.SampleAPI.DTOs.AssignmentDTOs;
 using Milvasoft.SampleAPI.DTOs.MentorDTOs;
+using Milvasoft.SampleAPI.DTOs.StudentAssignmentDTOs;
 using Milvasoft.SampleAPI.DTOs.StudentDTOs;
 using Milvasoft.SampleAPI.Entity;
 using Milvasoft.SampleAPI.Services.Abstract;
@@ -139,7 +141,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
                         Id = i.Id
                     }),
                     CurrentAssigmentDeliveryDate = mentorStudents.CurrentAssigmentDeliveryDate,
-                    OldAssignments = mentorStudents.OldAssignments.CheckList(f => mentorStudents.OldAssignments?.Select(oa => new StudentAssigmentDTO
+                    OldAssignments = mentorStudents.OldAssignments.CheckList(f => mentorStudents.OldAssignments?.Select(oa => new StudentAssignmentDTO
                     {
                         AssigmentId = oa.Assigment.Id,
                     }))
@@ -223,7 +225,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
                     Id = student.MentorId
                 }),
                 CurrentAssigmentDeliveryDate = student.CurrentAssigmentDeliveryDate,
-                OldAssignments = student.OldAssignments.CheckList(f => student.OldAssignments?.Select(oa => new StudentAssigmentDTO
+                OldAssignments = student.OldAssignments.CheckList(f => student.OldAssignments?.Select(oa => new StudentAssignmentDTO
                 {
                     AssigmentId = oa.Assigment.Id,
                 }))
@@ -255,12 +257,13 @@ namespace Milvasoft.SampleAPI.Services.Concrete
                 ProfessionId = currentStudent.Student.ProfessionId,
                 Mentor = currentStudent.Student.Mentor.CheckObject(i => new MentorDTO
                 {
-                    Id = currentStudent.Student.MentorId
+                    Name=i.Name,
+                    Surname=i.Surname
                 }),
                 CurrentAssigmentDeliveryDate = currentStudent.Student.CurrentAssigmentDeliveryDate,
-                OldAssignments = currentStudent.Student.OldAssignments.CheckList(f => currentStudent.Student.OldAssignments?.Select(oa => new StudentAssigmentDTO
+                OldAssignments = currentStudent.Student.OldAssignments.CheckList(f => currentStudent.Student.OldAssignments?.Select(oa => new StudentAssignmentDTO
                 {
-                    AssigmentId = oa.Assigment.Id,
+                    AssigmentId = oa.Assigment.Id  
                 }))
             };
         }
@@ -304,27 +307,47 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         }
 
         /// <summary>
-        /// Updates single student which that equals <paramref name="updateStudentDTO"/> in repository by <paramref name="updateStudentDTO"/>'s properties.
+        /// Updates single student which that equals <paramref name="updateStudentDTO"/> in repository by <paramref name="updateStudentDTO"/>'s properties by mentor.
         /// </summary>
         /// <param name="updateStudentDTO">Student to be updated.</param>
+        /// <param name="Id">Id of student to be updated.</param>
         /// <returns></returns>
-        public async Task UpdateStudentAsync(UpdateStudentDTO updateStudentDTO)
+        public async Task UpdateStudentByAdminAsync(UpdateStudentByAdminDTO updateStudentDTO, Guid Id)
         {
-            var toBeUpdatedStudent = await _studentRepository.GetByIdAsync(updateStudentDTO.Id).ConfigureAwait(false);
+            var toBeUpdatedStudent = await _studentRepository.GetByIdAsync(Id).ConfigureAwait(false);
 
             toBeUpdatedStudent.Name = updateStudentDTO.Name;
             toBeUpdatedStudent.Surname = updateStudentDTO.Surname;
             toBeUpdatedStudent.University = updateStudentDTO.University;
             toBeUpdatedStudent.Age = updateStudentDTO.Age;
-            toBeUpdatedStudent.Dream = updateStudentDTO.Dream;
+            toBeUpdatedStudent.IsConfidentialityAgreementSigned = updateStudentDTO.IsConfidentialityAgreementSigned;
+            toBeUpdatedStudent.MentorId = updateStudentDTO.MentorId;
+
+            await _studentRepository.UpdateAsync(toBeUpdatedStudent).ConfigureAwait(false);
+        }
+
+        /// <summary>
+        /// Updates single student which that equals <paramref name="updateStudentDTO"/> in repository by <paramref name="updateStudentDTO"/>'s properties by mentor.
+        /// </summary>
+        /// <param name="updateStudentDTO">Student to be updated.</param>
+        /// <param name="Id">Id of student to be updated.</param>
+        /// <returns></returns>
+        public async Task UpdateStudentByMentorAsync(UpdateStudentByMentorDTO updateStudentDTO,Guid Id)
+        {
+            var toBeUpdatedStudent = await _studentRepository.GetByIdAsync(Id).ConfigureAwait(false);
+
+            toBeUpdatedStudent.Name = updateStudentDTO.Name;
+            toBeUpdatedStudent.Surname = updateStudentDTO.Surname;
+            toBeUpdatedStudent.Level = updateStudentDTO.Level;
+            toBeUpdatedStudent.University = updateStudentDTO.University;
+            toBeUpdatedStudent.Age = updateStudentDTO.Age;
             toBeUpdatedStudent.HomeAddress = updateStudentDTO.HomeAddress;
             toBeUpdatedStudent.MentorThoughts = updateStudentDTO.MentorThoughts;
-            toBeUpdatedStudent.IsConfidentialityAgreementSigned = updateStudentDTO.IsConfidentialityAgreementSigned;
             toBeUpdatedStudent.GraduationStatus = updateStudentDTO.GraduationStatus;
+            toBeUpdatedStudent.CurrentAssigmentDeliveryDate = updateStudentDTO.CurrentAssigmentDeliveryDate;
             toBeUpdatedStudent.GraduationScore = updateStudentDTO.GraduationScore;
             toBeUpdatedStudent.MentorGraduationThoughts = updateStudentDTO.MentorGraduationThoughts;
             toBeUpdatedStudent.ProfessionId = updateStudentDTO.ProfessionId;
-            toBeUpdatedStudent.MentorId = updateStudentDTO.MentorId;
 
             await _studentRepository.UpdateAsync(toBeUpdatedStudent).ConfigureAwait(false);
         }
@@ -340,7 +363,8 @@ namespace Milvasoft.SampleAPI.Services.Concrete
 
             currentStudent.Student.Name = updateStudentDTO.Name;
             currentStudent.Student.Surname = updateStudentDTO.Surname;
-            currentStudent.Student.ProfessionId = updateStudentDTO.ProfessionId;
+            currentStudent.Student.University = updateStudentDTO.University;
+            currentStudent.Student.Age = updateStudentDTO.Age;
             currentStudent.Student.Dream = updateStudentDTO.Dream;
             currentStudent.Student.HomeAddress = updateStudentDTO.HomeAddress;
 
@@ -358,5 +382,9 @@ namespace Milvasoft.SampleAPI.Services.Concrete
 
             await _studentRepository.DeleteAsync(deletedStudents).ConfigureAwait(false);
         }
+
+
+
+
     }
 }
