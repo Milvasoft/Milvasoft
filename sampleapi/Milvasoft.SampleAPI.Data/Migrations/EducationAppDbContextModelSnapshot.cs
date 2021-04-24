@@ -630,6 +630,9 @@ namespace Milvasoft.SampleAPI.Data.Migrations
                     b.Property<Guid?>("LastModifierUserId")
                         .HasColumnType("uuid");
 
+                    b.Property<int>("Level")
+                        .HasColumnType("integer");
+
                     b.Property<string>("MentorGraduationThoughts")
                         .HasColumnType("text");
 
@@ -663,11 +666,17 @@ namespace Milvasoft.SampleAPI.Data.Migrations
                     b.ToTable("Students");
                 });
 
-            modelBuilder.Entity("Milvasoft.SampleAPI.Entity.StudentAssigmentDTO", b =>
+            modelBuilder.Entity("Milvasoft.SampleAPI.Entity.StudentAssigment", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
+
+                    b.Property<int>("AdditionalTime")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("AdditionalTimeDescription")
+                        .HasColumnType("text");
 
                     b.Property<string>("AssigmentFilePath")
                         .HasColumnType("text");
@@ -689,6 +698,9 @@ namespace Milvasoft.SampleAPI.Data.Migrations
 
                     b.Property<DateTime>("FinishedDate")
                         .HasColumnType("timestamp without time zone");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("boolean");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("boolean");
@@ -1094,7 +1106,7 @@ namespace Milvasoft.SampleAPI.Data.Migrations
                     b.Navigation("Profession");
                 });
 
-            modelBuilder.Entity("Milvasoft.SampleAPI.Entity.StudentAssigmentDTO", b =>
+            modelBuilder.Entity("Milvasoft.SampleAPI.Entity.StudentAssigment", b =>
                 {
                     b.HasOne("Milvasoft.SampleAPI.Entity.Assignment", "Assigment")
                         .WithMany()

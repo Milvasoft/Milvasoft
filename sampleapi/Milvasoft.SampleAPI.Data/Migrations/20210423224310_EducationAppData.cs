@@ -1,10 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
-using System;
 
 namespace Milvasoft.SampleAPI.Data.Migrations
 {
-    public partial class InitialCreate : Migration
+    public partial class EducationAppData : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -353,6 +353,7 @@ namespace Milvasoft.SampleAPI.Data.Migrations
                     Name = table.Column<string>(type: "text", nullable: true),
                     Surname = table.Column<string>(type: "text", nullable: true),
                     University = table.Column<string>(type: "text", nullable: true),
+                    Level = table.Column<int>(type: "integer", nullable: false),
                     Age = table.Column<int>(type: "integer", nullable: false),
                     Dream = table.Column<string>(type: "text", nullable: true),
                     HomeAddress = table.Column<string>(type: "text", nullable: true),
@@ -554,6 +555,9 @@ namespace Milvasoft.SampleAPI.Data.Migrations
                     ShouldDeliveryDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
                     StartedDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
                     FinishedDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    AdditionalTime = table.Column<int>(type: "integer", nullable: false),
+                    AdditionalTimeDescription = table.Column<string>(type: "text", nullable: true),
+                    IsActive = table.Column<bool>(type: "boolean", nullable: false),
                     CreationDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
                     CreatorUserId = table.Column<Guid>(type: "uuid", nullable: true),
                     LastModificationDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
