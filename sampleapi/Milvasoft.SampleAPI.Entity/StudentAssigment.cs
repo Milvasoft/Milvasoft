@@ -7,7 +7,7 @@ namespace Milvasoft.SampleAPI.Entity
     /// <summary>
     /// Student assginment relationship.
     /// </summary>
-    public class StudentAssigmentDTO : EducationEntityBase
+    public class StudentAssigment : EducationEntityBase
     {
         /// <summary>
         /// Student id.
@@ -63,5 +63,20 @@ namespace Milvasoft.SampleAPI.Entity
         /// Assignment finished date.
         /// </summary>
         public DateTime FinishedDate { get; set; }
+
+        /// <summary>
+        /// The additional time the student asks for the mentor.
+        /// </summary>
+        public int AdditionalTime { get; set; }
+
+        /// <summary>
+        /// An explanation of why the student is asking for additional time.
+        /// </summary>
+        public string AdditionalTimeDescription { get; set; }
+
+        /// <summary>
+        /// The status of the student's homework approved by the mentor.
+        /// </summary>
+        public bool IsActive { get; set; }
     }
 }

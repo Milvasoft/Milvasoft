@@ -28,6 +28,11 @@ namespace Milvasoft.SampleAPI.Entity
         public string University { get; set; }
 
         /// <summary>
+        /// The student's starting level of homework.
+        /// </summary>
+        public int Level { get; set; }
+
+        /// <summary>
         /// Age of student.
         /// </summary>
         public int Age { get; set; }
@@ -105,7 +110,7 @@ namespace Milvasoft.SampleAPI.Entity
         /// <summary>
         /// Old assignments of student.
         /// </summary>
-        public virtual IEnumerable<StudentAssigmentDTO> OldAssignments { get; set; }
+        public virtual IEnumerable<StudentAssigment> OldAssignments { get; set; }
 
     }
 }
