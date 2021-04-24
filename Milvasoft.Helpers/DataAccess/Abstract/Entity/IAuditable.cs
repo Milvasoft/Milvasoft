@@ -21,14 +21,10 @@ namespace Milvasoft.Helpers.DataAccess.Abstract.Entity
     /// </summary>
     /// <typeparam name="TKey"></typeparam>
     /// <typeparam name="TUserKey"></typeparam>
-    public interface IAuditable<TUserKey, TKey> : ICreationAuditable<TKey>, IHasModifier<TUserKey>
+    public interface IAuditable<TUserKey, TKey> : IAuditable<TKey>, IHasModifier<TUserKey>
         where TKey : struct, IEquatable<TKey>
         where TUserKey : struct, IEquatable<TUserKey>
     {
-        /// <summary>
-        /// Last modification date of entity.
-        /// </summary>
-        DateTime? LastModificationDate { get; set; }
     }
 
     /// <summary>

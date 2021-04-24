@@ -945,11 +945,6 @@
             <typeparam name="TKey"></typeparam>
             <typeparam name="TUserKey"></typeparam>
         </member>
-        <member name="P:Milvasoft.Helpers.DataAccess.Abstract.Entity.IAuditable`2.LastModificationDate">
-            <summary>
-            Last modification date of entity.
-            </summary>
-        </member>
         <member name="T:Milvasoft.Helpers.DataAccess.Abstract.Entity.IAuditable`3">
             <summary>
             Adds navigation properties to <see cref="T:Milvasoft.Helpers.DataAccess.Abstract.Entity.IAuditable`1"/> interface for user.
@@ -1026,11 +1021,6 @@
             </summary>
             <typeparam name="TKey"></typeparam>
             <typeparam name="TUserKey"></typeparam>
-        </member>
-        <member name="P:Milvasoft.Helpers.DataAccess.Abstract.Entity.ICreationAuditable`2.CreationDate">
-            <summary>
-            Creation date of entity.
-            </summary>
         </member>
         <member name="T:Milvasoft.Helpers.DataAccess.Abstract.Entity.ICreationAuditable`3">
             <summary>
