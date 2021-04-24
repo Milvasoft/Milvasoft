@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Milvasoft.Helpers;
 using Milvasoft.SampleAPI.DTOs;
 using Milvasoft.SampleAPI.DTOs.StudentDTOs;
@@ -111,13 +112,33 @@ namespace Milvasoft.SampleAPI.Controllers
         /// </summary>
         /// <param name="updateStudent"></param>
         /// <returns></returns>
-       // [Authorize(Roles = "Admin")]
         [HttpPut("Student")]
-        public async Task<IActionResult> UpdateStudent([FromBody] UpdateStudentDTO updateStudent)
+        public async Task<IActionResult> UpdateCurrentStudent([FromBody] UpdateStudentDTO updateStudent)
         {
-            return await _studentService.UpdateStudentAsync(updateStudent).ConfigureAwait(false).GetObjectResponseAsync<UpdateStudentDTO>("Success").ConfigureAwait(false);
+            return await _studentService.UpdateCurrentStudentAsync(updateStudent).ConfigureAwait(false).GetObjectResponseAsync<UpdateStudentDTO>("Success").ConfigureAwait(false);
         }
-
+        /// <summary>
+        /// Update <paramref name="updateStudent"/> data.
+        /// </summary>
+        /// <param name="updateStudent"></param>
+        /// <param name="Id"></param>
+        /// <returns></returns>
+        [HttpPut("StudentbyMentor")]
+        public async Task<IActionResult> UpdateStudentbyMentor([FromBody] UpdateStudentByMentorDTO updateStudent, Guid Id)
+        {
+            return await _studentService.UpdateStudentByMentorAsync(updateStudent,Id).ConfigureAwait(false).GetObjectResponseAsync<UpdateStudentDTO>("Success").ConfigureAwait(false);
+        }
+        /// <summary>
+        /// Update <paramref name="updateStudent"/> data.
+        /// </summary>
+        /// <param name="updateStudent"></param>
+        /// <param name="Id"></param>
+        /// <returns></returns>
+        [HttpPut("StudentbyAdmin")]
+        public async Task<IActionResult> UpdateStudentbyAdmin([FromBody] UpdateStudentByAdminDTO updateStudent, Guid Id)
+        {
+            return await _studentService.UpdateStudentByAdminAsync(updateStudent,Id).ConfigureAwait(false).GetObjectResponseAsync<UpdateStudentDTO>("Success").ConfigureAwait(false);
+        }
 
         /// <summary>
         /// Delete professions data by <paramref name="ids"/>

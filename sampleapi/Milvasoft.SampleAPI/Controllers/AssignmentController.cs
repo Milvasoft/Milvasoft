@@ -10,13 +10,13 @@ using System.Threading.Tasks;
 
 namespace Milvasoft.SampleAPI.Controllers
 {
+    /// <summary>
+    /// Provided assignment operations.
+    /// </summary>
     [ApiController]
     [ApiVersion("1.0")]
     [ApiExplorerSettings(GroupName = "v1.0")]
     [Route("sampleapi/[controller]")]
-    /// <summary>
-    /// Provided assignment operations.
-    /// </summary>
     public class AssignmentController : Controller
     {
         private readonly IAssignmentService _assigmentService;
@@ -139,6 +139,18 @@ namespace Milvasoft.SampleAPI.Controllers
         public async Task<IActionResult> DeleteAssignment([FromBody] List<Guid> ids)
         {
             return await _assigmentService.DeleteAssignmentAsync(ids).ConfigureAwait(false).GetObjectResponseAsync<AssignmentDTO, Guid>(ids, "Success").ConfigureAwait(false);
+        }
+
+        /// <summary>
+        /// Get avaible assignment for log in user.
+        /// </summary>
+        /// <returns></returns>
+        [HttpPatch("GetAssignment")]
+        public async Task<IActionResult> GetAssignmentForCurrentUser()
+        {
+            var assignment = await _assigmentService.GetAvaibleAssignmentForCurrentStudent().ConfigureAwait(false);
+
+            return assignment.GetObjectResponse("Success");
         }
     }
 }

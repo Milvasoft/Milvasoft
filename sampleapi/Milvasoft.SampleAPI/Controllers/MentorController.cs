@@ -37,7 +37,7 @@ namespace Milvasoft.SampleAPI.Controllers
         /// <returns></returns>
         //[Authorize(Roles = "Admin")]
         [HttpPatch("Admin")]
-        public async Task<IActionResult> GetMentorsForAdmn([FromBody] PaginationParamsWithSpec<MentorSpec> paginationParams)
+        public async Task<IActionResult> GetMentorsForAdmin([FromBody] PaginationParamsWithSpec<MentorSpec> paginationParams)
         {
             var mentors = await _mentorService.GetMentorsForAdminAsync(paginationParams).ConfigureAwait(false);
             return mentors.GetObjectResponse("Success");
@@ -57,6 +57,10 @@ namespace Milvasoft.SampleAPI.Controllers
             return mentor.GetObjectResponse("Success");
         }
 
+        /// <summary>
+        /// It brings the information of the mentor logged in.
+        /// </summary>
+        /// <returns></returns>
         [HttpPatch("Mentor")]
         public async Task<IActionResult> GetCurrentUser()
         {
@@ -79,15 +83,27 @@ namespace Milvasoft.SampleAPI.Controllers
         }
 
         /// <summary>
-        /// Update <paramref name="updateMentor"/> data.
+        /// The mentor can be updated by admin with <paramref name="Id"/>
         /// </summary>
         /// <param name="updateMentor"></param>
+        /// <param name="Id"></param>
         /// <returns></returns>
        // [Authorize(Roles = "Admin")]
         [HttpPut("Mentor")]
-        public async Task<IActionResult> UpdateMentor([FromBody] UpdateMentorDTO updateMentor)
+        public async Task<IActionResult> UpdateMentorbyAdmin([FromBody] UpdateMentorDTO updateMentor,Guid Id)
         {
-            return await _mentorService.UpdateMentorAsync(updateMentor).ConfigureAwait(false).GetObjectResponseAsync<UpdateMentorDTO>("Success"); ;
+            return await _mentorService.UpdateMentorByAdminAsync(updateMentor,Id).ConfigureAwait(false).GetObjectResponseAsync<UpdateMentorDTO>("Success"); ;
+        }
+
+        /// <summary>
+        ///  It allows the logged in mentor to update his / her information.
+        /// </summary>
+        /// <param name="updateMentor"></param>
+        /// <returns></returns>
+        [HttpPut("CurrentMentor")]
+        public async Task<IActionResult> UpdateCurrentMentor([FromBody]UpdateMentorDTO updateMentor)
+        {
+            return await _mentorService.UpdateCurrentMentorAsync(updateMentor).ConfigureAwait(false).GetObjectResponseAsync<UpdateMentorDTO>("Success");
         }
 
         /// <summary>
