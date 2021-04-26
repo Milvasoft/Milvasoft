@@ -27,7 +27,6 @@ namespace Milvasoft.SampleAPI.Services.Concrete
     /// </summary>
     public class MentorService : IMentorService
     {
-        string userName;
         private readonly UserManager<AppUser> _userManager;
         private readonly IBaseRepository<Mentor, Guid, EducationAppDbContext> _mentorRepository;
         private readonly IHttpContextAccessor _httpContextAccessor;
@@ -37,10 +36,10 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// </summary>
         /// <param name="mentorRepository"></param>
         /// <param name="userManager"></param>
-        /// <param name="httpContextAccessor"
+        /// <param name="httpContextAccessor"></param>
         public MentorService(IBaseRepository<Mentor, Guid, EducationAppDbContext> mentorRepository, UserManager<AppUser> userManager, IHttpContextAccessor httpContextAccessor)
         {
-            userName=httpContextAccessor.HttpContext.User.Identity.Name;
+            _httpContextAccessor = httpContextAccessor;
             _userManager = userManager;
             _mentorRepository = mentorRepository;
         }
@@ -136,6 +135,8 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// <returns></returns>
         public async Task<MentorForMentorDTO> GetCurrentUserProfile()
         {
+            var userName = _httpContextAccessor.HttpContext.User.Identity.Name;
+
             Func<IIncludable<Mentor>, IIncludable> includes = i => i.Include(p => p.Students)
                                                                     .Include(p => p.Professions)
                                                                     .Include(p => p.PublishedAnnouncements);
