@@ -566,12 +566,6 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.SampleAPI.Controllers.StudentController.GetStudentForMentorbyId(System.Guid)">
-            <summary>
-            Gets the all filtered student datas for mentor.
-            </summary>
-            <returns></returns>
-        </member>
         <member name="M:Milvasoft.SampleAPI.Controllers.StudentController.GetCurrentUserProfile">
             <summary>
             Brings the information of the student who is logged in.
@@ -579,6 +573,12 @@
             <returns></returns>
         </member>
         <member name="M:Milvasoft.SampleAPI.Controllers.StudentController.GetStudentForAdminbyId(System.Guid)">
+            <summary>
+            Gets the all filtered student datas for mentor.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Controllers.StudentController.GetStudentForMentorbyId(System.Guid)">
              <summary>
              Gets the filtered student datas for admin.
              </summary>
@@ -3611,7 +3611,7 @@
             Student service.
             </summary>
         </member>
-        <member name="M:Milvasoft.SampleAPI.Services.Concrete.StudentService.#ctor(Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository{Milvasoft.SampleAPI.Entity.Student,System.Guid,Milvasoft.SampleAPI.Data.EducationAppDbContext},Microsoft.AspNetCore.Identity.UserManager{Milvasoft.SampleAPI.Entity.AppUser},Microsoft.AspNetCore.Http.IHttpContextAccessor)">
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.StudentService.#ctor(Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository{Milvasoft.SampleAPI.Entity.Student,System.Guid,Milvasoft.SampleAPI.Data.EducationAppDbContext},Microsoft.AspNetCore.Identity.UserManager{Milvasoft.SampleAPI.Entity.AppUser},Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository{Milvasoft.SampleAPI.Entity.Mentor,System.Guid,Milvasoft.SampleAPI.Data.EducationAppDbContext},Microsoft.AspNetCore.Http.IHttpContextAccessor)">
             <summary>
             Performs constructor injection for repository interfaces used in this service.
             </summary>

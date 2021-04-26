@@ -179,9 +179,9 @@ namespace Milvasoft.SampleAPI.Services.Concrete
 
             var isMentorInDb = (await _mentorRepository.GetAllAsync(i => i.AppUserId.Equals(userId))).Any();
 
-            //var isMentorInDb = (await _mentorRepository.GetAllAsync(i => i.AppUserId.Equals(userId))).Any();
+            var isStudentInDb = (await _studentRepository.GetAllAsync(i => i.AppUserId.Equals(userId))).Any();
 
-            var confirmedUser = isUserType == isMentorInDb ;
+            var confirmedUser = isUserType == isMentorInDb || isStudentInDb;
 
             if (!confirmedUser)
             {

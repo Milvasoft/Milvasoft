@@ -144,7 +144,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
 
             var mentor = await _mentorRepository.GetFirstOrDefaultAsync(includes, p => p.AppUser.UserName == userName).ConfigureAwait(false);
 
-            
+            mentor.ThrowIfParameterIsNull();
 
             return new MentorForMentorDTO
             {

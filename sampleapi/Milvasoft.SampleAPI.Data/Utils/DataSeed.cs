@@ -55,12 +55,10 @@ namespace Milvasoft.SampleAPI.Data.Utils
         {
             var testEntities = new List<Profession>(){
                 new Profession {
-                    Id=1.ToGuid(),
                     Name = "Backend"
                 },
                 new Profession {
-                    Name = "Frontend",
-                    Id=2.ToGuid()
+                    Name = "Frontend"
                 },
             };
             await InitializeDataAsync<Profession, Guid>(testEntities).ConfigureAwait(false);

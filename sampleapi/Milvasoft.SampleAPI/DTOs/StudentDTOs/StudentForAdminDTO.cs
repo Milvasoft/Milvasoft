@@ -84,6 +84,6 @@ namespace Milvasoft.SampleAPI.DTOs.StudentDTOs
         /// Mentor of student.
         /// </summary>
         [SwaggerExclude]
-        public virtual MentorDTO Mentor { get; set; }
+        public virtual MentorForAdminDTO Mentor { get; set; }
     }
 }
