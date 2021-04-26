@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Milvasoft.Helpers;
 using Milvasoft.Helpers.DataAccess.Abstract.Entity;
 using Milvasoft.Helpers.MultiTenancy.EntityBase;
 using Milvasoft.SampleAPI.Entity;
@@ -21,6 +22,7 @@ namespace Milvasoft.SampleAPI.Data.Utils
             await _dbContext.Database.MigrateAsync().ConfigureAwait(false);
             await InitializeTestEntities().ConfigureAwait(false);
             await InitializeProfession().ConfigureAwait(false);
+            //await InitializeMentor().ConfigureAwait(false);
         }
 
         private static async Task InitializeDataAsync<TEntity, TKey>(List<TEntity> entities) where TEntity : class, IBaseEntity<TKey> where TKey : struct, IEquatable<TKey>
@@ -53,13 +55,44 @@ namespace Milvasoft.SampleAPI.Data.Utils
         {
             var testEntities = new List<Profession>(){
                 new Profession {
+                    Id=1.ToGuid(),
                     Name = "Backend"
                 },
                 new Profession {
-                    Name = "Frontend"
+                    Name = "Frontend",
+                    Id=2.ToGuid()
                 },
             };
             await InitializeDataAsync<Profession, Guid>(testEntities).ConfigureAwait(false);
         }
+
+        /*private static async Task InitializeMentor()
+        {
+            var testEntities = new List<AppUser>()
+            {
+                new AppUser
+                {
+                    
+                    UserName="oguzhanbaran",
+                    Email="oguzhan.baran96@gmail.com",
+                    Mentor=new Mentor
+                    {
+                        Name="Oğuzhan",
+                        Surname="Baran",
+                        Id=1.ToGuid(),
+                        Professions=new List<MentorProfession>
+                        {
+                            new MentorProfession
+                            {
+                                ProfessionId=1.ToGuid()
+                            }
+                        },
+                    }
+
+                }
+
+            };
+            await InitializeDataAsync<AppUser, Guid>(testEntities).ConfigureAwait(false);
+        }*/
     }
 }
