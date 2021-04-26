@@ -18,120 +18,61 @@ using System.Threading.Tasks;
 
 namespace Milvasoft.SampleAPI.Controllers
 {
+    /// <summary>
+    /// The class in which user transactions are entered and exited
+    /// </summary>
     [ApiController]
     [ApiVersion("1.0")]
     [ApiExplorerSettings(GroupName = "v1.0")]
     [Route("sampleapi/[controller]")]
     public class AccountController : ControllerBase
     {
-        private readonly IAccountService _accountService;
         private readonly IStringLocalizer<SharedResource> _sharedLocalizer;
-        private readonly IRedisCacheService _cacheServer;
-
-        public AccountController(IAccountService accountService, IStringLocalizer<SharedResource> sharedLocalizer, IRedisCacheService cacheServer, EducationAppDbContext educationAppDbContext)
-        {
-            _accountService = accountService;
-            _sharedLocalizer = sharedLocalizer;
-            _cacheServer = cacheServer;
-        }
-
-        [HttpGet("Tenant")]
-        [AllowAnonymous]
-        public async Task<IActionResult> Get(TenantId tenantId)
-        {
-            return Ok();
-        }
-
-        [HttpGet("CacheDemo")]
-        [AllowAnonymous]
-        public async Task<IActionResult> Get()
-        {
-            await _cacheServer.ConnectAsync();
-
-            if (_cacheServer.IsConnected())
-            {
-                await _cacheServer.SetAsync("lemon", "lemonate").ConfigureAwait(false);
-
-                return Ok(await _cacheServer.GetAsync("lemon").ConfigureAwait(false));
-            }
-            else return Ok("Error when connecting redis server.");
-        }
+        private readonly IAccountService _accountService;
 
         /// <summary>
-        /// Sign up method for users.
+        /// Constructor of <c>AccountController</c>
         /// </summary>
-        /// 
-        /// <returns></returns>
-        /// <param name="signUpDTO"></param>
-        /// <returns></returns>
-        [HttpPost("SignUp")]
-        [AllowAnonymous]
-        [OValidationFilter]
-        public async Task<ActionResult> SignUpAsync([FromBody] SignUpDTO signUpDTO)
+        /// <param name="sharedLocalizer"></param>
+        /// <param name="accountService"></param>
+        public AccountController(IStringLocalizer<SharedResource> sharedLocalizer, IAccountService accountService)
         {
-            ObjectResponse<LoginResultDTO> response = new ObjectResponse<LoginResultDTO>();
+            _sharedLocalizer = sharedLocalizer;
+            _accountService = accountService;
 
-            response.Result = await _accountService.SignUpAsync(signUpDTO).ConfigureAwait(false);
-
-            if (!response.Result.ErrorMessages.IsNullOrEmpty())
-            {
-                var stringBuilder = new StringBuilder();
-
-                stringBuilder.AppendJoin(',', response.Result.ErrorMessages.Select(i => i.Description));
-
-                response.Message = stringBuilder.ToString();
-
-                //response.Message = string.Join("\r\n", response.Result.ErrorMessages.Select(m => m.Description));
-                response.StatusCode = MilvaStatusCodes.Status400BadRequest; //status kod sonradan degistirlebilir.
-                response.Success = false;
-            } //Bu kontroller cogalabilir. orn her hata kodu icin kendine ozel status kod yazilabilir.
-            else if (response.Result.Token == null)
-            {
-                response.Message = _sharedLocalizer["UnknownLoginProblemMessage"];
-                response.StatusCode = MilvaStatusCodes.Status400BadRequest;
-                response.Success = false;
-            }
-            else
-            {
-                response.Message = _sharedLocalizer["SuccessfullyLoginMessage"];
-                response.StatusCode = MilvaStatusCodes.Status200OK;
-                response.Success = true;
-            }
-            return Ok(response);
         }
 
+
         /// <summary>
-        /// Sign in method for customers. This endpoint is accessible for only customers.
+        /// Sign in method for personnels. This endpoint is accessible for any requests.
         /// </summary>
         /// 
         /// <remarks>
         /// <para><b>EN:</b> </para>
-        /// <para> Sign in method for customers. This endpoint is accessible for only customers. </para> 
+        /// <para>Sign in method for personnels. This endpoint is accessible for any requests.</para> 
         /// <br></br>
         /// <para><b>TR:</b></para>
-        /// <para> Müşteriler için giriş yapma işlemi. Bu endpoint sadece müşteriler için erişilebilirdir. </para>
+        /// <para> Personnels için oturum açma yöntemi. Bu bitiş noktası herhangi bir istek için erişilebilir.</para>
+        /// 
+        /// <para> BackendBoss </para>
+        /// <para> Ak+123456 </para>
         /// 
         /// </remarks>
         /// 
         /// <returns></returns>
         /// <param name="loginDTO"></param>
         /// <returns></returns>
-        [HttpPost("SignIn")]
+        [HttpPost("User/SignIn")]
         [AllowAnonymous]
-        [OValidateIdParameter(EntityName = "Customer")]
-        public async Task<ActionResult> SignInAsync(LoginDTO loginDTO)
+        [OValidationFilter]
+        public async Task<ActionResult> SignInPersonnelAsync([FromBody] LoginDTO loginDTO)
         {
-            ObjectResponse<LoginResultDTO> response = new ObjectResponse<LoginResultDTO>();
+            ObjectResponse<LoginResultDTO> response = new();
 
-            response.Result = await _accountService.SignInAsync(loginDTO).ConfigureAwait(false);
-
+            response.Result = await _accountService.SignInAsync(loginDTO, true).ConfigureAwait(false);
             if (!response.Result.ErrorMessages.IsNullOrEmpty())
             {
-                var stringBuilder = new StringBuilder();
-
-                stringBuilder.AppendJoin(',', response.Result.ErrorMessages.Select(i => i.Description));
-
-                response.Message = stringBuilder.ToString();
+                response.Message = string.Join('~', response.Result.ErrorMessages.Select(i => i.Description));
 
                 //response.Message = string.Join("\r\n", response.Result.ErrorMessages.Select(m => m.Description));
                 response.StatusCode = MilvaStatusCodes.Status400BadRequest; //status kod sonradan degistirlebilir.
@@ -153,45 +94,32 @@ namespace Milvasoft.SampleAPI.Controllers
         }
 
         /// <summary>
-        /// Sign out method for customers. This endpoint is accessible for only customers.
+        /// <para>Change personnel user password.</para>
         /// </summary>
-        /// 
-        /// <remarks>
-        /// <para><b>EN:</b> </para>
-        /// <para> Sign out method for customers. This endpoint is accessible for only customers. </para> 
-        /// <br></br>
-        /// <para><b>TR:</b></para>
-        /// <para> Müşteriler için çıkış işlemi. Bu endpoint sadece müşteriler için erişilebilirdir. </para>
-        /// 
-        /// </remarks>
+        /// <param name="personnelUpdateDTO"></param>
         /// <returns></returns>
-        [HttpGet("SignOut")]
-        public async Task<ActionResult> SignOutCustomerAsync()
+        [HttpPut("Personnel/UpdatePassword")]
+        [OValidationFilter]
+        public async Task<IActionResult> ChangePersonnelUserDatasAsync(ChangePassDTO personnelUpdateDTO)
         {
-            //try to get user from customers
-            var response = new ObjectResponse<IdentityResult>();
-            response.Result = await _accountService.SignOutAsync();
-
-            if (response.Result == null)
+            var response = new ObjectResponse<IdentityResult>
             {
-                response.StatusCode = MilvaStatusCodes.Status503ServiceUnavailable;
-                response.Message = _sharedLocalizer["AlreadyLoggedOutMessage"];
-                response.Success = false;
-            }
-            else if (response.Result.Succeeded)
+                Result = await _accountService.ChangePasswordAsync(personnelUpdateDTO).ConfigureAwait(false)
+            };
+
+            if (response.Result.Succeeded)
             {
                 response.StatusCode = MilvaStatusCodes.Status200OK;
-                response.Message = _sharedLocalizer["SuccessfullyLoguotMessage"];
                 response.Success = true;
+                response.Message = _sharedLocalizer["PersonnelSuccessfullyChangePassword"];
             }
             else
             {
                 response.StatusCode = MilvaStatusCodes.Status503ServiceUnavailable;
-                response.Message = _sharedLocalizer["UnknownLogoutProblemMessage"];
                 response.Success = false;
             }
+            response.Result = null;
             return Ok(response);
         }
-
     }
 }
