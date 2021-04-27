@@ -52,7 +52,7 @@ namespace Milvasoft.Helpers
         /// Creates order by key selector by <paramref name="orderByPropertyName"/>.
         /// </summary>
         /// 
-        /// <exception cref="ArgumentException"> Throwns when type of <typeparamref name="T"/>'s properties doesn't contain '<paramref name="orderByPropertyName"/>'. </exception>
+        /// <exception cref="MilvaDeveloperException"> Throwns when type of <typeparamref name="T"/>'s properties doesn't contain '<paramref name="orderByPropertyName"/>'. </exception>
         /// 
         /// <typeparam name="T"></typeparam>
         /// <param name="orderByPropertyName"></param>
@@ -62,12 +62,53 @@ namespace Milvasoft.Helpers
             var entityType = typeof(T);
 
             if (!PropertyExists<T>(orderByPropertyName))
-                throw new ArgumentException($"Type of {entityType.Name}'s properties doesn't contain '{orderByPropertyName}'.");
+                throw new MilvaDeveloperException($"Type of {entityType.Name}'s properties doesn't contain '{orderByPropertyName}'.");
 
             var parameterExpression = Expression.Parameter(entityType, "i");
+
             Expression orderByProperty = Expression.Property(parameterExpression, orderByPropertyName);
 
             return Expression.Lambda<Func<T, object>>(Expression.Convert(orderByProperty, typeof(object)), parameterExpression);
+        }
+
+        /// <summary>
+        /// Create property selector predicate.(e.g. i => i.User).
+        /// If <typeparamref name="T"/> doesn't contains <paramref name="propertyName"/> throwns <see cref="MilvaDeveloperException"/>
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <typeparam name="TPropertyType"></typeparam>
+        /// <param name="propertyName"></param>
+        /// <returns></returns>
+        private static Expression<Func<T, TPropertyType>> CreatePropertySelector<T, TPropertyType>(string propertyName)
+        {
+            var entityType = typeof(T);
+
+            if (!PropertyExists<T>(propertyName))
+                throw new MilvaDeveloperException($"Type of {entityType.Name}'s properties doesn't contain '{propertyName}'.");
+
+            var parameter = Expression.Parameter(entityType);
+
+            return Expression.Lambda<Func<T, TPropertyType>>(Expression.Property(parameter, propertyName), parameter);
+        }
+
+        /// <summary>
+        /// Create property selector predicate.(e.g. i => i.User).
+        /// If <typeparamref name="T"/> doesn't contains <paramref name="propertyName"/> returns null.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <typeparam name="TPropertyType"></typeparam>
+        /// <param name="propertyName"></param>
+        /// <returns></returns>
+        private static Expression<Func<T, TPropertyType>> CreateRequiredPropertySelector<T, TPropertyType>(string propertyName)
+        {
+            var entityType = typeof(T);
+
+            if (!PropertyExists<T>(propertyName))
+                return null;
+
+            var parameter = Expression.Parameter(entityType);
+
+            return Expression.Lambda<Func<T, TPropertyType>>(Expression.Property(parameter, propertyName), parameter);
         }
 
         /// <summary>

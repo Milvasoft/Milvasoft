@@ -863,7 +863,7 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
             var entityType = typeof(TReturn);
 
             if (!CommonHelper.PropertyExists<TReturn>(orderByPropertyName))
-                throw new ArgumentException($"Type of {entityType}'s properties doesn't contain '{orderByPropertyName}'.");
+                throw new MilvaDeveloperException($"Type of {entityType}'s properties doesn't contain '{orderByPropertyName}'.");
 
             var parameterExpression = Expression.Parameter(entityType, "i");
 
@@ -928,7 +928,7 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
             var entityType = typeof(TReturn);
 
             if (!CommonHelper.PropertyExists<TReturn>(orderByPropertyName))
-                throw new ArgumentException($"Type of {entityType}'s properties doesn't contain '{orderByPropertyName}'.");
+                throw new MilvaDeveloperException($"Type of {entityType}'s properties doesn't contain '{orderByPropertyName}'.");
 
             var parameterExpression = Expression.Parameter(entityType, "i");
 
@@ -986,7 +986,7 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
             var entityType = typeof(TEntity);
 
             if (!CommonHelper.PropertyExists<TEntity>(maxPropertyName))
-                throw new ArgumentException($"Type of {entityType}'s properties doesn't contain '{maxPropertyName}'.");
+                throw new MilvaDeveloperException($"Type of {entityType}'s properties doesn't contain '{maxPropertyName}'.");
 
             var parameterExpression = Expression.Parameter(entityType, "i");
 
@@ -1104,14 +1104,14 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
 
         #region Private Helper Methods
 
-        private Expression<Func<TEntity, bool>> CreateKeyEqualityExpression(TKey key, Expression<Func<TEntity, bool>> conditionExpression = null)
+        protected Expression<Func<TEntity, bool>> CreateKeyEqualityExpression(TKey key, Expression<Func<TEntity, bool>> conditionExpression = null)
         {
             Expression<Func<TEntity, bool>> idCondition = i => i.Id.Equals(key);
             var mainCondition = idCondition.Append(CreateIsDeletedFalseExpression(), ExpressionType.AndAlso);
             return mainCondition.Append(conditionExpression, ExpressionType.AndAlso);
         }
 
-        private Expression<Func<TEntity, object>> CreateObjectPredicate(Type entityType, string propertyName)
+        protected Expression<Func<TEntity, object>> CreateObjectPredicate(Type entityType, string propertyName)
         {
             var parameterExpression = Expression.Parameter(entityType, "i");
 
@@ -1120,13 +1120,13 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
             return Expression.Lambda<Func<TEntity, object>>(Expression.Convert(orderByProperty, typeof(object)), parameterExpression);
         }
 
-        private static void CheckProperty(string propertyName, Type entityType)
+        protected static void CheckProperty(string propertyName, Type entityType)
         {
             if (!CommonHelper.PropertyExists<TEntity>(propertyName))
-                throw new ArgumentException($"Type of {entityType.Name}'s properties doesn't contain '{propertyName}'.");
+                throw new MilvaDeveloperException($"Type of {entityType.Name}'s properties doesn't contain '{propertyName}'.");
         }
 
-        private static int CalculatePageCountAndCompareWithRequested(int totalDataCount, int countOfRequestedRecordsInPage, int requestedPageNumber)
+        protected static int CalculatePageCountAndCompareWithRequested(int totalDataCount, int countOfRequestedRecordsInPage, int requestedPageNumber)
         {
             var actualPageCount = (Convert.ToDouble(totalDataCount) / Convert.ToDouble(countOfRequestedRecordsInPage));
 
@@ -1139,14 +1139,14 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
             return estimatedCountOfPages;
         }
 
-        private static void ValidatePaginationParameters(int requestedPageNumber, int countOfRequestedRecordsInPage)
+        protected static void ValidatePaginationParameters(int requestedPageNumber, int countOfRequestedRecordsInPage)
         {
             if (requestedPageNumber <= 0) throw new MilvaUserFriendlyException(MilvaException.WrongRequestedPageNumber);
 
             if (countOfRequestedRecordsInPage <= 0) throw new MilvaUserFriendlyException(MilvaException.WrongRequestedItemCount);
         }
 
-        private Expression<Func<TEntity, bool>> CreateConditionExpression(Expression<Func<TEntity, bool>> conditionExpression = null)
+        protected Expression<Func<TEntity, bool>> CreateConditionExpression(Expression<Func<TEntity, bool>> conditionExpression = null)
         {
             Expression<Func<TEntity, bool>> mainExpression;
 
@@ -1168,7 +1168,7 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
         /// For configure entity state. Change tracking.
         /// </summary>
         /// <param name="entity"></param>
-        private void InitalizeEdit(TEntity entity)
+        protected void InitalizeEdit(TEntity entity)
         {
             var local = _dbSet.Local.FirstOrDefault(entry => entry.Id.Equals(entity.Id));
             if (local != null)
@@ -1182,7 +1182,7 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
         /// For configure entity state. Change tracking.
         /// </summary>
         /// <param name="entities"></param>
-        private void InitalizeEdit(IEnumerable<TEntity> entities)
+        protected void InitalizeEdit(IEnumerable<TEntity> entities)
         {
             var localEntities = _dbSet.Local.Where(e => entities.Any(en => en.Id.Equals(e.Id)));
             if (!localEntities?.Any() ?? false)
