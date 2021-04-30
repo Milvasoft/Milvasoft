@@ -352,6 +352,20 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="M:Milvasoft.SampleAPI.Controllers.AssignmentController.TakeAssigment(System.Guid,Milvasoft.SampleAPI.DTOs.StudentAssignmentDTOs.AddStudentAssignmentDTO)">
+            <summary>
+            The student takes the next assignment.
+            </summary>
+            <param name="Id"></param>
+            <param name="newAssignment"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Controllers.AssignmentController.GetUnconfirmedAssignment">
+            <summary>
+            Brings the unapproved assignments of the students of the mentor logged in.
+            </summary>
+            <returns></returns>
+        </member>
         <member name="T:Milvasoft.SampleAPI.Controllers.MentorController">
             <summary>
             Provided Mentor operations.
@@ -2873,6 +2887,14 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="M:Milvasoft.SampleAPI.Services.Abstract.IAssignmentService.TakeAssignment(System.Guid,Milvasoft.SampleAPI.DTOs.StudentAssignmentDTOs.AddStudentAssignmentDTO)">
+            <summary>
+             The student takes the next assignment.
+            </summary>
+            <param name="Id"></param>
+            <param name="newAssignment"></param>
+            <returns></returns>
+        </member>
         <member name="T:Milvasoft.SampleAPI.Services.Abstract.IMentorService">
             <summary>
             Mentor service interface.
@@ -3324,11 +3346,16 @@
             Assignment service.
             </summary>
         </member>
-        <member name="M:Milvasoft.SampleAPI.Services.Concrete.AssignmentService.#ctor(Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository{Milvasoft.SampleAPI.Entity.Assignment,System.Guid,Milvasoft.SampleAPI.Data.EducationAppDbContext},Microsoft.AspNetCore.Identity.UserManager{Milvasoft.SampleAPI.Entity.AppUser},Microsoft.AspNetCore.Http.IHttpContextAccessor,Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository{Milvasoft.SampleAPI.Entity.StudentAssigment,System.Guid,Milvasoft.SampleAPI.Data.EducationAppDbContext})">
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.AssignmentService.#ctor(Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository{Milvasoft.SampleAPI.Entity.Assignment,System.Guid,Milvasoft.SampleAPI.Data.EducationAppDbContext},Microsoft.AspNetCore.Identity.UserManager{Milvasoft.SampleAPI.Entity.AppUser},Microsoft.AspNetCore.Http.IHttpContextAccessor,Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository{Milvasoft.SampleAPI.Entity.StudentAssigment,System.Guid,Milvasoft.SampleAPI.Data.EducationAppDbContext},Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository{Milvasoft.SampleAPI.Entity.Student,System.Guid,Milvasoft.SampleAPI.Data.EducationAppDbContext},Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository{Milvasoft.SampleAPI.Entity.Mentor,System.Guid,Milvasoft.SampleAPI.Data.EducationAppDbContext})">
             <summary>
             Performs constructor injection for repository interfaces used in this service.
             </summary>
             <param name="assignmentRepository"></param>
+            <param name="userManager"></param>
+            <param name="httpContextAccessor"></param>
+            <param name="studentAssignmentRepository"></param>
+            <param name="studentRepository"></param>
+            <param name="mentorRepository"></param>
         </member>
         <member name="M:Milvasoft.SampleAPI.Services.Concrete.AssignmentService.GetAssignmentForStudentAsync(Milvasoft.SampleAPI.DTOs.PaginationParamsWithSpec{Milvasoft.SampleAPI.Spec.AssignmentSpec})">
             <summary>
@@ -3402,6 +3429,12 @@
             </summary>
             <param name="Id"></param>
             <param name="newAssignment"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.AssignmentService.GetUnconfirmedAssignment">
+            <summary>
+            Brings the unapproved assignments of the students of the mentor logged in.
+            </summary>
             <returns></returns>
         </member>
         <member name="T:Milvasoft.SampleAPI.Services.Concrete.MentorService">
@@ -3618,6 +3651,7 @@
             <param name="studentRepository"></param>
             <param name="userManager"></param>
             <param name="httpContextAccessor"></param>
+            <param name="mentorRepository"></param>
         </member>
         <member name="M:Milvasoft.SampleAPI.Services.Concrete.StudentService.GetStudentsForAdminAsync(Milvasoft.SampleAPI.DTOs.PaginationParamsWithSpec{Milvasoft.SampleAPI.Spec.StudentSpec})">
             <summary>

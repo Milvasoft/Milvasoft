@@ -148,6 +148,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
 
             return new MentorForMentorDTO
             {
+                Id=mentor.Id,
                 Name = mentor.Name,
                 Surname = mentor.Surname,
                 CVFilePath = mentor.CVFilePath,
