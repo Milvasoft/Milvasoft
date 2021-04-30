@@ -170,7 +170,7 @@ namespace Milvasoft.SampleAPI.Controllers
         /// Brings the unapproved assignments of the students of the mentor logged in.
         /// </summary>
         /// <returns></returns>
-        [HttpGet("UnconfirmedAssignements")]
+        [HttpPatch("UnconfirmedAssignements")]
         public async Task<IActionResult> GetUnconfirmedAssignment()
         {
             var assignment = await _assigmentService.GetUnconfirmedAssignment().ConfigureAwait(false);

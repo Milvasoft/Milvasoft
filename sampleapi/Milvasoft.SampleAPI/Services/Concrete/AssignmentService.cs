@@ -345,7 +345,8 @@ namespace Milvasoft.SampleAPI.Services.Concrete
                 AssigmentId = toBeTakeAssignment.Id,
                 StudentId = currentStudent.Id,
                 AdditionalTime=newAssignment.AdditionalTime,
-                AdditionalTimeDescription= newAssignment.AdditionalTimeDescription
+                AdditionalTimeDescription= newAssignment.AdditionalTimeDescription,
+                Status=Entity.Enum.EducationStatus.InProgress
             };
 
             await _stuudentAssignmentRepository.AddAsync(studentAssignment).ConfigureAwait(false);
@@ -364,7 +365,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
 
             var currentMentor = await _mentorRepository.GetFirstOrDefaultAsync(i => i.AppUser.UserName == _loggedUser).ConfigureAwait(false);
 
-            var unconfirmedAssignment = await _stuudentAssignmentRepository.GetAllAsync(i => i.IsActive == false && i.Student.Mentor.Id==currentMentor.Id).ConfigureAwait(false);
+            var unconfirmedAssignment = await _stuudentAssignmentRepository.GetAllAsync(includes,i => i.IsActive == false && i.Student.Mentor.Id==currentMentor.Id).ConfigureAwait(false);
 
             var unconfirmedAssignmentsDTO = from assignment in unconfirmedAssignment
                              select new StudentAssignmentDTO
