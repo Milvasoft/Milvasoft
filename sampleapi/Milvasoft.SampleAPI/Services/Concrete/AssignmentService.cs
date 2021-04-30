@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Milvasoft.Helpers.DataAccess.Abstract;
+using Milvasoft.Helpers.DataAccess.IncludeLibrary;
 using Milvasoft.Helpers.Models;
 using Milvasoft.SampleAPI.Data;
 using Milvasoft.SampleAPI.DTOs;
@@ -28,14 +29,27 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         private readonly UserManager<AppUser> _userManager;
         private readonly IBaseRepository<Assignment, Guid, EducationAppDbContext> _assignmentRepository;
         private readonly IBaseRepository<StudentAssigment, Guid, EducationAppDbContext> _stuudentAssignmentRepository;
-
+        private readonly IBaseRepository<Student, Guid, EducationAppDbContext> _studentRepository;
+        private readonly IBaseRepository<Mentor, Guid, EducationAppDbContext> _mentorRepository;
 
         /// <summary>
         /// Performs constructor injection for repository interfaces used in this service.
         /// </summary>
         /// <param name="assignmentRepository"></param>
-        public AssignmentService(IBaseRepository<Assignment, Guid, EducationAppDbContext> assignmentRepository, UserManager<AppUser> userManager, IHttpContextAccessor httpContextAccessor, IBaseRepository<StudentAssigment, Guid, EducationAppDbContext> studentAssignmentRepository)
+        /// <param name="userManager"></param>
+        /// <param name="httpContextAccessor"></param>
+        /// <param name="studentAssignmentRepository"></param>
+        /// <param name="studentRepository"></param>
+        /// <param name="mentorRepository"></param>
+        public AssignmentService(IBaseRepository<Assignment, Guid, EducationAppDbContext> assignmentRepository,
+            UserManager<AppUser> userManager,
+            IHttpContextAccessor httpContextAccessor,
+            IBaseRepository<StudentAssigment, Guid, EducationAppDbContext> studentAssignmentRepository,
+            IBaseRepository<Student, Guid, EducationAppDbContext> studentRepository,
+            IBaseRepository<Mentor, Guid, EducationAppDbContext> mentorRepository)
         {
+            _mentorRepository = mentorRepository;
+            _studentRepository = studentRepository;
             _stuudentAssignmentRepository = studentAssignmentRepository;
             _userManager = userManager;
             _loggedUser = httpContextAccessor.HttpContext.User.Identity.Name;
@@ -285,13 +299,14 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// <returns> Returns the appropriate assignment to the student.</returns>
         public async Task<AssignmentForStudentDTO> GetAvaibleAssignmentForCurrentStudent()
         {
-            var currentStudent = await _userManager.FindByNameAsync(_loggedUser).ConfigureAwait(false);
 
-            currentStudent.Student.ThrowIfNullForGuidObject("User is not student.");
+            var currentStudent = await _studentRepository.GetFirstOrDefaultAsync(i => i.AppUser.UserName == _loggedUser).ConfigureAwait(false);
 
-            int level = currentStudent.Student.Level;
+            currentStudent.ThrowIfNullForGuidObject("User is not student.");
 
-            Guid professionId = currentStudent.Student.ProfessionId;
+            int level = currentStudent.Level;
+
+            Guid professionId = currentStudent.ProfessionId;
 
             var assignment = await _assignmentRepository.GetFirstOrDefaultAsync(i => i.Level == level && i.ProfessionId == professionId).ConfigureAwait(false);
 
@@ -316,9 +331,9 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// <returns></returns>
         public async Task TakeAssignment(Guid Id,AddStudentAssignmentDTO newAssignment)
         {
-            var currentStudent = await _userManager.FindByNameAsync(_loggedUser).ConfigureAwait(false);
+            var currentStudent = await _studentRepository.GetFirstOrDefaultAsync(i => i.AppUser.UserName == _loggedUser).ConfigureAwait(false);
 
-            currentStudent.Student.ThrowIfNullForGuidObject("User is not student.");
+            currentStudent.ThrowIfNullForGuidObject("User is not student.");
 
             var toBeTakeAssignment = await _assignmentRepository.GetByIdAsync(Id).ConfigureAwait(false);
 
@@ -328,7 +343,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
             {
                 IsActive = false,
                 AssigmentId = toBeTakeAssignment.Id,
-                StudentId = currentStudent.Student.Id,
+                StudentId = currentStudent.Id,
                 AdditionalTime=newAssignment.AdditionalTime,
                 AdditionalTimeDescription= newAssignment.AdditionalTimeDescription
             };
@@ -336,6 +351,36 @@ namespace Milvasoft.SampleAPI.Services.Concrete
             await _stuudentAssignmentRepository.AddAsync(studentAssignment).ConfigureAwait(false);
         }
 
-        
+        /// <summary>
+        /// Brings the unapproved assignments of the students of the mentor logged in.
+        /// </summary>
+        /// <returns></returns>
+        public async Task<List<StudentAssignmentDTO>> GetUnconfirmedAssignment()
+        {
+            Func<IIncludable<StudentAssigment>, IIncludable> includes = i => i.Include(p => p.Assigment)
+                                                                     .Include(s => s.Student)
+                                                                        .ThenInclude(m=>m.Mentor);
+                                                                        
+
+            var currentMentor = await _mentorRepository.GetFirstOrDefaultAsync(i => i.AppUser.UserName == _loggedUser).ConfigureAwait(false);
+
+            var unconfirmedAssignment = await _stuudentAssignmentRepository.GetAllAsync(i => i.IsActive == false && i.Student.Mentor.Id==currentMentor.Id).ConfigureAwait(false);
+
+            var unconfirmedAssignmentsDTO = from assignment in unconfirmedAssignment
+                             select new StudentAssignmentDTO
+                             {
+                                 Id=assignment.Id,
+                                 IsActive=assignment.IsActive,
+                                 AdditionalTime=assignment.AdditionalTime,
+                                 AdditionalTimeDescription=assignment.AdditionalTimeDescription,
+                                 Student=new StudentDTO
+                                 {
+                                     Name=assignment.Student.Name,
+                                     Surname=assignment.Student.Surname,
+                                     Id=assignment.Student.Id
+                                 }
+                             };
+            return unconfirmedAssignmentsDTO.ToList();
+        }
     }
 }

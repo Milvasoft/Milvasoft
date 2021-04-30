@@ -1,6 +1,7 @@
 ﻿using Milvasoft.Helpers.Models;
 using Milvasoft.SampleAPI.DTOs;
 using Milvasoft.SampleAPI.DTOs.AssignmentDTOs;
+using Milvasoft.SampleAPI.DTOs.StudentAssignmentDTOs;
 using Milvasoft.SampleAPI.Spec;
 using System;
 using System.Collections.Generic;
@@ -80,5 +81,15 @@ namespace Milvasoft.SampleAPI.Services.Abstract
         /// </summary>
         /// <returns></returns>
         Task<AssignmentForStudentDTO> GetAvaibleAssignmentForCurrentStudent();
+
+        /// <summary>
+        ///  The student takes the next assignment.
+        /// </summary>
+        /// <param name="Id"></param>
+        /// <param name="newAssignment"></param>
+        /// <returns></returns>
+        Task TakeAssignment(Guid Id, AddStudentAssignmentDTO newAssignment);
+
+        Task<List<StudentAssignmentDTO>> GetUnconfirmedAssignment();
     }
 }
