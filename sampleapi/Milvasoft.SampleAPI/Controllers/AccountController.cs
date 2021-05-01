@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
+using Milvasoft.Helpers;
 using Milvasoft.Helpers.Caching;
 using Milvasoft.Helpers.Extensions;
 using Milvasoft.Helpers.Models.Response;
@@ -44,21 +45,8 @@ namespace Milvasoft.SampleAPI.Controllers
 
 
         /// <summary>
-        /// Sign in method for personnels. This endpoint is accessible for any requests.
+        /// Sign in method for users. This endpoint is accessible for any requests.
         /// </summary>
-        /// 
-        /// <remarks>
-        /// <para><b>EN:</b> </para>
-        /// <para>Sign in method for personnels. This endpoint is accessible for any requests.</para> 
-        /// <br></br>
-        /// <para><b>TR:</b></para>
-        /// <para> Personnels için oturum açma yöntemi. Bu bitiş noktası herhangi bir istek için erişilebilir.</para>
-        /// 
-        /// <para> BackendBoss </para>
-        /// <para> Ak+123456 </para>
-        /// 
-        /// </remarks>
-        /// 
         /// <returns></returns>
         /// <param name="loginDTO"></param>
         /// <returns></returns>
@@ -74,10 +62,9 @@ namespace Milvasoft.SampleAPI.Controllers
             {
                 response.Message = string.Join('~', response.Result.ErrorMessages.Select(i => i.Description));
 
-                //response.Message = string.Join("\r\n", response.Result.ErrorMessages.Select(m => m.Description));
-                response.StatusCode = MilvaStatusCodes.Status400BadRequest; //status kod sonradan degistirlebilir.
+                response.StatusCode = MilvaStatusCodes.Status400BadRequest;
                 response.Success = false;
-            } //Bu kontroller cogalabilir. orn her hata kodu icin kendine ozel status kod yazilabilir.
+            } 
             else if (response.Result.Token == null)
             {
                 response.Message = _sharedLocalizer["UnknownLoginProblemMessage"];
@@ -91,6 +78,18 @@ namespace Milvasoft.SampleAPI.Controllers
                 response.Success = true;
             }
             return Ok(response);
+        }
+
+        /// <summary>
+        /// Logout method for users.
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("User/SignOut")]
+        [ApiVersion("1.1")]
+        public async Task<IActionResult> PersonnelLogoutAsync()
+        {
+            await _accountService.SignOutAsync().ConfigureAwait(false);
+            return Ok("Success");
         }
 
         /// <summary>
@@ -121,5 +120,7 @@ namespace Milvasoft.SampleAPI.Controllers
             response.Result = null;
             return Ok(response);
         }
+
+
     }
 }

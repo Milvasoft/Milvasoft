@@ -3270,7 +3270,7 @@
             <param name="passDTO"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.SampleAPI.Services.Concrete.AccountService.ValidatePersonnel(Milvasoft.Helpers.Identity.Abstract.ILoginDTO,Milvasoft.SampleAPI.Entity.AppUser,System.Boolean)">
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.AccountService.ValidateUser(Milvasoft.Helpers.Identity.Abstract.ILoginDTO,Milvasoft.SampleAPI.Entity.AppUser,System.Boolean)">
             <summary>
             <para><b>EN: </b>Validating user to login.</para>
             <para><b>TR: </b>Kullanıcıyı oturum açmak için doğrulama.</para>

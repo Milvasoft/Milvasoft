@@ -81,7 +81,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// <returns></returns>
         public async Task<LoginResultDTO> SignInAsync(LoginDTO loginDTO, bool isMentor) => await base.LoginAsync(loginDTO,
                                                                                                                 isMentor,
-                                                                                                                userValidationByUserType: ValidatePersonnel,
+                                                                                                                userValidationByUserType: ValidateUser,
                                                                                                                 tokenExpiredDate: isMentor ? DateTime.Now.AddDays(100) : DateTime.Now.AddDays(5)).ConfigureAwait(false);
 
         /// <summary>
@@ -97,6 +97,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// <returns></returns>
         public async Task<IdentityResult> ChangePasswordAsync(ChangePassDTO passDTO)
         {
+            if(passDTO.OldPassword == passDTO.NewPassword) throw new MilvaUserFriendlyException("Passwords are already the same");
             var user = await _userManager.FindByNameAsync(passDTO.UserName).ConfigureAwait(false);
             return await base.ChangePasswordAsync(user,passDTO.OldPassword, passDTO.NewPassword);
         }
@@ -110,7 +111,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// <param name="user"></param>
         /// <param name="isUserType"></param>
         /// <returns></returns>
-        private async Task<(AppUser educationUser, LoginResultDTO loginResult)> ValidatePersonnel(ILoginDTO loginDTO, AppUser user, bool isUserType)
+        private async Task<(AppUser educationUser, LoginResultDTO loginResult)> ValidateUser(ILoginDTO loginDTO, AppUser user, bool isUserType)
         {
             IdentityError GetLockedError(DateTime lockoutEnd)
             {
@@ -134,7 +135,6 @@ namespace Milvasoft.SampleAPI.Services.Concrete
 
             var userIdentifier = "";
 
-            //Kullanici adi veya email ile kullanici dogrulama
             #region User Validation
 
             var userNotFound = true;
@@ -195,7 +195,6 @@ namespace Milvasoft.SampleAPI.Services.Concrete
             {
                 _contextRepository.InitializeUpdating<AppUser, Guid>(user);
 
-                //Locklanmış kullanıcının süresini sıfırlıyoruz
                 await _userManager.SetLockoutEndDateAsync(user, null).ConfigureAwait(false);
 
                 await _userManager.ResetAccessFailedCountAsync(user).ConfigureAwait(false);
@@ -210,7 +209,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
             }
 
             var passIsTrue = _userManager.CheckPasswordAsync(user, loginDTO.Password).Result;
-            //personnel olarak giris yapmaya calisan gercekten personel mi? degilse basarili giris yapmissa da kabul etme ve hassas mesaj vermesini engellemek icin personel degil diye ayarla
+           
 
             if (!passIsTrue)
             {
