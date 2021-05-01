@@ -53,7 +53,7 @@ namespace Milvasoft.SampleAPI.Controllers
         [HttpPost("User/SignIn")]
         [AllowAnonymous]
         [OValidationFilter]
-        public async Task<ActionResult> SignInPersonnelAsync([FromBody] LoginDTO loginDTO)
+        public async Task<ActionResult> UsersSignIn([FromBody] LoginDTO loginDTO)
         {
             ObjectResponse<LoginResultDTO> response = new();
 
@@ -86,7 +86,7 @@ namespace Milvasoft.SampleAPI.Controllers
         /// <returns></returns>
         [HttpGet("User/SignOut")]
         [ApiVersion("1.1")]
-        public async Task<IActionResult> PersonnelLogoutAsync()
+        public async Task<IActionResult> UsersLogOut()
         {
             await _accountService.SignOutAsync().ConfigureAwait(false);
             return Ok("Success");
@@ -99,7 +99,7 @@ namespace Milvasoft.SampleAPI.Controllers
         /// <returns></returns>
         [HttpPut("Personnel/UpdatePassword")]
         [OValidationFilter]
-        public async Task<IActionResult> ChangePersonnelUserDatasAsync(ChangePassDTO personnelUpdateDTO)
+        public async Task<IActionResult> ChangeUserPassword(ChangePassDTO personnelUpdateDTO)
         {
             var response = new ObjectResponse<IdentityResult>
             {
