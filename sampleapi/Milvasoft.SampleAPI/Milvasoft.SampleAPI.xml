@@ -2895,6 +2895,19 @@
             <param name="newAssignment"></param>
             <returns></returns>
         </member>
+        <member name="M:Milvasoft.SampleAPI.Services.Abstract.IAssignmentService.GetUnconfirmedAssignment">
+            <summary>
+            Brings the unapproved assignments of the students of the mentor logged in.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Services.Abstract.IAssignmentService.ConfirmAssignment(Milvasoft.SampleAPI.DTOs.StudentAssignmentDTOs.StudentAssignmentDTO)">
+            <summary>
+            The mentor approves the homework request sent by the student.
+            </summary>
+            <param name="toBeUpdated"></param>
+            <returns></returns>
+        </member>
         <member name="T:Milvasoft.SampleAPI.Services.Abstract.IMentorService">
             <summary>
             Mentor service interface.
@@ -3435,6 +3448,13 @@
             <summary>
             Brings the unapproved assignments of the students of the mentor logged in.
             </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.AssignmentService.ConfirmAssignment(Milvasoft.SampleAPI.DTOs.StudentAssignmentDTOs.StudentAssignmentDTO)">
+            <summary>
+            The mentor approves the homework request sent by the student.
+            </summary>
+            <param name="toBeUpdated"></param>
             <returns></returns>
         </member>
         <member name="T:Milvasoft.SampleAPI.Services.Concrete.MentorService">

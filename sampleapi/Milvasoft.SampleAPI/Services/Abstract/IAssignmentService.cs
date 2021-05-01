@@ -90,6 +90,17 @@ namespace Milvasoft.SampleAPI.Services.Abstract
         /// <returns></returns>
         Task TakeAssignment(Guid Id, AddStudentAssignmentDTO newAssignment);
 
+        /// <summary>
+        /// Brings the unapproved assignments of the students of the mentor logged in.
+        /// </summary>
+        /// <returns></returns>
         Task<List<StudentAssignmentDTO>> GetUnconfirmedAssignment();
+
+        /// <summary>
+        /// The mentor approves the homework request sent by the student.
+        /// </summary>
+        /// <param name="toBeUpdated"></param>
+        /// <returns></returns>
+        Task ConfirmAssignment(StudentAssignmentDTO toBeUpdated);
     }
 }

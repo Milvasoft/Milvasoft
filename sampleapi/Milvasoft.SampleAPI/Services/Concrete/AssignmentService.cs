@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Milvasoft.Helpers.DataAccess.Abstract;
 using Milvasoft.Helpers.DataAccess.IncludeLibrary;
+using Milvasoft.Helpers.Exceptions;
 using Milvasoft.Helpers.Models;
 using Milvasoft.SampleAPI.Data;
 using Milvasoft.SampleAPI.DTOs;
@@ -335,6 +336,8 @@ namespace Milvasoft.SampleAPI.Services.Concrete
 
             currentStudent.ThrowIfNullForGuidObject("User is not student.");
 
+            if (currentStudent.CurrentAssigmentDeliveryDate < DateTime.Today) throw new MilvaUserFriendlyException("User already have assignment.");
+
             var toBeTakeAssignment = await _assignmentRepository.GetByIdAsync(Id).ConfigureAwait(false);
 
             toBeTakeAssignment.ThrowIfNullForGuidObject();
@@ -367,6 +370,8 @@ namespace Milvasoft.SampleAPI.Services.Concrete
 
             var unconfirmedAssignment = await _stuudentAssignmentRepository.GetAllAsync(includes,i => i.IsActive == false && i.Student.Mentor.Id==currentMentor.Id).ConfigureAwait(false);
 
+            unconfirmedAssignment.ThrowIfListIsNotNullOrEmpty("All assignments are approved.");
+
             var unconfirmedAssignmentsDTO = from assignment in unconfirmedAssignment
                              select new StudentAssignmentDTO
                              {
@@ -382,6 +387,26 @@ namespace Milvasoft.SampleAPI.Services.Concrete
                                  }
                              };
             return unconfirmedAssignmentsDTO.ToList();
+        }
+
+        /// <summary>
+        /// The mentor approves the homework request sent by the student.
+        /// </summary>
+        /// <param name="toBeUpdated"></param>
+        /// <returns></returns>
+        public async Task ConfirmAssignment(StudentAssignmentDTO toBeUpdated)
+        {
+            var toBeUpdatedAssignment = await _stuudentAssignmentRepository.GetByIdAsync(toBeUpdated.Id).ConfigureAwait(false);
+
+            var student = await _studentRepository.GetByIdAsync(toBeUpdatedAssignment.StudentId).ConfigureAwait(false);
+
+            if (toBeUpdatedAssignment.IsActive == true) throw new MilvaUserFriendlyException("The assignment is already active.");
+
+            toBeUpdatedAssignment.IsActive = true;
+            toBeUpdatedAssignment.FinishedDate = toBeUpdated.FinishedDate;
+
+            student.CurrentAssigmentDeliveryDate = toBeUpdatedAssignment.FinishedDate;
+            
         }
     }
 }
