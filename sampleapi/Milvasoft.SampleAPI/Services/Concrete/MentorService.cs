@@ -27,9 +27,13 @@ namespace Milvasoft.SampleAPI.Services.Concrete
     /// </summary>
     public class MentorService : IMentorService
     {
+        #region Fields
+
         private readonly UserManager<AppUser> _userManager;
         private readonly IBaseRepository<Mentor, Guid, EducationAppDbContext> _mentorRepository;
         private readonly IHttpContextAccessor _httpContextAccessor;
+
+        #endregion
 
         /// <summary>
         /// Performs constructor injection for repository interfaces used in this service.
@@ -43,6 +47,8 @@ namespace Milvasoft.SampleAPI.Services.Concrete
             _userManager = userManager;
             _mentorRepository = mentorRepository;
         }
+
+        #region CRUD Operations
 
         /// <summary>
         /// Get mentors for admin.
@@ -223,6 +229,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
 
             toBeUpdatedMentor.ThrowIfNullForGuidObject();
 
+            
             toBeUpdatedMentor.Name = updateMentorDTO.Name;
 
             toBeUpdatedMentor.Surname = updateMentorDTO.Surname;
@@ -243,6 +250,8 @@ namespace Milvasoft.SampleAPI.Services.Concrete
             var toBeUpdatedMentor = await _userManager.FindByNameAsync(_loggedUser).ConfigureAwait(false) ?? throw new MilvaUserFriendlyException("CannotFindUserWithThisToken");
 
             toBeUpdatedMentor.ThrowIfNullForGuidObject();
+
+            //TODO Oggi Profil resmi ve CV yükleme yapılacak.
 
             toBeUpdatedMentor.Mentor.Name = updateMentorDTO.Name;
             toBeUpdatedMentor.Mentor.Surname = updateMentorDTO.Surname;
@@ -266,5 +275,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
 
             await _mentorRepository.DeleteAsync(mentors).ConfigureAwait(false);
         }
+
+        #endregion
     }
 }

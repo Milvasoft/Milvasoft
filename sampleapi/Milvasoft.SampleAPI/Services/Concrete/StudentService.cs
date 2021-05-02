@@ -28,10 +28,14 @@ namespace Milvasoft.SampleAPI.Services.Concrete
     /// </summary>
     public class StudentService : IStudentService
     {
+        #region Fields
+
         private readonly IHttpContextAccessor _httpContextAccessor ;
         private readonly UserManager<AppUser> _userManager;
         private readonly IBaseRepository<Student, Guid, EducationAppDbContext> _studentRepository;
         private readonly IBaseRepository<Mentor, Guid, EducationAppDbContext> _mentorRepository;
+
+        #endregion
 
         /// <summary>
         /// Performs constructor injection for repository interfaces used in this service.
@@ -47,6 +51,8 @@ namespace Milvasoft.SampleAPI.Services.Concrete
             _studentRepository = studentRepository;
             _httpContextAccessor = httpContextAccessor;
         }
+
+        #region CRUD Operations
 
         /// <summary>
         /// It will filter students according to the parameters sent in <paramref name="pagiantionParams"/>
@@ -388,8 +394,6 @@ namespace Milvasoft.SampleAPI.Services.Concrete
             await _studentRepository.DeleteAsync(deletedStudents).ConfigureAwait(false);
         }
 
-
-
-
+        #endregion 
     }
 }

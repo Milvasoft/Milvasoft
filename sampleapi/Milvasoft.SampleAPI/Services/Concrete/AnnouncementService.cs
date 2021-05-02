@@ -24,9 +24,16 @@ namespace Milvasoft.SampleAPI.Services.Concrete
     /// </summary>
     public class AnnouncementService : IAnnouncementService
     {
+        #region Fields
+
         private readonly IBaseRepository<Announcement, Guid, EducationAppDbContext> _announcementRepository;
         private readonly UserManager<AppUser> _userManager;
         private readonly IHttpContextAccessor _httpContextAccessor;
+
+        #endregion
+
+        #region CRUD Operations
+
         /// <summary>
         /// Performs constructor injection for repository interfaces used in this service.
         /// </summary>
@@ -44,7 +51,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// Get all announcement for student.
         /// </summary>
         /// <param name="pagiantionParams">Filter object.</param>
-        /// <returns></returns>
+        /// <returns> The announcement is put in the form of an AnnouncementForStudentDTO.</returns>
         public async Task<PaginationDTO<AnnouncementForStudentDTO>> GetAnnouncementForStudentAsync(PaginationParamsWithSpec<AnnouncementSpec> pagiantionParams)
         {
             Func<IIncludable<Announcement>, IIncludable> includes = i => i.Include(md => md.PublisherMentor);
@@ -67,7 +74,8 @@ namespace Milvasoft.SampleAPI.Services.Concrete
                     PublisherMentor = announcement.PublisherMentor.CheckObject(i => new MentorDTO
                     {
                         Id = i.Id,
-                        Name = i.Name
+                        Name = i.Name,
+                        Surname=i.Surname
                     })
                 })),
                 PageCount = pageCount,
@@ -78,7 +86,8 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// <summary>
         /// Get all announcement for admin.
         /// </summary>
-        /// <returns></returns>
+        /// <param name="pagiantionParams">Filter object.</param>
+        /// <returns> The announcements is put in the form of an AnnouncementForAdminDTO.</returns>
         public async Task<PaginationDTO<AnnouncementForAdminDTO>> GetAnnouncementForAdminAsync(PaginationParamsWithSpec<AnnouncementSpec> pagiantionParams)
         {
             Func<IIncludable<Announcement>, IIncludable> includes = i => i.Include(md => md.PublisherMentor);
@@ -101,7 +110,9 @@ namespace Milvasoft.SampleAPI.Services.Concrete
                     IsFixed = announcement.IsFixed,
                     PublisherMentor = announcement.PublisherMentor.CheckObject(i => new MentorDTO
                     {
-                        Id = i.Id
+                        Id = i.Id,
+                        Name = i.Name,
+                        Surname = i.Surname
                     })
                 })),
                 PageCount = pageCount,
@@ -112,7 +123,8 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// <summary>
         /// Get all announcement for mentor.
         /// </summary>
-        /// <returns></returns>
+        /// <param name="pagiantionParams">Filter object.</param>
+        /// <returns> The announcement is put in the form of an AnnouncementForMentorDTO.</returns>
         public async Task<PaginationDTO<AnnouncementForMentorDTO>> GetAnnouncementForMentorAsync(PaginationParamsWithSpec<AnnouncementSpec> pagiantionParams)
         {
             Func<IIncludable<Announcement>, IIncludable> includes = i => i.Include(md => md.PublisherMentor);
@@ -135,7 +147,9 @@ namespace Milvasoft.SampleAPI.Services.Concrete
                     IsFixed = announcement.IsFixed,
                     PublisherMentor = announcement.PublisherMentor.CheckObject(i => new MentorDTO
                     {
-                        Id = i.Id
+                        Id = i.Id,
+                        Name = i.Name,
+                        Surname = i.Surname
                     })
                 })),
                 PageCount = pageCount,
@@ -146,8 +160,8 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// <summary>
         /// Get announcement for admin by <paramref name="announcementId"/>.
         /// </summary>
-        /// <param name="announcementId"></param>
-        /// <returns></returns>
+        /// <param name="announcementId">Id of the announcement to be brought</param>
+        /// <returns> The announcement is put in the form of an AnnouncementForAdminDTO.</returns>
         public async Task<AnnouncementForAdminDTO> GetAnnouncementForAdminAsync(Guid announcementId)
         {
             Func<IIncludable<Announcement>, IIncludable> includes = i => i.Include(md => md.PublisherMentor);
@@ -163,7 +177,9 @@ namespace Milvasoft.SampleAPI.Services.Concrete
                 IsFixed = announcement.IsFixed,
                 PublisherMentor = announcement.PublisherMentor.CheckObject(i => new MentorDTO
                 {
-                    Id = i.Id
+                    Id = i.Id,
+                    Name = i.Name,
+                    Surname = i.Surname
                 })
             };
         }
@@ -172,7 +188,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// Get entity for mentor by <paramref name="announcementId"/>.
         /// </summary>
         /// <param name="announcementId"></param>
-        /// <returns></returns>
+        /// <returns> The announcement is put in the form of an AnnouncementForMentorDTO.</returns>
         public async Task<AnnouncementForMentorDTO> GetAnnouncementForMentorAsync(Guid announcementId)
         {
             Func<IIncludable<Announcement>, IIncludable> includes = i => i.Include(md => md.PublisherMentor);
@@ -188,7 +204,9 @@ namespace Milvasoft.SampleAPI.Services.Concrete
                 IsFixed = announcement.IsFixed,
                 PublisherMentor = announcement.PublisherMentor.CheckObject(i => new MentorDTO
                 {
-                    Id = i.Id
+                    Id = i.Id,
+                    Name = i.Name,
+                    Surname = i.Surname
                 })
             };
         }
@@ -197,7 +215,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// Get announcement for student by <paramref name="announcementId"/>.
         /// </summary>
         /// <param name="announcementId"></param>
-        /// <returns></returns>
+        /// <returns> The announcement is put in the form of an AnnouncementForStudentDTO.</returns>
         public async Task<AnnouncementForStudentDTO> GetAnnouncementForStudentAsync(Guid announcementId)
         {
             Func<IIncludable<Announcement>, IIncludable> includes = i => i.Include(md => md.PublisherMentor);
@@ -212,7 +230,9 @@ namespace Milvasoft.SampleAPI.Services.Concrete
                 Description = announcement.Description,
                 PublisherMentor = announcement.PublisherMentor.CheckObject(i => new MentorDTO
                 {
-                    Id = i.Id
+                    Id = i.Id,
+                    Name = i.Name,
+                    Surname = i.Surname
                 })
             };
         }
@@ -257,7 +277,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// <summary>
         /// Delete multiple announcement by <paramref name="announcementIds"/>.
         /// </summary>
-        /// <param name="announcementIds"></param>
+        /// <param name="announcementIds"> Ids of announcements to be deleted.</param>
         /// <returns></returns>
         public async Task DeleteAnnouncementsAsync(List<Guid> announcementIds)
         {
@@ -265,5 +285,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
 
             await _announcementRepository.DeleteAsync(deletedAnnouncement).ConfigureAwait(false);
         }
+
+        #endregion
     }
 }
