@@ -28,9 +28,14 @@ namespace Milvasoft.SampleAPI.Services.Concrete
     /// </summary>
     public class StudentService : IStudentService
     {
-        private readonly string _loggedUser;
+        #region Fields
+
+        private readonly IHttpContextAccessor _httpContextAccessor ;
         private readonly UserManager<AppUser> _userManager;
         private readonly IBaseRepository<Student, Guid, EducationAppDbContext> _studentRepository;
+        private readonly IBaseRepository<Mentor, Guid, EducationAppDbContext> _mentorRepository;
+
+        #endregion
 
         /// <summary>
         /// Performs constructor injection for repository interfaces used in this service.
@@ -38,12 +43,16 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// <param name="studentRepository"></param>
         /// <param name="userManager"></param>
         /// <param name="httpContextAccessor"></param>
-        public StudentService(IBaseRepository<Student, Guid, EducationAppDbContext> studentRepository, UserManager<AppUser> userManager, IHttpContextAccessor httpContextAccessor)
+        /// <param name="mentorRepository"></param>
+        public StudentService(IBaseRepository<Student, Guid, EducationAppDbContext> studentRepository, UserManager<AppUser> userManager, IBaseRepository<Mentor, Guid, EducationAppDbContext> mentorRepository, IHttpContextAccessor httpContextAccessor)
         {
+            _mentorRepository = mentorRepository;
             _userManager = userManager;
             _studentRepository = studentRepository;
-            _loggedUser = httpContextAccessor.HttpContext.User.Identity.Name;
+            _httpContextAccessor = httpContextAccessor;
         }
+
+        #region CRUD Operations
 
         /// <summary>
         /// It will filter students according to the parameters sent in <paramref name="pagiantionParams"/>
@@ -81,8 +90,10 @@ namespace Milvasoft.SampleAPI.Services.Concrete
                     GraduationScore = student.GraduationScore,
                     MentorGraduationThoughts = student.MentorGraduationThoughts,
                     ProfessionId = student.ProfessionId,
-                    Mentor = student.Mentor.CheckObject(i => new MentorDTO
+                    Mentor = student.Mentor.CheckObject(i => new MentorForAdminDTO
                     {
+                        Name=i.Name,
+                        Surname=i.Surname,
                         Id = i.Id
                     })
                 })),
@@ -99,13 +110,12 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// <returns>Brings the students for whom the mentor is responsible.</returns>
         public async Task<PaginationDTO<StudentForMentorDTO>> GetStudentsForCurrentMentorAsync(PaginationParamsWithSpec<StudentSpec> pagiantionParams)
         {
-            var currentMentor = await _userManager.FindByNameAsync(_loggedUser).ConfigureAwait(false);
+            var username = _httpContextAccessor.HttpContext.User.Identity.Name;
 
-            currentMentor.ThrowIfNullForGuidObject();
+            var currentMentor = await _mentorRepository.GetFirstOrDefaultAsync(i => i.AppUser.UserName == username).ConfigureAwait(false);
 
             Func<IIncludable<Student>, IIncludable> includes = i => i.Include(md => md.Mentor)
-                                                                        .Include(assi => assi.OldAssignments);
-
+                                                                        .Include(oa => oa.OldAssignments);
 
             var (students, pageCount, totalDataCount) = await _studentRepository.PreparePaginationDTO<IBaseRepository<Student, Guid, EducationAppDbContext>, Student, Guid>
                                                                                                                 (pagiantionParams.PageIndex,
@@ -114,43 +124,40 @@ namespace Milvasoft.SampleAPI.Services.Concrete
                                                                                                                 pagiantionParams.OrderByAscending = false,
                                                                                                                 pagiantionParams.Spec?.ToExpression(),
                                                                                                                 includes).ConfigureAwait(false);
-            var mentorStudents = from i in students
-                                 where i.Mentor.AppUser.UserName == currentMentor.Mentor.AppUser.UserName
-                                 select i;
+
 
             return new PaginationDTO<StudentForMentorDTO>
             {
-                DTOList = mentorStudents.CheckList(i => mentorStudents.Select(mentorStudents => new StudentForMentorDTO
+                DTOList = students.CheckList(i => students.Select(students => students.MentorId==currentMentor.Id ? new StudentForMentorDTO
                 {
-                    Id = mentorStudents.Id,
-                    Name = mentorStudents.Name,
-                    Surname = mentorStudents.Surname,
-                    University = mentorStudents.University,
-                    Age = mentorStudents.Age,
-                    Dream = mentorStudents.Dream,
-                    HomeAddress = mentorStudents.HomeAddress,
-                    MentorThoughts = mentorStudents.MentorThoughts,
-                    GraduationStatus = mentorStudents.GraduationStatus,
-                    GraduationScore = mentorStudents.GraduationScore,
-                    MentorGraduationThoughts = mentorStudents.MentorGraduationThoughts,
-                    ProfessionId = mentorStudents.ProfessionId,
-                    Mentor = mentorStudents.Mentor.CheckObject(i => new MentorDTO
+                    Id = students.Id,
+                    Name = students.Name,
+                    Surname = students.Surname,
+                    University = students.University,
+                    Age = students.Age,
+                    Dream = students.Dream,
+                    HomeAddress = students.HomeAddress,
+                    MentorThoughts = students.MentorThoughts,
+                    GraduationStatus = students.GraduationStatus,
+                    GraduationScore = students.GraduationScore,
+                    MentorGraduationThoughts = students.MentorGraduationThoughts,
+                    ProfessionId = students.ProfessionId,
+                    Mentor = students.Mentor.CheckObject(i => new MentorDTO
                     {
                         AppUserId = i.AppUserId,
                         Name = i.Name,
                         Id = i.Id
                     }),
-                    CurrentAssigmentDeliveryDate = mentorStudents.CurrentAssigmentDeliveryDate,
-                    OldAssignments = mentorStudents.OldAssignments.CheckList(f => mentorStudents.OldAssignments?.Select(oa => new StudentAssignmentDTO
+                    CurrentAssigmentDeliveryDate = students.CurrentAssigmentDeliveryDate,
+                    OldAssignments = students.OldAssignments.CheckList(f =>students.OldAssignments.Select(oa => oa.Status!=Entity.Enum.EducationStatus.InProgress ? new StudentAssignmentDTO
                     {
-                        AssigmentId = oa.Assigment.Id,
-                    }))
-                })),
+                        Id = oa.Id,
+                    }:null))
+                }:null)),
                 PageCount = pageCount,
                 TotalDataCount = totalDataCount
             };
         }
-
 
         /// <summary>
         /// Get student information for admin by <paramref name="studentId"/>
@@ -160,8 +167,6 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         public async Task<StudentForAdminDTO> GetStudentForAdminAsync(Guid studentId)
         {
             Func<IIncludable<Student>, IIncludable> includes = i => i.Include(md => md.Mentor);
-
-            Expression<Func<Student, bool>> condition = i => i.Id == studentId;
 
             var student = await _studentRepository.GetByIdAsync(studentId, includes).ConfigureAwait(false);
 
@@ -181,9 +186,10 @@ namespace Milvasoft.SampleAPI.Services.Concrete
                 GraduationScore = student.GraduationScore,
                 MentorGraduationThoughts = student.MentorGraduationThoughts,
                 ProfessionId = student.ProfessionId,
-                Mentor = student.Mentor.CheckObject(i => new MentorDTO
+                Mentor = student.Mentor.CheckObject(i => new MentorForAdminDTO
                 {
-                    Id = student.MentorId
+                    Name=i.Name,
+                    Surname=i.Surname
                 }),
                 CreationDate = student.CreationDate,
                 LastModificationDate = student.LastModificationDate
@@ -198,12 +204,14 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// <returns></returns>
         public async Task<StudentForMentorDTO> GetStudentForMentorAsync(Guid studentId)
         {
-            var currentMentor = await _userManager.FindByNameAsync(_loggedUser).ConfigureAwait(false);
+            var username = _httpContextAccessor.HttpContext.User.Identity.Name;
+
+            var currentMentor = await _mentorRepository.GetFirstOrDefaultAsync(i => i.AppUser.UserName == username).ConfigureAwait(false);
 
             Func<IIncludable<Student>, IIncludable> includes = i => i.Include(md => md.Mentor)
                                                                      .Include(oa => oa.OldAssignments);
 
-            var student = await _studentRepository.GetByIdAsync(studentId, includes, i => i.Mentor == currentMentor.Mentor).ConfigureAwait(false);
+            var student = await _studentRepository.GetByIdAsync(studentId, includes, i => i.MentorId == currentMentor.Id).ConfigureAwait(false);
 
             student.ThrowIfNullForGuidObject();
 
@@ -238,30 +246,32 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// <returns></returns>
         public async Task<StudentForMentorDTO> GetCurrentUserProfile()
         {
-            var currentStudent = await _userManager.FindByNameAsync(_loggedUser).ConfigureAwait(false);
+            var username = _httpContextAccessor.HttpContext.User.Identity.Name;
+
+            var currentStudent = await _studentRepository.GetFirstOrDefaultAsync(i => i.AppUser.UserName == username).ConfigureAwait(false);
 
             currentStudent.ThrowIfNullForGuidObject();
 
             return new StudentForMentorDTO
             {
-                Name = currentStudent.Student.Name,
-                Surname = currentStudent.Student.Surname,
-                University = currentStudent.Student.University,
-                Age = currentStudent.Student.Age,
-                Dream = currentStudent.Student.Dream,
-                HomeAddress = currentStudent.Student.HomeAddress,
-                MentorThoughts = currentStudent.Student.MentorThoughts,
-                GraduationStatus = currentStudent.Student.GraduationStatus,
-                GraduationScore = currentStudent.Student.GraduationScore,
-                MentorGraduationThoughts = currentStudent.Student.MentorGraduationThoughts,
-                ProfessionId = currentStudent.Student.ProfessionId,
-                Mentor = currentStudent.Student.Mentor.CheckObject(i => new MentorDTO
+                Name = currentStudent.Name,
+                Surname = currentStudent.Surname,
+                University = currentStudent.University,
+                Age = currentStudent.Age,
+                Dream = currentStudent.Dream,
+                HomeAddress = currentStudent.HomeAddress,
+                MentorThoughts = currentStudent.MentorThoughts,
+                GraduationStatus = currentStudent.GraduationStatus,
+                GraduationScore = currentStudent.GraduationScore,
+                MentorGraduationThoughts = currentStudent.MentorGraduationThoughts,
+                ProfessionId = currentStudent.ProfessionId,
+                Mentor = currentStudent.Mentor.CheckObject(i => new MentorDTO
                 {
                     Name=i.Name,
                     Surname=i.Surname
                 }),
-                CurrentAssigmentDeliveryDate = currentStudent.Student.CurrentAssigmentDeliveryDate,
-                OldAssignments = currentStudent.Student.OldAssignments.CheckList(f => currentStudent.Student.OldAssignments?.Select(oa => new StudentAssignmentDTO
+                CurrentAssigmentDeliveryDate = currentStudent.CurrentAssigmentDeliveryDate,
+                OldAssignments = currentStudent.OldAssignments.CheckList(f => currentStudent.OldAssignments?.Select(oa => new StudentAssignmentDTO
                 {
                     AssigmentId = oa.Assigment.Id  
                 }))
@@ -298,7 +308,6 @@ namespace Milvasoft.SampleAPI.Services.Concrete
                 }
             };
 
-            appUser.Mentor = null;
 
             var result = await _userManager.CreateAsync(appUser, addStudentDTO.Password);
 
@@ -359,7 +368,9 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// <returns></returns>
         public async Task UpdateCurrentStudentAsync(UpdateStudentDTO updateStudentDTO)
         {
-            var currentStudent = await _userManager.FindByNameAsync(_loggedUser).ConfigureAwait(false);
+            var username = _httpContextAccessor.HttpContext.User.Identity.Name;
+
+            var currentStudent = await _userManager.FindByNameAsync(username).ConfigureAwait(false);
 
             currentStudent.Student.Name = updateStudentDTO.Name;
             currentStudent.Student.Surname = updateStudentDTO.Surname;
@@ -383,8 +394,6 @@ namespace Milvasoft.SampleAPI.Services.Concrete
             await _studentRepository.DeleteAsync(deletedStudents).ConfigureAwait(false);
         }
 
-
-
-
+        #endregion 
     }
 }

@@ -2,6 +2,7 @@
 using Milvasoft.Helpers;
 using Milvasoft.SampleAPI.DTOs;
 using Milvasoft.SampleAPI.DTOs.AssignmentDTOs;
+using Milvasoft.SampleAPI.DTOs.StudentAssignmentDTOs;
 using Milvasoft.SampleAPI.Services.Abstract;
 using Milvasoft.SampleAPI.Spec;
 using System;
@@ -149,6 +150,30 @@ namespace Milvasoft.SampleAPI.Controllers
         public async Task<IActionResult> GetAssignmentForCurrentUser()
         {
             var assignment = await _assigmentService.GetAvaibleAssignmentForCurrentStudent().ConfigureAwait(false);
+
+            return assignment.GetObjectResponse("Success");
+        }
+
+        /// <summary>
+        /// The student takes the next assignment.
+        /// </summary>
+        /// <param name="Id"></param>
+        /// <param name="newAssignment"></param>
+        /// <returns></returns>
+        [HttpPost("Take")]
+        public async Task<IActionResult> TakeAssigment(Guid Id,[FromBody] AddStudentAssignmentDTO newAssignment)
+        {
+            return await _assigmentService.TakeAssignment(Id, newAssignment).ConfigureAwait(false).GetObjectResponseAsync<AddStudentAssignmentDTO>("Success").ConfigureAwait(false);
+        }
+
+        /// <summary>
+        /// Brings the unapproved assignments of the students of the mentor logged in.
+        /// </summary>
+        /// <returns></returns>
+        [HttpPatch("UnconfirmedAssignements")]
+        public async Task<IActionResult> GetUnconfirmedAssignment()
+        {
+            var assignment = await _assigmentService.GetUnconfirmedAssignment().ConfigureAwait(false);
 
             return assignment.GetObjectResponse("Success");
         }

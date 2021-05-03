@@ -58,19 +58,6 @@ namespace Milvasoft.SampleAPI.Controllers
         }
 
         /// <summary>
-        /// Gets the all filtered student datas for mentor.
-        /// </summary>
-        /// <returns></returns>
-        //[Authorize(Roles = "Mentor")]
-        [HttpPatch("Mentor/{id}")]
-        public async Task<IActionResult> GetStudentForMentorbyId(Guid id)
-        {
-            var student = await _studentService.GetStudentForMentorAsync(id).ConfigureAwait(false);
-
-            return student.GetObjectResponse("Success");
-        }
-
-        /// <summary>
         /// Brings the information of the student who is logged in.
         /// </summary>
         /// <returns></returns>
@@ -83,12 +70,25 @@ namespace Milvasoft.SampleAPI.Controllers
         }
 
         /// <summary>
+        /// Gets the all filtered student datas for mentor.
+        /// </summary>
+        /// <returns></returns>
+        //[Authorize(Roles = "Mentor")]
+        [HttpPatch("Admin/{id}")]
+        public async Task<IActionResult> GetStudentForAdminbyId(Guid id)
+        {
+            var student = await _studentService.GetStudentForAdminAsync(id).ConfigureAwait(false);
+
+            return student.GetObjectResponse("Success");
+        }
+
+        /// <summary>
         /// Gets the filtered student datas for admin.
         /// </summary>
         /// <returns></returns>
         ///[Authorize(Roles = "Admin")]
-        [HttpPatch("Admin/{id}")]
-        public async Task<IActionResult> GetStudentForAdminbyId(Guid id)
+        [HttpPatch("Mentor/{id}")]
+        public async Task<IActionResult> GetStudentForMentorbyId(Guid id)
         {
             var student = await _studentService.GetStudentForAdminAsync(id).ConfigureAwait(false);
 

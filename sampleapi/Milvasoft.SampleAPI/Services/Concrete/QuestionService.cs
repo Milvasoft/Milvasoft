@@ -35,6 +35,8 @@ namespace Milvasoft.SampleAPI.Services.Concrete
             _questionService = questionService;
         }
 
+        #region CRUD Operations
+
         /// <summary>
         /// Get all questions for admin.
         /// </summary>
@@ -336,5 +338,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
                                             })
                                         } : null).ToList();
         }
+
+        #endregion
     }
 }

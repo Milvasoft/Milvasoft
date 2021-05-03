@@ -32,6 +32,7 @@ using System.Globalization;
 using System.IdentityModel.Tokens.Jwt;
 using System.IO;
 using System.Linq;
+using System.Net.Http.Headers;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
@@ -136,7 +137,6 @@ namespace Milvasoft.SampleAPI.AppStartup
             #region Data Access
 
             services.AddScoped<IContextRepository<EducationAppDbContext>, ContextRepository<EducationAppDbContext>>();
-
             services.AddScoped(typeof(IBaseRepository<,,>), typeof(EducationRepositoryBase<,,>));
 
             #endregion
@@ -156,6 +156,13 @@ namespace Milvasoft.SampleAPI.AppStartup
             services.AddSingleton<SharedResource>();
 
             services.AddHttpContextAccessor();
+
+            services.AddHttpClient<IAccountService, AccountService>(configureClient: opt =>
+            {
+
+                opt.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                opt.DefaultRequestVersion = new Version(1, 0);
+            });
         }
 
         /// <summary>

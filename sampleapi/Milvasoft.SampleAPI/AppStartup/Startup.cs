@@ -15,6 +15,7 @@ using Milvasoft.Helpers.MultiTenancy.Extensions;
 using Milvasoft.Helpers.MultiTenancy.ResolutionStrategy;
 using Milvasoft.Helpers.MultiTenancy.Store;
 using Milvasoft.SampleAPI.Data;
+using Milvasoft.SampleAPI.Data.Utils;
 using Milvasoft.SampleAPI.DTOs;
 using Milvasoft.SampleAPI.Localization;
 using Milvasoft.SampleAPI.Middlewares;

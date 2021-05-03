@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Milvasoft.Helpers.DataAccess.Abstract;
+using Milvasoft.Helpers.DataAccess.IncludeLibrary;
+using Milvasoft.Helpers.Exceptions;
 using Milvasoft.Helpers.Models;
 using Milvasoft.SampleAPI.Data;
 using Milvasoft.SampleAPI.DTOs;
@@ -24,28 +26,47 @@ namespace Milvasoft.SampleAPI.Services.Concrete
     /// </summary>
     public class AssignmentService : IAssignmentService
     {
+        #region Fields
+
         private readonly string _loggedUser;
         private readonly UserManager<AppUser> _userManager;
         private readonly IBaseRepository<Assignment, Guid, EducationAppDbContext> _assignmentRepository;
         private readonly IBaseRepository<StudentAssigment, Guid, EducationAppDbContext> _stuudentAssignmentRepository;
+        private readonly IBaseRepository<Student, Guid, EducationAppDbContext> _studentRepository;
+        private readonly IBaseRepository<Mentor, Guid, EducationAppDbContext> _mentorRepository;
 
+        #endregion
 
         /// <summary>
         /// Performs constructor injection for repository interfaces used in this service.
         /// </summary>
         /// <param name="assignmentRepository"></param>
-        public AssignmentService(IBaseRepository<Assignment, Guid, EducationAppDbContext> assignmentRepository, UserManager<AppUser> userManager, IHttpContextAccessor httpContextAccessor, IBaseRepository<StudentAssigment, Guid, EducationAppDbContext> studentAssignmentRepository)
+        /// <param name="userManager"></param>
+        /// <param name="httpContextAccessor"></param>
+        /// <param name="studentAssignmentRepository"></param>
+        /// <param name="studentRepository"></param>
+        /// <param name="mentorRepository"></param>
+        public AssignmentService(IBaseRepository<Assignment, Guid, EducationAppDbContext> assignmentRepository,
+            UserManager<AppUser> userManager,
+            IHttpContextAccessor httpContextAccessor,
+            IBaseRepository<StudentAssigment, Guid, EducationAppDbContext> studentAssignmentRepository,
+            IBaseRepository<Student, Guid, EducationAppDbContext> studentRepository,
+            IBaseRepository<Mentor, Guid, EducationAppDbContext> mentorRepository)
         {
+            _mentorRepository = mentorRepository;
+            _studentRepository = studentRepository;
             _stuudentAssignmentRepository = studentAssignmentRepository;
             _userManager = userManager;
             _loggedUser = httpContextAccessor.HttpContext.User.Identity.Name;
             _assignmentRepository = assignmentRepository;
         }
 
+        #region CRUP Operations
+
         /// <summary>
-        /// Get all assignment by <paramref name="pagiantionParams"/>
+        /// Get all assignment for student by <paramref name="pagiantionParams"/>
         /// </summary>
-        /// <returns></returns>
+        /// <returns>The assignments is put in the form of an AnnouncementForStudentDTO.</returns>
         public async Task<PaginationDTO<AssignmentForStudentDTO>> GetAssignmentForStudentAsync(PaginationParamsWithSpec<AssignmentSpec> pagiantionParams)
         {
             var (asssignments, pageCount, totalDataCount) = await _assignmentRepository.PreparePaginationDTO<IBaseRepository<Assignment, Guid, EducationAppDbContext>, Assignment, Guid>
@@ -66,8 +87,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
                     Level = assignment.Level,
                     Rules = assignment.Rules,
                     MaxDeliveryDay = assignment.MaxDeliveryDay,
-                    ProfessionId = assignment.ProfessionId,
-                    CreatorUser = assignment.CreatorUser
+                    ProfessionId = assignment.ProfessionId
                 })),
                 PageCount = pageCount,
                 TotalDataCount = totalDataCount
@@ -77,7 +97,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// <summary>
         /// Get assignments for admin by <paramref name="pagiantionParams"/>
         /// </summary>
-        /// <returns></returns>
+        /// <returns>The assignments is put in the form of an AnnouncementForAdminDTO.</returns>
         public async Task<PaginationDTO<AssignmentForAdminDTO>> GetAssignmentForAdminAsync(PaginationParamsWithSpec<AssignmentSpec> pagiantionParams)
         {
             var (asssignments, pageCount, totalDataCount) = await _assignmentRepository.PreparePaginationDTO<IBaseRepository<Assignment, Guid, EducationAppDbContext>, Assignment, Guid>
@@ -99,9 +119,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
                     Level = assignment.Level,
                     Rules = assignment.Rules,
                     MaxDeliveryDay = assignment.MaxDeliveryDay,
-                    ProfessionId = assignment.ProfessionId,
-                    CreatorUser = assignment.CreatorUser,
-                    LastModifierUser = assignment.LastModifierUser
+                    ProfessionId = assignment.ProfessionId
                 })),
                 PageCount = pageCount,
                 TotalDataCount = totalDataCount
@@ -111,7 +129,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// <summary>
         /// Get assignments for mentor by <paramref name="pagiantionParams"/>
         /// </summary>
-        /// <returns></returns>
+        /// <returns>The assignments is put in the form of an AnnouncementForMentorDTO.</returns>
         public async Task<PaginationDTO<AssignmentForMentorDTO>> GetAssignmentForMentorAsync(PaginationParamsWithSpec<AssignmentSpec> pagiantionParams)
         {
             var (asssignments, pageCount, totalDataCount) = await _assignmentRepository.PreparePaginationDTO<IBaseRepository<Assignment, Guid, EducationAppDbContext>, Assignment, Guid>
@@ -133,8 +151,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
                     Level = assignment.Level,
                     Rules = assignment.Rules,
                     MaxDeliveryDay = assignment.MaxDeliveryDay,
-                    ProfessionId = assignment.ProfessionId,
-                    CreatorUser = assignment.CreatorUser
+                    ProfessionId = assignment.ProfessionId
                 })),
                 PageCount = pageCount,
                 TotalDataCount = totalDataCount
@@ -144,8 +161,8 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// <summary>
         /// Get assignment for student by <paramref name="assignmentId"/>
         /// </summary>
-        /// <param name="assignmentId"></param>
-        /// <returns></returns>
+        /// <param name="assignmentId"> Id of the student to be shown.</param>
+        /// <returns>The assignment is put in the form of an AnnouncementForStudentDTO.</returns>
         public async Task<AssignmentForStudentDTO> GetAssignmentForStudentAsync(Guid assignmentId)
         {
             var assignment = await _assignmentRepository.GetByIdAsync(assignmentId).ConfigureAwait(false);
@@ -160,16 +177,15 @@ namespace Milvasoft.SampleAPI.Services.Concrete
                 Level = assignment.Level,
                 Rules = assignment.Rules,
                 MaxDeliveryDay = assignment.MaxDeliveryDay,
-                ProfessionId = assignment.ProfessionId,
-                CreatorUser = assignment.CreatorUser
+                ProfessionId = assignment.ProfessionId
             };
         }
 
         /// <summary>
         /// Get assignment for admin by <paramref name="assignmentId"/>
         /// </summary>
-        /// <param name="assignmentId"></param>
-        /// <returns></returns>
+        /// <param name="assignmentId">Id of the student to be shown.</param>
+        /// <returns>The assignment is put in the form of an AnnouncementForAdminDTO.</returns>
         public async Task<AssignmentForAdminDTO> GetAssignmentForAdminAsync(Guid assignmentId)
         {
             var assignment = await _assignmentRepository.GetByIdAsync(assignmentId).ConfigureAwait(false);
@@ -185,19 +201,15 @@ namespace Milvasoft.SampleAPI.Services.Concrete
                 Level = assignment.Level,
                 Rules = assignment.Rules,
                 MaxDeliveryDay = assignment.MaxDeliveryDay,
-                ProfessionId = assignment.ProfessionId,
-                CreationDate = assignment.CreationDate,
-                LastModificationDate = assignment.LastModificationDate,
-                CreatorUser = assignment.CreatorUser,
-                LastModifierUser = assignment.LastModifierUser
+                ProfessionId = assignment.ProfessionId
             };
         }
 
         /// <summary>
         /// Get assignment for mentor by <paramref name="assignmentId"/>
         /// </summary>
-        /// <param name="assignmentId"></param>
-        /// <returns></returns>
+        /// <param name="assignmentId">Id of the student to be shown.</param>
+        /// <returns>The assignment is put in the form of an AnnouncementForMentorDTO.</returns>
         public async Task<AssignmentForMentorDTO> GetAssignmentForMentorAsync(Guid assignmentId)
         {
             var assignment = await _assignmentRepository.GetByIdAsync(assignmentId).ConfigureAwait(false);
@@ -213,10 +225,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
                 Level = assignment.Level,
                 Rules = assignment.Rules,
                 MaxDeliveryDay = assignment.MaxDeliveryDay,
-                ProfessionId = assignment.ProfessionId,
-                CreationDate = assignment.CreationDate,
-                CreatorUser = assignment.CreatorUser,
-                LastModifierUser = assignment.LastModifierUser
+                ProfessionId = assignment.ProfessionId
             };
         }
 
@@ -271,7 +280,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// <summary>
         /// Delete assignments by <paramref name="assignmentIds"/>
         /// </summary>
-        /// <param name="assignmentIds"></param>
+        /// <param name="assignmentIds"> Id of assignments to be deleted.</param>
         /// <returns></returns>
         public async Task DeleteAssignmentAsync(List<Guid> assignmentIds)
         {
@@ -279,19 +288,23 @@ namespace Milvasoft.SampleAPI.Services.Concrete
             await _assignmentRepository.DeleteAsync(assignments).ConfigureAwait(false);
         }
 
+        #endregion
+
+        #region Students
         /// <summary>
         /// Brings homework suitable for the student's level.
         /// </summary>
         /// <returns> Returns the appropriate assignment to the student.</returns>
         public async Task<AssignmentForStudentDTO> GetAvaibleAssignmentForCurrentStudent()
         {
-            var currentStudent = await _userManager.FindByNameAsync(_loggedUser).ConfigureAwait(false);
 
-            currentStudent.Student.ThrowIfNullForGuidObject("User is not student.");
+            var currentStudent = await _studentRepository.GetFirstOrDefaultAsync(i => i.AppUser.UserName == _loggedUser).ConfigureAwait(false);
 
-            int level = currentStudent.Student.Level;
+            currentStudent.ThrowIfNullForGuidObject("User is not student.");
 
-            Guid professionId = currentStudent.Student.ProfessionId;
+            int level = currentStudent.Level;
+
+            Guid professionId = currentStudent.ProfessionId;
 
             var assignment = await _assignmentRepository.GetFirstOrDefaultAsync(i => i.Level == level && i.ProfessionId == professionId).ConfigureAwait(false);
 
@@ -316,9 +329,11 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// <returns></returns>
         public async Task TakeAssignment(Guid Id,AddStudentAssignmentDTO newAssignment)
         {
-            var currentStudent = await _userManager.FindByNameAsync(_loggedUser).ConfigureAwait(false);
+            var currentStudent = await _studentRepository.GetFirstOrDefaultAsync(i => i.AppUser.UserName == _loggedUser).ConfigureAwait(false);
 
-            currentStudent.Student.ThrowIfNullForGuidObject("User is not student.");
+            currentStudent.ThrowIfNullForGuidObject("User is not student.");
+
+            if (currentStudent.CurrentAssigmentDeliveryDate < DateTime.Today) throw new MilvaUserFriendlyException("User already have assignment.");
 
             var toBeTakeAssignment = await _assignmentRepository.GetByIdAsync(Id).ConfigureAwait(false);
 
@@ -328,14 +343,73 @@ namespace Milvasoft.SampleAPI.Services.Concrete
             {
                 IsActive = false,
                 AssigmentId = toBeTakeAssignment.Id,
-                StudentId = currentStudent.Student.Id,
+                StudentId = currentStudent.Id,
                 AdditionalTime=newAssignment.AdditionalTime,
-                AdditionalTimeDescription= newAssignment.AdditionalTimeDescription
+                AdditionalTimeDescription= newAssignment.AdditionalTimeDescription,
+                Status=Entity.Enum.EducationStatus.InProgress
             };
 
             await _stuudentAssignmentRepository.AddAsync(studentAssignment).ConfigureAwait(false);
         }
 
-        
+        #endregion
+
+        #region Mentors
+
+        /// <summary>
+        /// Brings the unapproved assignments of the students of the mentor logged in.
+        /// </summary>
+        /// <returns></returns>
+        public async Task<List<StudentAssignmentDTO>> GetUnconfirmedAssignment()
+        {
+            Func<IIncludable<StudentAssigment>, IIncludable> includes = i => i.Include(p => p.Assigment)
+                                                                     .Include(s => s.Student)
+                                                                        .ThenInclude(m=>m.Mentor);
+                                                                        
+
+            var currentMentor = await _mentorRepository.GetFirstOrDefaultAsync(i => i.AppUser.UserName == _loggedUser).ConfigureAwait(false);
+
+            var unconfirmedAssignment = await _stuudentAssignmentRepository.GetAllAsync(includes,i => i.IsActive == false && i.Student.Mentor.Id==currentMentor.Id).ConfigureAwait(false);
+
+            unconfirmedAssignment.ThrowIfListIsNotNullOrEmpty("All assignments are approved.");
+
+            var unconfirmedAssignmentsDTO = from assignment in unconfirmedAssignment
+                             select new StudentAssignmentDTO
+                             {
+                                 Id=assignment.Id,
+                                 IsActive=assignment.IsActive,
+                                 AdditionalTime=assignment.AdditionalTime,
+                                 AdditionalTimeDescription=assignment.AdditionalTimeDescription,
+                                 Student=new StudentDTO
+                                 {
+                                     Name=assignment.Student.Name,
+                                     Surname=assignment.Student.Surname,
+                                     Id=assignment.Student.Id
+                                 }
+                             };
+            return unconfirmedAssignmentsDTO.ToList();
+        }
+
+        /// <summary>
+        /// The mentor approves the homework request sent by the student.
+        /// </summary>
+        /// <param name="toBeUpdated"></param>
+        /// <returns></returns>
+        public async Task ConfirmAssignment(StudentAssignmentDTO toBeUpdated)
+        {
+            var toBeUpdatedAssignment = await _stuudentAssignmentRepository.GetByIdAsync(toBeUpdated.Id).ConfigureAwait(false);
+
+            var student = await _studentRepository.GetByIdAsync(toBeUpdatedAssignment.StudentId).ConfigureAwait(false);
+
+            if (toBeUpdatedAssignment.IsActive == true) throw new MilvaUserFriendlyException("The assignment is already active.");
+
+            toBeUpdatedAssignment.IsActive = true;
+            toBeUpdatedAssignment.FinishedDate = toBeUpdated.FinishedDate;
+
+            student.CurrentAssigmentDeliveryDate = toBeUpdatedAssignment.FinishedDate;
+            
+        }
+
+        #endregion
     }
 }
