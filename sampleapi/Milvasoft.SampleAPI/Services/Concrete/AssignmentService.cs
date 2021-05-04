@@ -3,6 +3,9 @@ using Microsoft.AspNetCore.Identity;
 using Milvasoft.Helpers.DataAccess.Abstract;
 using Milvasoft.Helpers.DataAccess.IncludeLibrary;
 using Milvasoft.Helpers.Exceptions;
+using Milvasoft.Helpers.FileOperations.Concrete;
+using Milvasoft.Helpers.FileOperations.Enums;
+using Milvasoft.Helpers.Mail;
 using Milvasoft.Helpers.Models;
 using Milvasoft.SampleAPI.Data;
 using Milvasoft.SampleAPI.DTOs;
@@ -16,6 +19,7 @@ using Milvasoft.SampleAPI.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace Milvasoft.SampleAPI.Services.Concrete
@@ -30,8 +34,9 @@ namespace Milvasoft.SampleAPI.Services.Concrete
 
         private readonly string _loggedUser;
         private readonly UserManager<AppUser> _userManager;
+        private readonly IMilvaMailSender _mailSender;
         private readonly IBaseRepository<Assignment, Guid, EducationAppDbContext> _assignmentRepository;
-        private readonly IBaseRepository<StudentAssigment, Guid, EducationAppDbContext> _stuudentAssignmentRepository;
+        private readonly IBaseRepository<StudentAssigment, Guid, EducationAppDbContext> _studentAssignmentRepository;
         private readonly IBaseRepository<Student, Guid, EducationAppDbContext> _studentRepository;
         private readonly IBaseRepository<Mentor, Guid, EducationAppDbContext> _mentorRepository;
 
@@ -46,19 +51,22 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// <param name="studentAssignmentRepository"></param>
         /// <param name="studentRepository"></param>
         /// <param name="mentorRepository"></param>
+        /// <param name="mailSender"></param>
         public AssignmentService(IBaseRepository<Assignment, Guid, EducationAppDbContext> assignmentRepository,
             UserManager<AppUser> userManager,
             IHttpContextAccessor httpContextAccessor,
             IBaseRepository<StudentAssigment, Guid, EducationAppDbContext> studentAssignmentRepository,
             IBaseRepository<Student, Guid, EducationAppDbContext> studentRepository,
-            IBaseRepository<Mentor, Guid, EducationAppDbContext> mentorRepository)
+            IBaseRepository<Mentor, Guid, EducationAppDbContext> mentorRepository,
+            IMilvaMailSender mailSender)
         {
             _mentorRepository = mentorRepository;
             _studentRepository = studentRepository;
-            _stuudentAssignmentRepository = studentAssignmentRepository;
+            _studentAssignmentRepository = studentAssignmentRepository;
             _userManager = userManager;
             _loggedUser = httpContextAccessor.HttpContext.User.Identity.Name;
             _assignmentRepository = assignmentRepository;
+            _mailSender = mailSender;
         }
 
         #region CRUP Operations
@@ -322,6 +330,35 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         }
 
         /// <summary>
+        /// Get current assignment for logged student.
+        /// </summary>
+        /// <returns></returns>
+        public async Task<AssignmentForStudentDTO> GetCurrentActiveAssignment()
+        {
+            var currentStudent = await _studentRepository.GetFirstOrDefaultAsync(i => i.AppUser.UserName == _loggedUser).ConfigureAwait(false);
+
+            currentStudent.ThrowIfNullForGuidObject();
+
+            var currentAssignment = await _studentAssignmentRepository.GetFirstOrDefaultAsync(i => i.StudentId == currentStudent.Id && i.IsActive == true);
+
+            currentAssignment.ThrowIfNullForGuidObject("Active assignment is not found.");
+
+            var assignment = await _assignmentRepository.GetByIdAsync(currentAssignment.AssigmentId).ConfigureAwait(false);
+
+            return new AssignmentForStudentDTO
+            {
+                Title = assignment.Title,
+                Level=assignment.Level,
+                Description=assignment.Description,
+                RemarksToStudent=assignment.RemarksToStudent,
+                MaxDeliveryDay=assignment.MaxDeliveryDay,
+                Rules=assignment.Rules,
+                ProfessionId=assignment.ProfessionId
+            };
+
+        }
+          
+        /// <summary>
         ///  The student takes the next assignment.
         /// </summary>
         /// <param name="Id"></param>
@@ -349,9 +386,62 @@ namespace Milvasoft.SampleAPI.Services.Concrete
                 Status=Entity.Enum.EducationStatus.InProgress
             };
 
-            await _stuudentAssignmentRepository.AddAsync(studentAssignment).ConfigureAwait(false);
+            await _studentAssignmentRepository.AddAsync(studentAssignment).ConfigureAwait(false);
         }
 
+        /// <summary>
+        /// Allows the student to turn in the assignment.
+        /// </summary>
+        /// <param name="submitAssignment"></param>
+        /// <returns></returns>
+        public async Task<string> SubmitAssignment(SubmitAssignmentDTO submitAssignment)
+        {
+            string basePath = GlobalConstants.DocumentLibraryPath;
+
+            FormFileOperations.FilesFolderNameCreator assignmentFolderNameCreator = CreateAssignmentName;
+
+            int maxFileLength = 140000000;
+
+            var allowedFileExtensions = GlobalConstants.AllowedFileExtensions.Find(i => i.FileType == FileType.Compressed.ToString()).AllowedExtensions;
+
+            var validationResult = submitAssignment.Assignment.ValidateFile(maxFileLength, allowedFileExtensions, FileType.Compressed);
+
+            switch (validationResult)
+            {
+                case FileValidationResult.Valid:
+                    break;
+                case FileValidationResult.FileSizeTooBig:
+                    // Get length of file in bytes
+                    long fileSizeInBytes = submitAssignment.Assignment.Length;
+                    // Convert the bytes to Kilobytes (1 KB = 1024 Bytes)
+                    double fileSizeInKB = fileSizeInBytes / 1024;
+                    // Convert the KB to MegaBytes (1 MB = 1024 KBytes)
+                    double fileSizeInMB = fileSizeInKB / 1024;
+                    throw new MilvaUserFriendlyException("FileIsTooBigMessage", fileSizeInMB.ToString("0.#"));
+                case FileValidationResult.InvalidFileExtension:
+                    var stringBuilder = new StringBuilder();
+                    throw new MilvaUserFriendlyException("UnsupportedFileTypeMessage", stringBuilder.AppendJoin(", ", allowedFileExtensions));
+                case FileValidationResult.NullFile:
+                    throw new MilvaUserFriendlyException("FileIsNull");
+            }
+
+            var path = await submitAssignment.Assignment.SaveFileToPathAsync(submitAssignment, basePath, assignmentFolderNameCreator, "Id").ConfigureAwait(false);
+
+            await submitAssignment.Assignment.OpenReadStream().DisposeAsync().ConfigureAwait(false);
+
+
+            return path;
+        }
+
+        /// <summary>
+        /// Create assignment name.
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        private static string CreateAssignmentName(Type type)
+        {
+            return type.Name + "Assignment";
+        }
         #endregion
 
         #region Mentors
@@ -369,7 +459,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
 
             var currentMentor = await _mentorRepository.GetFirstOrDefaultAsync(i => i.AppUser.UserName == _loggedUser).ConfigureAwait(false);
 
-            var unconfirmedAssignment = await _stuudentAssignmentRepository.GetAllAsync(includes,i => i.IsActive == false && i.Student.Mentor.Id==currentMentor.Id).ConfigureAwait(false);
+            var unconfirmedAssignment = await _studentAssignmentRepository.GetAllAsync(includes,i => i.IsActive == false && i.Student.Mentor.Id==currentMentor.Id).ConfigureAwait(false);
 
             unconfirmedAssignment.ThrowIfListIsNotNullOrEmpty("All assignments are approved.");
 
@@ -397,7 +487,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// <returns></returns>
         public async Task ConfirmAssignment(StudentAssignmentDTO toBeUpdated)
         {
-            var toBeUpdatedAssignment = await _stuudentAssignmentRepository.GetByIdAsync(toBeUpdated.Id).ConfigureAwait(false);
+            var toBeUpdatedAssignment = await _studentAssignmentRepository.GetByIdAsync(toBeUpdated.Id).ConfigureAwait(false);
 
             var student = await _studentRepository.GetByIdAsync(toBeUpdatedAssignment.StudentId).ConfigureAwait(false);
 

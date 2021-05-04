@@ -76,11 +76,19 @@ namespace Milvasoft.SampleAPI.Services.Abstract
         Task DeleteAssignmentAsync(List<Guid> ids);
         #endregion
 
+        #region Student
+
         /// <summary>
         /// Brings homework suitable for the student's level.
         /// </summary>
         /// <returns></returns>
         Task<AssignmentForStudentDTO> GetAvaibleAssignmentForCurrentStudent();
+
+        /// <summary>
+        /// Get current assignment for logged student.
+        /// </summary>
+        /// <returns></returns>
+        Task<AssignmentForStudentDTO> GetCurrentActiveAssignment();
 
         /// <summary>
         ///  The student takes the next assignment.
@@ -89,6 +97,17 @@ namespace Milvasoft.SampleAPI.Services.Abstract
         /// <param name="newAssignment"></param>
         /// <returns></returns>
         Task TakeAssignment(Guid Id, AddStudentAssignmentDTO newAssignment);
+
+        /// <summary>
+        /// Allows the student to turn in the assignment.
+        /// </summary>
+        /// <param name="submitAssignment"></param>
+        /// <returns></returns>
+        Task<string> SubmitAssignment(SubmitAssignmentDTO submitAssignment);
+
+        #endregion
+
+        #region Mentor
 
         /// <summary>
         /// Brings the unapproved assignments of the students of the mentor logged in.
@@ -102,5 +121,7 @@ namespace Milvasoft.SampleAPI.Services.Abstract
         /// <param name="toBeUpdated"></param>
         /// <returns></returns>
         Task ConfirmAssignment(StudentAssignmentDTO toBeUpdated);
+
+        #endregion
     }
 }
