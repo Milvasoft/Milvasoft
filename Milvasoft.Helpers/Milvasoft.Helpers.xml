@@ -752,10 +752,30 @@
             Creates order by key selector by <paramref name="orderByPropertyName"/>.
             </summary>
             
-            <exception cref="T:System.ArgumentException"> Throwns when type of <typeparamref name="T"/>'s properties doesn't contain '<paramref name="orderByPropertyName"/>'. </exception>
+            <exception cref="T:Milvasoft.Helpers.Exceptions.MilvaDeveloperException"> Throwns when type of <typeparamref name="T"/>'s properties doesn't contain '<paramref name="orderByPropertyName"/>'. </exception>
             
             <typeparam name="T"></typeparam>
             <param name="orderByPropertyName"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.CommonHelper.CreatePropertySelector``2(System.String)">
+            <summary>
+            Create property selector predicate.(e.g. i => i.User).
+            If <typeparamref name="T"/> doesn't contains <paramref name="propertyName"/> throwns <see cref="T:Milvasoft.Helpers.Exceptions.MilvaDeveloperException"/>
+            </summary>
+            <typeparam name="T"></typeparam>
+            <typeparam name="TPropertyType"></typeparam>
+            <param name="propertyName"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.CommonHelper.CreateRequiredPropertySelector``2(System.String)">
+            <summary>
+            Create property selector predicate.(e.g. i => i.User).
+            If <typeparamref name="T"/> doesn't contains <paramref name="propertyName"/> returns null.
+            </summary>
+            <typeparam name="T"></typeparam>
+            <typeparam name="TPropertyType"></typeparam>
+            <param name="propertyName"></param>
             <returns></returns>
         </member>
         <member name="M:Milvasoft.Helpers.CommonHelper.GetPropertyValue(System.Object,System.String)">
@@ -8569,7 +8589,33 @@
             <param name="errorMessage"></param>
             <returns>  <see cref="T:Milvasoft.Helpers.Models.Response.ObjectResponse`1"/> in 200 OK <see cref="T:Microsoft.AspNetCore.Mvc.ActionResult"/> </returns>
         </member>
+        <member name="M:Milvasoft.Helpers.Response.GetObjectResponseAsync``2(System.Threading.Tasks.Task,System.Collections.Generic.IEnumerable{``1},System.String,System.String)">
+            <summary>
+            <para> Run the <paramref name="asyncTask"/> then return <see cref="T:Milvasoft.Helpers.Models.Response.ObjectResponse`1"/>. </para>
+            <para> If <paramref name="asyncTask"/> is success sets the <paramref name="successMessage"/> to <see cref="T:Milvasoft.Helpers.Models.Response.ObjectResponse`1"/>.Message.
+                   Otherwise you should throw exception and cut the request pipeline in <paramref name="asyncTask"/>. </para>
+            </summary>
+            
+            <param name="asyncTask"></param>
+            <param name="idList"></param>
+            <param name="successMessage"></param>
+            <param name="errorMessage"></param>
+            <returns>  <see cref="T:Milvasoft.Helpers.Models.Response.ObjectResponse`1"/> in 200 OK <see cref="T:Microsoft.AspNetCore.Mvc.ActionResult"/> </returns>
+        </member>
         <member name="M:Milvasoft.Helpers.Response.GetObjectResponseAsync``2(System.Runtime.CompilerServices.ConfiguredTaskAwaitable{System.Collections.Generic.IEnumerable{``0}},System.Collections.Generic.IEnumerable{``1},System.String,System.String)">
+            <summary>
+            <para> Run the <paramref name="asyncTask"/> then return <see cref="T:Milvasoft.Helpers.Models.Response.ObjectResponse`1"/>. </para>
+            <para> If <paramref name="asyncTask"/> is success sets the <paramref name="successMessage"/> to <see cref="T:Milvasoft.Helpers.Models.Response.ObjectResponse`1"/>.Message.
+                   Otherwise you should throw exception and cut the request pipeline in <paramref name="asyncTask"/>. </para>
+            </summary>
+            
+            <param name="asyncTask"></param>
+            <param name="idList"></param>
+            <param name="successMessage"></param>
+            <param name="errorMessage"></param>
+            <returns>  <see cref="T:Milvasoft.Helpers.Models.Response.ObjectResponse`1"/> in 200 OK <see cref="T:Microsoft.AspNetCore.Mvc.ActionResult"/> </returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.Response.GetObjectResponseAsync``2(System.Threading.Tasks.Task{System.Collections.Generic.IEnumerable{``0}},System.Collections.Generic.IEnumerable{``1},System.String,System.String)">
             <summary>
             <para> Run the <paramref name="asyncTask"/> then return <see cref="T:Milvasoft.Helpers.Models.Response.ObjectResponse`1"/>. </para>
             <para> If <paramref name="asyncTask"/> is success sets the <paramref name="successMessage"/> to <see cref="T:Milvasoft.Helpers.Models.Response.ObjectResponse`1"/>.Message.
@@ -8638,6 +8684,72 @@
             <returns> <see cref="T:Milvasoft.Helpers.Models.Response.ObjectResponse`1"/> in 200 OK <see cref="T:Microsoft.AspNetCore.Mvc.ActionResult"/> </returns>
         </member>
         <member name="M:Milvasoft.Helpers.Response.GetObjectResponseAsync``1(System.Runtime.CompilerServices.ConfiguredTaskAwaitable{System.SByte},System.String)">
+            <summary>
+            <para> Run the <paramref name="asyncTask"/> then return <see cref="T:Milvasoft.Helpers.Models.Response.ObjectResponse`1"/>. </para>
+            <para> If <paramref name="asyncTask"/> is success sets the <paramref name="successMessage"/> to <see cref="T:Milvasoft.Helpers.Models.Response.ObjectResponse`1"/>.Message.
+                   Otherwise you should throw exception and cut the request pipeline in <paramref name="asyncTask"/>. </para>
+            </summary>
+            
+            <param name="asyncTask"></param>
+            <param name="successMessage"></param>
+            <returns> <see cref="T:Milvasoft.Helpers.Models.Response.ObjectResponse`1"/> in 200 OK <see cref="T:Microsoft.AspNetCore.Mvc.ActionResult"/> </returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.Response.GetObjectResponseAsync``1(System.Threading.Tasks.Task,System.String)">
+            <summary>
+            <para> Run the <paramref name="asyncTask"/> then return <see cref="T:Milvasoft.Helpers.Models.Response.ObjectResponse`1"/>. </para>
+            <para> If <paramref name="asyncTask"/> is success sets the <paramref name="successMessage"/> to <see cref="T:Milvasoft.Helpers.Models.Response.ObjectResponse`1"/>.Message.
+                   Otherwise you should throw exception and cut the request pipeline in <paramref name="asyncTask"/>. </para>
+            </summary>
+            
+            <param name="asyncTask"></param>
+            <param name="successMessage"></param>
+            <returns>  <see cref="T:Milvasoft.Helpers.Models.Response.ObjectResponse`1"/> in 200 OK <see cref="T:Microsoft.AspNetCore.Mvc.ActionResult"/> </returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.Response.GetObjectResponseAsync``1(System.Threading.Tasks.Task{``0},System.String)">
+            <summary>
+            <para> Run the <paramref name="asyncTask"/> then return <see cref="T:Milvasoft.Helpers.Models.Response.ObjectResponse`1"/>. </para>
+            <para> If <paramref name="asyncTask"/> is success sets the <paramref name="successMessage"/> to <see cref="T:Milvasoft.Helpers.Models.Response.ObjectResponse`1"/>.Message.
+                   Otherwise you should throw exception and cut the request pipeline in <paramref name="asyncTask"/>. </para>
+            </summary>
+            
+            <param name="asyncTask"></param>
+            <param name="successMessage"></param>
+            <returns>  <see cref="T:Milvasoft.Helpers.Models.Response.ObjectResponse`1"/> in 200 OK <see cref="T:Microsoft.AspNetCore.Mvc.ActionResult"/> </returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.Response.GetObjectResponseAsync``1(System.Threading.Tasks.Task{System.Object},System.String)">
+            <summary>
+            <para> Run the <paramref name="asyncTask"/> then return <see cref="T:Milvasoft.Helpers.Models.Response.ObjectResponse`1"/>. </para>
+            <para> If <paramref name="asyncTask"/> is success sets the <paramref name="successMessage"/> to <see cref="T:Milvasoft.Helpers.Models.Response.ObjectResponse`1"/>.Message.
+                   Otherwise you should throw exception and cut the request pipeline in <paramref name="asyncTask"/>. </para>
+            </summary>
+            
+            <param name="asyncTask"></param>
+            <param name="successMessage"></param>
+            <returns>  <see cref="T:Milvasoft.Helpers.Models.Response.ObjectResponse`1"/> in 200 OK <see cref="T:Microsoft.AspNetCore.Mvc.ActionResult"/> </returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.Response.GetObjectResponseAsync``1(System.Threading.Tasks.Task{System.Guid},System.String)">
+            <summary>
+            <para> Run the <paramref name="asyncTask"/> then return <see cref="T:Milvasoft.Helpers.Models.Response.ObjectResponse`1"/>. </para>
+            <para> If <paramref name="asyncTask"/> is success sets the <paramref name="successMessage"/> to <see cref="T:Milvasoft.Helpers.Models.Response.ObjectResponse`1"/>.Message.
+                   Otherwise you should throw exception and cut the request pipeline in <paramref name="asyncTask"/>. </para>
+            </summary>
+            
+            <param name="asyncTask"></param>
+            <param name="successMessage"></param>
+            <returns> <see cref="T:Milvasoft.Helpers.Models.Response.ObjectResponse`1"/> in 200 OK <see cref="T:Microsoft.AspNetCore.Mvc.ActionResult"/> </returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.Response.GetObjectResponseAsync``1(System.Threading.Tasks.Task{System.Int32},System.String)">
+            <summary>
+            <para> Run the <paramref name="asyncTask"/> then return <see cref="T:Milvasoft.Helpers.Models.Response.ObjectResponse`1"/>. </para>
+            <para> If <paramref name="asyncTask"/> is success sets the <paramref name="successMessage"/> to <see cref="T:Milvasoft.Helpers.Models.Response.ObjectResponse`1"/>.Message.
+                   Otherwise you should throw exception and cut the request pipeline in <paramref name="asyncTask"/>. </para>
+            </summary>
+            
+            <param name="asyncTask"></param>
+            <param name="successMessage"></param>
+            <returns> <see cref="T:Milvasoft.Helpers.Models.Response.ObjectResponse`1"/> in 200 OK <see cref="T:Microsoft.AspNetCore.Mvc.ActionResult"/> </returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.Response.GetObjectResponseAsync``1(System.Threading.Tasks.Task{System.SByte},System.String)">
             <summary>
             <para> Run the <paramref name="asyncTask"/> then return <see cref="T:Milvasoft.Helpers.Models.Response.ObjectResponse`1"/>. </para>
             <para> If <paramref name="asyncTask"/> is success sets the <paramref name="successMessage"/> to <see cref="T:Milvasoft.Helpers.Models.Response.ObjectResponse`1"/>.Message.
