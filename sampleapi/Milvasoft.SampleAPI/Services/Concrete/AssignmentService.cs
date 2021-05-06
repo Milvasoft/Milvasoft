@@ -77,12 +77,11 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// <returns>The assignments is put in the form of an AnnouncementForStudentDTO.</returns>
         public async Task<PaginationDTO<AssignmentForStudentDTO>> GetAssignmentForStudentAsync(PaginationParamsWithSpec<AssignmentSpec> pagiantionParams)
         {
-            var (asssignments, pageCount, totalDataCount) = await _assignmentRepository.PreparePaginationDTO<IBaseRepository<Assignment, Guid, EducationAppDbContext>, Assignment, Guid>
-                                                                                                                (pagiantionParams.PageIndex,
-                                                                                                                pagiantionParams.RequestedItemCount,
-                                                                                                                pagiantionParams.OrderByProperty = null,
-                                                                                                                pagiantionParams.OrderByAscending = false,
-                                                                                                                pagiantionParams.Spec?.ToExpression()).ConfigureAwait(false);
+            var (asssignments, pageCount, totalDataCount) = await _assignmentRepository.PreparePaginationDTO<Assignment, Guid>(pagiantionParams.PageIndex,
+                                                                                                                                    pagiantionParams.RequestedItemCount,
+                                                                                                                                    pagiantionParams.OrderByProperty,
+                                                                                                                                    pagiantionParams.OrderByAscending,
+                                                                                                                                    pagiantionParams.Spec?.ToExpression()).ConfigureAwait(false);
 
             return new PaginationDTO<AssignmentForStudentDTO>
             {
@@ -108,12 +107,11 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// <returns>The assignments is put in the form of an AnnouncementForAdminDTO.</returns>
         public async Task<PaginationDTO<AssignmentForAdminDTO>> GetAssignmentForAdminAsync(PaginationParamsWithSpec<AssignmentSpec> pagiantionParams)
         {
-            var (asssignments, pageCount, totalDataCount) = await _assignmentRepository.PreparePaginationDTO<IBaseRepository<Assignment, Guid, EducationAppDbContext>, Assignment, Guid>
-                                                                                                                 (pagiantionParams.PageIndex,
-                                                                                                                pagiantionParams.RequestedItemCount,
-                                                                                                                pagiantionParams.OrderByProperty = null,
-                                                                                                                pagiantionParams.OrderByAscending = false,
-                                                                                                                pagiantionParams.Spec?.ToExpression()).ConfigureAwait(false);
+            var (asssignments, pageCount, totalDataCount) = await _assignmentRepository.PreparePaginationDTO<Assignment, Guid>(pagiantionParams.PageIndex,
+                                                                                                                                    pagiantionParams.RequestedItemCount,
+                                                                                                                                    pagiantionParams.OrderByProperty,
+                                                                                                                                    pagiantionParams.OrderByAscending,
+                                                                                                                                    pagiantionParams.Spec?.ToExpression()).ConfigureAwait(false);
 
             return new PaginationDTO<AssignmentForAdminDTO>
             {
@@ -140,12 +138,11 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// <returns>The assignments is put in the form of an AnnouncementForMentorDTO.</returns>
         public async Task<PaginationDTO<AssignmentForMentorDTO>> GetAssignmentForMentorAsync(PaginationParamsWithSpec<AssignmentSpec> pagiantionParams)
         {
-            var (asssignments, pageCount, totalDataCount) = await _assignmentRepository.PreparePaginationDTO<IBaseRepository<Assignment, Guid, EducationAppDbContext>, Assignment, Guid>
-                                                                                                                  (pagiantionParams.PageIndex,
-                                                                                                                pagiantionParams.RequestedItemCount,
-                                                                                                                pagiantionParams.OrderByProperty = null,
-                                                                                                                pagiantionParams.OrderByAscending = false,
-                                                                                                                pagiantionParams.Spec?.ToExpression()).ConfigureAwait(false);
+            var (asssignments, pageCount, totalDataCount) = await _assignmentRepository.PreparePaginationDTO<Assignment, Guid>(pagiantionParams.PageIndex,
+                                                                                                                                    pagiantionParams.RequestedItemCount,
+                                                                                                                                    pagiantionParams.OrderByProperty,
+                                                                                                                                    pagiantionParams.OrderByAscending,
+                                                                                                                                    pagiantionParams.Spec?.ToExpression()).ConfigureAwait(false);
 
             return new PaginationDTO<AssignmentForMentorDTO>
             {

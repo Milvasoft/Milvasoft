@@ -66,13 +66,12 @@ namespace Milvasoft.SampleAPI.Services.Concrete
 
             Func<IIncludable<Student>, IIncludable> includes = i => i.Include(md => md.Mentor);
 
-            var (students, pageCount, totalDataCount) = await _studentRepository.PreparePaginationDTO<IBaseRepository<Student, Guid, EducationAppDbContext>, Student, Guid>
-                                                                                                                (pagiantionParams.PageIndex,
-                                                                                                                pagiantionParams.RequestedItemCount,
-                                                                                                                pagiantionParams.OrderByProperty = null,
-                                                                                                                pagiantionParams.OrderByAscending = false,
-                                                                                                                pagiantionParams.Spec?.ToExpression(),
-                                                                                                                includes).ConfigureAwait(false);
+            var (students, pageCount, totalDataCount) = await _studentRepository.PreparePaginationDTO<Student, Guid>(pagiantionParams.PageIndex,
+                                                                                                                     pagiantionParams.RequestedItemCount,
+                                                                                                                     pagiantionParams.OrderByProperty,
+                                                                                                                     pagiantionParams.OrderByAscending,
+                                                                                                                     pagiantionParams.Spec?.ToExpression(),
+                                                                                                                     includes).ConfigureAwait(false);
 
             return new PaginationDTO<StudentForAdminDTO>
             {
@@ -117,13 +116,12 @@ namespace Milvasoft.SampleAPI.Services.Concrete
             Func<IIncludable<Student>, IIncludable> includes = i => i.Include(md => md.Mentor)
                                                                         .Include(oa => oa.OldAssignments);
 
-            var (students, pageCount, totalDataCount) = await _studentRepository.PreparePaginationDTO<IBaseRepository<Student, Guid, EducationAppDbContext>, Student, Guid>
-                                                                                                                (pagiantionParams.PageIndex,
-                                                                                                                pagiantionParams.RequestedItemCount,
-                                                                                                                pagiantionParams.OrderByProperty = null,
-                                                                                                                pagiantionParams.OrderByAscending = false,
-                                                                                                                pagiantionParams.Spec?.ToExpression(),
-                                                                                                                includes).ConfigureAwait(false);
+            var (students, pageCount, totalDataCount) = await _studentRepository.PreparePaginationDTO<Student, Guid>(pagiantionParams.PageIndex,
+                                                                                                                     pagiantionParams.RequestedItemCount,
+                                                                                                                     pagiantionParams.OrderByProperty,
+                                                                                                                     pagiantionParams.OrderByAscending,
+                                                                                                                     pagiantionParams.Spec?.ToExpression(),
+                                                                                                                     includes).ConfigureAwait(false);
 
 
             return new PaginationDTO<StudentForMentorDTO>

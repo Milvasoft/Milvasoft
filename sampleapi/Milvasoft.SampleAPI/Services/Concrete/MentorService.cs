@@ -60,13 +60,13 @@ namespace Milvasoft.SampleAPI.Services.Concrete
                                                                      .Include(s => s.Students)
                                                                      .Include(p => p.Professions);
 
-            var (mentors, pageCount, totalDataCount) = await _mentorRepository.PreparePaginationDTO<IBaseRepository<Mentor, Guid, EducationAppDbContext>, Mentor, Guid>
-                                                                                                               (pagiantionParams.PageIndex,
-                                                                                                                pagiantionParams.RequestedItemCount,
-                                                                                                                pagiantionParams.OrderByProperty = null,
-                                                                                                                pagiantionParams.OrderByAscending = false,
-                                                                                                                pagiantionParams.Spec?.ToExpression(),
-                                                                                                                includes).ConfigureAwait(false);
+            var (mentors, pageCount, totalDataCount) = await _mentorRepository.PreparePaginationDTO<Mentor, Guid>(pagiantionParams.PageIndex,
+                                                                                                                                    pagiantionParams.RequestedItemCount,
+                                                                                                                                    pagiantionParams.OrderByProperty,
+                                                                                                                                    pagiantionParams.OrderByAscending,
+                                                                                                                                    pagiantionParams.Spec?.ToExpression(),
+                                                                                                                                    includes).ConfigureAwait(false);
+
             mentors.ThrowIfListIsNullOrEmpty("Object is not found.");
 
             return new PaginationDTO<MentorForAdminDTO>

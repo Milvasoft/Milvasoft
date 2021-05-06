@@ -56,13 +56,12 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         {
             Func<IIncludable<Announcement>, IIncludable> includes = i => i.Include(md => md.PublisherMentor);
 
-            var (announcements, pageCount, totalDataCount) = await _announcementRepository.PreparePaginationDTO<IBaseRepository<Announcement, Guid, EducationAppDbContext>, Announcement, Guid>
-                                                                                                                (pagiantionParams.PageIndex,
-                                                                                                                pagiantionParams.RequestedItemCount,
-                                                                                                                pagiantionParams.OrderByProperty = null,
-                                                                                                                pagiantionParams.OrderByAscending = false,
-                                                                                                                pagiantionParams.Spec?.ToExpression(),
-                                                                                                                includes).ConfigureAwait(false);
+            var (announcements, pageCount, totalDataCount) = await _announcementRepository.PreparePaginationDTO<Announcement, Guid>(pagiantionParams.PageIndex,
+                                                                                                                                    pagiantionParams.RequestedItemCount,
+                                                                                                                                    pagiantionParams.OrderByProperty,
+                                                                                                                                    pagiantionParams.OrderByAscending, 
+                                                                                                                                    pagiantionParams.Spec?.ToExpression(),
+                                                                                                                                    includes).ConfigureAwait(false);
 
             return new PaginationDTO<AnnouncementForStudentDTO>
             {
@@ -92,13 +91,12 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         {
             Func<IIncludable<Announcement>, IIncludable> includes = i => i.Include(md => md.PublisherMentor);
 
-            var (announcements, pageCount, totalDataCount) = await _announcementRepository.PreparePaginationDTO<IBaseRepository<Announcement, Guid, EducationAppDbContext>, Announcement, Guid>
-                                                                                                                (pagiantionParams.PageIndex,
-                                                                                                                pagiantionParams.RequestedItemCount,
-                                                                                                                pagiantionParams.OrderByProperty = null,
-                                                                                                                pagiantionParams.OrderByAscending = false,
-                                                                                                                pagiantionParams.Spec?.ToExpression(),
-                                                                                                                includes).ConfigureAwait(false);
+            var (announcements, pageCount, totalDataCount) = await _announcementRepository.PreparePaginationDTO<Announcement, Guid>(pagiantionParams.PageIndex,
+                                                                                                                                    pagiantionParams.RequestedItemCount,
+                                                                                                                                    pagiantionParams.OrderByProperty,
+                                                                                                                                    pagiantionParams.OrderByAscending,
+                                                                                                                                    pagiantionParams.Spec?.ToExpression(),
+                                                                                                                                    includes).ConfigureAwait(false);
 
             return new PaginationDTO<AnnouncementForAdminDTO>
             {
@@ -129,13 +127,12 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         {
             Func<IIncludable<Announcement>, IIncludable> includes = i => i.Include(md => md.PublisherMentor);
 
-            var (announcements, pageCount, totalDataCount) = await _announcementRepository.PreparePaginationDTO<IBaseRepository<Announcement, Guid, EducationAppDbContext>, Announcement, Guid>
-                                                                                                                (pagiantionParams.PageIndex,
-                                                                                                                pagiantionParams.RequestedItemCount,
-                                                                                                                pagiantionParams.OrderByProperty = null,
-                                                                                                                pagiantionParams.OrderByAscending = false,
-                                                                                                                pagiantionParams.Spec?.ToExpression(),
-                                                                                                                includes).ConfigureAwait(false);
+            var (announcements, pageCount, totalDataCount) = await _announcementRepository.PreparePaginationDTO<Announcement, Guid>(pagiantionParams.PageIndex,
+                                                                                                                                    pagiantionParams.RequestedItemCount,
+                                                                                                                                    pagiantionParams.OrderByProperty,
+                                                                                                                                    pagiantionParams.OrderByAscending,
+                                                                                                                                    pagiantionParams.Spec?.ToExpression(),
+                                                                                                                                    includes).ConfigureAwait(false);
 
             return new PaginationDTO<AnnouncementForMentorDTO>
             {

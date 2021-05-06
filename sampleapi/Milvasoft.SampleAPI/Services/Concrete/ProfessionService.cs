@@ -63,12 +63,12 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// <returns>Returns the filtered profession.</returns>
         public async Task<PaginationDTO<ProfessionDTO>> GetProfessionsAsync(PaginationParamsWithSpec<ProfessionSpec> pagiantionParams)
         {
-            var (professions, pageCount, totalDataCount) = await _professionRepository.PreparePaginationDTO<IBaseRepository<Profession, Guid, EducationAppDbContext>, Profession, Guid>
-                                                                                                                (pagiantionParams.PageIndex,
-                                                                                                                pagiantionParams.RequestedItemCount,
-                                                                                                                pagiantionParams.OrderByProperty = null,
-                                                                                                                pagiantionParams.OrderByAscending = false,
-                                                                                                                pagiantionParams.Spec?.ToExpression()).ConfigureAwait(false);
+            var (professions, pageCount, totalDataCount) = await _professionRepository.PreparePaginationDTO<Profession, Guid>(pagiantionParams.PageIndex,
+                                                                                                                              pagiantionParams.RequestedItemCount,
+                                                                                                                              pagiantionParams.OrderByProperty,
+                                                                                                                              pagiantionParams.OrderByAscending,
+                                                                                                                              pagiantionParams.Spec?.ToExpression()).ConfigureAwait(false);
+
 
             return new PaginationDTO<ProfessionDTO>
             {

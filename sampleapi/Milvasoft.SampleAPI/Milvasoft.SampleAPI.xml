@@ -3387,7 +3387,7 @@
             Assignment service.
             </summary>
         </member>
-        <member name="M:Milvasoft.SampleAPI.Services.Concrete.AssignmentService.#ctor(Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository{Milvasoft.SampleAPI.Entity.Assignment,System.Guid,Milvasoft.SampleAPI.Data.EducationAppDbContext},Microsoft.AspNetCore.Identity.UserManager{Milvasoft.SampleAPI.Entity.AppUser},Microsoft.AspNetCore.Http.IHttpContextAccessor,Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository{Milvasoft.SampleAPI.Entity.StudentAssigment,System.Guid,Milvasoft.SampleAPI.Data.EducationAppDbContext},Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository{Milvasoft.SampleAPI.Entity.Student,System.Guid,Milvasoft.SampleAPI.Data.EducationAppDbContext},Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository{Milvasoft.SampleAPI.Entity.Mentor,System.Guid,Milvasoft.SampleAPI.Data.EducationAppDbContext})">
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.AssignmentService.#ctor(Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository{Milvasoft.SampleAPI.Entity.Assignment,System.Guid,Milvasoft.SampleAPI.Data.EducationAppDbContext},Microsoft.AspNetCore.Identity.UserManager{Milvasoft.SampleAPI.Entity.AppUser},Microsoft.AspNetCore.Http.IHttpContextAccessor,Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository{Milvasoft.SampleAPI.Entity.StudentAssigment,System.Guid,Milvasoft.SampleAPI.Data.EducationAppDbContext},Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository{Milvasoft.SampleAPI.Entity.Student,System.Guid,Milvasoft.SampleAPI.Data.EducationAppDbContext},Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository{Milvasoft.SampleAPI.Entity.Mentor,System.Guid,Milvasoft.SampleAPI.Data.EducationAppDbContext},Milvasoft.Helpers.Mail.IMilvaMailSender)">
             <summary>
             Performs constructor injection for repository interfaces used in this service.
             </summary>
@@ -3397,6 +3397,7 @@
             <param name="studentAssignmentRepository"></param>
             <param name="studentRepository"></param>
             <param name="mentorRepository"></param>
+            <param name="mailSender"></param>
         </member>
         <member name="M:Milvasoft.SampleAPI.Services.Concrete.AssignmentService.GetAssignmentForStudentAsync(Milvasoft.SampleAPI.DTOs.PaginationParamsWithSpec{Milvasoft.SampleAPI.Spec.AssignmentSpec})">
             <summary>
@@ -3639,7 +3640,7 @@
             <summary>
             Performs constructor injection for repository interfaces used in this service.
             </summary>
-            <param name="questionService"></param>
+            <param name="questionRepository"></param>
         </member>
         <member name="M:Milvasoft.SampleAPI.Services.Concrete.QuestionService.GetQuestionsForAdminAsync(Milvasoft.SampleAPI.DTOs.PaginationParamsWithSpec{Milvasoft.SampleAPI.Spec.QuestionSpec})">
             <summary>

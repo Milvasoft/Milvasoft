@@ -160,7 +160,7 @@ namespace Milvasoft.SampleAPI.Controllers
         /// <param name="Id"></param>
         /// <param name="newAssignment"></param>
         /// <returns></returns>
-        [HttpPost("Take")]
+        [HttpPost("TakeAssignment")]
         public async Task<IActionResult> TakeAssigment(Guid Id,[FromBody] AddStudentAssignmentDTO newAssignment)
         {
             return await _assigmentService.TakeAssignment(Id, newAssignment).ConfigureAwait(false).GetObjectResponseAsync<AddStudentAssignmentDTO>("Success").ConfigureAwait(false);
@@ -176,6 +176,13 @@ namespace Milvasoft.SampleAPI.Controllers
             var assignment = await _assigmentService.GetUnconfirmedAssignment().ConfigureAwait(false);
 
             return assignment.GetObjectResponse("Success");
+        }
+
+        [HttpPost("SubmitAssignment")]
+        public async Task<IActionResult> SubmitAssignment([FromBody] SubmitAssignmentDTO submitAssignment)
+        {
+            var path = await _assigmentService.SubmitAssignment(submitAssignment).ConfigureAwait(false);
+            return Ok(path);
         }
     }
 }

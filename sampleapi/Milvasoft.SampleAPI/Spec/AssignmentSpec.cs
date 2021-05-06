@@ -16,8 +16,9 @@ namespace Milvasoft.SampleAPI.Spec
     {
         #region Fields
         private string _tittle;
-        private string _rules;
         #endregion
+
+
         #region Props
 
         /// <summary>

@@ -78,5 +78,7 @@ namespace Milvasoft.SampleAPI.Entity
         /// The status of the student's homework approved by the mentor.
         /// </summary>
         public bool IsActive { get; set; }
+
+
     }
 }
