@@ -318,16 +318,43 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="M:Milvasoft.SampleAPI.Controllers.AssignmentController.GetAssignmentForCurrentUser">
+            <summary>
+            Get avaible assignment for log in user.
+            </summary>
+            <returns> Returns the homework that the student can take.</returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Controllers.AssignmentController.GetUnconfirmedAssignment">
+            <summary>
+            Brings the unapproved assignments of the students of the mentor logged in.
+            </summary>
+            <returns> Returns unapproved assignments of students of the mentor logged in.</returns>
+        </member>
         <member name="M:Milvasoft.SampleAPI.Controllers.AssignmentController.AddAssignment(Milvasoft.SampleAPI.DTOs.AssignmentDTOs.AddAssignmentDTO)">
             <summary>
-            Add <b><paramref name="addAssignment"/></b> data to database.
+            Allows adding new homework.
             </summary>
             <param name="addAssignment"></param>
             <returns></returns>
         </member>
+        <member name="M:Milvasoft.SampleAPI.Controllers.AssignmentController.TakeAssigment(System.Guid,Milvasoft.SampleAPI.DTOs.StudentAssignmentDTOs.AddStudentAssignmentDTO)">
+            <summary>
+            The student takes the next assignment.
+            </summary>
+            <param name="Id"> Assignment Id. </param>
+            <param name="newAssignment"> Dto that makes the student want extra time. </param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Controllers.AssignmentController.SubmitAssignment(Milvasoft.SampleAPI.DTOs.SubmitAssignmentDTO)">
+            <summary>
+            Allows the student to submit their homework.
+            </summary>
+            <param name="submitAssignment"> Where the student's homework file and explanation are located dto.</param>
+            <returns> Returns the file path of the assignment.</returns>
+        </member>
         <member name="M:Milvasoft.SampleAPI.Controllers.AssignmentController.UpdateAssignment(Milvasoft.SampleAPI.DTOs.AssignmentDTOs.UpdateAssignmentDTO)">
             <summary>
-            Update <paramref name="updateAssignment"/> data.
+            Allows the homework to be updated.
             </summary>
             <param name="updateAssignment"></param>
             <returns></returns>
@@ -336,27 +363,7 @@
             <summary>
             Delete assignment data by <paramref name="ids"/>
             </summary>
-            <param name="ids"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Milvasoft.SampleAPI.Controllers.AssignmentController.GetAssignmentForCurrentUser">
-            <summary>
-            Get avaible assignment for log in user.
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:Milvasoft.SampleAPI.Controllers.AssignmentController.TakeAssigment(System.Guid,Milvasoft.SampleAPI.DTOs.StudentAssignmentDTOs.AddStudentAssignmentDTO)">
-            <summary>
-            The student takes the next assignment.
-            </summary>
-            <param name="Id"></param>
-            <param name="newAssignment"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Milvasoft.SampleAPI.Controllers.AssignmentController.GetUnconfirmedAssignment">
-            <summary>
-            Brings the unapproved assignments of the students of the mentor logged in.
-            </summary>
+            <param name="ids">Ids of to be deleted assignment.</param>
             <returns></returns>
         </member>
         <member name="T:Milvasoft.SampleAPI.Controllers.MentorController">

@@ -22,7 +22,9 @@ namespace Milvasoft.SampleAPI.Data.Utils
             await _dbContext.Database.MigrateAsync().ConfigureAwait(false);
             await InitializeTestEntities().ConfigureAwait(false);
             await InitializeProfession().ConfigureAwait(false);
-            //await InitializeMentor().ConfigureAwait(false);
+            await InitializeMentor().ConfigureAwait(false);
+            await InitializeAnnouncement().ConfigureAwait(false);
+
         }
 
         private static async Task InitializeDataAsync<TEntity, TKey>(List<TEntity> entities) where TEntity : class, IBaseEntity<TKey> where TKey : struct, IEquatable<TKey>
@@ -55,22 +57,96 @@ namespace Milvasoft.SampleAPI.Data.Utils
         {
             var testEntities = new List<Profession>(){
                 new Profession {
+                    Id=1.ToGuid(),
                     Name = "Backend"
                 },
                 new Profession {
+                    Id=2.ToGuid(),
                     Name = "Frontend"
                 },
             };
             await InitializeDataAsync<Profession, Guid>(testEntities).ConfigureAwait(false);
         }
 
-        /*private static async Task InitializeMentor()
+        private static async Task InitializeAnnouncement()
+        {
+            var testEntities = new List<Announcement>()
+            {
+                new Announcement
+                {
+                    Id=1.ToGuid(),
+                    Title="Stajyerler hakkında",
+                    Description="Stajyerler verilen ödevleri yapmalıdır.",
+                    IsFixed=true,
+                    MentorId=1.ToGuid()
+                },
+                new Announcement
+                {
+                    Id=2.ToGuid(),
+                    Title="Stajyerler hakkında",
+                    Description="Stajyerler kurallar uymak zorundadır.",
+                    IsFixed=false,
+                    MentorId=2.ToGuid()
+                }
+            };
+            await InitializeDataAsync<Announcement, Guid>(testEntities).ConfigureAwait(false);
+        }
+
+        private static async Task InitializeStudent()
+        {
+            var testEntities = new List<AppUser>
+            {
+                new AppUser
+                {
+                    UserName="burakakbay",
+                    Email="burakakbay@gmail.com",
+                    PhoneNumber="507 664 05 44",
+                        Student=new Student
+                        {
+                            Id=1.ToGuid(),
+                            Name="Burak",
+                            Surname="Akbay",
+                            ProfessionId=1.ToGuid(),
+                            IsConfidentialityAgreementSigned=true,
+                            Level=1,
+                            Age=18,
+                            Dream="Yazılımcı olmak.",
+                            HomeAddress="Ankara",
+                            University="Selçuk Üniversitesi",
+                            MentorId=1.ToGuid()
+                        }
+                },
+                new AppUser
+                {
+                    UserName="mehmetbayburt",
+                    Email="mehmetbayburt@gmail.com",
+                    PhoneNumber="507 661 05 44",
+                        Student=new Student
+                        {
+                            Id=2.ToGuid(),
+                            Name="Mehmet",
+                            Surname="Bayburt",
+                            ProfessionId=2.ToGuid(),
+                            IsConfidentialityAgreementSigned=true,
+                            Level=2,
+                            Age=21,
+                            Dream="Makina mühendisi olmak.",
+                            HomeAddress="istanbul",
+                            University="Selçuk Üniversitesi",
+                            MentorId=2.ToGuid()
+                        }
+                }
+            };
+            await InitializeDataAsync<AppUser, Guid>(testEntities).ConfigureAwait(false);
+        }
+        
+        private static async Task InitializeMentor()
         {
             var testEntities = new List<AppUser>()
             {
                 new AppUser
                 {
-                    
+
                     UserName="oguzhanbaran",
                     Email="oguzhan.baran96@gmail.com",
                     Mentor=new Mentor
@@ -84,13 +160,33 @@ namespace Milvasoft.SampleAPI.Data.Utils
                             {
                                 ProfessionId=1.ToGuid()
                             }
-                        },
+                        }
+                    }
+
+                },
+                new AppUser
+                {
+
+                    UserName="bugrakosen",
+                    Email="bugrakosen@gmail.com",
+                    Mentor=new Mentor
+                    {
+                        Name="Buğra Ahmet",
+                        Surname="Kösen",
+                        Id=2.ToGuid(),
+                        Professions=new List<MentorProfession>
+                        {
+                            new MentorProfession
+                            {
+                                ProfessionId=2.ToGuid()
+                            }
+                        }
                     }
 
                 }
 
             };
             await InitializeDataAsync<AppUser, Guid>(testEntities).ConfigureAwait(false);
-        }*/
+        }
     }
 }

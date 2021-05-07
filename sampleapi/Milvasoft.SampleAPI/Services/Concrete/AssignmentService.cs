@@ -33,8 +33,6 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         #region Fields
 
         private readonly string _loggedUser;
-        private readonly UserManager<AppUser> _userManager;
-        private readonly IMilvaMailSender _mailSender;
         private readonly IBaseRepository<Assignment, Guid, EducationAppDbContext> _assignmentRepository;
         private readonly IBaseRepository<StudentAssigment, Guid, EducationAppDbContext> _studentAssignmentRepository;
         private readonly IBaseRepository<Student, Guid, EducationAppDbContext> _studentRepository;
@@ -63,10 +61,8 @@ namespace Milvasoft.SampleAPI.Services.Concrete
             _mentorRepository = mentorRepository;
             _studentRepository = studentRepository;
             _studentAssignmentRepository = studentAssignmentRepository;
-            _userManager = userManager;
             _loggedUser = httpContextAccessor.HttpContext.User.Identity.Name;
             _assignmentRepository = assignmentRepository;
-            _mailSender = mailSender;
         }
 
         #region CRUP Operations

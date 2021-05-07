@@ -107,7 +107,31 @@ namespace Milvasoft.SampleAPI.Controllers
         }
 
         /// <summary>
-        /// Add <b><paramref name="addAssignment"/></b> data to database.
+        /// Get avaible assignment for log in user.
+        /// </summary>
+        /// <returns> Returns the homework that the student can take.</returns>
+        [HttpPatch("GetAssignment")]
+        public async Task<IActionResult> GetAssignmentForCurrentUser()
+        {
+            var assignment = await _assigmentService.GetAvaibleAssignmentForCurrentStudent().ConfigureAwait(false);
+
+            return assignment.GetObjectResponse("Success");
+        }
+
+        /// <summary>
+        /// Brings the unapproved assignments of the students of the mentor logged in.
+        /// </summary>
+        /// <returns> Returns unapproved assignments of students of the mentor logged in.</returns>
+        [HttpPatch("UnconfirmedAssignements")]
+        public async Task<IActionResult> GetUnconfirmedAssignment()
+        {
+            var assignment = await _assigmentService.GetUnconfirmedAssignment().ConfigureAwait(false);
+
+            return assignment.GetObjectResponse("Success");
+        }
+
+        /// <summary>
+        /// Allows adding new homework.
         /// </summary>
         /// <param name="addAssignment"></param>
         /// <returns></returns>
@@ -119,7 +143,31 @@ namespace Milvasoft.SampleAPI.Controllers
         }
 
         /// <summary>
-        /// Update <paramref name="updateAssignment"/> data.
+        /// The student takes the next assignment.
+        /// </summary>
+        /// <param name="Id"> Assignment Id. </param>
+        /// <param name="newAssignment"> Dto that makes the student want extra time. </param>
+        /// <returns></returns>
+        [HttpPost("TakeAssignment")]
+        public async Task<IActionResult> TakeAssigment(Guid Id, [FromBody] AddStudentAssignmentDTO newAssignment)
+        {
+            return await _assigmentService.TakeAssignment(Id, newAssignment).ConfigureAwait(false).GetObjectResponseAsync<AddStudentAssignmentDTO>("Success").ConfigureAwait(false);
+        }
+
+        /// <summary>
+        /// Allows the student to submit their homework.
+        /// </summary>
+        /// <param name="submitAssignment"> Where the student's homework file and explanation are located dto.</param>
+        /// <returns> Returns the file path of the assignment.</returns>
+        [HttpPost("SubmitAssignment")]
+        public async Task<IActionResult> SubmitAssignment([FromBody] SubmitAssignmentDTO submitAssignment)
+        {
+            var path = await _assigmentService.SubmitAssignment(submitAssignment).ConfigureAwait(false);
+            return Ok(path);
+        }
+
+        /// <summary>
+        /// Allows the homework to be updated.
         /// </summary>
         /// <param name="updateAssignment"></param>
         /// <returns></returns>
@@ -133,7 +181,7 @@ namespace Milvasoft.SampleAPI.Controllers
         /// <summary>
         /// Delete assignment data by <paramref name="ids"/>
         /// </summary>
-        /// <param name="ids"></param>
+        /// <param name="ids">Ids of to be deleted assignment.</param>
         /// <returns></returns>
        // [Authorize(Roles = "Admin")]
         [HttpDelete("Delete")]
@@ -142,47 +190,5 @@ namespace Milvasoft.SampleAPI.Controllers
             return await _assigmentService.DeleteAssignmentAsync(ids).ConfigureAwait(false).GetObjectResponseAsync<AssignmentDTO, Guid>(ids, "Success").ConfigureAwait(false);
         }
 
-        /// <summary>
-        /// Get avaible assignment for log in user.
-        /// </summary>
-        /// <returns></returns>
-        [HttpPatch("GetAssignment")]
-        public async Task<IActionResult> GetAssignmentForCurrentUser()
-        {
-            var assignment = await _assigmentService.GetAvaibleAssignmentForCurrentStudent().ConfigureAwait(false);
-
-            return assignment.GetObjectResponse("Success");
-        }
-
-        /// <summary>
-        /// The student takes the next assignment.
-        /// </summary>
-        /// <param name="Id"></param>
-        /// <param name="newAssignment"></param>
-        /// <returns></returns>
-        [HttpPost("TakeAssignment")]
-        public async Task<IActionResult> TakeAssigment(Guid Id,[FromBody] AddStudentAssignmentDTO newAssignment)
-        {
-            return await _assigmentService.TakeAssignment(Id, newAssignment).ConfigureAwait(false).GetObjectResponseAsync<AddStudentAssignmentDTO>("Success").ConfigureAwait(false);
-        }
-
-        /// <summary>
-        /// Brings the unapproved assignments of the students of the mentor logged in.
-        /// </summary>
-        /// <returns></returns>
-        [HttpPatch("UnconfirmedAssignements")]
-        public async Task<IActionResult> GetUnconfirmedAssignment()
-        {
-            var assignment = await _assigmentService.GetUnconfirmedAssignment().ConfigureAwait(false);
-
-            return assignment.GetObjectResponse("Success");
-        }
-
-        [HttpPost("SubmitAssignment")]
-        public async Task<IActionResult> SubmitAssignment([FromBody] SubmitAssignmentDTO submitAssignment)
-        {
-            var path = await _assigmentService.SubmitAssignment(submitAssignment).ConfigureAwait(false);
-            return Ok(path);
-        }
     }
 }
