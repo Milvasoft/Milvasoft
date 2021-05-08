@@ -17,19 +17,19 @@ namespace Milvasoft.SampleAPI.Services.Abstract
         /// Get all announcement for admin from database.
         /// </summary>
         /// <returns></returns>
-        Task<PaginationDTO<AnnouncementForAdminDTO>> GetAnnouncementForAdminAsync(PaginationParamsWithSpec<AnnouncementSpec> paginationParams);
+        Task<PaginationDTO<AnnouncementForAdminDTO>> GetAnnouncementsForAdminAsync(PaginationParamsWithSpec<AnnouncementSpec> paginationParams);
 
         /// <summary>
         /// Get all announcement for mentor from database.
         /// </summary>
         /// <returns></returns>
-        Task<PaginationDTO<AnnouncementForMentorDTO>> GetAnnouncementForMentorAsync(PaginationParamsWithSpec<AnnouncementSpec> paginationParams);
+        Task<PaginationDTO<AnnouncementForMentorDTO>> GetAnnouncementsForMentorAsync(PaginationParamsWithSpec<AnnouncementSpec> paginationParams);
 
         /// <summary>
         /// Get all announcement for mentor from database.
         /// </summary>
         /// <returns></returns>
-        Task<PaginationDTO<AnnouncementForStudentDTO>> GetAnnouncementForStudentAsync(PaginationParamsWithSpec<AnnouncementSpec> paginationParams);
+        Task<PaginationDTO<AnnouncementForStudentDTO>> GetAnnouncementsForStudentAsync(PaginationParamsWithSpec<AnnouncementSpec> paginationParams);
 
         /// <summary>
         /// Fetches filtered announcement by id for student.

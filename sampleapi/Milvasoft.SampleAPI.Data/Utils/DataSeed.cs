@@ -87,6 +87,14 @@ namespace Milvasoft.SampleAPI.Data.Utils
                     Description="Stajyerler kurallar uymak zorundadır.",
                     IsFixed=false,
                     MentorId=2.ToGuid()
+                },
+                new Announcement
+                {
+                    Id=3.ToGuid(),
+                    Title="Şirket kuralları",
+                    Description="Stajyerler arasında ilişki olamaz.",
+                    IsFixed=false,
+                    MentorId=1.ToGuid()
                 }
             };
             await InitializeDataAsync<Announcement, Guid>(testEntities).ConfigureAwait(false);

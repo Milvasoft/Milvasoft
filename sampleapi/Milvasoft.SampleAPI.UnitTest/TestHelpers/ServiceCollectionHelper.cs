@@ -15,6 +15,8 @@ using Milvasoft.Helpers.FileOperations.Abstract;
 using Milvasoft.Helpers.FileOperations.Concrete;
 using Milvasoft.Helpers.Identity.Concrete;
 using Milvasoft.Helpers.Models.Response;
+using Milvasoft.Helpers.MultiTenancy.Accessor;
+using Milvasoft.Helpers.MultiTenancy.EntityBase;
 using Milvasoft.Helpers.Utils;
 using Milvasoft.SampleAPI.Data;
 using Milvasoft.SampleAPI.Data.Repositories;
@@ -30,6 +32,7 @@ using System;
 using System.Globalization;
 using System.IdentityModel.Tokens.Jwt;
 using System.IO;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -92,11 +95,29 @@ namespace Milvasoft.SampleAPI.UnitTest.TestHelpers
 
             #region Services
 
+            _services.AddScoped<ITenantAccessor<IMilvaTenantBase<Guid>,Guid>, TenantAccessor<IMilvaTenantBase<Guid>,Guid>>();
+            _services.AddScoped<IMentorService, MentorService>();
+            _services.AddScoped<IStudentService, StudentService>();
             _services.AddScoped<IAccountService, AccountService>();
+            _services.AddScoped<IUsefulLinkService, UsefulLinkService>();
+            _services.AddScoped<IQuestionService, QuestionService>();
+            _services.AddScoped<IProfessionService, ProfessionService>();
+            _services.AddScoped<IAnnouncementService, AnnouncementService>();
+            _services.AddScoped<IAssignmentService, AssignmentService>();
 
             #endregion
 
             _services.AddSingleton<SharedResource>();
+
+            _services.AddHttpContextAccessor();
+
+            _services.AddHttpClient<IAccountService, AccountService>(configureClient: opt =>
+            {
+
+                opt.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                opt.DefaultRequestVersion = new Version(1, 0);
+            });
+            
             _services.AddScoped<IApplicationBuilder, ApplicationBuilder>();
         }
 

@@ -2776,19 +2776,19 @@
             Announcement service interface.
             </summary>
         </member>
-        <member name="M:Milvasoft.SampleAPI.Services.Abstract.IAnnouncementService.GetAnnouncementForAdminAsync(Milvasoft.SampleAPI.DTOs.PaginationParamsWithSpec{Milvasoft.SampleAPI.Spec.AnnouncementSpec})">
+        <member name="M:Milvasoft.SampleAPI.Services.Abstract.IAnnouncementService.GetAnnouncementsForAdminAsync(Milvasoft.SampleAPI.DTOs.PaginationParamsWithSpec{Milvasoft.SampleAPI.Spec.AnnouncementSpec})">
             <summary>
             Get all announcement for admin from database.
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.SampleAPI.Services.Abstract.IAnnouncementService.GetAnnouncementForMentorAsync(Milvasoft.SampleAPI.DTOs.PaginationParamsWithSpec{Milvasoft.SampleAPI.Spec.AnnouncementSpec})">
+        <member name="M:Milvasoft.SampleAPI.Services.Abstract.IAnnouncementService.GetAnnouncementsForMentorAsync(Milvasoft.SampleAPI.DTOs.PaginationParamsWithSpec{Milvasoft.SampleAPI.Spec.AnnouncementSpec})">
             <summary>
             Get all announcement for mentor from database.
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.SampleAPI.Services.Abstract.IAnnouncementService.GetAnnouncementForStudentAsync(Milvasoft.SampleAPI.DTOs.PaginationParamsWithSpec{Milvasoft.SampleAPI.Spec.AnnouncementSpec})">
+        <member name="M:Milvasoft.SampleAPI.Services.Abstract.IAnnouncementService.GetAnnouncementsForStudentAsync(Milvasoft.SampleAPI.DTOs.PaginationParamsWithSpec{Milvasoft.SampleAPI.Spec.AnnouncementSpec})">
             <summary>
             Get all announcement for mentor from database.
             </summary>
@@ -3326,21 +3326,21 @@
             <param name="httpContextAccessor"></param>
             <param name="userManager"></param>
         </member>
-        <member name="M:Milvasoft.SampleAPI.Services.Concrete.AnnouncementService.GetAnnouncementForStudentAsync(Milvasoft.SampleAPI.DTOs.PaginationParamsWithSpec{Milvasoft.SampleAPI.Spec.AnnouncementSpec})">
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.AnnouncementService.GetAnnouncementsForStudentAsync(Milvasoft.SampleAPI.DTOs.PaginationParamsWithSpec{Milvasoft.SampleAPI.Spec.AnnouncementSpec})">
             <summary>
             Get all announcement for student.
             </summary>
             <param name="pagiantionParams">Filter object.</param>
             <returns> The announcement is put in the form of an AnnouncementForStudentDTO.</returns>
         </member>
-        <member name="M:Milvasoft.SampleAPI.Services.Concrete.AnnouncementService.GetAnnouncementForAdminAsync(Milvasoft.SampleAPI.DTOs.PaginationParamsWithSpec{Milvasoft.SampleAPI.Spec.AnnouncementSpec})">
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.AnnouncementService.GetAnnouncementsForAdminAsync(Milvasoft.SampleAPI.DTOs.PaginationParamsWithSpec{Milvasoft.SampleAPI.Spec.AnnouncementSpec})">
             <summary>
             Get all announcement for admin.
             </summary>
             <param name="pagiantionParams">Filter object.</param>
             <returns> The announcements is put in the form of an AnnouncementForAdminDTO.</returns>
         </member>
-        <member name="M:Milvasoft.SampleAPI.Services.Concrete.AnnouncementService.GetAnnouncementForMentorAsync(Milvasoft.SampleAPI.DTOs.PaginationParamsWithSpec{Milvasoft.SampleAPI.Spec.AnnouncementSpec})">
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.AnnouncementService.GetAnnouncementsForMentorAsync(Milvasoft.SampleAPI.DTOs.PaginationParamsWithSpec{Milvasoft.SampleAPI.Spec.AnnouncementSpec})">
             <summary>
             Get all announcement for mentor.
             </summary>

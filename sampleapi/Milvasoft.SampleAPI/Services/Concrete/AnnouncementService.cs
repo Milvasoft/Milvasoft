@@ -52,7 +52,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// </summary>
         /// <param name="pagiantionParams">Filter object.</param>
         /// <returns> The announcement is put in the form of an AnnouncementForStudentDTO.</returns>
-        public async Task<PaginationDTO<AnnouncementForStudentDTO>> GetAnnouncementForStudentAsync(PaginationParamsWithSpec<AnnouncementSpec> pagiantionParams)
+        public async Task<PaginationDTO<AnnouncementForStudentDTO>> GetAnnouncementsForStudentAsync(PaginationParamsWithSpec<AnnouncementSpec> pagiantionParams)
         {
             Func<IIncludable<Announcement>, IIncludable> includes = i => i.Include(md => md.PublisherMentor);
 
@@ -87,7 +87,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// </summary>
         /// <param name="pagiantionParams">Filter object.</param>
         /// <returns> The announcements is put in the form of an AnnouncementForAdminDTO.</returns>
-        public async Task<PaginationDTO<AnnouncementForAdminDTO>> GetAnnouncementForAdminAsync(PaginationParamsWithSpec<AnnouncementSpec> pagiantionParams)
+        public async Task<PaginationDTO<AnnouncementForAdminDTO>> GetAnnouncementsForAdminAsync(PaginationParamsWithSpec<AnnouncementSpec> pagiantionParams)
         {
             Func<IIncludable<Announcement>, IIncludable> includes = i => i.Include(md => md.PublisherMentor);
 
@@ -123,7 +123,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// </summary>
         /// <param name="pagiantionParams">Filter object.</param>
         /// <returns> The announcement is put in the form of an AnnouncementForMentorDTO.</returns>
-        public async Task<PaginationDTO<AnnouncementForMentorDTO>> GetAnnouncementForMentorAsync(PaginationParamsWithSpec<AnnouncementSpec> pagiantionParams)
+        public async Task<PaginationDTO<AnnouncementForMentorDTO>> GetAnnouncementsForMentorAsync(PaginationParamsWithSpec<AnnouncementSpec> pagiantionParams)
         {
             Func<IIncludable<Announcement>, IIncludable> includes = i => i.Include(md => md.PublisherMentor);
 
@@ -165,7 +165,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
 
             var announcement = await _announcementRepository.GetByIdAsync(announcementId, includes).ConfigureAwait(false);
 
-            announcement.ThrowIfNullForGuidObject();
+            announcement.ThrowIfNullForGuidObject("Böyle bir duyuru bulunmamaktadır.");
 
             return new AnnouncementForAdminDTO
             {
@@ -192,7 +192,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
 
             var announcement = await _announcementRepository.GetByIdAsync(announcementId, includes).ConfigureAwait(false);
 
-            announcement.ThrowIfNullForGuidObject();
+            announcement.ThrowIfNullForGuidObject("Böyle bir duyuru bulunmamaktadır.");
 
             return new AnnouncementForMentorDTO
             {
@@ -219,7 +219,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
 
             var announcement = await _announcementRepository.GetByIdAsync(announcementId, includes).ConfigureAwait(false);
 
-            announcement.ThrowIfNullForGuidObject();
+            announcement.ThrowIfNullForGuidObject("Böyle bir duyuru bulunmamaktadır.");
 
             return new AnnouncementForStudentDTO
             {
@@ -231,6 +231,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
                     Name = i.Name,
                     Surname = i.Surname
                 })
+               
             };
         }
 
