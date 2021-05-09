@@ -24,6 +24,7 @@ namespace Milvasoft.SampleAPI.Data.Utils
             await InitializeProfession().ConfigureAwait(false);
             await InitializeMentor().ConfigureAwait(false);
             await InitializeAnnouncement().ConfigureAwait(false);
+            await InitializeUsefulLink().ConfigureAwait(false);
 
         }
 
@@ -98,6 +99,40 @@ namespace Milvasoft.SampleAPI.Data.Utils
                 }
             };
             await InitializeDataAsync<Announcement, Guid>(testEntities).ConfigureAwait(false);
+        }
+
+        private static async Task InitializeUsefulLink()
+        {
+            var testEntities = new List<UsefulLink>()
+            {
+                new UsefulLink
+                {
+                    Id=1.ToGuid(),
+                    ProfessionId=1.ToGuid(),
+                    Title="C# Dersleri",
+                    Url="www.oguzhanbaran.com"
+                },
+                new UsefulLink
+                {
+                    Id=2.ToGuid(),
+                    ProfessionId=2.ToGuid(),
+                    Title="C# Dersleri",
+                    Url="www.oguzhanbaranc#.com"
+                },new UsefulLink
+                {
+                    Id=3.ToGuid(),
+                    ProfessionId=2.ToGuid(),
+                    Title="HTML Dersleri",
+                    Url="www.oguzhanbaranhtml.com"
+                },new UsefulLink
+                {
+                    Id=4.ToGuid(),
+                    ProfessionId=1.ToGuid(),
+                    Title="Java Dersleri",
+                    Url="www.oguzhanbaran.com"
+                }
+            };
+            await InitializeDataAsync<UsefulLink, Guid>(testEntities).ConfigureAwait(false);
         }
 
         private static async Task InitializeStudent()

@@ -126,7 +126,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         {
             var link = await _usefulLinkRepository.GetByIdAsync(usefulLinkId).ConfigureAwait(false);
 
-            link.ThrowIfNullForGuidObject();
+            link.ThrowIfNullForGuidObject("Böyle bir link bulunmamaktadır.");
 
             return new UsefulLinkDTO()
             {
@@ -147,7 +147,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         {
             var link = await _usefulLinkRepository.GetByIdAsync(usefulLinkId).ConfigureAwait(false);
 
-            link.ThrowIfNullForGuidObject();
+            link.ThrowIfNullForGuidObject("Böyle bir link bulunmamaktadır.");
 
             return new UsefulLinkDTO()
             {
@@ -168,7 +168,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         {
             var link = await _usefulLinkRepository.GetByIdAsync(usefulLinkId).ConfigureAwait(false);
 
-            link.ThrowIfNullForGuidObject();
+            link.ThrowIfNullForGuidObject("Böyle bir link bulunmamaktadır.");
 
             return new UsefulLinkDTO()
             {
