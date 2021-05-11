@@ -15,6 +15,7 @@ using Xunit;
 
 namespace Milvasoft.SampleAPI.UnitTest.TestForTest
 {
+    [Collection("Test")]
     public class AnnnouncementTest
     {
         private readonly IAnnouncementService _announcementService;
@@ -75,6 +76,38 @@ namespace Milvasoft.SampleAPI.UnitTest.TestForTest
             Assert.Equal(2, test.TotalDataCount);
         }
 
+        [Fact]
+        public async Task GetAnnouncementsForAdmin_SpecTitle_2()
+        {
+            var paginationParams = new PaginationParamsWithSpec<AnnouncementSpec>
+            {
+                PageIndex = 1,
+                RequestedItemCount = 2,
+                Spec = new AnnouncementSpec
+                {
+                    Title= "Stajyerler hakkinda."
+                }
+            };
+            var test = await _announcementService.GetAnnouncementsForAdminAsync(paginationParams).ConfigureAwait(false);
+            Assert.Equal(2, test.TotalDataCount);
+        }
+
+        [Fact]
+        public async Task GetAnnouncementsForAdmin_SpecDescription_1()
+        {
+            var paginationParams = new PaginationParamsWithSpec<AnnouncementSpec>
+            {
+                PageIndex = 1,
+                RequestedItemCount = 2,
+                Spec = new AnnouncementSpec
+                {
+                    Description = "Stajyerler kurallara uymak zorundadir."
+                }
+            };
+            var test = await _announcementService.GetAnnouncementsForAdminAsync(paginationParams).ConfigureAwait(false);
+            Assert.Equal(1, test.TotalDataCount);
+        }
+
         #endregion
 
         #region GetAnnouncementsForMentor
@@ -121,6 +154,22 @@ namespace Milvasoft.SampleAPI.UnitTest.TestForTest
             };
             var test = await _announcementService.GetAnnouncementsForMentorAsync(paginationParams).ConfigureAwait(false);
             Assert.Equal(1, test.TotalDataCount);
+        }
+
+        [Fact]
+        public async Task GetAnnouncementsForMentor_SpecTitle_2()
+        {
+            var paginationParams = new PaginationParamsWithSpec<AnnouncementSpec>
+            {
+                PageIndex = 1,
+                RequestedItemCount = 2,
+                Spec = new AnnouncementSpec
+                {
+                    Title = "Stajyerler hakkinda."
+                }
+            };
+            var test = await _announcementService.GetAnnouncementsForMentorAsync(paginationParams).ConfigureAwait(false);
+            Assert.Equal(2, test.TotalDataCount);
         }
 
         #endregion
@@ -171,10 +220,26 @@ namespace Milvasoft.SampleAPI.UnitTest.TestForTest
             Assert.Equal(1, test.TotalDataCount);
         }
 
+        [Fact]
+        public async Task GetAnnouncementsForStudent_SpecTitle_2()
+        {
+            var paginationParams = new PaginationParamsWithSpec<AnnouncementSpec>
+            {
+                PageIndex = 1,
+                RequestedItemCount = 2,
+                Spec = new AnnouncementSpec
+                {
+                    Title = "Stajyerler hakkinda."
+                }
+            };
+            var test = await _announcementService.GetAnnouncementsForStudentAsync(paginationParams).ConfigureAwait(false);
+            Assert.Equal(2, test.TotalDataCount);
+        }
+
         #endregion
 
         #region GetAnnouncementForAdmin
-        
+
         [Fact]
         public async Task GetAnnouncementForAdmin_NegativId_ThrowException()
         {

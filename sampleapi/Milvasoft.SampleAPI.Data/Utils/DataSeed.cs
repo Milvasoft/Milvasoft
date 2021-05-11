@@ -76,16 +76,16 @@ namespace Milvasoft.SampleAPI.Data.Utils
                 new Announcement
                 {
                     Id=1.ToGuid(),
-                    Title="Stajyerler hakkında",
-                    Description="Stajyerler verilen ödevleri yapmalıdır.",
+                    Title="Stajyerler hakkinda.",
+                    Description="description",
                     IsFixed=true,
                     MentorId=1.ToGuid()
                 },
                 new Announcement
                 {
                     Id=2.ToGuid(),
-                    Title="Stajyerler hakkında",
-                    Description="Stajyerler kurallar uymak zorundadır.",
+                    Title="Stajyerler hakkinda.",
+                    Description="Stajyerler kurallara uymak zorundadir.",
                     IsFixed=false,
                     MentorId=2.ToGuid()
                 },

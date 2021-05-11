@@ -14,6 +14,7 @@ using Xunit;
 
 namespace Milvasoft.SampleAPI.UnitTest.TestForTest
 {
+    [Collection("Test")]
     public class UsefulLinkTest
     {
         private readonly IUsefulLinkService _usefulLinkService;

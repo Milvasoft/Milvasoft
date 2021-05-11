@@ -1,4 +1,5 @@
-﻿using Milvasoft.Helpers.Extensions;
+﻿using Milvasoft.Helpers.Exceptions;
+using Milvasoft.Helpers.Extensions;
 using Milvasoft.SampleAPI.Entity;
 using Milvasoft.SampleAPI.Spec.Abstract;
 using Milvasoft.SampleAPI.Utils;
@@ -38,18 +39,7 @@ namespace Milvasoft.SampleAPI.Spec
         /// </summary>
         /// <param name="entities"></param>
         /// <returns></returns>
-        public List<UsefulLink> GetFilteredEntities(IEnumerable<UsefulLink> entities)
-        {
-
-            entities.ThrowIfListIsNullOrEmpty();
-
-            if (!string.IsNullOrEmpty(Title)) entities = entities.Where(c => c.Title == Title);
-
-            if (ProfessionId.HasValue) entities = entities.Where(c => c.ProfessionId == ProfessionId);
-
-            return entities.ToList();
-
-        }
+        public List<UsefulLink> GetFilteredEntities(IEnumerable<UsefulLink> entities) => throw new MilvaUserFriendlyException(MilvaException.FeatureNotImplemented);
 
         /// <summary>
         /// Converts spesifications to expression.
@@ -61,7 +51,7 @@ namespace Milvasoft.SampleAPI.Spec
             Expression<Func<UsefulLink, bool>> mainPredicate = null;
             List<Expression<Func<UsefulLink, bool>>> predicates = new List<Expression<Func<UsefulLink, bool>>>();
 
-            if (!string.IsNullOrEmpty(Title)) predicates.Add(c => c.Title == Title);
+            if (!string.IsNullOrEmpty(Title)) predicates.Add(c => c.Title.ToUpper().Contains(Title));
 
             if (ProfessionId.HasValue) predicates.Add(c => c.ProfessionId == ProfessionId);
 

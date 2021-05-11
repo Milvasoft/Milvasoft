@@ -104,8 +104,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
 
 
         /// <summary>
-        /// <para><b>EN: </b>Validating user to login.</para>
-        /// <para><b>TR: </b>Kullanıcıyı oturum açmak için doğrulama.</para>
+        /// Validating user to login.
         /// </summary>
         /// <param name="loginDTO"></param>
         /// <param name="user"></param>
@@ -234,8 +233,6 @@ namespace Milvasoft.SampleAPI.Services.Concrete
 
             #endregion
         }
-
-        private bool IsExceptionResponse(object response) => CommonHelper.PropertyExists(response, "errorCodes");
 
     }
 }

@@ -245,8 +245,8 @@ namespace Milvasoft.SampleAPI.Services.Concrete
 
             var newAnnnouncement = new Announcement
             {
-                Title = addAnnouncementDTO.Title,
-                Description = addAnnouncementDTO.Description,
+                Title = addAnnouncementDTO.Title.ToUpper(),
+                Description = addAnnouncementDTO.Description.ToUpper(),
                 IsFixed = addAnnouncementDTO.IsFixed,
                 MentorId = addAnnouncementDTO.MentorId
             };
