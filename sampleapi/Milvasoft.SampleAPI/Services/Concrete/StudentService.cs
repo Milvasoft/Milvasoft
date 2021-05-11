@@ -293,6 +293,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
                     Name = addStudentDTO.Name,
                     Surname = addStudentDTO.Surname,
                     University = addStudentDTO.University,
+                    Level=addStudentDTO.Level,
                     Age = addStudentDTO.Age,
                     Dream = addStudentDTO.Dream,
                     HomeAddress = addStudentDTO.HomeAddress,

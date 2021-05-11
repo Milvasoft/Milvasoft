@@ -25,6 +25,7 @@ namespace Milvasoft.SampleAPI.Data.Utils
             await InitializeMentor().ConfigureAwait(false);
             await InitializeAnnouncement().ConfigureAwait(false);
             await InitializeUsefulLink().ConfigureAwait(false);
+            await InitializeAssignment().ConfigureAwait(false);
 
         }
 
@@ -54,6 +55,36 @@ namespace Milvasoft.SampleAPI.Data.Utils
             await InitializeDataAsync<TestEntity, TenantId>(testEntities).ConfigureAwait(false);
         }
 
+        private static async Task InitializeAssignment()
+        {
+            var testEntities = new List<Assignment>
+            {
+                new Assignment
+                {
+                    Title="Kart oyunu",
+                    Description="C#'da list yapısını kullanmadan kart oyunu.",
+                    Rules="List yapısı kullanılmayacak.",
+                    RemarksToStudent="Algoritmayı kurarken dikkat et.",
+                    Id=1.ToGuid(),
+                    Level=1,
+                    ProfessionId=1.ToGuid(),
+                    RemarksToMentor="Kontrol ederken list yapısının kullanılıp kullanılmadığına dikkat ediniz."
+                },
+                new Assignment
+                {
+                    Title="Web sitesi frontendi.",
+                    Description="HTML ve CSS kullanarak anasayfa yapımı.",
+                    Rules="JS kullanılmayacak.",
+                    RemarksToStudent="Sadece html ve css kullan.",
+                    Id=2.ToGuid(),
+                    Level=1,
+                    ProfessionId=2.ToGuid(),
+                    RemarksToMentor="Kontrol ederken js kullanılıp kullanılmadığına dikkat ediniz."
+                }
+                
+            };
+            await InitializeDataAsync<Assignment, Guid>(testEntities).ConfigureAwait(false);
+        }
         private static async Task InitializeProfession()
         {
             var testEntities = new List<Profession>(){

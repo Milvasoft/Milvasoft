@@ -51,12 +51,10 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// <param name="mentorRepository"></param>
         /// <param name="mailSender"></param>
         public AssignmentService(IBaseRepository<Assignment, Guid, EducationAppDbContext> assignmentRepository,
-            UserManager<AppUser> userManager,
             IHttpContextAccessor httpContextAccessor,
             IBaseRepository<StudentAssigment, Guid, EducationAppDbContext> studentAssignmentRepository,
             IBaseRepository<Student, Guid, EducationAppDbContext> studentRepository,
-            IBaseRepository<Mentor, Guid, EducationAppDbContext> mentorRepository,
-            IMilvaMailSender mailSender)
+            IBaseRepository<Mentor, Guid, EducationAppDbContext> mentorRepository)
         {
             _mentorRepository = mentorRepository;
             _studentRepository = studentRepository;
@@ -309,6 +307,8 @@ namespace Milvasoft.SampleAPI.Services.Concrete
 
             var assignment = await _assignmentRepository.GetFirstOrDefaultAsync(i => i.Level == level && i.ProfessionId == professionId).ConfigureAwait(false);
 
+            assignment.ThrowIfNullForGuidObject("No suitable assignments were found. ");
+
             return new AssignmentForStudentDTO
             {
                 Id = assignment.Id,
@@ -363,7 +363,6 @@ namespace Milvasoft.SampleAPI.Services.Concrete
 
             currentStudent.ThrowIfNullForGuidObject("User is not student.");
 
-            if (currentStudent.CurrentAssigmentDeliveryDate < DateTime.Today) throw new MilvaUserFriendlyException("User already have assignment.");
 
             var toBeTakeAssignment = await _assignmentRepository.GetByIdAsync(Id).ConfigureAwait(false);
 
