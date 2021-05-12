@@ -1,4 +1,5 @@
-﻿using Milvasoft.SampleAPI.Utils.Attributes.ValidationAttributes;
+﻿using Microsoft.AspNetCore.Http;
+using Milvasoft.SampleAPI.Utils.Attributes.ValidationAttributes;
 using System;
 
 namespace Milvasoft.SampleAPI.DTOs.MentorDTOs
@@ -23,10 +24,12 @@ namespace Milvasoft.SampleAPI.DTOs.MentorDTOs
         /// <summary>
         /// CV path of mentor.
         /// </summary>
-        public string CVFilePath { get; set; }
+        public IFormFile CVFilePath { get; set; }
 
         /// <summary>
-        /// AppUser ID of mentor.
+        /// User profile pictures.
         /// </summary>
+        public IFormFile Photo { get; set; }
+
     }
 }

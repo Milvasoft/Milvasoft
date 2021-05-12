@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Identity;
 using Milvasoft.Helpers.DataAccess.Abstract;
 using Milvasoft.Helpers.DataAccess.IncludeLibrary;
 using Milvasoft.Helpers.Exceptions;
+using Milvasoft.Helpers.FileOperations.Concrete;
+using Milvasoft.Helpers.FileOperations.Enums;
 using Milvasoft.Helpers.Identity.Concrete;
 using Milvasoft.Helpers.Models;
 using Milvasoft.SampleAPI.Data;
@@ -150,7 +152,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
 
             var mentor = await _mentorRepository.GetFirstOrDefaultAsync(includes, p => p.AppUser.UserName == userName).ConfigureAwait(false);
 
-            mentor.ThrowIfParameterIsNull();
+            mentor.ThrowIfNullForGuidObject("Object is not found.");
 
             return new MentorForMentorDTO
             {
@@ -228,12 +230,8 @@ namespace Milvasoft.SampleAPI.Services.Concrete
             var toBeUpdatedMentor = await _mentorRepository.GetByIdAsync(Id).ConfigureAwait(false);
 
             toBeUpdatedMentor.ThrowIfNullForGuidObject();
-
-            
             toBeUpdatedMentor.Name = updateMentorDTO.Name;
-
             toBeUpdatedMentor.Surname = updateMentorDTO.Surname;
-
 
             await _mentorRepository.UpdateAsync(toBeUpdatedMentor).ConfigureAwait(false);
         }
@@ -251,7 +249,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
 
             toBeUpdatedMentor.ThrowIfNullForGuidObject();
 
-            //TODO Oggi Profil resmi ve CV yükleme yapılacak.
+            var formFile = updateMentorDTO.Photo;
 
             toBeUpdatedMentor.Mentor.Name = updateMentorDTO.Name;
             toBeUpdatedMentor.Mentor.Surname = updateMentorDTO.Surname;

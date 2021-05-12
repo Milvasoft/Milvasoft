@@ -53,6 +53,8 @@ namespace Milvasoft.SampleAPI.Services.Concrete
                                                                                                                         pagiantionParams.Spec?.ToExpression(),
                                                                                                                         includes).ConfigureAwait(false);
 
+            questions.ThrowIfListIsNotNullOrEmpty("Object is not found.");
+
 
             return new PaginationDTO<QuestionForAdminDTO>
             {
@@ -97,6 +99,8 @@ namespace Milvasoft.SampleAPI.Services.Concrete
                                                                                                                         pagiantionParams.Spec?.ToExpression(),
                                                                                                                         includes).ConfigureAwait(false);
 
+            questions.ThrowIfListIsNotNullOrEmpty("Object is not found.");
+
             return new PaginationDTO<QuestionForMentorDTO>
             {
                 DTOList = questions.CheckList(i => questions.Select(question => new QuestionForMentorDTO
@@ -138,6 +142,8 @@ namespace Milvasoft.SampleAPI.Services.Concrete
                                                                                                                         pagiantionParams.Spec?.ToExpression(),
                                                                                                                         includes).ConfigureAwait(false);
 
+            questions.ThrowIfListIsNotNullOrEmpty("Object is not found.");
+
             return new PaginationDTO<QuestionForStudentDTO>
             {
                 DTOList = questions.CheckList(i => questions.Select(question => new QuestionForStudentDTO
@@ -173,7 +179,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
 
             var question = await _questionRepository.GetByIdAsync(questionId, includes).ConfigureAwait(false);
 
-            question.ThrowIfNullForGuidObject();
+            question.ThrowIfNullForGuidObject("Object is not found.");
 
             return new QuestionForAdminDTO
             {
@@ -210,7 +216,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
 
             var question = await _questionRepository.GetByIdAsync(questionId, includes).ConfigureAwait(false);
 
-            question.ThrowIfNullForGuidObject();
+            question.ThrowIfNullForGuidObject("Object is not found.");
 
             return new QuestionForMentorDTO
             {
@@ -244,7 +250,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
 
             var question = await _questionRepository.GetByIdAsync(questionId).ConfigureAwait(false);
 
-            question.ThrowIfNullForGuidObject();
+            question.ThrowIfNullForGuidObject("Object is not found.");
 
             return new QuestionForStudentDTO
             {
@@ -287,6 +293,8 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         {
             var toBeUpdatedQuestion = await _questionRepository.GetByIdAsync(updateQuestionDTO.Id).ConfigureAwait(false);
 
+            toBeUpdatedQuestion.ThrowIfNullForGuidObject("Object is not found.");
+
             toBeUpdatedQuestion.IsUseful = updateQuestionDTO.IsUseful;
             toBeUpdatedQuestion.MentorReply = updateQuestionDTO.MentorReply;
             toBeUpdatedQuestion.ProfessionId = updateQuestionDTO.ProfessionId;
@@ -303,6 +311,8 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// <returns></returns>
         public async Task DeleteQuestionsAsync(List<Guid> questionIds)
         {
+            questionIds.ThrowIfParameterIsNull();
+
             var deletedQuestions = await _questionRepository.GetAllAsync(i => questionIds.Select(p => p).Contains(i.Id)).ConfigureAwait(false);
 
             await _questionRepository.DeleteAsync(deletedQuestions).ConfigureAwait(false);
@@ -318,6 +328,8 @@ namespace Milvasoft.SampleAPI.Services.Concrete
                                                                     .Include(st => st.Student);
 
             var questions = await _questionRepository.GetAllAsync(i => i.WillShown).ConfigureAwait(false);
+
+            questions.ThrowIfListIsNotNullOrEmpty("Object is not found.");
 
             return (questions != null ? from question in questions
                                         select new QuestionDTO

@@ -69,6 +69,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
                                                                                                                               pagiantionParams.OrderByAscending,
                                                                                                                               pagiantionParams.Spec?.ToExpression()).ConfigureAwait(false);
 
+            professions.ThrowIfListIsNotNullOrEmpty("Object is not found.");
 
             return new PaginationDTO<ProfessionDTO>
             {
@@ -91,7 +92,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         {
             var profession = await _professionRepository.GetByIdAsync(professionId).ConfigureAwait(false);
 
-            profession.ThrowIfNullForGuidObject("Object not found.");
+            profession.ThrowIfNullForGuidObject("Object is not found.");
 
             return new ProfessionDTO
             {
@@ -112,7 +113,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         {
             var profession = await _professionRepository.GetByIdAsync(professionId).ConfigureAwait(false);
 
-            profession.ThrowIfNullForGuidObject("Object not found.");
+            profession.ThrowIfNullForGuidObject("Object is not found.");
 
             return new ProfessionDTO
             {
@@ -132,7 +133,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         {
             var profession = await _professionRepository.GetByIdAsync(professionId).ConfigureAwait(false);
 
-            profession.ThrowIfNullForGuidObject("Object not found.");
+            profession.ThrowIfNullForGuidObject("Object is not found.");
 
             return new ProfessionDTO
             {

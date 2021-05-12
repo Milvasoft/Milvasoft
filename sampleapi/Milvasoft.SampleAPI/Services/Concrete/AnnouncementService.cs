@@ -63,6 +63,8 @@ namespace Milvasoft.SampleAPI.Services.Concrete
                                                                                                                                     pagiantionParams.Spec?.ToExpression(),
                                                                                                                                     includes).ConfigureAwait(false);
 
+            announcements.ThrowIfListIsNotNullOrEmpty("Object is not found.");
+
             return new PaginationDTO<AnnouncementForStudentDTO>
             {
                 DTOList = announcements.CheckList(i => announcements.Select(announcement => new AnnouncementForStudentDTO
@@ -97,6 +99,8 @@ namespace Milvasoft.SampleAPI.Services.Concrete
                                                                                                                                     pagiantionParams.OrderByAscending,
                                                                                                                                     pagiantionParams.Spec?.ToExpression(),
                                                                                                                                     includes).ConfigureAwait(false);
+
+            announcements.ThrowIfListIsNotNullOrEmpty("Object is not found.");
 
             return new PaginationDTO<AnnouncementForAdminDTO>
             {
@@ -134,6 +138,8 @@ namespace Milvasoft.SampleAPI.Services.Concrete
                                                                                                                                     pagiantionParams.Spec?.ToExpression(),
                                                                                                                                     includes).ConfigureAwait(false);
 
+            announcements.ThrowIfListIsNotNullOrEmpty("Object is not found.");
+
             return new PaginationDTO<AnnouncementForMentorDTO>
             {
                 DTOList = announcements.CheckList(i => announcements.Select(announcement => new AnnouncementForMentorDTO
@@ -165,7 +171,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
 
             var announcement = await _announcementRepository.GetByIdAsync(announcementId, includes).ConfigureAwait(false);
 
-            announcement.ThrowIfNullForGuidObject("Böyle bir duyuru bulunmamaktadır.");
+            announcement.ThrowIfNullForGuidObject("Object is not found.");
 
             return new AnnouncementForAdminDTO
             {
@@ -192,7 +198,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
 
             var announcement = await _announcementRepository.GetByIdAsync(announcementId, includes).ConfigureAwait(false);
 
-            announcement.ThrowIfNullForGuidObject("Böyle bir duyuru bulunmamaktadır.");
+            announcement.ThrowIfNullForGuidObject("Object is not found.");
 
             return new AnnouncementForMentorDTO
             {
@@ -219,7 +225,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
 
             var announcement = await _announcementRepository.GetByIdAsync(announcementId, includes).ConfigureAwait(false);
 
-            announcement.ThrowIfNullForGuidObject("Böyle bir duyuru bulunmamaktadır.");
+            announcement.ThrowIfNullForGuidObject("Object is not found.");
 
             return new AnnouncementForStudentDTO
             {
@@ -262,6 +268,8 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         public async Task UpdateAnnouncementAsync(UpdateAnnouncementDTO updateAnnouncementDTO)
         {
             var toBeUpdatedAnnouncement = await _announcementRepository.GetByIdAsync(updateAnnouncementDTO.Id).ConfigureAwait(false);
+
+            toBeUpdatedAnnouncement.ThrowIfNullForGuidObject("Object is not found.");
 
             toBeUpdatedAnnouncement.Title = updateAnnouncementDTO.Title;
 

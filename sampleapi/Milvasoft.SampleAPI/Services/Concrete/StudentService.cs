@@ -73,6 +73,8 @@ namespace Milvasoft.SampleAPI.Services.Concrete
                                                                                                                      pagiantionParams.Spec?.ToExpression(),
                                                                                                                      includes).ConfigureAwait(false);
 
+            students.ThrowIfListIsNotNullOrEmpty("Object is not found.");
+
             return new PaginationDTO<StudentForAdminDTO>
             {
                 DTOList = students.CheckList(i => students.Select(student => new StudentForAdminDTO
@@ -122,7 +124,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
                                                                                                                      pagiantionParams.OrderByAscending,
                                                                                                                      pagiantionParams.Spec?.ToExpression(),
                                                                                                                      includes).ConfigureAwait(false);
-
+            students.ThrowIfListIsNotNullOrEmpty("Object is not found.");
 
             return new PaginationDTO<StudentForMentorDTO>
             {
@@ -168,7 +170,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
 
             var student = await _studentRepository.GetByIdAsync(studentId, includes).ConfigureAwait(false);
 
-            student.ThrowIfNullForGuidObject();
+            student.ThrowIfNullForGuidObject("Object is not found.");
 
             return new StudentForAdminDTO
             {
@@ -211,7 +213,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
 
             var student = await _studentRepository.GetByIdAsync(studentId, includes, i => i.MentorId == currentMentor.Id).ConfigureAwait(false);
 
-            student.ThrowIfNullForGuidObject();
+            student.ThrowIfNullForGuidObject("Object is not found.");
 
             return new StudentForMentorDTO
             {
@@ -248,7 +250,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
 
             var currentStudent = await _studentRepository.GetFirstOrDefaultAsync(i => i.AppUser.UserName == username).ConfigureAwait(false);
 
-            currentStudent.ThrowIfNullForGuidObject();
+            currentStudent.ThrowIfNullForGuidObject("User is not student.");
 
             return new StudentForMentorDTO
             {
@@ -324,6 +326,8 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         {
             var toBeUpdatedStudent = await _studentRepository.GetByIdAsync(Id).ConfigureAwait(false);
 
+            toBeUpdatedStudent.ThrowIfNullForGuidObject("Object is not found.");
+
             toBeUpdatedStudent.Name = updateStudentDTO.Name;
             toBeUpdatedStudent.Surname = updateStudentDTO.Surname;
             toBeUpdatedStudent.University = updateStudentDTO.University;
@@ -343,6 +347,8 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         public async Task UpdateStudentByMentorAsync(UpdateStudentByMentorDTO updateStudentDTO,Guid Id)
         {
             var toBeUpdatedStudent = await _studentRepository.GetByIdAsync(Id).ConfigureAwait(false);
+
+            toBeUpdatedStudent.ThrowIfNullForGuidObject("Object is not found.");
 
             toBeUpdatedStudent.Name = updateStudentDTO.Name;
             toBeUpdatedStudent.Surname = updateStudentDTO.Surname;
@@ -370,6 +376,8 @@ namespace Milvasoft.SampleAPI.Services.Concrete
             var username = _httpContextAccessor.HttpContext.User.Identity.Name;
 
             var currentStudent = await _userManager.FindByNameAsync(username).ConfigureAwait(false);
+
+            currentStudent.ThrowIfNullForGuidObject("Object is not found.");
 
             currentStudent.Student.Name = updateStudentDTO.Name;
             currentStudent.Student.Surname = updateStudentDTO.Surname;

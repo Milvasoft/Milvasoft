@@ -77,6 +77,8 @@ namespace Milvasoft.SampleAPI.Services.Concrete
                                                                                                                                     pagiantionParams.OrderByAscending,
                                                                                                                                     pagiantionParams.Spec?.ToExpression()).ConfigureAwait(false);
 
+            asssignments.ThrowIfListIsNotNullOrEmpty("Object is not found.");
+
             return new PaginationDTO<AssignmentForStudentDTO>
             {
                 DTOList = asssignments.CheckList(i => asssignments.Select(assignment => new AssignmentForStudentDTO
@@ -106,6 +108,8 @@ namespace Milvasoft.SampleAPI.Services.Concrete
                                                                                                                                     pagiantionParams.OrderByProperty,
                                                                                                                                     pagiantionParams.OrderByAscending,
                                                                                                                                     pagiantionParams.Spec?.ToExpression()).ConfigureAwait(false);
+
+            asssignments.ThrowIfListIsNotNullOrEmpty("Object is not found.");
 
             return new PaginationDTO<AssignmentForAdminDTO>
             {
@@ -138,6 +142,8 @@ namespace Milvasoft.SampleAPI.Services.Concrete
                                                                                                                                     pagiantionParams.OrderByAscending,
                                                                                                                                     pagiantionParams.Spec?.ToExpression()).ConfigureAwait(false);
 
+            asssignments.ThrowIfListIsNotNullOrEmpty("Object is not found.");
+
             return new PaginationDTO<AssignmentForMentorDTO>
             {
                 DTOList = asssignments.CheckList(i => asssignments.Select(assignment => new AssignmentForMentorDTO
@@ -166,7 +172,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         {
             var assignment = await _assignmentRepository.GetByIdAsync(assignmentId).ConfigureAwait(false);
 
-            assignment.ThrowIfNullForGuidObject();
+            assignment.ThrowIfNullForGuidObject("Object is not found.");
 
             return new AssignmentForStudentDTO
             {
@@ -189,7 +195,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         {
             var assignment = await _assignmentRepository.GetByIdAsync(assignmentId).ConfigureAwait(false);
 
-            assignment.ThrowIfNullForGuidObject();
+            assignment.ThrowIfNullForGuidObject("Object is not found.");
 
             return new AssignmentForAdminDTO
             {
@@ -213,7 +219,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         {
             var assignment = await _assignmentRepository.GetByIdAsync(assignmentId).ConfigureAwait(false);
 
-            assignment.ThrowIfNullForGuidObject();
+            assignment.ThrowIfNullForGuidObject("Object is not found.");
 
             return new AssignmentForMentorDTO
             {
@@ -259,6 +265,8 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         {
             var toBeUpdatedAssignment = await _assignmentRepository.GetByIdAsync(updateAssignmentDTO.Id).ConfigureAwait(false);
 
+            toBeUpdatedAssignment.ThrowIfNullForGuidObject("Object is not found.");
+
             toBeUpdatedAssignment.Title = updateAssignmentDTO.Title;
 
             toBeUpdatedAssignment.Description = updateAssignmentDTO.Description;
@@ -283,6 +291,8 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// <returns></returns>
         public async Task DeleteAssignmentAsync(List<Guid> assignmentIds)
         {
+            assignmentIds.ThrowIfParameterIsNull();
+
             var assignments = await _assignmentRepository.GetAllAsync(i => assignmentIds.Select(p => p).Contains(i.Id)).ConfigureAwait(false);
             await _assignmentRepository.DeleteAsync(assignments).ConfigureAwait(false);
         }
@@ -307,7 +317,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
 
             var assignment = await _assignmentRepository.GetFirstOrDefaultAsync(i => i.Level == level && i.ProfessionId == professionId).ConfigureAwait(false);
 
-            assignment.ThrowIfNullForGuidObject("No suitable assignments were found. ");
+            assignment.ThrowIfNullForGuidObject("No suitable assignments were found.");
 
             return new AssignmentForStudentDTO
             {
@@ -330,7 +340,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         {
             var currentStudent = await _studentRepository.GetFirstOrDefaultAsync(i => i.AppUser.UserName == _loggedUser).ConfigureAwait(false);
 
-            currentStudent.ThrowIfNullForGuidObject();
+            currentStudent.ThrowIfNullForGuidObject("User is not student.");
 
             var currentAssignment = await _studentAssignmentRepository.GetFirstOrDefaultAsync(i => i.StudentId == currentStudent.Id && i.IsActive == true);
 
@@ -403,11 +413,8 @@ namespace Milvasoft.SampleAPI.Services.Concrete
                 case FileValidationResult.Valid:
                     break;
                 case FileValidationResult.FileSizeTooBig:
-                    // Get length of file in bytes
                     long fileSizeInBytes = submitAssignment.Assignment.Length;
-                    // Convert the bytes to Kilobytes (1 KB = 1024 Bytes)
                     double fileSizeInKB = fileSizeInBytes / 1024;
-                    // Convert the KB to MegaBytes (1 MB = 1024 KBytes)
                     double fileSizeInMB = fileSizeInKB / 1024;
                     throw new MilvaUserFriendlyException("FileIsTooBigMessage", fileSizeInMB.ToString("0.#"));
                 case FileValidationResult.InvalidFileExtension:
