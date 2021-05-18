@@ -344,8 +344,8 @@ namespace Milvasoft.SampleAPI.AppStartup
                     {
                         if (string.IsNullOrEmpty(context.Principal.Identity.Name)
                             || context.SecurityToken is not JwtSecurityToken accessToken)
-                            //|| !SignedInUsers.SignedInUserTokens.ContainsKey(context.Principal.Identity.Name)
-                            //|| SignedInUsers.SignedInUserTokens[context.Principal.Identity.Name] != accessToken.RawData)
+                        //|| !SignedInUsers.SignedInUserTokens.ContainsKey(context.Principal.Identity.Name)
+                        //|| SignedInUsers.SignedInUserTokens[context.Principal.Identity.Name] != accessToken.RawData)
                         {
                             var localizer = GetLocalizerInstance(context.HttpContext);
 

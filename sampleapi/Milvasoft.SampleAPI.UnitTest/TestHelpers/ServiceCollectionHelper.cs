@@ -95,7 +95,7 @@ namespace Milvasoft.SampleAPI.UnitTest.TestHelpers
 
             #region Services
 
-            _services.AddScoped<ITenantAccessor<IMilvaTenantBase<Guid>,Guid>, TenantAccessor<IMilvaTenantBase<Guid>,Guid>>();
+            _services.AddScoped<ITenantAccessor<IMilvaTenantBase<Guid>, Guid>, TenantAccessor<IMilvaTenantBase<Guid>, Guid>>();
             _services.AddScoped<IMentorService, MentorService>();
             _services.AddScoped<IStudentService, StudentService>();
             _services.AddScoped<IAccountService, AccountService>();
@@ -117,7 +117,7 @@ namespace Milvasoft.SampleAPI.UnitTest.TestHelpers
                 opt.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
                 opt.DefaultRequestVersion = new Version(1, 0);
             });
-            
+
             _services.AddScoped<IApplicationBuilder, ApplicationBuilder>();
         }
 

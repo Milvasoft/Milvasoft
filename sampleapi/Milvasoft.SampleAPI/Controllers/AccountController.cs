@@ -2,19 +2,14 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
-using Milvasoft.Helpers;
-using Milvasoft.Helpers.Caching;
 using Milvasoft.Helpers.Extensions;
 using Milvasoft.Helpers.Models.Response;
-using Milvasoft.Helpers.MultiTenancy.EntityBase;
 using Milvasoft.Helpers.Utils;
-using Milvasoft.SampleAPI.Data;
 using Milvasoft.SampleAPI.DTOs.AccountDTOs;
 using Milvasoft.SampleAPI.Localization;
 using Milvasoft.SampleAPI.Services.Abstract;
 using Milvasoft.SampleAPI.Utils.Attributes.ActionFilters;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Milvasoft.SampleAPI.Controllers
@@ -63,7 +58,7 @@ namespace Milvasoft.SampleAPI.Controllers
 
                 response.StatusCode = MilvaStatusCodes.Status400BadRequest;
                 response.Success = false;
-            } 
+            }
             else if (response.Result.Token == null)
             {
                 response.Message = _sharedLocalizer["UnknownLoginProblemMessage"];

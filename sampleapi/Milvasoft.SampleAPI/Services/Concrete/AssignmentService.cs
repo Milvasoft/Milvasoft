@@ -1,11 +1,9 @@
 ﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
 using Milvasoft.Helpers.DataAccess.Abstract;
 using Milvasoft.Helpers.DataAccess.IncludeLibrary;
 using Milvasoft.Helpers.Exceptions;
 using Milvasoft.Helpers.FileOperations.Concrete;
 using Milvasoft.Helpers.FileOperations.Enums;
-using Milvasoft.Helpers.Mail;
 using Milvasoft.Helpers.Models;
 using Milvasoft.SampleAPI.Data;
 using Milvasoft.SampleAPI.DTOs;
@@ -345,23 +343,23 @@ namespace Milvasoft.SampleAPI.Services.Concrete
             return new AssignmentForStudentDTO
             {
                 Title = assignment.Title,
-                Level=assignment.Level,
-                Description=assignment.Description,
-                RemarksToStudent=assignment.RemarksToStudent,
-                MaxDeliveryDay=assignment.MaxDeliveryDay,
-                Rules=assignment.Rules,
-                ProfessionId=assignment.ProfessionId
+                Level = assignment.Level,
+                Description = assignment.Description,
+                RemarksToStudent = assignment.RemarksToStudent,
+                MaxDeliveryDay = assignment.MaxDeliveryDay,
+                Rules = assignment.Rules,
+                ProfessionId = assignment.ProfessionId
             };
 
         }
-          
+
         /// <summary>
         ///  The student takes the next assignment.
         /// </summary>
         /// <param name="Id"></param>
         /// <param name="newAssignment"></param>
         /// <returns></returns>
-        public async Task TakeAssignment(Guid Id,AddStudentAssignmentDTO newAssignment)
+        public async Task TakeAssignment(Guid Id, AddStudentAssignmentDTO newAssignment)
         {
             var currentStudent = await _studentRepository.GetFirstOrDefaultAsync(i => i.AppUser.UserName == _loggedUser).ConfigureAwait(false);
 
@@ -377,9 +375,9 @@ namespace Milvasoft.SampleAPI.Services.Concrete
                 IsActive = false,
                 AssigmentId = toBeTakeAssignment.Id,
                 StudentId = currentStudent.Id,
-                AdditionalTime=newAssignment.AdditionalTime,
-                AdditionalTimeDescription= newAssignment.AdditionalTimeDescription,
-                Status=Entity.Enum.EducationStatus.InProgress
+                AdditionalTime = newAssignment.AdditionalTime,
+                AdditionalTimeDescription = newAssignment.AdditionalTimeDescription,
+                Status = Entity.Enum.EducationStatus.InProgress
             };
 
             await _studentAssignmentRepository.AddAsync(studentAssignment).ConfigureAwait(false);
@@ -447,29 +445,29 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         {
             Func<IIncludable<StudentAssigment>, IIncludable> includes = i => i.Include(p => p.Assigment)
                                                                      .Include(s => s.Student)
-                                                                        .ThenInclude(m=>m.Mentor);
-                                                                        
+                                                                        .ThenInclude(m => m.Mentor);
+
 
             var currentMentor = await _mentorRepository.GetFirstOrDefaultAsync(i => i.AppUser.UserName == _loggedUser).ConfigureAwait(false);
 
-            var unconfirmedAssignment = await _studentAssignmentRepository.GetAllAsync(includes,i => i.IsActive == false && i.Student.Mentor.Id==currentMentor.Id).ConfigureAwait(false);
+            var unconfirmedAssignment = await _studentAssignmentRepository.GetAllAsync(includes, i => i.IsActive == false && i.Student.Mentor.Id == currentMentor.Id).ConfigureAwait(false);
 
             unconfirmedAssignment.ThrowIfListIsNotNullOrEmpty("All assignments are approved.");
 
             var unconfirmedAssignmentsDTO = from assignment in unconfirmedAssignment
-                             select new StudentAssignmentDTO
-                             {
-                                 Id=assignment.Id,
-                                 IsActive=assignment.IsActive,
-                                 AdditionalTime=assignment.AdditionalTime,
-                                 AdditionalTimeDescription=assignment.AdditionalTimeDescription,
-                                 Student=new StudentDTO
-                                 {
-                                     Name=assignment.Student.Name,
-                                     Surname=assignment.Student.Surname,
-                                     Id=assignment.Student.Id
-                                 }
-                             };
+                                            select new StudentAssignmentDTO
+                                            {
+                                                Id = assignment.Id,
+                                                IsActive = assignment.IsActive,
+                                                AdditionalTime = assignment.AdditionalTime,
+                                                AdditionalTimeDescription = assignment.AdditionalTimeDescription,
+                                                Student = new StudentDTO
+                                                {
+                                                    Name = assignment.Student.Name,
+                                                    Surname = assignment.Student.Surname,
+                                                    Id = assignment.Student.Id
+                                                }
+                                            };
             return unconfirmedAssignmentsDTO.ToList();
         }
 
@@ -490,7 +488,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
             toBeUpdatedAssignment.FinishedDate = toBeUpdated.FinishedDate;
 
             student.CurrentAssigmentDeliveryDate = toBeUpdatedAssignment.FinishedDate;
-            
+
         }
 
         #endregion

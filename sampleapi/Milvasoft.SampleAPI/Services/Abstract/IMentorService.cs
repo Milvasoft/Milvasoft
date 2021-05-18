@@ -45,7 +45,7 @@ namespace Milvasoft.SampleAPI.Services.Abstract
         /// <param name="updateMentorDTO"></param>
         /// <param name="Id"></param>
         /// <returns></returns>
-        Task UpdateMentorByAdminAsync(UpdateMentorDTO updateMentorDTO,Guid Id);
+        Task UpdateMentorByAdminAsync(UpdateMentorDTO updateMentorDTO, Guid Id);
 
         /// <summary>
         /// The mentor can update himself.

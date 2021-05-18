@@ -81,7 +81,7 @@ namespace Milvasoft.SampleAPI.Data.Utils
                     ProfessionId=2.ToGuid(),
                     RemarksToMentor="Kontrol ederken js kullanılıp kullanılmadığına dikkat ediniz."
                 }
-                
+
             };
             await InitializeDataAsync<Assignment, Guid>(testEntities).ConfigureAwait(false);
         }
@@ -213,7 +213,7 @@ namespace Milvasoft.SampleAPI.Data.Utils
             };
             await InitializeDataAsync<AppUser, Guid>(testEntities).ConfigureAwait(false);
         }
-        
+
         private static async Task InitializeMentor()
         {
             var testEntities = new List<AppUser>()

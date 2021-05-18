@@ -1,6 +1,4 @@
-﻿using Milvasoft.SampleAPI.Entity.Enum;
-using Milvasoft.SampleAPI.Utils.Attributes.ValidationAttributes;
-using System;
+﻿using Milvasoft.SampleAPI.Utils.Attributes.ValidationAttributes;
 
 namespace Milvasoft.SampleAPI.DTOs.StudentDTOs
 {
@@ -8,7 +6,7 @@ namespace Milvasoft.SampleAPI.DTOs.StudentDTOs
     /// UpdateStudentDTO for update student operations.
     /// </summary>
     public class UpdateStudentDTO
-    { 
+    {
         /// <summary>
         /// Student's name.
         /// </summary>

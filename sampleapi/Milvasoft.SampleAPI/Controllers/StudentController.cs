@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Milvasoft.Helpers;
 using Milvasoft.SampleAPI.DTOs;
 using Milvasoft.SampleAPI.DTOs.StudentDTOs;
@@ -126,7 +125,7 @@ namespace Milvasoft.SampleAPI.Controllers
         [HttpPut("StudentbyMentor")]
         public async Task<IActionResult> UpdateStudentbyMentor([FromBody] UpdateStudentByMentorDTO updateStudent, Guid Id)
         {
-            return await _studentService.UpdateStudentByMentorAsync(updateStudent,Id).ConfigureAwait(false).GetObjectResponseAsync<UpdateStudentDTO>("Success").ConfigureAwait(false);
+            return await _studentService.UpdateStudentByMentorAsync(updateStudent, Id).ConfigureAwait(false).GetObjectResponseAsync<UpdateStudentDTO>("Success").ConfigureAwait(false);
         }
         /// <summary>
         /// Update <paramref name="updateStudent"/> data.
@@ -137,7 +136,7 @@ namespace Milvasoft.SampleAPI.Controllers
         [HttpPut("StudentbyAdmin")]
         public async Task<IActionResult> UpdateStudentbyAdmin([FromBody] UpdateStudentByAdminDTO updateStudent, Guid Id)
         {
-            return await _studentService.UpdateStudentByAdminAsync(updateStudent,Id).ConfigureAwait(false).GetObjectResponseAsync<UpdateStudentDTO>("Success").ConfigureAwait(false);
+            return await _studentService.UpdateStudentByAdminAsync(updateStudent, Id).ConfigureAwait(false).GetObjectResponseAsync<UpdateStudentDTO>("Success").ConfigureAwait(false);
         }
 
         /// <summary>

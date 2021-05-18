@@ -1,8 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Milvasoft.SampleAPI.DTOs
 {
@@ -14,7 +11,7 @@ namespace Milvasoft.SampleAPI.DTOs
         /// <summary>
         /// Id of the homework to be sent
         /// </summary>
-        public Guid AssigmentId{ get; set; }
+        public Guid AssigmentId { get; set; }
         /// <summary>
         /// Assignment file.
         /// </summary>

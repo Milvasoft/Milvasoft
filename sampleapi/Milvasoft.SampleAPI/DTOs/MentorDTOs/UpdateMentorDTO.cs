@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Milvasoft.SampleAPI.Utils.Attributes.ValidationAttributes;
-using System;
 
 namespace Milvasoft.SampleAPI.DTOs.MentorDTOs
 {

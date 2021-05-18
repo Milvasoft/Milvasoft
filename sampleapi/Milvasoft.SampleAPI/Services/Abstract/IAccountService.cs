@@ -13,13 +13,13 @@ namespace Milvasoft.SampleAPI.Services.Abstract
     /// <summary>
     /// The class in which user transactions are entered and exited.
     /// </summary>
-    public interface IAccountService : IIdentityOperations<UserManager<AppUser>,EducationAppDbContext,IStringLocalizer<SharedResource>,AppUser,AppRole,Guid,LoginResultDTO>
+    public interface IAccountService : IIdentityOperations<UserManager<AppUser>, EducationAppDbContext, IStringLocalizer<SharedResource>, AppUser, AppRole, Guid, LoginResultDTO>
     {
         /// <summary>
         /// Login for incoming user. Returns a token if login informations are valid or the user is not lockedout. Otherwise returns the error list.
         /// </summary>
         /// <returns></returns>
-        Task<LoginResultDTO> SignInAsync(LoginDTO loginDTO,bool isMentor);
+        Task<LoginResultDTO> SignInAsync(LoginDTO loginDTO, bool isMentor);
 
         /// <summary>
         /// Signs out from database.

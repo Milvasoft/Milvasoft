@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace Milvasoft.SampleAPI.DTOs.StudentAssignmentDTOs
+﻿namespace Milvasoft.SampleAPI.DTOs.StudentAssignmentDTOs
 {
     /// <summary>
     /// Dto to use when adding a student assignment.

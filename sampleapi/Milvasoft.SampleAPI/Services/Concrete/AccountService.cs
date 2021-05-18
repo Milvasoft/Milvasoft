@@ -1,9 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
-using Microsoft.IdentityModel.Tokens;
-using Milvasoft.Helpers;
 using Milvasoft.Helpers.DataAccess.Abstract;
 using Milvasoft.Helpers.Exceptions;
 using Milvasoft.Helpers.Identity.Abstract;
@@ -16,11 +13,8 @@ using Milvasoft.SampleAPI.Services.Abstract;
 using Milvasoft.SampleAPI.Utils;
 using System;
 using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Net.Http;
-using System.Security.Claims;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Milvasoft.SampleAPI.Services.Concrete
@@ -28,7 +22,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
     /// <summary>
     /// Provides sign-in,sign-up and sign-out process for user.
     /// </summary>
-    public class AccountService : IdentityOperations<UserManager<AppUser>, EducationAppDbContext, IStringLocalizer<SharedResource>, AppUser, AppRole, Guid, LoginResultDTO>,IAccountService
+    public class AccountService : IdentityOperations<UserManager<AppUser>, EducationAppDbContext, IStringLocalizer<SharedResource>, AppUser, AppRole, Guid, LoginResultDTO>, IAccountService
     {
         private readonly UserManager<AppUser> _userManager;
         private readonly SignInManager<AppUser> _signInManager;
@@ -65,9 +59,9 @@ namespace Milvasoft.SampleAPI.Services.Concrete
             _userManager = userManager;
             _signInManager = signInManager;
             _httpClient = httpClient;
-            _studentRepository= studentRepository;
+            _studentRepository = studentRepository;
             _contextRepository = contextRepository;
-            _mentorRepository= mentorRepository;
+            _mentorRepository = mentorRepository;
             _httpContextAccessor = httpContextAccessor;
             _sharedLocalizer = sharedLocalizer;
             _tokenManagement = tokenManagement;
@@ -97,9 +91,9 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// <returns></returns>
         public async Task<IdentityResult> ChangePasswordAsync(ChangePassDTO passDTO)
         {
-            if(passDTO.OldPassword == passDTO.NewPassword) throw new MilvaUserFriendlyException("Passwords are already the same");
+            if (passDTO.OldPassword == passDTO.NewPassword) throw new MilvaUserFriendlyException("Passwords are already the same");
             var user = await _userManager.FindByNameAsync(passDTO.UserName).ConfigureAwait(false);
-            return await base.ChangePasswordAsync(user,passDTO.OldPassword, passDTO.NewPassword);
+            return await base.ChangePasswordAsync(user, passDTO.OldPassword, passDTO.NewPassword);
         }
 
 
@@ -208,7 +202,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
             }
 
             var passIsTrue = _userManager.CheckPasswordAsync(user, loginDTO.Password).Result;
-           
+
 
             if (!passIsTrue)
             {

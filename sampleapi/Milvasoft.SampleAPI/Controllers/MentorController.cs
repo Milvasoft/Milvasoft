@@ -90,9 +90,9 @@ namespace Milvasoft.SampleAPI.Controllers
         /// <returns></returns>
        // [Authorize(Roles = "Admin")]
         [HttpPut("Mentor")]
-        public async Task<IActionResult> UpdateMentorbyAdmin([FromBody] UpdateMentorDTO updateMentor,Guid Id)
+        public async Task<IActionResult> UpdateMentorbyAdmin([FromBody] UpdateMentorDTO updateMentor, Guid Id)
         {
-            return await _mentorService.UpdateMentorByAdminAsync(updateMentor,Id).ConfigureAwait(false).GetObjectResponseAsync<UpdateMentorDTO>("Success"); ;
+            return await _mentorService.UpdateMentorByAdminAsync(updateMentor, Id).ConfigureAwait(false).GetObjectResponseAsync<UpdateMentorDTO>("Success"); ;
         }
 
         /// <summary>
@@ -101,7 +101,7 @@ namespace Milvasoft.SampleAPI.Controllers
         /// <param name="updateMentor"></param>
         /// <returns></returns>
         [HttpPut("CurrentMentor")]
-        public async Task<IActionResult> UpdateCurrentMentor([FromBody]UpdateMentorDTO updateMentor)
+        public async Task<IActionResult> UpdateCurrentMentor([FromBody] UpdateMentorDTO updateMentor)
         {
             return await _mentorService.UpdateCurrentMentorAsync(updateMentor).ConfigureAwait(false).GetObjectResponseAsync<UpdateMentorDTO>("Success");
         }

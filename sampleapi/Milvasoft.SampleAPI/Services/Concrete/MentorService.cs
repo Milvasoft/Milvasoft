@@ -3,8 +3,6 @@ using Microsoft.AspNetCore.Identity;
 using Milvasoft.Helpers.DataAccess.Abstract;
 using Milvasoft.Helpers.DataAccess.IncludeLibrary;
 using Milvasoft.Helpers.Exceptions;
-using Milvasoft.Helpers.FileOperations.Concrete;
-using Milvasoft.Helpers.FileOperations.Enums;
 using Milvasoft.Helpers.Identity.Concrete;
 using Milvasoft.Helpers.Models;
 using Milvasoft.SampleAPI.Data;
@@ -150,7 +148,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
 
             return new MentorForMentorDTO
             {
-                Id=mentor.Id,
+                Id = mentor.Id,
                 Name = mentor.Name,
                 Surname = mentor.Surname,
                 CVFilePath = mentor.CVFilePath,
@@ -219,7 +217,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// <param name="updateMentorDTO">Mentor to be updated.</param>
         /// <param name="Id">Id of the to be updated mentor.</param>
         /// <returns></returns>
-        public async Task UpdateMentorByAdminAsync(UpdateMentorDTO updateMentorDTO,Guid Id)
+        public async Task UpdateMentorByAdminAsync(UpdateMentorDTO updateMentorDTO, Guid Id)
         {
             var toBeUpdatedMentor = await _mentorRepository.GetByIdAsync(Id).ConfigureAwait(false);
 

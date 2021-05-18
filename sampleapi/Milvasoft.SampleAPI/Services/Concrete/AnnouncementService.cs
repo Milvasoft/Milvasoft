@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
-using Milvasoft.Helpers.DataAccess.Abstract;
+﻿using Milvasoft.Helpers.DataAccess.Abstract;
 using Milvasoft.Helpers.DataAccess.IncludeLibrary;
 using Milvasoft.Helpers.Models;
 using Milvasoft.SampleAPI.Data;
@@ -23,7 +21,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
     /// Announcement service.
     /// </summary>
     public class AnnouncementService : IAnnouncementService
-    { 
+    {
         private readonly IBaseRepository<Announcement, Guid, EducationAppDbContext> _announcementRepository;
 
         /// <summary>
@@ -47,7 +45,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
             var (announcements, pageCount, totalDataCount) = await _announcementRepository.PreparePaginationDTO<Announcement, Guid>(pagiantionParams.PageIndex,
                                                                                                                                     pagiantionParams.RequestedItemCount,
                                                                                                                                     pagiantionParams.OrderByProperty,
-                                                                                                                                    pagiantionParams.OrderByAscending, 
+                                                                                                                                    pagiantionParams.OrderByAscending,
                                                                                                                                     pagiantionParams.Spec?.ToExpression(),
                                                                                                                                     includes).ConfigureAwait(false);
 
@@ -64,7 +62,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
                     {
                         Id = i.Id,
                         Name = i.Name,
-                        Surname=i.Surname
+                        Surname = i.Surname
                     })
                 })),
                 PageCount = pageCount,
@@ -225,7 +223,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
                     Name = i.Name,
                     Surname = i.Surname
                 })
-               
+
             };
         }
 

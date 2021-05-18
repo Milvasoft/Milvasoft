@@ -2,7 +2,6 @@
 using Milvasoft.Helpers.Extensions;
 using Milvasoft.SampleAPI.Entity;
 using Milvasoft.SampleAPI.Spec.Abstract;
-using Milvasoft.SampleAPI.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -60,7 +59,7 @@ namespace Milvasoft.SampleAPI.Spec
             List<Expression<Func<Announcement, bool>>> predicates = new List<Expression<Func<Announcement, bool>>>();
 
             if (!string.IsNullOrEmpty(Title)) predicates.Add(a => a.Title.ToUpper().Contains(Title));
-            if (!string.IsNullOrEmpty(Description))  predicates.Add(a => a.Description.ToUpper().Contains(Description));
+            if (!string.IsNullOrEmpty(Description)) predicates.Add(a => a.Description.ToUpper().Contains(Description));
 
             if (IsFixed.HasValue) predicates.Add(a => a.IsFixed == IsFixed);
             if (MentorId.HasValue) predicates.Add(a => a.MentorId == MentorId);
