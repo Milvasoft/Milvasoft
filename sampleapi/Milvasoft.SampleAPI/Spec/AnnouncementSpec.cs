@@ -10,7 +10,6 @@ using System.Linq.Expressions;
 
 namespace Milvasoft.SampleAPI.Spec
 {
-
     /// <summary>
     /// Filtering announcement object lists.
     /// </summary>
@@ -20,6 +19,7 @@ namespace Milvasoft.SampleAPI.Spec
         private string _tittle;
         private string _description;
         #endregion
+
         #region Props
         /// <summary>
         /// Filtering by Tittle of Announcement.

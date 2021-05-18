@@ -10,7 +10,6 @@ using System.Linq.Expressions;
 
 namespace Milvasoft.SampleAPI.Spec
 {
-
     /// <summary>
     /// Filtering student object list.
     /// </summary>
@@ -84,7 +83,6 @@ namespace Milvasoft.SampleAPI.Spec
         /// <returns></returns>
         public List<Student> GetFilteredEntities(IEnumerable<Student> entities)
         {
-
             if (!Name.IsNullOrEmpty()) entities = entities.Where(m => m.Name.ToUpper().Contains(Name));
             if (!Surname.IsNullOrEmpty()) entities = entities.Where(m => m.Surname.ToUpper().Contains(Surname));
             if (!University.IsNullOrEmpty()) entities = entities.Where(m => m.University.ToUpper().Contains(University));
@@ -97,7 +95,6 @@ namespace Milvasoft.SampleAPI.Spec
 
 
             return entities.ToList();
-
         }
 
         /// <summary>
@@ -106,7 +103,6 @@ namespace Milvasoft.SampleAPI.Spec
         /// <returns></returns>
         public Expression<Func<Student, bool>> ToExpression()
         {
-
             Expression<Func<Student, bool>> mainPredicate = null;
             List<Expression<Func<Student, bool>>> predicates = new List<Expression<Func<Student, bool>>>();
 
@@ -123,8 +119,6 @@ namespace Milvasoft.SampleAPI.Spec
 
             predicates?.ForEach(predicate => mainPredicate = mainPredicate.Append(predicate, ExpressionType.AndAlso));
             return mainPredicate;
-
-
         }
     }
 }
