@@ -19,7 +19,6 @@ namespace Milvasoft.SampleAPI.Controllers
     [ApiExplorerSettings(GroupName = "v1.0")]
     public class UsefulLinkController : Controller
     {
-
         private readonly IUsefulLinkService _userfulLinkService;
 
         /// <summary>

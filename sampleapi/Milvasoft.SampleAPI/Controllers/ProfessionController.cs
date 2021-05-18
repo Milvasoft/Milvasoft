@@ -127,5 +127,6 @@ namespace Milvasoft.SampleAPI.Controllers
         {
             return await _professionService.DeleteProfessionsAsync(ids).ConfigureAwait(false).GetObjectResponseAsync<UpdateProfessionDTO, Guid>(ids, "Success");
         }
+
     }
 }

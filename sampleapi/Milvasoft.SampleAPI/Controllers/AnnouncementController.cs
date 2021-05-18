@@ -140,5 +140,6 @@ namespace Milvasoft.SampleAPI.Controllers
         {
             return await _announcementService.DeleteAnnouncementsAsync(ids).ConfigureAwait(false).GetObjectResponseAsync<AnnouncementDTO, Guid>(ids, "Success").ConfigureAwait(false);
         }
+
     }
 }

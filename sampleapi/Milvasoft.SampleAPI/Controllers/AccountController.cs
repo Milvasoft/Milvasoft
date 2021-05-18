@@ -43,7 +43,6 @@ namespace Milvasoft.SampleAPI.Controllers
 
         }
 
-
         /// <summary>
         /// Sign in method for users. This endpoint is accessible for any requests.
         /// </summary>
@@ -120,7 +119,6 @@ namespace Milvasoft.SampleAPI.Controllers
             response.Result = null;
             return Ok(response);
         }
-
 
     }
 }

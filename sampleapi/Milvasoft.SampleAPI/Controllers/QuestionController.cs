@@ -129,7 +129,6 @@ namespace Milvasoft.SampleAPI.Controllers
             return await _questionService.UpdateQuestionAsync(updateQuestion).ConfigureAwait(false).GetObjectResponseAsync<UpdateQuestionDTO>("Success").ConfigureAwait(false);
         }
 
-
         /// <summary>
         /// Delete professions data by <paramref name="ids"/>
         /// </summary>
@@ -141,5 +140,6 @@ namespace Milvasoft.SampleAPI.Controllers
         {
             return await _questionService.DeleteQuestionsAsync(ids).ConfigureAwait(false).GetObjectResponseAsync<QuestionDTO, Guid>(ids, "Success");
         }
+
     }
 }
