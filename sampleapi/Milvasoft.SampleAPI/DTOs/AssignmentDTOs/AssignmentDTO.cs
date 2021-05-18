@@ -13,7 +13,6 @@ namespace Milvasoft.SampleAPI.DTOs.AssignmentDTOs
     /// </summary>
     public class AssignmentDTO : AuditableEntity<AppUser, Guid, Guid>
     {
-
         /// <summary>
         /// Tittle of assignment.
         /// </summary>

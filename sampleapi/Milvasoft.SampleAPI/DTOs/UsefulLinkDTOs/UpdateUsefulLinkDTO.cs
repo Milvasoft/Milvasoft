@@ -7,6 +7,9 @@ namespace Milvasoft.SampleAPI.DTOs.UsefulLinkDTOs
     /// </summary>
     public class UpdateUsefulLinkDTO
     {
+        /// <summary>
+        /// Id of to be updated useful links.
+        /// </summary>
         public Guid Id { get; set; }
         /// <summary>
         /// Tittle of link.

@@ -9,7 +9,6 @@ namespace Milvasoft.SampleAPI.DTOs.StudentDTOs
     /// </summary>
     public class AddStudentDTO
     {
-
         /// <summary>
         /// Student's name.
         /// </summary>
@@ -108,6 +107,5 @@ namespace Milvasoft.SampleAPI.DTOs.StudentDTOs
         /// </summary>
         [OValidateId]
         public Guid MentorId { get; set; }
-
     }
 }

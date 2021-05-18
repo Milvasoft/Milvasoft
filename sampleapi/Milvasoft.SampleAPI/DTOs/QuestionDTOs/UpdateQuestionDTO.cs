@@ -8,6 +8,9 @@ namespace Milvasoft.SampleAPI.DTOs.QuestionDTOs
     /// </summary>
     public class UpdateQuestionDTO
     {
+        /// <summary>
+        /// Id of to be updated question.
+        /// </summary>
         public Guid Id { get; set; }
 
         /// <summary>
