@@ -40,17 +40,6 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         }
 
         /// <summary>
-        /// Test method.
-        /// </summary>
-        /// <returns></returns>
-        public async Task TestMethod()
-        {
-            var tenantId = new TenantId("milvasoft", 4);
-
-            var entities = await _testRepository.GetAllAsync(i => i.TenancyName == tenantId.TenancyName);
-        }
-
-        /// <summary>
         /// Get all filtered professions by <paramref name="pagiantionParams"/>
         /// </summary>
         /// <returns>Returns the filtered profession.</returns>

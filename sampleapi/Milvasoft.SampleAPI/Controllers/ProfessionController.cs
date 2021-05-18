@@ -31,17 +31,6 @@ namespace Milvasoft.SampleAPI.Controllers
         }
 
         /// <summary>
-        /// Test controller.
-        /// </summary>
-        /// <returns></returns>
-        [HttpGet("Test")]
-        public async Task<IActionResult> Test()
-        {
-            await _professionService.TestMethod().ConfigureAwait(false);
-            return Ok("Ok");
-        }
-
-        /// <summary>
         /// Gets the all filtered professions datas for mentor.
         /// </summary>
         /// <returns></returns>
