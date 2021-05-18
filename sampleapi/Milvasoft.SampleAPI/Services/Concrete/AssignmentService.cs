@@ -44,12 +44,10 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// Performs constructor injection for repository interfaces used in this service.
         /// </summary>
         /// <param name="assignmentRepository"></param>
-        /// <param name="userManager"></param>
         /// <param name="httpContextAccessor"></param>
         /// <param name="studentAssignmentRepository"></param>
         /// <param name="studentRepository"></param>
         /// <param name="mentorRepository"></param>
-        /// <param name="mailSender"></param>
         public AssignmentService(IBaseRepository<Assignment, Guid, EducationAppDbContext> assignmentRepository,
             IHttpContextAccessor httpContextAccessor,
             IBaseRepository<StudentAssigment, Guid, EducationAppDbContext> studentAssignmentRepository,
@@ -62,8 +60,6 @@ namespace Milvasoft.SampleAPI.Services.Concrete
             _loggedUser = httpContextAccessor.HttpContext.User.Identity.Name;
             _assignmentRepository = assignmentRepository;
         }
-
-        #region CRUP Operations
 
         /// <summary>
         /// Get all assignment for student by <paramref name="pagiantionParams"/>
@@ -296,8 +292,6 @@ namespace Milvasoft.SampleAPI.Services.Concrete
             var assignments = await _assignmentRepository.GetAllAsync(i => assignmentIds.Select(p => p).Contains(i.Id)).ConfigureAwait(false);
             await _assignmentRepository.DeleteAsync(assignments).ConfigureAwait(false);
         }
-
-        #endregion
 
         #region Students
         /// <summary>

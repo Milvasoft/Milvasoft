@@ -14,7 +14,6 @@ namespace Milvasoft.SampleAPI.Services.Abstract
     /// </summary>
     public interface IStudentService
     {
-        #region CRUD Operations
         /// <summary>
         /// Get all students for admin from database.
         /// </summary>
@@ -77,7 +76,6 @@ namespace Milvasoft.SampleAPI.Services.Abstract
         /// <param name="ids"></param>
         /// <returns></returns>
         Task DeleteStudentsAsync(List<Guid> ids);
-        #endregion
 
         /// <summary>
         /// Brings instant user's profile information.

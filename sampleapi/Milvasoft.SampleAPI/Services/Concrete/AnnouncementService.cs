@@ -23,28 +23,16 @@ namespace Milvasoft.SampleAPI.Services.Concrete
     /// Announcement service.
     /// </summary>
     public class AnnouncementService : IAnnouncementService
-    {
-        #region Fields
-
+    { 
         private readonly IBaseRepository<Announcement, Guid, EducationAppDbContext> _announcementRepository;
-        private readonly UserManager<AppUser> _userManager;
-        private readonly IHttpContextAccessor _httpContextAccessor;
-
-        #endregion
-
-        #region CRUD Operations
 
         /// <summary>
         /// Performs constructor injection for repository interfaces used in this service.
         /// </summary>
         /// <param name="announcementRepository"></param>
-        /// <param name="httpContextAccessor"></param>
-        /// <param name="userManager"></param>
-        public AnnouncementService(IBaseRepository<Announcement, Guid, EducationAppDbContext> announcementRepository, UserManager<AppUser> userManager, IHttpContextAccessor httpContextAccessor)
+        public AnnouncementService(IBaseRepository<Announcement, Guid, EducationAppDbContext> announcementRepository)
         {
             _announcementRepository = announcementRepository;
-            _httpContextAccessor = httpContextAccessor;
-            _userManager = userManager;
         }
 
         /// <summary>
@@ -291,7 +279,5 @@ namespace Milvasoft.SampleAPI.Services.Concrete
 
             await _announcementRepository.DeleteAsync(deletedAnnouncement).ConfigureAwait(false);
         }
-
-        #endregion
     }
 }

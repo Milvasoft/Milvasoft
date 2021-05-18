@@ -16,18 +16,13 @@ using System.Threading.Tasks;
 
 namespace Milvasoft.SampleAPI.Services.Concrete
 {
-
     /// <summary>
     /// Profession service.
     /// </summary>
     public class ProfessionService : IProfessionService
     {
-        #region Fields
-
         private readonly IBaseRepository<Profession, Guid, EducationAppDbContext> _professionRepository;
         private readonly IBaseRepository<TestEntity, TenantId, EducationAppDbContext> _testRepository;
-
-        #endregion
 
         /// <summary>
         /// Performs constructor injection for repository interfaces used in this service.
@@ -43,8 +38,6 @@ namespace Milvasoft.SampleAPI.Services.Concrete
             _professionRepository = professionRepository;
             _testRepository = testRepository;
         }
-
-        #region CRUD Operations
 
         /// <summary>
         /// Test method.
@@ -181,8 +174,5 @@ namespace Milvasoft.SampleAPI.Services.Concrete
 
             await _professionRepository.DeleteAsync(professions).ConfigureAwait(false);
         }
-
-        #endregion
-
     }
 }

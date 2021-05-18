@@ -29,13 +29,9 @@ namespace Milvasoft.SampleAPI.Services.Concrete
     /// </summary>
     public class MentorService : IMentorService
     {
-        #region Fields
-
         private readonly UserManager<AppUser> _userManager;
         private readonly IBaseRepository<Mentor, Guid, EducationAppDbContext> _mentorRepository;
         private readonly IHttpContextAccessor _httpContextAccessor;
-
-        #endregion
 
         /// <summary>
         /// Performs constructor injection for repository interfaces used in this service.
@@ -49,8 +45,6 @@ namespace Milvasoft.SampleAPI.Services.Concrete
             _userManager = userManager;
             _mentorRepository = mentorRepository;
         }
-
-        #region CRUD Operations
 
         /// <summary>
         /// Get mentors for admin.
@@ -273,7 +267,5 @@ namespace Milvasoft.SampleAPI.Services.Concrete
 
             await _mentorRepository.DeleteAsync(mentors).ConfigureAwait(false);
         }
-
-        #endregion
     }
 }

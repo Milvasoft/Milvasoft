@@ -22,7 +22,6 @@ using System.Threading.Tasks;
 
 namespace Milvasoft.SampleAPI.Services.Concrete
 {
-
     /// <summary>
     /// Student service.
     /// </summary>
@@ -51,8 +50,6 @@ namespace Milvasoft.SampleAPI.Services.Concrete
             _studentRepository = studentRepository;
             _httpContextAccessor = httpContextAccessor;
         }
-
-        #region CRUD Operations
 
         /// <summary>
         /// It will filter students according to the parameters sent in <paramref name="pagiantionParams"/>
@@ -400,7 +397,5 @@ namespace Milvasoft.SampleAPI.Services.Concrete
 
             await _studentRepository.DeleteAsync(deletedStudents).ConfigureAwait(false);
         }
-
-        #endregion 
     }
 }

@@ -14,7 +14,6 @@ using System.Threading.Tasks;
 
 namespace Milvasoft.SampleAPI.Services.Concrete
 {
-
     /// <summary>
     /// UsefulLink service.
     /// </summary>
@@ -30,8 +29,6 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         {
             _usefulLinkRepository = usefulLinkRepository;
         }
-
-        #region CRUD Operations
 
         /// <summary>
         /// Get links for student.
@@ -226,7 +223,5 @@ namespace Milvasoft.SampleAPI.Services.Concrete
             var deletedLinks = await _usefulLinkRepository.GetAllAsync(i => usefulLinkIds.Select(p => p).Contains(i.Id)).ConfigureAwait(false);
             await _usefulLinkRepository.DeleteAsync(deletedLinks);
         }
-
-        #endregion
     }
 }

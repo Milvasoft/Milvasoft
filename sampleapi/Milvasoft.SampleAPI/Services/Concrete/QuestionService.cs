@@ -35,8 +35,6 @@ namespace Milvasoft.SampleAPI.Services.Concrete
             _questionRepository = questionRepository;
         }
 
-        #region CRUD Operations
-
         /// <summary>
         /// Get all questions for admin.
         /// </summary>
@@ -348,7 +346,5 @@ namespace Milvasoft.SampleAPI.Services.Concrete
                                             })
                                         } : null).ToList();
         }
-
-        #endregion
     }
 }
