@@ -13,7 +13,7 @@ namespace Milvasoft.SampleAPI.Controllers
     /// <summary>
     /// Provided Question operations.
     /// </summary>
-    [Route("api/v{version:apiVersion}/[controller]")]
+    [Route("sampleapi/[controller]")]
     [ApiController]
     [ApiVersion("1.0")]
     [ApiExplorerSettings(GroupName = "v1.0")]
