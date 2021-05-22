@@ -51,7 +51,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
                                                                                                         pagiantionParams.Spec?.ToExpression(),
                                                                                                         includes).ConfigureAwait(false);
 
-            questions.ThrowIfListIsNullOrEmpty("Object is not found.");
+            questions.ThrowIfListIsNullOrEmpty("CannotFindEntityException");
 
 
             return new PaginationDTO<QuestionForAdminDTO>
@@ -97,7 +97,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
                                                                                                         pagiantionParams.Spec?.ToExpression(),
                                                                                                         includes).ConfigureAwait(false);
 
-            questions.ThrowIfListIsNullOrEmpty("Object is not found.");
+            questions.ThrowIfListIsNullOrEmpty("CannotFindEntityException");
 
             return new PaginationDTO<QuestionForMentorDTO>
             {
@@ -140,7 +140,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
                                                                                                         pagiantionParams.Spec?.ToExpression(),
                                                                                                         includes).ConfigureAwait(false);
 
-            questions.ThrowIfListIsNullOrEmpty("Object is not found.");
+            questions.ThrowIfListIsNullOrEmpty("CannotFindEntityException");
 
             return new PaginationDTO<QuestionForStudentDTO>
             {
@@ -177,7 +177,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
 
             var question = await _questionRepository.GetByIdAsync(questionId, includes).ConfigureAwait(false);
 
-            question.ThrowIfNullForGuidObject("Object is not found.");
+            question.ThrowIfNullForGuidObject("CannotFindEntityException");
 
             return new QuestionForAdminDTO
             {
@@ -214,7 +214,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
 
             var question = await _questionRepository.GetByIdAsync(questionId, includes).ConfigureAwait(false);
 
-            question.ThrowIfNullForGuidObject("Object is not found.");
+            question.ThrowIfNullForGuidObject("CannotFindEntityException");
 
             return new QuestionForMentorDTO
             {
@@ -248,7 +248,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
 
             var question = await _questionRepository.GetByIdAsync(questionId).ConfigureAwait(false);
 
-            question.ThrowIfNullForGuidObject("Object is not found.");
+            question.ThrowIfNullForGuidObject("CannotFindEntityException");
 
             return new QuestionForStudentDTO
             {
@@ -291,7 +291,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         {
             var toBeUpdatedQuestion = await _questionRepository.GetByIdAsync(updateQuestionDTO.Id).ConfigureAwait(false);
 
-            toBeUpdatedQuestion.ThrowIfNullForGuidObject("Object is not found.");
+            toBeUpdatedQuestion.ThrowIfNullForGuidObject("CannotFindEntityException");
 
             toBeUpdatedQuestion.IsUseful = updateQuestionDTO.IsUseful;
             toBeUpdatedQuestion.MentorReply = updateQuestionDTO.MentorReply;
@@ -327,7 +327,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
 
             var questions = await _questionRepository.GetAllAsync(i => i.WillShown).ConfigureAwait(false);
 
-            questions.ThrowIfListIsNotNullOrEmpty("Object is not found.");
+            questions.ThrowIfListIsNotNullOrEmpty("CannotFindEntityException");
 
             return (questions != null ? from question in questions
                                         select new QuestionDTO

@@ -71,7 +71,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
                                                                                                                                     pagiantionParams.OrderByAscending,
                                                                                                                                     pagiantionParams.Spec?.ToExpression()).ConfigureAwait(false);
 
-            asssignments.ThrowIfListIsNullOrEmpty("Object is not found.");
+            asssignments.ThrowIfListIsNullOrEmpty("CannotFindEntityException");
 
             return new PaginationDTO<AssignmentForStudentDTO>
             {
@@ -103,7 +103,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
                                                                                                                                     pagiantionParams.OrderByAscending,
                                                                                                                                     pagiantionParams.Spec?.ToExpression()).ConfigureAwait(false);
 
-            asssignments.ThrowIfListIsNullOrEmpty("Object is not found.");
+            asssignments.ThrowIfListIsNullOrEmpty("CannotFindEntityException");
 
             return new PaginationDTO<AssignmentForAdminDTO>
             {
@@ -136,7 +136,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
                                                                                                                                     pagiantionParams.OrderByAscending,
                                                                                                                                     pagiantionParams.Spec?.ToExpression()).ConfigureAwait(false);
 
-            asssignments.ThrowIfListIsNullOrEmpty("Object is not found.");
+            asssignments.ThrowIfListIsNullOrEmpty("CannotFindEntityException");
 
             return new PaginationDTO<AssignmentForMentorDTO>
             {
@@ -166,7 +166,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         {
             var assignment = await _assignmentRepository.GetByIdAsync(assignmentId).ConfigureAwait(false);
 
-            assignment.ThrowIfNullForGuidObject("Object is not found.");
+            assignment.ThrowIfNullForGuidObject("CannotFindEntityException");
 
             return new AssignmentForStudentDTO
             {
@@ -189,7 +189,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         {
             var assignment = await _assignmentRepository.GetByIdAsync(assignmentId).ConfigureAwait(false);
 
-            assignment.ThrowIfNullForGuidObject("Object is not found.");
+            assignment.ThrowIfNullForGuidObject("CannotFindEntityException");
 
             return new AssignmentForAdminDTO
             {
@@ -213,7 +213,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         {
             var assignment = await _assignmentRepository.GetByIdAsync(assignmentId).ConfigureAwait(false);
 
-            assignment.ThrowIfNullForGuidObject("Object is not found.");
+            assignment.ThrowIfNullForGuidObject("CannotFindEntityException");
 
             return new AssignmentForMentorDTO
             {
@@ -259,7 +259,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         {
             var toBeUpdatedAssignment = await _assignmentRepository.GetByIdAsync(updateAssignmentDTO.Id).ConfigureAwait(false);
 
-            toBeUpdatedAssignment.ThrowIfNullForGuidObject("Object is not found.");
+            toBeUpdatedAssignment.ThrowIfNullForGuidObject("CannotFindEntityException");
 
             toBeUpdatedAssignment.Title = updateAssignmentDTO.Title;
 

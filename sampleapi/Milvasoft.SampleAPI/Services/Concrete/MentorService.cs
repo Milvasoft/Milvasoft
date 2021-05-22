@@ -61,7 +61,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
                                                                                                     pagiantionParams.Spec?.ToExpression(),
                                                                                                     includes).ConfigureAwait(false);
 
-            mentors.ThrowIfListIsNullOrEmpty("Object is not found.");
+            mentors.ThrowIfListIsNullOrEmpty("CannotFindEntityException");
 
             return new PaginationDTO<MentorForAdminDTO>
             {
@@ -144,7 +144,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
 
             var mentor = await _mentorRepository.GetFirstOrDefaultAsync(includes, p => p.AppUser.UserName == userName).ConfigureAwait(false);
 
-            mentor.ThrowIfNullForGuidObject("Object is not found.");
+            mentor.ThrowIfNullForGuidObject("CannotFindEntityException");
 
             return new MentorForMentorDTO
             {

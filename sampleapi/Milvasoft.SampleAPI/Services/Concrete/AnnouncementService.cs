@@ -49,7 +49,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
                                                                                                                                     pagiantionParams.Spec?.ToExpression(),
                                                                                                                                     includes).ConfigureAwait(false);
 
-            announcements.ThrowIfListIsNullOrEmpty("Object is not found.");
+            announcements.ThrowIfListIsNullOrEmpty("CannotFindEntityException");
 
             return new PaginationDTO<AnnouncementForStudentDTO>
             {
@@ -86,7 +86,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
                                                                                                                                     pagiantionParams.Spec?.ToExpression(),
                                                                                                                                     includes).ConfigureAwait(false);
 
-            announcements.ThrowIfListIsNullOrEmpty("Object is not found.");
+            announcements.ThrowIfListIsNullOrEmpty("CannotFindEntityException");
 
             return new PaginationDTO<AnnouncementForAdminDTO>
             {
@@ -124,7 +124,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
                                                                                                                                     pagiantionParams.Spec?.ToExpression(),
                                                                                                                                     includes).ConfigureAwait(false);
 
-            announcements.ThrowIfListIsNullOrEmpty("Object is not found.");
+            announcements.ThrowIfListIsNullOrEmpty("CannotFindEntityException");
 
             return new PaginationDTO<AnnouncementForMentorDTO>
             {
@@ -157,7 +157,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
 
             var announcement = await _announcementRepository.GetByIdAsync(announcementId, includes).ConfigureAwait(false);
 
-            announcement.ThrowIfNullForGuidObject("Object is not found.");
+            announcement.ThrowIfNullForGuidObject("CannotFindEntityException");
 
             return new AnnouncementForAdminDTO
             {
@@ -184,7 +184,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
 
             var announcement = await _announcementRepository.GetByIdAsync(announcementId, includes).ConfigureAwait(false);
 
-            announcement.ThrowIfNullForGuidObject("Object is not found.");
+            announcement.ThrowIfNullForGuidObject("CannotFindEntityException");
 
             return new AnnouncementForMentorDTO
             {
@@ -211,7 +211,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
 
             var announcement = await _announcementRepository.GetByIdAsync(announcementId, includes).ConfigureAwait(false);
 
-            announcement.ThrowIfNullForGuidObject("Object is not found.");
+            announcement.ThrowIfNullForGuidObject("CannotFindEntityException");
 
             return new AnnouncementForStudentDTO
             {
@@ -255,7 +255,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         {
             var toBeUpdatedAnnouncement = await _announcementRepository.GetByIdAsync(updateAnnouncementDTO.Id).ConfigureAwait(false);
 
-            toBeUpdatedAnnouncement.ThrowIfNullForGuidObject("Object is not found.");
+            toBeUpdatedAnnouncement.ThrowIfNullForGuidObject("CannotFindEntityException");
 
             toBeUpdatedAnnouncement.Title = updateAnnouncementDTO.Title;
 

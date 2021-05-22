@@ -64,7 +64,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
                                                                                                         pagiantionParams.Spec?.ToExpression(),
                                                                                                         includes).ConfigureAwait(false);
 
-            students.ThrowIfListIsNullOrEmpty("Object is not found.");
+            students.ThrowIfListIsNullOrEmpty("CannotFindEntityException");
 
             return new PaginationDTO<StudentForAdminDTO>
             {
@@ -115,7 +115,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
                                                                                                         pagiantionParams.OrderByAscending,
                                                                                                         pagiantionParams.Spec?.ToExpression(),
                                                                                                         includes).ConfigureAwait(false);
-            students.ThrowIfListIsNullOrEmpty("Object is not found.");
+            students.ThrowIfListIsNullOrEmpty("CannotFindEntityException");
 
             return new PaginationDTO<StudentForMentorDTO>
             {
@@ -161,7 +161,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
 
             var student = await _studentRepository.GetByIdAsync(studentId, includes).ConfigureAwait(false);
 
-            student.ThrowIfNullForGuidObject("Object is not found.");
+            student.ThrowIfNullForGuidObject("CannotFindEntityException");
 
             return new StudentForAdminDTO
             {
@@ -204,7 +204,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
 
             var student = await _studentRepository.GetByIdAsync(studentId, includes, i => i.MentorId == currentMentor.Id).ConfigureAwait(false);
 
-            student.ThrowIfNullForGuidObject("Object is not found.");
+            student.ThrowIfNullForGuidObject("CannotFindEntityException");
 
             return new StudentForMentorDTO
             {
@@ -241,7 +241,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
 
             var currentStudent = await _studentRepository.GetFirstOrDefaultAsync(i => i.AppUser.UserName == username).ConfigureAwait(false);
 
-            currentStudent.ThrowIfNullForGuidObject("User is not student.");
+            currentStudent.ThrowIfNullForGuidObject("CannotFindEntityException"); 
 
             return new StudentForMentorDTO
             {
@@ -317,7 +317,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         {
             var toBeUpdatedStudent = await _studentRepository.GetByIdAsync(Id).ConfigureAwait(false);
 
-            toBeUpdatedStudent.ThrowIfNullForGuidObject("Object is not found.");
+            toBeUpdatedStudent.ThrowIfNullForGuidObject("CannotFindEntityException");
 
             toBeUpdatedStudent.Name = updateStudentDTO.Name;
             toBeUpdatedStudent.Surname = updateStudentDTO.Surname;
@@ -339,7 +339,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         {
             var toBeUpdatedStudent = await _studentRepository.GetByIdAsync(Id).ConfigureAwait(false);
 
-            toBeUpdatedStudent.ThrowIfNullForGuidObject("Object is not found.");
+            toBeUpdatedStudent.ThrowIfNullForGuidObject("CannotFindEntityException");
 
             toBeUpdatedStudent.Name = updateStudentDTO.Name;
             toBeUpdatedStudent.Surname = updateStudentDTO.Surname;
@@ -368,7 +368,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
 
             var currentStudent = await _userManager.FindByNameAsync(username).ConfigureAwait(false);
 
-            currentStudent.ThrowIfNullForGuidObject("Object is not found.");
+            currentStudent.ThrowIfNullForGuidObject("CannotFindEntityException");
 
             currentStudent.Student.Name = updateStudentDTO.Name;
             currentStudent.Student.Surname = updateStudentDTO.Surname;

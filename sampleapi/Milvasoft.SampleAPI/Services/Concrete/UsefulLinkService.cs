@@ -44,7 +44,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
                                                                                                             pagiantionParams.OrderByAscending,
                                                                                                             pagiantionParams.Spec?.ToExpression()).ConfigureAwait(false);
 
-            usefulLinks.ThrowIfListIsNullOrEmpty("Object is not found.");
+            usefulLinks.ThrowIfListIsNullOrEmpty("CannotFindEntityException");
 
             return new PaginationDTO<UsefulLinkDTO>
             {
@@ -74,7 +74,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
                                                                                                             pagiantionParams.OrderByAscending,
                                                                                                             pagiantionParams.Spec?.ToExpression()).ConfigureAwait(false);
 
-            usefulLinks.ThrowIfListIsNullOrEmpty("Object is not found.");
+            usefulLinks.ThrowIfListIsNullOrEmpty("CannotFindEntityException");
 
             return new PaginationDTO<UsefulLinkDTO>
             {
@@ -104,7 +104,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
                                                                                                             pagiantionParams.OrderByAscending,
                                                                                                             pagiantionParams.Spec?.ToExpression()).ConfigureAwait(false);
 
-            usefulLinks.ThrowIfListIsNullOrEmpty("Object is not found.");
+            usefulLinks.ThrowIfListIsNullOrEmpty("CannotFindEntityException");
 
             return new PaginationDTO<UsefulLinkDTO>
             {
@@ -130,7 +130,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         {
             var link = await _usefulLinkRepository.GetByIdAsync(usefulLinkId).ConfigureAwait(false);
 
-            link.ThrowIfNullForGuidObject("Böyle bir link bulunmamaktadır.");
+            link.ThrowIfNullForGuidObject("CannotFindEntityException");
 
             return new UsefulLinkDTO()
             {
@@ -151,7 +151,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         {
             var link = await _usefulLinkRepository.GetByIdAsync(usefulLinkId).ConfigureAwait(false);
 
-            link.ThrowIfNullForGuidObject("Böyle bir link bulunmamaktadır.");
+            link.ThrowIfNullForGuidObject("CannotFindEntityException");
 
             return new UsefulLinkDTO()
             {
@@ -172,7 +172,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         {
             var link = await _usefulLinkRepository.GetByIdAsync(usefulLinkId).ConfigureAwait(false);
 
-            link.ThrowIfNullForGuidObject("Böyle bir link bulunmamaktadır.");
+            link.ThrowIfNullForGuidObject("CannotFindEntityException");
 
             return new UsefulLinkDTO()
             {
