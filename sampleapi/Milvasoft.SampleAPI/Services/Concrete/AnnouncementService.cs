@@ -42,14 +42,14 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         {
             Func<IIncludable<Announcement>, IIncludable> includes = i => i.Include(md => md.PublisherMentor);
 
-            var (announcements, pageCount, totalDataCount) = await _announcementRepository.PreparePaginationDTO<Announcement, Guid>(pagiantionParams.PageIndex,
+            var (announcements, pageCount, totalDataCount) = await _announcementRepository.PreparePaginationDTO(pagiantionParams.PageIndex,
                                                                                                                                     pagiantionParams.RequestedItemCount,
                                                                                                                                     pagiantionParams.OrderByProperty,
                                                                                                                                     pagiantionParams.OrderByAscending,
                                                                                                                                     pagiantionParams.Spec?.ToExpression(),
                                                                                                                                     includes).ConfigureAwait(false);
 
-            announcements.ThrowIfListIsNotNullOrEmpty("Object is not found.");
+            announcements.ThrowIfListIsNullOrEmpty("Object is not found.");
 
             return new PaginationDTO<AnnouncementForStudentDTO>
             {
@@ -79,14 +79,14 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         {
             Func<IIncludable<Announcement>, IIncludable> includes = i => i.Include(md => md.PublisherMentor);
 
-            var (announcements, pageCount, totalDataCount) = await _announcementRepository.PreparePaginationDTO<Announcement, Guid>(pagiantionParams.PageIndex,
+            var (announcements, pageCount, totalDataCount) = await _announcementRepository.PreparePaginationDTO(pagiantionParams.PageIndex,
                                                                                                                                     pagiantionParams.RequestedItemCount,
                                                                                                                                     pagiantionParams.OrderByProperty,
                                                                                                                                     pagiantionParams.OrderByAscending,
                                                                                                                                     pagiantionParams.Spec?.ToExpression(),
                                                                                                                                     includes).ConfigureAwait(false);
 
-            announcements.ThrowIfListIsNotNullOrEmpty("Object is not found.");
+            announcements.ThrowIfListIsNullOrEmpty("Object is not found.");
 
             return new PaginationDTO<AnnouncementForAdminDTO>
             {
@@ -117,14 +117,14 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         {
             Func<IIncludable<Announcement>, IIncludable> includes = i => i.Include(md => md.PublisherMentor);
 
-            var (announcements, pageCount, totalDataCount) = await _announcementRepository.PreparePaginationDTO<Announcement, Guid>(pagiantionParams.PageIndex,
+            var (announcements, pageCount, totalDataCount) = await _announcementRepository.PreparePaginationDTO(pagiantionParams.PageIndex,
                                                                                                                                     pagiantionParams.RequestedItemCount,
                                                                                                                                     pagiantionParams.OrderByProperty,
                                                                                                                                     pagiantionParams.OrderByAscending,
                                                                                                                                     pagiantionParams.Spec?.ToExpression(),
                                                                                                                                     includes).ConfigureAwait(false);
 
-            announcements.ThrowIfListIsNotNullOrEmpty("Object is not found.");
+            announcements.ThrowIfListIsNullOrEmpty("Object is not found.");
 
             return new PaginationDTO<AnnouncementForMentorDTO>
             {

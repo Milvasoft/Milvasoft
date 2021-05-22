@@ -38,11 +38,13 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         {
             pagiantionParams.ThrowIfParameterIsNull();
 
-            var (usefulLinks, pageCount, totalDataCount) = await _usefulLinkRepository.PreparePaginationDTO<UsefulLink, Guid>(pagiantionParams.PageIndex,
-                                                                                                                              pagiantionParams.RequestedItemCount,
-                                                                                                                              pagiantionParams.OrderByProperty,
-                                                                                                                              pagiantionParams.OrderByAscending,
-                                                                                                                              pagiantionParams.Spec?.ToExpression()).ConfigureAwait(false);
+            var (usefulLinks, pageCount, totalDataCount) = await _usefulLinkRepository.PreparePaginationDTO(pagiantionParams.PageIndex,
+                                                                                                            pagiantionParams.RequestedItemCount,
+                                                                                                            pagiantionParams.OrderByProperty,
+                                                                                                            pagiantionParams.OrderByAscending,
+                                                                                                            pagiantionParams.Spec?.ToExpression()).ConfigureAwait(false);
+
+            usefulLinks.ThrowIfListIsNullOrEmpty("Object is not found.");
 
             return new PaginationDTO<UsefulLinkDTO>
             {
@@ -66,11 +68,14 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// <returns></returns>
         public async Task<PaginationDTO<UsefulLinkDTO>> GetUsefulLinksForAdminAsync(PaginationParamsWithSpec<UsefulLinkSpec> pagiantionParams)
         {
-            var (usefulLinks, pageCount, totalDataCount) = await _usefulLinkRepository.PreparePaginationDTO<UsefulLink, Guid>(pagiantionParams.PageIndex,
-                                                                                                                              pagiantionParams.RequestedItemCount,
-                                                                                                                              pagiantionParams.OrderByProperty,
-                                                                                                                              pagiantionParams.OrderByAscending,
-                                                                                                                              pagiantionParams.Spec?.ToExpression()).ConfigureAwait(false);
+            var (usefulLinks, pageCount, totalDataCount) = await _usefulLinkRepository.PreparePaginationDTO(pagiantionParams.PageIndex,
+                                                                                                            pagiantionParams.RequestedItemCount,
+                                                                                                            pagiantionParams.OrderByProperty,
+                                                                                                            pagiantionParams.OrderByAscending,
+                                                                                                            pagiantionParams.Spec?.ToExpression()).ConfigureAwait(false);
+
+            usefulLinks.ThrowIfListIsNullOrEmpty("Object is not found.");
+
             return new PaginationDTO<UsefulLinkDTO>
             {
                 DTOList = usefulLinks.CheckList(i => usefulLinks.Select(link => new UsefulLinkDTO
@@ -93,11 +98,13 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// <returns></returns>
         public async Task<PaginationDTO<UsefulLinkDTO>> GetUsefulLinksForMentorAsync(PaginationParamsWithSpec<UsefulLinkSpec> pagiantionParams)
         {
-            var (usefulLinks, pageCount, totalDataCount) = await _usefulLinkRepository.PreparePaginationDTO<UsefulLink, Guid>(pagiantionParams.PageIndex,
-                                                                                                                              pagiantionParams.RequestedItemCount,
-                                                                                                                              pagiantionParams.OrderByProperty,
-                                                                                                                              pagiantionParams.OrderByAscending,
-                                                                                                                              pagiantionParams.Spec?.ToExpression()).ConfigureAwait(false);
+            var (usefulLinks, pageCount, totalDataCount) = await _usefulLinkRepository.PreparePaginationDTO(pagiantionParams.PageIndex,
+                                                                                                            pagiantionParams.RequestedItemCount,
+                                                                                                            pagiantionParams.OrderByProperty,
+                                                                                                            pagiantionParams.OrderByAscending,
+                                                                                                            pagiantionParams.Spec?.ToExpression()).ConfigureAwait(false);
+
+            usefulLinks.ThrowIfListIsNullOrEmpty("Object is not found.");
 
             return new PaginationDTO<UsefulLinkDTO>
             {

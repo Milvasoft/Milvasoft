@@ -47,7 +47,7 @@ namespace Milvasoft.SampleAPI.Spec
             Expression<Func<Profession, bool>> mainPredicate = null;
             List<Expression<Func<Profession, bool>>> predicates = new List<Expression<Func<Profession, bool>>>();
 
-            if (!string.IsNullOrEmpty(Name)) predicates.Add(c => c.Name == Name);
+            if (!string.IsNullOrEmpty(Name)) predicates.Add(c => c.Name.ToUpper() == Name.ToUpper());
 
             predicates?.ForEach(predicate => mainPredicate = mainPredicate.Append(predicate, ExpressionType.AndAlso));
             return mainPredicate;

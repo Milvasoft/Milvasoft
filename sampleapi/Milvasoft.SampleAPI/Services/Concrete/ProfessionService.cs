@@ -1,7 +1,5 @@
 ﻿using Milvasoft.Helpers.DataAccess.Abstract;
 using Milvasoft.Helpers.Models;
-using Milvasoft.Helpers.MultiTenancy.Accessor;
-using Milvasoft.Helpers.MultiTenancy.EntityBase;
 using Milvasoft.SampleAPI.Data;
 using Milvasoft.SampleAPI.DTOs;
 using Milvasoft.SampleAPI.DTOs.ProfessionDTOs;
@@ -22,21 +20,14 @@ namespace Milvasoft.SampleAPI.Services.Concrete
     public class ProfessionService : IProfessionService
     {
         private readonly IBaseRepository<Profession, Guid, EducationAppDbContext> _professionRepository;
-        private readonly IBaseRepository<TestEntity, TenantId, EducationAppDbContext> _testRepository;
 
         /// <summary>
         /// Performs constructor injection for repository interfaces used in this service.
         /// </summary>
         /// <param name="professionRepository"></param>
-        /// <param name="testRepository"></param>
-        /// <param name="tenantAccessor"></param>
-        public ProfessionService(IBaseRepository<Profession, Guid, EducationAppDbContext> professionRepository,
-                                 IBaseRepository<TestEntity, TenantId, EducationAppDbContext> testRepository,
-                                 ITenantAccessor<CachedTenant, TenantId> tenantAccessor)
+        public ProfessionService(IBaseRepository<Profession, Guid, EducationAppDbContext> professionRepository)
         {
-
             _professionRepository = professionRepository;
-            _testRepository = testRepository;
         }
 
         /// <summary>
@@ -45,13 +36,13 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// <returns>Returns the filtered profession.</returns>
         public async Task<PaginationDTO<ProfessionDTO>> GetProfessionsAsync(PaginationParamsWithSpec<ProfessionSpec> pagiantionParams)
         {
-            var (professions, pageCount, totalDataCount) = await _professionRepository.PreparePaginationDTO<Profession, Guid>(pagiantionParams.PageIndex,
-                                                                                                                              pagiantionParams.RequestedItemCount,
-                                                                                                                              pagiantionParams.OrderByProperty,
-                                                                                                                              pagiantionParams.OrderByAscending,
-                                                                                                                              pagiantionParams.Spec?.ToExpression()).ConfigureAwait(false);
+            var (professions, pageCount, totalDataCount) = await _professionRepository.PreparePaginationDTO(pagiantionParams.PageIndex,
+                                                                                                            pagiantionParams.RequestedItemCount,
+                                                                                                            pagiantionParams.OrderByProperty,
+                                                                                                            pagiantionParams.OrderByAscending,
+                                                                                                            pagiantionParams.Spec?.ToExpression()).ConfigureAwait(false);
 
-            professions.ThrowIfListIsNotNullOrEmpty("Object is not found.");
+            professions.ThrowIfListIsNullOrEmpty("Object is not found.");
 
             return new PaginationDTO<ProfessionDTO>
             {

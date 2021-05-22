@@ -436,12 +436,6 @@
             </summary>
             <param name="professionService"></param>
         </member>
-        <member name="M:Milvasoft.SampleAPI.Controllers.ProfessionController.Test">
-            <summary>
-            Test controller.
-            </summary>
-            <returns></returns>
-        </member>
         <member name="M:Milvasoft.SampleAPI.Controllers.ProfessionController.GetProfessions(Milvasoft.SampleAPI.DTOs.PaginationParamsWithSpec{Milvasoft.SampleAPI.Spec.ProfessionSpec})">
             <summary>
             Gets the all filtered professions datas for mentor.
@@ -750,6 +744,21 @@
             Remember me option.
             </summary>
         </member>
+        <member name="T:Milvasoft.SampleAPI.DTOs.AccountDTOs.LoginResultDTO">
+            <summary>
+            DTO returned by login.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.AccountDTOs.LoginResultDTO.ErrorMessages">
+            <summary>
+            Error caused by login.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.AccountDTOs.LoginResultDTO.Token">
+            <summary>
+            The token issued as a result of the login process.
+            </summary>
+        </member>
         <member name="T:Milvasoft.SampleAPI.DTOs.AccountDTOs.SignUpDTO">
             <summary>
             Login and sign up processes are happens with this dto.
@@ -757,22 +766,22 @@
         </member>
         <member name="P:Milvasoft.SampleAPI.DTOs.AccountDTOs.SignUpDTO.Name">
             <summary>
-            Customer's name.
+            User's name.
             </summary>
         </member>
         <member name="P:Milvasoft.SampleAPI.DTOs.AccountDTOs.SignUpDTO.Surname">
             <summary>
-            Customer's surname.
+            User's surname.
             </summary>
         </member>
         <member name="P:Milvasoft.SampleAPI.DTOs.AccountDTOs.SignUpDTO.PhoneNumber">
             <summary>
-            Customer's phone number.
+            User's phone number.
             </summary>
         </member>
         <member name="P:Milvasoft.SampleAPI.DTOs.AccountDTOs.SignUpDTO.Token">
             <summary>
-            Ops!yon Customer Global API token with unlimited time.
+            User Global API token with unlimited time.
             </summary>
         </member>
         <member name="T:Milvasoft.SampleAPI.DTOs.AccountDTOs.SignUpResultDTO">
@@ -1640,6 +1649,11 @@
             CV path of mentor.
             </summary>
         </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.MentorDTOs.UpdateMentorDTO.Photo">
+            <summary>
+            User profile pictures.
+            </summary>
+        </member>
         <member name="T:Milvasoft.SampleAPI.DTOs.PaginationParams">
             <summary>
             Paginatination params
@@ -1724,6 +1738,11 @@
         <member name="T:Milvasoft.SampleAPI.DTOs.ProfessionDTOs.UpdateProfessionDTO">
             <summary>
             AddProfessionDTO for add operations.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.ProfessionDTOs.UpdateProfessionDTO.Id">
+            <summary>
+            Id of to be updated profession.
             </summary>
         </member>
         <member name="P:Milvasoft.SampleAPI.DTOs.ProfessionDTOs.UpdateProfessionDTO.Name">
@@ -1959,6 +1978,11 @@
         <member name="T:Milvasoft.SampleAPI.DTOs.QuestionDTOs.UpdateQuestionDTO">
             <summary>
             UpdateQuestionDTO for update question operations.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.QuestionDTOs.UpdateQuestionDTO.Id">
+            <summary>
+            Id of to be updated question.
             </summary>
         </member>
         <member name="P:Milvasoft.SampleAPI.DTOs.QuestionDTOs.UpdateQuestionDTO.Title">
@@ -2656,6 +2680,11 @@
             UpdateUsefulLinkDTO for update useful link operations.
             </summary>
         </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.UsefulLinkDTOs.UpdateUsefulLinkDTO.Id">
+            <summary>
+            Id of to be updated useful links.
+            </summary>
+        </member>
         <member name="P:Milvasoft.SampleAPI.DTOs.UsefulLinkDTOs.UpdateUsefulLinkDTO.Title">
             <summary>
             Tittle of link.
@@ -2999,12 +3028,6 @@
             Profession service interface.
             </summary>
         </member>
-        <member name="M:Milvasoft.SampleAPI.Services.Abstract.IProfessionService.TestMethod">
-            <summary>
-            Test method.
-            </summary>
-            <returns></returns>
-        </member>
         <member name="M:Milvasoft.SampleAPI.Services.Abstract.IProfessionService.GetProfessionsAsync(Milvasoft.SampleAPI.DTOs.PaginationParamsWithSpec{Milvasoft.SampleAPI.Spec.ProfessionSpec})">
             <summary>
             Get all profession for student from database.
@@ -3317,13 +3340,11 @@
             Announcement service.
             </summary>
         </member>
-        <member name="M:Milvasoft.SampleAPI.Services.Concrete.AnnouncementService.#ctor(Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository{Milvasoft.SampleAPI.Entity.Announcement,System.Guid,Milvasoft.SampleAPI.Data.EducationAppDbContext},Microsoft.AspNetCore.Identity.UserManager{Milvasoft.SampleAPI.Entity.AppUser},Microsoft.AspNetCore.Http.IHttpContextAccessor)">
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.AnnouncementService.#ctor(Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository{Milvasoft.SampleAPI.Entity.Announcement,System.Guid,Milvasoft.SampleAPI.Data.EducationAppDbContext})">
             <summary>
             Performs constructor injection for repository interfaces used in this service.
             </summary>
             <param name="announcementRepository"></param>
-            <param name="httpContextAccessor"></param>
-            <param name="userManager"></param>
         </member>
         <member name="M:Milvasoft.SampleAPI.Services.Concrete.AnnouncementService.GetAnnouncementsForStudentAsync(Milvasoft.SampleAPI.DTOs.PaginationParamsWithSpec{Milvasoft.SampleAPI.Spec.AnnouncementSpec})">
             <summary>
@@ -3398,12 +3419,10 @@
             Performs constructor injection for repository interfaces used in this service.
             </summary>
             <param name="assignmentRepository"></param>
-            <param name="userManager"></param>
             <param name="httpContextAccessor"></param>
             <param name="studentAssignmentRepository"></param>
             <param name="studentRepository"></param>
             <param name="mentorRepository"></param>
-            <param name="mailSender"></param>
         </member>
         <member name="M:Milvasoft.SampleAPI.Services.Concrete.AssignmentService.GetAssignmentForStudentAsync(Milvasoft.SampleAPI.DTOs.PaginationParamsWithSpec{Milvasoft.SampleAPI.Spec.AssignmentSpec})">
             <summary>
@@ -3578,19 +3597,11 @@
             Profession service.
             </summary>
         </member>
-        <member name="M:Milvasoft.SampleAPI.Services.Concrete.ProfessionService.#ctor(Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository{Milvasoft.SampleAPI.Entity.Profession,System.Guid,Milvasoft.SampleAPI.Data.EducationAppDbContext},Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository{Milvasoft.SampleAPI.Entity.TestEntity,Milvasoft.Helpers.MultiTenancy.EntityBase.TenantId,Milvasoft.SampleAPI.Data.EducationAppDbContext},Milvasoft.Helpers.MultiTenancy.Accessor.ITenantAccessor{Milvasoft.SampleAPI.DTOs.CachedTenant,Milvasoft.Helpers.MultiTenancy.EntityBase.TenantId})">
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.ProfessionService.#ctor(Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository{Milvasoft.SampleAPI.Entity.Profession,System.Guid,Milvasoft.SampleAPI.Data.EducationAppDbContext})">
             <summary>
             Performs constructor injection for repository interfaces used in this service.
             </summary>
             <param name="professionRepository"></param>
-            <param name="testRepository"></param>
-            <param name="tenantAccessor"></param>
-        </member>
-        <member name="M:Milvasoft.SampleAPI.Services.Concrete.ProfessionService.TestMethod">
-            <summary>
-            Test method.
-            </summary>
-            <returns></returns>
         </member>
         <member name="M:Milvasoft.SampleAPI.Services.Concrete.ProfessionService.GetProfessionsAsync(Milvasoft.SampleAPI.DTOs.PaginationParamsWithSpec{Milvasoft.SampleAPI.Spec.ProfessionSpec})">
             <summary>

@@ -24,15 +24,11 @@ namespace Milvasoft.SampleAPI.Services.Concrete
     /// Student service.
     /// </summary>
     public class StudentService : IStudentService
-    {
-        #region Fields
-
+    { 
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly UserManager<AppUser> _userManager;
         private readonly IBaseRepository<Student, Guid, EducationAppDbContext> _studentRepository;
         private readonly IBaseRepository<Mentor, Guid, EducationAppDbContext> _mentorRepository;
-
-        #endregion
 
         /// <summary>
         /// Performs constructor injection for repository interfaces used in this service.
@@ -61,14 +57,14 @@ namespace Milvasoft.SampleAPI.Services.Concrete
 
             Func<IIncludable<Student>, IIncludable> includes = i => i.Include(md => md.Mentor);
 
-            var (students, pageCount, totalDataCount) = await _studentRepository.PreparePaginationDTO<Student, Guid>(pagiantionParams.PageIndex,
-                                                                                                                     pagiantionParams.RequestedItemCount,
-                                                                                                                     pagiantionParams.OrderByProperty,
-                                                                                                                     pagiantionParams.OrderByAscending,
-                                                                                                                     pagiantionParams.Spec?.ToExpression(),
-                                                                                                                     includes).ConfigureAwait(false);
+            var (students, pageCount, totalDataCount) = await _studentRepository.PreparePaginationDTO(pagiantionParams.PageIndex,
+                                                                                                        pagiantionParams.RequestedItemCount,
+                                                                                                        pagiantionParams.OrderByProperty,
+                                                                                                        pagiantionParams.OrderByAscending,
+                                                                                                        pagiantionParams.Spec?.ToExpression(),
+                                                                                                        includes).ConfigureAwait(false);
 
-            students.ThrowIfListIsNotNullOrEmpty("Object is not found.");
+            students.ThrowIfListIsNullOrEmpty("Object is not found.");
 
             return new PaginationDTO<StudentForAdminDTO>
             {
@@ -113,13 +109,13 @@ namespace Milvasoft.SampleAPI.Services.Concrete
             Func<IIncludable<Student>, IIncludable> includes = i => i.Include(md => md.Mentor)
                                                                         .Include(oa => oa.OldAssignments);
 
-            var (students, pageCount, totalDataCount) = await _studentRepository.PreparePaginationDTO<Student, Guid>(pagiantionParams.PageIndex,
-                                                                                                                     pagiantionParams.RequestedItemCount,
-                                                                                                                     pagiantionParams.OrderByProperty,
-                                                                                                                     pagiantionParams.OrderByAscending,
-                                                                                                                     pagiantionParams.Spec?.ToExpression(),
-                                                                                                                     includes).ConfigureAwait(false);
-            students.ThrowIfListIsNotNullOrEmpty("Object is not found.");
+            var (students, pageCount, totalDataCount) = await _studentRepository.PreparePaginationDTO(pagiantionParams.PageIndex,
+                                                                                                        pagiantionParams.RequestedItemCount,
+                                                                                                        pagiantionParams.OrderByProperty,
+                                                                                                        pagiantionParams.OrderByAscending,
+                                                                                                        pagiantionParams.Spec?.ToExpression(),
+                                                                                                        includes).ConfigureAwait(false);
+            students.ThrowIfListIsNullOrEmpty("Object is not found.");
 
             return new PaginationDTO<StudentForMentorDTO>
             {
