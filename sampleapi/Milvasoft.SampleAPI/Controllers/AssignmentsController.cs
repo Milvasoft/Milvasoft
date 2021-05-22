@@ -18,7 +18,7 @@ namespace Milvasoft.SampleAPI.Controllers
     [ApiVersion("1.0")]
     [ApiExplorerSettings(GroupName = "v1.0")]
     [Route("sampleapi/[controller]")]
-    public class AssignmentController : Controller
+    public class AssignmentsController : Controller
     {
         private readonly IAssignmentService _assigmentService;
 
@@ -26,7 +26,7 @@ namespace Milvasoft.SampleAPI.Controllers
         /// Constructor of <c>AssignmentConroller</c>.
         /// </summary>
         /// <param name="assignmentService"></param>
-        public AssignmentController(IAssignmentService assignmentService)
+        public AssignmentsController(IAssignmentService assignmentService)
         {
             _assigmentService = assignmentService;
         }

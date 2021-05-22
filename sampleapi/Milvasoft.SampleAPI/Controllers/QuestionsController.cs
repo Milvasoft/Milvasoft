@@ -17,7 +17,7 @@ namespace Milvasoft.SampleAPI.Controllers
     [ApiController]
     [ApiVersion("1.0")]
     [ApiExplorerSettings(GroupName = "v1.0")]
-    public class QuestionController : Controller
+    public class QuestionsController : Controller
     {
         private readonly IQuestionService _questionService;
 
@@ -25,7 +25,7 @@ namespace Milvasoft.SampleAPI.Controllers
         /// Constructor of <c>QuestionController</c>
         /// </summary>
         /// <param name="questionService"></param>
-        public QuestionController(IQuestionService questionService)
+        public QuestionsController(IQuestionService questionService)
         {
             _questionService = questionService;
         }

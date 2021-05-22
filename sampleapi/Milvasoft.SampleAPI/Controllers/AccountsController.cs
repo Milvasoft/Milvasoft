@@ -21,7 +21,7 @@ namespace Milvasoft.SampleAPI.Controllers
     [ApiVersion("1.0")]
     [ApiExplorerSettings(GroupName = "v1.0")]
     [Route("sampleapi/[controller]")]
-    public class AccountController : ControllerBase
+    public class AccountsController : ControllerBase
     {
         private readonly IStringLocalizer<SharedResource> _sharedLocalizer;
         private readonly IAccountService _accountService;
@@ -31,7 +31,7 @@ namespace Milvasoft.SampleAPI.Controllers
         /// </summary>
         /// <param name="sharedLocalizer"></param>
         /// <param name="accountService"></param>
-        public AccountController(IStringLocalizer<SharedResource> sharedLocalizer, IAccountService accountService)
+        public AccountsController(IStringLocalizer<SharedResource> sharedLocalizer, IAccountService accountService)
         {
             _sharedLocalizer = sharedLocalizer;
             _accountService = accountService;

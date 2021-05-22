@@ -17,7 +17,7 @@ namespace Milvasoft.SampleAPI.Controllers
     [ApiController]
     [ApiVersion("1.0")]
     [ApiExplorerSettings(GroupName = "v1.0")]
-    public class StudentController : ControllerBase
+    public class StudentsController : ControllerBase
     {
         private readonly IStudentService _studentService;
 
@@ -25,7 +25,7 @@ namespace Milvasoft.SampleAPI.Controllers
         /// Constructor of <c>StudentController</c>
         /// </summary>
         /// <param name="studentService"></param>
-        public StudentController(IStudentService studentService)
+        public StudentsController(IStudentService studentService)
         {
             _studentService = studentService;
         }

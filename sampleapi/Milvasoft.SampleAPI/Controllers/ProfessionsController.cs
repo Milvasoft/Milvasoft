@@ -17,7 +17,7 @@ namespace Milvasoft.SampleAPI.Controllers
     [ApiController]
     [ApiVersion("1.0")]
     [ApiExplorerSettings(GroupName = "v1.0")]
-    public class ProfessionController : Controller
+    public class ProfessionsController : Controller
     {
         private readonly IProfessionService _professionService;
 
@@ -25,7 +25,7 @@ namespace Milvasoft.SampleAPI.Controllers
         /// Constructor of <c>ProfessionController</c>.
         /// </summary>
         /// <param name="professionService"></param>
-        public ProfessionController(IProfessionService professionService)
+        public ProfessionsController(IProfessionService professionService)
         {
             _professionService = professionService;
         }

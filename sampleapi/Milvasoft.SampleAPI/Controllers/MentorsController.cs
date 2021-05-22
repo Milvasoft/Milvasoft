@@ -18,7 +18,7 @@ namespace Milvasoft.SampleAPI.Controllers
     [ApiVersion("1.0")]
     [ApiExplorerSettings(GroupName = "v1.0")]
     [Route("sampleapi/[controller]")]
-    public class MentorController : Controller
+    public class MentorsController : Controller
     {
         private readonly IMentorService _mentorService;
 
@@ -26,7 +26,7 @@ namespace Milvasoft.SampleAPI.Controllers
         /// Mentor constructor method for injection.
         /// </summary>
         /// <param name="mentorService"></param>
-        public MentorController(IMentorService mentorService)
+        public MentorsController(IMentorService mentorService)
         {
             _mentorService = mentorService;
         }

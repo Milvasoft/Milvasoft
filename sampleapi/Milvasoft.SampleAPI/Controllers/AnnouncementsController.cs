@@ -17,7 +17,7 @@ namespace Milvasoft.SampleAPI.Controllers
     [ApiVersion("1.0")]
     [ApiExplorerSettings(GroupName = "v1.0")]
     [Route("sampleapi/[controller]")]
-    public class AnnouncementController : Controller
+    public class AnnouncementsController : Controller
     {
         private readonly IAnnouncementService _announcementService;
 
@@ -25,7 +25,7 @@ namespace Milvasoft.SampleAPI.Controllers
         /// Constructor of <c>AnnouncementController</c>.
         /// </summary>
         /// <param name="announcementService"></param>
-        public AnnouncementController(IAnnouncementService announcementService)
+        public AnnouncementsController(IAnnouncementService announcementService)
         {
             _announcementService = announcementService;
         }

@@ -17,7 +17,7 @@ namespace Milvasoft.SampleAPI.Controllers
     [ApiController]
     [ApiVersion("1.0")]
     [ApiExplorerSettings(GroupName = "v1.0")]
-    public class UsefulLinkController : Controller
+    public class UsefulLinksController : Controller
     {
         private readonly IUsefulLinkService _userfulLinkService;
 
@@ -25,7 +25,7 @@ namespace Milvasoft.SampleAPI.Controllers
         /// Constructor of <c>UsefulLinkController</c>
         /// </summary>
         /// <param name="usefulLinkService"></param>
-        public UsefulLinkController(IUsefulLinkService usefulLinkService)
+        public UsefulLinksController(IUsefulLinkService usefulLinkService)
         {
             _userfulLinkService = usefulLinkService;
         }
