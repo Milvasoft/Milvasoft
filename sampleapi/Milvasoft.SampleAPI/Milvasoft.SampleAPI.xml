@@ -1640,6 +1640,11 @@
             CV path of mentor.
             </summary>
         </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.MentorDTOs.UpdateMentorDTO.Photo">
+            <summary>
+            User profile pictures.
+            </summary>
+        </member>
         <member name="T:Milvasoft.SampleAPI.DTOs.PaginationParams">
             <summary>
             Paginatination params

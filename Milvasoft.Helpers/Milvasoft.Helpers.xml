@@ -3810,6 +3810,13 @@
             </summary>
             <param name="exceptionCode"></param>
         </member>
+        <member name="M:Milvasoft.Helpers.Exceptions.MilvaUserFriendlyException.#ctor(Milvasoft.Helpers.Exceptions.MilvaException,System.Object[])">
+            <summary>
+            Initializes a new instance of the <see cref="T:Milvasoft.Helpers.Exceptions.MilvaUserFriendlyException"/> class with a specified error message.
+            </summary>
+            <param name="exceptionCode"></param>
+            <param name="exceptionObjects"></param>
+        </member>
         <member name="M:Milvasoft.Helpers.Exceptions.MilvaUserFriendlyException.#ctor(System.String,System.Object[])">
             <summary>
             Initializes a new instance of the <see cref="T:Milvasoft.Helpers.Exceptions.MilvaBaseException"/> class  with a specified error message.
