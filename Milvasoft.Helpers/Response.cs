@@ -14,8 +14,7 @@ namespace Milvasoft.Helpers
 {
     /// <summary>
     /// <para>Helper class to generate the same type of response.</para>
-    /// <para>All methods return <see cref="BaseResponse"/> type in ActionResult. Base response can be <see cref="ObjectResponse{T}" /> or <see cref="ObjectResponse{T}"/></para>
-    /// <para>All methods return HTTP status code 200 OK.</para>
+    /// <para>All methods return HTTP status code 200 OK.All methods return <see cref="BaseResponse"/> type in ActionResult. Base response can be <see cref="ObjectResponse{T}" /> or <see cref="ObjectResponse{T}"/></para>
     /// </summary>
     public static class Response
     {
