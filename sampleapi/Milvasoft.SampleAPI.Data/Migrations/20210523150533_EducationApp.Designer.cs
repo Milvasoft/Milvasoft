@@ -10,8 +10,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Milvasoft.SampleAPI.Data.Migrations
 {
     [DbContext(typeof(EducationAppDbContext))]
-    [Migration("20210423224310_EducationAppData")]
-    partial class EducationAppData
+    [Migration("20210523150533_EducationApp")]
+    partial class EducationApp
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -701,7 +701,7 @@ namespace Milvasoft.SampleAPI.Data.Migrations
                     b.Property<DateTime>("FinishedDate")
                         .HasColumnType("timestamp without time zone");
 
-                    b.Property<bool>("IsActive")
+                    b.Property<bool>("IsApproved")
                         .HasColumnType("boolean");
 
                     b.Property<bool>("IsDeleted")

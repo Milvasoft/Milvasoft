@@ -699,7 +699,7 @@ namespace Milvasoft.SampleAPI.Data.Migrations
                     b.Property<DateTime>("FinishedDate")
                         .HasColumnType("timestamp without time zone");
 
-                    b.Property<bool>("IsActive")
+                    b.Property<bool>("IsApproved")
                         .HasColumnType("boolean");
 
                     b.Property<bool>("IsDeleted")

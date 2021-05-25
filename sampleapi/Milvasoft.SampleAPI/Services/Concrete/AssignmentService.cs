@@ -334,7 +334,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
 
             currentStudent.ThrowIfNullForGuidObject("User is not student.");
 
-            var currentAssignment = await _studentAssignmentRepository.GetFirstOrDefaultAsync(i => i.StudentId == currentStudent.Id && i.IsActive == true);
+            var currentAssignment = await _studentAssignmentRepository.GetFirstOrDefaultAsync(i => i.StudentId == currentStudent.Id && i.IsApproved == true);
 
             currentAssignment.ThrowIfNullForGuidObject("Active assignment is not found.");
 
@@ -372,7 +372,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
 
             var studentAssignment = new StudentAssigment
             {
-                IsActive = false,
+                IsApproved = false,
                 AssigmentId = toBeTakeAssignment.Id,
                 StudentId = currentStudent.Id,
                 AdditionalTime = newAssignment.AdditionalTime,
@@ -450,7 +450,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
 
             var currentMentor = await _mentorRepository.GetFirstOrDefaultAsync(i => i.AppUser.UserName == _loggedUser).ConfigureAwait(false);
 
-            var unconfirmedAssignment = await _studentAssignmentRepository.GetAllAsync(includes, i => i.IsActive == false && i.Student.Mentor.Id == currentMentor.Id).ConfigureAwait(false);
+            var unconfirmedAssignment = await _studentAssignmentRepository.GetAllAsync(includes, i => i.IsApproved == false && i.Student.Mentor.Id == currentMentor.Id).ConfigureAwait(false);
 
             unconfirmedAssignment.ThrowIfListIsNotNullOrEmpty("All assignments are approved.");
 
@@ -458,7 +458,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
                                             select new StudentAssignmentDTO
                                             {
                                                 Id = assignment.Id,
-                                                IsActive = assignment.IsActive,
+                                                IsApproved = assignment.IsApproved,
                                                 AdditionalTime = assignment.AdditionalTime,
                                                 AdditionalTimeDescription = assignment.AdditionalTimeDescription,
                                                 Student = new StudentDTO
@@ -482,9 +482,9 @@ namespace Milvasoft.SampleAPI.Services.Concrete
 
             var student = await _studentRepository.GetByIdAsync(toBeUpdatedAssignment.StudentId).ConfigureAwait(false);
 
-            if (toBeUpdatedAssignment.IsActive == true) throw new MilvaUserFriendlyException("The assignment is already active.");
+            if (toBeUpdatedAssignment.IsApproved == true) throw new MilvaUserFriendlyException("The assignment is already active.");
 
-            toBeUpdatedAssignment.IsActive = true;
+            toBeUpdatedAssignment.IsApproved = true;
             toBeUpdatedAssignment.FinishedDate = toBeUpdated.FinishedDate;
 
             student.CurrentAssigmentDeliveryDate = toBeUpdatedAssignment.FinishedDate;

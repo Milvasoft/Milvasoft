@@ -1,10 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
-using System;
 
 namespace Milvasoft.SampleAPI.Data.Migrations
 {
-    public partial class EducationAppData : Migration
+    public partial class EducationApp : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -557,7 +557,7 @@ namespace Milvasoft.SampleAPI.Data.Migrations
                     FinishedDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
                     AdditionalTime = table.Column<int>(type: "integer", nullable: false),
                     AdditionalTimeDescription = table.Column<string>(type: "text", nullable: true),
-                    IsActive = table.Column<bool>(type: "boolean", nullable: false),
+                    IsApproved = table.Column<bool>(type: "boolean", nullable: false),
                     CreationDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
                     CreatorUserId = table.Column<Guid>(type: "uuid", nullable: true),
                     LastModificationDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),

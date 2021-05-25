@@ -2100,7 +2100,7 @@
             An explanation of why the student is asking for additional time.
             </summary>
         </member>
-        <member name="P:Milvasoft.SampleAPI.DTOs.StudentAssignmentDTOs.StudentAssignmentDTO.IsActive">
+        <member name="P:Milvasoft.SampleAPI.DTOs.StudentAssignmentDTOs.StudentAssignmentDTO.IsApproved">
             <summary>
             The status of the student's homework approved by the mentor.
             </summary>

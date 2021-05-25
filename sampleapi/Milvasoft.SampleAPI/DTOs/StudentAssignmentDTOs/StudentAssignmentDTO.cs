@@ -88,6 +88,6 @@ namespace Milvasoft.SampleAPI.DTOs.StudentAssignmentDTOs
         /// <summary>
         /// The status of the student's homework approved by the mentor.
         /// </summary>
-        public bool IsActive { get; set; }
+        public bool IsApproved { get; set; }
     }
 }
