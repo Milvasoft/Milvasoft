@@ -1,10 +1,12 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Localization;
+using Milvasoft.Helpers;
 using Milvasoft.Helpers.DataAccess.Abstract;
 using Milvasoft.Helpers.Exceptions;
 using Milvasoft.Helpers.Identity.Abstract;
 using Milvasoft.Helpers.Identity.Concrete;
+using Milvasoft.Helpers.Mail;
 using Milvasoft.SampleAPI.Data;
 using Milvasoft.SampleAPI.DTOs.AccountDTOs;
 using Milvasoft.SampleAPI.Entity;
@@ -15,6 +17,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace Milvasoft.SampleAPI.Services.Concrete
@@ -24,56 +27,80 @@ namespace Milvasoft.SampleAPI.Services.Concrete
     /// </summary>
     public class AccountService : IdentityOperations<UserManager<AppUser>, EducationAppDbContext, IStringLocalizer<SharedResource>, AppUser, AppRole, Guid, LoginResultDTO>, IAccountService
     {
-        private readonly UserManager<AppUser> _userManager;
-        private readonly SignInManager<AppUser> _signInManager;
-        private readonly IContextRepository<EducationAppDbContext> _contextRepository;
-        private readonly HttpClient _httpClient;
-        private readonly IHttpContextAccessor _httpContextAccessor;
-        private readonly TokenManagement _tokenManagement;
+        #region Fields
         private readonly IStringLocalizer<SharedResource> _sharedLocalizer;
+        private readonly IContextRepository<EducationAppDbContext> _contextRepository;
         private readonly IBaseRepository<Student, Guid, EducationAppDbContext> _studentRepository;
         private readonly IBaseRepository<Mentor, Guid, EducationAppDbContext> _mentorRepository;
+        private readonly IBaseRepository<AppUser, Guid, EducationAppDbContext> _userRepository;
+        private readonly UserManager<AppUser> _userManager;
+        private readonly SignInManager<AppUser> _signInManager;
+        private readonly ITokenManagement _tokenManagement;
+        private readonly IStringLocalizer<SharedResource> _localizer;
+        private readonly string _userName;
+        private readonly IMilvaMailSender _milvaMailSender;
+        private readonly DateTime _tokenExpireDate = DateTime.Now.AddDays(1);
+
+        /// <summary>
+        /// The authentication scheme for the provider the token is associated with.
+        /// </summary>
+        private readonly string _loginProvider;
+
+        /// <summary>
+        /// The name of token.
+        /// </summary>
+        private readonly string _tokenName;
+        #endregion
 
         /// <summary>
         /// Performs constructor injection for repository interfaces used in this service.
         /// </summary>
+        /// <param name="userRepository"></param>
+        /// <param name="studentRepository"></param>
+        /// <param name="mentorRepository"></param>
         /// <param name="userManager"></param>
         /// <param name="signInManager"></param>
         /// <param name="tokenManagement"></param>
-        /// <param name="httpClient"></param>
-        /// <param name="studentRepository"></param>
-        /// <param name="contextRepository"></param>
-        /// <param name="mentorRepository"></param>
+        /// <param name="localizer"></param>
         /// <param name="httpContextAccessor"></param>
+        /// <param name="milvaMailSender"></param>
+        /// <param name="contextRepository"></param>
         /// <param name="sharedLocalizer"></param>
-        public AccountService(UserManager<AppUser> userManager,
+        public AccountService(IBaseRepository<AppUser, Guid, EducationAppDbContext> userRepository,
+                              IBaseRepository<Student,Guid,EducationAppDbContext> studentRepository,
+                              IBaseRepository<Mentor,Guid,EducationAppDbContext> mentorRepository,
+                              UserManager<AppUser> userManager,
                               SignInManager<AppUser> signInManager,
                               TokenManagement tokenManagement,
-                              HttpClient httpClient,
-                              IBaseRepository<Student, Guid, EducationAppDbContext> studentRepository,
-                              IContextRepository<EducationAppDbContext> contextRepository,
-                              IBaseRepository<Mentor, Guid, EducationAppDbContext> mentorRepository,
+                              IStringLocalizer<SharedResource> localizer,
                               IHttpContextAccessor httpContextAccessor,
-                              IStringLocalizer<SharedResource> sharedLocalizer) : base(userManager, signInManager, tokenManagement, contextRepository, sharedLocalizer, httpContextAccessor, true)
+                              IMilvaMailSender milvaMailSender,
+                              IContextRepository<EducationAppDbContext> contextRepository,
+                              IStringLocalizer<SharedResource> sharedLocalizer): base(userManager, signInManager, tokenManagement, contextRepository, sharedLocalizer, httpContextAccessor, true)
         {
+            _studentRepository = studentRepository;
+            _mentorRepository = mentorRepository;
+            _contextRepository = contextRepository;
+            _sharedLocalizer = sharedLocalizer;
+            _userRepository = userRepository;
             _userManager = userManager;
             _signInManager = signInManager;
-            _httpClient = httpClient;
-            _studentRepository = studentRepository;
-            _contextRepository = contextRepository;
-            _mentorRepository = mentorRepository;
-            _httpContextAccessor = httpContextAccessor;
-            _sharedLocalizer = sharedLocalizer;
             _tokenManagement = tokenManagement;
+            _localizer = localizer;
+            _milvaMailSender = milvaMailSender;
+            _userName = httpContextAccessor.HttpContext.User.Identity.Name;
+            _loginProvider = tokenManagement.LoginProvider;
+            _tokenName = tokenManagement.TokenName;
         }
 
+        #region AppUser
         /// <summary>
         /// Signs in for incoming user. Returns a token if login informations are valid or the user is not lockedout. Otherwise returns the error list.
         /// </summary>
         /// <param name="loginDTO"></param>
         /// <param name="isMentor"></param>
         /// <returns></returns>
-        public async Task<LoginResultDTO> SignInAsync(LoginDTO loginDTO, bool isMentor) => await base.LoginAsync(loginDTO,
+        public async Task<LoginResultDTO> LoginAsync(LoginDTO loginDTO, bool isMentor) => await base.LoginAsync(loginDTO,
                                                                                                                 isMentor,
                                                                                                                 userValidationByUserType: ValidateUser,
                                                                                                                 tokenExpiredDate: isMentor ? DateTime.Now.AddDays(100) : DateTime.Now.AddDays(5)).ConfigureAwait(false);
@@ -82,19 +109,113 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// Signs out from database. Returns null if already signed out.
         /// </summary>
         /// <returns></returns>
-        public async Task<IdentityResult> SignOutAsync() => await base.LogoutAsync().ConfigureAwait(false);
+        public async Task<IdentityResult> LoggoutAsync() => await base.LogoutAsync().ConfigureAwait(false);
 
         /// <summary>
-        /// Chamge user password.
+        /// Gets a specific personnel data from repository by token value if exsist.
         /// </summary>
-        /// <param name="passDTO"></param>
-        /// <returns></returns>
-        public async Task<IdentityResult> ChangePasswordAsync(ChangePassDTO passDTO)
+        /// <returns> Logged-in user data. </returns>
+        public async Task<AppUserDTO> GetLoggedInInUserInformationAsync()
         {
-            if (passDTO.OldPassword == passDTO.NewPassword) throw new MilvaUserFriendlyException("Passwords are already the same");
-            var user = await _userManager.FindByNameAsync(passDTO.UserName).ConfigureAwait(false);
-            return await base.ChangePasswordAsync(user, passDTO.OldPassword, passDTO.NewPassword);
+            CheckLoginStatus();
+
+            var user = await _userRepository.GetFirstOrDefaultAsync(a=>a.UserName==_userName).ConfigureAwait(false);
+
+            user.ThrowIfNullForGuidObject("CannotGetSignedInUserInfo");
+
+            return new AppUserDTO
+            {
+                UserName = user.UserName,
+                Email = user.Email,
+                PhoneNumber = user.PhoneNumber
+            };
         }
+
+        /// <summary>
+        /// Sign up process for application user.
+        /// If signup process is succesful,then sign in.
+        /// </summary>
+        /// <param name="registerDTO"></param>
+        /// <returns></returns>
+        public async Task<LoginResultDTO> RegisterAsync(SignUpDTO registerDTO)
+        {
+            if (string.IsNullOrEmpty(registerDTO.Token))
+                throw new MilvaDeveloperException("Please enter the notification info.");
+
+            AppUser userToBeSignUp = new()
+            {
+                UserName = registerDTO.UserName,
+                Email = registerDTO.Email,
+                PhoneNumber = registerDTO.PhoneNumber
+            };
+
+            LoginResultDTO loginResult = new();
+
+            var createResult = await _userManager.CreateAsync(userToBeSignUp, registerDTO.Password);
+
+            if (createResult.Succeeded)
+            {
+                LoginDTO loginDTO = new();
+                loginDTO.UserName = userToBeSignUp.UserName;
+                loginDTO.Password = registerDTO.Password;
+
+                loginResult = await LoginAsync(loginDTO,true).ConfigureAwait(false);
+            }
+            else
+            {
+                loginResult.ErrorMessages = createResult.Errors.ToList();
+            }
+
+            return loginResult;
+        }
+
+        /// <summary>
+        /// Updates logged-in user's personal information.
+        /// </summary>
+        /// <param name="userDTO"></param>
+        /// <returns></returns>
+        public async Task UpdateAccountAsync(AppUserUpdateDTO userDTO)
+        {
+            CheckLoginStatus();
+
+            var toBeUpdatedUser = await _userRepository.GetFirstOrDefaultAsync(a=>a.UserName==_userName).ConfigureAwait(false);
+
+            bool initializeUpdate = false;
+
+            //TODO OGUZHAN Userin mentör veya öğrenci olduğuna bakılarak isim ve soyisim değiştirilebilecek.
+
+            if (!string.IsNullOrEmpty(userDTO.PhoneNumber))
+            {
+                toBeUpdatedUser.PhoneNumber = userDTO.NewPhoneNumber;
+                toBeUpdatedUser.PhoneNumberConfirmed = false;
+                initializeUpdate = true;
+            }
+
+
+            if (initializeUpdate)
+            {
+                toBeUpdatedUser.LastModificationDate = DateTime.Now;
+
+                var updateResult = await _userManager.UpdateAsync(toBeUpdatedUser).ConfigureAwait(false);
+
+                ThrowErrorMessagesIfNotSuccess(updateResult);
+            }
+        }
+
+        /// <summary>
+        /// Deletes logged-in user's account. This operation is irreversible.
+        /// </summary>
+        /// <returns></returns>
+        public async Task DeleteAccountAsync()
+        {
+            var user = await _userRepository.GetFirstOrDefaultAsync(a => a.UserName == _userName).ConfigureAwait(false);
+
+            user.ThrowIfNullForGuidObject("CannotGetSignedInUserInfo");
+
+            await base.DeleteUserAsync(user.Id).ConfigureAwait(false);//TODO OGUZHAN İlgili userin ilişkilerini veritabanından sil.
+        }
+
+        #endregion
 
 
         /// <summary>
@@ -104,129 +225,55 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// <param name="user"></param>
         /// <param name="isUserType"></param>
         /// <returns></returns>
-        private async Task<(AppUser educationUser, LoginResultDTO loginResult)> ValidateUser(ILoginDTO loginDTO, AppUser user, bool isUserType)
+        private async Task<(AppUser educationUser, LoginResultDTO loginResult)> ValidateUser(ILoginDTO loginDTO, AppUser user, bool isUserType) => await base.ValidateUserAsync(loginDTO, user).ConfigureAwait(false);
+
+        #region Account Activities
+
+        /// <summary>
+        /// Change user password with old password and new password.
+        /// </summary>
+        /// <param name="changeDTO"></param>
+        /// <returns></returns>
+        public async Task<IdentityResult> ChangePasswordAsync(ChangePassDTO changeDTO)
         {
-            IdentityError GetLockedError(DateTime lockoutEnd)
-            {
-                var remainingLockoutEnd = lockoutEnd - DateTime.Now;
+            CheckLoginStatus();
 
-                var reminingLockoutEndString = remainingLockoutEnd.Hours > GlobalConstants.Zero
-                                                ? _sharedLocalizer["Hours", remainingLockoutEnd.Hours]
-                                                : remainingLockoutEnd.Minutes > GlobalConstants.Zero
-                                                     ? _sharedLocalizer["Minutes", remainingLockoutEnd.Minutes]
-                                                     : _sharedLocalizer["Seconds", remainingLockoutEnd.Seconds];
+            var user = await _userRepository.GetFirstOrDefaultAsync(a => a.UserName == _userName).ConfigureAwait(false);
 
-                return new IdentityError { Code = "Locked", Description = _sharedLocalizer["Locked", reminingLockoutEndString] };
-            }
+            user.ThrowIfNullForGuidObject("IdentityInvalidUserName");
 
-            int accessFailedCountLimit = 5;
-
-            var loginResult = new LoginResultDTO { ErrorMessages = new List<IdentityError>() };
-
-            if (loginDTO.UserName == null && loginDTO.Email == null)
-                throw new MilvaUserFriendlyException("PleaseEnterEmailOrUsername");
-
-            var userIdentifier = "";
-
-            #region User Validation
-
-            var userNotFound = true;
-
-            if (loginDTO.UserName != null)
-            {
-                user = _userManager.FindByNameAsync(userName: loginDTO.UserName).Result;
-
-                userNotFound = user == null;
-
-                if (userNotFound && isUserType)
-                {
-                    loginResult.ErrorMessages.Add(new IdentityError { Code = "InvalidUserName", Description = _sharedLocalizer["InvalidUserName"] });
-                    return (user, loginResult);
-                }
-
-                userIdentifier = user.UserName;
-            }
-
-            if (loginDTO.Email != null && userNotFound)
-            {
-                user = _userManager.FindByEmailAsync(email: loginDTO.Email).Result;
-
-                userNotFound = user == null;
-
-                if (userNotFound && isUserType)
-                {
-                    loginResult.ErrorMessages.Add(new IdentityError { Code = "InvalidEmail", Description = _sharedLocalizer["InvalidEmail"] });
-                    return (user, loginResult);
-                }
-
-                userIdentifier = user.Email;
-            }
-
-            if (userNotFound)
-            {
-                loginResult.ErrorMessages.Add(new IdentityError { Code = "InvalidLogin", Description = _sharedLocalizer["InvalidLogin"] });
-                return (user, loginResult);
-            }
-
-            var userId = user.Id;
-
-            var isMentorInDb = (await _mentorRepository.GetAllAsync(i => i.AppUserId.Equals(userId))).Any();
-
-            var isStudentInDb = (await _studentRepository.GetAllAsync(i => i.AppUserId.Equals(userId))).Any();
-
-            var confirmedUser = isUserType == isMentorInDb || isStudentInDb;
-
-            if (!confirmedUser)
-            {
-                loginResult.ErrorMessages.Add(new IdentityError { Code = "InvalidLogin", Description = _sharedLocalizer["InvalidLogin"] });
-                return (user, loginResult);
-            }
-
-            var userLocked = _userManager.IsLockedOutAsync(user).Result;
-
-            if (userLocked && DateTime.Now > user.LockoutEnd.Value.DateTime)
-            {
-                _contextRepository.InitializeUpdating<AppUser, Guid>(user);
-
-                await _userManager.SetLockoutEndDateAsync(user, null).ConfigureAwait(false);
-
-                await _userManager.ResetAccessFailedCountAsync(user).ConfigureAwait(false);
-
-                userLocked = false;
-            }
-
-            if (userLocked)
-            {
-                loginResult.ErrorMessages.Add(GetLockedError(user.LockoutEnd.Value.DateTime));
-                return (user, loginResult);
-            }
-
-            var passIsTrue = _userManager.CheckPasswordAsync(user, loginDTO.Password).Result;
-
-
-            if (!passIsTrue)
-            {
-                await _userManager.AccessFailedAsync(user).ConfigureAwait(false);
-
-                if (_userManager.IsLockedOutAsync(user).Result)
-                {
-                    loginResult.ErrorMessages.Add(GetLockedError(user.LockoutEnd.Value.DateTime));
-                    return (user, loginResult);
-                }
-
-                var senstiveMessage = isUserType ? _sharedLocalizer["InvalidPassword"] : _sharedLocalizer["InvalidLogin"];
-
-                var lockWarningMessage = _sharedLocalizer["LockWarning", accessFailedCountLimit - user.AccessFailedCount];
-
-                loginResult.ErrorMessages.Add(new IdentityError { Code = "InvalidLogin", Description = $"{senstiveMessage} {lockWarningMessage}" });
-
-                return (user, loginResult);
-            }
-
-            return (user, loginResult);
-
-            #endregion
+            return await base.ChangePasswordAsync(user, changeDTO.OldPassword, changeDTO.NewPassword);
         }
+
+        #endregion
+
+        #region Private Helpers Methods
+        /// <summary>
+        /// If <paramref name="identityResult"/> is not succeeded throwns <see cref="MilvaUserFriendlyException"/>.
+        /// </summary>
+        /// <param name="identityResult"></param>
+        public void ThrowErrorMessagesIfNotSuccess(IdentityResult identityResult)
+        {
+            if (!identityResult.Succeeded)
+            {
+                var stringBuilder = new StringBuilder();
+
+                stringBuilder.AppendJoin(',', identityResult.Errors.Select(i => i.Description));
+                throw new MilvaUserFriendlyException(stringBuilder.ToString());
+            }
+        }
+
+        /// <summary>
+        /// Cheks <see cref="_userName"/>. If is null or empty throwns <see cref="MilvaUserFriendlyException"/>. Otherwise does nothing.
+        /// </summary>
+        private void CheckLoginStatus()
+        {
+            if (string.IsNullOrEmpty(_userName))
+                throw new MilvaUserFriendlyException("CannotGetSignedInUserInfo");
+        }
+
+        #endregion
+        
 
     }
 }

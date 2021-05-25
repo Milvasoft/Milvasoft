@@ -19,13 +19,13 @@ namespace Milvasoft.SampleAPI.Services.Abstract
         /// Login for incoming user. Returns a token if login informations are valid or the user is not lockedout. Otherwise returns the error list.
         /// </summary>
         /// <returns></returns>
-        Task<LoginResultDTO> SignInAsync(LoginDTO loginDTO, bool isMentor);
+        Task<LoginResultDTO> LoginAsync(LoginDTO loginDTO, bool isMentor);
 
         /// <summary>
         /// Signs out from database.
         /// </summary>
         /// <returns></returns>
-        Task<IdentityResult> SignOutAsync();
+        Task<IdentityResult> LogoutAsync();
 
         /// <summary>
         /// Change user password.

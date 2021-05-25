@@ -699,6 +699,46 @@
             <param name="ids"></param>
             <returns></returns>
         </member>
+        <member name="T:Milvasoft.SampleAPI.DTOs.AccountDTOs.AppUserDTO">
+            <summary>
+            DTO to be user in creation proccess.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.AccountDTOs.AppUserDTO.UserName">
+            <summary>
+            UserName of user.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.AccountDTOs.AppUserDTO.Email">
+            <summary>
+            Email of user.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.AccountDTOs.AppUserDTO.PhoneNumber">
+            <summary>
+            PhoneNumber of user.
+            </summary>   
+        </member>
+        <member name="T:Milvasoft.SampleAPI.DTOs.AccountDTOs.AppUserUpdateDTO">
+            <summary>
+            DTO to be user in creation proccess.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.AccountDTOs.AppUserUpdateDTO.NewName">
+            <summary>
+            Name of to be created user by admin.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.AccountDTOs.AppUserUpdateDTO.NewSurname">
+            <summary>
+            Surname of to be created user by admin.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.AccountDTOs.AppUserUpdateDTO.NewPhoneNumber">
+            <summary>
+            Phone number which can be entered in initial update process after registeration process.
+            </summary>
+        </member>
         <member name="T:Milvasoft.SampleAPI.DTOs.AccountDTOs.ChangePassDTO">
             <summary>
             User password processing takes place with this dto.
@@ -2781,13 +2821,13 @@
             The class in which user transactions are entered and exited.
             </summary>
         </member>
-        <member name="M:Milvasoft.SampleAPI.Services.Abstract.IAccountService.SignInAsync(Milvasoft.SampleAPI.DTOs.AccountDTOs.LoginDTO,System.Boolean)">
+        <member name="M:Milvasoft.SampleAPI.Services.Abstract.IAccountService.LoginAsync(Milvasoft.SampleAPI.DTOs.AccountDTOs.LoginDTO,System.Boolean)">
             <summary>
             Login for incoming user. Returns a token if login informations are valid or the user is not lockedout. Otherwise returns the error list.
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.SampleAPI.Services.Abstract.IAccountService.SignOutAsync">
+        <member name="M:Milvasoft.SampleAPI.Services.Abstract.IAccountService.LogoutAsync">
             <summary>
             Signs out from database.
             </summary>
@@ -3291,21 +3331,33 @@
             Provides sign-in,sign-up and sign-out process for user.
             </summary>
         </member>
-        <member name="M:Milvasoft.SampleAPI.Services.Concrete.AccountService.#ctor(Microsoft.AspNetCore.Identity.UserManager{Milvasoft.SampleAPI.Entity.AppUser},Microsoft.AspNetCore.Identity.SignInManager{Milvasoft.SampleAPI.Entity.AppUser},Milvasoft.SampleAPI.Utils.TokenManagement,System.Net.Http.HttpClient,Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository{Milvasoft.SampleAPI.Entity.Student,System.Guid,Milvasoft.SampleAPI.Data.EducationAppDbContext},Milvasoft.Helpers.DataAccess.Abstract.IContextRepository{Milvasoft.SampleAPI.Data.EducationAppDbContext},Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository{Milvasoft.SampleAPI.Entity.Mentor,System.Guid,Milvasoft.SampleAPI.Data.EducationAppDbContext},Microsoft.AspNetCore.Http.IHttpContextAccessor,Microsoft.Extensions.Localization.IStringLocalizer{Milvasoft.SampleAPI.Localization.SharedResource})">
+        <member name="F:Milvasoft.SampleAPI.Services.Concrete.AccountService._loginProvider">
+            <summary>
+            The authentication scheme for the provider the token is associated with.
+            </summary>
+        </member>
+        <member name="F:Milvasoft.SampleAPI.Services.Concrete.AccountService._tokenName">
+            <summary>
+            The name of token.
+            </summary>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.AccountService.#ctor(Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository{Milvasoft.SampleAPI.Entity.AppUser,System.Guid,Milvasoft.SampleAPI.Data.EducationAppDbContext},Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository{Milvasoft.SampleAPI.Entity.Student,System.Guid,Milvasoft.SampleAPI.Data.EducationAppDbContext},Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository{Milvasoft.SampleAPI.Entity.Mentor,System.Guid,Milvasoft.SampleAPI.Data.EducationAppDbContext},Microsoft.AspNetCore.Identity.UserManager{Milvasoft.SampleAPI.Entity.AppUser},Microsoft.AspNetCore.Identity.SignInManager{Milvasoft.SampleAPI.Entity.AppUser},Milvasoft.SampleAPI.Utils.TokenManagement,Microsoft.Extensions.Localization.IStringLocalizer{Milvasoft.SampleAPI.Localization.SharedResource},Microsoft.AspNetCore.Http.IHttpContextAccessor,Milvasoft.Helpers.Mail.IMilvaMailSender,Milvasoft.Helpers.DataAccess.Abstract.IContextRepository{Milvasoft.SampleAPI.Data.EducationAppDbContext},Microsoft.Extensions.Localization.IStringLocalizer{Milvasoft.SampleAPI.Localization.SharedResource})">
             <summary>
             Performs constructor injection for repository interfaces used in this service.
             </summary>
+            <param name="userRepository"></param>
+            <param name="studentRepository"></param>
+            <param name="mentorRepository"></param>
             <param name="userManager"></param>
             <param name="signInManager"></param>
             <param name="tokenManagement"></param>
-            <param name="httpClient"></param>
-            <param name="studentRepository"></param>
-            <param name="contextRepository"></param>
-            <param name="mentorRepository"></param>
+            <param name="localizer"></param>
             <param name="httpContextAccessor"></param>
+            <param name="milvaMailSender"></param>
+            <param name="contextRepository"></param>
             <param name="sharedLocalizer"></param>
         </member>
-        <member name="M:Milvasoft.SampleAPI.Services.Concrete.AccountService.SignInAsync(Milvasoft.SampleAPI.DTOs.AccountDTOs.LoginDTO,System.Boolean)">
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.AccountService.LoginAsync(Milvasoft.SampleAPI.DTOs.AccountDTOs.LoginDTO,System.Boolean)">
             <summary>
             Signs in for incoming user. Returns a token if login informations are valid or the user is not lockedout. Otherwise returns the error list.
             </summary>
@@ -3313,17 +3365,37 @@
             <param name="isMentor"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.SampleAPI.Services.Concrete.AccountService.SignOutAsync">
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.AccountService.LoggoutAsync">
             <summary>
             Signs out from database. Returns null if already signed out.
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.SampleAPI.Services.Concrete.AccountService.ChangePasswordAsync(Milvasoft.SampleAPI.DTOs.AccountDTOs.ChangePassDTO)">
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.AccountService.GetLoggedInInUserInformationAsync">
             <summary>
-            Chamge user password.
+            Gets a specific personnel data from repository by token value if exsist.
             </summary>
-            <param name="passDTO"></param>
+            <returns> Logged-in user data. </returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.AccountService.RegisterAsync(Milvasoft.SampleAPI.DTOs.AccountDTOs.SignUpDTO)">
+            <summary>
+            Sign up process for application user.
+            If signup process is succesful,then sign in.
+            </summary>
+            <param name="registerDTO"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.AccountService.UpdateAccountAsync(Milvasoft.SampleAPI.DTOs.AccountDTOs.AppUserUpdateDTO)">
+            <summary>
+            Updates logged-in user's personal information.
+            </summary>
+            <param name="userDTO"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.AccountService.DeleteAccountAsync">
+            <summary>
+            Deletes logged-in user's account. This operation is irreversible.
+            </summary>
             <returns></returns>
         </member>
         <member name="M:Milvasoft.SampleAPI.Services.Concrete.AccountService.ValidateUser(Milvasoft.Helpers.Identity.Abstract.ILoginDTO,Milvasoft.SampleAPI.Entity.AppUser,System.Boolean)">
@@ -3334,6 +3406,24 @@
             <param name="user"></param>
             <param name="isUserType"></param>
             <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.AccountService.ChangePasswordAsync(Milvasoft.SampleAPI.DTOs.AccountDTOs.ChangePassDTO)">
+            <summary>
+            Change user password with old password and new password.
+            </summary>
+            <param name="changeDTO"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.AccountService.ThrowErrorMessagesIfNotSuccess(Microsoft.AspNetCore.Identity.IdentityResult)">
+            <summary>
+            If <paramref name="identityResult"/> is not succeeded throwns <see cref="T:Milvasoft.Helpers.Exceptions.MilvaUserFriendlyException"/>.
+            </summary>
+            <param name="identityResult"></param>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.AccountService.CheckLoginStatus">
+            <summary>
+            Cheks <see cref="F:Milvasoft.SampleAPI.Services.Concrete.AccountService._userName"/>. If is null or empty throwns <see cref="T:Milvasoft.Helpers.Exceptions.MilvaUserFriendlyException"/>. Otherwise does nothing.
+            </summary>
         </member>
         <member name="T:Milvasoft.SampleAPI.Services.Concrete.AnnouncementService">
             <summary>

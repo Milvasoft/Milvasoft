@@ -51,7 +51,7 @@ namespace Milvasoft.SampleAPI.Controllers
         {
             ObjectResponse<LoginResultDTO> response = new();
 
-            response.Result = await _accountService.SignInAsync(loginDTO, true).ConfigureAwait(false);
+            response.Result = await _accountService.LoginAsync(loginDTO, true).ConfigureAwait(false);
             if (!response.Result.ErrorMessages.IsNullOrEmpty())
             {
                 response.Message = string.Join('~', response.Result.ErrorMessages.Select(i => i.Description));
@@ -82,7 +82,7 @@ namespace Milvasoft.SampleAPI.Controllers
         [ApiVersion("1.1")]
         public async Task<IActionResult> UsersLogOut()
         {
-            await _accountService.SignOutAsync().ConfigureAwait(false);
+            await _accountService.LogoutAsync().ConfigureAwait(false);
             return Ok("Success");
         }
 
