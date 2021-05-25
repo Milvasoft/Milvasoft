@@ -2,7 +2,6 @@
 using Milvasoft.Helpers.Extensions;
 using Milvasoft.SampleAPI.Entity;
 using Milvasoft.SampleAPI.Spec.Abstract;
-using Milvasoft.SampleAPI.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +9,6 @@ using System.Linq.Expressions;
 
 namespace Milvasoft.SampleAPI.Spec
 {
-
     /// <summary>
     /// Filtering Useful Link object list.
     /// </summary>
@@ -47,7 +45,6 @@ namespace Milvasoft.SampleAPI.Spec
         /// <returns></returns>
         public Expression<Func<UsefulLink, bool>> ToExpression()
         {
-
             Expression<Func<UsefulLink, bool>> mainPredicate = null;
             List<Expression<Func<UsefulLink, bool>>> predicates = new List<Expression<Func<UsefulLink, bool>>>();
 
@@ -57,8 +54,6 @@ namespace Milvasoft.SampleAPI.Spec
 
             predicates?.ForEach(predicate => mainPredicate = mainPredicate.Append(predicate, ExpressionType.AndAlso));
             return mainPredicate;
-
-
         }
     }
 }

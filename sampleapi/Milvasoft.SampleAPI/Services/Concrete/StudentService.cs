@@ -6,7 +6,6 @@ using Milvasoft.Helpers.Exceptions;
 using Milvasoft.Helpers.Models;
 using Milvasoft.SampleAPI.Data;
 using Milvasoft.SampleAPI.DTOs;
-using Milvasoft.SampleAPI.DTOs.AssignmentDTOs;
 using Milvasoft.SampleAPI.DTOs.MentorDTOs;
 using Milvasoft.SampleAPI.DTOs.StudentAssignmentDTOs;
 using Milvasoft.SampleAPI.DTOs.StudentDTOs;
@@ -17,25 +16,19 @@ using Milvasoft.SampleAPI.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace Milvasoft.SampleAPI.Services.Concrete
 {
-
     /// <summary>
     /// Student service.
     /// </summary>
     public class StudentService : IStudentService
-    {
-        #region Fields
-
-        private readonly IHttpContextAccessor _httpContextAccessor ;
+    { 
+        private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly UserManager<AppUser> _userManager;
         private readonly IBaseRepository<Student, Guid, EducationAppDbContext> _studentRepository;
         private readonly IBaseRepository<Mentor, Guid, EducationAppDbContext> _mentorRepository;
-
-        #endregion
 
         /// <summary>
         /// Performs constructor injection for repository interfaces used in this service.
@@ -52,8 +45,6 @@ namespace Milvasoft.SampleAPI.Services.Concrete
             _httpContextAccessor = httpContextAccessor;
         }
 
-        #region CRUD Operations
-
         /// <summary>
         /// It will filter students according to the parameters sent in <paramref name="pagiantionParams"/>
         /// </summary>
@@ -66,14 +57,14 @@ namespace Milvasoft.SampleAPI.Services.Concrete
 
             Func<IIncludable<Student>, IIncludable> includes = i => i.Include(md => md.Mentor);
 
-            var (students, pageCount, totalDataCount) = await _studentRepository.PreparePaginationDTO<Student, Guid>(pagiantionParams.PageIndex,
-                                                                                                                     pagiantionParams.RequestedItemCount,
-                                                                                                                     pagiantionParams.OrderByProperty,
-                                                                                                                     pagiantionParams.OrderByAscending,
-                                                                                                                     pagiantionParams.Spec?.ToExpression(),
-                                                                                                                     includes).ConfigureAwait(false);
+            var (students, pageCount, totalDataCount) = await _studentRepository.PreparePaginationDTO(pagiantionParams.PageIndex,
+                                                                                                        pagiantionParams.RequestedItemCount,
+                                                                                                        pagiantionParams.OrderByProperty,
+                                                                                                        pagiantionParams.OrderByAscending,
+                                                                                                        pagiantionParams.Spec?.ToExpression(),
+                                                                                                        includes).ConfigureAwait(false);
 
-            students.ThrowIfListIsNotNullOrEmpty("Object is not found.");
+            students.ThrowIfListIsNullOrEmpty("Object is not found.");
 
             return new PaginationDTO<StudentForAdminDTO>
             {
@@ -93,8 +84,8 @@ namespace Milvasoft.SampleAPI.Services.Concrete
                     ProfessionId = student.ProfessionId,
                     Mentor = student.Mentor.CheckObject(i => new MentorForAdminDTO
                     {
-                        Name=i.Name,
-                        Surname=i.Surname,
+                        Name = i.Name,
+                        Surname = i.Surname,
                         Id = i.Id
                     })
                 })),
@@ -118,17 +109,17 @@ namespace Milvasoft.SampleAPI.Services.Concrete
             Func<IIncludable<Student>, IIncludable> includes = i => i.Include(md => md.Mentor)
                                                                         .Include(oa => oa.OldAssignments);
 
-            var (students, pageCount, totalDataCount) = await _studentRepository.PreparePaginationDTO<Student, Guid>(pagiantionParams.PageIndex,
-                                                                                                                     pagiantionParams.RequestedItemCount,
-                                                                                                                     pagiantionParams.OrderByProperty,
-                                                                                                                     pagiantionParams.OrderByAscending,
-                                                                                                                     pagiantionParams.Spec?.ToExpression(),
-                                                                                                                     includes).ConfigureAwait(false);
-            students.ThrowIfListIsNotNullOrEmpty("Object is not found.");
+            var (students, pageCount, totalDataCount) = await _studentRepository.PreparePaginationDTO(pagiantionParams.PageIndex,
+                                                                                                        pagiantionParams.RequestedItemCount,
+                                                                                                        pagiantionParams.OrderByProperty,
+                                                                                                        pagiantionParams.OrderByAscending,
+                                                                                                        pagiantionParams.Spec?.ToExpression(),
+                                                                                                        includes).ConfigureAwait(false);
+            students.ThrowIfListIsNullOrEmpty("Object is not found.");
 
             return new PaginationDTO<StudentForMentorDTO>
             {
-                DTOList = students.CheckList(i => students.Select(students => students.MentorId==currentMentor.Id ? new StudentForMentorDTO
+                DTOList = students.CheckList(i => students.Select(students => students.MentorId == currentMentor.Id ? new StudentForMentorDTO
                 {
                     Id = students.Id,
                     Name = students.Name,
@@ -149,11 +140,11 @@ namespace Milvasoft.SampleAPI.Services.Concrete
                         Id = i.Id
                     }),
                     CurrentAssigmentDeliveryDate = students.CurrentAssigmentDeliveryDate,
-                    OldAssignments = students.OldAssignments.CheckList(f =>students.OldAssignments.Select(oa => oa.Status!=Entity.Enum.EducationStatus.InProgress ? new StudentAssignmentDTO
+                    OldAssignments = students.OldAssignments.CheckList(f => students.OldAssignments.Select(oa => oa.Status != Entity.Enum.EducationStatus.InProgress ? new StudentAssignmentDTO
                     {
                         Id = oa.Id,
-                    }:null))
-                }:null)),
+                    } : null))
+                } : null)),
                 PageCount = pageCount,
                 TotalDataCount = totalDataCount
             };
@@ -188,8 +179,8 @@ namespace Milvasoft.SampleAPI.Services.Concrete
                 ProfessionId = student.ProfessionId,
                 Mentor = student.Mentor.CheckObject(i => new MentorForAdminDTO
                 {
-                    Name=i.Name,
-                    Surname=i.Surname
+                    Name = i.Name,
+                    Surname = i.Surname
                 }),
                 CreationDate = student.CreationDate,
                 LastModificationDate = student.LastModificationDate
@@ -267,13 +258,13 @@ namespace Milvasoft.SampleAPI.Services.Concrete
                 ProfessionId = currentStudent.ProfessionId,
                 Mentor = currentStudent.Mentor.CheckObject(i => new MentorDTO
                 {
-                    Name=i.Name,
-                    Surname=i.Surname
+                    Name = i.Name,
+                    Surname = i.Surname
                 }),
                 CurrentAssigmentDeliveryDate = currentStudent.CurrentAssigmentDeliveryDate,
                 OldAssignments = currentStudent.OldAssignments.CheckList(f => currentStudent.OldAssignments?.Select(oa => new StudentAssignmentDTO
                 {
-                    AssigmentId = oa.Assigment.Id  
+                    AssigmentId = oa.Assigment.Id
                 }))
             };
         }
@@ -295,7 +286,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
                     Name = addStudentDTO.Name,
                     Surname = addStudentDTO.Surname,
                     University = addStudentDTO.University,
-                    Level=addStudentDTO.Level,
+                    Level = addStudentDTO.Level,
                     Age = addStudentDTO.Age,
                     Dream = addStudentDTO.Dream,
                     HomeAddress = addStudentDTO.HomeAddress,
@@ -344,7 +335,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// <param name="updateStudentDTO">Student to be updated.</param>
         /// <param name="Id">Id of student to be updated.</param>
         /// <returns></returns>
-        public async Task UpdateStudentByMentorAsync(UpdateStudentByMentorDTO updateStudentDTO,Guid Id)
+        public async Task UpdateStudentByMentorAsync(UpdateStudentByMentorDTO updateStudentDTO, Guid Id)
         {
             var toBeUpdatedStudent = await _studentRepository.GetByIdAsync(Id).ConfigureAwait(false);
 
@@ -400,7 +391,5 @@ namespace Milvasoft.SampleAPI.Services.Concrete
 
             await _studentRepository.DeleteAsync(deletedStudents).ConfigureAwait(false);
         }
-
-        #endregion 
     }
 }

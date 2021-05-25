@@ -18,7 +18,6 @@ namespace Milvasoft.SampleAPI.Spec
         private string _tittle;
         #endregion
 
-
         #region Props
 
         /// <summary>
@@ -55,7 +54,6 @@ namespace Milvasoft.SampleAPI.Spec
         /// <returns></returns>
         public List<Assignment> GetFilteredEntities(IEnumerable<Assignment> entities)
         {
-
             if (!Title.IsNullOrEmpty()) entities = entities.Where(m => m.Title.ToUpper().Contains(Title));
             if (!Rules.IsNullOrEmpty()) entities = entities.Where(m => m.Rules.ToUpper().Contains(Rules));
 
@@ -73,7 +71,6 @@ namespace Milvasoft.SampleAPI.Spec
         /// <returns></returns>
         public Expression<Func<Assignment, bool>> ToExpression()
         {
-
             Expression<Func<Assignment, bool>> mainPredicate = null;
             List<Expression<Func<Assignment, bool>>> predicates = new List<Expression<Func<Assignment, bool>>>();
 
@@ -87,7 +84,6 @@ namespace Milvasoft.SampleAPI.Spec
 
             predicates?.ForEach(predicate => mainPredicate = mainPredicate.Append(predicate, ExpressionType.AndAlso));
             return mainPredicate;
-
         }
     }
 }

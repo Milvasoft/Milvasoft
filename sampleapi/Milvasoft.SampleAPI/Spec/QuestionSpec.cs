@@ -58,7 +58,6 @@ namespace Milvasoft.SampleAPI.Spec
         /// <returns></returns>
         public List<Question> GetFilteredEntities(IEnumerable<Question> entities)
         {
-
             if (!Title.IsNullOrEmpty()) entities = entities.Where(m => m.Title.ToUpper().Contains(Title));
 
             if (MentorId.HasValue) entities = entities.Where(i => i.MentorId == MentorId);
@@ -77,7 +76,6 @@ namespace Milvasoft.SampleAPI.Spec
         /// <returns></returns>
         public Expression<Func<Question, bool>> ToExpression()
         {
-
             Expression<Func<Question, bool>> mainPredicate = null;
             List<Expression<Func<Question, bool>>> predicates = new List<Expression<Func<Question, bool>>>();
 
@@ -92,8 +90,6 @@ namespace Milvasoft.SampleAPI.Spec
 
             predicates?.ForEach(predicate => mainPredicate = mainPredicate.Append(predicate, ExpressionType.AndAlso));
             return mainPredicate;
-
-
         }
     }
 }

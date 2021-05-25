@@ -288,7 +288,7 @@ namespace Milvasoft.SampleAPI.Utils
         /// <param name="condition"></param>
         /// <param name="includes"></param>
         /// <returns></returns>
-        
+
         public static async Task<(IEnumerable<TEntity> entities, int pageCount, int totalDataCount)> PreparePaginationDTO<TEntity, TKey>(this IBaseRepository<TEntity, TKey, EducationAppDbContext> repository,
                                                                                                                                                       int pageIndex,
                                                                                                                                                       int requestedItemCount,

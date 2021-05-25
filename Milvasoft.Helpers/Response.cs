@@ -146,7 +146,7 @@ namespace Milvasoft.Helpers
 
             return new OkObjectResult(response);
         }
-        
+
         /// <summary>
         /// <para> Run the <paramref name="asyncTask"/> then return <see cref="ObjectResponse{T}"/>. </para>
         /// <para> If <paramref name="asyncTask"/> is success sets the <paramref name="successMessage"/> to <see cref="ObjectResponse{T}"/>.Message.
@@ -215,7 +215,7 @@ namespace Milvasoft.Helpers
 
             return new OkObjectResult(response);
         }
-        
+
         /// <summary>
         /// <para> Run the <paramref name="asyncTask"/> then return <see cref="ObjectResponse{T}"/>. </para>
         /// <para> If <paramref name="asyncTask"/> is success sets the <paramref name="successMessage"/> to <see cref="ObjectResponse{T}"/>.Message.

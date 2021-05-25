@@ -1,6 +1,5 @@
 ﻿using Milvasoft.Helpers.Models;
 using Milvasoft.SampleAPI.DTOs;
-using Milvasoft.SampleAPI.DTOs.AssignmentDTOs;
 using Milvasoft.SampleAPI.DTOs.StudentDTOs;
 using Milvasoft.SampleAPI.Spec;
 using System;
@@ -14,7 +13,6 @@ namespace Milvasoft.SampleAPI.Services.Abstract
     /// </summary>
     public interface IStudentService
     {
-        #region CRUD Operations
         /// <summary>
         /// Get all students for admin from database.
         /// </summary>
@@ -62,7 +60,7 @@ namespace Milvasoft.SampleAPI.Services.Abstract
         /// <param name="updateStudentDTO">Student to be updated.</param>
         /// <param name="Id">Id of student to be updated.</param>
         /// <returns></returns>
-        Task UpdateStudentByMentorAsync(UpdateStudentByMentorDTO updateStudentDTO,Guid Id);
+        Task UpdateStudentByMentorAsync(UpdateStudentByMentorDTO updateStudentDTO, Guid Id);
 
         /// <summary>
         /// Updates the information of the logged in student.
@@ -77,7 +75,6 @@ namespace Milvasoft.SampleAPI.Services.Abstract
         /// <param name="ids"></param>
         /// <returns></returns>
         Task DeleteStudentsAsync(List<Guid> ids);
-        #endregion
 
         /// <summary>
         /// Brings instant user's profile information.
@@ -85,6 +82,6 @@ namespace Milvasoft.SampleAPI.Services.Abstract
         /// <returns></returns>
         Task<StudentForMentorDTO> GetCurrentUserProfile();
 
-        
+
     }
 }

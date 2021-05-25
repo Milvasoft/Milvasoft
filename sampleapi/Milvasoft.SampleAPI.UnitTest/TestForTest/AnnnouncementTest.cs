@@ -1,11 +1,8 @@
 ﻿using Milvasoft.Helpers;
 using Milvasoft.Helpers.Exceptions;
 using Milvasoft.SampleAPI.DTOs;
-using Milvasoft.SampleAPI.DTOs.AccountDTOs;
 using Milvasoft.SampleAPI.DTOs.AnnouncementDTOs;
-using Milvasoft.SampleAPI.Entity;
 using Milvasoft.SampleAPI.Services.Abstract;
-using Milvasoft.SampleAPI.Services.Concrete;
 using Milvasoft.SampleAPI.Spec;
 using Milvasoft.SampleAPI.UnitTest.TestHelpers;
 using System;
@@ -51,9 +48,9 @@ namespace Milvasoft.SampleAPI.UnitTest.TestForTest
             {
                 PageIndex = 1,
                 RequestedItemCount = 2,
-                Spec= new AnnouncementSpec
+                Spec = new AnnouncementSpec
                 {
-                    IsFixed=false
+                    IsFixed = false
                 }
             };
             var test = await _announcementService.GetAnnouncementsForAdminAsync(paginationParams).ConfigureAwait(false);
@@ -85,7 +82,7 @@ namespace Milvasoft.SampleAPI.UnitTest.TestForTest
                 RequestedItemCount = 2,
                 Spec = new AnnouncementSpec
                 {
-                    Title= "Stajyerler hakkinda."
+                    Title = "Stajyerler hakkinda."
                 }
             };
             var test = await _announcementService.GetAnnouncementsForAdminAsync(paginationParams).ConfigureAwait(false);

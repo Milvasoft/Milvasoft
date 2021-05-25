@@ -7,7 +7,6 @@ namespace Milvasoft.SampleAPI.DTOs.ProfessionDTOs
     /// </summary>
     public class AddProfessionDTO
     {
-
         /// <summary>
         /// Name of profession.
         /// </summary>

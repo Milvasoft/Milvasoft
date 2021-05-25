@@ -14,12 +14,6 @@ namespace Milvasoft.SampleAPI.Services.Abstract
     public interface IProfessionService
     {
         /// <summary>
-        /// Test method.
-        /// </summary>
-        /// <returns></returns>
-        Task TestMethod();
-
-        /// <summary>
         /// Get all profession for student from database.
         /// </summary>
         /// <returns></returns>

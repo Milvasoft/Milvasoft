@@ -12,7 +12,6 @@ namespace Milvasoft.SampleAPI.DTOs
     /// </summary>
     public class AppRoleDTO : IdentityRole<Guid>, IFullAuditable<Guid>
     {
-
         /// <summary>
         /// Photo path of users.
         /// </summary>

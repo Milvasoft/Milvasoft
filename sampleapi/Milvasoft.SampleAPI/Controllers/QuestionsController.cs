@@ -13,11 +13,11 @@ namespace Milvasoft.SampleAPI.Controllers
     /// <summary>
     /// Provided Question operations.
     /// </summary>
-    [Route("api/v{version:apiVersion}/[controller]")]
+    [Route("sampleapi/[controller]")]
     [ApiController]
     [ApiVersion("1.0")]
     [ApiExplorerSettings(GroupName = "v1.0")]
-    public class QuestionController : Controller
+    public class QuestionsController : Controller
     {
         private readonly IQuestionService _questionService;
 
@@ -25,7 +25,7 @@ namespace Milvasoft.SampleAPI.Controllers
         /// Constructor of <c>QuestionController</c>
         /// </summary>
         /// <param name="questionService"></param>
-        public QuestionController(IQuestionService questionService)
+        public QuestionsController(IQuestionService questionService)
         {
             _questionService = questionService;
         }
@@ -129,7 +129,6 @@ namespace Milvasoft.SampleAPI.Controllers
             return await _questionService.UpdateQuestionAsync(updateQuestion).ConfigureAwait(false).GetObjectResponseAsync<UpdateQuestionDTO>("Success").ConfigureAwait(false);
         }
 
-
         /// <summary>
         /// Delete professions data by <paramref name="ids"/>
         /// </summary>
@@ -141,5 +140,6 @@ namespace Milvasoft.SampleAPI.Controllers
         {
             return await _questionService.DeleteQuestionsAsync(ids).ConfigureAwait(false).GetObjectResponseAsync<QuestionDTO, Guid>(ids, "Success");
         }
+
     }
 }

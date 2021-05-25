@@ -13,11 +13,11 @@ namespace Milvasoft.SampleAPI.Controllers
     /// <summary>
     /// Provided profession operations.
     /// </summary>
-    [Route("api/v{version:apiVersion}/[controller]")]
+    [Route("sampleapi/[controller]")]
     [ApiController]
     [ApiVersion("1.0")]
     [ApiExplorerSettings(GroupName = "v1.0")]
-    public class ProfessionController : Controller
+    public class ProfessionsController : Controller
     {
         private readonly IProfessionService _professionService;
 
@@ -25,20 +25,9 @@ namespace Milvasoft.SampleAPI.Controllers
         /// Constructor of <c>ProfessionController</c>.
         /// </summary>
         /// <param name="professionService"></param>
-        public ProfessionController(IProfessionService professionService)
+        public ProfessionsController(IProfessionService professionService)
         {
             _professionService = professionService;
-        }
-
-        /// <summary>
-        /// Test controller.
-        /// </summary>
-        /// <returns></returns>
-        [HttpGet("Test")]
-        public async Task<IActionResult> Test()
-        {
-            await _professionService.TestMethod().ConfigureAwait(false);
-            return Ok("Ok");
         }
 
         /// <summary>
@@ -127,5 +116,6 @@ namespace Milvasoft.SampleAPI.Controllers
         {
             return await _professionService.DeleteProfessionsAsync(ids).ConfigureAwait(false).GetObjectResponseAsync<UpdateProfessionDTO, Guid>(ids, "Success");
         }
+
     }
 }

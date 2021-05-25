@@ -10,7 +10,6 @@ using System.Collections.Generic;
 
 namespace Milvasoft.SampleAPI.DTOs.ProfessionDTOs
 {
-
     /// <summary>
     /// Profession entity.
     /// </summary>

@@ -35,8 +35,6 @@ namespace Milvasoft.SampleAPI.Services.Concrete
             _questionRepository = questionRepository;
         }
 
-        #region CRUD Operations
-
         /// <summary>
         /// Get all questions for admin.
         /// </summary>
@@ -46,14 +44,14 @@ namespace Milvasoft.SampleAPI.Services.Concrete
             Func<IIncludable<Question>, IIncludable> includes = i => i.Include(md => md.Mentor)
                                                                      .Include(st => st.Student);
 
-            var (questions, pageCount, totalDataCount) = await _questionRepository.PreparePaginationDTO<Question, Guid>(pagiantionParams.PageIndex,
-                                                                                                                        pagiantionParams.RequestedItemCount,
-                                                                                                                        pagiantionParams.OrderByProperty,
-                                                                                                                        pagiantionParams.OrderByAscending,
-                                                                                                                        pagiantionParams.Spec?.ToExpression(),
-                                                                                                                        includes).ConfigureAwait(false);
+            var (questions, pageCount, totalDataCount) = await _questionRepository.PreparePaginationDTO(pagiantionParams.PageIndex,
+                                                                                                        pagiantionParams.RequestedItemCount,
+                                                                                                        pagiantionParams.OrderByProperty,
+                                                                                                        pagiantionParams.OrderByAscending,
+                                                                                                        pagiantionParams.Spec?.ToExpression(),
+                                                                                                        includes).ConfigureAwait(false);
 
-            questions.ThrowIfListIsNotNullOrEmpty("Object is not found.");
+            questions.ThrowIfListIsNullOrEmpty("Object is not found.");
 
 
             return new PaginationDTO<QuestionForAdminDTO>
@@ -92,14 +90,14 @@ namespace Milvasoft.SampleAPI.Services.Concrete
                                                                      .Include(st => st.Student);
 
 
-            var (questions, pageCount, totalDataCount) = await _questionRepository.PreparePaginationDTO<Question, Guid>(pagiantionParams.PageIndex,
-                                                                                                                        pagiantionParams.RequestedItemCount,
-                                                                                                                        pagiantionParams.OrderByProperty,
-                                                                                                                        pagiantionParams.OrderByAscending,
-                                                                                                                        pagiantionParams.Spec?.ToExpression(),
-                                                                                                                        includes).ConfigureAwait(false);
+            var (questions, pageCount, totalDataCount) = await _questionRepository.PreparePaginationDTO(pagiantionParams.PageIndex,
+                                                                                                        pagiantionParams.RequestedItemCount,
+                                                                                                        pagiantionParams.OrderByProperty,
+                                                                                                        pagiantionParams.OrderByAscending,
+                                                                                                        pagiantionParams.Spec?.ToExpression(),
+                                                                                                        includes).ConfigureAwait(false);
 
-            questions.ThrowIfListIsNotNullOrEmpty("Object is not found.");
+            questions.ThrowIfListIsNullOrEmpty("Object is not found.");
 
             return new PaginationDTO<QuestionForMentorDTO>
             {
@@ -135,14 +133,14 @@ namespace Milvasoft.SampleAPI.Services.Concrete
             Func<IIncludable<Question>, IIncludable> includes = i => i.Include(md => md.Mentor)
                                                                     .Include(st => st.Student);
 
-            var (questions, pageCount, totalDataCount) = await _questionRepository.PreparePaginationDTO<Question, Guid>(pagiantionParams.PageIndex,
-                                                                                                                        pagiantionParams.RequestedItemCount,
-                                                                                                                        pagiantionParams.OrderByProperty,
-                                                                                                                        pagiantionParams.OrderByAscending,
-                                                                                                                        pagiantionParams.Spec?.ToExpression(),
-                                                                                                                        includes).ConfigureAwait(false);
+            var (questions, pageCount, totalDataCount) = await _questionRepository.PreparePaginationDTO(pagiantionParams.PageIndex,
+                                                                                                        pagiantionParams.RequestedItemCount,
+                                                                                                        pagiantionParams.OrderByProperty,
+                                                                                                        pagiantionParams.OrderByAscending,
+                                                                                                        pagiantionParams.Spec?.ToExpression(),
+                                                                                                        includes).ConfigureAwait(false);
 
-            questions.ThrowIfListIsNotNullOrEmpty("Object is not found.");
+            questions.ThrowIfListIsNullOrEmpty("Object is not found.");
 
             return new PaginationDTO<QuestionForStudentDTO>
             {
@@ -348,7 +346,5 @@ namespace Milvasoft.SampleAPI.Services.Concrete
                                             })
                                         } : null).ToList();
         }
-
-        #endregion
     }
 }

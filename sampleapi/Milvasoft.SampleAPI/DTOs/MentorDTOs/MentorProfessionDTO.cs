@@ -12,7 +12,6 @@ namespace Milvasoft.SampleAPI.DTOs.MentorDTOs
     /// </summary>
     public class MentorProfessionDTO : AuditableEntity<AppUserDTO, Guid, Guid>
     {
-
         /// <summary>
         /// Id of mentor.
         /// </summary>
@@ -24,8 +23,6 @@ namespace Milvasoft.SampleAPI.DTOs.MentorDTOs
         /// </summary>
         [SwaggerExclude]
         public virtual MentorDTO Mentor { get; set; }
-
-
 
         /// <summary>
         /// Id of profession.

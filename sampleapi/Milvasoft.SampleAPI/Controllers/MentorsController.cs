@@ -18,7 +18,7 @@ namespace Milvasoft.SampleAPI.Controllers
     [ApiVersion("1.0")]
     [ApiExplorerSettings(GroupName = "v1.0")]
     [Route("sampleapi/[controller]")]
-    public class MentorController : Controller
+    public class MentorsController : Controller
     {
         private readonly IMentorService _mentorService;
 
@@ -26,7 +26,7 @@ namespace Milvasoft.SampleAPI.Controllers
         /// Mentor constructor method for injection.
         /// </summary>
         /// <param name="mentorService"></param>
-        public MentorController(IMentorService mentorService)
+        public MentorsController(IMentorService mentorService)
         {
             _mentorService = mentorService;
         }
@@ -90,9 +90,9 @@ namespace Milvasoft.SampleAPI.Controllers
         /// <returns></returns>
        // [Authorize(Roles = "Admin")]
         [HttpPut("Mentor")]
-        public async Task<IActionResult> UpdateMentorbyAdmin([FromBody] UpdateMentorDTO updateMentor,Guid Id)
+        public async Task<IActionResult> UpdateMentorbyAdmin([FromBody] UpdateMentorDTO updateMentor, Guid Id)
         {
-            return await _mentorService.UpdateMentorByAdminAsync(updateMentor,Id).ConfigureAwait(false).GetObjectResponseAsync<UpdateMentorDTO>("Success"); ;
+            return await _mentorService.UpdateMentorByAdminAsync(updateMentor, Id).ConfigureAwait(false).GetObjectResponseAsync<UpdateMentorDTO>("Success"); ;
         }
 
         /// <summary>
@@ -101,7 +101,7 @@ namespace Milvasoft.SampleAPI.Controllers
         /// <param name="updateMentor"></param>
         /// <returns></returns>
         [HttpPut("CurrentMentor")]
-        public async Task<IActionResult> UpdateCurrentMentor([FromBody]UpdateMentorDTO updateMentor)
+        public async Task<IActionResult> UpdateCurrentMentor([FromBody] UpdateMentorDTO updateMentor)
         {
             return await _mentorService.UpdateCurrentMentorAsync(updateMentor).ConfigureAwait(false).GetObjectResponseAsync<UpdateMentorDTO>("Success");
         }

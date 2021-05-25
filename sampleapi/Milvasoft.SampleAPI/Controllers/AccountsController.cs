@@ -2,19 +2,14 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
-using Milvasoft.Helpers;
-using Milvasoft.Helpers.Caching;
 using Milvasoft.Helpers.Extensions;
 using Milvasoft.Helpers.Models.Response;
-using Milvasoft.Helpers.MultiTenancy.EntityBase;
 using Milvasoft.Helpers.Utils;
-using Milvasoft.SampleAPI.Data;
 using Milvasoft.SampleAPI.DTOs.AccountDTOs;
 using Milvasoft.SampleAPI.Localization;
 using Milvasoft.SampleAPI.Services.Abstract;
 using Milvasoft.SampleAPI.Utils.Attributes.ActionFilters;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Milvasoft.SampleAPI.Controllers
@@ -26,7 +21,7 @@ namespace Milvasoft.SampleAPI.Controllers
     [ApiVersion("1.0")]
     [ApiExplorerSettings(GroupName = "v1.0")]
     [Route("sampleapi/[controller]")]
-    public class AccountController : ControllerBase
+    public class AccountsController : ControllerBase
     {
         private readonly IStringLocalizer<SharedResource> _sharedLocalizer;
         private readonly IAccountService _accountService;
@@ -36,13 +31,12 @@ namespace Milvasoft.SampleAPI.Controllers
         /// </summary>
         /// <param name="sharedLocalizer"></param>
         /// <param name="accountService"></param>
-        public AccountController(IStringLocalizer<SharedResource> sharedLocalizer, IAccountService accountService)
+        public AccountsController(IStringLocalizer<SharedResource> sharedLocalizer, IAccountService accountService)
         {
             _sharedLocalizer = sharedLocalizer;
             _accountService = accountService;
 
         }
-
 
         /// <summary>
         /// Sign in method for users. This endpoint is accessible for any requests.
@@ -64,7 +58,7 @@ namespace Milvasoft.SampleAPI.Controllers
 
                 response.StatusCode = MilvaStatusCodes.Status400BadRequest;
                 response.Success = false;
-            } 
+            }
             else if (response.Result.Token == null)
             {
                 response.Message = _sharedLocalizer["UnknownLoginProblemMessage"];
@@ -120,7 +114,6 @@ namespace Milvasoft.SampleAPI.Controllers
             response.Result = null;
             return Ok(response);
         }
-
 
     }
 }

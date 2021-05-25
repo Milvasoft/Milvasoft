@@ -1,11 +1,9 @@
 ﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
 using Milvasoft.Helpers.DataAccess.Abstract;
 using Milvasoft.Helpers.DataAccess.IncludeLibrary;
 using Milvasoft.Helpers.Exceptions;
 using Milvasoft.Helpers.FileOperations.Concrete;
 using Milvasoft.Helpers.FileOperations.Enums;
-using Milvasoft.Helpers.Mail;
 using Milvasoft.Helpers.Models;
 using Milvasoft.SampleAPI.Data;
 using Milvasoft.SampleAPI.DTOs;
@@ -44,12 +42,10 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// Performs constructor injection for repository interfaces used in this service.
         /// </summary>
         /// <param name="assignmentRepository"></param>
-        /// <param name="userManager"></param>
         /// <param name="httpContextAccessor"></param>
         /// <param name="studentAssignmentRepository"></param>
         /// <param name="studentRepository"></param>
         /// <param name="mentorRepository"></param>
-        /// <param name="mailSender"></param>
         public AssignmentService(IBaseRepository<Assignment, Guid, EducationAppDbContext> assignmentRepository,
             IHttpContextAccessor httpContextAccessor,
             IBaseRepository<StudentAssigment, Guid, EducationAppDbContext> studentAssignmentRepository,
@@ -63,21 +59,19 @@ namespace Milvasoft.SampleAPI.Services.Concrete
             _assignmentRepository = assignmentRepository;
         }
 
-        #region CRUP Operations
-
         /// <summary>
         /// Get all assignment for student by <paramref name="pagiantionParams"/>
         /// </summary>
         /// <returns>The assignments is put in the form of an AnnouncementForStudentDTO.</returns>
         public async Task<PaginationDTO<AssignmentForStudentDTO>> GetAssignmentForStudentAsync(PaginationParamsWithSpec<AssignmentSpec> pagiantionParams)
         {
-            var (asssignments, pageCount, totalDataCount) = await _assignmentRepository.PreparePaginationDTO<Assignment, Guid>(pagiantionParams.PageIndex,
+            var (asssignments, pageCount, totalDataCount) = await _assignmentRepository.PreparePaginationDTO(pagiantionParams.PageIndex,
                                                                                                                                     pagiantionParams.RequestedItemCount,
                                                                                                                                     pagiantionParams.OrderByProperty,
                                                                                                                                     pagiantionParams.OrderByAscending,
                                                                                                                                     pagiantionParams.Spec?.ToExpression()).ConfigureAwait(false);
 
-            asssignments.ThrowIfListIsNotNullOrEmpty("Object is not found.");
+            asssignments.ThrowIfListIsNullOrEmpty("Object is not found.");
 
             return new PaginationDTO<AssignmentForStudentDTO>
             {
@@ -103,13 +97,13 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// <returns>The assignments is put in the form of an AnnouncementForAdminDTO.</returns>
         public async Task<PaginationDTO<AssignmentForAdminDTO>> GetAssignmentForAdminAsync(PaginationParamsWithSpec<AssignmentSpec> pagiantionParams)
         {
-            var (asssignments, pageCount, totalDataCount) = await _assignmentRepository.PreparePaginationDTO<Assignment, Guid>(pagiantionParams.PageIndex,
+            var (asssignments, pageCount, totalDataCount) = await _assignmentRepository.PreparePaginationDTO(pagiantionParams.PageIndex,
                                                                                                                                     pagiantionParams.RequestedItemCount,
                                                                                                                                     pagiantionParams.OrderByProperty,
                                                                                                                                     pagiantionParams.OrderByAscending,
                                                                                                                                     pagiantionParams.Spec?.ToExpression()).ConfigureAwait(false);
 
-            asssignments.ThrowIfListIsNotNullOrEmpty("Object is not found.");
+            asssignments.ThrowIfListIsNullOrEmpty("Object is not found.");
 
             return new PaginationDTO<AssignmentForAdminDTO>
             {
@@ -136,13 +130,13 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// <returns>The assignments is put in the form of an AnnouncementForMentorDTO.</returns>
         public async Task<PaginationDTO<AssignmentForMentorDTO>> GetAssignmentForMentorAsync(PaginationParamsWithSpec<AssignmentSpec> pagiantionParams)
         {
-            var (asssignments, pageCount, totalDataCount) = await _assignmentRepository.PreparePaginationDTO<Assignment, Guid>(pagiantionParams.PageIndex,
+            var (asssignments, pageCount, totalDataCount) = await _assignmentRepository.PreparePaginationDTO(pagiantionParams.PageIndex,
                                                                                                                                     pagiantionParams.RequestedItemCount,
                                                                                                                                     pagiantionParams.OrderByProperty,
                                                                                                                                     pagiantionParams.OrderByAscending,
                                                                                                                                     pagiantionParams.Spec?.ToExpression()).ConfigureAwait(false);
 
-            asssignments.ThrowIfListIsNotNullOrEmpty("Object is not found.");
+            asssignments.ThrowIfListIsNullOrEmpty("Object is not found.");
 
             return new PaginationDTO<AssignmentForMentorDTO>
             {
@@ -297,8 +291,6 @@ namespace Milvasoft.SampleAPI.Services.Concrete
             await _assignmentRepository.DeleteAsync(assignments).ConfigureAwait(false);
         }
 
-        #endregion
-
         #region Students
         /// <summary>
         /// Brings homework suitable for the student's level.
@@ -351,23 +343,23 @@ namespace Milvasoft.SampleAPI.Services.Concrete
             return new AssignmentForStudentDTO
             {
                 Title = assignment.Title,
-                Level=assignment.Level,
-                Description=assignment.Description,
-                RemarksToStudent=assignment.RemarksToStudent,
-                MaxDeliveryDay=assignment.MaxDeliveryDay,
-                Rules=assignment.Rules,
-                ProfessionId=assignment.ProfessionId
+                Level = assignment.Level,
+                Description = assignment.Description,
+                RemarksToStudent = assignment.RemarksToStudent,
+                MaxDeliveryDay = assignment.MaxDeliveryDay,
+                Rules = assignment.Rules,
+                ProfessionId = assignment.ProfessionId
             };
 
         }
-          
+
         /// <summary>
         ///  The student takes the next assignment.
         /// </summary>
         /// <param name="Id"></param>
         /// <param name="newAssignment"></param>
         /// <returns></returns>
-        public async Task TakeAssignment(Guid Id,AddStudentAssignmentDTO newAssignment)
+        public async Task TakeAssignment(Guid Id, AddStudentAssignmentDTO newAssignment)
         {
             var currentStudent = await _studentRepository.GetFirstOrDefaultAsync(i => i.AppUser.UserName == _loggedUser).ConfigureAwait(false);
 
@@ -383,9 +375,9 @@ namespace Milvasoft.SampleAPI.Services.Concrete
                 IsActive = false,
                 AssigmentId = toBeTakeAssignment.Id,
                 StudentId = currentStudent.Id,
-                AdditionalTime=newAssignment.AdditionalTime,
-                AdditionalTimeDescription= newAssignment.AdditionalTimeDescription,
-                Status=Entity.Enum.EducationStatus.InProgress
+                AdditionalTime = newAssignment.AdditionalTime,
+                AdditionalTimeDescription = newAssignment.AdditionalTimeDescription,
+                Status = Entity.Enum.EducationStatus.InProgress
             };
 
             await _studentAssignmentRepository.AddAsync(studentAssignment).ConfigureAwait(false);
@@ -453,29 +445,29 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         {
             Func<IIncludable<StudentAssigment>, IIncludable> includes = i => i.Include(p => p.Assigment)
                                                                      .Include(s => s.Student)
-                                                                        .ThenInclude(m=>m.Mentor);
-                                                                        
+                                                                        .ThenInclude(m => m.Mentor);
+
 
             var currentMentor = await _mentorRepository.GetFirstOrDefaultAsync(i => i.AppUser.UserName == _loggedUser).ConfigureAwait(false);
 
-            var unconfirmedAssignment = await _studentAssignmentRepository.GetAllAsync(includes,i => i.IsActive == false && i.Student.Mentor.Id==currentMentor.Id).ConfigureAwait(false);
+            var unconfirmedAssignment = await _studentAssignmentRepository.GetAllAsync(includes, i => i.IsActive == false && i.Student.Mentor.Id == currentMentor.Id).ConfigureAwait(false);
 
             unconfirmedAssignment.ThrowIfListIsNotNullOrEmpty("All assignments are approved.");
 
             var unconfirmedAssignmentsDTO = from assignment in unconfirmedAssignment
-                             select new StudentAssignmentDTO
-                             {
-                                 Id=assignment.Id,
-                                 IsActive=assignment.IsActive,
-                                 AdditionalTime=assignment.AdditionalTime,
-                                 AdditionalTimeDescription=assignment.AdditionalTimeDescription,
-                                 Student=new StudentDTO
-                                 {
-                                     Name=assignment.Student.Name,
-                                     Surname=assignment.Student.Surname,
-                                     Id=assignment.Student.Id
-                                 }
-                             };
+                                            select new StudentAssignmentDTO
+                                            {
+                                                Id = assignment.Id,
+                                                IsActive = assignment.IsActive,
+                                                AdditionalTime = assignment.AdditionalTime,
+                                                AdditionalTimeDescription = assignment.AdditionalTimeDescription,
+                                                Student = new StudentDTO
+                                                {
+                                                    Name = assignment.Student.Name,
+                                                    Surname = assignment.Student.Surname,
+                                                    Id = assignment.Student.Id
+                                                }
+                                            };
             return unconfirmedAssignmentsDTO.ToList();
         }
 
@@ -496,7 +488,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
             toBeUpdatedAssignment.FinishedDate = toBeUpdated.FinishedDate;
 
             student.CurrentAssigmentDeliveryDate = toBeUpdatedAssignment.FinishedDate;
-            
+
         }
 
         #endregion

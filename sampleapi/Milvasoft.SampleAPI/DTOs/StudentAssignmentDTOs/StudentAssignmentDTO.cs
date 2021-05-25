@@ -14,7 +14,6 @@ namespace Milvasoft.SampleAPI.DTOs.StudentAssignmentDTOs
     /// </summary>
     public class StudentAssignmentDTO : AuditableEntity<AppUser, Guid, Guid>
     {
-
         /// <summary>
         /// Student id.
         /// </summary>

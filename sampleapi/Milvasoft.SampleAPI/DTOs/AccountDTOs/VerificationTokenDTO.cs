@@ -2,6 +2,7 @@
 
 namespace Milvasoft.SampleAPI.DTOs.AccountDTOs
 {
+    //TODO OGZHAN YORUM SATILARI EKLENECEK.
     public record VerificationTokenDTO
     {
         [OValidateString(2, 100)]

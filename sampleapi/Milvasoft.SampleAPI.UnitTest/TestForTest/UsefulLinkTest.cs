@@ -7,8 +7,6 @@ using Milvasoft.SampleAPI.Spec;
 using Milvasoft.SampleAPI.UnitTest.TestHelpers;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -52,7 +50,7 @@ namespace Milvasoft.SampleAPI.UnitTest.TestForTest
                 RequestedItemCount = 2,
                 Spec = new UsefulLinkSpec
                 {
-                    ProfessionId=1.ToGuid()
+                    ProfessionId = 1.ToGuid()
                 }
             };
             var test = await _usefulLinkService.GetUsefulLinksForMentorAsync(paginationParams).ConfigureAwait(false);
@@ -68,7 +66,7 @@ namespace Milvasoft.SampleAPI.UnitTest.TestForTest
                 RequestedItemCount = 2,
                 Spec = new UsefulLinkSpec
                 {
-                    Title="C# Dersleri"
+                    Title = "C# Dersleri"
                 }
             };
             var test = await _usefulLinkService.GetUsefulLinksForAdminAsync(paginationParams).ConfigureAwait(false);
@@ -100,7 +98,7 @@ namespace Milvasoft.SampleAPI.UnitTest.TestForTest
                 RequestedItemCount = 2,
                 Spec = new UsefulLinkSpec
                 {
-                    Title="C# Dersleri"
+                    Title = "C# Dersleri"
                 }
             };
             var test = await _usefulLinkService.GetUsefulLinksForMentorAsync(paginationParams).ConfigureAwait(false);
@@ -116,7 +114,7 @@ namespace Milvasoft.SampleAPI.UnitTest.TestForTest
                 RequestedItemCount = 2,
                 Spec = new UsefulLinkSpec
                 {
-                    ProfessionId=2.ToGuid()
+                    ProfessionId = 2.ToGuid()
                 }
             };
             var test = await _usefulLinkService.GetUsefulLinksForMentorAsync(paginationParams).ConfigureAwait(false);
@@ -239,8 +237,8 @@ namespace Milvasoft.SampleAPI.UnitTest.TestForTest
             {
                 Title = "AddDeneme",
                 Description = "Deneme",
-                ProfessionId=1.ToGuid(),
-                Url="www.deneme.com"
+                ProfessionId = 1.ToGuid(),
+                Url = "www.deneme.com"
             };
             await _usefulLinkService.AddUsefulLinkAsync(newUsefulLinks).ConfigureAwait(false);
         }
@@ -263,6 +261,6 @@ namespace Milvasoft.SampleAPI.UnitTest.TestForTest
             List<Guid> toBeDeletedList = new List<Guid>() { 1.ToGuid(), 2.ToGuid() };
             await _usefulLinkService.DeleteUsefulLinksAsync(toBeDeletedList).ConfigureAwait(false);
         }
-    
+
     }
 }

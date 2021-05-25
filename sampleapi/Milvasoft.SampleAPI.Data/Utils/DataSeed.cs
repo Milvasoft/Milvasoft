@@ -26,7 +26,6 @@ namespace Milvasoft.SampleAPI.Data.Utils
             await InitializeAnnouncement().ConfigureAwait(false);
             await InitializeUsefulLink().ConfigureAwait(false);
             await InitializeAssignment().ConfigureAwait(false);
-
         }
 
         private static async Task InitializeDataAsync<TEntity, TKey>(List<TEntity> entities) where TEntity : class, IBaseEntity<TKey> where TKey : struct, IEquatable<TKey>
@@ -81,7 +80,7 @@ namespace Milvasoft.SampleAPI.Data.Utils
                     ProfessionId=2.ToGuid(),
                     RemarksToMentor="Kontrol ederken js kullanılıp kullanılmadığına dikkat ediniz."
                 }
-                
+
             };
             await InitializeDataAsync<Assignment, Guid>(testEntities).ConfigureAwait(false);
         }
@@ -175,6 +174,7 @@ namespace Milvasoft.SampleAPI.Data.Utils
                     UserName="burakakbay",
                     Email="burakakbay@gmail.com",
                     PhoneNumber="507 664 05 44",
+                    Id=1.ToGuid(),
                         Student=new Student
                         {
                             Id=1.ToGuid(),
@@ -195,6 +195,7 @@ namespace Milvasoft.SampleAPI.Data.Utils
                     UserName="mehmetbayburt",
                     Email="mehmetbayburt@gmail.com",
                     PhoneNumber="507 661 05 44",
+                    Id=1.ToGuid(),
                         Student=new Student
                         {
                             Id=2.ToGuid(),
@@ -213,14 +214,13 @@ namespace Milvasoft.SampleAPI.Data.Utils
             };
             await InitializeDataAsync<AppUser, Guid>(testEntities).ConfigureAwait(false);
         }
-        
+
         private static async Task InitializeMentor()
         {
             var testEntities = new List<AppUser>()
             {
                 new AppUser
                 {
-
                     UserName="oguzhanbaran",
                     Email="oguzhan.baran96@gmail.com",
                     Mentor=new Mentor
@@ -240,7 +240,6 @@ namespace Milvasoft.SampleAPI.Data.Utils
                 },
                 new AppUser
                 {
-
                     UserName="bugrakosen",
                     Email="bugrakosen@gmail.com",
                     Mentor=new Mentor
