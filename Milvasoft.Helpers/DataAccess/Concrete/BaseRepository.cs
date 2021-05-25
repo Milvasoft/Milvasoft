@@ -1133,8 +1133,7 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
             var estimatedCountOfPages = Convert.ToInt32(Math.Ceiling(actualPageCount));
 
             if (estimatedCountOfPages != 0 && requestedPageNumber > estimatedCountOfPages)
-                throw new MilvaUserFriendlyException(MilvaException.WrongPaginationParams)
-                { ExceptionObject = estimatedCountOfPages };
+                throw new MilvaUserFriendlyException(MilvaException.WrongPaginationParams, estimatedCountOfPages);
 
             return estimatedCountOfPages;
         }
@@ -1150,7 +1149,7 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
         {
             Expression<Func<TEntity, bool>> mainExpression;
 
-            //Step in when GetSoftDeletedEntities is false
+            //Step in when _softDeleteState is false
             if (!_softDeleteState)
             {
                 var softDeleteExpression = CreateIsDeletedFalseExpression();

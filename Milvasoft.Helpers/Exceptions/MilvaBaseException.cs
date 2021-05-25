@@ -16,7 +16,7 @@ namespace Milvasoft.Helpers.Exceptions
         /// Gets or sets object of exception.
         /// Default value is null.
         /// </summary>
-        public object ExceptionObject { get; set; } = null;
+        public object[] ExceptionObject { get; set; } = null;
 
         /// <summary>
         /// Variable for exception middleware.

@@ -3810,6 +3810,13 @@
             </summary>
             <param name="exceptionCode"></param>
         </member>
+        <member name="M:Milvasoft.Helpers.Exceptions.MilvaUserFriendlyException.#ctor(Milvasoft.Helpers.Exceptions.MilvaException,System.Object[])">
+            <summary>
+            Initializes a new instance of the <see cref="T:Milvasoft.Helpers.Exceptions.MilvaUserFriendlyException"/> class with a specified error message.
+            </summary>
+            <param name="exceptionCode"></param>
+            <param name="exceptionObjects"></param>
+        </member>
         <member name="M:Milvasoft.Helpers.Exceptions.MilvaUserFriendlyException.#ctor(System.String,System.Object[])">
             <summary>
             Initializes a new instance of the <see cref="T:Milvasoft.Helpers.Exceptions.MilvaBaseException"/> class  with a specified error message.
@@ -8527,8 +8534,7 @@
         <member name="T:Milvasoft.Helpers.Response">
             <summary>
             <para>Helper class to generate the same type of response.</para>
-            <para>All methods return <see cref="T:Milvasoft.Helpers.Models.Response.BaseResponse"/> type in ActionResult. Base response can be <see cref="T:Milvasoft.Helpers.Models.Response.ObjectResponse`1" /> or <see cref="T:Milvasoft.Helpers.Models.Response.ObjectResponse`1"/></para>
-            <para>All methods return HTTP status code 200 OK.</para>
+            <para>All methods return HTTP status code 200 OK.All methods return <see cref="T:Milvasoft.Helpers.Models.Response.BaseResponse"/> type in ActionResult. Base response can be <see cref="T:Milvasoft.Helpers.Models.Response.ObjectResponse`1" /> or <see cref="T:Milvasoft.Helpers.Models.Response.ObjectResponse`1"/></para>
             </summary>
         </member>
         <member name="M:Milvasoft.Helpers.Response.GetPaginationResponse``1(Milvasoft.Helpers.Models.PaginationDTO{``0},System.String,System.String)">

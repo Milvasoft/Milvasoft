@@ -67,6 +67,17 @@ namespace Milvasoft.Helpers.Exceptions
             => ExceptionCode = (int)exceptionCode;
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="MilvaUserFriendlyException"/> class with a specified error message.
+        /// </summary>
+        /// <param name="exceptionCode"></param>
+        /// <param name="exceptionObjects"></param>
+        public MilvaUserFriendlyException(MilvaException exceptionCode, params object[] exceptionObjects) : base($"{exceptionCode}Exception")
+        {
+            ExceptionCode = (int)exceptionCode;
+            ExceptionObject = exceptionObjects;
+        }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="MilvaBaseException"/> class  with a specified error message.
         /// </summary>
         /// <param name="messageOrLocalizerKey"></param>
