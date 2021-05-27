@@ -66,10 +66,6 @@ namespace Milvasoft.SampleAPI.AppStartup
         /// <param name="services"></param>
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMultiTenancy<CachedTenant, TenantId>()
-                    .WithResolutionStrategy<HeaderResolutionStrategy>()
-                    .WithStore<CachedTenantStore<CachedTenant, TenantId>>();
-
             services.ConfigureMVC();
 
             var cacheOptions = new RedisCacheServiceOptions("127.0.0.1:6379")
@@ -100,21 +96,6 @@ namespace Milvasoft.SampleAPI.AppStartup
         }
 
         /// <summary>
-        /// Configures tenant aware specifications.
-        /// </summary>
-        /// <param name="t"></param>
-        /// <param name="c"></param>
-        public static void ConfigureMultitenantContainer(CachedTenant t, ContainerBuilder c)
-        {
-            c.Register(container =>
-            {
-                var optionsBuilder = new DbContextOptionsBuilder<EducationAppDbContext>();
-                optionsBuilder.UseNpgsql(t.ConnectionString, b => b.MigrationsAssembly("Milvasoft.SampleAPI.Data").EnableRetryOnFailure()).UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
-                return new EducationAppDbContext(optionsBuilder.Options, container.Resolve<IHttpContextAccessor>(), container.Resolve<IAuditConfiguration>());
-            }).SingleInstance();
-        }
-
-        /// <summary>
         /// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         /// </summary>
         /// <param name="app"></param>
@@ -129,9 +110,7 @@ namespace Milvasoft.SampleAPI.AppStartup
 
             app.UseStaticFiles();
 
-            //app.UseHttpsRedirection();
-
-            app.UseMultiTenancy<CachedTenant, TenantId>().UseMultiTenantContainer<CachedTenant, TenantId>();
+            //app.UseHttpsRedirection
 
             app.UseRouting();
 
@@ -149,7 +128,7 @@ namespace Milvasoft.SampleAPI.AppStartup
 
             #region Seed
 
-            app.ResetDatabaseAsync().Wait();
+            //app.ResetDatabaseAsync().Wait();
 
             #endregion
         }

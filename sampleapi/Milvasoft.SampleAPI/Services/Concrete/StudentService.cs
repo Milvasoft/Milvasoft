@@ -24,7 +24,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
     /// Student service.
     /// </summary>
     public class StudentService : IStudentService
-    { 
+    {
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly UserManager<AppUser> _userManager;
         private readonly IBaseRepository<Student, Guid, EducationAppDbContext> _studentRepository;
@@ -241,7 +241,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
 
             var currentStudent = await _studentRepository.GetFirstOrDefaultAsync(i => i.AppUser.UserName == username).ConfigureAwait(false);
 
-            currentStudent.ThrowIfNullForGuidObject("CannotFindEntityException"); 
+            currentStudent.ThrowIfNullForGuidObject("CannotFindEntityException");
 
             return new StudentForMentorDTO
             {

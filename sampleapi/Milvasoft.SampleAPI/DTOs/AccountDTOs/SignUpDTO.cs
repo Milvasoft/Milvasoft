@@ -28,10 +28,5 @@ namespace Milvasoft.SampleAPI.DTOs.AccountDTOs
         [MilvaRegex(typeof(SharedResource), IsRequired = false)]
         public string PhoneNumber { get; set; }
 
-        /// <summary>
-        /// User Global API token with unlimited time.
-        /// </summary>
-        [OValidateString(2000)]
-        public string Token { get; set; }
     }
 }

@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Milvasoft.Helpers.DataAccess.Abstract;
 using Milvasoft.Helpers.DataAccess.Abstract.Entity;
 using Milvasoft.Helpers.DataAccess.Concrete.Entity;
@@ -7,6 +9,8 @@ using Milvasoft.Helpers.Exceptions;
 using Milvasoft.Helpers.Extensions;
 using Milvasoft.Helpers.FileOperations.Concrete;
 using Milvasoft.Helpers.FileOperations.Enums;
+using Milvasoft.Helpers.Models.Response;
+using Milvasoft.Helpers.Utils;
 using Milvasoft.SampleAPI.Data;
 using Milvasoft.SampleAPI.Entity;
 using System;
@@ -14,6 +18,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -457,6 +462,36 @@ namespace Milvasoft.SampleAPI.Utils
                 }
             }
         }
+
+        /// <summary>
+        /// Gets identity result as object response.
+        /// </summary>
+        /// <param name="asyncTask"></param>
+        /// <param name="successMessage"></param>
+        /// <param name="errorMessage"></param>
+        /// <returns></returns>
+        public static async Task<IActionResult> GetActivityResponseAsync(this ConfiguredTaskAwaitable<IdentityResult> asyncTask, string successMessage, string errorMessage)
+        {
+            ObjectResponse<IdentityResult> response = new()
+            {
+                Result = await asyncTask
+            };
+
+            if (!response.Result.Succeeded)
+            {
+                response.Message = errorMessage;
+                response.StatusCode = MilvaStatusCodes.Status600Exception;
+                response.Success = false;
+            }
+            else
+            {
+                response.Message = successMessage;
+                response.StatusCode = MilvaStatusCodes.Status200OK;
+                response.Success = true;
+            }
+            return new OkObjectResult(response);
+        }
+
 
         /// <summary>
         /// Throwns <see cref="MilvaUserFriendlyException"/> if <paramref name="entity"/> is null.

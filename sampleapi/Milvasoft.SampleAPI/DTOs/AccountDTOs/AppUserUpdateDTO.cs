@@ -1,12 +1,8 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Milvasoft.Helpers.Attributes.Validation;
-using Milvasoft.Helpers.DataAccess.Abstract.Entity;
 using Milvasoft.SampleAPI.Localization;
 using Milvasoft.SampleAPI.Utils.Attributes.ValidationAttributes;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Milvasoft.SampleAPI.DTOs.AccountDTOs
 {

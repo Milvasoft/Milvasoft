@@ -140,13 +140,6 @@
             </summary>
             <param name="services"></param>
         </member>
-        <member name="M:Milvasoft.SampleAPI.AppStartup.Startup.ConfigureMultitenantContainer(Milvasoft.SampleAPI.DTOs.CachedTenant,Autofac.ContainerBuilder)">
-            <summary>
-            Configures tenant aware specifications.
-            </summary>
-            <param name="t"></param>
-            <param name="c"></param>
-        </member>
         <member name="M:Milvasoft.SampleAPI.AppStartup.Startup.Configure(Microsoft.AspNetCore.Builder.IApplicationBuilder,Microsoft.AspNetCore.Hosting.IWebHostEnvironment)">
             <summary>
             This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -199,6 +192,198 @@
             <para>Change personnel user password.</para>
             </summary>
             <param name="personnelUpdateDTO"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Controllers.AccountsController.GetLoggedInInUserInformationAsync">
+            <summary>
+            Returns logged-in user's account information.
+            </summary>
+            
+            <remarks> 
+            
+            <para> Both users(admin and mobile app user) should use this endpoint. </para>
+            
+            </remarks>
+            
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Controllers.AccountsController.UpdateMyAccountAsync(Milvasoft.SampleAPI.DTOs.AccountDTOs.AppUserUpdateDTO)">
+            <summary>
+            Updates logged-in user's personal information.
+            </summary>
+            <param name="userDTO"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Controllers.AccountsController.RegisterAsync(Milvasoft.SampleAPI.DTOs.AccountDTOs.SignUpDTO)">
+            <summary>
+            Provides the registration process of mobile application users.
+            </summary>
+            <param name="signUpDTO"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Controllers.AccountsController.DeleteAccountAsync">
+            <summary>
+            Deletes logged-in user's account.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Controllers.AccountsController.SendEmailVerificationMailAsync">
+            <summary>
+            Sends email verification mail to logged-in user's email address.
+            </summary>
+            
+            <remarks>
+            
+            <para>Redirect link in the mail : <b> https://sampleappurl.com/verify?userName=sampleusername{AND}token=sampletoken </b> </para>
+            
+            <para> <b>Note :</b> As "{AND}" is a special character, it is not suitable for a summary syntax. That's why it was written that way.</para>
+            
+            </remarks>
+            
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Controllers.AccountsController.SendChangePhoneNumberMailAsync(System.String)">
+            <summary>
+            Sends phone number change mail to logged-in user's email address.
+            </summary>
+            
+            <remarks>
+            
+            <para>Redirect link in the mail : <b> https://sampleappurl.com/change/phoneNumber?userName=sampleusername{AND}token=sampletoken </b> </para>
+            
+            <para> <b>Note :</b> As "{AND}" is a special character, it is not suitable for a summary syntax. That's why it was written that way.</para>
+            
+            </remarks>
+            
+            <param name="newPhoneNumber"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Controllers.AccountsController.SendChangeEmailMailAsync(System.String)">
+            <summary>
+            Sends email change mail to logged-in user's email address.
+            </summary>
+            
+            <remarks>
+            
+            <para>Redirect link in the mail : <b> https://sampleappurl.com/change/email?userName=sampleusername{AND}token=sampletoken </b> </para>
+            
+            <para> <b>Note :</b> As "{AND}" is a special character, it is not suitable for a summary syntax. That's why it was written that way.</para>
+            
+            </remarks>
+            
+            <param name="newEmail"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Controllers.AccountsController.SendResetPasswordMailAsync">
+            <summary>
+            Sends password reset mail to logged-in user's email address.
+            </summary>
+            
+            <remarks>
+            
+            <para>Redirect link in the mail : <b> https://sampleappurl.com/reset/password?userName=sampleusername{AND}token=sampletoken </b> </para>
+            
+            <para> <b>Note :</b> As "{AND}" is a special character, it is not suitable for a summary syntax. That's why it was written that way.</para>
+            
+            </remarks>
+            
+            <param name="userName"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Controllers.AccountsController.SendForgotPasswordMailAsync(System.String)">
+            <summary>
+            Sends password reset mail to email address(<paramref name="email"/>).
+            </summary>
+            
+            <remarks>
+            
+            <para>Redirect link in the mail : <b> https://sampleappurl.com/reset/password?userName=sampleusername{AND}token=sampletoken </b> </para>
+            
+            <para> <b>Note :</b> As "{AND}" is a special character, it is not suitable for a summary syntax. That's why it was written that way.</para>
+            
+            </remarks>
+            
+            <param name="email"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Controllers.AccountsController.SendPhoneNumberVerificationMessageAsync">
+            <summary>
+            Sends verification code to logged-in user's phone number.
+            </summary>
+            <remarks>
+            
+            <para><b> IMPORTANT INFORMATION : The message sending service has not yet been integrated. 
+                                              So this method will not send message to the user's gsm number.
+                                              Instead of returns verification code for testing. </b></para>
+            
+            </remarks>
+            
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Controllers.AccountsController.VerifyPhoneNumberAsync(System.String)">
+            <summary>
+            Verifies logged-in user's phone number.
+            </summary>
+            
+            <remarks>
+            
+            The user must be logged-in because verification will be done from within the application.  
+            
+            </remarks>
+            
+            <param name="verificationCode"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Controllers.AccountsController.VerifyEmailAsync(Milvasoft.SampleAPI.DTOs.AccountDTOs.EmailVerificationDTO)">
+            <summary>
+            Verifies <paramref name="emailVerificationDTO"/>.UserName's email.
+            </summary>
+            <remarks>
+            
+            The reason the user does not need to be logged in to request this endpoint is that the verification will take place on a web page outside of the application.
+            
+            </remarks>
+            
+            <param name="emailVerificationDTO"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Controllers.AccountsController.ChangePhoneNumberAsync(Milvasoft.SampleAPI.DTOs.AccountDTOs.PhoneNumberChangeDTO)">
+            <summary>
+            Changes <paramref name="phoneNumberChangeDTO"/>.UserName's phone number.
+            </summary>
+            <remarks>
+            
+            The reason the user does not need to be logged in to request this endpoint is that the change process will take place on a web page outside of the application.
+            
+            </remarks>
+            
+            <param name="phoneNumberChangeDTO"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Controllers.AccountsController.ChangePasswordAsync(Milvasoft.SampleAPI.DTOs.AccountDTOs.ChangePassDTO)">
+            <summary>
+            Changes <paramref name="passwordChangeDTO"/>.UserName's password.
+            </summary>
+            <remarks>
+            
+            The user must be logged-in because the change process will be done from within the application.
+            
+            </remarks>
+            
+            <param name="passwordChangeDTO"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Controllers.AccountsController.ResetPasswordAsync(Milvasoft.SampleAPI.DTOs.AccountDTOs.PasswordResetDTO)">
+            <summary>
+            Resets <paramref name="passwordResetDTO"/>.UserName's password.
+            </summary>
+            <remarks>
+            
+            The reason the user does not need to be logged in to request this endpoint is that the reset process will take place on a web page outside of the application.
+            
+            </remarks>
+            
+            <param name="passwordResetDTO"></param>
             <returns></returns>
         </member>
         <member name="T:Milvasoft.SampleAPI.Controllers.AnnouncementsController">
@@ -759,6 +944,21 @@
             New password of the user.
             </summary>
         </member>
+        <member name="T:Milvasoft.SampleAPI.DTOs.AccountDTOs.EmailVerificationDTO">
+            <summary>
+            DTO to be used to verify email.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.AccountDTOs.EmailVerificationDTO.UserName">
+            <summary>
+            The user who wants to verify email.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.AccountDTOs.EmailVerificationDTO.TokenString">
+            <summary>
+            Verification token.
+            </summary>
+        </member>
         <member name="T:Milvasoft.SampleAPI.DTOs.AccountDTOs.LoginDTO">
             <summary>
             Login and sign up processes are happens with this dto.
@@ -799,6 +999,46 @@
             The token issued as a result of the login process.
             </summary>
         </member>
+        <member name="T:Milvasoft.SampleAPI.DTOs.AccountDTOs.PasswordResetDTO">
+            <summary>
+            DTO to be used to reset password.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.AccountDTOs.PasswordResetDTO.UserName">
+            <summary>
+            The user who wants to change email.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.AccountDTOs.PasswordResetDTO.NewPassword">
+            <summary>
+            New password.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.AccountDTOs.PasswordResetDTO.TokenString">
+            <summary>
+            Password reset token.
+            </summary>
+        </member>
+        <member name="T:Milvasoft.SampleAPI.DTOs.AccountDTOs.PhoneNumberChangeDTO">
+            <summary>
+            DTO to be used to change phone number.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.AccountDTOs.PhoneNumberChangeDTO.UserName">
+            <summary>
+            The user who wants to change phone number.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.AccountDTOs.PhoneNumberChangeDTO.NewPhoneNumber">
+            <summary>
+            New phone number.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.AccountDTOs.PhoneNumberChangeDTO.TokenString">
+            <summary>
+            Phone number change token.
+            </summary>
+        </member>
         <member name="T:Milvasoft.SampleAPI.DTOs.AccountDTOs.SignUpDTO">
             <summary>
             Login and sign up processes are happens with this dto.
@@ -817,11 +1057,6 @@
         <member name="P:Milvasoft.SampleAPI.DTOs.AccountDTOs.SignUpDTO.PhoneNumber">
             <summary>
             User's phone number.
-            </summary>
-        </member>
-        <member name="P:Milvasoft.SampleAPI.DTOs.AccountDTOs.SignUpDTO.Token">
-            <summary>
-            User Global API token with unlimited time.
             </summary>
         </member>
         <member name="T:Milvasoft.SampleAPI.DTOs.AccountDTOs.SignUpResultDTO">
@@ -2833,11 +3068,106 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="M:Milvasoft.SampleAPI.Services.Abstract.IAccountService.GetLoggedInInUserInformationAsync">
+            <summary>
+            Gets a specific personnel data from repository by token value if exsist.
+            </summary>
+            <returns> Logged-in user data. </returns>
+        </member>
         <member name="M:Milvasoft.SampleAPI.Services.Abstract.IAccountService.ChangePasswordAsync(Milvasoft.SampleAPI.DTOs.AccountDTOs.ChangePassDTO)">
             <summary>
             Change user password.
             </summary>
             <param name="changeDTO"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Services.Abstract.IAccountService.UpdateAccountAsync(Milvasoft.SampleAPI.DTOs.AccountDTOs.AppUserUpdateDTO)">
+            <summary>
+            Updates logged-in user's personal information.
+            </summary>
+            <param name="userDTO"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Services.Abstract.IAccountService.RegisterAsync(Milvasoft.SampleAPI.DTOs.AccountDTOs.SignUpDTO)">
+            <summary>
+            Sign up process for application user.
+            If signup process is succesful,then sign in.
+            </summary>
+            <param name="userSignUpDTO"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Services.Abstract.IAccountService.DeleteAccountAsync">
+            <summary>
+            Deletes logged-in user's account. This operation is irreversible.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Services.Abstract.IAccountService.SendEmailVerificationMailAsync">
+            <summary>
+            Sends email verification mail to logged-in user.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Services.Abstract.IAccountService.SendChangePhoneNumberMailAsync(System.String)">
+            <summary>
+            Sends phone number change mail to logged-in user.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Services.Abstract.IAccountService.SendChangeEmailMailAsync(System.String)">
+            <summary>
+            Sends email chage mail to logged-in user.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Services.Abstract.IAccountService.SendResetPasswordMailAsync">
+            <summary>
+            Sends password reset mail to logged-in user.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Services.Abstract.IAccountService.SendForgotPasswordMailAsync(System.String)">
+            <summary>
+            Sends password reset mail to <paramref name="email"/>.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Services.Abstract.IAccountService.SendPhoneNumberVerificationMessageAsync">
+            <summary>
+            Sends verification code to logged-in user's phone number.
+            <para><b> IMPORTANT INFORMATION : The message sending service has not yet been integrated. 
+                                              So this method will not send message to the user's gsm number.
+                                              Instead of returns verification code for testing. </b></para>
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Services.Abstract.IAccountService.VerifyPhoneNumberAsync(System.String)">
+            <summary>
+            Verifies email, if <paramref name="verificationCode"/> is correct.
+            </summary>
+            <param name="verificationCode"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Services.Abstract.IAccountService.VerifyEmailAsync(Milvasoft.SampleAPI.DTOs.AccountDTOs.EmailVerificationDTO)">
+            <summary>
+            Verifies <paramref name="emailVerificationDTO"/>.UserName's email, if <paramref name="emailVerificationDTO"/>.TokenString is valid.
+            </summary>
+            <param name="emailVerificationDTO"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Services.Abstract.IAccountService.ChangePhoneNumberAsync(Milvasoft.SampleAPI.DTOs.AccountDTOs.PhoneNumberChangeDTO)">
+            <summary>
+            Changes <paramref name="phoneNumberChangeDTO"/>.UserName's email 
+            with <paramref name="phoneNumberChangeDTO"/>.NewPhoneNumber, if <paramref name="phoneNumberChangeDTO"/>.TokenString is valid.
+            </summary>
+            <param name="phoneNumberChangeDTO"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Services.Abstract.IAccountService.ResetPasswordAsync(Milvasoft.SampleAPI.DTOs.AccountDTOs.PasswordResetDTO)">
+            <summary>
+            Resets <paramref name="passwordResetDTO"/>.UserName's password with <paramref name="passwordResetDTO"/>.NewPassword, if <paramref name="passwordResetDTO"/>.TokenString is valid.
+            </summary>
+            <param name="passwordResetDTO"></param>
             <returns></returns>
         </member>
         <member name="T:Milvasoft.SampleAPI.Services.Abstract.IAnnouncementService">
@@ -3341,21 +3671,23 @@
             The name of token.
             </summary>
         </member>
-        <member name="M:Milvasoft.SampleAPI.Services.Concrete.AccountService.#ctor(Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository{Milvasoft.SampleAPI.Entity.AppUser,System.Guid,Milvasoft.SampleAPI.Data.EducationAppDbContext},Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository{Milvasoft.SampleAPI.Entity.Student,System.Guid,Milvasoft.SampleAPI.Data.EducationAppDbContext},Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository{Milvasoft.SampleAPI.Entity.Mentor,System.Guid,Milvasoft.SampleAPI.Data.EducationAppDbContext},Microsoft.AspNetCore.Identity.UserManager{Milvasoft.SampleAPI.Entity.AppUser},Microsoft.AspNetCore.Identity.SignInManager{Milvasoft.SampleAPI.Entity.AppUser},Milvasoft.SampleAPI.Utils.TokenManagement,Microsoft.Extensions.Localization.IStringLocalizer{Milvasoft.SampleAPI.Localization.SharedResource},Microsoft.AspNetCore.Http.IHttpContextAccessor,Milvasoft.Helpers.Mail.IMilvaMailSender,Milvasoft.Helpers.DataAccess.Abstract.IContextRepository{Milvasoft.SampleAPI.Data.EducationAppDbContext},Microsoft.Extensions.Localization.IStringLocalizer{Milvasoft.SampleAPI.Localization.SharedResource})">
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.AccountService.#ctor(Microsoft.AspNetCore.Identity.UserManager{Milvasoft.SampleAPI.Entity.AppUser},Microsoft.AspNetCore.Identity.SignInManager{Milvasoft.SampleAPI.Entity.AppUser},Milvasoft.Helpers.Identity.Concrete.ITokenManagement,System.Net.Http.HttpClient,Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository{Milvasoft.SampleAPI.Entity.Student,System.Guid,Milvasoft.SampleAPI.Data.EducationAppDbContext},Milvasoft.Helpers.DataAccess.Abstract.IContextRepository{Milvasoft.SampleAPI.Data.EducationAppDbContext},Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository{Milvasoft.SampleAPI.Entity.Mentor,System.Guid,Milvasoft.SampleAPI.Data.EducationAppDbContext},Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository{Milvasoft.SampleAPI.Entity.AppUser,System.Guid,Milvasoft.SampleAPI.Data.EducationAppDbContext},Microsoft.AspNetCore.Http.IHttpContextAccessor,Milvasoft.Helpers.Mail.IMilvaMailSender,Microsoft.Extensions.Localization.IStringLocalizer{Milvasoft.SampleAPI.Localization.SharedResource},Milvasoft.Helpers.DependencyInjection.IMilvaLogger,Milvasoft.Helpers.Caching.IRedisCacheService)">
             <summary>
             Performs constructor injection for repository interfaces used in this service.
             </summary>
-            <param name="userRepository"></param>
-            <param name="studentRepository"></param>
-            <param name="mentorRepository"></param>
             <param name="userManager"></param>
             <param name="signInManager"></param>
             <param name="tokenManagement"></param>
-            <param name="localizer"></param>
+            <param name="httpClient"></param>
+            <param name="studentRepository"></param>
+            <param name="contextRepository"></param>
+            <param name="mentorRepository"></param>
+            <param name="userRepository"></param>
             <param name="httpContextAccessor"></param>
             <param name="milvaMailSender"></param>
-            <param name="contextRepository"></param>
             <param name="sharedLocalizer"></param>
+            <param name="milvaLogger"></param>
+            <param name="redisCacheService"></param>
         </member>
         <member name="M:Milvasoft.SampleAPI.Services.Concrete.AccountService.LoginAsync(Milvasoft.SampleAPI.DTOs.AccountDTOs.LoginDTO,System.Boolean)">
             <summary>
@@ -3365,10 +3697,17 @@
             <param name="isMentor"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.SampleAPI.Services.Concrete.AccountService.LoggoutAsync">
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.AccountService.LogoutAsync">
             <summary>
             Signs out from database. Returns null if already signed out.
             </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.AccountService.ChangePasswordAsync(Milvasoft.SampleAPI.DTOs.AccountDTOs.ChangePassDTO)">
+            <summary>
+            Chamge user password.
+            </summary>
+            <param name="passDTO"></param>
             <returns></returns>
         </member>
         <member name="M:Milvasoft.SampleAPI.Services.Concrete.AccountService.GetLoggedInInUserInformationAsync">
@@ -3377,19 +3716,20 @@
             </summary>
             <returns> Logged-in user data. </returns>
         </member>
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.AccountService.UpdateAccountAsync(Milvasoft.SampleAPI.DTOs.AccountDTOs.AppUserUpdateDTO)">
+            <summary>
+            Updates logged-in user's personal information.
+            </summary>
+            <param name="userDTO"></param>
+            <returns></returns>
+        </member>
         <member name="M:Milvasoft.SampleAPI.Services.Concrete.AccountService.RegisterAsync(Milvasoft.SampleAPI.DTOs.AccountDTOs.SignUpDTO)">
             <summary>
             Sign up process for application user.
             If signup process is succesful,then sign in.
             </summary>
             <param name="registerDTO"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Milvasoft.SampleAPI.Services.Concrete.AccountService.UpdateAccountAsync(Milvasoft.SampleAPI.DTOs.AccountDTOs.AppUserUpdateDTO)">
-            <summary>
-            Updates logged-in user's personal information.
-            </summary>
-            <param name="userDTO"></param>
+            <param name="language"></param>
             <returns></returns>
         </member>
         <member name="M:Milvasoft.SampleAPI.Services.Concrete.AccountService.DeleteAccountAsync">
@@ -3398,7 +3738,7 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.SampleAPI.Services.Concrete.AccountService.ValidateUser(Milvasoft.Helpers.Identity.Abstract.ILoginDTO,Milvasoft.SampleAPI.Entity.AppUser,System.Boolean)">
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.AccountService.GenerateTokenWithRoleAsync(Milvasoft.SampleAPI.Entity.AppUser,System.Boolean)">
             <summary>
             Validating user to login.
             </summary>
@@ -3406,13 +3746,63 @@
             <param name="user"></param>
             <param name="isUserType"></param>
             <returns></returns>
-        </member>
-        <member name="M:Milvasoft.SampleAPI.Services.Concrete.AccountService.ChangePasswordAsync(Milvasoft.SampleAPI.DTOs.AccountDTOs.ChangePassDTO)">
             <summary>
-            Change user password with old password and new password.
+            Roll is added according to user type and token is produced.
             </summary>
-            <param name="changeDTO"></param>
+            <param name="user"></param>
+            <param name="isAppUser"></param>
             <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.AccountService.GenerateToken(System.String,System.Collections.Generic.IList{System.String},System.Boolean)">
+            <summary>
+            If Authentication is successful, JWT tokens are generated.
+            </summary>
+            <param name="username"></param>
+            <param name="roles"></param>
+            <param name="isAppUser"></param>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.AccountService.GenerateVerificationCode">
+            <summary>
+            Generates 6-digit verification code.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.AccountService.PrepareMailBodyDictionary(System.String[])">
+            <summary>
+            <para> Please add items to <paramref name="values"/> with this sorting; </para>
+                     <para> - Mail Title         </para>
+                     <para> - Body Title         </para>
+                     <para> - Body Description   </para>
+                     <para> - Body Button Text   </para>
+                     <para> - Body Resend Text   </para>
+                     <para> - Body Bottom Text   </para>
+            </summary>
+            <param name="values"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.AccountService.SendActivityMailAsync(System.Collections.Generic.Dictionary{System.String,System.String},System.String,Milvasoft.SampleAPI.Services.Concrete.AccountService.AccountActivity,System.String,System.String)">
+            <summary>
+            Sends email to logged-in user's email.
+            Please make sure <paramref name="localizedMailBodyContents"/> dictionary parameter taken from <see cref="M:Milvasoft.SampleAPI.Services.Concrete.AccountService.PrepareMailBodyDictionary(System.String[])"/>.
+            </summary>
+            <param name="localizedMailBodyContents"></param>
+            <param name="urlPath"></param>
+            <param name="accountActivity"></param>
+            <param name="newInfo"> Could be new phone number or new email. </param>
+            <param name="username"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.AccountService.CheckRegex(System.String,System.String)">
+            <summary>
+            Regex check for action parameter.
+            </summary>
+            <param name="input"></param>
+            <param name="propName"></param>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.AccountService.CheckLoginStatus">
+            <summary>
+            Cheks <see cref="F:Milvasoft.SampleAPI.Services.Concrete.AccountService._userName"/>. If is null or empty throwns <see cref="T:Milvasoft.Helpers.Exceptions.MilvaUserFriendlyException"/>. Otherwise does nothing.
+            </summary>
         </member>
         <member name="M:Milvasoft.SampleAPI.Services.Concrete.AccountService.ThrowErrorMessagesIfNotSuccess(Microsoft.AspNetCore.Identity.IdentityResult)">
             <summary>
@@ -3420,10 +3810,73 @@
             </summary>
             <param name="identityResult"></param>
         </member>
-        <member name="M:Milvasoft.SampleAPI.Services.Concrete.AccountService.CheckLoginStatus">
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.AccountService.SendEmailVerificationMailAsync">
             <summary>
-            Cheks <see cref="F:Milvasoft.SampleAPI.Services.Concrete.AccountService._userName"/>. If is null or empty throwns <see cref="T:Milvasoft.Helpers.Exceptions.MilvaUserFriendlyException"/>. Otherwise does nothing.
+            Sends email verification mail to logged-in user.
             </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.AccountService.SendChangePhoneNumberMailAsync(System.String)">
+            <summary>
+            Sends phone number change mail to logged-in user.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.AccountService.SendChangeEmailMailAsync(System.String)">
+            <summary>
+            Sends email chage mail to logged-in user.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.AccountService.SendResetPasswordMailAsync">
+            <summary>
+            Sends password reset mail to logged-in user.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.AccountService.SendForgotPasswordMailAsync(System.String)">
+            <summary>
+            Sends password reset mail to<paramref name="email"/>.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.AccountService.SendPhoneNumberVerificationMessageAsync">
+            <summary>
+            Sends verification code to logged-in user's phone number.
+            <para><b> IMPORTANT INFORMATION : The message sending service has not yet been integrated. 
+                                              So this method will not send message to the user's gsm number.
+                                              Instead of returns verification code for testing. </b></para>
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.AccountService.VerifyPhoneNumberAsync(System.String)">
+            <summary>
+            Verifies email, if <paramref name="verificationCode"/> is correct.
+            </summary>
+            <param name="verificationCode"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.AccountService.VerifyEmailAsync(Milvasoft.SampleAPI.DTOs.AccountDTOs.EmailVerificationDTO)">
+            <summary>
+            Verifies <paramref name="emailVerificationDTO"/>.UserName's email, if <paramref name="emailVerificationDTO"/>.TokenString is valid.
+            </summary>
+            <param name="emailVerificationDTO"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.AccountService.ChangePhoneNumberAsync(Milvasoft.SampleAPI.DTOs.AccountDTOs.PhoneNumberChangeDTO)">
+            <summary>
+            Changes <paramref name="phoneNumberChangeDTO"/>.UserName's email 
+            with <paramref name="phoneNumberChangeDTO"/>.NewPhoneNumber, if <paramref name="phoneNumberChangeDTO"/>.TokenString is valid.
+            </summary>
+            <param name="phoneNumberChangeDTO"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.AccountService.ResetPasswordAsync(Milvasoft.SampleAPI.DTOs.AccountDTOs.PasswordResetDTO)">
+            <summary>
+            Resets <paramref name="passwordResetDTO"/>.UserName's password with <paramref name="passwordResetDTO"/>.NewPassword, if <paramref name="passwordResetDTO"/>.TokenString is valid.
+            </summary>
+            <param name="passwordResetDTO"></param>
+            <returns></returns>
         </member>
         <member name="T:Milvasoft.SampleAPI.Services.Concrete.AnnouncementService">
             <summary>
@@ -4369,6 +4822,86 @@
             <param name="minimumLength">The minimum length, inclusive.  It may not be negative.</param>
             <param name="maximumLength">The maximum length, inclusive.  It may not be negative.</param>
         </member>
+        <member name="T:Milvasoft.SampleAPI.Utils.EducationLogger">
+            <summary>
+            <para><b>EN: </b>The education project logger class.</para>
+            <para><b>TR: </b>Education projesi logger sınıfı.</para>
+            </summary>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Utils.EducationLogger.LogVerbose(System.String)">
+            <summary>
+            <para><b>EN: </b>Saves the log at debug level.</para>
+            <para><b>TR: </b>Log kaydını debug seviyesinde kaydeder.</para>
+            </summary>
+            <param name="message"></param>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Utils.EducationLogger.LogDebug(System.String)">
+            <summary>
+            <para><b>EN: </b>Saves the log at debug level.</para>
+            <para><b>TR: </b>Log kaydını debug seviyesinde kaydeder.</para>
+            </summary>
+            <param name="message"></param>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Utils.EducationLogger.LogError(System.String)">
+            <summary>
+            <para><b>EN: </b>Saves the log at error level.</para>
+            <para><b>TR: </b>Log kaydını error seviyesinde kaydeder.</para>
+            </summary>
+            <param name="message"></param>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Utils.EducationLogger.LogInfo(System.String)">
+            <summary>
+            <para><b>EN: </b>Saves the log at info level.</para>
+            <para><b>TR: </b>Log kaydını info seviyesinde kaydeder.</para>
+            </summary>
+            <param name="message"></param>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Utils.EducationLogger.LogWarning(System.String)">
+            <summary>
+            <para><b>EN: </b>Saves the log at warn level.</para>
+            <para><b>TR: </b>Log kaydını debug warn kaydeder.</para>
+            </summary>
+            <param name="message"></param>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Utils.EducationLogger.LogFatal(System.String)">
+            <summary>
+            <para><b>EN: </b>Saves the log at fatal level.</para>
+            <para><b>TR: </b>Log kaydını fatal seviyesinde kaydeder. </para>
+            </summary>
+            <param name="message"></param>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Utils.EducationLogger.LogFatal(System.String,Milvasoft.Helpers.Enums.MailSubject)">
+            <summary>
+            <para><b>EN: </b>Saves the log at fatal level. And sends mail to producer. </para>
+            <para><b>TR: </b>Log kaydını fatal seviyesinde kaydeder.Ve üreticiye e-mail gönderir. </para>
+            </summary>
+            <param name="message"></param>
+            <param name="mailSubjectsEnum"></param>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Utils.EducationLogger.LogFatalAsync(System.String,Milvasoft.Helpers.Enums.MailSubject)">
+            <summary>
+            <para><b>EN: </b>Saves the log at fatal level. And sends mail to producer. </para>
+            <para><b>TR: </b>Log kaydını fatal seviyesinde kaydeder.Ve üreticiye e-mail gönderir. </para>
+            </summary>
+            <param name="message"></param>
+            <param name="mailSubjectsEnum"></param>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Utils.EducationLogger.LogFatal(System.String,System.String)">
+            <summary>
+            <para><b>EN: </b>Saves the log at fatal level. And sends mail to producer. </para>
+            <para><b>TR: </b>Log kaydını fatal seviyesinde kaydeder.Ve üreticiye e-mail gönderir. </para>
+            </summary>
+            <param name="message"></param>
+            <param name="mailSubjectsEnum"></param>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Utils.EducationLogger.LogFatalAsync(System.String,System.String)">
+            <summary>
+            <para><b>EN: </b>Saves the log at fatal level. And sends mail to producer. </para>
+            <para><b>TR: </b>Log kaydını fatal seviyesinde kaydeder.Ve üreticiye e-mail gönderir. </para>
+            </summary>
+            <param name="message"></param>
+            <param name="mailSubjectsEnum"></param>
+        </member>
         <member name="T:Milvasoft.SampleAPI.Utils.GlobalConstants">
             <summary>
             Global constants.
@@ -4610,6 +5143,15 @@
             </summary>
             <param name="list"></param>
             <param name="message"></param>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Utils.HelperExtensions.GetActivityResponseAsync(System.Runtime.CompilerServices.ConfiguredTaskAwaitable{Microsoft.AspNetCore.Identity.IdentityResult},System.String,System.String)">
+            <summary>
+            Gets identity result as object response.
+            </summary>
+            <param name="asyncTask"></param>
+            <param name="successMessage"></param>
+            <param name="errorMessage"></param>
+            <returns></returns>
         </member>
         <member name="M:Milvasoft.SampleAPI.Utils.HelperExtensions.ThrowIfNullForGuidObject``1(``0,System.String)">
             <summary>

@@ -42,7 +42,7 @@ namespace Milvasoft.SampleAPI.AppStartup
                                 .UseWebRoot("wwwroot")
                                 .UseStartup<Startup>()
                                 .UseDefaultServiceProvider(options => options.ValidateScopes = false);
-                  }).UseServiceProviderFactory(new MultiTenantServiceProviderFactory<CachedTenant, TenantId>(Startup.ConfigureMultitenantContainer));
+                  });
 
     }
 }

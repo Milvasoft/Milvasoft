@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -8,12 +9,14 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Localization;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Milvasoft.Helpers.Caching;
 using Milvasoft.Helpers.DataAccess.Abstract;
 using Milvasoft.Helpers.DataAccess.Concrete;
 using Milvasoft.Helpers.DataAccess.MilvaContext;
 using Milvasoft.Helpers.DependencyInjection;
 using Milvasoft.Helpers.FileOperations.Abstract;
 using Milvasoft.Helpers.Identity.Concrete;
+using Milvasoft.Helpers.Mail;
 using Milvasoft.Helpers.Models.Response;
 using Milvasoft.Helpers.Utils;
 using Milvasoft.SampleAPI.Data;
@@ -32,6 +35,7 @@ using System.Globalization;
 using System.IdentityModel.Tokens.Jwt;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Net.Http.Headers;
 using System.Reflection;
 using System.Text;
@@ -153,6 +157,11 @@ namespace Milvasoft.SampleAPI.AppStartup
 
             #endregion
 
+            services.AddSingleton<IMilvaMailSender>(new MilvaMailSender("education@milvasoft.com",
+                                                                        new NetworkCredential("education@milvasoft.com", "I11Blx8i*%hi"),
+                                                                        587,
+                                                                        "mail.milvasoft.com"));
+            services.AddScoped<IMilvaLogger, EducationLogger>();
             services.AddSingleton<SharedResource>();
 
             services.AddHttpContextAccessor();
@@ -301,7 +310,7 @@ namespace Milvasoft.SampleAPI.AppStartup
                                                                                                              GlobalConstants.MilvaKey,
                                                                                                              new CultureInfo("tr-TR")).Result;
 
-            services.AddSingleton(tokenManagement);
+            services.AddSingleton<ITokenManagement>(tokenManagement);
 
             //var tokenOptions = configuration.GetSection("tokenManagement").Get<TokenManagement>();
 

@@ -105,6 +105,10 @@ namespace Milvasoft.SampleAPI.Utils
 
         public static string MilvaKey { get; } = "w!z%C*F-JaNdRgUk";
 
+        public const string ApplicationSiteUrl = "https://educationapp.vercel.app";
+
+        public const string DeveloperSiteUrl = "https://www.milvasoft.com";
+
         /// <summary>
         /// Zero
         /// </summary>

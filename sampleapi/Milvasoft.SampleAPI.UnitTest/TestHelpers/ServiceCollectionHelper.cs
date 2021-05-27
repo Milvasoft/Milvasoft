@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -14,6 +15,7 @@ using Milvasoft.Helpers.DependencyInjection;
 using Milvasoft.Helpers.FileOperations.Abstract;
 using Milvasoft.Helpers.FileOperations.Concrete;
 using Milvasoft.Helpers.Identity.Concrete;
+using Milvasoft.Helpers.Mail;
 using Milvasoft.Helpers.Models.Response;
 using Milvasoft.Helpers.MultiTenancy.Accessor;
 using Milvasoft.Helpers.MultiTenancy.EntityBase;
@@ -32,6 +34,7 @@ using System;
 using System.Globalization;
 using System.IdentityModel.Tokens.Jwt;
 using System.IO;
+using System.Net;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
@@ -88,14 +91,11 @@ namespace Milvasoft.SampleAPI.UnitTest.TestHelpers
             #region Data Access
 
             _services.AddScoped<IContextRepository<EducationAppDbContext>, ContextRepository<EducationAppDbContext>>();
-
             _services.AddScoped(typeof(IBaseRepository<,,>), typeof(EducationRepositoryBase<,,>));
 
             #endregion
 
             #region Services
-
-            _services.AddScoped<ITenantAccessor<IMilvaTenantBase<Guid>, Guid>, TenantAccessor<IMilvaTenantBase<Guid>, Guid>>();
             _services.AddScoped<IMentorService, MentorService>();
             _services.AddScoped<IStudentService, StudentService>();
             _services.AddScoped<IAccountService, AccountService>();
@@ -117,8 +117,6 @@ namespace Milvasoft.SampleAPI.UnitTest.TestHelpers
                 opt.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
                 opt.DefaultRequestVersion = new Version(1, 0);
             });
-
-            _services.AddScoped<IApplicationBuilder, ApplicationBuilder>();
         }
 
 
