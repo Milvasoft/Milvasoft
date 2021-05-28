@@ -1,8 +1,5 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
-using Milvasoft.Helpers.MultiTenancy.EntityBase;
-using Milvasoft.Helpers.MultiTenancy.LifetimeManagement;
-using Milvasoft.SampleAPI.DTOs;
 using System;
 using System.Threading.Tasks;
 

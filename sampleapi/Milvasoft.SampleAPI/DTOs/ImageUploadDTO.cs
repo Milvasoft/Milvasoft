@@ -2,9 +2,6 @@
 using Milvasoft.SampleAPI.Utils;
 using Milvasoft.SampleAPI.Utils.Attributes.ValidationAttributes;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Milvasoft.SampleAPI.DTOs
 {

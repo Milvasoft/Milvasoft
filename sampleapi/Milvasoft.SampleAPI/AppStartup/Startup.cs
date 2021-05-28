@@ -1,22 +1,12 @@
-using Autofac;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Localization;
 using Milvasoft.Helpers.Caching;
-using Milvasoft.Helpers.DependencyInjection;
 using Milvasoft.Helpers.FileOperations.Abstract;
 using Milvasoft.Helpers.FileOperations.Concrete;
-using Milvasoft.Helpers.MultiTenancy.EntityBase;
-using Milvasoft.Helpers.MultiTenancy.Extensions;
-using Milvasoft.Helpers.MultiTenancy.ResolutionStrategy;
-using Milvasoft.Helpers.MultiTenancy.Store;
-using Milvasoft.SampleAPI.Data;
 using Milvasoft.SampleAPI.Data.Utils;
-using Milvasoft.SampleAPI.DTOs;
 using Milvasoft.SampleAPI.Localization;
 using Milvasoft.SampleAPI.Middlewares;
 

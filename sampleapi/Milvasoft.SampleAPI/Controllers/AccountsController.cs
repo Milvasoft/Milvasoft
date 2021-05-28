@@ -12,7 +12,6 @@ using Milvasoft.SampleAPI.Localization;
 using Milvasoft.SampleAPI.Services.Abstract;
 using Milvasoft.SampleAPI.Utils;
 using Milvasoft.SampleAPI.Utils.Attributes.ActionFilters;
-using System;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -91,7 +90,7 @@ namespace Milvasoft.SampleAPI.Controllers
             return Ok("Success");
         }
 
-       
+
 
         /// <summary>
         /// Returns logged-in user's account information.

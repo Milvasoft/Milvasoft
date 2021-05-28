@@ -53,7 +53,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         private readonly IStringLocalizer<SharedResource> _localizer;
         private readonly IBaseRepository<Student, Guid, EducationAppDbContext> _studentRepository;
         private readonly IBaseRepository<Mentor, Guid, EducationAppDbContext> _mentorRepository;
-        private readonly IBaseRepository<AppUser,Guid,EducationAppDbContext> _userRepository;
+        private readonly IBaseRepository<AppUser, Guid, EducationAppDbContext> _userRepository;
         private readonly IMilvaLogger _milvaLogger;
         private readonly string _userName;
         private readonly IRedisCacheService _redisCacheService;
@@ -92,7 +92,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
                               IBaseRepository<Student, Guid, EducationAppDbContext> studentRepository,
                               IContextRepository<EducationAppDbContext> contextRepository,
                               IBaseRepository<Mentor, Guid, EducationAppDbContext> mentorRepository,
-                              IBaseRepository<AppUser,Guid,EducationAppDbContext> userRepository,
+                              IBaseRepository<AppUser, Guid, EducationAppDbContext> userRepository,
                               IHttpContextAccessor httpContextAccessor,
                               IMilvaMailSender milvaMailSender,
                               IStringLocalizer<SharedResource> sharedLocalizer,
@@ -154,7 +154,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         {
             CheckLoginStatus();
 
-            var user = await _userRepository.GetFirstOrDefaultAsync(a=>a.UserName==_userName).ConfigureAwait(false);
+            var user = await _userRepository.GetFirstOrDefaultAsync(a => a.UserName == _userName).ConfigureAwait(false);
 
             user.ThrowIfNullForGuidObject("CannotGetSignedInUserInfo");
 
@@ -175,7 +175,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         {
             CheckLoginStatus();
 
-            var toBeUpdatedUser = await _userRepository.GetFirstOrDefaultAsync(a=>a.UserName==_userName).ConfigureAwait(false);
+            var toBeUpdatedUser = await _userRepository.GetFirstOrDefaultAsync(a => a.UserName == _userName).ConfigureAwait(false);
 
             bool initializeUpdate = false;
 
@@ -222,7 +222,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
                 loginDTO.UserName = userToBeSignUp.UserName;
                 loginDTO.Password = registerDTO.Password;
 
-                loginResult = await LoginAsync(loginDTO,true).ConfigureAwait(false);
+                loginResult = await LoginAsync(loginDTO, true).ConfigureAwait(false);
             }
             else
             {
@@ -240,7 +240,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         {
             CheckLoginStatus();
 
-            var user = await _userRepository.GetFirstOrDefaultAsync(a=>a.UserName==_userName).ConfigureAwait(false)
+            var user = await _userRepository.GetFirstOrDefaultAsync(a => a.UserName == _userName).ConfigureAwait(false)
                             ?? throw new MilvaUserFriendlyException(MilvaException.CannotFindEntity);
 
             var deleteResult = await _userManager.DeleteAsync(user).ConfigureAwait(false);
@@ -682,7 +682,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// <returns></returns>
         public async Task<IdentityResult> ResetPasswordAsync(PasswordResetDTO passwordResetDTO)
         {
-            var user = await _userRepository.GetFirstOrDefaultAsync(a=>a.UserName==_userName).ConfigureAwait(false);
+            var user = await _userRepository.GetFirstOrDefaultAsync(a => a.UserName == _userName).ConfigureAwait(false);
 
             user.ThrowIfParameterIsNull("IdentityInvalidUserName");
 
