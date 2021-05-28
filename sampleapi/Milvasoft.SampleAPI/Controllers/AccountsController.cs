@@ -52,7 +52,7 @@ namespace Milvasoft.SampleAPI.Controllers
         [HttpPost("User/SignIn")]
         [AllowAnonymous]
         [OValidationFilter]
-        public async Task<ActionResult> UsersSignIn([FromBody] LoginDTO loginDTO)
+        public async Task<ActionResult> UsersLogin([FromBody] LoginDTO loginDTO)
         {
             ObjectResponse<LoginResultDTO> response = new();
 
@@ -91,34 +91,7 @@ namespace Milvasoft.SampleAPI.Controllers
             return Ok("Success");
         }
 
-        /// <summary>
-        /// <para>Change personnel user password.</para>
-        /// </summary>
-        /// <param name="personnelUpdateDTO"></param>
-        /// <returns></returns>
-        [HttpPut("Personnel/UpdatePassword")]
-        [OValidationFilter]
-        public async Task<IActionResult> ChangeUserPassword(ChangePassDTO personnelUpdateDTO)
-        {
-            var response = new ObjectResponse<IdentityResult>
-            {
-                Result = await _accountService.ChangePasswordAsync(personnelUpdateDTO).ConfigureAwait(false)
-            };
-
-            if (response.Result.Succeeded)
-            {
-                response.StatusCode = MilvaStatusCodes.Status200OK;
-                response.Success = true;
-                response.Message = _sharedLocalizer["PersonnelSuccessfullyChangePassword"];
-            }
-            else
-            {
-                response.StatusCode = MilvaStatusCodes.Status503ServiceUnavailable;
-                response.Success = false;
-            }
-            response.Result = null;
-            return Ok(response);
-        }
+       
 
         /// <summary>
         /// Returns logged-in user's account information.
@@ -392,22 +365,6 @@ namespace Milvasoft.SampleAPI.Controllers
                                                                                                                                  _sharedLocalizer["AccountActivityErrorMessage"]).ConfigureAwait(false);
 
         /// <summary>
-        /// Changes <paramref name="passwordChangeDTO"/>.UserName's password.
-        /// </summary>
-        /// <remarks>
-        /// 
-        /// The user must be logged-in because the change process will be done from within the application.
-        /// 
-        /// </remarks>
-        /// 
-        /// <param name="passwordChangeDTO"></param>
-        /// <returns></returns>
-        [HttpPut("Activity/Change/Password")]
-        public async Task<IActionResult> ChangePasswordAsync([FromBody] ChangePassDTO passwordChangeDTO)
-            => await _accountService.ChangePasswordAsync(passwordChangeDTO).ConfigureAwait(false).GetActivityResponseAsync(_sharedLocalizer["PasswordChangeSuccessfull"],
-                                                                                                                           _sharedLocalizer["AccountActivityErrorMessage"]).ConfigureAwait(false);
-
-        /// <summary>
         /// Resets <paramref name="passwordResetDTO"/>.UserName's password.
         /// </summary>
         /// <remarks>
@@ -423,6 +380,35 @@ namespace Milvasoft.SampleAPI.Controllers
         public async Task<IActionResult> ResetPasswordAsync([FromBody] PasswordResetDTO passwordResetDTO)
             => await _accountService.ResetPasswordAsync(passwordResetDTO).ConfigureAwait(false).GetActivityResponseAsync(_sharedLocalizer["PasswordResetSuccessfull"],
                                                                                                                          _sharedLocalizer["AccountActivityErrorMessage"]).ConfigureAwait(false);
+
+        /// <summary>
+        /// <para>Change personnel user password.</para>
+        /// </summary>
+        /// <param name="personnelUpdateDTO"></param>
+        /// <returns></returns>
+        [HttpPut("Activity/Change/Password")]
+        [OValidationFilter]
+        public async Task<IActionResult> ChangeUserPassword(ChangePassDTO personnelUpdateDTO)
+        {
+            var response = new ObjectResponse<IdentityResult>
+            {
+                Result = await _accountService.ChangePasswordAsync(personnelUpdateDTO).ConfigureAwait(false)
+            };
+
+            if (response.Result.Succeeded)
+            {
+                response.StatusCode = MilvaStatusCodes.Status200OK;
+                response.Success = true;
+                response.Message = _sharedLocalizer["PersonnelSuccessfullyChangePassword"];
+            }
+            else
+            {
+                response.StatusCode = MilvaStatusCodes.Status503ServiceUnavailable;
+                response.Success = false;
+            }
+            response.Result = null;
+            return Ok(response);
+        }
 
         #endregion
 

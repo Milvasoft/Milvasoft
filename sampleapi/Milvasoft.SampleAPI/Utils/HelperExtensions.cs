@@ -404,6 +404,38 @@ namespace Milvasoft.SampleAPI.Utils
         }
 
         /// <summary>
+        /// Validates file. 
+        /// </summary>
+        /// <param name="file"></param>
+        /// <param name="fileType"></param>
+        public static void ValidateFile(this IFormFile file, FileType fileType)
+        {
+            int maxFileLength = 14000000;
+
+            var allowedFileExtensions = GlobalConstants.AllowedFileExtensions.Find(i => i.FileType == fileType.ToString()).AllowedExtensions;
+
+            var validationResult = file.ValidateFile(maxFileLength, allowedFileExtensions, fileType);
+
+            switch (validationResult)
+            {
+                case FileValidationResult.Valid:
+                    break;
+                case FileValidationResult.FileSizeTooBig:
+                    // Get length of file in bytes
+                    long fileSizeInBytes = file.Length;
+                    // Convert the bytes to Kilobytes (1 KB = 1024 Bytes)
+                    double fileSizeInKB = fileSizeInBytes / 1024;
+                    // Convert the KB to MegaBytes (1 MB = 1024 KBytes)
+                    double fileSizeInMB = fileSizeInKB / 1024;
+                    throw new MilvaUserFriendlyException("FileIsTooBigMessage", fileSizeInMB.ToString("0.#"));
+                case FileValidationResult.InvalidFileExtension:
+                    throw new MilvaUserFriendlyException("UnsupportedFileTypeMessage", string.Join(", ", allowedFileExtensions));
+                case FileValidationResult.NullFile:
+                    throw new MilvaUserFriendlyException("FileCannotBeEmpty"); ;
+            }
+        }
+
+        /// <summary>
         /// Throwns <see cref="MilvaUserFriendlyException"/> if <paramref name="list"/> is null or empty.
         /// </summary>
         /// <param name="list"></param>

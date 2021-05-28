@@ -4,6 +4,7 @@ using Milvasoft.Helpers.DataAccess.IncludeLibrary;
 using Milvasoft.Helpers.Exceptions;
 using Milvasoft.Helpers.FileOperations.Concrete;
 using Milvasoft.Helpers.FileOperations.Enums;
+using Milvasoft.Helpers.Mail;
 using Milvasoft.Helpers.Models;
 using Milvasoft.SampleAPI.Data;
 using Milvasoft.SampleAPI.DTOs;
@@ -35,7 +36,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         private readonly IBaseRepository<StudentAssigment, Guid, EducationAppDbContext> _studentAssignmentRepository;
         private readonly IBaseRepository<Student, Guid, EducationAppDbContext> _studentRepository;
         private readonly IBaseRepository<Mentor, Guid, EducationAppDbContext> _mentorRepository;
-
+        private readonly IMilvaMailSender _milvaMailSender;
         #endregion
 
         /// <summary>
@@ -46,12 +47,15 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// <param name="studentAssignmentRepository"></param>
         /// <param name="studentRepository"></param>
         /// <param name="mentorRepository"></param>
+        /// <param name="milvaMailSender"></param>
         public AssignmentService(IBaseRepository<Assignment, Guid, EducationAppDbContext> assignmentRepository,
             IHttpContextAccessor httpContextAccessor,
             IBaseRepository<StudentAssigment, Guid, EducationAppDbContext> studentAssignmentRepository,
             IBaseRepository<Student, Guid, EducationAppDbContext> studentRepository,
-            IBaseRepository<Mentor, Guid, EducationAppDbContext> mentorRepository)
+            IBaseRepository<Mentor, Guid, EducationAppDbContext> mentorRepository,
+            IMilvaMailSender milvaMailSender)
         {
+            _milvaMailSender = milvaMailSender;
             _mentorRepository = mentorRepository;
             _studentRepository = studentRepository;
             _studentAssignmentRepository = studentAssignmentRepository;
@@ -365,7 +369,6 @@ namespace Milvasoft.SampleAPI.Services.Concrete
 
             currentStudent.ThrowIfNullForGuidObject("User is not student.");
 
-
             var toBeTakeAssignment = await _assignmentRepository.GetByIdAsync(Id).ConfigureAwait(false);
 
             toBeTakeAssignment.ThrowIfNullForGuidObject();
@@ -381,6 +384,8 @@ namespace Milvasoft.SampleAPI.Services.Concrete
             };
 
             await _studentAssignmentRepository.AddAsync(studentAssignment).ConfigureAwait(false);
+
+            await _milvaMailSender.MilvaSendMailAsync(currentStudent.Mentor.AppUser.Email, Helpers.Enums.MailSubject.Information, currentStudent.Name + currentStudent.Surname + " isimli öğrencinin yeni bir ödev isteği var.");
         }
 
         /// <summary>
@@ -390,6 +395,8 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// <returns></returns>
         public async Task<string> SubmitAssignment(SubmitAssignmentDTO submitAssignment)
         {
+            var currentStudent = await _studentRepository.GetFirstOrDefaultAsync(i => i.AppUser.UserName == _loggedUser).ConfigureAwait(false);
+
             string basePath = GlobalConstants.DocumentLibraryPath;
 
             FormFileOperations.FilesFolderNameCreator assignmentFolderNameCreator = CreateAssignmentName;
@@ -420,6 +427,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
 
             await submitAssignment.Assignment.OpenReadStream().DisposeAsync().ConfigureAwait(false);
 
+            await _milvaMailSender.MilvaSendMailAsync(currentStudent.Mentor.AppUser.Email, Helpers.Enums.MailSubject.Information, currentStudent.Name + currentStudent.Surname + " isimli öğrencinin yeni bir ödev isteği var.");
 
             return path;
         }

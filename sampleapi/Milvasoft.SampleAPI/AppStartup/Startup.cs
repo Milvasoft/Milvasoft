@@ -128,7 +128,7 @@ namespace Milvasoft.SampleAPI.AppStartup
 
             #region Seed
 
-            //app.ResetDatabaseAsync().Wait();
+            app.ResetDatabaseAsync().Wait();
 
             #endregion
         }

@@ -173,7 +173,7 @@
             <param name="sharedLocalizer"></param>
             <param name="accountService"></param>
         </member>
-        <member name="M:Milvasoft.SampleAPI.Controllers.AccountsController.UsersSignIn(Milvasoft.SampleAPI.DTOs.AccountDTOs.LoginDTO)">
+        <member name="M:Milvasoft.SampleAPI.Controllers.AccountsController.UsersLogin(Milvasoft.SampleAPI.DTOs.AccountDTOs.LoginDTO)">
             <summary>
             Sign in method for users. This endpoint is accessible for any requests.
             </summary>
@@ -185,13 +185,6 @@
             <summary>
             Logout method for users.
             </summary>
-            <returns></returns>
-        </member>
-        <member name="M:Milvasoft.SampleAPI.Controllers.AccountsController.ChangeUserPassword(Milvasoft.SampleAPI.DTOs.AccountDTOs.ChangePassDTO)">
-            <summary>
-            <para>Change personnel user password.</para>
-            </summary>
-            <param name="personnelUpdateDTO"></param>
             <returns></returns>
         </member>
         <member name="M:Milvasoft.SampleAPI.Controllers.AccountsController.GetLoggedInInUserInformationAsync">
@@ -360,19 +353,6 @@
             <param name="phoneNumberChangeDTO"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.SampleAPI.Controllers.AccountsController.ChangePasswordAsync(Milvasoft.SampleAPI.DTOs.AccountDTOs.ChangePassDTO)">
-            <summary>
-            Changes <paramref name="passwordChangeDTO"/>.UserName's password.
-            </summary>
-            <remarks>
-            
-            The user must be logged-in because the change process will be done from within the application.
-            
-            </remarks>
-            
-            <param name="passwordChangeDTO"></param>
-            <returns></returns>
-        </member>
         <member name="M:Milvasoft.SampleAPI.Controllers.AccountsController.ResetPasswordAsync(Milvasoft.SampleAPI.DTOs.AccountDTOs.PasswordResetDTO)">
             <summary>
             Resets <paramref name="passwordResetDTO"/>.UserName's password.
@@ -384,6 +364,13 @@
             </remarks>
             
             <param name="passwordResetDTO"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Controllers.AccountsController.ChangeUserPassword(Milvasoft.SampleAPI.DTOs.AccountDTOs.ChangePassDTO)">
+            <summary>
+            <para>Change personnel user password.</para>
+            </summary>
+            <param name="personnelUpdateDTO"></param>
             <returns></returns>
         </member>
         <member name="T:Milvasoft.SampleAPI.Controllers.AnnouncementsController">
@@ -1694,6 +1681,22 @@
             Purchased modules of tenant.
             </summary>
         </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.ImageUploadDTO.UserId">
+            <summary>
+            Id of the user whose official will be updated
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.ImageUploadDTO.Image">
+            <summary>
+            <para><b>EN: </b> Uploaded image of personnel.</para>
+            <para><b>TR: </b> Yüklenen personel resmi.</para>
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.ImageUploadDTO.ImageBase64String">
+            <summary>
+            <para><b>EN:</b>Image bse64 string of user.</para>
+            </summary>
+        </member>
         <member name="T:Milvasoft.SampleAPI.DTOs.MentorDTOs.AddMentorDTO">
             <summary>
             Add mentor DTO for add operations.
@@ -1767,6 +1770,18 @@
         <member name="P:Milvasoft.SampleAPI.DTOs.MentorDTOs.MentorDTO.AppUser">
             <summary>
             AppUser of mentor.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.MentorDTOs.MentorDTO.Image">
+            <summary>
+            <para><b>EN: </b> Uploaded image of personnel.</para>
+            <para><b>TR: </b> Yüklenen personel resmi.</para>
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.MentorDTOs.MentorDTO.ImageBase64String">
+            <summary>
+            <para><b>EN:</b>Image bse64 string of menu.</para>
+            <para><b>TR:</b>Menüye ait resmin base64 string değeri.</para>
             </summary>
         </member>
         <member name="P:Milvasoft.SampleAPI.DTOs.MentorDTOs.MentorDTO.PublishedAnnouncements">
@@ -2380,6 +2395,36 @@
             The status of the student's homework approved by the mentor.
             </summary>
         </member>
+        <member name="T:Milvasoft.SampleAPI.DTOs.SubmitAssignmentDTO">
+            <summary>
+            DTO is required to submit assignments.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.SubmitAssignmentDTO.AssigmentId">
+            <summary>
+            Id of the homework to be sent
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.SubmitAssignmentDTO.Assignment">
+            <summary>
+            Assignment file.
+            </summary>
+        </member>
+        <member name="F:Milvasoft.SampleAPI.DTOs.SubmitAssignmentDTO._fileBase64String">
+            <summary>
+            File base64string.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.SubmitAssignmentDTO.ImageBase64String">
+            <summary>
+            <para><b>EN:</b>File bse64 string of assignment.</para>
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.SubmitAssignmentDTO.Description">
+            <summary>
+            Assignment description to mentor.
+            </summary>
+        </member>
         <member name="T:Milvasoft.SampleAPI.DTOs.StudentDTOs.AddStudentDTO">
             <summary>
             AddStudentDTO for add student operations.
@@ -2543,6 +2588,18 @@
         <member name="P:Milvasoft.SampleAPI.DTOs.StudentDTOs.StudentDTO.CurrentAssigmentDeliveryDate">
             <summary>
             Due date of current assignment.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.StudentDTOs.StudentDTO.Image">
+            <summary>
+            <para><b>EN: </b> Uploaded image of personnel.</para>
+            <para><b>TR: </b> Yüklenen personel resmi.</para>
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.StudentDTOs.StudentDTO.ImageBase64String">
+            <summary>
+            <para><b>EN:</b>Image bse64 string of menu.</para>
+            <para><b>TR:</b>Menüye ait resmin base64 string değeri.</para>
             </summary>
         </member>
         <member name="P:Milvasoft.SampleAPI.DTOs.StudentDTOs.StudentDTO.AppUserId">
@@ -2903,26 +2960,6 @@
         <member name="P:Milvasoft.SampleAPI.DTOs.StudentDTOs.UpdateStudentDTO.HomeAddress">
             <summary>
             Home adress of student.
-            </summary>
-        </member>
-        <member name="T:Milvasoft.SampleAPI.DTOs.SubmitAssignmentDTO">
-            <summary>
-            DTO is required to submit assignments.
-            </summary>
-        </member>
-        <member name="P:Milvasoft.SampleAPI.DTOs.SubmitAssignmentDTO.AssigmentId">
-            <summary>
-            Id of the homework to be sent
-            </summary>
-        </member>
-        <member name="P:Milvasoft.SampleAPI.DTOs.SubmitAssignmentDTO.Assignment">
-            <summary>
-            Assignment file.
-            </summary>
-        </member>
-        <member name="P:Milvasoft.SampleAPI.DTOs.SubmitAssignmentDTO.Description">
-            <summary>
-            Assignment description to mentor.
             </summary>
         </member>
         <member name="T:Milvasoft.SampleAPI.DTOs.UsefulLinkDTOs.AddUsefulLinkDTO">
@@ -3957,7 +3994,7 @@
             Assignment service.
             </summary>
         </member>
-        <member name="M:Milvasoft.SampleAPI.Services.Concrete.AssignmentService.#ctor(Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository{Milvasoft.SampleAPI.Entity.Assignment,System.Guid,Milvasoft.SampleAPI.Data.EducationAppDbContext},Microsoft.AspNetCore.Http.IHttpContextAccessor,Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository{Milvasoft.SampleAPI.Entity.StudentAssigment,System.Guid,Milvasoft.SampleAPI.Data.EducationAppDbContext},Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository{Milvasoft.SampleAPI.Entity.Student,System.Guid,Milvasoft.SampleAPI.Data.EducationAppDbContext},Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository{Milvasoft.SampleAPI.Entity.Mentor,System.Guid,Milvasoft.SampleAPI.Data.EducationAppDbContext})">
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.AssignmentService.#ctor(Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository{Milvasoft.SampleAPI.Entity.Assignment,System.Guid,Milvasoft.SampleAPI.Data.EducationAppDbContext},Microsoft.AspNetCore.Http.IHttpContextAccessor,Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository{Milvasoft.SampleAPI.Entity.StudentAssigment,System.Guid,Milvasoft.SampleAPI.Data.EducationAppDbContext},Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository{Milvasoft.SampleAPI.Entity.Student,System.Guid,Milvasoft.SampleAPI.Data.EducationAppDbContext},Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository{Milvasoft.SampleAPI.Entity.Mentor,System.Guid,Milvasoft.SampleAPI.Data.EducationAppDbContext},Milvasoft.Helpers.Mail.IMilvaMailSender)">
             <summary>
             Performs constructor injection for repository interfaces used in this service.
             </summary>
@@ -3966,6 +4003,7 @@
             <param name="studentAssignmentRepository"></param>
             <param name="studentRepository"></param>
             <param name="mentorRepository"></param>
+            <param name="milvaMailSender"></param>
         </member>
         <member name="M:Milvasoft.SampleAPI.Services.Concrete.AssignmentService.GetAssignmentForStudentAsync(Milvasoft.SampleAPI.DTOs.PaginationParamsWithSpec{Milvasoft.SampleAPI.Spec.AssignmentSpec})">
             <summary>
@@ -4133,6 +4171,13 @@
             Deletes the mentor whose id has been sent.
             </summary>
             <param name="mentorIds">Id of the mentors to be deleted.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.MentorService.UpdateImageAsync(Milvasoft.SampleAPI.DTOs.ImageUploadDTO)">
+            <summary>
+            Updates picture of student.
+            </summary>
+            <param name="imageUploadDTO"></param>
             <returns></returns>
         </member>
         <member name="T:Milvasoft.SampleAPI.Services.Concrete.ProfessionService">
@@ -4353,6 +4398,13 @@
             Delete students by <paramref name="studentIds"/>.
             </summary>
             <param name="studentIds"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.StudentService.UpdateImageAsync(Milvasoft.SampleAPI.DTOs.ImageUploadDTO)">
+            <summary>
+            Updates picture of student.
+            </summary>
+            <param name="imageUploadDTO"></param>
             <returns></returns>
         </member>
         <member name="T:Milvasoft.SampleAPI.Services.Concrete.UsefulLinkService">
@@ -5122,6 +5174,13 @@
             </summary>
             <param name="list"></param>
             <param name="localizerKey"></param>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Utils.HelperExtensions.ValidateFile(Microsoft.AspNetCore.Http.IFormFile,Milvasoft.Helpers.FileOperations.Enums.FileType)">
+            <summary>
+            Validates file. 
+            </summary>
+            <param name="file"></param>
+            <param name="fileType"></param>
         </member>
         <member name="M:Milvasoft.SampleAPI.Utils.HelperExtensions.ThrowIfParameterIsNullOrEmpty``1(System.Collections.Generic.List{``0},System.String)">
             <summary>

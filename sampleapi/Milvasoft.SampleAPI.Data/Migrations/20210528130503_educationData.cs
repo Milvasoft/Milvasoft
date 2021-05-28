@@ -1,10 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
-using System;
 
 namespace Milvasoft.SampleAPI.Data.Migrations
 {
-    public partial class EducationApp : Migration
+    public partial class educationData : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -112,6 +112,7 @@ namespace Milvasoft.SampleAPI.Data.Migrations
                     Name = table.Column<string>(type: "text", nullable: true),
                     Surname = table.Column<string>(type: "text", nullable: true),
                     CVFilePath = table.Column<string>(type: "text", nullable: true),
+                    ImagePath = table.Column<string>(type: "text", nullable: true),
                     AppUserId = table.Column<Guid>(type: "uuid", nullable: false),
                     CreationDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
                     LastModificationDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
@@ -363,6 +364,7 @@ namespace Milvasoft.SampleAPI.Data.Migrations
                     GraduationScore = table.Column<int>(type: "integer", nullable: false),
                     MentorGraduationThoughts = table.Column<string>(type: "text", nullable: true),
                     CurrentAssigmentDeliveryDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    ImagePath = table.Column<string>(type: "text", nullable: true),
                     AppUserId = table.Column<Guid>(type: "uuid", nullable: false),
                     ProfessionId = table.Column<Guid>(type: "uuid", nullable: false),
                     MentorId = table.Column<Guid>(type: "uuid", nullable: false),

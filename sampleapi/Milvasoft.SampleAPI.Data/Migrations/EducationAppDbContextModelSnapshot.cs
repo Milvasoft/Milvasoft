@@ -416,6 +416,9 @@ namespace Milvasoft.SampleAPI.Data.Migrations
                     b.Property<DateTime?>("DeletionDate")
                         .HasColumnType("timestamp without time zone");
 
+                    b.Property<string>("ImagePath")
+                        .HasColumnType("text");
+
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("boolean");
 
@@ -616,6 +619,9 @@ namespace Milvasoft.SampleAPI.Data.Migrations
                         .HasColumnType("integer");
 
                     b.Property<string>("HomeAddress")
+                        .HasColumnType("text");
+
+                    b.Property<string>("ImagePath")
                         .HasColumnType("text");
 
                     b.Property<bool>("IsConfidentialityAgreementSigned")

@@ -105,27 +105,11 @@ namespace Milvasoft.SampleAPI.Data.Utils
             {
                 new Announcement
                 {
-                    Id=1.ToGuid(),
-                    Title="Stajyerler hakkinda.",
-                    Description="description",
-                    IsFixed=true,
-                    MentorId=1.ToGuid()
-                },
-                new Announcement
-                {
                     Id=2.ToGuid(),
                     Title="Stajyerler hakkinda.",
                     Description="Stajyerler kurallara uymak zorundadir.",
                     IsFixed=false,
                     MentorId=2.ToGuid()
-                },
-                new Announcement
-                {
-                    Id=3.ToGuid(),
-                    Title="Şirket kuralları",
-                    Description="Stajyerler arasında ilişki olamaz.",
-                    IsFixed=false,
-                    MentorId=1.ToGuid()
                 }
             };
             await InitializeDataAsync<Announcement, Guid>(testEntities).ConfigureAwait(false);
@@ -171,27 +155,6 @@ namespace Milvasoft.SampleAPI.Data.Utils
             {
                 new AppUser
                 {
-                    UserName="burakakbay",
-                    Email="burakakbay@gmail.com",
-                    PhoneNumber="507 664 05 44",
-                    Id=1.ToGuid(),
-                        Student=new Student
-                        {
-                            Id=1.ToGuid(),
-                            Name="Burak",
-                            Surname="Akbay",
-                            ProfessionId=1.ToGuid(),
-                            IsConfidentialityAgreementSigned=true,
-                            Level=1,
-                            Age=18,
-                            Dream="Yazılımcı olmak.",
-                            HomeAddress="Ankara",
-                            University="Selçuk Üniversitesi",
-                            MentorId=1.ToGuid()
-                        }
-                },
-                new AppUser
-                {
                     UserName="mehmetbayburt",
                     Email="mehmetbayburt@gmail.com",
                     PhoneNumber="507 661 05 44",
@@ -219,25 +182,6 @@ namespace Milvasoft.SampleAPI.Data.Utils
         {
             var testEntities = new List<AppUser>()
             {
-                new AppUser
-                {
-                    UserName="oguzhanbaran",
-                    Email="oguzhan.baran96@gmail.com",
-                    Mentor=new Mentor
-                    {
-                        Name="Oğuzhan",
-                        Surname="Baran",
-                        Id=1.ToGuid(),
-                        Professions=new List<MentorProfession>
-                        {
-                            new MentorProfession
-                            {
-                                ProfessionId=1.ToGuid()
-                            }
-                        }
-                    }
-
-                },
                 new AppUser
                 {
                     UserName="bugrakosen",
