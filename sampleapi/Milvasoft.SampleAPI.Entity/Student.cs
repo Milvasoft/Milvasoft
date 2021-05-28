@@ -1,4 +1,5 @@
-﻿using Milvasoft.Helpers.DataAccess.Concrete.Entity;
+﻿using Milvasoft.Helpers.DataAccess.Attributes;
+using Milvasoft.Helpers.DataAccess.Concrete.Entity;
 using Milvasoft.SampleAPI.Entity.Enum;
 using System;
 using System.Collections.Generic;
@@ -76,6 +77,12 @@ namespace Milvasoft.SampleAPI.Entity
         /// Due date of current assignment.
         /// </summary>
         public DateTime CurrentAssigmentDeliveryDate { get; set; }
+
+        /// <summary>
+        /// <para><b>EN: </b>Image server url of student.</para>
+        /// </summary>
+        [MilvaEncrypted]
+        public string ImagePath { get; set; }
 
         /// <summary>
         /// AppUser id.

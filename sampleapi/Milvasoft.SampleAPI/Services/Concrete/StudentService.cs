@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Identity;
 using Milvasoft.Helpers.DataAccess.Abstract;
 using Milvasoft.Helpers.DataAccess.IncludeLibrary;
 using Milvasoft.Helpers.Exceptions;
+using Milvasoft.Helpers.FileOperations.Concrete;
+using Milvasoft.Helpers.FileOperations.Enums;
 using Milvasoft.Helpers.Models;
 using Milvasoft.SampleAPI.Data;
 using Milvasoft.SampleAPI.DTOs;
@@ -390,6 +392,28 @@ namespace Milvasoft.SampleAPI.Services.Concrete
             var deletedStudents = await _studentRepository.GetAllAsync(i => studentIds.Select(p => p).Contains(i.Id)).ConfigureAwait(false);
 
             await _studentRepository.DeleteAsync(deletedStudents).ConfigureAwait(false);
+        }
+
+        /// <summary>
+        /// Updates picture of student.
+        /// </summary>
+        /// <param name="imageUploadDTO"></param>
+        /// <returns></returns>
+        public async Task UpdateImageAsync(ImageUploadDTO imageUploadDTO)
+        {
+            var student = await _studentRepository.GetByIdAsync(imageUploadDTO.UserId);
+
+            student.ThrowIfNullForGuidObject();
+
+            var formFile = imageUploadDTO.Image;
+
+            formFile.ValidateFile(FileType.Image);
+
+            var dto = new StudentDTO { Id = student.Id, Image = formFile };
+
+            student.ImagePath = await formFile.SaveImageToServerAsync<StudentDTO, Guid>(dto);
+
+            await _studentRepository.UpdateAsync(student);
         }
     }
 }

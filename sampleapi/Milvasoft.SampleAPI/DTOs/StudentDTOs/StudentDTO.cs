@@ -1,8 +1,10 @@
-﻿using Milvasoft.Helpers.DataAccess.Concrete.Entity;
+﻿using Microsoft.AspNetCore.Http;
+using Milvasoft.Helpers.DataAccess.Concrete.Entity;
 using Milvasoft.SampleAPI.DTOs.MentorDTOs;
 using Milvasoft.SampleAPI.DTOs.ProfessionDTOs;
 using Milvasoft.SampleAPI.Entity;
 using Milvasoft.SampleAPI.Entity.Enum;
+using Milvasoft.SampleAPI.Utils;
 using Milvasoft.SampleAPI.Utils.Attributes.ValidationAttributes;
 using Milvasoft.SampleAPI.Utils.Swagger;
 using System;
@@ -87,6 +89,32 @@ namespace Milvasoft.SampleAPI.DTOs.StudentDTOs
         /// Due date of current assignment.
         /// </summary>
         public DateTime CurrentAssigmentDeliveryDate { get; set; }
+
+        /// <summary>
+        /// <para><b>EN: </b> Uploaded image of personnel.</para>
+        /// <para><b>TR: </b> Yüklenen personel resmi.</para>
+        /// </summary>
+        public IFormFile Image { get; set; }
+
+        private string _imageBase64String;
+
+        /// <summary>
+        /// <para><b>EN:</b>Image bse64 string of menu.</para>
+        /// <para><b>TR:</b>Menüye ait resmin base64 string değeri.</para>
+        /// </summary>
+        [OValidateString(1073741823)]
+        public string ImageBase64String
+        {
+            get => _imageBase64String;
+            set
+            {
+                if (!string.IsNullOrEmpty(value))
+                {
+                    Image = HelperExtensions.ConvertToFormFile(value);
+                }
+                _imageBase64String = value;
+            }
+        }
 
         /// <summary>
         /// AppUser id.
