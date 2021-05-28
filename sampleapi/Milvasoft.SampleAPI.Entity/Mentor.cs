@@ -1,4 +1,5 @@
-﻿using Milvasoft.Helpers.DataAccess.Concrete.Entity;
+﻿using Milvasoft.Helpers.DataAccess.Attributes;
+using Milvasoft.Helpers.DataAccess.Concrete.Entity;
 using System;
 using System.Collections.Generic;
 
@@ -24,6 +25,12 @@ namespace Milvasoft.SampleAPI.Entity
         /// CV path of mentor.
         /// </summary>
         public string CVFilePath { get; set; }
+
+        /// <summary>
+        /// <para><b>EN: </b>Image server url of mentor..</para>
+        /// </summary>
+        [MilvaEncrypted]
+        public string ImagePath { get; set; }
 
         /// <summary>
         /// AppUser ID of mentor.

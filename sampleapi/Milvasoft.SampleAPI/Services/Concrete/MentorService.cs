@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Milvasoft.Helpers.DataAccess.Abstract;
 using Milvasoft.Helpers.DataAccess.IncludeLibrary;
 using Milvasoft.Helpers.Exceptions;
+using Milvasoft.Helpers.FileOperations.Enums;
 using Milvasoft.Helpers.Identity.Concrete;
 using Milvasoft.Helpers.Models;
 using Milvasoft.SampleAPI.Data;
@@ -264,6 +265,28 @@ namespace Milvasoft.SampleAPI.Services.Concrete
             mentors.ThrowIfListIsNullOrEmpty();
 
             await _mentorRepository.DeleteAsync(mentors).ConfigureAwait(false);
+        }
+
+        /// <summary>
+        /// Updates picture of student.
+        /// </summary>
+        /// <param name="imageUploadDTO"></param>
+        /// <returns></returns>
+        public async Task UpdateImageAsync(ImageUploadDTO imageUploadDTO)
+        {
+            var mentor = await _mentorRepository.GetByIdAsync(imageUploadDTO.UserId);
+
+            mentor.ThrowIfNullForGuidObject();
+
+            var formFile = imageUploadDTO.Image;
+
+            formFile.ValidateFile(FileType.Image);
+
+            var dto = new StudentDTO { Id = mentor.Id, Image = formFile };
+
+            mentor.ImagePath = await formFile.SaveImageToServerAsync<StudentDTO, Guid>(dto);
+
+            await _mentorRepository.UpdateAsync(mentor);
         }
     }
 }
