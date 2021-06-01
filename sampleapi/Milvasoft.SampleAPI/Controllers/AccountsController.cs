@@ -258,7 +258,6 @@ namespace Milvasoft.SampleAPI.Controllers
         /// 
         /// </remarks>
         /// 
-        /// <param name="userName"></param>
         /// <returns></returns>
         [HttpGet("Activity/Send/Mail/PasswordReset/{userName}")]
         [OValidateStringParameter(3, 30)]
