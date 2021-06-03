@@ -33,7 +33,7 @@ namespace Milvasoft.Helpers.Attributes.Validation
         /// <summary>
         /// Minimum decimal value of requested validate scope.
         /// </summary>
-        public int MinValue { get; } = -1;
+        public decimal MinValue { get; } = -1;
 
         #endregion
 
@@ -57,7 +57,7 @@ namespace Milvasoft.Helpers.Attributes.Validation
         /// Constructor of atrribute.
         /// </summary>
         /// <param name="minValue"></param>
-        public ValidateDecimalAttribute(int minValue)
+        public ValidateDecimalAttribute(decimal minValue)
         {
             MinValue = minValue;
         }
@@ -67,7 +67,7 @@ namespace Milvasoft.Helpers.Attributes.Validation
         /// </summary>
         /// <param name="minValue"></param>
         /// <param name="resourceType"></param>
-        public ValidateDecimalAttribute(int minValue, Type resourceType)
+        public ValidateDecimalAttribute(decimal minValue, Type resourceType)
         {
             MinValue = minValue;
             _resourceType = resourceType;
@@ -100,7 +100,7 @@ namespace Milvasoft.Helpers.Attributes.Validation
                 }
                 else errorMessage = $"{LocalizerKeys.PleaseEnterAValid} {context.MemberName}.";
 
-                if (Convert.ToInt32(value) <= MinValue)
+                if (Convert.ToDecimal(value) <= MinValue)
                 {
                     ErrorMessage = errorMessage;
                     return new ValidationResult(FormatErrorMessage(""));
