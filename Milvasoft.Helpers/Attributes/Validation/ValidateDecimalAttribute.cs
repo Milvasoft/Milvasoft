@@ -35,6 +35,11 @@ namespace Milvasoft.Helpers.Attributes.Validation
         /// </summary>
         public decimal MinValue { get; } = -1;
 
+        /// <summary>
+        /// Maximum decimal value of requested validate scope.
+        /// </summary>
+        public decimal? MaxValue { get; set; }
+
         #endregion
 
         #region Constructors
@@ -73,6 +78,18 @@ namespace Milvasoft.Helpers.Attributes.Validation
             _resourceType = resourceType;
         }
 
+        /// <summary>
+        /// Constructor of atrribute.
+        /// </summary>
+        /// <param name="minValue"></param>
+        /// <param name="maxValue"></param>
+        /// <param name="resourceType"></param>
+        public ValidateDecimalAttribute(decimal minValue, decimal maxValue, Type resourceType = null)
+        {
+            MinValue = minValue;
+            MaxValue = maxValue;
+            _resourceType = resourceType;
+        }
 
         #endregion
 
@@ -105,10 +122,17 @@ namespace Milvasoft.Helpers.Attributes.Validation
                     ErrorMessage = errorMessage;
                     return new ValidationResult(FormatErrorMessage(""));
                 }
+                if (MaxValue != null)
+                {
+                    if (Convert.ToDecimal(value) >= MaxValue)
+                    {
+                        ErrorMessage = errorMessage;
+                        return new ValidationResult(FormatErrorMessage(""));
+                    }
+                }
             }
 
             return ValidationResult.Success;
-
         }
     }
 }
