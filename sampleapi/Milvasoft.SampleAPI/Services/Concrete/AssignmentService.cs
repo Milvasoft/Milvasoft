@@ -324,11 +324,13 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// <returns></returns>
         public async Task<AssignmentForStudentDTO> GetCurrentActiveAssignment()
         {
-            var currentStudent = await _studentRepository.GetFirstOrDefaultAsync(i => i.AppUser.UserName == _loggedUser).ConfigureAwait(false);
+            Func<IIncludable<Student>, IIncludable> include = i => i.Include(p => p.OldAssignments);
 
-            currentStudent.ThrowIfNullForGuidObject();
+            var currentUser= await _studentRepository.GetAllAsync(include, i=> i.AppUser.UserName == _loggedUser).ConfigureAwait(false);
 
-            var currentAssignment = await _studentAssignmentRepository.GetFirstOrDefaultAsync(i => i.StudentId == currentStudent.Id && i.IsApproved);
+            var currentStudent = currentUser.First();
+
+            var currentAssignment = currentStudent.OldAssignments.Where(i=>i.IsApproved).First();
 
             currentAssignment.ThrowIfNullForGuidObject();
 
@@ -344,7 +346,6 @@ namespace Milvasoft.SampleAPI.Services.Concrete
                 Rules = assignment.Rules,
                 ProfessionId = assignment.ProfessionId
             };
-
         }
 
         /// <summary>
@@ -355,9 +356,16 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// <returns></returns>
         public async Task TakeAssignment(Guid Id, AddStudentAssignmentDTO newAssignment)
         {
-            var currentStudent = await _studentRepository.GetFirstOrDefaultAsync(i => i.AppUser.UserName == _loggedUser).ConfigureAwait(false);
+            Func<IIncludable<Student>, IIncludable> include = i => i.Include(p => p.OldAssignments);
+
+            var currentUser = await _studentRepository.GetAllAsync(include,i => i.AppUser.UserName == _loggedUser).ConfigureAwait(false);
+
+            var currentStudent = currentUser.First();
 
             currentStudent.ThrowIfNullForGuidObject();
+
+            //Assignment tablosuna ödevinin teslim edilip edilmediğine dair bool bir değişken koy.Aşağıdaki satırda onu kontrol et.
+            var lastAssignment = currentStudent.OldAssignments.Where(i=>i.FinishedDate==null).Last();
 
             var toBeTakeAssignment = await _assignmentRepository.GetByIdAsync(Id).ConfigureAwait(false);
 
