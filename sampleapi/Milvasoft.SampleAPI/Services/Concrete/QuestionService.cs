@@ -329,22 +329,21 @@ namespace Milvasoft.SampleAPI.Services.Concrete
 
             questions.ThrowIfListIsNotNullOrEmpty("CannotFindEntityException");
 
-            return (questions != null ? from question in questions
-                                        select new QuestionDTO
-                                        {
-                                            Title = question.Title,
-                                            QuestionContent = question.QuestionContent,
-                                            MentorReply = question.MentorReply,
-                                            ProfessionId = question.ProfessionId,
-                                            Mentor = question.Mentor.CheckObject(i => new MentorDTO
-                                            {
-                                                Id = (Guid)question.MentorId
-                                            }),
-                                            Student = question.Student.CheckObject(i => new StudentDTO
-                                            {
-                                                Id = i.Id
-                                            })
-                                        } : null).ToList();
+            return questions.CheckList(i => questions.Select(question=> new QuestionDTO
+            {
+                Title = question.Title,
+                QuestionContent = question.QuestionContent,
+                MentorReply = question.MentorReply,
+                ProfessionId = question.ProfessionId,
+                Mentor = question.Mentor.CheckObject(i => new MentorDTO
+                {
+                    Id = (Guid)question.MentorId
+                }),
+                Student = question.Student.CheckObject(i => new StudentDTO
+                {
+                    Id = i.Id
+                })
+            }));
         }
     }
 }
