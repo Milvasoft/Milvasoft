@@ -46,7 +46,7 @@
 		<Description>Helpers classes for projects. Please contribute for improvements. </Description>
 		<PackageTags>multitenancy,tenant,tenancy,json,file,image,helper,milvasoft,extensions,filter,request,response</PackageTags>
 		<Copyright>Milvasoft Yazılım Bilişim Araştırma Geliştirme Danışmanlık Sanayi ve Ticaret Ltd.Şti.</Copyright>
-		<Version>6.2.36</Version>
+		<Version>6.2.38</Version>
 		<PackageIcon>milvalogo.png</PackageIcon>
 
 	</PropertyGroup>
