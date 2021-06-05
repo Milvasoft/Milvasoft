@@ -28,6 +28,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
     /// </summary>
     public class MentorService : IMentorService
     {
+        private readonly string _loggedUser;
         private readonly UserManager<AppUser> _userManager;
         private readonly IBaseRepository<Mentor, Guid, EducationAppDbContext> _mentorRepository;
         private readonly IHttpContextAccessor _httpContextAccessor;
@@ -43,6 +44,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
             _httpContextAccessor = httpContextAccessor;
             _userManager = userManager;
             _mentorRepository = mentorRepository;
+            _loggedUser = httpContextAccessor.HttpContext.User.Identity.Name;
         }
 
         /// <summary>
@@ -134,14 +136,12 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// <returns></returns>
         public async Task<MentorForMentorDTO> GetCurrentUserProfile()
         {
-            var userName = _httpContextAccessor.HttpContext.User.Identity.Name;
-
             Func<IIncludable<Mentor>, IIncludable> includes = i => i.Include(p => p.Students)
                                                                     .Include(p => p.Professions)
                                                                     .Include(p => p.PublishedAnnouncements);
 
 
-            var mentor = await _mentorRepository.GetFirstOrDefaultAsync(includes, p => p.AppUser.UserName == userName).ConfigureAwait(false);
+            var mentor = await _mentorRepository.GetFirstOrDefaultAsync(includes, p => p.AppUser.UserName == _loggedUser).ConfigureAwait(false);
 
             mentor.ThrowIfNullForGuidObject();
 
@@ -233,8 +233,6 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// <returns></returns>
         public async Task UpdateCurrentMentorAsync(UpdateMentorDTO updateMentorDTO)
         {
-            var _loggedUser = _httpContextAccessor.HttpContext.User.Identity.Name;
-
             var toBeUpdatedMentor = await _userManager.FindByNameAsync(_loggedUser).ConfigureAwait(false) ?? throw new MilvaUserFriendlyException("CannotFindUserWithThisToken");
 
             toBeUpdatedMentor.ThrowIfNullForGuidObject();
@@ -252,8 +250,6 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// <returns></returns>
         public async Task DeleteMentorsAsync(List<Guid> mentorIds)
         {
-            mentorIds.ThrowIfParameterIsNullOrEmpty();
-
             var mentors = await _mentorRepository.GetAllAsync(i => mentorIds.Select(p => p).Contains(i.Id)).ConfigureAwait(false);
 
             mentors.ThrowIfListIsNullOrEmpty();

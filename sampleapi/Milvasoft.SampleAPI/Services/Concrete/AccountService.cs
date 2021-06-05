@@ -195,7 +195,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// </summary>
         /// <param name="registerDTO"></param>
         /// <returns></returns>
-        public async Task<LoginResultDTO> RegisterAsync(SignUpDTO registerDTO)
+        public async Task<LoginResultDTO> RegisterAsync(RegisterDTO registerDTO)
         {
             AppUser userToBeSignUp = new()
             {

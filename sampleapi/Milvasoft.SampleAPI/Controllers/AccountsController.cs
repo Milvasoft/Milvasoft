@@ -134,7 +134,7 @@ namespace Milvasoft.SampleAPI.Controllers
         [HttpPost("Register")]
         [AllowAnonymous]
         [OValidationFilter]
-        public async Task<IActionResult> RegisterAsync([FromBody] SignUpDTO signUpDTO)
+        public async Task<IActionResult> RegisterAsync([FromBody] RegisterDTO signUpDTO)
         {
             ObjectResponse<LoginResultDTO> response = new()
             {

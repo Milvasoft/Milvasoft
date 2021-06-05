@@ -27,6 +27,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
     /// </summary>
     public class StudentService : IStudentService
     {
+        private readonly string _loggedUser;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly UserManager<AppUser> _userManager;
         private readonly IBaseRepository<Student, Guid, EducationAppDbContext> _studentRepository;
@@ -39,12 +40,16 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// <param name="userManager"></param>
         /// <param name="httpContextAccessor"></param>
         /// <param name="mentorRepository"></param>
-        public StudentService(IBaseRepository<Student, Guid, EducationAppDbContext> studentRepository, UserManager<AppUser> userManager, IBaseRepository<Mentor, Guid, EducationAppDbContext> mentorRepository, IHttpContextAccessor httpContextAccessor)
+        public StudentService(IBaseRepository<Student, Guid, EducationAppDbContext> studentRepository,
+                              UserManager<AppUser> userManager,
+                              IBaseRepository<Mentor, Guid, EducationAppDbContext> mentorRepository,
+                              IHttpContextAccessor httpContextAccessor)
         {
             _mentorRepository = mentorRepository;
             _userManager = userManager;
             _studentRepository = studentRepository;
             _httpContextAccessor = httpContextAccessor;
+            _loggedUser = httpContextAccessor.HttpContext.User.Identity.Name;
         }
 
         /// <summary>
@@ -100,9 +105,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// <returns>Brings the students for whom the mentor is responsible.</returns>
         public async Task<PaginationDTO<StudentForMentorDTO>> GetStudentsForCurrentMentorAsync(PaginationParamsWithSpec<StudentSpec> paginationParams)
         {
-            var username = _httpContextAccessor.HttpContext.User.Identity.Name;
-
-            var currentMentor = await _mentorRepository.GetFirstOrDefaultAsync(i => i.AppUser.UserName == username).ConfigureAwait(false);
+            var currentMentor = await _mentorRepository.GetFirstOrDefaultAsync(i => i.AppUser.UserName == _loggedUser).ConfigureAwait(false);
 
             Func<IIncludable<Student>, IIncludable> includes = i => i.Include(md => md.Mentor)
                                                                      .Include(oa => oa.OldAssignments);
@@ -191,9 +194,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// <returns></returns>
         public async Task<StudentForMentorDTO> GetStudentForMentorAsync(Guid studentId)
         {
-            var username = _httpContextAccessor.HttpContext.User.Identity.Name;
-
-            var currentMentor = await _mentorRepository.GetFirstOrDefaultAsync(i => i.AppUser.UserName == username).ConfigureAwait(false);
+            var currentMentor = await _mentorRepository.GetFirstOrDefaultAsync(i => i.AppUser.UserName == _loggedUser).ConfigureAwait(false);
 
             Func<IIncludable<Student>, IIncludable> includes = i => i.Include(md => md.Mentor)
                                                                      .Include(oa => oa.OldAssignments);
@@ -233,9 +234,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// <returns></returns>
         public async Task<StudentForMentorDTO> GetCurrentUserProfile()
         {
-            var username = _httpContextAccessor.HttpContext.User.Identity.Name;
-
-            var currentStudent = await _studentRepository.GetFirstOrDefaultAsync(i => i.AppUser.UserName == username).ConfigureAwait(false);
+            var currentStudent = await _studentRepository.GetFirstOrDefaultAsync(i => i.AppUser.UserName == _loggedUser).ConfigureAwait(false);
 
             currentStudent.ThrowIfNullForGuidObject();
 
@@ -359,9 +358,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// <returns></returns>
         public async Task UpdateCurrentStudentAsync(UpdateStudentDTO updateStudentDTO)
         {
-            var username = _httpContextAccessor.HttpContext.User.Identity.Name;
-
-            var currentStudent = await _userManager.FindByNameAsync(username).ConfigureAwait(false);
+            var currentStudent = await _userManager.FindByNameAsync(_loggedUser).ConfigureAwait(false);
 
             currentStudent.ThrowIfNullForGuidObject();
 
