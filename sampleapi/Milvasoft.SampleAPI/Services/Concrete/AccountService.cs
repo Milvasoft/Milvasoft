@@ -42,7 +42,6 @@ namespace Milvasoft.SampleAPI.Services.Concrete
             PhoneNumberChange
         }
 
-
         private readonly UserManager<AppUser> _userManager;
         private readonly SignInManager<AppUser> _signInManager;
         private readonly IContextRepository<EducationAppDbContext> _contextRepository;
@@ -51,8 +50,6 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly ITokenManagement _tokenManagement;
         private readonly IStringLocalizer<SharedResource> _localizer;
-        private readonly IBaseRepository<Student, Guid, EducationAppDbContext> _studentRepository;
-        private readonly IBaseRepository<Mentor, Guid, EducationAppDbContext> _mentorRepository;
         private readonly IBaseRepository<AppUser, Guid, EducationAppDbContext> _userRepository;
         private readonly IMilvaLogger _milvaLogger;
         private readonly string _userName;
@@ -76,9 +73,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// <param name="signInManager"></param>
         /// <param name="tokenManagement"></param>
         /// <param name="httpClient"></param>
-        /// <param name="studentRepository"></param>
         /// <param name="contextRepository"></param>
-        /// <param name="mentorRepository"></param>
         /// <param name="userRepository"></param>
         /// <param name="httpContextAccessor"></param>
         /// <param name="milvaMailSender"></param>
@@ -89,9 +84,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
                               SignInManager<AppUser> signInManager,
                               ITokenManagement tokenManagement,
                               HttpClient httpClient,
-                              IBaseRepository<Student, Guid, EducationAppDbContext> studentRepository,
                               IContextRepository<EducationAppDbContext> contextRepository,
-                              IBaseRepository<Mentor, Guid, EducationAppDbContext> mentorRepository,
                               IBaseRepository<AppUser, Guid, EducationAppDbContext> userRepository,
                               IHttpContextAccessor httpContextAccessor,
                               IMilvaMailSender milvaMailSender,
@@ -107,9 +100,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
             _userManager = userManager;
             _signInManager = signInManager;
             _httpClient = httpClient;
-            _studentRepository = studentRepository;
             _contextRepository = contextRepository;
-            _mentorRepository = mentorRepository;
             _httpContextAccessor = httpContextAccessor;
             _localizer = sharedLocalizer;
             _tokenManagement = tokenManagement;
@@ -118,31 +109,33 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         }
 
         /// <summary>
-        /// Signs in for incoming user. Returns a token if login informations are valid or the user is not lockedout. Otherwise returns the error list.
+        /// Signs in for incoming user. 
         /// </summary>
         /// <param name="loginDTO"></param>
         /// <param name="isMentor"></param>
-        /// <returns></returns>
+        /// <returns>Returns a token if the login information is correct.Otherwise returns the error list.</returns>
         public async Task<LoginResultDTO> LoginAsync(LoginDTO loginDTO, bool isMentor) => await base.LoginAsync(loginDTO,
                                                                                                                 isMentor,
                                                                                                                 userValidationByUserType: ValidateUser,
                                                                                                                 tokenExpiredDate: isMentor ? DateTime.Now.AddDays(100) : DateTime.Now.AddDays(5)).ConfigureAwait(false);
 
         /// <summary>
-        /// Signs out from database. Returns null if already signed out.
+        /// Signs out from database. 
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Returns null if already signed out.</returns>
         public async Task<IdentityResult> LogoutAsync() => await base.LogoutAsync().ConfigureAwait(false);
 
         /// <summary>
-        /// Chamge user password.
+        /// Change user password.
         /// </summary>
         /// <param name="passDTO"></param>
         /// <returns></returns>
         public async Task<IdentityResult> ChangePasswordAsync(ChangePassDTO passDTO)
         {
-            if (passDTO.OldPassword == passDTO.NewPassword) throw new MilvaUserFriendlyException("Passwords are already the same");
+            if (passDTO.OldPassword == passDTO.NewPassword) throw new MilvaUserFriendlyException("PasswordSameException");
+
             var user = await _userManager.FindByNameAsync(passDTO.UserName).ConfigureAwait(false);
+
             return await base.ChangePasswordAsync(user, passDTO.OldPassword, passDTO.NewPassword);
         }
 
@@ -682,6 +675,5 @@ namespace Milvasoft.SampleAPI.Services.Concrete
             }
         }
         #endregion
-
     }
 }

@@ -35,17 +35,17 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// <summary>
         /// Get all announcement for student.
         /// </summary>
-        /// <param name="pagiantionParams">Filter object.</param>
+        /// <param name="paginationParams">Filter object.</param>
         /// <returns> The announcement is put in the form of an AnnouncementForStudentDTO.</returns>
-        public async Task<PaginationDTO<AnnouncementForStudentDTO>> GetAnnouncementsForStudentAsync(PaginationParamsWithSpec<AnnouncementSpec> pagiantionParams)
+        public async Task<PaginationDTO<AnnouncementForStudentDTO>> GetAnnouncementsForStudentAsync(PaginationParamsWithSpec<AnnouncementSpec> paginationParams)
         {
             Func<IIncludable<Announcement>, IIncludable> includes = i => i.Include(md => md.PublisherMentor);
 
-            var (announcements, pageCount, totalDataCount) = await _announcementRepository.PreparePaginationDTO(pagiantionParams.PageIndex,
-                                                                                                                pagiantionParams.RequestedItemCount,
-                                                                                                                pagiantionParams.OrderByProperty,
-                                                                                                                pagiantionParams.OrderByAscending,
-                                                                                                                pagiantionParams.Spec?.ToExpression(),
+            var (announcements, pageCount, totalDataCount) = await _announcementRepository.PreparePaginationDTO(paginationParams.PageIndex,
+                                                                                                                paginationParams.RequestedItemCount,
+                                                                                                                paginationParams.OrderByProperty,
+                                                                                                                paginationParams.OrderByAscending,
+                                                                                                                paginationParams.Spec?.ToExpression(),
                                                                                                                 includes).ConfigureAwait(false);
 
             return new PaginationDTO<AnnouncementForStudentDTO>
@@ -70,17 +70,17 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// <summary>
         /// Get all announcement for admin.
         /// </summary>
-        /// <param name="pagiantionParams">Filter object.</param>
+        /// <param name="paginationParams">Filter object.</param>
         /// <returns> The announcements is put in the form of an AnnouncementForAdminDTO.</returns>
-        public async Task<PaginationDTO<AnnouncementForAdminDTO>> GetAnnouncementsForAdminAsync(PaginationParamsWithSpec<AnnouncementSpec> pagiantionParams)
+        public async Task<PaginationDTO<AnnouncementForAdminDTO>> GetAnnouncementsForAdminAsync(PaginationParamsWithSpec<AnnouncementSpec> paginationParams)
         {
             Func<IIncludable<Announcement>, IIncludable> includes = i => i.Include(md => md.PublisherMentor);
 
-            var (announcements, pageCount, totalDataCount) = await _announcementRepository.PreparePaginationDTO(pagiantionParams.PageIndex,
-                                                                                                                pagiantionParams.RequestedItemCount,
-                                                                                                                pagiantionParams.OrderByProperty,
-                                                                                                                pagiantionParams.OrderByAscending,
-                                                                                                                pagiantionParams.Spec?.ToExpression(),
+            var (announcements, pageCount, totalDataCount) = await _announcementRepository.PreparePaginationDTO(paginationParams.PageIndex,
+                                                                                                                paginationParams.RequestedItemCount,
+                                                                                                                paginationParams.OrderByProperty,
+                                                                                                                paginationParams.OrderByAscending,
+                                                                                                                paginationParams.Spec?.ToExpression(),
                                                                                                                 includes).ConfigureAwait(false);
 
             return new PaginationDTO<AnnouncementForAdminDTO>
@@ -106,17 +106,17 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// <summary>
         /// Get all announcement for mentor.
         /// </summary>
-        /// <param name="pagiantionParams">Filter object.</param>
+        /// <param name="paginationParams">Filter object.</param>
         /// <returns> The announcement is put in the form of an AnnouncementForMentorDTO.</returns>
-        public async Task<PaginationDTO<AnnouncementForMentorDTO>> GetAnnouncementsForMentorAsync(PaginationParamsWithSpec<AnnouncementSpec> pagiantionParams)
+        public async Task<PaginationDTO<AnnouncementForMentorDTO>> GetAnnouncementsForMentorAsync(PaginationParamsWithSpec<AnnouncementSpec> paginationParams)
         {
             Func<IIncludable<Announcement>, IIncludable> includes = i => i.Include(md => md.PublisherMentor);
 
-            var (announcements, pageCount, totalDataCount) = await _announcementRepository.PreparePaginationDTO(pagiantionParams.PageIndex,
-                                                                                                                pagiantionParams.RequestedItemCount,
-                                                                                                                pagiantionParams.OrderByProperty,
-                                                                                                                pagiantionParams.OrderByAscending,
-                                                                                                                pagiantionParams.Spec?.ToExpression(),
+            var (announcements, pageCount, totalDataCount) = await _announcementRepository.PreparePaginationDTO(paginationParams.PageIndex,
+                                                                                                                paginationParams.RequestedItemCount,
+                                                                                                                paginationParams.OrderByProperty,
+                                                                                                                paginationParams.OrderByAscending,
+                                                                                                                paginationParams.Spec?.ToExpression(),
                                                                                                                 includes).ConfigureAwait(false);
 
             return new PaginationDTO<AnnouncementForMentorDTO>

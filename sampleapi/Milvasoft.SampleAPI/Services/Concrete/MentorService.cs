@@ -49,20 +49,18 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// Get mentors for admin.
         /// </summary>
         /// <returns></returns>
-        public async Task<PaginationDTO<MentorForAdminDTO>> GetMentorsForAdminAsync(PaginationParamsWithSpec<MentorSpec> pagiantionParams)
+        public async Task<PaginationDTO<MentorForAdminDTO>> GetMentorsForAdminAsync(PaginationParamsWithSpec<MentorSpec> paginationParams)
         {
             Func<IIncludable<Mentor>, IIncludable> includes = i => i.Include(p => p.PublishedAnnouncements)
-                                                                     .Include(s => s.Students)
-                                                                     .Include(p => p.Professions);
+                                                                    .Include(s => s.Students)
+                                                                    .Include(p => p.Professions);
 
-            var (mentors, pageCount, totalDataCount) = await _mentorRepository.PreparePaginationDTO(pagiantionParams.PageIndex,
-                                                                                                    pagiantionParams.RequestedItemCount,
-                                                                                                    pagiantionParams.OrderByProperty,
-                                                                                                    pagiantionParams.OrderByAscending,
-                                                                                                    pagiantionParams.Spec?.ToExpression(),
+            var (mentors, pageCount, totalDataCount) = await _mentorRepository.PreparePaginationDTO(paginationParams.PageIndex,
+                                                                                                    paginationParams.RequestedItemCount,
+                                                                                                    paginationParams.OrderByProperty,
+                                                                                                    paginationParams.OrderByAscending,
+                                                                                                    paginationParams.Spec?.ToExpression(),
                                                                                                     includes).ConfigureAwait(false);
-
-            mentors.ThrowIfListIsNullOrEmpty("CannotFindEntityException");
 
             return new PaginationDTO<MentorForAdminDTO>
             {
@@ -98,8 +96,8 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         public async Task<MentorForAdminDTO> GetMentorForAdminAsync(Guid mentorId)
         {
             Func<IIncludable<Mentor>, IIncludable> includes = i => i.Include(p => p.PublishedAnnouncements)
-                                                                     .Include(s => s.Students)
-                                                                     .Include(p => p.Professions);
+                                                                    .Include(s => s.Students)
+                                                                    .Include(p => p.Professions);
 
             var mentor = await _mentorRepository.GetByIdAsync(mentorId, includes).ConfigureAwait(false);
 
@@ -145,7 +143,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
 
             var mentor = await _mentorRepository.GetFirstOrDefaultAsync(includes, p => p.AppUser.UserName == userName).ConfigureAwait(false);
 
-            mentor.ThrowIfNullForGuidObject("CannotFindEntityException");
+            mentor.ThrowIfNullForGuidObject();
 
             return new MentorForMentorDTO
             {
@@ -176,7 +174,6 @@ namespace Milvasoft.SampleAPI.Services.Concrete
                     CurrentAssigmentDeliveryDate = st.CurrentAssigmentDeliveryDate,
                     Id = st.Id
                 }))
-
             };
         }
 
@@ -242,13 +239,10 @@ namespace Milvasoft.SampleAPI.Services.Concrete
 
             toBeUpdatedMentor.ThrowIfNullForGuidObject();
 
-            var formFile = updateMentorDTO.Photo;
-
             toBeUpdatedMentor.Mentor.Name = updateMentorDTO.Name;
             toBeUpdatedMentor.Mentor.Surname = updateMentorDTO.Surname;
 
             await _mentorRepository.UpdateAsync(toBeUpdatedMentor.Mentor).ConfigureAwait(false);
-
         }
 
         /// <summary>

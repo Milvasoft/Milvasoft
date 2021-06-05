@@ -34,17 +34,13 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// Get links for student.
         /// </summary>
         /// <returns></returns>
-        public async Task<PaginationDTO<UsefulLinkDTO>> GetUsefulLinksForStudentAsync(PaginationParamsWithSpec<UsefulLinkSpec> pagiantionParams)
+        public async Task<PaginationDTO<UsefulLinkDTO>> GetUsefulLinksForStudentAsync(PaginationParamsWithSpec<UsefulLinkSpec> paginationParams)
         {
-            pagiantionParams.ThrowIfParameterIsNull();
-
-            var (usefulLinks, pageCount, totalDataCount) = await _usefulLinkRepository.PreparePaginationDTO(pagiantionParams.PageIndex,
-                                                                                                            pagiantionParams.RequestedItemCount,
-                                                                                                            pagiantionParams.OrderByProperty,
-                                                                                                            pagiantionParams.OrderByAscending,
-                                                                                                            pagiantionParams.Spec?.ToExpression()).ConfigureAwait(false);
-
-            usefulLinks.ThrowIfListIsNullOrEmpty("CannotFindEntityException");
+            var (usefulLinks, pageCount, totalDataCount) = await _usefulLinkRepository.PreparePaginationDTO(paginationParams.PageIndex,
+                                                                                                            paginationParams.RequestedItemCount,
+                                                                                                            paginationParams.OrderByProperty,
+                                                                                                            paginationParams.OrderByAscending,
+                                                                                                            paginationParams.Spec?.ToExpression()).ConfigureAwait(false);
 
             return new PaginationDTO<UsefulLinkDTO>
             {
@@ -66,15 +62,13 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// Get links for admin.
         /// </summary>
         /// <returns></returns>
-        public async Task<PaginationDTO<UsefulLinkDTO>> GetUsefulLinksForAdminAsync(PaginationParamsWithSpec<UsefulLinkSpec> pagiantionParams)
+        public async Task<PaginationDTO<UsefulLinkDTO>> GetUsefulLinksForAdminAsync(PaginationParamsWithSpec<UsefulLinkSpec> paginationParams)
         {
-            var (usefulLinks, pageCount, totalDataCount) = await _usefulLinkRepository.PreparePaginationDTO(pagiantionParams.PageIndex,
-                                                                                                            pagiantionParams.RequestedItemCount,
-                                                                                                            pagiantionParams.OrderByProperty,
-                                                                                                            pagiantionParams.OrderByAscending,
-                                                                                                            pagiantionParams.Spec?.ToExpression()).ConfigureAwait(false);
-
-            usefulLinks.ThrowIfListIsNullOrEmpty("CannotFindEntityException");
+            var (usefulLinks, pageCount, totalDataCount) = await _usefulLinkRepository.PreparePaginationDTO(paginationParams.PageIndex,
+                                                                                                            paginationParams.RequestedItemCount,
+                                                                                                            paginationParams.OrderByProperty,
+                                                                                                            paginationParams.OrderByAscending,
+                                                                                                            paginationParams.Spec?.ToExpression()).ConfigureAwait(false);
 
             return new PaginationDTO<UsefulLinkDTO>
             {
@@ -96,15 +90,13 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// Get link for mentor.
         /// </summary>
         /// <returns></returns>
-        public async Task<PaginationDTO<UsefulLinkDTO>> GetUsefulLinksForMentorAsync(PaginationParamsWithSpec<UsefulLinkSpec> pagiantionParams)
+        public async Task<PaginationDTO<UsefulLinkDTO>> GetUsefulLinksForMentorAsync(PaginationParamsWithSpec<UsefulLinkSpec> paginationParams)
         {
-            var (usefulLinks, pageCount, totalDataCount) = await _usefulLinkRepository.PreparePaginationDTO(pagiantionParams.PageIndex,
-                                                                                                            pagiantionParams.RequestedItemCount,
-                                                                                                            pagiantionParams.OrderByProperty,
-                                                                                                            pagiantionParams.OrderByAscending,
-                                                                                                            pagiantionParams.Spec?.ToExpression()).ConfigureAwait(false);
-
-            usefulLinks.ThrowIfListIsNullOrEmpty("CannotFindEntityException");
+            var (usefulLinks, pageCount, totalDataCount) = await _usefulLinkRepository.PreparePaginationDTO(paginationParams.PageIndex,
+                                                                                                            paginationParams.RequestedItemCount,
+                                                                                                            paginationParams.OrderByProperty,
+                                                                                                            paginationParams.OrderByAscending,
+                                                                                                            paginationParams.Spec?.ToExpression()).ConfigureAwait(false);
 
             return new PaginationDTO<UsefulLinkDTO>
             {
@@ -130,7 +122,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         {
             var link = await _usefulLinkRepository.GetByIdAsync(usefulLinkId).ConfigureAwait(false);
 
-            link.ThrowIfNullForGuidObject("CannotFindEntityException");
+            link.ThrowIfNullForGuidObject();
 
             return new UsefulLinkDTO()
             {
@@ -139,7 +131,6 @@ namespace Milvasoft.SampleAPI.Services.Concrete
                 Url = link.Url,
                 ProfessionId = link.ProfessionId
             };
-
         }
 
         /// <summary>
@@ -151,7 +142,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         {
             var link = await _usefulLinkRepository.GetByIdAsync(usefulLinkId).ConfigureAwait(false);
 
-            link.ThrowIfNullForGuidObject("CannotFindEntityException");
+            link.ThrowIfNullForGuidObject();
 
             return new UsefulLinkDTO()
             {
@@ -172,7 +163,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         {
             var link = await _usefulLinkRepository.GetByIdAsync(usefulLinkId).ConfigureAwait(false);
 
-            link.ThrowIfNullForGuidObject("CannotFindEntityException");
+            link.ThrowIfNullForGuidObject();
 
             return new UsefulLinkDTO()
             {
@@ -211,10 +202,10 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         {
             var toBeUpdatedLink = await _usefulLinkRepository.GetByIdAsync(addUsefulLinkDTO.Id).ConfigureAwait(false);
 
+            toBeUpdatedLink.ThrowIfNullForGuidObject();
+
             toBeUpdatedLink.Title = addUsefulLinkDTO.Title;
-
             toBeUpdatedLink.Description = addUsefulLinkDTO.Description;
-
             toBeUpdatedLink.Url = addUsefulLinkDTO.Url;
 
             await _usefulLinkRepository.UpdateAsync(toBeUpdatedLink).ConfigureAwait(false);
@@ -228,6 +219,9 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         public async Task DeleteUsefulLinksAsync(List<Guid> usefulLinkIds)
         {
             var deletedLinks = await _usefulLinkRepository.GetAllAsync(i => usefulLinkIds.Select(p => p).Contains(i.Id)).ConfigureAwait(false);
+
+            deletedLinks.ThrowIfListIsNullOrEmpty();
+
             await _usefulLinkRepository.DeleteAsync(deletedLinks);
         }
     }

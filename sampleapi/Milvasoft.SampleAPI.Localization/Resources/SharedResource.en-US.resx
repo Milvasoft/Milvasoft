@@ -1305,4 +1305,7 @@
   <data name="WrongPaginationParamsException" xml:space="preserve">
     <value>The number of pages requested is greater than the page generated. Maximum number of pages should be {0}.</value>
   </data>
+  <data name="PasswordSameException" xml:space="preserve">
+    <value>The passwords are already the same.</value>
+  </data>
 </root>

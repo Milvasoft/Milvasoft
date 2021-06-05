@@ -280,7 +280,6 @@
             
             </remarks>
             
-            <param name="userName"></param>
             <returns></returns>
         </member>
         <member name="M:Milvasoft.SampleAPI.Controllers.AccountsController.SendForgotPasswordMailAsync(System.String)">
@@ -3708,7 +3707,7 @@
             The name of token.
             </summary>
         </member>
-        <member name="M:Milvasoft.SampleAPI.Services.Concrete.AccountService.#ctor(Microsoft.AspNetCore.Identity.UserManager{Milvasoft.SampleAPI.Entity.AppUser},Microsoft.AspNetCore.Identity.SignInManager{Milvasoft.SampleAPI.Entity.AppUser},Milvasoft.Helpers.Identity.Concrete.ITokenManagement,System.Net.Http.HttpClient,Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository{Milvasoft.SampleAPI.Entity.Student,System.Guid,Milvasoft.SampleAPI.Data.EducationAppDbContext},Milvasoft.Helpers.DataAccess.Abstract.IContextRepository{Milvasoft.SampleAPI.Data.EducationAppDbContext},Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository{Milvasoft.SampleAPI.Entity.Mentor,System.Guid,Milvasoft.SampleAPI.Data.EducationAppDbContext},Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository{Milvasoft.SampleAPI.Entity.AppUser,System.Guid,Milvasoft.SampleAPI.Data.EducationAppDbContext},Microsoft.AspNetCore.Http.IHttpContextAccessor,Milvasoft.Helpers.Mail.IMilvaMailSender,Microsoft.Extensions.Localization.IStringLocalizer{Milvasoft.SampleAPI.Localization.SharedResource},Milvasoft.Helpers.DependencyInjection.IMilvaLogger,Milvasoft.Helpers.Caching.IRedisCacheService)">
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.AccountService.#ctor(Microsoft.AspNetCore.Identity.UserManager{Milvasoft.SampleAPI.Entity.AppUser},Microsoft.AspNetCore.Identity.SignInManager{Milvasoft.SampleAPI.Entity.AppUser},Milvasoft.Helpers.Identity.Concrete.ITokenManagement,System.Net.Http.HttpClient,Milvasoft.Helpers.DataAccess.Abstract.IContextRepository{Milvasoft.SampleAPI.Data.EducationAppDbContext},Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository{Milvasoft.SampleAPI.Entity.AppUser,System.Guid,Milvasoft.SampleAPI.Data.EducationAppDbContext},Microsoft.AspNetCore.Http.IHttpContextAccessor,Milvasoft.Helpers.Mail.IMilvaMailSender,Microsoft.Extensions.Localization.IStringLocalizer{Milvasoft.SampleAPI.Localization.SharedResource},Milvasoft.Helpers.DependencyInjection.IMilvaLogger,Milvasoft.Helpers.Caching.IRedisCacheService)">
             <summary>
             Performs constructor injection for repository interfaces used in this service.
             </summary>
@@ -3716,9 +3715,7 @@
             <param name="signInManager"></param>
             <param name="tokenManagement"></param>
             <param name="httpClient"></param>
-            <param name="studentRepository"></param>
             <param name="contextRepository"></param>
-            <param name="mentorRepository"></param>
             <param name="userRepository"></param>
             <param name="httpContextAccessor"></param>
             <param name="milvaMailSender"></param>
@@ -3766,7 +3763,6 @@
             If signup process is succesful,then sign in.
             </summary>
             <param name="registerDTO"></param>
-            <param name="language"></param>
             <returns></returns>
         </member>
         <member name="M:Milvasoft.SampleAPI.Services.Concrete.AccountService.DeleteAccountAsync">
@@ -3774,78 +3770,6 @@
             Deletes logged-in user's account. This operation is irreversible.
             </summary>
             <returns></returns>
-        </member>
-        <member name="M:Milvasoft.SampleAPI.Services.Concrete.AccountService.GenerateTokenWithRoleAsync(Milvasoft.SampleAPI.Entity.AppUser,System.Boolean)">
-            <summary>
-            Validating user to login.
-            </summary>
-            <param name="loginDTO"></param>
-            <param name="user"></param>
-            <param name="isUserType"></param>
-            <returns></returns>
-            <summary>
-            Roll is added according to user type and token is produced.
-            </summary>
-            <param name="user"></param>
-            <param name="isAppUser"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Milvasoft.SampleAPI.Services.Concrete.AccountService.GenerateToken(System.String,System.Collections.Generic.IList{System.String},System.Boolean)">
-            <summary>
-            If Authentication is successful, JWT tokens are generated.
-            </summary>
-            <param name="username"></param>
-            <param name="roles"></param>
-            <param name="isAppUser"></param>
-        </member>
-        <member name="M:Milvasoft.SampleAPI.Services.Concrete.AccountService.GenerateVerificationCode">
-            <summary>
-            Generates 6-digit verification code.
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:Milvasoft.SampleAPI.Services.Concrete.AccountService.PrepareMailBodyDictionary(System.String[])">
-            <summary>
-            <para> Please add items to <paramref name="values"/> with this sorting; </para>
-                     <para> - Mail Title         </para>
-                     <para> - Body Title         </para>
-                     <para> - Body Description   </para>
-                     <para> - Body Button Text   </para>
-                     <para> - Body Resend Text   </para>
-                     <para> - Body Bottom Text   </para>
-            </summary>
-            <param name="values"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Milvasoft.SampleAPI.Services.Concrete.AccountService.SendActivityMailAsync(System.Collections.Generic.Dictionary{System.String,System.String},System.String,Milvasoft.SampleAPI.Services.Concrete.AccountService.AccountActivity,System.String,System.String)">
-            <summary>
-            Sends email to logged-in user's email.
-            Please make sure <paramref name="localizedMailBodyContents"/> dictionary parameter taken from <see cref="M:Milvasoft.SampleAPI.Services.Concrete.AccountService.PrepareMailBodyDictionary(System.String[])"/>.
-            </summary>
-            <param name="localizedMailBodyContents"></param>
-            <param name="urlPath"></param>
-            <param name="accountActivity"></param>
-            <param name="newInfo"> Could be new phone number or new email. </param>
-            <param name="username"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Milvasoft.SampleAPI.Services.Concrete.AccountService.CheckRegex(System.String,System.String)">
-            <summary>
-            Regex check for action parameter.
-            </summary>
-            <param name="input"></param>
-            <param name="propName"></param>
-        </member>
-        <member name="M:Milvasoft.SampleAPI.Services.Concrete.AccountService.CheckLoginStatus">
-            <summary>
-            Cheks <see cref="F:Milvasoft.SampleAPI.Services.Concrete.AccountService._userName"/>. If is null or empty throwns <see cref="T:Milvasoft.Helpers.Exceptions.MilvaUserFriendlyException"/>. Otherwise does nothing.
-            </summary>
-        </member>
-        <member name="M:Milvasoft.SampleAPI.Services.Concrete.AccountService.ThrowErrorMessagesIfNotSuccess(Microsoft.AspNetCore.Identity.IdentityResult)">
-            <summary>
-            If <paramref name="identityResult"/> is not succeeded throwns <see cref="T:Milvasoft.Helpers.Exceptions.MilvaUserFriendlyException"/>.
-            </summary>
-            <param name="identityResult"></param>
         </member>
         <member name="M:Milvasoft.SampleAPI.Services.Concrete.AccountService.SendEmailVerificationMailAsync">
             <summary>
@@ -3914,6 +3838,71 @@
             </summary>
             <param name="passwordResetDTO"></param>
             <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.AccountService.GenerateTokenWithRoleAsync(Milvasoft.SampleAPI.Entity.AppUser,System.Boolean)">
+            <summary>
+            Roll is added according to user type and token is produced.
+            </summary>
+            <param name="user"></param>
+            <param name="isAppUser"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.AccountService.GenerateToken(System.String,System.Collections.Generic.IList{System.String},System.Boolean)">
+            <summary>
+            If Authentication is successful, JWT tokens are generated.
+            </summary>
+            <param name="username"></param>
+            <param name="roles"></param>
+            <param name="isAppUser"></param>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.AccountService.GenerateVerificationCode">
+            <summary>
+            Generates 6-digit verification code.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.AccountService.PrepareMailBodyDictionary(System.String[])">
+            <summary>
+            <para> Please add items to <paramref name="values"/> with this sorting; </para>
+                     <para> - Mail Title         </para>
+                     <para> - Body Title         </para>
+                     <para> - Body Description   </para>
+                     <para> - Body Button Text   </para>
+                     <para> - Body Resend Text   </para>
+                     <para> - Body Bottom Text   </para>
+            </summary>
+            <param name="values"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.AccountService.SendActivityMailAsync(System.Collections.Generic.Dictionary{System.String,System.String},System.String,Milvasoft.SampleAPI.Services.Concrete.AccountService.AccountActivity,System.String,System.String)">
+            <summary>
+            Sends email to logged-in user's email.
+            Please make sure <paramref name="localizedMailBodyContents"/> dictionary parameter taken from <see cref="M:Milvasoft.SampleAPI.Services.Concrete.AccountService.PrepareMailBodyDictionary(System.String[])"/>.
+            </summary>
+            <param name="localizedMailBodyContents"></param>
+            <param name="urlPath"></param>
+            <param name="accountActivity"></param>
+            <param name="newInfo"> Could be new phone number or new email. </param>
+            <param name="username"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.AccountService.CheckRegex(System.String,System.String)">
+            <summary>
+            Regex check for action parameter.
+            </summary>
+            <param name="input"></param>
+            <param name="propName"></param>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.AccountService.CheckLoginStatus">
+            <summary>
+            Cheks <see cref="F:Milvasoft.SampleAPI.Services.Concrete.AccountService._userName"/>. If is null or empty throwns <see cref="T:Milvasoft.Helpers.Exceptions.MilvaUserFriendlyException"/>. Otherwise does nothing.
+            </summary>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.AccountService.ThrowErrorMessagesIfNotSuccess(Microsoft.AspNetCore.Identity.IdentityResult)">
+            <summary>
+            If <paramref name="identityResult"/> is not succeeded throwns <see cref="T:Milvasoft.Helpers.Exceptions.MilvaUserFriendlyException"/>.
+            </summary>
+            <param name="identityResult"></param>
         </member>
         <member name="T:Milvasoft.SampleAPI.Services.Concrete.AnnouncementService">
             <summary>
@@ -4090,13 +4079,6 @@
             Allows the student to turn in the assignment.
             </summary>
             <param name="submitAssignment"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Milvasoft.SampleAPI.Services.Concrete.AssignmentService.CreateAssignmentName(System.Type)">
-            <summary>
-            Create assignment name.
-            </summary>
-            <param name="type"></param>
             <returns></returns>
         </member>
         <member name="M:Milvasoft.SampleAPI.Services.Concrete.AssignmentService.GetUnconfirmedAssignment">

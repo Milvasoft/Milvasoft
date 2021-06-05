@@ -1302,4 +1302,7 @@
   <data name="WrongPaginationParamsException" xml:space="preserve">
     <value>İstenen sayfa sayısı, oluşturulan sayfa sayfasından fazla. Maksimum sayfa sayısı {0} olmalıdır.</value>
   </data>
+  <data name="PasswordSameException" xml:space="preserve">
+    <value>Şifreler zaten aynı.</value>
+  </data>
 </root>
