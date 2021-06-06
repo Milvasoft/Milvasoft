@@ -80,7 +80,7 @@ namespace Milvasoft.SampleAPI.Services.Abstract
         /// Brings instant user's profile information.
         /// </summary>
         /// <returns></returns>
-        Task<StudentForMentorDTO> GetCurrentUserProfile();
+        Task<StudentForMentorDTO> GetCurrentUserProfileAsync();
 
 
     }

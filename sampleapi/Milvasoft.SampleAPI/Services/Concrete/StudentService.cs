@@ -232,7 +232,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// Brings instant user's profile information.
         /// </summary>
         /// <returns></returns>
-        public async Task<StudentForMentorDTO> GetCurrentUserProfile()
+        public async Task<StudentForMentorDTO> GetCurrentUserProfileAsync()
         {
             var currentStudent = await _studentRepository.GetFirstOrDefaultAsync(i => i.AppUser.UserName == _loggedUser).ConfigureAwait(false);
 

@@ -207,7 +207,7 @@
             <param name="userDTO"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.SampleAPI.Controllers.AccountsController.RegisterAsync(Milvasoft.SampleAPI.DTOs.AccountDTOs.SignUpDTO)">
+        <member name="M:Milvasoft.SampleAPI.Controllers.AccountsController.RegisterAsync(Milvasoft.SampleAPI.DTOs.AccountDTOs.RegisterDTO)">
             <summary>
             Provides the registration process of mobile application users.
             </summary>
@@ -1025,22 +1025,22 @@
             Phone number change token.
             </summary>
         </member>
-        <member name="T:Milvasoft.SampleAPI.DTOs.AccountDTOs.SignUpDTO">
+        <member name="T:Milvasoft.SampleAPI.DTOs.AccountDTOs.RegisterDTO">
             <summary>
             Login and sign up processes are happens with this dto.
             </summary>
         </member>
-        <member name="P:Milvasoft.SampleAPI.DTOs.AccountDTOs.SignUpDTO.Name">
+        <member name="P:Milvasoft.SampleAPI.DTOs.AccountDTOs.RegisterDTO.Name">
             <summary>
             User's name.
             </summary>
         </member>
-        <member name="P:Milvasoft.SampleAPI.DTOs.AccountDTOs.SignUpDTO.Surname">
+        <member name="P:Milvasoft.SampleAPI.DTOs.AccountDTOs.RegisterDTO.Surname">
             <summary>
             User's surname.
             </summary>
         </member>
-        <member name="P:Milvasoft.SampleAPI.DTOs.AccountDTOs.SignUpDTO.PhoneNumber">
+        <member name="P:Milvasoft.SampleAPI.DTOs.AccountDTOs.RegisterDTO.PhoneNumber">
             <summary>
             User's phone number.
             </summary>
@@ -3046,6 +3046,11 @@
             Profession of link.
             </summary>
         </member>
+        <member name="T:Milvasoft.SampleAPI.Middlewares.ExceptionHandlerMiddleware">
+            <summary>
+            Middleware that will be activated in case of errors.
+            </summary>
+        </member>
         <member name="M:Milvasoft.SampleAPI.Middlewares.ExceptionHandlerMiddleware.#ctor(Microsoft.AspNetCore.Http.RequestDelegate)">
             <summary>
             Constructor of <c>ExceptionMiddleware</c> class.
@@ -3124,7 +3129,7 @@
             <param name="userDTO"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.SampleAPI.Services.Abstract.IAccountService.RegisterAsync(Milvasoft.SampleAPI.DTOs.AccountDTOs.SignUpDTO)">
+        <member name="M:Milvasoft.SampleAPI.Services.Abstract.IAccountService.RegisterAsync(Milvasoft.SampleAPI.DTOs.AccountDTOs.RegisterDTO)">
             <summary>
             Sign up process for application user.
             If signup process is succesful,then sign in.
@@ -3276,19 +3281,19 @@
             Assignment service interface.
             </summary>
         </member>
-        <member name="M:Milvasoft.SampleAPI.Services.Abstract.IAssignmentService.GetAssignmentForStudentAsync(Milvasoft.SampleAPI.DTOs.PaginationParamsWithSpec{Milvasoft.SampleAPI.Spec.AssignmentSpec})">
+        <member name="M:Milvasoft.SampleAPI.Services.Abstract.IAssignmentService.GetAssignmentsForStudentAsync(Milvasoft.SampleAPI.DTOs.PaginationParamsWithSpec{Milvasoft.SampleAPI.Spec.AssignmentSpec})">
             <summary>
             Get all assignment for student from database.
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.SampleAPI.Services.Abstract.IAssignmentService.GetAssignmentForAdminAsync(Milvasoft.SampleAPI.DTOs.PaginationParamsWithSpec{Milvasoft.SampleAPI.Spec.AssignmentSpec})">
+        <member name="M:Milvasoft.SampleAPI.Services.Abstract.IAssignmentService.GetAssignmentsForAdminAsync(Milvasoft.SampleAPI.DTOs.PaginationParamsWithSpec{Milvasoft.SampleAPI.Spec.AssignmentSpec})">
             <summary>
             Get all assignment for admin from database.
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.SampleAPI.Services.Abstract.IAssignmentService.GetAssignmentForMentorAsync(Milvasoft.SampleAPI.DTOs.PaginationParamsWithSpec{Milvasoft.SampleAPI.Spec.AssignmentSpec})">
+        <member name="M:Milvasoft.SampleAPI.Services.Abstract.IAssignmentService.GetAssignmentsForMentorAsync(Milvasoft.SampleAPI.DTOs.PaginationParamsWithSpec{Milvasoft.SampleAPI.Spec.AssignmentSpec})">
             <summary>
             Get all assignment for mentor from database.
             </summary>
@@ -3336,19 +3341,19 @@
             <param name="ids"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.SampleAPI.Services.Abstract.IAssignmentService.GetAvaibleAssignmentForCurrentStudent">
+        <member name="M:Milvasoft.SampleAPI.Services.Abstract.IAssignmentService.GetTakenAssignmentForCurrentStudentAsync">
             <summary>
             Brings homework suitable for the student's level.
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.SampleAPI.Services.Abstract.IAssignmentService.GetCurrentActiveAssignment">
+        <member name="M:Milvasoft.SampleAPI.Services.Abstract.IAssignmentService.GetCurrentActiveAssignmentAsync">
             <summary>
             Get current assignment for logged student.
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.SampleAPI.Services.Abstract.IAssignmentService.TakeAssignment(System.Guid,Milvasoft.SampleAPI.DTOs.StudentAssignmentDTOs.AddStudentAssignmentDTO)">
+        <member name="M:Milvasoft.SampleAPI.Services.Abstract.IAssignmentService.TakeAssignmentAsync(System.Guid,Milvasoft.SampleAPI.DTOs.StudentAssignmentDTOs.AddStudentAssignmentDTO)">
             <summary>
              The student takes the next assignment.
             </summary>
@@ -3356,20 +3361,20 @@
             <param name="newAssignment"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.SampleAPI.Services.Abstract.IAssignmentService.SubmitAssignment(Milvasoft.SampleAPI.DTOs.SubmitAssignmentDTO)">
+        <member name="M:Milvasoft.SampleAPI.Services.Abstract.IAssignmentService.SubmitAssignmentAsync(Milvasoft.SampleAPI.DTOs.SubmitAssignmentDTO)">
             <summary>
             Allows the student to turn in the assignment.
             </summary>
             <param name="submitAssignment"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.SampleAPI.Services.Abstract.IAssignmentService.GetUnconfirmedAssignment">
+        <member name="M:Milvasoft.SampleAPI.Services.Abstract.IAssignmentService.GetUnconfirmedAssignmentsAsync">
             <summary>
             Brings the unapproved assignments of the students of the mentor logged in.
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.SampleAPI.Services.Abstract.IAssignmentService.ConfirmAssignment(Milvasoft.SampleAPI.DTOs.StudentAssignmentDTOs.StudentAssignmentDTO)">
+        <member name="M:Milvasoft.SampleAPI.Services.Abstract.IAssignmentService.ConfirmAssignmentAsync(Milvasoft.SampleAPI.DTOs.StudentAssignmentDTOs.StudentAssignmentDTO)">
             <summary>
             The mentor approves the homework request sent by the student.
             </summary>
@@ -3394,7 +3399,7 @@
             <param name="id"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.SampleAPI.Services.Abstract.IMentorService.GetCurrentUserProfile">
+        <member name="M:Milvasoft.SampleAPI.Services.Abstract.IMentorService.GetCurrentUserProfileAsync">
             <summary>
             Brings instant user's profile information.
             </summary>
@@ -3547,7 +3552,7 @@
             <param name="ids"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.SampleAPI.Services.Abstract.IQuestionService.GetWillShowQuestions">
+        <member name="M:Milvasoft.SampleAPI.Services.Abstract.IQuestionService.GetWillShowQuestionsAsync">
             <summary>
              Returns questions to display
             </summary>
@@ -3621,7 +3626,7 @@
             <param name="ids"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.SampleAPI.Services.Abstract.IStudentService.GetCurrentUserProfile">
+        <member name="M:Milvasoft.SampleAPI.Services.Abstract.IStudentService.GetCurrentUserProfileAsync">
             <summary>
             Brings instant user's profile information.
             </summary>
@@ -3725,21 +3730,21 @@
         </member>
         <member name="M:Milvasoft.SampleAPI.Services.Concrete.AccountService.LoginAsync(Milvasoft.SampleAPI.DTOs.AccountDTOs.LoginDTO,System.Boolean)">
             <summary>
-            Signs in for incoming user. Returns a token if login informations are valid or the user is not lockedout. Otherwise returns the error list.
+            Signs in for incoming user. 
             </summary>
             <param name="loginDTO"></param>
             <param name="isMentor"></param>
-            <returns></returns>
+            <returns>Returns a token if the login information is correct.Otherwise returns the error list.</returns>
         </member>
         <member name="M:Milvasoft.SampleAPI.Services.Concrete.AccountService.LogoutAsync">
             <summary>
-            Signs out from database. Returns null if already signed out.
+            Signs out from database. 
             </summary>
-            <returns></returns>
+            <returns>Returns null if already signed out.</returns>
         </member>
         <member name="M:Milvasoft.SampleAPI.Services.Concrete.AccountService.ChangePasswordAsync(Milvasoft.SampleAPI.DTOs.AccountDTOs.ChangePassDTO)">
             <summary>
-            Chamge user password.
+            Change user password.
             </summary>
             <param name="passDTO"></param>
             <returns></returns>
@@ -3757,7 +3762,7 @@
             <param name="userDTO"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.SampleAPI.Services.Concrete.AccountService.RegisterAsync(Milvasoft.SampleAPI.DTOs.AccountDTOs.SignUpDTO)">
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.AccountService.RegisterAsync(Milvasoft.SampleAPI.DTOs.AccountDTOs.RegisterDTO)">
             <summary>
             Sign up process for application user.
             If signup process is succesful,then sign in.
@@ -3919,21 +3924,21 @@
             <summary>
             Get all announcement for student.
             </summary>
-            <param name="pagiantionParams">Filter object.</param>
+            <param name="paginationParams">Filter object.</param>
             <returns> The announcement is put in the form of an AnnouncementForStudentDTO.</returns>
         </member>
         <member name="M:Milvasoft.SampleAPI.Services.Concrete.AnnouncementService.GetAnnouncementsForAdminAsync(Milvasoft.SampleAPI.DTOs.PaginationParamsWithSpec{Milvasoft.SampleAPI.Spec.AnnouncementSpec})">
             <summary>
             Get all announcement for admin.
             </summary>
-            <param name="pagiantionParams">Filter object.</param>
+            <param name="paginationParams">Filter object.</param>
             <returns> The announcements is put in the form of an AnnouncementForAdminDTO.</returns>
         </member>
         <member name="M:Milvasoft.SampleAPI.Services.Concrete.AnnouncementService.GetAnnouncementsForMentorAsync(Milvasoft.SampleAPI.DTOs.PaginationParamsWithSpec{Milvasoft.SampleAPI.Spec.AnnouncementSpec})">
             <summary>
             Get all announcement for mentor.
             </summary>
-            <param name="pagiantionParams">Filter object.</param>
+            <param name="paginationParams">Filter object.</param>
             <returns> The announcement is put in the form of an AnnouncementForMentorDTO.</returns>
         </member>
         <member name="M:Milvasoft.SampleAPI.Services.Concrete.AnnouncementService.GetAnnouncementForAdminAsync(System.Guid)">
@@ -3994,21 +3999,21 @@
             <param name="mentorRepository"></param>
             <param name="milvaMailSender"></param>
         </member>
-        <member name="M:Milvasoft.SampleAPI.Services.Concrete.AssignmentService.GetAssignmentForStudentAsync(Milvasoft.SampleAPI.DTOs.PaginationParamsWithSpec{Milvasoft.SampleAPI.Spec.AssignmentSpec})">
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.AssignmentService.GetAssignmentsForStudentAsync(Milvasoft.SampleAPI.DTOs.PaginationParamsWithSpec{Milvasoft.SampleAPI.Spec.AssignmentSpec})">
             <summary>
-            Get all assignment for student by <paramref name="pagiantionParams"/>
+            Get all assignment for student by <paramref name="paginationParams"/>
             </summary>
             <returns>The assignments is put in the form of an AnnouncementForStudentDTO.</returns>
         </member>
-        <member name="M:Milvasoft.SampleAPI.Services.Concrete.AssignmentService.GetAssignmentForAdminAsync(Milvasoft.SampleAPI.DTOs.PaginationParamsWithSpec{Milvasoft.SampleAPI.Spec.AssignmentSpec})">
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.AssignmentService.GetAssignmentsForAdminAsync(Milvasoft.SampleAPI.DTOs.PaginationParamsWithSpec{Milvasoft.SampleAPI.Spec.AssignmentSpec})">
             <summary>
-            Get assignments for admin by <paramref name="pagiantionParams"/>
+            Get assignments for admin by <paramref name="paginationParams"/>
             </summary>
             <returns>The assignments is put in the form of an AnnouncementForAdminDTO.</returns>
         </member>
-        <member name="M:Milvasoft.SampleAPI.Services.Concrete.AssignmentService.GetAssignmentForMentorAsync(Milvasoft.SampleAPI.DTOs.PaginationParamsWithSpec{Milvasoft.SampleAPI.Spec.AssignmentSpec})">
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.AssignmentService.GetAssignmentsForMentorAsync(Milvasoft.SampleAPI.DTOs.PaginationParamsWithSpec{Milvasoft.SampleAPI.Spec.AssignmentSpec})">
             <summary>
-            Get assignments for mentor by <paramref name="pagiantionParams"/>
+            Get assignments for mentor by <paramref name="paginationParams"/>
             </summary>
             <returns>The assignments is put in the form of an AnnouncementForMentorDTO.</returns>
         </member>
@@ -4054,19 +4059,19 @@
             <param name="assignmentIds"> Id of assignments to be deleted.</param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.SampleAPI.Services.Concrete.AssignmentService.GetAvaibleAssignmentForCurrentStudent">
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.AssignmentService.GetTakenAssignmentForCurrentStudentAsync">
             <summary>
             Brings homework suitable for the student's level.
             </summary>
             <returns> Returns the appropriate assignment to the student.</returns>
         </member>
-        <member name="M:Milvasoft.SampleAPI.Services.Concrete.AssignmentService.GetCurrentActiveAssignment">
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.AssignmentService.GetCurrentActiveAssignmentAsync">
             <summary>
             Get current assignment for logged student.
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.SampleAPI.Services.Concrete.AssignmentService.TakeAssignment(System.Guid,Milvasoft.SampleAPI.DTOs.StudentAssignmentDTOs.AddStudentAssignmentDTO)">
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.AssignmentService.TakeAssignmentAsync(System.Guid,Milvasoft.SampleAPI.DTOs.StudentAssignmentDTOs.AddStudentAssignmentDTO)">
             <summary>
              The student takes the next assignment.
             </summary>
@@ -4074,20 +4079,20 @@
             <param name="newAssignment"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.SampleAPI.Services.Concrete.AssignmentService.SubmitAssignment(Milvasoft.SampleAPI.DTOs.SubmitAssignmentDTO)">
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.AssignmentService.SubmitAssignmentAsync(Milvasoft.SampleAPI.DTOs.SubmitAssignmentDTO)">
             <summary>
             Allows the student to turn in the assignment.
             </summary>
             <param name="submitAssignment"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.SampleAPI.Services.Concrete.AssignmentService.GetUnconfirmedAssignment">
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.AssignmentService.GetUnconfirmedAssignmentsAsync">
             <summary>
             Brings the unapproved assignments of the students of the mentor logged in.
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.SampleAPI.Services.Concrete.AssignmentService.ConfirmAssignment(Milvasoft.SampleAPI.DTOs.StudentAssignmentDTOs.StudentAssignmentDTO)">
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.AssignmentService.ConfirmAssignmentAsync(Milvasoft.SampleAPI.DTOs.StudentAssignmentDTOs.StudentAssignmentDTO)">
             <summary>
             The mentor approves the homework request sent by the student.
             </summary>
@@ -4120,7 +4125,7 @@
             <param name="mentorId"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.SampleAPI.Services.Concrete.MentorService.GetCurrentUserProfile">
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.MentorService.GetCurrentUserProfileAsync">
             <summary>
             Brings instant user's profile information.
             </summary>
@@ -4175,7 +4180,7 @@
         </member>
         <member name="M:Milvasoft.SampleAPI.Services.Concrete.ProfessionService.GetProfessionsAsync(Milvasoft.SampleAPI.DTOs.PaginationParamsWithSpec{Milvasoft.SampleAPI.Spec.ProfessionSpec})">
             <summary>
-            Get all filtered professions by <paramref name="pagiantionParams"/>
+            Get all filtered professions by <paramref name="paginationParams"/>
             </summary>
             <returns>Returns the filtered profession.</returns>
         </member>
@@ -4289,7 +4294,7 @@
             <param name="questionIds"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.SampleAPI.Services.Concrete.QuestionService.GetWillShowQuestions">
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.QuestionService.GetWillShowQuestionsAsync">
             <summary>
             If questions to show.
             </summary>
@@ -4311,10 +4316,10 @@
         </member>
         <member name="M:Milvasoft.SampleAPI.Services.Concrete.StudentService.GetStudentsForAdminAsync(Milvasoft.SampleAPI.DTOs.PaginationParamsWithSpec{Milvasoft.SampleAPI.Spec.StudentSpec})">
             <summary>
-            It will filter students according to the parameters sent in <paramref name="pagiantionParams"/>
+            It will filter students according to the parameters sent in <paramref name="paginationParams"/>
             </summary>
-            <exception cref="T:System.ArgumentNullException">If <paramref name="pagiantionParams"/> is null, it is thrown.</exception>
-            <param name="pagiantionParams">Filtering object.</param>
+            <exception cref="T:System.ArgumentNullException">If <paramref name="paginationParams"/> is null, it is thrown.</exception>
+            <param name="paginationParams">Filtering object.</param>
             <returns>Student information that can be seen by admin.</returns>
         </member>
         <member name="M:Milvasoft.SampleAPI.Services.Concrete.StudentService.GetStudentsForCurrentMentorAsync(Milvasoft.SampleAPI.DTOs.PaginationParamsWithSpec{Milvasoft.SampleAPI.Spec.StudentSpec})">
@@ -4322,7 +4327,7 @@
             Brings the students of the mentor who has entered.
             </summary>
              <exception cref="T:System.ArgumentNullException">If the mentor does not enter, it is thrown..</exception>
-            <param name="pagiantionParams">Filtering object.</param>
+            <param name="paginationParams">Filtering object.</param>
             <returns>Brings the students for whom the mentor is responsible.</returns>
         </member>
         <member name="M:Milvasoft.SampleAPI.Services.Concrete.StudentService.GetStudentForAdminAsync(System.Guid)">
@@ -4339,7 +4344,7 @@
             <param name="studentId"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.SampleAPI.Services.Concrete.StudentService.GetCurrentUserProfile">
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.StudentService.GetCurrentUserProfileAsync">
             <summary>
             Brings instant user's profile information.
             </summary>

@@ -116,7 +116,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// <returns>Returns a token if the login information is correct.Otherwise returns the error list.</returns>
         public async Task<LoginResultDTO> LoginAsync(LoginDTO loginDTO, bool isMentor) => await base.LoginAsync(loginDTO,
                                                                                                                 isMentor,
-                                                                                                                userValidationByUserType: ValidateUser,
+                                                                                                                userValidationByUserType: ValidateUserAsync,
                                                                                                                 tokenExpiredDate: isMentor ? DateTime.Now.AddDays(100) : DateTime.Now.AddDays(5)).ConfigureAwait(false);
 
         /// <summary>
@@ -649,7 +649,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
                 throw new MilvaUserFriendlyException("RegexErrorMessage", _localizer[$"Localized{propName}"], exampleFormat);
             }
         }
-        private async Task<(AppUser educationUser, LoginResultDTO loginResult)> ValidateUser(ILoginDTO loginDTO, AppUser user, bool isUserType) => await base.ValidateUserAsync(loginDTO, user).ConfigureAwait(false);
+        private async Task<(AppUser educationUser, LoginResultDTO loginResult)> ValidateUserAsync(ILoginDTO loginDTO, AppUser user, bool isUserType) => await base.ValidateUserAsync(loginDTO, user).ConfigureAwait(false);
 
         /// <summary>
         /// Cheks <see cref="_userName"/>. If is null or empty throwns <see cref="MilvaUserFriendlyException"/>. Otherwise does nothing.

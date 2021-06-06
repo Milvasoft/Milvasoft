@@ -134,7 +134,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// Brings instant user's profile information.
         /// </summary>
         /// <returns></returns>
-        public async Task<MentorForMentorDTO> GetCurrentUserProfile()
+        public async Task<MentorForMentorDTO> GetCurrentUserProfileAsync()
         {
             Func<IIncludable<Mentor>, IIncludable> includes = i => i.Include(p => p.Students)
                                                                     .Include(p => p.Professions)
@@ -220,6 +220,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
             var toBeUpdatedMentor = await _mentorRepository.GetByIdAsync(Id).ConfigureAwait(false);
 
             toBeUpdatedMentor.ThrowIfNullForGuidObject();
+
             toBeUpdatedMentor.Name = updateMentorDTO.Name;
             toBeUpdatedMentor.Surname = updateMentorDTO.Surname;
 

@@ -64,7 +64,7 @@ namespace Milvasoft.SampleAPI.Controllers
         [HttpPatch("Mentor")]
         public async Task<IActionResult> GetCurrentUser()
         {
-            var mentor = await _mentorService.GetCurrentUserProfile().ConfigureAwait(false);
+            var mentor = await _mentorService.GetCurrentUserProfileAsync().ConfigureAwait(false);
             return mentor.GetObjectResponse("Success");
         }
 

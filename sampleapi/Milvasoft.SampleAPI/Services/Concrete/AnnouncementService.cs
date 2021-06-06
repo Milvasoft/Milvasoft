@@ -248,6 +248,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
             var toBeUpdatedAnnouncement = await _announcementRepository.GetByIdAsync(updateAnnouncementDTO.Id).ConfigureAwait(false);
 
             toBeUpdatedAnnouncement.ThrowIfNullForGuidObject();
+
             toBeUpdatedAnnouncement.Title = updateAnnouncementDTO.Title;
             toBeUpdatedAnnouncement.Description = updateAnnouncementDTO.Description;
             toBeUpdatedAnnouncement.IsFixed = updateAnnouncementDTO.IsFixed;
@@ -262,11 +263,11 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// <returns></returns>
         public async Task DeleteAnnouncementsAsync(List<Guid> announcementIds)
         {
-            var deletedAnnouncement = await _announcementRepository.GetAllAsync(i => announcementIds.Select(p => p).Contains(i.Id)).ConfigureAwait(false);
+            var deletedAnnouncements = await _announcementRepository.GetAllAsync(i => announcementIds.Select(p => p).Contains(i.Id)).ConfigureAwait(false);
 
-            deletedAnnouncement.ThrowIfListIsNotNullOrEmpty();
+            deletedAnnouncements.ThrowIfListIsNullOrEmpty();
 
-            await _announcementRepository.DeleteAsync(deletedAnnouncement).ConfigureAwait(false);
+            await _announcementRepository.DeleteAsync(deletedAnnouncements).ConfigureAwait(false);
         }
     }
 }

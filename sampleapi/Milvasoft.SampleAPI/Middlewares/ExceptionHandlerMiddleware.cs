@@ -15,6 +15,9 @@ using System.Threading.Tasks;
 
 namespace Milvasoft.SampleAPI.Middlewares
 {
+    /// <summary>
+    /// Middleware that will be activated in case of errors.
+    /// </summary>
     public class ExceptionHandlerMiddleware
     {
         private readonly RequestDelegate _next;

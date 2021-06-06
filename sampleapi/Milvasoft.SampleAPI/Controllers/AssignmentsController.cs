@@ -39,7 +39,7 @@ namespace Milvasoft.SampleAPI.Controllers
         [HttpPatch("Mentor")]
         public async Task<IActionResult> GetAssignmentsForMentor([FromBody] PaginationParamsWithSpec<AssignmentSpec> paginationParams)
         {
-            var assignments = await _assigmentService.GetAssignmentForMentorAsync(paginationParams).ConfigureAwait(false);
+            var assignments = await _assigmentService.GetAssignmentsForMentorAsync(paginationParams).ConfigureAwait(false);
             return assignments.GetObjectResponse("Success");
         }
 
@@ -51,7 +51,7 @@ namespace Milvasoft.SampleAPI.Controllers
         [HttpPatch("Admin")]
         public async Task<IActionResult> GetAssignmentsForAdmn([FromBody] PaginationParamsWithSpec<AssignmentSpec> paginationParams)
         {
-            var assignments = await _assigmentService.GetAssignmentForAdminAsync(paginationParams).ConfigureAwait(false);
+            var assignments = await _assigmentService.GetAssignmentsForAdminAsync(paginationParams).ConfigureAwait(false);
             return assignments.GetObjectResponse("Success");
         }
 
@@ -63,7 +63,7 @@ namespace Milvasoft.SampleAPI.Controllers
         [HttpPatch("Student")]
         public async Task<IActionResult> GetAssignmentsForStudent([FromBody] PaginationParamsWithSpec<AssignmentSpec> paginationParams)
         {
-            var assignments = await _assigmentService.GetAssignmentForStudentAsync(paginationParams).ConfigureAwait(false);
+            var assignments = await _assigmentService.GetAssignmentsForStudentAsync(paginationParams).ConfigureAwait(false);
             return assignments.GetObjectResponse("Success");
         }
 
@@ -113,7 +113,7 @@ namespace Milvasoft.SampleAPI.Controllers
         [HttpPatch("GetAssignment")]
         public async Task<IActionResult> GetAssignmentForCurrentUser()
         {
-            var assignment = await _assigmentService.GetAvaibleAssignmentForCurrentStudent().ConfigureAwait(false);
+            var assignment = await _assigmentService.GetTakenAssignmentForCurrentStudentAsync().ConfigureAwait(false);
 
             return assignment.GetObjectResponse("Success");
         }
@@ -125,7 +125,7 @@ namespace Milvasoft.SampleAPI.Controllers
         [HttpPatch("UnconfirmedAssignements")]
         public async Task<IActionResult> GetUnconfirmedAssignment()
         {
-            var assignment = await _assigmentService.GetUnconfirmedAssignment().ConfigureAwait(false);
+            var assignment = await _assigmentService.GetUnconfirmedAssignmentsAsync().ConfigureAwait(false);
 
             return assignment.GetObjectResponse("Success");
         }
@@ -151,7 +151,7 @@ namespace Milvasoft.SampleAPI.Controllers
         [HttpPost("TakeAssignment")]
         public async Task<IActionResult> TakeAssigment(Guid Id, [FromBody] AddStudentAssignmentDTO newAssignment)
         {
-            return await _assigmentService.TakeAssignment(Id, newAssignment).ConfigureAwait(false).GetObjectResponseAsync<AddStudentAssignmentDTO>("Success").ConfigureAwait(false);
+            return await _assigmentService.TakeAssignmentAsync(Id, newAssignment).ConfigureAwait(false).GetObjectResponseAsync<AddStudentAssignmentDTO>("Success").ConfigureAwait(false);
         }
 
         /// <summary>
@@ -162,7 +162,7 @@ namespace Milvasoft.SampleAPI.Controllers
         [HttpPost("SubmitAssignment")]
         public async Task<IActionResult> SubmitAssignment([FromBody] SubmitAssignmentDTO submitAssignment)
         {
-            var path = await _assigmentService.SubmitAssignment(submitAssignment).ConfigureAwait(false);
+            var path = await _assigmentService.SubmitAssignmentAsync(submitAssignment).ConfigureAwait(false);
             return Ok(path);
         }
 

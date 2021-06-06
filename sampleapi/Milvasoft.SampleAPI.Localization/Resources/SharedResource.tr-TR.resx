@@ -1305,4 +1305,13 @@
   <data name="PasswordSameException" xml:space="preserve">
     <value>Şifreler zaten aynı.</value>
   </data>
+  <data name="NoTaskFound" xml:space="preserve">
+    <value>Verilebilecek görev bulunamadı.</value>
+  </data>
+  <data name="AssignmentActive" xml:space="preserve">
+    <value>Görev zaten onaylanmış.</value>
+  </data>
+  <data name="UndeliveredHomework" xml:space="preserve">
+    <value>Öğrencinin teslim edilmemiş ödevi var.</value>
+  </data>
 </root>

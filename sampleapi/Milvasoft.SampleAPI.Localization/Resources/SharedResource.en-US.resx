@@ -1308,4 +1308,13 @@
   <data name="PasswordSameException" xml:space="preserve">
     <value>The passwords are already the same.</value>
   </data>
+  <data name="NoTaskFound" xml:space="preserve">
+    <value>No task found.</value>
+  </data>
+  <data name="AssignmentActive" xml:space="preserve">
+    <value>The assignment is already active.</value>
+  </data>
+  <data name="UndeliveredHomework" xml:space="preserve">
+    <value>The student has undelivered homework.</value>
+  </data>
 </root>

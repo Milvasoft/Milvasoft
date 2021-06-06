@@ -314,7 +314,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// If questions to show.
         /// </summary>
         /// <returns></returns>
-        public async Task<List<QuestionDTO>> GetWillShowQuestions()
+        public async Task<List<QuestionDTO>> GetWillShowQuestionsAsync()
         {
             Func<IIncludable<Question>, IIncludable> includes = i => i.Include(md => md.Mentor)
                                                                     .Include(st => st.Student);

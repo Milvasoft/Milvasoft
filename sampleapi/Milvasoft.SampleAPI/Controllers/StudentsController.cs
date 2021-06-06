@@ -63,7 +63,7 @@ namespace Milvasoft.SampleAPI.Controllers
         [HttpPatch("Student")]
         public async Task<IActionResult> GetCurrentUserProfile()
         {
-            var currentStudent = await _studentService.GetCurrentUserProfile().ConfigureAwait(false);
+            var currentStudent = await _studentService.GetCurrentUserProfileAsync().ConfigureAwait(false);
 
             return currentStudent.GetObjectResponse("Success");
         }
