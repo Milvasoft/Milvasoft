@@ -1,4 +1,5 @@
-﻿using Milvasoft.Helpers.Extensions;
+﻿using Milvasoft.Helpers;
+using Milvasoft.Helpers.Extensions;
 using Milvasoft.SampleAPI.Entity;
 using Milvasoft.SampleAPI.Spec.Abstract;
 using System;
@@ -43,6 +44,16 @@ namespace Milvasoft.SampleAPI.Spec
         /// </summary>
         public Guid? ProfessionId { get; set; }
 
+        /// <summary> 
+        /// Low date of assignment.
+        /// </summary>
+        public DateTime? AssignmentLowerDate { get; set; }
+
+        /// <summary> 
+        /// Top date of assignment.
+        /// </summary>
+        public DateTime? AssignmentTopDate { get; set; }
+
         #endregion
 
         /// <summary>
@@ -79,6 +90,9 @@ namespace Milvasoft.SampleAPI.Spec
             if (Level.HasValue) predicates.Add(c => c.Level == Level);
             if (MaxDeliveryDay.HasValue) predicates.Add(c => c.MaxDeliveryDay == MaxDeliveryDay);
             if (ProfessionId.HasValue) predicates.Add(c => c.ProfessionId == ProfessionId);
+
+            var dateExpression = Filter.CreateDateFilterExpression<Assignment>(AssignmentTopDate, AssignmentLowerDate, i => i.CreationDate);
+            if (dateExpression != null) predicates.Add(dateExpression);
 
             predicates?.ForEach(predicate => mainPredicate = mainPredicate.Append(predicate, ExpressionType.AndAlso));
             return mainPredicate;
