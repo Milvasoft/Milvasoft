@@ -5,6 +5,9 @@ using System;
 
 namespace Milvasoft.SampleAPI.DTOs
 {
+    /// <summary>
+    /// Dto to be used when users upload image files.
+    /// </summary>
     public class ImageUploadDTO
     {
         /// <summary>
