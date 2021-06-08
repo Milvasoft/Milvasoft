@@ -6,7 +6,6 @@ using System;
 
 namespace Milvasoft.SampleAPI.DTOs.MentorDTOs
 {
-
     /// <summary>
     /// Mentor and profession relationship.
     /// </summary>

@@ -49,6 +49,9 @@ namespace Milvasoft.SampleAPI.DTOs.MentorDTOs
         /// </summary>
         public IFormFile Image { get; set; }
 
+        /// <summary>
+        /// The base64 version of the image file.
+        /// </summary>
         private string _imageBase64String;
 
         /// <summary>
