@@ -33,6 +33,5 @@ namespace Milvasoft.SampleAPI.DTOs.AccountDTOs
         /// Remember me option.
         /// </summary>
         public bool Persistent { get; set; }
-
     }
 }

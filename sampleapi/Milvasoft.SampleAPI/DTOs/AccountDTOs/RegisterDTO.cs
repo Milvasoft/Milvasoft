@@ -27,6 +27,5 @@ namespace Milvasoft.SampleAPI.DTOs.AccountDTOs
         [OValidateString(15, 16)]
         [MilvaRegex(typeof(SharedResource), IsRequired = false)]
         public string PhoneNumber { get; set; }
-
     }
 }
