@@ -25,6 +25,7 @@ namespace Milvasoft.SampleAPI.DTOs.StudentDTOs
         /// <summary>
         /// The student's starting level of homework.
         /// </summary>
+        [OValidateDecimal(20)]
         public int Level { get; set; }
 
         /// <summary>
@@ -36,6 +37,7 @@ namespace Milvasoft.SampleAPI.DTOs.StudentDTOs
         /// <summary>
         /// Age of student.
         /// </summary>
+        [OValidateDecimal(30)]
         public int Age { get; set; }
 
         /// <summary>
@@ -49,7 +51,5 @@ namespace Milvasoft.SampleAPI.DTOs.StudentDTOs
         /// </summary>
         [OValidateString(2000)]
         public string HomeAddress { get; set; }
-
-
     }
 }
