@@ -147,16 +147,45 @@
             <param name="app"></param>
             <param name="env"></param>
         </member>
-        <member name="M:Milvasoft.SampleAPI.AppStartup.StartupConfiguration.EncryptFile(Milvasoft.Helpers.FileOperations.Abstract.IJsonOperations)">
+        <member name="T:Milvasoft.SampleAPI.AppStartup.StartupConfiguration">
+            <summary>
+            Class in which initial configurations are specified.
+            </summary>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.AppStartup.StartupConfiguration.CheckPublicFiles">
+            <summary>
+            Checks media library folders. If folders not exists creates that folders.
+            </summary>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.AppStartup.StartupConfiguration.EncryptFile">
             <summary>
             For development.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.AppStartup.StartupConfiguration.DecryptFile">
+            <summary>
+            For development.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.AppStartup.StartupConfiguration.FillStringBlacklistAsync(Milvasoft.Helpers.FileOperations.Abstract.IJsonOperations)">
+            <summary>
+            Fills <c> GlobalConstants.StringBlackList </c> list from stringblacklist.json file.
             </summary>
             <param name="jsonOperations"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.SampleAPI.AppStartup.StartupConfiguration.DecryptFile(Milvasoft.Helpers.FileOperations.Abstract.IJsonOperations)">
+        <member name="M:Milvasoft.SampleAPI.AppStartup.StartupConfiguration.FillAllowedFileExtensionsAsync(Milvasoft.Helpers.FileOperations.Abstract.IJsonOperations)">
             <summary>
-            For development.
+            Fills <c> GlobalConstants.AllowedFileExtensions </c> list from allowedfileextensions.json file.
+            </summary>
+            <param name="jsonOperations"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.AppStartup.StartupConfiguration.FillApiKeyAsync(Milvasoft.Helpers.FileOperations.Abstract.IJsonOperations)">
+            <summary>
+            Fills <c>GlobalConstants.HubGroups</c> list from generalsettings.json file.
             </summary>
             <param name="jsonOperations"></param>
             <returns></returns>
@@ -1070,6 +1099,21 @@
             Determines Global API error or Local API error.
             </summary>
         </member>
+        <member name="T:Milvasoft.SampleAPI.DTOs.AccountDTOs.VerificationTokenDTO">
+            <summary>
+            Token information of the user is kept.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.AccountDTOs.VerificationTokenDTO.UserName">
+            <summary>
+            User name.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.DTOs.AccountDTOs.VerificationTokenDTO.TokenString">
+            <summary>
+            Token information generated specifically for the user.
+            </summary>
+        </member>
         <member name="T:Milvasoft.SampleAPI.DTOs.AnnouncementDTOs.AddAnnouncementDTO">
             <summary>
             AddAnnouncementDTO for add operations.
@@ -1680,6 +1724,11 @@
             Purchased modules of tenant.
             </summary>
         </member>
+        <member name="T:Milvasoft.SampleAPI.DTOs.ImageUploadDTO">
+            <summary>
+            Dto to be used when users upload image files.
+            </summary>
+        </member>
         <member name="P:Milvasoft.SampleAPI.DTOs.ImageUploadDTO.UserId">
             <summary>
             Id of the user whose official will be updated
@@ -1775,6 +1824,11 @@
             <summary>
             <para><b>EN: </b> Uploaded image of personnel.</para>
             <para><b>TR: </b> Yüklenen personel resmi.</para>
+            </summary>
+        </member>
+        <member name="F:Milvasoft.SampleAPI.DTOs.MentorDTOs.MentorDTO._imageBase64String">
+            <summary>
+            The base64 version of the image file.
             </summary>
         </member>
         <member name="P:Milvasoft.SampleAPI.DTOs.MentorDTOs.MentorDTO.ImageBase64String">
@@ -2593,6 +2647,11 @@
             <summary>
             <para><b>EN: </b> Uploaded image of personnel.</para>
             <para><b>TR: </b> Yüklenen personel resmi.</para>
+            </summary>
+        </member>
+        <member name="F:Milvasoft.SampleAPI.DTOs.StudentDTOs.StudentDTO._imageBase64String">
+            <summary>
+            base64 version of the image file.
             </summary>
         </member>
         <member name="P:Milvasoft.SampleAPI.DTOs.StudentDTOs.StudentDTO.ImageBase64String">
