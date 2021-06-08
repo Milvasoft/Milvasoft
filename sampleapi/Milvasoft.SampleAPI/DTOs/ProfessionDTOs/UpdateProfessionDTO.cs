@@ -12,6 +12,7 @@ namespace Milvasoft.SampleAPI.DTOs.ProfessionDTOs
         /// Id of to be updated profession.
         /// </summary>
         public Guid Id { get; set; }
+
         /// <summary>
         /// Name of profession.
         /// </summary>
