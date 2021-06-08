@@ -81,7 +81,5 @@ namespace Milvasoft.SampleAPI.Services.Abstract
         /// </summary>
         /// <returns></returns>
         Task<StudentForMentorDTO> GetCurrentUserProfileAsync();
-
-
     }
 }

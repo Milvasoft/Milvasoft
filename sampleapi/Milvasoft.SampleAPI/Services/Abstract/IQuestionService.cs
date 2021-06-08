@@ -78,6 +78,5 @@ namespace Milvasoft.SampleAPI.Services.Abstract
         /// </summary>
         /// <returns></returns>
         Task<List<QuestionDTO>> GetWillShowQuestionsAsync();
-
     }
 }

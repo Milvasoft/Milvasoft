@@ -54,7 +54,6 @@ namespace Milvasoft.SampleAPI.Services.Abstract
         /// <returns></returns>
         Task UpdateCurrentMentorAsync(UpdateMentorDTO updateMentorDTO);
 
-
         /// <summary>
         /// Delete assignment by <paramref name="ids"/>
         /// </summary>
