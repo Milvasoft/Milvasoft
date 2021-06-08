@@ -7,7 +7,6 @@ using System;
 
 namespace Milvasoft.SampleAPI.DTOs.AssignmentDTOs
 {
-
     /// <summary>
     /// Assignment for student.
     /// </summary>
@@ -40,6 +39,7 @@ namespace Milvasoft.SampleAPI.DTOs.AssignmentDTOs
         /// <summary>
         /// Difficulty level of the assignment.
         /// </summary>
+        [OValidateDecimal(20)]
         public int Level { get; set; }
 
         /// <summary>
@@ -51,6 +51,7 @@ namespace Milvasoft.SampleAPI.DTOs.AssignmentDTOs
         /// <summary> 
         /// The maximum time that the assignment will be delivered.
         /// </summary>
+        [OValidateDecimal(20)]
         public int MaxDeliveryDay { get; set; }
 
         /// <summary>
