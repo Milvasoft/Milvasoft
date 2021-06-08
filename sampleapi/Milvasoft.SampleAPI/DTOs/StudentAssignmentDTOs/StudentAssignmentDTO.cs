@@ -46,6 +46,7 @@ namespace Milvasoft.SampleAPI.DTOs.StudentAssignmentDTOs
         /// <summary>
         /// The mentor's score on the student's assignment.
         /// </summary>
+        [OValidateDecimal(100)]
         public int MentorScore { get; set; }
 
         /// <summary>
@@ -78,11 +79,13 @@ namespace Milvasoft.SampleAPI.DTOs.StudentAssignmentDTOs
         /// <summary>
         /// The additional time the student asks for the mentor.
         /// </summary>
+        [OValidateDecimal(10)]
         public int AdditionalTime { get; set; }
 
         /// <summary>
         /// An explanation of why the student is asking for additional time.
         /// </summary>
+        [OValidateString(2000)]
         public string AdditionalTimeDescription { get; set; }
 
         /// <summary>

@@ -13,7 +13,9 @@ namespace Milvasoft.SampleAPI.DTOs
         /// <summary>
         /// Id of the homework to be sent
         /// </summary>
+        [OValidateId]
         public Guid AssigmentId { get; set; }
+
         /// <summary>
         /// Assignment file.
         /// </summary>
@@ -44,6 +46,7 @@ namespace Milvasoft.SampleAPI.DTOs
         /// <summary>
         /// Assignment description to mentor.
         /// </summary>
+        [OValidateString(2000)]
         public string Description { get; set; }
     }
 }
