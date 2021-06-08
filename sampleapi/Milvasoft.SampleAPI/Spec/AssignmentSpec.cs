@@ -14,9 +14,7 @@ namespace Milvasoft.SampleAPI.Spec
     /// </summary>
     public class AssignmentSpec : IBaseSpec<Assignment>
     {
-        #region Fields
         private string _tittle;
-        #endregion
 
         #region Props
 

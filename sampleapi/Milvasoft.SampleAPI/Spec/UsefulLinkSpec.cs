@@ -14,9 +14,7 @@ namespace Milvasoft.SampleAPI.Spec
     /// </summary>
     public class UsefulLinkSpec : IBaseSpec<UsefulLink>
     {
-        #region Fields
         private string _tittle;
-        #endregion 
 
         #region Props
 

@@ -93,7 +93,6 @@ namespace Milvasoft.SampleAPI.Spec
             if (MentorId.HasValue) entities = entities.Where(i => i.MentorId == MentorId);
             if (ProfessionId.HasValue) entities = entities.Where(i => i.ProfessionId == ProfessionId);
 
-
             return entities.ToList();
         }
 

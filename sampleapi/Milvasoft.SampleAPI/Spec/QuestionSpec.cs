@@ -13,9 +13,7 @@ namespace Milvasoft.SampleAPI.Spec
     /// </summary>
     public class QuestionSpec : IBaseSpec<Question>
     {
-        #region Fields
         private string _tittle;
-        #endregion
 
         #region Props
         /// <summary>

@@ -13,10 +13,8 @@ namespace Milvasoft.SampleAPI.Spec
     /// </summary>
     public class MentorSpec : IBaseSpec<Mentor>
     {
-        #region Fields
         private string _name;
         private string _surname;
-        #endregion
 
         #region Props
 
