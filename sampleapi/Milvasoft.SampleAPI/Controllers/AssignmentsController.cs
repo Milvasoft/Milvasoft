@@ -35,11 +35,11 @@ namespace Milvasoft.SampleAPI.Controllers
         /// Gets the all filtered assignments datas for mentor.
         /// </summary>
         /// <returns></returns>
-        //[Authorize(Roles = "Mentor")]
         [HttpPatch("Mentor")]
         public async Task<IActionResult> GetAssignmentsForMentor([FromBody] PaginationParamsWithSpec<AssignmentSpec> paginationParams)
         {
             var assignments = await _assigmentService.GetAssignmentsForMentorAsync(paginationParams).ConfigureAwait(false);
+
             return assignments.GetObjectResponse("Success");
         }
 
@@ -47,11 +47,11 @@ namespace Milvasoft.SampleAPI.Controllers
         /// Gets the all filtered assignments datas for admin.
         /// </summary>
         /// <returns></returns>
-        //[Authorize(Roles = "Admin")]
         [HttpPatch("Admin")]
         public async Task<IActionResult> GetAssignmentsForAdmn([FromBody] PaginationParamsWithSpec<AssignmentSpec> paginationParams)
         {
             var assignments = await _assigmentService.GetAssignmentsForAdminAsync(paginationParams).ConfigureAwait(false);
+
             return assignments.GetObjectResponse("Success");
         }
 
@@ -59,11 +59,11 @@ namespace Milvasoft.SampleAPI.Controllers
         /// Gets the all filtered assignments datas for student.
         /// </summary>
         /// <returns></returns>
-        //[Authorize(Roles = "Student")]
         [HttpPatch("Student")]
         public async Task<IActionResult> GetAssignmentsForStudent([FromBody] PaginationParamsWithSpec<AssignmentSpec> paginationParams)
         {
             var assignments = await _assigmentService.GetAssignmentsForStudentAsync(paginationParams).ConfigureAwait(false);
+
             return assignments.GetObjectResponse("Success");
         }
 
@@ -71,7 +71,6 @@ namespace Milvasoft.SampleAPI.Controllers
         /// Gets the all filtered assignment datas for mentor.
         /// </summary>
         /// <returns></returns>
-        //[Authorize(Roles = "Mentor")]
         [HttpPatch("Mentor/{id}")]
         public async Task<IActionResult> GetAssignmentForMentorbyId(Guid id)
         {
@@ -97,7 +96,6 @@ namespace Milvasoft.SampleAPI.Controllers
         /// Gets the filtered assignment datas for student.
         /// </summary>
         /// <returns></returns>
-        //[Authorize(Roles = "Student")]
         [HttpPatch("Student/{id}")]
         public async Task<IActionResult> GetAssignmentForStudentbyId(Guid id)
         {
@@ -135,7 +133,6 @@ namespace Milvasoft.SampleAPI.Controllers
         /// </summary>
         /// <param name="addAssignment"></param>
         /// <returns></returns>
-       // [Authorize(Roles = "Admin")]
         [HttpPost("Assignment")]
         public async Task<IActionResult> AddAssignment([FromBody] AddAssignmentDTO addAssignment)
         {
@@ -163,6 +160,7 @@ namespace Milvasoft.SampleAPI.Controllers
         public async Task<IActionResult> SubmitAssignment([FromBody] SubmitAssignmentDTO submitAssignment)
         {
             var path = await _assigmentService.SubmitAssignmentAsync(submitAssignment).ConfigureAwait(false);
+
             return Ok(path);
         }
 
@@ -171,7 +169,6 @@ namespace Milvasoft.SampleAPI.Controllers
         /// </summary>
         /// <param name="updateAssignment"></param>
         /// <returns></returns>
-       // [Authorize(Roles = "Admin")]
         [HttpPut("Assignment")]
         public async Task<IActionResult> UpdateAssignment([FromBody] UpdateAssignmentDTO updateAssignment)
         {
@@ -183,12 +180,10 @@ namespace Milvasoft.SampleAPI.Controllers
         /// </summary>
         /// <param name="ids">Ids of to be deleted assignment.</param>
         /// <returns></returns>
-       // [Authorize(Roles = "Admin")]
         [HttpDelete("Delete")]
         public async Task<IActionResult> DeleteAssignment([FromBody] List<Guid> ids)
         {
             return await _assigmentService.DeleteAssignmentAsync(ids).ConfigureAwait(false).GetObjectResponseAsync<AssignmentDTO, Guid>(ids, "Success").ConfigureAwait(false);
         }
-
     }
 }

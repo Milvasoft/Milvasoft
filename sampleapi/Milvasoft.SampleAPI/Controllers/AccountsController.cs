@@ -30,6 +30,7 @@ namespace Milvasoft.SampleAPI.Controllers
         private readonly IStringLocalizer<SharedResource> _sharedLocalizer;
         private readonly IAccountService _accountService;
         private readonly string _defaultSucccessMessage;
+
         /// <summary>
         /// Constructor of <c>AccountController</c>
         /// </summary>
@@ -89,8 +90,6 @@ namespace Milvasoft.SampleAPI.Controllers
             await _accountService.LogoutAsync().ConfigureAwait(false);
             return Ok("Success");
         }
-
-
 
         /// <summary>
         /// Returns logged-in user's account information.
@@ -179,6 +178,7 @@ namespace Milvasoft.SampleAPI.Controllers
 
             return await _accountService.DeleteAccountAsync().ConfigureAwait(false).GetObjectResponseAsync<object>(successMessage).ConfigureAwait(false);
         }
+
         #region Account Activities / Note : Editors can be use this endpoints too.
 
         /// <summary>
@@ -409,6 +409,5 @@ namespace Milvasoft.SampleAPI.Controllers
         }
 
         #endregion
-
     }
 }

@@ -35,14 +35,13 @@ namespace Milvasoft.SampleAPI.Controllers
         /// Gets the all filtered mentors datas for admin.
         /// </summary>
         /// <returns></returns>
-        //[Authorize(Roles = "Admin")]
         [HttpPatch("Admin")]
         public async Task<IActionResult> GetMentorsForAdmin([FromBody] PaginationParamsWithSpec<MentorSpec> paginationParams)
         {
             var mentors = await _mentorService.GetMentorsForAdminAsync(paginationParams).ConfigureAwait(false);
+
             return mentors.GetObjectResponse("Success");
         }
-
 
         /// <summary>
         /// Gets the filtered mentor datas for admin.
@@ -65,16 +64,15 @@ namespace Milvasoft.SampleAPI.Controllers
         public async Task<IActionResult> GetCurrentUser()
         {
             var mentor = await _mentorService.GetCurrentUserProfileAsync().ConfigureAwait(false);
+
             return mentor.GetObjectResponse("Success");
         }
-
 
         /// <summary>
         /// Add <b><paramref name="addMentor"/></b> data to database.
         /// </summary>
         /// <param name="addMentor"></param>
         /// <returns></returns>
-       // [Authorize(Roles = "Admin")]
         [HttpPost("Mentor")]
         [OValidationFilter]
         public async Task<IActionResult> AddMentor([FromBody] AddMentorDTO addMentor)
@@ -88,7 +86,6 @@ namespace Milvasoft.SampleAPI.Controllers
         /// <param name="updateMentor"></param>
         /// <param name="Id"></param>
         /// <returns></returns>
-       // [Authorize(Roles = "Admin")]
         [HttpPut("Mentor")]
         public async Task<IActionResult> UpdateMentorbyAdmin([FromBody] UpdateMentorDTO updateMentor, Guid Id)
         {
@@ -111,7 +108,6 @@ namespace Milvasoft.SampleAPI.Controllers
         /// </summary>
         /// <param name="ids"></param>
         /// <returns></returns>
-       // [Authorize(Roles = "Admin")]
         [HttpDelete]
         public async Task<IActionResult> DeleteMentors([FromBody] List<Guid> ids)
         {

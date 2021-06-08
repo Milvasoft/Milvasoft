@@ -39,6 +39,7 @@ namespace Milvasoft.SampleAPI.Controllers
         public async Task<IActionResult> GetAnnouncementsForMentor([FromBody] PaginationParamsWithSpec<AnnouncementSpec> paginationParams)
         {
             var announcements = await _announcementService.GetAnnouncementsForMentorAsync(paginationParams).ConfigureAwait(false);
+
             return announcements.GetObjectResponse("Success");
         }
 
@@ -51,6 +52,7 @@ namespace Milvasoft.SampleAPI.Controllers
         public async Task<IActionResult> GetAnnouncementsForAdmn([FromBody] PaginationParamsWithSpec<AnnouncementSpec> paginationParams)
         {
             var announcements = await _announcementService.GetAnnouncementsForAdminAsync(paginationParams).ConfigureAwait(false);
+
             return announcements.GetObjectResponse("Success");
         }
 
@@ -63,6 +65,7 @@ namespace Milvasoft.SampleAPI.Controllers
         public async Task<IActionResult> GetAnnouncementsForStudent([FromBody] PaginationParamsWithSpec<AnnouncementSpec> paginationParams)
         {
             var announcements = await _announcementService.GetAnnouncementsForStudentAsync(paginationParams).ConfigureAwait(false);
+
             return announcements.GetObjectResponse("Success");
         }
 
@@ -140,6 +143,5 @@ namespace Milvasoft.SampleAPI.Controllers
         {
             return await _announcementService.DeleteAnnouncementsAsync(ids).ConfigureAwait(false).GetObjectResponseAsync<AnnouncementDTO, Guid>(ids, "Success").ConfigureAwait(false);
         }
-
     }
 }

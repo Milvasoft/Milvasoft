@@ -34,11 +34,11 @@ namespace Milvasoft.SampleAPI.Controllers
         /// Gets the all filtered questions datas for mentor.
         /// </summary>
         /// <returns></returns>
-        //[Authorize(Roles = "Mentor")]
         [HttpPatch("Mentor")]
         public async Task<IActionResult> GetQuestionsForMentor([FromBody] PaginationParamsWithSpec<QuestionSpec> paginationParams)
         {
             var questions = await _questionService.GetQuestionsForMentorAsync(paginationParams).ConfigureAwait(false);
+
             return questions.GetObjectResponse("Success");
         }
 
@@ -46,11 +46,11 @@ namespace Milvasoft.SampleAPI.Controllers
         /// Gets the all filtered questions datas for admin.
         /// </summary>
         /// <returns></returns>
-        //[Authorize(Roles = "Admin")]
         [HttpPatch("Admin")]
         public async Task<IActionResult> GetQuestionsForAdmin([FromBody] PaginationParamsWithSpec<QuestionSpec> paginationParams)
         {
             var questions = await _questionService.GetQuestionsForAdminAsync(paginationParams).ConfigureAwait(false);
+
             return questions.GetObjectResponse("Success");
         }
 
@@ -58,11 +58,11 @@ namespace Milvasoft.SampleAPI.Controllers
         /// Gets the all filtered questions datas for student.
         /// </summary>
         /// <returns></returns>
-        //[Authorize(Roles = "Student")]
         [HttpPatch("Student")]
         public async Task<IActionResult> GetQuestionsForStudent([FromBody] PaginationParamsWithSpec<QuestionSpec> paginationParams)
         {
             var questions = await _questionService.GetQuestionsForStudentAsync(paginationParams).ConfigureAwait(false);
+
             return questions.GetObjectResponse("Success");
         }
 
@@ -70,7 +70,6 @@ namespace Milvasoft.SampleAPI.Controllers
         /// Gets the all filtered question datas for mentor.
         /// </summary>
         /// <returns></returns>
-        //[Authorize(Roles = "Mentor")]
         [HttpPatch("Mentor/{id}")]
         public async Task<IActionResult> GetQuestionForMentorbyId(Guid id)
         {
@@ -96,7 +95,6 @@ namespace Milvasoft.SampleAPI.Controllers
         /// Gets the filtered question datas for student.
         /// </summary>
         /// <returns></returns>
-        //[Authorize(Roles = "Student")]
         [HttpPatch("Student/{id}")]
         public async Task<IActionResult> GetQuestionForStudentbyId(Guid id)
         {
@@ -110,7 +108,6 @@ namespace Milvasoft.SampleAPI.Controllers
         /// </summary>
         /// <param name="addQuestion"></param>
         /// <returns></returns>
-       // [Authorize(Roles = "Admin")]
         [HttpPost("Question")]
         public async Task<IActionResult> AddQuestion([FromBody] AddQuestionDTO addQuestion)
         {
@@ -122,7 +119,6 @@ namespace Milvasoft.SampleAPI.Controllers
         /// </summary>
         /// <param name="updateQuestion"></param>
         /// <returns></returns>
-       // [Authorize(Roles = "Admin")]
         [HttpPut("Question")]
         public async Task<IActionResult> UpdateQuestion([FromBody] UpdateQuestionDTO updateQuestion)
         {
@@ -134,12 +130,10 @@ namespace Milvasoft.SampleAPI.Controllers
         /// </summary>
         /// <param name="ids"></param>
         /// <returns></returns>
-       // [Authorize(Roles = "Admin")]
         [HttpDelete("Delete")]
         public async Task<IActionResult> DeleteQuestions([FromBody] List<Guid> ids)
         {
             return await _questionService.DeleteQuestionsAsync(ids).ConfigureAwait(false).GetObjectResponseAsync<QuestionDTO, Guid>(ids, "Success");
         }
-
     }
 }

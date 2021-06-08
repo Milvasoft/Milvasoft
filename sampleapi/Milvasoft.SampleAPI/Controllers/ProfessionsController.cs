@@ -34,11 +34,11 @@ namespace Milvasoft.SampleAPI.Controllers
         /// Gets the all filtered professions datas for mentor.
         /// </summary>
         /// <returns></returns>
-        //[Authorize(Roles = "Mentor")]
         [HttpPatch("Mentor")]
         public async Task<IActionResult> GetProfessions([FromBody] PaginationParamsWithSpec<ProfessionSpec> paginationParams)
         {
             var professions = await _professionService.GetProfessionsAsync(paginationParams).ConfigureAwait(false);
+
             return professions.GetObjectResponse("Success");
         }
 
@@ -46,7 +46,6 @@ namespace Milvasoft.SampleAPI.Controllers
         /// Gets the all filtered profession datas for mentor.
         /// </summary>
         /// <returns></returns>
-        //[Authorize(Roles = "Mentor")]
         [HttpPatch("Mentor/{id}")]
         public async Task<IActionResult> GetProfessionForMentorbyId(Guid id)
         {
@@ -72,7 +71,6 @@ namespace Milvasoft.SampleAPI.Controllers
         /// Gets the filtered profession datas for student.
         /// </summary>
         /// <returns></returns>
-        //[Authorize(Roles = "Student")]
         [HttpPatch("Student/{id}")]
         public async Task<IActionResult> GetProfessionForStudentbyId(Guid id)
         {
@@ -86,7 +84,6 @@ namespace Milvasoft.SampleAPI.Controllers
         /// </summary>
         /// <param name="addProfession"></param>
         /// <returns></returns>
-       // [Authorize(Roles = "Admin")]
         [HttpPost("Profession")]
         public async Task<IActionResult> AddProfession([FromBody] AddProfessionDTO addProfession)
         {
@@ -98,7 +95,6 @@ namespace Milvasoft.SampleAPI.Controllers
         /// </summary>
         /// <param name="updateProfession"></param>
         /// <returns></returns>
-       // [Authorize(Roles = "Admin")]
         [HttpPut("Profession")]
         public async Task<IActionResult> UpdateProfession([FromBody] UpdateProfessionDTO updateProfession)
         {
@@ -110,12 +106,10 @@ namespace Milvasoft.SampleAPI.Controllers
         /// </summary>
         /// <param name="ids"></param>
         /// <returns></returns>
-       // [Authorize(Roles = "Admin")]
         [HttpDelete("Delete")]
         public async Task<IActionResult> DeleteProfession([FromBody] List<Guid> ids)
         {
             return await _professionService.DeleteProfessionsAsync(ids).ConfigureAwait(false).GetObjectResponseAsync<UpdateProfessionDTO, Guid>(ids, "Success");
         }
-
     }
 }

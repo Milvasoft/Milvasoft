@@ -34,11 +34,11 @@ namespace Milvasoft.SampleAPI.Controllers
         /// Gets the all filtered usefulLinks datas for mentor.
         /// </summary>
         /// <returns></returns>
-        //[Authorize(Roles = "Mentor")]
         [HttpPatch("Mentor")]
         public async Task<IActionResult> GetUsefulLinksForMentor([FromBody] PaginationParamsWithSpec<UsefulLinkSpec> paginationParams)
         {
             var usefulLinks = await _userfulLinkService.GetUsefulLinksForMentorAsync(paginationParams).ConfigureAwait(false);
+
             return usefulLinks.GetObjectResponse("Success");
         }
 
@@ -46,11 +46,11 @@ namespace Milvasoft.SampleAPI.Controllers
         /// Gets the all filtered usefulLinks datas for admin.
         /// </summary>
         /// <returns></returns>
-        //[Authorize(Roles = "Admin")]
         [HttpPatch("Admin")]
         public async Task<IActionResult> GetUsefulLinksForAdmin([FromBody] PaginationParamsWithSpec<UsefulLinkSpec> paginationParams)
         {
             var usefulLinks = await _userfulLinkService.GetUsefulLinksForAdminAsync(paginationParams).ConfigureAwait(false);
+
             return usefulLinks.GetObjectResponse("Success");
         }
 
@@ -58,11 +58,11 @@ namespace Milvasoft.SampleAPI.Controllers
         /// Gets the all filtered usefulLinks datas for student.
         /// </summary>
         /// <returns></returns>
-        //[Authorize(Roles = "Student")]
         [HttpPatch("Student")]
         public async Task<IActionResult> GetUsefulLinksForStudent([FromBody] PaginationParamsWithSpec<UsefulLinkSpec> paginationParams)
         {
             var usefulLinks = await _userfulLinkService.GetUsefulLinksForStudentAsync(paginationParams).ConfigureAwait(false);
+
             return usefulLinks.GetObjectResponse("Success");
         }
 
@@ -70,7 +70,6 @@ namespace Milvasoft.SampleAPI.Controllers
         /// Gets the all filtered usefulLink datas for mentor.
         /// </summary>
         /// <returns></returns>
-        //[Authorize(Roles = "Mentor")]
         [HttpPatch("Mentor/{id}")]
         public async Task<IActionResult> GetUsefulLinkForMentorbyId(Guid id)
         {
@@ -96,7 +95,6 @@ namespace Milvasoft.SampleAPI.Controllers
         /// Gets the filtered usefulLink datas for student.
         /// </summary>
         /// <returns></returns>
-        //[Authorize(Roles = "Student")]
         [HttpPatch("Student/{id}")]
         public async Task<IActionResult> GetUsefulLinkForStudentbyId(Guid id)
         {
@@ -110,7 +108,6 @@ namespace Milvasoft.SampleAPI.Controllers
         /// </summary>
         /// <param name="addStudent"></param>
         /// <returns></returns>
-       // [Authorize(Roles = "Admin")]
         [HttpPost("UsefulLink")]
         public async Task<IActionResult> AddUsefulLink([FromBody] AddUsefulLinkDTO addStudent)
         {
@@ -122,7 +119,6 @@ namespace Milvasoft.SampleAPI.Controllers
         /// </summary>
         /// <param name="updateStudent"></param>
         /// <returns></returns>
-       // [Authorize(Roles = "Admin")]
         [HttpPut("UsefulLink")]
         public async Task<IActionResult> UpdateUsefulLink([FromBody] UpdateUsefulLinkDTO updateStudent)
         {
@@ -134,12 +130,10 @@ namespace Milvasoft.SampleAPI.Controllers
         /// </summary>
         /// <param name="ids"></param>
         /// <returns></returns>
-       // [Authorize(Roles = "Admin")]
         [HttpDelete("Delete")]
         public async Task<IActionResult> DeleteUsefulLinks([FromBody] List<Guid> ids)
         {
             return await _userfulLinkService.DeleteUsefulLinksAsync(ids).ConfigureAwait(false).GetObjectResponseAsync<UsefulLinkDTO, Guid>(ids, "Success");
         }
-
     }
 }
