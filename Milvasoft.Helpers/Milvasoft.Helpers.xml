@@ -3086,6 +3086,693 @@
             <param name="source"></param>
             <param name="context"></param>
         </member>
+        <member name="T:Milvasoft.Helpers.DataAccess.MongoDB.Abstract.IBaseRepository`1">
+            <summary>
+            Base repository for concrete repositories. All repositories must be have this methods.
+            </summary>
+            <typeparam name="TEntity"></typeparam>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.MongoDB.Abstract.IBaseRepository`1.GetAllAsync(System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Linq.Expressions.Expression{System.Func{`0,`0}})">
+            <summary>
+            Returns all entities.
+            </summary>
+            <param name="filterExpression"></param>
+            <param name="projectExpression"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.MongoDB.Abstract.IBaseRepository`1.GetAllAsync(MongoDB.Driver.FilterDefinition{`0},System.Linq.Expressions.Expression{System.Func{`0,`0}})">
+            <summary>
+            Returns all entities.
+            </summary>
+            <param name="filterDefinition"></param>
+            <param name="projectExpression"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.MongoDB.Abstract.IBaseRepository`1.GetByIdAsync(MongoDB.Bson.ObjectId,System.Linq.Expressions.Expression{System.Func{`0,`0}})">
+            <summary>
+            Returns one entity by entity Id from database asynchronously.
+            </summary>
+            <param name="id"></param>
+            <param name="projectExpression"></param>
+            <returns> The entity found or null. </returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.MongoDB.Abstract.IBaseRepository`1.GetFirstOrDefaultAsync(MongoDB.Driver.FilterDefinition{`0},System.Linq.Expressions.Expression{System.Func{`0,`0}})">
+            <summary>
+            Returns one entity by entity Id from database asynchronously.
+            </summary>
+            <param name="filter"></param>
+            <param name="projectExpression"></param>
+            <returns> The entity found or null. </returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.MongoDB.Abstract.IBaseRepository`1.GetFirstOrDefaultAsync(System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Linq.Expressions.Expression{System.Func{`0,`0}})">
+            <summary>
+            Returns one entity by entity Id from database asynchronously.
+            </summary>
+            <param name="filter"></param>
+            <param name="projectExpression"></param>
+            <returns> The entity found or null. </returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.MongoDB.Abstract.IBaseRepository`1.GetMaxAsync(MongoDB.Driver.FilterDefinition{`0},System.Linq.Expressions.Expression{System.Func{`0,System.Object}},System.Linq.Expressions.Expression{System.Func{`0,`0}})">
+            <summary>
+            Returns all entities.
+            </summary>
+            <param name="filterDefinition"></param>
+            <param name="propertySelector"></param>
+            <param name="projectExpression"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.MongoDB.Abstract.IBaseRepository`1.GetCountAsync(System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
+            <summary>
+            Returns entity count.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.MongoDB.Abstract.IBaseRepository`1.GetEmbeddedDocumentCountAsync``1(System.Linq.Expressions.Expression{System.Func{`0,System.Object}},MongoDB.Driver.FilterDefinition{``0})">
+            <summary>
+            Returns embedded document count.
+            </summary>
+            <typeparam name="TEmbedded"></typeparam>
+            <param name="unwindExpression"></param>
+            <param name="filterDefinition"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.MongoDB.Abstract.IBaseRepository`1.GetNestedArrayByEntityIdAsync``1(MongoDB.Bson.ObjectId,System.Linq.Expressions.Expression{System.Func{`0,System.Object}},System.Linq.Expressions.Expression{System.Func{``0,System.Boolean}},System.Collections.Generic.List{System.Linq.Expressions.Expression{System.Func{``0,System.Object}}})">
+            <summary>
+            Returns the nested list in the entity according to <paramref name="entityId"/>.
+            
+            <remarks>
+            <para><b>Remarks ;</b></para>
+            
+            <para> We specify the nested list with <paramref name="unwindExpression"/>. </para>
+            <para> You can send the filter value to the Nested list. See <paramref name="filterExpressionForTEmbedded"/>. </para>
+            <para> You can get the specific properties. See <paramref name="projectExpression"/>. </para>
+            </remarks>
+            </summary>
+            <typeparam name="TEmbedded"></typeparam>
+            <param name="entityId"></param>
+            <param name="unwindExpression"></param>
+            <param name="filterExpressionForTEmbedded"></param>
+            <param name="projectExpression"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.MongoDB.Abstract.IBaseRepository`1.GetAsPaginatedAsync(System.Int32,System.Int32,System.String,System.Boolean,MongoDB.Driver.FilterDefinition{`0},System.Linq.Expressions.Expression{System.Func{`0,`0}})">
+            <summary>
+            
+            You can bring up the page number you want with the number of data count you want.
+            
+            <para> You can send the filter value to the Nested list. See <paramref name="filterDefinition"/>. </para>
+            <para> You can get the specific properties. See <paramref name="projectExpression"/>. </para>
+            
+            </summary>
+            <param name="pageIndex"></param>
+            <param name="requestedItemCount"></param>
+            <param name="orderByProperty"></param>
+            <param name="orderByAscending"></param>
+            <param name="filterDefinition"></param>
+            <param name="projectExpression"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.MongoDB.Abstract.IBaseRepository`1.GetNestedPropertyAsPaginatedAsync``1(MongoDB.Bson.ObjectId,System.Int32,System.Int32,System.String,System.Boolean,System.Linq.Expressions.Expression{System.Func{`0,System.Object}},System.Collections.Generic.List{System.Linq.Expressions.Expression{System.Func{``0,System.Object}}},MongoDB.Driver.FilterDefinition{``0})">
+            <summary>
+            
+            According to the <paramref name="entityId"/>, you can bring up the nested list with the page number you want and the number of data you want.
+            
+            <para> You can send the filter value to the Nested list. See <paramref name="projectExpression"/>. </para>
+            <para> You can get the specific properties. See <paramref name="projectExpression"/>. </para>
+            <para> We specify the nested list with <paramref name="unwindExpression"/>. </para>
+            
+            </summary>
+            <typeparam name="TEmbedded"></typeparam>
+            <param name="entityId"></param>
+            <param name="pageIndex"></param>
+            <param name="requestedItemCount"></param>
+            <param name="orderByProperty"></param>
+            <param name="orderByAscending"></param>
+            <param name="unwindExpression"></param>
+            <param name="projectExpression"></param>
+            <param name="filterDefinition"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.MongoDB.Abstract.IBaseRepository`1.GetNestedPropertyAsPaginatedAsync``1(System.Collections.Generic.List{MongoDB.Bson.ObjectId},System.Int32,System.Int32,System.String,System.Boolean,System.Linq.Expressions.Expression{System.Func{`0,System.Object}},System.Collections.Generic.List{System.Linq.Expressions.Expression{System.Func{``0,System.Object}}},MongoDB.Driver.FilterDefinition{``0})">
+            <summary>
+            
+            According to the <paramref name="entityIds"/>, you can bring up the nested list with the page number you want and the number of data you want.
+            
+            <para> You can send the filter value to the Nested list. See <paramref name="projectExpression"/>. </para>
+            <para> You can get the specific properties. See <paramref name="projectExpression"/>. </para>
+            <para> We specify the nested list with <paramref name="unwindExpression"/>. </para>
+            
+            </summary>
+            <typeparam name="TEmbedded"></typeparam>
+            <param name="entityIds"></param>
+            <param name="pageIndex"></param>
+            <param name="requestedItemCount"></param>
+            <param name="orderByProperty"></param>
+            <param name="orderByAscending"></param>
+            <param name="unwindExpression"></param>
+            <param name="projectExpression"></param>
+            <param name="filterDefinition"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.MongoDB.Abstract.IBaseRepository`1.GetNestedPropertyAsPaginatedAsync``1(System.Int32,System.Int32,System.String,System.Boolean,System.Linq.Expressions.Expression{System.Func{`0,System.Object}},MongoDB.Driver.FilterDefinition{`0},System.Collections.Generic.List{System.Linq.Expressions.Expression{System.Func{``0,System.Object}}},MongoDB.Driver.FilterDefinition{``0})">
+            <summary>
+            
+            You can bring up the nested list with the page number you want and the number of data you want.
+            
+            <para> You can send the filter value to the Nested list. See <paramref name="projectExpression"/>. </para>
+            <para> You can get the specific properties. See <paramref name="projectExpression"/>. </para>
+            <para> We specify the nested list with <paramref name="unwindExpression"/>. </para>
+            
+            </summary>
+            <typeparam name="TEmbedded"></typeparam>
+            <param name="pageIndex"></param>
+            <param name="requestedItemCount"></param>
+            <param name="orderByProperty"></param>
+            <param name="orderByAscending"></param>
+            <param name="unwindExpression"></param>
+            <param name="filterExpression"></param>
+            <param name="projectExpression"></param>
+            <param name="filterDefForTEmbedded"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.MongoDB.Abstract.IBaseRepository`1.AddAsync(`0)">
+            <summary>
+             Adds single entity to database asynchronously.
+            </summary>
+            <param name="document"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.MongoDB.Abstract.IBaseRepository`1.AddAsync(System.Collections.Generic.ICollection{`0})">
+            <summary>
+             Adds multiple entities to database asynchronously.
+            </summary>
+            <param name="documents"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.MongoDB.Abstract.IBaseRepository`1.UpdateAsync(`0)">
+            <summary>
+            Replaces existing entities with new entities(<paramref name="document"/>).
+            </summary>
+            <param name="document"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.MongoDB.Abstract.IBaseRepository`1.UpdateAsync(`0,MongoDB.Driver.UpdateDefinition{`0})">
+            <summary>
+            Updates existing assets according to <paramref name="updateDefinition"/>.
+            </summary>
+            <param name="document"></param>
+            <param name="updateDefinition"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.MongoDB.Abstract.IBaseRepository`1.UpdateAsync(MongoDB.Driver.FilterDefinition{`0},MongoDB.Driver.UpdateDefinition{`0})">
+            <summary>
+            Updates existing assets according to <paramref name="updateDefinition"/> matching <paramref name="filterDefinition"/>.
+            </summary>
+            <param name="filterDefinition"></param>
+            <param name="updateDefinition"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.MongoDB.Abstract.IBaseRepository`1.UpdateRangeAsync(System.Collections.Generic.List{`0},System.Linq.Expressions.Expression{System.Func{`0,System.Object}}[])">
+            <summary>
+            Updates the data in multiple.
+            
+            <para> You can only update one property in multiple. See <paramref name="fieldDefinition"/> </para>
+            
+            </summary>
+            <param name="entities"></param>
+            <param name="fieldDefinition"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.MongoDB.Abstract.IBaseRepository`1.DeleteRangeAsync(MongoDB.Driver.FilterDefinition{`0})">
+            <summary>
+             Deletes multiple entity from database asynchronously. 
+            </summary>
+            <param name="filterExpression"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.MongoDB.Abstract.IBaseRepository`1.DeleteAsync(MongoDB.Bson.ObjectId)">
+            <summary>
+             Deletes single entity from database asynchronously..
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.MongoDB.Abstract.IBaseRepository`1.DeleteAsync(System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
+            <summary>
+             Deletes single entity from database asynchronously..
+            </summary>
+            <param name="filterExpression"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Milvasoft.Helpers.DataAccess.MongoDB.Concrete.BaseRepository`1">
+            <summary>
+            Base repository for concrete repositories. All repositories must be have this methods.
+            </summary>
+            <typeparam name="TEntity"></typeparam>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.MongoDB.Concrete.BaseRepository`1.#ctor(Milvasoft.Helpers.DataAccess.MongoDB.Utils.IMongoDbSettings)">
+            <summary>
+            Constructor of <see cref="T:Milvasoft.Helpers.DataAccess.MongoDB.Concrete.BaseRepository`1"/>
+            </summary>
+            <param name="settings"></param>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.MongoDB.Concrete.BaseRepository`1.GetMongoDatabaseInstance">
+            <summary>
+            Returns <see cref="T:MongoDB.Driver.IMongoDatabase"/>.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.MongoDB.Concrete.BaseRepository`1.GetAllAsync(System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Linq.Expressions.Expression{System.Func{`0,`0}})">
+            <summary>
+            Returns all entities.
+            </summary>
+            <param name="filterExpression"></param>
+            <param name="projectExpression"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.MongoDB.Concrete.BaseRepository`1.GetAllAsync(MongoDB.Driver.FilterDefinition{`0},System.Linq.Expressions.Expression{System.Func{`0,`0}})">
+            <summary>
+            Returns all entities.
+            </summary>
+            <param name="filterDefinition"></param>
+            <param name="projectExpression"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.MongoDB.Concrete.BaseRepository`1.GetMaxAsync(MongoDB.Driver.FilterDefinition{`0},System.Linq.Expressions.Expression{System.Func{`0,System.Object}},System.Linq.Expressions.Expression{System.Func{`0,`0}})">
+            <summary>
+            Returns all entities.
+            </summary>
+            <param name="filterDefinition"></param>
+            <param name="propertySelector"></param>
+            <param name="projectExpression"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.MongoDB.Concrete.BaseRepository`1.GetCountAsync(System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
+            <summary>
+            Returns entity count.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.MongoDB.Concrete.BaseRepository`1.GetEmbeddedDocumentCountAsync``1(System.Linq.Expressions.Expression{System.Func{`0,System.Object}},MongoDB.Driver.FilterDefinition{``0})">
+            <summary>
+            Returns embedded document count.
+            </summary>
+            <typeparam name="TEmbedded"></typeparam>
+            <param name="unwindExpression"></param>
+            <param name="filterExpression"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.MongoDB.Concrete.BaseRepository`1.GetByIdAsync(MongoDB.Bson.ObjectId,System.Linq.Expressions.Expression{System.Func{`0,`0}})">
+            <summary>
+            Returns one entity by entity Id from database asynchronously.
+            </summary>
+            <param name="id"></param>
+            <param name="projectExpression"></param>
+            <returns> The entity found or null. </returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.MongoDB.Concrete.BaseRepository`1.GetFirstOrDefaultAsync(MongoDB.Driver.FilterDefinition{`0},System.Linq.Expressions.Expression{System.Func{`0,`0}})">
+            <summary>
+            Returns one entity by entity Id from database asynchronously.
+            </summary>
+            <param name="filter"></param>
+            <param name="projectExpression"></param>
+            <returns> The entity found or null. </returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.MongoDB.Concrete.BaseRepository`1.GetFirstOrDefaultAsync(System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Linq.Expressions.Expression{System.Func{`0,`0}})">
+            <summary>
+            Returns one entity by entity Id from database asynchronously.
+            </summary>
+            <param name="filter"></param>
+            <param name="projectExpression"></param>
+            <returns> The entity found or null. </returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.MongoDB.Concrete.BaseRepository`1.GetNestedArrayByEntityIdAsync``1(MongoDB.Bson.ObjectId,System.Linq.Expressions.Expression{System.Func{`0,System.Object}},System.Linq.Expressions.Expression{System.Func{``0,System.Boolean}},System.Collections.Generic.List{System.Linq.Expressions.Expression{System.Func{``0,System.Object}}})">
+            <summary>
+            Returns the nested list in the entity according to <paramref name="entityId"/>.
+            
+            <remarks>
+            <para><b>Remarks ;</b></para>
+            
+            <para> We specify the nested list with <paramref name="unwindExpression"/>. </para>
+            <para> You can send the filter value to the Nested list. See <paramref name="filterExpressionForTEmbedded"/>. </para>
+            <para> You can get the specific properties. See <paramref name="projectExpression"/>. </para>
+            </remarks>
+            </summary>
+            <typeparam name="TEmbedded"></typeparam>
+            <param name="entityId"></param>
+            <param name="unwindExpression"></param>
+            <param name="filterExpressionForTEmbedded"></param>
+            <param name="projectExpression"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.MongoDB.Concrete.BaseRepository`1.GetAsPaginatedAsync(System.Int32,System.Int32,System.String,System.Boolean,MongoDB.Driver.FilterDefinition{`0},System.Linq.Expressions.Expression{System.Func{`0,`0}})">
+            <summary>
+            
+            You can bring up the page number you want with the number of data count you want.
+            
+            <para> You can sort when listing data. </para>
+            <para> You can send the filter value to the Nested list. See <paramref name="filterDefinition"/>. </para>
+            <para> You can get the specific properties. See <paramref name="projectExpression"/>. </para>
+            
+            </summary>
+            <param name="pageIndex"></param>
+            <param name="requestedItemCount"></param>
+            <param name="orderByProperty"></param>
+            <param name="orderByAscending"></param>
+            <param name="filterDefinition"></param>
+            <param name="projectExpression"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.MongoDB.Concrete.BaseRepository`1.GetNestedPropertyAsPaginatedAsync``1(MongoDB.Bson.ObjectId,System.Int32,System.Int32,System.String,System.Boolean,System.Linq.Expressions.Expression{System.Func{`0,System.Object}},System.Collections.Generic.List{System.Linq.Expressions.Expression{System.Func{``0,System.Object}}},MongoDB.Driver.FilterDefinition{``0})">
+            <summary>
+            
+            According to the <paramref name="entityId"/>, you can bring up the nested list with the page number you want and the number of data you want.
+            
+            <para> You can sort when listing data. </para>
+            <para> You can send the filter value to the Nested list. See <paramref name="projectExpression"/>. </para>
+            <para> You can get the specific properties. See <paramref name="projectExpression"/>. </para>
+            <para> We specify the nested list with <paramref name="unwindExpression"/>. </para>
+            
+            </summary>
+            <typeparam name="TEmbedded"></typeparam>
+            <param name="entityId"></param>
+            <param name="pageIndex"></param>
+            <param name="requestedItemCount"></param>
+            <param name="orderByProperty"></param>
+            <param name="orderByAscending"></param>
+            <param name="unwindExpression"></param>
+            <param name="projectExpression"></param>
+            <param name="filterExpressionForTEmbedded"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.MongoDB.Concrete.BaseRepository`1.GetNestedPropertyAsPaginatedAsync``1(System.Collections.Generic.List{MongoDB.Bson.ObjectId},System.Int32,System.Int32,System.String,System.Boolean,System.Linq.Expressions.Expression{System.Func{`0,System.Object}},System.Collections.Generic.List{System.Linq.Expressions.Expression{System.Func{``0,System.Object}}},MongoDB.Driver.FilterDefinition{``0})">
+            <summary>
+            
+            According to the <paramref name="entityIds"/>, you can bring up the nested list with the page number you want and the number of data you want.
+            
+            <para> You can send the filter value to the Nested list. See <paramref name="projectExpression"/>. </para>
+            <para> You can get the specific properties. See <paramref name="projectExpression"/>. </para>
+            <para> We specify the nested list with <paramref name="unwindExpression"/>. </para>
+            
+            </summary>
+            <typeparam name="TEmbedded"></typeparam>
+            <param name="entityIds"></param>
+            <param name="pageIndex"></param>
+            <param name="requestedItemCount"></param>
+            <param name="orderByProperty"></param>
+            <param name="orderByAscending"></param>
+            <param name="unwindExpression"></param>
+            <param name="projectExpression"></param>
+            <param name="filterExpressionForTEmbedded"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.MongoDB.Concrete.BaseRepository`1.GetNestedPropertyAsPaginatedAsync``1(System.Int32,System.Int32,System.String,System.Boolean,System.Linq.Expressions.Expression{System.Func{`0,System.Object}},MongoDB.Driver.FilterDefinition{`0},System.Collections.Generic.List{System.Linq.Expressions.Expression{System.Func{``0,System.Object}}},MongoDB.Driver.FilterDefinition{``0})">
+            <summary>
+            
+            You can bring up the nested list with the page number you want and the number of data you want.
+            
+            <para> You can send the filter value to the Nested list. See <paramref name="projectExpression"/>. </para>
+            <para> You can get the specific properties. See <paramref name="projectExpression"/>. </para>
+            <para> We specify the nested list with <paramref name="unwindExpression"/>. </para>
+            
+            </summary>
+            <typeparam name="TEmbedded"></typeparam>
+            <param name="pageIndex"></param>
+            <param name="requestedItemCount"></param>
+            <param name="orderByProperty"></param>
+            <param name="orderByAscending"></param>
+            <param name="unwindExpression"></param>
+            <param name="filterExpression"></param>
+            <param name="projectExpression"></param>
+            <param name="filterDefForTEmbedded"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.MongoDB.Concrete.BaseRepository`1.AddAsync(`0)">
+            <summary>
+             Adds single entity to database asynchronously.
+            </summary>
+            <param name="document"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.MongoDB.Concrete.BaseRepository`1.AddAsync(System.Collections.Generic.ICollection{`0})">
+            <summary>
+             Adds multiple entities to database asynchronously.
+            </summary>
+            <param name="documents"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.MongoDB.Concrete.BaseRepository`1.UpdateAsync(`0)">
+            <summary>
+            Replaces existing entities with new entities(<paramref name="document"/>).
+            </summary>
+            <param name="document"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.MongoDB.Concrete.BaseRepository`1.UpdateAsync(`0,MongoDB.Driver.UpdateDefinition{`0})">
+            <summary>
+            Updates existing assets according to <paramref name="updateDefinition"/>.
+            </summary>
+            <param name="document"></param>
+            <param name="updateDefinition"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.MongoDB.Concrete.BaseRepository`1.UpdateAsync(MongoDB.Driver.FilterDefinition{`0},MongoDB.Driver.UpdateDefinition{`0})">
+            <summary>
+            Updates existing assets according to <paramref name="updateDefinition"/> matching <paramref name="filterDefinition"/>.
+            </summary>
+            <param name="filterDefinition"></param>
+            <param name="updateDefinition"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.MongoDB.Concrete.BaseRepository`1.UpdateRangeAsync(System.Collections.Generic.List{`0},System.Linq.Expressions.Expression{System.Func{`0,System.Object}}[])">
+            <summary>
+            Updates the data in multiple.
+            
+            <para> You can only update one property in multiple. See <paramref name="fieldDefinitions"/> </para>
+            
+            </summary>
+            <param name="entities"></param>
+            <param name="fieldDefinitions"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.MongoDB.Concrete.BaseRepository`1.DeleteRangeAsync(MongoDB.Driver.FilterDefinition{`0})">
+            <summary>
+             Deletes multiple entity from database asynchronously. 
+            </summary>
+            <param name="filterExpression"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.MongoDB.Concrete.BaseRepository`1.DeleteAsync(System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
+            <summary>
+             Deletes single entity from database asynchronously..
+            </summary>
+            <param name="filterExpression"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.MongoDB.Concrete.BaseRepository`1.DeleteAsync(MongoDB.Bson.ObjectId)">
+            <summary>
+             Deletes single entity from database asynchronously..
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.MongoDB.Concrete.BaseRepository`1.GetProjectionQuery``1(System.Linq.Expressions.Expression{System.Func{`0,System.Object}},System.Collections.Generic.List{System.Linq.Expressions.Expression{System.Func{``0,System.Object}}})">
+            <summary>
+            Returns projection query in sttring.
+            </summary>
+            <typeparam name="TEmbedded"></typeparam>
+            <param name="projectExpressions"></param>
+            <param name="unwindExpression"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.MongoDB.Concrete.BaseRepository`1.GetTotalDataCount``1(System.Linq.Expressions.Expression{System.Func{`0,System.Object}},System.String,MongoDB.Driver.FilterDefinition{`0},MongoDB.Driver.FilterDefinition{``0})">
+            <summary>
+            Returns total data count for <typeparamref name="TEmbedded"/>.
+            </summary>
+            <typeparam name="TEmbedded"></typeparam>
+            <param name="unwindExpression"></param>
+            <param name="projectQuery"></param>
+            <param name="filterExpression"></param>
+            <param name="filterDefForTEmbedded"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.MongoDB.Concrete.BaseRepository`1.GetAggregateFacetForEmbeddedPagination``1(System.Int32,System.Int32,System.String,System.Boolean,System.String,MongoDB.Driver.FilterDefinition{``0})">
+            <summary>
+            Prepare aggregate facet for embedded pagination operations.
+            </summary>
+            <typeparam name="TEmbedded"></typeparam>
+            <param name="pageIndex"></param>
+            <param name="requestedItemCount"></param>
+            <param name="orderByProperty"></param>
+            <param name="orderByAscending"></param>
+            <param name="facetName"></param>
+            <param name="projectQuery"></param>
+            <param name="filterDefForTEmbedded"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Milvasoft.Helpers.DataAccess.MongoDB.Entity.Abstract.IDocumentBase">
+            <summary>
+            Base interface for most obk entities.
+            </summary>
+        </member>
+        <member name="T:Milvasoft.Helpers.DataAccess.MongoDB.Entity.Abstract.IEmbedded">
+            <summary>
+            Determines whether this entity is embedded.
+            </summary>
+        </member>
+        <member name="T:Milvasoft.Helpers.DataAccess.MongoDB.Entity.Concrete.DocumentBase">
+            <summary>
+            Base entity for most obk entities.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.DataAccess.MongoDB.Entity.Concrete.DocumentBase.Id">
+            <summary>
+            Unique key of entity.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.DataAccess.MongoDB.Entity.Concrete.DocumentBase.LastModificationDate">
+            <summary>
+            Last modification date of entity.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.DataAccess.MongoDB.Entity.Concrete.DocumentBase.CreationDate">
+            <summary>
+            Creation date of entity.
+            </summary>
+        </member>
+        <member name="T:Milvasoft.Helpers.DataAccess.MongoDB.Utils.BsonCollectionAttribute">
+            <summary>
+            Represents entity's collection name in MongoDB.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.DataAccess.MongoDB.Utils.BsonCollectionAttribute.CollectionName">
+            <summary>
+            Gets or sets collection name.
+            </summary>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.MongoDB.Utils.BsonCollectionAttribute.#ctor(System.String)">
+            <summary>
+            Creates new instance of <see cref="T:Milvasoft.Helpers.DataAccess.MongoDB.Utils.BsonCollectionAttribute"/>.
+            </summary>
+            <param name="collectionName"></param>
+        </member>
+        <member name="T:Milvasoft.Helpers.DataAccess.MongoDB.Utils.NoSqlRelationHelper">
+            <summary>
+            Extension methods for relational operations. Like "include approach" in RDBMS.
+            </summary>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.MongoDB.Utils.NoSqlRelationHelper.MapReferenceAsync``3(``0,MongoDB.Driver.IMongoDatabase,System.Linq.Expressions.Expression{System.Func{``0,``1}},System.Linq.Expressions.Expression{System.Func{``0,``2}},System.Linq.Expressions.Expression{System.Func{``2,``2}},System.Linq.Expressions.Expression{System.Func{``2,System.Boolean}})">
+            <summary>
+            Pulls and mapped the <paramref name="referencePropertySelector"/> object inside the <paramref name="entity"/> object from the database.
+            </summary>
+            <typeparam name="TEntity"></typeparam>
+            <typeparam name="TReferenceProperty"></typeparam>
+            <typeparam name="TMapProperty"></typeparam>
+            <param name="entity"> The document of collection. </param>
+            <param name="mongoDatabase"> The mongo database. </param>
+            <param name="referencePropertySelector"> The property that contains the MongoDbRef object. </param>
+            <param name="toBeMappedPropertySelector"> To be mapped property. </param>
+            <param name="filterExpression"></param>
+            <param name="projectExpression"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.MongoDB.Utils.NoSqlRelationHelper.MapReferenceAsync``3(``0,MongoDB.Driver.IMongoDatabase,System.Linq.Expressions.Expression{System.Func{``0,System.Collections.Generic.List{``1}}},System.Linq.Expressions.Expression{System.Func{``0,System.Collections.Generic.List{``2}}},System.Linq.Expressions.Expression{System.Func{``2,``2}},System.Linq.Expressions.Expression{System.Func{``2,System.Boolean}})">
+            <summary>
+            Pulls and mapped the <paramref name="referencePropertySelector"/> list inside the <paramref name="entity"/> object from the database.
+            </summary>
+            <typeparam name="TEntity"></typeparam>
+            <typeparam name="TReferenceProperty"></typeparam>
+            <typeparam name="TMapProperty"></typeparam>
+            <param name="entity"> The document of collection. </param>
+            <param name="mongoDatabase"> The mongo database. </param>
+            <param name="referencePropertySelector"> The property that contains the MongoDbRef object. </param>
+            <param name="toBeMappedPropertySelector"> To be mapped property. </param>
+            <param name="filterExpression"></param>
+            <param name="projectExpression"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.MongoDB.Utils.NoSqlRelationHelper.MapReferenceAsync``3(System.Collections.Generic.List{``0},MongoDB.Driver.IMongoDatabase,System.Linq.Expressions.Expression{System.Func{``0,``1}},System.Linq.Expressions.Expression{System.Func{``0,``2}},System.Linq.Expressions.Expression{System.Func{``2,``2}},System.Linq.Expressions.Expression{System.Func{``2,System.Boolean}})">
+            <summary>
+            Pulls and mapped the <paramref name="referencePropertySelector"/> object inside the <paramref name="entities"/> list from the database.
+            </summary>
+            <typeparam name="TEntity"></typeparam>
+            <typeparam name="TReferenceProperty"></typeparam>
+            <typeparam name="TMapProperty"></typeparam>
+            <param name="entities"> The documents of collection. </param>
+            <param name="mongoDatabase"> The mongo database. </param>
+            <param name="referencePropertySelector"> The property that contains the MongoDbRef object. </param>
+            <param name="toBeMappedPropertySelector"> To be mapped property. </param>
+            <param name="projectExpression"></param>
+            <param name="filterExpression"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.MongoDB.Utils.NoSqlRelationHelper.MapReferenceAsync``3(System.Collections.Generic.List{``0},MongoDB.Driver.IMongoDatabase,System.Linq.Expressions.Expression{System.Func{``0,System.Collections.Generic.List{``1}}},System.Linq.Expressions.Expression{System.Func{``0,System.Collections.Generic.List{``2}}},System.Linq.Expressions.Expression{System.Func{``2,``2}})">
+            <summary>
+            Pulls and mapped the <paramref name="referencePropertySelector"/> list inside the <paramref name="entities"/> list from the database.
+            </summary>
+            <typeparam name="TEntity"></typeparam>
+            <typeparam name="TReferenceProperty"></typeparam>
+            <typeparam name="TMapProperty"></typeparam>
+            <param name="entities"> The documents of collection. </param>
+            <param name="mongoDatabase"> The mongo database. </param>
+            <param name="referencePropertySelector"> The property that contains the MongoDbRef object. </param>
+            <param name="toBeMappedPropertySelector"> To be mapped property. </param>
+            <param name="projectExpression"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.MongoDB.Utils.NoSqlRelationHelper.StepIntoEmbedded``2(System.Collections.Generic.List{``0},System.Linq.Expressions.Expression{System.Func{``0,``1}})">
+            <summary>
+            Pulls and mapped the <paramref name="embeddedPropertySelector"/> object inside the <paramref name="entities"/> list from the database.
+            </summary>
+            <typeparam name="TEntity"></typeparam>
+            <typeparam name="TEmbeddedProperty"></typeparam>
+            <param name="entities"> The documents of collection. </param>
+            <param name="embeddedPropertySelector"> Embedded document to be step into. </param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.MongoDB.Utils.NoSqlRelationHelper.StepIntoEmbedded``2(System.Collections.Generic.List{``0},System.Linq.Expressions.Expression{System.Func{``0,System.Collections.Generic.List{``1}}})">
+            <summary>
+            Pulls and mapped the <paramref name="embeddedPropertySelector"/> list inside the <paramref name="entities"/> list from the database.
+            </summary>
+            <typeparam name="TEntity"></typeparam>
+            <typeparam name="TEmbeddedProperty"></typeparam>
+            <param name="entities"> The documents of collection. </param>
+            <param name="embeddedPropertySelector"> Embedded document to be step into </param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.MongoDB.Utils.NoSqlRelationHelper.Contains``1(MongoDB.Driver.FilterDefinitionBuilder{``0},System.Linq.Expressions.Expression{System.Func{``0,System.Object}},System.String)">
+            <summary>
+            Creates contains query.
+            </summary>
+            <typeparam name="TEntity"></typeparam>
+            <param name="filterDefinitionBuilder"></param>
+            <param name="field"></param>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.MongoDB.Utils.NoSqlRelationHelper.GetCollectionName(System.Type)">
+            <summary>
+            Returns collection name.
+            </summary>
+            <param name="documentType"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.MongoDB.Utils.NoSqlRelationHelper.GetMongoDBRef``1(MongoDB.Bson.ObjectId,System.String)">
+            <summary>
+            Returns <see cref="T:MongoDB.Driver.MongoDBRef"/>
+            </summary>
+            <param name="objectId"></param>
+            <param name="dbName"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.MongoDB.Utils.NoSqlRelationHelper.GetMongoDBRef``1(System.Collections.Generic.List{MongoDB.Bson.ObjectId},System.String)">
+            <summary>
+            Returns <see cref="T:MongoDB.Driver.MongoDBRef"/>
+            </summary>
+            <param name="objectIds"></param>
+            <param name="dbName"></param>
+            <returns></returns>
+        </member>
         <member name="T:Milvasoft.Helpers.DependencyInjection.IAuditConfiguration">
             <summary>
             Configuration for entity auditing. You can register this configuration in startup as singleton.
