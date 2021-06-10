@@ -4569,6 +4569,16 @@
             Filtering by MentorId of Announcement.
             </summary>
         </member>
+        <member name="P:Milvasoft.SampleAPI.Spec.AnnouncementSpec.AnnouncementLowerDate">
+            <summary> 
+            Low date of announcement.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.Spec.AnnouncementSpec.AnnouncementTopDate">
+            <summary> 
+            Top date of announcement.
+            </summary>
+        </member>
         <member name="M:Milvasoft.SampleAPI.Spec.AnnouncementSpec.GetFilteredEntities(System.Collections.Generic.IEnumerable{Milvasoft.SampleAPI.Entity.Announcement})">
             <summary>
             Filtering Announcement list by  with requested properties.
@@ -4612,6 +4622,16 @@
             The profession Id of assignment.
             </summary>
         </member>
+        <member name="P:Milvasoft.SampleAPI.Spec.AssignmentSpec.AssignmentLowerDate">
+            <summary> 
+            Low date of assignment.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.Spec.AssignmentSpec.AssignmentTopDate">
+            <summary> 
+            Top date of assignment.
+            </summary>
+        </member>
         <member name="M:Milvasoft.SampleAPI.Spec.AssignmentSpec.GetFilteredEntities(System.Collections.Generic.IEnumerable{Milvasoft.SampleAPI.Entity.Assignment})">
             <summary>
             Filtering Assignment list by  with requested properties.
@@ -4640,6 +4660,16 @@
             Mentor surname.
             </summary>
         </member>
+        <member name="P:Milvasoft.SampleAPI.Spec.MentorSpec.MentorLowDate">
+            <summary> 
+            Low date of mentor.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.Spec.MentorSpec.MentorTopDate">
+            <summary> 
+            Top date of mentor.
+            </summary>
+        </member>
         <member name="M:Milvasoft.SampleAPI.Spec.MentorSpec.GetFilteredEntities(System.Collections.Generic.IEnumerable{Milvasoft.SampleAPI.Entity.Mentor})">
             <summary>
             Filtering Assignment list by  with requested properties.
@@ -4661,6 +4691,16 @@
         <member name="P:Milvasoft.SampleAPI.Spec.ProfessionSpec.Name">
             <summary>
             Name of profession.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.Spec.ProfessionSpec.ProfessionLowDate">
+            <summary> 
+            Low date of profession.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.Spec.ProfessionSpec.ProfessionTopDate">
+            <summary> 
+            Top date of profession.
             </summary>
         </member>
         <member name="M:Milvasoft.SampleAPI.Spec.ProfessionSpec.GetFilteredEntities(System.Collections.Generic.IEnumerable{Milvasoft.SampleAPI.Entity.Profession})">
@@ -4709,6 +4749,16 @@
         <member name="P:Milvasoft.SampleAPI.Spec.QuestionSpec.MentorId">
             <summary>
             Id of the mentor answering the question.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.Spec.QuestionSpec.QuestionLowDate">
+            <summary> 
+            Low date of quesiton.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.Spec.QuestionSpec.QuestionTopDate">
+            <summary> 
+            Top date of question.
             </summary>
         </member>
         <member name="M:Milvasoft.SampleAPI.Spec.QuestionSpec.GetFilteredEntities(System.Collections.Generic.IEnumerable{Milvasoft.SampleAPI.Entity.Question})">
@@ -4774,6 +4824,16 @@
             Mentor id of student.
             </summary>
         </member>
+        <member name="P:Milvasoft.SampleAPI.Spec.StudentSpec.StudentLowDate">
+            <summary> 
+            Low date of student.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.Spec.StudentSpec.StudentTopDate">
+            <summary> 
+            Top date of student.
+            </summary>
+        </member>
         <member name="M:Milvasoft.SampleAPI.Spec.StudentSpec.GetFilteredEntities(System.Collections.Generic.IEnumerable{Milvasoft.SampleAPI.Entity.Student})">
             <summary>
             Filtering question list by  with requested properties.
@@ -4800,6 +4860,16 @@
         <member name="P:Milvasoft.SampleAPI.Spec.UsefulLinkSpec.ProfessionId">
             <summary>
             Profession id of link.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.Spec.UsefulLinkSpec.UsefulLinkLowDate">
+            <summary> 
+            Low date of useful link.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.SampleAPI.Spec.UsefulLinkSpec.UsefulLinkTopDate">
+            <summary> 
+            Top date of useful link.
             </summary>
         </member>
         <member name="M:Milvasoft.SampleAPI.Spec.UsefulLinkSpec.GetFilteredEntities(System.Collections.Generic.IEnumerable{Milvasoft.SampleAPI.Entity.UsefulLink})">
