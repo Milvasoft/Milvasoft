@@ -1,4 +1,5 @@
-﻿using Milvasoft.Helpers.Extensions;
+﻿using Milvasoft.Helpers;
+using Milvasoft.Helpers.Extensions;
 using Milvasoft.SampleAPI.Entity;
 using Milvasoft.SampleAPI.Spec.Abstract;
 using System;
@@ -13,10 +14,8 @@ namespace Milvasoft.SampleAPI.Spec
     /// </summary>
     public class MentorSpec : IBaseSpec<Mentor>
     {
-        #region Fields
         private string _name;
         private string _surname;
-        #endregion
 
         #region Props
 
@@ -29,6 +28,16 @@ namespace Milvasoft.SampleAPI.Spec
         /// Mentor surname.
         /// </summary>
         public string Surname { get => _surname; set => _surname = value?.ToUpper(); }
+
+        /// <summary> 
+        /// Low date of mentor.
+        /// </summary>
+        public DateTime? MentorLowDate { get; set; }
+
+        /// <summary> 
+        /// Top date of mentor.
+        /// </summary>
+        public DateTime? MentorTopDate { get; set; }
 
         #endregion
 
@@ -56,6 +65,9 @@ namespace Milvasoft.SampleAPI.Spec
 
             if (!string.IsNullOrEmpty(Name)) predicates.Add(c => c.Name == Name);
             if (!string.IsNullOrEmpty(Surname)) predicates.Add(c => c.Surname == Surname);
+
+            var dateExpression = Filter.CreateDateFilterExpression<Mentor>(MentorTopDate, MentorLowDate, i => i.CreationDate);
+            if (dateExpression != null) predicates.Add(dateExpression);
 
             predicates?.ForEach(predicate => mainPredicate = mainPredicate.Append(predicate, ExpressionType.AndAlso));
             return mainPredicate;

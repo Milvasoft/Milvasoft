@@ -28,6 +28,7 @@ namespace Milvasoft.SampleAPI.DTOs.StudentDTOs
         /// <summary>
         /// Age of student.
         /// </summary>
+        [OValidateDecimal(30)]
         public int Age { get; set; }
 
         /// <summary>
@@ -41,6 +42,5 @@ namespace Milvasoft.SampleAPI.DTOs.StudentDTOs
         /// </summary>
         [OValidateString(2000)]
         public string HomeAddress { get; set; }
-
     }
 }

@@ -53,7 +53,7 @@ namespace Milvasoft.SampleAPI.Services.Abstract
         /// </summary>
         /// <param name="userSignUpDTO"></param>
         /// <returns></returns>
-        Task<LoginResultDTO> RegisterAsync(SignUpDTO userSignUpDTO);
+        Task<LoginResultDTO> RegisterAsync(RegisterDTO userSignUpDTO);
 
         /// <summary>
         /// Deletes logged-in user's account. This operation is irreversible.

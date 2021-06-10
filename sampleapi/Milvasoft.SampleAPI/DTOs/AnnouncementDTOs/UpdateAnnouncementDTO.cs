@@ -29,6 +29,5 @@ namespace Milvasoft.SampleAPI.DTOs.AnnouncementDTOs
         /// Is the announcement fixed?
         /// </summary>
         public bool IsFixed { get; set; }
-
     }
 }

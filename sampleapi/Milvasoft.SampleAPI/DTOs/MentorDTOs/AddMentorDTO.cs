@@ -41,7 +41,6 @@ namespace Milvasoft.SampleAPI.DTOs.MentorDTOs
         /// </summary>
         public string PhoneNumber { get; set; }
 
-
         /// <summary>
         /// CV path of mentor.
         /// </summary>

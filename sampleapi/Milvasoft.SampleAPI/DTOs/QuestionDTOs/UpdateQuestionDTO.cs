@@ -46,6 +46,5 @@ namespace Milvasoft.SampleAPI.DTOs.QuestionDTOs
         /// </summary>
         [OValidateId]
         public Guid ProfessionId { get; set; }
-
     }
 }

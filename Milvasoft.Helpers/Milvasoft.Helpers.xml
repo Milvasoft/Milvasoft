@@ -177,6 +177,11 @@
             Minimum decimal value of requested validate scope.
             </summary>
         </member>
+        <member name="P:Milvasoft.Helpers.Attributes.Validation.ValidateDecimalAttribute.MaxValue">
+            <summary>
+            Maximum decimal value of requested validate scope.
+            </summary>
+        </member>
         <member name="M:Milvasoft.Helpers.Attributes.Validation.ValidateDecimalAttribute.#ctor">
             <summary>
             Constructor of atrribute.
@@ -188,17 +193,25 @@
             </summary>
             <param name="resourceType"></param>
         </member>
-        <member name="M:Milvasoft.Helpers.Attributes.Validation.ValidateDecimalAttribute.#ctor(System.Int32)">
+        <member name="M:Milvasoft.Helpers.Attributes.Validation.ValidateDecimalAttribute.#ctor(System.Decimal)">
             <summary>
             Constructor of atrribute.
             </summary>
             <param name="minValue"></param>
         </member>
-        <member name="M:Milvasoft.Helpers.Attributes.Validation.ValidateDecimalAttribute.#ctor(System.Int32,System.Type)">
+        <member name="M:Milvasoft.Helpers.Attributes.Validation.ValidateDecimalAttribute.#ctor(System.Decimal,System.Type)">
             <summary>
             Constructor of atrribute.
             </summary>
             <param name="minValue"></param>
+            <param name="resourceType"></param>
+        </member>
+        <member name="M:Milvasoft.Helpers.Attributes.Validation.ValidateDecimalAttribute.#ctor(System.Decimal,System.Decimal,System.Type)">
+            <summary>
+            Constructor of atrribute.
+            </summary>
+            <param name="minValue"></param>
+            <param name="maxValue"></param>
             <param name="resourceType"></param>
         </member>
         <member name="M:Milvasoft.Helpers.Attributes.Validation.ValidateDecimalAttribute.IsValid(System.Object,System.ComponentModel.DataAnnotations.ValidationContext)">

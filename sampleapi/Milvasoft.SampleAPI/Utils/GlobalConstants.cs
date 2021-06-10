@@ -109,6 +109,8 @@ namespace Milvasoft.SampleAPI.Utils
 
         public const string DeveloperSiteUrl = "https://www.milvasoft.com";
 
+        public const string MilvaSampleApiKey = "w!z%C*F-JaNdRgUk";
+
         /// <summary>
         /// Zero
         /// </summary>

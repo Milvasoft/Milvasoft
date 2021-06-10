@@ -30,6 +30,7 @@ namespace Milvasoft.SampleAPI.Controllers
         private readonly IStringLocalizer<SharedResource> _sharedLocalizer;
         private readonly IAccountService _accountService;
         private readonly string _defaultSucccessMessage;
+
         /// <summary>
         /// Constructor of <c>AccountController</c>
         /// </summary>
@@ -90,8 +91,6 @@ namespace Milvasoft.SampleAPI.Controllers
             return Ok("Success");
         }
 
-
-
         /// <summary>
         /// Returns logged-in user's account information.
         /// </summary>
@@ -134,7 +133,7 @@ namespace Milvasoft.SampleAPI.Controllers
         [HttpPost("Register")]
         [AllowAnonymous]
         [OValidationFilter]
-        public async Task<IActionResult> RegisterAsync([FromBody] SignUpDTO signUpDTO)
+        public async Task<IActionResult> RegisterAsync([FromBody] RegisterDTO signUpDTO)
         {
             ObjectResponse<LoginResultDTO> response = new()
             {
@@ -179,6 +178,7 @@ namespace Milvasoft.SampleAPI.Controllers
 
             return await _accountService.DeleteAccountAsync().ConfigureAwait(false).GetObjectResponseAsync<object>(successMessage).ConfigureAwait(false);
         }
+
         #region Account Activities / Note : Editors can be use this endpoints too.
 
         /// <summary>
@@ -258,7 +258,6 @@ namespace Milvasoft.SampleAPI.Controllers
         /// 
         /// </remarks>
         /// 
-        /// <param name="userName"></param>
         /// <returns></returns>
         [HttpGet("Activity/Send/Mail/PasswordReset/{userName}")]
         [OValidateStringParameter(3, 30)]
@@ -410,6 +409,5 @@ namespace Milvasoft.SampleAPI.Controllers
         }
 
         #endregion
-
     }
 }

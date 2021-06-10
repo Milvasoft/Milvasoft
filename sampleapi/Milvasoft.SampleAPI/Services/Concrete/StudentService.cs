@@ -27,6 +27,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
     /// </summary>
     public class StudentService : IStudentService
     {
+        private readonly string _loggedUser;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly UserManager<AppUser> _userManager;
         private readonly IBaseRepository<Student, Guid, EducationAppDbContext> _studentRepository;
@@ -39,34 +40,34 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// <param name="userManager"></param>
         /// <param name="httpContextAccessor"></param>
         /// <param name="mentorRepository"></param>
-        public StudentService(IBaseRepository<Student, Guid, EducationAppDbContext> studentRepository, UserManager<AppUser> userManager, IBaseRepository<Mentor, Guid, EducationAppDbContext> mentorRepository, IHttpContextAccessor httpContextAccessor)
+        public StudentService(IBaseRepository<Student, Guid, EducationAppDbContext> studentRepository,
+                              UserManager<AppUser> userManager,
+                              IBaseRepository<Mentor, Guid, EducationAppDbContext> mentorRepository,
+                              IHttpContextAccessor httpContextAccessor)
         {
             _mentorRepository = mentorRepository;
             _userManager = userManager;
             _studentRepository = studentRepository;
             _httpContextAccessor = httpContextAccessor;
+            _loggedUser = httpContextAccessor.HttpContext.User.Identity.Name;
         }
 
         /// <summary>
-        /// It will filter students according to the parameters sent in <paramref name="pagiantionParams"/>
+        /// It will filter students according to the parameters sent in <paramref name="paginationParams"/>
         /// </summary>
-        /// <exception cref="ArgumentNullException">If <paramref name="pagiantionParams"/> is null, it is thrown.</exception>
-        /// <param name="pagiantionParams">Filtering object.</param>
+        /// <exception cref="ArgumentNullException">If <paramref name="paginationParams"/> is null, it is thrown.</exception>
+        /// <param name="paginationParams">Filtering object.</param>
         /// <returns>Student information that can be seen by admin.</returns>
-        public async Task<PaginationDTO<StudentForAdminDTO>> GetStudentsForAdminAsync(PaginationParamsWithSpec<StudentSpec> pagiantionParams)
+        public async Task<PaginationDTO<StudentForAdminDTO>> GetStudentsForAdminAsync(PaginationParamsWithSpec<StudentSpec> paginationParams)
         {
-            pagiantionParams.ThrowIfParameterIsNull();
-
             Func<IIncludable<Student>, IIncludable> includes = i => i.Include(md => md.Mentor);
 
-            var (students, pageCount, totalDataCount) = await _studentRepository.PreparePaginationDTO(pagiantionParams.PageIndex,
-                                                                                                        pagiantionParams.RequestedItemCount,
-                                                                                                        pagiantionParams.OrderByProperty,
-                                                                                                        pagiantionParams.OrderByAscending,
-                                                                                                        pagiantionParams.Spec?.ToExpression(),
-                                                                                                        includes).ConfigureAwait(false);
-
-            students.ThrowIfListIsNullOrEmpty("CannotFindEntityException");
+            var (students, pageCount, totalDataCount) = await _studentRepository.PreparePaginationDTO(paginationParams.PageIndex,
+                                                                                                      paginationParams.RequestedItemCount,
+                                                                                                      paginationParams.OrderByProperty,
+                                                                                                      paginationParams.OrderByAscending,
+                                                                                                      paginationParams.Spec?.ToExpression(),
+                                                                                                      includes).ConfigureAwait(false);
 
             return new PaginationDTO<StudentForAdminDTO>
             {
@@ -100,24 +101,21 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// Brings the students of the mentor who has entered.
         /// </summary>
         ///  <exception cref="ArgumentNullException">If the mentor does not enter, it is thrown..</exception>
-        /// <param name="pagiantionParams">Filtering object.</param>
+        /// <param name="paginationParams">Filtering object.</param>
         /// <returns>Brings the students for whom the mentor is responsible.</returns>
-        public async Task<PaginationDTO<StudentForMentorDTO>> GetStudentsForCurrentMentorAsync(PaginationParamsWithSpec<StudentSpec> pagiantionParams)
+        public async Task<PaginationDTO<StudentForMentorDTO>> GetStudentsForCurrentMentorAsync(PaginationParamsWithSpec<StudentSpec> paginationParams)
         {
-            var username = _httpContextAccessor.HttpContext.User.Identity.Name;
-
-            var currentMentor = await _mentorRepository.GetFirstOrDefaultAsync(i => i.AppUser.UserName == username).ConfigureAwait(false);
+            var currentMentor = await _mentorRepository.GetFirstOrDefaultAsync(i => i.AppUser.UserName == _loggedUser).ConfigureAwait(false);
 
             Func<IIncludable<Student>, IIncludable> includes = i => i.Include(md => md.Mentor)
-                                                                        .Include(oa => oa.OldAssignments);
+                                                                     .Include(oa => oa.OldAssignments);
 
-            var (students, pageCount, totalDataCount) = await _studentRepository.PreparePaginationDTO(pagiantionParams.PageIndex,
-                                                                                                        pagiantionParams.RequestedItemCount,
-                                                                                                        pagiantionParams.OrderByProperty,
-                                                                                                        pagiantionParams.OrderByAscending,
-                                                                                                        pagiantionParams.Spec?.ToExpression(),
-                                                                                                        includes).ConfigureAwait(false);
-            students.ThrowIfListIsNullOrEmpty("CannotFindEntityException");
+            var (students, pageCount, totalDataCount) = await _studentRepository.PreparePaginationDTO(paginationParams.PageIndex,
+                                                                                                      paginationParams.RequestedItemCount,
+                                                                                                      paginationParams.OrderByProperty,
+                                                                                                      paginationParams.OrderByAscending,
+                                                                                                      paginationParams.Spec?.ToExpression(),
+                                                                                                      includes).ConfigureAwait(false);
 
             return new PaginationDTO<StudentForMentorDTO>
             {
@@ -163,7 +161,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
 
             var student = await _studentRepository.GetByIdAsync(studentId, includes).ConfigureAwait(false);
 
-            student.ThrowIfNullForGuidObject("CannotFindEntityException");
+            student.ThrowIfNullForGuidObject();
 
             return new StudentForAdminDTO
             {
@@ -187,7 +185,6 @@ namespace Milvasoft.SampleAPI.Services.Concrete
                 CreationDate = student.CreationDate,
                 LastModificationDate = student.LastModificationDate
             };
-
         }
 
         /// <summary>
@@ -197,16 +194,14 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// <returns></returns>
         public async Task<StudentForMentorDTO> GetStudentForMentorAsync(Guid studentId)
         {
-            var username = _httpContextAccessor.HttpContext.User.Identity.Name;
-
-            var currentMentor = await _mentorRepository.GetFirstOrDefaultAsync(i => i.AppUser.UserName == username).ConfigureAwait(false);
+            var currentMentor = await _mentorRepository.GetFirstOrDefaultAsync(i => i.AppUser.UserName == _loggedUser).ConfigureAwait(false);
 
             Func<IIncludable<Student>, IIncludable> includes = i => i.Include(md => md.Mentor)
                                                                      .Include(oa => oa.OldAssignments);
 
             var student = await _studentRepository.GetByIdAsync(studentId, includes, i => i.MentorId == currentMentor.Id).ConfigureAwait(false);
 
-            student.ThrowIfNullForGuidObject("CannotFindEntityException");
+            student.ThrowIfNullForGuidObject();
 
             return new StudentForMentorDTO
             {
@@ -237,13 +232,11 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// Brings instant user's profile information.
         /// </summary>
         /// <returns></returns>
-        public async Task<StudentForMentorDTO> GetCurrentUserProfile()
+        public async Task<StudentForMentorDTO> GetCurrentUserProfileAsync()
         {
-            var username = _httpContextAccessor.HttpContext.User.Identity.Name;
+            var currentStudent = await _studentRepository.GetFirstOrDefaultAsync(i => i.AppUser.UserName == _loggedUser).ConfigureAwait(false);
 
-            var currentStudent = await _studentRepository.GetFirstOrDefaultAsync(i => i.AppUser.UserName == username).ConfigureAwait(false);
-
-            currentStudent.ThrowIfNullForGuidObject("CannotFindEntityException");
+            currentStudent.ThrowIfNullForGuidObject();
 
             return new StudentForMentorDTO
             {
@@ -302,7 +295,6 @@ namespace Milvasoft.SampleAPI.Services.Concrete
                 }
             };
 
-
             var result = await _userManager.CreateAsync(appUser, addStudentDTO.Password);
 
             if (!result.Succeeded)
@@ -319,7 +311,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         {
             var toBeUpdatedStudent = await _studentRepository.GetByIdAsync(Id).ConfigureAwait(false);
 
-            toBeUpdatedStudent.ThrowIfNullForGuidObject("CannotFindEntityException");
+            toBeUpdatedStudent.ThrowIfNullForGuidObject();
 
             toBeUpdatedStudent.Name = updateStudentDTO.Name;
             toBeUpdatedStudent.Surname = updateStudentDTO.Surname;
@@ -341,7 +333,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         {
             var toBeUpdatedStudent = await _studentRepository.GetByIdAsync(Id).ConfigureAwait(false);
 
-            toBeUpdatedStudent.ThrowIfNullForGuidObject("CannotFindEntityException");
+            toBeUpdatedStudent.ThrowIfNullForGuidObject();
 
             toBeUpdatedStudent.Name = updateStudentDTO.Name;
             toBeUpdatedStudent.Surname = updateStudentDTO.Surname;
@@ -366,11 +358,9 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// <returns></returns>
         public async Task UpdateCurrentStudentAsync(UpdateStudentDTO updateStudentDTO)
         {
-            var username = _httpContextAccessor.HttpContext.User.Identity.Name;
+            var currentStudent = await _userManager.FindByNameAsync(_loggedUser).ConfigureAwait(false);
 
-            var currentStudent = await _userManager.FindByNameAsync(username).ConfigureAwait(false);
-
-            currentStudent.ThrowIfNullForGuidObject("CannotFindEntityException");
+            currentStudent.ThrowIfNullForGuidObject();
 
             currentStudent.Student.Name = updateStudentDTO.Name;
             currentStudent.Student.Surname = updateStudentDTO.Surname;
@@ -390,6 +380,8 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         public async Task DeleteStudentsAsync(List<Guid> studentIds)
         {
             var deletedStudents = await _studentRepository.GetAllAsync(i => studentIds.Select(p => p).Contains(i.Id)).ConfigureAwait(false);
+
+            deletedStudents.ThrowIfListIsNullOrEmpty();
 
             await _studentRepository.DeleteAsync(deletedStudents).ConfigureAwait(false);
         }

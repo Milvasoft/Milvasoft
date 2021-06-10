@@ -31,18 +31,16 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         }
 
         /// <summary>
-        /// Get all filtered professions by <paramref name="pagiantionParams"/>
+        /// Get all filtered professions by <paramref name="paginationParams"/>
         /// </summary>
         /// <returns>Returns the filtered profession.</returns>
-        public async Task<PaginationDTO<ProfessionDTO>> GetProfessionsAsync(PaginationParamsWithSpec<ProfessionSpec> pagiantionParams)
+        public async Task<PaginationDTO<ProfessionDTO>> GetProfessionsAsync(PaginationParamsWithSpec<ProfessionSpec> paginationParams)
         {
-            var (professions, pageCount, totalDataCount) = await _professionRepository.PreparePaginationDTO(pagiantionParams.PageIndex,
-                                                                                                            pagiantionParams.RequestedItemCount,
-                                                                                                            pagiantionParams.OrderByProperty,
-                                                                                                            pagiantionParams.OrderByAscending,
-                                                                                                            pagiantionParams.Spec?.ToExpression()).ConfigureAwait(false);
-
-            professions.ThrowIfListIsNullOrEmpty("CannotFindEntityException");
+            var (professions, pageCount, totalDataCount) = await _professionRepository.PreparePaginationDTO(paginationParams.PageIndex,
+                                                                                                            paginationParams.RequestedItemCount,
+                                                                                                            paginationParams.OrderByProperty,
+                                                                                                            paginationParams.OrderByAscending,
+                                                                                                            paginationParams.Spec?.ToExpression()).ConfigureAwait(false);
 
             return new PaginationDTO<ProfessionDTO>
             {
@@ -65,7 +63,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         {
             var profession = await _professionRepository.GetByIdAsync(professionId).ConfigureAwait(false);
 
-            profession.ThrowIfNullForGuidObject("CannotFindEntityException");
+            profession.ThrowIfNullForGuidObject();
 
             return new ProfessionDTO
             {
@@ -86,7 +84,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         {
             var profession = await _professionRepository.GetByIdAsync(professionId).ConfigureAwait(false);
 
-            profession.ThrowIfNullForGuidObject("CannotFindEntityException");
+            profession.ThrowIfNullForGuidObject();
 
             return new ProfessionDTO
             {
@@ -106,7 +104,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         {
             var profession = await _professionRepository.GetByIdAsync(professionId).ConfigureAwait(false);
 
-            profession.ThrowIfNullForGuidObject("CannotFindEntityException");
+            profession.ThrowIfNullForGuidObject();
 
             return new ProfessionDTO
             {
@@ -124,6 +122,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
             {
                 Name = addProfessionDTO.Name,
             };
+
             await _professionRepository.AddAsync(profession).ConfigureAwait(false);
         }
 

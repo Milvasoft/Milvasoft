@@ -6,7 +6,6 @@ using System;
 
 namespace Milvasoft.SampleAPI.DTOs
 {
-
     /// <summary>
     /// Role for all users.
     /// </summary>

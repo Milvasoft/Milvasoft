@@ -42,7 +42,6 @@ namespace Milvasoft.SampleAPI.Services.Concrete
             PhoneNumberChange
         }
 
-
         private readonly UserManager<AppUser> _userManager;
         private readonly SignInManager<AppUser> _signInManager;
         private readonly IContextRepository<EducationAppDbContext> _contextRepository;
@@ -51,8 +50,6 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly ITokenManagement _tokenManagement;
         private readonly IStringLocalizer<SharedResource> _localizer;
-        private readonly IBaseRepository<Student, Guid, EducationAppDbContext> _studentRepository;
-        private readonly IBaseRepository<Mentor, Guid, EducationAppDbContext> _mentorRepository;
         private readonly IBaseRepository<AppUser, Guid, EducationAppDbContext> _userRepository;
         private readonly IMilvaLogger _milvaLogger;
         private readonly string _userName;
@@ -76,9 +73,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// <param name="signInManager"></param>
         /// <param name="tokenManagement"></param>
         /// <param name="httpClient"></param>
-        /// <param name="studentRepository"></param>
         /// <param name="contextRepository"></param>
-        /// <param name="mentorRepository"></param>
         /// <param name="userRepository"></param>
         /// <param name="httpContextAccessor"></param>
         /// <param name="milvaMailSender"></param>
@@ -89,9 +84,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
                               SignInManager<AppUser> signInManager,
                               ITokenManagement tokenManagement,
                               HttpClient httpClient,
-                              IBaseRepository<Student, Guid, EducationAppDbContext> studentRepository,
                               IContextRepository<EducationAppDbContext> contextRepository,
-                              IBaseRepository<Mentor, Guid, EducationAppDbContext> mentorRepository,
                               IBaseRepository<AppUser, Guid, EducationAppDbContext> userRepository,
                               IHttpContextAccessor httpContextAccessor,
                               IMilvaMailSender milvaMailSender,
@@ -107,9 +100,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
             _userManager = userManager;
             _signInManager = signInManager;
             _httpClient = httpClient;
-            _studentRepository = studentRepository;
             _contextRepository = contextRepository;
-            _mentorRepository = mentorRepository;
             _httpContextAccessor = httpContextAccessor;
             _localizer = sharedLocalizer;
             _tokenManagement = tokenManagement;
@@ -118,31 +109,33 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         }
 
         /// <summary>
-        /// Signs in for incoming user. Returns a token if login informations are valid or the user is not lockedout. Otherwise returns the error list.
+        /// Signs in for incoming user. 
         /// </summary>
         /// <param name="loginDTO"></param>
         /// <param name="isMentor"></param>
-        /// <returns></returns>
+        /// <returns>Returns a token if the login information is correct.Otherwise returns the error list.</returns>
         public async Task<LoginResultDTO> LoginAsync(LoginDTO loginDTO, bool isMentor) => await base.LoginAsync(loginDTO,
                                                                                                                 isMentor,
-                                                                                                                userValidationByUserType: ValidateUser,
+                                                                                                                userValidationByUserType: ValidateUserAsync,
                                                                                                                 tokenExpiredDate: isMentor ? DateTime.Now.AddDays(100) : DateTime.Now.AddDays(5)).ConfigureAwait(false);
 
         /// <summary>
-        /// Signs out from database. Returns null if already signed out.
+        /// Signs out from database. 
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Returns null if already signed out.</returns>
         public async Task<IdentityResult> LogoutAsync() => await base.LogoutAsync().ConfigureAwait(false);
 
         /// <summary>
-        /// Chamge user password.
+        /// Change user password.
         /// </summary>
         /// <param name="passDTO"></param>
         /// <returns></returns>
         public async Task<IdentityResult> ChangePasswordAsync(ChangePassDTO passDTO)
         {
-            if (passDTO.OldPassword == passDTO.NewPassword) throw new MilvaUserFriendlyException("Passwords are already the same");
+            if (passDTO.OldPassword == passDTO.NewPassword) throw new MilvaUserFriendlyException("PasswordSameException");
+
             var user = await _userManager.FindByNameAsync(passDTO.UserName).ConfigureAwait(false);
+
             return await base.ChangePasswordAsync(user, passDTO.OldPassword, passDTO.NewPassword);
         }
 
@@ -201,9 +194,8 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// If signup process is succesful,then sign in.
         /// </summary>
         /// <param name="registerDTO"></param>
-        /// <param name="language"></param>
         /// <returns></returns>
-        public async Task<LoginResultDTO> RegisterAsync(SignUpDTO registerDTO)
+        public async Task<LoginResultDTO> RegisterAsync(RegisterDTO registerDTO)
         {
             AppUser userToBeSignUp = new()
             {
@@ -249,223 +241,6 @@ namespace Milvasoft.SampleAPI.Services.Concrete
             if (!deleteResult.Succeeded)
                 ThrowErrorMessagesIfNotSuccess(deleteResult);
         }
-
-        #region Private Helpers Methods
-        /// <summary>
-        /// Validating user to login.
-        /// </summary>
-        /// <param name="loginDTO"></param>
-        /// <param name="user"></param>
-        /// <param name="isUserType"></param>
-        /// <returns></returns>
-
-        /// <summary>
-        /// Roll is added according to user type and token is produced.
-        /// </summary>
-        /// <param name="user"></param>
-        /// <param name="isAppUser"></param>
-        /// <returns></returns>
-        public async Task<string> GenerateTokenWithRoleAsync(AppUser user, bool isAppUser)
-        {
-            var roles = await _userManager.GetRolesAsync(user).ConfigureAwait(false);
-
-            string newToken = GenerateToken(username: user.UserName, roles: roles, isAppUser);
-
-            await _userManager.RemoveAuthenticationTokenAsync(user, _loginProvider, _tokenName).ConfigureAwait(false);
-
-            IdentityResult identityResult = await _userManager.SetAuthenticationTokenAsync(user: user,
-                                                                                           loginProvider: _loginProvider,//Token nerede kullanılcak
-                                                                                           tokenName: _tokenName,//Token tipi
-                                                                                           tokenValue: newToken).ConfigureAwait(false);
-
-            if (!identityResult.Succeeded)
-                throw new MilvaUserFriendlyException();
-
-            return newToken;
-        }
-
-        /// <summary>
-        /// If Authentication is successful, JWT tokens are generated.
-        /// </summary>
-        /// <param name="username"></param>
-        /// <param name="roles"></param>
-        /// <param name="isAppUser"></param>
-        public string GenerateToken(string username, IList<string> roles, bool isAppUser)
-        {
-            var tokenHandler = new JwtSecurityTokenHandler();
-
-            var claimsIdentityList = new ClaimsIdentity(roles.Select(r => new Claim(ClaimTypes.Role, r)));
-
-            claimsIdentityList.AddClaim(new Claim(ClaimTypes.Name, username));
-
-            if (!isAppUser)
-                claimsIdentityList.AddClaim(new Claim(ClaimTypes.Expired, value: _tokenExpireDate.ToString()));
-
-            var tokenDescriptor = new SecurityTokenDescriptor
-            {
-                Subject = claimsIdentityList,
-                Issuer = _tokenManagement.Issuer,
-                Audience = _tokenManagement.Audience,
-                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(Encoding.ASCII.GetBytes(_tokenManagement.Secret)), SecurityAlgorithms.HmacSha256Signature)
-            };
-
-            if (!isAppUser)
-                tokenDescriptor.Expires = _tokenExpireDate;
-
-            var token = tokenHandler.CreateToken(tokenDescriptor);
-
-            return tokenHandler.WriteToken(token);
-        }
-
-        /// <summary>
-        /// Generates 6-digit verification code.
-        /// </summary>
-        /// <returns></returns>
-        private static string GenerateVerificationCode()
-        {
-            Random rand = new();
-
-            List<int> codeList = new();
-
-            string verificationCode = "";
-
-            for (int index = 0; index < 6; index++)
-            {
-                codeList.Add(rand.Next(1, 9));
-
-                verificationCode += codeList.ElementAt(index).ToString();
-            }
-            return verificationCode;
-        }
-
-        /// <summary>
-        /// <para> Please add items to <paramref name="values"/> with this sorting; </para>
-        ///          <para> - Mail Title         </para>
-        ///          <para> - Body Title         </para>
-        ///          <para> - Body Description   </para>
-        ///          <para> - Body Button Text   </para>
-        ///          <para> - Body Resend Text   </para>
-        ///          <para> - Body Bottom Text   </para>
-        /// </summary>
-        /// <param name="values"></param>
-        /// <returns></returns>
-        private static Dictionary<string, string> PrepareMailBodyDictionary(params string[] values)
-        {
-            var dic = new Dictionary<string, string>
-            {
-                { "~MailTitle", "" },
-                { "~BodyTitle", "" },
-                { "~BodyDescription", "" },
-                { "~BodyButtonText", "" },
-                { "~BodyResendText", "" },
-                { "~BodyBottomText", "" },
-            };
-
-            int i = 0;
-            foreach (var item in dic)
-            {
-                dic[item.Key] = values[i];
-                i++;
-            }
-
-            return dic;
-        }
-
-        /// <summary>
-        /// Sends email to logged-in user's email.
-        /// Please make sure <paramref name="localizedMailBodyContents"/> dictionary parameter taken from <see cref="PrepareMailBodyDictionary(string[])"/>.
-        /// </summary>
-        /// <param name="localizedMailBodyContents"></param>
-        /// <param name="urlPath"></param>
-        /// <param name="accountActivity"></param>
-        /// <param name="newInfo"> Could be new phone number or new email. </param>
-        /// <param name="username"></param>
-        /// <returns></returns>
-        private async Task SendActivityMailAsync(Dictionary<string, string> localizedMailBodyContents,
-                                                 string urlPath,
-                                                 AccountActivity accountActivity,
-                                                 string newInfo = null,
-                                                 string username = null)
-        {
-            var uName = username ?? _userName;
-
-            var user = await _userRepository.GetFirstOrDefaultAsync(a => a.UserName == _userName).ConfigureAwait(false)
-                                             ?? throw new MilvaUserFriendlyException(MilvaException.CannotFindEntity);
-
-            if (string.IsNullOrEmpty(user?.Email))
-                throw new MilvaUserFriendlyException("IdentityInvalidEmail");
-
-            string token = "";
-
-            switch (accountActivity)
-            {
-                case AccountActivity.EmailVerification:
-                    token = await _userManager.GenerateEmailConfirmationTokenAsync(user).ConfigureAwait(false);
-                    break;
-                case AccountActivity.EmailChange:
-                    token = await _userManager.GenerateChangeEmailTokenAsync(user, newInfo).ConfigureAwait(false);
-                    break;
-                case AccountActivity.PasswordReset:
-                    token = await _userManager.GeneratePasswordResetTokenAsync(user).ConfigureAwait(false);
-                    break;
-                case AccountActivity.PhoneNumberChange:
-                    token = await _userManager.GenerateChangePhoneNumberTokenAsync(user, newInfo).ConfigureAwait(false);
-                    break;
-            }
-
-            var confirmationUrl = $"{GlobalConstants.ApplicationSiteUrl}/{urlPath}?userName={username ?? _userName}&token={token}";
-
-            var htmlContent = await File.ReadAllTextAsync(Path.Combine(GlobalConstants.RootPath, "StaticFiles", "HTML", "mail_content.html")).ConfigureAwait(false);
-
-            foreach (var localizedMailBodyContent in localizedMailBodyContents)
-                htmlContent = htmlContent.Replace(localizedMailBodyContent.Key, localizedMailBodyContent.Value);
-
-            htmlContent = htmlContent.Replace("~BodyButtonLink", confirmationUrl);
-
-            await _milvaMailSender.MilvaSendMailAsync(user.Email, localizedMailBodyContents["~MailTitle"], htmlContent, true);
-        }
-
-        /// <summary>
-        /// Regex check for action parameter.
-        /// </summary>
-        /// <param name="input"></param>
-        /// <param name="propName"></param>
-        private void CheckRegex(string input, string propName)
-        {
-            var localizedPattern = _localizer[$"RegexPattern{propName}"];
-
-            if (!RegexMatcher.MatchRegex(input, _localizer[localizedPattern]))
-            {
-                var exampleFormat = _localizer[$"RegexExample{propName}"];
-                throw new MilvaUserFriendlyException("RegexErrorMessage", _localizer[$"Localized{propName}"], exampleFormat);
-            }
-        }
-        private async Task<(AppUser educationUser, LoginResultDTO loginResult)> ValidateUser(ILoginDTO loginDTO, AppUser user, bool isUserType) => await base.ValidateUserAsync(loginDTO, user).ConfigureAwait(false);
-
-        /// <summary>
-        /// Cheks <see cref="_userName"/>. If is null or empty throwns <see cref="MilvaUserFriendlyException"/>. Otherwise does nothing.
-        /// </summary>
-        private void CheckLoginStatus()
-        {
-            if (string.IsNullOrEmpty(_userName))
-                throw new MilvaUserFriendlyException("CannotGetSignedInUserInfo");
-        }
-
-        /// <summary>
-        /// If <paramref name="identityResult"/> is not succeeded throwns <see cref="MilvaUserFriendlyException"/>.
-        /// </summary>
-        /// <param name="identityResult"></param>
-        public void ThrowErrorMessagesIfNotSuccess(IdentityResult identityResult)
-        {
-            if (!identityResult.Succeeded)
-            {
-                var stringBuilder = new StringBuilder();
-
-                stringBuilder.AppendJoin(',', identityResult.Errors.Select(i => i.Description));
-                throw new MilvaUserFriendlyException(stringBuilder.ToString());
-            }
-        }
-        #endregion
 
         #region Account Activities 
 
@@ -691,5 +466,215 @@ namespace Milvasoft.SampleAPI.Services.Concrete
 
         #endregion
 
+        #region Private Helpers Methods
+
+        /// <summary>
+        /// Roll is added according to user type and token is produced.
+        /// </summary>
+        /// <param name="user"></param>
+        /// <param name="isAppUser"></param>
+        /// <returns></returns>
+        private async Task<string> GenerateTokenWithRoleAsync(AppUser user, bool isAppUser)
+        {
+            var roles = await _userManager.GetRolesAsync(user).ConfigureAwait(false);
+
+            string newToken = GenerateToken(username: user.UserName, roles: roles, isAppUser);
+
+            await _userManager.RemoveAuthenticationTokenAsync(user, _loginProvider, _tokenName).ConfigureAwait(false);
+
+            IdentityResult identityResult = await _userManager.SetAuthenticationTokenAsync(user: user,
+                                                                                           loginProvider: _loginProvider,//Token nerede kullanılcak
+                                                                                           tokenName: _tokenName,//Token tipi
+                                                                                           tokenValue: newToken).ConfigureAwait(false);
+
+            if (!identityResult.Succeeded)
+                throw new MilvaUserFriendlyException();
+
+            return newToken;
+        }
+
+        /// <summary>
+        /// If Authentication is successful, JWT tokens are generated.
+        /// </summary>
+        /// <param name="username"></param>
+        /// <param name="roles"></param>
+        /// <param name="isAppUser"></param>
+        private string GenerateToken(string username, IList<string> roles, bool isAppUser)
+        {
+            var tokenHandler = new JwtSecurityTokenHandler();
+
+            var claimsIdentityList = new ClaimsIdentity(roles.Select(r => new Claim(ClaimTypes.Role, r)));
+
+            claimsIdentityList.AddClaim(new Claim(ClaimTypes.Name, username));
+
+            if (!isAppUser)
+                claimsIdentityList.AddClaim(new Claim(ClaimTypes.Expired, value: _tokenExpireDate.ToString()));
+
+            var tokenDescriptor = new SecurityTokenDescriptor
+            {
+                Subject = claimsIdentityList,
+                Issuer = _tokenManagement.Issuer,
+                Audience = _tokenManagement.Audience,
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(Encoding.ASCII.GetBytes(_tokenManagement.Secret)), SecurityAlgorithms.HmacSha256Signature)
+            };
+
+            if (!isAppUser)
+                tokenDescriptor.Expires = _tokenExpireDate;
+
+            var token = tokenHandler.CreateToken(tokenDescriptor);
+
+            return tokenHandler.WriteToken(token);
+        }
+
+        /// <summary>
+        /// Generates 6-digit verification code.
+        /// </summary>
+        /// <returns></returns>
+        private static string GenerateVerificationCode()
+        {
+            Random rand = new();
+
+            List<int> codeList = new();
+
+            string verificationCode = "";
+
+            for (int index = 0; index < 6; index++)
+            {
+                codeList.Add(rand.Next(1, 9));
+
+                verificationCode += codeList.ElementAt(index).ToString();
+            }
+            return verificationCode;
+        }
+
+        /// <summary>
+        /// <para> Please add items to <paramref name="values"/> with this sorting; </para>
+        ///          <para> - Mail Title         </para>
+        ///          <para> - Body Title         </para>
+        ///          <para> - Body Description   </para>
+        ///          <para> - Body Button Text   </para>
+        ///          <para> - Body Resend Text   </para>
+        ///          <para> - Body Bottom Text   </para>
+        /// </summary>
+        /// <param name="values"></param>
+        /// <returns></returns>
+        private static Dictionary<string, string> PrepareMailBodyDictionary(params string[] values)
+        {
+            var dic = new Dictionary<string, string>
+            {
+                { "~MailTitle", "" },
+                { "~BodyTitle", "" },
+                { "~BodyDescription", "" },
+                { "~BodyButtonText", "" },
+                { "~BodyResendText", "" },
+                { "~BodyBottomText", "" },
+            };
+
+            int i = 0;
+            foreach (var item in dic)
+            {
+                dic[item.Key] = values[i];
+                i++;
+            }
+
+            return dic;
+        }
+
+        /// <summary>
+        /// Sends email to logged-in user's email.
+        /// Please make sure <paramref name="localizedMailBodyContents"/> dictionary parameter taken from <see cref="PrepareMailBodyDictionary(string[])"/>.
+        /// </summary>
+        /// <param name="localizedMailBodyContents"></param>
+        /// <param name="urlPath"></param>
+        /// <param name="accountActivity"></param>
+        /// <param name="newInfo"> Could be new phone number or new email. </param>
+        /// <param name="username"></param>
+        /// <returns></returns>
+        private async Task SendActivityMailAsync(Dictionary<string, string> localizedMailBodyContents,
+                                                 string urlPath,
+                                                 AccountActivity accountActivity,
+                                                 string newInfo = null,
+                                                 string username = null)
+        {
+            var uName = username ?? _userName;
+
+            var user = await _userRepository.GetFirstOrDefaultAsync(a => a.UserName == _userName).ConfigureAwait(false)
+                                             ?? throw new MilvaUserFriendlyException(MilvaException.CannotFindEntity);
+
+            if (string.IsNullOrEmpty(user?.Email))
+                throw new MilvaUserFriendlyException("IdentityInvalidEmail");
+
+            string token = "";
+
+            switch (accountActivity)
+            {
+                case AccountActivity.EmailVerification:
+                    token = await _userManager.GenerateEmailConfirmationTokenAsync(user).ConfigureAwait(false);
+                    break;
+                case AccountActivity.EmailChange:
+                    token = await _userManager.GenerateChangeEmailTokenAsync(user, newInfo).ConfigureAwait(false);
+                    break;
+                case AccountActivity.PasswordReset:
+                    token = await _userManager.GeneratePasswordResetTokenAsync(user).ConfigureAwait(false);
+                    break;
+                case AccountActivity.PhoneNumberChange:
+                    token = await _userManager.GenerateChangePhoneNumberTokenAsync(user, newInfo).ConfigureAwait(false);
+                    break;
+            }
+
+            var confirmationUrl = $"{GlobalConstants.ApplicationSiteUrl}/{urlPath}?userName={username ?? _userName}&token={token}";
+
+            var htmlContent = await File.ReadAllTextAsync(Path.Combine(GlobalConstants.RootPath, "StaticFiles", "HTML", "mail_content.html")).ConfigureAwait(false);
+
+            foreach (var localizedMailBodyContent in localizedMailBodyContents)
+                htmlContent = htmlContent.Replace(localizedMailBodyContent.Key, localizedMailBodyContent.Value);
+
+            htmlContent = htmlContent.Replace("~BodyButtonLink", confirmationUrl);
+
+            await _milvaMailSender.MilvaSendMailAsync(user.Email, localizedMailBodyContents["~MailTitle"], htmlContent, true);
+        }
+
+        /// <summary>
+        /// Regex check for action parameter.
+        /// </summary>
+        /// <param name="input"></param>
+        /// <param name="propName"></param>
+        private void CheckRegex(string input, string propName)
+        {
+            var localizedPattern = _localizer[$"RegexPattern{propName}"];
+
+            if (!RegexMatcher.MatchRegex(input, _localizer[localizedPattern]))
+            {
+                var exampleFormat = _localizer[$"RegexExample{propName}"];
+                throw new MilvaUserFriendlyException("RegexErrorMessage", _localizer[$"Localized{propName}"], exampleFormat);
+            }
+        }
+        private async Task<(AppUser educationUser, LoginResultDTO loginResult)> ValidateUserAsync(ILoginDTO loginDTO, AppUser user, bool isUserType) => await base.ValidateUserAsync(loginDTO, user).ConfigureAwait(false);
+
+        /// <summary>
+        /// Cheks <see cref="_userName"/>. If is null or empty throwns <see cref="MilvaUserFriendlyException"/>. Otherwise does nothing.
+        /// </summary>
+        private void CheckLoginStatus()
+        {
+            if (string.IsNullOrEmpty(_userName))
+                throw new MilvaUserFriendlyException("CannotGetSignedInUserInfo");
+        }
+
+        /// <summary>
+        /// If <paramref name="identityResult"/> is not succeeded throwns <see cref="MilvaUserFriendlyException"/>.
+        /// </summary>
+        /// <param name="identityResult"></param>
+        private void ThrowErrorMessagesIfNotSuccess(IdentityResult identityResult)
+        {
+            if (!identityResult.Succeeded)
+            {
+                var stringBuilder = new StringBuilder();
+
+                stringBuilder.AppendJoin(',', identityResult.Errors.Select(i => i.Description));
+                throw new MilvaUserFriendlyException(stringBuilder.ToString());
+            }
+        }
+
+        #endregion
     }
 }

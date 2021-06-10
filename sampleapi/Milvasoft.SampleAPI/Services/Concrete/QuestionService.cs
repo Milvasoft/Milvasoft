@@ -17,13 +17,11 @@ using System.Threading.Tasks;
 
 namespace Milvasoft.SampleAPI.Services.Concrete
 {
-
     /// <summary>
     /// Question service.
     /// </summary>
     public class QuestionService : IQuestionService
     {
-
         private readonly IBaseRepository<Question, Guid, EducationAppDbContext> _questionRepository;
 
         /// <summary>
@@ -39,20 +37,17 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// Get all questions for admin.
         /// </summary>
         /// <returns></returns>
-        public async Task<PaginationDTO<QuestionForAdminDTO>> GetQuestionsForAdminAsync(PaginationParamsWithSpec<QuestionSpec> pagiantionParams)
+        public async Task<PaginationDTO<QuestionForAdminDTO>> GetQuestionsForAdminAsync(PaginationParamsWithSpec<QuestionSpec> paginationParams)
         {
             Func<IIncludable<Question>, IIncludable> includes = i => i.Include(md => md.Mentor)
-                                                                     .Include(st => st.Student);
+                                                                      .Include(st => st.Student);
 
-            var (questions, pageCount, totalDataCount) = await _questionRepository.PreparePaginationDTO(pagiantionParams.PageIndex,
-                                                                                                        pagiantionParams.RequestedItemCount,
-                                                                                                        pagiantionParams.OrderByProperty,
-                                                                                                        pagiantionParams.OrderByAscending,
-                                                                                                        pagiantionParams.Spec?.ToExpression(),
+            var (questions, pageCount, totalDataCount) = await _questionRepository.PreparePaginationDTO(paginationParams.PageIndex,
+                                                                                                        paginationParams.RequestedItemCount,
+                                                                                                        paginationParams.OrderByProperty,
+                                                                                                        paginationParams.OrderByAscending,
+                                                                                                        paginationParams.Spec?.ToExpression(),
                                                                                                         includes).ConfigureAwait(false);
-
-            questions.ThrowIfListIsNullOrEmpty("CannotFindEntityException");
-
 
             return new PaginationDTO<QuestionForAdminDTO>
             {
@@ -84,20 +79,18 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// Get all questions for admin.
         /// </summary>
         /// <returns></returns>
-        public async Task<PaginationDTO<QuestionForMentorDTO>> GetQuestionsForMentorAsync(PaginationParamsWithSpec<QuestionSpec> pagiantionParams)
+        public async Task<PaginationDTO<QuestionForMentorDTO>> GetQuestionsForMentorAsync(PaginationParamsWithSpec<QuestionSpec> paginationParams)
         {
             Func<IIncludable<Question>, IIncludable> includes = i => i.Include(md => md.Mentor)
-                                                                     .Include(st => st.Student);
+                                                                      .Include(st => st.Student);
 
 
-            var (questions, pageCount, totalDataCount) = await _questionRepository.PreparePaginationDTO(pagiantionParams.PageIndex,
-                                                                                                        pagiantionParams.RequestedItemCount,
-                                                                                                        pagiantionParams.OrderByProperty,
-                                                                                                        pagiantionParams.OrderByAscending,
-                                                                                                        pagiantionParams.Spec?.ToExpression(),
+            var (questions, pageCount, totalDataCount) = await _questionRepository.PreparePaginationDTO(paginationParams.PageIndex,
+                                                                                                        paginationParams.RequestedItemCount,
+                                                                                                        paginationParams.OrderByProperty,
+                                                                                                        paginationParams.OrderByAscending,
+                                                                                                        paginationParams.Spec?.ToExpression(),
                                                                                                         includes).ConfigureAwait(false);
-
-            questions.ThrowIfListIsNullOrEmpty("CannotFindEntityException");
 
             return new PaginationDTO<QuestionForMentorDTO>
             {
@@ -128,19 +121,17 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// Get all questions for student.
         /// </summary>
         /// <returns></returns>
-        public async Task<PaginationDTO<QuestionForStudentDTO>> GetQuestionsForStudentAsync(PaginationParamsWithSpec<QuestionSpec> pagiantionParams)
+        public async Task<PaginationDTO<QuestionForStudentDTO>> GetQuestionsForStudentAsync(PaginationParamsWithSpec<QuestionSpec> paginationParams)
         {
             Func<IIncludable<Question>, IIncludable> includes = i => i.Include(md => md.Mentor)
-                                                                    .Include(st => st.Student);
+                                                                      .Include(st => st.Student);
 
-            var (questions, pageCount, totalDataCount) = await _questionRepository.PreparePaginationDTO(pagiantionParams.PageIndex,
-                                                                                                        pagiantionParams.RequestedItemCount,
-                                                                                                        pagiantionParams.OrderByProperty,
-                                                                                                        pagiantionParams.OrderByAscending,
-                                                                                                        pagiantionParams.Spec?.ToExpression(),
+            var (questions, pageCount, totalDataCount) = await _questionRepository.PreparePaginationDTO(paginationParams.PageIndex,
+                                                                                                        paginationParams.RequestedItemCount,
+                                                                                                        paginationParams.OrderByProperty,
+                                                                                                        paginationParams.OrderByAscending,
+                                                                                                        paginationParams.Spec?.ToExpression(),
                                                                                                         includes).ConfigureAwait(false);
-
-            questions.ThrowIfListIsNullOrEmpty("CannotFindEntityException");
 
             return new PaginationDTO<QuestionForStudentDTO>
             {
@@ -173,11 +164,11 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         public async Task<QuestionForAdminDTO> GetQuestionForAdminAsync(Guid questionId)
         {
             Func<IIncludable<Question>, IIncludable> includes = i => i.Include(md => md.Mentor)
-                                                                     .Include(st => st.Student);
+                                                                      .Include(st => st.Student);
 
             var question = await _questionRepository.GetByIdAsync(questionId, includes).ConfigureAwait(false);
 
-            question.ThrowIfNullForGuidObject("CannotFindEntityException");
+            question.ThrowIfNullForGuidObject();
 
             return new QuestionForAdminDTO
             {
@@ -210,11 +201,11 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         public async Task<QuestionForMentorDTO> GetQuestionForMentorAsync(Guid questionId)
         {
             Func<IIncludable<Question>, IIncludable> includes = i => i.Include(md => md.Mentor)
-                                                                     .Include(st => st.Student);
+                                                                      .Include(st => st.Student);
 
             var question = await _questionRepository.GetByIdAsync(questionId, includes).ConfigureAwait(false);
 
-            question.ThrowIfNullForGuidObject("CannotFindEntityException");
+            question.ThrowIfNullForGuidObject();
 
             return new QuestionForMentorDTO
             {
@@ -244,11 +235,11 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         public async Task<QuestionForStudentDTO> GetQuestionForStudentAsync(Guid questionId)
         {
             Func<IIncludable<Question>, IIncludable> includes = i => i.Include(md => md.Mentor)
-                                                                    .Include(st => st.Student);
+                                                                      .Include(st => st.Student);
 
             var question = await _questionRepository.GetByIdAsync(questionId).ConfigureAwait(false);
 
-            question.ThrowIfNullForGuidObject("CannotFindEntityException");
+            question.ThrowIfNullForGuidObject();
 
             return new QuestionForStudentDTO
             {
@@ -279,6 +270,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
                 Title = addQuestionDTO.Title,
                 QuestionContent = addQuestionDTO.QuestionContent,
             };
+
             await _questionRepository.AddAsync(question).ConfigureAwait(false);
         }
 
@@ -291,7 +283,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         {
             var toBeUpdatedQuestion = await _questionRepository.GetByIdAsync(updateQuestionDTO.Id).ConfigureAwait(false);
 
-            toBeUpdatedQuestion.ThrowIfNullForGuidObject("CannotFindEntityException");
+            toBeUpdatedQuestion.ThrowIfNullForGuidObject();
 
             toBeUpdatedQuestion.IsUseful = updateQuestionDTO.IsUseful;
             toBeUpdatedQuestion.MentorReply = updateQuestionDTO.MentorReply;
@@ -313,6 +305,8 @@ namespace Milvasoft.SampleAPI.Services.Concrete
 
             var deletedQuestions = await _questionRepository.GetAllAsync(i => questionIds.Select(p => p).Contains(i.Id)).ConfigureAwait(false);
 
+            deletedQuestions.ThrowIfListIsNullOrEmpty();
+
             await _questionRepository.DeleteAsync(deletedQuestions).ConfigureAwait(false);
         }
 
@@ -320,31 +314,28 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// If questions to show.
         /// </summary>
         /// <returns></returns>
-        public async Task<List<QuestionDTO>> GetWillShowQuestions()
+        public async Task<List<QuestionDTO>> GetWillShowQuestionsAsync()
         {
             Func<IIncludable<Question>, IIncludable> includes = i => i.Include(md => md.Mentor)
                                                                     .Include(st => st.Student);
 
             var questions = await _questionRepository.GetAllAsync(i => i.WillShown).ConfigureAwait(false);
 
-            questions.ThrowIfListIsNotNullOrEmpty("CannotFindEntityException");
-
-            return (questions != null ? from question in questions
-                                        select new QuestionDTO
-                                        {
-                                            Title = question.Title,
-                                            QuestionContent = question.QuestionContent,
-                                            MentorReply = question.MentorReply,
-                                            ProfessionId = question.ProfessionId,
-                                            Mentor = question.Mentor.CheckObject(i => new MentorDTO
-                                            {
-                                                Id = (Guid)question.MentorId
-                                            }),
-                                            Student = question.Student.CheckObject(i => new StudentDTO
-                                            {
-                                                Id = i.Id
-                                            })
-                                        } : null).ToList();
+            return questions.CheckList(i => questions.Select(question=> new QuestionDTO
+            {
+                Title = question.Title,
+                QuestionContent = question.QuestionContent,
+                MentorReply = question.MentorReply,
+                ProfessionId = question.ProfessionId,
+                Mentor = question.Mentor.CheckObject(i => new MentorDTO
+                {
+                    Id = (Guid)question.MentorId
+                }),
+                Student = question.Student.CheckObject(i => new StudentDTO
+                {
+                    Id = i.Id
+                })
+            }));
         }
     }
 }

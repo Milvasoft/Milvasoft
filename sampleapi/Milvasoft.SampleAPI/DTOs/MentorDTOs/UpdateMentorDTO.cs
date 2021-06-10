@@ -29,6 +29,5 @@ namespace Milvasoft.SampleAPI.DTOs.MentorDTOs
         /// User profile pictures.
         /// </summary>
         public IFormFile Photo { get; set; }
-
     }
 }

@@ -1,4 +1,5 @@
-﻿using Milvasoft.Helpers.Extensions;
+﻿using Milvasoft.Helpers;
+using Milvasoft.Helpers.Extensions;
 using Milvasoft.SampleAPI.Entity;
 using Milvasoft.SampleAPI.Entity.Enum;
 using Milvasoft.SampleAPI.Spec.Abstract;
@@ -74,6 +75,16 @@ namespace Milvasoft.SampleAPI.Spec
         [OValidateId]
         public Guid? MentorId { get; set; }
 
+        /// <summary> 
+        /// Low date of student.
+        /// </summary>
+        public DateTime? StudentLowDate { get; set; }
+
+        /// <summary> 
+        /// Top date of student.
+        /// </summary>
+        public DateTime? StudentTopDate { get; set; }
+
         #endregion
 
         /// <summary>
@@ -92,7 +103,6 @@ namespace Milvasoft.SampleAPI.Spec
 
             if (MentorId.HasValue) entities = entities.Where(i => i.MentorId == MentorId);
             if (ProfessionId.HasValue) entities = entities.Where(i => i.ProfessionId == ProfessionId);
-
 
             return entities.ToList();
         }
@@ -116,6 +126,9 @@ namespace Milvasoft.SampleAPI.Spec
             if (GraduationStatus.HasValue) predicates.Add(c => c.GraduationStatus == GraduationStatus);
             if (MentorId.HasValue) predicates.Add(c => c.MentorId == MentorId);
             if (GraduationScore.HasValue) predicates.Add(c => c.GraduationScore == GraduationScore);
+
+            var dateExpression = Filter.CreateDateFilterExpression<Student>(StudentTopDate, StudentLowDate, i => i.CreationDate);
+            if (dateExpression != null) predicates.Add(dateExpression);
 
             predicates?.ForEach(predicate => mainPredicate = mainPredicate.Append(predicate, ExpressionType.AndAlso));
             return mainPredicate;

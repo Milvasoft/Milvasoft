@@ -33,7 +33,12 @@ namespace Milvasoft.Helpers.Attributes.Validation
         /// <summary>
         /// Minimum decimal value of requested validate scope.
         /// </summary>
-        public int MinValue { get; } = -1;
+        public decimal MinValue { get; } = -1;
+
+        /// <summary>
+        /// Maximum decimal value of requested validate scope.
+        /// </summary>
+        public decimal? MaxValue { get; set; }
 
         #endregion
 
@@ -57,7 +62,7 @@ namespace Milvasoft.Helpers.Attributes.Validation
         /// Constructor of atrribute.
         /// </summary>
         /// <param name="minValue"></param>
-        public ValidateDecimalAttribute(int minValue)
+        public ValidateDecimalAttribute(decimal minValue)
         {
             MinValue = minValue;
         }
@@ -67,12 +72,24 @@ namespace Milvasoft.Helpers.Attributes.Validation
         /// </summary>
         /// <param name="minValue"></param>
         /// <param name="resourceType"></param>
-        public ValidateDecimalAttribute(int minValue, Type resourceType)
+        public ValidateDecimalAttribute(decimal minValue, Type resourceType)
         {
             MinValue = minValue;
             _resourceType = resourceType;
         }
 
+        /// <summary>
+        /// Constructor of atrribute.
+        /// </summary>
+        /// <param name="minValue"></param>
+        /// <param name="maxValue"></param>
+        /// <param name="resourceType"></param>
+        public ValidateDecimalAttribute(decimal minValue, decimal maxValue, Type resourceType = null)
+        {
+            MinValue = minValue;
+            MaxValue = maxValue;
+            _resourceType = resourceType;
+        }
 
         #endregion
 
@@ -100,15 +117,22 @@ namespace Milvasoft.Helpers.Attributes.Validation
                 }
                 else errorMessage = $"{LocalizerKeys.PleaseEnterAValid} {context.MemberName}.";
 
-                if (Convert.ToInt32(value) <= MinValue)
+                if (Convert.ToDecimal(value) <= MinValue)
                 {
                     ErrorMessage = errorMessage;
                     return new ValidationResult(FormatErrorMessage(""));
                 }
+                if (MaxValue != null)
+                {
+                    if (Convert.ToDecimal(value) >= MaxValue)
+                    {
+                        ErrorMessage = errorMessage;
+                        return new ValidationResult(FormatErrorMessage(""));
+                    }
+                }
             }
 
             return ValidationResult.Success;
-
         }
     }
 }

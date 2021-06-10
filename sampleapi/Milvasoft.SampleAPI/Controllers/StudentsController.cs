@@ -34,7 +34,6 @@ namespace Milvasoft.SampleAPI.Controllers
         /// Gets the all filtered students datas for log in mentor.
         /// </summary>
         /// <returns></returns>
-        //[Authorize(Roles = "Mentor")]
         [HttpPatch("Mentor")]
         public async Task<IActionResult> GetStudentsForMentor([FromBody] PaginationParamsWithSpec<StudentSpec> paginationParams)
         {
@@ -47,7 +46,6 @@ namespace Milvasoft.SampleAPI.Controllers
         /// Gets the all filtered students datas for admin.
         /// </summary>
         /// <returns></returns>
-        //[Authorize(Roles = "Admin")]
         [HttpPatch("Admin")]
         public async Task<IActionResult> GetStudentsForAdmin([FromBody] PaginationParamsWithSpec<StudentSpec> paginationParams)
         {
@@ -63,7 +61,7 @@ namespace Milvasoft.SampleAPI.Controllers
         [HttpPatch("Student")]
         public async Task<IActionResult> GetCurrentUserProfile()
         {
-            var currentStudent = await _studentService.GetCurrentUserProfile().ConfigureAwait(false);
+            var currentStudent = await _studentService.GetCurrentUserProfileAsync().ConfigureAwait(false);
 
             return currentStudent.GetObjectResponse("Success");
         }
@@ -72,7 +70,6 @@ namespace Milvasoft.SampleAPI.Controllers
         /// Gets the all filtered student datas for mentor.
         /// </summary>
         /// <returns></returns>
-        //[Authorize(Roles = "Mentor")]
         [HttpPatch("Admin/{id}")]
         public async Task<IActionResult> GetStudentForAdminbyId(Guid id)
         {
@@ -99,7 +96,6 @@ namespace Milvasoft.SampleAPI.Controllers
         /// </summary>
         /// <param name="addStudent"></param>
         /// <returns></returns>
-       // [Authorize(Roles = "Admin")]
         [HttpPost("Student")]
         public async Task<IActionResult> AddStudent([FromBody] AddStudentDTO addStudent)
         {
@@ -144,7 +140,6 @@ namespace Milvasoft.SampleAPI.Controllers
         /// </summary>
         /// <param name="ids"></param>
         /// <returns></returns>
-        // [Authorize(Roles = "Admin")]
         [HttpDelete("Delete")]
         public async Task<IActionResult> DeleteStudents([FromBody] List<Guid> ids)
         {

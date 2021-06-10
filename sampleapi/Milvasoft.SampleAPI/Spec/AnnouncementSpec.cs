@@ -1,4 +1,5 @@
-﻿using Milvasoft.Helpers.Exceptions;
+﻿using Milvasoft.Helpers;
+using Milvasoft.Helpers.Exceptions;
 using Milvasoft.Helpers.Extensions;
 using Milvasoft.SampleAPI.Entity;
 using Milvasoft.SampleAPI.Spec.Abstract;
@@ -40,6 +41,16 @@ namespace Milvasoft.SampleAPI.Spec
         /// </summary>
         public Guid? MentorId { get; set; }
 
+        /// <summary> 
+        /// Low date of announcement.
+        /// </summary>
+        public DateTime? AnnouncementLowerDate { get; set; }
+
+        /// <summary> 
+        /// Top date of announcement.
+        /// </summary>
+        public DateTime? AnnouncementTopDate { get; set; }
+
         #endregion
 
         /// <summary>
@@ -63,6 +74,9 @@ namespace Milvasoft.SampleAPI.Spec
 
             if (IsFixed.HasValue) predicates.Add(a => a.IsFixed == IsFixed);
             if (MentorId.HasValue) predicates.Add(a => a.MentorId == MentorId);
+
+            var dateExpression = Filter.CreateDateFilterExpression<Announcement>(AnnouncementTopDate, AnnouncementLowerDate, i => i.CreationDate);
+            if (dateExpression != null) predicates.Add(dateExpression);
 
             predicates?.ForEach(predicate => mainPredicate = mainPredicate.Append(predicate, ExpressionType.AndAlso));
 

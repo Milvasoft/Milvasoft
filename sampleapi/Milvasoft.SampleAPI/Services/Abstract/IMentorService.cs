@@ -30,7 +30,7 @@ namespace Milvasoft.SampleAPI.Services.Abstract
         /// Brings instant user's profile information.
         /// </summary>
         /// <returns></returns>
-        Task<MentorForMentorDTO> GetCurrentUserProfile();
+        Task<MentorForMentorDTO> GetCurrentUserProfileAsync();
 
         /// <summary>
         /// Add assignment to database.
@@ -53,7 +53,6 @@ namespace Milvasoft.SampleAPI.Services.Abstract
         /// <param name="updateMentorDTO"></param>
         /// <returns></returns>
         Task UpdateCurrentMentorAsync(UpdateMentorDTO updateMentorDTO);
-
 
         /// <summary>
         /// Delete assignment by <paramref name="ids"/>

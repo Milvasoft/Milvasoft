@@ -7,7 +7,7 @@ namespace Milvasoft.SampleAPI.DTOs.AccountDTOs
     /// <summary>
     /// Login and sign up processes are happens with this dto.
     /// </summary>
-    public class SignUpDTO : LoginDTO
+    public class RegisterDTO : LoginDTO
     {
         /// <summary>
         /// User's name.
@@ -27,6 +27,5 @@ namespace Milvasoft.SampleAPI.DTOs.AccountDTOs
         [OValidateString(15, 16)]
         [MilvaRegex(typeof(SharedResource), IsRequired = false)]
         public string PhoneNumber { get; set; }
-
     }
 }

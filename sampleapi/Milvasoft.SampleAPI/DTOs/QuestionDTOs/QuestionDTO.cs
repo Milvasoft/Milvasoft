@@ -9,13 +9,11 @@ using System;
 
 namespace Milvasoft.SampleAPI.DTOs.QuestionDTOs
 {
-
     /// <summary>
     /// Questions asked by students.
     /// </summary>
     public class QuestionDTO : AuditableEntity<AppUser, Guid, Guid>
     {
-
         /// <summary>
         /// Tittle of question.
         /// </summary>

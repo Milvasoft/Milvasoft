@@ -1,4 +1,5 @@
-﻿using Milvasoft.Helpers.Extensions;
+﻿using Milvasoft.Helpers;
+using Milvasoft.Helpers.Extensions;
 using Milvasoft.SampleAPI.Entity;
 using Milvasoft.SampleAPI.Spec.Abstract;
 using System;
@@ -14,17 +15,22 @@ namespace Milvasoft.SampleAPI.Spec
     /// </summary>
     public class ProfessionSpec : IBaseSpec<Profession>
     {
-        #region Fields
         private string _name;
-        #endregion
-
-        #region Props
 
         /// <summary>
         /// Name of profession.
         /// </summary>
         public string Name { get => _name; set => _name = value?.ToUpper(); }
-        #endregion
+
+        /// <summary> 
+        /// Low date of profession.
+        /// </summary>
+        public DateTime? ProfessionLowDate { get; set; }
+
+        /// <summary> 
+        /// Top date of profession.
+        /// </summary>
+        public DateTime? ProfessionTopDate { get; set; }
 
         /// <summary>
         /// Filtering profession list by  with requested properties.
@@ -48,6 +54,9 @@ namespace Milvasoft.SampleAPI.Spec
             List<Expression<Func<Profession, bool>>> predicates = new List<Expression<Func<Profession, bool>>>();
 
             if (!string.IsNullOrEmpty(Name)) predicates.Add(c => c.Name.ToUpper() == Name.ToUpper());
+
+            var dateExpression = Filter.CreateDateFilterExpression<Profession>(ProfessionTopDate, ProfessionLowDate, i => i.CreationDate);
+            if (dateExpression != null) predicates.Add(dateExpression);
 
             predicates?.ForEach(predicate => mainPredicate = mainPredicate.Append(predicate, ExpressionType.AndAlso));
             return mainPredicate;

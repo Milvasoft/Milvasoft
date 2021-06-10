@@ -29,6 +29,7 @@ namespace Milvasoft.SampleAPI.DTOs.StudentDTOs
         /// <summary>
         /// Age of student.
         /// </summary>
+        [OValidateDecimal(30)]
         public int Age { get; set; }
 
         /// <summary>

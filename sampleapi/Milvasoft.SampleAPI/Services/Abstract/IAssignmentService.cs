@@ -18,19 +18,19 @@ namespace Milvasoft.SampleAPI.Services.Abstract
         /// Get all assignment for student from database.
         /// </summary>
         /// <returns></returns>
-        Task<PaginationDTO<AssignmentForStudentDTO>> GetAssignmentForStudentAsync(PaginationParamsWithSpec<AssignmentSpec> paginationParams);
+        Task<PaginationDTO<AssignmentForStudentDTO>> GetAssignmentsForStudentAsync(PaginationParamsWithSpec<AssignmentSpec> paginationParams);
 
         /// <summary>
         /// Get all assignment for admin from database.
         /// </summary>
         /// <returns></returns>
-        Task<PaginationDTO<AssignmentForAdminDTO>> GetAssignmentForAdminAsync(PaginationParamsWithSpec<AssignmentSpec> paginationParams);
+        Task<PaginationDTO<AssignmentForAdminDTO>> GetAssignmentsForAdminAsync(PaginationParamsWithSpec<AssignmentSpec> paginationParams);
 
         /// <summary>
         /// Get all assignment for mentor from database.
         /// </summary>
         /// <returns></returns>
-        Task<PaginationDTO<AssignmentForMentorDTO>> GetAssignmentForMentorAsync(PaginationParamsWithSpec<AssignmentSpec> paginationParams);
+        Task<PaginationDTO<AssignmentForMentorDTO>> GetAssignmentsForMentorAsync(PaginationParamsWithSpec<AssignmentSpec> paginationParams);
 
         /// <summary>
         /// Fetches filtered assignment by id for student.
@@ -80,13 +80,13 @@ namespace Milvasoft.SampleAPI.Services.Abstract
         /// Brings homework suitable for the student's level.
         /// </summary>
         /// <returns></returns>
-        Task<AssignmentForStudentDTO> GetAvaibleAssignmentForCurrentStudent();
+        Task<AssignmentForStudentDTO> GetTakenAssignmentForCurrentStudentAsync();
 
         /// <summary>
         /// Get current assignment for logged student.
         /// </summary>
         /// <returns></returns>
-        Task<AssignmentForStudentDTO> GetCurrentActiveAssignment();
+        Task<AssignmentForStudentDTO> GetCurrentActiveAssignmentAsync();
 
         /// <summary>
         ///  The student takes the next assignment.
@@ -94,14 +94,14 @@ namespace Milvasoft.SampleAPI.Services.Abstract
         /// <param name="Id"></param>
         /// <param name="newAssignment"></param>
         /// <returns></returns>
-        Task TakeAssignment(Guid Id, AddStudentAssignmentDTO newAssignment);
+        Task TakeAssignmentAsync(Guid Id, AddStudentAssignmentDTO newAssignment);
 
         /// <summary>
         /// Allows the student to turn in the assignment.
         /// </summary>
         /// <param name="submitAssignment"></param>
         /// <returns></returns>
-        Task<string> SubmitAssignment(SubmitAssignmentDTO submitAssignment);
+        Task<string> SubmitAssignmentAsync(SubmitAssignmentDTO submitAssignment);
 
         #endregion
 
@@ -111,14 +111,14 @@ namespace Milvasoft.SampleAPI.Services.Abstract
         /// Brings the unapproved assignments of the students of the mentor logged in.
         /// </summary>
         /// <returns></returns>
-        Task<List<StudentAssignmentDTO>> GetUnconfirmedAssignment();
+        Task<List<StudentAssignmentDTO>> GetUnconfirmedAssignmentsAsync();
 
         /// <summary>
         /// The mentor approves the homework request sent by the student.
         /// </summary>
         /// <param name="toBeUpdated"></param>
         /// <returns></returns>
-        Task ConfirmAssignment(StudentAssignmentDTO toBeUpdated);
+        Task ConfirmAssignmentAsync(StudentAssignmentDTO toBeUpdated);
 
         #endregion
     }

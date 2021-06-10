@@ -16,7 +16,6 @@ using System.Threading.Tasks;
 
 namespace Milvasoft.SampleAPI.Services.Concrete
 {
-
     /// <summary>
     /// Announcement service.
     /// </summary>
@@ -36,20 +35,18 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// <summary>
         /// Get all announcement for student.
         /// </summary>
-        /// <param name="pagiantionParams">Filter object.</param>
+        /// <param name="paginationParams">Filter object.</param>
         /// <returns> The announcement is put in the form of an AnnouncementForStudentDTO.</returns>
-        public async Task<PaginationDTO<AnnouncementForStudentDTO>> GetAnnouncementsForStudentAsync(PaginationParamsWithSpec<AnnouncementSpec> pagiantionParams)
+        public async Task<PaginationDTO<AnnouncementForStudentDTO>> GetAnnouncementsForStudentAsync(PaginationParamsWithSpec<AnnouncementSpec> paginationParams)
         {
             Func<IIncludable<Announcement>, IIncludable> includes = i => i.Include(md => md.PublisherMentor);
 
-            var (announcements, pageCount, totalDataCount) = await _announcementRepository.PreparePaginationDTO(pagiantionParams.PageIndex,
-                                                                                                                                    pagiantionParams.RequestedItemCount,
-                                                                                                                                    pagiantionParams.OrderByProperty,
-                                                                                                                                    pagiantionParams.OrderByAscending,
-                                                                                                                                    pagiantionParams.Spec?.ToExpression(),
-                                                                                                                                    includes).ConfigureAwait(false);
-
-            announcements.ThrowIfListIsNullOrEmpty("CannotFindEntityException");
+            var (announcements, pageCount, totalDataCount) = await _announcementRepository.PreparePaginationDTO(paginationParams.PageIndex,
+                                                                                                                paginationParams.RequestedItemCount,
+                                                                                                                paginationParams.OrderByProperty,
+                                                                                                                paginationParams.OrderByAscending,
+                                                                                                                paginationParams.Spec?.ToExpression(),
+                                                                                                                includes).ConfigureAwait(false);
 
             return new PaginationDTO<AnnouncementForStudentDTO>
             {
@@ -73,20 +70,18 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// <summary>
         /// Get all announcement for admin.
         /// </summary>
-        /// <param name="pagiantionParams">Filter object.</param>
+        /// <param name="paginationParams">Filter object.</param>
         /// <returns> The announcements is put in the form of an AnnouncementForAdminDTO.</returns>
-        public async Task<PaginationDTO<AnnouncementForAdminDTO>> GetAnnouncementsForAdminAsync(PaginationParamsWithSpec<AnnouncementSpec> pagiantionParams)
+        public async Task<PaginationDTO<AnnouncementForAdminDTO>> GetAnnouncementsForAdminAsync(PaginationParamsWithSpec<AnnouncementSpec> paginationParams)
         {
             Func<IIncludable<Announcement>, IIncludable> includes = i => i.Include(md => md.PublisherMentor);
 
-            var (announcements, pageCount, totalDataCount) = await _announcementRepository.PreparePaginationDTO(pagiantionParams.PageIndex,
-                                                                                                                                    pagiantionParams.RequestedItemCount,
-                                                                                                                                    pagiantionParams.OrderByProperty,
-                                                                                                                                    pagiantionParams.OrderByAscending,
-                                                                                                                                    pagiantionParams.Spec?.ToExpression(),
-                                                                                                                                    includes).ConfigureAwait(false);
-
-            announcements.ThrowIfListIsNullOrEmpty("CannotFindEntityException");
+            var (announcements, pageCount, totalDataCount) = await _announcementRepository.PreparePaginationDTO(paginationParams.PageIndex,
+                                                                                                                paginationParams.RequestedItemCount,
+                                                                                                                paginationParams.OrderByProperty,
+                                                                                                                paginationParams.OrderByAscending,
+                                                                                                                paginationParams.Spec?.ToExpression(),
+                                                                                                                includes).ConfigureAwait(false);
 
             return new PaginationDTO<AnnouncementForAdminDTO>
             {
@@ -111,20 +106,18 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// <summary>
         /// Get all announcement for mentor.
         /// </summary>
-        /// <param name="pagiantionParams">Filter object.</param>
+        /// <param name="paginationParams">Filter object.</param>
         /// <returns> The announcement is put in the form of an AnnouncementForMentorDTO.</returns>
-        public async Task<PaginationDTO<AnnouncementForMentorDTO>> GetAnnouncementsForMentorAsync(PaginationParamsWithSpec<AnnouncementSpec> pagiantionParams)
+        public async Task<PaginationDTO<AnnouncementForMentorDTO>> GetAnnouncementsForMentorAsync(PaginationParamsWithSpec<AnnouncementSpec> paginationParams)
         {
             Func<IIncludable<Announcement>, IIncludable> includes = i => i.Include(md => md.PublisherMentor);
 
-            var (announcements, pageCount, totalDataCount) = await _announcementRepository.PreparePaginationDTO(pagiantionParams.PageIndex,
-                                                                                                                                    pagiantionParams.RequestedItemCount,
-                                                                                                                                    pagiantionParams.OrderByProperty,
-                                                                                                                                    pagiantionParams.OrderByAscending,
-                                                                                                                                    pagiantionParams.Spec?.ToExpression(),
-                                                                                                                                    includes).ConfigureAwait(false);
-
-            announcements.ThrowIfListIsNullOrEmpty("CannotFindEntityException");
+            var (announcements, pageCount, totalDataCount) = await _announcementRepository.PreparePaginationDTO(paginationParams.PageIndex,
+                                                                                                                paginationParams.RequestedItemCount,
+                                                                                                                paginationParams.OrderByProperty,
+                                                                                                                paginationParams.OrderByAscending,
+                                                                                                                paginationParams.Spec?.ToExpression(),
+                                                                                                                includes).ConfigureAwait(false);
 
             return new PaginationDTO<AnnouncementForMentorDTO>
             {
@@ -157,7 +150,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
 
             var announcement = await _announcementRepository.GetByIdAsync(announcementId, includes).ConfigureAwait(false);
 
-            announcement.ThrowIfNullForGuidObject("CannotFindEntityException");
+            announcement.ThrowIfNullForGuidObject();
 
             return new AnnouncementForAdminDTO
             {
@@ -184,7 +177,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
 
             var announcement = await _announcementRepository.GetByIdAsync(announcementId, includes).ConfigureAwait(false);
 
-            announcement.ThrowIfNullForGuidObject("CannotFindEntityException");
+            announcement.ThrowIfNullForGuidObject();
 
             return new AnnouncementForMentorDTO
             {
@@ -211,7 +204,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
 
             var announcement = await _announcementRepository.GetByIdAsync(announcementId, includes).ConfigureAwait(false);
 
-            announcement.ThrowIfNullForGuidObject("CannotFindEntityException");
+            announcement.ThrowIfNullForGuidObject();
 
             return new AnnouncementForStudentDTO
             {
@@ -234,7 +227,6 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// <returns></returns>
         public async Task AddAnnouncementAsync(AddAnnouncementDTO addAnnouncementDTO)
         {
-
             var newAnnnouncement = new Announcement
             {
                 Title = addAnnouncementDTO.Title.ToUpper(),
@@ -255,12 +247,10 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         {
             var toBeUpdatedAnnouncement = await _announcementRepository.GetByIdAsync(updateAnnouncementDTO.Id).ConfigureAwait(false);
 
-            toBeUpdatedAnnouncement.ThrowIfNullForGuidObject("CannotFindEntityException");
+            toBeUpdatedAnnouncement.ThrowIfNullForGuidObject();
 
             toBeUpdatedAnnouncement.Title = updateAnnouncementDTO.Title;
-
             toBeUpdatedAnnouncement.Description = updateAnnouncementDTO.Description;
-
             toBeUpdatedAnnouncement.IsFixed = updateAnnouncementDTO.IsFixed;
 
             await _announcementRepository.UpdateAsync(toBeUpdatedAnnouncement).ConfigureAwait(false);
@@ -273,9 +263,11 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// <returns></returns>
         public async Task DeleteAnnouncementsAsync(List<Guid> announcementIds)
         {
-            var deletedAnnouncement = await _announcementRepository.GetAllAsync(i => announcementIds.Select(p => p).Contains(i.Id)).ConfigureAwait(false);
+            var deletedAnnouncements = await _announcementRepository.GetAllAsync(i => announcementIds.Select(p => p).Contains(i.Id)).ConfigureAwait(false);
 
-            await _announcementRepository.DeleteAsync(deletedAnnouncement).ConfigureAwait(false);
+            deletedAnnouncements.ThrowIfListIsNullOrEmpty();
+
+            await _announcementRepository.DeleteAsync(deletedAnnouncements).ConfigureAwait(false);
         }
     }
 }

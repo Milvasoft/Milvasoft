@@ -1,4 +1,5 @@
-﻿using Milvasoft.Helpers.Exceptions;
+﻿using Milvasoft.Helpers;
+using Milvasoft.Helpers.Exceptions;
 using Milvasoft.Helpers.Extensions;
 using Milvasoft.SampleAPI.Entity;
 using Milvasoft.SampleAPI.Spec.Abstract;
@@ -14,9 +15,7 @@ namespace Milvasoft.SampleAPI.Spec
     /// </summary>
     public class UsefulLinkSpec : IBaseSpec<UsefulLink>
     {
-        #region Fields
         private string _tittle;
-        #endregion 
 
         #region Props
 
@@ -29,6 +28,16 @@ namespace Milvasoft.SampleAPI.Spec
         /// Profession id of link.
         /// </summary>
         public Guid? ProfessionId { get; set; }
+
+        /// <summary> 
+        /// Low date of useful link.
+        /// </summary>
+        public DateTime? UsefulLinkLowDate { get; set; }
+
+        /// <summary> 
+        /// Top date of useful link.
+        /// </summary>
+        public DateTime? UsefulLinkTopDate { get; set; }
 
         #endregion
 
@@ -51,6 +60,9 @@ namespace Milvasoft.SampleAPI.Spec
             if (!string.IsNullOrEmpty(Title)) predicates.Add(c => c.Title.ToUpper().Contains(Title));
 
             if (ProfessionId.HasValue) predicates.Add(c => c.ProfessionId == ProfessionId);
+
+            var dateExpression = Filter.CreateDateFilterExpression<UsefulLink>(UsefulLinkTopDate, UsefulLinkLowDate, i => i.CreationDate);
+            if (dateExpression != null) predicates.Add(dateExpression);
 
             predicates?.ForEach(predicate => mainPredicate = mainPredicate.Append(predicate, ExpressionType.AndAlso));
             return mainPredicate;
