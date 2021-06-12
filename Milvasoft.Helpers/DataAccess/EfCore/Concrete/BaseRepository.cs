@@ -1104,13 +1104,27 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
 
         #region Private Helper Methods
 
+        /// <summary>
+        /// Creates Id == <typeparamref name="TKey"/> equality expression and append to <see cref="CreateIsDeletedFalseExpression"/>.
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="conditionExpression"></param>
+        /// <returns></returns>
         protected Expression<Func<TEntity, bool>> CreateKeyEqualityExpression(TKey key, Expression<Func<TEntity, bool>> conditionExpression = null)
         {
             Expression<Func<TEntity, bool>> idCondition = i => i.Id.Equals(key);
+
             var mainCondition = idCondition.Append(CreateIsDeletedFalseExpression(), ExpressionType.AndAlso);
+
             return mainCondition.Append(conditionExpression, ExpressionType.AndAlso);
         }
 
+        /// <summary>
+        /// Creates property selector.
+        /// </summary>
+        /// <param name="entityType"></param>
+        /// <param name="propertyName"></param>
+        /// <returns></returns>
         protected Expression<Func<TEntity, object>> CreateObjectPredicate(Type entityType, string propertyName)
         {
             var parameterExpression = Expression.Parameter(entityType, "i");
@@ -1120,12 +1134,24 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
             return Expression.Lambda<Func<TEntity, object>>(Expression.Convert(orderByProperty, typeof(object)), parameterExpression);
         }
 
+        /// <summary>
+        /// Checks if there is a property named <paramref name="propertyName"/> in the properties of <b><paramref name="entityType"/></b>. 
+        /// </summary>
+        /// <param name="propertyName"></param>
+        /// <param name="entityType"></param>
         protected static void CheckProperty(string propertyName, Type entityType)
         {
             if (!CommonHelper.PropertyExists<TEntity>(propertyName))
                 throw new MilvaDeveloperException($"Type of {entityType.Name}'s properties doesn't contain '{propertyName}'.");
         }
 
+        /// <summary>
+        /// Checks pagination parameters are reasonable.
+        /// </summary>
+        /// <param name="totalDataCount"></param>
+        /// <param name="countOfRequestedRecordsInPage"></param>
+        /// <param name="requestedPageNumber"></param>
+        /// <returns></returns>
         protected static int CalculatePageCountAndCompareWithRequested(int totalDataCount, int countOfRequestedRecordsInPage, int requestedPageNumber)
         {
             var actualPageCount = (Convert.ToDouble(totalDataCount) / Convert.ToDouble(countOfRequestedRecordsInPage));
@@ -1138,6 +1164,11 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
             return estimatedCountOfPages;
         }
 
+        /// <summary>
+        /// Checks the parameters is valid.
+        /// </summary>
+        /// <param name="requestedPageNumber"></param>
+        /// <param name="countOfRequestedRecordsInPage"></param>
         protected static void ValidatePaginationParameters(int requestedPageNumber, int countOfRequestedRecordsInPage)
         {
             if (requestedPageNumber <= 0) throw new MilvaUserFriendlyException(MilvaException.WrongRequestedPageNumber);
@@ -1145,6 +1176,12 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
             if (countOfRequestedRecordsInPage <= 0) throw new MilvaUserFriendlyException(MilvaException.WrongRequestedItemCount);
         }
 
+        /// <summary>
+        /// If <see cref="_softDeleteState"/> is false,  appends is deleted false expression to <paramref name="conditionExpression"/>.
+        /// Else does nothing to <paramref name="conditionExpression"/> but if <see cref="_resetSoftDeleteState"/> is true then sets <see cref="_softDeleteState"/> false.
+        /// </summary>
+        /// <param name="conditionExpression"></param>
+        /// <returns></returns>
         protected Expression<Func<TEntity, bool>> CreateConditionExpression(Expression<Func<TEntity, bool>> conditionExpression = null)
         {
             Expression<Func<TEntity, bool>> mainExpression;

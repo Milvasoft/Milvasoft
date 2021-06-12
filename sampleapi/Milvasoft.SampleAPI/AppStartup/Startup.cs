@@ -6,7 +6,6 @@ using Microsoft.Extensions.Localization;
 using Milvasoft.Helpers.Caching;
 using Milvasoft.Helpers.FileOperations.Abstract;
 using Milvasoft.Helpers.FileOperations.Concrete;
-using Milvasoft.SampleAPI.Data.Utils;
 using Milvasoft.SampleAPI.Localization;
 using Milvasoft.SampleAPI.Middlewares;
 

@@ -14,6 +14,10 @@ namespace Milvasoft.Helpers.DataAccess.MongoDB.Abstract
     /// <typeparam name="TEntity"></typeparam>
     public interface IBaseRepository<TEntity> where TEntity : class, IAuditable<ObjectId>
     {
+        /// <summary>
+        /// Gets mongo database(<see cref="IMongoDatabase"/> instance.
+        /// </summary>
+        /// <returns></returns>
         IMongoDatabase GetMongoDatabaseInstance();
 
         /// <summary>

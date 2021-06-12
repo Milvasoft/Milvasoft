@@ -325,11 +325,11 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         {
             Func<IIncludable<Student>, IIncludable> include = i => i.Include(p => p.OldAssignments);
 
-            var currentUser= await _studentRepository.GetAllAsync(include, i=> i.AppUser.UserName == _loggedUser).ConfigureAwait(false);
+            var currentUser = await _studentRepository.GetAllAsync(include, i => i.AppUser.UserName == _loggedUser).ConfigureAwait(false);
 
             var currentStudent = currentUser.First();
 
-            var currentAssignment = currentStudent.OldAssignments.Where(i=>i.IsApproved).First();
+            var currentAssignment = currentStudent.OldAssignments.Where(i => i.IsApproved).First();
 
             currentAssignment.ThrowIfNullForGuidObject();
 
@@ -357,20 +357,20 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         {
             Func<IIncludable<Student>, IIncludable> include = i => i.Include(p => p.OldAssignments);
 
-            var currentUser = await _studentRepository.GetAllAsync(include,i => i.AppUser.UserName == _loggedUser).ConfigureAwait(false);
+            var currentUser = await _studentRepository.GetAllAsync(include, i => i.AppUser.UserName == _loggedUser).ConfigureAwait(false);
 
             var currentStudent = currentUser.First();
 
             currentStudent.ThrowIfNullForGuidObject();
 
-            var lastAssignment = currentStudent.OldAssignments.Where(i=>i.FinishedDate>=DateTime.Now);
+            var lastAssignment = currentStudent.OldAssignments.Where(i => i.FinishedDate >= DateTime.Now);
 
             if (lastAssignment.Count() > 0)
             {
                 throw new MilvaUserFriendlyException("UndeliveredHomework");
             }
 
-            var toBeTakeAssignment = await _assignmentRepository.GetByIdAsync(Id,i=>i.Level==currentStudent.Level).ConfigureAwait(false);
+            var toBeTakeAssignment = await _assignmentRepository.GetByIdAsync(Id, i => i.Level == currentStudent.Level).ConfigureAwait(false);
 
             toBeTakeAssignment.ThrowIfNullForGuidObject();
 

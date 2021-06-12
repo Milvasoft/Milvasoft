@@ -19,9 +19,16 @@ namespace Milvasoft.Helpers.DataAccess.MongoDB.Concrete
     /// <typeparam name="TEntity"></typeparam>
     public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : class, IAuditable<ObjectId>
     {
-        private readonly IMongoCollection<TEntity> _collection;
-        private readonly IMongoDatabase _mongoDatabase;
-        //TODO
+        /// <summary>
+        /// Mongo collection instance.
+        /// </summary>
+        protected readonly IMongoCollection<TEntity> _collection;
+
+        /// <summary>
+        /// Mongo database instance.
+        /// </summary>
+        protected readonly IMongoDatabase _mongoDatabase;
+
         /// <summary>
         /// Constructor of <see cref="BaseRepository{TEntity}"/>
         /// </summary>
@@ -53,7 +60,6 @@ namespace Milvasoft.Helpers.DataAccess.MongoDB.Concrete
             var findOptions = new FindOptions<TEntity> { Projection = projectDefinition };
 
             return await (await _collection.FindAsync(filter, findOptions).ConfigureAwait(false)).ToListAsync().ConfigureAwait(false);
-
         }
 
         /// <summary>
@@ -71,7 +77,6 @@ namespace Milvasoft.Helpers.DataAccess.MongoDB.Concrete
             var findOptions = new FindOptions<TEntity> { Projection = projectDefinition };
 
             return await (await _collection.FindAsync(filter, findOptions).ConfigureAwait(false)).ToListAsync().ConfigureAwait(false);
-
         }
 
         /// <summary>
@@ -209,7 +214,6 @@ namespace Milvasoft.Helpers.DataAccess.MongoDB.Concrete
                     PipelineStageDefinitionBuilder.Project<TEmbedded, TEmbedded>(BsonDocument.Parse("{" + projectQuery + "}")),
                     PipelineStageDefinitionBuilder.Match(filter)
             }));
-
 
             var aggregateFacetResult = await _collection.Aggregate().Match(p => p.Id == entityId).Unwind<TEntity, TEmbedded>(unwindExpression).Facet(dataFacet).ToListAsync().ConfigureAwait(false);
 
@@ -690,7 +694,6 @@ namespace Milvasoft.Helpers.DataAccess.MongoDB.Concrete
         /// <param name="requestedItemCount"></param>
         /// <param name="orderByProperty"></param>
         /// <param name="orderByAscending"></param>
-        /// <param name="facetName"></param>
         /// <param name="projectQuery"></param>
         /// <param name="filterDefForTEmbedded"></param>
         /// <returns></returns>
@@ -738,142 +741,5 @@ namespace Milvasoft.Helpers.DataAccess.MongoDB.Concrete
 
         #endregion
 
-        /*public async Task<TEntity> GetByIdAsync(ObjectId id, Expression<Func<TEntity, TEntity>> expression = null)
-        {
-            var filter = Builders<TEntity>.Filter.Eq(p => p.Id, id);
-
-            if (expression != null)
-            {
-                var filterDefinition = Builders<TEntity>.Projection.Expression(expression);
-
-                var options = new FindOptions<TEntity, TProj> { Projection = filterDefinition };
-
-                TProj proj = default;
-
-                using (var cursor = await _collection.FindAsync(filter, options).ConfigureAwait(false))
-                    while (await cursor.MoveNextAsync())
-                        proj = cursor.Current.FirstOrDefault();
-
-                return proj;
-            }
-            else
-            {
-
-                var createdType = typeof(TProj);
-
-                var itemForTentity = Expression.Parameter(typeof(TEntity), "p");
-
-                List<MemberBinding> memberBindings = new List<MemberBinding>();
-
-                foreach (var tEntityProps in typeof(TEntity).GetProperties())
-                {
-                    foreach (var tProjProps in createdType.GetProperties())
-                    {
-                        if (tEntityProps.Name == tProjProps.Name && tEntityProps.PropertyType == tProjProps.PropertyType)
-                        {
-                            var propMapped = Expression.Property(itemForTentity, tEntityProps.Name);//p.CatName
-                            var bind = Expression.Bind(tProjProps, propMapped);
-
-                            memberBindings.Add(bind);
-
-                            break;
-                        }
-                        if (tProjProps.PropertyType.Name.Contains("List"))
-                        {
-                            //var createObject = Expression.New(typeof());
-
-                            var genericListDtoType = tProjProps.PropertyType.GetGenericArguments()[0];
-                        }
-                        if (tEntityProps.PropertyType.IsAssignableFrom(typeof(List<MongoDBRef>)) && tEntityProps.Name == tProjProps.Name)
-                        {
-                            /*#region create mdbrf => new MongoDBRef(mdbrf.CollectionName, mdbrf.Id) {}
-
-                            var mappedType = typeof(MongoDBRef);
-                            var mapperType = tProjProps.PropertyType.GetGenericArguments().First();//objectId
-
-                            var propMongoRef = Expression.Parameter(typeof(MongoDBRef), "mdbrf"); // mdbrf
-
-                            var propCollection = Expression.Property(propMongoRef, typeof(MongoDBRef).GetProperty("CollectionName")); //mdbrf.Collection
-                            var propId = Expression.Property(propMongoRef, typeof(MongoDBRef).GetProperty("Id")); //mdbrf.Collection
-
-                            var mongoRefCons = mappedType.GetConstructors().First();
-                            var mongoRefInstance = Expression.New(mongoRefCons, propCollection, propId);// new MongoDBRef(mdbrf.CollectionName, mdbrf.Id) {}
-
-                            var mongoMemberInit = Expression.MemberInit(mongoRefInstance);
-
-                            var mongoRefLambda = Expression.Lambda(mongoMemberInit, propMongoRef);
-
-                            #endregion
-
-                            #region cretate c.AttendedCompetitionReferences.Select(mdbrf => new MongoDBRef(mdbrf.CollectionName, mdbrf.Id) {})
-
-                            var parameterExpressionC = Expression.Parameter(typeof(TEntity), "c");
-                            var selectParamExpression = Expression.Property(parameterExpressionC, typeof(TEntity).GetProperty(tEntityProps.Name));
-
-                            var selectExpression = Expression.Call(
-                                                    typeof(Enumerable),
-                                                    nameof(Enumerable.Select),
-                                                    new[] { typeof(MongoDBRef), typeof(MongoDBRef) },
-                                                    selectParamExpression, mongoRefLambda);
-
-                            #endregion
-
-                            Expression left = Expression.Property(propMongoRef, typeof(MongoDBRef).GetProperty("Id"));
-                            left = Expression.Property(left, typeof(BsonValue).GetProperty("AsObjectId"));
-
-                            //var mongoIdProp = CreateExpressionForNestedProp(typeof(MongoDBRef), "Id.AsObjectId");
-
-                            var selectExpressionInner = Expression.Call(
-                                                    typeof(Enumerable),
-                                                    nameof(Enumerable.Select),
-                                                    new[] { typeof(MongoDBRef), typeof(BsonValue) },
-                                                    selectExpression, mongoIdProp);
-
-                             var toListExpression = Expression.Call(
-                                                    typeof(Enumerable),
-                                                    nameof(Enumerable.ToList),
-                                                    new[] { typeof(BsonValue) },
-                                                    selectExpressionInner);
-
-                        }
-                        if (tEntityProps.PropertyType.IsAssignableFrom(typeof(MongoDBRef)) && tEntityProps.Name == tProjProps.Name)
-                        {
-
-                        }
-
-
-                        #region Local Functions
-
-                        LambdaExpression CreateExpressionForNestedProp(Type type, string propertyName)
-                        {
-                            var param = Expression.Parameter(type, "mdbrf");
-                            Expression body = param;
-                            foreach (var member in propertyName.Split('.'))
-                            {
-                                body = Expression.PropertyOrField(body, member);
-                            }
-                            return Expression.Lambda(body, param);
-                        }
-
-                        #endregion
-                    }
-                }
-
-                var propForMaterilId = Expression.Property(itemForTentity, "CatName");//p.CatName
-                var propForBio = Expression.Property(itemForTentity, "Bio");//p.CatName
-
-                var catName = Expression.Bind(createdType.GetProperty("CatName"), propForMaterilId);
-                var bio = Expression.Bind(createdType.GetProperty("Bio"), propForBio);
-
-                var ctor = Expression.New(createdType); // new CatDTO()
-
-                var memberInit = Expression.MemberInit(ctor, memberBindings);// catdto maplenecek yerleri doldurur.
-
-                var expressio = Expression.Lambda<Func<TEntity, TProj>>(memberInit, itemForTentity); // hepsini birleştirr.
-
-                return await _collection.Find(filter).Project(expressio).SingleOrDefaultAsync().ConfigureAwait(false);
-            }
-
-        }*/
     }
 }

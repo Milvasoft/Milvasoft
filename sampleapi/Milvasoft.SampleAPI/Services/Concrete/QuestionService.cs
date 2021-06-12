@@ -321,7 +321,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
 
             var questions = await _questionRepository.GetAllAsync(i => i.WillShown).ConfigureAwait(false);
 
-            return questions.CheckList(i => questions.Select(question=> new QuestionDTO
+            return questions.CheckList(i => questions.Select(question => new QuestionDTO
             {
                 Title = question.Title,
                 QuestionContent = question.QuestionContent,

@@ -15,7 +15,7 @@ namespace Milvasoft.Helpers.DataAccess.MongoDB.Entity.Concrete
         /// </summary>
         [BsonId]
         [BsonRepresentation(BsonType.String)]
-        public ObjectId Id { get; set; } = ObjectId.GenerateNewId();
+        public virtual ObjectId Id { get; set; } = ObjectId.GenerateNewId();
 
         /// <summary>
         /// Last modification date of entity.

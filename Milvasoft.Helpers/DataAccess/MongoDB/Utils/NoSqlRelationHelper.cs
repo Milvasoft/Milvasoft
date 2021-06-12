@@ -16,8 +16,6 @@ namespace Milvasoft.Helpers.DataAccess.MongoDB.Utils
     /// </summary>
     public static class NoSqlRelationHelper
     {
-        //TODO (svr) Testler yazılmaya başlandığında bu alttaki 4 MapReferenceAsync metodlarında ayrı bir test sınıfında testleri yazılacak.
-
         /// <summary>
         /// Pulls and mapped the <paramref name="referencePropertySelector"/> object inside the <paramref name="entity"/> object from the database.
         /// </summary>
@@ -369,10 +367,10 @@ namespace Milvasoft.Helpers.DataAccess.MongoDB.Utils
             foreach (var entity in entities)
             {
                 var embeddedProperty = (List<TEmbeddedProperty>)entities.GetType()
-                                                             .GetGenericArguments()
-                                                             .FirstOrDefault()
-                                                             .GetProperty(embeddedPropertySelector.GetPropertyName())
-                                                             .GetValue(entity);
+                                                                        .GetGenericArguments()
+                                                                        .FirstOrDefault()
+                                                                        .GetProperty(embeddedPropertySelector.GetPropertyName())
+                                                                        .GetValue(entity);
 
                 if (embeddedProperty != null)
                     embeddedProperties.Add(embeddedProperty);

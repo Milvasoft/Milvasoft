@@ -2336,6 +2336,53 @@
             <param name="conditionExpression"></param>
             <returns></returns>
         </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.CreateKeyEqualityExpression(`1,System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
+            <summary>
+            Creates Id == <typeparamref name="TKey"/> equality expression and append to <see cref="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.CreateIsDeletedFalseExpression"/>.
+            </summary>
+            <param name="key"></param>
+            <param name="conditionExpression"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.CreateObjectPredicate(System.Type,System.String)">
+            <summary>
+            Creates property selector.
+            </summary>
+            <param name="entityType"></param>
+            <param name="propertyName"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.CheckProperty(System.String,System.Type)">
+            <summary>
+            Checks if there is a property named <paramref name="propertyName"/> in the properties of <b><paramref name="entityType"/></b>. 
+            </summary>
+            <param name="propertyName"></param>
+            <param name="entityType"></param>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.CalculatePageCountAndCompareWithRequested(System.Int32,System.Int32,System.Int32)">
+            <summary>
+            Checks pagination parameters are reasonable.
+            </summary>
+            <param name="totalDataCount"></param>
+            <param name="countOfRequestedRecordsInPage"></param>
+            <param name="requestedPageNumber"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.ValidatePaginationParameters(System.Int32,System.Int32)">
+            <summary>
+            Checks the parameters is valid.
+            </summary>
+            <param name="requestedPageNumber"></param>
+            <param name="countOfRequestedRecordsInPage"></param>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.CreateConditionExpression(System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
+            <summary>
+            If <see cref="F:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3._softDeleteState"/> is false,  appends is deleted false expression to <paramref name="conditionExpression"/>.
+            Else does nothing to <paramref name="conditionExpression"/> but if <see cref="F:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3._resetSoftDeleteState"/> is true then sets <see cref="F:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3._softDeleteState"/> false.
+            </summary>
+            <param name="conditionExpression"></param>
+            <returns></returns>
+        </member>
         <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.InitalizeEdit(`0)">
             <summary>
             For configure entity state. Change tracking.
@@ -3105,6 +3152,12 @@
             </summary>
             <typeparam name="TEntity"></typeparam>
         </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.MongoDB.Abstract.IBaseRepository`1.GetMongoDatabaseInstance">
+            <summary>
+            Gets mongo database(<see cref="T:MongoDB.Driver.IMongoDatabase"/> instance.
+            </summary>
+            <returns></returns>
+        </member>
         <member name="M:Milvasoft.Helpers.DataAccess.MongoDB.Abstract.IBaseRepository`1.GetAllAsync(System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Linq.Expressions.Expression{System.Func{`0,`0}})">
             <summary>
             Returns all entities.
@@ -3342,6 +3395,16 @@
             Base repository for concrete repositories. All repositories must be have this methods.
             </summary>
             <typeparam name="TEntity"></typeparam>
+        </member>
+        <member name="F:Milvasoft.Helpers.DataAccess.MongoDB.Concrete.BaseRepository`1._collection">
+            <summary>
+            Mongo collection instance.
+            </summary>
+        </member>
+        <member name="F:Milvasoft.Helpers.DataAccess.MongoDB.Concrete.BaseRepository`1._mongoDatabase">
+            <summary>
+            Mongo database instance.
+            </summary>
         </member>
         <member name="M:Milvasoft.Helpers.DataAccess.MongoDB.Concrete.BaseRepository`1.#ctor(Milvasoft.Helpers.DataAccess.MongoDB.Utils.IMongoDbSettings)">
             <summary>
@@ -3618,7 +3681,6 @@
             <param name="requestedItemCount"></param>
             <param name="orderByProperty"></param>
             <param name="orderByAscending"></param>
-            <param name="facetName"></param>
             <param name="projectQuery"></param>
             <param name="filterDefForTEmbedded"></param>
             <returns></returns>
@@ -3668,6 +3730,36 @@
             Creates new instance of <see cref="T:Milvasoft.Helpers.DataAccess.MongoDB.Utils.BsonCollectionAttribute"/>.
             </summary>
             <param name="collectionName"></param>
+        </member>
+        <member name="T:Milvasoft.Helpers.DataAccess.MongoDB.Utils.IMongoDbSettings">
+            <summary>
+            Interface of mongo connection settings.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.DataAccess.MongoDB.Utils.IMongoDbSettings.DatabaseName">
+            <summary>
+            Database name of to be connected database.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.DataAccess.MongoDB.Utils.IMongoDbSettings.ConnectionString">
+            <summary>
+            Connection string of to be connected database.
+            </summary>
+        </member>
+        <member name="T:Milvasoft.Helpers.DataAccess.MongoDB.Utils.MongoDbSettings">
+            <summary>
+            Mongo connection settings.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.DataAccess.MongoDB.Utils.MongoDbSettings.DatabaseName">
+            <summary>
+            Database name of to be connected database.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.DataAccess.MongoDB.Utils.MongoDbSettings.ConnectionString">
+            <summary>
+            Connection string of to be connected database.
+            </summary>
         </member>
         <member name="T:Milvasoft.Helpers.DataAccess.MongoDB.Utils.NoSqlRelationHelper">
             <summary>
