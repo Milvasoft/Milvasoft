@@ -35,9 +35,11 @@ namespace Milvasoft.Helpers
                                                              string successMessage,
                                                              string errorMessage = null)
         {
-            var response = new ObjectResponse<PaginationDTO<T>> { StatusCode = MilvaStatusCodes.Status200OK };
-
-            response.Message = successMessage;
+            var response = new ObjectResponse<PaginationDTO<T>>
+            {
+                StatusCode = MilvaStatusCodes.Status200OK,
+                Message = successMessage
+            };
 
             if (paginationDTO.DTOList.IsNullOrEmpty())
             {
@@ -68,10 +70,11 @@ namespace Milvasoft.Helpers
                                                          string successMessage,
                                                          string errorMessage = null)
         {
-            var response = new ObjectResponse<List<T>>();
-
-            response.StatusCode = MilvaStatusCodes.Status200OK;
-            response.Message = successMessage;
+            var response = new ObjectResponse<List<T>>
+            {
+                StatusCode = MilvaStatusCodes.Status200OK,
+                Message = successMessage
+            };
 
             if (contentList.IsNullOrEmpty())
             {
@@ -101,7 +104,12 @@ namespace Milvasoft.Helpers
                                                          string successMessage,
                                                          string errorMessage = null)
         {
-            var response = new ObjectResponse<T> { StatusCode = MilvaStatusCodes.Status200OK, Success = true };
+            var response = new ObjectResponse<T>
+            {
+                StatusCode = MilvaStatusCodes.Status200OK,
+                Success = true
+            };
+
             response.Message = successMessage;
             if (content == null)
             {
