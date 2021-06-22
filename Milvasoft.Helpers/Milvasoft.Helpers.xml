@@ -7975,6 +7975,49 @@
             <param name="body"></param>
             <param name="isBodyHtml"></param>
         </member>
+        <member name="T:Milvasoft.Helpers.Middlewares.MiddlewareExtensions">
+            <summary>
+            Provides registration of milva middlewares.
+            </summary>
+        </member>
+        <member name="M:Milvasoft.Helpers.Middlewares.MiddlewareExtensions.UseMilvaResponseTimeCalculator(Microsoft.AspNetCore.Builder.IApplicationBuilder)">
+            <summary>
+            Adds response time calculator.
+            
+            <para> Calculates response time and adds result to response headers. </para>
+            </summary>
+            <param name="builder"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Milvasoft.Helpers.Middlewares.MilvaResponseTimeCalculator">
+            <summary>
+            Calculates response time and adds result to response headers.
+            Custom header is "X-Response-Time".
+            </summary>
+        </member>
+        <member name="F:Milvasoft.Helpers.Middlewares.MilvaResponseTimeCalculator._responseHeader">
+            <summary>
+            Name of the Response Header, Custom Headers starts with "X-"  
+            </summary>
+        </member>
+        <member name="F:Milvasoft.Helpers.Middlewares.MilvaResponseTimeCalculator._next">
+            <summary>
+            Handle to the next Middleware in the pipeline  
+            </summary>
+        </member>
+        <member name="M:Milvasoft.Helpers.Middlewares.MilvaResponseTimeCalculator.#ctor(Microsoft.AspNetCore.Http.RequestDelegate)">
+            <summary>
+            Initializes new instances of <see cref="T:Milvasoft.Helpers.Middlewares.MilvaResponseTimeCalculator"/>.
+            </summary>
+            <param name="next"></param>
+        </member>
+        <member name="M:Milvasoft.Helpers.Middlewares.MilvaResponseTimeCalculator.InvokeAsync(Microsoft.AspNetCore.Http.HttpContext)">
+            <summary>
+            Invokes the method or constructor reflected by this MethodInfo instance.
+            </summary>
+            <param name="context"></param>
+            <returns></returns>
+        </member>
         <member name="T:Milvasoft.Helpers.Models.CommunicationModel`2">
             <summary>
             Standart communication model. 
