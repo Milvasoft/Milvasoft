@@ -323,7 +323,6 @@ namespace Milvasoft.Helpers.DataAccess.MongoDB.Utils
         /// <returns></returns>
         public static List<TEmbeddedProperty> StepIntoEmbedded<TEntity, TEmbeddedProperty>(this List<TEntity> entities,
                                                                                            Expression<Func<TEntity, TEmbeddedProperty>> embeddedPropertySelector)
-        where TEntity : IAuditable<ObjectId>
         where TEmbeddedProperty : IEmbedded
         {
             if (entities.IsNullOrEmpty())
@@ -356,7 +355,6 @@ namespace Milvasoft.Helpers.DataAccess.MongoDB.Utils
         /// <returns></returns>
         public static List<TEmbeddedProperty> StepIntoEmbedded<TEntity, TEmbeddedProperty>(this List<TEntity> entities,
                                                                                            Expression<Func<TEntity, List<TEmbeddedProperty>>> embeddedPropertySelector)
-        where TEntity : IAuditable<ObjectId>
         where TEmbeddedProperty : IEmbedded
         {
             if (entities.IsNullOrEmpty())
