@@ -1,11 +1,14 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Localization;
 using Milvasoft.Helpers.Exceptions;
 using Milvasoft.Helpers.Extensions;
+using Milvasoft.Helpers.Models.Response;
 using Milvasoft.Helpers.Utils;
 using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Linq.Expressions;
@@ -294,5 +297,28 @@ namespace Milvasoft.Helpers
         public static T ToObject<T>(this string value) where T : class
             => string.IsNullOrEmpty(value) ? null : JsonConvert.DeserializeObject<T>(value);
 
+        /// <summary>
+        /// Prepares custom validation model for response.
+        /// </summary>
+        /// <param name="actionContext"></param>
+        /// <returns></returns>
+        public static ObjectResult CustomErrorResponse(ActionContext actionContext)
+        {
+            var errorMessageList = actionContext.ModelState.Where(modelError => modelError.Value.Errors.Count > 0)
+                                                           .SelectMany(modelError => modelError.Value.Errors.Select(i => i.ErrorMessage)).ToList();
+
+            var validationResponse = new ExceptionResponse
+            {
+                Success = false,
+                Message = string.Join('~', errorMessageList),
+                StatusCode = MilvaStatusCodes.Status600Exception,
+                Result = new object(),
+                ErrorCodes = new List<int>()
+            };
+
+            actionContext.HttpContext.Items.Add(new KeyValuePair<object, object>("StatusCode", MilvaStatusCodes.Status600Exception));
+
+            return new OkObjectResult(validationResponse);
+        }
     }
 }

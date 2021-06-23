@@ -8,6 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Localization;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Milvasoft.Helpers;
 using Milvasoft.Helpers.DataAccess.Abstract;
 using Milvasoft.Helpers.DataAccess.Concrete;
 using Milvasoft.Helpers.DataAccess.MilvaContext;
@@ -28,11 +29,9 @@ using Milvasoft.SampleAPI.Utils.Swagger;
 using Newtonsoft.Json;
 using Opsiyon.API.Helpers.Swagger;
 using System;
-using System.Collections.Generic;
 using System.Globalization;
 using System.IdentityModel.Tokens.Jwt;
 using System.IO;
-using System.Linq;
 using System.Net;
 using System.Net.Http.Headers;
 using System.Reflection;
@@ -72,7 +71,7 @@ namespace Milvasoft.SampleAPI.AppStartup
               {
                   options.InvalidModelStateResponseFactory = actionContext =>
                   {
-                      return CustomErrorResponse(actionContext);
+                      return CommonHelper.CustomErrorResponse(actionContext);
                   };
               }).AddDataAnnotationsLocalization();
         }
@@ -264,38 +263,6 @@ namespace Milvasoft.SampleAPI.AppStartup
 
 
         #region Private Methods 
-
-        /// <summary>
-        /// Prepares custom validation model for response.
-        /// </summary>
-        /// <param name="actionContext"></param>
-        /// <returns></returns>
-        private static ObjectResult CustomErrorResponse(ActionContext actionContext)
-        {
-            var validationErrors = actionContext.ModelState
-             .Where(modelError => modelError.Value.Errors.Count > 0)
-             .Select(modelError => new ValidationError
-             {
-                 ValidationFieldName = modelError.Key,
-                 ErrorMessageList = modelError.Value.Errors.Select(i => i.ErrorMessage).ToList()
-             }).ToList();
-
-            var stringBuilder = new StringBuilder();
-            List<string> errorMessageList = new List<string>();
-            validationErrors.ForEach(e => e.ErrorMessageList.ForEach(emg => errorMessageList.Add(emg)));
-            stringBuilder.AppendJoin(',', errorMessageList);
-            var validationResponse = new ExceptionResponse
-            {
-                Success = false,
-                Message = stringBuilder.ToString(),
-                StatusCode = MilvaStatusCodes.Status600Exception,
-                Result = new object(),
-                ErrorCodes = new List<int>()
-            };
-            actionContext.HttpContext.Items.Add(new KeyValuePair<object, object>("StatusCode", MilvaStatusCodes.Status600Exception));
-
-            return new OkObjectResult(validationResponse);
-        }
 
         /// <summary>
         /// Configures JWT Token Authentication.

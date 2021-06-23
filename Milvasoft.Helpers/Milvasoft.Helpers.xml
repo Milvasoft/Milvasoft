@@ -882,6 +882,13 @@
             <param name="value"></param>
             <returns></returns>
         </member>
+        <member name="M:Milvasoft.Helpers.CommonHelper.CustomErrorResponse(Microsoft.AspNetCore.Mvc.ActionContext)">
+            <summary>
+            Prepares custom validation model for response.
+            </summary>
+            <param name="actionContext"></param>
+            <returns></returns>
+        </member>
         <member name="T:Milvasoft.Helpers.DataAccess.Abstract.Entity.Auditing.IHasCreator`1">
             <summary>
             Determines entity has creator.
@@ -8151,21 +8158,6 @@
             <summary>
             Result object.
             </summary>
-        </member>
-        <member name="T:Milvasoft.Helpers.Models.Response.ValidationError">
-            <summary>
-            Validation error model for property.
-            </summary>
-        </member>
-        <member name="P:Milvasoft.Helpers.Models.Response.ValidationError.ValidationFieldName">
-            <value>
-            Property where validation error occurred.
-            </value>
-        </member>
-        <member name="P:Milvasoft.Helpers.Models.Response.ValidationError.ErrorMessageList">
-            <value>
-            Property's validation error messages.
-            </value>
         </member>
         <member name="T:Milvasoft.Helpers.MultiTenancy.Accessor.ITenantAccessor`2">
             <summary>

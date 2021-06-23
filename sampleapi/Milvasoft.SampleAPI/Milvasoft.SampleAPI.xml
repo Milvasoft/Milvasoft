@@ -87,13 +87,6 @@
             </summary>
             <param name="services"></param>
         </member>
-        <member name="M:Milvasoft.SampleAPI.AppStartup.ServiceCollectionExtensions.CustomErrorResponse(Microsoft.AspNetCore.Mvc.ActionContext)">
-            <summary>
-            Prepares custom validation model for response.
-            </summary>
-            <param name="actionContext"></param>
-            <returns></returns>
-        </member>
         <member name="M:Milvasoft.SampleAPI.AppStartup.ServiceCollectionExtensions.ConfigureJWT(Microsoft.Extensions.DependencyInjection.IServiceCollection,Milvasoft.Helpers.FileOperations.Abstract.IJsonOperations)">
             <summary>
             Configures JWT Token Authentication.
