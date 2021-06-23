@@ -7765,6 +7765,115 @@
             Platform : Android
             </summary>
         </member>
+        <member name="T:Milvasoft.Helpers.JobScheduling.MilvaCronJobService">
+            <summary>
+            Provides scheduled job operations.
+            </summary>
+        </member>
+        <member name="M:Milvasoft.Helpers.JobScheduling.MilvaCronJobService.#ctor(System.String,System.TimeZoneInfo)">
+            <summary>
+            Initializes new instances of <see cref="T:Milvasoft.Helpers.JobScheduling.MilvaCronJobService"/>
+            </summary>
+            <param name="cronExpression"></param>
+            <param name="timeZoneInfo"></param>
+        </member>
+        <member name="M:Milvasoft.Helpers.JobScheduling.MilvaCronJobService.#ctor(System.String,System.TimeZoneInfo,Cronos.CronFormat)">
+            <summary>
+            Initializes new instances of <see cref="T:Milvasoft.Helpers.JobScheduling.MilvaCronJobService"/>
+            </summary>
+            <param name="cronExpression"></param>
+            <param name="timeZoneInfo"></param>
+            <param name="cronFormat"></param>
+        </member>
+        <member name="M:Milvasoft.Helpers.JobScheduling.MilvaCronJobService.StartAsync(System.Threading.CancellationToken)">
+            <summary>
+            Starts the job.
+            </summary>
+            <param name="cancellationToken"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.JobScheduling.MilvaCronJobService.ScheduleJob(System.Threading.CancellationToken)">
+            <summary>
+            Schedules the job.
+            </summary>
+            <param name="cancellationToken"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.JobScheduling.MilvaCronJobService.ExecuteAsync(System.Threading.CancellationToken)">
+            <summary>
+            Executes the job.
+            </summary>
+            <param name="cancellationToken"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.JobScheduling.MilvaCronJobService.StopAsync(System.Threading.CancellationToken)">
+            <summary>
+            Stops the job.
+            </summary>
+            <param name="cancellationToken"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.JobScheduling.MilvaCronJobService.Dispose">
+            <summary>
+            Disposes the timer.
+            </summary>
+        </member>
+        <member name="T:Milvasoft.Helpers.JobScheduling.IScheduleConfig`1">
+            <summary>
+            Schedule config for scheduling jobs.
+            </summary>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="P:Milvasoft.Helpers.JobScheduling.IScheduleConfig`1.CronExpression">
+            <summary>
+            Cron expression of job.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.JobScheduling.IScheduleConfig`1.TimeZoneInfo">
+            <summary>
+            Time zone information of job.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.JobScheduling.IScheduleConfig`1.CronFormat">
+            <summary>
+            If seconds requested in cron expression send this property.
+            </summary>
+        </member>
+        <member name="T:Milvasoft.Helpers.JobScheduling.ScheduleConfig`1">
+            <summary>
+            Schedule config for scheduling jobs.
+            </summary>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="P:Milvasoft.Helpers.JobScheduling.ScheduleConfig`1.CronExpression">
+            <summary>
+            Cron expression of job.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.JobScheduling.ScheduleConfig`1.TimeZoneInfo">
+            <summary>
+            Time zone information of job.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.JobScheduling.ScheduleConfig`1.CronFormat">
+            <summary>
+            If seconds requested in cron expression send this property.
+            </summary>
+        </member>
+        <member name="T:Milvasoft.Helpers.JobScheduling.ServiceCollectionExtensions">
+            <summary>
+            Provides scheduled job operations.
+            </summary>
+        </member>
+        <member name="M:Milvasoft.Helpers.JobScheduling.ServiceCollectionExtensions.AddMilvaCronJob``1(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.Action{Milvasoft.Helpers.JobScheduling.IScheduleConfig{``0}})">
+            <summary>
+            Adds scheduled cron job to application.
+            </summary>
+            <typeparam name="TJob"></typeparam>
+            <param name="services"></param>
+            <param name="options"></param>
+            <returns></returns>
+        </member>
         <member name="T:Milvasoft.Helpers.Mail.IMilvaMailSender">
             <summary>
             Provides send mail.
