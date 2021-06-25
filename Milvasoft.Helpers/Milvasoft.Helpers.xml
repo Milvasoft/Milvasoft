@@ -1815,14 +1815,14 @@
         </member>
         <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.GetFirstOrDefaultAsync(System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
             <summary>
-             Returns all entities which IsDeleted condition is true from database asynchronously. If the condition is requested, it also provides that condition.
+             Returns first entity or default value which IsDeleted condition is true from database asynchronously. If the condition is requested, it also provides that condition.
             </summary>
             <param name="conditionExpression"></param>
             <returns></returns>
         </member>
         <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.GetFirstOrDefaultAsync(System.Func{Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable{`0},Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable},System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
             <summary>
-             Returns all entities which IsDeleted condition is true with includes from database asynchronously. If the condition is requested, it also provides that condition. 
+             Returns first entity or default value which IsDeleted condition is true with includes from database asynchronously. If the condition is requested, it also provides that condition. 
             </summary>
             <param name="includes"></param>
             <param name="conditionExpression"></param>
@@ -1830,14 +1830,14 @@
         </member>
         <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.GetSingleOrDefaultAsync(System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
             <summary>
-             Returns all entities which IsDeleted condition is true from database asynchronously. If the condition is requested, it also provides that condition.
+             Returns single entity or default value which IsDeleted condition is true from database asynchronously. If the condition is requested, it also provides that condition.
             </summary>
             <param name="conditionExpression"></param>
             <returns></returns>
         </member>
         <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.GetSingleOrDefaultAsync(System.Func{Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable{`0},Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable},System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
             <summary>
-             Returns all entities which IsDeleted condition is true with includes from database asynchronously. If the condition is requested, it also provides that condition.
+             Returns single entity or default value which IsDeleted condition is true with includes from database asynchronously. If the condition is requested, it also provides that condition.
             </summary>
             <param name="includes"></param>
             <param name="conditionExpression"></param>
