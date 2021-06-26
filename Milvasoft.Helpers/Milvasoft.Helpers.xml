@@ -3335,7 +3335,7 @@
             <param name="document"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.MongoDB.Abstract.IBaseRepository`1.AddAsync(System.Collections.Generic.ICollection{`0})">
+        <member name="M:Milvasoft.Helpers.DataAccess.MongoDB.Abstract.IBaseRepository`1.AddRangeAsync(System.Collections.Generic.IEnumerable{`0})">
             <summary>
              Adds multiple entities to database asynchronously.
             </summary>
@@ -3604,7 +3604,7 @@
             <param name="document"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.MongoDB.Concrete.BaseRepository`1.AddAsync(System.Collections.Generic.ICollection{`0})">
+        <member name="M:Milvasoft.Helpers.DataAccess.MongoDB.Concrete.BaseRepository`1.AddRangeAsync(System.Collections.Generic.IEnumerable{`0})">
             <summary>
              Adds multiple entities to database asynchronously.
             </summary>

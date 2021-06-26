@@ -469,7 +469,7 @@ namespace Milvasoft.Helpers.DataAccess.MongoDB.Concrete
         /// </summary>
         /// <param name="documents"></param>
         /// <returns></returns>
-        public virtual async Task AddAsync(ICollection<TEntity> documents)
+        public virtual async Task AddRangeAsync(IEnumerable<TEntity> documents)
         {
             var options = new InsertManyOptions { BypassDocumentValidation = false };
 

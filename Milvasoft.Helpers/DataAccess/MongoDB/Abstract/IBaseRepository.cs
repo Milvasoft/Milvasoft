@@ -224,7 +224,7 @@ namespace Milvasoft.Helpers.DataAccess.MongoDB.Abstract
         /// </summary>
         /// <param name="documents"></param>
         /// <returns></returns>
-        Task AddAsync(ICollection<TEntity> documents);
+        Task AddRangeAsync(IEnumerable<TEntity> documents);
 
         /// <summary>
         /// Replaces existing entities with new entities(<paramref name="document"/>).
