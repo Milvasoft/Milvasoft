@@ -84,7 +84,7 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
         }
 
         /// <summary>
-        ///  Returns all entities which IsDeleted condition is true from database asynchronously. If the condition is requested, it also provides that condition.
+        ///  Returns first entity or default value which IsDeleted condition is true from database asynchronously. If the condition is requested, it also provides that condition.
         /// </summary>
         /// <param name="conditionExpression"></param>
         /// <returns></returns>
@@ -92,7 +92,7 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
             => await _dbSet.FirstOrDefaultAsync(CreateConditionExpression(conditionExpression) ?? (entity => true)).ConfigureAwait(false);
 
         /// <summary>
-        ///  Returns all entities which IsDeleted condition is true with includes from database asynchronously. If the condition is requested, it also provides that condition. 
+        ///  Returns first entity or default value which IsDeleted condition is true with includes from database asynchronously. If the condition is requested, it also provides that condition. 
         /// </summary>
         /// <param name="includes"></param>
         /// <param name="conditionExpression"></param>
@@ -101,7 +101,7 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
             => await _dbSet.IncludeMultiple(includes).FirstOrDefaultAsync(CreateConditionExpression(conditionExpression) ?? (entity => true)).ConfigureAwait(false);
 
         /// <summary>
-        ///  Returns all entities which IsDeleted condition is true from database asynchronously. If the condition is requested, it also provides that condition.
+        ///  Returns single entity or default value which IsDeleted condition is true from database asynchronously. If the condition is requested, it also provides that condition.
         /// </summary>
         /// <param name="conditionExpression"></param>
         /// <returns></returns>
@@ -109,7 +109,7 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
             => await _dbSet.SingleOrDefaultAsync(CreateConditionExpression(conditionExpression) ?? (entity => true)).ConfigureAwait(false);
 
         /// <summary>
-        ///  Returns all entities which IsDeleted condition is true with includes from database asynchronously. If the condition is requested, it also provides that condition.
+        ///  Returns single entity or default value which IsDeleted condition is true with includes from database asynchronously. If the condition is requested, it also provides that condition.
         /// </summary>
         /// <param name="includes"></param>
         /// <param name="conditionExpression"></param>
