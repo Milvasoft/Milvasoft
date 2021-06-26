@@ -570,6 +570,17 @@ namespace Milvasoft.Helpers.DataAccess.MongoDB.Concrete
             await _collection.FindOneAndDeleteAsync(filter).ConfigureAwait(false);
         }
 
+        /// <summary>
+        ///  Deletes single entity from database asynchronously..
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns> The deleted document if one was deleted. </returns>
+        public async Task<TEntity> DeleteAndReturnDeletedAsync(ObjectId id)
+        {
+            var filter = Builders<TEntity>.Filter.Eq(doc => doc.Id, id);
+            return await _collection.FindOneAndDeleteAsync(filter).ConfigureAwait(false);
+        }
+
         #region Helper Methods
 
         /// <summary>

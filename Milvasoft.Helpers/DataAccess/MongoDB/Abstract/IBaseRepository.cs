@@ -277,6 +277,13 @@ namespace Milvasoft.Helpers.DataAccess.MongoDB.Abstract
         /// <summary>
         ///  Deletes single entity from database asynchronously..
         /// </summary>
+        /// <param name="id"></param>
+        /// <returns> The deleted document if one was deleted. </returns>
+        Task<TEntity> DeleteAndReturnDeletedAsync(ObjectId id);
+
+        /// <summary>
+        ///  Deletes single entity from database asynchronously..
+        /// </summary>
         /// <param name="filterExpression"></param>
         /// <returns></returns>
         Task DeleteAsync(Expression<Func<TEntity, bool>> filterExpression);
