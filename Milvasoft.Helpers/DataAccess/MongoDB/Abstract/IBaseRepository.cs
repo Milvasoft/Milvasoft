@@ -224,7 +224,7 @@ namespace Milvasoft.Helpers.DataAccess.MongoDB.Abstract
         /// </summary>
         /// <param name="documents"></param>
         /// <returns></returns>
-        Task AddAsync(ICollection<TEntity> documents);
+        Task AddRangeAsync(IEnumerable<TEntity> documents);
 
         /// <summary>
         /// Replaces existing entities with new entities(<paramref name="document"/>).
@@ -273,6 +273,13 @@ namespace Milvasoft.Helpers.DataAccess.MongoDB.Abstract
         /// <param name="id"></param>
         /// <returns></returns>
         Task DeleteAsync(ObjectId id);
+
+        /// <summary>
+        ///  Deletes single entity from database asynchronously..
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns> The deleted document if one was deleted. </returns>
+        Task<TEntity> DeleteAndReturnDeletedAsync(ObjectId id);
 
         /// <summary>
         ///  Deletes single entity from database asynchronously..
