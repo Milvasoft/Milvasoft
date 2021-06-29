@@ -202,7 +202,7 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
         }
 
         /// <summary>
-        ///  Creates asynchronously a shallow copy of a range of entity's which IsDeleted property is true, in the source List of TEntity with requested count and range.
+        ///  Creates and ordered asynchronously a shallow copy of a range of entity's which IsDeleted property is true, in the source List of TEntity with requested count and range.
         ///       If the condition is requested, it also provides that condition.
         ///       
         /// </summary>
@@ -253,7 +253,7 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
         }
 
         /// <summary>
-        ///  Creates asynchronously a shallow copy of a range of entity's which IsDeleted property is true, in the source List of TEntity with requested count,range and includes.
+        ///  Creates and ordered asynchronously a shallow copy of a range of entity's which IsDeleted property is true, in the source List of TEntity with requested count,range and includes.
         ///        If the condition is requested, it also provides that condition.
         ///        
         /// </summary>
@@ -438,7 +438,7 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
         }
 
         /// <summary>
-        ///  Gets entities as ordered with <paramref name="orderByPropertyName"/>.
+        ///  Gets entities with includes as ordered with <paramref name="orderByPropertyName"/>.
         ///        If the condition is requested, it also provides that condition.
         ///        
         /// </summary>
@@ -920,7 +920,7 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
         /// <param name="conditionExpression"></param>
         /// <param name="groupedClause"></param>
         /// <returns></returns>
-        public virtual async Task<IEnumerable<TReturn>> GetAsGroupedAnOrderedAsync<TReturn>(string orderByPropertyName,
+        public virtual async Task<IEnumerable<TReturn>> GetAsGroupedAndOrderedAsync<TReturn>(string orderByPropertyName,
                                                                                             bool orderByAscending,
                                                                                             Func<IQueryable<TReturn>> groupedClause,
                                                                                             Expression<Func<TReturn, bool>> conditionExpression = null)

@@ -80,7 +80,7 @@ namespace Milvasoft.Helpers.DataAccess.MongoDB.Concrete
         }
 
         /// <summary>
-        /// Returns all entities.
+        /// Returns the max value of the property selected with <paramref name="propertySelector"/>.
         /// </summary>
         /// <param name="filterDefinition"></param>
         /// <param name="propertySelector"></param>

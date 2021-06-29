@@ -221,6 +221,24 @@ namespace Milvasoft.Helpers.DataAccess.Abstract
                                                      Expression<Func<TEntity, bool>> conditionExpression = null);
 
         /// <summary>
+        ///  Gets entities with includes as ordered with <paramref name="orderByPropertyName"/>.
+        ///        If the condition is requested, it also provides that condition.
+        ///        
+        /// </summary>
+        ///
+        /// <exception cref="ArgumentException"> Throwns when type of <typeparamref name="TEntity"/>'s properties doesn't contain '<paramref name="orderByPropertyName"/>'. </exception>
+        /// 
+        /// <param name="includes"></param>
+        /// <param name="orderByPropertyName"></param>
+        /// <param name="orderByAscending"></param>
+        /// <param name="conditionExpression"></param>
+        /// <returns></returns>
+        Task<IEnumerable<TEntity>> GetAsOrderedAsync(Func<IIncludable<TEntity>, IIncludable> includes,
+                                                     string orderByPropertyName,
+                                                     bool orderByAscending,
+                                                     Expression<Func<TEntity, bool>> conditionExpression = null);
+
+        /// <summary>
         ///  Gets entities as ordered with <paramref name="orderByKeySelector"/>.
         ///       If the condition is requested, it also provides that condition.
         ///       
@@ -504,7 +522,7 @@ namespace Milvasoft.Helpers.DataAccess.Abstract
         /// <param name="conditionExpression"></param>
         /// <param name="groupedClause"></param>
         /// <returns></returns>
-        Task<IEnumerable<TReturn>> GetAsGroupedAnOrderedAsync<TReturn>(string orderByPropertyName,
+        Task<IEnumerable<TReturn>> GetAsGroupedAndOrderedAsync<TReturn>(string orderByPropertyName,
                                                                        bool orderByAscending,
                                                                        Func<IQueryable<TReturn>> groupedClause,
                                                                        Expression<Func<TReturn, bool>> conditionExpression = null);
