@@ -3787,6 +3787,11 @@
             Extension methods for relational operations. Like "include approach" in RDBMS.
             </summary>
         </member>
+        <member name="P:Milvasoft.Helpers.DataAccess.MongoDB.Utils.NoSqlRelationHelper.DbName">
+            <summary>
+            Db name of your project. Dont forget enter this value for proper <see cref="T:MongoDB.Driver.MongoDBRef"/> documents.
+            </summary>
+        </member>
         <member name="M:Milvasoft.Helpers.DataAccess.MongoDB.Utils.NoSqlRelationHelper.MapReferenceAsync``3(``0,MongoDB.Driver.IMongoDatabase,System.Linq.Expressions.Expression{System.Func{``0,``1}},System.Linq.Expressions.Expression{System.Func{``0,``2}},System.Linq.Expressions.Expression{System.Func{``2,``2}},System.Linq.Expressions.Expression{System.Func{``2,System.Boolean}})">
             <summary>
             Pulls and mapped the <paramref name="referencePropertySelector"/> object inside the <paramref name="entity"/> object from the database.
@@ -3883,20 +3888,18 @@
             <param name="documentType"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.MongoDB.Utils.NoSqlRelationHelper.GetMongoDBRef``1(MongoDB.Bson.ObjectId,System.String)">
+        <member name="M:Milvasoft.Helpers.DataAccess.MongoDB.Utils.NoSqlRelationHelper.GetMongoDBRef``1(MongoDB.Bson.ObjectId)">
             <summary>
             Returns <see cref="T:MongoDB.Driver.MongoDBRef"/>
             </summary>
             <param name="objectId"></param>
-            <param name="dbName"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.MongoDB.Utils.NoSqlRelationHelper.GetMongoDBRef``1(System.Collections.Generic.List{MongoDB.Bson.ObjectId},System.String)">
+        <member name="M:Milvasoft.Helpers.DataAccess.MongoDB.Utils.NoSqlRelationHelper.GetMongoDBRef``1(System.Collections.Generic.List{MongoDB.Bson.ObjectId})">
             <summary>
             Returns <see cref="T:MongoDB.Driver.MongoDBRef"/>
             </summary>
             <param name="objectIds"></param>
-            <param name="dbName"></param>
             <returns></returns>
         </member>
         <member name="T:Milvasoft.Helpers.DependencyInjection.IAuditConfiguration">

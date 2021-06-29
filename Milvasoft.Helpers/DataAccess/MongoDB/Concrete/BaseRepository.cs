@@ -590,8 +590,8 @@ namespace Milvasoft.Helpers.DataAccess.MongoDB.Concrete
         /// <param name="projectExpressions"></param>
         /// <param name="unwindExpression"></param>
         /// <returns></returns>
-        private string GetProjectionQuery<TEmbedded>(Expression<Func<TEntity, object>> unwindExpression,
-                                                     List<Expression<Func<TEmbedded, object>>> projectExpressions = null)
+        protected string GetProjectionQuery<TEmbedded>(Expression<Func<TEntity, object>> unwindExpression,
+                                                       List<Expression<Func<TEmbedded, object>>> projectExpressions = null)
         {
             List<string> mappedProps = new List<string>();
 
@@ -640,16 +640,12 @@ namespace Milvasoft.Helpers.DataAccess.MongoDB.Concrete
             {
                 List<string> unwindNesteds = new List<string>();
 
-                MemberExpression memberExpression = unwindExpression.Body as MemberExpression;
-
                 do
                 {
-                    if (memberExpression == null)
+                    if (unwindExpression.Body is not MemberExpression memberExpression)
                         break;
 
                     unwindNesteds.Add(memberExpression.Member.Name);
-
-                    memberExpression = memberExpression.Expression as MemberExpression;
 
                 } while (true);
 
@@ -670,10 +666,10 @@ namespace Milvasoft.Helpers.DataAccess.MongoDB.Concrete
         /// <param name="filterExpression"></param>
         /// <param name="filterDefForTEmbedded"></param>
         /// <returns></returns>
-        private async Task<int> GetTotalDataCount<TEmbedded>(Expression<Func<TEntity, object>> unwindExpression,
-                                                             string projectQuery,
-                                                             FilterDefinition<TEntity> filterExpression = null,
-                                                             FilterDefinition<TEmbedded> filterDefForTEmbedded = null)
+        protected async Task<int> GetTotalDataCount<TEmbedded>(Expression<Func<TEntity, object>> unwindExpression,
+                                                               string projectQuery,
+                                                               FilterDefinition<TEntity> filterExpression = null,
+                                                               FilterDefinition<TEmbedded> filterDefForTEmbedded = null)
         {
 
             var filter = filterDefForTEmbedded ?? Builders<TEmbedded>.Filter.Empty;
@@ -708,12 +704,12 @@ namespace Milvasoft.Helpers.DataAccess.MongoDB.Concrete
         /// <param name="projectQuery"></param>
         /// <param name="filterDefForTEmbedded"></param>
         /// <returns></returns>
-        private (AggregateFacet<TEmbedded, TEmbedded>, string) GetAggregateFacetForEmbeddedPagination<TEmbedded>(int pageIndex,
-                                                                                                                int requestedItemCount,
-                                                                                                                string orderByProperty,
-                                                                                                                bool orderByAscending,
-                                                                                                                string projectQuery,
-                                                                                                                FilterDefinition<TEmbedded> filterDefForTEmbedded = null)
+        protected (AggregateFacet<TEmbedded, TEmbedded>, string) GetAggregateFacetForEmbeddedPagination<TEmbedded>(int pageIndex,
+                                                                                                                   int requestedItemCount,
+                                                                                                                   string orderByProperty,
+                                                                                                                   bool orderByAscending,
+                                                                                                                   string projectQuery,
+                                                                                                                   FilterDefinition<TEmbedded> filterDefForTEmbedded = null)
         {
             #region Check is have orderByProperty
 
