@@ -128,7 +128,7 @@ namespace Milvasoft.Helpers
         }
 
         /// <summary>
-        /// Checks that MinimumLength and MaximumLength have legal values.  Throws InvalidOperationException if not.
+        /// Checks that MinimumLength and MaximumLength have legal values. Throws <see cref="InvalidOperationException"/>  if not.
         /// </summary>
         public static void EnsureLegalLengths(int maxLength, int minLength, IStringLocalizer stringLocalizer = null)
         {
