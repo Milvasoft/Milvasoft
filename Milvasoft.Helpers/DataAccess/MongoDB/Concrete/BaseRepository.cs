@@ -640,12 +640,16 @@ namespace Milvasoft.Helpers.DataAccess.MongoDB.Concrete
             {
                 List<string> unwindNesteds = new List<string>();
 
+                MemberExpression memberExpression = unwindExpression.Body as MemberExpression;
+
                 do
                 {
-                    if (unwindExpression.Body is not MemberExpression memberExpression)
+                    if (memberExpression == null)
                         break;
 
                     unwindNesteds.Add(memberExpression.Member.Name);
+
+                    memberExpression = memberExpression.Expression as MemberExpression;
 
                 } while (true);
 
