@@ -244,7 +244,7 @@ namespace Milvasoft.Helpers.DataAccess.MongoDB.Concrete
         {
             ValidatePaginationParameters(pageIndex, requestedItemCount);
 
-            var stages = GetSortDefinitions(orderByProps).ToList();
+            var stages = GetSortDefinitions<TEntity>(orderByProps).ToList();
 
             var filter = filterDefinition ?? Builders<TEntity>.Filter.Empty;
 
@@ -699,8 +699,11 @@ namespace Milvasoft.Helpers.DataAccess.MongoDB.Concrete
 
             stages.Add(PipelineStageDefinitionBuilder.Match(filter));
 
-            foreach (var sortDef in GetSortDefinitions(orderByProps))
-                stages.Add(sortDef);
+            var sortDefinitions = GetSortDefinitions<TEmbedded>(orderByProps);
+
+            if (!sortDefinitions.IsNullOrEmpty())
+                foreach (var sortDef in GetSortDefinitions<TEmbedded>(orderByProps))
+                    stages.Add(sortDef);
 
             stages.Add(PipelineStageDefinitionBuilder.Skip<TEmbedded>((pageIndex - 1) * requestedItemCount));
             stages.Add(PipelineStageDefinitionBuilder.Limit<TEmbedded>(requestedItemCount));
@@ -717,14 +720,14 @@ namespace Milvasoft.Helpers.DataAccess.MongoDB.Concrete
         /// </summary>
         /// <param name="orderByProps"></param>
         /// <returns></returns>
-        protected IEnumerable<IPipelineStageDefinition> GetSortDefinitions(List<OrderByProps> orderByProps)
+        protected IEnumerable<IPipelineStageDefinition> GetSortDefinitions<T>(List<OrderByProps> orderByProps)
         {
             if (!orderByProps.IsNullOrEmpty())
                 foreach (var orderByProp in orderByProps)
                 {
-                    CommonHelper.PropertyExists<TEntity>(orderByProp.PropName);
+                    CommonHelper.PropertyExists<T>(orderByProp.PropName);
 
-                    var sortDef = orderByProp.Ascending ? Builders<TEntity>.Sort.Ascending(orderByProp.PropName) : Builders<TEntity>.Sort.Descending(orderByProp.PropName);
+                    var sortDef = orderByProp.Ascending ? Builders<T>.Sort.Ascending(orderByProp.PropName) : Builders<T>.Sort.Descending(orderByProp.PropName);
 
                     yield return PipelineStageDefinitionBuilder.Sort(sortDef);
                 }

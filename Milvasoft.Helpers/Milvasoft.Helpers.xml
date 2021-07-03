@@ -3712,7 +3712,7 @@
             <param name="filterDefForTEmbedded"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.MongoDB.Concrete.BaseRepository`1.GetSortDefinitions(System.Collections.Generic.List{Milvasoft.Helpers.Models.OrderByProps})">
+        <member name="M:Milvasoft.Helpers.DataAccess.MongoDB.Concrete.BaseRepository`1.GetSortDefinitions``1(System.Collections.Generic.List{Milvasoft.Helpers.Models.OrderByProps})">
             <summary>
             Gets sort definition by <paramref name="orderByProps"/>.
             </summary>
