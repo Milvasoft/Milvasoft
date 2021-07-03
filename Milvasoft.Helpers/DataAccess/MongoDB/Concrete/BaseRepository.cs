@@ -355,7 +355,7 @@ namespace Milvasoft.Helpers.DataAccess.MongoDB.Concrete
                                                                                                                                       FilterDefinition<TEmbedded> filterExpressionForTEmbedded = null)
         {
             ValidatePaginationParameters(pageIndex, requestedItemCount);
-            
+
             Expression<Func<TEntity, bool>> whereExpression = !entityIds.IsNullOrEmpty() ? p => entityIds.Contains(p.Id) : (entity => false);
 
             var projectQuery = GetProjectionQuery(unwindExpression, projectExpression);
@@ -407,7 +407,7 @@ namespace Milvasoft.Helpers.DataAccess.MongoDB.Concrete
                                                                                                                                       FilterDefinition<TEmbedded> filterDefForTEmbedded = null)
         {
             ValidatePaginationParameters(pageIndex, requestedItemCount);
-            
+
             var projectQuery = GetProjectionQuery(unwindExpression, projectExpression);
 
             var (dataFacet, facetName) = GetAggregateFacetForEmbeddedPagination(pageIndex,
@@ -719,14 +719,15 @@ namespace Milvasoft.Helpers.DataAccess.MongoDB.Concrete
         /// <returns></returns>
         protected IEnumerable<IPipelineStageDefinition> GetSortDefinitions(List<OrderByProps> orderByProps)
         {
-            foreach (var orderByProp in orderByProps)
-            {
-                CommonHelper.PropertyExists<TEntity>(orderByProp.PropName);
+            if (!orderByProps.IsNullOrEmpty())
+                foreach (var orderByProp in orderByProps)
+                {
+                    CommonHelper.PropertyExists<TEntity>(orderByProp.PropName);
 
-                var sortDef = orderByProp.Ascending ? Builders<TEntity>.Sort.Ascending(orderByProp.PropName) : Builders<TEntity>.Sort.Descending(orderByProp.PropName);
+                    var sortDef = orderByProp.Ascending ? Builders<TEntity>.Sort.Ascending(orderByProp.PropName) : Builders<TEntity>.Sort.Descending(orderByProp.PropName);
 
-                yield return PipelineStageDefinitionBuilder.Sort(sortDef);
-            }
+                    yield return PipelineStageDefinitionBuilder.Sort(sortDef);
+                }
         }
 
         /// <summary>
