@@ -3248,7 +3248,7 @@
             <param name="projectExpression"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.MongoDB.Abstract.IBaseRepository`1.GetAsPaginatedAsync(System.Int32,System.Int32,System.String,System.Boolean,MongoDB.Driver.FilterDefinition{`0},System.Linq.Expressions.Expression{System.Func{`0,`0}})">
+        <member name="M:Milvasoft.Helpers.DataAccess.MongoDB.Abstract.IBaseRepository`1.GetAsPaginatedAsync(System.Int32,System.Int32,System.Collections.Generic.List{Milvasoft.Helpers.Models.OrderByProps},MongoDB.Driver.FilterDefinition{`0},System.Linq.Expressions.Expression{System.Func{`0,`0}})">
             <summary>
             
             You can bring up the page number you want with the number of data count you want.
@@ -3259,13 +3259,12 @@
             </summary>
             <param name="pageIndex"></param>
             <param name="requestedItemCount"></param>
-            <param name="orderByProperty"></param>
-            <param name="orderByAscending"></param>
+            <param name="orderByProps"></param>
             <param name="filterDefinition"></param>
             <param name="projectExpression"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.MongoDB.Abstract.IBaseRepository`1.GetNestedPropertyAsPaginatedAsync``1(MongoDB.Bson.ObjectId,System.Int32,System.Int32,System.String,System.Boolean,System.Linq.Expressions.Expression{System.Func{`0,System.Object}},System.Collections.Generic.List{System.Linq.Expressions.Expression{System.Func{``0,System.Object}}},MongoDB.Driver.FilterDefinition{``0})">
+        <member name="M:Milvasoft.Helpers.DataAccess.MongoDB.Abstract.IBaseRepository`1.GetNestedPropertyAsPaginatedAsync``1(MongoDB.Bson.ObjectId,System.Int32,System.Int32,System.Collections.Generic.List{Milvasoft.Helpers.Models.OrderByProps},System.Linq.Expressions.Expression{System.Func{`0,System.Object}},System.Collections.Generic.List{System.Linq.Expressions.Expression{System.Func{``0,System.Object}}},MongoDB.Driver.FilterDefinition{``0})">
             <summary>
             
             According to the <paramref name="entityId"/>, you can bring up the nested list with the page number you want and the number of data you want.
@@ -3279,14 +3278,13 @@
             <param name="entityId"></param>
             <param name="pageIndex"></param>
             <param name="requestedItemCount"></param>
-            <param name="orderByProperty"></param>
-            <param name="orderByAscending"></param>
+            <param name="orderByProps"></param>
             <param name="unwindExpression"></param>
             <param name="projectExpression"></param>
             <param name="filterDefinition"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.MongoDB.Abstract.IBaseRepository`1.GetNestedPropertyAsPaginatedAsync``1(System.Collections.Generic.List{MongoDB.Bson.ObjectId},System.Int32,System.Int32,System.String,System.Boolean,System.Linq.Expressions.Expression{System.Func{`0,System.Object}},System.Collections.Generic.List{System.Linq.Expressions.Expression{System.Func{``0,System.Object}}},MongoDB.Driver.FilterDefinition{``0})">
+        <member name="M:Milvasoft.Helpers.DataAccess.MongoDB.Abstract.IBaseRepository`1.GetNestedPropertyAsPaginatedAsync``1(System.Collections.Generic.List{MongoDB.Bson.ObjectId},System.Int32,System.Int32,System.Collections.Generic.List{Milvasoft.Helpers.Models.OrderByProps},System.Linq.Expressions.Expression{System.Func{`0,System.Object}},System.Collections.Generic.List{System.Linq.Expressions.Expression{System.Func{``0,System.Object}}},MongoDB.Driver.FilterDefinition{``0})">
             <summary>
             
             According to the <paramref name="entityIds"/>, you can bring up the nested list with the page number you want and the number of data you want.
@@ -3300,14 +3298,13 @@
             <param name="entityIds"></param>
             <param name="pageIndex"></param>
             <param name="requestedItemCount"></param>
-            <param name="orderByProperty"></param>
-            <param name="orderByAscending"></param>
+            <param name="orderByProps"></param>
             <param name="unwindExpression"></param>
             <param name="projectExpression"></param>
             <param name="filterDefinition"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.MongoDB.Abstract.IBaseRepository`1.GetNestedPropertyAsPaginatedAsync``1(System.Int32,System.Int32,System.String,System.Boolean,System.Linq.Expressions.Expression{System.Func{`0,System.Object}},MongoDB.Driver.FilterDefinition{`0},System.Collections.Generic.List{System.Linq.Expressions.Expression{System.Func{``0,System.Object}}},MongoDB.Driver.FilterDefinition{``0})">
+        <member name="M:Milvasoft.Helpers.DataAccess.MongoDB.Abstract.IBaseRepository`1.GetNestedPropertyAsPaginatedAsync``1(System.Int32,System.Int32,System.Collections.Generic.List{Milvasoft.Helpers.Models.OrderByProps},System.Linq.Expressions.Expression{System.Func{`0,System.Object}},MongoDB.Driver.FilterDefinition{`0},System.Collections.Generic.List{System.Linq.Expressions.Expression{System.Func{``0,System.Object}}},MongoDB.Driver.FilterDefinition{``0})">
             <summary>
             
             You can bring up the nested list with the page number you want and the number of data you want.
@@ -3320,8 +3317,7 @@
             <typeparam name="TEmbedded"></typeparam>
             <param name="pageIndex"></param>
             <param name="requestedItemCount"></param>
-            <param name="orderByProperty"></param>
-            <param name="orderByAscending"></param>
+            <param name="orderByProps"></param>
             <param name="unwindExpression"></param>
             <param name="filterExpression"></param>
             <param name="projectExpression"></param>
@@ -3515,7 +3511,7 @@
             <param name="projectExpression"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.MongoDB.Concrete.BaseRepository`1.GetAsPaginatedAsync(System.Int32,System.Int32,System.String,System.Boolean,MongoDB.Driver.FilterDefinition{`0},System.Linq.Expressions.Expression{System.Func{`0,`0}})">
+        <member name="M:Milvasoft.Helpers.DataAccess.MongoDB.Concrete.BaseRepository`1.GetAsPaginatedAsync(System.Int32,System.Int32,System.Collections.Generic.List{Milvasoft.Helpers.Models.OrderByProps},MongoDB.Driver.FilterDefinition{`0},System.Linq.Expressions.Expression{System.Func{`0,`0}})">
             <summary>
             
             You can bring up the page number you want with the number of data count you want.
@@ -3527,13 +3523,12 @@
             </summary>
             <param name="pageIndex"></param>
             <param name="requestedItemCount"></param>
-            <param name="orderByProperty"></param>
-            <param name="orderByAscending"></param>
+            <param name="orderByProps"></param>
             <param name="filterDefinition"></param>
             <param name="projectExpression"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.MongoDB.Concrete.BaseRepository`1.GetNestedPropertyAsPaginatedAsync``1(MongoDB.Bson.ObjectId,System.Int32,System.Int32,System.String,System.Boolean,System.Linq.Expressions.Expression{System.Func{`0,System.Object}},System.Collections.Generic.List{System.Linq.Expressions.Expression{System.Func{``0,System.Object}}},MongoDB.Driver.FilterDefinition{``0})">
+        <member name="M:Milvasoft.Helpers.DataAccess.MongoDB.Concrete.BaseRepository`1.GetNestedPropertyAsPaginatedAsync``1(MongoDB.Bson.ObjectId,System.Int32,System.Int32,System.Collections.Generic.List{Milvasoft.Helpers.Models.OrderByProps},System.Linq.Expressions.Expression{System.Func{`0,System.Object}},System.Collections.Generic.List{System.Linq.Expressions.Expression{System.Func{``0,System.Object}}},MongoDB.Driver.FilterDefinition{``0})">
             <summary>
             
             According to the <paramref name="entityId"/>, you can bring up the nested list with the page number you want and the number of data you want.
@@ -3548,14 +3543,13 @@
             <param name="entityId"></param>
             <param name="pageIndex"></param>
             <param name="requestedItemCount"></param>
-            <param name="orderByProperty"></param>
-            <param name="orderByAscending"></param>
+            <param name="orderByProps"></param>
             <param name="unwindExpression"></param>
             <param name="projectExpression"></param>
             <param name="filterExpressionForTEmbedded"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.MongoDB.Concrete.BaseRepository`1.GetNestedPropertyAsPaginatedAsync``1(System.Collections.Generic.List{MongoDB.Bson.ObjectId},System.Int32,System.Int32,System.String,System.Boolean,System.Linq.Expressions.Expression{System.Func{`0,System.Object}},System.Collections.Generic.List{System.Linq.Expressions.Expression{System.Func{``0,System.Object}}},MongoDB.Driver.FilterDefinition{``0})">
+        <member name="M:Milvasoft.Helpers.DataAccess.MongoDB.Concrete.BaseRepository`1.GetNestedPropertyAsPaginatedAsync``1(System.Collections.Generic.List{MongoDB.Bson.ObjectId},System.Int32,System.Int32,System.Collections.Generic.List{Milvasoft.Helpers.Models.OrderByProps},System.Linq.Expressions.Expression{System.Func{`0,System.Object}},System.Collections.Generic.List{System.Linq.Expressions.Expression{System.Func{``0,System.Object}}},MongoDB.Driver.FilterDefinition{``0})">
             <summary>
             
             According to the <paramref name="entityIds"/>, you can bring up the nested list with the page number you want and the number of data you want.
@@ -3569,14 +3563,13 @@
             <param name="entityIds"></param>
             <param name="pageIndex"></param>
             <param name="requestedItemCount"></param>
-            <param name="orderByProperty"></param>
-            <param name="orderByAscending"></param>
+            <param name="orderByProps"></param>
             <param name="unwindExpression"></param>
             <param name="projectExpression"></param>
             <param name="filterExpressionForTEmbedded"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.MongoDB.Concrete.BaseRepository`1.GetNestedPropertyAsPaginatedAsync``1(System.Int32,System.Int32,System.String,System.Boolean,System.Linq.Expressions.Expression{System.Func{`0,System.Object}},MongoDB.Driver.FilterDefinition{`0},System.Collections.Generic.List{System.Linq.Expressions.Expression{System.Func{``0,System.Object}}},MongoDB.Driver.FilterDefinition{``0})">
+        <member name="M:Milvasoft.Helpers.DataAccess.MongoDB.Concrete.BaseRepository`1.GetNestedPropertyAsPaginatedAsync``1(System.Int32,System.Int32,System.Collections.Generic.List{Milvasoft.Helpers.Models.OrderByProps},System.Linq.Expressions.Expression{System.Func{`0,System.Object}},MongoDB.Driver.FilterDefinition{`0},System.Collections.Generic.List{System.Linq.Expressions.Expression{System.Func{``0,System.Object}}},MongoDB.Driver.FilterDefinition{``0})">
             <summary>
             
             You can bring up the nested list with the page number you want and the number of data you want.
@@ -3589,8 +3582,7 @@
             <typeparam name="TEmbedded"></typeparam>
             <param name="pageIndex"></param>
             <param name="requestedItemCount"></param>
-            <param name="orderByProperty"></param>
-            <param name="orderByAscending"></param>
+            <param name="orderByProps"></param>
             <param name="unwindExpression"></param>
             <param name="filterExpression"></param>
             <param name="projectExpression"></param>
@@ -3693,18 +3685,31 @@
             <param name="filterDefForTEmbedded"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.MongoDB.Concrete.BaseRepository`1.GetAggregateFacetForEmbeddedPagination``1(System.Int32,System.Int32,System.String,System.Boolean,System.String,MongoDB.Driver.FilterDefinition{``0})">
+        <member name="M:Milvasoft.Helpers.DataAccess.MongoDB.Concrete.BaseRepository`1.GetAggregateFacetForEmbeddedPagination``1(System.Int32,System.Int32,System.Collections.Generic.List{Milvasoft.Helpers.Models.OrderByProps},System.String,MongoDB.Driver.FilterDefinition{``0})">
             <summary>
             Prepare aggregate facet for embedded pagination operations.
             </summary>
             <typeparam name="TEmbedded"></typeparam>
             <param name="pageIndex"></param>
             <param name="requestedItemCount"></param>
-            <param name="orderByProperty"></param>
-            <param name="orderByAscending"></param>
+            <param name="orderByProps"></param>
             <param name="projectQuery"></param>
             <param name="filterDefForTEmbedded"></param>
             <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.MongoDB.Concrete.BaseRepository`1.GetSortDefinitions(System.Collections.Generic.List{Milvasoft.Helpers.Models.OrderByProps})">
+            <summary>
+            Gets sort definition by <paramref name="orderByProps"/>.
+            </summary>
+            <param name="orderByProps"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.MongoDB.Concrete.BaseRepository`1.ValidatePaginationParameters(System.Int32,System.Int32)">
+            <summary>
+            Checks the parameters is valid.
+            </summary>
+            <param name="requestedPageNumber"></param>
+            <param name="countOfRequestedRecordsInPage"></param>
         </member>
         <member name="T:Milvasoft.Helpers.DataAccess.MongoDB.Entity.Abstract.IDocumentBase">
             <summary>
@@ -8212,6 +8217,21 @@
         <member name="P:Milvasoft.Helpers.Models.InvalidString.Values">
             <summary>
             Invalid values.
+            </summary>
+        </member>
+        <member name="T:Milvasoft.Helpers.Models.OrderByProps">
+            <summary>
+            Order by properties for multiple ordey by in database.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.Models.OrderByProps.PropName">
+            <summary>
+            Determines order by Property name of entity.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.Models.OrderByProps.Ascending">
+            <summary>
+            Determines order by ascending or descending.
             </summary>
         </member>
         <member name="T:Milvasoft.Helpers.Models.PaginationDTO`1">
