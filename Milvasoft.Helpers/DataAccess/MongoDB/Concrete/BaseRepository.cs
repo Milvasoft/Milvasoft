@@ -81,7 +81,7 @@ namespace Milvasoft.Helpers.DataAccess.MongoDB.Concrete
         }
 
         /// <summary>
-        /// Returns all entities.
+        /// Returns the max value of the property selected with <paramref name="propertySelector"/>.
         /// </summary>
         /// <param name="filterDefinition"></param>
         /// <param name="propertySelector"></param>
@@ -618,12 +618,16 @@ namespace Milvasoft.Helpers.DataAccess.MongoDB.Concrete
             {
                 List<string> unwindNesteds = new List<string>();
 
+                MemberExpression memberExpression = unwindExpression.Body as MemberExpression;
+
                 do
                 {
-                    if (unwindExpression.Body is not MemberExpression memberExpression)
+                    if (memberExpression == null)
                         break;
 
                     unwindNesteds.Add(memberExpression.Member.Name);
+
+                    memberExpression = memberExpression.Expression as MemberExpression;
 
                 } while (true);
 

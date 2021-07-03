@@ -1325,6 +1325,21 @@
             <param name="conditionExpression"></param>
             <returns></returns>
         </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.GetAsOrderedAsync(System.Func{Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable{`0},Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable},System.String,System.Boolean,System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
+             <summary>
+              Gets entities with includes as ordered with <paramref name="orderByPropertyName"/>.
+                    If the condition is requested, it also provides that condition.
+                    
+             </summary>
+            
+             <exception cref="T:System.ArgumentException"> Throwns when type of <typeparamref name="TEntity"/>'s properties doesn't contain '<paramref name="orderByPropertyName"/>'. </exception>
+             
+             <param name="includes"></param>
+             <param name="orderByPropertyName"></param>
+             <param name="orderByAscending"></param>
+             <param name="conditionExpression"></param>
+             <returns></returns>
+        </member>
         <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.GetAsOrderedAsync(System.Linq.Expressions.Expression{System.Func{`0,System.Object}},System.Boolean,System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
             <summary>
              Gets entities as ordered with <paramref name="orderByKeySelector"/>.
@@ -1564,7 +1579,7 @@
             <param name="groupedClause"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.GetAsGroupedAnOrderedAsync``1(System.String,System.Boolean,System.Func{System.Linq.IQueryable{``0}},System.Linq.Expressions.Expression{System.Func{``0,System.Boolean}})">
+        <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.GetAsGroupedAndOrderedAsync``1(System.String,System.Boolean,System.Func{System.Linq.IQueryable{``0}},System.Linq.Expressions.Expression{System.Func{``0,System.Boolean}})">
             <summary>
             Gets grouped entities with condition from database with <paramref name="groupedClause"/>.
             
@@ -1887,7 +1902,7 @@
         </member>
         <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.GetAsPaginatedAndOrderedAsync(System.Int32,System.Int32,System.String,System.Boolean,System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
             <summary>
-             Creates asynchronously a shallow copy of a range of entity's which IsDeleted property is true, in the source List of TEntity with requested count and range.
+             Creates and ordered asynchronously a shallow copy of a range of entity's which IsDeleted property is true, in the source List of TEntity with requested count and range.
                   If the condition is requested, it also provides that condition.
                   
             </summary>
@@ -1904,7 +1919,7 @@
         </member>
         <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.GetAsPaginatedAndOrderedAsync(System.Int32,System.Int32,System.Func{Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable{`0},Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable},System.String,System.Boolean,System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
              <summary>
-              Creates asynchronously a shallow copy of a range of entity's which IsDeleted property is true, in the source List of TEntity with requested count,range and includes.
+              Creates and ordered asynchronously a shallow copy of a range of entity's which IsDeleted property is true, in the source List of TEntity with requested count,range and includes.
                     If the condition is requested, it also provides that condition.
                     
              </summary>
@@ -1969,7 +1984,7 @@
         </member>
         <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.GetAsOrderedAsync(System.Func{Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable{`0},Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable},System.String,System.Boolean,System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
              <summary>
-              Gets entities as ordered with <paramref name="orderByPropertyName"/>.
+              Gets entities with includes as ordered with <paramref name="orderByPropertyName"/>.
                     If the condition is requested, it also provides that condition.
                     
              </summary>
@@ -2229,7 +2244,7 @@
             <param name="groupedClause"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.GetAsGroupedAnOrderedAsync``1(System.String,System.Boolean,System.Func{System.Linq.IQueryable{``0}},System.Linq.Expressions.Expression{System.Func{``0,System.Boolean}})">
+        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.GetAsGroupedAndOrderedAsync``1(System.String,System.Boolean,System.Func{System.Linq.IQueryable{``0}},System.Linq.Expressions.Expression{System.Func{``0,System.Boolean}})">
             <summary>
             Gets grouped entities with condition from database with <paramref name="groupedClause"/>.
             
@@ -3446,7 +3461,7 @@
         </member>
         <member name="M:Milvasoft.Helpers.DataAccess.MongoDB.Concrete.BaseRepository`1.GetMaxAsync(MongoDB.Driver.FilterDefinition{`0},System.Linq.Expressions.Expression{System.Func{`0,System.Object}},System.Linq.Expressions.Expression{System.Func{`0,`0}})">
             <summary>
-            Returns all entities.
+            Returns the max value of the property selected with <paramref name="propertySelector"/>.
             </summary>
             <param name="filterDefinition"></param>
             <param name="propertySelector"></param>
