@@ -17,6 +17,11 @@ namespace Milvasoft.Helpers.DataAccess.MongoDB.Utils
     public static class NoSqlRelationHelper
     {
         /// <summary>
+        /// Db name of your project. Dont forget enter this value for proper <see cref="MongoDBRef"/> documents.
+        /// </summary>
+        public static string DbName { get; set; } = "db";
+
+        /// <summary>
         /// Pulls and mapped the <paramref name="referencePropertySelector"/> object inside the <paramref name="entity"/> object from the database.
         /// </summary>
         /// <typeparam name="TEntity"></typeparam>
@@ -217,8 +222,6 @@ namespace Milvasoft.Helpers.DataAccess.MongoDB.Utils
 
             var toBeMappedValues = await collection.Find(totalFilterDefinition).Project(projectionDefinition).ToListAsync().ConfigureAwait(false);
 
-            int i = 0;
-
             foreach (var tobeMappedValueReference in toBeMappedValueReferences)
             {
                 var entity = entities.Where(p => p.Id == tobeMappedValueReference.Item2).FirstOrDefault();
@@ -226,8 +229,6 @@ namespace Milvasoft.Helpers.DataAccess.MongoDB.Utils
                 var toBeMappedValue = toBeMappedValues.Where(p => p.Id == tobeMappedValueReference.Item1.Id.AsObjectId).FirstOrDefault();
 
                 entity.GetType().GetProperty(toBeMappedPropertySelector.GetPropertyName()).SetValue(entity, toBeMappedValue);
-
-                i++;
             }
 
             return toBeMappedValues;
@@ -323,8 +324,6 @@ namespace Milvasoft.Helpers.DataAccess.MongoDB.Utils
         /// <returns></returns>
         public static List<TEmbeddedProperty> StepIntoEmbedded<TEntity, TEmbeddedProperty>(this List<TEntity> entities,
                                                                                            Expression<Func<TEntity, TEmbeddedProperty>> embeddedPropertySelector)
-        where TEntity : IAuditable<ObjectId>
-        where TEmbeddedProperty : IEmbedded
         {
             if (entities.IsNullOrEmpty())
                 return null;
@@ -356,8 +355,6 @@ namespace Milvasoft.Helpers.DataAccess.MongoDB.Utils
         /// <returns></returns>
         public static List<TEmbeddedProperty> StepIntoEmbedded<TEntity, TEmbeddedProperty>(this List<TEntity> entities,
                                                                                            Expression<Func<TEntity, List<TEmbeddedProperty>>> embeddedPropertySelector)
-        where TEntity : IAuditable<ObjectId>
-        where TEmbeddedProperty : IEmbedded
         {
             if (entities.IsNullOrEmpty())
                 return null;
@@ -402,18 +399,16 @@ namespace Milvasoft.Helpers.DataAccess.MongoDB.Utils
         /// Returns <see cref="MongoDBRef"/>
         /// </summary>
         /// <param name="objectId"></param>
-        /// <param name="dbName"></param>
         /// <returns></returns>
-        public static MongoDBRef GetMongoDBRef<TEntity>(this ObjectId objectId, string dbName = "obkdb")
-           => new(dbName, typeof(TEntity).GetCollectionName(), objectId);
+        public static MongoDBRef GetMongoDBRef<TEntity>(this ObjectId objectId)
+           => new(DbName, typeof(TEntity).GetCollectionName(), objectId);
 
         /// <summary>
         /// Returns <see cref="MongoDBRef"/>
         /// </summary>
         /// <param name="objectIds"></param>
-        /// <param name="dbName"></param>
         /// <returns></returns>
-        public static List<MongoDBRef> GetMongoDBRef<TEntity>(this List<ObjectId> objectIds, string dbName = "obkdb")
+        public static List<MongoDBRef> GetMongoDBRef<TEntity>(this List<ObjectId> objectIds)
         {
             if (objectIds.IsNullOrEmpty())
                 return null;
@@ -421,7 +416,7 @@ namespace Milvasoft.Helpers.DataAccess.MongoDB.Utils
             List<MongoDBRef> mongoDBRefs = new();
 
             foreach (var objectId in objectIds)
-                mongoDBRefs.Add(new(dbName, typeof(TEntity).GetCollectionName(), objectId));
+                mongoDBRefs.Add(new(DbName, typeof(TEntity).GetCollectionName(), objectId));
 
             return mongoDBRefs;
         }

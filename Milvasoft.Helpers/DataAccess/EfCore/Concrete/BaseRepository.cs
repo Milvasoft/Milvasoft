@@ -84,7 +84,7 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
         }
 
         /// <summary>
-        ///  Returns all entities which IsDeleted condition is true from database asynchronously. If the condition is requested, it also provides that condition.
+        ///  Returns first entity or default value which IsDeleted condition is true from database asynchronously. If the condition is requested, it also provides that condition.
         /// </summary>
         /// <param name="conditionExpression"></param>
         /// <returns></returns>
@@ -92,7 +92,7 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
             => await _dbSet.FirstOrDefaultAsync(CreateConditionExpression(conditionExpression) ?? (entity => true)).ConfigureAwait(false);
 
         /// <summary>
-        ///  Returns all entities which IsDeleted condition is true with includes from database asynchronously. If the condition is requested, it also provides that condition. 
+        ///  Returns first entity or default value which IsDeleted condition is true with includes from database asynchronously. If the condition is requested, it also provides that condition. 
         /// </summary>
         /// <param name="includes"></param>
         /// <param name="conditionExpression"></param>
@@ -101,7 +101,7 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
             => await _dbSet.IncludeMultiple(includes).FirstOrDefaultAsync(CreateConditionExpression(conditionExpression) ?? (entity => true)).ConfigureAwait(false);
 
         /// <summary>
-        ///  Returns all entities which IsDeleted condition is true from database asynchronously. If the condition is requested, it also provides that condition.
+        ///  Returns single entity or default value which IsDeleted condition is true from database asynchronously. If the condition is requested, it also provides that condition.
         /// </summary>
         /// <param name="conditionExpression"></param>
         /// <returns></returns>
@@ -109,7 +109,7 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
             => await _dbSet.SingleOrDefaultAsync(CreateConditionExpression(conditionExpression) ?? (entity => true)).ConfigureAwait(false);
 
         /// <summary>
-        ///  Returns all entities which IsDeleted condition is true with includes from database asynchronously. If the condition is requested, it also provides that condition.
+        ///  Returns single entity or default value which IsDeleted condition is true with includes from database asynchronously. If the condition is requested, it also provides that condition.
         /// </summary>
         /// <param name="includes"></param>
         /// <param name="conditionExpression"></param>
@@ -202,7 +202,7 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
         }
 
         /// <summary>
-        ///  Creates asynchronously a shallow copy of a range of entity's which IsDeleted property is true, in the source List of TEntity with requested count and range.
+        ///  Creates and ordered asynchronously a shallow copy of a range of entity's which IsDeleted property is true, in the source List of TEntity with requested count and range.
         ///       If the condition is requested, it also provides that condition.
         ///       
         /// </summary>
@@ -253,7 +253,7 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
         }
 
         /// <summary>
-        ///  Creates asynchronously a shallow copy of a range of entity's which IsDeleted property is true, in the source List of TEntity with requested count,range and includes.
+        ///  Creates and ordered asynchronously a shallow copy of a range of entity's which IsDeleted property is true, in the source List of TEntity with requested count,range and includes.
         ///        If the condition is requested, it also provides that condition.
         ///        
         /// </summary>
@@ -436,7 +436,7 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
         }
 
         /// <summary>
-        ///  Gets entities as ordered with <paramref name="orderByPropertyName"/>.
+        ///  Gets entities with includes as ordered with <paramref name="orderByPropertyName"/>.
         ///        If the condition is requested, it also provides that condition.
         ///        
         /// </summary>
@@ -912,7 +912,7 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
         /// <param name="conditionExpression"></param>
         /// <param name="groupedClause"></param>
         /// <returns></returns>
-        public virtual async Task<IEnumerable<TReturn>> GetAsGroupedAnOrderedAsync<TReturn>(string orderByPropertyName,
+        public virtual async Task<IEnumerable<TReturn>> GetAsGroupedAndOrderedAsync<TReturn>(string orderByPropertyName,
                                                                                             bool orderByAscending,
                                                                                             Func<IQueryable<TReturn>> groupedClause,
                                                                                             Expression<Func<TReturn, bool>> conditionExpression = null)

@@ -1,4 +1,5 @@
 ﻿using Milvasoft.Helpers.DataAccess.Abstract.Entity;
+using Milvasoft.Helpers.Models;
 using MongoDB.Bson;
 using MongoDB.Driver;
 using System;
@@ -117,15 +118,13 @@ namespace Milvasoft.Helpers.DataAccess.MongoDB.Abstract
         /// </summary>
         /// <param name="pageIndex"></param>
         /// <param name="requestedItemCount"></param>
-        /// <param name="orderByProperty"></param>
-        /// <param name="orderByAscending"></param>
+        /// <param name="orderByProps"></param>
         /// <param name="filterDefinition"></param>
         /// <param name="projectExpression"></param>
         /// <returns></returns>
         Task<(List<TEntity> entities, int pageCount, int totalDataCount)> GetAsPaginatedAsync(int pageIndex,
                                                                                               int requestedItemCount,
-                                                                                              string orderByProperty,
-                                                                                              bool orderByAscending,
+                                                                                              List<OrderByProps> orderByProps,
                                                                                               FilterDefinition<TEntity> filterDefinition = null,
                                                                                               Expression<Func<TEntity, TEntity>> projectExpression = null);
         /// <summary>
@@ -141,8 +140,7 @@ namespace Milvasoft.Helpers.DataAccess.MongoDB.Abstract
         /// <param name="entityId"></param>
         /// <param name="pageIndex"></param>
         /// <param name="requestedItemCount"></param>
-        /// <param name="orderByProperty"></param>
-        /// <param name="orderByAscending"></param>
+        /// <param name="orderByProps"></param>
         /// <param name="unwindExpression"></param>
         /// <param name="projectExpression"></param>
         /// <param name="filterDefinition"></param>
@@ -150,8 +148,7 @@ namespace Milvasoft.Helpers.DataAccess.MongoDB.Abstract
         Task<(List<TEmbedded> entities, int pageCount, int totalDataCount)> GetNestedPropertyAsPaginatedAsync<TEmbedded>(ObjectId entityId,
                                                                                                                          int pageIndex,
                                                                                                                          int requestedItemCount,
-                                                                                                                         string orderByProperty,
-                                                                                                                         bool orderByAscending,
+                                                                                                                         List<OrderByProps> orderByProps,
                                                                                                                          Expression<Func<TEntity, object>> unwindExpression,
                                                                                                                          List<Expression<Func<TEmbedded, object>>> projectExpression = null,
                                                                                                                          FilterDefinition<TEmbedded> filterDefinition = null);
@@ -169,8 +166,7 @@ namespace Milvasoft.Helpers.DataAccess.MongoDB.Abstract
         /// <param name="entityIds"></param>
         /// <param name="pageIndex"></param>
         /// <param name="requestedItemCount"></param>
-        /// <param name="orderByProperty"></param>
-        /// <param name="orderByAscending"></param>
+        /// <param name="orderByProps"></param>
         /// <param name="unwindExpression"></param>
         /// <param name="projectExpression"></param>
         /// <param name="filterDefinition"></param>
@@ -178,8 +174,7 @@ namespace Milvasoft.Helpers.DataAccess.MongoDB.Abstract
         Task<(List<TEmbedded> entities, int pageCount, int totalDataCount)> GetNestedPropertyAsPaginatedAsync<TEmbedded>(List<ObjectId> entityIds,
                                                                                                                          int pageIndex,
                                                                                                                          int requestedItemCount,
-                                                                                                                         string orderByProperty,
-                                                                                                                         bool orderByAscending,
+                                                                                                                         List<OrderByProps> orderByProps,
                                                                                                                          Expression<Func<TEntity, object>> unwindExpression,
                                                                                                                          List<Expression<Func<TEmbedded, object>>> projectExpression = null,
                                                                                                                          FilterDefinition<TEmbedded> filterDefinition = null);
@@ -196,8 +191,7 @@ namespace Milvasoft.Helpers.DataAccess.MongoDB.Abstract
         /// <typeparam name="TEmbedded"></typeparam>
         /// <param name="pageIndex"></param>
         /// <param name="requestedItemCount"></param>
-        /// <param name="orderByProperty"></param>
-        /// <param name="orderByAscending"></param>
+        /// <param name="orderByProps"></param>
         /// <param name="unwindExpression"></param>
         /// <param name="filterExpression"></param>
         /// <param name="projectExpression"></param>
@@ -205,8 +199,7 @@ namespace Milvasoft.Helpers.DataAccess.MongoDB.Abstract
         /// <returns></returns>
         Task<(List<TEmbedded> entities, int pageCount, int totalDataCount)> GetNestedPropertyAsPaginatedAsync<TEmbedded>(int pageIndex,
                                                                                                                          int requestedItemCount,
-                                                                                                                         string orderByProperty,
-                                                                                                                         bool orderByAscending,
+                                                                                                                         List<OrderByProps> orderByProps,
                                                                                                                          Expression<Func<TEntity, object>> unwindExpression,
                                                                                                                          FilterDefinition<TEntity> filterExpression = null,
                                                                                                                          List<Expression<Func<TEmbedded, object>>> projectExpression = null,
@@ -224,7 +217,7 @@ namespace Milvasoft.Helpers.DataAccess.MongoDB.Abstract
         /// </summary>
         /// <param name="documents"></param>
         /// <returns></returns>
-        Task AddAsync(ICollection<TEntity> documents);
+        Task AddRangeAsync(IEnumerable<TEntity> documents);
 
         /// <summary>
         /// Replaces existing entities with new entities(<paramref name="document"/>).
@@ -273,6 +266,13 @@ namespace Milvasoft.Helpers.DataAccess.MongoDB.Abstract
         /// <param name="id"></param>
         /// <returns></returns>
         Task DeleteAsync(ObjectId id);
+
+        /// <summary>
+        ///  Deletes single entity from database asynchronously..
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns> The deleted document if one was deleted. </returns>
+        Task<TEntity> DeleteAndReturnDeletedAsync(ObjectId id);
 
         /// <summary>
         ///  Deletes single entity from database asynchronously..

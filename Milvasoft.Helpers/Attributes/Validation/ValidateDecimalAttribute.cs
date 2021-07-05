@@ -117,7 +117,7 @@ namespace Milvasoft.Helpers.Attributes.Validation
                 }
                 else errorMessage = $"{LocalizerKeys.PleaseEnterAValid} {context.MemberName}.";
 
-                if (Convert.ToDecimal(value) <= MinValue)
+                if (decimal.TryParse(value.ToString(), out _) && Convert.ToDecimal(value) <= MinValue)
                 {
                     ErrorMessage = errorMessage;
                     return new ValidationResult(FormatErrorMessage(""));

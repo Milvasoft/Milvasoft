@@ -801,7 +801,7 @@
         </member>
         <member name="M:Milvasoft.Helpers.CommonHelper.EnsureLegalLengths(System.Int32,System.Int32,Microsoft.Extensions.Localization.IStringLocalizer)">
             <summary>
-            Checks that MinimumLength and MaximumLength have legal values.  Throws InvalidOperationException if not.
+            Checks that MinimumLength and MaximumLength have legal values. Throws <see cref="T:System.InvalidOperationException"/>  if not.
             </summary>
         </member>
         <member name="M:Milvasoft.Helpers.CommonHelper.GetEnumDesciption``1(``0)">
@@ -880,6 +880,13 @@
             </summary>
             <typeparam name="T"></typeparam>
             <param name="value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.CommonHelper.CustomErrorResponse(Microsoft.AspNetCore.Mvc.ActionContext)">
+            <summary>
+            Prepares custom validation model for response.
+            </summary>
+            <param name="actionContext"></param>
             <returns></returns>
         </member>
         <member name="T:Milvasoft.Helpers.DataAccess.Abstract.Entity.Auditing.IHasCreator`1">
@@ -1318,6 +1325,21 @@
             <param name="conditionExpression"></param>
             <returns></returns>
         </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.GetAsOrderedAsync(System.Func{Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable{`0},Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable},System.String,System.Boolean,System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
+             <summary>
+              Gets entities with includes as ordered with <paramref name="orderByPropertyName"/>.
+                    If the condition is requested, it also provides that condition.
+                    
+             </summary>
+            
+             <exception cref="T:System.ArgumentException"> Throwns when type of <typeparamref name="TEntity"/>'s properties doesn't contain '<paramref name="orderByPropertyName"/>'. </exception>
+             
+             <param name="includes"></param>
+             <param name="orderByPropertyName"></param>
+             <param name="orderByAscending"></param>
+             <param name="conditionExpression"></param>
+             <returns></returns>
+        </member>
         <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.GetAsOrderedAsync(System.Linq.Expressions.Expression{System.Func{`0,System.Object}},System.Boolean,System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
             <summary>
              Gets entities as ordered with <paramref name="orderByKeySelector"/>.
@@ -1557,7 +1579,7 @@
             <param name="groupedClause"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.GetAsGroupedAnOrderedAsync``1(System.String,System.Boolean,System.Func{System.Linq.IQueryable{``0}},System.Linq.Expressions.Expression{System.Func{``0,System.Boolean}})">
+        <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.GetAsGroupedAndOrderedAsync``1(System.String,System.Boolean,System.Func{System.Linq.IQueryable{``0}},System.Linq.Expressions.Expression{System.Func{``0,System.Boolean}})">
             <summary>
             Gets grouped entities with condition from database with <paramref name="groupedClause"/>.
             
@@ -1808,14 +1830,14 @@
         </member>
         <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.GetFirstOrDefaultAsync(System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
             <summary>
-             Returns all entities which IsDeleted condition is true from database asynchronously. If the condition is requested, it also provides that condition.
+             Returns first entity or default value which IsDeleted condition is true from database asynchronously. If the condition is requested, it also provides that condition.
             </summary>
             <param name="conditionExpression"></param>
             <returns></returns>
         </member>
         <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.GetFirstOrDefaultAsync(System.Func{Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable{`0},Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable},System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
             <summary>
-             Returns all entities which IsDeleted condition is true with includes from database asynchronously. If the condition is requested, it also provides that condition. 
+             Returns first entity or default value which IsDeleted condition is true with includes from database asynchronously. If the condition is requested, it also provides that condition. 
             </summary>
             <param name="includes"></param>
             <param name="conditionExpression"></param>
@@ -1823,14 +1845,14 @@
         </member>
         <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.GetSingleOrDefaultAsync(System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
             <summary>
-             Returns all entities which IsDeleted condition is true from database asynchronously. If the condition is requested, it also provides that condition.
+             Returns single entity or default value which IsDeleted condition is true from database asynchronously. If the condition is requested, it also provides that condition.
             </summary>
             <param name="conditionExpression"></param>
             <returns></returns>
         </member>
         <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.GetSingleOrDefaultAsync(System.Func{Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable{`0},Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable},System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
             <summary>
-             Returns all entities which IsDeleted condition is true with includes from database asynchronously. If the condition is requested, it also provides that condition.
+             Returns single entity or default value which IsDeleted condition is true with includes from database asynchronously. If the condition is requested, it also provides that condition.
             </summary>
             <param name="includes"></param>
             <param name="conditionExpression"></param>
@@ -1880,7 +1902,7 @@
         </member>
         <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.GetAsPaginatedAndOrderedAsync(System.Int32,System.Int32,System.String,System.Boolean,System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
             <summary>
-             Creates asynchronously a shallow copy of a range of entity's which IsDeleted property is true, in the source List of TEntity with requested count and range.
+             Creates and ordered asynchronously a shallow copy of a range of entity's which IsDeleted property is true, in the source List of TEntity with requested count and range.
                   If the condition is requested, it also provides that condition.
                   
             </summary>
@@ -1897,7 +1919,7 @@
         </member>
         <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.GetAsPaginatedAndOrderedAsync(System.Int32,System.Int32,System.Func{Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable{`0},Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable},System.String,System.Boolean,System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
              <summary>
-              Creates asynchronously a shallow copy of a range of entity's which IsDeleted property is true, in the source List of TEntity with requested count,range and includes.
+              Creates and ordered asynchronously a shallow copy of a range of entity's which IsDeleted property is true, in the source List of TEntity with requested count,range and includes.
                     If the condition is requested, it also provides that condition.
                     
              </summary>
@@ -1962,7 +1984,7 @@
         </member>
         <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.GetAsOrderedAsync(System.Func{Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable{`0},Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable},System.String,System.Boolean,System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
              <summary>
-              Gets entities as ordered with <paramref name="orderByPropertyName"/>.
+              Gets entities with includes as ordered with <paramref name="orderByPropertyName"/>.
                     If the condition is requested, it also provides that condition.
                     
              </summary>
@@ -2222,7 +2244,7 @@
             <param name="groupedClause"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.GetAsGroupedAnOrderedAsync``1(System.String,System.Boolean,System.Func{System.Linq.IQueryable{``0}},System.Linq.Expressions.Expression{System.Func{``0,System.Boolean}})">
+        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.GetAsGroupedAndOrderedAsync``1(System.String,System.Boolean,System.Func{System.Linq.IQueryable{``0}},System.Linq.Expressions.Expression{System.Func{``0,System.Boolean}})">
             <summary>
             Gets grouped entities with condition from database with <paramref name="groupedClause"/>.
             
@@ -3241,7 +3263,7 @@
             <param name="projectExpression"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.MongoDB.Abstract.IBaseRepository`1.GetAsPaginatedAsync(System.Int32,System.Int32,System.String,System.Boolean,MongoDB.Driver.FilterDefinition{`0},System.Linq.Expressions.Expression{System.Func{`0,`0}})">
+        <member name="M:Milvasoft.Helpers.DataAccess.MongoDB.Abstract.IBaseRepository`1.GetAsPaginatedAsync(System.Int32,System.Int32,System.Collections.Generic.List{Milvasoft.Helpers.Models.OrderByProps},MongoDB.Driver.FilterDefinition{`0},System.Linq.Expressions.Expression{System.Func{`0,`0}})">
             <summary>
             
             You can bring up the page number you want with the number of data count you want.
@@ -3252,13 +3274,12 @@
             </summary>
             <param name="pageIndex"></param>
             <param name="requestedItemCount"></param>
-            <param name="orderByProperty"></param>
-            <param name="orderByAscending"></param>
+            <param name="orderByProps"></param>
             <param name="filterDefinition"></param>
             <param name="projectExpression"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.MongoDB.Abstract.IBaseRepository`1.GetNestedPropertyAsPaginatedAsync``1(MongoDB.Bson.ObjectId,System.Int32,System.Int32,System.String,System.Boolean,System.Linq.Expressions.Expression{System.Func{`0,System.Object}},System.Collections.Generic.List{System.Linq.Expressions.Expression{System.Func{``0,System.Object}}},MongoDB.Driver.FilterDefinition{``0})">
+        <member name="M:Milvasoft.Helpers.DataAccess.MongoDB.Abstract.IBaseRepository`1.GetNestedPropertyAsPaginatedAsync``1(MongoDB.Bson.ObjectId,System.Int32,System.Int32,System.Collections.Generic.List{Milvasoft.Helpers.Models.OrderByProps},System.Linq.Expressions.Expression{System.Func{`0,System.Object}},System.Collections.Generic.List{System.Linq.Expressions.Expression{System.Func{``0,System.Object}}},MongoDB.Driver.FilterDefinition{``0})">
             <summary>
             
             According to the <paramref name="entityId"/>, you can bring up the nested list with the page number you want and the number of data you want.
@@ -3272,14 +3293,13 @@
             <param name="entityId"></param>
             <param name="pageIndex"></param>
             <param name="requestedItemCount"></param>
-            <param name="orderByProperty"></param>
-            <param name="orderByAscending"></param>
+            <param name="orderByProps"></param>
             <param name="unwindExpression"></param>
             <param name="projectExpression"></param>
             <param name="filterDefinition"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.MongoDB.Abstract.IBaseRepository`1.GetNestedPropertyAsPaginatedAsync``1(System.Collections.Generic.List{MongoDB.Bson.ObjectId},System.Int32,System.Int32,System.String,System.Boolean,System.Linq.Expressions.Expression{System.Func{`0,System.Object}},System.Collections.Generic.List{System.Linq.Expressions.Expression{System.Func{``0,System.Object}}},MongoDB.Driver.FilterDefinition{``0})">
+        <member name="M:Milvasoft.Helpers.DataAccess.MongoDB.Abstract.IBaseRepository`1.GetNestedPropertyAsPaginatedAsync``1(System.Collections.Generic.List{MongoDB.Bson.ObjectId},System.Int32,System.Int32,System.Collections.Generic.List{Milvasoft.Helpers.Models.OrderByProps},System.Linq.Expressions.Expression{System.Func{`0,System.Object}},System.Collections.Generic.List{System.Linq.Expressions.Expression{System.Func{``0,System.Object}}},MongoDB.Driver.FilterDefinition{``0})">
             <summary>
             
             According to the <paramref name="entityIds"/>, you can bring up the nested list with the page number you want and the number of data you want.
@@ -3293,14 +3313,13 @@
             <param name="entityIds"></param>
             <param name="pageIndex"></param>
             <param name="requestedItemCount"></param>
-            <param name="orderByProperty"></param>
-            <param name="orderByAscending"></param>
+            <param name="orderByProps"></param>
             <param name="unwindExpression"></param>
             <param name="projectExpression"></param>
             <param name="filterDefinition"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.MongoDB.Abstract.IBaseRepository`1.GetNestedPropertyAsPaginatedAsync``1(System.Int32,System.Int32,System.String,System.Boolean,System.Linq.Expressions.Expression{System.Func{`0,System.Object}},MongoDB.Driver.FilterDefinition{`0},System.Collections.Generic.List{System.Linq.Expressions.Expression{System.Func{``0,System.Object}}},MongoDB.Driver.FilterDefinition{``0})">
+        <member name="M:Milvasoft.Helpers.DataAccess.MongoDB.Abstract.IBaseRepository`1.GetNestedPropertyAsPaginatedAsync``1(System.Int32,System.Int32,System.Collections.Generic.List{Milvasoft.Helpers.Models.OrderByProps},System.Linq.Expressions.Expression{System.Func{`0,System.Object}},MongoDB.Driver.FilterDefinition{`0},System.Collections.Generic.List{System.Linq.Expressions.Expression{System.Func{``0,System.Object}}},MongoDB.Driver.FilterDefinition{``0})">
             <summary>
             
             You can bring up the nested list with the page number you want and the number of data you want.
@@ -3313,8 +3332,7 @@
             <typeparam name="TEmbedded"></typeparam>
             <param name="pageIndex"></param>
             <param name="requestedItemCount"></param>
-            <param name="orderByProperty"></param>
-            <param name="orderByAscending"></param>
+            <param name="orderByProps"></param>
             <param name="unwindExpression"></param>
             <param name="filterExpression"></param>
             <param name="projectExpression"></param>
@@ -3328,7 +3346,7 @@
             <param name="document"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.MongoDB.Abstract.IBaseRepository`1.AddAsync(System.Collections.Generic.ICollection{`0})">
+        <member name="M:Milvasoft.Helpers.DataAccess.MongoDB.Abstract.IBaseRepository`1.AddRangeAsync(System.Collections.Generic.IEnumerable{`0})">
             <summary>
              Adds multiple entities to database asynchronously.
             </summary>
@@ -3383,6 +3401,13 @@
             <param name="id"></param>
             <returns></returns>
         </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.MongoDB.Abstract.IBaseRepository`1.DeleteAndReturnDeletedAsync(MongoDB.Bson.ObjectId)">
+            <summary>
+             Deletes single entity from database asynchronously..
+            </summary>
+            <param name="id"></param>
+            <returns> The deleted document if one was deleted. </returns>
+        </member>
         <member name="M:Milvasoft.Helpers.DataAccess.MongoDB.Abstract.IBaseRepository`1.DeleteAsync(System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
             <summary>
              Deletes single entity from database asynchronously..
@@ -3436,7 +3461,7 @@
         </member>
         <member name="M:Milvasoft.Helpers.DataAccess.MongoDB.Concrete.BaseRepository`1.GetMaxAsync(MongoDB.Driver.FilterDefinition{`0},System.Linq.Expressions.Expression{System.Func{`0,System.Object}},System.Linq.Expressions.Expression{System.Func{`0,`0}})">
             <summary>
-            Returns all entities.
+            Returns the max value of the property selected with <paramref name="propertySelector"/>.
             </summary>
             <param name="filterDefinition"></param>
             <param name="propertySelector"></param>
@@ -3501,7 +3526,7 @@
             <param name="projectExpression"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.MongoDB.Concrete.BaseRepository`1.GetAsPaginatedAsync(System.Int32,System.Int32,System.String,System.Boolean,MongoDB.Driver.FilterDefinition{`0},System.Linq.Expressions.Expression{System.Func{`0,`0}})">
+        <member name="M:Milvasoft.Helpers.DataAccess.MongoDB.Concrete.BaseRepository`1.GetAsPaginatedAsync(System.Int32,System.Int32,System.Collections.Generic.List{Milvasoft.Helpers.Models.OrderByProps},MongoDB.Driver.FilterDefinition{`0},System.Linq.Expressions.Expression{System.Func{`0,`0}})">
             <summary>
             
             You can bring up the page number you want with the number of data count you want.
@@ -3513,13 +3538,12 @@
             </summary>
             <param name="pageIndex"></param>
             <param name="requestedItemCount"></param>
-            <param name="orderByProperty"></param>
-            <param name="orderByAscending"></param>
+            <param name="orderByProps"></param>
             <param name="filterDefinition"></param>
             <param name="projectExpression"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.MongoDB.Concrete.BaseRepository`1.GetNestedPropertyAsPaginatedAsync``1(MongoDB.Bson.ObjectId,System.Int32,System.Int32,System.String,System.Boolean,System.Linq.Expressions.Expression{System.Func{`0,System.Object}},System.Collections.Generic.List{System.Linq.Expressions.Expression{System.Func{``0,System.Object}}},MongoDB.Driver.FilterDefinition{``0})">
+        <member name="M:Milvasoft.Helpers.DataAccess.MongoDB.Concrete.BaseRepository`1.GetNestedPropertyAsPaginatedAsync``1(MongoDB.Bson.ObjectId,System.Int32,System.Int32,System.Collections.Generic.List{Milvasoft.Helpers.Models.OrderByProps},System.Linq.Expressions.Expression{System.Func{`0,System.Object}},System.Collections.Generic.List{System.Linq.Expressions.Expression{System.Func{``0,System.Object}}},MongoDB.Driver.FilterDefinition{``0})">
             <summary>
             
             According to the <paramref name="entityId"/>, you can bring up the nested list with the page number you want and the number of data you want.
@@ -3534,14 +3558,13 @@
             <param name="entityId"></param>
             <param name="pageIndex"></param>
             <param name="requestedItemCount"></param>
-            <param name="orderByProperty"></param>
-            <param name="orderByAscending"></param>
+            <param name="orderByProps"></param>
             <param name="unwindExpression"></param>
             <param name="projectExpression"></param>
             <param name="filterExpressionForTEmbedded"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.MongoDB.Concrete.BaseRepository`1.GetNestedPropertyAsPaginatedAsync``1(System.Collections.Generic.List{MongoDB.Bson.ObjectId},System.Int32,System.Int32,System.String,System.Boolean,System.Linq.Expressions.Expression{System.Func{`0,System.Object}},System.Collections.Generic.List{System.Linq.Expressions.Expression{System.Func{``0,System.Object}}},MongoDB.Driver.FilterDefinition{``0})">
+        <member name="M:Milvasoft.Helpers.DataAccess.MongoDB.Concrete.BaseRepository`1.GetNestedPropertyAsPaginatedAsync``1(System.Collections.Generic.List{MongoDB.Bson.ObjectId},System.Int32,System.Int32,System.Collections.Generic.List{Milvasoft.Helpers.Models.OrderByProps},System.Linq.Expressions.Expression{System.Func{`0,System.Object}},System.Collections.Generic.List{System.Linq.Expressions.Expression{System.Func{``0,System.Object}}},MongoDB.Driver.FilterDefinition{``0})">
             <summary>
             
             According to the <paramref name="entityIds"/>, you can bring up the nested list with the page number you want and the number of data you want.
@@ -3555,14 +3578,13 @@
             <param name="entityIds"></param>
             <param name="pageIndex"></param>
             <param name="requestedItemCount"></param>
-            <param name="orderByProperty"></param>
-            <param name="orderByAscending"></param>
+            <param name="orderByProps"></param>
             <param name="unwindExpression"></param>
             <param name="projectExpression"></param>
             <param name="filterExpressionForTEmbedded"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.MongoDB.Concrete.BaseRepository`1.GetNestedPropertyAsPaginatedAsync``1(System.Int32,System.Int32,System.String,System.Boolean,System.Linq.Expressions.Expression{System.Func{`0,System.Object}},MongoDB.Driver.FilterDefinition{`0},System.Collections.Generic.List{System.Linq.Expressions.Expression{System.Func{``0,System.Object}}},MongoDB.Driver.FilterDefinition{``0})">
+        <member name="M:Milvasoft.Helpers.DataAccess.MongoDB.Concrete.BaseRepository`1.GetNestedPropertyAsPaginatedAsync``1(System.Int32,System.Int32,System.Collections.Generic.List{Milvasoft.Helpers.Models.OrderByProps},System.Linq.Expressions.Expression{System.Func{`0,System.Object}},MongoDB.Driver.FilterDefinition{`0},System.Collections.Generic.List{System.Linq.Expressions.Expression{System.Func{``0,System.Object}}},MongoDB.Driver.FilterDefinition{``0})">
             <summary>
             
             You can bring up the nested list with the page number you want and the number of data you want.
@@ -3575,8 +3597,7 @@
             <typeparam name="TEmbedded"></typeparam>
             <param name="pageIndex"></param>
             <param name="requestedItemCount"></param>
-            <param name="orderByProperty"></param>
-            <param name="orderByAscending"></param>
+            <param name="orderByProps"></param>
             <param name="unwindExpression"></param>
             <param name="filterExpression"></param>
             <param name="projectExpression"></param>
@@ -3590,7 +3611,7 @@
             <param name="document"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.MongoDB.Concrete.BaseRepository`1.AddAsync(System.Collections.Generic.ICollection{`0})">
+        <member name="M:Milvasoft.Helpers.DataAccess.MongoDB.Concrete.BaseRepository`1.AddRangeAsync(System.Collections.Generic.IEnumerable{`0})">
             <summary>
              Adds multiple entities to database asynchronously.
             </summary>
@@ -3652,6 +3673,13 @@
             <param name="id"></param>
             <returns></returns>
         </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.MongoDB.Concrete.BaseRepository`1.DeleteAndReturnDeletedAsync(MongoDB.Bson.ObjectId)">
+            <summary>
+             Deletes single entity from database asynchronously..
+            </summary>
+            <param name="id"></param>
+            <returns> The deleted document if one was deleted. </returns>
+        </member>
         <member name="M:Milvasoft.Helpers.DataAccess.MongoDB.Concrete.BaseRepository`1.GetProjectionQuery``1(System.Linq.Expressions.Expression{System.Func{`0,System.Object}},System.Collections.Generic.List{System.Linq.Expressions.Expression{System.Func{``0,System.Object}}})">
             <summary>
             Returns projection query in sttring.
@@ -3672,18 +3700,31 @@
             <param name="filterDefForTEmbedded"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.MongoDB.Concrete.BaseRepository`1.GetAggregateFacetForEmbeddedPagination``1(System.Int32,System.Int32,System.String,System.Boolean,System.String,MongoDB.Driver.FilterDefinition{``0})">
+        <member name="M:Milvasoft.Helpers.DataAccess.MongoDB.Concrete.BaseRepository`1.GetAggregateFacetForEmbeddedPagination``1(System.Int32,System.Int32,System.Collections.Generic.List{Milvasoft.Helpers.Models.OrderByProps},System.String,MongoDB.Driver.FilterDefinition{``0})">
             <summary>
             Prepare aggregate facet for embedded pagination operations.
             </summary>
             <typeparam name="TEmbedded"></typeparam>
             <param name="pageIndex"></param>
             <param name="requestedItemCount"></param>
-            <param name="orderByProperty"></param>
-            <param name="orderByAscending"></param>
+            <param name="orderByProps"></param>
             <param name="projectQuery"></param>
             <param name="filterDefForTEmbedded"></param>
             <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.MongoDB.Concrete.BaseRepository`1.GetSortDefinitions``1(System.Collections.Generic.List{Milvasoft.Helpers.Models.OrderByProps})">
+            <summary>
+            Gets sort definition by <paramref name="orderByProps"/>.
+            </summary>
+            <param name="orderByProps"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.MongoDB.Concrete.BaseRepository`1.ValidatePaginationParameters(System.Int32,System.Int32)">
+            <summary>
+            Checks the parameters is valid.
+            </summary>
+            <param name="requestedPageNumber"></param>
+            <param name="countOfRequestedRecordsInPage"></param>
         </member>
         <member name="T:Milvasoft.Helpers.DataAccess.MongoDB.Entity.Abstract.IDocumentBase">
             <summary>
@@ -3764,6 +3805,11 @@
         <member name="T:Milvasoft.Helpers.DataAccess.MongoDB.Utils.NoSqlRelationHelper">
             <summary>
             Extension methods for relational operations. Like "include approach" in RDBMS.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.DataAccess.MongoDB.Utils.NoSqlRelationHelper.DbName">
+            <summary>
+            Db name of your project. Dont forget enter this value for proper <see cref="T:MongoDB.Driver.MongoDBRef"/> documents.
             </summary>
         </member>
         <member name="M:Milvasoft.Helpers.DataAccess.MongoDB.Utils.NoSqlRelationHelper.MapReferenceAsync``3(``0,MongoDB.Driver.IMongoDatabase,System.Linq.Expressions.Expression{System.Func{``0,``1}},System.Linq.Expressions.Expression{System.Func{``0,``2}},System.Linq.Expressions.Expression{System.Func{``2,``2}},System.Linq.Expressions.Expression{System.Func{``2,System.Boolean}})">
@@ -3862,20 +3908,18 @@
             <param name="documentType"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.MongoDB.Utils.NoSqlRelationHelper.GetMongoDBRef``1(MongoDB.Bson.ObjectId,System.String)">
+        <member name="M:Milvasoft.Helpers.DataAccess.MongoDB.Utils.NoSqlRelationHelper.GetMongoDBRef``1(MongoDB.Bson.ObjectId)">
             <summary>
             Returns <see cref="T:MongoDB.Driver.MongoDBRef"/>
             </summary>
             <param name="objectId"></param>
-            <param name="dbName"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.MongoDB.Utils.NoSqlRelationHelper.GetMongoDBRef``1(System.Collections.Generic.List{MongoDB.Bson.ObjectId},System.String)">
+        <member name="M:Milvasoft.Helpers.DataAccess.MongoDB.Utils.NoSqlRelationHelper.GetMongoDBRef``1(System.Collections.Generic.List{MongoDB.Bson.ObjectId})">
             <summary>
             Returns <see cref="T:MongoDB.Driver.MongoDBRef"/>
             </summary>
             <param name="objectIds"></param>
-            <param name="dbName"></param>
             <returns></returns>
         </member>
         <member name="T:Milvasoft.Helpers.DependencyInjection.IAuditConfiguration">
@@ -4550,6 +4594,94 @@
             <summary>
             Defines the WrongPaginationParams.
             </summary>
+        </member>
+        <member name="T:Milvasoft.Helpers.Exceptions.MilvaTestException">
+            <summary>
+            An error that will be launched during the Test.
+            </summary>
+        </member>
+        <member name="M:Milvasoft.Helpers.Exceptions.MilvaTestException.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Milvasoft.Helpers.Exceptions.MilvaTestException"/> class with a specified error message.
+            </summary>
+        </member>
+        <member name="M:Milvasoft.Helpers.Exceptions.MilvaTestException.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Milvasoft.Helpers.Exceptions.MilvaTestException"/> class with a specified error message.
+            </summary>
+            <param name="messageOrLocalizerKey"></param>
+        </member>
+        <member name="M:Milvasoft.Helpers.Exceptions.MilvaTestException.#ctor(System.String,System.Boolean)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Milvasoft.Helpers.Exceptions.MilvaBaseException"/> class  with a specified error message.
+            </summary>
+            <param name="messageOrLocalizerKey"></param>
+            <param name="useLocalizerKey"></param>
+        </member>
+        <member name="M:Milvasoft.Helpers.Exceptions.MilvaTestException.#ctor(System.String,Milvasoft.Helpers.Exceptions.MilvaException)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Milvasoft.Helpers.Exceptions.MilvaTestException"/> class with a specified error message.
+            </summary>
+            <param name="messageOrLocalizerKey"></param>
+            <param name="exceptionCode"></param>
+        </member>
+        <member name="M:Milvasoft.Helpers.Exceptions.MilvaTestException.#ctor(System.String,Milvasoft.Helpers.Exceptions.MilvaException,System.Object[])">
+            <summary>
+            Initializes a new instance of the <see cref="T:Milvasoft.Helpers.Exceptions.MilvaTestException"/> class with a specified error message.
+            </summary>
+            <param name="messageOrLocalizerKey"></param>
+            <param name="exceptionCode"></param>
+            <param name="exceptionObjects"></param>
+        </member>
+        <member name="M:Milvasoft.Helpers.Exceptions.MilvaTestException.#ctor(System.String,System.Int32)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Milvasoft.Helpers.Exceptions.MilvaTestException"/> class with a specified error message.
+            </summary>
+            <param name="messageOrLocalizerKey"></param>
+            <param name="exceptionCode"></param>
+        </member>
+        <member name="M:Milvasoft.Helpers.Exceptions.MilvaTestException.#ctor(Milvasoft.Helpers.Exceptions.MilvaException)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Milvasoft.Helpers.Exceptions.MilvaTestException"/> class with a specified error message.
+            </summary>
+            <param name="exceptionCode"></param>
+        </member>
+        <member name="M:Milvasoft.Helpers.Exceptions.MilvaTestException.#ctor(Milvasoft.Helpers.Exceptions.MilvaException,System.Object[])">
+            <summary>
+            Initializes a new instance of the <see cref="T:Milvasoft.Helpers.Exceptions.MilvaTestException"/> class with a specified error message.
+            </summary>
+            <param name="exceptionCode"></param>
+            <param name="exceptionObjects"></param>
+        </member>
+        <member name="M:Milvasoft.Helpers.Exceptions.MilvaTestException.#ctor(System.String,System.Object[])">
+            <summary>
+            Initializes a new instance of the <see cref="T:Milvasoft.Helpers.Exceptions.MilvaBaseException"/> class  with a specified error message.
+            </summary>
+            <param name="messageOrLocalizerKey"></param>
+            <param name="exceptionObjects"></param>
+        </member>
+        <member name="M:Milvasoft.Helpers.Exceptions.MilvaTestException.#ctor(System.String,System.Boolean,System.Object[])">
+            <summary>
+            Initializes a new instance of the <see cref="T:Milvasoft.Helpers.Exceptions.MilvaBaseException"/> class  with a specified error message.
+            </summary>
+            <param name="messageOrLocalizerKey"></param>
+            <param name="useLocalizerKey"></param>
+            <param name="exceptionObjects"></param>
+        </member>
+        <member name="M:Milvasoft.Helpers.Exceptions.MilvaTestException.#ctor(System.String,System.Exception)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Milvasoft.Helpers.Exceptions.MilvaTestException"/> class with a specified error message and a reference to the inner exception that is the cause of this exception.
+            </summary>
+            <param name="messageOrLocalizerKey"></param>
+            <param name="innerException"></param>
+        </member>
+        <member name="M:Milvasoft.Helpers.Exceptions.MilvaTestException.#ctor(System.String,System.Int32,System.Exception)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Milvasoft.Helpers.Exceptions.MilvaTestException"/> class with a specified error message and a reference to the inner exception that is the cause of this exception.
+            </summary>
+            <param name="messageOrLocalizerKey"></param>
+            <param name="exceptionCode"></param>
+            <param name="innerException"></param>
         </member>
         <member name="T:Milvasoft.Helpers.Exceptions.MilvaUserFriendlyException">
             <summary>
@@ -7758,6 +7890,115 @@
             Platform : Android
             </summary>
         </member>
+        <member name="T:Milvasoft.Helpers.JobScheduling.MilvaCronJobService">
+            <summary>
+            Provides scheduled job operations.
+            </summary>
+        </member>
+        <member name="M:Milvasoft.Helpers.JobScheduling.MilvaCronJobService.#ctor(System.String,System.TimeZoneInfo)">
+            <summary>
+            Initializes new instances of <see cref="T:Milvasoft.Helpers.JobScheduling.MilvaCronJobService"/>
+            </summary>
+            <param name="cronExpression"></param>
+            <param name="timeZoneInfo"></param>
+        </member>
+        <member name="M:Milvasoft.Helpers.JobScheduling.MilvaCronJobService.#ctor(System.String,System.TimeZoneInfo,Cronos.CronFormat)">
+            <summary>
+            Initializes new instances of <see cref="T:Milvasoft.Helpers.JobScheduling.MilvaCronJobService"/>
+            </summary>
+            <param name="cronExpression"></param>
+            <param name="timeZoneInfo"></param>
+            <param name="cronFormat"></param>
+        </member>
+        <member name="M:Milvasoft.Helpers.JobScheduling.MilvaCronJobService.StartAsync(System.Threading.CancellationToken)">
+            <summary>
+            Starts the job.
+            </summary>
+            <param name="cancellationToken"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.JobScheduling.MilvaCronJobService.ScheduleJob(System.Threading.CancellationToken)">
+            <summary>
+            Schedules the job.
+            </summary>
+            <param name="cancellationToken"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.JobScheduling.MilvaCronJobService.ExecuteAsync(System.Threading.CancellationToken)">
+            <summary>
+            Executes the job.
+            </summary>
+            <param name="cancellationToken"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.JobScheduling.MilvaCronJobService.StopAsync(System.Threading.CancellationToken)">
+            <summary>
+            Stops the job.
+            </summary>
+            <param name="cancellationToken"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.JobScheduling.MilvaCronJobService.Dispose">
+            <summary>
+            Disposes the timer.
+            </summary>
+        </member>
+        <member name="T:Milvasoft.Helpers.JobScheduling.IScheduleConfig`1">
+            <summary>
+            Schedule config for scheduling jobs.
+            </summary>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="P:Milvasoft.Helpers.JobScheduling.IScheduleConfig`1.CronExpression">
+            <summary>
+            Cron expression of job.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.JobScheduling.IScheduleConfig`1.TimeZoneInfo">
+            <summary>
+            Time zone information of job.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.JobScheduling.IScheduleConfig`1.CronFormat">
+            <summary>
+            If seconds requested in cron expression send this property.
+            </summary>
+        </member>
+        <member name="T:Milvasoft.Helpers.JobScheduling.ScheduleConfig`1">
+            <summary>
+            Schedule config for scheduling jobs.
+            </summary>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="P:Milvasoft.Helpers.JobScheduling.ScheduleConfig`1.CronExpression">
+            <summary>
+            Cron expression of job.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.JobScheduling.ScheduleConfig`1.TimeZoneInfo">
+            <summary>
+            Time zone information of job.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.JobScheduling.ScheduleConfig`1.CronFormat">
+            <summary>
+            If seconds requested in cron expression send this property.
+            </summary>
+        </member>
+        <member name="T:Milvasoft.Helpers.JobScheduling.ServiceCollectionExtensions">
+            <summary>
+            Provides scheduled job operations.
+            </summary>
+        </member>
+        <member name="M:Milvasoft.Helpers.JobScheduling.ServiceCollectionExtensions.AddMilvaCronJob``1(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.Action{Milvasoft.Helpers.JobScheduling.IScheduleConfig{``0}})">
+            <summary>
+            Adds scheduled cron job to application.
+            </summary>
+            <typeparam name="TJob"></typeparam>
+            <param name="services"></param>
+            <param name="options"></param>
+            <returns></returns>
+        </member>
         <member name="T:Milvasoft.Helpers.Mail.IMilvaMailSender">
             <summary>
             Provides send mail.
@@ -7975,6 +8216,454 @@
             <param name="body"></param>
             <param name="isBodyHtml"></param>
         </member>
+        <member name="T:Milvasoft.Helpers.Middlewares.MiddlewareExtensions">
+            <summary>
+            Provides registration of milva middlewares.
+            </summary>
+        </member>
+        <member name="M:Milvasoft.Helpers.Middlewares.MiddlewareExtensions.UseMilvaResponseTimeCalculator(Microsoft.AspNetCore.Builder.IApplicationBuilder)">
+            <summary>
+            Adds response time calculator.
+            
+            <para> Calculates response time and adds result to response headers. </para>
+            </summary>
+            <param name="builder"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Milvasoft.Helpers.Middlewares.MilvaResponseTimeCalculator">
+            <summary>
+            Calculates response time and adds result to response headers.
+            Custom header is "X-Response-Time".
+            </summary>
+        </member>
+        <member name="F:Milvasoft.Helpers.Middlewares.MilvaResponseTimeCalculator._responseHeader">
+            <summary>
+            Name of the Response Header, Custom Headers starts with "X-"  
+            </summary>
+        </member>
+        <member name="F:Milvasoft.Helpers.Middlewares.MilvaResponseTimeCalculator._next">
+            <summary>
+            Handle to the next Middleware in the pipeline  
+            </summary>
+        </member>
+        <member name="M:Milvasoft.Helpers.Middlewares.MilvaResponseTimeCalculator.#ctor(Microsoft.AspNetCore.Http.RequestDelegate)">
+            <summary>
+            Initializes new instances of <see cref="T:Milvasoft.Helpers.Middlewares.MilvaResponseTimeCalculator"/>.
+            </summary>
+            <param name="next"></param>
+        </member>
+        <member name="M:Milvasoft.Helpers.Middlewares.MilvaResponseTimeCalculator.InvokeAsync(Microsoft.AspNetCore.Http.HttpContext)">
+            <summary>
+            Invokes the method or constructor reflected by this MethodInfo instance.
+            </summary>
+            <param name="context"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Milvasoft.Helpers.MilvaTest.Integration.Attributes.ObkInlineDataAttribute">
+            <summary>
+            Test methods attribute for integration test.
+            </summary>
+        </member>
+        <member name="M:Milvasoft.Helpers.MilvaTest.Integration.Attributes.ObkInlineDataAttribute.#ctor">
+            <summary>
+            Constructor of <see cref="T:Milvasoft.Helpers.MilvaTest.Integration.Attributes.ObkInlineDataAttribute"/>
+            </summary>
+        </member>
+        <member name="M:Milvasoft.Helpers.MilvaTest.Integration.Attributes.ObkInlineDataAttribute.#ctor(System.String,System.String,Milvasoft.Helpers.MilvaTest.Integration.Enums.UrlTypeEnum,System.Object)">
+            <summary>
+            Constructor of <see cref="T:Milvasoft.Helpers.MilvaTest.Integration.Attributes.ObkInlineDataAttribute"/>
+            </summary>
+        </member>
+        <member name="M:Milvasoft.Helpers.MilvaTest.Integration.Attributes.ObkInlineDataAttribute.GetData(System.Reflection.MethodInfo)">
+            <summary>
+            Returns the data to be used to test the theory
+            </summary>
+            <param name="testMethod"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Milvasoft.Helpers.MilvaTest.Integration.Enums.AuthorizeTypeEnum">
+            <summary>
+            A enum that refers to how authorization processing will occur
+            </summary>
+        </member>
+        <member name="F:Milvasoft.Helpers.MilvaTest.Integration.Enums.AuthorizeTypeEnum.And">
+            <summary>
+            And process.
+            </summary>
+        </member>
+        <member name="F:Milvasoft.Helpers.MilvaTest.Integration.Enums.AuthorizeTypeEnum.Or">
+            <summary>
+            Or process.
+            </summary>
+        </member>
+        <member name="F:Milvasoft.Helpers.MilvaTest.Integration.Enums.AuthorizeTypeEnum.None">
+            <summary>
+            If the login process is not required.
+            </summary>
+        </member>
+        <member name="T:Milvasoft.Helpers.MilvaTest.Integration.Enums.UrlTypeEnum">
+            <summary>
+            A enum that determines how to create url information.
+            </summary>
+        </member>
+        <member name="F:Milvasoft.Helpers.MilvaTest.Integration.Enums.UrlTypeEnum.Specific">
+            <summary>
+            Used without processing incoming url information.
+            </summary>
+        </member>
+        <member name="F:Milvasoft.Helpers.MilvaTest.Integration.Enums.UrlTypeEnum.InController">
+            <summary>
+            Uses the name of the class in which the test method is used as a url.
+            </summary>
+        </member>
+        <member name="T:Milvasoft.Helpers.MilvaTest.Integration.Helpers.RequestHelper">
+            <summary>
+            Request helper class.
+            </summary>
+        </member>
+        <member name="M:Milvasoft.Helpers.MilvaTest.Integration.Helpers.RequestHelper.HttpRequestMessage(System.Net.Http.HttpMethod,System.String,System.String,System.Object,System.String)">
+            <summary>
+            Cretater http request messsage.
+            </summary>
+            <param name="httpMethod"></param>
+            <param name="url"></param>
+            <param name="token"></param>
+            <param name="acceptLanguage"></param>
+            <param name="obj"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.MilvaTest.Integration.Helpers.RequestHelper.GetHttpResponseAsync``1(System.Net.Http.HttpRequestMessage,System.Net.Http.HttpClient)">
+            <summary>
+            Returns http response.
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="httpRequestMessage"></param>
+            <param name="httpClient"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.MilvaTest.Integration.Helpers.RequestHelper.GetHttpPaginateResponseAsync``1(System.Net.Http.HttpRequestMessage,System.Net.Http.HttpClient)">
+            <summary>
+            Returns http response in pagination dto.
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="httpRequestMessage"></param>
+            <param name="httpClient"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.MilvaTest.Integration.Helpers.RequestHelper.LoginForTestAsync``2(System.Net.Http.HttpClient,``0,System.String)">
+            <summary>
+            Returns logged user's token.
+            </summary>
+            <param name="httpClient"></param>
+            <param name="loginDTO"></param>
+            <param name="httpMethod"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Milvasoft.Helpers.MilvaTest.Integration.Helpers.StaticMethods">
+            <summary>
+            Helper static methods for integration tests.
+            </summary>
+        </member>
+        <member name="M:Milvasoft.Helpers.MilvaTest.Integration.Helpers.StaticMethods.GetRandomLanguageForTest">
+            <summary>
+            Returns random language for integration test response message.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.MilvaTest.Integration.Helpers.StaticMethods.GetSpecificStringLocalizer(System.Globalization.CultureInfo)">
+            <summary>
+            Returns specific string localizer.
+            </summary>
+            <param name="cultureInfo"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Milvasoft.Helpers.MilvaTest.Integration.MilvaAssert">
+            <summary>
+            Includes custom control methods for the Assert class.
+            </summary>
+        </member>
+        <member name="M:Milvasoft.Helpers.MilvaTest.Integration.MilvaAssert.CheckResponseForSecurity(Milvasoft.Helpers.MilvaTest.Integration.TestExpectected,Milvasoft.Helpers.Models.Response.ObjectResponse{System.Object},System.Boolean,Microsoft.Extensions.Localization.IStringLocalizer)">
+            <summary>
+            Checks the result of safety tests.
+            </summary>
+            <param name="testExpectected"></param>
+            <param name="objectResponse"></param>
+            <param name="isAccepted"></param>
+            <param name="stringLocalizer"></param>
+        </member>
+        <member name="M:Milvasoft.Helpers.MilvaTest.Integration.MilvaAssert.CheckMessage(System.String,System.String,Microsoft.Extensions.Localization.IStringLocalizer)">
+            <summary>
+            Checks messages returned from test results.
+            </summary>
+            <param name="messageKey"></param>
+            <param name="responseMessage"></param>
+            <param name="stringLocalizer"></param>
+        </member>
+        <member name="T:Milvasoft.Helpers.MilvaTest.Integration.MilvaTestClient`1">
+            <summary>
+            Fake client for integration test.
+            </summary>
+        </member>
+        <member name="M:Milvasoft.Helpers.MilvaTest.Integration.MilvaTestClient`1.#ctor">
+            <summary>
+            Constructor of <see cref="T:Milvasoft.Helpers.MilvaTest.Integration.MilvaTestClient`1"/>.
+            </summary>
+        </member>
+        <member name="M:Milvasoft.Helpers.MilvaTest.Integration.MilvaTestClient`1.GetHttpClient">
+            <summary>
+            Returns <see cref="T:System.Net.Http.HttpClient"/>.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.MilvaTest.Integration.MilvaTestClient`1.GetServiceProvider">
+            <summary>
+            Returns <see cref="T:System.IServiceProvider"/>.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.MilvaTest.Integration.MilvaTestClient`1.GetService``1">
+            <summary>
+            Returns service.
+            </summary>
+            <typeparam name="TService"></typeparam>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.MilvaTest.Integration.MilvaTestClient`1.GetService(System.Type)">
+            <summary>
+            Returns service.
+            </summary>
+            <param name="service"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.MilvaTest.Integration.MilvaTestClient`1.SetLanguage(System.String)">
+            <summary>
+            Updates language at runtime
+            </summary>
+            <param name="language"></param>
+        </member>
+        <member name="M:Milvasoft.Helpers.MilvaTest.Integration.MilvaTestClient`1.ResetDatabaseAsync">
+            <summary>
+             Reset database for every test methods.
+             </summary>
+             <returns></returns>
+        </member>
+        <member name="T:Milvasoft.Helpers.MilvaTest.Integration.SafetyTestInject">
+            <summary>
+            Helper record for safety tests.
+            </summary>
+        </member>
+        <member name="M:Milvasoft.Helpers.MilvaTest.Integration.SafetyTestInject.#ctor">
+            <summary>
+            Consturctor of <see cref="T:Milvasoft.Helpers.MilvaTest.Integration.SafetyTestInject"/>.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.MilvaTest.Integration.SafetyTestInject.Url">
+            <summary>
+            The url to which the request will be sent.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.MilvaTest.Integration.SafetyTestInject.HttpMethod">
+            <summary>
+            Method type of request.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.MilvaTest.Integration.SafetyTestInject.Language">
+            <summary>
+            The language in which the request will be sent. 
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.MilvaTest.Integration.SafetyTestInject.StringLocalizer">
+            <summary>
+            Localizer instance for response equals.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.MilvaTest.Integration.SafetyTestInject.TestExpectected">
+            <summary>
+            Test excepted record.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.MilvaTest.Integration.SafetyTestInject.IsAcceptedRole">
+            <summary>
+            Whether the role value being tested is accepted
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.MilvaTest.Integration.SafetyTestInject.Token">
+            <summary>
+            The token to be added when sending the request.
+            </summary>
+        </member>
+        <member name="M:Milvasoft.Helpers.MilvaTest.Integration.SafetyTestInject.GetSafetyTestInject(System.String,System.Net.Http.HttpMethod,Microsoft.Extensions.Localization.IStringLocalizer,System.String,Milvasoft.Helpers.MilvaTest.Integration.TestExpectected,System.Boolean,System.String)">
+            <summary>
+            Returns <see cref="T:Milvasoft.Helpers.MilvaTest.Integration.SafetyTestInject"/> instance.
+            </summary>
+            <param name="url"></param>
+            <param name="httpMethod"></param>
+            <param name="stringLocalizer"></param>
+            <param name="language"></param>
+            <param name="testExpectected"></param>
+            <param name="isAccepted"></param>
+            <param name="token"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Milvasoft.Helpers.MilvaTest.Integration.TestExpectected">
+            <summary>
+            Test result class for safety testing.
+            </summary>
+        </member>
+        <member name="M:Milvasoft.Helpers.MilvaTest.Integration.TestExpectected.#ctor">
+            <summary>
+            Constructor of <see cref="T:Milvasoft.Helpers.MilvaTest.Integration.TestExpectected"/>.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.MilvaTest.Integration.TestExpectected.StatusCode">
+            <summary>
+            Status code of expected.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.MilvaTest.Integration.TestExpectected.Successful">
+            <summary>
+            Successful of expected.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.MilvaTest.Integration.TestExpectected.MessageKey">
+            <summary>
+            Message key of expected.
+            </summary>
+        </member>
+        <member name="M:Milvasoft.Helpers.MilvaTest.Integration.TestExpectected.GetTestExpectectedInstance(System.Nullable{System.Int32},System.Nullable{System.Boolean},System.String)">
+            <summary>
+            Returns <see cref="T:Milvasoft.Helpers.MilvaTest.Integration.TestExpectected"/> instance.
+            </summary>
+            <param name="statusCode"></param>
+            <param name="isSuccesful"></param>
+            <param name="messageKey"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Milvasoft.Helpers.MilvaTest.Integration.TestInject">
+            <summary>
+            A record that contains parameters that test methods depend on.
+            </summary>
+        </member>
+        <member name="M:Milvasoft.Helpers.MilvaTest.Integration.TestInject.#ctor">
+            <summary>
+            Cosntructor of <see cref="T:Milvasoft.Helpers.MilvaTest.Integration.TestInject"/>.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.MilvaTest.Integration.TestInject.Url">
+            <summary>
+            The url to which the request will be sent.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.MilvaTest.Integration.TestInject.HttpMethod">
+            <summary>
+            Method type of request.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.MilvaTest.Integration.TestInject.Language">
+            <summary>
+            The language in which the request will be sent. 
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.MilvaTest.Integration.TestInject.StringLocalizer">
+            <summary>
+            Localizer instance for response equals.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.MilvaTest.Integration.TestInject.SpecificObject">
+            <summary>
+            Special object for test methods.
+            </summary>
+        </member>
+        <member name="M:Milvasoft.Helpers.MilvaTest.Integration.TestInject.GetTestInject(System.String,System.Net.Http.HttpMethod,Microsoft.Extensions.Localization.IStringLocalizer,System.String,System.Object)">
+            <summary>
+            Returns <see cref="T:Milvasoft.Helpers.MilvaTest.Integration.TestInject"/> instance.
+            </summary>
+            <param name="url"></param>
+            <param name="httpMethod"></param>
+            <param name="stringLocalizer"></param>
+            <param name="language"></param>
+            <param name="specificObject"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Milvasoft.Helpers.MilvaTest.Integration.TestStartup.Abstract.MilvaTestStartup">
+            <summary>
+            Fake startup for integration test.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.MilvaTest.Integration.TestStartup.Abstract.MilvaTestStartup._acceptedLanguageIsoCodes">
+            <summary>
+            Supported languages for the project.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.MilvaTest.Integration.TestStartup.Abstract.MilvaTestStartup._acceptedRoles">
+            <summary>
+            Supported roles for the project.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.MilvaTest.Integration.TestStartup.Abstract.MilvaTestStartup._resourceSource">
+            <summary>
+            Localizer resource.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.MilvaTest.Integration.TestStartup.Abstract.MilvaTestStartup._testApiBaseUrl">
+            <summary>
+            Integration test base url.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.MilvaTest.Integration.TestStartup.Abstract.MilvaTestStartup._loginUrl">
+            <summary>
+            Url defined for user input
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.MilvaTest.Integration.TestStartup.Abstract.MilvaTestStartup._testEnvironment">
+            <summary>
+            Test environemnt.
+            </summary>
+        </member>
+        <member name="M:Milvasoft.Helpers.MilvaTest.Integration.TestStartup.Abstract.MilvaTestStartup.#ctor(System.Collections.Generic.List{System.String},System.Collections.Generic.List{System.String},System.Type,System.String,System.String,System.String)">
+            <summary>
+            Constructor of <see cref="T:Milvasoft.Helpers.MilvaTest.Integration.TestStartup.Abstract.MilvaTestStartup"/>.
+            </summary>
+            <param name="acceptedLanguageIsoCodes"></param>
+            <param name="acceptedRoles"></param>
+            <param name="resourceSource"></param>
+            <param name="testApiBaseUrl"></param>
+            <param name="loginUrl"></param>
+            <param name="testEnvironment"></param>
+        </member>
+        <member name="M:Milvasoft.Helpers.MilvaTest.Integration.TestStartup.Abstract.MilvaTestStartup.ConfigureServices(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+            <summary>
+            This method gets called by the runtime. Use this method to add services to the container.
+            </summary>
+            <param name="services"></param>
+        </member>
+        <member name="M:Milvasoft.Helpers.MilvaTest.Integration.TestStartup.Abstract.MilvaTestStartup.Configure(Microsoft.AspNetCore.Builder.IApplicationBuilder,Microsoft.AspNetCore.Hosting.IWebHostEnvironment)">
+            <summary>
+            This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+            </summary>
+            <param name="app"></param>
+            <param name="env"></param>
+        </member>
+        <member name="T:Milvasoft.Helpers.MilvaTest.Unit.Enums.CheckPropertyEnum">
+            <summary>
+            Includes the control type of data to be tested.
+            </summary>
+        </member>
+        <member name="F:Milvasoft.Helpers.MilvaTest.Unit.Enums.CheckPropertyEnum.Default">
+            <summary>
+            Checks whether the data to be tested can be the default value.
+            </summary>
+        </member>
+        <member name="F:Milvasoft.Helpers.MilvaTest.Unit.Enums.CheckPropertyEnum.NotDefault">
+            <summary>
+            Checks whether the data to be tested can be a non-default value.
+            </summary>
+        </member>
+        <member name="T:Milvasoft.Helpers.MilvaTest.Unit.MilvaAssert">
+            <summary>
+            Includes custom control methods for the Assert class.
+            </summary>
+        </member>
         <member name="T:Milvasoft.Helpers.Models.CommunicationModel`2">
             <summary>
             Standart communication model. 
@@ -8036,6 +8725,21 @@
         <member name="P:Milvasoft.Helpers.Models.InvalidString.Values">
             <summary>
             Invalid values.
+            </summary>
+        </member>
+        <member name="T:Milvasoft.Helpers.Models.OrderByProps">
+            <summary>
+            Order by properties for multiple ordey by in database.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.Models.OrderByProps.PropName">
+            <summary>
+            Determines order by Property name of entity.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.Models.OrderByProps.Ascending">
+            <summary>
+            Determines order by ascending or descending.
             </summary>
         </member>
         <member name="T:Milvasoft.Helpers.Models.PaginationDTO`1">
@@ -8108,21 +8812,6 @@
             <summary>
             Result object.
             </summary>
-        </member>
-        <member name="T:Milvasoft.Helpers.Models.Response.ValidationError">
-            <summary>
-            Validation error model for property.
-            </summary>
-        </member>
-        <member name="P:Milvasoft.Helpers.Models.Response.ValidationError.ValidationFieldName">
-            <value>
-            Property where validation error occurred.
-            </value>
-        </member>
-        <member name="P:Milvasoft.Helpers.Models.Response.ValidationError.ErrorMessageList">
-            <value>
-            Property's validation error messages.
-            </value>
         </member>
         <member name="T:Milvasoft.Helpers.MultiTenancy.Accessor.ITenantAccessor`2">
             <summary>
