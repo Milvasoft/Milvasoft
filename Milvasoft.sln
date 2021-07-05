@@ -13,7 +13,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Milvasoft.SampleAPI.Data", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Milvasoft.SampleAPI.Localization", "sampleapi\Milvasoft.SampleAPI.Localization\Milvasoft.SampleAPI.Localization.csproj", "{A5C626D1-24C9-412F-B477-DFB48F1A6CF2}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Milvasoft.SampleAPI.UnitTest", "sampleapi\Milvasoft.SampleAPI.UnitTest\Milvasoft.SampleAPI.UnitTest.csproj", "{98D28B2B-104E-41F3-B019-1B87DC7416AA}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Milvasoft.SampleAPI.UnitTest", "sampleapi\Milvasoft.SampleAPI.UnitTest\Milvasoft.SampleAPI.UnitTest.csproj", "{98D28B2B-104E-41F3-B019-1B87DC7416AA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
