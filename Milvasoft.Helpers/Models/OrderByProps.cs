@@ -17,5 +17,10 @@ namespace Milvasoft.Helpers.Models
         /// Determines order by ascending or descending.
         /// </summary>
         public bool Ascending { get; set; }
+
+        /// <summary>
+        /// Priority of order operation. Ex. first order by creation date then order by updated date.
+        /// </summary>
+        public int Priority { get; set; }
     }
 }

@@ -8249,6 +8249,11 @@
             Determines order by ascending or descending.
             </summary>
         </member>
+        <member name="P:Milvasoft.Helpers.Models.OrderByProps.Priority">
+            <summary>
+            Priority of order operation. Ex. first order by creation date then order by updated date.
+            </summary>
+        </member>
         <member name="T:Milvasoft.Helpers.Models.PaginationDTO`1">
             <summary>
             Stores pagination information.
