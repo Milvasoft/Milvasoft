@@ -77,9 +77,8 @@ namespace Milvasoft.Helpers.Test.Integration
                                string testApiBaseUrl,
                                string loginUrl,
                                string testEnvironment,
-                               HttpClient httpClient,
                                (object, string) loginDtoAndUserName,
-                               object userManager,
+                               Type userManager,
                                string tokenPropName)
         {
             if (_testServer == null)
@@ -93,9 +92,9 @@ namespace Milvasoft.Helpers.Test.Integration
             TestApiBaseUrl = testApiBaseUrl;
             LoginUrl = loginUrl;
             TestEnvironment = testEnvironment;
-            HttpClient = httpClient;
+            HttpClient = _httpClient;
             LoginDtoAndUserName = loginDtoAndUserName;
-            UserManager = userManager;
+            UserManager = _testServer.Services.GetRequiredService(userManager); 
             TokenPropName = tokenPropName;
         }
 

@@ -9929,7 +9929,7 @@
             The JSON name of the token property contained in response, which will be returned by the Api.
             </summary>
         </member>
-        <member name="M:Milvasoft.Helpers.Test.Integration.MilvaTestClient`1.#ctor(System.Collections.Generic.List{System.String},System.Collections.Generic.List{System.String},System.Type,System.String,System.String,System.String,System.Net.Http.HttpClient,System.ValueTuple{System.Object,System.String},System.Object,System.String)">
+        <member name="M:Milvasoft.Helpers.Test.Integration.MilvaTestClient`1.#ctor(System.Collections.Generic.List{System.String},System.Collections.Generic.List{System.String},System.Type,System.String,System.String,System.String,System.ValueTuple{System.Object,System.String},System.Type,System.String)">
             <summary>
             Constructor of <see cref="T:Milvasoft.Helpers.Test.Integration.MilvaTestClient`1"/>.
             </summary>
