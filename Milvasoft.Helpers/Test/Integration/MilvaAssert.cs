@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Localization;
 using Milvasoft.Helpers.Exceptions;
+using Milvasoft.Helpers.Models.Response;
 using Milvasoft.Helpers.Test.Integration;
 using Xunit;
 
@@ -15,10 +16,32 @@ namespace Milvasoft.Helpers.Test
         /// Checks the result of safety tests.
         /// </summary>
         /// <param name="testExpectected"></param>
+        /// <param name="responseObject"></param>
+        /// <param name="isAccepted"></param>
+        /// <param name="stringLocalizer"></param>
+        public static void CheckResponseForSecurity(TestExpectected testExpectected, ResponseObject responseObject, bool isAccepted, IStringLocalizer stringLocalizer)
+        {
+            if (isAccepted)
+            {
+                NotEqual(responseObject.StatusCode, StatusCodes.Status403Forbidden);
+                NotEqual(responseObject.StatusCode, StatusCodes.Status401Unauthorized);
+            }
+            else
+            {
+                CheckMessage(testExpectected.MessageKey, responseObject.Message, stringLocalizer);
+                Equal(testExpectected.StatusCode, responseObject.StatusCode);
+                Equal(testExpectected.Successful, responseObject.Successful);
+            }
+        }
+
+        /// <summary>
+        /// Checks the result of safety tests.
+        /// </summary>
+        /// <param name="testExpectected"></param>
         /// <param name="objectResponse"></param>
         /// <param name="isAccepted"></param>
         /// <param name="stringLocalizer"></param>
-        public static void CheckResponseForSecurity(TestExpectected testExpectected, ResponseObject objectResponse, bool isAccepted, IStringLocalizer stringLocalizer)
+        public static void CheckResponseForSecurity(TestExpectected testExpectected, ObjectResponse<object> objectResponse, bool isAccepted, IStringLocalizer stringLocalizer)
         {
             if (isAccepted)
             {
@@ -29,7 +52,7 @@ namespace Milvasoft.Helpers.Test
             {
                 CheckMessage(testExpectected.MessageKey, objectResponse.Message, stringLocalizer);
                 Equal(testExpectected.StatusCode, objectResponse.StatusCode);
-                Equal(testExpectected.Successful, objectResponse.Successful);
+                Equal(testExpectected.Successful, objectResponse.Success);
             }
         }
 

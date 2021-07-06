@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Milvasoft.Helpers.Extensions;
+using Milvasoft.Helpers.Models;
+using Milvasoft.Helpers.Models.Response;
 using Milvasoft.Helpers.Test.Integration.TestStartup.Abstract;
 using Newtonsoft.Json;
 using System;
@@ -61,6 +63,40 @@ namespace Milvasoft.Helpers.Test.Integration.Utils
             string responseString = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
 
             var responseObject = JsonConvert.DeserializeObject<TResponse>(responseString);
+
+            return responseObject;
+        }
+
+        /// <summary>
+        /// Returns http response in pagination dto.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="httpRequestMessage"></param>
+        /// <param name="httpClient"></param>
+        /// <returns></returns>
+        public static async Task<ObjectResponse<PaginationDTO<TResponse>>> GetHttpPaginateResponseAsync<TResponse>(HttpRequestMessage httpRequestMessage, HttpClient httpClient)
+        {
+            var response = await httpClient.SendAsync(httpRequestMessage).ConfigureAwait(false);
+            string responseString = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+
+            var responseObject = JsonConvert.DeserializeObject<ObjectResponse<PaginationDTO<TResponse>>>(responseString);
+
+            return responseObject;
+        }
+
+        /// <summary>
+        /// Returns http response.
+        /// </summary>
+        /// <typeparam name="TResponse"></typeparam>
+        /// <param name="httpRequestMessage"></param>
+        /// <param name="httpClient"></param>
+        /// <returns></returns>
+        public static async Task<ObjectResponse<TResponse>> GetHttpObjectResponseAsync<TResponse>(HttpRequestMessage httpRequestMessage, HttpClient httpClient)
+        {
+            var response = await httpClient.SendAsync(httpRequestMessage).ConfigureAwait(false);
+            string responseString = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+
+            var responseObject = JsonConvert.DeserializeObject<ObjectResponse<TResponse>>(responseString);
 
             return responseObject;
         }
