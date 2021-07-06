@@ -9874,28 +9874,6 @@
             Uses the name of the class in which the test method is used as a url.
             </summary>
         </member>
-        <member name="T:Milvasoft.Helpers.Test.Integration.MilvaAssert">
-            <summary>
-            Includes custom control methods for the Assert class.
-            </summary>
-        </member>
-        <member name="M:Milvasoft.Helpers.Test.Integration.MilvaAssert.CheckResponseForSecurity(Milvasoft.Helpers.Test.Integration.ResponseObject,Milvasoft.Helpers.Test.Integration.ResponseObject,System.Boolean,Microsoft.Extensions.Localization.IStringLocalizer)">
-            <summary>
-            Checks the result of safety tests.
-            </summary>
-            <param name="testExpectected"></param>
-            <param name="objectResponse"></param>
-            <param name="isAccepted"></param>
-            <param name="stringLocalizer"></param>
-        </member>
-        <member name="M:Milvasoft.Helpers.Test.Integration.MilvaAssert.CheckMessage(System.String,System.String,Microsoft.Extensions.Localization.IStringLocalizer)">
-            <summary>
-            Checks messages returned from test results.
-            </summary>
-            <param name="messageKey"></param>
-            <param name="responseMessage"></param>
-            <param name="stringLocalizer"></param>
-        </member>
         <member name="T:Milvasoft.Helpers.Test.Integration.MilvaTestClient`1">
             <summary>
             Fake client for integration test.
@@ -10257,27 +10235,32 @@
             <param name="cultureInfo"></param>
             <returns></returns>
         </member>
-        <member name="T:Milvasoft.Helpers.Test.Unit.Enums.CheckPropertyEnum">
+        <member name="T:Milvasoft.Helpers.Test.MilvaAssert">
             <summary>
-            Includes the control type of data to be tested.
+            Includes custom control methods for the Assert class.
             </summary>
-        </member>
-        <member name="F:Milvasoft.Helpers.Test.Unit.Enums.CheckPropertyEnum.Default">
-            <summary>
-            Checks whether the data to be tested can be the default value.
-            </summary>
-        </member>
-        <member name="F:Milvasoft.Helpers.Test.Unit.Enums.CheckPropertyEnum.NotDefault">
-            <summary>
-            Checks whether the data to be tested can be a non-default value.
-            </summary>
-        </member>
-        <member name="T:Milvasoft.Helpers.Test.Unit.MilvaAssert">
             <summary>
             Includes custom control methods for the Assert class.
             </summary>
         </member>
-        <member name="M:Milvasoft.Helpers.Test.Unit.MilvaAssert.CheckAnyItems``1(System.Collections.Generic.IEnumerable{``0},System.Predicate{``0})">
+        <member name="M:Milvasoft.Helpers.Test.MilvaAssert.CheckResponseForSecurity(Milvasoft.Helpers.Test.Integration.ResponseObject,Milvasoft.Helpers.Test.Integration.ResponseObject,System.Boolean,Microsoft.Extensions.Localization.IStringLocalizer)">
+            <summary>
+            Checks the result of safety tests.
+            </summary>
+            <param name="testExpectected"></param>
+            <param name="objectResponse"></param>
+            <param name="isAccepted"></param>
+            <param name="stringLocalizer"></param>
+        </member>
+        <member name="M:Milvasoft.Helpers.Test.MilvaAssert.CheckMessage(System.String,System.String,Microsoft.Extensions.Localization.IStringLocalizer)">
+            <summary>
+            Checks messages returned from test results.
+            </summary>
+            <param name="messageKey"></param>
+            <param name="responseMessage"></param>
+            <param name="stringLocalizer"></param>
+        </member>
+        <member name="M:Milvasoft.Helpers.Test.MilvaAssert.CheckAnyItems``1(System.Collections.Generic.IEnumerable{``0},System.Predicate{``0})">
             <summary>
             If none of the members in the collection comply with the predicate the error is thrown.
             </summary>
@@ -10285,7 +10268,7 @@
             <param name="collection"></param>
             <param name="predicate"></param>
         </member>
-        <member name="M:Milvasoft.Helpers.Test.Unit.MilvaAssert.CheckNotAnyItems``1(System.Collections.Generic.IEnumerable{``0},System.Predicate{``0})">
+        <member name="M:Milvasoft.Helpers.Test.MilvaAssert.CheckNotAnyItems``1(System.Collections.Generic.IEnumerable{``0},System.Predicate{``0})">
             <summary>
             If there are at least 1 item in the collection that meets the predicate it throws an exception.
             </summary>
@@ -10293,7 +10276,7 @@
             <param name="collection"></param>
             <param name="predicate"></param>
         </member>
-        <member name="M:Milvasoft.Helpers.Test.Unit.MilvaAssert.CheckAnyItems``1(``0,System.Predicate{``0})">
+        <member name="M:Milvasoft.Helpers.Test.MilvaAssert.CheckAnyItems``1(``0,System.Predicate{``0})">
             <summary>
             If none of the members in the collection comply with the predicate the error is thrown.
             </summary>
@@ -10301,7 +10284,7 @@
             <param name="entity"></param>
             <param name="predicate"></param>
         </member>
-        <member name="M:Milvasoft.Helpers.Test.Unit.MilvaAssert.CheckAllItems``1(System.Collections.Generic.IEnumerable{``0},Milvasoft.Helpers.Test.Unit.Enums.CheckPropertyEnum,System.Collections.Generic.List{System.Linq.Expressions.Expression{System.Func{``0,System.Object}}})">
+        <member name="M:Milvasoft.Helpers.Test.MilvaAssert.CheckAllItems``1(System.Collections.Generic.IEnumerable{``0},Milvasoft.Helpers.Test.Unit.Enums.CheckPropertyEnum,System.Collections.Generic.List{System.Linq.Expressions.Expression{System.Func{``0,System.Object}}})">
             <summary>
             
             Performs a check for all members in the collection.
@@ -10316,7 +10299,7 @@
             <param name="customAssertEnum"></param>
             <param name="expressions"></param>
         </member>
-        <member name="M:Milvasoft.Helpers.Test.Unit.MilvaAssert.CheckAllItems``1(``0,Milvasoft.Helpers.Test.Unit.Enums.CheckPropertyEnum,System.Collections.Generic.List{System.Linq.Expressions.Expression{System.Func{``0,System.Object}}})">
+        <member name="M:Milvasoft.Helpers.Test.MilvaAssert.CheckAllItems``1(``0,Milvasoft.Helpers.Test.Unit.Enums.CheckPropertyEnum,System.Collections.Generic.List{System.Linq.Expressions.Expression{System.Func{``0,System.Object}}})">
             <summary>
             
             Performs a check for all members in the entity.
@@ -10331,7 +10314,7 @@
             <param name="customAssertEnum"></param>
             <param name="expressions"></param>
         </member>
-        <member name="M:Milvasoft.Helpers.Test.Unit.MilvaAssert.CheckAllItems``1(System.Collections.Generic.List{System.Predicate{``0}},``0[])">
+        <member name="M:Milvasoft.Helpers.Test.MilvaAssert.CheckAllItems``1(System.Collections.Generic.List{System.Predicate{``0}},``0[])">
             <summary>
             
             Checks whether all members of the collection comply with the predicates.
@@ -10343,7 +10326,7 @@
             <param name="predicates"></param>
             <param name="entities"></param>
         </member>
-        <member name="M:Milvasoft.Helpers.Test.Unit.MilvaAssert.CheckAllItems``1(System.Collections.Generic.IEnumerable{``0},System.Predicate{``0})">
+        <member name="M:Milvasoft.Helpers.Test.MilvaAssert.CheckAllItems``1(System.Collections.Generic.IEnumerable{``0},System.Predicate{``0})">
             <summary>
             Checks whether all members of the collection comply with the predicate.
             
@@ -10354,7 +10337,7 @@
             <param name="collection"></param>
             <param name="predicate"></param>
         </member>
-        <member name="M:Milvasoft.Helpers.Test.Unit.MilvaAssert.CheckExceptionAsync(System.Func{System.Threading.Tasks.Task},System.String,System.Type)">
+        <member name="M:Milvasoft.Helpers.Test.MilvaAssert.CheckExceptionAsync(System.Func{System.Threading.Tasks.Task},System.String,System.Type)">
             <summary>
             This method used <see cref="M:Xunit.Assert.ThrowsAsync(System.Type,System.Func{System.Threading.Tasks.Task})"/>.
             </summary>
@@ -10363,7 +10346,7 @@
             <param name="exceptionType"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.Test.Unit.MilvaAssert.CheckExceptionAsync``1(System.Func{System.Threading.Tasks.Task},System.String)">
+        <member name="M:Milvasoft.Helpers.Test.MilvaAssert.CheckExceptionAsync``1(System.Func{System.Threading.Tasks.Task},System.String)">
             <summary>
             This method used <see cref="M:Xunit.Assert.Throws``1(System.Func{System.Object})"/>.
             </summary>
@@ -10371,7 +10354,7 @@
             <param name="expectedExceptionMessage"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.Test.Unit.MilvaAssert.CheckNotEqualAnyItem``1(System.Collections.Generic.IEnumerable{``0},System.Collections.Generic.IEnumerable{``0})">
+        <member name="M:Milvasoft.Helpers.Test.MilvaAssert.CheckNotEqualAnyItem``1(System.Collections.Generic.IEnumerable{``0},System.Collections.Generic.IEnumerable{``0})">
             <summary>
             Checks whether there is the same element in both lists.
             
@@ -10382,7 +10365,7 @@
             <param name="firstCollection"></param>
             <param name="secondCollection"></param>
         </member>
-        <member name="M:Milvasoft.Helpers.Test.Unit.MilvaAssert.Zero(System.Int32)">
+        <member name="M:Milvasoft.Helpers.Test.MilvaAssert.Zero(System.Int32)">
             <summary>
             Checks whether the incoming value is zero.
             
@@ -10391,7 +10374,7 @@
             </summary>
             <param name="value"></param>
         </member>
-        <member name="M:Milvasoft.Helpers.Test.Unit.MilvaAssert.Zero(System.Decimal)">
+        <member name="M:Milvasoft.Helpers.Test.MilvaAssert.Zero(System.Decimal)">
             <summary>
             Checks whether the incoming value is zero.
             
@@ -10400,7 +10383,7 @@
             </summary>
             <param name="value"></param>
         </member>
-        <member name="M:Milvasoft.Helpers.Test.Unit.MilvaAssert.GetPredicate``1(System.String,Milvasoft.Helpers.Test.Unit.Enums.CheckPropertyEnum)">
+        <member name="M:Milvasoft.Helpers.Test.MilvaAssert.GetPredicate``1(System.String,Milvasoft.Helpers.Test.Unit.Enums.CheckPropertyEnum)">
             <summary>
             creates a predicate according to <paramref name="customAssertEnum"/> and <paramref name="propName"/>.
             </summary>
@@ -10409,7 +10392,7 @@
             <param name="customAssertEnum"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.Test.Unit.MilvaAssert.GetExcpetionMessageDetail``1(System.Collections.Generic.List{System.Predicate{``0}},System.Predicate{``0},``0)">
+        <member name="M:Milvasoft.Helpers.Test.MilvaAssert.GetExcpetionMessageDetail``1(System.Collections.Generic.List{System.Predicate{``0}},System.Predicate{``0},``0)">
             <summary>
             Returns exception message for unit tests.
             </summary>
@@ -10419,13 +10402,28 @@
             <param name="entity"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.Test.Unit.MilvaAssert.GetExcpetionMessageDetail``1(``0)">
+        <member name="M:Milvasoft.Helpers.Test.MilvaAssert.GetExcpetionMessageDetail``1(``0)">
             <summary>
             Returns exception message for unit tests.
             </summary>
             <typeparam name="T"></typeparam>
             <param name="entity"></param>
             <returns></returns>
+        </member>
+        <member name="T:Milvasoft.Helpers.Test.Unit.Enums.CheckPropertyEnum">
+            <summary>
+            Includes the control type of data to be tested.
+            </summary>
+        </member>
+        <member name="F:Milvasoft.Helpers.Test.Unit.Enums.CheckPropertyEnum.Default">
+            <summary>
+            Checks whether the data to be tested can be the default value.
+            </summary>
+        </member>
+        <member name="F:Milvasoft.Helpers.Test.Unit.Enums.CheckPropertyEnum.NotDefault">
+            <summary>
+            Checks whether the data to be tested can be a non-default value.
+            </summary>
         </member>
         <member name="T:Milvasoft.Helpers.Test.Unit.ServiceCollectionHelper">
             <summary>

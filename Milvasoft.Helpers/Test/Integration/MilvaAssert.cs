@@ -1,9 +1,10 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Localization;
 using Milvasoft.Helpers.Exceptions;
+using Milvasoft.Helpers.Test.Integration;
 using Xunit;
 
-namespace Milvasoft.Helpers.Test.Integration
+namespace Milvasoft.Helpers.Test
 {
     /// <summary>
     /// Includes custom control methods for the Assert class.
