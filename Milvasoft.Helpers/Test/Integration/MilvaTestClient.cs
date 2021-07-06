@@ -86,16 +86,16 @@ namespace Milvasoft.Helpers.Test.Integration
 
             _httpClient = _testServer.CreateClient();
 
-            AcceptedLanguageIsoCodes = acceptedLanguageIsoCodes;
-            AcceptedRoles = acceptedRoles;
-            LocalizerResourceSource = localizerResourceSource;
-            TestApiBaseUrl = testApiBaseUrl;
-            LoginUrl = loginUrl;
-            TestEnvironment = testEnvironment;
-            HttpClient = _httpClient;
-            LoginDtoAndUserName = loginDtoAndUserName;
-            UserManager = _testServer.Services.GetRequiredService(userManager); 
-            TokenPropName = tokenPropName;
+            MilvaTestClient<MilvaTestStartup>.AcceptedLanguageIsoCodes = acceptedLanguageIsoCodes;
+            MilvaTestClient<MilvaTestStartup>.AcceptedRoles = acceptedRoles;
+            MilvaTestClient<MilvaTestStartup>.LocalizerResourceSource = localizerResourceSource;
+            MilvaTestClient<MilvaTestStartup>.TestApiBaseUrl = testApiBaseUrl;
+            MilvaTestClient<MilvaTestStartup>.LoginUrl = loginUrl;
+            MilvaTestClient<MilvaTestStartup>.TestEnvironment = testEnvironment;
+            MilvaTestClient<MilvaTestStartup>.HttpClient = _httpClient;
+            MilvaTestClient<MilvaTestStartup>.LoginDtoAndUserName = loginDtoAndUserName;
+            MilvaTestClient<MilvaTestStartup>.UserManager = _testServer.Services.GetRequiredService(userManager);
+            MilvaTestClient<MilvaTestStartup>.TokenPropName = tokenPropName;
         }
 
         /// <summary>
