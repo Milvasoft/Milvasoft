@@ -69,6 +69,11 @@ namespace Milvasoft.Helpers.Test.Integration
         public static string TokenPropName { get; set; }
 
         /// <summary>
+        /// Function that returns token for security tests.
+        /// </summary>
+        public static Func<Task<string>> GetTokenAsync { get; set; }
+
+        /// <summary>
         /// Constructor of <see cref="MilvaTestClient{TStartup}"/>.
         /// </summary>
         public MilvaTestClient(List<string> acceptedLanguageIsoCodes,
@@ -79,13 +84,15 @@ namespace Milvasoft.Helpers.Test.Integration
                                string testEnvironment,
                                (object, string) loginDtoAndUserName,
                                Type userManager,
-                               string tokenPropName)
+                               string tokenPropName,
+                               Func<Task<string>> getTokenAsync)
         {
             if (_testServer == null)
                 _testServer = new TestServer(new WebHostBuilder().UseStartup<TStartup>().UseEnvironment(testEnvironment));
 
             _httpClient = _testServer.CreateClient();
 
+            MilvaTestClient<MilvaTestStartup>.GetTokenAsync = getTokenAsync;
             MilvaTestClient<MilvaTestStartup>.AcceptedLanguageIsoCodes = acceptedLanguageIsoCodes;
             MilvaTestClient<MilvaTestStartup>.AcceptedRoles = acceptedRoles;
             MilvaTestClient<MilvaTestStartup>.LocalizerResourceSource = localizerResourceSource;

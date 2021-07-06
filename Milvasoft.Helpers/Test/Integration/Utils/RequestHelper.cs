@@ -108,7 +108,7 @@ namespace Milvasoft.Helpers.Test.Integration.Utils
         /// <param name="loginDTO"></param>
         /// <param name="httpMethod"></param>
         /// <returns></returns>
-        public static async Task<TLoginResultDTO> LoginForTestAsync<TLoginDTO, TLoginResultDTO>(HttpClient httpClient, TLoginDTO loginDTO, string httpMethod = "POST")
+        public static async Task<TLoginResultDTO> LoginForTestAsync<TLoginResultDTO>(HttpClient httpClient, object loginDTO, string httpMethod = "POST")
         {
             var request = HttpRequestMessage(new HttpMethod(httpMethod), MilvaTestClient<MilvaTestStartup>.LoginUrl, obj: loginDTO);
 
@@ -143,11 +143,7 @@ namespace Milvasoft.Helpers.Test.Integration.Utils
                 _ = await ((Task<IdentityResult>)addToRolesMethod.Invoke(MilvaTestClient<MilvaTestStartup>.UserManager, new object[] { user, roles })).ConfigureAwait(false);
             }
 
-            var loginResult = await LoginForTestAsync<object, object>(httpClient, MilvaTestClient<MilvaTestStartup>.LoginDtoAndUserName.Item1).ConfigureAwait(false);
-
-            var token = (string)loginResult.GetType().GetProperty(MilvaTestClient<MilvaTestStartup>.TokenPropName).GetValue(loginResult);
-
-            return token;
+            return await MilvaTestClient<MilvaTestStartup>.GetTokenAsync.Invoke().ConfigureAwait(false);
         }
     }
 }

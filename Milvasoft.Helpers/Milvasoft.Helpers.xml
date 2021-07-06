@@ -9931,7 +9931,12 @@
             The JSON name of the token property contained in response, which will be returned by the Api.
             </summary>
         </member>
-        <member name="M:Milvasoft.Helpers.Test.Integration.MilvaTestClient`1.#ctor(System.Collections.Generic.List{System.String},System.Collections.Generic.List{System.String},System.Type,System.String,System.String,System.String,System.ValueTuple{System.Object,System.String},System.Type,System.String)">
+        <member name="P:Milvasoft.Helpers.Test.Integration.MilvaTestClient`1.GetTokenAsync">
+            <summary>
+            Function that returns token for security tests.
+            </summary>
+        </member>
+        <member name="M:Milvasoft.Helpers.Test.Integration.MilvaTestClient`1.#ctor(System.Collections.Generic.List{System.String},System.Collections.Generic.List{System.String},System.Type,System.String,System.String,System.String,System.ValueTuple{System.Object,System.String},System.Type,System.String,System.Func{System.Threading.Tasks.Task{System.String}})">
             <summary>
             Constructor of <see cref="T:Milvasoft.Helpers.Test.Integration.MilvaTestClient`1"/>.
             </summary>
@@ -10211,7 +10216,7 @@
             <param name="httpClient"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.Test.Integration.Utils.RequestHelper.LoginForTestAsync``2(System.Net.Http.HttpClient,``0,System.String)">
+        <member name="M:Milvasoft.Helpers.Test.Integration.Utils.RequestHelper.LoginForTestAsync``1(System.Net.Http.HttpClient,System.Object,System.String)">
             <summary>
             Returns logged user's token.
             </summary>
