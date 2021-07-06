@@ -10243,7 +10243,7 @@
             Includes custom control methods for the Assert class.
             </summary>
         </member>
-        <member name="M:Milvasoft.Helpers.Test.MilvaAssert.CheckResponseForSecurity(Milvasoft.Helpers.Test.Integration.ResponseObject,Milvasoft.Helpers.Test.Integration.ResponseObject,System.Boolean,Microsoft.Extensions.Localization.IStringLocalizer)">
+        <member name="M:Milvasoft.Helpers.Test.MilvaAssert.CheckResponseForSecurity(Milvasoft.Helpers.Test.Integration.TestExpectected,Milvasoft.Helpers.Test.Integration.ResponseObject,System.Boolean,Microsoft.Extensions.Localization.IStringLocalizer)">
             <summary>
             Checks the result of safety tests.
             </summary>

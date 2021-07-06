@@ -18,7 +18,7 @@ namespace Milvasoft.Helpers.Test
         /// <param name="objectResponse"></param>
         /// <param name="isAccepted"></param>
         /// <param name="stringLocalizer"></param>
-        public static void CheckResponseForSecurity(ResponseObject testExpectected, ResponseObject objectResponse, bool isAccepted, IStringLocalizer stringLocalizer)
+        public static void CheckResponseForSecurity(TestExpectected testExpectected, ResponseObject objectResponse, bool isAccepted, IStringLocalizer stringLocalizer)
         {
             if (isAccepted)
             {
@@ -27,7 +27,7 @@ namespace Milvasoft.Helpers.Test
             }
             else
             {
-                CheckMessage(testExpectected.Message, objectResponse.Message, stringLocalizer);
+                CheckMessage(testExpectected.MessageKey, objectResponse.Message, stringLocalizer);
                 Equal(testExpectected.StatusCode, objectResponse.StatusCode);
                 Equal(testExpectected.Successful, objectResponse.Successful);
             }
