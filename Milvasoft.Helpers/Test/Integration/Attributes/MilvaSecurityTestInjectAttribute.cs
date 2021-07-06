@@ -65,7 +65,7 @@ namespace Milvasoft.Helpers.Test.Integration.Attributes
                 url = $"{controllerName}/{_url}";
             }
 
-            var allRoles = MilvaTestStartup.AcceptedRoles;
+            var allRoles = MilvaTestClient<MilvaTestStartup>.AcceptedRoles;
 
             Trim(_acceptedRoles);
             Trim(allRoles);

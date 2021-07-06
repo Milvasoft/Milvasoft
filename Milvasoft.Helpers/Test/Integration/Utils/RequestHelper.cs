@@ -34,7 +34,7 @@ namespace Milvasoft.Helpers.Test.Integration.Utils
 
             var requestMessage = new HttpRequestMessage
             {
-                RequestUri = new Uri(MilvaTestStartup.TestApiBaseUrl + url),
+                RequestUri = new Uri(MilvaTestClient<MilvaTestStartup>.TestApiBaseUrl + url),
                 Method = httpMethod
             };
 
@@ -110,7 +110,7 @@ namespace Milvasoft.Helpers.Test.Integration.Utils
         /// <returns></returns>
         public static async Task<TLoginResultDTO> LoginForTestAsync<TLoginDTO, TLoginResultDTO>(HttpClient httpClient, TLoginDTO loginDTO, string httpMethod = "POST")
         {
-            var request = HttpRequestMessage(new HttpMethod(httpMethod), MilvaTestStartup.LoginUrl, obj: loginDTO);
+            var request = HttpRequestMessage(new HttpMethod(httpMethod), MilvaTestClient<MilvaTestStartup>.LoginUrl, obj: loginDTO);
 
             return await GetHttpResponseAsync<TLoginResultDTO>(request, httpClient).ConfigureAwait(false);
         }
@@ -122,15 +122,15 @@ namespace Milvasoft.Helpers.Test.Integration.Utils
         /// <returns></returns>
         public static async Task<string> GetTokenByRoles(params string[] roles)
         {
-            var httpClient = MilvaTestStartup.HttpClient;
+            var httpClient = MilvaTestClient<MilvaTestStartup>.HttpClient;
 
             for (int i = 0; i < roles.Length; i++)
                 roles[i] = roles[i].Trim();
 
-            var userManagerMethods = MilvaTestStartup.UserManager.GetType().GetMethods();
+            var userManagerMethods = MilvaTestClient<MilvaTestStartup>.UserManager.GetType().GetMethods();
 
-            var user = ((IQueryable<object>)MilvaTestStartup.UserManager.GetType().GetProperty("Users").GetValue(userManagerMethods, null))
-                        .ToList().FirstOrDefault(p => p.GetType().GetProperty("UserName").GetValue(p, null).ToString() == MilvaTestStartup.LoginDtoAndUserName.Item2);
+            var user = ((IQueryable<object>)MilvaTestClient<MilvaTestStartup>.UserManager.GetType().GetProperty("Users").GetValue(userManagerMethods, null))
+                        .ToList().FirstOrDefault(p => p.GetType().GetProperty("UserName").GetValue(p, null).ToString() == MilvaTestClient<MilvaTestStartup>.LoginDtoAndUserName.Item2);
 
             if (!roles.IsNullOrEmpty())
             {
@@ -138,14 +138,14 @@ namespace Milvasoft.Helpers.Test.Integration.Utils
                 var removeFromRolesMethod = userManagerMethods.First(p => p.Name == "RemoveFromRolesAsync");
                 var addToRolesMethod = userManagerMethods.First(p => p.Name == "AddToRolesAsync");
 
-                var userRoles = await ((Task<IList<string>>)getRolesMethod.Invoke(MilvaTestStartup.UserManager, new object[] { user })).ConfigureAwait(false);
-                _ = await ((Task<IdentityResult>)removeFromRolesMethod.Invoke(MilvaTestStartup.UserManager, new object[] { user, userRoles })).ConfigureAwait(false);
-                _ = await ((Task<IdentityResult>)addToRolesMethod.Invoke(MilvaTestStartup.UserManager, new object[] { user, roles })).ConfigureAwait(false);
+                var userRoles = await ((Task<IList<string>>)getRolesMethod.Invoke(MilvaTestClient<MilvaTestStartup>.UserManager, new object[] { user })).ConfigureAwait(false);
+                _ = await ((Task<IdentityResult>)removeFromRolesMethod.Invoke(MilvaTestClient<MilvaTestStartup>.UserManager, new object[] { user, userRoles })).ConfigureAwait(false);
+                _ = await ((Task<IdentityResult>)addToRolesMethod.Invoke(MilvaTestClient<MilvaTestStartup>.UserManager, new object[] { user, roles })).ConfigureAwait(false);
             }
 
-            var loginResult = await LoginForTestAsync<object, object>(httpClient, MilvaTestStartup.LoginDtoAndUserName.Item1).ConfigureAwait(false);
+            var loginResult = await LoginForTestAsync<object, object>(httpClient, MilvaTestClient<MilvaTestStartup>.LoginDtoAndUserName.Item1).ConfigureAwait(false);
 
-            var token = (string)loginResult.GetType().GetProperty(MilvaTestStartup.TokenPropName).GetValue(loginResult);
+            var token = (string)loginResult.GetType().GetProperty(MilvaTestClient<MilvaTestStartup>.TokenPropName).GetValue(loginResult);
 
             return token;
         }
