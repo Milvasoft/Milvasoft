@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
 using Milvasoft.Helpers.Test.Integration.TestStartup.Abstract;
 using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -18,14 +19,83 @@ namespace Milvasoft.Helpers.Test.Integration
         private readonly TestServer _testServer;
 
         /// <summary>
+        /// Supported languages for the project.
+        /// </summary>
+        public static List<string> AcceptedLanguageIsoCodes { get; private set; }
+
+        /// <summary>
+        /// Supported roles for the project.
+        /// </summary>
+        public static List<string> AcceptedRoles { get; private set; }
+
+        /// <summary>
+        /// Localizer resource.
+        /// </summary>
+        public static Type LocalizerResourceSource { get; private set; }
+
+        /// <summary>
+        /// Integration test base url.
+        /// </summary>
+        public static string TestApiBaseUrl { get; set; }
+
+        /// <summary>
+        /// Url defined for user input
+        /// </summary>
+        public static string LoginUrl { get; set; }
+
+        /// <summary>
+        /// Test environemnt.
+        /// </summary>
+        public static string TestEnvironment { get; set; }
+
+        /// <summary>
+        /// Http client instance.
+        /// </summary>
+        public static HttpClient HttpClient { get; set; }
+
+        /// <summary>
+        /// User input data required for security tests.
+        /// </summary>
+        public static (object, string) LoginDtoAndUserName { get; set; }
+
+        /// <summary>
+        /// <see cref="Microsoft.AspNetCore.Identity.UserManager{TUser}"/> instance
+        /// </summary>
+        public static object UserManager { get; set; }
+
+        /// <summary>
+        /// The JSON name of the token property contained in response, which will be returned by the Api.
+        /// </summary>
+        public static string TokenPropName { get; set; }
+
+        /// <summary>
         /// Constructor of <see cref="MilvaTestClient{TStartup}"/>.
         /// </summary>
-        public MilvaTestClient()
+        public MilvaTestClient(List<string> acceptedLanguageIsoCodes,
+                               List<string> acceptedRoles,
+                               Type localizerResourceSource,
+                               string testApiBaseUrl,
+                               string loginUrl,
+                               string testEnvironment,
+                               (object, string) loginDtoAndUserName,
+                               Type userManager,
+                               string tokenPropName)
         {
             if (_testServer == null)
-                _testServer = new TestServer(new WebHostBuilder().UseStartup<TStartup>().UseEnvironment(MilvaTestStartup.TestEnvironment));
+                _testServer = new TestServer(new WebHostBuilder().UseStartup<TStartup>().UseEnvironment(testEnvironment));
 
             _httpClient = _testServer.CreateClient();
+
+            AcceptedLanguageIsoCodes = acceptedLanguageIsoCodes;
+            AcceptedRoles = acceptedRoles;
+            LocalizerResourceSource = localizerResourceSource;
+            TestApiBaseUrl = testApiBaseUrl;
+            LoginUrl = loginUrl;
+            TestEnvironment = testEnvironment;
+            HttpClient = _httpClient;
+            LoginDtoAndUserName = loginDtoAndUserName;
+            UserManager = _testServer.Services.GetRequiredService(userManager); 
+            TokenPropName = tokenPropName;
         }
 
         /// <summary>

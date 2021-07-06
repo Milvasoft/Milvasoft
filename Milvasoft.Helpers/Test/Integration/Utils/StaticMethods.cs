@@ -20,7 +20,7 @@ namespace Milvasoft.Helpers.Test.Integration.Utils
         {
             Random random = new();
 
-            var acceptedLanguages = MilvaTestStartup.AcceptedLanguageIsoCodes;
+            var acceptedLanguages = MilvaTestClient<MilvaTestStartup>.AcceptedLanguageIsoCodes;
 
             var randomIndex = random.Next(0, acceptedLanguages.Count);
             return acceptedLanguages[randomIndex];
@@ -41,7 +41,7 @@ namespace Milvasoft.Helpers.Test.Integration.Utils
 
             var factory = new ResourceManagerStringLocalizerFactory(options, new LoggerFactory());
 
-            return factory.Create(MilvaTestStartup.LocalizerResourceSource);
+            return factory.Create(MilvaTestClient<MilvaTestStartup>.LocalizerResourceSource);
         }
     }
 }

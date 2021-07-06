@@ -7,7 +7,7 @@ using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace Milvasoft.Helpers.Test.Unit
+namespace Milvasoft.Helpers.Test
 {
     /// <summary>
     /// Includes custom control methods for the Assert class.

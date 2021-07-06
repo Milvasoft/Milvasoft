@@ -9876,41 +9876,69 @@
             Uses the name of the class in which the test method is used as a url.
             </summary>
         </member>
-        <member name="T:Milvasoft.Helpers.Test.Integration.MilvaAssert">
-            <summary>
-            Includes custom control methods for the Assert class.
-            </summary>
-        </member>
-        <member name="M:Milvasoft.Helpers.Test.Integration.MilvaAssert.CheckResponseForSecurity(Milvasoft.Helpers.Test.Integration.ResponseObject,Milvasoft.Helpers.Test.Integration.ResponseObject,System.Boolean,Microsoft.Extensions.Localization.IStringLocalizer)">
-            <summary>
-            Checks the result of safety tests.
-            </summary>
-            <param name="testExpectected"></param>
-            <param name="objectResponse"></param>
-            <param name="isAccepted"></param>
-            <param name="stringLocalizer"></param>
-        </member>
-        <member name="M:Milvasoft.Helpers.Test.Integration.MilvaAssert.CheckMessage(System.String,System.String,Microsoft.Extensions.Localization.IStringLocalizer)">
-            <summary>
-            Checks messages returned from test results.
-            </summary>
-            <param name="messageKey"></param>
-            <param name="responseMessage"></param>
-            <param name="stringLocalizer"></param>
-        </member>
         <member name="T:Milvasoft.Helpers.Test.Integration.MilvaTestClient`1">
             <summary>
             Fake client for integration test.
             </summary>
         </member>
-        <member name="M:Milvasoft.Helpers.Test.Integration.MilvaTestClient`1.#ctor">
+        <member name="P:Milvasoft.Helpers.Test.Integration.MilvaTestClient`1.AcceptedLanguageIsoCodes">
+            <summary>
+            Supported languages for the project.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.Test.Integration.MilvaTestClient`1.AcceptedRoles">
+            <summary>
+            Supported roles for the project.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.Test.Integration.MilvaTestClient`1.LocalizerResourceSource">
+            <summary>
+            Localizer resource.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.Test.Integration.MilvaTestClient`1.TestApiBaseUrl">
+            <summary>
+            Integration test base url.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.Test.Integration.MilvaTestClient`1.LoginUrl">
+            <summary>
+            Url defined for user input
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.Test.Integration.MilvaTestClient`1.TestEnvironment">
+            <summary>
+            Test environemnt.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.Test.Integration.MilvaTestClient`1.HttpClient">
+            <summary>
+            Http client instance.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.Test.Integration.MilvaTestClient`1.LoginDtoAndUserName">
+            <summary>
+            User input data required for security tests.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.Test.Integration.MilvaTestClient`1.UserManager">
+            <summary>
+            <see cref="T:Microsoft.AspNetCore.Identity.UserManager`1"/> instance
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.Test.Integration.MilvaTestClient`1.TokenPropName">
+            <summary>
+            The JSON name of the token property contained in response, which will be returned by the Api.
+            </summary>
+        </member>
+        <member name="M:Milvasoft.Helpers.Test.Integration.MilvaTestClient`1.#ctor(System.Collections.Generic.List{System.String},System.Collections.Generic.List{System.String},System.Type,System.String,System.String,System.String,System.ValueTuple{System.Object,System.String},System.Type,System.String)">
             <summary>
             Constructor of <see cref="T:Milvasoft.Helpers.Test.Integration.MilvaTestClient`1"/>.
             </summary>
         </member>
         <member name="M:Milvasoft.Helpers.Test.Integration.MilvaTestClient`1.GetHttpClient">
             <summary>
-            Returns <see cref="T:System.Net.Http.HttpClient"/>.
+            Returns <see cref="P:Milvasoft.Helpers.Test.Integration.MilvaTestClient`1.HttpClient"/>.
             </summary>
             <returns></returns>
         </member>
@@ -10123,70 +10151,10 @@
             Fake startup for integration test.
             </summary>
         </member>
-        <member name="P:Milvasoft.Helpers.Test.Integration.TestStartup.Abstract.MilvaTestStartup.AcceptedLanguageIsoCodes">
-            <summary>
-            Supported languages for the project.
-            </summary>
-        </member>
-        <member name="P:Milvasoft.Helpers.Test.Integration.TestStartup.Abstract.MilvaTestStartup.AcceptedRoles">
-            <summary>
-            Supported roles for the project.
-            </summary>
-        </member>
-        <member name="P:Milvasoft.Helpers.Test.Integration.TestStartup.Abstract.MilvaTestStartup.LocalizerResourceSource">
-            <summary>
-            Localizer resource.
-            </summary>
-        </member>
-        <member name="P:Milvasoft.Helpers.Test.Integration.TestStartup.Abstract.MilvaTestStartup.TestApiBaseUrl">
-            <summary>
-            Integration test base url.
-            </summary>
-        </member>
-        <member name="P:Milvasoft.Helpers.Test.Integration.TestStartup.Abstract.MilvaTestStartup.LoginUrl">
-            <summary>
-            Url defined for user input
-            </summary>
-        </member>
-        <member name="P:Milvasoft.Helpers.Test.Integration.TestStartup.Abstract.MilvaTestStartup.TestEnvironment">
-            <summary>
-            Test environemnt.
-            </summary>
-        </member>
-        <member name="P:Milvasoft.Helpers.Test.Integration.TestStartup.Abstract.MilvaTestStartup.HttpClient">
-            <summary>
-            Http client instance.
-            </summary>
-        </member>
-        <member name="P:Milvasoft.Helpers.Test.Integration.TestStartup.Abstract.MilvaTestStartup.LoginDtoAndUserName">
-            <summary>
-            User input data required for security tests.
-            </summary>
-        </member>
-        <member name="P:Milvasoft.Helpers.Test.Integration.TestStartup.Abstract.MilvaTestStartup.UserManager">
-            <summary>
-            <see cref="T:Microsoft.AspNetCore.Identity.UserManager`1"/> instance
-            </summary>
-        </member>
-        <member name="P:Milvasoft.Helpers.Test.Integration.TestStartup.Abstract.MilvaTestStartup.TokenPropName">
-            <summary>
-            The JSON name of the token property contained in response, which will be returned by the Api.
-            </summary>
-        </member>
-        <member name="M:Milvasoft.Helpers.Test.Integration.TestStartup.Abstract.MilvaTestStartup.#ctor(System.Collections.Generic.List{System.String},System.Collections.Generic.List{System.String},System.Type,System.String,System.String,System.String,System.Net.Http.HttpClient,System.ValueTuple{System.Object,System.String},System.Object,System.String)">
+        <member name="M:Milvasoft.Helpers.Test.Integration.TestStartup.Abstract.MilvaTestStartup.#ctor">
             <summary>
             Constructor of <see cref="T:Milvasoft.Helpers.Test.Integration.TestStartup.Abstract.MilvaTestStartup"/>.
             </summary>
-            <param name="acceptedLanguageIsoCodes"></param>
-            <param name="acceptedRoles"></param>
-            <param name="localizerResourceSource"></param>
-            <param name="testApiBaseUrl"></param>
-            <param name="loginUrl"></param>
-            <param name="testEnvironment"></param>
-            <param name="httpClient"></param>
-            <param name="loginDtoAndUserName"></param>
-            <param name="userManager"></param>
-            <param name="tokenPropName"></param>
         </member>
         <member name="M:Milvasoft.Helpers.Test.Integration.TestStartup.Abstract.MilvaTestStartup.ConfigureServices(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
             <summary>
@@ -10217,6 +10185,24 @@
             <returns></returns>
         </member>
         <member name="M:Milvasoft.Helpers.Test.Integration.Utils.RequestHelper.GetHttpResponseAsync``1(System.Net.Http.HttpRequestMessage,System.Net.Http.HttpClient)">
+            <summary>
+            Returns http response.
+            </summary>
+            <typeparam name="TResponse"></typeparam>
+            <param name="httpRequestMessage"></param>
+            <param name="httpClient"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.Test.Integration.Utils.RequestHelper.GetHttpPaginateResponseAsync``1(System.Net.Http.HttpRequestMessage,System.Net.Http.HttpClient)">
+            <summary>
+            Returns http response in pagination dto.
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="httpRequestMessage"></param>
+            <param name="httpClient"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.Test.Integration.Utils.RequestHelper.GetHttpObjectResponseAsync``1(System.Net.Http.HttpRequestMessage,System.Net.Http.HttpClient)">
             <summary>
             Returns http response.
             </summary>
@@ -10259,27 +10245,41 @@
             <param name="cultureInfo"></param>
             <returns></returns>
         </member>
-        <member name="T:Milvasoft.Helpers.Test.Unit.Enums.CheckPropertyEnum">
+        <member name="T:Milvasoft.Helpers.Test.MilvaAssert">
             <summary>
-            Includes the control type of data to be tested.
+            Includes custom control methods for the Assert class.
             </summary>
-        </member>
-        <member name="F:Milvasoft.Helpers.Test.Unit.Enums.CheckPropertyEnum.Default">
-            <summary>
-            Checks whether the data to be tested can be the default value.
-            </summary>
-        </member>
-        <member name="F:Milvasoft.Helpers.Test.Unit.Enums.CheckPropertyEnum.NotDefault">
-            <summary>
-            Checks whether the data to be tested can be a non-default value.
-            </summary>
-        </member>
-        <member name="T:Milvasoft.Helpers.Test.Unit.MilvaAssert">
             <summary>
             Includes custom control methods for the Assert class.
             </summary>
         </member>
-        <member name="M:Milvasoft.Helpers.Test.Unit.MilvaAssert.CheckAnyItems``1(System.Collections.Generic.IEnumerable{``0},System.Predicate{``0})">
+        <member name="M:Milvasoft.Helpers.Test.MilvaAssert.CheckResponseForSecurity(Milvasoft.Helpers.Test.Integration.TestExpectected,Milvasoft.Helpers.Test.Integration.ResponseObject,System.Boolean,Microsoft.Extensions.Localization.IStringLocalizer)">
+            <summary>
+            Checks the result of safety tests.
+            </summary>
+            <param name="testExpectected"></param>
+            <param name="responseObject"></param>
+            <param name="isAccepted"></param>
+            <param name="stringLocalizer"></param>
+        </member>
+        <member name="M:Milvasoft.Helpers.Test.MilvaAssert.CheckResponseForSecurity(Milvasoft.Helpers.Test.Integration.TestExpectected,Milvasoft.Helpers.Models.Response.ObjectResponse{System.Object},System.Boolean,Microsoft.Extensions.Localization.IStringLocalizer)">
+            <summary>
+            Checks the result of safety tests.
+            </summary>
+            <param name="testExpectected"></param>
+            <param name="objectResponse"></param>
+            <param name="isAccepted"></param>
+            <param name="stringLocalizer"></param>
+        </member>
+        <member name="M:Milvasoft.Helpers.Test.MilvaAssert.CheckMessage(System.String,System.String,Microsoft.Extensions.Localization.IStringLocalizer)">
+            <summary>
+            Checks messages returned from test results.
+            </summary>
+            <param name="messageKey"></param>
+            <param name="responseMessage"></param>
+            <param name="stringLocalizer"></param>
+        </member>
+        <member name="M:Milvasoft.Helpers.Test.MilvaAssert.CheckAnyItems``1(System.Collections.Generic.IEnumerable{``0},System.Predicate{``0})">
             <summary>
             If none of the members in the collection comply with the predicate the error is thrown.
             </summary>
@@ -10287,7 +10287,7 @@
             <param name="collection"></param>
             <param name="predicate"></param>
         </member>
-        <member name="M:Milvasoft.Helpers.Test.Unit.MilvaAssert.CheckNotAnyItems``1(System.Collections.Generic.IEnumerable{``0},System.Predicate{``0})">
+        <member name="M:Milvasoft.Helpers.Test.MilvaAssert.CheckNotAnyItems``1(System.Collections.Generic.IEnumerable{``0},System.Predicate{``0})">
             <summary>
             If there are at least 1 item in the collection that meets the predicate it throws an exception.
             </summary>
@@ -10295,7 +10295,7 @@
             <param name="collection"></param>
             <param name="predicate"></param>
         </member>
-        <member name="M:Milvasoft.Helpers.Test.Unit.MilvaAssert.CheckAnyItems``1(``0,System.Predicate{``0})">
+        <member name="M:Milvasoft.Helpers.Test.MilvaAssert.CheckAnyItems``1(``0,System.Predicate{``0})">
             <summary>
             If none of the members in the collection comply with the predicate the error is thrown.
             </summary>
@@ -10303,7 +10303,7 @@
             <param name="entity"></param>
             <param name="predicate"></param>
         </member>
-        <member name="M:Milvasoft.Helpers.Test.Unit.MilvaAssert.CheckAllItems``1(System.Collections.Generic.IEnumerable{``0},Milvasoft.Helpers.Test.Unit.Enums.CheckPropertyEnum,System.Collections.Generic.List{System.Linq.Expressions.Expression{System.Func{``0,System.Object}}})">
+        <member name="M:Milvasoft.Helpers.Test.MilvaAssert.CheckAllItems``1(System.Collections.Generic.IEnumerable{``0},Milvasoft.Helpers.Test.Unit.Enums.CheckPropertyEnum,System.Collections.Generic.List{System.Linq.Expressions.Expression{System.Func{``0,System.Object}}})">
             <summary>
             
             Performs a check for all members in the collection.
@@ -10318,7 +10318,7 @@
             <param name="customAssertEnum"></param>
             <param name="expressions"></param>
         </member>
-        <member name="M:Milvasoft.Helpers.Test.Unit.MilvaAssert.CheckAllItems``1(``0,Milvasoft.Helpers.Test.Unit.Enums.CheckPropertyEnum,System.Collections.Generic.List{System.Linq.Expressions.Expression{System.Func{``0,System.Object}}})">
+        <member name="M:Milvasoft.Helpers.Test.MilvaAssert.CheckAllItems``1(``0,Milvasoft.Helpers.Test.Unit.Enums.CheckPropertyEnum,System.Collections.Generic.List{System.Linq.Expressions.Expression{System.Func{``0,System.Object}}})">
             <summary>
             
             Performs a check for all members in the entity.
@@ -10333,7 +10333,7 @@
             <param name="customAssertEnum"></param>
             <param name="expressions"></param>
         </member>
-        <member name="M:Milvasoft.Helpers.Test.Unit.MilvaAssert.CheckAllItems``1(System.Collections.Generic.List{System.Predicate{``0}},``0[])">
+        <member name="M:Milvasoft.Helpers.Test.MilvaAssert.CheckAllItems``1(System.Collections.Generic.List{System.Predicate{``0}},``0[])">
             <summary>
             
             Checks whether all members of the collection comply with the predicates.
@@ -10345,7 +10345,7 @@
             <param name="predicates"></param>
             <param name="entities"></param>
         </member>
-        <member name="M:Milvasoft.Helpers.Test.Unit.MilvaAssert.CheckAllItems``1(System.Collections.Generic.IEnumerable{``0},System.Predicate{``0})">
+        <member name="M:Milvasoft.Helpers.Test.MilvaAssert.CheckAllItems``1(System.Collections.Generic.IEnumerable{``0},System.Predicate{``0})">
             <summary>
             Checks whether all members of the collection comply with the predicate.
             
@@ -10356,7 +10356,7 @@
             <param name="collection"></param>
             <param name="predicate"></param>
         </member>
-        <member name="M:Milvasoft.Helpers.Test.Unit.MilvaAssert.CheckExceptionAsync(System.Func{System.Threading.Tasks.Task},System.String,System.Type)">
+        <member name="M:Milvasoft.Helpers.Test.MilvaAssert.CheckExceptionAsync(System.Func{System.Threading.Tasks.Task},System.String,System.Type)">
             <summary>
             This method used <see cref="M:Xunit.Assert.ThrowsAsync(System.Type,System.Func{System.Threading.Tasks.Task})"/>.
             </summary>
@@ -10365,7 +10365,7 @@
             <param name="exceptionType"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.Test.Unit.MilvaAssert.CheckExceptionAsync``1(System.Func{System.Threading.Tasks.Task},System.String)">
+        <member name="M:Milvasoft.Helpers.Test.MilvaAssert.CheckExceptionAsync``1(System.Func{System.Threading.Tasks.Task},System.String)">
             <summary>
             This method used <see cref="M:Xunit.Assert.Throws``1(System.Func{System.Object})"/>.
             </summary>
@@ -10373,7 +10373,7 @@
             <param name="expectedExceptionMessage"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.Test.Unit.MilvaAssert.CheckNotEqualAnyItem``1(System.Collections.Generic.IEnumerable{``0},System.Collections.Generic.IEnumerable{``0})">
+        <member name="M:Milvasoft.Helpers.Test.MilvaAssert.CheckNotEqualAnyItem``1(System.Collections.Generic.IEnumerable{``0},System.Collections.Generic.IEnumerable{``0})">
             <summary>
             Checks whether there is the same element in both lists.
             
@@ -10384,7 +10384,7 @@
             <param name="firstCollection"></param>
             <param name="secondCollection"></param>
         </member>
-        <member name="M:Milvasoft.Helpers.Test.Unit.MilvaAssert.Zero(System.Int32)">
+        <member name="M:Milvasoft.Helpers.Test.MilvaAssert.Zero(System.Int32)">
             <summary>
             Checks whether the incoming value is zero.
             
@@ -10393,7 +10393,7 @@
             </summary>
             <param name="value"></param>
         </member>
-        <member name="M:Milvasoft.Helpers.Test.Unit.MilvaAssert.Zero(System.Decimal)">
+        <member name="M:Milvasoft.Helpers.Test.MilvaAssert.Zero(System.Decimal)">
             <summary>
             Checks whether the incoming value is zero.
             
@@ -10402,7 +10402,7 @@
             </summary>
             <param name="value"></param>
         </member>
-        <member name="M:Milvasoft.Helpers.Test.Unit.MilvaAssert.GetPredicate``1(System.String,Milvasoft.Helpers.Test.Unit.Enums.CheckPropertyEnum)">
+        <member name="M:Milvasoft.Helpers.Test.MilvaAssert.GetPredicate``1(System.String,Milvasoft.Helpers.Test.Unit.Enums.CheckPropertyEnum)">
             <summary>
             creates a predicate according to <paramref name="customAssertEnum"/> and <paramref name="propName"/>.
             </summary>
@@ -10411,7 +10411,7 @@
             <param name="customAssertEnum"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.Test.Unit.MilvaAssert.GetExcpetionMessageDetail``1(System.Collections.Generic.List{System.Predicate{``0}},System.Predicate{``0},``0)">
+        <member name="M:Milvasoft.Helpers.Test.MilvaAssert.GetExcpetionMessageDetail``1(System.Collections.Generic.List{System.Predicate{``0}},System.Predicate{``0},``0)">
             <summary>
             Returns exception message for unit tests.
             </summary>
@@ -10421,13 +10421,28 @@
             <param name="entity"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.Test.Unit.MilvaAssert.GetExcpetionMessageDetail``1(``0)">
+        <member name="M:Milvasoft.Helpers.Test.MilvaAssert.GetExcpetionMessageDetail``1(``0)">
             <summary>
             Returns exception message for unit tests.
             </summary>
             <typeparam name="T"></typeparam>
             <param name="entity"></param>
             <returns></returns>
+        </member>
+        <member name="T:Milvasoft.Helpers.Test.Unit.Enums.CheckPropertyEnum">
+            <summary>
+            Includes the control type of data to be tested.
+            </summary>
+        </member>
+        <member name="F:Milvasoft.Helpers.Test.Unit.Enums.CheckPropertyEnum.Default">
+            <summary>
+            Checks whether the data to be tested can be the default value.
+            </summary>
+        </member>
+        <member name="F:Milvasoft.Helpers.Test.Unit.Enums.CheckPropertyEnum.NotDefault">
+            <summary>
+            Checks whether the data to be tested can be a non-default value.
+            </summary>
         </member>
         <member name="T:Milvasoft.Helpers.Test.Unit.ServiceCollectionHelper">
             <summary>
