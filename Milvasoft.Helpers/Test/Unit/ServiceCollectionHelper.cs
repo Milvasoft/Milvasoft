@@ -54,17 +54,17 @@ namespace Milvasoft.Helpers.Test.Unit
         /// </summary>
         /// <param name="jsonOperations"></param>
         /// <param name="configuration"></param>
-        public abstract void ConfigureDatabase(IJsonOperations jsonOperations = null, IConfiguration configuration = null);
+        protected abstract void ConfigureDatabase(IJsonOperations jsonOperations = null, IConfiguration configuration = null);
 
         /// <summary>
         /// You can configure your dependencies by using this method.
         /// </summary>
-        public abstract void ConfigureDependencyInjections();
+        protected abstract void ConfigureDependencyInjections();
 
         /// <summary>
         /// You can configure your indetity operations by using this method.
         /// </summary>
-        public abstract void ConfigureIdentity();
+        protected abstract void ConfigureIdentity();
 
         /// <summary>
         /// You can reset the database for data consistency using this method before each unit test runs.
@@ -114,6 +114,12 @@ namespace Milvasoft.Helpers.Test.Unit
         /// <typeparam name="TService"></typeparam>
         /// <returns></returns>
         public TService GetService<TService>() => _services.BuildServiceProvider().GetRequiredService<TService>();
+
+        /// <summary>
+        /// Returns <see cref="IServiceCollection"/> instance.
+        /// </summary>
+        /// <returns></returns>
+        public IServiceCollection GetServiceCollection() => _services;
 
         /// <summary>
         /// Returns <see cref="IJsonOperations"/> instance.
