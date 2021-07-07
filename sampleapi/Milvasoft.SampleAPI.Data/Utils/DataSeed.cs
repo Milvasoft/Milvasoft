@@ -76,7 +76,7 @@ namespace Milvasoft.SampleAPI.Data.Utils
                     Rules="JS kullanılmayacak.",
                     RemarksToStudent="Sadece html ve css kullan.",
                     Id=2.ToGuid(),
-                    Level=1,
+                    Level=3,
                     ProfessionId=2.ToGuid(),
                     RemarksToMentor="Kontrol ederken js kullanılıp kullanılmadığına dikkat ediniz."
                 }

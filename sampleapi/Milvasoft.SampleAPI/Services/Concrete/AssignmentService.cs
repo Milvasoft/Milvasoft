@@ -75,6 +75,8 @@ namespace Milvasoft.SampleAPI.Services.Concrete
                                                                                                             paginationParams.OrderByAscending,
                                                                                                             paginationParams.Spec?.ToExpression()).ConfigureAwait(false);
 
+            assignments.ThrowIfListIsNullOrEmpty();
+
             return new PaginationDTO<AssignmentForStudentDTO>
             {
                 DTOList = assignments.CheckList(i => assignments.Select(assignment => new AssignmentForStudentDTO
@@ -104,6 +106,8 @@ namespace Milvasoft.SampleAPI.Services.Concrete
                                                                                                             paginationParams.OrderByProperty,
                                                                                                             paginationParams.OrderByAscending,
                                                                                                             paginationParams.Spec?.ToExpression()).ConfigureAwait(false);
+
+            assignments.ThrowIfListIsNullOrEmpty();
 
             return new PaginationDTO<AssignmentForAdminDTO>
             {
@@ -135,6 +139,8 @@ namespace Milvasoft.SampleAPI.Services.Concrete
                                                                                                             paginationParams.OrderByProperty,
                                                                                                             paginationParams.OrderByAscending,
                                                                                                             paginationParams.Spec?.ToExpression()).ConfigureAwait(false);
+
+            assignments.ThrowIfListIsNullOrEmpty();
 
             return new PaginationDTO<AssignmentForMentorDTO>
             {
