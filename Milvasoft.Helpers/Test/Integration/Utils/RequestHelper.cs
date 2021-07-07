@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Milvasoft.Helpers.Exceptions;
 using Milvasoft.Helpers.Extensions;
 using Milvasoft.Helpers.Models;
 using Milvasoft.Helpers.Models.Response;
+using Milvasoft.Helpers.Test.Helpers;
 using Milvasoft.Helpers.Test.Integration.TestStartup.Abstract;
 using Newtonsoft.Json;
 using System;
@@ -32,9 +34,14 @@ namespace Milvasoft.Helpers.Test.Integration.Utils
         {
             var json = JsonConvert.SerializeObject(obj, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
 
+            var baseUrl = MilvaTestClient<MilvaTestStartup>.TestApiBaseUrl;
+
+            if (baseUrl.IsNullOrEmpty())
+                throw new MilvaTestException("Please enter the api base url information.");
+
             var requestMessage = new HttpRequestMessage
             {
-                RequestUri = new Uri(MilvaTestClient<MilvaTestStartup>.TestApiBaseUrl + url),
+                RequestUri = new Uri(baseUrl + url),
                 Method = httpMethod
             };
 
@@ -110,7 +117,12 @@ namespace Milvasoft.Helpers.Test.Integration.Utils
         /// <returns></returns>
         public static async Task<TLoginResultDTO> LoginForTestAsync<TLoginResultDTO>(HttpClient httpClient, object loginDTO, string httpMethod = "POST")
         {
-            var request = HttpRequestMessage(new HttpMethod(httpMethod), MilvaTestClient<MilvaTestStartup>.LoginUrl, obj: loginDTO);
+            var loginUrl = MilvaTestClient<MilvaTestStartup>.LoginUrl;
+
+            if (loginUrl.IsNullOrEmpty())
+                throw new MilvaTestException("Please enter api login url information.");
+
+            var request = HttpRequestMessage(new HttpMethod(httpMethod), loginUrl, obj: loginDTO);
 
             return await GetHttpResponseAsync<TLoginResultDTO>(request, httpClient).ConfigureAwait(false);
         }
@@ -124,13 +136,29 @@ namespace Milvasoft.Helpers.Test.Integration.Utils
         {
             var httpClient = MilvaTestClient<MilvaTestStartup>.HttpClient;
 
-            for (int i = 0; i < roles.Length; i++)
-                roles[i] = roles[i].Trim();
+            roles.ToList().Trim();
 
-            var userManagerMethods = MilvaTestClient<MilvaTestStartup>.UserManager.GetType().GetMethods();
+            var userManager = MilvaTestClient<MilvaTestStartup>.UserManager;
 
-            var user = ((IQueryable<object>)MilvaTestClient<MilvaTestStartup>.UserManager.GetType().GetProperty("Users").GetValue(MilvaTestClient<MilvaTestStartup>.UserManager, null))
-                        .ToList().FirstOrDefault(p => p.GetType().GetProperty("UserName").GetValue(p, null).ToString() == MilvaTestClient<MilvaTestStartup>.LoginDtoAndUserName.Item2);
+            var userName = MilvaTestClient<MilvaTestStartup>.LoginDtoAndUserName.Item2;
+
+            var loginDTO = MilvaTestClient<MilvaTestStartup>.LoginDtoAndUserName.Item1;
+
+            var getTokenFunc = MilvaTestClient<MilvaTestStartup>.GetTokenAsync;
+
+            getTokenFunc.IsNull("Please send the 'GetTokenAsync' method from 'MilvaTestClint'.");
+
+            if (string.IsNullOrEmpty(userName))
+                throw new MilvaTestException("Please enter the user information required for the test.");
+
+            loginDTO.IsNull("Please enter the user information required for the test.");
+
+            userManager.IsNull("Please send user manager from MilvaTestClient.");
+
+            var userManagerMethods = userManager.GetType().GetMethods();
+
+            var user = ((IQueryable<object>)userManager.GetType().GetProperty("Users").GetValue(userManager, null))
+                        .ToList().FirstOrDefault(p => p.GetType().GetProperty("UserName").GetValue(p, null).ToString() == userName);
 
             if (!roles.IsNullOrEmpty())
             {
@@ -138,12 +166,12 @@ namespace Milvasoft.Helpers.Test.Integration.Utils
                 var removeFromRolesMethod = userManagerMethods.First(p => p.Name == "RemoveFromRolesAsync");
                 var addToRolesMethod = userManagerMethods.First(p => p.Name == "AddToRolesAsync");
 
-                var userRoles = await ((Task<IList<string>>)getRolesMethod.Invoke(MilvaTestClient<MilvaTestStartup>.UserManager, new object[] { user })).ConfigureAwait(false);
-                _ = await ((Task<IdentityResult>)removeFromRolesMethod.Invoke(MilvaTestClient<MilvaTestStartup>.UserManager, new object[] { user, userRoles })).ConfigureAwait(false);
-                _ = await ((Task<IdentityResult>)addToRolesMethod.Invoke(MilvaTestClient<MilvaTestStartup>.UserManager, new object[] { user, roles })).ConfigureAwait(false);
+                var userRoles = await ((Task<IList<string>>)getRolesMethod.Invoke(userManager, new object[] { user })).ConfigureAwait(false);
+                _ = await ((Task<IdentityResult>)removeFromRolesMethod.Invoke(userManager, new object[] { user, userRoles })).ConfigureAwait(false);
+                _ = await ((Task<IdentityResult>)addToRolesMethod.Invoke(userManager, new object[] { user, roles })).ConfigureAwait(false);
             }
 
-            return await MilvaTestClient<MilvaTestStartup>.GetTokenAsync.Invoke().ConfigureAwait(false);
+            return await getTokenFunc.Invoke(loginDTO).ConfigureAwait(false);
         }
     }
 }

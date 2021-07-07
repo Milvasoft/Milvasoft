@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Milvasoft.Helpers.Test.Helpers;
 using Milvasoft.Helpers.Test.Integration.Attributes;
 using Milvasoft.Helpers.Test.Integration.TestStartup.Abstract;
 using System;
@@ -25,6 +26,10 @@ namespace Milvasoft.Helpers.Test.Integration.Utils
 
             var acceptedLanguages = MilvaTestClient<MilvaTestStartup>.AcceptedLanguageIsoCodes;
 
+            acceptedLanguages.IsNull("Please enter the iso codes for the accepted languages.");
+
+            acceptedLanguages.Trim();
+
             var randomIndex = random.Next(0, acceptedLanguages.Count);
             return acceptedLanguages[randomIndex];
         }
@@ -44,7 +49,11 @@ namespace Milvasoft.Helpers.Test.Integration.Utils
 
             var factory = new ResourceManagerStringLocalizerFactory(options, new LoggerFactory());
 
-            return factory.Create(MilvaTestClient<MilvaTestStartup>.LocalizerResourceSource);
+            var localizerResource = MilvaTestClient<MilvaTestStartup>.LocalizerResourceSource;
+
+            localizerResource.IsNull("Please enter the localizer resource type.");
+
+            return factory.Create(localizerResource);
         }
 
         /// <summary>
@@ -53,10 +62,12 @@ namespace Milvasoft.Helpers.Test.Integration.Utils
         /// <param name="methodInfo"></param>
         internal static void CreateClientInstance(this MethodInfo methodInfo)
         {
-            var clientAttribute = methodInfo.ReflectedType.CustomAttributes.ToList().First(p => p.AttributeType == typeof(CreateClientAttribute));
+            var clientAttribute = methodInfo.ReflectedType.CustomAttributes.ToList().FirstOrDefault(p => p.AttributeType == typeof(CreateClientAttribute));
+
+            clientAttribute.IsNull("Please use 'CreateClientAttribute' in your test class.");
 
             var clientType = (Type)clientAttribute.ConstructorArguments[0].Value;
-            var getInstanceMethodName = (string)clientAttribute.ConstructorArguments[1].Value;
+            var getInstanceMethodName = "GetFakeClientInstance";
 
             var info = clientType.GetMethod(getInstanceMethodName);
 

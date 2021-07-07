@@ -1,4 +1,5 @@
 ﻿using Milvasoft.Helpers.Exceptions;
+using Milvasoft.Helpers.Test.Helpers;
 using Milvasoft.Helpers.Test.Integration.Enums;
 using Milvasoft.Helpers.Test.Integration.TestStartup.Abstract;
 using Milvasoft.Helpers.Test.Integration.Utils;
@@ -47,16 +48,6 @@ namespace Milvasoft.Helpers.Test.Integration.Attributes
         /// <returns></returns>
         public override IEnumerable<object[]> GetData(MethodInfo methodInfo)
         {
-            #region Local Functions
-
-            static void Trim(List<string> values)
-            {
-                for (int i = 0; i < values.Count; i++)
-                    values[i] = values[i].Trim();
-            }
-
-            #endregion
-
             methodInfo.CreateClientInstance();
 
             string url = _url;
@@ -69,8 +60,10 @@ namespace Milvasoft.Helpers.Test.Integration.Attributes
 
             var allRoles = MilvaTestClient<MilvaTestStartup>.AcceptedRoles;
 
-            Trim(_acceptedRoles);
-            Trim(allRoles);
+            allRoles.IsNull("Please enter application Roles.");
+
+            _acceptedRoles.Trim();
+            allRoles.Trim();
 
             TestExpectected testExpectected;
 

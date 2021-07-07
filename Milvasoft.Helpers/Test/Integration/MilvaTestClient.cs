@@ -44,11 +44,6 @@ namespace Milvasoft.Helpers.Test.Integration
         public static string LoginUrl { get; set; }
 
         /// <summary>
-        /// Test environemnt.
-        /// </summary>
-        public static string TestEnvironment { get; set; }
-
-        /// <summary>
         /// Http client instance.
         /// </summary>
         public static HttpClient HttpClient { get; set; }
@@ -64,18 +59,22 @@ namespace Milvasoft.Helpers.Test.Integration
         public static object UserManager { get; set; }
 
         /// <summary>
-        /// The JSON name of the token property contained in response, which will be returned by the Api.
-        /// </summary>
-        public static string TokenPropName { get; set; }
-
-        /// <summary>
         /// Function that returns token for security tests.
         /// </summary>
-        public static Func<Task<string>> GetTokenAsync { get; set; }
+        public static Func<object, Task<string>> GetTokenAsync { get; set; }
 
         /// <summary>
         /// Constructor of <see cref="MilvaTestClient{TStartup}"/>.
         /// </summary>
+        /// <param name="acceptedLanguageIsoCodes"></param>
+        /// <param name="acceptedRoles"></param>
+        /// <param name="localizerResourceSource"></param>
+        /// <param name="testApiBaseUrl"></param>
+        /// <param name="loginUrl"></param>
+        /// <param name="testEnvironment"></param>
+        /// <param name="loginDtoAndUserName"></param>
+        /// <param name="userManager"></param>
+        /// <param name="getTokenAsync"></param>
         public MilvaTestClient(List<string> acceptedLanguageIsoCodes,
                                List<string> acceptedRoles,
                                Type localizerResourceSource,
@@ -84,8 +83,7 @@ namespace Milvasoft.Helpers.Test.Integration
                                string testEnvironment,
                                (object, string) loginDtoAndUserName,
                                Type userManager,
-                               string tokenPropName,
-                               Func<Task<string>> getTokenAsync)
+                               Func<object, Task<string>> getTokenAsync)
         {
             if (_testServer == null)
                 _testServer = new TestServer(new WebHostBuilder().UseStartup<TStartup>().UseEnvironment(testEnvironment));
@@ -98,11 +96,9 @@ namespace Milvasoft.Helpers.Test.Integration
             MilvaTestClient<MilvaTestStartup>.LocalizerResourceSource = localizerResourceSource;
             MilvaTestClient<MilvaTestStartup>.TestApiBaseUrl = testApiBaseUrl;
             MilvaTestClient<MilvaTestStartup>.LoginUrl = loginUrl;
-            MilvaTestClient<MilvaTestStartup>.TestEnvironment = testEnvironment;
             MilvaTestClient<MilvaTestStartup>.HttpClient = _httpClient;
             MilvaTestClient<MilvaTestStartup>.LoginDtoAndUserName = loginDtoAndUserName;
             MilvaTestClient<MilvaTestStartup>.UserManager = _testServer.Services.GetRequiredService(userManager);
-            MilvaTestClient<MilvaTestStartup>.TokenPropName = tokenPropName;
         }
 
         /// <summary>
@@ -146,5 +142,12 @@ namespace Milvasoft.Helpers.Test.Integration
         /// </summary>
         /// <returns></returns>
         public abstract Task ResetDatabaseAsync();
+
+        /// <summary>
+        /// The fake client class returns the singleton object.
+        /// </summary>
+        /// <typeparam name="TFakeClient"></typeparam>
+        /// <returns></returns>
+        public abstract TFakeClient GetFakeClientInstance<TFakeClient>() where TFakeClient : MilvaTestClient<TStartup>;
     }
 }
