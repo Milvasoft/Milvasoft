@@ -77,7 +77,7 @@ namespace Milvasoft.Helpers.Test.Integration.Utils
         /// <summary>
         /// Returns http response in pagination dto.
         /// </summary>
-        /// <typeparam name="T"></typeparam>
+        /// <typeparam name="TResponse"></typeparam>
         /// <param name="httpRequestMessage"></param>
         /// <param name="httpClient"></param>
         /// <returns></returns>
