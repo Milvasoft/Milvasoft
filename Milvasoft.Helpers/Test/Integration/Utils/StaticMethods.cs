@@ -68,7 +68,7 @@ namespace Milvasoft.Helpers.Test.Integration.Utils
             clientAttribute.IsNull("Please use 'CreateClientAttribute' in your test class.");
 
             var clientType = (Type)clientAttribute.ConstructorArguments[0].Value;
-            var getInstanceMethodName = MilvaTestClient<MilvaTestStartup>.GetFakeClientInstanceMethodName;
+            var getInstanceMethodName = (string)clientAttribute.ConstructorArguments[1].Value;
 
             if (string.IsNullOrEmpty(getInstanceMethodName))
                 throw new MilvaTestException("Please enter the method name that generates the client instance.");

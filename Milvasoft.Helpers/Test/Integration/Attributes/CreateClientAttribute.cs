@@ -12,7 +12,8 @@ namespace Milvasoft.Helpers.Test.Integration.Attributes
         /// Constructor of <see cref="CreateClientAttribute"/>.
         /// </summary>
         /// <param name="fakeClientType"></param>
-        public CreateClientAttribute(Type fakeClientType)
+        /// <param name="getClientInstanceMethodName"></param>
+        public CreateClientAttribute(Type fakeClientType, string getClientInstanceMethodName)
         {
 
         }
