@@ -3,6 +3,7 @@ using Milvasoft.Helpers.DataAccess.MongoDB.Abstract;
 using Milvasoft.Helpers.DataAccess.MongoDB.Utils;
 using Milvasoft.Helpers.Exceptions;
 using Milvasoft.Helpers.Extensions;
+using Milvasoft.Helpers.Models;
 using MongoDB.Bson;
 using MongoDB.Driver;
 using System;
@@ -231,38 +232,19 @@ namespace Milvasoft.Helpers.DataAccess.MongoDB.Concrete
         /// </summary>
         /// <param name="pageIndex"></param>
         /// <param name="requestedItemCount"></param>
-        /// <param name="orderByProperty"></param>
-        /// <param name="orderByAscending"></param>
+        /// <param name="orderByProps"></param>
         /// <param name="filterDefinition"></param>
         /// <param name="projectExpression"></param>
         /// <returns></returns>
         public async Task<(List<TEntity> entities, int pageCount, int totalDataCount)> GetAsPaginatedAsync(int pageIndex,
                                                                                                            int requestedItemCount,
-                                                                                                           string orderByProperty,
-                                                                                                           bool orderByAscending,
+                                                                                                           List<OrderByProp> orderByProps,
                                                                                                            FilterDefinition<TEntity> filterDefinition = null,
                                                                                                            Expression<Func<TEntity, TEntity>> projectExpression = null)
         {
-            #region Check is have orderByProperty
+            ValidatePaginationParameters(pageIndex, requestedItemCount);
 
-            int counter = 0;
-            foreach (var property in typeof(TEntity).GetProperties())
-                if (property.Name.Equals(orderByProperty))
-                {
-                    counter++;
-                    break;
-                }
-            if (counter == 0)
-                throw new MilvaDeveloperException("Can not find orderByProperty for this class.");
-
-            #endregion
-
-            if (pageIndex <= 0 || requestedItemCount <= 0)
-                throw new MilvaDeveloperException("The page number or number of entries requested to be displayed cannot be less than 0.");
-
-            SortDefinition<TEntity> sortDef = null;
-
-            sortDef = orderByAscending ? Builders<TEntity>.Sort.Ascending(orderByProperty) : Builders<TEntity>.Sort.Descending(orderByProperty);
+            var stages = GetSortDefinitions<TEntity>(orderByProps).ToList();
 
             var filter = filterDefinition ?? Builders<TEntity>.Filter.Empty;
 
@@ -275,13 +257,11 @@ namespace Milvasoft.Helpers.DataAccess.MongoDB.Concrete
 
             AggregateFacet<TEntity, TEntity> dataFacet = null;
 
-            dataFacet = AggregateFacet.Create("data", PipelineDefinition<TEntity, TEntity>.Create(new[]
-            {
-                    PipelineStageDefinitionBuilder.Sort(sortDef),
-                    PipelineStageDefinitionBuilder.Skip<TEntity>((pageIndex - 1) * requestedItemCount),
-                    PipelineStageDefinitionBuilder.Limit<TEntity>(requestedItemCount),
-                    PipelineStageDefinitionBuilder.Project(projectionDefinition)
-            }));
+            stages.Add(PipelineStageDefinitionBuilder.Skip<TEntity>((pageIndex - 1) * requestedItemCount));
+            stages.Add(PipelineStageDefinitionBuilder.Limit<TEntity>(requestedItemCount));
+            stages.Add(PipelineStageDefinitionBuilder.Project(projectionDefinition));
+
+            dataFacet = AggregateFacet.Create("data", PipelineDefinition<TEntity, TEntity>.Create(stages));
 
             var aggregateFacetResults = await _collection.Aggregate().Match(filter).Facet(countFacat, dataFacet).ToListAsync().ConfigureAwait(false);
 
@@ -293,6 +273,7 @@ namespace Milvasoft.Helpers.DataAccess.MongoDB.Concrete
 
             return (data, totalPages, (int)count);
         }
+
 
         /// <summary>
         /// 
@@ -308,8 +289,7 @@ namespace Milvasoft.Helpers.DataAccess.MongoDB.Concrete
         /// <param name="entityId"></param>
         /// <param name="pageIndex"></param>
         /// <param name="requestedItemCount"></param>
-        /// <param name="orderByProperty"></param>
-        /// <param name="orderByAscending"></param>
+        /// <param name="orderByProps"></param>
         /// <param name="unwindExpression"></param>
         /// <param name="projectExpression"></param>
         /// <param name="filterExpressionForTEmbedded"></param>
@@ -317,18 +297,18 @@ namespace Milvasoft.Helpers.DataAccess.MongoDB.Concrete
         public async Task<(List<TEmbedded> entities, int pageCount, int totalDataCount)> GetNestedPropertyAsPaginatedAsync<TEmbedded>(ObjectId entityId,
                                                                                                                                       int pageIndex,
                                                                                                                                       int requestedItemCount,
-                                                                                                                                      string orderByProperty,
-                                                                                                                                      bool orderByAscending,
+                                                                                                                                      List<OrderByProp> orderByProps,
                                                                                                                                       Expression<Func<TEntity, object>> unwindExpression,
                                                                                                                                       List<Expression<Func<TEmbedded, object>>> projectExpression = null,
                                                                                                                                       FilterDefinition<TEmbedded> filterExpressionForTEmbedded = null)
         {
+            ValidatePaginationParameters(pageIndex, requestedItemCount);
+
             var projectQuery = GetProjectionQuery(unwindExpression, projectExpression);
 
             var (dataFacet, facetName) = GetAggregateFacetForEmbeddedPagination(pageIndex,
                                                                                 requestedItemCount,
-                                                                                orderByProperty,
-                                                                                orderByAscending,
+                                                                                orderByProps,
                                                                                 projectQuery,
                                                                                 filterExpressionForTEmbedded);
 
@@ -361,8 +341,7 @@ namespace Milvasoft.Helpers.DataAccess.MongoDB.Concrete
         /// <param name="entityIds"></param>
         /// <param name="pageIndex"></param>
         /// <param name="requestedItemCount"></param>
-        /// <param name="orderByProperty"></param>
-        /// <param name="orderByAscending"></param>
+        /// <param name="orderByProps"></param>
         /// <param name="unwindExpression"></param>
         /// <param name="projectExpression"></param>
         /// <param name="filterExpressionForTEmbedded"></param>
@@ -370,20 +349,20 @@ namespace Milvasoft.Helpers.DataAccess.MongoDB.Concrete
         public async Task<(List<TEmbedded> entities, int pageCount, int totalDataCount)> GetNestedPropertyAsPaginatedAsync<TEmbedded>(List<ObjectId> entityIds,
                                                                                                                                       int pageIndex,
                                                                                                                                       int requestedItemCount,
-                                                                                                                                      string orderByProperty,
-                                                                                                                                      bool orderByAscending,
+                                                                                                                                      List<OrderByProp> orderByProps,
                                                                                                                                       Expression<Func<TEntity, object>> unwindExpression,
                                                                                                                                       List<Expression<Func<TEmbedded, object>>> projectExpression = null,
                                                                                                                                       FilterDefinition<TEmbedded> filterExpressionForTEmbedded = null)
         {
+            ValidatePaginationParameters(pageIndex, requestedItemCount);
+
             Expression<Func<TEntity, bool>> whereExpression = !entityIds.IsNullOrEmpty() ? p => entityIds.Contains(p.Id) : (entity => false);
 
             var projectQuery = GetProjectionQuery(unwindExpression, projectExpression);
 
             var (dataFacet, facetName) = GetAggregateFacetForEmbeddedPagination(pageIndex,
                                                                                 requestedItemCount,
-                                                                                orderByProperty,
-                                                                                orderByAscending,
+                                                                                orderByProps,
                                                                                 projectQuery,
                                                                                 filterExpressionForTEmbedded);
 
@@ -413,8 +392,7 @@ namespace Milvasoft.Helpers.DataAccess.MongoDB.Concrete
         /// <typeparam name="TEmbedded"></typeparam>
         /// <param name="pageIndex"></param>
         /// <param name="requestedItemCount"></param>
-        /// <param name="orderByProperty"></param>
-        /// <param name="orderByAscending"></param>
+        /// <param name="orderByProps"></param>
         /// <param name="unwindExpression"></param>
         /// <param name="filterExpression"></param>
         /// <param name="projectExpression"></param>
@@ -422,19 +400,19 @@ namespace Milvasoft.Helpers.DataAccess.MongoDB.Concrete
         /// <returns></returns>
         public async Task<(List<TEmbedded> entities, int pageCount, int totalDataCount)> GetNestedPropertyAsPaginatedAsync<TEmbedded>(int pageIndex,
                                                                                                                                       int requestedItemCount,
-                                                                                                                                      string orderByProperty,
-                                                                                                                                      bool orderByAscending,
+                                                                                                                                      List<OrderByProp> orderByProps,
                                                                                                                                       Expression<Func<TEntity, object>> unwindExpression,
                                                                                                                                       FilterDefinition<TEntity> filterExpression = null,
                                                                                                                                       List<Expression<Func<TEmbedded, object>>> projectExpression = null,
                                                                                                                                       FilterDefinition<TEmbedded> filterDefForTEmbedded = null)
         {
+            ValidatePaginationParameters(pageIndex, requestedItemCount);
+
             var projectQuery = GetProjectionQuery(unwindExpression, projectExpression);
 
             var (dataFacet, facetName) = GetAggregateFacetForEmbeddedPagination(pageIndex,
                                                                                 requestedItemCount,
-                                                                                orderByProperty,
-                                                                                orderByAscending,
+                                                                                orderByProps,
                                                                                 projectQuery,
                                                                                 filterDefForTEmbedded);
 
@@ -703,54 +681,73 @@ namespace Milvasoft.Helpers.DataAccess.MongoDB.Concrete
         /// <typeparam name="TEmbedded"></typeparam>
         /// <param name="pageIndex"></param>
         /// <param name="requestedItemCount"></param>
-        /// <param name="orderByProperty"></param>
-        /// <param name="orderByAscending"></param>
+        /// <param name="orderByProps"></param>
         /// <param name="projectQuery"></param>
         /// <param name="filterDefForTEmbedded"></param>
         /// <returns></returns>
         protected (AggregateFacet<TEmbedded, TEmbedded>, string) GetAggregateFacetForEmbeddedPagination<TEmbedded>(int pageIndex,
                                                                                                                    int requestedItemCount,
-                                                                                                                   string orderByProperty,
-                                                                                                                   bool orderByAscending,
+                                                                                                                   List<OrderByProp> orderByProps,
                                                                                                                    string projectQuery,
                                                                                                                    FilterDefinition<TEmbedded> filterDefForTEmbedded = null)
         {
-            #region Check is have orderByProperty
+            List<IPipelineStageDefinition> stages = new();
 
-            int counter = 0;
-            foreach (var property in typeof(TEmbedded).GetProperties())
-                if (property.Name.Equals(orderByProperty))
-                {
-                    counter++;
-                    break;
-                }
-            if (counter == 0)
-                throw new MilvaDeveloperException("Can not find orderByProperty for this class.");
-
-            #endregion
-
-            if (pageIndex <= 0 || requestedItemCount <= 0)
-                throw new MilvaDeveloperException("The page number or number of entries requested to be displayed cannot be less than 0.");
-
-            var sortDef = orderByAscending ? Builders<TEmbedded>.Sort.Ascending(orderByProperty) : Builders<TEmbedded>.Sort.Descending(orderByProperty);
+            stages.Add(PipelineStageDefinitionBuilder.Project<TEmbedded, TEmbedded>(BsonDocument.Parse("{" + projectQuery + "}")));
 
             var filter = filterDefForTEmbedded ?? Builders<TEmbedded>.Filter.Empty;
 
+            stages.Add(PipelineStageDefinitionBuilder.Match(filter));
+
+            var sortDefinitions = GetSortDefinitions<TEmbedded>(orderByProps);
+
+            if (!sortDefinitions.IsNullOrEmpty())
+                foreach (var sortDef in GetSortDefinitions<TEmbedded>(orderByProps))
+                    stages.Add(sortDef);
+
+            stages.Add(PipelineStageDefinitionBuilder.Skip<TEmbedded>((pageIndex - 1) * requestedItemCount));
+            stages.Add(PipelineStageDefinitionBuilder.Limit<TEmbedded>(requestedItemCount));
+
             string facetName = "matchingDatas";
 
-            var dataFacet = AggregateFacet.Create(facetName, PipelineDefinition<TEmbedded, TEmbedded>.Create(new[]
-            {
-                PipelineStageDefinitionBuilder.Project<TEmbedded, TEmbedded>(BsonDocument.Parse("{" + projectQuery + "}")),
-                PipelineStageDefinitionBuilder.Match(filter),
-                PipelineStageDefinitionBuilder.Sort(sortDef),
-                PipelineStageDefinitionBuilder.Skip<TEmbedded>((pageIndex - 1) * requestedItemCount),
-                PipelineStageDefinitionBuilder.Limit<TEmbedded>(requestedItemCount)
-            }));
+            var dataFacet = AggregateFacet.Create(facetName, PipelineDefinition<TEmbedded, TEmbedded>.Create(stages));
 
             return (dataFacet, facetName);
         }
 
+        /// <summary>
+        /// Gets sort definition by <paramref name="orderByProps"/>.
+        /// </summary>
+        /// <param name="orderByProps"></param>
+        /// <returns></returns>
+        protected IEnumerable<IPipelineStageDefinition> GetSortDefinitions<T>(List<OrderByProp> orderByProps)
+        {
+            if (!orderByProps.IsNullOrEmpty())
+                foreach (var orderByProp in orderByProps)
+                {
+                    CommonHelper.PropertyExists<T>(orderByProp.PropName);
+
+                    var sortDef = orderByProp.Ascending ? Builders<T>.Sort.Ascending(orderByProp.PropName) : Builders<T>.Sort.Descending(orderByProp.PropName);
+
+                    yield return PipelineStageDefinitionBuilder.Sort(sortDef);
+                }
+        }
+
+        /// <summary>
+        /// Checks the parameters is valid.
+        /// </summary>
+        /// <param name="requestedPageNumber"></param>
+        /// <param name="countOfRequestedRecordsInPage"></param>
+        protected static void ValidatePaginationParameters(int requestedPageNumber, int countOfRequestedRecordsInPage)
+        {
+            if (requestedPageNumber <= 0) throw new MilvaUserFriendlyException(MilvaException.WrongRequestedPageNumber);
+
+            if (countOfRequestedRecordsInPage <= 0) throw new MilvaUserFriendlyException(MilvaException.WrongRequestedItemCount);
+        }
+
         #endregion
+
+
 
     }
 }

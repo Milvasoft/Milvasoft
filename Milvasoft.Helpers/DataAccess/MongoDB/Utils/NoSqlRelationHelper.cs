@@ -1,5 +1,4 @@
 ﻿using Milvasoft.Helpers.DataAccess.Abstract.Entity;
-using Milvasoft.Helpers.DataAccess.MongoDB.Entity.Abstract;
 using Milvasoft.Helpers.Extensions;
 using MongoDB.Bson;
 using MongoDB.Driver;

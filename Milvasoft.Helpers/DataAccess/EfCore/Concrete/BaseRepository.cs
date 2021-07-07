@@ -423,8 +423,6 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
 
             var condition = CreateConditionExpression(conditionExpression);
 
-            var totalDataCount = await GetCountAsync(conditionExpression).ConfigureAwait(false);
-
             List<TEntity> repo;
 
             if (orderByAscending) repo = await _dbSet.Where(condition ?? (entity => true))
@@ -463,8 +461,6 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
 
             var condition = CreateConditionExpression(conditionExpression);
 
-            var totalDataCount = await GetCountAsync(conditionExpression).ConfigureAwait(false);
-
             List<TEntity> repo;
 
             if (orderByAscending) repo = (await _dbSet.Where(condition ?? (entity => true))
@@ -495,8 +491,6 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
         {
             var condition = CreateConditionExpression(conditionExpression);
 
-            var totalDataCount = await GetCountAsync(conditionExpression).ConfigureAwait(false);
-
             List<TEntity> repo;
 
             if (orderByAscending) repo = await _dbSet.Where(condition ?? (entity => true))
@@ -526,8 +520,6 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
                                                                           Expression<Func<TEntity, bool>> conditionExpression = null)
         {
             var condition = CreateConditionExpression(conditionExpression);
-
-            var totalDataCount = await GetCountAsync(conditionExpression).ConfigureAwait(false);
 
             List<TEntity> repo;
 
