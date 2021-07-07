@@ -13,7 +13,7 @@ namespace Milvasoft.Helpers.Test.Unit
     /// <summary>
     /// Includes helper and required methods for unit testing.
     /// </summary>
-    public abstract class ServiceCollectionHelper
+    public abstract class ServiceCollectionHelper<TUser> where TUser : class
     {
         private readonly IServiceCollection _services;
         private readonly IJsonOperations _jsonOperations;
@@ -82,12 +82,12 @@ namespace Milvasoft.Helpers.Test.Unit
         /// <param name="environment"></param>
         /// <param name="webHostEnvironment"></param>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1822:Mark members as static", Justification = "<Pending>")]
-        public void MockTestEnvironment(string environment, out IWebHostEnvironment webHostEnvironment)
+        public IWebHostEnvironment MockTestEnvironment(string environment)
         {
             var mockWebHostEnvironment = new Mock<IWebHostEnvironment>();
             mockWebHostEnvironment.Setup(p => p.EnvironmentName).Returns(environment);
 
-            webHostEnvironment = mockWebHostEnvironment.Object;
+            return mockWebHostEnvironment.Object;
         }
 
         /// <summary>
@@ -145,10 +145,11 @@ namespace Milvasoft.Helpers.Test.Unit
         /// <typeparam name="TUser"></typeparam>
         /// <param name="userManager"></param>
         /// <returns></returns>
-        public async Task<TUser> GetLoggedUserInformationsAsync<TUserManager, TUser>(TUserManager userManager) where TUserManager : UserManager<TUser>
-                                                                                                               where TUser : class
+        public async Task<TUser> GetLoggedUserInformationsAsync() 
         {
             var httpContext = GetServiceProvider().GetRequiredService<IHttpContextAccessor>().HttpContext;
+
+            var userManager = GetServiceProvider().GetRequiredService<UserManager<TUser>>();
 
             return await userManager.FindByNameAsync(httpContext.User.Identity.Name).ConfigureAwait(false);
         }

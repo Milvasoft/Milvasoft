@@ -10490,22 +10490,22 @@
             Checks whether the data to be tested can be a non-default value.
             </summary>
         </member>
-        <member name="T:Milvasoft.Helpers.Test.Unit.ServiceCollectionHelper">
+        <member name="T:Milvasoft.Helpers.Test.Unit.ServiceCollectionHelper`1">
             <summary>
             Includes helper and required methods for unit testing.
             </summary>
         </member>
-        <member name="M:Milvasoft.Helpers.Test.Unit.ServiceCollectionHelper.#ctor">
+        <member name="M:Milvasoft.Helpers.Test.Unit.ServiceCollectionHelper`1.#ctor">
             <summary>
-            Constructor of <see cref="T:Milvasoft.Helpers.Test.Unit.ServiceCollectionHelper"/>.
+            Constructor of <see cref="!:ServiceCollectionHelper"/>.
             
             <para> If you use this constructor, <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/> and <see cref="T:Milvasoft.Helpers.FileOperations.Abstract.IJsonOperations"/> objects are created as a singleton. </para>
             
             </summary>
         </member>
-        <member name="M:Milvasoft.Helpers.Test.Unit.ServiceCollectionHelper.#ctor(Microsoft.Extensions.DependencyInjection.IServiceCollection,Milvasoft.Helpers.FileOperations.Abstract.IJsonOperations)">
+        <member name="M:Milvasoft.Helpers.Test.Unit.ServiceCollectionHelper`1.#ctor(Microsoft.Extensions.DependencyInjection.IServiceCollection,Milvasoft.Helpers.FileOperations.Abstract.IJsonOperations)">
             <summary>
-            Constructor of <see cref="T:Milvasoft.Helpers.Test.Unit.ServiceCollectionHelper"/>.
+            Constructor of <see cref="!:ServiceCollectionHelper"/>.
             
             <para> If you use this constructor, you have to send <paramref name="services"/> and <paramref name="jsonOperations"/> objects. </para>
             
@@ -10513,69 +10513,75 @@
             <param name="services"></param>
             <param name="jsonOperations"></param>
         </member>
-        <member name="M:Milvasoft.Helpers.Test.Unit.ServiceCollectionHelper.ConfigureDatabase(Milvasoft.Helpers.FileOperations.Abstract.IJsonOperations,Microsoft.Extensions.Configuration.IConfiguration)">
+        <member name="M:Milvasoft.Helpers.Test.Unit.ServiceCollectionHelper`1.ConfigureDatabase(Milvasoft.Helpers.FileOperations.Abstract.IJsonOperations,Microsoft.Extensions.Configuration.IConfiguration)">
             <summary>
             Using this method, you can configure the database.
             </summary>
             <param name="jsonOperations"></param>
             <param name="configuration"></param>
         </member>
-        <member name="M:Milvasoft.Helpers.Test.Unit.ServiceCollectionHelper.ConfigureDependencyInjections">
+        <member name="M:Milvasoft.Helpers.Test.Unit.ServiceCollectionHelper`1.ConfigureDependencyInjections">
             <summary>
             You can configure your dependencies by using this method.
             </summary>
         </member>
-        <member name="M:Milvasoft.Helpers.Test.Unit.ServiceCollectionHelper.ConfigureIdentity">
+        <member name="M:Milvasoft.Helpers.Test.Unit.ServiceCollectionHelper`1.ConfigureIdentity">
             <summary>
             You can configure your indetity operations by using this method.
             </summary>
         </member>
-        <member name="M:Milvasoft.Helpers.Test.Unit.ServiceCollectionHelper.ResetDatabaseAsync">
+        <member name="M:Milvasoft.Helpers.Test.Unit.ServiceCollectionHelper`1.ResetDatabaseAsync">
             <summary>
             You can reset the database for data consistency using this method before each unit test runs.
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.Test.Unit.ServiceCollectionHelper.MockTestEnvironment(System.String,Microsoft.AspNetCore.Hosting.IWebHostEnvironment@)">
+        <member name="M:Milvasoft.Helpers.Test.Unit.ServiceCollectionHelper`1.MockTestEnvironment(System.String)">
             <summary>
             Creates a fake <see cref="T:Microsoft.AspNetCore.Hosting.IWebHostEnvironment"/> for the test environment.
             </summary>
             <param name="environment"></param>
             <param name="webHostEnvironment"></param>
         </member>
-        <member name="M:Milvasoft.Helpers.Test.Unit.ServiceCollectionHelper.MockLoggedUser(System.String)">
+        <member name="M:Milvasoft.Helpers.Test.Unit.ServiceCollectionHelper`1.MockLoggedUser(System.String)">
             <summary>
             Mock for logged user. Mock HttpContext.User.Identity.Name.
             </summary>
             <param name="userName"></param>
         </member>
-        <member name="M:Milvasoft.Helpers.Test.Unit.ServiceCollectionHelper.GetServiceProvider">
+        <member name="M:Milvasoft.Helpers.Test.Unit.ServiceCollectionHelper`1.GetServiceProvider">
             <summary>
             Returns <see cref="T:Microsoft.Extensions.DependencyInjection.ServiceProvider"/>.
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.Test.Unit.ServiceCollectionHelper.GetService``1">
+        <member name="M:Milvasoft.Helpers.Test.Unit.ServiceCollectionHelper`1.GetService``1">
             <summary>
             Returns service.
             </summary>
             <typeparam name="TService"></typeparam>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.Test.Unit.ServiceCollectionHelper.GetJsonOperations">
+        <member name="M:Milvasoft.Helpers.Test.Unit.ServiceCollectionHelper`1.GetServiceCollection">
+            <summary>
+            Returns <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/> instance.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.Test.Unit.ServiceCollectionHelper`1.GetJsonOperations">
             <summary>
             Returns <see cref="T:Milvasoft.Helpers.FileOperations.Abstract.IJsonOperations"/> instance.
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.Test.Unit.ServiceCollectionHelper.GetServiceWithAnotherUser``1(System.String)">
+        <member name="M:Milvasoft.Helpers.Test.Unit.ServiceCollectionHelper`1.GetServiceWithAnotherUser``1(System.String)">
             <summary>
             If you want to login with another user, you can use this method.
             </summary>
             <param name="userName"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.Test.Unit.ServiceCollectionHelper.GetLoggedUserInformationsAsync``2(``0)">
+        <member name="M:Milvasoft.Helpers.Test.Unit.ServiceCollectionHelper`1.GetLoggedUserInformationsAsync">
             <summary>
             Returns logged user informations.
             </summary>
