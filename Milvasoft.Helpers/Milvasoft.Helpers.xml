@@ -10013,11 +10013,10 @@
              </summary>
              <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.Test.Integration.MilvaTestClient`1.GetFakeClientInstance``1">
+        <member name="M:Milvasoft.Helpers.Test.Integration.MilvaTestClient`1.GetFakeClientInstance">
             <summary>
             The fake client class returns the singleton object.
             </summary>
-            <typeparam name="TFakeClient"></typeparam>
             <returns></returns>
         </member>
         <member name="T:Milvasoft.Helpers.Test.Integration.ResponseObject">

@@ -146,8 +146,7 @@ namespace Milvasoft.Helpers.Test.Integration
         /// <summary>
         /// The fake client class returns the singleton object.
         /// </summary>
-        /// <typeparam name="TFakeClient"></typeparam>
         /// <returns></returns>
-        public abstract TFakeClient GetFakeClientInstance<TFakeClient>() where TFakeClient : MilvaTestClient<TStartup>;
+        public abstract MilvaTestClient<TStartup> GetFakeClientInstance();
     }
 }
