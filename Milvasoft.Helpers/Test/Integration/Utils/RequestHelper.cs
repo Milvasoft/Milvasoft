@@ -129,7 +129,7 @@ namespace Milvasoft.Helpers.Test.Integration.Utils
 
             var userManagerMethods = MilvaTestClient<MilvaTestStartup>.UserManager.GetType().GetMethods();
 
-            var user = ((IQueryable<object>)MilvaTestClient<MilvaTestStartup>.UserManager.GetType().GetProperty("Users").GetValue(userManagerMethods, null))
+            var user = ((IQueryable<object>)MilvaTestClient<MilvaTestStartup>.UserManager.GetType().GetProperty("Users").GetValue(MilvaTestClient<MilvaTestStartup>.UserManager, null))
                         .ToList().FirstOrDefault(p => p.GetType().GetProperty("UserName").GetValue(p, null).ToString() == MilvaTestClient<MilvaTestStartup>.LoginDtoAndUserName.Item2);
 
             if (!roles.IsNullOrEmpty())
