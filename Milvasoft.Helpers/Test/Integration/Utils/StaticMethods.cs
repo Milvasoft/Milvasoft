@@ -53,7 +53,7 @@ namespace Milvasoft.Helpers.Test.Integration.Utils
         /// <param name="methodInfo"></param>
         internal static void CreateClientInstance(this MethodInfo methodInfo)
         {
-            var clientAttribute = methodInfo.CustomAttributes.ToList().First(p => p.AttributeType == typeof(CreateClientAttribute));
+            var clientAttribute = methodInfo.ReflectedType.CustomAttributes.ToList().First(p => p.AttributeType == typeof(CreateClientAttribute));
 
             var clientType = (Type)clientAttribute.ConstructorArguments[0].Value;
             var getInstanceMethodName = (string)clientAttribute.ConstructorArguments[1].Value;
