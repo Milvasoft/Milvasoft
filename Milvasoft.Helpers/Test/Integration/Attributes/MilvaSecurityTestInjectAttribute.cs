@@ -43,9 +43,9 @@ namespace Milvasoft.Helpers.Test.Integration.Attributes
         /// <summary>
         /// Returns the data to be used to test the theory
         /// </summary>
-        /// <param name="testMethod"></param>
+        /// <param name="methodInfo"></param>
         /// <returns></returns>
-        public override IEnumerable<object[]> GetData(MethodInfo testMethod)
+        public override IEnumerable<object[]> GetData(MethodInfo methodInfo)
         {
             #region Local Functions
 
@@ -57,11 +57,13 @@ namespace Milvasoft.Helpers.Test.Integration.Attributes
 
             #endregion
 
+            methodInfo.CreateClientInstance();
+
             string url = _url;
 
             if (_obkInlineDataEnum == UrlTypeEnum.InController)
             {
-                var controllerName = testMethod.ReflectedType.Name.Split("Controller")[0];
+                var controllerName = methodInfo.ReflectedType.Name.Split("Controller")[0];
                 url = $"{controllerName}/{_url}";
             }
 

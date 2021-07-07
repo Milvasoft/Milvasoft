@@ -9797,6 +9797,18 @@
             <param name="operation"></param>
             <returns></returns>
         </member>
+        <member name="T:Milvasoft.Helpers.Test.Integration.Attributes.CreateClientAttribute">
+            <summary>
+            Creates a client intance for integration tests.
+            </summary>
+        </member>
+        <member name="M:Milvasoft.Helpers.Test.Integration.Attributes.CreateClientAttribute.#ctor(System.Type,System.String)">
+            <summary>
+            Constructor of <see cref="T:Milvasoft.Helpers.Test.Integration.Attributes.CreateClientAttribute"/>.
+            </summary>
+            <param name="fakeClientType"></param>
+            <param name="getInstanceMethodName"></param>
+        </member>
         <member name="T:Milvasoft.Helpers.Test.Integration.Attributes.MilvaSecurityTestInjectAttribute">
             <summary>
             Test methods attribute for integration security testing.
@@ -9816,7 +9828,7 @@
             <summary>
             Returns the data to be used to test the theory
             </summary>
-            <param name="testMethod"></param>
+            <param name="methodInfo"></param>
             <returns></returns>
         </member>
         <member name="T:Milvasoft.Helpers.Test.Integration.Attributes.MilvaTestInjectAttribute">
@@ -9838,7 +9850,7 @@
             <summary>
             Returns the data to be used to test the theory
             </summary>
-            <param name="testMethod"></param>
+            <param name="methodInfo"></param>
             <returns></returns>
         </member>
         <member name="T:Milvasoft.Helpers.Test.Integration.Enums.AuthorizeTypeEnum">
@@ -10249,6 +10261,12 @@
             </summary>
             <param name="cultureInfo"></param>
             <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.Test.Integration.Utils.StaticMethods.CreateClientInstance(System.Reflection.MethodInfo)">
+            <summary>
+            Creates client for integration test.
+            </summary>
+            <param name="methodInfo"></param>
         </member>
         <member name="T:Milvasoft.Helpers.Test.MilvaAssert">
             <summary>

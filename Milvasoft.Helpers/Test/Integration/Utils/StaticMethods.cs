@@ -1,9 +1,12 @@
 ﻿using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Milvasoft.Helpers.Test.Integration.Attributes;
 using Milvasoft.Helpers.Test.Integration.TestStartup.Abstract;
 using System;
 using System.Globalization;
+using System.Linq;
+using System.Reflection;
 
 namespace Milvasoft.Helpers.Test.Integration.Utils
 {
@@ -42,6 +45,22 @@ namespace Milvasoft.Helpers.Test.Integration.Utils
             var factory = new ResourceManagerStringLocalizerFactory(options, new LoggerFactory());
 
             return factory.Create(MilvaTestClient<MilvaTestStartup>.LocalizerResourceSource);
+        }
+
+        /// <summary>
+        /// Creates client for integration test.
+        /// </summary>
+        /// <param name="methodInfo"></param>
+        internal static void CreateClientInstance(this MethodInfo methodInfo)
+        {
+            var clientAttribute = methodInfo.CustomAttributes.ToList().First(p => p.AttributeType == typeof(CreateClientAttribute));
+
+            var clientType = (Type)clientAttribute.ConstructorArguments[0].Value;
+            var getInstanceMethodName = (string)clientAttribute.ConstructorArguments[1].Value;
+
+            var info = clientType.GetMethod(getInstanceMethodName);
+
+            _ = info.Invoke(null, null);
         }
     }
 }

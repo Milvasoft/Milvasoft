@@ -43,11 +43,13 @@ namespace Milvasoft.Helpers.Test.Integration.Attributes
         /// <summary>
         /// Returns the data to be used to test the theory
         /// </summary>
-        /// <param name="testMethod"></param>
+        /// <param name="methodInfo"></param>
         /// <returns></returns>
-        public override IEnumerable<object[]> GetData(MethodInfo testMethod)
+        public override IEnumerable<object[]> GetData(MethodInfo methodInfo)
         {
-            var controllerName = testMethod.ReflectedType.Name.Split("Controller")[0];
+            methodInfo.CreateClientInstance();
+
+            var controllerName = methodInfo.ReflectedType.Name.Split("Controller")[0];
             string url = _url;
 
             if (_obkInlineDataEnum == UrlTypeEnum.InController)
