@@ -801,7 +801,7 @@
         </member>
         <member name="M:Milvasoft.Helpers.CommonHelper.EnsureLegalLengths(System.Int32,System.Int32,Microsoft.Extensions.Localization.IStringLocalizer)">
             <summary>
-            Checks that MinimumLength and MaximumLength have legal values.  Throws InvalidOperationException if not.
+            Checks that MinimumLength and MaximumLength have legal values. Throws <see cref="T:System.InvalidOperationException"/>  if not.
             </summary>
         </member>
         <member name="M:Milvasoft.Helpers.CommonHelper.GetEnumDesciption``1(``0)">
