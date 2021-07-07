@@ -9961,7 +9961,12 @@
             Function that returns token for security tests.
             </summary>
         </member>
-        <member name="M:Milvasoft.Helpers.Test.Integration.MilvaTestClient`1.#ctor(System.Collections.Generic.List{System.String},System.Collections.Generic.List{System.String},System.Type,System.String,System.String,System.String,System.ValueTuple{System.Object,System.String},System.Type,System.Func{System.Object,System.Threading.Tasks.Task{System.String}})">
+        <member name="P:Milvasoft.Helpers.Test.Integration.MilvaTestClient`1.GetFakeClientInstanceMethodName">
+            <summary>
+            The name of the method that generates the client instance.
+            </summary>
+        </member>
+        <member name="M:Milvasoft.Helpers.Test.Integration.MilvaTestClient`1.#ctor(System.Collections.Generic.List{System.String},System.Collections.Generic.List{System.String},System.Type,System.String,System.String,System.String,System.ValueTuple{System.Object,System.String},System.Type,System.Func{System.Object,System.Threading.Tasks.Task{System.String}},System.String)">
             <summary>
             Constructor of <see cref="T:Milvasoft.Helpers.Test.Integration.MilvaTestClient`1"/>.
             </summary>
@@ -9974,6 +9979,7 @@
             <param name="loginDtoAndUserName"></param>
             <param name="userManager"></param>
             <param name="getTokenAsync"></param>
+            <param name="getFakeClientInstanceMethodName"></param>
         </member>
         <member name="M:Milvasoft.Helpers.Test.Integration.MilvaTestClient`1.GetHttpClient">
             <summary>
@@ -10242,7 +10248,7 @@
             <summary>
             Returns http response in pagination dto.
             </summary>
-            <typeparam name="T"></typeparam>
+            <typeparam name="TResponse"></typeparam>
             <param name="httpRequestMessage"></param>
             <param name="httpClient"></param>
             <returns></returns>

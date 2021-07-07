@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Milvasoft.Helpers.Exceptions;
 using Milvasoft.Helpers.Test.Helpers;
 using Milvasoft.Helpers.Test.Integration.Attributes;
 using Milvasoft.Helpers.Test.Integration.TestStartup.Abstract;
@@ -67,9 +68,14 @@ namespace Milvasoft.Helpers.Test.Integration.Utils
             clientAttribute.IsNull("Please use 'CreateClientAttribute' in your test class.");
 
             var clientType = (Type)clientAttribute.ConstructorArguments[0].Value;
-            var getInstanceMethodName = "GetFakeClientInstance";
+            var getInstanceMethodName = MilvaTestClient<MilvaTestStartup>.GetFakeClientInstanceMethodName;
+
+            if (string.IsNullOrEmpty(getInstanceMethodName))
+                throw new MilvaTestException("Please enter the method name that generates the client instance.");
 
             var info = clientType.GetMethod(getInstanceMethodName);
+
+            info.IsNull("The method that generated the client instance could not be found.");
 
             _ = info.Invoke(null, null);
         }

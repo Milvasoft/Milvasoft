@@ -64,6 +64,11 @@ namespace Milvasoft.Helpers.Test.Integration
         public static Func<object, Task<string>> GetTokenAsync { get; set; }
 
         /// <summary>
+        /// The name of the method that generates the client instance.
+        /// </summary>
+        public static string GetFakeClientInstanceMethodName { get; set; }
+
+        /// <summary>
         /// Constructor of <see cref="MilvaTestClient{TStartup}"/>.
         /// </summary>
         /// <param name="acceptedLanguageIsoCodes"></param>
@@ -75,6 +80,7 @@ namespace Milvasoft.Helpers.Test.Integration
         /// <param name="loginDtoAndUserName"></param>
         /// <param name="userManager"></param>
         /// <param name="getTokenAsync"></param>
+        /// <param name="getFakeClientInstanceMethodName"></param>
         public MilvaTestClient(List<string> acceptedLanguageIsoCodes,
                                List<string> acceptedRoles,
                                Type localizerResourceSource,
@@ -83,7 +89,8 @@ namespace Milvasoft.Helpers.Test.Integration
                                string testEnvironment,
                                (object, string) loginDtoAndUserName,
                                Type userManager,
-                               Func<object, Task<string>> getTokenAsync)
+                               Func<object, Task<string>> getTokenAsync,
+                               string getFakeClientInstanceMethodName)
         {
             if (_testServer == null)
                 _testServer = new TestServer(new WebHostBuilder().UseStartup<TStartup>().UseEnvironment(testEnvironment));
@@ -97,6 +104,7 @@ namespace Milvasoft.Helpers.Test.Integration
             MilvaTestClient<MilvaTestStartup>.TestApiBaseUrl = testApiBaseUrl;
             MilvaTestClient<MilvaTestStartup>.LoginUrl = loginUrl;
             MilvaTestClient<MilvaTestStartup>.HttpClient = _httpClient;
+            MilvaTestClient<MilvaTestStartup>.GetFakeClientInstanceMethodName = getFakeClientInstanceMethodName;
             MilvaTestClient<MilvaTestStartup>.LoginDtoAndUserName = loginDtoAndUserName;
             MilvaTestClient<MilvaTestStartup>.UserManager = _testServer.Services.GetRequiredService(userManager);
         }
