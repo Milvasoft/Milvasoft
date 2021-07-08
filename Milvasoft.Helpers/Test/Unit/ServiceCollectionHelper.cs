@@ -6,6 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Milvasoft.Helpers.FileOperations.Abstract;
 using Milvasoft.Helpers.FileOperations.Concrete;
 using Moq;
+using System;
 using System.Threading.Tasks;
 
 namespace Milvasoft.Helpers.Test.Unit
@@ -31,6 +32,8 @@ namespace Milvasoft.Helpers.Test.Unit
 
             if (_jsonOperations == null)
                 _jsonOperations = new JsonOperations();
+
+            Environment.SetEnvironmentVariable("ASPNETCORE_ENVIRONMENT", "Development");
         }
 
         /// <summary>

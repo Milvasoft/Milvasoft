@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
+using System;
 
 namespace Milvasoft.Helpers.Test.Integration.TestStartup.Abstract
 {
@@ -13,7 +14,7 @@ namespace Milvasoft.Helpers.Test.Integration.TestStartup.Abstract
         /// </summary>
         public MilvaTestStartup()
         {
-            
+            Environment.SetEnvironmentVariable("ASPNETCORE_ENVIRONMENT", "Development");
         }
 
         /// <summary>
