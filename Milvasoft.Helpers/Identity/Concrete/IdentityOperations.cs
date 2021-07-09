@@ -131,7 +131,7 @@ namespace Milvasoft.Helpers.Identity.Concrete
 
                     SignedInUsers.SignedInUserTokens.Add(user.UserName, loginResult.Token.AccessToken);
                 }
-              
+
                 return loginResult;
             }
 

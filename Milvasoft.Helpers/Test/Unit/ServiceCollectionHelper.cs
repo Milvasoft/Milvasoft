@@ -148,7 +148,7 @@ namespace Milvasoft.Helpers.Test.Unit
         /// <typeparam name="TUser"></typeparam>
         /// <param name="userManager"></param>
         /// <returns></returns>
-        public async Task<TUser> GetLoggedUserInformationsAsync() 
+        public async Task<TUser> GetLoggedUserInformationsAsync()
         {
             var httpContext = GetServiceProvider().GetRequiredService<IHttpContextAccessor>().HttpContext;
 
