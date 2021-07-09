@@ -18,7 +18,6 @@ namespace Milvasoft.SampleAPI.DTOs.AccountDTOs
         /// <summary>
         /// The token issued as a result of the login process.
         /// </summary>
-        [OValidateString(5000)]
-        public string Token { get; set; }
+        public IToken Token { get; set; }
     }
 }

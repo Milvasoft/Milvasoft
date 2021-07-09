@@ -16,6 +16,6 @@ namespace Milvasoft.Helpers.Identity.Concrete
         /// <summary>
         /// If result is success sets the token.
         /// </summary>
-        public string Token { get; set; }
+        public IToken Token { get; set; }
     }
 }

@@ -3,6 +3,7 @@ using Milvasoft.Helpers.Exceptions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 
 namespace Milvasoft.Helpers.Identity.Concrete
@@ -154,6 +155,21 @@ namespace Milvasoft.Helpers.Identity.Concrete
                 password.Append((char)random.Next(65, 91));
 
             return password.ToString();
+        }
+
+        /// <summary>
+        /// Creates random refresh token.
+        /// </summary>
+        /// <returns></returns>
+        public static string CreateRefreshToken()
+        {
+            byte[] number = new byte[32];
+
+            using var random = RandomNumberGenerator.Create();
+
+            random.GetBytes(number);
+
+            return Convert.ToBase64String(number);
         }
     }
 }

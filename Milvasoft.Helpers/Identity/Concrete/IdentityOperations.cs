@@ -129,10 +129,9 @@ namespace Milvasoft.Helpers.Identity.Concrete
                     if (SignedInUsers.SignedInUserTokens.ContainsKey(user.UserName))
                         SignedInUsers.SignedInUserTokens.Remove(user.UserName);
 
-                    SignedInUsers.SignedInUserTokens.Add(user.UserName, loginResult.Token);
+                    SignedInUsers.SignedInUserTokens.Add(user.UserName, loginResult.Token.AccessToken);
                 }
-
-
+              
                 return loginResult;
             }
 
@@ -188,7 +187,7 @@ namespace Milvasoft.Helpers.Identity.Concrete
                     if (SignedInUsers.SignedInUserTokens.ContainsKey(user.UserName))
                         SignedInUsers.SignedInUserTokens.Remove(user.UserName);
 
-                    SignedInUsers.SignedInUserTokens.Add(user.UserName, loginResult.Token);
+                    SignedInUsers.SignedInUserTokens.Add(user.UserName, loginResult.Token.AccessToken);
                 }
 
                 return loginResult;
@@ -448,11 +447,11 @@ namespace Milvasoft.Helpers.Identity.Concrete
         /// <param name="user"></param>
         /// <param name="tokenExpiredDate"></param>
         /// <returns></returns>
-        public virtual async Task<string> GenerateTokenWithRoleAsync(TUser user, DateTime tokenExpiredDate)
+        public virtual async Task<IToken> GenerateTokenWithRoleAsync(TUser user, DateTime tokenExpiredDate)
         {
             var roles = await _userManager.GetRolesAsync(user).ConfigureAwait(false);
 
-            string newToken = GenerateToken(username: user.UserName, roles: roles, tokenExpiredDate);
+            var newToken = GenerateToken(username: user.UserName, roles: roles, tokenExpiredDate);
 
             _contextRepository.InitializeUpdating<TUser, TKey>(user);
 
@@ -463,7 +462,7 @@ namespace Milvasoft.Helpers.Identity.Concrete
             IdentityResult identityResult = await _userManager.SetAuthenticationTokenAsync(user: user,
                                                                                            loginProvider: _loginProvier,//Token nerede kullanılcak
                                                                                            tokenName: _tokenName,//Token tipi
-                                                                                           tokenValue: newToken).ConfigureAwait(false);
+                                                                                           tokenValue: newToken.AccessToken).ConfigureAwait(false);
 
             if (!identityResult.Succeeded)
                 throw new MilvaUserFriendlyException();
@@ -474,7 +473,7 @@ namespace Milvasoft.Helpers.Identity.Concrete
         /// <summary>
         /// If Authentication is successful, JWT tokens are generated.
         /// </summary>
-        public virtual string GenerateToken(string username, IList<string> roles, DateTime tokenExpiredDate)
+        public virtual IToken GenerateToken(string username, IList<string> roles, DateTime tokenExpiredDate)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
 
@@ -499,7 +498,12 @@ namespace Milvasoft.Helpers.Identity.Concrete
 
             var token = tokenHandler.CreateToken(tokenDescriptor);//Token Üretimi
 
-            return tokenHandler.WriteToken(token);
+            return new MilvaToken
+            {
+                AccessToken = tokenHandler.WriteToken(token),
+                Expiration = tokenExpiredDate,
+                RefreshToken = IdentityHelpers.CreateRefreshToken()
+            };
         }
 
         /// <summary>

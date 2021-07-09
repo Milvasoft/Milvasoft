@@ -7248,6 +7248,26 @@
             If result is success sets the token.
             </summary>
         </member>
+        <member name="T:Milvasoft.Helpers.Identity.Concrete.IToken">
+            <summary>
+            Login result DTO for DI.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.Identity.Concrete.IToken.AccessToken">
+            <summary>
+            If result is success sets the token.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.Identity.Concrete.IToken.Expiration">
+            <summary>
+            Expiration data of <see cref="P:Milvasoft.Helpers.Identity.Concrete.IToken.AccessToken"/>.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.Identity.Concrete.IToken.RefreshToken">
+            <summary>
+            Refresh token.
+            </summary>
+        </member>
         <member name="T:Milvasoft.Helpers.Identity.Concrete.ITokenManagement">
             <summary>
             Token management DTO for DI.
@@ -7354,6 +7374,12 @@
             Generates random password according to <paramref name="passwordOptions"/>.
             </summary>
             <param name="passwordOptions"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.Identity.Concrete.IdentityHelpers.CreateRefreshToken">
+            <summary>
+            Creates random refresh token.
+            </summary>
             <returns></returns>
         </member>
         <member name="T:Milvasoft.Helpers.Identity.Concrete.IdentityOperations`7">
@@ -7654,6 +7680,26 @@
             </summary>
             <param name="role"></param>
             <returns></returns>
+        </member>
+        <member name="T:Milvasoft.Helpers.Identity.Concrete.MilvaToken">
+            <summary>
+            Login result DTO for DI.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.Identity.Concrete.MilvaToken.AccessToken">
+            <summary>
+            If result is success sets the token.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.Identity.Concrete.MilvaToken.Expiration">
+            <summary>
+            Expiration data of <see cref="P:Milvasoft.Helpers.Identity.Concrete.MilvaToken.AccessToken"/>.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.Identity.Concrete.MilvaToken.RefreshToken">
+            <summary>
+            Refresh token.
+            </summary>
         </member>
         <member name="T:Milvasoft.Helpers.Identity.Concrete.MilvaUserValidation`3">
             <summary>
