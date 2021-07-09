@@ -35,7 +35,7 @@ namespace Milvasoft.Helpers.Identity.Concrete
        where TKey : struct, IEquatable<TKey>
        where TDbContext : IdentityDbContext<TUser, TRole, TKey>
        where TUserManager : UserManager<TUser>
-       where TLoginResultDTO : class, ILoginResultDTO, new()
+       where TLoginResultDTO : class, ILoginResultDTO<MilvaToken>, new()
        where TLocalizer : IStringLocalizer
     {
 
@@ -121,7 +121,7 @@ namespace Milvasoft.Helpers.Identity.Concrete
             if (signInResult.Succeeded)
             {
                 //Token username,IsPersonnel ve rollere göre üretilir
-                loginResult.Token = await GenerateTokenWithRoleAsync(user: user, tokenExpiredDate).ConfigureAwait(false);
+                loginResult.Token = await GenerateTokenWithRoleAsync(user: user, tokenExpiredDate).ConfigureAwait(false) as MilvaToken;
 
                 if (_useWhiteList)
                 {
@@ -179,7 +179,7 @@ namespace Milvasoft.Helpers.Identity.Concrete
             if (signInResult.Succeeded)
             {
                 //Token username,IsPersonnel ve rollere göre üretilir
-                loginResult.Token = await GenerateTokenWithRoleAsync(user: user, tokenExpiredDate).ConfigureAwait(false);
+                loginResult.Token = await GenerateTokenWithRoleAsync(user: user, tokenExpiredDate).ConfigureAwait(false) as MilvaToken;
 
                 if (_useWhiteList)
                 {

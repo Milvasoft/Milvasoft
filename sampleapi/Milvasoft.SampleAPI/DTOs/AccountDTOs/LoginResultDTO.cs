@@ -7,7 +7,7 @@ namespace Milvasoft.SampleAPI.DTOs.AccountDTOs
     /// <summary>
     /// DTO returned by login.
     /// </summary>
-    public class LoginResultDTO : ILoginResultDTO
+    public class LoginResultDTO : ILoginResultDTO<MilvaToken>
     {
         /// <summary>
         /// Error caused by login.
@@ -17,6 +17,6 @@ namespace Milvasoft.SampleAPI.DTOs.AccountDTOs
         /// <summary>
         /// The token issued as a result of the login process.
         /// </summary>
-        public IToken Token { get; set; }
+        public MilvaToken Token { get; set; }
     }
 }

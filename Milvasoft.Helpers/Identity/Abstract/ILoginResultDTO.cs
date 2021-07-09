@@ -6,7 +6,7 @@ namespace Milvasoft.Helpers.Identity.Concrete
     /// <summary>
     /// Login result DTO for DI.
     /// </summary>
-    public interface ILoginResultDTO
+    public interface ILoginResultDTO<TToken> where TToken : IToken
     {
         /// <summary>
         /// Error messages of result.
@@ -16,6 +16,6 @@ namespace Milvasoft.Helpers.Identity.Concrete
         /// <summary>
         /// If result is success sets the token.
         /// </summary>
-        public IToken Token { get; set; }
+        public TToken Token { get; set; }
     }
 }

@@ -7233,17 +7233,17 @@
             Password of user.
             </summary>
         </member>
-        <member name="T:Milvasoft.Helpers.Identity.Concrete.ILoginResultDTO">
+        <member name="T:Milvasoft.Helpers.Identity.Concrete.ILoginResultDTO`1">
             <summary>
             Login result DTO for DI.
             </summary>
         </member>
-        <member name="P:Milvasoft.Helpers.Identity.Concrete.ILoginResultDTO.ErrorMessages">
+        <member name="P:Milvasoft.Helpers.Identity.Concrete.ILoginResultDTO`1.ErrorMessages">
             <summary>
             Error messages of result.
             </summary>
         </member>
-        <member name="P:Milvasoft.Helpers.Identity.Concrete.ILoginResultDTO.Token">
+        <member name="P:Milvasoft.Helpers.Identity.Concrete.ILoginResultDTO`1.Token">
             <summary>
             If result is success sets the token.
             </summary>
