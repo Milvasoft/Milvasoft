@@ -1203,7 +1203,7 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
             {
                 _dbContext.Entry(local).State = EntityState.Detached;
             }
-            _dbContext.Entry(entity).State = EntityState.Modified;
+            //_dbContext.Entry(entity).State = EntityState.Modified;
         }
 
         /// <summary>
@@ -1218,8 +1218,8 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
                 foreach (var entity in localEntities)
                     _dbContext.Entry(entity).State = EntityState.Detached;
             }
-            foreach (var entity in entities)
-                _dbContext.Entry(entity).State = EntityState.Modified;
+            /*foreach (var entity in entities)
+                _dbContext.Entry(entity).State = EntityState.Modified;*/
         }
 
         #endregion
