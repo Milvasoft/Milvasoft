@@ -632,7 +632,7 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
         /// <returns></returns>
         public virtual async Task UpdateAsync(TEntity entity)
         {
-            InitalizeEdit(entity);
+            //InitalizeEdit(entity);
             _dbSet.Update(entity);
             await _dbContext.SaveChangesAsync().ConfigureAwait(false);
         }
@@ -644,7 +644,7 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
         /// <returns></returns>
         public virtual async Task UpdateAsync(IEnumerable<TEntity> entities)
         {
-            InitalizeEdit(entities);
+            //InitalizeEdit(entities);
             _dbSet.UpdateRange(entities);
             await _dbContext.SaveChangesAsync().ConfigureAwait(false);
         }
@@ -1203,7 +1203,7 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
             {
                 _dbContext.Entry(local).State = EntityState.Detached;
             }
-            //_dbContext.Entry(entity).State = EntityState.Modified;
+            _dbContext.Entry(entity).State = EntityState.Modified;
         }
 
         /// <summary>
@@ -1218,8 +1218,8 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
                 foreach (var entity in localEntities)
                     _dbContext.Entry(entity).State = EntityState.Detached;
             }
-            /*foreach (var entity in entities)
-                _dbContext.Entry(entity).State = EntityState.Modified;*/
+            foreach (var entity in entities)
+                _dbContext.Entry(entity).State = EntityState.Modified;
         }
 
         #endregion
