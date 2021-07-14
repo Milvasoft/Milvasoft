@@ -1769,6 +1769,16 @@
             <param name="id"></param>
             <returns></returns>
         </member>
+        <member name="T:Milvasoft.Helpers.DataAccess.Abstract.IUnitOfWork">
+            <summary>
+            Abstraction for unit of work pattern.
+            </summary>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IUnitOfWork.CommitAsync">
+            <summary>
+            Asynchronously sends all changes to the data store and commits as a single transaction unless a manual transaction was created using BeginTransaction().
+            </summary>
+        </member>
         <member name="T:Milvasoft.Helpers.DataAccess.Attributes.MilvaDefaultValueAttribute">
             <summary>
             Attribute for adding default value in context level.
@@ -1797,6 +1807,12 @@
             <typeparam name="TEntity"></typeparam>
             <typeparam name="TKey"></typeparam>
             <typeparam name="TContext"></typeparam>
+        </member>
+        <member name="P:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.SaveChangesAfterEveryTransaction">
+            <summary>
+            All repository methods save changes(<see cref="M:Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync(System.Threading.CancellationToken)"/>) after every transaction. Except get operations. 
+            If you use unit of work pattern or save changes manually you can set to false this variable.
+            </summary>
         </member>
         <member name="F:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3._dbContext">
             <summary>

@@ -181,7 +181,7 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
 
                     await userManager.RemoveAuthenticationTokenAsync(user, loginProvider, tokenName).ConfigureAwait(false);
 
-                    if (cachedTokenDictionary.ContainsKey(user.UserName))
+                    if (cachedTokenDictionary?.ContainsKey(user.UserName) ?? false)
                         cachedTokenDictionary.Remove(user.UserName);
                 }
             }

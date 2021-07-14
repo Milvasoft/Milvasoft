@@ -10,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Milvasoft.Helpers.DataAccess.Concrete
@@ -25,6 +26,17 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
                                                                                                              where TContext : DbContext
     {
         //TODO EntityFrameworkQueryableExtensions methods will be added here.
+        //TODO Sync methods will be added.
+
+        #region Public Properties
+
+        /// <summary>
+        /// All repository methods save changes(<see cref="DbContext.SaveChangesAsync(CancellationToken)"/>) after every transaction. Except get operations. 
+        /// If you use unit of work pattern or save changes manually you can set to false this variable.
+        /// </summary>
+        public static bool SaveChangesAfterEveryTransaction { get; set; } = true;
+
+        #endregion
 
         #region Protected Properties
 
@@ -611,7 +623,7 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
         public virtual async Task AddAsync(TEntity entity)
         {
             _dbSet.Add(entity);
-            await _dbContext.SaveChangesAsync().ConfigureAwait(false);
+            if (SaveChangesAfterEveryTransaction) await _dbContext.SaveChangesAsync().ConfigureAwait(false);
         }
 
         /// <summary>
@@ -622,7 +634,7 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
         public virtual async Task AddRangeAsync(IEnumerable<TEntity> entities)
         {
             _dbSet.AddRange(entities);
-            await _dbContext.SaveChangesAsync().ConfigureAwait(false);
+            if (SaveChangesAfterEveryTransaction) await _dbContext.SaveChangesAsync().ConfigureAwait(false);
         }
 
         /// <summary>
@@ -634,7 +646,7 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
         {
             InitalizeEdit(entity);
             _dbSet.Update(entity);
-            await _dbContext.SaveChangesAsync().ConfigureAwait(false);
+            if (SaveChangesAfterEveryTransaction) await _dbContext.SaveChangesAsync().ConfigureAwait(false);
         }
 
         /// <summary>
@@ -646,7 +658,7 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
         {
             InitalizeEdit(entities);
             _dbSet.UpdateRange(entities);
-            await _dbContext.SaveChangesAsync().ConfigureAwait(false);
+            if (SaveChangesAfterEveryTransaction) await _dbContext.SaveChangesAsync().ConfigureAwait(false);
         }
 
         /// <summary>
@@ -658,7 +670,7 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
         {
             InitalizeEdit(entity);
             _dbContext.Remove(entity);
-            await _dbContext.SaveChangesAsync().ConfigureAwait(false);
+            if (SaveChangesAfterEveryTransaction) await _dbContext.SaveChangesAsync().ConfigureAwait(false);
         }
 
         /// <summary>
@@ -670,7 +682,7 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
         {
             InitalizeEdit(entities);
             _dbContext.RemoveRange(entities);
-            await _dbContext.SaveChangesAsync().ConfigureAwait(false);
+            if (SaveChangesAfterEveryTransaction) await _dbContext.SaveChangesAsync().ConfigureAwait(false);
         }
 
         /// <summary>
@@ -1044,8 +1056,8 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
             if (!newEntities.IsNullOrEmpty())
             {
                 _dbSet.AddRange(newEntities);
-                await _dbContext.SaveChangesAsync().ConfigureAwait(false);
             }
+            if (SaveChangesAfterEveryTransaction) await _dbContext.SaveChangesAsync().ConfigureAwait(false);
         }
 
         /// <summary>
@@ -1057,7 +1069,7 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
             var entities = _dbSet.AsEnumerable();
             InitalizeEdit(entities);
             _dbContext.RemoveRange(entities);
-            await _dbContext.SaveChangesAsync().ConfigureAwait(false);
+            if (SaveChangesAfterEveryTransaction) await _dbContext.SaveChangesAsync().ConfigureAwait(false);
         }
 
         /// <summary>
