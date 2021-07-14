@@ -238,7 +238,7 @@ namespace Milvasoft.Helpers.DataAccess.MongoDB.Concrete
         /// <returns></returns>
         public async Task<(List<TEntity> entities, int pageCount, int totalDataCount)> GetAsPaginatedAsync(int pageIndex,
                                                                                                            int requestedItemCount,
-                                                                                                           List<OrderByProps> orderByProps,
+                                                                                                           List<OrderByProp> orderByProps,
                                                                                                            FilterDefinition<TEntity> filterDefinition = null,
                                                                                                            Expression<Func<TEntity, TEntity>> projectExpression = null)
         {
@@ -297,7 +297,7 @@ namespace Milvasoft.Helpers.DataAccess.MongoDB.Concrete
         public async Task<(List<TEmbedded> entities, int pageCount, int totalDataCount)> GetNestedPropertyAsPaginatedAsync<TEmbedded>(ObjectId entityId,
                                                                                                                                       int pageIndex,
                                                                                                                                       int requestedItemCount,
-                                                                                                                                      List<OrderByProps> orderByProps,
+                                                                                                                                      List<OrderByProp> orderByProps,
                                                                                                                                       Expression<Func<TEntity, object>> unwindExpression,
                                                                                                                                       List<Expression<Func<TEmbedded, object>>> projectExpression = null,
                                                                                                                                       FilterDefinition<TEmbedded> filterExpressionForTEmbedded = null)
@@ -349,7 +349,7 @@ namespace Milvasoft.Helpers.DataAccess.MongoDB.Concrete
         public async Task<(List<TEmbedded> entities, int pageCount, int totalDataCount)> GetNestedPropertyAsPaginatedAsync<TEmbedded>(List<ObjectId> entityIds,
                                                                                                                                       int pageIndex,
                                                                                                                                       int requestedItemCount,
-                                                                                                                                      List<OrderByProps> orderByProps,
+                                                                                                                                      List<OrderByProp> orderByProps,
                                                                                                                                       Expression<Func<TEntity, object>> unwindExpression,
                                                                                                                                       List<Expression<Func<TEmbedded, object>>> projectExpression = null,
                                                                                                                                       FilterDefinition<TEmbedded> filterExpressionForTEmbedded = null)
@@ -400,7 +400,7 @@ namespace Milvasoft.Helpers.DataAccess.MongoDB.Concrete
         /// <returns></returns>
         public async Task<(List<TEmbedded> entities, int pageCount, int totalDataCount)> GetNestedPropertyAsPaginatedAsync<TEmbedded>(int pageIndex,
                                                                                                                                       int requestedItemCount,
-                                                                                                                                      List<OrderByProps> orderByProps,
+                                                                                                                                      List<OrderByProp> orderByProps,
                                                                                                                                       Expression<Func<TEntity, object>> unwindExpression,
                                                                                                                                       FilterDefinition<TEntity> filterExpression = null,
                                                                                                                                       List<Expression<Func<TEmbedded, object>>> projectExpression = null,
@@ -687,7 +687,7 @@ namespace Milvasoft.Helpers.DataAccess.MongoDB.Concrete
         /// <returns></returns>
         protected (AggregateFacet<TEmbedded, TEmbedded>, string) GetAggregateFacetForEmbeddedPagination<TEmbedded>(int pageIndex,
                                                                                                                    int requestedItemCount,
-                                                                                                                   List<OrderByProps> orderByProps,
+                                                                                                                   List<OrderByProp> orderByProps,
                                                                                                                    string projectQuery,
                                                                                                                    FilterDefinition<TEmbedded> filterDefForTEmbedded = null)
         {
@@ -720,7 +720,7 @@ namespace Milvasoft.Helpers.DataAccess.MongoDB.Concrete
         /// </summary>
         /// <param name="orderByProps"></param>
         /// <returns></returns>
-        protected IEnumerable<IPipelineStageDefinition> GetSortDefinitions<T>(List<OrderByProps> orderByProps)
+        protected IEnumerable<IPipelineStageDefinition> GetSortDefinitions<T>(List<OrderByProp> orderByProps)
         {
             if (!orderByProps.IsNullOrEmpty())
                 foreach (var orderByProp in orderByProps)

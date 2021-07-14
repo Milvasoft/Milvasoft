@@ -644,7 +644,7 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
         /// <returns></returns>
         public virtual async Task UpdateAsync(TEntity entity)
         {
-            InitalizeEdit(entity);
+            //InitalizeEdit(entity);
             _dbSet.Update(entity);
             if (SaveChangesAfterEveryTransaction) await _dbContext.SaveChangesAsync().ConfigureAwait(false);
         }
@@ -656,7 +656,7 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
         /// <returns></returns>
         public virtual async Task UpdateAsync(IEnumerable<TEntity> entities)
         {
-            InitalizeEdit(entities);
+            //InitalizeEdit(entities);
             _dbSet.UpdateRange(entities);
             if (SaveChangesAfterEveryTransaction) await _dbContext.SaveChangesAsync().ConfigureAwait(false);
         }

@@ -120,12 +120,6 @@ namespace Milvasoft.SampleAPI.Services.Concrete
                                                                                                                 tokenExpiredDate: isMentor ? DateTime.Now.AddDays(100) : DateTime.Now.AddDays(5)).ConfigureAwait(false);
 
         /// <summary>
-        /// Signs out from database. 
-        /// </summary>
-        /// <returns>Returns null if already signed out.</returns>
-        public async Task<IdentityResult> LogoutAsync() => await base.LogoutAsync().ConfigureAwait(false);
-
-        /// <summary>
         /// Change user password.
         /// </summary>
         /// <param name="passDTO"></param>

@@ -5,7 +5,7 @@ namespace Milvasoft.Helpers.Models
     /// <summary>
     /// Order by properties for multiple ordey by in database.
     /// </summary>
-    public class OrderByProps
+    public class OrderByProp
     {
         /// <summary>
         /// Determines order by Property name of entity.

@@ -6,10 +6,15 @@ using System;
 namespace Milvasoft.Helpers.DataAccess.MongoDB.Entity.Concrete
 {
     /// <summary>
-    /// Base entity for most obk entities.
+    /// Base entity for entities. 
+    /// If <see cref="Environment"/>.ASPNETCORE_ENVIRONMENT variable is 'Development' you can set <see cref="CreationDate"/> prop.
+    /// If <see cref="Environment"/>.ASPNETCORE_ENVIRONMENT variable is 'Production' you cannot set <see cref="CreationDate"/>, this prop gets <see cref="ObjectId.CreationTime"/>.
     /// </summary>
     public abstract class DocumentBase : IDocumentBase
     {
+        private static bool _developmentEnv = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development";
+        private DateTime _creationDate;
+
         /// <summary>
         /// Unique key of entity.
         /// </summary>
@@ -20,12 +25,19 @@ namespace Milvasoft.Helpers.DataAccess.MongoDB.Entity.Concrete
         /// <summary>
         /// Last modification date of entity.
         /// </summary>
-        public DateTime? LastModificationDate { get; set; }
+        public virtual DateTime? LastModificationDate { get; set; }
 
         /// <summary>
         /// Creation date of entity.
         /// </summary>
-        //public DateTime CreationDate { get => Id.CreationTime; set { } }
-        public DateTime CreationDate { get; set; }
+        public virtual DateTime CreationDate
+        {
+            get => _developmentEnv ? _creationDate : Id.CreationTime;
+            set
+            {
+                if (_developmentEnv)
+                    _creationDate = value;
+            }
+        }
     }
 }

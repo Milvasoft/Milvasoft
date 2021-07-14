@@ -3155,12 +3155,6 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.SampleAPI.Services.Abstract.IAccountService.LogoutAsync">
-            <summary>
-            Signs out from database.
-            </summary>
-            <returns></returns>
-        </member>
         <member name="M:Milvasoft.SampleAPI.Services.Abstract.IAccountService.GetLoggedInInUserInformationAsync">
             <summary>
             Gets a specific personnel data from repository by token value if exsist.
@@ -3787,12 +3781,6 @@
             <param name="loginDTO"></param>
             <param name="isMentor"></param>
             <returns>Returns a token if the login information is correct.Otherwise returns the error list.</returns>
-        </member>
-        <member name="M:Milvasoft.SampleAPI.Services.Concrete.AccountService.LogoutAsync">
-            <summary>
-            Signs out from database. 
-            </summary>
-            <returns>Returns null if already signed out.</returns>
         </member>
         <member name="M:Milvasoft.SampleAPI.Services.Concrete.AccountService.ChangePasswordAsync(Milvasoft.SampleAPI.DTOs.AccountDTOs.ChangePassDTO)">
             <summary>

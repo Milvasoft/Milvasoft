@@ -22,12 +22,6 @@ namespace Milvasoft.SampleAPI.Services.Abstract
         Task<LoginResultDTO> LoginAsync(LoginDTO loginDTO, bool isMentor);
 
         /// <summary>
-        /// Signs out from database.
-        /// </summary>
-        /// <returns></returns>
-        Task<IdentityResult> LogoutAsync();
-
-        /// <summary>
         /// Gets a specific personnel data from repository by token value if exsist.
         /// </summary>
         /// <returns> Logged-in user data. </returns>

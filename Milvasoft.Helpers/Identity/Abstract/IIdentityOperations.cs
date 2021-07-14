@@ -24,7 +24,7 @@ namespace Milvasoft.Helpers.Identity.Abstract
        where TRole : IdentityRole<TKey>
        where TDbContext : IdentityDbContext<TUser, TRole, TKey>
        where TUserManager : UserManager<TUser>
-       where TLoginResultDTO : class, ILoginResultDTO, new()
+       where TLoginResultDTO : class, ILoginResultDTO<MilvaToken>, new()
        where TLocalizer : IStringLocalizer
     {
         #region Properties
