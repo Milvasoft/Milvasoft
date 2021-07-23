@@ -1,6 +1,8 @@
 ﻿using Milvasoft.Helpers.DependencyInjection;
 using Milvasoft.Helpers.Exceptions;
+using StackExchange.Redis;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Milvasoft.Helpers.Caching
@@ -46,6 +48,18 @@ namespace Milvasoft.Helpers.Caching
         /// <param name="key"></param>
         /// <returns></returns>
         Task<string> GetAsync(string key);
+
+        /// <summary>
+        /// Gets <paramref name="keys"/> values.
+        /// </summary>
+        /// <returns></returns>
+        Task<IEnumerable<T>> GetAsync<T>(IEnumerable<string> keys);
+
+        /// <summary>
+        /// Gets <paramref name="keys"/> values.
+        /// </summary>
+        /// <returns></returns>
+        Task<RedisValue[]> GetAsync(IEnumerable<string> keys);
 
         /// <summary>
         /// Sets <paramref name="value"/> with <paramref name="key"/>.

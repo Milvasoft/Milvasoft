@@ -1,8 +1,11 @@
 ﻿using Milvasoft.Helpers.DependencyInjection;
 using Milvasoft.Helpers.Enums;
 using Milvasoft.Helpers.Exceptions;
+using Milvasoft.Helpers.Extensions;
+using Newtonsoft.Json;
 using StackExchange.Redis;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -77,7 +80,6 @@ namespace Milvasoft.Helpers.Caching
             return ((string)await _client.GetDatabase().StringGetAsync(key)).ToObject<T>();
         }
 
-
         /// <summary>
         /// Gets <paramref name="key"/>'s value.
         /// </summary>
@@ -87,6 +89,46 @@ namespace Milvasoft.Helpers.Caching
         {
             await CheckClientAndConnectIfNotAsync().ConfigureAwait(false);
             return await _client.GetDatabase().StringGetAsync(key);
+        }
+
+        /// <summary>
+        /// Gets <paramref name="keys"/> values.
+        /// </summary>
+        /// <returns></returns>
+        public async Task<IEnumerable<T>> GetAsync<T>(IEnumerable<string> keys)
+        {
+            if (keys.IsNullOrEmpty())
+                return null;
+
+            var redisKeys = Array.ConvertAll(keys.ToArray(), item => (RedisKey)item);
+
+            var values = await _client.GetDatabase().StringGetAsync(redisKeys);
+
+            if (values.IsNullOrEmpty())
+                return null;
+
+            var redisValues = Array.ConvertAll(values, item => JsonConvert.DeserializeObject<T>((string)item));
+
+            return redisValues;
+        }
+
+        /// <summary>
+        /// Gets <paramref name="keys"/> values.
+        /// </summary>
+        /// <returns></returns>
+        public async Task<RedisValue[]> GetAsync(IEnumerable<string> keys)
+        {
+            if (keys.IsNullOrEmpty())
+                return null;
+
+            var redisKeys = Array.ConvertAll(keys.ToArray(), item => (RedisKey)item);
+
+            var values =  await _client.GetDatabase().StringGetAsync(redisKeys);
+
+            if (values.IsNullOrEmpty())
+                return null;
+
+            return values;
         }
 
         /// <summary>

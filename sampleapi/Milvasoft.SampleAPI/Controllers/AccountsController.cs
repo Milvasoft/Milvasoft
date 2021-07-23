@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
 using Milvasoft.Helpers;
+using Milvasoft.Helpers.Caching;
 using Milvasoft.Helpers.Enums;
 using Milvasoft.Helpers.Extensions;
 using Milvasoft.Helpers.Models.Response;
@@ -12,6 +13,8 @@ using Milvasoft.SampleAPI.Localization;
 using Milvasoft.SampleAPI.Services.Abstract;
 using Milvasoft.SampleAPI.Utils;
 using Milvasoft.SampleAPI.Utils.Attributes.ActionFilters;
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -30,7 +33,6 @@ namespace Milvasoft.SampleAPI.Controllers
         private readonly IStringLocalizer<SharedResource> _sharedLocalizer;
         private readonly IAccountService _accountService;
         private readonly string _defaultSucccessMessage;
-
         /// <summary>
         /// Constructor of <c>AccountController</c>
         /// </summary>

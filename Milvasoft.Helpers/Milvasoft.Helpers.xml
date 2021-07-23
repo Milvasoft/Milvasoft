@@ -369,6 +369,18 @@
             <param name="key"></param>
             <returns></returns>
         </member>
+        <member name="M:Milvasoft.Helpers.Caching.IRedisCacheService.GetAsync``1(System.Collections.Generic.IEnumerable{System.String})">
+            <summary>
+            Gets <paramref name="keys"/> values.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.Caching.IRedisCacheService.GetAsync(System.Collections.Generic.IEnumerable{System.String})">
+            <summary>
+            Gets <paramref name="keys"/> values.
+            </summary>
+            <returns></returns>
+        </member>
         <member name="M:Milvasoft.Helpers.Caching.IRedisCacheService.SetAsync(System.String,System.Object)">
             <summary>
             Sets <paramref name="value"/> with <paramref name="key"/>.
@@ -552,6 +564,18 @@
             Gets <paramref name="key"/>'s value.
             </summary>
             <param name="key"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.Caching.RedisCacheService.GetAsync``1(System.Collections.Generic.IEnumerable{System.String})">
+            <summary>
+            Gets <paramref name="keys"/> values.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.Caching.RedisCacheService.GetAsync(System.Collections.Generic.IEnumerable{System.String})">
+            <summary>
+            Gets <paramref name="keys"/> values.
+            </summary>
             <returns></returns>
         </member>
         <member name="M:Milvasoft.Helpers.Caching.RedisCacheService.SetAsync(System.String,System.Object)">
