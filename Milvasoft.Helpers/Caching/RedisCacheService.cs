@@ -123,7 +123,7 @@ namespace Milvasoft.Helpers.Caching
 
             var redisKeys = Array.ConvertAll(keys.ToArray(), item => (RedisKey)item);
 
-            var values =  await _client.GetDatabase().StringGetAsync(redisKeys);
+            var values = await _client.GetDatabase().StringGetAsync(redisKeys);
 
             if (values.IsNullOrEmpty())
                 return null;

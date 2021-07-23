@@ -221,6 +221,8 @@ namespace Milvasoft.Helpers.DataAccess.MongoDB.Concrete
             return aggregateFacetResult.First().Facets.First(x => x.Name == "matchingDatas").Output<TEmbedded>().ToList();
         }
 
+        #region Pagination
+
         /// <summary>
         /// 
         /// You can bring up the page number you want with the number of data count you want.
@@ -292,7 +294,7 @@ namespace Milvasoft.Helpers.DataAccess.MongoDB.Concrete
         /// <param name="orderByProps"></param>
         /// <param name="unwindExpression"></param>
         /// <param name="projectExpression"></param>
-        /// <param name="filterExpressionForTEmbedded"></param>
+        /// <param name="filterDefinitionForEmbedded"></param>
         /// <returns></returns>
         public async Task<(List<TEmbedded> entities, int pageCount, int totalDataCount)> GetNestedPropertyAsPaginatedAsync<TEmbedded>(ObjectId entityId,
                                                                                                                                       int pageIndex,
@@ -300,7 +302,7 @@ namespace Milvasoft.Helpers.DataAccess.MongoDB.Concrete
                                                                                                                                       List<OrderByProp> orderByProps,
                                                                                                                                       Expression<Func<TEntity, object>> unwindExpression,
                                                                                                                                       List<Expression<Func<TEmbedded, object>>> projectExpression = null,
-                                                                                                                                      FilterDefinition<TEmbedded> filterExpressionForTEmbedded = null)
+                                                                                                                                      FilterDefinition<TEmbedded> filterDefinitionForEmbedded = null)
         {
             ValidatePaginationParameters(pageIndex, requestedItemCount);
 
@@ -310,7 +312,7 @@ namespace Milvasoft.Helpers.DataAccess.MongoDB.Concrete
                                                                                 requestedItemCount,
                                                                                 orderByProps,
                                                                                 projectQuery,
-                                                                                filterExpressionForTEmbedded);
+                                                                                filterDefinitionForEmbedded);
 
             var filterDefForTentity = Builders<TEntity>.Filter.Where(p => p.Id == entityId);
 
@@ -319,7 +321,7 @@ namespace Milvasoft.Helpers.DataAccess.MongoDB.Concrete
             var count = await GetTotalDataCount(unwindExpression,
                                                 projectQuery,
                                                 filterDefForTentity,
-                                                filterExpressionForTEmbedded).ConfigureAwait(false);
+                                                filterDefinitionForEmbedded).ConfigureAwait(false);
 
             var totalPages = (int)Math.Ceiling((double)count / requestedItemCount);
 
@@ -344,7 +346,7 @@ namespace Milvasoft.Helpers.DataAccess.MongoDB.Concrete
         /// <param name="orderByProps"></param>
         /// <param name="unwindExpression"></param>
         /// <param name="projectExpression"></param>
-        /// <param name="filterExpressionForTEmbedded"></param>
+        /// <param name="filterDefinitionForEmbedded"></param>
         /// <returns></returns>
         public async Task<(List<TEmbedded> entities, int pageCount, int totalDataCount)> GetNestedPropertyAsPaginatedAsync<TEmbedded>(List<ObjectId> entityIds,
                                                                                                                                       int pageIndex,
@@ -352,7 +354,7 @@ namespace Milvasoft.Helpers.DataAccess.MongoDB.Concrete
                                                                                                                                       List<OrderByProp> orderByProps,
                                                                                                                                       Expression<Func<TEntity, object>> unwindExpression,
                                                                                                                                       List<Expression<Func<TEmbedded, object>>> projectExpression = null,
-                                                                                                                                      FilterDefinition<TEmbedded> filterExpressionForTEmbedded = null)
+                                                                                                                                      FilterDefinition<TEmbedded> filterDefinitionForEmbedded = null)
         {
             ValidatePaginationParameters(pageIndex, requestedItemCount);
 
@@ -364,14 +366,14 @@ namespace Milvasoft.Helpers.DataAccess.MongoDB.Concrete
                                                                                 requestedItemCount,
                                                                                 orderByProps,
                                                                                 projectQuery,
-                                                                                filterExpressionForTEmbedded);
+                                                                                filterDefinitionForEmbedded);
 
             var aggregateFacetResult = await _collection.Aggregate().Match(whereExpression).Unwind<TEntity, TEmbedded>(unwindExpression).Facet(dataFacet).ToListAsync().ConfigureAwait(false);
 
             var count = await GetTotalDataCount(unwindExpression,
                                                 projectQuery,
                                                 whereExpression,
-                                                filterExpressionForTEmbedded).ConfigureAwait(false);
+                                                filterDefinitionForEmbedded).ConfigureAwait(false);
 
             var totalPages = (int)Math.Ceiling((double)count / requestedItemCount);
 
@@ -394,17 +396,17 @@ namespace Milvasoft.Helpers.DataAccess.MongoDB.Concrete
         /// <param name="requestedItemCount"></param>
         /// <param name="orderByProps"></param>
         /// <param name="unwindExpression"></param>
-        /// <param name="filterExpression"></param>
+        /// <param name="filterDefinition"></param>
         /// <param name="projectExpression"></param>
-        /// <param name="filterDefForTEmbedded"></param>
+        /// <param name="filterDefinitionForEmbedded"></param>
         /// <returns></returns>
         public async Task<(List<TEmbedded> entities, int pageCount, int totalDataCount)> GetNestedPropertyAsPaginatedAsync<TEmbedded>(int pageIndex,
                                                                                                                                       int requestedItemCount,
                                                                                                                                       List<OrderByProp> orderByProps,
                                                                                                                                       Expression<Func<TEntity, object>> unwindExpression,
-                                                                                                                                      FilterDefinition<TEntity> filterExpression = null,
+                                                                                                                                      FilterDefinition<TEntity> filterDefinition = null,
                                                                                                                                       List<Expression<Func<TEmbedded, object>>> projectExpression = null,
-                                                                                                                                      FilterDefinition<TEmbedded> filterDefForTEmbedded = null)
+                                                                                                                                      FilterDefinition<TEmbedded> filterDefinitionForEmbedded = null)
         {
             ValidatePaginationParameters(pageIndex, requestedItemCount);
 
@@ -414,14 +416,14 @@ namespace Milvasoft.Helpers.DataAccess.MongoDB.Concrete
                                                                                 requestedItemCount,
                                                                                 orderByProps,
                                                                                 projectQuery,
-                                                                                filterDefForTEmbedded);
+                                                                                filterDefinitionForEmbedded);
 
-            var aggregateFacetResult = await _collection.Aggregate().Match(filterExpression ?? Builders<TEntity>.Filter.Empty).Unwind<TEntity, TEmbedded>(unwindExpression).Facet(dataFacet).ToListAsync().ConfigureAwait(false);
+            var aggregateFacetResult = await _collection.Aggregate().Match(filterDefinition ?? Builders<TEntity>.Filter.Empty).Unwind<TEntity, TEmbedded>(unwindExpression).Facet(dataFacet).ToListAsync().ConfigureAwait(false);
 
             var count = await GetTotalDataCount(unwindExpression,
                                                 projectQuery,
-                                                filterExpression,
-                                                filterDefForTEmbedded).ConfigureAwait(false);
+                                                filterDefinition,
+                                                filterDefinitionForEmbedded).ConfigureAwait(false);
 
             var totalPages = (int)Math.Ceiling((double)count / requestedItemCount);
 
@@ -429,6 +431,8 @@ namespace Milvasoft.Helpers.DataAccess.MongoDB.Concrete
 
             return (data, totalPages, count);
         }
+
+        #endregion
 
         /// <summary>
         ///  Adds single entity to database asynchronously.

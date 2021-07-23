@@ -3313,6 +3313,7 @@
             
             You can bring up the page number you want with the number of data count you want.
             
+            <para> You can sort when listing data. </para>
             <para> You can send the filter value to the Nested list. See <paramref name="filterDefinition"/>. </para>
             <para> You can get the specific properties. See <paramref name="projectExpression"/>. </para>
             
@@ -3329,6 +3330,7 @@
             
             According to the <paramref name="entityId"/>, you can bring up the nested list with the page number you want and the number of data you want.
             
+            <para> You can sort when listing data. </para>
             <para> You can send the filter value to the Nested list. See <paramref name="projectExpression"/>. </para>
             <para> You can get the specific properties. See <paramref name="projectExpression"/>. </para>
             <para> We specify the nested list with <paramref name="unwindExpression"/>. </para>
@@ -3341,7 +3343,7 @@
             <param name="orderByProps"></param>
             <param name="unwindExpression"></param>
             <param name="projectExpression"></param>
-            <param name="filterDefinition"></param>
+            <param name="filterDefinitionForEmbedded"></param>
             <returns></returns>
         </member>
         <member name="M:Milvasoft.Helpers.DataAccess.MongoDB.Abstract.IBaseRepository`1.GetNestedPropertyAsPaginatedAsync``1(System.Collections.Generic.List{MongoDB.Bson.ObjectId},System.Int32,System.Int32,System.Collections.Generic.List{Milvasoft.Helpers.Models.OrderByProp},System.Linq.Expressions.Expression{System.Func{`0,System.Object}},System.Collections.Generic.List{System.Linq.Expressions.Expression{System.Func{``0,System.Object}}},MongoDB.Driver.FilterDefinition{``0})">
@@ -3361,7 +3363,7 @@
             <param name="orderByProps"></param>
             <param name="unwindExpression"></param>
             <param name="projectExpression"></param>
-            <param name="filterDefinition"></param>
+            <param name="filterDefinitionForEmbedded"></param>
             <returns></returns>
         </member>
         <member name="M:Milvasoft.Helpers.DataAccess.MongoDB.Abstract.IBaseRepository`1.GetNestedPropertyAsPaginatedAsync``1(System.Int32,System.Int32,System.Collections.Generic.List{Milvasoft.Helpers.Models.OrderByProp},System.Linq.Expressions.Expression{System.Func{`0,System.Object}},MongoDB.Driver.FilterDefinition{`0},System.Collections.Generic.List{System.Linq.Expressions.Expression{System.Func{``0,System.Object}}},MongoDB.Driver.FilterDefinition{``0})">
@@ -3379,9 +3381,9 @@
             <param name="requestedItemCount"></param>
             <param name="orderByProps"></param>
             <param name="unwindExpression"></param>
-            <param name="filterExpression"></param>
+            <param name="filterDefinition"></param>
             <param name="projectExpression"></param>
-            <param name="filterDefForTEmbedded"></param>
+            <param name="filterDefinitionForEmbedded"></param>
             <returns></returns>
         </member>
         <member name="M:Milvasoft.Helpers.DataAccess.MongoDB.Abstract.IBaseRepository`1.AddAsync(`0)">
@@ -3606,7 +3608,7 @@
             <param name="orderByProps"></param>
             <param name="unwindExpression"></param>
             <param name="projectExpression"></param>
-            <param name="filterExpressionForTEmbedded"></param>
+            <param name="filterDefinitionForEmbedded"></param>
             <returns></returns>
         </member>
         <member name="M:Milvasoft.Helpers.DataAccess.MongoDB.Concrete.BaseRepository`1.GetNestedPropertyAsPaginatedAsync``1(System.Collections.Generic.List{MongoDB.Bson.ObjectId},System.Int32,System.Int32,System.Collections.Generic.List{Milvasoft.Helpers.Models.OrderByProp},System.Linq.Expressions.Expression{System.Func{`0,System.Object}},System.Collections.Generic.List{System.Linq.Expressions.Expression{System.Func{``0,System.Object}}},MongoDB.Driver.FilterDefinition{``0})">
@@ -3626,7 +3628,7 @@
             <param name="orderByProps"></param>
             <param name="unwindExpression"></param>
             <param name="projectExpression"></param>
-            <param name="filterExpressionForTEmbedded"></param>
+            <param name="filterDefinitionForEmbedded"></param>
             <returns></returns>
         </member>
         <member name="M:Milvasoft.Helpers.DataAccess.MongoDB.Concrete.BaseRepository`1.GetNestedPropertyAsPaginatedAsync``1(System.Int32,System.Int32,System.Collections.Generic.List{Milvasoft.Helpers.Models.OrderByProp},System.Linq.Expressions.Expression{System.Func{`0,System.Object}},MongoDB.Driver.FilterDefinition{`0},System.Collections.Generic.List{System.Linq.Expressions.Expression{System.Func{``0,System.Object}}},MongoDB.Driver.FilterDefinition{``0})">
@@ -3644,9 +3646,9 @@
             <param name="requestedItemCount"></param>
             <param name="orderByProps"></param>
             <param name="unwindExpression"></param>
-            <param name="filterExpression"></param>
+            <param name="filterDefinition"></param>
             <param name="projectExpression"></param>
-            <param name="filterDefForTEmbedded"></param>
+            <param name="filterDefinitionForEmbedded"></param>
             <returns></returns>
         </member>
         <member name="M:Milvasoft.Helpers.DataAccess.MongoDB.Concrete.BaseRepository`1.AddAsync(`0)">

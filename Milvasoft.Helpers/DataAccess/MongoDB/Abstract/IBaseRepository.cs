@@ -108,10 +108,13 @@ namespace Milvasoft.Helpers.DataAccess.MongoDB.Abstract
                                                                        Expression<Func<TEmbedded, bool>> filterExpressionForTEmbedded = null,
                                                                        List<Expression<Func<TEmbedded, object>>> projectExpression = null);
 
+        #region Pagination
+
         /// <summary>
         /// 
         /// You can bring up the page number you want with the number of data count you want.
         /// 
+        /// <para> You can sort when listing data. </para>
         /// <para> You can send the filter value to the Nested list. See <paramref name="filterDefinition"/>. </para>
         /// <para> You can get the specific properties. See <paramref name="projectExpression"/>. </para>
         /// 
@@ -127,10 +130,12 @@ namespace Milvasoft.Helpers.DataAccess.MongoDB.Abstract
                                                                                               List<OrderByProp> orderByProps,
                                                                                               FilterDefinition<TEntity> filterDefinition = null,
                                                                                               Expression<Func<TEntity, TEntity>> projectExpression = null);
+
         /// <summary>
         /// 
         /// According to the <paramref name="entityId"/>, you can bring up the nested list with the page number you want and the number of data you want.
         /// 
+        /// <para> You can sort when listing data. </para>
         /// <para> You can send the filter value to the Nested list. See <paramref name="projectExpression"/>. </para>
         /// <para> You can get the specific properties. See <paramref name="projectExpression"/>. </para>
         /// <para> We specify the nested list with <paramref name="unwindExpression"/>. </para>
@@ -143,7 +148,7 @@ namespace Milvasoft.Helpers.DataAccess.MongoDB.Abstract
         /// <param name="orderByProps"></param>
         /// <param name="unwindExpression"></param>
         /// <param name="projectExpression"></param>
-        /// <param name="filterDefinition"></param>
+        /// <param name="filterDefinitionForEmbedded"></param>
         /// <returns></returns>
         Task<(List<TEmbedded> entities, int pageCount, int totalDataCount)> GetNestedPropertyAsPaginatedAsync<TEmbedded>(ObjectId entityId,
                                                                                                                          int pageIndex,
@@ -151,7 +156,7 @@ namespace Milvasoft.Helpers.DataAccess.MongoDB.Abstract
                                                                                                                          List<OrderByProp> orderByProps,
                                                                                                                          Expression<Func<TEntity, object>> unwindExpression,
                                                                                                                          List<Expression<Func<TEmbedded, object>>> projectExpression = null,
-                                                                                                                         FilterDefinition<TEmbedded> filterDefinition = null);
+                                                                                                                         FilterDefinition<TEmbedded> filterDefinitionForEmbedded = null);
 
         /// <summary>
         /// 
@@ -169,7 +174,7 @@ namespace Milvasoft.Helpers.DataAccess.MongoDB.Abstract
         /// <param name="orderByProps"></param>
         /// <param name="unwindExpression"></param>
         /// <param name="projectExpression"></param>
-        /// <param name="filterDefinition"></param>
+        /// <param name="filterDefinitionForEmbedded"></param>
         /// <returns></returns>
         Task<(List<TEmbedded> entities, int pageCount, int totalDataCount)> GetNestedPropertyAsPaginatedAsync<TEmbedded>(List<ObjectId> entityIds,
                                                                                                                          int pageIndex,
@@ -177,7 +182,7 @@ namespace Milvasoft.Helpers.DataAccess.MongoDB.Abstract
                                                                                                                          List<OrderByProp> orderByProps,
                                                                                                                          Expression<Func<TEntity, object>> unwindExpression,
                                                                                                                          List<Expression<Func<TEmbedded, object>>> projectExpression = null,
-                                                                                                                         FilterDefinition<TEmbedded> filterDefinition = null);
+                                                                                                                         FilterDefinition<TEmbedded> filterDefinitionForEmbedded = null);
 
         /// <summary>
         /// 
@@ -193,17 +198,19 @@ namespace Milvasoft.Helpers.DataAccess.MongoDB.Abstract
         /// <param name="requestedItemCount"></param>
         /// <param name="orderByProps"></param>
         /// <param name="unwindExpression"></param>
-        /// <param name="filterExpression"></param>
+        /// <param name="filterDefinition"></param>
         /// <param name="projectExpression"></param>
-        /// <param name="filterDefForTEmbedded"></param>
+        /// <param name="filterDefinitionForEmbedded"></param>
         /// <returns></returns>
         Task<(List<TEmbedded> entities, int pageCount, int totalDataCount)> GetNestedPropertyAsPaginatedAsync<TEmbedded>(int pageIndex,
                                                                                                                          int requestedItemCount,
                                                                                                                          List<OrderByProp> orderByProps,
                                                                                                                          Expression<Func<TEntity, object>> unwindExpression,
-                                                                                                                         FilterDefinition<TEntity> filterExpression = null,
+                                                                                                                         FilterDefinition<TEntity> filterDefinition = null,
                                                                                                                          List<Expression<Func<TEmbedded, object>>> projectExpression = null,
-                                                                                                                         FilterDefinition<TEmbedded> filterDefForTEmbedded = null);
+                                                                                                                         FilterDefinition<TEmbedded> filterDefinitionForEmbedded = null);
+
+        #endregion
 
         /// <summary>
         ///  Adds single entity to database asynchronously.
