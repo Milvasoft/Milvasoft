@@ -115,7 +115,7 @@ namespace Milvasoft.Helpers.Test.Integration.Utils
         /// <param name="loginDTO"></param>
         /// <param name="httpMethod"></param>
         /// <returns></returns>
-        public static async Task<TLoginResultDTO> LoginForTestAsync<TLoginResultDTO>(HttpClient httpClient, object loginDTO, string httpMethod = "POST")
+        public static async Task<ObjectResponse<TLoginResultDTO>> LoginForTestAsync<TLoginResultDTO>(HttpClient httpClient, object loginDTO, string httpMethod = "POST")
         {
             var loginUrl = MilvaTestClient<MilvaTestStartup>.LoginUrl;
 
@@ -124,7 +124,7 @@ namespace Milvasoft.Helpers.Test.Integration.Utils
 
             var request = HttpRequestMessage(new HttpMethod(httpMethod), loginUrl, obj: loginDTO);
 
-            return await GetHttpResponseAsync<TLoginResultDTO>(request, httpClient).ConfigureAwait(false);
+            return await GetHttpObjectResponseAsync<TLoginResultDTO>(request, httpClient).ConfigureAwait(false);
         }
 
         /// <summary>

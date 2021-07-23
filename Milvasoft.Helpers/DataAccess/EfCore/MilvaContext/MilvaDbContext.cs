@@ -127,7 +127,7 @@ namespace Milvasoft.Helpers.DataAccess.MilvaContext
         /// </summary>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+        public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
         {
             AuditEntites();
             return base.SaveChangesAsync(cancellationToken);
@@ -288,7 +288,7 @@ namespace Milvasoft.Helpers.DataAccess.MilvaContext
         /// Provides auditing entities by <see cref="AuditConfiguration"/>.
         /// If deletion process happens then sets the <see cref="IgnoreSoftDelete"/> variable to true at the end of process.
         /// </summary>
-        protected virtual void AuditEntites()
+        public virtual void AuditEntites()
         {
             foreach (var entry in ChangeTracker.Entries())
             {
