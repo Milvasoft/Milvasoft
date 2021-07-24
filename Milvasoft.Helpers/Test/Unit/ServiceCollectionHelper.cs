@@ -20,7 +20,7 @@ namespace Milvasoft.Helpers.Test.Unit
         private readonly IJsonOperations _jsonOperations;
 
         /// <summary>
-        /// Constructor of <see cref="ServiceCollectionHelper"/>.
+        /// Constructor of <see cref="ServiceCollectionHelper{TUser}"/>.
         /// 
         /// <para> If you use this constructor, <see cref="IServiceCollection"/> and <see cref="IJsonOperations"/> objects are created as a singleton. </para>
         /// 
@@ -37,7 +37,7 @@ namespace Milvasoft.Helpers.Test.Unit
         }
 
         /// <summary>
-        /// Constructor of <see cref="ServiceCollectionHelper"/>.
+        /// Constructor of <see cref="ServiceCollectionHelper{TUser}"/>.
         /// 
         /// <para> If you use this constructor, you have to send <paramref name="services"/> and <paramref name="jsonOperations"/> objects. </para>
         /// 
@@ -83,7 +83,6 @@ namespace Milvasoft.Helpers.Test.Unit
         /// Creates a fake <see cref="IWebHostEnvironment"/> for the test environment.
         /// </summary>
         /// <param name="environment"></param>
-        /// <param name="webHostEnvironment"></param>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1822:Mark members as static", Justification = "<Pending>")]
         public IWebHostEnvironment MockTestEnvironment(string environment)
         {
