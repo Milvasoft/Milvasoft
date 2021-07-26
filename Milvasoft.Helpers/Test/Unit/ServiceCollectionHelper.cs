@@ -95,9 +95,9 @@ namespace Milvasoft.Helpers.Test.Unit
                                                        string webRootPath = null,
                                                        IFileProvider webRootFileProvider = null,
                                                        string contentRootPath = null,
-                                                       IFileProvider contentRootFileProvider = null )
+                                                       IFileProvider contentRootFileProvider = null)
         {
-            IWebHostEnvironment webHostEnvironment = new TestHostEnvironment
+            return new TestHostEnvironment
             {
                 EnvironmentName = environmentName,
                 ApplicationName = applicationName,
@@ -106,8 +106,6 @@ namespace Milvasoft.Helpers.Test.Unit
                 WebRootFileProvider = webRootFileProvider,
                 WebRootPath = webRootPath
             };
-
-            return webHostEnvironment;
         }
 
         /// <summary>
@@ -121,11 +119,10 @@ namespace Milvasoft.Helpers.Test.Unit
                 new Claim(ClaimTypes.Name, userName)
             }, "mock"));
 
-            var httpContext = new DefaultHttpContext() { User = user };
-
-            var httpContextAccessor = new HttpContextAccessor();
-
-            httpContextAccessor.HttpContext = httpContext;
+            var httpContextAccessor = new HttpContextAccessor
+            {
+                HttpContext = new DefaultHttpContext() { User = user }
+            };
 
             _services.AddSingleton((_) => httpContextAccessor);
         }
