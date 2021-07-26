@@ -3,10 +3,11 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.FileProviders;
 using Milvasoft.Helpers.FileOperations.Abstract;
 using Milvasoft.Helpers.FileOperations.Concrete;
-using Moq;
 using System;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace Milvasoft.Helpers.Test.Unit
@@ -82,14 +83,31 @@ namespace Milvasoft.Helpers.Test.Unit
         /// <summary>
         /// Creates a fake <see cref="IWebHostEnvironment"/> for the test environment.
         /// </summary>
-        /// <param name="environment"></param>
+        /// <param name="environmentName"></param>
+        /// <param name="applicationName"></param>
+        /// <param name="webRootPath"></param>
+        /// <param name="webRootFileProvider"></param>
+        /// <param name="contentRootPath"></param>
+        /// <param name="contentRootFileProvider"></param>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1822:Mark members as static", Justification = "<Pending>")]
-        public IWebHostEnvironment MockTestEnvironment(string environment)
+        public IWebHostEnvironment MockTestEnvironment(string environmentName,
+                                                       string applicationName = null,
+                                                       string webRootPath = null,
+                                                       IFileProvider webRootFileProvider = null,
+                                                       string contentRootPath = null,
+                                                       IFileProvider contentRootFileProvider = null )
         {
-            var mockWebHostEnvironment = new Mock<IWebHostEnvironment>();
-            mockWebHostEnvironment.Setup(p => p.EnvironmentName).Returns(environment);
+            IWebHostEnvironment webHostEnvironment = new TestHostEnvironment
+            {
+                EnvironmentName = environmentName,
+                ApplicationName = applicationName,
+                ContentRootFileProvider = contentRootFileProvider,
+                ContentRootPath = contentRootPath,
+                WebRootFileProvider = webRootFileProvider,
+                WebRootPath = webRootPath
+            };
 
-            return mockWebHostEnvironment.Object;
+            return webHostEnvironment;
         }
 
         /// <summary>
@@ -98,10 +116,18 @@ namespace Milvasoft.Helpers.Test.Unit
         /// <param name="userName"></param>
         public void MockLoggedUser(string userName)
         {
-            var mockHttpContextAccessor = new Mock<IHttpContextAccessor>();
-            mockHttpContextAccessor.Setup(o => o.HttpContext.User.Identity.Name).Returns(userName);
+            var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
+            {
+                new Claim(ClaimTypes.Name, userName)
+            }, "mock"));
 
-            _services.AddSingleton((_) => mockHttpContextAccessor.Object);
+            var httpContext = new DefaultHttpContext() { User = user };
+
+            var httpContextAccessor = new HttpContextAccessor();
+
+            httpContextAccessor.HttpContext = httpContext;
+
+            _services.AddSingleton((_) => httpContextAccessor);
         }
 
         /// <summary>

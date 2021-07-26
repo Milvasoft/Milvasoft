@@ -843,6 +843,13 @@
             <param name="value"></param>
             <returns></returns>
         </member>
+        <member name="M:Milvasoft.Helpers.CommonHelper.ToObjectId(System.Int32)">
+            <summary>
+            Converts <paramref name="value"/>'s type to <see cref="T:MongoDB.Bson.ObjectId"/>
+            </summary>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
         <member name="M:Milvasoft.Helpers.CommonHelper.GetRequiredLocalizerInstance``1(System.IServiceProvider)">
             <summary>
             Creates localizer instance if IStringLocalizerFactory registered to service collection.
@@ -10585,7 +10592,7 @@
         </member>
         <member name="M:Milvasoft.Helpers.Test.Unit.ServiceCollectionHelper`1.#ctor">
             <summary>
-            Constructor of <see cref="!:ServiceCollectionHelper"/>.
+            Constructor of <see cref="T:Milvasoft.Helpers.Test.Unit.ServiceCollectionHelper`1"/>.
             
             <para> If you use this constructor, <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/> and <see cref="T:Milvasoft.Helpers.FileOperations.Abstract.IJsonOperations"/> objects are created as a singleton. </para>
             
@@ -10593,7 +10600,7 @@
         </member>
         <member name="M:Milvasoft.Helpers.Test.Unit.ServiceCollectionHelper`1.#ctor(Microsoft.Extensions.DependencyInjection.IServiceCollection,Milvasoft.Helpers.FileOperations.Abstract.IJsonOperations)">
             <summary>
-            Constructor of <see cref="!:ServiceCollectionHelper"/>.
+            Constructor of <see cref="T:Milvasoft.Helpers.Test.Unit.ServiceCollectionHelper`1"/>.
             
             <para> If you use this constructor, you have to send <paramref name="services"/> and <paramref name="jsonOperations"/> objects. </para>
             
@@ -10624,12 +10631,16 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.Test.Unit.ServiceCollectionHelper`1.MockTestEnvironment(System.String)">
+        <member name="M:Milvasoft.Helpers.Test.Unit.ServiceCollectionHelper`1.MockTestEnvironment(System.String,System.String,System.String,Microsoft.Extensions.FileProviders.IFileProvider,System.String,Microsoft.Extensions.FileProviders.IFileProvider)">
             <summary>
             Creates a fake <see cref="T:Microsoft.AspNetCore.Hosting.IWebHostEnvironment"/> for the test environment.
             </summary>
-            <param name="environment"></param>
-            <param name="webHostEnvironment"></param>
+            <param name="environmentName"></param>
+            <param name="applicationName"></param>
+            <param name="webRootPath"></param>
+            <param name="webRootFileProvider"></param>
+            <param name="contentRootPath"></param>
+            <param name="contentRootFileProvider"></param>
         </member>
         <member name="M:Milvasoft.Helpers.Test.Unit.ServiceCollectionHelper`1.MockLoggedUser(System.String)">
             <summary>
@@ -10677,6 +10688,11 @@
             <typeparam name="TUser"></typeparam>
             <param name="userManager"></param>
             <returns></returns>
+        </member>
+        <member name="T:Milvasoft.Helpers.Test.Unit.TestHostEnvironment">
+            <summary>
+            Fake host environment class for <see cref="T:Microsoft.AspNetCore.Hosting.IWebHostEnvironment"/>.
+            </summary>
         </member>
         <member name="T:Milvasoft.Helpers.Utils.LocalizerKeys">
             <summary>
