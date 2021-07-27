@@ -1,4 +1,4 @@
-<h2 align="center">Welcome to Milvasoft Wiki!</h2>
+<h2 align="center">Welcome to Milvasoft!</h2>
 
 ![](https://i.hizliresim.com/12q7jh2.gif)
 
