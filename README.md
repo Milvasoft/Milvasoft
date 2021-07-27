@@ -1,4 +1,4 @@
-<h2 align="center">Welcome to Milvasoft!</h2>
+<h2 align="center">Welcome to Milvasoft Wiki!</h2>
 
 ![](https://i.hizliresim.com/12q7jh2.gif)
 
@@ -11,9 +11,13 @@
 <h3 align="center">The library includes the following features:</h3>
 
 ***
+<h3 align="center">Multi Tenancy</h3>
+It’s a single codebase that responds differently depending on which “tenant” is accessing it, there’s a few different patterns you can use like.<br>
 
-<h3 align="center">Attributes</h3>
-Attributes provide a powerful method of associating metadata, or declarative information, with code (assemblies, types, methods, properties, and so forth). After an attribute is associated with a program entity, the attribute can be queried at run time by using a technique called reflection. For more information, see <a href="https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/concepts/reflection">Reflection</a> (C#). More information for attributes, visit <a href="https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/concepts/attributes/">here.</a> <br><a href="https://github.com/Milvasoft/Milvasoft/wiki/Attributes"><b>Visit the library's attributes page.<b></a><br>
+**Application level isolation:** Spin up a new website and associated dependencies for each tenant.<br>
+**Multi-tenant app each with their own database:** Tenants use the same website, but have their own database.<br>
+**Multi-tenant app with multi-tenant database:** Tenants use the same website and the same database.
+<br><a href="https://github.com/Milvasoft/Milvasoft/wiki/Multi-Tenancy"><b>Visit the library's Multi Tenancy page.<b></a><br>
 
 
 ***
@@ -97,3 +101,13 @@ It allows you to send e-mail in the simplest way.
 <h3 align="center">File Operations</h3>
 It is a helper class that contains operations such as file upload, file download, file verification.
 <br><a href="https://github.com/Milvasoft/Milvasoft/wiki/File-Operations"><b>Visit the library's File Operations page.<b></a><br>
+
+***
+<h3 align="center">Identity</h3>
+Manages users, passwords, profile data, roles, claims, tokens, email confirmation, and more.
+<br><a href="https://github.com/Milvasoft/Milvasoft/wiki/Identity"><b>Visit the library's Identity page.<b></a><br>
+
+***
+
+<h3 align="center">Attributes</h3>
+Attributes provide a powerful method of associating metadata, or declarative information, with code (assemblies, types, methods, properties, and so forth). After an attribute is associated with a program entity, the attribute can be queried at run time by using a technique called reflection. For more information, see <a href="https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/concepts/reflection">Reflection</a> (C#). More information for attributes, visit <a href="https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/concepts/attributes/">here.</a> <br><a href="https://github.com/Milvasoft/Milvasoft/wiki/Attributes"><b>Visit the library's attributes page.<b></a><br>
