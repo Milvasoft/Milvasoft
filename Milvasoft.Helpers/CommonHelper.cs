@@ -141,7 +141,7 @@ namespace Milvasoft.Helpers
                                                                       ? stringLocalizer[LocalizerKeys.PreventStringInjectionMinLengthException]
                                                                       : "Please enter a valid value for the minimum character length.");
 
-            if (maxLength <= minLength) throw new MilvaValidationException(stringLocalizer != null
+            if (maxLength < minLength) throw new MilvaValidationException(stringLocalizer != null
                                                                                ? stringLocalizer[LocalizerKeys.PreventStringInjectionMinLengthBigThanMaxLengthException, minLength, maxLength]
                                                                                : $"The minimum value ({minLength}) you entered is greater than the maximum value ({maxLength}). Please enter a valid range of values.");
         }
