@@ -961,10 +961,8 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
         /// <param name="conditionExpression"></param>
         /// <returns></returns>
         public virtual async Task<TEntity> GetMaxAsync(Expression<Func<TEntity, bool>> conditionExpression = null)
-        {
-            return (await _dbSet.Where(CreateConditionExpression(conditionExpression) ?? (entity => true))
-                                                   .MaxAsync().ConfigureAwait(false));
-        }
+            => await _dbSet.Where(CreateConditionExpression(conditionExpression) ?? (entity => true))
+                                                   .MaxAsync().ConfigureAwait(false);
 
         /// <summary>
         /// Get max value of entities. With includes.
@@ -973,11 +971,35 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
         /// <param name="conditionExpression"></param>
         /// <returns></returns>
         public virtual async Task<TEntity> GetMaxAsync(Func<IIncludable<TEntity>, IIncludable> includes, Expression<Func<TEntity, bool>> conditionExpression = null)
-        {
-            return (await _dbSet.Where(CreateConditionExpression(conditionExpression) ?? (entity => true))
+            => await _dbSet.Where(CreateConditionExpression(conditionExpression) ?? (entity => true))
                                                    .IncludeMultiple(includes)
-                                                   .MaxAsync().ConfigureAwait(false));
-        }
+                                                   .MaxAsync().ConfigureAwait(false);
+
+        /// <summary>
+        /// Gets max value of <typeparamref name="TEntity"/>'s property in entities.
+        /// </summary>
+        /// <param name="maxProperty"></param>
+        /// <param name="conditionExpression"></param>
+        /// <returns></returns>
+        public virtual async Task<TEntity> GetMaxAsync<TProperty>(Expression<Func<TEntity, TProperty>> maxProperty, Expression<Func<TEntity, bool>> conditionExpression = null)
+            => await _dbSet.Where(CreateConditionExpression(conditionExpression) ?? (entity => true))
+                                                   .OrderByDescending(maxProperty)
+                                                   .FirstOrDefaultAsync().ConfigureAwait(false);
+
+        /// <summary>
+        /// Gets max value of <typeparamref name="TEntity"/>'s property in entities.
+        /// </summary>
+        /// <param name="maxProperty"></param>
+        /// <param name="includes"></param>
+        /// <param name="conditionExpression"></param>
+        /// <returns></returns>
+        public virtual async Task<object> GetMaxAsync<TProperty>(Expression<Func<TEntity, TProperty>> maxProperty,
+                                                                 Func<IIncludable<TEntity>, IIncludable> includes,
+                                                                 Expression<Func<TEntity, bool>> conditionExpression = null)
+            => (await _dbSet.Where(CreateConditionExpression(conditionExpression) ?? (entity => true))
+                                                   .IncludeMultiple(includes)
+                                                   .OrderByDescending(maxProperty)
+                                                   .FirstOrDefaultAsync().ConfigureAwait(false));
 
         /// <summary>
         /// Gets max value of <typeparamref name="TEntity"/>'s property in entities.
@@ -1009,10 +1031,8 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
         /// <param name="conditionExpression"></param>
         /// <returns></returns>
         public virtual async Task<object> GetMaxOfPropertyAsync<TProperty>(Expression<Func<TEntity, TProperty>> maxProperty, Expression<Func<TEntity, bool>> conditionExpression = null)
-        {
-            return (await _dbSet.Where(CreateConditionExpression(conditionExpression) ?? (entity => true))
-                                                   .MaxAsync(maxProperty).ConfigureAwait(false));
-        }
+            => await _dbSet.Where(CreateConditionExpression(conditionExpression) ?? (entity => true))
+                                                   .MaxAsync(maxProperty).ConfigureAwait(false);
 
         /// <summary>
         /// Get count of entities.
@@ -1020,10 +1040,8 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
         /// <param name="conditionExpression"></param>
         /// <returns></returns>
         public virtual async Task<int> GetCountAsync(Expression<Func<TEntity, bool>> conditionExpression = null)
-        {
-            return (await _dbSet.Where(CreateConditionExpression(conditionExpression) ?? (entity => true))
-                                                          .CountAsync().ConfigureAwait(false));
-        }
+            => await _dbSet.Where(CreateConditionExpression(conditionExpression) ?? (entity => true))
+                                                          .CountAsync().ConfigureAwait(false);
 
 
         /// <summary>

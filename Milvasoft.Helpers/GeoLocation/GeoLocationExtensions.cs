@@ -1,9 +1,5 @@
 ﻿using Milvasoft.Helpers.GeoLocation.Models;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Milvasoft.Helpers.GeoLocation
 {
@@ -13,7 +9,7 @@ namespace Milvasoft.Helpers.GeoLocation
     public static class GeoLocationExtensions
     {
         /// <summary>
-        /// Calculates the distance from <paramref name="point1"/> to <paramref name="point2"/>.
+        /// Calculates the distance in km from <paramref name="point1"/> to <paramref name="point2"/>.
         /// </summary>
         /// <param name="point1"></param>
         /// <param name="point2"></param>

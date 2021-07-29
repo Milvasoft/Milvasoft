@@ -1661,6 +1661,23 @@
             <param name="conditionExpression"></param>
             <returns></returns>
         </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.GetMaxAsync``1(System.Linq.Expressions.Expression{System.Func{`0,``0}},System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
+            <summary>
+            Gets max value of <typeparamref name="TEntity"/>'s property in entities.
+            </summary>
+            <param name="maxProperty"></param>
+            <param name="conditionExpression"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.GetMaxAsync``1(System.Linq.Expressions.Expression{System.Func{`0,``0}},System.Func{Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable{`0},Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable},System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
+            <summary>
+            Gets max value of <typeparamref name="TEntity"/>'s property in entities.
+            </summary>
+            <param name="maxProperty"></param>
+            <param name="includes"></param>
+            <param name="conditionExpression"></param>
+            <returns></returns>
+        </member>
         <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.GetMaxOfPropertyAsync(System.String,System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
             <summary>
             Gets max value of <typeparamref name="TEntity"/>'s property in entities.
@@ -2338,6 +2355,23 @@
             <summary>
             Get max value of entities. With includes.
             </summary>
+            <param name="includes"></param>
+            <param name="conditionExpression"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.GetMaxAsync``1(System.Linq.Expressions.Expression{System.Func{`0,``0}},System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
+            <summary>
+            Gets max value of <typeparamref name="TEntity"/>'s property in entities.
+            </summary>
+            <param name="maxProperty"></param>
+            <param name="conditionExpression"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.GetMaxAsync``1(System.Linq.Expressions.Expression{System.Func{`0,``0}},System.Func{Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable{`0},Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable},System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
+            <summary>
+            Gets max value of <typeparamref name="TEntity"/>'s property in entities.
+            </summary>
+            <param name="maxProperty"></param>
             <param name="includes"></param>
             <param name="conditionExpression"></param>
             <returns></returns>
@@ -7128,6 +7162,41 @@
             <param name="maxValuesObject"></param>
             <param name="requestedProperties"></param>
             <returns> Mapped <paramref name="maxValuesObject"/> </returns>
+        </member>
+        <member name="T:Milvasoft.Helpers.GeoLocation.GeoLocationExtensions">
+            <summary>
+            Extension methods for geo location.
+            </summary>
+        </member>
+        <member name="M:Milvasoft.Helpers.GeoLocation.GeoLocationExtensions.CalculateDistance(Milvasoft.Helpers.GeoLocation.Models.GeoPoint,Milvasoft.Helpers.GeoLocation.Models.GeoPoint)">
+            <summary>
+            Calculates the distance in km from <paramref name="point1"/> to <paramref name="point2"/>.
+            </summary>
+            <param name="point1"></param>
+            <param name="point2"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Milvasoft.Helpers.GeoLocation.Models.GeoPoint">
+            <summary>
+            Location point.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.GeoLocation.Models.GeoPoint.Latitude">
+            <summary>
+            Latitude of point.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.GeoLocation.Models.GeoPoint.Longitude">
+            <summary>
+            Longitude of point.
+            </summary>
+        </member>
+        <member name="M:Milvasoft.Helpers.GeoLocation.Models.GeoPoint.#ctor(System.Double,System.Double)">
+            <summary>
+            Initialize new instance of <see cref="T:Milvasoft.Helpers.GeoLocation.Models.GeoPoint"/> with lat and lon.
+            </summary>
+            <param name="latitude"></param>
+            <param name="longitude"></param>
         </member>
         <member name="T:Milvasoft.Helpers.Identity.Abstract.IIdentityOperations`7">
             <summary>

@@ -545,6 +545,25 @@ namespace Milvasoft.Helpers.DataAccess.Abstract
         /// <summary>
         /// Gets max value of <typeparamref name="TEntity"/>'s property in entities.
         /// </summary>
+        /// <param name="maxProperty"></param>
+        /// <param name="conditionExpression"></param>
+        /// <returns></returns>
+        Task<TEntity> GetMaxAsync<TProperty>(Expression<Func<TEntity, TProperty>> maxProperty, Expression<Func<TEntity, bool>> conditionExpression = null);
+
+        /// <summary>
+        /// Gets max value of <typeparamref name="TEntity"/>'s property in entities.
+        /// </summary>
+        /// <param name="maxProperty"></param>
+        /// <param name="includes"></param>
+        /// <param name="conditionExpression"></param>
+        /// <returns></returns>
+        Task<object> GetMaxAsync<TProperty>(Expression<Func<TEntity, TProperty>> maxProperty,
+                                            Func<IIncludable<TEntity>, IIncludable> includes,
+                                            Expression<Func<TEntity, bool>> conditionExpression = null);
+
+        /// <summary>
+        /// Gets max value of <typeparamref name="TEntity"/>'s property in entities.
+        /// </summary>
         /// <param name="maxPropertyName"></param>
         /// <param name="conditionExpression"></param>
         /// <returns></returns>
