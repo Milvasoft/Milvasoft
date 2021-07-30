@@ -42,47 +42,53 @@ namespace Milvasoft.Helpers.DataAccess.Abstract
         /// <summary>
         ///  Returns all entities which IsDeleted condition is true from database asynchronously. If the condition is requested, it also provides that condition.
         /// </summary>
+        /// <param name="projectionExpression"></param>
         /// <param name="conditionExpression"></param>
         /// <returns></returns>
-        Task<TEntity> GetFirstOrDefaultAsync(Expression<Func<TEntity, bool>> conditionExpression = null);
+        Task<TEntity> GetFirstOrDefaultAsync(Expression<Func<TEntity, bool>> conditionExpression = null, Expression<Func<TEntity, TEntity>> projectionExpression = null);
 
         /// <summary>
         ///  Returns all entities which IsDeleted condition is true with includes from database asynchronously. If the condition is requested, it also provides that condition.
         /// </summary>
         /// <param name="includes"></param>
         /// <param name="conditionExpression"></param>
+        /// <param name="projectionExpression"></param>
         /// <returns></returns>
-        Task<TEntity> GetFirstOrDefaultAsync(Func<IIncludable<TEntity>, IIncludable> includes, Expression<Func<TEntity, bool>> conditionExpression = null);
+        Task<TEntity> GetFirstOrDefaultAsync(Func<IIncludable<TEntity>, IIncludable> includes, Expression<Func<TEntity, bool>> conditionExpression = null, Expression<Func<TEntity, TEntity>> projectionExpression = null);
 
         /// <summary>
         ///  Returns all entities which IsDeleted condition is true from database asynchronously. If the condition is requested, it also provides that condition.
         /// </summary>
         /// <param name="conditionExpression"></param>
+        /// <param name="projectionExpression"></param>
         /// <returns></returns>
-        Task<TEntity> GetSingleOrDefaultAsync(Expression<Func<TEntity, bool>> conditionExpression = null);
+        Task<TEntity> GetSingleOrDefaultAsync(Expression<Func<TEntity, bool>> conditionExpression = null, Expression<Func<TEntity, TEntity>> projectionExpression = null);
 
         /// <summary>
         ///  Returns all entities which IsDeleted condition is true with includes from database asynchronously. If the condition is requested, it also provides that condition.
         /// </summary>
         /// <param name="includes"></param>
         /// <param name="conditionExpression"></param>
+        /// <param name="projectionExpression"></param>
         /// <returns></returns>
-        Task<TEntity> GetSingleOrDefaultAsync(Func<IIncludable<TEntity>, IIncludable> includes, Expression<Func<TEntity, bool>> conditionExpression = null);
+        Task<TEntity> GetSingleOrDefaultAsync(Func<IIncludable<TEntity>, IIncludable> includes, Expression<Func<TEntity, bool>> conditionExpression = null, Expression<Func<TEntity, TEntity>> projectionExpression = null);
 
         /// <summary>
         ///  Returns all entities which IsDeleted condition is true from database asynchronously. If the condition is requested, it also provides that condition.
         /// </summary>
+        /// <param name="projectionExpression"></param>
         /// <param name="conditionExpression"></param>
         /// <returns></returns>
-        Task<IEnumerable<TEntity>> GetAllAsync(Expression<Func<TEntity, bool>> conditionExpression = null);
+        Task<IEnumerable<TEntity>> GetAllAsync(Expression<Func<TEntity, bool>> conditionExpression = null, Expression<Func<TEntity, TEntity>> projectionExpression = null);
 
         /// <summary>
         ///  Returns all entities which IsDeleted condition is true with specified includes from database asynchronously. If the condition is requested, it also provides that condition.
         /// </summary>
         /// <param name="includes"></param>
+        /// <param name="projectionExpression"></param>
         /// <param name="conditionExpression"></param>
         /// <returns></returns>
-        Task<IEnumerable<TEntity>> GetAllAsync(Func<IIncludable<TEntity>, IIncludable> includes, Expression<Func<TEntity, bool>> conditionExpression = null);
+        Task<IEnumerable<TEntity>> GetAllAsync(Func<IIncludable<TEntity>, IIncludable> includes, Expression<Func<TEntity, bool>> conditionExpression = null, Expression<Func<TEntity, TEntity>> projectionExpression = null);
 
         #region Pagination And Order
 
@@ -275,8 +281,9 @@ namespace Milvasoft.Helpers.DataAccess.Abstract
         /// </summary>
         /// <param name="id"></param>
         /// <param name="conditionExpression"></param>
+        /// <param name="projectionExpression"></param>
         /// <returns> The entity found or null. </returns>
-        Task<TEntity> GetByIdAsync(TKey id, Expression<Func<TEntity, bool>> conditionExpression = null);
+        Task<TEntity> GetByIdAsync(TKey id, Expression<Func<TEntity, bool>> conditionExpression = null, Expression<Func<TEntity, TEntity>> projectionExpression = null);
 
         /// <summary>
         ///  Returns one entity by entity Id from database asynchronously. 
@@ -286,8 +293,9 @@ namespace Milvasoft.Helpers.DataAccess.Abstract
         /// 
         /// <param name="id"></param>
         /// <param name="conditionExpression"></param>
+        /// <param name="projectionExpression"></param>
         /// <returns> The entity. </returns>
-        Task<TEntity> GetRequiredByIdAsync(TKey id, Expression<Func<TEntity, bool>> conditionExpression = null);
+        Task<TEntity> GetRequiredByIdAsync(TKey id, Expression<Func<TEntity, bool>> conditionExpression = null, Expression<Func<TEntity, TEntity>> projectionExpression = null);
 
         /// <summary>
         ///  Returns one entity which IsDeleted condition is true by entity Id with includes from database asynchronously. If the condition is requested, it also provides that condition.
@@ -295,8 +303,9 @@ namespace Milvasoft.Helpers.DataAccess.Abstract
         /// <param name="id"></param>
         /// <param name="includes"></param>
         /// <param name="conditionExpression"></param>
+        /// <param name="projectionExpression"></param>
         /// <returns> The entity found or null. </returns>
-        Task<TEntity> GetByIdAsync(TKey id, Func<IIncludable<TEntity>, IIncludable> includes, Expression<Func<TEntity, bool>> conditionExpression = null);
+        Task<TEntity> GetByIdAsync(TKey id, Func<IIncludable<TEntity>, IIncludable> includes, Expression<Func<TEntity, bool>> conditionExpression = null, Expression<Func<TEntity, TEntity>> projectionExpression = null);
 
         /// <summary>
         ///  Returns one entity which IsDeleted condition is true by entity Id with includes from database asynchronously. If the condition is requested, it also provides that condition.
@@ -307,8 +316,9 @@ namespace Milvasoft.Helpers.DataAccess.Abstract
         /// <param name="id"></param>
         /// <param name="includes"></param>
         /// <param name="conditionExpression"></param>
+        /// <param name="projectionExpression"></param>
         /// <returns> The entity. </returns>
-        Task<TEntity> GetRequiredByIdAsync(TKey id, Func<IIncludable<TEntity>, IIncludable> includes, Expression<Func<TEntity, bool>> conditionExpression = null);
+        Task<TEntity> GetRequiredByIdAsync(TKey id, Func<IIncludable<TEntity>, IIncludable> includes, Expression<Func<TEntity, bool>> conditionExpression = null, Expression<Func<TEntity, TEntity>> projectionExpression = null);
 
         /// <summary>
         ///  Adds single entity to database asynchronously.
@@ -332,11 +342,27 @@ namespace Milvasoft.Helpers.DataAccess.Abstract
         Task UpdateAsync(TEntity entity);
 
         /// <summary>
+        /// Specific properties updates.
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <param name="projectionProperties"></param>
+        /// <returns></returns>
+        Task UpdateAsync(TEntity entity, params Expression<Func<TEntity, object>>[] projectionProperties);
+
+        /// <summary>
         ///  Updates multiple entities in database asynchronously.
         /// </summary>
         /// <param name="entities"></param>
         /// <returns></returns>
         Task UpdateAsync(IEnumerable<TEntity> entities);
+
+        /// <summary>
+        /// Specific properties updates.
+        /// </summary>
+        /// <param name="entities"></param>
+        /// <param name="projectionProperties"></param>
+        /// <returns></returns>
+        Task UpdateAsync(IEnumerable<TEntity> entities, params Expression<Func<TEntity, object>>[] projectionProperties);
 
         /// <summary>
         ///  Deletes single entity from database asynchronously..
@@ -531,24 +557,27 @@ namespace Milvasoft.Helpers.DataAccess.Abstract
         /// Get max value of entities.
         /// </summary>
         /// <param name="conditionExpression"></param>
+        /// <param name="projectionExpression"></param>
         /// <returns></returns>
-        Task<TEntity> GetMaxAsync(Expression<Func<TEntity, bool>> conditionExpression = null);
+        Task<TEntity> GetMaxAsync(Expression<Func<TEntity, bool>> conditionExpression = null, Expression<Func<TEntity, TEntity>> projectionExpression = null);
 
         /// <summary>
         /// Get max value of entities. With includes.
         /// </summary>
         /// <param name="includes"></param>
         /// <param name="conditionExpression"></param>
+        /// <param name="projectionExpression"></param>
         /// <returns></returns>
-        Task<TEntity> GetMaxAsync(Func<IIncludable<TEntity>, IIncludable> includes, Expression<Func<TEntity, bool>> conditionExpression = null);
+        Task<TEntity> GetMaxAsync(Func<IIncludable<TEntity>, IIncludable> includes, Expression<Func<TEntity, bool>> conditionExpression = null, Expression<Func<TEntity, TEntity>> projectionExpression = null);
 
         /// <summary>
         /// Gets max value of <typeparamref name="TEntity"/>'s property in entities.
         /// </summary>
         /// <param name="maxProperty"></param>
         /// <param name="conditionExpression"></param>
+        /// <param name="projectionExpression"></param>
         /// <returns></returns>
-        Task<TEntity> GetMaxAsync<TProperty>(Expression<Func<TEntity, TProperty>> maxProperty, Expression<Func<TEntity, bool>> conditionExpression = null);
+        Task<TEntity> GetMaxAsync<TProperty>(Expression<Func<TEntity, TProperty>> maxProperty, Expression<Func<TEntity, bool>> conditionExpression = null, Expression<Func<TEntity, TEntity>> projectionExpression = null);
 
         /// <summary>
         /// Gets max value of <typeparamref name="TEntity"/>'s property in entities.
@@ -556,10 +585,11 @@ namespace Milvasoft.Helpers.DataAccess.Abstract
         /// <param name="maxProperty"></param>
         /// <param name="includes"></param>
         /// <param name="conditionExpression"></param>
+        /// <param name="projectionExpression"></param>
         /// <returns></returns>
         Task<object> GetMaxAsync<TProperty>(Expression<Func<TEntity, TProperty>> maxProperty,
                                             Func<IIncludable<TEntity>, IIncludable> includes,
-                                            Expression<Func<TEntity, bool>> conditionExpression = null);
+                                            Expression<Func<TEntity, bool>> conditionExpression = null, Expression<Func<TEntity, TEntity>> projectionExpression = null);
 
         /// <summary>
         /// Gets max value of <typeparamref name="TEntity"/>'s property in entities.

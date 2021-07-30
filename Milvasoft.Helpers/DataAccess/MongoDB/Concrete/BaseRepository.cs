@@ -575,9 +575,9 @@ namespace Milvasoft.Helpers.DataAccess.MongoDB.Concrete
         protected string GetProjectionQuery<TEmbedded>(Expression<Func<TEntity, object>> unwindExpression,
                                                        List<Expression<Func<TEmbedded, object>>> projectExpressions = null)
         {
-            List<string> mappedProps = new List<string>();
+            List<string> mappedProps = new();
 
-            List<string> queries = new List<string>();
+            List<string> queries = new();
 
             var queryProp = GetUnwindType();
 
@@ -620,7 +620,7 @@ namespace Milvasoft.Helpers.DataAccess.MongoDB.Concrete
 
             string GetUnwindType()
             {
-                List<string> unwindNesteds = new List<string>();
+                List<string> unwindNesteds = new();
 
                 MemberExpression memberExpression = unwindExpression.Body as MemberExpression;
 

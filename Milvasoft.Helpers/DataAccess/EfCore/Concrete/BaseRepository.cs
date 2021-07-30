@@ -98,53 +98,59 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
         /// <summary>
         ///  Returns first entity or default value which IsDeleted condition is true from database asynchronously. If the condition is requested, it also provides that condition.
         /// </summary>
+        /// <param name="projectionExpression"></param>
         /// <param name="conditionExpression"></param>
         /// <returns></returns>
-        public virtual async Task<TEntity> GetFirstOrDefaultAsync(Expression<Func<TEntity, bool>> conditionExpression = null)
-            => await _dbSet.FirstOrDefaultAsync(CreateConditionExpression(conditionExpression) ?? (entity => true)).ConfigureAwait(false);
+        public virtual async Task<TEntity> GetFirstOrDefaultAsync(Expression<Func<TEntity, bool>> conditionExpression = null, Expression<Func<TEntity, TEntity>> projectionExpression = null)
+            => await _dbSet.Select(projectionExpression ?? (entity => entity)).FirstOrDefaultAsync(CreateConditionExpression(conditionExpression) ?? (entity => true)).ConfigureAwait(false);
 
         /// <summary>
         ///  Returns first entity or default value which IsDeleted condition is true with includes from database asynchronously. If the condition is requested, it also provides that condition. 
         /// </summary>
         /// <param name="includes"></param>
+        /// <param name="projectionExpression"></param>
         /// <param name="conditionExpression"></param>
         /// <returns></returns>
-        public virtual async Task<TEntity> GetFirstOrDefaultAsync(Func<IIncludable<TEntity>, IIncludable> includes, Expression<Func<TEntity, bool>> conditionExpression = null)
-            => await _dbSet.IncludeMultiple(includes).FirstOrDefaultAsync(CreateConditionExpression(conditionExpression) ?? (entity => true)).ConfigureAwait(false);
+        public virtual async Task<TEntity> GetFirstOrDefaultAsync(Func<IIncludable<TEntity>, IIncludable> includes, Expression<Func<TEntity, bool>> conditionExpression = null, Expression<Func<TEntity, TEntity>> projectionExpression = null)
+            => await _dbSet.Select(projectionExpression ?? (entity => entity)).IncludeMultiple(includes).FirstOrDefaultAsync(CreateConditionExpression(conditionExpression) ?? (entity => true)).ConfigureAwait(false);
 
         /// <summary>
         ///  Returns single entity or default value which IsDeleted condition is true from database asynchronously. If the condition is requested, it also provides that condition.
         /// </summary>
+        /// <param name="projectionExpression"></param>
         /// <param name="conditionExpression"></param>
         /// <returns></returns>
-        public virtual async Task<TEntity> GetSingleOrDefaultAsync(Expression<Func<TEntity, bool>> conditionExpression = null)
-            => await _dbSet.SingleOrDefaultAsync(CreateConditionExpression(conditionExpression) ?? (entity => true)).ConfigureAwait(false);
+        public virtual async Task<TEntity> GetSingleOrDefaultAsync(Expression<Func<TEntity, bool>> conditionExpression = null, Expression<Func<TEntity, TEntity>> projectionExpression = null)
+            => await _dbSet.Select(projectionExpression ?? (entity => entity)).SingleOrDefaultAsync(CreateConditionExpression(conditionExpression) ?? (entity => true)).ConfigureAwait(false);
 
         /// <summary>
         ///  Returns single entity or default value which IsDeleted condition is true with includes from database asynchronously. If the condition is requested, it also provides that condition.
         /// </summary>
         /// <param name="includes"></param>
         /// <param name="conditionExpression"></param>
+        /// <param name="projectionExpression"></param>
         /// <returns></returns>
-        public virtual async Task<TEntity> GetSingleOrDefaultAsync(Func<IIncludable<TEntity>, IIncludable> includes, Expression<Func<TEntity, bool>> conditionExpression = null)
-            => await _dbSet.IncludeMultiple(includes).SingleOrDefaultAsync(CreateConditionExpression(conditionExpression) ?? (entity => true)).ConfigureAwait(false);
+        public virtual async Task<TEntity> GetSingleOrDefaultAsync(Func<IIncludable<TEntity>, IIncludable> includes, Expression<Func<TEntity, bool>> conditionExpression = null, Expression<Func<TEntity, TEntity>> projectionExpression = null)
+            => await _dbSet.Select(projectionExpression ?? (entity => entity)).IncludeMultiple(includes).SingleOrDefaultAsync(CreateConditionExpression(conditionExpression) ?? (entity => true)).ConfigureAwait(false);
 
         /// <summary>
         ///  Returns all entities which IsDeleted condition is true from database asynchronously. If the condition is requested, it also provides that condition.
         /// </summary>
+        /// <param name="projectionExpression"></param>
         /// <param name="conditionExpression"></param>
         /// <returns></returns>
-        public virtual async Task<IEnumerable<TEntity>> GetAllAsync(Expression<Func<TEntity, bool>> conditionExpression = null)
-            => await _dbSet.Where(CreateConditionExpression(conditionExpression) ?? (entity => true)).ToListAsync().ConfigureAwait(false);
+        public virtual async Task<IEnumerable<TEntity>> GetAllAsync(Expression<Func<TEntity, bool>> conditionExpression = null, Expression<Func<TEntity, TEntity>> projectionExpression = null)
+            => await _dbSet.Where(CreateConditionExpression(conditionExpression) ?? (entity => true)).Select(projectionExpression ?? (entity => entity)).ToListAsync().ConfigureAwait(false);
 
         /// <summary>
         ///  Returns all entities which IsDeleted condition is true with specified includes from database asynchronously. If the condition is requested, it also provides that condition.
         /// </summary>
         /// <param name="includes"></param>
+        /// <param name="projectionExpression"></param>
         /// <param name="conditionExpression"></param>
         /// <returns></returns>
-        public virtual async Task<IEnumerable<TEntity>> GetAllAsync(Func<IIncludable<TEntity>, IIncludable> includes, Expression<Func<TEntity, bool>> conditionExpression = null)
-            => await _dbSet.Where(CreateConditionExpression(conditionExpression) ?? (entity => true)).IncludeMultiple(includes).ToListAsync().ConfigureAwait(false);
+        public virtual async Task<IEnumerable<TEntity>> GetAllAsync(Func<IIncludable<TEntity>, IIncludable> includes, Expression<Func<TEntity, bool>> conditionExpression = null, Expression<Func<TEntity, TEntity>> projectionExpression = null)
+            => await _dbSet.Where(CreateConditionExpression(conditionExpression) ?? (entity => true)).Select(projectionExpression ?? (entity => entity)).IncludeMultiple(includes).ToListAsync().ConfigureAwait(false);
 
         #region Pagination And Order
 
@@ -555,12 +561,13 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
         /// </summary>
         /// <param name="id"></param>
         /// <param name="conditionExpression"></param>
+        /// <param name="projectionExpression"></param>
         /// <returns> The entity found or null. </returns>
-        public virtual async Task<TEntity> GetByIdAsync(TKey id, Expression<Func<TEntity, bool>> conditionExpression = null)
+        public virtual async Task<TEntity> GetByIdAsync(TKey id, Expression<Func<TEntity, bool>> conditionExpression = null, Expression<Func<TEntity, TEntity>> projectionExpression = null)
         {
             var mainCondition = CreateKeyEqualityExpression(id, conditionExpression);
 
-            return await _dbSet.SingleOrDefaultAsync(mainCondition).ConfigureAwait(false);
+            return await _dbSet.Select(projectionExpression ?? (entity => entity)).SingleOrDefaultAsync(mainCondition).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -571,12 +578,13 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
         /// 
         /// <param name="id"></param>
         /// <param name="conditionExpression"></param>
+        /// <param name="projectionExpression"></param>
         /// <returns> The entity. </returns>
-        public virtual async Task<TEntity> GetRequiredByIdAsync(TKey id, Expression<Func<TEntity, bool>> conditionExpression = null)
+        public virtual async Task<TEntity> GetRequiredByIdAsync(TKey id, Expression<Func<TEntity, bool>> conditionExpression = null, Expression<Func<TEntity, TEntity>> projectionExpression = null)
         {
             var mainCondition = CreateKeyEqualityExpression(id, conditionExpression);
 
-            return (await _dbSet.SingleAsync(mainCondition).ConfigureAwait(false));
+            return (await _dbSet.Select(projectionExpression ?? (entity => entity)).SingleAsync(mainCondition).ConfigureAwait(false));
         }
 
         /// <summary>
@@ -585,14 +593,16 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
         /// <param name="id"></param>
         /// <param name="includes"></param>
         /// <param name="conditionExpression"></param>
+        /// <param name="projectionExpression"></param>
         /// <returns> The entity found or null. </returns>
         public virtual async Task<TEntity> GetByIdAsync(TKey id,
                                                         Func<IIncludable<TEntity>, IIncludable> includes,
-                                                        Expression<Func<TEntity, bool>> conditionExpression = null)
+                                                        Expression<Func<TEntity, bool>> conditionExpression = null,
+                                                        Expression<Func<TEntity, TEntity>> projectionExpression = null)
         {
             var mainCondition = CreateKeyEqualityExpression(id, conditionExpression);
 
-            return await _dbSet.IncludeMultiple(includes).SingleOrDefaultAsync(mainCondition).ConfigureAwait(false);
+            return await _dbSet.Select(projectionExpression ?? (entity => entity)).IncludeMultiple(includes).SingleOrDefaultAsync(mainCondition).ConfigureAwait(false);
         }
 
 
@@ -605,14 +615,16 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
         /// <param name="id"></param>
         /// <param name="includes"></param>
         /// <param name="conditionExpression"></param>
+        /// <param name="projectionExpression"></param>
         /// <returns> The entity. </returns>
         public virtual async Task<TEntity> GetRequiredByIdAsync(TKey id,
                                                                 Func<IIncludable<TEntity>, IIncludable> includes,
-                                                                Expression<Func<TEntity, bool>> conditionExpression = null)
+                                                                Expression<Func<TEntity, bool>> conditionExpression = null,
+                                                                Expression<Func<TEntity, TEntity>> projectionExpression = null)
         {
             var mainCondition = CreateKeyEqualityExpression(id, conditionExpression);
 
-            return await _dbSet.IncludeMultiple(includes).SingleAsync(mainCondition).ConfigureAwait(false);
+            return await _dbSet.Select(projectionExpression ?? (entity => entity)).IncludeMultiple(includes).SingleAsync(mainCondition).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -647,6 +659,43 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
             //InitalizeEdit(entity);
             _dbSet.Update(entity);
             if (SaveChangesAfterEveryTransaction) await _dbContext.SaveChangesAsync().ConfigureAwait(false);
+        }
+
+        /// <summary>
+        /// Specific properties updates.
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <param name="projectionProperties"></param>
+        /// <returns></returns>
+        public virtual async Task UpdateAsync(TEntity entity, params Expression<Func<TEntity, object>>[] projectionProperties)
+        {
+            var dbEntry = _dbContext.Entry(entity);
+
+            foreach (var includeProperty in projectionProperties)
+                dbEntry.Property(includeProperty).IsModified = true;
+            
+            await _dbContext.SaveChangesAsync().ConfigureAwait(false);
+        }
+
+        /// <summary>
+        /// Specific properties updates.
+        /// </summary>
+        /// <param name="entities"></param>
+        /// <param name="projectionProperties"></param>
+        /// <returns></returns>
+        public virtual async Task UpdateAsync(IEnumerable<TEntity> entities, params Expression<Func<TEntity, object>>[] projectionProperties)
+        {
+            foreach (var entity in entities)
+            {
+                var dbEntry = _dbContext.Entry(entity);
+
+                foreach (var includeProperty in projectionProperties)
+                {
+                    dbEntry.Property(includeProperty).IsModified = true;
+                }
+            }
+
+            await _dbContext.SaveChangesAsync();
         }
 
         /// <summary>
@@ -959,9 +1008,10 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
         /// Get max value of entities.
         /// </summary>
         /// <param name="conditionExpression"></param>
+        /// <param name="projectionExpression"></param>
         /// <returns></returns>
-        public virtual async Task<TEntity> GetMaxAsync(Expression<Func<TEntity, bool>> conditionExpression = null)
-            => await _dbSet.Where(CreateConditionExpression(conditionExpression) ?? (entity => true))
+        public virtual async Task<TEntity> GetMaxAsync(Expression<Func<TEntity, bool>> conditionExpression = null, Expression<Func<TEntity, TEntity>> projectionExpression = null)
+            => await _dbSet.Where(CreateConditionExpression(conditionExpression) ?? (entity => true)).Select(projectionExpression ?? (entity => entity))
                                                    .MaxAsync().ConfigureAwait(false);
 
         /// <summary>
@@ -969,8 +1019,10 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
         /// </summary>
         /// <param name="includes"></param>
         /// <param name="conditionExpression"></param>
+        /// <param name=""></param>
+        /// <param name="projectionExpression"></param>
         /// <returns></returns>
-        public virtual async Task<TEntity> GetMaxAsync(Func<IIncludable<TEntity>, IIncludable> includes, Expression<Func<TEntity, bool>> conditionExpression = null)
+        public virtual async Task<TEntity> GetMaxAsync(Func<IIncludable<TEntity>, IIncludable> includes, Expression<Func<TEntity, bool>> conditionExpression = null, Expression<Func<TEntity, TEntity>> projectionExpression = null)
             => await _dbSet.Where(CreateConditionExpression(conditionExpression) ?? (entity => true))
                                                    .IncludeMultiple(includes)
                                                    .MaxAsync().ConfigureAwait(false);
@@ -980,9 +1032,10 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
         /// </summary>
         /// <param name="maxProperty"></param>
         /// <param name="conditionExpression"></param>
+        /// <param name="projectionExpression"></param>
         /// <returns></returns>
-        public virtual async Task<TEntity> GetMaxAsync<TProperty>(Expression<Func<TEntity, TProperty>> maxProperty, Expression<Func<TEntity, bool>> conditionExpression = null)
-            => await _dbSet.Where(CreateConditionExpression(conditionExpression) ?? (entity => true))
+        public virtual async Task<TEntity> GetMaxAsync<TProperty>(Expression<Func<TEntity, TProperty>> maxProperty, Expression<Func<TEntity, bool>> conditionExpression = null, Expression<Func<TEntity, TEntity>> projectionExpression = null)
+            => await _dbSet.Where(CreateConditionExpression(conditionExpression) ?? (entity => true)).Select(projectionExpression ?? (entity => entity))
                                                    .OrderByDescending(maxProperty)
                                                    .FirstOrDefaultAsync().ConfigureAwait(false);
 
@@ -992,11 +1045,12 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
         /// <param name="maxProperty"></param>
         /// <param name="includes"></param>
         /// <param name="conditionExpression"></param>
+        /// <param name="projectionExpression"></param>
         /// <returns></returns>
         public virtual async Task<object> GetMaxAsync<TProperty>(Expression<Func<TEntity, TProperty>> maxProperty,
                                                                  Func<IIncludable<TEntity>, IIncludable> includes,
-                                                                 Expression<Func<TEntity, bool>> conditionExpression = null)
-            => (await _dbSet.Where(CreateConditionExpression(conditionExpression) ?? (entity => true))
+                                                                 Expression<Func<TEntity, bool>> conditionExpression = null, Expression<Func<TEntity, TEntity>> projectionExpression = null)
+            => (await _dbSet.Where(CreateConditionExpression(conditionExpression) ?? (entity => true)).Select(projectionExpression ?? (entity => entity))
                                                    .IncludeMultiple(includes)
                                                    .OrderByDescending(maxProperty)
                                                    .FirstOrDefaultAsync().ConfigureAwait(false));
