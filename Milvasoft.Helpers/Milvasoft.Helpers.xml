@@ -3294,11 +3294,14 @@
             </summary>
             <param name="modelBuilder"></param>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.MilvaContext.MilvaModelBuilderExtensions.ConfigureDecimalProperties(Microsoft.EntityFrameworkCore.ModelBuilder)">
+        <member name="M:Milvasoft.Helpers.DataAccess.MilvaContext.MilvaModelBuilderExtensions.ConfigureDecimalProperties(Microsoft.EntityFrameworkCore.ModelBuilder,System.Char,System.Int32,System.Int32)">
             <summary>
             Configures the decimal property of entities with decimal properties in decimal (18.2) format.
             </summary>
             <param name="modelBuilder"></param>
+            <param name="decimalSeperator"></param>
+            <param name="beforeSeperatorCount"></param>
+            <param name="afterSeperatorCount"></param>
         </member>
         <member name="M:Milvasoft.Helpers.DataAccess.MilvaContext.MilvaModelBuilderExtensions.IncludeAll``1(System.Linq.IQueryable{``0},Microsoft.EntityFrameworkCore.DbContext)">
             <summary>

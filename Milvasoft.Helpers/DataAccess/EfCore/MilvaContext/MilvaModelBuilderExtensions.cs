@@ -204,7 +204,10 @@ namespace Milvasoft.Helpers.DataAccess.MilvaContext
         /// Configures the decimal property of entities with decimal properties in decimal (18.2) format.
         /// </summary>
         /// <param name="modelBuilder"></param>
-        public static ModelBuilder ConfigureDecimalProperties(this ModelBuilder modelBuilder)
+        /// <param name="decimalSeperator"></param>
+        /// <param name="beforeSeperatorCount"></param>
+        /// <param name="afterSeperatorCount"></param>
+        public static ModelBuilder ConfigureDecimalProperties(this ModelBuilder modelBuilder, char decimalSeperator = ',', int beforeSeperatorCount = 18, int afterSeperatorCount = 10)
         {
             var entitiesHasDecimalProperty = modelBuilder.Model.GetEntityTypes().Where(prop => prop.ClrType.GetProperties().Any(p => p.PropertyType.IsAssignableFrom(typeof(decimal))));
 
@@ -214,7 +217,7 @@ namespace Milvasoft.Helpers.DataAccess.MilvaContext
                                                                                 && !p.CustomAttributes.Any(cA => cA.AttributeType.IsAssignableFrom(typeof(NotMappedAttribute))));
 
                 foreach (var prop in properties)
-                    modelBuilder.Entity(entityType.ClrType).Property(prop.Name).HasColumnType("decimal(18,2)");
+                    modelBuilder.Entity(entityType.ClrType).Property(prop.Name).HasColumnType($"decimal({beforeSeperatorCount}{decimalSeperator}{afterSeperatorCount})");
             }
 
             return modelBuilder;
