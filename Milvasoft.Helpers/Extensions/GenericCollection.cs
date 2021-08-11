@@ -1,4 +1,7 @@
-﻿using System.Collections;
+﻿using Milvasoft.Helpers.Exceptions;
+using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
@@ -89,5 +92,186 @@ namespace Milvasoft.Helpers.Extensions
             return (IQueryable<T>)ret;
         }
 
+        #region Max Methods 
+
+        /// <summary>
+        /// Returns the maximum value according to <paramref name="propertySelector"/> in <paramref name="source"/>.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="source"></param>
+        /// <param name="propertySelector"></param>
+        /// <returns> A object of type T. </returns>
+        public static T MilvaMax<T>(this IEnumerable<T> source, Expression<Func<T, decimal>> propertySelector) where T : class
+        {
+            if (source.IsNullOrEmpty()) throw new MilvaDeveloperException("Source cannot be null or empty.");
+
+            decimal value = 0;
+            T returnVal = null;
+            bool hasValue = false;
+
+            foreach (var item in source)
+            {
+                var dynamicValue = item.GetPropertyValue(propertySelector);
+
+                if (hasValue)
+                {
+                    if (dynamicValue > value)
+                    {
+                        value = dynamicValue;
+                        returnVal = item;
+                    }
+                }
+                else
+                {
+                    value = dynamicValue;
+                    returnVal = item;
+                    hasValue = true;
+                }
+            }
+
+            if (hasValue) return returnVal;
+
+            throw new MilvaDeveloperException("Sequence contains no elements.");
+        }
+
+        /// <summary>
+        /// Returns the maximum value according to <paramref name="propertySelector"/> in <paramref name="source"/>.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="source"></param>
+        /// <param name="propertySelector"></param>
+        /// <returns>  A service object of type T or null if there is no such service. </returns>
+        public static T MilvaMaxOrDefault<T>(this IEnumerable<T> source, Expression<Func<T, decimal>> propertySelector) where T : class
+        {
+            if (source.IsNullOrEmpty()) return default;
+
+            decimal value = 0;
+            T returnVal = null;
+            bool hasValue = false;
+
+            foreach (var item in source)
+            {
+                var dynamicValue = item.GetPropertyValue(propertySelector);
+
+                if (hasValue)
+                {
+                    if (dynamicValue > value)
+                    {
+                        value = dynamicValue;
+                        returnVal = item;
+                    }
+                }
+                else
+                {
+                    value = dynamicValue;
+                    returnVal = item;
+                    hasValue = true;
+                }
+            }
+
+            if (hasValue) return returnVal;
+
+            return default;
+        }
+
+        /// <summary>
+        /// Returns the maximum value according to <paramref name="propertySelector"/> in <paramref name="source"/>.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="source"></param>
+        /// <param name="propertySelector"></param>
+        /// <returns> A object of type T. </returns>
+        public static T MilvaMax<T>(this IEnumerable<T> source, Expression<Func<T, int>> propertySelector) where T : class
+        {
+            if (source.IsNullOrEmpty()) throw new MilvaDeveloperException("Source cannot be null or empty.");
+
+            int value = 0;
+            T returnVal = null;
+            bool hasValue = false;
+
+            foreach (var item in source)
+            {
+                var dynamicValue = item.GetPropertyValue(propertySelector);
+
+                if (hasValue)
+                {
+                    if (dynamicValue > value)
+                    {
+                        value = dynamicValue;
+                        returnVal = item;
+                    }
+                }
+                else
+                {
+                    value = dynamicValue;
+                    returnVal = item;
+                    hasValue = true;
+                }
+            }
+
+            if (hasValue) return returnVal;
+
+            throw new MilvaDeveloperException("Sequence contains no elements.");
+        }
+
+        /// <summary>
+        /// Returns the maximum value according to <paramref name="propertySelector"/> in <paramref name="source"/>.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="source"></param>
+        /// <param name="propertySelector"></param>
+        /// <returns>  A service object of type T or null if there is no such service. </returns>
+        public static T MilvaMaxOrDefault<T>(this IEnumerable<T> source, Expression<Func<T, int>> propertySelector) where T : class
+        {
+            if (source.IsNullOrEmpty()) return default;
+
+            int value = 0;
+            T returnVal = null;
+            bool hasValue = false;
+
+            foreach (var item in source)
+            {
+                var dynamicValue = item.GetPropertyValue(propertySelector);
+
+                if (hasValue)
+                {
+                    if (dynamicValue > value)
+                    {
+                        value = dynamicValue;
+                        returnVal = item;
+                    }
+                }
+                else
+                {
+                    value = dynamicValue;
+                    returnVal = item;
+                    hasValue = true;
+                }
+            }
+
+            if (hasValue) return returnVal;
+
+            return default;
+        }
+
+        #endregion
+
+        /// <summary>
+        /// Gets requested property value.
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <param name="property"> property </param>
+        /// <returns></returns>
+        public static decimal GetPropertyValue<T>(this T obj, Expression<Func<T, decimal>> property)
+            => (decimal)obj.GetType().GetProperty(property.GetPropertyName()).GetValue(obj, null);
+
+        /// <summary>
+        /// Gets requested property value.
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <param name="property"> property </param>
+        /// <returns></returns>
+        public static int GetPropertyValue<T>(this T obj, Expression<Func<T, int>> property)
+            => (int)obj.GetType().GetProperty(property.GetPropertyName()).GetValue(obj, null);
     }
 }

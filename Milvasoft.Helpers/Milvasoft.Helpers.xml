@@ -4958,6 +4958,58 @@
             <param name="propertyName"></param>
             <returns></returns>
         </member>
+        <member name="M:Milvasoft.Helpers.Extensions.GenericCollection.MilvaMax``1(System.Collections.Generic.IEnumerable{``0},System.Linq.Expressions.Expression{System.Func{``0,System.Decimal}})">
+            <summary>
+            Returns the maximum value according to <paramref name="propertySelector"/> in <paramref name="source"/>.
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="source"></param>
+            <param name="propertySelector"></param>
+            <returns> A object of type T. </returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.Extensions.GenericCollection.MilvaMaxOrDefault``1(System.Collections.Generic.IEnumerable{``0},System.Linq.Expressions.Expression{System.Func{``0,System.Decimal}})">
+            <summary>
+            Returns the maximum value according to <paramref name="propertySelector"/> in <paramref name="source"/>.
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="source"></param>
+            <param name="propertySelector"></param>
+            <returns>  A service object of type T or null if there is no such service. </returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.Extensions.GenericCollection.MilvaMax``1(System.Collections.Generic.IEnumerable{``0},System.Linq.Expressions.Expression{System.Func{``0,System.Int32}})">
+            <summary>
+            Returns the maximum value according to <paramref name="propertySelector"/> in <paramref name="source"/>.
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="source"></param>
+            <param name="propertySelector"></param>
+            <returns> A object of type T. </returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.Extensions.GenericCollection.MilvaMaxOrDefault``1(System.Collections.Generic.IEnumerable{``0},System.Linq.Expressions.Expression{System.Func{``0,System.Int32}})">
+            <summary>
+            Returns the maximum value according to <paramref name="propertySelector"/> in <paramref name="source"/>.
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="source"></param>
+            <param name="propertySelector"></param>
+            <returns>  A service object of type T or null if there is no such service. </returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.Extensions.GenericCollection.GetPropertyValue``1(``0,System.Linq.Expressions.Expression{System.Func{``0,System.Decimal}})">
+            <summary>
+            Gets requested property value.
+            </summary>
+            <param name="obj"></param>
+            <param name="property"> property </param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.Extensions.GenericCollection.GetPropertyValue``1(``0,System.Linq.Expressions.Expression{System.Func{``0,System.Int32}})">
+            <summary>
+            Gets requested property value.
+            </summary>
+            <param name="obj"></param>
+            <param name="property"> property </param>
+            <returns></returns>
+        </member>
         <member name="T:Milvasoft.Helpers.Extensions.Helpers.ExpressionParameterReplacer">
             <summary>
             Expression parameter replacer for expression builder.

@@ -673,7 +673,7 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
 
             foreach (var includeProperty in projectionProperties)
                 dbEntry.Property(includeProperty).IsModified = true;
-            
+
             await _dbContext.SaveChangesAsync().ConfigureAwait(false);
         }
 
