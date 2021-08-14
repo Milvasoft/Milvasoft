@@ -14,6 +14,11 @@ namespace Milvasoft.Helpers.MultiTenancy.Accessor
     where TKey : struct, IEquatable<TKey>
     {
         /// <summary>
+        /// Application service provider.
+        /// </summary>
+        IServiceProvider ServiceProvider { get; }
+
+        /// <summary>
         /// Accessed tenant from <see cref="HttpContext"/>
         /// </summary>
         TTenant Tenant { get; }

@@ -8629,6 +8629,11 @@
             <typeparam name="TTenant"></typeparam>
             <typeparam name="TKey"></typeparam>
         </member>
+        <member name="P:Milvasoft.Helpers.MultiTenancy.Accessor.ITenantAccessor`2.ServiceProvider">
+            <summary>
+            Application service provider.
+            </summary>
+        </member>
         <member name="P:Milvasoft.Helpers.MultiTenancy.Accessor.ITenantAccessor`2.Tenant">
             <summary>
             Accessed tenant from <see cref="T:Microsoft.AspNetCore.Http.HttpContext"/>
@@ -8641,11 +8646,17 @@
             <typeparam name="TTenant"></typeparam>
             <typeparam name="TKey"></typeparam>
         </member>
-        <member name="M:Milvasoft.Helpers.MultiTenancy.Accessor.TenantAccessor`2.#ctor(Microsoft.AspNetCore.Http.IHttpContextAccessor)">
+        <member name="P:Milvasoft.Helpers.MultiTenancy.Accessor.TenantAccessor`2.ServiceProvider">
+            <summary>
+            Application service provider.
+            </summary>
+        </member>
+        <member name="M:Milvasoft.Helpers.MultiTenancy.Accessor.TenantAccessor`2.#ctor(Microsoft.AspNetCore.Http.IHttpContextAccessor,System.IServiceProvider)">
             <summary>
             Creates new instance of <see cref="T:Milvasoft.Helpers.MultiTenancy.Accessor.TenantAccessor`2"/>.
             </summary>
             <param name="httpContextAccessor"></param>
+            <param name="serviceProvider"></param>
         </member>
         <member name="P:Milvasoft.Helpers.MultiTenancy.Accessor.TenantAccessor`2.Tenant">
             <summary>
@@ -8677,6 +8688,14 @@
             Registers the tenant store implementation.
             </summary>
             <typeparam name="TStore"></typeparam>
+            <param name="lifetime"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.MultiTenancy.Builder.TenantBuilder`2.WithAccessor``1(Microsoft.Extensions.DependencyInjection.ServiceLifetime)">
+            <summary>
+            Registers the tenant accessor implementation.
+            </summary>
+            <typeparam name="TTenantAccessor"></typeparam>
             <param name="lifetime"></param>
             <returns></returns>
         </member>

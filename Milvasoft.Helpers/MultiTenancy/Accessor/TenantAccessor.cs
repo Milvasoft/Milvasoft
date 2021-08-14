@@ -14,15 +14,22 @@ namespace Milvasoft.Helpers.MultiTenancy.Accessor
         where TTenant : class, IMilvaTenantBase<TKey>
         where TKey : struct, IEquatable<TKey>
     {
+        /// <summary>
+        /// Application service provider.
+        /// </summary>
+        public IServiceProvider ServiceProvider { get; }
+
         private readonly IHttpContextAccessor _httpContextAccessor;
 
         /// <summary>
         /// Creates new instance of <see cref="TenantAccessor{TTenant, TKey}"/>.
         /// </summary>
         /// <param name="httpContextAccessor"></param>
-        public TenantAccessor(IHttpContextAccessor httpContextAccessor)
+        /// <param name="serviceProvider"></param>
+        public TenantAccessor(IHttpContextAccessor httpContextAccessor, IServiceProvider serviceProvider)
         {
             _httpContextAccessor = httpContextAccessor;
+            ServiceProvider = serviceProvider;
         }
 
         /// <summary>
