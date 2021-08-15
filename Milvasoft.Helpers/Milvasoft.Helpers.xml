@@ -8634,6 +8634,11 @@
             Application service provider.
             </summary>
         </member>
+        <member name="P:Milvasoft.Helpers.MultiTenancy.Accessor.ITenantAccessor`2.HttpContextAccessor">
+            <summary>
+            Context accessor.
+            </summary>
+        </member>
         <member name="P:Milvasoft.Helpers.MultiTenancy.Accessor.ITenantAccessor`2.Tenant">
             <summary>
             Accessed tenant from <see cref="T:Microsoft.AspNetCore.Http.HttpContext"/>
@@ -8649,6 +8654,11 @@
         <member name="P:Milvasoft.Helpers.MultiTenancy.Accessor.TenantAccessor`2.ServiceProvider">
             <summary>
             Application service provider.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.MultiTenancy.Accessor.TenantAccessor`2.HttpContextAccessor">
+            <summary>
+            Context accessor.
             </summary>
         </member>
         <member name="M:Milvasoft.Helpers.MultiTenancy.Accessor.TenantAccessor`2.#ctor(Microsoft.AspNetCore.Http.IHttpContextAccessor,System.IServiceProvider)">
