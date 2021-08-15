@@ -16,7 +16,7 @@ namespace Milvasoft.Helpers.MultiTenancy.Middleware
     where TTenant : class, IMilvaTenantBase<TKey>
     where TKey : struct, IEquatable<TKey>
     {
-        private readonly RequestDelegate next;
+        private readonly RequestDelegate _next;
 
         /// <summary>
         /// Initializes new instance of <see cref="MultitenantContainerMiddleware{TTenant, TKey}"/>
@@ -24,7 +24,7 @@ namespace Milvasoft.Helpers.MultiTenancy.Middleware
         /// <param name="next"></param>
         public MultitenantContainerMiddleware(RequestDelegate next)
         {
-            this.next = next;
+            _next = next;
         }
 
         /// <summary>
@@ -39,7 +39,7 @@ namespace Milvasoft.Helpers.MultiTenancy.Middleware
             //Begin new scope for request as ASP.NET Core standard scope is per-request
             context.RequestServices = new AutofacServiceProvider(multiTenantContainerAccessor().GetCurrentTenantScope().BeginLifetimeScope());
 
-            await next.Invoke(context);
+            await _next.Invoke(context);
         }
     }
 }

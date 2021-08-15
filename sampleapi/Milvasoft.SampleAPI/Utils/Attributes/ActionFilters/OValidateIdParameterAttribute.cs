@@ -2,6 +2,7 @@
 using Milvasoft.Helpers.Attributes.ActionFilter;
 using Milvasoft.SampleAPI.Localization;
 using System;
+using System.Threading.Tasks;
 
 namespace Milvasoft.SampleAPI.Utils.Attributes.ActionFilters
 {
@@ -20,9 +21,9 @@ namespace Milvasoft.SampleAPI.Utils.Attributes.ActionFilters
         /// Performs when action executing.
         /// </summary>
         /// <param name="context"></param>
-        public override void OnActionExecuting(ActionExecutingContext context)
+        public override async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
         {
-            base.OnActionExecuting(context);
+            await base.OnActionExecutionAsync(context, next);
         }
     }
 }

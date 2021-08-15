@@ -16,7 +16,7 @@ namespace Milvasoft.Helpers.MultiTenancy.Middleware
     where TTenant : class, IMilvaTenantBase<TKey>
     where TKey : struct, IEquatable<TKey>
     {
-        private readonly RequestDelegate next;
+        private readonly RequestDelegate _next;
 
         /// <summary>
         /// Initializes new instance of <see cref="TenantMiddleware{TTenant, TKey}"/>
@@ -24,7 +24,7 @@ namespace Milvasoft.Helpers.MultiTenancy.Middleware
         /// <param name="next"></param>
         public TenantMiddleware(RequestDelegate next)
         {
-            this.next = next;
+            _next = next;
         }
 
         /// <summary>
@@ -44,8 +44,8 @@ namespace Milvasoft.Helpers.MultiTenancy.Middleware
             }
 
             //Continue processing
-            if (next != null)
-                await next(context);
+            if (_next != null)
+                await _next.Invoke(context);
         }
     }
 }

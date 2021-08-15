@@ -4,6 +4,118 @@
         <name>Milvasoft.Helpers</name>
     </assembly>
     <members>
+        <member name="T:Milvasoft.Helpers.Attributes.ActionFilter.AsyncValidateIdParameterAttribute">
+            <summary>
+            Throws <see cref="T:Milvasoft.Helpers.Exceptions.MilvaUserFriendlyException"/> if id parameter is not valid. Specifies that the class or method that this attribute is applied to requires the specified the valid id.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.Attributes.ActionFilter.AsyncValidateIdParameterAttribute.EntityName">
+            <summary>
+            Gets or sets error message content.
+            </summary>
+        </member>
+        <member name="M:Milvasoft.Helpers.Attributes.ActionFilter.AsyncValidateIdParameterAttribute.#ctor">
+            <summary>
+            Constructor of <see cref="T:Milvasoft.Helpers.Attributes.ActionFilter.ValidateIdParameterAttribute"/> for localization.
+            </summary>
+        </member>
+        <member name="M:Milvasoft.Helpers.Attributes.ActionFilter.AsyncValidateIdParameterAttribute.#ctor(System.Type)">
+            <summary>
+            Constructor of <see cref="T:Milvasoft.Helpers.Attributes.ActionFilter.ValidateIdParameterAttribute"/> for localization.
+            </summary>
+            <param name="resourceType"></param>
+        </member>
+        <member name="M:Milvasoft.Helpers.Attributes.ActionFilter.AsyncValidateIdParameterAttribute.OnActionExecutionAsync(Microsoft.AspNetCore.Mvc.Filters.ActionExecutingContext,Microsoft.AspNetCore.Mvc.Filters.ActionExecutionDelegate)">
+            <summary>
+            Performs when action executing.
+            </summary>
+            <param name="context"></param>
+            <param name="next"></param>
+        </member>
+        <member name="T:Milvasoft.Helpers.Attributes.ActionFilter.AsyncValidateStringParameterAttribute">
+            <summary>
+            Throws <see cref="T:Milvasoft.Helpers.Exceptions.MilvaUserFriendlyException"/> if string parameter is not valid. Specifies that the class or method that this attribute is applied to requires the specified prevent string injection attacks and min/max length checks.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.Attributes.ActionFilter.AsyncValidateStringParameterAttribute.MemberNameLocalizerKey">
+            <summary>
+            Gets or sets the error message spesific content
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.Attributes.ActionFilter.AsyncValidateStringParameterAttribute.MaximumLength">
+            <summary>
+            Gets the maximum acceptable length of the string
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.Attributes.ActionFilter.AsyncValidateStringParameterAttribute.MinimumLength">
+            <summary>
+            Gets or sets the minimum acceptable length of the string
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.Attributes.ActionFilter.AsyncValidateStringParameterAttribute.ResourceType">
+            <summary>
+            Dummy class type for resource location.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.Attributes.ActionFilter.AsyncValidateStringParameterAttribute.MailContent">
+            <summary>
+            If injection attack exist. Validation method will be send mail. 
+            If has value mail will be send.
+            </summary>
+        </member>
+        <member name="M:Milvasoft.Helpers.Attributes.ActionFilter.AsyncValidateStringParameterAttribute.#ctor(System.Int32,System.Int32)">
+            <summary>
+            Constructor that accepts the maximum length of the string.
+            </summary>
+            <param name="minimumLength">The minimum length, inclusive.  It may not be negative.</param>
+            <param name="maximumLength">The maximum length, inclusive.  It may not be negative.</param>
+        </member>
+        <member name="M:Milvasoft.Helpers.Attributes.ActionFilter.AsyncValidateStringParameterAttribute.OnActionExecutionAsync(Microsoft.AspNetCore.Mvc.Filters.ActionExecutingContext,Microsoft.AspNetCore.Mvc.Filters.ActionExecutionDelegate)">
+            <summary>
+            Performs when action executing.
+            </summary>
+            <param name="context"></param>
+            <param name="next"></param>
+        </member>
+        <member name="T:Milvasoft.Helpers.Attributes.ActionFilter.AsyncValidationFilterAttribute">
+            <summary>
+            Throws <see cref="T:Milvasoft.Helpers.Exceptions.MilvaUserFriendlyException"/> if any error exists. Provides the attribute validation exclude opportunity.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.Attributes.ActionFilter.AsyncValidationFilterAttribute.DisabledProperties">
+            <summary>
+            Defines the features will be cancelled required.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.Attributes.ActionFilter.AsyncValidationFilterAttribute.DisabledNestedProperties">
+            <summary>
+            Defines the features will be cancelled required. 
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.Attributes.ActionFilter.AsyncValidationFilterAttribute.AssemblyTypeForNestedProps">
+            <summary>
+            Assembly type for disable nested type prop validations.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.Attributes.ActionFilter.AsyncValidationFilterAttribute.DTOFolderAssemblyName">
+            <summary>
+            Folder assembly name for disable nested type prop validations.
+            </summary>
+        </member>
+        <member name="M:Milvasoft.Helpers.Attributes.ActionFilter.AsyncValidationFilterAttribute.OnActionExecutionAsync(Microsoft.AspNetCore.Mvc.Filters.ActionExecutingContext,Microsoft.AspNetCore.Mvc.Filters.ActionExecutionDelegate)">
+            <summary>
+            Performs when action executing.
+            </summary>
+            <param name="context"></param>
+            <param name="next"></param>
+        </member>
+        <member name="M:Milvasoft.Helpers.Attributes.ActionFilter.AsyncValidationFilterAttribute.GetProperties(System.String)">
+            <summary>
+            Gets properties.
+            </summary>
+            <param name="props"></param>
+            <returns></returns>
+        </member>
         <member name="T:Milvasoft.Helpers.Attributes.ActionFilter.ValidateIdParameterAttribute">
             <summary>
             Specifies that the class or method that this attribute is applied to requires the specified the valid id.

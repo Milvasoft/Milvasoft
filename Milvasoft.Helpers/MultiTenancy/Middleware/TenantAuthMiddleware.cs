@@ -58,7 +58,7 @@ namespace Milvasoft.Helpers.MultiTenancy.Middleware
                 }
             }
 
-            await _next(context);
+            await _next.Invoke(context);
         }
     }
 }
