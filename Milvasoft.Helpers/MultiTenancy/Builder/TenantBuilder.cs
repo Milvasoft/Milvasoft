@@ -26,7 +26,7 @@ namespace Milvasoft.Helpers.MultiTenancy.Builder
         /// <param name="services"></param>
         public TenantBuilder(IServiceCollection services)
         {
-            //services.AddTransient<ITenantAccessor<TTenant, TKey>, TenantAccessor<TTenant, TKey>>();
+            services.AddTransient<ITenantAccessor<TTenant, TKey>, TenantAccessor<TTenant, TKey>>();
             services.AddTransient<ITenantService<TTenant, TKey>, TenantService<TTenant, TKey>>();
             _services = services;
         }
@@ -54,18 +54,6 @@ namespace Milvasoft.Helpers.MultiTenancy.Builder
         public TenantBuilder<TTenant, TKey> WithStore<TStore>(ServiceLifetime lifetime = ServiceLifetime.Transient) where TStore : class, ITenantStore<TTenant, TKey>
         {
             _services.Add(ServiceDescriptor.Describe(typeof(ITenantStore<TTenant, TKey>), typeof(TStore), lifetime));
-            return this;
-        }
-
-        /// <summary>
-        /// Registers the tenant accessor implementation.
-        /// </summary>
-        /// <typeparam name="TTenantAccessor"></typeparam>
-        /// <param name="lifetime"></param>
-        /// <returns></returns>
-        public TenantBuilder<TTenant, TKey> WithAccessor<TTenantAccessor>(ServiceLifetime lifetime = ServiceLifetime.Transient) where TTenantAccessor : class, ITenantAccessor<TTenant, TKey>
-        {
-            _services.Add(ServiceDescriptor.Describe(typeof(ITenantAccessor<TTenant, TKey>), typeof(TTenantAccessor), lifetime));
             return this;
         }
     }

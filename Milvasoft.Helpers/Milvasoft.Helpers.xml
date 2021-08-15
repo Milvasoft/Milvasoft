@@ -8813,14 +8813,6 @@
             <param name="lifetime"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.MultiTenancy.Builder.TenantBuilder`2.WithAccessor``1(Microsoft.Extensions.DependencyInjection.ServiceLifetime)">
-            <summary>
-            Registers the tenant accessor implementation.
-            </summary>
-            <typeparam name="TTenantAccessor"></typeparam>
-            <param name="lifetime"></param>
-            <returns></returns>
-        </member>
         <member name="T:Milvasoft.Helpers.MultiTenancy.EntityBase.IMilvaTenantBase`1">
             <summary>
             Tenant base.
