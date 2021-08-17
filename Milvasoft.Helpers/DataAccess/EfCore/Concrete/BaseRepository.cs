@@ -645,8 +645,11 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
         /// <returns></returns>
         public virtual async Task AddRangeAsync(IEnumerable<TEntity> entities)
         {
-            _dbSet.AddRange(entities);
-            if (SaveChangesAfterEveryTransaction) await _dbContext.SaveChangesAsync().ConfigureAwait(false);
+            if (!entities.IsNullOrEmpty())
+            {
+                _dbSet.AddRange(entities);
+                if (SaveChangesAfterEveryTransaction) await _dbContext.SaveChangesAsync().ConfigureAwait(false);
+            }
         }
 
         /// <summary>
@@ -685,17 +688,20 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
         /// <returns></returns>
         public virtual async Task UpdateAsync(IEnumerable<TEntity> entities, params Expression<Func<TEntity, object>>[] projectionProperties)
         {
-            foreach (var entity in entities)
+            if (!entities.IsNullOrEmpty())
             {
-                var dbEntry = _dbContext.Entry(entity);
-
-                foreach (var includeProperty in projectionProperties)
+                foreach (var entity in entities)
                 {
-                    dbEntry.Property(includeProperty).IsModified = true;
-                }
-            }
+                    var dbEntry = _dbContext.Entry(entity);
 
-            await _dbContext.SaveChangesAsync();
+                    foreach (var includeProperty in projectionProperties)
+                    {
+                        dbEntry.Property(includeProperty).IsModified = true;
+                    }
+                }
+
+                await _dbContext.SaveChangesAsync();
+            }
         }
 
         /// <summary>
@@ -705,9 +711,12 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
         /// <returns></returns>
         public virtual async Task UpdateAsync(IEnumerable<TEntity> entities)
         {
-            //InitalizeEdit(entities);
-            _dbSet.UpdateRange(entities);
-            if (SaveChangesAfterEveryTransaction) await _dbContext.SaveChangesAsync().ConfigureAwait(false);
+            if (!entities.IsNullOrEmpty())
+            {
+                //InitalizeEdit(entities);
+                _dbSet.UpdateRange(entities);
+                if (SaveChangesAfterEveryTransaction) await _dbContext.SaveChangesAsync().ConfigureAwait(false);
+            }
         }
 
         /// <summary>
@@ -729,9 +738,12 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
         /// <returns></returns>
         public virtual async Task DeleteAsync(IEnumerable<TEntity> entities)
         {
-            InitalizeEdit(entities);
-            _dbContext.RemoveRange(entities);
-            if (SaveChangesAfterEveryTransaction) await _dbContext.SaveChangesAsync().ConfigureAwait(false);
+            if (!entities.IsNullOrEmpty())
+            {
+                InitalizeEdit(entities);
+                _dbContext.RemoveRange(entities);
+                if (SaveChangesAfterEveryTransaction) await _dbContext.SaveChangesAsync().ConfigureAwait(false);
+            }
         }
 
         /// <summary>
