@@ -13,7 +13,7 @@ namespace Milvasoft.Helpers.MultiTenancy.ResolutionStrategy
         /// <summary>
         /// Header key.
         /// </summary>
-        public string HeaderKey = TenancyConstants.HttpContextTenantKey;
+        public static string HeaderKey = TenancyConstants.HttpContextTenantKey;
 
         private readonly IHttpContextAccessor _httpContextAccessor;
 
