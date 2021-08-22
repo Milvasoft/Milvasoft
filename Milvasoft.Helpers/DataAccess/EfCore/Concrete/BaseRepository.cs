@@ -112,7 +112,7 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
         /// <param name="conditionExpression"></param>
         /// <returns></returns>
         public virtual async Task<TEntity> GetFirstOrDefaultAsync(Func<IIncludable<TEntity>, IIncludable> includes, Expression<Func<TEntity, bool>> conditionExpression = null, Expression<Func<TEntity, TEntity>> projectionExpression = null)
-            => await _dbSet.Select(projectionExpression ?? (entity => entity)).IncludeMultiple(includes).FirstOrDefaultAsync(CreateConditionExpression(conditionExpression) ?? (entity => true)).ConfigureAwait(false);
+            => await _dbSet.IncludeMultiple(includes).Select(projectionExpression ?? (entity => entity)).FirstOrDefaultAsync(CreateConditionExpression(conditionExpression) ?? (entity => true)).ConfigureAwait(false);
 
         /// <summary>
         ///  Returns single entity or default value which IsDeleted condition is true from database asynchronously. If the condition is requested, it also provides that condition.
@@ -131,7 +131,7 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
         /// <param name="projectionExpression"></param>
         /// <returns></returns>
         public virtual async Task<TEntity> GetSingleOrDefaultAsync(Func<IIncludable<TEntity>, IIncludable> includes, Expression<Func<TEntity, bool>> conditionExpression = null, Expression<Func<TEntity, TEntity>> projectionExpression = null)
-            => await _dbSet.Select(projectionExpression ?? (entity => entity)).IncludeMultiple(includes).SingleOrDefaultAsync(CreateConditionExpression(conditionExpression) ?? (entity => true)).ConfigureAwait(false);
+            => await _dbSet.IncludeMultiple(includes).Select(projectionExpression ?? (entity => entity)).SingleOrDefaultAsync(CreateConditionExpression(conditionExpression) ?? (entity => true)).ConfigureAwait(false);
 
         /// <summary>
         ///  Returns all entities which IsDeleted condition is true from database asynchronously. If the condition is requested, it also provides that condition.
@@ -150,7 +150,7 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
         /// <param name="conditionExpression"></param>
         /// <returns></returns>
         public virtual async Task<IEnumerable<TEntity>> GetAllAsync(Func<IIncludable<TEntity>, IIncludable> includes, Expression<Func<TEntity, bool>> conditionExpression = null, Expression<Func<TEntity, TEntity>> projectionExpression = null)
-            => await _dbSet.Where(CreateConditionExpression(conditionExpression) ?? (entity => true)).Select(projectionExpression ?? (entity => entity)).IncludeMultiple(includes).ToListAsync().ConfigureAwait(false);
+            => await _dbSet.Where(CreateConditionExpression(conditionExpression) ?? (entity => true)).IncludeMultiple(includes).Select(projectionExpression ?? (entity => entity)).ToListAsync().ConfigureAwait(false);
 
         #region Pagination And Order
 
@@ -602,7 +602,7 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
         {
             var mainCondition = CreateKeyEqualityExpression(id, conditionExpression);
 
-            return await _dbSet.Select(projectionExpression ?? (entity => entity)).IncludeMultiple(includes).SingleOrDefaultAsync(mainCondition).ConfigureAwait(false);
+            return await _dbSet.IncludeMultiple(includes).Select(projectionExpression ?? (entity => entity)).SingleOrDefaultAsync(mainCondition).ConfigureAwait(false);
         }
 
 
@@ -624,7 +624,7 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
         {
             var mainCondition = CreateKeyEqualityExpression(id, conditionExpression);
 
-            return await _dbSet.Select(projectionExpression ?? (entity => entity)).IncludeMultiple(includes).SingleAsync(mainCondition).ConfigureAwait(false);
+            return await _dbSet.IncludeMultiple(includes).Select(projectionExpression ?? (entity => entity)).SingleAsync(mainCondition).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -1034,9 +1034,12 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
         /// <param name=""></param>
         /// <param name="projectionExpression"></param>
         /// <returns></returns>
-        public virtual async Task<TEntity> GetMaxAsync(Func<IIncludable<TEntity>, IIncludable> includes, Expression<Func<TEntity, bool>> conditionExpression = null, Expression<Func<TEntity, TEntity>> projectionExpression = null)
+        public virtual async Task<TEntity> GetMaxAsync(Func<IIncludable<TEntity>, IIncludable> includes,
+                                                       Expression<Func<TEntity, bool>> conditionExpression = null,
+                                                       Expression<Func<TEntity, TEntity>> projectionExpression = null)
             => await _dbSet.Where(CreateConditionExpression(conditionExpression) ?? (entity => true))
                                                    .IncludeMultiple(includes)
+                                                   .Select(projectionExpression ?? (entity => entity))
                                                    .MaxAsync().ConfigureAwait(false);
 
         /// <summary>
@@ -1061,9 +1064,11 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
         /// <returns></returns>
         public virtual async Task<object> GetMaxAsync<TProperty>(Expression<Func<TEntity, TProperty>> maxProperty,
                                                                  Func<IIncludable<TEntity>, IIncludable> includes,
-                                                                 Expression<Func<TEntity, bool>> conditionExpression = null, Expression<Func<TEntity, TEntity>> projectionExpression = null)
-            => (await _dbSet.Where(CreateConditionExpression(conditionExpression) ?? (entity => true)).Select(projectionExpression ?? (entity => entity))
+                                                                 Expression<Func<TEntity, bool>> conditionExpression = null,
+                                                                 Expression<Func<TEntity, TEntity>> projectionExpression = null)
+            => (await _dbSet.Where(CreateConditionExpression(conditionExpression) ?? (entity => true))
                                                    .IncludeMultiple(includes)
+                                                   .Select(projectionExpression ?? (entity => entity))
                                                    .OrderByDescending(maxProperty)
                                                    .FirstOrDefaultAsync().ConfigureAwait(false));
 
