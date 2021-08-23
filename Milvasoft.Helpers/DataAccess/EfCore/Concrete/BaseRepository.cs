@@ -36,6 +36,11 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
         /// </summary>
         public static bool SaveChangesAfterEveryTransaction { get; set; } = true;
 
+        /// <summary>
+        /// Set to true when using no tracking.
+        /// </summary>
+        public static bool InitializeUpdate { get; set; } = true;
+
         #endregion
 
         #region Protected Properties
@@ -50,8 +55,34 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
 
         #region Private Properties
 
-        private bool _resetSoftDeleteState = true;
-        private bool _softDeleteState = false;
+        private static bool _resetSoftDeleteState = true;
+        private static bool _softDeleteState = false;
+
+        #endregion
+
+        /// <summary>
+        /// Constructor of BaseRepository for <paramref name="dbContext"/> injection.
+        /// </summary>
+        /// <param name="dbContext"></param>
+        public BaseRepository(TContext dbContext)
+        {
+            _dbContext = dbContext;
+            _dbSet = dbContext.Set<TEntity>();
+        }
+
+        /// <summary>
+        /// Determines whether save changes method called after evert repository method.
+        /// <para><b>Default is true.</b></para>
+        /// </summary>
+        /// <param name="state"></param>
+        public void ChangeSaveChangesAfterEveryTransactionState(bool state) => SaveChangesAfterEveryTransaction = state;
+
+        /// <summary>
+        /// Determines whether applied detach to updating entites. 
+        /// <para><b>Default is true.</b></para>
+        /// </summary>
+        /// <param name="state"></param>
+        public void ChangeInitializeUpdateState(bool state) => InitializeUpdate = state;
 
         /// <summary>
         /// Determines whether soft deleted entities in the database are fetched from the database.
@@ -65,18 +96,6 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
         /// </summary>
         /// <param name="state"></param>
         public void ResetSoftDeleteState(bool state) => _resetSoftDeleteState = state;
-
-        #endregion
-
-        /// <summary>
-        /// Constructor of BaseRepository for <paramref name="dbContext"/> injection.
-        /// </summary>
-        /// <param name="dbContext"></param>
-        public BaseRepository(TContext dbContext)
-        {
-            _dbContext = dbContext;
-            _dbSet = dbContext.Set<TEntity>();
-        }
 
         /// <summary>
         /// Gets <b>entity => entity.IsDeleted == false</b> expression, if <typeparamref name="TEntity"/> is assignable from <see cref="FullAuditableEntity{TKey}"/>.
@@ -1458,7 +1477,43 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
         /// </summary>
         /// <param name="tracking"></param>
         /// <returns></returns>
-        private static QueryTrackingBehavior GetQueryTrackingBehavior(bool tracking) => tracking ? QueryTrackingBehavior.TrackAll : QueryTrackingBehavior.NoTracking;
+        protected static QueryTrackingBehavior GetQueryTrackingBehavior(bool tracking) => tracking ? QueryTrackingBehavior.TrackAll : QueryTrackingBehavior.NoTracking;
+
+        /// <summary>
+        /// For configure entity state. Change tracking.
+        /// </summary>
+        /// <param name="entity"></param>
+        protected void InitalizeEdit(TEntity entity)
+        {
+            if (InitializeUpdate)
+            {
+                var local = _dbSet.Local.FirstOrDefault(entry => entry.Id.Equals(entity.Id));
+                if (local != null)
+                {
+                    _dbContext.Entry(local).State = EntityState.Detached;
+                }
+                _dbContext.Entry(entity).State = EntityState.Modified;
+            }
+        }
+
+        /// <summary>
+        /// For configure entity state. Change tracking.
+        /// </summary>
+        /// <param name="entities"></param>
+        protected void InitalizeEdit(IEnumerable<TEntity> entities)
+        {
+            if (InitializeUpdate)
+            {
+                var localEntities = _dbSet.Local.Where(e => entities.Any(en => en.Id.Equals(e.Id)));
+                if (!localEntities?.Any() ?? false)
+                {
+                    foreach (var entity in localEntities)
+                        _dbContext.Entry(entity).State = EntityState.Detached;
+                }
+                foreach (var entity in entities)
+                    _dbContext.Entry(entity).State = EntityState.Modified;
+            }
+        }
 
         #endregion
     }

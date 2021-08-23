@@ -2047,10 +2047,35 @@
             If you use unit of work pattern or save changes manually you can set to false this variable.
             </summary>
         </member>
+        <member name="P:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.InitializeUpdate">
+            <summary>
+            Set to true when using no tracking.
+            </summary>
+        </member>
         <member name="F:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3._dbContext">
             <summary>
             DbContext object.
             </summary>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.#ctor(`2)">
+            <summary>
+            Constructor of BaseRepository for <paramref name="dbContext"/> injection.
+            </summary>
+            <param name="dbContext"></param>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.ChangeSaveChangesAfterEveryTransactionState(System.Boolean)">
+            <summary>
+            Determines whether save changes method called after evert repository method.
+            <para><b>Default is true.</b></para>
+            </summary>
+            <param name="state"></param>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.ChangeInitializeUpdateState(System.Boolean)">
+            <summary>
+            Determines whether applied detach to updating entites. 
+            <para><b>Default is true.</b></para>
+            </summary>
+            <param name="state"></param>
         </member>
         <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.SoftDeleteState(System.Boolean)">
             <summary>
@@ -2064,12 +2089,6 @@
             Determines whether the default value of the variable that determines the status of deleted data in the database is assigned to the default value after database operation.
             </summary>
             <param name="state"></param>
-        </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.#ctor(`2)">
-            <summary>
-            Constructor of BaseRepository for <paramref name="dbContext"/> injection.
-            </summary>
-            <param name="dbContext"></param>
         </member>
         <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.CreateIsDeletedFalseExpression">
             <summary>
@@ -2737,6 +2756,18 @@
             </summary>
             <param name="tracking"></param>
             <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.InitalizeEdit(`0)">
+            <summary>
+            For configure entity state. Change tracking.
+            </summary>
+            <param name="entity"></param>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.InitalizeEdit(System.Collections.Generic.IEnumerable{`0})">
+            <summary>
+            For configure entity state. Change tracking.
+            </summary>
+            <param name="entities"></param>
         </member>
         <member name="T:Milvasoft.Helpers.DataAccess.Concrete.ContextRepository`1">
             <summary>

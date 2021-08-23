@@ -125,9 +125,11 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
                                                                       where TKey : struct, IEquatable<TKey>
         {
             var localEntity = _dbContext.Set<TEntity>().Local.FirstOrDefault(u => u.Id.Equals(entity.Id));
-            if (localEntity == null)
-                return;
-            _dbContext.Entry(localEntity).State = EntityState.Detached;
+            if (localEntity != null)
+            {
+                _dbContext.Entry(localEntity).State = EntityState.Detached;
+            }
+            _dbContext.Entry(localEntity).State = EntityState.Modified;
         }
 
         /// <summary>

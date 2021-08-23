@@ -48,7 +48,7 @@ namespace Milvasoft.Helpers.DataAccess.MilvaContext
         /// <summary>
         /// If its true ignores soft delete.
         /// </summary>
-        protected static AsyncLocal<bool> IgnoreSoftDelete = new AsyncLocal<bool>();
+        protected static AsyncLocal<bool> IgnoreSoftDelete = new();
 
         #endregion
 
