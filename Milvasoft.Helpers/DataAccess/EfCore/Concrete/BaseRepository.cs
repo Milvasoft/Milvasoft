@@ -1458,7 +1458,7 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
         /// </summary>
         /// <param name="tracking"></param>
         /// <returns></returns>
-        private static QueryTrackingBehavior GetQueryTrackingBehavior(bool tracking) => tracking ? QueryTrackingBehavior.TrackAll : QueryTrackingBehavior.NoTracking;
+        protected static QueryTrackingBehavior GetQueryTrackingBehavior(bool tracking) => tracking ? QueryTrackingBehavior.TrackAll : QueryTrackingBehavior.NoTracking;
 
         #endregion
     }
