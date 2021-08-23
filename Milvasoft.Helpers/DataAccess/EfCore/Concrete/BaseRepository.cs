@@ -78,7 +78,6 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
             _dbSet = dbContext.Set<TEntity>();
         }
 
-
         /// <summary>
         /// Gets <b>entity => entity.IsDeleted == false</b> expression, if <typeparamref name="TEntity"/> is assignable from <see cref="FullAuditableEntity{TKey}"/>.
         /// </summary>
@@ -95,33 +94,46 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
             else return null;
         }
 
+        #region Get Data  
+
         /// <summary>
         ///  Returns first entity or default value which IsDeleted condition is true from database asynchronously. If the condition is requested, it also provides that condition.
         /// </summary>
         /// <param name="projectionExpression"></param>
+        /// <param name="tracking"></param>
         /// <param name="conditionExpression"></param>
         /// <returns></returns>
-        public virtual async Task<TEntity> GetFirstOrDefaultAsync(Expression<Func<TEntity, bool>> conditionExpression = null, Expression<Func<TEntity, TEntity>> projectionExpression = null)
-            => await _dbSet.Select(projectionExpression ?? (entity => entity)).FirstOrDefaultAsync(CreateConditionExpression(conditionExpression) ?? (entity => true)).ConfigureAwait(false);
+        public virtual async Task<TEntity> GetFirstOrDefaultAsync(Expression<Func<TEntity, bool>> conditionExpression = null,
+                                                                  Expression<Func<TEntity, TEntity>> projectionExpression = null,
+                                                                  bool tracking = false)
+            => await _dbSet.AsTracking(GetQueryTrackingBehavior(tracking)).Select(projectionExpression ?? (entity => entity)).FirstOrDefaultAsync(CreateConditionExpression(conditionExpression) ?? (entity => true)).ConfigureAwait(false);
+
 
         /// <summary>
         ///  Returns first entity or default value which IsDeleted condition is true with includes from database asynchronously. If the condition is requested, it also provides that condition. 
         /// </summary>
         /// <param name="includes"></param>
         /// <param name="projectionExpression"></param>
+        /// <param name="tracking"></param>
         /// <param name="conditionExpression"></param>
         /// <returns></returns>
-        public virtual async Task<TEntity> GetFirstOrDefaultAsync(Func<IIncludable<TEntity>, IIncludable> includes, Expression<Func<TEntity, bool>> conditionExpression = null, Expression<Func<TEntity, TEntity>> projectionExpression = null)
-            => await _dbSet.IncludeMultiple(includes).Select(projectionExpression ?? (entity => entity)).FirstOrDefaultAsync(CreateConditionExpression(conditionExpression) ?? (entity => true)).ConfigureAwait(false);
+        public virtual async Task<TEntity> GetFirstOrDefaultAsync(Func<IIncludable<TEntity>, IIncludable> includes,
+                                                                  Expression<Func<TEntity, bool>> conditionExpression = null,
+                                                                  Expression<Func<TEntity, TEntity>> projectionExpression = null,
+                                                                  bool tracking = false)
+            => await _dbSet.AsTracking(GetQueryTrackingBehavior(tracking)).IncludeMultiple(includes).Select(projectionExpression ?? (entity => entity)).FirstOrDefaultAsync(CreateConditionExpression(conditionExpression) ?? (entity => true)).ConfigureAwait(false);
 
         /// <summary>
         ///  Returns single entity or default value which IsDeleted condition is true from database asynchronously. If the condition is requested, it also provides that condition.
         /// </summary>
         /// <param name="projectionExpression"></param>
+        /// <param name="tracking"></param>
         /// <param name="conditionExpression"></param>
         /// <returns></returns>
-        public virtual async Task<TEntity> GetSingleOrDefaultAsync(Expression<Func<TEntity, bool>> conditionExpression = null, Expression<Func<TEntity, TEntity>> projectionExpression = null)
-            => await _dbSet.Select(projectionExpression ?? (entity => entity)).SingleOrDefaultAsync(CreateConditionExpression(conditionExpression) ?? (entity => true)).ConfigureAwait(false);
+        public virtual async Task<TEntity> GetSingleOrDefaultAsync(Expression<Func<TEntity, bool>> conditionExpression = null,
+                                                                   Expression<Func<TEntity, TEntity>> projectionExpression = null,
+                                                                   bool tracking = false)
+            => await _dbSet.AsTracking(GetQueryTrackingBehavior(tracking)).Select(projectionExpression ?? (entity => entity)).SingleOrDefaultAsync(CreateConditionExpression(conditionExpression) ?? (entity => true)).ConfigureAwait(false);
 
         /// <summary>
         ///  Returns single entity or default value which IsDeleted condition is true with includes from database asynchronously. If the condition is requested, it also provides that condition.
@@ -129,28 +141,39 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
         /// <param name="includes"></param>
         /// <param name="conditionExpression"></param>
         /// <param name="projectionExpression"></param>
+        /// <param name="tracking"></param>
         /// <returns></returns>
-        public virtual async Task<TEntity> GetSingleOrDefaultAsync(Func<IIncludable<TEntity>, IIncludable> includes, Expression<Func<TEntity, bool>> conditionExpression = null, Expression<Func<TEntity, TEntity>> projectionExpression = null)
-            => await _dbSet.IncludeMultiple(includes).Select(projectionExpression ?? (entity => entity)).SingleOrDefaultAsync(CreateConditionExpression(conditionExpression) ?? (entity => true)).ConfigureAwait(false);
+        public virtual async Task<TEntity> GetSingleOrDefaultAsync(Func<IIncludable<TEntity>, IIncludable> includes,
+                                                                   Expression<Func<TEntity, bool>> conditionExpression = null,
+                                                                   Expression<Func<TEntity, TEntity>> projectionExpression = null,
+                                                                   bool tracking = false)
+            => await _dbSet.AsTracking(GetQueryTrackingBehavior(tracking)).IncludeMultiple(includes).Select(projectionExpression ?? (entity => entity)).SingleOrDefaultAsync(CreateConditionExpression(conditionExpression) ?? (entity => true)).ConfigureAwait(false);
 
         /// <summary>
         ///  Returns all entities which IsDeleted condition is true from database asynchronously. If the condition is requested, it also provides that condition.
         /// </summary>
         /// <param name="projectionExpression"></param>
+        /// <param name="tracking"></param>
         /// <param name="conditionExpression"></param>
         /// <returns></returns>
-        public virtual async Task<IEnumerable<TEntity>> GetAllAsync(Expression<Func<TEntity, bool>> conditionExpression = null, Expression<Func<TEntity, TEntity>> projectionExpression = null)
-            => await _dbSet.Where(CreateConditionExpression(conditionExpression) ?? (entity => true)).Select(projectionExpression ?? (entity => entity)).ToListAsync().ConfigureAwait(false);
+        public virtual async Task<IEnumerable<TEntity>> GetAllAsync(Expression<Func<TEntity, bool>> conditionExpression = null,
+                                                                    Expression<Func<TEntity, TEntity>> projectionExpression = null,
+                                                                    bool tracking = false)
+            => await _dbSet.AsTracking(GetQueryTrackingBehavior(tracking)).Where(CreateConditionExpression(conditionExpression) ?? (entity => true)).Select(projectionExpression ?? (entity => entity)).ToListAsync().ConfigureAwait(false);
 
         /// <summary>
         ///  Returns all entities which IsDeleted condition is true with specified includes from database asynchronously. If the condition is requested, it also provides that condition.
         /// </summary>
         /// <param name="includes"></param>
         /// <param name="projectionExpression"></param>
+        /// <param name="tracking"></param>
         /// <param name="conditionExpression"></param>
         /// <returns></returns>
-        public virtual async Task<IEnumerable<TEntity>> GetAllAsync(Func<IIncludable<TEntity>, IIncludable> includes, Expression<Func<TEntity, bool>> conditionExpression = null, Expression<Func<TEntity, TEntity>> projectionExpression = null)
-            => await _dbSet.Where(CreateConditionExpression(conditionExpression) ?? (entity => true)).IncludeMultiple(includes).Select(projectionExpression ?? (entity => entity)).ToListAsync().ConfigureAwait(false);
+        public virtual async Task<IEnumerable<TEntity>> GetAllAsync(Func<IIncludable<TEntity>, IIncludable> includes,
+                                                                    Expression<Func<TEntity, bool>> conditionExpression = null,
+                                                                    Expression<Func<TEntity, TEntity>> projectionExpression = null,
+                                                                    bool tracking = false)
+            => await _dbSet.AsTracking(GetQueryTrackingBehavior(tracking)).Where(CreateConditionExpression(conditionExpression) ?? (entity => true)).IncludeMultiple(includes).Select(projectionExpression ?? (entity => entity)).ToListAsync().ConfigureAwait(false);
 
         #region Pagination And Order
 
@@ -164,10 +187,12 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
         /// <param name="requestedPageNumber"></param>
         /// <param name="countOfRequestedRecordsInPage"></param>
         /// <param name="conditionExpression"></param>
+        /// <param name="tracking"></param>
         /// <returns></returns>
         public virtual async Task<(IEnumerable<TEntity> entities, int pageCount, int totalDataCount)> GetAsPaginatedAsync(int requestedPageNumber,
                                                                                                                           int countOfRequestedRecordsInPage,
-                                                                                                                          Expression<Func<TEntity, bool>> conditionExpression = null)
+                                                                                                                          Expression<Func<TEntity, bool>> conditionExpression = null,
+                                                                                                                          bool tracking = false)
         {
             ValidatePaginationParameters(requestedPageNumber, countOfRequestedRecordsInPage);
 
@@ -175,10 +200,12 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
 
             var totalDataCount = await GetCountAsync(conditionExpression).ConfigureAwait(false);
 
-            var repo = await _dbSet.Where(condition ?? (entity => true))
-                                                      .Skip((requestedPageNumber - 1) * countOfRequestedRecordsInPage)
-                                                      .Take(countOfRequestedRecordsInPage)
-                                                      .ToListAsync().ConfigureAwait(false);
+            var repo = await _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
+                                   .Where(condition ?? (entity => true))
+                                   .Skip((requestedPageNumber - 1) * countOfRequestedRecordsInPage)
+                                   .Take(countOfRequestedRecordsInPage)
+                                   .ToListAsync()
+                                   .ConfigureAwait(false);
 
             var estimatedCountOfPages = CalculatePageCountAndCompareWithRequested(totalDataCount, countOfRequestedRecordsInPage, requestedPageNumber);
 
@@ -196,11 +223,13 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
         /// <param name="countOfRequestedRecordsInPage"></param>
         /// <param name="includes"></param>
         /// <param name="conditionExpression"></param>
+        /// <param name="tracking"></param>
         /// <returns></returns>
         public virtual async Task<(IEnumerable<TEntity> entities, int pageCount, int totalDataCount)> GetAsPaginatedAsync(int requestedPageNumber,
                                                                                                                           int countOfRequestedRecordsInPage,
                                                                                                                           Func<IIncludable<TEntity>, IIncludable> includes,
-                                                                                                                          Expression<Func<TEntity, bool>> conditionExpression = null)
+                                                                                                                          Expression<Func<TEntity, bool>> conditionExpression = null,
+                                                                                                                          bool tracking = false)
         {
             ValidatePaginationParameters(requestedPageNumber, countOfRequestedRecordsInPage);
 
@@ -208,11 +237,13 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
 
             var totalDataCount = await GetCountAsync(conditionExpression).ConfigureAwait(false);
 
-            var repo = await _dbSet.Where(condition ?? (entity => true))
-                                                      .IncludeMultiple(includes)
-                                                      .Skip((requestedPageNumber - 1) * countOfRequestedRecordsInPage)
-                                                      .Take(countOfRequestedRecordsInPage)
-                                                      .ToListAsync().ConfigureAwait(false);
+            var repo = await _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
+                                   .Where(condition ?? (entity => true))
+                                   .IncludeMultiple(includes)
+                                   .Skip((requestedPageNumber - 1) * countOfRequestedRecordsInPage)
+                                   .Take(countOfRequestedRecordsInPage)
+                                   .ToListAsync()
+                                   .ConfigureAwait(false);
 
             var estimatedCountOfPages = CalculatePageCountAndCompareWithRequested(totalDataCount, countOfRequestedRecordsInPage, requestedPageNumber);
 
@@ -233,12 +264,14 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
         /// <param name="orderByPropertyName"></param>
         /// <param name="orderByAscending"></param>
         /// <param name="conditionExpression"></param>
+        /// <param name="tracking"></param>
         /// <returns></returns>
         public virtual async Task<(IEnumerable<TEntity> entities, int pageCount, int totalDataCount)> GetAsPaginatedAndOrderedAsync(int requestedPageNumber,
                                                                                                                                     int countOfRequestedRecordsInPage,
                                                                                                                                     string orderByPropertyName,
                                                                                                                                     bool orderByAscending,
-                                                                                                                                    Expression<Func<TEntity, bool>> conditionExpression = null)
+                                                                                                                                    Expression<Func<TEntity, bool>> conditionExpression = null,
+                                                                                                                                    bool tracking = false)
         {
             ValidatePaginationParameters(requestedPageNumber, countOfRequestedRecordsInPage);
 
@@ -254,16 +287,20 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
 
             List<TEntity> repo;
 
-            if (orderByAscending) repo = await _dbSet.Where(condition ?? (entity => true))
-                                                                        .OrderBy(predicate)
-                                                                        .Skip((requestedPageNumber - 1) * countOfRequestedRecordsInPage)
-                                                                        .Take(countOfRequestedRecordsInPage)
-                                                                        .ToListAsync().ConfigureAwait(false);
-            else repo = await _dbSet.Where(condition ?? (entity => true))
-                                                       .OrderByDescending(predicate)
-                                                       .Skip((requestedPageNumber - 1) * countOfRequestedRecordsInPage)
-                                                       .Take(countOfRequestedRecordsInPage)
-                                                       .ToListAsync().ConfigureAwait(false);
+            if (orderByAscending) repo = await _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
+                                                     .Where(condition ?? (entity => true))
+                                                     .OrderBy(predicate)
+                                                     .Skip((requestedPageNumber - 1) * countOfRequestedRecordsInPage)
+                                                     .Take(countOfRequestedRecordsInPage)
+                                                     .ToListAsync()
+                                                     .ConfigureAwait(false);
+            else repo = await _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
+                                    .Where(condition ?? (entity => true))
+                                    .OrderByDescending(predicate)
+                                    .Skip((requestedPageNumber - 1) * countOfRequestedRecordsInPage)
+                                    .Take(countOfRequestedRecordsInPage)
+                                    .ToListAsync()
+                                    .ConfigureAwait(false);
 
             var estimatedCountOfPages = CalculatePageCountAndCompareWithRequested(totalDataCount, countOfRequestedRecordsInPage, requestedPageNumber);
 
@@ -285,13 +322,15 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
         /// <param name="orderByPropertyName"></param>
         /// <param name="orderByAscending"></param>
         /// <param name="conditionExpression"></param>
+        /// <param name="tracking"></param>
         /// <returns></returns>
         public virtual async Task<(IEnumerable<TEntity> entities, int pageCount, int totalDataCount)> GetAsPaginatedAndOrderedAsync(int requestedPageNumber,
                                                                                                                                     int countOfRequestedRecordsInPage,
                                                                                                                                     Func<IIncludable<TEntity>, IIncludable> includes,
                                                                                                                                     string orderByPropertyName,
                                                                                                                                     bool orderByAscending,
-                                                                                                                                    Expression<Func<TEntity, bool>> conditionExpression = null)
+                                                                                                                                    Expression<Func<TEntity, bool>> conditionExpression = null,
+                                                                                                                                    bool tracking = false)
         {
             ValidatePaginationParameters(requestedPageNumber, countOfRequestedRecordsInPage);
 
@@ -307,18 +346,22 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
 
             List<TEntity> repo;
 
-            if (orderByAscending) repo = (await _dbSet.Where(condition ?? (entity => true))
-                                                                         .OrderBy(predicate)
-                                                                         .Skip((requestedPageNumber - 1) * countOfRequestedRecordsInPage)
-                                                                         .Take(countOfRequestedRecordsInPage)
-                                                                         .IncludeMultiple(includes)
-                                                                         .ToListAsync().ConfigureAwait(false));
-            else repo = (await _dbSet.Where(condition ?? (entity => true))
-                                                        .OrderByDescending(predicate)
-                                                        .Skip((requestedPageNumber - 1) * countOfRequestedRecordsInPage)
-                                                        .Take(countOfRequestedRecordsInPage)
-                                                        .IncludeMultiple(includes)
-                                                        .ToListAsync().ConfigureAwait(false));
+            if (orderByAscending) repo = (await _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
+                                                      .Where(condition ?? (entity => true))
+                                                      .OrderBy(predicate)
+                                                      .Skip((requestedPageNumber - 1) * countOfRequestedRecordsInPage)
+                                                      .Take(countOfRequestedRecordsInPage)
+                                                      .IncludeMultiple(includes)
+                                                      .ToListAsync()
+                                                      .ConfigureAwait(false));
+            else repo = (await _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
+                                     .Where(condition ?? (entity => true))
+                                     .OrderByDescending(predicate)
+                                     .Skip((requestedPageNumber - 1) * countOfRequestedRecordsInPage)
+                                     .Take(countOfRequestedRecordsInPage)
+                                     .IncludeMultiple(includes)
+                                     .ToListAsync()
+                                     .ConfigureAwait(false));
 
             var estimatedCountOfPages = CalculatePageCountAndCompareWithRequested(totalDataCount, countOfRequestedRecordsInPage, requestedPageNumber);
 
@@ -338,12 +381,14 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
         /// <param name="orderByKeySelector"></param>
         /// <param name="orderByAscending"></param>
         /// <param name="conditionExpression"></param>
+        /// <param name="tracking"></param>
         /// <returns></returns>
         public virtual async Task<(IEnumerable<TEntity> entities, int pageCount, int totalDataCount)> GetAsPaginatedAndOrderedAsync(int requestedPageNumber,
                                                                                                                                     int countOfRequestedRecordsInPage,
                                                                                                                                     Expression<Func<TEntity, object>> orderByKeySelector,
                                                                                                                                     bool orderByAscending,
-                                                                                                                                    Expression<Func<TEntity, bool>> conditionExpression = null)
+                                                                                                                                    Expression<Func<TEntity, bool>> conditionExpression = null,
+                                                                                                                                    bool tracking = false)
         {
             ValidatePaginationParameters(requestedPageNumber, countOfRequestedRecordsInPage);
 
@@ -353,16 +398,20 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
 
             List<TEntity> repo;
 
-            if (orderByAscending) repo = await _dbSet.Where(condition ?? (entity => true))
-                                                                        .OrderBy(orderByKeySelector)
-                                                                        .Skip((requestedPageNumber - 1) * countOfRequestedRecordsInPage)
-                                                                        .Take(countOfRequestedRecordsInPage)
-                                                                        .ToListAsync().ConfigureAwait(false);
-            else repo = await _dbSet.Where(condition ?? (entity => true))
-                                                       .OrderByDescending(orderByKeySelector)
-                                                       .Skip((requestedPageNumber - 1) * countOfRequestedRecordsInPage)
-                                                       .Take(countOfRequestedRecordsInPage)
-                                                       .ToListAsync().ConfigureAwait(false);
+            if (orderByAscending) repo = await _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
+                                                     .Where(condition ?? (entity => true))
+                                                     .OrderBy(orderByKeySelector)
+                                                     .Skip((requestedPageNumber - 1) * countOfRequestedRecordsInPage)
+                                                     .Take(countOfRequestedRecordsInPage)
+                                                     .ToListAsync()
+                                                     .ConfigureAwait(false);
+            else repo = await _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
+                                    .Where(condition ?? (entity => true))
+                                    .OrderByDescending(orderByKeySelector)
+                                    .Skip((requestedPageNumber - 1) * countOfRequestedRecordsInPage)
+                                    .Take(countOfRequestedRecordsInPage)
+                                    .ToListAsync()
+                                    .ConfigureAwait(false);
 
             var estimatedCountOfPages = CalculatePageCountAndCompareWithRequested(totalDataCount, countOfRequestedRecordsInPage, requestedPageNumber);
 
@@ -383,13 +432,15 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
         /// <param name="orderByKeySelector"></param>
         /// <param name="orderByAscending"></param>
         /// <param name="conditionExpression"></param>
+        /// <param name="tracking"></param>
         /// <returns></returns>
         public virtual async Task<(IEnumerable<TEntity> entities, int pageCount, int totalDataCount)> GetAsPaginatedAndOrderedAsync(int requestedPageNumber,
                                                                                                                                     int countOfRequestedRecordsInPage,
                                                                                                                                     Func<IIncludable<TEntity>, IIncludable> includes,
                                                                                                                                     Expression<Func<TEntity, object>> orderByKeySelector,
                                                                                                                                     bool orderByAscending,
-                                                                                                                                    Expression<Func<TEntity, bool>> conditionExpression = null)
+                                                                                                                                    Expression<Func<TEntity, bool>> conditionExpression = null,
+                                                                                                                                    bool tracking = false)
         {
             ValidatePaginationParameters(requestedPageNumber, countOfRequestedRecordsInPage);
 
@@ -399,18 +450,22 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
 
             List<TEntity> repo;
 
-            if (orderByAscending) repo = (await _dbSet.Where(condition ?? (entity => true))
-                                                                         .OrderBy(orderByKeySelector)
-                                                                         .Skip((requestedPageNumber - 1) * countOfRequestedRecordsInPage)
-                                                                         .Take(countOfRequestedRecordsInPage)
-                                                                         .IncludeMultiple(includes)
-                                                                         .ToListAsync().ConfigureAwait(false));
-            else repo = (await _dbSet.Where(condition ?? (entity => true))
-                                                        .OrderByDescending(orderByKeySelector)
-                                                        .Skip((requestedPageNumber - 1) * countOfRequestedRecordsInPage)
-                                                        .Take(countOfRequestedRecordsInPage)
-                                                        .IncludeMultiple(includes)
-                                                        .ToListAsync().ConfigureAwait(false));
+            if (orderByAscending) repo = (await _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
+                                                      .Where(condition ?? (entity => true))
+                                                      .OrderBy(orderByKeySelector)
+                                                      .Skip((requestedPageNumber - 1) * countOfRequestedRecordsInPage)
+                                                      .Take(countOfRequestedRecordsInPage)
+                                                      .IncludeMultiple(includes)
+                                                      .ToListAsync()
+                                                      .ConfigureAwait(false));
+            else repo = (await _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
+                                     .Where(condition ?? (entity => true))
+                                     .OrderByDescending(orderByKeySelector)
+                                     .Skip((requestedPageNumber - 1) * countOfRequestedRecordsInPage)
+                                     .Take(countOfRequestedRecordsInPage)
+                                     .IncludeMultiple(includes)
+                                     .ToListAsync()
+                                     .ConfigureAwait(false));
 
             var estimatedCountOfPages = CalculatePageCountAndCompareWithRequested(totalDataCount, countOfRequestedRecordsInPage, requestedPageNumber);
 
@@ -428,10 +483,12 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
         /// <param name="orderByPropertyName"></param>
         /// <param name="orderByAscending"></param>
         /// <param name="conditionExpression"></param>
+        /// <param name="tracking"></param>
         /// <returns></returns>
         public virtual async Task<IEnumerable<TEntity>> GetAsOrderedAsync(string orderByPropertyName,
                                                                           bool orderByAscending,
-                                                                          Expression<Func<TEntity, bool>> conditionExpression = null)
+                                                                          Expression<Func<TEntity, bool>> conditionExpression = null,
+                                                                          bool tracking = false)
         {
             var entityType = typeof(TEntity);
 
@@ -443,12 +500,16 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
 
             List<TEntity> repo;
 
-            if (orderByAscending) repo = await _dbSet.Where(condition ?? (entity => true))
-                                                                        .OrderBy(predicate)
-                                                                        .ToListAsync().ConfigureAwait(false);
-            else repo = await _dbSet.Where(condition ?? (entity => true))
-                                                       .OrderByDescending(predicate)
-                                                       .ToListAsync().ConfigureAwait(false);
+            if (orderByAscending) repo = await _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
+                                                     .Where(condition ?? (entity => true))
+                                                     .OrderBy(predicate)
+                                                     .ToListAsync()
+                                                     .ConfigureAwait(false);
+            else repo = await _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
+                                    .Where(condition ?? (entity => true))
+                                    .OrderByDescending(predicate)
+                                    .ToListAsync()
+                                    .ConfigureAwait(false);
 
             return repo;
         }
@@ -465,11 +526,13 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
         /// <param name="orderByPropertyName"></param>
         /// <param name="orderByAscending"></param>
         /// <param name="conditionExpression"></param>
+        /// <param name="tracking"></param>
         /// <returns></returns>
         public virtual async Task<IEnumerable<TEntity>> GetAsOrderedAsync(Func<IIncludable<TEntity>, IIncludable> includes,
                                                                           string orderByPropertyName,
                                                                           bool orderByAscending,
-                                                                          Expression<Func<TEntity, bool>> conditionExpression = null)
+                                                                          Expression<Func<TEntity, bool>> conditionExpression = null,
+                                                                          bool tracking = false)
         {
             var entityType = typeof(TEntity);
 
@@ -481,14 +544,18 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
 
             List<TEntity> repo;
 
-            if (orderByAscending) repo = (await _dbSet.Where(condition ?? (entity => true))
-                                                                         .OrderBy(predicate)
-                                                                         .IncludeMultiple(includes)
-                                                                         .ToListAsync().ConfigureAwait(false));
-            else repo = (await _dbSet.Where(condition ?? (entity => true))
-                                                        .OrderByDescending(predicate)
-                                                        .IncludeMultiple(includes)
-                                                        .ToListAsync().ConfigureAwait(false));
+            if (orderByAscending) repo = (await _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
+                                                      .Where(condition ?? (entity => true))
+                                                      .OrderBy(predicate)
+                                                      .IncludeMultiple(includes)
+                                                      .ToListAsync()
+                                                      .ConfigureAwait(false));
+            else repo = (await _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
+                                     .Where(condition ?? (entity => true))
+                                     .OrderByDescending(predicate)
+                                     .IncludeMultiple(includes)
+                                     .ToListAsync()
+                                     .ConfigureAwait(false));
 
             return repo;
         }
@@ -502,21 +569,27 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
         /// <param name="orderByKeySelector"></param>
         /// <param name="orderByAscending"></param>
         /// <param name="conditionExpression"></param>
+        /// <param name="tracking"></param>
         /// <returns></returns>
         public virtual async Task<IEnumerable<TEntity>> GetAsOrderedAsync(Expression<Func<TEntity, object>> orderByKeySelector,
                                                                           bool orderByAscending,
-                                                                          Expression<Func<TEntity, bool>> conditionExpression = null)
+                                                                          Expression<Func<TEntity, bool>> conditionExpression = null,
+                                                                          bool tracking = false)
         {
             var condition = CreateConditionExpression(conditionExpression);
 
             List<TEntity> repo;
 
-            if (orderByAscending) repo = await _dbSet.Where(condition ?? (entity => true))
-                                                                        .OrderBy(orderByKeySelector)
-                                                                        .ToListAsync().ConfigureAwait(false);
-            else repo = await _dbSet.Where(condition ?? (entity => true))
-                                                       .OrderByDescending(orderByKeySelector)
-                                                       .ToListAsync().ConfigureAwait(false);
+            if (orderByAscending) repo = await _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
+                                                     .Where(condition ?? (entity => true))
+                                                     .OrderBy(orderByKeySelector)
+                                                     .ToListAsync()
+                                                     .ConfigureAwait(false);
+            else repo = await _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
+                                    .Where(condition ?? (entity => true))
+                                    .OrderByDescending(orderByKeySelector)
+                                    .ToListAsync()
+                                    .ConfigureAwait(false);
 
             return repo;
         }
@@ -531,30 +604,35 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
         /// <param name="orderByKeySelector"></param>
         /// <param name="orderByAscending"></param>
         /// <param name="conditionExpression"></param>
+        /// <param name="tracking"></param>
         /// <returns></returns>
         public virtual async Task<IEnumerable<TEntity>> GetAsOrderedAsync(Func<IIncludable<TEntity>, IIncludable> includes,
                                                                           Expression<Func<TEntity, object>> orderByKeySelector,
                                                                           bool orderByAscending,
-                                                                          Expression<Func<TEntity, bool>> conditionExpression = null)
+                                                                          Expression<Func<TEntity, bool>> conditionExpression = null,
+                                                                          bool tracking = false)
         {
             var condition = CreateConditionExpression(conditionExpression);
 
             List<TEntity> repo;
 
-            if (orderByAscending) repo = (await _dbSet.Where(condition ?? (entity => true))
-                                                                         .OrderBy(orderByKeySelector)
-                                                                         .IncludeMultiple(includes)
-                                                                         .ToListAsync().ConfigureAwait(false));
-            else repo = (await _dbSet.Where(condition ?? (entity => true))
-                                                        .OrderByDescending(orderByKeySelector)
-                                                        .IncludeMultiple(includes)
-                                                        .ToListAsync().ConfigureAwait(false));
+            if (orderByAscending) repo = (await _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
+                                                      .Where(condition ?? (entity => true))
+                                                      .OrderBy(orderByKeySelector)
+                                                      .IncludeMultiple(includes)
+                                                      .ToListAsync()
+                                                      .ConfigureAwait(false));
+            else repo = (await _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
+                                     .Where(condition ?? (entity => true))
+                                     .OrderByDescending(orderByKeySelector)
+                                     .IncludeMultiple(includes)
+                                     .ToListAsync()
+                                     .ConfigureAwait(false));
 
             return repo;
         }
 
         #endregion
-
 
         /// <summary>
         /// Returns one entity by entity Id from database asynchronously.
@@ -562,12 +640,19 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
         /// <param name="id"></param>
         /// <param name="conditionExpression"></param>
         /// <param name="projectionExpression"></param>
+        /// <param name="tracking"></param>
         /// <returns> The entity found or null. </returns>
-        public virtual async Task<TEntity> GetByIdAsync(TKey id, Expression<Func<TEntity, bool>> conditionExpression = null, Expression<Func<TEntity, TEntity>> projectionExpression = null)
+        public virtual async Task<TEntity> GetByIdAsync(TKey id,
+                                                        Expression<Func<TEntity, bool>> conditionExpression = null,
+                                                        Expression<Func<TEntity, TEntity>> projectionExpression = null,
+                                                        bool tracking = false)
         {
             var mainCondition = CreateKeyEqualityExpression(id, conditionExpression);
 
-            return await _dbSet.Select(projectionExpression ?? (entity => entity)).SingleOrDefaultAsync(mainCondition).ConfigureAwait(false);
+            return await _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
+                               .Select(projectionExpression ?? (entity => entity))
+                               .SingleOrDefaultAsync(mainCondition)
+                               .ConfigureAwait(false);
         }
 
         /// <summary>
@@ -579,12 +664,19 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
         /// <param name="id"></param>
         /// <param name="conditionExpression"></param>
         /// <param name="projectionExpression"></param>
+        /// <param name="tracking"></param>
         /// <returns> The entity. </returns>
-        public virtual async Task<TEntity> GetRequiredByIdAsync(TKey id, Expression<Func<TEntity, bool>> conditionExpression = null, Expression<Func<TEntity, TEntity>> projectionExpression = null)
+        public virtual async Task<TEntity> GetRequiredByIdAsync(TKey id,
+                                                                Expression<Func<TEntity, bool>> conditionExpression = null,
+                                                                Expression<Func<TEntity, TEntity>> projectionExpression = null,
+                                                                bool tracking = false)
         {
             var mainCondition = CreateKeyEqualityExpression(id, conditionExpression);
 
-            return (await _dbSet.Select(projectionExpression ?? (entity => entity)).SingleAsync(mainCondition).ConfigureAwait(false));
+            return (await _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
+                                .Select(projectionExpression ?? (entity => entity))
+                                .SingleAsync(mainCondition)
+                                .ConfigureAwait(false));
         }
 
         /// <summary>
@@ -594,15 +686,21 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
         /// <param name="includes"></param>
         /// <param name="conditionExpression"></param>
         /// <param name="projectionExpression"></param>
+        /// <param name="tracking"></param>
         /// <returns> The entity found or null. </returns>
         public virtual async Task<TEntity> GetByIdAsync(TKey id,
                                                         Func<IIncludable<TEntity>, IIncludable> includes,
                                                         Expression<Func<TEntity, bool>> conditionExpression = null,
-                                                        Expression<Func<TEntity, TEntity>> projectionExpression = null)
+                                                        Expression<Func<TEntity, TEntity>> projectionExpression = null,
+                                                        bool tracking = false)
         {
             var mainCondition = CreateKeyEqualityExpression(id, conditionExpression);
 
-            return await _dbSet.IncludeMultiple(includes).Select(projectionExpression ?? (entity => entity)).SingleOrDefaultAsync(mainCondition).ConfigureAwait(false);
+            return await _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
+                               .IncludeMultiple(includes)
+                               .Select(projectionExpression ?? (entity => entity))
+                               .SingleOrDefaultAsync(mainCondition)
+                               .ConfigureAwait(false);
         }
 
 
@@ -616,134 +714,21 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
         /// <param name="includes"></param>
         /// <param name="conditionExpression"></param>
         /// <param name="projectionExpression"></param>
+        /// <param name="tracking"></param>
         /// <returns> The entity. </returns>
         public virtual async Task<TEntity> GetRequiredByIdAsync(TKey id,
                                                                 Func<IIncludable<TEntity>, IIncludable> includes,
                                                                 Expression<Func<TEntity, bool>> conditionExpression = null,
-                                                                Expression<Func<TEntity, TEntity>> projectionExpression = null)
+                                                                Expression<Func<TEntity, TEntity>> projectionExpression = null,
+                                                                bool tracking = false)
         {
             var mainCondition = CreateKeyEqualityExpression(id, conditionExpression);
 
-            return await _dbSet.IncludeMultiple(includes).Select(projectionExpression ?? (entity => entity)).SingleAsync(mainCondition).ConfigureAwait(false);
-        }
-
-        /// <summary>
-        ///  Adds single entity to database asynchronously. 
-        /// </summary>
-        /// <param name="entity"></param>
-        /// <returns></returns>
-        public virtual async Task AddAsync(TEntity entity)
-        {
-            _dbSet.Add(entity);
-            if (SaveChangesAfterEveryTransaction) await _dbContext.SaveChangesAsync().ConfigureAwait(false);
-        }
-
-        /// <summary>
-        ///  Adds multiple entities to database asynchronously. 
-        /// </summary>
-        /// <param name="entities"></param>
-        /// <returns></returns>
-        public virtual async Task AddRangeAsync(IEnumerable<TEntity> entities)
-        {
-            if (!entities.IsNullOrEmpty())
-            {
-                _dbSet.AddRange(entities);
-                if (SaveChangesAfterEveryTransaction) await _dbContext.SaveChangesAsync().ConfigureAwait(false);
-            }
-        }
-
-        /// <summary>
-        ///  Updates specified entity in database asynchronously.
-        /// </summary>
-        /// <param name="entity"></param>
-        /// <returns></returns>
-        public virtual async Task UpdateAsync(TEntity entity)
-        {
-            //InitalizeEdit(entity);
-            _dbSet.Update(entity);
-            if (SaveChangesAfterEveryTransaction) await _dbContext.SaveChangesAsync().ConfigureAwait(false);
-        }
-
-        /// <summary>
-        /// Specific properties updates.
-        /// </summary>
-        /// <param name="entity"></param>
-        /// <param name="projectionProperties"></param>
-        /// <returns></returns>
-        public virtual async Task UpdateAsync(TEntity entity, params Expression<Func<TEntity, object>>[] projectionProperties)
-        {
-            var dbEntry = _dbContext.Entry(entity);
-
-            foreach (var includeProperty in projectionProperties)
-                dbEntry.Property(includeProperty).IsModified = true;
-
-            await _dbContext.SaveChangesAsync().ConfigureAwait(false);
-        }
-
-        /// <summary>
-        /// Specific properties updates.
-        /// </summary>
-        /// <param name="entities"></param>
-        /// <param name="projectionProperties"></param>
-        /// <returns></returns>
-        public virtual async Task UpdateAsync(IEnumerable<TEntity> entities, params Expression<Func<TEntity, object>>[] projectionProperties)
-        {
-            if (!entities.IsNullOrEmpty())
-            {
-                foreach (var entity in entities)
-                {
-                    var dbEntry = _dbContext.Entry(entity);
-
-                    foreach (var includeProperty in projectionProperties)
-                    {
-                        dbEntry.Property(includeProperty).IsModified = true;
-                    }
-                }
-
-                await _dbContext.SaveChangesAsync();
-            }
-        }
-
-        /// <summary>
-        ///  Updates multiple entities in database asynchronously.
-        /// </summary>
-        /// <param name="entities"></param>
-        /// <returns></returns>
-        public virtual async Task UpdateAsync(IEnumerable<TEntity> entities)
-        {
-            if (!entities.IsNullOrEmpty())
-            {
-                //InitalizeEdit(entities);
-                _dbSet.UpdateRange(entities);
-                if (SaveChangesAfterEveryTransaction) await _dbContext.SaveChangesAsync().ConfigureAwait(false);
-            }
-        }
-
-        /// <summary>
-        ///  Deletes single entity from database asynchronously.
-        /// </summary>
-        /// <param name="entity"></param>
-        /// <returns></returns>
-        public virtual async Task DeleteAsync(TEntity entity)
-        {
-            InitalizeEdit(entity);
-            _dbContext.Remove(entity);
-            if (SaveChangesAfterEveryTransaction) await _dbContext.SaveChangesAsync().ConfigureAwait(false);
-        }
-
-        /// <summary>
-        ///  Deletes multiple entity from database asynchronously.
-        /// </summary>
-        /// <param name="entities"></param>
-        /// <returns></returns>
-        public virtual async Task DeleteAsync(IEnumerable<TEntity> entities)
-        {
-            if (!entities.IsNullOrEmpty())
-            {
-                InitalizeEdit(entities);
-                _dbContext.RemoveRange(entities);
-                if (SaveChangesAfterEveryTransaction) await _dbContext.SaveChangesAsync().ConfigureAwait(false);
-            }
+            return await _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
+                               .IncludeMultiple(includes)
+                               .Select(projectionExpression ?? (entity => entity))
+                               .SingleAsync(mainCondition)
+                               .ConfigureAwait(false);
         }
 
         /// <summary>
@@ -751,8 +736,11 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
         /// </summary>
         /// <param name="groupByPropertyName"></param>
         /// <param name="conditionExpression"></param>
+        /// <param name="tracking"></param>
         /// <returns></returns>
-        public virtual async Task<List<Tuple<object, int>>> GetGroupedAndCountAsync(string groupByPropertyName, Expression<Func<TEntity, bool>> conditionExpression = null)
+        public virtual async Task<List<Tuple<object, int>>> GetGroupedAndCountAsync(string groupByPropertyName,
+                                                                                    Expression<Func<TEntity, bool>> conditionExpression = null,
+                                                                                    bool tracking = false)
         {
             var entityType = typeof(TEntity);
 
@@ -760,10 +748,12 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
 
             var predicate = CreateObjectPredicate(entityType, groupByPropertyName);
 
-            return (await _dbSet.Where(CreateConditionExpression(conditionExpression) ?? (entity => true))
-                                                   .GroupBy(predicate)
-                                                   .Select(b => Tuple.Create(b.Key, b.Count()))
-                                                   .ToListAsync().ConfigureAwait(false));
+            return (await _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
+                                .Where(CreateConditionExpression(conditionExpression) ?? (entity => true))
+                                .GroupBy(predicate)
+                                .Select(b => Tuple.Create(b.Key, b.Count()))
+                                .ToListAsync()
+                                .ConfigureAwait(false));
         }
 
         /// <summary>
@@ -771,12 +761,17 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
         /// </summary>
         /// <param name="keySelector"></param>
         /// <param name="conditionExpression"></param>
+        /// <param name="tracking"></param>
         /// <returns></returns>
-        public virtual async Task<List<Tuple<object, int>>> GetGroupedAndCountAsync(Expression<Func<TEntity, object>> keySelector, Expression<Func<TEntity, bool>> conditionExpression = null)
-            => await _dbSet.Where(CreateConditionExpression(conditionExpression) ?? (entity => true))
-                                              .GroupBy(keySelector)
-                                              .Select(b => Tuple.Create(b.Key, b.Count()))
-                                              .ToListAsync().ConfigureAwait(false);
+        public virtual async Task<List<Tuple<object, int>>> GetGroupedAndCountAsync(Expression<Func<TEntity, object>> keySelector,
+                                                                                    Expression<Func<TEntity, bool>> conditionExpression = null,
+                                                                                    bool tracking = false)
+            => await _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
+                           .Where(CreateConditionExpression(conditionExpression) ?? (entity => true))
+                           .GroupBy(keySelector)
+                           .Select(b => Tuple.Create(b.Key, b.Count()))
+                           .ToListAsync()
+                           .ConfigureAwait(false);
 
         /// <summary>
         /// Gets grouped entities from database with <paramref name="groupedClause"/>.
@@ -807,7 +802,8 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
         /// <param name="groupedClause"></param>
         /// <param name="conditionExpression"></param>
         /// <returns></returns>
-        public virtual async Task<List<TReturn>> GetAsGroupedAsync<TReturn>(IQueryable<TReturn> groupedClause, Expression<Func<TReturn, bool>> conditionExpression = null)
+        public virtual async Task<List<TReturn>> GetAsGroupedAsync<TReturn>(IQueryable<TReturn> groupedClause,
+                                                                            Expression<Func<TReturn, bool>> conditionExpression = null)
             => await groupedClause.Where(conditionExpression ?? (entity => true)).ToListAsync().ConfigureAwait(false);
 
         /// <summary>
@@ -837,7 +833,8 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
         /// <param name="conditionExpression"></param>
         /// <param name="groupedClause"></param>
         /// <returns></returns>
-        public virtual async Task<List<TReturn>> GetAsGroupedAsync<TReturn>(Func<IQueryable<TReturn>> groupedClause, Expression<Func<TReturn, bool>> conditionExpression = null)
+        public virtual async Task<List<TReturn>> GetAsGroupedAsync<TReturn>(Func<IQueryable<TReturn>> groupedClause,
+                                                                            Expression<Func<TReturn, bool>> conditionExpression = null)
             => await groupedClause.Invoke().Where(conditionExpression ?? (entity => true)).ToListAsync().ConfigureAwait(false);
 
         /// <summary>
@@ -1021,10 +1018,16 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
         /// </summary>
         /// <param name="conditionExpression"></param>
         /// <param name="projectionExpression"></param>
+        /// <param name="tracking"></param>
         /// <returns></returns>
-        public virtual async Task<TEntity> GetMaxAsync(Expression<Func<TEntity, bool>> conditionExpression = null, Expression<Func<TEntity, TEntity>> projectionExpression = null)
-            => await _dbSet.Where(CreateConditionExpression(conditionExpression) ?? (entity => true)).Select(projectionExpression ?? (entity => entity))
-                                                   .MaxAsync().ConfigureAwait(false);
+        public virtual async Task<TEntity> GetMaxAsync(Expression<Func<TEntity, bool>> conditionExpression = null,
+                                                       Expression<Func<TEntity, TEntity>> projectionExpression = null,
+                                                       bool tracking = false)
+            => await _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
+                           .Where(CreateConditionExpression(conditionExpression) ?? (entity => true))
+                           .Select(projectionExpression ?? (entity => entity))
+                           .MaxAsync()
+                           .ConfigureAwait(false);
 
         /// <summary>
         /// Get max value of entities. With includes.
@@ -1033,14 +1036,18 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
         /// <param name="conditionExpression"></param>
         /// <param name=""></param>
         /// <param name="projectionExpression"></param>
+        /// <param name="tracking"></param>
         /// <returns></returns>
         public virtual async Task<TEntity> GetMaxAsync(Func<IIncludable<TEntity>, IIncludable> includes,
                                                        Expression<Func<TEntity, bool>> conditionExpression = null,
-                                                       Expression<Func<TEntity, TEntity>> projectionExpression = null)
-            => await _dbSet.Where(CreateConditionExpression(conditionExpression) ?? (entity => true))
-                                                   .IncludeMultiple(includes)
-                                                   .Select(projectionExpression ?? (entity => entity))
-                                                   .MaxAsync().ConfigureAwait(false);
+                                                       Expression<Func<TEntity, TEntity>> projectionExpression = null,
+                                                       bool tracking = false)
+            => await _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
+                           .Where(CreateConditionExpression(conditionExpression) ?? (entity => true))
+                           .IncludeMultiple(includes)
+                           .Select(projectionExpression ?? (entity => entity))
+                           .MaxAsync()
+                           .ConfigureAwait(false);
 
         /// <summary>
         /// Gets max value of <typeparamref name="TEntity"/>'s property in entities.
@@ -1048,11 +1055,18 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
         /// <param name="maxProperty"></param>
         /// <param name="conditionExpression"></param>
         /// <param name="projectionExpression"></param>
+        /// <param name="tracking"></param>
         /// <returns></returns>
-        public virtual async Task<TEntity> GetMaxAsync<TProperty>(Expression<Func<TEntity, TProperty>> maxProperty, Expression<Func<TEntity, bool>> conditionExpression = null, Expression<Func<TEntity, TEntity>> projectionExpression = null)
-            => await _dbSet.Where(CreateConditionExpression(conditionExpression) ?? (entity => true)).Select(projectionExpression ?? (entity => entity))
-                                                   .OrderByDescending(maxProperty)
-                                                   .FirstOrDefaultAsync().ConfigureAwait(false);
+        public virtual async Task<TEntity> GetMaxAsync<TProperty>(Expression<Func<TEntity, TProperty>> maxProperty,
+                                                                  Expression<Func<TEntity, bool>> conditionExpression = null,
+                                                                  Expression<Func<TEntity, TEntity>> projectionExpression = null,
+                                                                  bool tracking = false)
+            => await _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
+                           .Where(CreateConditionExpression(conditionExpression) ?? (entity => true))
+                           .Select(projectionExpression ?? (entity => entity))
+                           .OrderByDescending(maxProperty)
+                           .FirstOrDefaultAsync()
+                           .ConfigureAwait(false);
 
         /// <summary>
         /// Gets max value of <typeparamref name="TEntity"/>'s property in entities.
@@ -1061,24 +1075,31 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
         /// <param name="includes"></param>
         /// <param name="conditionExpression"></param>
         /// <param name="projectionExpression"></param>
+        /// <param name="tracking"></param>
         /// <returns></returns>
         public virtual async Task<object> GetMaxAsync<TProperty>(Expression<Func<TEntity, TProperty>> maxProperty,
                                                                  Func<IIncludable<TEntity>, IIncludable> includes,
                                                                  Expression<Func<TEntity, bool>> conditionExpression = null,
-                                                                 Expression<Func<TEntity, TEntity>> projectionExpression = null)
-            => (await _dbSet.Where(CreateConditionExpression(conditionExpression) ?? (entity => true))
-                                                   .IncludeMultiple(includes)
-                                                   .Select(projectionExpression ?? (entity => entity))
-                                                   .OrderByDescending(maxProperty)
-                                                   .FirstOrDefaultAsync().ConfigureAwait(false));
+                                                                 Expression<Func<TEntity, TEntity>> projectionExpression = null,
+                                                                 bool tracking = false)
+            => (await _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
+                            .Where(CreateConditionExpression(conditionExpression) ?? (entity => true))
+                            .IncludeMultiple(includes)
+                            .Select(projectionExpression ?? (entity => entity))
+                            .OrderByDescending(maxProperty)
+                            .FirstOrDefaultAsync()
+                            .ConfigureAwait(false));
 
         /// <summary>
         /// Gets max value of <typeparamref name="TEntity"/>'s property in entities.
         /// </summary>
         /// <param name="maxPropertyName"></param>
         /// <param name="conditionExpression"></param>
+        /// <param name="tracking"></param>
         /// <returns></returns>
-        public virtual async Task<object> GetMaxOfPropertyAsync(string maxPropertyName, Expression<Func<TEntity, bool>> conditionExpression = null)
+        public virtual async Task<object> GetMaxOfPropertyAsync(string maxPropertyName,
+                                                                Expression<Func<TEntity, bool>> conditionExpression = null,
+                                                                bool tracking = false)
         {
             var entityType = typeof(TEntity);
 
@@ -1091,8 +1112,10 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
 
             var predicate = Expression.Lambda<Func<TEntity, object>>(Expression.Convert(orderByProperty, typeof(object)), parameterExpression);
 
-            return (await _dbSet.Where(CreateConditionExpression(conditionExpression) ?? (entity => true))
-                                                   .MaxAsync(predicate).ConfigureAwait(false));
+            return (await _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
+                                .Where(CreateConditionExpression(conditionExpression) ?? (entity => true))
+                                .MaxAsync(predicate)
+                                .ConfigureAwait(false));
         }
 
         /// <summary>
@@ -1100,20 +1123,208 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
         /// </summary>
         /// <param name="maxProperty"></param>
         /// <param name="conditionExpression"></param>
+        /// <param name="tracking"></param>
         /// <returns></returns>
-        public virtual async Task<object> GetMaxOfPropertyAsync<TProperty>(Expression<Func<TEntity, TProperty>> maxProperty, Expression<Func<TEntity, bool>> conditionExpression = null)
-            => await _dbSet.Where(CreateConditionExpression(conditionExpression) ?? (entity => true))
-                                                   .MaxAsync(maxProperty).ConfigureAwait(false);
+        public virtual async Task<object> GetMaxOfPropertyAsync<TProperty>(Expression<Func<TEntity, TProperty>> maxProperty,
+                                                                           Expression<Func<TEntity, bool>> conditionExpression = null,
+                                                                           bool tracking = false)
+            => await _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
+                           .Where(CreateConditionExpression(conditionExpression) ?? (entity => true))
+                           .MaxAsync(maxProperty)
+                           .ConfigureAwait(false);
 
         /// <summary>
         /// Get count of entities.
         /// </summary>
         /// <param name="conditionExpression"></param>
+        /// <param name="tracking"></param>
         /// <returns></returns>
-        public virtual async Task<int> GetCountAsync(Expression<Func<TEntity, bool>> conditionExpression = null)
-            => await _dbSet.Where(CreateConditionExpression(conditionExpression) ?? (entity => true))
-                                                          .CountAsync().ConfigureAwait(false);
+        public virtual async Task<int> GetCountAsync(Expression<Func<TEntity, bool>> conditionExpression = null, bool tracking = false)
+            => await _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
+                           .Where(CreateConditionExpression(conditionExpression) ?? (entity => true))
+                           .CountAsync()
+                           .ConfigureAwait(false);
 
+        #endregion
+
+        /// <summary>
+        /// Returns whether or not the entity that satisfies this condition exists.
+        /// </summary>
+        /// <param name="conditionExpression"></param>
+        /// <returns></returns>
+        public virtual async Task<bool> ExistsAsync(Expression<Func<TEntity, bool>> conditionExpression = null)
+            => await _dbSet.AsNoTracking().FirstOrDefaultAsync(CreateConditionExpression(conditionExpression) ?? (entity => true)).ConfigureAwait(false) != null;
+
+        /// <summary>
+        /// Returns whether or not the entity that satisfies this condition exists. 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public virtual async Task<bool> ExistsAsync(TKey id)
+        {
+            var mainCondition = CreateKeyEqualityExpression(id);
+
+            return await _dbSet.AsNoTracking().SingleOrDefaultAsync(mainCondition).ConfigureAwait(false) != null;
+        }
+
+        /// <summary>
+        /// Returns whether or not the entity that satisfies this condition exists. 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="includes"></param>
+        /// <param name="conditionExpression"></param>
+        /// <returns></returns>
+        public virtual async Task<bool> ExistsAsync(TKey id, Func<IIncludable<TEntity>, IIncludable> includes, Expression<Func<TEntity, bool>> conditionExpression = null)
+        {
+            var mainCondition = CreateKeyEqualityExpression(id, conditionExpression);
+
+            return await _dbSet.AsNoTracking().IncludeMultiple(includes).SingleOrDefaultAsync(mainCondition).ConfigureAwait(false) != null;
+        }
+
+        /// <summary>
+        ///  Adds single entity to database asynchronously. 
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <returns></returns>
+        public virtual async Task AddAsync(TEntity entity)
+        {
+            _dbSet.Add(entity);
+            if (SaveChangesAfterEveryTransaction) await _dbContext.SaveChangesAsync().ConfigureAwait(false);
+        }
+
+        /// <summary>
+        ///  Adds multiple entities to database asynchronously. 
+        /// </summary>
+        /// <param name="entities"></param>
+        /// <returns></returns>
+        public virtual async Task AddRangeAsync(IEnumerable<TEntity> entities)
+        {
+            if (!entities.IsNullOrEmpty())
+            {
+                _dbSet.AddRange(entities);
+
+                if (SaveChangesAfterEveryTransaction)
+                    await _dbContext.SaveChangesAsync().ConfigureAwait(false);
+            }
+        }
+
+        /// <summary>
+        ///  Updates specified entity in database asynchronously.
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <returns></returns>
+        public virtual async Task UpdateAsync(TEntity entity)
+        {
+            _dbSet.Update(entity);
+
+            if (SaveChangesAfterEveryTransaction)
+                await _dbContext.SaveChangesAsync().ConfigureAwait(false);
+        }
+
+        /// <summary>
+        /// Specific properties updates.
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <param name="projectionProperties"></param>
+        /// <returns></returns>
+        public virtual async Task UpdateAsync(TEntity entity, params Expression<Func<TEntity, object>>[] projectionProperties)
+        {
+            var dbEntry = _dbContext.Entry(entity);
+
+            foreach (var includeProperty in projectionProperties)
+                dbEntry.Property(includeProperty).IsModified = true;
+
+            await _dbContext.SaveChangesAsync().ConfigureAwait(false);
+        }
+
+        /// <summary>
+        /// Specific properties updates.
+        /// </summary>
+        /// <param name="entities"></param>
+        /// <param name="projectionProperties"></param>
+        /// <returns></returns>
+        public virtual async Task UpdateAsync(IEnumerable<TEntity> entities, params Expression<Func<TEntity, object>>[] projectionProperties)
+        {
+            if (!entities.IsNullOrEmpty())
+            {
+                foreach (var entity in entities)
+                {
+                    var dbEntry = _dbContext.Entry(entity);
+
+                    foreach (var includeProperty in projectionProperties)
+                        dbEntry.Property(includeProperty).IsModified = true;
+                }
+
+                await _dbContext.SaveChangesAsync();
+            }
+        }
+
+        /// <summary>
+        ///  Updates multiple entities in database asynchronously.
+        /// </summary>
+        /// <param name="entities"></param>
+        /// <returns></returns>
+        public virtual async Task UpdateAsync(IEnumerable<TEntity> entities)
+        {
+            if (!entities.IsNullOrEmpty())
+            {
+                _dbSet.UpdateRange(entities);
+
+                if (SaveChangesAfterEveryTransaction)
+                    await _dbContext.SaveChangesAsync().ConfigureAwait(false);
+            }
+        }
+
+        /// <summary>
+        ///  Deletes single entity from database asynchronously.
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <returns></returns>
+        public virtual async Task DeleteAsync(TEntity entity)
+        {
+            _dbSet.Remove(entity);
+
+            if (SaveChangesAfterEveryTransaction)
+                await _dbContext.SaveChangesAsync().ConfigureAwait(false);
+        }
+
+        /// <summary>
+        ///  Deletes multiple entity from database asynchronously.
+        /// </summary>
+        /// <param name="entities"></param>
+        /// <returns></returns>
+        public virtual async Task DeleteAsync(IEnumerable<TEntity> entities)
+        {
+            if (!entities.IsNullOrEmpty())
+            {
+                _dbSet.RemoveRange(entities);
+
+                if (SaveChangesAfterEveryTransaction)
+                    await _dbContext.SaveChangesAsync().ConfigureAwait(false);
+            }
+        }
+
+        /// <summary>
+        /// Replaces existing entities(<paramref name="oldEntities"/>) with new entities(<paramref name="newEntities"/>).
+        /// </summary>
+        /// <param name="oldEntities"></param>
+        /// <param name="newEntities"></param>
+        /// <returns></returns>
+        public virtual async Task ReplaceOldsWithNewsAsync(IEnumerable<TEntity> oldEntities, IEnumerable<TEntity> newEntities)
+        {
+            if (!oldEntities.IsNullOrEmpty())
+            {
+                _dbSet.RemoveRange(oldEntities);
+            }
+
+            if (!newEntities.IsNullOrEmpty())
+            {
+                _dbSet.AddRange(newEntities);
+            }
+
+            if (SaveChangesAfterEveryTransaction)
+                await _dbContext.SaveChangesAsync().ConfigureAwait(false);
+        }
 
         /// <summary>
         /// Replaces existing entities(<paramref name="oldEntities"/>) with new entities(<paramref name="newEntities"/>).
@@ -1130,70 +1341,19 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
         }
 
         /// <summary>
-        /// Replaces existing entities(<paramref name="oldEntities"/>) with new entities(<paramref name="newEntities"/>).
-        /// </summary>
-        /// <param name="oldEntities"></param>
-        /// <param name="newEntities"></param>
-        /// <returns></returns>
-        public virtual async Task ReplaceOldsWithNewsAsync(IEnumerable<TEntity> oldEntities, IEnumerable<TEntity> newEntities)
-        {
-            if (!oldEntities.IsNullOrEmpty())
-            {
-                InitalizeEdit(oldEntities);
-                _dbContext.RemoveRange(oldEntities);
-            }
-            if (!newEntities.IsNullOrEmpty())
-            {
-                _dbSet.AddRange(newEntities);
-            }
-            if (SaveChangesAfterEveryTransaction) await _dbContext.SaveChangesAsync().ConfigureAwait(false);
-        }
-
-        /// <summary>
         /// Removes all entities from database.
         /// </summary>
         /// <returns></returns>
         public virtual async Task RemoveAllAsync()
         {
             var entities = _dbSet.AsEnumerable();
-            InitalizeEdit(entities);
-            _dbContext.RemoveRange(entities);
-            if (SaveChangesAfterEveryTransaction) await _dbContext.SaveChangesAsync().ConfigureAwait(false);
+
+            _dbSet.RemoveRange(entities);
+
+            if (SaveChangesAfterEveryTransaction)
+                await _dbContext.SaveChangesAsync().ConfigureAwait(false);
         }
 
-        /// <summary>
-        /// Returns whether or not the entity that satisfies this condition exists.
-        /// </summary>
-        /// <param name="conditionExpression"></param>
-        /// <returns></returns>
-        public virtual async Task<bool> ExistsAsync(Expression<Func<TEntity, bool>> conditionExpression = null)
-            => await _dbSet.FirstOrDefaultAsync(CreateConditionExpression(conditionExpression) ?? (entity => true)).ConfigureAwait(false) != null;
-
-        /// <summary>
-        /// Returns whether or not the entity that satisfies this condition exists. 
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
-        public virtual async Task<bool> ExistsAsync(TKey id)
-        {
-            var mainCondition = CreateKeyEqualityExpression(id);
-
-            return await _dbSet.SingleOrDefaultAsync(mainCondition).ConfigureAwait(false) != null;
-        }
-
-        /// <summary>
-        /// Returns whether or not the entity that satisfies this condition exists. 
-        /// </summary>
-        /// <param name="id"></param>
-        /// <param name="includes"></param>
-        /// <param name="conditionExpression"></param>
-        /// <returns></returns>
-        public virtual async Task<bool> ExistsAsync(TKey id, Func<IIncludable<TEntity>, IIncludable> includes, Expression<Func<TEntity, bool>> conditionExpression = null)
-        {
-            var mainCondition = CreateKeyEqualityExpression(id, conditionExpression);
-
-            return await _dbSet.IncludeMultiple(includes).SingleOrDefaultAsync(mainCondition).ConfigureAwait(false) != null;
-        }
 
         #region Private Helper Methods
 
@@ -1294,34 +1454,11 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
         }
 
         /// <summary>
-        /// For configure entity state. Change tracking.
+        /// Returns <see cref="QueryTrackingBehavior"/> according to <paramref name="tracking"/>.
         /// </summary>
-        /// <param name="entity"></param>
-        protected void InitalizeEdit(TEntity entity)
-        {
-            var local = _dbSet.Local.FirstOrDefault(entry => entry.Id.Equals(entity.Id));
-            if (local != null)
-            {
-                _dbContext.Entry(local).State = EntityState.Detached;
-            }
-            _dbContext.Entry(entity).State = EntityState.Modified;
-        }
-
-        /// <summary>
-        /// For configure entity state. Change tracking.
-        /// </summary>
-        /// <param name="entities"></param>
-        protected void InitalizeEdit(IEnumerable<TEntity> entities)
-        {
-            var localEntities = _dbSet.Local.Where(e => entities.Any(en => en.Id.Equals(e.Id)));
-            if (!localEntities?.Any() ?? false)
-            {
-                foreach (var entity in localEntities)
-                    _dbContext.Entry(entity).State = EntityState.Detached;
-            }
-            foreach (var entity in entities)
-                _dbContext.Entry(entity).State = EntityState.Modified;
-        }
+        /// <param name="tracking"></param>
+        /// <returns></returns>
+        private static QueryTrackingBehavior GetQueryTrackingBehavior(bool tracking) => tracking ? QueryTrackingBehavior.TrackAll : QueryTrackingBehavior.NoTracking;
 
         #endregion
     }

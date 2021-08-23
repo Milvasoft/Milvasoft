@@ -1315,62 +1315,68 @@
         </member>
         <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.CreateIsDeletedFalseExpression">
             <summary>
-            Gets <b>entity => entity.IsDeleted == false</b> expression, if <typeparamref name="TEntity"/> is assignable from <see cref="T:Milvasoft.Helpers.DataAccess.Abstract.Entity.IFullAuditable`1"/>.
+            Gets <b>entity => entity.IsDeleted == false</b> expression, if <typeparamref name="TEntity"/> is assignable from <see cref="!:FullAuditableEntity&lt;TKey&gt;"/>.
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.GetFirstOrDefaultAsync(System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Linq.Expressions.Expression{System.Func{`0,`0}})">
+        <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.GetFirstOrDefaultAsync(System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Linq.Expressions.Expression{System.Func{`0,`0}},System.Boolean)">
             <summary>
-             Returns all entities which IsDeleted condition is true from database asynchronously. If the condition is requested, it also provides that condition.
+             Returns first entity or default value which IsDeleted condition is true from database asynchronously. If the condition is requested, it also provides that condition.
             </summary>
             <param name="projectionExpression"></param>
+            <param name="tracking"></param>
             <param name="conditionExpression"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.GetFirstOrDefaultAsync(System.Func{Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable{`0},Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable},System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Linq.Expressions.Expression{System.Func{`0,`0}})">
+        <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.GetFirstOrDefaultAsync(System.Func{Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable{`0},Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable},System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Linq.Expressions.Expression{System.Func{`0,`0}},System.Boolean)">
             <summary>
-             Returns all entities which IsDeleted condition is true with includes from database asynchronously. If the condition is requested, it also provides that condition.
+             Returns first entity or default value which IsDeleted condition is true with includes from database asynchronously. If the condition is requested, it also provides that condition. 
+            </summary>
+            <param name="includes"></param>
+            <param name="projectionExpression"></param>
+            <param name="tracking"></param>
+            <param name="conditionExpression"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.GetSingleOrDefaultAsync(System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Linq.Expressions.Expression{System.Func{`0,`0}},System.Boolean)">
+            <summary>
+             Returns single entity or default value which IsDeleted condition is true from database asynchronously. If the condition is requested, it also provides that condition.
+            </summary>
+            <param name="projectionExpression"></param>
+            <param name="tracking"></param>
+            <param name="conditionExpression"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.GetSingleOrDefaultAsync(System.Func{Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable{`0},Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable},System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Linq.Expressions.Expression{System.Func{`0,`0}},System.Boolean)">
+            <summary>
+             Returns single entity or default value which IsDeleted condition is true with includes from database asynchronously. If the condition is requested, it also provides that condition.
             </summary>
             <param name="includes"></param>
             <param name="conditionExpression"></param>
             <param name="projectionExpression"></param>
+            <param name="tracking"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.GetSingleOrDefaultAsync(System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Linq.Expressions.Expression{System.Func{`0,`0}})">
-            <summary>
-             Returns all entities which IsDeleted condition is true from database asynchronously. If the condition is requested, it also provides that condition.
-            </summary>
-            <param name="conditionExpression"></param>
-            <param name="projectionExpression"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.GetSingleOrDefaultAsync(System.Func{Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable{`0},Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable},System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Linq.Expressions.Expression{System.Func{`0,`0}})">
-            <summary>
-             Returns all entities which IsDeleted condition is true with includes from database asynchronously. If the condition is requested, it also provides that condition.
-            </summary>
-            <param name="includes"></param>
-            <param name="conditionExpression"></param>
-            <param name="projectionExpression"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.GetAllAsync(System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Linq.Expressions.Expression{System.Func{`0,`0}})">
+        <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.GetAllAsync(System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Linq.Expressions.Expression{System.Func{`0,`0}},System.Boolean)">
             <summary>
              Returns all entities which IsDeleted condition is true from database asynchronously. If the condition is requested, it also provides that condition.
             </summary>
             <param name="projectionExpression"></param>
+            <param name="tracking"></param>
             <param name="conditionExpression"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.GetAllAsync(System.Func{Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable{`0},Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable},System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Linq.Expressions.Expression{System.Func{`0,`0}})">
+        <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.GetAllAsync(System.Func{Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable{`0},Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable},System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Linq.Expressions.Expression{System.Func{`0,`0}},System.Boolean)">
             <summary>
              Returns all entities which IsDeleted condition is true with specified includes from database asynchronously. If the condition is requested, it also provides that condition.
             </summary>
             <param name="includes"></param>
             <param name="projectionExpression"></param>
+            <param name="tracking"></param>
             <param name="conditionExpression"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.GetAsPaginatedAsync(System.Int32,System.Int32,System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
+        <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.GetAsPaginatedAsync(System.Int32,System.Int32,System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Boolean)">
             <summary>
              Creates asynchronously a shallow copy of a range of entity's which IsDeleted property is true, in the source List of TEntity with requested count and range. 
                   If the condition is requested, it also provides that condition.
@@ -1381,9 +1387,10 @@
             <param name="requestedPageNumber"></param>
             <param name="countOfRequestedRecordsInPage"></param>
             <param name="conditionExpression"></param>
+            <param name="tracking"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.GetAsPaginatedAsync(System.Int32,System.Int32,System.Func{Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable{`0},Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable},System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
+        <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.GetAsPaginatedAsync(System.Int32,System.Int32,System.Func{Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable{`0},Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable},System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Boolean)">
              <summary>
               Creates asynchronously a shallow copy of a range of entity's which IsDeleted property is true, in the source List of TEntity with requested count,range and includes.
                    If the condition is requested, it also provides that condition.
@@ -1395,11 +1402,12 @@
              <param name="countOfRequestedRecordsInPage"></param>
              <param name="includes"></param>
              <param name="conditionExpression"></param>
+             <param name="tracking"></param>
              <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.GetAsPaginatedAndOrderedAsync(System.Int32,System.Int32,System.String,System.Boolean,System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
+        <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.GetAsPaginatedAndOrderedAsync(System.Int32,System.Int32,System.String,System.Boolean,System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Boolean)">
             <summary>
-             Creates asynchronously a shallow copy of a range of entity's which IsDeleted property is true, in the source List of TEntity with requested count and range.
+             Creates and ordered asynchronously a shallow copy of a range of entity's which IsDeleted property is true, in the source List of TEntity with requested count and range.
                   If the condition is requested, it also provides that condition.
                   
             </summary>
@@ -1412,11 +1420,12 @@
             <param name="orderByPropertyName"></param>
             <param name="orderByAscending"></param>
             <param name="conditionExpression"></param>
+            <param name="tracking"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.GetAsPaginatedAndOrderedAsync(System.Int32,System.Int32,System.Func{Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable{`0},Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable},System.String,System.Boolean,System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
+        <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.GetAsPaginatedAndOrderedAsync(System.Int32,System.Int32,System.Func{Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable{`0},Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable},System.String,System.Boolean,System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Boolean)">
              <summary>
-              Creates asynchronously a shallow copy of a range of entity's which IsDeleted property is true, in the source List of TEntity with requested count,range and includes.
+              Creates and ordered asynchronously a shallow copy of a range of entity's which IsDeleted property is true, in the source List of TEntity with requested count,range and includes.
                     If the condition is requested, it also provides that condition.
                     
              </summary>
@@ -1430,9 +1439,10 @@
              <param name="orderByPropertyName"></param>
              <param name="orderByAscending"></param>
              <param name="conditionExpression"></param>
+             <param name="tracking"></param>
              <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.GetAsPaginatedAndOrderedAsync(System.Int32,System.Int32,System.Linq.Expressions.Expression{System.Func{`0,System.Object}},System.Boolean,System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
+        <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.GetAsPaginatedAndOrderedAsync(System.Int32,System.Int32,System.Linq.Expressions.Expression{System.Func{`0,System.Object}},System.Boolean,System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Boolean)">
             <summary>
              Creates asynchronously a shallow copy of a range of entity's which IsDeleted property is true, in the source List of TEntity with requested count and range.
                   If the condition is requested, it also provides that condition.
@@ -1446,9 +1456,10 @@
             <param name="orderByKeySelector"></param>
             <param name="orderByAscending"></param>
             <param name="conditionExpression"></param>
+            <param name="tracking"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.GetAsPaginatedAndOrderedAsync(System.Int32,System.Int32,System.Func{Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable{`0},Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable},System.Linq.Expressions.Expression{System.Func{`0,System.Object}},System.Boolean,System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
+        <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.GetAsPaginatedAndOrderedAsync(System.Int32,System.Int32,System.Func{Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable{`0},Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable},System.Linq.Expressions.Expression{System.Func{`0,System.Object}},System.Boolean,System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Boolean)">
              <summary>
               Creates asynchronously a shallow copy of a range of entity's which IsDeleted property is true, in the source List of TEntity with requested count,range and includes.
                     If the condition is requested, it also provides that condition.
@@ -1463,9 +1474,10 @@
              <param name="orderByKeySelector"></param>
              <param name="orderByAscending"></param>
              <param name="conditionExpression"></param>
+             <param name="tracking"></param>
              <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.GetAsOrderedAsync(System.String,System.Boolean,System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
+        <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.GetAsOrderedAsync(System.String,System.Boolean,System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Boolean)">
             <summary>
              Gets entities as ordered with <paramref name="orderByPropertyName"/>.
                   If the condition is requested, it also provides that condition.
@@ -1477,9 +1489,10 @@
             <param name="orderByPropertyName"></param>
             <param name="orderByAscending"></param>
             <param name="conditionExpression"></param>
+            <param name="tracking"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.GetAsOrderedAsync(System.Func{Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable{`0},Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable},System.String,System.Boolean,System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
+        <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.GetAsOrderedAsync(System.Func{Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable{`0},Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable},System.String,System.Boolean,System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Boolean)">
              <summary>
               Gets entities with includes as ordered with <paramref name="orderByPropertyName"/>.
                     If the condition is requested, it also provides that condition.
@@ -1492,9 +1505,10 @@
              <param name="orderByPropertyName"></param>
              <param name="orderByAscending"></param>
              <param name="conditionExpression"></param>
+             <param name="tracking"></param>
              <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.GetAsOrderedAsync(System.Linq.Expressions.Expression{System.Func{`0,System.Object}},System.Boolean,System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
+        <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.GetAsOrderedAsync(System.Linq.Expressions.Expression{System.Func{`0,System.Object}},System.Boolean,System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Boolean)">
             <summary>
              Gets entities as ordered with <paramref name="orderByKeySelector"/>.
                   If the condition is requested, it also provides that condition.
@@ -1504,9 +1518,10 @@
             <param name="orderByKeySelector"></param>
             <param name="orderByAscending"></param>
             <param name="conditionExpression"></param>
+            <param name="tracking"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.GetAsOrderedAsync(System.Func{Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable{`0},Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable},System.Linq.Expressions.Expression{System.Func{`0,System.Object}},System.Boolean,System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
+        <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.GetAsOrderedAsync(System.Func{Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable{`0},Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable},System.Linq.Expressions.Expression{System.Func{`0,System.Object}},System.Boolean,System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Boolean)">
              <summary>
               Gets entities as ordered with <paramref name="orderByKeySelector"/>.
                     If the condition is requested, it also provides that condition.
@@ -1517,20 +1532,22 @@
              <param name="orderByKeySelector"></param>
              <param name="orderByAscending"></param>
              <param name="conditionExpression"></param>
+             <param name="tracking"></param>
              <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.GetByIdAsync(`1,System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Linq.Expressions.Expression{System.Func{`0,`0}})">
+        <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.GetByIdAsync(`1,System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Linq.Expressions.Expression{System.Func{`0,`0}},System.Boolean)">
             <summary>
             Returns one entity by entity Id from database asynchronously.
             </summary>
             <param name="id"></param>
             <param name="conditionExpression"></param>
             <param name="projectionExpression"></param>
+            <param name="tracking"></param>
             <returns> The entity found or null. </returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.GetRequiredByIdAsync(`1,System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Linq.Expressions.Expression{System.Func{`0,`0}})">
+        <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.GetRequiredByIdAsync(`1,System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Linq.Expressions.Expression{System.Func{`0,`0}},System.Boolean)">
             <summary>
-             Returns one entity by entity Id from database asynchronously. 
+             Returns one entity by entity Id from database asynchronously.
             </summary>
             
             <exception cref="T:System.ArgumentNullException"> Throwns when no entity found. </exception>
@@ -1538,21 +1555,23 @@
             <param name="id"></param>
             <param name="conditionExpression"></param>
             <param name="projectionExpression"></param>
+            <param name="tracking"></param>
             <returns> The entity. </returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.GetByIdAsync(`1,System.Func{Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable{`0},Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable},System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Linq.Expressions.Expression{System.Func{`0,`0}})">
+        <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.GetByIdAsync(`1,System.Func{Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable{`0},Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable},System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Linq.Expressions.Expression{System.Func{`0,`0}},System.Boolean)">
             <summary>
-             Returns one entity which IsDeleted condition is true by entity Id with includes from database asynchronously. If the condition is requested, it also provides that condition.
+             Returns one entity which IsDeleted condition is true by entity Id with includes from database asynchronously. If the condition is requested, it also provides that condition. 
             </summary>
             <param name="id"></param>
             <param name="includes"></param>
             <param name="conditionExpression"></param>
             <param name="projectionExpression"></param>
+            <param name="tracking"></param>
             <returns> The entity found or null. </returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.GetRequiredByIdAsync(`1,System.Func{Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable{`0},Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable},System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Linq.Expressions.Expression{System.Func{`0,`0}})">
+        <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.GetRequiredByIdAsync(`1,System.Func{Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable{`0},Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable},System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Linq.Expressions.Expression{System.Func{`0,`0}},System.Boolean)">
             <summary>
-             Returns one entity which IsDeleted condition is true by entity Id with includes from database asynchronously. If the condition is requested, it also provides that condition.
+             Returns one entity which IsDeleted condition is true by entity Id with includes from database asynchronously. If the condition is requested, it also provides that condition. 
             </summary>
             
             <exception cref="T:System.ArgumentNullException"> Throwns when no entity found. </exception>
@@ -1561,72 +1580,25 @@
             <param name="includes"></param>
             <param name="conditionExpression"></param>
             <param name="projectionExpression"></param>
+            <param name="tracking"></param>
             <returns> The entity. </returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.AddAsync(`0)">
-            <summary>
-             Adds single entity to database asynchronously.
-            </summary>
-            <param name="entity"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.AddRangeAsync(System.Collections.Generic.IEnumerable{`0})">
-            <summary>
-             Adds multiple entities to database asynchronously.
-            </summary>
-            <param name="entities"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.UpdateAsync(`0)">
-            <summary>
-             Updates specified entity in database asynchronously.
-            </summary>
-            <param name="entity"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.UpdateAsync(`0,System.Linq.Expressions.Expression{System.Func{`0,System.Object}}[])">
-            <summary>
-            Specific properties updates.
-            </summary>
-            <param name="entity"></param>
-            <param name="projectionProperties"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.UpdateAsync(System.Collections.Generic.IEnumerable{`0})">
-            <summary>
-             Updates multiple entities in database asynchronously.
-            </summary>
-            <param name="entities"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.UpdateAsync(System.Collections.Generic.IEnumerable{`0},System.Linq.Expressions.Expression{System.Func{`0,System.Object}}[])">
-            <summary>
-            Specific properties updates.
-            </summary>
-            <param name="entities"></param>
-            <param name="projectionProperties"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.DeleteAsync(`0)">
-            <summary>
-             Deletes single entity from database asynchronously..
-            </summary>
-            <param name="entity"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.DeleteAsync(System.Collections.Generic.IEnumerable{`0})">
-            <summary>
-             Deletes multiple entity from database asynchronously. 
-            </summary>
-            <param name="entities"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.GetGroupedAndCountAsync(System.String,System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
+        <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.GetGroupedAndCountAsync(System.String,System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Boolean)">
             <summary>
             Groups entities with <paramref name="groupByPropertyName"/> and returns the key grouped and the number of items grouped with this key.
             </summary>
             <param name="groupByPropertyName"></param>
             <param name="conditionExpression"></param>
+            <param name="tracking"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.GetGroupedAndCountAsync(System.Linq.Expressions.Expression{System.Func{`0,System.Object}},System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Boolean)">
+            <summary>
+            Groups entities with <paramref name="keySelector"/> and returns the key grouped and the number of items grouped with this key.
+            </summary>
+            <param name="keySelector"></param>
+            <param name="conditionExpression"></param>
+            <param name="tracking"></param>
             <returns></returns>
         </member>
         <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.GetAsGroupedAsync``1(System.Linq.IQueryable{``0},System.Linq.Expressions.Expression{System.Func{``0,System.Boolean}})">
@@ -1724,10 +1696,10 @@
             <summary>
             Gets grouped entities with condition from database with <paramref name="groupedClause"/>.
             
-            <para><b>Example use;</b></para>
+            <para> <b>Example use;</b></para>
             <code>
             
-            <para>   Func{IQueryablePocoDTO>} groupByClauseFunc = () =>   from poco in _contextRepository.GetDbSet{Poco}()                                       </para>
+            <para>   Func{IQueryablePocoDTO>} groupByClauseFunc = () =>   from poco in _contextRepository.GetDbSet{Poco}()                                                    </para>
                                                                           group poco by new { poco.Id,  poco.PocoCode } into groupedPocos                                      
             <para>                                                              select new PocoDTO                                                                             </para>
             <para>                                                              {                                                                                              </para>
@@ -1735,7 +1707,7 @@
             <para>                                                                   PocoCode = groupedPocos.Key.PocoCode,                                                     </para>
             <para>                                                                   PocoCount = groupedPocos.Sum(p=>p.Count)                                                  </para>
             <para>                                                              };                                                                                             </para>
-                                 
+                                   
             <para>   var result = await _pocoRepository.GetGroupedAsync{PocoDTO}(1, 10, "PocoCode", false, groupByClauseFunc).ConfigureAwait(false);                           </para>
                
             </code>
@@ -1784,33 +1756,37 @@
             <param name="groupedClause"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.GetMaxAsync(System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Linq.Expressions.Expression{System.Func{`0,`0}})">
+        <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.GetMaxAsync(System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Linq.Expressions.Expression{System.Func{`0,`0}},System.Boolean)">
             <summary>
             Get max value of entities.
             </summary>
             <param name="conditionExpression"></param>
             <param name="projectionExpression"></param>
+            <param name="tracking"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.GetMaxAsync(System.Func{Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable{`0},Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable},System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Linq.Expressions.Expression{System.Func{`0,`0}})">
+        <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.GetMaxAsync(System.Func{Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable{`0},Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable},System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Linq.Expressions.Expression{System.Func{`0,`0}},System.Boolean)">
             <summary>
             Get max value of entities. With includes.
             </summary>
             <param name="includes"></param>
             <param name="conditionExpression"></param>
+            <param name=""></param>
             <param name="projectionExpression"></param>
+            <param name="tracking"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.GetMaxAsync``1(System.Linq.Expressions.Expression{System.Func{`0,``0}},System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Linq.Expressions.Expression{System.Func{`0,`0}})">
+        <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.GetMaxAsync``1(System.Linq.Expressions.Expression{System.Func{`0,``0}},System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Linq.Expressions.Expression{System.Func{`0,`0}},System.Boolean)">
             <summary>
             Gets max value of <typeparamref name="TEntity"/>'s property in entities.
             </summary>
             <param name="maxProperty"></param>
             <param name="conditionExpression"></param>
             <param name="projectionExpression"></param>
+            <param name="tracking"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.GetMaxAsync``1(System.Linq.Expressions.Expression{System.Func{`0,``0}},System.Func{Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable{`0},Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable},System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Linq.Expressions.Expression{System.Func{`0,`0}})">
+        <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.GetMaxAsync``1(System.Linq.Expressions.Expression{System.Func{`0,``0}},System.Func{Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable{`0},Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable},System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Linq.Expressions.Expression{System.Func{`0,`0}},System.Boolean)">
             <summary>
             Gets max value of <typeparamref name="TEntity"/>'s property in entities.
             </summary>
@@ -1818,29 +1794,114 @@
             <param name="includes"></param>
             <param name="conditionExpression"></param>
             <param name="projectionExpression"></param>
+            <param name="tracking"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.GetMaxOfPropertyAsync(System.String,System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
+        <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.GetMaxOfPropertyAsync(System.String,System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Boolean)">
             <summary>
             Gets max value of <typeparamref name="TEntity"/>'s property in entities.
             </summary>
             <param name="maxPropertyName"></param>
             <param name="conditionExpression"></param>
+            <param name="tracking"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.GetMaxOfPropertyAsync``1(System.Linq.Expressions.Expression{System.Func{`0,``0}},System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
+        <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.GetMaxOfPropertyAsync``1(System.Linq.Expressions.Expression{System.Func{`0,``0}},System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Boolean)">
             <summary>
             Gets max value of <typeparamref name="TEntity"/>'s property in entities.
             </summary>
             <param name="maxProperty"></param>
             <param name="conditionExpression"></param>
+            <param name="tracking"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.GetCountAsync(System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
+        <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.GetCountAsync(System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Boolean)">
             <summary>
             Get count of entities.
             </summary>
             <param name="conditionExpression"></param>
+            <param name="tracking"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.ExistsAsync(System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
+            <summary>
+            Returns whether or not the entity that satisfies this condition exists.
+            </summary>
+            <param name="conditionExpression"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.ExistsAsync(`1)">
+            <summary>
+            Returns whether or not the entity that satisfies this condition exists. 
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.ExistsAsync(`1,System.Func{Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable{`0},Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable},System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
+            <summary>
+            Returns whether or not the entity that satisfies this condition exists. 
+            </summary>
+            <param name="id"></param>
+            <param name="includes"></param>
+            <param name="conditionExpression"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.AddAsync(`0)">
+            <summary>
+             Adds single entity to database asynchronously. 
+            </summary>
+            <param name="entity"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.AddRangeAsync(System.Collections.Generic.IEnumerable{`0})">
+            <summary>
+             Adds multiple entities to database asynchronously. 
+            </summary>
+            <param name="entities"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.UpdateAsync(`0)">
+            <summary>
+             Updates specified entity in database asynchronously.
+            </summary>
+            <param name="entity"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.UpdateAsync(`0,System.Linq.Expressions.Expression{System.Func{`0,System.Object}}[])">
+            <summary>
+            Specific properties updates.
+            </summary>
+            <param name="entity"></param>
+            <param name="projectionProperties"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.UpdateAsync(System.Collections.Generic.IEnumerable{`0},System.Linq.Expressions.Expression{System.Func{`0,System.Object}}[])">
+            <summary>
+            Specific properties updates.
+            </summary>
+            <param name="entities"></param>
+            <param name="projectionProperties"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.UpdateAsync(System.Collections.Generic.IEnumerable{`0})">
+            <summary>
+             Updates multiple entities in database asynchronously.
+            </summary>
+            <param name="entities"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.DeleteAsync(`0)">
+            <summary>
+             Deletes single entity from database asynchronously.
+            </summary>
+            <param name="entity"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.DeleteAsync(System.Collections.Generic.IEnumerable{`0})">
+            <summary>
+             Deletes multiple entity from database asynchronously.
+            </summary>
+            <param name="entities"></param>
             <returns></returns>
         </member>
         <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.ReplaceOldsWithNewsAsync(System.Collections.Generic.IEnumerable{`0},System.Collections.Generic.IEnumerable{`0})">
@@ -1864,29 +1925,6 @@
             Removes all entities from database.
             </summary>
             <returns></returns>
-        </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.ExistsAsync(System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
-            <summary>
-             Returns all entities which IsDeleted condition is true from database asynchronously. If the condition is requested, it also provides that condition.
-            </summary>
-            <param name="conditionExpression"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.ExistsAsync(`1)">
-            <summary>
-             Returns one entity which IsDeleted condition is true by entity Id with includes from database asynchronously. If the condition is requested, it also provides that condition. 
-            </summary>
-            <param name="id"></param>
-            <returns> The entity found or null. </returns>
-        </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.ExistsAsync(`1,System.Func{Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable{`0},Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable},System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
-            <summary>
-             Returns one entity which IsDeleted condition is true by entity Id with includes from database asynchronously. If the condition is requested, it also provides that condition. 
-            </summary>
-            <param name="id"></param>
-            <param name="includes"></param>
-            <param name="conditionExpression"></param>
-            <returns> The entity found or null. </returns>
         </member>
         <member name="T:Milvasoft.Helpers.DataAccess.Abstract.IContextRepository`1">
             <summary>
@@ -2039,58 +2077,64 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.GetFirstOrDefaultAsync(System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Linq.Expressions.Expression{System.Func{`0,`0}})">
+        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.GetFirstOrDefaultAsync(System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Linq.Expressions.Expression{System.Func{`0,`0}},System.Boolean)">
             <summary>
              Returns first entity or default value which IsDeleted condition is true from database asynchronously. If the condition is requested, it also provides that condition.
             </summary>
             <param name="projectionExpression"></param>
+            <param name="tracking"></param>
             <param name="conditionExpression"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.GetFirstOrDefaultAsync(System.Func{Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable{`0},Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable},System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Linq.Expressions.Expression{System.Func{`0,`0}})">
+        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.GetFirstOrDefaultAsync(System.Func{Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable{`0},Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable},System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Linq.Expressions.Expression{System.Func{`0,`0}},System.Boolean)">
             <summary>
              Returns first entity or default value which IsDeleted condition is true with includes from database asynchronously. If the condition is requested, it also provides that condition. 
             </summary>
             <param name="includes"></param>
             <param name="projectionExpression"></param>
+            <param name="tracking"></param>
             <param name="conditionExpression"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.GetSingleOrDefaultAsync(System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Linq.Expressions.Expression{System.Func{`0,`0}})">
+        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.GetSingleOrDefaultAsync(System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Linq.Expressions.Expression{System.Func{`0,`0}},System.Boolean)">
             <summary>
              Returns single entity or default value which IsDeleted condition is true from database asynchronously. If the condition is requested, it also provides that condition.
             </summary>
             <param name="projectionExpression"></param>
+            <param name="tracking"></param>
             <param name="conditionExpression"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.GetSingleOrDefaultAsync(System.Func{Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable{`0},Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable},System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Linq.Expressions.Expression{System.Func{`0,`0}})">
+        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.GetSingleOrDefaultAsync(System.Func{Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable{`0},Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable},System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Linq.Expressions.Expression{System.Func{`0,`0}},System.Boolean)">
             <summary>
              Returns single entity or default value which IsDeleted condition is true with includes from database asynchronously. If the condition is requested, it also provides that condition.
             </summary>
             <param name="includes"></param>
             <param name="conditionExpression"></param>
             <param name="projectionExpression"></param>
+            <param name="tracking"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.GetAllAsync(System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Linq.Expressions.Expression{System.Func{`0,`0}})">
+        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.GetAllAsync(System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Linq.Expressions.Expression{System.Func{`0,`0}},System.Boolean)">
             <summary>
              Returns all entities which IsDeleted condition is true from database asynchronously. If the condition is requested, it also provides that condition.
             </summary>
             <param name="projectionExpression"></param>
+            <param name="tracking"></param>
             <param name="conditionExpression"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.GetAllAsync(System.Func{Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable{`0},Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable},System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Linq.Expressions.Expression{System.Func{`0,`0}})">
+        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.GetAllAsync(System.Func{Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable{`0},Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable},System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Linq.Expressions.Expression{System.Func{`0,`0}},System.Boolean)">
             <summary>
              Returns all entities which IsDeleted condition is true with specified includes from database asynchronously. If the condition is requested, it also provides that condition.
             </summary>
             <param name="includes"></param>
             <param name="projectionExpression"></param>
+            <param name="tracking"></param>
             <param name="conditionExpression"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.GetAsPaginatedAsync(System.Int32,System.Int32,System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
+        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.GetAsPaginatedAsync(System.Int32,System.Int32,System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Boolean)">
             <summary>
              Creates asynchronously a shallow copy of a range of entity's which IsDeleted property is true, in the source List of TEntity with requested count and range. 
                   If the condition is requested, it also provides that condition.
@@ -2101,9 +2145,10 @@
             <param name="requestedPageNumber"></param>
             <param name="countOfRequestedRecordsInPage"></param>
             <param name="conditionExpression"></param>
+            <param name="tracking"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.GetAsPaginatedAsync(System.Int32,System.Int32,System.Func{Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable{`0},Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable},System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
+        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.GetAsPaginatedAsync(System.Int32,System.Int32,System.Func{Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable{`0},Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable},System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Boolean)">
              <summary>
               Creates asynchronously a shallow copy of a range of entity's which IsDeleted property is true, in the source List of TEntity with requested count,range and includes.
                    If the condition is requested, it also provides that condition.
@@ -2115,9 +2160,10 @@
              <param name="countOfRequestedRecordsInPage"></param>
              <param name="includes"></param>
              <param name="conditionExpression"></param>
+             <param name="tracking"></param>
              <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.GetAsPaginatedAndOrderedAsync(System.Int32,System.Int32,System.String,System.Boolean,System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
+        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.GetAsPaginatedAndOrderedAsync(System.Int32,System.Int32,System.String,System.Boolean,System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Boolean)">
             <summary>
              Creates and ordered asynchronously a shallow copy of a range of entity's which IsDeleted property is true, in the source List of TEntity with requested count and range.
                   If the condition is requested, it also provides that condition.
@@ -2132,9 +2178,10 @@
             <param name="orderByPropertyName"></param>
             <param name="orderByAscending"></param>
             <param name="conditionExpression"></param>
+            <param name="tracking"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.GetAsPaginatedAndOrderedAsync(System.Int32,System.Int32,System.Func{Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable{`0},Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable},System.String,System.Boolean,System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
+        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.GetAsPaginatedAndOrderedAsync(System.Int32,System.Int32,System.Func{Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable{`0},Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable},System.String,System.Boolean,System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Boolean)">
              <summary>
               Creates and ordered asynchronously a shallow copy of a range of entity's which IsDeleted property is true, in the source List of TEntity with requested count,range and includes.
                     If the condition is requested, it also provides that condition.
@@ -2150,9 +2197,10 @@
              <param name="orderByPropertyName"></param>
              <param name="orderByAscending"></param>
              <param name="conditionExpression"></param>
+             <param name="tracking"></param>
              <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.GetAsPaginatedAndOrderedAsync(System.Int32,System.Int32,System.Linq.Expressions.Expression{System.Func{`0,System.Object}},System.Boolean,System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
+        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.GetAsPaginatedAndOrderedAsync(System.Int32,System.Int32,System.Linq.Expressions.Expression{System.Func{`0,System.Object}},System.Boolean,System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Boolean)">
             <summary>
              Creates asynchronously a shallow copy of a range of entity's which IsDeleted property is true, in the source List of TEntity with requested count and range.
                   If the condition is requested, it also provides that condition.
@@ -2166,9 +2214,10 @@
             <param name="orderByKeySelector"></param>
             <param name="orderByAscending"></param>
             <param name="conditionExpression"></param>
+            <param name="tracking"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.GetAsPaginatedAndOrderedAsync(System.Int32,System.Int32,System.Func{Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable{`0},Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable},System.Linq.Expressions.Expression{System.Func{`0,System.Object}},System.Boolean,System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
+        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.GetAsPaginatedAndOrderedAsync(System.Int32,System.Int32,System.Func{Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable{`0},Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable},System.Linq.Expressions.Expression{System.Func{`0,System.Object}},System.Boolean,System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Boolean)">
              <summary>
               Creates asynchronously a shallow copy of a range of entity's which IsDeleted property is true, in the source List of TEntity with requested count,range and includes.
                     If the condition is requested, it also provides that condition.
@@ -2183,9 +2232,10 @@
              <param name="orderByKeySelector"></param>
              <param name="orderByAscending"></param>
              <param name="conditionExpression"></param>
+             <param name="tracking"></param>
              <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.GetAsOrderedAsync(System.String,System.Boolean,System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
+        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.GetAsOrderedAsync(System.String,System.Boolean,System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Boolean)">
             <summary>
              Gets entities as ordered with <paramref name="orderByPropertyName"/>.
                   If the condition is requested, it also provides that condition.
@@ -2197,9 +2247,10 @@
             <param name="orderByPropertyName"></param>
             <param name="orderByAscending"></param>
             <param name="conditionExpression"></param>
+            <param name="tracking"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.GetAsOrderedAsync(System.Func{Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable{`0},Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable},System.String,System.Boolean,System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
+        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.GetAsOrderedAsync(System.Func{Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable{`0},Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable},System.String,System.Boolean,System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Boolean)">
              <summary>
               Gets entities with includes as ordered with <paramref name="orderByPropertyName"/>.
                     If the condition is requested, it also provides that condition.
@@ -2212,9 +2263,10 @@
              <param name="orderByPropertyName"></param>
              <param name="orderByAscending"></param>
              <param name="conditionExpression"></param>
+             <param name="tracking"></param>
              <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.GetAsOrderedAsync(System.Linq.Expressions.Expression{System.Func{`0,System.Object}},System.Boolean,System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
+        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.GetAsOrderedAsync(System.Linq.Expressions.Expression{System.Func{`0,System.Object}},System.Boolean,System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Boolean)">
             <summary>
              Gets entities as ordered with <paramref name="orderByKeySelector"/>.
                   If the condition is requested, it also provides that condition.
@@ -2224,9 +2276,10 @@
             <param name="orderByKeySelector"></param>
             <param name="orderByAscending"></param>
             <param name="conditionExpression"></param>
+            <param name="tracking"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.GetAsOrderedAsync(System.Func{Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable{`0},Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable},System.Linq.Expressions.Expression{System.Func{`0,System.Object}},System.Boolean,System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
+        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.GetAsOrderedAsync(System.Func{Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable{`0},Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable},System.Linq.Expressions.Expression{System.Func{`0,System.Object}},System.Boolean,System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Boolean)">
              <summary>
               Gets entities as ordered with <paramref name="orderByKeySelector"/>.
                     If the condition is requested, it also provides that condition.
@@ -2237,18 +2290,20 @@
              <param name="orderByKeySelector"></param>
              <param name="orderByAscending"></param>
              <param name="conditionExpression"></param>
+             <param name="tracking"></param>
              <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.GetByIdAsync(`1,System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Linq.Expressions.Expression{System.Func{`0,`0}})">
+        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.GetByIdAsync(`1,System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Linq.Expressions.Expression{System.Func{`0,`0}},System.Boolean)">
             <summary>
             Returns one entity by entity Id from database asynchronously.
             </summary>
             <param name="id"></param>
             <param name="conditionExpression"></param>
             <param name="projectionExpression"></param>
+            <param name="tracking"></param>
             <returns> The entity found or null. </returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.GetRequiredByIdAsync(`1,System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Linq.Expressions.Expression{System.Func{`0,`0}})">
+        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.GetRequiredByIdAsync(`1,System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Linq.Expressions.Expression{System.Func{`0,`0}},System.Boolean)">
             <summary>
              Returns one entity by entity Id from database asynchronously.
             </summary>
@@ -2258,9 +2313,10 @@
             <param name="id"></param>
             <param name="conditionExpression"></param>
             <param name="projectionExpression"></param>
+            <param name="tracking"></param>
             <returns> The entity. </returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.GetByIdAsync(`1,System.Func{Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable{`0},Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable},System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Linq.Expressions.Expression{System.Func{`0,`0}})">
+        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.GetByIdAsync(`1,System.Func{Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable{`0},Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable},System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Linq.Expressions.Expression{System.Func{`0,`0}},System.Boolean)">
             <summary>
              Returns one entity which IsDeleted condition is true by entity Id with includes from database asynchronously. If the condition is requested, it also provides that condition. 
             </summary>
@@ -2268,9 +2324,10 @@
             <param name="includes"></param>
             <param name="conditionExpression"></param>
             <param name="projectionExpression"></param>
+            <param name="tracking"></param>
             <returns> The entity found or null. </returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.GetRequiredByIdAsync(`1,System.Func{Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable{`0},Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable},System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Linq.Expressions.Expression{System.Func{`0,`0}})">
+        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.GetRequiredByIdAsync(`1,System.Func{Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable{`0},Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable},System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Linq.Expressions.Expression{System.Func{`0,`0}},System.Boolean)">
             <summary>
              Returns one entity which IsDeleted condition is true by entity Id with includes from database asynchronously. If the condition is requested, it also provides that condition. 
             </summary>
@@ -2281,80 +2338,25 @@
             <param name="includes"></param>
             <param name="conditionExpression"></param>
             <param name="projectionExpression"></param>
+            <param name="tracking"></param>
             <returns> The entity. </returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.AddAsync(`0)">
-            <summary>
-             Adds single entity to database asynchronously. 
-            </summary>
-            <param name="entity"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.AddRangeAsync(System.Collections.Generic.IEnumerable{`0})">
-            <summary>
-             Adds multiple entities to database asynchronously. 
-            </summary>
-            <param name="entities"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.UpdateAsync(`0)">
-            <summary>
-             Updates specified entity in database asynchronously.
-            </summary>
-            <param name="entity"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.UpdateAsync(`0,System.Linq.Expressions.Expression{System.Func{`0,System.Object}}[])">
-            <summary>
-            Specific properties updates.
-            </summary>
-            <param name="entity"></param>
-            <param name="projectionProperties"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.UpdateAsync(System.Collections.Generic.IEnumerable{`0},System.Linq.Expressions.Expression{System.Func{`0,System.Object}}[])">
-            <summary>
-            Specific properties updates.
-            </summary>
-            <param name="entities"></param>
-            <param name="projectionProperties"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.UpdateAsync(System.Collections.Generic.IEnumerable{`0})">
-            <summary>
-             Updates multiple entities in database asynchronously.
-            </summary>
-            <param name="entities"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.DeleteAsync(`0)">
-            <summary>
-             Deletes single entity from database asynchronously.
-            </summary>
-            <param name="entity"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.DeleteAsync(System.Collections.Generic.IEnumerable{`0})">
-            <summary>
-             Deletes multiple entity from database asynchronously.
-            </summary>
-            <param name="entities"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.GetGroupedAndCountAsync(System.String,System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
+        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.GetGroupedAndCountAsync(System.String,System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Boolean)">
             <summary>
             Groups entities with <paramref name="groupByPropertyName"/> and returns the key grouped and the number of items grouped with this key.
             </summary>
             <param name="groupByPropertyName"></param>
             <param name="conditionExpression"></param>
+            <param name="tracking"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.GetGroupedAndCountAsync(System.Linq.Expressions.Expression{System.Func{`0,System.Object}},System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
+        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.GetGroupedAndCountAsync(System.Linq.Expressions.Expression{System.Func{`0,System.Object}},System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Boolean)">
             <summary>
             Groups entities with <paramref name="keySelector"/> and returns the key grouped and the number of items grouped with this key.
             </summary>
             <param name="keySelector"></param>
             <param name="conditionExpression"></param>
+            <param name="tracking"></param>
             <returns></returns>
         </member>
         <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.GetAsGroupedAsync``1(System.Linq.IQueryable{``0},System.Linq.Expressions.Expression{System.Func{``0,System.Boolean}})">
@@ -2512,15 +2514,16 @@
             <param name="groupedClause"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.GetMaxAsync(System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Linq.Expressions.Expression{System.Func{`0,`0}})">
+        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.GetMaxAsync(System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Linq.Expressions.Expression{System.Func{`0,`0}},System.Boolean)">
             <summary>
             Get max value of entities.
             </summary>
             <param name="conditionExpression"></param>
             <param name="projectionExpression"></param>
+            <param name="tracking"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.GetMaxAsync(System.Func{Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable{`0},Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable},System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Linq.Expressions.Expression{System.Func{`0,`0}})">
+        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.GetMaxAsync(System.Func{Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable{`0},Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable},System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Linq.Expressions.Expression{System.Func{`0,`0}},System.Boolean)">
             <summary>
             Get max value of entities. With includes.
             </summary>
@@ -2528,18 +2531,20 @@
             <param name="conditionExpression"></param>
             <param name=""></param>
             <param name="projectionExpression"></param>
+            <param name="tracking"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.GetMaxAsync``1(System.Linq.Expressions.Expression{System.Func{`0,``0}},System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Linq.Expressions.Expression{System.Func{`0,`0}})">
+        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.GetMaxAsync``1(System.Linq.Expressions.Expression{System.Func{`0,``0}},System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Linq.Expressions.Expression{System.Func{`0,`0}},System.Boolean)">
             <summary>
             Gets max value of <typeparamref name="TEntity"/>'s property in entities.
             </summary>
             <param name="maxProperty"></param>
             <param name="conditionExpression"></param>
             <param name="projectionExpression"></param>
+            <param name="tracking"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.GetMaxAsync``1(System.Linq.Expressions.Expression{System.Func{`0,``0}},System.Func{Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable{`0},Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable},System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Linq.Expressions.Expression{System.Func{`0,`0}})">
+        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.GetMaxAsync``1(System.Linq.Expressions.Expression{System.Func{`0,``0}},System.Func{Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable{`0},Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable},System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Linq.Expressions.Expression{System.Func{`0,`0}},System.Boolean)">
             <summary>
             Gets max value of <typeparamref name="TEntity"/>'s property in entities.
             </summary>
@@ -2547,51 +2552,33 @@
             <param name="includes"></param>
             <param name="conditionExpression"></param>
             <param name="projectionExpression"></param>
+            <param name="tracking"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.GetMaxOfPropertyAsync(System.String,System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
+        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.GetMaxOfPropertyAsync(System.String,System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Boolean)">
             <summary>
             Gets max value of <typeparamref name="TEntity"/>'s property in entities.
             </summary>
             <param name="maxPropertyName"></param>
             <param name="conditionExpression"></param>
+            <param name="tracking"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.GetMaxOfPropertyAsync``1(System.Linq.Expressions.Expression{System.Func{`0,``0}},System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
+        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.GetMaxOfPropertyAsync``1(System.Linq.Expressions.Expression{System.Func{`0,``0}},System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Boolean)">
             <summary>
             Gets max value of <typeparamref name="TEntity"/>'s property in entities.
             </summary>
             <param name="maxProperty"></param>
             <param name="conditionExpression"></param>
+            <param name="tracking"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.GetCountAsync(System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
+        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.GetCountAsync(System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Boolean)">
             <summary>
             Get count of entities.
             </summary>
             <param name="conditionExpression"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.ReplaceOldsWithNewsInSeperateDatabaseProcessAsync(System.Collections.Generic.IEnumerable{`0},System.Collections.Generic.IEnumerable{`0})">
-            <summary>
-            Replaces existing entities(<paramref name="oldEntities"/>) with new entities(<paramref name="newEntities"/>).
-            </summary>
-            <param name="oldEntities"></param>
-            <param name="newEntities"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.ReplaceOldsWithNewsAsync(System.Collections.Generic.IEnumerable{`0},System.Collections.Generic.IEnumerable{`0})">
-            <summary>
-            Replaces existing entities(<paramref name="oldEntities"/>) with new entities(<paramref name="newEntities"/>).
-            </summary>
-            <param name="oldEntities"></param>
-            <param name="newEntities"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.RemoveAllAsync">
-            <summary>
-            Removes all entities from database.
-            </summary>
+            <param name="tracking"></param>
             <returns></returns>
         </member>
         <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.ExistsAsync(System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
@@ -2615,6 +2602,86 @@
             <param name="id"></param>
             <param name="includes"></param>
             <param name="conditionExpression"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.AddAsync(`0)">
+            <summary>
+             Adds single entity to database asynchronously. 
+            </summary>
+            <param name="entity"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.AddRangeAsync(System.Collections.Generic.IEnumerable{`0})">
+            <summary>
+             Adds multiple entities to database asynchronously. 
+            </summary>
+            <param name="entities"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.UpdateAsync(`0)">
+            <summary>
+             Updates specified entity in database asynchronously.
+            </summary>
+            <param name="entity"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.UpdateAsync(`0,System.Linq.Expressions.Expression{System.Func{`0,System.Object}}[])">
+            <summary>
+            Specific properties updates.
+            </summary>
+            <param name="entity"></param>
+            <param name="projectionProperties"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.UpdateAsync(System.Collections.Generic.IEnumerable{`0},System.Linq.Expressions.Expression{System.Func{`0,System.Object}}[])">
+            <summary>
+            Specific properties updates.
+            </summary>
+            <param name="entities"></param>
+            <param name="projectionProperties"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.UpdateAsync(System.Collections.Generic.IEnumerable{`0})">
+            <summary>
+             Updates multiple entities in database asynchronously.
+            </summary>
+            <param name="entities"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.DeleteAsync(`0)">
+            <summary>
+             Deletes single entity from database asynchronously.
+            </summary>
+            <param name="entity"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.DeleteAsync(System.Collections.Generic.IEnumerable{`0})">
+            <summary>
+             Deletes multiple entity from database asynchronously.
+            </summary>
+            <param name="entities"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.ReplaceOldsWithNewsAsync(System.Collections.Generic.IEnumerable{`0},System.Collections.Generic.IEnumerable{`0})">
+            <summary>
+            Replaces existing entities(<paramref name="oldEntities"/>) with new entities(<paramref name="newEntities"/>).
+            </summary>
+            <param name="oldEntities"></param>
+            <param name="newEntities"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.ReplaceOldsWithNewsInSeperateDatabaseProcessAsync(System.Collections.Generic.IEnumerable{`0},System.Collections.Generic.IEnumerable{`0})">
+            <summary>
+            Replaces existing entities(<paramref name="oldEntities"/>) with new entities(<paramref name="newEntities"/>).
+            </summary>
+            <param name="oldEntities"></param>
+            <param name="newEntities"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.RemoveAllAsync">
+            <summary>
+            Removes all entities from database.
+            </summary>
             <returns></returns>
         </member>
         <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.CreateKeyEqualityExpression(`1,System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
@@ -2664,17 +2731,12 @@
             <param name="conditionExpression"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.InitalizeEdit(`0)">
+        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.GetQueryTrackingBehavior(System.Boolean)">
             <summary>
-            For configure entity state. Change tracking.
+            Returns <see cref="T:Microsoft.EntityFrameworkCore.QueryTrackingBehavior"/> according to <paramref name="tracking"/>.
             </summary>
-            <param name="entity"></param>
-        </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.InitalizeEdit(System.Collections.Generic.IEnumerable{`0})">
-            <summary>
-            For configure entity state. Change tracking.
-            </summary>
-            <param name="entities"></param>
+            <param name="tracking"></param>
+            <returns></returns>
         </member>
         <member name="T:Milvasoft.Helpers.DataAccess.Concrete.ContextRepository`1">
             <summary>
