@@ -166,9 +166,6 @@ namespace Milvasoft.Helpers.Test.Unit
         /// <summary>
         /// Returns logged user informations.
         /// </summary>
-        /// <typeparam name="TUserManager"></typeparam>
-        /// <typeparam name="TUser"></typeparam>
-        /// <param name="userManager"></param>
         /// <returns></returns>
         public async Task<TUser> GetLoggedUserInformationsAsync()
         {

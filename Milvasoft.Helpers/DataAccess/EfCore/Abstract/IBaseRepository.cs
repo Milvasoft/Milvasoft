@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Milvasoft.Helpers.DataAccess.Abstract.Entity;
 using Milvasoft.Helpers.DataAccess.Concrete;
+using Milvasoft.Helpers.DataAccess.Concrete.Entity;
 using Milvasoft.Helpers.DataAccess.IncludeLibrary;
 using System;
 using System.Collections.Generic;

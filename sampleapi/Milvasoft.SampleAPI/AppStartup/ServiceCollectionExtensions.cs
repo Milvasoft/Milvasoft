@@ -40,6 +40,9 @@ using System.Threading.Tasks;
 
 namespace Milvasoft.SampleAPI.AppStartup
 {
+    /// <summary>
+    /// Service collection extensions.
+    /// </summary>
     public static class ServiceCollectionExtensions
     {
         #region Fields

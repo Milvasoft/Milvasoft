@@ -41,6 +41,11 @@
             <param name="args"></param>
             <returns></returns>
         </member>
+        <member name="T:Milvasoft.SampleAPI.AppStartup.ServiceCollectionExtensions">
+            <summary>
+            Service collection extensions.
+            </summary>
+        </member>
         <member name="M:Milvasoft.SampleAPI.AppStartup.ServiceCollectionExtensions.ConfigureMVC(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
             <summary>
             <para><b>EN: </b>Adds MVC services to the specified Microsoft.Extensions.DependencyInjection.IServiceCollection.</para>
@@ -3117,6 +3122,18 @@
             <param name="context"></param>
             <returns></returns>
         </member>
+        <member name="T:Milvasoft.SampleAPI.Middlewares.MiddlewareExtensions">
+            <summary>
+            Custom middleware extensions.
+            </summary>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Middlewares.MiddlewareExtensions.UseExceptionHandlerMiddleware(Microsoft.AspNetCore.Builder.IApplicationBuilder)">
+            <summary>
+            Adds exception handler to middleware pipeline.
+            </summary>
+            <param name="applicationBuilder"></param>
+            <returns></returns>
+        </member>
         <member name="M:Milvasoft.SampleAPI.Middlewares.MiddlewareExtensions.UseMilvaGeneralMiddleware(Microsoft.AspNetCore.Builder.IApplicationBuilder)">
             <summary>
             Extension method of <c>HeaderCheckMiddleware</c> class.
@@ -4976,6 +4993,12 @@
             <para><b>EN: </b>The education project logger class.</para>
             <para><b>TR: </b>Education projesi logger sınıfı.</para>
             </summary>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Utils.EducationLogger.#ctor(Milvasoft.Helpers.Mail.IMilvaMailSender)">
+            <summary>
+            Initializes new instance of <see cref="T:Milvasoft.SampleAPI.Utils.EducationLogger"/>
+            </summary>
+            <param name="milvaMailSender"></param>
         </member>
         <member name="M:Milvasoft.SampleAPI.Utils.EducationLogger.LogVerbose(System.String)">
             <summary>

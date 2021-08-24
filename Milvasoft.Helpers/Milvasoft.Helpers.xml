@@ -929,7 +929,7 @@
         </member>
         <member name="M:Milvasoft.Helpers.CommonHelper.GetPropertyValue(System.Object,System.String)">
             <summary>
-            Provides get nested property value.
+            Provides get nested property value. e.g. Product.Stock.Amount
             </summary>
             <param name="obj"></param>
             <param name="propertyName"></param>
@@ -960,6 +960,76 @@
             Converts <paramref name="value"/>'s type to <see cref="T:MongoDB.Bson.ObjectId"/>
             </summary>
             <param name="value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.CommonHelper.ToJson(System.Object)">
+            <summary>
+            Converts <paramref name="value"/> to <see cref="T:System.String"/>.
+            </summary>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.CommonHelper.ToObject``1(System.String)">
+            <summary>
+            Converts <paramref name="value"/> to <typeparamref name="T"/>.
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.CommonHelper.CustomErrorResponse(Microsoft.AspNetCore.Mvc.ActionContext)">
+            <summary>
+            Prepares custom validation model for response.
+            </summary>
+            <param name="actionContext"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.CommonHelper.IsBetween(System.DateTime,System.TimeSpan,System.TimeSpan)">
+            <summary>
+            Compares <paramref name="date"/> for whether between <paramref name="startTime"/> and <paramref name="endTime"/>. 
+            </summary>
+            
+            <remarks>
+            This is a time comparison not a date comparison.
+            </remarks>
+            
+            <param name="date"></param>
+            <param name="startTime"></param>
+            <param name="endTime"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.CommonHelper.IsBetween(System.DateTime,System.TimeSpan,System.TimeSpan,System.TimeSpan)">
+            <summary>
+            Compares <paramref name="date"/> for whether between <paramref name="startTime"/> and <paramref name="endTime"/>. 
+            </summary>
+            
+            <remarks>
+            This is a time comparison not a date comparison.
+            </remarks>
+            
+            <param name="date"></param>
+            <param name="compareTime"></param>
+            <param name="startTime"></param>
+            <param name="endTime"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.CommonHelper.IsBetween(System.DateTime,System.DateTime,System.DateTime)">
+            <summary>
+            Compares <paramref name="date"/> for whether between <paramref name="startDate"/> and <paramref name="endDate"/>. 
+            </summary>
+            <param name="date"></param>
+            <param name="startDate"></param>
+            <param name="endDate"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.CommonHelper.IsBetween(System.DateTime,System.TimeSpan,System.DateTime,System.DateTime)">
+            <summary>
+            Compares <paramref name="date"/> for whether between <paramref name="startDate"/> and <paramref name="endDate"/>. 
+            </summary>
+            <param name="date"></param>
+            <param name="time"></param>
+            <param name="startDate"></param>
+            <param name="endDate"></param>
             <returns></returns>
         </member>
         <member name="M:Milvasoft.Helpers.CommonHelper.GetRequiredLocalizerInstance``1(System.IServiceProvider)">
@@ -1008,28 +1078,6 @@
             </summary>
             <param name="serviceProvider"></param>
             <param name="resourceType"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Milvasoft.Helpers.CommonHelper.ToJson(System.Object)">
-            <summary>
-            Converts <paramref name="value"/> to <see cref="T:System.String"/>.
-            </summary>
-            <param name="value"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Milvasoft.Helpers.CommonHelper.ToObject``1(System.String)">
-            <summary>
-            Converts <paramref name="value"/> to <typeparamref name="T"/>.
-            </summary>
-            <typeparam name="T"></typeparam>
-            <param name="value"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Milvasoft.Helpers.CommonHelper.CustomErrorResponse(Microsoft.AspNetCore.Mvc.ActionContext)">
-            <summary>
-            Prepares custom validation model for response.
-            </summary>
-            <param name="actionContext"></param>
             <returns></returns>
         </member>
         <member name="T:Milvasoft.Helpers.DataAccess.Abstract.Entity.Auditing.IHasCreator`1">
@@ -1315,7 +1363,7 @@
         </member>
         <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.CreateIsDeletedFalseExpression">
             <summary>
-            Gets <b>entity => entity.IsDeleted == false</b> expression, if <typeparamref name="TEntity"/> is assignable from <see cref="!:FullAuditableEntity&lt;TKey&gt;"/>.
+            Gets <b>entity => entity.IsDeleted == false</b> expression, if <typeparamref name="TEntity"/> is assignable from <see cref="T:Milvasoft.Helpers.DataAccess.Concrete.Entity.FullAuditableEntity`1"/>.
             </summary>
             <returns></returns>
         </member>
@@ -2548,7 +2596,6 @@
             </summary>
             <param name="includes"></param>
             <param name="conditionExpression"></param>
-            <param name=""></param>
             <param name="projectionExpression"></param>
             <param name="tracking"></param>
             <returns></returns>
@@ -11094,9 +11141,6 @@
             <summary>
             Returns logged user informations.
             </summary>
-            <typeparam name="TUserManager"></typeparam>
-            <typeparam name="TUser"></typeparam>
-            <param name="userManager"></param>
             <returns></returns>
         </member>
         <member name="T:Milvasoft.Helpers.Test.Unit.TestHostEnvironment">

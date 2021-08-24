@@ -16,6 +16,10 @@ namespace Milvasoft.SampleAPI.Utils
         private readonly ILogger _logger = Log.Logger;
         private readonly IMilvaMailSender _milvaMailSender;
 
+        /// <summary>
+        /// Initializes new instance of <see cref="EducationLogger"/>
+        /// </summary>
+        /// <param name="milvaMailSender"></param>
         public EducationLogger(IMilvaMailSender milvaMailSender)
         {
             _milvaMailSender = milvaMailSender;

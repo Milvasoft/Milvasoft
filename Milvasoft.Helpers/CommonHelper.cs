@@ -83,7 +83,7 @@ namespace Milvasoft.Helpers
         /// <typeparam name="TPropertyType"></typeparam>
         /// <param name="propertyName"></param>
         /// <returns></returns>
-        private static Expression<Func<T, TPropertyType>> CreatePropertySelector<T, TPropertyType>(string propertyName)
+        public static Expression<Func<T, TPropertyType>> CreatePropertySelector<T, TPropertyType>(string propertyName)
         {
             var entityType = typeof(T);
 
@@ -103,7 +103,7 @@ namespace Milvasoft.Helpers
         /// <typeparam name="TPropertyType"></typeparam>
         /// <param name="propertyName"></param>
         /// <returns></returns>
-        private static Expression<Func<T, TPropertyType>> CreateRequiredPropertySelector<T, TPropertyType>(string propertyName)
+        public static Expression<Func<T, TPropertyType>> CreateRequiredPropertySelector<T, TPropertyType>(string propertyName)
         {
             var entityType = typeof(T);
 
@@ -116,7 +116,7 @@ namespace Milvasoft.Helpers
         }
 
         /// <summary>
-        /// Provides get nested property value.
+        /// Provides get nested property value. e.g. Product.Stock.Amount
         /// </summary>
         /// <param name="obj"></param>
         /// <param name="propertyName"></param>
@@ -206,6 +206,127 @@ namespace Milvasoft.Helpers
 
             return new ObjectId(objectId + valueConverted);
         }
+
+        /// <summary>
+        /// Converts <paramref name="value"/> to <see cref="string"/>.
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public static string ToJson(this object value) => JsonConvert.SerializeObject(value);
+
+        /// <summary>
+        /// Converts <paramref name="value"/> to <typeparamref name="T"/>.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public static T ToObject<T>(this string value) where T : class
+            => string.IsNullOrEmpty(value) ? null : JsonConvert.DeserializeObject<T>(value);
+
+        /// <summary>
+        /// Prepares custom validation model for response.
+        /// </summary>
+        /// <param name="actionContext"></param>
+        /// <returns></returns>
+        public static ObjectResult CustomErrorResponse(ActionContext actionContext)
+        {
+            var errorMessageList = actionContext.ModelState.Where(modelError => modelError.Value.Errors.Count > 0)
+                                                           .SelectMany(modelError => modelError.Value.Errors.Select(i => i.ErrorMessage)).ToList();
+
+            var validationResponse = new ExceptionResponse
+            {
+                Success = false,
+                Message = string.Join('~', errorMessageList),
+                StatusCode = MilvaStatusCodes.Status600Exception,
+                Result = new object(),
+                ErrorCodes = new List<int>()
+            };
+
+            actionContext.HttpContext.Items.Add(new KeyValuePair<object, object>("StatusCode", MilvaStatusCodes.Status600Exception));
+
+            return new OkObjectResult(validationResponse);
+        }
+
+        #region DateTime
+
+        /// <summary>
+        /// Compares <paramref name="date"/> for whether between <paramref name="startTime"/> and <paramref name="endTime"/>. 
+        /// </summary>
+        /// 
+        /// <remarks>
+        /// This is a time comparison not a date comparison.
+        /// </remarks>
+        /// 
+        /// <param name="date"></param>
+        /// <param name="startTime"></param>
+        /// <param name="endTime"></param>
+        /// <returns></returns>
+        public static bool IsBetween(this DateTime date, TimeSpan startTime, TimeSpan endTime)
+        {
+            DateTime startDate = new(date.Year, date.Month, date.Day);
+            DateTime endDate = startDate;
+
+            //Check whether the endTime is lesser than startTime
+            if (startTime >= endTime)
+            {
+                //Increase the date if endTime is timespan of the Nextday 
+                endDate = endDate.AddDays(1);
+            }
+
+            //Assign the startTime and endTime to the Dates
+            startDate = startDate.Date + startTime;
+            endDate = endDate.Date + endTime;
+
+            return (date >= startDate) && (date <= endDate);
+        }
+
+        /// <summary>
+        /// Compares <paramref name="date"/> for whether between <paramref name="startTime"/> and <paramref name="endTime"/>. 
+        /// </summary>
+        /// 
+        /// <remarks>
+        /// This is a time comparison not a date comparison.
+        /// </remarks>
+        /// 
+        /// <param name="date"></param>
+        /// <param name="compareTime"></param>
+        /// <param name="startTime"></param>
+        /// <param name="endTime"></param>
+        /// <returns></returns>
+        public static bool IsBetween(this DateTime date, TimeSpan compareTime, TimeSpan startTime, TimeSpan endTime)
+        {
+            date = new DateTime(date.Year, date.Month, date.Day).Date + compareTime;
+
+            return date.IsBetween(startTime, endTime);
+        }
+
+        /// <summary>
+        /// Compares <paramref name="date"/> for whether between <paramref name="startDate"/> and <paramref name="endDate"/>. 
+        /// </summary>
+        /// <param name="date"></param>
+        /// <param name="startDate"></param>
+        /// <param name="endDate"></param>
+        /// <returns></returns>
+        public static bool IsBetween(this DateTime date, DateTime startDate, DateTime endDate) => (date >= startDate) && (date <= endDate);
+
+        /// <summary>
+        /// Compares <paramref name="date"/> for whether between <paramref name="startDate"/> and <paramref name="endDate"/>. 
+        /// </summary>
+        /// <param name="date"></param>
+        /// <param name="time"></param>
+        /// <param name="startDate"></param>
+        /// <param name="endDate"></param>
+        /// <returns></returns>
+        public static bool IsBetween(this DateTime date, TimeSpan time, DateTime startDate, DateTime endDate)
+        {
+            date = new DateTime(date.Year, date.Month, date.Day).Date + time;
+
+            return (date >= startDate) && (date <= endDate);
+        }
+
+        #endregion
+
+        #region Localizer
 
         /// <summary>
         /// Creates localizer instance if IStringLocalizerFactory registered to service collection.
@@ -305,44 +426,6 @@ namespace Milvasoft.Helpers
             return localizerFactory.Create(resourceType.Name, assemblyName.Name);
         }
 
-        /// <summary>
-        /// Converts <paramref name="value"/> to <see cref="string"/>.
-        /// </summary>
-        /// <param name="value"></param>
-        /// <returns></returns>
-        public static string ToJson(this object value) => JsonConvert.SerializeObject(value);
-
-        /// <summary>
-        /// Converts <paramref name="value"/> to <typeparamref name="T"/>.
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="value"></param>
-        /// <returns></returns>
-        public static T ToObject<T>(this string value) where T : class
-            => string.IsNullOrEmpty(value) ? null : JsonConvert.DeserializeObject<T>(value);
-
-        /// <summary>
-        /// Prepares custom validation model for response.
-        /// </summary>
-        /// <param name="actionContext"></param>
-        /// <returns></returns>
-        public static ObjectResult CustomErrorResponse(ActionContext actionContext)
-        {
-            var errorMessageList = actionContext.ModelState.Where(modelError => modelError.Value.Errors.Count > 0)
-                                                           .SelectMany(modelError => modelError.Value.Errors.Select(i => i.ErrorMessage)).ToList();
-
-            var validationResponse = new ExceptionResponse
-            {
-                Success = false,
-                Message = string.Join('~', errorMessageList),
-                StatusCode = MilvaStatusCodes.Status600Exception,
-                Result = new object(),
-                ErrorCodes = new List<int>()
-            };
-
-            actionContext.HttpContext.Items.Add(new KeyValuePair<object, object>("StatusCode", MilvaStatusCodes.Status600Exception));
-
-            return new OkObjectResult(validationResponse);
-        }
+        #endregion
     }
 }
