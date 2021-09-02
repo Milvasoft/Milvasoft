@@ -1080,6 +1080,38 @@
             <param name="resourceType"></param>
             <returns></returns>
         </member>
+        <member name="M:Milvasoft.Helpers.CommonHelper.GetRequiredLocalizerInstanceWithMilvaResource(System.IServiceProvider)">
+            <summary>
+            Creates localizer instance if IStringLocalizerFactory registered to service collection.
+            You must implement <see cref="T:Milvasoft.Helpers.DependencyInjection.IMilvaResource"/> in your resource dummy class.
+            </summary>
+            <param name="serviceProvider"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.CommonHelper.GetLocalizerInstanceWithMilvaResource(System.IServiceProvider)">
+            <summary>
+            Creates localizer instance if IStringLocalizerFactory registered to service collection.
+            You must implement <see cref="T:Milvasoft.Helpers.DependencyInjection.IMilvaResource"/> in your resource dummy class.
+            </summary>
+            <param name="serviceProvider"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.CommonHelper.GetRequiredLocalizerInstanceWithMilvaResource(Microsoft.AspNetCore.Http.HttpContext)">
+            <summary>
+            Creates localizer instance if IStringLocalizerFactory registered to service collection.
+            You must implement <see cref="T:Milvasoft.Helpers.DependencyInjection.IMilvaResource"/> in your resource dummy class.
+            </summary>
+            <param name="context"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.CommonHelper.GetLocalizerInstanceWithMilvaResource(Microsoft.AspNetCore.Http.HttpContext)">
+            <summary>
+            Creates localizer instance if IStringLocalizerFactory registered to service collection. 
+            You must implement <see cref="T:Milvasoft.Helpers.DependencyInjection.IMilvaResource"/> in your resource dummy class.
+            </summary>
+            <param name="context"></param>
+            <returns></returns>
+        </member>
         <member name="T:Milvasoft.Helpers.DataAccess.Abstract.Entity.Auditing.IHasCreator`1">
             <summary>
             Determines entity has creator.
@@ -4514,6 +4546,11 @@
             </summary>
             <param name="message"></param>
             <param name="mailSubject"></param>
+        </member>
+        <member name="T:Milvasoft.Helpers.DependencyInjection.IMilvaResource">
+            <summary>
+            Interface for localizer injection. You should implement this interface in your dummy resouce class. 
+            </summary>
         </member>
         <member name="T:Milvasoft.Helpers.Encryption.Abstract.IMilvaEncryptionProvider">
             <summary>
@@ -10353,6 +10390,199 @@
             <param name="recordCount"></param>
             <param name="operation"></param>
             <returns></returns>
+        </member>
+        <member name="T:Milvasoft.Helpers.ResponseV2">
+            <summary>
+            <para>Helper class to generate the same type of response.</para>
+            <para>All methods return HTTP status code 200 OK.All methods return <see cref="T:Milvasoft.Helpers.Models.Response.BaseResponse"/> type in ActionResult. Base response can be <see cref="T:Milvasoft.Helpers.Models.Response.ObjectResponse`1" /> or <see cref="T:Milvasoft.Helpers.Models.Response.ObjectResponse`1"/></para>
+            </summary>
+        </member>
+        <member name="M:Milvasoft.Helpers.ResponseV2.GetPaginationResponseByEntity``1(Milvasoft.Helpers.Models.PaginationDTO{``0},Microsoft.AspNetCore.Http.HttpContext,System.Boolean,System.Boolean)">
+            <summary>
+            Sets error message or success message with nameof(<typeparamref name="T"/>).
+            If <paramref name="setDefaultSuccessMessageKey"/> is true it sets <see cref="F:Milvasoft.Helpers.Utils.LocalizerKeys.DefaultSucccessMessage"/> to success message.
+            </summary>
+            <param name="paginationDTO"></param>
+            <param name="httpContext"></param>
+            <param name="isFiltering"></param>
+            <param name="setDefaultSuccessMessageKey"></param>
+            <returns>  <see cref="T:Milvasoft.Helpers.Models.Response.ObjectResponse`1"/> in 200 OK <see cref="T:Microsoft.AspNetCore.Mvc.ActionResult"/> </returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.ResponseV2.GetObjectResponseByEntity``1(System.Collections.Generic.List{``0},Microsoft.AspNetCore.Http.HttpContext,System.Boolean)">
+            <summary>
+            Sets error message or success message with nameof(<typeparamref name="T"/>).
+            If <paramref name="setDefaultSuccessMessageKey"/> is true it sets <see cref="F:Milvasoft.Helpers.Utils.LocalizerKeys.DefaultSucccessMessage"/> to success message.
+            </summary>
+            <param name="contentList"></param>
+            <param name="httpContext"></param>
+            <param name="setDefaultSuccessMessageKey"></param>
+            <returns> <see cref="T:Milvasoft.Helpers.Models.Response.ObjectResponse`1"/> in 200 OK <see cref="T:Microsoft.AspNetCore.Mvc.ActionResult"/> </returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.ResponseV2.GetObjectResponseByEntity``1(``0,Microsoft.AspNetCore.Http.HttpContext,System.Boolean)">
+            <summary>
+            Sets error message or success message with nameof(<typeparamref name="T"/>).
+            If <paramref name="setDefaultSuccessMessageKey"/> is true it sets <see cref="F:Milvasoft.Helpers.Utils.LocalizerKeys.DefaultSucccessMessage"/> to success message.
+            </summary>
+            <param name="content"></param>
+            <param name="httpContext"></param>
+            <param name="setDefaultSuccessMessageKey"></param>
+            <returns> <see cref="T:Milvasoft.Helpers.Models.Response.ObjectResponse`1"/> in 200 OK <see cref="T:Microsoft.AspNetCore.Mvc.ActionResult"/> </returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.ResponseV2.GetObjectResponseByEntityAsync``2(System.Runtime.CompilerServices.ConfiguredTaskAwaitable,Microsoft.AspNetCore.Http.HttpContext,System.Collections.Generic.IEnumerable{``1},System.Boolean)">
+            <summary>
+            If <paramref name="idList"/> is null or empty sets error message to <see cref="F:Milvasoft.Helpers.Utils.LocalizerKeys.PleaseEnterAValid"/>.
+            If operation success sets success message with nameof(<typeparamref name="T"/>).
+            If <paramref name="setDefaultSuccessMessageKey"/> is true it sets <see cref="F:Milvasoft.Helpers.Utils.LocalizerKeys.DefaultSucccessMessage"/> to success message.
+            </summary>
+            <param name="asyncTask"></param>
+            <param name="httpContext"></param>
+            <param name="idList"></param>
+            <param name="setDefaultSuccessMessageKey"></param>
+            <returns>  <see cref="T:Milvasoft.Helpers.Models.Response.ObjectResponse`1"/> in 200 OK <see cref="T:Microsoft.AspNetCore.Mvc.ActionResult"/> </returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.ResponseV2.GetObjectResponseByEntityAsync``2(System.Threading.Tasks.Task,Microsoft.AspNetCore.Http.HttpContext,System.Collections.Generic.IEnumerable{``1},System.Boolean)">
+            <summary>
+            If <paramref name="idList"/> is null or empty sets error message to <see cref="F:Milvasoft.Helpers.Utils.LocalizerKeys.PleaseEnterAValid"/>.
+            If operation success sets success message with nameof(<typeparamref name="T"/>).
+            If <paramref name="setDefaultSuccessMessageKey"/> is true it sets <see cref="F:Milvasoft.Helpers.Utils.LocalizerKeys.DefaultSucccessMessage"/> to success message.
+            </summary>
+            <param name="asyncTask"></param>
+            <param name="httpContext"></param>
+            <param name="idList"></param>
+            <param name="setDefaultSuccessMessageKey"></param>-
+            <returns>  <see cref="T:Milvasoft.Helpers.Models.Response.ObjectResponse`1"/> in 200 OK <see cref="T:Microsoft.AspNetCore.Mvc.ActionResult"/> </returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.ResponseV2.GetObjectResponseByEntityAsync``2(System.Runtime.CompilerServices.ConfiguredTaskAwaitable{System.Collections.Generic.IEnumerable{``0}},Microsoft.AspNetCore.Http.HttpContext,System.Collections.Generic.IEnumerable{``1},System.Boolean)">
+            <summary>
+            If <paramref name="idList"/> is null or empty sets error message to <see cref="F:Milvasoft.Helpers.Utils.LocalizerKeys.PleaseEnterAValid"/>.
+            If operation success sets success message with nameof(<typeparamref name="T"/>).
+            If <paramref name="setDefaultSuccessMessageKey"/> is true it sets <see cref="F:Milvasoft.Helpers.Utils.LocalizerKeys.DefaultSucccessMessage"/> to success message.
+            </summary>
+            <param name="asyncTask"></param>
+            <param name="httpContext"></param>
+            <param name="idList"></param>
+            <param name="setDefaultSuccessMessageKey"></param>
+            <returns>  <see cref="T:Milvasoft.Helpers.Models.Response.ObjectResponse`1"/> in 200 OK <see cref="T:Microsoft.AspNetCore.Mvc.ActionResult"/> </returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.ResponseV2.GetObjectResponseByEntityAsync``2(System.Threading.Tasks.Task{System.Collections.Generic.IEnumerable{``0}},Microsoft.AspNetCore.Http.HttpContext,System.Collections.Generic.IEnumerable{``1},System.Boolean)">
+            <summary>
+            If <paramref name="idList"/> is null or empty sets error message to <see cref="F:Milvasoft.Helpers.Utils.LocalizerKeys.PleaseEnterAValid"/>.
+            If operation success sets success message with nameof(<typeparamref name="T"/>).
+            If <paramref name="setDefaultSuccessMessageKey"/> is true it sets <see cref="F:Milvasoft.Helpers.Utils.LocalizerKeys.DefaultSucccessMessage"/> to success message.
+            </summary>
+            <param name="asyncTask"></param>
+            <param name="httpContext"></param>
+            <param name="idList"></param>
+            <param name="setDefaultSuccessMessageKey"></param>
+            <returns>  <see cref="T:Milvasoft.Helpers.Models.Response.ObjectResponse`1"/> in 200 OK <see cref="T:Microsoft.AspNetCore.Mvc.ActionResult"/> </returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.ResponseV2.GetObjectResponseByEntityAsync``1(System.Runtime.CompilerServices.ConfiguredTaskAwaitable,Microsoft.AspNetCore.Http.HttpContext,System.Boolean)">
+            <summary>
+            Runs <paramref name="asyncTask"/> and if operation success sets success message with <see cref="M:Milvasoft.Helpers.Response.GetSuccessMessage(Microsoft.Extensions.Localization.IStringLocalizer,System.String,Milvasoft.Helpers.Enums.CrudOperation,System.Nullable{System.Int32})"/> with nameof(<typeparamref name="T"/>).
+            </summary>
+            <param name="asyncTask"></param>
+            <param name="httpContext"></param>
+            <param name="setDefaultSuccessMessageKey"></param>
+            <returns>  <see cref="T:Milvasoft.Helpers.Models.Response.ObjectResponse`1"/> in 200 OK <see cref="T:Microsoft.AspNetCore.Mvc.ActionResult"/> </returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.ResponseV2.GetObjectResponseByEntityAsync``1(System.Runtime.CompilerServices.ConfiguredTaskAwaitable{``0},Microsoft.AspNetCore.Http.HttpContext,System.Boolean)">
+            <summary>
+            Runs <paramref name="asyncTask"/> and if operation success sets success message with <see cref="M:Milvasoft.Helpers.Response.GetSuccessMessage(Microsoft.Extensions.Localization.IStringLocalizer,System.String,Milvasoft.Helpers.Enums.CrudOperation,System.Nullable{System.Int32})"/> with nameof(<typeparamref name="T"/>).
+            </summary>
+            <param name="asyncTask"></param>
+            <param name="httpContext"></param>
+            <param name="setDefaultSuccessMessageKey"></param>
+            <returns>  <see cref="T:Milvasoft.Helpers.Models.Response.ObjectResponse`1"/> in 200 OK <see cref="T:Microsoft.AspNetCore.Mvc.ActionResult"/> </returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.ResponseV2.GetObjectResponseByEntityAsync``1(System.Runtime.CompilerServices.ConfiguredTaskAwaitable{System.Object},Microsoft.AspNetCore.Http.HttpContext,System.Boolean)">
+            <summary>
+            Runs <paramref name="asyncTask"/> and if operation success sets success message with <see cref="M:Milvasoft.Helpers.Response.GetSuccessMessage(Microsoft.Extensions.Localization.IStringLocalizer,System.String,Milvasoft.Helpers.Enums.CrudOperation,System.Nullable{System.Int32})"/> with nameof(<typeparamref name="T"/>).
+            </summary>
+            <param name="asyncTask"></param>
+            <param name="httpContext"></param>
+            <param name="setDefaultSuccessMessageKey"></param>
+            <returns>  <see cref="T:Milvasoft.Helpers.Models.Response.ObjectResponse`1"/> in 200 OK <see cref="T:Microsoft.AspNetCore.Mvc.ActionResult"/> </returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.ResponseV2.GetObjectResponseByEntityAsync``1(System.Runtime.CompilerServices.ConfiguredTaskAwaitable{System.Guid},Microsoft.AspNetCore.Http.HttpContext,System.Boolean)">
+            <summary>
+            Runs <paramref name="asyncTask"/> and if operation success sets success message with <see cref="M:Milvasoft.Helpers.Response.GetSuccessMessage(Microsoft.Extensions.Localization.IStringLocalizer,System.String,Milvasoft.Helpers.Enums.CrudOperation,System.Nullable{System.Int32})"/> with nameof(<typeparamref name="T"/>).
+            </summary>
+            <param name="asyncTask"></param>
+            <param name="httpContext"></param>
+            <param name="setDefaultSuccessMessageKey"></param>
+            <returns> <see cref="T:Milvasoft.Helpers.Models.Response.ObjectResponse`1"/> in 200 OK <see cref="T:Microsoft.AspNetCore.Mvc.ActionResult"/> </returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.ResponseV2.GetObjectResponseByEntityAsync``1(System.Runtime.CompilerServices.ConfiguredTaskAwaitable{System.Int32},Microsoft.AspNetCore.Http.HttpContext,System.Boolean)">
+            <summary>
+            Runs <paramref name="asyncTask"/> and if operation success sets success message with <see cref="M:Milvasoft.Helpers.Response.GetSuccessMessage(Microsoft.Extensions.Localization.IStringLocalizer,System.String,Milvasoft.Helpers.Enums.CrudOperation,System.Nullable{System.Int32})"/> with nameof(<typeparamref name="T"/>).
+            </summary>
+            <param name="asyncTask"></param>
+            <param name="httpContext"></param>
+            <param name="setDefaultSuccessMessageKey"></param>
+            <returns> <see cref="T:Milvasoft.Helpers.Models.Response.ObjectResponse`1"/> in 200 OK <see cref="T:Microsoft.AspNetCore.Mvc.ActionResult"/> </returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.ResponseV2.GetObjectResponseByEntityAsync``1(System.Runtime.CompilerServices.ConfiguredTaskAwaitable{System.SByte},Microsoft.AspNetCore.Http.HttpContext,System.Boolean)">
+            <summary>
+            Runs <paramref name="asyncTask"/> and if operation success sets success message with <see cref="M:Milvasoft.Helpers.Response.GetSuccessMessage(Microsoft.Extensions.Localization.IStringLocalizer,System.String,Milvasoft.Helpers.Enums.CrudOperation,System.Nullable{System.Int32})"/> with nameof(<typeparamref name="T"/>).
+            </summary>
+            <param name="asyncTask"></param>
+            <param name="httpContext"></param>
+            <param name="setDefaultSuccessMessageKey"></param>
+            <returns> <see cref="T:Milvasoft.Helpers.Models.Response.ObjectResponse`1"/> in 200 OK <see cref="T:Microsoft.AspNetCore.Mvc.ActionResult"/> </returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.ResponseV2.GetObjectResponseByEntityAsync``1(System.Threading.Tasks.Task,Microsoft.AspNetCore.Http.HttpContext,System.Boolean)">
+            <summary>
+            Runs <paramref name="asyncTask"/> and if operation success sets success message with <see cref="M:Milvasoft.Helpers.Response.GetSuccessMessage(Microsoft.Extensions.Localization.IStringLocalizer,System.String,Milvasoft.Helpers.Enums.CrudOperation,System.Nullable{System.Int32})"/> with nameof(<typeparamref name="T"/>).
+            </summary>
+            <param name="asyncTask"></param>
+            <param name="httpContext"></param>
+            <param name="setDefaultSuccessMessageKey"></param>
+            <returns>  <see cref="T:Milvasoft.Helpers.Models.Response.ObjectResponse`1"/> in 200 OK <see cref="T:Microsoft.AspNetCore.Mvc.ActionResult"/> </returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.ResponseV2.GetObjectResponseByEntityAsync``1(System.Threading.Tasks.Task{``0},Microsoft.AspNetCore.Http.HttpContext,System.Boolean)">
+            <summary>
+            Runs <paramref name="asyncTask"/> and if operation success sets success message with <see cref="M:Milvasoft.Helpers.Response.GetSuccessMessage(Microsoft.Extensions.Localization.IStringLocalizer,System.String,Milvasoft.Helpers.Enums.CrudOperation,System.Nullable{System.Int32})"/> with nameof(<typeparamref name="T"/>).
+            </summary>
+            <param name="asyncTask"></param>
+            <param name="httpContext"></param>
+            <param name="setDefaultSuccessMessageKey"></param>
+            <returns>  <see cref="T:Milvasoft.Helpers.Models.Response.ObjectResponse`1"/> in 200 OK <see cref="T:Microsoft.AspNetCore.Mvc.ActionResult"/> </returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.ResponseV2.GetObjectResponseByEntityAsync``1(System.Threading.Tasks.Task{System.Object},Microsoft.AspNetCore.Http.HttpContext,System.Boolean)">
+            <summary>
+            Runs <paramref name="asyncTask"/> and if operation success sets success message with <see cref="M:Milvasoft.Helpers.Response.GetSuccessMessage(Microsoft.Extensions.Localization.IStringLocalizer,System.String,Milvasoft.Helpers.Enums.CrudOperation,System.Nullable{System.Int32})"/> with nameof(<typeparamref name="T"/>).
+            </summary>
+            <param name="asyncTask"></param>
+            <param name="httpContext"></param>
+            <param name="setDefaultSuccessMessageKey"></param>
+            <returns>  <see cref="T:Milvasoft.Helpers.Models.Response.ObjectResponse`1"/> in 200 OK <see cref="T:Microsoft.AspNetCore.Mvc.ActionResult"/> </returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.ResponseV2.GetObjectResponseByEntityAsync``1(System.Threading.Tasks.Task{System.Guid},Microsoft.AspNetCore.Http.HttpContext,System.Boolean)">
+            <summary>
+            Runs <paramref name="asyncTask"/> and if operation success sets success message with <see cref="M:Milvasoft.Helpers.Response.GetSuccessMessage(Microsoft.Extensions.Localization.IStringLocalizer,System.String,Milvasoft.Helpers.Enums.CrudOperation,System.Nullable{System.Int32})"/> with nameof(<typeparamref name="T"/>).
+            </summary>
+            <param name="asyncTask"></param>
+            <param name="httpContext"></param>
+            <param name="setDefaultSuccessMessageKey"></param>
+            <returns> <see cref="T:Milvasoft.Helpers.Models.Response.ObjectResponse`1"/> in 200 OK <see cref="T:Microsoft.AspNetCore.Mvc.ActionResult"/> </returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.ResponseV2.GetObjectResponseByEntityAsync``1(System.Threading.Tasks.Task{System.Int32},Microsoft.AspNetCore.Http.HttpContext,System.Boolean)">
+            <summary>
+            Runs <paramref name="asyncTask"/> and if operation success sets success message with <see cref="M:Milvasoft.Helpers.Response.GetSuccessMessage(Microsoft.Extensions.Localization.IStringLocalizer,System.String,Milvasoft.Helpers.Enums.CrudOperation,System.Nullable{System.Int32})"/> with nameof(<typeparamref name="T"/>).
+            </summary>
+            <param name="asyncTask"></param>
+            <param name="httpContext"></param>
+            <param name="setDefaultSuccessMessageKey"></param>
+            <returns> <see cref="T:Milvasoft.Helpers.Models.Response.ObjectResponse`1"/> in 200 OK <see cref="T:Microsoft.AspNetCore.Mvc.ActionResult"/> </returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.ResponseV2.GetObjectResponseByEntityAsync``1(System.Threading.Tasks.Task{System.SByte},Microsoft.AspNetCore.Http.HttpContext,System.Boolean)">
+            <summary>
+            Runs <paramref name="asyncTask"/> and if operation success sets success message with <see cref="M:Milvasoft.Helpers.Response.GetSuccessMessage(Microsoft.Extensions.Localization.IStringLocalizer,System.String,Milvasoft.Helpers.Enums.CrudOperation,System.Nullable{System.Int32})"/> with nameof(<typeparamref name="T"/>).
+            </summary>
+            <param name="asyncTask"></param>
+            <param name="httpContext"></param>
+            <param name="setDefaultSuccessMessageKey"></param>
+            <returns> <see cref="T:Milvasoft.Helpers.Models.Response.ObjectResponse`1"/> in 200 OK <see cref="T:Microsoft.AspNetCore.Mvc.ActionResult"/> </returns>
         </member>
         <member name="T:Milvasoft.Helpers.Test.Helpers.ExtensionMethods">
             <summary>
