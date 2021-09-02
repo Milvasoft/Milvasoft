@@ -8,10 +8,11 @@
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
         public const string LocalizedEntityName = "LocalizedEntityName";
         public const string Localized = "Localized";
+        public const string DefaultErrorMessage = "An error occured while processing";
 
         #region Response Message Keys
 
-        public const string DefaultErrorMessage = "An error occured while processing";
+        public const string DefaultSucccessMessage = "SuccessfullyOperationMessage";
         public const string ErrorMessageForAdd = "AddErrorMessage";
         public const string ErrorMessageForUpdate = "UpdateErrorMessage";
         public const string ErrorMessageForDelete = "DeleteErrorMessage";

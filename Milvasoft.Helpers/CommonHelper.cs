@@ -426,6 +426,80 @@ namespace Milvasoft.Helpers
             return localizerFactory.Create(resourceType.Name, assemblyName.Name);
         }
 
+        /// <summary>
+        /// Creates localizer instance if IStringLocalizerFactory registered to service collection.
+        /// You must implement <see cref="IMilvaResource"/> in your resource dummy class.
+        /// </summary>
+        /// <param name="serviceProvider"></param>
+        /// <returns></returns>
+        public static IStringLocalizer GetRequiredLocalizerInstanceWithMilvaResource(this IServiceProvider serviceProvider)
+        {
+            var localizerFactory = serviceProvider.GetRequiredService<IStringLocalizerFactory>();
+
+            var resourceType = serviceProvider.GetRequiredService<IMilvaResource>().GetType();
+
+            var assemblyName = new AssemblyName(resourceType.GetTypeInfo().Assembly.FullName);
+
+            return localizerFactory.Create(resourceType.Name, assemblyName.Name);
+        }
+
+        /// <summary>
+        /// Creates localizer instance if IStringLocalizerFactory registered to service collection.
+        /// You must implement <see cref="IMilvaResource"/> in your resource dummy class.
+        /// </summary>
+        /// <param name="serviceProvider"></param>
+        /// <returns></returns>
+        public static IStringLocalizer GetLocalizerInstanceWithMilvaResource(this IServiceProvider serviceProvider)
+        {
+            var localizerFactory = serviceProvider.GetService<IStringLocalizerFactory>();
+
+            var resourceType = serviceProvider.GetService<IMilvaResource>().GetType();
+
+            if (resourceType == null)
+                return null;
+
+            var assemblyName = new AssemblyName(resourceType.GetTypeInfo().Assembly.FullName);
+
+            return localizerFactory.Create(resourceType.Name, assemblyName.Name);
+        }
+
+        /// <summary>
+        /// Creates localizer instance if IStringLocalizerFactory registered to service collection.
+        /// You must implement <see cref="IMilvaResource"/> in your resource dummy class.
+        /// </summary>
+        /// <param name="context"></param>
+        /// <returns></returns>
+        public static IStringLocalizer GetRequiredLocalizerInstanceWithMilvaResource(this HttpContext context)
+        {
+            var localizerFactory = context.RequestServices.GetRequiredService<IStringLocalizerFactory>();
+
+            var resourceType = context.RequestServices.GetRequiredService<IMilvaResource>().GetType();
+
+            var assemblyName = new AssemblyName(resourceType.GetTypeInfo().Assembly.FullName);
+
+            return localizerFactory.Create(resourceType.Name, assemblyName.Name);
+        }
+
+        /// <summary>
+        /// Creates localizer instance if IStringLocalizerFactory registered to service collection. 
+        /// You must implement <see cref="IMilvaResource"/> in your resource dummy class.
+        /// </summary>
+        /// <param name="context"></param>
+        /// <returns></returns>
+        public static IStringLocalizer GetLocalizerInstanceWithMilvaResource(this HttpContext context)
+        {
+            var localizerFactory = context.RequestServices.GetService<IStringLocalizerFactory>();
+
+            var resourceType = context.RequestServices.GetService<IMilvaResource>().GetType();
+
+            if (resourceType == null)
+                return null;
+
+            var assemblyName = new AssemblyName(resourceType.GetTypeInfo().Assembly.FullName);
+
+            return localizerFactory.Create(resourceType.Name, assemblyName.Name);
+        }
+
         #endregion
     }
 }
