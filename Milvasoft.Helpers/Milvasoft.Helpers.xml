@@ -10408,13 +10408,14 @@
             <param name="setDefaultSuccessMessageKey"></param>
             <returns>  <see cref="T:Milvasoft.Helpers.Models.Response.ObjectResponse`1"/> in 200 OK <see cref="T:Microsoft.AspNetCore.Mvc.ActionResult"/> </returns>
         </member>
-        <member name="M:Milvasoft.Helpers.ResponseV2.GetObjectResponseByEntity``1(System.Collections.Generic.List{``0},Microsoft.AspNetCore.Http.HttpContext,System.Boolean)">
+        <member name="M:Milvasoft.Helpers.ResponseV2.GetObjectResponseByEntity``1(System.Collections.Generic.List{``0},Microsoft.AspNetCore.Http.HttpContext,System.Boolean,System.Boolean)">
             <summary>
             Sets error message or success message with nameof(<typeparamref name="T"/>).
             If <paramref name="setDefaultSuccessMessageKey"/> is true it sets <see cref="F:Milvasoft.Helpers.Utils.LocalizerKeys.DefaultSucccessMessage"/> to success message.
             </summary>
             <param name="contentList"></param>
             <param name="httpContext"></param>
+            <param name="isFiltering"></param>
             <param name="setDefaultSuccessMessageKey"></param>
             <returns> <see cref="T:Milvasoft.Helpers.Models.Response.ObjectResponse`1"/> in 200 OK <see cref="T:Microsoft.AspNetCore.Mvc.ActionResult"/> </returns>
         </member>
