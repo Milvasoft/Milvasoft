@@ -31,7 +31,7 @@ namespace Milvasoft.Helpers
         public static IActionResult GetPaginationResponseByEntity<T>(this PaginationDTO<T> paginationDTO,
                                                                      HttpContext httpContext,
                                                                      bool isFiltering,
-                                                                     bool setDefaultSuccessMessageKey = false)
+                                                                     bool setDefaultSuccessMessageKey = true)
         {
             var stringLocalizer = httpContext.RequestServices.GetRequiredLocalizerInstanceWithMilvaResource();
 
@@ -65,7 +65,7 @@ namespace Milvasoft.Helpers
         public static IActionResult GetObjectResponseByEntity<T>(this List<T> contentList,
                                                                  HttpContext httpContext,
                                                                  bool isFiltering,
-                                                                 bool setDefaultSuccessMessageKey = false)
+                                                                 bool setDefaultSuccessMessageKey = true)
         {
             var stringLocalizer = httpContext.RequestServices.GetRequiredLocalizerInstanceWithMilvaResource();
 
@@ -97,7 +97,7 @@ namespace Milvasoft.Helpers
         /// <returns> <see cref="ObjectResponse{T}"/> in 200 OK <see cref="ActionResult"/> </returns>
         public static IActionResult GetObjectResponseByEntity<T>(this T content,
                                                                  HttpContext httpContext,
-                                                                 bool setDefaultSuccessMessageKey = false)
+                                                                 bool setDefaultSuccessMessageKey = true)
         {
             var stringLocalizer = httpContext.RequestServices.GetRequiredLocalizerInstanceWithMilvaResource();
 
@@ -134,7 +134,7 @@ namespace Milvasoft.Helpers
                                                                                         HttpContext httpContext,
                                                                                         IEnumerable<TKey> idList,
                                                                                         string successMessageKey = null,
-                                                                                        bool setDefaultSuccessMessageKey = false) where TKey : IEquatable<TKey>
+                                                                                        bool setDefaultSuccessMessageKey = true) where TKey : IEquatable<TKey>
         {
             var stringLocalizer = httpContext.RequestServices.GetRequiredLocalizerInstanceWithMilvaResource();
 
@@ -179,7 +179,7 @@ namespace Milvasoft.Helpers
                                                                                         HttpContext httpContext,
                                                                                         IEnumerable<TKey> idList,
                                                                                         string successMessageKey = null,
-                                                                                        bool setDefaultSuccessMessageKey = false) where TKey : IEquatable<TKey>
+                                                                                        bool setDefaultSuccessMessageKey = true) where TKey : IEquatable<TKey>
         {
             var stringLocalizer = httpContext.RequestServices.GetRequiredLocalizerInstanceWithMilvaResource();
 
@@ -224,7 +224,7 @@ namespace Milvasoft.Helpers
                                                                                         HttpContext httpContext,
                                                                                         IEnumerable<TKey> idList,
                                                                                         string successMessageKey = null,
-                                                                                        bool setDefaultSuccessMessageKey = false) where TKey : struct, IEquatable<TKey>
+                                                                                        bool setDefaultSuccessMessageKey = true) where TKey : struct, IEquatable<TKey>
         {
             var stringLocalizer = httpContext.RequestServices.GetRequiredLocalizerInstanceWithMilvaResource();
 
@@ -245,8 +245,10 @@ namespace Milvasoft.Helpers
                 var result = await asyncTask;
 
                 response.Result = result;
-                response.Message = setDefaultSuccessMessageKey
-                                    ? stringLocalizer.GetSuccessMessage(typeKey, httpContext.GetCrudOperationByMethod())
+                response.Message = !setDefaultSuccessMessageKey
+                                    ? string.IsNullOrEmpty(successMessageKey)
+                                            ? stringLocalizer.GetSuccessMessage(typeKey, httpContext.GetCrudOperationByMethod())
+                                            : stringLocalizer[successMessageKey]
                                     : stringLocalizer[LocalizerKeys.DefaultSucccessMessage];
             }
 
@@ -268,7 +270,7 @@ namespace Milvasoft.Helpers
                                                                                         HttpContext httpContext,
                                                                                         IEnumerable<TKey> idList,
                                                                                         string successMessageKey = null,
-                                                                                        bool setDefaultSuccessMessageKey = false) where TKey : struct, IEquatable<TKey>
+                                                                                        bool setDefaultSuccessMessageKey = true) where TKey : struct, IEquatable<TKey>
         {
             var stringLocalizer = httpContext.RequestServices.GetRequiredLocalizerInstanceWithMilvaResource();
 
@@ -289,8 +291,10 @@ namespace Milvasoft.Helpers
                 var result = await asyncTask;
 
                 response.Result = result;
-                response.Message = setDefaultSuccessMessageKey
-                                    ? stringLocalizer.GetSuccessMessage(typeKey, httpContext.GetCrudOperationByMethod())
+                response.Message = !setDefaultSuccessMessageKey
+                                    ? string.IsNullOrEmpty(successMessageKey)
+                                            ? stringLocalizer.GetSuccessMessage(typeKey, httpContext.GetCrudOperationByMethod())
+                                            : stringLocalizer[successMessageKey]
                                     : stringLocalizer[LocalizerKeys.DefaultSucccessMessage];
             }
 
@@ -308,7 +312,7 @@ namespace Milvasoft.Helpers
         public static async Task<IActionResult> GetObjectResponseByEntityAsync<T>(this ConfiguredTaskAwaitable asyncTask,
                                                                                   HttpContext httpContext,
                                                                                   string successMessageKey = null,
-                                                                                  bool setDefaultSuccessMessageKey = false)
+                                                                                  bool setDefaultSuccessMessageKey = true)
         {
             await asyncTask;
 
@@ -320,8 +324,10 @@ namespace Milvasoft.Helpers
 
             var response = new ObjectResponse<T>
             {
-                Message = setDefaultSuccessMessageKey
-                                    ? stringLocalizer.GetSuccessMessage(typeKey, httpContext.GetCrudOperationByMethod())
+                Message = !setDefaultSuccessMessageKey
+                                    ? string.IsNullOrEmpty(successMessageKey)
+                                            ? stringLocalizer.GetSuccessMessage(typeKey, httpContext.GetCrudOperationByMethod())
+                                            : stringLocalizer[successMessageKey]
                                     : stringLocalizer[LocalizerKeys.DefaultSucccessMessage]
             };
 
@@ -339,7 +345,7 @@ namespace Milvasoft.Helpers
         public static async Task<IActionResult> GetObjectResponseByEntityAsync<T>(this ConfiguredTaskAwaitable<T> asyncTask,
                                                                                   HttpContext httpContext,
                                                                                   string successMessageKey = null,
-                                                                                  bool setDefaultSuccessMessageKey = false)
+                                                                                  bool setDefaultSuccessMessageKey = true)
         {
             var result = await asyncTask;
 
@@ -352,10 +358,12 @@ namespace Milvasoft.Helpers
             var response = new ObjectResponse<T>
             {
                 Result = result,
-                Message = setDefaultSuccessMessageKey
-                                    ? stringLocalizer.GetSuccessMessage(typeKey, httpContext.GetCrudOperationByMethod())
+                Message = !setDefaultSuccessMessageKey
+                                    ? string.IsNullOrEmpty(successMessageKey)
+                                            ? stringLocalizer.GetSuccessMessage(typeKey, httpContext.GetCrudOperationByMethod())
+                                            : stringLocalizer[successMessageKey]
                                     : stringLocalizer[LocalizerKeys.DefaultSucccessMessage]
-            };
+        };
 
             return new OkObjectResult(response);
         }
@@ -371,7 +379,7 @@ namespace Milvasoft.Helpers
         public static async Task<IActionResult> GetObjectResponseByEntityAsync<T>(this ConfiguredTaskAwaitable<object> asyncTask,
                                                                                   HttpContext httpContext,
                                                                                   string successMessageKey = null,
-                                                                                  bool setDefaultSuccessMessageKey = false)
+                                                                                  bool setDefaultSuccessMessageKey = true)
         {
             var result = await asyncTask;
 
@@ -384,8 +392,10 @@ namespace Milvasoft.Helpers
             var response = new ObjectResponse<object>
             {
                 Result = result,
-                Message = setDefaultSuccessMessageKey
-                                    ? stringLocalizer.GetSuccessMessage(typeKey, httpContext.GetCrudOperationByMethod())
+                Message = !setDefaultSuccessMessageKey
+                                    ? string.IsNullOrEmpty(successMessageKey)
+                                            ? stringLocalizer.GetSuccessMessage(typeKey, httpContext.GetCrudOperationByMethod())
+                                            : stringLocalizer[successMessageKey]
                                     : stringLocalizer[LocalizerKeys.DefaultSucccessMessage]
             };
 
@@ -403,7 +413,7 @@ namespace Milvasoft.Helpers
         public static async Task<IActionResult> GetObjectResponseByEntityAsync<T>(this ConfiguredTaskAwaitable<Guid> asyncTask,
                                                                                   HttpContext httpContext,
                                                                                   string successMessageKey = null,
-                                                                                  bool setDefaultSuccessMessageKey = false)
+                                                                                  bool setDefaultSuccessMessageKey = true)
         {
             var result = await asyncTask;
 
@@ -416,8 +426,10 @@ namespace Milvasoft.Helpers
             var response = new ObjectResponse<Guid>
             {
                 Result = result,
-                Message = setDefaultSuccessMessageKey
-                                    ? stringLocalizer.GetSuccessMessage(typeKey, httpContext.GetCrudOperationByMethod())
+                Message = !setDefaultSuccessMessageKey
+                                    ? string.IsNullOrEmpty(successMessageKey)
+                                            ? stringLocalizer.GetSuccessMessage(typeKey, httpContext.GetCrudOperationByMethod())
+                                            : stringLocalizer[successMessageKey]
                                     : stringLocalizer[LocalizerKeys.DefaultSucccessMessage]
             };
 
@@ -435,7 +447,7 @@ namespace Milvasoft.Helpers
         public static async Task<IActionResult> GetObjectResponseByEntityAsync<T>(this ConfiguredTaskAwaitable<int> asyncTask,
                                                                                   HttpContext httpContext,
                                                                                   string successMessageKey = null,
-                                                                                  bool setDefaultSuccessMessageKey = false)
+                                                                                  bool setDefaultSuccessMessageKey = true)
         {
             var stringLocalizer = httpContext.RequestServices.GetRequiredLocalizerInstanceWithMilvaResource();
 
@@ -448,8 +460,10 @@ namespace Milvasoft.Helpers
             var response = new ObjectResponse<int>
             {
                 Result = result,
-                Message = setDefaultSuccessMessageKey
-                                    ? stringLocalizer.GetSuccessMessage(typeKey, httpContext.GetCrudOperationByMethod())
+                Message = !setDefaultSuccessMessageKey
+                                    ? string.IsNullOrEmpty(successMessageKey)
+                                            ? stringLocalizer.GetSuccessMessage(typeKey, httpContext.GetCrudOperationByMethod())
+                                            : stringLocalizer[successMessageKey]
                                     : stringLocalizer[LocalizerKeys.DefaultSucccessMessage]
             };
 
@@ -467,7 +481,7 @@ namespace Milvasoft.Helpers
         public static async Task<IActionResult> GetObjectResponseByEntityAsync<T>(this ConfiguredTaskAwaitable<sbyte> asyncTask,
                                                                                   HttpContext httpContext,
                                                                                   string successMessageKey = null,
-                                                                                  bool setDefaultSuccessMessageKey = false)
+                                                                                  bool setDefaultSuccessMessageKey = true)
         {
             var result = await asyncTask;
 
@@ -480,8 +494,10 @@ namespace Milvasoft.Helpers
             var response = new ObjectResponse<sbyte>
             {
                 Result = result,
-                Message = setDefaultSuccessMessageKey
-                                    ? stringLocalizer.GetSuccessMessage(typeKey, httpContext.GetCrudOperationByMethod())
+                Message = !setDefaultSuccessMessageKey
+                                    ? string.IsNullOrEmpty(successMessageKey)
+                                            ? stringLocalizer.GetSuccessMessage(typeKey, httpContext.GetCrudOperationByMethod())
+                                            : stringLocalizer[successMessageKey]
                                     : stringLocalizer[LocalizerKeys.DefaultSucccessMessage]
             };
 
@@ -499,7 +515,7 @@ namespace Milvasoft.Helpers
         public static async Task<IActionResult> GetObjectResponseByEntityAsync<T>(this Task asyncTask,
                                                                                   HttpContext httpContext,
                                                                                   string successMessageKey = null,
-                                                                                  bool setDefaultSuccessMessageKey = false)
+                                                                                  bool setDefaultSuccessMessageKey = true)
         {
             await asyncTask;
 
@@ -511,8 +527,10 @@ namespace Milvasoft.Helpers
 
             var response = new ObjectResponse<T>
             {
-                Message = setDefaultSuccessMessageKey
-                                    ? stringLocalizer.GetSuccessMessage(typeKey, httpContext.GetCrudOperationByMethod())
+                Message = !setDefaultSuccessMessageKey
+                                    ? string.IsNullOrEmpty(successMessageKey)
+                                            ? stringLocalizer.GetSuccessMessage(typeKey, httpContext.GetCrudOperationByMethod())
+                                            : stringLocalizer[successMessageKey]
                                     : stringLocalizer[LocalizerKeys.DefaultSucccessMessage]
             };
 
@@ -530,7 +548,7 @@ namespace Milvasoft.Helpers
         public static async Task<IActionResult> GetObjectResponseByEntityAsync<T>(this Task<T> asyncTask,
                                                                                   HttpContext httpContext,
                                                                                   string successMessageKey = null,
-                                                                                  bool setDefaultSuccessMessageKey = false)
+                                                                                  bool setDefaultSuccessMessageKey = true)
         {
             var result = await asyncTask;
 
@@ -543,8 +561,10 @@ namespace Milvasoft.Helpers
             var response = new ObjectResponse<T>
             {
                 Result = result,
-                Message = setDefaultSuccessMessageKey
-                                    ? stringLocalizer.GetSuccessMessage(typeKey, httpContext.GetCrudOperationByMethod())
+                Message = !setDefaultSuccessMessageKey
+                                    ? string.IsNullOrEmpty(successMessageKey)
+                                            ? stringLocalizer.GetSuccessMessage(typeKey, httpContext.GetCrudOperationByMethod())
+                                            : stringLocalizer[successMessageKey]
                                     : stringLocalizer[LocalizerKeys.DefaultSucccessMessage]
             };
 
@@ -562,7 +582,7 @@ namespace Milvasoft.Helpers
         public static async Task<IActionResult> GetObjectResponseByEntityAsync<T>(this Task<object> asyncTask,
                                                                                   HttpContext httpContext,
                                                                                   string successMessageKey = null,
-                                                                                  bool setDefaultSuccessMessageKey = false)
+                                                                                  bool setDefaultSuccessMessageKey = true)
         {
             var result = await asyncTask;
 
@@ -575,8 +595,10 @@ namespace Milvasoft.Helpers
             var response = new ObjectResponse<object>
             {
                 Result = result,
-                Message = setDefaultSuccessMessageKey
-                                    ? stringLocalizer.GetSuccessMessage(typeKey, httpContext.GetCrudOperationByMethod())
+                Message = !setDefaultSuccessMessageKey
+                                    ? string.IsNullOrEmpty(successMessageKey)
+                                            ? stringLocalizer.GetSuccessMessage(typeKey, httpContext.GetCrudOperationByMethod())
+                                            : stringLocalizer[successMessageKey]
                                     : stringLocalizer[LocalizerKeys.DefaultSucccessMessage]
             };
 
@@ -594,7 +616,7 @@ namespace Milvasoft.Helpers
         public static async Task<IActionResult> GetObjectResponseByEntityAsync<T>(this Task<Guid> asyncTask,
                                                                                   HttpContext httpContext,
                                                                                   string successMessageKey = null,
-                                                                                  bool setDefaultSuccessMessageKey = false)
+                                                                                  bool setDefaultSuccessMessageKey = true)
         {
             var result = await asyncTask;
 
@@ -607,8 +629,10 @@ namespace Milvasoft.Helpers
             var response = new ObjectResponse<Guid>
             {
                 Result = result,
-                Message = setDefaultSuccessMessageKey
-                                    ? stringLocalizer.GetSuccessMessage(typeKey, httpContext.GetCrudOperationByMethod())
+                Message = !setDefaultSuccessMessageKey
+                                    ? string.IsNullOrEmpty(successMessageKey)
+                                            ? stringLocalizer.GetSuccessMessage(typeKey, httpContext.GetCrudOperationByMethod())
+                                            : stringLocalizer[successMessageKey]
                                     : stringLocalizer[LocalizerKeys.DefaultSucccessMessage]
             };
 
@@ -626,7 +650,7 @@ namespace Milvasoft.Helpers
         public static async Task<IActionResult> GetObjectResponseByEntityAsync<T>(this Task<int> asyncTask,
                                                                                   HttpContext httpContext,
                                                                                   string successMessageKey = null,
-                                                                                  bool setDefaultSuccessMessageKey = false)
+                                                                                  bool setDefaultSuccessMessageKey = true)
         {
             var result = await asyncTask;
 
@@ -639,8 +663,10 @@ namespace Milvasoft.Helpers
             var response = new ObjectResponse<int>
             {
                 Result = result,
-                Message = setDefaultSuccessMessageKey
-                                    ? stringLocalizer.GetSuccessMessage(typeKey, httpContext.GetCrudOperationByMethod())
+                Message = !setDefaultSuccessMessageKey
+                                    ? string.IsNullOrEmpty(successMessageKey)
+                                            ? stringLocalizer.GetSuccessMessage(typeKey, httpContext.GetCrudOperationByMethod())
+                                            : stringLocalizer[successMessageKey]
                                     : stringLocalizer[LocalizerKeys.DefaultSucccessMessage]
             };
 
@@ -658,7 +684,7 @@ namespace Milvasoft.Helpers
         public static async Task<IActionResult> GetObjectResponseByEntityAsync<T>(this Task<sbyte> asyncTask,
                                                                                   HttpContext httpContext,
                                                                                   string successMessageKey = null,
-                                                                                  bool setDefaultSuccessMessageKey = false)
+                                                                                  bool setDefaultSuccessMessageKey = true)
         {
             var result = await asyncTask;
 
@@ -671,8 +697,10 @@ namespace Milvasoft.Helpers
             var response = new ObjectResponse<sbyte>
             {
                 Result = result,
-                Message = setDefaultSuccessMessageKey
-                                    ? stringLocalizer.GetSuccessMessage(typeKey, httpContext.GetCrudOperationByMethod())
+                Message = !setDefaultSuccessMessageKey
+                                    ? string.IsNullOrEmpty(successMessageKey)
+                                            ? stringLocalizer.GetSuccessMessage(typeKey, httpContext.GetCrudOperationByMethod())
+                                            : stringLocalizer[successMessageKey]
                                     : stringLocalizer[LocalizerKeys.DefaultSucccessMessage]
             };
 
