@@ -25,11 +25,13 @@ namespace Milvasoft.Helpers
         /// </summary>
         /// <param name="paginationDTO"></param>
         /// <param name="httpContext"></param>
+        /// <param name="localizerKey"></param>
         /// <param name="isFiltering"></param>
         /// <param name="setDefaultSuccessMessageKey"></param>
         /// <returns>  <see cref="ObjectResponse{PaginationDTO}"/> in 200 OK <see cref="ActionResult"/> </returns>
         public static IActionResult GetPaginationResponseByEntity<T>(this PaginationDTO<T> paginationDTO,
                                                                      HttpContext httpContext,
+                                                                     string localizerKey,
                                                                      bool isFiltering,
                                                                      bool setDefaultSuccessMessageKey = true)
         {
@@ -39,14 +41,14 @@ namespace Milvasoft.Helpers
 
             if (paginationDTO.DTOList.IsNullOrEmpty())
             {
-                response.Message = stringLocalizer.GetErrorMessage(nameof(T), !isFiltering ? CrudOperation.GetAll : CrudOperation.Filtering);
+                response.Message = stringLocalizer.GetErrorMessage(localizerKey, !isFiltering ? CrudOperation.GetAll : CrudOperation.Filtering);
                 response.StatusCode = MilvaStatusCodes.Status204NoContent;
             }
             else
             {
                 response.Result = paginationDTO;
                 response.Message = !setDefaultSuccessMessageKey
-                                        ? stringLocalizer.GetSuccessMessage(nameof(T), httpContext.GetCrudOperationByMethod())
+                                        ? stringLocalizer.GetSuccessMessage(localizerKey, httpContext.GetCrudOperationByMethod())
                                         : stringLocalizer[LocalizerKeys.DefaultSucccessMessage];
             }
 
@@ -59,11 +61,13 @@ namespace Milvasoft.Helpers
         /// </summary>
         /// <param name="contentList"></param>
         /// <param name="httpContext"></param>
+        /// <param name="localizerKey"></param>
         /// <param name="isFiltering"></param>
         /// <param name="setDefaultSuccessMessageKey"></param>
         /// <returns> <see cref="ObjectResponse{T}"/> in 200 OK <see cref="ActionResult"/> </returns>
         public static IActionResult GetObjectResponseByEntity<T>(this List<T> contentList,
                                                                  HttpContext httpContext,
+                                                                 string localizerKey,
                                                                  bool isFiltering,
                                                                  bool setDefaultSuccessMessageKey = true)
         {
@@ -73,14 +77,14 @@ namespace Milvasoft.Helpers
 
             if (contentList.IsNullOrEmpty())
             {
-                response.Message = stringLocalizer.GetErrorMessage(nameof(T), !isFiltering ? CrudOperation.GetAll : CrudOperation.Filtering);
+                response.Message = stringLocalizer.GetErrorMessage(localizerKey, !isFiltering ? CrudOperation.GetAll : CrudOperation.Filtering);
                 response.StatusCode = MilvaStatusCodes.Status204NoContent;
             }
             else
             {
                 response.Result = contentList;
                 response.Message = !setDefaultSuccessMessageKey
-                                        ? stringLocalizer.GetSuccessMessage(nameof(T), httpContext.GetCrudOperationByMethod())
+                                        ? stringLocalizer.GetSuccessMessage(localizerKey, httpContext.GetCrudOperationByMethod())
                                         : stringLocalizer[LocalizerKeys.DefaultSucccessMessage];
             }
 
@@ -93,10 +97,12 @@ namespace Milvasoft.Helpers
         /// </summary>
         /// <param name="content"></param>
         /// <param name="httpContext"></param>
+        /// <param name="localizerKey"></param>
         /// <param name="setDefaultSuccessMessageKey"></param>
         /// <returns> <see cref="ObjectResponse{T}"/> in 200 OK <see cref="ActionResult"/> </returns>
         public static IActionResult GetObjectResponseByEntity<T>(this T content,
                                                                  HttpContext httpContext,
+                                                                 string localizerKey,
                                                                  bool setDefaultSuccessMessageKey = true)
         {
             var stringLocalizer = httpContext.RequestServices.GetRequiredLocalizerInstanceWithMilvaResource();
@@ -105,14 +111,14 @@ namespace Milvasoft.Helpers
 
             if (content == null)
             {
-                response.Message = stringLocalizer.GetErrorMessage(nameof(T), httpContext.GetCrudOperationByMethod());
+                response.Message = stringLocalizer.GetErrorMessage(localizerKey, httpContext.GetCrudOperationByMethod());
                 response.StatusCode = MilvaStatusCodes.Status204NoContent;
             }
             else
             {
                 response.Result = content;
                 response.Message = !setDefaultSuccessMessageKey
-                                    ? stringLocalizer.GetSuccessMessage(nameof(T), httpContext.GetCrudOperationByMethod())
+                                    ? stringLocalizer.GetSuccessMessage(localizerKey, httpContext.GetCrudOperationByMethod())
                                     : stringLocalizer[LocalizerKeys.DefaultSucccessMessage];
             }
 
