@@ -19,6 +19,7 @@ namespace Milvasoft.Helpers.Caching
     {
         private IConnectionMultiplexer _client;
         private readonly ConfigurationOptions _options;
+        private IDatabase _database;
 
         /// <summary>
         /// Initializes new instance of <see cref="RedisCacheService"/> with <paramref name="cacheServiceOptions"/>.
@@ -29,6 +30,7 @@ namespace Milvasoft.Helpers.Caching
         {
             _options = cacheServiceOptions.ConfigurationOptions;
             _client = connectionMultiplexer;
+            _database = _client?.GetDatabase();
         }
 
         /// <summary>
@@ -94,7 +96,7 @@ namespace Milvasoft.Helpers.Caching
         /// <param name="key"></param>
         /// <returns></returns>
         public async Task<T> GetAsync<T>(string key) where T : class
-            => ((string)await _client.GetDatabase().StringGetAsync(key).ConfigureAwait(false)).ToObject<T>();
+            => ((string)await _database.StringGetAsync(key).ConfigureAwait(false)).ToObject<T>();
 
         /// <summary>
         /// Gets <paramref name="key"/>'s value.
@@ -102,7 +104,7 @@ namespace Milvasoft.Helpers.Caching
         /// <param name="key"></param>
         /// <returns></returns>
         public async Task<string> GetAsync(string key)
-            => await _client.GetDatabase().StringGetAsync(key).ConfigureAwait(false);
+            => await _database.StringGetAsync(key).ConfigureAwait(false);
 
         /// <summary>
         /// Gets <paramref name="keys"/> values.
@@ -115,7 +117,7 @@ namespace Milvasoft.Helpers.Caching
 
             var redisKeys = Array.ConvertAll(keys.ToArray(), item => (RedisKey)item);
 
-            var values = await _client.GetDatabase().StringGetAsync(redisKeys).ConfigureAwait(false);
+            var values = await _database.StringGetAsync(redisKeys).ConfigureAwait(false);
 
             if (values.IsNullOrEmpty())
                 return null;
@@ -136,7 +138,7 @@ namespace Milvasoft.Helpers.Caching
 
             var redisKeys = Array.ConvertAll(keys.ToArray(), item => (RedisKey)item);
 
-            var values = await _client.GetDatabase().StringGetAsync(redisKeys).ConfigureAwait(false);
+            var values = await _database.StringGetAsync(redisKeys).ConfigureAwait(false);
 
             if (values.IsNullOrEmpty())
                 return null;
@@ -151,7 +153,7 @@ namespace Milvasoft.Helpers.Caching
         /// <param name="value"></param>
         /// <returns></returns>
         public async Task<bool> SetAsync(string key, object value)
-            => await _client.GetDatabase().StringSetAsync(key, value.ToJson()).ConfigureAwait(false);
+            => await _database.StringSetAsync(key, value.ToJson()).ConfigureAwait(false);
 
         /// <summary>
         /// Sets <paramref name="value"/> to <paramref name="key"/> with <paramref name="expiration"/>.
@@ -161,21 +163,21 @@ namespace Milvasoft.Helpers.Caching
         /// <param name="expiration"></param>
         /// <returns></returns>
         public async Task<bool> SetAsync(string key, object value, TimeSpan? expiration)
-            => await _client.GetDatabase().StringSetAsync(key, value.ToJson(), expiration).ConfigureAwait(false);
+            => await _database.StringSetAsync(key, value.ToJson(), expiration).ConfigureAwait(false);
 
         /// <summary>
         /// Removes <paramref name="key"/> and value.
         /// </summary>
         /// <param name="key"></param>
         public async Task<bool> RemoveAsync(string key)
-            => await _client.GetDatabase().KeyDeleteAsync(key).ConfigureAwait(false);
+            => await _database.KeyDeleteAsync(key).ConfigureAwait(false);
 
         /// <summary>
         /// Checks if there is a <paramref name="key"/> in database. 
         /// </summary>
         /// <param name="key"></param>
         public async Task<bool> KeyExistsAsync(string key)
-            => await _client.GetDatabase().KeyExistsAsync(key).ConfigureAwait(false);
+            => await _database.KeyExistsAsync(key).ConfigureAwait(false);
 
         /// <summary>
         /// Sets timeout on <paramref name="key"/>.
@@ -184,7 +186,7 @@ namespace Milvasoft.Helpers.Caching
         /// <param name="expiration"></param>
         /// <returns></returns>
         public async Task<bool> KeyExpireAsync(string key, TimeSpan expiration)
-            => await _client.GetDatabase().KeyExpireAsync(key, expiration).ConfigureAwait(false);
+            => await _database.KeyExpireAsync(key, expiration).ConfigureAwait(false);
 
         /// <summary>
         /// Sets timeout on <paramref name="key"/>.
@@ -193,7 +195,7 @@ namespace Milvasoft.Helpers.Caching
         /// <param name="expiration"></param>
         /// <returns></returns>
         public async Task<bool> KeyExpireAsync(string key, DateTime? expiration)
-            => await _client.GetDatabase().KeyExpireAsync(key, expiration).ConfigureAwait(false);
+            => await _database.KeyExpireAsync(key, expiration).ConfigureAwait(false);
 
         /// <summary>
         /// Flushs default database.
@@ -211,6 +213,8 @@ namespace Milvasoft.Helpers.Caching
             {
                 if (client?.IsConnected ?? false)
                     await client.GetServer(client.GetEndPoints().FirstOrDefault()).FlushDatabaseAsync().ConfigureAwait(false);
+
+                _options.AllowAdmin = false;
             }
             catch (Exception)
             {
@@ -283,11 +287,13 @@ namespace Milvasoft.Helpers.Caching
             if (_client == null)
             {
                 _client = await ConnectionMultiplexer.ConnectAsync(_options).ConfigureAwait(false);
+                _database = _client.GetDatabase();
             }
             else if (_client != null && !_client.IsConnected)
             {
                 await _client.CloseAsync().ConfigureAwait(false);
                 _client = await ConnectionMultiplexer.ConnectAsync(_options).ConfigureAwait(false);
+                _database = _client.GetDatabase();
             }
         }
 
@@ -323,14 +329,14 @@ namespace Milvasoft.Helpers.Caching
         /// <typeparam name="T"></typeparam>
         /// <param name="key"></param>
         /// <returns></returns>
-        public T Get<T>(string key) where T : class => ((string)_client.GetDatabase().StringGet(key)).ToObject<T>();
+        public T Get<T>(string key) where T : class => ((string)_database.StringGet(key)).ToObject<T>();
 
         /// <summary>
         /// Gets <paramref name="key"/>'s value.
         /// </summary>
         /// <param name="key"></param>
         /// <returns></returns>
-        public string Get(string key) => _client.GetDatabase().StringGet(key);
+        public string Get(string key) => _database.StringGet(key);
 
         /// <summary>
         /// Sets <paramref name="value"/> with <paramref name="key"/>.
@@ -338,7 +344,7 @@ namespace Milvasoft.Helpers.Caching
         /// <param name="key"></param>
         /// <param name="value"></param>
         /// <returns></returns>
-        public void Set(string key, string value) => _client.GetDatabase().StringSet(key, value);
+        public void Set(string key, string value) => _database.StringSet(key, value);
 
         /// <summary>
         /// Sets <paramref name="value"/> with <paramref name="key"/>.
@@ -346,7 +352,7 @@ namespace Milvasoft.Helpers.Caching
         /// <typeparam name="T"></typeparam>
         /// <param name="key"></param>
         /// <param name="value"></param>
-        public void Set<T>(string key, T value) where T : class => _client.GetDatabase().StringSet(key, value.ToJson());
+        public void Set<T>(string key, T value) where T : class => _database.StringSet(key, value.ToJson());
 
         /// <summary>
         /// Sets <paramref name="value"/> to <paramref name="key"/> with <paramref name="expiration"/>.
@@ -355,19 +361,19 @@ namespace Milvasoft.Helpers.Caching
         /// <param name="value"></param>
         /// <param name="expiration"></param>
         /// <returns></returns>
-        public void Set(string key, object value, TimeSpan expiration) => _client.GetDatabase().StringSet(key, value.ToJson(), expiration);
+        public void Set(string key, object value, TimeSpan expiration) => _database.StringSet(key, value.ToJson(), expiration);
 
         /// <summary>
         /// Removes <paramref name="key"/> and value.
         /// </summary>
         /// <param name="key"></param>
-        public void Remove(string key) => _client.GetDatabase().KeyDelete(key);
+        public void Remove(string key) => _database.KeyDelete(key);
 
         /// <summary>
         /// Checks if there is a <paramref name="key"/> in database. 
         /// </summary>
         /// <param name="key"></param>
-        public void KeyExists(string key) => _client.GetDatabase().KeyExists(key);
+        public void KeyExists(string key) => _database.KeyExists(key);
 
         #endregion
     }
