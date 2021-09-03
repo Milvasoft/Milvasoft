@@ -1,6 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using StackExchange.Redis;
-using System.Linq;
 
 namespace Milvasoft.Helpers.Caching
 {
@@ -19,10 +18,8 @@ namespace Milvasoft.Helpers.Caching
         {
             services.AddSingleton(options);
 
-            var connectionString = options.ConfigurationOptions.EndPoints.FirstOrDefault().ToString();
-
             //Configure other services up here
-            var multiplexer = ConnectionMultiplexer.ConnectAsync(connectionString).Result;
+            var multiplexer = ConnectionMultiplexer.ConnectAsync(options.ConnectionString).Result;
 
             services.AddSingleton<IConnectionMultiplexer>(multiplexer);
 
