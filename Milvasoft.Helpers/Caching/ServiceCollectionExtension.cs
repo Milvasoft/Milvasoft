@@ -19,7 +19,7 @@ namespace Milvasoft.Helpers.Caching
             services.AddSingleton(options);
 
             //Configure other services up here
-            var multiplexer = ConnectionMultiplexer.ConnectAsync(options.ConnectionString).Result;
+            var multiplexer = ConnectionMultiplexer.ConnectAsync(options.ConfigurationOptions).Result;
 
             services.AddSingleton<IConnectionMultiplexer>(multiplexer);
 
