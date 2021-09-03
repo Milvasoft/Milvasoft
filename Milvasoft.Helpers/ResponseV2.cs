@@ -369,7 +369,7 @@ namespace Milvasoft.Helpers
                                             ? stringLocalizer.GetSuccessMessage(typeKey, httpContext.GetCrudOperationByMethod())
                                             : stringLocalizer[successMessageKey]
                                     : stringLocalizer[LocalizerKeys.DefaultSucccessMessage]
-        };
+            };
 
             return new OkObjectResult(response);
         }

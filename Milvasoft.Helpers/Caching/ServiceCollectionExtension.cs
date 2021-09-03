@@ -1,4 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using StackExchange.Redis;
+using System.Linq;
 
 namespace Milvasoft.Helpers.Caching
 {
@@ -8,7 +10,7 @@ namespace Milvasoft.Helpers.Caching
     public static class ServiceCollectionExtension
     {
         /// <summary>
-        /// Adds <see cref="IRedisCacheService"/> to <see cref="IServiceCollection"/> by <see cref="RedisCacheServiceOptions.Lifetime"/>.
+        /// Adds <see cref="IRedisCacheService"/> to <see cref="IServiceCollection"/> by singleton.
         /// </summary>
         /// <param name="services"></param>
         /// <param name="options"></param>
@@ -17,17 +19,14 @@ namespace Milvasoft.Helpers.Caching
         {
             services.AddSingleton(options);
 
-            switch (options.Lifetime)
-            {
-                case ServiceLifetime.Singleton:
-                    return services.AddSingleton<IRedisCacheService, RedisCacheService>();
-                case ServiceLifetime.Scoped:
-                    return services.AddScoped<IRedisCacheService, RedisCacheService>();
-                case ServiceLifetime.Transient:
-                    return services.AddTransient<IRedisCacheService, RedisCacheService>();
-            }
+            var connectionString = options.ConfigurationOptions.EndPoints.FirstOrDefault().ToString();
 
-            return services;
+            //Configure other services up here
+            var multiplexer = ConnectionMultiplexer.ConnectAsync(connectionString).Result;
+
+            services.AddSingleton<IConnectionMultiplexer>(multiplexer);
+
+            return services.AddSingleton<IRedisCacheService, RedisCacheService>();
         }
 
     }

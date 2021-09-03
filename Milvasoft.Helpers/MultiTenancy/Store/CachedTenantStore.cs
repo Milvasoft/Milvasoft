@@ -21,18 +21,6 @@ namespace Milvasoft.Helpers.MultiTenancy.Store
         public CachedTenantStore(IRedisCacheService redisCacheService)
         {
             _redisCacheService = redisCacheService;
-            Task.WaitAll(_redisCacheService.ConnectAsync());
-        }
-
-        /// <summary>
-        /// Creates new instance of <see cref="CachedTenantStore{TTenant, TKey}"/>
-        /// </summary>
-        /// <param name="redisCacheService"></param>
-        /// <param name="connectionString"></param>
-        public CachedTenantStore(IRedisCacheService redisCacheService, string connectionString)
-        {
-            _redisCacheService = redisCacheService;
-            Task.WaitAll(_redisCacheService.ConnectAsync());
         }
 
         /// <summary>

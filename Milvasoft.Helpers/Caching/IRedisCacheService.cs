@@ -3,6 +3,7 @@ using Milvasoft.Helpers.Exceptions;
 using StackExchange.Redis;
 using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Threading.Tasks;
 
 namespace Milvasoft.Helpers.Caching
@@ -24,7 +25,7 @@ namespace Milvasoft.Helpers.Caching
         /// Connects redis database if there is no connection. Otherwise this method does nothing.
         /// </summary>
         /// <returns> Returns connected status. </returns>
-        Task<bool> ConnectAsync();
+        ValueTask<bool> ConnectAsync();
 
         /// <summary>
         /// Close all connections.
@@ -32,7 +33,25 @@ namespace Milvasoft.Helpers.Caching
         /// If connection not exists, disposes client object.
         /// </summary>
         /// <returns></returns>
-        Task DisconnectAsync();
+        ValueTask DisconnectAsync();
+
+        /// <summary>
+        /// Gets redis database.
+        /// </summary>
+        /// <returns></returns>
+        IDatabase GetDatabase(int db = -1, object asyncState = null);
+
+        /// <summary>
+        /// Gets redis server.
+        /// </summary>
+        /// <returns></returns>
+        IServer GetServer(string host, int port, object asyncState = null);
+
+        /// <summary>
+        /// Gets redis server.
+        /// </summary>
+        /// <returns></returns>
+        IServer GetServer(EndPoint endpoint, object asyncState = null);
 
         /// <summary>
         /// Gets <paramref name="key"/>'s value.

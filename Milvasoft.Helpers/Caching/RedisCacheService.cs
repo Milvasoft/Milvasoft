@@ -7,28 +7,28 @@ using StackExchange.Redis;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 
 namespace Milvasoft.Helpers.Caching
 {
     /// <summary>
-    /// Provides redis cache operations.
+    /// Provides redis cache operations. Redis connection multiplexer must be singleton.
     /// </summary>
     public class RedisCacheService : IRedisCacheService
     {
-        private ConnectionMultiplexer _client;
+        private IConnectionMultiplexer _client;
         private readonly ConfigurationOptions _options;
 
         /// <summary>
         /// Initializes new instance of <see cref="RedisCacheService"/> with <paramref name="cacheServiceOptions"/>.
         /// </summary>
         /// <param name="cacheServiceOptions"></param>
-        public RedisCacheService(RedisCacheServiceOptions cacheServiceOptions)
+        /// <param name="connectionMultiplexer"></param>
+        public RedisCacheService(RedisCacheServiceOptions cacheServiceOptions, IConnectionMultiplexer connectionMultiplexer)
         {
             _options = cacheServiceOptions.ConfigurationOptions;
-
-            if (cacheServiceOptions.ConnectWhenCreatingNewInstance)
-                _client = ConnectionMultiplexer.Connect(_options);
+            _client = connectionMultiplexer;
         }
 
         /// <summary>
@@ -37,13 +37,31 @@ namespace Milvasoft.Helpers.Caching
         /// <returns></returns>
         public bool IsConnected() => _client?.IsConnected ?? false;
 
+        /// <summary>
+        /// Gets redis database.
+        /// </summary>
+        /// <returns></returns>
+        public IDatabase GetDatabase(int db = -1, object asyncState = null) => _client?.GetDatabase(db, asyncState);
+
+        /// <summary>
+        /// Gets redis server.
+        /// </summary>
+        /// <returns></returns>
+        public IServer GetServer(string host, int port, object asyncState = null) => _client?.GetServer(host, port, asyncState);
+
+        /// <summary>
+        /// Gets redis server.
+        /// </summary>
+        /// <returns></returns>
+        public IServer GetServer(EndPoint endpoint, object asyncState = null) => _client?.GetServer(endpoint, asyncState);
+
         #region Async
 
         /// <summary>
         /// Connects redis database if there is no connection. Otherwise this method does nothing.
         /// </summary>
         /// <returns> Returns connected status. </returns>
-        public async Task<bool> ConnectAsync()
+        public async ValueTask<bool> ConnectAsync()
         {
             if (!IsConnected())
                 _client = await ConnectionMultiplexer.ConnectAsync(_options).ConfigureAwait(false);
@@ -54,9 +72,10 @@ namespace Milvasoft.Helpers.Caching
         /// Close all connections.
         /// If connection exists, closes the connection.
         /// If connection not exists, disposes client object.
+        /// Do not use this method when application is running. Redis connection multiplexer must be singleton.
         /// </summary>
         /// <returns></returns>
-        public async Task DisconnectAsync()
+        public async ValueTask DisconnectAsync()
         {
             if (_client != null && IsConnected())
             {
@@ -75,10 +94,7 @@ namespace Milvasoft.Helpers.Caching
         /// <param name="key"></param>
         /// <returns></returns>
         public async Task<T> GetAsync<T>(string key) where T : class
-        {
-            await CheckClientAndConnectIfNotAsync().ConfigureAwait(false);
-            return ((string)await _client.GetDatabase().StringGetAsync(key)).ToObject<T>();
-        }
+            => ((string)await _client.GetDatabase().StringGetAsync(key).ConfigureAwait(false)).ToObject<T>();
 
         /// <summary>
         /// Gets <paramref name="key"/>'s value.
@@ -86,10 +102,7 @@ namespace Milvasoft.Helpers.Caching
         /// <param name="key"></param>
         /// <returns></returns>
         public async Task<string> GetAsync(string key)
-        {
-            await CheckClientAndConnectIfNotAsync().ConfigureAwait(false);
-            return await _client.GetDatabase().StringGetAsync(key);
-        }
+            => await _client.GetDatabase().StringGetAsync(key).ConfigureAwait(false);
 
         /// <summary>
         /// Gets <paramref name="keys"/> values.
@@ -102,7 +115,7 @@ namespace Milvasoft.Helpers.Caching
 
             var redisKeys = Array.ConvertAll(keys.ToArray(), item => (RedisKey)item);
 
-            var values = await _client.GetDatabase().StringGetAsync(redisKeys);
+            var values = await _client.GetDatabase().StringGetAsync(redisKeys).ConfigureAwait(false);
 
             if (values.IsNullOrEmpty())
                 return null;
@@ -123,7 +136,7 @@ namespace Milvasoft.Helpers.Caching
 
             var redisKeys = Array.ConvertAll(keys.ToArray(), item => (RedisKey)item);
 
-            var values = await _client.GetDatabase().StringGetAsync(redisKeys);
+            var values = await _client.GetDatabase().StringGetAsync(redisKeys).ConfigureAwait(false);
 
             if (values.IsNullOrEmpty())
                 return null;
@@ -138,10 +151,7 @@ namespace Milvasoft.Helpers.Caching
         /// <param name="value"></param>
         /// <returns></returns>
         public async Task<bool> SetAsync(string key, object value)
-        {
-            await CheckClientAndConnectIfNotAsync().ConfigureAwait(false);
-            return await _client.GetDatabase().StringSetAsync(key, value.ToJson());
-        }
+            => await _client.GetDatabase().StringSetAsync(key, value.ToJson()).ConfigureAwait(false);
 
         /// <summary>
         /// Sets <paramref name="value"/> to <paramref name="key"/> with <paramref name="expiration"/>.
@@ -151,31 +161,21 @@ namespace Milvasoft.Helpers.Caching
         /// <param name="expiration"></param>
         /// <returns></returns>
         public async Task<bool> SetAsync(string key, object value, TimeSpan? expiration)
-        {
-            await CheckClientAndConnectIfNotAsync().ConfigureAwait(false);
-            return await _client.GetDatabase().StringSetAsync(key, value.ToJson(), expiration);
-        }
+            => await _client.GetDatabase().StringSetAsync(key, value.ToJson(), expiration).ConfigureAwait(false);
 
         /// <summary>
         /// Removes <paramref name="key"/> and value.
         /// </summary>
         /// <param name="key"></param>
         public async Task<bool> RemoveAsync(string key)
-        {
-            await CheckClientAndConnectIfNotAsync().ConfigureAwait(false);
-            return await _client.GetDatabase().KeyDeleteAsync(key);
-        }
+            => await _client.GetDatabase().KeyDeleteAsync(key).ConfigureAwait(false);
 
         /// <summary>
         /// Checks if there is a <paramref name="key"/> in database. 
         /// </summary>
         /// <param name="key"></param>
         public async Task<bool> KeyExistsAsync(string key)
-        {
-            await CheckClientAndConnectIfNotAsync().ConfigureAwait(false);
-
-            return await _client.GetDatabase().KeyExistsAsync(key);
-        }
+            => await _client.GetDatabase().KeyExistsAsync(key).ConfigureAwait(false);
 
         /// <summary>
         /// Sets timeout on <paramref name="key"/>.
@@ -184,10 +184,7 @@ namespace Milvasoft.Helpers.Caching
         /// <param name="expiration"></param>
         /// <returns></returns>
         public async Task<bool> KeyExpireAsync(string key, TimeSpan expiration)
-        {
-            await CheckClientAndConnectIfNotAsync().ConfigureAwait(false);
-            return await _client.GetDatabase().KeyExpireAsync(key, expiration);
-        }
+            => await _client.GetDatabase().KeyExpireAsync(key, expiration).ConfigureAwait(false);
 
         /// <summary>
         /// Sets timeout on <paramref name="key"/>.
@@ -196,10 +193,7 @@ namespace Milvasoft.Helpers.Caching
         /// <param name="expiration"></param>
         /// <returns></returns>
         public async Task<bool> KeyExpireAsync(string key, DateTime? expiration)
-        {
-            await CheckClientAndConnectIfNotAsync().ConfigureAwait(false);
-            return await _client.GetDatabase().KeyExpireAsync(key, expiration);
-        }
+            => await _client.GetDatabase().KeyExpireAsync(key, expiration).ConfigureAwait(false);
 
         /// <summary>
         /// Flushs default database.
@@ -208,6 +202,8 @@ namespace Milvasoft.Helpers.Caching
         public async Task FlushDatabaseAsync()
         {
             _options.AllowAdmin = true;
+
+            await DisconnectAsync().ConfigureAwait(false);
 
             var client = await ConnectionMultiplexer.ConnectAsync(_options).ConfigureAwait(false);
 
@@ -219,14 +215,6 @@ namespace Milvasoft.Helpers.Caching
             catch (Exception)
             {
                 throw new MilvaUserFriendlyException("RedisError");
-            }
-            finally
-            {
-                _options.AllowAdmin = false;
-
-                await client.CloseAsync().ConfigureAwait(false);
-
-                client.Dispose();
             }
         }
 
@@ -258,10 +246,6 @@ namespace Milvasoft.Helpers.Caching
 
                 throw;
             }
-            finally
-            {
-                await DisconnectAsync().ConfigureAwait(false);
-            }
         }
 
         /// <summary>
@@ -292,13 +276,9 @@ namespace Milvasoft.Helpers.Caching
 
                 throw;
             }
-            finally
-            {
-                await DisconnectAsync().ConfigureAwait(false);
-            }
         }
 
-        private async Task CheckClientAndConnectIfNotAsync()
+        private async ValueTask CheckClientAndConnectIfNotAsync()
         {
             if (_client == null)
             {

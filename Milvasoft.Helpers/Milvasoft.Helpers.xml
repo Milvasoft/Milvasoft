@@ -466,6 +466,24 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="M:Milvasoft.Helpers.Caching.IRedisCacheService.GetDatabase(System.Int32,System.Object)">
+            <summary>
+            Gets redis database.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.Caching.IRedisCacheService.GetServer(System.String,System.Int32,System.Object)">
+            <summary>
+            Gets redis server.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.Caching.IRedisCacheService.GetServer(System.Net.EndPoint,System.Object)">
+            <summary>
+            Gets redis server.
+            </summary>
+            <returns></returns>
+        </member>
         <member name="M:Milvasoft.Helpers.Caching.IRedisCacheService.GetAsync``1(System.String)">
             <summary>
             Gets <paramref name="key"/>'s value.
@@ -634,18 +652,37 @@
         </member>
         <member name="T:Milvasoft.Helpers.Caching.RedisCacheService">
             <summary>
-            Provides redis cache operations.
+            Provides redis cache operations. Redis connection multiplexer must be singleton.
             </summary>
         </member>
-        <member name="M:Milvasoft.Helpers.Caching.RedisCacheService.#ctor(Milvasoft.Helpers.Caching.RedisCacheServiceOptions)">
+        <member name="M:Milvasoft.Helpers.Caching.RedisCacheService.#ctor(Milvasoft.Helpers.Caching.RedisCacheServiceOptions,StackExchange.Redis.IConnectionMultiplexer)">
             <summary>
             Initializes new instance of <see cref="T:Milvasoft.Helpers.Caching.RedisCacheService"/> with <paramref name="cacheServiceOptions"/>.
             </summary>
             <param name="cacheServiceOptions"></param>
+            <param name="connectionMultiplexer"></param>
         </member>
         <member name="M:Milvasoft.Helpers.Caching.RedisCacheService.IsConnected">
             <summary>
             Gets redis client connection state.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.Caching.RedisCacheService.GetDatabase(System.Int32,System.Object)">
+            <summary>
+            Gets redis database.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.Caching.RedisCacheService.GetServer(System.String,System.Int32,System.Object)">
+            <summary>
+            Gets redis server.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.Caching.RedisCacheService.GetServer(System.Net.EndPoint,System.Object)">
+            <summary>
+            Gets redis server.
             </summary>
             <returns></returns>
         </member>
@@ -660,6 +697,7 @@
             Close all connections.
             If connection exists, closes the connection.
             If connection not exists, disposes client object.
+            Do not use this method when application is running. Redis connection multiplexer must be singleton.
             </summary>
             <returns></returns>
         </member>
@@ -832,16 +870,6 @@
             The options relevant to a set of redis connections
             </summary>
         </member>
-        <member name="P:Milvasoft.Helpers.Caching.RedisCacheServiceOptions.Lifetime">
-            <summary>
-            Specifies the lifetime of a <see cref="T:Milvasoft.Helpers.Caching.IRedisCacheService"/>.
-            </summary>
-        </member>
-        <member name="P:Milvasoft.Helpers.Caching.RedisCacheServiceOptions.ConnectWhenCreatingNewInstance">
-            <summary>
-            Determines object creation option.
-            </summary>
-        </member>
         <member name="P:Milvasoft.Helpers.Caching.RedisCacheServiceOptions.ConfigurationOptions">
             <summary>
             Redis configurations.
@@ -861,7 +889,7 @@
         </member>
         <member name="M:Milvasoft.Helpers.Caching.ServiceCollectionExtension.AddMilvaRedisCaching(Microsoft.Extensions.DependencyInjection.IServiceCollection,Milvasoft.Helpers.Caching.RedisCacheServiceOptions)">
             <summary>
-            Adds <see cref="T:Milvasoft.Helpers.Caching.IRedisCacheService"/> to <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/> by <see cref="P:Milvasoft.Helpers.Caching.RedisCacheServiceOptions.Lifetime"/>.
+            Adds <see cref="T:Milvasoft.Helpers.Caching.IRedisCacheService"/> to <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/> by singleton.
             </summary>
             <param name="services"></param>
             <param name="options"></param>
@@ -9834,13 +9862,6 @@
             </summary>
             <param name="redisCacheService"></param>
         </member>
-        <member name="M:Milvasoft.Helpers.MultiTenancy.Store.CachedTenantStore`2.#ctor(Milvasoft.Helpers.Caching.IRedisCacheService,System.String)">
-            <summary>
-            Creates new instance of <see cref="T:Milvasoft.Helpers.MultiTenancy.Store.CachedTenantStore`2"/>
-            </summary>
-            <param name="redisCacheService"></param>
-            <param name="connectionString"></param>
-        </member>
         <member name="M:Milvasoft.Helpers.MultiTenancy.Store.CachedTenantStore`2.GetTenantAsync(`1)">
             <summary>
             Returns a tenant according to <paramref name="identifier"/>.
@@ -10397,35 +10418,38 @@
             <para>All methods return HTTP status code 200 OK.All methods return <see cref="T:Milvasoft.Helpers.Models.Response.BaseResponse"/> type in ActionResult. Base response can be <see cref="T:Milvasoft.Helpers.Models.Response.ObjectResponse`1" /> or <see cref="T:Milvasoft.Helpers.Models.Response.ObjectResponse`1"/></para>
             </summary>
         </member>
-        <member name="M:Milvasoft.Helpers.ResponseV2.GetPaginationResponseByEntity``1(Milvasoft.Helpers.Models.PaginationDTO{``0},Microsoft.AspNetCore.Http.HttpContext,System.Boolean,System.Boolean)">
+        <member name="M:Milvasoft.Helpers.ResponseV2.GetPaginationResponseByEntity``1(Milvasoft.Helpers.Models.PaginationDTO{``0},Microsoft.AspNetCore.Http.HttpContext,System.String,System.Boolean,System.Boolean)">
             <summary>
             Sets error message or success message with nameof(<typeparamref name="T"/>).
             If <paramref name="setDefaultSuccessMessageKey"/> is true it sets <see cref="F:Milvasoft.Helpers.Utils.LocalizerKeys.DefaultSucccessMessage"/> to success message.
             </summary>
             <param name="paginationDTO"></param>
             <param name="httpContext"></param>
+            <param name="localizerKey"></param>
             <param name="isFiltering"></param>
             <param name="setDefaultSuccessMessageKey"></param>
             <returns>  <see cref="T:Milvasoft.Helpers.Models.Response.ObjectResponse`1"/> in 200 OK <see cref="T:Microsoft.AspNetCore.Mvc.ActionResult"/> </returns>
         </member>
-        <member name="M:Milvasoft.Helpers.ResponseV2.GetObjectResponseByEntity``1(System.Collections.Generic.List{``0},Microsoft.AspNetCore.Http.HttpContext,System.Boolean,System.Boolean)">
+        <member name="M:Milvasoft.Helpers.ResponseV2.GetObjectResponseByEntity``1(System.Collections.Generic.List{``0},Microsoft.AspNetCore.Http.HttpContext,System.String,System.Boolean,System.Boolean)">
             <summary>
             Sets error message or success message with nameof(<typeparamref name="T"/>).
             If <paramref name="setDefaultSuccessMessageKey"/> is true it sets <see cref="F:Milvasoft.Helpers.Utils.LocalizerKeys.DefaultSucccessMessage"/> to success message.
             </summary>
             <param name="contentList"></param>
             <param name="httpContext"></param>
+            <param name="localizerKey"></param>
             <param name="isFiltering"></param>
             <param name="setDefaultSuccessMessageKey"></param>
             <returns> <see cref="T:Milvasoft.Helpers.Models.Response.ObjectResponse`1"/> in 200 OK <see cref="T:Microsoft.AspNetCore.Mvc.ActionResult"/> </returns>
         </member>
-        <member name="M:Milvasoft.Helpers.ResponseV2.GetObjectResponseByEntity``1(``0,Microsoft.AspNetCore.Http.HttpContext,System.Boolean)">
+        <member name="M:Milvasoft.Helpers.ResponseV2.GetObjectResponseByEntity``1(``0,Microsoft.AspNetCore.Http.HttpContext,System.String,System.Boolean)">
             <summary>
             Sets error message or success message with nameof(<typeparamref name="T"/>).
             If <paramref name="setDefaultSuccessMessageKey"/> is true it sets <see cref="F:Milvasoft.Helpers.Utils.LocalizerKeys.DefaultSucccessMessage"/> to success message.
             </summary>
             <param name="content"></param>
             <param name="httpContext"></param>
+            <param name="localizerKey"></param>
             <param name="setDefaultSuccessMessageKey"></param>
             <returns> <see cref="T:Milvasoft.Helpers.Models.Response.ObjectResponse`1"/> in 200 OK <see cref="T:Microsoft.AspNetCore.Mvc.ActionResult"/> </returns>
         </member>

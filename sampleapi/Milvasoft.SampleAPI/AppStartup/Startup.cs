@@ -57,11 +57,7 @@ namespace Milvasoft.SampleAPI.AppStartup
         {
             services.ConfigureMVC();
 
-            var cacheOptions = new RedisCacheServiceOptions("127.0.0.1:6379")
-            {
-                Lifetime = ServiceLifetime.Scoped,
-                ConnectWhenCreatingNewInstance = false
-            };
+            var cacheOptions = new RedisCacheServiceOptions("127.0.0.1:6379");
 
             cacheOptions.ConfigurationOptions.AbortOnConnectFail = false;
             cacheOptions.ConfigurationOptions.ConnectTimeout = 300;
