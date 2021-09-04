@@ -6,6 +6,7 @@ using Milvasoft.Helpers.Utils;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 
 namespace Milvasoft.Helpers.Attributes.Validation
 {
@@ -84,13 +85,15 @@ namespace Milvasoft.Helpers.Attributes.Validation
 
                 if (valueType == typeof(Guid))
                 {
-                    var guidParameter = (Guid)value;
+                    var guidIdString = (string)value;
+
+                    var isParsed = Guid.TryParse(guidIdString, out Guid guidParameter);
 
                     var regexMatchResult = guidParameter.ToString().MatchRegex("^[{]?[0-9a-fA-F]{8}"
                                                                               + "-([0-9a-fA-F]{4}-)"
                                                                               + "{3}[0-9a-fA-F]{12}[}]?$");
 
-                    if (guidParameter == default || guidParameter == Guid.Empty || !regexMatchResult)
+                    if (isParsed || guidParameter == default || guidParameter == Guid.Empty || !regexMatchResult)
                     {
                         ErrorMessage = errorMessage;
                         httpContext.Items[context.MemberName] = ErrorMessage;
@@ -134,7 +137,7 @@ namespace Milvasoft.Helpers.Attributes.Validation
                         return new ValidationResult(FormatErrorMessage(""));
                     }
                 }
-                else if (valueType.GetGenericArguments()[0] == typeof(Guid))
+                else if (valueType.GetGenericArguments()?.FirstOrDefault() == typeof(Guid))
                 {
                     var guidParameters = (List<Guid>)value;
 
@@ -160,7 +163,7 @@ namespace Milvasoft.Helpers.Attributes.Validation
                             }
                         }
                 }
-                else if (valueType.GetGenericArguments()[0] == typeof(int))
+                else if (valueType.GetGenericArguments()?.FirstOrDefault() == typeof(int))
                 {
                     var intParameters = (List<int>)value;
 

@@ -8,6 +8,7 @@ using Milvasoft.Helpers.Utils;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Milvasoft.Helpers.Attributes.ActionFilter
@@ -114,7 +115,7 @@ namespace Milvasoft.Helpers.Attributes.ActionFilter
                             if (intParameter <= 0)
                                 base.OnActionExecuting(RewriteResponseAsync(message).Result);
                         }
-                        else if (valueType.GetGenericArguments()[0] == typeof(int))
+                        else if (valueType.GetGenericArguments()?.FirstOrDefault() == typeof(int))
                         {
                             var intParameters = (List<int>)parameterValue;
 
@@ -130,7 +131,7 @@ namespace Milvasoft.Helpers.Attributes.ActionFilter
                                     base.OnActionExecuting(RewriteResponseAsync(message).Result);
                             }
                         }
-                        else if (valueType.GetGenericArguments()[0] == typeof(Guid))
+                        else if (valueType.GetGenericArguments()?.FirstOrDefault() == typeof(Guid))
                         {
                             var guidParameters = (List<Guid>)parameterValue;
 

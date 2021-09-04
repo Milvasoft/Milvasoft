@@ -23,11 +23,13 @@ namespace Milvasoft.Helpers.Caching
 
             services.AddSingleton<IConnectionMultiplexer>(multiplexer);
 
-            return services.AddSingleton<IRedisCacheService, RedisCacheService>();
+            return options.Lifetime switch
+            {
+                ServiceLifetime.Singleton => services.AddSingleton<IRedisCacheService, RedisCacheService>(),
+                ServiceLifetime.Scoped => services.AddScoped<IRedisCacheService, RedisCacheService>(),
+                ServiceLifetime.Transient => services.AddTransient<IRedisCacheService, RedisCacheService>(),
+                _ => services,
+            };
         }
-
     }
-
-
-
 }
