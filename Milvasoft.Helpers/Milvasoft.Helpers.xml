@@ -870,6 +870,11 @@
             The options relevant to a set of redis connections
             </summary>
         </member>
+        <member name="P:Milvasoft.Helpers.Caching.RedisCacheServiceOptions.Lifetime">
+            <summary>
+            Specifies the lifetime of a <see cref="T:Milvasoft.Helpers.Caching.IRedisCacheService"/>.
+            </summary>
+        </member>
         <member name="P:Milvasoft.Helpers.Caching.RedisCacheServiceOptions.ConfigurationOptions">
             <summary>
             Redis configurations.
