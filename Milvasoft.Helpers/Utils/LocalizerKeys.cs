@@ -6,92 +6,92 @@
     public static class LocalizerKeys
     {
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
-        public const string LocalizedEntityName = "LocalizedEntityName";
-        public const string Localized = "Localized";
         public const string DefaultErrorMessage = "An error occured while processing";
+        public const string LocalizedEntityName = nameof(LocalizedEntityName);
+        public const string Localized = nameof(Localized);
 
         #region Response Message Keys
 
-        public const string DefaultSucccessMessage = "SuccessfullyOperationMessage";
-        public const string ErrorMessageForAdd = "AddErrorMessage";
-        public const string ErrorMessageForUpdate = "UpdateErrorMessage";
-        public const string ErrorMessageForDelete = "DeleteErrorMessage";
-        public const string ErrorMessageForGetById = "GetByIdErrorMessage";
-        public const string ErrorMessageForGetAll = "GetAllErrorMessage";
-        public const string ErrorMessageForFiltering = "FilteringErrorMessage";
-        public const string SuccessMessageForAdd = "AddSuccessMessage";
-        public const string SuccessMessageForUpdate = "UpdateSuccessMessage";
-        public const string SuccessMessageForDelete = "DeleteSuccessMessage";
-        public const string SuccessMessageForGetById = "GetByIdSuccessMessage";
-        public const string SuccessMessageForGetAll = "GetAllSuccessMessage";
-        public const string SuccessMessageForFiltering = "FilteringSuccessMessage";
+        public const string SuccessfullyOperationMessage = nameof(SuccessfullyOperationMessage);
+        public const string AddErrorMessage = nameof(AddErrorMessage);
+        public const string UpdateErrorMessage = nameof(UpdateErrorMessage);
+        public const string DeleteErrorMessage = nameof(DeleteErrorMessage);
+        public const string GetByIdErrorMessage = nameof(GetByIdErrorMessage);
+        public const string GetAllErrorMessage = nameof(GetAllErrorMessage);
+        public const string FilteringErrorMessage = nameof(FilteringErrorMessage);
+        public const string AddSuccessMessage = nameof(AddSuccessMessage);
+        public const string UpdateSuccessMessage = nameof(UpdateSuccessMessage);
+        public const string DeleteSuccessMessage = nameof(DeleteSuccessMessage);
+        public const string GetByIdSuccessMessage = nameof(GetByIdSuccessMessage);
+        public const string GetAllSuccessMessage = nameof(GetAllSuccessMessage);
+        public const string FilteringSuccessMessage = nameof(FilteringSuccessMessage);
 
         #endregion
 
         #region Identity Message Keys
 
-        public const string IdentityDefaultError = "IdentityDefaultError";
-        public const string IdentityDuplicateUsername = "IdentityDuplicateUsername";
-        public const string IdentityDuplicateEmail = "IdentityDuplicateEmail";
-        public const string IdentityInvalidUserName = "IdentityInvalidUserName";
-        public const string IdentityInvalidEmail = "IdentityInvalidEmail";
-        public const string IdentityConcurrencyFailure = "IdentityConcurrencyFailure";
-        public const string IdentityDuplicateRoleName = "IdentityDuplicateRoleName";
-        public const string IdentityInvalidRoleName = "IdentityInvalidRoleName";
-        public const string IdentityInvalidToken = "IdentityInvalidToken";
-        public const string IdentityLoginAlreadyAssociated = "IdentityLoginAlreadyAssociated";
-        public const string IdentityPasswordMismatch = "IdentityPasswordMismatch";
-        public const string IdentityPasswordRequiresDigit = "IdentityPasswordRequiresDigit";
-        public const string IdentityPasswordRequiresLower = "IdentityPasswordRequiresLower";
-        public const string IdentityPasswordRequiresNonAlphanumeric = "IdentityPasswordRequiresNonAlphanumeric";
-        public const string IdentityPasswordRequiresUniqueChars = "IdentityPasswordRequiresUniqueChars";
-        public const string IdentityPasswordRequiresUpper = "IdentityPasswordRequiresUpper";
-        public const string IdentityPasswordTooShort = "IdentityPasswordTooShort";
-        public const string IdentityRecoveryCodeRedemptionFailed = "IdentityRecoveryCodeRedemptionFailed";
-        public const string IdentityUserAlreadyHasPassword = "IdentityUserAlreadyHasPassword";
-        public const string IdentityUserAlreadyInRole = "IdentityUserAlreadyInRole";
-        public const string IdentityUserLockoutNotEnabled = "IdentityUserLockoutNotEnabled";
-        public const string IdentityUserNotInRole = "IdentityUserNotInRole";
+        public const string IdentityDefaultError = nameof(IdentityDefaultError);
+        public const string IdentityDuplicateUsername = nameof(IdentityDuplicateUsername);
+        public const string IdentityDuplicateEmail = nameof(IdentityDuplicateEmail);
+        public const string IdentityInvalidUserName = nameof(IdentityInvalidUserName);
+        public const string IdentityInvalidEmail = nameof(IdentityInvalidEmail);
+        public const string IdentityConcurrencyFailure = nameof(IdentityConcurrencyFailure);
+        public const string IdentityDuplicateRoleName = nameof(IdentityDuplicateRoleName);
+        public const string IdentityInvalidRoleName = nameof(IdentityInvalidRoleName);
+        public const string IdentityInvalidToken = nameof(IdentityInvalidToken);
+        public const string IdentityLoginAlreadyAssociated = nameof(IdentityLoginAlreadyAssociated);
+        public const string IdentityPasswordMismatch = nameof(IdentityPasswordMismatch);
+        public const string IdentityPasswordRequiresDigit = nameof(IdentityPasswordRequiresDigit);
+        public const string IdentityPasswordRequiresLower = nameof(IdentityPasswordRequiresLower);
+        public const string IdentityPasswordRequiresNonAlphanumeric = nameof(IdentityPasswordRequiresNonAlphanumeric);
+        public const string IdentityPasswordRequiresUniqueChars = nameof(IdentityPasswordRequiresUniqueChars);
+        public const string IdentityPasswordRequiresUpper = nameof(IdentityPasswordRequiresUpper);
+        public const string IdentityPasswordTooShort = nameof(IdentityPasswordTooShort);
+        public const string IdentityRecoveryCodeRedemptionFailed = nameof(IdentityRecoveryCodeRedemptionFailed);
+        public const string IdentityUserAlreadyHasPassword = nameof(IdentityUserAlreadyHasPassword);
+        public const string IdentityUserAlreadyInRole = nameof(IdentityUserAlreadyInRole);
+        public const string IdentityUserLockoutNotEnabled = nameof(IdentityUserLockoutNotEnabled);
+        public const string IdentityUserNotInRole = nameof(IdentityUserNotInRole);
 
         #endregion
 
         #region Attributes
 
         public const string PleaseEnterAValid = "Please enter a valid";
-        public const string PreventStringInjectionLengthResultNotTrue = "PreventStringInjectionLengthResultNotTrue";
-        public const string PreventStringInjectionContainsForbiddenWordError = "PreventStringInjectionContainsForbiddenWordError";
-        public const string PreventStringInjectionBellowMin = "PreventStringInjectionBellowMin";
-        public const string PreventStringInjectionMaxLengthException = "PreventStringInjectionMaxLengthException";
-        public const string PreventStringInjectionMinLengthException = "PreventStringInjectionMinLengthException";
-        public const string PreventStringInjectionMinLengthBigThanMaxLengthException = "PreventStringInjectionMinLengthBigThanMaxLengthException";
-        public const string MinDecimalValueException = "MinDecimalValueException";
-        public const string ValidationIdPropertyError = "ValidationIdPropertyError";
-        public const string ValidationIdParameterGeneralError = "ValidationIdParameterGeneralError";
-        public const string RegexErrorMessage = "RegexErrorMessage";
-        public const string RegexExample = "RegexExample";
-        public const string RegexPattern = "RegexPattern";
-        public const string PropertyIsRequired = "PropertyIsRequired";
+        public const string PreventStringInjectionLengthResultNotTrue = nameof(PreventStringInjectionLengthResultNotTrue);
+        public const string PreventStringInjectionContainsForbiddenWordError = nameof(PreventStringInjectionContainsForbiddenWordError);
+        public const string PreventStringInjectionBellowMin = nameof(PreventStringInjectionBellowMin);
+        public const string PreventStringInjectionMaxLengthException = nameof(PreventStringInjectionMaxLengthException);
+        public const string PreventStringInjectionMinLengthException = nameof(PreventStringInjectionMinLengthException);
+        public const string PreventStringInjectionMinLengthBigThanMaxLengthException = nameof(PreventStringInjectionMinLengthBigThanMaxLengthException);
+        public const string MinDecimalValueException = nameof(MinDecimalValueException);
+        public const string ValidationIdPropertyError = nameof(ValidationIdPropertyError);
+        public const string ValidationIdParameterGeneralError = nameof(ValidationIdParameterGeneralError);
+        public const string RegexErrorMessage = nameof(RegexErrorMessage);
+        public const string RegexExample = nameof(RegexExample);
+        public const string RegexPattern = nameof(RegexPattern);
+        public const string PropertyIsRequired = nameof(PropertyIsRequired);
 
         #endregion
 
         #region Identity
 
-        public const string RequiresTwoFactor = "RequiresTwoFactor";
-        public const string NotAllowed = "NotAllowed";
-        public const string CannotFindUserWithThisToken = "CannotFindUserWithThisToken";
-        public const string IncorrectOldPassword = "IncorrectOldPassword";
-        public const string Hours = "Hours";
-        public const string Minutes = "Minutes";
-        public const string Seconds = "Seconds";
-        public const string Locked = "Locked";
-        public const string PleaseEnterEmailOrUsername = "PleaseEnterEmailOrUsername";
-        public const string InvalidUserName = "InvalidUserName";
-        public const string InvalidEmail = "InvalidEmail";
-        public const string InvalidLogin = "InvalidLogin";
-        public const string LockWarning = "LockWarning";
-        public const string UserValidationUserNameNumberStartWith = "UserValidationUserNameNumberStartWith";
-        public const string UserValidationUserNameLength = "UserValidationUserNameLength";
-        public const string UserValidationEmailLength = "UserValidationEmailLength";
+        public const string RequiresTwoFactor = nameof(RequiresTwoFactor);
+        public const string NotAllowed = nameof(NotAllowed);
+        public const string CannotFindUserWithThisToken = nameof(CannotFindUserWithThisToken);
+        public const string IncorrectOldPassword = nameof(IncorrectOldPassword);
+        public const string Hours = nameof(Hours);
+        public const string Minutes = nameof(Minutes);
+        public const string Seconds = nameof(Seconds);
+        public const string Locked = nameof(Locked);
+        public const string PleaseEnterEmailOrUsername = nameof(PleaseEnterEmailOrUsername);
+        public const string InvalidUserName = nameof(InvalidUserName);
+        public const string InvalidEmail = nameof(InvalidEmail);
+        public const string InvalidLogin = nameof(InvalidLogin);
+        public const string LockWarning = nameof(LockWarning);
+        public const string UserValidationUserNameNumberStartWith = nameof(UserValidationUserNameNumberStartWith);
+        public const string UserValidationUserNameLength = nameof(UserValidationUserNameLength);
+        public const string UserValidationEmailLength = nameof(UserValidationEmailLength);
 
         #endregion
 

@@ -21,7 +21,7 @@ namespace Milvasoft.Helpers
     {
         /// <summary>
         /// Sets error message or success message with nameof(<typeparamref name="T"/>).
-        /// If <paramref name="setDefaultSuccessMessageKey"/> is true it sets <see cref="LocalizerKeys.DefaultSucccessMessage"/> to success message.
+        /// If <paramref name="setDefaultSuccessMessageKey"/> is true it sets <see cref="LocalizerKeys.SuccessfullyOperationMessage"/> to success message.
         /// </summary>
         /// <param name="paginationDTO"></param>
         /// <param name="httpContext"></param>
@@ -29,11 +29,11 @@ namespace Milvasoft.Helpers
         /// <param name="isFiltering"></param>
         /// <param name="setDefaultSuccessMessageKey"></param>
         /// <returns>  <see cref="ObjectResponse{PaginationDTO}"/> in 200 OK <see cref="ActionResult"/> </returns>
-        public static IActionResult GetPaginationResponseByEntity<T>(this PaginationDTO<T> paginationDTO,
-                                                                     HttpContext httpContext,
-                                                                     string localizerKey,
-                                                                     bool isFiltering,
-                                                                     bool setDefaultSuccessMessageKey = true)
+        public static IActionResult GetPaginationResponseByEntities<T>(this PaginationDTO<T> paginationDTO,
+                                                                       HttpContext httpContext,
+                                                                       string localizerKey,
+                                                                       bool isFiltering,
+                                                                       bool setDefaultSuccessMessageKey = true)
         {
             var stringLocalizer = httpContext.RequestServices.GetRequiredLocalizerInstanceWithMilvaResource();
 
@@ -48,8 +48,8 @@ namespace Milvasoft.Helpers
             {
                 response.Result = paginationDTO;
                 response.Message = !setDefaultSuccessMessageKey
-                                        ? stringLocalizer.GetSuccessMessage(localizerKey, httpContext.GetCrudOperationByMethod())
-                                        : stringLocalizer[LocalizerKeys.DefaultSucccessMessage];
+                                        ? stringLocalizer.GetSuccessMessage(localizerKey, !isFiltering ? CrudOperation.GetAll : CrudOperation.Filtering)
+                                        : stringLocalizer[LocalizerKeys.SuccessfullyOperationMessage];
             }
 
             return new OkObjectResult(response);
@@ -57,7 +57,7 @@ namespace Milvasoft.Helpers
 
         /// <summary>
         /// Sets error message or success message with nameof(<typeparamref name="T"/>).
-        /// If <paramref name="setDefaultSuccessMessageKey"/> is true it sets <see cref="LocalizerKeys.DefaultSucccessMessage"/> to success message.
+        /// If <paramref name="setDefaultSuccessMessageKey"/> is true it sets <see cref="LocalizerKeys.SuccessfullyOperationMessage"/> to success message.
         /// </summary>
         /// <param name="contentList"></param>
         /// <param name="httpContext"></param>
@@ -65,11 +65,11 @@ namespace Milvasoft.Helpers
         /// <param name="isFiltering"></param>
         /// <param name="setDefaultSuccessMessageKey"></param>
         /// <returns> <see cref="ObjectResponse{T}"/> in 200 OK <see cref="ActionResult"/> </returns>
-        public static IActionResult GetObjectResponseByEntity<T>(this List<T> contentList,
-                                                                 HttpContext httpContext,
-                                                                 string localizerKey,
-                                                                 bool isFiltering,
-                                                                 bool setDefaultSuccessMessageKey = true)
+        public static IActionResult GetObjectResponseByEntities<T>(this List<T> contentList,
+                                                                   HttpContext httpContext,
+                                                                   string localizerKey,
+                                                                   bool isFiltering,
+                                                                   bool setDefaultSuccessMessageKey = true)
         {
             var stringLocalizer = httpContext.RequestServices.GetRequiredLocalizerInstanceWithMilvaResource();
 
@@ -84,8 +84,8 @@ namespace Milvasoft.Helpers
             {
                 response.Result = contentList;
                 response.Message = !setDefaultSuccessMessageKey
-                                        ? stringLocalizer.GetSuccessMessage(localizerKey, httpContext.GetCrudOperationByMethod())
-                                        : stringLocalizer[LocalizerKeys.DefaultSucccessMessage];
+                                        ? stringLocalizer.GetSuccessMessage(localizerKey, !isFiltering ? CrudOperation.GetAll : CrudOperation.Filtering)
+                                        : stringLocalizer[LocalizerKeys.SuccessfullyOperationMessage];
             }
 
             return new OkObjectResult(response);
@@ -93,7 +93,7 @@ namespace Milvasoft.Helpers
 
         /// <summary>
         /// Sets error message or success message with nameof(<typeparamref name="T"/>).
-        /// If <paramref name="setDefaultSuccessMessageKey"/> is true it sets <see cref="LocalizerKeys.DefaultSucccessMessage"/> to success message.
+        /// If <paramref name="setDefaultSuccessMessageKey"/> is true it sets <see cref="LocalizerKeys.SuccessfullyOperationMessage"/> to success message.
         /// </summary>
         /// <param name="content"></param>
         /// <param name="httpContext"></param>
@@ -119,7 +119,7 @@ namespace Milvasoft.Helpers
                 response.Result = content;
                 response.Message = !setDefaultSuccessMessageKey
                                     ? stringLocalizer.GetSuccessMessage(localizerKey, httpContext.GetCrudOperationByMethod())
-                                    : stringLocalizer[LocalizerKeys.DefaultSucccessMessage];
+                                    : stringLocalizer[LocalizerKeys.SuccessfullyOperationMessage];
             }
 
             return new OkObjectResult(response);
@@ -128,7 +128,7 @@ namespace Milvasoft.Helpers
         /// <summary>
         /// If <paramref name="idList"/> is null or empty sets error message to <see cref="LocalizerKeys.PleaseEnterAValid"/>.
         /// If operation success sets success message with nameof(<typeparamref name="T"/>).
-        /// If <paramref name="setDefaultSuccessMessageKey"/> is true it sets <see cref="LocalizerKeys.DefaultSucccessMessage"/> to success message.
+        /// If <paramref name="setDefaultSuccessMessageKey"/> is true it sets <see cref="LocalizerKeys.SuccessfullyOperationMessage"/> to success message.
         /// </summary>
         /// <param name="asyncTask"></param>
         /// <param name="httpContext"></param>
@@ -148,7 +148,7 @@ namespace Milvasoft.Helpers
 
             var itemExists = httpContext.Items.TryGetValue("ActionContent", out object key);
 
-            string typeKey = itemExists ? key.ToString() : LocalizerKeys.DefaultSucccessMessage;
+            string typeKey = itemExists ? key.ToString() : LocalizerKeys.SuccessfullyOperationMessage;
 
             if (idList.IsNullOrEmpty())
             {
@@ -164,7 +164,7 @@ namespace Milvasoft.Helpers
                                     ? string.IsNullOrEmpty(successMessageKey)
                                             ? stringLocalizer.GetSuccessMessage(typeKey, httpContext.GetCrudOperationByMethod())
                                             : stringLocalizer[successMessageKey]
-                                    : stringLocalizer[LocalizerKeys.DefaultSucccessMessage];
+                                    : stringLocalizer[LocalizerKeys.SuccessfullyOperationMessage];
             }
 
             return new OkObjectResult(response);
@@ -173,7 +173,7 @@ namespace Milvasoft.Helpers
         /// <summary>
         /// If <paramref name="idList"/> is null or empty sets error message to <see cref="LocalizerKeys.PleaseEnterAValid"/>.
         /// If operation success sets success message with nameof(<typeparamref name="T"/>).
-        /// If <paramref name="setDefaultSuccessMessageKey"/> is true it sets <see cref="LocalizerKeys.DefaultSucccessMessage"/> to success message.
+        /// If <paramref name="setDefaultSuccessMessageKey"/> is true it sets <see cref="LocalizerKeys.SuccessfullyOperationMessage"/> to success message.
         /// </summary>
         /// <param name="asyncTask"></param>
         /// <param name="httpContext"></param>
@@ -193,7 +193,7 @@ namespace Milvasoft.Helpers
 
             var itemExists = httpContext.Items.TryGetValue("ActionContent", out object key);
 
-            string typeKey = itemExists ? key.ToString() : LocalizerKeys.DefaultSucccessMessage;
+            string typeKey = itemExists ? key.ToString() : LocalizerKeys.SuccessfullyOperationMessage;
 
             if (idList.IsNullOrEmpty())
             {
@@ -209,7 +209,7 @@ namespace Milvasoft.Helpers
                                     ? string.IsNullOrEmpty(successMessageKey)
                                             ? stringLocalizer.GetSuccessMessage(typeKey, httpContext.GetCrudOperationByMethod())
                                             : stringLocalizer[successMessageKey]
-                                    : stringLocalizer[LocalizerKeys.DefaultSucccessMessage];
+                                    : stringLocalizer[LocalizerKeys.SuccessfullyOperationMessage];
             }
 
             return new OkObjectResult(response);
@@ -218,7 +218,7 @@ namespace Milvasoft.Helpers
         /// <summary>
         /// If <paramref name="idList"/> is null or empty sets error message to <see cref="LocalizerKeys.PleaseEnterAValid"/>.
         /// If operation success sets success message with nameof(<typeparamref name="T"/>).
-        /// If <paramref name="setDefaultSuccessMessageKey"/> is true it sets <see cref="LocalizerKeys.DefaultSucccessMessage"/> to success message.
+        /// If <paramref name="setDefaultSuccessMessageKey"/> is true it sets <see cref="LocalizerKeys.SuccessfullyOperationMessage"/> to success message.
         /// </summary>
         /// <param name="asyncTask"></param>
         /// <param name="httpContext"></param>
@@ -238,7 +238,7 @@ namespace Milvasoft.Helpers
 
             var itemExists = httpContext.Items.TryGetValue("ActionContent", out object key);
 
-            string typeKey = itemExists ? key.ToString() : LocalizerKeys.DefaultSucccessMessage;
+            string typeKey = itemExists ? key.ToString() : LocalizerKeys.SuccessfullyOperationMessage;
 
             if (idList.IsNullOrEmpty())
             {
@@ -255,7 +255,7 @@ namespace Milvasoft.Helpers
                                     ? string.IsNullOrEmpty(successMessageKey)
                                             ? stringLocalizer.GetSuccessMessage(typeKey, httpContext.GetCrudOperationByMethod())
                                             : stringLocalizer[successMessageKey]
-                                    : stringLocalizer[LocalizerKeys.DefaultSucccessMessage];
+                                    : stringLocalizer[LocalizerKeys.SuccessfullyOperationMessage];
             }
 
             return new OkObjectResult(response);
@@ -264,7 +264,7 @@ namespace Milvasoft.Helpers
         /// <summary>
         /// If <paramref name="idList"/> is null or empty sets error message to <see cref="LocalizerKeys.PleaseEnterAValid"/>.
         /// If operation success sets success message with nameof(<typeparamref name="T"/>).
-        /// If <paramref name="setDefaultSuccessMessageKey"/> is true it sets <see cref="LocalizerKeys.DefaultSucccessMessage"/> to success message.
+        /// If <paramref name="setDefaultSuccessMessageKey"/> is true it sets <see cref="LocalizerKeys.SuccessfullyOperationMessage"/> to success message.
         /// </summary>
         /// <param name="asyncTask"></param>
         /// <param name="httpContext"></param>
@@ -284,7 +284,7 @@ namespace Milvasoft.Helpers
 
             var itemExists = httpContext.Items.TryGetValue("ActionContent", out object key);
 
-            string typeKey = itemExists ? key.ToString() : LocalizerKeys.DefaultSucccessMessage;
+            string typeKey = itemExists ? key.ToString() : LocalizerKeys.SuccessfullyOperationMessage;
 
             if (idList.IsNullOrEmpty())
             {
@@ -301,7 +301,7 @@ namespace Milvasoft.Helpers
                                     ? string.IsNullOrEmpty(successMessageKey)
                                             ? stringLocalizer.GetSuccessMessage(typeKey, httpContext.GetCrudOperationByMethod())
                                             : stringLocalizer[successMessageKey]
-                                    : stringLocalizer[LocalizerKeys.DefaultSucccessMessage];
+                                    : stringLocalizer[LocalizerKeys.SuccessfullyOperationMessage];
             }
 
             return new OkObjectResult(response);
@@ -326,7 +326,7 @@ namespace Milvasoft.Helpers
 
             var itemExists = httpContext.Items.TryGetValue("ActionContent", out object key);
 
-            string typeKey = itemExists ? key.ToString() : LocalizerKeys.DefaultSucccessMessage;
+            string typeKey = itemExists ? key.ToString() : LocalizerKeys.SuccessfullyOperationMessage;
 
             var response = new ObjectResponse<T>
             {
@@ -334,7 +334,7 @@ namespace Milvasoft.Helpers
                                     ? string.IsNullOrEmpty(successMessageKey)
                                             ? stringLocalizer.GetSuccessMessage(typeKey, httpContext.GetCrudOperationByMethod())
                                             : stringLocalizer[successMessageKey]
-                                    : stringLocalizer[LocalizerKeys.DefaultSucccessMessage]
+                                    : stringLocalizer[LocalizerKeys.SuccessfullyOperationMessage]
             };
 
             return new OkObjectResult(response);
@@ -359,7 +359,7 @@ namespace Milvasoft.Helpers
 
             var itemExists = httpContext.Items.TryGetValue("ActionContent", out object key);
 
-            string typeKey = itemExists ? key.ToString() : LocalizerKeys.DefaultSucccessMessage;
+            string typeKey = itemExists ? key.ToString() : LocalizerKeys.SuccessfullyOperationMessage;
 
             var response = new ObjectResponse<T>
             {
@@ -368,7 +368,7 @@ namespace Milvasoft.Helpers
                                     ? string.IsNullOrEmpty(successMessageKey)
                                             ? stringLocalizer.GetSuccessMessage(typeKey, httpContext.GetCrudOperationByMethod())
                                             : stringLocalizer[successMessageKey]
-                                    : stringLocalizer[LocalizerKeys.DefaultSucccessMessage]
+                                    : stringLocalizer[LocalizerKeys.SuccessfullyOperationMessage]
             };
 
             return new OkObjectResult(response);
@@ -393,7 +393,7 @@ namespace Milvasoft.Helpers
 
             var itemExists = httpContext.Items.TryGetValue("ActionContent", out object key);
 
-            string typeKey = itemExists ? key.ToString() : LocalizerKeys.DefaultSucccessMessage;
+            string typeKey = itemExists ? key.ToString() : LocalizerKeys.SuccessfullyOperationMessage;
 
             var response = new ObjectResponse<object>
             {
@@ -402,7 +402,7 @@ namespace Milvasoft.Helpers
                                     ? string.IsNullOrEmpty(successMessageKey)
                                             ? stringLocalizer.GetSuccessMessage(typeKey, httpContext.GetCrudOperationByMethod())
                                             : stringLocalizer[successMessageKey]
-                                    : stringLocalizer[LocalizerKeys.DefaultSucccessMessage]
+                                    : stringLocalizer[LocalizerKeys.SuccessfullyOperationMessage]
             };
 
             return new OkObjectResult(response);
@@ -427,7 +427,7 @@ namespace Milvasoft.Helpers
 
             var itemExists = httpContext.Items.TryGetValue("ActionContent", out object key);
 
-            string typeKey = itemExists ? key.ToString() : LocalizerKeys.DefaultSucccessMessage;
+            string typeKey = itemExists ? key.ToString() : LocalizerKeys.SuccessfullyOperationMessage;
 
             var response = new ObjectResponse<Guid>
             {
@@ -436,7 +436,7 @@ namespace Milvasoft.Helpers
                                     ? string.IsNullOrEmpty(successMessageKey)
                                             ? stringLocalizer.GetSuccessMessage(typeKey, httpContext.GetCrudOperationByMethod())
                                             : stringLocalizer[successMessageKey]
-                                    : stringLocalizer[LocalizerKeys.DefaultSucccessMessage]
+                                    : stringLocalizer[LocalizerKeys.SuccessfullyOperationMessage]
             };
 
             return new OkObjectResult(response);
@@ -461,7 +461,7 @@ namespace Milvasoft.Helpers
 
             var itemExists = httpContext.Items.TryGetValue("ActionContent", out object key);
 
-            string typeKey = itemExists ? key.ToString() : LocalizerKeys.DefaultSucccessMessage;
+            string typeKey = itemExists ? key.ToString() : LocalizerKeys.SuccessfullyOperationMessage;
 
             var response = new ObjectResponse<int>
             {
@@ -470,7 +470,7 @@ namespace Milvasoft.Helpers
                                     ? string.IsNullOrEmpty(successMessageKey)
                                             ? stringLocalizer.GetSuccessMessage(typeKey, httpContext.GetCrudOperationByMethod())
                                             : stringLocalizer[successMessageKey]
-                                    : stringLocalizer[LocalizerKeys.DefaultSucccessMessage]
+                                    : stringLocalizer[LocalizerKeys.SuccessfullyOperationMessage]
             };
 
             return new OkObjectResult(response);
@@ -495,7 +495,7 @@ namespace Milvasoft.Helpers
 
             var itemExists = httpContext.Items.TryGetValue("ActionContent", out object key);
 
-            string typeKey = itemExists ? key.ToString() : LocalizerKeys.DefaultSucccessMessage;
+            string typeKey = itemExists ? key.ToString() : LocalizerKeys.SuccessfullyOperationMessage;
 
             var response = new ObjectResponse<sbyte>
             {
@@ -504,7 +504,7 @@ namespace Milvasoft.Helpers
                                     ? string.IsNullOrEmpty(successMessageKey)
                                             ? stringLocalizer.GetSuccessMessage(typeKey, httpContext.GetCrudOperationByMethod())
                                             : stringLocalizer[successMessageKey]
-                                    : stringLocalizer[LocalizerKeys.DefaultSucccessMessage]
+                                    : stringLocalizer[LocalizerKeys.SuccessfullyOperationMessage]
             };
 
             return new OkObjectResult(response);
@@ -529,7 +529,7 @@ namespace Milvasoft.Helpers
 
             var itemExists = httpContext.Items.TryGetValue("ActionContent", out object key);
 
-            string typeKey = itemExists ? key.ToString() : LocalizerKeys.DefaultSucccessMessage;
+            string typeKey = itemExists ? key.ToString() : LocalizerKeys.SuccessfullyOperationMessage;
 
             var response = new ObjectResponse<T>
             {
@@ -537,7 +537,7 @@ namespace Milvasoft.Helpers
                                     ? string.IsNullOrEmpty(successMessageKey)
                                             ? stringLocalizer.GetSuccessMessage(typeKey, httpContext.GetCrudOperationByMethod())
                                             : stringLocalizer[successMessageKey]
-                                    : stringLocalizer[LocalizerKeys.DefaultSucccessMessage]
+                                    : stringLocalizer[LocalizerKeys.SuccessfullyOperationMessage]
             };
 
             return new OkObjectResult(response);
@@ -562,7 +562,7 @@ namespace Milvasoft.Helpers
 
             var itemExists = httpContext.Items.TryGetValue("ActionContent", out object key);
 
-            string typeKey = itemExists ? key.ToString() : LocalizerKeys.DefaultSucccessMessage;
+            string typeKey = itemExists ? key.ToString() : LocalizerKeys.SuccessfullyOperationMessage;
 
             var response = new ObjectResponse<T>
             {
@@ -571,7 +571,7 @@ namespace Milvasoft.Helpers
                                     ? string.IsNullOrEmpty(successMessageKey)
                                             ? stringLocalizer.GetSuccessMessage(typeKey, httpContext.GetCrudOperationByMethod())
                                             : stringLocalizer[successMessageKey]
-                                    : stringLocalizer[LocalizerKeys.DefaultSucccessMessage]
+                                    : stringLocalizer[LocalizerKeys.SuccessfullyOperationMessage]
             };
 
             return new OkObjectResult(response);
@@ -596,7 +596,7 @@ namespace Milvasoft.Helpers
 
             var itemExists = httpContext.Items.TryGetValue("ActionContent", out object key);
 
-            string typeKey = itemExists ? key.ToString() : LocalizerKeys.DefaultSucccessMessage;
+            string typeKey = itemExists ? key.ToString() : LocalizerKeys.SuccessfullyOperationMessage;
 
             var response = new ObjectResponse<object>
             {
@@ -605,7 +605,7 @@ namespace Milvasoft.Helpers
                                     ? string.IsNullOrEmpty(successMessageKey)
                                             ? stringLocalizer.GetSuccessMessage(typeKey, httpContext.GetCrudOperationByMethod())
                                             : stringLocalizer[successMessageKey]
-                                    : stringLocalizer[LocalizerKeys.DefaultSucccessMessage]
+                                    : stringLocalizer[LocalizerKeys.SuccessfullyOperationMessage]
             };
 
             return new OkObjectResult(response);
@@ -630,7 +630,7 @@ namespace Milvasoft.Helpers
 
             var itemExists = httpContext.Items.TryGetValue("ActionContent", out object key);
 
-            string typeKey = itemExists ? key.ToString() : LocalizerKeys.DefaultSucccessMessage;
+            string typeKey = itemExists ? key.ToString() : LocalizerKeys.SuccessfullyOperationMessage;
 
             var response = new ObjectResponse<Guid>
             {
@@ -639,7 +639,7 @@ namespace Milvasoft.Helpers
                                     ? string.IsNullOrEmpty(successMessageKey)
                                             ? stringLocalizer.GetSuccessMessage(typeKey, httpContext.GetCrudOperationByMethod())
                                             : stringLocalizer[successMessageKey]
-                                    : stringLocalizer[LocalizerKeys.DefaultSucccessMessage]
+                                    : stringLocalizer[LocalizerKeys.SuccessfullyOperationMessage]
             };
 
             return new OkObjectResult(response);
@@ -664,7 +664,7 @@ namespace Milvasoft.Helpers
 
             var itemExists = httpContext.Items.TryGetValue("ActionContent", out object key);
 
-            string typeKey = itemExists ? key.ToString() : LocalizerKeys.DefaultSucccessMessage;
+            string typeKey = itemExists ? key.ToString() : LocalizerKeys.SuccessfullyOperationMessage;
 
             var response = new ObjectResponse<int>
             {
@@ -673,7 +673,7 @@ namespace Milvasoft.Helpers
                                     ? string.IsNullOrEmpty(successMessageKey)
                                             ? stringLocalizer.GetSuccessMessage(typeKey, httpContext.GetCrudOperationByMethod())
                                             : stringLocalizer[successMessageKey]
-                                    : stringLocalizer[LocalizerKeys.DefaultSucccessMessage]
+                                    : stringLocalizer[LocalizerKeys.SuccessfullyOperationMessage]
             };
 
             return new OkObjectResult(response);
@@ -698,7 +698,7 @@ namespace Milvasoft.Helpers
 
             var itemExists = httpContext.Items.TryGetValue("ActionContent", out object key);
 
-            string typeKey = itemExists ? key.ToString() : LocalizerKeys.DefaultSucccessMessage;
+            string typeKey = itemExists ? key.ToString() : LocalizerKeys.SuccessfullyOperationMessage;
 
             var response = new ObjectResponse<sbyte>
             {
@@ -707,7 +707,7 @@ namespace Milvasoft.Helpers
                                     ? string.IsNullOrEmpty(successMessageKey)
                                             ? stringLocalizer.GetSuccessMessage(typeKey, httpContext.GetCrudOperationByMethod())
                                             : stringLocalizer[successMessageKey]
-                                    : stringLocalizer[LocalizerKeys.DefaultSucccessMessage]
+                                    : stringLocalizer[LocalizerKeys.SuccessfullyOperationMessage]
             };
 
             return new OkObjectResult(response);

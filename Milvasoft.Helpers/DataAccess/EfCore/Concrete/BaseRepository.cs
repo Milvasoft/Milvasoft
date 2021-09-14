@@ -55,8 +55,8 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
 
         #region Private Properties
 
-        private static bool _resetSoftDeleteState = true;
-        private static bool _softDeleteState = false;
+        private static bool _resetGetSoftDeletedEntitiesState = true;
+        private static bool _getSoftDeletedEntities = false;
 
         #endregion
 
@@ -89,13 +89,13 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
         /// <para><b>Default is false.</b></para>
         /// </summary>
         /// <param name="state"></param>
-        public void SoftDeleteState(bool state) => _softDeleteState = state;
+        public void GetSoftDeletedEntitiesInNextProcess(bool state) => _getSoftDeletedEntities = state;
 
         /// <summary>
         /// Determines whether the default value of the variable that determines the status of deleted data in the database is assigned to the default value after database operation.
         /// </summary>
         /// <param name="state"></param>
-        public void ResetSoftDeleteState(bool state) => _resetSoftDeleteState = state;
+        public void ResetSoftDeleteState(bool state) => _resetGetSoftDeletedEntitiesState = state;
 
         /// <summary>
         /// Gets <b>entity => entity.IsDeleted == false</b> expression, if <typeparamref name="TEntity"/> is assignable from <see cref="FullAuditableEntity{TKey}"/>.
@@ -1448,8 +1448,8 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
         }
 
         /// <summary>
-        /// If <see cref="_softDeleteState"/> is false,  appends is deleted false expression to <paramref name="conditionExpression"/>.
-        /// Else does nothing to <paramref name="conditionExpression"/> but if <see cref="_resetSoftDeleteState"/> is true then sets <see cref="_softDeleteState"/> false.
+        /// If <see cref="_getSoftDeletedEntities"/> is false,  appends is deleted false expression to <paramref name="conditionExpression"/>.
+        /// Else does nothing to <paramref name="conditionExpression"/> but if <see cref="_resetGetSoftDeletedEntitiesState"/> is true then sets <see cref="_getSoftDeletedEntities"/> false.
         /// </summary>
         /// <param name="conditionExpression"></param>
         /// <returns></returns>
@@ -1458,7 +1458,7 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
             Expression<Func<TEntity, bool>> mainExpression;
 
             //Step in when _softDeleteState is false
-            if (!_softDeleteState)
+            if (!_getSoftDeletedEntities)
             {
                 var softDeleteExpression = CreateIsDeletedFalseExpression();
                 mainExpression = softDeleteExpression.Append(conditionExpression, ExpressionType.AndAlso);
@@ -1466,7 +1466,9 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
             else
             {
                 mainExpression = conditionExpression;
-                if (_resetSoftDeleteState) _softDeleteState = false;
+
+                if (_resetGetSoftDeletedEntitiesState)
+                    _getSoftDeletedEntities = false;
             }
             return mainExpression;
         }

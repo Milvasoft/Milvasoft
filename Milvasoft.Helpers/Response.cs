@@ -559,27 +559,27 @@ namespace Milvasoft.Helpers
             {
                 case CrudOperation.Add:
                     localizedEntityName = localizer[LocalizerKeys.LocalizedEntityName + keyContent].ToString().ToLowerInVariantFirst();
-                    return localizer[LocalizerKeys.ErrorMessageForAdd, localizedEntityName];
+                    return localizer[LocalizerKeys.AddErrorMessage, localizedEntityName];
 
                 case CrudOperation.Update:
                     localizedEntityName = localizer[LocalizerKeys.LocalizedEntityName + keyContent].ToString().ToLowerInVariantFirst();
-                    return localizer[LocalizerKeys.ErrorMessageForUpdate, localizedEntityName];
+                    return localizer[LocalizerKeys.UpdateErrorMessage, localizedEntityName];
 
                 case CrudOperation.Delete:
                     localizedEntityName = localizer[LocalizerKeys.LocalizedEntityName + keyContent].ToString().ToLowerInVariantFirst();
-                    return localizer[LocalizerKeys.ErrorMessageForDelete, localizedEntityName];
+                    return localizer[LocalizerKeys.DeleteErrorMessage, localizedEntityName];
 
                 case CrudOperation.GetById:
                     localizedEntityName = localizer[LocalizerKeys.LocalizedEntityName + keyContent].ToString().ToUpperInVariantFirst();
-                    return localizer[LocalizerKeys.ErrorMessageForGetById, localizedEntityName];
+                    return localizer[LocalizerKeys.GetByIdErrorMessage, localizedEntityName];
 
                 case CrudOperation.GetAll:
                     localizedEntityName = localizer[LocalizerKeys.LocalizedEntityName + keyContent].ToString().ToLowerInvariant();
-                    return localizer[LocalizerKeys.ErrorMessageForGetAll, localizedEntityName];
+                    return localizer[LocalizerKeys.GetAllErrorMessage, localizedEntityName];
 
                 case CrudOperation.Filtering:
                     localizedEntityName = localizer[LocalizerKeys.LocalizedEntityName + keyContent].ToString().ToLowerInvariant();
-                    return localizer[LocalizerKeys.ErrorMessageForFiltering, localizedEntityName];
+                    return localizer[LocalizerKeys.FilteringErrorMessage, localizedEntityName];
 
                 case CrudOperation.Specific:
                     return localizer[keyContent].ToString();
@@ -611,27 +611,27 @@ namespace Milvasoft.Helpers
             {
                 case CrudOperation.Add:
                     localizedEntityName = localizer[LocalizerKeys.LocalizedEntityName + keyContent].ToString().ToUpperInVariantFirst();
-                    return localizer[LocalizerKeys.SuccessMessageForAdd, localizedEntityName];
+                    return localizer[LocalizerKeys.AddSuccessMessage, localizedEntityName];
 
                 case CrudOperation.Update:
                     localizedEntityName = localizer[LocalizerKeys.LocalizedEntityName + keyContent].ToString().ToUpperInVariantFirst();
-                    return localizer[LocalizerKeys.SuccessMessageForUpdate, localizedEntityName];
+                    return localizer[LocalizerKeys.UpdateSuccessMessage, localizedEntityName];
 
                 case CrudOperation.Delete:
                     localizedEntityName = localizer[LocalizerKeys.LocalizedEntityName + keyContent].ToString().ToUpperInVariantFirst();
-                    return localizer[LocalizerKeys.SuccessMessageForDelete, localizedEntityName];
+                    return localizer[LocalizerKeys.DeleteSuccessMessage, localizedEntityName];
 
                 case CrudOperation.GetById:
                     localizedEntityName = localizer[LocalizerKeys.LocalizedEntityName + keyContent].ToString();
-                    return localizer[LocalizerKeys.SuccessMessageForGetById, localizedEntityName, recordCount];
+                    return localizer[LocalizerKeys.GetByIdSuccessMessage, localizedEntityName, recordCount];
 
                 case CrudOperation.GetAll:
                     localizedEntityName = localizer[LocalizerKeys.LocalizedEntityName + keyContent].ToString();
-                    return localizer[LocalizerKeys.SuccessMessageForGetAll, localizedEntityName, recordCount.GetValueOrDefault()];
+                    return localizer[LocalizerKeys.GetAllSuccessMessage, localizedEntityName, recordCount.GetValueOrDefault()];
 
                 case CrudOperation.Filtering:
                     localizedEntityName = localizer[LocalizerKeys.LocalizedEntityName + keyContent].ToString();
-                    return localizer[LocalizerKeys.SuccessMessageForFiltering, localizedEntityName, recordCount];
+                    return localizer[LocalizerKeys.FilteringSuccessMessage, localizedEntityName, recordCount];
 
                 case CrudOperation.Specific:
                     return localizer[keyContent].ToString();

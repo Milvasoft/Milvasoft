@@ -26,7 +26,7 @@ namespace Milvasoft.Helpers.DataAccess.Abstract
         /// <para><b>Default is false.</b></para>
         /// </summary>
         /// <param name="state"></param>
-        void SoftDeleteState(bool state);
+        void GetSoftDeletedEntitiesInNextProcess(bool state);
 
         /// <summary>
         /// Determines whether the default value of the variable that determines the status of deleted data in the database is assigned to the default value after database operation.

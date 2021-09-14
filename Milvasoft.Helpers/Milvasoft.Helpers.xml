@@ -1413,7 +1413,7 @@
             <typeparam name="TKey"></typeparam>
             <typeparam name="TContext"></typeparam>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.SoftDeleteState(System.Boolean)">
+        <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.GetSoftDeletedEntitiesInNextProcess(System.Boolean)">
             <summary>
             Determines whether soft deleted entities in the database are fetched from the database.
             <para><b>Default is false.</b></para>
@@ -2190,7 +2190,7 @@
             </summary>
             <param name="state"></param>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.SoftDeleteState(System.Boolean)">
+        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.GetSoftDeletedEntitiesInNextProcess(System.Boolean)">
             <summary>
             Determines whether soft deleted entities in the database are fetched from the database.
             <para><b>Default is false.</b></para>
@@ -2856,8 +2856,8 @@
         </member>
         <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.CreateConditionExpression(System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
             <summary>
-            If <see cref="F:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3._softDeleteState"/> is false,  appends is deleted false expression to <paramref name="conditionExpression"/>.
-            Else does nothing to <paramref name="conditionExpression"/> but if <see cref="F:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3._resetSoftDeleteState"/> is true then sets <see cref="F:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3._softDeleteState"/> false.
+            If <see cref="F:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3._getSoftDeletedEntities"/> is false,  appends is deleted false expression to <paramref name="conditionExpression"/>.
+            Else does nothing to <paramref name="conditionExpression"/> but if <see cref="F:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3._resetGetSoftDeletedEntitiesState"/> is true then sets <see cref="F:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3._getSoftDeletedEntities"/> false.
             </summary>
             <param name="conditionExpression"></param>
             <returns></returns>
@@ -10423,10 +10423,10 @@
             <para>All methods return HTTP status code 200 OK.All methods return <see cref="T:Milvasoft.Helpers.Models.Response.BaseResponse"/> type in ActionResult. Base response can be <see cref="T:Milvasoft.Helpers.Models.Response.ObjectResponse`1" /> or <see cref="T:Milvasoft.Helpers.Models.Response.ObjectResponse`1"/></para>
             </summary>
         </member>
-        <member name="M:Milvasoft.Helpers.ResponseV2.GetPaginationResponseByEntity``1(Milvasoft.Helpers.Models.PaginationDTO{``0},Microsoft.AspNetCore.Http.HttpContext,System.String,System.Boolean,System.Boolean)">
+        <member name="M:Milvasoft.Helpers.ResponseV2.GetPaginationResponseByEntities``1(Milvasoft.Helpers.Models.PaginationDTO{``0},Microsoft.AspNetCore.Http.HttpContext,System.String,System.Boolean,System.Boolean)">
             <summary>
             Sets error message or success message with nameof(<typeparamref name="T"/>).
-            If <paramref name="setDefaultSuccessMessageKey"/> is true it sets <see cref="F:Milvasoft.Helpers.Utils.LocalizerKeys.DefaultSucccessMessage"/> to success message.
+            If <paramref name="setDefaultSuccessMessageKey"/> is true it sets <see cref="F:Milvasoft.Helpers.Utils.LocalizerKeys.SuccessfullyOperationMessage"/> to success message.
             </summary>
             <param name="paginationDTO"></param>
             <param name="httpContext"></param>
@@ -10435,10 +10435,10 @@
             <param name="setDefaultSuccessMessageKey"></param>
             <returns>  <see cref="T:Milvasoft.Helpers.Models.Response.ObjectResponse`1"/> in 200 OK <see cref="T:Microsoft.AspNetCore.Mvc.ActionResult"/> </returns>
         </member>
-        <member name="M:Milvasoft.Helpers.ResponseV2.GetObjectResponseByEntity``1(System.Collections.Generic.List{``0},Microsoft.AspNetCore.Http.HttpContext,System.String,System.Boolean,System.Boolean)">
+        <member name="M:Milvasoft.Helpers.ResponseV2.GetObjectResponseByEntities``1(System.Collections.Generic.List{``0},Microsoft.AspNetCore.Http.HttpContext,System.String,System.Boolean,System.Boolean)">
             <summary>
             Sets error message or success message with nameof(<typeparamref name="T"/>).
-            If <paramref name="setDefaultSuccessMessageKey"/> is true it sets <see cref="F:Milvasoft.Helpers.Utils.LocalizerKeys.DefaultSucccessMessage"/> to success message.
+            If <paramref name="setDefaultSuccessMessageKey"/> is true it sets <see cref="F:Milvasoft.Helpers.Utils.LocalizerKeys.SuccessfullyOperationMessage"/> to success message.
             </summary>
             <param name="contentList"></param>
             <param name="httpContext"></param>
@@ -10450,7 +10450,7 @@
         <member name="M:Milvasoft.Helpers.ResponseV2.GetObjectResponseByEntity``1(``0,Microsoft.AspNetCore.Http.HttpContext,System.String,System.Boolean)">
             <summary>
             Sets error message or success message with nameof(<typeparamref name="T"/>).
-            If <paramref name="setDefaultSuccessMessageKey"/> is true it sets <see cref="F:Milvasoft.Helpers.Utils.LocalizerKeys.DefaultSucccessMessage"/> to success message.
+            If <paramref name="setDefaultSuccessMessageKey"/> is true it sets <see cref="F:Milvasoft.Helpers.Utils.LocalizerKeys.SuccessfullyOperationMessage"/> to success message.
             </summary>
             <param name="content"></param>
             <param name="httpContext"></param>
@@ -10462,7 +10462,7 @@
             <summary>
             If <paramref name="idList"/> is null or empty sets error message to <see cref="F:Milvasoft.Helpers.Utils.LocalizerKeys.PleaseEnterAValid"/>.
             If operation success sets success message with nameof(<typeparamref name="T"/>).
-            If <paramref name="setDefaultSuccessMessageKey"/> is true it sets <see cref="F:Milvasoft.Helpers.Utils.LocalizerKeys.DefaultSucccessMessage"/> to success message.
+            If <paramref name="setDefaultSuccessMessageKey"/> is true it sets <see cref="F:Milvasoft.Helpers.Utils.LocalizerKeys.SuccessfullyOperationMessage"/> to success message.
             </summary>
             <param name="asyncTask"></param>
             <param name="httpContext"></param>
@@ -10475,7 +10475,7 @@
             <summary>
             If <paramref name="idList"/> is null or empty sets error message to <see cref="F:Milvasoft.Helpers.Utils.LocalizerKeys.PleaseEnterAValid"/>.
             If operation success sets success message with nameof(<typeparamref name="T"/>).
-            If <paramref name="setDefaultSuccessMessageKey"/> is true it sets <see cref="F:Milvasoft.Helpers.Utils.LocalizerKeys.DefaultSucccessMessage"/> to success message.
+            If <paramref name="setDefaultSuccessMessageKey"/> is true it sets <see cref="F:Milvasoft.Helpers.Utils.LocalizerKeys.SuccessfullyOperationMessage"/> to success message.
             </summary>
             <param name="asyncTask"></param>
             <param name="httpContext"></param>
@@ -10488,7 +10488,7 @@
             <summary>
             If <paramref name="idList"/> is null or empty sets error message to <see cref="F:Milvasoft.Helpers.Utils.LocalizerKeys.PleaseEnterAValid"/>.
             If operation success sets success message with nameof(<typeparamref name="T"/>).
-            If <paramref name="setDefaultSuccessMessageKey"/> is true it sets <see cref="F:Milvasoft.Helpers.Utils.LocalizerKeys.DefaultSucccessMessage"/> to success message.
+            If <paramref name="setDefaultSuccessMessageKey"/> is true it sets <see cref="F:Milvasoft.Helpers.Utils.LocalizerKeys.SuccessfullyOperationMessage"/> to success message.
             </summary>
             <param name="asyncTask"></param>
             <param name="httpContext"></param>
@@ -10501,7 +10501,7 @@
             <summary>
             If <paramref name="idList"/> is null or empty sets error message to <see cref="F:Milvasoft.Helpers.Utils.LocalizerKeys.PleaseEnterAValid"/>.
             If operation success sets success message with nameof(<typeparamref name="T"/>).
-            If <paramref name="setDefaultSuccessMessageKey"/> is true it sets <see cref="F:Milvasoft.Helpers.Utils.LocalizerKeys.DefaultSucccessMessage"/> to success message.
+            If <paramref name="setDefaultSuccessMessageKey"/> is true it sets <see cref="F:Milvasoft.Helpers.Utils.LocalizerKeys.SuccessfullyOperationMessage"/> to success message.
             </summary>
             <param name="asyncTask"></param>
             <param name="httpContext"></param>
