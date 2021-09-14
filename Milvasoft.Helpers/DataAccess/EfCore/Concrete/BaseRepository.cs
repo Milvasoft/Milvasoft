@@ -49,7 +49,11 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
         /// DbContext object.
         /// </summary>
         protected readonly TContext _dbContext;
-        private readonly DbSet<TEntity> _dbSet;
+
+        /// <summary>
+        /// DebSet object.
+        /// </summary>
+        protected readonly DbSet<TEntity> _dbSet;
 
         #endregion
 
