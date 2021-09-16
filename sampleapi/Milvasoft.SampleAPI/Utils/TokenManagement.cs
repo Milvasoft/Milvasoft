@@ -1,5 +1,4 @@
 ﻿using Milvasoft.Helpers.Identity.Abstract;
-using Milvasoft.Helpers.Identity.Concrete;
 using Milvasoft.SampleAPI.Utils.Attributes.ValidationAttributes;
 
 namespace Milvasoft.SampleAPI.Utils
