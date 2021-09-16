@@ -107,7 +107,7 @@ namespace Milvasoft.Helpers
                 Content = new StringContent(json, encoding, "application/json-" + httpMethod.ToString() + $"+{mediaType}"),
                 RequestUri = new Uri(url),
                 Method = httpMethod,
-                Version = version != null ? version : new Version(1, 0)
+                Version = version ?? new Version(1, 0)
             };
 
             if (headers != null && headers.Length > 0)

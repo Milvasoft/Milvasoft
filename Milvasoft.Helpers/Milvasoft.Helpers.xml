@@ -2170,6 +2170,11 @@
             DbContext object.
             </summary>
         </member>
+        <member name="F:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3._dbSet">
+            <summary>
+            DebSet object.
+            </summary>
+        </member>
         <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.#ctor(`2)">
             <summary>
             Constructor of BaseRepository for <paramref name="dbContext"/> injection.
@@ -7788,6 +7793,46 @@
             Password of user.
             </summary>
         </member>
+        <member name="T:Milvasoft.Helpers.Identity.Abstract.ITokenManagement">
+            <summary>
+            Token management DTO for DI.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.Identity.Abstract.ITokenManagement.Secret">
+            <summary>
+            Gets or sets Secret key of token.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.Identity.Abstract.ITokenManagement.Issuer">
+            <summary>
+            Gets or sets Authorization issuer.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.Identity.Abstract.ITokenManagement.Audience">
+            <summary>
+            Gets or sets Authorization audience.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.Identity.Abstract.ITokenManagement.LoginProvider">
+            <summary>
+            Gets or sets Authorization issuer.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.Identity.Abstract.ITokenManagement.TokenName">
+            <summary>
+            Gets or sets Authorization audience.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.Identity.Abstract.ITokenManagement.AccessExpiration">
+            <summary>
+            Gets or sets AccessExpiration of token.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.Identity.Abstract.ITokenManagement.RefreshExpiration">
+            <summary>
+            Gets or sets RefreshExpiration of token.
+            </summary>
+        </member>
         <member name="T:Milvasoft.Helpers.Identity.Concrete.ILoginResultDTO`1">
             <summary>
             Login result DTO for DI.
@@ -7821,46 +7866,6 @@
         <member name="P:Milvasoft.Helpers.Identity.Concrete.IToken.RefreshToken">
             <summary>
             Refresh token.
-            </summary>
-        </member>
-        <member name="T:Milvasoft.Helpers.Identity.Concrete.ITokenManagement">
-            <summary>
-            Token management DTO for DI.
-            </summary>
-        </member>
-        <member name="P:Milvasoft.Helpers.Identity.Concrete.ITokenManagement.Secret">
-            <summary>
-            Gets or sets Secret key of token.
-            </summary>
-        </member>
-        <member name="P:Milvasoft.Helpers.Identity.Concrete.ITokenManagement.Issuer">
-            <summary>
-            Gets or sets Authorization issuer.
-            </summary>
-        </member>
-        <member name="P:Milvasoft.Helpers.Identity.Concrete.ITokenManagement.Audience">
-            <summary>
-            Gets or sets Authorization audience.
-            </summary>
-        </member>
-        <member name="P:Milvasoft.Helpers.Identity.Concrete.ITokenManagement.LoginProvider">
-            <summary>
-            Gets or sets Authorization issuer.
-            </summary>
-        </member>
-        <member name="P:Milvasoft.Helpers.Identity.Concrete.ITokenManagement.TokenName">
-            <summary>
-            Gets or sets Authorization audience.
-            </summary>
-        </member>
-        <member name="P:Milvasoft.Helpers.Identity.Concrete.ITokenManagement.AccessExpiration">
-            <summary>
-            Gets or sets AccessExpiration of token.
-            </summary>
-        </member>
-        <member name="P:Milvasoft.Helpers.Identity.Concrete.ITokenManagement.RefreshExpiration">
-            <summary>
-            Gets or sets RefreshExpiration of token.
             </summary>
         </member>
         <member name="T:Milvasoft.Helpers.Identity.Concrete.IdentityHelpers">
@@ -7966,7 +7971,7 @@
             The name of token.
             </summary>
         </member>
-        <member name="M:Milvasoft.Helpers.Identity.Concrete.IdentityOperations`7.#ctor(`0,Microsoft.AspNetCore.Identity.SignInManager{`3},Milvasoft.Helpers.Identity.Concrete.ITokenManagement,Milvasoft.Helpers.DataAccess.Abstract.IContextRepository{`1},`2,Microsoft.AspNetCore.Http.IHttpContextAccessor,System.Boolean)">
+        <member name="M:Milvasoft.Helpers.Identity.Concrete.IdentityOperations`7.#ctor(`0,Microsoft.AspNetCore.Identity.SignInManager{`3},Milvasoft.Helpers.Identity.Abstract.ITokenManagement,Milvasoft.Helpers.DataAccess.Abstract.IContextRepository{`1},`2,Microsoft.AspNetCore.Http.IHttpContextAccessor,System.Boolean)">
             <summary>
             Performs constructor injection for repository interfaces used in this service.
             </summary>

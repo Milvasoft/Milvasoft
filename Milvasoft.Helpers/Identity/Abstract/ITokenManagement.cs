@@ -1,4 +1,4 @@
-﻿namespace Milvasoft.Helpers.Identity.Concrete
+﻿namespace Milvasoft.Helpers.Identity.Abstract
 {
     /// <summary>
     /// Token management DTO for DI.
