@@ -34,7 +34,6 @@ namespace Milvasoft.Helpers.DataAccess.Abstract
         /// <param name="state"></param>
         void ResetSoftDeleteState(bool state);
 
-
         /// <summary>
         /// Gets <b>entity => entity.IsDeleted == false</b> expression, if <typeparamref name="TEntity"/> is assignable from <see cref="FullAuditableEntity{TKey}"/>.
         /// </summary>
@@ -114,6 +113,33 @@ namespace Milvasoft.Helpers.DataAccess.Abstract
                                                Expression<Func<TEntity, bool>> conditionExpression = null,
                                                Expression<Func<TEntity, TEntity>> projectionExpression = null,
                                                bool tracking = false);
+        /// <summary>
+        ///  Returns all entities which IsDeleted condition is true from database asynchronously. If the condition is requested, it also provides that condition.
+        /// </summary>
+        /// <param name="count"></param>
+        /// <param name="projectionExpression"></param>
+        /// <param name="tracking"></param>
+        /// <param name="conditionExpression"></param>
+        /// <returns></returns>
+        Task<IEnumerable<TEntity>> GetSomeAsync(int count,
+                                                Expression<Func<TEntity, bool>> conditionExpression = null,
+                                                Expression<Func<TEntity, TEntity>> projectionExpression = null,
+                                                bool tracking = false);
+
+        /// <summary>
+        ///  Returns all entities which IsDeleted condition is true with specified includes from database asynchronously. If the condition is requested, it also provides that condition.
+        /// </summary>
+        /// <param name="count"></param>
+        /// <param name="includes"></param>
+        /// <param name="projectionExpression"></param>
+        /// <param name="tracking"></param>
+        /// <param name="conditionExpression"></param>
+        /// <returns></returns>
+        Task<IEnumerable<TEntity>> GetSomeAsync(int count,
+                                                Func<IIncludable<TEntity>, IIncludable> includes,
+                                                Expression<Func<TEntity, bool>> conditionExpression = null,
+                                                Expression<Func<TEntity, TEntity>> projectionExpression = null,
+                                                bool tracking = false);
 
         #region Pagination And Order
 

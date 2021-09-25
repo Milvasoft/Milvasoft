@@ -129,7 +129,10 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
         public virtual async Task<TEntity> GetFirstOrDefaultAsync(Expression<Func<TEntity, bool>> conditionExpression = null,
                                                                   Expression<Func<TEntity, TEntity>> projectionExpression = null,
                                                                   bool tracking = false)
-            => await _dbSet.AsTracking(GetQueryTrackingBehavior(tracking)).Select(projectionExpression ?? (entity => entity)).FirstOrDefaultAsync(CreateConditionExpression(conditionExpression) ?? (entity => true)).ConfigureAwait(false);
+            => await _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
+                           .Select(projectionExpression ?? (entity => entity))
+                           .FirstOrDefaultAsync(CreateConditionExpression(conditionExpression) ?? (entity => true))
+                           .ConfigureAwait(false);
 
 
         /// <summary>
@@ -144,7 +147,11 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
                                                                   Expression<Func<TEntity, bool>> conditionExpression = null,
                                                                   Expression<Func<TEntity, TEntity>> projectionExpression = null,
                                                                   bool tracking = false)
-            => await _dbSet.AsTracking(GetQueryTrackingBehavior(tracking)).IncludeMultiple(includes).Select(projectionExpression ?? (entity => entity)).FirstOrDefaultAsync(CreateConditionExpression(conditionExpression) ?? (entity => true)).ConfigureAwait(false);
+            => await _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
+                           .IncludeMultiple(includes)
+                           .Select(projectionExpression ?? (entity => entity))
+                           .FirstOrDefaultAsync(CreateConditionExpression(conditionExpression) ?? (entity => true))
+                           .ConfigureAwait(false);
 
         /// <summary>
         ///  Returns single entity or default value which IsDeleted condition is true from database asynchronously. If the condition is requested, it also provides that condition.
@@ -156,7 +163,10 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
         public virtual async Task<TEntity> GetSingleOrDefaultAsync(Expression<Func<TEntity, bool>> conditionExpression = null,
                                                                    Expression<Func<TEntity, TEntity>> projectionExpression = null,
                                                                    bool tracking = false)
-            => await _dbSet.AsTracking(GetQueryTrackingBehavior(tracking)).Select(projectionExpression ?? (entity => entity)).SingleOrDefaultAsync(CreateConditionExpression(conditionExpression) ?? (entity => true)).ConfigureAwait(false);
+            => await _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
+                           .Select(projectionExpression ?? (entity => entity))
+                           .SingleOrDefaultAsync(CreateConditionExpression(conditionExpression) ?? (entity => true))
+                           .ConfigureAwait(false);
 
         /// <summary>
         ///  Returns single entity or default value which IsDeleted condition is true with includes from database asynchronously. If the condition is requested, it also provides that condition.
@@ -170,7 +180,11 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
                                                                    Expression<Func<TEntity, bool>> conditionExpression = null,
                                                                    Expression<Func<TEntity, TEntity>> projectionExpression = null,
                                                                    bool tracking = false)
-            => await _dbSet.AsTracking(GetQueryTrackingBehavior(tracking)).IncludeMultiple(includes).Select(projectionExpression ?? (entity => entity)).SingleOrDefaultAsync(CreateConditionExpression(conditionExpression) ?? (entity => true)).ConfigureAwait(false);
+            => await _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
+                           .IncludeMultiple(includes)
+                           .Select(projectionExpression ?? (entity => entity))
+                           .SingleOrDefaultAsync(CreateConditionExpression(conditionExpression) ?? (entity => true))
+                           .ConfigureAwait(false);
 
         /// <summary>
         ///  Returns all entities which IsDeleted condition is true from database asynchronously. If the condition is requested, it also provides that condition.
@@ -182,7 +196,11 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
         public virtual async Task<IEnumerable<TEntity>> GetAllAsync(Expression<Func<TEntity, bool>> conditionExpression = null,
                                                                     Expression<Func<TEntity, TEntity>> projectionExpression = null,
                                                                     bool tracking = false)
-            => await _dbSet.AsTracking(GetQueryTrackingBehavior(tracking)).Where(CreateConditionExpression(conditionExpression) ?? (entity => true)).Select(projectionExpression ?? (entity => entity)).ToListAsync().ConfigureAwait(false);
+            => await _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
+                           .Where(CreateConditionExpression(conditionExpression) ?? (entity => true))
+                           .Select(projectionExpression ?? (entity => entity))
+                           .ToListAsync()
+                           .ConfigureAwait(false);
 
         /// <summary>
         ///  Returns all entities which IsDeleted condition is true with specified includes from database asynchronously. If the condition is requested, it also provides that condition.
@@ -196,7 +214,54 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
                                                                     Expression<Func<TEntity, bool>> conditionExpression = null,
                                                                     Expression<Func<TEntity, TEntity>> projectionExpression = null,
                                                                     bool tracking = false)
-            => await _dbSet.AsTracking(GetQueryTrackingBehavior(tracking)).Where(CreateConditionExpression(conditionExpression) ?? (entity => true)).IncludeMultiple(includes).Select(projectionExpression ?? (entity => entity)).ToListAsync().ConfigureAwait(false);
+            => await _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
+                           .Where(CreateConditionExpression(conditionExpression) ?? (entity => true))
+                           .IncludeMultiple(includes)
+                           .Select(projectionExpression ?? (entity => entity))
+                           .ToListAsync()
+                           .ConfigureAwait(false);
+
+
+        /// <summary>
+        ///  Returns all entities which IsDeleted condition is true from database asynchronously. If the condition is requested, it also provides that condition.
+        /// </summary>
+        /// <param name="count"></param>
+        /// <param name="projectionExpression"></param>
+        /// <param name="tracking"></param>
+        /// <param name="conditionExpression"></param>
+        /// <returns></returns>
+        public virtual async Task<IEnumerable<TEntity>> GetSomeAsync(int count,
+                                                                     Expression<Func<TEntity, bool>> conditionExpression = null,
+                                                                     Expression<Func<TEntity, TEntity>> projectionExpression = null,
+                                                                     bool tracking = false)
+            => await _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
+                           .Where(CreateConditionExpression(conditionExpression) ?? (entity => true))
+                           .Take(count)
+                           .Select(projectionExpression ?? (entity => entity))
+                           .ToListAsync()
+                           .ConfigureAwait(false);
+
+        /// <summary>
+        ///  Returns all entities which IsDeleted condition is true with specified includes from database asynchronously. If the condition is requested, it also provides that condition.
+        /// </summary>
+        /// <param name="count"></param>
+        /// <param name="includes"></param>
+        /// <param name="projectionExpression"></param>
+        /// <param name="tracking"></param>
+        /// <param name="conditionExpression"></param>
+        /// <returns></returns>
+        public virtual async Task<IEnumerable<TEntity>> GetSomeAsync(int count,
+                                                                     Func<IIncludable<TEntity>, IIncludable> includes,
+                                                                     Expression<Func<TEntity, bool>> conditionExpression = null,
+                                                                     Expression<Func<TEntity, TEntity>> projectionExpression = null,
+                                                                     bool tracking = false)
+            => await _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
+                           .Where(CreateConditionExpression(conditionExpression) ?? (entity => true))
+                           .Take(count)
+                           .IncludeMultiple(includes)
+                           .Select(projectionExpression ?? (entity => entity))
+                           .ToListAsync()
+                           .ConfigureAwait(false);
 
         #region Pagination And Order
 

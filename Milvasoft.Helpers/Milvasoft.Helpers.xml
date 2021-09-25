@@ -1489,6 +1489,27 @@
             <param name="conditionExpression"></param>
             <returns></returns>
         </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.GetSomeAsync(System.Int32,System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Linq.Expressions.Expression{System.Func{`0,`0}},System.Boolean)">
+            <summary>
+             Returns all entities which IsDeleted condition is true from database asynchronously. If the condition is requested, it also provides that condition.
+            </summary>
+            <param name="count"></param>
+            <param name="projectionExpression"></param>
+            <param name="tracking"></param>
+            <param name="conditionExpression"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.GetSomeAsync(System.Int32,System.Func{Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable{`0},Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable},System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Linq.Expressions.Expression{System.Func{`0,`0}},System.Boolean)">
+            <summary>
+             Returns all entities which IsDeleted condition is true with specified includes from database asynchronously. If the condition is requested, it also provides that condition.
+            </summary>
+            <param name="count"></param>
+            <param name="includes"></param>
+            <param name="projectionExpression"></param>
+            <param name="tracking"></param>
+            <param name="conditionExpression"></param>
+            <returns></returns>
+        </member>
         <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.GetAsPaginatedAsync(System.Int32,System.Int32,System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Boolean)">
             <summary>
              Creates asynchronously a shallow copy of a range of entity's which IsDeleted property is true, in the source List of TEntity with requested count and range. 
@@ -2265,6 +2286,27 @@
             <summary>
              Returns all entities which IsDeleted condition is true with specified includes from database asynchronously. If the condition is requested, it also provides that condition.
             </summary>
+            <param name="includes"></param>
+            <param name="projectionExpression"></param>
+            <param name="tracking"></param>
+            <param name="conditionExpression"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.GetSomeAsync(System.Int32,System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Linq.Expressions.Expression{System.Func{`0,`0}},System.Boolean)">
+            <summary>
+             Returns all entities which IsDeleted condition is true from database asynchronously. If the condition is requested, it also provides that condition.
+            </summary>
+            <param name="count"></param>
+            <param name="projectionExpression"></param>
+            <param name="tracking"></param>
+            <param name="conditionExpression"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.GetSomeAsync(System.Int32,System.Func{Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable{`0},Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable},System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Linq.Expressions.Expression{System.Func{`0,`0}},System.Boolean)">
+            <summary>
+             Returns all entities which IsDeleted condition is true with specified includes from database asynchronously. If the condition is requested, it also provides that condition.
+            </summary>
+            <param name="count"></param>
             <param name="includes"></param>
             <param name="projectionExpression"></param>
             <param name="tracking"></param>
