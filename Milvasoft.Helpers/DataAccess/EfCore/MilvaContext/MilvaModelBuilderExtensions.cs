@@ -6,6 +6,7 @@ using Milvasoft.Helpers.Encryption.Abstract;
 using Milvasoft.Helpers.Encryption.Concrete;
 using Milvasoft.Helpers.Exceptions;
 using Milvasoft.Helpers.MultiTenancy.EntityBase;
+using MongoDB.Bson;
 using System;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
@@ -29,17 +30,40 @@ namespace Milvasoft.Helpers.DataAccess.MilvaContext
 
             foreach (var entityType in modelBuilder.Model.GetEntityTypes())
             {
-                var properties = entityType
-                    .ClrType
-                    .GetProperties()
-                    .Where(p => p.PropertyType == typeof(TenantId));
+                var properties = entityType.ClrType
+                                           .GetProperties()
+                                           .Where(p => p.PropertyType == typeof(TenantId) || p.PropertyType == typeof(TenantId?));
 
                 foreach (var property in properties)
                 {
-                    modelBuilder
-                        .Entity(entityType.Name)
-                        .Property(property.Name)
-                        .HasConversion(tenantIdConverter);
+                    modelBuilder.Entity(entityType.Name)
+                                .Property(property.Name)
+                                .HasConversion(tenantIdConverter);
+                }
+            }
+
+            return modelBuilder;
+        }
+
+        /// <summary>
+        /// Adds <see cref="ObjectId"/> converters to <see cref="ObjectId"/> typed properties.
+        /// </summary>
+        /// <param name="modelBuilder"></param>
+        public static ModelBuilder UseObjectId(this ModelBuilder modelBuilder)
+        {
+            var objectIdConverter = new MilvaObjectIdStringConverter();
+
+            foreach (var entityType in modelBuilder.Model.GetEntityTypes())
+            {
+                var properties = entityType.ClrType
+                                           .GetProperties()
+                                           .Where(p => p.PropertyType == typeof(ObjectId) || p.PropertyType == typeof(ObjectId?));
+
+                foreach (var property in properties)
+                {
+                    modelBuilder.Entity(entityType.Name)
+                                .Property(property.Name)
+                                .HasConversion(objectIdConverter);
                 }
             }
 

@@ -3614,6 +3614,12 @@
             </summary>
             <param name="modelBuilder"></param>
         </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.MilvaContext.MilvaModelBuilderExtensions.UseObjectId(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <summary>
+            Adds <see cref="T:MongoDB.Bson.ObjectId"/> converters to <see cref="T:MongoDB.Bson.ObjectId"/> typed properties.
+            </summary>
+            <param name="modelBuilder"></param>
+        </member>
         <member name="M:Milvasoft.Helpers.DataAccess.MilvaContext.MilvaModelBuilderExtensions.UseAnnotationEncryption(Microsoft.EntityFrameworkCore.ModelBuilder,Milvasoft.Helpers.Encryption.Abstract.IMilvaEncryptionProvider)">
             <summary>
             Adds value converter(<see cref="T:Milvasoft.Helpers.Encryption.Concrete.MilvaEncryptionConverter"/>) to string properties which marked with <see cref="T:Milvasoft.Helpers.DataAccess.Attributes.MilvaEncryptedAttribute"/>.
@@ -3680,6 +3686,17 @@
             </summary>
             <param name="source"></param>
             <param name="context"></param>
+        </member>
+        <member name="T:Milvasoft.Helpers.DataAccess.MilvaContext.MilvaObjectIdStringConverter">
+            <summary>
+            Converts <see cref="T:MongoDB.Bson.ObjectId"/> to <see cref="T:System.String"/> or <see cref="T:System.String"/> to <see cref="T:MongoDB.Bson.ObjectId"/>.
+            </summary>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.MilvaContext.MilvaObjectIdStringConverter.#ctor(Microsoft.EntityFrameworkCore.Storage.ValueConversion.ConverterMappingHints)">
+            <summary>
+            Creates a new <see cref="T:Milvasoft.Helpers.DataAccess.MilvaContext.MilvaObjectIdStringConverter"/> instance.
+            </summary>
+            <param name="mappingHints">Entity Framework mapping hints</param>
         </member>
         <member name="T:Milvasoft.Helpers.DataAccess.MongoDB.Abstract.IBaseRepository`1">
             <summary>
