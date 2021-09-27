@@ -239,7 +239,7 @@ namespace Milvasoft.Helpers.FileOperations.Abstract
         #region With Encryption 
 
         /// <summary>
-        /// Gets content from crypted json file in <paramref name="filePath"/> with <paramref name="key"/>. 
+        /// Gets content from crypted json file in <paramref name="filePath"/>. 
         /// Returns them as the requested list of type.
         /// ! Milvasoft Corporation is not responsible of possible data loss.
         /// </summary>
@@ -254,9 +254,8 @@ namespace Milvasoft.Helpers.FileOperations.Abstract
         ///
         /// <typeparam name="T"> Return type. </typeparam>
         /// <param name="filePath"> Path to json file to get data from. </param>
-        /// <param name="key"> Key of encrypted file. Example key: 4u7x!A%D*F-JaNdR  </param>
         /// <returns> A content list of type <typeparamref name="T"/>. </returns>
-        Task<T> GetCryptedContentAsync<T>(string filePath, string key);
+        Task<T> GetCryptedContentAsync<T>(string filePath);
 
         /// <summary>
         /// Adds <paramref name="content"/> to json file in <paramref name="filePath"/>.

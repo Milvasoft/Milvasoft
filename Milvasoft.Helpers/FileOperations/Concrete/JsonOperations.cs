@@ -346,7 +346,7 @@ namespace Milvasoft.Helpers.FileOperations.Concrete
         #region With Encryption 
 
         /// <summary>
-        /// Gets content from crypted json file in <paramref name="filePath"/> with <paramref name="key"/>. 
+        /// Gets content from crypted json file in <paramref name="filePath"/>. 
         /// Returns them as the requested list of type.
         /// ! Milvasoft Corporation is not responsible of possible data loss.
         /// </summary>
@@ -361,11 +361,10 @@ namespace Milvasoft.Helpers.FileOperations.Concrete
         ///
         /// <typeparam name="T"> Return type. </typeparam>
         /// <param name="filePath"> Path to json file to get data from. </param>
-        /// <param name="key"> Key of encrypted file. Example key: 4u7x!A%D*F-JaNdR  </param>
         /// <returns> A content list of type <typeparamref name="T"/>. </returns>
-        public async Task<T> GetCryptedContentAsync<T>(string filePath, string key)
+        public async Task<T> GetCryptedContentAsync<T>(string filePath)
         {
-            var jsonContent = await DecryptAndReadAsync(GetFilePath(filePath), key).ConfigureAwait(false);
+            var jsonContent = await DecryptAndReadAsync(GetFilePath(filePath), _encryptionKey).ConfigureAwait(false);
 
             return JsonConvert.DeserializeObject<T>(jsonContent, _jsonSerializerSettings);
         }

@@ -5702,9 +5702,9 @@
             <param name="filePath"> Path to json file to get data from. </param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.FileOperations.Abstract.IJsonOperations.GetCryptedContentAsync``1(System.String,System.String)">
+        <member name="M:Milvasoft.Helpers.FileOperations.Abstract.IJsonOperations.GetCryptedContentAsync``1(System.String)">
              <summary>
-             Gets content from crypted json file in <paramref name="filePath"/> with <paramref name="key"/>. 
+             Gets content from crypted json file in <paramref name="filePath"/>. 
              Returns them as the requested list of type.
              ! Milvasoft Corporation is not responsible of possible data loss.
              </summary>
@@ -5719,7 +5719,6 @@
             
              <typeparam name="T"> Return type. </typeparam>
              <param name="filePath"> Path to json file to get data from. </param>
-             <param name="key"> Key of encrypted file. Example key: 4u7x!A%D*F-JaNdR  </param>
              <returns> A content list of type <typeparamref name="T"/>. </returns>
         </member>
         <member name="M:Milvasoft.Helpers.FileOperations.Abstract.IJsonOperations.AddCryptedContentAsync``1(``0,System.String,System.Boolean)">
@@ -7189,9 +7188,9 @@
             <param name="filePath"> Path to json file to get data from. </param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.FileOperations.Concrete.JsonOperations.GetCryptedContentAsync``1(System.String,System.String)">
+        <member name="M:Milvasoft.Helpers.FileOperations.Concrete.JsonOperations.GetCryptedContentAsync``1(System.String)">
              <summary>
-             Gets content from crypted json file in <paramref name="filePath"/> with <paramref name="key"/>. 
+             Gets content from crypted json file in <paramref name="filePath"/>. 
              Returns them as the requested list of type.
              ! Milvasoft Corporation is not responsible of possible data loss.
              </summary>
@@ -7206,7 +7205,6 @@
             
              <typeparam name="T"> Return type. </typeparam>
              <param name="filePath"> Path to json file to get data from. </param>
-             <param name="key"> Key of encrypted file. Example key: 4u7x!A%D*F-JaNdR  </param>
              <returns> A content list of type <typeparamref name="T"/>. </returns>
         </member>
         <member name="M:Milvasoft.Helpers.FileOperations.Concrete.JsonOperations.AddCryptedContentAsync``1(``0,System.String,System.Boolean)">
