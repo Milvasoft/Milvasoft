@@ -8,6 +8,7 @@ using Milvasoft.Helpers.DataAccess.Abstract.Entity.Auditing;
 using Milvasoft.Helpers.DataAccess.Concrete.Entity;
 using Milvasoft.Helpers.DependencyInjection;
 using Milvasoft.Helpers.Exceptions;
+using Milvasoft.Helpers.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -127,10 +128,22 @@ namespace Milvasoft.Helpers.DataAccess.MilvaContext
         /// </summary>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
+        public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
         {
             AuditEntites();
-            return base.SaveChangesAsync(cancellationToken);
+            return await base.SaveChangesAsync(cancellationToken);
+        }
+
+        /// <summary>
+        /// Overrided the SaveChangesAsync method for soft deleting.
+        /// </summary>
+        /// <param name="acceptAllChangesOnSuccess"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        public override async Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = new CancellationToken())
+        {
+            AuditEntites();
+            return await base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);
         }
 
         /// <summary>
@@ -193,7 +206,7 @@ namespace Milvasoft.Helpers.DataAccess.MilvaContext
             Expression<Func<TEntity, decimal>> predicate = Expression.Lambda<Func<TEntity, decimal>>(Expression.Convert(Expression.Property(parameterExpression, propName),
                                                                                                                         typeof(decimal)), parameterExpression);
 
-            return await this.Set<TEntity>().Where(CreateIsDeletedFalseExpression<TEntity>() ?? (entity => true)).IncludeLang(this).MaxAsync(predicate).ConfigureAwait(false);
+            return await Set<TEntity>().Where(CreateIsDeletedFalseExpression<TEntity>() ?? (entity => true)).IncludeLang(this).MaxAsync(predicate).ConfigureAwait(false);
         }
 
 
@@ -221,9 +234,16 @@ namespace Milvasoft.Helpers.DataAccess.MilvaContext
         /// <param name="entry"></param>
         protected virtual void SoftDelete(EntityEntry entry)
         {
+            //Apply soft delete to entry.
             AuditDeletion(entry);
 
-            //For changing includes
+            //If entry is a many side on one to many or many to many relation, skip this entry's navigations for soft delete.
+            if (entry.Collections.IsNullOrEmpty())
+                return;
+
+            //For changing includes.
+            //If navigation entry is a collection entry and included apply soft delete.
+            //If navigation entry included apply soft delete.
             foreach (var navigationEntry in entry.Navigations)
                 if (navigationEntry is CollectionEntry collectionEntry && collectionEntry?.CurrentValue != null)
                     foreach (var dependentEntry in collectionEntry.CurrentValue)
