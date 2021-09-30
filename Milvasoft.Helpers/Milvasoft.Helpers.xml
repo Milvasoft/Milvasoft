@@ -12627,5 +12627,60 @@
         <member name="F:Milvasoft.Helpers.Utils.MimeTypeNames.ApplicationZip">
             <summary>ZIP archive files; Registered[7]</summary>
         </member>
+        <member name="T:OpsiyonManagement.API.Helpers.Attributes.ValidationAttributes.ValidateListCountAttribute">
+            <summary>
+            Specifies that the class or property that this attribute is applied to requires the specified the valid id.
+            </summary>
+        </member>
+        <member name="P:OpsiyonManagement.API.Helpers.Attributes.ValidationAttributes.ValidateListCountAttribute.LocalizerKey">
+            <summary>
+            Gets or sets member name localizer key.
+            </summary>
+        </member>
+        <member name="P:OpsiyonManagement.API.Helpers.Attributes.ValidationAttributes.ValidateListCountAttribute.MinCount">
+            <summary>
+            Minimum decimal value of requested validate scope.
+            </summary>
+        </member>
+        <member name="P:OpsiyonManagement.API.Helpers.Attributes.ValidationAttributes.ValidateListCountAttribute.MaxCount">
+            <summary>
+            Maximum decimal value of requested validate scope.
+            </summary>
+        </member>
+        <member name="M:OpsiyonManagement.API.Helpers.Attributes.ValidationAttributes.ValidateListCountAttribute.#ctor(System.Type)">
+            <summary>
+            Initializes new instance of <see cref="T:OpsiyonManagement.API.Helpers.Attributes.ValidationAttributes.ValidateListCountAttribute"/>.
+            </summary>
+            <param name="resourceType"></param>
+        </member>
+        <member name="M:OpsiyonManagement.API.Helpers.Attributes.ValidationAttributes.ValidateListCountAttribute.#ctor(System.Int32)">
+            <summary>
+            Initializes new instance of <see cref="T:OpsiyonManagement.API.Helpers.Attributes.ValidationAttributes.ValidateListCountAttribute"/>.
+            </summary>
+            <param name="minCount"></param>
+        </member>
+        <member name="M:OpsiyonManagement.API.Helpers.Attributes.ValidationAttributes.ValidateListCountAttribute.#ctor(System.Int32,System.Type)">
+            <summary>
+            Initializes new instance of <see cref="T:OpsiyonManagement.API.Helpers.Attributes.ValidationAttributes.ValidateListCountAttribute"/>.
+            </summary>
+            <param name="minCount"></param>
+            <param name="resourceType"></param>
+        </member>
+        <member name="M:OpsiyonManagement.API.Helpers.Attributes.ValidationAttributes.ValidateListCountAttribute.#ctor(System.Int32,System.Int32,System.Type)">
+            <summary>
+            Initializes new instance of <see cref="T:OpsiyonManagement.API.Helpers.Attributes.ValidationAttributes.ValidateListCountAttribute"/>.
+            </summary>
+            <param name="minCount"></param>
+            <param name="maxCount"></param>
+            <param name="resourceType"></param>
+        </member>
+        <member name="M:OpsiyonManagement.API.Helpers.Attributes.ValidationAttributes.ValidateListCountAttribute.IsValid(System.Object,System.ComponentModel.DataAnnotations.ValidationContext)">
+            <summary>
+            Determines whether the specified value of the object is valid.
+            </summary>
+            <param name="value"></param>
+            <param name="context"></param>
+            <returns></returns>
+        </member>
     </members>
 </doc>

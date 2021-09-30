@@ -122,13 +122,10 @@ namespace Milvasoft.Helpers.Attributes.Validation
                     ErrorMessage = errorMessage;
                     return new ValidationResult(FormatErrorMessage(""));
                 }
-                if (MaxValue != null)
+                if (MaxValue != null && Convert.ToDecimal(value) >= MaxValue)
                 {
-                    if (Convert.ToDecimal(value) >= MaxValue)
-                    {
-                        ErrorMessage = errorMessage;
-                        return new ValidationResult(FormatErrorMessage(""));
-                    }
+                    ErrorMessage = errorMessage;
+                    return new ValidationResult(FormatErrorMessage(""));
                 }
             }
 

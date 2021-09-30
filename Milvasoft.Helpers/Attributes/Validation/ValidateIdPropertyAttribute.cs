@@ -16,7 +16,6 @@ namespace Milvasoft.Helpers.Attributes.Validation
     [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field, AllowMultiple = false)]
     public class ValidateIdPropertyAttribute : ValidationAttribute
     {
-
         #region Fields
 
         private readonly Type _resourceType = null;
@@ -85,7 +84,7 @@ namespace Milvasoft.Helpers.Attributes.Validation
 
                 if (valueType == typeof(Guid))
                 {
-                    var guidIdString = (string)value;
+                    var guidIdString = value.ToString();
 
                     var isParsed = Guid.TryParse(guidIdString, out Guid guidParameter);
 

@@ -105,7 +105,10 @@ namespace Milvasoft.Helpers.Attributes.ActionFilter
                             {
                                 if (entityProp.CustomAttributes.Count() != 0)
                                     if (httpContext.Items[entityProp.Name] != null)
+                                    {
                                         errors.Remove(httpContext.Items[entityProp.Name].ToString());
+                                        httpContext.Items.Remove(entityProp.Name);
+                                    }
                             }
                         }
                     }
@@ -114,7 +117,10 @@ namespace Milvasoft.Helpers.Attributes.ActionFilter
                 if (!properties.IsNullOrEmpty())
                     foreach (var prop in properties)
                         if (httpContext.Items[prop] != null)
+                        {
                             errors.Remove(httpContext.Items[prop].ToString());
+                            httpContext.Items.Remove(prop);
+                        }
 
                 if (!errors.IsNullOrEmpty())
                     base.OnActionExecuting(RewriteResponseAsync(string.Join("~", errors)).Result);

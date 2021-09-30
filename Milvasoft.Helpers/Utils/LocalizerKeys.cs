@@ -71,6 +71,11 @@
         public const string RegexExample = nameof(RegexExample);
         public const string RegexPattern = nameof(RegexPattern);
         public const string PropertyIsRequired = nameof(PropertyIsRequired);
+        public const string ListMaxCountMessage = nameof(ListMaxCountMessage);
+        public const string ListMinCountMessage = nameof(ListMinCountMessage);
+        public const string ListCountNotValid = nameof(ListCountNotValid);
+        public const string ListCountBelowMin = nameof(ListCountBelowMin);
+        public const string ListCountMustBe = nameof(ListCountMustBe);
 
         #endregion
 
