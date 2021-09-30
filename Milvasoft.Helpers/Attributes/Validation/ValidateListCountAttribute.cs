@@ -8,7 +8,7 @@ using Milvasoft.Helpers.Utils;
 using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace OpsiyonManagement.API.Helpers.Attributes.ValidationAttributes
+namespace Milvasoft.Helpers.Attributes.Validation
 {
     /// <summary>
     /// Specifies that the class or property that this attribute is applied to requires the specified the valid id.
