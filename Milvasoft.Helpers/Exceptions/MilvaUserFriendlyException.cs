@@ -56,6 +56,18 @@ namespace Milvasoft.Helpers.Exceptions
         /// </summary>
         /// <param name="messageOrLocalizerKey"></param>
         /// <param name="exceptionCode"></param>
+        /// <param name="useLocalizerKey"></param>
+        public MilvaUserFriendlyException(string messageOrLocalizerKey, MilvaException exceptionCode, bool useLocalizerKey) : base(messageOrLocalizerKey)
+        {
+            ExceptionCode = (int)exceptionCode;
+            UseLocalizerKey = useLocalizerKey;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MilvaUserFriendlyException"/> class with a specified error message.
+        /// </summary>
+        /// <param name="messageOrLocalizerKey"></param>
+        /// <param name="exceptionCode"></param>
         public MilvaUserFriendlyException(string messageOrLocalizerKey, int exceptionCode) : base(messageOrLocalizerKey)
             => ExceptionCode = exceptionCode;
 

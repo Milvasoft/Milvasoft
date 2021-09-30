@@ -65,9 +65,13 @@ namespace Milvasoft.Helpers.DataAccess.MilvaContext
                                   IHttpContextAccessor httpContextAccessor,
                                   IAuditConfiguration auditConfiguration) : base(options)
         {
-            var userName = httpContextAccessor?.HttpContext?.User?.Identity?.Name;
-            if (!string.IsNullOrEmpty(userName))
-                CurrentUser = Users.FirstOrDefaultAsync(i => i.UserName == userName).Result;
+            if (auditConfiguration.AuditCreator || auditConfiguration.AuditModifier || auditConfiguration.AuditDeleter)
+            {
+                var userName = httpContextAccessor?.HttpContext?.User?.Identity?.Name;
+
+                if (!string.IsNullOrEmpty(userName))
+                    CurrentUser = Users.FirstOrDefaultAsync(i => i.UserName == userName).Result;
+            }
 
             AuditConfiguration = auditConfiguration;
             IgnoreSoftDelete.Value = false;
@@ -83,9 +87,13 @@ namespace Milvasoft.Helpers.DataAccess.MilvaContext
                                   IHttpContextAccessor httpContextAccessor,
                                   IAuditConfiguration auditConfiguration) : base(options)
         {
-            var userName = httpContextAccessor?.HttpContext?.User?.Identity?.Name;
-            if (!string.IsNullOrEmpty(userName))
-                CurrentUser = Users.FirstOrDefaultAsync(i => i.UserName == userName).Result;
+            if (auditConfiguration.AuditCreator || auditConfiguration.AuditModifier || auditConfiguration.AuditDeleter)
+            {
+                var userName = httpContextAccessor?.HttpContext?.User?.Identity?.Name;
+
+                if (!string.IsNullOrEmpty(userName))
+                    CurrentUser = Users.FirstOrDefaultAsync(i => i.UserName == userName).Result;
+            }
 
             AuditConfiguration = auditConfiguration;
             IgnoreSoftDelete.Value = false;
@@ -209,7 +217,6 @@ namespace Milvasoft.Helpers.DataAccess.MilvaContext
             return await Set<TEntity>().Where(CreateIsDeletedFalseExpression<TEntity>() ?? (entity => true)).IncludeLang(this).MaxAsync(predicate).ConfigureAwait(false);
         }
 
-
         #region Protected Methods
 
         /// <summary>
@@ -275,9 +282,7 @@ namespace Milvasoft.Helpers.DataAccess.MilvaContext
             {
                 if (AuditConfiguration.AuditDeleter)
                 {
-                    //Change "DeleterUserId" property value.
-                    entry.Property(EntityPropertyNames.DeleterUserId).CurrentValue = CurrentUser != null ? CurrentUser.Id : null;
-                    entry.Property(EntityPropertyNames.DeleterUserId).IsModified = true;
+                    AuditPerformerUser(entry, EntityPropertyNames.DeleterUserId);
                 }
             }
         }
@@ -356,7 +361,6 @@ namespace Milvasoft.Helpers.DataAccess.MilvaContext
         #endregion
     }
 
-
     /// <summary>
     /// This class handles all database operations.
     /// </summary>
@@ -372,8 +376,6 @@ namespace Milvasoft.Helpers.DataAccess.MilvaContext
         where TRole : IdentityRole<TKey>, IFullAuditable<TKey>, IFullAuditable<TUser, TKey, TKey>
         where TKey : struct, IEquatable<TKey>
     {
-
-
         #region Constructors
 
         /// <summary>
@@ -386,10 +388,6 @@ namespace Milvasoft.Helpers.DataAccess.MilvaContext
                               IHttpContextAccessor httpContextAccessor,
                               IAuditConfiguration auditConfiguration) : base(options, httpContextAccessor, auditConfiguration)
         {
-            var userName = httpContextAccessor?.HttpContext?.User?.Identity?.Name;
-            if (!string.IsNullOrEmpty(userName))
-                CurrentUser = Users.FirstOrDefaultAsync(i => i.UserName == userName).Result;
-
             AuditConfiguration = auditConfiguration;
             IgnoreSoftDelete.Value = false;
         }
@@ -404,10 +402,6 @@ namespace Milvasoft.Helpers.DataAccess.MilvaContext
                               IHttpContextAccessor httpContextAccessor,
                               IAuditConfiguration auditConfiguration) : base(options, httpContextAccessor, auditConfiguration)
         {
-            var userName = httpContextAccessor?.HttpContext?.User?.Identity?.Name;
-            if (!string.IsNullOrEmpty(userName))
-                CurrentUser = Users.FirstOrDefaultAsync(i => i.UserName == userName).Result;
-
             AuditConfiguration = auditConfiguration;
             IgnoreSoftDelete.Value = false;
         }
@@ -420,8 +414,6 @@ namespace Milvasoft.Helpers.DataAccess.MilvaContext
         /// <param name="modelBuilder"></param>
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            base.OnModelCreating(modelBuilder);
-
             #region TUser.Set_ForeignKeys
 
             modelBuilder.Entity<TUser>()
@@ -440,8 +432,9 @@ namespace Milvasoft.Helpers.DataAccess.MilvaContext
                 .HasForeignKey(p => p.LastModifierUserId);
 
             #endregion
-        }
 
+            base.OnModelCreating(modelBuilder);
+        }
     }
 
 }
