@@ -57,9 +57,9 @@ namespace Milvasoft.Helpers.Exceptions
         /// <param name="messageOrLocalizerKey"></param>
         /// <param name="exceptionCode"></param>
         /// <param name="useLocalizerKey"></param>
-        public MilvaUserFriendlyException(string messageOrLocalizerKey, MilvaException exceptionCode, bool useLocalizerKey) : base(messageOrLocalizerKey)
+        public MilvaUserFriendlyException(string messageOrLocalizerKey, int exceptionCode, bool useLocalizerKey) : base(messageOrLocalizerKey)
         {
-            ExceptionCode = (int)exceptionCode;
+            ExceptionCode = exceptionCode;
             UseLocalizerKey = useLocalizerKey;
         }
 
