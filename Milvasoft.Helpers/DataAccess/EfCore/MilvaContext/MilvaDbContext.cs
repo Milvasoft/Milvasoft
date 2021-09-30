@@ -70,15 +70,16 @@ namespace Milvasoft.Helpers.DataAccess.MilvaContext
         {
             if (auditConfiguration.AuditCreator || auditConfiguration.AuditModifier || auditConfiguration.AuditDeleter)
             {
-                if (HttpMethods.IsPost(httpContextAccessor.HttpContext.Request.Method)
-                    || HttpMethods.IsPut(httpContextAccessor.HttpContext.Request.Method)
-                    || HttpMethods.IsDelete(httpContextAccessor.HttpContext.Request.Method))
-                {
-                    var userName = httpContextAccessor?.HttpContext?.User?.Identity?.Name;
+                if (httpContextAccessor?.HttpContext?.Request?.Method != null)
+                    if (HttpMethods.IsPost(httpContextAccessor.HttpContext.Request.Method)
+                        || HttpMethods.IsPut(httpContextAccessor.HttpContext.Request.Method)
+                        || HttpMethods.IsDelete(httpContextAccessor.HttpContext.Request.Method))
+                    {
+                        var userName = httpContextAccessor?.HttpContext?.User?.Identity?.Name;
 
-                    if (!string.IsNullOrEmpty(userName))
-                        CurrentUser = Users.FirstOrDefaultAsync(i => i.UserName == userName).Result;
-                }
+                        if (!string.IsNullOrEmpty(userName))
+                            CurrentUser = Users.FirstOrDefaultAsync(i => i.UserName == userName).Result;
+                    }
             }
 
             AuditConfiguration = auditConfiguration;
@@ -97,15 +98,16 @@ namespace Milvasoft.Helpers.DataAccess.MilvaContext
         {
             if (auditConfiguration.AuditCreator || auditConfiguration.AuditModifier || auditConfiguration.AuditDeleter)
             {
-                if (HttpMethods.IsPost(httpContextAccessor.HttpContext.Request.Method)
+                if (httpContextAccessor?.HttpContext?.Request?.Method != null)
+                    if (HttpMethods.IsPost(httpContextAccessor.HttpContext.Request.Method)
                     || HttpMethods.IsPut(httpContextAccessor.HttpContext.Request.Method)
                     || HttpMethods.IsDelete(httpContextAccessor.HttpContext.Request.Method))
-                {
-                    var userName = httpContextAccessor?.HttpContext?.User?.Identity?.Name;
+                    {
+                        var userName = httpContextAccessor?.HttpContext?.User?.Identity?.Name;
 
-                    if (!string.IsNullOrEmpty(userName))
-                        CurrentUser = Users.FirstOrDefaultAsync(i => i.UserName == userName).Result;
-                }
+                        if (!string.IsNullOrEmpty(userName))
+                            CurrentUser = Users.FirstOrDefaultAsync(i => i.UserName == userName).Result;
+                    }
             }
 
             AuditConfiguration = auditConfiguration;

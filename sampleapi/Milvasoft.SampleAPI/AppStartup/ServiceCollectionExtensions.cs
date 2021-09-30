@@ -188,7 +188,7 @@ namespace Milvasoft.SampleAPI.AppStartup
 
             services.AddEntityFrameworkNpgsql().AddDbContext<EducationAppDbContext>(opts =>
             {
-                opts.UseNpgsql(connectionString, b => b.MigrationsAssembly("Milvasoft.SampleAPI.Data").EnableRetryOnFailure()).UseQueryTrackingBehavior(NO_TRACKING);
+                opts.UseNpgsql(connectionString, b => b.MigrationsAssembly("Milvasoft.SampleAPI").EnableRetryOnFailure()).UseQueryTrackingBehavior(NO_TRACKING);
             }).AddSingleton<IAuditConfiguration>(new AuditConfiguration(true, true, true, true, true, true));
 
         }

@@ -3437,11 +3437,14 @@
         </member>
         <member name="T:Milvasoft.Helpers.DataAccess.MilvaContext.MilvaDbContextBase`3">
             <summary>
-            This class handles all database operations.
+            Handles all database operations. Inherits <see cref="T:Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityDbContext`3"/>
             </summary>
             
             <remarks>
             <para> You must register <see cref="T:Milvasoft.Helpers.DependencyInjection.IAuditConfiguration"/> in your application startup. </para>
+            <para> If <see cref="T:Milvasoft.Helpers.DependencyInjection.IAuditConfiguration"/>'s AuditDeleter, AuditModifier or AuditCreator is true
+                   and HttpMethod is POST,PUT or DELETE it will gets performer user in constructor from database.
+                   This can affect performance little bit. But you want audit every record easily you must use this :( </para>
             </remarks>
             <typeparam name="TUser"></typeparam>
             <typeparam name="TRole"></typeparam>
@@ -3464,7 +3467,7 @@
         </member>
         <member name="M:Milvasoft.Helpers.DataAccess.MilvaContext.MilvaDbContextBase`3.#ctor(Microsoft.EntityFrameworkCore.DbContextOptions,Microsoft.AspNetCore.Http.IHttpContextAccessor,Milvasoft.Helpers.DependencyInjection.IAuditConfiguration)">
             <summary>
-            Cunstructor of <see cref="T:Milvasoft.Helpers.DataAccess.MilvaContext.MilvaDbContext`3"></see>.
+            Initializes new instance of <see cref="T:Milvasoft.Helpers.DataAccess.MilvaContext.MilvaDbContext`3"/>.
             </summary>
             <param name="options"></param>
             <param name="httpContextAccessor"></param>
@@ -3579,11 +3582,14 @@
         </member>
         <member name="T:Milvasoft.Helpers.DataAccess.MilvaContext.MilvaDbContext`3">
             <summary>
-            This class handles all database operations.
+            Handles all database operations. Inherits <see cref="T:Milvasoft.Helpers.DataAccess.MilvaContext.MilvaDbContextBase`3"/>
             </summary>
             
             <remarks>
             <para> You must register <see cref="T:Milvasoft.Helpers.DependencyInjection.IAuditConfiguration"/> in your application startup. </para>
+            <para> If <see cref="T:Milvasoft.Helpers.DependencyInjection.IAuditConfiguration"/>'s AuditDeleter, AuditModifier or AuditCreator is true
+                   and HttpMethod is POST,PUT or DELETE it will gets performer user in constructor from database.
+                   This can affect performance little bit. But you want audit every record easily you must use this :( </para>
             </remarks>
             <typeparam name="TUser"></typeparam>
             <typeparam name="TRole"></typeparam>
@@ -3666,9 +3672,15 @@
             </summary>
             <param name="modelBuilder"></param>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.MilvaContext.MilvaModelBuilderExtensions.IgnoreDefaultRecords(Microsoft.EntityFrameworkCore.ModelBuilder)">
+        <member name="M:Milvasoft.Helpers.DataAccess.MilvaContext.MilvaModelBuilderExtensions.IgnoreDefaultIntRecords(Microsoft.EntityFrameworkCore.ModelBuilder)">
             <summary>
-            Enable the query filter for indelible entities.
+            Enable the query filter for indelible entities with integer key.
+            </summary>
+            <param name="modelBuilder"></param>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.MilvaContext.MilvaModelBuilderExtensions.IgnoreDefaultSByteRecords(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <summary>
+            Enable the query filter for indelible entities with small byte keys.
             </summary>
             <param name="modelBuilder"></param>
         </member>

@@ -2,9 +2,9 @@
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using System;
 
-namespace Milvasoft.SampleAPI.Data.Migrations
+namespace Milvasoft.SampleAPI.Migrations
 {
-    public partial class educationData : Migration
+    public partial class InitialCreate : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
