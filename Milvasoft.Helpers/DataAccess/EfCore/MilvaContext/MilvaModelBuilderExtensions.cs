@@ -202,10 +202,10 @@ namespace Milvasoft.Helpers.DataAccess.MilvaContext
         }
 
         /// <summary>
-        /// Enable the query filter for indelible entities.
+        /// Enable the query filter for indelible entities with integer key.
         /// </summary>
         /// <param name="modelBuilder"></param>
-        public static ModelBuilder IgnoreDefaultRecords(this ModelBuilder modelBuilder)
+        public static ModelBuilder IgnoreDefaultIntRecords(this ModelBuilder modelBuilder)
         {
             var indelibleEntites = modelBuilder.Model.GetEntityTypes().Where(entityType => entityType.FindProperty(EntityPropertyNames.Id) != null
                                                                                           && entityType.FindProperty(EntityPropertyNames.Id).PropertyInfo.PropertyType == typeof(int));
@@ -216,6 +216,29 @@ namespace Milvasoft.Helpers.DataAccess.MilvaContext
                 var prop = entityType.FindProperty(EntityPropertyNames.Id);
 
                 var filterExpression = Expression.GreaterThan(Expression.Property(parameter, prop.PropertyInfo), Expression.Constant(50, typeof(int)));
+
+                var dynamicLambda = Expression.Lambda(filterExpression, parameter);
+
+                entityType.SetQueryFilter(dynamicLambda);
+            }
+            return modelBuilder;
+        }
+
+        /// <summary>
+        /// Enable the query filter for indelible entities with small byte keys.
+        /// </summary>
+        /// <param name="modelBuilder"></param>
+        public static ModelBuilder IgnoreDefaultSByteRecords(this ModelBuilder modelBuilder)
+        {
+            var indelibleEntites = modelBuilder.Model.GetEntityTypes().Where(entityType => entityType.FindProperty(EntityPropertyNames.Id) != null
+                                                                                          && entityType.FindProperty(EntityPropertyNames.Id).PropertyInfo.PropertyType == typeof(sbyte));
+            foreach (var entityType in indelibleEntites)
+            {
+                var parameter = Expression.Parameter(entityType.ClrType, "entity");
+
+                var prop = entityType.FindProperty(EntityPropertyNames.Id);
+
+                var filterExpression = Expression.GreaterThan(Expression.Property(parameter, prop.PropertyInfo), Expression.Constant(50, typeof(sbyte)));
 
                 var dynamicLambda = Expression.Lambda(filterExpression, parameter);
 
@@ -245,6 +268,7 @@ namespace Milvasoft.Helpers.DataAccess.MilvaContext
 
             return modelBuilder;
         }
+
         /// <summary>
         /// Allows to all entities associated with deletions to be Included to the entity(s) to be included in the process.
         /// </summary>

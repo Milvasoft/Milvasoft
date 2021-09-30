@@ -20,11 +20,14 @@ using System.Threading.Tasks;
 namespace Milvasoft.Helpers.DataAccess.MilvaContext
 {
     /// <summary>
-    /// This class handles all database operations.
+    /// Handles all database operations. Inherits <see cref="IdentityDbContext{TUser, TRole, TKey}"/>
     /// </summary>
     /// 
     /// <remarks>
     /// <para> You must register <see cref="IAuditConfiguration"/> in your application startup. </para>
+    /// <para> If <see cref="IAuditConfiguration"/>'s AuditDeleter, AuditModifier or AuditCreator is true
+    ///        and HttpMethod is POST,PUT or DELETE it will gets performer user in constructor from database.
+    ///        This can affect performance little bit. But you want audit every record easily you must use this :( </para>
     /// </remarks>
     /// <typeparam name="TUser"></typeparam>
     /// <typeparam name="TRole"></typeparam>
@@ -56,7 +59,7 @@ namespace Milvasoft.Helpers.DataAccess.MilvaContext
         #region Constructors
 
         /// <summary>
-        /// Cunstructor of <see cref="MilvaDbContext{TUser, TRole, TKey}"></see>.
+        /// Initializes new instance of <see cref="MilvaDbContext{TUser, TRole, TKey}"/>.
         /// </summary>
         /// <param name="options"></param>
         /// <param name="httpContextAccessor"></param>
@@ -67,10 +70,15 @@ namespace Milvasoft.Helpers.DataAccess.MilvaContext
         {
             if (auditConfiguration.AuditCreator || auditConfiguration.AuditModifier || auditConfiguration.AuditDeleter)
             {
-                var userName = httpContextAccessor?.HttpContext?.User?.Identity?.Name;
+                if (HttpMethods.IsPost(httpContextAccessor.HttpContext.Request.Method)
+                    || HttpMethods.IsPut(httpContextAccessor.HttpContext.Request.Method)
+                    || HttpMethods.IsDelete(httpContextAccessor.HttpContext.Request.Method))
+                {
+                    var userName = httpContextAccessor?.HttpContext?.User?.Identity?.Name;
 
-                if (!string.IsNullOrEmpty(userName))
-                    CurrentUser = Users.FirstOrDefaultAsync(i => i.UserName == userName).Result;
+                    if (!string.IsNullOrEmpty(userName))
+                        CurrentUser = Users.FirstOrDefaultAsync(i => i.UserName == userName).Result;
+                }
             }
 
             AuditConfiguration = auditConfiguration;
@@ -89,10 +97,15 @@ namespace Milvasoft.Helpers.DataAccess.MilvaContext
         {
             if (auditConfiguration.AuditCreator || auditConfiguration.AuditModifier || auditConfiguration.AuditDeleter)
             {
-                var userName = httpContextAccessor?.HttpContext?.User?.Identity?.Name;
+                if (HttpMethods.IsPost(httpContextAccessor.HttpContext.Request.Method)
+                    || HttpMethods.IsPut(httpContextAccessor.HttpContext.Request.Method)
+                    || HttpMethods.IsDelete(httpContextAccessor.HttpContext.Request.Method))
+                {
+                    var userName = httpContextAccessor?.HttpContext?.User?.Identity?.Name;
 
-                if (!string.IsNullOrEmpty(userName))
-                    CurrentUser = Users.FirstOrDefaultAsync(i => i.UserName == userName).Result;
+                    if (!string.IsNullOrEmpty(userName))
+                        CurrentUser = Users.FirstOrDefaultAsync(i => i.UserName == userName).Result;
+                }
             }
 
             AuditConfiguration = auditConfiguration;
@@ -362,11 +375,14 @@ namespace Milvasoft.Helpers.DataAccess.MilvaContext
     }
 
     /// <summary>
-    /// This class handles all database operations.
+    /// Handles all database operations. Inherits <see cref="MilvaDbContextBase{TUser, TRole, TKey}"/>
     /// </summary>
     /// 
     /// <remarks>
     /// <para> You must register <see cref="IAuditConfiguration"/> in your application startup. </para>
+    /// <para> If <see cref="IAuditConfiguration"/>'s AuditDeleter, AuditModifier or AuditCreator is true
+    ///        and HttpMethod is POST,PUT or DELETE it will gets performer user in constructor from database.
+    ///        This can affect performance little bit. But you want audit every record easily you must use this :( </para>
     /// </remarks>
     /// <typeparam name="TUser"></typeparam>
     /// <typeparam name="TRole"></typeparam>
