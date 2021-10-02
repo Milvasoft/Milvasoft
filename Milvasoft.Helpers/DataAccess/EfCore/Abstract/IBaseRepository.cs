@@ -676,6 +676,17 @@ namespace Milvasoft.Helpers.DataAccess.Abstract
                                                       bool tracking = false);
 
         /// <summary>
+        /// Gets sums of value of <typeparamref name="TEntity"/>'s property in entities.
+        /// </summary>
+        /// <param name="sumProperty"></param>
+        /// <param name="conditionExpression"></param>
+        /// <param name="tracking"></param>
+        /// <returns></returns>
+        Task<decimal> GetSumOfPropertyAsync(Expression<Func<TEntity, decimal>> sumProperty,
+                                            Expression<Func<TEntity, bool>> conditionExpression = null,
+                                            bool tracking = false);
+
+        /// <summary>
         /// Get count of entities.
         /// </summary>
         /// <param name="conditionExpression"></param>

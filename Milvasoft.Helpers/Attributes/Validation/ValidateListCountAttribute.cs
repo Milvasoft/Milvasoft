@@ -1,8 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Localization;
-using Milvasoft.Helpers;
-using Milvasoft.Helpers.Attributes.Validation;
 using Milvasoft.Helpers.Exceptions;
 using Milvasoft.Helpers.Utils;
 using System;
@@ -98,7 +96,7 @@ namespace Milvasoft.Helpers.Attributes.Validation
             {
                 sharedLocalizer = context.GetLocalizerInstance(_resourceType);
 
-                localizedPropName = sharedLocalizer[LocalizerKey ?? $"{LocalizerKeys.LocalizedEntityName}{context.MemberName}"].ToString();
+                localizedPropName = sharedLocalizer[LocalizerKey ?? $"{LocalizerKeys.Localized}{context.MemberName}"].ToString();
             }
 
             var httpContext = context.GetService<IHttpContextAccessor>().HttpContext;

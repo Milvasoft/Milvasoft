@@ -1221,6 +1221,21 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
                            .ConfigureAwait(false);
 
         /// <summary>
+        /// Gets sums of value of <typeparamref name="TEntity"/>'s property in entities.
+        /// </summary>
+        /// <param name="sumProperty"></param>
+        /// <param name="conditionExpression"></param>
+        /// <param name="tracking"></param>
+        /// <returns></returns>
+        public virtual async Task<decimal> GetSumOfPropertyAsync(Expression<Func<TEntity, decimal>> sumProperty,
+                                                                 Expression<Func<TEntity, bool>> conditionExpression = null,
+                                                                 bool tracking = false)
+            => await _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
+                           .Where(CreateConditionExpression(conditionExpression) ?? (entity => true))
+                           .SumAsync(sumProperty)
+                           .ConfigureAwait(false);
+
+        /// <summary>
         /// Get count of entities.
         /// </summary>
         /// <param name="conditionExpression"></param>

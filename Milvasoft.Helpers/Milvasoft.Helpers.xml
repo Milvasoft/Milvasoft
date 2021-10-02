@@ -374,6 +374,61 @@
             <param name="context"></param>
             <returns></returns>
         </member>
+        <member name="T:Milvasoft.Helpers.Attributes.Validation.ValidateListCountAttribute">
+            <summary>
+            Specifies that the class or property that this attribute is applied to requires the specified the valid id.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.Attributes.Validation.ValidateListCountAttribute.LocalizerKey">
+            <summary>
+            Gets or sets member name localizer key.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.Attributes.Validation.ValidateListCountAttribute.MinCount">
+            <summary>
+            Minimum decimal value of requested validate scope.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.Attributes.Validation.ValidateListCountAttribute.MaxCount">
+            <summary>
+            Maximum decimal value of requested validate scope.
+            </summary>
+        </member>
+        <member name="M:Milvasoft.Helpers.Attributes.Validation.ValidateListCountAttribute.#ctor(System.Type)">
+            <summary>
+            Initializes new instance of <see cref="T:Milvasoft.Helpers.Attributes.Validation.ValidateListCountAttribute"/>.
+            </summary>
+            <param name="resourceType"></param>
+        </member>
+        <member name="M:Milvasoft.Helpers.Attributes.Validation.ValidateListCountAttribute.#ctor(System.Int32)">
+            <summary>
+            Initializes new instance of <see cref="T:Milvasoft.Helpers.Attributes.Validation.ValidateListCountAttribute"/>.
+            </summary>
+            <param name="minCount"></param>
+        </member>
+        <member name="M:Milvasoft.Helpers.Attributes.Validation.ValidateListCountAttribute.#ctor(System.Int32,System.Type)">
+            <summary>
+            Initializes new instance of <see cref="T:Milvasoft.Helpers.Attributes.Validation.ValidateListCountAttribute"/>.
+            </summary>
+            <param name="minCount"></param>
+            <param name="resourceType"></param>
+        </member>
+        <member name="M:Milvasoft.Helpers.Attributes.Validation.ValidateListCountAttribute.#ctor(System.Int32,System.Int32,System.Type)">
+            <summary>
+            Initializes new instance of <see cref="T:Milvasoft.Helpers.Attributes.Validation.ValidateListCountAttribute"/>.
+            </summary>
+            <param name="minCount"></param>
+            <param name="maxCount"></param>
+            <param name="resourceType"></param>
+        </member>
+        <member name="M:Milvasoft.Helpers.Attributes.Validation.ValidateListCountAttribute.IsValid(System.Object,System.ComponentModel.DataAnnotations.ValidationContext)">
+            <summary>
+            Determines whether the specified value of the object is valid.
+            </summary>
+            <param name="value"></param>
+            <param name="context"></param>
+            <returns></returns>
+        </member>
         <member name="T:Milvasoft.Helpers.Attributes.Validation.ValidateStringAttribute">
             <summary>
             Specifies that the class or property that this attribute is applied to requires the specified prevent string injection attacks and min/max length checks.
@@ -1949,6 +2004,15 @@
             <param name="tracking"></param>
             <returns></returns>
         </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.GetSumOfPropertyAsync(System.Linq.Expressions.Expression{System.Func{`0,System.Decimal}},System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Boolean)">
+            <summary>
+            Gets sums of value of <typeparamref name="TEntity"/>'s property in entities.
+            </summary>
+            <param name="sumProperty"></param>
+            <param name="conditionExpression"></param>
+            <param name="tracking"></param>
+            <returns></returns>
+        </member>
         <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.GetCountAsync(System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Boolean)">
             <summary>
             Get count of entities.
@@ -2747,6 +2811,15 @@
             Gets max value of <typeparamref name="TEntity"/>'s property in entities.
             </summary>
             <param name="maxProperty"></param>
+            <param name="conditionExpression"></param>
+            <param name="tracking"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.GetSumOfPropertyAsync(System.Linq.Expressions.Expression{System.Func{`0,System.Decimal}},System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Boolean)">
+            <summary>
+            Gets sums of value of <typeparamref name="TEntity"/>'s property in entities.
+            </summary>
+            <param name="sumProperty"></param>
             <param name="conditionExpression"></param>
             <param name="tracking"></param>
             <returns></returns>
@@ -12626,61 +12699,6 @@
         </member>
         <member name="F:Milvasoft.Helpers.Utils.MimeTypeNames.ApplicationZip">
             <summary>ZIP archive files; Registered[7]</summary>
-        </member>
-        <member name="T:OpsiyonManagement.API.Helpers.Attributes.ValidationAttributes.ValidateListCountAttribute">
-            <summary>
-            Specifies that the class or property that this attribute is applied to requires the specified the valid id.
-            </summary>
-        </member>
-        <member name="P:OpsiyonManagement.API.Helpers.Attributes.ValidationAttributes.ValidateListCountAttribute.LocalizerKey">
-            <summary>
-            Gets or sets member name localizer key.
-            </summary>
-        </member>
-        <member name="P:OpsiyonManagement.API.Helpers.Attributes.ValidationAttributes.ValidateListCountAttribute.MinCount">
-            <summary>
-            Minimum decimal value of requested validate scope.
-            </summary>
-        </member>
-        <member name="P:OpsiyonManagement.API.Helpers.Attributes.ValidationAttributes.ValidateListCountAttribute.MaxCount">
-            <summary>
-            Maximum decimal value of requested validate scope.
-            </summary>
-        </member>
-        <member name="M:OpsiyonManagement.API.Helpers.Attributes.ValidationAttributes.ValidateListCountAttribute.#ctor(System.Type)">
-            <summary>
-            Initializes new instance of <see cref="T:OpsiyonManagement.API.Helpers.Attributes.ValidationAttributes.ValidateListCountAttribute"/>.
-            </summary>
-            <param name="resourceType"></param>
-        </member>
-        <member name="M:OpsiyonManagement.API.Helpers.Attributes.ValidationAttributes.ValidateListCountAttribute.#ctor(System.Int32)">
-            <summary>
-            Initializes new instance of <see cref="T:OpsiyonManagement.API.Helpers.Attributes.ValidationAttributes.ValidateListCountAttribute"/>.
-            </summary>
-            <param name="minCount"></param>
-        </member>
-        <member name="M:OpsiyonManagement.API.Helpers.Attributes.ValidationAttributes.ValidateListCountAttribute.#ctor(System.Int32,System.Type)">
-            <summary>
-            Initializes new instance of <see cref="T:OpsiyonManagement.API.Helpers.Attributes.ValidationAttributes.ValidateListCountAttribute"/>.
-            </summary>
-            <param name="minCount"></param>
-            <param name="resourceType"></param>
-        </member>
-        <member name="M:OpsiyonManagement.API.Helpers.Attributes.ValidationAttributes.ValidateListCountAttribute.#ctor(System.Int32,System.Int32,System.Type)">
-            <summary>
-            Initializes new instance of <see cref="T:OpsiyonManagement.API.Helpers.Attributes.ValidationAttributes.ValidateListCountAttribute"/>.
-            </summary>
-            <param name="minCount"></param>
-            <param name="maxCount"></param>
-            <param name="resourceType"></param>
-        </member>
-        <member name="M:OpsiyonManagement.API.Helpers.Attributes.ValidationAttributes.ValidateListCountAttribute.IsValid(System.Object,System.ComponentModel.DataAnnotations.ValidationContext)">
-            <summary>
-            Determines whether the specified value of the object is valid.
-            </summary>
-            <param name="value"></param>
-            <param name="context"></param>
-            <returns></returns>
         </member>
     </members>
 </doc>
