@@ -77,7 +77,7 @@ namespace Milvasoft.Helpers.DataAccess.MilvaContext
                     {
                         var userName = httpContextAccessor?.HttpContext?.User?.Identity?.Name;
 
-                        if (!string.IsNullOrEmpty(userName))
+                        if (!string.IsNullOrWhiteSpace(userName))
                             CurrentUser = Users.FirstOrDefaultAsync(i => i.UserName == userName).Result;
                     }
             }
@@ -105,7 +105,7 @@ namespace Milvasoft.Helpers.DataAccess.MilvaContext
                     {
                         var userName = httpContextAccessor?.HttpContext?.User?.Identity?.Name;
 
-                        if (!string.IsNullOrEmpty(userName))
+                        if (!string.IsNullOrWhiteSpace(userName))
                             CurrentUser = Users.FirstOrDefaultAsync(i => i.UserName == userName).Result;
                     }
             }

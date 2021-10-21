@@ -4916,6 +4916,7 @@
             Performs when action executing.
             </summary>
             <param name="context"></param>
+            <param name="next"></param>
         </member>
         <member name="T:Milvasoft.SampleAPI.Utils.Attributes.ActionFilters.OValidateStringParameterAttribute">
             <summary>
@@ -5346,16 +5347,50 @@
             <param name="entity"></param>
             <param name="localizerKey"></param>
         </member>
-        <member name="T:Milvasoft.SampleAPI.Utils.Swagger.EntityDocumentFilter">
+        <member name="T:Milvasoft.SampleAPI.Utils.Swagger.CustomAttributeOperationFilter">
+             <summary>
+            Swagger document creation utility classs
+             </summary>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Utils.Swagger.CustomAttributeOperationFilter.Apply(Microsoft.OpenApi.Models.OpenApiOperation,Swashbuckle.AspNetCore.SwaggerGen.OperationFilterContext)">
             <summary>
-            <para><b>EN: </b>Swagger document creation utility class</para>
-            <para><b>TR: </b>Swagger dokumanı oluşturmaya yardımcı sınıf</para>
+            Applies filter on swagger document..
             </summary>
+            <param name="operation"></param>
+            <param name="context"></param>
+        </member>
+        <member name="T:Milvasoft.SampleAPI.Utils.Swagger.CustomAttributeSchemaFilter">
+             <summary>
+            Swagger document creation utility classs
+             </summary>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Utils.Swagger.CustomAttributeSchemaFilter.Apply(Microsoft.OpenApi.Models.OpenApiSchema,Swashbuckle.AspNetCore.SwaggerGen.SchemaFilterContext)">
+            <summary>
+            Applies filter on swagger document..
+            </summary>
+            <param name="swaggerSchema"></param>
+            <param name="context"></param>
+        </member>
+        <member name="T:Milvasoft.SampleAPI.Utils.Swagger.EntityDocumentFilter">
+             <summary>
+            Swagger document creation utility classs
+             </summary>
         </member>
         <member name="M:Milvasoft.SampleAPI.Utils.Swagger.EntityDocumentFilter.Apply(Microsoft.OpenApi.Models.OpenApiDocument,Swashbuckle.AspNetCore.SwaggerGen.DocumentFilterContext)">
             <summary>
-            <para><b>EN: </b> Applies filter on swagger document.</para>
-            <para><b>TR: </b> Swagger dökümantasyonuna istenilen filtrelemeyi uygular. </para>
+            Applies filter on swagger document..
+            </summary>
+            <param name="swaggerDoc"></param>
+            <param name="context"></param>
+        </member>
+        <member name="T:Milvasoft.SampleAPI.Utils.Swagger.ReplaceVersionWithExactValueInPathFilter">
+            <summary>
+            Replaces version parameter.
+            </summary>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Utils.Swagger.ReplaceVersionWithExactValueInPathFilter.Apply(Microsoft.OpenApi.Models.OpenApiDocument,Swashbuckle.AspNetCore.SwaggerGen.DocumentFilterContext)">
+            <summary>
+            Applies configuration.
             </summary>
             <param name="swaggerDoc"></param>
             <param name="context"></param>
@@ -5365,32 +5400,28 @@
             Operation filter to add the requirement of the custom header
             </summary>
         </member>
-        <member name="T:Opsiyon.API.Helpers.Swagger.CustomAttributeOperationFilter">
+        <member name="M:Milvasoft.SampleAPI.Utils.Swagger.RequestHeaderFilter.Apply(Microsoft.OpenApi.Models.OpenApiOperation,Swashbuckle.AspNetCore.SwaggerGen.OperationFilterContext)">
             <summary>
-            <para><b>EN: </b>Swagger document creation utility class</para>
-            <para><b>TR: </b>Swagger dokumanı oluşturmaya yardımcı sınıf</para>
-            </summary>
-        </member>
-        <member name="M:Opsiyon.API.Helpers.Swagger.CustomAttributeOperationFilter.Apply(Microsoft.OpenApi.Models.OpenApiOperation,Swashbuckle.AspNetCore.SwaggerGen.OperationFilterContext)">
-            <summary>
-            <para><b>EN: </b> Applies filter on swagger document.</para>
-            <para><b>TR: </b> Swagger dökümantasyonuna istenilen filtrelemeyi uygular. </para>
+            Applies configuration.
             </summary>
             <param name="operation"></param>
             <param name="context"></param>
         </member>
-        <member name="T:Opsiyon.API.Helpers.Swagger.CustomAttributeSchemaFilter">
+        <member name="T:Milvasoft.SampleAPI.Utils.Swagger.SwaggerExcludeAttribute">
             <summary>
-            <para><b>EN: </b>Swagger document creation utility class</para>
-            <para><b>TR: </b>Swagger dokumanı oluşturmaya yardımcı sınıf</para>
+            Excludes property from swagger documentation.
             </summary>
         </member>
-        <member name="M:Opsiyon.API.Helpers.Swagger.CustomAttributeSchemaFilter.Apply(Microsoft.OpenApi.Models.OpenApiSchema,Swashbuckle.AspNetCore.SwaggerGen.SchemaFilterContext)">
+        <member name="T:Milvasoft.SampleAPI.Utils.Swagger.SwaggerPropertyExcludeFilter">
             <summary>
-            <para><b>EN: </b> Applies filter on swagger document.</para>
-            <para><b>TR: </b> Swagger dökümantasyonuna istenilen filtrelemeyi uygular. </para>
+            Deletes properties marked with the SwaggerExclude attribute from the swagger documentation.
             </summary>
-            <param name="swaggerSchema"></param>
+        </member>
+        <member name="M:Milvasoft.SampleAPI.Utils.Swagger.SwaggerPropertyExcludeFilter.Apply(Microsoft.OpenApi.Models.OpenApiSchema,Swashbuckle.AspNetCore.SwaggerGen.SchemaFilterContext)">
+            <summary>
+            Applies configuration.
+            </summary>
+            <param name="schema"></param>
             <param name="context"></param>
         </member>
     </members>

@@ -83,8 +83,8 @@ namespace Milvasoft.SampleAPI.Spec
             Expression<Func<Assignment, bool>> mainPredicate = null;
             List<Expression<Func<Assignment, bool>>> predicates = new List<Expression<Func<Assignment, bool>>>();
 
-            if (!string.IsNullOrEmpty(Title)) predicates.Add(c => c.Title == Title);
-            if (!string.IsNullOrEmpty(Rules)) predicates.Add(c => c.Rules == Rules);
+            if (!string.IsNullOrWhiteSpace(Title)) predicates.Add(c => c.Title == Title);
+            if (!string.IsNullOrWhiteSpace(Rules)) predicates.Add(c => c.Rules == Rules);
 
 
             if (Level.HasValue) predicates.Add(c => c.Level == Level);

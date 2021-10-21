@@ -653,7 +653,7 @@ namespace Milvasoft.Helpers.FileOperations.Concrete
 
             var tempJsonContent = JsonConvert.DeserializeObject<List<T>>(jsonContentString, new JsonSerializerSettings() { Culture = cultureInfo ?? new CultureInfo("en-US") });
 
-            var jsonContent = string.IsNullOrEmpty(jsonContentString) ? new List<T>() : tempJsonContent;
+            var jsonContent = string.IsNullOrWhiteSpace(jsonContentString) ? new List<T>() : tempJsonContent;
 
             if (contentsHasId == true)
             {
@@ -713,7 +713,7 @@ namespace Milvasoft.Helpers.FileOperations.Concrete
 
             var tempJsonContent = JsonConvert.DeserializeObject<List<T>>(jsonContentString, new JsonSerializerSettings() { Culture = cultureInfo ?? new CultureInfo("en-US") });
 
-            var jsonContent = string.IsNullOrEmpty(jsonContentString) ? throw new Exception("No Records for Update") : tempJsonContent;
+            var jsonContent = string.IsNullOrWhiteSpace(jsonContentString) ? throw new Exception("No Records for Update") : tempJsonContent;
 
             var lastContent = jsonContent.Last();
 
@@ -767,7 +767,7 @@ namespace Milvasoft.Helpers.FileOperations.Concrete
 
             var tempJsonContent = JsonConvert.DeserializeObject<List<T>>(jsonContentString, new JsonSerializerSettings() { Culture = cultureInfo ?? new CultureInfo("en-US") });
 
-            var jsonContent = string.IsNullOrEmpty(jsonContentString) ? throw new Exception("No Records for Delete") : tempJsonContent;
+            var jsonContent = string.IsNullOrWhiteSpace(jsonContentString) ? throw new Exception("No Records for Delete") : tempJsonContent;
 
             var lastContent = jsonContent.Last();
 
@@ -999,7 +999,7 @@ namespace Milvasoft.Helpers.FileOperations.Concrete
 
             var tempJsonContent = JsonConvert.DeserializeObject<List<T>>(jsonContentString, new JsonSerializerSettings() { Culture = cultureInfo ?? new CultureInfo("en-US") });
 
-            var jsonContent = string.IsNullOrEmpty(jsonContentString) ? new List<T>() : tempJsonContent;
+            var jsonContent = string.IsNullOrWhiteSpace(jsonContentString) ? new List<T>() : tempJsonContent;
 
             if (contentsHasId == true)
             {
@@ -1065,7 +1065,7 @@ namespace Milvasoft.Helpers.FileOperations.Concrete
 
             var tempJsonContent = JsonConvert.DeserializeObject<List<T>>(jsonContentString, new JsonSerializerSettings() { Culture = cultureInfo ?? new CultureInfo("en-US") });
 
-            var jsonContent = string.IsNullOrEmpty(jsonContentString) ? throw new Exception("No Records for Update") : tempJsonContent;
+            var jsonContent = string.IsNullOrWhiteSpace(jsonContentString) ? throw new Exception("No Records for Update") : tempJsonContent;
 
             var lastContent = jsonContent.Last();
 
@@ -1127,7 +1127,7 @@ namespace Milvasoft.Helpers.FileOperations.Concrete
 
             var tempJsonContent = JsonConvert.DeserializeObject<List<T>>(jsonContentString, new JsonSerializerSettings() { Culture = cultureInfo ?? new CultureInfo("en-US") });
 
-            var jsonContent = string.IsNullOrEmpty(jsonContentString) ? throw new Exception("No Records for Delete") : tempJsonContent;
+            var jsonContent = string.IsNullOrWhiteSpace(jsonContentString) ? throw new Exception("No Records for Delete") : tempJsonContent;
 
             var lastContent = jsonContent.Last();
 
@@ -1723,7 +1723,7 @@ namespace Milvasoft.Helpers.FileOperations.Concrete
 
             var tempJsonContent = JsonConvert.DeserializeObject<List<T>>(jsonContentString, new JsonSerializerSettings() { Culture = cultureInfo ?? new CultureInfo("en-US") });
 
-            var jsonContent = string.IsNullOrEmpty(jsonContentString) ? new List<T>() : tempJsonContent;
+            var jsonContent = string.IsNullOrWhiteSpace(jsonContentString) ? new List<T>() : tempJsonContent;
 
             if (contentsHasId == true)
             {
@@ -1789,7 +1789,7 @@ namespace Milvasoft.Helpers.FileOperations.Concrete
 
             var tempJsonContent = JsonConvert.DeserializeObject<List<T>>(jsonContentString, new JsonSerializerSettings() { Culture = cultureInfo ?? new CultureInfo("en-US") });
 
-            var jsonContent = string.IsNullOrEmpty(jsonContentString) ? throw new Exception("No Records for Update") : tempJsonContent;
+            var jsonContent = string.IsNullOrWhiteSpace(jsonContentString) ? throw new Exception("No Records for Update") : tempJsonContent;
 
             var lastContent = jsonContent.Last();
 
@@ -1848,7 +1848,7 @@ namespace Milvasoft.Helpers.FileOperations.Concrete
 
             var tempJsonContent = JsonConvert.DeserializeObject<List<T>>(jsonContentString, new JsonSerializerSettings() { Culture = cultureInfo ?? new CultureInfo("en-US") });
 
-            var jsonContent = string.IsNullOrEmpty(jsonContentString) ? throw new Exception("No Records for Delete") : tempJsonContent;
+            var jsonContent = string.IsNullOrWhiteSpace(jsonContentString) ? throw new Exception("No Records for Delete") : tempJsonContent;
 
             var lastContent = jsonContent.Last();
 
@@ -2026,7 +2026,7 @@ namespace Milvasoft.Helpers.FileOperations.Concrete
         {
             var tempJsonContent = JsonConvert.DeserializeObject<List<T>>(jsonContentString, _jsonSerializerSettings);
 
-            var jsonContent = string.IsNullOrEmpty(jsonContentString) ? new List<T>() : tempJsonContent;
+            var jsonContent = string.IsNullOrWhiteSpace(jsonContentString) ? new List<T>() : tempJsonContent;
 
             if (contentsHasId == true)
             {
@@ -2055,7 +2055,7 @@ namespace Milvasoft.Helpers.FileOperations.Concrete
         {
             var tempJsonContent = JsonConvert.DeserializeObject<List<T>>(jsonContentString, _jsonSerializerSettings);
 
-            var jsonContent = string.IsNullOrEmpty(jsonContentString) ? throw new Exception("No Records for Update") : tempJsonContent;
+            var jsonContent = string.IsNullOrWhiteSpace(jsonContentString) ? throw new Exception("No Records for Update") : tempJsonContent;
 
             var lastContent = jsonContent.Last();
 
@@ -2088,7 +2088,7 @@ namespace Milvasoft.Helpers.FileOperations.Concrete
         {
             var tempJsonContent = JsonConvert.DeserializeObject<List<T>>(jsonContentString, _jsonSerializerSettings);
 
-            var jsonContent = string.IsNullOrEmpty(jsonContentString) ? throw new Exception("No Records for Delete") : tempJsonContent;
+            var jsonContent = string.IsNullOrWhiteSpace(jsonContentString) ? throw new Exception("No Records for Delete") : tempJsonContent;
 
             var lastContent = jsonContent.Last();
 
@@ -2204,7 +2204,7 @@ namespace Milvasoft.Helpers.FileOperations.Concrete
             File.WriteAllBytes(filePath, memStream.ToArray());
         }
 
-        private string GetFilePath(string filePath) => !string.IsNullOrEmpty(_basePath) ? Path.Combine(_basePath, filePath) : filePath;
+        private string GetFilePath(string filePath) => !string.IsNullOrWhiteSpace(_basePath) ? Path.Combine(_basePath, filePath) : filePath;
 
         #endregion
     }

@@ -1,20 +1,20 @@
-﻿using Microsoft.OpenApi.Models;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.OpenApi.Models;
 using Milvasoft.SampleAPI.Utils.Attributes.ActionFilters;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System;
+using System.Linq;
 using System.Reflection;
 
-namespace Opsiyon.API.Helpers.Swagger
+namespace Milvasoft.SampleAPI.Utils.Swagger
 {
     /// <summary>
-	/// <para><b>EN: </b>Swagger document creation utility class</para>
-	/// <para><b>TR: </b>Swagger dokumanı oluşturmaya yardımcı sınıf</para>
+	///Swagger document creation utility classs
 	/// </summary>
     public class CustomAttributeOperationFilter : IOperationFilter
     {
         /// <summary>
-        /// <para><b>EN: </b> Applies filter on swagger document.</para>
-        /// <para><b>TR: </b> Swagger dökümantasyonuna istenilen filtrelemeyi uygular. </para>
+        /// Applies filter on swagger document..
         /// </summary>
         /// <param name="operation"></param>
         /// <param name="context"></param>
@@ -33,6 +33,17 @@ namespace Opsiyon.API.Helpers.Swagger
                 }
             }
 
+            if (context.MethodInfo?.IsDefined(typeof(AuthorizeAttribute)) ?? false)
+            {
+                var authorizeAttributes = Attribute.GetCustomAttributes(context.MethodInfo, typeof(AuthorizeAttribute));
+
+                var roles = authorizeAttributes.Select(a => a as AuthorizeAttribute).Select(a => $"({a.Roles?.Replace(",", " | ")})");
+
+                var joinedString = string.Join(" & ", roles);
+
+                operation.Description += $"<br /> <br /> <b> Allowed Roles : {joinedString}<b/>";
+            }
+            else operation.Description += $"<br /> <br /> <b> Allowed Roles : (Everyone) <b/>";
 
         }
     }

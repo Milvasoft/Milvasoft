@@ -35,7 +35,7 @@ namespace Milvasoft.SampleAPI.DTOs
             get => _fileBase64String;
             set
             {
-                if (!string.IsNullOrEmpty(value))
+                if (!string.IsNullOrWhiteSpace(value))
                 {
                     Assignment = HelperExtensions.ConvertToFormFile(value);
                 }

@@ -3,6 +3,7 @@ using Milvasoft.SampleAPI.Utils.Attributes.ValidationAttributes;
 
 namespace Milvasoft.SampleAPI.Utils
 {
+#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
     public class TokenManagement : ITokenManagement
     {
         [OValidateString(1000)]
@@ -26,4 +27,5 @@ namespace Milvasoft.SampleAPI.Utils
         [OValidateDecimal(100)]
         public int RefreshExpiration { get; set; }
     }
+#pragma warning restore CS1591 // Missing XML comment for publicly visible type or member
 }

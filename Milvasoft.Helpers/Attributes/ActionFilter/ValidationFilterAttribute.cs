@@ -136,7 +136,7 @@ namespace Milvasoft.Helpers.Attributes.ActionFilter
         {
             string[] prop = null;
 
-            if (!string.IsNullOrEmpty(props))
+            if (!string.IsNullOrWhiteSpace(props))
             {
                 prop = props.Split(',');
 

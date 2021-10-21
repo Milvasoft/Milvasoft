@@ -116,9 +116,9 @@ namespace Milvasoft.SampleAPI.Spec
             Expression<Func<Student, bool>> mainPredicate = null;
             List<Expression<Func<Student, bool>>> predicates = new List<Expression<Func<Student, bool>>>();
 
-            if (!string.IsNullOrEmpty(Name)) predicates.Add(c => c.Name == Name);
-            if (!string.IsNullOrEmpty(Surname)) predicates.Add(c => c.Surname == Surname);
-            if (!string.IsNullOrEmpty(University)) predicates.Add(c => c.University == University);
+            if (!string.IsNullOrWhiteSpace(Name)) predicates.Add(c => c.Name == Name);
+            if (!string.IsNullOrWhiteSpace(Surname)) predicates.Add(c => c.Surname == Surname);
+            if (!string.IsNullOrWhiteSpace(University)) predicates.Add(c => c.University == University);
 
             if (Age.HasValue) predicates.Add(c => c.Age == Age);
             if (IsConfidentialityAgreementSigned.HasValue) predicates.Add(c => c.IsConfidentialityAgreementSigned == IsConfidentialityAgreementSigned);

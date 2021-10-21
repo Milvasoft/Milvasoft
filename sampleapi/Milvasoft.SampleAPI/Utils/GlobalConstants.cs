@@ -101,8 +101,8 @@ namespace Milvasoft.SampleAPI.Utils
         public static string DocumentLibraryPath { get; } = Path.Combine(MediaLibraryPath, "Document Library");
 
 
+#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
         public static byte[] ApiKey { get; set; }
-
         public static string MilvaKey { get; } = "w!z%C*F-JaNdRgUk";
 
         public const string ApplicationSiteUrl = "https://educationapp.vercel.app";
@@ -110,6 +110,8 @@ namespace Milvasoft.SampleAPI.Utils
         public const string DeveloperSiteUrl = "https://www.milvasoft.com";
 
         public const string MilvaSampleApiKey = "w!z%C*F-JaNdRgUk";
+        public static sbyte DefaultLanguageId { get; set; } = 1;
+#pragma warning restore CS1591 // Missing XML comment for publicly visible type or member
 
         /// <summary>
         /// Zero
@@ -125,7 +127,5 @@ namespace Milvasoft.SampleAPI.Utils
         /// 
         /// </summary>
         public static int DefaultNumberOfPeople { get; } = 2;
-        public static sbyte DefaultLanguageId { get; set; } = 1;
-
     }
 }

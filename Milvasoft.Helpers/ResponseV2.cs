@@ -161,7 +161,7 @@ namespace Milvasoft.Helpers
                 await asyncTask;
 
                 response.Message = !setDefaultSuccessMessageKey
-                                    ? string.IsNullOrEmpty(successMessageKey)
+                                    ? string.IsNullOrWhiteSpace(successMessageKey)
                                             ? stringLocalizer.GetSuccessMessage(typeKey, httpContext.GetCrudOperationByMethod())
                                             : stringLocalizer[successMessageKey]
                                     : stringLocalizer[LocalizerKeys.SuccessfullyOperationMessage];
@@ -206,7 +206,7 @@ namespace Milvasoft.Helpers
                 await asyncTask;
 
                 response.Message = !setDefaultSuccessMessageKey
-                                    ? string.IsNullOrEmpty(successMessageKey)
+                                    ? string.IsNullOrWhiteSpace(successMessageKey)
                                             ? stringLocalizer.GetSuccessMessage(typeKey, httpContext.GetCrudOperationByMethod())
                                             : stringLocalizer[successMessageKey]
                                     : stringLocalizer[LocalizerKeys.SuccessfullyOperationMessage];
@@ -252,7 +252,7 @@ namespace Milvasoft.Helpers
 
                 response.Result = result;
                 response.Message = !setDefaultSuccessMessageKey
-                                    ? string.IsNullOrEmpty(successMessageKey)
+                                    ? string.IsNullOrWhiteSpace(successMessageKey)
                                             ? stringLocalizer.GetSuccessMessage(typeKey, httpContext.GetCrudOperationByMethod())
                                             : stringLocalizer[successMessageKey]
                                     : stringLocalizer[LocalizerKeys.SuccessfullyOperationMessage];
@@ -298,7 +298,7 @@ namespace Milvasoft.Helpers
 
                 response.Result = result;
                 response.Message = !setDefaultSuccessMessageKey
-                                    ? string.IsNullOrEmpty(successMessageKey)
+                                    ? string.IsNullOrWhiteSpace(successMessageKey)
                                             ? stringLocalizer.GetSuccessMessage(typeKey, httpContext.GetCrudOperationByMethod())
                                             : stringLocalizer[successMessageKey]
                                     : stringLocalizer[LocalizerKeys.SuccessfullyOperationMessage];
@@ -331,7 +331,7 @@ namespace Milvasoft.Helpers
             var response = new ObjectResponse<T>
             {
                 Message = !setDefaultSuccessMessageKey
-                                    ? string.IsNullOrEmpty(successMessageKey)
+                                    ? string.IsNullOrWhiteSpace(successMessageKey)
                                             ? stringLocalizer.GetSuccessMessage(typeKey, httpContext.GetCrudOperationByMethod())
                                             : stringLocalizer[successMessageKey]
                                     : stringLocalizer[LocalizerKeys.SuccessfullyOperationMessage]
@@ -365,7 +365,7 @@ namespace Milvasoft.Helpers
             {
                 Result = result,
                 Message = !setDefaultSuccessMessageKey
-                                    ? string.IsNullOrEmpty(successMessageKey)
+                                    ? string.IsNullOrWhiteSpace(successMessageKey)
                                             ? stringLocalizer.GetSuccessMessage(typeKey, httpContext.GetCrudOperationByMethod())
                                             : stringLocalizer[successMessageKey]
                                     : stringLocalizer[LocalizerKeys.SuccessfullyOperationMessage]
@@ -399,7 +399,7 @@ namespace Milvasoft.Helpers
             {
                 Result = result,
                 Message = !setDefaultSuccessMessageKey
-                                    ? string.IsNullOrEmpty(successMessageKey)
+                                    ? string.IsNullOrWhiteSpace(successMessageKey)
                                             ? stringLocalizer.GetSuccessMessage(typeKey, httpContext.GetCrudOperationByMethod())
                                             : stringLocalizer[successMessageKey]
                                     : stringLocalizer[LocalizerKeys.SuccessfullyOperationMessage]
@@ -433,7 +433,7 @@ namespace Milvasoft.Helpers
             {
                 Result = result,
                 Message = !setDefaultSuccessMessageKey
-                                    ? string.IsNullOrEmpty(successMessageKey)
+                                    ? string.IsNullOrWhiteSpace(successMessageKey)
                                             ? stringLocalizer.GetSuccessMessage(typeKey, httpContext.GetCrudOperationByMethod())
                                             : stringLocalizer[successMessageKey]
                                     : stringLocalizer[LocalizerKeys.SuccessfullyOperationMessage]
@@ -467,7 +467,7 @@ namespace Milvasoft.Helpers
             {
                 Result = result,
                 Message = !setDefaultSuccessMessageKey
-                                    ? string.IsNullOrEmpty(successMessageKey)
+                                    ? string.IsNullOrWhiteSpace(successMessageKey)
                                             ? stringLocalizer.GetSuccessMessage(typeKey, httpContext.GetCrudOperationByMethod())
                                             : stringLocalizer[successMessageKey]
                                     : stringLocalizer[LocalizerKeys.SuccessfullyOperationMessage]
@@ -501,7 +501,7 @@ namespace Milvasoft.Helpers
             {
                 Result = result,
                 Message = !setDefaultSuccessMessageKey
-                                    ? string.IsNullOrEmpty(successMessageKey)
+                                    ? string.IsNullOrWhiteSpace(successMessageKey)
                                             ? stringLocalizer.GetSuccessMessage(typeKey, httpContext.GetCrudOperationByMethod())
                                             : stringLocalizer[successMessageKey]
                                     : stringLocalizer[LocalizerKeys.SuccessfullyOperationMessage]
@@ -534,7 +534,7 @@ namespace Milvasoft.Helpers
             var response = new ObjectResponse<T>
             {
                 Message = !setDefaultSuccessMessageKey
-                                    ? string.IsNullOrEmpty(successMessageKey)
+                                    ? string.IsNullOrWhiteSpace(successMessageKey)
                                             ? stringLocalizer.GetSuccessMessage(typeKey, httpContext.GetCrudOperationByMethod())
                                             : stringLocalizer[successMessageKey]
                                     : stringLocalizer[LocalizerKeys.SuccessfullyOperationMessage]
@@ -568,7 +568,7 @@ namespace Milvasoft.Helpers
             {
                 Result = result,
                 Message = !setDefaultSuccessMessageKey
-                                    ? string.IsNullOrEmpty(successMessageKey)
+                                    ? string.IsNullOrWhiteSpace(successMessageKey)
                                             ? stringLocalizer.GetSuccessMessage(typeKey, httpContext.GetCrudOperationByMethod())
                                             : stringLocalizer[successMessageKey]
                                     : stringLocalizer[LocalizerKeys.SuccessfullyOperationMessage]
@@ -602,7 +602,7 @@ namespace Milvasoft.Helpers
             {
                 Result = result,
                 Message = !setDefaultSuccessMessageKey
-                                    ? string.IsNullOrEmpty(successMessageKey)
+                                    ? string.IsNullOrWhiteSpace(successMessageKey)
                                             ? stringLocalizer.GetSuccessMessage(typeKey, httpContext.GetCrudOperationByMethod())
                                             : stringLocalizer[successMessageKey]
                                     : stringLocalizer[LocalizerKeys.SuccessfullyOperationMessage]
@@ -636,7 +636,7 @@ namespace Milvasoft.Helpers
             {
                 Result = result,
                 Message = !setDefaultSuccessMessageKey
-                                    ? string.IsNullOrEmpty(successMessageKey)
+                                    ? string.IsNullOrWhiteSpace(successMessageKey)
                                             ? stringLocalizer.GetSuccessMessage(typeKey, httpContext.GetCrudOperationByMethod())
                                             : stringLocalizer[successMessageKey]
                                     : stringLocalizer[LocalizerKeys.SuccessfullyOperationMessage]
@@ -670,7 +670,7 @@ namespace Milvasoft.Helpers
             {
                 Result = result,
                 Message = !setDefaultSuccessMessageKey
-                                    ? string.IsNullOrEmpty(successMessageKey)
+                                    ? string.IsNullOrWhiteSpace(successMessageKey)
                                             ? stringLocalizer.GetSuccessMessage(typeKey, httpContext.GetCrudOperationByMethod())
                                             : stringLocalizer[successMessageKey]
                                     : stringLocalizer[LocalizerKeys.SuccessfullyOperationMessage]
@@ -704,7 +704,7 @@ namespace Milvasoft.Helpers
             {
                 Result = result,
                 Message = !setDefaultSuccessMessageKey
-                                    ? string.IsNullOrEmpty(successMessageKey)
+                                    ? string.IsNullOrWhiteSpace(successMessageKey)
                                             ? stringLocalizer.GetSuccessMessage(typeKey, httpContext.GetCrudOperationByMethod())
                                             : stringLocalizer[successMessageKey]
                                     : stringLocalizer[LocalizerKeys.SuccessfullyOperationMessage]

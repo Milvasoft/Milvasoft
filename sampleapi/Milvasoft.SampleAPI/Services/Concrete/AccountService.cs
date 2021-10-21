@@ -166,7 +166,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
 
             bool initializeUpdate = false;
 
-            if (!string.IsNullOrEmpty(userDTO.PhoneNumber))
+            if (!string.IsNullOrWhiteSpace(userDTO.PhoneNumber))
             {
                 toBeUpdatedUser.PhoneNumber = userDTO.PhoneNumber;
                 toBeUpdatedUser.PhoneNumberConfirmed = false;
@@ -352,7 +352,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
 
             var user = await _userRepository.GetFirstOrDefaultAsync(a => a.UserName == _userName).ConfigureAwait(false);
 
-            if (string.IsNullOrEmpty(user?.PhoneNumber))
+            if (string.IsNullOrWhiteSpace(user?.PhoneNumber))
                 throw new MilvaUserFriendlyException("IdentityInvalidPhoneNumber");
 
             var verificationCode = GenerateVerificationCode();
@@ -595,7 +595,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
             var user = await _userRepository.GetFirstOrDefaultAsync(a => a.UserName == _userName).ConfigureAwait(false)
                                              ?? throw new MilvaUserFriendlyException(MilvaException.CannotFindEntity);
 
-            if (string.IsNullOrEmpty(user?.Email))
+            if (string.IsNullOrWhiteSpace(user?.Email))
                 throw new MilvaUserFriendlyException("IdentityInvalidEmail");
 
             string token = "";
@@ -650,7 +650,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         /// </summary>
         private void CheckLoginStatus()
         {
-            if (string.IsNullOrEmpty(_userName))
+            if (string.IsNullOrWhiteSpace(_userName))
                 throw new MilvaUserFriendlyException("CannotGetSignedInUserInfo");
         }
 

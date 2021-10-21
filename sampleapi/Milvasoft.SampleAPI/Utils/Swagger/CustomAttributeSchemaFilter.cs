@@ -7,17 +7,15 @@ using Swashbuckle.AspNetCore.SwaggerGen;
 using System;
 using System.Reflection;
 
-namespace Opsiyon.API.Helpers.Swagger
+namespace Milvasoft.SampleAPI.Utils.Swagger
 {
     /// <summary>
-	/// <para><b>EN: </b>Swagger document creation utility class</para>
-	/// <para><b>TR: </b>Swagger dokumanı oluşturmaya yardımcı sınıf</para>
+	///Swagger document creation utility classs
 	/// </summary>
     public class CustomAttributeSchemaFilter : ISchemaFilter
     {
         /// <summary>
-        /// <para><b>EN: </b> Applies filter on swagger document.</para>
-        /// <para><b>TR: </b> Swagger dökümantasyonuna istenilen filtrelemeyi uygular. </para>
+        /// Applies filter on swagger document..
         /// </summary>
         /// <param name="swaggerSchema"></param>
         /// <param name="context"></param>
@@ -40,7 +38,7 @@ namespace Opsiyon.API.Helpers.Swagger
 
             if (context.MemberInfo?.IsDefined(typeof(MilvaRegexAttribute)) ?? false)
             {
-                swaggerSchema.Pattern = Startup.SharedStringLocalizer?[LocalizerKeys.RegexExample + context.MemberInfo.Name];
+                swaggerSchema.Pattern = Startup.SharedStringLocalizer[LocalizerKeys.RegexExample + context.MemberInfo.Name];
             }
 
 

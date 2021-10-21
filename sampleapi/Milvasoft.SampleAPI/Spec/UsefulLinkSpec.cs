@@ -57,7 +57,7 @@ namespace Milvasoft.SampleAPI.Spec
             Expression<Func<UsefulLink, bool>> mainPredicate = null;
             List<Expression<Func<UsefulLink, bool>>> predicates = new List<Expression<Func<UsefulLink, bool>>>();
 
-            if (!string.IsNullOrEmpty(Title)) predicates.Add(c => c.Title.ToUpper().Contains(Title));
+            if (!string.IsNullOrWhiteSpace(Title)) predicates.Add(c => c.Title.ToUpper().Contains(Title));
 
             if (ProfessionId.HasValue) predicates.Add(c => c.ProfessionId == ProfessionId);
 

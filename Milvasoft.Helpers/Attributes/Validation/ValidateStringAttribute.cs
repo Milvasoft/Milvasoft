@@ -160,7 +160,7 @@ namespace Milvasoft.Helpers.Attributes.Validation
                     return new ValidationResult(FormatErrorMessage(""));
                 }
 
-                if (!string.IsNullOrEmpty(stringValue))
+                if (!string.IsNullOrWhiteSpace(stringValue))
                 {
                     var blackList = context.GetService<List<InvalidString>>();
 
@@ -171,7 +171,7 @@ namespace Milvasoft.Helpers.Attributes.Validation
                                 {
                                     var milvasoftLogger = context.GetService<IMilvaLogger>();
 
-                                    if (!string.IsNullOrEmpty(MailContent) && milvasoftLogger != null)
+                                    if (!string.IsNullOrWhiteSpace(MailContent) && milvasoftLogger != null)
                                         milvasoftLogger.LogFatal(MailContent, MailSubject.Hack);
 
                                     ErrorMessage = sharedLocalizer != null

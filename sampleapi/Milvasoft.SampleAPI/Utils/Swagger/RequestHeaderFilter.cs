@@ -11,6 +11,11 @@ namespace Milvasoft.SampleAPI.Utils.Swagger
     /// </summary>
     public class RequestHeaderFilter : IOperationFilter
     {
+        /// <summary>
+        /// Applies configuration.
+        /// </summary>
+        /// <param name="operation"></param>
+        /// <param name="context"></param>
         public void Apply(OpenApiOperation operation, OperationFilterContext context)
         {
             if (operation.Parameters == null) operation.Parameters = new List<OpenApiParameter>();
@@ -29,37 +34,6 @@ namespace Milvasoft.SampleAPI.Utils.Swagger
                     Description = "The lang iso code of system. (e.g. tr-TR)",
                     Required = false
                 });
-
-                //if (descriptor.ControllerName.StartsWith("Institution"))
-                //{
-                //    operation.Parameters.Add(new OpenApiParameter()
-                //    {
-                //        Name = "ApiKey",
-                //        In = ParameterLocation.Header,
-                //        Description = "Opsiyon API Key.",
-                //        Required = false
-                //    });
-                //}
-
-                //if (descriptor.ControllerName.StartsWith("Report"))
-                //{
-                //    operation.Parameters.Add(new OpenApiParameter()
-                //    {
-                //        Name = "PageIndex",
-                //        In = ParameterLocation.Header,
-                //        Description = "Requested page index.",
-                //        Required = false
-                //    });
-
-                //    operation.Parameters.Add(new OpenApiParameter()
-                //    {
-                //        Name = "ItemCount",
-                //        In = ParameterLocation.Header,
-                //        Description = "Requested item count in page.",
-                //        Required = false
-                //    });
-                //}
-
             }
         }
     }

@@ -63,8 +63,8 @@ namespace Milvasoft.SampleAPI.Spec
             Expression<Func<Mentor, bool>> mainPredicate = null;
             List<Expression<Func<Mentor, bool>>> predicates = new();
 
-            if (!string.IsNullOrEmpty(Name)) predicates.Add(c => c.Name == Name);
-            if (!string.IsNullOrEmpty(Surname)) predicates.Add(c => c.Surname == Surname);
+            if (!string.IsNullOrWhiteSpace(Name)) predicates.Add(c => c.Name == Name);
+            if (!string.IsNullOrWhiteSpace(Surname)) predicates.Add(c => c.Surname == Surname);
 
             var dateExpression = Filter.CreateDateFilterExpression<Mentor>(MentorTopDate, MentorLowDate, i => i.CreationDate);
             if (dateExpression != null) predicates.Add(dateExpression);

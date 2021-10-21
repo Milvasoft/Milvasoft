@@ -59,7 +59,7 @@ namespace Milvasoft.Helpers.MultiTenancy.EntityBase
         /// <param name="branchNo"></param>
         public TenantId(string tenancyName, int branchNo)
         {
-            if (string.IsNullOrEmpty(tenancyName))
+            if (string.IsNullOrWhiteSpace(tenancyName))
                 throw new MilvaUserFriendlyException("TenancyNameRequired.", MilvaException.TenancyNameRequired);
 
             if (branchNo <= 0)
@@ -173,17 +173,15 @@ namespace Milvasoft.Helpers.MultiTenancy.EntityBase
         /// <returns></returns>
         public string ToString(string format)
         {
-            if (string.IsNullOrEmpty(format)) format = "G";
+            if (string.IsNullOrWhiteSpace(format))
+                format = "G";
 
-            switch (format.ToUpperInvariant())
+            return format.ToUpperInvariant() switch
             {
-                case "G":
-                    return $"{_tenancyName}_{_branchNo}";
-                case "H":
-                    return $"{_tenancyName}_{_branchNo}_{_hash}";
-                default:
-                    throw new FormatException(string.Format("The {0} format string is not supported.", format));
-            }
+                "G" => $"{_tenancyName}_{_branchNo}",
+                "H" => $"{_tenancyName}_{_branchNo}_{_hash}",
+                _ => throw new FormatException(string.Format("The {0} format string is not supported.", format)),
+            };
         }
 
         /// <summary>
@@ -193,7 +191,7 @@ namespace Milvasoft.Helpers.MultiTenancy.EntityBase
         /// <returns></returns>
         public static TenantId Parse(string str)
         {
-            if (string.IsNullOrEmpty(str)) throw new MilvaDeveloperException("This string is not convertible to TenantId.");
+            if (string.IsNullOrWhiteSpace(str)) throw new MilvaDeveloperException("This string is not convertible to TenantId.");
 
             if (TryParse(str))
             {
@@ -216,7 +214,7 @@ namespace Milvasoft.Helpers.MultiTenancy.EntityBase
 
             if (splittedArray.Length < 2) return false;
 
-            if (string.IsNullOrEmpty(splittedArray[0]) || string.IsNullOrEmpty(splittedArray[1]))
+            if (string.IsNullOrWhiteSpace(splittedArray[0]) || string.IsNullOrWhiteSpace(splittedArray[1]))
                 return false;
             try
             {

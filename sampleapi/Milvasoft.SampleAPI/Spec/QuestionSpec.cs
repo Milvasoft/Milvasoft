@@ -88,7 +88,7 @@ namespace Milvasoft.SampleAPI.Spec
             Expression<Func<Question, bool>> mainPredicate = null;
             List<Expression<Func<Question, bool>>> predicates = new List<Expression<Func<Question, bool>>>();
 
-            if (!string.IsNullOrEmpty(Title)) predicates.Add(c => c.Title == Title);
+            if (!string.IsNullOrWhiteSpace(Title)) predicates.Add(c => c.Title == Title);
 
             if (IsUseful.HasValue) predicates.Add(c => c.IsUseful == IsUseful);
             if (WillShown.HasValue) predicates.Add(c => c.WillShown == WillShown);

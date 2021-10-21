@@ -21,6 +21,7 @@ namespace Milvasoft.SampleAPI.Utils.Attributes.ActionFilters
         /// Performs when action executing.
         /// </summary>
         /// <param name="context"></param>
+        /// <param name="next"></param>
         public override async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
         {
             await base.OnActionExecutionAsync(context, next);

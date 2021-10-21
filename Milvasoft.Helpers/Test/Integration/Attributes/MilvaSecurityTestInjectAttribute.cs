@@ -38,7 +38,7 @@ namespace Milvasoft.Helpers.Test.Integration.Attributes
             _httpMethod = new HttpMethod(httpMethod);
             _obkInlineDataEnum = obkInlineDataEnum;
             _authorizeTypeEnum = authorizeTypeEnum;
-            _acceptedRoles = string.IsNullOrEmpty(acceptedRoles) ? new List<string>() : acceptedRoles.Split(',').ToList();
+            _acceptedRoles = string.IsNullOrWhiteSpace(acceptedRoles) ? new List<string>() : acceptedRoles.Split(',').ToList();
         }
 
         /// <summary>

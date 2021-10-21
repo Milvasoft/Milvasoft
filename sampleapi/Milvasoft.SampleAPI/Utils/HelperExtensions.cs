@@ -268,7 +268,7 @@ namespace Milvasoft.SampleAPI.Utils
             where TEntity : class, IBaseEntity<TKey>
         {
 
-            return string.IsNullOrEmpty(orderByProperty) ? await repository.GetAsPaginatedAsync(pageIndex,
+            return string.IsNullOrWhiteSpace(orderByProperty) ? await repository.GetAsPaginatedAsync(pageIndex,
                                                                                                 requestedItemCount,
                                                                                                 includes,
                                                                                                 condition).ConfigureAwait(false)
@@ -307,7 +307,7 @@ namespace Milvasoft.SampleAPI.Utils
             where TEntity : class, IBaseEntity<TKey>
         {
 
-            return string.IsNullOrEmpty(orderByProperty) ? await repository.GetAsPaginatedAsync(pageIndex,
+            return string.IsNullOrWhiteSpace(orderByProperty) ? await repository.GetAsPaginatedAsync(pageIndex,
                                                                                                 requestedItemCount,
                                                                                                 includes,
                                                                                                 condition).ConfigureAwait(false)
@@ -372,7 +372,7 @@ namespace Milvasoft.SampleAPI.Utils
         {
             if (parameterObject == null)
             {
-                if (string.IsNullOrEmpty(localizerKey))
+                if (string.IsNullOrWhiteSpace(localizerKey))
                 {
                     throw new MilvaUserFriendlyException(MilvaException.NullParameter);
                 }
@@ -392,7 +392,7 @@ namespace Milvasoft.SampleAPI.Utils
         {
             if (list.IsNullOrEmpty())
             {
-                if (string.IsNullOrEmpty(localizerKey))
+                if (string.IsNullOrWhiteSpace(localizerKey))
                 {
                     throw new MilvaUserFriendlyException(MilvaException.CannotFindEntity);
                 }
@@ -444,7 +444,7 @@ namespace Milvasoft.SampleAPI.Utils
         {
             if (list.IsNullOrEmpty())
             {
-                if (string.IsNullOrEmpty(localizerKey))
+                if (string.IsNullOrWhiteSpace(localizerKey))
                 {
                     throw new MilvaUserFriendlyException(MilvaException.NullParameter);
                 }
@@ -464,7 +464,7 @@ namespace Milvasoft.SampleAPI.Utils
         {
             if (list.IsNullOrEmpty())
             {
-                if (string.IsNullOrEmpty(localizerKey))
+                if (string.IsNullOrWhiteSpace(localizerKey))
                 {
                     throw new MilvaUserFriendlyException(MilvaException.CannotFindEntity);
                 }
@@ -484,7 +484,7 @@ namespace Milvasoft.SampleAPI.Utils
         {
             if (!list.IsNullOrEmpty())
             {
-                if (string.IsNullOrEmpty(message))
+                if (string.IsNullOrWhiteSpace(message))
                 {
                     throw new MilvaUserFriendlyException(MilvaException.NullParameter);
                 }
@@ -535,7 +535,7 @@ namespace Milvasoft.SampleAPI.Utils
 
             if (entity == null)
             {
-                if (string.IsNullOrEmpty(localizerKey))
+                if (string.IsNullOrWhiteSpace(localizerKey))
                 {
                     throw new MilvaUserFriendlyException(MilvaException.CannotFindEntity);
                 }
@@ -556,7 +556,7 @@ namespace Milvasoft.SampleAPI.Utils
 
             if (entity == null)
             {
-                if (string.IsNullOrEmpty(localizerKey))
+                if (string.IsNullOrWhiteSpace(localizerKey))
                 {
                     throw new MilvaUserFriendlyException(MilvaException.CannotFindEntity);
                 }

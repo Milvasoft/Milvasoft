@@ -70,7 +70,7 @@ namespace Milvasoft.Helpers.Test.Integration.Utils
             var clientType = (Type)clientAttribute.ConstructorArguments[0].Value;
             var getInstanceMethodName = (string)clientAttribute.ConstructorArguments[1].Value;
 
-            if (string.IsNullOrEmpty(getInstanceMethodName))
+            if (string.IsNullOrWhiteSpace(getInstanceMethodName))
                 throw new MilvaTestException("Please enter the method name that generates the client instance.");
 
             var info = clientType.GetMethod(getInstanceMethodName);

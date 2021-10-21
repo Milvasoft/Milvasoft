@@ -75,7 +75,7 @@ namespace Milvasoft.Helpers.Attributes.Validation
             {
                 if (IsRequired)
                 {
-                    if (value != null && !string.IsNullOrEmpty(value.ToString()))
+                    if (value != null && !string.IsNullOrWhiteSpace(value.ToString()))
                     {
                         var localizedPattern = sharedLocalizer[$"{LocalizerKeys.RegexPattern}{MemberNameLocalizerKey ?? context.MemberName}"];
 
@@ -96,7 +96,7 @@ namespace Milvasoft.Helpers.Attributes.Validation
                 }
                 else
                 {
-                    if (value != null && !string.IsNullOrEmpty(value.ToString()))
+                    if (value != null && !string.IsNullOrWhiteSpace(value.ToString()))
                     {
                         var localizedPattern = sharedLocalizer[$"{LocalizerKeys.RegexPattern}{MemberNameLocalizerKey ?? context.MemberName}"];
 

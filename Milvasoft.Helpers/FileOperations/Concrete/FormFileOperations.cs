@@ -322,7 +322,7 @@ namespace Milvasoft.Helpers.FileOperations.Concrete
 
                 var path = await file.SaveFileToPathAsync(entity, basePath, folderNameCreator, propertyName).ConfigureAwait(false);
 
-                if (!string.IsNullOrEmpty(path))
+                if (!string.IsNullOrWhiteSpace(path))
                     fileEntities.Add(new TFileEntity
                     {
                         FileName = fileDTO.FileName,
@@ -396,7 +396,7 @@ namespace Milvasoft.Helpers.FileOperations.Concrete
         /// <returns> "api/ImageLibrary/1/1.jpeg" </returns>
         public static string GetFileUrlPathSectionFromFilePath(string originalFilePath, string requestPath)
         {
-            if (string.IsNullOrEmpty(originalFilePath))
+            if (string.IsNullOrWhiteSpace(originalFilePath))
                 return string.Empty;
 
             var fileNameWithExtension = Path.GetFileName(originalFilePath);
@@ -418,7 +418,7 @@ namespace Milvasoft.Helpers.FileOperations.Concrete
         /// <returns></returns>
         public static async Task<IFormFile> GetFileFromPathAsync(string path, FileType fileType)
         {
-            if (string.IsNullOrEmpty(path))
+            if (string.IsNullOrWhiteSpace(path))
                 return null;
 
             var memory = new MemoryStream();
@@ -724,14 +724,14 @@ namespace Milvasoft.Helpers.FileOperations.Concrete
 
             string CombineEnsureSingleSeparator(string a, string b, char separator)
             {
-                if (string.IsNullOrEmpty(a)) return b;
-                if (string.IsNullOrEmpty(b)) return a;
+                if (string.IsNullOrWhiteSpace(a)) return b;
+                if (string.IsNullOrWhiteSpace(b)) return a;
                 return a.TrimEnd(separator) + separator + b.TrimStart(separator);
             }
 
             foreach (var part in parts)
             {
-                if (string.IsNullOrEmpty(part))
+                if (string.IsNullOrWhiteSpace(part))
                     continue;
 
                 if (result.EndsWith("?") || part.StartsWith("?"))
@@ -767,7 +767,7 @@ namespace Milvasoft.Helpers.FileOperations.Concrete
         /// <returns>The encoded URL.</returns>
         private static string EncodeIllegalCharacters(string s, bool encodeSpaceAsPlus = false)
         {
-            if (string.IsNullOrEmpty(s))
+            if (string.IsNullOrWhiteSpace(s))
                 return s;
 
             if (encodeSpaceAsPlus)

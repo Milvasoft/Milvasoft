@@ -28,7 +28,6 @@ using Milvasoft.SampleAPI.Services.Concrete;
 using Milvasoft.SampleAPI.Utils;
 using Milvasoft.SampleAPI.Utils.Swagger;
 using Newtonsoft.Json;
-using Opsiyon.API.Helpers.Swagger;
 using System;
 using System.Globalization;
 using System.IdentityModel.Tokens.Jwt;
@@ -320,7 +319,7 @@ namespace Milvasoft.SampleAPI.AppStartup
                     //Token içinde name kontrol etme
                     OnTokenValidated = (context) =>
                     {
-                        if (string.IsNullOrEmpty(context.Principal.Identity.Name)
+                        if (string.IsNullOrWhiteSpace(context.Principal.Identity.Name)
                             || context.SecurityToken is not JwtSecurityToken accessToken)
                         //|| !SignedInUsers.SignedInUserTokens.ContainsKey(context.Principal.Identity.Name)
                         //|| SignedInUsers.SignedInUserTokens[context.Principal.Identity.Name] != accessToken.RawData)

@@ -516,7 +516,7 @@ namespace Milvasoft.Helpers.Identity.Concrete
 
             var value = principal?.Identity?.IsAuthenticated ?? false ? principal?.FindFirstValue(ClaimTypes.Expired) : null;
 
-            if (string.IsNullOrEmpty(value))
+            if (string.IsNullOrWhiteSpace(value))
                 return null;
 
             var experiedTime = DateTime.Parse(value);

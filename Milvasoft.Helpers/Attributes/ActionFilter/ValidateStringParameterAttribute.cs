@@ -120,7 +120,7 @@ namespace Milvasoft.Helpers.Attributes.ActionFilter
                                                                         ? sharedLocalizer[LocalizerKeys.PreventStringInjectionLengthResultNotTrue, localizedPropName, MinimumLength, MaximumLength]
                                                                         : $"{localizedPropName} must have a character length in the range {MinimumLength} to {MaximumLength}.").Result);
                         }
-                        if (!string.IsNullOrEmpty(stringValue))
+                        if (!string.IsNullOrWhiteSpace(stringValue))
                         {
                             var blackList = context.HttpContext.RequestServices.GetService<List<InvalidString>>();
 
@@ -131,7 +131,7 @@ namespace Milvasoft.Helpers.Attributes.ActionFilter
                                         {
                                             var milvasoftLogger = context.HttpContext.RequestServices.GetService<IMilvaLogger>();
 
-                                            if (!string.IsNullOrEmpty(MailContent) && milvasoftLogger != null)
+                                            if (!string.IsNullOrWhiteSpace(MailContent) && milvasoftLogger != null)
                                                 milvasoftLogger.LogFatal(MailContent, MailSubject.Hack);
 
                                             base.OnActionExecuting(RewriteResponseAsync(sharedLocalizer != null

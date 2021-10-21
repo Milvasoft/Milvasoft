@@ -222,7 +222,7 @@ namespace Milvasoft.Helpers
         /// <param name="value"></param>
         /// <returns></returns>
         public static T ToObject<T>(this string value) where T : class
-            => string.IsNullOrEmpty(value) ? null : JsonConvert.DeserializeObject<T>(value);
+            => string.IsNullOrWhiteSpace(value) ? null : JsonConvert.DeserializeObject<T>(value);
 
         /// <summary>
         /// Prepares custom validation model for response.

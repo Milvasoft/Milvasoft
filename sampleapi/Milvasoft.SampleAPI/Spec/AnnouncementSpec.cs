@@ -69,8 +69,8 @@ namespace Milvasoft.SampleAPI.Spec
             Expression<Func<Announcement, bool>> mainPredicate = null;
             List<Expression<Func<Announcement, bool>>> predicates = new List<Expression<Func<Announcement, bool>>>();
 
-            if (!string.IsNullOrEmpty(Title)) predicates.Add(a => a.Title.ToUpper().Contains(Title));
-            if (!string.IsNullOrEmpty(Description)) predicates.Add(a => a.Description.ToUpper().Contains(Description));
+            if (!string.IsNullOrWhiteSpace(Title)) predicates.Add(a => a.Title.ToUpper().Contains(Title));
+            if (!string.IsNullOrWhiteSpace(Description)) predicates.Add(a => a.Description.ToUpper().Contains(Description));
 
             if (IsFixed.HasValue) predicates.Add(a => a.IsFixed == IsFixed);
             if (MentorId.HasValue) predicates.Add(a => a.MentorId == MentorId);

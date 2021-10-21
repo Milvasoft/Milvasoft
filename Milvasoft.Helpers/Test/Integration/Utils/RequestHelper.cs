@@ -51,7 +51,7 @@ namespace Milvasoft.Helpers.Test.Integration.Utils
             if (json != "null")
                 requestMessage.Content = new StringContent(json, Encoding.UTF8, "application/json");
 
-            if (!string.IsNullOrEmpty(token))
+            if (!string.IsNullOrWhiteSpace(token))
                 requestMessage.Headers.Add("Authorization", $"Bearer {token}");
 
             return requestMessage;
@@ -148,7 +148,7 @@ namespace Milvasoft.Helpers.Test.Integration.Utils
 
             getTokenFunc.IsNull("Please send the 'GetTokenAsync' method from 'MilvaTestClint'.");
 
-            if (string.IsNullOrEmpty(userName))
+            if (string.IsNullOrWhiteSpace(userName))
                 throw new MilvaTestException("Please enter the user information required for the test.");
 
             loginDTO.IsNull("Please enter the user information required for the test.");

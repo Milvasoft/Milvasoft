@@ -33,7 +33,7 @@ namespace Milvasoft.SampleAPI.DTOs
             get => _imageBase64String;
             set
             {
-                if (!string.IsNullOrEmpty(value))
+                if (!string.IsNullOrWhiteSpace(value))
                 {
                     Image = HelperExtensions.ConvertToFormFile(value);
                 }

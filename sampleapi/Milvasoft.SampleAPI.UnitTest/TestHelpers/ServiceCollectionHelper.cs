@@ -175,7 +175,7 @@ namespace Milvasoft.SampleAPI.UnitTest.TestHelpers
                     OnTokenValidated = (context) =>
                     {
                         var accessToken = context.SecurityToken as JwtSecurityToken;
-                        if (string.IsNullOrEmpty(context.Principal.Identity.Name)
+                        if (string.IsNullOrWhiteSpace(context.Principal.Identity.Name)
                             || accessToken is null)
                             context.Fail(localizer["Unauthorized"]);
 

@@ -43,7 +43,7 @@ namespace Milvasoft.Helpers
 
             if (paginationDTO.DTOList.IsNullOrEmpty())
             {
-                response.Message = string.IsNullOrEmpty(errorMessage) ? LocalizerKeys.DefaultErrorMessage : errorMessage;
+                response.Message = string.IsNullOrWhiteSpace(errorMessage) ? LocalizerKeys.DefaultErrorMessage : errorMessage;
                 response.StatusCode = MilvaStatusCodes.Status204NoContent;
                 response.Success = true;
             }
@@ -78,7 +78,7 @@ namespace Milvasoft.Helpers
 
             if (contentList.IsNullOrEmpty())
             {
-                response.Message = string.IsNullOrEmpty(errorMessage) ? LocalizerKeys.DefaultErrorMessage : errorMessage;
+                response.Message = string.IsNullOrWhiteSpace(errorMessage) ? LocalizerKeys.DefaultErrorMessage : errorMessage;
                 response.StatusCode = MilvaStatusCodes.Status204NoContent;
                 response.Success = true;
             }
@@ -113,7 +113,7 @@ namespace Milvasoft.Helpers
             response.Message = successMessage;
             if (content == null)
             {
-                response.Message = string.IsNullOrEmpty(errorMessage) ? LocalizerKeys.DefaultErrorMessage : errorMessage;
+                response.Message = string.IsNullOrWhiteSpace(errorMessage) ? LocalizerKeys.DefaultErrorMessage : errorMessage;
                 response.StatusCode = MilvaStatusCodes.Status204NoContent;
             }
             response.Result = content;
@@ -140,7 +140,7 @@ namespace Milvasoft.Helpers
 
             if (idList.IsNullOrEmpty())
             {
-                response.Message = string.IsNullOrEmpty(errorMessage) ? LocalizerKeys.DefaultErrorMessage : errorMessage;
+                response.Message = string.IsNullOrWhiteSpace(errorMessage) ? LocalizerKeys.DefaultErrorMessage : errorMessage;
                 response.StatusCode = MilvaStatusCodes.Status600Exception;
                 response.Success = false;
             }
@@ -174,7 +174,7 @@ namespace Milvasoft.Helpers
 
             if (idList.IsNullOrEmpty())
             {
-                response.Message = string.IsNullOrEmpty(errorMessage) ? LocalizerKeys.DefaultErrorMessage : errorMessage;
+                response.Message = string.IsNullOrWhiteSpace(errorMessage) ? LocalizerKeys.DefaultErrorMessage : errorMessage;
                 response.StatusCode = MilvaStatusCodes.Status600Exception;
                 response.Success = false;
             }
@@ -208,7 +208,7 @@ namespace Milvasoft.Helpers
 
             if (idList.IsNullOrEmpty())
             {
-                response.Message = string.IsNullOrEmpty(errorMessage) ? LocalizerKeys.DefaultErrorMessage : errorMessage;
+                response.Message = string.IsNullOrWhiteSpace(errorMessage) ? LocalizerKeys.DefaultErrorMessage : errorMessage;
                 response.StatusCode = MilvaStatusCodes.Status600Exception;
                 response.Success = false;
             }
@@ -243,7 +243,7 @@ namespace Milvasoft.Helpers
 
             if (idList.IsNullOrEmpty())
             {
-                response.Message = string.IsNullOrEmpty(errorMessage) ? LocalizerKeys.DefaultErrorMessage : errorMessage;
+                response.Message = string.IsNullOrWhiteSpace(errorMessage) ? LocalizerKeys.DefaultErrorMessage : errorMessage;
                 response.StatusCode = MilvaStatusCodes.Status600Exception;
                 response.Success = false;
             }
