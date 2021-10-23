@@ -10,7 +10,7 @@
 ![](https://i.hizliresim.com/12q7jh2.gif)
 
 <h3 align="center">Milvasoft library helps you to create your .Net projects in the simplest way.</h3>
-<h3 align="center">Thanks to the helper methods in it, it makes your work easier.</h3>
+<h3 align="center">It makes your work easier with the helpful methods in it.</h3>
 <br>
 
 ***
