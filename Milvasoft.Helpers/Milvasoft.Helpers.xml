@@ -4674,7 +4674,7 @@
         </member>
         <member name="T:Milvasoft.Helpers.DependencyInjection.IMilvaLogger">
             <summary>
-            Logger interface for DI.
+            Logger interface for DI. If you want to get logs from library side errors implement this interface and register to <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/>.
             </summary>
         </member>
         <member name="M:Milvasoft.Helpers.DependencyInjection.IMilvaLogger.LogVerbose(System.String)">
@@ -4735,6 +4735,73 @@
             </summary>
             <param name="message"></param>
             <param name="mailSubject"></param>
+        </member>
+        <member name="M:Milvasoft.Helpers.DependencyInjection.IMilvaLogger.Write(Milvasoft.Helpers.DependencyInjection.SeriLogEventLevel,System.String)">
+            <summary>
+            Write a log event with the specified level.
+            </summary>
+            <param name="seriLogEventLevel"></param>
+            <param name="messageTemplate"></param>
+        </member>
+        <member name="M:Milvasoft.Helpers.DependencyInjection.IMilvaLogger.Write(Milvasoft.Helpers.DependencyInjection.SeriLogEventLevel,System.Exception,System.String)">
+            <summary>
+            Write a log event with the specified level.
+            </summary>
+            <param name="seriLogEventLevel"></param>
+            <param name="exception"></param>
+            <param name="messageTemplate"></param>
+        </member>
+        <member name="M:Milvasoft.Helpers.DependencyInjection.IMilvaLogger.Write(Milvasoft.Helpers.DependencyInjection.SeriLogEventLevel,System.String,System.Object[])">
+            <summary>
+            Write a log event with the specified level.
+            </summary>
+            <param name="seriLogEventLevel"></param>
+            <param name="messageTemplate"></param>
+            <param name="propertyValues"></param>
+        </member>
+        <member name="M:Milvasoft.Helpers.DependencyInjection.IMilvaLogger.Write(Milvasoft.Helpers.DependencyInjection.SeriLogEventLevel,System.Exception,System.String,System.Object[])">
+            <summary>
+            Write a log event with the specified level and associated exception.
+            </summary>
+            <param name="seriLogEventLevel"></param>
+            <param name="exception"></param>
+            <param name="messageTemplate"></param>
+            <param name="propertyValues"></param>
+        </member>
+        <member name="T:Milvasoft.Helpers.DependencyInjection.SeriLogEventLevel">
+            <summary>
+            Specifies the meaning and relative importance of a log event.
+            </summary>
+        </member>
+        <member name="F:Milvasoft.Helpers.DependencyInjection.SeriLogEventLevel.Verbose">
+            <summary>
+            Anything and everything you might want to know about a running block of code.
+            </summary>
+        </member>
+        <member name="F:Milvasoft.Helpers.DependencyInjection.SeriLogEventLevel.Debug">
+            <summary>
+            Internal system events that aren't necessarily observable from the outside.
+            </summary>
+        </member>
+        <member name="F:Milvasoft.Helpers.DependencyInjection.SeriLogEventLevel.Information">
+            <summary>
+            The lifeblood of operational intelligence - things happen.
+            </summary>
+        </member>
+        <member name="F:Milvasoft.Helpers.DependencyInjection.SeriLogEventLevel.Warning">
+            <summary>
+            Service is degraded or endangered.
+            </summary>
+        </member>
+        <member name="F:Milvasoft.Helpers.DependencyInjection.SeriLogEventLevel.Error">
+            <summary>
+            Functionality is unavailable, invariants are broken or data is lost.
+            </summary>
+        </member>
+        <member name="F:Milvasoft.Helpers.DependencyInjection.SeriLogEventLevel.Fatal">
+            <summary>
+            If you have a pager, it goes off when one of these occurs.
+            </summary>
         </member>
         <member name="T:Milvasoft.Helpers.DependencyInjection.IMilvaResource">
             <summary>
@@ -5472,6 +5539,42 @@
             <returns> A object of type T. </returns>
         </member>
         <member name="M:Milvasoft.Helpers.Extensions.GenericCollection.MilvaMaxOrDefault``1(System.Collections.Generic.IEnumerable{``0},System.Linq.Expressions.Expression{System.Func{``0,System.Int32}})">
+            <summary>
+            Returns the maximum value according to <paramref name="propertySelector"/> in <paramref name="source"/>.
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="source"></param>
+            <param name="propertySelector"></param>
+            <returns>  A service object of type T or null if there is no such service. </returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.Extensions.GenericCollection.MilvaMin``1(System.Collections.Generic.IEnumerable{``0},System.Linq.Expressions.Expression{System.Func{``0,System.Decimal}})">
+            <summary>
+            Returns the maximum value according to <paramref name="propertySelector"/> in <paramref name="source"/>.
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="source"></param>
+            <param name="propertySelector"></param>
+            <returns> A object of type T. </returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.Extensions.GenericCollection.MilvaMinOrDefault``1(System.Collections.Generic.IEnumerable{``0},System.Linq.Expressions.Expression{System.Func{``0,System.Decimal}})">
+            <summary>
+            Returns the maximum value according to <paramref name="propertySelector"/> in <paramref name="source"/>.
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="source"></param>
+            <param name="propertySelector"></param>
+            <returns>  A service object of type T or null if there is no such service. </returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.Extensions.GenericCollection.MilvaMin``1(System.Collections.Generic.IEnumerable{``0},System.Linq.Expressions.Expression{System.Func{``0,System.Int32}})">
+            <summary>
+            Returns the maximum value according to <paramref name="propertySelector"/> in <paramref name="source"/>.
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="source"></param>
+            <param name="propertySelector"></param>
+            <returns> A object of type T. </returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.Extensions.GenericCollection.MilvaMinOrDefault``1(System.Collections.Generic.IEnumerable{``0},System.Linq.Expressions.Expression{System.Func{``0,System.Int32}})">
             <summary>
             Returns the maximum value according to <paramref name="propertySelector"/> in <paramref name="source"/>.
             </summary>

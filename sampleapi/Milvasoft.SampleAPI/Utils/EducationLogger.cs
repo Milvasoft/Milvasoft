@@ -3,13 +3,14 @@ using Milvasoft.Helpers.DependencyInjection;
 using Milvasoft.Helpers.Enums;
 using Milvasoft.Helpers.Mail;
 using Serilog;
+using Serilog.Events;
+using System;
 using System.Threading.Tasks;
 
 namespace Milvasoft.SampleAPI.Utils
 {
     /// <summary>
-    /// <para><b>EN: </b>The education project logger class.</para>
-    /// <para><b>TR: </b>Education projesi logger sınıfı.</para>
+    /// The education project logger class.
     /// </summary>
     public class EducationLogger : IMilvaLogger
     {
@@ -26,43 +27,37 @@ namespace Milvasoft.SampleAPI.Utils
         }
 
         /// <summary>
-        /// <para><b>EN: </b>Saves the log at debug level.</para>
-        /// <para><b>TR: </b>Log kaydını debug seviyesinde kaydeder.</para>
+        /// Saves the log at debug level.
         /// </summary>
         /// <param name="message"></param>
         public void LogVerbose(string message) => _logger.Verbose(message);
 
         /// <summary>
-        /// <para><b>EN: </b>Saves the log at debug level.</para>
-        /// <para><b>TR: </b>Log kaydını debug seviyesinde kaydeder.</para>
+        /// Saves the log at debug level.
         /// </summary>
         /// <param name="message"></param>
         public void LogDebug(string message) => _logger.Debug(message);
 
         /// <summary>
-        /// <para><b>EN: </b>Saves the log at error level.</para>
-        /// <para><b>TR: </b>Log kaydını error seviyesinde kaydeder.</para>
+        /// Saves the log at error level.
         /// </summary>
         /// <param name="message"></param>
         public void LogError(string message) => _logger.Error(message);
 
         /// <summary>
-        /// <para><b>EN: </b>Saves the log at info level.</para>
-        /// <para><b>TR: </b>Log kaydını info seviyesinde kaydeder.</para>
+        /// Saves the log at info level.
         /// </summary>
         /// <param name="message"></param>
         public void LogInfo(string message) => _logger.Information(message);
 
         /// <summary>
-        /// <para><b>EN: </b>Saves the log at warn level.</para>
-        /// <para><b>TR: </b>Log kaydını debug warn kaydeder.</para>
+        /// Saves the log at warn level.
         /// </summary>
         /// <param name="message"></param>
         public void LogWarning(string message) => _logger.Warning(message);
 
         /// <summary>
-        /// <para><b>EN: </b>Saves the log at fatal level.</para>
-        /// <para><b>TR: </b>Log kaydını fatal seviyesinde kaydeder. </para>
+        /// Saves the log at fatal level.
         /// </summary>
         /// <param name="message"></param>
         public void LogFatal(string message)
@@ -71,8 +66,7 @@ namespace Milvasoft.SampleAPI.Utils
         }
 
         /// <summary>
-        /// <para><b>EN: </b>Saves the log at fatal level. And sends mail to producer. </para>
-        /// <para><b>TR: </b>Log kaydını fatal seviyesinde kaydeder.Ve üreticiye e-mail gönderir. </para>
+        /// Saves the log at fatal level. And sends mail to producer.
         /// </summary>
         /// <param name="message"></param>
         /// <param name="mailSubjectsEnum"></param>
@@ -84,8 +78,7 @@ namespace Milvasoft.SampleAPI.Utils
         }
 
         /// <summary>
-        /// <para><b>EN: </b>Saves the log at fatal level. And sends mail to producer. </para>
-        /// <para><b>TR: </b>Log kaydını fatal seviyesinde kaydeder.Ve üreticiye e-mail gönderir. </para>
+        /// Saves the log at fatal level. And sends mail to producer.
         /// </summary>
         /// <param name="message"></param>
         /// <param name="mailSubjectsEnum"></param>
@@ -97,9 +90,7 @@ namespace Milvasoft.SampleAPI.Utils
         }
 
         /// <summary>
-        /// <para><b>EN: </b>Saves the log at fatal level. And sends mail to producer. </para>
-        /// <para><b>TR: </b>Log kaydını fatal seviyesinde kaydeder.Ve üreticiye e-mail gönderir. </para>
-        /// </summary>
+        /// Saves the log at fatal level. And sends mail to producer.
         /// <param name="message"></param>
         /// <param name="mailSubjectsEnum"></param>
         public void LogFatal(string message, string mailSubjectsEnum)
@@ -111,8 +102,7 @@ namespace Milvasoft.SampleAPI.Utils
         }
 
         /// <summary>
-        /// <para><b>EN: </b>Saves the log at fatal level. And sends mail to producer. </para>
-        /// <para><b>TR: </b>Log kaydını fatal seviyesinde kaydeder.Ve üreticiye e-mail gönderir. </para>
+        /// Saves the log at fatal level. And sends mail to producer.
         /// </summary>
         /// <param name="message"></param>
         /// <param name="mailSubjectsEnum"></param>
@@ -122,5 +112,42 @@ namespace Milvasoft.SampleAPI.Utils
 
             await _milvaMailSender.MilvaSendMailAsync("ogibaran96@gmail.com", mailSubjectsEnum, message).ConfigureAwait(false);
         }
+
+        /// <summary>
+        /// Write a log event with the specified level.
+        /// </summary>
+        /// <param name="seriLogEventLevel"></param>
+        /// <param name="messageTemplate"></param>
+        public void Write(SeriLogEventLevel seriLogEventLevel, string messageTemplate)
+            => _logger.Write((LogEventLevel)seriLogEventLevel, messageTemplate);
+
+        /// <summary>
+        /// Write a log event with the specified level.
+        /// </summary>
+        /// <param name="seriLogEventLevel"></param>
+        /// <param name="exception"></param>
+        /// <param name="messageTemplate"></param>
+        public void Write(SeriLogEventLevel seriLogEventLevel, Exception exception, string messageTemplate)
+            => _logger.Write((LogEventLevel)seriLogEventLevel, exception, messageTemplate);
+
+        /// <summary>
+        /// Write a log event with the specified level.
+        /// </summary>
+        /// <param name="seriLogEventLevel"></param>
+        /// <param name="messageTemplate"></param>
+        /// <param name="propertyValues"></param>
+        public void Write(SeriLogEventLevel seriLogEventLevel, string messageTemplate, params object[] propertyValues)
+            => _logger.Write((LogEventLevel)seriLogEventLevel, messageTemplate, propertyValues);
+
+        /// <summary>
+        /// Write a log event with the specified level and associated exception.
+        /// </summary>
+        /// <param name="seriLogEventLevel"></param>
+        /// <param name="exception"></param>
+        /// <param name="messageTemplate"></param>
+        /// <param name="propertyValues"></param>
+        public void Write(SeriLogEventLevel seriLogEventLevel, Exception exception, string messageTemplate, params object[] propertyValues)
+            => _logger.Write((LogEventLevel)seriLogEventLevel, exception, messageTemplate, propertyValues);
+
     }
 }
