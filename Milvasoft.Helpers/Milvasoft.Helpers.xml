@@ -2128,6 +2128,16 @@
             Helper repository for general DbContext(<typeparamref name="TContext"/>) operations.
             </summary>
         </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IContextRepository`1.IgnoreSoftDeleteForNextProcess">
+            <summary>
+            Ignores soft delete for next process. Runs correctly, if <typeparamref name="TContext"/> inherit from MilvaDbContext.
+            </summary>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IContextRepository`1.ActivateSoftDelete">
+            <summary>
+            Activate soft delete. Runs correctly, if <typeparamref name="TContext"/> inherit from MilvaDbContext.
+            </summary>
+        </member>
         <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IContextRepository`1.ExecuteQueryAsync(System.String)">
             <summary>
             Executes sql query to database asynchronously.(e.g. trigger, event)
@@ -3016,6 +3026,16 @@
             </summary>
             <param name="dbContext"></param>
         </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.ContextRepository`1.IgnoreSoftDeleteForNextProcess">
+            <summary>
+            Ignores soft delete for next process for current <see cref="T:Microsoft.EntityFrameworkCore.DbContext"/> instance. Runs correctly, if <typeparamref name="TContext"/> inherit from MilvaDbContext.
+            </summary>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.ContextRepository`1.ActivateSoftDelete">
+            <summary>
+            Activate soft delete for current <see cref="T:Microsoft.EntityFrameworkCore.DbContext"/> instance. Runs correctly, if <typeparamref name="TContext"/> inherit from MilvaDbContext.
+            </summary>
+        </member>
         <member name="M:Milvasoft.Helpers.DataAccess.Concrete.ContextRepository`1.ExecuteQueryAsync(System.String)">
             <summary>
             Executes sql query to database asynchronously.(e.g. trigger, event).
@@ -3545,14 +3565,6 @@
             <param name="httpContextAccessor"></param>
             <param name="auditConfiguration"></param>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.MilvaContext.MilvaDbContextBase`3.#ctor(Microsoft.EntityFrameworkCore.DbContextOptions{Milvasoft.Helpers.DataAccess.MilvaContext.MilvaDbContextBase{`0,`1,`2}},Microsoft.AspNetCore.Http.IHttpContextAccessor,Milvasoft.Helpers.DependencyInjection.IAuditConfiguration)">
-            <summary>
-            Cunstructor of <see cref="T:Milvasoft.Helpers.DataAccess.MilvaContext.MilvaDbContext`3"></see>.
-            </summary>
-            <param name="options"></param>
-            <param name="httpContextAccessor"></param>
-            <param name="auditConfiguration"></param>
-        </member>
         <member name="M:Milvasoft.Helpers.DataAccess.MilvaContext.MilvaDbContextBase`3.OnModelCreating(Microsoft.EntityFrameworkCore.ModelBuilder)">
             <summary>
             Overrided the OnModelCreating for custom configurations to database.
@@ -3668,14 +3680,6 @@
             <typeparam name="TKey"></typeparam>
         </member>
         <member name="M:Milvasoft.Helpers.DataAccess.MilvaContext.MilvaDbContext`3.#ctor(Microsoft.EntityFrameworkCore.DbContextOptions,Microsoft.AspNetCore.Http.IHttpContextAccessor,Milvasoft.Helpers.DependencyInjection.IAuditConfiguration)">
-            <summary>
-            Cunstructor of <see cref="T:Milvasoft.Helpers.DataAccess.MilvaContext.MilvaDbContext`3"></see>.
-            </summary>
-            <param name="options"></param>
-            <param name="httpContextAccessor"></param>
-            <param name="auditConfiguration"></param>
-        </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.MilvaContext.MilvaDbContext`3.#ctor(Microsoft.EntityFrameworkCore.DbContextOptions{Milvasoft.Helpers.DataAccess.MilvaContext.MilvaDbContext{`0,`1,`2}},Microsoft.AspNetCore.Http.IHttpContextAccessor,Milvasoft.Helpers.DependencyInjection.IAuditConfiguration)">
             <summary>
             Cunstructor of <see cref="T:Milvasoft.Helpers.DataAccess.MilvaContext.MilvaDbContext`3"></see>.
             </summary>
@@ -10040,17 +10044,17 @@
             Context accessor.
             </summary>
         </member>
+        <member name="P:Milvasoft.Helpers.MultiTenancy.Accessor.TenantAccessor`2.Tenant">
+            <summary>
+            Accessed tenant from <see cref="T:Microsoft.AspNetCore.Http.HttpContext"/>.
+            </summary>
+        </member>
         <member name="M:Milvasoft.Helpers.MultiTenancy.Accessor.TenantAccessor`2.#ctor(Microsoft.AspNetCore.Http.IHttpContextAccessor,System.IServiceProvider)">
             <summary>
             Creates new instance of <see cref="T:Milvasoft.Helpers.MultiTenancy.Accessor.TenantAccessor`2"/>.
             </summary>
             <param name="httpContextAccessor"></param>
             <param name="serviceProvider"></param>
-        </member>
-        <member name="P:Milvasoft.Helpers.MultiTenancy.Accessor.TenantAccessor`2.Tenant">
-            <summary>
-            Accessed tenant from <see cref="T:Microsoft.AspNetCore.Http.HttpContext"/>.
-            </summary>
         </member>
         <member name="T:Milvasoft.Helpers.MultiTenancy.Builder.TenantBuilder`2">
             <summary>

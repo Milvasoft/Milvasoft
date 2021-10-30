@@ -14,6 +14,16 @@ namespace Milvasoft.Helpers.DataAccess.Abstract
     public interface IContextRepository<TContext> where TContext : DbContext
     {
         /// <summary>
+        /// Ignores soft delete for next process. Runs correctly, if <typeparamref name="TContext"/> inherit from MilvaDbContext.
+        /// </summary>
+        void IgnoreSoftDeleteForNextProcess();
+
+        /// <summary>
+        /// Activate soft delete. Runs correctly, if <typeparamref name="TContext"/> inherit from MilvaDbContext.
+        /// </summary>
+        void ActivateSoftDelete();
+
+        /// <summary>
         /// Executes sql query to database asynchronously.(e.g. trigger, event)
         /// </summary>
         /// <param name="query"></param>

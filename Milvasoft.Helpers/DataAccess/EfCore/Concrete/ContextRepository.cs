@@ -36,6 +36,18 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
         }
 
         /// <summary>
+        /// Ignores soft delete for next process for current <see cref="DbContext"/> instance. Runs correctly, if <typeparamref name="TContext"/> inherit from MilvaDbContext.
+        /// </summary>
+        public void IgnoreSoftDeleteForNextProcess()
+            => _dbContext.GetType().GetMethod("IgnoreSoftDeleteForNextProcess")?.Invoke(_dbContext, null);
+
+        /// <summary>
+        /// Activate soft delete for current <see cref="DbContext"/> instance. Runs correctly, if <typeparamref name="TContext"/> inherit from MilvaDbContext.
+        /// </summary>
+        public void ActivateSoftDelete()
+            => _dbContext.GetType().GetMethod("ActivateSoftDelete")?.Invoke(_dbContext, null);
+
+        /// <summary>
         /// Executes sql query to database asynchronously.(e.g. trigger, event).
         /// </summary>
         /// <param name="query"></param>
@@ -265,6 +277,5 @@ namespace Milvasoft.Helpers.DataAccess.Concrete
             }
             else return null;
         }
-
     }
 }

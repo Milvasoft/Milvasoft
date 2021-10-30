@@ -25,6 +25,11 @@ namespace Milvasoft.Helpers.MultiTenancy.Accessor
         public IHttpContextAccessor HttpContextAccessor { get; }
 
         /// <summary>
+        /// Accessed tenant from <see cref="HttpContext"/>.
+        /// </summary>
+        public TTenant Tenant => HttpContextAccessor.HttpContext?.GetTenant<TTenant, TKey>();
+
+        /// <summary>
         /// Creates new instance of <see cref="TenantAccessor{TTenant, TKey}"/>.
         /// </summary>
         /// <param name="httpContextAccessor"></param>
@@ -34,10 +39,5 @@ namespace Milvasoft.Helpers.MultiTenancy.Accessor
             HttpContextAccessor = httpContextAccessor;
             ServiceProvider = serviceProvider;
         }
-
-        /// <summary>
-        /// Accessed tenant from <see cref="HttpContext"/>.
-        /// </summary>
-        public TTenant Tenant => HttpContextAccessor.HttpContext.GetTenant<TTenant, TKey>();
     }
 }

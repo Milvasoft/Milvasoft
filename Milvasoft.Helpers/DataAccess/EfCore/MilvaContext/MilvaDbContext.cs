@@ -52,7 +52,7 @@ namespace Milvasoft.Helpers.DataAccess.MilvaContext
         /// <summary>
         /// If its true ignores soft delete.
         /// </summary>
-        protected static AsyncLocal<bool> IgnoreSoftDelete = new();
+        protected bool IgnoreSoftDelete = false;
 
         #endregion
 
@@ -83,35 +83,7 @@ namespace Milvasoft.Helpers.DataAccess.MilvaContext
             }
 
             AuditConfiguration = auditConfiguration;
-            IgnoreSoftDelete.Value = false;
-        }
-
-        /// <summary>
-        /// Cunstructor of <see cref="MilvaDbContext{TUser, TRole, TKey}"></see>.
-        /// </summary>
-        /// <param name="options"></param>
-        /// <param name="httpContextAccessor"></param>
-        /// <param name="auditConfiguration"></param>
-        public MilvaDbContextBase(DbContextOptions<MilvaDbContextBase<TUser, TRole, TKey>> options,
-                                  IHttpContextAccessor httpContextAccessor,
-                                  IAuditConfiguration auditConfiguration) : base(options)
-        {
-            if (auditConfiguration.AuditCreator || auditConfiguration.AuditModifier || auditConfiguration.AuditDeleter)
-            {
-                if (httpContextAccessor?.HttpContext?.Request?.Method != null)
-                    if (HttpMethods.IsPost(httpContextAccessor.HttpContext.Request.Method)
-                    || HttpMethods.IsPut(httpContextAccessor.HttpContext.Request.Method)
-                    || HttpMethods.IsDelete(httpContextAccessor.HttpContext.Request.Method))
-                    {
-                        var userName = httpContextAccessor?.HttpContext?.User?.Identity?.Name;
-
-                        if (!string.IsNullOrWhiteSpace(userName))
-                            CurrentUser = Users.FirstOrDefaultAsync(i => i.UserName == userName).Result;
-                    }
-            }
-
-            AuditConfiguration = auditConfiguration;
-            IgnoreSoftDelete.Value = false;
+            IgnoreSoftDelete = false;
         }
 
         #endregion
@@ -129,12 +101,12 @@ namespace Milvasoft.Helpers.DataAccess.MilvaContext
         /// <summary>
         /// Ignores soft delete for next process.
         /// </summary>
-        public static void IgnoreSoftDeleteForNextProcess() => IgnoreSoftDelete.Value = true;
+        public void IgnoreSoftDeleteForNextProcess() => IgnoreSoftDelete = true;
 
         /// <summary>
         /// Activate soft delete.
         /// </summary>
-        public static void ActivateSoftDelete() => IgnoreSoftDelete.Value = false;
+        public void ActivateSoftDelete() => IgnoreSoftDelete = false;
 
         /// <summary>
         /// Overrided the SaveChanges method for soft deleting.
@@ -361,7 +333,7 @@ namespace Milvasoft.Helpers.DataAccess.MilvaContext
                     case EntityState.Deleted:
                         if (entry.Metadata.GetProperties().Any(prop => prop.Name == EntityPropertyNames.IsDeleted))
                         {
-                            if (!IgnoreSoftDelete.Value)
+                            if (!IgnoreSoftDelete)
                                 SoftDelete(entry);
                         }
                         break;
@@ -370,7 +342,7 @@ namespace Milvasoft.Helpers.DataAccess.MilvaContext
                 }
             }
 
-            IgnoreSoftDelete.Value = false;
+            IgnoreSoftDelete = false;
         }
 
         #endregion
@@ -407,21 +379,7 @@ namespace Milvasoft.Helpers.DataAccess.MilvaContext
                               IAuditConfiguration auditConfiguration) : base(options, httpContextAccessor, auditConfiguration)
         {
             AuditConfiguration = auditConfiguration;
-            IgnoreSoftDelete.Value = false;
-        }
-
-        /// <summary>
-        /// Cunstructor of <see cref="MilvaDbContext{TUser, TRole, TKey}"></see>.
-        /// </summary>
-        /// <param name="options"></param>
-        /// <param name="httpContextAccessor"></param>
-        /// <param name="auditConfiguration"></param>
-        public MilvaDbContext(DbContextOptions<MilvaDbContext<TUser, TRole, TKey>> options,
-                              IHttpContextAccessor httpContextAccessor,
-                              IAuditConfiguration auditConfiguration) : base(options, httpContextAccessor, auditConfiguration)
-        {
-            AuditConfiguration = auditConfiguration;
-            IgnoreSoftDelete.Value = false;
+            IgnoreSoftDelete = false;
         }
 
         #endregion

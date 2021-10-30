@@ -32,7 +32,7 @@ namespace Milvasoft.SampleAPI.Data.Utils
         {
             var deletingEntities = await _dbContext.Set<TEntity>().AsNoTracking().ToListAsync().ConfigureAwait(false);
 
-            EducationAppDbContext.IgnoreSoftDeleteForNextProcess();
+            _dbContext.IgnoreSoftDeleteForNextProcess();
 
             _dbContext.Set<TEntity>().RemoveRange(deletingEntities);
 
