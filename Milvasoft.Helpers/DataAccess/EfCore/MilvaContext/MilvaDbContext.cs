@@ -130,18 +130,6 @@ namespace Milvasoft.Helpers.DataAccess.MilvaContext
         }
 
         /// <summary>
-        /// Overrided the SaveChangesAsync method for soft deleting.
-        /// </summary>
-        /// <param name="acceptAllChangesOnSuccess"></param>
-        /// <param name="cancellationToken"></param>
-        /// <returns></returns>
-        public override async Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = new CancellationToken())
-        {
-            AuditEntites();
-            return await base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);
-        }
-
-        /// <summary>
         /// Gets requested contents by <paramref name="type"/> DbSet.
         /// If this method gets soft deleted entities please override <see cref="CreateIsDeletedFalseExpression{TEntity}"/> method your own condition.
         /// </summary>
@@ -379,7 +367,6 @@ namespace Milvasoft.Helpers.DataAccess.MilvaContext
                               IAuditConfiguration auditConfiguration) : base(options, httpContextAccessor, auditConfiguration)
         {
             AuditConfiguration = auditConfiguration;
-            IgnoreSoftDelete = false;
         }
 
         #endregion

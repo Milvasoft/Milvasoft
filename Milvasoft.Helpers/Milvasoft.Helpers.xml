@@ -3594,14 +3594,6 @@
             <param name="cancellationToken"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.MilvaContext.MilvaDbContextBase`3.SaveChangesAsync(System.Boolean,System.Threading.CancellationToken)">
-            <summary>
-            Overrided the SaveChangesAsync method for soft deleting.
-            </summary>
-            <param name="acceptAllChangesOnSuccess"></param>
-            <param name="cancellationToken"></param>
-            <returns></returns>
-        </member>
         <member name="M:Milvasoft.Helpers.DataAccess.MilvaContext.MilvaDbContextBase`3.GetRequiredContents(System.Type)">
             <summary>
             Gets requested contents by <paramref name="type"/> DbSet.
