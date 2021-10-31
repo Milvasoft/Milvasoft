@@ -3140,11 +3140,6 @@
             Last modification date of entity.
             </summary>
         </member>
-        <member name="P:Milvasoft.Helpers.DataAccess.Concrete.Entity.AuditableEntity`1.LastModifierUserId">
-            <summary>
-            Last modifier of entity.
-            </summary>
-        </member>
         <member name="T:Milvasoft.Helpers.DataAccess.Concrete.Entity.AuditableEntity`2">
             <summary>
             Determines entity's is auditable with modifier and modification date.

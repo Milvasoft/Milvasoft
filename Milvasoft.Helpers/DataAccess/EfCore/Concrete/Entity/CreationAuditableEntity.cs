@@ -16,7 +16,6 @@ namespace Milvasoft.Helpers.DataAccess.Concrete.Entity
         /// Creation date of entity.
         /// </summary>
         public virtual DateTime CreationDate { get; set; }
-
     }
 
     /// <summary>
@@ -37,7 +36,6 @@ namespace Milvasoft.Helpers.DataAccess.Concrete.Entity
         /// Creator of entity.
         /// </summary>
         public virtual TUserKey? CreatorUserId { get; set; }
-
     }
 
     /// <summary>

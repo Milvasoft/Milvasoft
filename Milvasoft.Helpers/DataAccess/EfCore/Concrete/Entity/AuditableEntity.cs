@@ -15,11 +15,6 @@ namespace Milvasoft.Helpers.DataAccess.Concrete.Entity
         /// Last modification date of entity.
         /// </summary>
         public virtual DateTime? LastModificationDate { get; set; }
-
-        /// <summary>
-        /// Last modifier of entity.
-        /// </summary>
-        public virtual TKey? LastModifierUserId { get; set; }
     }
 
     /// <summary>
