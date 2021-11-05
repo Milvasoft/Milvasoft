@@ -157,6 +157,12 @@ namespace Milvasoft.Helpers.Caching
                                            string userFriendlyMessageLocalizerKey,
                                            IMilvaLogger milvaLogger = null);
 
+        /// <summary>
+        /// Checks redis connection and if connection close try to open connection.
+        /// </summary>
+        /// <returns></returns>
+        ValueTask CheckClientAndConnectIfNotAsync();
+
         #endregion
 
         #region Sync

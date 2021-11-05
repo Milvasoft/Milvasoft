@@ -639,6 +639,12 @@
             <param name="milvaLogger"></param>
             <returns></returns>
         </member>
+        <member name="M:Milvasoft.Helpers.Caching.IRedisCacheService.CheckClientAndConnectIfNotAsync">
+            <summary>
+            Checks redis connection and if connection close try to open connection.
+            </summary>
+            <returns></returns>
+        </member>
         <member name="M:Milvasoft.Helpers.Caching.IRedisCacheService.Connect">
             <summary>
             Connects redis database if there is no connection. Otherwise this method does nothing.
@@ -854,6 +860,12 @@
             <param name="action"></param>
             <param name="userFriendlyMessageLocalizerKey"></param>
             <param name="milvaLogger"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.Caching.RedisCacheService.CheckClientAndConnectIfNotAsync">
+            <summary>
+            Checks redis connection and if connection close try to open connection.
+            </summary>
             <returns></returns>
         </member>
         <member name="M:Milvasoft.Helpers.Caching.RedisCacheService.Connect">
@@ -1088,7 +1100,8 @@
         </member>
         <member name="M:Milvasoft.Helpers.CommonHelper.IsBetween(System.DateTime,System.TimeSpan,System.TimeSpan,System.TimeSpan)">
             <summary>
-            Compares <paramref name="date"/> for whether between <paramref name="startTime"/> and <paramref name="endTime"/>. 
+            Removes <paramref name="date"/>'s hour, second and milisecond then adds <paramref name="compareTime"/> to <paramref name="date"/> 
+            and compares <paramref name="date"/> for whether between <paramref name="startTime"/> and <paramref name="endTime"/>. 
             </summary>
             
             <remarks>

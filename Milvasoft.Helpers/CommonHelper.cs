@@ -282,7 +282,8 @@ namespace Milvasoft.Helpers
         }
 
         /// <summary>
-        /// Compares <paramref name="date"/> for whether between <paramref name="startTime"/> and <paramref name="endTime"/>. 
+        /// Removes <paramref name="date"/>'s hour, second and milisecond then adds <paramref name="compareTime"/> to <paramref name="date"/> 
+        /// and compares <paramref name="date"/> for whether between <paramref name="startTime"/> and <paramref name="endTime"/>. 
         /// </summary>
         /// 
         /// <remarks>

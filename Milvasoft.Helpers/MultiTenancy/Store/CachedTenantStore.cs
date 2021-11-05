@@ -30,6 +30,8 @@ namespace Milvasoft.Helpers.MultiTenancy.Store
         /// <returns></returns>
         public async Task<TTenant> GetTenantAsync(TKey identifier)
         {
+            await _redisCacheService.CheckClientAndConnectIfNotAsync();
+
             if (_redisCacheService.IsConnected())
                 return await _redisCacheService.GetAsync<TTenant>(identifier.ToString()).ConfigureAwait(false);
             else return null;
@@ -43,6 +45,8 @@ namespace Milvasoft.Helpers.MultiTenancy.Store
         /// <returns></returns>
         public async Task<bool> SetTenantAsync(TKey identifier, TTenant tenant)
         {
+            await _redisCacheService.CheckClientAndConnectIfNotAsync();
+
             if (_redisCacheService.IsConnected())
                 return await _redisCacheService.SetAsync(identifier.ToString(), tenant).ConfigureAwait(false);
             else return false;

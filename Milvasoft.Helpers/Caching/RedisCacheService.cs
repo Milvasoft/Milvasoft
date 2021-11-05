@@ -282,7 +282,11 @@ namespace Milvasoft.Helpers.Caching
             }
         }
 
-        private async ValueTask CheckClientAndConnectIfNotAsync()
+        /// <summary>
+        /// Checks redis connection and if connection close try to open connection.
+        /// </summary>
+        /// <returns></returns>
+        public async ValueTask CheckClientAndConnectIfNotAsync()
         {
             if (_client == null)
             {
