@@ -24,7 +24,7 @@
 
 	<ItemGroup>
 	  <None Update="Milvasoft.Helpers.xml">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	  </None>
 	  <None Update="Resources\milvalogo.png">
 	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
