@@ -40,7 +40,8 @@ namespace Milvasoft.Helpers.MultiTenancy.Middleware
 
                 var tenant = await tenantService.GetTenantAsync().ConfigureAwait(false);
 
-                context.Items.Add(TenancyConstants.HttpContextTenantKey, tenant);
+                if (tenant != null)
+                    context.Items.Add(TenancyConstants.HttpContextTenantKey, tenant);
             }
 
             //Continue processing
