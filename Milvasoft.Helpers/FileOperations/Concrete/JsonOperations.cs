@@ -1288,7 +1288,7 @@ namespace Milvasoft.Helpers.FileOperations.Concrete
 
         #endregion
 
-        #region JSON File Operations Sync
+        #region Obsolete JSON File Operations Sync
 
         /// <summary>
         /// Gets all content from json file in <paramref name="filePath"/>. 
@@ -1307,6 +1307,7 @@ namespace Milvasoft.Helpers.FileOperations.Concrete
         /// <param name="filePath"> Path to json file to get data from. </param>
         /// <param name="cultureInfo"> Culture information. Default is "en-US". </param>
         /// <returns> A content list of type <typeparamref name="T"/>. </returns>
+        [Obsolete("This method will be removed in next versions. Use instead GetContent")]
         public List<T> GetRequiredContentFromJsonFile<T>(string filePath, CultureInfo cultureInfo = null)
         {
             var jsonContent = File.ReadAllText(filePath, Encoding.UTF8);
@@ -1332,6 +1333,7 @@ namespace Milvasoft.Helpers.FileOperations.Concrete
         /// <param name="filePath"> Path to json file to get data from. </param>
         /// <param name="cultureInfo"> Culture information. Default is "en-US". </param>
         /// <returns> A content list of type <typeparamref name="T"/>. </returns>
+        [Obsolete("This method will be removed in next versions. Use instead GetContent")]
         public List<T> GetContentFromJsonFile<T>(string filePath, CultureInfo cultureInfo = null)
         {
             var jsonContent = File.ReadAllText(filePath, Encoding.UTF8);
@@ -1359,6 +1361,7 @@ namespace Milvasoft.Helpers.FileOperations.Concrete
         /// <param name="contentsHasId"> Determines whether the contents are added in auto increment by "Id" property. </param>
         /// <param name="cultureInfo"> Culture information. Default is "en-US". </param>
         /// <returns></returns>
+        [Obsolete("This method will be removed in next versions. Use instead AddContents")]
         public void AddContentToJsonFile<T>(List<T> contents, string filePath, bool contentsHasId, CultureInfo cultureInfo = null)
         {
             var jsonContentString = File.ReadAllText(filePath, Encoding.UTF8);
@@ -1419,6 +1422,7 @@ namespace Milvasoft.Helpers.FileOperations.Concrete
         /// <param name="filePath"> Path to json file to get data from. </param>
         /// <param name="mappingProperty"> The data to be updated is extracted from the file according to this property. </param>
         /// <param name="cultureInfo"> Culture information. Default is "en-US". </param>  
+        [Obsolete("This method will be removed in next versions. Use instead UpdateContents")]
         public void UpdateContentFromJsonFile<T>(List<T> contents, string filePath, Expression<Func<T, dynamic>> mappingProperty, CultureInfo cultureInfo = null)
         {
             var jsonContentString = File.ReadAllText(filePath, Encoding.UTF8);
@@ -1473,6 +1477,7 @@ namespace Milvasoft.Helpers.FileOperations.Concrete
         /// <param name="filePath"> Path to json file to get data from. </param>
         /// <param name="mappingProperty"> The data to be updated is extracted from the file according to this property. </param>
         /// <param name="cultureInfo"> Culture information. Default is "en-US". </param> 
+        [Obsolete("This method will be removed in next versions. Use instead DeleteContents")]
         public void DeleteContentFromJsonFile<T>(List<T> contents, string filePath, Expression<Func<T, dynamic>> mappingProperty, CultureInfo cultureInfo = null)
         {
             var jsonContentString = File.ReadAllText(filePath, Encoding.UTF8);
@@ -1546,6 +1551,7 @@ namespace Milvasoft.Helpers.FileOperations.Concrete
         /// <param name="filePath"> Path to json file to get data from. </param>
         /// <param name="cultureInfo"> Culture information. Default is "en-US". </param>
         /// <returns> A single content of type <typeparamref name="T"/>. </returns>
+        [Obsolete("This method will be removed in next versions. Use instead GetContent")]
         public T GetRequiredSingleContentFromJsonFile<T>(string filePath, CultureInfo cultureInfo = null)
         {
             var jsonContent = File.ReadAllText(filePath, Encoding.UTF8);
@@ -1589,6 +1595,7 @@ namespace Milvasoft.Helpers.FileOperations.Concrete
         /// <param name="filePath"> Path to json file to get data from. </param>
         /// <param name="cultureInfo"> Culture information. Default is "en-US". </param>
         /// <returns> A single content of type <typeparamref name="T"/> if content isn't null. </returns>
+        [Obsolete("This method will be removed in next versions. Use instead GetContent")]
         public T GetSingleContentFromJsonFile<T>(string filePath, CultureInfo cultureInfo = null)
         {
             var jsonContent = File.ReadAllText(filePath, Encoding.UTF8);
@@ -1618,6 +1625,7 @@ namespace Milvasoft.Helpers.FileOperations.Concrete
         /// <param name="content"> Content to be added or updated. </param>
         /// <param name="filePath"> Path to json file to get data from. </param>
         /// <param name="cultureInfo"> Culture information. Default is "en-US". </param>
+        [Obsolete("This method will be removed in next versions. Use instead UpdateContent")]
         public void AddOrUpdateSingleContentToJsonFile<T>(T content, string filePath, CultureInfo cultureInfo = null)
         {
             string newJsonResult = JsonConvert.SerializeObject(content, Formatting.Indented, new JsonSerializerSettings()
@@ -2003,6 +2011,224 @@ namespace Milvasoft.Helpers.FileOperations.Concrete
         }
 
         #endregion
+
+        #endregion
+
+        #region JSON File Operations Sync
+
+        /// <summary>
+        /// Gets all content from json file in <paramref name="filePath"/>. 
+        /// Returns them as the requested type.
+        /// </summary>
+        /// <remarks>
+        /// 
+        /// <para> This method support all structures in class remarks. </para> 
+        /// 
+        /// </remarks>
+        /// <typeparam name="T"> Model type in json.</typeparam>
+        /// <param name="filePath"></param>
+        /// <returns>Returns List<typeparamref name="T"/>.</returns>
+        public List<T> GetContent<T>(string filePath)
+        {
+            filePath = GetFilePath(filePath);
+
+            var jsonContent = File.ReadAllText(filePath, _encoding);
+
+            var contentList = JsonConvert.DeserializeObject<List<T>>(jsonContent, _jsonSerializerSettings);
+
+            return contentList;
+        }
+
+        /// <summary>
+        /// Adds <paramref name="content"/> to json file in <paramref name="filePath"/>.
+        /// </summary>
+        /// <remarks>
+        /// 
+        /// <para> This method supports only structure 2 in class remarks. </para> 
+        /// <para> Don't send <typeparamref name="T"/> as <see cref="List{T}"/>. You can use <see cref="List{T}"/> overload. </para>
+        /// <para> If content has "Id" property which type is "System.Int32" . Send <paramref name="contentsHasId"/> param "true". The code will be increase Id automatically. </para> 
+        /// <para> This method reads all file. This can cause performance impact with big files. </para> 
+        /// 
+        /// </remarks>
+        /// <typeparam name="T"> Model type in json.</typeparam>
+        /// <param name="content"> Content to be added. </param>
+        /// <param name="filePath"> Path to json file to get data from. </param>
+        /// <param name="contentsHasId"> Determines whether the contents are added in auto increment by "Id" property. </param>
+        public void AddContent<T>(T content, string filePath, bool contentsHasId = false)
+        {
+            filePath = GetFilePath(filePath);
+
+            var jsonContentString = File.ReadAllText(filePath, _encoding);
+
+            string newJsonResult = GetJsonResultForAdd(new List<T> { content }, jsonContentString, contentsHasId);
+
+            File.WriteAllText(filePath, newJsonResult);
+        }
+
+        /// <summary>
+        /// Adds <paramref name="contents"/> to json file in <paramref name="filePath"/>.
+        /// </summary>
+        /// <remarks>
+        /// 
+        /// <para> This method supports only structure 2 in class remarks. </para> 
+        /// <para> If content has "Id" property which type is "System.Int32". Send <paramref name="contentsHasId"/> param "true". The code will be increase Id automatically. </para> 
+        /// <para> This method reads all file. This can cause performance impact with big files. </para> 
+        /// 
+        /// </remarks>
+        /// <typeparam name="T"> Model type in json. </typeparam>
+        /// <param name="contents"> Contents to be added. </param>
+        /// <param name="filePath"> Path to json file to get data from. </param>
+        /// <param name="contentsHasId"> Determines whether the contents are added in auto increment by "Id" property. </param>
+        public void AddContents<T>(List<T> contents, string filePath, bool contentsHasId = false)
+        {
+            filePath = GetFilePath(filePath);
+
+            var jsonContentString = File.ReadAllText(filePath, _encoding);
+
+            string newJsonResult = GetJsonResultForAdd(contents, jsonContentString, contentsHasId);
+
+            File.WriteAllText(filePath, newJsonResult);
+        }
+
+        /// <summary>
+        /// Updates content from json file in <paramref name="filePath"/>.
+        /// </summary>
+        /// <remarks>
+        /// 
+        /// <para> This method supports only structure 2 in class remarks. </para> 
+        /// <para> Don't send <typeparamref name="T"/> as <see cref="List{T}"/>. You can use <see cref="List{T}"/> overload. </para>
+        /// <para> Updates by requested Property. Don't forget send <paramref name="mappingProperty"/> ! </para>
+        /// <para> Send all the properties of the object to be updated. Otherwise, unsent properties are updated to null. </para>
+        /// <para> This method reads all file. This can cause performance impact with big files. </para> 
+        /// 
+        /// </remarks>
+        /// 
+        /// <exception cref="Exception()"> Throwns when not valid <paramref name="mappingProperty"/> or requested Entity type does not have that <paramref name="mappingProperty"/>. </exception>
+        /// <exception cref="Exception()"> Throwns when json file in <paramref name="filePath"/> not contains <paramref name="content"/>. </exception>
+        /// 
+        /// <typeparam name="T"> Model type in json. </typeparam>
+        /// <param name="content"> Contents to be updated. </param>
+        /// <param name="filePath"> Path to json file to get data from. </param>
+        /// <param name="mappingProperty"> The data to be updated is extracted from the file according to this property. </param>
+        public void UpdateContent<T>(T content, string filePath, Expression<Func<T, dynamic>> mappingProperty)
+        {
+            filePath = GetFilePath(filePath);
+
+            var jsonContentString = File.ReadAllText(filePath, _encoding);
+
+            string newJsonResult = GetJsonResultForUpdate(new List<T> { content }, jsonContentString, mappingProperty);
+
+            File.WriteAllText(filePath, newJsonResult);
+        }
+
+        /// <summary>
+        /// Updates contents from json file in <paramref name="filePath"/>.
+        /// </summary>
+        /// <remarks>
+        /// 
+        /// <para> This method supports only structure 2 in class remarks. </para> 
+        /// <para> Don't send <typeparamref name="T"/> as <see cref="List{T}"/>. You can use <see cref="List{T}"/> overload. </para>
+        /// <para> Updates by requested Property. Don't forget send <paramref name="mappingProperty"/>! </para>
+        /// <para> Send all the properties of the object to be updated. Otherwise, unsent properties are updated to null. </para>
+        /// <para> This method reads all file. This can cause performance impact with big files. </para> 
+        /// 
+        /// </remarks>
+        /// 
+        /// <exception cref="Exception()"> Throwns when not valid <paramref name="mappingProperty"/> or requested Entity type does not have that <paramref name="mappingProperty"/>. </exception>
+        /// <exception cref="Exception()"> Throwns when json file in <paramref name="filePath"/> not contains <paramref name="contents"/>.</exception>
+        /// 
+        /// <typeparam name="T"> Model type in json. </typeparam>
+        /// <param name="contents"> Contents to be updated. </param>
+        /// <param name="filePath"> Path to json file to get data from. </param>
+        /// <param name="mappingProperty"> The data to be updated is extracted from the file according to this property. </param>
+        public void UpdateContents<T>(List<T> contents, string filePath, Expression<Func<T, dynamic>> mappingProperty)
+        {
+            filePath = GetFilePath(filePath);
+
+            var jsonContentString = File.ReadAllText(filePath, _encoding);
+
+            string newJsonResult = GetJsonResultForUpdate(contents, jsonContentString, mappingProperty);
+
+            File.WriteAllText(filePath, newJsonResult);
+        }
+
+        /// <summary>
+        /// Deletes record from requested json file.
+        /// </summary>
+        /// <remarks>
+        /// 
+        /// <para> This method supports only structure 2 in class remarks. </para> 
+        /// <para> Don't send <typeparamref name="T"/> as <see cref="List{T}"/>. You can use <see cref="List{T}"/> overload. </para>
+        /// <para> This method reads all file. This can cause performance impact with big files. </para> 
+        /// 
+        /// </remarks>
+        /// <typeparam name="T"> Model type in json. </typeparam>
+        /// <param name="mappingValue"> Mapping value of content to be deleted. </param>
+        /// <param name="filePath"> Path to json file to get data from. </param>
+        /// <param name="mappingProperty"> The data to be updated is extracted from the file according to this property. </param>
+        public void DeleteContent<T>(List<dynamic> mappingValue, string filePath, Expression<Func<T, dynamic>> mappingProperty)
+        {
+            filePath = GetFilePath(filePath);
+
+            var jsonContentString = File.ReadAllText(filePath, _encoding);
+
+            string newJsonResult = GetJsonResultForDelete(new List<dynamic> { mappingValue }, jsonContentString, mappingProperty);
+
+            File.WriteAllText(filePath, newJsonResult);
+        }
+
+        /// <summary>
+        /// Deletes records from requested json file.
+        /// </summary>
+        /// <remarks>
+        /// 
+        /// <para> This method supports only structure 2 in class remarks. </para> 
+        /// <para> This method reads all file. This can cause performance impact with big files. </para> 
+        /// 
+        /// </remarks>
+        /// <typeparam name="T"> Model type in json. </typeparam>
+        /// <param name="mappingValues"> Mapping values of contents to be deleted. </param>
+        /// <param name="filePath"> Path to json file to get data from. </param>
+        /// <param name="mappingProperty"> The data to be updated is extracted from the file according to this property. </param>
+        public void DeleteContents<T>(List<dynamic> mappingValues, string filePath, Expression<Func<T, dynamic>> mappingProperty)
+        {
+            filePath = GetFilePath(filePath);
+
+            var jsonContentString = File.ReadAllText(filePath, _encoding);
+
+            string newJsonResult = GetJsonResultForDelete(mappingValues, jsonContentString, mappingProperty);
+
+            File.WriteAllText(filePath, newJsonResult);
+        }
+
+        /// <summary>
+        /// Removes all file data and writes new one.
+        /// </summary>
+        /// <remarks>
+        /// 
+        /// <para> This method support all structures in class remarks. </para> 
+        /// 
+        /// </remarks>
+        /// <typeparam name="T"> Model type in json. </typeparam>
+        /// <param name="content"> Content to be added or updated. </param>
+        /// <param name="filePath"> Path to json file to get data from. </param>
+        public void ReplaceOldContentWithNew<T>(T content, string filePath)
+        {
+            string newJsonResult = JsonConvert.SerializeObject(content, Formatting.Indented, _jsonSerializerSettings);
+
+            File.WriteAllText(GetFilePath(filePath), newJsonResult);
+        }
+
+        /// <summary>
+        /// Clears json file in <paramref name="filePath"/>.
+        /// </summary>
+        /// <remarks>
+        /// 
+        /// <para> This method support all structures in class remarks. </para> 
+        /// 
+        /// </remarks>
+        /// <param name="filePath"> Path to json file to get data from. </param>
+        public void ClearJSONFile(string filePath) => File.WriteAllText(GetFilePath(filePath), "");
 
         #endregion
 
