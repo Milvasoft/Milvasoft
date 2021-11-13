@@ -6092,827 +6092,151 @@
             <param name="filePath"> Path to json file to get data from. </param>   
             <returns> Completed <see cref="T:System.Threading.Tasks.Task"/> </returns>
         </member>
-        <member name="M:Milvasoft.Helpers.FileOperations.Abstract.IJsonOperations.GetRequiredContentFromJsonFileAsync``1(System.String,System.Globalization.CultureInfo)">
+        <member name="M:Milvasoft.Helpers.FileOperations.Abstract.IJsonOperations.GetContent``1(System.String)">
             <summary>
             Gets all content from json file in <paramref name="filePath"/>. 
-            Returns them as the requested list of type.
-            </summary>
-            
-            <remarks> 
-            
-            If <paramref name="cultureInfo"/> is null, default is ("en-US")
-            
-            </remarks>
-            
-            <typeparam name="T"> Return type. </typeparam>
-            <param name="filePath"> Path to json file to get data from. </param>
-            <param name="cultureInfo"> Culture information. Default is "en-US". </param>
-            <returns> A content list of type <typeparamref name="T"/>. </returns>
-        </member>
-        <member name="M:Milvasoft.Helpers.FileOperations.Abstract.IJsonOperations.GetContentFromJsonFileAsync``1(System.String,System.Globalization.CultureInfo)">
-            <summary>
-            Gets all content from json file in <paramref name="filePath"/>. 
-            Returns them as the requested list of type.
-            </summary>
-            
-            <remarks> 
-            
-            If <paramref name="cultureInfo"/> is null, default is ("en-US")
-            
-            </remarks>
-            
-            <exception cref="T:System.ArgumentNullException"> Throwns when returned content list is null or empty. </exception>
-            
-            <typeparam name="T"> Return type. </typeparam>
-            <param name="filePath"> Path to json file to get data from. </param>
-            <param name="cultureInfo"> Culture information. Default is "en-US". </param>
-            <returns> A content list of type <typeparamref name="T"/>. </returns>
-        </member>
-        <member name="M:Milvasoft.Helpers.FileOperations.Abstract.IJsonOperations.AddContentToJsonFileAsync``1(System.Collections.Generic.List{``0},System.String,System.Boolean,System.Globalization.CultureInfo)">
-            <summary>
-            Adds <paramref name="contents"/> to json file in <paramref name="filePath"/>.
-            If content has "Id" property which type is "System.Int32" . Send <paramref name="contentsHasId"/> param "true". The code will be increase Id automatically.
+            Returns them as the requested type.
             </summary>
             <remarks>
             
-            <para> If <paramref name="cultureInfo"/> is null, default is ("en-US")</para> 
-            
-            <para><b> yourjsonfile.json file must contains list or must be empty.</b> </para> 
+            <para> This method support all structures in class remarks. </para> 
             
             </remarks>
-            <typeparam name="T"> Return type. </typeparam>
+            <typeparam name="T"> Model type in json.</typeparam>
+            <param name="filePath"></param>
+            <returns>Returns List<typeparamref name="T"/>.</returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.FileOperations.Abstract.IJsonOperations.AddContent``1(``0,System.String,System.Boolean)">
+            <summary>
+            Adds <paramref name="content"/> to json file in <paramref name="filePath"/>.
+            </summary>
+            <remarks>
+            
+            <para> This method supports only structure 2 in class remarks. </para> 
+            <para> Don't send <typeparamref name="T"/> as <see cref="T:System.Collections.Generic.List`1"/>. You can use <see cref="T:System.Collections.Generic.List`1"/> overload. </para>
+            <para> If content has "Id" property which type is "System.Int32" . Send <paramref name="contentsHasId"/> param "true". The code will be increase Id automatically. </para> 
+            <para> This method reads all file. This can cause performance impact with big files. </para> 
+            
+            </remarks>
+            <typeparam name="T"> Model type in json.</typeparam>
+            <param name="content"> Content to be added. </param>
+            <param name="filePath"> Path to json file to get data from. </param>
+            <param name="contentsHasId"> Determines whether the contents are added in auto increment by "Id" property. </param>
+        </member>
+        <member name="M:Milvasoft.Helpers.FileOperations.Abstract.IJsonOperations.AddContents``1(System.Collections.Generic.List{``0},System.String,System.Boolean)">
+            <summary>
+            Adds <paramref name="contents"/> to json file in <paramref name="filePath"/>.
+            </summary>
+            <remarks>
+            
+            <para> This method supports only structure 2 in class remarks. </para> 
+            <para> If content has "Id" property which type is "System.Int32". Send <paramref name="contentsHasId"/> param "true". The code will be increase Id automatically. </para> 
+            <para> This method reads all file. This can cause performance impact with big files. </para> 
+            
+            </remarks>
+            <typeparam name="T"> Model type in json. </typeparam>
             <param name="contents"> Contents to be added. </param>
             <param name="filePath"> Path to json file to get data from. </param>
             <param name="contentsHasId"> Determines whether the contents are added in auto increment by "Id" property. </param>
-            <param name="cultureInfo"> Culture information. Default is "en-US". </param>
-            <returns> Completed <see cref="T:System.Threading.Tasks.Task"/> </returns>
         </member>
-        <member name="M:Milvasoft.Helpers.FileOperations.Abstract.IJsonOperations.UpdateContentFromJsonFileAsync``1(System.Collections.Generic.List{``0},System.String,System.Linq.Expressions.Expression{System.Func{``0,System.Object}},System.Globalization.CultureInfo)">
+        <member name="M:Milvasoft.Helpers.FileOperations.Abstract.IJsonOperations.UpdateContent``1(``0,System.String,System.Linq.Expressions.Expression{System.Func{``0,System.Object}})">
+            <summary>
+            Updates content from json file in <paramref name="filePath"/>.
+            </summary>
+            <remarks>
+            
+            <para> This method supports only structure 2 in class remarks. </para> 
+            <para> Don't send <typeparamref name="T"/> as <see cref="T:System.Collections.Generic.List`1"/>. You can use <see cref="T:System.Collections.Generic.List`1"/> overload. </para>
+            <para> Updates by requested Property. Don't forget send <paramref name="mappingProperty"/> ! </para>
+            <para> Send all the properties of the object to be updated. Otherwise, unsent properties are updated to null. </para>
+            <para> This method reads all file. This can cause performance impact with big files. </para> 
+            
+            </remarks>
+            
+            <exception cref="M:System.Exception.#ctor"> Throwns when not valid <paramref name="mappingProperty"/> or requested Entity type does not have that <paramref name="mappingProperty"/>. </exception>
+            <exception cref="M:System.Exception.#ctor"> Throwns when json file in <paramref name="filePath"/> not contains <paramref name="content"/>. </exception>
+            
+            <typeparam name="T"> Model type in json. </typeparam>
+            <param name="content"> Contents to be updated. </param>
+            <param name="filePath"> Path to json file to get data from. </param>
+            <param name="mappingProperty"> The data to be updated is extracted from the file according to this property. </param>
+        </member>
+        <member name="M:Milvasoft.Helpers.FileOperations.Abstract.IJsonOperations.UpdateContents``1(System.Collections.Generic.List{``0},System.String,System.Linq.Expressions.Expression{System.Func{``0,System.Object}})">
             <summary>
             Updates contents from json file in <paramref name="filePath"/>.
             </summary>
             <remarks>
-            Updates by requested Property. Don't forget send <paramref name="mappingProperty"/> !!!
-            </remarks>
-            <exception cref="M:System.Exception.#ctor">
-            Throwns when not valid <paramref name="mappingProperty"/> or requested Entity type does not have that <paramref name="mappingProperty"/>.
-            </exception>
-            <exception cref="M:System.Exception.#ctor">
-            Throwns when json file in <paramref name="filePath"/> not contains <paramref name="contents"/> .
-            </exception>
-            <remarks>
             
-            Send all the properties of the object to be updated. Otherwise, unsent properties are updated to null.
-            
-            If <paramref name="cultureInfo"/> is null, default is ("en-US")
+            <para> This method supports only structure 2 in class remarks. </para> 
+            <para> Don't send <typeparamref name="T"/> as <see cref="T:System.Collections.Generic.List`1"/>. You can use <see cref="T:System.Collections.Generic.List`1"/> overload. </para>
+            <para> Updates by requested Property. Don't forget send <paramref name="mappingProperty"/>! </para>
+            <para> Send all the properties of the object to be updated. Otherwise, unsent properties are updated to null. </para>
+            <para> This method reads all file. This can cause performance impact with big files. </para> 
             
             </remarks>
             
-            <typeparam name="T"> Return type. </typeparam>
+            <exception cref="M:System.Exception.#ctor"> Throwns when not valid <paramref name="mappingProperty"/> or requested Entity type does not have that <paramref name="mappingProperty"/>. </exception>
+            <exception cref="M:System.Exception.#ctor"> Throwns when json file in <paramref name="filePath"/> not contains <paramref name="contents"/>.</exception>
+            
+            <typeparam name="T"> Model type in json. </typeparam>
             <param name="contents"> Contents to be updated. </param>
             <param name="filePath"> Path to json file to get data from. </param>
             <param name="mappingProperty"> The data to be updated is extracted from the file according to this property. </param>
-            <param name="cultureInfo"> Culture information. Default is "en-US". </param>  
-            <returns> Completed <see cref="T:System.Threading.Tasks.Task"/> </returns>
         </member>
-        <member name="M:Milvasoft.Helpers.FileOperations.Abstract.IJsonOperations.DeleteContentFromJsonFileAsync``1(System.Collections.Generic.List{``0},System.String,System.Linq.Expressions.Expression{System.Func{``0,System.Object}},System.Globalization.CultureInfo)">
+        <member name="M:Milvasoft.Helpers.FileOperations.Abstract.IJsonOperations.DeleteContent``1(System.Collections.Generic.List{System.Object},System.String,System.Linq.Expressions.Expression{System.Func{``0,System.Object}})">
             <summary>
             Deletes record from requested json file.
             </summary>
-            
-            <remarks> 
-            
-            If <paramref name="cultureInfo"/> is null, default is ("en-US")
-            
-            </remarks>
-            
-            <typeparam name="T"> Return type. </typeparam>
-            <param name="contents"> Contents to be updated. </param>
-            <param name="filePath"> Path to json file to get data from. </param>
-            <param name="mappingProperty"> The data to be updated is extracted from the file according to this property. </param>
-            <param name="cultureInfo"> Culture information. Default is "en-US". </param> 
-            <returns> Completed <see cref="T:System.Threading.Tasks.Task"/> </returns>
-        </member>
-        <member name="M:Milvasoft.Helpers.FileOperations.Abstract.IJsonOperations.GetRequiredSingleContentFromJsonFileAsync``1(System.String,System.Globalization.CultureInfo)">
-            <summary>
-            Gets single content from json file in <paramref name="filePath"/>. 
-            Returns them as the requested list of type.
-            
-            <para> Example json file template for use this library methods; </para>
-            <code>
-            
-             {
-               "Id": 1,
-               "Name": "poco1",
-               "Which": false
-             }
-             
-             OR
-             
-             "Hello World!"
-            
-            </code>
-            
-            </summary>
-            
-            <remarks> 
-            
-            If <paramref name="cultureInfo"/> is null, default is ("en-US")
-            
-            </remarks>
-            
-            <typeparam name="T"> Return type. </typeparam>
-            <param name="filePath"> Path to json file to get data from. </param>
-            <param name="cultureInfo"> Culture information. Default is "en-US". </param>
-            <returns> A single content of type <typeparamref name="T"/>. </returns>
-        </member>
-        <member name="M:Milvasoft.Helpers.FileOperations.Abstract.IJsonOperations.GetSingleContentFromJsonFileAsync``1(System.String,System.Globalization.CultureInfo)">
-            <summary>
-            Gets single content from json file in <paramref name="filePath"/>. 
-            Returns them as the requested list of type.
-            
-            <para> Example json file template for use this library methods; </para>
-            <code>
-            
-             {
-               "Id": 1,
-               "Name": "poco1",
-               "Which": false
-             }
-             
-             OR
-             
-             "Hello World!"
-            
-            </code>
-            
-            </summary>
-            
-            <remarks> 
-            
-            If <paramref name="cultureInfo"/> is null, default is ("en-US")
-            
-            </remarks>
-            
-            <exception cref="T:System.ArgumentNullException"> Throwns when returned content is null. </exception>
-            
-            <typeparam name="T"> Return type. </typeparam>
-            <param name="filePath"> Path to json file to get data from. </param>
-            <param name="cultureInfo"> Culture information. Default is "en-US". </param>
-            <returns> A single content of type <typeparamref name="T"/> if content isn't null.  </returns>
-        </member>
-        <member name="M:Milvasoft.Helpers.FileOperations.Abstract.IJsonOperations.AddOrUpdateSingleContentToJsonFileAsync``1(``0,System.String,System.Globalization.CultureInfo)">
-            <summary>
-            Adds <paramref name="content"/> to json file in <paramref name="filePath"/>.
-            (like Auto Increment)
-            </summary>
-            
             <remarks>
             
-            yourjsonfile.json file must contains exact same type of <typeparamref name="T"/> or file must be empty.
-            
-            If <paramref name="cultureInfo"/> is null, default is ("en-US")
+            <para> This method supports only structure 2 in class remarks. </para> 
+            <para> Don't send <typeparamref name="T"/> as <see cref="T:System.Collections.Generic.List`1"/>. You can use <see cref="T:System.Collections.Generic.List`1"/> overload. </para>
+            <para> This method reads all file. This can cause performance impact with big files. </para> 
             
             </remarks>
+            <typeparam name="T"> Model type in json. </typeparam>
+            <param name="mappingValue"> Mapping value of content to be deleted. </param>
+            <param name="filePath"> Path to json file to get data from. </param>
+            <param name="mappingProperty"> The data to be updated is extracted from the file according to this property. </param>
+        </member>
+        <member name="M:Milvasoft.Helpers.FileOperations.Abstract.IJsonOperations.DeleteContents``1(System.Collections.Generic.List{System.Object},System.String,System.Linq.Expressions.Expression{System.Func{``0,System.Object}})">
+            <summary>
+            Deletes records from requested json file.
+            </summary>
+            <remarks>
             
-            <typeparam name="T"> Return type. </typeparam>
+            <para> This method supports only structure 2 in class remarks. </para> 
+            <para> This method reads all file. This can cause performance impact with big files. </para> 
+            
+            </remarks>
+            <typeparam name="T"> Model type in json. </typeparam>
+            <param name="mappingValues"> Mapping values of contents to be deleted. </param>
+            <param name="filePath"> Path to json file to get data from. </param>
+            <param name="mappingProperty"> The data to be updated is extracted from the file according to this property. </param>
+        </member>
+        <member name="M:Milvasoft.Helpers.FileOperations.Abstract.IJsonOperations.ReplaceOldContentWithNew``1(``0,System.String)">
+            <summary>
+            Removes all file data and writes new one.
+            </summary>
+            <remarks>
+            
+            <para> This method support all structures in class remarks. </para> 
+            
+            </remarks>
+            <typeparam name="T"> Model type in json. </typeparam>
             <param name="content"> Content to be added or updated. </param>
             <param name="filePath"> Path to json file to get data from. </param>
-            <param name="cultureInfo"> Culture information. Default is "en-US". </param>
-            <returns> Completed <see cref="T:System.Threading.Tasks.Task"/> </returns>
-        </member>
-        <member name="M:Milvasoft.Helpers.FileOperations.Abstract.IJsonOperations.GetRequiredContentFromCryptedJsonFileAsync``1(System.String,System.String,System.Globalization.CultureInfo)">
-            <summary>
-            Gets all content from crypted json file in <paramref name="filePath"/> with <paramref name="key"/>. 
-            Returns them as the requested list of type.
-            !!! Milvasoft Corporation is not responsible of possible data loss.
-            </summary>
-            
-            <remarks> 
-            
-            If <paramref name="cultureInfo"/> is null, default is ("en-US")
-            
-            </remarks>
-            
-            <typeparam name="T"> Return type. </typeparam>
-            <param name="filePath"> Path to json file to get data from. </param>
-            <param name="key"> Key of encrypted file. </param>
-            <param name="cultureInfo"> Culture information. Default is "en-US". </param>
-            <returns> A content list of type <typeparamref name="T"/>. </returns>
-        </member>
-        <member name="M:Milvasoft.Helpers.FileOperations.Abstract.IJsonOperations.GetContentFromCryptedJsonFileAsync``1(System.String,System.String,System.Globalization.CultureInfo)">
-            <summary>
-            Gets all content from json file in <paramref name="filePath"/> with <paramref name="key"/>. 
-            Returns them as the requested list of type.
-            !!! Milvasoft Corporation is not responsible of possible data loss.
-            </summary>
-            
-            <remarks> 
-            
-            If <paramref name="cultureInfo"/> is null, default is ("en-US")
-            
-            </remarks>
-            
-            <exception cref="T:System.ArgumentNullException"> Throwns when returned content list is null or empty. </exception>
-            
-            <typeparam name="T"> Return type. </typeparam>
-            <param name="filePath"> Path to json file to get data from. </param>
-            <param name="key"> Key of encrypted file. </param>
-            <param name="cultureInfo"> Culture information. Default is "en-US". </param>
-            <returns> A content list of type <typeparamref name="T"/>. </returns>
-        </member>
-        <member name="M:Milvasoft.Helpers.FileOperations.Abstract.IJsonOperations.AddContentToCryptedJsonFileAsync``1(System.Collections.Generic.List{``0},System.String,System.Boolean,System.String,System.Globalization.CultureInfo)">
-            <summary>
-            Adds <paramref name="contents"/> to json file in <paramref name="filePath"/> with <paramref name="key"/>.
-            If content has "Id" property which type is "System.Int32" . Send <paramref name="contentsHasId"/> param "true". The code will be increase Id automatically.
-            !!! Milvasoft Corporation is not responsible of possible data loss.
-            </summary>
-            <remarks>
-            
-            <para> If <paramref name="cultureInfo"/> is null, default is ("en-US")</para> 
-            
-            <para><b> yourjsonfile.json file must contains list or must be empty.</b> </para> 
-            
-            </remarks>
-            <typeparam name="T"> Return type. </typeparam>
-            <param name="contents"> Contents to be added. </param>
-            <param name="filePath"> Path to json file to get data from. </param>
-            <param name="contentsHasId"> Determines whether the contents are added in auto increment by "Id" property. </param>
-            <param name="key"> Key of encrypted file. </param>      
-            <param name="cultureInfo"> Culture information. Default is "en-US". </param>
-            <returns> Completed <see cref="T:System.Threading.Tasks.Task"/> </returns>
-        </member>
-        <member name="M:Milvasoft.Helpers.FileOperations.Abstract.IJsonOperations.UpdateContentFromCryptedJsonFileAsync``1(System.Collections.Generic.List{``0},System.String,System.Linq.Expressions.Expression{System.Func{``0,System.Object}},System.String,System.Globalization.CultureInfo)">
-            <summary>
-            Updates contents from json file in <paramref name="filePath"/> with  <paramref name="key"/>.
-            !!! Milvasoft Corporation is not responsible of possible data loss.
-            </summary>
-            <remarks>
-            Updates by requested Property. Don't forget send <paramref name="mappingProperty"/> !!!
-            </remarks>
-            <exception cref="M:System.Exception.#ctor">
-            Throwns when not valid <paramref name="mappingProperty"/> or requested Entity type does not have that <paramref name="mappingProperty"/>.
-            </exception>
-            <exception cref="M:System.Exception.#ctor">
-            Throwns when json file in <paramref name="filePath"/> not contains <paramref name="contents"/> .
-            </exception>
-            <remarks>
-            
-            Send all the properties of the object to be updated. Otherwise, unsent properties are updated to null.
-            
-            If <paramref name="cultureInfo"/> is null, default is ("en-US")
-            
-            </remarks>
-            
-            <typeparam name="T"> Return type. </typeparam>
-            <param name="contents"> Contents to be updated. </param>
-            <param name="filePath"> Path to json file to get data from. </param>
-            <param name="mappingProperty"> The data to be updated is extracted from the file according to this property. </param>
-            <param name="key"> Key of encrypted file. </param>        
-            <param name="cultureInfo"> Culture information. Default is "en-US". </param>  
-            <returns> Completed <see cref="T:System.Threading.Tasks.Task"/> </returns>
-        </member>
-        <member name="M:Milvasoft.Helpers.FileOperations.Abstract.IJsonOperations.DeleteContentFromCryptedJsonFileAsync``1(System.Collections.Generic.List{``0},System.String,System.Linq.Expressions.Expression{System.Func{``0,System.Object}},System.String,System.Globalization.CultureInfo)">
-            <summary>
-            Deletes record from requested json file with <paramref name="key"/>.
-            !!! Milvasoft Corporation is not responsible of possible data loss.
-            </summary>
-            
-            <remarks> 
-            
-            If <paramref name="cultureInfo"/> is null, default is ("en-US")
-            
-            </remarks>
-            
-            <typeparam name="T"> Return type. </typeparam>
-            <param name="contents"> Contents to be updated. </param>
-            <param name="filePath"> Path to json file to get data from. </param>
-            <param name="mappingProperty"> The data to be updated is extracted from the file according to this property. </param>
-            <param name="key"> Key of encrypted file. </param>      
-            <param name="cultureInfo"> Culture information. Default is "en-US". </param> 
-            <returns> Completed <see cref="T:System.Threading.Tasks.Task"/> </returns>
-        </member>
-        <member name="M:Milvasoft.Helpers.FileOperations.Abstract.IJsonOperations.GetRequiredSingleContentCryptedFromJsonFileAsync``1(System.String,System.String,System.Globalization.CultureInfo)">
-            <summary>
-            Gets single content from json file in <paramref name="filePath"/> with <paramref name="key"/>. 
-            Returns them as the requested list of type.
-            !!! Milvasoft Corporation is not responsible of possible data loss.
-            
-            <para> Example json file template for use this library methods; </para>
-            <code>
-            
-             {
-               "Id": 1,
-               "Name": "poco1",
-               "Which": false
-             }
-             
-             OR
-             
-             "Hello World!"
-            
-            </code>
-            
-            </summary>
-            
-            <remarks> 
-            
-            If <paramref name="cultureInfo"/> is null, default is ("en-US")
-            
-            </remarks>
-            
-            <typeparam name="T"> Return type. </typeparam>
-            <param name="filePath"> Path to json file to get data from. </param>
-            <param name="key"> Key of encrypted file. </param>      
-            <param name="cultureInfo"> Culture information. Default is "en-US". </param>
-            <returns> A single content of type <typeparamref name="T"/>. </returns>
-        </member>
-        <member name="M:Milvasoft.Helpers.FileOperations.Abstract.IJsonOperations.GetSingleContentFromCryptedJsonFileAsync``1(System.String,System.String,System.Globalization.CultureInfo)">
-            <summary>
-            Gets single content from json file in <paramref name="filePath"/> with <paramref name="key"/>. 
-            Returns them as the requested list of type.
-            !!! Milvasoft Corporation is not responsible of possible data loss.
-            
-            <para> Example json file template for use this library methods; </para>
-            <code>
-            
-             {
-               "Id": 1,
-               "Name": "poco1",
-               "Which": false
-             }
-             
-             OR
-             
-             "Hello World!"
-            
-            </code>
-            
-            </summary>
-            
-            <remarks> 
-            
-            If <paramref name="cultureInfo"/> is null, default is ("en-US")
-            
-            </remarks>
-            
-            <exception cref="T:System.ArgumentNullException"> Throwns when returned content is null. </exception>
-            
-            <typeparam name="T"> Return type. </typeparam>
-            <param name="filePath"> Path to json file to get data from. </param>
-            <param name="cultureInfo"> Culture information. Default is "en-US". </param>
-            <param name="key"> Key of encrypted file. </param>        
-            <returns> A single content of type <typeparamref name="T"/> if content isn't null.  </returns>
-        </member>
-        <member name="M:Milvasoft.Helpers.FileOperations.Abstract.IJsonOperations.AddOrUpdateSingleContentToCryptedJsonFileAsync``1(``0,System.String,System.String,System.Globalization.CultureInfo)">
-            <summary>
-            Adds <paramref name="content"/> to json file in <paramref name="filePath"/> with <paramref name="key"/>.
-            (like Auto Increment)
-            !!! Milvasoft Corporation is not responsible of possible data loss.
-            
-            </summary>
-            
-            <remarks>
-            
-            yourjsonfile.json file must contains exact same type of <typeparamref name="T"/> or file must be empty.
-            
-            If <paramref name="cultureInfo"/> is null, default is ("en-US")
-            
-            </remarks>
-            
-            <typeparam name="T"> Return type. </typeparam>
-            <param name="content"> Content to be added or updated. </param>
-            <param name="filePath"> Path to json file to get data from. </param>
-            <param name="cultureInfo"> Culture information. Default is "en-US". </param>
-            <param name="key"> Key of encrypted file. </param>       
-            <returns> Completed <see cref="T:System.Threading.Tasks.Task"/> </returns>
-        </member>
-        <member name="M:Milvasoft.Helpers.FileOperations.Abstract.IJsonOperations.GetRequiredContentFromJsonFile``1(System.String,System.Globalization.CultureInfo)">
-            <summary>
-            Gets all content from json file in <paramref name="filePath"/>. 
-            Returns them as the requested list of type.
-            </summary>
-            
-            <remarks> 
-            
-            If <paramref name="cultureInfo"/> is null, default is ("en-US")
-            
-            </remarks>
-            
-            <exception cref="T:System.ArgumentNullException"> Throwns when returned content list is null or empty. </exception>
-            
-            <typeparam name="T"> Return type. </typeparam>
-            <param name="filePath"> Path to json file to get data from. </param>
-            <param name="cultureInfo"> Culture information. Default is "en-US". </param>
-            <returns> A content list of type <typeparamref name="T"/>. </returns>
-        </member>
-        <member name="M:Milvasoft.Helpers.FileOperations.Abstract.IJsonOperations.GetContentFromJsonFile``1(System.String,System.Globalization.CultureInfo)">
-            <summary>
-            Gets all content from json file in <paramref name="filePath"/>. 
-            Returns them as the requested list of type.
-            </summary>
-            
-            <remarks> 
-            
-            If <paramref name="cultureInfo"/> is null, default is ("en-US")
-            
-            </remarks>
-            
-            <typeparam name="T"> Return type. </typeparam>
-            <param name="filePath"> Path to json file to get data from. </param>
-            <param name="cultureInfo"> Culture information. Default is "en-US". </param>
-            <returns> A content list of type <typeparamref name="T"/>. </returns>
-        </member>
-        <member name="M:Milvasoft.Helpers.FileOperations.Abstract.IJsonOperations.AddContentToJsonFile``1(System.Collections.Generic.List{``0},System.String,System.Boolean,System.Globalization.CultureInfo)">
-            <summary>
-            Adds <paramref name="contents"/> to json file in <paramref name="filePath"/>.
-            If content has "Id" property which type is "System.Int32" . Send <paramref name="contentsHasId"/> param "true". The code will be increase Id automatically.
-            </summary>
-            <remarks>
-            
-            <para> If <paramref name="cultureInfo"/> is null, default is ("en-US")</para> 
-            
-            <para><b> yourjsonfile.json file must contains list or must be empty.</b> </para> 
-            
-            </remarks>
-            <typeparam name="T"> Return type. </typeparam>
-            <param name="contents"> Contents to be added. </param>
-            <param name="filePath"> Path to json file to get data from. </param>
-            <param name="contentsHasId"> Determines whether the contents are added in auto increment by "Id" property. </param>
-            <param name="cultureInfo"> Culture information. Default is "en-US". </param>
-            <returns></returns>
-        </member>
-        <member name="M:Milvasoft.Helpers.FileOperations.Abstract.IJsonOperations.UpdateContentFromJsonFile``1(System.Collections.Generic.List{``0},System.String,System.Linq.Expressions.Expression{System.Func{``0,System.Object}},System.Globalization.CultureInfo)">
-            <summary>
-            Updates contents from json file in <paramref name="filePath"/>.
-            </summary>
-            <remarks>
-            Updates by requested Property. Don't forget send <paramref name="mappingProperty"/> !!!
-            </remarks>
-            <exception cref="M:System.Exception.#ctor">
-            Throwns when not valid <paramref name="mappingProperty"/> or requested Entity type does not have that <paramref name="mappingProperty"/>.
-            </exception>
-            <exception cref="M:System.Exception.#ctor">
-            Throwns when json file in <paramref name="filePath"/> not contains <paramref name="contents"/> .
-            </exception>
-            <remarks>
-            
-            Send all the properties of the object to be updated. Otherwise, unsent properties are updated to null.
-            
-            If <paramref name="cultureInfo"/> is null, default is ("en-US")
-            
-            </remarks>
-            
-            <typeparam name="T"> Return type. </typeparam>
-            <param name="contents"> Contents to be updated. </param>
-            <param name="filePath"> Path to json file to get data from. </param>
-            <param name="mappingProperty"> The data to be updated is extracted from the file according to this property. </param>
-            <param name="cultureInfo"> Culture information. Default is "en-US". </param>  
-        </member>
-        <member name="M:Milvasoft.Helpers.FileOperations.Abstract.IJsonOperations.DeleteContentFromJsonFile``1(System.Collections.Generic.List{``0},System.String,System.Linq.Expressions.Expression{System.Func{``0,System.Object}},System.Globalization.CultureInfo)">
-            <summary>
-            Deletes record from requested json file.
-            </summary>
-            
-            <remarks> 
-            
-            If <paramref name="cultureInfo"/> is null, default is ("en-US")
-            
-            </remarks>
-            
-            <typeparam name="T"> Return type. </typeparam>
-            <param name="contents"> Contents to be updated. </param>
-            <param name="filePath"> Path to json file to get data from. </param>
-            <param name="mappingProperty"> The data to be updated is extracted from the file according to this property. </param>
-            <param name="cultureInfo"> Culture information. Default is "en-US". </param> 
-        </member>
-        <member name="M:Milvasoft.Helpers.FileOperations.Abstract.IJsonOperations.GetRequiredSingleContentFromJsonFile``1(System.String,System.Globalization.CultureInfo)">
-            <summary>
-            Gets single content from json file in <paramref name="filePath"/>. 
-            Returns them as the requested list of type.
-            
-            <para> Example json file template for use this library methods; </para>
-            <code>
-            
-             {
-               "Id": 1,
-               "Name": "poco1",
-               "Which": false
-             }
-             
-             OR
-             
-             "Hello World!"
-            
-            </code>
-            
-            </summary>
-            
-            <remarks> 
-            
-            If <paramref name="cultureInfo"/> is null, default is ("en-US")
-            
-            </remarks>
-            
-            <typeparam name="T"> Return type. </typeparam>
-            <param name="filePath"> Path to json file to get data from. </param>
-            <param name="cultureInfo"> Culture information. Default is "en-US". </param>
-            <returns> A single content of type <typeparamref name="T"/>. </returns>
-        </member>
-        <member name="M:Milvasoft.Helpers.FileOperations.Abstract.IJsonOperations.GetSingleContentFromJsonFile``1(System.String,System.Globalization.CultureInfo)">
-            <summary>
-            Gets single content from json file in <paramref name="filePath"/>. 
-            Returns them as the requested list of type.
-            
-            <para> Example json file template for use this library methods; </para>
-            <code>
-            
-             {
-               "Id": 1,
-               "Name": "poco1",
-               "Which": false
-             }
-             
-             OR
-             
-             "Hello World!"
-            
-            </code>
-            
-            </summary>
-            
-            <remarks> 
-            
-            If <paramref name="cultureInfo"/> is null, default is ("en-US")
-            
-            </remarks>
-            
-            <exception cref="T:System.ArgumentNullException"> Throwns when returned content is null. </exception>
-            
-            <typeparam name="T"> Return type. </typeparam>
-            <param name="filePath"> Path to json file to get data from. </param>
-            <param name="cultureInfo"> Culture information. Default is "en-US". </param>
-            <returns> A single content of type <typeparamref name="T"/> if content isn't null. </returns>
-        </member>
-        <member name="M:Milvasoft.Helpers.FileOperations.Abstract.IJsonOperations.AddOrUpdateSingleContentToJsonFile``1(``0,System.String,System.Globalization.CultureInfo)">
-            <summary>
-            Adds <paramref name="content"/> to json file in <paramref name="filePath"/>.
-            (like Auto Increment)
-            </summary>
-            
-            <remarks>
-            
-            yourjsonfile.json file must contains exact same type of <typeparamref name="T"/> or file must be empty.
-            
-            If <paramref name="cultureInfo"/> is null, default is ("en-US")
-            
-            </remarks>
-            
-            <typeparam name="T"> Return type. </typeparam>
-            <param name="content"> Content to be added or updated. </param>
-            <param name="filePath"> Path to json file to get data from. </param>
-            <param name="cultureInfo"> Culture information. Default is "en-US". </param>
         </member>
         <member name="M:Milvasoft.Helpers.FileOperations.Abstract.IJsonOperations.ClearJSONFile(System.String)">
             <summary>
             Clears json file in <paramref name="filePath"/>.
             </summary>
-            <param name="filePath"> Path to json file to get data from. </param>
-        </member>
-        <member name="M:Milvasoft.Helpers.FileOperations.Abstract.IJsonOperations.GetRequiredContentFromCryptedJsonFile``1(System.String,System.String,System.Globalization.CultureInfo)">
-            <summary>
-            Gets all content from crypted json file in <paramref name="filePath"/> with <paramref name="key"/>. 
-            Returns them as the requested list of type.
-            !!! Milvasoft Corporation is not responsible of possible data loss.
-            </summary>
-            
-            <remarks> 
-            
-            If <paramref name="cultureInfo"/> is null, default is ("en-US")
-            
-            </remarks>
-            
-            <exception cref="T:System.ArgumentOutOfRangeException"> Throwns when key is not proper lenght. </exception>
-            <exception cref="T:System.ArgumentException"> Throwns when key is incorrect. </exception>
-            
-            
-            <typeparam name="T"> Return type. </typeparam>
-            <param name="filePath"> Path to json file to get data from. </param>
-            <param name="key"> Key of encrypted file. </param>
-            <param name="cultureInfo"> Culture information. Default is "en-US". </param>
-            <returns> A content list of type <typeparamref name="T"/>. </returns>
-        </member>
-        <member name="M:Milvasoft.Helpers.FileOperations.Abstract.IJsonOperations.GetContentFromCryptedJsonFile``1(System.String,System.String,System.Globalization.CultureInfo)">
-            <summary>
-            Gets all content from json file in <paramref name="filePath"/> with <paramref name="key"/>. 
-            Returns them as the requested list of type.
-            !!! Milvasoft Corporation is not responsible of possible data loss.
-            </summary>
-            
-            <remarks> 
-            
-            If <paramref name="cultureInfo"/> is null, default is ("en-US")
-            
-            </remarks>
-            
-            <exception cref="T:System.ArgumentNullException"> Throwns when returned content list is null or empty. </exception>
-            <exception cref="T:System.ArgumentOutOfRangeException"> Throwns when key is not proper lenght. </exception>
-            <exception cref="T:System.ArgumentException"> Throwns when key is incorrect. </exception>
-            
-            
-            <typeparam name="T"> Return type. </typeparam>
-            <param name="filePath"> Path to json file to get data from. </param>
-            <param name="key"> Key of encrypted file. </param>
-            <param name="cultureInfo"> Culture information. Default is "en-US". </param>
-            <returns> A content list of type <typeparamref name="T"/>. </returns>
-        </member>
-        <member name="M:Milvasoft.Helpers.FileOperations.Abstract.IJsonOperations.AddContentToCryptedJsonFile``1(System.Collections.Generic.List{``0},System.String,System.Boolean,System.String,System.Globalization.CultureInfo)">
-            <summary>
-            Adds <paramref name="contents"/> to json file in <paramref name="filePath"/> with <paramref name="key"/>.
-            If content has "Id" property which type is "System.Int32" . Send <paramref name="contentsHasId"/> param "true". The code will be increase Id automatically.
-            !!! Milvasoft Corporation is not responsible of possible data loss.
-            </summary>
             <remarks>
             
-            <para> If <paramref name="cultureInfo"/> is null, default is ("en-US")</para> 
-            
-            <para><b> yourjsonfile.json file must contains list or must be empty.</b> </para> 
+            <para> This method support all structures in class remarks. </para> 
             
             </remarks>
-            
-            <exception cref="T:System.ArgumentOutOfRangeException"> Throwns when key is not proper lenght. </exception>
-            <exception cref="T:System.ArgumentException"> Throwns when key is incorrect. </exception>
-            
-            <typeparam name="T"> Return type. </typeparam>
-            <param name="contents"> Contents to be added. </param>
             <param name="filePath"> Path to json file to get data from. </param>
-            <param name="contentsHasId"> Determines whether the contents are added in auto increment by "Id" property. </param>
-            <param name="key"> Key of encrypted file. </param>      
-            <param name="cultureInfo"> Culture information. Default is "en-US". </param>
-            <returns> Completed <see cref="T:System.Threading.Tasks.Task"/> </returns>
-        </member>
-        <member name="M:Milvasoft.Helpers.FileOperations.Abstract.IJsonOperations.UpdateContentFromCryptedJsonFile``1(System.Collections.Generic.List{``0},System.String,System.Linq.Expressions.Expression{System.Func{``0,System.Object}},System.String,System.Globalization.CultureInfo)">
-            <summary>
-            Updates contents from json file in <paramref name="filePath"/> with  <paramref name="key"/>.
-            !!! Milvasoft Corporation is not responsible of possible data loss.
-            </summary>
-            <remarks>
-            Updates by requested Property. Don't forget send <paramref name="mappingProperty"/> !!!
-            </remarks>
-            <exception cref="M:System.Exception.#ctor">
-            Throwns when not valid <paramref name="mappingProperty"/> or requested Entity type does not have that <paramref name="mappingProperty"/>.
-            </exception>
-            <exception cref="M:System.Exception.#ctor">
-            Throwns when json file in <paramref name="filePath"/> not contains <paramref name="contents"/> .
-            </exception>
-            <remarks>
-            
-            Send all the properties of the object to be updated. Otherwise, unsent properties are updated to null.
-            
-            If <paramref name="cultureInfo"/> is null, default is ("en-US")
-            
-            </remarks>
-            
-            
-            <exception cref="T:System.ArgumentOutOfRangeException"> Throwns when key is not proper lenght. </exception>
-            <exception cref="T:System.ArgumentException"> Throwns when key is incorrect. </exception>
-            
-            <typeparam name="T"> Return type. </typeparam>
-            <param name="contents"> Contents to be updated. </param>
-            <param name="filePath"> Path to json file to get data from. </param>
-            <param name="mappingProperty"> The data to be updated is extracted from the file according to this property. </param>
-            <param name="key"> Key of encrypted file. </param>        
-            <param name="cultureInfo"> Culture information. Default is "en-US". </param>  
-            <returns> Completed <see cref="T:System.Threading.Tasks.Task"/> </returns>
-        </member>
-        <member name="M:Milvasoft.Helpers.FileOperations.Abstract.IJsonOperations.DeleteContentFromCryptedJsonFile``1(System.Collections.Generic.List{``0},System.String,System.Linq.Expressions.Expression{System.Func{``0,System.Object}},System.String,System.Globalization.CultureInfo)">
-            <summary>
-            Deletes record from requested json file with <paramref name="key"/>.
-            !!! Milvasoft Corporation is not responsible of possible data loss.
-            </summary>
-            
-            <remarks> 
-            
-            If <paramref name="cultureInfo"/> is null, default is ("en-US")
-            
-            </remarks>
-            
-            
-            <exception cref="T:System.ArgumentOutOfRangeException"> Throwns when key is not proper lenght. </exception>
-            <exception cref="T:System.ArgumentException"> Throwns when key is incorrect. </exception>
-            
-            <typeparam name="T"> Return type. </typeparam>
-            <param name="contents"> Contents to be updated. </param>
-            <param name="filePath"> Path to json file to get data from. </param>
-            <param name="mappingProperty"> The data to be updated is extracted from the file according to this property. </param>
-            <param name="key"> Key of encrypted file. </param>      
-            <param name="cultureInfo"> Culture information. Default is "en-US". </param> 
-            <returns> Completed <see cref="T:System.Threading.Tasks.Task"/> </returns>
-        </member>
-        <member name="M:Milvasoft.Helpers.FileOperations.Abstract.IJsonOperations.GetRequiredSingleContentCryptedFromJsonFile``1(System.String,System.String,System.Globalization.CultureInfo)">
-            <summary>
-            Gets single content from json file in <paramref name="filePath"/> with <paramref name="key"/>. 
-            Returns them as the requested list of type.
-            !!! Milvasoft Corporation is not responsible of possible data loss.
-            
-            <para> Example json file template for use this library methods; </para>
-            <code>
-            
-             {
-               "Id": 1,
-               "Name": "poco1",
-               "Which": false
-             }
-             
-             OR
-             
-             "Hello World!"
-            
-            </code>
-            
-            </summary>
-            
-            <remarks> 
-            
-            If <paramref name="cultureInfo"/> is null, default is ("en-US")
-            
-            </remarks>
-            
-            
-            <exception cref="T:System.ArgumentOutOfRangeException"> Throwns when key is not proper lenght. </exception>
-            <exception cref="T:System.ArgumentException"> Throwns when key is incorrect. </exception>
-            
-            <typeparam name="T"> Return type. </typeparam>
-            <param name="filePath"> Path to json file to get data from. </param>
-            <param name="key"> Key of encrypted file. </param>      
-            <param name="cultureInfo"> Culture information. Default is "en-US". </param>
-            <returns> A single content of type <typeparamref name="T"/>. </returns>
-        </member>
-        <member name="M:Milvasoft.Helpers.FileOperations.Abstract.IJsonOperations.GetSingleContentFromCryptedJsonFile``1(System.String,System.String,System.Globalization.CultureInfo)">
-            <summary>
-            Gets single content from json file in <paramref name="filePath"/> with <paramref name="key"/>. 
-            Returns them as the requested list of type.
-            !!! Milvasoft Corporation is not responsible of possible data loss.
-            
-            <para> Example json file template for use this library methods; </para>
-            <code>
-            
-             {
-               "Id": 1,
-               "Name": "poco1",
-               "Which": false
-             }
-             
-             OR
-             
-             "Hello World!"
-            
-            </code>
-            
-            </summary>
-            
-            <remarks> 
-            
-            If <paramref name="cultureInfo"/> is null, default is ("en-US")
-            
-            </remarks>
-            
-            <exception cref="T:System.ArgumentNullException"> Throwns when returned content is null. </exception>
-            <exception cref="T:System.ArgumentOutOfRangeException"> Throwns when key is not proper lenght. </exception>
-            <exception cref="T:System.ArgumentException"> Throwns when key is incorrect. </exception>
-            
-            
-            <typeparam name="T"> Return type. </typeparam>
-            <param name="filePath"> Path to json file to get data from. </param>
-            <param name="cultureInfo"> Culture information. Default is "en-US". </param>
-            <param name="key"> Key of encrypted file. </param>        
-            <returns> A single content of type <typeparamref name="T"/> if content isn't null.  </returns>
-        </member>
-        <member name="M:Milvasoft.Helpers.FileOperations.Abstract.IJsonOperations.AddOrUpdateSingleContentToCryptedJsonFile``1(``0,System.String,System.String,System.Globalization.CultureInfo)">
-            <summary>
-            Adds <paramref name="content"/> to json file in <paramref name="filePath"/> with <paramref name="key"/>.
-            (like Auto Increment)
-            !!! Milvasoft Corporation is not responsible of possible data loss.
-            
-            </summary>
-            
-            <remarks>
-            
-            yourjsonfile.json file must contains exact same type of <typeparamref name="T"/> or file must be empty.
-            
-            If <paramref name="cultureInfo"/> is null, default is ("en-US")
-            
-            </remarks>
-            
-            <exception cref="T:System.ArgumentOutOfRangeException"> Throwns when key is not proper lenght. </exception>
-            <exception cref="T:System.ArgumentException"> Throwns when key is incorrect. </exception>
-            
-            <typeparam name="T"> Return type. </typeparam>
-            <param name="content"> Content to be added or updated. </param>
-            <param name="filePath"> Path to json file to get data from. </param>
-            <param name="cultureInfo"> Culture information. Default is "en-US". </param>
-            <param name="key"> Key of encrypted file. </param>       
-            <returns> Completed <see cref="T:System.Threading.Tasks.Task"/> </returns>
         </member>
         <member name="M:Milvasoft.Helpers.FileOperations.Abstract.IJsonOperations.GetLastIdIfHasId``1(System.Nullable{System.Int32}@,System.Collections.Generic.List{``0})">
             <summary>
@@ -7578,856 +6902,151 @@
             <param name="filePath"> Path to json file to get data from. </param>   
             <returns> Completed <see cref="T:System.Threading.Tasks.Task"/> </returns>
         </member>
-        <member name="M:Milvasoft.Helpers.FileOperations.Concrete.JsonOperations.GetRequiredContentFromJsonFileAsync``1(System.String,System.Globalization.CultureInfo)">
+        <member name="M:Milvasoft.Helpers.FileOperations.Concrete.JsonOperations.GetContent``1(System.String)">
             <summary>
             Gets all content from json file in <paramref name="filePath"/>. 
-            Returns them as the requested list of type.
-            </summary>
-            
-            <remarks> 
-            
-            If <paramref name="cultureInfo"/> is null, default is ("en-US")
-            
-            </remarks>
-            
-            <typeparam name="T"> Return type. </typeparam>
-            <param name="filePath"> Path to json file to get data from. </param>
-            <param name="cultureInfo"> Culture information. Default is "en-US". </param>
-            <returns> A content list of type <typeparamref name="T"/>. </returns>
-        </member>
-        <member name="M:Milvasoft.Helpers.FileOperations.Concrete.JsonOperations.GetContentFromJsonFileAsync``1(System.String,System.Globalization.CultureInfo)">
-            <summary>
-            Gets all content from json file in <paramref name="filePath"/>. 
-            Returns them as the requested list of type.
-            </summary>
-            
-            <remarks> 
-            
-            If <paramref name="cultureInfo"/> is null, default is ("en-US")
-            
-            </remarks>
-            
-            <exception cref="T:System.ArgumentNullException"> Throwns when returned content list is null or empty. </exception>
-            
-            <typeparam name="T"> Return type. </typeparam>
-            <param name="filePath"> Path to json file to get data from. </param>
-            <param name="cultureInfo"> Culture information. Default is "en-US". </param>
-            <returns> A content list of type <typeparamref name="T"/>. </returns>
-        </member>
-        <member name="M:Milvasoft.Helpers.FileOperations.Concrete.JsonOperations.AddContentToJsonFileAsync``1(System.Collections.Generic.List{``0},System.String,System.Boolean,System.Globalization.CultureInfo)">
-            <summary>
-            Adds <paramref name="contents"/> to json file in <paramref name="filePath"/>.
-            If content has "Id" property which type is "System.Int32" . Send <paramref name="contentsHasId"/> param "true". The code will be increase Id automatically.
+            Returns them as the requested type.
             </summary>
             <remarks>
             
-            <para> If <paramref name="cultureInfo"/> is null, default is ("en-US")</para> 
-            
-            <para><b> yourjsonfile.json file must contains list or must be empty.</b> </para> 
+            <para> This method support all structures in class remarks. </para> 
             
             </remarks>
-            <typeparam name="T"> Return type. </typeparam>
+            <typeparam name="T"> Model type in json.</typeparam>
+            <param name="filePath"></param>
+            <returns>Returns List<typeparamref name="T"/>.</returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.FileOperations.Concrete.JsonOperations.AddContent``1(``0,System.String,System.Boolean)">
+            <summary>
+            Adds <paramref name="content"/> to json file in <paramref name="filePath"/>.
+            </summary>
+            <remarks>
+            
+            <para> This method supports only structure 2 in class remarks. </para> 
+            <para> Don't send <typeparamref name="T"/> as <see cref="T:System.Collections.Generic.List`1"/>. You can use <see cref="T:System.Collections.Generic.List`1"/> overload. </para>
+            <para> If content has "Id" property which type is "System.Int32" . Send <paramref name="contentsHasId"/> param "true". The code will be increase Id automatically. </para> 
+            <para> This method reads all file. This can cause performance impact with big files. </para> 
+            
+            </remarks>
+            <typeparam name="T"> Model type in json.</typeparam>
+            <param name="content"> Content to be added. </param>
+            <param name="filePath"> Path to json file to get data from. </param>
+            <param name="contentsHasId"> Determines whether the contents are added in auto increment by "Id" property. </param>
+        </member>
+        <member name="M:Milvasoft.Helpers.FileOperations.Concrete.JsonOperations.AddContents``1(System.Collections.Generic.List{``0},System.String,System.Boolean)">
+            <summary>
+            Adds <paramref name="contents"/> to json file in <paramref name="filePath"/>.
+            </summary>
+            <remarks>
+            
+            <para> This method supports only structure 2 in class remarks. </para> 
+            <para> If content has "Id" property which type is "System.Int32". Send <paramref name="contentsHasId"/> param "true". The code will be increase Id automatically. </para> 
+            <para> This method reads all file. This can cause performance impact with big files. </para> 
+            
+            </remarks>
+            <typeparam name="T"> Model type in json. </typeparam>
             <param name="contents"> Contents to be added. </param>
             <param name="filePath"> Path to json file to get data from. </param>
             <param name="contentsHasId"> Determines whether the contents are added in auto increment by "Id" property. </param>
-            <param name="cultureInfo"> Culture information. Default is "en-US". </param>
-            <returns> Completed <see cref="T:System.Threading.Tasks.Task"/> </returns>
         </member>
-        <member name="M:Milvasoft.Helpers.FileOperations.Concrete.JsonOperations.UpdateContentFromJsonFileAsync``1(System.Collections.Generic.List{``0},System.String,System.Linq.Expressions.Expression{System.Func{``0,System.Object}},System.Globalization.CultureInfo)">
+        <member name="M:Milvasoft.Helpers.FileOperations.Concrete.JsonOperations.UpdateContent``1(``0,System.String,System.Linq.Expressions.Expression{System.Func{``0,System.Object}})">
+            <summary>
+            Updates content from json file in <paramref name="filePath"/>.
+            </summary>
+            <remarks>
+            
+            <para> This method supports only structure 2 in class remarks. </para> 
+            <para> Don't send <typeparamref name="T"/> as <see cref="T:System.Collections.Generic.List`1"/>. You can use <see cref="T:System.Collections.Generic.List`1"/> overload. </para>
+            <para> Updates by requested Property. Don't forget send <paramref name="mappingProperty"/> ! </para>
+            <para> Send all the properties of the object to be updated. Otherwise, unsent properties are updated to null. </para>
+            <para> This method reads all file. This can cause performance impact with big files. </para> 
+            
+            </remarks>
+            
+            <exception cref="M:System.Exception.#ctor"> Throwns when not valid <paramref name="mappingProperty"/> or requested Entity type does not have that <paramref name="mappingProperty"/>. </exception>
+            <exception cref="M:System.Exception.#ctor"> Throwns when json file in <paramref name="filePath"/> not contains <paramref name="content"/>. </exception>
+            
+            <typeparam name="T"> Model type in json. </typeparam>
+            <param name="content"> Contents to be updated. </param>
+            <param name="filePath"> Path to json file to get data from. </param>
+            <param name="mappingProperty"> The data to be updated is extracted from the file according to this property. </param>
+        </member>
+        <member name="M:Milvasoft.Helpers.FileOperations.Concrete.JsonOperations.UpdateContents``1(System.Collections.Generic.List{``0},System.String,System.Linq.Expressions.Expression{System.Func{``0,System.Object}})">
             <summary>
             Updates contents from json file in <paramref name="filePath"/>.
             </summary>
             <remarks>
-            Updates by requested Property. Don't forget send <paramref name="mappingProperty"/> !
-            </remarks>
-            <exception cref="M:System.Exception.#ctor">
-            Throwns when not valid <paramref name="mappingProperty"/> or requested Entity type does not have that <paramref name="mappingProperty"/>.
-            </exception>
-            <exception cref="M:System.Exception.#ctor">
-            Throwns when json file in <paramref name="filePath"/> not contains <paramref name="contents"/> .
-            </exception>
-            <remarks>
             
-            Send all the properties of the object to be updated. Otherwise, unsent properties are updated to null.
-            
-            If <paramref name="cultureInfo"/> is null, default is ("en-US")
+            <para> This method supports only structure 2 in class remarks. </para> 
+            <para> Don't send <typeparamref name="T"/> as <see cref="T:System.Collections.Generic.List`1"/>. You can use <see cref="T:System.Collections.Generic.List`1"/> overload. </para>
+            <para> Updates by requested Property. Don't forget send <paramref name="mappingProperty"/>! </para>
+            <para> Send all the properties of the object to be updated. Otherwise, unsent properties are updated to null. </para>
+            <para> This method reads all file. This can cause performance impact with big files. </para> 
             
             </remarks>
             
-            <typeparam name="T"> Return type. </typeparam>
+            <exception cref="M:System.Exception.#ctor"> Throwns when not valid <paramref name="mappingProperty"/> or requested Entity type does not have that <paramref name="mappingProperty"/>. </exception>
+            <exception cref="M:System.Exception.#ctor"> Throwns when json file in <paramref name="filePath"/> not contains <paramref name="contents"/>.</exception>
+            
+            <typeparam name="T"> Model type in json. </typeparam>
             <param name="contents"> Contents to be updated. </param>
             <param name="filePath"> Path to json file to get data from. </param>
             <param name="mappingProperty"> The data to be updated is extracted from the file according to this property. </param>
-            <param name="cultureInfo"> Culture information. Default is "en-US". </param>  
-            <returns> Completed <see cref="T:System.Threading.Tasks.Task"/> </returns>
         </member>
-        <member name="M:Milvasoft.Helpers.FileOperations.Concrete.JsonOperations.DeleteContentFromJsonFileAsync``1(System.Collections.Generic.List{``0},System.String,System.Linq.Expressions.Expression{System.Func{``0,System.Object}},System.Globalization.CultureInfo)">
+        <member name="M:Milvasoft.Helpers.FileOperations.Concrete.JsonOperations.DeleteContent``1(System.Collections.Generic.List{System.Object},System.String,System.Linq.Expressions.Expression{System.Func{``0,System.Object}})">
             <summary>
             Deletes record from requested json file.
             </summary>
-            
-            <remarks> 
-            
-            If <paramref name="cultureInfo"/> is null, default is ("en-US")
-             
-            </remarks>
-            
-            <typeparam name="T"> Return type. </typeparam>
-            <param name="contents"> Contents to be updated. </param>
-            <param name="filePath"> Path to json file to get data from. </param>
-            <param name="mappingProperty"> The data to be updated is extracted from the file according to this property. </param>
-            <param name="cultureInfo"> Culture information. Default is "en-US". </param> 
-            <returns> Completed <see cref="T:System.Threading.Tasks.Task"/> </returns>
-        </member>
-        <member name="M:Milvasoft.Helpers.FileOperations.Concrete.JsonOperations.GetRequiredSingleContentFromJsonFileAsync``1(System.String,System.Globalization.CultureInfo)">
-            <summary>
-            Gets single content from json file in <paramref name="filePath"/>. 
-            Returns them as the requested list of type.
-            
-            <para> Example json file template for use this library methods; </para>
-            <code>
-            
-             {
-               "Id": 1,
-               "Name": "poco1",
-               "Which": false
-             }
-             
-             OR
-             
-             "Hello World!"
-            
-            </code>
-            
-            </summary>
-            
-            <remarks> 
-            
-            If <paramref name="cultureInfo"/> is null, default is ("en-US")
-            
-            </remarks>
-            
-            <typeparam name="T"> Return type. </typeparam>
-            <param name="filePath"> Path to json file to get data from. </param>
-            <param name="cultureInfo"> Culture information. Default is "en-US". </param>
-            <returns> A single content of type <typeparamref name="T"/>. </returns>
-        </member>
-        <member name="M:Milvasoft.Helpers.FileOperations.Concrete.JsonOperations.GetSingleContentFromJsonFileAsync``1(System.String,System.Globalization.CultureInfo)">
-            <summary>
-            Gets single content from json file in <paramref name="filePath"/>. 
-            Returns them as the requested list of type.
-            
-            <para> Example json file template for use this library methods; </para>
-            <code>
-            
-             {
-               "Id": 1,
-               "Name": "poco1",
-               "Which": false
-             }
-             
-             OR
-             
-             "Hello World!"
-            
-            </code>
-            
-            </summary>
-            
-            <remarks> 
-            
-            If <paramref name="cultureInfo"/> is null, default is ("en-US")
-            
-            </remarks>
-            
-            <exception cref="T:System.ArgumentNullException"> Throwns when returned content is null. </exception>
-            
-            <typeparam name="T"> Return type. </typeparam>
-            <param name="filePath"> Path to json file to get data from. </param>
-            <param name="cultureInfo"> Culture information. Default is "en-US". </param>
-            <returns> A single content of type <typeparamref name="T"/> if content isn't null.  </returns>
-        </member>
-        <member name="M:Milvasoft.Helpers.FileOperations.Concrete.JsonOperations.AddOrUpdateSingleContentToJsonFileAsync``1(``0,System.String,System.Globalization.CultureInfo)">
-            <summary>
-            Adds <paramref name="content"/> to json file in <paramref name="filePath"/>.
-            (like Auto Increment)
-            </summary>
-            
             <remarks>
             
-            yourjsonfile.json file must contains exact same type of <typeparamref name="T"/> or file must be empty.
-            
-            If <paramref name="cultureInfo"/> is null, default is ("en-US")
+            <para> This method supports only structure 2 in class remarks. </para> 
+            <para> Don't send <typeparamref name="T"/> as <see cref="T:System.Collections.Generic.List`1"/>. You can use <see cref="T:System.Collections.Generic.List`1"/> overload. </para>
+            <para> This method reads all file. This can cause performance impact with big files. </para> 
             
             </remarks>
+            <typeparam name="T"> Model type in json. </typeparam>
+            <param name="mappingValue"> Mapping value of content to be deleted. </param>
+            <param name="filePath"> Path to json file to get data from. </param>
+            <param name="mappingProperty"> The data to be updated is extracted from the file according to this property. </param>
+        </member>
+        <member name="M:Milvasoft.Helpers.FileOperations.Concrete.JsonOperations.DeleteContents``1(System.Collections.Generic.List{System.Object},System.String,System.Linq.Expressions.Expression{System.Func{``0,System.Object}})">
+            <summary>
+            Deletes records from requested json file.
+            </summary>
+            <remarks>
             
-            <typeparam name="T"> Return type. </typeparam>
+            <para> This method supports only structure 2 in class remarks. </para> 
+            <para> This method reads all file. This can cause performance impact with big files. </para> 
+            
+            </remarks>
+            <typeparam name="T"> Model type in json. </typeparam>
+            <param name="mappingValues"> Mapping values of contents to be deleted. </param>
+            <param name="filePath"> Path to json file to get data from. </param>
+            <param name="mappingProperty"> The data to be updated is extracted from the file according to this property. </param>
+        </member>
+        <member name="M:Milvasoft.Helpers.FileOperations.Concrete.JsonOperations.ReplaceOldContentWithNew``1(``0,System.String)">
+            <summary>
+            Removes all file data and writes new one.
+            </summary>
+            <remarks>
+            
+            <para> This method support all structures in class remarks. </para> 
+            
+            </remarks>
+            <typeparam name="T"> Model type in json. </typeparam>
             <param name="content"> Content to be added or updated. </param>
             <param name="filePath"> Path to json file to get data from. </param>
-            <param name="cultureInfo"> Culture information. Default is "en-US". </param>
-            <returns> Completed <see cref="T:System.Threading.Tasks.Task"/> </returns>
-        </member>
-        <member name="M:Milvasoft.Helpers.FileOperations.Concrete.JsonOperations.GetRequiredContentFromCryptedJsonFileAsync``1(System.String,System.String,System.Globalization.CultureInfo)">
-            <summary>
-            Gets all content from crypted json file in <paramref name="filePath"/> with <paramref name="key"/>. 
-            Returns them as the requested list of type.
-            ! Milvasoft Corporation is not responsible of possible data loss.
-            </summary>
-            
-            <remarks> 
-            
-            If <paramref name="cultureInfo"/> is null, default is ("en-US")
-            
-            </remarks>
-            
-            <exception cref="T:System.ArgumentOutOfRangeException"> Throwns when key is not proper lenght. </exception>
-            <exception cref="T:System.ArgumentException"> Throwns when key is incorrect. </exception>
-            
-            
-            <typeparam name="T"> Return type. </typeparam>
-            <param name="filePath"> Path to json file to get data from. </param>
-            <param name="key"> Key of encrypted file. Example key: 4u7x!A%D*F-JaNdR  </param>
-            <param name="cultureInfo"> Culture information. Default is "en-US". </param>
-            <returns> A content list of type <typeparamref name="T"/>. </returns>
-        </member>
-        <member name="M:Milvasoft.Helpers.FileOperations.Concrete.JsonOperations.GetContentFromCryptedJsonFileAsync``1(System.String,System.String,System.Globalization.CultureInfo)">
-            <summary>
-            Gets all content from json file in <paramref name="filePath"/> with <paramref name="key"/>. 
-            Returns them as the requested list of type.
-            ! Milvasoft Corporation is not responsible of possible data loss.
-            </summary>
-            
-            <remarks> 
-            
-            If <paramref name="cultureInfo"/> is null, default is ("en-US")
-            
-            </remarks>
-            
-            <exception cref="T:System.ArgumentNullException"> Throwns when returned content list is null or empty. </exception>
-            <exception cref="T:System.ArgumentOutOfRangeException"> Throwns when key is not proper lenght. </exception>
-            <exception cref="T:System.ArgumentException"> Throwns when key is incorrect. </exception>
-            
-            
-            <typeparam name="T"> Return type. </typeparam>
-            <param name="filePath"> Path to json file to get data from. </param>
-            <param name="key"> Key of encrypted file. Example key: 4u7x!A%D*F-JaNdR  </param>
-            <param name="cultureInfo"> Culture information. Default is "en-US". </param>
-            <returns> A content list of type <typeparamref name="T"/>. </returns>
-        </member>
-        <member name="M:Milvasoft.Helpers.FileOperations.Concrete.JsonOperations.AddContentToCryptedJsonFileAsync``1(System.Collections.Generic.List{``0},System.String,System.Boolean,System.String,System.Globalization.CultureInfo)">
-            <summary>
-            Adds <paramref name="contents"/> to json file in <paramref name="filePath"/> with <paramref name="key"/>.
-            If content has "Id" property which type is "System.Int32" . Send <paramref name="contentsHasId"/> param "true". The code will be increase Id automatically.
-            ! Milvasoft Corporation is not responsible of possible data loss.
-            </summary>
-            <remarks>
-            
-            <para> If <paramref name="cultureInfo"/> is null, default is ("en-US")</para> 
-            
-            <para><b> yourjsonfile.json file must contains list or must be empty.</b> </para> 
-            
-            </remarks>
-            
-            <exception cref="T:System.ArgumentOutOfRangeException"> Throwns when key is not proper lenght. </exception>
-            <exception cref="T:System.ArgumentException"> Throwns when key is incorrect. </exception>
-            
-            <typeparam name="T"> Return type. </typeparam>
-            <param name="contents"> Contents to be added. </param>
-            <param name="filePath"> Path to json file to get data from. </param>
-            <param name="contentsHasId"> Determines whether the contents are added in auto increment by "Id" property. </param>
-            <param name="key"> Key of encrypted file. Example key: 4u7x!A%D*F-JaNdR  </param>      
-            <param name="cultureInfo"> Culture information. Default is "en-US". </param>
-            <returns> Completed <see cref="T:System.Threading.Tasks.Task"/> </returns>
-        </member>
-        <member name="M:Milvasoft.Helpers.FileOperations.Concrete.JsonOperations.UpdateContentFromCryptedJsonFileAsync``1(System.Collections.Generic.List{``0},System.String,System.Linq.Expressions.Expression{System.Func{``0,System.Object}},System.String,System.Globalization.CultureInfo)">
-            <summary>
-            Updates contents from json file in <paramref name="filePath"/> with  <paramref name="key"/>.
-            ! Milvasoft Corporation is not responsible of possible data loss.
-            </summary>
-            <remarks>
-            Updates by requested Property. Don't forget send <paramref name="mappingProperty"/> !
-            </remarks>
-            <exception cref="M:System.Exception.#ctor">
-            Throwns when not valid <paramref name="mappingProperty"/> or requested Entity type does not have that <paramref name="mappingProperty"/>.
-            </exception>
-            <exception cref="M:System.Exception.#ctor">
-            Throwns when json file in <paramref name="filePath"/> not contains <paramref name="contents"/> .
-            </exception>
-            <remarks>
-            
-            Send all the properties of the object to be updated. Otherwise, unsent properties are updated to null.
-            
-            If <paramref name="cultureInfo"/> is null, default is ("en-US")
-            
-            </remarks>
-            
-            
-            <exception cref="T:System.ArgumentOutOfRangeException"> Throwns when key is not proper lenght. </exception>
-            <exception cref="T:System.ArgumentException"> Throwns when key is incorrect. </exception>
-            
-            <typeparam name="T"> Return type. </typeparam>
-            <param name="contents"> Contents to be updated. </param>
-            <param name="filePath"> Path to json file to get data from. </param>
-            <param name="mappingProperty"> The data to be updated is extracted from the file according to this property. </param>
-            <param name="key"> Key of encrypted file. Example key: 4u7x!A%D*F-JaNdR  </param>        
-            <param name="cultureInfo"> Culture information. Default is "en-US". </param>  
-            <returns> Completed <see cref="T:System.Threading.Tasks.Task"/> </returns>
-        </member>
-        <member name="M:Milvasoft.Helpers.FileOperations.Concrete.JsonOperations.DeleteContentFromCryptedJsonFileAsync``1(System.Collections.Generic.List{``0},System.String,System.Linq.Expressions.Expression{System.Func{``0,System.Object}},System.String,System.Globalization.CultureInfo)">
-            <summary>
-            Deletes record from requested json file with <paramref name="key"/>.
-            ! Milvasoft Corporation is not responsible of possible data loss.
-            </summary>
-            
-            <remarks> 
-            
-            If <paramref name="cultureInfo"/> is null, default is ("en-US")
-            
-            </remarks>
-            
-            
-            <exception cref="T:System.ArgumentOutOfRangeException"> Throwns when key is not proper lenght. </exception>
-            <exception cref="T:System.ArgumentException"> Throwns when key is incorrect. </exception>
-            
-            <typeparam name="T"> Return type. </typeparam>
-            <param name="contents"> Contents to be updated. </param>
-            <param name="filePath"> Path to json file to get data from. </param>
-            <param name="mappingProperty"> The data to be updated is extracted from the file according to this property. </param>
-            <param name="key"> Key of encrypted file. Example key: 4u7x!A%D*F-JaNdR  </param>      
-            <param name="cultureInfo"> Culture information. Default is "en-US". </param> 
-            <returns> Completed <see cref="T:System.Threading.Tasks.Task"/> </returns>
-        </member>
-        <member name="M:Milvasoft.Helpers.FileOperations.Concrete.JsonOperations.GetRequiredSingleContentCryptedFromJsonFileAsync``1(System.String,System.String,System.Globalization.CultureInfo)">
-            <summary>
-            Gets single content from json file in <paramref name="filePath"/> with <paramref name="key"/>. 
-            Returns them as the requested list of type.
-            ! Milvasoft Corporation is not responsible of possible data loss.
-            
-            <para> Example json file template for use this library methods; </para>
-            <code>
-            
-             {
-               "Id": 1,
-               "Name": "poco1",
-               "Which": false
-             }
-             
-             OR
-             
-             "Hello World!"
-            
-            </code>
-            
-            </summary>
-            
-            <remarks> 
-            
-            If <paramref name="cultureInfo"/> is null, default is ("en-US")
-            
-            </remarks>
-            
-            
-            <exception cref="T:System.ArgumentOutOfRangeException"> Throwns when key is not proper lenght. </exception>
-            <exception cref="T:System.ArgumentException"> Throwns when key is incorrect. </exception>
-            
-            <typeparam name="T"> Return type. </typeparam>
-            <param name="filePath"> Path to json file to get data from. </param>
-            <param name="key"> Key of encrypted file. Example key: 4u7x!A%D*F-JaNdR </param>      
-            <param name="cultureInfo"> Culture information. Default is "en-US". </param>
-            <returns> A single content of type <typeparamref name="T"/>. </returns>
-        </member>
-        <member name="M:Milvasoft.Helpers.FileOperations.Concrete.JsonOperations.GetSingleContentFromCryptedJsonFileAsync``1(System.String,System.String,System.Globalization.CultureInfo)">
-            <summary>
-            Gets single content from json file in <paramref name="filePath"/> with <paramref name="key"/>. 
-            Returns them as the requested list of type.
-            ! Milvasoft Corporation is not responsible of possible data loss.
-            
-            <para> Example json file template for use this library methods; </para>
-            <code>
-            
-             {
-               "Id": 1,
-               "Name": "poco1",
-               "Which": false
-             }
-             
-             OR
-             
-             "Hello World!"
-            
-            </code>
-            
-            </summary>
-            
-            <remarks> 
-            
-            If <paramref name="cultureInfo"/> is null, default is ("en-US")
-            
-            </remarks>
-            
-            <exception cref="T:System.ArgumentNullException"> Throwns when returned content is null. </exception>
-            <exception cref="T:System.ArgumentOutOfRangeException"> Throwns when key is not proper lenght. </exception>
-            <exception cref="T:System.ArgumentException"> Throwns when key is incorrect. </exception>
-            
-            
-            <typeparam name="T"> Return type. </typeparam>
-            <param name="filePath"> Path to json file to get data from. </param>
-            <param name="cultureInfo"> Culture information. Default is "en-US". </param>
-            <param name="key"> Key of encrypted file. Example key: 4u7x!A%D*F-JaNdR </param>        
-            <returns> A single content of type <typeparamref name="T"/> if content isn't null.  </returns>
-        </member>
-        <member name="M:Milvasoft.Helpers.FileOperations.Concrete.JsonOperations.AddOrUpdateSingleContentToCryptedJsonFileAsync``1(``0,System.String,System.String,System.Globalization.CultureInfo)">
-            <summary>
-            Adds <paramref name="content"/> to json file in <paramref name="filePath"/> with <paramref name="key"/>.
-            (like Auto Increment)
-            ! Milvasoft Corporation is not responsible of possible data loss.
-            
-            </summary>
-            
-            <remarks>
-            
-            yourjsonfile.json file must contains exact same type of <typeparamref name="T"/> or file must be empty.
-            
-            If <paramref name="cultureInfo"/> is null, default is ("en-US")
-            
-            </remarks>
-            
-            <exception cref="T:System.ArgumentOutOfRangeException"> Throwns when key is not proper lenght. </exception>
-            <exception cref="T:System.ArgumentException"> Throwns when key is incorrect. </exception>
-            
-            <typeparam name="T"> Return type. </typeparam>
-            <param name="content"> Content to be added or updated. </param>
-            <param name="filePath"> Path to json file to get data from. </param>
-            <param name="cultureInfo"> Culture information. Default is "en-US". </param>
-            <param name="key"> Key of encrypted file. Example key: 4u7x!A%D*F-JaNdR  </param>       
-            <returns> Completed <see cref="T:System.Threading.Tasks.Task"/> </returns>
-        </member>
-        <member name="M:Milvasoft.Helpers.FileOperations.Concrete.JsonOperations.GetRequiredContentFromJsonFile``1(System.String,System.Globalization.CultureInfo)">
-            <summary>
-            Gets all content from json file in <paramref name="filePath"/>. 
-            Returns them as the requested list of type.
-            </summary>
-            
-            <remarks> 
-            
-            If <paramref name="cultureInfo"/> is null, default is ("en-US")
-            
-            </remarks>
-            
-            <exception cref="T:System.ArgumentNullException"> Throwns when returned content list is null or empty. </exception>
-            
-            <typeparam name="T"> Return type. </typeparam>
-            <param name="filePath"> Path to json file to get data from. </param>
-            <param name="cultureInfo"> Culture information. Default is "en-US". </param>
-            <returns> A content list of type <typeparamref name="T"/>. </returns>
-        </member>
-        <member name="M:Milvasoft.Helpers.FileOperations.Concrete.JsonOperations.GetContentFromJsonFile``1(System.String,System.Globalization.CultureInfo)">
-            <summary>
-            Gets all content from json file in <paramref name="filePath"/>. 
-            Returns them as the requested list of type.
-            </summary>
-            
-            <remarks> 
-            
-            If <paramref name="cultureInfo"/> is null, default is ("en-US")
-            
-            </remarks>
-            
-            <typeparam name="T"> Return type. </typeparam>
-            <param name="filePath"> Path to json file to get data from. </param>
-            <param name="cultureInfo"> Culture information. Default is "en-US". </param>
-            <returns> A content list of type <typeparamref name="T"/>. </returns>
-        </member>
-        <member name="M:Milvasoft.Helpers.FileOperations.Concrete.JsonOperations.AddContentToJsonFile``1(System.Collections.Generic.List{``0},System.String,System.Boolean,System.Globalization.CultureInfo)">
-            <summary>
-            Adds <paramref name="contents"/> to json file in <paramref name="filePath"/>.
-            If content has "Id" property which type is "System.Int32" . Send <paramref name="contentsHasId"/> param "true". The code will be increase Id automatically.
-            </summary>
-            <remarks>
-            
-            <para> If <paramref name="cultureInfo"/> is null, default is ("en-US")</para> 
-            
-            <para><b> yourjsonfile.json file must contains list or must be empty.</b> </para> 
-            
-            </remarks>
-            <typeparam name="T"> Return type. </typeparam>
-            <param name="contents"> Contents to be added. </param>
-            <param name="filePath"> Path to json file to get data from. </param>
-            <param name="contentsHasId"> Determines whether the contents are added in auto increment by "Id" property. </param>
-            <param name="cultureInfo"> Culture information. Default is "en-US". </param>
-            <returns></returns>
-        </member>
-        <member name="M:Milvasoft.Helpers.FileOperations.Concrete.JsonOperations.UpdateContentFromJsonFile``1(System.Collections.Generic.List{``0},System.String,System.Linq.Expressions.Expression{System.Func{``0,System.Object}},System.Globalization.CultureInfo)">
-            <summary>
-            Updates contents from json file in <paramref name="filePath"/>.
-            </summary>
-            <remarks>
-            Updates by requested Property. Don't forget send <paramref name="mappingProperty"/> !
-            </remarks>
-            <exception cref="M:System.Exception.#ctor">
-            Throwns when not valid <paramref name="mappingProperty"/> or requested Entity type does not have that <paramref name="mappingProperty"/>.
-            </exception>
-            <exception cref="M:System.Exception.#ctor">
-            Throwns when json file in <paramref name="filePath"/> not contains <paramref name="contents"/> .
-            </exception>
-            <remarks>
-            
-            Send all the properties of the object to be updated. Otherwise, unsent properties are updated to null.
-            
-            If <paramref name="cultureInfo"/> is null, default is ("en-US")
-            
-            </remarks>
-            
-            <typeparam name="T"> Return type. </typeparam>
-            <param name="contents"> Contents to be updated. </param>
-            <param name="filePath"> Path to json file to get data from. </param>
-            <param name="mappingProperty"> The data to be updated is extracted from the file according to this property. </param>
-            <param name="cultureInfo"> Culture information. Default is "en-US". </param>  
-        </member>
-        <member name="M:Milvasoft.Helpers.FileOperations.Concrete.JsonOperations.DeleteContentFromJsonFile``1(System.Collections.Generic.List{``0},System.String,System.Linq.Expressions.Expression{System.Func{``0,System.Object}},System.Globalization.CultureInfo)">
-            <summary>
-            Deletes record from requested json file.
-            </summary>
-            
-            <remarks> 
-            
-            If <paramref name="cultureInfo"/> is null, default is ("en-US")
-            
-            </remarks>
-            
-            <typeparam name="T"> Return type. </typeparam>
-            <param name="contents"> Contents to be updated. </param>
-            <param name="filePath"> Path to json file to get data from. </param>
-            <param name="mappingProperty"> The data to be updated is extracted from the file according to this property. </param>
-            <param name="cultureInfo"> Culture information. Default is "en-US". </param> 
-        </member>
-        <member name="M:Milvasoft.Helpers.FileOperations.Concrete.JsonOperations.GetRequiredSingleContentFromJsonFile``1(System.String,System.Globalization.CultureInfo)">
-            <summary>
-            Gets single content from json file in <paramref name="filePath"/>. 
-            Returns them as the requested list of type.
-            
-            <para> Example json file template for use this library methods; </para>
-            <code>
-            
-             {
-               "Id": 1,
-               "Name": "poco1",
-               "Which": false
-             }
-             
-             OR
-             
-             "Hello World!"
-            
-            </code>
-            
-            </summary>
-            
-            <remarks> 
-            
-            If <paramref name="cultureInfo"/> is null, default is ("en-US")
-            
-            </remarks>
-            
-            <typeparam name="T"> Return type. </typeparam>
-            <param name="filePath"> Path to json file to get data from. </param>
-            <param name="cultureInfo"> Culture information. Default is "en-US". </param>
-            <returns> A single content of type <typeparamref name="T"/>. </returns>
-        </member>
-        <member name="M:Milvasoft.Helpers.FileOperations.Concrete.JsonOperations.GetSingleContentFromJsonFile``1(System.String,System.Globalization.CultureInfo)">
-            <summary>
-            Gets single content from json file in <paramref name="filePath"/>. 
-            Returns them as the requested list of type.
-            
-            <para> Example json file template for use this library methods; </para>
-            <code>
-            
-             {
-               "Id": 1,
-               "Name": "poco1",
-               "Which": false
-             }
-             
-             OR
-             
-             "Hello World!"
-            
-            </code>
-            
-            </summary>
-            
-            <remarks> 
-            
-            If <paramref name="cultureInfo"/> is null, default is ("en-US")
-            
-            </remarks>
-            
-            <exception cref="T:System.ArgumentNullException"> Throwns when returned content is null. </exception>
-            
-            <typeparam name="T"> Return type. </typeparam>
-            <param name="filePath"> Path to json file to get data from. </param>
-            <param name="cultureInfo"> Culture information. Default is "en-US". </param>
-            <returns> A single content of type <typeparamref name="T"/> if content isn't null. </returns>
-        </member>
-        <member name="M:Milvasoft.Helpers.FileOperations.Concrete.JsonOperations.AddOrUpdateSingleContentToJsonFile``1(``0,System.String,System.Globalization.CultureInfo)">
-            <summary>
-            Adds <paramref name="content"/> to json file in <paramref name="filePath"/>.
-            (like Auto Increment)
-            </summary>
-            
-            <remarks>
-            
-            yourjsonfile.json file must contains exact same type of <typeparamref name="T"/> or file must be empty.
-            
-            If <paramref name="cultureInfo"/> is null, default is ("en-US")
-            
-            </remarks>
-            
-            <typeparam name="T"> Return type. </typeparam>
-            <param name="content"> Content to be added or updated. </param>
-            <param name="filePath"> Path to json file to get data from. </param>
-            <param name="cultureInfo"> Culture information. Default is "en-US". </param>
         </member>
         <member name="M:Milvasoft.Helpers.FileOperations.Concrete.JsonOperations.ClearJSONFile(System.String)">
             <summary>
             Clears json file in <paramref name="filePath"/>.
             </summary>
-            <param name="filePath"> Path to json file to get data from. </param>
-        </member>
-        <member name="M:Milvasoft.Helpers.FileOperations.Concrete.JsonOperations.GetRequiredContentFromCryptedJsonFile``1(System.String,System.String,System.Globalization.CultureInfo)">
-            <summary>
-            Gets all content from crypted json file in <paramref name="filePath"/> with <paramref name="key"/>. 
-            Returns them as the requested list of type.
-            ! Milvasoft Corporation is not responsible of possible data loss.
-            </summary>
-            
-            <remarks> 
-            
-            If <paramref name="cultureInfo"/> is null, default is ("en-US")
-            
-            </remarks>
-            
-            <exception cref="T:System.ArgumentOutOfRangeException"> Throwns when key is not proper lenght. </exception>
-            <exception cref="T:System.ArgumentException"> Throwns when key is incorrect. </exception>
-            
-            
-            <typeparam name="T"> Return type. </typeparam>
-            <param name="filePath"> Path to json file to get data from. </param>
-            <param name="key"> Key of encrypted file. Example key: 4u7x!A%D*F-JaNdR </param>
-            <param name="cultureInfo"> Culture information. Default is "en-US". </param>
-            <returns> A content list of type <typeparamref name="T"/>. </returns>
-        </member>
-        <member name="M:Milvasoft.Helpers.FileOperations.Concrete.JsonOperations.GetContentFromCryptedJsonFile``1(System.String,System.String,System.Globalization.CultureInfo)">
-            <summary>
-            Gets all content from json file in <paramref name="filePath"/> with <paramref name="key"/>. 
-            Returns them as the requested list of type.
-            ! Milvasoft Corporation is not responsible of possible data loss.
-            </summary>
-            
-            <remarks> 
-            
-            If <paramref name="cultureInfo"/> is null, default is ("en-US")
-            
-            </remarks>
-            
-            <exception cref="T:System.ArgumentNullException"> Throwns when returned content list is null or empty. </exception>
-            <exception cref="T:System.ArgumentOutOfRangeException"> Throwns when key is not proper lenght. </exception>
-            <exception cref="T:System.ArgumentException"> Throwns when key is incorrect. </exception>
-            
-            
-            <typeparam name="T"> Return type. </typeparam>
-            <param name="filePath"> Path to json file to get data from. </param>
-            <param name="key"> Key of encrypted file. Example key: 4u7x!A%D*F-JaNdR </param>
-            <param name="cultureInfo"> Culture information. Default is "en-US". </param>
-            <returns> A content list of type <typeparamref name="T"/>. </returns>
-        </member>
-        <member name="M:Milvasoft.Helpers.FileOperations.Concrete.JsonOperations.AddContentToCryptedJsonFile``1(System.Collections.Generic.List{``0},System.String,System.Boolean,System.String,System.Globalization.CultureInfo)">
-            <summary>
-            Adds <paramref name="contents"/> to json file in <paramref name="filePath"/> with <paramref name="key"/>.
-            If content has "Id" property which type is "System.Int32" . Send <paramref name="contentsHasId"/> param "true". The code will be increase Id automatically.
-            ! Milvasoft Corporation is not responsible of possible data loss.
-            </summary>
             <remarks>
             
-            <para> If <paramref name="cultureInfo"/> is null, default is ("en-US")</para> 
-            
-            <para><b> yourjsonfile.json file must contains list or must be empty.</b> </para> 
+            <para> This method support all structures in class remarks. </para> 
             
             </remarks>
-            
-            <exception cref="T:System.ArgumentOutOfRangeException"> Throwns when key is not proper lenght. </exception>
-            <exception cref="T:System.ArgumentException"> Throwns when key is incorrect. </exception>
-            
-            <typeparam name="T"> Return type. </typeparam>
-            <param name="contents"> Contents to be added. </param>
             <param name="filePath"> Path to json file to get data from. </param>
-            <param name="contentsHasId"> Determines whether the contents are added in auto increment by "Id" property. </param>
-            <param name="key"> Key of encrypted file. Example key: 4u7x!A%D*F-JaNdR </param>      
-            <param name="cultureInfo"> Culture information. Default is "en-US". </param>
-            <returns> Completed <see cref="T:System.Threading.Tasks.Task"/> </returns>
-        </member>
-        <member name="M:Milvasoft.Helpers.FileOperations.Concrete.JsonOperations.UpdateContentFromCryptedJsonFile``1(System.Collections.Generic.List{``0},System.String,System.Linq.Expressions.Expression{System.Func{``0,System.Object}},System.String,System.Globalization.CultureInfo)">
-            <summary>
-            Updates contents from json file in <paramref name="filePath"/> with  <paramref name="key"/>.
-            ! Milvasoft Corporation is not responsible of possible data loss.
-            </summary>
-            <remarks>
-            Updates by requested Property. Don't forget send <paramref name="mappingProperty"/> !
-            </remarks>
-            <exception cref="M:System.Exception.#ctor">
-            Throwns when not valid <paramref name="mappingProperty"/> or requested Entity type does not have that <paramref name="mappingProperty"/>.
-            </exception>
-            <exception cref="M:System.Exception.#ctor">
-            Throwns when json file in <paramref name="filePath"/> not contains <paramref name="contents"/> .
-            </exception>
-            <remarks>
-            
-            Send all the properties of the object to be updated. Otherwise, unsent properties are updated to null.
-            
-            If <paramref name="cultureInfo"/> is null, default is ("en-US")
-            
-            </remarks>
-            
-            
-            <exception cref="T:System.ArgumentOutOfRangeException"> Throwns when key is not proper lenght. </exception>
-            <exception cref="T:System.ArgumentException"> Throwns when key is incorrect. </exception>
-            
-            <typeparam name="T"> Return type. </typeparam>
-            <param name="contents"> Contents to be updated. </param>
-            <param name="filePath"> Path to json file to get data from. </param>
-            <param name="mappingProperty"> The data to be updated is extracted from the file according to this property. </param>
-            <param name="key"> Key of encrypted file. Example key: 4u7x!A%D*F-JaNdR </param>        
-            <param name="cultureInfo"> Culture information. Default is "en-US". </param>  
-            <returns> Completed <see cref="T:System.Threading.Tasks.Task"/> </returns>
-        </member>
-        <member name="M:Milvasoft.Helpers.FileOperations.Concrete.JsonOperations.DeleteContentFromCryptedJsonFile``1(System.Collections.Generic.List{``0},System.String,System.Linq.Expressions.Expression{System.Func{``0,System.Object}},System.String,System.Globalization.CultureInfo)">
-            <summary>
-            Deletes record from requested json file with <paramref name="key"/>.
-            ! Milvasoft Corporation is not responsible of possible data loss.
-            </summary>
-            
-            <remarks> 
-            
-            If <paramref name="cultureInfo"/> is null, default is ("en-US")
-            
-            </remarks>
-            
-            
-            <exception cref="T:System.ArgumentOutOfRangeException"> Throwns when key is not proper lenght. </exception>
-            <exception cref="T:System.ArgumentException"> Throwns when key is incorrect. </exception>
-            
-            <typeparam name="T"> Return type. </typeparam>
-            <param name="contents"> Contents to be updated. </param>
-            <param name="filePath"> Path to json file to get data from. </param>
-            <param name="mappingProperty"> The data to be updated is extracted from the file according to this property. </param>
-            <param name="key"> Key of encrypted file. Example key: 4u7x!A%D*F-JaNdR </param>      
-            <param name="cultureInfo"> Culture information. Default is "en-US". </param> 
-            <returns> Completed <see cref="T:System.Threading.Tasks.Task"/> </returns>
-        </member>
-        <member name="M:Milvasoft.Helpers.FileOperations.Concrete.JsonOperations.GetRequiredSingleContentCryptedFromJsonFile``1(System.String,System.String,System.Globalization.CultureInfo)">
-            <summary>
-            Gets single content from json file in <paramref name="filePath"/> with <paramref name="key"/>. 
-            Returns them as the requested list of type.
-            ! Milvasoft Corporation is not responsible of possible data loss.
-            
-            <para> Example json file template for use this library methods; </para>
-            <code>
-            
-             {
-               "Id": 1,
-               "Name": "poco1",
-               "Which": false
-             }
-             
-             OR
-             
-             "Hello World!"
-            
-            </code>
-            
-            </summary>
-            
-            <remarks> 
-            
-            If <paramref name="cultureInfo"/> is null, default is ("en-US")
-            
-            </remarks>
-            
-            
-            <exception cref="T:System.ArgumentOutOfRangeException"> Throwns when key is not proper lenght. </exception>
-            <exception cref="T:System.ArgumentException"> Throwns when key is incorrect. </exception>
-            
-            <typeparam name="T"> Return type. </typeparam>
-            <param name="filePath"> Path to json file to get data from. </param>
-            <param name="key"> Key of encrypted file. Example key: 4u7x!A%D*F-JaNdR </param>      
-            <param name="cultureInfo"> Culture information. Default is "en-US". </param>
-            <returns> A single content of type <typeparamref name="T"/>. </returns>
-        </member>
-        <member name="M:Milvasoft.Helpers.FileOperations.Concrete.JsonOperations.GetSingleContentFromCryptedJsonFile``1(System.String,System.String,System.Globalization.CultureInfo)">
-            <summary>
-            Gets single content from json file in <paramref name="filePath"/> with <paramref name="key"/>. 
-            Returns them as the requested list of type.
-            ! Milvasoft Corporation is not responsible of possible data loss.
-            
-            <para> Example json file template for use this library methods; </para>
-            <code>
-            
-             {
-               "Id": 1,
-               "Name": "poco1",
-               "Which": false
-             }
-             
-             OR
-             
-             "Hello World!"
-            
-            </code>
-            
-            </summary>
-            
-            <remarks> 
-            
-            If <paramref name="cultureInfo"/> is null, default is ("en-US")
-            
-            </remarks>
-            
-            <exception cref="T:System.ArgumentNullException"> Throwns when returned content is null. </exception>
-            <exception cref="T:System.ArgumentOutOfRangeException"> Throwns when key is not proper lenght. </exception>
-            <exception cref="T:System.ArgumentException"> Throwns when key is incorrect. </exception>
-            
-            
-            <typeparam name="T"> Return type. </typeparam>
-            <param name="filePath"> Path to json file to get data from. </param>
-            <param name="cultureInfo"> Culture information. Default is "en-US". </param>
-            <param name="key"> Key of encrypted file. Example key: 4u7x!A%D*F-JaNdR </param>        
-            <returns> A single content of type <typeparamref name="T"/> if content isn't null.  </returns>
-        </member>
-        <member name="M:Milvasoft.Helpers.FileOperations.Concrete.JsonOperations.AddOrUpdateSingleContentToCryptedJsonFile``1(``0,System.String,System.String,System.Globalization.CultureInfo)">
-            <summary>
-            Adds <paramref name="content"/> to json file in <paramref name="filePath"/> with <paramref name="key"/>.
-            (like Auto Increment)
-            ! Milvasoft Corporation is not responsible of possible data loss.
-            
-            </summary>
-            
-            <remarks>
-            
-            yourjsonfile.json file must contains exact same type of <typeparamref name="T"/> or file must be empty.
-            
-            If <paramref name="cultureInfo"/> is null, default is ("en-US")
-            
-            </remarks>
-            
-            <exception cref="T:System.ArgumentOutOfRangeException"> Throwns when key is not proper lenght. </exception>
-            <exception cref="T:System.ArgumentException"> Throwns when key is incorrect. </exception>
-            
-            <typeparam name="T"> Return type. </typeparam>
-            <param name="content"> Content to be added or updated. </param>
-            <param name="filePath"> Path to json file to get data from. </param>
-            <param name="cultureInfo"> Culture information. Default is "en-US". </param>
-            <param name="key"> Key of encrypted file. Example key: 4u7x!A%D*F-JaNdR </param>       
-            <returns> Completed <see cref="T:System.Threading.Tasks.Task"/> </returns>
         </member>
         <member name="M:Milvasoft.Helpers.FileOperations.Concrete.JsonOperations.GetLastIdIfHasId``1(System.Nullable{System.Int32}@,System.Collections.Generic.List{``0})">
             <summary>

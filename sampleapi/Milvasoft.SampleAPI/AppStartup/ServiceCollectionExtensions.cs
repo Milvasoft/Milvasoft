@@ -29,7 +29,6 @@ using Milvasoft.SampleAPI.Utils;
 using Milvasoft.SampleAPI.Utils.Swagger;
 using Newtonsoft.Json;
 using System;
-using System.Globalization;
 using System.IdentityModel.Tokens.Jwt;
 using System.IO;
 using System.Net;
@@ -274,9 +273,7 @@ namespace Milvasoft.SampleAPI.AppStartup
         /// <param name="jSONFile"></param>
         private static void ConfigureJWT(this IServiceCollection services, IJsonOperations jSONFile)
         {
-            var tokenManagement = jSONFile.GetRequiredSingleContentCryptedFromJsonFileAsync<TokenManagement>(Path.Combine(GlobalConstants.RootPath, "StaticFiles", "JSON", "tokenmanagement.json"),
-                                                                                                             GlobalConstants.MilvaKey,
-                                                                                                             new CultureInfo("tr-TR")).Result;
+            var tokenManagement = jSONFile.GetCryptedContentAsync<TokenManagement>(Path.Combine(GlobalConstants.RootPath, "StaticFiles", "JSON", "tokenmanagement.json")).Result;
 
             services.AddSingleton<ITokenManagement>(tokenManagement);
 

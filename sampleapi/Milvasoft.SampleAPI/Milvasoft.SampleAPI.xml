@@ -155,39 +155,6 @@
             Checks media library folders. If folders not exists creates that folders.
             </summary>
         </member>
-        <member name="M:Milvasoft.SampleAPI.AppStartup.StartupConfiguration.EncryptFile">
-            <summary>
-            For development.
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:Milvasoft.SampleAPI.AppStartup.StartupConfiguration.DecryptFile">
-            <summary>
-            For development.
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:Milvasoft.SampleAPI.AppStartup.StartupConfiguration.FillStringBlacklistAsync(Milvasoft.Helpers.FileOperations.Abstract.IJsonOperations)">
-            <summary>
-            Fills <c> GlobalConstants.StringBlackList </c> list from stringblacklist.json file.
-            </summary>
-            <param name="jsonOperations"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Milvasoft.SampleAPI.AppStartup.StartupConfiguration.FillAllowedFileExtensionsAsync(Milvasoft.Helpers.FileOperations.Abstract.IJsonOperations)">
-            <summary>
-            Fills <c> GlobalConstants.AllowedFileExtensions </c> list from allowedfileextensions.json file.
-            </summary>
-            <param name="jsonOperations"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Milvasoft.SampleAPI.AppStartup.StartupConfiguration.FillApiKeyAsync(Milvasoft.Helpers.FileOperations.Abstract.IJsonOperations)">
-            <summary>
-            Fills <c>GlobalConstants.HubGroups</c> list from generalsettings.json file.
-            </summary>
-            <param name="jsonOperations"></param>
-            <returns></returns>
-        </member>
         <member name="T:Milvasoft.SampleAPI.Controllers.AccountsController">
             <summary>
             The class in which user transactions are entered and exited

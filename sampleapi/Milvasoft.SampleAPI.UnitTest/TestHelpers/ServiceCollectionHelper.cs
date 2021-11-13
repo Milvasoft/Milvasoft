@@ -27,7 +27,6 @@ using Milvasoft.SampleAPI.Utils;
 using Moq;
 using Newtonsoft.Json;
 using System;
-using System.Globalization;
 using System.IdentityModel.Tokens.Jwt;
 using System.IO;
 using System.Net.Http.Headers;
@@ -154,9 +153,7 @@ namespace Milvasoft.SampleAPI.UnitTest.TestHelpers
         {
             var localizer = _services.BuildServiceProvider().GetRequiredService<IStringLocalizer<SharedResource>>();
 
-            var tokenManagement = jSONFile.GetRequiredSingleContentCryptedFromJsonFileAsync<TokenManagement>(Path.Combine(FakeGlobalConstants.RootPath, "StaticFiles", "JSON", "tokenmanagement.json"),
-                                                                                                             FakeGlobalConstants.MilvaKey,
-                                                                                                             new CultureInfo("tr-TR")).Result;
+            var tokenManagement = jSONFile.GetCryptedContentAsync<TokenManagement>(Path.Combine(FakeGlobalConstants.RootPath, "StaticFiles", "JSON", "tokenmanagement.json")).Result;
 
             _services.AddSingleton(tokenManagement);
 
