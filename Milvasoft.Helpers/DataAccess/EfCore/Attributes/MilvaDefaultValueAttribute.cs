@@ -9,6 +9,11 @@ namespace Milvasoft.Helpers.DataAccess.EfCore.Attributes;
 public class MilvaDefaultValueAttribute : Attribute
 {
     /// <summary>
+    /// Default value of tagged property.
+    /// </summary>
+    public object DefaultValue { get; private set; }
+
+    /// <summary>
     /// Specifies this property has a default value upon creation.
     /// </summary>
     /// <param name="defaultValue">The default value of the property.</param>
@@ -16,9 +21,4 @@ public class MilvaDefaultValueAttribute : Attribute
     {
         DefaultValue = defaultValue;
     }
-
-    /// <summary>
-    /// Default value of tagged property.
-    /// </summary>
-    public object DefaultValue { get; private set; }
 }
