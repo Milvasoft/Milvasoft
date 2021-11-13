@@ -159,7 +159,7 @@ public static class FormFileOperations
             if (!Directory.Exists(folderPathOfItem))
                 Directory.CreateDirectory(folderPathOfItem);
 
-            DirectoryInfo directory = new DirectoryInfo(folderPathOfItem);
+            DirectoryInfo directory = new(folderPathOfItem);
 
             var directoryFiles = directory.GetFiles();
 
@@ -218,8 +218,9 @@ public static class FormFileOperations
                                                                          string propertyName)
     {
         if (files.IsNullOrEmpty()) return new List<string>();
+
         //Gets file extension.
-        var fileExtension = Path.GetExtension(files.First().FileName);
+        var fileExtension = Path.GetExtension(files[0].FileName);
 
         //Gets the class name. E.g. If class is ProductDTO then sets the value of this variable as "Product".
         var folderNameOfClass = folderNameCreator.Invoke(entity.GetType());
@@ -245,7 +246,7 @@ public static class FormFileOperations
             if (!Directory.Exists(folderPathOfItem))
                 Directory.CreateDirectory(folderPathOfItem);
 
-            DirectoryInfo directory = new DirectoryInfo(folderPathOfItem);
+            DirectoryInfo directory = new(folderPathOfItem);
 
             var directoryFiles = directory.GetFiles();
 
@@ -509,7 +510,7 @@ public static class FormFileOperations
     /// <param name="folderPath"></param>
     public static void RemoveFilesInFolder(string folderPath)
     {
-        DirectoryInfo directory = new DirectoryInfo(folderPath);
+        DirectoryInfo directory = new(folderPath);
 
         var files = directory?.EnumerateFiles();
 
@@ -525,7 +526,7 @@ public static class FormFileOperations
     /// <param name="fileNames"> File names should contains extension. </param>
     public static void RemoveFilesInFolder(string folderPath, List<string> fileNames)
     {
-        DirectoryInfo directory = new DirectoryInfo(folderPath);
+        DirectoryInfo directory = new(folderPath);
 
         var files = directory?.EnumerateFiles();
 
@@ -542,7 +543,7 @@ public static class FormFileOperations
     /// <param name="folderPath"></param>
     public static void RemoveDirectoriesInFolder(string folderPath)
     {
-        DirectoryInfo directory = new DirectoryInfo(folderPath);
+        DirectoryInfo directory = new(folderPath);
 
         var directories = directory?.EnumerateDirectories();
 
@@ -558,7 +559,7 @@ public static class FormFileOperations
     /// <param name="directoryNames"></param>
     public static void RemoveDirectoriesInFolder(string folderPath, List<string> directoryNames)
     {
-        DirectoryInfo directory = new DirectoryInfo(folderPath);
+        DirectoryInfo directory = new(folderPath);
         var directories = directory?.EnumerateDirectories();
 
         if (!directories.IsNullOrEmpty())
@@ -574,7 +575,7 @@ public static class FormFileOperations
     /// <param name="folderPath"></param>
     public static void RemoveDirectoriesAndFolder(string folderPath)
     {
-        DirectoryInfo directory = new DirectoryInfo(folderPath);
+        DirectoryInfo directory = new(folderPath);
 
         if (directory != null)
         {
@@ -722,7 +723,7 @@ public static class FormFileOperations
         string result = "";
         bool inQuery = false, inFragment = false;
 
-        string CombineEnsureSingleSeparator(string a, string b, char separator)
+        static string CombineEnsureSingleSeparator(string a, string b, char separator)
         {
             if (string.IsNullOrWhiteSpace(a)) return b;
             if (string.IsNullOrWhiteSpace(b)) return a;
@@ -745,12 +746,12 @@ public static class FormFileOperations
             else
                 result = CombineEnsureSingleSeparator(result, part, '/');
 
-            if (part.Contains("#"))
+            if (part.Contains('#'))
             {
                 inQuery = false;
                 inFragment = true;
             }
-            else if (!inFragment && part.Contains("?"))
+            else if (!inFragment && part.Contains('?'))
             {
                 inQuery = true;
             }
@@ -777,15 +778,15 @@ public static class FormFileOperations
         // in that % isn't illegal if it's the start of a %-encoded sequence https://stackoverflow.com/a/47636037/62600
 
         // no % characters, so avoid the regex overhead
-        if (!s.Contains("%"))
-            return Uri.EscapeUriString(s);
+        if (!s.Contains('%'))
+            return Uri.EscapeDataString(s);
 
         // pick out all %-hex-hex matches and avoid double-encoding 
         return Regex.Replace(s, "(.*?)((%[0-9A-Fa-f]{2})|$)", c =>
         {
             var a = c.Groups[1].Value; // group 1 is a sequence with no %-encoding - encode illegal characters
             var b = c.Groups[2].Value; // group 2 is a valid 3-character %-encoded sequence - leave it alone!
-            return Uri.EscapeUriString(a) + b;
+            return Uri.EscapeDataString(a) + b;
         });
     }
 

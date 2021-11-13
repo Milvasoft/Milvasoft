@@ -3508,6 +3508,23 @@
             <param name="propertySelector"></param>
             <returns></returns>
         </member>
+        <member name="T:Milvasoft.Helpers.DataAccess.EfCore.IncludeLibrary.IncludeMultipleClass">
+            <summary>
+            Allows to include multiple class.
+            </summary>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.IncludeLibrary.IncludeMultipleClass.IncludeMultiple``1(System.Linq.IQueryable{``0},System.Func{Milvasoft.Helpers.DataAccess.EfCore.IncludeLibrary.IIncludable{``0},Milvasoft.Helpers.DataAccess.EfCore.IncludeLibrary.IIncludable})">
+            <summary>
+            Supports queryable Include/ThenInclude chaining operators.
+            </summary>
+            <example>
+            var personnelTable = _personnelTableRepository.GetAllWithIncludes(i => i.Include(p=>p.personnel).Include(p=>p.tableSetting));
+            </example>
+            <typeparam name="T"></typeparam>
+            <param name="query"></param>
+            <param name="includes"></param>
+            <returns></returns>
+        </member>
         <member name="T:Milvasoft.Helpers.DataAccess.EfCore.MilvaContext.AuditConfiguration">
             <summary>
             Entity auditing configuration. You can register this configuration in startup as singleton.
@@ -3776,23 +3793,6 @@
             Creates a new <see cref="T:Milvasoft.Helpers.DataAccess.EfCore.MilvaContext.MilvaObjectIdStringConverter"/> instance.
             </summary>
             <param name="mappingHints">Entity Framework mapping hints</param>
-        </member>
-        <member name="T:Milvasoft.Helpers.DataAccess.IncludeLibrary.IncludeMultipleClass">
-            <summary>
-            Allows to include multiple class.
-            </summary>
-        </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.IncludeLibrary.IncludeMultipleClass.IncludeMultiple``1(System.Linq.IQueryable{``0},System.Func{Milvasoft.Helpers.DataAccess.EfCore.IncludeLibrary.IIncludable{``0},Milvasoft.Helpers.DataAccess.EfCore.IncludeLibrary.IIncludable})">
-            <summary>
-            Supports queryable Include/ThenInclude chaining operators.
-            </summary>
-            <example>
-            var personnelTable = _personnelTableRepository.GetAllWithIncludes(i => i.Include(p=>p.personnel).Include(p=>p.tableSetting));
-            </example>
-            <typeparam name="T"></typeparam>
-            <param name="query"></param>
-            <param name="includes"></param>
-            <returns></returns>
         </member>
         <member name="T:Milvasoft.Helpers.DataAccess.MongoDB.Abstract.IBaseRepository`1">
             <summary>

@@ -100,7 +100,7 @@ public class MilvaEncryptionProvider : IMilvaEncryptionProvider
 
             await memoryStream.ReadAsync(initializationVector.AsMemory(0, initializationVector.Length)).ConfigureAwait(false);
 
-            using AesCryptoServiceProvider aesProvider = CreateCryptographyProvider();
+            using var aesProvider = CreateCryptographyProvider();
 
             using ICryptoTransform decryptor = aesProvider.CreateDecryptor(_key, initializationVector);
 
@@ -222,7 +222,7 @@ public class MilvaEncryptionProvider : IMilvaEncryptionProvider
 
             memoryStream.Read(initializationVector, 0, initializationVector.Length);
 
-            using AesCryptoServiceProvider aesProvider = CreateCryptographyProvider();
+            using var aesProvider = CreateCryptographyProvider();
 
             using ICryptoTransform decryptor = aesProvider.CreateDecryptor(_key, initializationVector);
 
@@ -303,16 +303,17 @@ public class MilvaEncryptionProvider : IMilvaEncryptionProvider
     /// Creates an AES cryptography provider.
     /// </summary>
     /// <returns></returns>
-    private AesCryptoServiceProvider CreateCryptographyProvider()
+    private Aes CreateCryptographyProvider()
     {
-        return new AesCryptoServiceProvider
-        {
-            BlockSize = AesBlockSize,
-            Mode = _mode,
-            Padding = _padding,
-            Key = _key,
-            KeySize = _key.Length * 8
-        };
+        var provider = Aes.Create();
+
+        provider.BlockSize = AesBlockSize;
+        provider.Mode = _mode;
+        provider.Padding = _padding;
+        provider.Key = _key;
+        provider.KeySize = _key.Length * 8;
+
+        return provider;
     }
 
 }

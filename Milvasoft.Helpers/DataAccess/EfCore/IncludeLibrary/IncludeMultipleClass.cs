@@ -1,31 +1,29 @@
-﻿using Milvasoft.Helpers.DataAccess.EfCore.IncludeLibrary;
-using System;
+﻿using System;
 using System.Linq;
 
-namespace Milvasoft.Helpers.DataAccess.IncludeLibrary
+namespace Milvasoft.Helpers.DataAccess.EfCore.IncludeLibrary;
+
+/// <summary>
+/// Allows to include multiple class.
+/// </summary>
+public static class IncludeMultipleClass
 {
     /// <summary>
-    /// Allows to include multiple class.
+    /// Supports queryable Include/ThenInclude chaining operators.
     /// </summary>
-    public static class IncludeMultipleClass
+    /// <example>
+    /// var personnelTable = _personnelTableRepository.GetAllWithIncludes(i => i.Include(p=>p.personnel).Include(p=>p.tableSetting));
+    /// </example>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="query"></param>
+    /// <param name="includes"></param>
+    /// <returns></returns>
+    public static IQueryable<T> IncludeMultiple<T>(this IQueryable<T> query, Func<IIncludable<T>, IIncludable> includes) where T : class
     {
-        /// <summary>
-        /// Supports queryable Include/ThenInclude chaining operators.
-        /// </summary>
-        /// <example>
-        /// var personnelTable = _personnelTableRepository.GetAllWithIncludes(i => i.Include(p=>p.personnel).Include(p=>p.tableSetting));
-        /// </example>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="query"></param>
-        /// <param name="includes"></param>
-        /// <returns></returns>
-        public static IQueryable<T> IncludeMultiple<T>(this IQueryable<T> query, Func<IIncludable<T>, IIncludable> includes) where T : class
-        {
-            if (includes == null)
-                return query;
+        if (includes == null)
+            return query;
 
-            var includable = (Includable<T>)includes(new Includable<T>(query));
-            return includable.Input;
-        }
+        var includable = (Includable<T>)includes(new Includable<T>(query));
+        return includable.Input;
     }
 }

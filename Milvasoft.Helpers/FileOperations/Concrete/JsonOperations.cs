@@ -1139,7 +1139,7 @@ public class JsonOperations : IJsonOperations
         return JsonConvert.SerializeObject(jsonContent, Formatting.Indented);
     }
 
-    private async Task<string> DecryptAndReadAsync(string filePath, string key)
+    private static async Task<string> DecryptAndReadAsync(string filePath, string key)
     {
         var encryptionProvider = new MilvaEncryptionProvider(key);
 
@@ -1148,7 +1148,7 @@ public class JsonOperations : IJsonOperations
         return encryptionProvider.Decrypt(inputValue);
     }
 
-    private async Task EncryptAndWriteAsync(string filePath, string content, string key)
+    private static async Task EncryptAndWriteAsync(string filePath, string content, string key)
     {
         var encryptionProvider = new MilvaEncryptionProvider(key);
 
@@ -1157,16 +1157,17 @@ public class JsonOperations : IJsonOperations
         await File.WriteAllTextAsync(filePath, encryptedContent, Encoding.UTF8).ConfigureAwait(false);
     }
 
-    private string DecryptAndRead(string filePath, string key)
+    private static string DecryptAndRead(string filePath, string key)
     {
         var plainContent = File.ReadAllBytes(filePath);
         //byte[] plainContent = Encoding.ASCII.GetBytes(content);
 
-        using var algorithm = new AesCryptoServiceProvider();
+        using var algorithm = Aes.Create();
 
         var keyBytes = Encoding.UTF8.GetBytes(key);
 
-        if (keyBytes.Length != 16) throw new ArgumentOutOfRangeException("Key is not proper length. Key bit length must be 16.");
+        if (keyBytes.Length != 16)
+            throw new ArgumentOutOfRangeException(key, "Key is not proper length. Key bit length must be 16.");
 
         algorithm.IV = keyBytes;
         algorithm.Key = keyBytes;
@@ -1195,16 +1196,17 @@ public class JsonOperations : IJsonOperations
         return streamReader.ReadToEnd();
     }
 
-    private void EncryptAndWrite(string filePath, string content, string key)
+    private static void EncryptAndWrite(string filePath, string content, string key)
     {
         //var plainContent = await File.ReadAllBytesAsync(filePath).ConfigureAwait(false);
         byte[] plainContent = Encoding.ASCII.GetBytes(content);
 
-        using var algorithm = new AesCryptoServiceProvider();
+        using var algorithm = Aes.Create();
 
         var keyBytes = Encoding.UTF8.GetBytes(key);
 
-        if (keyBytes.Length != 16) throw new ArgumentOutOfRangeException("Key is not proper length. Key bit length must be 16.");
+        if (keyBytes.Length != 16)
+            throw new ArgumentOutOfRangeException(key, "Key is not proper length. Key bit length must be 16.");
 
         algorithm.IV = keyBytes;
         algorithm.Key = keyBytes;
