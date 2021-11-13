@@ -1,14 +1,13 @@
-﻿namespace Milvasoft.Helpers.MultiTenancy.Utils
+﻿namespace Milvasoft.Helpers.MultiTenancy.Utils;
+
+/// <summary>
+/// Tenancy contants.
+/// </summary>
+public class TenancyConstants
 {
     /// <summary>
-    /// Tenancy contants.
+    /// Header tenant key.
     /// </summary>
-    public class TenancyConstants
-    {
-        /// <summary>
-        /// Header tenant key.
-        /// </summary>
-        public const string HttpContextTenantKey = "X-Tenant";
+    public const string HttpContextTenantKey = "X-Tenant";
 
-    }
 }

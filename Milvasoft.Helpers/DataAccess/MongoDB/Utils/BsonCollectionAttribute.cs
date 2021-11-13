@@ -1,25 +1,24 @@
 ﻿using System;
 
-namespace Milvasoft.Helpers.DataAccess.MongoDB.Utils
+namespace Milvasoft.Helpers.DataAccess.MongoDB.Utils;
+
+/// <summary>
+/// Represents entity's collection name in MongoDB.
+/// </summary>
+[AttributeUsage(AttributeTargets.Class, Inherited = false)]
+public class BsonCollectionAttribute : Attribute
 {
     /// <summary>
-    /// Represents entity's collection name in MongoDB.
+    /// Gets or sets collection name.
     /// </summary>
-    [AttributeUsage(AttributeTargets.Class, Inherited = false)]
-    public class BsonCollectionAttribute : Attribute
-    {
-        /// <summary>
-        /// Gets or sets collection name.
-        /// </summary>
-        public string CollectionName { get; }
+    public string CollectionName { get; }
 
-        /// <summary>
-        /// Creates new instance of <see cref="BsonCollectionAttribute"/>.
-        /// </summary>
-        /// <param name="collectionName"></param>
-        public BsonCollectionAttribute(string collectionName)
-        {
-            CollectionName = collectionName;
-        }
+    /// <summary>
+    /// Creates new instance of <see cref="BsonCollectionAttribute"/>.
+    /// </summary>
+    /// <param name="collectionName"></param>
+    public BsonCollectionAttribute(string collectionName)
+    {
+        CollectionName = collectionName;
     }
 }

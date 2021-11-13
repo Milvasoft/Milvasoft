@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
-using Milvasoft.Helpers.DataAccess.MilvaContext;
+using Milvasoft.Helpers.DataAccess.EfCore.MilvaContext;
 using Milvasoft.Helpers.DependencyInjection;
 using Milvasoft.SampleAPI.Entity;
 using System;

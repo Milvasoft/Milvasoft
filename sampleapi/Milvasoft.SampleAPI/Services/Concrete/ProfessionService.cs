@@ -1,4 +1,4 @@
-﻿using Milvasoft.Helpers.DataAccess.Abstract;
+﻿using Milvasoft.Helpers.DataAccess.EfCore.Abstract;
 using Milvasoft.Helpers.Models;
 using Milvasoft.SampleAPI.Data;
 using Milvasoft.SampleAPI.DTOs;

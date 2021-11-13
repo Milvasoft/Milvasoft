@@ -1,5 +1,5 @@
-﻿using Milvasoft.Helpers.DataAccess.Abstract;
-using Milvasoft.Helpers.DataAccess.IncludeLibrary;
+﻿using Milvasoft.Helpers.DataAccess.EfCore.Abstract;
+using Milvasoft.Helpers.DataAccess.EfCore.IncludeLibrary;
 using Milvasoft.Helpers.Models;
 using Milvasoft.SampleAPI.Data;
 using Milvasoft.SampleAPI.DTOs;

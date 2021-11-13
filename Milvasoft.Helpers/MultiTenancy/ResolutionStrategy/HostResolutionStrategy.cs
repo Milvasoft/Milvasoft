@@ -1,31 +1,30 @@
 ﻿using Microsoft.AspNetCore.Http;
 using System.Threading.Tasks;
 
-namespace Milvasoft.Helpers.MultiTenancy.ResolutionStrategy
+namespace Milvasoft.Helpers.MultiTenancy.ResolutionStrategy;
+
+/// <summary>
+/// Resolve the host to a tenant identifier
+/// </summary>
+public class HostResolutionStrategy : ITenantResolutionStrategy<string>
 {
+    private readonly IHttpContextAccessor _httpContextAccessor;
+
     /// <summary>
-    /// Resolve the host to a tenant identifier
+    /// Creates new instance of <see cref="HostResolutionStrategy"/>
     /// </summary>
-    public class HostResolutionStrategy : ITenantResolutionStrategy<string>
+    /// <param name="httpContextAccessor"></param>
+    public HostResolutionStrategy(IHttpContextAccessor httpContextAccessor)
     {
-        private readonly IHttpContextAccessor _httpContextAccessor;
+        _httpContextAccessor = httpContextAccessor;
+    }
 
-        /// <summary>
-        /// Creates new instance of <see cref="HostResolutionStrategy"/>
-        /// </summary>
-        /// <param name="httpContextAccessor"></param>
-        public HostResolutionStrategy(IHttpContextAccessor httpContextAccessor)
-        {
-            _httpContextAccessor = httpContextAccessor;
-        }
-
-        /// <summary>
-        /// Get the tenant identifier from host.
-        /// </summary>
-        /// <returns></returns>
-        public async Task<string> GetTenantIdentifierAsync()
-        {
-            return await Task.FromResult(_httpContextAccessor.HttpContext.Request.Host.Host);
-        }
+    /// <summary>
+    /// Get the tenant identifier from host.
+    /// </summary>
+    /// <returns></returns>
+    public async Task<string> GetTenantIdentifierAsync()
+    {
+        return await Task.FromResult(_httpContextAccessor.HttpContext.Request.Host.Host);
     }
 }

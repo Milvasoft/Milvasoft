@@ -2,30 +2,29 @@
 using Milvasoft.Helpers.MultiTenancy.EntityBase;
 using System;
 
-namespace Milvasoft.Helpers.MultiTenancy.Accessor
+namespace Milvasoft.Helpers.MultiTenancy.Accessor;
+
+/// <summary>
+/// Tenant accessor for easy access.
+/// </summary>
+/// <typeparam name="TTenant"></typeparam>
+/// <typeparam name="TKey"></typeparam>
+public interface ITenantAccessor<TTenant, TKey>
+    where TTenant : class, IMilvaTenantBase<TKey>
+    where TKey : struct, IEquatable<TKey>
 {
     /// <summary>
-    /// Tenant accessor for easy access.
+    /// Application service provider.
     /// </summary>
-    /// <typeparam name="TTenant"></typeparam>
-    /// <typeparam name="TKey"></typeparam>
-    public interface ITenantAccessor<TTenant, TKey>
-        where TTenant : class, IMilvaTenantBase<TKey>
-        where TKey : struct, IEquatable<TKey>
-    {
-        /// <summary>
-        /// Application service provider.
-        /// </summary>
-        IServiceProvider ServiceProvider { get; }
+    IServiceProvider ServiceProvider { get; }
 
-        /// <summary>
-        /// Context accessor.
-        /// </summary>
-        IHttpContextAccessor HttpContextAccessor { get; }
+    /// <summary>
+    /// Context accessor.
+    /// </summary>
+    IHttpContextAccessor HttpContextAccessor { get; }
 
-        /// <summary>
-        /// Accessed tenant from <see cref="HttpContext"/>
-        /// </summary>
-        TTenant Tenant { get; }
-    }
+    /// <summary>
+    /// Accessed tenant from <see cref="HttpContext"/>
+    /// </summary>
+    TTenant Tenant { get; }
 }

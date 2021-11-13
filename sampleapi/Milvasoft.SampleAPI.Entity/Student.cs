@@ -1,5 +1,5 @@
-﻿using Milvasoft.Helpers.DataAccess.Attributes;
-using Milvasoft.Helpers.DataAccess.Concrete.Entity;
+﻿using Milvasoft.Helpers.DataAccess.EfCore.Attributes;
+using Milvasoft.Helpers.DataAccess.EfCore.Concrete.Entity;
 using Milvasoft.SampleAPI.Entity.Enum;
 using System;
 using System.Collections.Generic;

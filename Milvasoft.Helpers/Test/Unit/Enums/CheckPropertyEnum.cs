@@ -1,18 +1,17 @@
-﻿namespace Milvasoft.Helpers.Test.Unit.Enums
+﻿namespace Milvasoft.Helpers.Test.Unit.Enums;
+
+/// <summary>
+/// Includes the control type of data to be tested.
+/// </summary>
+public enum CheckPropertyEnum : sbyte
 {
     /// <summary>
-    /// Includes the control type of data to be tested.
+    /// Checks whether the data to be tested can be the default value.
     /// </summary>
-    public enum CheckPropertyEnum : sbyte
-    {
-        /// <summary>
-        /// Checks whether the data to be tested can be the default value.
-        /// </summary>
-        Default,
+    Default,
 
-        /// <summary>
-        /// Checks whether the data to be tested can be a non-default value.
-        /// </summary>
-        NotDefault
-    }
+    /// <summary>
+    /// Checks whether the data to be tested can be a non-default value.
+    /// </summary>
+    NotDefault
 }

@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Milvasoft.Helpers.DataAccess.Abstract.Entity;
-using Milvasoft.Helpers.DataAccess.Concrete;
+using Milvasoft.Helpers.DataAccess.EfCore.Abstract.Entity;
+using Milvasoft.Helpers.DataAccess.EfCore.Concrete;
 using System;
 
 namespace Milvasoft.SampleAPI.Data.Repositories

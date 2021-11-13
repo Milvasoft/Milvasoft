@@ -1,20 +1,19 @@
 ﻿using System;
 
-namespace Milvasoft.Helpers.DataAccess.Abstract.Entity.Auditing
+namespace Milvasoft.Helpers.DataAccess.EfCore.Abstract.Entity.Auditing;
+
+/// <summary>
+/// Determines entity has deletion date.
+/// </summary>
+public interface ISoftDeletable
 {
     /// <summary>
-    /// Determines entity has deletion date.
+    /// Deletion date of entity.
     /// </summary>
-    public interface ISoftDeletable
-    {
-        /// <summary>
-        /// Deletion date of entity.
-        /// </summary>
-        DateTime? DeletionDate { get; set; }
+    DateTime? DeletionDate { get; set; }
 
-        /// <summary>
-        /// Gets or sets a value indicating whether IsDeleted.
-        /// </summary>
-        public bool IsDeleted { get; set; }
-    }
+    /// <summary>
+    /// Gets or sets a value indicating whether IsDeleted.
+    /// </summary>
+    public bool IsDeleted { get; set; }
 }

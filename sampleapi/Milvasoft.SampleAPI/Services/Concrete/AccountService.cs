@@ -4,7 +4,7 @@ using Microsoft.Extensions.Localization;
 using Microsoft.IdentityModel.Tokens;
 using Milvasoft.Helpers;
 using Milvasoft.Helpers.Caching;
-using Milvasoft.Helpers.DataAccess.Abstract;
+using Milvasoft.Helpers.DataAccess.EfCore.Abstract;
 using Milvasoft.Helpers.DependencyInjection;
 using Milvasoft.Helpers.Enums;
 using Milvasoft.Helpers.Exceptions;

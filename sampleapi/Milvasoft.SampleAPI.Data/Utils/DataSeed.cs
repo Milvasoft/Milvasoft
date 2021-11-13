@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Milvasoft.Helpers;
-using Milvasoft.Helpers.DataAccess.Abstract.Entity;
+using Milvasoft.Helpers.DataAccess.EfCore.Abstract.Entity;
 using Milvasoft.Helpers.MultiTenancy.EntityBase;
 using Milvasoft.SampleAPI.Entity;
 using System;

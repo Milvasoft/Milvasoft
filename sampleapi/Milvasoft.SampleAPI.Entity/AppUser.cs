@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using Milvasoft.Helpers.DataAccess.Abstract.Entity;
+using Milvasoft.Helpers.DataAccess.EfCore.Abstract.Entity;
 using System;
 
 namespace Milvasoft.SampleAPI.Entity

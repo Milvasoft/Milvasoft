@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using Milvasoft.Helpers.DataAccess.Abstract.Entity;
+using Milvasoft.Helpers.DataAccess.EfCore.Abstract.Entity;
 using Milvasoft.SampleAPI.DTOs.MentorDTOs;
 using Milvasoft.SampleAPI.DTOs.StudentDTOs;
 using System;

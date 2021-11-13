@@ -2,61 +2,60 @@
 using System.Diagnostics;
 using System.Threading.Tasks;
 
-namespace Milvasoft.Helpers.Middlewares
+namespace Milvasoft.Helpers.Middlewares;
+
+/// <summary>
+/// Calculates response time and adds result to response headers.
+/// Custom header is "X-Response-Time".
+/// </summary>
+public class MilvaResponseTimeCalculator
 {
     /// <summary>
-    /// Calculates response time and adds result to response headers.
-    /// Custom header is "X-Response-Time".
+    /// Name of the Response Header, Custom Headers starts with "X-"  
     /// </summary>
-    public class MilvaResponseTimeCalculator
+    private const string _responseHeader = "X-Response-Time-ms";
+
+    /// <summary>
+    /// Handle to the next Middleware in the pipeline  
+    /// </summary>
+    private readonly RequestDelegate _next;
+
+    /// <summary>
+    /// Initializes new instances of <see cref="MilvaResponseTimeCalculator"/>.
+    /// </summary>
+    /// <param name="next"></param>
+    public MilvaResponseTimeCalculator(RequestDelegate next)
     {
-        /// <summary>
-        /// Name of the Response Header, Custom Headers starts with "X-"  
-        /// </summary>
-        private const string _responseHeader = "X-Response-Time";
+        _next = next;
+    }
 
-        /// <summary>
-        /// Handle to the next Middleware in the pipeline  
-        /// </summary>
-        private readonly RequestDelegate _next;
+    /// <summary>
+    /// Invokes the method or constructor reflected by this MethodInfo instance.
+    /// </summary>
+    /// <param name="context"></param>
+    /// <returns></returns>
+    public Task InvokeAsync(HttpContext context)
+    {
+        // Start the Timer using Stopwatch  
+        var watch = new Stopwatch();
 
-        /// <summary>
-        /// Initializes new instances of <see cref="MilvaResponseTimeCalculator"/>.
-        /// </summary>
-        /// <param name="next"></param>
-        public MilvaResponseTimeCalculator(RequestDelegate next)
+        watch.Start();
+
+        context.Response.OnStarting(() =>
         {
-            _next = next;
-        }
 
-        /// <summary>
-        /// Invokes the method or constructor reflected by this MethodInfo instance.
-        /// </summary>
-        /// <param name="context"></param>
-        /// <returns></returns>
-        public Task InvokeAsync(HttpContext context)
-        {
-            // Start the Timer using Stopwatch  
-            var watch = new Stopwatch();
+            // Stop the timer information and calculate the time   
+            watch.Stop();
 
-            watch.Start();
+            var responseTimeForCompleteRequest = watch.ElapsedMilliseconds;
 
-            context.Response.OnStarting(() =>
-            {
+            // Add the Response time information in the Response headers.   
+            context.Response.Headers[_responseHeader] = $"{responseTimeForCompleteRequest}";
 
-                // Stop the timer information and calculate the time   
-                watch.Stop();
+            return Task.CompletedTask;
+        });
 
-                var responseTimeForCompleteRequest = watch.ElapsedMilliseconds;
-
-                // Add the Response time information in the Response headers.   
-                context.Response.Headers[_responseHeader] = $"{responseTimeForCompleteRequest} ms";
-
-                return Task.CompletedTask;
-            });
-
-            // Call the next delegate/middleware in the pipeline   
-            return _next(context);
-        }
+        // Call the next delegate/middleware in the pipeline   
+        return _next(context);
     }
 }

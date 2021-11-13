@@ -1,21 +1,20 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using System.Collections.Generic;
 
-namespace Milvasoft.Helpers.Identity.Concrete
+namespace Milvasoft.Helpers.Identity.Concrete;
+
+/// <summary>
+/// Login result DTO for DI.
+/// </summary>
+public interface ILoginResultDTO<TToken> where TToken : IToken
 {
     /// <summary>
-    /// Login result DTO for DI.
+    /// Error messages of result.
     /// </summary>
-    public interface ILoginResultDTO<TToken> where TToken : IToken
-    {
-        /// <summary>
-        /// Error messages of result.
-        /// </summary>
-        public List<IdentityError> ErrorMessages { get; set; }
+    public List<IdentityError> ErrorMessages { get; set; }
 
-        /// <summary>
-        /// If result is success sets the token.
-        /// </summary>
-        public TToken Token { get; set; }
-    }
+    /// <summary>
+    /// If result is success sets the token.
+    /// </summary>
+    public TToken Token { get; set; }
 }

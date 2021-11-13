@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
-using Milvasoft.Helpers.DataAccess.Abstract;
-using Milvasoft.Helpers.DataAccess.IncludeLibrary;
+using Milvasoft.Helpers.DataAccess.EfCore.Abstract;
+using Milvasoft.Helpers.DataAccess.EfCore.IncludeLibrary;
 using Milvasoft.Helpers.Exceptions;
 using Milvasoft.Helpers.FileOperations.Concrete;
 using Milvasoft.Helpers.FileOperations.Enums;

@@ -1,9 +1,8 @@
-﻿namespace Milvasoft.Helpers.DependencyInjection
+﻿namespace Milvasoft.Helpers.DependencyInjection;
+
+/// <summary>
+/// Interface for localizer injection. You should implement this interface in your dummy resouce class. 
+/// </summary>
+public interface IMilvaResource
 {
-    /// <summary>
-    /// Interface for localizer injection. You should implement this interface in your dummy resouce class. 
-    /// </summary>
-    public interface IMilvaResource
-    {
-    }
 }

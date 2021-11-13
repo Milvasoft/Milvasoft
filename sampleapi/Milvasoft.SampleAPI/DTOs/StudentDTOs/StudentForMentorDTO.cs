@@ -1,4 +1,4 @@
-﻿using Milvasoft.Helpers.DataAccess.Concrete.Entity;
+﻿using Milvasoft.Helpers.DataAccess.EfCore.Concrete.Entity;
 using Milvasoft.SampleAPI.DTOs.MentorDTOs;
 using Milvasoft.SampleAPI.DTOs.StudentAssignmentDTOs;
 using Milvasoft.SampleAPI.Entity;

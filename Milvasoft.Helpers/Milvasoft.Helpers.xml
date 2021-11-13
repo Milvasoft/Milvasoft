@@ -1213,267 +1213,267 @@
             <param name="context"></param>
             <returns></returns>
         </member>
-        <member name="T:Milvasoft.Helpers.DataAccess.Abstract.Entity.Auditing.IHasCreator`1">
+        <member name="T:Milvasoft.Helpers.DataAccess.EfCore.Abstract.Entity.Auditing.IHasCreator`1">
             <summary>
             Determines entity has creator.
             </summary>
             <typeparam name="TUserKey"></typeparam>
         </member>
-        <member name="P:Milvasoft.Helpers.DataAccess.Abstract.Entity.Auditing.IHasCreator`1.CreatorUserId">
+        <member name="P:Milvasoft.Helpers.DataAccess.EfCore.Abstract.Entity.Auditing.IHasCreator`1.CreatorUserId">
             <summary>
             Creator of entity.
             </summary>
         </member>
-        <member name="T:Milvasoft.Helpers.DataAccess.Abstract.Entity.Auditing.IHasCreator">
+        <member name="T:Milvasoft.Helpers.DataAccess.EfCore.Abstract.Entity.Auditing.IHasCreator">
             <summary>
             Determines entity has creator.
             </summary>
         </member>
-        <member name="P:Milvasoft.Helpers.DataAccess.Abstract.Entity.Auditing.IHasCreator.CreatorUserId">
+        <member name="P:Milvasoft.Helpers.DataAccess.EfCore.Abstract.Entity.Auditing.IHasCreator.CreatorUserId">
             <summary>
             Creator of entity.
             </summary>
         </member>
-        <member name="T:Milvasoft.Helpers.DataAccess.Abstract.Entity.Auditing.IHasDeleter`1">
+        <member name="T:Milvasoft.Helpers.DataAccess.EfCore.Abstract.Entity.Auditing.IHasDeleter`1">
             <summary>
             Determines entity has deleter.
             </summary>
             <typeparam name="TUserKey"></typeparam>
         </member>
-        <member name="P:Milvasoft.Helpers.DataAccess.Abstract.Entity.Auditing.IHasDeleter`1.DeleterUserId">
+        <member name="P:Milvasoft.Helpers.DataAccess.EfCore.Abstract.Entity.Auditing.IHasDeleter`1.DeleterUserId">
             <summary>
             Deleter of entity.
             </summary>er
         </member>
-        <member name="T:Milvasoft.Helpers.DataAccess.Abstract.Entity.Auditing.IHasDeleter">
+        <member name="T:Milvasoft.Helpers.DataAccess.EfCore.Abstract.Entity.Auditing.IHasDeleter">
             <summary>
             Determines entity has deleter.
             </summary>
         </member>
-        <member name="P:Milvasoft.Helpers.DataAccess.Abstract.Entity.Auditing.IHasDeleter.DeleterUserId">
+        <member name="P:Milvasoft.Helpers.DataAccess.EfCore.Abstract.Entity.Auditing.IHasDeleter.DeleterUserId">
             <summary>
             Deleter of entity.
             </summary>er
         </member>
-        <member name="T:Milvasoft.Helpers.DataAccess.Abstract.Entity.Auditing.IHasModifier`1">
+        <member name="T:Milvasoft.Helpers.DataAccess.EfCore.Abstract.Entity.Auditing.IHasModifier`1">
             <summary>
             Determines entity has modifier.
             </summary>
             <typeparam name="TUserKey"></typeparam>
         </member>
-        <member name="P:Milvasoft.Helpers.DataAccess.Abstract.Entity.Auditing.IHasModifier`1.LastModifierUserId">
+        <member name="P:Milvasoft.Helpers.DataAccess.EfCore.Abstract.Entity.Auditing.IHasModifier`1.LastModifierUserId">
             <summary>
             Last modifier of entity.
             </summary>
         </member>
-        <member name="T:Milvasoft.Helpers.DataAccess.Abstract.Entity.Auditing.IHasModifier">
+        <member name="T:Milvasoft.Helpers.DataAccess.EfCore.Abstract.Entity.Auditing.IHasModifier">
             <summary>
             Determines entity has modifier.
             </summary>
         </member>
-        <member name="P:Milvasoft.Helpers.DataAccess.Abstract.Entity.Auditing.IHasModifier.LastModifierUserId">
+        <member name="P:Milvasoft.Helpers.DataAccess.EfCore.Abstract.Entity.Auditing.IHasModifier.LastModifierUserId">
             <summary>
             Last modifier of entity.
             </summary>
         </member>
-        <member name="T:Milvasoft.Helpers.DataAccess.Abstract.Entity.Auditing.ISoftDeletable">
+        <member name="T:Milvasoft.Helpers.DataAccess.EfCore.Abstract.Entity.Auditing.ISoftDeletable">
             <summary>
             Determines entity has deletion date.
             </summary>
         </member>
-        <member name="P:Milvasoft.Helpers.DataAccess.Abstract.Entity.Auditing.ISoftDeletable.DeletionDate">
+        <member name="P:Milvasoft.Helpers.DataAccess.EfCore.Abstract.Entity.Auditing.ISoftDeletable.DeletionDate">
             <summary>
             Deletion date of entity.
             </summary>
         </member>
-        <member name="P:Milvasoft.Helpers.DataAccess.Abstract.Entity.Auditing.ISoftDeletable.IsDeleted">
+        <member name="P:Milvasoft.Helpers.DataAccess.EfCore.Abstract.Entity.Auditing.ISoftDeletable.IsDeleted">
             <summary>
             Gets or sets a value indicating whether IsDeleted.
             </summary>
         </member>
-        <member name="T:Milvasoft.Helpers.DataAccess.Abstract.Entity.IAuditable`1">
+        <member name="T:Milvasoft.Helpers.DataAccess.EfCore.Abstract.Entity.IAuditable`1">
             <summary>
             Determines entity is auditable with modifier and modification date.
             </summary>
             <typeparam name="TKey"></typeparam>
         </member>
-        <member name="P:Milvasoft.Helpers.DataAccess.Abstract.Entity.IAuditable`1.LastModificationDate">
+        <member name="P:Milvasoft.Helpers.DataAccess.EfCore.Abstract.Entity.IAuditable`1.LastModificationDate">
             <summary>
             Last modification date of entity.
             </summary>
         </member>
-        <member name="T:Milvasoft.Helpers.DataAccess.Abstract.Entity.IAuditable`2">
+        <member name="T:Milvasoft.Helpers.DataAccess.EfCore.Abstract.Entity.IAuditable`2">
             <summary>
             Determines entity is auditable with modifier and modification date.
             </summary>
             <typeparam name="TKey"></typeparam>
             <typeparam name="TUserKey"></typeparam>
         </member>
-        <member name="T:Milvasoft.Helpers.DataAccess.Abstract.Entity.IAuditable`3">
+        <member name="T:Milvasoft.Helpers.DataAccess.EfCore.Abstract.Entity.IAuditable`3">
             <summary>
-            Adds navigation properties to <see cref="T:Milvasoft.Helpers.DataAccess.Abstract.Entity.IAuditable`1"/> interface for user.
+            Adds navigation properties to <see cref="T:Milvasoft.Helpers.DataAccess.EfCore.Abstract.Entity.IAuditable`1"/> interface for user.
             </summary>
             <typeparam name="TKey">Primary key of the user</typeparam>
             <typeparam name="TUser">Type of the user</typeparam>
             <typeparam name="TUserKey">Type of the user</typeparam>
         </member>
-        <member name="P:Milvasoft.Helpers.DataAccess.Abstract.Entity.IAuditable`3.LastModifierUser">
+        <member name="P:Milvasoft.Helpers.DataAccess.EfCore.Abstract.Entity.IAuditable`3.LastModifierUser">
             <summary>
             Reference to the last modifier user of this entity.
             </summary>
         </member>
-        <member name="T:Milvasoft.Helpers.DataAccess.Abstract.Entity.IAuditableWithCustomUser`3">
+        <member name="T:Milvasoft.Helpers.DataAccess.EfCore.Abstract.Entity.IAuditableWithCustomUser`3">
             <summary>
-            Adds navigation properties to <see cref="T:Milvasoft.Helpers.DataAccess.Abstract.Entity.IAuditable`1"/> interface for custom user.
+            Adds navigation properties to <see cref="T:Milvasoft.Helpers.DataAccess.EfCore.Abstract.Entity.IAuditable`1"/> interface for custom user.
             </summary>
             <typeparam name="TKey">Primary key of the user</typeparam>
             <typeparam name="TUser">Type of the user</typeparam>
             <typeparam name="TUserKey">Type of the user</typeparam>
         </member>
-        <member name="P:Milvasoft.Helpers.DataAccess.Abstract.Entity.IAuditableWithCustomUser`3.LastModifierUser">
+        <member name="P:Milvasoft.Helpers.DataAccess.EfCore.Abstract.Entity.IAuditableWithCustomUser`3.LastModifierUser">
             <summary>
             Reference to the last modifier user of this entity.
             </summary>
         </member>
-        <member name="T:Milvasoft.Helpers.DataAccess.Abstract.Entity.IAuditableWithoutUser`1">
+        <member name="T:Milvasoft.Helpers.DataAccess.EfCore.Abstract.Entity.IAuditableWithoutUser`1">
             <summary>
             Determines entity is auditable without modifier.
             </summary>
             <typeparam name="TKey"></typeparam>
         </member>
-        <member name="P:Milvasoft.Helpers.DataAccess.Abstract.Entity.IAuditableWithoutUser`1.LastModificationDate">
+        <member name="P:Milvasoft.Helpers.DataAccess.EfCore.Abstract.Entity.IAuditableWithoutUser`1.LastModificationDate">
             <summary>
             Last modification date of entity.
             </summary>
         </member>
-        <member name="T:Milvasoft.Helpers.DataAccess.Abstract.Entity.IBaseEntity`1">
+        <member name="T:Milvasoft.Helpers.DataAccess.EfCore.Abstract.Entity.IBaseEntity`1">
             <summary>
             Defines interface for base entity type. All entities in the system must implement this interface.
             </summary>
             <typeparam name="TKey"></typeparam>
         </member>
-        <member name="T:Milvasoft.Helpers.DataAccess.Abstract.Entity.IBaseEntity">
+        <member name="T:Milvasoft.Helpers.DataAccess.EfCore.Abstract.Entity.IBaseEntity">
             <summary>
             Defines interface for base entity type. All entities in the system must implement this interface.
             </summary>
         </member>
-        <member name="T:Milvasoft.Helpers.DataAccess.Abstract.Entity.IEntityBase`1">
+        <member name="T:Milvasoft.Helpers.DataAccess.EfCore.Abstract.Entity.IEntityBase`1">
             <summary>
             Defines interface for base entity type. All entities in the system must implement this interface.
             </summary>
             <typeparam name="TKey"></typeparam>
         </member>
-        <member name="P:Milvasoft.Helpers.DataAccess.Abstract.Entity.IEntityBase`1.Id">
+        <member name="P:Milvasoft.Helpers.DataAccess.EfCore.Abstract.Entity.IEntityBase`1.Id">
             <summary>
             Unique identifier for this entity.
             </summary>
         </member>
-        <member name="T:Milvasoft.Helpers.DataAccess.Abstract.Entity.IMilvaEntity">
+        <member name="T:Milvasoft.Helpers.DataAccess.EfCore.Abstract.Entity.IMilvaEntity">
             <summary>
             Dummy interface given for constraint
             </summary>
         </member>
-        <member name="T:Milvasoft.Helpers.DataAccess.Abstract.Entity.ICreationAuditable`1">
+        <member name="T:Milvasoft.Helpers.DataAccess.EfCore.Abstract.Entity.ICreationAuditable`1">
             <summary>
             Determines entity's creation is auditable with user information.
             </summary>
             <typeparam name="TKey"></typeparam>
         </member>
-        <member name="P:Milvasoft.Helpers.DataAccess.Abstract.Entity.ICreationAuditable`1.CreationDate">
+        <member name="P:Milvasoft.Helpers.DataAccess.EfCore.Abstract.Entity.ICreationAuditable`1.CreationDate">
             <summary>
             Creation date of entity.
             </summary>
         </member>
-        <member name="T:Milvasoft.Helpers.DataAccess.Abstract.Entity.ICreationAuditable`2">
+        <member name="T:Milvasoft.Helpers.DataAccess.EfCore.Abstract.Entity.ICreationAuditable`2">
             <summary>
             Determines entity's creation is auditable with user information.
             </summary>
             <typeparam name="TKey"></typeparam>
             <typeparam name="TUserKey"></typeparam>
         </member>
-        <member name="T:Milvasoft.Helpers.DataAccess.Abstract.Entity.ICreationAuditable`3">
+        <member name="T:Milvasoft.Helpers.DataAccess.EfCore.Abstract.Entity.ICreationAuditable`3">
             <summary>
-            Adds navigation properties to <see cref="T:Milvasoft.Helpers.DataAccess.Abstract.Entity.ICreationAuditable`1"/> interface for user.
+            Adds navigation properties to <see cref="T:Milvasoft.Helpers.DataAccess.EfCore.Abstract.Entity.ICreationAuditable`1"/> interface for user.
             </summary>
             <typeparam name="TKey">Key of the user</typeparam>
             <typeparam name="TUser">Type of the user</typeparam>
             <typeparam name="TUserKey">Type of the user</typeparam>
         </member>
-        <member name="P:Milvasoft.Helpers.DataAccess.Abstract.Entity.ICreationAuditable`3.CreatorUser">
+        <member name="P:Milvasoft.Helpers.DataAccess.EfCore.Abstract.Entity.ICreationAuditable`3.CreatorUser">
             <summary>
             Reference to the creator user of this entity.
             </summary>
         </member>
-        <member name="T:Milvasoft.Helpers.DataAccess.Abstract.Entity.ICreationAuditableWithCustomUser`3">
+        <member name="T:Milvasoft.Helpers.DataAccess.EfCore.Abstract.Entity.ICreationAuditableWithCustomUser`3">
             <summary>
-            Adds navigation properties to <see cref="T:Milvasoft.Helpers.DataAccess.Abstract.Entity.ICreationAuditable`1"/> interface for user.
+            Adds navigation properties to <see cref="T:Milvasoft.Helpers.DataAccess.EfCore.Abstract.Entity.ICreationAuditable`1"/> interface for user.
             </summary>
             <typeparam name="TKey">Key of the user</typeparam>
             <typeparam name="TUser">Type of the user</typeparam>
             <typeparam name="TUserKey">Type of the user</typeparam>
         </member>
-        <member name="P:Milvasoft.Helpers.DataAccess.Abstract.Entity.ICreationAuditableWithCustomUser`3.CreatorUser">
+        <member name="P:Milvasoft.Helpers.DataAccess.EfCore.Abstract.Entity.ICreationAuditableWithCustomUser`3.CreatorUser">
             <summary>
             Reference to the creator user of this entity.
             </summary>
         </member>
-        <member name="T:Milvasoft.Helpers.DataAccess.Abstract.Entity.ICreationAuditableWithoutUser`1">
+        <member name="T:Milvasoft.Helpers.DataAccess.EfCore.Abstract.Entity.ICreationAuditableWithoutUser`1">
             <summary>
             Determines entity's creation is auditable.
             </summary>
             <typeparam name="TKey"></typeparam>
         </member>
-        <member name="P:Milvasoft.Helpers.DataAccess.Abstract.Entity.ICreationAuditableWithoutUser`1.CreationDate">
+        <member name="P:Milvasoft.Helpers.DataAccess.EfCore.Abstract.Entity.ICreationAuditableWithoutUser`1.CreationDate">
             <summary>
             Creation date of entity.
             </summary>
         </member>
-        <member name="T:Milvasoft.Helpers.DataAccess.Abstract.Entity.IFullAuditable`1">
+        <member name="T:Milvasoft.Helpers.DataAccess.EfCore.Abstract.Entity.IFullAuditable`1">
             <summary>
             Determines entity is fully auditable with user information.
             </summary>
             <typeparam name="TKey"></typeparam>
         </member>
-        <member name="T:Milvasoft.Helpers.DataAccess.Abstract.Entity.IFullAuditable`2">
+        <member name="T:Milvasoft.Helpers.DataAccess.EfCore.Abstract.Entity.IFullAuditable`2">
             <summary>
             Determines entity is fully auditable with user information.
             </summary>
             <typeparam name="TKey"></typeparam>
             <typeparam name="TUserKey"></typeparam>
         </member>
-        <member name="T:Milvasoft.Helpers.DataAccess.Abstract.Entity.IFullAuditable`3">
+        <member name="T:Milvasoft.Helpers.DataAccess.EfCore.Abstract.Entity.IFullAuditable`3">
             <summary>
-            Adds navigation properties to <see cref="T:Milvasoft.Helpers.DataAccess.Abstract.Entity.IFullAuditable`1"/> interface for user.
+            Adds navigation properties to <see cref="T:Milvasoft.Helpers.DataAccess.EfCore.Abstract.Entity.IFullAuditable`1"/> interface for user.
             </summary>
             <typeparam name="TKey">Key of the user</typeparam>
             <typeparam name="TUser">Type of the user</typeparam>
             <typeparam name="TUserKey">Type of the user</typeparam>
         </member>
-        <member name="P:Milvasoft.Helpers.DataAccess.Abstract.Entity.IFullAuditable`3.DeleterUser">
+        <member name="P:Milvasoft.Helpers.DataAccess.EfCore.Abstract.Entity.IFullAuditable`3.DeleterUser">
             <summary>
             Reference to the last modifier user of this entity.
             </summary>
         </member>
-        <member name="T:Milvasoft.Helpers.DataAccess.Abstract.Entity.IFullAuditableWithCustomUser`3">
+        <member name="T:Milvasoft.Helpers.DataAccess.EfCore.Abstract.Entity.IFullAuditableWithCustomUser`3">
             <summary>
-            Adds navigation properties to <see cref="T:Milvasoft.Helpers.DataAccess.Abstract.Entity.IFullAuditable`1"/> interface for user.
+            Adds navigation properties to <see cref="T:Milvasoft.Helpers.DataAccess.EfCore.Abstract.Entity.IFullAuditable`1"/> interface for user.
             </summary>
             <typeparam name="TKey">Key of the user</typeparam>
             <typeparam name="TUser">Type of the user</typeparam>
             <typeparam name="TUserKey">Type of the user</typeparam>
         </member>
-        <member name="P:Milvasoft.Helpers.DataAccess.Abstract.Entity.IFullAuditableWithCustomUser`3.DeleterUser">
+        <member name="P:Milvasoft.Helpers.DataAccess.EfCore.Abstract.Entity.IFullAuditableWithCustomUser`3.DeleterUser">
             <summary>
             Reference to the last modifier user of this entity.
             </summary>
         </member>
-        <member name="T:Milvasoft.Helpers.DataAccess.Abstract.Entity.IFullAuditableWithoutUser`1">
+        <member name="T:Milvasoft.Helpers.DataAccess.EfCore.Abstract.Entity.IFullAuditableWithoutUser`1">
             <summary>
             Determines entity is fully auditable.
             </summary>
             <typeparam name="TKey"></typeparam>
         </member>
-        <member name="T:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3">
+        <member name="T:Milvasoft.Helpers.DataAccess.EfCore.Abstract.IBaseRepository`3">
             <summary>
             Base repository for concrete repositories. All repositories must be have this methods.
             </summary>
@@ -1481,26 +1481,26 @@
             <typeparam name="TKey"></typeparam>
             <typeparam name="TContext"></typeparam>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.GetSoftDeletedEntitiesInNextProcess(System.Boolean)">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Abstract.IBaseRepository`3.GetSoftDeletedEntitiesInNextProcess(System.Boolean)">
             <summary>
             Determines whether soft deleted entities in the database are fetched from the database.
             <para><b>Default is false.</b></para>
             </summary>
             <param name="state"></param>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.ResetSoftDeleteState(System.Boolean)">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Abstract.IBaseRepository`3.ResetSoftDeleteState(System.Boolean)">
             <summary>
             Determines whether the default value of the variable that determines the status of deleted data in the database is assigned to the default value after database operation.
             </summary>
             <param name="state"></param>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.CreateIsDeletedFalseExpression">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Abstract.IBaseRepository`3.CreateIsDeletedFalseExpression">
             <summary>
-            Gets <b>entity => entity.IsDeleted == false</b> expression, if <typeparamref name="TEntity"/> is assignable from <see cref="T:Milvasoft.Helpers.DataAccess.Concrete.Entity.FullAuditableEntity`1"/>.
+            Gets <b>entity => entity.IsDeleted == false</b> expression, if <typeparamref name="TEntity"/> is assignable from <see cref="T:Milvasoft.Helpers.DataAccess.EfCore.Concrete.Entity.FullAuditableEntity`1"/>.
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.GetFirstOrDefaultAsync(System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Linq.Expressions.Expression{System.Func{`0,`0}},System.Boolean)">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Abstract.IBaseRepository`3.GetFirstOrDefaultAsync(System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Linq.Expressions.Expression{System.Func{`0,`0}},System.Boolean)">
             <summary>
              Returns first entity or default value which IsDeleted condition is true from database asynchronously. If the condition is requested, it also provides that condition.
             </summary>
@@ -1509,7 +1509,7 @@
             <param name="conditionExpression"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.GetFirstOrDefaultAsync(System.Func{Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable{`0},Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable},System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Linq.Expressions.Expression{System.Func{`0,`0}},System.Boolean)">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Abstract.IBaseRepository`3.GetFirstOrDefaultAsync(System.Func{Milvasoft.Helpers.DataAccess.EfCore.IncludeLibrary.IIncludable{`0},Milvasoft.Helpers.DataAccess.EfCore.IncludeLibrary.IIncludable},System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Linq.Expressions.Expression{System.Func{`0,`0}},System.Boolean)">
             <summary>
              Returns first entity or default value which IsDeleted condition is true with includes from database asynchronously. If the condition is requested, it also provides that condition. 
             </summary>
@@ -1519,7 +1519,7 @@
             <param name="conditionExpression"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.GetSingleOrDefaultAsync(System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Linq.Expressions.Expression{System.Func{`0,`0}},System.Boolean)">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Abstract.IBaseRepository`3.GetSingleOrDefaultAsync(System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Linq.Expressions.Expression{System.Func{`0,`0}},System.Boolean)">
             <summary>
              Returns single entity or default value which IsDeleted condition is true from database asynchronously. If the condition is requested, it also provides that condition.
             </summary>
@@ -1528,7 +1528,7 @@
             <param name="conditionExpression"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.GetSingleOrDefaultAsync(System.Func{Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable{`0},Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable},System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Linq.Expressions.Expression{System.Func{`0,`0}},System.Boolean)">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Abstract.IBaseRepository`3.GetSingleOrDefaultAsync(System.Func{Milvasoft.Helpers.DataAccess.EfCore.IncludeLibrary.IIncludable{`0},Milvasoft.Helpers.DataAccess.EfCore.IncludeLibrary.IIncludable},System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Linq.Expressions.Expression{System.Func{`0,`0}},System.Boolean)">
             <summary>
              Returns single entity or default value which IsDeleted condition is true with includes from database asynchronously. If the condition is requested, it also provides that condition.
             </summary>
@@ -1538,7 +1538,7 @@
             <param name="tracking"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.GetAllAsync(System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Linq.Expressions.Expression{System.Func{`0,`0}},System.Boolean)">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Abstract.IBaseRepository`3.GetAllAsync(System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Linq.Expressions.Expression{System.Func{`0,`0}},System.Boolean)">
             <summary>
              Returns all entities which IsDeleted condition is true from database asynchronously. If the condition is requested, it also provides that condition.
             </summary>
@@ -1547,7 +1547,7 @@
             <param name="conditionExpression"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.GetAllAsync(System.Func{Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable{`0},Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable},System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Linq.Expressions.Expression{System.Func{`0,`0}},System.Boolean)">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Abstract.IBaseRepository`3.GetAllAsync(System.Func{Milvasoft.Helpers.DataAccess.EfCore.IncludeLibrary.IIncludable{`0},Milvasoft.Helpers.DataAccess.EfCore.IncludeLibrary.IIncludable},System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Linq.Expressions.Expression{System.Func{`0,`0}},System.Boolean)">
             <summary>
              Returns all entities which IsDeleted condition is true with specified includes from database asynchronously. If the condition is requested, it also provides that condition.
             </summary>
@@ -1557,7 +1557,7 @@
             <param name="conditionExpression"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.GetSomeAsync(System.Int32,System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Linq.Expressions.Expression{System.Func{`0,`0}},System.Boolean)">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Abstract.IBaseRepository`3.GetSomeAsync(System.Int32,System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Linq.Expressions.Expression{System.Func{`0,`0}},System.Boolean)">
             <summary>
              Returns all entities which IsDeleted condition is true from database asynchronously. If the condition is requested, it also provides that condition.
             </summary>
@@ -1567,7 +1567,7 @@
             <param name="conditionExpression"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.GetSomeAsync(System.Int32,System.Func{Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable{`0},Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable},System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Linq.Expressions.Expression{System.Func{`0,`0}},System.Boolean)">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Abstract.IBaseRepository`3.GetSomeAsync(System.Int32,System.Func{Milvasoft.Helpers.DataAccess.EfCore.IncludeLibrary.IIncludable{`0},Milvasoft.Helpers.DataAccess.EfCore.IncludeLibrary.IIncludable},System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Linq.Expressions.Expression{System.Func{`0,`0}},System.Boolean)">
             <summary>
              Returns all entities which IsDeleted condition is true with specified includes from database asynchronously. If the condition is requested, it also provides that condition.
             </summary>
@@ -1578,7 +1578,7 @@
             <param name="conditionExpression"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.GetAsPaginatedAsync(System.Int32,System.Int32,System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Boolean)">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Abstract.IBaseRepository`3.GetAsPaginatedAsync(System.Int32,System.Int32,System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Boolean)">
             <summary>
              Creates asynchronously a shallow copy of a range of entity's which IsDeleted property is true, in the source List of TEntity with requested count and range. 
                   If the condition is requested, it also provides that condition.
@@ -1592,7 +1592,7 @@
             <param name="tracking"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.GetAsPaginatedAsync(System.Int32,System.Int32,System.Func{Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable{`0},Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable},System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Boolean)">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Abstract.IBaseRepository`3.GetAsPaginatedAsync(System.Int32,System.Int32,System.Func{Milvasoft.Helpers.DataAccess.EfCore.IncludeLibrary.IIncludable{`0},Milvasoft.Helpers.DataAccess.EfCore.IncludeLibrary.IIncludable},System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Boolean)">
              <summary>
               Creates asynchronously a shallow copy of a range of entity's which IsDeleted property is true, in the source List of TEntity with requested count,range and includes.
                    If the condition is requested, it also provides that condition.
@@ -1607,7 +1607,7 @@
              <param name="tracking"></param>
              <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.GetAsPaginatedAndOrderedAsync(System.Int32,System.Int32,System.String,System.Boolean,System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Boolean)">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Abstract.IBaseRepository`3.GetAsPaginatedAndOrderedAsync(System.Int32,System.Int32,System.String,System.Boolean,System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Boolean)">
             <summary>
              Creates and ordered asynchronously a shallow copy of a range of entity's which IsDeleted property is true, in the source List of TEntity with requested count and range.
                   If the condition is requested, it also provides that condition.
@@ -1625,7 +1625,7 @@
             <param name="tracking"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.GetAsPaginatedAndOrderedAsync(System.Int32,System.Int32,System.Func{Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable{`0},Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable},System.String,System.Boolean,System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Boolean)">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Abstract.IBaseRepository`3.GetAsPaginatedAndOrderedAsync(System.Int32,System.Int32,System.Func{Milvasoft.Helpers.DataAccess.EfCore.IncludeLibrary.IIncludable{`0},Milvasoft.Helpers.DataAccess.EfCore.IncludeLibrary.IIncludable},System.String,System.Boolean,System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Boolean)">
              <summary>
               Creates and ordered asynchronously a shallow copy of a range of entity's which IsDeleted property is true, in the source List of TEntity with requested count,range and includes.
                     If the condition is requested, it also provides that condition.
@@ -1644,7 +1644,7 @@
              <param name="tracking"></param>
              <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.GetAsPaginatedAndOrderedAsync(System.Int32,System.Int32,System.Linq.Expressions.Expression{System.Func{`0,System.Object}},System.Boolean,System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Boolean)">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Abstract.IBaseRepository`3.GetAsPaginatedAndOrderedAsync(System.Int32,System.Int32,System.Linq.Expressions.Expression{System.Func{`0,System.Object}},System.Boolean,System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Boolean)">
             <summary>
              Creates asynchronously a shallow copy of a range of entity's which IsDeleted property is true, in the source List of TEntity with requested count and range.
                   If the condition is requested, it also provides that condition.
@@ -1661,7 +1661,7 @@
             <param name="tracking"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.GetAsPaginatedAndOrderedAsync(System.Int32,System.Int32,System.Func{Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable{`0},Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable},System.Linq.Expressions.Expression{System.Func{`0,System.Object}},System.Boolean,System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Boolean)">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Abstract.IBaseRepository`3.GetAsPaginatedAndOrderedAsync(System.Int32,System.Int32,System.Func{Milvasoft.Helpers.DataAccess.EfCore.IncludeLibrary.IIncludable{`0},Milvasoft.Helpers.DataAccess.EfCore.IncludeLibrary.IIncludable},System.Linq.Expressions.Expression{System.Func{`0,System.Object}},System.Boolean,System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Boolean)">
              <summary>
               Creates asynchronously a shallow copy of a range of entity's which IsDeleted property is true, in the source List of TEntity with requested count,range and includes.
                     If the condition is requested, it also provides that condition.
@@ -1679,7 +1679,7 @@
              <param name="tracking"></param>
              <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.GetAsOrderedAsync(System.String,System.Boolean,System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Boolean)">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Abstract.IBaseRepository`3.GetAsOrderedAsync(System.String,System.Boolean,System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Boolean)">
             <summary>
              Gets entities as ordered with <paramref name="orderByPropertyName"/>.
                   If the condition is requested, it also provides that condition.
@@ -1694,7 +1694,7 @@
             <param name="tracking"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.GetAsOrderedAsync(System.Func{Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable{`0},Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable},System.String,System.Boolean,System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Boolean)">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Abstract.IBaseRepository`3.GetAsOrderedAsync(System.Func{Milvasoft.Helpers.DataAccess.EfCore.IncludeLibrary.IIncludable{`0},Milvasoft.Helpers.DataAccess.EfCore.IncludeLibrary.IIncludable},System.String,System.Boolean,System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Boolean)">
              <summary>
               Gets entities with includes as ordered with <paramref name="orderByPropertyName"/>.
                     If the condition is requested, it also provides that condition.
@@ -1710,7 +1710,7 @@
              <param name="tracking"></param>
              <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.GetAsOrderedAsync(System.Linq.Expressions.Expression{System.Func{`0,System.Object}},System.Boolean,System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Boolean)">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Abstract.IBaseRepository`3.GetAsOrderedAsync(System.Linq.Expressions.Expression{System.Func{`0,System.Object}},System.Boolean,System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Boolean)">
             <summary>
              Gets entities as ordered with <paramref name="orderByKeySelector"/>.
                   If the condition is requested, it also provides that condition.
@@ -1723,7 +1723,7 @@
             <param name="tracking"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.GetAsOrderedAsync(System.Func{Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable{`0},Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable},System.Linq.Expressions.Expression{System.Func{`0,System.Object}},System.Boolean,System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Boolean)">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Abstract.IBaseRepository`3.GetAsOrderedAsync(System.Func{Milvasoft.Helpers.DataAccess.EfCore.IncludeLibrary.IIncludable{`0},Milvasoft.Helpers.DataAccess.EfCore.IncludeLibrary.IIncludable},System.Linq.Expressions.Expression{System.Func{`0,System.Object}},System.Boolean,System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Boolean)">
              <summary>
               Gets entities as ordered with <paramref name="orderByKeySelector"/>.
                     If the condition is requested, it also provides that condition.
@@ -1737,7 +1737,7 @@
              <param name="tracking"></param>
              <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.GetByIdAsync(`1,System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Linq.Expressions.Expression{System.Func{`0,`0}},System.Boolean)">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Abstract.IBaseRepository`3.GetByIdAsync(`1,System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Linq.Expressions.Expression{System.Func{`0,`0}},System.Boolean)">
             <summary>
             Returns one entity by entity Id from database asynchronously.
             </summary>
@@ -1747,7 +1747,7 @@
             <param name="tracking"></param>
             <returns> The entity found or null. </returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.GetRequiredByIdAsync(`1,System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Linq.Expressions.Expression{System.Func{`0,`0}},System.Boolean)">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Abstract.IBaseRepository`3.GetRequiredByIdAsync(`1,System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Linq.Expressions.Expression{System.Func{`0,`0}},System.Boolean)">
             <summary>
              Returns one entity by entity Id from database asynchronously.
             </summary>
@@ -1760,7 +1760,7 @@
             <param name="tracking"></param>
             <returns> The entity. </returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.GetByIdAsync(`1,System.Func{Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable{`0},Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable},System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Linq.Expressions.Expression{System.Func{`0,`0}},System.Boolean)">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Abstract.IBaseRepository`3.GetByIdAsync(`1,System.Func{Milvasoft.Helpers.DataAccess.EfCore.IncludeLibrary.IIncludable{`0},Milvasoft.Helpers.DataAccess.EfCore.IncludeLibrary.IIncludable},System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Linq.Expressions.Expression{System.Func{`0,`0}},System.Boolean)">
             <summary>
              Returns one entity which IsDeleted condition is true by entity Id with includes from database asynchronously. If the condition is requested, it also provides that condition. 
             </summary>
@@ -1771,7 +1771,7 @@
             <param name="tracking"></param>
             <returns> The entity found or null. </returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.GetRequiredByIdAsync(`1,System.Func{Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable{`0},Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable},System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Linq.Expressions.Expression{System.Func{`0,`0}},System.Boolean)">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Abstract.IBaseRepository`3.GetRequiredByIdAsync(`1,System.Func{Milvasoft.Helpers.DataAccess.EfCore.IncludeLibrary.IIncludable{`0},Milvasoft.Helpers.DataAccess.EfCore.IncludeLibrary.IIncludable},System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Linq.Expressions.Expression{System.Func{`0,`0}},System.Boolean)">
             <summary>
              Returns one entity which IsDeleted condition is true by entity Id with includes from database asynchronously. If the condition is requested, it also provides that condition. 
             </summary>
@@ -1785,7 +1785,7 @@
             <param name="tracking"></param>
             <returns> The entity. </returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.GetGroupedAndCountAsync(System.String,System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Boolean)">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Abstract.IBaseRepository`3.GetGroupedAndCountAsync(System.String,System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Boolean)">
             <summary>
             Groups entities with <paramref name="groupByPropertyName"/> and returns the key grouped and the number of items grouped with this key.
             </summary>
@@ -1794,7 +1794,7 @@
             <param name="tracking"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.GetGroupedAndCountAsync(System.Linq.Expressions.Expression{System.Func{`0,System.Object}},System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Boolean)">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Abstract.IBaseRepository`3.GetGroupedAndCountAsync(System.Linq.Expressions.Expression{System.Func{`0,System.Object}},System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Boolean)">
             <summary>
             Groups entities with <paramref name="keySelector"/> and returns the key grouped and the number of items grouped with this key.
             </summary>
@@ -1803,14 +1803,14 @@
             <param name="tracking"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.GetAsGroupedAsync``1(System.Linq.IQueryable{``0},System.Linq.Expressions.Expression{System.Func{``0,System.Boolean}})">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Abstract.IBaseRepository`3.GetAsGroupedAsync``1(System.Linq.IQueryable{``0},System.Linq.Expressions.Expression{System.Func{``0,System.Boolean}})">
             <summary>
             Gets grouped entities from database with <paramref name="groupedClause"/>.
             
             <para> <b>Example use;</b></para>
             <code>
             
-            <para>   var dbSet = _contextRepository.GetDbSet{Poco}();  <see cref="M:Milvasoft.Helpers.DataAccess.Concrete.ContextRepository`1.GetDbSet``1"></see> </para>
+            <para>   var dbSet = _contextRepository.GetDbSet{Poco}();  <see cref="M:Milvasoft.Helpers.DataAccess.EfCore.Concrete.ContextRepository`1.GetDbSet``1"></see> </para>
             
             <para>   var groupByClause = from poco in dbSet                                                                             </para>
                                          group poco by new { poco.Id,  poco.PocoCode } into groupedPocos                                      
@@ -1834,7 +1834,7 @@
             <param name="conditionExpression"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.GetAsGroupedAsync``1(System.Func{System.Linq.IQueryable{``0}},System.Linq.Expressions.Expression{System.Func{``0,System.Boolean}})">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Abstract.IBaseRepository`3.GetAsGroupedAsync``1(System.Func{System.Linq.IQueryable{``0}},System.Linq.Expressions.Expression{System.Func{``0,System.Boolean}})">
             <summary>
             Gets grouped entities with condition from database with <paramref name="groupedClause"/>.
             
@@ -1863,7 +1863,7 @@
             <param name="groupedClause"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.GetAsGroupedAndPaginatedAsync``1(System.Int32,System.Int32,System.Func{System.Linq.IQueryable{``0}},System.Linq.Expressions.Expression{System.Func{``0,System.Boolean}})">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Abstract.IBaseRepository`3.GetAsGroupedAndPaginatedAsync``1(System.Int32,System.Int32,System.Func{System.Linq.IQueryable{``0}},System.Linq.Expressions.Expression{System.Func{``0,System.Boolean}})">
             <summary>
             Gets grouped entities with condition from database with <paramref name="groupedClause"/>.
             
@@ -1894,7 +1894,7 @@
             <param name="groupedClause"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.GetAsGroupedAndPaginatedAndOrderedAsync``1(System.Int32,System.Int32,System.String,System.Boolean,System.Func{System.Linq.IQueryable{``0}},System.Linq.Expressions.Expression{System.Func{``0,System.Boolean}})">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Abstract.IBaseRepository`3.GetAsGroupedAndPaginatedAndOrderedAsync``1(System.Int32,System.Int32,System.String,System.Boolean,System.Func{System.Linq.IQueryable{``0}},System.Linq.Expressions.Expression{System.Func{``0,System.Boolean}})">
             <summary>
             Gets grouped entities with condition from database with <paramref name="groupedClause"/>.
             
@@ -1927,7 +1927,7 @@
             <param name="groupedClause"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.GetAsGroupedAndOrderedAsync``1(System.String,System.Boolean,System.Func{System.Linq.IQueryable{``0}},System.Linq.Expressions.Expression{System.Func{``0,System.Boolean}})">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Abstract.IBaseRepository`3.GetAsGroupedAndOrderedAsync``1(System.String,System.Boolean,System.Func{System.Linq.IQueryable{``0}},System.Linq.Expressions.Expression{System.Func{``0,System.Boolean}})">
             <summary>
             Gets grouped entities with condition from database with <paramref name="groupedClause"/>.
             
@@ -1958,7 +1958,7 @@
             <param name="groupedClause"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.GetMaxAsync(System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Linq.Expressions.Expression{System.Func{`0,`0}},System.Boolean)">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Abstract.IBaseRepository`3.GetMaxAsync(System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Linq.Expressions.Expression{System.Func{`0,`0}},System.Boolean)">
             <summary>
             Get max value of entities.
             </summary>
@@ -1967,7 +1967,7 @@
             <param name="tracking"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.GetMaxAsync(System.Func{Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable{`0},Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable},System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Linq.Expressions.Expression{System.Func{`0,`0}},System.Boolean)">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Abstract.IBaseRepository`3.GetMaxAsync(System.Func{Milvasoft.Helpers.DataAccess.EfCore.IncludeLibrary.IIncludable{`0},Milvasoft.Helpers.DataAccess.EfCore.IncludeLibrary.IIncludable},System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Linq.Expressions.Expression{System.Func{`0,`0}},System.Boolean)">
             <summary>
             Get max value of entities. With includes.
             </summary>
@@ -1977,7 +1977,7 @@
             <param name="tracking"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.GetMaxAsync``1(System.Linq.Expressions.Expression{System.Func{`0,``0}},System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Linq.Expressions.Expression{System.Func{`0,`0}},System.Boolean)">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Abstract.IBaseRepository`3.GetMaxAsync``1(System.Linq.Expressions.Expression{System.Func{`0,``0}},System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Linq.Expressions.Expression{System.Func{`0,`0}},System.Boolean)">
             <summary>
             Gets max value of <typeparamref name="TEntity"/>'s property in entities.
             </summary>
@@ -1987,7 +1987,7 @@
             <param name="tracking"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.GetMaxAsync``1(System.Linq.Expressions.Expression{System.Func{`0,``0}},System.Func{Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable{`0},Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable},System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Linq.Expressions.Expression{System.Func{`0,`0}},System.Boolean)">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Abstract.IBaseRepository`3.GetMaxAsync``1(System.Linq.Expressions.Expression{System.Func{`0,``0}},System.Func{Milvasoft.Helpers.DataAccess.EfCore.IncludeLibrary.IIncludable{`0},Milvasoft.Helpers.DataAccess.EfCore.IncludeLibrary.IIncludable},System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Linq.Expressions.Expression{System.Func{`0,`0}},System.Boolean)">
             <summary>
             Gets max value of <typeparamref name="TEntity"/>'s property in entities.
             </summary>
@@ -1998,7 +1998,7 @@
             <param name="tracking"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.GetMaxOfPropertyAsync(System.String,System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Boolean)">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Abstract.IBaseRepository`3.GetMaxOfPropertyAsync(System.String,System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Boolean)">
             <summary>
             Gets max value of <typeparamref name="TEntity"/>'s property in entities.
             </summary>
@@ -2007,7 +2007,7 @@
             <param name="tracking"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.GetMaxOfPropertyAsync``1(System.Linq.Expressions.Expression{System.Func{`0,``0}},System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Boolean)">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Abstract.IBaseRepository`3.GetMaxOfPropertyAsync``1(System.Linq.Expressions.Expression{System.Func{`0,``0}},System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Boolean)">
             <summary>
             Gets max value of <typeparamref name="TEntity"/>'s property in entities.
             </summary>
@@ -2016,7 +2016,7 @@
             <param name="tracking"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.GetSumOfPropertyAsync(System.Linq.Expressions.Expression{System.Func{`0,System.Decimal}},System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Boolean)">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Abstract.IBaseRepository`3.GetSumOfPropertyAsync(System.Linq.Expressions.Expression{System.Func{`0,System.Decimal}},System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Boolean)">
             <summary>
             Gets sums of value of <typeparamref name="TEntity"/>'s property in entities.
             </summary>
@@ -2025,7 +2025,7 @@
             <param name="tracking"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.GetCountAsync(System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Boolean)">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Abstract.IBaseRepository`3.GetCountAsync(System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Boolean)">
             <summary>
             Get count of entities.
             </summary>
@@ -2033,21 +2033,21 @@
             <param name="tracking"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.ExistsAsync(System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Abstract.IBaseRepository`3.ExistsAsync(System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
             <summary>
             Returns whether or not the entity that satisfies this condition exists.
             </summary>
             <param name="conditionExpression"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.ExistsAsync(`1)">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Abstract.IBaseRepository`3.ExistsAsync(`1)">
             <summary>
             Returns whether or not the entity that satisfies this condition exists. 
             </summary>
             <param name="id"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.ExistsAsync(`1,System.Func{Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable{`0},Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable},System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Abstract.IBaseRepository`3.ExistsAsync(`1,System.Func{Milvasoft.Helpers.DataAccess.EfCore.IncludeLibrary.IIncludable{`0},Milvasoft.Helpers.DataAccess.EfCore.IncludeLibrary.IIncludable},System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
             <summary>
             Returns whether or not the entity that satisfies this condition exists. 
             </summary>
@@ -2056,28 +2056,28 @@
             <param name="conditionExpression"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.AddAsync(`0)">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Abstract.IBaseRepository`3.AddAsync(`0)">
             <summary>
              Adds single entity to database asynchronously. 
             </summary>
             <param name="entity"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.AddRangeAsync(System.Collections.Generic.IEnumerable{`0})">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Abstract.IBaseRepository`3.AddRangeAsync(System.Collections.Generic.IEnumerable{`0})">
             <summary>
              Adds multiple entities to database asynchronously. 
             </summary>
             <param name="entities"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.UpdateAsync(`0)">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Abstract.IBaseRepository`3.UpdateAsync(`0)">
             <summary>
              Updates specified entity in database asynchronously.
             </summary>
             <param name="entity"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.UpdateAsync(`0,System.Linq.Expressions.Expression{System.Func{`0,System.Object}}[])">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Abstract.IBaseRepository`3.UpdateAsync(`0,System.Linq.Expressions.Expression{System.Func{`0,System.Object}}[])">
             <summary>
             Specific properties updates.
             </summary>
@@ -2085,7 +2085,7 @@
             <param name="projectionProperties"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.UpdateAsync(System.Collections.Generic.IEnumerable{`0},System.Linq.Expressions.Expression{System.Func{`0,System.Object}}[])">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Abstract.IBaseRepository`3.UpdateAsync(System.Collections.Generic.IEnumerable{`0},System.Linq.Expressions.Expression{System.Func{`0,System.Object}}[])">
             <summary>
             Specific properties updates.
             </summary>
@@ -2093,28 +2093,28 @@
             <param name="projectionProperties"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.UpdateAsync(System.Collections.Generic.IEnumerable{`0})">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Abstract.IBaseRepository`3.UpdateAsync(System.Collections.Generic.IEnumerable{`0})">
             <summary>
              Updates multiple entities in database asynchronously.
             </summary>
             <param name="entities"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.DeleteAsync(`0)">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Abstract.IBaseRepository`3.DeleteAsync(`0)">
             <summary>
              Deletes single entity from database asynchronously.
             </summary>
             <param name="entity"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.DeleteAsync(System.Collections.Generic.IEnumerable{`0})">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Abstract.IBaseRepository`3.DeleteAsync(System.Collections.Generic.IEnumerable{`0})">
             <summary>
              Deletes multiple entity from database asynchronously.
             </summary>
             <param name="entities"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.ReplaceOldsWithNewsAsync(System.Collections.Generic.IEnumerable{`0},System.Collections.Generic.IEnumerable{`0})">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Abstract.IBaseRepository`3.ReplaceOldsWithNewsAsync(System.Collections.Generic.IEnumerable{`0},System.Collections.Generic.IEnumerable{`0})">
             <summary>
             Replaces existing entities(<paramref name="oldEntities"/>) with new entities(<paramref name="newEntities"/>).
             </summary>
@@ -2122,7 +2122,7 @@
             <param name="newEntities"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.ReplaceOldsWithNewsInSeperateDatabaseProcessAsync(System.Collections.Generic.IEnumerable{`0},System.Collections.Generic.IEnumerable{`0})">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Abstract.IBaseRepository`3.ReplaceOldsWithNewsInSeperateDatabaseProcessAsync(System.Collections.Generic.IEnumerable{`0},System.Collections.Generic.IEnumerable{`0})">
             <summary>
             Replaces existing entities(<paramref name="oldEntities"/>) with new entities(<paramref name="newEntities"/>).
             </summary>
@@ -2130,50 +2130,42 @@
             <param name="newEntities"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository`3.RemoveAllAsync">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Abstract.IBaseRepository`3.RemoveAllAsync">
             <summary>
             Removes all entities from database.
             </summary>
             <returns></returns>
         </member>
-        <member name="T:Milvasoft.Helpers.DataAccess.Abstract.IContextRepository`1">
+        <member name="T:Milvasoft.Helpers.DataAccess.EfCore.Abstract.IContextRepository`1">
             <summary>
             Helper repository for general DbContext(<typeparamref name="TContext"/>) operations.
             </summary>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IContextRepository`1.IgnoreSoftDeleteForNextProcess">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Abstract.IContextRepository`1.IgnoreSoftDeleteForNextProcess">
             <summary>
             Ignores soft delete for next process. Runs correctly, if <typeparamref name="TContext"/> inherit from MilvaDbContext.
             </summary>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IContextRepository`1.ActivateSoftDelete">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Abstract.IContextRepository`1.ActivateSoftDelete">
             <summary>
             Activate soft delete. Runs correctly, if <typeparamref name="TContext"/> inherit from MilvaDbContext.
             </summary>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IContextRepository`1.ExecuteQueryAsync(System.String)">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Abstract.IContextRepository`1.ExecuteQueryAsync(System.String)">
             <summary>
             Executes sql query to database asynchronously.(e.g. trigger, event)
             </summary>
             <param name="query"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IContextRepository`1.ApplyTransactionAsync(System.Func{System.Threading.Tasks.Task})">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Abstract.IContextRepository`1.ApplyTransactionAsync(System.Func{System.Threading.Tasks.Task})">
             <summary>
             Applies transaction process to requested function.
             </summary>
             <param name="function"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IContextRepository`1.ApplyTransactionAsync(System.Func{System.Threading.Tasks.Task},System.Action)">
-            <summary>
-            Applies transaction process to requested function.
-            </summary>
-            <param name="function"></param>
-            <param name="rollbackFunction"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IContextRepository`1.ApplyTransactionAsync(System.Func{System.Threading.Tasks.Task},System.Func{System.Threading.Tasks.Task})">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Abstract.IContextRepository`1.ApplyTransactionAsync(System.Func{System.Threading.Tasks.Task},System.Action)">
             <summary>
             Applies transaction process to requested function.
             </summary>
@@ -2181,12 +2173,20 @@
             <param name="rollbackFunction"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IContextRepository`1.InitializeUpdating``2(``0)">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Abstract.IContextRepository`1.ApplyTransactionAsync(System.Func{System.Threading.Tasks.Task},System.Func{System.Threading.Tasks.Task})">
+            <summary>
+            Applies transaction process to requested function.
+            </summary>
+            <param name="function"></param>
+            <param name="rollbackFunction"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Abstract.IContextRepository`1.InitializeUpdating``2(``0)">
             <summary>
             User update process.
             </summary>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IContextRepository`1.RemoveExpiredTokensAsync``2(Microsoft.AspNetCore.Identity.UserManager{``0},System.String,System.String,System.Collections.Generic.Dictionary{System.String,System.String})">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Abstract.IContextRepository`1.RemoveExpiredTokensAsync``2(Microsoft.AspNetCore.Identity.UserManager{``0},System.String,System.String,System.Collections.Generic.Dictionary{System.String,System.String})">
             <summary>
             <para> Removes expired tokens from the system. </para>
             </summary>
@@ -2208,52 +2208,52 @@
             <param name="cachedTokenDictionary"> Dictionary params : Key = userName of <typeparamref name="TUser"/>. Value = JWT security Token as string. </param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IContextRepository`1.GetDbSet``1">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Abstract.IContextRepository`1.GetDbSet``1">
             <summary>
             Gets requested DbSet by <typeparamref name="TEntity"/>.
             </summary>
             <typeparam name="TEntity"></typeparam>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IContextRepository`1.ExistsAsync``2(``1)">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Abstract.IContextRepository`1.ExistsAsync``2(``1)">
             <summary>
             Returns whether or not the entity that satisfies this condition exists. 
             </summary>
             <param name="id"></param>
             <returns></returns>
         </member>
-        <member name="T:Milvasoft.Helpers.DataAccess.Abstract.IUnitOfWork">
+        <member name="T:Milvasoft.Helpers.DataAccess.EfCore.Abstract.IUnitOfWork">
             <summary>
             Abstraction for unit of work pattern.
             </summary>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Abstract.IUnitOfWork.CommitAsync">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Abstract.IUnitOfWork.CommitAsync">
             <summary>
             Asynchronously sends all changes to the data store and commits as a single transaction unless a manual transaction was created using BeginTransaction().
             </summary>
         </member>
-        <member name="T:Milvasoft.Helpers.DataAccess.Attributes.MilvaDefaultValueAttribute">
+        <member name="T:Milvasoft.Helpers.DataAccess.EfCore.Attributes.MilvaDefaultValueAttribute">
             <summary>
             Attribute for adding default value in context level.
             </summary>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Attributes.MilvaDefaultValueAttribute.#ctor(System.Object)">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Attributes.MilvaDefaultValueAttribute.#ctor(System.Object)">
             <summary>
             Specifies this property has a default value upon creation.
             </summary>
             <param name="defaultValue">The default value of the property.</param>
         </member>
-        <member name="P:Milvasoft.Helpers.DataAccess.Attributes.MilvaDefaultValueAttribute.DefaultValue">
+        <member name="P:Milvasoft.Helpers.DataAccess.EfCore.Attributes.MilvaDefaultValueAttribute.DefaultValue">
             <summary>
             Default value of tagged property.
             </summary>
         </member>
-        <member name="T:Milvasoft.Helpers.DataAccess.Attributes.MilvaEncryptedAttribute">
+        <member name="T:Milvasoft.Helpers.DataAccess.EfCore.Attributes.MilvaEncryptedAttribute">
             <summary>
             Specifies that the value field value should be encrypted.
             </summary>
         </member>
-        <member name="T:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3">
+        <member name="T:Milvasoft.Helpers.DataAccess.EfCore.Concrete.BaseRepository`3">
             <summary>
              Base repository for concrete repositories. All Ops!yon repositories must be have this methods.
             </summary>
@@ -2261,67 +2261,67 @@
             <typeparam name="TKey"></typeparam>
             <typeparam name="TContext"></typeparam>
         </member>
-        <member name="P:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.SaveChangesAfterEveryTransaction">
+        <member name="P:Milvasoft.Helpers.DataAccess.EfCore.Concrete.BaseRepository`3.SaveChangesAfterEveryTransaction">
             <summary>
             All repository methods save changes(<see cref="M:Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync(System.Threading.CancellationToken)"/>) after every transaction. Except get operations. 
             If you use unit of work pattern or save changes manually you can set to false this variable.
             </summary>
         </member>
-        <member name="P:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.InitializeUpdate">
+        <member name="P:Milvasoft.Helpers.DataAccess.EfCore.Concrete.BaseRepository`3.InitializeUpdate">
             <summary>
             Set to true when using no tracking.
             </summary>
         </member>
-        <member name="F:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3._dbContext">
+        <member name="F:Milvasoft.Helpers.DataAccess.EfCore.Concrete.BaseRepository`3._dbContext">
             <summary>
             DbContext object.
             </summary>
         </member>
-        <member name="F:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3._dbSet">
+        <member name="F:Milvasoft.Helpers.DataAccess.EfCore.Concrete.BaseRepository`3._dbSet">
             <summary>
             DebSet object.
             </summary>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.#ctor(`2)">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Concrete.BaseRepository`3.#ctor(`2)">
             <summary>
             Constructor of BaseRepository for <paramref name="dbContext"/> injection.
             </summary>
             <param name="dbContext"></param>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.ChangeSaveChangesAfterEveryTransactionState(System.Boolean)">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Concrete.BaseRepository`3.ChangeSaveChangesAfterEveryTransactionState(System.Boolean)">
             <summary>
             Determines whether save changes method called after evert repository method.
             <para><b>Default is true.</b></para>
             </summary>
             <param name="state"></param>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.ChangeInitializeUpdateState(System.Boolean)">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Concrete.BaseRepository`3.ChangeInitializeUpdateState(System.Boolean)">
             <summary>
             Determines whether applied detach to updating entites. 
             <para><b>Default is true.</b></para>
             </summary>
             <param name="state"></param>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.GetSoftDeletedEntitiesInNextProcess(System.Boolean)">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Concrete.BaseRepository`3.GetSoftDeletedEntitiesInNextProcess(System.Boolean)">
             <summary>
             Determines whether soft deleted entities in the database are fetched from the database.
             <para><b>Default is false.</b></para>
             </summary>
             <param name="state"></param>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.ResetSoftDeleteState(System.Boolean)">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Concrete.BaseRepository`3.ResetSoftDeleteState(System.Boolean)">
             <summary>
             Determines whether the default value of the variable that determines the status of deleted data in the database is assigned to the default value after database operation.
             </summary>
             <param name="state"></param>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.CreateIsDeletedFalseExpression">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Concrete.BaseRepository`3.CreateIsDeletedFalseExpression">
             <summary>
-            Gets <b>entity => entity.IsDeleted == false</b> expression, if <typeparamref name="TEntity"/> is assignable from <see cref="T:Milvasoft.Helpers.DataAccess.Concrete.Entity.FullAuditableEntity`1"/>.
+            Gets <b>entity => entity.IsDeleted == false</b> expression, if <typeparamref name="TEntity"/> is assignable from <see cref="T:Milvasoft.Helpers.DataAccess.EfCore.Concrete.Entity.FullAuditableEntity`1"/>.
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.GetFirstOrDefaultAsync(System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Linq.Expressions.Expression{System.Func{`0,`0}},System.Boolean)">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Concrete.BaseRepository`3.GetFirstOrDefaultAsync(System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Linq.Expressions.Expression{System.Func{`0,`0}},System.Boolean)">
             <summary>
              Returns first entity or default value which IsDeleted condition is true from database asynchronously. If the condition is requested, it also provides that condition.
             </summary>
@@ -2330,7 +2330,7 @@
             <param name="conditionExpression"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.GetFirstOrDefaultAsync(System.Func{Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable{`0},Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable},System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Linq.Expressions.Expression{System.Func{`0,`0}},System.Boolean)">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Concrete.BaseRepository`3.GetFirstOrDefaultAsync(System.Func{Milvasoft.Helpers.DataAccess.EfCore.IncludeLibrary.IIncludable{`0},Milvasoft.Helpers.DataAccess.EfCore.IncludeLibrary.IIncludable},System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Linq.Expressions.Expression{System.Func{`0,`0}},System.Boolean)">
             <summary>
              Returns first entity or default value which IsDeleted condition is true with includes from database asynchronously. If the condition is requested, it also provides that condition. 
             </summary>
@@ -2340,7 +2340,7 @@
             <param name="conditionExpression"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.GetSingleOrDefaultAsync(System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Linq.Expressions.Expression{System.Func{`0,`0}},System.Boolean)">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Concrete.BaseRepository`3.GetSingleOrDefaultAsync(System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Linq.Expressions.Expression{System.Func{`0,`0}},System.Boolean)">
             <summary>
              Returns single entity or default value which IsDeleted condition is true from database asynchronously. If the condition is requested, it also provides that condition.
             </summary>
@@ -2349,7 +2349,7 @@
             <param name="conditionExpression"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.GetSingleOrDefaultAsync(System.Func{Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable{`0},Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable},System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Linq.Expressions.Expression{System.Func{`0,`0}},System.Boolean)">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Concrete.BaseRepository`3.GetSingleOrDefaultAsync(System.Func{Milvasoft.Helpers.DataAccess.EfCore.IncludeLibrary.IIncludable{`0},Milvasoft.Helpers.DataAccess.EfCore.IncludeLibrary.IIncludable},System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Linq.Expressions.Expression{System.Func{`0,`0}},System.Boolean)">
             <summary>
              Returns single entity or default value which IsDeleted condition is true with includes from database asynchronously. If the condition is requested, it also provides that condition.
             </summary>
@@ -2359,7 +2359,7 @@
             <param name="tracking"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.GetAllAsync(System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Linq.Expressions.Expression{System.Func{`0,`0}},System.Boolean)">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Concrete.BaseRepository`3.GetAllAsync(System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Linq.Expressions.Expression{System.Func{`0,`0}},System.Boolean)">
             <summary>
              Returns all entities which IsDeleted condition is true from database asynchronously. If the condition is requested, it also provides that condition.
             </summary>
@@ -2368,7 +2368,7 @@
             <param name="conditionExpression"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.GetAllAsync(System.Func{Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable{`0},Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable},System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Linq.Expressions.Expression{System.Func{`0,`0}},System.Boolean)">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Concrete.BaseRepository`3.GetAllAsync(System.Func{Milvasoft.Helpers.DataAccess.EfCore.IncludeLibrary.IIncludable{`0},Milvasoft.Helpers.DataAccess.EfCore.IncludeLibrary.IIncludable},System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Linq.Expressions.Expression{System.Func{`0,`0}},System.Boolean)">
             <summary>
              Returns all entities which IsDeleted condition is true with specified includes from database asynchronously. If the condition is requested, it also provides that condition.
             </summary>
@@ -2378,7 +2378,7 @@
             <param name="conditionExpression"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.GetSomeAsync(System.Int32,System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Linq.Expressions.Expression{System.Func{`0,`0}},System.Boolean)">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Concrete.BaseRepository`3.GetSomeAsync(System.Int32,System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Linq.Expressions.Expression{System.Func{`0,`0}},System.Boolean)">
             <summary>
              Returns all entities which IsDeleted condition is true from database asynchronously. If the condition is requested, it also provides that condition.
             </summary>
@@ -2388,7 +2388,7 @@
             <param name="conditionExpression"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.GetSomeAsync(System.Int32,System.Func{Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable{`0},Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable},System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Linq.Expressions.Expression{System.Func{`0,`0}},System.Boolean)">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Concrete.BaseRepository`3.GetSomeAsync(System.Int32,System.Func{Milvasoft.Helpers.DataAccess.EfCore.IncludeLibrary.IIncludable{`0},Milvasoft.Helpers.DataAccess.EfCore.IncludeLibrary.IIncludable},System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Linq.Expressions.Expression{System.Func{`0,`0}},System.Boolean)">
             <summary>
              Returns all entities which IsDeleted condition is true with specified includes from database asynchronously. If the condition is requested, it also provides that condition.
             </summary>
@@ -2399,7 +2399,7 @@
             <param name="conditionExpression"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.GetAsPaginatedAsync(System.Int32,System.Int32,System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Boolean)">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Concrete.BaseRepository`3.GetAsPaginatedAsync(System.Int32,System.Int32,System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Boolean)">
             <summary>
              Creates asynchronously a shallow copy of a range of entity's which IsDeleted property is true, in the source List of TEntity with requested count and range. 
                   If the condition is requested, it also provides that condition.
@@ -2413,7 +2413,7 @@
             <param name="tracking"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.GetAsPaginatedAsync(System.Int32,System.Int32,System.Func{Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable{`0},Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable},System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Boolean)">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Concrete.BaseRepository`3.GetAsPaginatedAsync(System.Int32,System.Int32,System.Func{Milvasoft.Helpers.DataAccess.EfCore.IncludeLibrary.IIncludable{`0},Milvasoft.Helpers.DataAccess.EfCore.IncludeLibrary.IIncludable},System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Boolean)">
              <summary>
               Creates asynchronously a shallow copy of a range of entity's which IsDeleted property is true, in the source List of TEntity with requested count,range and includes.
                    If the condition is requested, it also provides that condition.
@@ -2428,7 +2428,7 @@
              <param name="tracking"></param>
              <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.GetAsPaginatedAndOrderedAsync(System.Int32,System.Int32,System.String,System.Boolean,System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Boolean)">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Concrete.BaseRepository`3.GetAsPaginatedAndOrderedAsync(System.Int32,System.Int32,System.String,System.Boolean,System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Boolean)">
             <summary>
              Creates and ordered asynchronously a shallow copy of a range of entity's which IsDeleted property is true, in the source List of TEntity with requested count and range.
                   If the condition is requested, it also provides that condition.
@@ -2446,7 +2446,7 @@
             <param name="tracking"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.GetAsPaginatedAndOrderedAsync(System.Int32,System.Int32,System.Func{Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable{`0},Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable},System.String,System.Boolean,System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Boolean)">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Concrete.BaseRepository`3.GetAsPaginatedAndOrderedAsync(System.Int32,System.Int32,System.Func{Milvasoft.Helpers.DataAccess.EfCore.IncludeLibrary.IIncludable{`0},Milvasoft.Helpers.DataAccess.EfCore.IncludeLibrary.IIncludable},System.String,System.Boolean,System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Boolean)">
              <summary>
               Creates and ordered asynchronously a shallow copy of a range of entity's which IsDeleted property is true, in the source List of TEntity with requested count,range and includes.
                     If the condition is requested, it also provides that condition.
@@ -2465,7 +2465,7 @@
              <param name="tracking"></param>
              <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.GetAsPaginatedAndOrderedAsync(System.Int32,System.Int32,System.Linq.Expressions.Expression{System.Func{`0,System.Object}},System.Boolean,System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Boolean)">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Concrete.BaseRepository`3.GetAsPaginatedAndOrderedAsync(System.Int32,System.Int32,System.Linq.Expressions.Expression{System.Func{`0,System.Object}},System.Boolean,System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Boolean)">
             <summary>
              Creates asynchronously a shallow copy of a range of entity's which IsDeleted property is true, in the source List of TEntity with requested count and range.
                   If the condition is requested, it also provides that condition.
@@ -2482,7 +2482,7 @@
             <param name="tracking"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.GetAsPaginatedAndOrderedAsync(System.Int32,System.Int32,System.Func{Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable{`0},Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable},System.Linq.Expressions.Expression{System.Func{`0,System.Object}},System.Boolean,System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Boolean)">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Concrete.BaseRepository`3.GetAsPaginatedAndOrderedAsync(System.Int32,System.Int32,System.Func{Milvasoft.Helpers.DataAccess.EfCore.IncludeLibrary.IIncludable{`0},Milvasoft.Helpers.DataAccess.EfCore.IncludeLibrary.IIncludable},System.Linq.Expressions.Expression{System.Func{`0,System.Object}},System.Boolean,System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Boolean)">
              <summary>
               Creates asynchronously a shallow copy of a range of entity's which IsDeleted property is true, in the source List of TEntity with requested count,range and includes.
                     If the condition is requested, it also provides that condition.
@@ -2500,7 +2500,7 @@
              <param name="tracking"></param>
              <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.GetAsOrderedAsync(System.String,System.Boolean,System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Boolean)">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Concrete.BaseRepository`3.GetAsOrderedAsync(System.String,System.Boolean,System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Boolean)">
             <summary>
              Gets entities as ordered with <paramref name="orderByPropertyName"/>.
                   If the condition is requested, it also provides that condition.
@@ -2515,7 +2515,7 @@
             <param name="tracking"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.GetAsOrderedAsync(System.Func{Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable{`0},Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable},System.String,System.Boolean,System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Boolean)">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Concrete.BaseRepository`3.GetAsOrderedAsync(System.Func{Milvasoft.Helpers.DataAccess.EfCore.IncludeLibrary.IIncludable{`0},Milvasoft.Helpers.DataAccess.EfCore.IncludeLibrary.IIncludable},System.String,System.Boolean,System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Boolean)">
              <summary>
               Gets entities with includes as ordered with <paramref name="orderByPropertyName"/>.
                     If the condition is requested, it also provides that condition.
@@ -2531,7 +2531,7 @@
              <param name="tracking"></param>
              <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.GetAsOrderedAsync(System.Linq.Expressions.Expression{System.Func{`0,System.Object}},System.Boolean,System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Boolean)">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Concrete.BaseRepository`3.GetAsOrderedAsync(System.Linq.Expressions.Expression{System.Func{`0,System.Object}},System.Boolean,System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Boolean)">
             <summary>
              Gets entities as ordered with <paramref name="orderByKeySelector"/>.
                   If the condition is requested, it also provides that condition.
@@ -2544,7 +2544,7 @@
             <param name="tracking"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.GetAsOrderedAsync(System.Func{Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable{`0},Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable},System.Linq.Expressions.Expression{System.Func{`0,System.Object}},System.Boolean,System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Boolean)">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Concrete.BaseRepository`3.GetAsOrderedAsync(System.Func{Milvasoft.Helpers.DataAccess.EfCore.IncludeLibrary.IIncludable{`0},Milvasoft.Helpers.DataAccess.EfCore.IncludeLibrary.IIncludable},System.Linq.Expressions.Expression{System.Func{`0,System.Object}},System.Boolean,System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Boolean)">
              <summary>
               Gets entities as ordered with <paramref name="orderByKeySelector"/>.
                     If the condition is requested, it also provides that condition.
@@ -2558,7 +2558,7 @@
              <param name="tracking"></param>
              <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.GetByIdAsync(`1,System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Linq.Expressions.Expression{System.Func{`0,`0}},System.Boolean)">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Concrete.BaseRepository`3.GetByIdAsync(`1,System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Linq.Expressions.Expression{System.Func{`0,`0}},System.Boolean)">
             <summary>
             Returns one entity by entity Id from database asynchronously.
             </summary>
@@ -2568,7 +2568,7 @@
             <param name="tracking"></param>
             <returns> The entity found or null. </returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.GetRequiredByIdAsync(`1,System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Linq.Expressions.Expression{System.Func{`0,`0}},System.Boolean)">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Concrete.BaseRepository`3.GetRequiredByIdAsync(`1,System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Linq.Expressions.Expression{System.Func{`0,`0}},System.Boolean)">
             <summary>
              Returns one entity by entity Id from database asynchronously.
             </summary>
@@ -2581,7 +2581,7 @@
             <param name="tracking"></param>
             <returns> The entity. </returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.GetByIdAsync(`1,System.Func{Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable{`0},Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable},System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Linq.Expressions.Expression{System.Func{`0,`0}},System.Boolean)">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Concrete.BaseRepository`3.GetByIdAsync(`1,System.Func{Milvasoft.Helpers.DataAccess.EfCore.IncludeLibrary.IIncludable{`0},Milvasoft.Helpers.DataAccess.EfCore.IncludeLibrary.IIncludable},System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Linq.Expressions.Expression{System.Func{`0,`0}},System.Boolean)">
             <summary>
              Returns one entity which IsDeleted condition is true by entity Id with includes from database asynchronously. If the condition is requested, it also provides that condition. 
             </summary>
@@ -2592,7 +2592,7 @@
             <param name="tracking"></param>
             <returns> The entity found or null. </returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.GetRequiredByIdAsync(`1,System.Func{Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable{`0},Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable},System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Linq.Expressions.Expression{System.Func{`0,`0}},System.Boolean)">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Concrete.BaseRepository`3.GetRequiredByIdAsync(`1,System.Func{Milvasoft.Helpers.DataAccess.EfCore.IncludeLibrary.IIncludable{`0},Milvasoft.Helpers.DataAccess.EfCore.IncludeLibrary.IIncludable},System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Linq.Expressions.Expression{System.Func{`0,`0}},System.Boolean)">
             <summary>
              Returns one entity which IsDeleted condition is true by entity Id with includes from database asynchronously. If the condition is requested, it also provides that condition. 
             </summary>
@@ -2606,7 +2606,7 @@
             <param name="tracking"></param>
             <returns> The entity. </returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.GetGroupedAndCountAsync(System.String,System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Boolean)">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Concrete.BaseRepository`3.GetGroupedAndCountAsync(System.String,System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Boolean)">
             <summary>
             Groups entities with <paramref name="groupByPropertyName"/> and returns the key grouped and the number of items grouped with this key.
             </summary>
@@ -2615,7 +2615,7 @@
             <param name="tracking"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.GetGroupedAndCountAsync(System.Linq.Expressions.Expression{System.Func{`0,System.Object}},System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Boolean)">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Concrete.BaseRepository`3.GetGroupedAndCountAsync(System.Linq.Expressions.Expression{System.Func{`0,System.Object}},System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Boolean)">
             <summary>
             Groups entities with <paramref name="keySelector"/> and returns the key grouped and the number of items grouped with this key.
             </summary>
@@ -2624,14 +2624,14 @@
             <param name="tracking"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.GetAsGroupedAsync``1(System.Linq.IQueryable{``0},System.Linq.Expressions.Expression{System.Func{``0,System.Boolean}})">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Concrete.BaseRepository`3.GetAsGroupedAsync``1(System.Linq.IQueryable{``0},System.Linq.Expressions.Expression{System.Func{``0,System.Boolean}})">
             <summary>
             Gets grouped entities from database with <paramref name="groupedClause"/>.
             
             <para> <b>Example use;</b></para>
             <code>
             
-            <para>   var dbSet = _contextRepository.GetDbSet{Poco}();  <see cref="M:Milvasoft.Helpers.DataAccess.Concrete.ContextRepository`1.GetDbSet``1"></see> </para>
+            <para>   var dbSet = _contextRepository.GetDbSet{Poco}();  <see cref="M:Milvasoft.Helpers.DataAccess.EfCore.Concrete.ContextRepository`1.GetDbSet``1"></see> </para>
             
             <para>   var groupByClause = from poco in dbSet                                                                             </para>
                                          group poco by new { poco.Id,  poco.PocoCode } into groupedPocos                                      
@@ -2655,7 +2655,7 @@
             <param name="conditionExpression"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.GetAsGroupedAsync``1(System.Func{System.Linq.IQueryable{``0}},System.Linq.Expressions.Expression{System.Func{``0,System.Boolean}})">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Concrete.BaseRepository`3.GetAsGroupedAsync``1(System.Func{System.Linq.IQueryable{``0}},System.Linq.Expressions.Expression{System.Func{``0,System.Boolean}})">
             <summary>
             Gets grouped entities with condition from database with <paramref name="groupedClause"/>.
             
@@ -2684,7 +2684,7 @@
             <param name="groupedClause"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.GetAsGroupedAndPaginatedAsync``1(System.Int32,System.Int32,System.Func{System.Linq.IQueryable{``0}},System.Linq.Expressions.Expression{System.Func{``0,System.Boolean}})">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Concrete.BaseRepository`3.GetAsGroupedAndPaginatedAsync``1(System.Int32,System.Int32,System.Func{System.Linq.IQueryable{``0}},System.Linq.Expressions.Expression{System.Func{``0,System.Boolean}})">
             <summary>
             Gets grouped entities with condition from database with <paramref name="groupedClause"/>.
             
@@ -2715,7 +2715,7 @@
             <param name="groupedClause"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.GetAsGroupedAndPaginatedAndOrderedAsync``1(System.Int32,System.Int32,System.String,System.Boolean,System.Func{System.Linq.IQueryable{``0}},System.Linq.Expressions.Expression{System.Func{``0,System.Boolean}})">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Concrete.BaseRepository`3.GetAsGroupedAndPaginatedAndOrderedAsync``1(System.Int32,System.Int32,System.String,System.Boolean,System.Func{System.Linq.IQueryable{``0}},System.Linq.Expressions.Expression{System.Func{``0,System.Boolean}})">
             <summary>
             Gets grouped entities with condition from database with <paramref name="groupedClause"/>.
             
@@ -2748,7 +2748,7 @@
             <param name="groupedClause"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.GetAsGroupedAndOrderedAsync``1(System.String,System.Boolean,System.Func{System.Linq.IQueryable{``0}},System.Linq.Expressions.Expression{System.Func{``0,System.Boolean}})">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Concrete.BaseRepository`3.GetAsGroupedAndOrderedAsync``1(System.String,System.Boolean,System.Func{System.Linq.IQueryable{``0}},System.Linq.Expressions.Expression{System.Func{``0,System.Boolean}})">
             <summary>
             Gets grouped entities with condition from database with <paramref name="groupedClause"/>.
             
@@ -2779,7 +2779,7 @@
             <param name="groupedClause"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.GetMaxAsync(System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Linq.Expressions.Expression{System.Func{`0,`0}},System.Boolean)">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Concrete.BaseRepository`3.GetMaxAsync(System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Linq.Expressions.Expression{System.Func{`0,`0}},System.Boolean)">
             <summary>
             Get max value of entities.
             </summary>
@@ -2788,7 +2788,7 @@
             <param name="tracking"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.GetMaxAsync(System.Func{Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable{`0},Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable},System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Linq.Expressions.Expression{System.Func{`0,`0}},System.Boolean)">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Concrete.BaseRepository`3.GetMaxAsync(System.Func{Milvasoft.Helpers.DataAccess.EfCore.IncludeLibrary.IIncludable{`0},Milvasoft.Helpers.DataAccess.EfCore.IncludeLibrary.IIncludable},System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Linq.Expressions.Expression{System.Func{`0,`0}},System.Boolean)">
             <summary>
             Get max value of entities. With includes.
             </summary>
@@ -2798,7 +2798,7 @@
             <param name="tracking"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.GetMaxAsync``1(System.Linq.Expressions.Expression{System.Func{`0,``0}},System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Linq.Expressions.Expression{System.Func{`0,`0}},System.Boolean)">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Concrete.BaseRepository`3.GetMaxAsync``1(System.Linq.Expressions.Expression{System.Func{`0,``0}},System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Linq.Expressions.Expression{System.Func{`0,`0}},System.Boolean)">
             <summary>
             Gets max value of <typeparamref name="TEntity"/>'s property in entities.
             </summary>
@@ -2808,7 +2808,7 @@
             <param name="tracking"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.GetMaxAsync``1(System.Linq.Expressions.Expression{System.Func{`0,``0}},System.Func{Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable{`0},Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable},System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Linq.Expressions.Expression{System.Func{`0,`0}},System.Boolean)">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Concrete.BaseRepository`3.GetMaxAsync``1(System.Linq.Expressions.Expression{System.Func{`0,``0}},System.Func{Milvasoft.Helpers.DataAccess.EfCore.IncludeLibrary.IIncludable{`0},Milvasoft.Helpers.DataAccess.EfCore.IncludeLibrary.IIncludable},System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Linq.Expressions.Expression{System.Func{`0,`0}},System.Boolean)">
             <summary>
             Gets max value of <typeparamref name="TEntity"/>'s property in entities.
             </summary>
@@ -2819,7 +2819,7 @@
             <param name="tracking"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.GetMaxOfPropertyAsync(System.String,System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Boolean)">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Concrete.BaseRepository`3.GetMaxOfPropertyAsync(System.String,System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Boolean)">
             <summary>
             Gets max value of <typeparamref name="TEntity"/>'s property in entities.
             </summary>
@@ -2828,7 +2828,7 @@
             <param name="tracking"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.GetMaxOfPropertyAsync``1(System.Linq.Expressions.Expression{System.Func{`0,``0}},System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Boolean)">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Concrete.BaseRepository`3.GetMaxOfPropertyAsync``1(System.Linq.Expressions.Expression{System.Func{`0,``0}},System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Boolean)">
             <summary>
             Gets max value of <typeparamref name="TEntity"/>'s property in entities.
             </summary>
@@ -2837,7 +2837,7 @@
             <param name="tracking"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.GetSumOfPropertyAsync(System.Linq.Expressions.Expression{System.Func{`0,System.Decimal}},System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Boolean)">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Concrete.BaseRepository`3.GetSumOfPropertyAsync(System.Linq.Expressions.Expression{System.Func{`0,System.Decimal}},System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Boolean)">
             <summary>
             Gets sums of value of <typeparamref name="TEntity"/>'s property in entities.
             </summary>
@@ -2846,7 +2846,7 @@
             <param name="tracking"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.GetCountAsync(System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Boolean)">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Concrete.BaseRepository`3.GetCountAsync(System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Boolean)">
             <summary>
             Get count of entities.
             </summary>
@@ -2854,21 +2854,21 @@
             <param name="tracking"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.ExistsAsync(System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Concrete.BaseRepository`3.ExistsAsync(System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
             <summary>
             Returns whether or not the entity that satisfies this condition exists.
             </summary>
             <param name="conditionExpression"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.ExistsAsync(`1)">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Concrete.BaseRepository`3.ExistsAsync(`1)">
             <summary>
             Returns whether or not the entity that satisfies this condition exists. 
             </summary>
             <param name="id"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.ExistsAsync(`1,System.Func{Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable{`0},Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable},System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Concrete.BaseRepository`3.ExistsAsync(`1,System.Func{Milvasoft.Helpers.DataAccess.EfCore.IncludeLibrary.IIncludable{`0},Milvasoft.Helpers.DataAccess.EfCore.IncludeLibrary.IIncludable},System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
             <summary>
             Returns whether or not the entity that satisfies this condition exists. 
             </summary>
@@ -2877,28 +2877,28 @@
             <param name="conditionExpression"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.AddAsync(`0)">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Concrete.BaseRepository`3.AddAsync(`0)">
             <summary>
              Adds single entity to database asynchronously. 
             </summary>
             <param name="entity"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.AddRangeAsync(System.Collections.Generic.IEnumerable{`0})">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Concrete.BaseRepository`3.AddRangeAsync(System.Collections.Generic.IEnumerable{`0})">
             <summary>
              Adds multiple entities to database asynchronously. 
             </summary>
             <param name="entities"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.UpdateAsync(`0)">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Concrete.BaseRepository`3.UpdateAsync(`0)">
             <summary>
              Updates specified entity in database asynchronously.
             </summary>
             <param name="entity"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.UpdateAsync(`0,System.Linq.Expressions.Expression{System.Func{`0,System.Object}}[])">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Concrete.BaseRepository`3.UpdateAsync(`0,System.Linq.Expressions.Expression{System.Func{`0,System.Object}}[])">
             <summary>
             Specific properties updates.
             </summary>
@@ -2906,7 +2906,7 @@
             <param name="projectionProperties"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.UpdateAsync(System.Collections.Generic.IEnumerable{`0},System.Linq.Expressions.Expression{System.Func{`0,System.Object}}[])">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Concrete.BaseRepository`3.UpdateAsync(System.Collections.Generic.IEnumerable{`0},System.Linq.Expressions.Expression{System.Func{`0,System.Object}}[])">
             <summary>
             Specific properties updates.
             </summary>
@@ -2914,28 +2914,28 @@
             <param name="projectionProperties"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.UpdateAsync(System.Collections.Generic.IEnumerable{`0})">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Concrete.BaseRepository`3.UpdateAsync(System.Collections.Generic.IEnumerable{`0})">
             <summary>
              Updates multiple entities in database asynchronously.
             </summary>
             <param name="entities"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.DeleteAsync(`0)">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Concrete.BaseRepository`3.DeleteAsync(`0)">
             <summary>
              Deletes single entity from database asynchronously.
             </summary>
             <param name="entity"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.DeleteAsync(System.Collections.Generic.IEnumerable{`0})">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Concrete.BaseRepository`3.DeleteAsync(System.Collections.Generic.IEnumerable{`0})">
             <summary>
              Deletes multiple entity from database asynchronously.
             </summary>
             <param name="entities"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.ReplaceOldsWithNewsAsync(System.Collections.Generic.IEnumerable{`0},System.Collections.Generic.IEnumerable{`0})">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Concrete.BaseRepository`3.ReplaceOldsWithNewsAsync(System.Collections.Generic.IEnumerable{`0},System.Collections.Generic.IEnumerable{`0})">
             <summary>
             Replaces existing entities(<paramref name="oldEntities"/>) with new entities(<paramref name="newEntities"/>).
             </summary>
@@ -2943,7 +2943,7 @@
             <param name="newEntities"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.ReplaceOldsWithNewsInSeperateDatabaseProcessAsync(System.Collections.Generic.IEnumerable{`0},System.Collections.Generic.IEnumerable{`0})">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Concrete.BaseRepository`3.ReplaceOldsWithNewsInSeperateDatabaseProcessAsync(System.Collections.Generic.IEnumerable{`0},System.Collections.Generic.IEnumerable{`0})">
             <summary>
             Replaces existing entities(<paramref name="oldEntities"/>) with new entities(<paramref name="newEntities"/>).
             </summary>
@@ -2951,21 +2951,21 @@
             <param name="newEntities"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.RemoveAllAsync">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Concrete.BaseRepository`3.RemoveAllAsync">
             <summary>
             Removes all entities from database.
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.CreateKeyEqualityExpression(`1,System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Concrete.BaseRepository`3.CreateKeyEqualityExpression(`1,System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
             <summary>
-            Creates Id == <typeparamref name="TKey"/> equality expression and append to <see cref="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.CreateIsDeletedFalseExpression"/>.
+            Creates Id == <typeparamref name="TKey"/> equality expression and append to <see cref="M:Milvasoft.Helpers.DataAccess.EfCore.Concrete.BaseRepository`3.CreateIsDeletedFalseExpression"/>.
             </summary>
             <param name="key"></param>
             <param name="conditionExpression"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.CreateObjectPredicate(System.Type,System.String)">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Concrete.BaseRepository`3.CreateObjectPredicate(System.Type,System.String)">
             <summary>
             Creates property selector.
             </summary>
@@ -2973,14 +2973,14 @@
             <param name="propertyName"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.CheckProperty(System.String,System.Type)">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Concrete.BaseRepository`3.CheckProperty(System.String,System.Type)">
             <summary>
             Checks if there is a property named <paramref name="propertyName"/> in the properties of <b><paramref name="entityType"/></b>. 
             </summary>
             <param name="propertyName"></param>
             <param name="entityType"></param>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.CalculatePageCountAndCompareWithRequested(System.Int32,System.Int32,System.Int32)">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Concrete.BaseRepository`3.CalculatePageCountAndCompareWithRequested(System.Int32,System.Int32,System.Int32)">
             <summary>
             Checks pagination parameters are reasonable.
             </summary>
@@ -2989,89 +2989,81 @@
             <param name="requestedPageNumber"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.ValidatePaginationParameters(System.Int32,System.Int32)">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Concrete.BaseRepository`3.ValidatePaginationParameters(System.Int32,System.Int32)">
             <summary>
             Checks the parameters is valid.
             </summary>
             <param name="requestedPageNumber"></param>
             <param name="countOfRequestedRecordsInPage"></param>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.CreateConditionExpression(System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Concrete.BaseRepository`3.CreateConditionExpression(System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
             <summary>
-            If <see cref="F:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3._getSoftDeletedEntities"/> is false,  appends is deleted false expression to <paramref name="conditionExpression"/>.
-            Else does nothing to <paramref name="conditionExpression"/> but if <see cref="F:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3._resetGetSoftDeletedEntitiesState"/> is true then sets <see cref="F:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3._getSoftDeletedEntities"/> false.
+            If <see cref="F:Milvasoft.Helpers.DataAccess.EfCore.Concrete.BaseRepository`3._getSoftDeletedEntities"/> is false,  appends is deleted false expression to <paramref name="conditionExpression"/>.
+            Else does nothing to <paramref name="conditionExpression"/> but if <see cref="F:Milvasoft.Helpers.DataAccess.EfCore.Concrete.BaseRepository`3._resetGetSoftDeletedEntitiesState"/> is true then sets <see cref="F:Milvasoft.Helpers.DataAccess.EfCore.Concrete.BaseRepository`3._getSoftDeletedEntities"/> false.
             </summary>
             <param name="conditionExpression"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.GetQueryTrackingBehavior(System.Boolean)">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Concrete.BaseRepository`3.GetQueryTrackingBehavior(System.Boolean)">
             <summary>
             Returns <see cref="T:Microsoft.EntityFrameworkCore.QueryTrackingBehavior"/> according to <paramref name="tracking"/>.
             </summary>
             <param name="tracking"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.InitalizeEdit(`0)">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Concrete.BaseRepository`3.InitalizeEdit(`0)">
             <summary>
             For configure entity state. Change tracking.
             </summary>
             <param name="entity"></param>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.BaseRepository`3.InitalizeEdit(System.Collections.Generic.IEnumerable{`0})">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Concrete.BaseRepository`3.InitalizeEdit(System.Collections.Generic.IEnumerable{`0})">
             <summary>
             For configure entity state. Change tracking.
             </summary>
             <param name="entities"></param>
         </member>
-        <member name="T:Milvasoft.Helpers.DataAccess.Concrete.ContextRepository`1">
+        <member name="T:Milvasoft.Helpers.DataAccess.EfCore.Concrete.ContextRepository`1">
             <summary>
             Helper repository for general DbContext(<typeparamref name="TContext"/>) operations.
             </summary>
         </member>
-        <member name="F:Milvasoft.Helpers.DataAccess.Concrete.ContextRepository`1._dbContext">
+        <member name="F:Milvasoft.Helpers.DataAccess.EfCore.Concrete.ContextRepository`1._dbContext">
             <summary>
             DbContext object.
             </summary>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.ContextRepository`1.#ctor(`0)">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Concrete.ContextRepository`1.#ctor(`0)">
             <summary>
             Constructor of ContextRepository for inject context.
             </summary>
             <param name="dbContext"></param>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.ContextRepository`1.IgnoreSoftDeleteForNextProcess">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Concrete.ContextRepository`1.IgnoreSoftDeleteForNextProcess">
             <summary>
             Ignores soft delete for next process for current <see cref="T:Microsoft.EntityFrameworkCore.DbContext"/> instance. Runs correctly, if <typeparamref name="TContext"/> inherit from MilvaDbContext.
             </summary>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.ContextRepository`1.ActivateSoftDelete">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Concrete.ContextRepository`1.ActivateSoftDelete">
             <summary>
             Activate soft delete for current <see cref="T:Microsoft.EntityFrameworkCore.DbContext"/> instance. Runs correctly, if <typeparamref name="TContext"/> inherit from MilvaDbContext.
             </summary>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.ContextRepository`1.ExecuteQueryAsync(System.String)">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Concrete.ContextRepository`1.ExecuteQueryAsync(System.String)">
             <summary>
             Executes sql query to database asynchronously.(e.g. trigger, event).
             </summary>
             <param name="query"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.ContextRepository`1.ApplyTransactionAsync(System.Func{System.Threading.Tasks.Task})">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Concrete.ContextRepository`1.ApplyTransactionAsync(System.Func{System.Threading.Tasks.Task})">
             <summary>
             Applies transaction process to requested function.
             </summary>
             <param name="function"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.ContextRepository`1.ApplyTransactionAsync(System.Func{System.Threading.Tasks.Task},System.Func{System.Threading.Tasks.Task})">
-            <summary>
-            Applies transaction process to requested function.
-            </summary>
-            <param name="function"></param>
-            <param name="rollbackFunction"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.ContextRepository`1.ApplyTransactionAsync(System.Func{System.Threading.Tasks.Task},System.Action)">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Concrete.ContextRepository`1.ApplyTransactionAsync(System.Func{System.Threading.Tasks.Task},System.Func{System.Threading.Tasks.Task})">
             <summary>
             Applies transaction process to requested function.
             </summary>
@@ -3079,12 +3071,20 @@
             <param name="rollbackFunction"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.ContextRepository`1.InitializeUpdating``2(``0)">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Concrete.ContextRepository`1.ApplyTransactionAsync(System.Func{System.Threading.Tasks.Task},System.Action)">
+            <summary>
+            Applies transaction process to requested function.
+            </summary>
+            <param name="function"></param>
+            <param name="rollbackFunction"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Concrete.ContextRepository`1.InitializeUpdating``2(``0)">
             <summary>
             User update process.
             </summary>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.ContextRepository`1.RemoveExpiredTokensAsync``2(Microsoft.AspNetCore.Identity.UserManager{``0},System.String,System.String,System.Collections.Generic.Dictionary{System.String,System.String})">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Concrete.ContextRepository`1.RemoveExpiredTokensAsync``2(Microsoft.AspNetCore.Identity.UserManager{``0},System.String,System.String,System.Collections.Generic.Dictionary{System.String,System.String})">
             <summary>
             <para> Removes expired tokens from the system. </para>
             </summary>
@@ -3108,364 +3108,364 @@
             <param name="cachedTokenDictionary"> Dictionary params : Key = userName of <typeparamref name="TUser"/>. Value = JWT security Token as string. </param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.ContextRepository`1.GetRequiredContents``1">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Concrete.ContextRepository`1.GetRequiredContents``1">
             <summary>
             Gets requested contents by <typeparamref name="TEntity"/> DbSet.
             </summary>
             <typeparam name="TEntity"></typeparam>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.ContextRepository`1.GetRequiredContents(System.Type)">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Concrete.ContextRepository`1.GetRequiredContents(System.Type)">
             <summary>
             Gets requested contents by <paramref name="type"/> DbSet.
             </summary>
             <param name="type"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.ContextRepository`1.GetDbSet``1">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Concrete.ContextRepository`1.GetDbSet``1">
             <summary>
             Gets requested DbSet by <typeparamref name="TEntity"/>.
             </summary>
             <typeparam name="TEntity"></typeparam>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.ContextRepository`1.ExistsAsync``2(``1)">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Concrete.ContextRepository`1.ExistsAsync``2(``1)">
             <summary>
             Returns whether or not the entity that satisfies this condition exists. 
             </summary>
             <param name="id"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.ContextRepository`1.CreateIsDeletedFalseExpression``1">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Concrete.ContextRepository`1.CreateIsDeletedFalseExpression``1">
             <summary>
-            Gets <b>entity => entity.IsDeleted == false</b> expression, if <typeparamref name="TEntity"/> is assignable from <see cref="T:Milvasoft.Helpers.DataAccess.Concrete.Entity.FullAuditableEntity`1"/>.
+            Gets <b>entity => entity.IsDeleted == false</b> expression, if <typeparamref name="TEntity"/> is assignable from <see cref="T:Milvasoft.Helpers.DataAccess.EfCore.Concrete.Entity.FullAuditableEntity`1"/>.
             </summary>
             <returns></returns>
         </member>
-        <member name="T:Milvasoft.Helpers.DataAccess.Concrete.Entity.AuditableEntity`1">
+        <member name="T:Milvasoft.Helpers.DataAccess.EfCore.Concrete.Entity.AuditableEntity`1">
             <summary>
             Determines entity's is auditable with modifier and modification date.
             </summary>
             <typeparam name="TKey">Type of the user</typeparam>
         </member>
-        <member name="P:Milvasoft.Helpers.DataAccess.Concrete.Entity.AuditableEntity`1.LastModificationDate">
+        <member name="P:Milvasoft.Helpers.DataAccess.EfCore.Concrete.Entity.AuditableEntity`1.LastModificationDate">
             <summary>
             Last modification date of entity.
             </summary>
         </member>
-        <member name="T:Milvasoft.Helpers.DataAccess.Concrete.Entity.AuditableEntity`2">
+        <member name="T:Milvasoft.Helpers.DataAccess.EfCore.Concrete.Entity.AuditableEntity`2">
             <summary>
             Determines entity's is auditable with modifier and modification date.
             </summary>
             <typeparam name="TKey">Type of the user</typeparam>
             <typeparam name="TUserKey">Type of the user</typeparam>
         </member>
-        <member name="P:Milvasoft.Helpers.DataAccess.Concrete.Entity.AuditableEntity`2.LastModificationDate">
+        <member name="P:Milvasoft.Helpers.DataAccess.EfCore.Concrete.Entity.AuditableEntity`2.LastModificationDate">
             <summary>
             Last modification date of entity.
             </summary>
         </member>
-        <member name="P:Milvasoft.Helpers.DataAccess.Concrete.Entity.AuditableEntity`2.LastModifierUserId">
+        <member name="P:Milvasoft.Helpers.DataAccess.EfCore.Concrete.Entity.AuditableEntity`2.LastModifierUserId">
             <summary>
             Last modifier of entity.
             </summary>
         </member>
-        <member name="T:Milvasoft.Helpers.DataAccess.Concrete.Entity.AuditableEntity`3">
+        <member name="T:Milvasoft.Helpers.DataAccess.EfCore.Concrete.Entity.AuditableEntity`3">
             <summary>
-            This class can be used to simplify implementing <see cref="T:Milvasoft.Helpers.DataAccess.Abstract.Entity.IAuditable`1"/>.
+            This class can be used to simplify implementing <see cref="T:Milvasoft.Helpers.DataAccess.EfCore.Abstract.Entity.IAuditable`1"/>.
             </summary>
             <typeparam name="TKey">Type of the primary key of the entity</typeparam>
             <typeparam name="TUser">Type of the user</typeparam>
             <typeparam name="TUserKey">Type of the user</typeparam>
         </member>
-        <member name="P:Milvasoft.Helpers.DataAccess.Concrete.Entity.AuditableEntity`3.CreatorUser">
+        <member name="P:Milvasoft.Helpers.DataAccess.EfCore.Concrete.Entity.AuditableEntity`3.CreatorUser">
             <summary>
             Reference to the creator user of this entity.
             </summary>
         </member>
-        <member name="P:Milvasoft.Helpers.DataAccess.Concrete.Entity.AuditableEntity`3.LastModifierUser">
+        <member name="P:Milvasoft.Helpers.DataAccess.EfCore.Concrete.Entity.AuditableEntity`3.LastModifierUser">
             <summary>
             Reference to the last modifier user of this entity.
             </summary>
         </member>
-        <member name="T:Milvasoft.Helpers.DataAccess.Concrete.Entity.AuditableEntityWithCustomUser`3">
+        <member name="T:Milvasoft.Helpers.DataAccess.EfCore.Concrete.Entity.AuditableEntityWithCustomUser`3">
             <summary>
-            This class can be used to simplify implementing <see cref="T:Milvasoft.Helpers.DataAccess.Abstract.Entity.IAuditable`1"/>.
+            This class can be used to simplify implementing <see cref="T:Milvasoft.Helpers.DataAccess.EfCore.Abstract.Entity.IAuditable`1"/>.
             </summary>
             <typeparam name="TKey">Type of the primary key of the entity</typeparam>
             <typeparam name="TUser">Type of the user</typeparam>
             <typeparam name="TUserKey">Type of the user</typeparam>
         </member>
-        <member name="P:Milvasoft.Helpers.DataAccess.Concrete.Entity.AuditableEntityWithCustomUser`3.CreatorUser">
+        <member name="P:Milvasoft.Helpers.DataAccess.EfCore.Concrete.Entity.AuditableEntityWithCustomUser`3.CreatorUser">
             <summary>
             Reference to the creator user of this entity.
             </summary>
         </member>
-        <member name="P:Milvasoft.Helpers.DataAccess.Concrete.Entity.AuditableEntityWithCustomUser`3.LastModifierUser">
+        <member name="P:Milvasoft.Helpers.DataAccess.EfCore.Concrete.Entity.AuditableEntityWithCustomUser`3.LastModifierUser">
             <summary>
             Reference to the last modifier user of this entity.
             </summary>
         </member>
-        <member name="T:Milvasoft.Helpers.DataAccess.Concrete.Entity.AuditableEntityWithoutUser`1">
+        <member name="T:Milvasoft.Helpers.DataAccess.EfCore.Concrete.Entity.AuditableEntityWithoutUser`1">
             <summary>
             Determines entity's is auditable with modifier and modification date.
             </summary>
             <typeparam name="TKey">Type of the user</typeparam>
         </member>
-        <member name="P:Milvasoft.Helpers.DataAccess.Concrete.Entity.AuditableEntityWithoutUser`1.LastModificationDate">
+        <member name="P:Milvasoft.Helpers.DataAccess.EfCore.Concrete.Entity.AuditableEntityWithoutUser`1.LastModificationDate">
             <summary>
             Last modification date of entity.
             </summary>
         </member>
-        <member name="T:Milvasoft.Helpers.DataAccess.Concrete.Entity.BaseEntity`1">
+        <member name="T:Milvasoft.Helpers.DataAccess.EfCore.Concrete.Entity.BaseEntity`1">
             <summary>
             Base entity for all of entities.
             </summary>
         </member>
-        <member name="P:Milvasoft.Helpers.DataAccess.Concrete.Entity.BaseEntity`1.Id">
+        <member name="P:Milvasoft.Helpers.DataAccess.EfCore.Concrete.Entity.BaseEntity`1.Id">
             <summary>
             Unique identifier for this entity.
             </summary>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.Entity.BaseEntity`1.ToString">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Concrete.Entity.BaseEntity`1.ToString">
             <summary>
-            Returns this instance of "<see cref="T:System.Type"/>.Name <see cref="T:Milvasoft.Helpers.DataAccess.Concrete.Entity.BaseEntity`1"/>.Id" as string.
+            Returns this instance of "<see cref="T:System.Type"/>.Name <see cref="T:Milvasoft.Helpers.DataAccess.EfCore.Concrete.Entity.BaseEntity`1"/>.Id" as string.
             </summary>
             <returns></returns>
         </member>
-        <member name="T:Milvasoft.Helpers.DataAccess.Concrete.Entity.EntityBase`1">
+        <member name="T:Milvasoft.Helpers.DataAccess.EfCore.Concrete.Entity.EntityBase`1">
             <summary>
             Base entity for all of entities.
             </summary>
         </member>
-        <member name="P:Milvasoft.Helpers.DataAccess.Concrete.Entity.EntityBase`1.Id">
+        <member name="P:Milvasoft.Helpers.DataAccess.EfCore.Concrete.Entity.EntityBase`1.Id">
             <summary>
             Unique identifier for this entity.
             </summary>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.Concrete.Entity.EntityBase`1.ToString">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Concrete.Entity.EntityBase`1.ToString">
             <summary>
-            Returns this instance of "<see cref="T:System.Type"/>.Name <see cref="T:Milvasoft.Helpers.DataAccess.Concrete.Entity.BaseEntity`1"/>.Id" as string.
+            Returns this instance of "<see cref="T:System.Type"/>.Name <see cref="T:Milvasoft.Helpers.DataAccess.EfCore.Concrete.Entity.BaseEntity`1"/>.Id" as string.
             </summary>
             <returns></returns>
         </member>
-        <member name="T:Milvasoft.Helpers.DataAccess.Concrete.Entity.CreationAuditableEntity`1">
+        <member name="T:Milvasoft.Helpers.DataAccess.EfCore.Concrete.Entity.CreationAuditableEntity`1">
             <summary>
             Determines entity's creation is auditable.
             </summary>
             <typeparam name="TKey">Type of the user</typeparam>
         </member>
-        <member name="P:Milvasoft.Helpers.DataAccess.Concrete.Entity.CreationAuditableEntity`1.CreationDate">
+        <member name="P:Milvasoft.Helpers.DataAccess.EfCore.Concrete.Entity.CreationAuditableEntity`1.CreationDate">
             <summary>
             Creation date of entity.
             </summary>
         </member>
-        <member name="T:Milvasoft.Helpers.DataAccess.Concrete.Entity.CreationAuditableEntity`2">
+        <member name="T:Milvasoft.Helpers.DataAccess.EfCore.Concrete.Entity.CreationAuditableEntity`2">
             <summary>
             Determines entity's creation is auditable.
             </summary>
             <typeparam name="TKey">Type of the user</typeparam>
             <typeparam name="TUserKey">Type of the user</typeparam>
         </member>
-        <member name="P:Milvasoft.Helpers.DataAccess.Concrete.Entity.CreationAuditableEntity`2.CreationDate">
+        <member name="P:Milvasoft.Helpers.DataAccess.EfCore.Concrete.Entity.CreationAuditableEntity`2.CreationDate">
             <summary>
             Creation date of entity.
             </summary>
         </member>
-        <member name="P:Milvasoft.Helpers.DataAccess.Concrete.Entity.CreationAuditableEntity`2.CreatorUserId">
+        <member name="P:Milvasoft.Helpers.DataAccess.EfCore.Concrete.Entity.CreationAuditableEntity`2.CreatorUserId">
             <summary>
             Creator of entity.
             </summary>
         </member>
-        <member name="T:Milvasoft.Helpers.DataAccess.Concrete.Entity.CreationAuditableEntity`3">
+        <member name="T:Milvasoft.Helpers.DataAccess.EfCore.Concrete.Entity.CreationAuditableEntity`3">
             <summary>
-            This class can be used to simplify implementing <see cref="T:Milvasoft.Helpers.DataAccess.Abstract.Entity.ICreationAuditable`3"/>.
+            This class can be used to simplify implementing <see cref="T:Milvasoft.Helpers.DataAccess.EfCore.Abstract.Entity.ICreationAuditable`3"/>.
             </summary>
             <typeparam name="TKey">Type of the primary key of the entity</typeparam>
             <typeparam name="TUser">Type of the user</typeparam>
             <typeparam name="TUserKey">Type of the user</typeparam>
         </member>
-        <member name="P:Milvasoft.Helpers.DataAccess.Concrete.Entity.CreationAuditableEntity`3.CreatorUser">
+        <member name="P:Milvasoft.Helpers.DataAccess.EfCore.Concrete.Entity.CreationAuditableEntity`3.CreatorUser">
             <summary>
             Reference to the creator user of this entity.
             </summary>
         </member>
-        <member name="T:Milvasoft.Helpers.DataAccess.Concrete.Entity.CreationAuditableEntityEntityWithCustomUser`3">
+        <member name="T:Milvasoft.Helpers.DataAccess.EfCore.Concrete.Entity.CreationAuditableEntityEntityWithCustomUser`3">
             <summary>
-            This class can be used to simplify implementing <see cref="T:Milvasoft.Helpers.DataAccess.Abstract.Entity.ICreationAuditableWithCustomUser`3"/>.
+            This class can be used to simplify implementing <see cref="T:Milvasoft.Helpers.DataAccess.EfCore.Abstract.Entity.ICreationAuditableWithCustomUser`3"/>.
             </summary>
             <typeparam name="TKey">Type of the primary key of the entity</typeparam>
             <typeparam name="TUser">Type of the user</typeparam>
             <typeparam name="TUserKey">Type of the user</typeparam>
         </member>
-        <member name="P:Milvasoft.Helpers.DataAccess.Concrete.Entity.CreationAuditableEntityEntityWithCustomUser`3.CreatorUser">
+        <member name="P:Milvasoft.Helpers.DataAccess.EfCore.Concrete.Entity.CreationAuditableEntityEntityWithCustomUser`3.CreatorUser">
             <summary>
             Reference to the creator user of this entity.
             </summary>
         </member>
-        <member name="T:Milvasoft.Helpers.DataAccess.Concrete.Entity.CreationAuditableEntityWithoutUser`1">
+        <member name="T:Milvasoft.Helpers.DataAccess.EfCore.Concrete.Entity.CreationAuditableEntityWithoutUser`1">
             <summary>
             Determines entity's creation is auditable without user.
             </summary>
             <typeparam name="TKey">Type of the user</typeparam>
         </member>
-        <member name="P:Milvasoft.Helpers.DataAccess.Concrete.Entity.CreationAuditableEntityWithoutUser`1.CreationDate">
+        <member name="P:Milvasoft.Helpers.DataAccess.EfCore.Concrete.Entity.CreationAuditableEntityWithoutUser`1.CreationDate">
             <summary>
             Creation date of entity.
             </summary>
         </member>
-        <member name="T:Milvasoft.Helpers.DataAccess.Concrete.Entity.EntityPropertyNames">
+        <member name="T:Milvasoft.Helpers.DataAccess.EfCore.Concrete.Entity.EntityPropertyNames">
             <summary>
             Auditing property names.
             </summary>
         </member>
-        <member name="T:Milvasoft.Helpers.DataAccess.Concrete.Entity.FullAuditableEntity`1">
+        <member name="T:Milvasoft.Helpers.DataAccess.EfCore.Concrete.Entity.FullAuditableEntity`1">
             <summary>
             Determines entity is fully auditable soft deletable entity.
             </summary>
             <typeparam name="TKey">Type of the user</typeparam>
         </member>
-        <member name="P:Milvasoft.Helpers.DataAccess.Concrete.Entity.FullAuditableEntity`1.DeletionDate">
+        <member name="P:Milvasoft.Helpers.DataAccess.EfCore.Concrete.Entity.FullAuditableEntity`1.DeletionDate">
             <summary>
             Deletion date of entity.
             </summary>
         </member>
-        <member name="P:Milvasoft.Helpers.DataAccess.Concrete.Entity.FullAuditableEntity`1.IsDeleted">
+        <member name="P:Milvasoft.Helpers.DataAccess.EfCore.Concrete.Entity.FullAuditableEntity`1.IsDeleted">
             <summary>
             Gets or sets a value indicating whether IsDeleted.
             </summary>
         </member>
-        <member name="T:Milvasoft.Helpers.DataAccess.Concrete.Entity.FullAuditableEntity`2">
+        <member name="T:Milvasoft.Helpers.DataAccess.EfCore.Concrete.Entity.FullAuditableEntity`2">
             <summary>
             Determines entity is fully auditable soft deletable entity.
             </summary>
             <typeparam name="TKey">Type of the user</typeparam>
             <typeparam name="TUserKey">Type of the user</typeparam>
         </member>
-        <member name="P:Milvasoft.Helpers.DataAccess.Concrete.Entity.FullAuditableEntity`2.DeletionDate">
+        <member name="P:Milvasoft.Helpers.DataAccess.EfCore.Concrete.Entity.FullAuditableEntity`2.DeletionDate">
             <summary>
             Deletion date of entity.
             </summary>
         </member>
-        <member name="P:Milvasoft.Helpers.DataAccess.Concrete.Entity.FullAuditableEntity`2.DeleterUserId">
+        <member name="P:Milvasoft.Helpers.DataAccess.EfCore.Concrete.Entity.FullAuditableEntity`2.DeleterUserId">
             <summary>
             Deleter of entity.
             </summary>er
         </member>
-        <member name="P:Milvasoft.Helpers.DataAccess.Concrete.Entity.FullAuditableEntity`2.IsDeleted">
+        <member name="P:Milvasoft.Helpers.DataAccess.EfCore.Concrete.Entity.FullAuditableEntity`2.IsDeleted">
             <summary>
             Gets or sets a value indicating whether IsDeleted.
             </summary>
         </member>
-        <member name="T:Milvasoft.Helpers.DataAccess.Concrete.Entity.FullAuditableEntity`3">
+        <member name="T:Milvasoft.Helpers.DataAccess.EfCore.Concrete.Entity.FullAuditableEntity`3">
             <summary>
-            Implements <see cref="T:Milvasoft.Helpers.DataAccess.Abstract.Entity.IFullAuditable`3"/> to be a base class for full-audited entities.
+            Implements <see cref="T:Milvasoft.Helpers.DataAccess.EfCore.Abstract.Entity.IFullAuditable`3"/> to be a base class for full-audited entities.
             </summary>
             <typeparam name="TKey">Type of the primary key of the entity</typeparam>
             <typeparam name="TUser">Type of the user</typeparam>
             <typeparam name="TUserKey">Type of the user</typeparam>
         </member>
-        <member name="P:Milvasoft.Helpers.DataAccess.Concrete.Entity.FullAuditableEntity`3.DeletionDate">
+        <member name="P:Milvasoft.Helpers.DataAccess.EfCore.Concrete.Entity.FullAuditableEntity`3.DeletionDate">
             <summary>
             Deletion time of this entity.
             </summary>
         </member>
-        <member name="P:Milvasoft.Helpers.DataAccess.Concrete.Entity.FullAuditableEntity`3.DeleterUserId">
+        <member name="P:Milvasoft.Helpers.DataAccess.EfCore.Concrete.Entity.FullAuditableEntity`3.DeleterUserId">
             <summary>
             Which user deleted this entity?
             </summary>
         </member>
-        <member name="P:Milvasoft.Helpers.DataAccess.Concrete.Entity.FullAuditableEntity`3.DeleterUser">
+        <member name="P:Milvasoft.Helpers.DataAccess.EfCore.Concrete.Entity.FullAuditableEntity`3.DeleterUser">
             <summary>
             Reference to the deleter user of this entity.
             </summary>
         </member>
-        <member name="P:Milvasoft.Helpers.DataAccess.Concrete.Entity.FullAuditableEntity`3.IsDeleted">
+        <member name="P:Milvasoft.Helpers.DataAccess.EfCore.Concrete.Entity.FullAuditableEntity`3.IsDeleted">
             <summary>
             Is this entity Deleted?
             </summary>
         </member>
-        <member name="T:Milvasoft.Helpers.DataAccess.Concrete.Entity.FullAuditableEntityWithCustomUser`3">
+        <member name="T:Milvasoft.Helpers.DataAccess.EfCore.Concrete.Entity.FullAuditableEntityWithCustomUser`3">
             <summary>
-            Implements <see cref="T:Milvasoft.Helpers.DataAccess.Abstract.Entity.IFullAuditableWithCustomUser`3"/> to be a base class for full-audited entities.
+            Implements <see cref="T:Milvasoft.Helpers.DataAccess.EfCore.Abstract.Entity.IFullAuditableWithCustomUser`3"/> to be a base class for full-audited entities.
             </summary>
             <typeparam name="TKey">Type of the primary key of the entity</typeparam>
             <typeparam name="TUser">Type of the user</typeparam>
             <typeparam name="TUserKey">Type of the user</typeparam>
         </member>
-        <member name="P:Milvasoft.Helpers.DataAccess.Concrete.Entity.FullAuditableEntityWithCustomUser`3.DeletionDate">
+        <member name="P:Milvasoft.Helpers.DataAccess.EfCore.Concrete.Entity.FullAuditableEntityWithCustomUser`3.DeletionDate">
             <summary>
             Deletion time of this entity.
             </summary>
         </member>
-        <member name="P:Milvasoft.Helpers.DataAccess.Concrete.Entity.FullAuditableEntityWithCustomUser`3.DeleterUserId">
+        <member name="P:Milvasoft.Helpers.DataAccess.EfCore.Concrete.Entity.FullAuditableEntityWithCustomUser`3.DeleterUserId">
             <summary>
             Which user deleted this entity?
             </summary>
         </member>
-        <member name="P:Milvasoft.Helpers.DataAccess.Concrete.Entity.FullAuditableEntityWithCustomUser`3.DeleterUser">
+        <member name="P:Milvasoft.Helpers.DataAccess.EfCore.Concrete.Entity.FullAuditableEntityWithCustomUser`3.DeleterUser">
             <summary>
             Reference to the deleter user of this entity.
             </summary>
         </member>
-        <member name="P:Milvasoft.Helpers.DataAccess.Concrete.Entity.FullAuditableEntityWithCustomUser`3.IsDeleted">
+        <member name="P:Milvasoft.Helpers.DataAccess.EfCore.Concrete.Entity.FullAuditableEntityWithCustomUser`3.IsDeleted">
             <summary>
             Is this entity Deleted?
             </summary>
         </member>
-        <member name="T:Milvasoft.Helpers.DataAccess.Concrete.Entity.FullAuditableEntityWithoutUser`1">
+        <member name="T:Milvasoft.Helpers.DataAccess.EfCore.Concrete.Entity.FullAuditableEntityWithoutUser`1">
             <summary>
             Determines entity is fully auditable without user.
             </summary>
             <typeparam name="TKey">Type of the user</typeparam>
         </member>
-        <member name="P:Milvasoft.Helpers.DataAccess.Concrete.Entity.FullAuditableEntityWithoutUser`1.DeletionDate">
+        <member name="P:Milvasoft.Helpers.DataAccess.EfCore.Concrete.Entity.FullAuditableEntityWithoutUser`1.DeletionDate">
             <summary>
             Deletion date of entity.
             </summary>
         </member>
-        <member name="P:Milvasoft.Helpers.DataAccess.Concrete.Entity.FullAuditableEntityWithoutUser`1.IsDeleted">
+        <member name="P:Milvasoft.Helpers.DataAccess.EfCore.Concrete.Entity.FullAuditableEntityWithoutUser`1.IsDeleted">
             <summary>
             Gets or sets a value indicating whether IsDeleted.
             </summary>
         </member>
-        <member name="T:Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable">
+        <member name="T:Milvasoft.Helpers.DataAccess.EfCore.IncludeLibrary.IIncludable">
             <summary>
             Supports queryable Include/ThenInclude chaining operators. 
             </summary>
         </member>
-        <member name="T:Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable`1">
+        <member name="T:Milvasoft.Helpers.DataAccess.EfCore.IncludeLibrary.IIncludable`1">
             <summary>
             Supports queryable Include/ThenInclude chaining operators.
             </summary>
             <typeparam name="TEntity"></typeparam>
         </member>
-        <member name="T:Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable`2">
-            <summary>
-            Supports queryable Include/ThenInclude chaining operators.
-            </summary>
-            <typeparam name="TEntity"></typeparam>
-            <typeparam name="TProperty"></typeparam>
-        </member>
-        <member name="T:Milvasoft.Helpers.DataAccess.IncludeLibrary.Includable`1">
-            <summary>
-            Supports queryable Include/ThenInclude chaining operators.
-            </summary>
-            <typeparam name="TEntity"></typeparam>
-        </member>
-        <member name="T:Milvasoft.Helpers.DataAccess.IncludeLibrary.Includable`2">
+        <member name="T:Milvasoft.Helpers.DataAccess.EfCore.IncludeLibrary.IIncludable`2">
             <summary>
             Supports queryable Include/ThenInclude chaining operators.
             </summary>
             <typeparam name="TEntity"></typeparam>
             <typeparam name="TProperty"></typeparam>
         </member>
-        <member name="T:Milvasoft.Helpers.DataAccess.IncludeLibrary.IncludableExtensions">
+        <member name="T:Milvasoft.Helpers.DataAccess.EfCore.IncludeLibrary.Includable`1">
+            <summary>
+            Supports queryable Include/ThenInclude chaining operators.
+            </summary>
+            <typeparam name="TEntity"></typeparam>
+        </member>
+        <member name="T:Milvasoft.Helpers.DataAccess.EfCore.IncludeLibrary.Includable`2">
+            <summary>
+            Supports queryable Include/ThenInclude chaining operators.
+            </summary>
+            <typeparam name="TEntity"></typeparam>
+            <typeparam name="TProperty"></typeparam>
+        </member>
+        <member name="T:Milvasoft.Helpers.DataAccess.EfCore.IncludeLibrary.IncludableExtensions">
             <summary>
             Includable extension for Ops!yon API. For reason to use that class: We cannot use default include process which in EntityFramework. Because of mysql and context. 
             </summary>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.IncludeLibrary.IncludableExtensions.Include``2(Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable{``0},System.Linq.Expressions.Expression{System.Func{``0,``1}})">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.IncludeLibrary.IncludableExtensions.Include``2(Milvasoft.Helpers.DataAccess.EfCore.IncludeLibrary.IIncludable{``0},System.Linq.Expressions.Expression{System.Func{``0,``1}})">
             <summary>
             Allows lazy loading.
             </summary>
@@ -3475,18 +3475,7 @@
             <param name="propertySelector"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.IncludeLibrary.IncludableExtensions.ThenInclude``3(Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable{``0,``2},System.Linq.Expressions.Expression{System.Func{``2,``1}})">
-            <summary>
-            Allows lazy loading.
-            </summary>
-            <typeparam name="TEntity"></typeparam>
-            <typeparam name="TOtherProperty"></typeparam>
-            <typeparam name="TProperty"></typeparam>
-            <param name="includes"></param>
-            <param name="propertySelector"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.IncludeLibrary.IncludableExtensions.ThenInclude``3(Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable{``0,System.Collections.Generic.IEnumerable{``2}},System.Linq.Expressions.Expression{System.Func{``2,``1}})">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.IncludeLibrary.IncludableExtensions.ThenInclude``3(Milvasoft.Helpers.DataAccess.EfCore.IncludeLibrary.IIncludable{``0,``2},System.Linq.Expressions.Expression{System.Func{``2,``1}})">
             <summary>
             Allows lazy loading.
             </summary>
@@ -3497,7 +3486,7 @@
             <param name="propertySelector"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.IncludeLibrary.IncludableExtensions.ThenInclude``3(Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable{``0,System.Collections.Generic.ICollection{``2}},System.Linq.Expressions.Expression{System.Func{``2,``1}})">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.IncludeLibrary.IncludableExtensions.ThenInclude``3(Milvasoft.Helpers.DataAccess.EfCore.IncludeLibrary.IIncludable{``0,System.Collections.Generic.IEnumerable{``2}},System.Linq.Expressions.Expression{System.Func{``2,``1}})">
             <summary>
             Allows lazy loading.
             </summary>
@@ -3508,34 +3497,28 @@
             <param name="propertySelector"></param>
             <returns></returns>
         </member>
-        <member name="T:Milvasoft.Helpers.DataAccess.IncludeLibrary.IncludeMultipleClass">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.IncludeLibrary.IncludableExtensions.ThenInclude``3(Milvasoft.Helpers.DataAccess.EfCore.IncludeLibrary.IIncludable{``0,System.Collections.Generic.ICollection{``2}},System.Linq.Expressions.Expression{System.Func{``2,``1}})">
             <summary>
-            Allows to include multiple class.
+            Allows lazy loading.
             </summary>
-        </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.IncludeLibrary.IncludeMultipleClass.IncludeMultiple``1(System.Linq.IQueryable{``0},System.Func{Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable{``0},Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable})">
-            <summary>
-            Supports queryable Include/ThenInclude chaining operators.
-            </summary>
-            <example>
-            var personnelTable = _personnelTableRepository.GetAllWithIncludes(i => i.Include(p=>p.personnel).Include(p=>p.tableSetting));
-            </example>
-            <typeparam name="T"></typeparam>
-            <param name="query"></param>
+            <typeparam name="TEntity"></typeparam>
+            <typeparam name="TOtherProperty"></typeparam>
+            <typeparam name="TProperty"></typeparam>
             <param name="includes"></param>
+            <param name="propertySelector"></param>
             <returns></returns>
         </member>
-        <member name="T:Milvasoft.Helpers.DataAccess.MilvaContext.AuditConfiguration">
+        <member name="T:Milvasoft.Helpers.DataAccess.EfCore.MilvaContext.AuditConfiguration">
             <summary>
             Entity auditing configuration. You can register this configuration in startup as singleton.
             </summary>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.MilvaContext.AuditConfiguration.#ctor(System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean)">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.MilvaContext.AuditConfiguration.#ctor(System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean)">
             <summary>
             Entity auditing configuration. You can register this configuration in startup as singleton.
             </summary>
         </member>
-        <member name="T:Milvasoft.Helpers.DataAccess.MilvaContext.MilvaDbContextBase`3">
+        <member name="T:Milvasoft.Helpers.DataAccess.EfCore.MilvaContext.MilvaDbContextBase`3">
             <summary>
             Handles all database operations. Inherits <see cref="T:Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityDbContext`3"/>
             </summary>
@@ -3550,123 +3533,123 @@
             <typeparam name="TRole"></typeparam>
             <typeparam name="TKey"></typeparam>
         </member>
-        <member name="F:Milvasoft.Helpers.DataAccess.MilvaContext.MilvaDbContextBase`3.CurrentUser">
+        <member name="F:Milvasoft.Helpers.DataAccess.EfCore.MilvaContext.MilvaDbContextBase`3.CurrentUser">
             <summary>
             Current user.
             </summary>
         </member>
-        <member name="F:Milvasoft.Helpers.DataAccess.MilvaContext.MilvaDbContextBase`3.AuditConfiguration">
+        <member name="F:Milvasoft.Helpers.DataAccess.EfCore.MilvaContext.MilvaDbContextBase`3.AuditConfiguration">
             <summary>
             Audit configuration.
             </summary>
         </member>
-        <member name="F:Milvasoft.Helpers.DataAccess.MilvaContext.MilvaDbContextBase`3.IgnoreSoftDelete">
+        <member name="F:Milvasoft.Helpers.DataAccess.EfCore.MilvaContext.MilvaDbContextBase`3.IgnoreSoftDelete">
             <summary>
             If its true ignores soft delete.
             </summary>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.MilvaContext.MilvaDbContextBase`3.#ctor(Microsoft.EntityFrameworkCore.DbContextOptions,Microsoft.AspNetCore.Http.IHttpContextAccessor,Milvasoft.Helpers.DependencyInjection.IAuditConfiguration)">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.MilvaContext.MilvaDbContextBase`3.#ctor(Microsoft.EntityFrameworkCore.DbContextOptions,Microsoft.AspNetCore.Http.IHttpContextAccessor,Milvasoft.Helpers.DependencyInjection.IAuditConfiguration)">
             <summary>
-            Initializes new instance of <see cref="T:Milvasoft.Helpers.DataAccess.MilvaContext.MilvaDbContext`3"/>.
+            Initializes new instance of <see cref="T:Milvasoft.Helpers.DataAccess.EfCore.MilvaContext.MilvaDbContext`3"/>.
             </summary>
             <param name="options"></param>
             <param name="httpContextAccessor"></param>
             <param name="auditConfiguration"></param>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.MilvaContext.MilvaDbContextBase`3.OnModelCreating(Microsoft.EntityFrameworkCore.ModelBuilder)">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.MilvaContext.MilvaDbContextBase`3.OnModelCreating(Microsoft.EntityFrameworkCore.ModelBuilder)">
             <summary>
             Overrided the OnModelCreating for custom configurations to database.
             </summary>
             <param name="modelBuilder"></param>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.MilvaContext.MilvaDbContextBase`3.IgnoreSoftDeleteForNextProcess">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.MilvaContext.MilvaDbContextBase`3.IgnoreSoftDeleteForNextProcess">
             <summary>
             Ignores soft delete for next process.
             </summary>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.MilvaContext.MilvaDbContextBase`3.ActivateSoftDelete">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.MilvaContext.MilvaDbContextBase`3.ActivateSoftDelete">
             <summary>
             Activate soft delete.
             </summary>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.MilvaContext.MilvaDbContextBase`3.SaveChanges">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.MilvaContext.MilvaDbContextBase`3.SaveChanges">
             <summary>
             Overrided the SaveChanges method for soft deleting.
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.MilvaContext.MilvaDbContextBase`3.SaveChangesAsync(System.Threading.CancellationToken)">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.MilvaContext.MilvaDbContextBase`3.SaveChangesAsync(System.Threading.CancellationToken)">
             <summary>
             Overrided the SaveChangesAsync method for soft deleting.
             </summary>
             <param name="cancellationToken"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.MilvaContext.MilvaDbContextBase`3.GetRequiredContents(System.Type)">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.MilvaContext.MilvaDbContextBase`3.GetRequiredContents(System.Type)">
             <summary>
             Gets requested contents by <paramref name="type"/> DbSet.
-            If this method gets soft deleted entities please override <see cref="M:Milvasoft.Helpers.DataAccess.MilvaContext.MilvaDbContextBase`3.CreateIsDeletedFalseExpression``1"/> method your own condition.
+            If this method gets soft deleted entities please override <see cref="M:Milvasoft.Helpers.DataAccess.EfCore.MilvaContext.MilvaDbContextBase`3.CreateIsDeletedFalseExpression``1"/> method your own condition.
             </summary>
             <param name="type"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.MilvaContext.MilvaDbContextBase`3.GetRequiredContentsAsync``1">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.MilvaContext.MilvaDbContextBase`3.GetRequiredContentsAsync``1">
             <summary>
             Gets requested contents by <typeparamref name="TEntity"/> DbSet.
-            If this method gets soft deleted entities please override <see cref="M:Milvasoft.Helpers.DataAccess.MilvaContext.MilvaDbContextBase`3.CreateIsDeletedFalseExpression``1"/> method your own condition.
+            If this method gets soft deleted entities please override <see cref="M:Milvasoft.Helpers.DataAccess.EfCore.MilvaContext.MilvaDbContextBase`3.CreateIsDeletedFalseExpression``1"/> method your own condition.
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.MilvaContext.MilvaDbContextBase`3.GetMaxValueAsync``1(System.String)">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.MilvaContext.MilvaDbContextBase`3.GetMaxValueAsync``1(System.String)">
             <summary>
             Gets the requested <typeparamref name="TEntity"/>'s property's(<paramref name="propName"/>) max value.
-            If this method gets soft deleted entities please override <see cref="M:Milvasoft.Helpers.DataAccess.MilvaContext.MilvaDbContextBase`3.CreateIsDeletedFalseExpression``1"/> method your own condition.
+            If this method gets soft deleted entities please override <see cref="M:Milvasoft.Helpers.DataAccess.EfCore.MilvaContext.MilvaDbContextBase`3.CreateIsDeletedFalseExpression``1"/> method your own condition.
             </summary>
             <typeparam name="TEntity"></typeparam>
             <param name="propName"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.MilvaContext.MilvaDbContextBase`3.CreateIsDeletedFalseExpression``1">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.MilvaContext.MilvaDbContextBase`3.CreateIsDeletedFalseExpression``1">
             <summary>
-            Gets <b>entity => entity.IsDeleted == false</b> expression, if <typeparamref name="TEntity"/> is assignable from <see cref="T:Milvasoft.Helpers.DataAccess.Abstract.Entity.IFullAuditable`1"/>.
+            Gets <b>entity => entity.IsDeleted == false</b> expression, if <typeparamref name="TEntity"/> is assignable from <see cref="T:Milvasoft.Helpers.DataAccess.EfCore.Abstract.Entity.IFullAuditable`1"/>.
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.MilvaContext.MilvaDbContextBase`3.SoftDelete(Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry)">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.MilvaContext.MilvaDbContextBase`3.SoftDelete(Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry)">
             <summary>
             Soft delete operation.
             </summary>
             <param name="entry"></param>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.MilvaContext.MilvaDbContextBase`3.AuditDeletion(Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry)">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.MilvaContext.MilvaDbContextBase`3.AuditDeletion(Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry)">
             <summary>
             Entity auditing for delete. 
             </summary>
             <param name="entry"></param>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.MilvaContext.MilvaDbContextBase`3.AuditDate(Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry,System.String)">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.MilvaContext.MilvaDbContextBase`3.AuditDate(Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry,System.String)">
             <summary>
             Entity auditing by date. 
             </summary>
             <param name="entry"></param>
             <param name="propertyName"></param>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.MilvaContext.MilvaDbContextBase`3.AuditPerformerUser(Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry,System.String)">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.MilvaContext.MilvaDbContextBase`3.AuditPerformerUser(Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry,System.String)">
             <summary>
             Entity auditing by performer user.
             </summary>
             <param name="entry"></param>
             <param name="propertyName"></param>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.MilvaContext.MilvaDbContextBase`3.AuditEntites">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.MilvaContext.MilvaDbContextBase`3.AuditEntites">
             <summary>
-            Provides auditing entities by <see cref="F:Milvasoft.Helpers.DataAccess.MilvaContext.MilvaDbContextBase`3.AuditConfiguration"/>.
-            If deletion process happens then sets the <see cref="F:Milvasoft.Helpers.DataAccess.MilvaContext.MilvaDbContextBase`3.IgnoreSoftDelete"/> variable to true at the end of process.
+            Provides auditing entities by <see cref="F:Milvasoft.Helpers.DataAccess.EfCore.MilvaContext.MilvaDbContextBase`3.AuditConfiguration"/>.
+            If deletion process happens then sets the <see cref="F:Milvasoft.Helpers.DataAccess.EfCore.MilvaContext.MilvaDbContextBase`3.IgnoreSoftDelete"/> variable to true at the end of process.
             </summary>
         </member>
-        <member name="T:Milvasoft.Helpers.DataAccess.MilvaContext.MilvaDbContext`3">
+        <member name="T:Milvasoft.Helpers.DataAccess.EfCore.MilvaContext.MilvaDbContext`3">
             <summary>
-            Handles all database operations. Inherits <see cref="T:Milvasoft.Helpers.DataAccess.MilvaContext.MilvaDbContextBase`3"/>
+            Handles all database operations. Inherits <see cref="T:Milvasoft.Helpers.DataAccess.EfCore.MilvaContext.MilvaDbContextBase`3"/>
             </summary>
             
             <remarks>
@@ -3679,88 +3662,88 @@
             <typeparam name="TRole"></typeparam>
             <typeparam name="TKey"></typeparam>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.MilvaContext.MilvaDbContext`3.#ctor(Microsoft.EntityFrameworkCore.DbContextOptions,Microsoft.AspNetCore.Http.IHttpContextAccessor,Milvasoft.Helpers.DependencyInjection.IAuditConfiguration)">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.MilvaContext.MilvaDbContext`3.#ctor(Microsoft.EntityFrameworkCore.DbContextOptions,Microsoft.AspNetCore.Http.IHttpContextAccessor,Milvasoft.Helpers.DependencyInjection.IAuditConfiguration)">
             <summary>
-            Cunstructor of <see cref="T:Milvasoft.Helpers.DataAccess.MilvaContext.MilvaDbContext`3"></see>.
+            Cunstructor of <see cref="T:Milvasoft.Helpers.DataAccess.EfCore.MilvaContext.MilvaDbContext`3"></see>.
             </summary>
             <param name="options"></param>
             <param name="httpContextAccessor"></param>
             <param name="auditConfiguration"></param>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.MilvaContext.MilvaDbContext`3.OnModelCreating(Microsoft.EntityFrameworkCore.ModelBuilder)">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.MilvaContext.MilvaDbContext`3.OnModelCreating(Microsoft.EntityFrameworkCore.ModelBuilder)">
             <summary>
             Overrided the OnModelCreating for custom configurations to database.
             </summary>
             <param name="modelBuilder"></param>
         </member>
-        <member name="T:Milvasoft.Helpers.DataAccess.MilvaContext.MilvaModelBuilderExtensions">
+        <member name="T:Milvasoft.Helpers.DataAccess.EfCore.MilvaContext.MilvaModelBuilderExtensions">
             <summary>
-            Extension methods for <c cref="T:Milvasoft.Helpers.DataAccess.MilvaContext.MilvaDbContext`3"></c>.
+            Extension methods for <c cref="T:Milvasoft.Helpers.DataAccess.EfCore.MilvaContext.MilvaDbContext`3"></c>.
             </summary>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.MilvaContext.MilvaModelBuilderExtensions.UseTenantId(Microsoft.EntityFrameworkCore.ModelBuilder)">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.MilvaContext.MilvaModelBuilderExtensions.UseTenantId(Microsoft.EntityFrameworkCore.ModelBuilder)">
             <summary>
             Adds <see cref="T:Milvasoft.Helpers.MultiTenancy.EntityBase.TenantId"/> converters to <see cref="T:Milvasoft.Helpers.MultiTenancy.EntityBase.TenantId"/> typed properties.
             </summary>
             <param name="modelBuilder"></param>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.MilvaContext.MilvaModelBuilderExtensions.UseObjectId(Microsoft.EntityFrameworkCore.ModelBuilder)">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.MilvaContext.MilvaModelBuilderExtensions.UseObjectId(Microsoft.EntityFrameworkCore.ModelBuilder)">
             <summary>
             Adds <see cref="T:MongoDB.Bson.ObjectId"/> converters to <see cref="T:MongoDB.Bson.ObjectId"/> typed properties.
             </summary>
             <param name="modelBuilder"></param>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.MilvaContext.MilvaModelBuilderExtensions.UseAnnotationEncryption(Microsoft.EntityFrameworkCore.ModelBuilder,Milvasoft.Helpers.Encryption.Abstract.IMilvaEncryptionProvider)">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.MilvaContext.MilvaModelBuilderExtensions.UseAnnotationEncryption(Microsoft.EntityFrameworkCore.ModelBuilder,Milvasoft.Helpers.Encryption.Abstract.IMilvaEncryptionProvider)">
             <summary>
-            Adds value converter(<see cref="T:Milvasoft.Helpers.Encryption.Concrete.MilvaEncryptionConverter"/>) to string properties which marked with <see cref="T:Milvasoft.Helpers.DataAccess.Attributes.MilvaEncryptedAttribute"/>.
+            Adds value converter(<see cref="T:Milvasoft.Helpers.Encryption.Concrete.MilvaEncryptionConverter"/>) to string properties which marked with <see cref="T:Milvasoft.Helpers.DataAccess.EfCore.Attributes.MilvaEncryptedAttribute"/>.
             </summary>
             <param name="modelBuilder"></param>
             <param name="encryptionProvider"></param>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.MilvaContext.MilvaModelBuilderExtensions.UseEncryption(Microsoft.EntityFrameworkCore.ModelBuilder,Milvasoft.Helpers.Encryption.Abstract.IMilvaEncryptionProvider)">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.MilvaContext.MilvaModelBuilderExtensions.UseEncryption(Microsoft.EntityFrameworkCore.ModelBuilder,Milvasoft.Helpers.Encryption.Abstract.IMilvaEncryptionProvider)">
             <summary>
             Adds value converter(<see cref="T:Milvasoft.Helpers.Encryption.Concrete.MilvaEncryptionConverter"/>) to all strings properties.
             </summary>
             <param name="modelBuilder"></param>
             <param name="encryptionProvider"></param>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.MilvaContext.MilvaModelBuilderExtensions.ConfigureStringProperties(Microsoft.EntityFrameworkCore.ModelBuilder)">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.MilvaContext.MilvaModelBuilderExtensions.ConfigureStringProperties(Microsoft.EntityFrameworkCore.ModelBuilder)">
             <summary>
             For PostgreSql, makes string properties for Turkish character compatible.
             </summary>
             <param name="modelBuilder"></param>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.MilvaContext.MilvaModelBuilderExtensions.AddIndexToIndelibleEntities(Microsoft.EntityFrameworkCore.ModelBuilder)">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.MilvaContext.MilvaModelBuilderExtensions.AddIndexToIndelibleEntities(Microsoft.EntityFrameworkCore.ModelBuilder)">
             <summary>
             Adds an index for each indelible entity for IsDeleted property.
             </summary>
             <param name="modelBuilder"></param>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.MilvaContext.MilvaModelBuilderExtensions.ConfigureDefaultValue(Microsoft.EntityFrameworkCore.ModelBuilder)">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.MilvaContext.MilvaModelBuilderExtensions.ConfigureDefaultValue(Microsoft.EntityFrameworkCore.ModelBuilder)">
             <summary>
             Configures default value for update database.
             </summary>
             <param name="modelBuilder"></param>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.MilvaContext.MilvaModelBuilderExtensions.FilterDeletedEntities(Microsoft.EntityFrameworkCore.ModelBuilder)">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.MilvaContext.MilvaModelBuilderExtensions.FilterDeletedEntities(Microsoft.EntityFrameworkCore.ModelBuilder)">
             <summary>
             Enable the query filter for indelible entities.
             </summary>
             <param name="modelBuilder"></param>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.MilvaContext.MilvaModelBuilderExtensions.IgnoreDefaultIntRecords(Microsoft.EntityFrameworkCore.ModelBuilder)">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.MilvaContext.MilvaModelBuilderExtensions.IgnoreDefaultIntRecords(Microsoft.EntityFrameworkCore.ModelBuilder)">
             <summary>
             Enable the query filter for indelible entities with integer key.
             </summary>
             <param name="modelBuilder"></param>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.MilvaContext.MilvaModelBuilderExtensions.IgnoreDefaultSByteRecords(Microsoft.EntityFrameworkCore.ModelBuilder)">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.MilvaContext.MilvaModelBuilderExtensions.IgnoreDefaultSByteRecords(Microsoft.EntityFrameworkCore.ModelBuilder)">
             <summary>
             Enable the query filter for indelible entities with small byte keys.
             </summary>
             <param name="modelBuilder"></param>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.MilvaContext.MilvaModelBuilderExtensions.ConfigureDecimalProperties(Microsoft.EntityFrameworkCore.ModelBuilder,System.Int32,System.Int32)">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.MilvaContext.MilvaModelBuilderExtensions.ConfigureDecimalProperties(Microsoft.EntityFrameworkCore.ModelBuilder,System.Int32,System.Int32)">
             <summary>
             Configures the decimal property of entities with decimal properties in decimal (18,2) format.
             </summary>
@@ -3768,14 +3751,14 @@
             <param name="beforeSeperatorCount"></param>
             <param name="afterSeperatorCount"></param>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.MilvaContext.MilvaModelBuilderExtensions.IncludeAll``1(System.Linq.IQueryable{``0},Microsoft.EntityFrameworkCore.DbContext)">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.MilvaContext.MilvaModelBuilderExtensions.IncludeAll``1(System.Linq.IQueryable{``0},Microsoft.EntityFrameworkCore.DbContext)">
             <summary>
             Allows to all entities associated with deletions to be Included to the entity(s) to be included in the process.
             </summary>
             <param name="source"></param>
             <param name="context"></param>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.MilvaContext.MilvaModelBuilderExtensions.IncludeLang``1(System.Linq.IQueryable{``0},Microsoft.EntityFrameworkCore.DbContext)">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.MilvaContext.MilvaModelBuilderExtensions.IncludeLang``1(System.Linq.IQueryable{``0},Microsoft.EntityFrameworkCore.DbContext)">
             <summary>
             Allows to all entities associated with deletions to be Included to the entity(s) to be included in the process.
             Entities must be contains "Langs" navigation property for include process. (e.g. ProductLangs)
@@ -3783,16 +3766,33 @@
             <param name="source"></param>
             <param name="context"></param>
         </member>
-        <member name="T:Milvasoft.Helpers.DataAccess.MilvaContext.MilvaObjectIdStringConverter">
+        <member name="T:Milvasoft.Helpers.DataAccess.EfCore.MilvaContext.MilvaObjectIdStringConverter">
             <summary>
             Converts <see cref="T:MongoDB.Bson.ObjectId"/> to <see cref="T:System.String"/> or <see cref="T:System.String"/> to <see cref="T:MongoDB.Bson.ObjectId"/>.
             </summary>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.MilvaContext.MilvaObjectIdStringConverter.#ctor(Microsoft.EntityFrameworkCore.Storage.ValueConversion.ConverterMappingHints)">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.MilvaContext.MilvaObjectIdStringConverter.#ctor(Microsoft.EntityFrameworkCore.Storage.ValueConversion.ConverterMappingHints)">
             <summary>
-            Creates a new <see cref="T:Milvasoft.Helpers.DataAccess.MilvaContext.MilvaObjectIdStringConverter"/> instance.
+            Creates a new <see cref="T:Milvasoft.Helpers.DataAccess.EfCore.MilvaContext.MilvaObjectIdStringConverter"/> instance.
             </summary>
             <param name="mappingHints">Entity Framework mapping hints</param>
+        </member>
+        <member name="T:Milvasoft.Helpers.DataAccess.IncludeLibrary.IncludeMultipleClass">
+            <summary>
+            Allows to include multiple class.
+            </summary>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.IncludeLibrary.IncludeMultipleClass.IncludeMultiple``1(System.Linq.IQueryable{``0},System.Func{Milvasoft.Helpers.DataAccess.EfCore.IncludeLibrary.IIncludable{``0},Milvasoft.Helpers.DataAccess.EfCore.IncludeLibrary.IIncludable})">
+            <summary>
+            Supports queryable Include/ThenInclude chaining operators.
+            </summary>
+            <example>
+            var personnelTable = _personnelTableRepository.GetAllWithIncludes(i => i.Include(p=>p.personnel).Include(p=>p.tableSetting));
+            </example>
+            <typeparam name="T"></typeparam>
+            <param name="query"></param>
+            <param name="includes"></param>
+            <returns></returns>
         </member>
         <member name="T:Milvasoft.Helpers.DataAccess.MongoDB.Abstract.IBaseRepository`1">
             <summary>
@@ -9035,7 +9035,7 @@
             The name of token.
             </summary>
         </member>
-        <member name="M:Milvasoft.Helpers.Identity.Concrete.IdentityOperations`7.#ctor(`0,Microsoft.AspNetCore.Identity.SignInManager{`3},Milvasoft.Helpers.Identity.Abstract.ITokenManagement,Milvasoft.Helpers.DataAccess.Abstract.IContextRepository{`1},`2,Microsoft.AspNetCore.Http.IHttpContextAccessor,System.Boolean)">
+        <member name="M:Milvasoft.Helpers.Identity.Concrete.IdentityOperations`7.#ctor(`0,Microsoft.AspNetCore.Identity.SignInManager{`3},Milvasoft.Helpers.Identity.Abstract.ITokenManagement,Milvasoft.Helpers.DataAccess.EfCore.Abstract.IContextRepository{`1},`2,Microsoft.AspNetCore.Http.IHttpContextAccessor,System.Boolean)">
             <summary>
             Performs constructor injection for repository interfaces used in this service.
             </summary>

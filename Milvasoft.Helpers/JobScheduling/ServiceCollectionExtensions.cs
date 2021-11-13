@@ -2,37 +2,36 @@
 using Milvasoft.Helpers.Exceptions;
 using System;
 
-namespace Milvasoft.Helpers.JobScheduling
+namespace Milvasoft.Helpers.JobScheduling;
+
+/// <summary>
+/// Provides scheduled job operations.
+/// </summary>
+public static class ServiceCollectionExtensions
 {
     /// <summary>
-    /// Provides scheduled job operations.
+    /// Adds scheduled cron job to application.
     /// </summary>
-    public static class ServiceCollectionExtensions
+    /// <typeparam name="TJob"></typeparam>
+    /// <param name="services"></param>
+    /// <param name="options"></param>
+    /// <returns></returns>
+    public static IServiceCollection AddMilvaCronJob<TJob>(this IServiceCollection services, Action<IScheduleConfig<TJob>> options) where TJob : MilvaCronJobService
     {
-        /// <summary>
-        /// Adds scheduled cron job to application.
-        /// </summary>
-        /// <typeparam name="TJob"></typeparam>
-        /// <param name="services"></param>
-        /// <param name="options"></param>
-        /// <returns></returns>
-        public static IServiceCollection AddMilvaCronJob<TJob>(this IServiceCollection services, Action<IScheduleConfig<TJob>> options) where TJob : MilvaCronJobService
-        {
-            if (options == null)
-                throw new MilvaDeveloperException("Please provide Schedule Configurations.");
+        if (options == null)
+            throw new MilvaDeveloperException("Please provide Schedule Configurations.");
 
-            var config = new ScheduleConfig<TJob>();
+        var config = new ScheduleConfig<TJob>();
 
-            options.Invoke(config);
+        options.Invoke(config);
 
-            if (string.IsNullOrWhiteSpace(config.CronExpression))
-                throw new MilvaDeveloperException("Empty Cron Expression is not allowed.");
+        if (string.IsNullOrWhiteSpace(config.CronExpression))
+            throw new MilvaDeveloperException("Empty Cron Expression is not allowed.");
 
-            services.AddSingleton<IScheduleConfig<TJob>>(config);
+        services.AddSingleton<IScheduleConfig<TJob>>(config);
 
-            services.AddHostedService<TJob>();
+        services.AddHostedService<TJob>();
 
-            return services;
-        }
+        return services;
     }
 }

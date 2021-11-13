@@ -1,4 +1,4 @@
-﻿using Milvasoft.Helpers.DataAccess.Concrete.Entity;
+﻿using Milvasoft.Helpers.DataAccess.EfCore.Concrete.Entity;
 using Milvasoft.SampleAPI.Entity;
 using Milvasoft.SampleAPI.Utils.Attributes.ValidationAttributes;
 using System;

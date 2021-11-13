@@ -14,7 +14,7 @@
 		<PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.5" />
 		<PackageReference Include="Microsoft.Extensions.Localization.Abstractions" Version="6.0.0" />
 		<PackageReference Include="MongoDB.Driver" Version="2.13.2" />
-		<PackageReference Include="StackExchange.Redis" Version="2.2.79" />
+		<PackageReference Include="StackExchange.Redis" Version="2.2.88" />
 		<PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.14.1" />
 
 		<PackageReference Include="Microsoft.AspNetCore.TestHost" Version="6.0.0" />

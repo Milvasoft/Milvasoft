@@ -1,10 +1,10 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Milvasoft.Helpers.DataAccess.Abstract;
-using Milvasoft.Helpers.DataAccess.Abstract.Entity;
-using Milvasoft.Helpers.DataAccess.Concrete.Entity;
-using Milvasoft.Helpers.DataAccess.IncludeLibrary;
+using Milvasoft.Helpers.DataAccess.EfCore.Abstract;
+using Milvasoft.Helpers.DataAccess.EfCore.Abstract.Entity;
+using Milvasoft.Helpers.DataAccess.EfCore.Concrete.Entity;
+using Milvasoft.Helpers.DataAccess.EfCore.IncludeLibrary;
 using Milvasoft.Helpers.Exceptions;
 using Milvasoft.Helpers.Extensions;
 using Milvasoft.Helpers.FileOperations.Concrete;

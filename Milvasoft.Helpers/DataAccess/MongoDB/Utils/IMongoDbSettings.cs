@@ -1,18 +1,17 @@
-﻿namespace Milvasoft.Helpers.DataAccess.MongoDB.Utils
+﻿namespace Milvasoft.Helpers.DataAccess.MongoDB.Utils;
+
+/// <summary>
+/// Interface of mongo connection settings.
+/// </summary>
+public interface IMongoDbSettings
 {
     /// <summary>
-    /// Interface of mongo connection settings.
+    /// Database name of to be connected database.
     /// </summary>
-    public interface IMongoDbSettings
-    {
-        /// <summary>
-        /// Database name of to be connected database.
-        /// </summary>
-        string DatabaseName { get; set; }
+    string DatabaseName { get; set; }
 
-        /// <summary>
-        /// Connection string of to be connected database.
-        /// </summary>
-        string ConnectionString { get; set; }
-    }
+    /// <summary>
+    /// Connection string of to be connected database.
+    /// </summary>
+    string ConnectionString { get; set; }
 }

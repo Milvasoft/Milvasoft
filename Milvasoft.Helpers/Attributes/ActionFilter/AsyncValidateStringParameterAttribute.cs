@@ -11,120 +11,119 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Milvasoft.Helpers.Attributes.ActionFilter
+namespace Milvasoft.Helpers.Attributes.ActionFilter;
+
+/// <summary>
+/// Throws <see cref="MilvaUserFriendlyException"/> if string parameter is not valid. Specifies that the class or method that this attribute is applied to requires the specified prevent string injection attacks and min/max length checks.
+/// </summary>
+[AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
+public class AsyncValidateStringParameterAttribute : Attribute, IAsyncActionFilter
 {
+    #region Properties
+
     /// <summary>
-    /// Throws <see cref="MilvaUserFriendlyException"/> if string parameter is not valid. Specifies that the class or method that this attribute is applied to requires the specified prevent string injection attacks and min/max length checks.
+    /// Gets or sets the error message spesific content
     /// </summary>
-    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
-    public class AsyncValidateStringParameterAttribute : Attribute, IAsyncActionFilter
+    public string MemberNameLocalizerKey { get; set; }
+
+    /// <summary>
+    /// Gets the maximum acceptable length of the string
+    /// </summary>
+    public int MaximumLength { get; private set; }
+
+    /// <summary>
+    /// Gets or sets the minimum acceptable length of the string
+    /// </summary>
+    public int MinimumLength { get; private set; } = 0;
+
+    /// <summary>
+    /// Dummy class type for resource location.
+    /// </summary>
+    public Type ResourceType { get; set; }
+
+    /// <summary>
+    /// If injection attack exist. Validation method will be send mail. 
+    /// If has value mail will be send.
+    /// </summary>
+    public string MailContent { get; set; }
+
+    #endregion
+
+    /// <summary>
+    /// Constructor that accepts the maximum length of the string.
+    /// </summary>
+    /// <param name="minimumLength">The minimum length, inclusive.  It may not be negative.</param>
+    /// <param name="maximumLength">The maximum length, inclusive.  It may not be negative.</param>
+    public AsyncValidateStringParameterAttribute(int minimumLength, int maximumLength)
     {
-        #region Properties
+        MaximumLength = maximumLength;
+        MinimumLength = minimumLength;
+    }
 
-        /// <summary>
-        /// Gets or sets the error message spesific content
-        /// </summary>
-        public string MemberNameLocalizerKey { get; set; }
+    /// <summary>
+    /// Performs when action executing.
+    /// </summary>
+    /// <param name="context"></param>
+    /// <param name="next"></param>
+    public virtual async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
+    {
+        IStringLocalizer sharedLocalizer = null;
 
-        /// <summary>
-        /// Gets the maximum acceptable length of the string
-        /// </summary>
-        public int MaximumLength { get; private set; }
+        if (ResourceType != null)
+            sharedLocalizer = context.HttpContext.RequestServices.GetLocalizerInstance(ResourceType);
 
-        /// <summary>
-        /// Gets or sets the minimum acceptable length of the string
-        /// </summary>
-        public int MinimumLength { get; private set; } = 0;
+        CommonHelper.EnsureLegalLengths(MaximumLength, MinimumLength, sharedLocalizer);
 
-        /// <summary>
-        /// Dummy class type for resource location.
-        /// </summary>
-        public Type ResourceType { get; set; }
-
-        /// <summary>
-        /// If injection attack exist. Validation method will be send mail. 
-        /// If has value mail will be send.
-        /// </summary>
-        public string MailContent { get; set; }
-
-        #endregion
-
-        /// <summary>
-        /// Constructor that accepts the maximum length of the string.
-        /// </summary>
-        /// <param name="minimumLength">The minimum length, inclusive.  It may not be negative.</param>
-        /// <param name="maximumLength">The maximum length, inclusive.  It may not be negative.</param>
-        public AsyncValidateStringParameterAttribute(int minimumLength, int maximumLength)
+        if (context.ActionArguments.Count != 0)
         {
-            MaximumLength = maximumLength;
-            MinimumLength = minimumLength;
-        }
-
-        /// <summary>
-        /// Performs when action executing.
-        /// </summary>
-        /// <param name="context"></param>
-        /// <param name="next"></param>
-        public virtual async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
-        {
-            IStringLocalizer sharedLocalizer = null;
-
-            if (ResourceType != null)
-                sharedLocalizer = context.HttpContext.RequestServices.GetLocalizerInstance(ResourceType);
-
-            CommonHelper.EnsureLegalLengths(MaximumLength, MinimumLength, sharedLocalizer);
-
-            if (context.ActionArguments.Count != 0)
+            foreach (var actionArgument in context.ActionArguments)
             {
-                foreach (var actionArgument in context.ActionArguments)
+                if (actionArgument.Value is string)
                 {
-                    if (actionArgument.Value is string)
+                    var stringValue = actionArgument.Value.ToString();
+                    var localizedPropName = MemberNameLocalizerKey ?? actionArgument.Key;
+
+                    // Automatically pass if value is null. RequiredAttribute should be used to assert a value is not null.
+                    // We expect a cast exception if a non-string was passed in.
+                    int length = actionArgument.Value == null ? 0 : stringValue.Length;
+                    var lengthResult = actionArgument.Value == null || (length >= this.MinimumLength && length <= this.MaximumLength);
+
+                    if (!lengthResult)
                     {
-                        var stringValue = actionArgument.Value.ToString();
-                        var localizedPropName = MemberNameLocalizerKey ?? actionArgument.Key;
+                        throw new MilvaUserFriendlyException(sharedLocalizer != null
+                                                                    ? sharedLocalizer[LocalizerKeys.PreventStringInjectionLengthResultNotTrue, localizedPropName, MinimumLength, MaximumLength]
+                                                                    : $"{localizedPropName} must have a character length in the range {MinimumLength} to {MaximumLength}.");
+                    }
+                    if (!string.IsNullOrWhiteSpace(stringValue))
+                    {
+                        var blackList = context.HttpContext.RequestServices.GetService<List<InvalidString>>();
 
-                        // Automatically pass if value is null. RequiredAttribute should be used to assert a value is not null.
-                        // We expect a cast exception if a non-string was passed in.
-                        int length = actionArgument.Value == null ? 0 : stringValue.Length;
-                        var lengthResult = actionArgument.Value == null || (length >= this.MinimumLength && length <= this.MaximumLength);
+                        if (!blackList.IsNullOrEmpty())
+                            foreach (var invalidString in blackList)
+                                foreach (var invalidStringValue in invalidString.Values)
+                                    if (stringValue.Contains(invalidStringValue))
+                                    {
+                                        var milvasoftLogger = context.HttpContext.RequestServices.GetService<IMilvaLogger>();
 
-                        if (!lengthResult)
-                        {
-                            throw new MilvaUserFriendlyException(sharedLocalizer != null
-                                                                        ? sharedLocalizer[LocalizerKeys.PreventStringInjectionLengthResultNotTrue, localizedPropName, MinimumLength, MaximumLength]
-                                                                        : $"{localizedPropName} must have a character length in the range {MinimumLength} to {MaximumLength}.");
-                        }
-                        if (!string.IsNullOrWhiteSpace(stringValue))
-                        {
-                            var blackList = context.HttpContext.RequestServices.GetService<List<InvalidString>>();
+                                        if (!string.IsNullOrWhiteSpace(MailContent) && milvasoftLogger != null)
+                                            milvasoftLogger.LogFatal(MailContent, MailSubject.Hack);
 
-                            if (!blackList.IsNullOrEmpty())
-                                foreach (var invalidString in blackList)
-                                    foreach (var invalidStringValue in invalidString.Values)
-                                        if (stringValue.Contains(invalidStringValue))
-                                        {
-                                            var milvasoftLogger = context.HttpContext.RequestServices.GetService<IMilvaLogger>();
-
-                                            if (!string.IsNullOrWhiteSpace(MailContent) && milvasoftLogger != null)
-                                                milvasoftLogger.LogFatal(MailContent, MailSubject.Hack);
-
-                                            throw new MilvaUserFriendlyException(sharedLocalizer != null
-                                                                                        ? sharedLocalizer[LocalizerKeys.PreventStringInjectionContainsForbiddenWordError, localizedPropName]
-                                                                                        : $"{localizedPropName} contains invalid words.");
-                                        }
-                        }
-                        if (MinimumLength > 0 && (stringValue?.Length ?? 0) < MinimumLength)
-                        {
-                            throw new MilvaUserFriendlyException(sharedLocalizer != null
-                                                                        ? sharedLocalizer[LocalizerKeys.PreventStringInjectionBellowMin, localizedPropName, MinimumLength]
-                                                                        : $"{localizedPropName} is below the minimum character limit. Please enter at least {MinimumLength} characters.");
-                        }
+                                        throw new MilvaUserFriendlyException(sharedLocalizer != null
+                                                                                    ? sharedLocalizer[LocalizerKeys.PreventStringInjectionContainsForbiddenWordError, localizedPropName]
+                                                                                    : $"{localizedPropName} contains invalid words.");
+                                    }
+                    }
+                    if (MinimumLength > 0 && (stringValue?.Length ?? 0) < MinimumLength)
+                    {
+                        throw new MilvaUserFriendlyException(sharedLocalizer != null
+                                                                    ? sharedLocalizer[LocalizerKeys.PreventStringInjectionBellowMin, localizedPropName, MinimumLength]
+                                                                    : $"{localizedPropName} is below the minimum character limit. Please enter at least {MinimumLength} characters.");
                     }
                 }
             }
-
-            await next();
         }
 
+        await next();
     }
+
 }

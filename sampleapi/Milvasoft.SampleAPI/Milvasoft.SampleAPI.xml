@@ -3775,7 +3775,7 @@
             The name of token.
             </summary>
         </member>
-        <member name="M:Milvasoft.SampleAPI.Services.Concrete.AccountService.#ctor(Microsoft.AspNetCore.Identity.UserManager{Milvasoft.SampleAPI.Entity.AppUser},Microsoft.AspNetCore.Identity.SignInManager{Milvasoft.SampleAPI.Entity.AppUser},Milvasoft.Helpers.Identity.Abstract.ITokenManagement,System.Net.Http.HttpClient,Milvasoft.Helpers.DataAccess.Abstract.IContextRepository{Milvasoft.SampleAPI.Data.EducationAppDbContext},Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository{Milvasoft.SampleAPI.Entity.AppUser,System.Guid,Milvasoft.SampleAPI.Data.EducationAppDbContext},Microsoft.AspNetCore.Http.IHttpContextAccessor,Milvasoft.Helpers.Mail.IMilvaMailSender,Microsoft.Extensions.Localization.IStringLocalizer{Milvasoft.SampleAPI.Localization.SharedResource},Milvasoft.Helpers.DependencyInjection.IMilvaLogger,Milvasoft.Helpers.Caching.IRedisCacheService)">
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.AccountService.#ctor(Microsoft.AspNetCore.Identity.UserManager{Milvasoft.SampleAPI.Entity.AppUser},Microsoft.AspNetCore.Identity.SignInManager{Milvasoft.SampleAPI.Entity.AppUser},Milvasoft.Helpers.Identity.Abstract.ITokenManagement,System.Net.Http.HttpClient,Milvasoft.Helpers.DataAccess.EfCore.Abstract.IContextRepository{Milvasoft.SampleAPI.Data.EducationAppDbContext},Milvasoft.Helpers.DataAccess.EfCore.Abstract.IBaseRepository{Milvasoft.SampleAPI.Entity.AppUser,System.Guid,Milvasoft.SampleAPI.Data.EducationAppDbContext},Microsoft.AspNetCore.Http.IHttpContextAccessor,Milvasoft.Helpers.Mail.IMilvaMailSender,Microsoft.Extensions.Localization.IStringLocalizer{Milvasoft.SampleAPI.Localization.SharedResource},Milvasoft.Helpers.DependencyInjection.IMilvaLogger,Milvasoft.Helpers.Caching.IRedisCacheService)">
             <summary>
             Performs constructor injection for repository interfaces used in this service.
             </summary>
@@ -3971,7 +3971,7 @@
             Announcement service.
             </summary>
         </member>
-        <member name="M:Milvasoft.SampleAPI.Services.Concrete.AnnouncementService.#ctor(Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository{Milvasoft.SampleAPI.Entity.Announcement,System.Guid,Milvasoft.SampleAPI.Data.EducationAppDbContext})">
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.AnnouncementService.#ctor(Milvasoft.Helpers.DataAccess.EfCore.Abstract.IBaseRepository{Milvasoft.SampleAPI.Entity.Announcement,System.Guid,Milvasoft.SampleAPI.Data.EducationAppDbContext})">
             <summary>
             Performs constructor injection for repository interfaces used in this service.
             </summary>
@@ -4045,7 +4045,7 @@
             Assignment service.
             </summary>
         </member>
-        <member name="M:Milvasoft.SampleAPI.Services.Concrete.AssignmentService.#ctor(Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository{Milvasoft.SampleAPI.Entity.Assignment,System.Guid,Milvasoft.SampleAPI.Data.EducationAppDbContext},Microsoft.AspNetCore.Http.IHttpContextAccessor,Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository{Milvasoft.SampleAPI.Entity.StudentAssigment,System.Guid,Milvasoft.SampleAPI.Data.EducationAppDbContext},Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository{Milvasoft.SampleAPI.Entity.Student,System.Guid,Milvasoft.SampleAPI.Data.EducationAppDbContext},Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository{Milvasoft.SampleAPI.Entity.Mentor,System.Guid,Milvasoft.SampleAPI.Data.EducationAppDbContext},Milvasoft.Helpers.Mail.IMilvaMailSender)">
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.AssignmentService.#ctor(Milvasoft.Helpers.DataAccess.EfCore.Abstract.IBaseRepository{Milvasoft.SampleAPI.Entity.Assignment,System.Guid,Milvasoft.SampleAPI.Data.EducationAppDbContext},Microsoft.AspNetCore.Http.IHttpContextAccessor,Milvasoft.Helpers.DataAccess.EfCore.Abstract.IBaseRepository{Milvasoft.SampleAPI.Entity.StudentAssigment,System.Guid,Milvasoft.SampleAPI.Data.EducationAppDbContext},Milvasoft.Helpers.DataAccess.EfCore.Abstract.IBaseRepository{Milvasoft.SampleAPI.Entity.Student,System.Guid,Milvasoft.SampleAPI.Data.EducationAppDbContext},Milvasoft.Helpers.DataAccess.EfCore.Abstract.IBaseRepository{Milvasoft.SampleAPI.Entity.Mentor,System.Guid,Milvasoft.SampleAPI.Data.EducationAppDbContext},Milvasoft.Helpers.Mail.IMilvaMailSender)">
             <summary>
             Performs constructor injection for repository interfaces used in this service.
             </summary>
@@ -4161,7 +4161,7 @@
             Mentor service. 
             </summary>
         </member>
-        <member name="M:Milvasoft.SampleAPI.Services.Concrete.MentorService.#ctor(Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository{Milvasoft.SampleAPI.Entity.Mentor,System.Guid,Milvasoft.SampleAPI.Data.EducationAppDbContext},Microsoft.AspNetCore.Identity.UserManager{Milvasoft.SampleAPI.Entity.AppUser},Microsoft.AspNetCore.Http.IHttpContextAccessor)">
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.MentorService.#ctor(Milvasoft.Helpers.DataAccess.EfCore.Abstract.IBaseRepository{Milvasoft.SampleAPI.Entity.Mentor,System.Guid,Milvasoft.SampleAPI.Data.EducationAppDbContext},Microsoft.AspNetCore.Identity.UserManager{Milvasoft.SampleAPI.Entity.AppUser},Microsoft.AspNetCore.Http.IHttpContextAccessor)">
             <summary>
             Performs constructor injection for repository interfaces used in this service.
             </summary>
@@ -4229,7 +4229,7 @@
             Profession service.
             </summary>
         </member>
-        <member name="M:Milvasoft.SampleAPI.Services.Concrete.ProfessionService.#ctor(Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository{Milvasoft.SampleAPI.Entity.Profession,System.Guid,Milvasoft.SampleAPI.Data.EducationAppDbContext})">
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.ProfessionService.#ctor(Milvasoft.Helpers.DataAccess.EfCore.Abstract.IBaseRepository{Milvasoft.SampleAPI.Entity.Profession,System.Guid,Milvasoft.SampleAPI.Data.EducationAppDbContext})">
             <summary>
             Performs constructor injection for repository interfaces used in this service.
             </summary>
@@ -4285,7 +4285,7 @@
             Question service.
             </summary>
         </member>
-        <member name="M:Milvasoft.SampleAPI.Services.Concrete.QuestionService.#ctor(Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository{Milvasoft.SampleAPI.Entity.Question,System.Guid,Milvasoft.SampleAPI.Data.EducationAppDbContext})">
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.QuestionService.#ctor(Milvasoft.Helpers.DataAccess.EfCore.Abstract.IBaseRepository{Milvasoft.SampleAPI.Entity.Question,System.Guid,Milvasoft.SampleAPI.Data.EducationAppDbContext})">
             <summary>
             Performs constructor injection for repository interfaces used in this service.
             </summary>
@@ -4362,7 +4362,7 @@
             Student service.
             </summary>
         </member>
-        <member name="M:Milvasoft.SampleAPI.Services.Concrete.StudentService.#ctor(Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository{Milvasoft.SampleAPI.Entity.Student,System.Guid,Milvasoft.SampleAPI.Data.EducationAppDbContext},Microsoft.AspNetCore.Identity.UserManager{Milvasoft.SampleAPI.Entity.AppUser},Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository{Milvasoft.SampleAPI.Entity.Mentor,System.Guid,Milvasoft.SampleAPI.Data.EducationAppDbContext},Microsoft.AspNetCore.Http.IHttpContextAccessor)">
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.StudentService.#ctor(Milvasoft.Helpers.DataAccess.EfCore.Abstract.IBaseRepository{Milvasoft.SampleAPI.Entity.Student,System.Guid,Milvasoft.SampleAPI.Data.EducationAppDbContext},Microsoft.AspNetCore.Identity.UserManager{Milvasoft.SampleAPI.Entity.AppUser},Milvasoft.Helpers.DataAccess.EfCore.Abstract.IBaseRepository{Milvasoft.SampleAPI.Entity.Mentor,System.Guid,Milvasoft.SampleAPI.Data.EducationAppDbContext},Microsoft.AspNetCore.Http.IHttpContextAccessor)">
             <summary>
             Performs constructor injection for repository interfaces used in this service.
             </summary>
@@ -4456,7 +4456,7 @@
             UsefulLink service.
             </summary>
         </member>
-        <member name="M:Milvasoft.SampleAPI.Services.Concrete.UsefulLinkService.#ctor(Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository{Milvasoft.SampleAPI.Entity.UsefulLink,System.Guid,Milvasoft.SampleAPI.Data.EducationAppDbContext})">
+        <member name="M:Milvasoft.SampleAPI.Services.Concrete.UsefulLinkService.#ctor(Milvasoft.Helpers.DataAccess.EfCore.Abstract.IBaseRepository{Milvasoft.SampleAPI.Entity.UsefulLink,System.Guid,Milvasoft.SampleAPI.Data.EducationAppDbContext})">
             <summary>
             Performs constructor injection for repository interfaces used in this service.
             </summary>
@@ -5250,7 +5250,7 @@
             <param name="returnFunc"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.SampleAPI.Utils.HelperExtensions.PreparePaginationDTO``3(``0,System.Int32,System.Int32,System.String,System.Boolean,System.Linq.Expressions.Expression{System.Func{``1,System.Boolean}},System.Func{Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable{``1},Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable})">
+        <member name="M:Milvasoft.SampleAPI.Utils.HelperExtensions.PreparePaginationDTO``3(``0,System.Int32,System.Int32,System.String,System.Boolean,System.Linq.Expressions.Expression{System.Func{``1,System.Boolean}},System.Func{Milvasoft.Helpers.DataAccess.EfCore.IncludeLibrary.IIncludable{``1},Milvasoft.Helpers.DataAccess.EfCore.IncludeLibrary.IIncludable})">
             <summary>
             Prepares pagination dto according to pagination parameters.
             </summary>
@@ -5266,7 +5266,7 @@
             <param name="includes"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.SampleAPI.Utils.HelperExtensions.PreparePaginationDTO``2(Milvasoft.Helpers.DataAccess.Abstract.IBaseRepository{``0,``1,Milvasoft.SampleAPI.Data.EducationAppDbContext},System.Int32,System.Int32,System.String,System.Boolean,System.Linq.Expressions.Expression{System.Func{``0,System.Boolean}},System.Func{Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable{``0},Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable})">
+        <member name="M:Milvasoft.SampleAPI.Utils.HelperExtensions.PreparePaginationDTO``2(Milvasoft.Helpers.DataAccess.EfCore.Abstract.IBaseRepository{``0,``1,Milvasoft.SampleAPI.Data.EducationAppDbContext},System.Int32,System.Int32,System.String,System.Boolean,System.Linq.Expressions.Expression{System.Func{``0,System.Boolean}},System.Func{Milvasoft.Helpers.DataAccess.EfCore.IncludeLibrary.IIncludable{``0},Milvasoft.Helpers.DataAccess.EfCore.IncludeLibrary.IIncludable})">
             <summary>
             Prepares pagination dto according to pagination parameters.
             </summary>
@@ -5281,7 +5281,7 @@
             <param name="includes"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.SampleAPI.Utils.HelperExtensions.PreparePaginationDTO``3(``0,System.Int32,System.Int32,System.Linq.Expressions.Expression{System.Func{``1,System.Object}},System.Boolean,System.Linq.Expressions.Expression{System.Func{``1,System.Boolean}},System.Func{Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable{``1},Milvasoft.Helpers.DataAccess.IncludeLibrary.IIncludable})">
+        <member name="M:Milvasoft.SampleAPI.Utils.HelperExtensions.PreparePaginationDTO``3(``0,System.Int32,System.Int32,System.Linq.Expressions.Expression{System.Func{``1,System.Object}},System.Boolean,System.Linq.Expressions.Expression{System.Func{``1,System.Boolean}},System.Func{Milvasoft.Helpers.DataAccess.EfCore.IncludeLibrary.IIncludable{``1},Milvasoft.Helpers.DataAccess.EfCore.IncludeLibrary.IIncludable})">
             <summary>
             Prepares pagination dto according to pagination parameters.
             </summary>

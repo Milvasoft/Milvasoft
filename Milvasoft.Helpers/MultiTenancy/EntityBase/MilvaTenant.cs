@@ -1,86 +1,85 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using Milvasoft.Helpers.DataAccess.Abstract.Entity;
+using Milvasoft.Helpers.DataAccess.EfCore.Abstract.Entity;
 using System;
 
-namespace Milvasoft.Helpers.MultiTenancy.EntityBase
+namespace Milvasoft.Helpers.MultiTenancy.EntityBase;
+
+/// <summary>
+/// Represents a Tenant of the application.
+/// </summary>
+/// <typeparam name="TUser"></typeparam>
+/// <typeparam name="TUserKey"></typeparam>
+public abstract class MilvaTenant<TUser, TUserKey> : MilvaBaseTenant<TUserKey, TenantId>, IFullAuditable<TUser, TUserKey, TenantId>
+where TUser : IdentityUser<TUserKey>
+where TUserKey : struct, IEquatable<TUserKey>
 {
+    private string _tenancyName;
+    private int _branchNo;
+
+
     /// <summary>
-    /// Represents a Tenant of the application.
+    /// Id of tenant.
     /// </summary>
-    /// <typeparam name="TUser"></typeparam>
-    /// <typeparam name="TUserKey"></typeparam>
-    public abstract class MilvaTenant<TUser, TUserKey> : MilvaBaseTenant<TUserKey, TenantId>, IFullAuditable<TUser, TUserKey, TenantId>
-    where TUser : IdentityUser<TUserKey>
-    where TUserKey : struct, IEquatable<TUserKey>
+    public override TenantId Id
     {
-        private string _tenancyName;
-        private int _branchNo;
+        get => base.Id;
+    }
 
+    /// <summary>
+    /// Tenancy name of tenant.
+    /// </summary>
+    public override string TenancyName
+    {
+        get => _tenancyName;
+    }
 
-        /// <summary>
-        /// Id of tenant.
-        /// </summary>
-        public override TenantId Id
-        {
-            get => base.Id;
-        }
+    /// <summary>
+    /// Display name of the Tenant.
+    /// </summary>
+    public virtual int BranchNo
+    {
+        get => _branchNo;
+    }
 
-        /// <summary>
-        /// Tenancy name of tenant.
-        /// </summary>
-        public override string TenancyName
-        {
-            get => _tenancyName;
-        }
+    /// <summary>
+    /// Represents Tenant's subscription expire date.
+    /// </summary>
+    public DateTime SubscriptionExpireDate { get; set; }
 
-        /// <summary>
-        /// Display name of the Tenant.
-        /// </summary>
-        public virtual int BranchNo
-        {
-            get => _branchNo;
-        }
+    /// <summary>
+    /// Deleter user navigation property.
+    /// </summary>
+    public TUser DeleterUser { get; set; }
 
-        /// <summary>
-        /// Represents Tenant's subscription expire date.
-        /// </summary>
-        public DateTime SubscriptionExpireDate { get; set; }
+    /// <summary>
+    /// Modifier user navigation property.
+    /// </summary>
+    public TUser LastModifierUser { get; set; }
 
-        /// <summary>
-        /// Deleter user navigation property.
-        /// </summary>
-        public TUser DeleterUser { get; set; }
+    /// <summary>
+    /// Creator user navigation property.
+    /// </summary>
+    public TUser CreatorUser { get; set; }
 
-        /// <summary>
-        /// Modifier user navigation property.
-        /// </summary>
-        public TUser LastModifierUser { get; set; }
+    /// <summary>
+    /// Creates a new tenant.
+    /// </summary>
+    protected MilvaTenant()
+    {
+        Id = TenantId.NewTenantId();
+        IsActive = true;
+    }
 
-        /// <summary>
-        /// Creator user navigation property.
-        /// </summary>
-        public TUser CreatorUser { get; set; }
-
-        /// <summary>
-        /// Creates a new tenant.
-        /// </summary>
-        protected MilvaTenant()
-        {
-            Id = TenantId.NewTenantId();
-            IsActive = true;
-        }
-
-        /// <summary>
-        /// Creates a new tenant.
-        /// </summary>
-        /// <param name="tenancyName">UNIQUE name of this Tenant</param>
-        /// <param name="branchNo"></param>
-        protected MilvaTenant(string tenancyName, int branchNo)
-        {
-            Id = new TenantId(tenancyName, branchNo);
-            _tenancyName = tenancyName;
-            _branchNo = branchNo;
-            IsActive = true;
-        }
+    /// <summary>
+    /// Creates a new tenant.
+    /// </summary>
+    /// <param name="tenancyName">UNIQUE name of this Tenant</param>
+    /// <param name="branchNo"></param>
+    protected MilvaTenant(string tenancyName, int branchNo)
+    {
+        Id = new TenantId(tenancyName, branchNo);
+        _tenancyName = tenancyName;
+        _branchNo = branchNo;
+        IsActive = true;
     }
 }

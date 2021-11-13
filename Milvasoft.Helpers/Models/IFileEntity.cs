@@ -1,18 +1,17 @@
-﻿namespace Milvasoft.Helpers.Models
+﻿namespace Milvasoft.Helpers.Models;
+
+/// <summary>
+///  Abstraction for multiple file upload process.
+/// </summary>
+public interface IFileEntity
 {
     /// <summary>
-    ///  Abstraction for multiple file upload process.
+    /// Name of file.
     /// </summary>
-    public interface IFileEntity
-    {
-        /// <summary>
-        /// Name of file.
-        /// </summary>
-        public string FileName { get; set; }
+    public string FileName { get; set; }
 
-        /// <summary>
-        /// Path of file.
-        /// </summary>
-        public string FilePath { get; set; }
-    }
+    /// <summary>
+    /// Path of file.
+    /// </summary>
+    public string FilePath { get; set; }
 }
