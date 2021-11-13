@@ -153,11 +153,13 @@ public interface IBaseRepository<TEntity, TKey, TContext> where TEntity : class,
     /// <param name="requestedPageNumber"></param>
     /// <param name="countOfRequestedRecordsInPage"></param>
     /// <param name="conditionExpression"></param>
+    /// <param name="projectionExpression"></param>
     /// <param name="tracking"></param>
     /// <returns></returns>
     Task<(IEnumerable<TEntity> entities, int pageCount, int totalDataCount)> GetAsPaginatedAsync(int requestedPageNumber,
                                                                                                  int countOfRequestedRecordsInPage,
                                                                                                  Expression<Func<TEntity, bool>> conditionExpression = null,
+                                                                                                 Expression<Func<TEntity, TEntity>> projectionExpression = null,
                                                                                                  bool tracking = false);
 
     /// <summary>
@@ -171,12 +173,14 @@ public interface IBaseRepository<TEntity, TKey, TContext> where TEntity : class,
     /// <param name="countOfRequestedRecordsInPage"></param>
     /// <param name="includes"></param>
     /// <param name="conditionExpression"></param>
+    /// <param name="projectionExpression"></param>
     /// <param name="tracking"></param>
     /// <returns></returns>
     Task<(IEnumerable<TEntity> entities, int pageCount, int totalDataCount)> GetAsPaginatedAsync(int requestedPageNumber,
                                                                                                  int countOfRequestedRecordsInPage,
                                                                                                  Func<IIncludable<TEntity>, IIncludable> includes,
                                                                                                  Expression<Func<TEntity, bool>> conditionExpression = null,
+                                                                                                 Expression<Func<TEntity, TEntity>> projectionExpression = null,
                                                                                                  bool tracking = false);
 
     /// <summary>
@@ -193,6 +197,7 @@ public interface IBaseRepository<TEntity, TKey, TContext> where TEntity : class,
     /// <param name="orderByPropertyName"></param>
     /// <param name="orderByAscending"></param>
     /// <param name="conditionExpression"></param>
+    /// <param name="projectionExpression"></param>
     /// <param name="tracking"></param>
     /// <returns></returns>
     Task<(IEnumerable<TEntity> entities, int pageCount, int totalDataCount)> GetAsPaginatedAndOrderedAsync(int requestedPageNumber,
@@ -200,6 +205,7 @@ public interface IBaseRepository<TEntity, TKey, TContext> where TEntity : class,
                                                                                                            string orderByPropertyName,
                                                                                                            bool orderByAscending,
                                                                                                            Expression<Func<TEntity, bool>> conditionExpression = null,
+                                                                                                           Expression<Func<TEntity, TEntity>> projectionExpression = null,
                                                                                                            bool tracking = false);
 
     /// <summary>
@@ -217,6 +223,7 @@ public interface IBaseRepository<TEntity, TKey, TContext> where TEntity : class,
     /// <param name="orderByPropertyName"></param>
     /// <param name="orderByAscending"></param>
     /// <param name="conditionExpression"></param>
+    /// <param name="projectionExpression"></param>
     /// <param name="tracking"></param>
     /// <returns></returns>
     Task<(IEnumerable<TEntity> entities, int pageCount, int totalDataCount)> GetAsPaginatedAndOrderedAsync(int requestedPageNumber,
@@ -225,6 +232,7 @@ public interface IBaseRepository<TEntity, TKey, TContext> where TEntity : class,
                                                                                                            string orderByPropertyName,
                                                                                                            bool orderByAscending,
                                                                                                            Expression<Func<TEntity, bool>> conditionExpression = null,
+                                                                                                           Expression<Func<TEntity, TEntity>> projectionExpression = null,
                                                                                                            bool tracking = false);
 
     /// <summary>
@@ -240,6 +248,7 @@ public interface IBaseRepository<TEntity, TKey, TContext> where TEntity : class,
     /// <param name="orderByKeySelector"></param>
     /// <param name="orderByAscending"></param>
     /// <param name="conditionExpression"></param>
+    /// <param name="projectionExpression"></param>
     /// <param name="tracking"></param>
     /// <returns></returns>
     Task<(IEnumerable<TEntity> entities, int pageCount, int totalDataCount)> GetAsPaginatedAndOrderedAsync(int requestedPageNumber,
@@ -247,6 +256,7 @@ public interface IBaseRepository<TEntity, TKey, TContext> where TEntity : class,
                                                                                                            Expression<Func<TEntity, object>> orderByKeySelector,
                                                                                                            bool orderByAscending,
                                                                                                            Expression<Func<TEntity, bool>> conditionExpression = null,
+                                                                                                           Expression<Func<TEntity, TEntity>> projectionExpression = null,
                                                                                                            bool tracking = false);
 
     /// <summary>
@@ -263,6 +273,7 @@ public interface IBaseRepository<TEntity, TKey, TContext> where TEntity : class,
     /// <param name="orderByKeySelector"></param>
     /// <param name="orderByAscending"></param>
     /// <param name="conditionExpression"></param>
+    /// <param name="projectionExpression"></param>
     /// <param name="tracking"></param>
     /// <returns></returns>
     Task<(IEnumerable<TEntity> entities, int pageCount, int totalDataCount)> GetAsPaginatedAndOrderedAsync(int requestedPageNumber,
@@ -271,6 +282,7 @@ public interface IBaseRepository<TEntity, TKey, TContext> where TEntity : class,
                                                                                                            Expression<Func<TEntity, object>> orderByKeySelector,
                                                                                                            bool orderByAscending,
                                                                                                            Expression<Func<TEntity, bool>> conditionExpression = null,
+                                                                                                           Expression<Func<TEntity, TEntity>> projectionExpression = null,
                                                                                                            bool tracking = false);
 
     /// <summary>
@@ -284,11 +296,13 @@ public interface IBaseRepository<TEntity, TKey, TContext> where TEntity : class,
     /// <param name="orderByPropertyName"></param>
     /// <param name="orderByAscending"></param>
     /// <param name="conditionExpression"></param>
+    /// <param name="projectionExpression"></param>
     /// <param name="tracking"></param>
     /// <returns></returns>
     Task<IEnumerable<TEntity>> GetAsOrderedAsync(string orderByPropertyName,
                                                  bool orderByAscending,
                                                  Expression<Func<TEntity, bool>> conditionExpression = null,
+                                                 Expression<Func<TEntity, TEntity>> projectionExpression = null,
                                                  bool tracking = false);
 
     /// <summary>
@@ -303,12 +317,14 @@ public interface IBaseRepository<TEntity, TKey, TContext> where TEntity : class,
     /// <param name="orderByPropertyName"></param>
     /// <param name="orderByAscending"></param>
     /// <param name="conditionExpression"></param>
+    /// <param name="projectionExpression"></param>
     /// <param name="tracking"></param>
     /// <returns></returns>
     Task<IEnumerable<TEntity>> GetAsOrderedAsync(Func<IIncludable<TEntity>, IIncludable> includes,
                                                  string orderByPropertyName,
                                                  bool orderByAscending,
                                                  Expression<Func<TEntity, bool>> conditionExpression = null,
+                                                 Expression<Func<TEntity, TEntity>> projectionExpression = null,
                                                  bool tracking = false);
 
     /// <summary>
@@ -320,11 +336,13 @@ public interface IBaseRepository<TEntity, TKey, TContext> where TEntity : class,
     /// <param name="orderByKeySelector"></param>
     /// <param name="orderByAscending"></param>
     /// <param name="conditionExpression"></param>
+    /// <param name="projectionExpression"></param>
     /// <param name="tracking"></param>
     /// <returns></returns>
     Task<IEnumerable<TEntity>> GetAsOrderedAsync(Expression<Func<TEntity, object>> orderByKeySelector,
                                                  bool orderByAscending,
                                                  Expression<Func<TEntity, bool>> conditionExpression = null,
+                                                 Expression<Func<TEntity, TEntity>> projectionExpression = null,
                                                  bool tracking = false);
 
     /// <summary>
@@ -337,12 +355,14 @@ public interface IBaseRepository<TEntity, TKey, TContext> where TEntity : class,
     /// <param name="orderByKeySelector"></param>
     /// <param name="orderByAscending"></param>
     /// <param name="conditionExpression"></param>
+    /// <param name="projectionExpression"></param>
     /// <param name="tracking"></param>
     /// <returns></returns>
     Task<IEnumerable<TEntity>> GetAsOrderedAsync(Func<IIncludable<TEntity>, IIncludable> includes,
                                                  Expression<Func<TEntity, object>> orderByKeySelector,
                                                  bool orderByAscending,
                                                  Expression<Func<TEntity, bool>> conditionExpression = null,
+                                                 Expression<Func<TEntity, TEntity>> projectionExpression = null,
                                                  bool tracking = false);
 
     #endregion

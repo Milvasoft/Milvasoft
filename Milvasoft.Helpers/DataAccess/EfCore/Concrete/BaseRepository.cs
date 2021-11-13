@@ -275,11 +275,13 @@ public abstract class BaseRepository<TEntity, TKey, TContext> : IBaseRepository<
     /// <param name="requestedPageNumber"></param>
     /// <param name="countOfRequestedRecordsInPage"></param>
     /// <param name="conditionExpression"></param>
+    /// <param name="projectionExpression"></param>
     /// <param name="tracking"></param>
     /// <returns></returns>
     public virtual async Task<(IEnumerable<TEntity> entities, int pageCount, int totalDataCount)> GetAsPaginatedAsync(int requestedPageNumber,
                                                                                                                       int countOfRequestedRecordsInPage,
                                                                                                                       Expression<Func<TEntity, bool>> conditionExpression = null,
+                                                                                                                      Expression<Func<TEntity, TEntity>> projectionExpression = null,
                                                                                                                       bool tracking = false)
     {
         ValidatePaginationParameters(requestedPageNumber, countOfRequestedRecordsInPage);
@@ -290,6 +292,7 @@ public abstract class BaseRepository<TEntity, TKey, TContext> : IBaseRepository<
 
         var repo = await _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
                                .Where(condition ?? (entity => true))
+                               .Select(projectionExpression ?? (entity => entity))
                                .Skip((requestedPageNumber - 1) * countOfRequestedRecordsInPage)
                                .Take(countOfRequestedRecordsInPage)
                                .ToListAsync()
@@ -311,12 +314,14 @@ public abstract class BaseRepository<TEntity, TKey, TContext> : IBaseRepository<
     /// <param name="countOfRequestedRecordsInPage"></param>
     /// <param name="includes"></param>
     /// <param name="conditionExpression"></param>
+    /// <param name="projectionExpression"></param>
     /// <param name="tracking"></param>
     /// <returns></returns>
     public virtual async Task<(IEnumerable<TEntity> entities, int pageCount, int totalDataCount)> GetAsPaginatedAsync(int requestedPageNumber,
                                                                                                                       int countOfRequestedRecordsInPage,
                                                                                                                       Func<IIncludable<TEntity>, IIncludable> includes,
                                                                                                                       Expression<Func<TEntity, bool>> conditionExpression = null,
+                                                                                                                      Expression<Func<TEntity, TEntity>> projectionExpression = null,
                                                                                                                       bool tracking = false)
     {
         ValidatePaginationParameters(requestedPageNumber, countOfRequestedRecordsInPage);
@@ -328,6 +333,7 @@ public abstract class BaseRepository<TEntity, TKey, TContext> : IBaseRepository<
         var repo = await _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
                                .Where(condition ?? (entity => true))
                                .IncludeMultiple(includes)
+                               .Select(projectionExpression ?? (entity => entity))
                                .Skip((requestedPageNumber - 1) * countOfRequestedRecordsInPage)
                                .Take(countOfRequestedRecordsInPage)
                                .ToListAsync()
@@ -352,6 +358,7 @@ public abstract class BaseRepository<TEntity, TKey, TContext> : IBaseRepository<
     /// <param name="orderByPropertyName"></param>
     /// <param name="orderByAscending"></param>
     /// <param name="conditionExpression"></param>
+    /// <param name="projectionExpression"></param>
     /// <param name="tracking"></param>
     /// <returns></returns>
     public virtual async Task<(IEnumerable<TEntity> entities, int pageCount, int totalDataCount)> GetAsPaginatedAndOrderedAsync(int requestedPageNumber,
@@ -359,6 +366,7 @@ public abstract class BaseRepository<TEntity, TKey, TContext> : IBaseRepository<
                                                                                                                                 string orderByPropertyName,
                                                                                                                                 bool orderByAscending,
                                                                                                                                 Expression<Func<TEntity, bool>> conditionExpression = null,
+                                                                                                                                Expression<Func<TEntity, TEntity>> projectionExpression = null,
                                                                                                                                 bool tracking = false)
     {
         ValidatePaginationParameters(requestedPageNumber, countOfRequestedRecordsInPage);
@@ -377,6 +385,7 @@ public abstract class BaseRepository<TEntity, TKey, TContext> : IBaseRepository<
 
         if (orderByAscending) repo = await _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
                                                  .Where(condition ?? (entity => true))
+                                                 .Select(projectionExpression ?? (entity => entity))
                                                  .OrderBy(predicate)
                                                  .Skip((requestedPageNumber - 1) * countOfRequestedRecordsInPage)
                                                  .Take(countOfRequestedRecordsInPage)
@@ -384,6 +393,7 @@ public abstract class BaseRepository<TEntity, TKey, TContext> : IBaseRepository<
                                                  .ConfigureAwait(false);
         else repo = await _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
                                 .Where(condition ?? (entity => true))
+                                .Select(projectionExpression ?? (entity => entity))
                                 .OrderByDescending(predicate)
                                 .Skip((requestedPageNumber - 1) * countOfRequestedRecordsInPage)
                                 .Take(countOfRequestedRecordsInPage)
@@ -410,6 +420,7 @@ public abstract class BaseRepository<TEntity, TKey, TContext> : IBaseRepository<
     /// <param name="orderByPropertyName"></param>
     /// <param name="orderByAscending"></param>
     /// <param name="conditionExpression"></param>
+    /// <param name="projectionExpression"></param>
     /// <param name="tracking"></param>
     /// <returns></returns>
     public virtual async Task<(IEnumerable<TEntity> entities, int pageCount, int totalDataCount)> GetAsPaginatedAndOrderedAsync(int requestedPageNumber,
@@ -418,6 +429,7 @@ public abstract class BaseRepository<TEntity, TKey, TContext> : IBaseRepository<
                                                                                                                                 string orderByPropertyName,
                                                                                                                                 bool orderByAscending,
                                                                                                                                 Expression<Func<TEntity, bool>> conditionExpression = null,
+                                                                                                                                Expression<Func<TEntity, TEntity>> projectionExpression = null,
                                                                                                                                 bool tracking = false)
     {
         ValidatePaginationParameters(requestedPageNumber, countOfRequestedRecordsInPage);
@@ -440,6 +452,7 @@ public abstract class BaseRepository<TEntity, TKey, TContext> : IBaseRepository<
                                                   .Skip((requestedPageNumber - 1) * countOfRequestedRecordsInPage)
                                                   .Take(countOfRequestedRecordsInPage)
                                                   .IncludeMultiple(includes)
+                                                  .Select(projectionExpression ?? (entity => entity))
                                                   .ToListAsync()
                                                   .ConfigureAwait(false);
         else repo = await _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
@@ -448,6 +461,7 @@ public abstract class BaseRepository<TEntity, TKey, TContext> : IBaseRepository<
                                  .Skip((requestedPageNumber - 1) * countOfRequestedRecordsInPage)
                                  .Take(countOfRequestedRecordsInPage)
                                  .IncludeMultiple(includes)
+                                 .Select(projectionExpression ?? (entity => entity))
                                  .ToListAsync()
                                  .ConfigureAwait(false);
 
@@ -469,6 +483,7 @@ public abstract class BaseRepository<TEntity, TKey, TContext> : IBaseRepository<
     /// <param name="orderByKeySelector"></param>
     /// <param name="orderByAscending"></param>
     /// <param name="conditionExpression"></param>
+    /// <param name="projectionExpression"></param>
     /// <param name="tracking"></param>
     /// <returns></returns>
     public virtual async Task<(IEnumerable<TEntity> entities, int pageCount, int totalDataCount)> GetAsPaginatedAndOrderedAsync(int requestedPageNumber,
@@ -476,6 +491,7 @@ public abstract class BaseRepository<TEntity, TKey, TContext> : IBaseRepository<
                                                                                                                                 Expression<Func<TEntity, object>> orderByKeySelector,
                                                                                                                                 bool orderByAscending,
                                                                                                                                 Expression<Func<TEntity, bool>> conditionExpression = null,
+                                                                                                                                Expression<Func<TEntity, TEntity>> projectionExpression = null,
                                                                                                                                 bool tracking = false)
     {
         ValidatePaginationParameters(requestedPageNumber, countOfRequestedRecordsInPage);
@@ -488,6 +504,7 @@ public abstract class BaseRepository<TEntity, TKey, TContext> : IBaseRepository<
 
         if (orderByAscending) repo = await _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
                                                  .Where(condition ?? (entity => true))
+                                                 .Select(projectionExpression ?? (entity => entity))
                                                  .OrderBy(orderByKeySelector)
                                                  .Skip((requestedPageNumber - 1) * countOfRequestedRecordsInPage)
                                                  .Take(countOfRequestedRecordsInPage)
@@ -495,6 +512,7 @@ public abstract class BaseRepository<TEntity, TKey, TContext> : IBaseRepository<
                                                  .ConfigureAwait(false);
         else repo = await _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
                                 .Where(condition ?? (entity => true))
+                                .Select(projectionExpression ?? (entity => entity))
                                 .OrderByDescending(orderByKeySelector)
                                 .Skip((requestedPageNumber - 1) * countOfRequestedRecordsInPage)
                                 .Take(countOfRequestedRecordsInPage)
@@ -520,6 +538,7 @@ public abstract class BaseRepository<TEntity, TKey, TContext> : IBaseRepository<
     /// <param name="orderByKeySelector"></param>
     /// <param name="orderByAscending"></param>
     /// <param name="conditionExpression"></param>
+    /// <param name="projectionExpression"></param>
     /// <param name="tracking"></param>
     /// <returns></returns>
     public virtual async Task<(IEnumerable<TEntity> entities, int pageCount, int totalDataCount)> GetAsPaginatedAndOrderedAsync(int requestedPageNumber,
@@ -528,6 +547,7 @@ public abstract class BaseRepository<TEntity, TKey, TContext> : IBaseRepository<
                                                                                                                                 Expression<Func<TEntity, object>> orderByKeySelector,
                                                                                                                                 bool orderByAscending,
                                                                                                                                 Expression<Func<TEntity, bool>> conditionExpression = null,
+                                                                                                                                Expression<Func<TEntity, TEntity>> projectionExpression = null,
                                                                                                                                 bool tracking = false)
     {
         ValidatePaginationParameters(requestedPageNumber, countOfRequestedRecordsInPage);
@@ -544,6 +564,7 @@ public abstract class BaseRepository<TEntity, TKey, TContext> : IBaseRepository<
                                                   .Skip((requestedPageNumber - 1) * countOfRequestedRecordsInPage)
                                                   .Take(countOfRequestedRecordsInPage)
                                                   .IncludeMultiple(includes)
+                                                  .Select(projectionExpression ?? (entity => entity))
                                                   .ToListAsync()
                                                   .ConfigureAwait(false);
         else repo = await _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
@@ -552,6 +573,7 @@ public abstract class BaseRepository<TEntity, TKey, TContext> : IBaseRepository<
                                  .Skip((requestedPageNumber - 1) * countOfRequestedRecordsInPage)
                                  .Take(countOfRequestedRecordsInPage)
                                  .IncludeMultiple(includes)
+                                 .Select(projectionExpression ?? (entity => entity))
                                  .ToListAsync()
                                  .ConfigureAwait(false);
 
@@ -571,11 +593,13 @@ public abstract class BaseRepository<TEntity, TKey, TContext> : IBaseRepository<
     /// <param name="orderByPropertyName"></param>
     /// <param name="orderByAscending"></param>
     /// <param name="conditionExpression"></param>
+    /// <param name="projectionExpression"></param>
     /// <param name="tracking"></param>
     /// <returns></returns>
     public virtual async Task<IEnumerable<TEntity>> GetAsOrderedAsync(string orderByPropertyName,
                                                                       bool orderByAscending,
                                                                       Expression<Func<TEntity, bool>> conditionExpression = null,
+                                                                      Expression<Func<TEntity, TEntity>> projectionExpression = null,
                                                                       bool tracking = false)
     {
         var entityType = typeof(TEntity);
@@ -590,11 +614,13 @@ public abstract class BaseRepository<TEntity, TKey, TContext> : IBaseRepository<
 
         if (orderByAscending) repo = await _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
                                                  .Where(condition ?? (entity => true))
+                                                 .Select(projectionExpression ?? (entity => entity))
                                                  .OrderBy(predicate)
                                                  .ToListAsync()
                                                  .ConfigureAwait(false);
         else repo = await _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
                                 .Where(condition ?? (entity => true))
+                                .Select(projectionExpression ?? (entity => entity))
                                 .OrderByDescending(predicate)
                                 .ToListAsync()
                                 .ConfigureAwait(false);
@@ -614,12 +640,14 @@ public abstract class BaseRepository<TEntity, TKey, TContext> : IBaseRepository<
     /// <param name="orderByPropertyName"></param>
     /// <param name="orderByAscending"></param>
     /// <param name="conditionExpression"></param>
+    /// <param name="projectionExpression"></param>
     /// <param name="tracking"></param>
     /// <returns></returns>
     public virtual async Task<IEnumerable<TEntity>> GetAsOrderedAsync(Func<IIncludable<TEntity>, IIncludable> includes,
                                                                       string orderByPropertyName,
                                                                       bool orderByAscending,
                                                                       Expression<Func<TEntity, bool>> conditionExpression = null,
+                                                                      Expression<Func<TEntity, TEntity>> projectionExpression = null,
                                                                       bool tracking = false)
     {
         var entityType = typeof(TEntity);
@@ -636,12 +664,14 @@ public abstract class BaseRepository<TEntity, TKey, TContext> : IBaseRepository<
                                                   .Where(condition ?? (entity => true))
                                                   .OrderBy(predicate)
                                                   .IncludeMultiple(includes)
+                                                  .Select(projectionExpression ?? (entity => entity))
                                                   .ToListAsync()
                                                   .ConfigureAwait(false);
         else repo = await _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
                                  .Where(condition ?? (entity => true))
                                  .OrderByDescending(predicate)
                                  .IncludeMultiple(includes)
+                                 .Select(projectionExpression ?? (entity => entity))
                                  .ToListAsync()
                                  .ConfigureAwait(false);
 
@@ -657,11 +687,13 @@ public abstract class BaseRepository<TEntity, TKey, TContext> : IBaseRepository<
     /// <param name="orderByKeySelector"></param>
     /// <param name="orderByAscending"></param>
     /// <param name="conditionExpression"></param>
+    /// <param name="projectionExpression"></param>
     /// <param name="tracking"></param>
     /// <returns></returns>
     public virtual async Task<IEnumerable<TEntity>> GetAsOrderedAsync(Expression<Func<TEntity, object>> orderByKeySelector,
                                                                       bool orderByAscending,
                                                                       Expression<Func<TEntity, bool>> conditionExpression = null,
+                                                                      Expression<Func<TEntity, TEntity>> projectionExpression = null,
                                                                       bool tracking = false)
     {
         var condition = CreateConditionExpression(conditionExpression);
@@ -670,11 +702,13 @@ public abstract class BaseRepository<TEntity, TKey, TContext> : IBaseRepository<
 
         if (orderByAscending) repo = await _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
                                                  .Where(condition ?? (entity => true))
+                                                 .Select(projectionExpression ?? (entity => entity))
                                                  .OrderBy(orderByKeySelector)
                                                  .ToListAsync()
                                                  .ConfigureAwait(false);
         else repo = await _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
                                 .Where(condition ?? (entity => true))
+                                .Select(projectionExpression ?? (entity => entity))
                                 .OrderByDescending(orderByKeySelector)
                                 .ToListAsync()
                                 .ConfigureAwait(false);
@@ -692,12 +726,14 @@ public abstract class BaseRepository<TEntity, TKey, TContext> : IBaseRepository<
     /// <param name="orderByKeySelector"></param>
     /// <param name="orderByAscending"></param>
     /// <param name="conditionExpression"></param>
+    /// <param name="projectionExpression"></param>
     /// <param name="tracking"></param>
     /// <returns></returns>
     public virtual async Task<IEnumerable<TEntity>> GetAsOrderedAsync(Func<IIncludable<TEntity>, IIncludable> includes,
                                                                       Expression<Func<TEntity, object>> orderByKeySelector,
                                                                       bool orderByAscending,
                                                                       Expression<Func<TEntity, bool>> conditionExpression = null,
+                                                                      Expression<Func<TEntity, TEntity>> projectionExpression = null,
                                                                       bool tracking = false)
     {
         var condition = CreateConditionExpression(conditionExpression);
@@ -708,12 +744,14 @@ public abstract class BaseRepository<TEntity, TKey, TContext> : IBaseRepository<
                                                   .Where(condition ?? (entity => true))
                                                   .OrderBy(orderByKeySelector)
                                                   .IncludeMultiple(includes)
+                                                  .Select(projectionExpression ?? (entity => entity))
                                                   .ToListAsync()
                                                   .ConfigureAwait(false);
         else repo = await _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
                                  .Where(condition ?? (entity => true))
                                  .OrderByDescending(orderByKeySelector)
                                  .IncludeMultiple(includes)
+                                 .Select(projectionExpression ?? (entity => entity))
                                  .ToListAsync()
                                  .ConfigureAwait(false);
 
@@ -1071,9 +1109,9 @@ public abstract class BaseRepository<TEntity, TKey, TContext> : IBaseRepository<
     /// <param name="groupedClause"></param>
     /// <returns></returns>
     public virtual async Task<IEnumerable<TReturn>> GetAsGroupedAndOrderedAsync<TReturn>(string orderByPropertyName,
-                                                                                        bool orderByAscending,
-                                                                                        Func<IQueryable<TReturn>> groupedClause,
-                                                                                        Expression<Func<TReturn, bool>> conditionExpression = null)
+                                                                                         bool orderByAscending,
+                                                                                         Func<IQueryable<TReturn>> groupedClause,
+                                                                                         Expression<Func<TReturn, bool>> conditionExpression = null)
     {
         var entityType = typeof(TReturn);
 
@@ -1092,12 +1130,12 @@ public abstract class BaseRepository<TEntity, TKey, TContext> : IBaseRepository<
 
         if (orderByAscending)
             repo = await groupedClause.Invoke().Where(conditionExpression ?? (entity => true))
-                                                   .OrderBy(predicate)
-                                                       .ToListAsync().ConfigureAwait(false);
+                                               .OrderBy(predicate)
+                                               .ToListAsync().ConfigureAwait(false);
         else
             repo = await groupedClause.Invoke().Where(conditionExpression ?? (entity => true))
-                                                   .OrderByDescending(predicate)
-                                                        .ToListAsync().ConfigureAwait(false);
+                                               .OrderByDescending(predicate)
+                                               .ToListAsync().ConfigureAwait(false);
         return repo;
     }
 
