@@ -2237,21 +2237,43 @@
             Attribute for adding default value in context level.
             </summary>
         </member>
+        <member name="P:Milvasoft.Helpers.DataAccess.EfCore.Attributes.MilvaDefaultValueAttribute.DefaultValue">
+            <summary>
+            Default value of tagged property.
+            </summary>
+        </member>
         <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Attributes.MilvaDefaultValueAttribute.#ctor(System.Object)">
             <summary>
             Specifies this property has a default value upon creation.
             </summary>
             <param name="defaultValue">The default value of the property.</param>
         </member>
-        <member name="P:Milvasoft.Helpers.DataAccess.EfCore.Attributes.MilvaDefaultValueAttribute.DefaultValue">
-            <summary>
-            Default value of tagged property.
-            </summary>
-        </member>
         <member name="T:Milvasoft.Helpers.DataAccess.EfCore.Attributes.MilvaEncryptedAttribute">
             <summary>
             Specifies that the value field value should be encrypted.
             </summary>
+        </member>
+        <member name="T:Milvasoft.Helpers.DataAccess.EfCore.Attributes.MilvaPrecisionAttribute">
+            <summary>
+            Attribute for adding precision in context level.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.DataAccess.EfCore.Attributes.MilvaPrecisionAttribute.Precision">
+            <summary>
+            Precision of tagged property.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.DataAccess.EfCore.Attributes.MilvaPrecisionAttribute.Scale">
+            <summary>
+            Scale of tagged property.
+            </summary>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Attributes.MilvaPrecisionAttribute.#ctor(System.Int32,System.Int32)">
+            <summary>
+            Specifies this property has a precision upon creation.
+            </summary>
+            <param name="precision"></param>
+            <param name="scale"></param>
         </member>
         <member name="T:Milvasoft.Helpers.DataAccess.EfCore.Concrete.BaseRepository`3">
             <summary>
@@ -3724,49 +3746,46 @@
             <param name="modelBuilder"></param>
             <param name="encryptionProvider"></param>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.MilvaContext.MilvaModelBuilderExtensions.ConfigureStringProperties(Microsoft.EntityFrameworkCore.ModelBuilder)">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.MilvaContext.MilvaModelBuilderExtensions.UseTurkishCollation(Microsoft.EntityFrameworkCore.ModelBuilder)">
             <summary>
             For PostgreSql, makes string properties for Turkish character compatible.
             </summary>
             <param name="modelBuilder"></param>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.MilvaContext.MilvaModelBuilderExtensions.AddIndexToIndelibleEntities(Microsoft.EntityFrameworkCore.ModelBuilder)">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.MilvaContext.MilvaModelBuilderExtensions.UseIndexToIndelibleEntities(Microsoft.EntityFrameworkCore.ModelBuilder)">
             <summary>
             Adds an index for each indelible entity for IsDeleted property.
             </summary>
             <param name="modelBuilder"></param>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.MilvaContext.MilvaModelBuilderExtensions.ConfigureDefaultValue(Microsoft.EntityFrameworkCore.ModelBuilder)">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.MilvaContext.MilvaModelBuilderExtensions.UseDefaultValue(Microsoft.EntityFrameworkCore.ModelBuilder)">
             <summary>
             Configures default value for update database.
             </summary>
             <param name="modelBuilder"></param>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.MilvaContext.MilvaModelBuilderExtensions.FilterDeletedEntities(Microsoft.EntityFrameworkCore.ModelBuilder)">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.MilvaContext.MilvaModelBuilderExtensions.UseSoftDeleteQueryFilter(Microsoft.EntityFrameworkCore.ModelBuilder)">
             <summary>
             Enable the query filter for indelible entities.
             </summary>
             <param name="modelBuilder"></param>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.MilvaContext.MilvaModelBuilderExtensions.IgnoreDefaultIntRecords(Microsoft.EntityFrameworkCore.ModelBuilder)">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.MilvaContext.MilvaModelBuilderExtensions.UsePrecision(Microsoft.EntityFrameworkCore.ModelBuilder,System.Int32,System.Int32)">
             <summary>
-            Enable the query filter for indelible entities with integer key.
+            Configures the decimal property of entities with decimal properties in decimal default(18,2) format.
             </summary>
             <param name="modelBuilder"></param>
+            <param name="precision"></param>
+            <param name="scale"></param>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.MilvaContext.MilvaModelBuilderExtensions.IgnoreDefaultSByteRecords(Microsoft.EntityFrameworkCore.ModelBuilder)">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.MilvaContext.MilvaModelBuilderExtensions.UseAnnotationPrecision(Microsoft.EntityFrameworkCore.ModelBuilder)">
             <summary>
-            Enable the query filter for indelible entities with small byte keys.
+            Configures the decimal property of entities with decimal properties in decimal format according to <see cref="T:Milvasoft.Helpers.DataAccess.EfCore.Attributes.MilvaPrecisionAttribute"/>.
             </summary>
+            <remarks>
+            You can use this method with <see cref="M:Milvasoft.Helpers.DataAccess.EfCore.MilvaContext.MilvaModelBuilderExtensions.UsePrecision(Microsoft.EntityFrameworkCore.ModelBuilder,System.Int32,System.Int32)"/> method. 
+            </remarks>
             <param name="modelBuilder"></param>
-        </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.MilvaContext.MilvaModelBuilderExtensions.ConfigureDecimalProperties(Microsoft.EntityFrameworkCore.ModelBuilder,System.Int32,System.Int32)">
-            <summary>
-            Configures the decimal property of entities with decimal properties in decimal (18,2) format.
-            </summary>
-            <param name="modelBuilder"></param>
-            <param name="beforeSeperatorCount"></param>
-            <param name="afterSeperatorCount"></param>
         </member>
         <member name="M:Milvasoft.Helpers.DataAccess.EfCore.MilvaContext.MilvaModelBuilderExtensions.IncludeAll``1(System.Linq.IQueryable{``0},Microsoft.EntityFrameworkCore.DbContext)">
             <summary>

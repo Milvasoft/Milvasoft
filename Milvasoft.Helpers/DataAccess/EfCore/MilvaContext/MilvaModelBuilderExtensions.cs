@@ -127,14 +127,14 @@ public static class MilvaModelBuilderExtensions
     /// For PostgreSql, makes string properties for Turkish character compatible.
     /// </summary>
     /// <param name="modelBuilder"></param>
-    public static ModelBuilder ConfigureStringProperties(this ModelBuilder modelBuilder)
+    public static ModelBuilder UseTurkishCollation(this ModelBuilder modelBuilder)
     {
         var entitiesHasDecimalProperty = modelBuilder.Model.GetEntityTypes().Where(prop => prop.ClrType.GetProperties().Any(p => p.PropertyType.IsAssignableFrom(typeof(string))));
 
         foreach (var entityType in entitiesHasDecimalProperty)
         {
             var properties = entityType.ClrType.GetProperties().Where(p => p.PropertyType.IsAssignableFrom(typeof(string))
-                                                                            && !p.CustomAttributes.Any(cA => cA.AttributeType.IsAssignableFrom(typeof(NotMappedAttribute))));
+                                                                            && !p.CustomAttributes.Any(cA => cA.AttributeType.IsEquivalentTo(typeof(NotMappedAttribute))));
 
             foreach (var prop in properties)
                 modelBuilder.Entity(entityType.ClrType).Property(prop.Name).UseCollation("tr-TR-x-icu");
@@ -146,7 +146,7 @@ public static class MilvaModelBuilderExtensions
     /// Adds an index for each indelible entity for IsDeleted property.
     /// </summary>
     /// <param name="modelBuilder"></param>
-    public static ModelBuilder AddIndexToIndelibleEntities(this ModelBuilder modelBuilder)
+    public static ModelBuilder UseIndexToIndelibleEntities(this ModelBuilder modelBuilder)
     {
         var indelibleEntites = modelBuilder.Model.GetEntityTypes().Where(entityType => entityType.FindProperty(EntityPropertyNames.IsDeleted) != null);
 
@@ -160,7 +160,7 @@ public static class MilvaModelBuilderExtensions
     /// Configures default value for update database.
     /// </summary>
     /// <param name="modelBuilder"></param>
-    public static ModelBuilder ConfigureDefaultValue(this ModelBuilder modelBuilder)
+    public static ModelBuilder UseDefaultValue(this ModelBuilder modelBuilder)
     {
         foreach (var entityType in modelBuilder.Model.GetEntityTypes())
             foreach (var property in entityType.GetProperties())
@@ -182,7 +182,7 @@ public static class MilvaModelBuilderExtensions
     /// Enable the query filter for indelible entities.
     /// </summary>
     /// <param name="modelBuilder"></param>
-    public static ModelBuilder FilterDeletedEntities(this ModelBuilder modelBuilder)
+    public static ModelBuilder UseSoftDeleteQueryFilter(this ModelBuilder modelBuilder)
     {
         var indelibleEntites = modelBuilder.Model.GetEntityTypes().Where(entityType => entityType.FindProperty(EntityPropertyNames.IsDeleted) != null);
 
@@ -202,69 +202,50 @@ public static class MilvaModelBuilderExtensions
     }
 
     /// <summary>
-    /// Enable the query filter for indelible entities with integer key.
+    /// Configures the decimal property of entities with decimal properties in decimal default(18,2) format.
     /// </summary>
     /// <param name="modelBuilder"></param>
-    public static ModelBuilder IgnoreDefaultIntRecords(this ModelBuilder modelBuilder)
-    {
-        var indelibleEntites = modelBuilder.Model.GetEntityTypes().Where(entityType => entityType.FindProperty(EntityPropertyNames.Id) != null
-                                                                                      && entityType.FindProperty(EntityPropertyNames.Id).PropertyInfo.PropertyType == typeof(int));
-        foreach (var entityType in indelibleEntites)
-        {
-            var parameter = Expression.Parameter(entityType.ClrType, "entity");
-
-            var prop = entityType.FindProperty(EntityPropertyNames.Id);
-
-            var filterExpression = Expression.GreaterThan(Expression.Property(parameter, prop.PropertyInfo), Expression.Constant(50, typeof(int)));
-
-            var dynamicLambda = Expression.Lambda(filterExpression, parameter);
-
-            entityType.SetQueryFilter(dynamicLambda);
-        }
-        return modelBuilder;
-    }
-
-    /// <summary>
-    /// Enable the query filter for indelible entities with small byte keys.
-    /// </summary>
-    /// <param name="modelBuilder"></param>
-    public static ModelBuilder IgnoreDefaultSByteRecords(this ModelBuilder modelBuilder)
-    {
-        var indelibleEntites = modelBuilder.Model.GetEntityTypes().Where(entityType => entityType.FindProperty(EntityPropertyNames.Id) != null
-                                                                                      && entityType.FindProperty(EntityPropertyNames.Id).PropertyInfo.PropertyType == typeof(sbyte));
-        foreach (var entityType in indelibleEntites)
-        {
-            var parameter = Expression.Parameter(entityType.ClrType, "entity");
-
-            var prop = entityType.FindProperty(EntityPropertyNames.Id);
-
-            var filterExpression = Expression.GreaterThan(Expression.Property(parameter, prop.PropertyInfo), Expression.Constant(50, typeof(sbyte)));
-
-            var dynamicLambda = Expression.Lambda(filterExpression, parameter);
-
-            entityType.SetQueryFilter(dynamicLambda);
-        }
-        return modelBuilder;
-    }
-
-    /// <summary>
-    /// Configures the decimal property of entities with decimal properties in decimal (18,2) format.
-    /// </summary>
-    /// <param name="modelBuilder"></param>
-    /// <param name="beforeSeperatorCount"></param>
-    /// <param name="afterSeperatorCount"></param>
-    public static ModelBuilder ConfigureDecimalProperties(this ModelBuilder modelBuilder, int beforeSeperatorCount = 18, int afterSeperatorCount = 10)
+    /// <param name="precision"></param>
+    /// <param name="scale"></param>
+    public static ModelBuilder UsePrecision(this ModelBuilder modelBuilder, int precision = 18, int scale = 10)
     {
         var entitiesHasDecimalProperty = modelBuilder.Model.GetEntityTypes().Where(prop => prop.ClrType.GetProperties().Any(p => p.PropertyType.IsAssignableFrom(typeof(decimal))));
 
         foreach (var entityType in entitiesHasDecimalProperty)
         {
             var properties = entityType.ClrType.GetProperties().Where(p => p.PropertyType.IsAssignableFrom(typeof(decimal))
-                                                                            && !p.CustomAttributes.Any(cA => cA.AttributeType.IsAssignableFrom(typeof(NotMappedAttribute))));
+                                                                      && (!p.CustomAttributes?.Any(cA => (cA.AttributeType?.IsEquivalentTo(typeof(NotMappedAttribute)) ?? false)
+                                                                                                      || (cA.AttributeType?.IsEquivalentTo(typeof(MilvaPrecisionAttribute)) ?? false)) ?? true));
 
             foreach (var prop in properties)
-                modelBuilder.Entity(entityType.ClrType).Property(prop.Name).HasColumnType($"decimal({beforeSeperatorCount},{afterSeperatorCount})");
+                modelBuilder.Entity(entityType.ClrType).Property(prop.Name).HasPrecision(precision, scale);
         }
+
+        return modelBuilder;
+    }
+
+    /// <summary>
+    /// Configures the decimal property of entities with decimal properties in decimal format according to <see cref="MilvaPrecisionAttribute"/>.
+    /// </summary>
+    /// <remarks>
+    /// You can use this method with <see cref="UsePrecision(ModelBuilder, int, int)"/> method. 
+    /// </remarks>
+    /// <param name="modelBuilder"></param>
+    public static ModelBuilder UseAnnotationPrecision(this ModelBuilder modelBuilder)
+    {
+        foreach (var entityType in modelBuilder.Model.GetEntityTypes())
+            foreach (var property in entityType.GetProperties())
+            {
+                var memberInfo = property.PropertyInfo ?? (MemberInfo)property.FieldInfo;
+
+                if (memberInfo == null) continue;
+
+                var precisionAttribute = Attribute.GetCustomAttribute(memberInfo, typeof(MilvaPrecisionAttribute)) as MilvaPrecisionAttribute;
+
+                if (precisionAttribute == null) continue;
+
+                modelBuilder.Entity(entityType.ClrType).Property(property.Name).HasPrecision(precisionAttribute.Precision, precisionAttribute.Scale);
+            }
 
         return modelBuilder;
     }
