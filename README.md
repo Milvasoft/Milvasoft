@@ -11,6 +11,8 @@
 
 <h3 align="center">Milvasoft library helps you to create your .Net projects in the simplest way.</h3>
 <h3 align="center">It makes your work easier with the helpful methods in it.</h3>
+
+<h4 align="center">Sample api needs a lot of changes, so it's useless for now.</h4>
 <br>
 
 ***
