@@ -2175,6 +2175,14 @@
             <param name="function"></param>
             <returns></returns>
         </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Abstract.IContextRepository`1.ApplyTransactionAsync``1(System.Func{System.Threading.Tasks.Task{``0}})">
+            <summary>
+            Applies transaction process to requested function.
+            </summary>
+            <typeparam name="TResult"></typeparam>
+            <param name="function"></param>
+            <returns></returns>
+        </member>
         <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Abstract.IContextRepository`1.ApplyTransactionAsync(System.Func{System.Threading.Tasks.Task},System.Action)">
             <summary>
             Applies transaction process to requested function.
@@ -2183,10 +2191,28 @@
             <param name="rollbackFunction"></param>
             <returns></returns>
         </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Abstract.IContextRepository`1.ApplyTransactionAsync``1(System.Func{System.Threading.Tasks.Task{``0}},System.Action)">
+            <summary>
+            Applies transaction process to requested function.
+            </summary>
+            <typeparam name="TResult"></typeparam>
+            <param name="function"></param>
+            <param name="rollbackFunction"></param>
+            <returns></returns>
+        </member>
         <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Abstract.IContextRepository`1.ApplyTransactionAsync(System.Func{System.Threading.Tasks.Task},System.Func{System.Threading.Tasks.Task})">
             <summary>
             Applies transaction process to requested function.
             </summary>
+            <param name="function"></param>
+            <param name="rollbackFunction"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Abstract.IContextRepository`1.ApplyTransactionAsync``1(System.Func{System.Threading.Tasks.Task{``0}},System.Func{System.Threading.Tasks.Task})">
+            <summary>
+            Applies transaction process to requested function.
+            </summary>
+            <typeparam name="TResult"></typeparam>
             <param name="function"></param>
             <param name="rollbackFunction"></param>
             <returns></returns>
@@ -3105,6 +3131,14 @@
             <param name="function"></param>
             <returns></returns>
         </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Concrete.ContextRepository`1.ApplyTransactionAsync``1(System.Func{System.Threading.Tasks.Task{``0}})">
+            <summary>
+            Applies transaction process to requested function.
+            </summary>
+            <typeparam name="TResult"></typeparam>
+            <param name="function"></param>
+            <returns></returns>
+        </member>
         <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Concrete.ContextRepository`1.ApplyTransactionAsync(System.Func{System.Threading.Tasks.Task},System.Func{System.Threading.Tasks.Task})">
             <summary>
             Applies transaction process to requested function.
@@ -3113,10 +3147,28 @@
             <param name="rollbackFunction"></param>
             <returns></returns>
         </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Concrete.ContextRepository`1.ApplyTransactionAsync``1(System.Func{System.Threading.Tasks.Task{``0}},System.Func{System.Threading.Tasks.Task})">
+            <summary>
+            Applies transaction process to requested function.
+            </summary>
+            <typeparam name="TResult"></typeparam>
+            <param name="function"></param>
+            <param name="rollbackFunction"></param>
+            <returns></returns>
+        </member>
         <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Concrete.ContextRepository`1.ApplyTransactionAsync(System.Func{System.Threading.Tasks.Task},System.Action)">
             <summary>
             Applies transaction process to requested function.
             </summary>
+            <param name="function"></param>
+            <param name="rollbackFunction"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Concrete.ContextRepository`1.ApplyTransactionAsync``1(System.Func{System.Threading.Tasks.Task{``0}},System.Action)">
+            <summary>
+            Applies transaction process to requested function.
+            </summary>
+            <typeparam name="TResult"></typeparam>
             <param name="function"></param>
             <param name="rollbackFunction"></param>
             <returns></returns>

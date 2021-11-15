@@ -81,6 +81,33 @@ public class ContextRepository<TContext> : IContextRepository<TContext> where TC
     /// <summary>
     /// Applies transaction process to requested function.
     /// </summary>
+    /// <typeparam name="TResult"></typeparam>
+    /// <param name="function"></param>
+    /// <returns></returns>
+    public async Task<TResult> ApplyTransactionAsync<TResult>(Func<Task<TResult>> function)
+    {
+        var executionStrategy = _dbContext.Database.CreateExecutionStrategy();
+        return await executionStrategy.ExecuteAsync(async () =>
+        {
+            var transaction = await _dbContext.Database.BeginTransactionAsync().ConfigureAwait(false);
+            try
+            {
+                var result = await function().ConfigureAwait(false);
+                await transaction.CommitAsync().ConfigureAwait(false);
+
+                return result;
+            }
+            catch (Exception)
+            {
+                await transaction.RollbackAsync().ConfigureAwait(false);
+                throw;
+            }
+        });
+    }
+
+    /// <summary>
+    /// Applies transaction process to requested function.
+    /// </summary>
     /// <param name="function"></param>
     /// <param name="rollbackFunction"></param>
     /// <returns></returns>
@@ -107,6 +134,35 @@ public class ContextRepository<TContext> : IContextRepository<TContext> where TC
     /// <summary>
     /// Applies transaction process to requested function.
     /// </summary>
+    /// <typeparam name="TResult"></typeparam>
+    /// <param name="function"></param>
+    /// <param name="rollbackFunction"></param>
+    /// <returns></returns>
+    public async Task<TResult> ApplyTransactionAsync<TResult>(Func<Task<TResult>> function, Func<Task> rollbackFunction)
+    {
+        var executionStrategy = _dbContext.Database.CreateExecutionStrategy();
+        return await executionStrategy.ExecuteAsync(async () =>
+        {
+            var transaction = await _dbContext.Database.BeginTransactionAsync().ConfigureAwait(false);
+            try
+            {
+                var result = await function().ConfigureAwait(false);
+                await transaction.CommitAsync().ConfigureAwait(false);
+
+                return result;
+            }
+            catch (Exception)
+            {
+                await transaction.RollbackAsync().ConfigureAwait(false);
+                await rollbackFunction().ConfigureAwait(false);
+                throw;
+            }
+        });
+    }
+
+    /// <summary>
+    /// Applies transaction process to requested function.
+    /// </summary>
     /// <param name="function"></param>
     /// <param name="rollbackFunction"></param>
     /// <returns></returns>
@@ -120,6 +176,35 @@ public class ContextRepository<TContext> : IContextRepository<TContext> where TC
             {
                 await function().ConfigureAwait(false);
                 await transaction.CommitAsync().ConfigureAwait(false);
+            }
+            catch (Exception)
+            {
+                await transaction.RollbackAsync().ConfigureAwait(false);
+                rollbackFunction();
+                throw;
+            }
+        });
+    }
+
+    /// <summary>
+    /// Applies transaction process to requested function.
+    /// </summary>
+    /// <typeparam name="TResult"></typeparam>
+    /// <param name="function"></param>
+    /// <param name="rollbackFunction"></param>
+    /// <returns></returns>
+    public async Task<TResult> ApplyTransactionAsync<TResult>(Func<Task<TResult>> function, Action rollbackFunction)
+    {
+        var executionStrategy = _dbContext.Database.CreateExecutionStrategy();
+        return await executionStrategy.ExecuteAsync(async () =>
+        {
+            var transaction = await _dbContext.Database.BeginTransactionAsync().ConfigureAwait(false);
+            try
+            {
+                var result = await function().ConfigureAwait(false);
+                await transaction.CommitAsync().ConfigureAwait(false);
+
+                return result;
             }
             catch (Exception)
             {

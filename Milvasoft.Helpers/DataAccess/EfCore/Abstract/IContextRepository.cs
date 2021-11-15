@@ -40,6 +40,14 @@ public interface IContextRepository<TContext> where TContext : DbContext
     /// <summary>
     /// Applies transaction process to requested function.
     /// </summary>
+    /// <typeparam name="TResult"></typeparam>
+    /// <param name="function"></param>
+    /// <returns></returns>
+    Task<TResult> ApplyTransactionAsync<TResult>(Func<Task<TResult>> function);
+
+    /// <summary>
+    /// Applies transaction process to requested function.
+    /// </summary>
     /// <param name="function"></param>
     /// <param name="rollbackFunction"></param>
     /// <returns></returns>
@@ -48,10 +56,28 @@ public interface IContextRepository<TContext> where TContext : DbContext
     /// <summary>
     /// Applies transaction process to requested function.
     /// </summary>
+    /// <typeparam name="TResult"></typeparam>
+    /// <param name="function"></param>
+    /// <param name="rollbackFunction"></param>
+    /// <returns></returns>
+    Task<TResult> ApplyTransactionAsync<TResult>(Func<Task<TResult>> function, Action rollbackFunction);
+
+    /// <summary>
+    /// Applies transaction process to requested function.
+    /// </summary>
     /// <param name="function"></param>
     /// <param name="rollbackFunction"></param>
     /// <returns></returns>
     Task ApplyTransactionAsync(Func<Task> function, Func<Task> rollbackFunction);
+
+    /// <summary>
+    /// Applies transaction process to requested function.
+    /// </summary>
+    /// <typeparam name="TResult"></typeparam>
+    /// <param name="function"></param>
+    /// <param name="rollbackFunction"></param>
+    /// <returns></returns>
+    Task<TResult> ApplyTransactionAsync<TResult>(Func<Task<TResult>> function, Func<Task> rollbackFunction);
 
     /// <summary>
     /// User update process.
