@@ -19,6 +19,7 @@ public class RedisCacheService : IRedisCacheService
 {
     private IConnectionMultiplexer _client;
     private readonly ConfigurationOptions _options;
+    private readonly bool _useUtcForDateTimes;
     private IDatabase _database;
 
     /// <summary>
@@ -29,6 +30,7 @@ public class RedisCacheService : IRedisCacheService
     public RedisCacheService(RedisCacheServiceOptions cacheServiceOptions, IConnectionMultiplexer connectionMultiplexer)
     {
         _options = cacheServiceOptions.ConfigurationOptions;
+        _useUtcForDateTimes = cacheServiceOptions.UseUtcForExpirationDates;
         _client = connectionMultiplexer;
         _database = _client?.GetDatabase();
     }
@@ -163,7 +165,11 @@ public class RedisCacheService : IRedisCacheService
     /// <param name="expiration"></param>
     /// <returns></returns>
     public async Task<bool> SetAsync(string key, object value, TimeSpan? expiration)
-        => await _database.StringSetAsync(key, value.ToJson(), expiration).ConfigureAwait(false);
+        => await _database.StringSetAsync(key, value.ToJson(), expiration.HasValue
+                                                               ? _useUtcForDateTimes
+                                                                    ? expiration.Value.ConvertToUtc()
+                                                                    : expiration
+                                                               : expiration).ConfigureAwait(false);
 
     /// <summary>
     /// Removes <paramref name="key"/> and value.
@@ -186,7 +192,7 @@ public class RedisCacheService : IRedisCacheService
     /// <param name="expiration"></param>
     /// <returns></returns>
     public async Task<bool> KeyExpireAsync(string key, TimeSpan expiration)
-        => await _database.KeyExpireAsync(key, expiration).ConfigureAwait(false);
+        => await _database.KeyExpireAsync(key, _useUtcForDateTimes ? expiration.ConvertToUtc() : expiration).ConfigureAwait(false);
 
     /// <summary>
     /// Sets timeout on <paramref name="key"/>.
@@ -365,7 +371,7 @@ public class RedisCacheService : IRedisCacheService
     /// <param name="value"></param>
     /// <param name="expiration"></param>
     /// <returns></returns>
-    public void Set(string key, object value, TimeSpan expiration) => _database.StringSet(key, value.ToJson(), expiration);
+    public void Set(string key, object value, TimeSpan expiration) => _database.StringSet(key, value.ToJson(), _useUtcForDateTimes ? expiration.ConvertToUtc() : expiration);
 
     /// <summary>
     /// Removes <paramref name="key"/> and value.

@@ -19,6 +19,11 @@ public class RedisCacheServiceOptions
     public ConfigurationOptions ConfigurationOptions { get; }
 
     /// <summary>
+    /// Uses DateTime.UtcNow if its true.
+    /// </summary>
+    public bool UseUtcForExpirationDates { get; set; }
+
+    /// <summary>
     /// Initializes new instance of <see cref="RedisCacheServiceOptions"/>.
     /// <paramref name="connectionString"/> will be added in <see cref="ConfigurationOptions.EndPoints"/>.
     /// </summary>

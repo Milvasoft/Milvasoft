@@ -947,6 +947,11 @@
             Redis configurations.
             </summary>
         </member>
+        <member name="P:Milvasoft.Helpers.Caching.RedisCacheServiceOptions.UseUtcForExpirationDates">
+            <summary>
+            Uses DateTime.UtcNow if its true.
+            </summary>
+        </member>
         <member name="M:Milvasoft.Helpers.Caching.RedisCacheServiceOptions.#ctor(System.String)">
             <summary>
             Initializes new instance of <see cref="T:Milvasoft.Helpers.Caching.RedisCacheServiceOptions"/>.
