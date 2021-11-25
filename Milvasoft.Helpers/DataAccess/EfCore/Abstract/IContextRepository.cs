@@ -86,32 +86,6 @@ public interface IContextRepository<TContext> where TContext : DbContext
                                                            where TKey : struct, IEquatable<TKey>;
 
     /// <summary>
-    /// <para> Removes expired tokens from the system. </para>
-    /// </summary>
-    /// 
-    /// <remarks>
-    /// 
-    /// <para><b>Remarks :</b></para>
-    /// 
-    /// <para> Your DbContext(<typeparamref name="TContext"/>) must inherit from <see cref="IdentityDbContext"/>. </para>
-    /// <para> Your DbContext(<typeparamref name="TContext"/>) must contain <see cref="IdentityUserToken{TKey}"/> DbSet of name "UserTokens". </para>
-    /// 
-    /// </remarks>
-    /// 
-    /// <exception cref="ArgumentException"> Throwns when type of <typeparamref name="TContext"/>'s properties doesn't contain <see cref="IdentityUserToken{TKey}"/> of name 'UserTokens'. </exception>
-    /// 
-    /// <param name="userManager"> User manager </param>
-    /// <param name="loginProvider"> Login Provider (e.g. Facebook) </param>
-    /// <param name="tokenName"> Token Type </param>
-    /// <param name="cachedTokenDictionary"> Dictionary params : Key = userName of <typeparamref name="TUser"/>. Value = JWT security Token as string. </param>
-    /// <returns></returns>
-    Task RemoveExpiredTokensAsync<TUser, TKey>(UserManager<TUser> userManager,
-                                               string loginProvider,
-                                               string tokenName,
-                                               Dictionary<string, string> cachedTokenDictionary = null) where TUser : IdentityUser<TKey>, IBaseEntity<TKey>
-                                                                                                        where TKey : struct, IEquatable<TKey>;
-
-    /// <summary>
     /// Gets requested DbSet by <typeparamref name="TEntity"/>.
     /// </summary>
     /// <typeparam name="TEntity"></typeparam>

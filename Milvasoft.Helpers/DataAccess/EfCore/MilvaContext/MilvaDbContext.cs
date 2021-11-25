@@ -37,6 +37,8 @@ public abstract class MilvaDbContextBase<TUser, TRole, TKey> : IdentityDbContext
     where TRole : IdentityRole<TKey>, IFullAuditable<TKey>
     where TKey : struct, IEquatable<TKey>
 {
+    private readonly bool _useUtcForDateTimes;
+
     #region Protected Properties
 
     /// <summary>
@@ -64,9 +66,11 @@ public abstract class MilvaDbContextBase<TUser, TRole, TKey> : IdentityDbContext
     /// <param name="options"></param>
     /// <param name="httpContextAccessor"></param>
     /// <param name="auditConfiguration"></param>
+    /// <param name="useUtcForDateTimes"></param>
     public MilvaDbContextBase(DbContextOptions options,
                               IHttpContextAccessor httpContextAccessor,
-                              IAuditConfiguration auditConfiguration) : base(options)
+                              IAuditConfiguration auditConfiguration,
+                              bool useUtcForDateTimes = false) : base(options)
     {
         if (auditConfiguration.AuditCreator || auditConfiguration.AuditModifier || auditConfiguration.AuditDeleter)
         {
@@ -83,6 +87,7 @@ public abstract class MilvaDbContextBase<TUser, TRole, TKey> : IdentityDbContext
         }
 
         AuditConfiguration = auditConfiguration;
+        _useUtcForDateTimes = useUtcForDateTimes;
         IgnoreSoftDelete = false;
     }
 
@@ -250,7 +255,7 @@ public abstract class MilvaDbContextBase<TUser, TRole, TKey> : IdentityDbContext
         entry.Property(EntityPropertyNames.IsDeleted).IsModified = true;
 
         //Change "DeletionDate" property value.
-        entry.Property(EntityPropertyNames.DeletionDate).CurrentValue = DateTime.Now;
+        entry.Property(EntityPropertyNames.DeletionDate).CurrentValue = _useUtcForDateTimes ? DateTime.UtcNow : DateTime.Now;
         entry.Property(EntityPropertyNames.DeletionDate).IsModified = true;
 
         if (entry.Metadata.GetProperties().Any(prop => prop.Name == EntityPropertyNames.DeleterUserId))
@@ -269,7 +274,7 @@ public abstract class MilvaDbContextBase<TUser, TRole, TKey> : IdentityDbContext
     /// <param name="propertyName"></param>
     protected virtual void AuditDate(EntityEntry entry, string propertyName)
     {
-        entry.Property(propertyName).CurrentValue = DateTime.Now;
+        entry.Property(propertyName).CurrentValue = _useUtcForDateTimes ? DateTime.UtcNow : DateTime.Now;
         entry.Property(propertyName).IsModified = true;
     }
 
@@ -362,9 +367,11 @@ public abstract class MilvaDbContext<TUser, TRole, TKey> : MilvaDbContextBase<TU
     /// <param name="options"></param>
     /// <param name="httpContextAccessor"></param>
     /// <param name="auditConfiguration"></param>
+    /// <param name="useUtcForDateTimes"></param>
     public MilvaDbContext(DbContextOptions options,
                           IHttpContextAccessor httpContextAccessor,
-                          IAuditConfiguration auditConfiguration) : base(options, httpContextAccessor, auditConfiguration)
+                          IAuditConfiguration auditConfiguration,
+                          bool useUtcForDateTimes = false) : base(options, httpContextAccessor, auditConfiguration, useUtcForDateTimes)
     {
         AuditConfiguration = auditConfiguration;
     }

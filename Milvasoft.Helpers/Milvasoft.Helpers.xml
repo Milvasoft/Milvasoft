@@ -2222,28 +2222,6 @@
             User update process.
             </summary>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Abstract.IContextRepository`1.RemoveExpiredTokensAsync``2(Microsoft.AspNetCore.Identity.UserManager{``0},System.String,System.String,System.Collections.Generic.Dictionary{System.String,System.String})">
-            <summary>
-            <para> Removes expired tokens from the system. </para>
-            </summary>
-            
-            <remarks>
-            
-            <para><b>Remarks :</b></para>
-            
-            <para> Your DbContext(<typeparamref name="TContext"/>) must inherit from <see cref="T:Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityDbContext"/>. </para>
-            <para> Your DbContext(<typeparamref name="TContext"/>) must contain <see cref="T:Microsoft.AspNetCore.Identity.IdentityUserToken`1"/> DbSet of name "UserTokens". </para>
-            
-            </remarks>
-            
-            <exception cref="T:System.ArgumentException"> Throwns when type of <typeparamref name="TContext"/>'s properties doesn't contain <see cref="T:Microsoft.AspNetCore.Identity.IdentityUserToken`1"/> of name 'UserTokens'. </exception>
-            
-            <param name="userManager"> User manager </param>
-            <param name="loginProvider"> Login Provider (e.g. Facebook) </param>
-            <param name="tokenName"> Token Type </param>
-            <param name="cachedTokenDictionary"> Dictionary params : Key = userName of <typeparamref name="TUser"/>. Value = JWT security Token as string. </param>
-            <returns></returns>
-        </member>
         <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Abstract.IContextRepository`1.GetDbSet``1">
             <summary>
             Gets requested DbSet by <typeparamref name="TEntity"/>.
@@ -3178,30 +3156,6 @@
             User update process.
             </summary>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Concrete.ContextRepository`1.RemoveExpiredTokensAsync``2(Microsoft.AspNetCore.Identity.UserManager{``0},System.String,System.String,System.Collections.Generic.Dictionary{System.String,System.String})">
-            <summary>
-            <para> Removes expired tokens from the system. </para>
-            </summary>
-            
-            <remarks>
-            
-            <para><b>Remarks :</b></para>
-            
-            <para> Your DbContext(<typeparamref name="TContext"/>) must inherit from <see cref="T:Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityDbContext"/>. </para>
-            <para> Your DbContext(<typeparamref name="TContext"/>) must contain <see cref="T:Microsoft.AspNetCore.Identity.IdentityUserToken`1"/> DbSet of name "UserTokens". </para>
-            <para> Your DbContext(<typeparamref name="TContext"/>) must contain <see cref="T:Microsoft.AspNetCore.Identity.IdentityUser`1"/> DbSet of name "Users". </para>
-            
-            </remarks>
-            
-            <exception cref="T:System.ArgumentException"> Throwns when type of <typeparamref name="TContext"/>'s properties doesn't contain <see cref="T:Microsoft.AspNetCore.Identity.IdentityUser`1"/> of name 'Users'. </exception>
-            <exception cref="T:System.ArgumentException"> Throwns when type of <typeparamref name="TContext"/>'s properties doesn't contain <see cref="T:Microsoft.AspNetCore.Identity.IdentityUserToken`1"/> of name 'UserTokens'. </exception>
-            
-            <param name="userManager"> User manager </param>
-            <param name="loginProvider"> Login Provider (e.g. Facebook) </param>
-            <param name="tokenName"> Token Type </param>
-            <param name="cachedTokenDictionary"> Dictionary params : Key = userName of <typeparamref name="TUser"/>. Value = JWT security Token as string. </param>
-            <returns></returns>
-        </member>
         <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Concrete.ContextRepository`1.GetRequiredContents``1">
             <summary>
             Gets requested contents by <typeparamref name="TEntity"/> DbSet.
@@ -3659,13 +3613,14 @@
             If its true ignores soft delete.
             </summary>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.MilvaContext.MilvaDbContextBase`3.#ctor(Microsoft.EntityFrameworkCore.DbContextOptions,Microsoft.AspNetCore.Http.IHttpContextAccessor,Milvasoft.Helpers.DependencyInjection.IAuditConfiguration)">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.MilvaContext.MilvaDbContextBase`3.#ctor(Microsoft.EntityFrameworkCore.DbContextOptions,Microsoft.AspNetCore.Http.IHttpContextAccessor,Milvasoft.Helpers.DependencyInjection.IAuditConfiguration,System.Boolean)">
             <summary>
             Initializes new instance of <see cref="T:Milvasoft.Helpers.DataAccess.EfCore.MilvaContext.MilvaDbContext`3"/>.
             </summary>
             <param name="options"></param>
             <param name="httpContextAccessor"></param>
             <param name="auditConfiguration"></param>
+            <param name="useUtcForDateTimes"></param>
         </member>
         <member name="M:Milvasoft.Helpers.DataAccess.EfCore.MilvaContext.MilvaDbContextBase`3.OnModelCreating(Microsoft.EntityFrameworkCore.ModelBuilder)">
             <summary>
@@ -3773,13 +3728,14 @@
             <typeparam name="TRole"></typeparam>
             <typeparam name="TKey"></typeparam>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.MilvaContext.MilvaDbContext`3.#ctor(Microsoft.EntityFrameworkCore.DbContextOptions,Microsoft.AspNetCore.Http.IHttpContextAccessor,Milvasoft.Helpers.DependencyInjection.IAuditConfiguration)">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.MilvaContext.MilvaDbContext`3.#ctor(Microsoft.EntityFrameworkCore.DbContextOptions,Microsoft.AspNetCore.Http.IHttpContextAccessor,Milvasoft.Helpers.DependencyInjection.IAuditConfiguration,System.Boolean)">
             <summary>
             Cunstructor of <see cref="T:Milvasoft.Helpers.DataAccess.EfCore.MilvaContext.MilvaDbContext`3"></see>.
             </summary>
             <param name="options"></param>
             <param name="httpContextAccessor"></param>
             <param name="auditConfiguration"></param>
+            <param name="useUtcForDateTimes"></param>
         </member>
         <member name="M:Milvasoft.Helpers.DataAccess.EfCore.MilvaContext.MilvaDbContext`3.OnModelCreating(Microsoft.EntityFrameworkCore.ModelBuilder)">
             <summary>
@@ -4150,6 +4106,11 @@
             Mongo database instance.
             </summary>
         </member>
+        <member name="F:Milvasoft.Helpers.DataAccess.MongoDB.Concrete.BaseRepository`1._useUtcForDateTimes">
+            <summary>
+            Mongo database instance.
+            </summary>
+        </member>
         <member name="M:Milvasoft.Helpers.DataAccess.MongoDB.Concrete.BaseRepository`1.#ctor(Milvasoft.Helpers.DataAccess.MongoDB.Utils.IMongoDbSettings)">
             <summary>
             Constructor of <see cref="T:Milvasoft.Helpers.DataAccess.MongoDB.Concrete.BaseRepository`1"/>
@@ -4508,6 +4469,11 @@
             Connection string of to be connected database.
             </summary>
         </member>
+        <member name="P:Milvasoft.Helpers.DataAccess.MongoDB.Utils.IMongoDbSettings.UseUtcForDateTimes">
+            <summary>
+            Uses DateTime.UtcNow if its true.
+            </summary>
+        </member>
         <member name="T:Milvasoft.Helpers.DataAccess.MongoDB.Utils.MongoDbSettings">
             <summary>
             Mongo connection settings.
@@ -4521,6 +4487,11 @@
         <member name="P:Milvasoft.Helpers.DataAccess.MongoDB.Utils.MongoDbSettings.ConnectionString">
             <summary>
             Connection string of to be connected database.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.DataAccess.MongoDB.Utils.MongoDbSettings.UseUtcForDateTimes">
+            <summary>
+            Uses DateTime.UtcNow if its true.
             </summary>
         </member>
         <member name="T:Milvasoft.Helpers.DataAccess.MongoDB.Utils.NoSqlRelationHelper">

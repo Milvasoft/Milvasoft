@@ -230,63 +230,6 @@ public class ContextRepository<TContext> : IContextRepository<TContext> where TC
     }
 
     /// <summary>
-    /// <para> Removes expired tokens from the system. </para>
-    /// </summary>
-    /// 
-    /// <remarks>
-    /// 
-    /// <para><b>Remarks :</b></para>
-    /// 
-    /// <para> Your DbContext(<typeparamref name="TContext"/>) must inherit from <see cref="IdentityDbContext"/>. </para>
-    /// <para> Your DbContext(<typeparamref name="TContext"/>) must contain <see cref="IdentityUserToken{TKey}"/> DbSet of name "UserTokens". </para>
-    /// <para> Your DbContext(<typeparamref name="TContext"/>) must contain <see cref="IdentityUser{TKey}"/> DbSet of name "Users". </para>
-    /// 
-    /// </remarks>
-    /// 
-    /// <exception cref="ArgumentException"> Throwns when type of <typeparamref name="TContext"/>'s properties doesn't contain <see cref="IdentityUser{TKey}"/> of name 'Users'. </exception>
-    /// <exception cref="ArgumentException"> Throwns when type of <typeparamref name="TContext"/>'s properties doesn't contain <see cref="IdentityUserToken{TKey}"/> of name 'UserTokens'. </exception>
-    /// 
-    /// <param name="userManager"> User manager </param>
-    /// <param name="loginProvider"> Login Provider (e.g. Facebook) </param>
-    /// <param name="tokenName"> Token Type </param>
-    /// <param name="cachedTokenDictionary"> Dictionary params : Key = userName of <typeparamref name="TUser"/>. Value = JWT security Token as string. </param>
-    /// <returns></returns>
-    public async Task RemoveExpiredTokensAsync<TUser, TKey>(UserManager<TUser> userManager,
-                                                            string loginProvider,
-                                                            string tokenName,
-                                                            Dictionary<string, string> cachedTokenDictionary = null) where TUser : IdentityUser<TKey>, IBaseEntity<TKey>
-                                                                                                                     where TKey : struct, IEquatable<TKey>
-    {
-        var tokenHandler = new JwtSecurityTokenHandler();
-
-        var userTokensString = "UserTokens";
-
-        var usersString = "Users";
-
-        if (!CommonHelper.PropertyExists<TContext>(usersString))
-            throw new ArgumentException($"Type of {typeof(TContext)}'s properties doesn't contain '{usersString}'.");
-
-        if (!CommonHelper.PropertyExists<TContext>(userTokensString))
-            throw new ArgumentException($"Type of {typeof(TContext)}'s properties doesn't contain '{userTokensString}'.");
-
-        var userTokens = (DbSet<IdentityUserToken<TKey>>)_dbContext.GetType().GetProperty(userTokensString).GetValue(_dbContext, null);
-        var users = await ((DbSet<TUser>)_dbContext.GetType().GetProperty(usersString).GetValue(_dbContext, null)).ToListAsync().ConfigureAwait(false);
-
-        foreach (var userToken in userTokens)
-        {
-            if (tokenHandler.ReadJwtToken(userToken.Value).ValidTo <= DateTime.Now)
-            {
-                var user = users.Find(i => i.Id.Equals(userToken.UserId));
-
-                await userManager.RemoveAuthenticationTokenAsync(user, loginProvider, tokenName).ConfigureAwait(false);
-
-                if (cachedTokenDictionary?.ContainsKey(user.UserName) ?? false)
-                    cachedTokenDictionary.Remove(user.UserName);
-            }
-        }
-    }
-
-    /// <summary>
     /// Gets requested contents by <typeparamref name="TEntity"/> DbSet.
     /// </summary>
     /// <typeparam name="TEntity"></typeparam>

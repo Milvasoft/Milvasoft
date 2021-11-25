@@ -14,4 +14,9 @@ public class MongoDbSettings : IMongoDbSettings
     /// Connection string of to be connected database.
     /// </summary>
     public string ConnectionString { get; set; }
+
+    /// <summary>
+    /// Uses DateTime.UtcNow if its true.
+    /// </summary>
+    public bool UseUtcForDateTimes { get; set; }
 }

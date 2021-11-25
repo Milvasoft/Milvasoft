@@ -369,7 +369,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
 
             currentStudent.ThrowIfNullForGuidObject();
 
-            var lastAssignment = currentStudent.OldAssignments.Where(i => i.FinishedDate >= DateTime.Now);
+            var lastAssignment = currentStudent.OldAssignments.Where(i => i.FinishedDate >= DateTime.UtcNow);
 
             if (lastAssignment.Count() > 0)
             {

@@ -54,7 +54,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         private readonly IMilvaLogger _milvaLogger;
         private readonly string _userName;
         private readonly IRedisCacheService _redisCacheService;
-        private readonly DateTime _tokenExpireDate = DateTime.Now.AddDays(1);
+        private readonly DateTime _tokenExpireDate = DateTime.UtcNow.AddDays(1);
 
         /// <summary>
         /// The authentication scheme for the provider the token is associated with.
@@ -117,7 +117,8 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         public async Task<LoginResultDTO> LoginAsync(LoginDTO loginDTO, bool isMentor) => await base.LoginAsync(loginDTO,
                                                                                                                 isMentor,
                                                                                                                 userValidationByUserType: ValidateUserAsync,
-                                                                                                                tokenExpiredDate: isMentor ? DateTime.Now.AddDays(100) : DateTime.Now.AddDays(5)).ConfigureAwait(false);
+                                                                                                                tokenExpiredDate: isMentor ? DateTime.UtcNow.AddDays(100) 
+                                                                                                                                           : DateTime.UtcNow.AddDays(5)).ConfigureAwait(false);
 
         /// <summary>
         /// Change user password.
@@ -175,7 +176,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
 
             if (initializeUpdate)
             {
-                toBeUpdatedUser.LastModificationDate = DateTime.Now;
+                toBeUpdatedUser.LastModificationDate = DateTime.UtcNow;
 
                 var updateResult = await _userManager.UpdateAsync(toBeUpdatedUser).ConfigureAwait(false);
 

@@ -338,7 +338,7 @@ public class IdentityOperations<TUserManager, TDbContext, TLocalizer, TUser, TRo
     {
         IdentityError GetLockedError(DateTime lockoutEnd)
         {
-            var remainingLockoutEnd = lockoutEnd - DateTime.Now;
+            var remainingLockoutEnd = lockoutEnd - DateTime.UtcNow;
 
             var reminingLockoutEndString = remainingLockoutEnd.Hours > 0
                                             ? _localizer[LocalizerKeys.Hours, remainingLockoutEnd.Hours]
@@ -398,7 +398,7 @@ public class IdentityOperations<TUserManager, TDbContext, TLocalizer, TUser, TRo
 
         var userLocked = _userManager.IsLockedOutAsync(user).Result;
 
-        if (userLocked && DateTime.Now > user.LockoutEnd.Value.DateTime)
+        if (userLocked && DateTime.UtcNow > user.LockoutEnd.Value.DateTime)
         {
             _contextRepository.InitializeUpdating<TUser, TKey>(user);
 

@@ -31,6 +31,11 @@ public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : 
     protected readonly IMongoDatabase _mongoDatabase;
 
     /// <summary>
+    /// Mongo database instance.
+    /// </summary>
+    protected readonly bool _useUtcForDateTimes;
+
+    /// <summary>
     /// Constructor of <see cref="BaseRepository{TEntity}"/>
     /// </summary>
     /// <param name="settings"></param>
@@ -38,6 +43,7 @@ public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : 
     {
         _mongoDatabase = new MongoClient(settings.ConnectionString).GetDatabase(settings.DatabaseName);
         _collection = _mongoDatabase.GetCollection<TEntity>(typeof(TEntity).GetCollectionName());
+        _useUtcForDateTimes = settings.UseUtcForDateTimes;
     }
 
     /// <summary>
@@ -466,7 +472,7 @@ public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : 
     public virtual async Task UpdateAsync(TEntity document)
     {
         var filter = Builders<TEntity>.Filter.Eq(doc => doc.Id, document.Id);
-        document.LastModificationDate = DateTime.Now;
+        document.LastModificationDate = _useUtcForDateTimes ? DateTime.UtcNow : DateTime.Now;
         await _collection.FindOneAndReplaceAsync(filter, document).ConfigureAwait(false);
     }
 
@@ -479,7 +485,7 @@ public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : 
     public virtual async Task UpdateAsync(TEntity document, UpdateDefinition<TEntity> updateDefinition)
     {
         var filter = Builders<TEntity>.Filter.Eq(doc => doc.Id, document.Id);
-        document.LastModificationDate = DateTime.Now;
+        document.LastModificationDate = _useUtcForDateTimes ? DateTime.UtcNow : DateTime.Now;
         await _collection.UpdateOneAsync(filter, updateDefinition).ConfigureAwait(false);
     }
 
