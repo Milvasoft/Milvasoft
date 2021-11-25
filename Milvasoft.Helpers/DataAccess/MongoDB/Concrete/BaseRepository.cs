@@ -1,4 +1,5 @@
 ﻿using Milvasoft.Helpers.DataAccess.EfCore.Abstract.Entity;
+using Milvasoft.Helpers.DataAccess.EfCore.Concrete.Entity;
 using Milvasoft.Helpers.DataAccess.MongoDB.Abstract;
 using Milvasoft.Helpers.DataAccess.MongoDB.Utils;
 using Milvasoft.Helpers.Exceptions;
@@ -51,6 +52,8 @@ public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : 
     /// </summary>
     /// <returns></returns>
     public IMongoDatabase GetMongoDatabaseInstance() => _mongoDatabase;
+
+    #region Get Data
 
     /// <summary>
     /// Returns all entities.
@@ -440,6 +443,8 @@ public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : 
 
     #endregion
 
+    #endregion
+
     /// <summary>
     ///  Adds single entity to database asynchronously.
     /// </summary>
@@ -448,6 +453,9 @@ public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : 
     public virtual async Task AddAsync(TEntity document)
     {
         var options = new InsertOneOptions { BypassDocumentValidation = false };
+
+        if (_useUtcForDateTimes)
+            ConvertDateTimePropertiesToUtc(document);
 
         await _collection.InsertOneAsync(document, options).ConfigureAwait(false);
     }
@@ -461,6 +469,9 @@ public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : 
     {
         var options = new InsertManyOptions { BypassDocumentValidation = false };
 
+        if (_useUtcForDateTimes)
+            ConvertDateTimePropertiesToUtc(documents);
+
         await _collection.InsertManyAsync(documents, options).ConfigureAwait(false);
     }
 
@@ -472,7 +483,12 @@ public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : 
     public virtual async Task UpdateAsync(TEntity document)
     {
         var filter = Builders<TEntity>.Filter.Eq(doc => doc.Id, document.Id);
-        document.LastModificationDate = _useUtcForDateTimes ? DateTime.UtcNow : DateTime.Now;
+
+        document.LastModificationDate = DateTime.Now;
+
+        if (_useUtcForDateTimes)
+            ConvertDateTimePropertiesToUtc(document);
+
         await _collection.FindOneAndReplaceAsync(filter, document).ConfigureAwait(false);
     }
 
@@ -485,13 +501,23 @@ public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : 
     public virtual async Task UpdateAsync(TEntity document, UpdateDefinition<TEntity> updateDefinition)
     {
         var filter = Builders<TEntity>.Filter.Eq(doc => doc.Id, document.Id);
-        document.LastModificationDate = _useUtcForDateTimes ? DateTime.UtcNow : DateTime.Now;
+
+        document.LastModificationDate = DateTime.Now;
+
+        if (_useUtcForDateTimes)
+            ConvertDateTimePropertiesToUtc(document);
+
         await _collection.UpdateOneAsync(filter, updateDefinition).ConfigureAwait(false);
     }
 
     /// <summary>
     /// Updates existing assets according to <paramref name="updateDefinition"/> matching <paramref name="filterDefinition"/>.
     /// </summary>
+    /// <remarks>
+    /// 
+    /// UTC convert operation cannot apply even if you set <see cref="IMongoDbSettings.UseUtcForDateTimes"/> to true when using this method.
+    /// 
+    /// </remarks>
     /// <param name="filterDefinition"></param>
     /// <param name="updateDefinition"></param>
     /// <returns></returns>
@@ -503,25 +529,52 @@ public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : 
     /// <summary>
     /// Updates the data in multiple.
     /// 
-    /// <para> You can only update one property in multiple. See <paramref name="fieldDefinitions"/> </para>
+    /// <para> You can only update one property in multiple. </para>
     /// 
     /// </summary>
-    /// <param name="entities"></param>
+    /// <param name="documents"></param>
     /// <param name="fieldDefinitions"></param>
     /// <returns></returns>
-    public async Task UpdateRangeAsync(List<TEntity> entities, params Expression<Func<TEntity, object>>[] fieldDefinitions)
+    public async Task UpdateRangeAsync(List<TEntity> documents, params Expression<Func<TEntity, object>>[] fieldDefinitions)
     {
         var listWrites = new List<WriteModel<TEntity>>();
 
-        foreach (var entity in entities)
+        foreach (var entity in documents)
         {
+            var filterDef = Builders<TEntity>.Filter.Eq(p => p.Id, entity.Id);
+
             foreach (var fieldDef in fieldDefinitions)
             {
-                var filterDef = Builders<TEntity>.Filter.Eq(p => p.Id, entity.Id);
-                var UpdateDef = Builders<TEntity>.Update.Set(fieldDef, entity.GetType().GetProperty(fieldDef.GetPropertyName()).GetValue(entity));
+                if (fieldDef.ReturnType == typeof(DateTime))
+                {
+                    var propValue = (DateTime)entity.GetType().GetProperty(fieldDef.GetPropertyName()).GetValue(entity);
 
-                listWrites.Add(new UpdateOneModel<TEntity>(filterDef, UpdateDef));
+                    var updateDef = Builders<TEntity>.Update.Set(fieldDef, propValue.ToUniversalTime());
+
+                    listWrites.Add(new UpdateOneModel<TEntity>(filterDef, updateDef));
+                }
+                else if (fieldDef.ReturnType == typeof(DateTime?))
+                {
+                    var propValue = (DateTime?)entity.GetType().GetProperty(fieldDef.GetPropertyName()).GetValue(entity);
+
+                    if (propValue.HasValue)
+                    {
+                        var updateDef = Builders<TEntity>.Update.Set(fieldDef, propValue.Value.ToUniversalTime());
+
+                        listWrites.Add(new UpdateOneModel<TEntity>(filterDef, updateDef));
+                    }                  
+                }
+                else
+                {
+                    var updateDef = Builders<TEntity>.Update.Set(fieldDef, entity.GetType().GetProperty(fieldDef.GetPropertyName()).GetValue(entity));
+
+                    listWrites.Add(new UpdateOneModel<TEntity>(filterDef, updateDef));
+                }
             }
+
+            var updateDefForLastModificationDate = Builders<TEntity>.Update.Set(i => i.LastModificationDate, _useUtcForDateTimes ? DateTime.UtcNow : DateTime.Now);
+
+            listWrites.Add(new UpdateOneModel<TEntity>(filterDef, updateDefForLastModificationDate));
         }
 
         await _collection.BulkWriteAsync(listWrites).ConfigureAwait(false);
@@ -753,6 +806,67 @@ public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : 
         if (requestedPageNumber <= 0) throw new MilvaUserFriendlyException(MilvaException.WrongRequestedPageNumber);
 
         if (countOfRequestedRecordsInPage <= 0) throw new MilvaUserFriendlyException(MilvaException.WrongRequestedItemCount);
+    }
+
+    /// <summary>
+    /// Convert date times to UTC Zero.
+    /// </summary>
+    /// <remarks>
+    /// 
+    /// This will applied when "useUtcForDateTimes" in constructor property is true.
+    /// This will applied <see cref="DateTime"/> and nullable <see cref="DateTime"/>.
+    /// 
+    /// </remarks>
+    protected virtual void ConvertDateTimePropertiesToUtc(TEntity document)
+    {
+        foreach (var prop in document.GetType().GetProperties())
+        {
+            if (prop.PropertyType == typeof(DateTime))
+            {
+                var propValue = (DateTime)prop.GetValue(document);
+
+                prop.SetValue(document, propValue.ToUniversalTime());
+            }
+            else if (prop.PropertyType == typeof(DateTime?))
+            {
+                var propValue = (DateTime?)prop.GetValue(document);
+
+                if (propValue.HasValue)
+                    prop.SetValue(document, propValue.Value.ToUniversalTime());
+            }
+        }
+    }
+
+    /// <summary>
+    /// Convert date times to UTC Zero.
+    /// </summary>
+    /// <remarks>
+    /// 
+    /// This will applied when "useUtcForDateTimes" in constructor property is true.
+    /// This will applied <see cref="DateTime"/> and nullable <see cref="DateTime"/>.
+    /// 
+    /// </remarks>
+    protected virtual void ConvertDateTimePropertiesToUtc(IEnumerable<TEntity> documents)
+    {
+        foreach (var document in documents)
+        {
+            foreach (var prop in document.GetType().GetProperties())
+            {
+                if (prop.PropertyType == typeof(DateTime))
+                {
+                    var propValue = (DateTime)prop.GetValue(document);
+
+                    prop.SetValue(document, propValue.ToUniversalTime());
+                }
+                else if (prop.PropertyType == typeof(DateTime?))
+                {
+                    var propValue = (DateTime?)prop.GetValue(document);
+
+                    if (propValue.HasValue)
+                        prop.SetValue(document, propValue.Value.ToUniversalTime());
+                }
+            }
+        }
     }
 
     #endregion

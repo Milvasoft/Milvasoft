@@ -120,6 +120,10 @@ public abstract class MilvaDbContextBase<TUser, TRole, TKey> : IdentityDbContext
     public override int SaveChanges()
     {
         AuditEntites();
+
+        if (_useUtcForDateTimes)
+            ConvertDateTimesToUtc();
+
         return base.SaveChanges();
     }
 
@@ -131,6 +135,10 @@ public abstract class MilvaDbContextBase<TUser, TRole, TKey> : IdentityDbContext
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
     {
         AuditEntites();
+
+        if (_useUtcForDateTimes)
+            ConvertDateTimesToUtc();
+
         return await base.SaveChangesAsync(cancellationToken);
     }
 
@@ -255,7 +263,7 @@ public abstract class MilvaDbContextBase<TUser, TRole, TKey> : IdentityDbContext
         entry.Property(EntityPropertyNames.IsDeleted).IsModified = true;
 
         //Change "DeletionDate" property value.
-        entry.Property(EntityPropertyNames.DeletionDate).CurrentValue = _useUtcForDateTimes ? DateTime.UtcNow : DateTime.Now;
+        entry.Property(EntityPropertyNames.DeletionDate).CurrentValue = DateTime.Now;
         entry.Property(EntityPropertyNames.DeletionDate).IsModified = true;
 
         if (entry.Metadata.GetProperties().Any(prop => prop.Name == EntityPropertyNames.DeleterUserId))
@@ -274,7 +282,7 @@ public abstract class MilvaDbContextBase<TUser, TRole, TKey> : IdentityDbContext
     /// <param name="propertyName"></param>
     protected virtual void AuditDate(EntityEntry entry, string propertyName)
     {
-        entry.Property(propertyName).CurrentValue = _useUtcForDateTimes ? DateTime.UtcNow : DateTime.Now;
+        entry.Property(propertyName).CurrentValue = DateTime.Now;
         entry.Property(propertyName).IsModified = true;
     }
 
@@ -336,6 +344,41 @@ public abstract class MilvaDbContextBase<TUser, TRole, TKey> : IdentityDbContext
         }
 
         IgnoreSoftDelete = false;
+    }
+
+    /// <summary>
+    /// Convert date times to UTC Zero if entry state is not <see cref="EntityState.Unchanged"/>.
+    /// </summary>
+    /// <remarks>
+    /// 
+    /// This will applied when "useUtcForDateTimes" in constructor property is true.
+    /// This will applied <see cref="DateTime"/> and nullable <see cref="DateTime"/>.
+    /// 
+    /// </remarks>
+    public virtual void ConvertDateTimesToUtc()
+    {
+        foreach (var entry in ChangeTracker.Entries())
+        {
+            if (entry.State != EntityState.Unchanged)
+            {
+                foreach (var prop in entry.Metadata.GetProperties())
+                {
+                    if (prop.ClrType == typeof(DateTime))
+                    {
+                        var propEntry = (DateTime)entry.Property(prop.Name).CurrentValue;
+
+                        entry.Property(prop.Name).CurrentValue = propEntry.ToUniversalTime();
+                    }
+                    else if (prop.ClrType == typeof(DateTime?))
+                    {
+                        var propEntry = (DateTime?)entry.Property(prop.Name).CurrentValue;
+
+                        if (propEntry.HasValue)
+                            entry.Property(prop.Name).CurrentValue = propEntry.Value.ToUniversalTime();
+                    }
+                }
+            }
+        }
     }
 
     #endregion

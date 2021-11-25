@@ -5017,7 +5017,13 @@
             <param name="message"></param>
             <param name="mailSubjectsEnum"></param>
         </member>
-        <!-- Badly formed XML comment ignored for member "M:Milvasoft.SampleAPI.Utils.EducationLogger.LogFatal(System.String,System.String)" -->
+        <member name="M:Milvasoft.SampleAPI.Utils.EducationLogger.LogFatal(System.String,System.String)">
+            <summary>
+            Saves the log at fatal level. And sends mail to producer.
+            </summary>
+            <param name="message"></param>
+            <param name="mailSubjectsEnum"></param>
+        </member>
         <member name="M:Milvasoft.SampleAPI.Utils.EducationLogger.LogFatalAsync(System.String,System.String)">
             <summary>
             Saves the log at fatal level. And sends mail to producer.

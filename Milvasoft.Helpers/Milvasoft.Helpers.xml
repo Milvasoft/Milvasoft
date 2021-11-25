@@ -3728,6 +3728,17 @@
             If deletion process happens then sets the <see cref="F:Milvasoft.Helpers.DataAccess.EfCore.MilvaContext.MilvaDbContextBase`3.IgnoreSoftDelete"/> variable to true at the end of process.
             </summary>
         </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.MilvaContext.MilvaDbContextBase`3.ConvertDateTimesToUtc">
+            <summary>
+            Convert date times to UTC Zero if entry state is not <see cref="F:Microsoft.EntityFrameworkCore.EntityState.Unchanged"/>.
+            </summary>
+            <remarks>
+            
+            This will applied when "useUtcForDateTimes" in constructor property is true.
+            This will applied <see cref="T:System.DateTime"/> and nullable <see cref="T:System.DateTime"/>.
+            
+            </remarks>
+        </member>
         <member name="T:Milvasoft.Helpers.DataAccess.EfCore.MilvaContext.MilvaDbContext`3">
             <summary>
             Handles all database operations. Inherits <see cref="T:Milvasoft.Helpers.DataAccess.EfCore.MilvaContext.MilvaDbContextBase`3"/>
@@ -3798,6 +3809,12 @@
         <member name="M:Milvasoft.Helpers.DataAccess.EfCore.MilvaContext.MilvaModelBuilderExtensions.UseIndexToIndelibleEntities(Microsoft.EntityFrameworkCore.ModelBuilder)">
             <summary>
             Adds an index for each indelible entity for IsDeleted property.
+            </summary>
+            <param name="modelBuilder"></param>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.MilvaContext.MilvaModelBuilderExtensions.UseIndexToCreationAuditableEntities(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <summary>
+            Adds an index for each creation auditable entity for CreationDate property.
             </summary>
             <param name="modelBuilder"></param>
         </member>
@@ -4332,6 +4349,11 @@
             <summary>
             Updates existing assets according to <paramref name="updateDefinition"/> matching <paramref name="filterDefinition"/>.
             </summary>
+            <remarks>
+            
+            UTC convert operation cannot apply even if you set <see cref="P:Milvasoft.Helpers.DataAccess.MongoDB.Utils.IMongoDbSettings.UseUtcForDateTimes"/> to true when using this method.
+            
+            </remarks>
             <param name="filterDefinition"></param>
             <param name="updateDefinition"></param>
             <returns></returns>
@@ -4340,10 +4362,10 @@
             <summary>
             Updates the data in multiple.
             
-            <para> You can only update one property in multiple. See <paramref name="fieldDefinitions"/> </para>
+            <para> You can only update one property in multiple. </para>
             
             </summary>
-            <param name="entities"></param>
+            <param name="documents"></param>
             <param name="fieldDefinitions"></param>
             <returns></returns>
         </member>
@@ -4420,6 +4442,28 @@
             </summary>
             <param name="requestedPageNumber"></param>
             <param name="countOfRequestedRecordsInPage"></param>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.MongoDB.Concrete.BaseRepository`1.ConvertDateTimePropertiesToUtc(`0)">
+            <summary>
+            Convert date times to UTC Zero.
+            </summary>
+            <remarks>
+            
+            This will applied when "useUtcForDateTimes" in constructor property is true.
+            This will applied <see cref="T:System.DateTime"/> and nullable <see cref="T:System.DateTime"/>.
+            
+            </remarks>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.MongoDB.Concrete.BaseRepository`1.ConvertDateTimePropertiesToUtc(System.Collections.Generic.IEnumerable{`0})">
+            <summary>
+            Convert date times to UTC Zero.
+            </summary>
+            <remarks>
+            
+            This will applied when "useUtcForDateTimes" in constructor property is true.
+            This will applied <see cref="T:System.DateTime"/> and nullable <see cref="T:System.DateTime"/>.
+            
+            </remarks>
         </member>
         <member name="T:Milvasoft.Helpers.DataAccess.MongoDB.Entity.Abstract.IDocumentBase">
             <summary>

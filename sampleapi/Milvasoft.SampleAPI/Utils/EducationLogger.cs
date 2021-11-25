@@ -91,6 +91,7 @@ namespace Milvasoft.SampleAPI.Utils
 
         /// <summary>
         /// Saves the log at fatal level. And sends mail to producer.
+        /// </summary>
         /// <param name="message"></param>
         /// <param name="mailSubjectsEnum"></param>
         public void LogFatal(string message, string mailSubjectsEnum)
