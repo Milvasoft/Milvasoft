@@ -261,9 +261,16 @@ public static class CommonHelper
     /// <param name="date"></param>
     /// <param name="startTime"></param>
     /// <param name="endTime"></param>
+    /// <param name="convertTimesToUtc"></param>
     /// <returns></returns>
-    public static bool IsBetween(this DateTime date, TimeSpan startTime, TimeSpan endTime)
+    public static bool IsBetween(this DateTime date, TimeSpan startTime, TimeSpan endTime, bool convertTimesToUtc = true)
     {
+        if (convertTimesToUtc)
+        {
+            startTime = startTime.ConvertToUtc();
+            endTime = endTime.ConvertToUtc();
+        }
+
         DateTime startDate = new(date.Year, date.Month, date.Day);
         DateTime endDate = startDate;
 
@@ -294,9 +301,17 @@ public static class CommonHelper
     /// <param name="compareTime"></param>
     /// <param name="startTime"></param>
     /// <param name="endTime"></param>
+    /// <param name="convertTimesToUtc"></param>
     /// <returns></returns>
-    public static bool IsBetween(this DateTime date, TimeSpan compareTime, TimeSpan startTime, TimeSpan endTime)
+    public static bool IsBetween(this DateTime date, TimeSpan compareTime, TimeSpan startTime, TimeSpan endTime, bool convertTimesToUtc = true)
     {
+        if (convertTimesToUtc)
+        {
+            compareTime = compareTime.ConvertToUtc();
+            startTime = startTime.ConvertToUtc();
+            endTime = endTime.ConvertToUtc();
+        }
+
         date = new DateTime(date.Year, date.Month, date.Day).Date + compareTime;
 
         return date.IsBetween(startTime, endTime);
@@ -318,13 +333,24 @@ public static class CommonHelper
     /// <param name="time"></param>
     /// <param name="startDate"></param>
     /// <param name="endDate"></param>
+    /// <param name="convertTimeToUtc"></param>
     /// <returns></returns>
-    public static bool IsBetween(this DateTime date, TimeSpan time, DateTime startDate, DateTime endDate)
+    public static bool IsBetween(this DateTime date, TimeSpan time, DateTime startDate, DateTime endDate, bool convertTimeToUtc = true)
     {
+        if (convertTimeToUtc)
+            time = time.ConvertToUtc();
+
         date = new DateTime(date.Year, date.Month, date.Day).Date + time;
 
         return (date >= startDate) && (date <= endDate);
     }
+
+    /// <summary>
+    /// Converts timespan to universal time.
+    /// </summary>
+    /// <param name="timeSpan"></param>
+    /// <returns></returns>
+    public static TimeSpan ConvertToUtc(this TimeSpan timeSpan) => TimeSpan.FromTicks(new DateTime(timeSpan.Ticks).ToUniversalTime().Ticks);
 
     #endregion
 
