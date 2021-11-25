@@ -7,7 +7,7 @@
 </div>
 
 
-![](https://i.hizliresim.com/12q7jh2.gif)
+![milva-bird](https://user-images.githubusercontent.com/13048645/141461853-dbacad32-2150-4276-a848-45b81f2eeeb2.jpg)
 
 <h3 align="center">Milvasoft library helps you to create your .Net projects in the simplest way.</h3>
 <h3 align="center">It makes your work easier with the helpful methods in it.</h3>
