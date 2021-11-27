@@ -335,6 +335,37 @@
             <param name="context"></param>
             <returns></returns>
         </member>
+        <member name="T:Milvasoft.Helpers.Attributes.Validation.ValidateEnumAttribute">
+            <summary>
+            Validates value is defined in enum.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.Attributes.Validation.ValidateEnumAttribute.LocalizerKey">
+            <summary>
+            Gets or sets the error message spesific content
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.Attributes.Validation.ValidateEnumAttribute.FullMessage">
+            <summary>
+            Gets or sets the full error message spesific content.
+            </summary>
+        </member>
+        <member name="M:Milvasoft.Helpers.Attributes.Validation.ValidateEnumAttribute.#ctor(System.Type,System.Type)">
+            <summary>
+            Constructor of atrribute.
+            </summary>
+            <param name="resourceType"></param>
+            <param name="enumType"></param>
+        </member>
+        <member name="M:Milvasoft.Helpers.Attributes.Validation.ValidateEnumAttribute.IsValid(System.Object,System.ComponentModel.DataAnnotations.ValidationContext)">
+            <summary>
+            Determines whether the specified value of the object is valid.
+            </summary>
+            
+            <param name="value"></param>
+            <param name="context"></param>
+            <returns></returns>
+        </member>
         <member name="T:Milvasoft.Helpers.Attributes.Validation.ValidateIdPropertyAttribute">
             <summary>
             Specifies that the class or property that this attribute is applied to requires the specified the valid id.

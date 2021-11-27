@@ -57,6 +57,7 @@ public static class LocalizerKeys
 
     #region Attributes
 
+    public const string PleaseSelectAValid = nameof(PleaseSelectAValid);
     public const string PleaseEnterAValid = "Please enter a valid";
     public const string PreventStringInjectionLengthResultNotTrue = nameof(PreventStringInjectionLengthResultNotTrue);
     public const string PreventStringInjectionContainsForbiddenWordError = nameof(PreventStringInjectionContainsForbiddenWordError);
