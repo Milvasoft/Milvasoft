@@ -148,7 +148,7 @@ public abstract class MilvaDbContextBase<TUser, TRole, TKey> : IdentityDbContext
     /// </summary>
     /// <param name="type"></param>
     /// <returns></returns>
-    public async Task<object> GetRequiredContents(Type type)
+    public async Task<object> GetRequiredContentsAsync(Type type)
     {
         string propName = $"{type.Name}Langs";
         if (!CommonHelper.PropertyExists(type, propName))
@@ -181,8 +181,12 @@ public abstract class MilvaDbContextBase<TUser, TRole, TKey> : IdentityDbContext
     /// If this method gets soft deleted entities please override <see cref="CreateIsDeletedFalseExpression{TEntity}"/> method your own condition.
     /// </summary>
     /// <returns></returns>
-    public async Task<List<TEntity>> GetRequiredContentsAsync<TEntity>() where TEntity : class
-        => await Set<TEntity>().Where(CreateIsDeletedFalseExpression<TEntity>() ?? (entity => true)).IncludeLang(this).ToListAsync().ConfigureAwait(false);
+    public async Task<List<TEntity>> GetRequiredContentsAsync<TEntity>(Expression<Func<TEntity, TEntity>> projectionExpression = null) where TEntity : class
+        => await Set<TEntity>().Where(CreateIsDeletedFalseExpression<TEntity>() ?? (entity => true))
+                               .IncludeLang(this)
+                               .Select(projectionExpression ?? (entity => entity))
+                               .ToListAsync()
+                               .ConfigureAwait(false);
 
     /// <summary>
     /// Gets the requested <typeparamref name="TEntity"/>'s property's(<paramref name="propName"/>) max value.
