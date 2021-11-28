@@ -38,18 +38,25 @@ public class MilvaMailSender : IMilvaMailSender
     public string SmtpHost { get; set; }
 
     /// <summary>
+    /// Gets or sets enable ssql of mail sender smtp client.
+    /// </summary>
+    public bool EnableSsl { get; set; }
+
+    /// <summary>
     /// Initializes mail sending operation default values.
     /// </summary>
     /// <param name="from"></param>
     /// <param name="networkCredential"></param>
     /// <param name="smtpPort"></param>
     /// <param name="smtpHost"></param>
-    public MilvaMailSender(string from, NetworkCredential networkCredential, int smtpPort, string smtpHost)
+    /// <param name="enableSsl"></param>
+    public MilvaMailSender(string from, NetworkCredential networkCredential, int smtpPort, string smtpHost, bool enableSsl)
     {
         From = from;
         NetworkCredential = networkCredential;
         SmtpPort = smtpPort;
         SmtpHost = smtpHost;
+        EnableSsl = enableSsl;
     }
 
     #region Async
@@ -123,7 +130,8 @@ public class MilvaMailSender : IMilvaMailSender
 
         using var smtpClient = new SmtpClient(SmtpHost, SmtpPort)
         {
-            Credentials = NetworkCredential
+            Credentials = NetworkCredential,
+            EnableSsl = EnableSsl,
         };
 
         await smtpClient.SendMailAsync(mailMessage).ConfigureAwait(false);
@@ -178,7 +186,8 @@ public class MilvaMailSender : IMilvaMailSender
 
         using var smtpClient = new SmtpClient(SmtpHost, SmtpPort)
         {
-            Credentials = NetworkCredential
+            Credentials = NetworkCredential,
+            EnableSsl = EnableSsl,
         };
 
         await smtpClient.SendMailAsync(mailMessage).ConfigureAwait(false);
@@ -216,8 +225,11 @@ public class MilvaMailSender : IMilvaMailSender
             IsBodyHtml = isBodyHtml
         };
 
-        using var smtpClient = new SmtpClient(SmtpHost, SmtpPort);
-        smtpClient.Credentials = NetworkCredential;
+        using var smtpClient = new SmtpClient(SmtpHost, SmtpPort)
+        {
+            Credentials = NetworkCredential,
+            EnableSsl = EnableSsl,
+        };
 
         await smtpClient.SendMailAsync(mailMessage).ConfigureAwait(false);
     }
@@ -246,7 +258,8 @@ public class MilvaMailSender : IMilvaMailSender
 
         using var smtpClient = new SmtpClient(SmtpHost, SmtpPort)
         {
-            Credentials = NetworkCredential
+            Credentials = NetworkCredential,
+            EnableSsl = EnableSsl,
         };
 
         await smtpClient.SendMailAsync(mailMessage).ConfigureAwait(false);
@@ -306,8 +319,11 @@ public class MilvaMailSender : IMilvaMailSender
             IsBodyHtml = isBodyHtml
         };
 
-        var smtpClient = new SmtpClient(SmtpHost, SmtpPort);
-        smtpClient.Credentials = NetworkCredential;
+        var smtpClient = new SmtpClient(SmtpHost, SmtpPort)
+        {
+            Credentials = NetworkCredential,
+            EnableSsl = EnableSsl,
+        };
 
         smtpClient.SendAsync(mailMessage, mailMessage);
     }
@@ -336,7 +352,8 @@ public class MilvaMailSender : IMilvaMailSender
 
         var smtpClient = new SmtpClient(SmtpHost, SmtpPort)
         {
-            Credentials = NetworkCredential
+            Credentials = NetworkCredential,
+            EnableSsl = EnableSsl,
         };
 
         smtpClient.SendAsync(mailMessage, mailMessage);

@@ -8855,7 +8855,12 @@
             Gets or sets Host of mail sender.
             </summary>
         </member>
-        <member name="M:Milvasoft.Helpers.Mail.MilvaMailSender.#ctor(System.String,System.Net.NetworkCredential,System.Int32,System.String)">
+        <member name="P:Milvasoft.Helpers.Mail.MilvaMailSender.EnableSsl">
+            <summary>
+            Gets or sets enable ssql of mail sender smtp client.
+            </summary>
+        </member>
+        <member name="M:Milvasoft.Helpers.Mail.MilvaMailSender.#ctor(System.String,System.Net.NetworkCredential,System.Int32,System.String,System.Boolean)">
             <summary>
             Initializes mail sending operation default values.
             </summary>
@@ -8863,6 +8868,7 @@
             <param name="networkCredential"></param>
             <param name="smtpPort"></param>
             <param name="smtpHost"></param>
+            <param name="enableSsl"></param>
         </member>
         <member name="M:Milvasoft.Helpers.Mail.MilvaMailSender.MilvaSendMailAsync(System.String,System.String,System.String,System.Boolean)">
             <summary>

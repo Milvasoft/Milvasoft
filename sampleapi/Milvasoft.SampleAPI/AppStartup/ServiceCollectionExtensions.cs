@@ -158,7 +158,8 @@ public static class ServiceCollectionExtensions
         services.AddSingleton<IMilvaMailSender>(new MilvaMailSender("education@milvasoft.com",
                                                                     new NetworkCredential("education@milvasoft.com", "I11Blx8i*%hi"),
                                                                     587,
-                                                                    "mail.milvasoft.com"));
+                                                                    "mail.milvasoft.com",
+                                                                    true));
         services.AddScoped<IMilvaLogger, EducationLogger>();
         services.AddSingleton<SharedResource>();
 
