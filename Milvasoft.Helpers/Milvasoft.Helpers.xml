@@ -3697,7 +3697,7 @@
             <param name="cancellationToken"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.MilvaContext.MilvaDbContextBase`3.GetRequiredContentsAsync(System.Type)">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.MilvaContext.MilvaDbContextBase`3.GetRequiredContentsDynamicallyAsync(System.Type)">
             <summary>
             Gets requested contents by <paramref name="type"/> DbSet.
             If this method gets soft deleted entities please override <see cref="M:Milvasoft.Helpers.DataAccess.EfCore.MilvaContext.MilvaDbContextBase`3.CreateIsDeletedFalseExpression``1"/> method your own condition.

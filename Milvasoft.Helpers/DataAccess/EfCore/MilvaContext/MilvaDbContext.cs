@@ -148,31 +148,34 @@ public abstract class MilvaDbContextBase<TUser, TRole, TKey> : IdentityDbContext
     /// </summary>
     /// <param name="type"></param>
     /// <returns></returns>
-    public async Task<object> GetRequiredContentsAsync(Type type)
+    public async Task<object> GetRequiredContentsDynamicallyAsync(Type type)
     {
         string propName = $"{type.Name}Langs";
+
         if (!CommonHelper.PropertyExists(type, propName))
             throw new MilvaDeveloperException($"Type of {type}'s properties doesn't contain '{propName}'.");
 
         ParameterExpression paramterExpression = Expression.Parameter(type, "i");
+
         Expression orderByProperty = Expression.Property(paramterExpression, propName);
 
         Expression<Func<object, object>> predicate = Expression.Lambda<Func<object, object>>(Expression.Convert(Expression.Property(paramterExpression, propName), typeof(object)), paramterExpression);
 
         var dbSet = GetType().GetMethod("Set").MakeGenericMethod(type).Invoke(this, null);
 
-        var whereMethods = typeof(EntityFrameworkQueryableExtensions)
-            .GetMethods(BindingFlags.Static | BindingFlags.Public)
-            .Where(mi => mi.Name == "ToListAsync");
+        var whereMethods = typeof(EntityFrameworkQueryableExtensions).GetMethods(BindingFlags.Static | BindingFlags.Public)
+                                                                     .Where(mi => mi.Name == "ToListAsync");
 
         MethodInfo whereMethod = whereMethods.FirstOrDefault();
 
         whereMethod = whereMethod.MakeGenericMethod(type);
 
         var ret = (Task)whereMethod.Invoke(dbSet, new object[] { dbSet, null });
+
         await ret.ConfigureAwait(false);
 
         var resultProperty = ret.GetType().GetProperty("Result");
+
         return resultProperty.GetValue(ret);
     }
 
