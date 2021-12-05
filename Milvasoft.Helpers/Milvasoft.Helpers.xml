@@ -126,6 +126,11 @@
             Gets or sets error message content.
             </summary>
         </member>
+        <member name="P:Milvasoft.Helpers.Attributes.ActionFilter.ValidateIdParameterAttribute.IsRequired">
+            <summary>
+            Gets or sets required. Default value is true.
+            </summary>
+        </member>
         <member name="M:Milvasoft.Helpers.Attributes.ActionFilter.ValidateIdParameterAttribute.#ctor">
             <summary>
             Constructor of <see cref="T:Milvasoft.Helpers.Attributes.ActionFilter.ValidateIdParameterAttribute"/> for localization.
@@ -5620,6 +5625,22 @@
             <returns>A binary expression that has the node type property equal to OrElse, 
             and the left and right properties set to the specified values</returns>
         </member>
+        <member name="M:Milvasoft.Helpers.Extensions.Expressions.Combine``1(System.Linq.Expressions.Expression{System.Func{``0,``0}}[])">
+            <summary>
+            Combines two expressions to one.
+            </summary>
+            <typeparam name="TEntity"></typeparam>
+            <param name="selectors"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.Extensions.Expressions.Combine``1(System.Linq.Expressions.Expression{System.Func{``0,System.Object}}[])">
+            <summary>
+            Combines two expressions to one.
+            </summary>
+            <typeparam name="TEntity"></typeparam>
+            <param name="selectors"></param>
+            <returns></returns>
+        </member>
         <member name="M:Milvasoft.Helpers.Extensions.Expressions.GetPropertyInfo``2(System.Linq.Expressions.Expression{System.Func{``0,``1}})">
             <summary>
             Determines the right casting and pets property from expression with this right casting.
@@ -5781,6 +5802,18 @@
             </summary>
             <param name="node"> The expression to visit. </param>
             <returns> The modified expression, if it or any subexpression was modified; otherwise, returns the original expression.</returns>
+        </member>
+        <member name="T:Milvasoft.Helpers.Extensions.Helpers.ParameterReplaceVisitor">
+            <summary>
+            Expression parameter replacer for expression builder.
+            </summary>
+        </member>
+        <member name="M:Milvasoft.Helpers.Extensions.Helpers.ParameterReplaceVisitor.#ctor(System.Linq.Expressions.ParameterExpression,System.Linq.Expressions.ParameterExpression)">
+            <summary>
+            Constructor of <see cref="T:Milvasoft.Helpers.Extensions.Helpers.ParameterReplaceVisitor"/>
+            </summary>
+            <param name="from"></param>
+            <param name="to"></param>
         </member>
         <member name="T:Milvasoft.Helpers.Extensions.Strings">
             <summary>

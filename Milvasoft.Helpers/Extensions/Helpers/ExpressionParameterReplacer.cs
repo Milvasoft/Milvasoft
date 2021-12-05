@@ -36,3 +36,26 @@ public class ExpressionParameterReplacer : ExpressionVisitor
         return base.VisitParameter(node);
     }
 }
+
+/// <summary>
+/// Expression parameter replacer for expression builder.
+/// </summary>
+public class ParameterReplaceVisitor : ExpressionVisitor
+{
+    private readonly ParameterExpression from, to;
+
+    /// <summary>
+    /// Constructor of <see cref="ParameterReplaceVisitor"/>
+    /// </summary>
+    /// <param name="from"></param>
+    /// <param name="to"></param>
+    public ParameterReplaceVisitor(ParameterExpression from, ParameterExpression to)
+    {
+        this.from = from;
+        this.to = to;
+    }
+    protected override Expression VisitParameter(ParameterExpression node)
+    {
+        return node == from ? to : base.VisitParameter(node);
+    }
+}

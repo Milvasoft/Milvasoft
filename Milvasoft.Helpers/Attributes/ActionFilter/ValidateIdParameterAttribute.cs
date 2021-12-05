@@ -32,6 +32,11 @@ public class ValidateIdParameterAttribute : ActionFilterAttribute
     public string EntityName { get; set; }
 
     /// <summary>
+    /// Gets or sets required. Default value is true.
+    /// </summary>
+    public bool IsRequired { get; set; } = true;
+
+    /// <summary>
     /// Constructor of <see cref="ValidateIdParameterAttribute"/> for localization.
     /// </summary>
     public ValidateIdParameterAttribute() { }
@@ -119,7 +124,8 @@ public class ValidateIdParameterAttribute : ActionFilterAttribute
                     {
                         var intParameters = (List<int>)parameterValue;
 
-                        if (intParameters.IsNullOrEmpty()) base.OnActionExecuting(RewriteResponseAsync(message).Result);
+                        if (IsRequired && intParameters.IsNullOrEmpty()) 
+                            base.OnActionExecuting(RewriteResponseAsync(message).Result);
 
                         foreach (var intParameter in intParameters)
                         {
@@ -135,7 +141,8 @@ public class ValidateIdParameterAttribute : ActionFilterAttribute
                     {
                         var guidParameters = (List<Guid>)parameterValue;
 
-                        if (guidParameters.IsNullOrEmpty()) base.OnActionExecuting(RewriteResponseAsync(message).Result);
+                        if (IsRequired && guidParameters.IsNullOrEmpty()) 
+                            base.OnActionExecuting(RewriteResponseAsync(message).Result);
 
                         foreach (var guidParameter in guidParameters)
                         {

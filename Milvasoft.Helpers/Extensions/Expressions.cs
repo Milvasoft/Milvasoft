@@ -1,5 +1,6 @@
 ﻿using Milvasoft.Helpers.Extensions.Helpers;
 using System;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 
@@ -31,14 +32,18 @@ public static class Expressions
                     //the initial case starts off with a left expression as null. If that's the case,
                     //then give the short-circuit operator something to trigger on for the right expression
                     if (left == null)
-                    { left = model => false; }
+                    {
+                        left = model => false;
+                    }
 
                     result = OrElse(left, right);
                     break;
                 case ExpressionType.AndAlso:
 
                     if (left == null)
-                    { left = model => true; }
+                    {
+                        left = model => true;
+                    }
 
                     result = AndAlso(left, right);
                     break;
@@ -59,11 +64,8 @@ public static class Expressions
     /// and the left and right properties set to the specified values</returns>
     public static Expression<Func<T, bool>> AndAlso<T>(this Expression<Func<T, bool>> left, Expression<Func<T, bool>> right)
     {
-        var combined = Expression.Lambda<Func<T, bool>>(
-            Expression.AndAlso(
-                left.Body,
-                new ExpressionParameterReplacer(right.Parameters, left.Parameters).Visit(right.Body)
-                ), left.Parameters);
+        var combined = Expression.Lambda<Func<T, bool>>(Expression.AndAlso(left.Body, new ExpressionParameterReplacer(right.Parameters, left.Parameters).Visit(right.Body)), left.Parameters);
+
         return combined;
     }
 
@@ -76,13 +78,45 @@ public static class Expressions
     /// and the left and right properties set to the specified values</returns>
     public static Expression<Func<T, bool>> OrElse<T>(this Expression<Func<T, bool>> left, Expression<Func<T, bool>> right)
     {
-        var combined = Expression.Lambda<Func<T, bool>>(
-            Expression.OrElse(
-                left.Body,
-                new ExpressionParameterReplacer(right.Parameters, left.Parameters).Visit(right.Body)
-                ), left.Parameters);
+        var combined = Expression.Lambda<Func<T, bool>>(Expression.OrElse(left.Body, new ExpressionParameterReplacer(right.Parameters, left.Parameters).Visit(right.Body)), left.Parameters);
 
         return combined;
+    }
+
+    /// <summary>
+    /// Combines two expressions to one.
+    /// </summary>
+    /// <typeparam name="TEntity"></typeparam>
+    /// <param name="selectors"></param>
+    /// <returns></returns>
+    public static Expression<Func<TEntity, TEntity>> Combine<TEntity>(params Expression<Func<TEntity, TEntity>>[] selectors) where TEntity : class
+    {
+        var param = Expression.Parameter(typeof(TEntity), "x");
+
+        return Expression.Lambda<Func<TEntity, TEntity>>(Expression.MemberInit(Expression.New(typeof(TEntity).GetConstructor(Type.EmptyTypes)),
+                                                         from selector in selectors
+                                                         let replace = new ParameterReplaceVisitor(selector.Parameters[0], param)
+                                                         from binding in ((MemberInitExpression)selector.Body).Bindings.OfType<MemberAssignment>()
+                                                         select Expression.Bind(binding.Member, replace.VisitAndConvert(binding.Expression, "Combine"))),
+                                                         param);
+    }
+
+    /// <summary>
+    /// Combines two expressions to one.
+    /// </summary>
+    /// <typeparam name="TEntity"></typeparam>
+    /// <param name="selectors"></param>
+    /// <returns></returns>
+    public static Expression<Func<TEntity, object>> Combine<TEntity>(params Expression<Func<TEntity, object>>[] selectors) where TEntity : class
+    {
+        var param = Expression.Parameter(typeof(TEntity), "x");
+
+        return Expression.Lambda<Func<TEntity, object>>(Expression.MemberInit(Expression.New(typeof(TEntity).GetConstructor(Type.EmptyTypes)),
+                                                        from selector in selectors
+                                                        let replace = new ParameterReplaceVisitor(selector.Parameters[0], param)
+                                                        from binding in ((MemberInitExpression)selector.Body).Bindings.OfType<MemberAssignment>()
+                                                        select Expression.Bind(binding.Member, replace.VisitAndConvert(binding.Expression, "Combine"))),
+                                                        param);
     }
 
     /// <summary>

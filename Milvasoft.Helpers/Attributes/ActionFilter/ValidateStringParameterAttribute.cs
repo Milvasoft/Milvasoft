@@ -72,31 +72,9 @@ public class ValidateStringParameterAttribute : ActionFilterAttribute
     public override void OnActionExecuting(ActionExecutingContext context)
     {
         IStringLocalizer sharedLocalizer = null;
+
         if (ResourceType != null)
             sharedLocalizer = context.HttpContext.RequestServices.GetLocalizerInstance(ResourceType);
-
-        async Task<ActionExecutingContext> RewriteResponseAsync(string errorMessage)
-        {
-            var localizedErrorMessage = errorMessage;
-
-            var validationResponse = new ExceptionResponse
-            {
-                Success = false,
-                Message = localizedErrorMessage,
-                StatusCode = MilvaStatusCodes.Status400BadRequest,
-                Result = new object(),
-                ErrorCodes = new List<int>()
-            };
-            var json = JsonConvert.SerializeObject(validationResponse);
-            context.HttpContext.Response.ContentType = "application/json";
-            context.HttpContext.Items.Add(new KeyValuePair<object, object>("StatusCode", MilvaStatusCodes.Status600Exception));
-            context.HttpContext.Response.StatusCode = MilvaStatusCodes.Status200OK;
-            await context.HttpContext.Response.WriteAsync(json).ConfigureAwait(false);
-
-            context.Result = new BadRequestResult();
-
-            return context;
-        };
 
         CommonHelper.EnsureLegalLengths(MaximumLength, MinimumLength, sharedLocalizer);
 
@@ -148,6 +126,30 @@ public class ValidateStringParameterAttribute : ActionFilterAttribute
                 }
             }
         }
+
+        async Task<ActionExecutingContext> RewriteResponseAsync(string errorMessage)
+        {
+            var localizedErrorMessage = errorMessage;
+
+            var validationResponse = new ExceptionResponse
+            {
+                Success = false,
+                Message = localizedErrorMessage,
+                StatusCode = MilvaStatusCodes.Status400BadRequest,
+                Result = new object(),
+                ErrorCodes = new List<int>()
+            };
+
+            var json = JsonConvert.SerializeObject(validationResponse);
+            context.HttpContext.Response.ContentType = "application/json";
+            context.HttpContext.Items.Add(new KeyValuePair<object, object>("StatusCode", MilvaStatusCodes.Status600Exception));
+            context.HttpContext.Response.StatusCode = MilvaStatusCodes.Status200OK;
+            await context.HttpContext.Response.WriteAsync(json).ConfigureAwait(false);
+
+            context.Result = new BadRequestResult();
+
+            return context;
+        };
     }
 
 }
