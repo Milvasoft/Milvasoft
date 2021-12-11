@@ -63,7 +63,7 @@ public class ValidateEnumAttribute : ValidationAttribute
                 sharedLocalizer = context.GetLocalizerInstance(_resourceType);
 
                 localizedPropName = sharedLocalizer[LocalizerKey != null ? LocalizerKey : $"{LocalizerKeys.Localized}{context.MemberName}"];
-                errorMessage = FullMessage ? sharedLocalizer[LocalizerKey] : sharedLocalizer[LocalizerKeys.PleaseEnterAValid, localizedPropName];
+                errorMessage = FullMessage ? sharedLocalizer[LocalizerKey] : sharedLocalizer[LocalizerKeys.PleaseSelectAValid, localizedPropName];
             }
             else errorMessage = $"{LocalizerKeys.PleaseEnterAValid} {context.MemberName}.";
 

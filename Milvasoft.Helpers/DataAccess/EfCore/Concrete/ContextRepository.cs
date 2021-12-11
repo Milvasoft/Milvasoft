@@ -62,12 +62,15 @@ public class ContextRepository<TContext> : IContextRepository<TContext> where TC
     public async Task ApplyTransactionAsync(Func<Task> function)
     {
         var executionStrategy = _dbContext.Database.CreateExecutionStrategy();
+
         await executionStrategy.ExecuteAsync(async () =>
         {
-            var transaction = await _dbContext.Database.BeginTransactionAsync().ConfigureAwait(false);
+            using var transaction = await _dbContext.Database.BeginTransactionAsync().ConfigureAwait(false);
+
             try
             {
                 await function().ConfigureAwait(false);
+
                 await transaction.CommitAsync().ConfigureAwait(false);
             }
             catch (Exception)
@@ -87,12 +90,15 @@ public class ContextRepository<TContext> : IContextRepository<TContext> where TC
     public async Task<TResult> ApplyTransactionAsync<TResult>(Func<Task<TResult>> function)
     {
         var executionStrategy = _dbContext.Database.CreateExecutionStrategy();
+
         return await executionStrategy.ExecuteAsync(async () =>
         {
-            var transaction = await _dbContext.Database.BeginTransactionAsync().ConfigureAwait(false);
+            using var transaction = await _dbContext.Database.BeginTransactionAsync().ConfigureAwait(false);
+
             try
             {
                 var result = await function().ConfigureAwait(false);
+
                 await transaction.CommitAsync().ConfigureAwait(false);
 
                 return result;
