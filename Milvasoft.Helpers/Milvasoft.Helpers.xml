@@ -355,6 +355,12 @@
             Gets or sets the full error message spesific content.
             </summary>
         </member>
+        <member name="M:Milvasoft.Helpers.Attributes.Validation.ValidateEnumAttribute.#ctor(System.Type)">
+            <summary>
+            Constructor of atrribute.
+            </summary>
+            <param name="resourceType"></param>
+        </member>
         <member name="M:Milvasoft.Helpers.Attributes.Validation.ValidateEnumAttribute.#ctor(System.Type,System.Type)">
             <summary>
             Constructor of atrribute.

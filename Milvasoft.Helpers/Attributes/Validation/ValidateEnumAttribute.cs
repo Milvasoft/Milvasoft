@@ -36,6 +36,15 @@ public class ValidateEnumAttribute : ValidationAttribute
     /// Constructor of atrribute.
     /// </summary>
     /// <param name="resourceType"></param>
+    public ValidateEnumAttribute(Type resourceType)
+    {
+        _resourceType = resourceType;
+    }
+
+    /// <summary>
+    /// Constructor of atrribute.
+    /// </summary>
+    /// <param name="resourceType"></param>
     /// <param name="enumType"></param>
     public ValidateEnumAttribute(Type resourceType, Type enumType)
     {
@@ -62,12 +71,14 @@ public class ValidateEnumAttribute : ValidationAttribute
             {
                 sharedLocalizer = context.GetLocalizerInstance(_resourceType);
 
-                localizedPropName = sharedLocalizer[LocalizerKey != null ? LocalizerKey : $"{LocalizerKeys.Localized}{context.MemberName}"];
+                localizedPropName = sharedLocalizer[LocalizerKey ?? $"{LocalizerKeys.Localized}{context.MemberName}"];
                 errorMessage = FullMessage ? sharedLocalizer[LocalizerKey] : sharedLocalizer[LocalizerKeys.PleaseSelectAValid, localizedPropName];
             }
             else errorMessage = $"{LocalizerKeys.PleaseEnterAValid} {context.MemberName}.";
 
-            if (!Enum.IsDefined(_enumType, value))
+            var valueType = _enumType ?? value.GetType();
+
+            if (!Enum.IsDefined(valueType, value))
             {
                 ErrorMessage = errorMessage;
                 return new ValidationResult(FormatErrorMessage(""));
