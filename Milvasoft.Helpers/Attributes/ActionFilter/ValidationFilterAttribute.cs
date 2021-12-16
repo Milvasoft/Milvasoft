@@ -82,7 +82,6 @@ public class ValidationFilterAttribute : ActionFilterAttribute
             foreach (var item in modelErrors)
                 errors.Add(item.ErrorMessage);
 
-
             var properties = GetProperties(DisabledProperties);
             var nestedProperties = GetProperties(DisabledNestedProperties);
 

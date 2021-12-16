@@ -117,12 +117,12 @@ public class ValidateDecimalAttribute : ValidationAttribute
             }
             else errorMessage = $"{LocalizerKeys.PleaseEnterAValid} {context.MemberName}.";
 
-            if (decimal.TryParse(value.ToString(), out _) && Convert.ToDecimal(value) <= MinValue)
+            if (decimal.TryParse(value.ToString(), out decimal decimalValue) && decimalValue <= MinValue)
             {
                 ErrorMessage = errorMessage;
                 return new ValidationResult(FormatErrorMessage(""));
             }
-            if (MaxValue != null && Convert.ToDecimal(value) >= MaxValue)
+            if (MaxValue != null && decimalValue >= MaxValue)
             {
                 ErrorMessage = errorMessage;
                 return new ValidationResult(FormatErrorMessage(""));
