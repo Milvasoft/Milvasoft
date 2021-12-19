@@ -5,6 +5,7 @@ using Milvasoft.Helpers.Extensions;
 using Milvasoft.Helpers.Utils;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Milvasoft.Helpers.Attributes.ActionFilter;
@@ -95,7 +96,7 @@ public class AsyncValidateIdParameterAttribute : Attribute, IAsyncActionFilter
                         }
 
                     }
-                    else if (valueType.GetGenericArguments()[0] == typeof(int))
+                    else if (valueType.GetGenericArguments()?.FirstOrDefault() == typeof(int))
                     {
                         var intParameters = (List<int>)parameterValue;
 
@@ -116,7 +117,7 @@ public class AsyncValidateIdParameterAttribute : Attribute, IAsyncActionFilter
                             }
                         }
                     }
-                    else if (valueType.GetGenericArguments()[0] == typeof(Guid))
+                    else if (valueType.GetGenericArguments()?.FirstOrDefault() == typeof(Guid))
                     {
                         var guidParameters = (List<Guid>)parameterValue;
 
