@@ -92,7 +92,7 @@ public class ValidateIdPropertyAttribute : ValidationAttribute
                                                                           + "-([0-9a-fA-F]{4}-)"
                                                                           + "{3}[0-9a-fA-F]{12}[}]?$");
 
-                if (isParsed || guidParameter == default || guidParameter == Guid.Empty || !regexMatchResult)
+                if (!isParsed || guidParameter == default || guidParameter == Guid.Empty || !regexMatchResult)
                 {
                     ErrorMessage = errorMessage;
                     httpContext.Items[context.MemberName] = ErrorMessage;
