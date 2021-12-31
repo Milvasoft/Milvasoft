@@ -130,6 +130,7 @@ public class ContextRepository<TContext> : IContextRepository<TContext> where TC
         if (startTransaction)
         {
             var executionStrategy = _dbContext.Database.CreateExecutionStrategy();
+
             await executionStrategy.ExecuteAsync(async () =>
             {
                 var transaction = await _dbContext.Database.BeginTransactionAsync().ConfigureAwait(false);
@@ -196,6 +197,7 @@ public class ContextRepository<TContext> : IContextRepository<TContext> where TC
         if (startTransaction)
         {
             var executionStrategy = _dbContext.Database.CreateExecutionStrategy();
+
             await executionStrategy.ExecuteAsync(async () =>
             {
                 var transaction = await _dbContext.Database.BeginTransactionAsync().ConfigureAwait(false);
@@ -257,6 +259,7 @@ public class ContextRepository<TContext> : IContextRepository<TContext> where TC
                                                   where TKey : struct, IEquatable<TKey>
     {
         var localEntity = _dbContext.Set<TEntity>().Local.FirstOrDefault(u => u.Id.Equals(entity.Id));
+
         if (localEntity != null)
         {
             _dbContext.Entry(localEntity).State = EntityState.Detached;
