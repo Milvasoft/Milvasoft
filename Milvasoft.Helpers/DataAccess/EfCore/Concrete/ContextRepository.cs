@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Milvasoft.Helpers.DataAccess.EfCore.Abstract;
 using Milvasoft.Helpers.DataAccess.EfCore.Abstract.Entity;
 using Milvasoft.Helpers.DataAccess.EfCore.Abstract.Entity.Auditing;
@@ -8,7 +6,6 @@ using Milvasoft.Helpers.DataAccess.EfCore.Concrete.Entity;
 using Milvasoft.Helpers.Extensions;
 using System;
 using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
@@ -58,27 +55,31 @@ public class ContextRepository<TContext> : IContextRepository<TContext> where TC
     /// Applies transaction process to requested function.
     /// </summary>
     /// <param name="function"></param>
+    /// <param name="startTransaction"> When nested conditional transactions are desired, a transaction cannot be started for the transaction it contains. </param>
     /// <returns></returns>
-    public async Task ApplyTransactionAsync(Func<Task> function)
+    public async Task ApplyTransactionAsync(Func<Task> function, bool startTransaction = true)
     {
-        var executionStrategy = _dbContext.Database.CreateExecutionStrategy();
-
-        await executionStrategy.ExecuteAsync(async () =>
+        if (startTransaction)
         {
-            using var transaction = await _dbContext.Database.BeginTransactionAsync().ConfigureAwait(false);
+            var executionStrategy = _dbContext.Database.CreateExecutionStrategy();
 
-            try
+            await executionStrategy.ExecuteAsync(async () =>
             {
-                await function().ConfigureAwait(false);
+                using var transaction = await _dbContext.Database.BeginTransactionAsync().ConfigureAwait(false);
 
-                await transaction.CommitAsync().ConfigureAwait(false);
-            }
-            catch (Exception)
-            {
-                await transaction.RollbackAsync().ConfigureAwait(false);
-                throw;
-            }
-        });
+                try
+                {
+                    await function().ConfigureAwait(false);
+
+                    await transaction.CommitAsync().ConfigureAwait(false);
+                }
+                catch (Exception)
+                {
+                    await transaction.RollbackAsync().ConfigureAwait(false);
+                    throw;
+                }
+            });
+        }
     }
 
     /// <summary>
@@ -116,25 +117,29 @@ public class ContextRepository<TContext> : IContextRepository<TContext> where TC
     /// </summary>
     /// <param name="function"></param>
     /// <param name="rollbackFunction"></param>
+    /// <param name="startTransaction"> When nested conditional transactions are desired, a transaction cannot be started for the transaction it contains. </param>
     /// <returns></returns>
-    public async Task ApplyTransactionAsync(Func<Task> function, Func<Task> rollbackFunction)
+    public async Task ApplyTransactionAsync(Func<Task> function, Func<Task> rollbackFunction, bool startTransaction = true)
     {
-        var executionStrategy = _dbContext.Database.CreateExecutionStrategy();
-        await executionStrategy.ExecuteAsync(async () =>
+        if (startTransaction)
         {
-            var transaction = await _dbContext.Database.BeginTransactionAsync().ConfigureAwait(false);
-            try
+            var executionStrategy = _dbContext.Database.CreateExecutionStrategy();
+            await executionStrategy.ExecuteAsync(async () =>
             {
-                await function().ConfigureAwait(false);
-                await transaction.CommitAsync().ConfigureAwait(false);
-            }
-            catch (Exception)
-            {
-                await transaction.RollbackAsync().ConfigureAwait(false);
-                await rollbackFunction().ConfigureAwait(false);
-                throw;
-            }
-        });
+                var transaction = await _dbContext.Database.BeginTransactionAsync().ConfigureAwait(false);
+                try
+                {
+                    await function().ConfigureAwait(false);
+                    await transaction.CommitAsync().ConfigureAwait(false);
+                }
+                catch (Exception)
+                {
+                    await transaction.RollbackAsync().ConfigureAwait(false);
+                    await rollbackFunction().ConfigureAwait(false);
+                    throw;
+                }
+            });
+        }
     }
 
     /// <summary>
@@ -171,25 +176,29 @@ public class ContextRepository<TContext> : IContextRepository<TContext> where TC
     /// </summary>
     /// <param name="function"></param>
     /// <param name="rollbackFunction"></param>
+    /// <param name="startTransaction"> When nested conditional transactions are desired, a transaction cannot be started for the transaction it contains. </param>
     /// <returns></returns>
-    public async Task ApplyTransactionAsync(Func<Task> function, Action rollbackFunction)
+    public async Task ApplyTransactionAsync(Func<Task> function, Action rollbackFunction, bool startTransaction = true)
     {
-        var executionStrategy = _dbContext.Database.CreateExecutionStrategy();
-        await executionStrategy.ExecuteAsync(async () =>
+        if (startTransaction)
         {
-            var transaction = await _dbContext.Database.BeginTransactionAsync().ConfigureAwait(false);
-            try
+            var executionStrategy = _dbContext.Database.CreateExecutionStrategy();
+            await executionStrategy.ExecuteAsync(async () =>
             {
-                await function().ConfigureAwait(false);
-                await transaction.CommitAsync().ConfigureAwait(false);
-            }
-            catch (Exception)
-            {
-                await transaction.RollbackAsync().ConfigureAwait(false);
-                rollbackFunction();
-                throw;
-            }
-        });
+                var transaction = await _dbContext.Database.BeginTransactionAsync().ConfigureAwait(false);
+                try
+                {
+                    await function().ConfigureAwait(false);
+                    await transaction.CommitAsync().ConfigureAwait(false);
+                }
+                catch (Exception)
+                {
+                    await transaction.RollbackAsync().ConfigureAwait(false);
+                    rollbackFunction();
+                    throw;
+                }
+            });
+        }
     }
 
     /// <summary>
@@ -225,7 +234,7 @@ public class ContextRepository<TContext> : IContextRepository<TContext> where TC
     /// User update process.
     /// </summary>
     public void InitializeUpdating<TEntity, TKey>(TEntity entity) where TEntity : class, IBaseEntity<TKey>
-                                                                  where TKey : struct, IEquatable<TKey>
+                                                  where TKey : struct, IEquatable<TKey>
     {
         var localEntity = _dbContext.Set<TEntity>().Local.FirstOrDefault(u => u.Id.Equals(entity.Id));
         if (localEntity != null)

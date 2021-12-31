@@ -117,7 +117,7 @@ namespace Milvasoft.SampleAPI.Services.Concrete
         public async Task<LoginResultDTO> LoginAsync(LoginDTO loginDTO, bool isMentor) => await base.LoginAsync(loginDTO,
                                                                                                                 isMentor,
                                                                                                                 userValidationByUserType: ValidateUserAsync,
-                                                                                                                tokenExpiredDate: isMentor ? DateTime.UtcNow.AddDays(100) 
+                                                                                                                tokenExpiredDate: isMentor ? DateTime.UtcNow.AddDays(100)
                                                                                                                                            : DateTime.UtcNow.AddDays(5)).ConfigureAwait(false);
 
         /// <summary>

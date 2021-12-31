@@ -1,5 +1,4 @@
 ﻿using Milvasoft.Helpers.DataAccess.EfCore.Abstract.Entity;
-using Milvasoft.Helpers.DataAccess.EfCore.Concrete.Entity;
 using Milvasoft.Helpers.DataAccess.MongoDB.Abstract;
 using Milvasoft.Helpers.DataAccess.MongoDB.Utils;
 using Milvasoft.Helpers.Exceptions;
@@ -562,7 +561,7 @@ public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : 
                         var updateDef = Builders<TEntity>.Update.Set(fieldDef, propValue.Value.ToUniversalTime());
 
                         listWrites.Add(new UpdateOneModel<TEntity>(filterDef, updateDef));
-                    }                  
+                    }
                 }
                 else
                 {

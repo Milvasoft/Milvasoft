@@ -1,9 +1,6 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Milvasoft.Helpers.DataAccess.EfCore.Abstract.Entity;
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Milvasoft.Helpers.DataAccess.EfCore.Abstract;
@@ -34,8 +31,9 @@ public interface IContextRepository<TContext> where TContext : DbContext
     /// Applies transaction process to requested function.
     /// </summary>
     /// <param name="function"></param>
+    /// <param name="startTransaction"> When nested conditional transactions are desired, a transaction cannot be started for the transaction it contains. </param>
     /// <returns></returns>
-    Task ApplyTransactionAsync(Func<Task> function);
+    Task ApplyTransactionAsync(Func<Task> function, bool startTransaction = true);
 
     /// <summary>
     /// Applies transaction process to requested function.
@@ -50,8 +48,9 @@ public interface IContextRepository<TContext> where TContext : DbContext
     /// </summary>
     /// <param name="function"></param>
     /// <param name="rollbackFunction"></param>
+    /// <param name="startTransaction"> When nested conditional transactions are desired, a transaction cannot be started for the transaction it contains. </param>
     /// <returns></returns>
-    Task ApplyTransactionAsync(Func<Task> function, Action rollbackFunction);
+    Task ApplyTransactionAsync(Func<Task> function, Action rollbackFunction, bool startTransaction = true);
 
     /// <summary>
     /// Applies transaction process to requested function.
@@ -67,8 +66,9 @@ public interface IContextRepository<TContext> where TContext : DbContext
     /// </summary>
     /// <param name="function"></param>
     /// <param name="rollbackFunction"></param>
+    /// <param name="startTransaction"> When nested conditional transactions are desired, a transaction cannot be started for the transaction it contains. </param>
     /// <returns></returns>
-    Task ApplyTransactionAsync(Func<Task> function, Func<Task> rollbackFunction);
+    Task ApplyTransactionAsync(Func<Task> function, Func<Task> rollbackFunction, bool startTransaction = true);
 
     /// <summary>
     /// Applies transaction process to requested function.

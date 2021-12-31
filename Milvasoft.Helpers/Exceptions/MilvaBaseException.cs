@@ -20,7 +20,7 @@ public abstract class MilvaBaseException : Exception
 
     /// <summary>
     /// Variable for exception middleware.
-    /// Default value is null.
+    /// Default value is true.
     /// </summary>
     public bool UseLocalizerKey { get; set; } = true;
 

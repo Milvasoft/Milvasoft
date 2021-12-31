@@ -124,7 +124,7 @@ public class ValidateIdParameterAttribute : ActionFilterAttribute
                     {
                         var intParameters = (List<int>)parameterValue;
 
-                        if (IsRequired && intParameters.IsNullOrEmpty()) 
+                        if (IsRequired && intParameters.IsNullOrEmpty())
                             base.OnActionExecuting(RewriteResponseAsync(message).Result);
 
                         foreach (var intParameter in intParameters)
@@ -141,7 +141,7 @@ public class ValidateIdParameterAttribute : ActionFilterAttribute
                     {
                         var guidParameters = (List<Guid>)parameterValue;
 
-                        if (IsRequired && guidParameters.IsNullOrEmpty()) 
+                        if (IsRequired && guidParameters.IsNullOrEmpty())
                             base.OnActionExecuting(RewriteResponseAsync(message).Result);
 
                         foreach (var guidParameter in guidParameters)
