@@ -40,8 +40,9 @@ public interface IContextRepository<TContext> where TContext : DbContext
     /// </summary>
     /// <typeparam name="TResult"></typeparam>
     /// <param name="function"></param>
+    /// <param name="startTransaction"> When nested conditional transactions are desired, a transaction cannot be started for the transaction it contains. </param>
     /// <returns></returns>
-    Task<TResult> ApplyTransactionAsync<TResult>(Func<Task<TResult>> function);
+    Task<TResult> ApplyTransactionAsync<TResult>(Func<Task<TResult>> function, bool startTransaction = true);
 
     /// <summary>
     /// Applies transaction process to requested function.
@@ -58,8 +59,9 @@ public interface IContextRepository<TContext> where TContext : DbContext
     /// <typeparam name="TResult"></typeparam>
     /// <param name="function"></param>
     /// <param name="rollbackFunction"></param>
+    /// <param name="startTransaction"> When nested conditional transactions are desired, a transaction cannot be started for the transaction it contains. </param>
     /// <returns></returns>
-    Task<TResult> ApplyTransactionAsync<TResult>(Func<Task<TResult>> function, Action rollbackFunction);
+    Task<TResult> ApplyTransactionAsync<TResult>(Func<Task<TResult>> function, Action rollbackFunction, bool startTransaction = true);
 
     /// <summary>
     /// Applies transaction process to requested function.
@@ -76,8 +78,9 @@ public interface IContextRepository<TContext> where TContext : DbContext
     /// <typeparam name="TResult"></typeparam>
     /// <param name="function"></param>
     /// <param name="rollbackFunction"></param>
+    /// <param name="startTransaction"> When nested conditional transactions are desired, a transaction cannot be started for the transaction it contains. </param>
     /// <returns></returns>
-    Task<TResult> ApplyTransactionAsync<TResult>(Func<Task<TResult>> function, Func<Task> rollbackFunction);
+    Task<TResult> ApplyTransactionAsync<TResult>(Func<Task<TResult>> function, Func<Task> rollbackFunction, bool startTransaction = true);
 
     /// <summary>
     /// User update process.
