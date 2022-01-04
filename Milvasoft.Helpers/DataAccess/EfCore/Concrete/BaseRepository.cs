@@ -203,6 +203,23 @@ public abstract class BaseRepository<TEntity, TKey, TContext> : IBaseRepository<
                        .ConfigureAwait(false);
 
     /// <summary>
+    /// Returns all entities which IsDeleted condition is true from database asynchronously. If the condition is requested, it also provides that condition.
+    /// </summary>
+    /// <typeparam name="TResult"></typeparam>
+    /// <param name="conditionExpression"></param>
+    /// <param name="projectionExpression"></param>
+    /// <param name="tracking"></param>
+    /// <returns></returns>
+    public virtual async Task<IEnumerable<TResult>> GetAllAsync<TResult>(Expression<Func<TEntity, TResult>> projectionExpression, 
+                                                                         Expression<Func<TEntity, bool>> conditionExpression = null,
+                                                                         bool tracking = false)
+        => await _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
+                       .Where(CreateConditionExpression(conditionExpression) ?? (entity => true))
+                       .Select(projectionExpression)
+                       .ToListAsync()
+                       .ConfigureAwait(false);
+
+    /// <summary>
     ///  Returns all entities which IsDeleted condition is true with specified includes from database asynchronously. If the condition is requested, it also provides that condition.
     /// </summary>
     /// <param name="includes"></param>
@@ -221,6 +238,25 @@ public abstract class BaseRepository<TEntity, TKey, TContext> : IBaseRepository<
                        .ToListAsync()
                        .ConfigureAwait(false);
 
+    /// <summary>
+    /// Returns all entities which IsDeleted condition is true with specified includes from database asynchronously. If the condition is requested, it also provides that condition.
+    /// </summary>
+    /// <typeparam name="TResult"></typeparam>
+    /// <param name="includes"></param>
+    /// <param name="projectionExpression"></param>
+    /// <param name="conditionExpression"></param>
+    /// <param name="tracking"></param>
+    /// <returns></returns>
+    public virtual async Task<IEnumerable<TResult>> GetAllAsync<TResult>(Func<IIncludable<TEntity>, IIncludable> includes,
+                                                                         Expression<Func<TEntity, TResult>> projectionExpression,
+                                                                         Expression<Func<TEntity, bool>> conditionExpression = null,
+                                                                         bool tracking = false)
+        => await _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
+                       .Where(CreateConditionExpression(conditionExpression) ?? (entity => true))
+                       .IncludeMultiple(includes)
+                       .Select(projectionExpression)
+                       .ToListAsync()
+                       .ConfigureAwait(false);
 
     /// <summary>
     ///  Returns all entities which IsDeleted condition is true from database asynchronously. If the condition is requested, it also provides that condition.

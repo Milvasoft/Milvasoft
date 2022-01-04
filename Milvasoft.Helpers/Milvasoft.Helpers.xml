@@ -1604,6 +1604,16 @@
             <param name="conditionExpression"></param>
             <returns></returns>
         </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Abstract.IBaseRepository`3.GetAllAsync``1(System.Linq.Expressions.Expression{System.Func{`0,``0}},System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Boolean)">
+            <summary>
+            Returns all entities which IsDeleted condition is true from database asynchronously. If the condition is requested, it also provides that condition.
+            </summary>
+            <typeparam name="TResult"></typeparam>
+            <param name="conditionExpression"></param>
+            <param name="projectionExpression"></param>
+            <param name="tracking"></param>
+            <returns></returns>
+        </member>
         <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Abstract.IBaseRepository`3.GetAllAsync(System.Func{Milvasoft.Helpers.DataAccess.EfCore.IncludeLibrary.IIncludable{`0},Milvasoft.Helpers.DataAccess.EfCore.IncludeLibrary.IIncludable},System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Linq.Expressions.Expression{System.Func{`0,`0}},System.Boolean)">
             <summary>
              Returns all entities which IsDeleted condition is true with specified includes from database asynchronously. If the condition is requested, it also provides that condition.
@@ -1612,6 +1622,17 @@
             <param name="projectionExpression"></param>
             <param name="tracking"></param>
             <param name="conditionExpression"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Abstract.IBaseRepository`3.GetAllAsync``1(System.Func{Milvasoft.Helpers.DataAccess.EfCore.IncludeLibrary.IIncludable{`0},Milvasoft.Helpers.DataAccess.EfCore.IncludeLibrary.IIncludable},System.Linq.Expressions.Expression{System.Func{`0,``0}},System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Boolean)">
+            <summary>
+            Returns all entities which IsDeleted condition is true with specified includes from database asynchronously. If the condition is requested, it also provides that condition.
+            </summary>
+            <typeparam name="TResult"></typeparam>
+            <param name="includes"></param>
+            <param name="projectionExpression"></param>
+            <param name="conditionExpression"></param>
+            <param name="tracking"></param>
             <returns></returns>
         </member>
         <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Abstract.IBaseRepository`3.GetSomeAsync(System.Int32,System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Linq.Expressions.Expression{System.Func{`0,`0}},System.Boolean)">
@@ -2467,6 +2488,16 @@
             <param name="conditionExpression"></param>
             <returns></returns>
         </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Concrete.BaseRepository`3.GetAllAsync``1(System.Linq.Expressions.Expression{System.Func{`0,``0}},System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Boolean)">
+            <summary>
+            Returns all entities which IsDeleted condition is true from database asynchronously. If the condition is requested, it also provides that condition.
+            </summary>
+            <typeparam name="TResult"></typeparam>
+            <param name="conditionExpression"></param>
+            <param name="projectionExpression"></param>
+            <param name="tracking"></param>
+            <returns></returns>
+        </member>
         <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Concrete.BaseRepository`3.GetAllAsync(System.Func{Milvasoft.Helpers.DataAccess.EfCore.IncludeLibrary.IIncludable{`0},Milvasoft.Helpers.DataAccess.EfCore.IncludeLibrary.IIncludable},System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Linq.Expressions.Expression{System.Func{`0,`0}},System.Boolean)">
             <summary>
              Returns all entities which IsDeleted condition is true with specified includes from database asynchronously. If the condition is requested, it also provides that condition.
@@ -2475,6 +2506,17 @@
             <param name="projectionExpression"></param>
             <param name="tracking"></param>
             <param name="conditionExpression"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Concrete.BaseRepository`3.GetAllAsync``1(System.Func{Milvasoft.Helpers.DataAccess.EfCore.IncludeLibrary.IIncludable{`0},Milvasoft.Helpers.DataAccess.EfCore.IncludeLibrary.IIncludable},System.Linq.Expressions.Expression{System.Func{`0,``0}},System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Boolean)">
+            <summary>
+            Returns all entities which IsDeleted condition is true with specified includes from database asynchronously. If the condition is requested, it also provides that condition.
+            </summary>
+            <typeparam name="TResult"></typeparam>
+            <param name="includes"></param>
+            <param name="projectionExpression"></param>
+            <param name="conditionExpression"></param>
+            <param name="tracking"></param>
             <returns></returns>
         </member>
         <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Concrete.BaseRepository`3.GetSomeAsync(System.Int32,System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Linq.Expressions.Expression{System.Func{`0,`0}},System.Boolean)">
