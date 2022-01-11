@@ -3834,6 +3834,12 @@
             </summary>
             <param name="modelBuilder"></param>
         </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.MilvaContext.MilvaModelBuilderExtensions.UseUtcDateTime(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <summary>
+            Use UTC for datetime types.
+            </summary>
+            <param name="modelBuilder"></param>
+        </member>
         <member name="M:Milvasoft.Helpers.DataAccess.EfCore.MilvaContext.MilvaModelBuilderExtensions.UseObjectId(Microsoft.EntityFrameworkCore.ModelBuilder)">
             <summary>
             Adds <see cref="T:MongoDB.Bson.ObjectId"/> converters to <see cref="T:MongoDB.Bson.ObjectId"/> typed properties.

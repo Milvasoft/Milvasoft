@@ -100,6 +100,10 @@ public abstract class MilvaDbContextBase<TUser, TRole, TKey> : IdentityDbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.UseTenantId();
+
+        if (_useUtcForDateTimes)
+            modelBuilder.UseUtcDateTime();
+
         base.OnModelCreating(modelBuilder);
     }
 
@@ -121,9 +125,6 @@ public abstract class MilvaDbContextBase<TUser, TRole, TKey> : IdentityDbContext
     {
         AuditEntites();
 
-        if (_useUtcForDateTimes)
-            ConvertDateTimesToUtc();
-
         return base.SaveChanges();
     }
 
@@ -135,9 +136,6 @@ public abstract class MilvaDbContextBase<TUser, TRole, TKey> : IdentityDbContext
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
     {
         AuditEntites();
-
-        if (_useUtcForDateTimes)
-            ConvertDateTimesToUtc();
 
         return await base.SaveChangesAsync(cancellationToken);
     }
@@ -374,13 +372,14 @@ public abstract class MilvaDbContextBase<TUser, TRole, TKey> : IdentityDbContext
                     {
                         var propEntry = (DateTime)entry.Property(prop.Name).CurrentValue;
 
-                        entry.Property(prop.Name).CurrentValue = propEntry.ToUniversalTime();
+                        if (propEntry != default)
+                            entry.Property(prop.Name).CurrentValue = propEntry.ToUniversalTime();
                     }
                     else if (prop.ClrType == typeof(DateTime?))
                     {
                         var propEntry = (DateTime?)entry.Property(prop.Name).CurrentValue;
 
-                        if (propEntry.HasValue)
+                        if (propEntry.HasValue && propEntry.Value != default)
                             entry.Property(prop.Name).CurrentValue = propEntry.Value.ToUniversalTime();
                     }
                 }
