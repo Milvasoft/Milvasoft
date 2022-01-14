@@ -117,6 +117,8 @@ public class RedisCacheService : IRedisCacheService
         if (keys.IsNullOrEmpty())
             return null;
 
+        keys.ToList().RemoveAll(i => string.IsNullOrWhiteSpace(i));
+
         var redisKeys = Array.ConvertAll(keys.ToArray(), item => (RedisKey)item);
 
         var values = await _database.StringGetAsync(redisKeys).ConfigureAwait(false);
@@ -124,7 +126,15 @@ public class RedisCacheService : IRedisCacheService
         if (values.IsNullOrEmpty())
             return null;
 
-        var redisValues = Array.ConvertAll(values, item => JsonConvert.DeserializeObject<T>((string)item));
+        var stringValues = values.ToStringArray();
+
+        List<T> redisValues = new();
+
+        foreach (var item in stringValues)
+        {
+            if (!string.IsNullOrWhiteSpace(item))
+                redisValues.Add(JsonConvert.DeserializeObject<T>(item));
+        }
 
         return redisValues;
     }
@@ -137,6 +147,8 @@ public class RedisCacheService : IRedisCacheService
     {
         if (keys.IsNullOrEmpty())
             return null;
+
+        keys.ToList().RemoveAll(i => string.IsNullOrWhiteSpace(i));
 
         var redisKeys = Array.ConvertAll(keys.ToArray(), item => (RedisKey)item);
 
