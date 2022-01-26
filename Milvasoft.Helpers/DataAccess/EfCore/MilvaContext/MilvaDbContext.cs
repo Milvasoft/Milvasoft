@@ -38,6 +38,7 @@ public abstract class MilvaDbContextBase<TUser, TRole, TKey> : IdentityDbContext
     where TKey : struct, IEquatable<TKey>
 {
     private readonly bool _useUtcForDateTimes;
+    private readonly IHttpContextAccessor _httpContextAccessor;
 
     #region Protected Properties
 
@@ -72,26 +73,36 @@ public abstract class MilvaDbContextBase<TUser, TRole, TKey> : IdentityDbContext
                               IAuditConfiguration auditConfiguration,
                               bool useUtcForDateTimes = false) : base(options)
     {
-        if (auditConfiguration.AuditCreator || auditConfiguration.AuditModifier || auditConfiguration.AuditDeleter)
-        {
-            if (httpContextAccessor?.HttpContext?.Request?.Method != null)
-                if (HttpMethods.IsPost(httpContextAccessor.HttpContext.Request.Method)
-                    || HttpMethods.IsPut(httpContextAccessor.HttpContext.Request.Method)
-                    || HttpMethods.IsDelete(httpContextAccessor.HttpContext.Request.Method))
-                {
-                    var userName = httpContextAccessor?.HttpContext?.User?.Identity?.Name;
-
-                    if (!string.IsNullOrWhiteSpace(userName))
-                        CurrentUser = Users.FirstOrDefaultAsync(i => i.UserName == userName).Result;
-                }
-        }
-
+        _httpContextAccessor = httpContextAccessor;
         AuditConfiguration = auditConfiguration;
         _useUtcForDateTimes = useUtcForDateTimes;
         IgnoreSoftDelete = false;
     }
 
     #endregion
+
+    /// <summary>
+    /// This method is called for each instance of the context that is created. The base implementation does nothing.
+    /// </summary>
+    /// <param name="optionsBuilder"></param>
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    {
+        if (AuditConfiguration.AuditCreator || AuditConfiguration.AuditModifier || AuditConfiguration.AuditDeleter)
+        {
+            if (_httpContextAccessor?.HttpContext?.Request?.Method != null)
+                if (HttpMethods.IsPost(_httpContextAccessor.HttpContext.Request.Method)
+                    || HttpMethods.IsPut(_httpContextAccessor.HttpContext.Request.Method)
+                    || HttpMethods.IsDelete(_httpContextAccessor.HttpContext.Request.Method))
+                {
+                    var userName = _httpContextAccessor?.HttpContext?.User?.Identity?.Name;
+
+                    if (!string.IsNullOrWhiteSpace(userName))
+                        CurrentUser = Users.FirstOrDefaultAsync(i => i.UserName == userName).Result;
+                }
+        }
+
+        base.OnConfiguring(optionsBuilder);
+    }
 
     /// <summary>
     /// Overrided the OnModelCreating for custom configurations to database.

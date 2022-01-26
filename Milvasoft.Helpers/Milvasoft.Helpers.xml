@@ -3733,6 +3733,12 @@
             <param name="auditConfiguration"></param>
             <param name="useUtcForDateTimes"></param>
         </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.MilvaContext.MilvaDbContextBase`3.OnConfiguring(Microsoft.EntityFrameworkCore.DbContextOptionsBuilder)">
+            <summary>
+            This method is called for each instance of the context that is created. The base implementation does nothing.
+            </summary>
+            <param name="optionsBuilder"></param>
+        </member>
         <member name="M:Milvasoft.Helpers.DataAccess.EfCore.MilvaContext.MilvaDbContextBase`3.OnModelCreating(Microsoft.EntityFrameworkCore.ModelBuilder)">
             <summary>
             Overrided the OnModelCreating for custom configurations to database.
