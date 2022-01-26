@@ -82,29 +82,6 @@ public abstract class MilvaDbContextBase<TUser, TRole, TKey> : IdentityDbContext
     #endregion
 
     /// <summary>
-    /// This method is called for each instance of the context that is created. The base implementation does nothing.
-    /// </summary>
-    /// <param name="optionsBuilder"></param>
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
-        if (AuditConfiguration.AuditCreator || AuditConfiguration.AuditModifier || AuditConfiguration.AuditDeleter)
-        {
-            if (_httpContextAccessor?.HttpContext?.Request?.Method != null)
-                if (HttpMethods.IsPost(_httpContextAccessor.HttpContext.Request.Method)
-                    || HttpMethods.IsPut(_httpContextAccessor.HttpContext.Request.Method)
-                    || HttpMethods.IsDelete(_httpContextAccessor.HttpContext.Request.Method))
-                {
-                    var userName = _httpContextAccessor?.HttpContext?.User?.Identity?.Name;
-
-                    if (!string.IsNullOrWhiteSpace(userName))
-                        CurrentUser = Users.FirstOrDefaultAsync(i => i.UserName == userName).Result;
-                }
-        }
-
-        base.OnConfiguring(optionsBuilder);
-    }
-
-    /// <summary>
     /// Overrided the OnModelCreating for custom configurations to database.
     /// </summary>
     /// <param name="modelBuilder"></param>
@@ -309,6 +286,23 @@ public abstract class MilvaDbContextBase<TUser, TRole, TKey> : IdentityDbContext
     /// <param name="propertyName"></param>
     protected virtual void AuditPerformerUser(EntityEntry entry, string propertyName)
     {
+        if (CurrentUser == null)
+        {
+            if (AuditConfiguration.AuditCreator || AuditConfiguration.AuditModifier || AuditConfiguration.AuditDeleter)
+            {
+                if (_httpContextAccessor?.HttpContext?.Request?.Method != null)
+                    if (HttpMethods.IsPost(_httpContextAccessor.HttpContext.Request.Method) ||
+                        HttpMethods.IsPut(_httpContextAccessor.HttpContext.Request.Method) ||
+                        HttpMethods.IsDelete(_httpContextAccessor.HttpContext.Request.Method))
+                    {
+                        var userName = _httpContextAccessor?.HttpContext?.User?.Identity?.Name;
+
+                        if (!string.IsNullOrWhiteSpace(userName))
+                            CurrentUser = Users.FirstOrDefaultAsync(i => i.UserName == userName).Result;
+                    }
+            }
+        }
+
         entry.Property(propertyName).CurrentValue = CurrentUser?.Id;
         entry.Property(propertyName).IsModified = true;
     }
