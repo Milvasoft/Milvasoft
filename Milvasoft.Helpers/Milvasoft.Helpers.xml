@@ -5520,6 +5520,11 @@
             Defines the WrongPaginationParams.
             </summary>
         </member>
+        <member name="F:Milvasoft.Helpers.Exceptions.MilvaException.InvalidTenantId">
+            <summary>
+            Defines the InvalidTenantId.
+            </summary>
+        </member>
         <member name="T:Milvasoft.Helpers.Exceptions.MilvaTestException">
             <summary>
             Test exception class.

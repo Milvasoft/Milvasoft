@@ -17,6 +17,7 @@ public struct TenantId : IEquatable<TenantId>
     /// </summary>
     public static readonly TenantId Empty = new();
 
+    private static readonly string _invalidTenantIdErrorMessage = "This string is not convertible to TenantId";
     private string _tenancyName;
     private int _branchNo;
     private string _hash;
@@ -49,7 +50,10 @@ public struct TenantId : IEquatable<TenantId>
             _branchNo = branchNo;
             _hash = $"{tenancyName}_{branchNo}".HashToString();
         }
-        else throw new MilvaDeveloperException("This string is not convertible to TenantId.");
+        else throw new MilvaDeveloperException(_invalidTenantIdErrorMessage)
+        {
+            ExceptionCode = (int)MilvaException.InvalidTenantId
+        };
     }
 
     /// <summary>
@@ -60,7 +64,7 @@ public struct TenantId : IEquatable<TenantId>
     public TenantId(string tenancyName, int branchNo)
     {
         if (string.IsNullOrWhiteSpace(tenancyName))
-            throw new MilvaUserFriendlyException("TenancyNameRequired.", MilvaException.TenancyNameRequired);
+            throw new MilvaUserFriendlyException("TenancyNameRequired", MilvaException.TenancyNameRequired);
 
         if (branchNo <= 0)
             throw new MilvaDeveloperException("Branch No cannot be 0 or less.");
@@ -191,7 +195,11 @@ public struct TenantId : IEquatable<TenantId>
     /// <returns></returns>
     public static TenantId Parse(string str)
     {
-        if (string.IsNullOrWhiteSpace(str)) throw new MilvaDeveloperException("This string is not convertible to TenantId.");
+        if (string.IsNullOrWhiteSpace(str))
+            throw new MilvaDeveloperException(_invalidTenantIdErrorMessage)
+            {
+                ExceptionCode = (int)MilvaException.InvalidTenantId
+            };
 
         if (TryParse(str))
         {
@@ -199,7 +207,10 @@ public struct TenantId : IEquatable<TenantId>
 
             return new TenantId(splitted[0], Convert.ToInt32(splitted[1]));
         }
-        else throw new MilvaDeveloperException("This string is not convertible to TenantId.");
+        else throw new MilvaDeveloperException(_invalidTenantIdErrorMessage)
+        {
+            ExceptionCode = (int)MilvaException.InvalidTenantId
+        };
     }
 
     /// <summary>
@@ -241,7 +252,10 @@ public struct TenantId : IEquatable<TenantId>
     public static explicit operator TenantId(string tenantId)
     {
         if (!TryParse(tenantId))
-            throw new MilvaDeveloperException("Cannot explicit casting because of invalid format.");
+            throw new MilvaDeveloperException(_invalidTenantIdErrorMessage)
+            {
+                ExceptionCode = (int)MilvaException.InvalidTenantId
+            };
 
         return Parse(tenantId);
     }

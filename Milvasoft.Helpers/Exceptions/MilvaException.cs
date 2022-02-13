@@ -159,4 +159,9 @@ public enum MilvaException
     /// Defines the WrongPaginationParams.
     /// </summary>
     WrongRequestedItemCount = 30,
+
+    /// <summary>
+    /// Defines the InvalidTenantId.
+    /// </summary>
+    InvalidTenantId = 31,
 }
