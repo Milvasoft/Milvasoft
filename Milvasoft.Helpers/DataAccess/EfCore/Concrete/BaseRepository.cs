@@ -210,7 +210,7 @@ public abstract class BaseRepository<TEntity, TKey, TContext> : IBaseRepository<
     /// <param name="projectionExpression"></param>
     /// <param name="tracking"></param>
     /// <returns></returns>
-    public virtual async Task<IEnumerable<TResult>> GetAllAsync<TResult>(Expression<Func<TEntity, TResult>> projectionExpression, 
+    public virtual async Task<IEnumerable<TResult>> GetAllAsync<TResult>(Expression<Func<TEntity, TResult>> projectionExpression,
                                                                          Expression<Func<TEntity, bool>> conditionExpression = null,
                                                                          bool tracking = false)
         => await _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))

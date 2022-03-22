@@ -204,7 +204,7 @@ public static class Request
         var requestUrl = $"{address}/{pathName}{query}{hash}";
 
         // Create new Regex.
-        var regex = new Regex(@"^(ht|f)tp(s?)\:\/\/[0-9a-zA-Z]([-.\w]*[0-9a-zA-Z])*(:(0-9)*)*(\/?)([a-zA-Z0-9\-\.\?\,\'\/\\\+&%\$#_]*)?$");
+        var regex = new Regex(@"^(ht|f)tp(s?)\:\/\/[0-9a-zA-Z]([-.\w]*[0-9a-zA-Z])*(:(0-9)*)*(\/?)([a-zA-Z0-9\-\.\?\=\,\'\/\\\+&%\$#_]*)?$");
 
         // Call Match on Regex instance.
         var match = regex.Match(requestUrl);

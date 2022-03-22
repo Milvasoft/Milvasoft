@@ -4245,11 +4245,12 @@
             Mongo database instance.
             </summary>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.MongoDB.Concrete.BaseRepository`1.#ctor(Milvasoft.Helpers.DataAccess.MongoDB.Utils.IMongoDbSettings)">
+        <member name="M:Milvasoft.Helpers.DataAccess.MongoDB.Concrete.BaseRepository`1.#ctor(Milvasoft.Helpers.DataAccess.MongoDB.Utils.IMongoDbSettings,MongoDB.Driver.IMongoClient)">
             <summary>
-            Constructor of <see cref="T:Milvasoft.Helpers.DataAccess.MongoDB.Concrete.BaseRepository`1"/>
+            Constructor of <see cref="T:Milvasoft.Helpers.DataAccess.MongoDB.Concrete.BaseRepository`1"/>. Initializes new IMongoDatabase object from registered IMongoClient. Register IMongoClient object as singleton to your IoC to use this consructor.
             </summary>
             <param name="settings"></param>
+            <param name="mongoClient"></param>
         </member>
         <member name="M:Milvasoft.Helpers.DataAccess.MongoDB.Concrete.BaseRepository`1.GetMongoDatabaseInstance">
             <summary>
@@ -8073,6 +8074,21 @@
             Remember me option.
             </summary>
         </member>
+        <member name="T:Milvasoft.Helpers.Identity.Abstract.ILoginResultDTO`1">
+            <summary>
+            Login result DTO for DI.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.Identity.Abstract.ILoginResultDTO`1.ErrorMessages">
+            <summary>
+            Error messages of result.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.Identity.Abstract.ILoginResultDTO`1.Token">
+            <summary>
+            If result is success sets the token.
+            </summary>
+        </member>
         <member name="T:Milvasoft.Helpers.Identity.Abstract.ISignUpDTO">
             <summary>
             Login and sign up processes are happens with this dto.
@@ -8096,6 +8112,26 @@
         <member name="P:Milvasoft.Helpers.Identity.Abstract.ISignUpDTO.PhoneNumber">
             <summary>
             Password of user.
+            </summary>
+        </member>
+        <member name="T:Milvasoft.Helpers.Identity.Abstract.IToken">
+            <summary>
+            Login result DTO for DI.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.Identity.Abstract.IToken.AccessToken">
+            <summary>
+            If result is success sets the token.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.Identity.Abstract.IToken.Expiration">
+            <summary>
+            Expiration data of <see cref="P:Milvasoft.Helpers.Identity.Abstract.IToken.AccessToken"/>.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.Identity.Abstract.IToken.RefreshToken">
+            <summary>
+            Refresh token.
             </summary>
         </member>
         <member name="T:Milvasoft.Helpers.Identity.Abstract.ITokenManagement">
@@ -8136,41 +8172,6 @@
         <member name="P:Milvasoft.Helpers.Identity.Abstract.ITokenManagement.RefreshExpiration">
             <summary>
             Gets or sets RefreshExpiration of token.
-            </summary>
-        </member>
-        <member name="T:Milvasoft.Helpers.Identity.Concrete.ILoginResultDTO`1">
-            <summary>
-            Login result DTO for DI.
-            </summary>
-        </member>
-        <member name="P:Milvasoft.Helpers.Identity.Concrete.ILoginResultDTO`1.ErrorMessages">
-            <summary>
-            Error messages of result.
-            </summary>
-        </member>
-        <member name="P:Milvasoft.Helpers.Identity.Concrete.ILoginResultDTO`1.Token">
-            <summary>
-            If result is success sets the token.
-            </summary>
-        </member>
-        <member name="T:Milvasoft.Helpers.Identity.Concrete.IToken">
-            <summary>
-            Login result DTO for DI.
-            </summary>
-        </member>
-        <member name="P:Milvasoft.Helpers.Identity.Concrete.IToken.AccessToken">
-            <summary>
-            If result is success sets the token.
-            </summary>
-        </member>
-        <member name="P:Milvasoft.Helpers.Identity.Concrete.IToken.Expiration">
-            <summary>
-            Expiration data of <see cref="P:Milvasoft.Helpers.Identity.Concrete.IToken.AccessToken"/>.
-            </summary>
-        </member>
-        <member name="P:Milvasoft.Helpers.Identity.Concrete.IToken.RefreshToken">
-            <summary>
-            Refresh token.
             </summary>
         </member>
         <member name="T:Milvasoft.Helpers.Identity.Concrete.IdentityHelpers">

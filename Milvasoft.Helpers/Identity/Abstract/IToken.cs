@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Milvasoft.Helpers.Identity.Concrete;
+namespace Milvasoft.Helpers.Identity.Abstract;
 
 /// <summary>
 /// Login result DTO for DI.

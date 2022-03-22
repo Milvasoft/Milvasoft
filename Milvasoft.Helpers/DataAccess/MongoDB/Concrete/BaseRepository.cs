@@ -36,12 +36,13 @@ public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : 
     protected readonly bool _useUtcForDateTimes;
 
     /// <summary>
-    /// Constructor of <see cref="BaseRepository{TEntity}"/>
+    /// Constructor of <see cref="BaseRepository{TEntity}"/>. Initializes new IMongoDatabase object from registered IMongoClient. Register IMongoClient object as singleton to your IoC to use this consructor.
     /// </summary>
     /// <param name="settings"></param>
-    public BaseRepository(IMongoDbSettings settings)
+    /// <param name="mongoClient"></param>
+    public BaseRepository(IMongoDbSettings settings, IMongoClient mongoClient)
     {
-        _mongoDatabase = new MongoClient(settings.ConnectionString).GetDatabase(settings.DatabaseName);
+        _mongoDatabase = mongoClient.GetDatabase(settings.DatabaseName);
         _collection = _mongoDatabase.GetCollection<TEntity>(typeof(TEntity).GetCollectionName());
         _useUtcForDateTimes = settings.UseUtcForDateTimes;
     }

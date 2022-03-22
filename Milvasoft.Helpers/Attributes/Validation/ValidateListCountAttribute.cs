@@ -142,7 +142,7 @@ public class ValidateListCountAttribute : ValidationAttribute
             else if (MinCount > 0 && count < MinCount)
             {
                 ErrorMessage = sharedLocalizer != null
-                               ? sharedLocalizer[LocalizerKeys.ListCountBelowMin, localizedPropName, MinCount]
+                               ? sharedLocalizer[LocalizerKeys.ListCountBelowMin, MinCount, localizedPropName]
                                : $"Please select at least {MinCount} {localizedPropName}.";
 
                 httpContext.Items[context.MemberName] = ErrorMessage;
@@ -155,7 +155,7 @@ public class ValidateListCountAttribute : ValidationAttribute
             if (MinCount > 0)
             {
                 ErrorMessage = sharedLocalizer != null
-                               ? sharedLocalizer[LocalizerKeys.ListCountBelowMin, localizedPropName, MinCount]
+                               ? sharedLocalizer[LocalizerKeys.ListCountBelowMin, MinCount, localizedPropName]
                                : $"Please select at least {MinCount} {localizedPropName}.";
 
                 httpContext.Items[context.MemberName] = ErrorMessage;
