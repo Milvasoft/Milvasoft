@@ -3000,7 +3000,7 @@
             <param name="bulkConfig"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Abstract.IBaseRepository`3.DeleteBulkAsync(System.Collections.Generic.List{`0},System.Action{EFCore.BulkExtensions.BulkConfig})">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Abstract.IBaseRepository`3.DeleteBulk(System.Collections.Generic.List{`0},System.Action{EFCore.BulkExtensions.BulkConfig})">
             <summary>
             Bulk delete operation. 
             </summary>
@@ -4754,7 +4754,7 @@
             <param name="bulkConfig"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Concrete.BaseRepository`3.DeleteBulkAsync(System.Collections.Generic.List{`0},System.Action{EFCore.BulkExtensions.BulkConfig})">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Concrete.BaseRepository`3.DeleteBulk(System.Collections.Generic.List{`0},System.Action{EFCore.BulkExtensions.BulkConfig})">
             <summary>
             Bulk delete operation. 
             </summary>

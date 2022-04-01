@@ -1434,7 +1434,7 @@ public abstract partial class BaseRepository<TEntity, TKey, TContext> where TEnt
     /// <param name="entities"></param>
     /// <param name="bulkConfig"></param>
     /// <returns></returns>
-    public virtual void DeleteBulkAsync(List<TEntity> entities, Action<BulkConfig> bulkConfig = null)
+    public virtual void DeleteBulk(List<TEntity> entities, Action<BulkConfig> bulkConfig = null)
     {
         if (!entities.IsNullOrEmpty())
             _dbContext.BulkDelete(entities, bulkConfig);

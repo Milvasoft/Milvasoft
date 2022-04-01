@@ -1809,7 +1809,7 @@ public interface IBaseRepository<TEntity, TKey, TContext> where TEntity : class,
     /// <param name="entities"></param>
     /// <param name="bulkConfig"></param>
     /// <returns></returns>
-    void DeleteBulkAsync(List<TEntity> entities, Action<BulkConfig> bulkConfig = null);
+    void DeleteBulk(List<TEntity> entities, Action<BulkConfig> bulkConfig = null);
 
     /// <summary>
     /// Bulk add operation. 
