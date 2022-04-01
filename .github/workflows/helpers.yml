@@ -22,6 +22,7 @@ jobs:
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: 6.0.x
+        
     - name: Install dependencies
       run: dotnet restore
     - name: Build
@@ -34,3 +35,32 @@ jobs:
        PROJECT_FILE_PATH: Milvasoft.Helpers/Milvasoft.Helpers.csproj  
        NUGET_KEY: ${{secrets.NUGET_API_KEY}} 
 
+# jobs:
+#   build:
+#     runs-on: ubuntu-latest
+#     name: Update NuGet package
+#     steps:
+
+#       - name: Checkout repository
+#         uses: actions/checkout@v1
+
+#       - name: Setup .NET Core
+#         uses: actions/setup-dotnet@v1
+#         with:    
+#         dotnet-version: 6.0.x
+        
+#       - name: Install dependencies
+#         run: dotnet restore     
+#       - name: Build
+#         run: dotnet build --configuration Release --no-restore
+        
+             
+#       - name: Build solution and generate NuGet package
+#         run: |  
+#           cd Opsiyon
+#           dotnet pack -c Release -o out   
+          
+#       - name: Push
+#         run: dotnet nuget push ./Opsiyon/out/*.nupkg --source https://nuget.pkg.github.com/acraven/index.json --api-key ${GITHUB_TOKEN} -skip-duplicate --no-symbols true
+#         env:
+#         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
