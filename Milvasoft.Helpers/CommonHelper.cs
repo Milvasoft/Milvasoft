@@ -2,6 +2,9 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Localization;
+using Milvasoft.Helpers.DataAccess.EfCore.Abstract.Entity;
+using Milvasoft.Helpers.DataAccess.EfCore.Abstract.Entity.Auditing;
+using Milvasoft.Helpers.DataAccess.EfCore.Concrete.Entity;
 using Milvasoft.Helpers.DependencyInjection;
 using Milvasoft.Helpers.Exceptions;
 using Milvasoft.Helpers.Extensions;
@@ -114,6 +117,25 @@ public static class CommonHelper
         var parameter = Expression.Parameter(entityType);
 
         return Expression.Lambda<Func<T, TPropertyType>>(Expression.Property(parameter, propertyName), parameter);
+    }
+
+    /// <summary>
+    /// Gets <b>entity => entity.IsDeleted == false</b> expression, if <typeparamref name="TEntity"/> is assignable from <see cref="IFullAuditable{TKey}"/>.
+    /// </summary>
+    /// <returns></returns>
+    public static Expression<Func<TEntity, bool>> CreateIsDeletedFalseExpression<TEntity>()
+    {
+        var entityType = typeof(TEntity);
+
+        if (typeof(ISoftDeletable).IsAssignableFrom(entityType))
+        {
+            var parameter = Expression.Parameter(entityType, "entity");
+
+            var filterExpression = Expression.Equal(Expression.Property(parameter, entityType.GetProperty(EntityPropertyNames.IsDeleted)), Expression.Constant(false, typeof(bool)));
+
+            return Expression.Lambda<Func<TEntity, bool>>(filterExpression, parameter);
+        }
+        else return null;
     }
 
     /// <summary>

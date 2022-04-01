@@ -10,10 +10,11 @@
 	<ItemGroup>
 		<PackageReference Include="Autofac.AspNetCore.Multitenant" Version="5.1.0" />
 		<PackageReference Include="Cronos" Version="0.7.1" />
+		<PackageReference Include="EFCore.BulkExtensions" Version="6.4.2" />
 		<PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.3" />
-		<PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.5" />
 		<PackageReference Include="Microsoft.Extensions.Localization.Abstractions" Version="6.0.3" />
 		<PackageReference Include="MongoDB.Driver" Version="2.15.0" />
+		<PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
 		<PackageReference Include="StackExchange.Redis" Version="2.5.43" />
 		<PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.16.0" />
 
@@ -48,7 +49,7 @@
 		<Description>Helpers classes for projects. Please contribute for improvements. </Description>
 		<PackageTags>multitenancy,tenant,tenancy,json,file,image,helper,milvasoft,extensions,filter,request,response,test</PackageTags>
 		<Copyright>Milvasoft Yazılım Bilişim Araştırma Geliştirme Danışmanlık Sanayi ve Ticaret Ltd.Şti.</Copyright>
-		<Version>6.7.26</Version>
+		<Version>6.7.27</Version>
 		<PackageIcon>milvalogo.png</PackageIcon>
 
 	</PropertyGroup>

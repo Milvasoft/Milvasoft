@@ -14,7 +14,7 @@ namespace Milvasoft.SampleAPI.Data
 
         public EducationAppDbContext(DbContextOptions<EducationAppDbContext> options,
                                      IHttpContextAccessor httpContextAccessor,
-                                     IAuditConfiguration auditConfiguration) : base(options, httpContextAccessor, auditConfiguration)
+                                     IAuditConfiguration auditConfiguration) : base(options)
         {
         }
 

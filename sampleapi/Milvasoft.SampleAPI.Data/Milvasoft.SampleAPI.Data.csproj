@@ -5,10 +5,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="6.0.0" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\..\Milvasoft.Helpers\Milvasoft.Helpers.csproj" />
     <ProjectReference Include="..\Milvasoft.SampleAPI.Entity\Milvasoft.SampleAPI.Entity.csproj" />
   </ItemGroup>

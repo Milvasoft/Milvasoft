@@ -1,10 +1,10 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using EFCore.BulkExtensions;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Milvasoft.Helpers.DataAccess.EfCore.Abstract.Entity;
-using Milvasoft.Helpers.DataAccess.EfCore.Abstract.Entity.Auditing;
 using Milvasoft.Helpers.DataAccess.EfCore.Concrete.Entity;
 using Milvasoft.Helpers.DependencyInjection;
 using Milvasoft.Helpers.Exceptions;
@@ -20,6 +20,28 @@ using System.Threading.Tasks;
 namespace Milvasoft.Helpers.DataAccess.EfCore.MilvaContext;
 
 /// <summary>
+/// Interface for base repository.
+/// </summary>
+public interface IMilvaDbContextBase
+{
+    /// <summary>
+    /// Overrided the BulkSaveChanges method for soft deleting.
+    /// </summary>
+    /// <param name="bulkConfig"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    void SaveChangesBulk(BulkConfig bulkConfig = null, CancellationToken cancellationToken = new CancellationToken());
+
+    /// <summary>
+    /// Overrided the BulkSaveChangesAsync method for soft deleting.
+    /// </summary>
+    /// <param name="bulkConfig"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    Task SaveChangesBulkAsync(BulkConfig bulkConfig = null, CancellationToken cancellationToken = new CancellationToken());
+}
+
+/// <summary>
 /// Handles all database operations. Inherits <see cref="IdentityDbContext{TUser, TRole, TKey}"/>
 /// </summary>
 /// 
@@ -32,30 +54,42 @@ namespace Milvasoft.Helpers.DataAccess.EfCore.MilvaContext;
 /// <typeparam name="TUser"></typeparam>
 /// <typeparam name="TRole"></typeparam>
 /// <typeparam name="TKey"></typeparam>
-public abstract class MilvaDbContextBase<TUser, TRole, TKey> : IdentityDbContext<TUser, TRole, TKey>
+public abstract class MilvaDbContextBase<TUser, TRole, TKey> : IdentityDbContext<TUser, TRole, TKey>, IMilvaDbContextBase
     where TUser : IdentityUser<TKey>, IFullAuditable<TKey>
     where TRole : IdentityRole<TKey>, IFullAuditable<TKey>
     where TKey : struct, IEquatable<TKey>
 {
-    private readonly bool _useUtcForDateTimes;
-    private readonly IHttpContextAccessor _httpContextAccessor;
-
-    #region Protected Properties
+    #region Public Properties
 
     /// <summary>
-    /// Current user.
+    /// If it is true converts all saved DateTimes to UTC. Default value is false.
     /// </summary>
-    protected TUser CurrentUser;
+    public bool UseUtcForDateTimes { get; set; } = false;
+
+    /// <summary>
+    /// Required for auditing. HttpMethods.IsPost(HttpMethod) || HttpMethods.IsPut(HttpMethod) || HttpMethods.IsDelete(HttpMethod) comparision is done.
+    /// </summary>
+    public string HttpMethod { get; set; }
+
+    /// <summary>
+    /// Logged user's username for auditing.
+    /// </summary>
+    public string UserName { get; set; }
 
     /// <summary>
     /// Audit configuration.
     /// </summary>
-    protected IAuditConfiguration AuditConfiguration;
+    public IAuditConfiguration AuditConfiguration { get; set; }
 
     /// <summary>
-    /// If its true ignores soft delete.
+    /// It will be set internally.
     /// </summary>
-    protected bool IgnoreSoftDelete = false;
+    public TUser CurrentUser { get; set; }
+
+    /// <summary>
+    /// Soft delete state. Default value is false.
+    /// </summary>
+    public bool IgnoreSoftDelete { get; set; } = false;
 
     #endregion
 
@@ -65,18 +99,8 @@ public abstract class MilvaDbContextBase<TUser, TRole, TKey> : IdentityDbContext
     /// Initializes new instance of <see cref="MilvaDbContext{TUser, TRole, TKey}"/>.
     /// </summary>
     /// <param name="options"></param>
-    /// <param name="httpContextAccessor"></param>
-    /// <param name="auditConfiguration"></param>
-    /// <param name="useUtcForDateTimes"></param>
-    public MilvaDbContextBase(DbContextOptions options,
-                              IHttpContextAccessor httpContextAccessor,
-                              IAuditConfiguration auditConfiguration,
-                              bool useUtcForDateTimes = false) : base(options)
+    public MilvaDbContextBase(DbContextOptions options) : base(options)
     {
-        _httpContextAccessor = httpContextAccessor;
-        AuditConfiguration = auditConfiguration;
-        _useUtcForDateTimes = useUtcForDateTimes;
-        IgnoreSoftDelete = false;
     }
 
     #endregion
@@ -89,7 +113,7 @@ public abstract class MilvaDbContextBase<TUser, TRole, TKey> : IdentityDbContext
     {
         modelBuilder.UseTenantId();
 
-        if (_useUtcForDateTimes)
+        if (UseUtcForDateTimes)
             modelBuilder.UseUtcDateTime();
 
         base.OnModelCreating(modelBuilder);
@@ -126,6 +150,32 @@ public abstract class MilvaDbContextBase<TUser, TRole, TKey> : IdentityDbContext
         AuditEntites();
 
         return await base.SaveChangesAsync(cancellationToken);
+    }
+
+    /// <summary>
+    /// Overrided the BulkSaveChanges method for soft deleting.
+    /// </summary>
+    /// <param name="bulkConfig"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    public virtual void SaveChangesBulk(BulkConfig bulkConfig = null, CancellationToken cancellationToken = new CancellationToken())
+    {
+        AuditEntites();
+
+        this.BulkSaveChanges(bulkConfig);
+    }
+
+    /// <summary>
+    /// Overrided the BulkSaveChangesAsync method for soft deleting.
+    /// </summary>
+    /// <param name="bulkConfig"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    public virtual async Task SaveChangesBulkAsync(BulkConfig bulkConfig = null, CancellationToken cancellationToken = new CancellationToken())
+    {
+        AuditEntites();
+
+        await this.BulkSaveChangesAsync(bulkConfig, cancellationToken: cancellationToken);
     }
 
     /// <summary>
@@ -171,7 +221,7 @@ public abstract class MilvaDbContextBase<TUser, TRole, TKey> : IdentityDbContext
     /// </summary>
     /// <returns></returns>
     public async Task<List<TEntity>> GetRequiredContentsAsync<TEntity>(Expression<Func<TEntity, TEntity>> projectionExpression = null) where TEntity : class
-        => await Set<TEntity>().Where(CreateIsDeletedFalseExpression<TEntity>() ?? (entity => true))
+        => await Set<TEntity>().Where(CommonHelper.CreateIsDeletedFalseExpression<TEntity>() ?? (entity => true))
                                .IncludeLang(this)
                                .Select(projectionExpression ?? (entity => entity))
                                .ToListAsync()
@@ -195,26 +245,10 @@ public abstract class MilvaDbContextBase<TUser, TRole, TKey> : IdentityDbContext
         Expression<Func<TEntity, decimal>> predicate = Expression.Lambda<Func<TEntity, decimal>>(Expression.Convert(Expression.Property(parameterExpression, propName),
                                                                                                                     typeof(decimal)), parameterExpression);
 
-        return await Set<TEntity>().Where(CreateIsDeletedFalseExpression<TEntity>() ?? (entity => true)).IncludeLang(this).MaxAsync(predicate).ConfigureAwait(false);
+        return await Set<TEntity>().Where(CommonHelper.CreateIsDeletedFalseExpression<TEntity>() ?? (entity => true)).IncludeLang(this).MaxAsync(predicate).ConfigureAwait(false);
     }
 
     #region Protected Methods
-
-    /// <summary>
-    /// Gets <b>entity => entity.IsDeleted == false</b> expression, if <typeparamref name="TEntity"/> is assignable from <see cref="IFullAuditable{TKey}"/>.
-    /// </summary>
-    /// <returns></returns>
-    protected virtual Expression<Func<TEntity, bool>> CreateIsDeletedFalseExpression<TEntity>()
-    {
-        var entityType = typeof(TEntity);
-        if (typeof(ISoftDeletable).IsAssignableFrom(entityType))
-        {
-            var parameter = Expression.Parameter(entityType, "entity");
-            var filterExpression = Expression.Equal(Expression.Property(parameter, entityType.GetProperty(EntityPropertyNames.IsDeleted)), Expression.Constant(false, typeof(bool)));
-            return Expression.Lambda<Func<TEntity, bool>>(filterExpression, parameter);
-        }
-        else return null;
-    }
 
     /// <summary>
     /// Soft delete operation.
@@ -286,22 +320,17 @@ public abstract class MilvaDbContextBase<TUser, TRole, TKey> : IdentityDbContext
     /// <param name="propertyName"></param>
     protected virtual void AuditPerformerUser(EntityEntry entry, string propertyName)
     {
-        if (CurrentUser == null)
-        {
-            if (AuditConfiguration.AuditCreator || AuditConfiguration.AuditModifier || AuditConfiguration.AuditDeleter)
+        if (!string.IsNullOrWhiteSpace(UserName))
+            if (CurrentUser == null)
             {
-                if (_httpContextAccessor?.HttpContext?.Request?.Method != null)
-                    if (HttpMethods.IsPost(_httpContextAccessor.HttpContext.Request.Method) ||
-                        HttpMethods.IsPut(_httpContextAccessor.HttpContext.Request.Method) ||
-                        HttpMethods.IsDelete(_httpContextAccessor.HttpContext.Request.Method))
+                if (AuditConfiguration.AuditCreator || AuditConfiguration.AuditModifier || AuditConfiguration.AuditDeleter)
+                {
+                    if (HttpMethods.IsPost(HttpMethod) || HttpMethods.IsPut(HttpMethod) || HttpMethods.IsDelete(HttpMethod))
                     {
-                        var userName = _httpContextAccessor?.HttpContext?.User?.Identity?.Name;
-
-                        if (!string.IsNullOrWhiteSpace(userName))
-                            CurrentUser = Users.FirstOrDefaultAsync(i => i.UserName == userName).Result;
+                        CurrentUser = Users.FirstOrDefaultAsync(i => i.UserName == UserName).Result;
                     }
+                }
             }
-        }
 
         entry.Property(propertyName).CurrentValue = CurrentUser?.Id;
         entry.Property(propertyName).IsModified = true;
@@ -425,8 +454,11 @@ public abstract class MilvaDbContext<TUser, TRole, TKey> : MilvaDbContextBase<TU
     public MilvaDbContext(DbContextOptions options,
                           IHttpContextAccessor httpContextAccessor,
                           IAuditConfiguration auditConfiguration,
-                          bool useUtcForDateTimes = false) : base(options, httpContextAccessor, auditConfiguration, useUtcForDateTimes)
+                          bool useUtcForDateTimes = false) : base(options)
     {
+        UseUtcForDateTimes = useUtcForDateTimes;
+        HttpMethod = httpContextAccessor.HttpContext.Request.Method;
+        UserName = httpContextAccessor.HttpContext.User.Identity.Name;
         AuditConfiguration = auditConfiguration;
     }
 
@@ -460,3 +492,69 @@ public abstract class MilvaDbContext<TUser, TRole, TKey> : MilvaDbContextBase<TU
         base.OnModelCreating(modelBuilder);
     }
 }
+
+/// <summary>
+/// Handles all database operations. Inherits <see cref="MilvaDbContextBase{TUser, TRole, TKey}"/>
+/// </summary>
+/// 
+/// <remarks>
+/// <para> You must register <see cref="IAuditConfiguration"/> in your application startup. </para>
+/// <para> If <see cref="IAuditConfiguration"/>'s AuditDeleter, AuditModifier or AuditCreator is true
+///        and HttpMethod is POST,PUT or DELETE it will gets performer user in constructor from database.
+///        This can affect performance little bit. But you want audit every record easily you must use this :( </para>
+/// </remarks>
+/// <typeparam name="TUser"></typeparam>
+/// <typeparam name="TRole"></typeparam>
+/// <typeparam name="TKey"></typeparam>
+public abstract class MilvaPooledDbContext<TUser, TRole, TKey> : MilvaDbContextBase<TUser, TRole, TKey>
+    where TUser : IdentityUser<TKey>, IFullAuditable<TKey>, IFullAuditable<TUser, TKey, TKey>
+    where TRole : IdentityRole<TKey>, IFullAuditable<TKey>, IFullAuditable<TUser, TKey, TKey>
+    where TKey : struct, IEquatable<TKey>
+{
+    #region Constructors
+
+    /// <summary>
+    /// Cunstructor of <see cref="MilvaDbContext{TUser, TRole, TKey}"></see>.
+    /// </summary>
+    /// <param name="options"></param>
+    /// <param name="httpContextAccessor"></param>
+    /// <param name="auditConfiguration"></param>
+    /// <param name="useUtcForDateTimes"></param>
+    public MilvaPooledDbContext(DbContextOptions options) : base(options)
+    {
+    }
+
+    #endregion
+
+    /// <summary>
+    /// Overrided the OnModelCreating for custom configurations to database.
+    /// </summary>
+    /// <param name="modelBuilder"></param>
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        #region TUser.Set_ForeignKeys
+
+        modelBuilder.Entity<TUser>()
+            .HasOne(p => p.DeleterUser)
+            .WithMany()
+            .HasForeignKey(p => p.DeleterUserId);
+
+        modelBuilder.Entity<TUser>()
+            .HasOne(p => p.CreatorUser)
+            .WithMany()
+            .HasForeignKey(p => p.CreatorUserId);
+
+        modelBuilder.Entity<TUser>()
+            .HasOne(p => p.LastModifierUser)
+            .WithMany()
+            .HasForeignKey(p => p.LastModifierUserId);
+
+        #endregion
+
+        base.OnModelCreating(modelBuilder);
+    }
+}
+
+
+
+

@@ -1,9 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using EFCore.BulkExtensions;
+using Microsoft.EntityFrameworkCore;
 using Milvasoft.Helpers.DataAccess.EfCore.Abstract;
 using Milvasoft.Helpers.DataAccess.EfCore.Abstract.Entity;
-using Milvasoft.Helpers.DataAccess.EfCore.Abstract.Entity.Auditing;
-using Milvasoft.Helpers.DataAccess.EfCore.Concrete.Entity;
 using Milvasoft.Helpers.DataAccess.EfCore.IncludeLibrary;
+using Milvasoft.Helpers.DataAccess.EfCore.MilvaContext;
 using Milvasoft.Helpers.Exceptions;
 using Milvasoft.Helpers.Extensions;
 using System;
@@ -21,9 +21,9 @@ namespace Milvasoft.Helpers.DataAccess.EfCore.Concrete;
 /// <typeparam name="TEntity"></typeparam>
 /// <typeparam name="TKey"></typeparam>
 /// <typeparam name="TContext"></typeparam>
-public abstract class BaseRepository<TEntity, TKey, TContext> : IBaseRepository<TEntity, TKey, TContext> where TEntity : class, IBaseEntity<TKey>
-                                                                                                         where TKey : struct, IEquatable<TKey>
-                                                                                                         where TContext : DbContext
+public abstract partial class BaseRepository<TEntity, TKey, TContext> : IBaseRepository<TEntity, TKey, TContext> where TEntity : class, IBaseEntity<TKey>
+                                                                                                                 where TKey : struct, IEquatable<TKey>
+                                                                                                                 where TContext : DbContext, IMilvaDbContextBase
 {
     //TODO EntityFrameworkQueryableExtensions methods will be added here.
     //TODO Sync methods will be added.
@@ -101,22 +101,6 @@ public abstract class BaseRepository<TEntity, TKey, TContext> : IBaseRepository<
     /// <param name="state"></param>
     public void ResetSoftDeleteState(bool state) => _resetGetSoftDeletedEntitiesState = state;
 
-    /// <summary>
-    /// Gets <b>entity => entity.IsDeleted == false</b> expression, if <typeparamref name="TEntity"/> is assignable from <see cref="FullAuditableEntity{TKey}"/>.
-    /// </summary>
-    /// <returns></returns>
-    public virtual Expression<Func<TEntity, bool>> CreateIsDeletedFalseExpression()
-    {
-        var entityType = typeof(TEntity);
-        if (typeof(ISoftDeletable).IsAssignableFrom(entityType))
-        {
-            var parameter = Expression.Parameter(entityType, "entity");
-            var filterExpression = Expression.Equal(Expression.Property(parameter, entityType.GetProperty(EntityPropertyNames.IsDeleted)), Expression.Constant(false, typeof(bool)));
-            return Expression.Lambda<Func<TEntity, bool>>(filterExpression, parameter);
-        }
-        else return null;
-    }
-
     #region Get Data  
 
     /// <summary>
@@ -125,13 +109,15 @@ public abstract class BaseRepository<TEntity, TKey, TContext> : IBaseRepository<
     /// <param name="projectionExpression"></param>
     /// <param name="tracking"></param>
     /// <param name="conditionExpression"></param>
+    /// <param name="cancellationToken"></param>
     /// <returns></returns>
     public virtual async Task<TEntity> GetFirstOrDefaultAsync(Expression<Func<TEntity, bool>> conditionExpression = null,
                                                               Expression<Func<TEntity, TEntity>> projectionExpression = null,
-                                                              bool tracking = false)
+                                                              bool tracking = false,
+                                                              CancellationToken cancellationToken = new CancellationToken())
         => await _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
                        .Select(projectionExpression ?? (entity => entity))
-                       .FirstOrDefaultAsync(CreateConditionExpression(conditionExpression) ?? (entity => true))
+                       .FirstOrDefaultAsync(CreateConditionExpression(conditionExpression) ?? (entity => true), cancellationToken)
                        .ConfigureAwait(false);
 
 
@@ -142,15 +128,17 @@ public abstract class BaseRepository<TEntity, TKey, TContext> : IBaseRepository<
     /// <param name="projectionExpression"></param>
     /// <param name="tracking"></param>
     /// <param name="conditionExpression"></param>
+    /// <param name="cancellationToken"></param>
     /// <returns></returns>
     public virtual async Task<TEntity> GetFirstOrDefaultAsync(Func<IIncludable<TEntity>, IIncludable> includes,
                                                               Expression<Func<TEntity, bool>> conditionExpression = null,
                                                               Expression<Func<TEntity, TEntity>> projectionExpression = null,
-                                                              bool tracking = false)
+                                                              bool tracking = false,
+                                                              CancellationToken cancellationToken = new CancellationToken())
         => await _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
                        .IncludeMultiple(includes)
                        .Select(projectionExpression ?? (entity => entity))
-                       .FirstOrDefaultAsync(CreateConditionExpression(conditionExpression) ?? (entity => true))
+                       .FirstOrDefaultAsync(CreateConditionExpression(conditionExpression) ?? (entity => true), cancellationToken)
                        .ConfigureAwait(false);
 
     /// <summary>
@@ -159,13 +147,15 @@ public abstract class BaseRepository<TEntity, TKey, TContext> : IBaseRepository<
     /// <param name="projectionExpression"></param>
     /// <param name="tracking"></param>
     /// <param name="conditionExpression"></param>
+    /// <param name="cancellationToken"></param>
     /// <returns></returns>
     public virtual async Task<TEntity> GetSingleOrDefaultAsync(Expression<Func<TEntity, bool>> conditionExpression = null,
                                                                Expression<Func<TEntity, TEntity>> projectionExpression = null,
-                                                               bool tracking = false)
+                                                               bool tracking = false,
+                                                               CancellationToken cancellationToken = new CancellationToken())
         => await _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
                        .Select(projectionExpression ?? (entity => entity))
-                       .SingleOrDefaultAsync(CreateConditionExpression(conditionExpression) ?? (entity => true))
+                       .SingleOrDefaultAsync(CreateConditionExpression(conditionExpression) ?? (entity => true), cancellationToken)
                        .ConfigureAwait(false);
 
     /// <summary>
@@ -175,15 +165,17 @@ public abstract class BaseRepository<TEntity, TKey, TContext> : IBaseRepository<
     /// <param name="conditionExpression"></param>
     /// <param name="projectionExpression"></param>
     /// <param name="tracking"></param>
+    /// <param name="cancellationToken"></param>
     /// <returns></returns>
     public virtual async Task<TEntity> GetSingleOrDefaultAsync(Func<IIncludable<TEntity>, IIncludable> includes,
                                                                Expression<Func<TEntity, bool>> conditionExpression = null,
                                                                Expression<Func<TEntity, TEntity>> projectionExpression = null,
-                                                               bool tracking = false)
+                                                               bool tracking = false,
+                                                               CancellationToken cancellationToken = new CancellationToken())
         => await _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
                        .IncludeMultiple(includes)
                        .Select(projectionExpression ?? (entity => entity))
-                       .SingleOrDefaultAsync(CreateConditionExpression(conditionExpression) ?? (entity => true))
+                       .SingleOrDefaultAsync(CreateConditionExpression(conditionExpression) ?? (entity => true), cancellationToken)
                        .ConfigureAwait(false);
 
     /// <summary>
@@ -192,14 +184,16 @@ public abstract class BaseRepository<TEntity, TKey, TContext> : IBaseRepository<
     /// <param name="projectionExpression"></param>
     /// <param name="tracking"></param>
     /// <param name="conditionExpression"></param>
+    /// <param name="cancellationToken"></param>
     /// <returns></returns>
     public virtual async Task<IEnumerable<TEntity>> GetAllAsync(Expression<Func<TEntity, bool>> conditionExpression = null,
                                                                 Expression<Func<TEntity, TEntity>> projectionExpression = null,
-                                                                bool tracking = false)
+                                                                bool tracking = false,
+                                                                CancellationToken cancellationToken = new CancellationToken())
         => await _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
                        .Where(CreateConditionExpression(conditionExpression) ?? (entity => true))
                        .Select(projectionExpression ?? (entity => entity))
-                       .ToListAsync()
+                       .ToListAsync(cancellationToken)
                        .ConfigureAwait(false);
 
     /// <summary>
@@ -209,14 +203,16 @@ public abstract class BaseRepository<TEntity, TKey, TContext> : IBaseRepository<
     /// <param name="conditionExpression"></param>
     /// <param name="projectionExpression"></param>
     /// <param name="tracking"></param>
+    /// <param name="cancellationToken"></param>
     /// <returns></returns>
     public virtual async Task<IEnumerable<TResult>> GetAllAsync<TResult>(Expression<Func<TEntity, TResult>> projectionExpression,
                                                                          Expression<Func<TEntity, bool>> conditionExpression = null,
-                                                                         bool tracking = false)
+                                                                         bool tracking = false,
+                                                                         CancellationToken cancellationToken = new CancellationToken())
         => await _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
                        .Where(CreateConditionExpression(conditionExpression) ?? (entity => true))
                        .Select(projectionExpression)
-                       .ToListAsync()
+                       .ToListAsync(cancellationToken)
                        .ConfigureAwait(false);
 
     /// <summary>
@@ -226,16 +222,18 @@ public abstract class BaseRepository<TEntity, TKey, TContext> : IBaseRepository<
     /// <param name="projectionExpression"></param>
     /// <param name="tracking"></param>
     /// <param name="conditionExpression"></param>
+    /// <param name="cancellationToken"></param>
     /// <returns></returns>
     public virtual async Task<IEnumerable<TEntity>> GetAllAsync(Func<IIncludable<TEntity>, IIncludable> includes,
                                                                 Expression<Func<TEntity, bool>> conditionExpression = null,
                                                                 Expression<Func<TEntity, TEntity>> projectionExpression = null,
-                                                                bool tracking = false)
+                                                                bool tracking = false,
+                                                                CancellationToken cancellationToken = new CancellationToken())
         => await _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
                        .Where(CreateConditionExpression(conditionExpression) ?? (entity => true))
                        .IncludeMultiple(includes)
                        .Select(projectionExpression ?? (entity => entity))
-                       .ToListAsync()
+                       .ToListAsync(cancellationToken)
                        .ConfigureAwait(false);
 
     /// <summary>
@@ -246,16 +244,18 @@ public abstract class BaseRepository<TEntity, TKey, TContext> : IBaseRepository<
     /// <param name="projectionExpression"></param>
     /// <param name="conditionExpression"></param>
     /// <param name="tracking"></param>
+    /// <param name="cancellationToken"></param>
     /// <returns></returns>
     public virtual async Task<IEnumerable<TResult>> GetAllAsync<TResult>(Func<IIncludable<TEntity>, IIncludable> includes,
                                                                          Expression<Func<TEntity, TResult>> projectionExpression,
                                                                          Expression<Func<TEntity, bool>> conditionExpression = null,
-                                                                         bool tracking = false)
+                                                                         bool tracking = false,
+                                                                         CancellationToken cancellationToken = new CancellationToken())
         => await _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
                        .Where(CreateConditionExpression(conditionExpression) ?? (entity => true))
                        .IncludeMultiple(includes)
                        .Select(projectionExpression)
-                       .ToListAsync()
+                       .ToListAsync(cancellationToken)
                        .ConfigureAwait(false);
 
     /// <summary>
@@ -265,16 +265,18 @@ public abstract class BaseRepository<TEntity, TKey, TContext> : IBaseRepository<
     /// <param name="projectionExpression"></param>
     /// <param name="tracking"></param>
     /// <param name="conditionExpression"></param>
+    /// <param name="cancellationToken"></param>
     /// <returns></returns>
     public virtual async Task<IEnumerable<TEntity>> GetSomeAsync(int count,
                                                                  Expression<Func<TEntity, bool>> conditionExpression = null,
                                                                  Expression<Func<TEntity, TEntity>> projectionExpression = null,
-                                                                 bool tracking = false)
+                                                                 bool tracking = false,
+                                                                 CancellationToken cancellationToken = new CancellationToken())
         => await _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
                        .Where(CreateConditionExpression(conditionExpression) ?? (entity => true))
                        .Take(count)
                        .Select(projectionExpression ?? (entity => entity))
-                       .ToListAsync()
+                       .ToListAsync(cancellationToken)
                        .ConfigureAwait(false);
 
     /// <summary>
@@ -285,18 +287,20 @@ public abstract class BaseRepository<TEntity, TKey, TContext> : IBaseRepository<
     /// <param name="projectionExpression"></param>
     /// <param name="tracking"></param>
     /// <param name="conditionExpression"></param>
+    /// <param name="cancellationToken"></param>
     /// <returns></returns>
     public virtual async Task<IEnumerable<TEntity>> GetSomeAsync(int count,
                                                                  Func<IIncludable<TEntity>, IIncludable> includes,
                                                                  Expression<Func<TEntity, bool>> conditionExpression = null,
                                                                  Expression<Func<TEntity, TEntity>> projectionExpression = null,
-                                                                 bool tracking = false)
+                                                                 bool tracking = false,
+                                                                 CancellationToken cancellationToken = new CancellationToken())
         => await _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
                        .Where(CreateConditionExpression(conditionExpression) ?? (entity => true))
                        .Take(count)
                        .IncludeMultiple(includes)
                        .Select(projectionExpression ?? (entity => entity))
-                       .ToListAsync()
+                       .ToListAsync(cancellationToken)
                        .ConfigureAwait(false);
 
     #region Pagination And Order
@@ -313,25 +317,27 @@ public abstract class BaseRepository<TEntity, TKey, TContext> : IBaseRepository<
     /// <param name="conditionExpression"></param>
     /// <param name="projectionExpression"></param>
     /// <param name="tracking"></param>
+    /// <param name="cancellationToken"></param>
     /// <returns></returns>
     public virtual async Task<(IEnumerable<TEntity> entities, int pageCount, int totalDataCount)> GetAsPaginatedAsync(int requestedPageNumber,
                                                                                                                       int countOfRequestedRecordsInPage,
                                                                                                                       Expression<Func<TEntity, bool>> conditionExpression = null,
                                                                                                                       Expression<Func<TEntity, TEntity>> projectionExpression = null,
-                                                                                                                      bool tracking = false)
+                                                                                                                      bool tracking = false,
+                                                                                                                      CancellationToken cancellationToken = new CancellationToken())
     {
         ValidatePaginationParameters(requestedPageNumber, countOfRequestedRecordsInPage);
 
         var condition = CreateConditionExpression(conditionExpression);
 
-        var totalDataCount = await GetCountAsync(conditionExpression).ConfigureAwait(false);
+        var totalDataCount = await GetCountAsync(conditionExpression, cancellationToken: cancellationToken).ConfigureAwait(false);
 
         var repo = await _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
                                .Where(condition ?? (entity => true))
                                .Select(projectionExpression ?? (entity => entity))
                                .Skip((requestedPageNumber - 1) * countOfRequestedRecordsInPage)
                                .Take(countOfRequestedRecordsInPage)
-                               .ToListAsync()
+                               .ToListAsync(cancellationToken)
                                .ConfigureAwait(false);
 
         var estimatedCountOfPages = CalculatePageCountAndCompareWithRequested(totalDataCount, countOfRequestedRecordsInPage, requestedPageNumber);
@@ -352,19 +358,21 @@ public abstract class BaseRepository<TEntity, TKey, TContext> : IBaseRepository<
     /// <param name="conditionExpression"></param>
     /// <param name="projectionExpression"></param>
     /// <param name="tracking"></param>
+    /// <param name="cancellationToken"></param>
     /// <returns></returns>
     public virtual async Task<(IEnumerable<TEntity> entities, int pageCount, int totalDataCount)> GetAsPaginatedAsync(int requestedPageNumber,
                                                                                                                       int countOfRequestedRecordsInPage,
                                                                                                                       Func<IIncludable<TEntity>, IIncludable> includes,
                                                                                                                       Expression<Func<TEntity, bool>> conditionExpression = null,
                                                                                                                       Expression<Func<TEntity, TEntity>> projectionExpression = null,
-                                                                                                                      bool tracking = false)
+                                                                                                                      bool tracking = false,
+                                                                                                                      CancellationToken cancellationToken = new CancellationToken())
     {
         ValidatePaginationParameters(requestedPageNumber, countOfRequestedRecordsInPage);
 
         var condition = CreateConditionExpression(conditionExpression);
 
-        var totalDataCount = await GetCountAsync(conditionExpression).ConfigureAwait(false);
+        var totalDataCount = await GetCountAsync(conditionExpression, cancellationToken: cancellationToken).ConfigureAwait(false);
 
         var repo = await _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
                                .Where(condition ?? (entity => true))
@@ -372,7 +380,7 @@ public abstract class BaseRepository<TEntity, TKey, TContext> : IBaseRepository<
                                .Select(projectionExpression ?? (entity => entity))
                                .Skip((requestedPageNumber - 1) * countOfRequestedRecordsInPage)
                                .Take(countOfRequestedRecordsInPage)
-                               .ToListAsync()
+                               .ToListAsync(cancellationToken)
                                .ConfigureAwait(false);
 
         var estimatedCountOfPages = CalculatePageCountAndCompareWithRequested(totalDataCount, countOfRequestedRecordsInPage, requestedPageNumber);
@@ -396,6 +404,7 @@ public abstract class BaseRepository<TEntity, TKey, TContext> : IBaseRepository<
     /// <param name="conditionExpression"></param>
     /// <param name="projectionExpression"></param>
     /// <param name="tracking"></param>
+    /// <param name="cancellationToken"></param>
     /// <returns></returns>
     public virtual async Task<(IEnumerable<TEntity> entities, int pageCount, int totalDataCount)> GetAsPaginatedAndOrderedAsync(int requestedPageNumber,
                                                                                                                                 int countOfRequestedRecordsInPage,
@@ -403,7 +412,8 @@ public abstract class BaseRepository<TEntity, TKey, TContext> : IBaseRepository<
                                                                                                                                 bool orderByAscending,
                                                                                                                                 Expression<Func<TEntity, bool>> conditionExpression = null,
                                                                                                                                 Expression<Func<TEntity, TEntity>> projectionExpression = null,
-                                                                                                                                bool tracking = false)
+                                                                                                                                bool tracking = false,
+                                                                                                                                CancellationToken cancellationToken = new CancellationToken())
     {
         ValidatePaginationParameters(requestedPageNumber, countOfRequestedRecordsInPage);
 
@@ -415,7 +425,7 @@ public abstract class BaseRepository<TEntity, TKey, TContext> : IBaseRepository<
 
         var condition = CreateConditionExpression(conditionExpression);
 
-        var totalDataCount = await GetCountAsync(conditionExpression).ConfigureAwait(false);
+        var totalDataCount = await GetCountAsync(conditionExpression, cancellationToken: cancellationToken).ConfigureAwait(false);
 
         List<TEntity> repo;
 
@@ -425,7 +435,7 @@ public abstract class BaseRepository<TEntity, TKey, TContext> : IBaseRepository<
                                                  .OrderBy(predicate)
                                                  .Skip((requestedPageNumber - 1) * countOfRequestedRecordsInPage)
                                                  .Take(countOfRequestedRecordsInPage)
-                                                 .ToListAsync()
+                                                 .ToListAsync(cancellationToken)
                                                  .ConfigureAwait(false);
         else repo = await _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
                                 .Where(condition ?? (entity => true))
@@ -433,7 +443,7 @@ public abstract class BaseRepository<TEntity, TKey, TContext> : IBaseRepository<
                                 .OrderByDescending(predicate)
                                 .Skip((requestedPageNumber - 1) * countOfRequestedRecordsInPage)
                                 .Take(countOfRequestedRecordsInPage)
-                                .ToListAsync()
+                                .ToListAsync(cancellationToken)
                                 .ConfigureAwait(false);
 
         var estimatedCountOfPages = CalculatePageCountAndCompareWithRequested(totalDataCount, countOfRequestedRecordsInPage, requestedPageNumber);
@@ -458,6 +468,7 @@ public abstract class BaseRepository<TEntity, TKey, TContext> : IBaseRepository<
     /// <param name="conditionExpression"></param>
     /// <param name="projectionExpression"></param>
     /// <param name="tracking"></param>
+    /// <param name="cancellationToken"></param>
     /// <returns></returns>
     public virtual async Task<(IEnumerable<TEntity> entities, int pageCount, int totalDataCount)> GetAsPaginatedAndOrderedAsync(int requestedPageNumber,
                                                                                                                                 int countOfRequestedRecordsInPage,
@@ -466,7 +477,8 @@ public abstract class BaseRepository<TEntity, TKey, TContext> : IBaseRepository<
                                                                                                                                 bool orderByAscending,
                                                                                                                                 Expression<Func<TEntity, bool>> conditionExpression = null,
                                                                                                                                 Expression<Func<TEntity, TEntity>> projectionExpression = null,
-                                                                                                                                bool tracking = false)
+                                                                                                                                bool tracking = false,
+                                                                                                                                CancellationToken cancellationToken = new CancellationToken())
     {
         ValidatePaginationParameters(requestedPageNumber, countOfRequestedRecordsInPage);
 
@@ -478,7 +490,7 @@ public abstract class BaseRepository<TEntity, TKey, TContext> : IBaseRepository<
 
         var condition = CreateConditionExpression(conditionExpression);
 
-        var totalDataCount = await GetCountAsync(conditionExpression).ConfigureAwait(false);
+        var totalDataCount = await GetCountAsync(conditionExpression, cancellationToken: cancellationToken).ConfigureAwait(false);
 
         List<TEntity> repo;
 
@@ -489,7 +501,7 @@ public abstract class BaseRepository<TEntity, TKey, TContext> : IBaseRepository<
                                                   .Take(countOfRequestedRecordsInPage)
                                                   .IncludeMultiple(includes)
                                                   .Select(projectionExpression ?? (entity => entity))
-                                                  .ToListAsync()
+                                                  .ToListAsync(cancellationToken)
                                                   .ConfigureAwait(false);
         else repo = await _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
                                  .Where(condition ?? (entity => true))
@@ -498,7 +510,7 @@ public abstract class BaseRepository<TEntity, TKey, TContext> : IBaseRepository<
                                  .Take(countOfRequestedRecordsInPage)
                                  .IncludeMultiple(includes)
                                  .Select(projectionExpression ?? (entity => entity))
-                                 .ToListAsync()
+                                 .ToListAsync(cancellationToken)
                                  .ConfigureAwait(false);
 
         var estimatedCountOfPages = CalculatePageCountAndCompareWithRequested(totalDataCount, countOfRequestedRecordsInPage, requestedPageNumber);
@@ -521,6 +533,7 @@ public abstract class BaseRepository<TEntity, TKey, TContext> : IBaseRepository<
     /// <param name="conditionExpression"></param>
     /// <param name="projectionExpression"></param>
     /// <param name="tracking"></param>
+    /// <param name="cancellationToken"></param>
     /// <returns></returns>
     public virtual async Task<(IEnumerable<TEntity> entities, int pageCount, int totalDataCount)> GetAsPaginatedAndOrderedAsync(int requestedPageNumber,
                                                                                                                                 int countOfRequestedRecordsInPage,
@@ -528,13 +541,14 @@ public abstract class BaseRepository<TEntity, TKey, TContext> : IBaseRepository<
                                                                                                                                 bool orderByAscending,
                                                                                                                                 Expression<Func<TEntity, bool>> conditionExpression = null,
                                                                                                                                 Expression<Func<TEntity, TEntity>> projectionExpression = null,
-                                                                                                                                bool tracking = false)
+                                                                                                                                bool tracking = false,
+                                                                                                                                CancellationToken cancellationToken = new CancellationToken())
     {
         ValidatePaginationParameters(requestedPageNumber, countOfRequestedRecordsInPage);
 
         var condition = CreateConditionExpression(conditionExpression);
 
-        var totalDataCount = await GetCountAsync(conditionExpression).ConfigureAwait(false);
+        var totalDataCount = await GetCountAsync(conditionExpression, cancellationToken: cancellationToken).ConfigureAwait(false);
 
         List<TEntity> repo;
 
@@ -544,7 +558,7 @@ public abstract class BaseRepository<TEntity, TKey, TContext> : IBaseRepository<
                                                  .OrderBy(orderByKeySelector)
                                                  .Skip((requestedPageNumber - 1) * countOfRequestedRecordsInPage)
                                                  .Take(countOfRequestedRecordsInPage)
-                                                 .ToListAsync()
+                                                 .ToListAsync(cancellationToken)
                                                  .ConfigureAwait(false);
         else repo = await _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
                                 .Where(condition ?? (entity => true))
@@ -552,7 +566,7 @@ public abstract class BaseRepository<TEntity, TKey, TContext> : IBaseRepository<
                                 .OrderByDescending(orderByKeySelector)
                                 .Skip((requestedPageNumber - 1) * countOfRequestedRecordsInPage)
                                 .Take(countOfRequestedRecordsInPage)
-                                .ToListAsync()
+                                .ToListAsync(cancellationToken)
                                 .ConfigureAwait(false);
 
         var estimatedCountOfPages = CalculatePageCountAndCompareWithRequested(totalDataCount, countOfRequestedRecordsInPage, requestedPageNumber);
@@ -576,6 +590,7 @@ public abstract class BaseRepository<TEntity, TKey, TContext> : IBaseRepository<
     /// <param name="conditionExpression"></param>
     /// <param name="projectionExpression"></param>
     /// <param name="tracking"></param>
+    /// <param name="cancellationToken"></param>
     /// <returns></returns>
     public virtual async Task<(IEnumerable<TEntity> entities, int pageCount, int totalDataCount)> GetAsPaginatedAndOrderedAsync(int requestedPageNumber,
                                                                                                                                 int countOfRequestedRecordsInPage,
@@ -584,13 +599,14 @@ public abstract class BaseRepository<TEntity, TKey, TContext> : IBaseRepository<
                                                                                                                                 bool orderByAscending,
                                                                                                                                 Expression<Func<TEntity, bool>> conditionExpression = null,
                                                                                                                                 Expression<Func<TEntity, TEntity>> projectionExpression = null,
-                                                                                                                                bool tracking = false)
+                                                                                                                                bool tracking = false,
+                                                                                                                                CancellationToken cancellationToken = new CancellationToken())
     {
         ValidatePaginationParameters(requestedPageNumber, countOfRequestedRecordsInPage);
 
         var condition = CreateConditionExpression(conditionExpression);
 
-        var totalDataCount = await GetCountAsync(conditionExpression).ConfigureAwait(false);
+        var totalDataCount = await GetCountAsync(conditionExpression, cancellationToken: cancellationToken).ConfigureAwait(false);
 
         List<TEntity> repo;
 
@@ -601,7 +617,7 @@ public abstract class BaseRepository<TEntity, TKey, TContext> : IBaseRepository<
                                                   .Take(countOfRequestedRecordsInPage)
                                                   .IncludeMultiple(includes)
                                                   .Select(projectionExpression ?? (entity => entity))
-                                                  .ToListAsync()
+                                                  .ToListAsync(cancellationToken)
                                                   .ConfigureAwait(false);
         else repo = await _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
                                  .Where(condition ?? (entity => true))
@@ -610,7 +626,7 @@ public abstract class BaseRepository<TEntity, TKey, TContext> : IBaseRepository<
                                  .Take(countOfRequestedRecordsInPage)
                                  .IncludeMultiple(includes)
                                  .Select(projectionExpression ?? (entity => entity))
-                                 .ToListAsync()
+                                 .ToListAsync(cancellationToken)
                                  .ConfigureAwait(false);
 
         var estimatedCountOfPages = CalculatePageCountAndCompareWithRequested(totalDataCount, countOfRequestedRecordsInPage, requestedPageNumber);
@@ -631,12 +647,14 @@ public abstract class BaseRepository<TEntity, TKey, TContext> : IBaseRepository<
     /// <param name="conditionExpression"></param>
     /// <param name="projectionExpression"></param>
     /// <param name="tracking"></param>
+    /// <param name="cancellationToken"></param>
     /// <returns></returns>
     public virtual async Task<IEnumerable<TEntity>> GetAsOrderedAsync(string orderByPropertyName,
                                                                       bool orderByAscending,
                                                                       Expression<Func<TEntity, bool>> conditionExpression = null,
                                                                       Expression<Func<TEntity, TEntity>> projectionExpression = null,
-                                                                      bool tracking = false)
+                                                                      bool tracking = false,
+                                                                      CancellationToken cancellationToken = new CancellationToken())
     {
         var entityType = typeof(TEntity);
 
@@ -652,13 +670,13 @@ public abstract class BaseRepository<TEntity, TKey, TContext> : IBaseRepository<
                                                  .Where(condition ?? (entity => true))
                                                  .Select(projectionExpression ?? (entity => entity))
                                                  .OrderBy(predicate)
-                                                 .ToListAsync()
+                                                 .ToListAsync(cancellationToken)
                                                  .ConfigureAwait(false);
         else repo = await _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
                                 .Where(condition ?? (entity => true))
                                 .Select(projectionExpression ?? (entity => entity))
                                 .OrderByDescending(predicate)
-                                .ToListAsync()
+                                .ToListAsync(cancellationToken)
                                 .ConfigureAwait(false);
 
         return repo;
@@ -678,13 +696,15 @@ public abstract class BaseRepository<TEntity, TKey, TContext> : IBaseRepository<
     /// <param name="conditionExpression"></param>
     /// <param name="projectionExpression"></param>
     /// <param name="tracking"></param>
+    /// <param name="cancellationToken"></param>
     /// <returns></returns>
     public virtual async Task<IEnumerable<TEntity>> GetAsOrderedAsync(Func<IIncludable<TEntity>, IIncludable> includes,
                                                                       string orderByPropertyName,
                                                                       bool orderByAscending,
                                                                       Expression<Func<TEntity, bool>> conditionExpression = null,
                                                                       Expression<Func<TEntity, TEntity>> projectionExpression = null,
-                                                                      bool tracking = false)
+                                                                      bool tracking = false,
+                                                                      CancellationToken cancellationToken = new CancellationToken())
     {
         var entityType = typeof(TEntity);
 
@@ -701,14 +721,14 @@ public abstract class BaseRepository<TEntity, TKey, TContext> : IBaseRepository<
                                                   .OrderBy(predicate)
                                                   .IncludeMultiple(includes)
                                                   .Select(projectionExpression ?? (entity => entity))
-                                                  .ToListAsync()
+                                                  .ToListAsync(cancellationToken)
                                                   .ConfigureAwait(false);
         else repo = await _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
                                  .Where(condition ?? (entity => true))
                                  .OrderByDescending(predicate)
                                  .IncludeMultiple(includes)
                                  .Select(projectionExpression ?? (entity => entity))
-                                 .ToListAsync()
+                                 .ToListAsync(cancellationToken)
                                  .ConfigureAwait(false);
 
         return repo;
@@ -725,12 +745,14 @@ public abstract class BaseRepository<TEntity, TKey, TContext> : IBaseRepository<
     /// <param name="conditionExpression"></param>
     /// <param name="projectionExpression"></param>
     /// <param name="tracking"></param>
+    /// <param name="cancellationToken"></param>
     /// <returns></returns>
     public virtual async Task<IEnumerable<TEntity>> GetAsOrderedAsync(Expression<Func<TEntity, object>> orderByKeySelector,
                                                                       bool orderByAscending,
                                                                       Expression<Func<TEntity, bool>> conditionExpression = null,
                                                                       Expression<Func<TEntity, TEntity>> projectionExpression = null,
-                                                                      bool tracking = false)
+                                                                      bool tracking = false,
+                                                                      CancellationToken cancellationToken = new CancellationToken())
     {
         var condition = CreateConditionExpression(conditionExpression);
 
@@ -740,13 +762,13 @@ public abstract class BaseRepository<TEntity, TKey, TContext> : IBaseRepository<
                                                  .Where(condition ?? (entity => true))
                                                  .Select(projectionExpression ?? (entity => entity))
                                                  .OrderBy(orderByKeySelector)
-                                                 .ToListAsync()
+                                                 .ToListAsync(cancellationToken)
                                                  .ConfigureAwait(false);
         else repo = await _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
                                 .Where(condition ?? (entity => true))
                                 .Select(projectionExpression ?? (entity => entity))
                                 .OrderByDescending(orderByKeySelector)
-                                .ToListAsync()
+                                .ToListAsync(cancellationToken)
                                 .ConfigureAwait(false);
 
         return repo;
@@ -764,13 +786,15 @@ public abstract class BaseRepository<TEntity, TKey, TContext> : IBaseRepository<
     /// <param name="conditionExpression"></param>
     /// <param name="projectionExpression"></param>
     /// <param name="tracking"></param>
+    /// <param name="cancellationToken"></param>
     /// <returns></returns>
     public virtual async Task<IEnumerable<TEntity>> GetAsOrderedAsync(Func<IIncludable<TEntity>, IIncludable> includes,
                                                                       Expression<Func<TEntity, object>> orderByKeySelector,
                                                                       bool orderByAscending,
                                                                       Expression<Func<TEntity, bool>> conditionExpression = null,
                                                                       Expression<Func<TEntity, TEntity>> projectionExpression = null,
-                                                                      bool tracking = false)
+                                                                      bool tracking = false,
+                                                                      CancellationToken cancellationToken = new CancellationToken())
     {
         var condition = CreateConditionExpression(conditionExpression);
 
@@ -781,14 +805,14 @@ public abstract class BaseRepository<TEntity, TKey, TContext> : IBaseRepository<
                                                   .OrderBy(orderByKeySelector)
                                                   .IncludeMultiple(includes)
                                                   .Select(projectionExpression ?? (entity => entity))
-                                                  .ToListAsync()
+                                                  .ToListAsync(cancellationToken)
                                                   .ConfigureAwait(false);
         else repo = await _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
                                  .Where(condition ?? (entity => true))
                                  .OrderByDescending(orderByKeySelector)
                                  .IncludeMultiple(includes)
                                  .Select(projectionExpression ?? (entity => entity))
-                                 .ToListAsync()
+                                 .ToListAsync(cancellationToken)
                                  .ConfigureAwait(false);
 
         return repo;
@@ -803,17 +827,19 @@ public abstract class BaseRepository<TEntity, TKey, TContext> : IBaseRepository<
     /// <param name="conditionExpression"></param>
     /// <param name="projectionExpression"></param>
     /// <param name="tracking"></param>
+    /// <param name="cancellationToken"></param>
     /// <returns> The entity found or null. </returns>
     public virtual async Task<TEntity> GetByIdAsync(TKey id,
                                                     Expression<Func<TEntity, bool>> conditionExpression = null,
                                                     Expression<Func<TEntity, TEntity>> projectionExpression = null,
-                                                    bool tracking = false)
+                                                    bool tracking = false,
+                                                    CancellationToken cancellationToken = new CancellationToken())
     {
         var mainCondition = CreateKeyEqualityExpression(id, conditionExpression);
 
         return await _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
                            .Select(projectionExpression ?? (entity => entity))
-                           .SingleOrDefaultAsync(mainCondition)
+                           .SingleOrDefaultAsync(mainCondition, cancellationToken)
                            .ConfigureAwait(false);
     }
 
@@ -827,17 +853,19 @@ public abstract class BaseRepository<TEntity, TKey, TContext> : IBaseRepository<
     /// <param name="conditionExpression"></param>
     /// <param name="projectionExpression"></param>
     /// <param name="tracking"></param>
+    /// <param name="cancellationToken"></param>
     /// <returns> The entity. </returns>
     public virtual async Task<TEntity> GetRequiredByIdAsync(TKey id,
                                                             Expression<Func<TEntity, bool>> conditionExpression = null,
                                                             Expression<Func<TEntity, TEntity>> projectionExpression = null,
-                                                            bool tracking = false)
+                                                            bool tracking = false,
+                                                            CancellationToken cancellationToken = new CancellationToken())
     {
         var mainCondition = CreateKeyEqualityExpression(id, conditionExpression);
 
         return await _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
                             .Select(projectionExpression ?? (entity => entity))
-                            .SingleAsync(mainCondition)
+                            .SingleAsync(mainCondition, cancellationToken)
                             .ConfigureAwait(false);
     }
 
@@ -849,19 +877,21 @@ public abstract class BaseRepository<TEntity, TKey, TContext> : IBaseRepository<
     /// <param name="conditionExpression"></param>
     /// <param name="projectionExpression"></param>
     /// <param name="tracking"></param>
+    /// <param name="cancellationToken"></param>
     /// <returns> The entity found or null. </returns>
     public virtual async Task<TEntity> GetByIdAsync(TKey id,
                                                     Func<IIncludable<TEntity>, IIncludable> includes,
                                                     Expression<Func<TEntity, bool>> conditionExpression = null,
                                                     Expression<Func<TEntity, TEntity>> projectionExpression = null,
-                                                    bool tracking = false)
+                                                    bool tracking = false,
+                                                    CancellationToken cancellationToken = new CancellationToken())
     {
         var mainCondition = CreateKeyEqualityExpression(id, conditionExpression);
 
         return await _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
                            .IncludeMultiple(includes)
                            .Select(projectionExpression ?? (entity => entity))
-                           .SingleOrDefaultAsync(mainCondition)
+                           .SingleOrDefaultAsync(mainCondition, cancellationToken)
                            .ConfigureAwait(false);
     }
 
@@ -877,19 +907,21 @@ public abstract class BaseRepository<TEntity, TKey, TContext> : IBaseRepository<
     /// <param name="conditionExpression"></param>
     /// <param name="projectionExpression"></param>
     /// <param name="tracking"></param>
+    /// <param name="cancellationToken"></param>
     /// <returns> The entity. </returns>
     public virtual async Task<TEntity> GetRequiredByIdAsync(TKey id,
                                                             Func<IIncludable<TEntity>, IIncludable> includes,
                                                             Expression<Func<TEntity, bool>> conditionExpression = null,
                                                             Expression<Func<TEntity, TEntity>> projectionExpression = null,
-                                                            bool tracking = false)
+                                                            bool tracking = false,
+                                                            CancellationToken cancellationToken = new CancellationToken())
     {
         var mainCondition = CreateKeyEqualityExpression(id, conditionExpression);
 
         return await _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
                            .IncludeMultiple(includes)
                            .Select(projectionExpression ?? (entity => entity))
-                           .SingleAsync(mainCondition)
+                           .SingleAsync(mainCondition, cancellationToken)
                            .ConfigureAwait(false);
     }
 
@@ -899,10 +931,12 @@ public abstract class BaseRepository<TEntity, TKey, TContext> : IBaseRepository<
     /// <param name="groupByPropertyName"></param>
     /// <param name="conditionExpression"></param>
     /// <param name="tracking"></param>
+    /// <param name="cancellationToken"></param>
     /// <returns></returns>
     public virtual async Task<List<Tuple<object, int>>> GetGroupedAndCountAsync(string groupByPropertyName,
                                                                                 Expression<Func<TEntity, bool>> conditionExpression = null,
-                                                                                bool tracking = false)
+                                                                                bool tracking = false,
+                                                                                CancellationToken cancellationToken = new CancellationToken())
     {
         var entityType = typeof(TEntity);
 
@@ -914,7 +948,7 @@ public abstract class BaseRepository<TEntity, TKey, TContext> : IBaseRepository<
                             .Where(CreateConditionExpression(conditionExpression) ?? (entity => true))
                             .GroupBy(predicate)
                             .Select(b => Tuple.Create(b.Key, b.Count()))
-                            .ToListAsync()
+                            .ToListAsync(cancellationToken)
                             .ConfigureAwait(false);
     }
 
@@ -924,15 +958,17 @@ public abstract class BaseRepository<TEntity, TKey, TContext> : IBaseRepository<
     /// <param name="keySelector"></param>
     /// <param name="conditionExpression"></param>
     /// <param name="tracking"></param>
+    /// <param name="cancellationToken"></param>
     /// <returns></returns>
     public virtual async Task<List<Tuple<object, int>>> GetGroupedAndCountAsync(Expression<Func<TEntity, object>> keySelector,
                                                                                 Expression<Func<TEntity, bool>> conditionExpression = null,
-                                                                                bool tracking = false)
+                                                                                bool tracking = false,
+                                                                                CancellationToken cancellationToken = new CancellationToken())
         => await _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
                        .Where(CreateConditionExpression(conditionExpression) ?? (entity => true))
                        .GroupBy(keySelector)
                        .Select(b => Tuple.Create(b.Key, b.Count()))
-                       .ToListAsync()
+                       .ToListAsync(cancellationToken)
                        .ConfigureAwait(false);
 
     /// <summary>
@@ -963,10 +999,12 @@ public abstract class BaseRepository<TEntity, TKey, TContext> : IBaseRepository<
     /// <typeparam name="TReturn"></typeparam>
     /// <param name="groupedClause"></param>
     /// <param name="conditionExpression"></param>
+    /// <param name="cancellationToken"></param>
     /// <returns></returns>
     public virtual async Task<List<TReturn>> GetAsGroupedAsync<TReturn>(IQueryable<TReturn> groupedClause,
-                                                                        Expression<Func<TReturn, bool>> conditionExpression = null)
-        => await groupedClause.Where(conditionExpression ?? (entity => true)).ToListAsync().ConfigureAwait(false);
+                                                                        Expression<Func<TReturn, bool>> conditionExpression = null,
+                                                                        CancellationToken cancellationToken = new CancellationToken())
+        => await groupedClause.Where(conditionExpression ?? (entity => true)).ToListAsync(cancellationToken).ConfigureAwait(false);
 
     /// <summary>
     /// Gets grouped entities with condition from database with <paramref name="groupedClause"/>.
@@ -994,10 +1032,12 @@ public abstract class BaseRepository<TEntity, TKey, TContext> : IBaseRepository<
     /// <typeparam name="TReturn"></typeparam>
     /// <param name="conditionExpression"></param>
     /// <param name="groupedClause"></param>
+    /// <param name="cancellationToken"></param>
     /// <returns></returns>
     public virtual async Task<List<TReturn>> GetAsGroupedAsync<TReturn>(Func<IQueryable<TReturn>> groupedClause,
-                                                                        Expression<Func<TReturn, bool>> conditionExpression = null)
-        => await groupedClause.Invoke().Where(conditionExpression ?? (entity => true)).ToListAsync().ConfigureAwait(false);
+                                                                        Expression<Func<TReturn, bool>> conditionExpression = null,
+                                                                        CancellationToken cancellationToken = new CancellationToken())
+        => await groupedClause.Invoke().Where(conditionExpression ?? (entity => true)).ToListAsync(cancellationToken).ConfigureAwait(false);
 
     /// <summary>
     /// Gets grouped entities with condition from database with <paramref name="groupedClause"/>.
@@ -1027,17 +1067,24 @@ public abstract class BaseRepository<TEntity, TKey, TContext> : IBaseRepository<
     /// <param name="countOfRequestedRecordsInPage"></param>
     /// <param name="conditionExpression"></param>
     /// <param name="groupedClause"></param>
+    /// <param name="cancellationToken"></param>
     /// <returns></returns>
     public virtual async Task<(IEnumerable<TReturn> entities, int pageCount)> GetAsGroupedAndPaginatedAsync<TReturn>(int requestedPageNumber,
                                                                                                                      int countOfRequestedRecordsInPage,
                                                                                                                      Func<IQueryable<TReturn>> groupedClause,
-                                                                                                                     Expression<Func<TReturn, bool>> conditionExpression = null)
+                                                                                                                     Expression<Func<TReturn, bool>> conditionExpression = null,
+                                                                                                                     CancellationToken cancellationToken = new CancellationToken())
     {
         ValidatePaginationParameters(requestedPageNumber, countOfRequestedRecordsInPage);
 
-        var totalDataCount = await groupedClause.Invoke().Where(conditionExpression ?? (entity => true)).CountAsync().ConfigureAwait(false);
+        var totalDataCount = await groupedClause.Invoke().Where(conditionExpression ?? (entity => true)).CountAsync(cancellationToken).ConfigureAwait(false);
 
-        var repo = await groupedClause.Invoke().Where(conditionExpression ?? (entity => true)).Skip((requestedPageNumber - 1) * countOfRequestedRecordsInPage).Take(countOfRequestedRecordsInPage).ToListAsync().ConfigureAwait(false);
+        var repo = await groupedClause.Invoke()
+                                      .Where(conditionExpression ?? (entity => true))
+                                      .Skip((requestedPageNumber - 1) * countOfRequestedRecordsInPage)
+                                      .Take(countOfRequestedRecordsInPage)
+                                      .ToListAsync(cancellationToken)
+                                      .ConfigureAwait(false);
 
         var estimatedCountOfPages = CalculatePageCountAndCompareWithRequested(totalDataCount, countOfRequestedRecordsInPage, requestedPageNumber);
 
@@ -1074,20 +1121,21 @@ public abstract class BaseRepository<TEntity, TKey, TContext> : IBaseRepository<
     /// <param name="orderByAscending"></param>
     /// <param name="conditionExpression"></param>
     /// <param name="groupedClause"></param>
+    /// <param name="cancellationToken"></param>
     /// <returns></returns>
     public virtual async Task<(IEnumerable<TReturn> entities, int pageCount)> GetAsGroupedAndPaginatedAndOrderedAsync<TReturn>(int requestedPageNumber,
                                                                                                                                int countOfRequestedRecordsInPage,
                                                                                                                                string orderByPropertyName,
                                                                                                                                bool orderByAscending,
                                                                                                                                Func<IQueryable<TReturn>> groupedClause,
-                                                                                                                               Expression<Func<TReturn, bool>> conditionExpression = null)
+                                                                                                                               Expression<Func<TReturn, bool>> conditionExpression = null,
+                                                                                                                               CancellationToken cancellationToken = new CancellationToken())
     {
         ValidatePaginationParameters(requestedPageNumber, countOfRequestedRecordsInPage);
 
         var entityType = typeof(TReturn);
 
-        if (!CommonHelper.PropertyExists<TReturn>(orderByPropertyName))
-            throw new MilvaDeveloperException($"Type of {entityType}'s properties doesn't contain '{orderByPropertyName}'.");
+        CheckProperty(orderByPropertyName, entityType);
 
         var parameterExpression = Expression.Parameter(entityType, "i");
 
@@ -1095,7 +1143,7 @@ public abstract class BaseRepository<TEntity, TKey, TContext> : IBaseRepository<
 
         var predicate = Expression.Lambda<Func<TReturn, object>>(Expression.Convert(orderByProperty, typeof(object)), parameterExpression);
 
-        var totalDataCount = await groupedClause.Invoke().Where(conditionExpression ?? (entity => true)).CountAsync().ConfigureAwait(false);
+        var totalDataCount = await groupedClause.Invoke().Where(conditionExpression ?? (entity => true)).CountAsync(cancellationToken).ConfigureAwait(false);
 
         List<TReturn> repo;
 
@@ -1103,12 +1151,12 @@ public abstract class BaseRepository<TEntity, TKey, TContext> : IBaseRepository<
                                                                  .OrderBy(predicate)
                                                                  .Skip((requestedPageNumber - 1) * countOfRequestedRecordsInPage)
                                                                  .Take(countOfRequestedRecordsInPage)
-                                                                 .ToListAsync().ConfigureAwait(false);
+                                                                 .ToListAsync(cancellationToken).ConfigureAwait(false);
         else repo = await groupedClause.Invoke().Where(conditionExpression ?? (entity => true))
                                                 .OrderByDescending(predicate)
                                                 .Skip((requestedPageNumber - 1) * countOfRequestedRecordsInPage)
                                                 .Take(countOfRequestedRecordsInPage)
-                                                .ToListAsync().ConfigureAwait(false);
+                                                .ToListAsync(cancellationToken).ConfigureAwait(false);
 
         var estimatedCountOfPages = CalculatePageCountAndCompareWithRequested(totalDataCount, countOfRequestedRecordsInPage, requestedPageNumber);
 
@@ -1143,16 +1191,17 @@ public abstract class BaseRepository<TEntity, TKey, TContext> : IBaseRepository<
     /// <param name="orderByAscending"></param>
     /// <param name="conditionExpression"></param>
     /// <param name="groupedClause"></param>
+    /// <param name="cancellationToken"></param>
     /// <returns></returns>
     public virtual async Task<IEnumerable<TReturn>> GetAsGroupedAndOrderedAsync<TReturn>(string orderByPropertyName,
                                                                                          bool orderByAscending,
                                                                                          Func<IQueryable<TReturn>> groupedClause,
-                                                                                         Expression<Func<TReturn, bool>> conditionExpression = null)
+                                                                                         Expression<Func<TReturn, bool>> conditionExpression = null,
+                                                                                         CancellationToken cancellationToken = new CancellationToken())
     {
         var entityType = typeof(TReturn);
 
-        if (!CommonHelper.PropertyExists<TReturn>(orderByPropertyName))
-            throw new MilvaDeveloperException($"Type of {entityType}'s properties doesn't contain '{orderByPropertyName}'.");
+        CheckProperty(orderByPropertyName, entityType);
 
         var parameterExpression = Expression.Parameter(entityType, "i");
 
@@ -1160,18 +1209,18 @@ public abstract class BaseRepository<TEntity, TKey, TContext> : IBaseRepository<
 
         var predicate = Expression.Lambda<Func<TReturn, object>>(Expression.Convert(orderByProperty, typeof(object)), parameterExpression);
 
-        var totalDataCount = await groupedClause.Invoke().Where(conditionExpression ?? (entity => true)).CountAsync().ConfigureAwait(false);
+        var totalDataCount = await groupedClause.Invoke().Where(conditionExpression ?? (entity => true)).CountAsync(cancellationToken).ConfigureAwait(false);
 
         List<TReturn> repo;
 
         if (orderByAscending)
             repo = await groupedClause.Invoke().Where(conditionExpression ?? (entity => true))
                                                .OrderBy(predicate)
-                                               .ToListAsync().ConfigureAwait(false);
+                                               .ToListAsync(cancellationToken).ConfigureAwait(false);
         else
             repo = await groupedClause.Invoke().Where(conditionExpression ?? (entity => true))
                                                .OrderByDescending(predicate)
-                                               .ToListAsync().ConfigureAwait(false);
+                                               .ToListAsync(cancellationToken).ConfigureAwait(false);
         return repo;
     }
 
@@ -1181,14 +1230,16 @@ public abstract class BaseRepository<TEntity, TKey, TContext> : IBaseRepository<
     /// <param name="conditionExpression"></param>
     /// <param name="projectionExpression"></param>
     /// <param name="tracking"></param>
+    /// <param name="cancellationToken"></param>
     /// <returns></returns>
     public virtual async Task<TEntity> GetMaxAsync(Expression<Func<TEntity, bool>> conditionExpression = null,
                                                    Expression<Func<TEntity, TEntity>> projectionExpression = null,
-                                                   bool tracking = false)
+                                                   bool tracking = false,
+                                                   CancellationToken cancellationToken = new CancellationToken())
         => await _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
                        .Where(CreateConditionExpression(conditionExpression) ?? (entity => true))
                        .Select(projectionExpression ?? (entity => entity))
-                       .MaxAsync()
+                       .MaxAsync(cancellationToken)
                        .ConfigureAwait(false);
 
     /// <summary>
@@ -1198,16 +1249,18 @@ public abstract class BaseRepository<TEntity, TKey, TContext> : IBaseRepository<
     /// <param name="conditionExpression"></param>
     /// <param name="projectionExpression"></param>
     /// <param name="tracking"></param>
+    /// <param name="cancellationToken"></param>
     /// <returns></returns>
     public virtual async Task<TEntity> GetMaxAsync(Func<IIncludable<TEntity>, IIncludable> includes,
                                                    Expression<Func<TEntity, bool>> conditionExpression = null,
                                                    Expression<Func<TEntity, TEntity>> projectionExpression = null,
-                                                   bool tracking = false)
+                                                   bool tracking = false,
+                                                   CancellationToken cancellationToken = new CancellationToken())
         => await _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
                        .Where(CreateConditionExpression(conditionExpression) ?? (entity => true))
                        .IncludeMultiple(includes)
                        .Select(projectionExpression ?? (entity => entity))
-                       .MaxAsync()
+                       .MaxAsync(cancellationToken)
                        .ConfigureAwait(false);
 
     /// <summary>
@@ -1217,16 +1270,18 @@ public abstract class BaseRepository<TEntity, TKey, TContext> : IBaseRepository<
     /// <param name="conditionExpression"></param>
     /// <param name="projectionExpression"></param>
     /// <param name="tracking"></param>
+    /// <param name="cancellationToken"></param>
     /// <returns></returns>
     public virtual async Task<TEntity> GetMaxAsync<TProperty>(Expression<Func<TEntity, TProperty>> maxProperty,
                                                               Expression<Func<TEntity, bool>> conditionExpression = null,
                                                               Expression<Func<TEntity, TEntity>> projectionExpression = null,
-                                                              bool tracking = false)
+                                                              bool tracking = false,
+                                                              CancellationToken cancellationToken = new CancellationToken())
         => await _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
                        .Where(CreateConditionExpression(conditionExpression) ?? (entity => true))
                        .Select(projectionExpression ?? (entity => entity))
                        .OrderByDescending(maxProperty)
-                       .FirstOrDefaultAsync()
+                       .FirstOrDefaultAsync(cancellationToken)
                        .ConfigureAwait(false);
 
     /// <summary>
@@ -1237,18 +1292,20 @@ public abstract class BaseRepository<TEntity, TKey, TContext> : IBaseRepository<
     /// <param name="conditionExpression"></param>
     /// <param name="projectionExpression"></param>
     /// <param name="tracking"></param>
+    /// <param name="cancellationToken"></param>
     /// <returns></returns>
     public virtual async Task<object> GetMaxAsync<TProperty>(Expression<Func<TEntity, TProperty>> maxProperty,
                                                              Func<IIncludable<TEntity>, IIncludable> includes,
                                                              Expression<Func<TEntity, bool>> conditionExpression = null,
                                                              Expression<Func<TEntity, TEntity>> projectionExpression = null,
-                                                             bool tracking = false)
+                                                             bool tracking = false,
+                                                             CancellationToken cancellationToken = new CancellationToken())
         => await _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
                         .Where(CreateConditionExpression(conditionExpression) ?? (entity => true))
                         .IncludeMultiple(includes)
                         .Select(projectionExpression ?? (entity => entity))
                         .OrderByDescending(maxProperty)
-                        .FirstOrDefaultAsync()
+                        .FirstOrDefaultAsync(cancellationToken)
                         .ConfigureAwait(false);
 
     /// <summary>
@@ -1257,10 +1314,12 @@ public abstract class BaseRepository<TEntity, TKey, TContext> : IBaseRepository<
     /// <param name="maxPropertyName"></param>
     /// <param name="conditionExpression"></param>
     /// <param name="tracking"></param>
+    /// <param name="cancellationToken"></param>
     /// <returns></returns>
     public virtual async Task<object> GetMaxOfPropertyAsync(string maxPropertyName,
                                                             Expression<Func<TEntity, bool>> conditionExpression = null,
-                                                            bool tracking = false)
+                                                            bool tracking = false,
+                                                            CancellationToken cancellationToken = new CancellationToken())
     {
         var entityType = typeof(TEntity);
 
@@ -1275,7 +1334,7 @@ public abstract class BaseRepository<TEntity, TKey, TContext> : IBaseRepository<
 
         return await _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
                             .Where(CreateConditionExpression(conditionExpression) ?? (entity => true))
-                            .MaxAsync(predicate)
+                            .MaxAsync(predicate, cancellationToken)
                             .ConfigureAwait(false);
     }
 
@@ -1285,13 +1344,15 @@ public abstract class BaseRepository<TEntity, TKey, TContext> : IBaseRepository<
     /// <param name="maxProperty"></param>
     /// <param name="conditionExpression"></param>
     /// <param name="tracking"></param>
+    /// <param name="cancellationToken"></param>
     /// <returns></returns>
     public virtual async Task<object> GetMaxOfPropertyAsync<TProperty>(Expression<Func<TEntity, TProperty>> maxProperty,
                                                                        Expression<Func<TEntity, bool>> conditionExpression = null,
-                                                                       bool tracking = false)
+                                                                       bool tracking = false,
+                                                                       CancellationToken cancellationToken = new CancellationToken())
         => await _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
                        .Where(CreateConditionExpression(conditionExpression) ?? (entity => true))
-                       .MaxAsync(maxProperty)
+                       .MaxAsync(maxProperty, cancellationToken)
                        .ConfigureAwait(false);
 
     /// <summary>
@@ -1300,13 +1361,15 @@ public abstract class BaseRepository<TEntity, TKey, TContext> : IBaseRepository<
     /// <param name="sumProperty"></param>
     /// <param name="conditionExpression"></param>
     /// <param name="tracking"></param>
+    /// <param name="cancellationToken"></param>
     /// <returns></returns>
     public virtual async Task<decimal> GetSumOfPropertyAsync(Expression<Func<TEntity, decimal>> sumProperty,
                                                              Expression<Func<TEntity, bool>> conditionExpression = null,
-                                                             bool tracking = false)
+                                                             bool tracking = false,
+                                                             CancellationToken cancellationToken = new CancellationToken())
         => await _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
                        .Where(CreateConditionExpression(conditionExpression) ?? (entity => true))
-                       .SumAsync(sumProperty)
+                       .SumAsync(sumProperty, cancellationToken)
                        .ConfigureAwait(false);
 
     /// <summary>
@@ -1314,11 +1377,14 @@ public abstract class BaseRepository<TEntity, TKey, TContext> : IBaseRepository<
     /// </summary>
     /// <param name="conditionExpression"></param>
     /// <param name="tracking"></param>
+    /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    public virtual async Task<int> GetCountAsync(Expression<Func<TEntity, bool>> conditionExpression = null, bool tracking = false)
+    public virtual async Task<int> GetCountAsync(Expression<Func<TEntity, bool>> conditionExpression = null,
+                                                 bool tracking = false,
+                                                 CancellationToken cancellationToken = new CancellationToken())
         => await _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
                        .Where(CreateConditionExpression(conditionExpression) ?? (entity => true))
-                       .CountAsync()
+                       .CountAsync(cancellationToken)
                        .ConfigureAwait(false);
 
     #endregion
@@ -1340,7 +1406,7 @@ public abstract class BaseRepository<TEntity, TKey, TContext> : IBaseRepository<
     {
         var mainCondition = CreateKeyEqualityExpression(id);
 
-        return await _dbSet.AsNoTracking().SingleOrDefaultAsync(mainCondition).ConfigureAwait(false) != null;
+        return await _dbSet.AsNoTracking().AnyAsync(mainCondition).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -1354,7 +1420,7 @@ public abstract class BaseRepository<TEntity, TKey, TContext> : IBaseRepository<
     {
         var mainCondition = CreateKeyEqualityExpression(id, conditionExpression);
 
-        return await _dbSet.AsNoTracking().IncludeMultiple(includes).SingleOrDefaultAsync(mainCondition).ConfigureAwait(false) != null;
+        return await _dbSet.AsNoTracking().IncludeMultiple(includes).AnyAsync(mainCondition).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -1530,6 +1596,96 @@ public abstract class BaseRepository<TEntity, TKey, TContext> : IBaseRepository<
             await _dbContext.SaveChangesAsync().ConfigureAwait(false);
     }
 
+    #region Bulk Async
+
+    /// <summary>
+    /// Bulk add operation. 
+    /// </summary>
+    /// <param name="entities"></param>
+    /// <param name="bulkConfig"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    public virtual async Task AddBulkAsync(List<TEntity> entities, Action<BulkConfig> bulkConfig = null, CancellationToken cancellationToken = new CancellationToken())
+    {
+        if (!entities.IsNullOrEmpty())
+            await _dbContext.BulkInsertAsync(entities, bulkConfig, cancellationToken: cancellationToken);
+    }
+
+    /// <summary>
+    /// Bulk update operation. 
+    /// </summary>
+    /// <param name="entities"></param>
+    /// <param name="bulkConfig"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    public virtual async Task UpdateBulkAsync(List<TEntity> entities, Action<BulkConfig> bulkConfig = null, CancellationToken cancellationToken = new CancellationToken())
+    {
+        if (!entities.IsNullOrEmpty())
+            await _dbContext.BulkUpdateAsync(entities, bulkConfig, cancellationToken: cancellationToken);
+    }
+
+    /// <summary>
+    /// Bulk delete operation. 
+    /// </summary>
+    /// <param name="entities"></param>
+    /// <param name="bulkConfig"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    public virtual async Task DeleteBulkAsync(List<TEntity> entities, Action<BulkConfig> bulkConfig = null, CancellationToken cancellationToken = new CancellationToken())
+    {
+        if (!entities.IsNullOrEmpty())
+            await _dbContext.BulkDeleteAsync(entities, bulkConfig, cancellationToken: cancellationToken);
+    }
+
+    /// <summary>
+    /// Bulk add operation. 
+    /// </summary>
+    /// <param name="entities"></param>
+    /// <param name="bulkConfig"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    public virtual async Task AddBulkWithSaveChangesAsync(List<TEntity> entities, BulkConfig bulkConfig = null, CancellationToken cancellationToken = new CancellationToken())
+    {
+        if (!entities.IsNullOrEmpty())
+            _dbSet.AddRange(entities);
+
+        if (SaveChangesAfterEveryTransaction)
+            await _dbContext.SaveChangesBulkAsync(bulkConfig, cancellationToken).ConfigureAwait(false);
+    }
+
+    /// <summary>
+    /// Bulk update operation. 
+    /// </summary>
+    /// <param name="entities"></param>
+    /// <param name="bulkConfig"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    public virtual async Task UpdateBulkWithSaveChangesAsync(List<TEntity> entities, BulkConfig bulkConfig = null, CancellationToken cancellationToken = new CancellationToken())
+    {
+        if (!entities.IsNullOrEmpty())
+            _dbSet.UpdateRange(entities);
+
+        if (SaveChangesAfterEveryTransaction)
+            await _dbContext.SaveChangesBulkAsync(bulkConfig, cancellationToken).ConfigureAwait(false);
+    }
+
+    /// <summary>
+    /// Bulk delete operation. 
+    /// </summary>
+    /// <param name="entities"></param>
+    /// <param name="bulkConfig"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    public virtual async Task DeleteBulkWithSaveChangesAsync(List<TEntity> entities, BulkConfig bulkConfig = null, CancellationToken cancellationToken = new CancellationToken())
+    {
+        if (!entities.IsNullOrEmpty())
+            _dbSet.RemoveRange(entities);
+
+        if (SaveChangesAfterEveryTransaction)
+            await _dbContext.SaveChangesBulkAsync(bulkConfig, cancellationToken).ConfigureAwait(false);
+    }
+
+    #endregion
 
     #region Private Helper Methods
 
@@ -1539,11 +1695,11 @@ public abstract class BaseRepository<TEntity, TKey, TContext> : IBaseRepository<
     /// <param name="key"></param>
     /// <param name="conditionExpression"></param>
     /// <returns></returns>
-    protected Expression<Func<TEntity, bool>> CreateKeyEqualityExpression(TKey key, Expression<Func<TEntity, bool>> conditionExpression = null)
+    protected static Expression<Func<TEntity, bool>> CreateKeyEqualityExpression(TKey key, Expression<Func<TEntity, bool>> conditionExpression = null)
     {
         Expression<Func<TEntity, bool>> idCondition = i => i.Id.Equals(key);
 
-        var mainCondition = idCondition.Append(CreateIsDeletedFalseExpression(), ExpressionType.AndAlso);
+        var mainCondition = idCondition.Append(CommonHelper.CreateIsDeletedFalseExpression<TEntity>(), ExpressionType.AndAlso);
 
         return mainCondition.Append(conditionExpression, ExpressionType.AndAlso);
     }
@@ -1554,7 +1710,7 @@ public abstract class BaseRepository<TEntity, TKey, TContext> : IBaseRepository<
     /// <param name="entityType"></param>
     /// <param name="propertyName"></param>
     /// <returns></returns>
-    protected Expression<Func<TEntity, object>> CreateObjectPredicate(Type entityType, string propertyName)
+    protected static Expression<Func<TEntity, object>> CreateObjectPredicate(Type entityType, string propertyName)
     {
         var parameterExpression = Expression.Parameter(entityType, "i");
 
@@ -1611,14 +1767,15 @@ public abstract class BaseRepository<TEntity, TKey, TContext> : IBaseRepository<
     /// </summary>
     /// <param name="conditionExpression"></param>
     /// <returns></returns>
-    protected Expression<Func<TEntity, bool>> CreateConditionExpression(Expression<Func<TEntity, bool>> conditionExpression = null)
+    protected static Expression<Func<TEntity, bool>> CreateConditionExpression(Expression<Func<TEntity, bool>> conditionExpression = null)
     {
         Expression<Func<TEntity, bool>> mainExpression;
 
         //Step in when _softDeleteState is false
         if (!_getSoftDeletedEntities)
         {
-            var softDeleteExpression = CreateIsDeletedFalseExpression();
+            var softDeleteExpression = CommonHelper.CreateIsDeletedFalseExpression<TEntity>();
+
             mainExpression = softDeleteExpression.Append(conditionExpression, ExpressionType.AndAlso);
         }
         else
@@ -1628,6 +1785,7 @@ public abstract class BaseRepository<TEntity, TKey, TContext> : IBaseRepository<
             if (_resetGetSoftDeletedEntitiesState)
                 _getSoftDeletedEntities = false;
         }
+
         return mainExpression;
     }
 
