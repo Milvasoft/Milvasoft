@@ -470,7 +470,7 @@ public abstract class MilvaDbContext<TUser, TRole, TKey> : MilvaDbContextBase<TU
     /// <param name="modelBuilder"></param>
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        #region TUser.Set_ForeignKeys
+        #region TUser.Set_ForeignKeys & TRole.Set_ForeignKeys
 
         modelBuilder.Entity<TUser>()
                     .HasOne(p => p.DeleterUser)
@@ -485,6 +485,24 @@ public abstract class MilvaDbContext<TUser, TRole, TKey> : MilvaDbContextBase<TU
                     .IsRequired(false);
 
         modelBuilder.Entity<TUser>()
+                    .HasOne(p => p.LastModifierUser)
+                    .WithMany()
+                    .HasForeignKey(p => p.LastModifierUserId)
+                    .IsRequired(false);
+
+        modelBuilder.Entity<TRole>()
+                    .HasOne(p => p.DeleterUser)
+                    .WithMany()
+                    .HasForeignKey(p => p.DeleterUserId)
+                    .IsRequired(false);
+
+        modelBuilder.Entity<TRole>()
+                    .HasOne(p => p.CreatorUser)
+                    .WithMany()
+                    .HasForeignKey(p => p.CreatorUserId)
+                    .IsRequired(false);
+
+        modelBuilder.Entity<TRole>()
                     .HasOne(p => p.LastModifierUser)
                     .WithMany()
                     .HasForeignKey(p => p.LastModifierUserId)
@@ -535,7 +553,7 @@ public abstract class MilvaPooledDbContext<TUser, TRole, TKey> : MilvaDbContextB
     /// <param name="modelBuilder"></param>
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        #region TUser.Set_ForeignKeys
+        #region TUser.Set_ForeignKeys & TRole.Set_ForeignKeys
 
         modelBuilder.Entity<TUser>()
                     .HasOne(p => p.DeleterUser)
@@ -550,6 +568,24 @@ public abstract class MilvaPooledDbContext<TUser, TRole, TKey> : MilvaDbContextB
                     .IsRequired(false);
 
         modelBuilder.Entity<TUser>()
+                    .HasOne(p => p.LastModifierUser)
+                    .WithMany()
+                    .HasForeignKey(p => p.LastModifierUserId)
+                    .IsRequired(false);
+
+        modelBuilder.Entity<TRole>()
+                    .HasOne(p => p.DeleterUser)
+                    .WithMany()
+                    .HasForeignKey(p => p.DeleterUserId)
+                    .IsRequired(false);
+
+        modelBuilder.Entity<TRole>()
+                    .HasOne(p => p.CreatorUser)
+                    .WithMany()
+                    .HasForeignKey(p => p.CreatorUserId)
+                    .IsRequired(false);
+
+        modelBuilder.Entity<TRole>()
                     .HasOne(p => p.LastModifierUser)
                     .WithMany()
                     .HasForeignKey(p => p.LastModifierUserId)
