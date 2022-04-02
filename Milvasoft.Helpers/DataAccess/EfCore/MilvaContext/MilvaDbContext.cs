@@ -473,19 +473,22 @@ public abstract class MilvaDbContext<TUser, TRole, TKey> : MilvaDbContextBase<TU
         #region TUser.Set_ForeignKeys
 
         modelBuilder.Entity<TUser>()
-            .HasOne(p => p.DeleterUser)
-            .WithMany()
-            .HasForeignKey(p => p.DeleterUserId);
+                    .HasOne(p => p.DeleterUser)
+                    .WithMany()
+                    .HasForeignKey(p => p.DeleterUserId)
+                    .IsRequired(false);
 
         modelBuilder.Entity<TUser>()
-            .HasOne(p => p.CreatorUser)
-            .WithMany()
-            .HasForeignKey(p => p.CreatorUserId);
+                    .HasOne(p => p.CreatorUser)
+                    .WithMany()
+                    .HasForeignKey(p => p.CreatorUserId)
+                    .IsRequired(false);
 
         modelBuilder.Entity<TUser>()
-            .HasOne(p => p.LastModifierUser)
-            .WithMany()
-            .HasForeignKey(p => p.LastModifierUserId);
+                    .HasOne(p => p.LastModifierUser)
+                    .WithMany()
+                    .HasForeignKey(p => p.LastModifierUserId)
+                    .IsRequired(false);
 
         #endregion
 
@@ -535,19 +538,22 @@ public abstract class MilvaPooledDbContext<TUser, TRole, TKey> : MilvaDbContextB
         #region TUser.Set_ForeignKeys
 
         modelBuilder.Entity<TUser>()
-            .HasOne(p => p.DeleterUser)
-            .WithMany()
-            .HasForeignKey(p => p.DeleterUserId);
+                    .HasOne(p => p.DeleterUser)
+                    .WithMany()
+                    .HasForeignKey(p => p.DeleterUserId)
+                    .IsRequired(false);
 
         modelBuilder.Entity<TUser>()
-            .HasOne(p => p.CreatorUser)
-            .WithMany()
-            .HasForeignKey(p => p.CreatorUserId);
+                    .HasOne(p => p.CreatorUser)
+                    .WithMany()
+                    .HasForeignKey(p => p.CreatorUserId)
+                    .IsRequired(false);
 
         modelBuilder.Entity<TUser>()
-            .HasOne(p => p.LastModifierUser)
-            .WithMany()
-            .HasForeignKey(p => p.LastModifierUserId);
+                    .HasOne(p => p.LastModifierUser)
+                    .WithMany()
+                    .HasForeignKey(p => p.LastModifierUserId)
+                    .IsRequired(false);
 
         #endregion
 
