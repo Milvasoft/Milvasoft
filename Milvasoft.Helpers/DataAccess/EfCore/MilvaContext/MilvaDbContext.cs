@@ -815,8 +815,8 @@ public abstract class MilvaDbContext<TUser, TKey> : MilvaDbContextBase<TUser, TK
                           bool useUtcForDateTimes = false) : base(options)
     {
         UseUtcForDateTimes = useUtcForDateTimes;
-        HttpMethod = httpContextAccessor.HttpContext.Request.Method;
-        UserName = httpContextAccessor.HttpContext.User.Identity.Name;
+        HttpMethod = httpContextAccessor?.HttpContext?.Request?.Method;
+        UserName = httpContextAccessor?.HttpContext?.User?.Identity?.Name;
         AuditConfiguration = auditConfiguration;
     }
 
@@ -882,13 +882,13 @@ public abstract class MilvaIdentityDbContext<TUser, TRole, TKey> : MilvaIdentity
     /// <param name="auditConfiguration"></param>
     /// <param name="useUtcForDateTimes"></param>
     public MilvaIdentityDbContext(DbContextOptions options,
-                          IHttpContextAccessor httpContextAccessor,
-                          IAuditConfiguration auditConfiguration,
-                          bool useUtcForDateTimes = false) : base(options)
+                                  IHttpContextAccessor httpContextAccessor,
+                                  IAuditConfiguration auditConfiguration,
+                                  bool useUtcForDateTimes = false) : base(options)
     {
         UseUtcForDateTimes = useUtcForDateTimes;
-        HttpMethod = httpContextAccessor.HttpContext.Request.Method;
-        UserName = httpContextAccessor.HttpContext.User.Identity.Name;
+        HttpMethod = httpContextAccessor?.HttpContext?.Request?.Method;
+        UserName = httpContextAccessor?.HttpContext?.User?.Identity?.Name;
         AuditConfiguration = auditConfiguration;
     }
 
