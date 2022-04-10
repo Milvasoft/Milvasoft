@@ -7,6 +7,9 @@ namespace Milvasoft.Helpers.Identity.Concrete.Entity;
 /// </summary>
 public class MilvaUser<TKey> where TKey : IEquatable<TKey>
 {
+    private string _userName;
+    private string _email;
+
     /// <summary>
     /// Gets or sets the primary key for this user.
     /// </summary>
@@ -15,22 +18,22 @@ public class MilvaUser<TKey> where TKey : IEquatable<TKey>
     /// <summary>
     /// Gets or sets the user name for this user.
     /// </summary>
-    public virtual string UserName { get; set; }
+    public virtual string UserName { get => _userName; set => _userName = value; }
 
     /// <summary>
     /// Gets or sets the normalized user name for this user.
     /// </summary>
-    public virtual string NormalizedUserName { get; set; }
+    public virtual string NormalizedUserName { get => _userName.MilvaNormalize(); set => _userName.MilvaNormalize(); }
 
     /// <summary>
     /// Gets or sets the email address for this user.
     /// </summary>
-    public virtual string Email { get; set; }
+    public virtual string Email { get => _email; set => _email = value; }
 
     /// <summary>
     /// Gets or sets the normalized email address for this user.
     /// </summary>
-    public virtual string NormalizedEmail { get; set; }
+    public virtual string NormalizedEmail { get => _email.MilvaNormalize(); set => _email.MilvaNormalize(); }
 
     /// <summary>
     /// Gets or sets a flag indicating if a user has confirmed their email address.

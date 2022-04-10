@@ -34,6 +34,14 @@ public interface IMilvaUserManager<TUser, TKey> where TUser : MilvaUser<TKey> wh
     void SetPasswordHash(TUser user, string password);
 
     /// <summary>
+    /// Validates and hashes password and sets user's password hash property. If validation failed throws exception.
+    /// </summary>
+    /// <param name="user">The user</param>
+    /// <param name="password"></param>
+    /// <returns></returns>
+    void ValidateAndSetPasswordHash(TUser user, string password);
+
+    /// <summary>
     /// Configures user's lockout. Use before login.
     /// </summary>
     /// <param name="user">The user</param>

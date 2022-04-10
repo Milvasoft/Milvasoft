@@ -22,14 +22,15 @@ public class MilvaUserManager<TUser, TKey> : IMilvaUserManager<TUser, TKey> wher
     /// Creates a new instance of <see cref="MilvaUserManager{TUser,TKEy}"/>/
     /// </summary>
     /// <param name="dataProtector"></param>
+    /// <param name="options"></param>
     /// <param name="_options"></param>
     /// <param name="passwordHasher"></param>
     public MilvaUserManager(Lazy<IDataProtector> dataProtector,
-                            MilvaIdentityOptions _options,
+                            MilvaIdentityOptions options,
                             Lazy<IMilvaPasswordHasher> passwordHasher)
     {
         _dataProtector = dataProtector;
-        this._options = _options;
+        _options = options;
         _passwordHasher = passwordHasher;
     }
 
@@ -63,6 +64,19 @@ public class MilvaUserManager<TUser, TKey> : IMilvaUserManager<TUser, TKey> wher
     /// <returns></returns>
     public virtual void SetPasswordHash(TUser user, string password)
         => user.PasswordHash = _passwordHasher.Value.HashPassword(password);
+
+    /// <summary>
+    /// Validates and hashes password and sets user's password hash property. If validation failed throws exception.
+    /// </summary>
+    /// <param name="user">The user</param>
+    /// <param name="password"></param>
+    /// <returns></returns>
+    public virtual void ValidateAndSetPasswordHash(TUser user, string password)
+    {
+        ValidatePassword(password);
+
+        user.PasswordHash = _passwordHasher.Value.HashPassword(password);
+    }
 
     /// <summary>
     /// Configures user's lockout. Use before login.

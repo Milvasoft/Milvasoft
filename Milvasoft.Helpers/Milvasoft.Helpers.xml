@@ -10036,6 +10036,14 @@
             <param name="password"></param>
             <returns></returns>
         </member>
+        <member name="M:Milvasoft.Helpers.Identity.Abstract.IMilvaUserManager`2.ValidateAndSetPasswordHash(`0,System.String)">
+            <summary>
+            Validates and hashes password and sets user's password hash property. If validation failed throws exception.
+            </summary>
+            <param name="user">The user</param>
+            <param name="password"></param>
+            <returns></returns>
+        </member>
         <member name="M:Milvasoft.Helpers.Identity.Abstract.IMilvaUserManager`2.ConfigureLockout(`0,System.Boolean)">
             <summary>
             Configures user's lockout. Use before login.
@@ -10914,6 +10922,7 @@
             Creates a new instance of <see cref="T:Milvasoft.Helpers.Identity.Concrete.MilvaUserManager`2"/>/
             </summary>
             <param name="dataProtector"></param>
+            <param name="options"></param>
             <param name="_options"></param>
             <param name="passwordHasher"></param>
         </member>
@@ -10936,6 +10945,14 @@
         <member name="M:Milvasoft.Helpers.Identity.Concrete.MilvaUserManager`2.SetPasswordHash(`0,System.String)">
             <summary>
             Hashes password and sets user's password hash property.
+            </summary>
+            <param name="user">The user</param>
+            <param name="password"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.Identity.Concrete.MilvaUserManager`2.ValidateAndSetPasswordHash(`0,System.String)">
+            <summary>
+            Validates and hashes password and sets user's password hash property. If validation failed throws exception.
             </summary>
             <param name="user">The user</param>
             <param name="password"></param>
@@ -12193,6 +12210,60 @@
             </summary>
         </member>
         <member name="M:Milvasoft.Helpers.MultiTenancy.EntityBase.MilvaTenant`2.#ctor(System.String,System.Int32)">
+            <summary>
+            Creates a new tenant.
+            </summary>
+            <param name="tenancyName">UNIQUE name of this Tenant</param>
+            <param name="branchNo"></param>
+        </member>
+        <member name="T:Milvasoft.Helpers.MultiTenancy.EntityBase.MilvaIdentityTenant`2">
+            <summary>
+            Represents a Tenant of the application.
+            </summary>
+            <typeparam name="TUser"></typeparam>
+            <typeparam name="TUserKey"></typeparam>
+        </member>
+        <member name="P:Milvasoft.Helpers.MultiTenancy.EntityBase.MilvaIdentityTenant`2.Id">
+            <summary>
+            Id of tenant.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.MultiTenancy.EntityBase.MilvaIdentityTenant`2.TenancyName">
+            <summary>
+            Tenancy name of tenant.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.MultiTenancy.EntityBase.MilvaIdentityTenant`2.BranchNo">
+            <summary>
+            Display name of the Tenant.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.MultiTenancy.EntityBase.MilvaIdentityTenant`2.SubscriptionExpireDate">
+            <summary>
+            Represents Tenant's subscription expire date.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.MultiTenancy.EntityBase.MilvaIdentityTenant`2.DeleterUser">
+            <summary>
+            Deleter user navigation property.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.MultiTenancy.EntityBase.MilvaIdentityTenant`2.LastModifierUser">
+            <summary>
+            Modifier user navigation property.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.MultiTenancy.EntityBase.MilvaIdentityTenant`2.CreatorUser">
+            <summary>
+            Creator user navigation property.
+            </summary>
+        </member>
+        <member name="M:Milvasoft.Helpers.MultiTenancy.EntityBase.MilvaIdentityTenant`2.#ctor">
+            <summary>
+            Creates a new tenant.
+            </summary>
+        </member>
+        <member name="M:Milvasoft.Helpers.MultiTenancy.EntityBase.MilvaIdentityTenant`2.#ctor(System.String,System.Int32)">
             <summary>
             Creates a new tenant.
             </summary>
