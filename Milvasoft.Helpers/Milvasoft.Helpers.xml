@@ -1276,6 +1276,13 @@
             <param name="context"></param>
             <returns></returns>
         </member>
+        <member name="M:Milvasoft.Helpers.CommonHelper.MilvaNormalize(System.String)">
+            <summary>
+            Normalize string according to invariant culture.
+            </summary>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
         <member name="T:Milvasoft.Helpers.DataAccess.EfCore.Abstract.Entity.Auditing.IHasCreator`1">
             <summary>
             Determines entity has creator.
@@ -5326,7 +5333,160 @@
             <param name="cancellationToken"></param>
             <returns></returns>
         </member>
-        <member name="T:Milvasoft.Helpers.DataAccess.EfCore.MilvaContext.MilvaDbContextBase`3">
+        <member name="T:Milvasoft.Helpers.DataAccess.EfCore.MilvaContext.MilvaDbContextBase`2">
+            <summary>
+            Handles all database operations.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.DataAccess.EfCore.MilvaContext.MilvaDbContextBase`2.UseUtcForDateTimes">
+            <summary>
+            If it is true converts all saved DateTimes to UTC. Default value is false.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.DataAccess.EfCore.MilvaContext.MilvaDbContextBase`2.HttpMethod">
+            <summary>
+            Required for auditing. HttpMethods.IsPost(HttpMethod) || HttpMethods.IsPut(HttpMethod) || HttpMethods.IsDelete(HttpMethod) comparision is done.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.DataAccess.EfCore.MilvaContext.MilvaDbContextBase`2.UserName">
+            <summary>
+            Logged user's username for auditing.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.DataAccess.EfCore.MilvaContext.MilvaDbContextBase`2.AuditConfiguration">
+            <summary>
+            Audit configuration.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.DataAccess.EfCore.MilvaContext.MilvaDbContextBase`2.CurrentUser">
+            <summary>
+            It will be set internally.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.DataAccess.EfCore.MilvaContext.MilvaDbContextBase`2.IgnoreSoftDelete">
+            <summary>
+            Soft delete state. Default value is false.
+            </summary>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.MilvaContext.MilvaDbContextBase`2.#ctor(Microsoft.EntityFrameworkCore.DbContextOptions)">
+            <summary>
+            Initializes new instance of <see cref="!:MilvaDbContext&lt;TUser, TRole, TKey&gt;"/>.
+            </summary>
+            <param name="options"></param>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.MilvaContext.MilvaDbContextBase`2.OnModelCreating(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <summary>
+            Overrided the OnModelCreating for custom configurations to database.
+            </summary>
+            <param name="modelBuilder"></param>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.MilvaContext.MilvaDbContextBase`2.IgnoreSoftDeleteForNextProcess">
+            <summary>
+            Ignores soft delete for next process.
+            </summary>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.MilvaContext.MilvaDbContextBase`2.ActivateSoftDelete">
+            <summary>
+            Activate soft delete.
+            </summary>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.MilvaContext.MilvaDbContextBase`2.SaveChanges">
+            <summary>
+            Overrided the SaveChanges method for soft deleting.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.MilvaContext.MilvaDbContextBase`2.SaveChangesAsync(System.Threading.CancellationToken)">
+            <summary>
+            Overrided the SaveChangesAsync method for soft deleting.
+            </summary>
+            <param name="cancellationToken"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.MilvaContext.MilvaDbContextBase`2.SaveChangesBulk(EFCore.BulkExtensions.BulkConfig,System.Threading.CancellationToken)">
+            <summary>
+            Overrided the BulkSaveChanges method for soft deleting.
+            </summary>
+            <param name="bulkConfig"></param>
+            <param name="cancellationToken"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.MilvaContext.MilvaDbContextBase`2.SaveChangesBulkAsync(EFCore.BulkExtensions.BulkConfig,System.Threading.CancellationToken)">
+            <summary>
+            Overrided the BulkSaveChangesAsync method for soft deleting.
+            </summary>
+            <param name="bulkConfig"></param>
+            <param name="cancellationToken"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.MilvaContext.MilvaDbContextBase`2.GetRequiredContentsDynamicallyAsync(System.Type)">
+            <summary>
+            Gets requested contents by <paramref name="type"/> DbSet.
+            If this method gets soft deleted entities please override <see cref="!:CreateIsDeletedFalseExpression&lt;TEntity&gt;"/> method your own condition.
+            </summary>
+            <param name="type"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.MilvaContext.MilvaDbContextBase`2.GetRequiredContentsAsync``1(System.Linq.Expressions.Expression{System.Func{``0,``0}})">
+            <summary>
+            Gets requested contents by <typeparamref name="TEntity"/> DbSet.
+            If this method gets soft deleted entities please override <see cref="!:CreateIsDeletedFalseExpression&lt;TEntity&gt;"/> method your own condition.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.MilvaContext.MilvaDbContextBase`2.GetMaxValueAsync``1(System.String)">
+            <summary>
+            Gets the requested <typeparamref name="TEntity"/>'s property's(<paramref name="propName"/>) max value.
+            If this method gets soft deleted entities please override <see cref="!:CreateIsDeletedFalseExpression&lt;TEntity&gt;"/> method your own condition.
+            </summary>
+            <typeparam name="TEntity"></typeparam>
+            <param name="propName"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.MilvaContext.MilvaDbContextBase`2.SoftDelete(Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry)">
+            <summary>
+            Soft delete operation.
+            </summary>
+            <param name="entry"></param>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.MilvaContext.MilvaDbContextBase`2.AuditDeletion(Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry)">
+            <summary>
+            Entity auditing for delete. 
+            </summary>
+            <param name="entry"></param>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.MilvaContext.MilvaDbContextBase`2.AuditDate(Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry,System.String)">
+            <summary>
+            Entity auditing by date. 
+            </summary>
+            <param name="entry"></param>
+            <param name="propertyName"></param>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.MilvaContext.MilvaDbContextBase`2.AuditPerformerUser(Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry,System.String)">
+            <summary>
+            Entity auditing by performer user.
+            </summary>
+            <param name="entry"></param>
+            <param name="propertyName"></param>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.MilvaContext.MilvaDbContextBase`2.AuditEntites">
+            <summary>
+            Provides auditing entities by <see cref="P:Milvasoft.Helpers.DataAccess.EfCore.MilvaContext.MilvaDbContextBase`2.AuditConfiguration"/>.
+            If deletion process happens then sets the <see cref="P:Milvasoft.Helpers.DataAccess.EfCore.MilvaContext.MilvaDbContextBase`2.IgnoreSoftDelete"/> variable to true at the end of process.
+            </summary>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.MilvaContext.MilvaDbContextBase`2.ConvertDateTimesToUtc">
+            <summary>
+            Convert date times to UTC Zero if entry state is not <see cref="F:Microsoft.EntityFrameworkCore.EntityState.Unchanged"/>.
+            </summary>
+            <remarks>
+            
+            This will applied when "useUtcForDateTimes" in constructor property is true.
+            This will applied <see cref="T:System.DateTime"/> and nullable <see cref="T:System.DateTime"/>.
+            
+            </remarks>
+        </member>
+        <member name="T:Milvasoft.Helpers.DataAccess.EfCore.MilvaContext.MilvaIdentityDbContextBase`3">
             <summary>
             Handles all database operations. Inherits <see cref="T:Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityDbContext`3"/>
             </summary>
@@ -5341,72 +5501,72 @@
             <typeparam name="TRole"></typeparam>
             <typeparam name="TKey"></typeparam>
         </member>
-        <member name="P:Milvasoft.Helpers.DataAccess.EfCore.MilvaContext.MilvaDbContextBase`3.UseUtcForDateTimes">
+        <member name="P:Milvasoft.Helpers.DataAccess.EfCore.MilvaContext.MilvaIdentityDbContextBase`3.UseUtcForDateTimes">
             <summary>
             If it is true converts all saved DateTimes to UTC. Default value is false.
             </summary>
         </member>
-        <member name="P:Milvasoft.Helpers.DataAccess.EfCore.MilvaContext.MilvaDbContextBase`3.HttpMethod">
+        <member name="P:Milvasoft.Helpers.DataAccess.EfCore.MilvaContext.MilvaIdentityDbContextBase`3.HttpMethod">
             <summary>
             Required for auditing. HttpMethods.IsPost(HttpMethod) || HttpMethods.IsPut(HttpMethod) || HttpMethods.IsDelete(HttpMethod) comparision is done.
             </summary>
         </member>
-        <member name="P:Milvasoft.Helpers.DataAccess.EfCore.MilvaContext.MilvaDbContextBase`3.UserName">
+        <member name="P:Milvasoft.Helpers.DataAccess.EfCore.MilvaContext.MilvaIdentityDbContextBase`3.UserName">
             <summary>
             Logged user's username for auditing.
             </summary>
         </member>
-        <member name="P:Milvasoft.Helpers.DataAccess.EfCore.MilvaContext.MilvaDbContextBase`3.AuditConfiguration">
+        <member name="P:Milvasoft.Helpers.DataAccess.EfCore.MilvaContext.MilvaIdentityDbContextBase`3.AuditConfiguration">
             <summary>
             Audit configuration.
             </summary>
         </member>
-        <member name="P:Milvasoft.Helpers.DataAccess.EfCore.MilvaContext.MilvaDbContextBase`3.CurrentUser">
+        <member name="P:Milvasoft.Helpers.DataAccess.EfCore.MilvaContext.MilvaIdentityDbContextBase`3.CurrentUser">
             <summary>
             It will be set internally.
             </summary>
         </member>
-        <member name="P:Milvasoft.Helpers.DataAccess.EfCore.MilvaContext.MilvaDbContextBase`3.IgnoreSoftDelete">
+        <member name="P:Milvasoft.Helpers.DataAccess.EfCore.MilvaContext.MilvaIdentityDbContextBase`3.IgnoreSoftDelete">
             <summary>
             Soft delete state. Default value is false.
             </summary>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.MilvaContext.MilvaDbContextBase`3.#ctor(Microsoft.EntityFrameworkCore.DbContextOptions)">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.MilvaContext.MilvaIdentityDbContextBase`3.#ctor(Microsoft.EntityFrameworkCore.DbContextOptions)">
             <summary>
-            Initializes new instance of <see cref="T:Milvasoft.Helpers.DataAccess.EfCore.MilvaContext.MilvaDbContext`3"/>.
+            Initializes new instance of <see cref="T:Milvasoft.Helpers.DataAccess.EfCore.MilvaContext.MilvaIdentityDbContextBase`3"/>.
             </summary>
             <param name="options"></param>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.MilvaContext.MilvaDbContextBase`3.OnModelCreating(Microsoft.EntityFrameworkCore.ModelBuilder)">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.MilvaContext.MilvaIdentityDbContextBase`3.OnModelCreating(Microsoft.EntityFrameworkCore.ModelBuilder)">
             <summary>
             Overrided the OnModelCreating for custom configurations to database.
             </summary>
             <param name="modelBuilder"></param>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.MilvaContext.MilvaDbContextBase`3.IgnoreSoftDeleteForNextProcess">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.MilvaContext.MilvaIdentityDbContextBase`3.IgnoreSoftDeleteForNextProcess">
             <summary>
             Ignores soft delete for next process.
             </summary>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.MilvaContext.MilvaDbContextBase`3.ActivateSoftDelete">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.MilvaContext.MilvaIdentityDbContextBase`3.ActivateSoftDelete">
             <summary>
             Activate soft delete.
             </summary>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.MilvaContext.MilvaDbContextBase`3.SaveChanges">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.MilvaContext.MilvaIdentityDbContextBase`3.SaveChanges">
             <summary>
             Overrided the SaveChanges method for soft deleting.
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.MilvaContext.MilvaDbContextBase`3.SaveChangesAsync(System.Threading.CancellationToken)">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.MilvaContext.MilvaIdentityDbContextBase`3.SaveChangesAsync(System.Threading.CancellationToken)">
             <summary>
             Overrided the SaveChangesAsync method for soft deleting.
             </summary>
             <param name="cancellationToken"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.MilvaContext.MilvaDbContextBase`3.SaveChangesBulk(EFCore.BulkExtensions.BulkConfig,System.Threading.CancellationToken)">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.MilvaContext.MilvaIdentityDbContextBase`3.SaveChangesBulk(EFCore.BulkExtensions.BulkConfig,System.Threading.CancellationToken)">
             <summary>
             Overrided the BulkSaveChanges method for soft deleting.
             </summary>
@@ -5414,7 +5574,7 @@
             <param name="cancellationToken"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.MilvaContext.MilvaDbContextBase`3.SaveChangesBulkAsync(EFCore.BulkExtensions.BulkConfig,System.Threading.CancellationToken)">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.MilvaContext.MilvaIdentityDbContextBase`3.SaveChangesBulkAsync(EFCore.BulkExtensions.BulkConfig,System.Threading.CancellationToken)">
             <summary>
             Overrided the BulkSaveChangesAsync method for soft deleting.
             </summary>
@@ -5422,7 +5582,7 @@
             <param name="cancellationToken"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.MilvaContext.MilvaDbContextBase`3.GetRequiredContentsDynamicallyAsync(System.Type)">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.MilvaContext.MilvaIdentityDbContextBase`3.GetRequiredContentsDynamicallyAsync(System.Type)">
             <summary>
             Gets requested contents by <paramref name="type"/> DbSet.
             If this method gets soft deleted entities please override <see cref="!:CreateIsDeletedFalseExpression&lt;TEntity&gt;"/> method your own condition.
@@ -5430,14 +5590,14 @@
             <param name="type"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.MilvaContext.MilvaDbContextBase`3.GetRequiredContentsAsync``1(System.Linq.Expressions.Expression{System.Func{``0,``0}})">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.MilvaContext.MilvaIdentityDbContextBase`3.GetRequiredContentsAsync``1(System.Linq.Expressions.Expression{System.Func{``0,``0}})">
             <summary>
             Gets requested contents by <typeparamref name="TEntity"/> DbSet.
             If this method gets soft deleted entities please override <see cref="!:CreateIsDeletedFalseExpression&lt;TEntity&gt;"/> method your own condition.
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.MilvaContext.MilvaDbContextBase`3.GetMaxValueAsync``1(System.String)">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.MilvaContext.MilvaIdentityDbContextBase`3.GetMaxValueAsync``1(System.String)">
             <summary>
             Gets the requested <typeparamref name="TEntity"/>'s property's(<paramref name="propName"/>) max value.
             If this method gets soft deleted entities please override <see cref="!:CreateIsDeletedFalseExpression&lt;TEntity&gt;"/> method your own condition.
@@ -5446,39 +5606,39 @@
             <param name="propName"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.MilvaContext.MilvaDbContextBase`3.SoftDelete(Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry)">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.MilvaContext.MilvaIdentityDbContextBase`3.SoftDelete(Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry)">
             <summary>
             Soft delete operation.
             </summary>
             <param name="entry"></param>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.MilvaContext.MilvaDbContextBase`3.AuditDeletion(Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry)">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.MilvaContext.MilvaIdentityDbContextBase`3.AuditDeletion(Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry)">
             <summary>
             Entity auditing for delete. 
             </summary>
             <param name="entry"></param>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.MilvaContext.MilvaDbContextBase`3.AuditDate(Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry,System.String)">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.MilvaContext.MilvaIdentityDbContextBase`3.AuditDate(Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry,System.String)">
             <summary>
             Entity auditing by date. 
             </summary>
             <param name="entry"></param>
             <param name="propertyName"></param>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.MilvaContext.MilvaDbContextBase`3.AuditPerformerUser(Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry,System.String)">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.MilvaContext.MilvaIdentityDbContextBase`3.AuditPerformerUser(Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry,System.String)">
             <summary>
             Entity auditing by performer user.
             </summary>
             <param name="entry"></param>
             <param name="propertyName"></param>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.MilvaContext.MilvaDbContextBase`3.AuditEntites">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.MilvaContext.MilvaIdentityDbContextBase`3.AuditEntites">
             <summary>
-            Provides auditing entities by <see cref="P:Milvasoft.Helpers.DataAccess.EfCore.MilvaContext.MilvaDbContextBase`3.AuditConfiguration"/>.
-            If deletion process happens then sets the <see cref="P:Milvasoft.Helpers.DataAccess.EfCore.MilvaContext.MilvaDbContextBase`3.IgnoreSoftDelete"/> variable to true at the end of process.
+            Provides auditing entities by <see cref="P:Milvasoft.Helpers.DataAccess.EfCore.MilvaContext.MilvaIdentityDbContextBase`3.AuditConfiguration"/>.
+            If deletion process happens then sets the <see cref="P:Milvasoft.Helpers.DataAccess.EfCore.MilvaContext.MilvaIdentityDbContextBase`3.IgnoreSoftDelete"/> variable to true at the end of process.
             </summary>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.MilvaContext.MilvaDbContextBase`3.ConvertDateTimesToUtc">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.MilvaContext.MilvaIdentityDbContextBase`3.ConvertDateTimesToUtc">
             <summary>
             Convert date times to UTC Zero if entry state is not <see cref="F:Microsoft.EntityFrameworkCore.EntityState.Unchanged"/>.
             </summary>
@@ -5489,9 +5649,9 @@
             
             </remarks>
         </member>
-        <member name="T:Milvasoft.Helpers.DataAccess.EfCore.MilvaContext.MilvaDbContext`3">
+        <member name="T:Milvasoft.Helpers.DataAccess.EfCore.MilvaContext.MilvaDbContext`2">
             <summary>
-            Handles all database operations. Inherits <see cref="T:Milvasoft.Helpers.DataAccess.EfCore.MilvaContext.MilvaDbContextBase`3"/>
+            Handles all database operations. Inherits <see cref="T:Milvasoft.Helpers.DataAccess.EfCore.MilvaContext.MilvaDbContextBase`2"/>
             </summary>
             
             <remarks>
@@ -5501,27 +5661,26 @@
                    This can affect performance little bit. But you want audit every record easily you must use this :( </para>
             </remarks>
             <typeparam name="TUser"></typeparam>
-            <typeparam name="TRole"></typeparam>
             <typeparam name="TKey"></typeparam>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.MilvaContext.MilvaDbContext`3.#ctor(Microsoft.EntityFrameworkCore.DbContextOptions,Microsoft.AspNetCore.Http.IHttpContextAccessor,Milvasoft.Helpers.DependencyInjection.IAuditConfiguration,System.Boolean)">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.MilvaContext.MilvaDbContext`2.#ctor(Microsoft.EntityFrameworkCore.DbContextOptions,Microsoft.AspNetCore.Http.IHttpContextAccessor,Milvasoft.Helpers.DependencyInjection.IAuditConfiguration,System.Boolean)">
             <summary>
-            Cunstructor of <see cref="T:Milvasoft.Helpers.DataAccess.EfCore.MilvaContext.MilvaDbContext`3"></see>.
+            Cunstructor of <see cref="T:Milvasoft.Helpers.DataAccess.EfCore.MilvaContext.MilvaDbContext`2"></see>.
             </summary>
             <param name="options"></param>
             <param name="httpContextAccessor"></param>
             <param name="auditConfiguration"></param>
             <param name="useUtcForDateTimes"></param>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.MilvaContext.MilvaDbContext`3.OnModelCreating(Microsoft.EntityFrameworkCore.ModelBuilder)">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.MilvaContext.MilvaDbContext`2.OnModelCreating(Microsoft.EntityFrameworkCore.ModelBuilder)">
             <summary>
             Overrided the OnModelCreating for custom configurations to database.
             </summary>
             <param name="modelBuilder"></param>
         </member>
-        <member name="T:Milvasoft.Helpers.DataAccess.EfCore.MilvaContext.MilvaPooledDbContext`3">
+        <member name="T:Milvasoft.Helpers.DataAccess.EfCore.MilvaContext.MilvaIdentityDbContext`3">
             <summary>
-            Handles all database operations. Inherits <see cref="T:Milvasoft.Helpers.DataAccess.EfCore.MilvaContext.MilvaDbContextBase`3"/>
+            Handles all database operations. Inherits <see cref="T:Milvasoft.Helpers.DataAccess.EfCore.MilvaContext.MilvaIdentityDbContextBase`3"/>
             </summary>
             
             <remarks>
@@ -5534,16 +5693,70 @@
             <typeparam name="TRole"></typeparam>
             <typeparam name="TKey"></typeparam>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.MilvaContext.MilvaPooledDbContext`3.#ctor(Microsoft.EntityFrameworkCore.DbContextOptions)">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.MilvaContext.MilvaIdentityDbContext`3.#ctor(Microsoft.EntityFrameworkCore.DbContextOptions,Microsoft.AspNetCore.Http.IHttpContextAccessor,Milvasoft.Helpers.DependencyInjection.IAuditConfiguration,System.Boolean)">
             <summary>
-            Cunstructor of <see cref="T:Milvasoft.Helpers.DataAccess.EfCore.MilvaContext.MilvaDbContext`3"></see>.
+            Cunstructor of <see cref="!:MilvaDbContext&lt;TUser, TRole, TKey&gt;"></see>.
             </summary>
             <param name="options"></param>
             <param name="httpContextAccessor"></param>
             <param name="auditConfiguration"></param>
             <param name="useUtcForDateTimes"></param>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.MilvaContext.MilvaPooledDbContext`3.OnModelCreating(Microsoft.EntityFrameworkCore.ModelBuilder)">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.MilvaContext.MilvaIdentityDbContext`3.OnModelCreating(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <summary>
+            Overrided the OnModelCreating for custom configurations to database.
+            </summary>
+            <param name="modelBuilder"></param>
+        </member>
+        <member name="T:Milvasoft.Helpers.DataAccess.EfCore.MilvaContext.MilvaPooledDbContext`2">
+            <summary>
+            Handles all database operations. Inherits <see cref="!:MilvaDbContextBase&lt;TUser, TRole, TKey&gt;"/>
+            </summary>
+            
+            <remarks>
+            <para> You must register <see cref="T:Milvasoft.Helpers.DependencyInjection.IAuditConfiguration"/> in your application startup. </para>
+            <para> If <see cref="T:Milvasoft.Helpers.DependencyInjection.IAuditConfiguration"/>'s AuditDeleter, AuditModifier or AuditCreator is true
+                   and HttpMethod is POST,PUT or DELETE it will gets performer user in constructor from database.
+                   This can affect performance little bit. But you want audit every record easily you must use this :( </para>
+            </remarks>
+            <typeparam name="TUser"></typeparam>
+            <typeparam name="TRole"></typeparam>
+            <typeparam name="TKey"></typeparam>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.MilvaContext.MilvaPooledDbContext`2.#ctor(Microsoft.EntityFrameworkCore.DbContextOptions)">
+            <summary>
+            Cunstructor of <see cref="!:MilvaDbContext&lt;TUser, TRole, TKey&gt;"></see>.
+            </summary>
+            <param name="options"></param>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.MilvaContext.MilvaPooledDbContext`2.OnModelCreating(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <summary>
+            Overrided the OnModelCreating for custom configurations to database.
+            </summary>
+            <param name="modelBuilder"></param>
+        </member>
+        <member name="T:Milvasoft.Helpers.DataAccess.EfCore.MilvaContext.MilvaPooledIdentityDbContext`3">
+            <summary>
+            Handles all database operations. Inherits <see cref="!:MilvaDbContextBase&lt;TUser, TRole, TKey&gt;"/>
+            </summary>
+            
+            <remarks>
+            <para> You must register <see cref="T:Milvasoft.Helpers.DependencyInjection.IAuditConfiguration"/> in your application startup. </para>
+            <para> If <see cref="T:Milvasoft.Helpers.DependencyInjection.IAuditConfiguration"/>'s AuditDeleter, AuditModifier or AuditCreator is true
+                   and HttpMethod is POST,PUT or DELETE it will gets performer user in constructor from database.
+                   This can affect performance little bit. But you want audit every record easily you must use this :( </para>
+            </remarks>
+            <typeparam name="TUser"></typeparam>
+            <typeparam name="TRole"></typeparam>
+            <typeparam name="TKey"></typeparam>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.MilvaContext.MilvaPooledIdentityDbContext`3.#ctor(Microsoft.EntityFrameworkCore.DbContextOptions)">
+            <summary>
+            Cunstructor of <see cref="!:MilvaDbContext&lt;TUser, TRole, TKey&gt;"></see>.
+            </summary>
+            <param name="options"></param>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.MilvaContext.MilvaPooledIdentityDbContext`3.OnModelCreating(Microsoft.EntityFrameworkCore.ModelBuilder)">
             <summary>
             Overrided the OnModelCreating for custom configurations to database.
             </summary>
@@ -5551,7 +5764,7 @@
         </member>
         <member name="T:Milvasoft.Helpers.DataAccess.EfCore.MilvaContext.MilvaModelBuilderExtensions">
             <summary>
-            Extension methods for <c cref="T:Milvasoft.Helpers.DataAccess.EfCore.MilvaContext.MilvaDbContext`3"></c>.
+            Extension methods for <c cref="!:MilvaDbContext&lt;TUser, TRole, TKey&gt;"></c>.
             </summary>
         </member>
         <member name="M:Milvasoft.Helpers.DataAccess.EfCore.MilvaContext.MilvaModelBuilderExtensions.UseTenantId(Microsoft.EntityFrameworkCore.ModelBuilder)">
@@ -9773,6 +9986,135 @@
             If result is success sets the token.
             </summary>
         </member>
+        <member name="T:Milvasoft.Helpers.Identity.Abstract.IMilvaPasswordHasher">
+            <summary>
+            Implements the standard Identity password hashing
+            </summary>
+        </member>
+        <member name="M:Milvasoft.Helpers.Identity.Abstract.IMilvaPasswordHasher.HashPassword(System.String)">
+            <summary>
+            Returns a hashed representation of the supplied <paramref name="password"/>.
+            </summary>
+            <param name="password">The password to hash.</param>
+            <returns>A hashed representation of the supplied <paramref name="password"/>.</returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.Identity.Abstract.IMilvaPasswordHasher.VerifyHashedPassword(System.String,System.String)">
+            <summary>
+            Returns a <see cref="T:System.Boolean"/> indicating the result of a password hash comparison.
+            </summary>
+            <param name="hashedPassword">The hash value for a user's stored password.</param>
+            <param name="providedPassword">The password supplied for comparison.</param>
+            <returns>A <see cref="T:System.Boolean"/> indicating the result of a password hash comparison.</returns>
+            <remarks>Implementations of this method should be time consistent.</remarks>
+        </member>
+        <member name="T:Milvasoft.Helpers.Identity.Abstract.IMilvaUserManager`2">
+            <summary>
+            Implements the standard Identity password hashing
+            </summary>
+        </member>
+        <member name="M:Milvasoft.Helpers.Identity.Abstract.IMilvaUserManager`2.ConfigureForCreate(`0,System.String)">
+            <summary>
+            Validates user, sets password hash, set normalized columns.
+            </summary>
+            <param name="user"></param>
+            <param name="password"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.Identity.Abstract.IMilvaUserManager`2.CheckPassword(`0,System.String)">
+            <summary>
+            Check password hash.
+            </summary>
+            <param name="user">The user</param>
+            <param name="password"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.Identity.Abstract.IMilvaUserManager`2.SetPasswordHash(`0,System.String)">
+            <summary>
+            Hashes password and sets user's password hash property.
+            </summary>
+            <param name="user">The user</param>
+            <param name="password"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.Identity.Abstract.IMilvaUserManager`2.ConfigureLockout(`0,System.Boolean)">
+            <summary>
+            Configures user's lockout. Use before login.
+            </summary>
+            <param name="user">The user</param>
+            <param name="accessFailed"></param>
+            <returns> If user locked returns true. </returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.Identity.Abstract.IMilvaUserManager`2.PreLoginCheck(`0)">
+            <summary>
+            User confirmed props and locked check.
+            </summary>
+            <param name="user">The user</param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.Identity.Abstract.IMilvaUserManager`2.CanSignIn(`0)">
+            <summary>
+            User confirmed props check.
+            </summary>
+            <param name="user">The user whose sign-in status should be returned.</param>
+            <returns> </returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.Identity.Abstract.IMilvaUserManager`2.IsLockedOut(`0)">
+            <summary>
+            Returns a flag indicating whether the specified <paramref name="user"/> his locked out.
+            </summary>
+            <param name="user">The user whose locked out status should be retrieved.</param>
+            <returns>
+            True if the specified <paramref name="user "/> is locked out, otherwise false.
+            </returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.Identity.Abstract.IMilvaUserManager`2.ValidateUser(`0,System.String)">
+            <summary>
+            Validates user.
+            </summary>
+            <param name="user"></param>
+            <param name="password"></param>
+        </member>
+        <member name="M:Milvasoft.Helpers.Identity.Abstract.IMilvaUserManager`2.ValidatePassword(System.String)">
+            <summary>
+            Validates a password.
+            </summary>
+            <param name="password">The password supplied for validation</param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.Identity.Abstract.IMilvaUserManager`2.ValidateUserName(System.String)">
+            <summary>
+            Validates username.
+            </summary>
+            <param name="userName"></param>
+        </member>
+        <member name="M:Milvasoft.Helpers.Identity.Abstract.IMilvaUserManager`2.ValidateEmail(System.String)">
+            <summary>
+            Validates email.
+            </summary>
+            <param name="email"></param>
+        </member>
+        <member name="M:Milvasoft.Helpers.Identity.Abstract.IMilvaUserManager`2.GenerateUserToken(`0,Milvasoft.Helpers.Identity.TokenProvider.Purpose,System.String)">
+            <summary>
+            Generates a token for the given <paramref name="user"/> and <paramref name="purpose"/>.
+            </summary>
+            <param name="purpose">The purpose the token will be for.</param>
+            <param name="value"></param>
+            <param name="user">The user the token will be for.</param>
+            <returns> </returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.Identity.Abstract.IMilvaUserManager`2.VerifyUserToken(`0,Milvasoft.Helpers.Identity.TokenProvider.Purpose,System.String,System.String)">
+            <summary>
+            Returns a flag indicating whether the specified <paramref name="token"/> is valid for the given <paramref name="user"/> and <paramref name="purpose"/>.
+            </summary>
+            <param name="user">The user to validate the token against.</param>
+            <param name="purpose">The purpose the token should be generated for.</param>
+            <param name="token">The token to validate</param>
+            <param name="value"></param>
+            <returns>
+            True if the <paramref name="token"/>
+            is valid, otherwise false.
+            </returns>
+        </member>
         <member name="T:Milvasoft.Helpers.Identity.Abstract.ISignUpDTO">
             <summary>
             Login and sign up processes are happens with this dto.
@@ -9856,6 +10198,127 @@
         <member name="P:Milvasoft.Helpers.Identity.Abstract.ITokenManagement.RefreshExpiration">
             <summary>
             Gets or sets RefreshExpiration of token.
+            </summary>
+        </member>
+        <member name="T:Milvasoft.Helpers.Identity.Builder.MilvaIdentityBuilder`2">
+            <summary>
+            Implements the standard Identity password hashing.
+            </summary>
+        </member>
+        <member name="M:Milvasoft.Helpers.Identity.Builder.MilvaIdentityBuilder`2.#ctor(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+            <summary>
+            Creates new instance of <see cref="T:Milvasoft.Helpers.Identity.Builder.MilvaIdentityBuilder`2"/>.
+            </summary>
+            <param name="services"></param>
+        </member>
+        <member name="M:Milvasoft.Helpers.Identity.Builder.MilvaIdentityBuilder`2.WithOptions(System.Action{Milvasoft.Helpers.Identity.Concrete.Options.MilvaIdentityOptions})">
+            <summary>
+            Adds and configures the identity system for the specified User and Role types.
+            </summary>
+            <param name="setupAction">An action to configure the <see cref="T:Milvasoft.Helpers.Identity.Concrete.Options.MilvaIdentityOptions"/>.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.Identity.Builder.MilvaIdentityBuilder`2.WithUserManager``1">
+            <summary>
+            Adds and configures the identity system for the specified User and Role types.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.Identity.Builder.MilvaIdentityBuilder`2.WithPasswordHasherOptions(System.Action{Milvasoft.Helpers.Identity.Concrete.Options.MilvaPasswordHasherOptions})">
+            <summary>
+            Adds and configures the identity system for the specified User and Role types.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Milvasoft.Helpers.Identity.Builder.MilvaIdentityServiceCollectionExtensions">
+            <summary>
+            Implements the standard Milva Identity.
+            </summary>
+        </member>
+        <member name="M:Milvasoft.Helpers.Identity.Builder.MilvaIdentityServiceCollectionExtensions.AddMilvaIdentity``2(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+            <summary>
+            Adds the default identity system configuration for the specified User and Role types.
+            </summary>
+            <typeparam name="TUser">The type representing a User in the system.</typeparam>
+            <typeparam name="TKey">The type representing a Key in the system.</typeparam>
+            <param name="services">The services available in the application.</param>
+            <returns>An <see cref="T:Milvasoft.Helpers.Identity.Builder.MilvaIdentityBuilder`2"/> for creating and configuring the identity system.</returns>
+        </member>
+        <member name="T:Milvasoft.Helpers.Identity.Concrete.Entity.MilvaUser`1">
+            <summary>
+            Represents a user in the identity system
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.Identity.Concrete.Entity.MilvaUser`1.Id">
+            <summary>
+            Gets or sets the primary key for this user.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.Identity.Concrete.Entity.MilvaUser`1.UserName">
+            <summary>
+            Gets or sets the user name for this user.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.Identity.Concrete.Entity.MilvaUser`1.NormalizedUserName">
+            <summary>
+            Gets or sets the normalized user name for this user.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.Identity.Concrete.Entity.MilvaUser`1.Email">
+            <summary>
+            Gets or sets the email address for this user.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.Identity.Concrete.Entity.MilvaUser`1.NormalizedEmail">
+            <summary>
+            Gets or sets the normalized email address for this user.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.Identity.Concrete.Entity.MilvaUser`1.EmailConfirmed">
+            <summary>
+            Gets or sets a flag indicating if a user has confirmed their email address.
+            </summary>
+            <value>True if the email address has been confirmed, otherwise false.</value>
+        </member>
+        <member name="P:Milvasoft.Helpers.Identity.Concrete.Entity.MilvaUser`1.PasswordHash">
+            <summary>
+            Gets or sets a salted and hashed representation of the password for this user.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.Identity.Concrete.Entity.MilvaUser`1.PhoneNumber">
+            <summary>
+            Gets or sets a telephone number for the user.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.Identity.Concrete.Entity.MilvaUser`1.PhoneNumberConfirmed">
+            <summary>
+            Gets or sets a flag indicating if a user has confirmed their telephone address.
+            </summary>
+            <value>True if the telephone number has been confirmed, otherwise false.</value>
+        </member>
+        <member name="P:Milvasoft.Helpers.Identity.Concrete.Entity.MilvaUser`1.TwoFactorEnabled">
+            <summary>
+            Gets or sets a flag indicating if two factor authentication is enabled for this user.
+            </summary>
+            <value>True if 2fa is enabled, otherwise false.</value>
+        </member>
+        <member name="P:Milvasoft.Helpers.Identity.Concrete.Entity.MilvaUser`1.LockoutEnd">
+            <summary>
+            Gets or sets the date and time, in UTC, when any user lockout ends.
+            </summary>
+            <remarks>
+            A value in the past means the user is not locked out.
+            </remarks>
+        </member>
+        <member name="P:Milvasoft.Helpers.Identity.Concrete.Entity.MilvaUser`1.LockoutEnabled">
+            <summary>
+            Gets or sets a flag indicating if the user could be locked out.
+            </summary>
+            <value>True if the user could be locked out, otherwise false.</value>
+        </member>
+        <member name="P:Milvasoft.Helpers.Identity.Concrete.Entity.MilvaUser`1.AccessFailedCount">
+            <summary>
+            Gets or sets the number of failed login attempts for the current user.
             </summary>
         </member>
         <member name="T:Milvasoft.Helpers.Identity.Concrete.IdentityHelpers">
@@ -10231,6 +10694,196 @@
             <param name="role"></param>
             <returns></returns>
         </member>
+        <member name="T:Milvasoft.Helpers.Identity.Concrete.MilvaIdentityExceptionThrower">
+            <summary>
+            Provides localized identity error messages. All error's code is nameof(<see cref="!:static  void Throw"/>) method. (e.g. Code = "DefaultError")
+            </summary>
+        </member>
+        <member name="M:Milvasoft.Helpers.Identity.Concrete.MilvaIdentityExceptionThrower.ThrowDefaultError">
+            <summary>
+            An unknown failure has occurred. Localizer Key : IdentityDefaultError
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.Identity.Concrete.MilvaIdentityExceptionThrower.ThrowDuplicateUserName">
+            <summary>
+            There is another user with this username. Localizer Key : IdentityDuplicateUsername
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.Identity.Concrete.MilvaIdentityExceptionThrower.ThrowDuplicateEmail">
+            <summary>
+            There is another user with this email. Localizer Key : IdentityDuplicateEmail
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.Identity.Concrete.MilvaIdentityExceptionThrower.ThrowInvalidUserName">
+            <summary>
+            Invalid username. Localizer Key : IdentityInvalidUsername
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.Identity.Concrete.MilvaIdentityExceptionThrower.ThrowInvalidEmail">
+            <summary>
+            Invalid email. Localizer Key : IdentityInvalidEmail
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.Identity.Concrete.MilvaIdentityExceptionThrower.ThrowConcurrencyFailure">
+            <summary>
+            Concurrency failure, data has been modified. Localizer Key : IdentityConcurrencyFailure
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.Identity.Concrete.MilvaIdentityExceptionThrower.ThrowDuplicateRoleName">
+            <summary>
+            This role is already exist. Localizer Key : IdentityDuplicateRoleName
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.Identity.Concrete.MilvaIdentityExceptionThrower.ThrowInvalidRoleName">
+            <summary>
+            Invalid role name. Localizer Key : IdentityInvalidRoleName
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.Identity.Concrete.MilvaIdentityExceptionThrower.ThrowInvalidToken">
+            <summary>
+            Invalid credentials. Localizer Key : IdentityInvalidToken
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.Identity.Concrete.MilvaIdentityExceptionThrower.ThrowLoginAlreadyAssociated">
+            <summary>
+            This user is already logged in. Localizer Key : IdentityLoginAlreadyAssociated
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.Identity.Concrete.MilvaIdentityExceptionThrower.ThrowPasswordMismatch">
+            <summary>
+            Incorrect password. Localizer Key : IdentityPasswordMismatch
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.Identity.Concrete.MilvaIdentityExceptionThrower.ThrowPasswordRequiresDigit">
+            <summary>
+            Password must have at least one digit. Localizer Key : IdentityPasswordRequiresDigit
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.Identity.Concrete.MilvaIdentityExceptionThrower.ThrowPasswordRequiresLower">
+            <summary>
+            Password must have at least one lowercase. Localizer Key : IdentityPasswordRequiresLower
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.Identity.Concrete.MilvaIdentityExceptionThrower.ThrowPasswordRequiresNonAlphanumeric">
+            <summary>
+            Password must have at least one alphanumeric character. Localizer Key : IdentityPasswordRequiresNonAlphanumeric
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.Identity.Concrete.MilvaIdentityExceptionThrower.ThrowPasswordRequiresUniqueChars">
+            <summary>
+            Password must have at least one special character. Localizer Key : IdentityPasswordRequiresUniqueChars
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.Identity.Concrete.MilvaIdentityExceptionThrower.ThrowPasswordRequiresUpper">
+            <summary>
+            Password must have at least one uppercase. Localizer Key : IdentityPasswordRequiresUpper
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.Identity.Concrete.MilvaIdentityExceptionThrower.ThrowPasswordTooShort">
+            <summary>
+            Password lenght is too short. Localizer Key : IdentityPasswordTooShort
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.Identity.Concrete.MilvaIdentityExceptionThrower.ThrowRecoveryCodeRedemptionFailed">
+            <summary>
+            Recovery failed. Localizer Key : IdentityRecoveryCodeRedemptionFailed
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.Identity.Concrete.MilvaIdentityExceptionThrower.ThrowUserAlreadyHasPassword">
+            <summary>
+            User already has password. Localizer Key : IdentityUserAlreadyHasPassword
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.Identity.Concrete.MilvaIdentityExceptionThrower.ThrowUserAlreadyInRole">
+            <summary>
+            The user is already assigned to this role. Localizer Key : IdentityUserAlreadyInRole
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.Identity.Concrete.MilvaIdentityExceptionThrower.ThrowUserLockoutNotEnabled">
+            <summary>
+            Lockout is not enabled for this user. Localizer Key : IdentityUserLockoutNotEnabled
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.Identity.Concrete.MilvaIdentityExceptionThrower.ThrowUserNotInRole">
+            <summary>
+            User is not assigned to this role. Localizer Key : IdentityUserNotInRole
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.Identity.Concrete.MilvaIdentityExceptionThrower.ThrowNotAllowed">
+            <summary>
+            User is not assigned to this role. Localizer Key : NotAllowed
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.Identity.Concrete.MilvaIdentityExceptionThrower.ThrowLocked">
+            <summary>
+            User is not assigned to this role. Localizer Key : Locked
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.Identity.Concrete.MilvaIdentityExceptionThrower.ThrowLockedWarning">
+            <summary>
+            User is not assigned to this role. Localizer Key : Locked
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Milvasoft.Helpers.Identity.Concrete.MilvaPasswordHasher">
+            <summary>
+            Implements the standard Identity password hashing.
+            </summary>
+        </member>
+        <member name="M:Milvasoft.Helpers.Identity.Concrete.MilvaPasswordHasher.#ctor(Microsoft.Extensions.Options.IOptions{Milvasoft.Helpers.Identity.Concrete.Options.MilvaPasswordHasherOptions})">
+            <summary>
+            Creates a new instance of <see cref="T:Milvasoft.Helpers.Identity.Concrete.MilvaPasswordHasher"/>.
+            </summary>
+            <param name="optionsAccessor"></param>
+        </member>
+        <member name="M:Milvasoft.Helpers.Identity.Concrete.MilvaPasswordHasher.HashPassword(System.String)">
+            <summary>
+            Returns a hashed representation of the supplied <paramref name="password"/>.
+            </summary>
+            <param name="password">The password to hash.</param>
+            <returns>A hashed representation of the supplied <paramref name="password"/>.</returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.Identity.Concrete.MilvaPasswordHasher.VerifyHashedPassword(System.String,System.String)">
+            <summary>
+            Returns a <see cref="T:System.Boolean"/> indicating the result of a password hash comparison.
+            </summary>
+            <param name="hashedPassword">The hash value for a user's stored password.</param>
+            <param name="providedPassword">The password supplied for comparison.</param>
+            <returns>A <see cref="T:System.Boolean"/> indicating the result of a password hash comparison.</returns>
+            <remarks>Implementations of this method should be time consistent.</remarks>
+        </member>
+        <member name="M:Milvasoft.Helpers.Identity.Concrete.MilvaPasswordHasher.ByteArraysEqual(System.Byte[],System.Byte[])">
+            <summary>
+            Compares two byte arrays for equality. The method is specifically written so that the loop is not optimized.
+            </summary>
+            <param name="a"></param>
+            <param name="b"></param>
+            <returns></returns>
+        </member>
         <member name="T:Milvasoft.Helpers.Identity.Concrete.MilvaToken">
             <summary>
             Login result DTO for DI.
@@ -10251,6 +10904,153 @@
             Refresh token.
             </summary>
         </member>
+        <member name="T:Milvasoft.Helpers.Identity.Concrete.MilvaUserManager`2">
+            <summary>
+            Implements the standard Identity password hashing.
+            </summary>
+        </member>
+        <member name="M:Milvasoft.Helpers.Identity.Concrete.MilvaUserManager`2.#ctor(System.Lazy{Microsoft.AspNetCore.DataProtection.IDataProtector},Milvasoft.Helpers.Identity.Concrete.Options.MilvaIdentityOptions,System.Lazy{Milvasoft.Helpers.Identity.Abstract.IMilvaPasswordHasher})">
+            <summary>
+            Creates a new instance of <see cref="T:Milvasoft.Helpers.Identity.Concrete.MilvaUserManager`2"/>/
+            </summary>
+            <param name="dataProtector"></param>
+            <param name="_options"></param>
+            <param name="passwordHasher"></param>
+        </member>
+        <member name="M:Milvasoft.Helpers.Identity.Concrete.MilvaUserManager`2.ConfigureForCreate(`0,System.String)">
+            <summary>
+            Validates user, sets password hash, set normalized columns.
+            </summary>
+            <param name="user"></param>
+            <param name="password"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.Identity.Concrete.MilvaUserManager`2.CheckPassword(`0,System.String)">
+            <summary>
+            Check password hash.
+            </summary>
+            <param name="user">The user</param>
+            <param name="password"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.Identity.Concrete.MilvaUserManager`2.SetPasswordHash(`0,System.String)">
+            <summary>
+            Hashes password and sets user's password hash property.
+            </summary>
+            <param name="user">The user</param>
+            <param name="password"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.Identity.Concrete.MilvaUserManager`2.ConfigureLockout(`0,System.Boolean)">
+            <summary>
+            Configures user's lockout. Use before login.
+            </summary>
+            <param name="user">The user</param>
+            <param name="accessFailed"></param>
+            <returns> If user locked returns true. </returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.Identity.Concrete.MilvaUserManager`2.PreLoginCheck(`0)">
+            <summary>
+            User confirmed props and locked check.
+            </summary>
+            <param name="user">The user</param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.Identity.Concrete.MilvaUserManager`2.CanSignIn(`0)">
+            <summary>
+            User confirmed props check.
+            </summary>
+            <param name="user">The user whose sign-in status should be returned.</param>
+            <returns> </returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.Identity.Concrete.MilvaUserManager`2.IsLockedOut(`0)">
+            <summary>
+            Returns a flag indicating whether the specified <paramref name="user"/> his locked out.
+            </summary>
+            <param name="user">The user whose locked out status should be retrieved.</param>
+            <returns>
+            True if the specified <paramref name="user "/> is locked out, otherwise false.
+            </returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.Identity.Concrete.MilvaUserManager`2.ValidateUser(`0,System.String)">
+            <summary>
+            Validates user.
+            </summary>
+            <param name="user"></param>
+            <param name="password"></param>
+        </member>
+        <member name="M:Milvasoft.Helpers.Identity.Concrete.MilvaUserManager`2.ValidatePassword(System.String)">
+            <summary>
+            Validates a password.
+            </summary>
+            <param name="password">The password supplied for validation</param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.Identity.Concrete.MilvaUserManager`2.ValidateUserName(System.String)">
+            <summary>
+            Validates username.
+            </summary>
+            <param name="userName"></param>
+        </member>
+        <member name="M:Milvasoft.Helpers.Identity.Concrete.MilvaUserManager`2.ValidateEmail(System.String)">
+            <summary>
+            Validates email.
+            </summary>
+            <param name="email"></param>
+        </member>
+        <member name="M:Milvasoft.Helpers.Identity.Concrete.MilvaUserManager`2.GenerateUserToken(`0,Milvasoft.Helpers.Identity.TokenProvider.Purpose,System.String)">
+            <summary>
+            Generates a token for the given <paramref name="user"/> and <paramref name="purpose"/>.
+            </summary>
+            <param name="purpose">The purpose the token will be for.</param>
+            <param name="value"></param>
+            <param name="user">The user the token will be for.</param>
+            <returns>
+            The <see cref="!:Task"/> that represents result of the asynchronous operation, a token for
+            the given user and purpose.
+            </returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.Identity.Concrete.MilvaUserManager`2.VerifyUserToken(`0,Milvasoft.Helpers.Identity.TokenProvider.Purpose,System.String,System.String)">
+            <summary>
+            Returns a flag indicating whether the specified <paramref name="token"/> is valid for the given <paramref name="user"/> and <paramref name="purpose"/>.
+            </summary>
+            <param name="user">The user to validate the token against.</param>
+            <param name="purpose">The purpose the token should be generated for.</param>
+            <param name="token">The token to validate</param>
+            <param name="value"></param>
+            <returns>
+            True if the <paramref name="token"/>
+            is valid, otherwise false.
+            </returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.Identity.Concrete.MilvaUserManager`2.IsDigit(System.Char)">
+            <summary>
+            Returns a flag indicating whether the supplied character is a digit.
+            </summary>
+            <param name="c">The character to check if it is a digit.</param>
+            <returns>True if the character is a digit, otherwise false.</returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.Identity.Concrete.MilvaUserManager`2.IsLower(System.Char)">
+            <summary>
+            Returns a flag indicating whether the supplied character is a lower case ASCII letter.
+            </summary>
+            <param name="c">The character to check if it is a lower case ASCII letter.</param>
+            <returns>True if the character is a lower case ASCII letter, otherwise false.</returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.Identity.Concrete.MilvaUserManager`2.IsUpper(System.Char)">
+            <summary>
+            Returns a flag indicating whether the supplied character is an upper case ASCII letter.
+            </summary>
+            <param name="c">The character to check if it is an upper case ASCII letter.</param>
+            <returns>True if the character is an upper case ASCII letter, otherwise false.</returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.Identity.Concrete.MilvaUserManager`2.IsLetterOrDigit(System.Char)">
+            <summary>
+            Returns a flag indicating whether the supplied character is an ASCII letter or digit.
+            </summary>
+            <param name="c">The character to check if it is an ASCII letter or digit.</param>
+            <returns>True if the character is an ASCII letter or digit, otherwise false.</returns>
+        </member>
         <member name="T:Milvasoft.Helpers.Identity.Concrete.MilvaUserValidation`3">
             <summary>
             Provides an abstraction for user validation.
@@ -10267,6 +11067,185 @@
             Validates the specified user as an asynchronous operation.
             </summary>
         </member>
+        <member name="T:Milvasoft.Helpers.Identity.Concrete.Options.MilvaIdentityOptions">
+            <summary>
+            Provides localized identity error messages. All error's code is nameof(<see cref="!:static void"/>) method. (e.g. Code = "DefaultError")
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.Identity.Concrete.Options.MilvaIdentityOptions.User">
+            <summary>
+            Gets or sets the <see cref="T:Microsoft.AspNetCore.Identity.UserOptions"/> for the identity system.
+            </summary>
+            <value>
+            The <see cref="T:Microsoft.AspNetCore.Identity.UserOptions"/> for the identity system.
+            </value>
+        </member>
+        <member name="P:Milvasoft.Helpers.Identity.Concrete.Options.MilvaIdentityOptions.Password">
+            <summary>
+            Gets or sets the <see cref="T:Microsoft.AspNetCore.Identity.PasswordOptions"/> for the identity system.
+            </summary>
+            <value>
+            The <see cref="T:Microsoft.AspNetCore.Identity.PasswordOptions"/> for the identity system.
+            </value>
+        </member>
+        <member name="P:Milvasoft.Helpers.Identity.Concrete.Options.MilvaIdentityOptions.Lockout">
+            <summary>
+            Gets or sets the <see cref="T:Microsoft.AspNetCore.Identity.LockoutOptions"/> for the identity system.
+            </summary>
+            <value>
+            The <see cref="T:Microsoft.AspNetCore.Identity.LockoutOptions"/> for the identity system.
+            </value>
+        </member>
+        <member name="P:Milvasoft.Helpers.Identity.Concrete.Options.MilvaIdentityOptions.SignIn">
+            <summary>
+            Gets or sets the <see cref="T:Microsoft.AspNetCore.Identity.SignInOptions"/> for the identity system.
+            </summary>
+            <value>
+            The <see cref="T:Microsoft.AspNetCore.Identity.SignInOptions"/> for the identity system.
+            </value>
+        </member>
+        <member name="T:Milvasoft.Helpers.Identity.Concrete.Options.MilvaLockoutOptions">
+            <summary>
+            Options for configuring user lockout.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.Identity.Concrete.Options.MilvaLockoutOptions.AllowedForNewUsers">
+            <value>
+            True if a newly created user can be locked out, otherwise false.
+            </value>
+            <remarks>
+            Defaults to true.
+            </remarks>
+        </member>
+        <member name="P:Milvasoft.Helpers.Identity.Concrete.Options.MilvaLockoutOptions.MaxFailedAccessAttempts">
+            <summary>
+            Gets or sets the number of failed access attempts allowed before a user is locked out,
+            assuming lock out is enabled.
+            </summary>
+            <value>
+            The number of failed access attempts allowed before a user is locked out, if lockout is enabled.
+            </value>
+            <remarks>Defaults to 5 failed attempts before an account is locked out.</remarks>
+        </member>
+        <member name="P:Milvasoft.Helpers.Identity.Concrete.Options.MilvaLockoutOptions.DefaultLockoutTimeSpan">
+            <summary>
+            Gets or sets the <see cref="T:System.TimeSpan"/> a user is locked out for when a lockout occurs.
+            </summary>
+            <value>The <see cref="T:System.TimeSpan"/> a user is locked out for when a lockout occurs.</value>
+            <remarks>Defaults to 5 minutes.</remarks>
+        </member>
+        <member name="P:Milvasoft.Helpers.Identity.Concrete.Options.MilvaPasswordHasherOptions.IterationCount">
+            <summary>
+            Gets or sets the number of iterations used when hashing passwords using PBKDF2.
+            </summary>
+            <value>
+            The number of iterations used when hashing passwords using PBKDF2.
+            </value>
+            <remarks>
+            This value is only used when the compatibility mode is set to 'V3'.
+            The value must be a positive integer. The default value is 10,000.
+            </remarks>
+        </member>
+        <member name="P:Milvasoft.Helpers.Identity.Concrete.Options.MilvaPasswordHasherOptions.Rng">
+            <summary>
+            Random number generator.
+            </summary>
+        </member>
+        <member name="T:Milvasoft.Helpers.Identity.Concrete.Options.MilvaPasswordOptions">
+            <summary>
+            Specifies options for password requirements.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.Identity.Concrete.Options.MilvaPasswordOptions.RequiredLength">
+            <summary>
+            Gets or sets the minimum length a password must be.
+            </summary>
+            <remarks>
+            This defaults to 6.
+            </remarks>
+        </member>
+        <member name="P:Milvasoft.Helpers.Identity.Concrete.Options.MilvaPasswordOptions.RequiredUniqueChars">
+            <summary>
+            Gets or sets the minimum number of unique chars a password must comprised of.
+            </summary>
+            <remarks>
+            This defaults to 1.
+            </remarks>
+        </member>
+        <member name="P:Milvasoft.Helpers.Identity.Concrete.Options.MilvaPasswordOptions.RequireNonAlphanumeric">
+            <summary>
+            Gets or sets a flag indicating if passwords must contain a non-alphanumeric character.
+            </summary>
+            <value>True if passwords must contain a non-alphanumeric character, otherwise false.</value>
+            <remarks>
+            This defaults to true.
+            </remarks>
+        </member>
+        <member name="P:Milvasoft.Helpers.Identity.Concrete.Options.MilvaPasswordOptions.RequireLowercase">
+            <summary>
+            Gets or sets a flag indicating if passwords must contain a lower case ASCII character.
+            </summary>
+            <value>True if passwords must contain a lower case ASCII character.</value>
+            <remarks>
+            This defaults to true.
+            </remarks>
+        </member>
+        <member name="P:Milvasoft.Helpers.Identity.Concrete.Options.MilvaPasswordOptions.RequireUppercase">
+            <summary>
+            Gets or sets a flag indicating if passwords must contain a upper case ASCII character.
+            </summary>
+            <value>True if passwords must contain a upper case ASCII character.</value>
+            <remarks>
+            This defaults to true.
+            </remarks>
+        </member>
+        <member name="P:Milvasoft.Helpers.Identity.Concrete.Options.MilvaPasswordOptions.RequireDigit">
+            <summary>
+            Gets or sets a flag indicating if passwords must contain a digit.
+            </summary>
+            <value>True if passwords must contain a digit.</value>
+            <remarks>
+            This defaults to true.
+            </remarks>
+        </member>
+        <member name="T:Milvasoft.Helpers.Identity.Concrete.Options.MilvaSignInOptions">
+            <summary>
+            Options for user validation.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.Identity.Concrete.Options.MilvaSignInOptions.RequireConfirmedEmail">
+            <summary>
+            Gets or sets a flag indicating whether a confirmed email address is required to sign in.
+            </summary>
+            <value>True if a user must have a confirmed email address before they can sign in, otherwise false.</value>
+        </member>
+        <member name="P:Milvasoft.Helpers.Identity.Concrete.Options.MilvaSignInOptions.RequireConfirmedPhoneNumber">
+            <summary>
+            Gets or sets a flag indicating whether a confirmed telephone number is required to sign in.
+            </summary>
+            <value>True if a user must have a confirmed telephone number before they can sign in, otherwise false.</value>
+        </member>
+        <member name="T:Milvasoft.Helpers.Identity.Concrete.Options.MilvaUserOptions">
+            <summary>
+            Options for user validation.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Helpers.Identity.Concrete.Options.MilvaUserOptions.AllowedUserNameCharacters">
+            <summary>
+            Gets or sets the list of allowed characters in the username used to validate user names.
+            </summary>
+            <value>
+            The list of allowed characters in the username used to validate user names.
+            </value>
+        </member>
+        <member name="P:Milvasoft.Helpers.Identity.Concrete.Options.MilvaUserOptions.RequireUniqueEmail">
+            <summary>
+            Gets or sets a flag indicating whether the application requires unique emails for its users.
+            </summary>
+            <value>
+            True if the application requires each user to have their own, unique email, otherwise false.
+            </value>
+        </member>
         <member name="T:Milvasoft.Helpers.Identity.Concrete.SignedInUsers">
             <summary>
             Contains userId and Token pair for authentication.
@@ -10276,6 +11255,87 @@
             <summary>
             UserName and token pairs for each logged in user.
             </summary>
+        </member>
+        <member name="T:Milvasoft.Helpers.Identity.TokenProvider.DataProtectorExtensions">
+            <summary>
+            Provides protection and validation of identity tokens.
+            </summary>
+        </member>
+        <member name="M:Milvasoft.Helpers.Identity.TokenProvider.DataProtectorExtensions.Generate``1(Microsoft.AspNetCore.DataProtection.IDataProtector,System.String,``0)">
+            <summary>
+            Generates a protected token for the specified <paramref name="userId"/> as an asynchronous operation.
+            </summary>
+            <param name="protector"></param>
+            <param name="purpose">The purpose the token will be used for.</param>
+            <param name="userId"></param>
+            <returns>A <see cref="!:Task&lt;TResult&gt;"/> representing the generated token.</returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.Identity.TokenProvider.DataProtectorExtensions.Validate``1(Microsoft.AspNetCore.DataProtection.IDataProtector,System.String,System.String,``0)">
+            <summary>
+            Validates the protected <paramref name="token"/> for the specified <paramref name="actualUserId"/> and <paramref name="purpose"/> as an asynchronous operation.
+            </summary>
+            <param name="protector"></param>
+            <param name="purpose">The purpose the token was be used for.</param>
+            <param name="token">The token to validate.</param>
+            <param name="actualUserId"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Milvasoft.Helpers.Identity.TokenProvider.StreamExtensions">
+            <summary>
+            Utility extensions to streams
+            </summary>
+        </member>
+        <member name="T:Milvasoft.Helpers.Identity.TokenProvider.DigitTokenProvider`2">
+            <summary>
+            Represents a token provider that generates time based codes using the user's security stamp.
+            </summary>
+            <typeparam name="TUser">The type encapsulating a user.</typeparam>
+            <typeparam name="TKey">The type user's key.</typeparam>
+        </member>
+        <member name="M:Milvasoft.Helpers.Identity.TokenProvider.DigitTokenProvider`2.Generate(Milvasoft.Helpers.Identity.TokenProvider.Purpose,`0)">
+            <summary>
+            Generates a token for the specified <paramref name="user"/> and <paramref name="purpose"/>.
+            </summary>
+            <param name="purpose">The purpose the token will be used for.</param>
+            <param name="user">The user a token should be generated for.</param>
+            <returns>
+            The <see cref="!:Task"/> that represents the asynchronous operation, containing the token for the specified 
+            <paramref name="user"/> and <paramref name="purpose"/>.
+            </returns>
+            <remarks>
+            The <paramref name="purpose"/> parameter allows a token generator to be used for multiple types of token whilst
+            insuring a token for one purpose cannot be used for another. For example if you specified a purpose of "Email" 
+            and validated it with the same purpose a token with the purpose of TOTP would not pass the check even if it was
+            for the same user.
+            
+            Implementations of <see cref="T:Microsoft.AspNetCore.Identity.IUserTwoFactorTokenProvider`1"/> should validate that purpose is not null or empty to
+            help with token separation.
+            </remarks>
+        </member>
+        <member name="M:Milvasoft.Helpers.Identity.TokenProvider.DigitTokenProvider`2.Validate(Milvasoft.Helpers.Identity.TokenProvider.Purpose,System.String,`0)">
+            <summary>
+            Returns a flag indicating whether the specified <paramref name="token"/> is valid for the given
+            <paramref name="user"/> and <paramref name="purpose"/>.
+            </summary>
+            <param name="purpose">The purpose the token will be used for.</param>
+            <param name="token">The token to validate.</param>
+            <param name="user">The user a token should be validated for.</param>
+            <returns>
+            The <see cref="!:Task"/> that represents the asynchronous operation, containing the a flag indicating the result
+            of validating the <paramref name="token"> for the specified </paramref><paramref name="user"/> and <paramref name="purpose"/>.
+            The task will return true if the token is valid, otherwise false.
+            </returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.Identity.TokenProvider.DigitTokenProvider`2.GetUserModifier(Milvasoft.Helpers.Identity.TokenProvider.Purpose,`0)">
+            <summary>
+            Returns a constant, provider and user unique modifier used for entropy in generated tokens from user information.
+            </summary>
+            <param name="purpose">The purpose the token will be generated for.</param>
+            <param name="user">The user a token should be generated for.</param>
+            <returns>
+            The <see cref="!:Task"/> that represents the asynchronous operation, containing a constant modifier for the specified 
+            <paramref name="user"/> and <paramref name="purpose"/>.
+            </returns>
         </member>
         <member name="T:Milvasoft.Helpers.Integration.Expo.PushNotification.ExpoClient">
             <summary>

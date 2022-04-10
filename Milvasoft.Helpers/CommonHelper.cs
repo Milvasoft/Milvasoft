@@ -551,4 +551,11 @@ public static class CommonHelper
     }
 
     #endregion
+
+    /// <summary>
+    /// Normalize string according to invariant culture.
+    /// </summary>
+    /// <param name="value"></param>
+    /// <returns></returns>
+    public static string MilvaNormalize(this string value) => !string.IsNullOrWhiteSpace(value) ? value.ToLower().ToUpperInvariant() : null;
 }
