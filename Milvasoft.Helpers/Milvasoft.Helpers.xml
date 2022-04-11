@@ -10917,7 +10917,7 @@
             Implements the standard Identity password hashing.
             </summary>
         </member>
-        <member name="M:Milvasoft.Helpers.Identity.Concrete.MilvaUserManager`2.#ctor(System.Lazy{Microsoft.AspNetCore.DataProtection.IDataProtector},Milvasoft.Helpers.Identity.Concrete.Options.MilvaIdentityOptions,System.Lazy{Milvasoft.Helpers.Identity.Abstract.IMilvaPasswordHasher})">
+        <member name="M:Milvasoft.Helpers.Identity.Concrete.MilvaUserManager`2.#ctor(System.Lazy{Microsoft.AspNetCore.DataProtection.IDataProtectionProvider},Milvasoft.Helpers.Identity.Concrete.Options.MilvaIdentityOptions,System.Lazy{Milvasoft.Helpers.Identity.Abstract.IMilvaPasswordHasher})">
             <summary>
             Creates a new instance of <see cref="T:Milvasoft.Helpers.Identity.Concrete.MilvaUserManager`2"/>/
             </summary>
@@ -11278,16 +11278,16 @@
             Provides protection and validation of identity tokens.
             </summary>
         </member>
-        <member name="M:Milvasoft.Helpers.Identity.TokenProvider.DataProtectorExtensions.Generate``1(Microsoft.AspNetCore.DataProtection.IDataProtector,System.String,``0)">
+        <member name="M:Milvasoft.Helpers.Identity.TokenProvider.DataProtectorExtensions.Generate``1(Microsoft.AspNetCore.DataProtection.IDataProtectionProvider,System.String,``0)">
             <summary>
             Generates a protected token for the specified <paramref name="userId"/> as an asynchronous operation.
             </summary>
             <param name="protector"></param>
             <param name="purpose">The purpose the token will be used for.</param>
             <param name="userId"></param>
-            <returns>A <see cref="!:Task&lt;TResult&gt;"/> representing the generated token.</returns>
+            <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.Identity.TokenProvider.DataProtectorExtensions.Validate``1(Microsoft.AspNetCore.DataProtection.IDataProtector,System.String,System.String,``0)">
+        <member name="M:Milvasoft.Helpers.Identity.TokenProvider.DataProtectorExtensions.Validate``1(Microsoft.AspNetCore.DataProtection.IDataProtectionProvider,System.String,System.String,``0)">
             <summary>
             Validates the protected <paramref name="token"/> for the specified <paramref name="actualUserId"/> and <paramref name="purpose"/> as an asynchronous operation.
             </summary>

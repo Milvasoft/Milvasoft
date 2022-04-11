@@ -14,7 +14,7 @@ namespace Milvasoft.Helpers.Identity.Concrete;
 /// </summary>
 public class MilvaUserManager<TUser, TKey> : IMilvaUserManager<TUser, TKey> where TUser : MilvaUser<TKey> where TKey : IEquatable<TKey>
 {
-    private readonly Lazy<IDataProtector> _dataProtector;
+    private readonly Lazy<IDataProtectionProvider> _dataProtector;
     private readonly Lazy<IMilvaPasswordHasher> _passwordHasher;
     private readonly MilvaIdentityOptions _options;
 
@@ -25,7 +25,7 @@ public class MilvaUserManager<TUser, TKey> : IMilvaUserManager<TUser, TKey> wher
     /// <param name="options"></param>
     /// <param name="_options"></param>
     /// <param name="passwordHasher"></param>
-    public MilvaUserManager(Lazy<IDataProtector> dataProtector,
+    public MilvaUserManager(Lazy<IDataProtectionProvider> dataProtector,
                             MilvaIdentityOptions options,
                             Lazy<IMilvaPasswordHasher> passwordHasher)
     {

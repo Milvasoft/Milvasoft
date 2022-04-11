@@ -16,8 +16,8 @@ public static class DataProtectorExtensions
     /// <param name="protector"></param>
     /// <param name="purpose">The purpose the token will be used for.</param>
     /// <param name="userId"></param>
-    /// <returns>A <see cref="Task{TResult}"/> representing the generated token.</returns>
-    public static string Generate<TKey>(this IDataProtector protector, string purpose, TKey userId) where TKey : IEquatable<TKey>
+    /// <returns></returns>
+    public static string Generate<TKey>(this IDataProtectionProvider protector, string purpose, TKey userId) where TKey : IEquatable<TKey>
     {
         var ms = new MemoryStream();
 
@@ -31,7 +31,7 @@ public static class DataProtectorExtensions
             writer.Write(stamp ?? "");
         }
 
-        var protectedBytes = protector.Protect(ms.ToArray());
+        var protectedBytes = protector.CreateProtector(purpose).Protect(ms.ToArray());
         return Convert.ToBase64String(protectedBytes);
     }
 
@@ -43,12 +43,14 @@ public static class DataProtectorExtensions
     /// <param name="token">The token to validate.</param>
     /// <param name="actualUserId"></param>
     /// <returns></returns>
-    public static bool Validate<TKey>(this IDataProtector protector, string purpose, string token, TKey actualUserId) where TKey : IEquatable<TKey>
+    public static bool Validate<TKey>(this IDataProtectionProvider protector, string purpose, string token, TKey actualUserId) where TKey : IEquatable<TKey>
     {
         try
         {
-            var unprotectedData = protector.Unprotect(Convert.FromBase64String(token));
+            var unprotectedData = protector.CreateProtector(purpose).Unprotect(Convert.FromBase64String(token));
+
             var ms = new MemoryStream(unprotectedData);
+
             using (var reader = ms.CreateReader())
             {
                 var creationTime = reader.ReadDateTimeOffset();
