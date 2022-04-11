@@ -98,6 +98,13 @@ public interface IRedisCacheService
     Task<bool> SetAsync(string key, object value, TimeSpan? expiration);
 
     /// <summary>
+    /// Sets <paramref name="values"/>.
+    /// </summary>
+    /// <param name="values"></param>
+    /// <returns></returns>
+    Task<bool> SetAsync(KeyValuePair<RedisKey, RedisValue>[] values);
+
+    /// <summary>
     /// Removes <paramref name="key"/> and value.
     /// </summary>
     /// <param name="key"></param>

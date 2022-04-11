@@ -625,6 +625,13 @@
             <param name="expiration"></param>
             <returns></returns>
         </member>
+        <member name="M:Milvasoft.Helpers.Caching.IRedisCacheService.SetAsync(System.Collections.Generic.KeyValuePair{StackExchange.Redis.RedisKey,StackExchange.Redis.RedisValue}[])">
+            <summary>
+            Sets <paramref name="values"/>.
+            </summary>
+            <param name="values"></param>
+            <returns></returns>
+        </member>
         <member name="M:Milvasoft.Helpers.Caching.IRedisCacheService.RemoveAsync(System.String)">
             <summary>
             Removes <paramref name="key"/> and value.
@@ -846,6 +853,13 @@
             <param name="key"></param>
             <param name="value"></param>
             <param name="expiration"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.Caching.RedisCacheService.SetAsync(System.Collections.Generic.KeyValuePair{StackExchange.Redis.RedisKey,StackExchange.Redis.RedisValue}[])">
+            <summary>
+            Sets <paramref name="values"/>.
+            </summary>
+            <param name="values"></param>
             <returns></returns>
         </member>
         <member name="M:Milvasoft.Helpers.Caching.RedisCacheService.RemoveAsync(System.String)">

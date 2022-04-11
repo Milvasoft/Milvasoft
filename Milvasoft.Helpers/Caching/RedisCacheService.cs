@@ -184,6 +184,14 @@ public class RedisCacheService : IRedisCacheService
                                                                : expiration).ConfigureAwait(false);
 
     /// <summary>
+    /// Sets <paramref name="values"/>.
+    /// </summary>
+    /// <param name="values"></param>
+    /// <returns></returns>
+    public async Task<bool> SetAsync(KeyValuePair<RedisKey, RedisValue>[] values)
+        => await _database.StringSetAsync(values).ConfigureAwait(false);
+
+    /// <summary>
     /// Removes <paramref name="key"/> and value.
     /// </summary>
     /// <param name="key"></param>
