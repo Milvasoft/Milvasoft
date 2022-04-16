@@ -73,7 +73,7 @@ public abstract class MilvaDbContextBase<TUser, TUserKey> : DbContext, IMilvaDbC
     /// <summary>
     /// It will be set internally.
     /// </summary>
-    public TUser CurrentUser { get; set; }
+    public TUserKey? CurrentUserId { get; set; }
 
     /// <summary>
     /// Soft delete state. Default value is false.
@@ -309,7 +309,7 @@ public abstract class MilvaDbContextBase<TUser, TUserKey> : DbContext, IMilvaDbC
     /// <param name="propertyName"></param>
     protected virtual void AuditPerformerUser(EntityEntry entry, string propertyName)
     {
-        entry.Property(propertyName).CurrentValue = CurrentUser?.Id;
+        entry.Property(propertyName).CurrentValue = CurrentUserId;
         entry.Property(propertyName).IsModified = true;
     }
 
@@ -444,7 +444,7 @@ public abstract class MilvaIdentityDbContextBase<TUser, TRole, TKey> : IdentityD
     /// <summary>
     /// It will be set internally.
     /// </summary>
-    public TUser CurrentUser { get; set; }
+    public TKey? CurrentUserId { get; set; }
 
     /// <summary>
     /// Soft delete state. Default value is false.
@@ -681,18 +681,18 @@ public abstract class MilvaIdentityDbContextBase<TUser, TRole, TKey> : IdentityD
     protected virtual void AuditPerformerUser(EntityEntry entry, string propertyName)
     {
         if (!string.IsNullOrWhiteSpace(UserName))
-            if (CurrentUser == null)
+            if (CurrentUserId == null)
             {
                 if (AuditConfiguration.AuditCreator || AuditConfiguration.AuditModifier || AuditConfiguration.AuditDeleter)
                 {
                     if (HttpMethods.IsPost(HttpMethod) || HttpMethods.IsPut(HttpMethod) || HttpMethods.IsDelete(HttpMethod))
                     {
-                        CurrentUser = Users.FirstOrDefaultAsync(i => i.UserName == UserName).Result;
+                        CurrentUserId = Users.FirstOrDefaultAsync(i => i.UserName == UserName).Result.Id;
                     }
                 }
             }
 
-        entry.Property(propertyName).CurrentValue = CurrentUser?.Id;
+        entry.Property(propertyName).CurrentValue = CurrentUserId;
         entry.Property(propertyName).IsModified = true;
     }
 
