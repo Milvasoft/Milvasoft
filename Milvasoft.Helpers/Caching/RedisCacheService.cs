@@ -199,6 +199,13 @@ public class RedisCacheService : IRedisCacheService
         => await _database.KeyDeleteAsync(key).ConfigureAwait(false);
 
     /// <summary>
+    /// Removes <paramref name="keys"/> and value.
+    /// </summary>
+    /// <param name="keys"></param>
+    public async Task<long> RemoveAsync(IEnumerable<string> keys)
+        => await _database.KeyDeleteAsync(keys: keys.Select(i => new RedisKey(i)).ToArray()).ConfigureAwait(false);
+
+    /// <summary>
     /// Checks if there is a <paramref name="key"/> in database. 
     /// </summary>
     /// <param name="key"></param>

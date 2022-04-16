@@ -111,6 +111,12 @@ public interface IRedisCacheService
     Task<bool> RemoveAsync(string key);
 
     /// <summary>
+    /// Removes <paramref name="keys"/> and value.
+    /// </summary>
+    /// <param name="keys"></param>
+    Task<long> RemoveAsync(IEnumerable<string> keys);
+
+    /// <summary>
     /// Checks if there is a <paramref name="key"/> in database. 
     /// </summary>
     /// <param name="key"></param>
