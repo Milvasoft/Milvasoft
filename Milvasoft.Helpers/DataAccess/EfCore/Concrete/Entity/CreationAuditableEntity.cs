@@ -62,7 +62,7 @@ public abstract class CreationAuditableEntity<TUser, TUserKey, TKey> : CreationA
 /// <typeparam name="TKey">Type of the primary key of the entity</typeparam>
 /// <typeparam name="TUser">Type of the user</typeparam>
 /// <typeparam name="TUserKey">Type of the user</typeparam>
-public abstract class CreationAuditableEntityEntityWithCustomUser<TUser, TUserKey, TKey> : CreationAuditableEntity<TUserKey, TKey>, ICreationAuditableWithCustomUser<TUser, TUserKey, TKey>
+public abstract class CreationAuditableEntityWithCustomUser<TUser, TUserKey, TKey> : CreationAuditableEntity<TUserKey, TKey>, ICreationAuditableWithCustomUser<TUser, TUserKey, TKey>
     where TUser : IBaseEntity<TUserKey>
     where TKey : struct, IEquatable<TKey>
     where TUserKey : struct, IEquatable<TUserKey>

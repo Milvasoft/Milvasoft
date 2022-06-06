@@ -81,7 +81,7 @@ public class AsyncValidateStringParameterAttribute : Attribute, IAsyncActionFilt
                 if (actionArgument.Value is string)
                 {
                     var stringValue = actionArgument.Value.ToString();
-                    var localizedPropName = MemberNameLocalizerKey ?? actionArgument.Key;
+                    var localizedPropName = sharedLocalizer[MemberNameLocalizerKey ?? $"{LocalizerKeys.Localized}{actionArgument.Key}"];
 
                     // Automatically pass if value is null. RequiredAttribute should be used to assert a value is not null.
                     // We expect a cast exception if a non-string was passed in.

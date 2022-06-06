@@ -638,6 +638,12 @@
             </summary>
             <param name="key"></param>
         </member>
+        <member name="M:Milvasoft.Helpers.Caching.IRedisCacheService.RemoveAsync(System.Collections.Generic.IEnumerable{System.String})">
+            <summary>
+            Removes <paramref name="keys"/> and value.
+            </summary>
+            <param name="keys"></param>
+        </member>
         <member name="M:Milvasoft.Helpers.Caching.IRedisCacheService.KeyExistsAsync(System.String)">
             <summary>
             Checks if there is a <paramref name="key"/> in database. 
@@ -867,6 +873,12 @@
             Removes <paramref name="key"/> and value.
             </summary>
             <param name="key"></param>
+        </member>
+        <member name="M:Milvasoft.Helpers.Caching.RedisCacheService.RemoveAsync(System.Collections.Generic.IEnumerable{System.String})">
+            <summary>
+            Removes <paramref name="keys"/> and value.
+            </summary>
+            <param name="keys"></param>
         </member>
         <member name="M:Milvasoft.Helpers.Caching.RedisCacheService.KeyExistsAsync(System.String)">
             <summary>
@@ -5081,7 +5093,7 @@
             Reference to the creator user of this entity.
             </summary>
         </member>
-        <member name="T:Milvasoft.Helpers.DataAccess.EfCore.Concrete.Entity.CreationAuditableEntityEntityWithCustomUser`3">
+        <member name="T:Milvasoft.Helpers.DataAccess.EfCore.Concrete.Entity.CreationAuditableEntityWithCustomUser`3">
             <summary>
             This class can be used to simplify implementing <see cref="T:Milvasoft.Helpers.DataAccess.EfCore.Abstract.Entity.ICreationAuditableWithCustomUser`3"/>.
             </summary>
@@ -5089,7 +5101,7 @@
             <typeparam name="TUser">Type of the user</typeparam>
             <typeparam name="TUserKey">Type of the user</typeparam>
         </member>
-        <member name="P:Milvasoft.Helpers.DataAccess.EfCore.Concrete.Entity.CreationAuditableEntityEntityWithCustomUser`3.CreatorUser">
+        <member name="P:Milvasoft.Helpers.DataAccess.EfCore.Concrete.Entity.CreationAuditableEntityWithCustomUser`3.CreatorUser">
             <summary>
             Reference to the creator user of this entity.
             </summary>
