@@ -18,7 +18,7 @@
 
 # Docs
 
-- [Wiki]((https://github.com/Milvasoft/Milvasoft/wiki))
+- [Wiki](https://github.com/Milvasoft/Milvasoft/wiki)
 - [Documentation](https://packagedocs.milvasoft.com/milvasoft.helpers/helpers)
 
 # Features
