@@ -42,9 +42,9 @@ public static class CommonHelper
     /// <param name="content"></param>
     /// <param name="propertyName"></param>
     /// <returns></returns>
-    public static bool PropertyExists(object content, string propertyName) => content.GetType().GetProperty(propertyName, BindingFlags.IgnoreCase
-                                                                                                                          | BindingFlags.Public
-                                                                                                                          | BindingFlags.Instance) != null;
+    public static bool PropertyExists(this object content, string propertyName) => content.GetType().GetProperty(propertyName, BindingFlags.IgnoreCase
+                                                                                                                             | BindingFlags.Public
+                                                                                                                             | BindingFlags.Instance) != null;
 
     /// <summary>
     /// Checks if there is a property named <paramref name="propertyName"/> in the properties of <b><paramref name="type"/></b>. 
@@ -52,9 +52,9 @@ public static class CommonHelper
     /// <param name="type"></param>
     /// <param name="propertyName"></param>
     /// <returns></returns>
-    public static bool PropertyExists(Type type, string propertyName) => type.GetProperty(propertyName, BindingFlags.IgnoreCase
-                                                                                                        | BindingFlags.Public
-                                                                                                        | BindingFlags.Instance) != null;
+    public static bool PropertyExists(this Type type, string propertyName) => type.GetProperty(propertyName, BindingFlags.IgnoreCase
+                                                                                                           | BindingFlags.Public
+                                                                                                           | BindingFlags.Instance) != null;
 
     /// <summary>
     /// Creates order by key selector by <paramref name="orderByPropertyName"/>.

@@ -11,7 +11,7 @@ public class RedisCacheServiceOptions
     /// <summary>
     /// Specifies the lifetime of a <see cref="IRedisCacheService"/>.
     /// </summary>
-    public ServiceLifetime Lifetime { get; set; } = ServiceLifetime.Transient;
+    public ServiceLifetime Lifetime { get; set; } = ServiceLifetime.Singleton;
 
     /// <summary>
     /// Redis configurations.

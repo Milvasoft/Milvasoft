@@ -18,24 +18,11 @@ public abstract class MilvaCronJobService : IHostedService, IDisposable
     /// <summary>
     /// Initializes new instances of <see cref="MilvaCronJobService"/>
     /// </summary>
-    /// <param name="cronExpression"></param>
-    /// <param name="timeZoneInfo"></param>
-    protected MilvaCronJobService(string cronExpression, TimeZoneInfo timeZoneInfo)
+    /// <param name="scheduleConfig"></param>
+    protected MilvaCronJobService(IScheduleConfig scheduleConfig)
     {
-        _expression = CronExpression.Parse(cronExpression, CronFormat.IncludeSeconds);
-        _timeZoneInfo = timeZoneInfo;
-    }
-
-    /// <summary>
-    /// Initializes new instances of <see cref="MilvaCronJobService"/>
-    /// </summary>
-    /// <param name="cronExpression"></param>
-    /// <param name="timeZoneInfo"></param>
-    /// <param name="cronFormat"></param>
-    protected MilvaCronJobService(string cronExpression, TimeZoneInfo timeZoneInfo, CronFormat cronFormat)
-    {
-        _expression = CronExpression.Parse(cronExpression, cronFormat);
-        _timeZoneInfo = timeZoneInfo;
+        _expression = CronExpression.Parse(scheduleConfig.CronExpression, scheduleConfig.CronFormat);
+        _timeZoneInfo = scheduleConfig.TimeZoneInfo;
     }
 
     /// <summary>

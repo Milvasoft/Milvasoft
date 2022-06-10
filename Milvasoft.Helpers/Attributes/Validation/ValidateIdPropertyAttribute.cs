@@ -30,11 +30,6 @@ public class ValidateIdPropertyAttribute : ValidationAttribute
     public string MemberNameLocalizerKey { get; set; }
 
     /// <summary>
-    /// Gets or sets error message localizer key.
-    /// </summary>
-    public string ErrorMessageLocalizerKey { get; set; }
-
-    /// <summary>
     /// If this is true, validation method won't check list is null.
     /// </summary>
     public bool DontCheckNullable { get; set; }

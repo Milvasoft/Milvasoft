@@ -6,8 +6,7 @@ namespace Milvasoft.Helpers.JobScheduling;
 /// <summary>
 /// Schedule config for scheduling jobs.
 /// </summary>
-/// <typeparam name="T"></typeparam>
-public interface IScheduleConfig<T>
+public interface IScheduleConfig
 {
     /// <summary>
     /// Cron expression of job.
@@ -22,14 +21,13 @@ public interface IScheduleConfig<T>
     /// <summary>
     /// If seconds requested in cron expression send this property.
     /// </summary>
-    public CronFormat? CronFormat { get; set; }
+    public CronFormat CronFormat { get; set; }
 }
 
 /// <summary>
 /// Schedule config for scheduling jobs.
 /// </summary>
-/// <typeparam name="T"></typeparam>
-public class ScheduleConfig<T> : IScheduleConfig<T>
+public class ScheduleConfig : IScheduleConfig
 {
     /// <summary>
     /// Cron expression of job.
@@ -44,5 +42,5 @@ public class ScheduleConfig<T> : IScheduleConfig<T>
     /// <summary>
     /// If seconds requested in cron expression send this property.
     /// </summary>
-    public CronFormat? CronFormat { get; set; }
+    public CronFormat CronFormat { get; set; } = Cronos.CronFormat.IncludeSeconds;
 }

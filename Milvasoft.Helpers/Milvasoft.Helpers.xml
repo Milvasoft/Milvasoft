@@ -387,11 +387,6 @@
             Gets or sets member name localizer key.
             </summary>
         </member>
-        <member name="P:Milvasoft.Helpers.Attributes.Validation.ValidateIdPropertyAttribute.ErrorMessageLocalizerKey">
-            <summary>
-            Gets or sets error message localizer key.
-            </summary>
-        </member>
         <member name="P:Milvasoft.Helpers.Attributes.Validation.ValidateIdPropertyAttribute.DontCheckNullable">
             <summary>
             If this is true, validation method won't check list is null.
@@ -11524,20 +11519,11 @@
             Provides scheduled job operations.
             </summary>
         </member>
-        <member name="M:Milvasoft.Helpers.JobScheduling.MilvaCronJobService.#ctor(System.String,System.TimeZoneInfo)">
+        <member name="M:Milvasoft.Helpers.JobScheduling.MilvaCronJobService.#ctor(Milvasoft.Helpers.JobScheduling.IScheduleConfig)">
             <summary>
             Initializes new instances of <see cref="T:Milvasoft.Helpers.JobScheduling.MilvaCronJobService"/>
             </summary>
-            <param name="cronExpression"></param>
-            <param name="timeZoneInfo"></param>
-        </member>
-        <member name="M:Milvasoft.Helpers.JobScheduling.MilvaCronJobService.#ctor(System.String,System.TimeZoneInfo,Cronos.CronFormat)">
-            <summary>
-            Initializes new instances of <see cref="T:Milvasoft.Helpers.JobScheduling.MilvaCronJobService"/>
-            </summary>
-            <param name="cronExpression"></param>
-            <param name="timeZoneInfo"></param>
-            <param name="cronFormat"></param>
+            <param name="scheduleConfig"></param>
         </member>
         <member name="M:Milvasoft.Helpers.JobScheduling.MilvaCronJobService.StartAsync(System.Threading.CancellationToken)">
             <summary>
@@ -11572,44 +11558,42 @@
             Disposes the timer.
             </summary>
         </member>
-        <member name="T:Milvasoft.Helpers.JobScheduling.IScheduleConfig`1">
+        <member name="T:Milvasoft.Helpers.JobScheduling.IScheduleConfig">
             <summary>
             Schedule config for scheduling jobs.
             </summary>
-            <typeparam name="T"></typeparam>
         </member>
-        <member name="P:Milvasoft.Helpers.JobScheduling.IScheduleConfig`1.CronExpression">
+        <member name="P:Milvasoft.Helpers.JobScheduling.IScheduleConfig.CronExpression">
             <summary>
             Cron expression of job.
             </summary>
         </member>
-        <member name="P:Milvasoft.Helpers.JobScheduling.IScheduleConfig`1.TimeZoneInfo">
+        <member name="P:Milvasoft.Helpers.JobScheduling.IScheduleConfig.TimeZoneInfo">
             <summary>
             Time zone information of job.
             </summary>
         </member>
-        <member name="P:Milvasoft.Helpers.JobScheduling.IScheduleConfig`1.CronFormat">
+        <member name="P:Milvasoft.Helpers.JobScheduling.IScheduleConfig.CronFormat">
             <summary>
             If seconds requested in cron expression send this property.
             </summary>
         </member>
-        <member name="T:Milvasoft.Helpers.JobScheduling.ScheduleConfig`1">
+        <member name="T:Milvasoft.Helpers.JobScheduling.ScheduleConfig">
             <summary>
             Schedule config for scheduling jobs.
             </summary>
-            <typeparam name="T"></typeparam>
         </member>
-        <member name="P:Milvasoft.Helpers.JobScheduling.ScheduleConfig`1.CronExpression">
+        <member name="P:Milvasoft.Helpers.JobScheduling.ScheduleConfig.CronExpression">
             <summary>
             Cron expression of job.
             </summary>
         </member>
-        <member name="P:Milvasoft.Helpers.JobScheduling.ScheduleConfig`1.TimeZoneInfo">
+        <member name="P:Milvasoft.Helpers.JobScheduling.ScheduleConfig.TimeZoneInfo">
             <summary>
             Time zone information of job.
             </summary>
         </member>
-        <member name="P:Milvasoft.Helpers.JobScheduling.ScheduleConfig`1.CronFormat">
+        <member name="P:Milvasoft.Helpers.JobScheduling.ScheduleConfig.CronFormat">
             <summary>
             If seconds requested in cron expression send this property.
             </summary>
@@ -11619,7 +11603,7 @@
             Provides scheduled job operations.
             </summary>
         </member>
-        <member name="M:Milvasoft.Helpers.JobScheduling.ServiceCollectionExtensions.AddMilvaCronJob``1(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.Action{Milvasoft.Helpers.JobScheduling.IScheduleConfig{``0}})">
+        <member name="M:Milvasoft.Helpers.JobScheduling.ServiceCollectionExtensions.AddMilvaCronJob``1(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.Action{Milvasoft.Helpers.JobScheduling.IScheduleConfig})">
             <summary>
             Adds scheduled cron job to application.
             </summary>
