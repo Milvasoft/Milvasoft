@@ -30,11 +30,12 @@
 - Json File Operations
 - File Saving To Server & Serving From Server
 - Identity Account Operations
+- Integrations
 - Job Scheduling
 - SMTP Mail Send
 - Multi Tenancy
 - Unit & Integration Testing
-- [And so much more little things...](https://github.com/Milvasoft/Milvasoft/tree/master/Milvasoft.Helpers)
+- [And so much more things...](https://github.com/Milvasoft/Milvasoft/tree/master/Milvasoft.Helpers)
 
 The library provides abstractions and structures for the concepts listed above. In general, it takes help from third-party libraries while doing this.
 
