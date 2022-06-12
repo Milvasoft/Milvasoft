@@ -1,5 +1,4 @@
 ﻿using Milvasoft.Core.EntityBase.Abstract;
-using System;
 
 namespace Milvasoft.Core.EntityBase.MultiTenancy;
 

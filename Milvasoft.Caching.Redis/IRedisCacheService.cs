@@ -1,10 +1,7 @@
 ﻿using Milvasoft.Core.Abstractions;
 using Milvasoft.Core.Exceptions;
 using StackExchange.Redis;
-using System;
-using System.Collections.Generic;
 using System.Net;
-using System.Threading.Tasks;
 
 namespace Milvasoft.Caching.Redis;
 

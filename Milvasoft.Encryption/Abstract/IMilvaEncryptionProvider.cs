@@ -1,6 +1,4 @@
-﻿using System.Threading.Tasks;
-
-namespace Milvasoft.Encryption.Abstract;
+﻿namespace Milvasoft.Encryption.Abstract;
 
 /// <summary>
 /// Provides file encryption and decryption with AES Algorithm. Milvasoft Corporation is not responsible of possible data loss.

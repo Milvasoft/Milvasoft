@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Milvasoft.Testing.IntegrationTest.Attributes;
+﻿namespace Milvasoft.Testing.IntegrationTest.Attributes;
 
 /// <summary>
 /// Creates a client intance for integration tests.

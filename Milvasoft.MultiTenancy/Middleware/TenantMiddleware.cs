@@ -2,8 +2,6 @@
 using Milvasoft.Core.EntityBase.MultiTenancy;
 using Milvasoft.MultiTenancy.Service;
 using Milvasoft.MultiTenancy.Utils;
-using System;
-using System.Threading.Tasks;
 
 namespace Milvasoft.MultiTenancy.Middleware;
 

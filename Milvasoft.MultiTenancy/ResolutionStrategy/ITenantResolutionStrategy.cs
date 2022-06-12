@@ -1,7 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
-
-namespace Milvasoft.MultiTenancy.ResolutionStrategy;
+﻿namespace Milvasoft.MultiTenancy.ResolutionStrategy;
 
 /// <summary>
 /// Abstraction for tenant resolution strategy.

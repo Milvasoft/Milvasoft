@@ -2,10 +2,6 @@
 using Microsoft.Extensions.Localization;
 using Milvasoft.Core.EntityBase.Abstract;
 using Milvasoft.Core.Utils.Constants;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Milvasoft.Identity.Concrete;
 

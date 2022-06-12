@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Milvasoft.DataAccess.EfCore.Attributes;
+﻿namespace Milvasoft.DataAccess.EfCore.Attributes;
 
 /// <summary>
 /// Attribute for adding precision in context level.

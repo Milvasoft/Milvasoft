@@ -1,7 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Milvasoft.DataAccess.EfCore.IncludeLibrary;
-using System;
-using System.Collections.Generic;
 using System.Linq.Expressions;
 
 namespace Milvasoft.DataAccess.EfCore.IncludeLibrary;

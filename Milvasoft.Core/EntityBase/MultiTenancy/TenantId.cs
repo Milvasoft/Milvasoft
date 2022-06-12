@@ -1,6 +1,5 @@
 ﻿using Milvasoft.Core.Exceptions;
 using Milvasoft.Core.Extensions;
-using System;
 using System.ComponentModel;
 
 namespace Milvasoft.Core.EntityBase.MultiTenancy;

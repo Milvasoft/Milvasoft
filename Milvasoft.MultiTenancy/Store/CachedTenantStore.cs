@@ -1,7 +1,5 @@
-﻿using Milvasoft.Core.EntityBase.MultiTenancy;
-using Milvasoft.Caching.Redis;
-using System;
-using System.Threading.Tasks;
+﻿using Milvasoft.Caching.Redis;
+using Milvasoft.Core.EntityBase.MultiTenancy;
 
 namespace Milvasoft.MultiTenancy.Store;
 

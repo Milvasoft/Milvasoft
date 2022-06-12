@@ -1,7 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
-
-namespace Milvasoft.DataAccess.EfCore.Abstract;
+﻿namespace Milvasoft.DataAccess.EfCore.Abstract;
 
 /// <summary>
 /// Abstraction for unit of work pattern.

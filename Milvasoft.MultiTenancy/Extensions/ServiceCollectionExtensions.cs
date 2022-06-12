@@ -1,7 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Milvasoft.Core.EntityBase.MultiTenancy;
 using Milvasoft.MultiTenancy.Builder;
-using System;
 
 namespace Milvasoft.MultiTenancy.Extensions;
 

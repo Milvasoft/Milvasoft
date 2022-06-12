@@ -1,6 +1,5 @@
 ﻿using Milvasoft.Identity.Concrete.Entity;
 using Milvasoft.Identity.TokenProvider;
-using System;
 
 namespace Milvasoft.Identity.Abstract;
 

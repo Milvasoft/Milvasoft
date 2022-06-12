@@ -4,16 +4,10 @@ using Milvasoft.Core.Extensions;
 using Milvasoft.Core.Utils.Models;
 using Milvasoft.Core.Utils.Models.Response;
 using Milvasoft.Testing.Helpers;
-using Milvasoft.Testing.IntegrationTest;
 using Milvasoft.Testing.IntegrationTest.TestStartup.Abstract;
 using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace Milvasoft.Testing.IntegrationTest.Utils;
 

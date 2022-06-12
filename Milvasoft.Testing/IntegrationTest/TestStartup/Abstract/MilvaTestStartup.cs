@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
-using System;
 
 namespace Milvasoft.Testing.IntegrationTest.TestStartup.Abstract;
 

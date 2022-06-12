@@ -1,6 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore.Query;
-using System;
-using System.Linq;
 
 namespace Milvasoft.DataAccess.EfCore.IncludeLibrary;
 

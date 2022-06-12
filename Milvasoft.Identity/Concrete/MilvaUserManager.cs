@@ -4,10 +4,7 @@ using Milvasoft.Identity.Abstract;
 using Milvasoft.Identity.Concrete.Entity;
 using Milvasoft.Identity.Concrete.Options;
 using Milvasoft.Identity.TokenProvider;
-using System;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Milvasoft.Identity.Concrete;
 

@@ -1,8 +1,6 @@
 ﻿using Milvasoft.Core.EntityBase.MultiTenancy;
 using Milvasoft.MultiTenancy.ResolutionStrategy;
 using Milvasoft.MultiTenancy.Store;
-using System;
-using System.Threading.Tasks;
 
 namespace Milvasoft.MultiTenancy.Service;
 

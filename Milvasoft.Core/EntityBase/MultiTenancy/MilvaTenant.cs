@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Milvasoft.Core.EntityBase.Abstract;
-using System;
 
 namespace Milvasoft.Core.EntityBase.MultiTenancy;
 

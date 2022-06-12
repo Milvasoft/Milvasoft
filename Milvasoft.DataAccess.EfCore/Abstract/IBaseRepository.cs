@@ -3,12 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Milvasoft.Core.EntityBase.Abstract;
 using Milvasoft.DataAccess.EfCore.Concrete;
 using Milvasoft.DataAccess.EfCore.IncludeLibrary;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace Milvasoft.DataAccess.EfCore.Abstract;
 

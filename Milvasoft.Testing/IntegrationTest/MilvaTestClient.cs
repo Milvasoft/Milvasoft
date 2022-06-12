@@ -2,11 +2,7 @@
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
 using Milvasoft.Testing.IntegrationTest.TestStartup.Abstract;
-using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Net.Http;
-using System.Threading.Tasks;
 
 namespace Milvasoft.Testing.IntegrationTest;
 

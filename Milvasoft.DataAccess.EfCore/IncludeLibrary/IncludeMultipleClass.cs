@@ -1,7 +1,4 @@
-﻿using System;
-using System.Linq;
-
-namespace Milvasoft.DataAccess.EfCore.IncludeLibrary;
+﻿namespace Milvasoft.DataAccess.EfCore.IncludeLibrary;
 
 /// <summary>
 /// Allows to include multiple class.

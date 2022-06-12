@@ -4,12 +4,8 @@ using Milvasoft.Core.EntityBase.Abstract.Auditing;
 using Milvasoft.Core.EntityBase.Concrete;
 using Milvasoft.Core.Extensions;
 using Milvasoft.DataAccess.EfCore.Abstract;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
-using System.Threading.Tasks;
 
 namespace Milvasoft.DataAccess.EfCore.Concrete;
 

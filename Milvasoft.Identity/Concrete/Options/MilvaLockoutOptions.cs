@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Milvasoft.Identity.Concrete.Options;
+﻿namespace Milvasoft.Identity.Concrete.Options;
 
 /// <summary>
 /// Options for configuring user lockout.

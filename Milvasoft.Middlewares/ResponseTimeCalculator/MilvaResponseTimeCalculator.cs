@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
 using System.Diagnostics;
-using System.Threading.Tasks;
 
 namespace Milvasoft.Middlewares.ResponseTimeCalculator;
 

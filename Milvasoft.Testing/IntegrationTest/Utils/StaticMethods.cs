@@ -3,12 +3,9 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Milvasoft.Core.Exceptions;
 using Milvasoft.Testing.Helpers;
-using Milvasoft.Testing.IntegrationTest;
 using Milvasoft.Testing.IntegrationTest.Attributes;
 using Milvasoft.Testing.IntegrationTest.TestStartup.Abstract;
-using System;
 using System.Globalization;
-using System.Linq;
 using System.Reflection;
 
 namespace Milvasoft.Testing.IntegrationTest.Utils;

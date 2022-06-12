@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Milvasoft.Core.EntityBase.MultiTenancy;
-using System;
 
 namespace Milvasoft.MultiTenancy.Accessor;
 

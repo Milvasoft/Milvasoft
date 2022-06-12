@@ -7,8 +7,6 @@ using Milvasoft.Core.Extensions;
 using Milvasoft.Core.Utils.Constants;
 using Milvasoft.Core.Utils.Enums;
 using Milvasoft.Core.Utils.Models;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace Milvasoft.Attributes.Validation;

@@ -1,7 +1,6 @@
 ﻿using Milvasoft.DataAccess.MongoDB.Entity.Abstract;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
-using System;
 
 namespace Milvasoft.DataAccess.MongoDB.Entity.Concrete;
 

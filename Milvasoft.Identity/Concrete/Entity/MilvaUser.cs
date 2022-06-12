@@ -1,5 +1,4 @@
 ﻿using Milvasoft.Core;
-using System;
 
 namespace Milvasoft.Identity.Concrete.Entity;
 

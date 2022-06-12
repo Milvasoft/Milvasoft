@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace Milvasoft.Identity.Concrete;
+﻿namespace Milvasoft.Identity.Concrete;
 
 /// <summary>
 /// Contains userId and Token pair for authentication.

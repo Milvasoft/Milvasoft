@@ -1,6 +1,4 @@
 ﻿using Milvasoft.Core.EntityBase.MultiTenancy;
-using System;
-using System.Threading.Tasks;
 
 namespace Milvasoft.MultiTenancy.Service;
 

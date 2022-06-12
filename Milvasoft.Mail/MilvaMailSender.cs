@@ -1,15 +1,10 @@
 ﻿using Milvasoft.Core;
 using Milvasoft.Core.Extensions;
 using Milvasoft.Core.Utils.Enums;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using System.Net;
 using System.Net.Mail;
 using System.Net.Mime;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace Milvasoft.Mail;
 

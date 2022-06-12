@@ -4,10 +4,7 @@ using Milvasoft.Testing.Helpers;
 using Milvasoft.Testing.IntegrationTest.Enums;
 using Milvasoft.Testing.IntegrationTest.TestStartup.Abstract;
 using Milvasoft.Testing.IntegrationTest.Utils;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
-using System.Net.Http;
 using System.Reflection;
 using Xunit.Sdk;
 

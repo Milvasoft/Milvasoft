@@ -6,10 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 using Milvasoft.FileOperations.Abstract;
 using Milvasoft.FileOperations.Concrete;
-using Milvasoft.Testing.UnitTest;
-using System;
 using System.Security.Claims;
-using System.Threading.Tasks;
 
 namespace Milvasoft.Testing.UnitTest;
 

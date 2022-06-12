@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Milvasoft.DataAccess.EfCore.Attributes;
+﻿namespace Milvasoft.DataAccess.EfCore.Attributes;
 
 /// <summary>
 /// Specifies that the value field value should be encrypted.

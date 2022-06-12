@@ -1,5 +1,4 @@
 ﻿using Milvasoft.Core.GeoLocation.Models;
-using System;
 
 namespace Milvasoft.Core.GeoLocation;
 

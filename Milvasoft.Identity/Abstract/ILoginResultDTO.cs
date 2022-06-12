@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using System.Collections.Generic;
 
 namespace Milvasoft.Identity.Abstract;
 

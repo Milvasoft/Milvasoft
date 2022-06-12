@@ -1,7 +1,6 @@
 ﻿using Microsoft.Extensions.Options;
 using Milvasoft.Core.EntityBase.MultiTenancy;
 using Milvasoft.MultiTenancy.Accessor;
-using System;
 using System.Collections.Concurrent;
 
 namespace Milvasoft.MultiTenancy.Options;

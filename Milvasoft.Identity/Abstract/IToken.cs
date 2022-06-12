@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Milvasoft.Identity.Abstract;
+﻿namespace Milvasoft.Identity.Abstract;
 
 /// <summary>
 /// Login result DTO for DI.

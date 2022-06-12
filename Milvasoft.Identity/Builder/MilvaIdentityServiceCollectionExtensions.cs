@@ -1,6 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Milvasoft.Identity.Concrete.Entity;
-using System;
 
 namespace Milvasoft.Identity.Builder;
 

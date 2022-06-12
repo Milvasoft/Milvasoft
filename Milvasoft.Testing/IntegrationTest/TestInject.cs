@@ -1,5 +1,4 @@
 ﻿using Microsoft.Extensions.Localization;
-using System.Net.Http;
 
 namespace Milvasoft.Testing.IntegrationTest;
 

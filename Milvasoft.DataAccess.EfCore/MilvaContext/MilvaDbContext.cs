@@ -10,14 +10,8 @@ using Milvasoft.Core.EntityBase.Abstract;
 using Milvasoft.Core.EntityBase.Concrete;
 using Milvasoft.Core.Exceptions;
 using Milvasoft.Core.Extensions;
-using Milvasoft.DataAccess.EfCore.MilvaContext;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace Milvasoft.DataAccess.EfCore.MilvaContext;
 

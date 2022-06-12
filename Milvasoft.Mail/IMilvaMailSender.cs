@@ -1,8 +1,6 @@
 ﻿using Milvasoft.Core.Utils.Enums;
-using System.Collections.Generic;
 using System.Net.Mail;
 using System.Net.Mime;
-using System.Threading.Tasks;
 
 namespace Milvasoft.Mail;
 
