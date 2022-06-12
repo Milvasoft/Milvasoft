@@ -6,7 +6,7 @@ namespace Milvasoft.Integrations.Expo.PushNotification;
 /// <summary>
 /// Expo client for push api requests.
 /// </summary>
-public class ExpoClient
+public class ExpoClient : IDisposable
 {
     #region Environemt Configuration
 
@@ -21,6 +21,7 @@ public class ExpoClient
     /// </summary>
     private static readonly HttpClientHandler _httpHandler = new() { MaxConnectionsPerServer = 6 };
     private static readonly HttpClient _httpClient = new(_httpHandler);
+    private bool disposedValue;
 
     static ExpoClient()
     {
@@ -40,7 +41,7 @@ public class ExpoClient
     /// </summary>
     /// <param name="pushTicketRequest"></param>
     /// <returns></returns>
-    public async Task<PushTicketResponse> PushSendAsync(PushTicketRequest pushTicketRequest)
+    public static async Task<PushTicketResponse> PushSendAsync(PushTicketRequest pushTicketRequest)
     {
         var ticketResponse = await PostAsync<PushTicketRequest, PushTicketResponse>(pushTicketRequest, _pushSendPath);
         return ticketResponse;
@@ -51,7 +52,7 @@ public class ExpoClient
     /// </summary>
     /// <param name="pushReceiptRequest"></param>
     /// <returns></returns>
-    public async Task<PushReceiptResponse> PushGetReceiptsAsync(PushReceiptRequest pushReceiptRequest)
+    public static async Task<PushReceiptResponse> PushGetReceiptsAsync(PushReceiptRequest pushReceiptRequest)
     {
         var receiptResponse = await PostAsync<PushReceiptRequest, PushReceiptResponse>(pushReceiptRequest, _pushGetReceiptsPath);
         return receiptResponse;
@@ -65,7 +66,7 @@ public class ExpoClient
     /// <param name="requestObj"></param>
     /// <param name="path"></param>
     /// <returns></returns>
-    private async Task<U> PostAsync<T, U>(T requestObj, string path)
+    private static async Task<U> PostAsync<T, U>(T requestObj, string path)
     {
         var serializedRequestObj = JsonConvert.SerializeObject(requestObj, new JsonSerializerSettings
         {
@@ -85,5 +86,43 @@ public class ExpoClient
         }
 
         return responseBody;
+    }
+
+    /// <summary>
+    /// Disposes this object.
+    /// </summary>
+    /// <param name="disposing"></param>
+    protected virtual void Dispose(bool disposing)
+    {
+        if (!disposedValue)
+        {
+            if (disposing)
+            {
+                // TODO: dispose managed state (managed objects)
+                _httpClient.Dispose();
+                _httpHandler.Dispose();
+            }
+
+            // TODO: free unmanaged resources (unmanaged objects) and override finalizer
+            // TODO: set large fields to null
+            disposedValue = true;
+        }
+    }
+
+    // // TODO: override finalizer only if 'Dispose(bool disposing)' has code to free unmanaged resources
+    // ~ExpoClient()
+    // {
+    //     // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
+    //     Dispose(disposing: false);
+    // }
+
+    /// <summary>
+    /// Disposes this object.
+    /// </summary>
+    public void Dispose()
+    {
+        // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
+        Dispose(disposing: true);
+        GC.SuppressFinalize(this);
     }
 }

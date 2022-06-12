@@ -44,6 +44,17 @@
             <param name="path"></param>
             <returns></returns>
         </member>
+        <member name="M:Milvasoft.Integrations.Expo.PushNotification.ExpoClient.Dispose(System.Boolean)">
+            <summary>
+            Disposes this object.
+            </summary>
+            <param name="disposing"></param>
+        </member>
+        <member name="M:Milvasoft.Integrations.Expo.PushNotification.ExpoClient.Dispose">
+            <summary>
+            Disposes this object.
+            </summary>
+        </member>
         <member name="T:Milvasoft.Integrations.Expo.PushNotification.PushDataObject">
             <summary>
             Expo api accepts only json objects. So that we use this class to serialize to be transferred data into <see cref="P:Milvasoft.Integrations.Expo.PushNotification.PushTicketRequest.PushData"/>.
