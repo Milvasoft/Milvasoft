@@ -1,0 +1,30 @@
+name: Milvasoft.Identity Nuget Publish
+
+on:
+  push:
+    branches: [ master ]
+    paths:
+      - 'Milvasoft.Identity/**'
+  pull_request:
+    branches: [ master ]
+    paths:
+      - 'Milvasoft.Identity/**'
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 6.0.x
+      - name: Restore Milvasoft.Identity project dependencies
+        run: dotnet restore Milvasoft.Identity/Milvasoft.Identity.csproj
+      - name: Build Milvasoft.Identity project
+        run: dotnet build Milvasoft.Identity/Milvasoft.Identity.csproj --no-restore --configuration Release
+      - name: Pack Milvasoft.Identity project
+        run: dotnet pack Milvasoft.Identity/Milvasoft.Identity.csproj --no-build --configuration Release --include-symbols -p:SymbolPackageFormat=snupkg -o .
+      - name: Publish package to NuGet
+        run: dotnet nuget push *.nupkg --api-key ${{secrets.NUGET_API_KEY}} --source "https://api.nuget.org/v3/index.json" --skip-duplicate

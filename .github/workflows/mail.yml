@@ -1,0 +1,30 @@
+name: Milvasoft.Mail Nuget Publish
+
+on:
+  push:
+    branches: [ master ]
+    paths:
+      - 'Milvasoft.Mail/**'
+  pull_request:
+    branches: [ master ]
+    paths:
+      - 'Milvasoft.Mail/**'
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 6.0.x
+      - name: Restore Milvasoft.Mail project dependencies
+        run: dotnet restore Milvasoft.Mail/Milvasoft.Mail.csproj
+      - name: Build Milvasoft.Mail project
+        run: dotnet build Milvasoft.Mail/Milvasoft.Mail.csproj --no-restore --configuration Release
+      - name: Pack Milvasoft.Mail project
+        run: dotnet pack Milvasoft.Mail/Milvasoft.Mail.csproj --no-build --configuration Release --include-symbols -p:SymbolPackageFormat=snupkg -o .
+      - name: Publish package to NuGet
+        run: dotnet nuget push *.nupkg --api-key ${{secrets.NUGET_API_KEY}} --source "https://api.nuget.org/v3/index.json" --skip-duplicate

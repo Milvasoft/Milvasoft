@@ -1,0 +1,30 @@
+name: Milvasoft.Encryption Nuget Publish
+
+on:
+  push:
+    branches: [ master ]
+    paths:
+      - 'Milvasoft.Encryption/**'
+  pull_request:
+    branches: [ master ]
+    paths:
+      - 'Milvasoft.Encryption/**'
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 6.0.x
+      - name: Restore Milvasoft.Encryption project dependencies
+        run: dotnet restore Milvasoft.Encryption/Milvasoft.Encryption.csproj
+      - name: Build Milvasoft.Encryption project
+        run: dotnet build Milvasoft.Encryption/Milvasoft.Encryption.csproj --no-restore --configuration Release
+      - name: Pack Milvasoft.Encryption project
+        run: dotnet pack Milvasoft.Encryption/Milvasoft.Encryption.csproj --no-build --configuration Release --include-symbols -p:SymbolPackageFormat=snupkg -o .
+      - name: Publish package to NuGet
+        run: dotnet nuget push *.nupkg --api-key ${{secrets.NUGET_API_KEY}} --source "https://api.nuget.org/v3/index.json" --skip-duplicate
