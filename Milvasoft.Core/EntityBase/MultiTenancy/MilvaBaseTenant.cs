@@ -5,7 +5,7 @@ namespace Milvasoft.Core.EntityBase.MultiTenancy;
 /// <summary>
 /// Tenant base.
 /// </summary>
-/// <typeparam name="TKey"> Your key must override ToString() method correctly to block exceptions in <see cref="MultiTenantContainer{TTenant, TKey}"/>. </typeparam>
+/// <typeparam name="TKey"></typeparam>
 /// <typeparam name="TUserKey"></typeparam>
 public abstract class MilvaBaseTenant<TUserKey, TKey> : FullAuditableEntity<TUserKey, TKey>, IMilvaBaseTenant<TKey>
     where TKey : struct, IEquatable<TKey>

@@ -53,6 +53,12 @@ public class ParameterReplaceVisitor : ExpressionVisitor
         this.from = from;
         this.to = to;
     }
+
+    /// <summary>
+    /// Visits the System.Linq.Expressions.ParameterExpression.
+    /// </summary>
+    /// <param name="node"></param>
+    /// <returns></returns>
     protected override Expression VisitParameter(ParameterExpression node)
     {
         return node == from ? to : base.VisitParameter(node);

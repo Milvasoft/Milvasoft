@@ -1116,7 +1116,7 @@
             <summary>
             Tenant base.
             </summary>
-            <typeparam name="TKey"> Your key must override ToString() method correctly to block exceptions in <see cref="!:MultiTenantContainer&lt;TTenant, TKey&gt;"/>. </typeparam>
+            <typeparam name="TKey"></typeparam>
             <typeparam name="TUserKey"></typeparam>
         </member>
         <member name="P:Milvasoft.Core.EntityBase.MultiTenancy.MilvaBaseTenant`2.TenancyName">
@@ -2078,6 +2078,13 @@
             </summary>
             <param name="from"></param>
             <param name="to"></param>
+        </member>
+        <member name="M:Milvasoft.Core.Extensions.Helpers.ParameterReplaceVisitor.VisitParameter(System.Linq.Expressions.ParameterExpression)">
+            <summary>
+            Visits the System.Linq.Expressions.ParameterExpression.
+            </summary>
+            <param name="node"></param>
+            <returns></returns>
         </member>
         <member name="T:Milvasoft.Core.Extensions.Strings">
             <summary>
