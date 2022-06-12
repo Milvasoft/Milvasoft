@@ -1,0 +1,231 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Milvasoft.Mail</name>
+    </assembly>
+    <members>
+        <member name="T:Milvasoft.Mail.IMilvaMailSender">
+            <summary>
+            Provides send mail.
+            </summary>
+        </member>
+        <member name="M:Milvasoft.Mail.IMilvaMailSender.MilvaSendMailAsync(System.String,System.String,System.String,System.Boolean)">
+            <summary>
+            Provides send mail.
+            </summary>
+            <param name="to"></param>
+            <param name="subject"></param>
+            <param name="body"></param>
+            <param name="isBodyHtml"></param>
+        </member>
+        <member name="M:Milvasoft.Mail.IMilvaMailSender.MilvaSendMailAsync(System.String,Milvasoft.Core.Utils.Enums.MailSubject,System.String,System.Boolean)">
+            <summary>
+            Provides send mail.
+            </summary>
+            <param name="to"></param>
+            <param name="subject"></param>
+            <param name="body"></param>
+            <param name="isBodyHtml"></param>
+        </member>
+        <member name="M:Milvasoft.Mail.IMilvaMailSender.MilvaSendMailAsync(System.String,System.String,System.String,System.String,System.Net.Mime.ContentType,System.Boolean)">
+            <summary>
+            Provides send mail with attachment.
+            </summary>
+            <param name="to"></param>
+            <param name="subject"></param>
+            <param name="body"></param>
+            <param name="filePath"></param>
+            <param name="contentType"></param>
+            <param name="isBodyHtml"></param>
+        </member>
+        <member name="M:Milvasoft.Mail.IMilvaMailSender.MilvaSendMailAsync(System.String,System.String,System.String,System.Collections.Generic.List{System.Net.Mail.Attachment},System.Boolean)">
+            <summary>
+            Provides send mail with attachment.
+            </summary>
+            <param name="to"></param>
+            <param name="subject"></param>
+            <param name="body"></param>
+            <param name="attachments"></param>
+            <param name="isBodyHtml"></param>
+        </member>
+        <member name="M:Milvasoft.Mail.IMilvaMailSender.MilvaSendMailAsync(System.String,System.String,System.String,System.String,System.String,System.Boolean)">
+            <summary>
+            Provides send mail with attachment.
+            </summary>
+            <param name="to"></param>
+            <param name="subject"></param>
+            <param name="body"></param>
+            <param name="base64String"> Data uri formatted base64 string.</param>
+            <param name="attachmentName"></param>
+            <param name="isBodyHtml"></param>
+        </member>
+        <member name="M:Milvasoft.Mail.IMilvaMailSender.MilvaSendMailAsync(System.String,Milvasoft.Core.Utils.Enums.MailSubject,System.String,System.String,System.Net.Mime.ContentType,System.Boolean)">
+            <summary>
+            Provides send mail with attachment.
+            </summary>
+            <param name="to"></param>
+            <param name="subject"></param>
+            <param name="body"></param>
+            <param name="filePath"></param>
+            <param name="contentType"></param>
+            <param name="isBodyHtml"></param>
+        </member>
+        <member name="M:Milvasoft.Mail.IMilvaMailSender.MilvaSendMail(System.String,System.String,System.String,System.Boolean)">
+            <summary>
+            Provides send mail.
+            </summary>
+            <param name="to"></param>
+            <param name="subject"></param>
+            <param name="body"></param>
+            <param name="isBodyHtml"></param>
+        </member>
+        <member name="M:Milvasoft.Mail.IMilvaMailSender.MilvaSendMail(System.String,System.String,System.String,System.String,System.Boolean)">
+            <summary>
+            Provides send mail with attachment.
+            </summary>
+            <param name="to"></param>
+            <param name="subject"></param>
+            <param name="body"></param>
+            <param name="filePath"></param>
+            <param name="isBodyHtml"></param>
+        </member>
+        <member name="M:Milvasoft.Mail.IMilvaMailSender.MilvaSendMail(System.String,Milvasoft.Core.Utils.Enums.MailSubject,System.String,System.Boolean)">
+            <summary>
+            Provides send mail.
+            </summary>
+            <param name="to"></param>
+            <param name="subject"></param>
+            <param name="body"></param>
+            <param name="isBodyHtml"></param>
+        </member>
+        <member name="T:Milvasoft.Mail.MilvaMailSender">
+            <summary>
+            Provides send mail.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Mail.MilvaMailSender.From">
+            <summary>
+            Gets or sets mail sender.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Mail.MilvaMailSender.NetworkCredential">
+            <summary>
+            Gets or sets mail sender credentials.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Mail.MilvaMailSender.SmtpPort">
+            <summary>
+            Gets or sets Port of mail sender.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Mail.MilvaMailSender.SmtpHost">
+            <summary>
+            Gets or sets Host of mail sender.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Mail.MilvaMailSender.EnableSsl">
+            <summary>
+            Gets or sets enable ssql of mail sender smtp client.
+            </summary>
+        </member>
+        <member name="M:Milvasoft.Mail.MilvaMailSender.#ctor(System.String,System.Net.NetworkCredential,System.Int32,System.String,System.Boolean)">
+            <summary>
+            Initializes mail sending operation default values.
+            </summary>
+            <param name="from"></param>
+            <param name="networkCredential"></param>
+            <param name="smtpPort"></param>
+            <param name="smtpHost"></param>
+            <param name="enableSsl"></param>
+        </member>
+        <member name="M:Milvasoft.Mail.MilvaMailSender.MilvaSendMailAsync(System.String,System.String,System.String,System.Boolean)">
+            <summary>
+            Provides send mail.
+            </summary>
+            <param name="to"></param>
+            <param name="subject"></param>
+            <param name="body"></param>
+            <param name="isBodyHtml"></param>
+        </member>
+        <member name="M:Milvasoft.Mail.MilvaMailSender.MilvaSendMailAsync(System.String,Milvasoft.Core.Utils.Enums.MailSubject,System.String,System.Boolean)">
+            <summary>
+            Provides send mail.
+            </summary>
+            <param name="to"></param>
+            <param name="subject"></param>
+            <param name="body"></param>
+            <param name="isBodyHtml"></param>
+        </member>
+        <member name="M:Milvasoft.Mail.MilvaMailSender.MilvaSendMailAsync(System.String,System.String,System.String,System.String,System.Net.Mime.ContentType,System.Boolean)">
+            <summary>
+            Provides send mail with attachment.
+            </summary>
+            <param name="to"></param>
+            <param name="subject"></param>
+            <param name="body"></param>
+            <param name="filePath"></param>
+            <param name="contentType"></param>
+            <param name="isBodyHtml"></param>
+        </member>
+        <member name="M:Milvasoft.Mail.MilvaMailSender.MilvaSendMailAsync(System.String,System.String,System.String,System.Collections.Generic.List{System.Net.Mail.Attachment},System.Boolean)">
+            <summary>
+            Provides send mail with attachment.
+            </summary>
+            <param name="to"></param>
+            <param name="subject"></param>
+            <param name="body"></param>
+            <param name="attachments"></param>
+            <param name="isBodyHtml"></param>
+        </member>
+        <member name="M:Milvasoft.Mail.MilvaMailSender.MilvaSendMailAsync(System.String,System.String,System.String,System.String,System.String,System.Boolean)">
+            <summary>
+            Provides send mail with attachment.
+            </summary>
+            <param name="to"></param>
+            <param name="subject"></param>
+            <param name="body"></param>
+            <param name="base64String"> Data uri formatted base64 string.</param>
+            <param name="attachmentName"></param>
+            <param name="isBodyHtml"></param>
+        </member>
+        <member name="M:Milvasoft.Mail.MilvaMailSender.MilvaSendMailAsync(System.String,Milvasoft.Core.Utils.Enums.MailSubject,System.String,System.String,System.Net.Mime.ContentType,System.Boolean)">
+            <summary>
+            Provides send mail with attachment.
+            </summary>
+            <param name="to"></param>
+            <param name="subject"></param>
+            <param name="body"></param>
+            <param name="filePath"></param>
+            <param name="contentType"></param>
+            <param name="isBodyHtml"></param>
+        </member>
+        <member name="M:Milvasoft.Mail.MilvaMailSender.MilvaSendMail(System.String,System.String,System.String,System.Boolean)">
+            <summary>
+            Provides send mail.
+            </summary>
+            <param name="to"></param>
+            <param name="subject"></param>
+            <param name="body"></param>
+            <param name="isBodyHtml"></param>
+        </member>
+        <member name="M:Milvasoft.Mail.MilvaMailSender.MilvaSendMail(System.String,System.String,System.String,System.String,System.Boolean)">
+            <summary>
+            Provides send mail with attachment.
+            </summary>
+            <param name="to"></param>
+            <param name="subject"></param>
+            <param name="body"></param>
+            <param name="filePath"></param>
+            <param name="isBodyHtml"></param>
+        </member>
+        <member name="M:Milvasoft.Mail.MilvaMailSender.MilvaSendMail(System.String,Milvasoft.Core.Utils.Enums.MailSubject,System.String,System.Boolean)">
+            <summary>
+            Provides send mail.
+            </summary>
+            <param name="to"></param>
+            <param name="subject"></param>
+            <param name="body"></param>
+            <param name="isBodyHtml"></param>
+        </member>
+    </members>
+</doc>

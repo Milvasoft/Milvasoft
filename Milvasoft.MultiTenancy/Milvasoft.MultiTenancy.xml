@@ -1,0 +1,420 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Milvasoft.MultiTenancy</name>
+    </assembly>
+    <members>
+        <member name="T:Milvasoft.MultiTenancy.Accessor.ITenantAccessor`2">
+            <summary>
+            Tenant accessor for easy access.
+            </summary>
+            <typeparam name="TTenant"></typeparam>
+            <typeparam name="TKey"></typeparam>
+        </member>
+        <member name="P:Milvasoft.MultiTenancy.Accessor.ITenantAccessor`2.ServiceProvider">
+            <summary>
+            Application service provider.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.MultiTenancy.Accessor.ITenantAccessor`2.HttpContextAccessor">
+            <summary>
+            Context accessor.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.MultiTenancy.Accessor.ITenantAccessor`2.Tenant">
+            <summary>
+            Accessed tenant from <see cref="T:Microsoft.AspNetCore.Http.HttpContext"/>
+            </summary>
+        </member>
+        <member name="T:Milvasoft.MultiTenancy.Accessor.TenantAccessor`2">
+            <summary>
+            Tenant accessor for easy access.
+            </summary>
+            <typeparam name="TTenant"></typeparam>
+            <typeparam name="TKey"></typeparam>
+        </member>
+        <member name="P:Milvasoft.MultiTenancy.Accessor.TenantAccessor`2.ServiceProvider">
+            <summary>
+            Application service provider.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.MultiTenancy.Accessor.TenantAccessor`2.HttpContextAccessor">
+            <summary>
+            Context accessor.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.MultiTenancy.Accessor.TenantAccessor`2.Tenant">
+            <summary>
+            Accessed tenant from <see cref="T:Microsoft.AspNetCore.Http.HttpContext"/>.
+            </summary>
+        </member>
+        <member name="M:Milvasoft.MultiTenancy.Accessor.TenantAccessor`2.#ctor(Microsoft.AspNetCore.Http.IHttpContextAccessor,System.IServiceProvider)">
+            <summary>
+            Creates new instance of <see cref="T:Milvasoft.MultiTenancy.Accessor.TenantAccessor`2"/>.
+            </summary>
+            <param name="httpContextAccessor"></param>
+            <param name="serviceProvider"></param>
+        </member>
+        <member name="T:Milvasoft.MultiTenancy.Builder.TenantBuilder`2">
+            <summary>
+            Configure tenant services.
+            </summary>
+        </member>
+        <member name="M:Milvasoft.MultiTenancy.Builder.TenantBuilder`2.#ctor(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+            <summary>
+            Creates new instance of <see cref="T:Milvasoft.MultiTenancy.Builder.TenantBuilder`2"/>.
+            Registers <see cref="T:Milvasoft.MultiTenancy.Service.TenantService`2"/> to <see cref="T:Milvasoft.MultiTenancy.Service.ITenantService`2"/> as <see cref="F:Microsoft.Extensions.DependencyInjection.ServiceLifetime.Transient"/>
+            </summary>
+            <param name="services"></param>
+        </member>
+        <member name="M:Milvasoft.MultiTenancy.Builder.TenantBuilder`2.WithResolutionStrategy``1(Microsoft.Extensions.DependencyInjection.ServiceLifetime)">
+            <summary>
+            Registers the tenant resolver implementation.
+            </summary>
+            <typeparam name="TResolutionStrategy"></typeparam>
+            <param name="lifetime"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.MultiTenancy.Builder.TenantBuilder`2.WithStore``1(Microsoft.Extensions.DependencyInjection.ServiceLifetime)">
+            <summary>
+            Registers the tenant store implementation.
+            </summary>
+            <typeparam name="TStore"></typeparam>
+            <param name="lifetime"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Milvasoft.MultiTenancy.Extensions.ApplicationBuilderExtensions">
+            <summary>
+            Provides registration of custom tenant middlewares.
+            </summary>
+        </member>
+        <member name="M:Milvasoft.MultiTenancy.Extensions.ApplicationBuilderExtensions.UseMultiTenancy``2(Microsoft.AspNetCore.Builder.IApplicationBuilder)">
+            <summary>
+            Use the Tenant Middleware to process the request
+            </summary>
+            <typeparam name="TTenant"></typeparam>
+            <typeparam name="TKey"></typeparam>
+            <param name="builder"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.MultiTenancy.Extensions.ApplicationBuilderExtensions.UseMultiTenantAuthentication(Microsoft.AspNetCore.Builder.IApplicationBuilder)">
+            <summary>
+            Use the Tenant Auth to process the authentication handlers
+            </summary>
+            <param name="builder"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Milvasoft.MultiTenancy.Extensions.HttpContextExtensions">
+            <summary>
+            Extensions to HttpContext to make multi-tenancy easier to use
+            </summary>
+        </member>
+        <member name="M:Milvasoft.MultiTenancy.Extensions.HttpContextExtensions.GetTenant``2(Microsoft.AspNetCore.Http.HttpContext)">
+            <summary>
+            Returns the current tenant
+            </summary>
+            <typeparam name="TTenant"></typeparam>
+            <typeparam name="TKey"></typeparam>
+            <param name="context"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Milvasoft.MultiTenancy.Extensions.ServiceCollectionExtensions">
+            <summary>
+            Provides registration of custom tenant services.
+            </summary>
+        </member>
+        <member name="M:Milvasoft.MultiTenancy.Extensions.ServiceCollectionExtensions.AddMultiTenancy``2(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+            <summary>
+            Add the services (application specific tenant class)
+            </summary>
+            <param name="services"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Milvasoft.MultiTenancy.Middleware.TenantAuthMiddleware">
+            <summary>
+            AuthenticationMiddleware.cs from framework with injection point moved
+            </summary>
+        </member>
+        <member name="M:Milvasoft.MultiTenancy.Middleware.TenantAuthMiddleware.#ctor(Microsoft.AspNetCore.Http.RequestDelegate)">
+            <summary>
+            Initializes new instance of <see cref="T:Milvasoft.MultiTenancy.Middleware.TenantAuthMiddleware"/>
+            </summary>
+            <param name="next"></param>
+        </member>
+        <member name="M:Milvasoft.MultiTenancy.Middleware.TenantAuthMiddleware.Invoke(Microsoft.AspNetCore.Http.HttpContext,Microsoft.AspNetCore.Authentication.IAuthenticationSchemeProvider)">
+            <summary>
+            Invokes the method or constructor reflected by this MethodInfo instance.
+            </summary>
+            <param name="context"></param>
+            <param name="Schemes"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Milvasoft.MultiTenancy.Middleware.TenantMiddleware`2">
+            <summary>
+            If request items not contains Tenant object. Sets the tenant object into items.
+            </summary>
+            <typeparam name="TTenant"></typeparam>
+            <typeparam name="TKey"></typeparam>
+        </member>
+        <member name="M:Milvasoft.MultiTenancy.Middleware.TenantMiddleware`2.#ctor(Microsoft.AspNetCore.Http.RequestDelegate)">
+            <summary>
+            Initializes new instance of <see cref="T:Milvasoft.MultiTenancy.Middleware.TenantMiddleware`2"/>
+            </summary>
+            <param name="next"></param>
+        </member>
+        <member name="M:Milvasoft.MultiTenancy.Middleware.TenantMiddleware`2.Invoke(Microsoft.AspNetCore.Http.HttpContext)">
+            <summary>
+            Invokes the method or constructor reflected by this MethodInfo instance.
+            </summary>
+            <param name="context"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Milvasoft.MultiTenancy.Options.TenantOptions`1">
+            <summary>
+            Makes IOptions tenant aware.
+            </summary>
+        </member>
+        <member name="M:Milvasoft.MultiTenancy.Options.TenantOptions`1.#ctor(Microsoft.Extensions.Options.IOptionsFactory{`0},Microsoft.Extensions.Options.IOptionsMonitorCache{`0})">
+            <summary>
+            Initializes new instance of <see cref="T:Milvasoft.MultiTenancy.Options.TenantOptions`1"/>
+            </summary>
+            <param name="factory"></param>
+            <param name="cache"></param>
+        </member>
+        <member name="P:Milvasoft.MultiTenancy.Options.TenantOptions`1.Value">
+            <summary>
+            Options Value.
+            </summary>
+        </member>
+        <member name="M:Milvasoft.MultiTenancy.Options.TenantOptions`1.Get(System.String)">
+            <summary>
+            Adds a key/value pair to the <see cref="T:System.Collections.Concurrent.ConcurrentDictionary`2"/>      
+            if the key does not already exist. Returns the new value, or the existing value
+            if the key exists.
+            </summary>
+            <param name="name"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Milvasoft.MultiTenancy.Options.TenantOptionsCache`3">
+            <summary>
+            Tenant aware options cache
+            </summary>
+            <typeparam name="TOptions"></typeparam>
+            <typeparam name="TTenant"></typeparam>
+            <typeparam name="TKey"></typeparam>
+        </member>
+        <member name="M:Milvasoft.MultiTenancy.Options.TenantOptionsCache`3.#ctor(Milvasoft.MultiTenancy.Accessor.ITenantAccessor{`1,`2})">
+            <summary>
+            Initializes new instance of <see cref="T:Milvasoft.MultiTenancy.Options.TenantOptionsCache`3"/>
+            </summary>
+            <param name="tenantAccessor"></param>
+        </member>
+        <member name="M:Milvasoft.MultiTenancy.Options.TenantOptionsCache`3.Clear">
+            <summary>
+            Clears tenant options cache.
+            </summary>
+        </member>
+        <member name="M:Milvasoft.MultiTenancy.Options.TenantOptionsCache`3.GetOrAdd(System.String,System.Func{`0})">
+            <summary>
+            Adds a key/value pair to the <see cref="T:System.Collections.Concurrent.ConcurrentDictionary`2"/>      
+            if the key does not already exist. Returns the new value, or the existing value
+            if the key exists.
+            </summary>
+            <param name="name"></param>
+            <param name="createOptions"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.MultiTenancy.Options.TenantOptionsCache`3.TryAdd(System.String,`0)">
+            <summary>
+            Tries to adds a new option to the cache, will return false if the name already exists.
+            </summary>
+            <param name="name"></param>
+            <param name="options"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.MultiTenancy.Options.TenantOptionsCache`3.TryRemove(System.String)">
+            <summary>
+            Try to remove an options instance.
+            </summary>
+            <param name="name"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Milvasoft.MultiTenancy.Options.TenantOptionsCacheDictionary`2">
+            <summary>
+            Dictionary of tenant specific options caches.
+            </summary>
+            <typeparam name="TOptions"></typeparam>
+            <typeparam name="TKey"></typeparam>
+        </member>
+        <member name="F:Milvasoft.MultiTenancy.Options.TenantOptionsCacheDictionary`2._tenantSpecificOptionCaches">
+            <summary>
+            Caches stored in memory.
+            </summary>
+        </member>
+        <member name="M:Milvasoft.MultiTenancy.Options.TenantOptionsCacheDictionary`2.Get(`1)">
+            <summary>
+            Gets options for specific tenant (create if not exists).
+            </summary>
+            <param name="tenantId"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Milvasoft.MultiTenancy.Options.TenantOptionsFactory`3">
+            <summary>
+            Create a new options instance with configuration applied
+            </summary>
+            <typeparam name="TOptions"></typeparam>
+            <typeparam name="TTenant"></typeparam>
+            <typeparam name="TKey"></typeparam>
+        </member>
+        <member name="M:Milvasoft.MultiTenancy.Options.TenantOptionsFactory`3.#ctor(System.Collections.Generic.IEnumerable{Microsoft.Extensions.Options.IConfigureOptions{`0}},System.Collections.Generic.IEnumerable{Microsoft.Extensions.Options.IPostConfigureOptions{`0}},System.Action{`0,`1},Milvasoft.MultiTenancy.Accessor.ITenantAccessor{`1,`2})">
+            <summary>
+            Initializes new instance of <see cref="T:Milvasoft.MultiTenancy.Options.TenantOptionsFactory`3"/>
+            </summary>
+            <param name="setups"></param>
+            <param name="postConfigures"></param>
+            <param name="tenantConfig"></param>
+            <param name="tenantAccessor"></param>
+        </member>
+        <member name="M:Milvasoft.MultiTenancy.Options.TenantOptionsFactory`3.Create(System.String)">
+            <summary>
+            Creates a new options instance.
+            </summary>
+            <param name="name"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Milvasoft.MultiTenancy.ResolutionStrategy.HeaderResolutionStrategy">
+            <summary>
+            Resolve the header to a tenant identifier
+            </summary>
+        </member>
+        <member name="F:Milvasoft.MultiTenancy.ResolutionStrategy.HeaderResolutionStrategy.HeaderKey">
+            <summary>
+            Header key.
+            </summary>
+        </member>
+        <member name="M:Milvasoft.MultiTenancy.ResolutionStrategy.HeaderResolutionStrategy.#ctor(Microsoft.AspNetCore.Http.IHttpContextAccessor)">
+            <summary>
+            Creates new instance of <see cref="T:Milvasoft.MultiTenancy.ResolutionStrategy.HostResolutionStrategy"/>
+            </summary>
+            <param name="httpContextAccessor"></param>
+        </member>
+        <member name="M:Milvasoft.MultiTenancy.ResolutionStrategy.HeaderResolutionStrategy.GetTenantIdentifierAsync">
+            <summary>
+            Get the tenant identifier from header.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Milvasoft.MultiTenancy.ResolutionStrategy.HostResolutionStrategy">
+            <summary>
+            Resolve the host to a tenant identifier
+            </summary>
+        </member>
+        <member name="M:Milvasoft.MultiTenancy.ResolutionStrategy.HostResolutionStrategy.#ctor(Microsoft.AspNetCore.Http.IHttpContextAccessor)">
+            <summary>
+            Creates new instance of <see cref="T:Milvasoft.MultiTenancy.ResolutionStrategy.HostResolutionStrategy"/>
+            </summary>
+            <param name="httpContextAccessor"></param>
+        </member>
+        <member name="M:Milvasoft.MultiTenancy.ResolutionStrategy.HostResolutionStrategy.GetTenantIdentifierAsync">
+            <summary>
+            Get the tenant identifier from host.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Milvasoft.MultiTenancy.ResolutionStrategy.ITenantResolutionStrategy`1">
+            <summary>
+            Abstraction for tenant resolution strategy.
+            </summary>
+            <typeparam name="TKey"></typeparam>
+        </member>
+        <member name="M:Milvasoft.MultiTenancy.ResolutionStrategy.ITenantResolutionStrategy`1.GetTenantIdentifierAsync">
+            <summary>
+            Get the tenant identifier
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Milvasoft.MultiTenancy.Service.ITenantService`2">
+            <summary>
+            Tenant access service.
+            </summary>
+            <typeparam name="TTenant"></typeparam>
+            <typeparam name="TKey"></typeparam>
+        </member>
+        <member name="M:Milvasoft.MultiTenancy.Service.ITenantService`2.GetTenantAsync">
+            <summary>
+            Gets the current tenant.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Milvasoft.MultiTenancy.Service.TenantService`2">
+            <summary>
+            Tenant access service.
+            </summary>
+            <typeparam name="TTenant"></typeparam>
+            <typeparam name="TKey"></typeparam>
+        </member>
+        <member name="M:Milvasoft.MultiTenancy.Service.TenantService`2.#ctor(Milvasoft.MultiTenancy.ResolutionStrategy.ITenantResolutionStrategy{`1},Milvasoft.MultiTenancy.Store.ITenantStore{`0,`1})">
+            <summary>
+            Creates new instances of <see cref="T:Milvasoft.MultiTenancy.Service.TenantService`2"/>
+            </summary>
+            <param name="tenantResolutionStrategy"></param>
+            <param name="tenantStore"></param>
+        </member>
+        <member name="M:Milvasoft.MultiTenancy.Service.TenantService`2.GetTenantAsync">
+            <summary>
+            Gets the current tenant.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Milvasoft.MultiTenancy.Store.CachedTenantStore`2">
+            <summary>
+            Cached tenant store. Sample store for <see cref="T:Milvasoft.MultiTenancy.Store.ITenantStore`2"/>
+            </summary>
+        </member>
+        <member name="M:Milvasoft.MultiTenancy.Store.CachedTenantStore`2.#ctor(Milvasoft.Caching.Redis.IRedisCacheService)">
+            <summary>
+            Creates new instance of <see cref="T:Milvasoft.MultiTenancy.Store.CachedTenantStore`2"/>
+            </summary>
+            <param name="redisCacheService"></param>
+        </member>
+        <member name="M:Milvasoft.MultiTenancy.Store.CachedTenantStore`2.GetTenantAsync(`1)">
+            <summary>
+            Returns a tenant according to <paramref name="identifier"/>.
+            </summary>
+            <param name="identifier"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.MultiTenancy.Store.CachedTenantStore`2.SetTenantAsync(`1,`0)">
+            <summary>
+            Sets a tenant with a given identifier.
+            </summary>
+            <param name="identifier"></param>
+            <param name="tenant"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Milvasoft.MultiTenancy.Store.ITenantStore`2">
+            <summary>
+            Abstraction for tenant storage. 
+            </summary>
+            <typeparam name="TTenant"></typeparam>
+            <typeparam name="TKey"></typeparam>
+        </member>
+        <member name="M:Milvasoft.MultiTenancy.Store.ITenantStore`2.GetTenantAsync(`1)">
+            <summary>
+            Gets tenant according to <paramref name="identifier"/>.
+            </summary>
+            <param name="identifier"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Milvasoft.MultiTenancy.Utils.TenancyConstants">
+            <summary>
+            Tenancy contants.
+            </summary>
+        </member>
+        <member name="F:Milvasoft.MultiTenancy.Utils.TenancyConstants.HttpContextTenantKey">
+            <summary>
+            Header tenant key.
+            </summary>
+        </member>
+    </members>
+</doc>

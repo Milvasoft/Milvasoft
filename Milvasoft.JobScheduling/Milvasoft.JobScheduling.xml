@@ -1,0 +1,106 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Milvasoft.JobScheduling</name>
+    </assembly>
+    <members>
+        <member name="T:Milvasoft.JobScheduling.MilvaCronJobService">
+            <summary>
+            Provides scheduled job operations.
+            </summary>
+        </member>
+        <member name="M:Milvasoft.JobScheduling.MilvaCronJobService.#ctor(Milvasoft.JobScheduling.IScheduleConfig)">
+            <summary>
+            Initializes new instances of <see cref="T:Milvasoft.JobScheduling.MilvaCronJobService"/>
+            </summary>
+            <param name="scheduleConfig"></param>
+        </member>
+        <member name="M:Milvasoft.JobScheduling.MilvaCronJobService.StartAsync(System.Threading.CancellationToken)">
+            <summary>
+            Starts the job.
+            </summary>
+            <param name="cancellationToken"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.JobScheduling.MilvaCronJobService.ScheduleJob(System.Threading.CancellationToken)">
+            <summary>
+            Schedules the job.
+            </summary>
+            <param name="cancellationToken"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.JobScheduling.MilvaCronJobService.ExecuteAsync(System.Threading.CancellationToken)">
+            <summary>
+            Executes the job.
+            </summary>
+            <param name="cancellationToken"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.JobScheduling.MilvaCronJobService.StopAsync(System.Threading.CancellationToken)">
+            <summary>
+            Stops the job.
+            </summary>
+            <param name="cancellationToken"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.JobScheduling.MilvaCronJobService.Dispose">
+            <summary>
+            Disposes the timer.
+            </summary>
+        </member>
+        <member name="T:Milvasoft.JobScheduling.IScheduleConfig">
+            <summary>
+            Schedule config for scheduling jobs.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.JobScheduling.IScheduleConfig.CronExpression">
+            <summary>
+            Cron expression of job.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.JobScheduling.IScheduleConfig.TimeZoneInfo">
+            <summary>
+            Time zone information of job.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.JobScheduling.IScheduleConfig.CronFormat">
+            <summary>
+            If seconds requested in cron expression send this property.
+            </summary>
+        </member>
+        <member name="T:Milvasoft.JobScheduling.ScheduleConfig">
+            <summary>
+            Schedule config for scheduling jobs.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.JobScheduling.ScheduleConfig.CronExpression">
+            <summary>
+            Cron expression of job.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.JobScheduling.ScheduleConfig.TimeZoneInfo">
+            <summary>
+            Time zone information of job.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.JobScheduling.ScheduleConfig.CronFormat">
+            <summary>
+            If seconds requested in cron expression send this property.
+            </summary>
+        </member>
+        <member name="T:Milvasoft.JobScheduling.ServiceCollectionExtensions">
+            <summary>
+            Provides scheduled job operations.
+            </summary>
+        </member>
+        <member name="M:Milvasoft.JobScheduling.ServiceCollectionExtensions.AddMilvaCronJob``1(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.Action{Milvasoft.JobScheduling.IScheduleConfig})">
+            <summary>
+            Adds scheduled cron job to application.
+            </summary>
+            <typeparam name="TJob"></typeparam>
+            <param name="services"></param>
+            <param name="options"></param>
+            <returns></returns>
+        </member>
+    </members>
+</doc>

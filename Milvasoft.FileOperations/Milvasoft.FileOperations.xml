@@ -1,0 +1,1878 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Milvasoft.FileOperations</name>
+    </assembly>
+    <members>
+        <member name="T:Milvasoft.FileOperations.Abstract.IJsonOperations">
+            <summary>
+            Provides add-edit-delete-get process json files that hold one list.
+            
+            <para> Default CultureInfo is en-US </para>
+            <para> Default Encoding is UTF8 </para>
+            
+            <para> Example json file template for use this library methods; </para>
+            <code>
+            
+            <para> <b>Structure 1 :</b></para>
+            
+             "connectionstring"
+            
+            <para> <b>Structure 2 :</b></para>
+            [
+             {
+               "Id": 1,
+               "Name": "poco1",
+               "Which": false
+             },
+             {
+               "Id": 2,
+               "Name": "poco2",
+               "Which": true
+             },
+             {
+               "Id": 3,
+               "Name": "poco3",
+               "Which": true
+             }
+            ]
+            
+            <para> <b>Structure 3 :</b></para>
+            
+             {
+               "Id": 1,
+               "Name": "poco1",
+               "Which": false
+             },
+             {
+               "Id": 2,
+               "Name": "poco2",
+               "Which": true
+             },
+             {
+               "Id": 3,
+               "Name": "poco3",
+               "Which": true
+             }
+            
+            </code>
+            </summary>
+        </member>
+        <member name="M:Milvasoft.FileOperations.Abstract.IJsonOperations.SetCultureInfo(System.Globalization.CultureInfo)">
+            <summary>
+            If you change culture info after object creation, use this method.
+            </summary>
+            <param name="cultureInfo"></param>
+        </member>
+        <member name="M:Milvasoft.FileOperations.Abstract.IJsonOperations.SetEncryptionKey(System.String)">
+            <summary>
+            If you change encryption key after object creation, use this method.
+            </summary>
+            <param name="encryptionKey"></param>
+        </member>
+        <member name="M:Milvasoft.FileOperations.Abstract.IJsonOperations.SetEncoding(System.Text.Encoding)">
+            <summary>
+            If you change encoding after object creation, use this method.
+            </summary>
+            <param name="encoding"></param>
+        </member>
+        <member name="M:Milvasoft.FileOperations.Abstract.IJsonOperations.GetContentAsync``1(System.String)">
+            <summary>
+            Gets all content from json file in <paramref name="filePath"/>. 
+            Returns them as the requested type.
+            </summary>
+            <remarks>
+            
+            <para> This method support all structures in class remarks. </para> 
+            
+            </remarks>
+            <typeparam name="T"> Return type. </typeparam>
+            <param name="filePath"> Path to json file to get data from. </param>
+            <returns> A content as type <typeparamref name="T"/>. </returns>
+        </member>
+        <member name="M:Milvasoft.FileOperations.Abstract.IJsonOperations.AddContentAsync``1(``0,System.String,System.Boolean)">
+            <summary>
+            Adds <paramref name="content"/> to json file in <paramref name="filePath"/>.
+            </summary>
+            <remarks>
+            
+            <para> This method supports only structure 2 in class remarks. </para> 
+            <para> Don't send <typeparamref name="T"/> as <see cref="T:System.Collections.Generic.List`1"/>. You can use <see cref="T:System.Collections.Generic.List`1"/> overload. </para>
+            <para> If content has "Id" property which type is "System.Int32" . Send <paramref name="contentsHasId"/> param "true". The code will be increase Id automatically. </para> 
+            <para> This method reads all file. This can cause performance impact with big files. </para> 
+            
+            </remarks>
+            <typeparam name="T"> Return type. </typeparam>
+            <param name="content"> Content to be added. </param>
+            <param name="filePath"> Path to json file to get data from. </param>
+            <param name="contentsHasId"> Determines whether the contents are added in auto increment by "Id" property. </param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.FileOperations.Abstract.IJsonOperations.AddContentsAsync``1(System.Collections.Generic.List{``0},System.String,System.Boolean)">
+            <summary>
+            Adds <paramref name="contents"/> to json file in <paramref name="filePath"/>.
+            </summary>
+            <remarks>
+            
+            <para> This method supports only structure 2 in class remarks. </para> 
+            <para> If content has "Id" property which type is "System.Int32". Send <paramref name="contentsHasId"/> param "true". The code will be increase Id automatically. </para> 
+            <para> This method reads all file. This can cause performance impact with big files. </para> 
+            
+            </remarks>
+            <typeparam name="T"> Model type in json. </typeparam>
+            <param name="contents"> Contents to be added. </param>
+            <param name="filePath"> Path to json file to get data from. </param>
+            <param name="contentsHasId"> Determines whether the contents are added in auto increment by "Id" property. </param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.FileOperations.Abstract.IJsonOperations.UpdateContentAsync``1(``0,System.String,System.Linq.Expressions.Expression{System.Func{``0,System.Object}})">
+            <summary>
+            Updates content from json file in <paramref name="filePath"/>.
+            </summary>
+            <remarks>
+            
+            <para> This method supports only structure 2 in class remarks. </para> 
+            <para> Don't send <typeparamref name="T"/> as <see cref="T:System.Collections.Generic.List`1"/>. You can use <see cref="T:System.Collections.Generic.List`1"/> overload. </para>
+            <para> Updates by requested Property. Don't forget send <paramref name="mappingProperty"/> ! </para>
+            <para> Send all the properties of the object to be updated. Otherwise, unsent properties are updated to null. </para>
+            <para> This method reads all file. This can cause performance impact with big files. </para> 
+            
+            </remarks>
+            
+            <exception cref="M:System.Exception.#ctor"> Throwns when not valid <paramref name="mappingProperty"/> or requested Entity type does not have that <paramref name="mappingProperty"/>. </exception>
+            <exception cref="M:System.Exception.#ctor"> Throwns when json file in <paramref name="filePath"/> not contains <paramref name="content"/>. </exception>
+            
+            <typeparam name="T"> Model type in json. </typeparam>
+            <param name="content"> Contents to be updated. </param>
+            <param name="filePath"> Path to json file to get data from. </param>
+            <param name="mappingProperty"> The data to be updated is extracted from the file according to this property. </param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.FileOperations.Abstract.IJsonOperations.UpdateContentsAsync``1(System.Collections.Generic.List{``0},System.String,System.Linq.Expressions.Expression{System.Func{``0,System.Object}})">
+            <summary>
+            Updates contents from json file in <paramref name="filePath"/>.
+            </summary>
+            <remarks>
+            
+            <para> This method supports only structure 2 in class remarks. </para> 
+            <para> Don't send <typeparamref name="T"/> as <see cref="T:System.Collections.Generic.List`1"/>. You can use <see cref="T:System.Collections.Generic.List`1"/> overload. </para>
+            <para> Updates by requested Property. Don't forget send <paramref name="mappingProperty"/>! </para>
+            <para> Send all the properties of the object to be updated. Otherwise, unsent properties are updated to null. </para>
+            <para> This method reads all file. This can cause performance impact with big files. </para> 
+            
+            </remarks>
+            
+            <exception cref="M:System.Exception.#ctor"> Throwns when not valid <paramref name="mappingProperty"/> or requested Entity type does not have that <paramref name="mappingProperty"/>. </exception>
+            <exception cref="M:System.Exception.#ctor"> Throwns when json file in <paramref name="filePath"/> not contains <paramref name="contents"/>.</exception>
+            
+            <typeparam name="T"> Model type in json. </typeparam>
+            <param name="contents"> Contents to be updated. </param>
+            <param name="filePath"> Path to json file to get data from. </param>
+            <param name="mappingProperty"> The data to be updated is extracted from the file according to this property. </param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.FileOperations.Abstract.IJsonOperations.DeleteContentAsync``1(System.Collections.Generic.List{System.Object},System.String,System.Linq.Expressions.Expression{System.Func{``0,System.Object}})">
+            <summary>
+            Deletes record from requested json file.
+            </summary>
+            <remarks>
+            
+            <para> This method supports only structure 2 in class remarks. </para> 
+            <para> Don't send <typeparamref name="T"/> as <see cref="T:System.Collections.Generic.List`1"/>. You can use <see cref="T:System.Collections.Generic.List`1"/> overload. </para>
+            <para> This method reads all file. This can cause performance impact with big files. </para> 
+            
+            </remarks>
+            <typeparam name="T"> Model type in json. </typeparam>
+            <param name="mappingValue"> Mapping value of content to be deleted. </param>
+            <param name="filePath"> Path to json file to get data from. </param>
+            <param name="mappingProperty"> The data to be updated is extracted from the file according to this property. </param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.FileOperations.Abstract.IJsonOperations.DeleteContentsAsync``1(System.Collections.Generic.List{System.Object},System.String,System.Linq.Expressions.Expression{System.Func{``0,System.Object}})">
+            <summary>
+            Deletes records from requested json file.
+            </summary>
+            <remarks>
+            
+            <para> This method supports only structure 2 in class remarks. </para> 
+            <para> This method reads all file. This can cause performance impact with big files. </para> 
+            
+            </remarks>
+            <typeparam name="T"> Model type in json. </typeparam>
+            <param name="mappingValues"> Mapping values of contents to be deleted. </param>
+            <param name="filePath"> Path to json file to get data from. </param>
+            <param name="mappingProperty"> The data to be updated is extracted from the file according to this property. </param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.FileOperations.Abstract.IJsonOperations.ReplaceOldContentWithNewAsync``1(``0,System.String)">
+            <summary>
+            Removes all file data and writes new one.
+            </summary>
+            <remarks>
+            
+            <para> This method support all structures in class remarks. </para> 
+            
+            </remarks>
+            <typeparam name="T"> Model type in json. </typeparam>
+            <param name="content"> Content to be added or updated. </param>
+            <param name="filePath"> Path to json file to get data from. </param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.FileOperations.Abstract.IJsonOperations.ClearJSONFileAsync(System.String)">
+            <summary>
+            Clears json file in <paramref name="filePath"/>.
+            </summary>
+            <remarks>
+            
+            <para> This method support all structures in class remarks. </para> 
+            
+            </remarks>
+            <param name="filePath"> Path to json file to get data from. </param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.FileOperations.Abstract.IJsonOperations.GetCryptedContentAsync``1(System.String)">
+             <summary>
+             Gets content from crypted json file in <paramref name="filePath"/>. 
+             Returns them as the requested list of type.
+             ! Milvasoft Corporation is not responsible of possible data loss.
+             </summary>
+             <remarks>
+             
+             <para> This method support all structures in class remarks. </para> 
+            
+             </remarks>
+             
+             <exception cref="T:System.ArgumentOutOfRangeException"> Throwns when encryption key is not proper lenght. </exception>
+             <exception cref="T:System.ArgumentException"> Throwns when encryption key is incorrect. </exception>
+            
+             <typeparam name="T"> Return type. </typeparam>
+             <param name="filePath"> Path to json file to get data from. </param>
+             <returns> A content list of type <typeparamref name="T"/>. </returns>
+        </member>
+        <member name="M:Milvasoft.FileOperations.Abstract.IJsonOperations.AddCryptedContentAsync``1(``0,System.String,System.Boolean)">
+            <summary>
+            Adds <paramref name="content"/> to json file in <paramref name="filePath"/>.
+            If content has "Id" property which type is "System.Int32" . Send <paramref name="contentsHasId"/> param "true". The code will be increase Id automatically.
+            ! Milvasoft Corporation is not responsible of possible data loss.
+            </summary>
+            <remarks>
+            
+            <para> This method supports only structure 2 in the class remarks. </para> 
+            <para> Don't send <typeparamref name="T"/> as <see cref="T:System.Collections.Generic.List`1"/>. You can use <see cref="T:System.Collections.Generic.List`1"/> overload. </para>
+            <para> This method reads all file. This can cause performance impact with big files. </para> 
+            
+            </remarks>
+            
+            <exception cref="T:System.ArgumentOutOfRangeException"> Throwns when encryption key is not proper lenght. </exception>
+            <exception cref="T:System.ArgumentException"> Throwns when encryption key is incorrect. </exception>
+            
+            <typeparam name="T"> Model type in json. </typeparam>
+            <param name="content"> Contents to be added. </param>
+            <param name="filePath"> Path to json file to get data from. </param>
+            <param name="contentsHasId"> Determines whether the contents are added in auto increment by "Id" property. </param> 
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.FileOperations.Abstract.IJsonOperations.AddCryptedContentsAsync``1(System.Collections.Generic.List{``0},System.String,System.Boolean)">
+            <summary>
+            Adds <paramref name="contents"/> to json file in <paramref name="filePath"/>.
+            If content has "Id" property which type is "System.Int32" . Send <paramref name="contentsHasId"/> param "true". The code will be increase Id automatically.
+            ! Milvasoft Corporation is not responsible of possible data loss.
+            </summary>
+            
+            <remarks>
+            
+            <para> This method supports only structure 2 in the class remarks. </para> 
+            <para> This method reads all file. This can cause performance impact with big files. </para> 
+            
+            </remarks>
+            
+            <exception cref="T:System.ArgumentOutOfRangeException"> Throwns when encryption key is not proper lenght. </exception>
+            <exception cref="T:System.ArgumentException"> Throwns when encryption key is incorrect. </exception>
+            
+            <typeparam name="T"> Model type in json. </typeparam>
+            <param name="contents"> Contents to be added. </param>
+            <param name="filePath"> Path to json file to get data from. </param>
+            <param name="contentsHasId"> Determines whether the contents are added in auto increment by "Id" property. </param> 
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.FileOperations.Abstract.IJsonOperations.UpdateCryptedContentAsync``1(``0,System.String,System.Linq.Expressions.Expression{System.Func{``0,System.Object}})">
+            <summary>
+            Updates contents from json file in <paramref name="filePath"/>.
+            ! Milvasoft Corporation is not responsible of possible data loss.
+            </summary>
+            
+            <remarks>
+            
+            <para> This method supports only structure 2 in the class remarks. </para> 
+            <para> Don't send <typeparamref name="T"/> as <see cref="T:System.Collections.Generic.List`1"/>. You can use <see cref="T:System.Collections.Generic.List`1"/> overload. </para>
+            <para> Updates by requested Property. Don't forget send <paramref name="mappingProperty"/> ! </para>
+            <para> Send all the properties of the object to be updated. Otherwise, unsent properties are updated to null. </para>
+            <para> This method reads all file. This can cause performance impact with big files. </para> 
+            
+            </remarks>
+            
+            <exception cref="M:System.Exception.#ctor"> Throwns when not valid <paramref name="mappingProperty"/> or requested Entity type does not have that <paramref name="mappingProperty"/>.</exception>
+            <exception cref="M:System.Exception.#ctor"> Throwns when json file in <paramref name="filePath"/> not contains <paramref name="content"/> .</exception>
+            <exception cref="T:System.ArgumentOutOfRangeException"> Throwns when encryption key is not proper lenght. </exception>
+            <exception cref="T:System.ArgumentException"> Throwns when encryption key is incorrect. </exception>
+            
+            <typeparam name="T"> Model type in json. </typeparam>
+            <param name="content"> Contents to be updated. </param>
+            <param name="filePath"> Path to json file to get data from. </param>
+            <param name="mappingProperty"> The data to be updated is extracted from the file according to this property. </param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.FileOperations.Abstract.IJsonOperations.UpdateCryptedContentsAsync``1(System.Collections.Generic.List{``0},System.String,System.Linq.Expressions.Expression{System.Func{``0,System.Object}})">
+            <summary>
+            Updates contents from json file in <paramref name="filePath"/>.
+            ! Milvasoft Corporation is not responsible of possible data loss.
+            </summary>
+            <remarks>
+            
+            <para> This method supports only structure 2 in the class remarks. </para> 
+            <para> Updates by requested Property. Don't forget send <paramref name="mappingProperty"/> ! </para>
+            <para> Send all the properties of the object to be updated. Otherwise, unsent properties are updated to null. </para>
+            <para> This method reads all file. This can cause performance impact with big files. </para> 
+            
+            </remarks>
+            
+            <exception cref="M:System.Exception.#ctor"> Throwns when not valid <paramref name="mappingProperty"/> or requested Entity type does not have that <paramref name="mappingProperty"/>. </exception>
+            <exception cref="M:System.Exception.#ctor"> Throwns when json file in <paramref name="filePath"/> not contains <paramref name="contents"/>. </exception>
+            <exception cref="T:System.ArgumentOutOfRangeException"> Throwns when encryption key is not proper lenght. </exception>
+            <exception cref="T:System.ArgumentException"> Throwns when encryption key is incorrect. </exception>
+            
+            <typeparam name="T"> Model type in json. </typeparam>
+            <param name="contents"> Contents to be updated. </param>
+            <param name="filePath"> Path to json file to get data from. </param>
+            <param name="mappingProperty"> The data to be updated is extracted from the file according to this property. </param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.FileOperations.Abstract.IJsonOperations.DeleteCryptedContentAsync``1(System.Object,System.String,System.Linq.Expressions.Expression{System.Func{``0,System.Object}})">
+            <summary>
+            Deletes record from requested json file.
+            ! Milvasoft Corporation is not responsible of possible data loss.
+            </summary>
+            <remarks>
+            
+            <para> This method supports only structure 2 in the class remarks. </para> 
+            <para> Don't send <typeparamref name="T"/> as <see cref="T:System.Collections.Generic.List`1"/>. You can use <see cref="T:System.Collections.Generic.List`1"/> overload. </para>
+            <para> This method reads all file. This can cause performance impact with big files. </para> 
+            
+            </remarks>
+            
+            <exception cref="T:System.ArgumentOutOfRangeException"> Throwns when encryption key is not proper lenght. </exception>
+            <exception cref="T:System.ArgumentException"> Throwns when encryption key is incorrect. </exception>
+            
+            <typeparam name="T"> Model type in json. </typeparam>
+            <param name="mappingValue"> Mapping value of content to be deleted. </param>
+            <param name="filePath"> Path to json file to get data from. </param>
+            <param name="mappingProperty"> The data to be updated is extracted from the file according to this property. </param>
+            <returns> Completed <see cref="T:System.Threading.Tasks.Task"/> </returns>
+        </member>
+        <member name="M:Milvasoft.FileOperations.Abstract.IJsonOperations.DeleteCryptedContentAsync``1(System.Collections.Generic.List{System.Object},System.String,System.Linq.Expressions.Expression{System.Func{``0,System.Object}})">
+            <summary>
+            Deletes record from requested json file.
+            ! Milvasoft Corporation is not responsible of possible data loss.
+            </summary>
+            <remarks>
+            
+            <para> This method supports only structure 2 in class remarks. </para> 
+            <para> This method reads all file. This can cause performance impact with big files. </para> 
+            
+            </remarks>
+            
+            <exception cref="T:System.ArgumentOutOfRangeException"> Throwns when encryption key is not proper lenght. </exception>
+            <exception cref="T:System.ArgumentException"> Throwns when encryption key is incorrect. </exception>
+            
+            <typeparam name="T"> Model type in json. </typeparam>
+            <param name="mappingValues"> Mapping values of contents to be deleted. </param>
+            <param name="filePath"> Path to json file to get data from. </param>
+            <param name="mappingProperty"> The data to be updated is extracted from the file according to this property. </param>
+            <returns> Completed <see cref="T:System.Threading.Tasks.Task"/> </returns>
+        </member>
+        <member name="M:Milvasoft.FileOperations.Abstract.IJsonOperations.ReplaceCryptedOldContentWithNewAsync``1(``0,System.String)">
+            <summary>
+            Removes all file data and writes new one.
+            ! Milvasoft Corporation is not responsible of possible data loss.
+            </summary>
+            
+            <para> This method support all structures in class remarks. </para> 
+            <exception cref="T:System.ArgumentOutOfRangeException"> Throwns when key is not proper lenght. </exception>
+            <exception cref="T:System.ArgumentException"> Throwns when key is incorrect. </exception>
+            
+            <typeparam name="T"> Model type in json. </typeparam>
+            <param name="content"> Content to be added or updated. </param>
+            <param name="filePath"> Path to json file to get data from. </param>   
+            <returns> Completed <see cref="T:System.Threading.Tasks.Task"/> </returns>
+        </member>
+        <member name="M:Milvasoft.FileOperations.Abstract.IJsonOperations.GetContent``1(System.String)">
+            <summary>
+            Gets all content from json file in <paramref name="filePath"/>. 
+            Returns them as the requested type.
+            </summary>
+            <remarks>
+            
+            <para> This method support all structures in class remarks. </para> 
+            
+            </remarks>
+            <typeparam name="T"> Return type. </typeparam>
+            <param name="filePath"> Path to json file to get data from. </param>
+            <returns> A content as type <typeparamref name="T"/>. </returns>
+        </member>
+        <member name="M:Milvasoft.FileOperations.Abstract.IJsonOperations.AddContent``1(``0,System.String,System.Boolean)">
+            <summary>
+            Adds <paramref name="content"/> to json file in <paramref name="filePath"/>.
+            </summary>
+            <remarks>
+            
+            <para> This method supports only structure 2 in class remarks. </para> 
+            <para> Don't send <typeparamref name="T"/> as <see cref="T:System.Collections.Generic.List`1"/>. You can use <see cref="T:System.Collections.Generic.List`1"/> overload. </para>
+            <para> If content has "Id" property which type is "System.Int32" . Send <paramref name="contentsHasId"/> param "true". The code will be increase Id automatically. </para> 
+            <para> This method reads all file. This can cause performance impact with big files. </para> 
+            
+            </remarks>
+            <typeparam name="T"> Return type. </typeparam>
+            <param name="content"> Content to be added. </param>
+            <param name="filePath"> Path to json file to get data from. </param>
+            <param name="contentsHasId"> Determines whether the contents are added in auto increment by "Id" property. </param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.FileOperations.Abstract.IJsonOperations.AddContents``1(System.Collections.Generic.List{``0},System.String,System.Boolean)">
+            <summary>
+            Adds <paramref name="contents"/> to json file in <paramref name="filePath"/>.
+            </summary>
+            <remarks>
+            
+            <para> This method supports only structure 2 in class remarks. </para> 
+            <para> If content has "Id" property which type is "System.Int32". Send <paramref name="contentsHasId"/> param "true". The code will be increase Id automatically. </para> 
+            <para> This method reads all file. This can cause performance impact with big files. </para> 
+            
+            </remarks>
+            <typeparam name="T"> Model type in json. </typeparam>
+            <param name="contents"> Contents to be added. </param>
+            <param name="filePath"> Path to json file to get data from. </param>
+            <param name="contentsHasId"> Determines whether the contents are added in auto increment by "Id" property. </param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.FileOperations.Abstract.IJsonOperations.UpdateContent``1(``0,System.String,System.Linq.Expressions.Expression{System.Func{``0,System.Object}})">
+            <summary>
+            Updates content from json file in <paramref name="filePath"/>.
+            </summary>
+            <remarks>
+            
+            <para> This method supports only structure 2 in class remarks. </para> 
+            <para> Don't send <typeparamref name="T"/> as <see cref="T:System.Collections.Generic.List`1"/>. You can use <see cref="T:System.Collections.Generic.List`1"/> overload. </para>
+            <para> Updates by requested Property. Don't forget send <paramref name="mappingProperty"/> ! </para>
+            <para> Send all the properties of the object to be updated. Otherwise, unsent properties are updated to null. </para>
+            <para> This method reads all file. This can cause performance impact with big files. </para> 
+            
+            </remarks>
+            
+            <exception cref="M:System.Exception.#ctor"> Throwns when not valid <paramref name="mappingProperty"/> or requested Entity type does not have that <paramref name="mappingProperty"/>. </exception>
+            <exception cref="M:System.Exception.#ctor"> Throwns when json file in <paramref name="filePath"/> not contains <paramref name="content"/>. </exception>
+            
+            <typeparam name="T"> Model type in json. </typeparam>
+            <param name="content"> Contents to be updated. </param>
+            <param name="filePath"> Path to json file to get data from. </param>
+            <param name="mappingProperty"> The data to be updated is extracted from the file according to this property. </param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.FileOperations.Abstract.IJsonOperations.UpdateContents``1(System.Collections.Generic.List{``0},System.String,System.Linq.Expressions.Expression{System.Func{``0,System.Object}})">
+            <summary>
+            Updates contents from json file in <paramref name="filePath"/>.
+            </summary>
+            <remarks>
+            
+            <para> This method supports only structure 2 in class remarks. </para> 
+            <para> Don't send <typeparamref name="T"/> as <see cref="T:System.Collections.Generic.List`1"/>. You can use <see cref="T:System.Collections.Generic.List`1"/> overload. </para>
+            <para> Updates by requested Property. Don't forget send <paramref name="mappingProperty"/>! </para>
+            <para> Send all the properties of the object to be updated. Otherwise, unsent properties are updated to null. </para>
+            <para> This method reads all file. This can cause performance impact with big files. </para> 
+            
+            </remarks>
+            
+            <exception cref="M:System.Exception.#ctor"> Throwns when not valid <paramref name="mappingProperty"/> or requested Entity type does not have that <paramref name="mappingProperty"/>. </exception>
+            <exception cref="M:System.Exception.#ctor"> Throwns when json file in <paramref name="filePath"/> not contains <paramref name="contents"/>.</exception>
+            
+            <typeparam name="T"> Model type in json. </typeparam>
+            <param name="contents"> Contents to be updated. </param>
+            <param name="filePath"> Path to json file to get data from. </param>
+            <param name="mappingProperty"> The data to be updated is extracted from the file according to this property. </param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.FileOperations.Abstract.IJsonOperations.DeleteContent``1(System.Collections.Generic.List{System.Object},System.String,System.Linq.Expressions.Expression{System.Func{``0,System.Object}})">
+            <summary>
+            Deletes record from requested json file.
+            </summary>
+            <remarks>
+            
+            <para> This method supports only structure 2 in class remarks. </para> 
+            <para> Don't send <typeparamref name="T"/> as <see cref="T:System.Collections.Generic.List`1"/>. You can use <see cref="T:System.Collections.Generic.List`1"/> overload. </para>
+            <para> This method reads all file. This can cause performance impact with big files. </para> 
+            
+            </remarks>
+            <typeparam name="T"> Model type in json. </typeparam>
+            <param name="mappingValue"> Mapping value of content to be deleted. </param>
+            <param name="filePath"> Path to json file to get data from. </param>
+            <param name="mappingProperty"> The data to be updated is extracted from the file according to this property. </param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.FileOperations.Abstract.IJsonOperations.DeleteContents``1(System.Collections.Generic.List{System.Object},System.String,System.Linq.Expressions.Expression{System.Func{``0,System.Object}})">
+            <summary>
+            Deletes records from requested json file.
+            </summary>
+            <remarks>
+            
+            <para> This method supports only structure 2 in class remarks. </para> 
+            <para> This method reads all file. This can cause performance impact with big files. </para> 
+            
+            </remarks>
+            <typeparam name="T"> Model type in json. </typeparam>
+            <param name="mappingValues"> Mapping values of contents to be deleted. </param>
+            <param name="filePath"> Path to json file to get data from. </param>
+            <param name="mappingProperty"> The data to be updated is extracted from the file according to this property. </param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.FileOperations.Abstract.IJsonOperations.ReplaceOldContentWithNew``1(``0,System.String)">
+            <summary>
+            Removes all file data and writes new one.
+            </summary>
+            <remarks>
+            
+            <para> This method support all structures in class remarks. </para> 
+            
+            </remarks>
+            <typeparam name="T"> Model type in json. </typeparam>
+            <param name="content"> Content to be added or updated. </param>
+            <param name="filePath"> Path to json file to get data from. </param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.FileOperations.Abstract.IJsonOperations.ClearJSONFile(System.String)">
+            <summary>
+            Clears json file in <paramref name="filePath"/>.
+            </summary>
+            <remarks>
+            
+            <para> This method support all structures in class remarks. </para> 
+            
+            </remarks>
+            <param name="filePath"> Path to json file to get data from. </param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.FileOperations.Abstract.IJsonOperations.GetCryptedContent``1(System.String)">
+             <summary>
+             Gets content from crypted json file in <paramref name="filePath"/>. 
+             Returns them as the requested list of type.
+             ! Milvasoft Corporation is not responsible of possible data loss.
+             </summary>
+             <remarks>
+             
+             <para> This method support all structures in class remarks. </para> 
+            
+             </remarks>
+             
+             <exception cref="T:System.ArgumentOutOfRangeException"> Throwns when encryption key is not proper lenght. </exception>
+             <exception cref="T:System.ArgumentException"> Throwns when encryption key is incorrect. </exception>
+            
+             <typeparam name="T"> Return type. </typeparam>
+             <param name="filePath"> Path to json file to get data from. </param>
+             <returns> A content list of type <typeparamref name="T"/>. </returns>
+        </member>
+        <member name="M:Milvasoft.FileOperations.Abstract.IJsonOperations.AddCryptedContent``1(``0,System.String,System.Boolean)">
+            <summary>
+            Adds <paramref name="content"/> to json file in <paramref name="filePath"/>.
+            If content has "Id" property which type is "System.Int32" . Send <paramref name="contentsHasId"/> param "true". The code will be increase Id automatically.
+            ! Milvasoft Corporation is not responsible of possible data loss.
+            </summary>
+            <remarks>
+            
+            <para> This method supports only structure 2 in the class remarks. </para> 
+            <para> Don't send <typeparamref name="T"/> as <see cref="T:System.Collections.Generic.List`1"/>. You can use <see cref="T:System.Collections.Generic.List`1"/> overload. </para>
+            <para> This method reads all file. This can cause performance impact with big files. </para> 
+            
+            </remarks>
+            
+            <exception cref="T:System.ArgumentOutOfRangeException"> Throwns when encryption key is not proper lenght. </exception>
+            <exception cref="T:System.ArgumentException"> Throwns when encryption key is incorrect. </exception>
+            
+            <typeparam name="T"> Model type in json. </typeparam>
+            <param name="content"> Contents to be added. </param>
+            <param name="filePath"> Path to json file to get data from. </param>
+            <param name="contentsHasId"> Determines whether the contents are added in auto increment by "Id" property. </param> 
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.FileOperations.Abstract.IJsonOperations.AddCryptedContents``1(System.Collections.Generic.List{``0},System.String,System.Boolean)">
+            <summary>
+            Adds <paramref name="contents"/> to json file in <paramref name="filePath"/>.
+            If content has "Id" property which type is "System.Int32" . Send <paramref name="contentsHasId"/> param "true". The code will be increase Id automatically.
+            ! Milvasoft Corporation is not responsible of possible data loss.
+            </summary>
+            
+            <remarks>
+            
+            <para> This method supports only structure 2 in the class remarks. </para> 
+            <para> This method reads all file. This can cause performance impact with big files. </para> 
+            
+            </remarks>
+            
+            <exception cref="T:System.ArgumentOutOfRangeException"> Throwns when encryption key is not proper lenght. </exception>
+            <exception cref="T:System.ArgumentException"> Throwns when encryption key is incorrect. </exception>
+            
+            <typeparam name="T"> Model type in json. </typeparam>
+            <param name="contents"> Contents to be added. </param>
+            <param name="filePath"> Path to json file to get data from. </param>
+            <param name="contentsHasId"> Determines whether the contents are added in auto increment by "Id" property. </param> 
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.FileOperations.Abstract.IJsonOperations.UpdateCryptedContent``1(``0,System.String,System.Linq.Expressions.Expression{System.Func{``0,System.Object}})">
+            <summary>
+            Updates contents from json file in <paramref name="filePath"/>.
+            ! Milvasoft Corporation is not responsible of possible data loss.
+            </summary>
+            
+            <remarks>
+            
+            <para> This method supports only structure 2 in the class remarks. </para> 
+            <para> Don't send <typeparamref name="T"/> as <see cref="T:System.Collections.Generic.List`1"/>. You can use <see cref="T:System.Collections.Generic.List`1"/> overload. </para>
+            <para> Updates by requested Property. Don't forget send <paramref name="mappingProperty"/> ! </para>
+            <para> Send all the properties of the object to be updated. Otherwise, unsent properties are updated to null. </para>
+            <para> This method reads all file. This can cause performance impact with big files. </para> 
+            
+            </remarks>
+            
+            <exception cref="M:System.Exception.#ctor"> Throwns when not valid <paramref name="mappingProperty"/> or requested Entity type does not have that <paramref name="mappingProperty"/>.</exception>
+            <exception cref="M:System.Exception.#ctor"> Throwns when json file in <paramref name="filePath"/> not contains <paramref name="content"/> .</exception>
+            <exception cref="T:System.ArgumentOutOfRangeException"> Throwns when encryption key is not proper lenght. </exception>
+            <exception cref="T:System.ArgumentException"> Throwns when encryption key is incorrect. </exception>
+            
+            <typeparam name="T"> Model type in json. </typeparam>
+            <param name="content"> Contents to be updated. </param>
+            <param name="filePath"> Path to json file to get data from. </param>
+            <param name="mappingProperty"> The data to be updated is extracted from the file according to this property. </param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.FileOperations.Abstract.IJsonOperations.UpdateCryptedContents``1(System.Collections.Generic.List{``0},System.String,System.Linq.Expressions.Expression{System.Func{``0,System.Object}})">
+            <summary>
+            Updates contents from json file in <paramref name="filePath"/>.
+            ! Milvasoft Corporation is not responsible of possible data loss.
+            </summary>
+            <remarks>
+            
+            <para> This method supports only structure 2 in the class remarks. </para> 
+            <para> Updates by requested Property. Don't forget send <paramref name="mappingProperty"/> ! </para>
+            <para> Send all the properties of the object to be updated. Otherwise, unsent properties are updated to null. </para>
+            <para> This method reads all file. This can cause performance impact with big files. </para> 
+            
+            </remarks>
+            
+            <exception cref="M:System.Exception.#ctor"> Throwns when not valid <paramref name="mappingProperty"/> or requested Entity type does not have that <paramref name="mappingProperty"/>. </exception>
+            <exception cref="M:System.Exception.#ctor"> Throwns when json file in <paramref name="filePath"/> not contains <paramref name="contents"/>. </exception>
+            <exception cref="T:System.ArgumentOutOfRangeException"> Throwns when encryption key is not proper lenght. </exception>
+            <exception cref="T:System.ArgumentException"> Throwns when encryption key is incorrect. </exception>
+            
+            <typeparam name="T"> Model type in json. </typeparam>
+            <param name="contents"> Contents to be updated. </param>
+            <param name="filePath"> Path to json file to get data from. </param>
+            <param name="mappingProperty"> The data to be updated is extracted from the file according to this property. </param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.FileOperations.Abstract.IJsonOperations.DeleteCryptedContent``1(System.Object,System.String,System.Linq.Expressions.Expression{System.Func{``0,System.Object}})">
+            <summary>
+            Deletes record from requested json file.
+            ! Milvasoft Corporation is not responsible of possible data loss.
+            </summary>
+            <remarks>
+            
+            <para> This method supports only structure 2 in the class remarks. </para> 
+            <para> Don't send <typeparamref name="T"/> as <see cref="T:System.Collections.Generic.List`1"/>. You can use <see cref="T:System.Collections.Generic.List`1"/> overload. </para>
+            <para> This method reads all file. This can cause performance impact with big files. </para> 
+            
+            </remarks>
+            
+            <exception cref="T:System.ArgumentOutOfRangeException"> Throwns when encryption key is not proper lenght. </exception>
+            <exception cref="T:System.ArgumentException"> Throwns when encryption key is incorrect. </exception>
+            
+            <typeparam name="T"> Model type in json. </typeparam>
+            <param name="mappingValue"> Mapping value of content to be deleted. </param>
+            <param name="filePath"> Path to json file to get data from. </param>
+            <param name="mappingProperty"> The data to be updated is extracted from the file according to this property. </param>
+            <returns> Completed <see cref="T:System.Threading.Tasks.Task"/> </returns>
+        </member>
+        <member name="M:Milvasoft.FileOperations.Abstract.IJsonOperations.DeleteCryptedContent``1(System.Collections.Generic.List{System.Object},System.String,System.Linq.Expressions.Expression{System.Func{``0,System.Object}})">
+            <summary>
+            Deletes record from requested json file.
+            ! Milvasoft Corporation is not responsible of possible data loss.
+            </summary>
+            <remarks>
+            
+            <para> This method supports only structure 2 in class remarks. </para> 
+            <para> This method reads all file. This can cause performance impact with big files. </para> 
+            
+            </remarks>
+            
+            <exception cref="T:System.ArgumentOutOfRangeException"> Throwns when encryption key is not proper lenght. </exception>
+            <exception cref="T:System.ArgumentException"> Throwns when encryption key is incorrect. </exception>
+            
+            <typeparam name="T"> Model type in json. </typeparam>
+            <param name="mappingValues"> Mapping values of contents to be deleted. </param>
+            <param name="filePath"> Path to json file to get data from. </param>
+            <param name="mappingProperty"> The data to be updated is extracted from the file according to this property. </param>
+            <returns> Completed <see cref="T:System.Threading.Tasks.Task"/> </returns>
+        </member>
+        <member name="M:Milvasoft.FileOperations.Abstract.IJsonOperations.ReplaceCryptedOldContentWithNew``1(``0,System.String)">
+            <summary>
+            Removes all file data and writes new one.
+            ! Milvasoft Corporation is not responsible of possible data loss.
+            </summary>
+            
+            <para> This method support all structures in class remarks. </para> 
+            <exception cref="T:System.ArgumentOutOfRangeException"> Throwns when key is not proper lenght. </exception>
+            <exception cref="T:System.ArgumentException"> Throwns when key is incorrect. </exception>
+            
+            <typeparam name="T"> Model type in json. </typeparam>
+            <param name="content"> Content to be added or updated. </param>
+            <param name="filePath"> Path to json file to get data from. </param>   
+            <returns> Completed <see cref="T:System.Threading.Tasks.Task"/> </returns>
+        </member>
+        <member name="M:Milvasoft.FileOperations.Abstract.IJsonOperations.GetLastIdIfHasId``1(System.Nullable{System.Int32}@,System.Collections.Generic.List{``0})">
+            <summary>
+            Gets last id from <paramref name="contentList"/>
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="lastId"></param>
+            <param name="contentList"></param>
+        </member>
+        <member name="T:Milvasoft.FileOperations.Concrete.FormFileOperations">
+            <summary>
+            <see cref="T:Microsoft.AspNetCore.Http.IFormFile"/> operations for .NET Core.
+            </summary>
+        </member>
+        <member name="T:Milvasoft.FileOperations.Concrete.FormFileOperations.FilesFolderNameCreator">
+            <summary>
+            File name creator delegate.
+            </summary>
+            <param name="type"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.FileOperations.Concrete.FormFileOperations.SaveFileToPathAsync``1(Microsoft.AspNetCore.Http.IFormFile,``0,System.String,Milvasoft.FileOperations.Concrete.FormFileOperations.FilesFolderNameCreator,System.String)">
+            <summary>
+            Saves uploaded IFormFile file to physical file path. If <paramref name="file"/>.Lenght is lower or equal than 0 then returns empty string.
+            Target Path will be : "<paramref name ="basePath"></paramref>/<b><paramref name="folderNameCreator"/>()</b>/<paramref name="entity"></paramref>.<paramref name="propertyName"/>"
+            </summary>
+            
+            <para><b>Remarks:</b></para>
+            
+            <remarks>
+            
+            <para> Don't forget validate file with <see cref="M:Milvasoft.FileOperations.Concrete.FormFileOperations.ValidateFile(Microsoft.AspNetCore.Http.IFormFile,System.Int64,System.Collections.Generic.List{System.String},Milvasoft.FileOperations.Enums.FileType)"/>, before use this method.</para>
+            
+            </remarks>
+            
+            <typeparam name="TEntity"></typeparam>
+            <param name="file"> Uploaded file in entity. </param>
+            <param name="entity"></param>
+            <param name="basePath"></param>
+            <param name="folderNameCreator"></param>
+            <param name="propertyName"></param>
+            <returns> Completed Task </returns>
+        </member>
+        <member name="M:Milvasoft.FileOperations.Concrete.FormFileOperations.SaveFilesToPathAsync``1(System.Collections.Generic.List{Microsoft.AspNetCore.Http.IFormFile},``0,System.String,Milvasoft.FileOperations.Concrete.FormFileOperations.FilesFolderNameCreator,System.String)">
+            <summary>
+            Saves uploaded IFormFile files to physical file path. If file list is null or empty returns empty <see cref="T:System.Collections.Generic.List`1"/> 
+            Target Path will be : "<paramref name ="basePath"></paramref>/<b><paramref name="folderNameCreator"/>()</b>/<paramref name="entity"></paramref>.<paramref name="propertyName"/>"
+            </summary>
+            
+            <para><b>Remarks:</b></para>
+            
+            <remarks>
+            
+            <para> Don't forget validate files with <see cref="M:Milvasoft.FileOperations.Concrete.FormFileOperations.ValidateFile(Microsoft.AspNetCore.Http.IFormFile,System.Int64,System.Collections.Generic.List{System.String},Milvasoft.FileOperations.Enums.FileType)"/>, before use this method.</para>
+            
+            </remarks>
+            
+            <typeparam name="TEntity"></typeparam>
+            <param name="files"> Uploaded file in entity. </param>
+            <param name="entity"></param>
+            <param name="basePath"></param>
+            <param name="folderNameCreator"></param>
+            <param name="propertyName"></param>
+            <returns> Completed Task </returns>
+        </member>
+        <member name="M:Milvasoft.FileOperations.Concrete.FormFileOperations.SaveFilesToPathAsync``1(Microsoft.AspNetCore.Http.IFormFileCollection,``0,System.String,Milvasoft.FileOperations.Concrete.FormFileOperations.FilesFolderNameCreator,System.String)">
+            <summary>
+            Saves uploaded IFormFile files to physical file path. If file list is null or empty returns empty <see cref="T:System.Collections.Generic.List`1"/> 
+            Target Path will be : "<paramref name ="basePath"></paramref>/<b><paramref name="folderNameCreator"/>()</b>/<paramref name="entity"></paramref>.<paramref name="propertyName"/>"
+            </summary>
+            
+            <para><b>Remarks:</b></para>
+            
+            <remarks>
+            
+            <para> Don't forget validate files with <see cref="M:Milvasoft.FileOperations.Concrete.FormFileOperations.ValidateFile(Microsoft.AspNetCore.Http.IFormFile,System.Int64,System.Collections.Generic.List{System.String},Milvasoft.FileOperations.Enums.FileType)"/>, before use this method.</para>
+            
+            </remarks>
+            
+            <typeparam name="TEntity"></typeparam>
+            <param name="files"> Uploaded file in entity. </param>
+            <param name="entity"></param>
+            <param name="basePath"></param>
+            <param name="folderNameCreator"></param>
+            <param name="propertyName"></param>
+            <returns> Completed Task </returns>
+        </member>
+        <member name="M:Milvasoft.FileOperations.Concrete.FormFileOperations.SaveFilesToPathAsync``3(System.Collections.Generic.List{``1},``0,System.String,Milvasoft.FileOperations.Concrete.FormFileOperations.FilesFolderNameCreator,System.String)">
+            <summary>
+            Saves uploaded IFormFile files to physical file path. If file list is null or empty returns empty <see cref="T:System.Collections.Generic.List`1"/> 
+            Target Path will be : "<paramref name ="basePath"></paramref>/<b><paramref name="folderNameCreator"/>()</b>/<paramref name="entity"></paramref>.<paramref name="propertyName"/>"
+            </summary>
+            
+            <para><b>Remarks:</b></para>
+            
+            <remarks>
+            
+            <para> Don't forget validate files with <see cref="M:Milvasoft.FileOperations.Concrete.FormFileOperations.ValidateFile(Microsoft.AspNetCore.Http.IFormFile,System.Int64,System.Collections.Generic.List{System.String},Milvasoft.FileOperations.Enums.FileType)"/>, before use this method.</para>
+            
+            </remarks>
+            
+            <typeparam name="TEntity"></typeparam>
+            <typeparam name="TFileDTO"></typeparam>
+            <typeparam name="TFileEntity"></typeparam>
+            <param name="fileDTOList"> Uploaded file in entity. </param>
+            <param name="entity"></param>
+            <param name="basePath"></param>
+            <param name="folderNameCreator"></param>
+            <param name="propertyName"></param>
+            <returns> Completed Task </returns>
+        </member>
+        <member name="M:Milvasoft.FileOperations.Concrete.FormFileOperations.ValidateFile(Microsoft.AspNetCore.Http.IFormFile,System.Int64,System.Collections.Generic.List{System.String},Milvasoft.FileOperations.Enums.FileType)">
+            <summary>
+            Checks that the file compatible the upload rules. 
+            File extension validation is not case sensitive.
+            </summary>
+            <param name="file"> Uploaded file. </param>
+            <param name="fileType"> Uploaded file type. (e.g image,video,sound..) </param>
+            <param name="maxFileSize"> Maximum file size in bytes of uploaded file. </param>
+            <param name="allowedFileExtensions"> Allowed file extensions for <paramref name="fileType"/>. </param>
+        </member>
+        <member name="M:Milvasoft.FileOperations.Concrete.FormFileOperations.ValidateFiles(System.Collections.Generic.List{Microsoft.AspNetCore.Http.IFormFile},System.Int64,System.Collections.Generic.List{System.String},Milvasoft.FileOperations.Enums.FileType)">
+            <summary>
+            Checks that the files compatible the upload rules. 
+            File extension validation is not case sensitive.
+            </summary>
+            <param name="files"> Uploaded files. </param>
+            <param name="fileType"> Uploaded file type. (e.g image,video,sound..) </param>
+            <param name="maxFileSize"> Maximum file size in bytes of uploaded file. </param>
+            <param name="allowedFileExtensions"> Allowed file extensions for <paramref name="fileType"/>. </param>
+        </member>
+        <member name="M:Milvasoft.FileOperations.Concrete.FormFileOperations.GetFileUrlPathSectionFromFilePath(System.String,System.String)">
+            <summary>
+            Returns the path of the uploaded file.
+            </summary>
+            <param name="originalFilePath"> Uploaded file. </param>
+            <param name="requestPath"> Request path section. (e.g. api/ImageLibrary) </param>
+            <returns> "api/ImageLibrary/1/1.jpeg" </returns>
+        </member>
+        <member name="M:Milvasoft.FileOperations.Concrete.FormFileOperations.GetFileFromPathAsync(System.String,Milvasoft.FileOperations.Enums.FileType)">
+            <summary>
+            Gets file as <see cref="T:Microsoft.AspNetCore.Http.IFormFile"/> from requested path.
+            </summary>
+            <param name="path"></param>
+            <param name="fileType"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.FileOperations.Concrete.FormFileOperations.ConvertToFormFile(System.String)">
+            <summary>
+            Converts data URI formatted base64 string to IFormFile.
+            </summary>
+            <param name="dataUriBase64"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.FileOperations.Concrete.FormFileOperations.RemoveDirectoryFileIsIn(System.String)">
+            <summary>
+            Removes the folder the file is in.
+            </summary>
+            <param name="filePath"></param>
+        </member>
+        <member name="M:Milvasoft.FileOperations.Concrete.FormFileOperations.RemoveFileByPath(System.String)">
+            <summary>
+            Removes file.
+            </summary>
+            <param name="filePath"></param>
+        </member>
+        <member name="M:Milvasoft.FileOperations.Concrete.FormFileOperations.RemoveFilesByPath(System.Collections.Generic.List{System.String})">
+            <summary>
+            Removes file.
+            </summary>
+            <param name="filePaths"></param>
+        </member>
+        <member name="M:Milvasoft.FileOperations.Concrete.FormFileOperations.RemoveFilesInFolder(System.String)">
+            <summary>
+            Delete all files in directory on <paramref name="folderPath"/>.
+            </summary>
+            <param name="folderPath"></param>
+        </member>
+        <member name="M:Milvasoft.FileOperations.Concrete.FormFileOperations.RemoveFilesInFolder(System.String,System.Collections.Generic.List{System.String})">
+            <summary>
+            Delete matching files in directory on <paramref name="folderPath"/>.
+            </summary>
+            <param name="folderPath"></param>
+            <param name="fileNames"> File names should contains extension. </param>
+        </member>
+        <member name="M:Milvasoft.FileOperations.Concrete.FormFileOperations.RemoveDirectoriesInFolder(System.String)">
+            <summary>
+            Delete all directories in directory on <paramref name="folderPath"/>.
+            </summary>
+            <param name="folderPath"></param>
+        </member>
+        <member name="M:Milvasoft.FileOperations.Concrete.FormFileOperations.RemoveDirectoriesInFolder(System.String,System.Collections.Generic.List{System.String})">
+            <summary>
+            Delete matching directories in directory on <paramref name="folderPath"/>.
+            </summary>
+            <param name="folderPath"></param>
+            <param name="directoryNames"></param>
+        </member>
+        <member name="M:Milvasoft.FileOperations.Concrete.FormFileOperations.RemoveDirectoriesAndFolder(System.String)">
+            <summary>
+            Delete all files and directories in directory on <paramref name="folderPath"/>.
+            </summary>
+            <param name="folderPath"></param>
+        </member>
+        <member name="M:Milvasoft.FileOperations.Concrete.FormFileOperations.RenameFolderAndFileName(System.String,System.Guid)">
+            <summary>
+            It is used to change the folder and name information of the uploaded file.
+            </summary>
+            <param name="oldPath"> Old file path. </param>
+            <param name="newId"> New id of item. </param>
+        </member>
+        <member name="M:Milvasoft.FileOperations.Concrete.FormFileOperations.GetContentType(System.String)">
+            <summary>
+            Allows learning of the file type.
+            </summary>
+            <param name="path"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.FileOperations.Concrete.FormFileOperations.GetExtension(System.String,System.String)">
+            <summary>
+            Checks if <paramref name="input"/> matches <paramref name="regexString"/>.
+            </summary>
+            <param name="input"></param>
+            <param name="regexString"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.FileOperations.Concrete.FormFileOperations.GetMimeTypes(System.String)">
+            <summary>
+            File types to be accepted.
+            </summary>
+        </member>
+        <member name="M:Milvasoft.FileOperations.Concrete.FormFileOperations.GetDefaultFileExtensions(Milvasoft.FileOperations.Enums.FileType)">
+            <summary>
+            Gets default defined file extensions by <paramref name="fileType"/>.
+            </summary>
+            <param name="fileType"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.FileOperations.Concrete.FormFileOperations.Combine(System.String[])">
+            <summary>
+            Basically a Path.Combine for URLs. Ensures exactly one '/' separates each segment,and exactly on '&amp;' separates each query parameter.
+            URL-encodes illegal characters but not reserved characters.
+            </summary>
+            <param name="parts">URL parts to combine.</param>
+        </member>
+        <member name="M:Milvasoft.FileOperations.Concrete.FormFileOperations.EncodeIllegalCharacters(System.String,System.Boolean)">
+            <summary>
+            URL-encodes characters in a string that are neither reserved nor unreserved. 
+            Avoids encoding reserved characters such as '/' and '?'. Avoids encoding '%' if it begins a %-hex-hex sequence (i.e. avoids double-encoding).
+            </summary>
+            <param name="s">The string to encode.</param>
+            <param name="encodeSpaceAsPlus">If true, spaces will be encoded as + signs. Otherwise, they'll be encoded as %20.</param>
+            <returns>The encoded URL.</returns>
+        </member>
+        <member name="T:Milvasoft.FileOperations.Concrete.JsonOperations">
+            <summary>
+            Provides add-edit-delete-get process json files that hold one list.
+            
+            <para> Default CultureInfo is en-US </para>
+            <para> Default Encoding is UTF8 </para>
+            
+            <para> Example json file template for use this library methods; </para>
+            <code>
+            
+            <para> <b>Structure 1 :</b></para>
+            
+             "connectionstring"
+            
+            <para> <b>Structure 2 :</b></para>
+            [
+             {
+               "Id": 1,
+               "Name": "poco1",
+               "Which": false
+             },
+             {
+               "Id": 2,
+               "Name": "poco2",
+               "Which": true
+             },
+             {
+               "Id": 3,
+               "Name": "poco3",
+               "Which": true
+             }
+            ]
+            
+            <para> <b>Structure 3 :</b></para>
+            
+             {
+               "Id": 1,
+               "Name": "poco1",
+               "Which": false
+             },
+             {
+               "Id": 2,
+               "Name": "poco2",
+               "Which": true
+             },
+             {
+               "Id": 3,
+               "Name": "poco3",
+               "Which": true
+             }
+            
+            </code>
+            </summary>
+        </member>
+        <member name="M:Milvasoft.FileOperations.Concrete.JsonOperations.#ctor">
+            <summary>
+            Initializes new instance of <see cref="T:Milvasoft.FileOperations.Concrete.JsonOperations"/>.
+            </summary>
+        </member>
+        <member name="M:Milvasoft.FileOperations.Concrete.JsonOperations.#ctor(Milvasoft.FileOperations.IJsonOperationsConfig)">
+            <summary>
+            Initializes new instance of <see cref="T:Milvasoft.FileOperations.Concrete.JsonOperations"/> with <see cref="T:Milvasoft.FileOperations.IJsonOperationsConfig"/>.
+            </summary>
+        </member>
+        <member name="M:Milvasoft.FileOperations.Concrete.JsonOperations.SetCultureInfo(System.Globalization.CultureInfo)">
+            <summary>
+            If you change culture info after object creation, use this method.
+            </summary>
+            <param name="cultureInfo"></param>
+        </member>
+        <member name="M:Milvasoft.FileOperations.Concrete.JsonOperations.SetEncryptionKey(System.String)">
+            <summary>
+            If you change encryption key after object creation, use this method.
+            </summary>
+            <param name="encryptionKey"></param>
+        </member>
+        <member name="M:Milvasoft.FileOperations.Concrete.JsonOperations.SetEncoding(System.Text.Encoding)">
+            <summary>
+            If you change encoding after object creation, use this method.
+            </summary>
+            <param name="encoding"></param>
+        </member>
+        <member name="M:Milvasoft.FileOperations.Concrete.JsonOperations.GetContentAsync``1(System.String)">
+            <summary>
+            Gets all content from json file in <paramref name="filePath"/>. 
+            Returns them as the requested type.
+            </summary>
+            <remarks>
+            
+            <para> This method support all structures in class remarks. </para> 
+            
+            </remarks>
+            <typeparam name="T"> Return type. </typeparam>
+            <param name="filePath"> Path to json file to get data from. </param>
+            <returns> A content as type <typeparamref name="T"/>. </returns>
+        </member>
+        <member name="M:Milvasoft.FileOperations.Concrete.JsonOperations.AddContentAsync``1(``0,System.String,System.Boolean)">
+            <summary>
+            Adds <paramref name="content"/> to json file in <paramref name="filePath"/>.
+            </summary>
+            <remarks>
+            
+            <para> This method supports only structure 2 in class remarks. </para> 
+            <para> Don't send <typeparamref name="T"/> as <see cref="T:System.Collections.Generic.List`1"/>. You can use <see cref="T:System.Collections.Generic.List`1"/> overload. </para>
+            <para> If content has "Id" property which type is "System.Int32" . Send <paramref name="contentsHasId"/> param "true". The code will be increase Id automatically. </para> 
+            <para> This method reads all file. This can cause performance impact with big files. </para> 
+            
+            </remarks>
+            <typeparam name="T"> Return type. </typeparam>
+            <param name="content"> Content to be added. </param>
+            <param name="filePath"> Path to json file to get data from. </param>
+            <param name="contentsHasId"> Determines whether the contents are added in auto increment by "Id" property. </param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.FileOperations.Concrete.JsonOperations.AddContentsAsync``1(System.Collections.Generic.List{``0},System.String,System.Boolean)">
+            <summary>
+            Adds <paramref name="contents"/> to json file in <paramref name="filePath"/>.
+            </summary>
+            <remarks>
+            
+            <para> This method supports only structure 2 in class remarks. </para> 
+            <para> If content has "Id" property which type is "System.Int32". Send <paramref name="contentsHasId"/> param "true". The code will be increase Id automatically. </para> 
+            <para> This method reads all file. This can cause performance impact with big files. </para> 
+            
+            </remarks>
+            <typeparam name="T"> Model type in json. </typeparam>
+            <param name="contents"> Contents to be added. </param>
+            <param name="filePath"> Path to json file to get data from. </param>
+            <param name="contentsHasId"> Determines whether the contents are added in auto increment by "Id" property. </param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.FileOperations.Concrete.JsonOperations.UpdateContentAsync``1(``0,System.String,System.Linq.Expressions.Expression{System.Func{``0,System.Object}})">
+            <summary>
+            Updates content from json file in <paramref name="filePath"/>.
+            </summary>
+            <remarks>
+            
+            <para> This method supports only structure 2 in class remarks. </para> 
+            <para> Don't send <typeparamref name="T"/> as <see cref="T:System.Collections.Generic.List`1"/>. You can use <see cref="T:System.Collections.Generic.List`1"/> overload. </para>
+            <para> Updates by requested Property. Don't forget send <paramref name="mappingProperty"/> ! </para>
+            <para> Send all the properties of the object to be updated. Otherwise, unsent properties are updated to null. </para>
+            <para> This method reads all file. This can cause performance impact with big files. </para> 
+            
+            </remarks>
+            
+            <exception cref="M:System.Exception.#ctor"> Throwns when not valid <paramref name="mappingProperty"/> or requested Entity type does not have that <paramref name="mappingProperty"/>. </exception>
+            <exception cref="M:System.Exception.#ctor"> Throwns when json file in <paramref name="filePath"/> not contains <paramref name="content"/>. </exception>
+            
+            <typeparam name="T"> Model type in json. </typeparam>
+            <param name="content"> Contents to be updated. </param>
+            <param name="filePath"> Path to json file to get data from. </param>
+            <param name="mappingProperty"> The data to be updated is extracted from the file according to this property. </param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.FileOperations.Concrete.JsonOperations.UpdateContentsAsync``1(System.Collections.Generic.List{``0},System.String,System.Linq.Expressions.Expression{System.Func{``0,System.Object}})">
+            <summary>
+            Updates contents from json file in <paramref name="filePath"/>.
+            </summary>
+            <remarks>
+            
+            <para> This method supports only structure 2 in class remarks. </para> 
+            <para> Don't send <typeparamref name="T"/> as <see cref="T:System.Collections.Generic.List`1"/>. You can use <see cref="T:System.Collections.Generic.List`1"/> overload. </para>
+            <para> Updates by requested Property. Don't forget send <paramref name="mappingProperty"/>! </para>
+            <para> Send all the properties of the object to be updated. Otherwise, unsent properties are updated to null. </para>
+            <para> This method reads all file. This can cause performance impact with big files. </para> 
+            
+            </remarks>
+            
+            <exception cref="M:System.Exception.#ctor"> Throwns when not valid <paramref name="mappingProperty"/> or requested Entity type does not have that <paramref name="mappingProperty"/>. </exception>
+            <exception cref="M:System.Exception.#ctor"> Throwns when json file in <paramref name="filePath"/> not contains <paramref name="contents"/>.</exception>
+            
+            <typeparam name="T"> Model type in json. </typeparam>
+            <param name="contents"> Contents to be updated. </param>
+            <param name="filePath"> Path to json file to get data from. </param>
+            <param name="mappingProperty"> The data to be updated is extracted from the file according to this property. </param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.FileOperations.Concrete.JsonOperations.DeleteContentAsync``1(System.Collections.Generic.List{System.Object},System.String,System.Linq.Expressions.Expression{System.Func{``0,System.Object}})">
+            <summary>
+            Deletes record from requested json file.
+            </summary>
+            <remarks>
+            
+            <para> This method supports only structure 2 in class remarks. </para> 
+            <para> Don't send <typeparamref name="T"/> as <see cref="T:System.Collections.Generic.List`1"/>. You can use <see cref="T:System.Collections.Generic.List`1"/> overload. </para>
+            <para> This method reads all file. This can cause performance impact with big files. </para> 
+            
+            </remarks>
+            <typeparam name="T"> Model type in json. </typeparam>
+            <param name="mappingValue"> Mapping value of content to be deleted. </param>
+            <param name="filePath"> Path to json file to get data from. </param>
+            <param name="mappingProperty"> The data to be updated is extracted from the file according to this property. </param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.FileOperations.Concrete.JsonOperations.DeleteContentsAsync``1(System.Collections.Generic.List{System.Object},System.String,System.Linq.Expressions.Expression{System.Func{``0,System.Object}})">
+            <summary>
+            Deletes records from requested json file.
+            </summary>
+            <remarks>
+            
+            <para> This method supports only structure 2 in class remarks. </para> 
+            <para> This method reads all file. This can cause performance impact with big files. </para> 
+            
+            </remarks>
+            <typeparam name="T"> Model type in json. </typeparam>
+            <param name="mappingValues"> Mapping values of contents to be deleted. </param>
+            <param name="filePath"> Path to json file to get data from. </param>
+            <param name="mappingProperty"> The data to be updated is extracted from the file according to this property. </param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.FileOperations.Concrete.JsonOperations.ReplaceOldContentWithNewAsync``1(``0,System.String)">
+            <summary>
+            Removes all file data and writes new one.
+            </summary>
+            <remarks>
+            
+            <para> This method support all structures in class remarks. </para> 
+            
+            </remarks>
+            <typeparam name="T"> Model type in json. </typeparam>
+            <param name="content"> Content to be added or updated. </param>
+            <param name="filePath"> Path to json file to get data from. </param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.FileOperations.Concrete.JsonOperations.ClearJSONFileAsync(System.String)">
+            <summary>
+            Clears json file in <paramref name="filePath"/>.
+            </summary>
+            <remarks>
+            
+            <para> This method support all structures in class remarks. </para> 
+            
+            </remarks>
+            <param name="filePath"> Path to json file to get data from. </param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.FileOperations.Concrete.JsonOperations.GetCryptedContentAsync``1(System.String)">
+             <summary>
+             Gets content from crypted json file in <paramref name="filePath"/>. 
+             Returns them as the requested list of type.
+             ! Milvasoft Corporation is not responsible of possible data loss.
+             </summary>
+             <remarks>
+             
+             <para> This method support all structures in class remarks. </para> 
+            
+             </remarks>
+             
+             <exception cref="T:System.ArgumentOutOfRangeException"> Throwns when encryption key is not proper lenght. </exception>
+             <exception cref="T:System.ArgumentException"> Throwns when encryption key is incorrect. </exception>
+            
+             <typeparam name="T"> Return type. </typeparam>
+             <param name="filePath"> Path to json file to get data from. </param>
+             <returns> A content list of type <typeparamref name="T"/>. </returns>
+        </member>
+        <member name="M:Milvasoft.FileOperations.Concrete.JsonOperations.AddCryptedContentAsync``1(``0,System.String,System.Boolean)">
+            <summary>
+            Adds <paramref name="content"/> to json file in <paramref name="filePath"/>.
+            If content has "Id" property which type is "System.Int32" . Send <paramref name="contentsHasId"/> param "true". The code will be increase Id automatically.
+            ! Milvasoft Corporation is not responsible of possible data loss.
+            </summary>
+            <remarks>
+            
+            <para> This method supports only structure 2 in the class remarks. </para> 
+            <para> Don't send <typeparamref name="T"/> as <see cref="T:System.Collections.Generic.List`1"/>. You can use <see cref="T:System.Collections.Generic.List`1"/> overload. </para>
+            <para> This method reads all file. This can cause performance impact with big files. </para> 
+            
+            </remarks>
+            
+            <exception cref="T:System.ArgumentOutOfRangeException"> Throwns when encryption key is not proper lenght. </exception>
+            <exception cref="T:System.ArgumentException"> Throwns when encryption key is incorrect. </exception>
+            
+            <typeparam name="T"> Model type in json. </typeparam>
+            <param name="content"> Contents to be added. </param>
+            <param name="filePath"> Path to json file to get data from. </param>
+            <param name="contentsHasId"> Determines whether the contents are added in auto increment by "Id" property. </param> 
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.FileOperations.Concrete.JsonOperations.AddCryptedContentsAsync``1(System.Collections.Generic.List{``0},System.String,System.Boolean)">
+            <summary>
+            Adds <paramref name="contents"/> to json file in <paramref name="filePath"/>.
+            If content has "Id" property which type is "System.Int32" . Send <paramref name="contentsHasId"/> param "true". The code will be increase Id automatically.
+            ! Milvasoft Corporation is not responsible of possible data loss.
+            </summary>
+            
+            <remarks>
+            
+            <para> This method supports only structure 2 in the class remarks. </para> 
+            <para> This method reads all file. This can cause performance impact with big files. </para> 
+            
+            </remarks>
+            
+            <exception cref="T:System.ArgumentOutOfRangeException"> Throwns when encryption key is not proper lenght. </exception>
+            <exception cref="T:System.ArgumentException"> Throwns when encryption key is incorrect. </exception>
+            
+            <typeparam name="T"> Model type in json. </typeparam>
+            <param name="contents"> Contents to be added. </param>
+            <param name="filePath"> Path to json file to get data from. </param>
+            <param name="contentsHasId"> Determines whether the contents are added in auto increment by "Id" property. </param> 
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.FileOperations.Concrete.JsonOperations.UpdateCryptedContentAsync``1(``0,System.String,System.Linq.Expressions.Expression{System.Func{``0,System.Object}})">
+            <summary>
+            Updates contents from json file in <paramref name="filePath"/>.
+            ! Milvasoft Corporation is not responsible of possible data loss.
+            </summary>
+            
+            <remarks>
+            
+            <para> This method supports only structure 2 in the class remarks. </para> 
+            <para> Don't send <typeparamref name="T"/> as <see cref="T:System.Collections.Generic.List`1"/>. You can use <see cref="T:System.Collections.Generic.List`1"/> overload. </para>
+            <para> Updates by requested Property. Don't forget send <paramref name="mappingProperty"/> ! </para>
+            <para> Send all the properties of the object to be updated. Otherwise, unsent properties are updated to null. </para>
+            <para> This method reads all file. This can cause performance impact with big files. </para> 
+            
+            </remarks>
+            
+            <exception cref="M:System.Exception.#ctor"> Throwns when not valid <paramref name="mappingProperty"/> or requested Entity type does not have that <paramref name="mappingProperty"/>.</exception>
+            <exception cref="M:System.Exception.#ctor"> Throwns when json file in <paramref name="filePath"/> not contains <paramref name="content"/> .</exception>
+            <exception cref="T:System.ArgumentOutOfRangeException"> Throwns when encryption key is not proper lenght. </exception>
+            <exception cref="T:System.ArgumentException"> Throwns when encryption key is incorrect. </exception>
+            
+            <typeparam name="T"> Model type in json. </typeparam>
+            <param name="content"> Contents to be updated. </param>
+            <param name="filePath"> Path to json file to get data from. </param>
+            <param name="mappingProperty"> The data to be updated is extracted from the file according to this property. </param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.FileOperations.Concrete.JsonOperations.UpdateCryptedContentsAsync``1(System.Collections.Generic.List{``0},System.String,System.Linq.Expressions.Expression{System.Func{``0,System.Object}})">
+            <summary>
+            Updates contents from json file in <paramref name="filePath"/>.
+            ! Milvasoft Corporation is not responsible of possible data loss.
+            </summary>
+            <remarks>
+            
+            <para> This method supports only structure 2 in the class remarks. </para> 
+            <para> Updates by requested Property. Don't forget send <paramref name="mappingProperty"/> ! </para>
+            <para> Send all the properties of the object to be updated. Otherwise, unsent properties are updated to null. </para>
+            <para> This method reads all file. This can cause performance impact with big files. </para> 
+            
+            </remarks>
+            
+            <exception cref="M:System.Exception.#ctor"> Throwns when not valid <paramref name="mappingProperty"/> or requested Entity type does not have that <paramref name="mappingProperty"/>. </exception>
+            <exception cref="M:System.Exception.#ctor"> Throwns when json file in <paramref name="filePath"/> not contains <paramref name="contents"/>. </exception>
+            <exception cref="T:System.ArgumentOutOfRangeException"> Throwns when encryption key is not proper lenght. </exception>
+            <exception cref="T:System.ArgumentException"> Throwns when encryption key is incorrect. </exception>
+            
+            <typeparam name="T"> Model type in json. </typeparam>
+            <param name="contents"> Contents to be updated. </param>
+            <param name="filePath"> Path to json file to get data from. </param>
+            <param name="mappingProperty"> The data to be updated is extracted from the file according to this property. </param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.FileOperations.Concrete.JsonOperations.DeleteCryptedContentAsync``1(System.Object,System.String,System.Linq.Expressions.Expression{System.Func{``0,System.Object}})">
+            <summary>
+            Deletes record from requested json file.
+            ! Milvasoft Corporation is not responsible of possible data loss.
+            </summary>
+            <remarks>
+            
+            <para> This method supports only structure 2 in the class remarks. </para> 
+            <para> Don't send <typeparamref name="T"/> as <see cref="T:System.Collections.Generic.List`1"/>. You can use <see cref="T:System.Collections.Generic.List`1"/> overload. </para>
+            <para> This method reads all file. This can cause performance impact with big files. </para> 
+            
+            </remarks>
+            
+            <exception cref="T:System.ArgumentOutOfRangeException"> Throwns when encryption key is not proper lenght. </exception>
+            <exception cref="T:System.ArgumentException"> Throwns when encryption key is incorrect. </exception>
+            
+            <typeparam name="T"> Model type in json. </typeparam>
+            <param name="mappingValue"> Mapping value of content to be deleted. </param>
+            <param name="filePath"> Path to json file to get data from. </param>
+            <param name="mappingProperty"> The data to be updated is extracted from the file according to this property. </param>
+            <returns> Completed <see cref="T:System.Threading.Tasks.Task"/> </returns>
+        </member>
+        <member name="M:Milvasoft.FileOperations.Concrete.JsonOperations.DeleteCryptedContentAsync``1(System.Collections.Generic.List{System.Object},System.String,System.Linq.Expressions.Expression{System.Func{``0,System.Object}})">
+            <summary>
+            Deletes record from requested json file.
+            ! Milvasoft Corporation is not responsible of possible data loss.
+            </summary>
+            <remarks>
+            
+            <para> This method supports only structure 2 in class remarks. </para> 
+            <para> This method reads all file. This can cause performance impact with big files. </para> 
+            
+            </remarks>
+            
+            <exception cref="T:System.ArgumentOutOfRangeException"> Throwns when encryption key is not proper lenght. </exception>
+            <exception cref="T:System.ArgumentException"> Throwns when encryption key is incorrect. </exception>
+            
+            <typeparam name="T"> Model type in json. </typeparam>
+            <param name="mappingValues"> Mapping values of contents to be deleted. </param>
+            <param name="filePath"> Path to json file to get data from. </param>
+            <param name="mappingProperty"> The data to be updated is extracted from the file according to this property. </param>
+            <returns> Completed <see cref="T:System.Threading.Tasks.Task"/> </returns>
+        </member>
+        <member name="M:Milvasoft.FileOperations.Concrete.JsonOperations.ReplaceCryptedOldContentWithNewAsync``1(``0,System.String)">
+            <summary>
+            Removes all file data and writes new one.
+            ! Milvasoft Corporation is not responsible of possible data loss.
+            </summary>
+            
+            <para> This method support all structures in class remarks. </para> 
+            <exception cref="T:System.ArgumentOutOfRangeException"> Throwns when key is not proper lenght. </exception>
+            <exception cref="T:System.ArgumentException"> Throwns when key is incorrect. </exception>
+            
+            <typeparam name="T"> Model type in json. </typeparam>
+            <param name="content"> Content to be added or updated. </param>
+            <param name="filePath"> Path to json file to get data from. </param>   
+            <returns> Completed <see cref="T:System.Threading.Tasks.Task"/> </returns>
+        </member>
+        <member name="M:Milvasoft.FileOperations.Concrete.JsonOperations.GetContent``1(System.String)">
+            <summary>
+            Gets all content from json file in <paramref name="filePath"/>. 
+            Returns them as the requested type.
+            </summary>
+            <remarks>
+            
+            <para> This method support all structures in class remarks. </para> 
+            
+            </remarks>
+            <typeparam name="T"> Return type. </typeparam>
+            <param name="filePath"> Path to json file to get data from. </param>
+            <returns> A content as type <typeparamref name="T"/>. </returns>
+        </member>
+        <member name="M:Milvasoft.FileOperations.Concrete.JsonOperations.AddContent``1(``0,System.String,System.Boolean)">
+            <summary>
+            Adds <paramref name="content"/> to json file in <paramref name="filePath"/>.
+            </summary>
+            <remarks>
+            
+            <para> This method supports only structure 2 in class remarks. </para> 
+            <para> Don't send <typeparamref name="T"/> as <see cref="T:System.Collections.Generic.List`1"/>. You can use <see cref="T:System.Collections.Generic.List`1"/> overload. </para>
+            <para> If content has "Id" property which type is "System.Int32" . Send <paramref name="contentsHasId"/> param "true". The code will be increase Id automatically. </para> 
+            <para> This method reads all file. This can cause performance impact with big files. </para> 
+            
+            </remarks>
+            <typeparam name="T"> Return type. </typeparam>
+            <param name="content"> Content to be added. </param>
+            <param name="filePath"> Path to json file to get data from. </param>
+            <param name="contentsHasId"> Determines whether the contents are added in auto increment by "Id" property. </param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.FileOperations.Concrete.JsonOperations.AddContents``1(System.Collections.Generic.List{``0},System.String,System.Boolean)">
+            <summary>
+            Adds <paramref name="contents"/> to json file in <paramref name="filePath"/>.
+            </summary>
+            <remarks>
+            
+            <para> This method supports only structure 2 in class remarks. </para> 
+            <para> If content has "Id" property which type is "System.Int32". Send <paramref name="contentsHasId"/> param "true". The code will be increase Id automatically. </para> 
+            <para> This method reads all file. This can cause performance impact with big files. </para> 
+            
+            </remarks>
+            <typeparam name="T"> Model type in json. </typeparam>
+            <param name="contents"> Contents to be added. </param>
+            <param name="filePath"> Path to json file to get data from. </param>
+            <param name="contentsHasId"> Determines whether the contents are added in auto increment by "Id" property. </param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.FileOperations.Concrete.JsonOperations.UpdateContent``1(``0,System.String,System.Linq.Expressions.Expression{System.Func{``0,System.Object}})">
+            <summary>
+            Updates content from json file in <paramref name="filePath"/>.
+            </summary>
+            <remarks>
+            
+            <para> This method supports only structure 2 in class remarks. </para> 
+            <para> Don't send <typeparamref name="T"/> as <see cref="T:System.Collections.Generic.List`1"/>. You can use <see cref="T:System.Collections.Generic.List`1"/> overload. </para>
+            <para> Updates by requested Property. Don't forget send <paramref name="mappingProperty"/> ! </para>
+            <para> Send all the properties of the object to be updated. Otherwise, unsent properties are updated to null. </para>
+            <para> This method reads all file. This can cause performance impact with big files. </para> 
+            
+            </remarks>
+            
+            <exception cref="M:System.Exception.#ctor"> Throwns when not valid <paramref name="mappingProperty"/> or requested Entity type does not have that <paramref name="mappingProperty"/>. </exception>
+            <exception cref="M:System.Exception.#ctor"> Throwns when json file in <paramref name="filePath"/> not contains <paramref name="content"/>. </exception>
+            
+            <typeparam name="T"> Model type in json. </typeparam>
+            <param name="content"> Contents to be updated. </param>
+            <param name="filePath"> Path to json file to get data from. </param>
+            <param name="mappingProperty"> The data to be updated is extracted from the file according to this property. </param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.FileOperations.Concrete.JsonOperations.UpdateContents``1(System.Collections.Generic.List{``0},System.String,System.Linq.Expressions.Expression{System.Func{``0,System.Object}})">
+            <summary>
+            Updates contents from json file in <paramref name="filePath"/>.
+            </summary>
+            <remarks>
+            
+            <para> This method supports only structure 2 in class remarks. </para> 
+            <para> Don't send <typeparamref name="T"/> as <see cref="T:System.Collections.Generic.List`1"/>. You can use <see cref="T:System.Collections.Generic.List`1"/> overload. </para>
+            <para> Updates by requested Property. Don't forget send <paramref name="mappingProperty"/>! </para>
+            <para> Send all the properties of the object to be updated. Otherwise, unsent properties are updated to null. </para>
+            <para> This method reads all file. This can cause performance impact with big files. </para> 
+            
+            </remarks>
+            
+            <exception cref="M:System.Exception.#ctor"> Throwns when not valid <paramref name="mappingProperty"/> or requested Entity type does not have that <paramref name="mappingProperty"/>. </exception>
+            <exception cref="M:System.Exception.#ctor"> Throwns when json file in <paramref name="filePath"/> not contains <paramref name="contents"/>.</exception>
+            
+            <typeparam name="T"> Model type in json. </typeparam>
+            <param name="contents"> Contents to be updated. </param>
+            <param name="filePath"> Path to json file to get data from. </param>
+            <param name="mappingProperty"> The data to be updated is extracted from the file according to this property. </param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.FileOperations.Concrete.JsonOperations.DeleteContent``1(System.Collections.Generic.List{System.Object},System.String,System.Linq.Expressions.Expression{System.Func{``0,System.Object}})">
+            <summary>
+            Deletes record from requested json file.
+            </summary>
+            <remarks>
+            
+            <para> This method supports only structure 2 in class remarks. </para> 
+            <para> Don't send <typeparamref name="T"/> as <see cref="T:System.Collections.Generic.List`1"/>. You can use <see cref="T:System.Collections.Generic.List`1"/> overload. </para>
+            <para> This method reads all file. This can cause performance impact with big files. </para> 
+            
+            </remarks>
+            <typeparam name="T"> Model type in json. </typeparam>
+            <param name="mappingValue"> Mapping value of content to be deleted. </param>
+            <param name="filePath"> Path to json file to get data from. </param>
+            <param name="mappingProperty"> The data to be updated is extracted from the file according to this property. </param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.FileOperations.Concrete.JsonOperations.DeleteContents``1(System.Collections.Generic.List{System.Object},System.String,System.Linq.Expressions.Expression{System.Func{``0,System.Object}})">
+            <summary>
+            Deletes records from requested json file.
+            </summary>
+            <remarks>
+            
+            <para> This method supports only structure 2 in class remarks. </para> 
+            <para> This method reads all file. This can cause performance impact with big files. </para> 
+            
+            </remarks>
+            <typeparam name="T"> Model type in json. </typeparam>
+            <param name="mappingValues"> Mapping values of contents to be deleted. </param>
+            <param name="filePath"> Path to json file to get data from. </param>
+            <param name="mappingProperty"> The data to be updated is extracted from the file according to this property. </param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.FileOperations.Concrete.JsonOperations.ReplaceOldContentWithNew``1(``0,System.String)">
+            <summary>
+            Removes all file data and writes new one.
+            </summary>
+            <remarks>
+            
+            <para> This method support all structures in class remarks. </para> 
+            
+            </remarks>
+            <typeparam name="T"> Model type in json. </typeparam>
+            <param name="content"> Content to be added or updated. </param>
+            <param name="filePath"> Path to json file to get data from. </param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.FileOperations.Concrete.JsonOperations.ClearJSONFile(System.String)">
+            <summary>
+            Clears json file in <paramref name="filePath"/>.
+            </summary>
+            <remarks>
+            
+            <para> This method support all structures in class remarks. </para> 
+            
+            </remarks>
+            <param name="filePath"> Path to json file to get data from. </param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.FileOperations.Concrete.JsonOperations.GetCryptedContent``1(System.String)">
+             <summary>
+             Gets content from crypted json file in <paramref name="filePath"/>. 
+             Returns them as the requested list of type.
+             ! Milvasoft Corporation is not responsible of possible data loss.
+             </summary>
+             <remarks>
+             
+             <para> This method support all structures in class remarks. </para> 
+            
+             </remarks>
+             
+             <exception cref="T:System.ArgumentOutOfRangeException"> Throwns when encryption key is not proper lenght. </exception>
+             <exception cref="T:System.ArgumentException"> Throwns when encryption key is incorrect. </exception>
+            
+             <typeparam name="T"> Return type. </typeparam>
+             <param name="filePath"> Path to json file to get data from. </param>
+             <returns> A content list of type <typeparamref name="T"/>. </returns>
+        </member>
+        <member name="M:Milvasoft.FileOperations.Concrete.JsonOperations.AddCryptedContent``1(``0,System.String,System.Boolean)">
+            <summary>
+            Adds <paramref name="content"/> to json file in <paramref name="filePath"/>.
+            If content has "Id" property which type is "System.Int32" . Send <paramref name="contentsHasId"/> param "true". The code will be increase Id automatically.
+            ! Milvasoft Corporation is not responsible of possible data loss.
+            </summary>
+            <remarks>
+            
+            <para> This method supports only structure 2 in the class remarks. </para> 
+            <para> Don't send <typeparamref name="T"/> as <see cref="T:System.Collections.Generic.List`1"/>. You can use <see cref="T:System.Collections.Generic.List`1"/> overload. </para>
+            <para> This method reads all file. This can cause performance impact with big files. </para> 
+            
+            </remarks>
+            
+            <exception cref="T:System.ArgumentOutOfRangeException"> Throwns when encryption key is not proper lenght. </exception>
+            <exception cref="T:System.ArgumentException"> Throwns when encryption key is incorrect. </exception>
+            
+            <typeparam name="T"> Model type in json. </typeparam>
+            <param name="content"> Contents to be added. </param>
+            <param name="filePath"> Path to json file to get data from. </param>
+            <param name="contentsHasId"> Determines whether the contents are added in auto increment by "Id" property. </param> 
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.FileOperations.Concrete.JsonOperations.AddCryptedContents``1(System.Collections.Generic.List{``0},System.String,System.Boolean)">
+            <summary>
+            Adds <paramref name="contents"/> to json file in <paramref name="filePath"/>.
+            If content has "Id" property which type is "System.Int32" . Send <paramref name="contentsHasId"/> param "true". The code will be increase Id automatically.
+            ! Milvasoft Corporation is not responsible of possible data loss.
+            </summary>
+            
+            <remarks>
+            
+            <para> This method supports only structure 2 in the class remarks. </para> 
+            <para> This method reads all file. This can cause performance impact with big files. </para> 
+            
+            </remarks>
+            
+            <exception cref="T:System.ArgumentOutOfRangeException"> Throwns when encryption key is not proper lenght. </exception>
+            <exception cref="T:System.ArgumentException"> Throwns when encryption key is incorrect. </exception>
+            
+            <typeparam name="T"> Model type in json. </typeparam>
+            <param name="contents"> Contents to be added. </param>
+            <param name="filePath"> Path to json file to get data from. </param>
+            <param name="contentsHasId"> Determines whether the contents are added in auto increment by "Id" property. </param> 
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.FileOperations.Concrete.JsonOperations.UpdateCryptedContent``1(``0,System.String,System.Linq.Expressions.Expression{System.Func{``0,System.Object}})">
+            <summary>
+            Updates contents from json file in <paramref name="filePath"/>.
+            ! Milvasoft Corporation is not responsible of possible data loss.
+            </summary>
+            
+            <remarks>
+            
+            <para> This method supports only structure 2 in the class remarks. </para> 
+            <para> Don't send <typeparamref name="T"/> as <see cref="T:System.Collections.Generic.List`1"/>. You can use <see cref="T:System.Collections.Generic.List`1"/> overload. </para>
+            <para> Updates by requested Property. Don't forget send <paramref name="mappingProperty"/> ! </para>
+            <para> Send all the properties of the object to be updated. Otherwise, unsent properties are updated to null. </para>
+            <para> This method reads all file. This can cause performance impact with big files. </para> 
+            
+            </remarks>
+            
+            <exception cref="M:System.Exception.#ctor"> Throwns when not valid <paramref name="mappingProperty"/> or requested Entity type does not have that <paramref name="mappingProperty"/>.</exception>
+            <exception cref="M:System.Exception.#ctor"> Throwns when json file in <paramref name="filePath"/> not contains <paramref name="content"/> .</exception>
+            <exception cref="T:System.ArgumentOutOfRangeException"> Throwns when encryption key is not proper lenght. </exception>
+            <exception cref="T:System.ArgumentException"> Throwns when encryption key is incorrect. </exception>
+            
+            <typeparam name="T"> Model type in json. </typeparam>
+            <param name="content"> Contents to be updated. </param>
+            <param name="filePath"> Path to json file to get data from. </param>
+            <param name="mappingProperty"> The data to be updated is extracted from the file according to this property. </param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.FileOperations.Concrete.JsonOperations.UpdateCryptedContents``1(System.Collections.Generic.List{``0},System.String,System.Linq.Expressions.Expression{System.Func{``0,System.Object}})">
+            <summary>
+            Updates contents from json file in <paramref name="filePath"/>.
+            ! Milvasoft Corporation is not responsible of possible data loss.
+            </summary>
+            <remarks>
+            
+            <para> This method supports only structure 2 in the class remarks. </para> 
+            <para> Updates by requested Property. Don't forget send <paramref name="mappingProperty"/> ! </para>
+            <para> Send all the properties of the object to be updated. Otherwise, unsent properties are updated to null. </para>
+            <para> This method reads all file. This can cause performance impact with big files. </para> 
+            
+            </remarks>
+            
+            <exception cref="M:System.Exception.#ctor"> Throwns when not valid <paramref name="mappingProperty"/> or requested Entity type does not have that <paramref name="mappingProperty"/>. </exception>
+            <exception cref="M:System.Exception.#ctor"> Throwns when json file in <paramref name="filePath"/> not contains <paramref name="contents"/>. </exception>
+            <exception cref="T:System.ArgumentOutOfRangeException"> Throwns when encryption key is not proper lenght. </exception>
+            <exception cref="T:System.ArgumentException"> Throwns when encryption key is incorrect. </exception>
+            
+            <typeparam name="T"> Model type in json. </typeparam>
+            <param name="contents"> Contents to be updated. </param>
+            <param name="filePath"> Path to json file to get data from. </param>
+            <param name="mappingProperty"> The data to be updated is extracted from the file according to this property. </param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.FileOperations.Concrete.JsonOperations.DeleteCryptedContent``1(System.Object,System.String,System.Linq.Expressions.Expression{System.Func{``0,System.Object}})">
+            <summary>
+            Deletes record from requested json file.
+            ! Milvasoft Corporation is not responsible of possible data loss.
+            </summary>
+            <remarks>
+            
+            <para> This method supports only structure 2 in the class remarks. </para> 
+            <para> Don't send <typeparamref name="T"/> as <see cref="T:System.Collections.Generic.List`1"/>. You can use <see cref="T:System.Collections.Generic.List`1"/> overload. </para>
+            <para> This method reads all file. This can cause performance impact with big files. </para> 
+            
+            </remarks>
+            
+            <exception cref="T:System.ArgumentOutOfRangeException"> Throwns when encryption key is not proper lenght. </exception>
+            <exception cref="T:System.ArgumentException"> Throwns when encryption key is incorrect. </exception>
+            
+            <typeparam name="T"> Model type in json. </typeparam>
+            <param name="mappingValue"> Mapping value of content to be deleted. </param>
+            <param name="filePath"> Path to json file to get data from. </param>
+            <param name="mappingProperty"> The data to be updated is extracted from the file according to this property. </param>
+            <returns> Completed <see cref="T:System.Threading.Tasks.Task"/> </returns>
+        </member>
+        <member name="M:Milvasoft.FileOperations.Concrete.JsonOperations.DeleteCryptedContent``1(System.Collections.Generic.List{System.Object},System.String,System.Linq.Expressions.Expression{System.Func{``0,System.Object}})">
+            <summary>
+            Deletes record from requested json file.
+            ! Milvasoft Corporation is not responsible of possible data loss.
+            </summary>
+            <remarks>
+            
+            <para> This method supports only structure 2 in class remarks. </para> 
+            <para> This method reads all file. This can cause performance impact with big files. </para> 
+            
+            </remarks>
+            
+            <exception cref="T:System.ArgumentOutOfRangeException"> Throwns when encryption key is not proper lenght. </exception>
+            <exception cref="T:System.ArgumentException"> Throwns when encryption key is incorrect. </exception>
+            
+            <typeparam name="T"> Model type in json. </typeparam>
+            <param name="mappingValues"> Mapping values of contents to be deleted. </param>
+            <param name="filePath"> Path to json file to get data from. </param>
+            <param name="mappingProperty"> The data to be updated is extracted from the file according to this property. </param>
+            <returns> Completed <see cref="T:System.Threading.Tasks.Task"/> </returns>
+        </member>
+        <member name="M:Milvasoft.FileOperations.Concrete.JsonOperations.ReplaceCryptedOldContentWithNew``1(``0,System.String)">
+            <summary>
+            Removes all file data and writes new one.
+            ! Milvasoft Corporation is not responsible of possible data loss.
+            </summary>
+            
+            <para> This method support all structures in class remarks. </para> 
+            <exception cref="T:System.ArgumentOutOfRangeException"> Throwns when key is not proper lenght. </exception>
+            <exception cref="T:System.ArgumentException"> Throwns when key is incorrect. </exception>
+            
+            <typeparam name="T"> Model type in json. </typeparam>
+            <param name="content"> Content to be added or updated. </param>
+            <param name="filePath"> Path to json file to get data from. </param>   
+            <returns> Completed <see cref="T:System.Threading.Tasks.Task"/> </returns>
+        </member>
+        <member name="M:Milvasoft.FileOperations.Concrete.JsonOperations.GetLastIdIfHasId``1(System.Nullable{System.Int32}@,System.Collections.Generic.List{``0})">
+            <summary>
+            Gets last id from <paramref name="contentList"/>
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="lastId"></param>
+            <param name="contentList"></param>
+        </member>
+        <member name="T:Milvasoft.FileOperations.Enums.FileType">
+            <summary>
+             File types.
+            </summary>
+        </member>
+        <member name="F:Milvasoft.FileOperations.Enums.FileType.Image">
+            <summary> 
+            File Type Image
+            </summary>
+        </member>
+        <member name="F:Milvasoft.FileOperations.Enums.FileType.Video">
+            <summary> 
+            File Type Video
+            </summary>
+        </member>
+        <member name="F:Milvasoft.FileOperations.Enums.FileType.ARModel">
+            <summary>
+            File Type ARModel       
+            </summary>
+        </member>
+        <member name="F:Milvasoft.FileOperations.Enums.FileType.Audio">
+            <summary> 
+            File Type Audio
+            </summary>
+        </member>
+        <member name="F:Milvasoft.FileOperations.Enums.FileType.Document">
+            <summary> 
+            File Type Document
+            </summary>
+        </member>
+        <member name="F:Milvasoft.FileOperations.Enums.FileType.Compressed">
+            <summary> 
+            File Type Compressed
+            </summary>
+        </member>
+        <member name="F:Milvasoft.FileOperations.Enums.FileType.EMail">
+            <summary> 
+            File Type EMail
+            </summary>
+        </member>
+        <member name="F:Milvasoft.FileOperations.Enums.FileType.Font">
+            <summary> 
+            File Type Font
+            </summary>
+        </member>
+        <member name="F:Milvasoft.FileOperations.Enums.FileType.InternetRelated">
+            <summary> 
+            File Type InternetRelated
+            </summary>
+        </member>
+        <member name="T:Milvasoft.FileOperations.Enums.FileValidationResult">
+            <summary>
+            File validation results. 
+            </summary>
+        </member>
+        <member name="F:Milvasoft.FileOperations.Enums.FileValidationResult.Valid">
+            <summary> 
+            Valid file result.
+            </summary>
+        </member>
+        <member name="F:Milvasoft.FileOperations.Enums.FileValidationResult.FileSizeTooBig">
+            <summary> 
+            File size too big result.
+            </summary>
+        </member>
+        <member name="F:Milvasoft.FileOperations.Enums.FileValidationResult.InvalidFileExtension">
+            <summary> 
+            Invalid file extension result.
+            </summary>
+        </member>
+        <member name="F:Milvasoft.FileOperations.Enums.FileValidationResult.NullFile">
+            <summary> 
+            Invalid file extension result.
+            </summary>
+        </member>
+        <member name="T:Milvasoft.FileOperations.IJsonOperationsConfig">
+            <summary>
+            Json operations config for json file operations.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.FileOperations.IJsonOperationsConfig.BasePath">
+            <summary>
+            Gets or sets base path. If sets combines all file paths with this.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.FileOperations.IJsonOperationsConfig.EncryptionKey">
+            <summary>
+            Gets or sets encryption key.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.FileOperations.IJsonOperationsConfig.CultureInfo">
+            <summary>
+            Culture info to be used when access file.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.FileOperations.IJsonOperationsConfig.Encoding">
+            <summary>
+            Encoding to be used when access file.
+            </summary>
+        </member>
+        <member name="T:Milvasoft.FileOperations.JsonOperationsConfig">
+            <summary>
+            Json operations config for json file operations.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.FileOperations.JsonOperationsConfig.BasePath">
+            <summary>
+            Gets or sets base path. If sets combines all file paths with this.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.FileOperations.JsonOperationsConfig.EncryptionKey">
+            <summary>
+            Gets or sets encryption key.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.FileOperations.JsonOperationsConfig.CultureInfo">
+            <summary>
+            Culture info to be used when access file. Default is en-US.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.FileOperations.JsonOperationsConfig.Encoding">
+            <summary>
+            Encoding to be used when access file. Default is UTF8.
+            </summary>
+        </member>
+        <member name="T:Milvasoft.FileOperations.ServiceCollectionExtensions">
+            <summary>
+            Provides json file operations.
+            </summary>
+        </member>
+        <member name="M:Milvasoft.FileOperations.ServiceCollectionExtensions.AddJsonOperations(Microsoft.Extensions.DependencyInjection.IServiceCollection,Microsoft.Extensions.DependencyInjection.ServiceLifetime,System.Action{Milvasoft.FileOperations.IJsonOperationsConfig})">
+            <summary>
+            Adds json file operations services to service collection. Adds <see cref="T:Milvasoft.FileOperations.IJsonOperationsConfig"/> as singleton to services too.
+            </summary>
+            <param name="services"></param>
+            <param name="lifetime"></param>
+            <param name="options"></param>
+            <returns></returns>
+        </member>
+    </members>
+</doc>

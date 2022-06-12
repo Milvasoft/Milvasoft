@@ -8,32 +8,35 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Autofac.AspNetCore.Multitenant" Version="5.1.0" />
-		<PackageReference Include="Cronos" Version="0.7.1" />
-		<PackageReference Include="EFCore.BulkExtensions" Version="6.4.4" />
-		<PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.4" />
-		<PackageReference Include="Microsoft.Extensions.Localization.Abstractions" Version="6.0.4" />
-		<PackageReference Include="MongoDB.Driver" Version="2.15.0" />
-		<PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
-		<PackageReference Include="StackExchange.Redis" Version="2.5.61" />
-		<PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.17.0" />
-
-		<PackageReference Include="Microsoft.AspNetCore.TestHost" Version="6.0.4" />
-		<PackageReference Include="xunit.assert" Version="2.4.1" />
-		<PackageReference Include="xunit.extensibility.core" Version="2.4.1" />
+		<ProjectReference Include="..\Milvasoft.Attributes\Milvasoft.Attributes.csproj" />
+		<ProjectReference Include="..\Milvasoft.Caching.Redis\Milvasoft.Caching.Redis.csproj" />
+		<ProjectReference Include="..\Milvasoft.Core\Milvasoft.Core.csproj">
+			<TreatAsUsed>true</TreatAsUsed>
+		</ProjectReference>
+		<ProjectReference Include="..\Milvasoft.DataAccess.EfCore\Milvasoft.DataAccess.EfCore.csproj" />
+		<ProjectReference Include="..\Milvasoft.DataAccess.MongoDB\Milvasoft.DataAccess.MongoDB.csproj" />
+		<ProjectReference Include="..\Milvasoft.Encryption\Milvasoft.Encryption.csproj" />
+		<ProjectReference Include="..\Milvasoft.FileOperations\Milvasoft.FileOperations.csproj" />
+		<ProjectReference Include="..\Milvasoft.Identity\Milvasoft.Identity.csproj" />
+		<ProjectReference Include="..\Milvasoft.Integrations.Expo\Milvasoft.Integrations.Expo.csproj" />
+		<ProjectReference Include="..\Milvasoft.JobScheduling\Milvasoft.JobScheduling.csproj" />
+		<ProjectReference Include="..\Milvasoft.Mail\Milvasoft.Mail.csproj" />
+		<ProjectReference Include="..\Milvasoft.Middlewares\Milvasoft.Middlewares.csproj" />
+		<ProjectReference Include="..\Milvasoft.MultiTenancy\Milvasoft.MultiTenancy.csproj" />
+		<ProjectReference Include="..\Milvasoft.Testing\Milvasoft.Testing.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>
-	  <None Update="Milvasoft.Helpers.xml">
-	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-	  </None>
-	  <None Update="Resources\milvalogo.png">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </None>
-	  <None Include="Resources\milvalogo.png">
-	    <Pack>True</Pack>
-	    <PackagePath></PackagePath>
-	  </None>
+		<None Update="Milvasoft.Helpers.xml">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="Resources\milvalogo.png">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Include="Resources\milvalogo.png">
+			<Pack>True</Pack>
+			<PackagePath></PackagePath>
+		</None>
 	</ItemGroup>
 
 
@@ -49,14 +52,14 @@
 		<Description>Helpers classes for projects. Please contribute for improvements. </Description>
 		<PackageTags>multitenancy,tenant,tenancy,json,file,image,helper,milvasoft,extensions,filter,request,response,test</PackageTags>
 		<Copyright>Milvasoft Yazılım Bilişim Araştırma Geliştirme Danışmanlık Sanayi ve Ticaret Ltd.Şti.</Copyright>
-		<Version>6.7.38</Version>
+		<Version>6.9.0</Version>
 		<PackageIcon>milvalogo.png</PackageIcon>
 
 	</PropertyGroup>
 
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-	  <DocumentationFile>..\Milvasoft.Helpers\Milvasoft.Helpers.xml</DocumentationFile>
+		<DocumentationFile>..\Milvasoft.Helpers\Milvasoft.Helpers.xml</DocumentationFile>
 	</PropertyGroup>
 
 </Project>

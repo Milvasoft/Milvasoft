@@ -1,0 +1,51 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net6.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>disable</Nullable>
+		<PackageIcon>milvalogo.png</PackageIcon>
+		<GenerateDocumentationFile>true</GenerateDocumentationFile>
+		<IsPackable>true</IsPackable>
+		<DocumentationFile>..\Milvasoft.JobScheduling\Milvasoft.JobScheduling.xml</DocumentationFile>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Cronos" Version="0.7.1" />
+
+	</ItemGroup>
+	
+	<ItemGroup>
+		<None Update="Milvasoft.JobScheduling.xml">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="Resources\milvalogo.png">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Include="Resources\milvalogo.png">
+			<Pack>True</Pack>
+			<PackagePath></PackagePath>
+		</None>
+	</ItemGroup>
+	
+	<ItemGroup>
+	  <ProjectReference Include="..\Milvasoft.Core\Milvasoft.Core.csproj" />
+	</ItemGroup>
+
+	<PropertyGroup>
+
+		<PackageId>Milvasoft.JobScheduling</PackageId>
+		<RepositoryUrl>https://github.com/Milvasoft/Milvasoft/tree/master/Milvasoft.Helpers</RepositoryUrl>
+		<RepositoryType>git</RepositoryType>
+		<PackageProjectUrl>https://github.com/Milvasoft/Milvasoft/tree/master/Milvasoft.Helpers</PackageProjectUrl>
+		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+		<Authors>Milvasoft Corporation</Authors>
+		<Product>Milvasoft.JobScheduling</Product>
+		<Description>Provides job scheduling like cron job with hosted service.</Description>
+		<PackageTags>cron,scheduling,job,hostedservice,schedule</PackageTags>
+		<Copyright>Milvasoft Yazılım Bilişim Araştırma Geliştirme Danışmanlık Sanayi ve Ticaret Ltd.Şti.</Copyright>
+		<Version>1.0.0</Version>
+		<PackageIcon>milvalogo.png</PackageIcon>
+
+	</PropertyGroup>
+</Project>
