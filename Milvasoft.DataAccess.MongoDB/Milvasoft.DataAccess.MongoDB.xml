@@ -274,7 +274,7 @@
             Mongo database instance.
             </summary>
         </member>
-        <member name="M:Milvasoft.DataAccess.MongoDB.Concrete.BaseRepository`1.#ctor(Milvasoft.DataAccess.MongoDB.Utils.IMongoDbSettings,MongoDB.Driver.IMongoClient)">
+        <member name="M:Milvasoft.DataAccess.MongoDB.Concrete.BaseRepository`1.#ctor(Milvasoft.DataAccess.MongoDB.Utils.Settings.IMongoDbSettings,MongoDB.Driver.IMongoClient)">
             <summary>
             Constructor of <see cref="T:Milvasoft.DataAccess.MongoDB.Concrete.BaseRepository`1"/>. Initializes new IMongoDatabase object from registered IMongoClient. Register IMongoClient object as singleton to your IoC to use this consructor.
             </summary>
@@ -483,7 +483,7 @@
             </summary>
             <remarks>
             
-            UTC convert operation cannot apply even if you set <see cref="P:Milvasoft.DataAccess.MongoDB.Utils.IMongoDbSettings.UseUtcForDateTimes"/> to true when using this method.
+            UTC convert operation cannot apply even if you set <see cref="P:Milvasoft.DataAccess.MongoDB.Utils.Settings.IMongoDbSettings.UseUtcForDateTimes"/> to true when using this method.
             
             </remarks>
             <param name="filterDefinition"></param>
@@ -629,61 +629,21 @@
             Creation date of entity.
             </summary>
         </member>
-        <member name="T:Milvasoft.DataAccess.MongoDB.Utils.BsonCollectionAttribute">
+        <member name="T:Milvasoft.DataAccess.MongoDB.Utils.Attributes.BsonCollectionAttribute">
             <summary>
             Represents entity's collection name in MongoDB.
             </summary>
         </member>
-        <member name="P:Milvasoft.DataAccess.MongoDB.Utils.BsonCollectionAttribute.CollectionName">
+        <member name="P:Milvasoft.DataAccess.MongoDB.Utils.Attributes.BsonCollectionAttribute.CollectionName">
             <summary>
             Gets or sets collection name.
             </summary>
         </member>
-        <member name="M:Milvasoft.DataAccess.MongoDB.Utils.BsonCollectionAttribute.#ctor(System.String)">
+        <member name="M:Milvasoft.DataAccess.MongoDB.Utils.Attributes.BsonCollectionAttribute.#ctor(System.String)">
             <summary>
-            Creates new instance of <see cref="T:Milvasoft.DataAccess.MongoDB.Utils.BsonCollectionAttribute"/>.
+            Creates new instance of <see cref="T:Milvasoft.DataAccess.MongoDB.Utils.Attributes.BsonCollectionAttribute"/>.
             </summary>
             <param name="collectionName"></param>
-        </member>
-        <member name="T:Milvasoft.DataAccess.MongoDB.Utils.IMongoDbSettings">
-            <summary>
-            Interface of mongo connection settings.
-            </summary>
-        </member>
-        <member name="P:Milvasoft.DataAccess.MongoDB.Utils.IMongoDbSettings.DatabaseName">
-            <summary>
-            Database name of to be connected database.
-            </summary>
-        </member>
-        <member name="P:Milvasoft.DataAccess.MongoDB.Utils.IMongoDbSettings.ConnectionString">
-            <summary>
-            Connection string of to be connected database.
-            </summary>
-        </member>
-        <member name="P:Milvasoft.DataAccess.MongoDB.Utils.IMongoDbSettings.UseUtcForDateTimes">
-            <summary>
-            Uses DateTime.UtcNow if its true.
-            </summary>
-        </member>
-        <member name="T:Milvasoft.DataAccess.MongoDB.Utils.MongoDbSettings">
-            <summary>
-            Mongo connection settings.
-            </summary>
-        </member>
-        <member name="P:Milvasoft.DataAccess.MongoDB.Utils.MongoDbSettings.DatabaseName">
-            <summary>
-            Database name of to be connected database.
-            </summary>
-        </member>
-        <member name="P:Milvasoft.DataAccess.MongoDB.Utils.MongoDbSettings.ConnectionString">
-            <summary>
-            Connection string of to be connected database.
-            </summary>
-        </member>
-        <member name="P:Milvasoft.DataAccess.MongoDB.Utils.MongoDbSettings.UseUtcForDateTimes">
-            <summary>
-            Uses DateTime.UtcNow if its true.
-            </summary>
         </member>
         <member name="T:Milvasoft.DataAccess.MongoDB.Utils.NoSqlRelationHelper">
             <summary>
@@ -804,6 +764,142 @@
             </summary>
             <param name="objectIds"></param>
             <returns></returns>
+        </member>
+        <member name="T:Milvasoft.DataAccess.MongoDB.Utils.Serializers.EncryptedString">
+            <summary>
+            If property type is EncryptedString, client side encryption is applied to property.
+            </summary>
+        </member>
+        <member name="M:Milvasoft.DataAccess.MongoDB.Utils.Serializers.EncryptedString.#ctor(System.String)">
+            <summary>
+            Initializes new <see cref="T:Milvasoft.DataAccess.MongoDB.Utils.Serializers.EncryptedString"/>.
+            </summary>
+            <param name="value"></param>
+        </member>
+        <member name="T:Milvasoft.DataAccess.MongoDB.Utils.Serializers.TenantIdSerializer">
+            <summary>
+            Serializer for <see cref="T:Milvasoft.Core.EntityBase.MultiTenancy.TenantId"/>.
+            </summary>
+        </member>
+        <member name="M:Milvasoft.DataAccess.MongoDB.Utils.Serializers.TenantIdSerializer.Deserialize(MongoDB.Bson.Serialization.BsonDeserializationContext,MongoDB.Bson.Serialization.BsonDeserializationArgs)">
+            <summary>
+            Deserializes a value.
+            </summary>
+            <param name="context"></param>
+            <param name="args"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.DataAccess.MongoDB.Utils.Serializers.TenantIdSerializer.Serialize(MongoDB.Bson.Serialization.BsonSerializationContext,MongoDB.Bson.Serialization.BsonSerializationArgs,Milvasoft.Core.EntityBase.MultiTenancy.TenantId)">
+            <summary>
+            Serializes a value.
+            </summary>
+            <param name="context"></param>
+            <param name="args"></param>
+            <param name="value"></param>
+        </member>
+        <member name="T:Milvasoft.DataAccess.MongoDB.Utils.Serializers.NullableTenantIdSerializer">
+            <summary>
+            Serializer for nullable <see cref="T:Milvasoft.Core.EntityBase.MultiTenancy.TenantId"/>.
+            </summary>
+        </member>
+        <member name="M:Milvasoft.DataAccess.MongoDB.Utils.Serializers.NullableTenantIdSerializer.Deserialize(MongoDB.Bson.Serialization.BsonDeserializationContext,MongoDB.Bson.Serialization.BsonDeserializationArgs)">
+            <summary>
+            Deserializes a value.
+            </summary>
+            <param name="context"></param>
+            <param name="args"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.DataAccess.MongoDB.Utils.Serializers.NullableTenantIdSerializer.Serialize(MongoDB.Bson.Serialization.BsonSerializationContext,MongoDB.Bson.Serialization.BsonSerializationArgs,System.Nullable{Milvasoft.Core.EntityBase.MultiTenancy.TenantId})">
+            <summary>
+            Serializes a value.
+            </summary>
+            <param name="context"></param>
+            <param name="args"></param>
+            <param name="value"></param>
+        </member>
+        <member name="T:Milvasoft.DataAccess.MongoDB.Utils.ServiceCollectionExtensions">
+            <summary>
+            Mongodb service collection extensions.
+            </summary>
+        </member>
+        <member name="M:Milvasoft.DataAccess.MongoDB.Utils.ServiceCollectionExtensions.AddMilvaMongoHelper(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.Action{Milvasoft.DataAccess.MongoDB.Utils.Settings.IMongoDbSettings})">
+            <summary>
+            Adds related mongo services to service collection..
+            </summary>
+            <param name="services"></param>
+            <param name="options"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Milvasoft.DataAccess.MongoDB.Utils.Settings.IMongoDbSettings">
+            <summary>
+            Interface of mongo connection settings.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.DataAccess.MongoDB.Utils.Settings.IMongoDbSettings.DatabaseName">
+            <summary>
+            Database name of to be connected database.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.DataAccess.MongoDB.Utils.Settings.IMongoDbSettings.ConnectionString">
+            <summary>
+            Connection string of to be connected database. You can provide this or <see cref="P:Milvasoft.DataAccess.MongoDB.Utils.Settings.IMongoDbSettings.MongoClientSettings"/>.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.DataAccess.MongoDB.Utils.Settings.IMongoDbSettings.EncryptionKey">
+            <summary>
+            128 bit encryption key for client side encryption. If you don't provide this, the required services for encryption will not be added.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.DataAccess.MongoDB.Utils.Settings.IMongoDbSettings.UseUtcForDateTimes">
+            <summary>
+            Uses DateTime.UtcNow if its true.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.DataAccess.MongoDB.Utils.Settings.IMongoDbSettings.AddTenantIdSupport">
+            <summary>
+            Adds TenantId support.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.DataAccess.MongoDB.Utils.Settings.IMongoDbSettings.MongoClientSettings">
+            <summary>
+            Mongo client settings. You can provide this or <see cref="P:Milvasoft.DataAccess.MongoDB.Utils.Settings.IMongoDbSettings.ConnectionString"/>.
+            </summary>
+        </member>
+        <member name="T:Milvasoft.DataAccess.MongoDB.Utils.Settings.MongoDbSettings">
+            <summary>
+            Mongo connection settings.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.DataAccess.MongoDB.Utils.Settings.MongoDbSettings.DatabaseName">
+            <summary>
+            Database name of to be connected database.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.DataAccess.MongoDB.Utils.Settings.MongoDbSettings.ConnectionString">
+            <summary>
+            Connection string of to be connected database. You can provide this or <see cref="P:Milvasoft.DataAccess.MongoDB.Utils.Settings.MongoDbSettings.MongoClientSettings"/>.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.DataAccess.MongoDB.Utils.Settings.MongoDbSettings.EncryptionKey">
+            <summary>
+            128 bit encryption key for client side encryption. If you don't provide this, the required services for encryption will not be added.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.DataAccess.MongoDB.Utils.Settings.MongoDbSettings.UseUtcForDateTimes">
+            <summary>
+            Uses DateTime.UtcNow if its true.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.DataAccess.MongoDB.Utils.Settings.MongoDbSettings.AddTenantIdSupport">
+            <summary>
+            Adds TenantId support.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.DataAccess.MongoDB.Utils.Settings.MongoDbSettings.MongoClientSettings">
+            <summary>
+            Mongo client settings. You can provide this or <see cref="P:Milvasoft.DataAccess.MongoDB.Utils.Settings.MongoDbSettings.ConnectionString"/>.
+            </summary>
         </member>
     </members>
 </doc>

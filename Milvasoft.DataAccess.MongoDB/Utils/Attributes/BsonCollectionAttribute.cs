@@ -1,4 +1,4 @@
-﻿namespace Milvasoft.DataAccess.MongoDB.Utils;
+﻿namespace Milvasoft.DataAccess.MongoDB.Utils.Attributes;
 
 /// <summary>
 /// Represents entity's collection name in MongoDB.
