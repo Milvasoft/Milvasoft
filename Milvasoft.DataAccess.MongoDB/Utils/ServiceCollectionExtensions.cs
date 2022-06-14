@@ -54,7 +54,7 @@ public static class ServiceCollectionExtensions
 
             var serializer = new EncryptedStringSerializer(encryptionProvider);
 
-            services.AddSingleton<IEncryptedStringSerializer>();
+            services.AddSingleton<IEncryptedStringSerializer>(serializer);
 
             BsonSerializer.RegisterSerializer(serializer);
         }
