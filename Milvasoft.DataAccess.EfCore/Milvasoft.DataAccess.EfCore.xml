@@ -1892,19 +1892,145 @@
             <param name="cancellationToken"></param>
             <returns></returns>
         </member>
-        <member name="T:Milvasoft.DataAccess.EfCore.MilvaContext.MilvaDbContextBase`2">
+        <member name="T:Milvasoft.DataAccess.EfCore.MilvaContext.MilvaDbContextBase">
             <summary>
             Handles all database operations.
             </summary>
         </member>
-        <member name="P:Milvasoft.DataAccess.EfCore.MilvaContext.MilvaDbContextBase`2.UseUtcForDateTimes">
+        <member name="P:Milvasoft.DataAccess.EfCore.MilvaContext.MilvaDbContextBase.UseUtcForDateTimes">
             <summary>
             If it is true converts all saved DateTimes to UTC. Default value is false.
             </summary>
         </member>
-        <member name="P:Milvasoft.DataAccess.EfCore.MilvaContext.MilvaDbContextBase`2.HttpMethod">
+        <member name="P:Milvasoft.DataAccess.EfCore.MilvaContext.MilvaDbContextBase.HttpMethod">
             <summary>
             Required for auditing. HttpMethods.IsPost(HttpMethod) || HttpMethods.IsPut(HttpMethod) || HttpMethods.IsDelete(HttpMethod) comparision is done.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.DataAccess.EfCore.MilvaContext.MilvaDbContextBase.AuditConfiguration">
+            <summary>
+            Audit configuration.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.DataAccess.EfCore.MilvaContext.MilvaDbContextBase.IgnoreSoftDelete">
+            <summary>
+            Soft delete state. Default value is false.
+            </summary>
+        </member>
+        <member name="M:Milvasoft.DataAccess.EfCore.MilvaContext.MilvaDbContextBase.#ctor(Microsoft.EntityFrameworkCore.DbContextOptions)">
+            <summary>
+            Initializes new instance of <see cref="T:Milvasoft.DataAccess.EfCore.MilvaContext.MilvaDbContextBase`2"/>.
+            </summary>
+            <param name="options"></param>
+        </member>
+        <member name="M:Milvasoft.DataAccess.EfCore.MilvaContext.MilvaDbContextBase.OnModelCreating(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <summary>
+            Overrided the OnModelCreating for custom configurations to database.
+            </summary>
+            <param name="modelBuilder"></param>
+        </member>
+        <member name="M:Milvasoft.DataAccess.EfCore.MilvaContext.MilvaDbContextBase.IgnoreSoftDeleteForNextProcess">
+            <summary>
+            Ignores soft delete for next process.
+            </summary>
+        </member>
+        <member name="M:Milvasoft.DataAccess.EfCore.MilvaContext.MilvaDbContextBase.ActivateSoftDelete">
+            <summary>
+            Activate soft delete.
+            </summary>
+        </member>
+        <member name="M:Milvasoft.DataAccess.EfCore.MilvaContext.MilvaDbContextBase.SaveChanges">
+            <summary>
+            Overrided the SaveChanges method for soft deleting.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.DataAccess.EfCore.MilvaContext.MilvaDbContextBase.SaveChangesAsync(System.Threading.CancellationToken)">
+            <summary>
+            Overrided the SaveChangesAsync method for soft deleting.
+            </summary>
+            <param name="cancellationToken"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.DataAccess.EfCore.MilvaContext.MilvaDbContextBase.SaveChangesBulk(EFCore.BulkExtensions.BulkConfig,System.Threading.CancellationToken)">
+            <summary>
+            Overrided the BulkSaveChanges method for soft deleting.
+            </summary>
+            <param name="bulkConfig"></param>
+            <param name="cancellationToken"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.DataAccess.EfCore.MilvaContext.MilvaDbContextBase.SaveChangesBulkAsync(EFCore.BulkExtensions.BulkConfig,System.Threading.CancellationToken)">
+            <summary>
+            Overrided the BulkSaveChangesAsync method for soft deleting.
+            </summary>
+            <param name="bulkConfig"></param>
+            <param name="cancellationToken"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.DataAccess.EfCore.MilvaContext.MilvaDbContextBase.GetRequiredContentsDynamicallyAsync(System.Type)">
+            <summary>
+            Gets requested contents by <paramref name="type"/> DbSet.
+            If this method gets soft deleted entities please override <see cref="M:Milvasoft.Core.CommonHelper.CreateIsDeletedFalseExpression``1"/> method your own condition.
+            </summary>
+            <param name="type"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.DataAccess.EfCore.MilvaContext.MilvaDbContextBase.GetRequiredContentsAsync``1(System.Linq.Expressions.Expression{System.Func{``0,``0}})">
+            <summary>
+            Gets requested contents by <typeparamref name="TEntity"/> DbSet.
+            If this method gets soft deleted entities please override <see cref="M:Milvasoft.Core.CommonHelper.CreateIsDeletedFalseExpression``1"/> method your own condition.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.DataAccess.EfCore.MilvaContext.MilvaDbContextBase.GetMaxValueAsync``1(System.String)">
+            <summary>
+            Gets the requested <typeparamref name="TEntity"/>'s property's(<paramref name="propName"/>) max value.
+            If this method gets soft deleted entities please override <see cref="M:Milvasoft.Core.CommonHelper.CreateIsDeletedFalseExpression``1"/> method your own condition.
+            </summary>
+            <typeparam name="TEntity"></typeparam>
+            <param name="propName"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.DataAccess.EfCore.MilvaContext.MilvaDbContextBase.SoftDelete(Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry)">
+            <summary>
+            Soft delete operation.
+            </summary>
+            <param name="entry"></param>
+        </member>
+        <member name="M:Milvasoft.DataAccess.EfCore.MilvaContext.MilvaDbContextBase.AuditDeletion(Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry)">
+            <summary>
+            Entity auditing for delete. 
+            </summary>
+            <param name="entry"></param>
+        </member>
+        <member name="M:Milvasoft.DataAccess.EfCore.MilvaContext.MilvaDbContextBase.AuditDate(Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry,System.String)">
+            <summary>
+            Entity auditing by date. 
+            </summary>
+            <param name="entry"></param>
+            <param name="propertyName"></param>
+        </member>
+        <member name="M:Milvasoft.DataAccess.EfCore.MilvaContext.MilvaDbContextBase.AuditEntites">
+            <summary>
+            Provides auditing entities by <see cref="P:Milvasoft.DataAccess.EfCore.MilvaContext.MilvaDbContextBase.AuditConfiguration"/>.
+            If deletion process happens then sets the <see cref="P:Milvasoft.DataAccess.EfCore.MilvaContext.MilvaDbContextBase.IgnoreSoftDelete"/> variable to true at the end of process.
+            </summary>
+        </member>
+        <member name="M:Milvasoft.DataAccess.EfCore.MilvaContext.MilvaDbContextBase.ConvertDateTimesToUtc">
+            <summary>
+            Convert date times to UTC Zero if entry state is not <see cref="F:Microsoft.EntityFrameworkCore.EntityState.Unchanged"/>.
+            </summary>
+            <remarks>
+            
+            This will applied when "useUtcForDateTimes" in constructor property is true.
+            This will applied <see cref="T:System.DateTime"/> and nullable <see cref="T:System.DateTime"/>.
+            
+            </remarks>
+        </member>
+        <member name="T:Milvasoft.DataAccess.EfCore.MilvaContext.MilvaDbContextBase`2">
+            <summary>
+            Handles all database operations.
             </summary>
         </member>
         <member name="P:Milvasoft.DataAccess.EfCore.MilvaContext.MilvaDbContextBase`2.UserName">
@@ -1912,19 +2038,9 @@
             Logged user's username for auditing.
             </summary>
         </member>
-        <member name="P:Milvasoft.DataAccess.EfCore.MilvaContext.MilvaDbContextBase`2.AuditConfiguration">
-            <summary>
-            Audit configuration.
-            </summary>
-        </member>
         <member name="P:Milvasoft.DataAccess.EfCore.MilvaContext.MilvaDbContextBase`2.CurrentUserId">
             <summary>
             It will be set internally.
-            </summary>
-        </member>
-        <member name="P:Milvasoft.DataAccess.EfCore.MilvaContext.MilvaDbContextBase`2.IgnoreSoftDelete">
-            <summary>
-            Soft delete state. Default value is false.
             </summary>
         </member>
         <member name="M:Milvasoft.DataAccess.EfCore.MilvaContext.MilvaDbContextBase`2.#ctor(Microsoft.EntityFrameworkCore.DbContextOptions)">
@@ -1938,16 +2054,6 @@
             Overrided the OnModelCreating for custom configurations to database.
             </summary>
             <param name="modelBuilder"></param>
-        </member>
-        <member name="M:Milvasoft.DataAccess.EfCore.MilvaContext.MilvaDbContextBase`2.IgnoreSoftDeleteForNextProcess">
-            <summary>
-            Ignores soft delete for next process.
-            </summary>
-        </member>
-        <member name="M:Milvasoft.DataAccess.EfCore.MilvaContext.MilvaDbContextBase`2.ActivateSoftDelete">
-            <summary>
-            Activate soft delete.
-            </summary>
         </member>
         <member name="M:Milvasoft.DataAccess.EfCore.MilvaContext.MilvaDbContextBase`2.SaveChanges">
             <summary>
@@ -1978,30 +2084,6 @@
             <param name="cancellationToken"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.DataAccess.EfCore.MilvaContext.MilvaDbContextBase`2.GetRequiredContentsDynamicallyAsync(System.Type)">
-            <summary>
-            Gets requested contents by <paramref name="type"/> DbSet.
-            If this method gets soft deleted entities please override <see cref="M:Milvasoft.Core.CommonHelper.CreateIsDeletedFalseExpression``1"/> method your own condition.
-            </summary>
-            <param name="type"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Milvasoft.DataAccess.EfCore.MilvaContext.MilvaDbContextBase`2.GetRequiredContentsAsync``1(System.Linq.Expressions.Expression{System.Func{``0,``0}})">
-            <summary>
-            Gets requested contents by <typeparamref name="TEntity"/> DbSet.
-            If this method gets soft deleted entities please override <see cref="M:Milvasoft.Core.CommonHelper.CreateIsDeletedFalseExpression``1"/> method your own condition.
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:Milvasoft.DataAccess.EfCore.MilvaContext.MilvaDbContextBase`2.GetMaxValueAsync``1(System.String)">
-            <summary>
-            Gets the requested <typeparamref name="TEntity"/>'s property's(<paramref name="propName"/>) max value.
-            If this method gets soft deleted entities please override <see cref="M:Milvasoft.Core.CommonHelper.CreateIsDeletedFalseExpression``1"/> method your own condition.
-            </summary>
-            <typeparam name="TEntity"></typeparam>
-            <param name="propName"></param>
-            <returns></returns>
-        </member>
         <member name="M:Milvasoft.DataAccess.EfCore.MilvaContext.MilvaDbContextBase`2.SoftDelete(Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry)">
             <summary>
             Soft delete operation.
@@ -2014,13 +2096,6 @@
             </summary>
             <param name="entry"></param>
         </member>
-        <member name="M:Milvasoft.DataAccess.EfCore.MilvaContext.MilvaDbContextBase`2.AuditDate(Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry,System.String)">
-            <summary>
-            Entity auditing by date. 
-            </summary>
-            <param name="entry"></param>
-            <param name="propertyName"></param>
-        </member>
         <member name="M:Milvasoft.DataAccess.EfCore.MilvaContext.MilvaDbContextBase`2.AuditPerformerUser(Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry,System.String)">
             <summary>
             Entity auditing by performer user.
@@ -2030,20 +2105,9 @@
         </member>
         <member name="M:Milvasoft.DataAccess.EfCore.MilvaContext.MilvaDbContextBase`2.AuditEntites">
             <summary>
-            Provides auditing entities by <see cref="P:Milvasoft.DataAccess.EfCore.MilvaContext.MilvaDbContextBase`2.AuditConfiguration"/>.
-            If deletion process happens then sets the <see cref="P:Milvasoft.DataAccess.EfCore.MilvaContext.MilvaDbContextBase`2.IgnoreSoftDelete"/> variable to true at the end of process.
+            Provides auditing entities by <see cref="!:AuditConfiguration"/>.
+            If deletion process happens then sets the <see cref="!:IgnoreSoftDelete"/> variable to true at the end of process.
             </summary>
-        </member>
-        <member name="M:Milvasoft.DataAccess.EfCore.MilvaContext.MilvaDbContextBase`2.ConvertDateTimesToUtc">
-            <summary>
-            Convert date times to UTC Zero if entry state is not <see cref="F:Microsoft.EntityFrameworkCore.EntityState.Unchanged"/>.
-            </summary>
-            <remarks>
-            
-            This will applied when "useUtcForDateTimes" in constructor property is true.
-            This will applied <see cref="T:System.DateTime"/> and nullable <see cref="T:System.DateTime"/>.
-            
-            </remarks>
         </member>
         <member name="T:Milvasoft.DataAccess.EfCore.MilvaContext.MilvaIdentityDbContextBase`3">
             <summary>

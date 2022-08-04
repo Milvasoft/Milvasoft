@@ -40,9 +40,7 @@ public interface IMilvaDbContextBase
 /// <summary>
 /// Handles all database operations.
 /// </summary>
-public abstract class MilvaDbContextBase<TUser, TUserKey> : DbContext, IMilvaDbContextBase
-    where TUser : class, IFullAuditable<TUserKey>
-    where TUserKey : struct, IEquatable<TUserKey>
+public abstract class MilvaDbContextBase : DbContext, IMilvaDbContextBase
 {
     #region Public Properties
 
@@ -57,19 +55,9 @@ public abstract class MilvaDbContextBase<TUser, TUserKey> : DbContext, IMilvaDbC
     public string HttpMethod { get; set; }
 
     /// <summary>
-    /// Logged user's username for auditing.
-    /// </summary>
-    public string UserName { get; set; }
-
-    /// <summary>
     /// Audit configuration.
     /// </summary>
     public IAuditConfiguration AuditConfiguration { get; set; }
-
-    /// <summary>
-    /// It will be set internally.
-    /// </summary>
-    public TUserKey? CurrentUserId { get; set; }
 
     /// <summary>
     /// Soft delete state. Default value is false.
@@ -277,14 +265,6 @@ public abstract class MilvaDbContextBase<TUser, TUserKey> : DbContext, IMilvaDbC
         //Change "DeletionDate" property value.
         entry.Property(EntityPropertyNames.DeletionDate).CurrentValue = DateTime.Now;
         entry.Property(EntityPropertyNames.DeletionDate).IsModified = true;
-
-        if (entry.Metadata.GetProperties().Any(prop => prop.Name == EntityPropertyNames.DeleterUserId))
-        {
-            if (AuditConfiguration.AuditDeleter)
-            {
-                AuditPerformerUser(entry, EntityPropertyNames.DeleterUserId);
-            }
-        }
     }
 
     /// <summary>
@@ -295,17 +275,6 @@ public abstract class MilvaDbContextBase<TUser, TUserKey> : DbContext, IMilvaDbC
     protected virtual void AuditDate(EntityEntry entry, string propertyName)
     {
         entry.Property(propertyName).CurrentValue = DateTime.Now;
-        entry.Property(propertyName).IsModified = true;
-    }
-
-    /// <summary>
-    /// Entity auditing by performer user.
-    /// </summary>
-    /// <param name="entry"></param>
-    /// <param name="propertyName"></param>
-    protected virtual void AuditPerformerUser(EntityEntry entry, string propertyName)
-    {
-        entry.Property(propertyName).CurrentValue = CurrentUserId;
         entry.Property(propertyName).IsModified = true;
     }
 
@@ -325,22 +294,12 @@ public abstract class MilvaDbContextBase<TUser, TUserKey> : DbContext, IMilvaDbC
                         if (entry.Metadata.GetProperties().Any(prop => prop.Name == EntityPropertyNames.CreationDate))
                             AuditDate(entry, EntityPropertyNames.CreationDate);
                     }
-                    if (AuditConfiguration.AuditCreator)
-                    {
-                        if (entry.Metadata.GetProperties().Any(prop => prop.Name == EntityPropertyNames.CreatorUserId))
-                            AuditPerformerUser(entry, EntityPropertyNames.CreatorUserId);
-                    }
                     break;
                 case EntityState.Modified:
                     if (AuditConfiguration.AuditModificationDate)
                     {
                         if (entry.Metadata.GetProperties().Any(prop => prop.Name == EntityPropertyNames.LastModificationDate))
                             AuditDate(entry, EntityPropertyNames.LastModificationDate);
-                    }
-                    if (AuditConfiguration.AuditModifier)
-                    {
-                        if (entry.Metadata.GetProperties().Any(prop => prop.Name == EntityPropertyNames.LastModifierUserId))
-                            AuditPerformerUser(entry, EntityPropertyNames.LastModifierUserId);
                     }
                     break;
                 case EntityState.Deleted:
@@ -392,6 +351,219 @@ public abstract class MilvaDbContextBase<TUser, TUserKey> : DbContext, IMilvaDbC
                 }
             }
         }
+    }
+
+    #endregion
+}
+
+/// <summary>
+/// Handles all database operations.
+/// </summary>
+public abstract class MilvaDbContextBase<TUser, TUserKey> : MilvaDbContextBase
+    where TUser : class, IFullAuditable<TUserKey>
+    where TUserKey : struct, IEquatable<TUserKey>
+{
+    #region Public Properties
+
+    /// <summary>
+    /// Logged user's username for auditing.
+    /// </summary>
+    public string UserName { get; set; }
+
+    /// <summary>
+    /// It will be set internally.
+    /// </summary>
+    public TUserKey? CurrentUserId { get; set; }
+
+    #endregion
+
+    #region Constructors
+
+    /// <summary>
+    /// Initializes new instance of <see cref="MilvaDbContextBase{TUser, TUserKey}"/>.
+    /// </summary>
+    /// <param name="options"></param>
+    public MilvaDbContextBase(DbContextOptions options) : base(options)
+    {
+    }
+
+    #endregion
+
+    /// <summary>
+    /// Overrided the OnModelCreating for custom configurations to database.
+    /// </summary>
+    /// <param name="modelBuilder"></param>
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder.UseTenantId();
+
+        if (UseUtcForDateTimes)
+            modelBuilder.UseUtcDateTime();
+
+        base.OnModelCreating(modelBuilder);
+    }
+
+    /// <summary>
+    /// Overrided the SaveChanges method for soft deleting.
+    /// </summary>
+    /// <returns></returns>
+    public override int SaveChanges()
+    {
+        AuditEntites();
+
+        return base.SaveChanges();
+    }
+
+    /// <summary>
+    /// Overrided the SaveChangesAsync method for soft deleting.
+    /// </summary>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
+    {
+        AuditEntites();
+
+        return await base.SaveChangesAsync(cancellationToken);
+    }
+
+    /// <summary>
+    /// Overrided the BulkSaveChanges method for soft deleting.
+    /// </summary>
+    /// <param name="bulkConfig"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    public override void SaveChangesBulk(BulkConfig bulkConfig = null, CancellationToken cancellationToken = new CancellationToken())
+    {
+        AuditEntites();
+
+        this.BulkSaveChanges(bulkConfig);
+    }
+
+    /// <summary>
+    /// Overrided the BulkSaveChangesAsync method for soft deleting.
+    /// </summary>
+    /// <param name="bulkConfig"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    public override async Task SaveChangesBulkAsync(BulkConfig bulkConfig = null, CancellationToken cancellationToken = new CancellationToken())
+    {
+        AuditEntites();
+
+        await this.BulkSaveChangesAsync(bulkConfig, cancellationToken: cancellationToken);
+    }
+
+    #region Protected Methods
+
+    /// <summary>
+    /// Soft delete operation.
+    /// </summary>
+    /// <param name="entry"></param>
+    protected override void SoftDelete(EntityEntry entry)
+    {
+        //Apply soft delete to entry.
+        AuditDeletion(entry);
+
+        //If entry is a many side on one to many or many to many relation, skip this entry's navigations for soft delete.
+        if (entry.Collections.IsNullOrEmpty())
+            return;
+
+        //For changing includes.
+        //If navigation entry is a collection entry and included apply soft delete.
+        //If navigation entry included apply soft delete.
+        foreach (var navigationEntry in entry.Navigations)
+            if (navigationEntry is CollectionEntry collectionEntry && collectionEntry?.CurrentValue != null)
+                foreach (var dependentEntry in collectionEntry.CurrentValue)
+                    AuditDeletion(Entry(dependentEntry));
+            else if (navigationEntry?.CurrentValue != null)
+                AuditDeletion(Entry(navigationEntry.CurrentValue));
+    }
+
+    /// <summary>
+    /// Entity auditing for delete. 
+    /// </summary>
+    /// <param name="entry"></param>
+    protected override void AuditDeletion(EntityEntry entry)
+    {
+        if (!entry.Metadata.GetProperties().Any(x => x.Name == EntityPropertyNames.IsDeleted))
+            return;
+
+        entry.State = EntityState.Modified;
+
+        //Change "IsDeleted" property value.
+        entry.Property(EntityPropertyNames.IsDeleted).CurrentValue = true;
+        entry.Property(EntityPropertyNames.IsDeleted).IsModified = true;
+
+        //Change "DeletionDate" property value.
+        entry.Property(EntityPropertyNames.DeletionDate).CurrentValue = DateTime.Now;
+        entry.Property(EntityPropertyNames.DeletionDate).IsModified = true;
+
+        if (entry.Metadata.GetProperties().Any(prop => prop.Name == EntityPropertyNames.DeleterUserId))
+        {
+            if (AuditConfiguration.AuditDeleter)
+            {
+                AuditPerformerUser(entry, EntityPropertyNames.DeleterUserId);
+            }
+        }
+    }
+
+    /// <summary>
+    /// Entity auditing by performer user.
+    /// </summary>
+    /// <param name="entry"></param>
+    /// <param name="propertyName"></param>
+    protected virtual void AuditPerformerUser(EntityEntry entry, string propertyName)
+    {
+        entry.Property(propertyName).CurrentValue = CurrentUserId;
+        entry.Property(propertyName).IsModified = true;
+    }
+
+    /// <summary>
+    /// Provides auditing entities by <see cref="AuditConfiguration"/>.
+    /// If deletion process happens then sets the <see cref="IgnoreSoftDelete"/> variable to true at the end of process.
+    /// </summary>
+    public override void AuditEntites()
+    {
+        foreach (var entry in ChangeTracker.Entries())
+        {
+            switch (entry.State)
+            {
+                case EntityState.Added:
+                    if (AuditConfiguration.AuditCreationDate)
+                    {
+                        if (entry.Metadata.GetProperties().Any(prop => prop.Name == EntityPropertyNames.CreationDate))
+                            AuditDate(entry, EntityPropertyNames.CreationDate);
+                    }
+                    if (AuditConfiguration.AuditCreator)
+                    {
+                        if (entry.Metadata.GetProperties().Any(prop => prop.Name == EntityPropertyNames.CreatorUserId))
+                            AuditPerformerUser(entry, EntityPropertyNames.CreatorUserId);
+                    }
+                    break;
+                case EntityState.Modified:
+                    if (AuditConfiguration.AuditModificationDate)
+                    {
+                        if (entry.Metadata.GetProperties().Any(prop => prop.Name == EntityPropertyNames.LastModificationDate))
+                            AuditDate(entry, EntityPropertyNames.LastModificationDate);
+                    }
+                    if (AuditConfiguration.AuditModifier)
+                    {
+                        if (entry.Metadata.GetProperties().Any(prop => prop.Name == EntityPropertyNames.LastModifierUserId))
+                            AuditPerformerUser(entry, EntityPropertyNames.LastModifierUserId);
+                    }
+                    break;
+                case EntityState.Deleted:
+                    if (entry.Metadata.GetProperties().Any(prop => prop.Name == EntityPropertyNames.IsDeleted))
+                    {
+                        if (!IgnoreSoftDelete)
+                            SoftDelete(entry);
+                    }
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        IgnoreSoftDelete = false;
     }
 
     #endregion
