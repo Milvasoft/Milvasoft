@@ -2272,6 +2272,27 @@
             
             </remarks>
         </member>
+        <member name="T:Milvasoft.DataAccess.EfCore.MilvaContext.MilvaDbContext">
+            <summary>
+            Handles all database operations. Inherits <see cref="T:Milvasoft.DataAccess.EfCore.MilvaContext.MilvaDbContextBase`2"/>
+            </summary>
+            
+            <remarks>
+            <para> You must register <see cref="T:Milvasoft.Core.Abstractions.IAuditConfiguration"/> in your application startup. </para>
+            <para> If <see cref="T:Milvasoft.Core.Abstractions.IAuditConfiguration"/>'s AuditDeleter, AuditModifier or AuditCreator is true
+                   and HttpMethod is POST,PUT or DELETE it will gets performer user in constructor from database.
+                   This can affect performance little bit. But you want audit every record easily you must use this :( </para>
+            </remarks>
+        </member>
+        <member name="M:Milvasoft.DataAccess.EfCore.MilvaContext.MilvaDbContext.#ctor(Microsoft.EntityFrameworkCore.DbContextOptions,Microsoft.AspNetCore.Http.IHttpContextAccessor,Milvasoft.Core.Abstractions.IAuditConfiguration,System.Boolean)">
+            <summary>
+            Cunstructor of <see cref="T:Milvasoft.DataAccess.EfCore.MilvaContext.MilvaDbContext`2"></see>.
+            </summary>
+            <param name="options"></param>
+            <param name="httpContextAccessor"></param>
+            <param name="auditConfiguration"></param>
+            <param name="useUtcForDateTimes"></param>
+        </member>
         <member name="T:Milvasoft.DataAccess.EfCore.MilvaContext.MilvaDbContext`2">
             <summary>
             Handles all database operations. Inherits <see cref="T:Milvasoft.DataAccess.EfCore.MilvaContext.MilvaDbContextBase`2"/>

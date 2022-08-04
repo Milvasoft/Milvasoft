@@ -962,6 +962,40 @@ public abstract class MilvaIdentityDbContextBase<TUser, TRole, TKey> : IdentityD
 ///        and HttpMethod is POST,PUT or DELETE it will gets performer user in constructor from database.
 ///        This can affect performance little bit. But you want audit every record easily you must use this :( </para>
 /// </remarks>
+public abstract class MilvaDbContext : MilvaDbContextBase
+{
+    #region Constructors
+
+    /// <summary>
+    /// Cunstructor of <see cref="MilvaDbContext{TUser, TKey}"></see>.
+    /// </summary>
+    /// <param name="options"></param>
+    /// <param name="httpContextAccessor"></param>
+    /// <param name="auditConfiguration"></param>
+    /// <param name="useUtcForDateTimes"></param>
+    public MilvaDbContext(DbContextOptions options,
+                          IHttpContextAccessor httpContextAccessor,
+                          IAuditConfiguration auditConfiguration,
+                          bool useUtcForDateTimes = false) : base(options)
+    {
+        UseUtcForDateTimes = useUtcForDateTimes;
+        HttpMethod = httpContextAccessor?.HttpContext?.Request?.Method;
+        AuditConfiguration = auditConfiguration;
+    }
+
+    #endregion
+}
+
+/// <summary>
+/// Handles all database operations. Inherits <see cref="MilvaDbContextBase{TUser, TKey}"/>
+/// </summary>
+/// 
+/// <remarks>
+/// <para> You must register <see cref="IAuditConfiguration"/> in your application startup. </para>
+/// <para> If <see cref="IAuditConfiguration"/>'s AuditDeleter, AuditModifier or AuditCreator is true
+///        and HttpMethod is POST,PUT or DELETE it will gets performer user in constructor from database.
+///        This can affect performance little bit. But you want audit every record easily you must use this :( </para>
+/// </remarks>
 /// <typeparam name="TUser"></typeparam>
 /// <typeparam name="TKey"></typeparam>
 public abstract class MilvaDbContext<TUser, TKey> : MilvaDbContextBase<TUser, TKey>
