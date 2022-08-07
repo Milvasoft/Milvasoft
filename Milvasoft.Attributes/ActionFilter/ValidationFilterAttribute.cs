@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Milvasoft.Core.Exceptions;
 using Milvasoft.Core.Extensions;
 using Milvasoft.Core.Utils.Constants;
 using Milvasoft.Core.Utils.Models.Response;
@@ -53,7 +54,7 @@ public class ValidationFilterAttribute : ActionFilterAttribute
                 Message = message,
                 StatusCode = MilvaStatusCodes.Status600Exception,
                 Result = new object(),
-                ErrorCodes = new List<int>()
+                ErrorCodes = new List<int>((int)MilvaException.Validation)
             };
             var json = JsonConvert.SerializeObject(validationResponse);
 

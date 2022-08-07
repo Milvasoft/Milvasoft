@@ -90,7 +90,7 @@ public class AsyncValidateStringParameterAttribute : Attribute, IAsyncActionFilt
                     {
                         throw new MilvaUserFriendlyException(sharedLocalizer != null
                                                                     ? sharedLocalizer[LocalizerKeys.PreventStringInjectionLengthResultNotTrue, localizedPropName, MinimumLength, MaximumLength]
-                                                                    : $"{localizedPropName} must have a character length in the range {MinimumLength} to {MaximumLength}.");
+                                                                    : $"{localizedPropName} must have a character length in the range {MinimumLength} to {MaximumLength}.", MilvaException.Validation);
                     }
                     if (!string.IsNullOrWhiteSpace(stringValue))
                     {
@@ -108,14 +108,14 @@ public class AsyncValidateStringParameterAttribute : Attribute, IAsyncActionFilt
 
                                         throw new MilvaUserFriendlyException(sharedLocalizer != null
                                                                                     ? sharedLocalizer[LocalizerKeys.PreventStringInjectionContainsForbiddenWordError, localizedPropName]
-                                                                                    : $"{localizedPropName} contains invalid words.");
+                                                                                    : $"{localizedPropName} contains invalid words.", MilvaException.Validation);
                                     }
                     }
                     if (MinimumLength > 0 && (stringValue?.Length ?? 0) < MinimumLength)
                     {
                         throw new MilvaUserFriendlyException(sharedLocalizer != null
                                                                     ? sharedLocalizer[LocalizerKeys.PreventStringInjectionBellowMin, localizedPropName, MinimumLength]
-                                                                    : $"{localizedPropName} is below the minimum character limit. Please enter at least {MinimumLength} characters.");
+                                                                    : $"{localizedPropName} is below the minimum character limit. Please enter at least {MinimumLength} characters.", MilvaException.Validation);
                     }
                 }
             }

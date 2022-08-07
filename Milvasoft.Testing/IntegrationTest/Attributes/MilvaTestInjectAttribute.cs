@@ -12,7 +12,7 @@ namespace Milvasoft.Testing.IntegrationTest.Attributes;
 public class MilvaTestInjectAttribute : DataAttribute
 {
     private readonly string _url;
-    private readonly UrlTypeEnum _obkInlineDataEnum;
+    private readonly UrlTypeEnum _urlTypeEnum;
     private readonly HttpMethod _httpMethod;
     private readonly object _specificObj;
 
@@ -23,7 +23,7 @@ public class MilvaTestInjectAttribute : DataAttribute
     {
         _url = "";
         _httpMethod = HttpMethod.Get;
-        _obkInlineDataEnum = UrlTypeEnum.InController;
+        _urlTypeEnum = UrlTypeEnum.InController;
         _specificObj = null;
     }
 
@@ -34,7 +34,7 @@ public class MilvaTestInjectAttribute : DataAttribute
     {
         _url = url;
         _httpMethod = new HttpMethod(httpMethod);
-        _obkInlineDataEnum = obkInlineDataEnum;
+        _urlTypeEnum = obkInlineDataEnum;
         _specificObj = specificObj;
     }
 
@@ -50,7 +50,7 @@ public class MilvaTestInjectAttribute : DataAttribute
         var controllerName = methodInfo.ReflectedType.Name.Split("Controller")[0];
         string url = _url;
 
-        if (_obkInlineDataEnum == UrlTypeEnum.InController)
+        if (_urlTypeEnum == UrlTypeEnum.InController)
             url = $"{controllerName}/{_url}";
 
         var language = StaticMethods.GetRandomLanguageForTest();

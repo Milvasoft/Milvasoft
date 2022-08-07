@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Localization;
 using Milvasoft.Core;
 using Milvasoft.Core.Abstractions;
+using Milvasoft.Core.Exceptions;
 using Milvasoft.Core.Extensions;
 using Milvasoft.Core.Utils.Constants;
 using Milvasoft.Core.Utils.Enums;
@@ -135,7 +136,7 @@ public class ValidateStringParameterAttribute : ActionFilterAttribute
                 Message = localizedErrorMessage,
                 StatusCode = MilvaStatusCodes.Status400BadRequest,
                 Result = new object(),
-                ErrorCodes = new List<int>()
+                ErrorCodes = new List<int>((int)MilvaException.Validation)
             };
 
             var json = JsonConvert.SerializeObject(validationResponse);

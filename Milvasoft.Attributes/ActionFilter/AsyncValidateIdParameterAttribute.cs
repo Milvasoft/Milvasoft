@@ -80,7 +80,7 @@ public class AsyncValidateIdParameterAttribute : Attribute, IAsyncActionFilter
 
                         if (guidParameter == default || guidParameter == Guid.Empty || !regexMatchResult)
                         {
-                            throw new MilvaUserFriendlyException(message);
+                            throw new MilvaUserFriendlyException(message, MilvaException.Validation);
                         }
                     }
                     else if (valueType == typeof(int))
@@ -89,7 +89,7 @@ public class AsyncValidateIdParameterAttribute : Attribute, IAsyncActionFilter
 
                         if (intParameter <= 0)
                         {
-                            throw new MilvaUserFriendlyException(message);
+                            throw new MilvaUserFriendlyException(message, MilvaException.Validation);
                         }
 
                     }
@@ -99,7 +99,7 @@ public class AsyncValidateIdParameterAttribute : Attribute, IAsyncActionFilter
 
                         if (intParameters.IsNullOrEmpty())
                         {
-                            throw new MilvaUserFriendlyException(message);
+                            throw new MilvaUserFriendlyException(message, MilvaException.Validation);
                         }
 
                         foreach (var intParameter in intParameters)
@@ -110,7 +110,7 @@ public class AsyncValidateIdParameterAttribute : Attribute, IAsyncActionFilter
 
                             if (intParameter <= 0)
                             {
-                                throw new MilvaUserFriendlyException(message);
+                                throw new MilvaUserFriendlyException(message, MilvaException.Validation);
                             }
                         }
                     }
@@ -120,7 +120,7 @@ public class AsyncValidateIdParameterAttribute : Attribute, IAsyncActionFilter
 
                         if (guidParameters.IsNullOrEmpty())
                         {
-                            throw new MilvaUserFriendlyException(message);
+                            throw new MilvaUserFriendlyException(message, MilvaException.Validation);
                         }
 
                         foreach (var guidParameter in guidParameters)
@@ -131,7 +131,7 @@ public class AsyncValidateIdParameterAttribute : Attribute, IAsyncActionFilter
 
                             if (guidParameter == default || guidParameter == Guid.Empty || !regexMatchResult)
                             {
-                                throw new MilvaUserFriendlyException(message);
+                                throw new MilvaUserFriendlyException(message, MilvaException.Validation);
                             }
                         }
                     }

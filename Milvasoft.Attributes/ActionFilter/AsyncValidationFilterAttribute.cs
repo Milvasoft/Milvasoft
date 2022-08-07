@@ -53,7 +53,6 @@ public class AsyncValidationFilterAttribute : Attribute, IAsyncActionFilter
             foreach (var item in modelErrors)
                 errors.Add(item.ErrorMessage);
 
-
             var properties = GetProperties(DisabledProperties);
             var nestedProperties = GetProperties(DisabledNestedProperties);
 
@@ -88,7 +87,7 @@ public class AsyncValidationFilterAttribute : Attribute, IAsyncActionFilter
                         errors.Remove(httpContext.Items[prop].ToString());
 
             if (!errors.IsNullOrEmpty())
-                throw new MilvaUserFriendlyException(string.Join("~", errors));
+                throw new MilvaUserFriendlyException(string.Join("~", errors), MilvaException.Validation);
         }
 
         await next();

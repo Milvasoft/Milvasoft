@@ -259,7 +259,7 @@ public static class CommonHelper
             Message = string.Join('~', errorMessageList),
             StatusCode = MilvaStatusCodes.Status600Exception,
             Result = new object(),
-            ErrorCodes = new List<int>()
+            ErrorCodes = new List<int> { (int)MilvaException.Validation }
         };
 
         actionContext.HttpContext.Items.Add(new KeyValuePair<object, object>("StatusCode", MilvaStatusCodes.Status600Exception));
