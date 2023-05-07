@@ -39,7 +39,7 @@
 		<Description>Provides expo integration like push notification sending.</Description>
 		<PackageTags>expo,pushnotification,integration</PackageTags>
 		<Copyright>Milvasoft Yazılım Bilişim Araştırma Geliştirme Danışmanlık Sanayi ve Ticaret Ltd.Şti.</Copyright>
-		<Version>1.0.1</Version>
+		<Version>7.0.0</Version>
 		<PackageIcon>milvalogo.png</PackageIcon>
 
 	</PropertyGroup>
