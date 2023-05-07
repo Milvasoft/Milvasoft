@@ -16,7 +16,6 @@
 		<PackageReference Include="EFCore.BulkExtensions" Version="7.1.0" />
 	</ItemGroup>
 
-
 	<ItemGroup>
 		<None Update="Milvasoft.DataAccess.EfCore.xml">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

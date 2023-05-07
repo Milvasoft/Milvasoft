@@ -39,7 +39,6 @@
 		</None>
 	</ItemGroup>
 
-
 	<PropertyGroup>
 
 		<PackageId>Milvasoft.Helpers</PackageId>

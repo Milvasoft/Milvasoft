@@ -16,7 +16,6 @@
 		<ProjectReference Include="..\Milvasoft.Core\Milvasoft.Core.csproj" />
 	</ItemGroup>
 
-
 	<ItemGroup>
 		<None Update="Milvasoft.MultiTenancy.xml">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

@@ -14,7 +14,6 @@
 		<PackageReference Include="MongoDB.Driver" Version="2.19.1" />
 	</ItemGroup>
 
-
 	<ItemGroup>
 		<None Update="Milvasoft.DataAccess.MongoDB.xml">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

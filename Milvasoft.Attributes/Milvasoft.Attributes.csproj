@@ -27,7 +27,6 @@
 		</None>
 	</ItemGroup>
 
-
 	<PropertyGroup>
 
 		<PackageId>Milvasoft.Attributes</PackageId>

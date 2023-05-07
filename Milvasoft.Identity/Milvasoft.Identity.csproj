@@ -12,9 +12,6 @@
 
 	<ItemGroup>
 		<PackageReference Include="Microsoft.AspNetCore.DataProtection" Version="7.0.5" />
-	</ItemGroup>
-
-	<ItemGroup>
 		<ProjectReference Include="..\Milvasoft.Attributes\Milvasoft.Attributes.csproj" />
 		<ProjectReference Include="..\Milvasoft.Core\Milvasoft.Core.csproj" />
 	</ItemGroup>
