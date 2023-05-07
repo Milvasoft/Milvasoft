@@ -19,7 +19,7 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v1
         with:
-          dotnet-version: 6.0.x
+          dotnet-version: 7.0.x
       - name: Restore Milvasoft.Middlewares project dependencies
         run: dotnet restore Milvasoft.Middlewares/Milvasoft.Middlewares.csproj
       - name: Build Milvasoft.Middlewares project
