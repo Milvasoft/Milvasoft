@@ -19,7 +19,7 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v1
         with:
-          dotnet-version: 6.0.x
+          dotnet-version: 7.0.x
       - name: Restore Milvasoft.JobScheduling project dependencies
         run: dotnet restore Milvasoft.JobScheduling/Milvasoft.JobScheduling.csproj
       - name: Build Milvasoft.JobScheduling project
