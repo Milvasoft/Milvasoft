@@ -2048,6 +2048,15 @@
             <param name="property"> property </param>
             <returns></returns>
         </member>
+        <member name="M:Milvasoft.Core.Extensions.GenericCollection.SplitList``1(System.Collections.Generic.List{``0},System.Int32)">
+            <summary>
+            Splits list into batches with specified batch size.
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="list"></param>
+            <param name="batchSize"></param>
+            <returns></returns>
+        </member>
         <member name="T:Milvasoft.Core.Extensions.Helpers.ExpressionParameterReplacer">
             <summary>
             Expression parameter replacer for expression builder.

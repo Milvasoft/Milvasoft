@@ -434,4 +434,25 @@ public static class GenericCollection
     /// <returns></returns>
     public static int GetPropertyValue<T>(this T obj, Expression<Func<T, int>> property)
         => (int)obj.GetType().GetProperty(property.GetPropertyName()).GetValue(obj, null);
+
+    public static IEnumerable<TOut> Map<TIn, TOut>(this IEnumerable<TIn> values, Expression<Func<TIn, TOut>> mapExpression) where TOut : class, new()
+    {
+        var mapFunction = mapExpression.Compile();
+
+        foreach (var value in values)
+            yield return mapFunction.Invoke(value);
+    }
+
+    /// <summary>
+    /// Splits list into batches with specified batch size.
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="list"></param>
+    /// <param name="batchSize"></param>
+    /// <returns></returns>
+    public static IEnumerable<List<T>> SplitList<T>(this List<T> list, int batchSize = 100)
+    {
+        for (int i = 0; i < list.Count; i += batchSize)
+            yield return list.GetRange(i, Math.Min(batchSize, list.Count - i));
+    }
 }
