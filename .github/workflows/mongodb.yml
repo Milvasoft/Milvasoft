@@ -19,7 +19,7 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v1
         with:
-          dotnet-version: 6.0.x
+          dotnet-version: 7.0.x
       - name: Restore Milvasoft.DataAccess.MongoDB project dependencies
         run: dotnet restore Milvasoft.DataAccess.MongoDB/Milvasoft.DataAccess.MongoDB.csproj
       - name: Build Milvasoft.DataAccess.MongoDB project
