@@ -39,7 +39,7 @@
 		<Description>Custom middlewares.</Description>
 		<PackageTags>middleware</PackageTags>
 		<Copyright>Milvasoft Yazılım Bilişim Araştırma Geliştirme Danışmanlık Sanayi ve Ticaret Ltd.Şti.</Copyright>
-		<Version>7.0.0</Version>
+		<Version>8.0.0</Version>
 		<PackageIcon>milvalogo.png</PackageIcon>
 
 	</PropertyGroup>
