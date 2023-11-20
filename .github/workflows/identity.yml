@@ -1,4 +1,4 @@
-8name: Milvasoft.Identity Nuget Publish
+name: Milvasoft.Identity Nuget Publish
 
 on:
   push:
