@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFramework>net7.0</TargetFramework>
+		<TargetFramework>net8.0</TargetFramework>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>disable</Nullable>
 		<PackageIcon>milvalogo.png</PackageIcon>
@@ -40,7 +40,7 @@
 		<Description>Provides operations such as saving files, fetching, validating and using json files as database in the file system.</Description>
 		<PackageTags>json,jsonfile,fileoperations,database,crud</PackageTags>
 		<Copyright>Milvasoft Yazılım Bilişim Araştırma Geliştirme Danışmanlık Sanayi ve Ticaret Ltd.Şti.</Copyright>
-		<Version>7.0.0</Version>
+		<Version>8.0.0</Version>
 		<PackageIcon>milvalogo.png</PackageIcon>
 
 	</PropertyGroup>

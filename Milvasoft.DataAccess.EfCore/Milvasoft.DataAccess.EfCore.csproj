@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFramework>net7.0</TargetFramework>
+		<TargetFramework>net8.0</TargetFramework>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>disable</Nullable>
 		<PackageIcon>milvalogo.png</PackageIcon>
@@ -13,7 +13,7 @@
 	<ItemGroup>
 		<ProjectReference Include="..\Milvasoft.Core\Milvasoft.Core.csproj" />
 		<ProjectReference Include="..\Milvasoft.Encryption\Milvasoft.Encryption.csproj" />
-		<PackageReference Include="EFCore.BulkExtensions" Version="7.1.0" />
+		<PackageReference Include="EFCore.BulkExtensions" Version="8.0.0-rc.1.2" />
 	</ItemGroup>
 
 	<ItemGroup>
