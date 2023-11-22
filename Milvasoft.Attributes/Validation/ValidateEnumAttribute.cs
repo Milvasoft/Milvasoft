@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Localization;
 using Milvasoft.Core;
+using Milvasoft.Core.Abstractions;
 using Milvasoft.Core.Utils.Constants;
 using System.ComponentModel.DataAnnotations;
 
@@ -13,7 +14,6 @@ public class ValidateEnumAttribute : ValidationAttribute
 {
     #region Fields
 
-    private readonly Type _resourceType = null;
     private readonly Type _enumType = null;
 
     #endregion
@@ -30,25 +30,26 @@ public class ValidateEnumAttribute : ValidationAttribute
     /// </summary>
     public bool FullMessage { get; set; }
 
+    /// <summary>
+    /// Gets or sets error message localization flag.
+    /// </summary>
+    public bool LocalizeErrorMessages { get; set; }
+
     #endregion
 
     /// <summary>
     /// Constructor of atrribute.
     /// </summary>
-    /// <param name="resourceType"></param>
-    public ValidateEnumAttribute(Type resourceType)
+    public ValidateEnumAttribute()
     {
-        _resourceType = resourceType;
     }
 
     /// <summary>
     /// Constructor of atrribute.
     /// </summary>
-    /// <param name="resourceType"></param>
     /// <param name="enumType"></param>
-    public ValidateEnumAttribute(Type resourceType, Type enumType)
+    public ValidateEnumAttribute(Type enumType)
     {
-        _resourceType = resourceType;
         _enumType = enumType;
     }
 
@@ -63,16 +64,16 @@ public class ValidateEnumAttribute : ValidationAttribute
     {
         if (value != null)
         {
-            IStringLocalizer sharedLocalizer;
+            IMilvaLocalizer milvaLocalizer;
             string localizedPropName;
             string errorMessage;
 
-            if (_resourceType != null)
+            if (LocalizeErrorMessages)
             {
-                sharedLocalizer = context.GetLocalizerInstance(_resourceType);
+                milvaLocalizer = context.GetMilvaLocalizer();
 
-                localizedPropName = sharedLocalizer[LocalizerKey ?? $"{LocalizerKeys.Localized}{context.MemberName}"];
-                errorMessage = FullMessage ? sharedLocalizer[LocalizerKey] : sharedLocalizer[LocalizerKeys.PleaseSelectAValid, localizedPropName];
+                localizedPropName = milvaLocalizer[LocalizerKey ?? $"{LocalizerKeys.Localized}{context.MemberName}"];
+                errorMessage = FullMessage ? milvaLocalizer[LocalizerKey] : milvaLocalizer[LocalizerKeys.PleaseSelectAValid, localizedPropName];
             }
             else errorMessage = $"{LocalizerKeys.PleaseEnterAValid} {context.MemberName}.";
 

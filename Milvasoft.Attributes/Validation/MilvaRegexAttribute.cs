@@ -10,13 +10,6 @@ namespace Milvasoft.Attributes.Validation;
 [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field, AllowMultiple = false)]
 public class MilvaRegexAttribute : RegularExpressionAttribute
 {
-
-    #region Fields
-
-    private readonly Type _resourceType = null;
-
-    #endregion
-
     #region Properties
 
     /// <summary>
@@ -34,6 +27,11 @@ public class MilvaRegexAttribute : RegularExpressionAttribute
     /// </summary>
     public bool IsRequired { get; set; } = true;
 
+    /// <summary>
+    /// Gets or sets error message localization flag.
+    /// </summary>
+    public bool LocalizeErrorMessages { get; set; }
+
     #endregion
 
     #region Constructors
@@ -42,14 +40,6 @@ public class MilvaRegexAttribute : RegularExpressionAttribute
     /// Constructor that accepts the maximum length of the string.
     /// </summary>
     public MilvaRegexAttribute() : base(@"^()$") { }
-
-    /// <summary>
-    /// Constructor that accepts the maximum length of the string.
-    /// </summary>
-    public MilvaRegexAttribute(Type resourceType) : base(@"^()$")
-    {
-        _resourceType = resourceType;
-    }
 
     /// <summary>
     /// Constructor that accepts the maximum length of the string.
@@ -67,30 +57,30 @@ public class MilvaRegexAttribute : RegularExpressionAttribute
     /// <returns></returns>
     protected override ValidationResult IsValid(object value, ValidationContext context)
     {
-        var sharedLocalizer = context.GetLocalizerInstance(_resourceType);
+        var milvaLocalizer = context.GetMilvaLocalizer();
 
-        var localizedPropName = sharedLocalizer == null ? context.MemberName : sharedLocalizer[$"{LocalizerKeys.Localized}{MemberNameLocalizerKey ?? context.MemberName}"];
+        var localizedPropName = milvaLocalizer == null ? context.MemberName : milvaLocalizer[$"{LocalizerKeys.Localized}{MemberNameLocalizerKey ?? context.MemberName}"];
 
-        if (sharedLocalizer != null)
+        if (milvaLocalizer != null)
         {
             if (IsRequired)
             {
                 if (value != null && !string.IsNullOrWhiteSpace(value.ToString()))
                 {
-                    var localizedPattern = sharedLocalizer[$"{LocalizerKeys.RegexPattern}{MemberNameLocalizerKey ?? context.MemberName}"];
+                    var localizedPattern = milvaLocalizer[$"{LocalizerKeys.RegexPattern}{MemberNameLocalizerKey ?? context.MemberName}"];
 
-                    if (RegexMatcher.MatchRegex(value.ToString(), sharedLocalizer[localizedPattern]))
+                    if (RegexMatcher.MatchRegex(value.ToString(), milvaLocalizer[localizedPattern]))
                         return ValidationResult.Success;
                     else
                     {
-                        var exampleFormat = sharedLocalizer[ExampleFormatLocalizerKey ?? LocalizerKeys.RegexExample + context.MemberName];
-                        ErrorMessage = sharedLocalizer[LocalizerKeys.RegexErrorMessage, localizedPropName, exampleFormat];
+                        var exampleFormat = milvaLocalizer[ExampleFormatLocalizerKey ?? LocalizerKeys.RegexExample + context.MemberName];
+                        ErrorMessage = milvaLocalizer[LocalizerKeys.RegexErrorMessage, localizedPropName, exampleFormat];
                         return new ValidationResult(FormatErrorMessage(""));
                     }
                 }
                 else
                 {
-                    ErrorMessage = sharedLocalizer[LocalizerKeys.PropertyIsRequired, localizedPropName];
+                    ErrorMessage = milvaLocalizer[LocalizerKeys.PropertyIsRequired, localizedPropName];
                     return new ValidationResult(FormatErrorMessage(""));
                 }
             }
@@ -98,14 +88,14 @@ public class MilvaRegexAttribute : RegularExpressionAttribute
             {
                 if (value != null && !string.IsNullOrWhiteSpace(value.ToString()))
                 {
-                    var localizedPattern = sharedLocalizer[$"{LocalizerKeys.RegexPattern}{MemberNameLocalizerKey ?? context.MemberName}"];
+                    var localizedPattern = milvaLocalizer[$"{LocalizerKeys.RegexPattern}{MemberNameLocalizerKey ?? context.MemberName}"];
 
-                    if (RegexMatcher.MatchRegex(value.ToString(), sharedLocalizer[localizedPattern]))
+                    if (RegexMatcher.MatchRegex(value.ToString(), milvaLocalizer[localizedPattern]))
                         return ValidationResult.Success;
                     else
                     {
-                        var exampleFormat = sharedLocalizer[ExampleFormatLocalizerKey ?? LocalizerKeys.RegexExample + context.MemberName];
-                        ErrorMessage = sharedLocalizer[LocalizerKeys.RegexErrorMessage, localizedPropName, exampleFormat];
+                        var exampleFormat = milvaLocalizer[ExampleFormatLocalizerKey ?? LocalizerKeys.RegexExample + context.MemberName];
+                        ErrorMessage = milvaLocalizer[LocalizerKeys.RegexErrorMessage, localizedPropName, exampleFormat];
                         return new ValidationResult(FormatErrorMessage(""));
                     }
                 }

@@ -2,6 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Localization;
 using Milvasoft.Core;
+using Milvasoft.Core.Abstractions;
 using Milvasoft.Core.Extensions;
 using Milvasoft.Core.Utils.Constants;
 using System.ComponentModel.DataAnnotations;
@@ -14,11 +15,6 @@ namespace Milvasoft.Attributes.Validation;
 [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field, AllowMultiple = false)]
 public class ValidateIdPropertyAttribute : ValidationAttribute
 {
-    #region Fields
-
-    private readonly Type _resourceType = null;
-
-    #endregion
 
     #region Properties
 
@@ -32,21 +28,17 @@ public class ValidateIdPropertyAttribute : ValidationAttribute
     /// </summary>
     public bool DontCheckNullable { get; set; }
 
+    /// <summary>
+    /// Gets or sets error message localization flag.
+    /// </summary>
+    public bool LocalizeErrorMessages { get; set; }
+
     #endregion
 
     /// <summary>
     /// Constructor of <see cref="ValidateIdPropertyAttribute"/>.
     /// </summary>
     public ValidateIdPropertyAttribute() { }
-
-    /// <summary>
-    /// Constructor of <see cref="ValidateIdPropertyAttribute"/> for localization.
-    /// </summary>
-    /// <param name="resourceType"></param>
-    public ValidateIdPropertyAttribute(Type resourceType)
-    {
-        _resourceType = resourceType;
-    }
 
     /// <summary>
     /// Determines whether the specified value of the object is valid.
@@ -58,16 +50,16 @@ public class ValidateIdPropertyAttribute : ValidationAttribute
     {
         if (value != null)
         {
-            IStringLocalizer sharedLocalizer;
+            IMilvaLocalizer milvaLocalizer;
             string localizedRelationName;
             string errorMessage;
 
-            if (_resourceType != null)
+            if (LocalizeErrorMessages)
             {
-                sharedLocalizer = context.GetLocalizerInstance(_resourceType);
+                milvaLocalizer = context.GetMilvaLocalizer();
 
-                localizedRelationName = sharedLocalizer[MemberNameLocalizerKey ?? $"{LocalizerKeys.LocalizedEntityName}{context.MemberName[0..^2]}"].ToString().ToLowerInvariant();
-                errorMessage = sharedLocalizer[LocalizerKeys.ValidationIdPropertyError, localizedRelationName];
+                localizedRelationName = milvaLocalizer[MemberNameLocalizerKey ?? $"{LocalizerKeys.LocalizedEntityName}{context.MemberName[0..^2]}"].ToString().ToLowerInvariant();
+                errorMessage = milvaLocalizer[LocalizerKeys.ValidationIdPropertyError, localizedRelationName];
             }
             else errorMessage = $"{LocalizerKeys.PleaseEnterAValid} {context.MemberName}";
 

@@ -1,5 +1,5 @@
-﻿using Microsoft.Extensions.Localization;
-using Milvasoft.Core;
+﻿using Milvasoft.Core;
+using Milvasoft.Core.Abstractions;
 using Milvasoft.Core.Utils.Constants;
 using System.ComponentModel.DataAnnotations;
 
@@ -11,13 +11,6 @@ namespace Milvasoft.Attributes.Validation;
 [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field, AllowMultiple = false)]
 public class ValidateDecimalAttribute : ValidationAttribute
 {
-
-    #region Fields
-
-    private readonly Type _resourceType = null;
-
-    #endregion
-
     #region Properties
 
     /// <summary>
@@ -40,6 +33,11 @@ public class ValidateDecimalAttribute : ValidationAttribute
     /// </summary>
     public decimal? MaxValue { get; set; }
 
+    /// <summary>
+    /// Gets or sets error message localization flag.
+    /// </summary>
+    public bool LocalizeErrorMessages { get; set; }
+
     #endregion
 
     #region Constructors
@@ -48,15 +46,6 @@ public class ValidateDecimalAttribute : ValidationAttribute
     /// Constructor of atrribute.
     /// </summary>
     public ValidateDecimalAttribute() { }
-
-    /// <summary>
-    /// Constructor of atrribute.
-    /// </summary>
-    /// <param name="resourceType"></param>
-    public ValidateDecimalAttribute(Type resourceType)
-    {
-        _resourceType = resourceType;
-    }
 
     /// <summary>
     /// Constructor of atrribute.
@@ -71,24 +60,11 @@ public class ValidateDecimalAttribute : ValidationAttribute
     /// Constructor of atrribute.
     /// </summary>
     /// <param name="minValue"></param>
-    /// <param name="resourceType"></param>
-    public ValidateDecimalAttribute(decimal minValue, Type resourceType)
-    {
-        MinValue = minValue;
-        _resourceType = resourceType;
-    }
-
-    /// <summary>
-    /// Constructor of atrribute.
-    /// </summary>
-    /// <param name="minValue"></param>
     /// <param name="maxValue"></param>
-    /// <param name="resourceType"></param>
-    public ValidateDecimalAttribute(decimal minValue, decimal maxValue, Type resourceType = null)
+    public ValidateDecimalAttribute(decimal minValue, decimal maxValue)
     {
         MinValue = minValue;
         MaxValue = maxValue;
-        _resourceType = resourceType;
     }
 
     #endregion
@@ -104,16 +80,16 @@ public class ValidateDecimalAttribute : ValidationAttribute
     {
         if (value != null)
         {
-            IStringLocalizer sharedLocalizer;
+            IMilvaLocalizer milvaLocalizer;
             string localizedPropName;
             string errorMessage;
 
-            if (_resourceType != null)
+            if (LocalizeErrorMessages)
             {
-                sharedLocalizer = context.GetLocalizerInstance(_resourceType);
+                milvaLocalizer = context.GetMilvaLocalizer();
 
-                localizedPropName = sharedLocalizer[LocalizerKey ?? $"{LocalizerKeys.Localized}{context.MemberName}"];
-                errorMessage = FullMessage ? sharedLocalizer[LocalizerKey] : sharedLocalizer[LocalizerKeys.MinDecimalValueException, localizedPropName];
+                localizedPropName = milvaLocalizer[LocalizerKey ?? $"{LocalizerKeys.Localized}{context.MemberName}"];
+                errorMessage = FullMessage ? milvaLocalizer[LocalizerKey] : milvaLocalizer[LocalizerKeys.MinDecimalValueException, localizedPropName];
             }
             else errorMessage = $"{LocalizerKeys.PleaseEnterAValid} {context.MemberName}.";
 

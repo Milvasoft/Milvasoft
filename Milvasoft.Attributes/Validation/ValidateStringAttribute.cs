@@ -41,9 +41,9 @@ public class ValidateStringAttribute : ValidationAttribute
     public string MailContent { get; set; }
 
     /// <summary>
-    /// Dummy class type for resource location.
+    /// Gets or sets error message localization flag.
     /// </summary>
-    public Type ResourceType { get; set; } = null;
+    public bool LocalizeErrorMessages { get; set; }
 
     #endregion
 
@@ -127,20 +127,22 @@ public class ValidateStringAttribute : ValidationAttribute
 
         ValidationResult GetValidationResult(string stringValue, ValidationContext context)
         {
-            IStringLocalizer sharedLocalizer = null;
-            string localizedPropName;
-            if (ResourceType != null)
-            {
-                sharedLocalizer = context.GetLocalizerInstance(ResourceType);
+            IMilvaLocalizer milvaLocalizer = null;
 
-                localizedPropName = sharedLocalizer[MemberNameLocalizerKey ?? $"{LocalizerKeys.Localized}{context.MemberName}"];
+            string localizedPropName;
+
+            if (LocalizeErrorMessages)
+            {
+                milvaLocalizer = context.GetMilvaLocalizer();
+
+                localizedPropName = milvaLocalizer[MemberNameLocalizerKey ?? $"{LocalizerKeys.Localized}{context.MemberName}"];
             }
             else localizedPropName = context.MemberName;
 
             var httpContext = context.GetService<IHttpContextAccessor>().HttpContext;
 
             // Check the lengths for legality
-            CommonHelper.EnsureLegalLengths(MaximumLength, MinimumLength, sharedLocalizer);
+            CommonHelper.EnsureLegalLengths(MaximumLength, MinimumLength, milvaLocalizer);
 
             // Automatically pass if value is null. RequiredAttribute should be used to assert a value is not null.
             // We expect a cast exception if a non-string was passed in.
@@ -150,8 +152,8 @@ public class ValidateStringAttribute : ValidationAttribute
 
             if (!lengthResult)
             {
-                ErrorMessage = sharedLocalizer != null
-                               ? sharedLocalizer[LocalizerKeys.PreventStringInjectionLengthResultNotTrue, localizedPropName, MinimumLength, MaximumLength]
+                ErrorMessage = milvaLocalizer != null
+                               ? milvaLocalizer[LocalizerKeys.PreventStringInjectionLengthResultNotTrue, localizedPropName, MinimumLength, MaximumLength]
                                : $"{localizedPropName} must have a character length in the range {MinimumLength} to {MaximumLength}.";
 
                 httpContext.Items[context.MemberName] = ErrorMessage;
@@ -173,8 +175,8 @@ public class ValidateStringAttribute : ValidationAttribute
                                 if (!string.IsNullOrWhiteSpace(MailContent) && milvasoftLogger != null)
                                     milvasoftLogger.LogFatal(MailContent, MailSubject.Hack);
 
-                                ErrorMessage = sharedLocalizer != null
-                                               ? sharedLocalizer[LocalizerKeys.PreventStringInjectionContainsForbiddenWordError, localizedPropName]
+                                ErrorMessage = milvaLocalizer != null
+                                               ? milvaLocalizer[LocalizerKeys.PreventStringInjectionContainsForbiddenWordError, localizedPropName]
                                                : $"{localizedPropName} contains invalid words.";
 
                                 return new ValidationResult(FormatErrorMessage(""));
@@ -183,8 +185,8 @@ public class ValidateStringAttribute : ValidationAttribute
 
             if (MinimumLength > 0 && (stringValue?.Length ?? 0) < MinimumLength)
             {
-                ErrorMessage = sharedLocalizer != null
-                               ? sharedLocalizer[LocalizerKeys.PreventStringInjectionBellowMin, localizedPropName, MinimumLength]
+                ErrorMessage = milvaLocalizer != null
+                               ? milvaLocalizer[LocalizerKeys.PreventStringInjectionBellowMin, localizedPropName, MinimumLength]
                                : $"{localizedPropName} is below the minimum character limit. Please enter at least {MinimumLength} characters.";
 
                 httpContext.Items[context.MemberName] = ErrorMessage;

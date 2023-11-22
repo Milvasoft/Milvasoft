@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Localization;
 using Milvasoft.Core;
 using Milvasoft.Core.Abstractions;
 using Milvasoft.Core.Exceptions;
@@ -35,9 +34,9 @@ public class AsyncValidateStringParameterAttribute : Attribute, IAsyncActionFilt
     public int MinimumLength { get; private set; } = 0;
 
     /// <summary>
-    /// Dummy class type for resource location.
+    /// Gets or sets error message localization flag.
     /// </summary>
-    public Type ResourceType { get; set; }
+    public bool LocalizeErrorMessages { get; set; }
 
     /// <summary>
     /// If injection attack exist. Validation method will be send mail. 
@@ -65,12 +64,12 @@ public class AsyncValidateStringParameterAttribute : Attribute, IAsyncActionFilt
     /// <param name="next"></param>
     public virtual async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
     {
-        IStringLocalizer sharedLocalizer = null;
+        IMilvaLocalizer milvaLocalizer = null;
 
-        if (ResourceType != null)
-            sharedLocalizer = context.HttpContext.RequestServices.GetLocalizerInstance(ResourceType);
+        if (LocalizeErrorMessages)
+            milvaLocalizer = context.HttpContext.RequestServices.GetMilvaLocalizer();
 
-        CommonHelper.EnsureLegalLengths(MaximumLength, MinimumLength, sharedLocalizer);
+        CommonHelper.EnsureLegalLengths(MaximumLength, MinimumLength, milvaLocalizer);
 
         if (context.ActionArguments.Count != 0)
         {
@@ -79,7 +78,7 @@ public class AsyncValidateStringParameterAttribute : Attribute, IAsyncActionFilt
                 if (actionArgument.Value is string)
                 {
                     var stringValue = actionArgument.Value.ToString();
-                    var localizedPropName = sharedLocalizer[MemberNameLocalizerKey ?? $"{LocalizerKeys.Localized}{actionArgument.Key}"];
+                    var localizedPropName = milvaLocalizer[MemberNameLocalizerKey ?? $"{LocalizerKeys.Localized}{actionArgument.Key}"];
 
                     // Automatically pass if value is null. RequiredAttribute should be used to assert a value is not null.
                     // We expect a cast exception if a non-string was passed in.
@@ -88,8 +87,8 @@ public class AsyncValidateStringParameterAttribute : Attribute, IAsyncActionFilt
 
                     if (!lengthResult)
                     {
-                        throw new MilvaUserFriendlyException(sharedLocalizer != null
-                                                                    ? sharedLocalizer[LocalizerKeys.PreventStringInjectionLengthResultNotTrue, localizedPropName, MinimumLength, MaximumLength]
+                        throw new MilvaUserFriendlyException(milvaLocalizer != null
+                                                                    ? milvaLocalizer[LocalizerKeys.PreventStringInjectionLengthResultNotTrue, localizedPropName, MinimumLength, MaximumLength]
                                                                     : $"{localizedPropName} must have a character length in the range {MinimumLength} to {MaximumLength}.", MilvaException.Validation);
                     }
                     if (!string.IsNullOrWhiteSpace(stringValue))
@@ -106,15 +105,15 @@ public class AsyncValidateStringParameterAttribute : Attribute, IAsyncActionFilt
                                         if (!string.IsNullOrWhiteSpace(MailContent) && milvasoftLogger != null)
                                             milvasoftLogger.LogFatal(MailContent, MailSubject.Hack);
 
-                                        throw new MilvaUserFriendlyException(sharedLocalizer != null
-                                                                                    ? sharedLocalizer[LocalizerKeys.PreventStringInjectionContainsForbiddenWordError, localizedPropName]
+                                        throw new MilvaUserFriendlyException(milvaLocalizer != null
+                                                                                    ? milvaLocalizer[LocalizerKeys.PreventStringInjectionContainsForbiddenWordError, localizedPropName]
                                                                                     : $"{localizedPropName} contains invalid words.", MilvaException.Validation);
                                     }
                     }
                     if (MinimumLength > 0 && (stringValue?.Length ?? 0) < MinimumLength)
                     {
-                        throw new MilvaUserFriendlyException(sharedLocalizer != null
-                                                                    ? sharedLocalizer[LocalizerKeys.PreventStringInjectionBellowMin, localizedPropName, MinimumLength]
+                        throw new MilvaUserFriendlyException(milvaLocalizer != null
+                                                                    ? milvaLocalizer[LocalizerKeys.PreventStringInjectionBellowMin, localizedPropName, MinimumLength]
                                                                     : $"{localizedPropName} is below the minimum character limit. Please enter at least {MinimumLength} characters.", MilvaException.Validation);
                     }
                 }

@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Localization;
 using Milvasoft.Core;
 using Milvasoft.Core.Abstractions;
 using Milvasoft.Core.Exceptions;
@@ -40,9 +39,9 @@ public class ValidateStringParameterAttribute : ActionFilterAttribute
     public int MinimumLength { get; private set; } = 0;
 
     /// <summary>
-    /// Dummy class type for resource location.
+    /// Gets or sets error message localization flag.
     /// </summary>
-    public Type ResourceType { get; set; }
+    public bool LocalizeErrorMessages { get; set; }
 
     /// <summary>
     /// If injection attack exist. Validation method will be send mail. 
@@ -70,12 +69,12 @@ public class ValidateStringParameterAttribute : ActionFilterAttribute
     /// <param name="context"></param>
     public override void OnActionExecuting(ActionExecutingContext context)
     {
-        IStringLocalizer sharedLocalizer = null;
+        IMilvaLocalizer milvaLocalizer = null;
 
-        if (ResourceType != null)
-            sharedLocalizer = context.HttpContext.RequestServices.GetLocalizerInstance(ResourceType);
+        if (LocalizeErrorMessages)
+            milvaLocalizer = context.HttpContext.RequestServices.GetMilvaLocalizer();
 
-        CommonHelper.EnsureLegalLengths(MaximumLength, MinimumLength, sharedLocalizer);
+        CommonHelper.EnsureLegalLengths(MaximumLength, MinimumLength, milvaLocalizer);
 
         if (context.ActionArguments.Count != 0)
         {
@@ -93,8 +92,8 @@ public class ValidateStringParameterAttribute : ActionFilterAttribute
 
                     if (!lengthResult)
                     {
-                        base.OnActionExecuting(RewriteResponseAsync(sharedLocalizer != null
-                                                                    ? sharedLocalizer[LocalizerKeys.PreventStringInjectionLengthResultNotTrue, localizedPropName, MinimumLength, MaximumLength]
+                        base.OnActionExecuting(RewriteResponseAsync(milvaLocalizer != null
+                                                                    ? milvaLocalizer[LocalizerKeys.PreventStringInjectionLengthResultNotTrue, localizedPropName, MinimumLength, MaximumLength]
                                                                     : $"{localizedPropName} must have a character length in the range {MinimumLength} to {MaximumLength}.").Result);
                     }
                     if (!string.IsNullOrWhiteSpace(stringValue))
@@ -111,15 +110,15 @@ public class ValidateStringParameterAttribute : ActionFilterAttribute
                                         if (!string.IsNullOrWhiteSpace(MailContent) && milvasoftLogger != null)
                                             milvasoftLogger.LogFatal(MailContent, MailSubject.Hack);
 
-                                        base.OnActionExecuting(RewriteResponseAsync(sharedLocalizer != null
-                                                                                    ? sharedLocalizer[LocalizerKeys.PreventStringInjectionContainsForbiddenWordError, localizedPropName]
+                                        base.OnActionExecuting(RewriteResponseAsync(milvaLocalizer != null
+                                                                                    ? milvaLocalizer[LocalizerKeys.PreventStringInjectionContainsForbiddenWordError, localizedPropName]
                                                                                     : $"{localizedPropName} contains invalid words.").Result);
                                     }
                     }
                     if (MinimumLength > 0 && (stringValue?.Length ?? 0) < MinimumLength)
                     {
-                        base.OnActionExecuting(RewriteResponseAsync(sharedLocalizer != null
-                                                                    ? sharedLocalizer[LocalizerKeys.PreventStringInjectionBellowMin, localizedPropName, MinimumLength]
+                        base.OnActionExecuting(RewriteResponseAsync(milvaLocalizer != null
+                                                                    ? milvaLocalizer[LocalizerKeys.PreventStringInjectionBellowMin, localizedPropName, MinimumLength]
                                                                     : $"{localizedPropName} is below the minimum character limit. Please enter at least {MinimumLength} characters.").Result);
                     }
                 }

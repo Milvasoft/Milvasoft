@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
-using Microsoft.Extensions.Localization;
 using Milvasoft.Core;
+using Milvasoft.Core.Abstractions;
 using Milvasoft.Core.Exceptions;
 using Milvasoft.Core.Extensions;
 using Milvasoft.Core.Utils.Constants;
@@ -17,13 +17,6 @@ namespace Milvasoft.Attributes.ActionFilter;
 [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
 public class ValidateIdParameterAttribute : ActionFilterAttribute
 {
-
-    #region Fields
-
-    private readonly Type _resourceType = null;
-
-    #endregion
-
     /// <summary>
     /// Gets or sets error message content.
     /// </summary>
@@ -35,18 +28,14 @@ public class ValidateIdParameterAttribute : ActionFilterAttribute
     public bool IsRequired { get; set; } = true;
 
     /// <summary>
-    /// Constructor of <see cref="ValidateIdParameterAttribute"/> for localization.
+    /// Gets or sets error message localization flag.
     /// </summary>
-    public ValidateIdParameterAttribute() { }
+    public bool LocalizeErrorMessages { get; set; }
 
     /// <summary>
     /// Constructor of <see cref="ValidateIdParameterAttribute"/> for localization.
     /// </summary>
-    /// <param name="resourceType"></param>
-    public ValidateIdParameterAttribute(Type resourceType)
-    {
-        _resourceType = resourceType;
-    }
+    public ValidateIdParameterAttribute() { }
 
     /// <summary>
     /// Performs when action executing.
@@ -78,15 +67,15 @@ public class ValidateIdParameterAttribute : ActionFilterAttribute
 
         if (context.ActionArguments.Count != 0)
         {
-            IStringLocalizer sharedLocalizer = null;
+            IMilvaLocalizer milvaLocalizer = null;
 
-            if (_resourceType != null)
-                sharedLocalizer = context.HttpContext.RequestServices.GetLocalizerInstance(_resourceType);
+            if (LocalizeErrorMessages)
+                milvaLocalizer = context.HttpContext.RequestServices.GetMilvaLocalizer();
 
-            var message = sharedLocalizer != null
+            var message = milvaLocalizer != null
                      ? EntityName != null
-                           ? sharedLocalizer[LocalizerKeys.ValidationIdPropertyError, sharedLocalizer[LocalizerKeys.LocalizedEntityName + EntityName]]
-                           : sharedLocalizer[LocalizerKeys.ValidationIdParameterGeneralError]
+                           ? milvaLocalizer[LocalizerKeys.ValidationIdPropertyError, milvaLocalizer[LocalizerKeys.LocalizedEntityName + EntityName]]
+                           : milvaLocalizer[LocalizerKeys.ValidationIdParameterGeneralError]
                      : EntityName != null
                            ? $"{LocalizerKeys.PleaseEnterAValid} {EntityName}."
                            : "Please enter all required parameters completely.";

@@ -2,6 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Localization;
 using Milvasoft.Core;
+using Milvasoft.Core.Abstractions;
 using Milvasoft.Core.Exceptions;
 using Milvasoft.Core.Utils.Constants;
 using System.ComponentModel.DataAnnotations;
@@ -14,12 +15,6 @@ namespace Milvasoft.Attributes.Validation;
 [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field, AllowMultiple = false)]
 public class ValidateListCountAttribute : ValidationAttribute
 {
-    #region Fields
-
-    private readonly Type _resourceType = null;
-
-    #endregion
-
     /// <summary>
     /// Gets or sets member name localizer key.
     /// </summary>
@@ -35,15 +30,18 @@ public class ValidateListCountAttribute : ValidationAttribute
     /// </summary>
     public int? MaxCount { get; set; }
 
+    /// <summary>
+    /// Gets or sets error message localization flag.
+    /// </summary>
+    public bool LocalizeErrorMessages { get; set; }
+
     #region Consructors
 
     /// <summary>
     /// Initializes new instance of <see cref="ValidateListCountAttribute"/>.
     /// </summary>
-    /// <param name="resourceType"></param>
-    public ValidateListCountAttribute(Type resourceType)
+    public ValidateListCountAttribute()
     {
-        _resourceType = resourceType;
     }
 
     /// <summary>
@@ -59,24 +57,11 @@ public class ValidateListCountAttribute : ValidationAttribute
     /// Initializes new instance of <see cref="ValidateListCountAttribute"/>.
     /// </summary>
     /// <param name="minCount"></param>
-    /// <param name="resourceType"></param>
-    public ValidateListCountAttribute(int minCount, Type resourceType)
-    {
-        MinCount = minCount;
-        _resourceType = resourceType;
-    }
-
-    /// <summary>
-    /// Initializes new instance of <see cref="ValidateListCountAttribute"/>.
-    /// </summary>
-    /// <param name="minCount"></param>
     /// <param name="maxCount"></param>
-    /// <param name="resourceType"></param>
-    public ValidateListCountAttribute(int minCount, int maxCount, Type resourceType = null)
+    public ValidateListCountAttribute(int minCount, int maxCount)
     {
         MinCount = minCount;
         MaxCount = maxCount;
-        _resourceType = resourceType;
     }
 
     #endregion
@@ -89,14 +74,14 @@ public class ValidateListCountAttribute : ValidationAttribute
     /// <returns></returns>
     protected override ValidationResult IsValid(object value, ValidationContext context)
     {
-        IStringLocalizer sharedLocalizer = null;
+        IMilvaLocalizer milvaLocalizer = null;
         string localizedPropName = context.MemberName;
 
-        if (_resourceType != null)
+        if (LocalizeErrorMessages)
         {
-            sharedLocalizer = context.GetLocalizerInstance(_resourceType);
+            milvaLocalizer = context.GetMilvaLocalizer();
 
-            localizedPropName = sharedLocalizer[LocalizerKey ?? $"{LocalizerKeys.Localized}{context.MemberName}"].ToString();
+            localizedPropName = milvaLocalizer[LocalizerKey ?? $"{LocalizerKeys.Localized}{context.MemberName}"].ToString();
         }
 
         var httpContext = context.GetService<IHttpContextAccessor>().HttpContext;
@@ -106,18 +91,18 @@ public class ValidateListCountAttribute : ValidationAttribute
             var count = (int)value.GetType().GetProperty("Count").GetValue(value);
 
             if (MaxCount < 0)
-                throw new MilvaValidationException(sharedLocalizer != null
-                                                   ? sharedLocalizer[LocalizerKeys.ListMaxCountMessage]
+                throw new MilvaValidationException(milvaLocalizer != null
+                                                   ? milvaLocalizer[LocalizerKeys.ListMaxCountMessage]
                                                    : "Please enter a valid value for the maximum count.");
 
             if (MinCount < 0)
-                throw new MilvaValidationException(sharedLocalizer != null
-                                                   ? sharedLocalizer[LocalizerKeys.ListMinCountMessage]
+                throw new MilvaValidationException(milvaLocalizer != null
+                                                   ? milvaLocalizer[LocalizerKeys.ListMinCountMessage]
                                                    : "Please enter a valid value for the minimum count.");
 
             if (MaxCount < MinCount)
-                throw new MilvaValidationException(sharedLocalizer != null
-                                                   ? sharedLocalizer[LocalizerKeys.PreventStringInjectionMinLengthBigThanMaxLengthException, MinCount, MaxCount]
+                throw new MilvaValidationException(milvaLocalizer != null
+                                                   ? milvaLocalizer[LocalizerKeys.PreventStringInjectionMinLengthBigThanMaxLengthException, MinCount, MaxCount]
                                                    : $"The minimum value ({MinCount}) you entered is greater than the maximum value ({MaxCount}). Please enter a valid range of values.");
 
             if (MaxCount.HasValue)
@@ -126,10 +111,10 @@ public class ValidateListCountAttribute : ValidationAttribute
 
                 if (!countResult)
                 {
-                    ErrorMessage = sharedLocalizer != null
+                    ErrorMessage = milvaLocalizer != null
                                    ? MaxCount == MinCount
-                                            ? sharedLocalizer[LocalizerKeys.ListCountMustBe, localizedPropName, MinCount]
-                                            : sharedLocalizer[LocalizerKeys.ListCountNotValid, localizedPropName, MinCount, MaxCount]
+                                            ? milvaLocalizer[LocalizerKeys.ListCountMustBe, localizedPropName, MinCount]
+                                            : milvaLocalizer[LocalizerKeys.ListCountNotValid, localizedPropName, MinCount, MaxCount]
                                    : MaxCount == MinCount
                                             ? $"The number of {localizedPropName} must be {MinCount}."
                                             : $"The number of {localizedPropName} must be minimum {MinCount} and maximum {MaxCount}.";
@@ -141,8 +126,8 @@ public class ValidateListCountAttribute : ValidationAttribute
             }
             else if (MinCount > 0 && count < MinCount)
             {
-                ErrorMessage = sharedLocalizer != null
-                               ? sharedLocalizer[LocalizerKeys.ListCountBelowMin, MinCount, localizedPropName]
+                ErrorMessage = milvaLocalizer != null
+                               ? milvaLocalizer[LocalizerKeys.ListCountBelowMin, MinCount, localizedPropName]
                                : $"Please select at least {MinCount} {localizedPropName}.";
 
                 httpContext.Items[context.MemberName] = ErrorMessage;
@@ -154,8 +139,8 @@ public class ValidateListCountAttribute : ValidationAttribute
         {
             if (MinCount > 0)
             {
-                ErrorMessage = sharedLocalizer != null
-                               ? sharedLocalizer[LocalizerKeys.ListCountBelowMin, MinCount, localizedPropName]
+                ErrorMessage = milvaLocalizer != null
+                               ? milvaLocalizer[LocalizerKeys.ListCountBelowMin, MinCount, localizedPropName]
                                : $"Please select at least {MinCount} {localizedPropName}.";
 
                 httpContext.Items[context.MemberName] = ErrorMessage;
