@@ -1,15 +1,15 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using StackExchange.Redis;
 
-namespace Milvasoft.Caching.Redis;
+namespace Milvasoft.Caching.Redis.Options;
 
 /// <summary>
 /// The options relevant to a set of redis connections
 /// </summary>
-public class RedisCacheServiceOptions
+public class RedisCachingOptions : IRedisCachingOptions
 {
     /// <summary>
-    /// Specifies the lifetime of a <see cref="IRedisCacheService"/>.
+    /// Specifies the lifetime of a <see cref="IRedisAccessor"/>.
     /// </summary>
     public ServiceLifetime Lifetime { get; set; } = ServiceLifetime.Singleton;
 
@@ -24,11 +24,11 @@ public class RedisCacheServiceOptions
     public bool UseUtcForExpirationDates { get; set; }
 
     /// <summary>
-    /// Initializes new instance of <see cref="RedisCacheServiceOptions"/>.
+    /// Initializes new instance of <see cref="RedisCachingOptions"/>.
     /// <paramref name="connectionString"/> will be added in <see cref="ConfigurationOptions.EndPoints"/>.
     /// </summary>
     /// <param name="connectionString"></param>
-    public RedisCacheServiceOptions(string connectionString)
+    public RedisCachingOptions(string connectionString)
     {
         ConfigurationOptions = new ConfigurationOptions();
         ConfigurationOptions.EndPoints.Add(connectionString);

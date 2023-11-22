@@ -1,4 +1,5 @@
-﻿using Milvasoft.Core;
+﻿using Milvasoft.Caching.Redis.Options;
+using Milvasoft.Core;
 using Milvasoft.Core.Abstractions;
 using Milvasoft.Core.Exceptions;
 using Milvasoft.Core.Extensions;
@@ -12,52 +13,8 @@ namespace Milvasoft.Caching.Redis;
 /// <summary>
 /// Provides redis cache operations. Redis connection multiplexer must be singleton.
 /// </summary>
-public class RedisCacheService : IRedisCacheService
+public partial class RedisAccessor
 {
-    private IConnectionMultiplexer _client;
-    private readonly ConfigurationOptions _options;
-    private readonly bool _useUtcForDateTimes;
-    private IDatabase _database;
-
-    /// <summary>
-    /// Initializes new instance of <see cref="RedisCacheService"/> with <paramref name="cacheServiceOptions"/>.
-    /// </summary>
-    /// <param name="cacheServiceOptions"></param>
-    /// <param name="connectionMultiplexer"></param>
-    public RedisCacheService(RedisCacheServiceOptions cacheServiceOptions, IConnectionMultiplexer connectionMultiplexer)
-    {
-        _options = cacheServiceOptions.ConfigurationOptions;
-        _useUtcForDateTimes = cacheServiceOptions.UseUtcForExpirationDates;
-        _client = connectionMultiplexer;
-        _database = _client?.GetDatabase();
-    }
-
-    /// <summary>
-    /// Gets redis client connection state.
-    /// </summary>
-    /// <returns></returns>
-    public bool IsConnected() => _client?.IsConnected ?? false;
-
-    /// <summary>
-    /// Gets redis database.
-    /// </summary>
-    /// <returns></returns>
-    public IDatabase GetDatabase(int db = -1, object asyncState = null) => _client?.GetDatabase(db, asyncState);
-
-    /// <summary>
-    /// Gets redis server.
-    /// </summary>
-    /// <returns></returns>
-    public IServer GetServer(string host, int port, object asyncState = null) => _client?.GetServer(host, port, asyncState);
-
-    /// <summary>
-    /// Gets redis server.
-    /// </summary>
-    /// <returns></returns>
-    public IServer GetServer(EndPoint endpoint, object asyncState = null) => _client?.GetServer(endpoint, asyncState);
-
-    #region Async
-
     /// <summary>
     /// Connects redis database if there is no connection. Otherwise this method does nothing.
     /// </summary>
@@ -330,84 +287,4 @@ public class RedisCacheService : IRedisCacheService
             _database = _client.GetDatabase();
         }
     }
-
-    #endregion
-
-    #region Sync
-
-    /// <summary>
-    /// Connects redis database.
-    /// </summary>
-    /// <returns></returns>
-    public void Connect() => _client = ConnectionMultiplexer.Connect(_options);
-
-    /// <summary>
-    /// Close all connections.
-    /// </summary>
-    /// <returns></returns>
-    public void Disconnect()
-    {
-        if (_client != null && _client.IsConnected)
-        {
-            _client.Close();
-        }
-        else if (_client != null && !_client.IsConnected)
-        {
-            _client.Dispose();
-        }
-    }
-
-    /// <summary>
-    /// Gets <paramref name="key"/>'s value.
-    /// </summary>
-    /// <typeparam name="T"></typeparam>
-    /// <param name="key"></param>
-    /// <returns></returns>
-    public T Get<T>(string key) where T : class => ((string)_database.StringGet(key)).ToObject<T>();
-
-    /// <summary>
-    /// Gets <paramref name="key"/>'s value.
-    /// </summary>
-    /// <param name="key"></param>
-    /// <returns></returns>
-    public string Get(string key) => _database.StringGet(key);
-
-    /// <summary>
-    /// Sets <paramref name="value"/> with <paramref name="key"/>.
-    /// </summary>
-    /// <param name="key"></param>
-    /// <param name="value"></param>
-    /// <returns></returns>
-    public void Set(string key, string value) => _database.StringSet(key, value);
-
-    /// <summary>
-    /// Sets <paramref name="value"/> with <paramref name="key"/>.
-    /// </summary>
-    /// <typeparam name="T"></typeparam>
-    /// <param name="key"></param>
-    /// <param name="value"></param>
-    public void Set<T>(string key, T value) where T : class => _database.StringSet(key, value.ToJson());
-
-    /// <summary>
-    /// Sets <paramref name="value"/> to <paramref name="key"/> with <paramref name="expiration"/>.
-    /// </summary>
-    /// <param name="key"></param>
-    /// <param name="value"></param>
-    /// <param name="expiration"></param>
-    /// <returns></returns>
-    public void Set(string key, object value, TimeSpan expiration) => _database.StringSet(key, value.ToJson(), _useUtcForDateTimes ? expiration.ConvertToUtc() : expiration);
-
-    /// <summary>
-    /// Removes <paramref name="key"/> and value.
-    /// </summary>
-    /// <param name="key"></param>
-    public void Remove(string key) => _database.KeyDelete(key);
-
-    /// <summary>
-    /// Checks if there is a <paramref name="key"/> in database. 
-    /// </summary>
-    /// <param name="key"></param>
-    public void KeyExists(string key) => _database.KeyExists(key);
-
-    #endregion
 }

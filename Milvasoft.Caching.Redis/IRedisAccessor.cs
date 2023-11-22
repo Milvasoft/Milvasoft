@@ -8,7 +8,7 @@ namespace Milvasoft.Caching.Redis;
 /// <summary>
 /// Provides caching operations.
 /// </summary>
-public interface IRedisCacheService
+public interface IRedisAccessor
 {
     /// <summary>
     /// Gets redis client connection state.
@@ -205,6 +205,18 @@ public interface IRedisCacheService
     /// <param name="key"></param>
     /// <returns></returns>
     string Get(string key);
+
+    /// <summary>
+    /// Gets <paramref name="keys"/> values.
+    /// </summary>
+    /// <returns></returns>
+    public IEnumerable<T> Get<T>(IEnumerable<string> keys);
+
+    /// <summary>
+    /// Gets <paramref name="keys"/> values.
+    /// </summary>
+    /// <returns></returns>
+    public RedisValue[] Get(IEnumerable<string> keys);
 
     /// <summary>
     /// Sets <paramref name="value"/> with <paramref name="key"/>.
