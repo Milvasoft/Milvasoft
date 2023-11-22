@@ -10,13 +10,13 @@ public class CachedTenantStore<TTenant, TKey> : ITenantStore<TTenant, TKey>
     where TKey : struct, IEquatable<TKey>
     where TTenant : class, IMilvaTenantBase<TKey>, new()
 {
-    private readonly IRedisCacheService _redisCacheService;
+    private readonly IRedisAccessor _redisCacheService;
 
     /// <summary>
     /// Creates new instance of <see cref="CachedTenantStore{TTenant, TKey}"/>
     /// </summary>
     /// <param name="redisCacheService"></param>
-    public CachedTenantStore(IRedisCacheService redisCacheService)
+    public CachedTenantStore(IRedisAccessor redisCacheService)
     {
         _redisCacheService = redisCacheService;
     }

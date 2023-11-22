@@ -371,7 +371,7 @@
             Cached tenant store. Sample store for <see cref="T:Milvasoft.MultiTenancy.Store.ITenantStore`2"/>
             </summary>
         </member>
-        <member name="M:Milvasoft.MultiTenancy.Store.CachedTenantStore`2.#ctor(Milvasoft.Caching.Redis.IRedisCacheService)">
+        <member name="M:Milvasoft.MultiTenancy.Store.CachedTenantStore`2.#ctor(Milvasoft.Caching.Redis.IRedisAccessor)">
             <summary>
             Creates new instance of <see cref="T:Milvasoft.MultiTenancy.Store.CachedTenantStore`2"/>
             </summary>
