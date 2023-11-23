@@ -138,7 +138,7 @@
             Gets the string resource with the given key.
             </summary>
             <param name="key"></param>
-            <returns>The string resource as a <see cref="T:Microsoft.Extensions.Localization.LocalizedString"/>.</returns>
+            <returns>The string resource as a <see cref="T:Milvasoft.Types.LocalizedValue"/>.</returns>
         </member>
         <member name="P:Milvasoft.Core.Abstractions.IMilvaLocalizer.Item(System.String,System.Object[])">
             <summary>
@@ -146,7 +146,7 @@
             </summary>
             <param name="key">The key of the string resource.</param>
             <param name="arguments">The values to format the string with.</param>
-            <returns>The formatted string resource as a <see cref="T:Microsoft.Extensions.Localization.LocalizedString"/>.</returns>
+            <returns>The formatted string resource as a <see cref="T:Milvasoft.Types.LocalizedValue"/>.</returns>
         </member>
         <member name="M:Milvasoft.Core.Abstractions.IMilvaLocalizer.GetAllStrings(System.Boolean)">
             <summary>
@@ -402,13 +402,6 @@
             </summary>
             <typeparam name="T"></typeparam>
             <param name="value"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Milvasoft.Core.CommonHelper.CustomErrorResponse(Microsoft.AspNetCore.Mvc.ActionContext)">
-            <summary>
-            Prepares custom validation model for response.
-            </summary>
-            <param name="actionContext"></param>
             <returns></returns>
         </member>
         <member name="M:Milvasoft.Core.CommonHelper.IsBetween(System.DateTime,System.TimeSpan,System.TimeSpan,System.Boolean)">
@@ -2429,70 +2422,6 @@
             <param name="pathName"></param>
             <param name="query"></param>
             <param name="hash"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Milvasoft.Core.Request.SendRequestDeserializeSingle``1(System.Net.Http.HttpClient,System.Net.Http.HttpRequestMessage)">
-            <summary>
-            Sends request by <paramref name="httpRequestMessage"/>.
-            <para><b> If you want to use the "ErrorCodes" property, change the return value to (ExceptionResponse) where necessary.</b></para> 
-            </summary>
-            <typeparam name="T"></typeparam>
-            <param name="httpRequestMessage"></param>
-            <param name="httpClient"></param>
-            <returns> ObjectResponse </returns>
-        </member>
-        <member name="M:Milvasoft.Core.Request.SendRequestDeserializeMultiple``1(System.Net.Http.HttpClient,System.Net.Http.HttpRequestMessage)">
-            <summary>
-            Sends request by <paramref name="httpRequestMessage"/>. Gets response as => <see cref="T:Milvasoft.Core.Utils.Models.Response.ObjectResponse`1"/>
-            </summary>
-            <typeparam name="T"></typeparam>
-            <param name="httpRequestMessage"></param>
-            <param name="httpClient"></param>
-            <returns> ObjectResponse </returns>
-        </member>
-        <member name="M:Milvasoft.Core.Request.SendRequestDeserialize``1(System.Net.Http.HttpClient,System.Net.Http.HttpRequestMessage)">
-            <summary>
-            Sends request by <paramref name="httpRequestMessage"/>.
-            </summary>
-            <param name="httpRequestMessage"></param>
-            <param name="httpClient"></param>
-            <typeparam name="TReturn"></typeparam>
-            <returns> <typeparamref name="TReturn"/> </returns>
-        </member>
-        <member name="M:Milvasoft.Core.Request.SendRequestDeserializeSingle``2(System.Net.Http.HttpClient,System.Net.Http.HttpRequestMessage)">
-            <summary>
-            Sends request by <paramref name="httpRequestMessage"/>. Gets response as => <see cref="T:Milvasoft.Core.Utils.Models.Response.ObjectResponse`1"/>
-            <para><b> If you want to use the "ErrorCodes" property, change the return value to (ExceptionResponse) where necessary.</b></para> 
-            </summary>
-            <typeparam name="T"></typeparam>
-            <typeparam name="TKey"></typeparam>
-            <param name="httpRequestMessage"></param>
-            <param name="httpClient"></param>
-            <returns> ObjectResponse </returns>
-        </member>
-        <member name="M:Milvasoft.Core.Request.SendRequestDeserializeMultiple``2(System.Net.Http.HttpClient,System.Net.Http.HttpRequestMessage)">
-            <summary>
-            Sends request by <paramref name="httpRequestMessage"/>. Gets response as => <see cref="T:Milvasoft.Core.Utils.Models.Response.ObjectResponse`1"/>
-            </summary> 
-            <typeparam name="T"></typeparam>
-            <typeparam name="TKey"></typeparam>
-            <param name="httpRequestMessage"></param>
-            <param name="httpClient"></param>
-            <returns> ObjectResponse </returns>
-        </member>
-        <member name="M:Milvasoft.Core.Request.PropertyExists(Newtonsoft.Json.Linq.JObject,System.String)">
-            <summary>
-            Checks <paramref name="propertyName"/> exists in <paramref name="jObject"/>.
-            </summary>
-            <param name="propertyName"></param>
-            <param name="jObject"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Milvasoft.Core.Request.IsSuccessStatusCode(Milvasoft.Core.Utils.Models.Response.BaseResponse)">
-            <summary>
-            Determines <paramref name="baseResponse"/>'s status code success or fail.
-            </summary>
-            <param name="baseResponse"></param>
             <returns></returns>
         </member>
         <member name="T:Milvasoft.Core.Utils.Constants.LocalizerKeys">

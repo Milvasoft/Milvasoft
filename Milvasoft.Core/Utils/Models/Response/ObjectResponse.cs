@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace Milvasoft.Core.Utils.Models.Response;
 
@@ -11,6 +11,6 @@ public class ObjectResponse<TEntity> : BaseResponse
     /// <summary>
     /// Result object.
     /// </summary>
-    [JsonProperty("result")]
+    [JsonPropertyName("result")]
     public virtual TEntity Result { get; set; }
 }

@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace Milvasoft.Core.Utils.Models.Response;
 
@@ -10,12 +10,12 @@ public class ExceptionResponse : ObjectResponse<object>
     /// <summary>
     /// Result of request.
     /// </summary>
-    [JsonProperty("result")]
+    [JsonPropertyName("result")]
     public override object Result { get; set; }
 
     /// <summary>
     /// Error codes of request, if exists.
     /// </summary>
-    [JsonProperty("errorCodes")]
+    [JsonPropertyName("errorCodes")]
     public List<int> ErrorCodes { get; set; }
 }

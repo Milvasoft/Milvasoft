@@ -28,6 +28,11 @@
 		</None>
 	</ItemGroup>
 
+	<ItemGroup>
+	  <PackageReference Include="Microsoft.AspNetCore.Http" Version="2.1.34" />
+	  <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+	</ItemGroup>
+
 	<PropertyGroup>
 
 		<PackageId>Milvasoft.FileOperations</PackageId>

@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Localization;
+using Milvasoft.Core.Abstractions;
 using Milvasoft.Core.EntityBase.Abstract;
 using Milvasoft.Core.Utils.Constants;
 
@@ -8,18 +8,17 @@ namespace Milvasoft.Identity.Concrete;
 /// <summary>
 /// Provides an abstraction for user validation.
 /// </summary>
-public class MilvaUserValidation<TUser, TKey, TLocalizer> : IUserValidator<TUser>
+public class MilvaUserValidation<TUser, TKey> : IUserValidator<TUser>
     where TUser : IdentityUser<TKey>, IEntityBase<TKey>
     where TKey : IEquatable<TKey>
-    where TLocalizer : IStringLocalizer
 {
-    private readonly TLocalizer _localizer;
+    private readonly IMilvaLocalizer _localizer;
 
     /// <summary>
     /// Constructor for localizer dependenct injection.
     /// </summary>
     /// <param name="localizer"></param>
-    public MilvaUserValidation(TLocalizer localizer) => _localizer = localizer;
+    public MilvaUserValidation(IMilvaLocalizer localizer) => _localizer = localizer;
 
     /// <summary>
     /// Validates the specified user as an asynchronous operation.

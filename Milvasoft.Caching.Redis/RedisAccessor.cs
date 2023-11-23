@@ -1,12 +1,9 @@
 ﻿using Milvasoft.Caching.Redis.Options;
 using Milvasoft.Core;
-using Milvasoft.Core.Abstractions;
-using Milvasoft.Core.Exceptions;
 using Milvasoft.Core.Extensions;
-using Milvasoft.Core.Utils.Enums;
-using Newtonsoft.Json;
 using StackExchange.Redis;
 using System.Net;
+using System.Text.Json;
 
 namespace Milvasoft.Caching.Redis;
 
@@ -121,7 +118,7 @@ public partial class RedisAccessor : IRedisAccessor
         foreach (var item in stringValues)
         {
             if (!string.IsNullOrWhiteSpace(item))
-                redisValues.Add(JsonConvert.DeserializeObject<T>(item));
+                redisValues.Add(JsonSerializer.Deserialize<T>(item));
         }
 
         return redisValues;

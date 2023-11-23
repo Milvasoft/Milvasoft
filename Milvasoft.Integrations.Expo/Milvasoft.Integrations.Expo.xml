@@ -134,7 +134,7 @@
             <summary>
             The subtitle to display in the notification below the title.
             Platform : iOS 
-            </summary>
+            </summary>  
         </member>
         <member name="P:Milvasoft.Integrations.Expo.PushNotification.PushTicketRequest.PushSound">
             <summary>

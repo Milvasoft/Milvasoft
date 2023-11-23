@@ -33,6 +33,18 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Milvasoft.Identity", "Milva
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Milvasoft.Middlewares", "Milvasoft.Middlewares\Milvasoft.Middlewares.csproj", "{5473C000-4230-4E31-A7BC-CD1DCC21908C}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Milvasoft.Localization", "Milvasoft.Localization\Milvasoft.Localization.csproj", "{01550FD0-ECE6-4115-9F4F-896A45D63309}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Milvasoft.TestApi", "Milvasoft.TestApi\Milvasoft.TestApi.csproj", "{48252FEF-EE15-4D4D-8B76-D4FF6BA23461}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Localization", "Localization", "{4DDD7543-7217-418C-899E-525D0D3C0E59}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Milvasoft.Localization.Redis", "Milvasoft.Localization.Redis\Milvasoft.Localization.Redis.csproj", "{60BF9EEC-6824-4FEC-9E73-9884941DEA55}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Milvasoft.Localization.Resx", "Milvasoft.Localization.Resx\Milvasoft.Localization.Resx.csproj", "{3ADC85B1-AA00-4FB2-A2B7-94DC629A8471}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Milvasoft.Types", "Milvasoft.Types\Milvasoft.Types.csproj", "{B89E4D68-C979-49F2-8F70-82B2212B300B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -99,9 +111,34 @@ Global
 		{5473C000-4230-4E31-A7BC-CD1DCC21908C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5473C000-4230-4E31-A7BC-CD1DCC21908C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5473C000-4230-4E31-A7BC-CD1DCC21908C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{01550FD0-ECE6-4115-9F4F-896A45D63309}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{01550FD0-ECE6-4115-9F4F-896A45D63309}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{01550FD0-ECE6-4115-9F4F-896A45D63309}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{01550FD0-ECE6-4115-9F4F-896A45D63309}.Release|Any CPU.Build.0 = Release|Any CPU
+		{48252FEF-EE15-4D4D-8B76-D4FF6BA23461}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{48252FEF-EE15-4D4D-8B76-D4FF6BA23461}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{48252FEF-EE15-4D4D-8B76-D4FF6BA23461}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{48252FEF-EE15-4D4D-8B76-D4FF6BA23461}.Release|Any CPU.Build.0 = Release|Any CPU
+		{60BF9EEC-6824-4FEC-9E73-9884941DEA55}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{60BF9EEC-6824-4FEC-9E73-9884941DEA55}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{60BF9EEC-6824-4FEC-9E73-9884941DEA55}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{60BF9EEC-6824-4FEC-9E73-9884941DEA55}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3ADC85B1-AA00-4FB2-A2B7-94DC629A8471}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3ADC85B1-AA00-4FB2-A2B7-94DC629A8471}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3ADC85B1-AA00-4FB2-A2B7-94DC629A8471}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3ADC85B1-AA00-4FB2-A2B7-94DC629A8471}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B89E4D68-C979-49F2-8F70-82B2212B300B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B89E4D68-C979-49F2-8F70-82B2212B300B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B89E4D68-C979-49F2-8F70-82B2212B300B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B89E4D68-C979-49F2-8F70-82B2212B300B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{01550FD0-ECE6-4115-9F4F-896A45D63309} = {4DDD7543-7217-418C-899E-525D0D3C0E59}
+		{60BF9EEC-6824-4FEC-9E73-9884941DEA55} = {4DDD7543-7217-418C-899E-525D0D3C0E59}
+		{3ADC85B1-AA00-4FB2-A2B7-94DC629A8471} = {4DDD7543-7217-418C-899E-525D0D3C0E59}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {E552B285-92CB-491D-8ACD-91C933292699}

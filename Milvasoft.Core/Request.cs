@@ -1,9 +1,5 @@
-﻿using Milvasoft.Core.Exceptions;
-using Milvasoft.Core.Utils.Models;
-using Milvasoft.Core.Utils.Models.Response;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using System.Text;
+﻿using System.Text;
+using System.Text.Json;
 using System.Text.RegularExpressions;
 
 namespace Milvasoft.Core;
@@ -61,7 +57,7 @@ public static class Request
                                                           object content,
                                                           params KeyValuePair<string, string>[] headers)
     {
-        var json = JsonConvert.SerializeObject(content);
+        var json = JsonSerializer.Serialize(content);
 
         var requestMessage = new HttpRequestMessage
         {
@@ -96,7 +92,7 @@ public static class Request
                                                           Version version,
                                                           params KeyValuePair<string, string>[] headers)
     {
-        var json = JsonConvert.SerializeObject(content);
+        var json = JsonSerializer.Serialize(content);
 
         var requestMessage = new HttpRequestMessage
         {
@@ -219,141 +215,6 @@ public static class Request
         }
 
     }
-
-    #endregion
-
-    #region Request Send
-
-    /// <summary>
-    /// Sends request by <paramref name="httpRequestMessage"/>.
-    /// <para><b> If you want to use the "ErrorCodes" property, change the return value to (ExceptionResponse) where necessary.</b></para> 
-    /// </summary>
-    /// <typeparam name="T"></typeparam>
-    /// <param name="httpRequestMessage"></param>
-    /// <param name="httpClient"></param>
-    /// <returns> ObjectResponse </returns>
-    public static async Task<object> SendRequestDeserializeSingle<T>(this HttpClient httpClient, HttpRequestMessage httpRequestMessage)
-    {
-        using var response = await httpClient.SendAsync(httpRequestMessage).ConfigureAwait(false);
-
-        if (response.IsSuccessStatusCode)
-        {
-            var contentString = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-
-            var responseObject = (JObject)JsonConvert.DeserializeObject(contentString);
-
-            if (!responseObject.PropertyExists("errorCodes")) return responseObject.ToObject<ObjectResponse<T>>();
-            else return responseObject.ToObject<ExceptionResponse>();
-        }
-        else throw new MilvaUserFriendlyException();
-    }
-
-    /// <summary>
-    /// Sends request by <paramref name="httpRequestMessage"/>. Gets response as => <see cref="ObjectResponse{IEnumerable}"/>
-    /// </summary>
-    /// <typeparam name="T"></typeparam>
-    /// <param name="httpRequestMessage"></param>
-    /// <param name="httpClient"></param>
-    /// <returns> ObjectResponse </returns>
-    public static async Task<object> SendRequestDeserializeMultiple<T>(this HttpClient httpClient, HttpRequestMessage httpRequestMessage)
-    {
-        using var response = await httpClient.SendAsync(httpRequestMessage).ConfigureAwait(false);
-
-        if (response.IsSuccessStatusCode)
-        {
-            var contentString = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-
-            var responseObject = (JObject)JsonConvert.DeserializeObject(contentString);
-
-            if (!responseObject.PropertyExists("errorCodes")) return responseObject.ToObject<ObjectResponse<IEnumerable<T>>>();
-            else return responseObject.ToObject<ExceptionResponse>();
-        }
-        else throw new MilvaUserFriendlyException();
-    }
-
-    /// <summary>
-    /// Sends request by <paramref name="httpRequestMessage"/>.
-    /// </summary>
-    /// <param name="httpRequestMessage"></param>
-    /// <param name="httpClient"></param>
-    /// <typeparam name="TReturn"></typeparam>
-    /// <returns> <typeparamref name="TReturn"/> </returns>
-    public static async Task<TReturn> SendRequestDeserialize<TReturn>(this HttpClient httpClient, HttpRequestMessage httpRequestMessage)
-    {
-        using var response = await httpClient.SendAsync(httpRequestMessage).ConfigureAwait(false);
-
-        var contentString = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-
-        return JsonConvert.DeserializeObject<TReturn>(contentString);
-    }
-
-    /// <summary>
-    /// Sends request by <paramref name="httpRequestMessage"/>. Gets response as => <see cref="ObjectResponse{CommunicationModel}"/>
-    /// <para><b> If you want to use the "ErrorCodes" property, change the return value to (ExceptionResponse) where necessary.</b></para> 
-    /// </summary>
-    /// <typeparam name="T"></typeparam>
-    /// <typeparam name="TKey"></typeparam>
-    /// <param name="httpRequestMessage"></param>
-    /// <param name="httpClient"></param>
-    /// <returns> ObjectResponse </returns>
-    public static async Task<object> SendRequestDeserializeSingle<T, TKey>(this HttpClient httpClient, HttpRequestMessage httpRequestMessage) where TKey : struct, IEquatable<TKey>
-    {
-        using var response = await httpClient.SendAsync(httpRequestMessage).ConfigureAwait(false);
-
-        if (response.IsSuccessStatusCode)
-        {
-            var contentString = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-
-            var responseObject = (JObject)JsonConvert.DeserializeObject(contentString);
-
-            if (!responseObject.PropertyExists("errorCodes")) return responseObject.ToObject<ObjectResponse<CommunicationModel<T, TKey>>>();
-            else return responseObject.ToObject<ExceptionResponse>();
-        }
-        else throw new MilvaUserFriendlyException();
-    }
-
-    /// <summary>
-    /// Sends request by <paramref name="httpRequestMessage"/>. Gets response as => <see cref="ObjectResponse{CommunicationModel}"/>
-    /// </summary> 
-    /// <typeparam name="T"></typeparam>
-    /// <typeparam name="TKey"></typeparam>
-    /// <param name="httpRequestMessage"></param>
-    /// <param name="httpClient"></param>
-    /// <returns> ObjectResponse </returns>
-    public static async Task<object> SendRequestDeserializeMultiple<T, TKey>(this HttpClient httpClient, HttpRequestMessage httpRequestMessage) where TKey : struct, IEquatable<TKey>
-    {
-        using var response = await httpClient.SendAsync(httpRequestMessage).ConfigureAwait(false);
-
-        if (response.IsSuccessStatusCode)
-        {
-            var contentString = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-
-            var responseObject = (JObject)JsonConvert.DeserializeObject(contentString);
-
-            if (!responseObject.PropertyExists("errorCodes")) return responseObject.ToObject<ObjectResponse<CommunicationModel<IEnumerable<T>, TKey>>>();
-            else return responseObject.ToObject<ExceptionResponse>();
-        }
-        else throw new MilvaUserFriendlyException();
-    }
-
-    #endregion
-
-    #region Helpers
-
-    /// <summary>
-    /// Checks <paramref name="propertyName"/> exists in <paramref name="jObject"/>.
-    /// </summary>
-    /// <param name="propertyName"></param>
-    /// <param name="jObject"></param>
-    /// <returns></returns>
-    public static bool PropertyExists(this JObject jObject, string propertyName) => jObject.Property(propertyName) != null;
-
-    /// <summary>
-    /// Determines <paramref name="baseResponse"/>'s status code success or fail.
-    /// </summary>
-    /// <param name="baseResponse"></param>
-    /// <returns></returns>
-    public static bool IsSuccessStatusCode(this BaseResponse baseResponse) => baseResponse.StatusCode >= 200 && baseResponse.StatusCode <= 299;
 
     #endregion
 

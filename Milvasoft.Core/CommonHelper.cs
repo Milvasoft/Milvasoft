@@ -1,7 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Localization;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Milvasoft.Core.Abstractions;
 using Milvasoft.Core.EntityBase.Abstract;
 using Milvasoft.Core.EntityBase.Abstract.Auditing;
@@ -9,12 +6,11 @@ using Milvasoft.Core.EntityBase.Concrete;
 using Milvasoft.Core.Exceptions;
 using Milvasoft.Core.Extensions;
 using Milvasoft.Core.Utils.Constants;
-using Milvasoft.Core.Utils.Models.Response;
 using MongoDB.Bson;
-using Newtonsoft.Json;
 using System.ComponentModel;
 using System.Linq.Expressions;
 using System.Reflection;
+using System.Text.Json;
 
 namespace Milvasoft.Core;
 
@@ -232,7 +228,7 @@ public static class CommonHelper
     /// </summary>
     /// <param name="value"></param>
     /// <returns></returns>
-    public static string ToJson(this object value) => JsonConvert.SerializeObject(value);
+    public static string ToJson(this object value) => JsonSerializer.Serialize(value);
 
     /// <summary>
     /// Converts <paramref name="value"/> to <typeparamref name="T"/>.
@@ -241,31 +237,7 @@ public static class CommonHelper
     /// <param name="value"></param>
     /// <returns></returns>
     public static T ToObject<T>(this string value) where T : class
-        => string.IsNullOrWhiteSpace(value) ? null : JsonConvert.DeserializeObject<T>(value);
-
-    /// <summary>
-    /// Prepares custom validation model for response.
-    /// </summary>
-    /// <param name="actionContext"></param>
-    /// <returns></returns>
-    public static ObjectResult CustomErrorResponse(ActionContext actionContext)
-    {
-        var errorMessageList = actionContext.ModelState.Where(modelError => modelError.Value.Errors.Count > 0)
-                                                       .SelectMany(modelError => modelError.Value.Errors.Select(i => i.ErrorMessage)).ToList();
-
-        var validationResponse = new ExceptionResponse
-        {
-            Success = false,
-            Message = string.Join('~', errorMessageList),
-            StatusCode = MilvaStatusCodes.Status600Exception,
-            Result = new object(),
-            ErrorCodes = new List<int> { (int)MilvaException.Validation }
-        };
-
-        actionContext.HttpContext.Items.Add(new KeyValuePair<object, object>("StatusCode", MilvaStatusCodes.Status600Exception));
-
-        return new OkObjectResult(validationResponse);
-    }
+        => string.IsNullOrWhiteSpace(value) ? null : JsonSerializer.Deserialize<T>(value);
 
     #region DateTime
 

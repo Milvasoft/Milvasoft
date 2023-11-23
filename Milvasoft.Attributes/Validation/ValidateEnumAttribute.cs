@@ -1,5 +1,4 @@
-﻿using Microsoft.Extensions.Localization;
-using Milvasoft.Core;
+﻿using Milvasoft.Core;
 using Milvasoft.Core.Abstractions;
 using Milvasoft.Core.Utils.Constants;
 using System.ComponentModel.DataAnnotations;

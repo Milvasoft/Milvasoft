@@ -1,41 +1,38 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace Milvasoft.Integrations.Expo.PushNotification;
 
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
-[JsonObject(MemberSerialization.OptIn)]
 public class PushTicketResponse
 {
-    [JsonProperty(PropertyName = "data")]
+    [JsonPropertyName("data")]
     public List<PushTicketStatus> PushTicketStatuses { get; set; }
 
-    [JsonProperty(PropertyName = "errors")]
+    [JsonPropertyName("errors")]
     public List<PushTicketErrors> PushTicketErrors { get; set; }
 }
 
-[JsonObject(MemberSerialization.OptIn)]
 public class PushTicketStatus
 {
-    [JsonProperty(PropertyName = "status")] //"error" | "ok",
+    [JsonPropertyName("status")] //"error" | "ok",
     public string TicketStatus { get; set; }
 
-    [JsonProperty(PropertyName = "id")]
+    [JsonPropertyName("id")]
     public string TicketId { get; set; }
 
-    [JsonProperty(PropertyName = "message")]
+    [JsonPropertyName("message")]
     public string TicketMessage { get; set; }
 
-    [JsonProperty(PropertyName = "details")]
+    [JsonPropertyName("details")]
     public object TicketDetails { get; set; }
 }
 
-[JsonObject(MemberSerialization.OptIn)]
 public class PushTicketErrors
 {
-    [JsonProperty(PropertyName = "code")]
+    [JsonPropertyName("code")]
     public int ErrorCode { get; set; }
 
-    [JsonProperty(PropertyName = "message")]
+    [JsonPropertyName("message")]
     public string ErrorMessage { get; set; }
 }
 #pragma warning restore CS1591 // Missing XML comment for publicly visible type or member

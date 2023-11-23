@@ -461,153 +461,153 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="T:Milvasoft.Identity.Concrete.MilvaIdentityDescriber`1">
+        <member name="T:Milvasoft.Identity.Concrete.MilvaIdentityDescriber">
             <summary>
             Provides localized identity error messages. All error's code is nameof(<see cref="T:Microsoft.AspNetCore.Identity.IdentityError"/>) method. (e.g. Code = "DefaultError")
             </summary>
         </member>
-        <member name="M:Milvasoft.Identity.Concrete.MilvaIdentityDescriber`1.#ctor(`0)">
+        <member name="M:Milvasoft.Identity.Concrete.MilvaIdentityDescriber.#ctor(Milvasoft.Core.Abstractions.IMilvaLocalizer)">
             <summary>
             Constructor for localizer dependenct injection.
             </summary>
             <param name="localizer"></param>
         </member>
-        <member name="M:Milvasoft.Identity.Concrete.MilvaIdentityDescriber`1.DefaultError">
+        <member name="M:Milvasoft.Identity.Concrete.MilvaIdentityDescriber.DefaultError">
             <summary>
             An unknown failure has occurred. Localizer Key : IdentityDefaultError
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Identity.Concrete.MilvaIdentityDescriber`1.DuplicateUserName(System.String)">
+        <member name="M:Milvasoft.Identity.Concrete.MilvaIdentityDescriber.DuplicateUserName(System.String)">
             <summary>
             There is another user with this username. Localizer Key : IdentityDuplicateUsername
             </summary>
             <param name="userName"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Identity.Concrete.MilvaIdentityDescriber`1.DuplicateEmail(System.String)">
+        <member name="M:Milvasoft.Identity.Concrete.MilvaIdentityDescriber.DuplicateEmail(System.String)">
             <summary>
             There is another user with this email. Localizer Key : IdentityDuplicateEmail
             </summary>
             <param name="email"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Identity.Concrete.MilvaIdentityDescriber`1.InvalidUserName(System.String)">
+        <member name="M:Milvasoft.Identity.Concrete.MilvaIdentityDescriber.InvalidUserName(System.String)">
             <summary>
             Invalid username. Localizer Key : IdentityInvalidUsername
             </summary>
             <param name="userName"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Identity.Concrete.MilvaIdentityDescriber`1.InvalidEmail(System.String)">
+        <member name="M:Milvasoft.Identity.Concrete.MilvaIdentityDescriber.InvalidEmail(System.String)">
             <summary>
             Invalid email. Localizer Key : IdentityInvalidEmail
             </summary>
             <param name="email"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Identity.Concrete.MilvaIdentityDescriber`1.ConcurrencyFailure">
+        <member name="M:Milvasoft.Identity.Concrete.MilvaIdentityDescriber.ConcurrencyFailure">
             <summary>
             Concurrency failure, data has been modified. Localizer Key : IdentityConcurrencyFailure
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Identity.Concrete.MilvaIdentityDescriber`1.DuplicateRoleName(System.String)">
+        <member name="M:Milvasoft.Identity.Concrete.MilvaIdentityDescriber.DuplicateRoleName(System.String)">
             <summary>
             This role is already exist. Localizer Key : IdentityDuplicateRoleName
             </summary>
             <param name="role"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Identity.Concrete.MilvaIdentityDescriber`1.InvalidRoleName(System.String)">
+        <member name="M:Milvasoft.Identity.Concrete.MilvaIdentityDescriber.InvalidRoleName(System.String)">
             <summary>
             Invalid role name. Localizer Key : IdentityInvalidRoleName
             </summary>
             <param name="role"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Identity.Concrete.MilvaIdentityDescriber`1.InvalidToken">
+        <member name="M:Milvasoft.Identity.Concrete.MilvaIdentityDescriber.InvalidToken">
             <summary>
             Invalid credentials. Localizer Key : IdentityInvalidToken
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Identity.Concrete.MilvaIdentityDescriber`1.LoginAlreadyAssociated">
+        <member name="M:Milvasoft.Identity.Concrete.MilvaIdentityDescriber.LoginAlreadyAssociated">
             <summary>
             This user is already logged in. Localizer Key : IdentityLoginAlreadyAssociated
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Identity.Concrete.MilvaIdentityDescriber`1.PasswordMismatch">
+        <member name="M:Milvasoft.Identity.Concrete.MilvaIdentityDescriber.PasswordMismatch">
             <summary>
             Incorrect password. Localizer Key : IdentityPasswordMismatch
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Identity.Concrete.MilvaIdentityDescriber`1.PasswordRequiresDigit">
+        <member name="M:Milvasoft.Identity.Concrete.MilvaIdentityDescriber.PasswordRequiresDigit">
             <summary>
             Password must have at least one digit. Localizer Key : IdentityPasswordRequiresDigit
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Identity.Concrete.MilvaIdentityDescriber`1.PasswordRequiresLower">
+        <member name="M:Milvasoft.Identity.Concrete.MilvaIdentityDescriber.PasswordRequiresLower">
             <summary>
             Password must have at least one lowercase. Localizer Key : IdentityPasswordRequiresLower
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Identity.Concrete.MilvaIdentityDescriber`1.PasswordRequiresNonAlphanumeric">
+        <member name="M:Milvasoft.Identity.Concrete.MilvaIdentityDescriber.PasswordRequiresNonAlphanumeric">
             <summary>
             Password must have at least one alphanumeric character. Localizer Key : IdentityPasswordRequiresNonAlphanumeric
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Identity.Concrete.MilvaIdentityDescriber`1.PasswordRequiresUniqueChars(System.Int32)">
+        <member name="M:Milvasoft.Identity.Concrete.MilvaIdentityDescriber.PasswordRequiresUniqueChars(System.Int32)">
             <summary>
             Password must have at least one special character. Localizer Key : IdentityPasswordRequiresUniqueChars
             </summary>
             <param name="uniqueChars"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Identity.Concrete.MilvaIdentityDescriber`1.PasswordRequiresUpper">
+        <member name="M:Milvasoft.Identity.Concrete.MilvaIdentityDescriber.PasswordRequiresUpper">
             <summary>
             Password must have at least one uppercase. Localizer Key : IdentityPasswordRequiresUpper
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Identity.Concrete.MilvaIdentityDescriber`1.PasswordTooShort(System.Int32)">
+        <member name="M:Milvasoft.Identity.Concrete.MilvaIdentityDescriber.PasswordTooShort(System.Int32)">
             <summary>
             Password lenght is too short. Localizer Key : IdentityPasswordTooShort
             </summary>
             <param name="length"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Identity.Concrete.MilvaIdentityDescriber`1.RecoveryCodeRedemptionFailed">
+        <member name="M:Milvasoft.Identity.Concrete.MilvaIdentityDescriber.RecoveryCodeRedemptionFailed">
             <summary>
             Recovery failed. Localizer Key : IdentityRecoveryCodeRedemptionFailed
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Identity.Concrete.MilvaIdentityDescriber`1.UserAlreadyHasPassword">
+        <member name="M:Milvasoft.Identity.Concrete.MilvaIdentityDescriber.UserAlreadyHasPassword">
             <summary>
             User already has password. Localizer Key : IdentityUserAlreadyHasPassword
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Identity.Concrete.MilvaIdentityDescriber`1.UserAlreadyInRole(System.String)">
+        <member name="M:Milvasoft.Identity.Concrete.MilvaIdentityDescriber.UserAlreadyInRole(System.String)">
             <summary>
             The user is already assigned to this role. Localizer Key : IdentityUserAlreadyInRole
             </summary>
             <param name="role"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Identity.Concrete.MilvaIdentityDescriber`1.UserLockoutNotEnabled">
+        <member name="M:Milvasoft.Identity.Concrete.MilvaIdentityDescriber.UserLockoutNotEnabled">
             <summary>
             Lockout is not enabled for this user. Localizer Key : IdentityUserLockoutNotEnabled
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Identity.Concrete.MilvaIdentityDescriber`1.UserNotInRole(System.String)">
+        <member name="M:Milvasoft.Identity.Concrete.MilvaIdentityDescriber.UserNotInRole(System.String)">
             <summary>
             User is not assigned to this role. Localizer Key : IdentityUserNotInRole
             </summary>
@@ -979,18 +979,18 @@
             <param name="c">The character to check if it is an ASCII letter or digit.</param>
             <returns>True if the character is an ASCII letter or digit, otherwise false.</returns>
         </member>
-        <member name="T:Milvasoft.Identity.Concrete.MilvaUserValidation`3">
+        <member name="T:Milvasoft.Identity.Concrete.MilvaUserValidation`2">
             <summary>
             Provides an abstraction for user validation.
             </summary>
         </member>
-        <member name="M:Milvasoft.Identity.Concrete.MilvaUserValidation`3.#ctor(`2)">
+        <member name="M:Milvasoft.Identity.Concrete.MilvaUserValidation`2.#ctor(Milvasoft.Core.Abstractions.IMilvaLocalizer)">
             <summary>
             Constructor for localizer dependenct injection.
             </summary>
             <param name="localizer"></param>
         </member>
-        <member name="M:Milvasoft.Identity.Concrete.MilvaUserValidation`3.ValidateAsync(Microsoft.AspNetCore.Identity.UserManager{`0},`0)">
+        <member name="M:Milvasoft.Identity.Concrete.MilvaUserValidation`2.ValidateAsync(Microsoft.AspNetCore.Identity.UserManager{`0},`0)">
             <summary>
             Validates the specified user as an asynchronous operation.
             </summary>

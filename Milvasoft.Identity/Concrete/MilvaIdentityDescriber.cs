@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Localization;
+using Milvasoft.Core.Abstractions;
 using Milvasoft.Core.Utils.Constants;
 
 namespace Milvasoft.Identity.Concrete;
@@ -7,15 +7,15 @@ namespace Milvasoft.Identity.Concrete;
 /// <summary>
 /// Provides localized identity error messages. All error's code is nameof(<see cref="IdentityError"/>) method. (e.g. Code = "DefaultError")
 /// </summary>
-public class MilvaIdentityDescriber<TLocalizer> : IdentityErrorDescriber where TLocalizer : IStringLocalizer
+public class MilvaIdentityDescriber : IdentityErrorDescriber
 {
-    private readonly TLocalizer _localizer;
+    private readonly IMilvaLocalizer _localizer;
 
     /// <summary>
     /// Constructor for localizer dependenct injection.
     /// </summary>
     /// <param name="localizer"></param>
-    public MilvaIdentityDescriber(TLocalizer localizer) => _localizer = localizer;
+    public MilvaIdentityDescriber(IMilvaLocalizer localizer) => _localizer = localizer;
 
     /// <summary>
     /// An unknown failure has occurred. Localizer Key : IdentityDefaultError

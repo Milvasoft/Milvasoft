@@ -1,5 +1,6 @@
-﻿using Newtonsoft.Json;
-using System.Net.Http.Headers;
+﻿using System.Net.Http.Headers;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace Milvasoft.Integrations.Expo.PushNotification;
 
@@ -68,9 +69,9 @@ public class ExpoClient : IDisposable
     /// <returns></returns>
     private static async Task<U> PostAsync<T, U>(T requestObj, string path)
     {
-        var serializedRequestObj = JsonConvert.SerializeObject(requestObj, new JsonSerializerSettings
+        var serializedRequestObj = JsonSerializer.Serialize(requestObj, new JsonSerializerOptions
         {
-            NullValueHandling = NullValueHandling.Ignore
+             DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
         });
 
         var requestBody = new StringContent(serializedRequestObj, System.Text.Encoding.UTF8, "application/json");
@@ -82,7 +83,7 @@ public class ExpoClient : IDisposable
         if (response.IsSuccessStatusCode)
         {
             var rawResponseBody = await response.Content.ReadAsStringAsync();
-            responseBody = JsonConvert.DeserializeObject<U>(rawResponseBody);
+            responseBody = JsonSerializer.Deserialize<U>(rawResponseBody);
         }
 
         return responseBody;
