@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.Localization;
+﻿using Milvasoft.Types;
 
 namespace Milvasoft.Core.Abstractions;
 
@@ -11,16 +11,16 @@ public interface IMilvaLocalizer
     /// Gets the string resource with the given key.
     /// </summary>
     /// <param name="key"></param>
-    /// <returns>The string resource as a <see cref="LocalizedString"/>.</returns>
-    LocalizedString this[string key] { get; }
+    /// <returns>The string resource as a <see cref="LocalizedValue"/>.</returns>
+    LocalizedValue this[string key] { get; }
 
     /// <summary>
     /// Gets the string resource with the given key and formatted with the supplied arguments.
     /// </summary>
     /// <param name="key">The key of the string resource.</param>
     /// <param name="arguments">The values to format the string with.</param>
-    /// <returns>The formatted string resource as a <see cref="LocalizedString"/>.</returns>
-    LocalizedString this[string key, params object[] arguments] { get; }
+    /// <returns>The formatted string resource as a <see cref="LocalizedValue"/>.</returns>
+    LocalizedValue this[string key, params object[] arguments] { get; }
 
     /// <summary>
     /// Gets all string resources.
@@ -29,5 +29,5 @@ public interface IMilvaLocalizer
     /// A <see cref="System.Boolean"/> indicating whether to include strings from parent cultures.
     /// </param>
     /// <returns>The strings.</returns>
-    public IEnumerable<LocalizedString> GetAllStrings(bool includeParentCultures);
+    public IEnumerable<LocalizedValue> GetAllStrings(bool includeParentCultures);
 }
