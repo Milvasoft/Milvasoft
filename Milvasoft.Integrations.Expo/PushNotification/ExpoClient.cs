@@ -71,7 +71,7 @@ public class ExpoClient : IDisposable
     {
         var serializedRequestObj = JsonSerializer.Serialize(requestObj, new JsonSerializerOptions
         {
-             DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
+            DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
         });
 
         var requestBody = new StringContent(serializedRequestObj, System.Text.Encoding.UTF8, "application/json");
@@ -99,23 +99,13 @@ public class ExpoClient : IDisposable
         {
             if (disposing)
             {
-                // TODO: dispose managed state (managed objects)
                 _httpClient.Dispose();
                 _httpHandler.Dispose();
             }
 
-            // TODO: free unmanaged resources (unmanaged objects) and override finalizer
-            // TODO: set large fields to null
             disposedValue = true;
         }
     }
-
-    // // TODO: override finalizer only if 'Dispose(bool disposing)' has code to free unmanaged resources
-    // ~ExpoClient()
-    // {
-    //     // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
-    //     Dispose(disposing: false);
-    // }
 
     /// <summary>
     /// Disposes this object.

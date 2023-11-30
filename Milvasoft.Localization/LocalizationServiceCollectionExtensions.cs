@@ -12,6 +12,6 @@ public static class LocalizationServiceCollectionExtensions
     /// </summary>
     /// <param name="services"></param>
     /// <returns></returns>
-    public static LocalizationBuilder AddMilvaLocalization(this IServiceCollection services)      
+    public static LocalizationBuilder AddMilvaLocalization(this IServiceCollection services)
         => new(services);
 }
