@@ -129,6 +129,11 @@
             <param name="culture"></param>
             <returns></returns>
         </member>
+        <member name="T:Milvasoft.Core.Abstractions.ILocalizationOptions">
+            <summary>
+            Milva localization options.
+            </summary>
+        </member>
         <member name="P:Milvasoft.Core.Abstractions.ILocalizationOptions.ManagerLifetime">
             <summary>
             Localization manager service lifetime.
@@ -142,6 +147,18 @@
         <member name="P:Milvasoft.Core.Abstractions.ILocalizationOptions.KeyFormatDelegate">
             <summary>
             Fortmatted key creator delegate.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Core.Abstractions.ILocalizationOptions.UseInMemoryCache">
+            <summary>
+            LocalizationMemoryCache helps speeding up getting localized values from data stores.
+            It is helpful to set to false during development mode and to true in production.
+            Default value: false.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Core.Abstractions.ILocalizationOptions.MemoryCacheEntryOptions">
+            <summary>
+            Memory cache entry options.
             </summary>
         </member>
         <member name="T:Milvasoft.Core.Abstractions.IMapper">

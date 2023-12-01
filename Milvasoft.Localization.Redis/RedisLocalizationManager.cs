@@ -33,7 +33,7 @@ public class RedisLocalizationManager(IRedisAccessor redisService, IRedisCaching
 
             var value = _redisService.Get(formattedKey);
 
-            return new LocalizedValue(formattedKey, value, value == null, GetSearchLocation(formattedKey));
+            return new LocalizedValue(formattedKey, value, value != null, GetSearchLocation(formattedKey));
         }
     }
 
@@ -56,7 +56,7 @@ public class RedisLocalizationManager(IRedisAccessor redisService, IRedisCaching
                 value = string.Format(value, arguments);
             }
 
-            return new LocalizedValue(formattedKey, value, value == null, GetSearchLocation(formattedKey));
+            return new LocalizedValue(formattedKey, value, value != null, GetSearchLocation(formattedKey));
         }
     }
 
@@ -74,7 +74,7 @@ public class RedisLocalizationManager(IRedisAccessor redisService, IRedisCaching
         var keys = server.Keys().Select(k => k.ToString());
         var values = _redisService.Get(keys);
 
-        return values.Select(v => new LocalizedValue(v, v, !v.HasValue, GetSearchLocation("keys[]")));
+        return values.Select(v => new LocalizedValue(v, v, v.HasValue, GetSearchLocation("keys[]")));
     }
 
     #endregion

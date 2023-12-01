@@ -1,4 +1,5 @@
 ﻿using Milvasoft.Caching.Redis.Options;
+using Milvasoft.Localization.Builder;
 
 namespace Milvasoft.Localization.Redis;
 

@@ -1,5 +1,8 @@
-﻿using Milvasoft.Core.Abstractions;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Milvasoft.Core.Abstractions;
 using Milvasoft.Types;
+using System.Diagnostics;
+using System.Xml.Linq;
 
 namespace Milvasoft.Localization;
 
@@ -10,9 +13,20 @@ namespace Milvasoft.Localization;
 /// Creates a new <see cref="MilvaLocalizer"/>.
 /// </remarks>
 /// <param name="manager">The <see cref="ILocalizationManager"/> to use.</param>
-public class MilvaLocalizer(ILocalizationManager localizationManager) : IMilvaLocalizer
+public class MilvaLocalizer : IMilvaLocalizer
 {
-    private readonly ILocalizationManager _localizationManager = localizationManager;
+    private readonly ILocalizationManager _localizationManager;
+    private readonly ILocalizationOptions _localizationOptions;
+    private readonly ILocalizationMemoryCache _cache;
+
+    public MilvaLocalizer(IServiceProvider serviceProvider)
+    {
+        _localizationManager = serviceProvider.GetRequiredService<ILocalizationManager>();
+        _localizationOptions = serviceProvider.GetRequiredService<ILocalizationOptions>();
+
+        if (_localizationOptions.UseInMemoryCache)
+            _cache = serviceProvider.GetService<ILocalizationMemoryCache>();
+    }
 
     /// <summary>
     /// Gets the string resource with the given key.
@@ -25,7 +39,21 @@ public class MilvaLocalizer(ILocalizationManager localizationManager) : IMilvaLo
         {
             ArgumentNullException.ThrowIfNull(key);
 
-            return _localizationManager[key];
+            LocalizedValue localizedValue = null;
+
+            //Get value from cache if cache is used.
+            if (_localizationOptions.UseInMemoryCache)
+                localizedValue = _cache.Get(key);
+
+            if (localizedValue == null || !localizedValue.ResourceFound)
+            {
+                localizedValue = _localizationManager[key];
+
+                if (_localizationOptions.UseInMemoryCache && localizedValue.ResourceFound)
+                    _cache.Set(key, localizedValue.Value);
+            }
+
+            return localizedValue;
         }
     }
 
@@ -41,7 +69,21 @@ public class MilvaLocalizer(ILocalizationManager localizationManager) : IMilvaLo
         {
             ArgumentNullException.ThrowIfNull(key);
 
-            return _localizationManager[key, arguments];
+            LocalizedValue localizedValue = null;
+
+            //Get value from cache if cache is used.
+            if (_localizationOptions.UseInMemoryCache)
+                localizedValue = _cache.Get(key, arguments);
+
+            if (localizedValue == null || !localizedValue.ResourceFound)
+            {
+                localizedValue = _localizationManager[key];
+
+                if (_localizationOptions.UseInMemoryCache && localizedValue.ResourceFound)
+                    _cache.Set(key, localizedValue.Value);
+            }
+
+            return localizedValue;
         }
     }
 

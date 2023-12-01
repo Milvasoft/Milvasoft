@@ -1,7 +1,8 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Localization;
-using Microsoft.Extensions.Options;
 using Milvasoft.Core.Abstractions;
+using Milvasoft.Localization.Builder;
 
 namespace Milvasoft.Localization.Resx;
 
@@ -21,6 +22,14 @@ public static class ResxLocalizationExtensions
         var config = new ResxLocalizationOptions();
 
         localizationOptions?.Invoke(config);
+
+        if (config.UseInMemoryCache)
+        {
+            if (!localizationBuilder.Services.Any(s => s.ServiceType == typeof(IMemoryCache)))
+                localizationBuilder.Services.AddMemoryCache();
+
+            localizationBuilder.Services.AddSingleton<ILocalizationMemoryCache, LocalizationMemoryCache>();
+        }
 
         config.KeyFormatDelegate ??= (string key) => string.Format(config.KeyFormat, key);
 

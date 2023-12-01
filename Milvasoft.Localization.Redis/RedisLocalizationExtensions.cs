@@ -1,7 +1,9 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.DependencyInjection;
 using Milvasoft.Caching.Redis;
 using Milvasoft.Caching.Redis.Options;
 using Milvasoft.Core.Abstractions;
+using Milvasoft.Localization.Builder;
 using System.Globalization;
 
 namespace Milvasoft.Localization.Redis;
@@ -23,6 +25,14 @@ public static class RedisLocalizationExtensions
         var config = new RedisLocalizationOptions();
 
         localizationOptions?.Invoke(config);
+
+        if (config.UseInMemoryCache)
+        {
+            if (!localizationBuilder.Services.Any(s => s.ServiceType == typeof(IMemoryCache)))
+                localizationBuilder.Services.AddMemoryCache();
+
+            localizationBuilder.Services.AddSingleton<ILocalizationMemoryCache, LocalizationMemoryCache>();
+        }
 
         config.KeyFormatDelegate ??= (string key, string cultureName) => string.Format(config.KeyFormat, cultureName, key);
 

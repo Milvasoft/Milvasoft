@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 
-namespace Milvasoft.Localization;
+namespace Milvasoft.Localization.Builder;
 
 /// <summary>
 /// Provides registration of localization services.

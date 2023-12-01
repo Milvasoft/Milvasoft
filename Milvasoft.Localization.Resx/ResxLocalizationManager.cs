@@ -33,7 +33,7 @@ public class ResxLocalizationManager<TResource>(IStringLocalizer<TResource> stri
 
             var value = _stringLocalizer[key];
 
-            return new LocalizedValue(key, value);
+            return new LocalizedValue(key, value, !value.ResourceNotFound, value.SearchedLocation);
         }
     }
 
@@ -54,7 +54,7 @@ public class ResxLocalizationManager<TResource>(IStringLocalizer<TResource> stri
 
             var value = _stringLocalizer[key, arguments];
 
-            return new LocalizedValue(key, value);
+            return new LocalizedValue(key, value, !value.ResourceNotFound, value.SearchedLocation);
         }
     }
 
@@ -69,7 +69,7 @@ public class ResxLocalizationManager<TResource>(IStringLocalizer<TResource> stri
     {
         var values = _stringLocalizer.GetAllStrings(includeParentCultures);
 
-        return values.Select(value => new LocalizedValue(value.Name, value.Value));
+        return values.Select(value => new LocalizedValue(value.Name, value.Value, !value.ResourceNotFound, value.SearchedLocation));
     }
 
 

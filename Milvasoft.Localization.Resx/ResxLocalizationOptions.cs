@@ -1,4 +1,6 @@
-﻿namespace Milvasoft.Localization.Resx;
+﻿using Milvasoft.Localization.Builder;
+
+namespace Milvasoft.Localization.Resx;
 
 
 /// <summary>
