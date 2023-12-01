@@ -2,6 +2,7 @@
 using Milvasoft.Caching.Redis;
 using Milvasoft.Caching.Redis.Options;
 using Milvasoft.Core.Abstractions;
+using System.Globalization;
 
 namespace Milvasoft.Localization.Redis;
 
@@ -17,29 +18,19 @@ public static class RedisLocalizationExtensions
     /// </summary>
     /// <param name="lifetime"></param>
     /// <returns></returns>
-    public static LocalizationBuilder WithRedisManager(this LocalizationBuilder localizationBuilder, ServiceLifetime lifetime = ServiceLifetime.Transient)
+    public static LocalizationBuilder WithRedisManager(this LocalizationBuilder localizationBuilder, Action<RedisLocalizationOptions> localizationOptions = null)
     {
-        if (!localizationBuilder.Services.Any(s => s.ServiceType == typeof(IRedisCachingOptions)))
-            throw new Exception("Please add required Milva redis caching services to service collection. You can use services.AddMilvaRedisCaching(). Or you can use this method overloads");
+        var config = new RedisLocalizationOptions();
 
-        localizationBuilder.Services.Add(ServiceDescriptor.Describe(typeof(ILocalizationManager), typeof(RedisLocalizationManager), lifetime));
-        localizationBuilder.Services.AddTransient<IMilvaLocalizer, MilvaLocalizer>();
+        localizationOptions?.Invoke(config);
 
-        return localizationBuilder;
-    }
+        config.KeyFormatDelegate ??= (string key, string cultureName) => string.Format(config.KeyFormat, cultureName, key);
 
-    /// <summary>
-    /// Registers <see cref="RedisLocalizationManager"/> as <see cref="ILocalizationManager"/>.
-    /// Adds Milva redis caching services to service collection.
-    /// </summary>
-    /// <param name="lifetime"></param>
-    /// <returns></returns>
-    public static LocalizationBuilder WithRedisManager(this LocalizationBuilder localizationBuilder, RedisCachingOptions redisOptions, ServiceLifetime lifetime = ServiceLifetime.Transient)
-    {
-        if (!localizationBuilder.Services.Any(s => s.ServiceType == typeof(IRedisCachingOptions)))
-            localizationBuilder.Services.AddMilvaRedisCaching(redisOptions);
+        if (!localizationBuilder.Services.Any(s => s.ServiceType == typeof(IRedisCachingOptions)) && config.RedisOptions != null)
+            localizationBuilder.Services.AddMilvaRedisCaching(config.RedisOptions);
 
-        localizationBuilder.Services.Add(ServiceDescriptor.Describe(typeof(ILocalizationManager), typeof(RedisLocalizationManager), lifetime));
+        localizationBuilder.Services.AddSingleton<ILocalizationOptions>(config);
+        localizationBuilder.Services.Add(ServiceDescriptor.Describe(typeof(ILocalizationManager), typeof(RedisLocalizationManager), config.ManagerLifetime));
         localizationBuilder.Services.AddTransient<IMilvaLocalizer, MilvaLocalizer>();
 
         return localizationBuilder;

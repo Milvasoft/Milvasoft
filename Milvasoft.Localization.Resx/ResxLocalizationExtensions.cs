@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Localization;
+using Microsoft.Extensions.Options;
 using Milvasoft.Core.Abstractions;
 
 namespace Milvasoft.Localization.Resx;
@@ -15,30 +16,19 @@ public static class ResxLocalizationExtensions
     /// </summary>
     /// <param name="lifetime"></param>
     /// <returns></returns>
-    public static LocalizationBuilder WithResxManager<TResource>(this LocalizationBuilder localizationBuilder, ServiceLifetime lifetime = ServiceLifetime.Transient)
+    public static LocalizationBuilder WithResxManager<TResource>(this LocalizationBuilder localizationBuilder, Action<ResxLocalizationOptions> localizationOptions = null)
     {
-        if (!localizationBuilder.Services.Any(s => s.ServiceType == typeof(IStringLocalizerFactory)))
-            throw new Exception("Please add required Microsoft localization services to service collection. You can use services.AddLocalization(). Or you can use this method overloads");
+        var config = new ResxLocalizationOptions();
 
-        localizationBuilder.Services.Add(ServiceDescriptor.Describe(typeof(ILocalizationManager), typeof(ResxLocalizationManager<TResource>), lifetime));
-        localizationBuilder.Services.AddTransient<IMilvaLocalizer, MilvaLocalizer>();
+        localizationOptions?.Invoke(config);
 
-        return localizationBuilder;
-    }
+        config.KeyFormatDelegate ??= (string key) => string.Format(config.KeyFormat, key);
 
+        if (!localizationBuilder.Services.Any(s => s.ServiceType == typeof(IStringLocalizerFactory)) && !string.IsNullOrEmpty(config.ResourcesPath))
+            localizationBuilder.Services.AddLocalization(options => options.ResourcesPath = config.ResourcesPath);
 
-    /// <summary>
-    /// Registers <see cref="ResxLocalizationManager{TResource}"/> as <see cref="ILocalizationManager"/>.
-    /// Adds Milva redis caching services to service collection.
-    /// </summary>
-    /// <param name="lifetime"></param>
-    /// <returns></returns>
-    public static LocalizationBuilder WithResxManager<TResource>(this LocalizationBuilder localizationBuilder, string resourcesPath, ServiceLifetime lifetime = ServiceLifetime.Transient)
-    {
-        if (!localizationBuilder.Services.Any(s => s.ServiceType == typeof(IStringLocalizerFactory)))
-            localizationBuilder.Services.AddLocalization(options => options.ResourcesPath = resourcesPath);
-
-        localizationBuilder.Services.Add(ServiceDescriptor.Describe(typeof(ILocalizationManager), typeof(ResxLocalizationManager<TResource>), lifetime));
+        localizationBuilder.Services.AddSingleton<ILocalizationOptions>(config);
+        localizationBuilder.Services.Add(ServiceDescriptor.Describe(typeof(ILocalizationManager), typeof(ResxLocalizationManager<TResource>), config.ManagerLifetime));
         localizationBuilder.Services.AddTransient<IMilvaLocalizer, MilvaLocalizer>();
 
         return localizationBuilder;

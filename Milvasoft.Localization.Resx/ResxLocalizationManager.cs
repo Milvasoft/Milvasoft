@@ -1,11 +1,21 @@
 ﻿using Microsoft.Extensions.Localization;
+using Milvasoft.Core.Abstractions;
+using Milvasoft.Localization.Resx.ResxManipulator;
 using Milvasoft.Types;
+using System.Globalization;
 
 namespace Milvasoft.Localization.Resx;
 
-public class ResxLocalizationManager<TResource>(IStringLocalizer<TResource> stringLocalizer) : ILocalizationManager
+/// <summary>
+/// Provides localization operations with resx files with <see cref="IStringLocalizer{TResource}"/>.
+/// </summary>
+/// <typeparam name="TResource"></typeparam>
+/// <param name="stringLocalizer"></param>
+/// <param name="localizationOptions"></param>
+public class ResxLocalizationManager<TResource>(IStringLocalizer<TResource> stringLocalizer, ILocalizationOptions localizationOptions) : ILocalizationManager
 {
     private readonly IStringLocalizer<TResource> _stringLocalizer = stringLocalizer;
+    private readonly ResxLocalizationOptions _localizationOptions = (ResxLocalizationOptions)localizationOptions;
 
     /// <summary>
     /// Gets the string resource with the given key.
@@ -18,6 +28,8 @@ public class ResxLocalizationManager<TResource>(IStringLocalizer<TResource> stri
         {
             if (string.IsNullOrEmpty(key))
                 throw new ArgumentNullException(nameof(key));
+
+            key = _localizationOptions.KeyFormatDelegate.Invoke(key);
 
             var value = _stringLocalizer[key];
 
@@ -38,6 +50,8 @@ public class ResxLocalizationManager<TResource>(IStringLocalizer<TResource> stri
             if (string.IsNullOrEmpty(key))
                 throw new ArgumentNullException(nameof(key));
 
+            key = _localizationOptions.KeyFormatDelegate.Invoke(key);
+
             var value = _stringLocalizer[key, arguments];
 
             return new LocalizedValue(key, value);
@@ -55,6 +69,142 @@ public class ResxLocalizationManager<TResource>(IStringLocalizer<TResource> stri
     {
         var values = _stringLocalizer.GetAllStrings(includeParentCultures);
 
-        return values.Select(value => new LocalizedValue(value, value));
+        return values.Select(value => new LocalizedValue(value.Name, value.Value));
+    }
+
+
+    #region Update Methods
+
+    /// <summary>
+    /// Sets the given <paramref name="value"/> with given <paramref name="key"/>.
+    /// </summary>
+    /// <param name="key"></param>
+    /// <param name="value"></param>
+    public void Set(string key, string value)
+    {
+        ThrowIfKeyIsInvalid(key);
+
+        SetAsync(key, value).Wait();
+    }
+
+    /// <summary>
+    /// Sets the given <paramref name="value"/> with given <paramref name="key"/>.
+    /// </summary>
+    /// <param name="key"></param>
+    /// <param name="value"></param>
+    /// <returns></returns>
+    public async Task SetAsync(string key, string value)
+    {
+        ThrowIfKeyIsInvalid(key);
+
+        var resxWriter = new ResxWriter(typeof(TResource), CultureInfo.CurrentCulture.Name, _localizationOptions.ResourcesFolderPath, null);
+
+        await resxWriter.AddAsync(new ResxElement
+        {
+            Key = key,
+            Value = value
+        }, true);
+    }
+
+    /// <summary>
+    /// Sets the given <paramref name="value"/> with given <paramref name="key"/> in given <paramref name="culture"/>.
+    /// </summary>
+    /// <param name="key"></param>
+    /// <param name="value"></param>
+    /// <param name="culture"></param>
+    public void Set(string key, string value, string culture)
+    {
+        var cultureSwitcher = new CultureSwitcher(culture);
+
+        Set(key, value);
+
+        cultureSwitcher.Dispose();
+    }
+
+    /// <summary>
+    /// Sets the given <paramref name="value"/> with given <paramref name="key"/> in given <paramref name="culture"/>.
+    /// </summary>
+    /// <param name="key"></param>
+    /// <param name="value"></param>
+    /// <param name="culture"></param>
+    /// <returns></returns>
+    public async Task SetAsync(string key, string value, string culture)
+    {
+        var cultureSwitcher = new CultureSwitcher(culture);
+
+        await SetAsync(key, value);
+
+        cultureSwitcher.Dispose();
+    }
+
+    /// <summary>
+    /// Removes value from resource with given <paramref name="key"/>.
+    /// </summary>
+    /// <param name="key"></param>
+    public void Remove(string key)
+    {
+        ThrowIfKeyIsInvalid(key);
+
+        RemoveAsync(key).Wait();
+    }
+
+    /// <summary>
+    /// Removes value from resource with given <paramref name="key"/>.
+    /// </summary>
+    /// <param name="key"></param>
+    /// <returns></returns>
+    public async Task RemoveAsync(string key)
+    {
+        ThrowIfKeyIsInvalid(key);
+
+        var resxWriter = new ResxWriter(typeof(TResource), CultureInfo.CurrentCulture.Name, _localizationOptions.ResourcesFolderPath, null);
+
+        await resxWriter.RemoveAsync(new ResxElement
+        {
+            Key = key
+        });
+    }
+
+    /// <summary>
+    /// Removes value from resource with given <paramref name="key"/> with given <paramref name="culture"/>.
+    /// </summary>
+    /// <param name="key"></param>
+    /// <param name="culture"></param>
+    public void Remove(string key, string culture)
+    {
+        var cultureSwitcher = new CultureSwitcher(culture);
+
+        Remove(key);
+
+        cultureSwitcher.Dispose();
+    }
+
+    /// <summary>
+    /// Removes value from resource with given <paramref name="key"/> with given <paramref name="culture"/>.
+    /// </summary>
+    /// <param name="key"></param>
+    /// <param name="culture"></param>
+    /// <returns></returns>
+    public async Task RemoveAsync(string key, string culture)
+    {
+        var cultureSwitcher = new CultureSwitcher(culture);
+
+        await RemoveAsync(key);
+
+        cultureSwitcher.Dispose();
+    }
+
+    #endregion
+
+    /// <summary>
+    /// Checks the key is null or empty.
+    /// </summary>
+    /// <param name="key"></param>
+    /// <returns></returns>
+    /// <exception cref="ArgumentNullException"></exception>
+    private static void ThrowIfKeyIsInvalid(string key)
+    {
+        if (string.IsNullOrEmpty(key))
+            throw new ArgumentNullException(nameof(key));
     }
 }
