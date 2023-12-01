@@ -4,7 +4,6 @@ using Milvasoft.Caching.Redis;
 using Milvasoft.Caching.Redis.Options;
 using Milvasoft.Core.Abstractions;
 using Milvasoft.Localization.Builder;
-using System.Globalization;
 
 namespace Milvasoft.Localization.Redis;
 

@@ -1,5 +1,4 @@
 ﻿using Microsoft.Extensions.Logging;
-using Milvasoft.Core.Abstractions;
 using Milvasoft.Core.Exceptions;
 using StackExchange.Redis;
 using System.Net;

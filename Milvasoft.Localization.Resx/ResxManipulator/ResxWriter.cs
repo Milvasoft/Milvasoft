@@ -1,5 +1,4 @@
 ﻿using Microsoft.Extensions.Logging;
-using System.Reflection;
 using System.Xml.Linq;
 
 namespace Milvasoft.Localization.Resx.ResxManipulator;

@@ -2,10 +2,10 @@
 using Milvasoft.Interception.Interceptors.ActivityScope;
 using System.Diagnostics;
 using System.Linq.Expressions;
-using System.Reflection;
 using System.Text.Json;
 
 namespace Milvasoft.Interception.Interceptors.Logging;
+
 public class LogInterceptor : IMilvaInterceptor
 {
     /// TODO : ILOggerla uyumlu çalışacak bir yapı geliştir.  

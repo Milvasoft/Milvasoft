@@ -1,6 +1,5 @@
 ﻿using Milvasoft.Interception.Decorator;
 using System.Diagnostics;
-using System.Reflection;
 
 namespace Milvasoft.Interception.Interceptors.ActivityScope;
 
