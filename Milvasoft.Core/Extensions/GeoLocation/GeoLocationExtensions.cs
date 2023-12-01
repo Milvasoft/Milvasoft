@@ -1,6 +1,6 @@
-﻿using Milvasoft.Core.GeoLocation.Models;
+﻿using Milvasoft.Core.Extensions.GeoLocation.Models;
 
-namespace Milvasoft.Core.GeoLocation;
+namespace Milvasoft.Core.Extensions.GeoLocation;
 
 /// <summary>
 /// Extension methods for geo location.

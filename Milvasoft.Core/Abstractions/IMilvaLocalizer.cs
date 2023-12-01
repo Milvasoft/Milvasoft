@@ -30,4 +30,22 @@ public interface IMilvaLocalizer
     /// </param>
     /// <returns>The strings.</returns>
     public IEnumerable<LocalizedValue> GetAllStrings(bool includeParentCultures);
+
+    /// <summary>
+    /// Gets string resource with given <paramref name="key"/> with given <paramref name="culture"/>.
+    /// </summary>
+    /// <param name="key"></param>
+    /// <param name="culture"></param>
+    /// <returns>The string.</returns>
+    public LocalizedValue GetWithCulture(string key, string culture);
+
+    /// <summary>
+    /// Gets string resource with given <paramref name="key"/> with given <paramref name="culture"/>.
+    /// </summary>
+    /// <param name="key"></param>
+    /// <param name="culture"></param>
+    /// <param name="arguments"></param>
+    /// <returns>The string.</returns>
+    public LocalizedValue GetWithCulture(string key, string culture, params object[] arguments);
+
 }

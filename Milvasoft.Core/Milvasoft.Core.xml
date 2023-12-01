@@ -39,6 +39,111 @@
             Determines whether the entity auditing by the deleter.
             </summary>
         </member>
+        <member name="T:Milvasoft.Core.Abstractions.ILocalizationManager">
+            <summary>
+            It is the manager that provides access to localization resources. You can use this interface for creating new custom managers. Or you can use ready-made milva managers. 
+            <para> For ready made managers see here : https://github.com/Milvasoft/Milvasoft/tree/master/Localization/Milvasoft.Localization.Redis </para> 
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Core.Abstractions.ILocalizationManager.Item(System.String)">
+            <summary>
+            Gets the string resource with the given key.
+            </summary>
+            <param name="key"></param>
+            <returns>The string resource as a <see cref="T:Milvasoft.Types.LocalizedValue"/>.</returns>
+        </member>
+        <member name="P:Milvasoft.Core.Abstractions.ILocalizationManager.Item(System.String,System.Object[])">
+            <summary>
+            Gets the string resource with the given key and formatted with the supplied arguments.
+            </summary>
+            <param name="key">The key of the string resource.</param>
+            <param name="arguments">The values to format the string with.</param>
+            <returns>The formatted string resource as a <see cref="T:Milvasoft.Types.LocalizedValue"/>.</returns>
+        </member>
+        <member name="M:Milvasoft.Core.Abstractions.ILocalizationManager.GetAllStrings(System.Boolean)">
+            <summary>
+            Gets all string resources.
+            </summary>
+            <param name="includeParentCultures">
+            A <see cref="T:System.Boolean"/> indicating whether to include strings from parent cultures.
+            </param>
+            <returns>The strings.</returns>
+        </member>
+        <member name="M:Milvasoft.Core.Abstractions.ILocalizationManager.Set(System.String,System.String)">
+            <summary>
+            Sets the given <paramref name="value"/> with given <paramref name="key"/>.
+            </summary>
+            <param name="key"></param>
+            <param name="value"></param>
+        </member>
+        <member name="M:Milvasoft.Core.Abstractions.ILocalizationManager.Set(System.String,System.String,System.String)">
+            <summary>
+            Sets the given <paramref name="value"/> with given <paramref name="key"/> in given <paramref name="culture"/>.
+            </summary>
+            <param name="key"></param>
+            <param name="value"></param>
+            <param name="culture"></param>
+        </member>
+        <member name="M:Milvasoft.Core.Abstractions.ILocalizationManager.Remove(System.String)">
+            <summary>
+            Removes value from resource with given <paramref name="key"/>.
+            </summary>
+            <param name="key"></param>
+        </member>
+        <member name="M:Milvasoft.Core.Abstractions.ILocalizationManager.Remove(System.String,System.String)">
+            <summary>
+            Removes value from resource with given <paramref name="key"/> with given <paramref name="culture"/>.
+            </summary>
+            <param name="key"></param>
+            <param name="culture"></param>
+        </member>
+        <member name="M:Milvasoft.Core.Abstractions.ILocalizationManager.SetAsync(System.String,System.String)">
+            <summary>
+            Sets the given <paramref name="value"/> with given <paramref name="key"/>.
+            </summary>
+            <param name="key"></param>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Core.Abstractions.ILocalizationManager.SetAsync(System.String,System.String,System.String)">
+            <summary>
+            Sets the given <paramref name="value"/> with given <paramref name="key"/> in given <paramref name="culture"/>.
+            </summary>
+            <param name="key"></param>
+            <param name="value"></param>
+            <param name="culture"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Core.Abstractions.ILocalizationManager.RemoveAsync(System.String)">
+            <summary>
+            Removes value from resource with given <paramref name="key"/>.
+            </summary>
+            <param name="key"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Core.Abstractions.ILocalizationManager.RemoveAsync(System.String,System.String)">
+            <summary>
+            Removes value from resource with given <paramref name="key"/> with given <paramref name="culture"/>.
+            </summary>
+            <param name="key"></param>
+            <param name="culture"></param>
+            <returns></returns>
+        </member>
+        <member name="P:Milvasoft.Core.Abstractions.ILocalizationOptions.ManagerLifetime">
+            <summary>
+            Localization manager service lifetime.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Core.Abstractions.ILocalizationOptions.KeyFormat">
+            <summary>
+            Key format
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Core.Abstractions.ILocalizationOptions.KeyFormatDelegate">
+            <summary>
+            Fortmatted key creator delegate.
+            </summary>
+        </member>
         <member name="T:Milvasoft.Core.Abstractions.IMapper">
             <summary>
             Responsible interface for mapping from the source object to the object we want to access.
@@ -156,6 +261,23 @@
             A <see cref="T:System.Boolean"/> indicating whether to include strings from parent cultures.
             </param>
             <returns>The strings.</returns>
+        </member>
+        <member name="M:Milvasoft.Core.Abstractions.IMilvaLocalizer.GetWithCulture(System.String,System.String)">
+            <summary>
+            Gets string resource with given <paramref name="key"/> with given <paramref name="culture"/>.
+            </summary>
+            <param name="key"></param>
+            <param name="culture"></param>
+            <returns>The string.</returns>
+        </member>
+        <member name="M:Milvasoft.Core.Abstractions.IMilvaLocalizer.GetWithCulture(System.String,System.String,System.Object[])">
+            <summary>
+            Gets string resource with given <paramref name="key"/> with given <paramref name="culture"/>.
+            </summary>
+            <param name="key"></param>
+            <param name="culture"></param>
+            <param name="arguments"></param>
+            <returns>The string.</returns>
         </member>
         <member name="T:Milvasoft.Core.Abstractions.IMilvaLogger">
             <summary>

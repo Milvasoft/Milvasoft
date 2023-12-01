@@ -1,7 +1,6 @@
-﻿using Milvasoft.Core.Extensions;
-using System.Linq.Expressions;
+﻿using System.Linq.Expressions;
 
-namespace Milvasoft.Core;
+namespace Milvasoft.Core.Extensions;
 
 /// <summary>
 /// Helper for filtering.
