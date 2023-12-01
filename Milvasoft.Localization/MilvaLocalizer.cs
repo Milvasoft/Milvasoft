@@ -55,4 +55,38 @@ public class MilvaLocalizer(ILocalizationManager localizationManager) : IMilvaLo
     public IEnumerable<LocalizedValue> GetAllStrings(bool includeParentCultures) =>
         _localizationManager.GetAllStrings(includeParentCultures);
 
+    /// <summary>
+    /// Gets string resource with given <paramref name="key"/> with given <paramref name="culture"/>.
+    /// </summary>
+    /// <param name="key"></param>
+    /// <param name="culture"></param>
+    /// <returns>The string.</returns>
+    public LocalizedValue GetWithCulture(string key, string culture)
+    {
+        var cultureSwitcher = new CultureSwitcher(culture);
+
+        var value = this[key];
+
+        cultureSwitcher.Dispose();
+
+        return value;
+    }
+
+    /// <summary>
+    /// Gets string resource with given <paramref name="key"/> with given <paramref name="culture"/>.
+    /// </summary>
+    /// <param name="key"></param>
+    /// <param name="culture"></param>
+    /// <param name="arguments"></param>
+    /// <returns>The string.</returns>
+    public LocalizedValue GetWithCulture(string key, string culture, params object[] arguments)
+    {
+        var cultureSwitcher = new CultureSwitcher(culture);
+
+        var value = this[key, arguments];
+
+        cultureSwitcher.Dispose();
+
+        return value;
+    }
 }

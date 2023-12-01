@@ -10,7 +10,7 @@ namespace Milvasoft.Localization;
 /// Creates new instance of <see cref="LocalizationBuilder"/>.
 /// </remarks>
 /// <param name="services"></param>
-public class LocalizationBuilder(IServiceCollection services)
+public sealed class LocalizationBuilder(IServiceCollection services)
 {
     public IServiceCollection Services { get; } = services;
 
@@ -20,10 +20,13 @@ public class LocalizationBuilder(IServiceCollection services)
     /// <typeparam name="TManager"></typeparam>
     /// <param name="lifetime"></param>
     /// <returns></returns>
-    public LocalizationBuilder WithManager<TManager>(ServiceLifetime lifetime = ServiceLifetime.Transient) where TManager : class, ILocalizationManager
+    public LocalizationBuilder WithManager<TManager>(ILocalizationOptions localizationOptions = null) where TManager : class, ILocalizationManager
     {
-        Services.Add(ServiceDescriptor.Describe(typeof(ILocalizationManager), typeof(TManager), lifetime));
+        localizationOptions ??= new LocalizationOptions();
 
+        Services.Add(ServiceDescriptor.Describe(typeof(ILocalizationManager), typeof(TManager), localizationOptions.ManagerLifetime));
+
+        Services.AddSingleton(localizationOptions);
         Services.AddTransient<IMilvaLocalizer, MilvaLocalizer>();
 
         return this;
