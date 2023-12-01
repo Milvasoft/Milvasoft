@@ -159,6 +159,7 @@ public class ResxWriter
         try
         {
             _xd.Root.Elements("data").FirstOrDefault(x => x == elmnt).Remove();
+            await SaveAsync();
             tsk.SetResult(true);
         }
         catch (Exception e)
