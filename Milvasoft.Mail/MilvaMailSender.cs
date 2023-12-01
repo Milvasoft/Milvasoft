@@ -1,6 +1,4 @@
-﻿using Milvasoft.Core;
-using Milvasoft.Core.Extensions;
-using Milvasoft.Core.Utils.Enums;
+﻿using Milvasoft.Core.Extensions;
 using System.Net;
 using System.Net.Mail;
 using System.Net.Mime;
@@ -11,49 +9,40 @@ namespace Milvasoft.Mail;
 /// <summary>
 /// Provides send mail.
 /// </summary>
-public class MilvaMailSender : IMilvaMailSender
+/// <remarks>
+/// Initializes mail sending operation default values.
+/// </remarks>
+/// <param name="from"></param>
+/// <param name="networkCredential"></param>
+/// <param name="smtpPort"></param>
+/// <param name="smtpHost"></param>
+/// <param name="enableSsl"></param>
+public class MilvaMailSender(string from, NetworkCredential networkCredential, int smtpPort, string smtpHost, bool enableSsl) : IMilvaMailSender
 {
     /// <summary>
     /// Gets or sets mail sender.
     /// </summary>
-    public string From { get; set; }
+    public string From { get; set; } = from;
 
     /// <summary>
     /// Gets or sets mail sender credentials.
     /// </summary>
-    public NetworkCredential NetworkCredential { get; set; }
+    public NetworkCredential NetworkCredential { get; set; } = networkCredential;
 
     /// <summary>
     /// Gets or sets Port of mail sender.
     /// </summary>
-    public int SmtpPort { get; set; }
+    public int SmtpPort { get; set; } = smtpPort;
 
     /// <summary>
     /// Gets or sets Host of mail sender.
     /// </summary>
-    public string SmtpHost { get; set; }
+    public string SmtpHost { get; set; } = smtpHost;
 
     /// <summary>
     /// Gets or sets enable ssql of mail sender smtp client.
     /// </summary>
-    public bool EnableSsl { get; set; }
-
-    /// <summary>
-    /// Initializes mail sending operation default values.
-    /// </summary>
-    /// <param name="from"></param>
-    /// <param name="networkCredential"></param>
-    /// <param name="smtpPort"></param>
-    /// <param name="smtpHost"></param>
-    /// <param name="enableSsl"></param>
-    public MilvaMailSender(string from, NetworkCredential networkCredential, int smtpPort, string smtpHost, bool enableSsl)
-    {
-        From = from;
-        NetworkCredential = networkCredential;
-        SmtpPort = smtpPort;
-        SmtpHost = smtpHost;
-        EnableSsl = enableSsl;
-    }
+    public bool EnableSsl { get; set; } = enableSsl;
 
     #region Async
 
@@ -68,18 +57,6 @@ public class MilvaMailSender : IMilvaMailSender
                                          string subject,
                                          string body,
                                          bool isBodyHtml = false) => await SendMailAsync(to, subject, body, isBodyHtml).ConfigureAwait(false);
-
-    /// <summary>
-    /// Provides send mail.
-    /// </summary>
-    /// <param name="to"></param>
-    /// <param name="subject"></param>
-    /// <param name="body"></param>
-    /// <param name="isBodyHtml"></param>
-    public async Task MilvaSendMailAsync(string to,
-                                         MailSubject subject,
-                                         string body,
-                                         bool isBodyHtml = false) => await SendMailAsync(to, CommonHelper.GetEnumDesciption(subject), body, isBodyHtml).ConfigureAwait(false);
 
     #region Send With Attachment
 
@@ -189,27 +166,6 @@ public class MilvaMailSender : IMilvaMailSender
         await smtpClient.SendMailAsync(mailMessage).ConfigureAwait(false);
     }
 
-    /// <summary>
-    /// Provides send mail with attachment.
-    /// </summary>
-    /// <param name="to"></param>
-    /// <param name="subject"></param>
-    /// <param name="body"></param>
-    /// <param name="filePath"></param>
-    /// <param name="contentType"></param>
-    /// <param name="isBodyHtml"></param>
-    public async Task MilvaSendMailAsync(string to,
-                                         MailSubject subject,
-                                         string body,
-                                         string filePath,
-                                         ContentType contentType,
-                                         bool isBodyHtml = false) => await SendMailWithFileAsync(to,
-                                                                                                 CommonHelper.GetEnumDesciption(subject),
-                                                                                                 body,
-                                                                                                 isBodyHtml,
-                                                                                                 filePath,
-                                                                                                 contentType).ConfigureAwait(false);
-
     #endregion
 
     #region Private Methods
@@ -292,18 +248,6 @@ public class MilvaMailSender : IMilvaMailSender
                               string body,
                               string filePath,
                               bool isBodyHtml = false) => SendMailWithFile(to, subject, body, isBodyHtml, filePath);
-
-    /// <summary>
-    /// Provides send mail.
-    /// </summary>
-    /// <param name="to"></param>
-    /// <param name="subject"></param>
-    /// <param name="body"></param>
-    /// <param name="isBodyHtml"></param>
-    public void MilvaSendMail(string to,
-                              MailSubject subject,
-                              string body,
-                              bool isBodyHtml = false) => SendMail(to, CommonHelper.GetEnumDesciption(subject), body, isBodyHtml);
 
 
     #region Private Methods

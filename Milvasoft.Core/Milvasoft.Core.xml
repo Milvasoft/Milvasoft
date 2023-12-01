@@ -279,137 +279,6 @@
             <param name="arguments"></param>
             <returns>The string.</returns>
         </member>
-        <member name="T:Milvasoft.Core.Abstractions.IMilvaLogger">
-            <summary>
-            Logger interface for DI. If you want to get logs from library side errors implement this interface and register to <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/>.
-            </summary>
-        </member>
-        <member name="M:Milvasoft.Core.Abstractions.IMilvaLogger.LogVerbose(System.String)">
-            <summary>
-            Saves the log at verbose level.
-            </summary>
-        </member>
-        <member name="M:Milvasoft.Core.Abstractions.IMilvaLogger.LogInfo(System.String)">
-            <summary>
-            Saves the log at info level.
-            </summary>
-        </member>
-        <member name="M:Milvasoft.Core.Abstractions.IMilvaLogger.LogWarning(System.String)">
-            <summary>
-            Saves the log at warn level.
-            </summary>
-        </member>
-        <member name="M:Milvasoft.Core.Abstractions.IMilvaLogger.LogDebug(System.String)">
-            <summary>
-            Saves the log at debug level.
-            </summary>
-        </member>
-        <member name="M:Milvasoft.Core.Abstractions.IMilvaLogger.LogError(System.String)">
-            <summary>
-            Saves the log at error level.
-            </summary>
-        </member>
-        <member name="M:Milvasoft.Core.Abstractions.IMilvaLogger.LogFatal(System.String)">
-            <summary>
-            Saves the log at fatal level.
-            </summary>
-            <param name="message"></param>
-        </member>
-        <member name="M:Milvasoft.Core.Abstractions.IMilvaLogger.LogFatal(System.String,System.String)">
-            <summary>
-            Saves the log at fatal level. And sends mail to producer.
-            </summary>
-            <param name="message"></param>
-            <param name="mailSubject"></param>
-        </member>
-        <member name="M:Milvasoft.Core.Abstractions.IMilvaLogger.LogFatalAsync(System.String,System.String)">
-            <summary>
-            Saves the log at fatal level. And sends mail to producer.
-            </summary>
-            <param name="message"></param>
-            <param name="mailSubject"></param>
-        </member>
-        <member name="M:Milvasoft.Core.Abstractions.IMilvaLogger.LogFatal(System.String,Milvasoft.Core.Utils.Enums.MailSubject)">
-            <summary>
-            Saves the log at fatal level. And sends mail to producer.
-            </summary>
-            <param name="message"></param>
-            <param name="mailSubject"></param>
-        </member>
-        <member name="M:Milvasoft.Core.Abstractions.IMilvaLogger.LogFatalAsync(System.String,Milvasoft.Core.Utils.Enums.MailSubject)">
-            <summary>
-            Saves the log at fatal level. And sends mail to producer.
-            </summary>
-            <param name="message"></param>
-            <param name="mailSubject"></param>
-        </member>
-        <member name="M:Milvasoft.Core.Abstractions.IMilvaLogger.Write(Milvasoft.Core.Abstractions.SeriLogEventLevel,System.String)">
-            <summary>
-            Write a log event with the specified level.
-            </summary>
-            <param name="seriLogEventLevel"></param>
-            <param name="messageTemplate"></param>
-        </member>
-        <member name="M:Milvasoft.Core.Abstractions.IMilvaLogger.Write(Milvasoft.Core.Abstractions.SeriLogEventLevel,System.Exception,System.String)">
-            <summary>
-            Write a log event with the specified level.
-            </summary>
-            <param name="seriLogEventLevel"></param>
-            <param name="exception"></param>
-            <param name="messageTemplate"></param>
-        </member>
-        <member name="M:Milvasoft.Core.Abstractions.IMilvaLogger.Write(Milvasoft.Core.Abstractions.SeriLogEventLevel,System.String,System.Object[])">
-            <summary>
-            Write a log event with the specified level.
-            </summary>
-            <param name="seriLogEventLevel"></param>
-            <param name="messageTemplate"></param>
-            <param name="propertyValues"></param>
-        </member>
-        <member name="M:Milvasoft.Core.Abstractions.IMilvaLogger.Write(Milvasoft.Core.Abstractions.SeriLogEventLevel,System.Exception,System.String,System.Object[])">
-            <summary>
-            Write a log event with the specified level and associated exception.
-            </summary>
-            <param name="seriLogEventLevel"></param>
-            <param name="exception"></param>
-            <param name="messageTemplate"></param>
-            <param name="propertyValues"></param>
-        </member>
-        <member name="T:Milvasoft.Core.Abstractions.SeriLogEventLevel">
-            <summary>
-            Specifies the meaning and relative importance of a log event.
-            </summary>
-        </member>
-        <member name="F:Milvasoft.Core.Abstractions.SeriLogEventLevel.Verbose">
-            <summary>
-            Anything and everything you might want to know about a running block of code.
-            </summary>
-        </member>
-        <member name="F:Milvasoft.Core.Abstractions.SeriLogEventLevel.Debug">
-            <summary>
-            Internal system events that aren't necessarily observable from the outside.
-            </summary>
-        </member>
-        <member name="F:Milvasoft.Core.Abstractions.SeriLogEventLevel.Information">
-            <summary>
-            The lifeblood of operational intelligence - things happen.
-            </summary>
-        </member>
-        <member name="F:Milvasoft.Core.Abstractions.SeriLogEventLevel.Warning">
-            <summary>
-            Service is degraded or endangered.
-            </summary>
-        </member>
-        <member name="F:Milvasoft.Core.Abstractions.SeriLogEventLevel.Error">
-            <summary>
-            Functionality is unavailable, invariants are broken or data is lost.
-            </summary>
-        </member>
-        <member name="F:Milvasoft.Core.Abstractions.SeriLogEventLevel.Fatal">
-            <summary>
-            If you have a pager, it goes off when one of these occurs.
-            </summary>
-        </member>
         <member name="T:Milvasoft.Core.CommonHelper">
             <summary>
             Common Helper class.
@@ -1998,6 +1867,99 @@
             <param name="expression"></param>
             <returns></returns>
         </member>
+        <member name="T:Milvasoft.Core.Extensions.Filter">
+            <summary>
+            Helper for filtering.
+            </summary>
+        </member>
+        <member name="M:Milvasoft.Core.Extensions.Filter.FilterByDate``1(System.Collections.Generic.IEnumerable{``0},System.Nullable{System.DateTime},System.Nullable{System.DateTime},System.Linq.Expressions.Expression{System.Func{``0,System.Nullable{System.DateTime}}})">
+             <summary>
+             <para> Filter <paramref name="contentList"/> by <paramref name="dateTopValue"/> and <paramref name="dateLowerValue"/> values. </para>
+             </summary>
+             
+             <remarks>
+             
+             <para><b>Remarks: </b></para>
+             
+             <para> If a selection has been made between two dates, it will return those between the two dates. </para>
+             <para> If only the <paramref name="dateTopValue"/> value exists, it returns those larger than the <paramref name="dateLowerValue"/> value. </para>
+             <para> If only the <paramref name="dateLowerValue"/> value exists, it returns those smaller than the <paramref name="dateTopValue"/> value. </para>
+             
+             </remarks>
+            
+             <typeparam name="T"></typeparam>
+             <param name="contentList"></param>
+             <param name="dateTopValue"></param>
+             <param name="dateLowerValue"></param>
+             <param name="dateProperty"></param>
+             <returns> Filtered <paramref name="contentList"/> </returns>
+        </member>
+        <member name="M:Milvasoft.Core.Extensions.Filter.CreateDateFilterExpression``1(System.Nullable{System.DateTime},System.Nullable{System.DateTime},System.Linq.Expressions.Expression{System.Func{``0,System.Nullable{System.DateTime}}})">
+            <summary>
+            <para> Creates expression by <paramref name="dateTopValue"/> and <paramref name="dateLowerValue"/> values. </para>
+            </summary>
+            
+            <remarks>
+            
+            <para><b>Remarks: </b></para>
+            
+            <para> If a selection has been made between two dates, it will return those between the two dates. </para>
+            <para> If only the <paramref name="dateTopValue"/> value exists, it returns those larger than the <paramref name="dateLowerValue"/> value. </para>
+            <para> If only the <paramref name="dateLowerValue"/> value exists, it returns those smaller than the <paramref name="dateTopValue"/> value. </para>
+            
+            </remarks>
+            
+            <typeparam name="T"></typeparam>
+            <param name="dateTopValue"></param>
+            <param name="dateLowerValue"></param>
+            <param name="dateProperty"></param>
+            <returns> 
+            
+            Example Return when both values has value :
+            
+            <code> i => i.<paramref name="dateProperty"/> <b>biggerThanOrEqual</b> <paramref name="dateLowerValue"/> <b>AND</b> i.<paramref name="dateProperty"/> <b>lessThanOrEqual</b> <paramref name="dateTopValue"/> </code>
+            
+            </returns>
+        </member>
+        <member name="M:Milvasoft.Core.Extensions.Filter.CreateDateFilterExpression``1(System.Nullable{System.DateTime},System.Nullable{System.DateTime},System.Linq.Expressions.Expression{System.Func{``0,System.DateTime}})">
+            <summary>
+            <para> Creates expression by <paramref name="dateTopValue"/> and <paramref name="dateLowerValue"/> values. </para>
+            </summary>
+            
+            <remarks>
+            
+            <para><b>Remarks: </b></para>
+            
+            <para> If a selection has been made between two dates, it will return those between the two dates. </para>
+            <para> If only the <paramref name="dateTopValue"/> value exists, it returns those larger than the <paramref name="dateLowerValue"/> value. </para>
+            <para> If only the <paramref name="dateLowerValue"/> value exists, it returns those smaller than the <paramref name="dateTopValue"/> value. </para>
+            
+            </remarks>
+            
+            <typeparam name="T"></typeparam>
+            <param name="dateTopValue"></param>
+            <param name="dateLowerValue"></param>
+            <param name="dateProperty"></param>
+            <returns> 
+            
+            Example Return when both values has value :
+            
+            <code> i => i.<paramref name="dateProperty"/> <b>biggerThanOrEqual</b> <paramref name="dateLowerValue"/> <b>AND</b> i.<paramref name="dateProperty"/> <b>lessThanOrEqual</b> <paramref name="dateTopValue"/> </code>
+            
+            </returns>
+        </member>
+        <member name="M:Milvasoft.Core.Extensions.Filter.GetSpecMaxValues``2(System.Collections.Generic.IEnumerable{``0},``1,System.Linq.Expressions.Expression{System.Func{``0,System.Decimal}}[])">
+            <summary>
+            <para>Gets maximum list values of matching properties of <paramref name="maxValuesObject"/> and <typeparamref name = "T" />.</para>
+            <para>Returns that max values in <paramref name="maxValuesObject"/>.</para>
+            </summary>
+            <typeparam name="T"></typeparam>
+            <typeparam name="TReturnObject"></typeparam>
+            <param name="entities"></param>
+            <param name="maxValuesObject"></param>
+            <param name="requestedProperties"></param>
+            <returns> Mapped <paramref name="maxValuesObject"/> </returns>
+        </member>
         <member name="T:Milvasoft.Core.Extensions.GenericCollection">
             <summary>
             Generic collection helper extension methods.
@@ -2132,6 +2094,41 @@
             <param name="batchSize"></param>
             <returns></returns>
         </member>
+        <member name="T:Milvasoft.Core.Extensions.GeoLocation.GeoLocationExtensions">
+            <summary>
+            Extension methods for geo location.
+            </summary>
+        </member>
+        <member name="M:Milvasoft.Core.Extensions.GeoLocation.GeoLocationExtensions.CalculateDistance(Milvasoft.Core.Extensions.GeoLocation.Models.GeoPoint,Milvasoft.Core.Extensions.GeoLocation.Models.GeoPoint)">
+            <summary>
+            Calculates the distance in km from <paramref name="point1"/> to <paramref name="point2"/>.
+            </summary>
+            <param name="point1"></param>
+            <param name="point2"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Milvasoft.Core.Extensions.GeoLocation.Models.GeoPoint">
+            <summary>
+            Location point.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Core.Extensions.GeoLocation.Models.GeoPoint.Latitude">
+            <summary>
+            Latitude of point.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Core.Extensions.GeoLocation.Models.GeoPoint.Longitude">
+            <summary>
+            Longitude of point.
+            </summary>
+        </member>
+        <member name="M:Milvasoft.Core.Extensions.GeoLocation.Models.GeoPoint.#ctor(System.Double,System.Double)">
+            <summary>
+            Initialize new instance of <see cref="T:Milvasoft.Core.Extensions.GeoLocation.Models.GeoPoint"/> with lat and lon.
+            </summary>
+            <param name="latitude"></param>
+            <param name="longitude"></param>
+        </member>
         <member name="T:Milvasoft.Core.Extensions.Helpers.ExpressionParameterReplacer">
             <summary>
             Expression parameter replacer for expression builder.
@@ -2230,134 +2227,6 @@
             </summary>
             <param name="str"></param>
             <returns> Hashed <paramref name="str"/> as string. </returns>
-        </member>
-        <member name="T:Milvasoft.Core.Filter">
-            <summary>
-            Helper for filtering.
-            </summary>
-        </member>
-        <member name="M:Milvasoft.Core.Filter.FilterByDate``1(System.Collections.Generic.IEnumerable{``0},System.Nullable{System.DateTime},System.Nullable{System.DateTime},System.Linq.Expressions.Expression{System.Func{``0,System.Nullable{System.DateTime}}})">
-             <summary>
-             <para> Filter <paramref name="contentList"/> by <paramref name="dateTopValue"/> and <paramref name="dateLowerValue"/> values. </para>
-             </summary>
-             
-             <remarks>
-             
-             <para><b>Remarks: </b></para>
-             
-             <para> If a selection has been made between two dates, it will return those between the two dates. </para>
-             <para> If only the <paramref name="dateTopValue"/> value exists, it returns those larger than the <paramref name="dateLowerValue"/> value. </para>
-             <para> If only the <paramref name="dateLowerValue"/> value exists, it returns those smaller than the <paramref name="dateTopValue"/> value. </para>
-             
-             </remarks>
-            
-             <typeparam name="T"></typeparam>
-             <param name="contentList"></param>
-             <param name="dateTopValue"></param>
-             <param name="dateLowerValue"></param>
-             <param name="dateProperty"></param>
-             <returns> Filtered <paramref name="contentList"/> </returns>
-        </member>
-        <member name="M:Milvasoft.Core.Filter.CreateDateFilterExpression``1(System.Nullable{System.DateTime},System.Nullable{System.DateTime},System.Linq.Expressions.Expression{System.Func{``0,System.Nullable{System.DateTime}}})">
-            <summary>
-            <para> Creates expression by <paramref name="dateTopValue"/> and <paramref name="dateLowerValue"/> values. </para>
-            </summary>
-            
-            <remarks>
-            
-            <para><b>Remarks: </b></para>
-            
-            <para> If a selection has been made between two dates, it will return those between the two dates. </para>
-            <para> If only the <paramref name="dateTopValue"/> value exists, it returns those larger than the <paramref name="dateLowerValue"/> value. </para>
-            <para> If only the <paramref name="dateLowerValue"/> value exists, it returns those smaller than the <paramref name="dateTopValue"/> value. </para>
-            
-            </remarks>
-            
-            <typeparam name="T"></typeparam>
-            <param name="dateTopValue"></param>
-            <param name="dateLowerValue"></param>
-            <param name="dateProperty"></param>
-            <returns> 
-            
-            Example Return when both values has value :
-            
-            <code> i => i.<paramref name="dateProperty"/> <b>biggerThanOrEqual</b> <paramref name="dateLowerValue"/> <b>AND</b> i.<paramref name="dateProperty"/> <b>lessThanOrEqual</b> <paramref name="dateTopValue"/> </code>
-            
-            </returns>
-        </member>
-        <member name="M:Milvasoft.Core.Filter.CreateDateFilterExpression``1(System.Nullable{System.DateTime},System.Nullable{System.DateTime},System.Linq.Expressions.Expression{System.Func{``0,System.DateTime}})">
-            <summary>
-            <para> Creates expression by <paramref name="dateTopValue"/> and <paramref name="dateLowerValue"/> values. </para>
-            </summary>
-            
-            <remarks>
-            
-            <para><b>Remarks: </b></para>
-            
-            <para> If a selection has been made between two dates, it will return those between the two dates. </para>
-            <para> If only the <paramref name="dateTopValue"/> value exists, it returns those larger than the <paramref name="dateLowerValue"/> value. </para>
-            <para> If only the <paramref name="dateLowerValue"/> value exists, it returns those smaller than the <paramref name="dateTopValue"/> value. </para>
-            
-            </remarks>
-            
-            <typeparam name="T"></typeparam>
-            <param name="dateTopValue"></param>
-            <param name="dateLowerValue"></param>
-            <param name="dateProperty"></param>
-            <returns> 
-            
-            Example Return when both values has value :
-            
-            <code> i => i.<paramref name="dateProperty"/> <b>biggerThanOrEqual</b> <paramref name="dateLowerValue"/> <b>AND</b> i.<paramref name="dateProperty"/> <b>lessThanOrEqual</b> <paramref name="dateTopValue"/> </code>
-            
-            </returns>
-        </member>
-        <member name="M:Milvasoft.Core.Filter.GetSpecMaxValues``2(System.Collections.Generic.IEnumerable{``0},``1,System.Linq.Expressions.Expression{System.Func{``0,System.Decimal}}[])">
-            <summary>
-            <para>Gets maximum list values of matching properties of <paramref name="maxValuesObject"/> and <typeparamref name = "T" />.</para>
-            <para>Returns that max values in <paramref name="maxValuesObject"/>.</para>
-            </summary>
-            <typeparam name="T"></typeparam>
-            <typeparam name="TReturnObject"></typeparam>
-            <param name="entities"></param>
-            <param name="maxValuesObject"></param>
-            <param name="requestedProperties"></param>
-            <returns> Mapped <paramref name="maxValuesObject"/> </returns>
-        </member>
-        <member name="T:Milvasoft.Core.GeoLocation.GeoLocationExtensions">
-            <summary>
-            Extension methods for geo location.
-            </summary>
-        </member>
-        <member name="M:Milvasoft.Core.GeoLocation.GeoLocationExtensions.CalculateDistance(Milvasoft.Core.GeoLocation.Models.GeoPoint,Milvasoft.Core.GeoLocation.Models.GeoPoint)">
-            <summary>
-            Calculates the distance in km from <paramref name="point1"/> to <paramref name="point2"/>.
-            </summary>
-            <param name="point1"></param>
-            <param name="point2"></param>
-            <returns></returns>
-        </member>
-        <member name="T:Milvasoft.Core.GeoLocation.Models.GeoPoint">
-            <summary>
-            Location point.
-            </summary>
-        </member>
-        <member name="P:Milvasoft.Core.GeoLocation.Models.GeoPoint.Latitude">
-            <summary>
-            Latitude of point.
-            </summary>
-        </member>
-        <member name="P:Milvasoft.Core.GeoLocation.Models.GeoPoint.Longitude">
-            <summary>
-            Longitude of point.
-            </summary>
-        </member>
-        <member name="M:Milvasoft.Core.GeoLocation.Models.GeoPoint.#ctor(System.Double,System.Double)">
-            <summary>
-            Initialize new instance of <see cref="T:Milvasoft.Core.GeoLocation.Models.GeoPoint"/> with lat and lon.
-            </summary>
-            <param name="latitude"></param>
-            <param name="longitude"></param>
         </member>
         <member name="T:Milvasoft.Core.NetworkUtil">
             <summary>
@@ -2866,71 +2735,6 @@
         </member>
         <member name="F:Milvasoft.Core.Utils.Constants.MimeTypeNames.ApplicationZip">
             <summary>ZIP archive files; Registered[7]</summary>
-        </member>
-        <member name="T:Milvasoft.Core.Utils.Enums.CrudOperation">
-            <summary>
-            CRUD operation enum.
-            </summary>
-        </member>
-        <member name="F:Milvasoft.Core.Utils.Enums.CrudOperation.Add">
-            <summary>
-            Add operation
-            </summary>
-        </member>
-        <member name="F:Milvasoft.Core.Utils.Enums.CrudOperation.Update">
-            <summary>
-            Update operation
-            </summary>
-        </member>
-        <member name="F:Milvasoft.Core.Utils.Enums.CrudOperation.Delete">
-            <summary>
-            Delete operation
-            </summary>
-        </member>
-        <member name="F:Milvasoft.Core.Utils.Enums.CrudOperation.GetById">
-            <summary>
-            GetById operation
-            </summary>
-        </member>
-        <member name="F:Milvasoft.Core.Utils.Enums.CrudOperation.GetAll">
-            <summary>
-            GetAll operation
-            </summary>
-        </member>
-        <member name="F:Milvasoft.Core.Utils.Enums.CrudOperation.Filtering">
-            <summary>
-            Filtering operation
-            </summary>
-        </member>
-        <member name="F:Milvasoft.Core.Utils.Enums.CrudOperation.Specific">
-            <summary>
-            Specific operation
-            </summary>
-        </member>
-        <member name="T:Milvasoft.Core.Utils.Enums.MailSubject">
-            <summary>
-            Mail subjects.
-            </summary>
-        </member>
-        <member name="F:Milvasoft.Core.Utils.Enums.MailSubject.Error">
-            <summary>
-            The enum that should be sent for error messages.
-            </summary>
-        </member>
-        <member name="F:Milvasoft.Core.Utils.Enums.MailSubject.Hack">
-            <summary>
-            The enum that should be sent for hack warning.
-            </summary>
-        </member>
-        <member name="F:Milvasoft.Core.Utils.Enums.MailSubject.ShutDown">
-            <summary>
-            The enum that should be sent for hack warning.
-            </summary>
-        </member>
-        <member name="F:Milvasoft.Core.Utils.Enums.MailSubject.Information">
-            <summary>
-            The enum that should be sent for information.
-            </summary>
         </member>
         <member name="T:Milvasoft.Core.Utils.Models.CommunicationModel`2">
             <summary>

@@ -1,8 +1,7 @@
-﻿using Milvasoft.Core;
-using Milvasoft.Core.Abstractions;
+﻿using Microsoft.Extensions.Logging;
+using Milvasoft.Core;
 using Milvasoft.Core.Exceptions;
 using Milvasoft.Core.Extensions;
-using Milvasoft.Core.Utils.Enums;
 using StackExchange.Redis;
 using System.Text.Json;
 
@@ -216,7 +215,7 @@ public partial class RedisAccessor
     /// <param name="userFriendlyMessageLocalizerKey"></param>
     /// <param name="milvaLogger"></param>
     /// <returns></returns>
-    public async Task PerformRedisActionAsync(Func<Task> action, string userFriendlyMessageLocalizerKey, IMilvaLogger milvaLogger = null)
+    public async Task PerformRedisActionAsync(Func<Task> action, string userFriendlyMessageLocalizerKey, ILogger milvaLogger = null)
     {
         try
         {
@@ -230,8 +229,7 @@ public partial class RedisAccessor
         }
         catch (MilvaUserFriendlyException)
         {
-            if (milvaLogger != null)
-                _ = milvaLogger.LogFatalAsync("Cannot reach redis server.", MailSubject.Error);
+            milvaLogger?.LogError("Cannot reach redis server.");
 
             throw;
         }
@@ -246,7 +244,7 @@ public partial class RedisAccessor
     /// <param name="userFriendlyMessageLocalizerKey"></param>
     /// <param name="milvaLogger"></param>
     /// <returns></returns>
-    public async Task<T> PerformRedisActionAsync<T>(Func<Task<T>> action, string userFriendlyMessageLocalizerKey, IMilvaLogger milvaLogger = null)
+    public async Task<T> PerformRedisActionAsync<T>(Func<Task<T>> action, string userFriendlyMessageLocalizerKey, ILogger milvaLogger = null)
     {
         try
         {
@@ -260,8 +258,7 @@ public partial class RedisAccessor
         }
         catch (MilvaUserFriendlyException)
         {
-            if (milvaLogger != null)
-                _ = milvaLogger.LogFatalAsync("Cannot reach redis server.", MailSubject.Error);
+            milvaLogger?.LogError("Cannot reach redis server.");
 
             throw;
         }

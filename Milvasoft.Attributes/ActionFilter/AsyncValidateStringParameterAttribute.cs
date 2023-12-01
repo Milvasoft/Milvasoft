@@ -1,11 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Milvasoft.Core;
 using Milvasoft.Core.Abstractions;
 using Milvasoft.Core.Exceptions;
 using Milvasoft.Core.Extensions;
 using Milvasoft.Core.Utils.Constants;
-using Milvasoft.Core.Utils.Enums;
 using Milvasoft.Core.Utils.Models;
 
 namespace Milvasoft.Attributes.ActionFilter;
@@ -100,10 +100,10 @@ public class AsyncValidateStringParameterAttribute : Attribute, IAsyncActionFilt
                                 foreach (var invalidStringValue in invalidString.Values)
                                     if (stringValue.Contains(invalidStringValue))
                                     {
-                                        var milvasoftLogger = context.HttpContext.RequestServices.GetService<IMilvaLogger>();
+                                        var milvasoftLogger = context.HttpContext.RequestServices.GetService<ILogger>();
 
                                         if (!string.IsNullOrWhiteSpace(MailContent) && milvasoftLogger != null)
-                                            milvasoftLogger.LogFatal(MailContent, MailSubject.Hack);
+                                            milvasoftLogger.LogError(MailContent);
 
                                         throw new MilvaUserFriendlyException(milvaLocalizer != null
                                                                                     ? milvaLocalizer[LocalizerKeys.PreventStringInjectionContainsForbiddenWordError, localizedPropName]

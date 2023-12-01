@@ -1,10 +1,10 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Milvasoft.Core;
 using Milvasoft.Core.Abstractions;
 using Milvasoft.Core.Extensions;
 using Milvasoft.Core.Utils.Constants;
-using Milvasoft.Core.Utils.Enums;
 using Milvasoft.Core.Utils.Models;
 using System.ComponentModel.DataAnnotations;
 
@@ -169,10 +169,10 @@ public class ValidateStringAttribute : ValidationAttribute
                         foreach (var invalidStringValue in invalidString.Values)
                             if (stringValue.ToLowerInvariant().Contains(invalidStringValue))
                             {
-                                var milvasoftLogger = context.GetService<IMilvaLogger>();
+                                var milvasoftLogger = context.GetService<ILogger>();
 
                                 if (!string.IsNullOrWhiteSpace(MailContent) && milvasoftLogger != null)
-                                    milvasoftLogger.LogFatal(MailContent, MailSubject.Hack);
+                                    milvasoftLogger.LogError(MailContent);
 
                                 ErrorMessage = milvaLocalizer != null
                                                ? milvaLocalizer[LocalizerKeys.PreventStringInjectionContainsForbiddenWordError, localizedPropName]
