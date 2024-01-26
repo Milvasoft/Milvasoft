@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Milvasoft.Interception.Interceptors;
+using Milvasoft.Interception.Interceptors.Logging;
 using Milvasoft.Interception.Interceptors.Runner;
 using System.Reflection;
 
@@ -71,6 +72,24 @@ public static class InterceptionServiceCollectionExtensions
             services.Insert(index, Intercept(descriptor));
             services.RemoveAt(index + 1);
         }
+
+        return services;
+    }
+
+    /// <summary>
+    /// Decorates the specified service type descriptor inside <see cref="IServiceCollection"/>.
+    /// </summary>
+    /// <typeparam name="T">Service type to be decorated</typeparam>
+    public static IServiceCollection AddLoggingInterceptor(this IServiceCollection services, Action<ILogInterceptionOptions> interceptionOptions = null)
+    {
+        if (!services.Any(s => s.ServiceType == typeof(LogInterceptor)))
+            services.AddTransient<LogInterceptor>();
+
+        var config = new LogInterceptionOptions();
+
+        interceptionOptions?.Invoke(config);
+
+        services.AddSingleton<ILogInterceptionOptions>(config);
 
         return services;
     }

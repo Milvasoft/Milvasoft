@@ -45,7 +45,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Milvasoft.Localization.Resx
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Milvasoft.Types", "Milvasoft.Types\Milvasoft.Types.csproj", "{B89E4D68-C979-49F2-8F70-82B2212B300B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Milvasoft.Interception", "Milvasoft.Interception\Milvasoft.Interception.csproj", "{5D42AB35-DC86-41AE-9781-1D0A957FCDDC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Milvasoft.Interception", "Milvasoft.Interception\Milvasoft.Interception.csproj", "{5D42AB35-DC86-41AE-9781-1D0A957FCDDC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

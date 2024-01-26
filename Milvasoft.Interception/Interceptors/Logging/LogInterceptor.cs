@@ -1,23 +1,30 @@
-﻿using Milvasoft.Interception.Decorator;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Milvasoft.Core;
+using Milvasoft.Core.Abstractions;
+using Milvasoft.Interception.Decorator;
 using Milvasoft.Interception.Interceptors.ActivityScope;
 using System.Diagnostics;
 using System.Linq.Expressions;
-using System.Text.Json;
 
 namespace Milvasoft.Interception.Interceptors.Logging;
 
 public class LogInterceptor : IMilvaInterceptor
 {
-    /// TODO : ILOggerla uyumlu çalışacak bir yapı geliştir.  
-
     public int InterceptionOrder { get; set; } = -1;
+
+    private IServiceProvider _serviceProvider;
+    private IMilvaLogger _logger;
+    private ILogInterceptionOptions _logInterceptionOptions;
+
+    public LogInterceptor(IServiceProvider serviceProvider)
+    {
+        _serviceProvider = serviceProvider;
+        _logger = serviceProvider.GetService<IMilvaLogger>();
+        _logInterceptionOptions = serviceProvider.GetService<ILogInterceptionOptions>();
+    }
 
     public async Task OnInvoke(Call call)
     {
-        var logAttribute = call.GetInterceptorAttribute<LogAttribute>();
-
-        var defaultLog = logAttribute != null;
-
         var stopwatch = new Stopwatch();
 
         stopwatch.Start();
@@ -26,27 +33,20 @@ public class LogInterceptor : IMilvaInterceptor
 
         stopwatch.Stop();
 
-        var ms = stopwatch.ElapsedMilliseconds;
-
-        if (defaultLog)
+        var logObjectPropDic = _logInterceptionOptions.LogDefaultParameters ? new Dictionary<string, object>()
         {
-            var log = new LogObject
-            {
-                TransactionId = ActivityHelper.TraceId,
-                Id = ActivityHelper.Id,
-                SpanId = ActivityHelper.SpanId,
-                Parent = ActivityHelper.Parent,
-                TraceId = ActivityHelper.TraceId,
-                MethodName = call.Method.Name,
-                MethodParams = JsonSerializer.Serialize(call.Arguments),
-                MethodResult = JsonSerializer.Serialize(call.ReturnValue),
-                ElapsedMs = ms.ToString()
-            };
+            { "TransactionId", ActivityHelper.TraceId },
+            { "MethodName", call.Method.Name },
+            { "MethodParams", call.Arguments },
+            { "MethodResult", call.ReturnValue },
+            { "ElapsedMs", stopwatch.ElapsedMilliseconds },
+            { "UtcLogTime" , DateTime.UtcNow },
+        } : [];
 
-            Console.WriteLine(log);
-            Console.WriteLine("\n");
-        }
-        else
+        var logAttribute = call.GetInterceptorAttribute<LogAttribute>();
+
+        //If call hasn't LogAttribute this means call has LogRunnerAttribute. So, get required values from expression.
+        if (logAttribute == null && _logInterceptionOptions.LogDefaultParameters)
         {
             var expression = call.Arguments[0];
 
@@ -55,86 +55,30 @@ public class LogInterceptor : IMilvaInterceptor
             var values = new List<object>();
 
             foreach (var argument in body.Arguments)
-            {
                 values.Add(argument.GetType().GetProperty("Value").GetValue(argument));
-            }
 
             var argumentValues = values;
 
             var methodName = body.Method.Name;
 
-            var log = new LogObject
+            logObjectPropDic["MethodName"] = methodName;
+            logObjectPropDic["MethodParams"] = argumentValues;
+        }
+
+        //If you want to log the values coming from the project where the library is used.
+        var extraPropsObject = _logInterceptionOptions.ExtraLoggingPropertiesSelector?.Invoke(_serviceProvider);
+
+        if (extraPropsObject != null)
+        {
+            var extraProps = extraPropsObject.GetType().GetProperties();
+
+            foreach (var extraProp in extraProps)
             {
-                TransactionId = ActivityHelper.TraceId,
-                Id = ActivityHelper.Id,
-                SpanId = ActivityHelper.SpanId,
-                Parent = ActivityHelper.Parent,
-                TraceId = ActivityHelper.TraceId,
-                MethodName = methodName.ToString(),
-                MethodParams = JsonSerializer.Serialize(argumentValues),
-                MethodResult = JsonSerializer.Serialize(call.ReturnValue),
-                ElapsedMs = ms.ToString()
-            };
-
-            Console.WriteLine(log);
-            Console.WriteLine("\n");
+                logObjectPropDic.Add(extraProp.Name, extraProp.GetValue(extraPropsObject, null));
+            }
         }
+
+        _logger.Log(logObjectPropDic.ToJson().ToObject<object>());
     }
 
-    public static MemberExpression ResolveMemberExpression(Expression expression)
-    {
-
-        if (expression is MemberExpression)
-        {
-            return (MemberExpression)expression;
-        }
-        else if (expression is UnaryExpression)
-        {
-            // if casting is involved, Expression is not x => x.FieldName but x => Convert(x.Fieldname)
-            return (MemberExpression)((UnaryExpression)expression).Operand;
-        }
-        else
-        {
-            throw new NotSupportedException(expression.ToString());
-        }
-    }
-
-    private static object GetValue(MemberExpression exp)
-    {
-        // expression is ConstantExpression or FieldExpression
-        if (exp.Expression is ConstantExpression)
-        {
-            return ((ConstantExpression)exp.Expression).Value
-                    .GetType()
-                    .GetField(exp.Member.Name)
-                    .GetValue(((ConstantExpression)exp.Expression).Value);
-        }
-        else if (exp.Expression is MemberExpression)
-        {
-            return GetValue((MemberExpression)exp.Expression);
-        }
-        else
-        {
-            throw new NotImplementedException();
-        }
-    }
-
-    static string MethodNameFor<T>(Expression<Func<T>> expression)
-    {
-        return ((MethodCallExpression)expression.Body).Method.Name;
-    }
-
-}
-
-public record LogObject
-{
-    public string TransactionId { get; set; }
-    public string Id { get; set; }
-    public string SpanId { get; set; }
-    public string Parent { get; set; }
-    public string TraceId { get; set; }
-    public string MethodName { get; set; }
-    public string MethodParams { get; set; }
-    public string MethodResult { get; set; }
-    public string ElapsedMs { get; set; }
 }
