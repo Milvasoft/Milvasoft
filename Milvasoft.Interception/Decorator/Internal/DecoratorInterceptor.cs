@@ -8,7 +8,6 @@ internal class DecoratorInterceptor(ReadOnlyDictionary<MethodInfo, IMilvaInterce
 {
     public ReadOnlyDictionary<MethodInfo, IMilvaInterceptor[]> MethodDecoratorMap { get; } = methodDecoratorMap;
 
-
     public void InterceptSynchronous(IInvocation invocation)
     {
         if (TryGetMethodDecorators(invocation, out var decorators))
@@ -80,7 +79,6 @@ internal class DecoratorInterceptor(ReadOnlyDictionary<MethodInfo, IMilvaInterce
 
         return MethodDecoratorMap.TryGetValue(targetMethod, out decorators) && decorators != null && decorators.Length != 0;
     }
-
 
     private static async Task WrapInvocationInTask(IInvocation invocation, IMilvaInterceptor[] decorators)
     {

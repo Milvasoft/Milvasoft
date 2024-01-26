@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Milvasoft.Core.Abstractions;
 using System.Xml.Linq;
 
 namespace Milvasoft.Localization.Resx.ResxManipulator;
@@ -9,7 +9,7 @@ namespace Milvasoft.Localization.Resx.ResxManipulator;
 public class ResxWriter
 {
     private readonly XDocument _xd;
-    private readonly ILogger _logger;
+    private readonly IMilvaLogger _logger;
     private readonly string _resourceFilePath;
 
     /// <summary>
@@ -19,7 +19,7 @@ public class ResxWriter
     /// <param name="location"></param>
     /// <param name="culture"></param>
     /// <param name="loggerFactory"></param>
-    public ResxWriter(Type type, string culture, string resourcePath, ILogger logger)
+    public ResxWriter(Type type, string culture, string resourcePath, IMilvaLogger logger)
     {
         _resourceFilePath = Path.Combine(resourcePath, $"{type.Name}.{culture}.resx");
 
@@ -28,7 +28,7 @@ public class ResxWriter
 
         _xd = XDocument.Load(_resourceFilePath);
         _logger = logger;
-        _logger?.LogInformation($"Resource file loaded: '{_resourceFilePath}'");
+        _logger?.Information($"Resource file loaded: '{_resourceFilePath}'");
     }
 
     private bool CreateNewResxFile(Type type)
@@ -41,12 +41,12 @@ public class ResxWriter
             // Create a copy of the template resx resource
             var resxTemplate = System.Reflection.Assembly.GetExecutingAssembly().GetManifestResourceStream("Milvasoft.Localization.Resx.ResxManipulator.Templates.ResxTemplate.xml");
 
-            _logger?.LogInformation($"ResxTemplate: {resxTemplate == null}");
+            _logger?.Information($"ResxTemplate: {resxTemplate == null}");
 
             using (Stream file = File.Create(_resourceFilePath))
                 resxTemplate.CopyTo(file);
 
-            _logger?.LogInformation($"Resx file created: '{_resourceFilePath}'");
+            _logger?.Information($"Resx file created: '{_resourceFilePath}'");
 
             success = true;
         }
@@ -105,8 +105,8 @@ public class ResxWriter
             }
             catch (Exception e)
             {
-                _logger?.LogError("Error while adding element to resource file.");
-                _logger?.LogError(e.Message);
+                _logger?.Error("Error while adding element to resource file.");
+                _logger?.Error(e.Message);
                 tsk.SetException(e);
                 tsk.SetResult(false);
                 return await tsk.Task;
@@ -130,8 +130,8 @@ public class ResxWriter
             }
             catch (Exception e)
             {
-                _logger?.LogError("Resource exporting error! An error occord during adding element to resx file.");
-                _logger?.LogError(e.Message);
+                _logger?.Error("Resource exporting error! An error occord during adding element to resx file.");
+                _logger?.Error(e.Message);
                 tsk.SetException(e);
                 tsk.TrySetResult(false);
             }
@@ -164,8 +164,8 @@ public class ResxWriter
         }
         catch (Exception e)
         {
-            _logger?.LogError("Resource removing error! An error occord during removing element from resx file.");
-            _logger?.LogError(e.Message);
+            _logger?.Error("Resource removing error! An error occord during removing element from resx file.");
+            _logger?.Error(e.Message);
 
             tsk.SetException(e);
             tsk.TrySetResult(false);
@@ -214,7 +214,7 @@ public class ResxWriter
             }
             catch (Exception e)
             {
-                _logger?.LogError(e.Message);
+                _logger?.Error(e.Message);
                 tsk.SetResult(false);
             }
         });

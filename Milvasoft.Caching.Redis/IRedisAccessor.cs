@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Milvasoft.Core.Abstractions;
 using Milvasoft.Core.Exceptions;
 using StackExchange.Redis;
 using System.Net;
@@ -152,7 +152,7 @@ public interface IRedisAccessor
     /// <returns></returns>
     Task PerformRedisActionAsync(Func<Task> action,
                                  string userFriendlyMessageLocalizerKey,
-                                 ILogger milvaLogger = null);
+                                 IMilvaLogger milvaLogger = null);
 
     /// <summary>
     /// It performs the requested redis action in try catch blocks. If redis client not connected, connects.
@@ -165,7 +165,7 @@ public interface IRedisAccessor
     /// <returns></returns>
     Task<T> PerformRedisActionAsync<T>(Func<Task<T>> action,
                                        string userFriendlyMessageLocalizerKey,
-                                       ILogger milvaLogger = null);
+                                       IMilvaLogger milvaLogger = null);
 
     /// <summary>
     /// Checks redis connection and if connection close try to open connection.

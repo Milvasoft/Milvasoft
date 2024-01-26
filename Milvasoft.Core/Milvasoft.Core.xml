@@ -296,6 +296,197 @@
             <param name="arguments"></param>
             <returns>The string.</returns>
         </member>
+        <member name="T:Milvasoft.Core.Abstractions.IMilvaLogger">
+            <summary>
+            Logger interface for DI. If you want to get logs from library side errors implement this interface and register to <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/>.
+            </summary>
+        </member>
+        <member name="M:Milvasoft.Core.Abstractions.IMilvaLogger.Log(System.Object)">
+            <summary>
+            Abstraction where you can make logs such as database logging.
+            </summary>
+            <param name="logEntry"></param>
+        </member>
+        <member name="M:Milvasoft.Core.Abstractions.IMilvaLogger.Verbose(System.String)">
+            <summary>
+            Write a log event with verbose level.
+            </summary>
+            <param name="message">Message template describing the event.</param>
+            <example>
+            Log.Verbose("Staring into space, wondering if we're alone.");
+            </example>
+        </member>
+        <member name="M:Milvasoft.Core.Abstractions.IMilvaLogger.Verbose(System.Exception,System.String)">
+            <summary>
+            Write a log event with the verbose level and associated exception.
+            </summary>
+            <param name="exception">Exception related to the event.</param>
+            <param name="messageTemplate">Message template describing the event.</param>
+            <example>
+            Log.Verbose(exception, "Staring into space, wondering where this comet came from.");
+            </example>
+        </member>
+        <member name="M:Milvasoft.Core.Abstractions.IMilvaLogger.Verbose(System.Exception,System.String,System.Object[])">
+            <summary>
+            Write a log event with the verbose level and associated exception.
+            </summary>
+            <param name="exception">Exception related to the event.</param>
+            <param name="messageTemplate">Message template describing the event.</param>
+            <param name="propertyValues">Objects positionally formatted into the message template.</param>
+            <example>
+            Log.Verbose(ex, "Staring into {@from}, wondering where this comet came from.", space);
+            </example>
+        </member>
+        <member name="M:Milvasoft.Core.Abstractions.IMilvaLogger.Debug(System.String)">
+            <summary>
+            Write a log event with debug level.
+            </summary>
+            <param name="message">Message template describing the event.</param>
+            <example>
+            Log.Verbose("Staring into space, wondering if we're alone.");
+            </example>
+        </member>
+        <member name="M:Milvasoft.Core.Abstractions.IMilvaLogger.Debug(System.Exception,System.String)">
+            <summary>
+            Write a log event with the debug level and associated exception.
+            </summary>
+            <param name="exception">Exception related to the event.</param>
+            <param name="messageTemplate">Message template describing the event.</param>
+            <example>
+            Log.Verbose(exception, "Staring into space, wondering where this comet came from.");
+            </example>
+        </member>
+        <member name="M:Milvasoft.Core.Abstractions.IMilvaLogger.Debug(System.Exception,System.String,System.Object[])">
+            <summary>
+            Write a log event with the debug level and associated exception.
+            </summary>
+            <param name="exception">Exception related to the event.</param>
+            <param name="messageTemplate">Message template describing the event.</param>
+            <param name="propertyValues">Objects positionally formatted into the message template.</param>
+            <example>
+            Log.Verbose(ex, "Staring into {@from}, wondering where this comet came from.", space);
+            </example>
+        </member>
+        <member name="M:Milvasoft.Core.Abstractions.IMilvaLogger.Information(System.String)">
+            <summary>
+            Write a log event with information level.
+            </summary>
+            <param name="message">Message template describing the event.</param>
+            <example>
+            Log.Verbose("Staring into space, wondering if we're alone.");
+            </example>
+        </member>
+        <member name="M:Milvasoft.Core.Abstractions.IMilvaLogger.Information(System.Exception,System.String)">
+            <summary>
+            Write a log event with the information level and associated exception.
+            </summary>
+            <param name="exception">Exception related to the event.</param>
+            <param name="messageTemplate">Message template describing the event.</param>
+            <example>
+            Log.Verbose(exception, "Staring into space, wondering where this comet came from.");
+            </example>
+        </member>
+        <member name="M:Milvasoft.Core.Abstractions.IMilvaLogger.Information(System.Exception,System.String,System.Object[])">
+            <summary>
+            Write a log event with the information level and associated exception.
+            </summary>
+            <param name="exception">Exception related to the event.</param>
+            <param name="messageTemplate">Message template describing the event.</param>
+            <param name="propertyValues">Objects positionally formatted into the message template.</param>
+            <example>
+            Log.Verbose(ex, "Staring into {@from}, wondering where this comet came from.", space);
+            </example>
+        </member>
+        <member name="M:Milvasoft.Core.Abstractions.IMilvaLogger.Warning(System.String)">
+            <summary>
+            Write a log event with warning level.
+            </summary>
+            <param name="message">Message template describing the event.</param>
+            <example>
+            Log.Verbose("Staring into space, wondering if we're alone.");
+            </example>
+        </member>
+        <member name="M:Milvasoft.Core.Abstractions.IMilvaLogger.Warning(System.Exception,System.String)">
+            <summary>
+            Write a log event with the warning level and associated exception.
+            </summary>
+            <param name="exception">Exception related to the event.</param>
+            <param name="messageTemplate">Message template describing the event.</param>
+            <example>
+            Log.Verbose(exception, "Staring into space, wondering where this comet came from.");
+            </example>
+        </member>
+        <member name="M:Milvasoft.Core.Abstractions.IMilvaLogger.Warning(System.Exception,System.String,System.Object[])">
+            <summary>
+            Write a log event with the warning level and associated exception.
+            </summary>
+            <param name="exception">Exception related to the event.</param>
+            <param name="messageTemplate">Message template describing the event.</param>
+            <param name="propertyValues">Objects positionally formatted into the message template.</param>
+            <example>
+            Log.Verbose(ex, "Staring into {@from}, wondering where this comet came from.", space);
+            </example>
+        </member>
+        <member name="M:Milvasoft.Core.Abstractions.IMilvaLogger.Error(System.String)">
+            <summary>
+            Write a log event with error level.
+            </summary>
+            <param name="message">Message template describing the event.</param>
+            <example>
+            Log.Verbose("Staring into space, wondering if we're alone.");
+            </example>
+        </member>
+        <member name="M:Milvasoft.Core.Abstractions.IMilvaLogger.Error(System.Exception,System.String)">
+            <summary>
+            Write a log event with the error level and associated exception.
+            </summary>
+            <param name="exception">Exception related to the event.</param>
+            <param name="messageTemplate">Message template describing the event.</param>
+            <example>
+            Log.Verbose(exception, "Staring into space, wondering where this comet came from.");
+            </example>
+        </member>
+        <member name="M:Milvasoft.Core.Abstractions.IMilvaLogger.Error(System.Exception,System.String,System.Object[])">
+            <summary>
+            Write a log event with the error level and associated exception.
+            </summary>
+            <param name="exception">Exception related to the event.</param>
+            <param name="messageTemplate">Message template describing the event.</param>
+            <param name="propertyValues">Objects positionally formatted into the message template.</param>
+            <example>
+            Log.Verbose(ex, "Staring into {@from}, wondering where this comet came from.", space);
+            </example>
+        </member>
+        <member name="M:Milvasoft.Core.Abstractions.IMilvaLogger.Fatal(System.String)">
+            <summary>
+            Write a log event with fatal level.
+            </summary>
+            <param name="message">Message template describing the event.</param>
+            <example>
+            Log.Verbose("Staring into space, wondering if we're alone.");
+            </example>
+        </member>
+        <member name="M:Milvasoft.Core.Abstractions.IMilvaLogger.Fatal(System.Exception,System.String)">
+            <summary>
+            Write a log event with the fatal level and associated exception.
+            </summary>
+            <param name="exception">Exception related to the event.</param>
+            <param name="messageTemplate">Message template describing the event.</param>
+            <example>
+            Log.Verbose(exception, "Staring into space, wondering where this comet came from.");
+            </example>
+        </member>
+        <member name="M:Milvasoft.Core.Abstractions.IMilvaLogger.Fatal(System.Exception,System.String,System.Object[])">
+            <summary>
+            Write a log event with the fatal level and associated exception.
+            </summary>
+            <param name="exception">Exception related to the event.</param>
+            <param name="messageTemplate">Message template describing the event.</param>
+            <param name="propertyValues">Objects positionally formatted into the message template.</param>
+            <example>
+            Log.Verbose(ex, "Staring into {@from}, wondering where this comet came from.", space);
+            </example>
+        </member>
         <member name="T:Milvasoft.Core.CommonHelper">
             <summary>
             Common Helper class.
@@ -2245,6 +2436,18 @@
             <param name="str"></param>
             <returns> Hashed <paramref name="str"/> as string. </returns>
         </member>
+        <member name="T:Milvasoft.Core.MilvaConsoleLogger">
+            <summary>
+            Example <see cref="T:Milvasoft.Core.Abstractions.IMilvaLogger"/> implementation.
+            </summary>
+            <param name="logger"></param>
+        </member>
+        <member name="M:Milvasoft.Core.MilvaConsoleLogger.#ctor(Microsoft.Extensions.Logging.ILoggerFactory)">
+            <summary>
+            Example <see cref="T:Milvasoft.Core.Abstractions.IMilvaLogger"/> implementation.
+            </summary>
+            <param name="logger"></param>
+        </member>
         <member name="T:Milvasoft.Core.NetworkUtil">
             <summary>
             Provides access network statistics.
@@ -2799,6 +3002,16 @@
         <member name="P:Milvasoft.Core.Utils.Models.IFileEntity.FilePath">
             <summary>
             Path of file.
+            </summary>
+        </member>
+        <member name="T:Milvasoft.Core.Utils.Models.ILogEntry">
+            <summary>
+            Abstraction for <see cref="T:Milvasoft.Core.Abstractions.IMilvaLogger"/>.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Core.Utils.Models.ILogEntry.LogMessage">
+            <summary>
+            Gets or sets log message.
             </summary>
         </member>
         <member name="T:Milvasoft.Core.Utils.Models.InvalidString">
