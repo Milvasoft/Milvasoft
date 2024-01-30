@@ -518,8 +518,8 @@ public abstract class MilvaDbContextBase<TUser, TUserKey> : MilvaDbContextBase
     }
 
     /// <summary>
-    /// Provides auditing entities by <see cref="AuditConfiguration"/>.
-    /// If deletion process happens then sets the <see cref="IgnoreSoftDelete"/> variable to true at the end of process.
+    /// Provides auditing entities by AuditConfiguration.
+    /// If deletion process happens then sets the IgnoreSoftDelete variable to true at the end of process.
     /// </summary>
     public override void AuditEntites()
     {

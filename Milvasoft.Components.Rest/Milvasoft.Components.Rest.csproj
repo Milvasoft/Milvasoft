@@ -1,0 +1,21 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>disable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Request\FilterableAndSortable.cs~RF9e52de5.TMP" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Akinzekeel.ExpressionBuilder" Version="20200621.4.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Milvasoft.Core\Milvasoft.Core.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -2,13 +2,13 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.DependencyInjection;
+using Milvasoft.Components.Rest.Response;
 using Milvasoft.Core;
 using Milvasoft.Core.Abstractions;
 using Milvasoft.Core.Exceptions;
 using Milvasoft.Core.Extensions;
 using Milvasoft.Core.Utils.Constants;
 using Milvasoft.Core.Utils.Models;
-using Milvasoft.Core.Utils.Models.Response;
 using Newtonsoft.Json;
 
 namespace Milvasoft.Attributes.ActionFilter;
@@ -128,13 +128,11 @@ public class ValidateStringParameterAttribute : ActionFilterAttribute
         {
             var localizedErrorMessage = errorMessage;
 
-            var validationResponse = new ExceptionResponse
+            var validationResponse = new Response
             {
-                Success = false,
-                Message = localizedErrorMessage,
-                StatusCode = MilvaStatusCodes.Status400BadRequest,
-                Result = new object(),
-                ErrorCodes = new List<int>((int)MilvaException.Validation)
+                IsSuccess = false,
+                Messages = [new ResponseMessage(((int)MilvaException.Validation).ToString(), localizedErrorMessage, Components.Rest.Enums.MessageType.Error)],
+                StatusCode = (int)MilvaStatusCodes.Status400BadRequest,
             };
 
             var json = JsonConvert.SerializeObject(validationResponse);

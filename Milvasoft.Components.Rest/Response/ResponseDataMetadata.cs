@@ -1,0 +1,67 @@
+﻿namespace Milvasoft.Components.Rest.Response;
+
+/// <summary>
+/// Response metadata for frontend apps.
+/// </summary>
+public class ResponseDataMetadata
+{
+    /// <summary>
+    /// Column or property name.
+    /// </summary>
+    public string Name { get; set; }
+
+    /// <summary>
+    /// Column or property localized name.
+    /// </summary>
+    public string LocalizedName { get; set; }
+
+    /// <summary>
+    /// Column or property type.
+    /// </summary>
+    public string Type { get; set; }
+
+    /// <summary>
+    /// Column or property type.
+    /// </summary>
+    public string DataType { get; set; }
+
+    /// <summary>
+    /// Determines whether column or property will displayed or not.
+    /// </summary>
+    public bool Display { get; set; } = true;
+
+    /// <summary>
+    /// Determines whether this property value remove from response or not.
+    /// </summary>
+    public bool RemoveFromResponse { get; set; }
+
+    /// <summary>
+    /// Determines whether the column or property will be masked or not.
+    /// </summary>
+    public bool Mask { get; set; }
+
+    /// <summary>
+    /// Determines whether the column will be filtered on the frontend.
+    /// </summary>
+    public bool Filterable { get; set; }
+
+    /// <summary>
+    /// Determines whether the column or property is nullable or not.
+    /// </summary>
+    public bool Nullable { get; set; }
+
+    /// <summary>
+    /// If the column is of decimal type, it determines how many digits there will be after the comma.
+    /// </summary>
+    public byte? DecimalScale { get; set; }
+
+    /// <summary>
+    /// It determines the format in which data in the table will display. Example : "{{Code}} - {{Name}}"
+    /// </summary>
+    public string CellDisplayFormat { get; set; }
+
+    /// <summary>
+    /// It determines what the tooltip format of a data in the table will be.
+    /// </summary>
+    public string CellTooltipFormat { get; set; }
+}

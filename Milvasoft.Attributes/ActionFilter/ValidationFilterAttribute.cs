@@ -2,10 +2,10 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Milvasoft.Components.Rest.Response;
 using Milvasoft.Core.Exceptions;
 using Milvasoft.Core.Extensions;
 using Milvasoft.Core.Utils.Constants;
-using Milvasoft.Core.Utils.Models.Response;
 using Newtonsoft.Json;
 using System.Reflection;
 
@@ -48,14 +48,13 @@ public class ValidationFilterAttribute : ActionFilterAttribute
     {
         async Task<ActionExecutingContext> RewriteResponseAsync(string message)
         {
-            var validationResponse = new ExceptionResponse
+            var validationResponse = new Response
             {
-                Success = false,
-                Message = message,
-                StatusCode = MilvaStatusCodes.Status600Exception,
-                Result = new object(),
-                ErrorCodes = new List<int>((int)MilvaException.Validation)
+                IsSuccess = false,
+                Messages = [new ResponseMessage(((int)MilvaException.Validation).ToString(), message, Components.Rest.Enums.MessageType.Error)],
+                StatusCode = (int)MilvaStatusCodes.Status600Exception,
             };
+
             var json = JsonConvert.SerializeObject(validationResponse);
 
             context.HttpContext.Response.ContentType = "application/json";

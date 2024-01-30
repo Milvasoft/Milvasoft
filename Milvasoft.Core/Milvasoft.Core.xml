@@ -39,6 +39,36 @@
             Determines whether the entity auditing by the deleter.
             </summary>
         </member>
+        <member name="T:Milvasoft.Core.Abstractions.IFileDTO">
+            <summary>
+            Abstraction for multiple file upload process.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Core.Abstractions.IFileDTO.FileName">
+            <summary>
+            Name of file.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Core.Abstractions.IFileDTO.File">
+            <summary>
+            File.
+            </summary>
+        </member>
+        <member name="T:Milvasoft.Core.Abstractions.IFileEntity">
+            <summary>
+             Abstraction for multiple file upload process.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Core.Abstractions.IFileEntity.FileName">
+            <summary>
+            Name of file.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Core.Abstractions.IFileEntity.FilePath">
+            <summary>
+            Path of file.
+            </summary>
+        </member>
         <member name="T:Milvasoft.Core.Abstractions.ILocalizationManager">
             <summary>
             It is the manager that provides access to localization resources. You can use this interface for creating new custom managers. Or you can use ready-made milva managers. 
@@ -2293,6 +2323,16 @@
             <param name="property"> property </param>
             <returns></returns>
         </member>
+        <member name="M:Milvasoft.Core.Extensions.GenericCollection.Map``2(System.Collections.Generic.IEnumerable{``0},System.Linq.Expressions.Expression{System.Func{``0,``1}})">
+            <summary>
+            Collection mapping.
+            </summary>
+            <typeparam name="TIn"></typeparam>
+            <typeparam name="TOut"></typeparam>
+            <param name="values"></param>
+            <param name="mapExpression"></param>
+            <returns></returns>
+        </member>
         <member name="M:Milvasoft.Core.Extensions.GenericCollection.SplitList``1(System.Collections.Generic.List{``0},System.Int32)">
             <summary>
             Splits list into batches with specified batch size.
@@ -2435,18 +2475,6 @@
             </summary>
             <param name="str"></param>
             <returns> Hashed <paramref name="str"/> as string. </returns>
-        </member>
-        <member name="T:Milvasoft.Core.MilvaConsoleLogger">
-            <summary>
-            Example <see cref="T:Milvasoft.Core.Abstractions.IMilvaLogger"/> implementation.
-            </summary>
-            <param name="logger"></param>
-        </member>
-        <member name="M:Milvasoft.Core.MilvaConsoleLogger.#ctor(Microsoft.Extensions.Logging.ILoggerFactory)">
-            <summary>
-            Example <see cref="T:Milvasoft.Core.Abstractions.IMilvaLogger"/> implementation.
-            </summary>
-            <param name="logger"></param>
         </member>
         <member name="T:Milvasoft.Core.NetworkUtil">
             <summary>
@@ -2956,64 +2984,6 @@
         <member name="F:Milvasoft.Core.Utils.Constants.MimeTypeNames.ApplicationZip">
             <summary>ZIP archive files; Registered[7]</summary>
         </member>
-        <member name="T:Milvasoft.Core.Utils.Models.CommunicationModel`2">
-            <summary>
-            Standart communication model. 
-            For example, it can be used when you have two APIs communicating in a project and these APIs often need the same key when communicating.
-            </summary>
-            <typeparam name="T"></typeparam>
-            <typeparam name="TKey"></typeparam>
-        </member>
-        <member name="P:Milvasoft.Core.Utils.Models.CommunicationModel`2.TransmittedModel">
-            <summary>
-            Model transmitted during communication
-            </summary>
-        </member>
-        <member name="P:Milvasoft.Core.Utils.Models.CommunicationModel`2.TransmittedId">
-            <summary>
-            Key that must always be transmitted during communication.
-            </summary>
-        </member>
-        <member name="T:Milvasoft.Core.Utils.Models.IFileDTO">
-            <summary>
-            Abstraction for multiple file upload process.
-            </summary>
-        </member>
-        <member name="P:Milvasoft.Core.Utils.Models.IFileDTO.FileName">
-            <summary>
-            Name of file.
-            </summary>
-        </member>
-        <member name="P:Milvasoft.Core.Utils.Models.IFileDTO.File">
-            <summary>
-            File.
-            </summary>
-        </member>
-        <member name="T:Milvasoft.Core.Utils.Models.IFileEntity">
-            <summary>
-             Abstraction for multiple file upload process.
-            </summary>
-        </member>
-        <member name="P:Milvasoft.Core.Utils.Models.IFileEntity.FileName">
-            <summary>
-            Name of file.
-            </summary>
-        </member>
-        <member name="P:Milvasoft.Core.Utils.Models.IFileEntity.FilePath">
-            <summary>
-            Path of file.
-            </summary>
-        </member>
-        <member name="T:Milvasoft.Core.Utils.Models.ILogEntry">
-            <summary>
-            Abstraction for <see cref="T:Milvasoft.Core.Abstractions.IMilvaLogger"/>.
-            </summary>
-        </member>
-        <member name="P:Milvasoft.Core.Utils.Models.ILogEntry.LogMessage">
-            <summary>
-            Gets or sets log message.
-            </summary>
-        </member>
         <member name="T:Milvasoft.Core.Utils.Models.InvalidString">
             <summary>
             Invalid strings for prevent hacking or someting ;)
@@ -3067,57 +3037,6 @@
         <member name="P:Milvasoft.Core.Utils.Models.PaginationDTO`1.TotalDataCount">
             <summary>
             Total data count of all pages.
-            </summary>
-        </member>
-        <member name="T:Milvasoft.Core.Utils.Models.Response.BaseResponse">
-            <summary>
-            Base response model for API responses.
-            </summary>
-        </member>
-        <member name="P:Milvasoft.Core.Utils.Models.Response.BaseResponse.Success">
-            <summary>
-            <para> Default = true. </para>
-            <para> Information of whether the request was successful. </para>
-            <para> If request is success: Success = true. </para>
-            <para> If request is fail: Success = false. </para>
-            </summary>
-        </member>
-        <member name="P:Milvasoft.Core.Utils.Models.Response.BaseResponse.Message">
-            <summary>
-            <para> Default: Process Successful! </para>
-            <para> Message of response. </para>
-            </summary>
-        </member>
-        <member name="P:Milvasoft.Core.Utils.Models.Response.BaseResponse.StatusCode">
-            <summary>
-            <para> Default = <see cref="F:Milvasoft.Core.Utils.Constants.MilvaStatusCodes.Status200OK"/> </para>
-            <para> Http status code of response. </para>
-            </summary>
-        </member>
-        <member name="T:Milvasoft.Core.Utils.Models.Response.ExceptionResponse">
-            <summary>
-            Model of Exception.
-            </summary>
-        </member>
-        <member name="P:Milvasoft.Core.Utils.Models.Response.ExceptionResponse.Result">
-            <summary>
-            Result of request.
-            </summary>
-        </member>
-        <member name="P:Milvasoft.Core.Utils.Models.Response.ExceptionResponse.ErrorCodes">
-            <summary>
-            Error codes of request, if exists.
-            </summary>
-        </member>
-        <member name="T:Milvasoft.Core.Utils.Models.Response.ObjectResponse`1">
-            <summary>
-            Response model for requests that return a object.
-            </summary>
-            <typeparam name="TEntity"></typeparam>
-        </member>
-        <member name="P:Milvasoft.Core.Utils.Models.Response.ObjectResponse`1.Result">
-            <summary>
-            Result object.
             </summary>
         </member>
     </members>

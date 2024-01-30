@@ -10,6 +10,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+		<ProjectReference Include="..\Milvasoft.Components.Rest\Milvasoft.Components.Rest.csproj" />
 		<ProjectReference Include="..\Milvasoft.Core\Milvasoft.Core.csproj" />
 	</ItemGroup>
 

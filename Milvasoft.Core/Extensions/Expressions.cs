@@ -29,24 +29,20 @@ public static class Expressions
 
                     //the initial case starts off with a left expression as null. If that's the case,
                     //then give the short-circuit operator something to trigger on for the right expression
-                    if (left == null)
-                    {
-                        left = model => false;
-                    }
+                    left ??= model => false;
 
                     result = left.OrElse(right);
+
                     break;
                 case ExpressionType.AndAlso:
 
-                    if (left == null)
-                    {
-                        left = model => true;
-                    }
+                    left ??= model => true;
 
                     result = left.AndAlso(right);
+
                     break;
                 default:
-                    throw new InvalidOperationException();
+                    break;
             }
             return result;
         }

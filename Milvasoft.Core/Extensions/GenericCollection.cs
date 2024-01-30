@@ -435,6 +435,14 @@ public static class GenericCollection
     public static int GetPropertyValue<T>(this T obj, Expression<Func<T, int>> property)
         => (int)obj.GetType().GetProperty(property.GetPropertyName()).GetValue(obj, null);
 
+    /// <summary>
+    /// Collection mapping.
+    /// </summary>
+    /// <typeparam name="TIn"></typeparam>
+    /// <typeparam name="TOut"></typeparam>
+    /// <param name="values"></param>
+    /// <param name="mapExpression"></param>
+    /// <returns></returns>
     public static IEnumerable<TOut> Map<TIn, TOut>(this IEnumerable<TIn> values, Expression<Func<TIn, TOut>> mapExpression) where TOut : class, new()
     {
         var mapFunction = mapExpression.Compile();

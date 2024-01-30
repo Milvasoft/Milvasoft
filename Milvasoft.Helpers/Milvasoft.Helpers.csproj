@@ -23,7 +23,6 @@
 		<ProjectReference Include="..\Milvasoft.Mail\Milvasoft.Mail.csproj" />
 		<ProjectReference Include="..\Milvasoft.Middlewares\Milvasoft.Middlewares.csproj" />
 		<ProjectReference Include="..\Milvasoft.MultiTenancy\Milvasoft.MultiTenancy.csproj" />
-		<ProjectReference Include="..\Milvasoft.Testing\Milvasoft.Testing.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>
