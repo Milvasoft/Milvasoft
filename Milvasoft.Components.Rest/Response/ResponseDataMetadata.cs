@@ -32,12 +32,7 @@ public class ResponseDataMetadata
     /// <summary>
     /// Determines whether column or property will pinned or not.
     /// </summary>
-    public bool Pinned { get; set; } = true;
-
-    /// <summary>
-    /// Determines whether this property value remove from response or not.
-    /// </summary>
-    public bool RemoveFromResponse { get; set; }
+    public bool Pinned { get; set; }
 
     /// <summary>
     /// Determines whether the column or property will be masked or not.

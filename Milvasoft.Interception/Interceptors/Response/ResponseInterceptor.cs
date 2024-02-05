@@ -39,13 +39,15 @@ public class ResponseInterceptor : IMilvaInterceptor
     {
         response.Metadata = [];
 
-        var (resultData, resultDataType) = response.GetResponseData();
+        //Gets result data and generic type
+        var (responseData, resultDataType) = response.GetResponseData();
 
         if (!resultDataType.IsClass)
             return;
 
         bool dataTypeIsList = false;
 
+        //If result type is collection 
         if (resultDataType.IsGenericType && typeof(IList).IsAssignableFrom(resultDataType))
         {
             resultDataType = resultDataType.GetGenericArguments()[0];
@@ -58,8 +60,7 @@ public class ResponseInterceptor : IMilvaInterceptor
         if (properties == null || properties.Length == 0)
             return;
 
-        var hasResult = resultData != null;
-
+        var hasResponseData = responseData != null;
         var translateAttribute = resultDataType.GetCustomAttribute<TranslateAttribute>();
         var localizer = translateAttribute != null ? _serviceProvider.GetService<IMilvaLocalizer>() : null;
 
@@ -67,6 +68,7 @@ public class ResponseInterceptor : IMilvaInterceptor
         {
             var propertyType = prop.PropertyType.IsGenericType ? prop.PropertyType.GetGenericArguments()[0] : prop.PropertyType;
 
+            //Get used attributes
             var browsableAttribute = prop.GetCustomAttribute<BrowsableAttribute>();
             var hideByRoleAttribute = prop.GetCustomAttribute<HideByRoleAttribute>();
             var maskByRoleAttribute = prop.GetCustomAttribute<MaskByRoleAttribute>();
@@ -77,68 +79,59 @@ public class ResponseInterceptor : IMilvaInterceptor
             var cellDisplayFormatAttribute = prop.GetCustomAttribute<CellDisplayFormatAttribute>();
             var defaultValueAttribute = prop.GetCustomAttribute<DefaultValueAttribute>();
 
-            bool removeFromResponse = false;
+
+            //TODO role based limitations.
+            bool removePropMetadataFromResponse = false;
             bool mask = false;
-            DecimalPrecision decimalPrecision = decimalDigitAttribute?.DecimalPrecision;
-            string cellTooltipFormat = cellTooltipFormatAttribute?.Format;
-            string cellDisplayFormat = cellDisplayFormatAttribute?.Format;
 
             if (hideByRoleAttribute != null && (hideByRoleAttribute.Roles.Length != 0 /*&& listRoleName.Any(r => hideByRoleAttribute.Roles.Contains(r))*/))
-                removeFromResponse = true;
+                removePropMetadataFromResponse = true;
 
             if (maskByRoleAttribute != null && (maskByRoleAttribute.Roles.Length != 0 == false /*&& listRoleName.Any(r => maskByRoleAttribute.Roles.Contains(r))*/))
                 mask = true;
 
             string localizedName = prop.Name;
 
+            //Apply localization to property
             if (translateAttribute != null && localizer != null)
-            {
                 localizedName = _interceptionOptions.LocalizationMethod == null
                                          ? ApplyLocalization(translateAttribute.Key, localizer, resultDataType, prop.Name)
                                          : _interceptionOptions.LocalizationMethod.Invoke(translateAttribute.Key, localizer, resultDataType, prop.Name);
-            }
 
+            //Create metadata object
             var metadata = new ResponseDataMetadata()
             {
                 Name = prop.Name,
                 LocalizedName = localizedName,
                 Type = propertyType.Name,
                 Display = browsableAttribute == null || browsableAttribute.Browsable,
-                RemoveFromResponse = removeFromResponse,
                 DefaultValue = defaultValueAttribute?.Value,
                 Mask = mask,
                 Filterable = filterableAttribute == null || filterableAttribute.Filterable,
                 Pinned = pinnedAttribute == null || pinnedAttribute.Pinned,
-                DecimalPrecision = decimalPrecision,
-                CellTooltipFormat = cellTooltipFormat,
-                CellDisplayFormat = cellDisplayFormat,
+                DecimalPrecision = decimalDigitAttribute?.DecimalPrecision,
+                CellTooltipFormat = cellTooltipFormatAttribute?.Format,
+                CellDisplayFormat = cellDisplayFormatAttribute?.Format,
             };
 
-            if (!removeFromResponse)
+            if (!removePropMetadataFromResponse)
                 response.Metadata.Add(metadata);
 
-            if (hasResult)
+            if (hasResponseData)
             {
                 if (dataTypeIsList)
                 {
-                    var list = resultData as IList;
-
-                    foreach (var item in list)
-                        ApplyMetadataRulesToResponseData(item, prop, metadata);
+                    foreach (var item in responseData as IList)
+                        ApplyMetadataRulesToResponseData(item, prop, metadata, removePropMetadataFromResponse);
                 }
-                else
-                {
-                    ApplyMetadataRulesToResponseData(resultData, prop, metadata);
-                }
+                else ApplyMetadataRulesToResponseData(responseData, prop, metadata, removePropMetadataFromResponse);
             }
         }
-
-        return;
     }
 
-    private static void ApplyMetadataRulesToResponseData(object responseObject, PropertyInfo prop, ResponseDataMetadata metadata)
+    private static void ApplyMetadataRulesToResponseData(object responseObject, PropertyInfo prop, ResponseDataMetadata metadata, bool removeFromResponse)
     {
-        if (metadata.RemoveFromResponse)
+        if (removeFromResponse)
         {
             object defaultValue = prop.PropertyType.IsValueType ? Activator.CreateInstance(prop.PropertyType) : null;
 
