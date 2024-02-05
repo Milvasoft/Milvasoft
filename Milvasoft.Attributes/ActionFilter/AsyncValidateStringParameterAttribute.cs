@@ -12,8 +12,13 @@ namespace Milvasoft.Attributes.ActionFilter;
 /// <summary>
 /// Throws <see cref="MilvaUserFriendlyException"/> if string parameter is not valid. Specifies that the class or method that this attribute is applied to requires the specified prevent string injection attacks and min/max length checks.
 /// </summary>
+/// <remarks>
+/// Constructor that accepts the maximum length of the string.
+/// </remarks>
+/// <param name="minimumLength">The minimum length, inclusive.  It may not be negative.</param>
+/// <param name="maximumLength">The maximum length, inclusive.  It may not be negative.</param>
 [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
-public class AsyncValidateStringParameterAttribute : Attribute, IAsyncActionFilter
+public class AsyncValidateStringParameterAttribute(int minimumLength, int maximumLength) : Attribute, IAsyncActionFilter
 {
     #region Properties
 
@@ -25,12 +30,12 @@ public class AsyncValidateStringParameterAttribute : Attribute, IAsyncActionFilt
     /// <summary>
     /// Gets the maximum acceptable length of the string
     /// </summary>
-    public int MaximumLength { get; private set; }
+    public int MaximumLength { get; private set; } = maximumLength;
 
     /// <summary>
     /// Gets or sets the minimum acceptable length of the string
     /// </summary>
-    public int MinimumLength { get; private set; } = 0;
+    public int MinimumLength { get; private set; } = minimumLength;
 
     /// <summary>
     /// Gets or sets error message localization flag.
@@ -44,17 +49,6 @@ public class AsyncValidateStringParameterAttribute : Attribute, IAsyncActionFilt
     public string MailContent { get; set; }
 
     #endregion
-
-    /// <summary>
-    /// Constructor that accepts the maximum length of the string.
-    /// </summary>
-    /// <param name="minimumLength">The minimum length, inclusive.  It may not be negative.</param>
-    /// <param name="maximumLength">The maximum length, inclusive.  It may not be negative.</param>
-    public AsyncValidateStringParameterAttribute(int minimumLength, int maximumLength)
-    {
-        MaximumLength = maximumLength;
-        MinimumLength = minimumLength;
-    }
 
     /// <summary>
     /// Performs when action executing.

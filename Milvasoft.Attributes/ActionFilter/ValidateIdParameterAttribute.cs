@@ -48,7 +48,7 @@ public class ValidateIdParameterAttribute : ActionFilterAttribute
             var validationResponse = new Response
             {
                 IsSuccess = false,
-                Messages = [new ResponseMessage(((int)MilvaException.Validation).ToString(), errorMessage, Components.Rest.Enums.MessageType.Error) ],
+                Messages = [new ResponseMessage(((int)MilvaException.Validation).ToString(), errorMessage, Components.Rest.Enums.MessageType.Error)],
                 StatusCode = (int)MilvaStatusCodes.Status600Exception,
             };
 

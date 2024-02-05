@@ -33,6 +33,11 @@
 	  <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.1.38" />
 	</ItemGroup>
 
+
+	<ItemGroup>
+	  <Folder Include="Design\" />
+	</ItemGroup>
+
 	<PropertyGroup>
 
 		<PackageId>Milvasoft.Attributes</PackageId>
