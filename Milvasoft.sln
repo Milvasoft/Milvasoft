@@ -49,6 +49,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Milvasoft.Components.Rest",
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Components", "Components", "{59BDBA81-3527-48FB-A8D0-7891FBC7BE25}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Milvasoft.Attributes.Annotations", "Milvasoft.Attributes.Annotations\Milvasoft.Attributes.Annotations.csproj", "{79E7B6B8-F369-4BB0-A0E3-0381947B0C01}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -139,15 +141,21 @@ Global
 		{05965A25-0E62-4AF5-B2EA-C523DC61B9A2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{05965A25-0E62-4AF5-B2EA-C523DC61B9A2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{05965A25-0E62-4AF5-B2EA-C523DC61B9A2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{79E7B6B8-F369-4BB0-A0E3-0381947B0C01}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{79E7B6B8-F369-4BB0-A0E3-0381947B0C01}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{79E7B6B8-F369-4BB0-A0E3-0381947B0C01}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{79E7B6B8-F369-4BB0-A0E3-0381947B0C01}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
+		{C05F57B0-324F-4CB0-AF94-CBDCA42664B2} = {59BDBA81-3527-48FB-A8D0-7891FBC7BE25}
 		{01550FD0-ECE6-4115-9F4F-896A45D63309} = {4DDD7543-7217-418C-899E-525D0D3C0E59}
 		{60BF9EEC-6824-4FEC-9E73-9884941DEA55} = {4DDD7543-7217-418C-899E-525D0D3C0E59}
 		{3ADC85B1-AA00-4FB2-A2B7-94DC629A8471} = {4DDD7543-7217-418C-899E-525D0D3C0E59}
 		{05965A25-0E62-4AF5-B2EA-C523DC61B9A2} = {59BDBA81-3527-48FB-A8D0-7891FBC7BE25}
+		{79E7B6B8-F369-4BB0-A0E3-0381947B0C01} = {59BDBA81-3527-48FB-A8D0-7891FBC7BE25}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {E552B285-92CB-491D-8ACD-91C933292699}

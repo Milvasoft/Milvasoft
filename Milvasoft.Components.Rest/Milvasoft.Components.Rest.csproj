@@ -15,6 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Milvasoft.Attributes.Annotations\Milvasoft.Attributes.Annotations.csproj" />
     <ProjectReference Include="..\Milvasoft.Core\Milvasoft.Core.csproj" />
   </ItemGroup>
 

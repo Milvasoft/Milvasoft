@@ -1,6 +1,5 @@
 ﻿using Milvasoft.Components.Rest.Enums;
 using System.Runtime.Serialization;
-using System.Text.Json.Serialization;
 
 namespace Milvasoft.Components.Rest.Response;
 
@@ -159,17 +158,27 @@ public class Response : IResponse
 
 }
 
-public class Response<T> : Response
+public class Response<T> : Response, IResponse<T>
 {
-    public T Data { get; set; }
+    private T _data;
+
+    public T Data
+    {
+        get => _data; set
+        {
+            _data = value;
+        }
+    }
 
     [DataMember]
-    public List<ResponseDataMetadata> ColumnTypes { get; set; }
+    public List<ResponseDataMetadata> Metadata { get; set; }
 
     public (object, Type) GetResponseData()
     {
         return (Data, typeof(T));
     }
+
+    #region Constructors
 
     public Response() : base()
     {
@@ -190,6 +199,9 @@ public class Response<T> : Response
     {
         Data = data;
     }
+
+    #endregion
+
 
     #region Success
 
@@ -235,7 +247,6 @@ public class Response<T> : Response
     }
 
     #endregion
-
 
     #region Error
 

@@ -1,10 +1,14 @@
-﻿namespace Milvasoft.Components.Rest.Response;
+﻿using Milvasoft.Attributes.Annotations;
+
+namespace Milvasoft.Components.Rest.Response;
 
 /// <summary>
 /// Response metadata for frontend apps.
 /// </summary>
 public class ResponseDataMetadata
 {
+    //TODO Tree data https://mui.com/x/react-data-grid/tree-data/
+
     /// <summary>
     /// Column or property name.
     /// </summary>
@@ -21,14 +25,14 @@ public class ResponseDataMetadata
     public string Type { get; set; }
 
     /// <summary>
-    /// Column or property type.
-    /// </summary>
-    public string DataType { get; set; }
-
-    /// <summary>
     /// Determines whether column or property will displayed or not.
     /// </summary>
     public bool Display { get; set; } = true;
+
+    /// <summary>
+    /// Determines whether column or property will pinned or not.
+    /// </summary>
+    public bool Pinned { get; set; } = true;
 
     /// <summary>
     /// Determines whether this property value remove from response or not.
@@ -41,19 +45,19 @@ public class ResponseDataMetadata
     public bool Mask { get; set; }
 
     /// <summary>
-    /// Determines whether the column will be filtered on the frontend.
+    /// Determines whether the column will be filtered and ordered on the frontend.
     /// </summary>
     public bool Filterable { get; set; }
 
     /// <summary>
-    /// Determines whether the column or property is nullable or not.
+    /// Default value if column or property data is null.
     /// </summary>
-    public bool Nullable { get; set; }
+    public object DefaultValue { get; set; } = default;
 
     /// <summary>
     /// If the column is of decimal type, it determines how many digits there will be after the comma.
     /// </summary>
-    public byte? DecimalScale { get; set; }
+    public DecimalPrecision DecimalPrecision { get; set; }
 
     /// <summary>
     /// It determines the format in which data in the table will display. Example : "{{Code}} - {{Name}}"

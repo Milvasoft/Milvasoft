@@ -1,5 +1,4 @@
 ﻿using Milvasoft.Core.Exceptions;
-using System.Collections.Generic;
 
 namespace Milvasoft.Components.Rest.Request;
 
@@ -19,6 +18,8 @@ public class ListRequest : FilterableAndSortable
     /// </summary>
     /// <example>10</example>
     public int? RowCount { get; set; }
+
+    //TODO aggregation  https://mui.com/x/react-data-grid/aggregation/
 
     /// <summary>
     /// Checks pagination parameters are reasonable.

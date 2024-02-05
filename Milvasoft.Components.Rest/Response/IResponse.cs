@@ -1,6 +1,4 @@
-﻿using Milvasoft.Components.Rest.Enums;
-
-namespace Milvasoft.Components.Rest.Response;
+﻿namespace Milvasoft.Components.Rest.Response;
 
 /// <summary>
 /// Represents a response interface containing properties and methods to handle response data and messages.
@@ -38,21 +36,24 @@ public interface IResponse
 /// <summary>
 /// Represents a response interface containing properties and methods to handle response data and messages.
 /// </summary>
-public interface IResponse<T> : IResponse
+public interface IResponse<T> : IResponse, IHasMetadata
 {
     /// <summary>
     /// Gets or sets response data.
     /// </summary>
     public T Data { get; set; }
+}
 
+public interface IHasMetadata
+{
     /// <summary>
     /// Gets or sets the list of column types in the response data.
     /// </summary>
-    List<ResponseDataMetadata> ColumnTypes { get; set; }
+    List<ResponseDataMetadata> Metadata { get; set; }
 
     /// <summary>
     /// Retrieves the data and its corresponding type from the response.
     /// </summary>
     /// <returns>A tuple containing the data object and its type.</returns>
-    (object Data, Type DataType) GetData();
+    (object Data, Type DataType) GetResponseData();
 }

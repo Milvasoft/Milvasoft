@@ -29,7 +29,7 @@ public class ResponseMessage
 
     public ResponseMessage()
     {
-            
+
     }
 
     public ResponseMessage(string message) : this(message, MessageType.Information)

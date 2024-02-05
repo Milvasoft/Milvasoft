@@ -1,4 +1,6 @@
-﻿using System.Collections.Concurrent;
+﻿using Milvasoft.Components.Rest.Response;
+using Milvasoft.Interception.Interceptors.Logging;
+using System.Collections.Concurrent;
 using System.Collections.ObjectModel;
 using System.Reflection;
 
@@ -40,9 +42,21 @@ internal class MethodDecoratorMap
             if (interfaceMethod != null)
                 decoratorAttributes = decoratorAttributes.Concat(interfaceMethod.GetCustomAttributes<DecorateAttribute>(true));
 
-            var decorators = decoratorAttributes.Select(attribute => attribute.DecoratorType).Distinct().ToArray();
+            var decorators = decoratorAttributes.Select(attribute => attribute.DecoratorType).Distinct().ToList();
 
-            map.Add(method, decorators);
+
+            var isMilvaResponseTyped = method.ReturnType.IsAssignableTo(typeof(IResponse));
+
+            if (method.ReturnType.GetTypeInfo().IsGenericType && method.ReturnType.GetTypeInfo().GetGenericTypeDefinition() == typeof(Task<>))
+            {
+                var typeOfTask = method.ReturnType.GetGenericArguments()[0];
+                isMilvaResponseTyped = typeOfTask.IsAssignableTo(typeof(IResponse));
+            }
+
+            if (isMilvaResponseTyped)
+                decorators.Add(typeof(ResponseInterceptor));
+
+            map.Add(method, decorators.ToArray());
         }
 
         return new ReadOnlyDictionary<MethodInfo, Type[]>(map);
