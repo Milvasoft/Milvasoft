@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using Microsoft.Extensions.DependencyInjection;
 using Milvasoft.Core.Abstractions;
 using Milvasoft.Core.EntityBase.Abstract;
 using Milvasoft.Core.EntityBase.Abstract.Auditing;
@@ -25,9 +26,8 @@ public static class CommonHelper
     /// <typeparam name="T"></typeparam>
     /// <param name="propertyName"></param>
     /// <returns></returns>
-    public static bool PropertyExists<T>(string propertyName) => typeof(T).GetProperty(propertyName, BindingFlags.IgnoreCase
-                                                                                                   | BindingFlags.Public
-                                                                                                   | BindingFlags.Instance) != null;
+    public static PropertyInfo ThrowIfPropertyNotExists<T>(string propertyName)
+        => ThrowIfPropertyNotExists(typeof(T), propertyName);
 
     /// <summary>
     /// Checks if there is a property named <paramref name="propertyName"/> in the properties of <b><paramref name="content"/></b>. 
@@ -35,9 +35,8 @@ public static class CommonHelper
     /// <param name="content"></param>
     /// <param name="propertyName"></param>
     /// <returns></returns>
-    public static bool PropertyExists(this object content, string propertyName) => content.GetType().GetProperty(propertyName, BindingFlags.IgnoreCase
-                                                                                                                             | BindingFlags.Public
-                                                                                                                             | BindingFlags.Instance) != null;
+    public static PropertyInfo ThrowIfPropertyNotExists(this object content, string propertyName)
+        => ThrowIfPropertyNotExists(content.GetType(), propertyName);
 
     /// <summary>
     /// Checks if there is a property named <paramref name="propertyName"/> in the properties of <b><paramref name="type"/></b>. 
@@ -45,9 +44,46 @@ public static class CommonHelper
     /// <param name="type"></param>
     /// <param name="propertyName"></param>
     /// <returns></returns>
-    public static bool PropertyExists(this Type type, string propertyName) => type.GetProperty(propertyName, BindingFlags.IgnoreCase
-                                                                                                           | BindingFlags.Public
-                                                                                                           | BindingFlags.Instance) != null;
+    public static PropertyInfo ThrowIfPropertyNotExists(this Type type, string propertyName)
+        => GetPublicPropertyIgnoreCase(type, propertyName) ?? throw new MilvaDeveloperException($"Type of {type.Name}'s properties doesn't contain '{propertyName}'.");
+
+    /// <summary>
+    /// Checks if there is a property named <paramref name="propertyName"/> in the properties of <b>typeof(<typeparamref name="T"/>)</b>. 
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="propertyName"></param>
+    /// <returns></returns>
+    public static bool PropertyExists<T>(string propertyName) => PropertyExists(typeof(T), propertyName);
+
+    /// <summary>
+    /// Checks if there is a property named <paramref name="propertyName"/> in the properties of <b><paramref name="content"/></b>. 
+    /// </summary>
+    /// <param name="content"></param>
+    /// <param name="propertyName"></param>
+    /// <returns></returns>
+    public static bool PropertyExists(this object content, string propertyName) => PropertyExists(content.GetType(), propertyName);
+
+    /// <summary>
+    /// Checks if there is a property named <paramref name="propertyName"/> in the properties of <b><paramref name="type"/></b>. 
+    /// </summary>
+    /// <param name="type"></param>
+    /// <param name="propertyName"></param>
+    /// <returns></returns>
+    public static bool PropertyExists(this Type type, string propertyName) => GetPublicPropertyIgnoreCase(type, propertyName) != null;
+
+    /// <summary>
+    /// Gets property with <see cref="BindingFlags.Public"/>, <see cref="BindingFlags.IgnoreCase"/>, <see cref="BindingFlags.Instance"/>
+    /// </summary>
+    /// <param name="type"></param>
+    /// <param name="propertyName"></param>
+    /// <returns></returns>
+    public static PropertyInfo GetPublicPropertyIgnoreCase(this Type type, string propertyName)
+    {
+        if (string.IsNullOrWhiteSpace(propertyName))
+            throw new MilvaDeveloperException("Please send property name correctly");
+
+        return type.GetProperty(propertyName, BindingFlags.IgnoreCase | BindingFlags.Public | BindingFlags.Instance);
+    }
 
     /// <summary>
     /// Creates order by key selector by <paramref name="orderByPropertyName"/>.
@@ -62,8 +98,7 @@ public static class CommonHelper
     {
         var entityType = typeof(T);
 
-        if (!PropertyExists<T>(orderByPropertyName))
-            throw new MilvaDeveloperException($"Type of {entityType.Name}'s properties doesn't contain '{orderByPropertyName}'.");
+        entityType.ThrowIfPropertyNotExists(orderByPropertyName);
 
         var parameterExpression = Expression.Parameter(entityType, "i");
 
@@ -85,7 +120,7 @@ public static class CommonHelper
         var entityType = typeof(T);
 
         if (!PropertyExists<T>(propertyName))
-            throw new MilvaDeveloperException($"Type of {entityType.Name}'s properties doesn't contain '{propertyName}'.");
+            return null;
 
         var parameter = Expression.Parameter(entityType);
 
@@ -104,8 +139,7 @@ public static class CommonHelper
     {
         var entityType = typeof(T);
 
-        if (!PropertyExists<T>(propertyName))
-            return null;
+        entityType.ThrowIfPropertyNotExists(propertyName);
 
         var parameter = Expression.Parameter(entityType);
 
@@ -141,6 +175,7 @@ public static class CommonHelper
     {
         foreach (var prop in propertyName.Split('.').Select(propName => obj.GetType().GetProperty(propName)))
             obj = prop.GetValue(obj, null);
+
         return obj;
     }
 

@@ -211,8 +211,7 @@ public abstract class MilvaDbContextBase : DbContext, IMilvaDbContextBase
     {
         var entityType = typeof(TEntity);
 
-        if (!CommonHelper.PropertyExists<TEntity>(propName))
-            throw new MilvaDeveloperException($"Type of {entityType}'s properties doesn't contain '{propName}'.");
+        entityType.ThrowIfPropertyNotExists(propName);
 
         ParameterExpression parameterExpression = Expression.Parameter(entityType, "i");
         Expression<Func<TEntity, decimal>> predicate = Expression.Lambda<Func<TEntity, decimal>>(Expression.Convert(Expression.Property(parameterExpression, propName),
@@ -766,8 +765,7 @@ public abstract class MilvaIdentityDbContextBase<TUser, TRole, TKey> : IdentityD
     {
         var entityType = typeof(TEntity);
 
-        if (!CommonHelper.PropertyExists<TEntity>(propName))
-            throw new MilvaDeveloperException($"Type of {entityType}'s properties doesn't contain '{propName}'.");
+        entityType.ThrowIfPropertyNotExists(propName);
 
         ParameterExpression parameterExpression = Expression.Parameter(entityType, "i");
         Expression<Func<TEntity, decimal>> predicate = Expression.Lambda<Func<TEntity, decimal>>(Expression.Convert(Expression.Property(parameterExpression, propName),

@@ -10,7 +10,7 @@ public class FilterCriteria
     /// <summary>
     /// Gets or sets the name of the column on which the filter is applied.
     /// </summary>
-    public string ColumnName { get; set; }
+    public string FilterBy { get; set; }
 
     /// <summary>
     /// Gets or sets the value to filter by.

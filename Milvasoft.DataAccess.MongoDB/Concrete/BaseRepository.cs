@@ -1,4 +1,5 @@
-﻿using Milvasoft.Core;
+﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using Milvasoft.Core;
 using Milvasoft.Core.EntityBase.Abstract;
 using Milvasoft.Core.Exceptions;
 using Milvasoft.Core.Extensions;
@@ -792,7 +793,7 @@ public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : 
         if (!orderByProps.IsNullOrEmpty())
             foreach (var orderByProp in orderByProps)
             {
-                CommonHelper.PropertyExists<T>(orderByProp.PropName);
+                CommonHelper.ThrowIfPropertyNotExists<T>(orderByProp.PropName);
 
                 var sortDef = orderByProp.Ascending ? Builders<T>.Sort.Ascending(orderByProp.PropName) : Builders<T>.Sort.Descending(orderByProp.PropName);
 

@@ -1,8 +1,11 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Azure.Core;
+using ExpressionBuilder.Common;
+using Microsoft.EntityFrameworkCore;
 using Milvasoft.Components.Rest.Enums;
 using Milvasoft.Components.Rest.Request;
 using Milvasoft.Components.Rest.Response;
 using Milvasoft.Core;
+using Milvasoft.Core.Extensions;
 
 namespace Milvasoft.DataAccess.EfCore.Utils;
 
@@ -12,39 +15,91 @@ namespace Milvasoft.DataAccess.EfCore.Utils;
 public static class QueryExtensions
 {
     /// <summary>
-    /// Applies filtering and sorting options to the IQueryable data source.
+    /// Applies filtering options to the IQueryable data source.
     /// </summary>
     /// <typeparam name="TEntity">The type of entity in the IQueryable.</typeparam>
     /// <param name="query">The source IQueryable data.</param>
-    /// <param name="filterRequest">The filter request containing filter and sort options.</param>
-    /// <returns>An IQueryable object with applied filters and sorting.</returns>
+    /// <param name="listRequest">The list request containing filter options.</param>
+    /// <returns>An IQueryable object with applied filtering.</returns>
     /// <remarks>
-    /// This method applies filters and sorting options to the provided IQueryable data source based on the given FilterRequest object.
-    /// If the FilterRequest is null, the original IQueryable data is returned without any modifications.
+    /// This method applies filter options to the provided IQueryable data source based on the given <paramref name="listRequest"/> object.
+    /// If the <paramref name="listRequest"/> is null, the original IQueryable data is returned without any modifications.
+    /// </remarks>
+    public static IQueryable<TEntity> WithFilter<TEntity>(this IQueryable<TEntity> query, ListRequest listRequest) where TEntity : class
+        => query.WithFilter(listRequest.Filter);
+
+    /// <summary>
+    /// Applies sorting options to the IQueryable data source.
+    /// </summary>
+    /// <typeparam name="TEntity">The type of entity in the IQueryable.</typeparam>
+    /// <param name="query">The source IQueryable data.</param>
+    /// <param name="listRequest">The list request containing sort options.</param>
+    /// <returns>An IQueryable object with applied sorting.</returns>
+    /// <remarks>
+    /// This method applies sorting options to the provided IQueryable data source based on the given <paramref name="listRequest"/> object.
+    /// If the <paramref name="listRequest"/> is null, the original IQueryable data is returned without any modifications.
+    /// </remarks>
+    public static IQueryable<TEntity> WithSort<TEntity>(this IQueryable<TEntity> query, ListRequest listRequest) where TEntity : class
+        => query.WithSort(listRequest.Sort);
+
+    /// <summary>
+    /// Applies sorting options to the IQueryable data source.
+    /// </summary>
+    /// <typeparam name="TEntity">The type of entity in the IQueryable.</typeparam>
+    /// <param name="query">The source IQueryable data.</param>
+    /// <param name="listRequest">The list request containing sort options.</param>
+    /// <returns>An IQueryable object with applied sorting.</returns>
+    /// <remarks>
+    /// This method applies sorting options to the provided IQueryable data source based on the given <paramref name="listRequest"/> object.
+    /// If the <paramref name="listRequest"/> is null, the original IQueryable data is returned without any modifications.
+    /// </remarks>
+    public static IQueryable<TEntity> WithFilterAndSort<TEntity>(this IQueryable<TEntity> query, ListRequest listRequest) where TEntity : class
+        => query.WithFilter(listRequest.Filter).WithSort(listRequest.Sort);
+
+    /// <summary>
+    /// Applies filtering options to the IQueryable data source.
+    /// </summary>
+    /// <typeparam name="TEntity">The type of entity in the IQueryable.</typeparam>
+    /// <param name="query">The source IQueryable data.</param>
+    /// <param name="filterRequest">The list request containing filter options.</param>
+    /// <returns>An IQueryable object with applied filtering.</returns>
+    /// <remarks>
+    /// This method applies filter options to the provided IQueryable data source based on the given <paramref name="filterRequest"/> object.
+    /// If the <paramref name="filterRequest"/> is null, the original IQueryable data is returned without any modifications.
     /// </remarks>
     public static IQueryable<TEntity> WithFilter<TEntity>(this IQueryable<TEntity> query, FilterRequest filterRequest) where TEntity : class
     {
-        IQueryable<TEntity> result = query;
+        var expression = filterRequest?.BuildFilterExpression<TEntity>();
 
-        if (filterRequest == null)
-            return result;
-
-        var expression = filterRequest.BuildFilterExpression<TEntity>();
-
-        result = result.Where(expression);
-
-        if (!string.IsNullOrEmpty(filterRequest.Sort))
-        {
-            result = filterRequest.SortType switch
-            {
-                SortType.Asc => result.OrderBy(CommonHelper.CreateOrderByKeySelector<TEntity>(filterRequest.Sort)),
-                SortType.Desc => result.OrderByDescending(CommonHelper.CreateOrderByKeySelector<TEntity>(filterRequest.Sort)),
-                _ => result,
-            };
-        }
-
-        return result;
+        return expression != null ? query.Where(expression) : query;
     }
+
+    /// <summary>
+    /// Applies sorting options to the IQueryable data source.
+    /// </summary>
+    /// <typeparam name="TEntity">The type of entity in the IQueryable.</typeparam>
+    /// <param name="query">The source IQueryable data.</param>
+    /// <param name="sortRequest">The list request containing sort options.</param>
+    /// <returns>An IQueryable object with applied sorting.</returns>
+    /// <remarks>
+    /// This method applies sorting options to the provided IQueryable data source based on the given <paramref name="sortRequest"/> object.
+    /// If the <paramref name="sortRequest"/> is null, the original IQueryable data is returned without any modifications.
+    /// </remarks>
+    public static IQueryable<TEntity> WithSort<TEntity>(this IQueryable<TEntity> query, SortRequest sortRequest) where TEntity : class
+    {
+        var propExpression = sortRequest?.BuildPropertySelectorExpression<TEntity>();
+
+        return propExpression == null
+            ? query
+            : sortRequest.Type switch
+            {
+                SortType.Asc => query.OrderBy(propExpression),
+                SortType.Desc => query.OrderByDescending(propExpression),
+                _ => query,
+            };
+    }
+
+    //TODO test this with entity framework
 
     /// <summary>
     /// Retrieves a paginated list result asynchronously from the provided IQueryable data source based on the specified list request parameters.
@@ -63,31 +118,33 @@ public static class QueryExtensions
     /// </remarks>
     public static async Task<ListResponse<TEntity>> ToListResponseAsync<TEntity>(this IQueryable<TEntity> query, ListRequest listRequest) where TEntity : class
     {
-        IQueryable<TEntity> result = query;
+        if (query == null)
+            return new ListResponse<TEntity>(true, "Ok", [], listRequest.PageNumber);
 
         listRequest ??= new ListRequest();
 
-        var expression = listRequest.BuildFilterExpression<TEntity>();
+        query = query.WithFilterAndSort(listRequest);
 
-        result = result.Where(expression);
+        var aggregationResults = await listRequest.Aggregation?.ApplyAggregationAsync(query);
 
         int? totalDataCount = null;
         int? totalPageCount = null;
 
-        result = listRequest.ApplySort(result);
-
         if (listRequest.PageNumber.HasValue && listRequest.RowCount.HasValue)
         {
-            totalDataCount = result.Count();
+            totalDataCount = query.Count();
             totalPageCount = listRequest.CalculatePageCountAndCompareWithRequested(totalDataCount);
 
-            result = result.Skip((listRequest.PageNumber.Value - 1) * listRequest.RowCount.Value)
-                           .Take(listRequest.RowCount.Value);
+            query = query.Skip((listRequest.PageNumber.Value - 1) * listRequest.RowCount.Value)
+                         .Take(listRequest.RowCount.Value);
         }
 
-        var list = await result.ToListAsync();
+        var list = await query.ToListAsync();
 
-        var listResult = new ListResponse<TEntity>(true, "Ok", list, listRequest.PageNumber, totalPageCount, totalDataCount);
+        var listResult = new ListResponse<TEntity>(true, "Ok", list, listRequest.PageNumber, totalPageCount, totalDataCount)
+        {
+            AggregationResults = aggregationResults
+        };
 
         return listResult;
     }
@@ -109,31 +166,33 @@ public static class QueryExtensions
     /// </remarks>
     public static ListResponse<TEntity> ToListResponse<TEntity>(this IQueryable<TEntity> query, ListRequest listRequest) where TEntity : class
     {
-        IQueryable<TEntity> result = query;
+        if (query == null)
+            return new ListResponse<TEntity>(true, "Ok", [], listRequest.PageNumber);
 
         listRequest ??= new ListRequest();
 
-        var expression = listRequest.BuildFilterExpression<TEntity>();
+        query = query.WithFilterAndSort(listRequest);
 
-        result = result.Where(expression);
+        var aggregationResults = listRequest.Aggregation?.ApplyAggregation(query);
 
         int? totalDataCount = null;
         int? totalPageCount = null;
 
-        result = listRequest.ApplySort(result);
-
         if (listRequest.PageNumber.HasValue && listRequest.RowCount.HasValue)
         {
-            totalDataCount = result.Count();
+            totalDataCount = query.Count();
             totalPageCount = listRequest.CalculatePageCountAndCompareWithRequested(totalDataCount);
 
-            result = result.Skip((listRequest.PageNumber.Value - 1) * listRequest.RowCount.Value)
-                           .Take(listRequest.RowCount.Value);
+            query = query.Skip((listRequest.PageNumber.Value - 1) * listRequest.RowCount.Value)
+                          .Take(listRequest.RowCount.Value);
         }
 
-        var list = result.ToList();
+        var list = query.ToList();
 
-        var listResult = new ListResponse<TEntity>(true, "Ok", list, listRequest.PageNumber, totalPageCount, totalDataCount);
+        var listResult = new ListResponse<TEntity>(true, "Ok", list, listRequest.PageNumber, totalPageCount, totalDataCount)
+        {
+            AggregationResults = aggregationResults
+        };
 
         return listResult;
     }

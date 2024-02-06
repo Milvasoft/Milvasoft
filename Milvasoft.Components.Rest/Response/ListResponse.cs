@@ -27,6 +27,11 @@ public class ListResponse<T> : Response<List<T>>
     [DataMember]
     public int? TotalDataCount { get; set; }
 
+    /// <summary>
+    /// Aggregation results.
+    /// </summary>
+    public List<AggregationResult> AggregationResults { get; set; }
+
     private ListResponse() : base()
     {
     }
@@ -34,9 +39,9 @@ public class ListResponse<T> : Response<List<T>>
     public ListResponse(bool isSuccess,
                         string message,
                         List<T> data,
-                        int? currentPage,
-                        int? totalPage,
-                        int? totalData) : this(isSuccess,
+                        int? currentPage = null,
+                        int? totalPage = null,
+                        int? totalData = null) : this(isSuccess,
                                                new List<ResponseMessage>() { new() { Message = message } },
                                                data,
                                                currentPage,
@@ -48,9 +53,9 @@ public class ListResponse<T> : Response<List<T>>
     public ListResponse(bool isSuccess,
                         List<ResponseMessage> messages,
                         List<T> data,
-                        int? currentPage,
-                        int? totalPage,
-                        int? totalData) : base(data)
+                        int? currentPage = null,
+                        int? totalPage = null,
+                        int? totalData = null) : base(data)
     {
         IsSuccess = isSuccess;
         Messages = messages;

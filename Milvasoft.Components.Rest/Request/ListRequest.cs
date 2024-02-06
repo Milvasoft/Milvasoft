@@ -1,11 +1,12 @@
 ﻿using Milvasoft.Core.Exceptions;
+using Milvasoft.Core.Extensions;
 
 namespace Milvasoft.Components.Rest.Request;
 
 /// <summary>
 /// List request specs.
 /// </summary>
-public class ListRequest : FilterableAndSortable
+public class ListRequest
 {
     /// <summary>
     /// Requested page number
@@ -19,10 +20,23 @@ public class ListRequest : FilterableAndSortable
     /// <example>10</example>
     public int? RowCount { get; set; }
 
-    //TODO aggregation  https://mui.com/x/react-data-grid/aggregation/
+    /// <summary>
+    /// Filter criterias.
+    /// </summary>
+    public FilterRequest Filter { get; set; }
 
     /// <summary>
-    /// Checks pagination parameters are reasonable.
+    /// Sort criterias.
+    /// </summary>
+    public SortRequest Sort { get; set; }
+
+    /// <summary>
+    /// Aggregation criterias.
+    /// </summary>
+    public AggregationRequest Aggregation { get; set; }
+
+    /// <summary>
+    /// Checks pagination paramete  rs are reasonable.
     /// </summary>
     /// <param name="totalDataCount"></param>
     /// <returns></returns>

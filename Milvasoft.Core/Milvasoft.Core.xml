@@ -522,6 +522,30 @@
             Common Helper class.
             </summary>
         </member>
+        <member name="M:Milvasoft.Core.CommonHelper.ThrowIfPropertyNotExists``1(System.String)">
+            <summary>
+            Checks if there is a property named <paramref name="propertyName"/> in the properties of <b>typeof(<typeparamref name="T"/>)</b>. 
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="propertyName"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Core.CommonHelper.ThrowIfPropertyNotExists(System.Object,System.String)">
+            <summary>
+            Checks if there is a property named <paramref name="propertyName"/> in the properties of <b><paramref name="content"/></b>. 
+            </summary>
+            <param name="content"></param>
+            <param name="propertyName"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Core.CommonHelper.ThrowIfPropertyNotExists(System.Type,System.String)">
+            <summary>
+            Checks if there is a property named <paramref name="propertyName"/> in the properties of <b><paramref name="type"/></b>. 
+            </summary>
+            <param name="type"></param>
+            <param name="propertyName"></param>
+            <returns></returns>
+        </member>
         <member name="M:Milvasoft.Core.CommonHelper.PropertyExists``1(System.String)">
             <summary>
             Checks if there is a property named <paramref name="propertyName"/> in the properties of <b>typeof(<typeparamref name="T"/>)</b>. 
@@ -541,6 +565,14 @@
         <member name="M:Milvasoft.Core.CommonHelper.PropertyExists(System.Type,System.String)">
             <summary>
             Checks if there is a property named <paramref name="propertyName"/> in the properties of <b><paramref name="type"/></b>. 
+            </summary>
+            <param name="type"></param>
+            <param name="propertyName"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Core.CommonHelper.GetPublicPropertyIgnoreCase(System.Type,System.String)">
+            <summary>
+            Gets property with <see cref="F:System.Reflection.BindingFlags.Public"/>, <see cref="F:System.Reflection.BindingFlags.IgnoreCase"/>, <see cref="F:System.Reflection.BindingFlags.Instance"/>
             </summary>
             <param name="type"></param>
             <param name="propertyName"></param>

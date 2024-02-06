@@ -957,8 +957,7 @@ public abstract partial class BaseRepository<TEntity, TKey, TContext> where TEnt
 
         var entityType = typeof(TReturn);
 
-        if (!CommonHelper.PropertyExists<TReturn>(orderByPropertyName))
-            throw new MilvaDeveloperException($"Type of {entityType}'s properties doesn't contain '{orderByPropertyName}'.");
+        entityType.ThrowIfPropertyNotExists(orderByPropertyName);
 
         var parameterExpression = Expression.Parameter(entityType, "i");
 
@@ -1024,8 +1023,7 @@ public abstract partial class BaseRepository<TEntity, TKey, TContext> where TEnt
     {
         var entityType = typeof(TReturn);
 
-        if (!CommonHelper.PropertyExists<TReturn>(orderByPropertyName))
-            throw new MilvaDeveloperException($"Type of {entityType}'s properties doesn't contain '{orderByPropertyName}'.");
+        entityType.ThrowIfPropertyNotExists(orderByPropertyName);
 
         var parameterExpression = Expression.Parameter(entityType, "i");
 
@@ -1135,8 +1133,7 @@ public abstract partial class BaseRepository<TEntity, TKey, TContext> where TEnt
     {
         var entityType = typeof(TEntity);
 
-        if (!CommonHelper.PropertyExists<TEntity>(maxPropertyName))
-            throw new MilvaDeveloperException($"Type of {entityType}'s properties doesn't contain '{maxPropertyName}'.");
+        entityType.ThrowIfPropertyNotExists(maxPropertyName);
 
         var parameterExpression = Expression.Parameter(entityType, "i");
 
