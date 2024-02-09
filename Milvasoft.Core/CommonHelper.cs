@@ -1,5 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Milvasoft.Core.Abstractions;
 using Milvasoft.Core.EntityBase.Abstract;
 using Milvasoft.Core.EntityBase.Abstract.Auditing;
@@ -129,6 +128,26 @@ public static class CommonHelper
 
     /// <summary>
     /// Create property selector predicate.(e.g. i => i.User).
+    /// If <typeparamref name="T"/> doesn't contains <paramref name="propertyName"/> throwns <see cref="MilvaDeveloperException"/>
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <typeparam name="TPropertyType"></typeparam>
+    /// <param name="propertyName"></param>
+    /// <returns></returns>
+    public static Func<T, TPropertyType> CreatePropertySelectorFunction<T, TPropertyType>(string propertyName)
+    {
+        var entityType = typeof(T);
+
+        if (!PropertyExists<T>(propertyName))
+            return null;
+
+        var parameter = Expression.Parameter(entityType);
+
+        return Expression.Lambda<Func<T, TPropertyType>>(Expression.Property(parameter, propertyName), parameter).Compile();
+    }
+
+    /// <summary>
+    /// Create property selector predicate.(e.g. i => i.User).
     /// If <typeparamref name="T"/> doesn't contains <paramref name="propertyName"/> returns null.
     /// </summary>
     /// <typeparam name="T"></typeparam>
@@ -144,6 +163,25 @@ public static class CommonHelper
         var parameter = Expression.Parameter(entityType);
 
         return Expression.Lambda<Func<T, TPropertyType>>(Expression.Property(parameter, propertyName), parameter);
+    }
+
+    /// <summary>
+    /// Create property selector predicate.(e.g. i => i.User).
+    /// If <typeparamref name="T"/> doesn't contains <paramref name="propertyName"/> returns null.
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <typeparam name="TPropertyType"></typeparam>
+    /// <param name="propertyName"></param>
+    /// <returns></returns>
+    public static Func<T, TPropertyType> CreateRequiredPropertySelectorFuction<T, TPropertyType>(string propertyName)
+    {
+        var entityType = typeof(T);
+
+        entityType.ThrowIfPropertyNotExists(propertyName);
+
+        var parameter = Expression.Parameter(entityType);
+
+        return Expression.Lambda<Func<T, TPropertyType>>(Expression.Property(parameter, propertyName), parameter).Compile();
     }
 
     /// <summary>

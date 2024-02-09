@@ -1,11 +1,7 @@
-﻿using Azure.Core;
-using ExpressionBuilder.Common;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Milvasoft.Components.Rest.Enums;
 using Milvasoft.Components.Rest.Request;
 using Milvasoft.Components.Rest.Response;
-using Milvasoft.Core;
-using Milvasoft.Core.Extensions;
 
 namespace Milvasoft.DataAccess.EfCore.Utils;
 
@@ -125,7 +121,7 @@ public static class QueryExtensions
 
         query = query.WithFilterAndSort(listRequest);
 
-        var aggregationResults = await listRequest.Aggregation?.ApplyAggregationAsync(query);
+        var aggregationResults = listRequest.Aggregation != null ? await listRequest.Aggregation.ApplyAggregationAsync(query) : null;
 
         int? totalDataCount = null;
         int? totalPageCount = null;
@@ -173,7 +169,7 @@ public static class QueryExtensions
 
         query = query.WithFilterAndSort(listRequest);
 
-        var aggregationResults = listRequest.Aggregation?.ApplyAggregation(query);
+        var aggregationResults = listRequest.Aggregation?.ApplyAggregationAsync(query, false).Result;
 
         int? totalDataCount = null;
         int? totalPageCount = null;

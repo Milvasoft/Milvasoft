@@ -1,5 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using Milvasoft.Core;
+﻿using Milvasoft.Core;
 using Milvasoft.Core.EntityBase.Abstract;
 using Milvasoft.Core.Exceptions;
 using Milvasoft.Core.Extensions;

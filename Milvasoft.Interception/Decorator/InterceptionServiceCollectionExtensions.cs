@@ -56,7 +56,7 @@ public static class InterceptionServiceCollectionExtensions
     /// <typeparam name="T">Service type to be decorated</typeparam>
     public static IServiceCollection Intercept(this IServiceCollection services, Type type)
     {
-        services.TryAddSingleton(x => new Decorator((type) => (IMilvaInterceptor)x.GetRequiredService(type)));
+        services.TryAddScoped(x => new Decorator((type) => (IMilvaInterceptor)x.GetRequiredService(type)));
 
         var descriptors = services.Where(x => x.ServiceType == type).ToArray();
 

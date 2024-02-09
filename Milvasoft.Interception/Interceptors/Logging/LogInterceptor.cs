@@ -37,8 +37,8 @@ public class LogInterceptor : IMilvaInterceptor
         {
             { "TransactionId", ActivityHelper.TraceId },
             { "MethodName", call.Method.Name },
-            { "MethodParams", call.Arguments },
-            { "MethodResult", call.ReturnValue },
+            { "MethodParams", call.Arguments.ToJson() },
+            { "MethodResult", call.ReturnValue.ToJson() },
             { "ElapsedMs", stopwatch.ElapsedMilliseconds },
             { "UtcLogTime" , DateTime.UtcNow },
         } : [];
@@ -78,7 +78,11 @@ public class LogInterceptor : IMilvaInterceptor
             }
         }
 
-        _logger.Log(logObjectPropDic.ToJson().ToObject<object>());
+        if (_logInterceptionOptions.LogAsync)
+        {
+            await _logger.LogAsync(logObjectPropDic.ToJson());
+        }
+        else _logger.Log(logObjectPropDic.ToJson());
     }
 
 }

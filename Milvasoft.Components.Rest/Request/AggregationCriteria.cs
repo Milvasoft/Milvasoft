@@ -1,9 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using Microsoft.EntityFrameworkCore.Query.SqlExpressions;
+using Microsoft.EntityFrameworkCore.Query.Internal;
 using Milvasoft.Components.Rest.Enums;
 using Milvasoft.Components.Rest.Response;
 using Milvasoft.Core;
+using Milvasoft.Core.Exceptions;
 using System.Reflection;
 
 namespace Milvasoft.Components.Rest.Request;
@@ -13,127 +13,238 @@ namespace Milvasoft.Components.Rest.Request;
 /// </summary>
 public class AggregationCriteria
 {
+    private static readonly Dictionary<QueryProviderType, List<MethodInfo>> _aggregationMethods = BuildAggregationMethodDictionary();
+    private QueryProviderType _queryProviderType;
+    private Type _entityType;
+    private Type _propType;
+    private bool _runAsync;
+    private string _aggregateBy;
+    private AggregationType _type;
+
     /// <summary>
     /// Aggregation column name.
     /// </summary>
     /// <example>{columnName}</example>
-    public virtual string AggregateBy { get; set; }
+    public virtual string AggregateBy { get => _aggregateBy; set => _aggregateBy = value; }
 
     /// <summary>
     /// Aggregation type.
     /// </summary>
     /// <example>{columnName}</example>
-    public virtual AggregationType Type { get; set; }
+    public virtual AggregationType Type { get => _type; set => _type = value; }
 
-    public virtual async Task<AggregationResult> ApplyAggregationAsync<TEntity>(IQueryable<TEntity> query)
+    public virtual async Task<AggregationResult> ApplyAggregationAsync<TEntity>(IQueryable<TEntity> query, bool runAsync = true)
     {
-        if (string.IsNullOrEmpty(AggregateBy))
-            return new AggregationResult(AggregateBy, Type, null);
+        if (string.IsNullOrEmpty(_aggregateBy))
+            return new AggregationResult(_aggregateBy, _type, null);
 
-        var entityType = typeof(TEntity);
+        var prop = InitializeFields(query, runAsync);
 
-        var prop = entityType.GetPublicPropertyIgnoreCase(AggregateBy);
+        var propertySelector = CreatePropertySelector();
 
-        var propType = prop.PropertyType;
-
-        var propertySelector = CreatePropertySelector(entityType, propType);
-
-        if (Type == AggregationType.Count)
+        if (_type == AggregationType.Count)
         {
-            return new AggregationResult(prop.Name, Type, await query.CountAsync().ConfigureAwait(false));
+            var count = runAsync ? await query.CountAsync().ConfigureAwait(false) : query.Count();
+
+            return new AggregationResult(prop.Name, _type, count);
         }
-        else return new AggregationResult(prop.Name, Type, GenericInvokeAggregationMethodAsync(query, propertySelector, entityType, propType));
+        else
+        {
+            var res = await GenericInvokeAggregationMethodAsync(query, propertySelector);
+
+            return new AggregationResult(prop.Name, _type, res);
+        }
     }
 
-    /// <summary>
-    /// If <see cref="SortBy"/> property is not null or empty apply sorting with <see cref="SortBy"/> and <see cref="Type"/>.
-    /// </summary>
-    /// <typeparam name="TEntity"></typeparam>
-    /// <param name="query"></param>
-    /// <returns></returns>
-    public virtual AggregationResult ApplyAggregation<TEntity>(IQueryable<TEntity> query)
+    private async Task<object> GenericInvokeAggregationMethodAsync<TEntity>(IQueryable<TEntity> query, object propertySelectorResult)
     {
-        if (string.IsNullOrEmpty(AggregateBy))
-            return new AggregationResult(AggregateBy, Type, null);
+        MethodInfo genericAggregationMethod = MakeGenericMethod();
 
-        var entityType = typeof(TEntity);
+        if (genericAggregationMethod == null)
+            return null;
 
-        var prop = entityType.GetPublicPropertyIgnoreCase(AggregateBy);
+        object result;
 
-        var propType = prop.PropertyType;
-
-        var propertySelector = CreatePropertySelector(entityType, propType);
-
-        if (Type == AggregationType.Count)
+        if (_runAsync)
         {
-            return new AggregationResult(prop.Name, Type, query.Count());
+            var taskResult = (Task)genericAggregationMethod.Invoke(null, new object[] { query, propertySelectorResult, null });
+
+            await taskResult;
+
+            var resultProperty = taskResult.GetType().GetProperty("Result");
+
+            result = resultProperty.GetValue(taskResult);
         }
-        else return new AggregationResult(prop.Name, Type, GenericInvokeAggregationMethod(query, propertySelector, entityType, propType));
+        else
+        {
+            result = genericAggregationMethod?.Invoke(null, new object[] { query, propertySelectorResult });
+        }
+
+        return result;
     }
 
-    private object CreatePropertySelector(Type entityType, Type propType)
+    private MethodInfo MakeGenericMethod()
     {
+        MethodInfo aggregationMethod = null;
+
+        var methodName = GetMethodName(_type, _runAsync);
+
+        var relatedMethods = _aggregationMethods[_queryProviderType].Where(mi => mi.Name == methodName);
+
+        foreach (var method in relatedMethods)
+        {
+            var methodParameters = method.GetParameters().Select(i => i.ParameterType);
+
+            if (IsMethodParametersContainsDesiredType(methodParameters))
+            {
+                aggregationMethod = method;
+                break;
+            }
+        }
+
+        if (aggregationMethod == null)
+            throw new MilvaDeveloperException("Unkown query provider.");
+
+        if (!aggregationMethod.IsGenericMethod)
+            return aggregationMethod;
+
+        MethodInfo genericAggregationMethod;
+
+        if (aggregationMethod.GetGenericArguments().Length == 1)
+        {
+            genericAggregationMethod = aggregationMethod.MakeGenericMethod(_entityType);
+        }
+        else genericAggregationMethod = aggregationMethod.MakeGenericMethod(_entityType, _propType);
+
+        return genericAggregationMethod;
+
+        bool IsMethodParametersContainsDesiredType(IEnumerable<Type> types)
+        {
+            var genericTypes = types.Where(i => i.ContainsGenericParameters);
+
+            //If method parameter's all generic parameters is generic type
+            if (genericTypes.Count() > 1 && genericTypes.All(t => t.GenericTypeArguments.All(g => g.IsGenericType)))
+                return true;
+
+            foreach (var type in types)
+            {
+                if (type.IsGenericType)
+                    if (IsMethodParametersContainsDesiredType(type.GetGenericArguments()))
+                        return true;
+
+                if (type == _propType || type == _entityType)
+                    return true;
+            }
+
+            return false;
+        }
+    }
+
+    private object CreatePropertySelector()
+    {
+        string selectorMethodName = _queryProviderType switch
+        {
+            QueryProviderType.List => "CreateRequiredPropertySelector",
+            QueryProviderType.Enumerable => "CreateRequiredPropertySelectorFuction",
+            QueryProviderType.AsyncQueryable => "CreateRequiredPropertySelector",
+            _ => "CreateRequiredPropertySelector",
+        };
+
         // Step 1: Get the MethodInfo object for the generic method
-        var selectorMethod = typeof(CommonHelper).GetMethod("CreateRequiredPropertySelector");
+        var selectorMethod = typeof(CommonHelper).GetMethod(selectorMethodName);
 
         // Step 2: Construct the method generic with desired type of arguments
-        MethodInfo genericSelectorMethod = selectorMethod.MakeGenericMethod(entityType, propType);
+        MethodInfo genericSelectorMethod = selectorMethod.MakeGenericMethod(_entityType, _propType);
 
         // Step 3: Call the generic method with the specified type arguments
-        var propertySelectorResult = genericSelectorMethod.Invoke(null, new object[] { AggregateBy });
+        var propertySelectorResult = genericSelectorMethod.Invoke(null, new object[] { _aggregateBy });
 
         return propertySelectorResult;
     }
 
-    private async Task<object> GenericInvokeAggregationMethodAsync<TEntity>(IQueryable<TEntity> query, object propertySelectorResult, Type entityType, Type propType)
+    private static string GetMethodName(AggregationType type, bool runAsync) => type switch
     {
-        MethodInfo genericAggregationMethod = MakeGenericMethod(entityType, propType);
-
-        var taskResult = (Task)genericAggregationMethod.Invoke(null, new object[] { query, propertySelectorResult });
-
-        await taskResult;
-
-        var resultProperty = taskResult.GetType().GetProperty("Result");
-
-        var result = resultProperty.GetValue(taskResult);
-
-        return result;
-    }
-
-    private object GenericInvokeAggregationMethod<TEntity>(IQueryable<TEntity> query, object propertySelectorResult, Type entityType, Type propType)
-    {
-        MethodInfo genericAggregationMethod = MakeGenericMethod(entityType, propType);
-
-        var result = genericAggregationMethod.Invoke(null, new object[] { query, propertySelectorResult });
-
-        return result;
-    }
-
-    private static string GetMethodName(AggregationType type, bool isAsync = false) => type switch
-    {
-        AggregationType.Avg => isAsync ? "AverageAsync" : "Average",
-        AggregationType.Sum => isAsync ? "SumAsync" : "Sum",
-        AggregationType.Min => isAsync ? "MinByAsync" : "MinBy",
-        AggregationType.Max => isAsync ? "MaxByAsync" : "MaxBy",
-        AggregationType.Count => isAsync ? "CountAsync" : "Count",
+        AggregationType.Avg => runAsync ? "AverageAsync" : "Average",
+        AggregationType.Sum => runAsync ? "SumAsync" : "Sum",
+        AggregationType.Min => runAsync ? "MinAsync" : "MinBy",
+        AggregationType.Max => runAsync ? "MaxAsync" : "MaxBy",
+        AggregationType.Count => runAsync ? "CountAsync" : "Count",
         _ => string.Empty,
     };
 
-    private MethodInfo MakeGenericMethod(Type entityType, Type propType)
+    private static Dictionary<QueryProviderType, List<MethodInfo>> BuildAggregationMethodDictionary()
     {
-        var aggreagationMethod = typeof(Queryable).GetMethods().FirstOrDefault(mi => mi.Name == GetMethodName(Type, true)
-                                                                     && mi.IsGenericMethodDefinition
-                                                                     //&& mi.GetParameters().Any(pi => pi.ParameterType == propType)
-                                                                     && mi.GetParameters().Length == 2);
+        var aggregationTypes = Enum.GetValues<AggregationType>();
 
-        MethodInfo genericAggregationMethod;
+        Dictionary<QueryProviderType, List<MethodInfo>> methodInfos = [];
 
-        if (aggreagationMethod.GetGenericArguments().Length == 1)
+        methodInfos.Add(QueryProviderType.List, []);
+        methodInfos.Add(QueryProviderType.Enumerable, []);
+        methodInfos.Add(QueryProviderType.AsyncQueryable, []);
+
+        foreach (var aggregationType in aggregationTypes)
         {
-            genericAggregationMethod = aggreagationMethod.MakeGenericMethod(entityType);
-        }
-        else genericAggregationMethod = aggreagationMethod.MakeGenericMethod(entityType, propType);
+            var syncMethodName = GetMethodName(aggregationType, runAsync: false);
+            var asyncMethodName = GetMethodName(aggregationType, runAsync: true);
 
-        return genericAggregationMethod;
+            //Add collection methods
+            var relatedMethods = typeof(Queryable).GetMethods()
+                                                  .Where(mi => mi.Name == syncMethodName
+                                                                         && mi.IsGenericMethodDefinition
+                                                                         && mi.GetParameters().Length == 2);
+
+            methodInfos[QueryProviderType.List].AddRange(relatedMethods);
+
+            //Add entity framework sync methods
+            relatedMethods = typeof(Enumerable).GetMethods(BindingFlags.Static | BindingFlags.Public)
+                                               .Where(mi => mi.Name == syncMethodName
+                                                            && mi.GetParameters().Length == 2);
+
+            methodInfos[QueryProviderType.Enumerable].AddRange(relatedMethods);
+
+            //Add entity framework async methods
+            relatedMethods = typeof(EntityFrameworkQueryableExtensions).GetMethods(BindingFlags.Static | BindingFlags.Public)
+                                                                       .Where(mi => mi.Name == asyncMethodName
+                                                                                    && mi.GetParameters().Length == 3);
+
+            methodInfos[QueryProviderType.AsyncQueryable].AddRange(relatedMethods);
+
+        }
+
+        return methodInfos;
+    }
+
+    private PropertyInfo InitializeFields<TEntity>(IQueryable<TEntity> query, bool runAsync)
+    {
+        _runAsync = runAsync;
+        _entityType = typeof(TEntity);
+
+        var prop = _entityType.ThrowIfPropertyNotExists(_aggregateBy);
+
+        _propType = prop.PropertyType;
+
+        if (runAsync)
+        {
+            _queryProviderType = QueryProviderType.AsyncQueryable;
+        }
+        else
+        {
+            if (query.Provider.GetType().IsAssignableTo(typeof(EnumerableQuery)))
+                _queryProviderType = QueryProviderType.List;
+            else if (query.Provider.GetType().IsAssignableTo(typeof(EntityQueryProvider)))
+                _queryProviderType = QueryProviderType.Enumerable;
+            else _queryProviderType = QueryProviderType.List;
+        }
+
+        return prop;
+    }
+
+
+
+    private enum QueryProviderType
+    {
+        List,
+        Enumerable,
+        AsyncQueryable
     }
 }

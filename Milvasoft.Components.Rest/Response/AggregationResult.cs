@@ -2,7 +2,7 @@
 
 namespace Milvasoft.Components.Rest.Response;
 
-public class AggregationResult(string aggregatedBy,AggregationType aggregationType, object result)
+public class AggregationResult(string aggregatedBy, AggregationType aggregationType, object result)
 {
     public string AggregatedBy { get; set; } = aggregatedBy;
 

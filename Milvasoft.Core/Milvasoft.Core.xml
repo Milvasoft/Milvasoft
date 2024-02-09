@@ -331,11 +331,17 @@
             Logger interface for DI. If you want to get logs from library side errors implement this interface and register to <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/>.
             </summary>
         </member>
-        <member name="M:Milvasoft.Core.Abstractions.IMilvaLogger.Log(System.Object)">
+        <member name="M:Milvasoft.Core.Abstractions.IMilvaLogger.Log(System.String)">
             <summary>
             Abstraction where you can make logs such as database logging.
             </summary>
-            <param name="logEntry"></param>
+            <param name="logEntry">Log object json string.</param>
+        </member>
+        <member name="M:Milvasoft.Core.Abstractions.IMilvaLogger.LogAsync(System.String)">
+            <summary>
+            Abstraction where you can make logs such as database logging.
+            </summary>
+            <param name="logEntry">Log object json string</param>
         </member>
         <member name="M:Milvasoft.Core.Abstractions.IMilvaLogger.Verbose(System.String)">
             <summary>
@@ -599,7 +605,27 @@
             <param name="propertyName"></param>
             <returns></returns>
         </member>
+        <member name="M:Milvasoft.Core.CommonHelper.CreatePropertySelectorFunction``2(System.String)">
+            <summary>
+            Create property selector predicate.(e.g. i => i.User).
+            If <typeparamref name="T"/> doesn't contains <paramref name="propertyName"/> throwns <see cref="T:Milvasoft.Core.Exceptions.MilvaDeveloperException"/>
+            </summary>
+            <typeparam name="T"></typeparam>
+            <typeparam name="TPropertyType"></typeparam>
+            <param name="propertyName"></param>
+            <returns></returns>
+        </member>
         <member name="M:Milvasoft.Core.CommonHelper.CreateRequiredPropertySelector``2(System.String)">
+            <summary>
+            Create property selector predicate.(e.g. i => i.User).
+            If <typeparamref name="T"/> doesn't contains <paramref name="propertyName"/> returns null.
+            </summary>
+            <typeparam name="T"></typeparam>
+            <typeparam name="TPropertyType"></typeparam>
+            <param name="propertyName"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Core.CommonHelper.CreateRequiredPropertySelectorFuction``2(System.String)">
             <summary>
             Create property selector predicate.(e.g. i => i.User).
             If <typeparamref name="T"/> doesn't contains <paramref name="propertyName"/> returns null.

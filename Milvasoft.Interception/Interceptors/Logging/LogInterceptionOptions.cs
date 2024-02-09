@@ -3,6 +3,11 @@
 public class LogInterceptionOptions : ILogInterceptionOptions
 {
     /// <summary>
+    /// It determines whether the values that the Milvasoft library logs with async.
+    /// </summary>
+    public bool LogAsync { get; set; } = true;
+
+    /// <summary>
     /// It determines whether the values that the Milvasoft library logs by default will be logged. Default is true;
     /// </summary>
     public bool LogDefaultParameters { get; set; } = true;
@@ -16,6 +21,11 @@ public class LogInterceptionOptions : ILogInterceptionOptions
 
 public interface ILogInterceptionOptions
 {
+    /// <summary>
+    /// It determines whether the values that the Milvasoft library logs with async.
+    /// </summary>
+    public bool LogAsync { get; set; }
+
     /// <summary>
     /// It determines whether the values that the Milvasoft library logs by default will be logged. Default is true;
     /// </summary>

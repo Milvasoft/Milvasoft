@@ -10,8 +10,14 @@ public interface IMilvaLogger
     /// <summary>
     /// Abstraction where you can make logs such as database logging.
     /// </summary>
-    /// <param name="logEntry"></param>
-    public void Log(object logEntry);
+    /// <param name="logEntry">Log object json string.</param>
+    public void Log(string logEntry);
+
+    /// <summary>
+    /// Abstraction where you can make logs such as database logging.
+    /// </summary>
+    /// <param name="logEntry">Log object json string</param>
+    public Task LogAsync(string logEntry);
 
     /// <summary>
     /// Write a log event with verbose level.
