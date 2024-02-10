@@ -30,8 +30,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <PackageReference Include="EFCore.BulkExtensions" Version="8.0.0" />
-	  <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.1.1" />
+	  <PackageReference Include="EFCore.BulkExtensions" Version="8.0.1" />
 	</ItemGroup>
 
 	<PropertyGroup>

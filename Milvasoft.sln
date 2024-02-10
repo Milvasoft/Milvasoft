@@ -4,6 +4,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 17.0.32112.339
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Milvasoft.Helpers", "Milvasoft.Helpers\Milvasoft.Helpers.csproj", "{49A1B0F8-BAC8-433A-A5B8-737E28A5AFA6}"
+	ProjectSection(ProjectDependencies) = postProject
+		{01550FD0-ECE6-4115-9F4F-896A45D63309} = {01550FD0-ECE6-4115-9F4F-896A45D63309}
+		{05965A25-0E62-4AF5-B2EA-C523DC61B9A2} = {05965A25-0E62-4AF5-B2EA-C523DC61B9A2}
+		{3ADC85B1-AA00-4FB2-A2B7-94DC629A8471} = {3ADC85B1-AA00-4FB2-A2B7-94DC629A8471}
+		{5D42AB35-DC86-41AE-9781-1D0A957FCDDC} = {5D42AB35-DC86-41AE-9781-1D0A957FCDDC}
+		{60BF9EEC-6824-4FEC-9E73-9884941DEA55} = {60BF9EEC-6824-4FEC-9E73-9884941DEA55}
+		{79E7B6B8-F369-4BB0-A0E3-0381947B0C01} = {79E7B6B8-F369-4BB0-A0E3-0381947B0C01}
+		{B89E4D68-C979-49F2-8F70-82B2212B300B} = {B89E4D68-C979-49F2-8F70-82B2212B300B}
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Milvasoft.Core", "Milvasoft.Core\Milvasoft.Core.csproj", "{518CFB64-0A25-4A0E-B211-37FD4D954B06}"
 EndProject
@@ -49,7 +58,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Milvasoft.Components.Rest",
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Components", "Components", "{59BDBA81-3527-48FB-A8D0-7891FBC7BE25}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Milvasoft.Attributes.Annotations", "Milvasoft.Attributes.Annotations\Milvasoft.Attributes.Annotations.csproj", "{79E7B6B8-F369-4BB0-A0E3-0381947B0C01}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Milvasoft.Attributes.Annotations", "Milvasoft.Attributes.Annotations\Milvasoft.Attributes.Annotations.csproj", "{79E7B6B8-F369-4BB0-A0E3-0381947B0C01}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
