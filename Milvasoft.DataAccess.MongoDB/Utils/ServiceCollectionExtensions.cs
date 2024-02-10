@@ -1,8 +1,8 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Milvasoft.Core.Exceptions;
+using Milvasoft.Cryptography.Concrete;
 using Milvasoft.DataAccess.MongoDB.Utils.Serializers;
 using Milvasoft.DataAccess.MongoDB.Utils.Settings;
-using Milvasoft.Encryption.Concrete;
 using MongoDB.Bson.Serialization;
 using MongoDB.Driver;
 
@@ -50,7 +50,7 @@ public static class ServiceCollectionExtensions
 
         if (!string.IsNullOrWhiteSpace(config.EncryptionKey))
         {
-            var encryptionProvider = new MilvaEncryptionProvider(config.EncryptionKey);
+            var encryptionProvider = new MilvaCryptographyProvider(config.EncryptionKey);
 
             var serializer = new EncryptedStringSerializer(encryptionProvider);
 

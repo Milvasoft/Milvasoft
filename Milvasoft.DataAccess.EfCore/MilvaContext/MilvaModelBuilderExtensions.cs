@@ -3,9 +3,9 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using Milvasoft.Core.EntityBase.Concrete;
 using Milvasoft.Core.EntityBase.MultiTenancy;
 using Milvasoft.Core.Exceptions;
+using Milvasoft.Cryptography.Abstract;
 using Milvasoft.DataAccess.EfCore.Attributes;
 using Milvasoft.DataAccess.EfCore.Utils.Converters;
-using Milvasoft.Encryption.Abstract;
 using MongoDB.Bson;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq.Expressions;
@@ -101,7 +101,7 @@ public static class MilvaModelBuilderExtensions
     /// </summary>
     /// <param name="modelBuilder"></param>
     /// <param name="encryptionProvider"></param>
-    public static ModelBuilder UseAnnotationEncryption(this ModelBuilder modelBuilder, IMilvaEncryptionProvider encryptionProvider)
+    public static ModelBuilder UseAnnotationEncryption(this ModelBuilder modelBuilder, IMilvaCryptographyProvider encryptionProvider)
     {
         if (modelBuilder is null)
             throw new MilvaDeveloperException("The given model builder cannot be null");
@@ -132,7 +132,7 @@ public static class MilvaModelBuilderExtensions
     /// </summary>
     /// <param name="modelBuilder"></param>
     /// <param name="encryptionProvider"></param>
-    public static ModelBuilder UseEncryption(this ModelBuilder modelBuilder, IMilvaEncryptionProvider encryptionProvider)
+    public static ModelBuilder UseEncryption(this ModelBuilder modelBuilder, IMilvaCryptographyProvider encryptionProvider)
     {
         if (modelBuilder is null)
             throw new MilvaDeveloperException("The given model builder cannot be null");

@@ -1,4 +1,4 @@
-﻿using Milvasoft.Encryption.Abstract;
+﻿using Milvasoft.Cryptography.Abstract;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
 using MongoDB.Bson.Serialization.Serializers;
@@ -10,9 +10,9 @@ public interface IEncryptedStringSerializer : IBsonSerializer<EncryptedString> {
 
 public class EncryptedStringSerializer : SerializerBase<EncryptedString>, IEncryptedStringSerializer
 {
-    private readonly IMilvaEncryptionProvider _encrypter;
+    private readonly IMilvaCryptographyProvider _encrypter;
 
-    public EncryptedStringSerializer(IMilvaEncryptionProvider encrypter)
+    public EncryptedStringSerializer(IMilvaCryptographyProvider encrypter)
     {
         _encrypter = encrypter;
     }

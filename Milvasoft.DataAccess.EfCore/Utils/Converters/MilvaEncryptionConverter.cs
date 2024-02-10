@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Milvasoft.Encryption.Abstract;
+using Milvasoft.Cryptography.Abstract;
 
 namespace Milvasoft.DataAccess.EfCore.Utils.Converters;
 
@@ -13,7 +13,7 @@ public sealed class MilvaEncryptionConverter : ValueConverter<string, string>
     /// </summary>
     /// <param name="encryptionProvider">Encryption provider</param>
     /// <param name="mappingHints">Entity Framework mapping hints</param>
-    public MilvaEncryptionConverter(IMilvaEncryptionProvider encryptionProvider, ConverterMappingHints mappingHints = null)
+    public MilvaEncryptionConverter(IMilvaCryptographyProvider encryptionProvider, ConverterMappingHints mappingHints = null)
         : base(value => encryptionProvider.Encrypt(value), x => encryptionProvider.Decrypt(x), mappingHints)
     {
     }

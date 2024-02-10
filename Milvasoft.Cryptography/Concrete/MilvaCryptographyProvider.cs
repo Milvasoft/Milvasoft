@@ -1,13 +1,13 @@
-﻿using Milvasoft.Encryption.Abstract;
+﻿using Milvasoft.Cryptography.Abstract;
 using System.Security.Cryptography;
 using System.Text;
 
-namespace Milvasoft.Encryption.Concrete;
+namespace Milvasoft.Cryptography.Concrete;
 
 /// <summary>
 /// Provides file encryption and decryption with AES Algorithm. Milvasoft Corporation is not responsible of possible data loss.
 /// </summary>
-public class MilvaEncryptionProvider : IMilvaEncryptionProvider
+public class MilvaCryptographyProvider : IMilvaCryptographyProvider
 {
 
     #region Fields
@@ -33,12 +33,12 @@ public class MilvaEncryptionProvider : IMilvaEncryptionProvider
     #endregion
 
     /// <summary>
-    /// Creates a new <see cref="MilvaEncryptionProvider"/> instance.
+    /// Creates a new <see cref="MilvaCryptographyProvider"/> instance.
     /// </summary>
     /// <param name="key"> Must be between 128-256 bit.</param>
     /// <param name="mode"></param>
     /// <param name="padding"></param>
-    public MilvaEncryptionProvider(string key, CipherMode mode = CipherMode.CBC, PaddingMode padding = PaddingMode.PKCS7)
+    public MilvaCryptographyProvider(string key, CipherMode mode = CipherMode.CBC, PaddingMode padding = PaddingMode.PKCS7)
     {
         _key = Encoding.UTF8.GetBytes(key);
 

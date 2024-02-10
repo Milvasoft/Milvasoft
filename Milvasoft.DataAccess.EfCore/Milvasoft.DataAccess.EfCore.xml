@@ -2428,14 +2428,14 @@
             </summary>
             <param name="modelBuilder"></param>
         </member>
-        <member name="M:Milvasoft.DataAccess.EfCore.MilvaContext.MilvaModelBuilderExtensions.UseAnnotationEncryption(Microsoft.EntityFrameworkCore.ModelBuilder,Milvasoft.Encryption.Abstract.IMilvaEncryptionProvider)">
+        <member name="M:Milvasoft.DataAccess.EfCore.MilvaContext.MilvaModelBuilderExtensions.UseAnnotationEncryption(Microsoft.EntityFrameworkCore.ModelBuilder,Milvasoft.Cryptography.Abstract.IMilvaCryptographyProvider)">
             <summary>
             Adds value converter(<see cref="T:Milvasoft.DataAccess.EfCore.Utils.Converters.MilvaEncryptionConverter"/>) to string properties which marked with <see cref="T:Milvasoft.DataAccess.EfCore.Attributes.MilvaEncryptedAttribute"/>.
             </summary>
             <param name="modelBuilder"></param>
             <param name="encryptionProvider"></param>
         </member>
-        <member name="M:Milvasoft.DataAccess.EfCore.MilvaContext.MilvaModelBuilderExtensions.UseEncryption(Microsoft.EntityFrameworkCore.ModelBuilder,Milvasoft.Encryption.Abstract.IMilvaEncryptionProvider)">
+        <member name="M:Milvasoft.DataAccess.EfCore.MilvaContext.MilvaModelBuilderExtensions.UseEncryption(Microsoft.EntityFrameworkCore.ModelBuilder,Milvasoft.Cryptography.Abstract.IMilvaCryptographyProvider)">
             <summary>
             Adds value converter(<see cref="T:Milvasoft.DataAccess.EfCore.Utils.Converters.MilvaEncryptionConverter"/>) to all strings properties.
             </summary>
@@ -2519,7 +2519,7 @@
             Defines the internal encryption converter for string values.
             </summary>
         </member>
-        <member name="M:Milvasoft.DataAccess.EfCore.Utils.Converters.MilvaEncryptionConverter.#ctor(Milvasoft.Encryption.Abstract.IMilvaEncryptionProvider,Microsoft.EntityFrameworkCore.Storage.ValueConversion.ConverterMappingHints)">
+        <member name="M:Milvasoft.DataAccess.EfCore.Utils.Converters.MilvaEncryptionConverter.#ctor(Milvasoft.Cryptography.Abstract.IMilvaCryptographyProvider,Microsoft.EntityFrameworkCore.Storage.ValueConversion.ConverterMappingHints)">
             <summary>
             Creates a new <see cref="T:Milvasoft.DataAccess.EfCore.Utils.Converters.MilvaEncryptionConverter"/> instance.
             </summary>

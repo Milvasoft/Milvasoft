@@ -13,8 +13,8 @@
 	<ItemGroup>
 		<ProjectReference Include="..\Milvasoft.Components.Rest\Milvasoft.Components.Rest.csproj" />
 		<ProjectReference Include="..\Milvasoft.Core\Milvasoft.Core.csproj" />
-		<ProjectReference Include="..\Milvasoft.Encryption\Milvasoft.Encryption.csproj" />
-	</ItemGroup>
+		<ProjectReference Include="..\Milvasoft.Cryptography\Milvasoft.Cryptography.csproj" />
+			</ItemGroup>
 
 	<ItemGroup>
 		<None Update="Milvasoft.DataAccess.EfCore.xml">

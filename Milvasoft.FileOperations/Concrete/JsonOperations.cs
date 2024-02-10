@@ -1,5 +1,5 @@
 ﻿using Milvasoft.Core.Extensions;
-using Milvasoft.Encryption.Concrete;
+using Milvasoft.Cryptography.Concrete;
 using Milvasoft.FileOperations.Abstract;
 using Newtonsoft.Json;
 using System.Globalization;
@@ -1136,7 +1136,7 @@ public class JsonOperations : IJsonOperations
 
     private static async Task<string> DecryptAndReadAsync(string filePath, string key)
     {
-        var encryptionProvider = new MilvaEncryptionProvider(key);
+        var encryptionProvider = new MilvaCryptographyProvider(key);
 
         var inputValue = await File.ReadAllTextAsync(filePath).ConfigureAwait(false);
 
@@ -1145,7 +1145,7 @@ public class JsonOperations : IJsonOperations
 
     private static async Task EncryptAndWriteAsync(string filePath, string content, string key)
     {
-        var encryptionProvider = new MilvaEncryptionProvider(key);
+        var encryptionProvider = new MilvaCryptographyProvider(key);
 
         var encryptedContent = encryptionProvider.Encrypt(content);
 

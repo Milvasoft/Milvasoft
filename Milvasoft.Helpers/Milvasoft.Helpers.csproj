@@ -8,24 +8,6 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\Milvasoft.Attributes\Milvasoft.Attributes.csproj" />
-		<ProjectReference Include="..\Milvasoft.Caching.Redis\Milvasoft.Caching.Redis.csproj" />
-		<ProjectReference Include="..\Milvasoft.Core\Milvasoft.Core.csproj">
-			<TreatAsUsed>true</TreatAsUsed>
-		</ProjectReference>
-		<ProjectReference Include="..\Milvasoft.DataAccess.EfCore\Milvasoft.DataAccess.EfCore.csproj" />
-		<ProjectReference Include="..\Milvasoft.DataAccess.MongoDB\Milvasoft.DataAccess.MongoDB.csproj" />
-		<ProjectReference Include="..\Milvasoft.Encryption\Milvasoft.Encryption.csproj" />
-		<ProjectReference Include="..\Milvasoft.FileOperations\Milvasoft.FileOperations.csproj" />
-		<ProjectReference Include="..\Milvasoft.Identity\Milvasoft.Identity.csproj" />
-		<ProjectReference Include="..\Milvasoft.Integrations.Expo\Milvasoft.Integrations.Expo.csproj" />
-		<ProjectReference Include="..\Milvasoft.JobScheduling\Milvasoft.JobScheduling.csproj" />
-		<ProjectReference Include="..\Milvasoft.Mail\Milvasoft.Mail.csproj" />
-		<ProjectReference Include="..\Milvasoft.Middlewares\Milvasoft.Middlewares.csproj" />
-		<ProjectReference Include="..\Milvasoft.MultiTenancy\Milvasoft.MultiTenancy.csproj" />
-	</ItemGroup>
-
-	<ItemGroup>
 		<None Update="Milvasoft.Helpers.xml">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
@@ -36,6 +18,20 @@
 			<Pack>True</Pack>
 			<PackagePath></PackagePath>
 		</None>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\Milvasoft.Attributes\Milvasoft.Attributes.csproj" />
+	  <ProjectReference Include="..\Milvasoft.DataAccess.EfCore\Milvasoft.DataAccess.EfCore.csproj" />
+	  <ProjectReference Include="..\Milvasoft.DataAccess.MongoDB\Milvasoft.DataAccess.MongoDB.csproj" />
+	  <ProjectReference Include="..\Milvasoft.FileOperations\Milvasoft.FileOperations.csproj" />
+	  <ProjectReference Include="..\Milvasoft.Identity\Milvasoft.Identity.csproj" />
+	  <ProjectReference Include="..\Milvasoft.Interception\Milvasoft.Interception.csproj" />
+	  <ProjectReference Include="..\Milvasoft.JobScheduling\Milvasoft.JobScheduling.csproj" />
+	  <ProjectReference Include="..\Milvasoft.Localization.Redis\Milvasoft.Localization.Redis.csproj" />
+	  <ProjectReference Include="..\Milvasoft.Localization.Resx\Milvasoft.Localization.Resx.csproj" />
+	  <ProjectReference Include="..\Milvasoft.Middlewares\Milvasoft.Middlewares.csproj" />
+	  <ProjectReference Include="..\Milvasoft.MultiTenancy\Milvasoft.MultiTenancy.csproj" />
 	</ItemGroup>
 
 	<PropertyGroup>
