@@ -1,4 +1,5 @@
 ﻿using Milvasoft.Components.Rest.Enums;
+using Milvasoft.Core.Utils.Constants;
 using System.Runtime.Serialization;
 
 namespace Milvasoft.Components.Rest.Response;
@@ -19,7 +20,7 @@ public class ResponseMessage
     /// Gets or sets the message content.
     /// </summary>
     [DataMember]
-    public string Message { get; set; }
+    public string Message { get; set; } = LocalizerKeys.Successful;
 
     /// <summary>
     /// Gets or sets the type of message.

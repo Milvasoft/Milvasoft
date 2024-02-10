@@ -12,7 +12,8 @@ public static class LocalizerKeys
 
     #region Response Message Keys
 
-    public const string SuccessfullyOperationMessage = nameof(SuccessfullyOperationMessage);
+    public const string Successful = nameof(Successful);
+    public const string Failed = nameof(Failed);
     public const string AddErrorMessage = nameof(AddErrorMessage);
     public const string UpdateErrorMessage = nameof(UpdateErrorMessage);
     public const string DeleteErrorMessage = nameof(DeleteErrorMessage);

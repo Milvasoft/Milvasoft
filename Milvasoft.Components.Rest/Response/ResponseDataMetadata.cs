@@ -24,11 +24,6 @@ public class ResponseDataMetadata : IHasMetadata
     public string Type { get; set; }
 
     /// <summary>
-    /// Determines whether column or property type is collection or not.
-    /// </summary>
-    public bool DataTypeIsCollection { get; set; }
-
-    /// <summary>
     /// Determines whether column or property will displayed or not.
     /// </summary>
     public bool Display { get; set; } = true;

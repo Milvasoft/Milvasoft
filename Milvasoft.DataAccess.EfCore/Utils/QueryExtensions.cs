@@ -136,7 +136,7 @@ public static class QueryExtensions
 
         var list = await query.ToListAsync();
 
-        var listResult = ListResponse<TEntity>.Success(list, LocalizerKeys.SuccessfullyOperationMessage, listRequest.PageNumber, totalPageCount, totalDataCount);
+        var listResult = ListResponse<TEntity>.Success(list, LocalizerKeys.Successful, listRequest.PageNumber, totalPageCount, totalDataCount);
 
         listResult.AggregationResults = aggregationResults;
 
@@ -184,7 +184,7 @@ public static class QueryExtensions
 
         var list = query.ToList();
 
-        var listResult = ListResponse<TEntity>.Success(list, LocalizerKeys.SuccessfullyOperationMessage, listRequest.PageNumber, totalPageCount, totalDataCount);
+        var listResult = ListResponse<TEntity>.Success(list, LocalizerKeys.Successful, listRequest.PageNumber, totalPageCount, totalDataCount);
 
         listResult.AggregationResults = aggregationResults;
 

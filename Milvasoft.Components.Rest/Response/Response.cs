@@ -1,4 +1,5 @@
 ﻿using Milvasoft.Components.Rest.Enums;
+using Milvasoft.Core.Utils.Constants;
 using System.Net;
 using System.Runtime.Serialization;
 
@@ -68,7 +69,7 @@ public class Response : IResponse
 
     #region Success
 
-    public static Response Success() => new()
+    public static Response Success() => new(LocalizerKeys.Successful)
     {
         IsSuccess = true,
         StatusCode = (int)HttpStatusCode.OK,
@@ -114,7 +115,7 @@ public class Response : IResponse
 
     #region Error
 
-    public static Response Error() => new()
+    public static Response Error() => new(LocalizerKeys.Failed)
     {
         IsSuccess = false,
         StatusCode = (int)HttpStatusCode.BadRequest,
@@ -206,7 +207,7 @@ public class Response<T> : Response, IResponse<T>
 
     #region Success
 
-    public static Response<T> Success(T data) => new(data)
+    public static Response<T> Success(T data) => new(data, LocalizerKeys.Successful)
     {
         IsSuccess = true,
         StatusCode = (int)HttpStatusCode.OK,
@@ -251,7 +252,7 @@ public class Response<T> : Response, IResponse<T>
 
     #region Error
 
-    public static Response<T> Error(T data) => new(data)
+    public static Response<T> Error(T data) => new(data, LocalizerKeys.Failed)
     {
         IsSuccess = false,
         StatusCode = (int)HttpStatusCode.BadRequest,

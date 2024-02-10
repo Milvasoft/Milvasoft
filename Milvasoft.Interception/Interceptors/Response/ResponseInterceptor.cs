@@ -1,7 +1,9 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.DependencyInjection;
 using Milvasoft.Attributes.Annotations;
 using Milvasoft.Components.Rest.Response;
 using Milvasoft.Core.Abstractions;
+using Milvasoft.Core.Extensions;
 using Milvasoft.Interception.Decorator;
 using System.Collections;
 using System.ComponentModel;
@@ -20,19 +22,31 @@ public class ResponseInterceptor(IServiceProvider serviceProvider, IResponseInte
     {
         await call.NextAsync();
 
-        if (call.ReturnValue.GetType().IsAssignableTo(typeof(IHasMetadata)))
+        var returnValueType = call?.ReturnValue?.GetType();
+
+        if (returnValueType.IsAssignableTo(typeof(IResponse)))
         {
-            var response = (IHasMetadata)call.ReturnValue;
+            if (returnValueType.IsAssignableTo(typeof(IHasMetadata)))
+            {
+                var hasMetadataResponse = call.ReturnValue as IHasMetadata;
 
-            response.Metadatas = [];
+                hasMetadataResponse.Metadatas = [];
 
-            //Gets result data and generic type
-            var (responseData, resultDataType) = response.GetResponseData();
+                //Gets result data and generic type
+                var (responseData, resultDataType) = hasMetadataResponse.GetResponseData();
 
-            if (!resultDataType.IsClass)
-                return;
+                if (!resultDataType.IsClass)
+                    return;
 
-            CreateMetadata(response, resultDataType, responseData);
+                CreateMetadata(hasMetadataResponse, resultDataType, responseData);
+            }
+
+            var response = call.ReturnValue as IResponse;
+
+            if (_interceptionOptions.TranslateResultMessages && !response.Messages.IsNullOrEmpty())
+            {
+                TranslateResultMessages(response);
+            }
         }
     }
 
@@ -63,10 +77,6 @@ public class ResponseInterceptor(IServiceProvider serviceProvider, IResponseInte
             if (prop.PropertyType.IsClass && prop.PropertyType != typeof(string))
                 CreateMetadata(metadata, prop.PropertyType, propObject);
 
-            var hasResponseData = propObject != null;
-            var translateAttribute = resultDataType.GetCustomAttribute<TranslateAttribute>();
-            var localizer = translateAttribute != null ? _serviceProvider.GetService<IMilvaLocalizer>() : null;
-
             //Get used attributes
             var browsableAttribute = prop.GetCustomAttribute<BrowsableAttribute>();
             var hideByRoleAttribute = prop.GetCustomAttribute<HideByRoleAttribute>();
@@ -88,6 +98,9 @@ public class ResponseInterceptor(IServiceProvider serviceProvider, IResponseInte
             if (maskByRoleAttribute != null && maskByRoleAttribute.Roles.Length != 0 == false && (_interceptionOptions.HideByRoleFunc?.Invoke(hideByRoleAttribute) ?? false))
                 mask = true;
 
+            var hasResponseData = propObject != null;
+            var translateAttribute = _interceptionOptions.TranslateMetadata ? resultDataType.GetCustomAttribute<TranslateAttribute>() : null;
+            var localizer = translateAttribute != null ? _serviceProvider.GetService<IMilvaLocalizer>() : null;
             string localizedName = prop.Name;
 
             //Apply localization to property
@@ -108,7 +121,6 @@ public class ResponseInterceptor(IServiceProvider serviceProvider, IResponseInte
             metadata.DecimalPrecision = decimalDigitAttribute?.DecimalPrecision;
             metadata.CellTooltipFormat = cellTooltipFormatAttribute?.Format;
             metadata.CellDisplayFormat = cellDisplayFormatAttribute?.Format;
-            metadata.DataTypeIsCollection = dataTypeIsCollection;
 
             if (!removePropMetadataFromResponse)
                 response.Metadatas.Add(metadata);
@@ -171,5 +183,16 @@ public class ResponseInterceptor(IServiceProvider serviceProvider, IResponseInte
         localizedName ??= propName;
 
         return localizedName;
+    }
+
+
+    private void TranslateResultMessages(IResponse response)
+    {
+        var localizer = _serviceProvider.GetService<IMilvaLocalizer>();
+
+        if (localizer != null)
+            foreach (var message in response.Messages)
+                message.Message = localizer[message.Message];
+
     }
 }

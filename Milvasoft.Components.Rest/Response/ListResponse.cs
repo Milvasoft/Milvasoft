@@ -1,4 +1,5 @@
 ﻿using Milvasoft.Components.Rest.Enums;
+using Milvasoft.Core.Utils.Constants;
 using System.Net;
 using System.Runtime.Serialization;
 
@@ -36,6 +37,11 @@ public class ListResponse<T> : Response<List<T>>
 
     private ListResponse() : base()
     {
+    }
+    
+    private ListResponse(string message) : base()
+    {
+        Messages = [new() { Message = message }];
     }
 
     public ListResponse(List<T> data) : base(data)
@@ -90,13 +96,13 @@ public class ListResponse<T> : Response<List<T>>
 
     #region Success
 
-    public static ListResponse<T> Success() => new()
+    public static ListResponse<T> Success() => new(LocalizerKeys.Successful)
     {
         IsSuccess = true,
         StatusCode = (int)HttpStatusCode.OK,
     };
 
-    public static ListResponse<T> Success(List<T> data) => new(data)
+    public static ListResponse<T> Success(List<T> data) => new(data, LocalizerKeys.Successful)
     {
         IsSuccess = true,
         StatusCode = (int)HttpStatusCode.OK,
