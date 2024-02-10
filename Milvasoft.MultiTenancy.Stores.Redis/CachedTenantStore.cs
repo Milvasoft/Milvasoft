@@ -1,7 +1,8 @@
 ﻿using Milvasoft.Caching.Redis;
 using Milvasoft.Core.EntityBase.MultiTenancy;
+using Milvasoft.MultiTenancy.Store;
 
-namespace Milvasoft.MultiTenancy.Store;
+namespace Milvasoft.MultiTenancy.Stores.Redis;
 
 /// <summary>
 /// Cached tenant store. Sample store for <see cref="ITenantStore{TTenant, TKey}"/>

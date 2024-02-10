@@ -366,32 +366,6 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="T:Milvasoft.MultiTenancy.Store.CachedTenantStore`2">
-            <summary>
-            Cached tenant store. Sample store for <see cref="T:Milvasoft.MultiTenancy.Store.ITenantStore`2"/>
-            </summary>
-        </member>
-        <member name="M:Milvasoft.MultiTenancy.Store.CachedTenantStore`2.#ctor(Milvasoft.Caching.Redis.IRedisAccessor)">
-            <summary>
-            Creates new instance of <see cref="T:Milvasoft.MultiTenancy.Store.CachedTenantStore`2"/>
-            </summary>
-            <param name="redisCacheService"></param>
-        </member>
-        <member name="M:Milvasoft.MultiTenancy.Store.CachedTenantStore`2.GetTenantAsync(`1)">
-            <summary>
-            Returns a tenant according to <paramref name="identifier"/>.
-            </summary>
-            <param name="identifier"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Milvasoft.MultiTenancy.Store.CachedTenantStore`2.SetTenantAsync(`1,`0)">
-            <summary>
-            Sets a tenant with a given identifier.
-            </summary>
-            <param name="identifier"></param>
-            <param name="tenant"></param>
-            <returns></returns>
-        </member>
         <member name="T:Milvasoft.MultiTenancy.Store.ITenantStore`2">
             <summary>
             Abstraction for tenant storage. 
