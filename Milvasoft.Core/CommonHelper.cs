@@ -6,7 +6,6 @@ using Milvasoft.Core.EntityBase.Concrete;
 using Milvasoft.Core.Exceptions;
 using Milvasoft.Core.Extensions;
 using Milvasoft.Core.Utils.Constants;
-using MongoDB.Bson;
 using System.ComponentModel;
 using System.Linq.Expressions;
 using System.Reflection;
@@ -271,29 +270,6 @@ public static class CommonHelper
         byte[] bytes = new byte[16];
         BitConverter.GetBytes(value).CopyTo(bytes, 0);
         return new Guid(bytes);
-    }
-
-    /// <summary>
-    /// Converts <paramref name="value"/>'s type to <see cref="ObjectId"/>
-    /// </summary>
-    /// <param name="value"></param>
-    /// <returns></returns>
-    public static ObjectId ToObjectId(this int value)
-    {
-        var totalObjectIdLenth = ObjectId.GenerateNewId().ToString().Length;
-
-        var valueConverted = value.ToString();
-
-        if (totalObjectIdLenth <= valueConverted.Length) return new ObjectId("");
-
-        string objectId = "";
-
-        for (int i = 0; i < totalObjectIdLenth - valueConverted.Length; i++)
-        {
-            objectId += "0";
-        }
-
-        return new ObjectId(objectId + valueConverted);
     }
 
     /// <summary>

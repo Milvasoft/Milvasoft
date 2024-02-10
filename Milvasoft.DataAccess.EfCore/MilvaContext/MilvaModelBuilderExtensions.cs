@@ -4,7 +4,7 @@ using Milvasoft.Core.EntityBase.Concrete;
 using Milvasoft.Core.EntityBase.MultiTenancy;
 using Milvasoft.Core.Exceptions;
 using Milvasoft.DataAccess.EfCore.Attributes;
-using Milvasoft.DataAccess.EfCore.Utils;
+using Milvasoft.DataAccess.EfCore.Utils.Converters;
 using Milvasoft.Encryption.Abstract;
 using MongoDB.Bson;
 using System.ComponentModel.DataAnnotations.Schema;

@@ -12,6 +12,7 @@
 
   <ItemGroup>
     <PackageReference Include="Akinzekeel.ExpressionBuilder" Version="20200621.4.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.1" />
   </ItemGroup>
 
   <ItemGroup>

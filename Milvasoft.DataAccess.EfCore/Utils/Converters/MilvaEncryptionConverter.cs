@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Milvasoft.Encryption.Abstract;
 
-namespace Milvasoft.DataAccess.EfCore.Utils;
+namespace Milvasoft.DataAccess.EfCore.Utils.Converters;
 
 /// <summary>
 /// Defines the internal encryption converter for string values.

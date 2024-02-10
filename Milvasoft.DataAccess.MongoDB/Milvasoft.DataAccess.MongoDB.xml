@@ -765,6 +765,13 @@
             <param name="objectIds"></param>
             <returns></returns>
         </member>
+        <member name="M:Milvasoft.DataAccess.MongoDB.Utils.NoSqlRelationHelper.ToObjectId(System.Int32)">
+            <summary>
+            Converts <paramref name="value"/>'s type to <see cref="T:MongoDB.Bson.ObjectId"/>
+            </summary>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
         <member name="T:Milvasoft.DataAccess.MongoDB.Utils.Serializers.EncryptedString">
             <summary>
             If property type is EncryptedString, client side encryption is applied to property.

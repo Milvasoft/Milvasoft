@@ -1,5 +1,4 @@
 ﻿using Milvasoft.Attributes.Annotations;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 using System.Runtime.Serialization;
 
 namespace Milvasoft.Components.Rest.Response;

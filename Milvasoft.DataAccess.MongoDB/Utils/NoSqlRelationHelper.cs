@@ -416,4 +416,27 @@ public static class NoSqlRelationHelper
 
         return mongoDBRefs;
     }
+
+    /// <summary>
+    /// Converts <paramref name="value"/>'s type to <see cref="ObjectId"/>
+    /// </summary>
+    /// <param name="value"></param>
+    /// <returns></returns>
+    public static ObjectId ToObjectId(this int value)
+    {
+        var totalObjectIdLenth = ObjectId.GenerateNewId().ToString().Length;
+
+        var valueConverted = value.ToString();
+
+        if (totalObjectIdLenth <= valueConverted.Length) return new ObjectId("");
+
+        string objectId = "";
+
+        for (int i = 0; i < totalObjectIdLenth - valueConverted.Length; i++)
+        {
+            objectId += "0";
+        }
+
+        return new ObjectId(objectId + valueConverted);
+    }
 }

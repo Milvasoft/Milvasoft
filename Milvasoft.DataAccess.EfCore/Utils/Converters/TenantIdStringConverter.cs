@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using Milvasoft.Core.EntityBase.MultiTenancy;
 
-namespace Milvasoft.Core.EntityBase.MultiTenancy;
+namespace Milvasoft.DataAccess.EfCore.Utils.Converters;
 
 /// <summary>
 /// Converts <see cref="TenantId"/> to <see cref="string"/> or <see cref="string"/> to <see cref="TenantId"/>.

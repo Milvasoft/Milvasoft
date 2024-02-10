@@ -669,13 +669,6 @@
             <param name="value"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Core.CommonHelper.ToObjectId(System.Int32)">
-            <summary>
-            Converts <paramref name="value"/>'s type to <see cref="T:MongoDB.Bson.ObjectId"/>
-            </summary>
-            <param name="value"></param>
-            <returns></returns>
-        </member>
         <member name="M:Milvasoft.Core.CommonHelper.ToJson(System.Object)">
             <summary>
             Converts <paramref name="value"/> to <see cref="T:System.String"/>.
@@ -1671,17 +1664,6 @@
             </summary>
             <param name="tenantId"></param>
             <returns></returns>
-        </member>
-        <member name="T:Milvasoft.Core.EntityBase.MultiTenancy.TenantIdStringConverter">
-            <summary>
-            Converts <see cref="T:Milvasoft.Core.EntityBase.MultiTenancy.TenantId"/> to <see cref="T:System.String"/> or <see cref="T:System.String"/> to <see cref="T:Milvasoft.Core.EntityBase.MultiTenancy.TenantId"/>.
-            </summary>
-        </member>
-        <member name="M:Milvasoft.Core.EntityBase.MultiTenancy.TenantIdStringConverter.#ctor(Microsoft.EntityFrameworkCore.Storage.ValueConversion.ConverterMappingHints)">
-            <summary>
-            Creates a new <see cref="T:Milvasoft.Core.EntityBase.MultiTenancy.TenantIdStringConverter"/> instance.
-            </summary>
-            <param name="mappingHints">Entity Framework mapping hints</param>
         </member>
         <member name="T:Milvasoft.Core.EntityBase.MultiTenancy.TenantIdTypeConverter">
             <summary>

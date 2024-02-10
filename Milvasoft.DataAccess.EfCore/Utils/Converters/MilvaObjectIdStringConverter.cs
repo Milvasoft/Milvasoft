@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MongoDB.Bson;
 
-namespace Milvasoft.DataAccess.EfCore.Utils;
+namespace Milvasoft.DataAccess.EfCore.Utils.Converters;
 
 /// <summary>
 /// Converts <see cref="ObjectId"/> to <see cref="string"/> or <see cref="string"/> to <see cref="ObjectId"/>.
