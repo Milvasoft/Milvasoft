@@ -7,7 +7,7 @@ using System.Collections;
 using System.ComponentModel;
 using System.Reflection;
 
-namespace Milvasoft.Interception.Interceptors.Logging;
+namespace Milvasoft.Interception.Interceptors.Response;
 
 public class ResponseInterceptor(IServiceProvider serviceProvider, IResponseInterceptionOptions interceptionOptions) : IMilvaInterceptor
 {
@@ -145,7 +145,7 @@ public class ResponseInterceptor(IServiceProvider serviceProvider, IResponseInte
             {
                 int showCharCount = Convert.ToInt32(Math.Floor(propertyValue.Length * 0.25M));
 
-                propertyValue = $"{propertyValue[..showCharCount]}" + $"{new string('*', propertyValue.Length - (showCharCount * 2))}" + $"{propertyValue[^showCharCount..]}";
+                propertyValue = $"{propertyValue[..showCharCount]}" + $"{new string('*', propertyValue.Length - showCharCount * 2)}" + $"{propertyValue[^showCharCount..]}";
 
                 prop.SetValue(responseObject, propertyValue);
             }

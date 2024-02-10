@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 
-namespace Milvasoft.Types;
+namespace Milvasoft.Types.Classes;
 
 /// <summary>
 /// A locale specific string value.

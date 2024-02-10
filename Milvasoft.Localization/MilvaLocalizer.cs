@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Milvasoft.Core.Abstractions;
-using Milvasoft.Types;
+using Milvasoft.Types.Classes;
 
 namespace Milvasoft.Localization;
 

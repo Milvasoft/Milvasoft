@@ -1,7 +1,7 @@
 ﻿using Milvasoft.Attributes.Annotations;
 using Milvasoft.Core.Abstractions;
 
-namespace Milvasoft.Interception.Interceptors.Logging;
+namespace Milvasoft.Interception.Interceptors.Response;
 
 public class ResponseInterceptionOptions : IResponseInterceptionOptions
 {

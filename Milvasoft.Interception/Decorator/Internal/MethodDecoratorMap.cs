@@ -1,5 +1,5 @@
 ﻿using Milvasoft.Components.Rest.Response;
-using Milvasoft.Interception.Interceptors.Logging;
+using Milvasoft.Interception.Interceptors.Response;
 using System.Collections.Concurrent;
 using System.Collections.ObjectModel;
 using System.Reflection;

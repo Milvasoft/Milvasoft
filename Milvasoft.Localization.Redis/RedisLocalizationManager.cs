@@ -1,7 +1,7 @@
 ﻿using Milvasoft.Caching.Redis;
 using Milvasoft.Caching.Redis.Options;
 using Milvasoft.Core.Abstractions;
-using Milvasoft.Types;
+using Milvasoft.Types.Classes;
 using System.Globalization;
 
 namespace Milvasoft.Localization.Redis;

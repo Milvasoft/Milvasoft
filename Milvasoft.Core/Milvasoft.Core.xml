@@ -80,7 +80,7 @@
             Gets the string resource with the given key.
             </summary>
             <param name="key"></param>
-            <returns>The string resource as a <see cref="T:Milvasoft.Types.LocalizedValue"/>.</returns>
+            <returns>The string resource as a <see cref="T:Milvasoft.Types.Classes.LocalizedValue"/>.</returns>
         </member>
         <member name="P:Milvasoft.Core.Abstractions.ILocalizationManager.Item(System.String,System.Object[])">
             <summary>
@@ -88,7 +88,7 @@
             </summary>
             <param name="key">The key of the string resource.</param>
             <param name="arguments">The values to format the string with.</param>
-            <returns>The formatted string resource as a <see cref="T:Milvasoft.Types.LocalizedValue"/>.</returns>
+            <returns>The formatted string resource as a <see cref="T:Milvasoft.Types.Classes.LocalizedValue"/>.</returns>
         </member>
         <member name="M:Milvasoft.Core.Abstractions.ILocalizationManager.GetAllStrings(System.Boolean)">
             <summary>
@@ -290,7 +290,7 @@
             Gets the string resource with the given key.
             </summary>
             <param name="key"></param>
-            <returns>The string resource as a <see cref="T:Milvasoft.Types.LocalizedValue"/>.</returns>
+            <returns>The string resource as a <see cref="T:Milvasoft.Types.Classes.LocalizedValue"/>.</returns>
         </member>
         <member name="P:Milvasoft.Core.Abstractions.IMilvaLocalizer.Item(System.String,System.Object[])">
             <summary>
@@ -298,7 +298,7 @@
             </summary>
             <param name="key">The key of the string resource.</param>
             <param name="arguments">The values to format the string with.</param>
-            <returns>The formatted string resource as a <see cref="T:Milvasoft.Types.LocalizedValue"/>.</returns>
+            <returns>The formatted string resource as a <see cref="T:Milvasoft.Types.Classes.LocalizedValue"/>.</returns>
         </member>
         <member name="M:Milvasoft.Core.Abstractions.IMilvaLocalizer.GetAllStrings(System.Boolean)">
             <summary>

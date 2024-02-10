@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Caching.Memory;
 using Milvasoft.Core.Abstractions;
-using Milvasoft.Types;
+using Milvasoft.Types.Classes;
 using System.Globalization;
 
 namespace Milvasoft.Localization;

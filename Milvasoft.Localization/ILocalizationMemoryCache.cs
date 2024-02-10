@@ -1,4 +1,4 @@
-﻿using Milvasoft.Types;
+﻿using Milvasoft.Types.Classes;
 
 namespace Milvasoft.Localization;
 

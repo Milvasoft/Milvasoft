@@ -1,6 +1,6 @@
 ﻿using Milvasoft.Interception.Decorator;
 
-namespace Milvasoft.Interception.Interceptors.Logging;
+namespace Milvasoft.Interception.Interceptors.Response;
 
 public class ResponseAttribute : DecorateAttribute
 {

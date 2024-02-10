@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.Localization;
 using Milvasoft.Core.Abstractions;
 using Milvasoft.Localization.Resx.ResxManipulator;
-using Milvasoft.Types;
+using Milvasoft.Types.Classes;
 using System.Globalization;
 
 namespace Milvasoft.Localization.Resx;
