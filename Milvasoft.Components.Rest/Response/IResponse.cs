@@ -49,7 +49,7 @@ public interface IHasMetadata
     /// <summary>
     /// Gets or sets the list of column types in the response data.
     /// </summary>
-    List<ResponseDataMetadata> Metadata { get; set; }
+    List<ResponseDataMetadata> Metadatas { get; set; }
 
     /// <summary>
     /// Retrieves the data and its corresponding type from the response.

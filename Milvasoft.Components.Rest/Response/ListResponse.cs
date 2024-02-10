@@ -1,4 +1,6 @@
-﻿using System.Runtime.Serialization;
+﻿using Milvasoft.Components.Rest.Enums;
+using System.Net;
+using System.Runtime.Serialization;
 
 namespace Milvasoft.Components.Rest.Response;
 
@@ -36,17 +38,39 @@ public class ListResponse<T> : Response<List<T>>
     {
     }
 
+    public ListResponse(List<T> data) : base(data)
+    {
+    }
+
+    public ListResponse(List<T> data, string message) : base(data, message)
+    {
+    }
+
+    public ListResponse(List<T> data, ResponseMessage responseMessage) : base(data, responseMessage)
+    {
+    }
+
+    public ListResponse(List<T> data,
+                        int? currentPage = null,
+                        int? totalPage = null,
+                        int? totalData = null) : base(data)
+    {
+        CurrentPageNumber = currentPage;
+        TotalPageCount = totalPage;
+        TotalDataCount = totalData;
+    }
+
     public ListResponse(bool isSuccess,
                         string message,
                         List<T> data,
                         int? currentPage = null,
-                        int? totalPage = null,
-                        int? totalData = null) : this(isSuccess,
+                        int? totalPageCount = null,
+                        int? totalDataCount = null) : this(isSuccess,
                                                new List<ResponseMessage>() { new() { Message = message } },
                                                data,
                                                currentPage,
-                                               totalPage,
-                                               totalData)
+                                               totalPageCount,
+                                               totalDataCount)
     {
     }
 
@@ -54,14 +78,142 @@ public class ListResponse<T> : Response<List<T>>
                         List<ResponseMessage> messages,
                         List<T> data,
                         int? currentPage = null,
-                        int? totalPage = null,
-                        int? totalData = null) : base(data)
+                        int? totalPageCount = null,
+                        int? totalDataCount = null) : base(data)
     {
         IsSuccess = isSuccess;
         Messages = messages;
         CurrentPageNumber = currentPage;
-        TotalPageCount = totalPage;
-        TotalDataCount = totalData;
+        TotalPageCount = totalPageCount;
+        TotalDataCount = totalDataCount;
     }
+
+    #region Success
+
+    public static ListResponse<T> Success() => new()
+    {
+        IsSuccess = true,
+        StatusCode = (int)HttpStatusCode.OK,
+    };
+
+    public static ListResponse<T> Success(List<T> data) => new(data)
+    {
+        IsSuccess = true,
+        StatusCode = (int)HttpStatusCode.OK,
+    };
+
+    public static ListResponse<T> Success(List<T> data, string message)
+    {
+        var response = new ListResponse<T>(data, message)
+        {
+            IsSuccess = true,
+            StatusCode = (int)HttpStatusCode.OK,
+        };
+
+        return response;
+    }
+
+    public static ListResponse<T> Success(List<T> data, int? currentPage, int? totalPageCount, int? totalDataCount) => new(data, currentPage, totalPageCount, totalDataCount)
+    {
+        IsSuccess = true,
+        StatusCode = (int)HttpStatusCode.OK,
+    };
+
+    public static ListResponse<T> Success(List<T> data, string message, int? currentPage, int? totalPageCount, int? totalDataCount)
+    {
+        var response = new ListResponse<T>(true, message, data, currentPage, totalPageCount, totalDataCount)
+        {
+            StatusCode = (int)HttpStatusCode.OK,
+        };
+
+        return response;
+    }
+
+    public static ListResponse<T> Success(List<T> data, string message, MessageType messageType)
+    {
+        var response = new ListResponse<T>(data)
+        {
+            IsSuccess = true,
+            StatusCode = (int)HttpStatusCode.OK,
+        };
+
+        response.AddMessage(message, messageType);
+
+        return response;
+    }
+
+    public static ListResponse<T> Success(List<T> data, ResponseMessage responseMessage)
+    {
+        var response = new ListResponse<T>(data, responseMessage)
+        {
+            IsSuccess = true,
+            StatusCode = (int)HttpStatusCode.OK,
+        };
+
+        return response;
+    }
+
+    #endregion
+
+    #region Error
+
+    public static ListResponse<T> Error(List<T> data) => new(data)
+    {
+        IsSuccess = false,
+        StatusCode = (int)HttpStatusCode.BadRequest,
+    };
+
+    public static ListResponse<T> Error(List<T> data, string message)
+    {
+        var response = new ListResponse<T>(data, message)
+        {
+            IsSuccess = false,
+            StatusCode = (int)HttpStatusCode.BadRequest,
+        };
+
+        return response;
+    }
+
+    public static ListResponse<T> Error(List<T> data, int? currentPage, int? totalPageCount, int? totalDataCount) => new(data, currentPage, totalPageCount, totalDataCount)
+    {
+        IsSuccess = false,
+        StatusCode = (int)HttpStatusCode.BadRequest,
+    };
+
+    public static ListResponse<T> Error(List<T> data, string message, int? currentPage, int? totalPageCount, int? totalDataCount)
+    {
+        var response = new ListResponse<T>(false, message, data, currentPage, totalPageCount, totalDataCount)
+        {
+            StatusCode = (int)HttpStatusCode.BadRequest,
+        };
+
+        return response;
+    }
+
+    public static ListResponse<T> Error(List<T> data, string message, MessageType messageType)
+    {
+        var response = new ListResponse<T>(data)
+        {
+            IsSuccess = false,
+            StatusCode = (int)HttpStatusCode.BadRequest,
+        };
+
+        response.AddMessage(message, messageType);
+
+        return response;
+    }
+
+    public static ListResponse<T> Error(List<T> data, ResponseMessage responseMessage)
+    {
+        var response = new ListResponse<T>(data, responseMessage)
+        {
+            IsSuccess = false,
+            StatusCode = (int)HttpStatusCode.BadRequest,
+        };
+
+        return response;
+    }
+
+    #endregion
 
 }

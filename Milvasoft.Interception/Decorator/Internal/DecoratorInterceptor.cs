@@ -35,7 +35,7 @@ internal class DecoratorInterceptor(ReadOnlyDictionary<MethodInfo, IMilvaInterce
     {
         if (TryGetMethodDecorators(invocation, out var decorators))
         {
-            var decoratedTask = WrapInvocationInTask(invocation, decorators.OrderBy(d => d.InterceptionOrder).ToArray());
+            var decoratedTask = WrapInvocationInTask(invocation, [.. decorators.OrderBy(d => d.GetInterceptionOrder())]);
 
             if (decoratedTask.IsFaulted)
             {
@@ -115,5 +115,5 @@ internal class DecoratorInterceptor(ReadOnlyDictionary<MethodInfo, IMilvaInterce
         return (TResult)call.ReturnValue;
     }
 
-    private static IMilvaInterceptor GetFirstRunningInterceptor(IMilvaInterceptor[] decorators) => decorators.MinBy(decorator => decorator.InterceptionOrder);
+    private static IMilvaInterceptor GetFirstRunningInterceptor(IMilvaInterceptor[] decorators) => decorators.MinBy(decorator => decorator.GetInterceptionOrder());
 }

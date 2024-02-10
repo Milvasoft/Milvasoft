@@ -1,14 +1,14 @@
 ﻿using Milvasoft.Attributes.Annotations;
+using static System.Runtime.InteropServices.JavaScript.JSType;
+using System.Runtime.Serialization;
 
 namespace Milvasoft.Components.Rest.Response;
 
 /// <summary>
 /// Response metadata for frontend apps.
 /// </summary>
-public class ResponseDataMetadata
+public class ResponseDataMetadata : IHasMetadata
 {
-    //TODO Tree data https://mui.com/x/react-data-grid/tree-data/
-
     /// <summary>
     /// Column or property name.
     /// </summary>
@@ -23,6 +23,11 @@ public class ResponseDataMetadata
     /// Column or property type.
     /// </summary>
     public string Type { get; set; }
+
+    /// <summary>
+    /// Determines whether column or property type is collection or not.
+    /// </summary>
+    public bool DataTypeIsCollection { get; set; }
 
     /// <summary>
     /// Determines whether column or property will displayed or not.
@@ -63,4 +68,12 @@ public class ResponseDataMetadata
     /// It determines what the tooltip format of a data in the table will be.
     /// </summary>
     public string CellTooltipFormat { get; set; }
+
+    [DataMember]
+    public List<ResponseDataMetadata> Metadatas { get; set; }
+
+    public (object, Type) GetResponseData()
+    {
+        return (null, null);
+    }
 }

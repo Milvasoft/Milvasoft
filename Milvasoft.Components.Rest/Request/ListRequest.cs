@@ -22,12 +22,12 @@ public class ListRequest
     /// <summary>
     /// Filter criterias.
     /// </summary>
-    public FilterRequest Filter { get; set; }
+    public FilterRequest Filtering { get; set; }
 
     /// <summary>
     /// Sort criterias.
     /// </summary>
-    public SortRequest Sort { get; set; }
+    public SortRequest Sorting { get; set; }
 
     /// <summary>
     /// Aggregation criterias.

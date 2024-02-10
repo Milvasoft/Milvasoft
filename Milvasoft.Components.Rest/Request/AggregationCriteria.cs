@@ -144,10 +144,10 @@ public class AggregationCriteria
     {
         string selectorMethodName = _queryProviderType switch
         {
-            QueryProviderType.List => "CreateRequiredPropertySelector",
-            QueryProviderType.Enumerable => "CreateRequiredPropertySelectorFuction",
-            QueryProviderType.AsyncQueryable => "CreateRequiredPropertySelector",
-            _ => "CreateRequiredPropertySelector",
+            QueryProviderType.List => nameof(CommonHelper.CreateRequiredPropertySelector),
+            QueryProviderType.Enumerable => nameof(CommonHelper.CreateRequiredPropertySelectorFuction),
+            QueryProviderType.AsyncQueryable => nameof(CommonHelper.CreateRequiredPropertySelector),
+            _ => nameof(CommonHelper.CreateRequiredPropertySelector),
         };
 
         // Step 1: Get the MethodInfo object for the generic method
@@ -164,11 +164,11 @@ public class AggregationCriteria
 
     private static string GetMethodName(AggregationType type, bool runAsync) => type switch
     {
-        AggregationType.Avg => runAsync ? "AverageAsync" : "Average",
-        AggregationType.Sum => runAsync ? "SumAsync" : "Sum",
-        AggregationType.Min => runAsync ? "MinAsync" : "MinBy",
-        AggregationType.Max => runAsync ? "MaxAsync" : "MaxBy",
-        AggregationType.Count => runAsync ? "CountAsync" : "Count",
+        AggregationType.Avg => runAsync ? nameof(EntityFrameworkQueryableExtensions.AverageAsync) : nameof(Queryable.Average),
+        AggregationType.Sum => runAsync ? nameof(EntityFrameworkQueryableExtensions.SumAsync) : nameof(Queryable.Sum),
+        AggregationType.Min => runAsync ? nameof(EntityFrameworkQueryableExtensions.MinAsync) : nameof(Queryable.MinBy),
+        AggregationType.Max => runAsync ? nameof(EntityFrameworkQueryableExtensions.MaxAsync) : nameof(Queryable.MaxBy),
+        AggregationType.Count => runAsync ? nameof(EntityFrameworkQueryableExtensions.CountAsync) : nameof(Queryable.Count),
         _ => string.Empty,
     };
 

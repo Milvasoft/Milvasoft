@@ -1,4 +1,5 @@
 ﻿using Milvasoft.Components.Rest.Enums;
+using System.Net;
 using System.Runtime.Serialization;
 
 namespace Milvasoft.Components.Rest.Response;
@@ -70,7 +71,7 @@ public class Response : IResponse
     public static Response Success() => new()
     {
         IsSuccess = true,
-        StatusCode = 200,
+        StatusCode = (int)HttpStatusCode.OK,
     };
 
     public static Response Success(string message)
@@ -78,7 +79,7 @@ public class Response : IResponse
         var response = new Response(message)
         {
             IsSuccess = true,
-            StatusCode = 200,
+            StatusCode = (int)HttpStatusCode.OK,
         };
 
         return response;
@@ -89,7 +90,7 @@ public class Response : IResponse
         var response = new Response(message)
         {
             IsSuccess = true,
-            StatusCode = 200,
+            StatusCode = (int)HttpStatusCode.OK,
         };
 
         response.AddMessage(message, messageType);
@@ -102,7 +103,7 @@ public class Response : IResponse
         var response = new Response(responseMessage)
         {
             IsSuccess = true,
-            StatusCode = 200,
+            StatusCode = (int)HttpStatusCode.OK,
         };
 
         return response;
@@ -116,7 +117,7 @@ public class Response : IResponse
     public static Response Error() => new()
     {
         IsSuccess = false,
-        StatusCode = 500,
+        StatusCode = (int)HttpStatusCode.BadRequest,
     };
 
     public static Response Error(string message)
@@ -124,7 +125,7 @@ public class Response : IResponse
         var response = new Response(message)
         {
             IsSuccess = false,
-            StatusCode = 500,
+            StatusCode = (int)HttpStatusCode.BadRequest,
         };
 
         return response;
@@ -135,7 +136,7 @@ public class Response : IResponse
         var response = new Response(message)
         {
             IsSuccess = false,
-            StatusCode = 500,
+            StatusCode = (int)HttpStatusCode.BadRequest,
         };
 
         response.AddMessage(message, messageType);
@@ -148,7 +149,7 @@ public class Response : IResponse
         var response = new Response(responseMessage)
         {
             IsSuccess = false,
-            StatusCode = 500,
+            StatusCode = (int)HttpStatusCode.BadRequest,
         };
 
         return response;
@@ -171,7 +172,7 @@ public class Response<T> : Response, IResponse<T>
     }
 
     [DataMember]
-    public List<ResponseDataMetadata> Metadata { get; set; }
+    public List<ResponseDataMetadata> Metadatas { get; set; }
 
     public (object, Type) GetResponseData()
     {
@@ -205,10 +206,10 @@ public class Response<T> : Response, IResponse<T>
 
     #region Success
 
-    public static Response<T> Success(T data) => new Response<T>(data)
+    public static Response<T> Success(T data) => new(data)
     {
         IsSuccess = true,
-        StatusCode = 200,
+        StatusCode = (int)HttpStatusCode.OK,
     };
 
     public static Response<T> Success(T data, string message)
@@ -216,7 +217,7 @@ public class Response<T> : Response, IResponse<T>
         var response = new Response<T>(data, message)
         {
             IsSuccess = true,
-            StatusCode = 200,
+            StatusCode = (int)HttpStatusCode.OK,
         };
 
         return response;
@@ -227,7 +228,7 @@ public class Response<T> : Response, IResponse<T>
         var response = new Response<T>(data)
         {
             IsSuccess = true,
-            StatusCode = 200,
+            StatusCode = (int)HttpStatusCode.OK,
         };
 
         response.AddMessage(message, messageType);
@@ -240,7 +241,7 @@ public class Response<T> : Response, IResponse<T>
         var response = new Response<T>(data, responseMessage)
         {
             IsSuccess = true,
-            StatusCode = 200,
+            StatusCode = (int)HttpStatusCode.OK,
         };
 
         return response;
@@ -250,10 +251,10 @@ public class Response<T> : Response, IResponse<T>
 
     #region Error
 
-    public static Response<T> Error(T data) => new Response<T>(data)
+    public static Response<T> Error(T data) => new(data)
     {
         IsSuccess = false,
-        StatusCode = 500,
+        StatusCode = (int)HttpStatusCode.BadRequest,
     };
 
     public static Response<T> Error(T data, string message)
@@ -261,7 +262,7 @@ public class Response<T> : Response, IResponse<T>
         var response = new Response<T>(data, message)
         {
             IsSuccess = false,
-            StatusCode = 500,
+            StatusCode = (int)HttpStatusCode.BadRequest,
         };
 
         return response;
@@ -272,7 +273,7 @@ public class Response<T> : Response, IResponse<T>
         var response = new Response<T>(data)
         {
             IsSuccess = false,
-            StatusCode = 500,
+            StatusCode = (int)HttpStatusCode.BadRequest,
         };
 
         response.AddMessage(message, messageType);
@@ -285,7 +286,7 @@ public class Response<T> : Response, IResponse<T>
         var response = new Response<T>(data, responseMessage)
         {
             IsSuccess = false,
-            StatusCode = 500,
+            StatusCode = (int)HttpStatusCode.BadRequest,
         };
 
         return response;

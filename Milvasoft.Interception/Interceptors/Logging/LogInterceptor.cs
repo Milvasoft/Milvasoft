@@ -10,7 +10,7 @@ namespace Milvasoft.Interception.Interceptors.Logging;
 
 public class LogInterceptor : IMilvaInterceptor
 {
-    public int InterceptionOrder { get; set; } = -1;
+    public static int InterceptionOrder { get; set; } = -1;
 
     private IServiceProvider _serviceProvider;
     private IMilvaLogger _logger;
@@ -78,7 +78,7 @@ public class LogInterceptor : IMilvaInterceptor
             }
         }
 
-        if (_logInterceptionOptions.LogAsync)
+        if (_logInterceptionOptions.AsyncLogging)
         {
             await _logger.LogAsync(logObjectPropDic.ToJson());
         }

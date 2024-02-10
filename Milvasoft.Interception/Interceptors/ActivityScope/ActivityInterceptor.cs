@@ -9,7 +9,7 @@ namespace Milvasoft.Interception.Interceptors.ActivityScope;
 public class ActivityInterceptor : IMilvaInterceptor
 {
     /// <inheritdoc/>
-    public int InterceptionOrder { get; set; } = -99;
+    public static int InterceptionOrder { get; set; } = int.MinValue;
 
     public async Task OnInvoke(Call call)
     {

@@ -9,18 +9,12 @@ using System.Reflection;
 
 namespace Milvasoft.Interception.Interceptors.Logging;
 
-public class ResponseInterceptor : IMilvaInterceptor
+public class ResponseInterceptor(IServiceProvider serviceProvider, IResponseInterceptionOptions interceptionOptions) : IMilvaInterceptor
 {
-    public int InterceptionOrder { get; set; } = 999;
+    public static int InterceptionOrder { get; set; } = int.MaxValue;
 
-    private IServiceProvider _serviceProvider;
-    private readonly IResponseInterceptionOptions _interceptionOptions;
-
-    public ResponseInterceptor(IServiceProvider serviceProvider, IResponseInterceptionOptions interceptionOptions)
-    {
-        _serviceProvider = serviceProvider;
-        _interceptionOptions = interceptionOptions;
-    }
+    private readonly IServiceProvider _serviceProvider = serviceProvider;
+    private readonly IResponseInterceptionOptions _interceptionOptions = interceptionOptions;
 
     public async Task OnInvoke(Call call)
     {
@@ -30,43 +24,48 @@ public class ResponseInterceptor : IMilvaInterceptor
         {
             var response = (IHasMetadata)call.ReturnValue;
 
-            FillResponseMetadata(response);
-        }
+            response.Metadatas = [];
 
+            //Gets result data and generic type
+            var (responseData, resultDataType) = response.GetResponseData();
+
+            if (!resultDataType.IsClass)
+                return;
+
+            CreateMetadata(response, resultDataType, responseData);
+        }
     }
 
-    private void FillResponseMetadata(IHasMetadata response)
+    /// <summary>
+    /// Creates metadata recursively and assigns to <see cref="IHasMetadata.Metadatas"/>.
+    /// </summary>
+    /// <param name="response"></param>
+    /// <param name="resultDataType"></param>
+    /// <param name="propObject"></param>
+    private void CreateMetadata(IHasMetadata response, Type resultDataType, object propObject)
     {
-        response.Metadata = [];
+        bool dataTypeIsCollection = resultDataType.IsGenericType && typeof(IList).IsAssignableFrom(resultDataType);
 
-        //Gets result data and generic type
-        var (responseData, resultDataType) = response.GetResponseData();
-
-        if (!resultDataType.IsClass)
-            return;
-
-        bool dataTypeIsList = false;
-
-        //If result type is collection 
-        if (resultDataType.IsGenericType && typeof(IList).IsAssignableFrom(resultDataType))
-        {
-            resultDataType = resultDataType.GetGenericArguments()[0];
-
-            dataTypeIsList = true;
-        }
+        resultDataType = dataTypeIsCollection ? resultDataType.GetGenericArguments()[0] : resultDataType;
 
         var properties = resultDataType.GetProperties();
 
         if (properties == null || properties.Length == 0)
             return;
 
-        var hasResponseData = responseData != null;
-        var translateAttribute = resultDataType.GetCustomAttribute<TranslateAttribute>();
-        var localizer = translateAttribute != null ? _serviceProvider.GetService<IMilvaLocalizer>() : null;
-
         foreach (var prop in properties)
         {
-            var propertyType = prop.PropertyType.IsGenericType ? prop.PropertyType.GetGenericArguments()[0] : prop.PropertyType;
+            ResponseDataMetadata metadata = new()
+            {
+                Metadatas = []
+            };
+
+            if (prop.PropertyType.IsClass && prop.PropertyType != typeof(string))
+                CreateMetadata(metadata, prop.PropertyType, propObject);
+
+            var hasResponseData = propObject != null;
+            var translateAttribute = resultDataType.GetCustomAttribute<TranslateAttribute>();
+            var localizer = translateAttribute != null ? _serviceProvider.GetService<IMilvaLocalizer>() : null;
 
             //Get used attributes
             var browsableAttribute = prop.GetCustomAttribute<BrowsableAttribute>();
@@ -80,51 +79,48 @@ public class ResponseInterceptor : IMilvaInterceptor
             var defaultValueAttribute = prop.GetCustomAttribute<DefaultValueAttribute>();
 
 
-            //TODO role based limitations.
             bool removePropMetadataFromResponse = false;
             bool mask = false;
 
-            if (hideByRoleAttribute != null && (hideByRoleAttribute.Roles.Length != 0 /*&& listRoleName.Any(r => hideByRoleAttribute.Roles.Contains(r))*/))
+            if (hideByRoleAttribute != null && hideByRoleAttribute.Roles.Length != 0 && (_interceptionOptions.HideByRoleFunc?.Invoke(hideByRoleAttribute) ?? false))
                 removePropMetadataFromResponse = true;
 
-            if (maskByRoleAttribute != null && (maskByRoleAttribute.Roles.Length != 0 == false /*&& listRoleName.Any(r => maskByRoleAttribute.Roles.Contains(r))*/))
+            if (maskByRoleAttribute != null && maskByRoleAttribute.Roles.Length != 0 == false && (_interceptionOptions.HideByRoleFunc?.Invoke(hideByRoleAttribute) ?? false))
                 mask = true;
 
             string localizedName = prop.Name;
 
             //Apply localization to property
             if (translateAttribute != null && localizer != null)
-                localizedName = _interceptionOptions.LocalizationMethod == null
+                localizedName = _interceptionOptions.ApplyLocalizationFunc == null
                                          ? ApplyLocalization(translateAttribute.Key, localizer, resultDataType, prop.Name)
-                                         : _interceptionOptions.LocalizationMethod.Invoke(translateAttribute.Key, localizer, resultDataType, prop.Name);
+                                         : _interceptionOptions.ApplyLocalizationFunc.Invoke(translateAttribute.Key, localizer, resultDataType, prop.Name);
 
-            //Create metadata object
-            var metadata = new ResponseDataMetadata()
-            {
-                Name = prop.Name,
-                LocalizedName = localizedName,
-                Type = propertyType.Name,
-                Display = browsableAttribute == null || browsableAttribute.Browsable,
-                DefaultValue = defaultValueAttribute?.Value,
-                Mask = mask,
-                Filterable = filterableAttribute == null || filterableAttribute.Filterable,
-                Pinned = pinnedAttribute == null || pinnedAttribute.Pinned,
-                DecimalPrecision = decimalDigitAttribute?.DecimalPrecision,
-                CellTooltipFormat = cellTooltipFormatAttribute?.Format,
-                CellDisplayFormat = cellDisplayFormatAttribute?.Format,
-            };
+            //Fill metadata object
+            metadata.Name = prop.Name;
+            metadata.LocalizedName = localizedName;
+            metadata.Type = prop.PropertyType.Name;
+            metadata.Display = browsableAttribute == null || browsableAttribute.Browsable;
+            metadata.DefaultValue = defaultValueAttribute?.Value;
+            metadata.Mask = mask;
+            metadata.Filterable = filterableAttribute == null || filterableAttribute.Filterable;
+            metadata.Pinned = pinnedAttribute != null && pinnedAttribute.Pinned;
+            metadata.DecimalPrecision = decimalDigitAttribute?.DecimalPrecision;
+            metadata.CellTooltipFormat = cellTooltipFormatAttribute?.Format;
+            metadata.CellDisplayFormat = cellDisplayFormatAttribute?.Format;
+            metadata.DataTypeIsCollection = dataTypeIsCollection;
 
             if (!removePropMetadataFromResponse)
-                response.Metadata.Add(metadata);
+                response.Metadatas.Add(metadata);
 
             if (hasResponseData)
             {
-                if (dataTypeIsList)
+                if (dataTypeIsCollection)
                 {
-                    foreach (var item in responseData as IList)
+                    foreach (var item in propObject as IList)
                         ApplyMetadataRulesToResponseData(item, prop, metadata, removePropMetadataFromResponse);
                 }
-                else ApplyMetadataRulesToResponseData(responseData, prop, metadata, removePropMetadataFromResponse);
+                else ApplyMetadataRulesToResponseData(propObject, prop, metadata, removePropMetadataFromResponse);
             }
         }
     }
@@ -176,5 +172,4 @@ public class ResponseInterceptor : IMilvaInterceptor
 
         return localizedName;
     }
-
 }

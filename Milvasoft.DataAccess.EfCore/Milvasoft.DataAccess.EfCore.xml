@@ -2542,7 +2542,7 @@
             Entity framework related extensions.
             </summary>
         </member>
-        <member name="M:Milvasoft.DataAccess.EfCore.Utils.QueryExtensions.WithFilter``1(System.Linq.IQueryable{``0},Milvasoft.Components.Rest.Request.ListRequest)">
+        <member name="M:Milvasoft.DataAccess.EfCore.Utils.QueryExtensions.WithFiltering``1(System.Linq.IQueryable{``0},Milvasoft.Components.Rest.Request.ListRequest)">
             <summary>
             Applies filtering options to the IQueryable data source.
             </summary>
@@ -2555,7 +2555,7 @@
             If the <paramref name="listRequest"/> is null, the original IQueryable data is returned without any modifications.
             </remarks>
         </member>
-        <member name="M:Milvasoft.DataAccess.EfCore.Utils.QueryExtensions.WithSort``1(System.Linq.IQueryable{``0},Milvasoft.Components.Rest.Request.ListRequest)">
+        <member name="M:Milvasoft.DataAccess.EfCore.Utils.QueryExtensions.WithSorting``1(System.Linq.IQueryable{``0},Milvasoft.Components.Rest.Request.ListRequest)">
             <summary>
             Applies sorting options to the IQueryable data source.
             </summary>
@@ -2568,7 +2568,7 @@
             If the <paramref name="listRequest"/> is null, the original IQueryable data is returned without any modifications.
             </remarks>
         </member>
-        <member name="M:Milvasoft.DataAccess.EfCore.Utils.QueryExtensions.WithFilterAndSort``1(System.Linq.IQueryable{``0},Milvasoft.Components.Rest.Request.ListRequest)">
+        <member name="M:Milvasoft.DataAccess.EfCore.Utils.QueryExtensions.WithFilteringAndSorting``1(System.Linq.IQueryable{``0},Milvasoft.Components.Rest.Request.ListRequest)">
             <summary>
             Applies sorting options to the IQueryable data source.
             </summary>
@@ -2581,30 +2581,30 @@
             If the <paramref name="listRequest"/> is null, the original IQueryable data is returned without any modifications.
             </remarks>
         </member>
-        <member name="M:Milvasoft.DataAccess.EfCore.Utils.QueryExtensions.WithFilter``1(System.Linq.IQueryable{``0},Milvasoft.Components.Rest.Request.FilterRequest)">
+        <member name="M:Milvasoft.DataAccess.EfCore.Utils.QueryExtensions.WithFiltering``1(System.Linq.IQueryable{``0},Milvasoft.Components.Rest.Request.FilterRequest)">
             <summary>
             Applies filtering options to the IQueryable data source.
             </summary>
             <typeparam name="TEntity">The type of entity in the IQueryable.</typeparam>
             <param name="query">The source IQueryable data.</param>
-            <param name="filterRequest">The list request containing filter options.</param>
+            <param name="filteringRequest">The list request containing filter options.</param>
             <returns>An IQueryable object with applied filtering.</returns>
             <remarks>
-            This method applies filter options to the provided IQueryable data source based on the given <paramref name="filterRequest"/> object.
-            If the <paramref name="filterRequest"/> is null, the original IQueryable data is returned without any modifications.
+            This method applies filter options to the provided IQueryable data source based on the given <paramref name="filteringRequest"/> object.
+            If the <paramref name="filteringRequest"/> is null, the original IQueryable data is returned without any modifications.
             </remarks>
         </member>
-        <member name="M:Milvasoft.DataAccess.EfCore.Utils.QueryExtensions.WithSort``1(System.Linq.IQueryable{``0},Milvasoft.Components.Rest.Request.SortRequest)">
+        <member name="M:Milvasoft.DataAccess.EfCore.Utils.QueryExtensions.WithSorting``1(System.Linq.IQueryable{``0},Milvasoft.Components.Rest.Request.SortRequest)">
             <summary>
             Applies sorting options to the IQueryable data source.
             </summary>
             <typeparam name="TEntity">The type of entity in the IQueryable.</typeparam>
             <param name="query">The source IQueryable data.</param>
-            <param name="sortRequest">The list request containing sort options.</param>
+            <param name="sortingRequest">The list request containing sort options.</param>
             <returns>An IQueryable object with applied sorting.</returns>
             <remarks>
-            This method applies sorting options to the provided IQueryable data source based on the given <paramref name="sortRequest"/> object.
-            If the <paramref name="sortRequest"/> is null, the original IQueryable data is returned without any modifications.
+            This method applies sorting options to the provided IQueryable data source based on the given <paramref name="sortingRequest"/> object.
+            If the <paramref name="sortingRequest"/> is null, the original IQueryable data is returned without any modifications.
             </remarks>
         </member>
         <member name="M:Milvasoft.DataAccess.EfCore.Utils.QueryExtensions.ToListResponseAsync``1(System.Linq.IQueryable{``0},Milvasoft.Components.Rest.Request.ListRequest)">
