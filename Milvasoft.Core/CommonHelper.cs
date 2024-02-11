@@ -1,5 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using Milvasoft.Core.Abstractions;
+using Milvasoft.Core.Abstractions.Localization;
 using Milvasoft.Core.EntityBase.Abstract;
 using Milvasoft.Core.EntityBase.Abstract.Auditing;
 using Milvasoft.Core.EntityBase.Concrete;

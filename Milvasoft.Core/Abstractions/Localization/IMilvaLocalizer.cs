@@ -1,6 +1,6 @@
 ﻿using Milvasoft.Types.Classes;
 
-namespace Milvasoft.Core.Abstractions;
+namespace Milvasoft.Core.Abstractions.Localization;
 
 /// <summary>
 /// Represents a service that provides localized strings.
@@ -26,7 +26,7 @@ public interface IMilvaLocalizer
     /// Gets all string resources.
     /// </summary>
     /// <param name="includeParentCultures">
-    /// A <see cref="System.Boolean"/> indicating whether to include strings from parent cultures.
+    /// A <see cref="bool"/> indicating whether to include strings from parent cultures.
     /// </param>
     /// <returns>The strings.</returns>
     public IEnumerable<LocalizedValue> GetAllStrings(bool includeParentCultures);

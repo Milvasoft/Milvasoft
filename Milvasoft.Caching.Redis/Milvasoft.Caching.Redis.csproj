@@ -10,6 +10,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+		<ProjectReference Include="..\Milvasoft.Caching\Milvasoft.Caching.csproj" />
 		<ProjectReference Include="..\Milvasoft.Core\Milvasoft.Core.csproj" />
 		<PackageReference Include="StackExchange.Redis" Version="2.7.17" />
 	</ItemGroup>

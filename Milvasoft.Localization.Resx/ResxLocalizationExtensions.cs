@@ -1,7 +1,8 @@
 ﻿using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Localization;
-using Milvasoft.Core.Abstractions;
+using Milvasoft.Core.Abstractions.Localization;
+using Milvasoft.Core.Exceptions;
 using Milvasoft.Localization.Builder;
 
 namespace Milvasoft.Localization.Resx;
@@ -19,6 +20,9 @@ public static class ResxLocalizationExtensions
     /// <returns></returns>
     public static LocalizationBuilder WithResxManager<TResource>(this LocalizationBuilder localizationBuilder, Action<ResxLocalizationOptions> localizationOptions = null)
     {
+        if (localizationBuilder.Services.Any(s => s.ServiceType == typeof(ILocalizationManager)))
+            throw new MilvaDeveloperException("A ILocalizationManager already registered!");
+
         var config = new ResxLocalizationOptions();
 
         localizationOptions?.Invoke(config);

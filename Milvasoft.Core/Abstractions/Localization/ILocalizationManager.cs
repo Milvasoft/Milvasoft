@@ -1,6 +1,6 @@
 ﻿using Milvasoft.Types.Classes;
 
-namespace Milvasoft.Core.Abstractions;
+namespace Milvasoft.Core.Abstractions.Localization;
 
 /// <summary>
 /// It is the manager that provides access to localization resources. You can use this interface for creating new custom managers. Or you can use ready-made milva managers. 

@@ -1,7 +1,7 @@
 ﻿using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace Milvasoft.Integrations.Expo.PushNotification;
+namespace Milvasoft.Notification.Push.Expo.PushNotification;
 
 /// <summary>
 /// Model for expo push notification api send push notification. Max <see cref="PushTo"/> count is 100.

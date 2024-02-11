@@ -79,7 +79,7 @@ public partial class RedisAccessor
 
         var stringValues = values.ToStringArray();
 
-        List<T> redisValues = new();
+        List<T> redisValues = [];
 
         foreach (var item in stringValues)
         {

@@ -2,6 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Milvasoft.Core;
 using Milvasoft.Core.Abstractions;
+using Milvasoft.Core.Abstractions.Localization;
 using Milvasoft.Core.Extensions;
 using Milvasoft.Core.Utils.Constants;
 using Milvasoft.Core.Utils.Models;

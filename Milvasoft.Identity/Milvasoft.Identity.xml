@@ -466,7 +466,7 @@
             Provides localized identity error messages. All error's code is nameof(<see cref="T:Microsoft.AspNetCore.Identity.IdentityError"/>) method. (e.g. Code = "DefaultError")
             </summary>
         </member>
-        <member name="M:Milvasoft.Identity.Concrete.MilvaIdentityDescriber.#ctor(Milvasoft.Core.Abstractions.IMilvaLocalizer)">
+        <member name="M:Milvasoft.Identity.Concrete.MilvaIdentityDescriber.#ctor(Milvasoft.Core.Abstractions.Localization.IMilvaLocalizer)">
             <summary>
             Constructor for localizer dependenct injection.
             </summary>
@@ -984,7 +984,7 @@
             Provides an abstraction for user validation.
             </summary>
         </member>
-        <member name="M:Milvasoft.Identity.Concrete.MilvaUserValidation`2.#ctor(Milvasoft.Core.Abstractions.IMilvaLocalizer)">
+        <member name="M:Milvasoft.Identity.Concrete.MilvaUserValidation`2.#ctor(Milvasoft.Core.Abstractions.Localization.IMilvaLocalizer)">
             <summary>
             Constructor for localizer dependenct injection.
             </summary>

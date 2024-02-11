@@ -1,5 +1,6 @@
 ﻿using Milvasoft.Caching.Redis.Options;
 using Milvasoft.Core;
+using Milvasoft.Core.Abstractions.Cache;
 using Milvasoft.Core.Extensions;
 using StackExchange.Redis;
 using System.Net;
@@ -22,10 +23,12 @@ public partial class RedisAccessor : IRedisAccessor
     /// </summary>
     /// <param name="cacheServiceOptions"></param>
     /// <param name="connectionMultiplexer"></param>
-    public RedisAccessor(RedisCachingOptions cacheServiceOptions, IConnectionMultiplexer connectionMultiplexer)
+    public RedisAccessor(ICacheOptions<RedisCachingOptions> cacheServiceOptions, IConnectionMultiplexer connectionMultiplexer)
     {
-        _options = cacheServiceOptions.ConfigurationOptions;
-        _useUtcForDateTimes = cacheServiceOptions.UseUtcForExpirationDates;
+        var opt = (RedisCachingOptions)cacheServiceOptions;
+
+        _options = opt.ConfigurationOptions;
+        _useUtcForDateTimes = opt.UseUtcForExpirationDates;
         _client = connectionMultiplexer;
         _database = _client?.GetDatabase();
     }
@@ -151,7 +154,7 @@ public partial class RedisAccessor : IRedisAccessor
     /// <param name="key"></param>
     /// <param name="value"></param>
     /// <returns></returns>
-    public void Set(string key, string value) => _database.StringSet(key, value);
+    public bool Set(string key, string value) => _database.StringSet(key, value);
 
     /// <summary>
     /// Sets <paramref name="value"/> with <paramref name="key"/>.
@@ -159,7 +162,7 @@ public partial class RedisAccessor : IRedisAccessor
     /// <typeparam name="T"></typeparam>
     /// <param name="key"></param>
     /// <param name="value"></param>
-    public void Set<T>(string key, T value) where T : class => _database.StringSet(key, value.ToJson());
+    public bool Set<T>(string key, T value) where T : class => _database.StringSet(key, value.ToJson());
 
     /// <summary>
     /// Sets <paramref name="value"/> to <paramref name="key"/> with <paramref name="expiration"/>.
@@ -168,19 +171,35 @@ public partial class RedisAccessor : IRedisAccessor
     /// <param name="value"></param>
     /// <param name="expiration"></param>
     /// <returns></returns>
-    public void Set(string key, object value, TimeSpan expiration) => _database.StringSet(key, value.ToJson(), _useUtcForDateTimes ? expiration.ConvertToUtc() : expiration);
+    public bool Set(string key, object value, TimeSpan? expiration) => _database.StringSet(key, value.ToJson(), _useUtcForDateTimes ? expiration.Value.ConvertToUtc() : expiration);
 
     /// <summary>
     /// Removes <paramref name="key"/> and value.
     /// </summary>
     /// <param name="key"></param>
-    public void Remove(string key) => _database.KeyDelete(key);
+    public bool Remove(string key) => _database.KeyDelete(key);
 
     /// <summary>
     /// Checks if there is a <paramref name="key"/> in database. 
     /// </summary>
     /// <param name="key"></param>
-    public void KeyExists(string key) => _database.KeyExists(key);
+    public bool KeyExists(string key) => _database.KeyExists(key);
+
+    /// <summary>
+    /// Sets timeout on <paramref name="key"/>.
+    /// </summary>
+    /// <param name="key"></param>
+    /// <param name="expiration"></param>
+    /// <returns></returns>
+    public bool KeyExpire(string key, TimeSpan expiration) => _database.KeyExpire(key, expiration);
+
+    /// <summary>
+    /// Sets timeout on <paramref name="key"/>.
+    /// </summary>
+    /// <param name="key"></param>
+    /// <param name="expiration"></param>
+    /// <returns></returns>
+    public bool KeyExpire(string key, DateTime? expiration) => _database.KeyExpire(key, expiration);
 
     #endregion
 }

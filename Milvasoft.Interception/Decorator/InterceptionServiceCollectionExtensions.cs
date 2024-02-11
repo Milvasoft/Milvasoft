@@ -55,9 +55,23 @@ public static class InterceptionServiceCollectionExtensions
     /// Decorates the specified service type descriptor inside <see cref="IServiceCollection"/>.
     /// </summary>
     /// <typeparam name="T">Service type to be decorated</typeparam>
-    public static IServiceCollection Intercept(this IServiceCollection services, Type type)
+    public static IServiceCollection Intercept(this IServiceCollection services, Type type, ServiceLifetime serviceLifetime = ServiceLifetime.Scoped)
     {
-        services.TryAddScoped(x => new Decorator((type) => (IMilvaInterceptor)x.GetRequiredService(type)));
+        switch (serviceLifetime)
+        {
+            case ServiceLifetime.Singleton:
+                services.TryAddSingleton(x => new Decorator((type) => (IMilvaInterceptor)x.GetRequiredService(type)));
+                break;
+            case ServiceLifetime.Scoped:
+                services.TryAddScoped(x => new Decorator((type) => (IMilvaInterceptor)x.GetRequiredService(type)));
+                break;
+            case ServiceLifetime.Transient:
+                services.TryAddTransient(x => new Decorator((type) => (IMilvaInterceptor)x.GetRequiredService(type)));
+                break;
+            default:
+                services.TryAddScoped(x => new Decorator((type) => (IMilvaInterceptor)x.GetRequiredService(type)));
+                break;
+        }
 
         var descriptors = services.Where(x => x.ServiceType == type).ToArray();
 

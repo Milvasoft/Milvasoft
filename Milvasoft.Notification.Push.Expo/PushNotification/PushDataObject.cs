@@ -1,4 +1,4 @@
-﻿namespace Milvasoft.Integrations.Expo.PushNotification;
+﻿namespace Milvasoft.Notification.Push.Expo.PushNotification;
 
 /// <summary>
 /// Expo api accepts only json objects. So that we use this class to serialize to be transferred data into <see cref="PushTicketRequest.PushData"/>.

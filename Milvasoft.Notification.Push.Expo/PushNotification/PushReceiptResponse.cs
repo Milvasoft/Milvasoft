@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace Milvasoft.Integrations.Expo.PushNotification;
+namespace Milvasoft.Notification.Push.Expo.PushNotification;
 
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
 public class PushReceiptResponse

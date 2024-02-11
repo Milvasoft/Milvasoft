@@ -1,5 +1,5 @@
 ﻿using Microsoft.Extensions.Localization;
-using Milvasoft.Core.Abstractions;
+using Milvasoft.Core.Abstractions.Localization;
 using Milvasoft.Localization.Resx.ResxManipulator;
 using Milvasoft.Types.Classes;
 using System.Globalization;

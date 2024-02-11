@@ -38,7 +38,7 @@ public class ListResponse<T> : Response<List<T>>
     private ListResponse() : base()
     {
     }
-    
+
     private ListResponse(string message) : base()
     {
         Messages = [new() { Message = message }];

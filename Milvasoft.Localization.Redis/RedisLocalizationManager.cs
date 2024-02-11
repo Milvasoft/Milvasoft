@@ -1,6 +1,7 @@
 ﻿using Milvasoft.Caching.Redis;
 using Milvasoft.Caching.Redis.Options;
-using Milvasoft.Core.Abstractions;
+using Milvasoft.Core.Abstractions.Cache;
+using Milvasoft.Core.Abstractions.Localization;
 using Milvasoft.Types.Classes;
 using System.Globalization;
 
@@ -9,13 +10,13 @@ namespace Milvasoft.Localization.Redis;
 /// <summary>
 /// Provides localization operations with rediswith <see cref="IStringLocalizer{TResource}"/>.
 /// </summary>
-/// <param name="redisService"></param>
+/// <param name="cacheAccessor"></param>
 /// <param name="redisCacheServiceOptions"></param>
 /// <param name="localizationOptions"></param>
-public class RedisLocalizationManager(IRedisAccessor redisService, IRedisCachingOptions redisCacheServiceOptions, ILocalizationOptions localizationOptions) : ILocalizationManager
+public class RedisLocalizationManager(ICacheAccessor<RedisAccessor> cacheAccessor, ICacheOptions<RedisCachingOptions> redisCacheServiceOptions, ILocalizationOptions localizationOptions) : ILocalizationManager
 {
-    private readonly IRedisAccessor _redisService = redisService;
-    private readonly IRedisCachingOptions _redisCacheServiceOptions = redisCacheServiceOptions;
+    private readonly RedisAccessor _cacheAccessor = (RedisAccessor)cacheAccessor;
+    private readonly RedisCachingOptions _redisCacheServiceOptions = (RedisCachingOptions)redisCacheServiceOptions;
     private readonly RedisLocalizationOptions _localizationOptions = (RedisLocalizationOptions)localizationOptions;
 
     #region Get Methods
@@ -31,7 +32,7 @@ public class RedisLocalizationManager(IRedisAccessor redisService, IRedisCaching
         {
             var formattedKey = CheckAndFormatKey(key);
 
-            var value = _redisService.Get(formattedKey);
+            var value = _cacheAccessor.Get(formattedKey);
 
             return new LocalizedValue(formattedKey, value, value != null, GetSearchLocation(formattedKey));
         }
@@ -49,7 +50,7 @@ public class RedisLocalizationManager(IRedisAccessor redisService, IRedisCaching
         {
             var formattedKey = CheckAndFormatKey(key);
 
-            var value = _redisService.Get(formattedKey);
+            var value = _cacheAccessor.Get(formattedKey);
 
             if (value != null)
             {
@@ -69,10 +70,10 @@ public class RedisLocalizationManager(IRedisAccessor redisService, IRedisCaching
     /// <returns>The strings.</returns>
     public IEnumerable<LocalizedValue> GetAllStrings(bool includeParentCultures)
     {
-        var server = _redisService.GetServer(_redisCacheServiceOptions.ConfigurationOptions.EndPoints[0]);
+        var server = _cacheAccessor.GetServer(_redisCacheServiceOptions.ConfigurationOptions.EndPoints[0]);
 
         var keys = server.Keys().Select(k => k.ToString());
-        var values = _redisService.Get(keys);
+        var values = _cacheAccessor.Get(keys);
 
         return values.Select(v => new LocalizedValue(v, v, v.HasValue, GetSearchLocation("keys[]")));
     }
@@ -90,7 +91,7 @@ public class RedisLocalizationManager(IRedisAccessor redisService, IRedisCaching
     {
         var formattedKey = CheckAndFormatKey(key);
 
-        _redisService.Set(formattedKey, value);
+        _cacheAccessor.Set(formattedKey, value);
     }
 
     /// <summary>
@@ -103,7 +104,7 @@ public class RedisLocalizationManager(IRedisAccessor redisService, IRedisCaching
     {
         var formattedKey = CheckAndFormatKey(key);
 
-        await _redisService.SetAsync(formattedKey, value);
+        await _cacheAccessor.SetAsync(formattedKey, value);
     }
 
     /// <summary>
@@ -145,7 +146,7 @@ public class RedisLocalizationManager(IRedisAccessor redisService, IRedisCaching
     {
         var formattedKey = CheckAndFormatKey(key);
 
-        _redisService.Remove(formattedKey);
+        _cacheAccessor.Remove(formattedKey);
     }
 
     /// <summary>
@@ -157,7 +158,7 @@ public class RedisLocalizationManager(IRedisAccessor redisService, IRedisCaching
     {
         var formattedKey = CheckAndFormatKey(key);
 
-        await _redisService.RemoveAsync(formattedKey);
+        await _cacheAccessor.RemoveAsync(formattedKey);
     }
 
     /// <summary>

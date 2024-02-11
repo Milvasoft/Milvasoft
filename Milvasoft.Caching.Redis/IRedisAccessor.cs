@@ -1,4 +1,5 @@
 ﻿using Milvasoft.Core.Abstractions;
+using Milvasoft.Core.Abstractions.Cache;
 using Milvasoft.Core.Exceptions;
 using StackExchange.Redis;
 using System.Net;
@@ -8,7 +9,7 @@ namespace Milvasoft.Caching.Redis;
 /// <summary>
 /// Provides caching operations.
 /// </summary>
-public interface IRedisAccessor
+public interface IRedisAccessor : ICacheAccessor<RedisAccessor>
 {
     /// <summary>
     /// Gets redis client connection state.
@@ -51,48 +52,10 @@ public interface IRedisAccessor
     IServer GetServer(EndPoint endpoint, object asyncState = null);
 
     /// <summary>
-    /// Gets <paramref name="key"/>'s value.
-    /// </summary>
-    /// <typeparam name="T"></typeparam>
-    /// <param name="key"></param>
-    /// <returns></returns>
-    Task<T> GetAsync<T>(string key) where T : class;
-
-    /// <summary>
-    /// Gets <paramref name="key"/>'s value.
-    /// </summary>
-    /// <param name="key"></param>
-    /// <returns></returns>
-    Task<string> GetAsync(string key);
-
-    /// <summary>
-    /// Gets <paramref name="keys"/> values.
-    /// </summary>
-    /// <returns></returns>
-    Task<IEnumerable<T>> GetAsync<T>(IEnumerable<string> keys);
-
-    /// <summary>
     /// Gets <paramref name="keys"/> values.
     /// </summary>
     /// <returns></returns>
     Task<RedisValue[]> GetAsync(IEnumerable<string> keys);
-
-    /// <summary>
-    /// Sets <paramref name="value"/> with <paramref name="key"/>.
-    /// </summary>
-    /// <param name="key"></param>
-    /// <param name="value"></param>
-    /// <returns></returns>
-    Task<bool> SetAsync(string key, object value);
-
-    /// <summary>
-    /// Sets <paramref name="value"/> to <paramref name="key"/> with <paramref name="expiration"/>.
-    /// </summary>
-    /// <param name="key"></param>
-    /// <param name="value"></param>
-    /// <param name="expiration"></param>
-    /// <returns></returns>
-    Task<bool> SetAsync(string key, object value, TimeSpan? expiration);
 
     /// <summary>
     /// Sets <paramref name="values"/>.
@@ -100,40 +63,6 @@ public interface IRedisAccessor
     /// <param name="values"></param>
     /// <returns></returns>
     Task<bool> SetAsync(KeyValuePair<RedisKey, RedisValue>[] values);
-
-    /// <summary>
-    /// Removes <paramref name="key"/> and value.
-    /// </summary>
-    /// <param name="key"></param>
-    Task<bool> RemoveAsync(string key);
-
-    /// <summary>
-    /// Removes <paramref name="keys"/> and value.
-    /// </summary>
-    /// <param name="keys"></param>
-    Task<long> RemoveAsync(IEnumerable<string> keys);
-
-    /// <summary>
-    /// Checks if there is a <paramref name="key"/> in database. 
-    /// </summary>
-    /// <param name="key"></param>
-    Task<bool> KeyExistsAsync(string key);
-
-    /// <summary>
-    /// Sets timeout on <paramref name="key"/>.
-    /// </summary>
-    /// <param name="key"></param>
-    /// <param name="expiration"></param>
-    /// <returns></returns>
-    Task<bool> KeyExpireAsync(string key, TimeSpan expiration);
-
-    /// <summary>
-    /// Sets timeout on <paramref name="key"/>.
-    /// </summary>
-    /// <param name="key"></param>
-    /// <param name="expiration"></param>
-    /// <returns></returns>
-    Task<bool> KeyExpireAsync(string key, DateTime? expiration);
 
     /// <summary>
     /// Flushs default database.
@@ -192,68 +121,10 @@ public interface IRedisAccessor
     public void Disconnect();
 
     /// <summary>
-    /// Gets <paramref name="key"/>'s value.
-    /// </summary>
-    /// <typeparam name="T"></typeparam>
-    /// <param name="key"></param>
-    /// <returns></returns>
-    T Get<T>(string key) where T : class;
-
-    /// <summary>
-    /// Gets <paramref name="key"/>'s value.
-    /// </summary>
-    /// <param name="key"></param>
-    /// <returns></returns>
-    string Get(string key);
-
-    /// <summary>
-    /// Gets <paramref name="keys"/> values.
-    /// </summary>
-    /// <returns></returns>
-    public IEnumerable<T> Get<T>(IEnumerable<string> keys);
-
-    /// <summary>
     /// Gets <paramref name="keys"/> values.
     /// </summary>
     /// <returns></returns>
     public RedisValue[] Get(IEnumerable<string> keys);
-
-    /// <summary>
-    /// Sets <paramref name="value"/> with <paramref name="key"/>.
-    /// </summary>
-    /// <param name="key"></param>
-    /// <param name="value"></param>
-    /// <returns></returns>
-    void Set(string key, string value);
-
-    /// <summary>
-    /// Sets <paramref name="value"/> with <paramref name="key"/>.
-    /// </summary>
-    /// <typeparam name="T"></typeparam>
-    /// <param name="key"></param>
-    /// <param name="value"></param>
-    void Set<T>(string key, T value) where T : class;
-
-    /// <summary>
-    /// Sets <paramref name="value"/> to <paramref name="key"/> with <paramref name="expiration"/>.
-    /// </summary>
-    /// <param name="key"></param>
-    /// <param name="value"></param>
-    /// <param name="expiration"></param>
-    /// <returns></returns>
-    void Set(string key, object value, TimeSpan expiration);
-
-    /// <summary>
-    /// Removes <paramref name="key"/> and value.
-    /// </summary>
-    /// <param name="key"></param>
-    void Remove(string key);
-
-    /// <summary>
-    /// Checks if there is a <paramref name="key"/> in database. 
-    /// </summary>
-    /// <param name="key"></param>
-    void KeyExists(string key);
 
     #endregion
 }

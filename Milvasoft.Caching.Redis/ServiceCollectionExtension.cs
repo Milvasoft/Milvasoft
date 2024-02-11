@@ -1,5 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Milvasoft.Caching.Builder;
 using Milvasoft.Caching.Redis.Options;
+using Milvasoft.Core.Abstractions.Cache;
 using StackExchange.Redis;
 
 namespace Milvasoft.Caching.Redis;
@@ -10,27 +12,29 @@ namespace Milvasoft.Caching.Redis;
 public static class ServiceCollectionExtension
 {
     /// <summary>
-    /// Adds <see cref="IRedisAccessor"/> to <see cref="IServiceCollection"/> singleton by default.
+    /// Registers <see cref="RedisAccessor"/> as <see cref="ICacheAccessor{T}"/>.
     /// </summary>
-    /// <param name="services"></param>
-    /// <param name="options"></param>
+    /// <param name="cacheBuilder"></param>
+    /// <param name="cachingOptions"></param>
     /// <returns></returns>
-    public static IServiceCollection AddMilvaRedisCaching(this IServiceCollection services, RedisCachingOptions options)
+    public static CacheBuilder WithRedisAccessor(this CacheBuilder cacheBuilder, RedisCachingOptions cachingOptions)
     {
-        services.AddSingleton(options);
-
-        //Configure other services up here
-        var multiplexer = ConnectionMultiplexer.ConnectAsync(options.ConfigurationOptions).Result;
-
-        services.AddSingleton<IConnectionMultiplexer>(multiplexer);
-        services.AddSingleton<IRedisCachingOptions>(options);
-
-        return options.Lifetime switch
+        if (!cacheBuilder.Services.Any(s => s.ServiceType == typeof(ICacheAccessor<RedisAccessor>)) && cachingOptions != null)
         {
-            ServiceLifetime.Singleton => services.AddSingleton<IRedisAccessor, RedisAccessor>(),
-            ServiceLifetime.Scoped => services.AddScoped<IRedisAccessor, RedisAccessor>(),
-            ServiceLifetime.Transient => services.AddTransient<IRedisAccessor, RedisAccessor>(),
-            _ => services,
-        };
+            if (!cacheBuilder.Services.Any(s => s.ServiceType == typeof(IConnectionMultiplexer)))
+            {
+                //Configure other services up here
+                var multiplexer = ConnectionMultiplexer.Connect(cachingOptions.ConfigurationOptions);
+
+                cacheBuilder.Services.AddSingleton<IConnectionMultiplexer>(multiplexer);
+            }
+
+            if (!cacheBuilder.Services.Any(s => s.ServiceType == typeof(ICacheOptions<RedisCachingOptions>)))
+                cacheBuilder.Services.AddSingleton<ICacheOptions<RedisCachingOptions>>(cachingOptions);
+
+            cacheBuilder.Services.Add(ServiceDescriptor.Describe(typeof(ICacheAccessor<RedisAccessor>), typeof(RedisAccessor), cachingOptions.AccessorLifetime));
+        }
+
+        return cacheBuilder;
     }
 }

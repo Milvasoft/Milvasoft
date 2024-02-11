@@ -1,7 +1,7 @@
 ﻿using System.Net.Mail;
 using System.Net.Mime;
 
-namespace Milvasoft.Mail;
+namespace Milvasoft.Notification.Mail.Smtp;
 
 /// <summary>
 /// Provides send mail.

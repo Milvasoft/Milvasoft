@@ -4,7 +4,7 @@ using System.Net.Mail;
 using System.Net.Mime;
 using System.Text.RegularExpressions;
 
-namespace Milvasoft.Mail;
+namespace Milvasoft.Notification.Mail.Smtp;
 
 /// <summary>
 /// Provides send mail.
