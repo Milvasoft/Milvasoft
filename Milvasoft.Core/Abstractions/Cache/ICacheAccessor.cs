@@ -1,6 +1,6 @@
 ﻿namespace Milvasoft.Core.Abstractions.Cache;
 
-public interface ICacheAccessor<TAccessor> where TAccessor : class
+public interface ICacheAccessor
 {
     /// <summary>
     /// Gets redis client connection state.
@@ -161,4 +161,8 @@ public interface ICacheAccessor<TAccessor> where TAccessor : class
     bool KeyExpire(string key, DateTime? expiration);
 
     #endregion
+}
+
+public interface ICacheAccessor<TAccessor> : ICacheAccessor where TAccessor : class
+{
 }

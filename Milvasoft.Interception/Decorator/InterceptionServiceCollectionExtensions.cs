@@ -128,6 +128,24 @@ public static class InterceptionServiceCollectionExtensions
     }
 
     /// <summary>
+    /// Decorates the specified service type descriptor inside <see cref="IServiceCollection"/>.
+    /// </summary>
+    /// <typeparam name="T">Service type to be decorated</typeparam>
+    public static IServiceCollection AddCacheInterceptor(this IServiceCollection services, Action<ICacheInterceptionOptions> interceptionOptions = null)
+    {
+        if (!services.Any(s => s.ServiceType == typeof(CacheInterceptor)))
+            services.AddTransient<CacheInterceptor>();
+
+        var config = new CacheInterceptionOptions();
+
+        interceptionOptions?.Invoke(config);
+
+        services.AddSingleton<ICacheInterceptionOptions>(config);
+
+        return services;
+    }
+
+    /// <summary>
     /// Decorates the types added to the service collection to intercept them with Castle.Core's ProxyGenerator.
     /// </summary>
     /// <param name="serviceDescriptor"></param>

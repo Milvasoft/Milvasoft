@@ -33,14 +33,21 @@ public class LogInterceptor : IMilvaInterceptor
 
         stopwatch.Stop();
 
+        var cacheAttribute = call.GetInterceptorAttribute<CacheAttribute>();
+
         var logObjectPropDic = _logInterceptionOptions.LogDefaultParameters ? new Dictionary<string, object>()
         {
-            { "TransactionId", ActivityHelper.TraceId },
-            { "MethodName", call.Method.Name },
-            { "MethodParams", call.Arguments.ToJson() },
-            { "MethodResult", call.ReturnValue.ToJson() },
-            { "ElapsedMs", stopwatch.ElapsedMilliseconds },
-            { "UtcLogTime" , DateTime.UtcNow },
+           { "TransactionId", ActivityHelper.TraceId },
+           { "MethodName", call.Method.Name },
+           { "MethodParams", call.Arguments.ToJson() },
+           { "MethodResult", call.ReturnValue.ToJson() },
+           { "ElapsedMs", stopwatch.ElapsedMilliseconds },
+           { "UtcLogTime" , DateTime.UtcNow },
+           { "CacheInfo" , new {
+               IsProcessedOnce = cacheAttribute != null ? cacheAttribute.IsProcessedOnce : (bool?)null,
+               CacheRemoveKey = cacheAttribute?.Key,
+             }.ToJson()
+           },
         } : [];
 
         var logAttribute = call.GetInterceptorAttribute<LogAttribute>();
