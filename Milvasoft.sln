@@ -36,8 +36,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Milvasoft.Middlewares", "Mi
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Milvasoft.Localization", "Milvasoft.Localization\Milvasoft.Localization.csproj", "{01550FD0-ECE6-4115-9F4F-896A45D63309}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Milvasoft.TestApi", "Milvasoft.TestApi\Milvasoft.TestApi.csproj", "{48252FEF-EE15-4D4D-8B76-D4FF6BA23461}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Localization", "Localization", "{4DDD7543-7217-418C-899E-525D0D3C0E59}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Milvasoft.Localization.Redis", "Milvasoft.Localization.Redis\Milvasoft.Localization.Redis.csproj", "{60BF9EEC-6824-4FEC-9E73-9884941DEA55}"
@@ -82,11 +80,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Milvasoft.Notification.Push
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Milvasoft.Notification.Mail.Smtp", "Milvasoft.Notification.Mail.Smtp\Milvasoft.Notification.Mail.Smtp.csproj", "{246AE772-7E7B-4146-A92B-DECE3F0B8C1F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Milvasoft.Components.Swagger", "Milvasoft.Components.Swagger\Milvasoft.Components.Swagger.csproj", "{1FBA9A6E-946D-4B31-880B-455EAB1EDB3D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Milvasoft.Components.Swagger", "Milvasoft.Components.Swagger\Milvasoft.Components.Swagger.csproj", "{1FBA9A6E-946D-4B31-880B-455EAB1EDB3D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Milvasoft.Caching", "Milvasoft.Caching\Milvasoft.Caching.csproj", "{32CFCC48-0DBD-4DD5-821A-6EA968F45DBC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Milvasoft.Caching", "Milvasoft.Caching\Milvasoft.Caching.csproj", "{32CFCC48-0DBD-4DD5-821A-6EA968F45DBC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Milvasoft.Caching.InMemory", "Milvasoft.Caching.InMemory\Milvasoft.Caching.InMemory.csproj", "{3D9BFD9C-03F9-46DF-9E3B-859843643638}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Milvasoft.Caching.InMemory", "Milvasoft.Caching.InMemory\Milvasoft.Caching.InMemory.csproj", "{3D9BFD9C-03F9-46DF-9E3B-859843643638}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -142,10 +140,6 @@ Global
 		{01550FD0-ECE6-4115-9F4F-896A45D63309}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{01550FD0-ECE6-4115-9F4F-896A45D63309}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{01550FD0-ECE6-4115-9F4F-896A45D63309}.Release|Any CPU.Build.0 = Release|Any CPU
-		{48252FEF-EE15-4D4D-8B76-D4FF6BA23461}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{48252FEF-EE15-4D4D-8B76-D4FF6BA23461}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{48252FEF-EE15-4D4D-8B76-D4FF6BA23461}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{48252FEF-EE15-4D4D-8B76-D4FF6BA23461}.Release|Any CPU.Build.0 = Release|Any CPU
 		{60BF9EEC-6824-4FEC-9E73-9884941DEA55}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{60BF9EEC-6824-4FEC-9E73-9884941DEA55}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{60BF9EEC-6824-4FEC-9E73-9884941DEA55}.Release|Any CPU.ActiveCfg = Release|Any CPU
