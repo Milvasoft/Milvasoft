@@ -1,13 +1,14 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Milvasoft.Components.Rest.Response;
 using Milvasoft.Core;
 using Milvasoft.Core.Abstractions.Cache;
 using Milvasoft.Interception.Decorator;
 
-namespace Milvasoft.Interception.Interceptors.Logging;
+namespace Milvasoft.Interception.Interceptors.Cache;
 
 public class CacheInterceptor : IMilvaInterceptor
 {
-    public static int InterceptionOrder { get; set; } = -2;
+    public static int InterceptionOrder { get; set; } = 0;
 
     private IServiceProvider _serviceProvider;
     private ICacheAccessor _cache;
@@ -35,12 +36,19 @@ public class CacheInterceptor : IMilvaInterceptor
             {
                 cacheKey = $"{cacheAttribute.Key}_{call.Arguments.ToJson()}";
 
-                var value = await _cache.GetAsync(cacheKey);
+                var value = await _cache.GetAsync<object>(cacheKey);
 
                 if (value != null)
                 {
+                    if (value is IResponse)
+                    {
+                        value.GetType().GetProperty("IsCachedData").SetValue(value, true);
+                    }
+
                     cachedValue = value;
                     call.ReturnValue = cachedValue;
+                    call.ProceedToOriginalInvocation = false;
+                    await call.NextAsync();
                     return;
                 }
             }
@@ -60,6 +68,14 @@ public class CacheInterceptor : IMilvaInterceptor
                 }
 
                 cacheAttribute.IsProcessedOnce = true;
+            }
+            else
+            {
+                if (call.ReturnValue?.GetType() == typeof(IResponse<>))
+                {
+                    call.ReturnValue.GetType().GetProperty("IsCachedData").SetValue(call.ReturnValue, true);
+                }
+
             }
         }
         else await call.NextAsync();

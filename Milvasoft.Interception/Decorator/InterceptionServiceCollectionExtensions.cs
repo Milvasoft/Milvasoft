@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Milvasoft.Interception.Interceptors;
+using Milvasoft.Interception.Interceptors.Cache;
 using Milvasoft.Interception.Interceptors.Logging;
 using Milvasoft.Interception.Interceptors.Response;
 using Milvasoft.Interception.Interceptors.Runner;
@@ -98,7 +99,7 @@ public static class InterceptionServiceCollectionExtensions
     public static IServiceCollection AddLoggingInterceptor(this IServiceCollection services, Action<ILogInterceptionOptions> interceptionOptions = null)
     {
         if (!services.Any(s => s.ServiceType == typeof(LogInterceptor)))
-            services.AddTransient<LogInterceptor>();
+            services.AddScoped<LogInterceptor>();
 
         var config = new LogInterceptionOptions();
 
@@ -116,7 +117,7 @@ public static class InterceptionServiceCollectionExtensions
     public static IServiceCollection AddResponseInterceptor(this IServiceCollection services, Action<IResponseInterceptionOptions> interceptionOptions = null)
     {
         if (!services.Any(s => s.ServiceType == typeof(ResponseInterceptor)))
-            services.AddTransient<ResponseInterceptor>();
+            services.AddScoped<ResponseInterceptor>();
 
         var config = new ResponseInterceptionOptions();
 
@@ -134,7 +135,7 @@ public static class InterceptionServiceCollectionExtensions
     public static IServiceCollection AddCacheInterceptor(this IServiceCollection services, Action<ICacheInterceptionOptions> interceptionOptions = null)
     {
         if (!services.Any(s => s.ServiceType == typeof(CacheInterceptor)))
-            services.AddTransient<CacheInterceptor>();
+            services.AddScoped<CacheInterceptor>();
 
         var config = new CacheInterceptionOptions();
 

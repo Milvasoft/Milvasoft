@@ -2,6 +2,7 @@
 using Milvasoft.Core.Utils.Constants;
 using System.Net;
 using System.Runtime.Serialization;
+using System.Text.Json.Serialization;
 
 namespace Milvasoft.Components.Rest.Response;
 
@@ -171,6 +172,12 @@ public class Response<T> : Response, IResponse<T>
             _data = value;
         }
     }
+
+    /// <summary>
+    /// Specifies the response data is cached or not.
+    /// </summary>
+    [JsonIgnore]
+    public bool IsCachedData { get; set; }
 
     [DataMember]
     public List<ResponseDataMetadata> Metadatas { get; set; }

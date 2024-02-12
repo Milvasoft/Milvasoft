@@ -1,8 +1,10 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Milvasoft.Components.Rest.Response;
 using Milvasoft.Core;
 using Milvasoft.Core.Abstractions;
 using Milvasoft.Interception.Decorator;
 using Milvasoft.Interception.Interceptors.ActivityScope;
+using Milvasoft.Interception.Interceptors.Cache;
 using System.Diagnostics;
 using System.Linq.Expressions;
 
@@ -33,7 +35,22 @@ public class LogInterceptor : IMilvaInterceptor
 
         stopwatch.Stop();
 
+        bool responseDataFetchedFromCache = false;
         var cacheAttribute = call.GetInterceptorAttribute<CacheAttribute>();
+
+        if (call.ReturnValue is IResponse)
+        {
+            if (cacheAttribute != null)
+                responseDataFetchedFromCache = (bool)call.ReturnValue.GetType().GetProperty("IsCachedData").GetValue(call.ReturnValue);
+        }
+
+        List<ResponseDataMetadata> metadatas = null;
+
+        if (call.ReturnValue is IHasMetadata res && _logInterceptionOptions.ExcludeResponseMetadataFromLog)
+        {
+            metadatas = res.Metadatas;
+            res.Metadatas = null;
+        }
 
         var logObjectPropDic = _logInterceptionOptions.LogDefaultParameters ? new Dictionary<string, object>()
         {
@@ -44,7 +61,7 @@ public class LogInterceptor : IMilvaInterceptor
            { "ElapsedMs", stopwatch.ElapsedMilliseconds },
            { "UtcLogTime" , DateTime.UtcNow },
            { "CacheInfo" , new {
-               IsProcessedOnce = cacheAttribute != null ? cacheAttribute.IsProcessedOnce : (bool?)null,
+               FetchedFromCache = responseDataFetchedFromCache,
                CacheRemoveKey = cacheAttribute?.Key,
              }.ToJson()
            },
@@ -90,6 +107,13 @@ public class LogInterceptor : IMilvaInterceptor
             await _logger.LogAsync(logObjectPropDic.ToJson());
         }
         else _logger.Log(logObjectPropDic.ToJson());
+
+        //If metadata removing requested, add removed metadata to call.returnValue again
+        if(metadatas != null)
+        {
+            var returnVal = call.ReturnValue as IHasMetadata;
+            returnVal.Metadatas = metadatas;
+        }
     }
 
 }

@@ -45,6 +45,13 @@ public sealed class Call
     /// </summary>
     public object Object => _invocation.InvocationTarget;
 
+    /// <summary>
+    /// If you are working with an interceptor such as cache interceptor and you want the calling method not to run at all, false must be sent. 
+    /// The original caller is not called, only the interceptors are called.
+    /// Default is true.
+    /// </summary>
+    public bool ProceedToOriginalInvocation { get; set; } = true;
+
     #endregion
 
     #region Fields
@@ -78,6 +85,9 @@ public sealed class Call
             }
             else
             {
+                if (!ProceedToOriginalInvocation)
+                    return;
+
                 _proceedInfo.Invoke();
 
                 if (_invocation.ReturnValue is Task task && MethodImplementation.IsAsync())

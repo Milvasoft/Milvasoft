@@ -7,6 +7,7 @@ using Milvasoft.Interception.Decorator;
 using System.Collections;
 using System.ComponentModel;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 
 namespace Milvasoft.Interception.Interceptors.Response;
 
@@ -34,7 +35,7 @@ public class ResponseInterceptor(IServiceProvider serviceProvider, IResponseInte
                 //Gets result data and generic type
                 var (responseData, resultDataType) = hasMetadataResponse.GetResponseData();
 
-                if (!resultDataType.IsClass)
+                if (!resultDataType.IsClass && resultDataType.Namespace.Contains(nameof(System)))
                     return;
 
                 CreateMetadata(hasMetadataResponse, resultDataType, responseData);
@@ -61,6 +62,12 @@ public class ResponseInterceptor(IServiceProvider serviceProvider, IResponseInte
 
         resultDataType = dataTypeIsCollection ? resultDataType.GetGenericArguments()[0] : resultDataType;
 
+        if (resultDataType.Namespace.Contains(nameof(System)))
+        {
+            CreatePropMetadata(response.GetType().GetProperty("Data"));
+            return;
+        }
+
         var properties = resultDataType.GetProperties();
 
         if (properties == null || properties.Length == 0)
@@ -68,36 +75,39 @@ public class ResponseInterceptor(IServiceProvider serviceProvider, IResponseInte
 
         foreach (var prop in properties)
         {
+            CreatePropMetadata(prop);
+        }
+
+        void CreatePropMetadata(PropertyInfo prop)
+        {
             ResponseDataMetadata metadata = new()
             {
                 Metadatas = []
             };
 
-            if (prop.PropertyType.IsClass && prop.PropertyType != typeof(string))
+            if (prop.PropertyType.IsClass && !resultDataType.Namespace.Contains(nameof(System)))
                 CreateMetadata(metadata, prop.PropertyType, propObject);
 
-            //Get used attributes
-            var browsableAttribute = prop.GetCustomAttribute<BrowsableAttribute>();
-            var hideByRoleAttribute = prop.GetCustomAttribute<HideByRoleAttribute>();
-            var maskByRoleAttribute = prop.GetCustomAttribute<MaskByRoleAttribute>();
-            var filterableAttribute = prop.GetCustomAttribute<FilterableAttribute>();
-            var pinnedAttribute = prop.GetCustomAttribute<PinnedAttribute>();
-            var decimalDigitAttribute = prop.GetCustomAttribute<DecimalPrecisionAttribute>();
-            var cellTooltipFormatAttribute = prop.GetCustomAttribute<CellTooltipFormatAttribute>();
-            var cellDisplayFormatAttribute = prop.GetCustomAttribute<CellDisplayFormatAttribute>();
-            var defaultValueAttribute = prop.GetCustomAttribute<DefaultValueAttribute>();
+            metadata.Name = prop.Name;
+            metadata.Type = GetPropertyFriendlyName(prop);
+            metadata.LocalizedName = prop.Name;
 
+            //If no attribute specified no need to proceed.
+            if (!prop.GetCustomAttributes().Any())
+            {
+                response.Metadatas.Add(metadata);
+                return;
+            }
 
             bool removePropMetadataFromResponse = false;
             bool mask = false;
 
-            if (hideByRoleAttribute != null && hideByRoleAttribute.Roles.Length != 0 && (_interceptionOptions.HideByRoleFunc?.Invoke(hideByRoleAttribute) ?? false))
+            if (TryGetAttribute(prop, out HideByRoleAttribute hideByRoleAttribute) && hideByRoleAttribute.Roles.Length != 0 && (_interceptionOptions.HideByRoleFunc?.Invoke(hideByRoleAttribute) ?? false))
                 removePropMetadataFromResponse = true;
 
-            if (maskByRoleAttribute != null && maskByRoleAttribute.Roles.Length != 0 == false && (_interceptionOptions.HideByRoleFunc?.Invoke(hideByRoleAttribute) ?? false))
+            if (TryGetAttribute(prop, out MaskByRoleAttribute maskByRoleAttribute) && maskByRoleAttribute.Roles.Length != 0 == false && (_interceptionOptions.HideByRoleFunc?.Invoke(hideByRoleAttribute) ?? false))
                 mask = true;
 
-            var hasResponseData = propObject != null;
             var translateAttribute = _interceptionOptions.TranslateMetadata ? resultDataType.GetCustomAttribute<TranslateAttribute>() : null;
             var localizer = translateAttribute != null ? _serviceProvider.GetService<IMilvaLocalizer>() : null;
             string localizedName = prop.Name;
@@ -109,22 +119,20 @@ public class ResponseInterceptor(IServiceProvider serviceProvider, IResponseInte
                                          : _interceptionOptions.ApplyLocalizationFunc.Invoke(translateAttribute.Key, localizer, resultDataType, prop.Name);
 
             //Fill metadata object
-            metadata.Name = prop.Name;
             metadata.LocalizedName = localizedName;
-            metadata.Type = prop.PropertyType.Name;
-            metadata.Display = browsableAttribute == null || browsableAttribute.Browsable;
-            metadata.DefaultValue = defaultValueAttribute?.Value;
+            metadata.Display = !TryGetAttribute(prop, out BrowsableAttribute browsableAttribute) || browsableAttribute.Browsable;
+            metadata.DefaultValue = TryGetAttribute(prop, out DefaultValueAttribute defaultValueAttribute) ? defaultValueAttribute.Value : null; ;
             metadata.Mask = mask;
-            metadata.Filterable = filterableAttribute == null || filterableAttribute.Filterable;
-            metadata.Pinned = pinnedAttribute != null && pinnedAttribute.Pinned;
-            metadata.DecimalPrecision = decimalDigitAttribute?.DecimalPrecision;
-            metadata.CellTooltipFormat = cellTooltipFormatAttribute?.Format;
-            metadata.CellDisplayFormat = cellDisplayFormatAttribute?.Format;
+            metadata.Filterable = !TryGetAttribute(prop, out FilterableAttribute filterableAttribute) || filterableAttribute.Filterable;
+            metadata.Pinned = !TryGetAttribute(prop, out PinnedAttribute pinnedAttribute) && pinnedAttribute.Pinned;
+            metadata.DecimalPrecision = TryGetAttribute(prop, out DecimalPrecisionAttribute decimalPrecisionAttribute) ? decimalPrecisionAttribute.DecimalPrecision : null;
+            metadata.CellTooltipFormat = TryGetAttribute(prop, out CellTooltipFormatAttribute cellTooltipFormatAttribute) ? cellTooltipFormatAttribute.Format : null;
+            metadata.CellDisplayFormat = TryGetAttribute(prop, out CellDisplayFormatAttribute cellDisplayFormatAttribute) ? cellDisplayFormatAttribute.Format : null;
 
             if (!removePropMetadataFromResponse)
                 response.Metadatas.Add(metadata);
 
-            if (hasResponseData)
+            if (propObject != null)
             {
                 if (dataTypeIsCollection)
                 {
@@ -136,6 +144,13 @@ public class ResponseInterceptor(IServiceProvider serviceProvider, IResponseInte
         }
     }
 
+    /// <summary>
+    /// Aplly metadata rules to <see cref="IResponse{T}.Data"/>.
+    /// </summary>
+    /// <param name="responseObject"></param>
+    /// <param name="prop"></param>
+    /// <param name="metadata"></param>
+    /// <param name="removeFromResponse"></param>
     private static void ApplyMetadataRulesToResponseData(object responseObject, PropertyInfo prop, ResponseDataMetadata metadata, bool removeFromResponse)
     {
         if (removeFromResponse)
@@ -184,7 +199,10 @@ public class ResponseInterceptor(IServiceProvider serviceProvider, IResponseInte
         return localizedName;
     }
 
-
+    /// <summary>
+    /// Translates <see cref="IResponse.Messages"/> <see cref="ResponseMessage.Message"/> property.
+    /// </summary>
+    /// <param name="response"></param>
     private void TranslateResultMessages(IResponse response)
     {
         var localizer = _serviceProvider.GetService<IMilvaLocalizer>();
@@ -194,4 +212,29 @@ public class ResponseInterceptor(IServiceProvider serviceProvider, IResponseInte
                 message.Message = localizer[message.Message];
 
     }
+
+    /// <summary>
+    /// Gets property user friendly name for generic types.
+    /// </summary>
+    /// <param name="prop"></param>
+    /// <returns></returns>
+    private static string GetPropertyFriendlyName(PropertyInfo prop)
+        => prop.PropertyType.IsGenericType
+            ? $"{prop.PropertyType.Name.Remove(prop.PropertyType.Name.IndexOf('`'))}.{string.Join(',', prop.PropertyType.GetGenericArguments().Select(i => i.Name))}"
+            : prop.PropertyType.Name;
+
+    /// <summary>
+    /// Gets custom attribute.
+    /// </summary>
+    /// <typeparam name="TAttribute"></typeparam>
+    /// <param name="prop"></param>
+    /// <param name="attribute"></param>
+    /// <returns></returns>
+    public static bool TryGetAttribute<TAttribute>(PropertyInfo prop, out TAttribute attribute) where TAttribute : Attribute
+    {
+        attribute = prop.GetCustomAttribute<TAttribute>();
+
+        return attribute != null;
+    }
+
 }

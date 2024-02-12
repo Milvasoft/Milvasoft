@@ -1,4 +1,6 @@
-﻿namespace Milvasoft.Components.Rest.Response;
+﻿using System.Text.Json.Serialization;
+
+namespace Milvasoft.Components.Rest.Response;
 
 /// <summary>
 /// Represents a response interface containing properties and methods to handle response data and messages.
@@ -42,6 +44,12 @@ public interface IResponse<T> : IResponse, IHasMetadata
     /// Gets or sets response data.
     /// </summary>
     public T Data { get; set; }
+
+    /// <summary>
+    /// Specifies the response data is cached or not.
+    /// </summary>
+    [JsonIgnore]
+    bool IsCachedData { get; set; }
 }
 
 public interface IHasMetadata

@@ -1,4 +1,4 @@
-﻿namespace Milvasoft.Interception.Interceptors.Logging;
+﻿namespace Milvasoft.Interception.Interceptors.Cache;
 
 public class CacheInterceptionOptions : ICacheInterceptionOptions
 {
