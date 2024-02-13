@@ -7,7 +7,6 @@ using Milvasoft.Interception.Decorator;
 using System.Collections;
 using System.ComponentModel;
 using System.Reflection;
-using System.Runtime.CompilerServices;
 
 namespace Milvasoft.Interception.Interceptors.Response;
 
