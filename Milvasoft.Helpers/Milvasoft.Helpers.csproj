@@ -22,6 +22,7 @@
 
 	<ItemGroup>
 	  <ProjectReference Include="..\Milvasoft.Attributes\Milvasoft.Attributes.csproj" />
+	  <ProjectReference Include="..\Milvasoft.Components.Swagger\Milvasoft.Components.Swagger.csproj" />
 	  <ProjectReference Include="..\Milvasoft.DataAccess.EfCore\Milvasoft.DataAccess.EfCore.csproj" />
 	  <ProjectReference Include="..\Milvasoft.DataAccess.MongoDB\Milvasoft.DataAccess.MongoDB.csproj" />
 	  <ProjectReference Include="..\Milvasoft.FileOperations\Milvasoft.FileOperations.csproj" />
