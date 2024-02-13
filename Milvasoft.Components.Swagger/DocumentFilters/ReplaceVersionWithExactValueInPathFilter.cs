@@ -1,7 +1,7 @@
 ﻿using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
-namespace Milvasoft.Components.Swagger.OperationFilters;
+namespace Milvasoft.Components.Swagger.DocumentFilters;
 
 /// <summary>
 /// Replaces version parameter.
