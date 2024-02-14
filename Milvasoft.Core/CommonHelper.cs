@@ -7,6 +7,7 @@ using Milvasoft.Core.Exceptions;
 using Milvasoft.Core.Extensions;
 using Milvasoft.Core.Utils.Constants;
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Text.Json;
@@ -122,7 +123,7 @@ public static class CommonHelper
 
         var parameter = Expression.Parameter(entityType);
 
-        return Expression.Lambda<Func<T, TPropertyType>>(Expression.Property(parameter, propertyName), parameter);
+        return Expression.Lambda<Func<T, TPropertyType>>(Expression.Convert(Expression.Property(parameter, propertyName), typeof(TPropertyType)), parameter);
     }
 
     /// <summary>
@@ -142,7 +143,7 @@ public static class CommonHelper
 
         var parameter = Expression.Parameter(entityType);
 
-        return Expression.Lambda<Func<T, TPropertyType>>(Expression.Property(parameter, propertyName), parameter).Compile();
+        return Expression.Lambda<Func<T, TPropertyType>>(Expression.Convert(Expression.Property(parameter, propertyName), typeof(TPropertyType)), parameter).Compile();
     }
 
     /// <summary>
@@ -161,7 +162,7 @@ public static class CommonHelper
 
         var parameter = Expression.Parameter(entityType);
 
-        return Expression.Lambda<Func<T, TPropertyType>>(Expression.Property(parameter, propertyName), parameter);
+        return Expression.Lambda<Func<T, TPropertyType>>(Expression.Convert(Expression.Property(parameter, propertyName), typeof(TPropertyType)), parameter);
     }
 
     /// <summary>
@@ -180,7 +181,7 @@ public static class CommonHelper
 
         var parameter = Expression.Parameter(entityType);
 
-        return Expression.Lambda<Func<T, TPropertyType>>(Expression.Property(parameter, propertyName), parameter).Compile();
+        return Expression.Lambda<Func<T, TPropertyType>>(Expression.Convert(Expression.Property(parameter, propertyName), typeof(TPropertyType)), parameter).Compile();
     }
 
     /// <summary>

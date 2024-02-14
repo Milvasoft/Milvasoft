@@ -165,7 +165,7 @@ public static class QueryExtensions
             return ListResponse<TEntity>.Success();
 
         listRequest ??= new ListRequest();
-
+        
         query = query.WithFilteringAndSorting(listRequest);
 
         var aggregationResults = listRequest.Aggregation?.ApplyAggregationAsync(query, false).Result;

@@ -152,7 +152,7 @@ public class AggregationCriteria
 
         // Step 1: Get the MethodInfo object for the generic method
         var selectorMethod = typeof(CommonHelper).GetMethod(selectorMethodName);
-
+        
         // Step 2: Construct the method generic with desired type of arguments
         MethodInfo genericSelectorMethod = selectorMethod.MakeGenericMethod(_entityType, _propType);
 
@@ -223,6 +223,9 @@ public class AggregationCriteria
 
         _propType = prop.PropertyType;
 
+        if (IsNonNullableValueType(_propType))
+            _propType = typeof(Nullable<>).MakeGenericType(_propType);
+
         if (runAsync)
         {
             _queryProviderType = QueryProviderType.AsyncQueryable;
@@ -239,8 +242,8 @@ public class AggregationCriteria
         return prop;
     }
 
-
-
+    private static bool IsNonNullableValueType(Type type) =>  type.IsValueType && Nullable.GetUnderlyingType(type) == null;
+    
     private enum QueryProviderType
     {
         List,
