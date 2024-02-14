@@ -73,12 +73,13 @@ public class ResponseInterceptor(IServiceProvider serviceProvider, IResponseInte
             return;
 
         foreach (var prop in properties)
-        {
             CreatePropMetadata(prop);
-        }
 
         void CreatePropMetadata(PropertyInfo prop)
         {
+            if (prop == null)
+                return;
+
             ResponseDataMetadata metadata = new()
             {
                 Metadatas = []
@@ -89,7 +90,18 @@ public class ResponseInterceptor(IServiceProvider serviceProvider, IResponseInte
 
             metadata.Name = prop.Name;
             metadata.Type = GetPropertyFriendlyName(prop);
-            metadata.LocalizedName = prop.Name;
+
+            var translateAttribute = _interceptionOptions.TranslateMetadata ? resultDataType.GetCustomAttribute<TranslateAttribute>() : null;
+            var localizer = translateAttribute != null ? _serviceProvider.GetService<IMilvaLocalizer>() : null;
+            string localizedName = prop.Name;
+
+            //Apply localization to property
+            if (translateAttribute != null && localizer != null)
+                localizedName = _interceptionOptions.ApplyLocalizationFunc == null
+                                         ? ApplyLocalization(translateAttribute.Key, localizer, resultDataType, prop.Name)
+                                         : _interceptionOptions.ApplyLocalizationFunc.Invoke(translateAttribute.Key, localizer, resultDataType, prop.Name);
+
+            metadata.LocalizedName = localizedName;
 
             //If no attribute specified no need to proceed.
             if (!prop.GetCustomAttributes().Any())
@@ -106,24 +118,13 @@ public class ResponseInterceptor(IServiceProvider serviceProvider, IResponseInte
 
             if (TryGetAttribute(prop, out MaskByRoleAttribute maskByRoleAttribute) && maskByRoleAttribute.Roles.Length != 0 == false && (_interceptionOptions.HideByRoleFunc?.Invoke(hideByRoleAttribute) ?? false))
                 mask = true;
-
-            var translateAttribute = _interceptionOptions.TranslateMetadata ? resultDataType.GetCustomAttribute<TranslateAttribute>() : null;
-            var localizer = translateAttribute != null ? _serviceProvider.GetService<IMilvaLocalizer>() : null;
-            string localizedName = prop.Name;
-
-            //Apply localization to property
-            if (translateAttribute != null && localizer != null)
-                localizedName = _interceptionOptions.ApplyLocalizationFunc == null
-                                         ? ApplyLocalization(translateAttribute.Key, localizer, resultDataType, prop.Name)
-                                         : _interceptionOptions.ApplyLocalizationFunc.Invoke(translateAttribute.Key, localizer, resultDataType, prop.Name);
-
+           
             //Fill metadata object
-            metadata.LocalizedName = localizedName;
             metadata.Display = !TryGetAttribute(prop, out BrowsableAttribute browsableAttribute) || browsableAttribute.Browsable;
             metadata.DefaultValue = TryGetAttribute(prop, out DefaultValueAttribute defaultValueAttribute) ? defaultValueAttribute.Value : null; ;
             metadata.Mask = mask;
             metadata.Filterable = !TryGetAttribute(prop, out FilterableAttribute filterableAttribute) || filterableAttribute.Filterable;
-            metadata.Pinned = !TryGetAttribute(prop, out PinnedAttribute pinnedAttribute) && pinnedAttribute.Pinned;
+            metadata.Pinned = TryGetAttribute(prop, out PinnedAttribute pinnedAttribute) && pinnedAttribute.Pinned;
             metadata.DecimalPrecision = TryGetAttribute(prop, out DecimalPrecisionAttribute decimalPrecisionAttribute) ? decimalPrecisionAttribute.DecimalPrecision : null;
             metadata.CellTooltipFormat = TryGetAttribute(prop, out CellTooltipFormatAttribute cellTooltipFormatAttribute) ? cellTooltipFormatAttribute.Format : null;
             metadata.CellDisplayFormat = TryGetAttribute(prop, out CellDisplayFormatAttribute cellDisplayFormatAttribute) ? cellDisplayFormatAttribute.Format : null;
