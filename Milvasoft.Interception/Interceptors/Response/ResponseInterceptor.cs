@@ -4,6 +4,7 @@ using Milvasoft.Components.Rest.Response;
 using Milvasoft.Core.Abstractions.Localization;
 using Milvasoft.Core.Extensions;
 using Milvasoft.Interception.Decorator;
+using Milvasoft.Types.Classes;
 using System.Collections;
 using System.ComponentModel;
 using System.Reflection;
@@ -118,7 +119,7 @@ public class ResponseInterceptor(IServiceProvider serviceProvider, IResponseInte
 
             if (TryGetAttribute(prop, out MaskByRoleAttribute maskByRoleAttribute) && maskByRoleAttribute.Roles.Length != 0 == false && (_interceptionOptions.HideByRoleFunc?.Invoke(hideByRoleAttribute) ?? false))
                 mask = true;
-           
+
             //Fill metadata object
             metadata.Display = !TryGetAttribute(prop, out BrowsableAttribute browsableAttribute) || browsableAttribute.Browsable;
             metadata.DefaultValue = TryGetAttribute(prop, out DefaultValueAttribute defaultValueAttribute) ? defaultValueAttribute.Value : null; ;
@@ -190,7 +191,9 @@ public class ResponseInterceptor(IServiceProvider serviceProvider, IResponseInte
     {
         var key = $"{localizationKey ?? resultDataType.Name}.{propName}";
 
-        string localizedName = localizer[key];
+        LocalizedValue localizedValue = localizer[key];
+
+        string localizedName = localizedValue.ResourceFound ? localizedValue : null;
 
         localizedName ??= localizer[$"Global.{propName}"];
 
