@@ -135,7 +135,7 @@ public class Response : IResponse
 
     public static Response Error(string message, MessageType messageType)
     {
-        var response = new Response(message)
+        var response = new Response
         {
             IsSuccess = false,
             StatusCode = (int)HttpStatusCode.BadRequest,
