@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Milvasoft.Caching.Builder;
 using Milvasoft.Caching.Redis.Options;
 using Milvasoft.Core.Abstractions.Cache;
@@ -36,5 +37,31 @@ public static class ServiceCollectionExtension
         }
 
         return cacheBuilder;
+    }
+
+    /// <summary>
+    /// Registers <see cref="RedisAccessor"/> as <see cref="ICacheAccessor"/>.
+    /// Adds <see cref="ICacheOptions{TOptions}"/> as <see cref="Microsoft.Extensions.Options.IOptions{TOptions}"/>.
+    /// </summary>
+    /// <param name="builder"></param>
+    /// <param name="configurationManager"></param>
+    /// <returns></returns>
+    public static CacheBuilder WithInMemoryAccessor(this CacheBuilder builder, IConfigurationManager configurationManager)
+    {
+        var section = configurationManager.GetSection(RedisCachingOptions.SectionName);
+
+        builder.Services.AddOptions<ICacheOptions<RedisCachingOptions>>()
+                        .Bind(section)
+                        .ValidateDataAnnotations();
+
+        builder.Services.AddOptions<RedisCachingOptions>()
+                        .Bind(section)
+                        .ValidateDataAnnotations();
+
+        var options = section.Get<RedisCachingOptions>();
+
+        builder.WithRedisAccessor(options);
+
+        return builder;
     }
 }

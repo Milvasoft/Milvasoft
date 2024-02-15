@@ -2,7 +2,7 @@
 
 namespace Milvasoft.Core.Abstractions.Cache;
 
-public interface ICacheOptions<TCacheOptions> where TCacheOptions : class
+public interface ICacheOptions<TCacheOptions> : IMilvaOptions where TCacheOptions : class
 {
     /// <summary>
     /// Caching accessor service lifetime.

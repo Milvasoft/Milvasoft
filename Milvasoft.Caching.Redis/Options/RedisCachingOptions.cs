@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Milvasoft.Core.Abstractions.Cache;
+using Milvasoft.Core.Extensions;
 using StackExchange.Redis;
 
 namespace Milvasoft.Caching.Redis.Options;
@@ -9,6 +10,8 @@ namespace Milvasoft.Caching.Redis.Options;
 /// </summary>
 public class RedisCachingOptions : ICacheOptions<RedisCachingOptions>
 {
+    public static string SectionName { get; } = $"{MilvaOptionsExtensions.ParentSectionName}:Localization";
+
     /// <summary>
     /// Accessor lifetime
     /// </summary>

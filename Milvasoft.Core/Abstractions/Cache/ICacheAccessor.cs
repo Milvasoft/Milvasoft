@@ -163,6 +163,6 @@ public interface ICacheAccessor
     #endregion
 }
 
-public interface ICacheAccessor<TAccessor> : ICacheAccessor where TAccessor : class
+public interface ICacheAccessor<TAccessor> : ICacheAccessor where TAccessor : class, ICacheAccessor
 {
 }

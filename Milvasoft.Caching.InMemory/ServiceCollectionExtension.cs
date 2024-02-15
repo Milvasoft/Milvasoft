@@ -1,7 +1,9 @@
 ﻿using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Milvasoft.Caching.Builder;
 using Milvasoft.Core.Abstractions.Cache;
+using Milvasoft.Core.Abstractions.Localization;
 
 namespace Milvasoft.Caching.InMemory;
 
@@ -11,7 +13,7 @@ namespace Milvasoft.Caching.InMemory;
 public static class ServiceCollectionExtension
 {
     /// <summary>
-    /// Registers <see cref="RedisAccessor"/> as <see cref="ICacheAccessor"/>.
+    /// Registers <see cref="MemoryCacheAccessor"/> as <see cref="ICacheAccessor"/>.
     /// </summary>
     /// <param name="cacheBuilder"></param>
     /// <param name="cachingOptions"></param>
@@ -35,7 +37,7 @@ public static class ServiceCollectionExtension
         if (!cacheBuilder.Services.Any(s => s.ServiceType == typeof(ICacheAccessor<MemoryCacheAccessor>)))
         {
             if (cachingOptions != null)
-            {
+            {              
                 if (!cacheBuilder.Services.Any(s => s.ServiceType == typeof(ICacheOptions<InMemoryCacheOptions>)))
                     cacheBuilder.Services.AddSingleton<ICacheOptions<InMemoryCacheOptions>>(cachingOptions);
 
@@ -50,4 +52,29 @@ public static class ServiceCollectionExtension
         return cacheBuilder;
     }
 
+    /// <summary>
+    /// Registers <see cref="MemoryCacheAccessor"/> as <see cref="ICacheAccessor"/>.
+    /// Adds <see cref="ICacheOptions{TOptions}"/> as <see cref="Microsoft.Extensions.Options.IOptions{TOptions}"/>.
+    /// </summary>
+    /// <param name="builder"></param>
+    /// <param name="configurationManager"></param>
+    /// <returns></returns>
+    public static CacheBuilder WithInMemoryAccessor(this CacheBuilder builder, IConfigurationManager configurationManager)
+    {
+        var section = configurationManager.GetSection(InMemoryCacheOptions.SectionName);
+
+        builder.Services.AddOptions<ICacheOptions<InMemoryCacheOptions>>()
+                        .Bind(section)
+                        .ValidateDataAnnotations();
+
+        builder.Services.AddOptions<InMemoryCacheOptions>()
+                        .Bind(section)
+                        .ValidateDataAnnotations();
+
+        var options = section.Get<InMemoryCacheOptions>();
+
+        builder.WithInMemoryAccessor(options);
+
+        return builder;
+    }
 }

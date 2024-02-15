@@ -1,12 +1,13 @@
 ﻿using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.DependencyInjection;
+using Milvasoft.Core.Extensions;
 
 namespace Milvasoft.Core.Abstractions.Localization;
 
 /// <summary>
 /// Milva localization options.
 /// </summary>
-public interface ILocalizationOptions
+public interface ILocalizationOptions : IMilvaOptions
 {
     /// <summary>
     /// Localization manager service lifetime.

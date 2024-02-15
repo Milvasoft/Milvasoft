@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Milvasoft.Caching.Builder;
 using Milvasoft.Caching.Redis;
@@ -49,5 +50,39 @@ public static class RedisLocalizationExtensions
         localizationBuilder.Services.AddTransient<IMilvaLocalizer, MilvaLocalizer>();
 
         return localizationBuilder;
+    }
+
+    /// <summary>
+    /// Registers <see cref="ResxLocalizationManager{TResource}"/> as <see cref="ILocalizationManager"/>.
+    /// Adds <see cref="LocalizationOptions"/> as <see cref="Microsoft.Extensions.Options.IOptions{TOptions}"/>.
+    /// </summary>
+    /// <param name="configurationManager"></param>
+    /// <param name="keyFormatDelegate">Post configure property.</param>
+    /// <returns></returns>
+    public static LocalizationBuilder WithRedisManager(this LocalizationBuilder builder, IConfigurationManager configurationManager, Func<string, string, string> keyFormatDelegate = null)
+    {
+        var section = configurationManager.GetSection(RedisLocalizationOptions.SectionName);
+
+        builder.Services.AddOptions<ILocalizationOptions>()
+                        .Bind(section)
+                        .ValidateDataAnnotations();
+
+        builder.Services.AddOptions<RedisLocalizationOptions>()
+                        .Bind(section)
+                        .ValidateDataAnnotations();
+
+        if (keyFormatDelegate != null)
+            builder.Services.PostConfigure<RedisLocalizationOptions>(opt =>
+            {
+                opt.KeyFormatDelegate = keyFormatDelegate;
+            });
+
+        var options = section.Get<RedisLocalizationOptions>();
+
+        options.KeyFormatDelegate = keyFormatDelegate;
+
+        builder.WithRedisManager(localizationOptions: (opt) => opt = options);
+
+        return builder;
     }
 }

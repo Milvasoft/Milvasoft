@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.DependencyInjection;
 using Milvasoft.Core.Abstractions.Localization;
+using Milvasoft.Core.Extensions;
 
 namespace Milvasoft.Localization.Builder;
 
@@ -9,6 +10,8 @@ namespace Milvasoft.Localization.Builder;
 /// </summary>
 public class LocalizationOptions : ILocalizationOptions
 {
+    public static string SectionName { get; } = $"{MilvaOptionsExtensions.ParentSectionName}:Localization";
+
     /// <inheritdoc/>
     public ServiceLifetime ManagerLifetime { get; set; } = ServiceLifetime.Transient;
 

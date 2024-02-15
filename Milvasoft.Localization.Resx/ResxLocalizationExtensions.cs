@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Localization;
 using Milvasoft.Core.Abstractions.Localization;
@@ -45,5 +46,51 @@ public static class ResxLocalizationExtensions
         localizationBuilder.Services.AddTransient<IMilvaLocalizer, MilvaLocalizer>();
 
         return localizationBuilder;
+    }
+
+    /// <summary>
+    /// Registers <see cref="ResxLocalizationManager{TResource}"/> as <see cref="ILocalizationManager"/>.
+    /// Adds <see cref="LocalizationOptions"/> as <see cref="Microsoft.Extensions.Options.IOptions{TOptions}"/>.
+    /// </summary>
+    /// <param name="configurationManager"></param>
+    /// <param name="keyFormatDelegate">Post configure property.</param>
+    /// <returns></returns>
+    public static LocalizationBuilder WithResxManager<TResource>(this LocalizationBuilder builder, IConfigurationManager configurationManager, string resourceFolderPath = null, string resourcesPath = null, Func<string, string> keyFormatDelegate = null)
+    {
+        var section = configurationManager.GetSection(ResxLocalizationOptions.SectionName);
+
+        builder.Services.AddOptions<ILocalizationOptions>()
+                        .Bind(section)
+                        .ValidateDataAnnotations();
+
+        builder.Services.AddOptions<ResxLocalizationOptions>()
+                .Bind(section)
+                .ValidateDataAnnotations();
+
+
+        builder.Services.PostConfigure<ResxLocalizationOptions>(opt =>
+        {
+            opt.KeyFormatDelegate = keyFormatDelegate ?? opt.KeyFormatDelegate;
+            opt.ResourcesFolderPath = resourceFolderPath ?? opt.ResourcesFolderPath;
+            opt.ResourcesPath = resourcesPath ?? opt.ResourcesPath;
+        });
+
+        builder.Services.PostConfigure<ILocalizationOptions>(opt =>
+        {
+            opt.KeyFormatDelegate = keyFormatDelegate ?? opt.KeyFormatDelegate;
+        });
+
+        builder.Services.PostConfigure<ResxLocalizationOptions>(opt =>
+        {
+            opt.KeyFormatDelegate = keyFormatDelegate ?? opt.KeyFormatDelegate;
+        });
+
+        var options = section.Get<ResxLocalizationOptions>();
+
+        options.KeyFormatDelegate = keyFormatDelegate ?? options.KeyFormatDelegate;
+
+        builder.WithResxManager<TResource>(localizationOptions: (opt) => opt = options);
+
+        return builder;
     }
 }

@@ -315,6 +315,16 @@
             <param name="ignoreNullValues"></param>
             <returns></returns>
         </member>
+        <member name="T:Milvasoft.Core.Abstractions.IMilvaBuilder">
+            <summary>
+            Dummy class for builder implementations.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Core.Abstractions.IMilvaBuilder.Services">
+            <summary>
+            Service collection.
+            </summary>
+        </member>
         <member name="T:Milvasoft.Core.Abstractions.IMilvaLogger">
             <summary>
             Logger interface for DI. If you want to get logs from library side errors implement this interface and register to <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/>.
@@ -511,6 +521,16 @@
             <example>
             Log.Verbose(ex, "Staring into {@from}, wondering where this comet came from.", space);
             </example>
+        </member>
+        <member name="T:Milvasoft.Core.Abstractions.IMilvaOptions">
+            <summary>
+            Dummy interface for options implementations.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Core.Abstractions.IMilvaOptions.SectionName">
+            <summary>
+            Configuration section name.
+            </summary>
         </member>
         <member name="T:Milvasoft.Core.Abstractions.Localization.ILocalizationManager">
             <summary>
@@ -2610,6 +2630,19 @@
             Visits the System.Linq.Expressions.ParameterExpression.
             </summary>
             <param name="node"></param>
+            <returns></returns>
+        </member>
+        <member name="F:Milvasoft.Core.Extensions.MilvaOptionsExtensions.ParentSectionName">
+            <summary>
+            Milvasoft main configuration object name.
+            </summary>
+        </member>
+        <member name="M:Milvasoft.Core.Extensions.MilvaOptionsExtensions.ConfigureOptions``1(Milvasoft.Core.Abstractions.IMilvaBuilder,Microsoft.Extensions.Configuration.IConfigurationManager)">
+            <summary>
+            Adds <see cref="T:Microsoft.Extensions.Localization.LocalizationOptions"/> as <see cref="T:Microsoft.Extensions.Options.IOptions`1"/>.
+            </summary>
+            <param name="builder"></param>
+            <param name="configurationManager"></param>
             <returns></returns>
         </member>
         <member name="T:Milvasoft.Core.Extensions.Strings">
