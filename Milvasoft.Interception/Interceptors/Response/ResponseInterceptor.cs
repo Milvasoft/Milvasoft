@@ -91,6 +91,7 @@ public class ResponseInterceptor(IServiceProvider serviceProvider, IResponseInte
 
             metadata.Name = prop.Name;
             metadata.Type = GetPropertyFriendlyName(prop);
+            metadata.DefaultValue = TryGetAttribute(prop, out DefaultValueAttribute defaultValueAttribute) ? defaultValueAttribute.Value : null;
 
             var translateAttribute = _interceptionOptions.TranslateMetadata ? resultDataType.GetCustomAttribute<TranslateAttribute>() : null;
             var localizer = translateAttribute != null ? _serviceProvider.GetService<IMilvaLocalizer>() : null;
@@ -98,9 +99,13 @@ public class ResponseInterceptor(IServiceProvider serviceProvider, IResponseInte
 
             //Apply localization to property
             if (translateAttribute != null && localizer != null)
+            {
                 localizedName = _interceptionOptions.ApplyLocalizationFunc == null
                                          ? ApplyLocalization(translateAttribute.Key, localizer, resultDataType, prop.Name)
                                          : _interceptionOptions.ApplyLocalizationFunc.Invoke(translateAttribute.Key, localizer, resultDataType, prop.Name);
+
+                metadata.DefaultValue = metadata.DefaultValue != null ? (string)localizer[(string)defaultValueAttribute.Value] : metadata.DefaultValue;
+            }
 
             metadata.LocalizedName = localizedName;
 
@@ -120,9 +125,11 @@ public class ResponseInterceptor(IServiceProvider serviceProvider, IResponseInte
             if (TryGetAttribute(prop, out MaskByRoleAttribute maskByRoleAttribute) && maskByRoleAttribute.Roles.Length != 0 == false && (_interceptionOptions.HideByRoleFunc?.Invoke(hideByRoleAttribute) ?? false))
                 mask = true;
 
+            if (TryGetAttribute(prop, out MaskAttribute _))
+                mask = true;
+
             //Fill metadata object
             metadata.Display = !TryGetAttribute(prop, out BrowsableAttribute browsableAttribute) || browsableAttribute.Browsable;
-            metadata.DefaultValue = TryGetAttribute(prop, out DefaultValueAttribute defaultValueAttribute) ? defaultValueAttribute.Value : null; ;
             metadata.Mask = mask;
             metadata.Filterable = !TryGetAttribute(prop, out FilterableAttribute filterableAttribute) || filterableAttribute.Filterable;
             metadata.Pinned = TryGetAttribute(prop, out PinnedAttribute pinnedAttribute) && pinnedAttribute.Pinned;

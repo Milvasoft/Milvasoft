@@ -5,7 +5,7 @@
 /// Default: false 
 /// </summary>
 [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field, AllowMultiple = false)]
-public class PinnedAttribute(bool pinned = false) : Attribute
+public class PinnedAttribute(bool pinned = true) : Attribute
 {
     /// <summary>
     /// Gets or sets pinned.
