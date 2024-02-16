@@ -55,6 +55,15 @@ public partial class RedisAccessor
     /// Gets <paramref name="key"/>'s value.
     /// </summary>
     /// <param name="key"></param>
+    /// <param name="returnType"></param>
+    /// <returns></returns>
+    public async Task<object> GetAsync(string key, Type returnType)
+        => ((string)await _database.StringGetAsync(key).ConfigureAwait(false)).ToObject(returnType);
+
+    /// <summary>
+    /// Gets <paramref name="key"/>'s value.
+    /// </summary>
+    /// <param name="key"></param>
     /// <returns></returns>
     public async Task<string> GetAsync(string key)
         => await _database.StringGetAsync(key).ConfigureAwait(false);

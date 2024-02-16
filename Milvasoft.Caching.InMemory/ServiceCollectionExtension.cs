@@ -2,6 +2,8 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Milvasoft.Caching.Builder;
+using Milvasoft.Caching.InMemory.Accessor;
+using Milvasoft.Caching.InMemory.Options;
 using Milvasoft.Core.Abstractions.Cache;
 using Milvasoft.Core.Abstractions.Localization;
 
@@ -59,11 +61,14 @@ public static class ServiceCollectionExtension
     /// <param name="builder"></param>
     /// <param name="configurationManager"></param>
     /// <returns></returns>
-    public static CacheBuilder WithInMemoryAccessor(this CacheBuilder builder, IConfigurationManager configurationManager)
+    public static CacheBuilder WithInMemoryAccessor(this CacheBuilder builder)
     {
-        var section = configurationManager.GetSection(InMemoryCacheOptions.SectionName);
+        if (builder.ConfigurationManager == null)
+            return builder.WithInMemoryAccessor(cachingOptions: null);
 
-        builder.Services.AddOptions<ICacheOptions<InMemoryCacheOptions>>()
+        var section = builder.ConfigurationManager.GetSection(InMemoryCacheOptions.SectionName);
+
+        builder.Services.AddOptions<InMemoryCacheOptions>()
                         .Bind(section)
                         .ValidateDataAnnotations();
 

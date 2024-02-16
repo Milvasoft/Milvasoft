@@ -3,6 +3,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Milvasoft.Caching.Builder;
 using Milvasoft.Caching.Redis;
+using Milvasoft.Caching.Redis.Accessor;
 using Milvasoft.Caching.Redis.Options;
 using Milvasoft.Core.Abstractions.Cache;
 using Milvasoft.Core.Abstractions.Localization;
@@ -59,11 +60,14 @@ public static class RedisLocalizationExtensions
     /// <param name="configurationManager"></param>
     /// <param name="keyFormatDelegate">Post configure property.</param>
     /// <returns></returns>
-    public static LocalizationBuilder WithRedisManager(this LocalizationBuilder builder, IConfigurationManager configurationManager, Func<string, string, string> keyFormatDelegate = null)
+    public static LocalizationBuilder WithRedisManager(this LocalizationBuilder builder, Func<string, string, string> keyFormatDelegate = null)
     {
-        var section = configurationManager.GetSection(RedisLocalizationOptions.SectionName);
+        if (builder.ConfigurationManager == null)
+            return builder.WithRedisManager(localizationOptions: null);
 
-        builder.Services.AddOptions<ILocalizationOptions>()
+        var section = builder.ConfigurationManager.GetSection(RedisLocalizationOptions.SectionName);
+
+        builder.Services.AddOptions<RedisLocalizationOptions>()
                         .Bind(section)
                         .ValidateDataAnnotations();
 
@@ -71,17 +75,24 @@ public static class RedisLocalizationExtensions
                         .Bind(section)
                         .ValidateDataAnnotations();
 
-        if (keyFormatDelegate != null)
-            builder.Services.PostConfigure<RedisLocalizationOptions>(opt =>
-            {
-                opt.KeyFormatDelegate = keyFormatDelegate;
-            });
+        builder.Services.PostConfigure<RedisLocalizationOptions>(opt =>
+        {
+            opt.KeyFormatDelegate = keyFormatDelegate ?? opt.KeyFormatDelegate;
+        });
 
         var options = section.Get<RedisLocalizationOptions>();
 
         options.KeyFormatDelegate = keyFormatDelegate;
 
-        builder.WithRedisManager(localizationOptions: (opt) => opt = options);
+        builder.WithRedisManager(localizationOptions: (opt) =>
+        {
+            opt.ManagerLifetime = options.ManagerLifetime;
+            opt.RedisOptions = options.RedisOptions;
+            opt.MemoryCacheEntryOptions = options.MemoryCacheEntryOptions;
+            opt.UseInMemoryCache = options.UseInMemoryCache;
+            opt.KeyFormatDelegate = options.KeyFormatDelegate;
+            opt.KeyFormat = options.KeyFormat;
+        });
 
         return builder;
     }

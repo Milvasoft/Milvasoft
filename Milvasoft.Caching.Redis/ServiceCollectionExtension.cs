@@ -1,8 +1,10 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Milvasoft.Caching.Builder;
+using Milvasoft.Caching.Redis.Accessor;
 using Milvasoft.Caching.Redis.Options;
 using Milvasoft.Core.Abstractions.Cache;
+using Milvasoft.Core.Abstractions.Localization;
 using StackExchange.Redis;
 
 namespace Milvasoft.Caching.Redis;
@@ -44,13 +46,15 @@ public static class ServiceCollectionExtension
     /// Adds <see cref="ICacheOptions{TOptions}"/> as <see cref="Microsoft.Extensions.Options.IOptions{TOptions}"/>.
     /// </summary>
     /// <param name="builder"></param>
-    /// <param name="configurationManager"></param>
     /// <returns></returns>
-    public static CacheBuilder WithInMemoryAccessor(this CacheBuilder builder, IConfigurationManager configurationManager)
+    public static CacheBuilder WithRedisAccessor(this CacheBuilder builder)
     {
-        var section = configurationManager.GetSection(RedisCachingOptions.SectionName);
+        if (builder.ConfigurationManager == null)
+            return builder.WithRedisAccessor(cachingOptions: null);
 
-        builder.Services.AddOptions<ICacheOptions<RedisCachingOptions>>()
+        var section = builder.ConfigurationManager.GetSection(RedisCachingOptions.SectionName);
+
+        builder.Services.AddOptions<ILocalizationOptions>()
                         .Bind(section)
                         .ValidateDataAnnotations();
 

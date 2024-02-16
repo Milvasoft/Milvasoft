@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Milvasoft.Caching.Builder;
 
@@ -12,6 +13,6 @@ public static class CacheServiceCollectionExtensions
     /// </summary>
     /// <param name="services"></param>
     /// <returns></returns>
-    public static CacheBuilder AddMilvaCaching(this IServiceCollection services)
-        => new(services);
+    public static CacheBuilder AddMilvaCaching(this IServiceCollection services, IConfigurationManager configurationManager = null)
+        => new(services, configurationManager);
 }

@@ -10,12 +10,17 @@ namespace Milvasoft.Caching.Redis.Options;
 /// </summary>
 public class RedisCachingOptions : ICacheOptions<RedisCachingOptions>
 {
-    public static string SectionName { get; } = $"{MilvaOptionsExtensions.ParentSectionName}:Localization";
+    public static string SectionName { get; } = $"{MilvaOptionsExtensions.ParentSectionName}:Caching:Redis";
 
     /// <summary>
     /// Accessor lifetime
     /// </summary>
     public ServiceLifetime AccessorLifetime { get; set; } = ServiceLifetime.Singleton;
+
+    /// <summary>
+    /// Redis connection string.
+    /// </summary>
+    public string ConnectionString { get; }
 
     /// <summary>
     /// Redis configurations.
@@ -34,6 +39,7 @@ public class RedisCachingOptions : ICacheOptions<RedisCachingOptions>
     /// <param name="connectionString"></param>
     public RedisCachingOptions(string connectionString)
     {
+        ConnectionString = connectionString;
         ConfigurationOptions = new ConfigurationOptions();
         ConfigurationOptions.EndPoints.Add(connectionString);
     }

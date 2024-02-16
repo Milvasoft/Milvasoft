@@ -1,10 +1,12 @@
 ﻿using Microsoft.Extensions.Caching.Memory;
+using System.Reflection;
 
-namespace Milvasoft.Caching.InMemory;
+namespace Milvasoft.Caching.InMemory.Accessor;
 
 public class MemoryCacheAccessor : IMemoryCacheAccessor
 {
     private readonly IMemoryCache _cache;
+    private static readonly MethodInfo GenericGetMethod = typeof(MemoryCacheAccessor).GetMethods().FirstOrDefault(i => i.Name == nameof(Get) && i.IsGenericMethod);
 
     public MemoryCacheAccessor(IMemoryCache cache)
     {
@@ -18,6 +20,8 @@ public class MemoryCacheAccessor : IMemoryCacheAccessor
     public string Get(string key) => _cache?.Get<string>(key);
 
     public async Task<T> GetAsync<T>(string key) where T : class => await Task.Run(() => Get<T>(key));
+
+    public async Task<object> GetAsync(string key, Type returnType) => await Task.Run(() => GenericGetMethod.MakeGenericMethod(returnType).Invoke(this, [key]));
 
     public async Task<string> GetAsync(string key) => await Task.Run(() => Get(key));
 
@@ -60,7 +64,7 @@ public class MemoryCacheAccessor : IMemoryCacheAccessor
 
     public bool Set(string key, string value) => _cache.Set(key, value) != null;
 
-    public bool Set<T>(string key, T value) where T : class => _cache.Set<T>(key, value) != null;
+    public bool Set<T>(string key, T value) where T : class => _cache.Set(key, value) != null;
 
     public bool Set(string key, object value, TimeSpan? expiration) => (expiration.HasValue ? _cache.Set(key, value, expiration.Value) : Set(key, value)) != null;
 

@@ -1,4 +1,4 @@
-﻿using Milvasoft.Caching.Redis;
+﻿using Milvasoft.Caching.Redis.Accessor;
 using Milvasoft.Core.EntityBase.MultiTenancy;
 using Milvasoft.MultiTenancy.Store;
 

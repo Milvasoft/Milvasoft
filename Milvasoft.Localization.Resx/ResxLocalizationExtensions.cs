@@ -5,6 +5,7 @@ using Microsoft.Extensions.Localization;
 using Milvasoft.Core.Abstractions.Localization;
 using Milvasoft.Core.Exceptions;
 using Milvasoft.Localization.Builder;
+using LocalizationOptions = Milvasoft.Localization.Builder.LocalizationOptions;
 
 namespace Milvasoft.Localization.Resx;
 
@@ -38,8 +39,8 @@ public static class ResxLocalizationExtensions
 
         config.KeyFormatDelegate ??= (string key) => string.Format(config.KeyFormat, key);
 
-        if (!localizationBuilder.Services.Any(s => s.ServiceType == typeof(IStringLocalizerFactory)) && !string.IsNullOrEmpty(config.ResourcesPath))
-            localizationBuilder.Services.AddLocalization(options => options.ResourcesPath = config.ResourcesPath);
+        if (!localizationBuilder.Services.Any(s => s.ServiceType == typeof(IStringLocalizerFactory)))
+            localizationBuilder.Services.AddLocalization(options => options.ResourcesPath = config?.ResourcesPath ?? options.ResourcesPath);
 
         localizationBuilder.Services.AddSingleton<ILocalizationOptions>(config);
         localizationBuilder.Services.Add(ServiceDescriptor.Describe(typeof(ILocalizationManager), typeof(ResxLocalizationManager<TResource>), config.ManagerLifetime));
@@ -55,9 +56,12 @@ public static class ResxLocalizationExtensions
     /// <param name="configurationManager"></param>
     /// <param name="keyFormatDelegate">Post configure property.</param>
     /// <returns></returns>
-    public static LocalizationBuilder WithResxManager<TResource>(this LocalizationBuilder builder, IConfigurationManager configurationManager, string resourceFolderPath = null, string resourcesPath = null, Func<string, string> keyFormatDelegate = null)
+    public static LocalizationBuilder WithResxManager<TResource>(this LocalizationBuilder builder, string resourceFolderPath = null, string resourcesPath = null, Func<string, string> keyFormatDelegate = null)
     {
-        var section = configurationManager.GetSection(ResxLocalizationOptions.SectionName);
+        if (builder.ConfigurationManager == null)
+            return builder.WithResxManager<TResource>(localizationOptions: null);
+
+        var section = builder.ConfigurationManager.GetSection(ResxLocalizationOptions.SectionName);
 
         builder.Services.AddOptions<ILocalizationOptions>()
                         .Bind(section)
@@ -80,7 +84,7 @@ public static class ResxLocalizationExtensions
             opt.KeyFormatDelegate = keyFormatDelegate ?? opt.KeyFormatDelegate;
         });
 
-        builder.Services.PostConfigure<ResxLocalizationOptions>(opt =>
+        builder.Services.PostConfigure<LocalizationOptions>(opt =>
         {
             opt.KeyFormatDelegate = keyFormatDelegate ?? opt.KeyFormatDelegate;
         });
@@ -89,7 +93,16 @@ public static class ResxLocalizationExtensions
 
         options.KeyFormatDelegate = keyFormatDelegate ?? options.KeyFormatDelegate;
 
-        builder.WithResxManager<TResource>(localizationOptions: (opt) => opt = options);
+        builder.WithResxManager<TResource>(localizationOptions: (opt) =>
+        {
+            opt.ManagerLifetime = options.ManagerLifetime;
+            opt.MemoryCacheEntryOptions = options.MemoryCacheEntryOptions;
+            opt.UseInMemoryCache = options.UseInMemoryCache;
+            opt.KeyFormatDelegate = options.KeyFormatDelegate;
+            opt.KeyFormat = options.KeyFormat;
+            opt.ResourcesPath = options.ResourcesPath;
+            opt.ResourcesFolderPath = options.ResourcesFolderPath;
+        });
 
         return builder;
     }

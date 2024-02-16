@@ -4,7 +4,7 @@ using Milvasoft.Core.Exceptions;
 using StackExchange.Redis;
 using System.Net;
 
-namespace Milvasoft.Caching.Redis;
+namespace Milvasoft.Caching.Redis.Accessor;
 
 /// <summary>
 /// Provides caching operations.

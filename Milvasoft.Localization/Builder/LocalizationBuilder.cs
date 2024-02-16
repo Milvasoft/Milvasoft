@@ -13,9 +13,11 @@ namespace Milvasoft.Localization.Builder;
 /// Creates new instance of <see cref="LocalizationBuilder"/>.
 /// </remarks>
 /// <param name="services"></param>
-public sealed class LocalizationBuilder(IServiceCollection services) : IMilvaBuilder
+/// <param name="configurationManager"></param>
+public sealed class LocalizationBuilder(IServiceCollection services, IConfigurationManager configurationManager = null) : IMilvaBuilder
 {
     public IServiceCollection Services { get; } = services;
+    public IConfigurationManager ConfigurationManager { get; } = configurationManager;
 
     /// <summary>
     /// You can register your own LocalizationManager to service collection with lifetime.

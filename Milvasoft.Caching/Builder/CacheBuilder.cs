@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Milvasoft.Caching.Builder;
 
@@ -9,7 +10,8 @@ namespace Milvasoft.Caching.Builder;
 /// Creates new instance of <see cref="CacheBuilder"/>.
 /// </remarks>
 /// <param name="services"></param>
-public sealed class CacheBuilder(IServiceCollection services)
+public sealed class CacheBuilder(IServiceCollection services, IConfigurationManager configurationManager = null)
 {
     public IServiceCollection Services { get; } = services;
+    public IConfigurationManager ConfigurationManager { get; } = configurationManager;
 }
