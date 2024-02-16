@@ -83,9 +83,9 @@ public class JsonOperations : IJsonOperations
     }
 
     /// <summary>
-    /// Initializes new instance of <see cref="JsonOperations"/> with <see cref="IJsonOperationsConfig"/>.
+    /// Initializes new instance of <see cref="JsonOperations"/> with <see cref="IJsonFileOperationOptions"/>.
     /// </summary>
-    public JsonOperations(IJsonOperationsConfig jsonOperationsConfig)
+    public JsonOperations(IJsonFileOperationOptions jsonOperationsConfig)
     {
         _basePath = jsonOperationsConfig.BasePath;
         _encryptionKey = jsonOperationsConfig.EncryptionKey;

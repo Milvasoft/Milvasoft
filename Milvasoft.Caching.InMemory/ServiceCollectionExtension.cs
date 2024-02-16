@@ -68,7 +68,7 @@ public static class ServiceCollectionExtension
 
         var section = builder.ConfigurationManager.GetSection(InMemoryCacheOptions.SectionName);
 
-        builder.Services.AddOptions<InMemoryCacheOptions>()
+        builder.Services.AddOptions<ICacheOptions<InMemoryCacheOptions>>()
                         .Bind(section)
                         .ValidateDataAnnotations();
 

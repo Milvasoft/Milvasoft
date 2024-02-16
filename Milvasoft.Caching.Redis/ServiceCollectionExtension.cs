@@ -54,7 +54,7 @@ public static class ServiceCollectionExtension
 
         var section = builder.ConfigurationManager.GetSection(RedisCachingOptions.SectionName);
 
-        builder.Services.AddOptions<ILocalizationOptions>()
+        builder.Services.AddOptions<ICacheOptions<RedisCachingOptions>>()
                         .Bind(section)
                         .ValidateDataAnnotations();
 

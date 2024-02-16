@@ -742,6 +742,56 @@
             <param name="lastId"></param>
             <param name="contentList"></param>
         </member>
+        <member name="T:Milvasoft.FileOperations.Builder.FileOperationsBuilder">
+            <summary>
+            Configure caching services.
+            </summary>
+            <remarks>
+            Creates new instance of <see cref="T:Milvasoft.FileOperations.Builder.FileOperationsBuilder"/>.
+            </remarks>
+            <param name="services"></param>
+            <param name="configurationManager"></param>
+        </member>
+        <member name="M:Milvasoft.FileOperations.Builder.FileOperationsBuilder.#ctor(Microsoft.Extensions.DependencyInjection.IServiceCollection,Microsoft.Extensions.Configuration.IConfigurationManager)">
+            <summary>
+            Configure caching services.
+            </summary>
+            <remarks>
+            Creates new instance of <see cref="T:Milvasoft.FileOperations.Builder.FileOperationsBuilder"/>.
+            </remarks>
+            <param name="services"></param>
+            <param name="configurationManager"></param>
+        </member>
+        <member name="T:Milvasoft.FileOperations.Builder.ServiceCollectionExtensions">
+            <summary>
+            Provides registration of caching services.
+            </summary>
+        </member>
+        <member name="M:Milvasoft.FileOperations.Builder.ServiceCollectionExtensions.AddFileOperations(Microsoft.Extensions.DependencyInjection.IServiceCollection,Microsoft.Extensions.Configuration.IConfigurationManager)">
+            <summary>
+            Adds json file operations services to service collection. Adds <see cref="T:Milvasoft.FileOperations.IJsonFileOperationOptions"/> as singleton to services too.
+            </summary>
+            <param name="services"></param>
+            <param name="configurationManager"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.FileOperations.Builder.ServiceCollectionExtensions.WithJsonOperations(Milvasoft.FileOperations.Builder.FileOperationsBuilder,System.Action{Milvasoft.FileOperations.IJsonFileOperationOptions})">
+            <summary>
+            Adds json file operations services to service collection. Adds <see cref="T:Milvasoft.FileOperations.IJsonFileOperationOptions"/> as singleton to services too.
+            </summary>
+            <param name="builder"></param>
+            <param name="jsonOptions"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.FileOperations.Builder.ServiceCollectionExtensions.WithJsonOperations(Milvasoft.FileOperations.Builder.FileOperationsBuilder,System.String,System.Text.Encoding)">
+            <summary>
+            Adds json file operations services to service collection. Adds <see cref="T:Milvasoft.FileOperations.IJsonFileOperationOptions"/> as singleton to services too.
+            </summary>
+            <param name="builder"></param>
+            <param name="basePath"></param>
+            <param name="encoding"></param>
+            <returns></returns>
+        </member>
         <member name="T:Milvasoft.FileOperations.Concrete.FormFileOperations">
             <summary>
             <see cref="T:Microsoft.AspNetCore.Http.IFormFile"/> operations for .NET Core.
@@ -1046,9 +1096,9 @@
             Initializes new instance of <see cref="T:Milvasoft.FileOperations.Concrete.JsonOperations"/>.
             </summary>
         </member>
-        <member name="M:Milvasoft.FileOperations.Concrete.JsonOperations.#ctor(Milvasoft.FileOperations.IJsonOperationsConfig)">
+        <member name="M:Milvasoft.FileOperations.Concrete.JsonOperations.#ctor(Milvasoft.FileOperations.IJsonFileOperationOptions)">
             <summary>
-            Initializes new instance of <see cref="T:Milvasoft.FileOperations.Concrete.JsonOperations"/> with <see cref="T:Milvasoft.FileOperations.IJsonOperationsConfig"/>.
+            Initializes new instance of <see cref="T:Milvasoft.FileOperations.Concrete.JsonOperations"/> with <see cref="T:Milvasoft.FileOperations.IJsonFileOperationOptions"/>.
             </summary>
         </member>
         <member name="M:Milvasoft.FileOperations.Concrete.JsonOperations.SetCultureInfo(System.Globalization.CultureInfo)">
@@ -1810,69 +1860,75 @@
             Invalid file extension result.
             </summary>
         </member>
-        <member name="T:Milvasoft.FileOperations.IJsonOperationsConfig">
+        <member name="T:Milvasoft.FileOperations.IJsonFileOperationOptions">
             <summary>
             Json operations config for json file operations.
             </summary>
         </member>
-        <member name="P:Milvasoft.FileOperations.IJsonOperationsConfig.BasePath">
+        <member name="P:Milvasoft.FileOperations.IJsonFileOperationOptions.Lifetime">
             <summary>
             Gets or sets base path. If sets combines all file paths with this.
             </summary>
         </member>
-        <member name="P:Milvasoft.FileOperations.IJsonOperationsConfig.EncryptionKey">
+        <member name="P:Milvasoft.FileOperations.IJsonFileOperationOptions.BasePath">
+            <summary>
+            Gets or sets base path. If sets combines all file paths with this.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.FileOperations.IJsonFileOperationOptions.EncryptionKey">
             <summary>
             Gets or sets encryption key.
             </summary>
         </member>
-        <member name="P:Milvasoft.FileOperations.IJsonOperationsConfig.CultureInfo">
+        <member name="P:Milvasoft.FileOperations.IJsonFileOperationOptions.CultureCode">
+            <summary>
+            Gets or sets encryption key.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.FileOperations.IJsonFileOperationOptions.CultureInfo">
             <summary>
             Culture info to be used when access file.
             </summary>
         </member>
-        <member name="P:Milvasoft.FileOperations.IJsonOperationsConfig.Encoding">
+        <member name="P:Milvasoft.FileOperations.IJsonFileOperationOptions.Encoding">
             <summary>
             Encoding to be used when access file.
             </summary>
         </member>
-        <member name="T:Milvasoft.FileOperations.JsonOperationsConfig">
+        <member name="T:Milvasoft.FileOperations.JsonFileOperationsOptions">
             <summary>
             Json operations config for json file operations.
             </summary>
         </member>
-        <member name="P:Milvasoft.FileOperations.JsonOperationsConfig.BasePath">
+        <member name="P:Milvasoft.FileOperations.JsonFileOperationsOptions.Lifetime">
             <summary>
             Gets or sets base path. If sets combines all file paths with this.
             </summary>
         </member>
-        <member name="P:Milvasoft.FileOperations.JsonOperationsConfig.EncryptionKey">
+        <member name="P:Milvasoft.FileOperations.JsonFileOperationsOptions.BasePath">
+            <summary>
+            Gets or sets base path. If sets combines all file paths with this.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.FileOperations.JsonFileOperationsOptions.EncryptionKey">
             <summary>
             Gets or sets encryption key.
             </summary>
         </member>
-        <member name="P:Milvasoft.FileOperations.JsonOperationsConfig.CultureInfo">
+        <member name="P:Milvasoft.FileOperations.JsonFileOperationsOptions.CultureCode">
+            <summary>
+            Gets or sets encryption key.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.FileOperations.JsonFileOperationsOptions.CultureInfo">
             <summary>
             Culture info to be used when access file. Default is en-US.
             </summary>
         </member>
-        <member name="P:Milvasoft.FileOperations.JsonOperationsConfig.Encoding">
+        <member name="P:Milvasoft.FileOperations.JsonFileOperationsOptions.Encoding">
             <summary>
             Encoding to be used when access file. Default is UTF8.
             </summary>
-        </member>
-        <member name="T:Milvasoft.FileOperations.ServiceCollectionExtensions">
-            <summary>
-            Provides json file operations.
-            </summary>
-        </member>
-        <member name="M:Milvasoft.FileOperations.ServiceCollectionExtensions.AddJsonOperations(Microsoft.Extensions.DependencyInjection.IServiceCollection,Microsoft.Extensions.DependencyInjection.ServiceLifetime,System.Action{Milvasoft.FileOperations.IJsonOperationsConfig})">
-            <summary>
-            Adds json file operations services to service collection. Adds <see cref="T:Milvasoft.FileOperations.IJsonOperationsConfig"/> as singleton to services too.
-            </summary>
-            <param name="services"></param>
-            <param name="lifetime"></param>
-            <param name="options"></param>
-            <returns></returns>
         </member>
     </members>
 </doc>

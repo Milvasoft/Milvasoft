@@ -1,4 +1,7 @@
-﻿using System.Globalization;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Milvasoft.Core.Abstractions;
+using Milvasoft.Core.Extensions;
+using System.Globalization;
 using System.Text;
 
 namespace Milvasoft.FileOperations;
@@ -6,8 +9,13 @@ namespace Milvasoft.FileOperations;
 /// <summary>
 /// Json operations config for json file operations.
 /// </summary>
-public interface IJsonOperationsConfig
+public interface IJsonFileOperationOptions : IMilvaOptions
 {
+    /// <summary>
+    /// Gets or sets base path. If sets combines all file paths with this.
+    /// </summary>
+    ServiceLifetime Lifetime { get; set; }
+
     /// <summary>
     /// Gets or sets base path. If sets combines all file paths with this.
     /// </summary>
@@ -17,6 +25,11 @@ public interface IJsonOperationsConfig
     /// Gets or sets encryption key.
     /// </summary>
     string EncryptionKey { get; set; }
+
+    /// <summary>
+    /// Gets or sets encryption key.
+    /// </summary>
+    public string CultureCode { get; set; }
 
     /// <summary>
     /// Culture info to be used when access file.
@@ -32,8 +45,17 @@ public interface IJsonOperationsConfig
 /// <summary>
 /// Json operations config for json file operations.
 /// </summary>
-public class JsonOperationsConfig : IJsonOperationsConfig
+public class JsonFileOperationsOptions : IJsonFileOperationOptions
 {
+    private string _cultureCode;
+
+    public static string SectionName { get; } = $"{MilvaOptionsExtensions.ParentSectionName}:FileOperations:Json";
+
+    /// <summary>
+    /// Gets or sets base path. If sets combines all file paths with this.
+    /// </summary>
+    public ServiceLifetime Lifetime { get; set; } = ServiceLifetime.Singleton;
+
     /// <summary>
     /// Gets or sets base path. If sets combines all file paths with this.
     /// </summary>
@@ -45,6 +67,11 @@ public class JsonOperationsConfig : IJsonOperationsConfig
     public string EncryptionKey { get; set; }
 
     /// <summary>
+    /// Gets or sets encryption key.
+    /// </summary>
+    public string CultureCode { get => _cultureCode; set => _cultureCode = value; }
+
+    /// <summary>
     /// Culture info to be used when access file. Default is en-US.
     /// </summary>
     public CultureInfo CultureInfo { get; set; } = new CultureInfo("en-US");
@@ -53,4 +80,9 @@ public class JsonOperationsConfig : IJsonOperationsConfig
     /// Encoding to be used when access file. Default is UTF8.
     /// </summary>
     public Encoding Encoding { get; set; } = Encoding.UTF8;
+
+    public JsonFileOperationsOptions()
+    {
+        CultureInfo = _cultureCode != null ? new CultureInfo(_cultureCode) : new CultureInfo("en-US");
+    }
 }
