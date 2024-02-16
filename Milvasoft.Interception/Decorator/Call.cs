@@ -35,6 +35,11 @@ public sealed class Call
     public object ReturnValue { get; set; }
 
     /// <summary>
+    /// Gets or sets the return value provided by call target or other <see cref="IMilvaInterceptor"/> instances.
+    /// </summary>
+    public Type ReturnType { get; set; }
+
+    /// <summary>
     /// Gets the generic arguments of the method. 
     /// Returns empty if method is not generic.
     /// </summary>
@@ -68,6 +73,7 @@ public sealed class Call
         _invocation = invocation;
         _decorators = decorators;
         _proceedInfo = invocation.CaptureProceedInfo();
+        ReturnType = invocation.Method.ReturnType;
     }
 
     /// <summary>

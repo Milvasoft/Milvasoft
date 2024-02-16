@@ -1,10 +1,17 @@
-﻿using Milvasoft.Attributes.Annotations;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Milvasoft.Attributes.Annotations;
+using Milvasoft.Core.Abstractions;
 using Milvasoft.Core.Abstractions.Localization;
+using Milvasoft.Core.Extensions;
 
 namespace Milvasoft.Interception.Interceptors.Response;
 
 public class ResponseInterceptionOptions : IResponseInterceptionOptions
 {
+    public static string SectionName { get; } = $"{MilvaOptionsExtensions.ParentSectionName}:Interception:Response";
+
+    public ServiceLifetime InterceptorLifetime { get; set; } = ServiceLifetime.Scoped;
+
     /// <summary>
     /// If it is true <see cref="ResponseInterceptor"/> translate IResponseTyped response's result messages. Default is true. 
     /// </summary>
@@ -33,8 +40,10 @@ public class ResponseInterceptionOptions : IResponseInterceptionOptions
 }
 
 
-public interface IResponseInterceptionOptions
+public interface IResponseInterceptionOptions : IMilvaOptions
 {
+    public ServiceLifetime InterceptorLifetime { get; set; }
+
     /// <summary>
     /// If it is true <see cref="ResponseInterceptor"/> translate IResponseTyped response's result messages. Default is true.
     /// </summary>

@@ -1,11 +1,20 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Milvasoft.Attributes.Annotations;
+using Milvasoft.Core.Abstractions;
+using Milvasoft.Core.Abstractions.Localization;
+using Milvasoft.Interception.Builder;
 using Milvasoft.Interception.Interceptors;
+using Milvasoft.Interception.Interceptors.ActivityScope;
 using Milvasoft.Interception.Interceptors.Cache;
 using Milvasoft.Interception.Interceptors.Logging;
 using Milvasoft.Interception.Interceptors.Response;
 using Milvasoft.Interception.Interceptors.Runner;
+using System.Configuration;
+using System.Linq;
 using System.Reflection;
+using static System.Collections.Specialized.BitVector32;
 
 namespace Milvasoft.Interception.Decorator;
 
@@ -24,57 +33,59 @@ public static class InterceptionServiceCollectionExtensions
     /// <param name="services"> Service collection to be decorated. </param>
     /// <param name="assembly"> An assembly containing classes that contain the methods to be intercepted. </param>
     /// <returns></returns>
-    public static IServiceCollection AddMilvaInterception(this IServiceCollection services, Assembly assembly)
+    public static InterceptionBuilder AddMilvaInterception(this IServiceCollection services, Assembly assembly, IConfigurationManager configurationManager = null)
     {
         ArgumentNullException.ThrowIfNull(assembly);
 
         var types = assembly.FindDecorableTypes();
 
-        services.AddScoped<IInterceptorRunner, InterceptorRunner>();
-        services.Intercept(typeof(IInterceptorRunner));
+        var builder = new InterceptionBuilder(services, configurationManager);
+
+        builder.Services.AddScoped<IInterceptorRunner, InterceptorRunner>();
+        builder.Intercept(typeof(IInterceptorRunner));
 
         foreach (var type in types)
-            services.Intercept(type);
+            builder.Intercept(type);
 
-        return services;
+        return builder;
     }
 
     /// <summary>
     /// Decorates the specified service type descriptor inside <see cref="IServiceCollection"/>.
     /// </summary>
     /// <typeparam name="T">Service type to be decorated</typeparam>
-    public static IServiceCollection Intercept<T>(this IServiceCollection services) where T : class
+    public static InterceptionBuilder WithInterceptor<T>(this InterceptionBuilder builder) where T : class
     {
-        services.AddScoped<IInterceptorRunner, InterceptorRunner>();
-        services.Intercept(typeof(IInterceptorRunner));
-        services.Intercept(typeof(T));
+        builder.Services.AddScoped<IInterceptorRunner, InterceptorRunner>();
+        builder.Intercept(typeof(IInterceptorRunner));
+        builder.Intercept(typeof(T));
 
-        return services;
+        return builder;
     }
 
     /// <summary>
     /// Decorates the specified service type descriptor inside <see cref="IServiceCollection"/>.
     /// </summary>
     /// <typeparam name="T">Service type to be decorated</typeparam>
-    public static IServiceCollection Intercept(this IServiceCollection services, Type type, ServiceLifetime serviceLifetime = ServiceLifetime.Scoped)
+    public static InterceptionBuilder Intercept(this InterceptionBuilder builder, Type type, ServiceLifetime serviceLifetime = ServiceLifetime.Scoped)
     {
         switch (serviceLifetime)
         {
             case ServiceLifetime.Singleton:
-                services.TryAddSingleton(x => new Decorator((type) => (IMilvaInterceptor)x.GetRequiredService(type)));
+                builder.Services.TryAddSingleton(x => new Decorator((type) => (IMilvaInterceptor)x.GetRequiredService(type)));
                 break;
             case ServiceLifetime.Scoped:
-                services.TryAddScoped(x => new Decorator((type) => (IMilvaInterceptor)x.GetRequiredService(type)));
+                builder.Services.TryAddScoped(x => new Decorator((type) => (IMilvaInterceptor)x.GetRequiredService(type)));
                 break;
             case ServiceLifetime.Transient:
-                services.TryAddTransient(x => new Decorator((type) => (IMilvaInterceptor)x.GetRequiredService(type)));
+                builder.Services.TryAddTransient(x => new Decorator((type) => (IMilvaInterceptor)x.GetRequiredService(type)));
                 break;
             default:
-                services.TryAddScoped(x => new Decorator((type) => (IMilvaInterceptor)x.GetRequiredService(type)));
+                builder.Services.TryAddScoped(x => new Decorator((type) => (IMilvaInterceptor)x.GetRequiredService(type)));
                 break;
         }
 
-        var descriptors = services.Where(x => x.ServiceType == type).ToArray();
+        var descriptors = builder.Services.Where(x => x.ServiceType == type).ToArray();
 
         if (descriptors.Length == 0)
         {
@@ -83,68 +94,184 @@ public static class InterceptionServiceCollectionExtensions
 
         foreach (var descriptor in descriptors)
         {
-            var index = services.IndexOf(descriptor);
+            var index = builder.Services.IndexOf(descriptor);
 
-            services.Insert(index, Intercept(descriptor));
-            services.RemoveAt(index + 1);
+            builder.Services.Insert(index, Intercept(descriptor));
+            builder.Services.RemoveAt(index + 1);
         }
 
-        return services;
+        return builder;
     }
 
     /// <summary>
     /// Decorates the specified service type descriptor inside <see cref="IServiceCollection"/>.
     /// </summary>
     /// <typeparam name="T">Service type to be decorated</typeparam>
-    public static IServiceCollection AddLoggingInterceptor(this IServiceCollection services, Action<ILogInterceptionOptions> interceptionOptions = null)
+    public static InterceptionBuilder WithLogInterceptor(this InterceptionBuilder builder, Action<ILogInterceptionOptions> interceptionOptions)
     {
-        if (!services.Any(s => s.ServiceType == typeof(LogInterceptor)))
-            services.AddScoped<LogInterceptor>();
-
         var config = new LogInterceptionOptions();
 
         interceptionOptions?.Invoke(config);
 
-        services.AddSingleton<ILogInterceptionOptions>(config);
+        if (!builder.Services.Any(s => s.ServiceType == typeof(LogInterceptor)))
+            builder.Services.Add(ServiceDescriptor.Describe(typeof(LogInterceptor), typeof(LogInterceptor), config.InterceptorLifetime));
 
-        return services;
+        builder.Services.AddSingleton<ILogInterceptionOptions>(config);
+
+        return builder;
     }
 
     /// <summary>
     /// Decorates the specified service type descriptor inside <see cref="IServiceCollection"/>.
     /// </summary>
     /// <typeparam name="T">Service type to be decorated</typeparam>
-    public static IServiceCollection AddResponseInterceptor(this IServiceCollection services, Action<IResponseInterceptionOptions> interceptionOptions = null)
+    public static InterceptionBuilder WithLogInterceptor(this InterceptionBuilder builder, Func<IServiceProvider, object> extraLoggingPropertiesSelector = null)
     {
-        if (!services.Any(s => s.ServiceType == typeof(ResponseInterceptor)))
-            services.AddScoped<ResponseInterceptor>();
+        if (builder.ConfigurationManager == null)
+            return builder.WithLogInterceptor(interceptionOptions: null);
 
+        var section = builder.ConfigurationManager.GetSection(LogInterceptionOptions.SectionName);
+
+        builder.Services.AddOptions<LogInterceptionOptions>()
+                        .Bind(section)
+                        .ValidateDataAnnotations();
+
+        builder.Services.PostConfigure<LogInterceptionOptions>(opt =>
+        {
+            opt.ExtraLoggingPropertiesSelector = extraLoggingPropertiesSelector ?? opt.ExtraLoggingPropertiesSelector;
+        });
+
+        var options = (ILogInterceptionOptions)section.Get<LogInterceptionOptions>();
+
+        options.ExtraLoggingPropertiesSelector = extraLoggingPropertiesSelector ?? options.ExtraLoggingPropertiesSelector;
+
+        builder.WithLogInterceptor(interceptionOptions: (opt) =>
+        {
+            opt.InterceptorLifetime = options.InterceptorLifetime;
+            opt.ExtraLoggingPropertiesSelector = options.ExtraLoggingPropertiesSelector;
+            opt.LogDefaultParameters = options.LogDefaultParameters;
+            opt.ExcludeResponseMetadataFromLog = options.ExcludeResponseMetadataFromLog;
+            opt.AsyncLogging = options.AsyncLogging;
+        });
+
+        return builder;
+    }
+
+    /// <summary>
+    /// Decorates the specified service type descriptor inside <see cref="IServiceCollection"/>.
+    /// </summary>
+    /// <typeparam name="T">Service type to be decorated</typeparam>
+    public static InterceptionBuilder WithResponseInterceptor(this InterceptionBuilder builder, Action<IResponseInterceptionOptions> interceptionOptions)
+    {
         var config = new ResponseInterceptionOptions();
 
         interceptionOptions?.Invoke(config);
 
-        services.AddSingleton<IResponseInterceptionOptions>(config);
+        if (!builder.Services.Any(s => s.ServiceType == typeof(ResponseInterceptor)))
+            builder.Services.Add(ServiceDescriptor.Describe(typeof(ResponseInterceptor), typeof(ResponseInterceptor), config.InterceptorLifetime));
 
-        return services;
+        builder.Services.AddSingleton<IResponseInterceptionOptions>(config);
+
+        return builder;
     }
 
     /// <summary>
     /// Decorates the specified service type descriptor inside <see cref="IServiceCollection"/>.
     /// </summary>
     /// <typeparam name="T">Service type to be decorated</typeparam>
-    public static IServiceCollection AddCacheInterceptor(this IServiceCollection services, Action<ICacheInterceptionOptions> interceptionOptions = null)
+    public static InterceptionBuilder WithResponseInterceptor(this InterceptionBuilder builder,
+                                                              Func<HideByRoleAttribute, bool> hideByRoleFunc = null,
+                                                              Func<string, IMilvaLocalizer, Type, string, string> applyLocalizationFunc = null)
     {
-        if (!services.Any(s => s.ServiceType == typeof(CacheInterceptor)))
-            services.AddScoped<CacheInterceptor>();
+        if (builder.ConfigurationManager == null)
+            return builder.WithResponseInterceptor(interceptionOptions: null);
 
+        var section = builder.ConfigurationManager.GetSection(ResponseInterceptionOptions.SectionName);
+
+        builder.Services.AddOptions<ResponseInterceptionOptions>()
+                        .Bind(section)
+                        .ValidateDataAnnotations();
+
+        builder.Services.PostConfigure<ResponseInterceptionOptions>(opt =>
+        {
+            opt.HideByRoleFunc = hideByRoleFunc ?? opt.HideByRoleFunc;
+            opt.ApplyLocalizationFunc = applyLocalizationFunc ?? opt.ApplyLocalizationFunc;
+        });
+
+        var options = section.Get<ResponseInterceptionOptions>();
+
+        options.HideByRoleFunc = hideByRoleFunc ?? options.HideByRoleFunc;
+        options.ApplyLocalizationFunc = applyLocalizationFunc ?? options.ApplyLocalizationFunc;
+
+        builder.WithResponseInterceptor(interceptionOptions: (opt) =>
+        {
+            opt.InterceptorLifetime = options.InterceptorLifetime;
+            opt.TranslateMetadata = options.TranslateMetadata;
+            opt.TranslateResultMessages = options.TranslateResultMessages;
+            opt.ApplyLocalizationFunc = options.ApplyLocalizationFunc;
+            opt.HideByRoleFunc = options.HideByRoleFunc;
+        });
+
+        return builder;
+    }
+
+    /// <summary>
+    /// Decorates the specified service type descriptor inside <see cref="IServiceCollection"/>.
+    /// </summary>
+    /// <typeparam name="T">Service type to be decorated</typeparam>
+    public static InterceptionBuilder WithCacheInterceptor(this InterceptionBuilder builder, Action<ICacheInterceptionOptions> interceptionOptions)
+    {
         var config = new CacheInterceptionOptions();
 
         interceptionOptions?.Invoke(config);
 
-        services.AddSingleton<ICacheInterceptionOptions>(config);
+        if (!builder.Services.Any(s => s.ServiceType == typeof(CacheInterceptor)))
+            builder.Services.Add(ServiceDescriptor.Describe(typeof(CacheInterceptor), typeof(CacheInterceptor), config.InterceptorLifetime));
 
-        return services;
+        builder.Services.AddSingleton<ICacheInterceptionOptions>(config);
+
+        return builder;
     }
+
+    /// <summary>
+    /// Decorates the specified service type descriptor inside <see cref="IServiceCollection"/>.
+    /// </summary>
+    /// <typeparam name="T">Service type to be decorated</typeparam>
+    public static InterceptionBuilder WithCacheInterceptor(this InterceptionBuilder builder)
+    {
+        if (builder.ConfigurationManager == null)
+            return builder.WithCacheInterceptor(interceptionOptions: null);
+
+        var section = builder.ConfigurationManager.GetSection(CacheInterceptionOptions.SectionName);
+
+        builder.Services.AddOptions<CacheInterceptionOptions>()
+                        .Bind(section)
+                        .ValidateDataAnnotations();
+
+        var options = section.Get<CacheInterceptionOptions>();
+
+        builder.WithCacheInterceptor(interceptionOptions: (opt) =>
+        {
+            opt.InterceptorLifetime = options.InterceptorLifetime;
+            opt.CacheAccessorAssemblyQualifiedName = options.CacheAccessorAssemblyQualifiedName;
+        });
+
+        return builder;
+    }
+
+    /// <summary>
+    /// Decorates the specified service type descriptor inside <see cref="IServiceCollection"/>.
+    /// </summary>
+    /// <typeparam name="T">Service type to be decorated</typeparam>
+    public static InterceptionBuilder WithActivityInterceptor(this InterceptionBuilder builder, ServiceLifetime serviceLifetime = ServiceLifetime.Scoped)
+    {
+        if (!builder.Services.Any(s => s.ServiceType == typeof(ActivityInterceptor)))
+            builder.Services.Add(ServiceDescriptor.Describe(typeof(ActivityInterceptor), typeof(ActivityInterceptor), serviceLifetime));
+
+        return builder;
+    }
+
+
 
     /// <summary>
     /// Decorates the types added to the service collection to intercept them with Castle.Core's ProxyGenerator.

@@ -10,6 +10,7 @@ using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq.Expressions;
 using System.Reflection;
+using System.Reflection.Emit;
 using System.Text.Json;
 
 namespace Milvasoft.Core;
@@ -289,6 +290,15 @@ public static class CommonHelper
     public static T ToObject<T>(this string value) where T : class
         => string.IsNullOrWhiteSpace(value) ? null : JsonSerializer.Deserialize<T>(value);
 
+    /// <summary>
+    /// Converts <paramref name="value"/> to <paramref name="returnType"/>.
+    /// </summary>
+    /// <param name="value"></param>
+    /// <param name="returnType"></param>
+    /// <returns></returns>
+    public static object ToObject(this string value, Type returnType)
+        => string.IsNullOrWhiteSpace(value) ? null : JsonSerializer.Deserialize(value, returnType);
+
     #region DateTime
 
     /// <summary>
@@ -431,4 +441,24 @@ public static class CommonHelper
     /// <param name="value"></param>
     /// <returns></returns>
     public static string MilvaNormalize(this string value) => !string.IsNullOrWhiteSpace(value) ? value.ToLower().ToUpperInvariant() : null;
+
+    public static Type CreateType(string typeName)
+    {
+
+        var assemblyBuilder = AssemblyBuilder.DefineDynamicAssembly(new AssemblyName(typeName), AssemblyBuilderAccess.Run);
+
+        ModuleBuilder moduleBuilder = assemblyBuilder.DefineDynamicModule("MainModule");
+
+        System.Reflection.Emit.TypeBuilder typeBuilder = moduleBuilder.DefineType(typeName
+            , TypeAttributes.Public
+              | TypeAttributes.Class
+              | TypeAttributes.AutoClass
+              | TypeAttributes.AnsiClass
+              | TypeAttributes.BeforeFieldInit
+              | TypeAttributes.AutoLayout);
+
+        typeBuilder.DefineDefaultConstructor(MethodAttributes.Public | MethodAttributes.SpecialName | MethodAttributes.RTSpecialName);
+
+        return typeBuilder.CreateType();
+    }
 }

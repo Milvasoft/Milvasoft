@@ -1,7 +1,15 @@
-﻿namespace Milvasoft.Interception.Interceptors.Logging;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Milvasoft.Core.Abstractions;
+using Milvasoft.Core.Extensions;
+
+namespace Milvasoft.Interception.Interceptors.Logging;
 
 public class LogInterceptionOptions : ILogInterceptionOptions
 {
+    public static string SectionName { get; } = $"{MilvaOptionsExtensions.ParentSectionName}:Interception:Log";
+
+    public ServiceLifetime InterceptorLifetime { get; set; } = ServiceLifetime.Scoped;
+
     /// <summary>
     /// It determines whether the values that the Milvasoft library logs with async.
     /// </summary>
@@ -24,8 +32,10 @@ public class LogInterceptionOptions : ILogInterceptionOptions
 }
 
 
-public interface ILogInterceptionOptions
+public interface ILogInterceptionOptions : IMilvaOptions
 {
+    public ServiceLifetime InterceptorLifetime { get; set; }
+    
     /// <summary>
     /// It determines whether the values that the Milvasoft library logs with async.
     /// </summary>

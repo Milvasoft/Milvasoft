@@ -18,6 +18,15 @@
             <param name="key"></param>
             <returns></returns>
         </member>
+        <member name="M:Milvasoft.Core.Abstractions.Cache.ICacheAccessor.GetAsync(System.String,System.Type)">
+            <summary>
+            Gets <paramref name="key"/>'s value.
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="key"></param>
+            <param name="returnType"></param>
+            <returns></returns>
+        </member>
         <member name="M:Milvasoft.Core.Abstractions.Cache.ICacheAccessor.GetAsync(System.String)">
             <summary>
             Gets <paramref name="key"/>'s value.
@@ -859,6 +868,14 @@
             </summary>
             <typeparam name="T"></typeparam>
             <param name="value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Core.CommonHelper.ToObject(System.String,System.Type)">
+            <summary>
+            Converts <paramref name="value"/> to <paramref name="returnType"/>.
+            </summary>
+            <param name="value"></param>
+            <param name="returnType"></param>
             <returns></returns>
         </member>
         <member name="M:Milvasoft.Core.CommonHelper.IsBetween(System.DateTime,System.TimeSpan,System.TimeSpan,System.Boolean)">

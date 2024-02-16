@@ -33,6 +33,7 @@ public interface IResponse
     /// <param name="delimiter">The delimiter to use for separating messages (default is ';').</param>
     /// <returns>A string representation of the response messages.</returns>
     string MessagesToString(string delimiter = ";");
+
 }
 
 /// <summary>

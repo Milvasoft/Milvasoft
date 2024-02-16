@@ -4,6 +4,21 @@ using Milvasoft.Components.Rest.Response;
 namespace Milvasoft.Components.Rest;
 public static class RestExtensions
 {
+    public static bool TryConvertToResponse(object obj, out IResponse response)
+    {
+        try
+        {
+            response = (IResponse)obj;
+        }
+        catch
+        {
+            response = null;
+            return false;
+        }
+
+        return true;
+    }
+
     #region Success
 
     /// <summary>

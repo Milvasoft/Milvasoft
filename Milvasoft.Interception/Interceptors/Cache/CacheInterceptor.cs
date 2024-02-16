@@ -1,8 +1,10 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Milvasoft.Caching.Redis;
 using Milvasoft.Components.Rest.Response;
 using Milvasoft.Core;
 using Milvasoft.Core.Abstractions.Cache;
 using Milvasoft.Interception.Decorator;
+using System.Text.Json;
 
 namespace Milvasoft.Interception.Interceptors.Cache;
 
@@ -19,8 +21,12 @@ public class CacheInterceptor : IMilvaInterceptor
         _serviceProvider = serviceProvider;
         _cacheInterceptionOptions = serviceProvider.GetService<ICacheInterceptionOptions>();
 
-        if (_cacheInterceptionOptions != null && _cacheInterceptionOptions.CacheAccessorType != null)
-            _cache = (ICacheAccessor)serviceProvider.GetService(_cacheInterceptionOptions.CacheAccessorType);
+        if (_cacheInterceptionOptions != null && _cacheInterceptionOptions.CacheAccessorAssemblyQualifiedName != null)
+        {
+            var accessorType = _cacheInterceptionOptions.GetAccessorType();
+
+            _cache = (ICacheAccessor)serviceProvider.GetService(accessorType);
+        }
     }
 
     public async Task OnInvoke(Call call)
@@ -32,15 +38,17 @@ public class CacheInterceptor : IMilvaInterceptor
 
             var cacheAttribute = call.GetInterceptorAttribute<CacheAttribute>();
 
-            if (cacheAttribute.Key != null)
+            if (cacheAttribute?.Key != null)
             {
                 cacheKey = $"{cacheAttribute.Key}_{call.Arguments.ToJson()}";
 
-                var value = await _cache.GetAsync<object>(cacheKey);
+                var returnType = call.ReturnType.GetGenericTypeDefinition() == typeof(Task<>) ? call.ReturnType.GenericTypeArguments.FirstOrDefault() : call.ReturnType;
+
+                var value = await _cache.GetAsync(cacheKey, returnType);
 
                 if (value != null)
                 {
-                    if (value is IResponse)
+                    if (returnType.IsAssignableTo(typeof(IResponse)))
                     {
                         value.GetType().GetProperty("IsCachedData").SetValue(value, true);
                     }

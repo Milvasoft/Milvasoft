@@ -33,13 +33,14 @@ public class ListResponse<T> : Response<List<T>>
     /// <summary>
     /// Aggregation results.
     /// </summary>
+    [DataMember]
     public List<AggregationResult> AggregationResults { get; set; }
 
-    private ListResponse() : base()
+    public ListResponse() : base()
     {
     }
 
-    private ListResponse(string message) : base()
+    public ListResponse(string message) : base()
     {
         Messages = [new() { Message = message }];
     }

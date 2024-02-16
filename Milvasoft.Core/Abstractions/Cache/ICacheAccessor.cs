@@ -21,6 +21,15 @@ public interface ICacheAccessor
     /// <summary>
     /// Gets <paramref name="key"/>'s value.
     /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="key"></param>
+    /// <param name="returnType"></param>
+    /// <returns></returns>
+    Task<object> GetAsync(string key, Type returnType);
+
+    /// <summary>
+    /// Gets <paramref name="key"/>'s value.
+    /// </summary>
     /// <param name="key"></param>
     /// <returns></returns>
     Task<string> GetAsync(string key);
