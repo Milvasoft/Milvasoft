@@ -855,11 +855,12 @@
             <param name="value"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Core.CommonHelper.ToJson(System.Object)">
+        <member name="M:Milvasoft.Core.CommonHelper.ToJson(System.Object,System.Text.Json.JsonSerializerOptions)">
             <summary>
             Converts <paramref name="value"/> to <see cref="T:System.String"/>.
             </summary>
             <param name="value"></param>
+            <param name="jsonOptions"></param>
             <returns></returns>
         </member>
         <member name="M:Milvasoft.Core.CommonHelper.ToObject``1(System.String)">

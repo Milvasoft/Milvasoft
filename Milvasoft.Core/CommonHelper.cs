@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.AspNetCore.Http.Json;
+using Microsoft.Extensions.DependencyInjection;
 using Milvasoft.Core.Abstractions.Localization;
 using Milvasoft.Core.EntityBase.Abstract;
 using Milvasoft.Core.EntityBase.Abstract.Auditing;
@@ -278,8 +279,9 @@ public static class CommonHelper
     /// Converts <paramref name="value"/> to <see cref="string"/>.
     /// </summary>
     /// <param name="value"></param>
+    /// <param name="jsonOptions"></param>
     /// <returns></returns>
-    public static string ToJson(this object value) => JsonSerializer.Serialize(value);
+    public static string ToJson(this object value, JsonSerializerOptions jsonOptions = null) => JsonSerializer.Serialize(value, jsonOptions);
 
     /// <summary>
     /// Converts <paramref name="value"/> to <typeparamref name="T"/>.

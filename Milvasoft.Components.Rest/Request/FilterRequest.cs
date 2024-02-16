@@ -5,6 +5,7 @@ using ExpressionBuilder.Operations;
 using Milvasoft.Components.Rest.Enums;
 using Milvasoft.Core;
 using Milvasoft.Core.Extensions;
+using System.Collections;
 using System.Linq.Expressions;
 
 namespace Milvasoft.Components.Rest.Request;
@@ -47,8 +48,11 @@ public class FilterRequest
 
             if (propertyType == typeof(Guid))
                 value = Guid.Parse(filter.Value.ToString());
-            else
-                value = Convert.ChangeType(filter.Value, propertyType);
+            else if(propertyType.IsGenericType && typeof(IList).IsAssignableFrom(propertyType))
+            {
+                throw new NotImplementedException("List search not implemented yet!");
+            }
+            else value = Convert.ChangeType(filter.Value, propertyType);
 
             if (propertyType == typeof(DateTime))
             {
