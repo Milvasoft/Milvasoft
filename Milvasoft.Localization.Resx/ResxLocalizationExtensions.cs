@@ -56,7 +56,7 @@ public static class ResxLocalizationExtensions
     /// <param name="configurationManager"></param>
     /// <param name="keyFormatDelegate">Post configure property.</param>
     /// <returns></returns>
-    public static LocalizationBuilder WithResxManager<TResource>(this LocalizationBuilder builder, string resourceFolderPath = null, string resourcesPath = null, Func<string, string> keyFormatDelegate = null)
+    public static LocalizationBuilder WithResxManager<TResource>(this LocalizationBuilder builder,  string resourcesPath = null, string resourceFolderPath = null, Func<string, string> keyFormatDelegate = null)
     {
         if (builder.ConfigurationManager == null)
             return builder.WithResxManager<TResource>(localizationOptions: null);
@@ -71,12 +71,11 @@ public static class ResxLocalizationExtensions
                 .Bind(section)
                 .ValidateDataAnnotations();
 
-
         builder.Services.PostConfigure<ResxLocalizationOptions>(opt =>
         {
             opt.KeyFormatDelegate = keyFormatDelegate ?? opt.KeyFormatDelegate;
-            opt.ResourcesFolderPath = resourceFolderPath ?? opt.ResourcesFolderPath;
             opt.ResourcesPath = resourcesPath ?? opt.ResourcesPath;
+            opt.ResourcesFolderPath = resourceFolderPath ?? opt.ResourcesFolderPath;
         });
 
         builder.Services.PostConfigure<ILocalizationOptions>(opt =>
@@ -98,10 +97,10 @@ public static class ResxLocalizationExtensions
             opt.ManagerLifetime = options.ManagerLifetime;
             opt.MemoryCacheEntryOptions = options.MemoryCacheEntryOptions;
             opt.UseInMemoryCache = options.UseInMemoryCache;
-            opt.KeyFormatDelegate = options.KeyFormatDelegate;
             opt.KeyFormat = options.KeyFormat;
-            opt.ResourcesPath = options.ResourcesPath;
-            opt.ResourcesFolderPath = options.ResourcesFolderPath;
+            opt.KeyFormatDelegate = keyFormatDelegate ?? opt.KeyFormatDelegate;
+            opt.ResourcesPath = resourcesPath ?? opt.ResourcesPath;
+            opt.ResourcesFolderPath = resourceFolderPath ?? opt.ResourcesFolderPath;
         });
 
         return builder;

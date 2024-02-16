@@ -1,4 +1,5 @@
-﻿using Milvasoft.Localization.Builder;
+﻿using Milvasoft.Core.Extensions;
+using Milvasoft.Localization.Builder;
 
 namespace Milvasoft.Localization.Resx;
 
@@ -8,6 +9,8 @@ namespace Milvasoft.Localization.Resx;
 /// </summary>
 public class ResxLocalizationOptions : LocalizationOptions
 {
+    public new static string SectionName { get; } = $"{MilvaOptionsExtensions.ParentSectionName}:Localization:Resx";
+
     /// <summary>
     /// Key format.
     /// 

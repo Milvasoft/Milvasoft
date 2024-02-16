@@ -61,10 +61,6 @@ public static class ServiceCollectionExtensions
                         .Bind(section)
                         .ValidateDataAnnotations();
 
-        builder.Services.AddOptions<JsonFileOperationsOptions>()
-                        .Bind(section)
-                        .ValidateDataAnnotations();
-
         builder.Services.PostConfigure<JsonFileOperationsOptions>(opt =>
         {
             opt.Encoding = encoding ?? opt.Encoding;
@@ -76,7 +72,6 @@ public static class ServiceCollectionExtensions
         builder.WithJsonOperations(opt =>
         {
             opt.Lifetime = options.Lifetime;
-            opt.BasePath = options.BasePath;
             opt.EncryptionKey = options.EncryptionKey;
             opt.CultureCode = options.CultureCode;
             opt.Encoding = encoding ?? opt.Encoding;
