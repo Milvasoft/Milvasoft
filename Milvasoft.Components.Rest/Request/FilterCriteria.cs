@@ -8,7 +8,7 @@ namespace Milvasoft.Components.Rest.Request;
 public class FilterCriteria
 {
     /// <summary>
-    /// Gets or sets the name of the column on which the filter is applied.
+    /// Gets or sets the name of the column on which the filter is applied. Collection searchs are not supported.
     /// </summary>
     public string FilterBy { get; set; }
 

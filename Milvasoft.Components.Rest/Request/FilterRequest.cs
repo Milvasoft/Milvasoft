@@ -16,7 +16,7 @@ namespace Milvasoft.Components.Rest.Request;
 public class FilterRequest
 {
     /// <summary>
-    /// Filter details
+    /// Filter details.
     /// </summary>
     public virtual List<FilterCriteria> Criterias { get; set; }
 
@@ -50,7 +50,7 @@ public class FilterRequest
                 value = Guid.Parse(filter.Value.ToString());
             else if(propertyType.IsGenericType && typeof(IList).IsAssignableFrom(propertyType))
             {
-                throw new NotImplementedException("List search not implemented yet!");
+                return expression;
             }
             else value = Convert.ChangeType(filter.Value, propertyType);
 
