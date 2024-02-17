@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using Milvasoft.Core.EntityBase.Abstract.Auditing;
+using Milvasoft.Core.EntityBases.Abstract.Auditing;
 
-namespace Milvasoft.Core.EntityBase.Abstract;
+namespace Milvasoft.Core.EntityBases.Abstract;
 
 /// <summary>
 /// Determines entity is auditable with modifier and modification date.

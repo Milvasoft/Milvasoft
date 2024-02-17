@@ -40,7 +40,13 @@ public class AggregationCriteria
 
         var prop = InitializeFields(query, runAsync);
 
-        var propertySelector = CreatePropertySelector();
+        var propertySelector = _queryProviderType switch
+        {
+            QueryProviderType.List => CommonHelper.DynamicInvokeCreatePropertySelector(nameof(CommonHelper.CreateRequiredPropertySelector), _entityType, prop),
+            QueryProviderType.Enumerable => CommonHelper.DynamicInvokeCreatePropertySelector(nameof(CommonHelper.CreateRequiredPropertySelectorFuction), _entityType, prop),
+            QueryProviderType.AsyncQueryable => CommonHelper.DynamicInvokeCreatePropertySelector(nameof(CommonHelper.CreateRequiredPropertySelector), _entityType, prop),
+            _ => CommonHelper.DynamicInvokeCreatePropertySelector(nameof(CommonHelper.CreateRequiredPropertySelector), _entityType, prop),
+        }; ;
 
         if (_type == AggregationType.Count)
         {
@@ -140,28 +146,6 @@ public class AggregationCriteria
         }
     }
 
-    private object CreatePropertySelector()
-    {
-        string selectorMethodName = _queryProviderType switch
-        {
-            QueryProviderType.List => nameof(CommonHelper.CreateRequiredPropertySelector),
-            QueryProviderType.Enumerable => nameof(CommonHelper.CreateRequiredPropertySelectorFuction),
-            QueryProviderType.AsyncQueryable => nameof(CommonHelper.CreateRequiredPropertySelector),
-            _ => nameof(CommonHelper.CreateRequiredPropertySelector),
-        };
-
-        // Step 1: Get the MethodInfo object for the generic method
-        var selectorMethod = typeof(CommonHelper).GetMethod(selectorMethodName);
-        
-        // Step 2: Construct the method generic with desired type of arguments
-        MethodInfo genericSelectorMethod = selectorMethod.MakeGenericMethod(_entityType, _propType);
-
-        // Step 3: Call the generic method with the specified type arguments
-        var propertySelectorResult = genericSelectorMethod.Invoke(null, new object[] { _aggregateBy });
-
-        return propertySelectorResult;
-    }
-
     private static string GetMethodName(AggregationType type, bool runAsync) => type switch
     {
         AggregationType.Avg => runAsync ? nameof(EntityFrameworkQueryableExtensions.AverageAsync) : nameof(Queryable.Average),
@@ -242,8 +226,8 @@ public class AggregationCriteria
         return prop;
     }
 
-    private static bool IsNonNullableValueType(Type type) =>  type.IsValueType && Nullable.GetUnderlyingType(type) == null;
-    
+    private static bool IsNonNullableValueType(Type type) => type.IsValueType && Nullable.GetUnderlyingType(type) == null;
+
     private enum QueryProviderType
     {
         List,

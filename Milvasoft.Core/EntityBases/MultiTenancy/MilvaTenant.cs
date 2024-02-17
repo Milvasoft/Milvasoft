@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using Milvasoft.Core.EntityBase.Abstract;
+using Milvasoft.Core.EntityBases.Abstract;
 
-namespace Milvasoft.Core.EntityBase.MultiTenancy;
+namespace Milvasoft.Core.EntityBases.MultiTenancy;
 
 /// <summary>
 /// Represents a Tenant of the application.

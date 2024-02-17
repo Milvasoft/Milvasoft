@@ -821,9 +821,18 @@
             <param name="propertyName"></param>
             <returns></returns>
         </member>
+        <member name="M:Milvasoft.Core.CommonHelper.DynamicInvokeCreatePropertySelector(System.String,System.Type,System.Reflection.PropertyInfo)">
+            <summary>
+            Dynamically gets method and invokes <see cref="T:Milvasoft.Core.CommonHelper"/> create property selector methods.
+            </summary>
+            <param name="createPropertySelectorMethodName"></param>
+            <param name="entityType"></param>
+            <param name="prop"></param>
+            <returns></returns>
+        </member>
         <member name="M:Milvasoft.Core.CommonHelper.CreateIsDeletedFalseExpression``1">
             <summary>
-            Gets <b>entity => entity.IsDeleted == false</b> expression, if <typeparamref name="TEntity"/> is assignable from <see cref="T:Milvasoft.Core.EntityBase.Abstract.IFullAuditable`1"/>.
+            Gets <b>entity => entity.IsDeleted == false</b> expression, if <typeparamref name="TEntity"/> is assignable from <see cref="T:Milvasoft.Core.EntityBases.Abstract.IFullAuditable`1"/>.
             </summary>
             <returns></returns>
         </member>
@@ -961,857 +970,859 @@
             <param name="value"></param>
             <returns></returns>
         </member>
-        <member name="T:Milvasoft.Core.EntityBase.Abstract.Auditing.IHasCreator`1">
+        <member name="M:Milvasoft.Core.CommonHelper.AssignUpdatedProperties``2(``0,``1)">
+            <summary>
+            Updates entity matching properties with <paramref name="dto"/>'s not null properties.
+            </summary>
+            <typeparam name="TDto"></typeparam>
+            <typeparam name="TEntity"></typeparam>
+            <param name="dto"></param>
+            <param name="entity"></param>
+        </member>
+        <member name="T:Milvasoft.Core.EntityBases.Abstract.Auditing.IHasCreator`1">
             <summary>
             Determines entity has creator.
             </summary>
             <typeparam name="TUserKey"></typeparam>
         </member>
-        <member name="P:Milvasoft.Core.EntityBase.Abstract.Auditing.IHasCreator`1.CreatorUserId">
+        <member name="P:Milvasoft.Core.EntityBases.Abstract.Auditing.IHasCreator`1.CreatorUserId">
             <summary>
             Creator of entity.
             </summary>
         </member>
-        <member name="T:Milvasoft.Core.EntityBase.Abstract.Auditing.IHasCreator">
+        <member name="T:Milvasoft.Core.EntityBases.Abstract.Auditing.IHasCreator">
             <summary>
             Determines entity has creator.
             </summary>
         </member>
-        <member name="P:Milvasoft.Core.EntityBase.Abstract.Auditing.IHasCreator.CreatorUserId">
+        <member name="P:Milvasoft.Core.EntityBases.Abstract.Auditing.IHasCreator.CreatorUserId">
             <summary>
             Creator of entity.
             </summary>
         </member>
-        <member name="T:Milvasoft.Core.EntityBase.Abstract.Auditing.IHasDeleter`1">
+        <member name="T:Milvasoft.Core.EntityBases.Abstract.Auditing.IHasDeleter`1">
             <summary>
             Determines entity has deleter.
             </summary>
             <typeparam name="TUserKey"></typeparam>
         </member>
-        <member name="P:Milvasoft.Core.EntityBase.Abstract.Auditing.IHasDeleter`1.DeleterUserId">
+        <member name="P:Milvasoft.Core.EntityBases.Abstract.Auditing.IHasDeleter`1.DeleterUserId">
             <summary>
             Deleter of entity.
             </summary>er
         </member>
-        <member name="T:Milvasoft.Core.EntityBase.Abstract.Auditing.IHasDeleter">
+        <member name="T:Milvasoft.Core.EntityBases.Abstract.Auditing.IHasDeleter">
             <summary>
             Determines entity has deleter.
             </summary>
         </member>
-        <member name="P:Milvasoft.Core.EntityBase.Abstract.Auditing.IHasDeleter.DeleterUserId">
+        <member name="P:Milvasoft.Core.EntityBases.Abstract.Auditing.IHasDeleter.DeleterUserId">
             <summary>
             Deleter of entity.
             </summary>er
         </member>
-        <member name="T:Milvasoft.Core.EntityBase.Abstract.Auditing.IHasModifier`1">
+        <member name="T:Milvasoft.Core.EntityBases.Abstract.Auditing.IHasModifier`1">
             <summary>
             Determines entity has modifier.
             </summary>
             <typeparam name="TUserKey"></typeparam>
         </member>
-        <member name="P:Milvasoft.Core.EntityBase.Abstract.Auditing.IHasModifier`1.LastModifierUserId">
+        <member name="P:Milvasoft.Core.EntityBases.Abstract.Auditing.IHasModifier`1.LastModifierUserId">
             <summary>
             Last modifier of entity.
             </summary>
         </member>
-        <member name="T:Milvasoft.Core.EntityBase.Abstract.Auditing.IHasModifier">
+        <member name="T:Milvasoft.Core.EntityBases.Abstract.Auditing.IHasModifier">
             <summary>
             Determines entity has modifier.
             </summary>
         </member>
-        <member name="P:Milvasoft.Core.EntityBase.Abstract.Auditing.IHasModifier.LastModifierUserId">
+        <member name="P:Milvasoft.Core.EntityBases.Abstract.Auditing.IHasModifier.LastModifierUserId">
             <summary>
             Last modifier of entity.
             </summary>
         </member>
-        <member name="T:Milvasoft.Core.EntityBase.Abstract.Auditing.ISoftDeletable">
+        <member name="T:Milvasoft.Core.EntityBases.Abstract.Auditing.ISoftDeletable">
             <summary>
             Determines entity has deletion date.
             </summary>
         </member>
-        <member name="P:Milvasoft.Core.EntityBase.Abstract.Auditing.ISoftDeletable.DeletionDate">
+        <member name="P:Milvasoft.Core.EntityBases.Abstract.Auditing.ISoftDeletable.DeletionDate">
             <summary>
             Deletion date of entity.
             </summary>
         </member>
-        <member name="P:Milvasoft.Core.EntityBase.Abstract.Auditing.ISoftDeletable.IsDeleted">
+        <member name="P:Milvasoft.Core.EntityBases.Abstract.Auditing.ISoftDeletable.IsDeleted">
             <summary>
             Gets or sets a value indicating whether IsDeleted.
             </summary>
         </member>
-        <member name="T:Milvasoft.Core.EntityBase.Abstract.IAuditable`1">
+        <member name="T:Milvasoft.Core.EntityBases.Abstract.IAuditable`1">
             <summary>
             Determines entity is auditable with modifier and modification date.
             </summary>
             <typeparam name="TKey"></typeparam>
         </member>
-        <member name="P:Milvasoft.Core.EntityBase.Abstract.IAuditable`1.LastModificationDate">
+        <member name="P:Milvasoft.Core.EntityBases.Abstract.IAuditable`1.LastModificationDate">
             <summary>
             Last modification date of entity.
             </summary>
         </member>
-        <member name="T:Milvasoft.Core.EntityBase.Abstract.IAuditable`2">
+        <member name="T:Milvasoft.Core.EntityBases.Abstract.IAuditable`2">
             <summary>
             Determines entity is auditable with modifier and modification date.
             </summary>
             <typeparam name="TKey"></typeparam>
             <typeparam name="TUserKey"></typeparam>
         </member>
-        <member name="T:Milvasoft.Core.EntityBase.Abstract.IAuditable`3">
+        <member name="T:Milvasoft.Core.EntityBases.Abstract.IAuditable`3">
             <summary>
-            Adds navigation properties to <see cref="T:Milvasoft.Core.EntityBase.Abstract.IAuditable`1"/> interface for user.
+            Adds navigation properties to <see cref="T:Milvasoft.Core.EntityBases.Abstract.IAuditable`1"/> interface for user.
             </summary>
             <typeparam name="TKey">Primary key of the user</typeparam>
             <typeparam name="TUser">Type of the user</typeparam>
             <typeparam name="TUserKey">Type of the user</typeparam>
         </member>
-        <member name="P:Milvasoft.Core.EntityBase.Abstract.IAuditable`3.LastModifierUser">
+        <member name="P:Milvasoft.Core.EntityBases.Abstract.IAuditable`3.LastModifierUser">
             <summary>
             Reference to the last modifier user of this entity.
             </summary>
         </member>
-        <member name="T:Milvasoft.Core.EntityBase.Abstract.IAuditableWithCustomUser`3">
+        <member name="T:Milvasoft.Core.EntityBases.Abstract.IAuditableWithCustomUser`3">
             <summary>
-            Adds navigation properties to <see cref="T:Milvasoft.Core.EntityBase.Abstract.IAuditable`1"/> interface for custom user.
+            Adds navigation properties to <see cref="T:Milvasoft.Core.EntityBases.Abstract.IAuditable`1"/> interface for custom user.
             </summary>
             <typeparam name="TKey">Primary key of the user</typeparam>
             <typeparam name="TUser">Type of the user</typeparam>
             <typeparam name="TUserKey">Type of the user</typeparam>
         </member>
-        <member name="P:Milvasoft.Core.EntityBase.Abstract.IAuditableWithCustomUser`3.LastModifierUser">
+        <member name="P:Milvasoft.Core.EntityBases.Abstract.IAuditableWithCustomUser`3.LastModifierUser">
             <summary>
             Reference to the last modifier user of this entity.
             </summary>
         </member>
-        <member name="T:Milvasoft.Core.EntityBase.Abstract.IAuditableWithoutUser`1">
+        <member name="T:Milvasoft.Core.EntityBases.Abstract.IAuditableWithoutUser`1">
             <summary>
             Determines entity is auditable without modifier.
             </summary>
             <typeparam name="TKey"></typeparam>
         </member>
-        <member name="P:Milvasoft.Core.EntityBase.Abstract.IAuditableWithoutUser`1.LastModificationDate">
+        <member name="P:Milvasoft.Core.EntityBases.Abstract.IAuditableWithoutUser`1.LastModificationDate">
             <summary>
             Last modification date of entity.
             </summary>
         </member>
-        <member name="T:Milvasoft.Core.EntityBase.Abstract.IBaseEntity`1">
+        <member name="T:Milvasoft.Core.EntityBases.Abstract.IBaseEntity`1">
             <summary>
             Defines interface for base entity type. All entities in the system must implement this interface.
             </summary>
             <typeparam name="TKey"></typeparam>
         </member>
-        <member name="T:Milvasoft.Core.EntityBase.Abstract.IBaseEntity">
+        <member name="T:Milvasoft.Core.EntityBases.Abstract.IBaseEntity">
             <summary>
             Defines interface for base entity type. All entities in the system must implement this interface.
             </summary>
         </member>
-        <member name="T:Milvasoft.Core.EntityBase.Abstract.IEntityBase`1">
+        <member name="T:Milvasoft.Core.EntityBases.Abstract.IEntityBase`1">
             <summary>
             Defines interface for base entity type. All entities in the system must implement this interface.
             </summary>
             <typeparam name="TKey"></typeparam>
         </member>
-        <member name="P:Milvasoft.Core.EntityBase.Abstract.IEntityBase`1.Id">
+        <member name="P:Milvasoft.Core.EntityBases.Abstract.IEntityBase`1.Id">
             <summary>
             Unique identifier for this entity.
             </summary>
         </member>
-        <member name="T:Milvasoft.Core.EntityBase.Abstract.IMilvaEntity">
+        <member name="T:Milvasoft.Core.EntityBases.Abstract.IMilvaEntity">
             <summary>
             Dummy interface given for constraint
             </summary>
         </member>
-        <member name="T:Milvasoft.Core.EntityBase.Abstract.ICreationAuditable`1">
+        <member name="T:Milvasoft.Core.EntityBases.Abstract.ICreationAuditable`1">
             <summary>
             Determines entity's creation is auditable with user information.
             </summary>
             <typeparam name="TKey"></typeparam>
         </member>
-        <member name="P:Milvasoft.Core.EntityBase.Abstract.ICreationAuditable`1.CreationDate">
+        <member name="P:Milvasoft.Core.EntityBases.Abstract.ICreationAuditable`1.CreationDate">
             <summary>
             Creation date of entity.
             </summary>
         </member>
-        <member name="T:Milvasoft.Core.EntityBase.Abstract.ICreationAuditable`2">
+        <member name="T:Milvasoft.Core.EntityBases.Abstract.ICreationAuditable`2">
             <summary>
             Determines entity's creation is auditable with user information.
             </summary>
             <typeparam name="TKey"></typeparam>
             <typeparam name="TUserKey"></typeparam>
         </member>
-        <member name="T:Milvasoft.Core.EntityBase.Abstract.ICreationAuditable`3">
+        <member name="T:Milvasoft.Core.EntityBases.Abstract.ICreationAuditable`3">
             <summary>
-            Adds navigation properties to <see cref="T:Milvasoft.Core.EntityBase.Abstract.ICreationAuditable`1"/> interface for user.
+            Adds navigation properties to <see cref="T:Milvasoft.Core.EntityBases.Abstract.ICreationAuditable`1"/> interface for user.
             </summary>
             <typeparam name="TKey">Key of the user</typeparam>
             <typeparam name="TUser">Type of the user</typeparam>
             <typeparam name="TUserKey">Type of the user</typeparam>
         </member>
-        <member name="P:Milvasoft.Core.EntityBase.Abstract.ICreationAuditable`3.CreatorUser">
+        <member name="P:Milvasoft.Core.EntityBases.Abstract.ICreationAuditable`3.CreatorUser">
             <summary>
             Reference to the creator user of this entity.
             </summary>
         </member>
-        <member name="T:Milvasoft.Core.EntityBase.Abstract.ICreationAuditableWithCustomUser`3">
+        <member name="T:Milvasoft.Core.EntityBases.Abstract.ICreationAuditableWithCustomUser`3">
             <summary>
-            Adds navigation properties to <see cref="T:Milvasoft.Core.EntityBase.Abstract.ICreationAuditable`1"/> interface for user.
+            Adds navigation properties to <see cref="T:Milvasoft.Core.EntityBases.Abstract.ICreationAuditable`1"/> interface for user.
             </summary>
             <typeparam name="TKey">Key of the user</typeparam>
             <typeparam name="TUser">Type of the user</typeparam>
             <typeparam name="TUserKey">Type of the user</typeparam>
         </member>
-        <member name="P:Milvasoft.Core.EntityBase.Abstract.ICreationAuditableWithCustomUser`3.CreatorUser">
+        <member name="P:Milvasoft.Core.EntityBases.Abstract.ICreationAuditableWithCustomUser`3.CreatorUser">
             <summary>
             Reference to the creator user of this entity.
             </summary>
         </member>
-        <member name="T:Milvasoft.Core.EntityBase.Abstract.ICreationAuditableWithoutUser`1">
+        <member name="T:Milvasoft.Core.EntityBases.Abstract.ICreationAuditableWithoutUser`1">
             <summary>
             Determines entity's creation is auditable.
             </summary>
             <typeparam name="TKey"></typeparam>
         </member>
-        <member name="P:Milvasoft.Core.EntityBase.Abstract.ICreationAuditableWithoutUser`1.CreationDate">
+        <member name="P:Milvasoft.Core.EntityBases.Abstract.ICreationAuditableWithoutUser`1.CreationDate">
             <summary>
             Creation date of entity.
             </summary>
         </member>
-        <member name="T:Milvasoft.Core.EntityBase.Abstract.IFullAuditable`1">
+        <member name="T:Milvasoft.Core.EntityBases.Abstract.IFullAuditable`1">
             <summary>
             Determines entity is fully auditable with user information.
             </summary>
             <typeparam name="TKey"></typeparam>
         </member>
-        <member name="T:Milvasoft.Core.EntityBase.Abstract.IFullAuditable`2">
+        <member name="T:Milvasoft.Core.EntityBases.Abstract.IFullAuditable`2">
             <summary>
             Determines entity is fully auditable with user information.
             </summary>
             <typeparam name="TKey"></typeparam>
             <typeparam name="TUserKey"></typeparam>
         </member>
-        <member name="T:Milvasoft.Core.EntityBase.Abstract.IFullAuditable`3">
+        <member name="T:Milvasoft.Core.EntityBases.Abstract.IFullAuditable`3">
             <summary>
-            Adds navigation properties to <see cref="T:Milvasoft.Core.EntityBase.Abstract.IFullAuditable`1"/> interface for user.
+            Adds navigation properties to <see cref="T:Milvasoft.Core.EntityBases.Abstract.IFullAuditable`1"/> interface for user.
             </summary>
             <typeparam name="TKey">Key of the user</typeparam>
             <typeparam name="TUser">Type of the user</typeparam>
             <typeparam name="TUserKey">Type of the user</typeparam>
         </member>
-        <member name="P:Milvasoft.Core.EntityBase.Abstract.IFullAuditable`3.DeleterUser">
+        <member name="P:Milvasoft.Core.EntityBases.Abstract.IFullAuditable`3.DeleterUser">
             <summary>
             Reference to the last modifier user of this entity.
             </summary>
         </member>
-        <member name="T:Milvasoft.Core.EntityBase.Abstract.IFullAuditableWithCustomUser`3">
+        <member name="T:Milvasoft.Core.EntityBases.Abstract.IFullAuditableWithCustomUser`3">
             <summary>
-            Adds navigation properties to <see cref="T:Milvasoft.Core.EntityBase.Abstract.IFullAuditable`1"/> interface for user.
+            Adds navigation properties to <see cref="T:Milvasoft.Core.EntityBases.Abstract.IFullAuditable`1"/> interface for user.
             </summary>
             <typeparam name="TKey">Key of the user</typeparam>
             <typeparam name="TUser">Type of the user</typeparam>
             <typeparam name="TUserKey">Type of the user</typeparam>
         </member>
-        <member name="P:Milvasoft.Core.EntityBase.Abstract.IFullAuditableWithCustomUser`3.DeleterUser">
+        <member name="P:Milvasoft.Core.EntityBases.Abstract.IFullAuditableWithCustomUser`3.DeleterUser">
             <summary>
             Reference to the last modifier user of this entity.
             </summary>
         </member>
-        <member name="T:Milvasoft.Core.EntityBase.Abstract.IFullAuditableWithoutUser`1">
+        <member name="T:Milvasoft.Core.EntityBases.Abstract.IFullAuditableWithoutUser`1">
             <summary>
             Determines entity is fully auditable.
             </summary>
             <typeparam name="TKey"></typeparam>
         </member>
-        <member name="T:Milvasoft.Core.EntityBase.Concrete.AuditableEntity`1">
+        <member name="T:Milvasoft.Core.EntityBases.Concrete.AuditableEntity`1">
             <summary>
             Determines entity's is auditable with modifier and modification date.
             </summary>
             <typeparam name="TKey">Type of the user</typeparam>
         </member>
-        <member name="P:Milvasoft.Core.EntityBase.Concrete.AuditableEntity`1.LastModificationDate">
+        <member name="P:Milvasoft.Core.EntityBases.Concrete.AuditableEntity`1.LastModificationDate">
             <summary>
             Last modification date of entity.
             </summary>
         </member>
-        <member name="T:Milvasoft.Core.EntityBase.Concrete.AuditableEntity`2">
+        <member name="T:Milvasoft.Core.EntityBases.Concrete.AuditableEntity`2">
             <summary>
             Determines entity's is auditable with modifier and modification date.
             </summary>
             <typeparam name="TKey">Type of the user</typeparam>
             <typeparam name="TUserKey">Type of the user</typeparam>
         </member>
-        <member name="P:Milvasoft.Core.EntityBase.Concrete.AuditableEntity`2.LastModificationDate">
+        <member name="P:Milvasoft.Core.EntityBases.Concrete.AuditableEntity`2.LastModificationDate">
             <summary>
             Last modification date of entity.
             </summary>
         </member>
-        <member name="P:Milvasoft.Core.EntityBase.Concrete.AuditableEntity`2.LastModifierUserId">
+        <member name="P:Milvasoft.Core.EntityBases.Concrete.AuditableEntity`2.LastModifierUserId">
             <summary>
             Last modifier of entity.
             </summary>
         </member>
-        <member name="T:Milvasoft.Core.EntityBase.Concrete.AuditableEntity`3">
+        <member name="T:Milvasoft.Core.EntityBases.Concrete.AuditableEntity`3">
             <summary>
-            This class can be used to simplify implementing <see cref="T:Milvasoft.Core.EntityBase.Abstract.IAuditable`1"/>.
+            This class can be used to simplify implementing <see cref="T:Milvasoft.Core.EntityBases.Abstract.IAuditable`1"/>.
             </summary>
             <typeparam name="TKey">Type of the primary key of the entity</typeparam>
             <typeparam name="TUser">Type of the user</typeparam>
             <typeparam name="TUserKey">Type of the user</typeparam>
         </member>
-        <member name="P:Milvasoft.Core.EntityBase.Concrete.AuditableEntity`3.CreatorUser">
+        <member name="P:Milvasoft.Core.EntityBases.Concrete.AuditableEntity`3.CreatorUser">
             <summary>
             Reference to the creator user of this entity.
             </summary>
         </member>
-        <member name="P:Milvasoft.Core.EntityBase.Concrete.AuditableEntity`3.LastModifierUser">
+        <member name="P:Milvasoft.Core.EntityBases.Concrete.AuditableEntity`3.LastModifierUser">
             <summary>
             Reference to the last modifier user of this entity.
             </summary>
         </member>
-        <member name="T:Milvasoft.Core.EntityBase.Concrete.AuditableEntityWithCustomUser`3">
+        <member name="T:Milvasoft.Core.EntityBases.Concrete.AuditableEntityWithCustomUser`3">
             <summary>
-            This class can be used to simplify implementing <see cref="T:Milvasoft.Core.EntityBase.Abstract.IAuditable`1"/>.
+            This class can be used to simplify implementing <see cref="T:Milvasoft.Core.EntityBases.Abstract.IAuditable`1"/>.
             </summary>
             <typeparam name="TKey">Type of the primary key of the entity</typeparam>
             <typeparam name="TUser">Type of the user</typeparam>
             <typeparam name="TUserKey">Type of the user</typeparam>
         </member>
-        <member name="P:Milvasoft.Core.EntityBase.Concrete.AuditableEntityWithCustomUser`3.CreatorUser">
+        <member name="P:Milvasoft.Core.EntityBases.Concrete.AuditableEntityWithCustomUser`3.CreatorUser">
             <summary>
             Reference to the creator user of this entity.
             </summary>
         </member>
-        <member name="P:Milvasoft.Core.EntityBase.Concrete.AuditableEntityWithCustomUser`3.LastModifierUser">
+        <member name="P:Milvasoft.Core.EntityBases.Concrete.AuditableEntityWithCustomUser`3.LastModifierUser">
             <summary>
             Reference to the last modifier user of this entity.
             </summary>
         </member>
-        <member name="T:Milvasoft.Core.EntityBase.Concrete.AuditableEntityWithoutUser`1">
+        <member name="T:Milvasoft.Core.EntityBases.Concrete.AuditableEntityWithoutUser`1">
             <summary>
             Determines entity's is auditable with modifier and modification date.
             </summary>
             <typeparam name="TKey">Type of the user</typeparam>
         </member>
-        <member name="P:Milvasoft.Core.EntityBase.Concrete.AuditableEntityWithoutUser`1.LastModificationDate">
+        <member name="P:Milvasoft.Core.EntityBases.Concrete.AuditableEntityWithoutUser`1.LastModificationDate">
             <summary>
             Last modification date of entity.
             </summary>
         </member>
-        <member name="T:Milvasoft.Core.EntityBase.Concrete.BaseDto`1">
+        <member name="T:Milvasoft.Core.EntityBases.Concrete.BaseDto`1">
             <summary>
             Base entity for all of entities.
             </summary>
         </member>
-        <member name="P:Milvasoft.Core.EntityBase.Concrete.BaseDto`1.Id">
+        <member name="P:Milvasoft.Core.EntityBases.Concrete.BaseDto`1.Id">
             <summary>
             Unique identifier for this entity.
             </summary>
         </member>
-        <member name="M:Milvasoft.Core.EntityBase.Concrete.BaseDto`1.ToString">
+        <member name="M:Milvasoft.Core.EntityBases.Concrete.BaseDto`1.ToString">
             <summary>
-            Returns this instance of "<see cref="T:System.Type"/>.Name <see cref="T:Milvasoft.Core.EntityBase.Concrete.BaseEntity`1"/>.Id" as string.
+            Returns this instance of "<see cref="T:System.Type"/>.Name <see cref="T:Milvasoft.Core.EntityBases.Concrete.BaseEntity`1"/>.Id" as string.
             </summary>
             <returns></returns>
         </member>
-        <member name="T:Milvasoft.Core.EntityBase.Concrete.DtoBase`1">
+        <member name="T:Milvasoft.Core.EntityBases.Concrete.DtoBase`1">
             <summary>
             Base entity for all of entities.
             </summary>
         </member>
-        <member name="P:Milvasoft.Core.EntityBase.Concrete.DtoBase`1.Id">
+        <member name="P:Milvasoft.Core.EntityBases.Concrete.DtoBase`1.Id">
             <summary>
             Unique identifier for this entity.
             </summary>
         </member>
-        <member name="M:Milvasoft.Core.EntityBase.Concrete.DtoBase`1.ToString">
+        <member name="M:Milvasoft.Core.EntityBases.Concrete.DtoBase`1.ToString">
             <summary>
-            Returns this instance of "<see cref="T:System.Type"/>.Name <see cref="T:Milvasoft.Core.EntityBase.Concrete.BaseEntity`1"/>.Id" as string.
+            Returns this instance of "<see cref="T:System.Type"/>.Name <see cref="T:Milvasoft.Core.EntityBases.Concrete.BaseEntity`1"/>.Id" as string.
             </summary>
             <returns></returns>
         </member>
-        <member name="T:Milvasoft.Core.EntityBase.Concrete.DtoBase">
+        <member name="T:Milvasoft.Core.EntityBases.Concrete.DtoBase">
             <summary>
             Base entity for all of entities.
             </summary>
         </member>
-        <member name="T:Milvasoft.Core.EntityBase.Concrete.BaseEntity`1">
+        <member name="T:Milvasoft.Core.EntityBases.Concrete.BaseEntity`1">
             <summary>
             Base entity for all of entities.
             </summary>
         </member>
-        <member name="P:Milvasoft.Core.EntityBase.Concrete.BaseEntity`1.Id">
+        <member name="P:Milvasoft.Core.EntityBases.Concrete.BaseEntity`1.Id">
             <summary>
             Unique identifier for this entity.
             </summary>
         </member>
-        <member name="M:Milvasoft.Core.EntityBase.Concrete.BaseEntity`1.ToString">
+        <member name="M:Milvasoft.Core.EntityBases.Concrete.BaseEntity`1.ToString">
             <summary>
-            Returns this instance of "<see cref="T:System.Type"/>.Name <see cref="T:Milvasoft.Core.EntityBase.Concrete.BaseEntity`1"/>.Id" as string.
+            Returns this instance of "<see cref="T:System.Type"/>.Name <see cref="T:Milvasoft.Core.EntityBases.Concrete.BaseEntity`1"/>.Id" as string.
             </summary>
             <returns></returns>
         </member>
-        <member name="T:Milvasoft.Core.EntityBase.Concrete.EntityBase`1">
+        <member name="T:Milvasoft.Core.EntityBases.Concrete.EntityBase`1">
             <summary>
             Base entity for all of entities.
             </summary>
         </member>
-        <member name="P:Milvasoft.Core.EntityBase.Concrete.EntityBase`1.Id">
+        <member name="P:Milvasoft.Core.EntityBases.Concrete.EntityBase`1.Id">
             <summary>
             Unique identifier for this entity.
             </summary>
         </member>
-        <member name="M:Milvasoft.Core.EntityBase.Concrete.EntityBase`1.ToString">
+        <member name="M:Milvasoft.Core.EntityBases.Concrete.EntityBase`1.ToString">
             <summary>
-            Returns this instance of "<see cref="T:System.Type"/>.Name <see cref="T:Milvasoft.Core.EntityBase.Concrete.BaseEntity`1"/>.Id" as string.
+            Returns this instance of "<see cref="T:System.Type"/>.Name <see cref="T:Milvasoft.Core.EntityBases.Concrete.BaseEntity`1"/>.Id" as string.
             </summary>
             <returns></returns>
         </member>
-        <member name="T:Milvasoft.Core.EntityBase.Concrete.EntityBase">
+        <member name="T:Milvasoft.Core.EntityBases.Concrete.EntityBase">
             <summary>
             Base entity for all of entities.
             </summary>
         </member>
-        <member name="M:Milvasoft.Core.EntityBase.Concrete.EntityBase.AssignUpdatedProperties``1(``0)">
-            <summary>
-            Updates entity matching properties with <paramref name="dto"/>'s not null properties.
-            </summary>
-            <typeparam name="TDto"></typeparam>
-            <param name="dto"></param>
-        </member>
-        <member name="T:Milvasoft.Core.EntityBase.Concrete.CreationAuditableEntity`1">
+        <member name="T:Milvasoft.Core.EntityBases.Concrete.CreationAuditableEntity`1">
             <summary>
             Determines entity's creation is auditable.
             </summary>
             <typeparam name="TKey">Type of the user</typeparam>
         </member>
-        <member name="P:Milvasoft.Core.EntityBase.Concrete.CreationAuditableEntity`1.CreationDate">
+        <member name="P:Milvasoft.Core.EntityBases.Concrete.CreationAuditableEntity`1.CreationDate">
             <summary>
             Creation date of entity.
             </summary>
         </member>
-        <member name="T:Milvasoft.Core.EntityBase.Concrete.CreationAuditableEntity`2">
+        <member name="T:Milvasoft.Core.EntityBases.Concrete.CreationAuditableEntity`2">
             <summary>
             Determines entity's creation is auditable.
             </summary>
             <typeparam name="TKey">Type of the user</typeparam>
             <typeparam name="TUserKey">Type of the user</typeparam>
         </member>
-        <member name="P:Milvasoft.Core.EntityBase.Concrete.CreationAuditableEntity`2.CreationDate">
+        <member name="P:Milvasoft.Core.EntityBases.Concrete.CreationAuditableEntity`2.CreationDate">
             <summary>
             Creation date of entity.
             </summary>
         </member>
-        <member name="P:Milvasoft.Core.EntityBase.Concrete.CreationAuditableEntity`2.CreatorUserId">
+        <member name="P:Milvasoft.Core.EntityBases.Concrete.CreationAuditableEntity`2.CreatorUserId">
             <summary>
             Creator of entity.
             </summary>
         </member>
-        <member name="T:Milvasoft.Core.EntityBase.Concrete.CreationAuditableEntity`3">
+        <member name="T:Milvasoft.Core.EntityBases.Concrete.CreationAuditableEntity`3">
             <summary>
-            This class can be used to simplify implementing <see cref="T:Milvasoft.Core.EntityBase.Abstract.ICreationAuditable`3"/>.
+            This class can be used to simplify implementing <see cref="T:Milvasoft.Core.EntityBases.Abstract.ICreationAuditable`3"/>.
             </summary>
             <typeparam name="TKey">Type of the primary key of the entity</typeparam>
             <typeparam name="TUser">Type of the user</typeparam>
             <typeparam name="TUserKey">Type of the user</typeparam>
         </member>
-        <member name="P:Milvasoft.Core.EntityBase.Concrete.CreationAuditableEntity`3.CreatorUser">
+        <member name="P:Milvasoft.Core.EntityBases.Concrete.CreationAuditableEntity`3.CreatorUser">
             <summary>
             Reference to the creator user of this entity.
             </summary>
         </member>
-        <member name="T:Milvasoft.Core.EntityBase.Concrete.CreationAuditableEntityWithCustomUser`3">
+        <member name="T:Milvasoft.Core.EntityBases.Concrete.CreationAuditableEntityWithCustomUser`3">
             <summary>
-            This class can be used to simplify implementing <see cref="T:Milvasoft.Core.EntityBase.Abstract.ICreationAuditableWithCustomUser`3"/>.
+            This class can be used to simplify implementing <see cref="T:Milvasoft.Core.EntityBases.Abstract.ICreationAuditableWithCustomUser`3"/>.
             </summary>
             <typeparam name="TKey">Type of the primary key of the entity</typeparam>
             <typeparam name="TUser">Type of the user</typeparam>
             <typeparam name="TUserKey">Type of the user</typeparam>
         </member>
-        <member name="P:Milvasoft.Core.EntityBase.Concrete.CreationAuditableEntityWithCustomUser`3.CreatorUser">
+        <member name="P:Milvasoft.Core.EntityBases.Concrete.CreationAuditableEntityWithCustomUser`3.CreatorUser">
             <summary>
             Reference to the creator user of this entity.
             </summary>
         </member>
-        <member name="T:Milvasoft.Core.EntityBase.Concrete.CreationAuditableEntityWithoutUser`1">
+        <member name="T:Milvasoft.Core.EntityBases.Concrete.CreationAuditableEntityWithoutUser`1">
             <summary>
             Determines entity's creation is auditable without user.
             </summary>
             <typeparam name="TKey">Type of the user</typeparam>
         </member>
-        <member name="P:Milvasoft.Core.EntityBase.Concrete.CreationAuditableEntityWithoutUser`1.CreationDate">
+        <member name="P:Milvasoft.Core.EntityBases.Concrete.CreationAuditableEntityWithoutUser`1.CreationDate">
             <summary>
             Creation date of entity.
             </summary>
         </member>
-        <member name="T:Milvasoft.Core.EntityBase.Concrete.EntityPropertyNames">
+        <member name="T:Milvasoft.Core.EntityBases.Concrete.EntityPropertyNames">
             <summary>
             Auditing property names.
             </summary>
         </member>
-        <member name="T:Milvasoft.Core.EntityBase.Concrete.FullAuditableEntity`1">
+        <member name="T:Milvasoft.Core.EntityBases.Concrete.FullAuditableEntity`1">
             <summary>
             Determines entity is fully auditable soft deletable entity.
             </summary>
             <typeparam name="TKey">Type of the user</typeparam>
         </member>
-        <member name="P:Milvasoft.Core.EntityBase.Concrete.FullAuditableEntity`1.DeletionDate">
+        <member name="P:Milvasoft.Core.EntityBases.Concrete.FullAuditableEntity`1.DeletionDate">
             <summary>
             Deletion date of entity.
             </summary>
         </member>
-        <member name="P:Milvasoft.Core.EntityBase.Concrete.FullAuditableEntity`1.IsDeleted">
+        <member name="P:Milvasoft.Core.EntityBases.Concrete.FullAuditableEntity`1.IsDeleted">
             <summary>
             Gets or sets a value indicating whether IsDeleted.
             </summary>
         </member>
-        <member name="T:Milvasoft.Core.EntityBase.Concrete.FullAuditableEntity`2">
+        <member name="T:Milvasoft.Core.EntityBases.Concrete.FullAuditableEntity`2">
             <summary>
             Determines entity is fully auditable soft deletable entity.
             </summary>
             <typeparam name="TKey">Type of the user</typeparam>
             <typeparam name="TUserKey">Type of the user</typeparam>
         </member>
-        <member name="P:Milvasoft.Core.EntityBase.Concrete.FullAuditableEntity`2.DeletionDate">
+        <member name="P:Milvasoft.Core.EntityBases.Concrete.FullAuditableEntity`2.DeletionDate">
             <summary>
             Deletion date of entity.
             </summary>
         </member>
-        <member name="P:Milvasoft.Core.EntityBase.Concrete.FullAuditableEntity`2.DeleterUserId">
+        <member name="P:Milvasoft.Core.EntityBases.Concrete.FullAuditableEntity`2.DeleterUserId">
             <summary>
             Deleter of entity.
             </summary>er
         </member>
-        <member name="P:Milvasoft.Core.EntityBase.Concrete.FullAuditableEntity`2.IsDeleted">
+        <member name="P:Milvasoft.Core.EntityBases.Concrete.FullAuditableEntity`2.IsDeleted">
             <summary>
             Gets or sets a value indicating whether IsDeleted.
             </summary>
         </member>
-        <member name="T:Milvasoft.Core.EntityBase.Concrete.FullAuditableEntity`3">
+        <member name="T:Milvasoft.Core.EntityBases.Concrete.FullAuditableEntity`3">
             <summary>
-            Implements <see cref="T:Milvasoft.Core.EntityBase.Abstract.IFullAuditable`3"/> to be a base class for full-audited entities.
+            Implements <see cref="T:Milvasoft.Core.EntityBases.Abstract.IFullAuditable`3"/> to be a base class for full-audited entities.
             </summary>
             <typeparam name="TKey">Type of the primary key of the entity</typeparam>
             <typeparam name="TUser">Type of the user</typeparam>
             <typeparam name="TUserKey">Type of the user</typeparam>
         </member>
-        <member name="P:Milvasoft.Core.EntityBase.Concrete.FullAuditableEntity`3.DeletionDate">
+        <member name="P:Milvasoft.Core.EntityBases.Concrete.FullAuditableEntity`3.DeletionDate">
             <summary>
             Deletion time of this entity.
             </summary>
         </member>
-        <member name="P:Milvasoft.Core.EntityBase.Concrete.FullAuditableEntity`3.DeleterUserId">
+        <member name="P:Milvasoft.Core.EntityBases.Concrete.FullAuditableEntity`3.DeleterUserId">
             <summary>
             Which user deleted this entity?
             </summary>
         </member>
-        <member name="P:Milvasoft.Core.EntityBase.Concrete.FullAuditableEntity`3.DeleterUser">
+        <member name="P:Milvasoft.Core.EntityBases.Concrete.FullAuditableEntity`3.DeleterUser">
             <summary>
             Reference to the deleter user of this entity.
             </summary>
         </member>
-        <member name="P:Milvasoft.Core.EntityBase.Concrete.FullAuditableEntity`3.IsDeleted">
+        <member name="P:Milvasoft.Core.EntityBases.Concrete.FullAuditableEntity`3.IsDeleted">
             <summary>
             Is this entity Deleted?
             </summary>
         </member>
-        <member name="T:Milvasoft.Core.EntityBase.Concrete.FullAuditableEntityWithCustomUser`3">
+        <member name="T:Milvasoft.Core.EntityBases.Concrete.FullAuditableEntityWithCustomUser`3">
             <summary>
-            Implements <see cref="T:Milvasoft.Core.EntityBase.Abstract.IFullAuditableWithCustomUser`3"/> to be a base class for full-audited entities.
+            Implements <see cref="T:Milvasoft.Core.EntityBases.Abstract.IFullAuditableWithCustomUser`3"/> to be a base class for full-audited entities.
             </summary>
             <typeparam name="TKey">Type of the primary key of the entity</typeparam>
             <typeparam name="TUser">Type of the user</typeparam>
             <typeparam name="TUserKey">Type of the user</typeparam>
         </member>
-        <member name="P:Milvasoft.Core.EntityBase.Concrete.FullAuditableEntityWithCustomUser`3.DeletionDate">
+        <member name="P:Milvasoft.Core.EntityBases.Concrete.FullAuditableEntityWithCustomUser`3.DeletionDate">
             <summary>
             Deletion time of this entity.
             </summary>
         </member>
-        <member name="P:Milvasoft.Core.EntityBase.Concrete.FullAuditableEntityWithCustomUser`3.DeleterUserId">
+        <member name="P:Milvasoft.Core.EntityBases.Concrete.FullAuditableEntityWithCustomUser`3.DeleterUserId">
             <summary>
             Which user deleted this entity?
             </summary>
         </member>
-        <member name="P:Milvasoft.Core.EntityBase.Concrete.FullAuditableEntityWithCustomUser`3.DeleterUser">
+        <member name="P:Milvasoft.Core.EntityBases.Concrete.FullAuditableEntityWithCustomUser`3.DeleterUser">
             <summary>
             Reference to the deleter user of this entity.
             </summary>
         </member>
-        <member name="P:Milvasoft.Core.EntityBase.Concrete.FullAuditableEntityWithCustomUser`3.IsDeleted">
+        <member name="P:Milvasoft.Core.EntityBases.Concrete.FullAuditableEntityWithCustomUser`3.IsDeleted">
             <summary>
             Is this entity Deleted?
             </summary>
         </member>
-        <member name="T:Milvasoft.Core.EntityBase.Concrete.FullAuditableEntityWithoutUser`1">
+        <member name="T:Milvasoft.Core.EntityBases.Concrete.FullAuditableEntityWithoutUser`1">
             <summary>
             Determines entity is fully auditable without user.
             </summary>
             <typeparam name="TKey">Type of the user</typeparam>
         </member>
-        <member name="P:Milvasoft.Core.EntityBase.Concrete.FullAuditableEntityWithoutUser`1.DeletionDate">
+        <member name="P:Milvasoft.Core.EntityBases.Concrete.FullAuditableEntityWithoutUser`1.DeletionDate">
             <summary>
             Deletion date of entity.
             </summary>
         </member>
-        <member name="P:Milvasoft.Core.EntityBase.Concrete.FullAuditableEntityWithoutUser`1.IsDeleted">
+        <member name="P:Milvasoft.Core.EntityBases.Concrete.FullAuditableEntityWithoutUser`1.IsDeleted">
             <summary>
             Gets or sets a value indicating whether IsDeleted.
             </summary>
         </member>
-        <member name="T:Milvasoft.Core.EntityBase.MultiTenancy.IMilvaTenantBase`1">
+        <member name="T:Milvasoft.Core.EntityBases.MultiTenancy.IMilvaTenantBase`1">
             <summary>
             Tenant base.
             </summary>
         </member>
-        <member name="P:Milvasoft.Core.EntityBase.MultiTenancy.IMilvaTenantBase`1.TenancyName">
+        <member name="P:Milvasoft.Core.EntityBases.MultiTenancy.IMilvaTenantBase`1.TenancyName">
             <summary>
             Display name of the Tenant.
             </summary>
         </member>
-        <member name="P:Milvasoft.Core.EntityBase.MultiTenancy.IMilvaTenantBase`1.Name">
+        <member name="P:Milvasoft.Core.EntityBases.MultiTenancy.IMilvaTenantBase`1.Name">
             <summary>
             Display name of the Tenant.
             </summary>
         </member>
-        <member name="P:Milvasoft.Core.EntityBase.MultiTenancy.IMilvaTenantBase`1.ConnectionString">
+        <member name="P:Milvasoft.Core.EntityBases.MultiTenancy.IMilvaTenantBase`1.ConnectionString">
             <summary>
             ENCRYPTED connection string of the tenant database.
             Can be null if this tenant is stored in host database.
             </summary>
         </member>
-        <member name="P:Milvasoft.Core.EntityBase.MultiTenancy.IMilvaTenantBase`1.IsActive">
+        <member name="P:Milvasoft.Core.EntityBases.MultiTenancy.IMilvaTenantBase`1.IsActive">
             <summary>
             Is this tenant active?
             If as tenant is not active, no user of this tenant can use the application.
             </summary>
         </member>
-        <member name="T:Milvasoft.Core.EntityBase.MultiTenancy.IMilvaBaseTenant`1">
+        <member name="T:Milvasoft.Core.EntityBases.MultiTenancy.IMilvaBaseTenant`1">
             <summary>
             Tenant base.
             </summary>
         </member>
-        <member name="T:Milvasoft.Core.EntityBase.MultiTenancy.MilvaBaseTenant`2">
+        <member name="T:Milvasoft.Core.EntityBases.MultiTenancy.MilvaBaseTenant`2">
             <summary>
             Tenant base.
             </summary>
             <typeparam name="TKey"></typeparam>
             <typeparam name="TUserKey"></typeparam>
         </member>
-        <member name="P:Milvasoft.Core.EntityBase.MultiTenancy.MilvaBaseTenant`2.TenancyName">
+        <member name="P:Milvasoft.Core.EntityBases.MultiTenancy.MilvaBaseTenant`2.TenancyName">
             <summary>
             Tenancy name of tenant.
             </summary>
         </member>
-        <member name="P:Milvasoft.Core.EntityBase.MultiTenancy.MilvaBaseTenant`2.Name">
+        <member name="P:Milvasoft.Core.EntityBases.MultiTenancy.MilvaBaseTenant`2.Name">
             <summary>
             Display name of the Tenant.
             </summary>
         </member>
-        <member name="P:Milvasoft.Core.EntityBase.MultiTenancy.MilvaBaseTenant`2.ConnectionString">
+        <member name="P:Milvasoft.Core.EntityBases.MultiTenancy.MilvaBaseTenant`2.ConnectionString">
             <summary>
             ENCRYPTED connection string of the tenant database.
             Can be null if this tenant is stored in host database.
             </summary>
         </member>
-        <member name="P:Milvasoft.Core.EntityBase.MultiTenancy.MilvaBaseTenant`2.IsActive">
+        <member name="P:Milvasoft.Core.EntityBases.MultiTenancy.MilvaBaseTenant`2.IsActive">
             <summary>
             Is this tenant active?
             If as tenant is not active, no user of this tenant can use the application.
             </summary>
         </member>
-        <member name="T:Milvasoft.Core.EntityBase.MultiTenancy.MilvaTenant`2">
+        <member name="T:Milvasoft.Core.EntityBases.MultiTenancy.MilvaTenant`2">
             <summary>
             Represents a Tenant of the application.
             </summary>
             <typeparam name="TUser"></typeparam>
             <typeparam name="TUserKey"></typeparam>
         </member>
-        <member name="P:Milvasoft.Core.EntityBase.MultiTenancy.MilvaTenant`2.Id">
+        <member name="P:Milvasoft.Core.EntityBases.MultiTenancy.MilvaTenant`2.Id">
             <summary>
             Id of tenant.
             </summary>
         </member>
-        <member name="P:Milvasoft.Core.EntityBase.MultiTenancy.MilvaTenant`2.TenancyName">
+        <member name="P:Milvasoft.Core.EntityBases.MultiTenancy.MilvaTenant`2.TenancyName">
             <summary>
             Tenancy name of tenant.
             </summary>
         </member>
-        <member name="P:Milvasoft.Core.EntityBase.MultiTenancy.MilvaTenant`2.BranchNo">
+        <member name="P:Milvasoft.Core.EntityBases.MultiTenancy.MilvaTenant`2.BranchNo">
             <summary>
             Display name of the Tenant.
             </summary>
         </member>
-        <member name="P:Milvasoft.Core.EntityBase.MultiTenancy.MilvaTenant`2.SubscriptionExpireDate">
+        <member name="P:Milvasoft.Core.EntityBases.MultiTenancy.MilvaTenant`2.SubscriptionExpireDate">
             <summary>
             Represents Tenant's subscription expire date.
             </summary>
         </member>
-        <member name="P:Milvasoft.Core.EntityBase.MultiTenancy.MilvaTenant`2.DeleterUser">
+        <member name="P:Milvasoft.Core.EntityBases.MultiTenancy.MilvaTenant`2.DeleterUser">
             <summary>
             Deleter user navigation property.
             </summary>
         </member>
-        <member name="P:Milvasoft.Core.EntityBase.MultiTenancy.MilvaTenant`2.LastModifierUser">
+        <member name="P:Milvasoft.Core.EntityBases.MultiTenancy.MilvaTenant`2.LastModifierUser">
             <summary>
             Modifier user navigation property.
             </summary>
         </member>
-        <member name="P:Milvasoft.Core.EntityBase.MultiTenancy.MilvaTenant`2.CreatorUser">
+        <member name="P:Milvasoft.Core.EntityBases.MultiTenancy.MilvaTenant`2.CreatorUser">
             <summary>
             Creator user navigation property.
             </summary>
         </member>
-        <member name="M:Milvasoft.Core.EntityBase.MultiTenancy.MilvaTenant`2.#ctor">
+        <member name="M:Milvasoft.Core.EntityBases.MultiTenancy.MilvaTenant`2.#ctor">
             <summary>
             Creates a new tenant.
             </summary>
         </member>
-        <member name="M:Milvasoft.Core.EntityBase.MultiTenancy.MilvaTenant`2.#ctor(System.String,System.Int32)">
+        <member name="M:Milvasoft.Core.EntityBases.MultiTenancy.MilvaTenant`2.#ctor(System.String,System.Int32)">
             <summary>
             Creates a new tenant.
             </summary>
             <param name="tenancyName">UNIQUE name of this Tenant</param>
             <param name="branchNo"></param>
         </member>
-        <member name="T:Milvasoft.Core.EntityBase.MultiTenancy.MilvaIdentityTenant`2">
+        <member name="T:Milvasoft.Core.EntityBases.MultiTenancy.MilvaIdentityTenant`2">
             <summary>
             Represents a Tenant of the application.
             </summary>
             <typeparam name="TUser"></typeparam>
             <typeparam name="TUserKey"></typeparam>
         </member>
-        <member name="P:Milvasoft.Core.EntityBase.MultiTenancy.MilvaIdentityTenant`2.Id">
+        <member name="P:Milvasoft.Core.EntityBases.MultiTenancy.MilvaIdentityTenant`2.Id">
             <summary>
             Id of tenant.
             </summary>
         </member>
-        <member name="P:Milvasoft.Core.EntityBase.MultiTenancy.MilvaIdentityTenant`2.TenancyName">
+        <member name="P:Milvasoft.Core.EntityBases.MultiTenancy.MilvaIdentityTenant`2.TenancyName">
             <summary>
             Tenancy name of tenant.
             </summary>
         </member>
-        <member name="P:Milvasoft.Core.EntityBase.MultiTenancy.MilvaIdentityTenant`2.BranchNo">
+        <member name="P:Milvasoft.Core.EntityBases.MultiTenancy.MilvaIdentityTenant`2.BranchNo">
             <summary>
             Display name of the Tenant.
             </summary>
         </member>
-        <member name="P:Milvasoft.Core.EntityBase.MultiTenancy.MilvaIdentityTenant`2.SubscriptionExpireDate">
+        <member name="P:Milvasoft.Core.EntityBases.MultiTenancy.MilvaIdentityTenant`2.SubscriptionExpireDate">
             <summary>
             Represents Tenant's subscription expire date.
             </summary>
         </member>
-        <member name="P:Milvasoft.Core.EntityBase.MultiTenancy.MilvaIdentityTenant`2.DeleterUser">
+        <member name="P:Milvasoft.Core.EntityBases.MultiTenancy.MilvaIdentityTenant`2.DeleterUser">
             <summary>
             Deleter user navigation property.
             </summary>
         </member>
-        <member name="P:Milvasoft.Core.EntityBase.MultiTenancy.MilvaIdentityTenant`2.LastModifierUser">
+        <member name="P:Milvasoft.Core.EntityBases.MultiTenancy.MilvaIdentityTenant`2.LastModifierUser">
             <summary>
             Modifier user navigation property.
             </summary>
         </member>
-        <member name="P:Milvasoft.Core.EntityBase.MultiTenancy.MilvaIdentityTenant`2.CreatorUser">
+        <member name="P:Milvasoft.Core.EntityBases.MultiTenancy.MilvaIdentityTenant`2.CreatorUser">
             <summary>
             Creator user navigation property.
             </summary>
         </member>
-        <member name="M:Milvasoft.Core.EntityBase.MultiTenancy.MilvaIdentityTenant`2.#ctor">
+        <member name="M:Milvasoft.Core.EntityBases.MultiTenancy.MilvaIdentityTenant`2.#ctor">
             <summary>
             Creates a new tenant.
             </summary>
         </member>
-        <member name="M:Milvasoft.Core.EntityBase.MultiTenancy.MilvaIdentityTenant`2.#ctor(System.String,System.Int32)">
+        <member name="M:Milvasoft.Core.EntityBases.MultiTenancy.MilvaIdentityTenant`2.#ctor(System.String,System.Int32)">
             <summary>
             Creates a new tenant.
             </summary>
             <param name="tenancyName">UNIQUE name of this Tenant</param>
             <param name="branchNo"></param>
         </member>
-        <member name="T:Milvasoft.Core.EntityBase.MultiTenancy.TenantId">
+        <member name="T:Milvasoft.Core.EntityBases.MultiTenancy.TenantId">
             <summary>
             Fully unique tenant id.
             </summary>
         </member>
-        <member name="F:Milvasoft.Core.EntityBase.MultiTenancy.TenantId.Empty">
+        <member name="F:Milvasoft.Core.EntityBases.MultiTenancy.TenantId.Empty">
             <summary>
-            Creates an empty <see cref="T:Milvasoft.Core.EntityBase.MultiTenancy.TenantId"/> instance.
+            Creates an empty <see cref="T:Milvasoft.Core.EntityBases.MultiTenancy.TenantId"/> instance.
             </summary>
         </member>
-        <member name="P:Milvasoft.Core.EntityBase.MultiTenancy.TenantId.TenancyName">
+        <member name="P:Milvasoft.Core.EntityBases.MultiTenancy.TenantId.TenancyName">
             <summary>
             Unique tenancy name of tenant.
             </summary>
         </member>
-        <member name="P:Milvasoft.Core.EntityBase.MultiTenancy.TenantId.BranchNo">
+        <member name="P:Milvasoft.Core.EntityBases.MultiTenancy.TenantId.BranchNo">
             <summary>
             Branch no of Tenant.
             </summary>
         </member>
-        <member name="M:Milvasoft.Core.EntityBase.MultiTenancy.TenantId.#ctor(System.String)">
+        <member name="M:Milvasoft.Core.EntityBases.MultiTenancy.TenantId.#ctor(System.String)">
             <summary>
-            Creates new instance of <see cref="T:Milvasoft.Core.EntityBase.MultiTenancy.TenantId"/>.
+            Creates new instance of <see cref="T:Milvasoft.Core.EntityBases.MultiTenancy.TenantId"/>.
             </summary>
             <param name="tenantIdString"></param>
         </member>
-        <member name="M:Milvasoft.Core.EntityBase.MultiTenancy.TenantId.#ctor(System.String,System.Int32)">
+        <member name="M:Milvasoft.Core.EntityBases.MultiTenancy.TenantId.#ctor(System.String,System.Int32)">
             <summary>
-            Creates new instance of <see cref="T:Milvasoft.Core.EntityBase.MultiTenancy.TenantId"/>.
+            Creates new instance of <see cref="T:Milvasoft.Core.EntityBases.MultiTenancy.TenantId"/>.
             </summary>
             <param name="tenancyName"></param>
             <param name="branchNo"></param>
         </member>
-        <member name="M:Milvasoft.Core.EntityBase.MultiTenancy.TenantId.NewTenantId">
+        <member name="M:Milvasoft.Core.EntityBases.MultiTenancy.TenantId.NewTenantId">
             <summary>
             Generates new unique tenant id.
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Core.EntityBase.MultiTenancy.TenantId.GetHashCode">
+        <member name="M:Milvasoft.Core.EntityBases.MultiTenancy.TenantId.GetHashCode">
             <summary>
             Combines Tenancy Name and BranchNo into a hash code.
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Core.EntityBase.MultiTenancy.TenantId.GetHashString">
+        <member name="M:Milvasoft.Core.EntityBases.MultiTenancy.TenantId.GetHashString">
             <summary>
             Returns hash.
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Core.EntityBase.MultiTenancy.TenantId.Equals(System.Object)">
+        <member name="M:Milvasoft.Core.EntityBases.MultiTenancy.TenantId.Equals(System.Object)">
             <summary>
             Compares hashes.
             </summary>
             <param name="other"></param>
             <returns> If both hash are equals returns true, othewise false. </returns>
         </member>
-        <member name="M:Milvasoft.Core.EntityBase.MultiTenancy.TenantId.Equals(Milvasoft.Core.EntityBase.MultiTenancy.TenantId)">
+        <member name="M:Milvasoft.Core.EntityBases.MultiTenancy.TenantId.Equals(Milvasoft.Core.EntityBases.MultiTenancy.TenantId)">
             <summary>
             Compares hashes.
             </summary>
             <param name="other"></param>
             <returns> If both hash are equals returns true, othewise false. </returns>
         </member>
-        <member name="M:Milvasoft.Core.EntityBase.MultiTenancy.TenantId.TenancyNameEquals(Milvasoft.Core.EntityBase.MultiTenancy.TenantId)">
+        <member name="M:Milvasoft.Core.EntityBases.MultiTenancy.TenantId.TenancyNameEquals(Milvasoft.Core.EntityBases.MultiTenancy.TenantId)">
             <summary>
-            Compares <see cref="P:Milvasoft.Core.EntityBase.MultiTenancy.TenantId.TenancyName"/> with <paramref name="other"/>.TenancyName.
+            Compares <see cref="P:Milvasoft.Core.EntityBases.MultiTenancy.TenantId.TenancyName"/> with <paramref name="other"/>.TenancyName.
             </summary>
             <param name="other"></param>
             <returns> If both TenancyName are equals returns true, othewise false. </returns>
         </member>
-        <member name="M:Milvasoft.Core.EntityBase.MultiTenancy.TenantId.BranchNoEquals(Milvasoft.Core.EntityBase.MultiTenancy.TenantId)">
+        <member name="M:Milvasoft.Core.EntityBases.MultiTenancy.TenantId.BranchNoEquals(Milvasoft.Core.EntityBases.MultiTenancy.TenantId)">
             <summary>
-            Compares <see cref="P:Milvasoft.Core.EntityBase.MultiTenancy.TenantId.BranchNo"/> with <paramref name="other"/>.BranchNo.
+            Compares <see cref="P:Milvasoft.Core.EntityBases.MultiTenancy.TenantId.BranchNo"/> with <paramref name="other"/>.BranchNo.
             </summary>
             <param name="other"></param>
             <returns> If both BranchNo are equals returns true, othewise false. </returns>
         </member>
-        <member name="M:Milvasoft.Core.EntityBase.MultiTenancy.TenantId.ToString">
+        <member name="M:Milvasoft.Core.EntityBases.MultiTenancy.TenantId.ToString">
             <summary>
             Returns Tenancy Name and Branch No with '_' seperator 
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Core.EntityBase.MultiTenancy.TenantId.ToString(System.String)">
+        <member name="M:Milvasoft.Core.EntityBases.MultiTenancy.TenantId.ToString(System.String)">
             <summary>
             <para>Supported formats : G , H </para>
             <para>G returns tenancyName and branchNo with '_' seperator</para>
@@ -1820,50 +1831,50 @@
             <param name="format"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Core.EntityBase.MultiTenancy.TenantId.Parse(System.String)">
+        <member name="M:Milvasoft.Core.EntityBases.MultiTenancy.TenantId.Parse(System.String)">
             <summary>
-            Parses <paramref name="str"/> to <see cref="T:Milvasoft.Core.EntityBase.MultiTenancy.TenantId"/>.
+            Parses <paramref name="str"/> to <see cref="T:Milvasoft.Core.EntityBases.MultiTenancy.TenantId"/>.
             </summary>
             <param name="str"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Core.EntityBase.MultiTenancy.TenantId.TryParse(System.String)">
+        <member name="M:Milvasoft.Core.EntityBases.MultiTenancy.TenantId.TryParse(System.String)">
             <summary>
-            Converts the string representation of a <see cref="T:Milvasoft.Core.EntityBase.MultiTenancy.TenantId"/> to its string equivalent.
+            Converts the string representation of a <see cref="T:Milvasoft.Core.EntityBases.MultiTenancy.TenantId"/> to its string equivalent.
             A return value indicates whether the conversion succeeded.
             </summary>
             <param name="str"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Core.EntityBase.MultiTenancy.TenantId.op_Implicit(Milvasoft.Core.EntityBase.MultiTenancy.TenantId)~System.String">
+        <member name="M:Milvasoft.Core.EntityBases.MultiTenancy.TenantId.op_Implicit(Milvasoft.Core.EntityBases.MultiTenancy.TenantId)~System.String">
             <summary>
             Provides implicit casting.
             </summary>
             <param name="tenantId"></param>
         </member>
-        <member name="M:Milvasoft.Core.EntityBase.MultiTenancy.TenantId.op_Explicit(System.String)~Milvasoft.Core.EntityBase.MultiTenancy.TenantId">
+        <member name="M:Milvasoft.Core.EntityBases.MultiTenancy.TenantId.op_Explicit(System.String)~Milvasoft.Core.EntityBases.MultiTenancy.TenantId">
             <summary>
             Provides explicit casting.
             </summary>
             <param name="tenantId"></param>
         </member>
-        <member name="M:Milvasoft.Core.EntityBase.MultiTenancy.TenantId.op_Equality(Milvasoft.Core.EntityBase.MultiTenancy.TenantId,Milvasoft.Core.EntityBase.MultiTenancy.TenantId)">
+        <member name="M:Milvasoft.Core.EntityBases.MultiTenancy.TenantId.op_Equality(Milvasoft.Core.EntityBases.MultiTenancy.TenantId,Milvasoft.Core.EntityBases.MultiTenancy.TenantId)">
             <summary>
-            Indicates whether the values of two specified <see cref="T:Milvasoft.Core.EntityBase.MultiTenancy.TenantId"/> objects are equal.
+            Indicates whether the values of two specified <see cref="T:Milvasoft.Core.EntityBases.MultiTenancy.TenantId"/> objects are equal.
             </summary>
             <param name="a"></param>
             <param name="b"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Core.EntityBase.MultiTenancy.TenantId.op_Inequality(Milvasoft.Core.EntityBase.MultiTenancy.TenantId,Milvasoft.Core.EntityBase.MultiTenancy.TenantId)">
+        <member name="M:Milvasoft.Core.EntityBases.MultiTenancy.TenantId.op_Inequality(Milvasoft.Core.EntityBases.MultiTenancy.TenantId,Milvasoft.Core.EntityBases.MultiTenancy.TenantId)">
             <summary>
-            Indicates whether the values of two specified <see cref="T:Milvasoft.Core.EntityBase.MultiTenancy.TenantId"/> objects are not equal.
+            Indicates whether the values of two specified <see cref="T:Milvasoft.Core.EntityBases.MultiTenancy.TenantId"/> objects are not equal.
             </summary>
             <param name="a"></param>
             <param name="b"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Core.EntityBase.MultiTenancy.TenantId.op_LessThan(Milvasoft.Core.EntityBase.MultiTenancy.TenantId,Milvasoft.Core.EntityBase.MultiTenancy.TenantId)">
+        <member name="M:Milvasoft.Core.EntityBases.MultiTenancy.TenantId.op_LessThan(Milvasoft.Core.EntityBases.MultiTenancy.TenantId,Milvasoft.Core.EntityBases.MultiTenancy.TenantId)">
             <summary>
             Indicates whether the values of <paramref name="a"/>.BranchNo are smaller than <paramref name="b"/>.
             </summary>
@@ -1871,7 +1882,7 @@
             <param name="b"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Core.EntityBase.MultiTenancy.TenantId.op_GreaterThan(Milvasoft.Core.EntityBase.MultiTenancy.TenantId,Milvasoft.Core.EntityBase.MultiTenancy.TenantId)">
+        <member name="M:Milvasoft.Core.EntityBases.MultiTenancy.TenantId.op_GreaterThan(Milvasoft.Core.EntityBases.MultiTenancy.TenantId,Milvasoft.Core.EntityBases.MultiTenancy.TenantId)">
             <summary>
             Indicates whether the values of <paramref name="a"/>.BranchNo are bigger than <paramref name="b"/>.
             </summary>
@@ -1879,7 +1890,7 @@
             <param name="b"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Core.EntityBase.MultiTenancy.TenantId.op_LessThanOrEqual(Milvasoft.Core.EntityBase.MultiTenancy.TenantId,Milvasoft.Core.EntityBase.MultiTenancy.TenantId)">
+        <member name="M:Milvasoft.Core.EntityBases.MultiTenancy.TenantId.op_LessThanOrEqual(Milvasoft.Core.EntityBases.MultiTenancy.TenantId,Milvasoft.Core.EntityBases.MultiTenancy.TenantId)">
             <summary>
             Indicates whether the values of <paramref name="a"/>.BranchNo are smaller or equal than <paramref name="b"/>.
             </summary>
@@ -1887,7 +1898,7 @@
             <param name="b"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Core.EntityBase.MultiTenancy.TenantId.op_GreaterThanOrEqual(Milvasoft.Core.EntityBase.MultiTenancy.TenantId,Milvasoft.Core.EntityBase.MultiTenancy.TenantId)">
+        <member name="M:Milvasoft.Core.EntityBases.MultiTenancy.TenantId.op_GreaterThanOrEqual(Milvasoft.Core.EntityBases.MultiTenancy.TenantId,Milvasoft.Core.EntityBases.MultiTenancy.TenantId)">
             <summary>
             Indicates whether the values of <paramref name="a"/>.BranchNo are bigger or equal than <paramref name="b"/>.
             </summary>
@@ -1895,26 +1906,26 @@
             <param name="b"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Core.EntityBase.MultiTenancy.TenantId.op_Increment(Milvasoft.Core.EntityBase.MultiTenancy.TenantId)">
+        <member name="M:Milvasoft.Core.EntityBases.MultiTenancy.TenantId.op_Increment(Milvasoft.Core.EntityBases.MultiTenancy.TenantId)">
             <summary>
             Increases <paramref name="tenantId"/>.BranchNo.
             </summary>
             <param name="tenantId"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Core.EntityBase.MultiTenancy.TenantId.op_Decrement(Milvasoft.Core.EntityBase.MultiTenancy.TenantId)">
+        <member name="M:Milvasoft.Core.EntityBases.MultiTenancy.TenantId.op_Decrement(Milvasoft.Core.EntityBases.MultiTenancy.TenantId)">
             <summary>
             Decreases <paramref name="tenantId"/>.BranchNo.
             </summary>
             <param name="tenantId"></param>
             <returns></returns>
         </member>
-        <member name="T:Milvasoft.Core.EntityBase.MultiTenancy.TenantIdTypeConverter">
+        <member name="T:Milvasoft.Core.EntityBases.MultiTenancy.TenantIdTypeConverter">
             <summary>
-            Provides a type converter to convert string objects to and from <see cref="T:Milvasoft.Core.EntityBase.MultiTenancy.TenantId"/>.
+            Provides a type converter to convert string objects to and from <see cref="T:Milvasoft.Core.EntityBases.MultiTenancy.TenantId"/>.
             </summary>
         </member>
-        <member name="M:Milvasoft.Core.EntityBase.MultiTenancy.TenantIdTypeConverter.CanConvertFrom(System.ComponentModel.ITypeDescriptorContext,System.Type)">
+        <member name="M:Milvasoft.Core.EntityBases.MultiTenancy.TenantIdTypeConverter.CanConvertFrom(System.ComponentModel.ITypeDescriptorContext,System.Type)">
             <summary>
             Determines <paramref name="sourceType"/> can convert from string.
             </summary>
@@ -1922,16 +1933,16 @@
             <param name="sourceType"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Core.EntityBase.MultiTenancy.TenantIdTypeConverter.ConvertFrom(System.ComponentModel.ITypeDescriptorContext,System.Globalization.CultureInfo,System.Object)">
+        <member name="M:Milvasoft.Core.EntityBases.MultiTenancy.TenantIdTypeConverter.ConvertFrom(System.ComponentModel.ITypeDescriptorContext,System.Globalization.CultureInfo,System.Object)">
             <summary>
-            Converts <paramref name="value"/>(<see cref="T:System.String"/>) to <see cref="T:Milvasoft.Core.EntityBase.MultiTenancy.TenantId"/>.
+            Converts <paramref name="value"/>(<see cref="T:System.String"/>) to <see cref="T:Milvasoft.Core.EntityBases.MultiTenancy.TenantId"/>.
             </summary>
             <param name="context"></param>
             <param name="culture"></param>
             <param name="value"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Core.EntityBase.MultiTenancy.TenantIdTypeConverter.CanConvertTo(System.ComponentModel.ITypeDescriptorContext,System.Type)">
+        <member name="M:Milvasoft.Core.EntityBases.MultiTenancy.TenantIdTypeConverter.CanConvertTo(System.ComponentModel.ITypeDescriptorContext,System.Type)">
             <summary>
             Determines <paramref name="destinationType"/> can convert to string.
             </summary>
@@ -1939,7 +1950,7 @@
             <param name="destinationType"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Core.EntityBase.MultiTenancy.TenantIdTypeConverter.ConvertTo(System.ComponentModel.ITypeDescriptorContext,System.Globalization.CultureInfo,System.Object,System.Type)">
+        <member name="M:Milvasoft.Core.EntityBases.MultiTenancy.TenantIdTypeConverter.ConvertTo(System.ComponentModel.ITypeDescriptorContext,System.Globalization.CultureInfo,System.Object,System.Type)">
             <summary>
             Converts the given value object to the specified type, using the specified context and culture information.
             </summary>

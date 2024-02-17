@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
-using Milvasoft.Core.EntityBase.MultiTenancy;
+using Milvasoft.Core.EntityBases.MultiTenancy;
 using Milvasoft.MultiTenancy.Utils;
 
 namespace Milvasoft.MultiTenancy.ResolutionStrategy;

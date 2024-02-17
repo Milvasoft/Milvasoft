@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Milvasoft.Core.Abstractions.Localization;
-using Milvasoft.Core.EntityBase.Abstract;
+using Milvasoft.Core.EntityBases.Abstract;
 using Milvasoft.Core.Utils.Constants;
 
 namespace Milvasoft.Identity.Concrete;

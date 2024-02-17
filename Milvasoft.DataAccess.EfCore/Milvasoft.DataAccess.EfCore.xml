@@ -1771,7 +1771,7 @@
         </member>
         <member name="M:Milvasoft.DataAccess.EfCore.Concrete.ContextRepository`1.CreateIsDeletedFalseExpression``1">
             <summary>
-            Gets <b>entity => entity.IsDeleted == false</b> expression, if <typeparamref name="TEntity"/> is assignable from <see cref="T:Milvasoft.Core.EntityBase.Concrete.FullAuditableEntity`1"/>.
+            Gets <b>entity => entity.IsDeleted == false</b> expression, if <typeparamref name="TEntity"/> is assignable from <see cref="T:Milvasoft.Core.EntityBases.Concrete.FullAuditableEntity`1"/>.
             </summary>
             <returns></returns>
         </member>
@@ -2412,7 +2412,7 @@
         </member>
         <member name="M:Milvasoft.DataAccess.EfCore.MilvaContext.MilvaModelBuilderExtensions.UseTenantId(Microsoft.EntityFrameworkCore.ModelBuilder)">
             <summary>
-            Adds <see cref="T:Milvasoft.Core.EntityBase.MultiTenancy.TenantId"/> converters to <see cref="T:Milvasoft.Core.EntityBase.MultiTenancy.TenantId"/> typed properties.
+            Adds <see cref="T:Milvasoft.Core.EntityBases.MultiTenancy.TenantId"/> converters to <see cref="T:Milvasoft.Core.EntityBases.MultiTenancy.TenantId"/> typed properties.
             </summary>
             <param name="modelBuilder"></param>
         </member>
@@ -2539,7 +2539,7 @@
         </member>
         <member name="T:Milvasoft.DataAccess.EfCore.Utils.Converters.TenantIdStringConverter">
             <summary>
-            Converts <see cref="T:Milvasoft.Core.EntityBase.MultiTenancy.TenantId"/> to <see cref="T:System.String"/> or <see cref="T:System.String"/> to <see cref="T:Milvasoft.Core.EntityBase.MultiTenancy.TenantId"/>.
+            Converts <see cref="T:Milvasoft.Core.EntityBases.MultiTenancy.TenantId"/> to <see cref="T:System.String"/> or <see cref="T:System.String"/> to <see cref="T:Milvasoft.Core.EntityBases.MultiTenancy.TenantId"/>.
             </summary>
         </member>
         <member name="M:Milvasoft.DataAccess.EfCore.Utils.Converters.TenantIdStringConverter.#ctor(Microsoft.EntityFrameworkCore.Storage.ValueConversion.ConverterMappingHints)">
@@ -2651,6 +2651,43 @@
             The ListResponse object contains the retrieved data along with pagination metadata such as total data count, total page count, and current page number.
             If no pagination parameters are specified, the method returns the entire result set without pagination.
             </remarks>
+        </member>
+        <member name="M:Milvasoft.DataAccess.EfCore.Utils.QueryExtensions.GetSetPropertyBuilder``2(``1)">
+            <summary>
+            Gets <see cref="T:Milvasoft.DataAccess.EfCore.Utils.SetPropertyBuilder`1"/> for entity's matching properties with <paramref name="dto"/>'s not null properties.
+            </summary>
+            <typeparam name="TDto"></typeparam>
+            <typeparam name="TEntity"></typeparam>
+            <param name="dto"></param>
+        </member>
+        <member name="T:Milvasoft.DataAccess.EfCore.Utils.SetPropertyBuilder`1">
+            <summary>
+            <see cref="T:Microsoft.EntityFrameworkCore.Query.SetPropertyCalls`1"/> expression builder for <see cref="M:Microsoft.EntityFrameworkCore.RelationalQueryableExtensions.ExecuteUpdate``1(System.Linq.IQueryable{``0},System.Linq.Expressions.Expression{System.Func{Microsoft.EntityFrameworkCore.Query.SetPropertyCalls{``0},Microsoft.EntityFrameworkCore.Query.SetPropertyCalls{``0}}})"/>
+            </summary>
+            <typeparam name="TSource"></typeparam>
+        </member>
+        <member name="P:Milvasoft.DataAccess.EfCore.Utils.SetPropertyBuilder`1.SetPropertyCalls">
+            <summary>
+            Gets <see cref="T:Microsoft.EntityFrameworkCore.Query.SetPropertyCalls`1"/> expression. 
+            </summary>
+        </member>
+        <member name="M:Milvasoft.DataAccess.EfCore.Utils.SetPropertyBuilder`1.SetPropertyValue``1(System.Linq.Expressions.Expression{System.Func{`0,``0}},``0)">
+            <summary>
+            Appends expressions to <see cref="P:Milvasoft.DataAccess.EfCore.Utils.SetPropertyBuilder`1.SetPropertyCalls"/>
+            </summary>
+            <typeparam name="TProperty"></typeparam>
+            <param name="propertyExpression"></param>
+            <param name="valueExpression"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.DataAccess.EfCore.Utils.SetPropertyBuilder`1.SetProperty``1(System.Linq.Expressions.Expression{System.Func{`0,``0}},System.Linq.Expressions.Expression{System.Func{`0,``0}})">
+            <summary>
+            Appends expressions to <see cref="P:Milvasoft.DataAccess.EfCore.Utils.SetPropertyBuilder`1.SetPropertyCalls"/>
+            </summary>
+            <typeparam name="TProperty"></typeparam>
+            <param name="propertyExpression"></param>
+            <param name="valueExpression"></param>
+            <returns></returns>
         </member>
         <member name="T:Milvasoft.Helpers.DataAccess.EfCore.Concrete.BaseRepository`3">
             <summary>

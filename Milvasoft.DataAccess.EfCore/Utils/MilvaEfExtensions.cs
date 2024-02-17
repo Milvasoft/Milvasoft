@@ -2,6 +2,8 @@
 using Milvasoft.Components.Rest.Enums;
 using Milvasoft.Components.Rest.Request;
 using Milvasoft.Components.Rest.Response;
+using Milvasoft.Core;
+using Milvasoft.Core.EntityBases.Concrete;
 using Milvasoft.Core.Utils.Constants;
 
 namespace Milvasoft.DataAccess.EfCore.Utils;
@@ -9,7 +11,7 @@ namespace Milvasoft.DataAccess.EfCore.Utils;
 /// <summary>
 /// Entity framework related extensions.
 /// </summary>
-public static class QueryExtensions
+public static class MilvaEfExtensions
 {
     /// <summary>
     /// Applies filtering options to the IQueryable data source.
@@ -165,7 +167,7 @@ public static class QueryExtensions
             return ListResponse<TEntity>.Success();
 
         listRequest ??= new ListRequest();
-        
+
         query = query.WithFilteringAndSorting(listRequest);
 
         var aggregationResults = listRequest.Aggregation?.ApplyAggregationAsync(query, false).Result;
@@ -189,5 +191,44 @@ public static class QueryExtensions
         listResult.AggregationResults = aggregationResults;
 
         return listResult;
+    }
+
+    /// <summary>
+    /// Gets <see cref="SetPropertyBuilder{TSource}"/> for entity's matching properties with <paramref name="dto"/>'s not null properties.
+    /// </summary>
+    /// <typeparam name="TDto"></typeparam>
+    /// <typeparam name="TEntity"></typeparam>
+    /// <param name="dto"></param>
+    public static SetPropertyBuilder<TEntity> GetSetPropertyBuilder<TEntity, TDto>(this TDto dto) where TDto : DtoBase where TEntity : EntityBase
+    {
+        if (dto == null)
+            return null;
+
+        var builder = new SetPropertyBuilder<TEntity>();
+
+        var entityType = typeof(TEntity);
+
+        var setPropertyMethod = typeof(SetPropertyBuilder<TEntity>).GetMethods().FirstOrDefault(mi => mi.Name == "SetPropertyValue");
+
+        foreach (var dtoProp in dto.GetDtoProperties())
+        {
+            var matchingEntityProp = entityType.GetProperties().FirstOrDefault(i => i.Name == dtoProp.Name);
+
+            if (matchingEntityProp == null)
+                continue;
+
+            var dtoValue = dtoProp.GetValue(dto);
+
+            if (dtoValue != null)
+            {
+                var genericMethod = setPropertyMethod.MakeGenericMethod([matchingEntityProp.PropertyType]);
+
+                var expression = CommonHelper.DynamicInvokeCreatePropertySelector(nameof(CommonHelper.CreatePropertySelector), entityType, matchingEntityProp);
+
+                builder = (SetPropertyBuilder<TEntity>)genericMethod.Invoke(builder, [expression, dtoValue]);
+            }
+        }
+
+        return builder;
     }
 }

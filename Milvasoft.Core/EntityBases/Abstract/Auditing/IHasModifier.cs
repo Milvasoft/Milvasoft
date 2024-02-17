@@ -1,4 +1,4 @@
-﻿namespace Milvasoft.Core.EntityBase.Abstract.Auditing;
+﻿namespace Milvasoft.Core.EntityBases.Abstract.Auditing;
 
 /// <summary>
 /// Determines entity has modifier.

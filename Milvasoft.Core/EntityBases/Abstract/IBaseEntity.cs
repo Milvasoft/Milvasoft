@@ -1,4 +1,4 @@
-﻿namespace Milvasoft.Core.EntityBase.Abstract;
+﻿namespace Milvasoft.Core.EntityBases.Abstract;
 
 /// <summary>
 /// Defines interface for base entity type. All entities in the system must implement this interface.

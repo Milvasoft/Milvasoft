@@ -2,7 +2,7 @@
 using Milvasoft.Core.Extensions;
 using System.ComponentModel;
 
-namespace Milvasoft.Core.EntityBase.MultiTenancy;
+namespace Milvasoft.Core.EntityBases.MultiTenancy;
 
 /// <summary>
 /// Fully unique tenant id.

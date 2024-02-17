@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Milvasoft.Core.EntityBase.Concrete;
-using Milvasoft.Core.EntityBase.MultiTenancy;
+using Milvasoft.Core.EntityBases.Concrete;
+using Milvasoft.Core.EntityBases.MultiTenancy;
 using Milvasoft.Core.Exceptions;
 using Milvasoft.Cryptography.Abstract;
 using Milvasoft.DataAccess.EfCore.Attributes;

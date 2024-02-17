@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Builder;
-using Milvasoft.Core.EntityBase.MultiTenancy;
+using Milvasoft.Core.EntityBases.MultiTenancy;
 using Milvasoft.MultiTenancy.Middleware;
 
 namespace Milvasoft.MultiTenancy.Extensions;

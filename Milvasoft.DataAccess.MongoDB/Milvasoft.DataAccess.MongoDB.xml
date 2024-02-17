@@ -785,7 +785,7 @@
         </member>
         <member name="T:Milvasoft.DataAccess.MongoDB.Utils.Serializers.TenantIdSerializer">
             <summary>
-            Serializer for <see cref="T:Milvasoft.Core.EntityBase.MultiTenancy.TenantId"/>.
+            Serializer for <see cref="T:Milvasoft.Core.EntityBases.MultiTenancy.TenantId"/>.
             </summary>
         </member>
         <member name="M:Milvasoft.DataAccess.MongoDB.Utils.Serializers.TenantIdSerializer.Deserialize(MongoDB.Bson.Serialization.BsonDeserializationContext,MongoDB.Bson.Serialization.BsonDeserializationArgs)">
@@ -796,7 +796,7 @@
             <param name="args"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.DataAccess.MongoDB.Utils.Serializers.TenantIdSerializer.Serialize(MongoDB.Bson.Serialization.BsonSerializationContext,MongoDB.Bson.Serialization.BsonSerializationArgs,Milvasoft.Core.EntityBase.MultiTenancy.TenantId)">
+        <member name="M:Milvasoft.DataAccess.MongoDB.Utils.Serializers.TenantIdSerializer.Serialize(MongoDB.Bson.Serialization.BsonSerializationContext,MongoDB.Bson.Serialization.BsonSerializationArgs,Milvasoft.Core.EntityBases.MultiTenancy.TenantId)">
             <summary>
             Serializes a value.
             </summary>
@@ -806,7 +806,7 @@
         </member>
         <member name="T:Milvasoft.DataAccess.MongoDB.Utils.Serializers.NullableTenantIdSerializer">
             <summary>
-            Serializer for nullable <see cref="T:Milvasoft.Core.EntityBase.MultiTenancy.TenantId"/>.
+            Serializer for nullable <see cref="T:Milvasoft.Core.EntityBases.MultiTenancy.TenantId"/>.
             </summary>
         </member>
         <member name="M:Milvasoft.DataAccess.MongoDB.Utils.Serializers.NullableTenantIdSerializer.Deserialize(MongoDB.Bson.Serialization.BsonDeserializationContext,MongoDB.Bson.Serialization.BsonDeserializationArgs)">
@@ -817,7 +817,7 @@
             <param name="args"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.DataAccess.MongoDB.Utils.Serializers.NullableTenantIdSerializer.Serialize(MongoDB.Bson.Serialization.BsonSerializationContext,MongoDB.Bson.Serialization.BsonSerializationArgs,System.Nullable{Milvasoft.Core.EntityBase.MultiTenancy.TenantId})">
+        <member name="M:Milvasoft.DataAccess.MongoDB.Utils.Serializers.NullableTenantIdSerializer.Serialize(MongoDB.Bson.Serialization.BsonSerializationContext,MongoDB.Bson.Serialization.BsonSerializationArgs,System.Nullable{Milvasoft.Core.EntityBases.MultiTenancy.TenantId})">
             <summary>
             Serializes a value.
             </summary>

@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Globalization;
 
-namespace Milvasoft.Core.EntityBase.MultiTenancy;
+namespace Milvasoft.Core.EntityBases.MultiTenancy;
 
 /// <summary>
 /// Provides a type converter to convert string objects to and from <see cref="TenantId"/>.

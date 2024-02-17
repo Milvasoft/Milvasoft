@@ -1,7 +1,7 @@
 ﻿using EFCore.BulkExtensions;
 using Microsoft.EntityFrameworkCore;
 using Milvasoft.Core;
-using Milvasoft.Core.EntityBase.Abstract;
+using Milvasoft.Core.EntityBases.Abstract;
 using Milvasoft.Core.Exceptions;
 using Milvasoft.Core.Extensions;
 using Milvasoft.DataAccess.EfCore.Abstract;

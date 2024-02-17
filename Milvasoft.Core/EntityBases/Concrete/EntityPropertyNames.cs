@@ -1,4 +1,4 @@
-﻿namespace Milvasoft.Core.EntityBase.Concrete;
+﻿namespace Milvasoft.Core.EntityBases.Concrete;
 
 /// <summary>
 /// Auditing property names.

@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using Milvasoft.Core.EntityBase.Abstract;
+using Milvasoft.Core.EntityBases.Abstract;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Milvasoft.Core.EntityBase.Concrete;
+namespace Milvasoft.Core.EntityBases.Concrete;
 
 /// <summary>
 /// Determines entity's creation is auditable.

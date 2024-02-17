@@ -1,4 +1,4 @@
-﻿using Milvasoft.Core.EntityBase.MultiTenancy;
+﻿using Milvasoft.Core.EntityBases.MultiTenancy;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
 using MongoDB.Bson.Serialization.Serializers;

@@ -1,6 +1,6 @@
 ﻿using EFCore.BulkExtensions;
 using Microsoft.EntityFrameworkCore;
-using Milvasoft.Core.EntityBase.Abstract;
+using Milvasoft.Core.EntityBases.Abstract;
 using Milvasoft.DataAccess.EfCore.Concrete;
 using Milvasoft.DataAccess.EfCore.IncludeLibrary;
 using System.Linq.Expressions;

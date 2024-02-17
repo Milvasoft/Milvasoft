@@ -1,12 +1,13 @@
 ﻿using Microsoft.AspNetCore.Http.Json;
 using Microsoft.Extensions.DependencyInjection;
 using Milvasoft.Core.Abstractions.Localization;
-using Milvasoft.Core.EntityBase.Abstract;
-using Milvasoft.Core.EntityBase.Abstract.Auditing;
-using Milvasoft.Core.EntityBase.Concrete;
+using Milvasoft.Core.EntityBases.Abstract;
+using Milvasoft.Core.EntityBases.Abstract.Auditing;
+using Milvasoft.Core.EntityBases.Concrete;
 using Milvasoft.Core.Exceptions;
 using Milvasoft.Core.Extensions;
 using Milvasoft.Core.Utils.Constants;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq.Expressions;
@@ -184,6 +185,27 @@ public static class CommonHelper
         var parameter = Expression.Parameter(entityType);
 
         return Expression.Lambda<Func<T, TPropertyType>>(Expression.Convert(Expression.Property(parameter, propertyName), typeof(TPropertyType)), parameter).Compile();
+    }
+
+    /// <summary>
+    /// Dynamically gets method and invokes <see cref="CommonHelper"/> create property selector methods.
+    /// </summary>
+    /// <param name="createPropertySelectorMethodName"></param>
+    /// <param name="entityType"></param>
+    /// <param name="prop"></param>
+    /// <returns></returns>
+    public static object DynamicInvokeCreatePropertySelector(string createPropertySelectorMethodName, Type entityType, PropertyInfo prop)
+    {
+        // Step 1: Get the MethodInfo object for the generic method
+        var selectorMethod = typeof(CommonHelper).GetMethod(createPropertySelectorMethodName);
+
+        // Step 2: Construct the method generic with desired type of arguments
+        MethodInfo genericSelectorMethod = selectorMethod.MakeGenericMethod(entityType, prop.PropertyType);
+
+        // Step 3: Call the generic method with the specified type arguments
+        var propertySelectorResult = genericSelectorMethod.Invoke(null, new object[] { prop.Name });
+
+        return propertySelectorResult;
     }
 
     /// <summary>
@@ -446,7 +468,6 @@ public static class CommonHelper
 
     public static Type CreateType(string typeName)
     {
-
         var assemblyBuilder = AssemblyBuilder.DefineDynamicAssembly(new AssemblyName(typeName), AssemblyBuilderAccess.Run);
 
         ModuleBuilder moduleBuilder = assemblyBuilder.DefineDynamicModule("MainModule");
@@ -462,5 +483,38 @@ public static class CommonHelper
         typeBuilder.DefineDefaultConstructor(MethodAttributes.Public | MethodAttributes.SpecialName | MethodAttributes.RTSpecialName);
 
         return typeBuilder.CreateType();
+    }
+
+    /// <summary>
+    /// Updates entity matching properties with <paramref name="dto"/>'s not null properties.
+    /// </summary>
+    /// <typeparam name="TDto"></typeparam>
+    /// <typeparam name="TEntity"></typeparam>
+    /// <param name="dto"></param>
+    /// <param name="entity"></param>
+    /// <returns>Updated property informations.</returns>
+    public static List<PropertyInfo> AssignUpdatedProperties<TEntity, TDto>(this TEntity entity, TDto dto) where TDto : DtoBase where TEntity : EntityBase
+    {
+        if (entity == null || dto == null)
+            return null;
+
+        List<PropertyInfo> updatedProps = [];
+
+        foreach (var dtoProp in dto.GetDtoProperties())
+        {
+            var matchingEntityProp = entity.GetDtoProperties().FirstOrDefault(i => i.Name == dtoProp.Name);
+
+            if (matchingEntityProp == null)
+                continue;
+
+            var dtoValue = dtoProp.GetValue(dto);
+
+            if (dtoValue != null)
+                matchingEntityProp.SetValue(entity, dtoValue);
+
+            updatedProps.Add(matchingEntityProp);
+        }
+
+        return updatedProps;
     }
 }

@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Milvasoft.Core.EntityBase.Abstract;
-using Milvasoft.Core.EntityBase.Abstract.Auditing;
-using Milvasoft.Core.EntityBase.Concrete;
+using Milvasoft.Core.EntityBases.Abstract;
+using Milvasoft.Core.EntityBases.Abstract.Auditing;
+using Milvasoft.Core.EntityBases.Concrete;
 using Milvasoft.Core.Extensions;
 using Milvasoft.DataAccess.EfCore.Abstract;
 using System.Linq.Expressions;

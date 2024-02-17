@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Milvasoft.Core.EntityBase.Abstract;
+using Milvasoft.Core.EntityBases.Abstract;
 
 namespace Milvasoft.DataAccess.EfCore.Abstract;
 

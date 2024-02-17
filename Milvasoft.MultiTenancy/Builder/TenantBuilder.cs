@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
-using Milvasoft.Core.EntityBase.MultiTenancy;
+using Milvasoft.Core.EntityBases.MultiTenancy;
 using Milvasoft.MultiTenancy.Accessor;
 using Milvasoft.MultiTenancy.ResolutionStrategy;
 using Milvasoft.MultiTenancy.Service;

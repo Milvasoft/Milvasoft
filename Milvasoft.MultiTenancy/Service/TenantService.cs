@@ -1,4 +1,4 @@
-﻿using Milvasoft.Core.EntityBase.MultiTenancy;
+﻿using Milvasoft.Core.EntityBases.MultiTenancy;
 using Milvasoft.MultiTenancy.ResolutionStrategy;
 using Milvasoft.MultiTenancy.Store;
 
