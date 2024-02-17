@@ -821,13 +821,14 @@
             <param name="propertyName"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Core.CommonHelper.DynamicInvokeCreatePropertySelector(System.String,System.Type,System.Reflection.PropertyInfo)">
+        <member name="M:Milvasoft.Core.CommonHelper.DynamicInvokeCreatePropertySelector(System.String,System.Type,System.Type,System.String)">
             <summary>
             Dynamically gets method and invokes <see cref="T:Milvasoft.Core.CommonHelper"/> create property selector methods.
             </summary>
             <param name="createPropertySelectorMethodName"></param>
             <param name="entityType"></param>
-            <param name="prop"></param>
+            <param name="propType"></param>
+            <param name="propName"></param>
             <returns></returns>
         </member>
         <member name="M:Milvasoft.Core.CommonHelper.CreateIsDeletedFalseExpression``1">
@@ -978,6 +979,7 @@
             <typeparam name="TEntity"></typeparam>
             <param name="dto"></param>
             <param name="entity"></param>
+            <returns>Updated property informations.</returns>
         </member>
         <member name="T:Milvasoft.Core.EntityBases.Abstract.Auditing.IHasCreator`1">
             <summary>

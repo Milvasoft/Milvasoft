@@ -5,7 +5,7 @@ namespace Milvasoft.Components.Rest.Request;
 /// <summary>
 /// List request specs.
 /// </summary>
-public class ListRequest
+public record ListRequest : IListRequest
 {
     /// <summary>
     /// Requested page number
@@ -59,4 +59,34 @@ public class ListRequest
 
         return estimatedCountOfPages;
     }
+}
+
+public interface IListRequest
+{
+    /// <summary>
+    /// Requested page number
+    /// </summary>
+    /// <example>1</example>
+    public int? PageNumber { get; set; }
+
+    /// <summary>
+    /// Rows per page
+    /// </summary>
+    /// <example>10</example>
+    public int? RowCount { get; set; }
+
+    /// <summary>
+    /// Filter criterias.
+    /// </summary>
+    public FilterRequest Filtering { get; set; }
+
+    /// <summary>
+    /// Sort criterias.
+    /// </summary>
+    public SortRequest Sorting { get; set; }
+
+    /// <summary>
+    /// Aggregation criterias.
+    /// </summary>
+    public AggregationRequest Aggregation { get; set; }
 }

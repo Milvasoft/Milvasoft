@@ -199,7 +199,7 @@ public static class MilvaEfExtensions
     /// <typeparam name="TDto"></typeparam>
     /// <typeparam name="TEntity"></typeparam>
     /// <param name="dto"></param>
-    public static SetPropertyBuilder<TEntity> GetSetPropertyBuilder<TEntity, TDto>(this TDto dto) where TDto : DtoBase where TEntity : EntityBase
+    public static SetPropertyBuilder<TEntity> GetSetPropertyBuilder<TEntity, TDto>(this TDto dto)
     {
         if (dto == null)
             return null;
@@ -210,7 +210,7 @@ public static class MilvaEfExtensions
 
         var setPropertyMethod = typeof(SetPropertyBuilder<TEntity>).GetMethods().FirstOrDefault(mi => mi.Name == "SetPropertyValue");
 
-        foreach (var dtoProp in dto.GetDtoProperties())
+        foreach (var dtoProp in dto.GetType().GetProperties())
         {
             var matchingEntityProp = entityType.GetProperties().FirstOrDefault(i => i.Name == dtoProp.Name);
 
@@ -223,7 +223,10 @@ public static class MilvaEfExtensions
             {
                 var genericMethod = setPropertyMethod.MakeGenericMethod([matchingEntityProp.PropertyType]);
 
-                var expression = CommonHelper.DynamicInvokeCreatePropertySelector(nameof(CommonHelper.CreatePropertySelector), entityType, matchingEntityProp);
+                var expression = CommonHelper.DynamicInvokeCreatePropertySelector(nameof(CommonHelper.CreatePropertySelector),
+                                                                                  entityType,
+                                                                                  matchingEntityProp.PropertyType,
+                                                                                  matchingEntityProp.Name);
 
                 builder = (SetPropertyBuilder<TEntity>)genericMethod.Invoke(builder, [expression, dtoValue]);
             }

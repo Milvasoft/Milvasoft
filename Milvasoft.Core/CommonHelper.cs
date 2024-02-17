@@ -192,18 +192,19 @@ public static class CommonHelper
     /// </summary>
     /// <param name="createPropertySelectorMethodName"></param>
     /// <param name="entityType"></param>
-    /// <param name="prop"></param>
+    /// <param name="propType"></param>
+    /// <param name="propName"></param>
     /// <returns></returns>
-    public static object DynamicInvokeCreatePropertySelector(string createPropertySelectorMethodName, Type entityType, PropertyInfo prop)
+    public static object DynamicInvokeCreatePropertySelector(string createPropertySelectorMethodName, Type entityType, Type propType, string propName)
     {
         // Step 1: Get the MethodInfo object for the generic method
         var selectorMethod = typeof(CommonHelper).GetMethod(createPropertySelectorMethodName);
 
         // Step 2: Construct the method generic with desired type of arguments
-        MethodInfo genericSelectorMethod = selectorMethod.MakeGenericMethod(entityType, prop.PropertyType);
+        MethodInfo genericSelectorMethod = selectorMethod.MakeGenericMethod(entityType, propType);
 
         // Step 3: Call the generic method with the specified type arguments
-        var propertySelectorResult = genericSelectorMethod.Invoke(null, new object[] { prop.Name });
+        var propertySelectorResult = genericSelectorMethod.Invoke(null, new object[] { propName });
 
         return propertySelectorResult;
     }
