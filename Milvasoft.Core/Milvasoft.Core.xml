@@ -1296,6 +1296,43 @@
             Last modification date of entity.
             </summary>
         </member>
+        <member name="T:Milvasoft.Core.EntityBase.Concrete.BaseDto`1">
+            <summary>
+            Base entity for all of entities.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Core.EntityBase.Concrete.BaseDto`1.Id">
+            <summary>
+            Unique identifier for this entity.
+            </summary>
+        </member>
+        <member name="M:Milvasoft.Core.EntityBase.Concrete.BaseDto`1.ToString">
+            <summary>
+            Returns this instance of "<see cref="T:System.Type"/>.Name <see cref="T:Milvasoft.Core.EntityBase.Concrete.BaseEntity`1"/>.Id" as string.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Milvasoft.Core.EntityBase.Concrete.DtoBase`1">
+            <summary>
+            Base entity for all of entities.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Core.EntityBase.Concrete.DtoBase`1.Id">
+            <summary>
+            Unique identifier for this entity.
+            </summary>
+        </member>
+        <member name="M:Milvasoft.Core.EntityBase.Concrete.DtoBase`1.ToString">
+            <summary>
+            Returns this instance of "<see cref="T:System.Type"/>.Name <see cref="T:Milvasoft.Core.EntityBase.Concrete.BaseEntity`1"/>.Id" as string.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Milvasoft.Core.EntityBase.Concrete.DtoBase">
+            <summary>
+            Base entity for all of entities.
+            </summary>
+        </member>
         <member name="T:Milvasoft.Core.EntityBase.Concrete.BaseEntity`1">
             <summary>
             Base entity for all of entities.
@@ -1327,6 +1364,18 @@
             Returns this instance of "<see cref="T:System.Type"/>.Name <see cref="T:Milvasoft.Core.EntityBase.Concrete.BaseEntity`1"/>.Id" as string.
             </summary>
             <returns></returns>
+        </member>
+        <member name="T:Milvasoft.Core.EntityBase.Concrete.EntityBase">
+            <summary>
+            Base entity for all of entities.
+            </summary>
+        </member>
+        <member name="M:Milvasoft.Core.EntityBase.Concrete.EntityBase.AssignUpdatedProperties``1(``0)">
+            <summary>
+            Updates entity matching properties with <paramref name="dto"/>'s not null properties.
+            </summary>
+            <typeparam name="TDto"></typeparam>
+            <param name="dto"></param>
         </member>
         <member name="T:Milvasoft.Core.EntityBase.Concrete.CreationAuditableEntity`1">
             <summary>
