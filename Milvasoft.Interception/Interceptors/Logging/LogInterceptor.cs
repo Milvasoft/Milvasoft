@@ -78,16 +78,21 @@ public partial class LogInterceptor : IMilvaInterceptor
                 {
                     DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull | System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingDefault
                 };
+                
                 jsonOpts.Converters.Add(converter);
 
                 exceptionAsJson = exception.ToJson(jsonOpts);
             }
 
+            var methodParameters = call.Arguments?.ToList();
+
+            methodParameters?.RemoveAll(p => p is CancellationToken);
+
             var logObjectPropDic = _logInterceptionOptions.LogDefaultParameters ? new Dictionary<string, object>()
             {
                { "TransactionId", ActivityHelper.TraceId },
                { "MethodName", call.Method.Name },
-               { "MethodParams", call.Arguments?.ToJson() },
+               { "MethodParams", methodParameters?.ToJson() },
                { "MethodResult", call.ReturnValue?.ToJson() },
                { "ElapsedMs", stopwatch.ElapsedMilliseconds },
                { "UtcLogTime" , DateTime.UtcNow },
@@ -115,6 +120,8 @@ public partial class LogInterceptor : IMilvaInterceptor
                     values.Add(argument.GetType().GetProperty("Value").GetValue(argument));
 
                 var argumentValues = values;
+
+                argumentValues?.RemoveAll(p => p is CancellationToken);
 
                 var methodName = body.Method.Name;
 

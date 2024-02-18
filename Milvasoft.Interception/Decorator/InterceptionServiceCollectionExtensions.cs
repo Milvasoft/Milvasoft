@@ -41,6 +41,10 @@ public static class InterceptionServiceCollectionExtensions
 
         var builder = new InterceptionBuilder(services, configurationManager);
 
+        var externalTypes = builder.Services.Where(i => i?.ImplementationType?.GetInterfaces()?.Any(i => i == typeof(IInterceptable)) ?? false)?.Select(i => i.ServiceType);
+
+        types = (types?.Concat(externalTypes) ?? externalTypes)?.Distinct()?.ToList();
+
         builder.Services.AddScoped<IInterceptorRunner, InterceptorRunner>();
         builder.Intercept(typeof(IInterceptorRunner));
 
@@ -302,8 +306,8 @@ public static class InterceptionServiceCollectionExtensions
     private static IEnumerable<Type> FindDecorableTypes(this Assembly assembly)
     {
         var types = assembly.GetExportedTypes()
-                            .Where(type => type is { IsClass: false, IsAbstract: true })
-                            .Where(type => type != typeof(IInterceptable) && typeof(IInterceptable).IsAssignableFrom(type));
+                            .Where(type => (type is { IsClass: false, IsAbstract: true })
+                                           && (type != typeof(IInterceptable) && typeof(IInterceptable).IsAssignableFrom(type)));
 
         return types;
     }
