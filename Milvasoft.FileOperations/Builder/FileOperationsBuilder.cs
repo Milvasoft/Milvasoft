@@ -13,6 +13,13 @@ namespace Milvasoft.FileOperations.Builder;
 /// <param name="configurationManager"></param>
 public sealed class FileOperationsBuilder(IServiceCollection services, IConfigurationManager configurationManager = null)
 {
+    /// <summary>
+    /// Service collection.
+    /// </summary>
     public IServiceCollection Services { get; } = services;
+
+    /// <summary>
+    /// Configuration manager. 
+    /// </summary>
     public IConfigurationManager ConfigurationManager { get; } = configurationManager;
 }

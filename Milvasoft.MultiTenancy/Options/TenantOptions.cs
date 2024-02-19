@@ -6,22 +6,16 @@ namespace Milvasoft.MultiTenancy.Options;
 /// <summary>
 /// Makes IOptions tenant aware.
 /// </summary>
-public class TenantOptions<TOptions> : IOptions<TOptions>, IOptionsSnapshot<TOptions>
+/// <remarks>
+/// Initializes new instance of <see cref="TenantOptions{TOptions}"/>
+/// </remarks>
+/// <param name="factory"></param>
+/// <param name="cache"></param>
+public class TenantOptions<TOptions>(IOptionsFactory<TOptions> factory, IOptionsMonitorCache<TOptions> cache) : IOptions<TOptions>, IOptionsSnapshot<TOptions>
     where TOptions : class, new()
 {
-    private readonly IOptionsFactory<TOptions> _factory;
-    private readonly IOptionsMonitorCache<TOptions> _cache;
-
-    /// <summary>
-    /// Initializes new instance of <see cref="TenantOptions{TOptions}"/>
-    /// </summary>
-    /// <param name="factory"></param>
-    /// <param name="cache"></param>
-    public TenantOptions(IOptionsFactory<TOptions> factory, IOptionsMonitorCache<TOptions> cache)
-    {
-        _factory = factory;
-        _cache = cache;
-    }
+    private readonly IOptionsFactory<TOptions> _factory = factory;
+    private readonly IOptionsMonitorCache<TOptions> _cache = cache;
 
     /// <summary>
     /// Options Value.
@@ -35,8 +29,5 @@ public class TenantOptions<TOptions> : IOptions<TOptions>, IOptionsSnapshot<TOpt
     /// </summary>
     /// <param name="name"></param>
     /// <returns></returns>
-    public TOptions Get(string name)
-    {
-        return _cache.GetOrAdd(name, () => _factory.Create(name));
-    }
+    public TOptions Get(string name) => _cache.GetOrAdd(name, () => _factory.Create(name));
 }

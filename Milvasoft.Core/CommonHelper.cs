@@ -224,7 +224,8 @@ public static class CommonHelper
 
             return Expression.Lambda<Func<TEntity, bool>>(filterExpression, parameter);
         }
-        else return null;
+        else
+            return null;
     }
 
     /// <summary>
@@ -246,15 +247,18 @@ public static class CommonHelper
     /// </summary>
     public static void EnsureLegalLengths(int maxLength, int minLength, IMilvaLocalizer milvaLocalizer = null)
     {
-        if (maxLength < 0) throw new MilvaValidationException(milvaLocalizer != null
+        if (maxLength < 0)
+            throw new MilvaValidationException(milvaLocalizer != null
                                                                   ? milvaLocalizer[LocalizerKeys.PreventStringInjectionMaxLengthException]
                                                                   : "Please enter a valid value for the maximum character length.");
 
-        if (minLength < 0) throw new MilvaValidationException(milvaLocalizer != null
+        if (minLength < 0)
+            throw new MilvaValidationException(milvaLocalizer != null
                                                                   ? milvaLocalizer[LocalizerKeys.PreventStringInjectionMinLengthException]
                                                                   : "Please enter a valid value for the minimum character length.");
 
-        if (maxLength < minLength) throw new MilvaValidationException(milvaLocalizer != null
+        if (maxLength < minLength)
+            throw new MilvaValidationException(milvaLocalizer != null
                                                                            ? milvaLocalizer[LocalizerKeys.PreventStringInjectionMinLengthBigThanMaxLengthException, minLength, maxLength]
                                                                            : $"The minimum value ({minLength}) you entered is greater than the maximum value ({maxLength}). Please enter a valid range of values.");
     }
@@ -466,6 +470,11 @@ public static class CommonHelper
     /// <returns></returns>
     public static string MilvaNormalize(this string value) => !string.IsNullOrWhiteSpace(value) ? value.ToLower().ToUpperInvariant() : null;
 
+    /// <summary>
+    /// Creates dynamic assembly type.
+    /// </summary>
+    /// <param name="typeName"></param>
+    /// <returns></returns>
     public static Type CreateType(string typeName)
     {
         var assemblyBuilder = AssemblyBuilder.DefineDynamicAssembly(new AssemblyName(typeName), AssemblyBuilderAccess.Run);
@@ -502,7 +511,7 @@ public static class CommonHelper
 
         foreach (var dtoProp in dto.GetDtoProperties())
         {
-            var matchingEntityProp = entity.GetDtoProperties().FirstOrDefault(i => i.Name == dtoProp.Name);
+            var matchingEntityProp = entity.GetEntityProperties().FirstOrDefault(i => i.Name == dtoProp.Name);
 
             if (matchingEntityProp == null)
                 continue;
@@ -518,12 +527,15 @@ public static class CommonHelper
         return updatedProps;
     }
 
+    /// <summary>
+    /// Gets hexadecimal string hash.
+    /// </summary>
+    /// <param name="input"></param>
+    /// <returns></returns>
     public static string GetHexadecimalHash(this string input)
     {
-        var sha256 = SHA256.Create();
-
         // Convert the input string to a byte array and compute the hash.
-        byte[] data = sha256.ComputeHash(Encoding.UTF8.GetBytes(input));
+        byte[] data = SHA256.HashData(Encoding.UTF8.GetBytes(input));
 
         // Create a new Stringbuilder to collect the bytes
         // and create a string.
@@ -535,8 +547,6 @@ public static class CommonHelper
         {
             sBuilder.Append(data[i].ToString("x2"));
         }
-
-        sha256.Dispose();
 
         // Return the hexadecimal string.
         return sBuilder.ToString();

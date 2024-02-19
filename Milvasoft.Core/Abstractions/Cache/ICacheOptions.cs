@@ -2,6 +2,10 @@
 
 namespace Milvasoft.Core.Abstractions.Cache;
 
+/// <summary>
+/// Makes IOptions cache aware.
+/// </summary>
+/// <typeparam name="TCacheOptions"></typeparam>
 public interface ICacheOptions<TCacheOptions> : IMilvaOptions where TCacheOptions : class
 {
     /// <summary>

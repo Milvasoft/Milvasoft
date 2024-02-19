@@ -762,6 +762,16 @@
             <param name="services"></param>
             <param name="configurationManager"></param>
         </member>
+        <member name="P:Milvasoft.FileOperations.Builder.FileOperationsBuilder.Services">
+            <summary>
+            Service collection.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.FileOperations.Builder.FileOperationsBuilder.ConfigurationManager">
+            <summary>
+            Configuration manager. 
+            </summary>
+        </member>
         <member name="T:Milvasoft.FileOperations.Builder.ServiceCollectionExtensions">
             <summary>
             Provides registration of caching services.
@@ -1900,6 +1910,11 @@
             Json operations config for json file operations.
             </summary>
         </member>
+        <member name="P:Milvasoft.FileOperations.JsonFileOperationsOptions.SectionName">
+            <summary>
+            Configuration file section path.
+            </summary>
+        </member>
         <member name="P:Milvasoft.FileOperations.JsonFileOperationsOptions.Lifetime">
             <summary>
             Gets or sets base path. If sets combines all file paths with this.
@@ -1928,6 +1943,11 @@
         <member name="P:Milvasoft.FileOperations.JsonFileOperationsOptions.Encoding">
             <summary>
             Encoding to be used when access file. Default is UTF8.
+            </summary>
+        </member>
+        <member name="M:Milvasoft.FileOperations.JsonFileOperationsOptions.#ctor">
+            <summary>
+            Initializes new instance.
             </summary>
         </member>
     </members>

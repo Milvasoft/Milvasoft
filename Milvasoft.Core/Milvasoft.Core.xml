@@ -4,6 +4,11 @@
         <name>Milvasoft.Core</name>
     </assembly>
     <members>
+        <member name="T:Milvasoft.Core.Abstractions.Cache.ICacheAccessor">
+            <summary>
+            Provides cache access methods.
+            </summary>
+        </member>
         <member name="M:Milvasoft.Core.Abstractions.Cache.ICacheAccessor.IsConnected">
             <summary>
             Gets redis client connection state.
@@ -22,7 +27,6 @@
             <summary>
             Gets <paramref name="key"/>'s value.
             </summary>
-            <typeparam name="T"></typeparam>
             <param name="key"></param>
             <param name="returnType"></param>
             <returns></returns>
@@ -164,6 +168,18 @@
             <param name="key"></param>
             <param name="expiration"></param>
             <returns></returns>
+        </member>
+        <member name="T:Milvasoft.Core.Abstractions.Cache.ICacheAccessor`1">
+            <summary>
+            Cache accessor generic implementation. 
+            </summary>
+            <typeparam name="TAccessor"></typeparam>
+        </member>
+        <member name="T:Milvasoft.Core.Abstractions.Cache.ICacheOptions`1">
+            <summary>
+            Makes IOptions cache aware.
+            </summary>
+            <typeparam name="TCacheOptions"></typeparam>
         </member>
         <member name="P:Milvasoft.Core.Abstractions.Cache.ICacheOptions`1.AccessorLifetime">
             <summary>
@@ -971,6 +987,13 @@
             <param name="value"></param>
             <returns></returns>
         </member>
+        <member name="M:Milvasoft.Core.CommonHelper.CreateType(System.String)">
+            <summary>
+            Creates dynamic assembly type.
+            </summary>
+            <param name="typeName"></param>
+            <returns></returns>
+        </member>
         <member name="M:Milvasoft.Core.CommonHelper.AssignUpdatedProperties``2(``0,``1)">
             <summary>
             Updates entity matching properties with <paramref name="dto"/>'s not null properties.
@@ -980,6 +1003,13 @@
             <param name="dto"></param>
             <param name="entity"></param>
             <returns>Updated property informations.</returns>
+        </member>
+        <member name="M:Milvasoft.Core.CommonHelper.GetHexadecimalHash(System.String)">
+            <summary>
+            Gets hexadecimal string hash.
+            </summary>
+            <param name="input"></param>
+            <returns></returns>
         </member>
         <member name="T:Milvasoft.Core.EntityBases.Abstract.Auditing.IHasCreator`1">
             <summary>
@@ -1353,6 +1383,23 @@
             Base entity for all of entities.
             </summary>
         </member>
+        <member name="M:Milvasoft.Core.EntityBases.Concrete.DtoBase.#ctor">
+            <summary>
+            Initializes new instance.
+            </summary>
+        </member>
+        <member name="M:Milvasoft.Core.EntityBases.Concrete.DtoBase.GetDtoType">
+            <summary>
+            Gets dto type.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Core.EntityBases.Concrete.DtoBase.GetDtoProperties">
+            <summary>
+            Get dto type properties.
+            </summary>
+            <returns></returns>
+        </member>
         <member name="T:Milvasoft.Core.EntityBases.Concrete.BaseEntity`1">
             <summary>
             Base entity for all of entities.
@@ -1389,6 +1436,23 @@
             <summary>
             Base entity for all of entities.
             </summary>
+        </member>
+        <member name="M:Milvasoft.Core.EntityBases.Concrete.EntityBase.#ctor">
+            <summary>
+            Initializes new instance.
+            </summary>
+        </member>
+        <member name="M:Milvasoft.Core.EntityBases.Concrete.EntityBase.GetEntityType">
+            <summary>
+            Gets entity type.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Core.EntityBases.Concrete.EntityBase.GetEntityProperties">
+            <summary>
+            Gets entity's type properties from static collection.
+            </summary>
+            <returns></returns>
         </member>
         <member name="T:Milvasoft.Core.EntityBases.Concrete.CreationAuditableEntity`1">
             <summary>
@@ -1961,6 +2025,37 @@
             <param name="value"></param>
             <param name="destinationType"></param>
             <returns></returns>
+        </member>
+        <member name="T:Milvasoft.Core.Exceptions.ExceptionConverter`1">
+            <summary>
+            System.Text.Json exception converter. Ignores <see cref="P:System.Exception.TargetSite"/> property. Only serializes <see cref="P:System.Exception.Message"/> and <see cref="P:System.Exception.StackTrace"/> properties.
+            </summary>
+            <typeparam name="TExceptionType"></typeparam>
+        </member>
+        <member name="M:Milvasoft.Core.Exceptions.ExceptionConverter`1.CanConvert(System.Type)">
+            <summary>
+            Determnies whether <typeparamref name="TExceptionType"/> is convertible to <see cref="T:System.Exception"/> or not.
+            </summary>
+            <param name="typeToConvert"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Core.Exceptions.ExceptionConverter`1.Read(System.Text.Json.Utf8JsonReader@,System.Type,System.Text.Json.JsonSerializerOptions)">
+            <summary>
+            Deserialization operation.
+            </summary>
+            <param name="reader"></param>
+            <param name="typeToConvert"></param>
+            <param name="options"></param>
+            <returns></returns>
+            <exception cref="T:System.NotSupportedException"></exception>
+        </member>
+        <member name="M:Milvasoft.Core.Exceptions.ExceptionConverter`1.Write(System.Text.Json.Utf8JsonWriter,`0,System.Text.Json.JsonSerializerOptions)">
+            <summary>
+            Serialization operation.
+            </summary>
+            <param name="writer"></param>
+            <param name="value"></param>
+            <param name="options"></param>
         </member>
         <member name="T:Milvasoft.Core.Exceptions.MilvaBaseException">
             <summary>
@@ -2711,6 +2806,11 @@
             </summary>
             <param name="node"></param>
             <returns></returns>
+        </member>
+        <member name="T:Milvasoft.Core.Extensions.MilvaOptionsExtensions">
+            <summary>
+            Milvasoft library components options extensions.
+            </summary>
         </member>
         <member name="F:Milvasoft.Core.Extensions.MilvaOptionsExtensions.ParentSectionName">
             <summary>

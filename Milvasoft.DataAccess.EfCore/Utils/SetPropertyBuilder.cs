@@ -20,7 +20,7 @@ public class SetPropertyBuilder<TSource>
     /// </summary>
     /// <typeparam name="TProperty"></typeparam>
     /// <param name="propertyExpression"></param>
-    /// <param name="valueExpression"></param>
+    /// <param name="value"></param>
     /// <returns></returns>
     public SetPropertyBuilder<TSource> SetPropertyValue<TProperty>(Expression<Func<TSource, TProperty>> propertyExpression, TProperty value) => SetProperty(propertyExpression, _ => value);
 

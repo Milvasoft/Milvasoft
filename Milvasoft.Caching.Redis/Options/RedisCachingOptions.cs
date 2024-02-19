@@ -10,6 +10,9 @@ namespace Milvasoft.Caching.Redis.Options;
 /// </summary>
 public class RedisCachingOptions : ICacheOptions<RedisCachingOptions>
 {
+    /// <summary>
+    /// Configuration section path in configuration file.
+    /// </summary>
     public static string SectionName { get; } = $"{MilvaOptionsExtensions.ParentSectionName}:Caching:Redis";
 
     /// <summary>
@@ -43,5 +46,4 @@ public class RedisCachingOptions : ICacheOptions<RedisCachingOptions>
         ConfigurationOptions = new ConfigurationOptions();
         ConfigurationOptions.EndPoints.Add(connectionString);
     }
-
 }

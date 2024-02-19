@@ -173,11 +173,19 @@
             <summary>
             Makes IOptions tenant aware.
             </summary>
+            <remarks>
+            Initializes new instance of <see cref="T:Milvasoft.MultiTenancy.Options.TenantOptions`1"/>
+            </remarks>
+            <param name="factory"></param>
+            <param name="cache"></param>
         </member>
         <member name="M:Milvasoft.MultiTenancy.Options.TenantOptions`1.#ctor(Microsoft.Extensions.Options.IOptionsFactory{`0},Microsoft.Extensions.Options.IOptionsMonitorCache{`0})">
             <summary>
-            Initializes new instance of <see cref="T:Milvasoft.MultiTenancy.Options.TenantOptions`1"/>
+            Makes IOptions tenant aware.
             </summary>
+            <remarks>
+            Initializes new instance of <see cref="T:Milvasoft.MultiTenancy.Options.TenantOptions`1"/>
+            </remarks>
             <param name="factory"></param>
             <param name="cache"></param>
         </member>
@@ -202,11 +210,21 @@
             <typeparam name="TOptions"></typeparam>
             <typeparam name="TTenant"></typeparam>
             <typeparam name="TKey"></typeparam>
+            <remarks>
+            Initializes new instance of <see cref="T:Milvasoft.MultiTenancy.Options.TenantOptionsCache`3"/>
+            </remarks>
+            <param name="tenantAccessor"></param>
         </member>
         <member name="M:Milvasoft.MultiTenancy.Options.TenantOptionsCache`3.#ctor(Milvasoft.MultiTenancy.Accessor.ITenantAccessor{`1,`2})">
             <summary>
-            Initializes new instance of <see cref="T:Milvasoft.MultiTenancy.Options.TenantOptionsCache`3"/>
+            Tenant aware options cache
             </summary>
+            <typeparam name="TOptions"></typeparam>
+            <typeparam name="TTenant"></typeparam>
+            <typeparam name="TKey"></typeparam>
+            <remarks>
+            Initializes new instance of <see cref="T:Milvasoft.MultiTenancy.Options.TenantOptionsCache`3"/>
+            </remarks>
             <param name="tenantAccessor"></param>
         </member>
         <member name="M:Milvasoft.MultiTenancy.Options.TenantOptionsCache`3.Clear">

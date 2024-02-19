@@ -95,6 +95,7 @@ public class ListResponse<T> : Response<List<T>>
         TotalDataCount = totalDataCount;
     }
 
+#pragma warning disable CS0108 // Member hides inherited member; missing new keyword
     #region Success
 
     public static ListResponse<T> Success() => new(LocalizerKeys.Successful)
@@ -222,5 +223,6 @@ public class ListResponse<T> : Response<List<T>>
     }
 
     #endregion
+#pragma warning restore CS0108 // Member hides inherited member; missing new keyword
 
 }

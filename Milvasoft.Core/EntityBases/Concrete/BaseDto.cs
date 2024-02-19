@@ -51,12 +51,26 @@ public abstract class DtoBase
     private static Type _dtoType;
     private static PropertyInfo[] _propertyInfos;
 
+    /// <summary>
+    /// Initializes new instance.
+    /// </summary>
     public DtoBase()
     {
         _dtoType = GetType();
         _propertyInfos = _dtoType.GetProperties(BindingFlags.Public | BindingFlags.Instance);
     }
 
+    /// <summary>
+    /// Gets dto type.
+    /// </summary>
+    /// <returns></returns>
+#pragma warning disable CA1822 // Mark members as static
     public Type GetDtoType() => _dtoType;
+
+    /// <summary>
+    /// Get dto type properties.
+    /// </summary>
+    /// <returns></returns>
     public PropertyInfo[] GetDtoProperties() => _propertyInfos;
+#pragma warning restore CA1822 // Mark members as static
 }

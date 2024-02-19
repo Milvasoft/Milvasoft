@@ -11,12 +11,6 @@ namespace Milvasoft.Caching.Redis.Accessor;
 /// </summary>
 public interface IRedisAccessor : ICacheAccessor<RedisAccessor>
 {
-    /// <summary>
-    /// Gets redis client connection state.
-    /// </summary>
-    /// <returns></returns>
-    bool IsConnected();
-
     #region Async
 
     /// <summary>

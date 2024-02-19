@@ -2677,7 +2677,7 @@
             </summary>
             <typeparam name="TProperty"></typeparam>
             <param name="propertyExpression"></param>
-            <param name="valueExpression"></param>
+            <param name="value"></param>
             <returns></returns>
         </member>
         <member name="M:Milvasoft.DataAccess.EfCore.Utils.SetPropertyBuilder`1.SetProperty``1(System.Linq.Expressions.Expression{System.Func{`0,``0}},System.Linq.Expressions.Expression{System.Func{`0,``0}})">

@@ -22,20 +22,27 @@ public class ExpoClient : IDisposable
     /// </summary>
     private static readonly HttpClientHandler _httpHandler = new() { MaxConnectionsPerServer = 6 };
     private static readonly HttpClient _httpClient = new(_httpHandler);
-    private bool disposedValue;
+    private bool _disposedValue;
+    private const string _applicationJsonMimeType = "application/json";
+    private const string _tokenName = "Bearer";
+    private static readonly JsonSerializerOptions _jsonSerializerOptions = new()
+    {
+        DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
+    };
+    
 
     static ExpoClient()
     {
         _httpClient.BaseAddress = new Uri(_expoBackendHost);
         _httpClient.DefaultRequestHeaders.Accept.Clear();
-        _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+        _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(_applicationJsonMimeType));
     }
 
     /// <summary>
     /// Adds Bearer authorization header value to <see cref="HttpClient.DefaultRequestHeaders"/>.
     /// </summary>
     /// <param name="token"></param>
-    public static void AddBearerAuthorizationHeader(string token) => _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+    public static void AddBearerAuthorizationHeader(string token) => _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(_tokenName, token);
 
     /// <summary>
     /// Sends <paramref name="pushTicketRequest"/> to expo push api and returns <see cref="PushTicketResponse"/>.
@@ -69,12 +76,9 @@ public class ExpoClient : IDisposable
     /// <returns></returns>
     private static async Task<U> PostAsync<T, U>(T requestObj, string path)
     {
-        var serializedRequestObj = JsonSerializer.Serialize(requestObj, new JsonSerializerOptions
-        {
-            DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
-        });
+        var serializedRequestObj = JsonSerializer.Serialize(requestObj, _jsonSerializerOptions);
 
-        var requestBody = new StringContent(serializedRequestObj, System.Text.Encoding.UTF8, "application/json");
+        var requestBody = new StringContent(serializedRequestObj, System.Text.Encoding.UTF8, _applicationJsonMimeType);
 
         var responseBody = default(U);
 
@@ -95,7 +99,7 @@ public class ExpoClient : IDisposable
     /// <param name="disposing"></param>
     protected virtual void Dispose(bool disposing)
     {
-        if (!disposedValue)
+        if (!_disposedValue)
         {
             if (disposing)
             {
@@ -103,7 +107,7 @@ public class ExpoClient : IDisposable
                 _httpHandler.Dispose();
             }
 
-            disposedValue = true;
+            _disposedValue = true;
         }
     }
 

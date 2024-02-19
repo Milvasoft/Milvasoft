@@ -46,7 +46,7 @@ public class AggregationCriteria
             QueryProviderType.Enumerable => CommonHelper.DynamicInvokeCreatePropertySelector(nameof(CommonHelper.CreateRequiredPropertySelectorFuction), _entityType, _propType, prop.Name),
             QueryProviderType.AsyncQueryable => CommonHelper.DynamicInvokeCreatePropertySelector(nameof(CommonHelper.CreateRequiredPropertySelector), _entityType, _propType, prop.Name),
             _ => CommonHelper.DynamicInvokeCreatePropertySelector(nameof(CommonHelper.CreateRequiredPropertySelector), _entityType, _propType, prop.Name),
-        }; ;
+        };
 
         if (_type == AggregationType.Count)
         {
@@ -120,7 +120,8 @@ public class AggregationCriteria
         {
             genericAggregationMethod = aggregationMethod.MakeGenericMethod(_entityType);
         }
-        else genericAggregationMethod = aggregationMethod.MakeGenericMethod(_entityType, _propType);
+        else 
+            genericAggregationMethod = aggregationMethod.MakeGenericMethod(_entityType, _propType);
 
         return genericAggregationMethod;
 
@@ -220,7 +221,8 @@ public class AggregationCriteria
                 _queryProviderType = QueryProviderType.List;
             else if (query.Provider.GetType().IsAssignableTo(typeof(EntityQueryProvider)))
                 _queryProviderType = QueryProviderType.Enumerable;
-            else _queryProviderType = QueryProviderType.List;
+            else 
+                _queryProviderType = QueryProviderType.List;
         }
 
         return prop;

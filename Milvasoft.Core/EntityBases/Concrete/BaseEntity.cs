@@ -44,7 +44,6 @@ public abstract class EntityBase<TKey> : EntityBase, IEntityBase<TKey>
     public override string ToString() => $"[{GetType().Name} {Id}]";
 }
 
-
 /// <summary>
 /// Base entity for all of entities.
 /// </summary>
@@ -53,13 +52,27 @@ public abstract class EntityBase
     private static Type _entityType;
     private static PropertyInfo[] _propertyInfos;
 
+    /// <summary>
+    /// Initializes new instance.
+    /// </summary>
     public EntityBase()
     {
         _entityType = GetType();
         _propertyInfos = _entityType.GetProperties(BindingFlags.Public | BindingFlags.Instance);
     }
 
+#pragma warning disable CA1822 // Mark members as static
+    /// <summary>
+    /// Gets entity type.
+    /// </summary>
+    /// <returns></returns>
     public Type GetEntityType() => _entityType;
-    public PropertyInfo[] GetDtoProperties() => _propertyInfos;
+
+    /// <summary>
+    /// Gets entity's type properties from static collection.
+    /// </summary>
+    /// <returns></returns>
+    public PropertyInfo[] GetEntityProperties() => _propertyInfos;
+#pragma warning restore CA1822 // Mark members as static
 }
 

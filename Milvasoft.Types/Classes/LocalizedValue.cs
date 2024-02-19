@@ -25,7 +25,7 @@ public class LocalizedValue
     /// <summary>
     /// The location which was searched for a localization value.
     /// </summary>
-    public string? SearchedLocation { get; }
+    public string SearchedLocation { get; }
 
     /// <summary>
     /// Creates a new <see cref="LocalizedValue"/>.
@@ -53,7 +53,7 @@ public class LocalizedValue
     /// <param name="value">The actual string.</param>
     /// <param name="resourceFound">Whether the string was not found in a resource. Set this to <c>false</c> to indicate an alternate string value was used.</param>
     /// <param name="searchedLocation">The location which was searched for a localization value.</param>
-    public LocalizedValue(string key, string value, bool resourceFound, string? searchedLocation)
+    public LocalizedValue(string key, string value, bool resourceFound, string searchedLocation)
     {
         ArgumentNullException.ThrowIfNull(key);
         //ArgumentNullException.ThrowIfNull(value);
@@ -67,12 +67,9 @@ public class LocalizedValue
     /// <summary>
     /// Implicitly converts the <see cref="LocalizedValue"/> to a <see cref="string"/>.
     /// </summary>
-    /// <param name="LocalizedValue">The string to be implicitly converted.</param>
-    [return: NotNullIfNotNull("LocalizedValue")]
-    public static implicit operator string?(LocalizedValue LocalizedValue)
-    {
-        return LocalizedValue?.Value;
-    }
+    /// <param name="localizedValue">The string to be implicitly converted.</param>
+    [return: NotNullIfNotNull(nameof(LocalizedValue))]
+    public static implicit operator string(LocalizedValue localizedValue) => localizedValue?.Value;
 
     /// <summary>
     /// Returns the actual string.

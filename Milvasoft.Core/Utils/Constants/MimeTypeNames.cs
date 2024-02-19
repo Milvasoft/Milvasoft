@@ -113,7 +113,7 @@ public static class MimeTypeNames
     ///However,text/javascript is allowed in HTML 4 and 5 and, unlike application/javascript, has cross-browser support. 
     ///The "type" attribute of the script tag in HTML5 is optional and there is no need to use it at all since all browsers have always assumed the correct
     ///default (even in HTML 4 where it was required by the specification).</summary>
-    [Obsolete]
+    [Obsolete("JavaScript - Defined in and obsoleted by RFC 4329 in order to discourage its usage in favor of application/javascript.")]
     public const string TextJavascript = "text/javascript";
 
     ///<summary>JPEG JFIF image; Associated with Internet Explorer; Listed in ms775147(v=vs.85) - Progressive JPEG, initiated before global browser support for progressive 

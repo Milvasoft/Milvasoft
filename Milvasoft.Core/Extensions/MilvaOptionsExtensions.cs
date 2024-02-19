@@ -5,6 +5,9 @@ using Milvasoft.Core.Abstractions;
 
 namespace Milvasoft.Core.Extensions;
 
+/// <summary>
+/// Milvasoft library components options extensions.
+/// </summary>
 public static class MilvaOptionsExtensions
 {
     /// <summary>
@@ -23,8 +26,8 @@ public static class MilvaOptionsExtensions
         var section = configurationManager.GetSection(TOptions.SectionName);
 
         builder.Services.AddOptions<TOptions>()
-                .Bind(section)
-                .ValidateDataAnnotations();
+                        .Bind(section)
+                        .ValidateDataAnnotations();
 
         return builder;
     }

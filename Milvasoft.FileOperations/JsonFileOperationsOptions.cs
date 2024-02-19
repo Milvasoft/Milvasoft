@@ -49,6 +49,9 @@ public class JsonFileOperationsOptions : IJsonFileOperationOptions
 {
     private string _cultureCode;
 
+    /// <summary>
+    /// Configuration file section path.
+    /// </summary>
     public static string SectionName { get; } = $"{MilvaOptionsExtensions.ParentSectionName}:FileOperations:Json";
 
     /// <summary>
@@ -81,6 +84,9 @@ public class JsonFileOperationsOptions : IJsonFileOperationOptions
     /// </summary>
     public Encoding Encoding { get; set; } = Encoding.UTF8;
 
+    /// <summary>
+    /// Initializes new instance.
+    /// </summary>
     public JsonFileOperationsOptions()
     {
         CultureInfo = _cultureCode != null ? new CultureInfo(_cultureCode) : new CultureInfo("en-US");

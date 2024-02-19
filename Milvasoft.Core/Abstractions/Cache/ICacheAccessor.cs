@@ -1,5 +1,8 @@
 ﻿namespace Milvasoft.Core.Abstractions.Cache;
 
+/// <summary>
+/// Provides cache access methods.
+/// </summary>
 public interface ICacheAccessor
 {
     /// <summary>
@@ -21,7 +24,6 @@ public interface ICacheAccessor
     /// <summary>
     /// Gets <paramref name="key"/>'s value.
     /// </summary>
-    /// <typeparam name="T"></typeparam>
     /// <param name="key"></param>
     /// <param name="returnType"></param>
     /// <returns></returns>
@@ -172,6 +174,10 @@ public interface ICacheAccessor
     #endregion
 }
 
+/// <summary>
+/// Cache accessor generic implementation. 
+/// </summary>
+/// <typeparam name="TAccessor"></typeparam>
 public interface ICacheAccessor<TAccessor> : ICacheAccessor where TAccessor : class, ICacheAccessor
 {
 }
