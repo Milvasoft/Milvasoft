@@ -13,6 +13,8 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Reflection.Emit;
+using System.Security.Cryptography;
+using System.Text;
 using System.Text.Json;
 
 namespace Milvasoft.Core;
@@ -517,5 +519,29 @@ public static class CommonHelper
         }
 
         return updatedProps;
+    }
+
+    public static string GetHexadecimalHash(this string input)
+    {
+        var sha256 = SHA256.Create();
+
+        // Convert the input string to a byte array and compute the hash.
+        byte[] data = sha256.ComputeHash(Encoding.UTF8.GetBytes(input));
+
+        // Create a new Stringbuilder to collect the bytes
+        // and create a string.
+        StringBuilder sBuilder = new StringBuilder();
+
+        // Loop through each byte of the hashed data 
+        // and format each one as a hexadecimal string.
+        for (int i = 0; i < data.Length; i++)
+        {
+            sBuilder.Append(data[i].ToString("x2"));
+        }
+
+        sha256.Dispose();
+
+        // Return the hexadecimal string.
+        return sBuilder.ToString();
     }
 }

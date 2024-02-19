@@ -1,10 +1,11 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using Milvasoft.Caching.Redis;
 using Milvasoft.Components.Rest.Response;
 using Milvasoft.Core;
 using Milvasoft.Core.Abstractions.Cache;
+using Milvasoft.Core.Extensions;
 using Milvasoft.Interception.Decorator;
-using System.Text.Json;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace Milvasoft.Interception.Interceptors.Cache;
 
@@ -44,7 +45,7 @@ public class CacheInterceptor : IMilvaInterceptor
 
                 methodParameters?.RemoveAll(p => p is CancellationToken);
 
-                cacheKey = $"{cacheAttribute.Key}_{methodParameters?.ToJson()}";
+                cacheKey = $"{cacheAttribute.Key}_{methodParameters?.ToJson().GetHexadecimalHash()}";
 
                 var returnType = call.ReturnType.GetGenericTypeDefinition() == typeof(Task<>) ? call.ReturnType.GenericTypeArguments.FirstOrDefault() : call.ReturnType;
 
@@ -60,7 +61,9 @@ public class CacheInterceptor : IMilvaInterceptor
                     cachedValue = value;
                     call.ReturnValue = cachedValue;
                     call.ProceedToOriginalInvocation = false;
+
                     await call.NextAsync();
+
                     return;
                 }
             }
@@ -72,6 +75,7 @@ public class CacheInterceptor : IMilvaInterceptor
                 if (cacheAttribute.Timeout.HasValue)
                 {
                     TimeSpan timespan = TimeSpan.FromSeconds(cacheAttribute.Timeout.Value);
+
                     await _cache.SetAsync(cacheKey, call.ReturnValue, timespan);
                 }
                 else
@@ -90,7 +94,7 @@ public class CacheInterceptor : IMilvaInterceptor
 
             }
         }
-        else await call.NextAsync();
+        else
+            await call.NextAsync();
     }
-
 }
