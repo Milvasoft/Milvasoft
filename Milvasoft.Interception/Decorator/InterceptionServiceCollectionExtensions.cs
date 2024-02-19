@@ -2,7 +2,6 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Milvasoft.Attributes.Annotations;
-using Milvasoft.Core.Abstractions;
 using Milvasoft.Core.Abstractions.Localization;
 using Milvasoft.Interception.Builder;
 using Milvasoft.Interception.Interceptors;
@@ -11,10 +10,7 @@ using Milvasoft.Interception.Interceptors.Cache;
 using Milvasoft.Interception.Interceptors.Logging;
 using Milvasoft.Interception.Interceptors.Response;
 using Milvasoft.Interception.Interceptors.Runner;
-using System.Configuration;
-using System.Linq;
 using System.Reflection;
-using static System.Collections.Specialized.BitVector32;
 
 namespace Milvasoft.Interception.Decorator;
 

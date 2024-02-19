@@ -86,7 +86,7 @@ internal class DecoratorInterceptor(ReadOnlyDictionary<MethodInfo, IMilvaInterce
 
         await GetFirstRunningInterceptor(decorators).OnInvoke(call).ConfigureAwait(false);
     }
-        
+
     private static async Task<TResult> WrapInvocationInTaskWithResult<TResult>(IInvocation invocation, IMilvaInterceptor[] decorators)
     {
         var call = new Call(invocation, decorators);

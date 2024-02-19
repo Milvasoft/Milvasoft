@@ -1,6 +1,4 @@
-﻿using Milvasoft.Core.Extensions;
-
-namespace Milvasoft.Core.Abstractions;
+﻿namespace Milvasoft.Core.Abstractions;
 
 /// <summary>
 /// Dummy interface for options implementations.

@@ -78,7 +78,7 @@ public partial class LogInterceptor : IMilvaInterceptor
                 {
                     DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull | System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingDefault
                 };
-                
+
                 jsonOpts.Converters.Add(converter);
 
                 exceptionAsJson = exception.ToJson(jsonOpts);
@@ -91,6 +91,8 @@ public partial class LogInterceptor : IMilvaInterceptor
             var logObjectPropDic = _logInterceptionOptions.LogDefaultParameters ? new Dictionary<string, object>()
             {
                { "TransactionId", ActivityHelper.TraceId },
+               { "Namespace", call.Method.DeclaringType.Namespace },
+               { "ClassName", call.Method.DeclaringType.Name },
                { "MethodName", call.Method.Name },
                { "MethodParams", methodParameters?.ToJson() },
                { "MethodResult", call.ReturnValue?.ToJson() },

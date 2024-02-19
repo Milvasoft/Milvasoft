@@ -2,7 +2,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Reflection;
-using System.Runtime.CompilerServices;
 
 namespace Milvasoft.Core.EntityBases.Concrete;
 

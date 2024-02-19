@@ -35,7 +35,7 @@ public class LogInterceptionOptions : ILogInterceptionOptions
 public interface ILogInterceptionOptions : IMilvaOptions
 {
     public ServiceLifetime InterceptorLifetime { get; set; }
-    
+
     /// <summary>
     /// It determines whether the values that the Milvasoft library logs with async.
     /// </summary>

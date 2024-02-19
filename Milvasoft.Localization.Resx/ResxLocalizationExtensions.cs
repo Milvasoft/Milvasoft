@@ -56,7 +56,7 @@ public static class ResxLocalizationExtensions
     /// <param name="configurationManager"></param>
     /// <param name="keyFormatDelegate">Post configure property.</param>
     /// <returns></returns>
-    public static LocalizationBuilder WithResxManager<TResource>(this LocalizationBuilder builder,  string resourcesPath = null, string resourceFolderPath = null, Func<string, string> keyFormatDelegate = null)
+    public static LocalizationBuilder WithResxManager<TResource>(this LocalizationBuilder builder, string resourcesPath = null, string resourceFolderPath = null, Func<string, string> keyFormatDelegate = null)
     {
         if (builder.ConfigurationManager == null)
             return builder.WithResxManager<TResource>(localizationOptions: null);

@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Http.Json;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Milvasoft.Core.Abstractions.Localization;
 using Milvasoft.Core.EntityBases.Abstract;
 using Milvasoft.Core.EntityBases.Abstract.Auditing;
@@ -7,9 +6,7 @@ using Milvasoft.Core.EntityBases.Concrete;
 using Milvasoft.Core.Exceptions;
 using Milvasoft.Core.Extensions;
 using Milvasoft.Core.Utils.Constants;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Reflection.Emit;

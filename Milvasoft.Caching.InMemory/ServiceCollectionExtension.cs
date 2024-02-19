@@ -5,7 +5,6 @@ using Milvasoft.Caching.Builder;
 using Milvasoft.Caching.InMemory.Accessor;
 using Milvasoft.Caching.InMemory.Options;
 using Milvasoft.Core.Abstractions.Cache;
-using Milvasoft.Core.Abstractions.Localization;
 
 namespace Milvasoft.Caching.InMemory;
 
@@ -39,7 +38,7 @@ public static class ServiceCollectionExtension
         if (!cacheBuilder.Services.Any(s => s.ServiceType == typeof(ICacheAccessor<MemoryCacheAccessor>)))
         {
             if (cachingOptions != null)
-            {              
+            {
                 if (!cacheBuilder.Services.Any(s => s.ServiceType == typeof(ICacheOptions<InMemoryCacheOptions>)))
                     cacheBuilder.Services.AddSingleton<ICacheOptions<InMemoryCacheOptions>>(cachingOptions);
 

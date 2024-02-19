@@ -1,9 +1,7 @@
 ﻿using Milvasoft.Core.EntityBases.Abstract;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq.Expressions;
 using System.Reflection;
-using System.Reflection.Metadata.Ecma335;
 
 namespace Milvasoft.Core.EntityBases.Concrete;
 

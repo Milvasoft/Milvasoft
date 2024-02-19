@@ -1,9 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using Milvasoft.Core;
 using Milvasoft.Core.Abstractions;
 using Milvasoft.Core.Abstractions.Cache;
 using Milvasoft.Core.Extensions;
-using System.Reflection;
 
 namespace Milvasoft.Interception.Interceptors.Cache;
 

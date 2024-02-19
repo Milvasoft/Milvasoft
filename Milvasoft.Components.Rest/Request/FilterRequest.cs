@@ -48,7 +48,7 @@ public class FilterRequest
 
             if (propertyType == typeof(Guid))
                 value = Guid.Parse(filter.Value.ToString());
-            else if(propertyType.IsGenericType && typeof(IList).IsAssignableFrom(propertyType))
+            else if (propertyType.IsGenericType && typeof(IList).IsAssignableFrom(propertyType))
             {
                 return expression;
             }

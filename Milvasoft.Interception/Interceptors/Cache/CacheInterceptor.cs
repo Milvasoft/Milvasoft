@@ -2,10 +2,7 @@
 using Milvasoft.Components.Rest.Response;
 using Milvasoft.Core;
 using Milvasoft.Core.Abstractions.Cache;
-using Milvasoft.Core.Extensions;
 using Milvasoft.Interception.Decorator;
-using System.Security.Cryptography;
-using System.Text;
 
 namespace Milvasoft.Interception.Interceptors.Cache;
 
