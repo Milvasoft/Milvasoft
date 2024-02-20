@@ -91,13 +91,15 @@ public class ValidateDecimalAttribute : ValidationAttribute
                 localizedPropName = milvaLocalizer[LocalizerKey ?? $"{LocalizerKeys.Localized}{context.MemberName}"];
                 errorMessage = FullMessage ? milvaLocalizer[LocalizerKey] : milvaLocalizer[LocalizerKeys.MinDecimalValueException, localizedPropName];
             }
-            else errorMessage = $"{LocalizerKeys.PleaseEnterAValid} {context.MemberName}.";
+            else
+                errorMessage = $"{LocalizerKeys.PleaseEnterAValid} {context.MemberName}.";
 
             if (decimal.TryParse(value.ToString(), out decimal decimalValue) && decimalValue <= MinValue)
             {
                 ErrorMessage = errorMessage;
                 return new ValidationResult(FormatErrorMessage(""));
             }
+
             if (MaxValue != null && decimalValue >= MaxValue)
             {
                 ErrorMessage = errorMessage;

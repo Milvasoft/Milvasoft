@@ -293,6 +293,7 @@ public abstract class MilvaDbContextBase : DbContext, IMilvaDbContextBase
                         if (entry.Metadata.GetProperties().Any(prop => prop.Name == EntityPropertyNames.CreationDate))
                             AuditDate(entry, EntityPropertyNames.CreationDate);
                     }
+
                     break;
                 case EntityState.Modified:
                     if (AuditConfiguration.AuditModificationDate)
@@ -300,6 +301,7 @@ public abstract class MilvaDbContextBase : DbContext, IMilvaDbContextBase
                         if (entry.Metadata.GetProperties().Any(prop => prop.Name == EntityPropertyNames.LastModificationDate))
                             AuditDate(entry, EntityPropertyNames.LastModificationDate);
                     }
+
                     break;
                 case EntityState.Deleted:
                     if (entry.Metadata.GetProperties().Any(prop => prop.Name == EntityPropertyNames.IsDeleted))
@@ -307,6 +309,7 @@ public abstract class MilvaDbContextBase : DbContext, IMilvaDbContextBase
                         if (!IgnoreSoftDelete)
                             SoftDelete(entry);
                     }
+
                     break;
                 default:
                     break;
@@ -532,11 +535,13 @@ public abstract class MilvaDbContextBase<TUser, TUserKey> : MilvaDbContextBase
                         if (entry.Metadata.GetProperties().Any(prop => prop.Name == EntityPropertyNames.CreationDate))
                             AuditDate(entry, EntityPropertyNames.CreationDate);
                     }
+
                     if (AuditConfiguration.AuditCreator)
                     {
                         if (entry.Metadata.GetProperties().Any(prop => prop.Name == EntityPropertyNames.CreatorUserId))
                             AuditPerformerUser(entry, EntityPropertyNames.CreatorUserId);
                     }
+
                     break;
                 case EntityState.Modified:
                     if (AuditConfiguration.AuditModificationDate)
@@ -544,11 +549,13 @@ public abstract class MilvaDbContextBase<TUser, TUserKey> : MilvaDbContextBase
                         if (entry.Metadata.GetProperties().Any(prop => prop.Name == EntityPropertyNames.LastModificationDate))
                             AuditDate(entry, EntityPropertyNames.LastModificationDate);
                     }
+
                     if (AuditConfiguration.AuditModifier)
                     {
                         if (entry.Metadata.GetProperties().Any(prop => prop.Name == EntityPropertyNames.LastModifierUserId))
                             AuditPerformerUser(entry, EntityPropertyNames.LastModifierUserId);
                     }
+
                     break;
                 case EntityState.Deleted:
                     if (entry.Metadata.GetProperties().Any(prop => prop.Name == EntityPropertyNames.IsDeleted))
@@ -556,6 +563,7 @@ public abstract class MilvaDbContextBase<TUser, TUserKey> : MilvaDbContextBase
                         if (!IgnoreSoftDelete)
                             SoftDelete(entry);
                     }
+
                     break;
                 default:
                     break;
@@ -878,11 +886,13 @@ public abstract class MilvaIdentityDbContextBase<TUser, TRole, TKey> : IdentityD
                         if (entry.Metadata.GetProperties().Any(prop => prop.Name == EntityPropertyNames.CreationDate))
                             AuditDate(entry, EntityPropertyNames.CreationDate);
                     }
+
                     if (AuditConfiguration.AuditCreator)
                     {
                         if (entry.Metadata.GetProperties().Any(prop => prop.Name == EntityPropertyNames.CreatorUserId))
                             AuditPerformerUser(entry, EntityPropertyNames.CreatorUserId);
                     }
+
                     break;
                 case EntityState.Modified:
                     if (AuditConfiguration.AuditModificationDate)
@@ -890,11 +900,13 @@ public abstract class MilvaIdentityDbContextBase<TUser, TRole, TKey> : IdentityD
                         if (entry.Metadata.GetProperties().Any(prop => prop.Name == EntityPropertyNames.LastModificationDate))
                             AuditDate(entry, EntityPropertyNames.LastModificationDate);
                     }
+
                     if (AuditConfiguration.AuditModifier)
                     {
                         if (entry.Metadata.GetProperties().Any(prop => prop.Name == EntityPropertyNames.LastModifierUserId))
                             AuditPerformerUser(entry, EntityPropertyNames.LastModifierUserId);
                     }
+
                     break;
                 case EntityState.Deleted:
                     if (entry.Metadata.GetProperties().Any(prop => prop.Name == EntityPropertyNames.IsDeleted))
@@ -902,6 +914,7 @@ public abstract class MilvaIdentityDbContextBase<TUser, TRole, TKey> : IdentityD
                         if (!IgnoreSoftDelete)
                             SoftDelete(entry);
                     }
+
                     break;
                 default:
                     break;
@@ -1172,7 +1185,6 @@ public abstract class MilvaPooledDbContext<TUser, TKey> : MilvaDbContextBase<TUs
 
     #endregion
 
-
     /// <summary>
     /// Overrided the OnModelCreating for custom configurations to database.
     /// </summary>
@@ -1284,7 +1296,4 @@ public abstract class MilvaPooledIdentityDbContext<TUser, TRole, TKey> : MilvaId
         base.OnModelCreating(modelBuilder);
     }
 }
-
-
-
 

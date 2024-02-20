@@ -51,7 +51,8 @@ public static class FormFileOperations
                                                                   FilesFolderNameCreator folderNameCreator,
                                                                   string propertyName)
     {
-        if (file.Length <= 0) return "";
+        if (file.Length <= 0)
+            return "";
 
         //Gets file extension.
         var fileExtension = Path.GetExtension(file.FileName);
@@ -84,6 +85,7 @@ public static class FormFileOperations
                 Directory.Delete(folderPathOfItem, true);
                 Directory.CreateDirectory(folderPathOfItem);
             }
+
             var fileNameWithExtension = $"{folderNameOfItem}{fileExtension}";
             var filePathOfItem = Path.Combine(folderPathOfItem, fileNameWithExtension);
             using (var fileStream = new FileStream(filePathOfItem, FileMode.Create))
@@ -126,7 +128,8 @@ public static class FormFileOperations
                                                                          FilesFolderNameCreator folderNameCreator,
                                                                          string propertyName)
     {
-        if (files.IsNullOrEmpty()) return new List<string>();
+        if (files.IsNullOrEmpty())
+            return new List<string>();
 
         //Gets file extension.
         var fileExtension = Path.GetExtension(files.First().FileName);
@@ -173,6 +176,7 @@ public static class FormFileOperations
                 {
                     await item.CopyToAsync(fileStream).ConfigureAwait(false);
                 }
+
                 folderPaths.Add(filePathOfItem);
                 markerNo++;
             }
@@ -213,7 +217,8 @@ public static class FormFileOperations
                                                                          FilesFolderNameCreator folderNameCreator,
                                                                          string propertyName)
     {
-        if (files.IsNullOrEmpty()) return new List<string>();
+        if (files.IsNullOrEmpty())
+            return new List<string>();
 
         //Gets file extension.
         var fileExtension = Path.GetExtension(files[0].FileName);
@@ -260,6 +265,7 @@ public static class FormFileOperations
                 {
                     await item.CopyToAsync(fileStream).ConfigureAwait(false);
                 }
+
                 folderPaths.Add(filePathOfItem);
                 markerNo++;
             }
@@ -272,7 +278,6 @@ public static class FormFileOperations
             Directory.Delete(folderPathOfItem);
             throw;
         }
-
     }
 
     /// <summary>
@@ -305,17 +310,20 @@ public static class FormFileOperations
     where TFileDTO : class, IFileDTO
     where TFileEntity : class, IFileEntity, new()
     {
-        if (fileDTOList.IsNullOrEmpty()) return new List<TFileEntity>();
+        if (fileDTOList.IsNullOrEmpty())
+            return new List<TFileEntity>();
 
         var fileEntities = new List<TFileEntity>();
 
         foreach (var fileDTO in fileDTOList)
         {
-            if (fileDTO == null) continue;
+            if (fileDTO == null)
+                continue;
 
             var file = fileDTO.File;
 
-            if (file.Length <= 0) continue;
+            if (file.Length <= 0)
+                continue;
 
             var path = await file.SaveFileToPathAsync(entity, basePath, folderNameCreator, propertyName).ConfigureAwait(false);
 
@@ -340,7 +348,8 @@ public static class FormFileOperations
     /// <param name="allowedFileExtensions"> Allowed file extensions for <paramref name="fileType"/>. </param>
     public static FileValidationResult ValidateFile(this IFormFile file, long maxFileSize, List<string> allowedFileExtensions, FileType fileType = FileType.Document)
     {
-        if (file == null) return FileValidationResult.NullFile;
+        if (file == null)
+            return FileValidationResult.NullFile;
 
         if (allowedFileExtensions == null)
             allowedFileExtensions = GetDefaultFileExtensions(fileType);
@@ -477,7 +486,8 @@ public static class FormFileOperations
     /// <param name="filePath"></param>
     public static void RemoveDirectoryFileIsIn(string filePath)
     {
-        if (File.Exists(filePath)) Directory.Delete(Path.GetDirectoryName(filePath), true);
+        if (File.Exists(filePath))
+            Directory.Delete(Path.GetDirectoryName(filePath), true);
     }
 
     /// <summary>
@@ -486,7 +496,8 @@ public static class FormFileOperations
     /// <param name="filePath"></param>
     public static void RemoveFileByPath(string filePath)
     {
-        if (File.Exists(filePath)) File.Delete(filePath);
+        if (File.Exists(filePath))
+            File.Delete(filePath);
     }
 
     /// <summary>
@@ -497,7 +508,8 @@ public static class FormFileOperations
     {
         if (!filePaths.IsNullOrEmpty())
             foreach (var filePath in filePaths)
-                if (File.Exists(filePath)) File.Delete(filePath);
+                if (File.Exists(filePath))
+                    File.Delete(filePath);
     }
 
     /// <summary>
@@ -613,7 +625,6 @@ public static class FormFileOperations
 
     #endregion
 
-
     #region Private Helper Methods
 
     /// <summary>
@@ -682,9 +693,6 @@ public static class FormFileOperations
                {FileType.Image, ".tif"},               {FileType.Video, ".wmv"},
                {FileType.Image, ".tiff"},
 
-
-
-
                {FileType.Document, ".doc"},           {FileType.Compressed, ".arj"},         {FileType.InternetRelated, ".ai"},              {FileType.Font, ".fnt"},
                {FileType.Document, ".docx"},          {FileType.Compressed, ".deb"},         {FileType.InternetRelated, ".bmp"},             {FileType.Font, ".fon"},
                {FileType.Document, ".odt"},           {FileType.Compressed, ".pkg"},         {FileType.InternetRelated, ".gif"},             {FileType.Font, ".otf"},
@@ -721,8 +729,10 @@ public static class FormFileOperations
 
         static string CombineEnsureSingleSeparator(string a, string b, char separator)
         {
-            if (string.IsNullOrWhiteSpace(a)) return b;
-            if (string.IsNullOrWhiteSpace(b)) return a;
+            if (string.IsNullOrWhiteSpace(a))
+                return b;
+            if (string.IsNullOrWhiteSpace(b))
+                return a;
             return a.TrimEnd(separator) + separator + b.TrimStart(separator);
         }
 
@@ -752,6 +762,7 @@ public static class FormFileOperations
                 inQuery = true;
             }
         }
+
         return EncodeIllegalCharacters(result);
     }
 

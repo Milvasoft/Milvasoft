@@ -63,11 +63,13 @@ public static class DataProtectorExtensions
                 {
                     return false;
                 }
+
                 var purp = reader.ReadString();
                 if (!string.Equals(purp, purpose))
                 {
                     return false;
                 }
+
                 var stamp = reader.ReadString();
                 if (reader.PeekChar() != -1)
                 {
@@ -82,6 +84,7 @@ public static class DataProtectorExtensions
         {
             // Do not leak exception
         }
+
         return false;
     }
 }

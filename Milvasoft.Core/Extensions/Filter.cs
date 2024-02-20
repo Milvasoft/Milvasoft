@@ -35,7 +35,6 @@ public static class Filter
         if (dateLowerValue.HasValue && dateTopValue.HasValue)
             contentList = contentList.Where(i => (DateTime)i.GetType().GetProperty(propertyName).GetValue(i, null) >= dateLowerValue.Value && (DateTime)i.GetType().GetProperty(propertyName).GetValue(i, null) <= dateTopValue.Value);
 
-
         // If only the DateTopValue value exists, it returns those larger than the DateLowerValue value.
         else if (dateLowerValue.HasValue && !dateTopValue.HasValue)
         {
@@ -100,7 +99,6 @@ public static class Filter
         if (dateLowerValue.HasValue && dateTopValue.HasValue)
             mainExpression = mainExpression.Append(predicate, ExpressionType.AndAlso);
 
-
         // If only the DateTopValue value exists, it returns those larger than the DateLowerValue value.
         else if (dateLowerValue.HasValue && !dateTopValue.HasValue)
         {
@@ -142,7 +140,6 @@ public static class Filter
     {
         Expression<Func<T, bool>> mainExpression = null;
 
-
         var entityType = typeof(T);
         var propertyName = dateProperty.GetPropertyName();
 
@@ -165,7 +162,6 @@ public static class Filter
         //If a selection has been made between two dates, it will return those between the two dates.
         if (dateLowerValue.HasValue && dateTopValue.HasValue)
             mainExpression = mainExpression.Append(predicate, ExpressionType.AndAlso);
-
 
         // If only the DateTopValue value exists, it returns those larger than the DateLowerValue value.
         else if (dateLowerValue.HasValue && !dateTopValue.HasValue)
@@ -202,8 +198,8 @@ public static class Filter
                 propertyOfMaxValuesObject.SetValue(maxValuesObject, maxValueOfProperty);
             }
         }
+
         return maxValuesObject;
     }
-
 
 }

@@ -16,7 +16,6 @@ internal static class TypeExtensions
         => type.GetMethods(BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public)
                .Where(x => !x.IsSpecialName);
 
-
     /// <summary>
     /// Gets <paramref name="implementation"/>'s interface methods as method info.
     /// </summary>

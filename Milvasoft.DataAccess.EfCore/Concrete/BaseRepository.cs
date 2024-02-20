@@ -18,7 +18,11 @@ namespace Milvasoft.Helpers.DataAccess.EfCore.Concrete;
 /// <typeparam name="TEntity"></typeparam>
 /// <typeparam name="TKey"></typeparam>
 /// <typeparam name="TContext"></typeparam>
-public abstract partial class BaseRepository<TEntity, TKey, TContext> : IBaseRepository<TEntity, TKey, TContext> where TEntity : class, IBaseEntity<TKey>
+/// <remarks>
+/// Constructor of BaseRepository for <paramref name="dbContext"/> injection.
+/// </remarks>
+/// <param name="dbContext"></param>
+public abstract partial class BaseRepository<TEntity, TKey, TContext>(TContext dbContext) : IBaseRepository<TEntity, TKey, TContext> where TEntity : class, IBaseEntity<TKey>
                                                                                                                  where TKey : struct, IEquatable<TKey>
                                                                                                                  where TContext : DbContext, IMilvaDbContextBase
 {
@@ -45,12 +49,12 @@ public abstract partial class BaseRepository<TEntity, TKey, TContext> : IBaseRep
     /// <summary>
     /// DbContext object.
     /// </summary>
-    protected readonly TContext _dbContext;
+    protected readonly TContext _dbContext = dbContext;
 
     /// <summary>
     /// DebSet object.
     /// </summary>
-    protected readonly DbSet<TEntity> _dbSet;
+    protected readonly DbSet<TEntity> _dbSet = dbContext.Set<TEntity>();
 
     #endregion
 
@@ -60,16 +64,6 @@ public abstract partial class BaseRepository<TEntity, TKey, TContext> : IBaseRep
     private static bool _getSoftDeletedEntities = false;
 
     #endregion
-
-    /// <summary>
-    /// Constructor of BaseRepository for <paramref name="dbContext"/> injection.
-    /// </summary>
-    /// <param name="dbContext"></param>
-    public BaseRepository(TContext dbContext)
-    {
-        _dbContext = dbContext;
-        _dbSet = dbContext.Set<TEntity>();
-    }
 
     /// <summary>
     /// Determines whether save changes method called after evert repository method.
@@ -116,7 +110,6 @@ public abstract partial class BaseRepository<TEntity, TKey, TContext> : IBaseRep
                        .Select(projectionExpression ?? (entity => entity))
                        .FirstOrDefaultAsync(CreateConditionExpression(conditionExpression) ?? (entity => true), cancellationToken)
                        .ConfigureAwait(false);
-
 
     /// <summary>
     ///  Returns first entity or default value which IsDeleted condition is true with includes from database asynchronously. If the condition is requested, it also provides that condition. 
@@ -426,7 +419,8 @@ public abstract partial class BaseRepository<TEntity, TKey, TContext> : IBaseRep
 
         List<TEntity> repo;
 
-        if (orderByAscending) repo = await _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
+        if (orderByAscending) 
+            repo = await _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
                                                  .Where(condition ?? (entity => true))
                                                  .Select(projectionExpression ?? (entity => entity))
                                                  .OrderBy(predicate)
@@ -434,7 +428,8 @@ public abstract partial class BaseRepository<TEntity, TKey, TContext> : IBaseRep
                                                  .Take(countOfRequestedRecordsInPage)
                                                  .ToListAsync(cancellationToken)
                                                  .ConfigureAwait(false);
-        else repo = await _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
+        else 
+            repo = await _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
                                 .Where(condition ?? (entity => true))
                                 .Select(projectionExpression ?? (entity => entity))
                                 .OrderByDescending(predicate)
@@ -491,7 +486,8 @@ public abstract partial class BaseRepository<TEntity, TKey, TContext> : IBaseRep
 
         List<TEntity> repo;
 
-        if (orderByAscending) repo = await _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
+        if (orderByAscending) 
+            repo = await _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
                                                   .Where(condition ?? (entity => true))
                                                   .OrderBy(predicate)
                                                   .Skip((requestedPageNumber - 1) * countOfRequestedRecordsInPage)
@@ -500,7 +496,8 @@ public abstract partial class BaseRepository<TEntity, TKey, TContext> : IBaseRep
                                                   .Select(projectionExpression ?? (entity => entity))
                                                   .ToListAsync(cancellationToken)
                                                   .ConfigureAwait(false);
-        else repo = await _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
+        else 
+            repo = await _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
                                  .Where(condition ?? (entity => true))
                                  .OrderByDescending(predicate)
                                  .Skip((requestedPageNumber - 1) * countOfRequestedRecordsInPage)
@@ -549,7 +546,8 @@ public abstract partial class BaseRepository<TEntity, TKey, TContext> : IBaseRep
 
         List<TEntity> repo;
 
-        if (orderByAscending) repo = await _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
+        if (orderByAscending) 
+            repo = await _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
                                                  .Where(condition ?? (entity => true))
                                                  .Select(projectionExpression ?? (entity => entity))
                                                  .OrderBy(orderByKeySelector)
@@ -557,7 +555,8 @@ public abstract partial class BaseRepository<TEntity, TKey, TContext> : IBaseRep
                                                  .Take(countOfRequestedRecordsInPage)
                                                  .ToListAsync(cancellationToken)
                                                  .ConfigureAwait(false);
-        else repo = await _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
+        else 
+            repo = await _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
                                 .Where(condition ?? (entity => true))
                                 .Select(projectionExpression ?? (entity => entity))
                                 .OrderByDescending(orderByKeySelector)
@@ -607,7 +606,8 @@ public abstract partial class BaseRepository<TEntity, TKey, TContext> : IBaseRep
 
         List<TEntity> repo;
 
-        if (orderByAscending) repo = await _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
+        if (orderByAscending)
+            repo = await _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
                                                   .Where(condition ?? (entity => true))
                                                   .OrderBy(orderByKeySelector)
                                                   .Skip((requestedPageNumber - 1) * countOfRequestedRecordsInPage)
@@ -616,7 +616,8 @@ public abstract partial class BaseRepository<TEntity, TKey, TContext> : IBaseRep
                                                   .Select(projectionExpression ?? (entity => entity))
                                                   .ToListAsync(cancellationToken)
                                                   .ConfigureAwait(false);
-        else repo = await _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
+        else
+            repo = await _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
                                  .Where(condition ?? (entity => true))
                                  .OrderByDescending(orderByKeySelector)
                                  .Skip((requestedPageNumber - 1) * countOfRequestedRecordsInPage)
@@ -663,13 +664,15 @@ public abstract partial class BaseRepository<TEntity, TKey, TContext> : IBaseRep
 
         List<TEntity> repo;
 
-        if (orderByAscending) repo = await _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
+        if (orderByAscending)
+            repo = await _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
                                                  .Where(condition ?? (entity => true))
                                                  .Select(projectionExpression ?? (entity => entity))
                                                  .OrderBy(predicate)
                                                  .ToListAsync(cancellationToken)
                                                  .ConfigureAwait(false);
-        else repo = await _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
+        else
+            repo = await _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
                                 .Where(condition ?? (entity => true))
                                 .Select(projectionExpression ?? (entity => entity))
                                 .OrderByDescending(predicate)
@@ -713,14 +716,16 @@ public abstract partial class BaseRepository<TEntity, TKey, TContext> : IBaseRep
 
         List<TEntity> repo;
 
-        if (orderByAscending) repo = await _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
+        if (orderByAscending)
+            repo = await _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
                                                   .Where(condition ?? (entity => true))
                                                   .OrderBy(predicate)
                                                   .IncludeMultiple(includes)
                                                   .Select(projectionExpression ?? (entity => entity))
                                                   .ToListAsync(cancellationToken)
                                                   .ConfigureAwait(false);
-        else repo = await _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
+        else
+            repo = await _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
                                  .Where(condition ?? (entity => true))
                                  .OrderByDescending(predicate)
                                  .IncludeMultiple(includes)
@@ -755,13 +760,15 @@ public abstract partial class BaseRepository<TEntity, TKey, TContext> : IBaseRep
 
         List<TEntity> repo;
 
-        if (orderByAscending) repo = await _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
+        if (orderByAscending)
+            repo = await _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
                                                  .Where(condition ?? (entity => true))
                                                  .Select(projectionExpression ?? (entity => entity))
                                                  .OrderBy(orderByKeySelector)
                                                  .ToListAsync(cancellationToken)
                                                  .ConfigureAwait(false);
-        else repo = await _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
+        else
+            repo = await _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
                                 .Where(condition ?? (entity => true))
                                 .Select(projectionExpression ?? (entity => entity))
                                 .OrderByDescending(orderByKeySelector)
@@ -797,14 +804,16 @@ public abstract partial class BaseRepository<TEntity, TKey, TContext> : IBaseRep
 
         List<TEntity> repo;
 
-        if (orderByAscending) repo = await _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
+        if (orderByAscending)
+            repo = await _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
                                                   .Where(condition ?? (entity => true))
                                                   .OrderBy(orderByKeySelector)
                                                   .IncludeMultiple(includes)
                                                   .Select(projectionExpression ?? (entity => entity))
                                                   .ToListAsync(cancellationToken)
                                                   .ConfigureAwait(false);
-        else repo = await _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
+        else
+            repo = await _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
                                  .Where(condition ?? (entity => true))
                                  .OrderByDescending(orderByKeySelector)
                                  .IncludeMultiple(includes)
@@ -891,7 +900,6 @@ public abstract partial class BaseRepository<TEntity, TKey, TContext> : IBaseRep
                            .SingleOrDefaultAsync(mainCondition, cancellationToken)
                            .ConfigureAwait(false);
     }
-
 
     /// <summary>
     ///  Returns one entity which IsDeleted condition is true by entity Id with includes from database asynchronously. If the condition is requested, it also provides that condition. 
@@ -1144,12 +1152,14 @@ public abstract partial class BaseRepository<TEntity, TKey, TContext> : IBaseRep
 
         List<TReturn> repo;
 
-        if (orderByAscending) repo = await groupedClause.Invoke().Where(conditionExpression ?? (entity => true))
+        if (orderByAscending)
+            repo = await groupedClause.Invoke().Where(conditionExpression ?? (entity => true))
                                                                  .OrderBy(predicate)
                                                                  .Skip((requestedPageNumber - 1) * countOfRequestedRecordsInPage)
                                                                  .Take(countOfRequestedRecordsInPage)
                                                                  .ToListAsync(cancellationToken).ConfigureAwait(false);
-        else repo = await groupedClause.Invoke().Where(conditionExpression ?? (entity => true))
+        else
+            repo = await groupedClause.Invoke().Where(conditionExpression ?? (entity => true))
                                                 .OrderByDescending(predicate)
                                                 .Skip((requestedPageNumber - 1) * countOfRequestedRecordsInPage)
                                                 .Take(countOfRequestedRecordsInPage)
@@ -1428,7 +1438,8 @@ public abstract partial class BaseRepository<TEntity, TKey, TContext> : IBaseRep
     public virtual async Task AddAsync(TEntity entity)
     {
         _dbSet.Add(entity);
-        if (SaveChangesAfterEveryTransaction) await _dbContext.SaveChangesAsync().ConfigureAwait(false);
+        if (SaveChangesAfterEveryTransaction)
+            await _dbContext.SaveChangesAsync().ConfigureAwait(false);
     }
 
     /// <summary>
@@ -1753,9 +1764,11 @@ public abstract partial class BaseRepository<TEntity, TKey, TContext> : IBaseRep
     /// <param name="countOfRequestedRecordsInPage"></param>
     protected static void ValidatePaginationParameters(int requestedPageNumber, int countOfRequestedRecordsInPage)
     {
-        if (requestedPageNumber <= 0) throw new MilvaUserFriendlyException(MilvaException.WrongRequestedPageNumber);
+        if (requestedPageNumber <= 0)
+            throw new MilvaUserFriendlyException(MilvaException.WrongRequestedPageNumber);
 
-        if (countOfRequestedRecordsInPage <= 0) throw new MilvaUserFriendlyException(MilvaException.WrongRequestedItemCount);
+        if (countOfRequestedRecordsInPage <= 0)
+            throw new MilvaUserFriendlyException(MilvaException.WrongRequestedItemCount);
     }
 
     /// <summary>
@@ -1806,6 +1819,7 @@ public abstract partial class BaseRepository<TEntity, TKey, TContext> : IBaseRep
             {
                 _dbContext.Entry(local).State = EntityState.Detached;
             }
+
             _dbContext.Entry(entity).State = EntityState.Modified;
         }
     }
@@ -1824,6 +1838,7 @@ public abstract partial class BaseRepository<TEntity, TKey, TContext> : IBaseRep
                 foreach (var entity in localEntities)
                     _dbContext.Entry(entity).State = EntityState.Detached;
             }
+
             foreach (var entity in entities)
                 _dbContext.Entry(entity).State = EntityState.Modified;
         }

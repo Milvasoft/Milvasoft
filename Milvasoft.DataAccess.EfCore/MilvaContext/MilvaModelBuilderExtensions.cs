@@ -124,6 +124,7 @@ public static class MilvaModelBuilderExtensions
                 }
             }
         }
+
         return modelBuilder;
     }
 
@@ -165,6 +166,7 @@ public static class MilvaModelBuilderExtensions
             foreach (var prop in properties)
                 modelBuilder.Entity(entityType.ClrType).Property(prop.Name).UseCollation("tr-TR-x-icu");
         }
+
         return modelBuilder;
     }
 
@@ -207,12 +209,15 @@ public static class MilvaModelBuilderExtensions
             {
                 var memberInfo = property.PropertyInfo ?? (MemberInfo)property.FieldInfo;
 
-                if (memberInfo == null) continue;
+                if (memberInfo == null)
+                    continue;
 
-                if (Attribute.GetCustomAttribute(memberInfo, typeof(MilvaDefaultValueAttribute)) is not MilvaDefaultValueAttribute defaultValue) continue;
+                if (Attribute.GetCustomAttribute(memberInfo, typeof(MilvaDefaultValueAttribute)) is not MilvaDefaultValueAttribute defaultValue)
+                    continue;
 
                 modelBuilder.Entity(entityType.ClrType).Property(property.Name).HasDefaultValue(defaultValue.DefaultValue);
             }
+
         return modelBuilder;
     }
 
@@ -236,6 +241,7 @@ public static class MilvaModelBuilderExtensions
 
             entityType.SetQueryFilter(dynamicLambda);
         }
+
         return modelBuilder;
     }
 
@@ -276,9 +282,11 @@ public static class MilvaModelBuilderExtensions
             {
                 var memberInfo = property.PropertyInfo ?? (MemberInfo)property.FieldInfo;
 
-                if (memberInfo == null) continue;
+                if (memberInfo == null)
+                    continue;
 
-                if (Attribute.GetCustomAttribute(memberInfo, typeof(MilvaPrecisionAttribute)) is not MilvaPrecisionAttribute precisionAttribute) continue;
+                if (Attribute.GetCustomAttribute(memberInfo, typeof(MilvaPrecisionAttribute)) is not MilvaPrecisionAttribute precisionAttribute)
+                    continue;
 
                 modelBuilder.Entity(entityType.ClrType).Property(property.Name).HasPrecision(precisionAttribute.Precision, precisionAttribute.Scale);
             }

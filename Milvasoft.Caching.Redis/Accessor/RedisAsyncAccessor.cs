@@ -234,7 +234,8 @@ public partial class RedisAccessor
             {
                 await action().ConfigureAwait(false);
             }
-            else throw new MilvaUserFriendlyException(userFriendlyMessageLocalizerKey);
+            else
+                throw new MilvaUserFriendlyException(userFriendlyMessageLocalizerKey);
         }
         catch (MilvaUserFriendlyException)
         {
@@ -263,7 +264,8 @@ public partial class RedisAccessor
             {
                 return await action().ConfigureAwait(false);
             }
-            else throw new MilvaUserFriendlyException(userFriendlyMessageLocalizerKey);
+            else
+                throw new MilvaUserFriendlyException(userFriendlyMessageLocalizerKey);
         }
         catch (MilvaUserFriendlyException)
         {

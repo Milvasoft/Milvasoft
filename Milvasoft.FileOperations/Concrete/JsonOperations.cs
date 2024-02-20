@@ -1052,8 +1052,10 @@ public class JsonOperations : IJsonOperations
         {
             int? lastId;
 
-            if (jsonContent.Count == 0) lastId = 0;
-            else GetLastIdIfHasId(out lastId, jsonContent);
+            if (jsonContent.Count == 0)
+                lastId = 0;
+            else
+                GetLastIdIfHasId(out lastId, jsonContent);
 
             foreach (var content in contents)
             {
@@ -1081,7 +1083,8 @@ public class JsonOperations : IJsonOperations
 
         var mappingPropertyName = mappingProperty.GetPropertyName();
 
-        if (lastContent.GetType().GetProperty(mappingPropertyName) == null) throw new Exception($"This content type not have {mappingPropertyName} property");
+        if (lastContent.GetType().GetProperty(mappingPropertyName) == null)
+            throw new Exception($"This content type not have {mappingPropertyName} property");
 
         var upToDateContents = new List<T>();
         foreach (var content in contents)
@@ -1099,7 +1102,8 @@ public class JsonOperations : IJsonOperations
             }
         }
 
-        if (upToDateContents.Count == 0) throw new Exception("Requested content for update not found!");
+        if (upToDateContents.Count == 0)
+            throw new Exception("Requested content for update not found!");
 
         return JsonConvert.SerializeObject(jsonContent, Formatting.Indented);
     }
@@ -1114,7 +1118,8 @@ public class JsonOperations : IJsonOperations
 
         var mappingPropertyName = mappingProperty.GetPropertyName();
 
-        if (lastContent.GetType().GetProperty(mappingPropertyName) == null) throw new Exception($"This content type not have {mappingPropertyName} property ");
+        if (lastContent.GetType().GetProperty(mappingPropertyName) == null)
+            throw new Exception($"This content type not have {mappingPropertyName} property ");
 
         var willRemovedContents = new List<T>();
 
@@ -1126,7 +1131,8 @@ public class JsonOperations : IJsonOperations
                 willRemovedContents.Add(matchedContent);
         }
 
-        if (willRemovedContents.Count == 0) throw new Exception("Requested content for delete not found!");
+        if (willRemovedContents.Count == 0)
+            throw new Exception("Requested content for delete not found!");
 
         foreach (var willRemovedContent in willRemovedContents)
             jsonContent.Remove(willRemovedContent);

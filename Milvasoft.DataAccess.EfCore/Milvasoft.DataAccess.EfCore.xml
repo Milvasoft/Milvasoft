@@ -2696,9 +2696,25 @@
             <typeparam name="TEntity"></typeparam>
             <typeparam name="TKey"></typeparam>
             <typeparam name="TContext"></typeparam>
+            <remarks>
+            Constructor of BaseRepository for <paramref name="dbContext"/> injection.
+            </remarks>
+            <param name="dbContext"></param>
             <summary>
              Base repository for concrete repositories. All Ops!yon repositories must be have this methods.
             </summary>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Concrete.BaseRepository`3.#ctor(`2)">
+            <summary>
+             Base repository for concrete repositories. All Ops!yon repositories must be have this methods.
+            </summary>
+            <typeparam name="TEntity"></typeparam>
+            <typeparam name="TKey"></typeparam>
+            <typeparam name="TContext"></typeparam>
+            <remarks>
+            Constructor of BaseRepository for <paramref name="dbContext"/> injection.
+            </remarks>
+            <param name="dbContext"></param>
         </member>
         <member name="P:Milvasoft.Helpers.DataAccess.EfCore.Concrete.BaseRepository`3.SaveChangesAfterEveryTransaction">
             <summary>
@@ -2720,12 +2736,6 @@
             <summary>
             DebSet object.
             </summary>
-        </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Concrete.BaseRepository`3.#ctor(`2)">
-            <summary>
-            Constructor of BaseRepository for <paramref name="dbContext"/> injection.
-            </summary>
-            <param name="dbContext"></param>
         </member>
         <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Concrete.BaseRepository`3.ChangeSaveChangesAfterEveryTransactionState(System.Boolean)">
             <summary>

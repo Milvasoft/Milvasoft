@@ -92,7 +92,6 @@ public class ValidateStringAttribute : ValidationAttribute
         MemberNameLocalizerKey = memberNameLocalizerKey;
     }
 
-
     #endregion
 
     /// <summary>
@@ -103,7 +102,8 @@ public class ValidateStringAttribute : ValidationAttribute
     /// <returns></returns>
     protected override ValidationResult IsValid(object value, ValidationContext context)
     {
-        if (value == null) value = "";
+        if (value == null)
+            value = "";
 
         var valueType = value.GetType();
 
@@ -136,7 +136,8 @@ public class ValidateStringAttribute : ValidationAttribute
 
                 localizedPropName = milvaLocalizer[MemberNameLocalizerKey ?? $"{LocalizerKeys.Localized}{context.MemberName}"];
             }
-            else localizedPropName = context.MemberName;
+            else
+                localizedPropName = context.MemberName;
 
             var httpContext = context.GetService<IHttpContextAccessor>().HttpContext;
 
@@ -195,6 +196,5 @@ public class ValidateStringAttribute : ValidationAttribute
 
             return ValidationResult.Success;
         }
-
     }
 }

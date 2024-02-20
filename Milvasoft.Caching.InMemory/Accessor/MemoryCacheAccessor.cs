@@ -72,7 +72,6 @@ public class MemoryCacheAccessor : IMemoryCacheAccessor
 
     public async Task<bool> SetAsync(string key, object value, TimeSpan? expiration) => await Task.Run(() => Set(key, value, expiration));
 
-
     public Task<long> RemoveAsync(IEnumerable<string> keys) => throw new NotImplementedException();
 
     public IEnumerable<T> Get<T>(IEnumerable<string> keys) => throw new NotImplementedException();

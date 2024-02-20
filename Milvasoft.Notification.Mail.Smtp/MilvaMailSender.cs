@@ -249,7 +249,6 @@ public class MilvaMailSender(string from, NetworkCredential networkCredential, i
                               string filePath,
                               bool isBodyHtml = false) => SendMailWithFile(to, subject, body, isBodyHtml, filePath);
 
-
     #region Private Methods
 
     private void SendMail(string to, string subject, string body, bool isBodyHtml)
@@ -298,7 +297,6 @@ public class MilvaMailSender(string from, NetworkCredential networkCredential, i
 
         smtpClient.SendAsync(mailMessage, mailMessage);
     }
-
 
     #endregion
 

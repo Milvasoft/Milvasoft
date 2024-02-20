@@ -50,7 +50,6 @@ public class AsyncValidateIdParameterAttribute : Attribute, IAsyncActionFilter
                            ? $"{LocalizerKeys.PleaseEnterAValid} {EntityName}."
                            : "Please enter all required parameters completely.";
 
-
             foreach (var actionArgument in context.ActionArguments)
             {
                 if (actionArgument.Key.Contains("Id") || actionArgument.Key.Contains("id"))

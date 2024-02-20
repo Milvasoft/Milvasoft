@@ -60,7 +60,8 @@ public class ValidateIdPropertyAttribute : ValidationAttribute
                 localizedRelationName = milvaLocalizer[MemberNameLocalizerKey ?? $"{LocalizerKeys.LocalizedEntityName}{context.MemberName[0..^2]}"].ToString().ToLowerInvariant();
                 errorMessage = milvaLocalizer[LocalizerKeys.ValidationIdPropertyError, localizedRelationName];
             }
-            else errorMessage = $"{LocalizerKeys.PleaseEnterAValid} {context.MemberName}";
+            else
+                errorMessage = $"{LocalizerKeys.PleaseEnterAValid} {context.MemberName}";
 
             var httpContext = context.GetService<IHttpContextAccessor>().HttpContext;
 

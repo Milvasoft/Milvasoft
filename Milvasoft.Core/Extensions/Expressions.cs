@@ -44,9 +44,11 @@ public static class Expressions
                 default:
                     break;
             }
+
             return result;
         }
-        else return left;
+        else
+            return left;
     }
 
     /// <summary>

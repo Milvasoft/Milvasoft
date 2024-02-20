@@ -44,7 +44,6 @@ internal class MethodDecoratorMap
 
             var decorators = decoratorAttributes.Select(attribute => attribute.DecoratorType).Distinct().ToList();
 
-
             var isMilvaResponseTyped = method.ReturnType.IsAssignableTo(typeof(IResponse));
 
             if (method.ReturnType.GetTypeInfo().IsGenericType && method.ReturnType.GetTypeInfo().GetGenericTypeDefinition() == typeof(Task<>))
@@ -56,7 +55,7 @@ internal class MethodDecoratorMap
             if (isMilvaResponseTyped)
                 decorators.Add(typeof(ResponseInterceptor));
 
-            map.Add(method, decorators.ToArray());
+            map.Add(method, [.. decorators]);
         }
 
         return new ReadOnlyDictionary<MethodInfo, Type[]>(map);

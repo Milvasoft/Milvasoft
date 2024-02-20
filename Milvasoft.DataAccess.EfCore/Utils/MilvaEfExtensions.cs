@@ -141,7 +141,6 @@ public static class MilvaEfExtensions
 
         listResult.AggregationResults = aggregationResults;
 
-
         return listResult;
     }
 

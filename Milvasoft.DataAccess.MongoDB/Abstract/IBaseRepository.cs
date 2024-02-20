@@ -50,7 +50,6 @@ public interface IBaseRepository<TEntity> where TEntity : class, IAuditable<Obje
     /// <returns> The entity found or null. </returns>
     Task<TEntity> GetFirstOrDefaultAsync(FilterDefinition<TEntity> filter = null, Expression<Func<TEntity, TEntity>> projectExpression = null);
 
-
     /// <summary>
     /// Returns one entity by entity Id from database asynchronously.
     /// </summary>

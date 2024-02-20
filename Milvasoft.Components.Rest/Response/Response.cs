@@ -47,7 +47,6 @@ public class Response : IResponse
     /// <param name="message"></param>
     public void AddMessage(string message, MessageType messageType) => Messages.Add(new ResponseMessage(message, messageType));
 
-
     /// <summary>
     /// Adds message to <paramref name="message"/> with key.
     /// </summary>
@@ -112,7 +111,6 @@ public class Response : IResponse
     }
 
     #endregion
-
 
     #region Error
 
@@ -210,7 +208,6 @@ public class Response<T> : Response, IResponse<T>
     }
 
     #endregion
-
 
     #region Success
 

@@ -44,6 +44,7 @@ public abstract class MilvaCronJobService : IHostedService, IDisposable
             {
                 await ScheduleJob(cancellationToken);
             }
+
             _timer = new System.Timers.Timer(delay.TotalMilliseconds);
             _timer.Elapsed += async (sender, args) =>
             {
@@ -62,6 +63,7 @@ public abstract class MilvaCronJobService : IHostedService, IDisposable
             };
             _timer.Start();
         }
+
         await Task.CompletedTask;
     }
 

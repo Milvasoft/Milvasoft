@@ -52,7 +52,8 @@ public class FilterRequest
             {
                 return expression;
             }
-            else value = Convert.ChangeType(filter.Value, propertyType);
+            else
+                value = Convert.ChangeType(filter.Value, propertyType);
 
             if (propertyType == typeof(DateTime))
             {

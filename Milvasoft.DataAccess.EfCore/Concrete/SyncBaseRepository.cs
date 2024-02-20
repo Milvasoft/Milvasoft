@@ -35,7 +35,6 @@ public abstract partial class BaseRepository<TEntity, TKey, TContext> where TEnt
                  .Select(projectionExpression ?? (entity => entity))
                  .FirstOrDefault(CreateConditionExpression(conditionExpression) ?? (entity => true));
 
-
     /// <summary>
     ///  Returns first entity or default value which IsDeleted condition is true with includes from database hronously. If the condition is requested, it also provides that condition. 
     /// </summary>
@@ -309,14 +308,16 @@ public abstract partial class BaseRepository<TEntity, TKey, TContext> where TEnt
 
         List<TEntity> repo;
 
-        if (orderByAscending) repo = _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
+        if (orderByAscending)
+            repo = _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
                                            .Where(condition ?? (entity => true))
                                            .Select(projectionExpression ?? (entity => entity))
                                            .OrderBy(predicate)
                                            .Skip((requestedPageNumber - 1) * countOfRequestedRecordsInPage)
                                            .Take(countOfRequestedRecordsInPage)
                                            .ToList();
-        else repo = _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
+        else
+            repo = _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
                           .Where(condition ?? (entity => true))
                           .Select(projectionExpression ?? (entity => entity))
                           .OrderByDescending(predicate)
@@ -370,7 +371,8 @@ public abstract partial class BaseRepository<TEntity, TKey, TContext> where TEnt
 
         List<TEntity> repo;
 
-        if (orderByAscending) repo = _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
+        if (orderByAscending)
+            repo = _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
                                                   .Where(condition ?? (entity => true))
                                                   .OrderBy(predicate)
                                                   .Skip((requestedPageNumber - 1) * countOfRequestedRecordsInPage)
@@ -378,7 +380,8 @@ public abstract partial class BaseRepository<TEntity, TKey, TContext> where TEnt
                                                   .IncludeMultiple(includes)
                                                   .Select(projectionExpression ?? (entity => entity))
                                                   .ToList();
-        else repo = _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
+        else
+            repo = _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
                                  .Where(condition ?? (entity => true))
                                  .OrderByDescending(predicate)
                                  .Skip((requestedPageNumber - 1) * countOfRequestedRecordsInPage)
@@ -424,14 +427,16 @@ public abstract partial class BaseRepository<TEntity, TKey, TContext> where TEnt
 
         List<TEntity> repo;
 
-        if (orderByAscending) repo = _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
+        if (orderByAscending)
+            repo = _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
                                            .Where(condition ?? (entity => true))
                                            .Select(projectionExpression ?? (entity => entity))
                                            .OrderBy(orderByKeySelector)
                                            .Skip((requestedPageNumber - 1) * countOfRequestedRecordsInPage)
                                            .Take(countOfRequestedRecordsInPage)
                                            .ToList();
-        else repo = _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
+        else
+            repo = _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
                           .Where(condition ?? (entity => true))
                           .Select(projectionExpression ?? (entity => entity))
                           .OrderByDescending(orderByKeySelector)
@@ -478,7 +483,8 @@ public abstract partial class BaseRepository<TEntity, TKey, TContext> where TEnt
 
         List<TEntity> repo;
 
-        if (orderByAscending) repo = _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
+        if (orderByAscending)
+            repo = _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
                                            .Where(condition ?? (entity => true))
                                            .OrderBy(orderByKeySelector)
                                            .Skip((requestedPageNumber - 1) * countOfRequestedRecordsInPage)
@@ -486,7 +492,8 @@ public abstract partial class BaseRepository<TEntity, TKey, TContext> where TEnt
                                            .IncludeMultiple(includes)
                                            .Select(projectionExpression ?? (entity => entity))
                                            .ToList();
-        else repo = _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
+        else
+            repo = _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
                           .Where(condition ?? (entity => true))
                           .OrderByDescending(orderByKeySelector)
                           .Skip((requestedPageNumber - 1) * countOfRequestedRecordsInPage)
@@ -530,12 +537,14 @@ public abstract partial class BaseRepository<TEntity, TKey, TContext> where TEnt
 
         List<TEntity> repo;
 
-        if (orderByAscending) repo = _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
+        if (orderByAscending)
+            repo = _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
                                            .Where(condition ?? (entity => true))
                                            .Select(projectionExpression ?? (entity => entity))
                                            .OrderBy(predicate)
                                            .ToList();
-        else repo = _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
+        else
+            repo = _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
                           .Where(condition ?? (entity => true))
                           .Select(projectionExpression ?? (entity => entity))
                           .OrderByDescending(predicate)
@@ -576,13 +585,15 @@ public abstract partial class BaseRepository<TEntity, TKey, TContext> where TEnt
 
         List<TEntity> repo;
 
-        if (orderByAscending) repo = _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
+        if (orderByAscending)
+            repo = _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
                                            .Where(condition ?? (entity => true))
                                            .OrderBy(predicate)
                                            .IncludeMultiple(includes)
                                            .Select(projectionExpression ?? (entity => entity))
                                            .ToList();
-        else repo = _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
+        else
+            repo = _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
                           .Where(condition ?? (entity => true))
                           .OrderByDescending(predicate)
                           .IncludeMultiple(includes)
@@ -614,12 +625,14 @@ public abstract partial class BaseRepository<TEntity, TKey, TContext> where TEnt
 
         List<TEntity> repo;
 
-        if (orderByAscending) repo = _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
+        if (orderByAscending)
+            repo = _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
                                            .Where(condition ?? (entity => true))
                                            .Select(projectionExpression ?? (entity => entity))
                                            .OrderBy(orderByKeySelector)
                                            .ToList();
-        else repo = _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
+        else
+            repo = _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
                           .Where(condition ?? (entity => true))
                           .Select(projectionExpression ?? (entity => entity))
                           .OrderByDescending(orderByKeySelector)
@@ -652,13 +665,15 @@ public abstract partial class BaseRepository<TEntity, TKey, TContext> where TEnt
 
         List<TEntity> repo;
 
-        if (orderByAscending) repo = _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
+        if (orderByAscending)
+            repo = _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
                                            .Where(condition ?? (entity => true))
                                            .OrderBy(orderByKeySelector)
                                            .IncludeMultiple(includes)
                                            .Select(projectionExpression ?? (entity => entity))
                                            .ToList();
-        else repo = _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
+        else
+            repo = _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
                           .Where(condition ?? (entity => true))
                           .OrderByDescending(orderByKeySelector)
                           .IncludeMultiple(includes)
@@ -735,7 +750,6 @@ public abstract partial class BaseRepository<TEntity, TKey, TContext> where TEnt
                      .Select(projectionExpression ?? (entity => entity))
                      .SingleOrDefault(mainCondition);
     }
-
 
     /// <summary>
     ///  Returns one entity which IsDeleted condition is true by entity Id with includes from database hronously. If the condition is requested, it also provides that condition. 
@@ -968,13 +982,15 @@ public abstract partial class BaseRepository<TEntity, TKey, TContext> where TEnt
 
         List<TReturn> repo;
 
-        if (orderByAscending) repo = groupedClause.Invoke()
+        if (orderByAscending)
+            repo = groupedClause.Invoke()
                                                   .Where(conditionExpression ?? (entity => true))
                                                   .OrderBy(predicate)
                                                   .Skip((requestedPageNumber - 1) * countOfRequestedRecordsInPage)
                                                   .Take(countOfRequestedRecordsInPage)
                                                   .ToList();
-        else repo = groupedClause.Invoke()
+        else
+            repo = groupedClause.Invoke()
                                  .Where(conditionExpression ?? (entity => true))
                                  .OrderByDescending(predicate)
                                  .Skip((requestedPageNumber - 1) * countOfRequestedRecordsInPage)

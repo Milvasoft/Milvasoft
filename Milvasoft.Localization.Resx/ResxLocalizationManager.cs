@@ -72,7 +72,6 @@ public class ResxLocalizationManager<TResource>(IStringLocalizer<TResource> stri
         return values.Select(value => new LocalizedValue(value.Name, value.Value, !value.ResourceNotFound, value.SearchedLocation));
     }
 
-
     #region Update Methods
 
     /// <summary>

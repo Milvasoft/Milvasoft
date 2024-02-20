@@ -19,7 +19,9 @@ public class ExpressionParameterReplacer : ExpressionVisitor
         ParameterReplacements = new Dictionary<ParameterExpression, ParameterExpression>();
 
         for (var i = 0; i != fromParameters.Count && i != toParameters.Count; i++)
-        { ParameterReplacements.Add(fromParameters[i], toParameters[i]); }
+        {
+            ParameterReplacements.Add(fromParameters[i], toParameters[i]);
+        }
     }
 
     /// <summary>
@@ -30,7 +32,9 @@ public class ExpressionParameterReplacer : ExpressionVisitor
     protected override Expression VisitParameter(ParameterExpression node)
     {
         if (ParameterReplacements.TryGetValue(node, out var replacement))
-        { node = replacement; }
+        {
+            node = replacement;
+        }
 
         return base.VisitParameter(node);
     }

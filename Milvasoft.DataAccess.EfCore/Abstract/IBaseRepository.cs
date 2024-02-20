@@ -45,7 +45,6 @@ public interface IBaseRepository<TEntity, TKey, TContext> where TEntity : class,
                                                                bool tracking = false,
                                                                CancellationToken cancellationToken = new CancellationToken());
 
-
     /// <summary>
     ///  Returns first entity or default value which IsDeleted condition is true with includes from database asynchronously. If the condition is requested, it also provides that condition. 
     /// </summary>
@@ -474,7 +473,6 @@ public interface IBaseRepository<TEntity, TKey, TContext> where TEntity : class,
                                                    Expression<Func<TEntity, TEntity>> projectionExpression = null,
                                                    bool tracking = false,
                                                    CancellationToken cancellationToken = new CancellationToken());
-
 
     /// <summary>
     ///  Returns one entity which IsDeleted condition is true by entity Id with includes from database asynchronously. If the condition is requested, it also provides that condition. 
@@ -973,7 +971,6 @@ public interface IBaseRepository<TEntity, TKey, TContext> where TEntity : class,
 
     #endregion
 
-
     #region Sync
 
     #region Get Data  
@@ -988,7 +985,6 @@ public interface IBaseRepository<TEntity, TKey, TContext> where TEntity : class,
     TEntity GetFirstOrDefault(Expression<Func<TEntity, bool>> conditionExpression = null,
                                             Expression<Func<TEntity, TEntity>> projectionExpression = null,
                                             bool tracking = false);
-
 
     /// <summary>
     ///  Returns first entity or default value which IsDeleted condition is true with includes from database hronously. If the condition is requested, it also provides that condition. 
@@ -1374,7 +1370,6 @@ public interface IBaseRepository<TEntity, TKey, TContext> where TEntity : class,
                                   Expression<Func<TEntity, bool>> conditionExpression = null,
                                   Expression<Func<TEntity, TEntity>> projectionExpression = null,
                                   bool tracking = false);
-
 
     /// <summary>
     ///  Returns one entity which IsDeleted condition is true by entity Id with includes from database hronously. If the condition is requested, it also provides that condition. 

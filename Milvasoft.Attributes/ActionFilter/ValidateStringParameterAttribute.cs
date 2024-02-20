@@ -89,6 +89,7 @@ public class ValidateStringParameterAttribute(int minimumLength, int maximumLeng
                                                                     ? milvaLocalizer[LocalizerKeys.PreventStringInjectionLengthResultNotTrue, localizedPropName, MinimumLength, MaximumLength]
                                                                     : $"{localizedPropName} must have a character length in the range {MinimumLength} to {MaximumLength}.").Result);
                     }
+
                     if (!string.IsNullOrWhiteSpace(stringValue))
                     {
                         var blackList = context.HttpContext.RequestServices.GetService<List<InvalidString>>();
@@ -108,6 +109,7 @@ public class ValidateStringParameterAttribute(int minimumLength, int maximumLeng
                                                                                     : $"{localizedPropName} contains invalid words.").Result);
                                     }
                     }
+
                     if (MinimumLength > 0 && (stringValue?.Length ?? 0) < MinimumLength)
                     {
                         base.OnActionExecuting(RewriteResponseAsync(milvaLocalizer != null

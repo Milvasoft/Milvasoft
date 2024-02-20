@@ -271,8 +271,6 @@ public static class InterceptionServiceCollectionExtensions
         return builder;
     }
 
-
-
     /// <summary>
     /// Decorates the types added to the service collection to intercept them with Castle.Core's ProxyGenerator.
     /// </summary>

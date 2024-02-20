@@ -107,13 +107,13 @@ public class MilvaRegexAttribute : RegularExpressionAttribute
         }
         else
         {
-            if (base.IsValid(value)) return ValidationResult.Success;
+            if (base.IsValid(value))
+                return ValidationResult.Success;
             else
             {
                 ErrorMessage = $"{LocalizerKeys.PleaseEnterAValid} {context.MemberName}";
                 return new ValidationResult(FormatErrorMessage(""));
             }
         }
-
     }
 }

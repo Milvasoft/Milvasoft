@@ -3,7 +3,6 @@ using Milvasoft.Localization.Builder;
 
 namespace Milvasoft.Localization.Resx;
 
-
 /// <summary>
 /// Resx manager spesific options.
 /// </summary>

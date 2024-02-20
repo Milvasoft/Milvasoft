@@ -287,7 +287,6 @@ public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : 
         return (data, totalPages, (int)count);
     }
 
-
     /// <summary>
     /// 
     /// According to the <paramref name="entityId"/>, you can bring up the nested list with the page number you want and the number of data you want.
@@ -807,9 +806,11 @@ public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : 
     /// <param name="countOfRequestedRecordsInPage"></param>
     protected static void ValidatePaginationParameters(int requestedPageNumber, int countOfRequestedRecordsInPage)
     {
-        if (requestedPageNumber <= 0) throw new MilvaUserFriendlyException(MilvaException.WrongRequestedPageNumber);
+        if (requestedPageNumber <= 0)
+            throw new MilvaUserFriendlyException(MilvaException.WrongRequestedPageNumber);
 
-        if (countOfRequestedRecordsInPage <= 0) throw new MilvaUserFriendlyException(MilvaException.WrongRequestedItemCount);
+        if (countOfRequestedRecordsInPage <= 0)
+            throw new MilvaUserFriendlyException(MilvaException.WrongRequestedItemCount);
     }
 
     /// <summary>
@@ -874,7 +875,5 @@ public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : 
     }
 
     #endregion
-
-
 
 }

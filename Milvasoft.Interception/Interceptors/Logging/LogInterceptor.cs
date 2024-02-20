@@ -155,7 +155,8 @@ public partial class LogInterceptor : IMilvaInterceptor
 
                 await _logger.LogAsync(logObjectAsJson);
             }
-            else _logger.Log(logObjectPropDic.ToJson());
+            else 
+                _logger.Log(logObjectPropDic.ToJson());
 
             //If metadata removing requested, add removed metadata to call.returnValue again
             if (metadatas != null)
@@ -163,14 +164,13 @@ public partial class LogInterceptor : IMilvaInterceptor
                 var returnVal = call.ReturnValue as IHasMetadata;
                 returnVal.Metadatas = metadatas;
             }
+        }
 
-            if (exception != null)
-            {
-                throw exception;
-            }
+        if (exception != null)
+        {
+            throw exception;
         }
     }
-
 
     [GeneratedRegex("([\\\\])([a-z])(\\d+)")]
     private static partial Regex SlashRegex1();

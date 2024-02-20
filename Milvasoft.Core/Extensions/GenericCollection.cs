@@ -46,7 +46,6 @@ public static class GenericCollection
             return null;
         }
 
-
         var paramterExpression = Expression.Parameter(typeof(T));
 
         Expression orderByProperty = Expression.Property(paramterExpression, propertyName);
@@ -100,7 +99,8 @@ public static class GenericCollection
     /// <returns> A object of type T. </returns>
     public static T MilvaMax<T>(this IEnumerable<T> source, Expression<Func<T, decimal>> propertySelector) where T : class
     {
-        if (source.IsNullOrEmpty()) throw new MilvaDeveloperException("Source cannot be null or empty.");
+        if (source.IsNullOrEmpty())
+            throw new MilvaDeveloperException("Source cannot be null or empty.");
 
         decimal value = 0;
         T returnVal = null;
@@ -126,7 +126,8 @@ public static class GenericCollection
             }
         }
 
-        if (hasValue) return returnVal;
+        if (hasValue)
+            return returnVal;
 
         throw new MilvaDeveloperException("Sequence contains no elements.");
     }
@@ -140,7 +141,8 @@ public static class GenericCollection
     /// <returns>  A service object of type T or null if there is no such service. </returns>
     public static T MilvaMaxOrDefault<T>(this IEnumerable<T> source, Expression<Func<T, decimal>> propertySelector) where T : class
     {
-        if (source.IsNullOrEmpty()) return default;
+        if (source.IsNullOrEmpty())
+            return default;
 
         decimal value = 0;
         T returnVal = null;
@@ -166,7 +168,8 @@ public static class GenericCollection
             }
         }
 
-        if (hasValue) return returnVal;
+        if (hasValue)
+            return returnVal;
 
         return default;
     }
@@ -180,7 +183,8 @@ public static class GenericCollection
     /// <returns> A object of type T. </returns>
     public static T MilvaMax<T>(this IEnumerable<T> source, Expression<Func<T, int>> propertySelector) where T : class
     {
-        if (source.IsNullOrEmpty()) throw new MilvaDeveloperException("Source cannot be null or empty.");
+        if (source.IsNullOrEmpty())
+            throw new MilvaDeveloperException("Source cannot be null or empty.");
 
         int value = 0;
         T returnVal = null;
@@ -206,7 +210,8 @@ public static class GenericCollection
             }
         }
 
-        if (hasValue) return returnVal;
+        if (hasValue)
+            return returnVal;
 
         throw new MilvaDeveloperException("Sequence contains no elements.");
     }
@@ -220,7 +225,8 @@ public static class GenericCollection
     /// <returns>  A service object of type T or null if there is no such service. </returns>
     public static T MilvaMaxOrDefault<T>(this IEnumerable<T> source, Expression<Func<T, int>> propertySelector) where T : class
     {
-        if (source.IsNullOrEmpty()) return default;
+        if (source.IsNullOrEmpty())
+            return default;
 
         int value = 0;
         T returnVal = null;
@@ -246,7 +252,8 @@ public static class GenericCollection
             }
         }
 
-        if (hasValue) return returnVal;
+        if (hasValue)
+            return returnVal;
 
         return default;
     }
@@ -264,7 +271,8 @@ public static class GenericCollection
     /// <returns> A object of type T. </returns>
     public static T MilvaMin<T>(this IEnumerable<T> source, Expression<Func<T, decimal>> propertySelector) where T : class
     {
-        if (source.IsNullOrEmpty()) throw new MilvaDeveloperException("Source cannot be null or empty.");
+        if (source.IsNullOrEmpty())
+            throw new MilvaDeveloperException("Source cannot be null or empty.");
 
         decimal value = 0;
         T returnVal = null;
@@ -290,7 +298,8 @@ public static class GenericCollection
             }
         }
 
-        if (hasValue) return returnVal;
+        if (hasValue)
+            return returnVal;
 
         throw new MilvaDeveloperException("Sequence contains no elements.");
     }
@@ -304,7 +313,8 @@ public static class GenericCollection
     /// <returns>  A service object of type T or null if there is no such service. </returns>
     public static T MilvaMinOrDefault<T>(this IEnumerable<T> source, Expression<Func<T, decimal>> propertySelector) where T : class
     {
-        if (source.IsNullOrEmpty()) return default;
+        if (source.IsNullOrEmpty())
+            return default;
 
         decimal value = 0;
         T returnVal = null;
@@ -330,7 +340,8 @@ public static class GenericCollection
             }
         }
 
-        if (hasValue) return returnVal;
+        if (hasValue)
+            return returnVal;
 
         return default;
     }
@@ -344,7 +355,8 @@ public static class GenericCollection
     /// <returns> A object of type T. </returns>
     public static T MilvaMin<T>(this IEnumerable<T> source, Expression<Func<T, int>> propertySelector) where T : class
     {
-        if (source.IsNullOrEmpty()) throw new MilvaDeveloperException("Source cannot be null or empty.");
+        if (source.IsNullOrEmpty())
+            throw new MilvaDeveloperException("Source cannot be null or empty.");
 
         int value = 0;
         T returnVal = null;
@@ -370,7 +382,8 @@ public static class GenericCollection
             }
         }
 
-        if (hasValue) return returnVal;
+        if (hasValue)
+            return returnVal;
 
         throw new MilvaDeveloperException("Sequence contains no elements.");
     }
@@ -384,7 +397,8 @@ public static class GenericCollection
     /// <returns>  A service object of type T or null if there is no such service. </returns>
     public static T MilvaMinOrDefault<T>(this IEnumerable<T> source, Expression<Func<T, int>> propertySelector) where T : class
     {
-        if (source.IsNullOrEmpty()) return default;
+        if (source.IsNullOrEmpty())
+            return default;
 
         int value = 0;
         T returnVal = null;
@@ -410,7 +424,8 @@ public static class GenericCollection
             }
         }
 
-        if (hasValue) return returnVal;
+        if (hasValue)
+            return returnVal;
 
         return default;
     }

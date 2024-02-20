@@ -30,7 +30,6 @@ public class ExpoClient : IDisposable
         DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
     };
 
-
     static ExpoClient()
     {
         _httpClient.BaseAddress = new Uri(_expoBackendHost);

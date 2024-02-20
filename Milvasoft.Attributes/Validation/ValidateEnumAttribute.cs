@@ -74,7 +74,8 @@ public class ValidateEnumAttribute : ValidationAttribute
                 localizedPropName = milvaLocalizer[LocalizerKey ?? $"{LocalizerKeys.Localized}{context.MemberName}"];
                 errorMessage = FullMessage ? milvaLocalizer[LocalizerKey] : milvaLocalizer[LocalizerKeys.PleaseSelectAValid, localizedPropName];
             }
-            else errorMessage = $"{LocalizerKeys.PleaseEnterAValid} {context.MemberName}.";
+            else
+                errorMessage = $"{LocalizerKeys.PleaseEnterAValid} {context.MemberName}.";
 
             var valueType = _enumType ?? value.GetType();
 

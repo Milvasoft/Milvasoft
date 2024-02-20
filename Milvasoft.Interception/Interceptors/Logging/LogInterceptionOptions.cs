@@ -31,7 +31,6 @@ public class LogInterceptionOptions : ILogInterceptionOptions
     public Func<IServiceProvider, object> ExtraLoggingPropertiesSelector { get; set; }
 }
 
-
 public interface ILogInterceptionOptions : IMilvaOptions
 {
     public ServiceLifetime InterceptorLifetime { get; set; }

@@ -20,6 +20,7 @@ public sealed class TenantIdTypeConverter : StringConverter
         {
             return true;
         }
+
         return base.CanConvertFrom(context, sourceType);
     }
 
@@ -36,6 +37,7 @@ public sealed class TenantIdTypeConverter : StringConverter
         {
             return TenantId.Parse((string)value);
         }
+
         return base.ConvertFrom(context, culture, value);
     }
 
@@ -51,6 +53,7 @@ public sealed class TenantIdTypeConverter : StringConverter
         {
             return true;
         }
+
         return base.CanConvertTo(context, destinationType);
     }
 

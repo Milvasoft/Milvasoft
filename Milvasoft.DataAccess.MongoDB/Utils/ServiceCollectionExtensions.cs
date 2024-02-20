@@ -42,7 +42,8 @@ public static class ServiceCollectionExtensions
         {
             mongoClient = new MongoClient(config.MongoClientSettings);
         }
-        else mongoClient = new MongoClient(config.ConnectionString);
+        else
+            mongoClient = new MongoClient(config.ConnectionString);
 
         services.AddSingleton<IMongoClient>(mongoClient);
         services.AddSingleton(mongoClient.GetDatabase(config.DatabaseName));

@@ -21,7 +21,6 @@ public static class ServiceCollectionExtensions
                                                           IConfigurationManager configurationManager = null)
     => new(services, configurationManager);
 
-
     /// <summary>
     /// Adds json file operations services to service collection. Adds <see cref="IJsonFileOperationOptions"/> as singleton to services too.
     /// </summary>

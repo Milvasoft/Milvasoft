@@ -89,7 +89,8 @@ public class NullableTenantIdSerializer : SerializerBase<TenantId?>
             context.Reader.ReadNull();
             return null;
         }
-        else return BsonSerializer.Deserialize<TenantId?>(context.Reader);
+        else
+            return BsonSerializer.Deserialize<TenantId?>(context.Reader);
     }
 
     /// <summary>
@@ -102,6 +103,7 @@ public class NullableTenantIdSerializer : SerializerBase<TenantId?>
     {
         if (value != null)
             context.Writer.WriteString(value);
-        else context.Writer.WriteNull();
+        else
+            context.Writer.WriteNull();
     }
 }

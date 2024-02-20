@@ -39,7 +39,6 @@ public class ResponseInterceptionOptions : IResponseInterceptionOptions
     public Func<string, IMilvaLocalizer, Type, string, string> ApplyLocalizationFunc { get; set; }
 }
 
-
 public interface IResponseInterceptionOptions : IMilvaOptions
 {
     public ServiceLifetime InterceptorLifetime { get; set; }

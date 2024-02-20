@@ -3,7 +3,6 @@ using Milvasoft.Components.Rest.Response;
 
 namespace Milvasoft.Components.CQRS.Query;
 
-
 /// <summary>
 /// Abstraction for <see cref="Response{T}"/> typed query handler.
 /// </summary>

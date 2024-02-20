@@ -33,7 +33,8 @@ public class CachedTenantStore<TTenant, TKey> : ITenantStore<TTenant, TKey>
 
         if (_redisCacheService.IsConnected())
             return await _redisCacheService.GetAsync<TTenant>(identifier.ToString()).ConfigureAwait(false);
-        else return null;
+        else
+            return null;
     }
 
     /// <summary>
@@ -48,6 +49,7 @@ public class CachedTenantStore<TTenant, TKey> : ITenantStore<TTenant, TKey>
 
         if (_redisCacheService.IsConnected())
             return await _redisCacheService.SetAsync(identifier.ToString(), tenant).ConfigureAwait(false);
-        else return false;
+        else
+            return false;
     }
 }

@@ -35,7 +35,6 @@ public class ResxWriter
     {
         bool success;
 
-
         try
         {
             // Create a copy of the template resx resource

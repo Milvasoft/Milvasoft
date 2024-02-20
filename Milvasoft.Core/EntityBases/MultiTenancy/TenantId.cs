@@ -49,7 +49,8 @@ public struct TenantId : IEquatable<TenantId>
             _branchNo = branchNo;
             _hash = $"{tenancyName}_{branchNo}".HashToString();
         }
-        else throw new MilvaDeveloperException(_invalidTenantIdErrorMessage)
+        else
+            throw new MilvaDeveloperException(_invalidTenantIdErrorMessage)
         {
             ExceptionCode = (int)MilvaException.InvalidTenantId
         };
@@ -114,7 +115,8 @@ public struct TenantId : IEquatable<TenantId>
         // Check that o is a TenantId first
         if (other == null || other is not TenantId id)
             return false;
-        else tenantId = id;
+        else
+            tenantId = id;
 
         if (tenantId._hash != GetHashString())
             return false;
@@ -206,7 +208,8 @@ public struct TenantId : IEquatable<TenantId>
 
             return new TenantId(splitted[0], Convert.ToInt32(splitted[1]));
         }
-        else throw new MilvaDeveloperException(_invalidTenantIdErrorMessage)
+        else
+            throw new MilvaDeveloperException(_invalidTenantIdErrorMessage)
         {
             ExceptionCode = (int)MilvaException.InvalidTenantId
         };
@@ -222,7 +225,8 @@ public struct TenantId : IEquatable<TenantId>
     {
         var splittedArray = str.Split('_');
 
-        if (splittedArray.Length < 2) return false;
+        if (splittedArray.Length < 2)
+            return false;
 
         if (string.IsNullOrWhiteSpace(splittedArray[0]) || string.IsNullOrWhiteSpace(splittedArray[1]))
             return false;

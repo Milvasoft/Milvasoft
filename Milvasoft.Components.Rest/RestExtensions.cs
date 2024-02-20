@@ -59,7 +59,6 @@ public static class RestExtensions
 
     #endregion
 
-
     #region Error
 
     /// <summary>

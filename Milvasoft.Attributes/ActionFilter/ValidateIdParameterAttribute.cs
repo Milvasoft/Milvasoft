@@ -63,7 +63,6 @@ public class ValidateIdParameterAttribute : ActionFilterAttribute
             return context;
         };
 
-
         if (context.ActionArguments.Count != 0)
         {
             IMilvaLocalizer milvaLocalizer = null;
@@ -78,7 +77,6 @@ public class ValidateIdParameterAttribute : ActionFilterAttribute
                      : EntityName != null
                            ? $"{LocalizerKeys.PleaseEnterAValid} {EntityName}."
                            : "Please enter all required parameters completely.";
-
 
             foreach (var actionArgument in context.ActionArguments)
             {

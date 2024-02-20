@@ -48,7 +48,6 @@ public class MilvaCryptographyProvider : IMilvaCryptographyProvider
         _padding = padding;
     }
 
-
     #region Async Encryption
 
     /// <summary>
@@ -247,7 +246,6 @@ public class MilvaCryptographyProvider : IMilvaCryptographyProvider
         File.WriteAllText(filePath, encryptedContent, Encoding.UTF8);
     }
 
-
     /// <summary>
     /// Decrypt file in <paramref name="filePath"/> with AES Algorithm and key.
     /// !!! Milvasoft Corporation is not responsible of possible data loss.
@@ -277,7 +275,6 @@ public class MilvaCryptographyProvider : IMilvaCryptographyProvider
         File.WriteAllText(filePath, encryptedContent, encoding);
     }
 
-
     /// <summary>
     /// Decrypt file in <paramref name="filePath"/> with AES Algorithm and key.
     /// !!! Milvasoft Corporation is not responsible of possible data loss.
@@ -292,7 +289,6 @@ public class MilvaCryptographyProvider : IMilvaCryptographyProvider
 
         File.WriteAllText(filePath, decryptedContent, encoding);
     }
-
 
     #endregion
 

@@ -76,7 +76,8 @@ public class ContextRepository<TContext> : IContextRepository<TContext> where TC
                 }
             });
         }
-        else await function().ConfigureAwait(false);
+        else
+            await function().ConfigureAwait(false);
     }
 
     /// <summary>
@@ -111,7 +112,8 @@ public class ContextRepository<TContext> : IContextRepository<TContext> where TC
                 }
             });
         }
-        else return await function().ConfigureAwait(false);
+        else
+            return await function().ConfigureAwait(false);
     }
 
     /// <summary>
@@ -143,7 +145,8 @@ public class ContextRepository<TContext> : IContextRepository<TContext> where TC
                 }
             });
         }
-        else await function().ConfigureAwait(false);
+        else
+            await function().ConfigureAwait(false);
     }
 
     /// <summary>
@@ -178,7 +181,8 @@ public class ContextRepository<TContext> : IContextRepository<TContext> where TC
                 }
             });
         }
-        else return await function().ConfigureAwait(false);
+        else
+            return await function().ConfigureAwait(false);
     }
 
     /// <summary>
@@ -210,7 +214,8 @@ public class ContextRepository<TContext> : IContextRepository<TContext> where TC
                 }
             });
         }
-        else await function().ConfigureAwait(false);
+        else
+            await function().ConfigureAwait(false);
     }
 
     /// <summary>
@@ -245,7 +250,8 @@ public class ContextRepository<TContext> : IContextRepository<TContext> where TC
                 }
             });
         }
-        else return await function().ConfigureAwait(false);
+        else
+            return await function().ConfigureAwait(false);
     }
 
     /// <summary>
@@ -260,6 +266,7 @@ public class ContextRepository<TContext> : IContextRepository<TContext> where TC
         {
             _dbContext.Entry(localEntity).State = EntityState.Detached;
         }
+
         _dbContext.Entry(localEntity).State = EntityState.Modified;
     }
 
@@ -337,6 +344,7 @@ public class ContextRepository<TContext> : IContextRepository<TContext> where TC
             var filterExpression = Expression.Equal(Expression.Property(parameter, entityType.GetProperty(EntityPropertyNames.IsDeleted)), Expression.Constant(false, typeof(bool)));
             return Expression.Lambda<Func<TEntity, bool>>(filterExpression, parameter);
         }
-        else return null;
+        else
+            return null;
     }
 }

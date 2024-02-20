@@ -53,7 +53,8 @@ public static class NoSqlRelationHelper
             {
                 var referenceValue = (TReferenceProperty)item.GetValue(entity);
 
-                if (referenceValue == null) break;
+                if (referenceValue == null)
+                    break;
 
                 var collectionName = mappedPropertyType.GetCollectionName();
 
@@ -117,7 +118,8 @@ public static class NoSqlRelationHelper
             {
                 var referenceValues = (List<TReferenceProperty>)item.GetValue(entity);
 
-                if (referenceValues.IsNullOrEmpty()) break;
+                if (referenceValues.IsNullOrEmpty())
+                    break;
 
                 var collectionName = mappedPropertyType.GetCollectionName();
 
@@ -184,7 +186,8 @@ public static class NoSqlRelationHelper
                 {
                     var referenceValue = (TReferenceProperty)entityProp.GetValue(entity);
 
-                    if (referenceValue == null) break;
+                    if (referenceValue == null)
+                        break;
 
                     if (referenceValue.CollectionName == typeof(TMapProperty).GetCollectionName())
                     {
@@ -264,7 +267,8 @@ public static class NoSqlRelationHelper
                 {
                     var referenceValues = (List<TReferenceProperty>)entityProp.GetValue(entity);
 
-                    if (referenceValues.IsNullOrEmpty()) break;
+                    if (referenceValues.IsNullOrEmpty())
+                        break;
 
                     if (referenceValues.FirstOrDefault().CollectionName == typeof(TMapProperty).GetCollectionName())
                     {
@@ -428,7 +432,8 @@ public static class NoSqlRelationHelper
 
         var valueConverted = value.ToString();
 
-        if (totalObjectIdLenth <= valueConverted.Length) return new ObjectId("");
+        if (totalObjectIdLenth <= valueConverted.Length)
+            return new ObjectId("");
 
         string objectId = "";
 

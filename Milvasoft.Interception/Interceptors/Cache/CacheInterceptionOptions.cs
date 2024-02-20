@@ -20,7 +20,6 @@ public class CacheInterceptionOptions : ICacheInterceptionOptions
     public Type GetAccessorType() => _accessorType ??= typeof(ICacheAccessor<>).MakeGenericType([Type.GetType(CacheAccessorAssemblyQualifiedName)]);
 }
 
-
 public interface ICacheInterceptionOptions : IMilvaOptions
 {
     public ServiceLifetime InterceptorLifetime { get; set; }
