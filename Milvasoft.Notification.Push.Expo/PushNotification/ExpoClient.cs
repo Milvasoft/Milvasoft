@@ -29,7 +29,7 @@ public class ExpoClient : IDisposable
     {
         DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
     };
-    
+
 
     static ExpoClient()
     {

@@ -120,7 +120,7 @@ public class AggregationCriteria
         {
             genericAggregationMethod = aggregationMethod.MakeGenericMethod(_entityType);
         }
-        else 
+        else
             genericAggregationMethod = aggregationMethod.MakeGenericMethod(_entityType, _propType);
 
         return genericAggregationMethod;
@@ -221,7 +221,7 @@ public class AggregationCriteria
                 _queryProviderType = QueryProviderType.List;
             else if (query.Provider.GetType().IsAssignableTo(typeof(EntityQueryProvider)))
                 _queryProviderType = QueryProviderType.Enumerable;
-            else 
+            else
                 _queryProviderType = QueryProviderType.List;
         }
 
