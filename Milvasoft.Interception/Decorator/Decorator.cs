@@ -10,21 +10,20 @@ namespace Milvasoft.Interception.Decorator;
 /// </summary>
 public sealed class Decorator
 {
+    private readonly ProxyGenerator _proxyGenerator = SingletonProxyFactory.GetProxyGenerator();
+
     /// <summary>
     /// Gets or sets the factory method for creating a <see cref="IMilvaInterceptor"/> instance based on the <see cref="Type"/>.
     /// </summary>
     public Func<Type, IMilvaInterceptor> Factory { get; set; }
 
-    private readonly ProxyGenerator _proxyGenerator = new();
-    private readonly MethodDecoratorMap _methodDecoratorMap = new();
-
     /// <summary>
     /// <para>Creates a decorator with <see cref="Factory"/> set to <see cref="Activator.CreateInstance(Type)"/>.</para>
     /// <para>This only allows to create <see cref="IMilvaInterceptor"/> instances that have a parameterless constructor.</para>
     /// </summary>
-    public Decorator()
+    public Decorator(IServiceProvider serviceProvider)
     {
-        Factory = (type) => (IMilvaInterceptor)Activator.CreateInstance(type);
+        Factory = (type) => (IMilvaInterceptor)serviceProvider.GetService(type);
     }
 
     /// <summary>
@@ -69,8 +68,8 @@ public sealed class Decorator
         var interceptor = BuildDecoratorInterceptor(targetObject);
 
         var proxy = type.IsInterface
-            ? _proxyGenerator.CreateInterfaceProxyWithTargetInterface(type, targetObject, interceptor)
-            : _proxyGenerator.CreateClassProxyWithTarget(type, targetObject, interceptor);
+                         ? _proxyGenerator.CreateInterfaceProxyWithTargetInterface(type, targetObject, interceptor)
+                         : _proxyGenerator.CreateClassProxyWithTarget(type, targetObject, interceptor);
 
         return proxy;
     }
@@ -83,8 +82,7 @@ public sealed class Decorator
     /// <returns></returns>
     private DecoratorInterceptor BuildDecoratorInterceptor<TImplementation>(TImplementation targetObject)
     {
-        var decoratorTypesMap = _methodDecoratorMap.Get(targetObject.GetType());
-        var decoratorInstances = new Dictionary<Type, IMilvaInterceptor>();
+        var decoratorTypesMap = MethodDecoratorMap.Get(targetObject.GetType());
 
         var decoratorsMap = decoratorTypesMap.ToDictionary(typeMapItem => typeMapItem.Key,
                                                            typeMapItem => typeMapItem.Value.Select(type => GetDecorator(type)).ToArray());
@@ -93,13 +91,7 @@ public sealed class Decorator
 
         IMilvaInterceptor GetDecorator(Type type)
         {
-            if (!decoratorInstances.TryGetValue(type, out var decoratorInstance))
-            {
-                decoratorInstance = Factory(type);
-                decoratorInstances.Add(type, decoratorInstance);
-            }
-
-            return decoratorInstance;
+            return Factory(type);
         }
     }
 }

@@ -9,13 +9,13 @@ namespace Milvasoft.Interception.Decorator.Internal;
 /// <summary>
 /// Mappings of which decorator will intercept decorable methods.
 /// </summary>
-internal class MethodDecoratorMap
+internal class MethodDecoratorMap 
 {
-    private readonly ConcurrentDictionary<Type, ReadOnlyDictionary<MethodInfo, Type[]>> _map;
+    private readonly static ConcurrentDictionary<Type, ReadOnlyDictionary<MethodInfo, Type[]>> _map;
 
-    public MethodDecoratorMap() => _map = new ConcurrentDictionary<Type, ReadOnlyDictionary<MethodInfo, Type[]>>();
+    static MethodDecoratorMap() => _map = new ConcurrentDictionary<Type, ReadOnlyDictionary<MethodInfo, Type[]>>();
 
-    public ReadOnlyDictionary<MethodInfo, Type[]> Get(Type decoratedType) => _map.GetOrAdd(decoratedType, Factory);
+    public static ReadOnlyDictionary<MethodInfo, Type[]> Get(Type decoratedType) => _map.GetOrAdd(decoratedType, Factory);
 
     /// <summary>
     /// Finds the decorable methods of the class of the given type. Then, it maps which decorators will intercept these methods.
