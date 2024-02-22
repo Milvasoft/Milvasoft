@@ -18,4 +18,8 @@
     <ProjectReference Include="..\Milvasoft.Core\Milvasoft.Core.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Utils\" />
+  </ItemGroup>
+
 </Project>

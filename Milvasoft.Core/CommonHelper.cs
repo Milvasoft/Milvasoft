@@ -6,6 +6,7 @@ using Milvasoft.Core.EntityBases.Concrete;
 using Milvasoft.Core.Exceptions;
 using Milvasoft.Core.Extensions;
 using Milvasoft.Core.Utils.Constants;
+using Milvasoft.Core.Utils.JsonConverters;
 using System.ComponentModel;
 using System.Linq.Expressions;
 using System.Reflection;
@@ -297,7 +298,9 @@ public static class CommonHelper
     public static Guid ToGuid(this int value)
     {
         byte[] bytes = new byte[16];
+
         BitConverter.GetBytes(value).CopyTo(bytes, 0);
+
         return new Guid(bytes);
     }
 
@@ -307,25 +310,27 @@ public static class CommonHelper
     /// <param name="value"></param>
     /// <param name="jsonOptions"></param>
     /// <returns></returns>
-    public static string ToJson(this object value, JsonSerializerOptions jsonOptions = null) => JsonSerializer.Serialize(value, jsonOptions);
+    public static string ToJson(this object value, JsonSerializerOptions jsonOptions = null) => JsonSerializer.Serialize(value, jsonOptions ?? MilvaJsonConverterOptions.Current);
 
     /// <summary>
     /// Converts <paramref name="value"/> to <typeparamref name="T"/>.
     /// </summary>
     /// <typeparam name="T"></typeparam>
     /// <param name="value"></param>
+    /// <param name="jsonOptions"></param>
     /// <returns></returns>
-    public static T ToObject<T>(this string value) where T : class
-        => string.IsNullOrWhiteSpace(value) ? null : JsonSerializer.Deserialize<T>(value);
+    public static T ToObject<T>(this string value, JsonSerializerOptions jsonOptions = null) where T : class
+        => string.IsNullOrWhiteSpace(value) ? null : JsonSerializer.Deserialize<T>(value, jsonOptions ?? MilvaJsonConverterOptions.Current);
 
     /// <summary>
     /// Converts <paramref name="value"/> to <paramref name="returnType"/>.
     /// </summary>
     /// <param name="value"></param>
     /// <param name="returnType"></param>
+    /// <param name="jsonOptions"></param>
     /// <returns></returns>
-    public static object ToObject(this string value, Type returnType)
-        => string.IsNullOrWhiteSpace(value) ? null : JsonSerializer.Deserialize(value, returnType);
+    public static object ToObject(this string value, Type returnType, JsonSerializerOptions jsonOptions = null)
+        => string.IsNullOrWhiteSpace(value) ? null : JsonSerializer.Deserialize(value, returnType, jsonOptions ?? MilvaJsonConverterOptions.Current);
 
     #region DateTime
 

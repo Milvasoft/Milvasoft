@@ -2,13 +2,11 @@
 using Milvasoft.Components.Rest.Response;
 using Milvasoft.Core;
 using Milvasoft.Core.Abstractions;
-using Milvasoft.Core.Exceptions;
 using Milvasoft.Interception.Decorator;
 using Milvasoft.Interception.Interceptors.ActivityScope;
 using Milvasoft.Interception.Interceptors.Cache;
 using System.Diagnostics;
 using System.Linq.Expressions;
-using System.Text.Json;
 using System.Text.RegularExpressions;
 
 namespace Milvasoft.Interception.Interceptors.Logging;
@@ -68,22 +66,6 @@ public partial class LogInterceptor : IMilvaInterceptor
                 res.Metadatas = null;
             }
 
-            string exceptionAsJson = null;
-
-            if (exception != null)
-            {
-                var converter = new ExceptionConverter<Exception>();
-
-                var jsonOpts = new JsonSerializerOptions
-                {
-                    DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull | System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingDefault
-                };
-
-                jsonOpts.Converters.Add(converter);
-
-                exceptionAsJson = exception.ToJson(jsonOpts);
-            }
-
             var methodParameters = call.Arguments?.ToList();
 
             methodParameters?.RemoveAll(p => p is CancellationToken);
@@ -99,7 +81,7 @@ public partial class LogInterceptor : IMilvaInterceptor
                { "ElapsedMs", stopwatch.ElapsedMilliseconds },
                { "UtcLogTime" , DateTime.UtcNow },
                { "IsSuccess" , isSuccessResponse },
-               { "Exception" , exceptionAsJson },
+               { "Exception" , exception?.ToJson() },
                { "CacheInfo" , new {
                    FetchedFromCache = responseDataFetchedFromCache,
                    CacheRemoveKey = cacheAttribute?.Key,

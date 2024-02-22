@@ -1,9 +1,19 @@
 ﻿using Milvasoft.Components.Rest.Enums;
 using Milvasoft.Components.Rest.Response;
+using Milvasoft.Core.Utils.JsonConverters;
+using System.Text.Json;
 
 namespace Milvasoft.Components.Rest;
 public static class RestExtensions
 {
+    public static JsonSerializerOptions AddResponseConverters(this JsonSerializerOptions options)
+    {
+        options.Converters.Add(new InterfaceConverterFactory<Response.Response, IResponse>());
+        options.Converters.Add(new InterfaceConverterFactory(typeof(Response<>), typeof(IResponse<>)));
+
+        return options;   
+    }
+
     public static bool TryConvertToResponse(object obj, out IResponse response)
     {
         try

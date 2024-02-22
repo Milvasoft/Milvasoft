@@ -889,20 +889,22 @@
             <param name="jsonOptions"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Core.CommonHelper.ToObject``1(System.String)">
+        <member name="M:Milvasoft.Core.CommonHelper.ToObject``1(System.String,System.Text.Json.JsonSerializerOptions)">
             <summary>
             Converts <paramref name="value"/> to <typeparamref name="T"/>.
             </summary>
             <typeparam name="T"></typeparam>
             <param name="value"></param>
+            <param name="jsonOptions"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Core.CommonHelper.ToObject(System.String,System.Type)">
+        <member name="M:Milvasoft.Core.CommonHelper.ToObject(System.String,System.Type,System.Text.Json.JsonSerializerOptions)">
             <summary>
             Converts <paramref name="value"/> to <paramref name="returnType"/>.
             </summary>
             <param name="value"></param>
             <param name="returnType"></param>
+            <param name="jsonOptions"></param>
             <returns></returns>
         </member>
         <member name="M:Milvasoft.Core.CommonHelper.IsBetween(System.DateTime,System.TimeSpan,System.TimeSpan,System.Boolean)">
@@ -2025,37 +2027,6 @@
             <param name="value"></param>
             <param name="destinationType"></param>
             <returns></returns>
-        </member>
-        <member name="T:Milvasoft.Core.Exceptions.ExceptionConverter`1">
-            <summary>
-            System.Text.Json exception converter. Ignores <see cref="P:System.Exception.TargetSite"/> property. Only serializes <see cref="P:System.Exception.Message"/> and <see cref="P:System.Exception.StackTrace"/> properties.
-            </summary>
-            <typeparam name="TExceptionType"></typeparam>
-        </member>
-        <member name="M:Milvasoft.Core.Exceptions.ExceptionConverter`1.CanConvert(System.Type)">
-            <summary>
-            Determnies whether <typeparamref name="TExceptionType"/> is convertible to <see cref="T:System.Exception"/> or not.
-            </summary>
-            <param name="typeToConvert"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Milvasoft.Core.Exceptions.ExceptionConverter`1.Read(System.Text.Json.Utf8JsonReader@,System.Type,System.Text.Json.JsonSerializerOptions)">
-            <summary>
-            Deserialization operation.
-            </summary>
-            <param name="reader"></param>
-            <param name="typeToConvert"></param>
-            <param name="options"></param>
-            <returns></returns>
-            <exception cref="T:System.NotSupportedException"></exception>
-        </member>
-        <member name="M:Milvasoft.Core.Exceptions.ExceptionConverter`1.Write(System.Text.Json.Utf8JsonWriter,`0,System.Text.Json.JsonSerializerOptions)">
-            <summary>
-            Serialization operation.
-            </summary>
-            <param name="writer"></param>
-            <param name="value"></param>
-            <param name="options"></param>
         </member>
         <member name="T:Milvasoft.Core.Exceptions.MilvaBaseException">
             <summary>
@@ -3417,6 +3388,112 @@
         </member>
         <member name="F:Milvasoft.Core.Utils.Constants.MimeTypeNames.ApplicationZip">
             <summary>ZIP archive files; Registered[7]</summary>
+        </member>
+        <member name="T:Milvasoft.Core.Utils.JsonConverters.ExceptionConverter`1">
+            <summary>
+            System.Text.Json exception converter. Ignores <see cref="P:System.Exception.TargetSite"/> property. Only serializes <see cref="P:System.Exception.Message"/> and <see cref="P:System.Exception.StackTrace"/> properties.
+            </summary>
+            <typeparam name="TExceptionType"></typeparam>
+        </member>
+        <member name="M:Milvasoft.Core.Utils.JsonConverters.ExceptionConverter`1.CanConvert(System.Type)">
+            <summary>
+            Determnies whether <typeparamref name="TExceptionType"/> is convertible to <see cref="T:System.Exception"/> or not.
+            </summary>
+            <param name="typeToConvert"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Core.Utils.JsonConverters.ExceptionConverter`1.Read(System.Text.Json.Utf8JsonReader@,System.Type,System.Text.Json.JsonSerializerOptions)">
+            <summary>
+            Deserialization operation.
+            </summary>
+            <param name="reader"></param>
+            <param name="typeToConvert"></param>
+            <param name="options"></param>
+            <returns></returns>
+            <exception cref="T:System.NotSupportedException"></exception>
+        </member>
+        <member name="M:Milvasoft.Core.Utils.JsonConverters.ExceptionConverter`1.Write(System.Text.Json.Utf8JsonWriter,`0,System.Text.Json.JsonSerializerOptions)">
+            <summary>
+            Serialization operation.
+            </summary>
+            <param name="writer"></param>
+            <param name="value"></param>
+            <param name="options"></param>
+        </member>
+        <member name="T:Milvasoft.Core.Utils.JsonConverters.InterfaceConverter`2">
+            <summary>
+            Converter for deserializing generic interfaces with System.Text.Json. 
+            </summary>
+            <typeparam name="TImplementation"></typeparam>
+            <typeparam name="TInterface"></typeparam>
+        </member>
+        <member name="M:Milvasoft.Core.Utils.JsonConverters.InterfaceConverter`2.Read(System.Text.Json.Utf8JsonReader@,System.Type,System.Text.Json.JsonSerializerOptions)">
+            <summary>
+            Deserialization operation.
+            </summary>
+            <param name="reader"></param>
+            <param name="typeToConvert"></param>
+            <param name="options"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Core.Utils.JsonConverters.InterfaceConverter`2.Write(System.Text.Json.Utf8JsonWriter,`1,System.Text.Json.JsonSerializerOptions)">
+            <summary>
+            Serialization operation.
+            </summary>
+            <param name="writer"></param>
+            <param name="value"></param>
+            <param name="options"></param>
+        </member>
+        <member name="T:Milvasoft.Core.Utils.JsonConverters.InterfaceConverterFactory`2">
+            <summary>
+            Converter factory for deserializing generic interfaces with System.Text.Json. 
+            </summary>
+            <typeparam name="TImplementation"></typeparam>
+            <typeparam name="TInterface"></typeparam>
+        </member>
+        <member name="M:Milvasoft.Core.Utils.JsonConverters.InterfaceConverterFactory`2.#ctor">
+            <summary>
+            Initializes new instance.
+            </summary>
+        </member>
+        <member name="T:Milvasoft.Core.Utils.JsonConverters.InterfaceConverterFactory">
+            <summary>
+            Converter factory for deserializing generic interfaces with System.Text.Json. 
+            </summary>
+            <param name="implementationType"></param>
+            <param name="interfaceType"></param>
+        </member>
+        <member name="M:Milvasoft.Core.Utils.JsonConverters.InterfaceConverterFactory.#ctor(System.Type,System.Type)">
+            <summary>
+            Converter factory for deserializing generic interfaces with System.Text.Json. 
+            </summary>
+            <param name="implementationType"></param>
+            <param name="interfaceType"></param>
+        </member>
+        <member name="P:Milvasoft.Core.Utils.JsonConverters.InterfaceConverterFactory.ImplementationType">
+            <summary>
+            Implementation type.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Core.Utils.JsonConverters.InterfaceConverterFactory.InterfaceType">
+            <summary>
+            Interface type.
+            </summary>
+        </member>
+        <member name="M:Milvasoft.Core.Utils.JsonConverters.InterfaceConverterFactory.CanConvert(System.Type)">
+            <summary>
+            Determnies whether <paramref name="typeToConvert"/> is convertible to interface type or not.
+            </summary>
+            <param name="typeToConvert"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Core.Utils.JsonConverters.InterfaceConverterFactory.CreateConverter(System.Type,System.Text.Json.JsonSerializerOptions)">
+            <summary>
+            Creates json converter.
+            </summary>
+            <param name="typeToConvert"></param>
+            <param name="options"></param>
+            <returns></returns>
         </member>
         <member name="T:Milvasoft.Core.Utils.Models.InvalidString">
             <summary>

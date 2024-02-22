@@ -86,7 +86,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Milvasoft.Caching", "Milvas
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Milvasoft.Caching.InMemory", "Milvasoft.Caching.InMemory\Milvasoft.Caching.InMemory.csproj", "{3D9BFD9C-03F9-46DF-9E3B-859843643638}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Milvasoft.Components.CQRS", "Milvasoft.Components.CQRS\Milvasoft.Components.CQRS.csproj", "{E590BBAF-ACEA-4D9B-86DB-9B05DF722BD5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Milvasoft.Components.CQRS", "Milvasoft.Components.CQRS\Milvasoft.Components.CQRS.csproj", "{E590BBAF-ACEA-4D9B-86DB-9B05DF722BD5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
