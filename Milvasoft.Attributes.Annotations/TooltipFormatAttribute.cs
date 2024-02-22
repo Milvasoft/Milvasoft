@@ -6,7 +6,7 @@
 /// <example></example>
 /// <param name="format">Format example "{{Currency}}"</param>
 [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field, AllowMultiple = false)]
-public class CellTooltipFormatAttribute(string format) : Attribute
+public class TooltipFormatAttribute(string format) : Attribute
 {
     /// <summary>
     /// Cell tooltip format.

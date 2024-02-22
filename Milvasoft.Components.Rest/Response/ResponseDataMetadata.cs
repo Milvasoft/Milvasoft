@@ -56,18 +56,15 @@ public class ResponseDataMetadata : IHasMetadata
     /// <summary>
     /// It determines the format in which data in the table will display. Example : "{{Code}} - {{Name}}"
     /// </summary>
-    public string CellDisplayFormat { get; set; }
+    public string DisplayFormat { get; set; }
 
     /// <summary>
     /// It determines what the tooltip format of a data in the table will be.
     /// </summary>
-    public string CellTooltipFormat { get; set; }
+    public string TooltipFormat { get; set; }
 
     [DataMember]
     public List<ResponseDataMetadata> Metadatas { get; set; }
 
-    public (object, Type) GetResponseData()
-    {
-        return (null, null);
-    }
+    public (object, Type) GetResponseData() => (null, null);
 }
