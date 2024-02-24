@@ -713,8 +713,11 @@ public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepositor
     /// <returns></returns>
     public virtual async Task ExecuteUpdateAsync(Expression<Func<TEntity, bool>> predicate, SetPropertyBuilder<TEntity> propertyBuilder, CancellationToken cancellationToken = default)
     {
-        AddPerformTimePropertyCall(propertyBuilder, EntityPropertyNames.LastModificationDate);
-        AddPerformerUserPropertyCall(propertyBuilder, EntityPropertyNames.LastModifierUserName);
+        if (_dataAccessConfiguration.Auditing.AuditModificationDate)
+            AddPerformTimePropertyCall(propertyBuilder, EntityPropertyNames.LastModificationDate);
+
+        if (_dataAccessConfiguration.Auditing.AuditModifier)
+            AddPerformerUserPropertyCall(propertyBuilder, EntityPropertyNames.LastModifierUserName);
 
         await _dbSet.Where(predicate).ExecuteUpdateAsync(propertyBuilder.SetPropertyCalls, cancellationToken: cancellationToken);
     }
@@ -971,7 +974,7 @@ public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepositor
     /// <param name="propertyBuilder"></param>
     protected internal virtual void AddDeletionPropertyCalls(SetPropertyBuilder<TEntity> propertyBuilder)
     {
-        if (_dataAccessConfiguration.Auditing.IsAuditingPerformTime())
+        if (_dataAccessConfiguration.Auditing.AuditDeletionDate)
             AddPerformTimePropertyCall(propertyBuilder, EntityPropertyNames.DeletionDate);
 
         if (CommonHelper.PropertyExists<TEntity>(EntityPropertyNames.IsDeleted))
@@ -981,7 +984,8 @@ public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepositor
             propertyBuilder.SetPropertyValue(performerUserNameExpression, true);
         }
 
-        AddPerformerUserPropertyCall(propertyBuilder, EntityPropertyNames.DeleterUserName);
+        if (_dataAccessConfiguration.Auditing.AuditDeleter)
+            AddPerformerUserPropertyCall(propertyBuilder, EntityPropertyNames.DeleterUserName);
     }
 
     /// <summary>
@@ -991,16 +995,13 @@ public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepositor
     /// <param name="propertyName"></param>
     protected internal virtual void AddPerformTimePropertyCall(SetPropertyBuilder<TEntity> propertyBuilder, string propertyName)
     {
-        if (_dataAccessConfiguration.Auditing.IsAuditingPerformTime())
+        if (CommonHelper.PropertyExists<TEntity>(propertyName))
         {
-            if (CommonHelper.PropertyExists<TEntity>(propertyName))
-            {
-                var performerUserNameExpression = CommonHelper.CreatePropertySelector<TEntity, DateTime>(propertyName);
+            var performerUserNameExpression = CommonHelper.CreatePropertySelector<TEntity, DateTime>(propertyName);
 
-                var now = _dataAccessConfiguration.DbContext.UseUtcForDateTimes ? DateTime.UtcNow : DateTime.Now;
+            var now = _dataAccessConfiguration.DbContext.UseUtcForDateTimes ? DateTime.UtcNow : DateTime.Now;
 
-                propertyBuilder.SetPropertyValue(performerUserNameExpression, now);
-            }
+            propertyBuilder.SetPropertyValue(performerUserNameExpression, now);
         }
     }
 
@@ -1011,18 +1012,15 @@ public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepositor
     /// <param name="propertyName"></param>
     protected internal virtual void AddPerformerUserPropertyCall(SetPropertyBuilder<TEntity> propertyBuilder, string propertyName)
     {
-        if (_dataAccessConfiguration.Auditing.IsAuditingPerformer())
+        if (CommonHelper.PropertyExists<TEntity>(propertyName))
         {
-            if (CommonHelper.PropertyExists<TEntity>(propertyName))
+            var currentUserName = _dataAccessConfiguration.DbContext.GetCurrentUserNameDelegate.Invoke();
+
+            if (!string.IsNullOrWhiteSpace(currentUserName))
             {
-                var currentUserName = _dataAccessConfiguration.DbContext.GetCurrentUserNameDelegate.Invoke();
+                var performerUserNameExpression = CommonHelper.CreatePropertySelector<TEntity, string>(propertyName);
 
-                if (!string.IsNullOrWhiteSpace(currentUserName))
-                {
-                    var performerUserNameExpression = CommonHelper.CreatePropertySelector<TEntity, string>(propertyName);
-
-                    propertyBuilder.SetPropertyValue(performerUserNameExpression, currentUserName);
-                }
+                propertyBuilder.SetPropertyValue(performerUserNameExpression, currentUserName);
             }
         }
     }

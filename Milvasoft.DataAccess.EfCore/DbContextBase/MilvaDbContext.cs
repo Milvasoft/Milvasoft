@@ -169,14 +169,20 @@ public abstract class MilvaDbContextBase(DbContextOptions options) : DbContext(o
             {
                 case EntityState.Added:
 
-                    AuditDate(entry, EntityPropertyNames.CreationDate);
-                    AuditPerformerUser(entry, EntityPropertyNames.CreatorUserName);
+                    if (_dbContextConfiguration.Auditing.AuditCreationDate)
+                        AuditDate(entry, EntityPropertyNames.CreationDate);
+
+                    if (_dbContextConfiguration.Auditing.AuditCreator)
+                        AuditPerformerUser(entry, EntityPropertyNames.CreatorUserName);
 
                     break;
                 case EntityState.Modified:
 
-                    AuditDate(entry, EntityPropertyNames.LastModificationDate);
-                    AuditPerformerUser(entry, EntityPropertyNames.LastModifierUserName);
+                    if (_dbContextConfiguration.Auditing.AuditModificationDate)
+                        AuditDate(entry, EntityPropertyNames.LastModificationDate);
+
+                    if (_dbContextConfiguration.Auditing.AuditModifier)
+                        AuditPerformerUser(entry, EntityPropertyNames.LastModifierUserName);
 
                     break;
                 case EntityState.Deleted:
@@ -244,11 +250,15 @@ public abstract class MilvaDbContextBase(DbContextOptions options) : DbContext(o
         entry.Property(EntityPropertyNames.IsDeleted).CurrentValue = true;
         entry.Property(EntityPropertyNames.IsDeleted).IsModified = true;
 
-        //Change "DeletionDate" property value.
-        entry.Property(EntityPropertyNames.DeletionDate).CurrentValue = DateTime.Now;
-        entry.Property(EntityPropertyNames.DeletionDate).IsModified = true;
+        if (_dbContextConfiguration.Auditing.AuditDeletionDate)
+        {
+            //Change "DeletionDate" property value.
+            entry.Property(EntityPropertyNames.DeletionDate).CurrentValue = DateTime.Now;
+            entry.Property(EntityPropertyNames.DeletionDate).IsModified = true;
+        }
 
-        AuditPerformerUser(entry, EntityPropertyNames.DeleterUserName);
+        if (_dbContextConfiguration.Auditing.AuditDeleter)
+            AuditPerformerUser(entry, EntityPropertyNames.DeleterUserName);
     }
 
     /// <summary>
@@ -258,13 +268,10 @@ public abstract class MilvaDbContextBase(DbContextOptions options) : DbContext(o
     /// <param name="propertyName"></param>
     protected internal virtual void AuditDate(EntityEntry entry, string propertyName)
     {
-        if (_dbContextConfiguration.Auditing.IsAuditingPerformTime())
+        if (entry.Metadata.GetProperties().Any(prop => prop.Name == propertyName))
         {
-            if (entry.Metadata.GetProperties().Any(prop => prop.Name == propertyName))
-            {
-                entry.Property(propertyName).CurrentValue = DateTime.Now;
-                entry.Property(propertyName).IsModified = true;
-            }
+            entry.Property(propertyName).CurrentValue = DateTime.Now;
+            entry.Property(propertyName).IsModified = true;
         }
     }
 
@@ -275,17 +282,14 @@ public abstract class MilvaDbContextBase(DbContextOptions options) : DbContext(o
     /// <param name="propertyName"></param>
     protected internal virtual void AuditPerformerUser(EntityEntry entry, string propertyName)
     {
-        if (_dbContextConfiguration.Auditing.IsAuditingPerformer())
-        {
-            var currentUserName = _dbContextConfiguration.DbContext.GetCurrentUserNameDelegate.Invoke();
+        var currentUserName = _dbContextConfiguration.DbContext.GetCurrentUserNameDelegate.Invoke();
 
-            if (!string.IsNullOrWhiteSpace(currentUserName))
+        if (!string.IsNullOrWhiteSpace(currentUserName))
+        {
+            if (entry.Metadata.GetProperties().Any(prop => prop.Name == propertyName))
             {
-                if (entry.Metadata.GetProperties().Any(prop => prop.Name == propertyName))
-                {
-                    entry.Property(propertyName).CurrentValue = currentUserName;
-                    entry.Property(propertyName).IsModified = true;
-                }
+                entry.Property(propertyName).CurrentValue = currentUserName;
+                entry.Property(propertyName).IsModified = true;
             }
         }
     }

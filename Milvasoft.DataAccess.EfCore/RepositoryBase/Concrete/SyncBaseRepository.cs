@@ -556,8 +556,11 @@ public abstract partial class BaseRepository<TEntity, TContext> where TEntity : 
     /// <returns></returns>
     public virtual void ExecuteUpdate(Expression<Func<TEntity, bool>> predicate, SetPropertyBuilder<TEntity> propertyBuilder)
     {
-        AddPerformTimePropertyCall(propertyBuilder, EntityPropertyNames.LastModificationDate);
-        AddPerformerUserPropertyCall(propertyBuilder, EntityPropertyNames.LastModifierUserName);
+        if (_dataAccessConfiguration.Auditing.AuditModificationDate)
+            AddPerformTimePropertyCall(propertyBuilder, EntityPropertyNames.LastModificationDate);
+
+        if (_dataAccessConfiguration.Auditing.AuditModifier)
+            AddPerformerUserPropertyCall(propertyBuilder, EntityPropertyNames.LastModifierUserName);
 
         _dbSet.Where(predicate).ExecuteUpdate(propertyBuilder.SetPropertyCalls);
     }
