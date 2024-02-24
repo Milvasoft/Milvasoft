@@ -16,7 +16,7 @@ public abstract class AuditableEntity<TKey> : CreationAuditableEntity<TKey>, IAu
     /// <summary>
     /// Modifier of entity.
     /// </summary>
-    public virtual string ModifierUserName { get; set; }
+    public virtual string LastModifierUserName { get; set; }
 }
 
 /// <summary>

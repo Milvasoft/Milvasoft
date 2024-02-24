@@ -8,5 +8,5 @@ public interface IHasModifier
     /// <summary>
     /// Last modifier of entity.
     /// </summary>
-    string ModifierUserName { get; set; }
+    string LastModifierUserName { get; set; }
 }

@@ -138,11 +138,6 @@
             Default prop for datetime configuration.
             </summary>
         </member>
-        <member name="F:Milvasoft.DataAccess.EfCore.DbContextBase.MilvaDbContextBase._currentUserName">
-            <summary>
-            Default prop for datetime configuration.
-            </summary>
-        </member>
         <member name="M:Milvasoft.DataAccess.EfCore.DbContextBase.MilvaDbContextBase.#ctor(Microsoft.EntityFrameworkCore.DbContextOptions,Milvasoft.DataAccess.EfCore.Configuration.DataAccessConfiguration)">
             <summary>
             Initializes new instance.

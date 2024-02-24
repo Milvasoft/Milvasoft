@@ -37,11 +37,6 @@ public abstract class MilvaDbContextBase(DbContextOptions options) : DbContext(o
     protected bool _useUtcForDateTimes = false;
 
     /// <summary>
-    /// Default prop for datetime configuration.
-    /// </summary>
-    protected string _currentUserName = null;
-
-    /// <summary>
     /// Initializes new instance.
     /// </summary>
     /// <param name="options"></param>
@@ -49,7 +44,6 @@ public abstract class MilvaDbContextBase(DbContextOptions options) : DbContext(o
     public MilvaDbContextBase(DbContextOptions options, DataAccessConfiguration dbContextConfiguration) : this(options)
     {
         SetDataAccessConfiguration(dbContextConfiguration);
-        _currentUserName = dbContextConfiguration.DbContext.GetCurrentUserNameDelegate.Invoke();
     }
 
     /// <summary>
@@ -283,11 +277,13 @@ public abstract class MilvaDbContextBase(DbContextOptions options) : DbContext(o
     {
         if (_dbContextConfiguration.Auditing.IsAuditingPerformer())
         {
-            if (!string.IsNullOrWhiteSpace(_currentUserName))
+            var currentUserName = _dbContextConfiguration.DbContext.GetCurrentUserNameDelegate.Invoke();
+
+            if (!string.IsNullOrWhiteSpace(currentUserName))
             {
                 if (entry.Metadata.GetProperties().Any(prop => prop.Name == propertyName))
                 {
-                    entry.Property(propertyName).CurrentValue = _currentUserName;
+                    entry.Property(propertyName).CurrentValue = currentUserName;
                     entry.Property(propertyName).IsModified = true;
                 }
             }

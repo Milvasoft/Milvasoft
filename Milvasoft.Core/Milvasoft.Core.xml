@@ -1003,7 +1003,7 @@
             Determines entity has modifier.
             </summary>
         </member>
-        <member name="P:Milvasoft.Core.EntityBases.Abstract.Auditing.IHasModifier.ModifierUserName">
+        <member name="P:Milvasoft.Core.EntityBases.Abstract.Auditing.IHasModifier.LastModifierUserName">
             <summary>
             Last modifier of entity.
             </summary>
@@ -1122,7 +1122,7 @@
             Last modification date of entity.
             </summary>
         </member>
-        <member name="P:Milvasoft.Core.EntityBases.Concrete.AuditableEntity`1.ModifierUserName">
+        <member name="P:Milvasoft.Core.EntityBases.Concrete.AuditableEntity`1.LastModifierUserName">
             <summary>
             Modifier of entity.
             </summary>

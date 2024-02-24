@@ -1,4 +1,6 @@
-﻿namespace Milvasoft.Core.Utils.Constants;
+﻿using Milvasoft.Core.EntityBases.Concrete;
+
+namespace Milvasoft.Core.Utils.Constants;
 
 /// <summary>
 /// Auditing property names.
