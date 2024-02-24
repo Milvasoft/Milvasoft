@@ -175,23 +175,6 @@ public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepositor
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
     public virtual async Task<TResult> GetSingleOrDefaultAsync<TResult>(Expression<Func<TEntity, TResult>> projectionExpression,
-                                                                        Expression<Func<TResult, bool>> conditionExpression = null,
-                                                                        bool tracking = false,
-                                                                        CancellationToken cancellationToken = default)
-        => await _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
-                       .Select(projectionExpression)
-                       .SingleOrDefaultAsync(CreateConditionExpression(conditionExpression) ?? (entity => true), cancellationToken)
-                       .ConfigureAwait(false);
-
-    /// <summary>
-    /// Returns first entity or default value which IsDeleted condition is true from database asynchronously. If the condition is requested, it also provides that condition.
-    /// </summary>
-    /// <param name="projectionExpression"></param>
-    /// <param name="tracking"></param>
-    /// <param name="conditionExpression"></param>
-    /// <param name="cancellationToken"></param>
-    /// <returns></returns>
-    public virtual async Task<TResult> GetSingleOrDefaultAsync<TResult>(Expression<Func<TEntity, TResult>> projectionExpression,
                                                                         Expression<Func<TEntity, bool>> conditionExpression = null,
                                                                         bool tracking = false,
                                                                         CancellationToken cancellationToken = default)
@@ -240,6 +223,83 @@ public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepositor
 
     #endregion
 
+    #region Async GetById
+
+    /// <summary>
+    /// Returns one entity by entity Id from database asynchronously.
+    /// </summary>
+    /// <param name="id"></param>
+    /// <param name="conditionExpression"></param>
+    /// <param name="projectionExpression"></param>
+    /// <param name="tracking"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns> The entity found or null. </returns>
+    public virtual async Task<TResult> GetByIdAsync<TResult>(object id,
+                                                             Expression<Func<TEntity, TResult>> projectionExpression,
+                                                             Expression<Func<TEntity, bool>> conditionExpression = null,
+                                                             bool tracking = false,
+                                                             CancellationToken cancellationToken = new CancellationToken())
+    {
+        var mainCondition = CreateKeyEqualityExpression(id, conditionExpression);
+
+        return await _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
+                           .Where(mainCondition)
+                           .Select(projectionExpression)
+                           .SingleOrDefaultAsync(cancellationToken)
+                           .ConfigureAwait(false);
+    }
+
+    /// <summary>
+    /// Returns one entity by entity Id from database asynchronously.
+    /// </summary>
+    /// <param name="id"></param>
+    /// <param name="conditionExpression"></param>
+    /// <param name="projectionExpression"></param>
+    /// <param name="tracking"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns> The entity found or null. </returns>
+    public virtual async Task<TEntity> GetByIdAsync(object id,
+                                                    Expression<Func<TEntity, TEntity>> projectionExpression = null,
+                                                    Expression<Func<TEntity, bool>> conditionExpression = null,
+                                                    bool tracking = false,
+                                                    CancellationToken cancellationToken = new CancellationToken())
+    {
+        var mainCondition = CreateKeyEqualityExpression(id, conditionExpression);
+
+        return await _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
+                           .Select(projectionExpression ?? (entity => entity))
+                           .SingleOrDefaultAsync(mainCondition, cancellationToken)
+                           .ConfigureAwait(false);
+    }
+
+    /// <summary>
+    ///  Returns one entity which IsDeleted condition is true by entity Id with includes from database asynchronously. If the condition is requested, it also provides that condition. 
+    /// </summary>
+    /// <param name="id"></param>
+    /// <param name="includes"></param>
+    /// <param name="conditionExpression"></param>
+    /// <param name="projectionExpression"></param>
+    /// <param name="tracking"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns> The entity found or null. </returns>
+    public virtual async Task<TEntity> GetByIdAsync(object id,
+                                                    Func<IIncludable<TEntity>, IIncludable> includes,
+                                                    Expression<Func<TEntity, bool>> conditionExpression = null,
+                                                    Expression<Func<TEntity, TEntity>> projectionExpression = null,
+                                                    bool tracking = false,
+                                                    CancellationToken cancellationToken = new CancellationToken())
+    {
+        var mainCondition = CreateKeyEqualityExpression(id, conditionExpression);
+
+        return await _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
+                           .IncludeMultiple(includes)
+                           .Select(projectionExpression ?? (entity => entity))
+                           .SingleOrDefaultAsync(mainCondition, cancellationToken)
+                           .ConfigureAwait(false);
+    }
+
+    #endregion
+
     #region Async GetAll
 
     /// <summary>
@@ -279,46 +339,6 @@ public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepositor
         => await _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
                        .Where(CreateConditionExpression(conditionExpression) ?? (entity => true))
                        .Select(projectionExpression)
-                       .ToListAsync(cancellationToken)
-                       .ConfigureAwait(false);
-
-    /// <summary>
-    /// Returns all entities which IsDeleted condition is true from database asynchronously. If the condition is requested, it also provides that condition.
-    /// </summary>
-    /// <typeparam name="TResult"></typeparam>
-    /// <param name="listRequest"></param>
-    /// <param name="conditionExpression"></param>
-    /// <param name="projectionExpression"></param>
-    /// <param name="tracking"></param>
-    /// <param name="cancellationToken"></param>
-    /// <returns></returns>
-    public virtual async Task<ListResponse<TResult>> GetAllAsync<TResult>(ListRequest listRequest,
-                                                                          Expression<Func<TEntity, TResult>> projectionExpression,
-                                                                          Expression<Func<TResult, bool>> conditionExpression = null,
-                                                                          bool tracking = false,
-                                                                          CancellationToken cancellationToken = default) where TResult : class
-        => await _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
-                       .Select(projectionExpression)
-                       .Where(CreateConditionExpression(conditionExpression) ?? (entity => true))
-                       .ToListResponseAsync(listRequest, cancellationToken)
-                       .ConfigureAwait(false);
-
-    /// <summary>
-    /// Returns all entities which IsDeleted condition is true from database asynchronously. If the condition is requested, it also provides that condition.
-    /// </summary>
-    /// <typeparam name="TResult"></typeparam>
-    /// <param name="conditionExpression"></param>
-    /// <param name="projectionExpression"></param>
-    /// <param name="tracking"></param>
-    /// <param name="cancellationToken"></param>
-    /// <returns></returns>
-    public virtual async Task<IEnumerable<TResult>> GetAllAsync<TResult>(Expression<Func<TEntity, TResult>> projectionExpression,
-                                                                         Expression<Func<TResult, bool>> conditionExpression = null,
-                                                                         bool tracking = false,
-                                                                         CancellationToken cancellationToken = default)
-        => await _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
-                       .Select(projectionExpression)
-                       .Where(CreateConditionExpression(conditionExpression) ?? (entity => true))
                        .ToListAsync(cancellationToken)
                        .ConfigureAwait(false);
 
@@ -425,27 +445,6 @@ public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepositor
                        .Where(CreateConditionExpression(conditionExpression) ?? (entity => true))
                        .Take(count)
                        .Select(projectionExpression)
-                       .ToListAsync(cancellationToken)
-                       .ConfigureAwait(false);
-
-    /// <summary>
-    ///  Returns all entities which IsDeleted condition is true from database asynchronously. If the condition is requested, it also provides that condition.
-    /// </summary>
-    /// <param name="count"></param>
-    /// <param name="projectionExpression"></param>
-    /// <param name="tracking"></param>
-    /// <param name="conditionExpression"></param>
-    /// <param name="cancellationToken"></param>
-    /// <returns></returns>
-    public virtual async Task<IEnumerable<TResult>> GetSomeAsync<TResult>(int count,
-                                                                          Expression<Func<TEntity, TResult>> projectionExpression,
-                                                                          Expression<Func<TResult, bool>> conditionExpression = null,
-                                                                          bool tracking = false,
-                                                                          CancellationToken cancellationToken = default)
-        => await _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
-                       .Take(count)
-                       .Select(projectionExpression)
-                       .Where(CreateConditionExpression(conditionExpression) ?? (entity => true))
                        .ToListAsync(cancellationToken)
                        .ConfigureAwait(false);
 
@@ -926,7 +925,7 @@ public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepositor
     /// </summary>
     /// <param name="conditionExpression"></param>
     /// <returns></returns>
-    protected Expression<Func<TEntity, bool>> CreateConditionExpression(Expression<Func<TEntity, bool>> conditionExpression = null) 
+    protected Expression<Func<TEntity, bool>> CreateConditionExpression(Expression<Func<TEntity, bool>> conditionExpression = null)
         => CreateConditionExpression<TEntity>(conditionExpression);
 
     /// <summary>

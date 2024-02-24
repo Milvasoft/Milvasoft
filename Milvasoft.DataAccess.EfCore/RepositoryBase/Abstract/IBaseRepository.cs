@@ -57,19 +57,6 @@ public interface IBaseRepository<TEntity, TContext> where TEntity : IMilvaEntity
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
     Task<TResult> GetFirstOrDefaultAsync<TResult>(Expression<Func<TEntity, TResult>> projectionExpression,
-                                                  Expression<Func<TResult, bool>> conditionExpression = null,
-                                                  bool tracking = false,
-                                                  CancellationToken cancellationToken = default);
-
-    /// <summary>
-    /// Returns first entity or default value which IsDeleted condition is true from database asynchronously. If the condition is requested, it also provides that condition.
-    /// </summary>
-    /// <param name="projectionExpression"></param>
-    /// <param name="tracking"></param>
-    /// <param name="conditionExpression"></param>
-    /// <param name="cancellationToken"></param>
-    /// <returns></returns>
-    Task<TResult> GetFirstOrDefaultAsync<TResult>(Expression<Func<TEntity, TResult>> projectionExpression,
                                                   Expression<Func<TEntity, bool>> conditionExpression = null,
                                                   bool tracking = false,
                                                   CancellationToken cancellationToken = default);
@@ -115,19 +102,6 @@ public interface IBaseRepository<TEntity, TContext> where TEntity : IMilvaEntity
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
     Task<TResult> GetSingleOrDefaultAsync<TResult>(Expression<Func<TEntity, TResult>> projectionExpression,
-                                                   Expression<Func<TResult, bool>> conditionExpression = null,
-                                                   bool tracking = false,
-                                                   CancellationToken cancellationToken = default);
-
-    /// <summary>
-    /// Returns first entity or default value which IsDeleted condition is true from database asynchronously. If the condition is requested, it also provides that condition.
-    /// </summary>
-    /// <param name="projectionExpression"></param>
-    /// <param name="tracking"></param>
-    /// <param name="conditionExpression"></param>
-    /// <param name="cancellationToken"></param>
-    /// <returns></returns>
-    Task<TResult> GetSingleOrDefaultAsync<TResult>(Expression<Func<TEntity, TResult>> projectionExpression,
                                                    Expression<Func<TEntity, bool>> conditionExpression = null,
                                                    bool tracking = false,
                                                    CancellationToken cancellationToken = default);
@@ -162,6 +136,57 @@ public interface IBaseRepository<TEntity, TContext> where TEntity : IMilvaEntity
 
     #endregion
 
+    #region Async GetById
+
+    /// <summary>
+    /// Returns one entity by entity Id from database asynchronously.
+    /// </summary>
+    /// <param name="id"></param>
+    /// <param name="conditionExpression"></param>
+    /// <param name="projectionExpression"></param>
+    /// <param name="tracking"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns> The entity found or null. </returns>
+    Task<TResult> GetByIdAsync<TResult>(object id,
+                                        Expression<Func<TEntity, TResult>> projectionExpression,
+                                        Expression<Func<TEntity, bool>> conditionExpression = null,
+                                        bool tracking = false,
+                                        CancellationToken cancellationToken = new CancellationToken());
+
+    /// <summary>
+    /// Returns one entity by entity Id from database asynchronously.
+    /// </summary>
+    /// <param name="id"></param>
+    /// <param name="conditionExpression"></param>
+    /// <param name="projectionExpression"></param>
+    /// <param name="tracking"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns> The entity found or null. </returns>
+    Task<TEntity> GetByIdAsync(object id,
+                               Expression<Func<TEntity, TEntity>> projectionExpression = null,
+                               Expression<Func<TEntity, bool>> conditionExpression = null,
+                               bool tracking = false,
+                               CancellationToken cancellationToken = new CancellationToken());
+
+    /// <summary>
+    ///  Returns one entity which IsDeleted condition is true by entity Id with includes from database asynchronously. If the condition is requested, it also provides that condition. 
+    /// </summary>
+    /// <param name="id"></param>
+    /// <param name="includes"></param>
+    /// <param name="conditionExpression"></param>
+    /// <param name="projectionExpression"></param>
+    /// <param name="tracking"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns> The entity found or null. </returns>
+    Task<TEntity> GetByIdAsync(object id,
+                               Func<IIncludable<TEntity>, IIncludable> includes,
+                               Expression<Func<TEntity, bool>> conditionExpression = null,
+                               Expression<Func<TEntity, TEntity>> projectionExpression = null,
+                               bool tracking = false,
+                               CancellationToken cancellationToken = new CancellationToken());
+
+    #endregion
+
     #region Async GetAll
 
     /// <summary>
@@ -191,36 +216,6 @@ public interface IBaseRepository<TEntity, TContext> where TEntity : IMilvaEntity
     /// <returns></returns>
     Task<IEnumerable<TResult>> GetAllAsync<TResult>(Expression<Func<TEntity, TResult>> projectionExpression,
                                                     Expression<Func<TEntity, bool>> conditionExpression = null,
-                                                    bool tracking = false,
-                                                    CancellationToken cancellationToken = default);
-
-    /// <summary>
-    /// Returns all entities which IsDeleted condition is true from database asynchronously. If the condition is requested, it also provides that condition.
-    /// </summary>
-    /// <typeparam name="TResult"></typeparam>
-    /// <param name="listRequest"></param>
-    /// <param name="conditionExpression"></param>
-    /// <param name="projectionExpression"></param>
-    /// <param name="tracking"></param>
-    /// <param name="cancellationToken"></param>
-    /// <returns></returns>
-    Task<ListResponse<TResult>> GetAllAsync<TResult>(ListRequest listRequest,
-                                                     Expression<Func<TEntity, TResult>> projectionExpression,
-                                                     Expression<Func<TResult, bool>> conditionExpression = null,
-                                                     bool tracking = false,
-                                                     CancellationToken cancellationToken = default) where TResult : class;
-
-    /// <summary>
-    /// Returns all entities which IsDeleted condition is true from database asynchronously. If the condition is requested, it also provides that condition.
-    /// </summary>
-    /// <typeparam name="TResult"></typeparam>
-    /// <param name="conditionExpression"></param>
-    /// <param name="projectionExpression"></param>
-    /// <param name="tracking"></param>
-    /// <param name="cancellationToken"></param>
-    /// <returns></returns>
-    Task<IEnumerable<TResult>> GetAllAsync<TResult>(Expression<Func<TEntity, TResult>> projectionExpression,
-                                                    Expression<Func<TResult, bool>> conditionExpression = null,
                                                     bool tracking = false,
                                                     CancellationToken cancellationToken = default);
 
@@ -299,21 +294,6 @@ public interface IBaseRepository<TEntity, TContext> where TEntity : IMilvaEntity
     Task<IEnumerable<TResult>> GetSomeAsync<TResult>(int count,
                                                      Expression<Func<TEntity, TResult>> projectionExpression,
                                                      Expression<Func<TEntity, bool>> conditionExpression = null,
-                                                     bool tracking = false,
-                                                     CancellationToken cancellationToken = default);
-
-    /// <summary>
-    ///  Returns all entities which IsDeleted condition is true from database asynchronously. If the condition is requested, it also provides that condition.
-    /// </summary>
-    /// <param name="count"></param>
-    /// <param name="projectionExpression"></param>
-    /// <param name="tracking"></param>
-    /// <param name="conditionExpression"></param>
-    /// <param name="cancellationToken"></param>
-    /// <returns></returns>
-    Task<IEnumerable<TResult>> GetSomeAsync<TResult>(int count,
-                                                     Expression<Func<TEntity, TResult>> projectionExpression,
-                                                     Expression<Func<TResult, bool>> conditionExpression = null,
                                                      bool tracking = false,
                                                      CancellationToken cancellationToken = default);
 
@@ -549,20 +529,10 @@ public interface IBaseRepository<TEntity, TContext> where TEntity : IMilvaEntity
     #endregion
 
     #endregion
+
     #region Sync Data Access
 
     #region Sync FirstOrDefault 
-
-    /// <summary>
-    /// Returns first entity or default value which IsDeleted condition is true from database asynchronously. If the condition is requested, it also provides that condition.
-    /// </summary>
-    /// <param name="projectionExpression"></param>
-    /// <param name="tracking"></param>
-    /// <param name="conditionExpression"></param>
-    /// <returns></returns>
-    TResult GetFirstOrDefault<TResult>(Expression<Func<TEntity, TResult>> projectionExpression,
-                                       Expression<Func<TResult, bool>> conditionExpression = null,
-                                       bool tracking = false);
 
     /// <summary>
     /// Returns first entity or default value which IsDeleted condition is true from database asynchronously. If the condition is requested, it also provides that condition.
@@ -611,17 +581,6 @@ public interface IBaseRepository<TEntity, TContext> where TEntity : IMilvaEntity
     /// <param name="conditionExpression"></param>
     /// <returns></returns>
     TResult GetSingleOrDefault<TResult>(Expression<Func<TEntity, TResult>> projectionExpression,
-                                        Expression<Func<TResult, bool>> conditionExpression = null,
-                                        bool tracking = false);
-
-    /// <summary>
-    /// Returns first entity or default value which IsDeleted condition is true from database asynchronously. If the condition is requested, it also provides that condition.
-    /// </summary>
-    /// <param name="projectionExpression"></param>
-    /// <param name="tracking"></param>
-    /// <param name="conditionExpression"></param>
-    /// <returns></returns>
-    TResult GetSingleOrDefault<TResult>(Expression<Func<TEntity, TResult>> projectionExpression,
                                         Expression<Func<TEntity, bool>> conditionExpression = null,
                                         bool tracking = false);
 
@@ -651,6 +610,51 @@ public interface IBaseRepository<TEntity, TContext> where TEntity : IMilvaEntity
 
     #endregion
 
+    #region Sync GetById
+
+    /// <summary>
+    /// Returns one entity by entity Id from database asynchronously.
+    /// </summary>
+    /// <param name="id"></param>
+    /// <param name="conditionExpression"></param>
+    /// <param name="projectionExpression"></param>
+    /// <param name="tracking"></param>
+    /// <returns> The entity found or null. </returns>
+    TResult GetById<TResult>(object id,
+                             Expression<Func<TEntity, TResult>> projectionExpression,
+                             Expression<Func<TEntity, bool>> conditionExpression = null,
+                             bool tracking = false);
+
+    /// <summary>
+    /// Returns one entity by entity Id from database asynchronously.
+    /// </summary>
+    /// <param name="id"></param>
+    /// <param name="conditionExpression"></param>
+    /// <param name="projectionExpression"></param>
+    /// <param name="tracking"></param>
+    /// <returns> The entity found or null. </returns>
+    TEntity GetById(object id,
+                    Expression<Func<TEntity, TEntity>> projectionExpression = null,
+                    Expression<Func<TEntity, bool>> conditionExpression = null,
+                    bool tracking = false);
+
+    /// <summary>
+    ///  Returns one entity which IsDeleted condition is true by entity Id with includes from database asynchronously. If the condition is requested, it also provides that condition. 
+    /// </summary>
+    /// <param name="id"></param>
+    /// <param name="includes"></param>
+    /// <param name="conditionExpression"></param>
+    /// <param name="projectionExpression"></param>
+    /// <param name="tracking"></param>
+    /// <returns> The entity found or null. </returns>
+    TEntity GetById(object id,
+                    Func<IIncludable<TEntity>, IIncludable> includes,
+                    Expression<Func<TEntity, bool>> conditionExpression = null,
+                    Expression<Func<TEntity, TEntity>> projectionExpression = null,
+                    bool tracking = false);
+
+    #endregion
+
     #region Sync GetAll
 
     /// <summary>
@@ -677,32 +681,6 @@ public interface IBaseRepository<TEntity, TContext> where TEntity : IMilvaEntity
     /// <returns></returns>
     IEnumerable<TResult> GetAll<TResult>(Expression<Func<TEntity, TResult>> projectionExpression,
                                          Expression<Func<TEntity, bool>> conditionExpression = null,
-                                         bool tracking = false);
-
-    /// <summary>
-    /// Returns all entities which IsDeleted condition is true from database asynchronously. If the condition is requested, it also provides that condition.
-    /// </summary>
-    /// <typeparam name="TResult"></typeparam>
-    /// <param name="listRequest"></param>
-    /// <param name="conditionExpression"></param>
-    /// <param name="projectionExpression"></param>
-    /// <param name="tracking"></param>
-    /// <returns></returns>
-    ListResponse<TResult> GetAll<TResult>(ListRequest listRequest,
-                                          Expression<Func<TEntity, TResult>> projectionExpression,
-                                          Expression<Func<TResult, bool>> conditionExpression = null,
-                                          bool tracking = false) where TResult : class;
-
-    /// <summary>
-    /// Returns all entities which IsDeleted condition is true from database asynchronously. If the condition is requested, it also provides that condition.
-    /// </summary>
-    /// <typeparam name="TResult"></typeparam>
-    /// <param name="conditionExpression"></param>
-    /// <param name="projectionExpression"></param>
-    /// <param name="tracking"></param>
-    /// <returns></returns>
-    IEnumerable<TResult> GetAll<TResult>(Expression<Func<TEntity, TResult>> projectionExpression,
-                                         Expression<Func<TResult, bool>> conditionExpression = null,
                                          bool tracking = false);
 
     /// <summary>
@@ -771,19 +749,6 @@ public interface IBaseRepository<TEntity, TContext> where TEntity : IMilvaEntity
     IEnumerable<TResult> GetSome<TResult>(int count,
                                           Expression<Func<TEntity, TResult>> projectionExpression,
                                           Expression<Func<TEntity, bool>> conditionExpression = null,
-                                          bool tracking = false);
-
-    /// <summary>
-    ///  Returns all entities which IsDeleted condition is true from database asynchronously. If the condition is requested, it also provides that condition.
-    /// </summary>
-    /// <param name="count"></param>
-    /// <param name="projectionExpression"></param>
-    /// <param name="tracking"></param>
-    /// <param name="conditionExpression"></param>
-    /// <returns></returns>
-    IEnumerable<TResult> GetSome<TResult>(int count,
-                                          Expression<Func<TEntity, TResult>> projectionExpression,
-                                          Expression<Func<TResult, bool>> conditionExpression = null,
                                           bool tracking = false);
 
     /// <summary>
