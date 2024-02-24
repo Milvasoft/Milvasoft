@@ -15,7 +15,7 @@ public static class ServiceCollectionExtension
     /// <param name="services"></param>
     /// <param name="dataAccessConfiguration"></param>
     /// <returns></returns>
-    public static IServiceCollection AddMilvaDbContext(this IServiceCollection services, Action<DataAccessConfiguration> dataAccessConfiguration)
+    public static IServiceCollection ConfigureMilvaDataAccess(this IServiceCollection services, Action<DataAccessConfiguration> dataAccessConfiguration)
     {
         var config = new DataAccessConfiguration();
 
@@ -33,10 +33,10 @@ public static class ServiceCollectionExtension
     /// <param name="configurationManager"></param>
     /// <param name="getUserNameDelegate"></param>
     /// <returns></returns>
-    public static IServiceCollection AddMilvaDbContext(this IServiceCollection services, IConfigurationManager configurationManager, Func<string> getUserNameDelegate = null)
+    public static IServiceCollection ConfigureMilvaDataAccess(this IServiceCollection services, IConfigurationManager configurationManager, Func<string> getUserNameDelegate = null)
     {
         if (configurationManager == null)
-            return services.AddMilvaDbContext(dataAccessConfiguration: null);
+            return services.ConfigureMilvaDataAccess(dataAccessConfiguration: null);
 
         var section = configurationManager.GetSection(DataAccessConfiguration.SectionName);
 
@@ -53,7 +53,7 @@ public static class ServiceCollectionExtension
 
         options.DbContext.GetCurrentUserNameDelegate = getUserNameDelegate;
 
-        services.AddMilvaDbContext(dataAccessConfiguration: (opt) =>
+        services.ConfigureMilvaDataAccess(dataAccessConfiguration: (opt) =>
         {
             opt.DbContext = options.DbContext;
             opt.Repository = options.Repository;

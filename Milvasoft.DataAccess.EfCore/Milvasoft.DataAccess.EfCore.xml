@@ -1450,7 +1450,7 @@
             Service collection extension for configuring milva specific context features.
             </summary>
         </member>
-        <member name="M:Milvasoft.DataAccess.EfCore.ServiceCollectionExtension.AddMilvaDbContext(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.Action{Milvasoft.DataAccess.EfCore.Configuration.DataAccessConfiguration})">
+        <member name="M:Milvasoft.DataAccess.EfCore.ServiceCollectionExtension.ConfigureMilvaDataAccess(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.Action{Milvasoft.DataAccess.EfCore.Configuration.DataAccessConfiguration})">
             <summary>
             Adds required services to service collection for configuring milva specific context features.
             </summary>
@@ -1458,7 +1458,7 @@
             <param name="dataAccessConfiguration"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.DataAccess.EfCore.ServiceCollectionExtension.AddMilvaDbContext(Microsoft.Extensions.DependencyInjection.IServiceCollection,Microsoft.Extensions.Configuration.IConfigurationManager,System.Func{System.String})">
+        <member name="M:Milvasoft.DataAccess.EfCore.ServiceCollectionExtension.ConfigureMilvaDataAccess(Microsoft.Extensions.DependencyInjection.IServiceCollection,Microsoft.Extensions.Configuration.IConfigurationManager,System.Func{System.String})">
             <summary>
             Adds required services to service collection for configuring milva specific context features.
             </summary>
