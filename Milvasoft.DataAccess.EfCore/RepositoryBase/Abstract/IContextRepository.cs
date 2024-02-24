@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Milvasoft.Core.EntityBases.Abstract;
 
-namespace Milvasoft.DataAccess.EfCore.Abstract;
+namespace Milvasoft.DataAccess.EfCore.RepositoryBase.Abstract;
 
 /// <summary>
 /// Helper repository for general DbContext(<typeparamref name="TContext"/>) operations.

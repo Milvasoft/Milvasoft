@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore.Query;
 
-namespace Milvasoft.DataAccess.EfCore.IncludeLibrary;
+namespace Milvasoft.DataAccess.EfCore.Utils.IncludeLibrary;
 
 /// <summary>
 /// Supports queryable Include/ThenInclude chaining operators. 
@@ -46,8 +46,7 @@ internal class Includable<TEntity, TProperty> :
 {
     internal IIncludableQueryable<TEntity, TProperty> IncludableInput { get; }
 
-    internal Includable(IIncludableQueryable<TEntity, TProperty> queryable) :
-        base(queryable)
+    internal Includable(IIncludableQueryable<TEntity, TProperty> queryable) : base(queryable)
     {
         IncludableInput = queryable;
     }

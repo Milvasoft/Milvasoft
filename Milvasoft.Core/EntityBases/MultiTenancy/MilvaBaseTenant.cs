@@ -6,10 +6,7 @@ namespace Milvasoft.Core.EntityBases.MultiTenancy;
 /// Tenant base.
 /// </summary>
 /// <typeparam name="TKey"></typeparam>
-/// <typeparam name="TUserKey"></typeparam>
-public abstract class MilvaBaseTenant<TUserKey, TKey> : FullAuditableEntity<TUserKey, TKey>, IMilvaBaseTenant<TKey>
-    where TKey : struct, IEquatable<TKey>
-    where TUserKey : struct, IEquatable<TUserKey>
+public abstract class MilvaBaseTenant<TKey> : FullAuditableEntity<TKey>, IMilvaBaseTenant<TKey> where TKey : struct, IEquatable<TKey>
 {
     /// <summary>
     /// Tenancy name of tenant.

@@ -147,7 +147,7 @@ public class ResponseInterceptor(IServiceProvider serviceProvider, IResponseInte
                     foreach (var item in propObject as IList)
                         ApplyMetadataRulesToResponseData(item, prop, metadata, removePropMetadataFromResponse);
                 }
-                else 
+                else
                     ApplyMetadataRulesToResponseData(propObject, prop, metadata, removePropMetadataFromResponse);
             }
         }

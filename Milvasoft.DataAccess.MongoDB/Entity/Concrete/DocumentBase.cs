@@ -11,7 +11,7 @@ namespace Milvasoft.DataAccess.MongoDB.Entity.Concrete;
 /// </summary>
 public abstract class DocumentBase : IDocumentBase
 {
-    private static bool _developmentEnv = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development";
+    private static readonly bool _developmentEnv = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development";
     private DateTime _creationDate;
 
     /// <summary>

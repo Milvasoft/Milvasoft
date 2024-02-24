@@ -1,4 +1,6 @@
-﻿namespace Milvasoft.Core.EntityBases.Abstract;
+﻿using System.Xml.Linq;
+
+namespace Milvasoft.Core.EntityBases.Abstract;
 
 /// <summary>
 /// Defines interface for base entity type. All entities in the system must implement this interface.
@@ -24,7 +26,7 @@ public interface IEntityBase<TKey> : IMilvaEntity
     /// <summary>
     /// Unique identifier for this entity.
     /// </summary>
-    public TKey Id { get; set; }
+    public new TKey Id { get; set; }
 }
 
 /// <summary>
@@ -32,5 +34,11 @@ public interface IEntityBase<TKey> : IMilvaEntity
 /// </summary>
 public interface IMilvaEntity
 {
-
+    /// <summary>
+    /// Unique identifier for this entity.
+    /// </summary>
+    public virtual object Id {
+        get => Id;
+        set => Id = value;
+    }
 }

@@ -1,8 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Milvasoft.DataAccess.EfCore.IncludeLibrary;
+using Milvasoft.DataAccess.EfCore.Utils.IncludeLibrary;
 using System.Linq.Expressions;
 
-namespace Milvasoft.DataAccess.EfCore.IncludeLibrary;
+namespace Milvasoft.DataAccess.EfCore.Utils.IncludeLibrary;
 
 /// <summary>
 /// Includable extension for Ops!yon API. For reason to use that class: We cannot use default include process which in EntityFramework. Because of mysql and context. 

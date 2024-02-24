@@ -1,4 +1,4 @@
-﻿namespace Milvasoft.DataAccess.EfCore.IncludeLibrary;
+﻿namespace Milvasoft.DataAccess.EfCore.Utils.IncludeLibrary;
 
 /// <summary>
 /// Allows to include multiple class.

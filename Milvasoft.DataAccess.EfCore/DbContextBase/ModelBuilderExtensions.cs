@@ -1,22 +1,23 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Milvasoft.Core.EntityBases.Concrete;
+using Milvasoft.Attributes.Annotations;
 using Milvasoft.Core.EntityBases.MultiTenancy;
 using Milvasoft.Core.Exceptions;
+using Milvasoft.Core.Utils.Constants;
 using Milvasoft.Cryptography.Abstract;
-using Milvasoft.DataAccess.EfCore.Attributes;
 using Milvasoft.DataAccess.EfCore.Utils.Converters;
 using MongoDB.Bson;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq.Expressions;
 using System.Reflection;
 
-namespace Milvasoft.DataAccess.EfCore.MilvaContext;
+namespace Milvasoft.DataAccess.EfCore.DbContextBase;
 
 /// <summary>
 /// Extension methods for MilvaDbContexts
 /// </summary>
-public static class MilvaModelBuilderExtensions
+public static class ModelBuilderExtensions
 {
     /// <summary>
     /// Adds <see cref="TenantId"/> converters to <see cref="TenantId"/> typed properties.
@@ -97,7 +98,7 @@ public static class MilvaModelBuilderExtensions
     }
 
     /// <summary>
-    /// Adds value converter(<see cref="MilvaEncryptionConverter"/>) to string properties which marked with <see cref="MilvaEncryptedAttribute"/>.
+    /// Adds value converter(<see cref="MilvaEncryptionConverter"/>) to string properties which marked with <see cref="EncryptedAttribute"/>.
     /// </summary>
     /// <param name="modelBuilder"></param>
     /// <param name="encryptionProvider"></param>
@@ -117,9 +118,9 @@ public static class MilvaModelBuilderExtensions
             {
                 if (property.ClrType == typeof(string) /* && !IsDiscriminator(property)*/)
                 {
-                    object[] attributes = property.PropertyInfo.GetCustomAttributes(typeof(MilvaEncryptedAttribute), false);
+                    var attributes = property.PropertyInfo.GetCustomAttributes(typeof(EncryptedAttribute), false);
 
-                    if (attributes.Any())
+                    if (attributes.Length != 0)
                         property.SetValueConverter(encryptionConverter);
                 }
             }
@@ -212,10 +213,10 @@ public static class MilvaModelBuilderExtensions
                 if (memberInfo == null)
                     continue;
 
-                if (Attribute.GetCustomAttribute(memberInfo, typeof(MilvaDefaultValueAttribute)) is not MilvaDefaultValueAttribute defaultValue)
+                if (Attribute.GetCustomAttribute(memberInfo, typeof(DefaultValueAttribute)) is not DefaultValueAttribute defaultValue)
                     continue;
 
-                modelBuilder.Entity(entityType.ClrType).Property(property.Name).HasDefaultValue(defaultValue.DefaultValue);
+                modelBuilder.Entity(entityType.ClrType).Property(property.Name).HasDefaultValue(defaultValue.Value);
             }
 
         return modelBuilder;
@@ -259,7 +260,7 @@ public static class MilvaModelBuilderExtensions
         {
             var properties = entityType.ClrType.GetProperties().Where(p => p.PropertyType.IsAssignableFrom(typeof(decimal))
                                                                       && (!p.CustomAttributes?.Any(cA => (cA.AttributeType?.IsEquivalentTo(typeof(NotMappedAttribute)) ?? false)
-                                                                                                      || (cA.AttributeType?.IsEquivalentTo(typeof(MilvaPrecisionAttribute)) ?? false)) ?? true));
+                                                                                                      || (cA.AttributeType?.IsEquivalentTo(typeof(DecimalPrecisionAttribute)) ?? false)) ?? true));
 
             foreach (var prop in properties)
                 modelBuilder.Entity(entityType.ClrType).Property(prop.Name).HasPrecision(precision, scale);
@@ -269,7 +270,7 @@ public static class MilvaModelBuilderExtensions
     }
 
     /// <summary>
-    /// Configures the decimal property of entities with decimal properties in decimal format according to <see cref="MilvaPrecisionAttribute"/>.
+    /// Configures the decimal property of entities with decimal properties in decimal format according to <see cref="DecimalPrecisionAttribute"/>.
     /// </summary>
     /// <remarks>
     /// You can use this method with <see cref="UsePrecision(ModelBuilder, int, int)"/> method. 
@@ -285,7 +286,7 @@ public static class MilvaModelBuilderExtensions
                 if (memberInfo == null)
                     continue;
 
-                if (Attribute.GetCustomAttribute(memberInfo, typeof(MilvaPrecisionAttribute)) is not MilvaPrecisionAttribute precisionAttribute)
+                if (Attribute.GetCustomAttribute(memberInfo, typeof(DecimalPrecisionAttribute)) is not DecimalPrecisionAttribute precisionAttribute)
                     continue;
 
                 modelBuilder.Entity(entityType.ClrType).Property(property.Name).HasPrecision(precisionAttribute.Precision, precisionAttribute.Scale);

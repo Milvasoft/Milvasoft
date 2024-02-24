@@ -11,7 +11,7 @@ public static class RestExtensions
         options.Converters.Add(new InterfaceConverterFactory<Response.Response, IResponse>());
         options.Converters.Add(new InterfaceConverterFactory(typeof(Response<>), typeof(IResponse<>)));
 
-        return options;   
+        return options;
     }
 
     public static bool TryConvertToResponse(object obj, out IResponse response)

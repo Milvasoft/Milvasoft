@@ -137,7 +137,7 @@ public partial class LogInterceptor : IMilvaInterceptor
 
                 await _logger.LogAsync(logObjectAsJson);
             }
-            else 
+            else
                 _logger.Log(logObjectPropDic.ToJson());
 
             //If metadata removing requested, add removed metadata to call.returnValue again

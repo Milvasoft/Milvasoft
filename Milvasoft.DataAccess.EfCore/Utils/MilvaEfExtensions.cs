@@ -103,6 +103,7 @@ public static class MilvaEfExtensions
     /// <typeparam name="TEntity">The type of entity in the IQueryable.</typeparam>
     /// <param name="query">The source IQueryable data.</param>
     /// <param name="listRequest">The list request containing pagination, filtering, and sorting options.</param>
+    /// <param name="cancellationToken"></param>
     /// <returns>
     /// A Task representing the asynchronous operation that yields a ListResponse containing the paginated list result.
     /// </returns>
@@ -112,7 +113,7 @@ public static class MilvaEfExtensions
     /// The ListResponse object contains the retrieved data along with pagination metadata such as total data count, total page count, and current page number.
     /// If no pagination parameters are specified, the method returns the entire result set without pagination.
     /// </remarks>
-    public static async Task<ListResponse<TEntity>> ToListResponseAsync<TEntity>(this IQueryable<TEntity> query, ListRequest listRequest) where TEntity : class
+    public static async Task<ListResponse<TEntity>> ToListResponseAsync<TEntity>(this IQueryable<TEntity> query, ListRequest listRequest, CancellationToken cancellationToken = default) where TEntity : class
     {
         if (query == null)
             return ListResponse<TEntity>.Success();
@@ -121,7 +122,7 @@ public static class MilvaEfExtensions
 
         query = query.WithFilteringAndSorting(listRequest);
 
-        var aggregationResults = listRequest.Aggregation != null ? await listRequest.Aggregation.ApplyAggregationAsync(query) : null;
+        var aggregationResults = listRequest.Aggregation != null ? await listRequest.Aggregation.ApplyAggregationAsync(query, cancellationToken: cancellationToken) : null;
 
         int? totalDataCount = null;
         int? totalPageCount = null;
@@ -135,7 +136,7 @@ public static class MilvaEfExtensions
                          .Take(listRequest.RowCount.Value);
         }
 
-        var list = await query.ToListAsync();
+        var list = await query.ToListAsync(cancellationToken);
 
         var listResult = ListResponse<TEntity>.Success(list, LocalizerKeys.Successful, listRequest.PageNumber, totalPageCount, totalDataCount);
 
@@ -197,7 +198,7 @@ public static class MilvaEfExtensions
     /// <typeparam name="TDto"></typeparam>
     /// <typeparam name="TEntity"></typeparam>
     /// <param name="dto"></param>
-    public static SetPropertyBuilder<TEntity> GetSetPropertyBuilder<TEntity, TDto>(this TDto dto)
+    public static SetPropertyBuilder<TEntity> GetSetPropertyBuilderFromDto<TEntity, TDto>(this TDto dto)
     {
         if (dto == null)
             return null;

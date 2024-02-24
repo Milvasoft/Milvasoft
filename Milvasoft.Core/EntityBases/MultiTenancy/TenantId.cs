@@ -51,9 +51,9 @@ public struct TenantId : IEquatable<TenantId>
         }
         else
             throw new MilvaDeveloperException(_invalidTenantIdErrorMessage)
-        {
-            ExceptionCode = (int)MilvaException.InvalidTenantId
-        };
+            {
+                ExceptionCode = (int)MilvaException.InvalidTenantId
+            };
     }
 
     /// <summary>
@@ -210,9 +210,9 @@ public struct TenantId : IEquatable<TenantId>
         }
         else
             throw new MilvaDeveloperException(_invalidTenantIdErrorMessage)
-        {
-            ExceptionCode = (int)MilvaException.InvalidTenantId
-        };
+            {
+                ExceptionCode = (int)MilvaException.InvalidTenantId
+            };
     }
 
     /// <summary>

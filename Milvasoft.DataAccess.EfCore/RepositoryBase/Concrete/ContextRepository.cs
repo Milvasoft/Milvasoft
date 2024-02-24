@@ -3,30 +3,26 @@ using Milvasoft.Core.EntityBases.Abstract;
 using Milvasoft.Core.EntityBases.Abstract.Auditing;
 using Milvasoft.Core.EntityBases.Concrete;
 using Milvasoft.Core.Extensions;
-using Milvasoft.DataAccess.EfCore.Abstract;
+using Milvasoft.Core.Utils.Constants;
+using Milvasoft.DataAccess.EfCore.RepositoryBase.Abstract;
 using System.Linq.Expressions;
 using System.Reflection;
 
-namespace Milvasoft.DataAccess.EfCore.Concrete;
+namespace Milvasoft.DataAccess.EfCore.RepositoryBase.Concrete;
 
 /// <summary>
 /// Helper repository for general DbContext(<typeparamref name="TContext"/>) operations.
 /// </summary>
-public class ContextRepository<TContext> : IContextRepository<TContext> where TContext : DbContext
+/// <remarks>
+/// Constructor of ContextRepository for inject context.
+/// </remarks>
+/// <param name="dbContext"></param>
+public class ContextRepository<TContext>(TContext dbContext) : IContextRepository<TContext> where TContext : DbContext
 {
     /// <summary>
     /// DbContext object.
     /// </summary>
-    protected TContext _dbContext;
-
-    /// <summary>
-    /// Constructor of ContextRepository for inject context.
-    /// </summary>
-    /// <param name="dbContext"></param>
-    public ContextRepository(TContext dbContext)
-    {
-        _dbContext = dbContext;
-    }
+    protected TContext _dbContext = dbContext;
 
     /// <summary>
     /// Ignores soft delete for next process for current <see cref="DbContext"/> instance. Runs correctly, if <typeparamref name="TContext"/> inherit from MilvaDbContext.

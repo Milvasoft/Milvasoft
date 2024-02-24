@@ -5,6 +5,7 @@ using Milvasoft.Components.Rest.Response;
 using Milvasoft.Core;
 using Milvasoft.Core.Exceptions;
 using System.Reflection;
+using System.Threading;
 
 namespace Milvasoft.Components.Rest.Request;
 
@@ -33,7 +34,7 @@ public class AggregationCriteria
     /// <example>{columnName}</example>
     public virtual AggregationType Type { get => _type; set => _type = value; }
 
-    public virtual async Task<AggregationResult> ApplyAggregationAsync<TEntity>(IQueryable<TEntity> query, bool runAsync = true)
+    public virtual async Task<AggregationResult> ApplyAggregationAsync<TEntity>(IQueryable<TEntity> query, bool runAsync = true, CancellationToken cancellationToken = default)
     {
         if (string.IsNullOrEmpty(_aggregateBy))
             return new AggregationResult(_aggregateBy, _type, null);
@@ -50,19 +51,19 @@ public class AggregationCriteria
 
         if (_type == AggregationType.Count)
         {
-            var count = runAsync ? await query.CountAsync().ConfigureAwait(false) : query.Count();
+            var count = runAsync ? await query.CountAsync(cancellationToken).ConfigureAwait(false) : query.Count();
 
             return new AggregationResult(prop.Name, _type, count);
         }
         else
         {
-            var res = await GenericInvokeAggregationMethodAsync(query, propertySelector);
+            var res = await GenericInvokeAggregationMethodAsync(query, propertySelector, cancellationToken);
 
             return new AggregationResult(prop.Name, _type, res);
         }
     }
 
-    private async Task<object> GenericInvokeAggregationMethodAsync<TEntity>(IQueryable<TEntity> query, object propertySelectorResult)
+    private async Task<object> GenericInvokeAggregationMethodAsync<TEntity>(IQueryable<TEntity> query, object propertySelectorResult, CancellationToken cancellationToken = default)
     {
         MethodInfo genericAggregationMethod = MakeGenericMethod();
 
@@ -73,7 +74,7 @@ public class AggregationCriteria
 
         if (_runAsync)
         {
-            var taskResult = (Task)genericAggregationMethod.Invoke(null, new object[] { query, propertySelectorResult, null });
+            var taskResult = (Task)genericAggregationMethod.Invoke(null, new object[] { query, propertySelectorResult, cancellationToken });
 
             await taskResult;
 

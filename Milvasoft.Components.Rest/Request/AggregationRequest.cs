@@ -19,7 +19,7 @@ public class AggregationRequest
     /// <typeparam name="TEntity"></typeparam>
     /// <param name="query"></param>
     /// <returns></returns>
-    public virtual async Task<List<AggregationResult>> ApplyAggregationAsync<TEntity>(IQueryable<TEntity> query, bool runAsync = true)
+    public virtual async Task<List<AggregationResult>> ApplyAggregationAsync<TEntity>(IQueryable<TEntity> query, bool runAsync = true, CancellationToken cancellationToken = default)
     {
         if (Criterias.IsNullOrEmpty())
             return null;
@@ -28,7 +28,7 @@ public class AggregationRequest
 
         foreach (var criteria in Criterias)
         {
-            var res = await criteria.ApplyAggregationAsync(query, runAsync);
+            var res = await criteria.ApplyAggregationAsync(query, runAsync, cancellationToken);
 
             result.Add(res);
         }

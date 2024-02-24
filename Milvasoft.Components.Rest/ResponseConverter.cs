@@ -2,7 +2,7 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace Milvasoft.Core.Utils.JsonConverters;
+namespace Milvasoft.Components.Rest;
 
 /// <summary>
 /// Converter for deserializing generic interfaces with System.Text.Json. 
