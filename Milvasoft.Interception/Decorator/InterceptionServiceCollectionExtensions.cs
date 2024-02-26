@@ -2,9 +2,9 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Milvasoft.Attributes.Annotations;
+using Milvasoft.Core.Abstractions;
 using Milvasoft.Core.Abstractions.Localization;
 using Milvasoft.Interception.Builder;
-using Milvasoft.Interception.Interceptors;
 using Milvasoft.Interception.Interceptors.ActivityScope;
 using Milvasoft.Interception.Interceptors.Cache;
 using Milvasoft.Interception.Interceptors.Logging;
@@ -20,7 +20,8 @@ namespace Milvasoft.Interception.Decorator;
 public static class InterceptionServiceCollectionExtensions
 {
     /// <summary>
-    /// Decorates service collection with intercaptable service methods.
+    /// Decorates service collection with intercaptable service methods. 
+    /// Use this method after all registrations. Because it can be decorates <see cref="IInterceptable"/> services from service collection.
     /// 
     /// <para> You can decorate the service collection with <see cref="Intercept{T}(IServiceCollection)"/> overload. </para>
     /// 

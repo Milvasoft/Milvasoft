@@ -216,6 +216,11 @@
             Path of file.
             </summary>
         </member>
+        <member name="T:Milvasoft.Core.Abstractions.IInterceptable">
+            <summary>
+            It is the dummy interface that marks which class's methods can be intercepted.
+            </summary>
+        </member>
         <member name="T:Milvasoft.Core.Abstractions.IMapper">
             <summary>
             Responsible interface for mapping from the source object to the object we want to access.
