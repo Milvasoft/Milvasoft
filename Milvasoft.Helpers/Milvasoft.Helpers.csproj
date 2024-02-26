@@ -30,7 +30,7 @@
 	  <ProjectReference Include="..\Milvasoft.DataAccess.MongoDB\Milvasoft.DataAccess.MongoDB.csproj" />
 	  <ProjectReference Include="..\Milvasoft.FileOperations\Milvasoft.FileOperations.csproj" />
 	  <ProjectReference Include="..\Milvasoft.Identity\Milvasoft.Identity.csproj" />
-	  <ProjectReference Include="..\Milvasoft.Interception\Milvasoft.Interception.csproj" />
+	  <ProjectReference Include="..\Milvasoft.Interception.Ef\Milvasoft.Interception.Ef.csproj" />
 	  <ProjectReference Include="..\Milvasoft.JobScheduling\Milvasoft.JobScheduling.csproj" />
 	  <ProjectReference Include="..\Milvasoft.Localization.Redis\Milvasoft.Localization.Redis.csproj" />
 	  <ProjectReference Include="..\Milvasoft.Localization.Resx\Milvasoft.Localization.Resx.csproj" />

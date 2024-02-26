@@ -93,7 +93,7 @@
         </member>
         <member name="T:Milvasoft.DataAccess.EfCore.Configuration.RepositoryConfiguration">
             <summary>
-            <see cref="!:BaseRepository&lt;TEntity, TKey, TContext&gt;"/> configuration.
+            <see cref="T:Milvasoft.Helpers.DataAccess.EfCore.Concrete.BaseRepository`2"/> configuration.
             </summary>
         </member>
         <member name="P:Milvasoft.DataAccess.EfCore.Configuration.RepositoryConfiguration.DefaultSaveChangesChoice">

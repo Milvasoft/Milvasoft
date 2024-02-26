@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using Milvasoft.Core;
 using Milvasoft.Core.EntityBases.Abstract;
 using Milvasoft.Core.Exceptions;

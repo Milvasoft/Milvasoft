@@ -1,12 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Milvasoft.Core.Extensions;
 using Milvasoft.DataAccess.EfCore.Utils.Enums;
 using Milvasoft.Helpers.DataAccess.EfCore.Concrete;
 
 namespace Milvasoft.DataAccess.EfCore.Configuration;
 
 /// <summary>
-/// <see cref="BaseRepository{TEntity, TKey, TContext}"/> configuration.
+/// <see cref="BaseRepository{TEntity, TContext}"/> configuration.
 /// </summary>
 public class RepositoryConfiguration
 {
