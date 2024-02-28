@@ -50,7 +50,7 @@ public class RedisCachingOptions : ICacheOptions<RedisCachingOptions>
     /// Initializes new instance of <see cref="RedisCachingOptions"/>.
     /// </summary>
     public RedisCachingOptions()
-    {       
+    {
     }
 
     /// <summary>

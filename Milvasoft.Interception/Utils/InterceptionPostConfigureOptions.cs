@@ -2,7 +2,7 @@
 
 namespace Milvasoft.Interception.Interceptors.Logging;
 
-public class InterceptionPostConfigureOptions 
+public class InterceptionPostConfigureOptions
 {
     /// <summary>
     /// Logging interceptor post configuration options.

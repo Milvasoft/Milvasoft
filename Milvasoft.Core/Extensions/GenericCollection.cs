@@ -1,7 +1,4 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Localization;
-using Microsoft.Extensions.Options;
-using Milvasoft.Core.Abstractions.Localization;
 using Milvasoft.Core.Exceptions;
 using System.Collections;
 using System.Linq.Expressions;

@@ -3,7 +3,7 @@ using Milvasoft.Core.Abstractions.Localization;
 
 namespace Milvasoft.Interception.Interceptors.Response;
 
-public class ResponseInterceptionPostConfigureOptions 
+public class ResponseInterceptionPostConfigureOptions
 {
     /// <summary>
     /// This property represents a function that takes an array of role names as input and determines whether hiding should be performed based on role-based authorization checks.

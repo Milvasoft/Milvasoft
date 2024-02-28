@@ -64,7 +64,7 @@ public static class ServiceCollectionExtension
     /// <param name="services"></param>
     /// <param name="postConfigureAction"></param>
     /// <returns></returns>
-    public static IServiceCollection PostConfigureMilvaDataAccess(this IServiceCollection services,  Action<DataAccessPostConfigureConfiguration> postConfigureAction)
+    public static IServiceCollection PostConfigureMilvaDataAccess(this IServiceCollection services, Action<DataAccessPostConfigureConfiguration> postConfigureAction)
     {
         if (postConfigureAction == null)
             throw new MilvaDeveloperException("Please provide post configure options.");
@@ -87,5 +87,5 @@ public static class ServiceCollectionExtension
         });
 
         return services;
-    } 
+    }
 }
