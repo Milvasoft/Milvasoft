@@ -10,6 +10,8 @@ namespace Milvasoft.Caching.Redis.Options;
 /// </summary>
 public class RedisCachingOptions : ICacheOptions<RedisCachingOptions>
 {
+    private string _connectionString;
+
     /// <summary>
     /// Configuration section path in configuration file.
     /// </summary>
@@ -23,12 +25,21 @@ public class RedisCachingOptions : ICacheOptions<RedisCachingOptions>
     /// <summary>
     /// Redis connection string.
     /// </summary>
-    public string ConnectionString { get; }
+    public string ConnectionString
+    {
+        get => _connectionString;
+        set
+        {
+            _connectionString = value;
+            ConfigurationOptions ??= new();
+            ConfigurationOptions.EndPoints.Add(_connectionString);
+        }
+    }
 
     /// <summary>
     /// Redis configurations.
     /// </summary>
-    public ConfigurationOptions ConfigurationOptions { get; }
+    public ConfigurationOptions ConfigurationOptions { get; set; } = new();
 
     /// <summary>
     /// Uses DateTime.UtcNow if its true.
@@ -37,13 +48,18 @@ public class RedisCachingOptions : ICacheOptions<RedisCachingOptions>
 
     /// <summary>
     /// Initializes new instance of <see cref="RedisCachingOptions"/>.
+    /// </summary>
+    public RedisCachingOptions()
+    {       
+    }
+
+    /// <summary>
+    /// Initializes new instance of <see cref="RedisCachingOptions"/>.
     /// <paramref name="connectionString"/> will be added in <see cref="ConfigurationOptions.EndPoints"/>.
     /// </summary>
     /// <param name="connectionString"></param>
     public RedisCachingOptions(string connectionString)
     {
-        ConnectionString = connectionString;
-        ConfigurationOptions = new ConfigurationOptions();
-        ConfigurationOptions.EndPoints.Add(connectionString);
+        _connectionString = connectionString;
     }
 }

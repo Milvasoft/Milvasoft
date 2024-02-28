@@ -1,4 +1,8 @@
-﻿using Milvasoft.Core.Exceptions;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Localization;
+using Microsoft.Extensions.Options;
+using Milvasoft.Core.Abstractions.Localization;
+using Milvasoft.Core.Exceptions;
 using System.Collections;
 using System.Linq.Expressions;
 using System.Reflection;
@@ -10,9 +14,9 @@ namespace Milvasoft.Core.Extensions;
 /// </summary>
 public static class GenericCollection
 {
-    private static readonly MethodInfo OrderByMethod = typeof(Queryable).GetMethods().Single(method => method.Name == "OrderBy" && method.GetParameters().Length == 2);
+    private static readonly MethodInfo _orderByMethod = typeof(Queryable).GetMethods().Single(method => method.Name == "OrderBy" && method.GetParameters().Length == 2);
 
-    private static readonly MethodInfo OrderByDescendingMethod = typeof(Queryable).GetMethods().Single(method => method.Name == "OrderByDescending" && method.GetParameters().Length == 2);
+    private static readonly MethodInfo _orderByDescendingMethod = typeof(Queryable).GetMethods().Single(method => method.Name == "OrderByDescending" && method.GetParameters().Length == 2);
 
     /// <summary>
     /// Checks whether or not collection is null or empty. Assumes collection can be safely enumerated multiple times.
@@ -52,7 +56,7 @@ public static class GenericCollection
 
         var lambda = Expression.Lambda(orderByProperty, paramterExpression);
 
-        var genericMethod = OrderByMethod.MakeGenericMethod(typeof(T), orderByProperty.Type);
+        var genericMethod = _orderByMethod.MakeGenericMethod(typeof(T), orderByProperty.Type);
 
         var ret = genericMethod.Invoke(null, new object[] { source, lambda });
 
@@ -81,7 +85,7 @@ public static class GenericCollection
 
         var lambda = Expression.Lambda(orderByProperty, paramterExpression);
 
-        var genericMethod = OrderByDescendingMethod.MakeGenericMethod(typeof(T), orderByProperty.Type);
+        var genericMethod = _orderByDescendingMethod.MakeGenericMethod(typeof(T), orderByProperty.Type);
 
         var ret = genericMethod.Invoke(null, new object[] { source, lambda });
 
@@ -477,5 +481,46 @@ public static class GenericCollection
     {
         for (int i = 0; i < list.Count; i += batchSize)
             yield return list.GetRange(i, Math.Min(batchSize, list.Count - i));
+    }
+
+    /// <summary>
+    /// Updates singleton implementation instance with <paramref name="updateAction"/>.
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="services"></param>
+    /// <param name="updateAction"></param>
+    /// <returns></returns>
+    public static IServiceCollection UpdateSingletonInstance<T>(this IServiceCollection services, Action<T> updateAction)
+    {
+        var servicesToReplace = services.Where(service => service.ServiceType == typeof(T)).ToList();
+
+        foreach (var service in servicesToReplace)
+        {
+            if (service.ImplementationInstance != null && service.Lifetime == ServiceLifetime.Singleton)
+                updateAction.Invoke((T)service.ImplementationInstance);
+        }
+
+        return services;
+    }
+
+    /// <summary>
+    /// Updates singleton implementation instance with <paramref name="updateAction"/>.
+    /// </summary>
+    /// <typeparam name="TImplementation"></typeparam>
+    /// <typeparam name="TInstance"></typeparam>
+    /// <param name="services"></param>
+    /// <param name="updateAction"></param>
+    /// <returns></returns>
+    public static IServiceCollection UpdateSingletonInstance<TImplementation, TInstance>(this IServiceCollection services, Action<TInstance> updateAction)
+    {
+        var servicesToReplace = services.Where(service => service.ServiceType == typeof(TImplementation)).ToList();
+
+        foreach (var service in servicesToReplace)
+        {
+            if (service.ImplementationInstance != null && service.Lifetime == ServiceLifetime.Singleton)
+                updateAction.Invoke((TInstance)service.ImplementationInstance);
+        }
+
+        return services;
     }
 }

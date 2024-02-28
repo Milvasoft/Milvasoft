@@ -1,5 +1,4 @@
 ﻿using Milvasoft.Core.Abstractions;
-using Milvasoft.DataAccess.EfCore.Utils.Enums;
 
 namespace Milvasoft.DataAccess.EfCore.Configuration;
 

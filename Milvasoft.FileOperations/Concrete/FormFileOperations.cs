@@ -12,7 +12,7 @@ namespace Milvasoft.FileOperations.Concrete;
 /// <summary>
 /// <see cref="IFormFile"/> operations for .NET Core.
 /// </summary>
-public static class FormFileOperations
+public static partial class FormFileOperations
 {
     #region Public Properties
 
@@ -129,7 +129,7 @@ public static class FormFileOperations
                                                                          string propertyName)
     {
         if (files.IsNullOrEmpty())
-            return new List<string>();
+            return [];
 
         //Gets file extension.
         var fileExtension = Path.GetExtension(files.First().FileName);
@@ -218,7 +218,7 @@ public static class FormFileOperations
                                                                          string propertyName)
     {
         if (files.IsNullOrEmpty())
-            return new List<string>();
+            return [];
 
         //Gets file extension.
         var fileExtension = Path.GetExtension(files[0].FileName);
@@ -311,7 +311,7 @@ public static class FormFileOperations
     where TFileEntity : class, IFileEntity, new()
     {
         if (fileDTOList.IsNullOrEmpty())
-            return new List<TFileEntity>();
+            return [];
 
         var fileEntities = new List<TFileEntity>();
 
@@ -351,8 +351,7 @@ public static class FormFileOperations
         if (file == null)
             return FileValidationResult.NullFile;
 
-        if (allowedFileExtensions == null)
-            allowedFileExtensions = GetDefaultFileExtensions(fileType);
+        allowedFileExtensions ??= GetDefaultFileExtensions(fileType);
 
         allowedFileExtensions = allowedFileExtensions.ConvertAll(d => d.ToLower());
 
@@ -593,7 +592,6 @@ public static class FormFileOperations
             foreach (DirectoryInfo dir in directory.EnumerateDirectories())
                 dir.Delete(true);
         }
-
     }
 
     /// <summary>
@@ -677,42 +675,39 @@ public static class FormFileOperations
     /// </summary>
     /// <param name="fileType"></param>
     /// <returns></returns>
-    private static List<string> GetDefaultFileExtensions(FileType fileType)
+    private static List<string> GetDefaultFileExtensions(FileType fileType) => new Dictionary<FileType, string>
     {
-        return new Dictionary<FileType, string>
-            {
-               {FileType.Image, ".ai"},                {FileType.Video, ".3g2"},             {FileType.Audio, ".aif"},                       {FileType.EMail, ".email"},
-               {FileType.Image, ".bmp"},               {FileType.Video, ".3gp"},             {FileType.Audio, ".cda"},                       {FileType.EMail, ".eml"},
-               {FileType.Image, ".gif"},               {FileType.Video, ".h264"},            {FileType.Audio, ".mid"},                       {FileType.EMail, ".emlx"},
-               {FileType.Image, ".ico"},               {FileType.Video, ".m4v"},             {FileType.Audio, ".mp3"},                       {FileType.EMail, ".msg"},
-               {FileType.Image, ".jpeg"},              {FileType.Video, ".mkv"},             {FileType.Audio, ".mpa"},                       {FileType.EMail, ".oft"},
-               {FileType.Image, ".jpg"},               {FileType.Video, ".mov"},             {FileType.Audio, ".ogg"},                       {FileType.EMail, ".ost"},
-               {FileType.Image, ".png"},               {FileType.Video, ".mp4"},             {FileType.Audio, ".wav"},                       {FileType.EMail, ".pst"},
-               {FileType.Image, ".ps"},                {FileType.Video, ".mpg"},             {FileType.Audio, ".wma"},                       {FileType.EMail, ".vcf"},
-               {FileType.Image, ".svg"},               {FileType.Video, ".mpeg"},            {FileType.Audio, ".wpl"},
-               {FileType.Image, ".tif"},               {FileType.Video, ".wmv"},
-               {FileType.Image, ".tiff"},
+       {FileType.Image, ".ai"},                {FileType.Video, ".3g2"},             {FileType.Audio, ".aif"},                       {FileType.EMail, ".email"},
+       {FileType.Image, ".bmp"},               {FileType.Video, ".3gp"},             {FileType.Audio, ".cda"},                       {FileType.EMail, ".eml"},
+       {FileType.Image, ".gif"},               {FileType.Video, ".h264"},            {FileType.Audio, ".mid"},                       {FileType.EMail, ".emlx"},
+       {FileType.Image, ".ico"},               {FileType.Video, ".m4v"},             {FileType.Audio, ".mp3"},                       {FileType.EMail, ".msg"},
+       {FileType.Image, ".jpeg"},              {FileType.Video, ".mkv"},             {FileType.Audio, ".mpa"},                       {FileType.EMail, ".oft"},
+       {FileType.Image, ".jpg"},               {FileType.Video, ".mov"},             {FileType.Audio, ".ogg"},                       {FileType.EMail, ".ost"},
+       {FileType.Image, ".png"},               {FileType.Video, ".mp4"},             {FileType.Audio, ".wav"},                       {FileType.EMail, ".pst"},
+       {FileType.Image, ".ps"},                {FileType.Video, ".mpg"},             {FileType.Audio, ".wma"},                       {FileType.EMail, ".vcf"},
+       {FileType.Image, ".svg"},               {FileType.Video, ".mpeg"},            {FileType.Audio, ".wpl"},
+       {FileType.Image, ".tif"},               {FileType.Video, ".wmv"},
+       {FileType.Image, ".tiff"},
 
-               {FileType.Document, ".doc"},           {FileType.Compressed, ".arj"},         {FileType.InternetRelated, ".ai"},              {FileType.Font, ".fnt"},
-               {FileType.Document, ".docx"},          {FileType.Compressed, ".deb"},         {FileType.InternetRelated, ".bmp"},             {FileType.Font, ".fon"},
-               {FileType.Document, ".odt"},           {FileType.Compressed, ".pkg"},         {FileType.InternetRelated, ".gif"},             {FileType.Font, ".otf"},
-               {FileType.Document, ".pdf"},           {FileType.Compressed, ".rar"},         {FileType.InternetRelated, ".ico"},             {FileType.Font, ".ttf"},
-               {FileType.Document, ".rtf"},           {FileType.Compressed, ".rpm"},         {FileType.InternetRelated, ".jpeg"},
-               {FileType.Document, ".tex"},           {FileType.Compressed, ".zip"},         {FileType.InternetRelated, ".jpg"},
-               {FileType.Document, ".txt"},                                                  {FileType.InternetRelated, ".png"},
-               {FileType.Document, ".wpd"},                                                  {FileType.InternetRelated, ".ps"},
-               {FileType.Document, ".ods"},                                                  {FileType.InternetRelated, ".psd"},
-               {FileType.Document, ".xls"},                                                  {FileType.InternetRelated, ".svg"},
-               {FileType.Document, ".xlsm"},                                                 {FileType.InternetRelated, ".tif"},
-               {FileType.Document, ".xlsx"},                                                 {FileType.InternetRelated, ".tiff"},
-               {FileType.Document, ".key"},
-               {FileType.Document, ".odp"},
-               {FileType.Document, ".pps"},
-               {FileType.Document, ".ppt"},
-               {FileType.Document, ".pptx"},
+       {FileType.Document, ".doc"},           {FileType.Compressed, ".arj"},         {FileType.InternetRelated, ".ai"},              {FileType.Font, ".fnt"},
+       {FileType.Document, ".docx"},          {FileType.Compressed, ".deb"},         {FileType.InternetRelated, ".bmp"},             {FileType.Font, ".fon"},
+       {FileType.Document, ".odt"},           {FileType.Compressed, ".pkg"},         {FileType.InternetRelated, ".gif"},             {FileType.Font, ".otf"},
+       {FileType.Document, ".pdf"},           {FileType.Compressed, ".rar"},         {FileType.InternetRelated, ".ico"},             {FileType.Font, ".ttf"},
+       {FileType.Document, ".rtf"},           {FileType.Compressed, ".rpm"},         {FileType.InternetRelated, ".jpeg"},
+       {FileType.Document, ".tex"},           {FileType.Compressed, ".zip"},         {FileType.InternetRelated, ".jpg"},
+       {FileType.Document, ".txt"},                                                  {FileType.InternetRelated, ".png"},
+       {FileType.Document, ".wpd"},                                                  {FileType.InternetRelated, ".ps"},
+       {FileType.Document, ".ods"},                                                  {FileType.InternetRelated, ".psd"},
+       {FileType.Document, ".xls"},                                                  {FileType.InternetRelated, ".svg"},
+       {FileType.Document, ".xlsm"},                                                 {FileType.InternetRelated, ".tif"},
+       {FileType.Document, ".xlsx"},                                                 {FileType.InternetRelated, ".tiff"},
+       {FileType.Document, ".key"},
+       {FileType.Document, ".odp"},
+       {FileType.Document, ".pps"},
+       {FileType.Document, ".ppt"},
+       {FileType.Document, ".pptx"},
 
-            }.ToLookup(i => i.Key, i => i.Value).Where(i => i.Key == fileType).Select(i => i.First()).ToList();
-    }
+    }.ToLookup(i => i.Key, i => i.Value).Where(i => i.Key == fileType).Select(i => i.First()).ToList();
 
     /// <summary>
     /// Basically a Path.Combine for URLs. Ensures exactly one '/' separates each segment,and exactly on '&amp;' separates each query parameter.
@@ -721,8 +716,7 @@ public static class FormFileOperations
     /// <param name="parts">URL parts to combine.</param>
     private static string Combine(params string[] parts)
     {
-        if (parts == null)
-            throw new ArgumentNullException(nameof(parts));
+        ArgumentNullException.ThrowIfNull(parts);
 
         string result = "";
         bool inQuery = false, inFragment = false;
@@ -741,9 +735,9 @@ public static class FormFileOperations
             if (string.IsNullOrWhiteSpace(part))
                 continue;
 
-            if (result.EndsWith("?") || part.StartsWith("?"))
+            if (result.EndsWith('?') || part.StartsWith('?'))
                 result = CombineEnsureSingleSeparator(result, part, '?');
-            else if (result.EndsWith("#") || part.StartsWith("#"))
+            else if (result.EndsWith('#') || part.StartsWith('#'))
                 result = CombineEnsureSingleSeparator(result, part, '#');
             else if (inFragment)
                 result += part;
@@ -789,13 +783,16 @@ public static class FormFileOperations
             return Uri.EscapeDataString(s);
 
         // pick out all %-hex-hex matches and avoid double-encoding 
-        return Regex.Replace(s, "(.*?)((%[0-9A-Fa-f]{2})|$)", c =>
+        return IllegalCharsRegex().Replace(s, c =>
         {
             var a = c.Groups[1].Value; // group 1 is a sequence with no %-encoding - encode illegal characters
             var b = c.Groups[2].Value; // group 2 is a valid 3-character %-encoded sequence - leave it alone!
             return Uri.EscapeDataString(a) + b;
         });
     }
+
+    [GeneratedRegex("(.*?)((%[0-9A-Fa-f]{2})|$)")]
+    private static partial Regex IllegalCharsRegex();
 
     #endregion
 }

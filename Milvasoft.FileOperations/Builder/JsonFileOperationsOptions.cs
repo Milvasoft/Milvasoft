@@ -4,7 +4,7 @@ using Milvasoft.Core.Extensions;
 using System.Globalization;
 using System.Text;
 
-namespace Milvasoft.FileOperations;
+namespace Milvasoft.FileOperations.Builder;
 
 /// <summary>
 /// Json operations config for json file operations.
@@ -27,11 +27,6 @@ public interface IJsonFileOperationOptions : IMilvaOptions
     string EncryptionKey { get; set; }
 
     /// <summary>
-    /// Gets or sets encryption key.
-    /// </summary>
-    public string CultureCode { get; set; }
-
-    /// <summary>
     /// Culture info to be used when access file.
     /// </summary>
     CultureInfo CultureInfo { get; set; }
@@ -47,8 +42,6 @@ public interface IJsonFileOperationOptions : IMilvaOptions
 /// </summary>
 public class JsonFileOperationsOptions : IJsonFileOperationOptions
 {
-    private string _cultureCode;
-
     /// <summary>
     /// Configuration file section path.
     /// </summary>
@@ -70,11 +63,6 @@ public class JsonFileOperationsOptions : IJsonFileOperationOptions
     public string EncryptionKey { get; set; }
 
     /// <summary>
-    /// Gets or sets encryption key.
-    /// </summary>
-    public string CultureCode { get => _cultureCode; set => _cultureCode = value; }
-
-    /// <summary>
     /// Culture info to be used when access file. Default is en-US.
     /// </summary>
     public CultureInfo CultureInfo { get; set; } = new CultureInfo("en-US");
@@ -83,12 +71,4 @@ public class JsonFileOperationsOptions : IJsonFileOperationOptions
     /// Encoding to be used when access file. Default is UTF8.
     /// </summary>
     public Encoding Encoding { get; set; } = Encoding.UTF8;
-
-    /// <summary>
-    /// Initializes new instance.
-    /// </summary>
-    public JsonFileOperationsOptions()
-    {
-        CultureInfo = _cultureCode != null ? new CultureInfo(_cultureCode) : new CultureInfo("en-US");
-    }
 }

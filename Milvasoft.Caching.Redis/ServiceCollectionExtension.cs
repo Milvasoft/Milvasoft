@@ -23,7 +23,7 @@ public static class ServiceCollectionExtension
     {
         if (!cacheBuilder.Services.Any(s => s.ServiceType == typeof(ICacheAccessor<RedisAccessor>)) && cachingOptions != null)
         {
-            if (!cacheBuilder.Services.Any(s => s.ServiceType == typeof(IConnectionMultiplexer)))
+            if (!cacheBuilder.Services.Any(s => s.ServiceType == typeof(IConnectionMultiplexer)) && cachingOptions.ConfigurationOptions != null)
             {
                 //Configure other services up here
                 var multiplexer = ConnectionMultiplexer.Connect(cachingOptions.ConfigurationOptions);
@@ -52,10 +52,6 @@ public static class ServiceCollectionExtension
             return builder.WithRedisAccessor(cachingOptions: null);
 
         var section = builder.ConfigurationManager.GetSection(RedisCachingOptions.SectionName);
-
-        builder.Services.AddOptions<ICacheOptions<RedisCachingOptions>>()
-                        .Bind(section)
-                        .ValidateDataAnnotations();
 
         builder.Services.AddOptions<RedisCachingOptions>()
                         .Bind(section)

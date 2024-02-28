@@ -40,7 +40,7 @@ public partial class WithNoLockInterceptor(IServiceProvider serviceProvider) : I
 
             await executionStrategy.ExecuteAsync(async () =>
             {
-               using  var transactionScope = new TransactionScope(TransactionScopeOption.Required, _transactionOptions, TransactionScopeAsyncFlowOption.Enabled);
+                using var transactionScope = new TransactionScope(TransactionScopeOption.Required, _transactionOptions, TransactionScopeAsyncFlowOption.Enabled);
 
                 try
                 {

@@ -5,7 +5,6 @@ using Milvasoft.Components.Rest.Response;
 using Milvasoft.Core;
 using Milvasoft.Core.Exceptions;
 using System.Reflection;
-using System.Threading;
 
 namespace Milvasoft.Components.Rest.Request;
 

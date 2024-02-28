@@ -1,13 +1,12 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Caching.Memory;
+﻿using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Milvasoft.Core.Exceptions;
+using Milvasoft.Core.Extensions;
 using Milvasoft.Identity.Abstract;
 using Milvasoft.Identity.Concrete;
 using Milvasoft.Identity.Concrete.Entity;
 using Milvasoft.Identity.Concrete.Options;
-using System.Security.Cryptography;
 
 namespace Milvasoft.Identity.Builder;
 
@@ -32,7 +31,6 @@ public class MilvaIdentityBuilder<TUser, TKey> where TUser : MilvaUser<TKey> whe
         _services = services;
         _configurationManager = configurationManager;
     }
-
 
     /// <summary>
     /// Adds and configures the identity system for the specified User and Role types.
@@ -98,19 +96,19 @@ public class MilvaIdentityBuilder<TUser, TKey> where TUser : MilvaUser<TKey> whe
     /// Adds and configures the identity system for the specified User and Role types.
     /// </summary>
     /// <returns></returns>
-    public MilvaIdentityBuilder<TUser, TKey> WithPostConfigureOptions(Action<MilvaIdentityPostConfigureOptions> setupAction)
+    public MilvaIdentityBuilder<TUser, TKey> PostConfigureIdentityOptions(Action<MilvaIdentityPostConfigureOptions> setupAction)
     {
         if (setupAction == null)
             throw new MilvaDeveloperException("Please provide post configure options.");
 
-       if(!_optionsConfiguredFromConfigurationManager)
+        if (!_optionsConfiguredFromConfigurationManager)
             throw new MilvaDeveloperException("Please configure options with WithOptions() builder method before post configuring.");
 
         var config = new MilvaIdentityPostConfigureOptions();
 
         setupAction?.Invoke(config);
 
-        _services.Configure<MilvaIdentityOptions>(opt =>
+        _services.UpdateSingletonInstance<MilvaIdentityOptions>(opt =>
         {
             opt.Password.Hasher.RandomNumberGenerator = config.RandomNumberGenerator ?? opt.Password.Hasher.RandomNumberGenerator;
         });

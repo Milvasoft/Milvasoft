@@ -23,10 +23,11 @@ public class RedisLocalizationOptions : LocalizationOptions
     /// <summary>
     /// Milva redis caching options
     /// </summary>
-    public RedisCachingOptions RedisOptions { get; set; }
+    public RedisCachingOptions RedisOptions { get; set; } = new();
 
     /// <summary>
-    /// Fortmatted key creator delegate.
+    /// Formatted key creator delegate.
+    /// Default is: (string key, string cultureName) => string.Format(config.KeyFormat, cultureName, key);
     /// </summary>
     public new Func<string, string, string> KeyFormatDelegate { get; set; }
 }

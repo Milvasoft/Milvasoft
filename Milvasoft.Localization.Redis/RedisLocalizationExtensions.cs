@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using Milvasoft.Caching.Builder;
 using Milvasoft.Caching.Redis;
 using Milvasoft.Caching.Redis.Accessor;
@@ -8,6 +9,7 @@ using Milvasoft.Caching.Redis.Options;
 using Milvasoft.Core.Abstractions.Cache;
 using Milvasoft.Core.Abstractions.Localization;
 using Milvasoft.Core.Exceptions;
+using Milvasoft.Core.Extensions;
 using Milvasoft.Localization.Builder;
 
 namespace Milvasoft.Localization.Redis;
@@ -24,9 +26,9 @@ public static class RedisLocalizationExtensions
     /// </summary>
     /// <param name="lifetime"></param>
     /// <returns></returns>
-    public static LocalizationBuilder WithRedisManager(this LocalizationBuilder localizationBuilder, Action<RedisLocalizationOptions> localizationOptions = null)
+    public static LocalizationBuilder WithRedisManager(this LocalizationBuilder builder, Action<RedisLocalizationOptions> localizationOptions)
     {
-        if (localizationBuilder.Services.Any(s => s.ServiceType == typeof(ILocalizationManager)))
+        if (builder.Services.Any(s => s.ServiceType == typeof(ILocalizationManager)))
             throw new MilvaDeveloperException("A ILocalizationManager already registered!");
 
         var config = new RedisLocalizationOptions();
@@ -35,32 +37,32 @@ public static class RedisLocalizationExtensions
 
         if (config.UseInMemoryCache)
         {
-            if (!localizationBuilder.Services.Any(s => s.ServiceType == typeof(IMemoryCache)))
-                localizationBuilder.Services.AddMemoryCache();
+            if (!builder.Services.Any(s => s.ServiceType == typeof(IMemoryCache)))
+                builder.Services.AddMemoryCache();
 
-            localizationBuilder.Services.AddSingleton<ILocalizationMemoryCache, LocalizationMemoryCache>();
+            builder.Services.AddSingleton<ILocalizationMemoryCache, LocalizationMemoryCache>();
         }
 
         config.KeyFormatDelegate ??= (string key, string cultureName) => string.Format(config.KeyFormat, cultureName, key);
 
-        if (!localizationBuilder.Services.Any(s => s.ServiceType == typeof(ICacheOptions<RedisCachingOptions>)) && config.RedisOptions != null)
-            localizationBuilder.Services.AddMilvaCaching().WithRedisAccessor(config.RedisOptions);
+        if (!builder.Services.Any(s => s.ServiceType == typeof(ICacheOptions<RedisCachingOptions>)) && config.RedisOptions != null)
+            builder.Services.AddMilvaCaching().WithRedisAccessor(config.RedisOptions);
 
-        localizationBuilder.Services.AddSingleton<ILocalizationOptions>(config);
-        localizationBuilder.Services.Add(ServiceDescriptor.Describe(typeof(ILocalizationManager), typeof(RedisLocalizationManager), config.ManagerLifetime));
-        localizationBuilder.Services.AddTransient<IMilvaLocalizer, MilvaLocalizer>();
+        builder.Services.AddSingleton<ILocalizationOptions>(config);
+        builder.Services.Add(ServiceDescriptor.Describe(typeof(ILocalizationManager), typeof(RedisLocalizationManager), config.ManagerLifetime));
+        builder.Services.AddTransient<IMilvaLocalizer, MilvaLocalizer>();
 
-        return localizationBuilder;
+        return builder;
     }
 
     /// <summary>
     /// Registers <see cref="ResxLocalizationManager{TResource}"/> as <see cref="ILocalizationManager"/>.
-    /// Adds <see cref="LocalizationOptions"/> as <see cref="Microsoft.Extensions.Options.IOptions{TOptions}"/>.
+    /// Adds <see cref="LocalizationOptions"/> as <see cref="IOptions{TOptions}"/>.
     /// </summary>
     /// <param name="configurationManager"></param>
     /// <param name="keyFormatDelegate">Post configure property.</param>
     /// <returns></returns>
-    public static LocalizationBuilder WithRedisManager(this LocalizationBuilder builder, Func<string, string, string> keyFormatDelegate = null)
+    public static LocalizationBuilder WithRedisManager(this LocalizationBuilder builder)
     {
         if (builder.ConfigurationManager == null)
             return builder.WithRedisManager(localizationOptions: null);
@@ -71,18 +73,7 @@ public static class RedisLocalizationExtensions
                         .Bind(section)
                         .ValidateDataAnnotations();
 
-        builder.Services.AddOptions<RedisLocalizationOptions>()
-                        .Bind(section)
-                        .ValidateDataAnnotations();
-
-        builder.Services.PostConfigure<RedisLocalizationOptions>(opt =>
-        {
-            opt.KeyFormatDelegate = keyFormatDelegate ?? opt.KeyFormatDelegate;
-        });
-
         var options = section.Get<RedisLocalizationOptions>();
-
-        options.KeyFormatDelegate = keyFormatDelegate;
 
         builder.WithRedisManager(localizationOptions: (opt) =>
         {
@@ -93,6 +84,47 @@ public static class RedisLocalizationExtensions
             opt.KeyFormatDelegate = options.KeyFormatDelegate;
             opt.KeyFormat = options.KeyFormat;
         });
+
+        return builder;
+    }
+
+    /// <summary>
+    /// Post configuration.
+    /// </summary>
+    /// <param name="builder"></param>
+    /// <param name="postConfigureAction"></param>
+    /// <returns></returns>
+    public static LocalizationBuilder PostConfigureRedisLocalizationOptions(this LocalizationBuilder builder, Action<RedisLocalizationPostConfigureOptions> postConfigureAction)
+    {
+        if (postConfigureAction == null)
+            throw new MilvaDeveloperException("Please provide post configure options.");
+
+        if (!builder.Services.Any(s => s.ServiceType == typeof(IConfigureOptions<RedisLocalizationOptions>)))
+            throw new MilvaDeveloperException("Please configure options with WithOptions() builder method before post configuring.");
+
+        var config = new RedisLocalizationPostConfigureOptions();
+
+        postConfigureAction?.Invoke(config);
+
+        builder.Services.UpdateSingletonInstance<ILocalizationOptions, RedisLocalizationOptions>(opt =>
+        {
+            opt.RedisOptions.ConfigurationOptions = config.ConfigurationOptions ?? opt.RedisOptions.ConfigurationOptions;
+            opt.KeyFormatDelegate = config.KeyFormatDelegate ?? opt.KeyFormatDelegate;
+        });
+
+        builder.Services.PostConfigure<RedisLocalizationOptions>(opt =>
+        {
+            opt.RedisOptions.ConfigurationOptions = config.ConfigurationOptions ?? opt.RedisOptions.ConfigurationOptions;
+            opt.KeyFormatDelegate = config.KeyFormatDelegate ?? opt.KeyFormatDelegate;
+        });
+
+        if (!builder.Services.Any(s => s.ServiceType == typeof(ICacheOptions<RedisCachingOptions>)))
+        {
+            var options = builder.Services.FirstOrDefault(s => s.ServiceType == typeof(ILocalizationOptions))?.ImplementationInstance;
+
+            if (options != null)
+                builder.Services.AddMilvaCaching().WithRedisAccessor(((RedisLocalizationOptions)options).RedisOptions);
+        }
 
         return builder;
     }

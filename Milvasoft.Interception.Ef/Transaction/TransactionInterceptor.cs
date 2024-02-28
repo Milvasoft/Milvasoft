@@ -1,8 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.DependencyInjection;
 using Milvasoft.Interception.Decorator;
-using Milvasoft.Interception.Ef;
 
 namespace Milvasoft.Interception.Ef.Transaction;
 

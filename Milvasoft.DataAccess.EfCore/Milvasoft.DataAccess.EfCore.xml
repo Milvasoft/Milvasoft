@@ -14,18 +14,6 @@
             Entity auditing configuration. You can register this configuration in startup as singleton.
             </summary>
         </member>
-        <member name="M:Milvasoft.DataAccess.EfCore.Configuration.AuditConfiguration.IsAuditingPerformer">
-            <summary>
-            Returns whether this configuration audits the performer.
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:Milvasoft.DataAccess.EfCore.Configuration.AuditConfiguration.IsAuditingPerformTime">
-            <summary>
-            Returns whether this configuration audits the perform time.
-            </summary>
-            <returns></returns>
-        </member>
         <member name="T:Milvasoft.DataAccess.EfCore.Configuration.DataAccessConfiguration">
             <summary>
             IOptions aware custom MilvaDbContext configurations.
@@ -49,6 +37,16 @@
         <member name="P:Milvasoft.DataAccess.EfCore.Configuration.DataAccessConfiguration.Auditing">
             <summary>
             Audit configuration. Default is auditing only dates.
+            </summary>
+        </member>
+        <member name="T:Milvasoft.DataAccess.EfCore.Configuration.DataAccessPostConfigureConfiguration">
+            <summary>
+            IOptions aware custom MilvaDbContext configurations.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.DataAccess.EfCore.Configuration.DataAccessPostConfigureConfiguration.GetCurrentUserNameDelegate">
+            <summary>
+            Current user id getter delegate for auditing operations.
             </summary>
         </member>
         <member name="T:Milvasoft.DataAccess.EfCore.Configuration.DbContextConfiguration">
@@ -1453,13 +1451,20 @@
             <param name="dataAccessConfiguration"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.DataAccess.EfCore.ServiceCollectionExtension.ConfigureMilvaDataAccess(Microsoft.Extensions.DependencyInjection.IServiceCollection,Microsoft.Extensions.Configuration.IConfigurationManager,System.Func{System.String})">
+        <member name="M:Milvasoft.DataAccess.EfCore.ServiceCollectionExtension.ConfigureMilvaDataAccess(Microsoft.Extensions.DependencyInjection.IServiceCollection,Microsoft.Extensions.Configuration.IConfigurationManager)">
             <summary>
             Adds required services to service collection for configuring milva specific context features.
             </summary>
             <param name="services"></param>
             <param name="configurationManager"></param>
-            <param name="getUserNameDelegate"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.DataAccess.EfCore.ServiceCollectionExtension.PostConfigureMilvaDataAccess(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.Action{Milvasoft.DataAccess.EfCore.Configuration.DataAccessPostConfigureConfiguration})">
+            <summary>
+            Adds required services to service collection for configuring milva specific context features.
+            </summary>
+            <param name="services"></param>
+            <param name="postConfigureAction"></param>
             <returns></returns>
         </member>
         <member name="T:Milvasoft.DataAccess.EfCore.Utils.Converters.MilvaEncryptionConverter">

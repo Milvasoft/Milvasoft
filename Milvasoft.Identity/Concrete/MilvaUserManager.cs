@@ -11,27 +11,20 @@ namespace Milvasoft.Identity.Concrete;
 /// <summary>
 /// Implements the standard Identity password hashing.
 /// </summary>
-public class MilvaUserManager<TUser, TKey> : IMilvaUserManager<TUser, TKey> where TUser : MilvaUser<TKey> where TKey : IEquatable<TKey>
+/// <remarks>
+/// Creates a new instance of <see cref="MilvaUserManager{TUser,TKEy}"/>/
+/// </remarks>
+/// <param name="dataProtector"></param>
+/// <param name="options"></param>
+/// <param name="passwordHasher"></param>
+public class MilvaUserManager<TUser, TKey>(Lazy<IDataProtectionProvider> dataProtector,
+                        MilvaIdentityOptions options,
+                        Lazy<IMilvaPasswordHasher> passwordHasher) : IMilvaUserManager<TUser, TKey> where TUser : MilvaUser<TKey> where TKey : IEquatable<TKey>
 {
-    private readonly Lazy<IDataProtectionProvider> _dataProtector;
-    private readonly Lazy<IMilvaPasswordHasher> _passwordHasher;
-    private readonly MilvaIdentityOptions _options;
+    private readonly Lazy<IDataProtectionProvider> _dataProtector = dataProtector;
+    private readonly Lazy<IMilvaPasswordHasher> _passwordHasher = passwordHasher;
+    private readonly MilvaIdentityOptions _options = options;
     private static readonly EmailAddressAttribute _emailAddressAttribute = new();
-
-    /// <summary>
-    /// Creates a new instance of <see cref="MilvaUserManager{TUser,TKEy}"/>/
-    /// </summary>
-    /// <param name="dataProtector"></param>
-    /// <param name="options"></param>
-    /// <param name="passwordHasher"></param>
-    public MilvaUserManager(Lazy<IDataProtectionProvider> dataProtector,
-                            MilvaIdentityOptions options,
-                            Lazy<IMilvaPasswordHasher> passwordHasher)
-    {
-        _dataProtector = dataProtector;
-        _options = options;
-        _passwordHasher = passwordHasher;
-    }
 
     /// <summary>
     /// Validates user, sets password hash, set normalized columns.

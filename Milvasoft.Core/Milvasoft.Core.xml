@@ -634,7 +634,8 @@
         </member>
         <member name="P:Milvasoft.Core.Abstractions.Localization.ILocalizationOptions.KeyFormatDelegate">
             <summary>
-            Fortmatted key creator delegate.
+            Formatted key creator delegate.
+            Default is: (string key) => string.Format(config.KeyFormat, key);
             </summary>
         </member>
         <member name="P:Milvasoft.Core.Abstractions.Localization.ILocalizationOptions.UseInMemoryCache">
@@ -2312,6 +2313,25 @@
             <typeparam name="T"></typeparam>
             <param name="list"></param>
             <param name="batchSize"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Core.Extensions.GenericCollection.UpdateSingletonInstance``1(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.Action{``0})">
+            <summary>
+            Updates singleton implementation instance with <paramref name="updateAction"/>.
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="services"></param>
+            <param name="updateAction"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Core.Extensions.GenericCollection.UpdateSingletonInstance``2(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.Action{``1})">
+            <summary>
+            Updates singleton implementation instance with <paramref name="updateAction"/>.
+            </summary>
+            <typeparam name="TImplementation"></typeparam>
+            <typeparam name="TInstance"></typeparam>
+            <param name="services"></param>
+            <param name="updateAction"></param>
             <returns></returns>
         </member>
         <member name="T:Milvasoft.Core.Extensions.GeoLocation.GeoLocationExtensions">

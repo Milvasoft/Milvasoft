@@ -3,8 +3,6 @@ using Microsoft.EntityFrameworkCore;
 using Milvasoft.Components.Rest.Request;
 using Milvasoft.Components.Rest.Response;
 using Milvasoft.Core.EntityBases.Abstract;
-using Milvasoft.Core.Utils.Constants;
-using Milvasoft.DataAccess.EfCore.RepositoryBase.Concrete;
 using Milvasoft.DataAccess.EfCore.Utils;
 using Milvasoft.DataAccess.EfCore.Utils.Enums;
 using Milvasoft.DataAccess.EfCore.Utils.IncludeLibrary;

@@ -1,8 +1,10 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
+using Milvasoft.Core.Exceptions;
+using Milvasoft.Core.Extensions;
 using Milvasoft.FileOperations.Abstract;
 using Milvasoft.FileOperations.Concrete;
-using System.Text;
 
 namespace Milvasoft.FileOperations.Builder;
 
@@ -27,8 +29,7 @@ public static class ServiceCollectionExtensions
     /// <param name="builder"></param>
     /// <param name="jsonOptions"></param>
     /// <returns></returns>
-    public static FileOperationsBuilder WithJsonOperations(this FileOperationsBuilder builder,
-                                                          Action<IJsonFileOperationOptions> jsonOptions)
+    public static FileOperationsBuilder WithJsonOperations(this FileOperationsBuilder builder, Action<IJsonFileOperationOptions> jsonOptions)
     {
         var config = new JsonFileOperationsOptions();
 
@@ -45,10 +46,8 @@ public static class ServiceCollectionExtensions
     /// Adds json file operations services to service collection. Adds <see cref="IJsonFileOperationOptions"/> as singleton to services too.
     /// </summary>
     /// <param name="builder"></param>
-    /// <param name="basePath"></param>
-    /// <param name="encoding"></param>
     /// <returns></returns>
-    public static FileOperationsBuilder WithJsonOperations(this FileOperationsBuilder builder, string basePath = null, Encoding encoding = null)
+    public static FileOperationsBuilder WithJsonOperations(this FileOperationsBuilder builder)
     {
         if (builder.ConfigurationManager == null)
             return builder.WithJsonOperations(jsonOptions: null);
@@ -59,21 +58,48 @@ public static class ServiceCollectionExtensions
                         .Bind(section)
                         .ValidateDataAnnotations();
 
-        builder.Services.PostConfigure<JsonFileOperationsOptions>(opt =>
-        {
-            opt.Encoding = encoding ?? opt.Encoding;
-            opt.BasePath = basePath ?? opt.BasePath;
-        });
-
         var options = section.Get<JsonFileOperationsOptions>();
 
         builder.WithJsonOperations(opt =>
         {
+            opt.BasePath = options.BasePath;
             opt.Lifetime = options.Lifetime;
             opt.EncryptionKey = options.EncryptionKey;
-            opt.CultureCode = options.CultureCode;
-            opt.Encoding = encoding ?? opt.Encoding;
-            opt.BasePath = basePath ?? opt.BasePath;
+        });
+
+        return builder;
+    }
+
+    /// <summary>
+    /// Post configuration.
+    /// </summary>
+    /// <param name="builder"></param>
+    /// <param name="postConfigureAction"></param>
+    /// <returns></returns>
+    public static FileOperationsBuilder PostConfigureJsonOperationsOptions(this FileOperationsBuilder builder, Action<JsonFileOperationsPostConfigureOptions> postConfigureAction)
+    {
+        if (postConfigureAction == null)
+            throw new MilvaDeveloperException("Please provide post configure options.");
+
+        if (!builder.Services.Any(s => s.ServiceType == typeof(IConfigureOptions<JsonFileOperationsOptions>)))
+            throw new MilvaDeveloperException("Please configure options with WithOptions() builder method before post configuring.");
+
+        var config = new JsonFileOperationsPostConfigureOptions();
+
+        postConfigureAction?.Invoke(config);
+
+        builder.Services.UpdateSingletonInstance<IJsonFileOperationOptions>(opt =>
+        {
+            opt.BasePath = config.BasePath ?? opt.BasePath;
+            opt.CultureInfo = config.CultureInfo ?? opt.CultureInfo;
+            opt.Encoding = config.Encoding ?? opt.Encoding;
+        });
+
+        builder.Services.PostConfigure<JsonFileOperationsOptions>(opt =>
+        {
+            opt.BasePath = config.BasePath ?? opt.BasePath;
+            opt.CultureInfo = config.CultureInfo ?? opt.CultureInfo;
+            opt.Encoding = config.Encoding ?? opt.Encoding;
         });
 
         return builder;

@@ -19,7 +19,7 @@ public static class ServiceCollectionExtension
     /// <param name="cacheBuilder"></param>
     /// <param name="cachingOptions"></param>
     /// <returns></returns>
-    public static CacheBuilder WithInMemoryAccessor(this CacheBuilder cacheBuilder, InMemoryCacheOptions cachingOptions = null)
+    public static CacheBuilder WithInMemoryAccessor(this CacheBuilder cacheBuilder, InMemoryCacheOptions cachingOptions)
     {
         if (!cacheBuilder.Services.Any(s => s.ServiceType == typeof(IMemoryCache)))
             cacheBuilder.Services.AddMemoryCache(opt =>
@@ -66,10 +66,6 @@ public static class ServiceCollectionExtension
             return builder.WithInMemoryAccessor(cachingOptions: null);
 
         var section = builder.ConfigurationManager.GetSection(InMemoryCacheOptions.SectionName);
-
-        builder.Services.AddOptions<ICacheOptions<InMemoryCacheOptions>>()
-                        .Bind(section)
-                        .ValidateDataAnnotations();
 
         builder.Services.AddOptions<InMemoryCacheOptions>()
                         .Bind(section)

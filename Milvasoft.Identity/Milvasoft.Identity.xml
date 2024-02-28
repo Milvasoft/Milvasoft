@@ -297,7 +297,7 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Identity.Builder.MilvaIdentityBuilder`2.WithPostConfigureOptions(System.Action{Milvasoft.Identity.Concrete.Options.MilvaIdentityPostConfigureOptions})">
+        <member name="M:Milvasoft.Identity.Builder.MilvaIdentityBuilder`2.PostConfigureIdentityOptions(System.Action{Milvasoft.Identity.Concrete.Options.MilvaIdentityPostConfigureOptions})">
             <summary>
             Adds and configures the identity system for the specified User and Role types.
             </summary>
@@ -836,11 +836,20 @@
             <summary>
             Implements the standard Identity password hashing.
             </summary>
+            <remarks>
+            Creates a new instance of <see cref="T:Milvasoft.Identity.Concrete.MilvaUserManager`2"/>/
+            </remarks>
+            <param name="dataProtector"></param>
+            <param name="options"></param>
+            <param name="passwordHasher"></param>
         </member>
         <member name="M:Milvasoft.Identity.Concrete.MilvaUserManager`2.#ctor(System.Lazy{Microsoft.AspNetCore.DataProtection.IDataProtectionProvider},Milvasoft.Identity.Concrete.Options.MilvaIdentityOptions,System.Lazy{Milvasoft.Identity.Abstract.IMilvaPasswordHasher})">
             <summary>
-            Creates a new instance of <see cref="T:Milvasoft.Identity.Concrete.MilvaUserManager`2"/>/
+            Implements the standard Identity password hashing.
             </summary>
+            <remarks>
+            Creates a new instance of <see cref="T:Milvasoft.Identity.Concrete.MilvaUserManager`2"/>/
+            </remarks>
             <param name="dataProtector"></param>
             <param name="options"></param>
             <param name="passwordHasher"></param>

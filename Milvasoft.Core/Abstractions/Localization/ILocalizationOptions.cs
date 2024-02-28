@@ -19,7 +19,8 @@ public interface ILocalizationOptions : IMilvaOptions
     public string KeyFormat { get; set; }
 
     /// <summary>
-    /// Fortmatted key creator delegate.
+    /// Formatted key creator delegate.
+    /// Default is: (string key) => string.Format(config.KeyFormat, key);
     /// </summary>
     public Func<string, string> KeyFormatDelegate { get; set; }
 

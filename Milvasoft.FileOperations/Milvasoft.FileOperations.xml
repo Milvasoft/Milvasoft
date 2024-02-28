@@ -772,6 +772,91 @@
             Configuration manager. 
             </summary>
         </member>
+        <member name="T:Milvasoft.FileOperations.Builder.IJsonFileOperationOptions">
+            <summary>
+            Json operations config for json file operations.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.FileOperations.Builder.IJsonFileOperationOptions.Lifetime">
+            <summary>
+            Gets or sets base path. If sets combines all file paths with this.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.FileOperations.Builder.IJsonFileOperationOptions.BasePath">
+            <summary>
+            Gets or sets base path. If sets combines all file paths with this.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.FileOperations.Builder.IJsonFileOperationOptions.EncryptionKey">
+            <summary>
+            Gets or sets encryption key.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.FileOperations.Builder.IJsonFileOperationOptions.CultureInfo">
+            <summary>
+            Culture info to be used when access file.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.FileOperations.Builder.IJsonFileOperationOptions.Encoding">
+            <summary>
+            Encoding to be used when access file.
+            </summary>
+        </member>
+        <member name="T:Milvasoft.FileOperations.Builder.JsonFileOperationsOptions">
+            <summary>
+            Json operations config for json file operations.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.FileOperations.Builder.JsonFileOperationsOptions.SectionName">
+            <summary>
+            Configuration file section path.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.FileOperations.Builder.JsonFileOperationsOptions.Lifetime">
+            <summary>
+            Gets or sets base path. If sets combines all file paths with this.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.FileOperations.Builder.JsonFileOperationsOptions.BasePath">
+            <summary>
+            Gets or sets base path. If sets combines all file paths with this.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.FileOperations.Builder.JsonFileOperationsOptions.EncryptionKey">
+            <summary>
+            Gets or sets encryption key.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.FileOperations.Builder.JsonFileOperationsOptions.CultureInfo">
+            <summary>
+            Culture info to be used when access file. Default is en-US.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.FileOperations.Builder.JsonFileOperationsOptions.Encoding">
+            <summary>
+            Encoding to be used when access file. Default is UTF8.
+            </summary>
+        </member>
+        <member name="T:Milvasoft.FileOperations.Builder.JsonFileOperationsPostConfigureOptions">
+            <summary>
+            Json operations config for json file operations.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.FileOperations.Builder.JsonFileOperationsPostConfigureOptions.BasePath">
+            <summary>
+            Gets or sets base path. If sets combines all file paths with this.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.FileOperations.Builder.JsonFileOperationsPostConfigureOptions.CultureInfo">
+            <summary>
+            Culture info to be used when access file. Default is en-US.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.FileOperations.Builder.JsonFileOperationsPostConfigureOptions.Encoding">
+            <summary>
+            Encoding to be used when access file. Default is UTF8.
+            </summary>
+        </member>
         <member name="T:Milvasoft.FileOperations.Builder.ServiceCollectionExtensions">
             <summary>
             Provides registration of caching services.
@@ -779,27 +864,33 @@
         </member>
         <member name="M:Milvasoft.FileOperations.Builder.ServiceCollectionExtensions.AddFileOperations(Microsoft.Extensions.DependencyInjection.IServiceCollection,Microsoft.Extensions.Configuration.IConfigurationManager)">
             <summary>
-            Adds json file operations services to service collection. Adds <see cref="T:Milvasoft.FileOperations.IJsonFileOperationOptions"/> as singleton to services too.
+            Adds json file operations services to service collection. Adds <see cref="T:Milvasoft.FileOperations.Builder.IJsonFileOperationOptions"/> as singleton to services too.
             </summary>
             <param name="services"></param>
             <param name="configurationManager"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.FileOperations.Builder.ServiceCollectionExtensions.WithJsonOperations(Milvasoft.FileOperations.Builder.FileOperationsBuilder,System.Action{Milvasoft.FileOperations.IJsonFileOperationOptions})">
+        <member name="M:Milvasoft.FileOperations.Builder.ServiceCollectionExtensions.WithJsonOperations(Milvasoft.FileOperations.Builder.FileOperationsBuilder,System.Action{Milvasoft.FileOperations.Builder.IJsonFileOperationOptions})">
             <summary>
-            Adds json file operations services to service collection. Adds <see cref="T:Milvasoft.FileOperations.IJsonFileOperationOptions"/> as singleton to services too.
+            Adds json file operations services to service collection. Adds <see cref="T:Milvasoft.FileOperations.Builder.IJsonFileOperationOptions"/> as singleton to services too.
             </summary>
             <param name="builder"></param>
             <param name="jsonOptions"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.FileOperations.Builder.ServiceCollectionExtensions.WithJsonOperations(Milvasoft.FileOperations.Builder.FileOperationsBuilder,System.String,System.Text.Encoding)">
+        <member name="M:Milvasoft.FileOperations.Builder.ServiceCollectionExtensions.WithJsonOperations(Milvasoft.FileOperations.Builder.FileOperationsBuilder)">
             <summary>
-            Adds json file operations services to service collection. Adds <see cref="T:Milvasoft.FileOperations.IJsonFileOperationOptions"/> as singleton to services too.
+            Adds json file operations services to service collection. Adds <see cref="T:Milvasoft.FileOperations.Builder.IJsonFileOperationOptions"/> as singleton to services too.
             </summary>
             <param name="builder"></param>
-            <param name="basePath"></param>
-            <param name="encoding"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.FileOperations.Builder.ServiceCollectionExtensions.PostConfigureJsonOperationsOptions(Milvasoft.FileOperations.Builder.FileOperationsBuilder,System.Action{Milvasoft.FileOperations.Builder.JsonFileOperationsPostConfigureOptions})">
+            <summary>
+            Post configuration.
+            </summary>
+            <param name="builder"></param>
+            <param name="postConfigureAction"></param>
             <returns></returns>
         </member>
         <member name="T:Milvasoft.FileOperations.Concrete.FormFileOperations">
@@ -1047,6 +1138,23 @@
             <param name="encodeSpaceAsPlus">If true, spaces will be encoded as + signs. Otherwise, they'll be encoded as %20.</param>
             <returns>The encoded URL.</returns>
         </member>
+        <member name="M:Milvasoft.FileOperations.Concrete.FormFileOperations.IllegalCharsRegex">
+            <remarks>
+            Pattern:<br/>
+            <code>(.*?)((%[0-9A-Fa-f]{2})|$)</code><br/>
+            Explanation:<br/>
+            <code>
+            ○ 1st capture group.<br/>
+                ○ Match a character other than '\n' lazily any number of times.<br/>
+            ○ 2nd capture group.<br/>
+                ○ Match with 2 alternative expressions, atomically.<br/>
+                    ○ 3rd capture group.<br/>
+                        ○ Match '%'.<br/>
+                        ○ Match a character in the set [0-9A-Fa-f] exactly 2 times.<br/>
+                    ○ Match if at the end of the string or if before an ending newline.<br/>
+            </code>
+            </remarks>
+        </member>
         <member name="T:Milvasoft.FileOperations.Concrete.JsonOperations">
             <summary>
             Provides add-edit-delete-get process json files that hold one list.
@@ -1106,9 +1214,9 @@
             Initializes new instance of <see cref="T:Milvasoft.FileOperations.Concrete.JsonOperations"/>.
             </summary>
         </member>
-        <member name="M:Milvasoft.FileOperations.Concrete.JsonOperations.#ctor(Milvasoft.FileOperations.IJsonFileOperationOptions)">
+        <member name="M:Milvasoft.FileOperations.Concrete.JsonOperations.#ctor(Milvasoft.FileOperations.Builder.IJsonFileOperationOptions)">
             <summary>
-            Initializes new instance of <see cref="T:Milvasoft.FileOperations.Concrete.JsonOperations"/> with <see cref="T:Milvasoft.FileOperations.IJsonFileOperationOptions"/>.
+            Initializes new instance of <see cref="T:Milvasoft.FileOperations.Concrete.JsonOperations"/> with <see cref="T:Milvasoft.FileOperations.Builder.IJsonFileOperationOptions"/>.
             </summary>
         </member>
         <member name="M:Milvasoft.FileOperations.Concrete.JsonOperations.SetCultureInfo(System.Globalization.CultureInfo)">
@@ -1870,85 +1978,41 @@
             Invalid file extension result.
             </summary>
         </member>
-        <member name="T:Milvasoft.FileOperations.IJsonFileOperationOptions">
-            <summary>
-            Json operations config for json file operations.
-            </summary>
+        <member name="T:System.Text.RegularExpressions.Generated.IllegalCharsRegex_0">
+            <summary>Custom <see cref="T:System.Text.RegularExpressions.Regex"/>-derived type for the IllegalCharsRegex method.</summary>
         </member>
-        <member name="P:Milvasoft.FileOperations.IJsonFileOperationOptions.Lifetime">
-            <summary>
-            Gets or sets base path. If sets combines all file paths with this.
-            </summary>
+        <member name="F:System.Text.RegularExpressions.Generated.IllegalCharsRegex_0.Instance">
+            <summary>Cached, thread-safe singleton instance.</summary>
         </member>
-        <member name="P:Milvasoft.FileOperations.IJsonFileOperationOptions.BasePath">
-            <summary>
-            Gets or sets base path. If sets combines all file paths with this.
-            </summary>
+        <member name="M:System.Text.RegularExpressions.Generated.IllegalCharsRegex_0.#ctor">
+            <summary>Initializes the instance.</summary>
         </member>
-        <member name="P:Milvasoft.FileOperations.IJsonFileOperationOptions.EncryptionKey">
-            <summary>
-            Gets or sets encryption key.
-            </summary>
+        <member name="T:System.Text.RegularExpressions.Generated.IllegalCharsRegex_0.RunnerFactory">
+            <summary>Provides a factory for creating <see cref="T:System.Text.RegularExpressions.RegexRunner"/> instances to be used by methods on <see cref="T:System.Text.RegularExpressions.Regex"/>.</summary>
         </member>
-        <member name="P:Milvasoft.FileOperations.IJsonFileOperationOptions.CultureCode">
-            <summary>
-            Gets or sets encryption key.
-            </summary>
+        <member name="M:System.Text.RegularExpressions.Generated.IllegalCharsRegex_0.RunnerFactory.CreateInstance">
+            <summary>Creates an instance of a <see cref="T:System.Text.RegularExpressions.RegexRunner"/> used by methods on <see cref="T:System.Text.RegularExpressions.Regex"/>.</summary>
         </member>
-        <member name="P:Milvasoft.FileOperations.IJsonFileOperationOptions.CultureInfo">
-            <summary>
-            Culture info to be used when access file.
-            </summary>
+        <member name="T:System.Text.RegularExpressions.Generated.IllegalCharsRegex_0.RunnerFactory.Runner">
+            <summary>Provides the runner that contains the custom logic implementing the specified regular expression.</summary>
         </member>
-        <member name="P:Milvasoft.FileOperations.IJsonFileOperationOptions.Encoding">
-            <summary>
-            Encoding to be used when access file.
-            </summary>
+        <member name="M:System.Text.RegularExpressions.Generated.IllegalCharsRegex_0.RunnerFactory.Runner.Scan(System.ReadOnlySpan{System.Char})">
+            <summary>Scan the <paramref name="inputSpan"/> starting from base.runtextstart for the next match.</summary>
+            <param name="inputSpan">The text being scanned by the regular expression.</param>
         </member>
-        <member name="T:Milvasoft.FileOperations.JsonFileOperationsOptions">
-            <summary>
-            Json operations config for json file operations.
-            </summary>
+        <member name="M:System.Text.RegularExpressions.Generated.IllegalCharsRegex_0.RunnerFactory.Runner.TryMatchAtCurrentPosition(System.ReadOnlySpan{System.Char})">
+            <summary>Determine whether <paramref name="inputSpan"/> at base.runtextpos is a match for the regular expression.</summary>
+            <param name="inputSpan">The text being scanned by the regular expression.</param>
+            <returns>true if the regular expression matches at the current position; otherwise, false.</returns>
         </member>
-        <member name="P:Milvasoft.FileOperations.JsonFileOperationsOptions.SectionName">
-            <summary>
-            Configuration file section path.
-            </summary>
+        <member name="T:System.Text.RegularExpressions.Generated.Utilities">
+            <summary>Helper methods used by generated <see cref="T:System.Text.RegularExpressions.Regex"/>-derived implementations.</summary>
         </member>
-        <member name="P:Milvasoft.FileOperations.JsonFileOperationsOptions.Lifetime">
-            <summary>
-            Gets or sets base path. If sets combines all file paths with this.
-            </summary>
+        <member name="F:System.Text.RegularExpressions.Generated.Utilities.s_defaultTimeout">
+            <summary>Default timeout value set in <see cref="T:System.AppContext"/>, or <see cref="F:System.Text.RegularExpressions.Regex.InfiniteMatchTimeout"/> if none was set.</summary>
         </member>
-        <member name="P:Milvasoft.FileOperations.JsonFileOperationsOptions.BasePath">
-            <summary>
-            Gets or sets base path. If sets combines all file paths with this.
-            </summary>
-        </member>
-        <member name="P:Milvasoft.FileOperations.JsonFileOperationsOptions.EncryptionKey">
-            <summary>
-            Gets or sets encryption key.
-            </summary>
-        </member>
-        <member name="P:Milvasoft.FileOperations.JsonFileOperationsOptions.CultureCode">
-            <summary>
-            Gets or sets encryption key.
-            </summary>
-        </member>
-        <member name="P:Milvasoft.FileOperations.JsonFileOperationsOptions.CultureInfo">
-            <summary>
-            Culture info to be used when access file. Default is en-US.
-            </summary>
-        </member>
-        <member name="P:Milvasoft.FileOperations.JsonFileOperationsOptions.Encoding">
-            <summary>
-            Encoding to be used when access file. Default is UTF8.
-            </summary>
-        </member>
-        <member name="M:Milvasoft.FileOperations.JsonFileOperationsOptions.#ctor">
-            <summary>
-            Initializes new instance.
-            </summary>
+        <member name="F:System.Text.RegularExpressions.Generated.Utilities.s_hasTimeout">
+            <summary>Whether <see cref="F:System.Text.RegularExpressions.Generated.Utilities.s_defaultTimeout"/> is non-infinite.</summary>
         </member>
     </members>
 </doc>

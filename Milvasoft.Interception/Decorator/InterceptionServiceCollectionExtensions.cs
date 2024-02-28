@@ -1,9 +1,12 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.Extensions.Options;
 using Milvasoft.Attributes.Annotations;
 using Milvasoft.Core.Abstractions;
 using Milvasoft.Core.Abstractions.Localization;
+using Milvasoft.Core.Exceptions;
+using Milvasoft.Core.Extensions;
 using Milvasoft.Interception.Builder;
 using Milvasoft.Interception.Interceptors.ActivityScope;
 using Milvasoft.Interception.Interceptors.Cache;
@@ -104,6 +107,8 @@ public static class InterceptionServiceCollectionExtensions
         return builder;
     }
 
+    #region Log
+
     /// <summary>
     /// Decorates the specified service type descriptor inside <see cref="IServiceCollection"/>.
     /// </summary>
@@ -126,7 +131,7 @@ public static class InterceptionServiceCollectionExtensions
     /// Decorates the specified service type descriptor inside <see cref="IServiceCollection"/>.
     /// </summary>
     /// <typeparam name="T">Service type to be decorated</typeparam>
-    public static InterceptionBuilder WithLogInterceptor(this InterceptionBuilder builder, Func<IServiceProvider, object> extraLoggingPropertiesSelector = null)
+    public static InterceptionBuilder WithLogInterceptor(this InterceptionBuilder builder)
     {
         if (builder.ConfigurationManager == null)
             return builder.WithLogInterceptor(interceptionOptions: null);
@@ -137,14 +142,7 @@ public static class InterceptionServiceCollectionExtensions
                         .Bind(section)
                         .ValidateDataAnnotations();
 
-        builder.Services.PostConfigure<LogInterceptionOptions>(opt =>
-        {
-            opt.ExtraLoggingPropertiesSelector = extraLoggingPropertiesSelector ?? opt.ExtraLoggingPropertiesSelector;
-        });
-
         var options = (ILogInterceptionOptions)section.Get<LogInterceptionOptions>();
-
-        options.ExtraLoggingPropertiesSelector = extraLoggingPropertiesSelector ?? options.ExtraLoggingPropertiesSelector;
 
         builder.WithLogInterceptor(interceptionOptions: (opt) =>
         {
@@ -157,6 +155,41 @@ public static class InterceptionServiceCollectionExtensions
 
         return builder;
     }
+
+    /// <summary>
+    /// Adds required services to service collection for configuring milva specific context features.
+    /// </summary>
+    /// <param name="builder"></param>
+    /// <param name="postConfigureAction"></param>
+    /// <returns></returns>
+    public static InterceptionBuilder PostConfigureLogInterceptionOptions(this InterceptionBuilder builder, Action<LogInterceptionPostConfigureOptions> postConfigureAction)
+    {
+        if (postConfigureAction == null)
+            throw new MilvaDeveloperException("Please provide post configure options.");
+
+        if (!builder.Services.Any(s => s.ServiceType == typeof(IConfigureOptions<LogInterceptionOptions>)))
+            throw new MilvaDeveloperException("Please configure options with WithOptions() builder method before post configuring.");
+
+        var config = new LogInterceptionPostConfigureOptions();
+
+        postConfigureAction?.Invoke(config);
+
+        builder.Services.UpdateSingletonInstance<ILogInterceptionOptions>(opt =>
+        {
+            opt.ExtraLoggingPropertiesSelector = config.ExtraLoggingPropertiesSelector ?? opt.ExtraLoggingPropertiesSelector;
+        });
+
+        builder.Services.PostConfigure<LogInterceptionOptions>(opt =>
+        {
+            opt.ExtraLoggingPropertiesSelector = config.ExtraLoggingPropertiesSelector ?? opt.ExtraLoggingPropertiesSelector;
+        });
+
+        return builder;
+    }
+
+    #endregion
+
+    #region Response 
 
     /// <summary>
     /// Decorates the specified service type descriptor inside <see cref="IServiceCollection"/>.
@@ -180,9 +213,7 @@ public static class InterceptionServiceCollectionExtensions
     /// Decorates the specified service type descriptor inside <see cref="IServiceCollection"/>.
     /// </summary>
     /// <typeparam name="T">Service type to be decorated</typeparam>
-    public static InterceptionBuilder WithResponseInterceptor(this InterceptionBuilder builder,
-                                                              Func<HideByRoleAttribute, bool> hideByRoleFunc = null,
-                                                              Func<string, IMilvaLocalizer, Type, string, string> applyLocalizationFunc = null)
+    public static InterceptionBuilder WithResponseInterceptor(this InterceptionBuilder builder)
     {
         if (builder.ConfigurationManager == null)
             return builder.WithResponseInterceptor(interceptionOptions: null);
@@ -193,16 +224,7 @@ public static class InterceptionServiceCollectionExtensions
                         .Bind(section)
                         .ValidateDataAnnotations();
 
-        builder.Services.PostConfigure<ResponseInterceptionOptions>(opt =>
-        {
-            opt.HideByRoleFunc = hideByRoleFunc ?? opt.HideByRoleFunc;
-            opt.ApplyLocalizationFunc = applyLocalizationFunc ?? opt.ApplyLocalizationFunc;
-        });
-
         var options = section.Get<ResponseInterceptionOptions>();
-
-        options.HideByRoleFunc = hideByRoleFunc ?? options.HideByRoleFunc;
-        options.ApplyLocalizationFunc = applyLocalizationFunc ?? options.ApplyLocalizationFunc;
 
         builder.WithResponseInterceptor(interceptionOptions: (opt) =>
         {
@@ -215,6 +237,43 @@ public static class InterceptionServiceCollectionExtensions
 
         return builder;
     }
+
+    /// <summary>
+    /// Adds required services to service collection for configuring milva specific context features.
+    /// </summary>
+    /// <param name="builder"></param>
+    /// <param name="postConfigureAction"></param>
+    /// <returns></returns>
+    public static InterceptionBuilder PostConfigureResponseInterceptionOptions(this InterceptionBuilder builder, Action<ResponseInterceptionPostConfigureOptions> postConfigureAction)
+    {
+        if (postConfigureAction == null)
+            throw new MilvaDeveloperException("Please provide post configure options.");
+
+        if (!builder.Services.Any(s => s.ServiceType == typeof(IConfigureOptions<LogInterceptionOptions>)))
+            throw new MilvaDeveloperException("Please configure options with WithOptions() builder method before post configuring.");
+
+        var config = new ResponseInterceptionPostConfigureOptions();
+
+        postConfigureAction?.Invoke(config);
+
+        builder.Services.UpdateSingletonInstance<IResponseInterceptionOptions>(opt =>
+        {
+            opt.HideByRoleFunc = config.HideByRoleFunc ?? opt.HideByRoleFunc;
+            opt.ApplyLocalizationFunc = config.ApplyLocalizationFunc ?? opt.ApplyLocalizationFunc;
+        });
+
+        builder.Services.PostConfigure<ResponseInterceptionOptions>(opt =>
+        {
+            opt.HideByRoleFunc = config.HideByRoleFunc ?? opt.HideByRoleFunc;
+            opt.ApplyLocalizationFunc = config.ApplyLocalizationFunc ?? opt.ApplyLocalizationFunc;
+        });
+
+        return builder;
+    }
+
+    #endregion
+
+    #region Cache
 
     /// <summary>
     /// Decorates the specified service type descriptor inside <see cref="IServiceCollection"/>.
@@ -260,6 +319,10 @@ public static class InterceptionServiceCollectionExtensions
         return builder;
     }
 
+    #endregion
+
+    #region Activity
+
     /// <summary>
     /// Decorates the specified service type descriptor inside <see cref="IServiceCollection"/>.
     /// </summary>
@@ -268,6 +331,37 @@ public static class InterceptionServiceCollectionExtensions
     {
         if (!builder.Services.Any(s => s.ServiceType == typeof(ActivityInterceptor)))
             builder.Services.Add(ServiceDescriptor.Describe(typeof(ActivityInterceptor), typeof(ActivityInterceptor), serviceLifetime));
+
+        return builder;
+    }
+
+    #endregion
+
+    /// <summary>
+    /// Adds required services to service collection for configuring milva specific context features.
+    /// </summary>
+    /// <param name="builder"></param>
+    /// <param name="postConfigureAction"></param>
+    /// <returns></returns>
+    public static InterceptionBuilder PostConfigureInterceptionOptions(this InterceptionBuilder builder, Action<InterceptionPostConfigureOptions> postConfigureAction)
+    {
+        if (postConfigureAction == null)
+            throw new MilvaDeveloperException("Please provide post configure options.");
+
+        var config = new InterceptionPostConfigureOptions();
+
+        postConfigureAction?.Invoke(config);
+
+        builder.PostConfigureLogInterceptionOptions(opt =>
+        {
+            opt.ExtraLoggingPropertiesSelector = config.Log.ExtraLoggingPropertiesSelector;
+        });
+
+        builder.PostConfigureResponseInterceptionOptions(opt =>
+        {
+            opt.HideByRoleFunc = config.Response.HideByRoleFunc;
+            opt.ApplyLocalizationFunc = config.Response.ApplyLocalizationFunc;
+        });
 
         return builder;
     }

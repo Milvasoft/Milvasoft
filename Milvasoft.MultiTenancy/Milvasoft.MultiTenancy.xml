@@ -283,11 +283,24 @@
             <typeparam name="TOptions"></typeparam>
             <typeparam name="TTenant"></typeparam>
             <typeparam name="TKey"></typeparam>
+            <remarks>
+            Initializes new instance of <see cref="T:Milvasoft.MultiTenancy.Options.TenantOptionsFactory`3"/>
+            </remarks>
+            <param name="setups"></param>
+            <param name="postConfigures"></param>
+            <param name="tenantConfig"></param>
+            <param name="tenantAccessor"></param>
         </member>
         <member name="M:Milvasoft.MultiTenancy.Options.TenantOptionsFactory`3.#ctor(System.Collections.Generic.IEnumerable{Microsoft.Extensions.Options.IConfigureOptions{`0}},System.Collections.Generic.IEnumerable{Microsoft.Extensions.Options.IPostConfigureOptions{`0}},System.Action{`0,`1},Milvasoft.MultiTenancy.Accessor.ITenantAccessor{`1,`2})">
             <summary>
-            Initializes new instance of <see cref="T:Milvasoft.MultiTenancy.Options.TenantOptionsFactory`3"/>
+            Create a new options instance with configuration applied
             </summary>
+            <typeparam name="TOptions"></typeparam>
+            <typeparam name="TTenant"></typeparam>
+            <typeparam name="TKey"></typeparam>
+            <remarks>
+            Initializes new instance of <see cref="T:Milvasoft.MultiTenancy.Options.TenantOptionsFactory`3"/>
+            </remarks>
             <param name="setups"></param>
             <param name="postConfigures"></param>
             <param name="tenantConfig"></param>

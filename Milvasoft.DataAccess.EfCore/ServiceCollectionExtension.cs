@@ -1,5 +1,8 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
+using Milvasoft.Core.Exceptions;
+using Milvasoft.Core.Extensions;
 using Milvasoft.DataAccess.EfCore.Configuration;
 
 namespace Milvasoft.DataAccess.EfCore;
@@ -31,9 +34,8 @@ public static class ServiceCollectionExtension
     /// </summary>
     /// <param name="services"></param>
     /// <param name="configurationManager"></param>
-    /// <param name="getUserNameDelegate"></param>
     /// <returns></returns>
-    public static IServiceCollection ConfigureMilvaDataAccess(this IServiceCollection services, IConfigurationManager configurationManager, Func<string> getUserNameDelegate = null)
+    public static IServiceCollection ConfigureMilvaDataAccess(this IServiceCollection services, IConfigurationManager configurationManager)
     {
         if (configurationManager == null)
             return services.ConfigureMilvaDataAccess(dataAccessConfiguration: null);
@@ -44,14 +46,7 @@ public static class ServiceCollectionExtension
                         .Bind(section)
                         .ValidateDataAnnotations();
 
-        services.PostConfigure<DataAccessConfiguration>(opt =>
-        {
-            opt.DbContext.GetCurrentUserNameDelegate = getUserNameDelegate ?? opt.DbContext.GetCurrentUserNameDelegate;
-        });
-
         var options = section.Get<DataAccessConfiguration>();
-
-        options.DbContext.GetCurrentUserNameDelegate = getUserNameDelegate;
 
         services.ConfigureMilvaDataAccess(dataAccessConfiguration: (opt) =>
         {
@@ -62,4 +57,35 @@ public static class ServiceCollectionExtension
 
         return services;
     }
+
+    /// <summary>
+    /// Adds required services to service collection for configuring milva specific context features.
+    /// </summary>
+    /// <param name="services"></param>
+    /// <param name="postConfigureAction"></param>
+    /// <returns></returns>
+    public static IServiceCollection PostConfigureMilvaDataAccess(this IServiceCollection services,  Action<DataAccessPostConfigureConfiguration> postConfigureAction)
+    {
+        if (postConfigureAction == null)
+            throw new MilvaDeveloperException("Please provide post configure options.");
+
+        if (!services.Any(s => s.ServiceType == typeof(IConfigureOptions<DataAccessConfiguration>)))
+            throw new MilvaDeveloperException("Please configure options with WithOptions() builder method before post configuring.");
+
+        var config = new DataAccessPostConfigureConfiguration();
+
+        postConfigureAction?.Invoke(config);
+
+        services.UpdateSingletonInstance<IDataAccessConfiguration>(opt =>
+        {
+            opt.DbContext.GetCurrentUserNameDelegate = config.GetCurrentUserNameDelegate ?? opt.DbContext.GetCurrentUserNameDelegate;
+        });
+
+        services.PostConfigure<DataAccessConfiguration>(opt =>
+        {
+            opt.DbContext.GetCurrentUserNameDelegate = config.GetCurrentUserNameDelegate ?? opt.DbContext.GetCurrentUserNameDelegate;
+        });
+
+        return services;
+    } 
 }

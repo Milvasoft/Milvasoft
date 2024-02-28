@@ -1,6 +1,4 @@
-﻿using System.Xml.Linq;
-
-namespace Milvasoft.Core.EntityBases.Abstract;
+﻿namespace Milvasoft.Core.EntityBases.Abstract;
 
 /// <summary>
 /// Defines interface for base entity type. All entities in the system must implement this interface.
@@ -37,7 +35,8 @@ public interface IMilvaEntity
     /// <summary>
     /// Unique identifier for this entity.
     /// </summary>
-    public virtual object Id {
+    public virtual object Id
+    {
         get => Id;
         set => Id = value;
     }

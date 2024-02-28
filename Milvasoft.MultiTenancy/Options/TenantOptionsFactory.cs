@@ -10,34 +10,26 @@ namespace Milvasoft.MultiTenancy.Options;
 /// <typeparam name="TOptions"></typeparam>
 /// <typeparam name="TTenant"></typeparam>
 /// <typeparam name="TKey"></typeparam>
-internal class TenantOptionsFactory<TOptions, TTenant, TKey> : IOptionsFactory<TOptions>
+/// <remarks>
+/// Initializes new instance of <see cref="TenantOptionsFactory{TOptions, TTenant, TKey}"/>
+/// </remarks>
+/// <param name="setups"></param>
+/// <param name="postConfigures"></param>
+/// <param name="tenantConfig"></param>
+/// <param name="tenantAccessor"></param>
+internal class TenantOptionsFactory<TOptions, TTenant, TKey>(IEnumerable<IConfigureOptions<TOptions>> setups,
+                            IEnumerable<IPostConfigureOptions<TOptions>> postConfigures,
+                            Action<TOptions, TTenant> tenantConfig,
+                            ITenantAccessor<TTenant, TKey> tenantAccessor) : IOptionsFactory<TOptions>
     where TOptions : class, new()
     where TTenant : class, IMilvaTenantBase<TKey>
     where TKey : struct, IEquatable<TKey>
 {
 
-    private readonly IEnumerable<IConfigureOptions<TOptions>> _setups;
-    private readonly IEnumerable<IPostConfigureOptions<TOptions>> _postConfigures;
-    private readonly Action<TOptions, TTenant> _tenantConfig;
-    private readonly ITenantAccessor<TTenant, TKey> _tenantAccessor;
-
-    /// <summary>
-    /// Initializes new instance of <see cref="TenantOptionsFactory{TOptions, TTenant, TKey}"/>
-    /// </summary>
-    /// <param name="setups"></param>
-    /// <param name="postConfigures"></param>
-    /// <param name="tenantConfig"></param>
-    /// <param name="tenantAccessor"></param>
-    public TenantOptionsFactory(IEnumerable<IConfigureOptions<TOptions>> setups,
-                                IEnumerable<IPostConfigureOptions<TOptions>> postConfigures,
-                                Action<TOptions, TTenant> tenantConfig,
-                                ITenantAccessor<TTenant, TKey> tenantAccessor)
-    {
-        _setups = setups;
-        _postConfigures = postConfigures;
-        _tenantAccessor = tenantAccessor;
-        _tenantConfig = tenantConfig;
-    }
+    private readonly IEnumerable<IConfigureOptions<TOptions>> _setups = setups;
+    private readonly IEnumerable<IPostConfigureOptions<TOptions>> _postConfigures = postConfigures;
+    private readonly Action<TOptions, TTenant> _tenantConfig = tenantConfig;
+    private readonly ITenantAccessor<TTenant, TKey> _tenantAccessor = tenantAccessor;
 
     /// <summary>
     /// Creates a new options instance.
