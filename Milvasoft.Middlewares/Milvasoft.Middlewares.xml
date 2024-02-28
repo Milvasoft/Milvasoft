@@ -23,6 +23,20 @@
             Calculates response time and adds result to response headers.
             Custom header is "X-Response-Time".
             </summary>
+            <remarks>
+            Initializes new instances of <see cref="T:Milvasoft.Middlewares.ResponseTimeCalculator.MilvaResponseTimeCalculator"/>.
+            </remarks>
+            <param name="next"></param>
+        </member>
+        <member name="M:Milvasoft.Middlewares.ResponseTimeCalculator.MilvaResponseTimeCalculator.#ctor(Microsoft.AspNetCore.Http.RequestDelegate)">
+            <summary>
+            Calculates response time and adds result to response headers.
+            Custom header is "X-Response-Time".
+            </summary>
+            <remarks>
+            Initializes new instances of <see cref="T:Milvasoft.Middlewares.ResponseTimeCalculator.MilvaResponseTimeCalculator"/>.
+            </remarks>
+            <param name="next"></param>
         </member>
         <member name="F:Milvasoft.Middlewares.ResponseTimeCalculator.MilvaResponseTimeCalculator._responseHeader">
             <summary>
@@ -33,12 +47,6 @@
             <summary>
             Handle to the next Middleware in the pipeline  
             </summary>
-        </member>
-        <member name="M:Milvasoft.Middlewares.ResponseTimeCalculator.MilvaResponseTimeCalculator.#ctor(Microsoft.AspNetCore.Http.RequestDelegate)">
-            <summary>
-            Initializes new instances of <see cref="T:Milvasoft.Middlewares.ResponseTimeCalculator.MilvaResponseTimeCalculator"/>.
-            </summary>
-            <param name="next"></param>
         </member>
         <member name="M:Milvasoft.Middlewares.ResponseTimeCalculator.MilvaResponseTimeCalculator.InvokeAsync(Microsoft.AspNetCore.Http.HttpContext)">
             <summary>

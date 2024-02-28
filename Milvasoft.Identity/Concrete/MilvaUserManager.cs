@@ -16,6 +16,7 @@ public class MilvaUserManager<TUser, TKey> : IMilvaUserManager<TUser, TKey> wher
     private readonly Lazy<IDataProtectionProvider> _dataProtector;
     private readonly Lazy<IMilvaPasswordHasher> _passwordHasher;
     private readonly MilvaIdentityOptions _options;
+    private static readonly EmailAddressAttribute _emailAddressAttribute = new();
 
     /// <summary>
     /// Creates a new instance of <see cref="MilvaUserManager{TUser,TKEy}"/>/
@@ -92,7 +93,7 @@ public class MilvaUserManager<TUser, TKey> : IMilvaUserManager<TUser, TKey> wher
 
                 if (user.AccessFailedCount >= _options.Lockout.MaxFailedAccessAttempts)
                 {
-                    user.LockoutEnd = DateTimeOffset.UtcNow.Add(_options.Lockout.DefaultLockoutTimeSpan);
+                    user.LockoutEnd = DateTimeOffset.UtcNow.Add(_options.Lockout.GetLockoutMinute());
                     user.AccessFailedCount = 0;
 
                     return true;
@@ -189,10 +190,7 @@ public class MilvaUserManager<TUser, TKey> : IMilvaUserManager<TUser, TKey> wher
     /// <returns></returns>
     public virtual void ValidatePassword(string password)
     {
-        if (password == null)
-        {
-            throw new ArgumentNullException(nameof(password));
-        }
+        ArgumentNullException.ThrowIfNull(password);
 
         var options = _options.Password;
 
@@ -237,7 +235,7 @@ public class MilvaUserManager<TUser, TKey> : IMilvaUserManager<TUser, TKey> wher
         if (string.IsNullOrWhiteSpace(email))
             MilvaIdentityExceptionThrower.ThrowInvalidEmail();
 
-        if (!new EmailAddressAttribute().IsValid(email))
+        if (!_emailAddressAttribute.IsValid(email))
             MilvaIdentityExceptionThrower.ThrowInvalidEmail();
 
     }

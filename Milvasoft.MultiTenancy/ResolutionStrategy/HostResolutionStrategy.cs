@@ -22,8 +22,5 @@ public class HostResolutionStrategy : ITenantResolutionStrategy<string>
     /// Get the tenant identifier from host.
     /// </summary>
     /// <returns></returns>
-    public async Task<string> GetTenantIdentifierAsync()
-    {
-        return await Task.FromResult(_httpContextAccessor.HttpContext.Request.Host.Host);
-    }
+    public async Task<string> GetTenantIdentifierAsync() => await Task.FromResult(_httpContextAccessor.HttpContext.Request.Host.Host);
 }

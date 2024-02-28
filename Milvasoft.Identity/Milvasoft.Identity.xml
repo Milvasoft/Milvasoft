@@ -271,18 +271,12 @@
             Implements the standard Identity password hashing.
             </summary>
         </member>
-        <member name="M:Milvasoft.Identity.Builder.MilvaIdentityBuilder`2.#ctor(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+        <member name="M:Milvasoft.Identity.Builder.MilvaIdentityBuilder`2.#ctor(Microsoft.Extensions.DependencyInjection.IServiceCollection,Microsoft.Extensions.Configuration.IConfigurationManager)">
             <summary>
             Creates new instance of <see cref="T:Milvasoft.Identity.Builder.MilvaIdentityBuilder`2"/>.
             </summary>
             <param name="services"></param>
-        </member>
-        <member name="M:Milvasoft.Identity.Builder.MilvaIdentityBuilder`2.WithOptions(System.Action{Milvasoft.Identity.Concrete.Options.MilvaIdentityOptions})">
-            <summary>
-            Adds and configures the identity system for the specified User and Role types.
-            </summary>
-            <param name="setupAction">An action to configure the <see cref="T:Milvasoft.Identity.Concrete.Options.MilvaIdentityOptions"/>.</param>
-            <returns></returns>
+            <param name="configurationManager"></param>
         </member>
         <member name="M:Milvasoft.Identity.Builder.MilvaIdentityBuilder`2.WithUserManager``1">
             <summary>
@@ -290,7 +284,20 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Identity.Builder.MilvaIdentityBuilder`2.WithPasswordHasherOptions(System.Action{Milvasoft.Identity.Concrete.Options.MilvaPasswordHasherOptions})">
+        <member name="M:Milvasoft.Identity.Builder.MilvaIdentityBuilder`2.WithOptions(System.Action{Milvasoft.Identity.Concrete.Options.MilvaIdentityOptions})">
+            <summary>
+            Adds and configures the identity system for the specified User and Role types.
+            </summary>
+            <param name="identityOptions">An action to configure the <see cref="T:Milvasoft.Identity.Concrete.Options.MilvaIdentityOptions"/>.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Identity.Builder.MilvaIdentityBuilder`2.WithOptions">
+            <summary>
+            Adds and configures the identity system for the specified User and Role types.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Identity.Builder.MilvaIdentityBuilder`2.WithPostConfigureOptions(System.Action{Milvasoft.Identity.Concrete.Options.MilvaIdentityPostConfigureOptions})">
             <summary>
             Adds and configures the identity system for the specified User and Role types.
             </summary>
@@ -301,13 +308,14 @@
             Implements the standard Milva Identity.
             </summary>
         </member>
-        <member name="M:Milvasoft.Identity.Builder.MilvaIdentityServiceCollectionExtensions.AddMilvaIdentity``2(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+        <member name="M:Milvasoft.Identity.Builder.MilvaIdentityServiceCollectionExtensions.AddMilvaIdentity``2(Microsoft.Extensions.DependencyInjection.IServiceCollection,Microsoft.Extensions.Configuration.IConfigurationManager)">
             <summary>
             Adds the default identity system configuration for the specified User and Role types.
             </summary>
             <typeparam name="TUser">The type representing a User in the system.</typeparam>
             <typeparam name="TKey">The type representing a Key in the system.</typeparam>
             <param name="services">The services available in the application.</param>
+            <param name="configurationManager"></param>
             <returns>An <see cref="T:Milvasoft.Identity.Builder.MilvaIdentityBuilder`2"/> for creating and configuring the identity system.</returns>
         </member>
         <member name="T:Milvasoft.Identity.Concrete.Entity.MilvaUser`1">
@@ -1000,6 +1008,9 @@
             Provides localized identity error messages. All error's code is nameof method. (e.g. Code = "DefaultError")
             </summary>
         </member>
+        <member name="P:Milvasoft.Identity.Concrete.Options.MilvaIdentityOptions.SectionName">
+            <inheritdoc/>
+        </member>
         <member name="P:Milvasoft.Identity.Concrete.Options.MilvaIdentityOptions.User">
             <summary>
             Gets or sets the <see cref="T:Microsoft.AspNetCore.Identity.UserOptions"/> for the identity system.
@@ -1032,6 +1043,16 @@
             The <see cref="T:Microsoft.AspNetCore.Identity.SignInOptions"/> for the identity system.
             </value>
         </member>
+        <member name="T:Milvasoft.Identity.Concrete.Options.MilvaIdentityPostConfigureOptions">
+            <summary>
+            Provides post congifure.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Identity.Concrete.Options.MilvaIdentityPostConfigureOptions.RandomNumberGenerator">
+            <summary>
+            Random number generator.
+            </summary>
+        </member>
         <member name="T:Milvasoft.Identity.Concrete.Options.MilvaLockoutOptions">
             <summary>
             Options for configuring user lockout.
@@ -1055,12 +1076,18 @@
             </value>
             <remarks>Defaults to 5 failed attempts before an account is locked out.</remarks>
         </member>
-        <member name="P:Milvasoft.Identity.Concrete.Options.MilvaLockoutOptions.DefaultLockoutTimeSpan">
+        <member name="P:Milvasoft.Identity.Concrete.Options.MilvaLockoutOptions.DefaultLockoutMinute">
             <summary>
             Gets or sets the <see cref="T:System.TimeSpan"/> a user is locked out for when a lockout occurs.
             </summary>
             <value>The <see cref="T:System.TimeSpan"/> a user is locked out for when a lockout occurs.</value>
             <remarks>Defaults to 5 minutes.</remarks>
+        </member>
+        <member name="M:Milvasoft.Identity.Concrete.Options.MilvaLockoutOptions.GetLockoutMinute">
+            <summary>
+            Gets lockout minute as timespan.
+            </summary>
+            <returns></returns>
         </member>
         <member name="T:Milvasoft.Identity.Concrete.Options.MilvaPasswordHasherOptions">
             <summary>
@@ -1079,7 +1106,7 @@
             The value must be a positive integer. The default value is 10,000.
             </remarks>
         </member>
-        <member name="P:Milvasoft.Identity.Concrete.Options.MilvaPasswordHasherOptions.Rng">
+        <member name="P:Milvasoft.Identity.Concrete.Options.MilvaPasswordHasherOptions.RandomNumberGenerator">
             <summary>
             Random number generator.
             </summary>
@@ -1087,6 +1114,11 @@
         <member name="T:Milvasoft.Identity.Concrete.Options.MilvaPasswordOptions">
             <summary>
             Specifies options for password requirements.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Identity.Concrete.Options.MilvaPasswordOptions.Hasher">
+            <summary>
+            Password hasher options.
             </summary>
         </member>
         <member name="P:Milvasoft.Identity.Concrete.Options.MilvaPasswordOptions.RequiredLength">
@@ -1178,16 +1210,6 @@
             <value>
             True if the application requires each user to have their own, unique email, otherwise false.
             </value>
-        </member>
-        <member name="T:Milvasoft.Identity.Concrete.SignedInUsers">
-            <summary>
-            Contains userId and Token pair for authentication.
-            </summary>
-        </member>
-        <member name="P:Milvasoft.Identity.Concrete.SignedInUsers.SignedInUserTokens">
-            <summary>
-            UserName and token pairs for each logged in user.
-            </summary>
         </member>
         <member name="T:Milvasoft.Identity.TokenProvider.DataProtectorExtensions">
             <summary>

@@ -28,7 +28,7 @@ public class MilvaPasswordHasher : IMilvaPasswordHasher
         if (_iterCount < 1)
             throw new InvalidOperationException("InvalidPasswordHasherIterationCount");
 
-        _rng = options.Rng;
+        _rng = options.RandomNumberGenerator;
     }
 
     /// <summary>

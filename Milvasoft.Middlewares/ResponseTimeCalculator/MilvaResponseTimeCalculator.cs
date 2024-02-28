@@ -7,7 +7,11 @@ namespace Milvasoft.Middlewares.ResponseTimeCalculator;
 /// Calculates response time and adds result to response headers.
 /// Custom header is "X-Response-Time".
 /// </summary>
-public class MilvaResponseTimeCalculator
+/// <remarks>
+/// Initializes new instances of <see cref="MilvaResponseTimeCalculator"/>.
+/// </remarks>
+/// <param name="next"></param>
+public class MilvaResponseTimeCalculator(RequestDelegate next)
 {
     /// <summary>
     /// Name of the Response Header, Custom Headers starts with "X-"  
@@ -17,16 +21,7 @@ public class MilvaResponseTimeCalculator
     /// <summary>
     /// Handle to the next Middleware in the pipeline  
     /// </summary>
-    private readonly RequestDelegate _next;
-
-    /// <summary>
-    /// Initializes new instances of <see cref="MilvaResponseTimeCalculator"/>.
-    /// </summary>
-    /// <param name="next"></param>
-    public MilvaResponseTimeCalculator(RequestDelegate next)
-    {
-        _next = next;
-    }
+    private readonly RequestDelegate _next = next;
 
     /// <summary>
     /// Invokes the method or constructor reflected by this MethodInfo instance.

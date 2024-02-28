@@ -28,5 +28,11 @@ public class MilvaLockoutOptions
     /// </summary>
     /// <value>The <see cref="TimeSpan"/> a user is locked out for when a lockout occurs.</value>
     /// <remarks>Defaults to 5 minutes.</remarks>
-    public TimeSpan DefaultLockoutTimeSpan { get; set; } = TimeSpan.FromMinutes(5);
+    public int DefaultLockoutMinute { get; set; } = 5;
+
+    /// <summary>
+    /// Gets lockout minute as timespan.
+    /// </summary>
+    /// <returns></returns>
+    public TimeSpan GetLockoutMinute() => TimeSpan.FromMinutes(DefaultLockoutMinute);
 }

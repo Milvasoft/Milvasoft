@@ -1,12 +1,17 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Milvasoft.Core.Abstractions;
+using Milvasoft.Core.Extensions;
 
 namespace Milvasoft.Identity.Concrete.Options;
 
 /// <summary>
 /// Provides localized identity error messages. All error's code is nameof method. (e.g. Code = "DefaultError")
 /// </summary>
-public class MilvaIdentityOptions
+public class MilvaIdentityOptions : IMilvaOptions
 {
+    /// <inheritdoc/>
+    public static string SectionName { get; } = $"{MilvaOptionsExtensions.ParentSectionName}:Identity";
+
     /// <summary>
     /// Gets or sets the <see cref="UserOptions"/> for the identity system.
     /// </summary>

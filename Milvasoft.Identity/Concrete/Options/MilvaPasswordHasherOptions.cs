@@ -24,5 +24,5 @@ public class MilvaPasswordHasherOptions
     /// <summary>
     /// Random number generator.
     /// </summary>
-    public RandomNumberGenerator Rng { get; set; } = _defaultRng;
+    public RandomNumberGenerator RandomNumberGenerator { get; set; } = _defaultRng;
 }

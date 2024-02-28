@@ -6,6 +6,11 @@
 public class MilvaPasswordOptions
 {
     /// <summary>
+    /// Password hasher options.
+    /// </summary>
+    public MilvaPasswordHasherOptions Hasher { get; set; } = new();
+
+    /// <summary>
     /// Gets or sets the minimum length a password must be.
     /// </summary>
     /// <remarks>

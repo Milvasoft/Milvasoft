@@ -37,6 +37,7 @@ public abstract class MilvaCronJobService : IHostedService, IDisposable
     protected virtual async Task ScheduleJob(CancellationToken cancellationToken)
     {
         var next = _expression.GetNextOccurrence(DateTimeOffset.Now, _timeZoneInfo);
+
         if (next.HasValue)
         {
             var delay = next.Value - DateTimeOffset.Now;
@@ -46,6 +47,7 @@ public abstract class MilvaCronJobService : IHostedService, IDisposable
             }
 
             _timer = new System.Timers.Timer(delay.TotalMilliseconds);
+
             _timer.Elapsed += async (sender, args) =>
             {
                 _timer.Dispose();  // reset and dispose timer
@@ -61,6 +63,7 @@ public abstract class MilvaCronJobService : IHostedService, IDisposable
                     await ScheduleJob(cancellationToken);    // reschedule next
                 }
             };
+
             _timer.Start();
         }
 
