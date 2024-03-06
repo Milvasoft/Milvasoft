@@ -1,5 +1,4 @@
-﻿using Milvasoft.Core.Utils.Constants;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Milvasoft.Core.EntityBases.Abstract;
 

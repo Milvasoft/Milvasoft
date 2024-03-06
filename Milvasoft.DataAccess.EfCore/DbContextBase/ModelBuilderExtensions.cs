@@ -2,7 +2,6 @@
 using Microsoft.EntityFrameworkCore.Metadata;
 using Milvasoft.Attributes.Annotations;
 using Milvasoft.Core.EntityBases.Abstract;
-using Milvasoft.Core.EntityBases.Concrete;
 using Milvasoft.Core.EntityBases.MultiTenancy;
 using Milvasoft.Core.Exceptions;
 using Milvasoft.Core.Utils.Constants;
