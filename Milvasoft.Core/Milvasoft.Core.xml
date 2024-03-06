@@ -1117,6 +1117,66 @@
             </summary>
             <typeparam name="TKey"></typeparam>
         </member>
+        <member name="T:Milvasoft.Core.EntityBases.Abstract.IHasMultiLanguage">
+            <summary>
+            Dummy interface for type findings.
+            </summary>
+        </member>
+        <member name="T:Milvasoft.Core.EntityBases.Abstract.IHasMultiLanguage`1">
+            <summary>
+            Interface for entities with multiple language data.
+            </summary>
+            <typeparam name="TLangEntity"></typeparam>
+        </member>
+        <member name="P:Milvasoft.Core.EntityBases.Abstract.IHasMultiLanguage`1.Languages">
+            <summary>
+            Multi language data.
+            </summary>
+        </member>
+        <member name="T:Milvasoft.Core.EntityBases.Abstract.ILanguageEntity`3">
+            <summary>
+            Interface for language entities.
+            </summary>
+            <typeparam name="TEntity"></typeparam>
+            <typeparam name="TKey"></typeparam>
+            <typeparam name="TLanguageKey"></typeparam>
+        </member>
+        <member name="P:Milvasoft.Core.EntityBases.Abstract.ILanguageEntity`3.EntityId">
+            <summary> 
+            Language of menu id which is related.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Core.EntityBases.Abstract.ILanguageEntity`3.LanguageId">
+            <summary> 
+            Language of menu which is related.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Core.EntityBases.Abstract.ILanguageEntity`3.Entity">
+            <summary> 
+            Language of menu which is related.
+            </summary>
+        </member>
+        <member name="T:Milvasoft.Core.EntityBases.Abstract.ILanguage`1">
+            <summary>
+            Interface for language entity.
+            </summary>
+            <typeparam name="TKey"></typeparam>
+        </member>
+        <member name="P:Milvasoft.Core.EntityBases.Abstract.ILanguage`1.Id">
+            <summary> 
+            Id of language.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Core.EntityBases.Abstract.ILanguage`1.Name">
+            <summary> 
+            Name of language. e.g. English
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Core.EntityBases.Abstract.ILanguage`1.Code">
+            <summary> 
+            Iso code of language. e.g. en-US
+            </summary>
+        </member>
         <member name="T:Milvasoft.Core.EntityBases.Concrete.AuditableEntity`1">
             <summary>
             Determines entity's is auditable with modifier and modification date.
@@ -1315,6 +1375,84 @@
             <summary>
             Gets or sets a value indicating whether IsDeleted.
             </summary>
+        </member>
+        <member name="T:Milvasoft.Core.EntityBases.Concrete.HasMultiLanguageEntity`2">
+            <summary>
+            Base entity for all of entities.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Core.EntityBases.Concrete.HasMultiLanguageEntity`2.Id">
+            <summary>
+            Unique identifier for this entity.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Core.EntityBases.Concrete.HasMultiLanguageEntity`2.Languages">
+            <summary>
+            Multi language data.
+            </summary>
+        </member>
+        <member name="M:Milvasoft.Core.EntityBases.Concrete.HasMultiLanguageEntity`2.ToString">
+            <summary>
+            Returns this instance of "<see cref="T:System.Type"/>.Name <see cref="T:Milvasoft.Core.EntityBases.Concrete.BaseEntity`1"/>.Id" as string.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Milvasoft.Core.EntityBases.Concrete.MultiLanguageEntity`4">
+            <summary>
+            Base entity for all of entities.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Core.EntityBases.Concrete.MultiLanguageEntity`4.Id">
+            <summary>
+            Unique identifier for this entity.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Core.EntityBases.Concrete.MultiLanguageEntity`4.EntityId">
+            <summary> 
+            Language of menu id which is related.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Core.EntityBases.Concrete.MultiLanguageEntity`4.LanguageId">
+            <summary> 
+            Language of menu which is related.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Core.EntityBases.Concrete.MultiLanguageEntity`4.Entity">
+            <summary> 
+            Language of menu which is related.
+            </summary>
+        </member>
+        <member name="M:Milvasoft.Core.EntityBases.Concrete.MultiLanguageEntity`4.ToString">
+            <summary>
+            Returns this instance of "<see cref="T:System.Type"/>.Name <see cref="T:Milvasoft.Core.EntityBases.Concrete.BaseEntity`1"/>.Id" as string.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Milvasoft.Core.EntityBases.Concrete.LanguageEntity`1">
+            <summary>
+            Base entity for all of entities.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Core.EntityBases.Concrete.LanguageEntity`1.Id">
+            <summary>
+            Unique identifier for this entity.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Core.EntityBases.Concrete.LanguageEntity`1.Name">
+            <summary> 
+            Name of language. e.g. English
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Core.EntityBases.Concrete.LanguageEntity`1.Code">
+            <summary> 
+            Iso code of language. e.g. en-US
+            </summary>
+        </member>
+        <member name="M:Milvasoft.Core.EntityBases.Concrete.LanguageEntity`1.ToString">
+            <summary>
+            Returns this instance of "<see cref="T:System.Type"/>.Name <see cref="T:Milvasoft.Core.EntityBases.Concrete.BaseEntity`1"/>.Id" as string.
+            </summary>
+            <returns></returns>
         </member>
         <member name="T:Milvasoft.Core.EntityBases.MultiTenancy.IMilvaTenantBase`1">
             <summary>
@@ -2405,6 +2543,40 @@
             Visits the System.Linq.Expressions.ParameterExpression.
             </summary>
             <param name="node"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Milvasoft.Core.Extensions.LanguageExtensions">
+            <summary>
+            Multi language extensions.
+            </summary>
+        </member>
+        <member name="M:Milvasoft.Core.Extensions.LanguageExtensions.CreateLanguageExpression``3(System.Object,System.Object,System.Linq.Expressions.Expression{System.Func{``1,System.String}})">
+            <summary>
+            Creates an expression that retrieves the language-specific value of a property for a given entity based on the current language.
+            </summary>
+            <typeparam name="TEntity">The type of the entity.</typeparam>
+            <typeparam name="TDto">The type of the DTO.</typeparam>
+            <typeparam name="TLanguageEntity">The type of the language entity.</typeparam>
+            <param name="defaultLanguageId">The default language ID.</param>
+            <param name="currentLanguageId">The current language ID.</param>
+            <param name="propertyExpression">The expression representing the property to retrieve the value from.</param>
+            <returns>An expression that retrieves the language-specific value of the property for the given entity.</returns>
+        </member>
+        <member name="M:Milvasoft.Core.Extensions.LanguageExtensions.GetLang``1(System.Collections.Generic.IEnumerable{``0},System.Linq.Expressions.Expression{System.Func{``0,System.String}},System.Int32,System.Int32)">
+            <summary>
+            Gets requested lang property value.
+            </summary>
+            <param name="langs"></param>
+            <param name="propertyName"></param>
+            <param name="defaultLangId"></param>
+            <param name="requestedLangId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Core.Extensions.LanguageExtensions.GetLangs``2(System.Collections.Generic.IEnumerable{``0})">
+            <summary>
+            Ready mapping is done. For example, it is used to map the data in the Product class to the ProductDTO class..
+            </summary>
+            <param name="langs"></param>
             <returns></returns>
         </member>
         <member name="T:Milvasoft.Core.Extensions.MilvaOptionsExtensions">

@@ -30,9 +30,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <PackageReference Include="EFCore.BulkExtensions" Version="8.0.1" />
-	  <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.1" />
-	  <PackageReference Include="MongoDB.Bson" Version="2.23.1" />
+	  <PackageReference Include="EFCore.BulkExtensions" Version="8.0.2" />
+	  <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.2" />
+	  <PackageReference Include="MongoDB.Bson" Version="2.24.0" />
 	</ItemGroup>
 
 	<PropertyGroup>

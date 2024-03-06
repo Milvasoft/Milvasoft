@@ -1,6 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Milvasoft.Attributes.Annotations;
+using Milvasoft.Core.EntityBases.Abstract;
+using Milvasoft.Core.EntityBases.Concrete;
 using Milvasoft.Core.EntityBases.MultiTenancy;
 using Milvasoft.Core.Exceptions;
 using Milvasoft.Core.Utils.Constants;
@@ -157,7 +159,7 @@ public static class ModelBuilderExtensions
     /// <param name="modelBuilder"></param>
     public static ModelBuilder UseTurkishCollation(this ModelBuilder modelBuilder)
     {
-        var entitiesHasDecimalProperty = modelBuilder.Model.GetEntityTypes().Where(prop => prop.ClrType.GetProperties().Any(p => p.PropertyType.IsAssignableFrom(typeof(string))));
+        var entitiesHasDecimalProperty = modelBuilder.Model.GetEntityTypes().Where(e => e.ClrType.GetProperties().Any(p => p.PropertyType.IsAssignableFrom(typeof(string))));
 
         foreach (var entityType in entitiesHasDecimalProperty)
         {
@@ -254,7 +256,7 @@ public static class ModelBuilderExtensions
     /// <param name="scale"></param>
     public static ModelBuilder UsePrecision(this ModelBuilder modelBuilder, int precision = 18, int scale = 10)
     {
-        var entitiesHasDecimalProperty = modelBuilder.Model.GetEntityTypes().Where(prop => prop.ClrType.GetProperties().Any(p => p.PropertyType.IsAssignableFrom(typeof(decimal))));
+        var entitiesHasDecimalProperty = modelBuilder.Model.GetEntityTypes().Where(e => e.ClrType.GetProperties().Any(p => p.PropertyType.IsAssignableFrom(typeof(decimal))));
 
         foreach (var entityType in entitiesHasDecimalProperty)
         {
@@ -320,18 +322,47 @@ public static class ModelBuilderExtensions
     /// </summary>
     /// <param name="source"></param>
     /// <param name="context"></param>
-    public static IQueryable<T> IncludeLang<T>(this IQueryable<T> source, DbContext context)
-        where T : class
+    public static IQueryable<TEntity> IncludeLanguages<TEntity>(this IQueryable<TEntity> source, DbContext context) where TEntity : class
     {
-        var navigations = context.Model.FindEntityType(typeof(T))
+        var navigations = context.Model.FindEntityType(typeof(TEntity))
                                        .GetDerivedTypesInclusive()
                                        .SelectMany(type => type.GetNavigations())
                                        .Distinct();
 
         foreach (var property in navigations)
-            if (property.Name.Contains("Langs"))
+            if (property.Name == nameof(IHasMultiLanguage<TEntity>.Languages))
                 source = source.Include(property.Name);
 
         return source;
+    }
+
+    /// <summary>
+    /// Allows to all entities associated with deletions to be Included to the entity(s) to be included in the process.
+    /// Entities must be contains "Langs" navigation property for include process. (e.g. ProductLangs)
+    /// </summary>
+    /// <param name="source"></param>
+    public static IQueryable<TEntity> IncludeLanguages<TEntity, TLangEntity>(this IQueryable<TEntity> source) where TEntity : class, IHasMultiLanguage<TLangEntity> where TLangEntity : class
+        => source.Include(nameof(IHasMultiLanguage<TEntity>.Languages));
+
+    /// <summary>
+    /// Language entities relationships.
+    /// </summary>
+    /// <remarks>
+    /// You can use this method with <see cref="UsePrecision(ModelBuilder, int, int)"/> method. 
+    /// </remarks>
+    /// <param name="modelBuilder"></param>
+    public static ModelBuilder UseEntityLanguageRelations(this ModelBuilder modelBuilder)
+    {
+        var languageEntities = modelBuilder.Model.GetEntityTypes().Where(e => e.ClrType.IsAssignableTo(typeof(IHasMultiLanguage)));
+
+        foreach (var entityType in languageEntities)
+        {
+            modelBuilder.Entity(entityType.ClrType)
+                        .HasMany("Languages")
+                        .WithOne("Entity")
+                        .HasForeignKey($"EntityId");
+        }
+
+        return modelBuilder;
     }
 }

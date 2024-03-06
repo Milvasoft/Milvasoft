@@ -416,13 +416,29 @@
             <param name="source"></param>
             <param name="context"></param>
         </member>
-        <member name="M:Milvasoft.DataAccess.EfCore.DbContextBase.ModelBuilderExtensions.IncludeLang``1(System.Linq.IQueryable{``0},Microsoft.EntityFrameworkCore.DbContext)">
+        <member name="M:Milvasoft.DataAccess.EfCore.DbContextBase.ModelBuilderExtensions.IncludeLanguages``1(System.Linq.IQueryable{``0},Microsoft.EntityFrameworkCore.DbContext)">
             <summary>
             Allows to all entities associated with deletions to be Included to the entity(s) to be included in the process.
             Entities must be contains "Langs" navigation property for include process. (e.g. ProductLangs)
             </summary>
             <param name="source"></param>
             <param name="context"></param>
+        </member>
+        <member name="M:Milvasoft.DataAccess.EfCore.DbContextBase.ModelBuilderExtensions.IncludeLanguages``2(System.Linq.IQueryable{``0})">
+            <summary>
+            Allows to all entities associated with deletions to be Included to the entity(s) to be included in the process.
+            Entities must be contains "Langs" navigation property for include process. (e.g. ProductLangs)
+            </summary>
+            <param name="source"></param>
+        </member>
+        <member name="M:Milvasoft.DataAccess.EfCore.DbContextBase.ModelBuilderExtensions.UseEntityLanguageRelations(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <summary>
+            Language entities relationships.
+            </summary>
+            <remarks>
+            You can use this method with <see cref="M:Milvasoft.DataAccess.EfCore.DbContextBase.ModelBuilderExtensions.UsePrecision(Microsoft.EntityFrameworkCore.ModelBuilder,System.Int32,System.Int32)"/> method. 
+            </remarks>
+            <param name="modelBuilder"></param>
         </member>
         <member name="T:Milvasoft.DataAccess.EfCore.RepositoryBase.Abstract.IBaseRepository`2">
             <summary>

@@ -4,9 +4,11 @@ using ExpressionBuilder.Interfaces;
 using ExpressionBuilder.Operations;
 using Milvasoft.Components.Rest.Enums;
 using Milvasoft.Core;
+using Milvasoft.Core.EntityBases.Abstract;
 using Milvasoft.Core.Extensions;
 using System.Collections;
 using System.Linq.Expressions;
+using System.Reflection;
 
 namespace Milvasoft.Components.Rest.Request;
 
@@ -33,21 +35,41 @@ public class FilterRequest
 
         var expression = new Filter<TEntity>();
 
+        var entityType = typeof(TEntity);
+
+        PropertyInfo languagesPropertyInfo = null;
+
+        if (entityType.IsAssignableTo(typeof(IHasMultiLanguage)))
+            languagesPropertyInfo = entityType.GetProperty("Languages");
+
         foreach (var filter in Criterias)
         {
-            var property = typeof(TEntity).ThrowIfPropertyNotExists(filter.FilterBy);
+            var property = typeof(TEntity).GetProperty(filter.FilterBy);
+
+            var operation = GetOperation(filter.FilterType);
+
+            if (languagesPropertyInfo != null)
+            {
+                var propType = languagesPropertyInfo.PropertyType.GenericTypeArguments.FirstOrDefault();
+
+                propType.ThrowIfPropertyNotExists(filter.FilterBy);
+
+                expression.By($"Languages[{filter.FilterBy}]", operation, filter.Value, Connector.And);
+
+                Expression<Func<TEntity, bool>> ex = expression;
+
+                continue;
+            }
 
             var propertyType = property.PropertyType;
 
             if (propertyType.IsGenericType && propertyType.GetGenericTypeDefinition() == typeof(Nullable<>))
                 propertyType = propertyType.GetGenericArguments()[0];
 
-            var operation = GetOperation(filter.FilterType);
-
             object value;
 
             if (propertyType == typeof(Guid))
-                value = Guid.Parse(filter.Value.ToString());
+                value = Guid.Parse(filter.Value);
             else if (propertyType.IsGenericType && typeof(IList).IsAssignableFrom(propertyType))
             {
                 return expression;
@@ -76,20 +98,20 @@ public class FilterRequest
         }
 
         return expression;
-
-        static IOperation GetOperation(FilterType filterType) => filterType switch
-        {
-            FilterType.Equal => Operation.EqualTo,
-            FilterType.NotEqual => Operation.NotEqualTo,
-            FilterType.Greater => Operation.GreaterThan,
-            FilterType.GreaterEqual => Operation.GreaterThanOrEqualTo,
-            FilterType.Less => Operation.LessThan,
-            FilterType.LessEqual => Operation.LessThanOrEqualTo,
-            FilterType.Contains => Operation.Contains,
-            FilterType.NotContains => Operation.DoesNotContain,
-            FilterType.StartsWith => Operation.StartsWith,
-            FilterType.EndsWith => Operation.EndsWith,
-            _ => Operation.EqualTo,
-        };
     }
+
+    private static IOperation GetOperation(FilterType filterType) => filterType switch
+    {
+        FilterType.Equal => Operation.EqualTo,
+        FilterType.NotEqual => Operation.NotEqualTo,
+        FilterType.Greater => Operation.GreaterThan,
+        FilterType.GreaterEqual => Operation.GreaterThanOrEqualTo,
+        FilterType.Less => Operation.LessThan,
+        FilterType.LessEqual => Operation.LessThanOrEqualTo,
+        FilterType.Contains => Operation.Contains,
+        FilterType.NotContains => Operation.DoesNotContain,
+        FilterType.StartsWith => Operation.StartsWith,
+        FilterType.EndsWith => Operation.EndsWith,
+        _ => Operation.EqualTo,
+    };
 }

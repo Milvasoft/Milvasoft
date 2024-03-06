@@ -1,6 +1,7 @@
-﻿using Milvasoft.Interception.Interceptors.Response;
+﻿using Milvasoft.Interception.Interceptors.Logging;
+using Milvasoft.Interception.Interceptors.Response;
 
-namespace Milvasoft.Interception.Interceptors.Logging;
+namespace Milvasoft.Interception.Utils;
 
 public class InterceptionPostConfigureOptions
 {

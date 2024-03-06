@@ -340,7 +340,7 @@ public abstract class MilvaDbContextBase(DbContextOptions options) : DbContext(o
     /// <returns></returns>
     public async Task<List<TEntity>> GetRequiredContentsAsync<TEntity>(Expression<Func<TEntity, TEntity>> projectionExpression = null) where TEntity : class
         => await Set<TEntity>().Where(CommonHelper.CreateIsDeletedFalseExpression<TEntity>() ?? (entity => true))
-                               .IncludeLang(this)
+                               .IncludeLanguages(this)
                                .Select(projectionExpression ?? (entity => entity))
                                .ToListAsync()
                                .ConfigureAwait(false);
@@ -362,7 +362,7 @@ public abstract class MilvaDbContextBase(DbContextOptions options) : DbContext(o
 
         var predicate = Expression.Lambda<Func<TEntity, decimal>>(Expression.Convert(Expression.Property(parameterExpression, propName), typeof(decimal)), parameterExpression);
 
-        return await Set<TEntity>().Where(CommonHelper.CreateIsDeletedFalseExpression<TEntity>() ?? (entity => true)).IncludeLang(this).MaxAsync(predicate).ConfigureAwait(false);
+        return await Set<TEntity>().Where(CommonHelper.CreateIsDeletedFalseExpression<TEntity>() ?? (entity => true)).IncludeLanguages(this).MaxAsync(predicate).ConfigureAwait(false);
     }
 
     #endregion
