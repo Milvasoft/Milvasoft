@@ -1154,13 +1154,13 @@
             Iso code of language. e.g. en-US
             </summary>
         </member>
-        <member name="T:Milvasoft.Core.EntityBases.Abstract.ITranslationEntity`1">
+        <member name="T:Milvasoft.Core.EntityBases.Abstract.MultiLanguage.ITranslationEntity`1">
             <summary>
             Interface for language entities.
             </summary>
             <typeparam name="TEntity"></typeparam>
         </member>
-        <member name="T:Milvasoft.Core.EntityBases.Abstract.ITranslationEntity`3">
+        <member name="T:Milvasoft.Core.EntityBases.Abstract.MultiLanguage.ITranslationEntity`3">
             <summary>
             Interface for language entities.
             </summary>
@@ -1168,17 +1168,17 @@
             <typeparam name="TKey"></typeparam>
             <typeparam name="TLanguageKey"></typeparam>
         </member>
-        <member name="P:Milvasoft.Core.EntityBases.Abstract.ITranslationEntity`3.EntityId">
+        <member name="P:Milvasoft.Core.EntityBases.Abstract.MultiLanguage.ITranslationEntity`3.EntityId">
             <summary> 
             Language of menu id which is related.
             </summary>
         </member>
-        <member name="P:Milvasoft.Core.EntityBases.Abstract.ITranslationEntity`3.LanguageId">
+        <member name="P:Milvasoft.Core.EntityBases.Abstract.MultiLanguage.ITranslationEntity`3.LanguageId">
             <summary> 
             Language of menu which is related.
             </summary>
         </member>
-        <member name="P:Milvasoft.Core.EntityBases.Abstract.ITranslationEntity`3.Entity">
+        <member name="P:Milvasoft.Core.EntityBases.Abstract.MultiLanguage.ITranslationEntity`3.Entity">
             <summary> 
             Language of menu which is related.
             </summary>
@@ -1442,11 +1442,6 @@
         <member name="T:Milvasoft.Core.EntityBases.Concrete.MultiLanguage.TranslationEntity`4">
             <summary>
             Base entity for all of entities.
-            </summary>
-        </member>
-        <member name="P:Milvasoft.Core.EntityBases.Concrete.MultiLanguage.TranslationEntity`4.LanguageIdPropertyName">
-            <summary>
-            Property name for reflection.
             </summary>
         </member>
         <member name="P:Milvasoft.Core.EntityBases.Concrete.MultiLanguage.TranslationEntity`4.Id">
