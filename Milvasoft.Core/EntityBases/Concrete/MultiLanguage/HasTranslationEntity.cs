@@ -20,7 +20,6 @@ public abstract class HasTranslationEntity<TKey, TTranslationEntity> : EntityBas
         where TKey : struct, IEquatable<TKey>
         where TTranslationEntity : class
 {
-
     /// <summary>
     /// Unique identifier for this entity.
     /// </summary>

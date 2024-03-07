@@ -21,11 +21,6 @@ public abstract class TranslationEntity<TKey, TEntity, TEntityKey, TLanguageKey>
     where TEntity : class
 {
     /// <summary>
-    /// Property name for reflection.
-    /// </summary>
-    public static string LanguageIdPropertyName { get; } = nameof(LanguageId);
-
-    /// <summary>
     /// Unique identifier for this entity.
     /// </summary>
     [Key]
