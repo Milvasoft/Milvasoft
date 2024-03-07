@@ -1,43 +1,30 @@
 ﻿using Milvasoft.Core.EntityBases.Abstract;
+using Milvasoft.Core.EntityBases.Abstract.MultiLanguage;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Milvasoft.Core.EntityBases.Concrete;
+namespace Milvasoft.Core.EntityBases.Concrete.MultiLanguage;
 
 /// <summary>
 /// Base entity for all of entities.
 /// </summary>
-public abstract class HasMultiLanguageEntity<TKey, TLanguageEntity> : EntityBase, IHasMultiLanguage<TLanguageEntity>, IBaseEntity<TKey>
-        where TKey : struct, IEquatable<TKey>
-        where TLanguageEntity : class
+public abstract class TranslationEntity<TEntity> : TranslationEntity<int, TEntity, int, int>, ITranslationEntity<TEntity>
+    where TEntity : class
 {
-    /// <summary>
-    /// Unique identifier for this entity.
-    /// </summary>
-    [Key]
-    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-    public virtual TKey Id { get; set; }
-
-    /// <summary>
-    /// Multi language data.
-    /// </summary>
-    [NotMapped]
-    public virtual ICollection<TLanguageEntity> Languages { get; set; }
-
-    /// <summary>
-    /// Returns this instance of "<see cref="Type"/>.Name <see cref="BaseEntity{TKey}"/>.Id" as string.
-    /// </summary>
-    /// <returns></returns>
-    public override string ToString() => $"[{GetType().Name} {Id}]";
 }
 
 /// <summary>
 /// Base entity for all of entities.
 /// </summary>
-public abstract class MultiLanguageEntity<TKey, TEntity, TEntityKey, TLanguageKey> : EntityBase, ILanguageEntity<TEntity, TEntityKey, TLanguageKey>, IBaseEntity<TKey>
+public abstract class TranslationEntity<TKey, TEntity, TEntityKey, TLanguageKey> : EntityBase, ITranslationEntity<TEntity, TEntityKey, TLanguageKey>, IBaseEntity<TKey>
     where TKey : struct, IEquatable<TKey>
     where TEntity : class
 {
+    /// <summary>
+    /// Property name for reflection.
+    /// </summary>
+    public static string LanguageIdPropertyName { get; } = nameof(LanguageId);
+
     /// <summary>
     /// Unique identifier for this entity.
     /// </summary>

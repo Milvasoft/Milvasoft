@@ -1117,23 +1117,50 @@
             </summary>
             <typeparam name="TKey"></typeparam>
         </member>
-        <member name="T:Milvasoft.Core.EntityBases.Abstract.IHasMultiLanguage">
+        <member name="T:Milvasoft.Core.EntityBases.Abstract.MultiLanguage.IHasTranslation">
             <summary>
             Dummy interface for type findings.
             </summary>
         </member>
-        <member name="T:Milvasoft.Core.EntityBases.Abstract.IHasMultiLanguage`1">
+        <member name="T:Milvasoft.Core.EntityBases.Abstract.MultiLanguage.IHasTranslation`1">
             <summary>
             Interface for entities with multiple language data.
             </summary>
-            <typeparam name="TLangEntity"></typeparam>
+            <typeparam name="TTranslationEntity"></typeparam>
         </member>
-        <member name="P:Milvasoft.Core.EntityBases.Abstract.IHasMultiLanguage`1.Languages">
+        <member name="P:Milvasoft.Core.EntityBases.Abstract.MultiLanguage.IHasTranslation`1.Translations">
             <summary>
-            Multi language data.
+            Translation data.
             </summary>
         </member>
-        <member name="T:Milvasoft.Core.EntityBases.Abstract.ILanguageEntity`3">
+        <member name="T:Milvasoft.Core.EntityBases.Abstract.MultiLanguage.ILanguage`1">
+            <summary>
+            Interface for language entity.
+            </summary>
+            <typeparam name="TKey"></typeparam>
+        </member>
+        <member name="P:Milvasoft.Core.EntityBases.Abstract.MultiLanguage.ILanguage`1.Id">
+            <summary> 
+            Id of language.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Core.EntityBases.Abstract.MultiLanguage.ILanguage`1.Name">
+            <summary> 
+            Name of language. e.g. English
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Core.EntityBases.Abstract.MultiLanguage.ILanguage`1.Code">
+            <summary> 
+            Iso code of language. e.g. en-US
+            </summary>
+        </member>
+        <member name="T:Milvasoft.Core.EntityBases.Abstract.ITranslationEntity`1">
+            <summary>
+            Interface for language entities.
+            </summary>
+            <typeparam name="TEntity"></typeparam>
+        </member>
+        <member name="T:Milvasoft.Core.EntityBases.Abstract.ITranslationEntity`3">
             <summary>
             Interface for language entities.
             </summary>
@@ -1141,67 +1168,110 @@
             <typeparam name="TKey"></typeparam>
             <typeparam name="TLanguageKey"></typeparam>
         </member>
-        <member name="P:Milvasoft.Core.EntityBases.Abstract.ILanguageEntity`3.EntityId">
+        <member name="P:Milvasoft.Core.EntityBases.Abstract.ITranslationEntity`3.EntityId">
             <summary> 
             Language of menu id which is related.
             </summary>
         </member>
-        <member name="P:Milvasoft.Core.EntityBases.Abstract.ILanguageEntity`3.LanguageId">
+        <member name="P:Milvasoft.Core.EntityBases.Abstract.ITranslationEntity`3.LanguageId">
             <summary> 
             Language of menu which is related.
             </summary>
         </member>
-        <member name="P:Milvasoft.Core.EntityBases.Abstract.ILanguageEntity`3.Entity">
+        <member name="P:Milvasoft.Core.EntityBases.Abstract.ITranslationEntity`3.Entity">
             <summary> 
             Language of menu which is related.
             </summary>
         </member>
-        <member name="T:Milvasoft.Core.EntityBases.Abstract.ILanguage`1">
-            <summary>
-            Interface for language entity.
-            </summary>
-            <typeparam name="TKey"></typeparam>
-        </member>
-        <member name="P:Milvasoft.Core.EntityBases.Abstract.ILanguage`1.Id">
-            <summary> 
-            Id of language.
-            </summary>
-        </member>
-        <member name="P:Milvasoft.Core.EntityBases.Abstract.ILanguage`1.Name">
-            <summary> 
-            Name of language. e.g. English
-            </summary>
-        </member>
-        <member name="P:Milvasoft.Core.EntityBases.Abstract.ILanguage`1.Code">
-            <summary> 
-            Iso code of language. e.g. en-US
-            </summary>
-        </member>
-        <member name="T:Milvasoft.Core.EntityBases.Concrete.AuditableEntity`1">
+        <member name="T:Milvasoft.Core.EntityBases.Concrete.Auditing.AuditableEntity`1">
             <summary>
             Determines entity's is auditable with modifier and modification date.
             </summary>
             <typeparam name="TKey">Type of the user</typeparam>
         </member>
-        <member name="P:Milvasoft.Core.EntityBases.Concrete.AuditableEntity`1.LastModificationDate">
+        <member name="P:Milvasoft.Core.EntityBases.Concrete.Auditing.AuditableEntity`1.LastModificationDate">
             <summary>
             Last modification date of entity.
             </summary>
         </member>
-        <member name="P:Milvasoft.Core.EntityBases.Concrete.AuditableEntity`1.LastModifierUserName">
+        <member name="P:Milvasoft.Core.EntityBases.Concrete.Auditing.AuditableEntity`1.LastModifierUserName">
             <summary>
             Modifier of entity.
             </summary>
         </member>
-        <member name="T:Milvasoft.Core.EntityBases.Concrete.AuditableEntityWithoutUser`1">
+        <member name="T:Milvasoft.Core.EntityBases.Concrete.Auditing.AuditableEntityWithoutUser`1">
             <summary>
             Determines entity's is auditable with modifier and modification date.
             </summary>
             <typeparam name="TKey">Type of the user</typeparam>
         </member>
-        <member name="P:Milvasoft.Core.EntityBases.Concrete.AuditableEntityWithoutUser`1.LastModificationDate">
+        <member name="P:Milvasoft.Core.EntityBases.Concrete.Auditing.AuditableEntityWithoutUser`1.LastModificationDate">
             <summary>
             Last modification date of entity.
+            </summary>
+        </member>
+        <member name="T:Milvasoft.Core.EntityBases.Concrete.Auditing.CreationAuditableEntity`1">
+            <summary>
+            Determines entity's creation is auditable.
+            </summary>
+            <typeparam name="TKey">Type of the user</typeparam>
+        </member>
+        <member name="P:Milvasoft.Core.EntityBases.Concrete.Auditing.CreationAuditableEntity`1.CreationDate">
+            <summary>
+            Creation date of entity.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Core.EntityBases.Concrete.Auditing.CreationAuditableEntity`1.CreatorUserName">
+            <summary>
+            Creator of entity.
+            </summary>
+        </member>
+        <member name="T:Milvasoft.Core.EntityBases.Concrete.Auditing.CreationAuditableEntityWithoutUser`1">
+            <summary>
+            Determines entity's creation is auditable without user.
+            </summary>
+            <typeparam name="TKey">Type of the user</typeparam>
+        </member>
+        <member name="P:Milvasoft.Core.EntityBases.Concrete.Auditing.CreationAuditableEntityWithoutUser`1.CreationDate">
+            <summary>
+            Creation date of entity.
+            </summary>
+        </member>
+        <member name="T:Milvasoft.Core.EntityBases.Concrete.Auditing.FullAuditableEntity`1">
+            <summary>
+            Determines entity is fully auditable soft deletable entity.
+            </summary>
+            <typeparam name="TKey">Type of the user</typeparam>
+        </member>
+        <member name="P:Milvasoft.Core.EntityBases.Concrete.Auditing.FullAuditableEntity`1.DeletionDate">
+            <summary>
+            Deletion date of entity.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Core.EntityBases.Concrete.Auditing.FullAuditableEntity`1.DeleterUserName">
+            <summary>
+            Deleter of entity.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Core.EntityBases.Concrete.Auditing.FullAuditableEntity`1.IsDeleted">
+            <summary>
+            Gets or sets a value indicating whether IsDeleted.
+            </summary>
+        </member>
+        <member name="T:Milvasoft.Core.EntityBases.Concrete.Auditing.FullAuditableEntityWithoutUser`1">
+            <summary>
+            Determines entity is fully auditable without user.
+            </summary>
+            <typeparam name="TKey">Type of the user</typeparam>
+        </member>
+        <member name="P:Milvasoft.Core.EntityBases.Concrete.Auditing.FullAuditableEntityWithoutUser`1.DeletionDate">
+            <summary>
+            Deletion date of entity.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Core.EntityBases.Concrete.Auditing.FullAuditableEntityWithoutUser`1.IsDeleted">
+            <summary>
+            Gets or sets a value indicating whether IsDeleted.
             </summary>
         </member>
         <member name="T:Milvasoft.Core.EntityBases.Concrete.BaseDto`1">
@@ -1312,143 +1382,94 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="T:Milvasoft.Core.EntityBases.Concrete.CreationAuditableEntity`1">
-            <summary>
-            Determines entity's creation is auditable.
-            </summary>
-            <typeparam name="TKey">Type of the user</typeparam>
-        </member>
-        <member name="P:Milvasoft.Core.EntityBases.Concrete.CreationAuditableEntity`1.CreationDate">
-            <summary>
-            Creation date of entity.
-            </summary>
-        </member>
-        <member name="P:Milvasoft.Core.EntityBases.Concrete.CreationAuditableEntity`1.CreatorUserName">
-            <summary>
-            Creator of entity.
-            </summary>
-        </member>
-        <member name="T:Milvasoft.Core.EntityBases.Concrete.CreationAuditableEntityWithoutUser`1">
-            <summary>
-            Determines entity's creation is auditable without user.
-            </summary>
-            <typeparam name="TKey">Type of the user</typeparam>
-        </member>
-        <member name="P:Milvasoft.Core.EntityBases.Concrete.CreationAuditableEntityWithoutUser`1.CreationDate">
-            <summary>
-            Creation date of entity.
-            </summary>
-        </member>
-        <member name="T:Milvasoft.Core.EntityBases.Concrete.FullAuditableEntity`1">
-            <summary>
-            Determines entity is fully auditable soft deletable entity.
-            </summary>
-            <typeparam name="TKey">Type of the user</typeparam>
-        </member>
-        <member name="P:Milvasoft.Core.EntityBases.Concrete.FullAuditableEntity`1.DeletionDate">
-            <summary>
-            Deletion date of entity.
-            </summary>
-        </member>
-        <member name="P:Milvasoft.Core.EntityBases.Concrete.FullAuditableEntity`1.DeleterUserName">
-            <summary>
-            Deleter of entity.
-            </summary>
-        </member>
-        <member name="P:Milvasoft.Core.EntityBases.Concrete.FullAuditableEntity`1.IsDeleted">
-            <summary>
-            Gets or sets a value indicating whether IsDeleted.
-            </summary>
-        </member>
-        <member name="T:Milvasoft.Core.EntityBases.Concrete.FullAuditableEntityWithoutUser`1">
-            <summary>
-            Determines entity is fully auditable without user.
-            </summary>
-            <typeparam name="TKey">Type of the user</typeparam>
-        </member>
-        <member name="P:Milvasoft.Core.EntityBases.Concrete.FullAuditableEntityWithoutUser`1.DeletionDate">
-            <summary>
-            Deletion date of entity.
-            </summary>
-        </member>
-        <member name="P:Milvasoft.Core.EntityBases.Concrete.FullAuditableEntityWithoutUser`1.IsDeleted">
-            <summary>
-            Gets or sets a value indicating whether IsDeleted.
-            </summary>
-        </member>
-        <member name="T:Milvasoft.Core.EntityBases.Concrete.HasMultiLanguageEntity`2">
+        <member name="T:Milvasoft.Core.EntityBases.Concrete.MultiLanguage.HasTranslationEntity`1">
             <summary>
             Base entity for all of entities.
             </summary>
         </member>
-        <member name="P:Milvasoft.Core.EntityBases.Concrete.HasMultiLanguageEntity`2.Id">
+        <member name="T:Milvasoft.Core.EntityBases.Concrete.MultiLanguage.HasTranslationEntity`2">
+            <summary>
+            Base entity for all of entities.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Core.EntityBases.Concrete.MultiLanguage.HasTranslationEntity`2.Id">
             <summary>
             Unique identifier for this entity.
             </summary>
         </member>
-        <member name="P:Milvasoft.Core.EntityBases.Concrete.HasMultiLanguageEntity`2.Languages">
+        <member name="P:Milvasoft.Core.EntityBases.Concrete.MultiLanguage.HasTranslationEntity`2.Translations">
             <summary>
             Multi language data.
             </summary>
         </member>
-        <member name="M:Milvasoft.Core.EntityBases.Concrete.HasMultiLanguageEntity`2.ToString">
+        <member name="M:Milvasoft.Core.EntityBases.Concrete.MultiLanguage.HasTranslationEntity`2.ToString">
             <summary>
             Returns this instance of "<see cref="T:System.Type"/>.Name <see cref="T:Milvasoft.Core.EntityBases.Concrete.BaseEntity`1"/>.Id" as string.
             </summary>
             <returns></returns>
         </member>
-        <member name="T:Milvasoft.Core.EntityBases.Concrete.MultiLanguageEntity`4">
+        <member name="T:Milvasoft.Core.EntityBases.Concrete.MultiLanguage.LanguageEntity`1">
             <summary>
             Base entity for all of entities.
             </summary>
         </member>
-        <member name="P:Milvasoft.Core.EntityBases.Concrete.MultiLanguageEntity`4.Id">
+        <member name="P:Milvasoft.Core.EntityBases.Concrete.MultiLanguage.LanguageEntity`1.Id">
             <summary>
             Unique identifier for this entity.
             </summary>
         </member>
-        <member name="P:Milvasoft.Core.EntityBases.Concrete.MultiLanguageEntity`4.EntityId">
-            <summary> 
-            Language of menu id which is related.
-            </summary>
-        </member>
-        <member name="P:Milvasoft.Core.EntityBases.Concrete.MultiLanguageEntity`4.LanguageId">
-            <summary> 
-            Language of menu which is related.
-            </summary>
-        </member>
-        <member name="P:Milvasoft.Core.EntityBases.Concrete.MultiLanguageEntity`4.Entity">
-            <summary> 
-            Language of menu which is related.
-            </summary>
-        </member>
-        <member name="M:Milvasoft.Core.EntityBases.Concrete.MultiLanguageEntity`4.ToString">
-            <summary>
-            Returns this instance of "<see cref="T:System.Type"/>.Name <see cref="T:Milvasoft.Core.EntityBases.Concrete.BaseEntity`1"/>.Id" as string.
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="T:Milvasoft.Core.EntityBases.Concrete.LanguageEntity`1">
-            <summary>
-            Base entity for all of entities.
-            </summary>
-        </member>
-        <member name="P:Milvasoft.Core.EntityBases.Concrete.LanguageEntity`1.Id">
-            <summary>
-            Unique identifier for this entity.
-            </summary>
-        </member>
-        <member name="P:Milvasoft.Core.EntityBases.Concrete.LanguageEntity`1.Name">
+        <member name="P:Milvasoft.Core.EntityBases.Concrete.MultiLanguage.LanguageEntity`1.Name">
             <summary> 
             Name of language. e.g. English
             </summary>
         </member>
-        <member name="P:Milvasoft.Core.EntityBases.Concrete.LanguageEntity`1.Code">
+        <member name="P:Milvasoft.Core.EntityBases.Concrete.MultiLanguage.LanguageEntity`1.Code">
             <summary> 
             Iso code of language. e.g. en-US
             </summary>
         </member>
-        <member name="M:Milvasoft.Core.EntityBases.Concrete.LanguageEntity`1.ToString">
+        <member name="M:Milvasoft.Core.EntityBases.Concrete.MultiLanguage.LanguageEntity`1.ToString">
+            <summary>
+            Returns this instance of "<see cref="T:System.Type"/>.Name <see cref="T:Milvasoft.Core.EntityBases.Concrete.BaseEntity`1"/>.Id" as string.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Milvasoft.Core.EntityBases.Concrete.MultiLanguage.TranslationEntity`1">
+            <summary>
+            Base entity for all of entities.
+            </summary>
+        </member>
+        <member name="T:Milvasoft.Core.EntityBases.Concrete.MultiLanguage.TranslationEntity`4">
+            <summary>
+            Base entity for all of entities.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Core.EntityBases.Concrete.MultiLanguage.TranslationEntity`4.LanguageIdPropertyName">
+            <summary>
+            Property name for reflection.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Core.EntityBases.Concrete.MultiLanguage.TranslationEntity`4.Id">
+            <summary>
+            Unique identifier for this entity.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Core.EntityBases.Concrete.MultiLanguage.TranslationEntity`4.EntityId">
+            <summary> 
+            Language of menu id which is related.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Core.EntityBases.Concrete.MultiLanguage.TranslationEntity`4.LanguageId">
+            <summary> 
+            Language of menu which is related.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Core.EntityBases.Concrete.MultiLanguage.TranslationEntity`4.Entity">
+            <summary> 
+            Language of menu which is related.
+            </summary>
+        </member>
+        <member name="M:Milvasoft.Core.EntityBases.Concrete.MultiLanguage.TranslationEntity`4.ToString">
             <summary>
             Returns this instance of "<see cref="T:System.Type"/>.Name <see cref="T:Milvasoft.Core.EntityBases.Concrete.BaseEntity`1"/>.Id" as string.
             </summary>
@@ -2550,33 +2571,47 @@
             Multi language extensions.
             </summary>
         </member>
-        <member name="M:Milvasoft.Core.Extensions.LanguageExtensions.CreateLanguageExpression``3(System.Object,System.Object,System.Linq.Expressions.Expression{System.Func{``1,System.String}})">
+        <member name="M:Milvasoft.Core.Extensions.LanguageExtensions.CreateTranslationMapExpression``5(``4,``4,System.Linq.Expressions.Expression{System.Func{``1,System.String}})">
             <summary>
             Creates an expression that retrieves the language-specific value of a property for a given entity based on the current language.
             </summary>
             <typeparam name="TEntity">The type of the entity.</typeparam>
             <typeparam name="TDto">The type of the DTO.</typeparam>
-            <typeparam name="TLanguageEntity">The type of the language entity.</typeparam>
+            <typeparam name="TTranslationEntity">The type of the translation entity.</typeparam>
+            <typeparam name="TEntityKey">The type of the entity key.</typeparam>
+            <typeparam name="TLanguageKey">The type of the language key.</typeparam>
             <param name="defaultLanguageId">The default language ID.</param>
             <param name="currentLanguageId">The current language ID.</param>
             <param name="propertyExpression">The expression representing the property to retrieve the value from.</param>
             <returns>An expression that retrieves the language-specific value of the property for the given entity.</returns>
         </member>
-        <member name="M:Milvasoft.Core.Extensions.LanguageExtensions.GetLang``1(System.Collections.Generic.IEnumerable{``0},System.Linq.Expressions.Expression{System.Func{``0,System.String}},System.Int32,System.Int32)">
+        <member name="M:Milvasoft.Core.Extensions.LanguageExtensions.CreateTranslationMapExpression``3(System.Int32,System.Int32,System.Linq.Expressions.Expression{System.Func{``1,System.String}})">
             <summary>
-            Gets requested lang property value.
+            Creates an expression that retrieves the language-specific value of a property for a given entity based on the current language.
             </summary>
-            <param name="langs"></param>
+            <typeparam name="TEntity">The type of the entity.</typeparam>
+            <typeparam name="TDto">The type of the DTO.</typeparam>
+            <typeparam name="TTranslationEntity">The type of the translation entity.</typeparam>
+            <param name="defaultLanguageId">The default language ID.</param>
+            <param name="currentLanguageId">The current language ID.</param>
+            <param name="propertyExpression">The expression representing the property to retrieve the value from.</param>
+            <returns>An expression that retrieves the language-specific value of the property for the given entity.</returns>
+        </member>
+        <member name="M:Milvasoft.Core.Extensions.LanguageExtensions.GetTranslation``1(System.Collections.Generic.IEnumerable{``0},System.Linq.Expressions.Expression{System.Func{``0,System.String}},System.Int32,System.Int32)">
+            <summary>
+            Gets requested translation property value.
+            </summary>
+            <param name="translations"></param>
             <param name="propertyName"></param>
-            <param name="defaultLangId"></param>
-            <param name="requestedLangId"></param>
+            <param name="defaultLanguageId"></param>
+            <param name="currentLanguageId"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Core.Extensions.LanguageExtensions.GetLangs``2(System.Collections.Generic.IEnumerable{``0})">
+        <member name="M:Milvasoft.Core.Extensions.LanguageExtensions.GetTranslations``2(System.Collections.Generic.IEnumerable{``0})">
             <summary>
-            Ready mapping is done. For example, it is used to map the data in the Product class to the ProductDTO class..
+            Ready mapping is done. For example, it is used to map the data in the Poco class to the PocoDto class..
             </summary>
-            <param name="langs"></param>
+            <param name="translations"></param>
             <returns></returns>
         </member>
         <member name="T:Milvasoft.Core.Extensions.MilvaOptionsExtensions">

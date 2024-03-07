@@ -1,25 +1,13 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Milvasoft.Core.EntityBases.Abstract;
+namespace Milvasoft.Core.EntityBases.Abstract.MultiLanguage;
 
 /// <summary>
-/// Dummy interface for type findings.
+/// Interface for language entities.
 /// </summary>
-public interface IHasMultiLanguage
+/// <typeparam name="TEntity"></typeparam>
+public interface ITranslationEntity<TEntity> : ITranslationEntity<TEntity, int, int> where TEntity : class
 {
-}
-
-/// <summary>
-/// Interface for entities with multiple language data.
-/// </summary>
-/// <typeparam name="TLangEntity"></typeparam>
-public interface IHasMultiLanguage<TLangEntity> : IHasMultiLanguage where TLangEntity : class
-{
-    /// <summary>
-    /// Multi language data.
-    /// </summary>
-    [NotMapped]
-    public ICollection<TLangEntity> Languages { get; set; }
 }
 
 /// <summary>
@@ -28,7 +16,7 @@ public interface IHasMultiLanguage<TLangEntity> : IHasMultiLanguage where TLangE
 /// <typeparam name="TEntity"></typeparam>
 /// <typeparam name="TKey"></typeparam>
 /// <typeparam name="TLanguageKey"></typeparam>
-public interface ILanguageEntity<TEntity, TKey, TLanguageKey> where TEntity : class
+public interface ITranslationEntity<TEntity, TKey, TLanguageKey> where TEntity : class
 {
     /// <summary> 
     /// Language of menu id which is related.

@@ -1,4 +1,4 @@
-﻿using Milvasoft.Core.EntityBases.Concrete;
+﻿using Milvasoft.Core.EntityBases.Concrete.Auditing;
 
 namespace Milvasoft.Core.EntityBases.MultiTenancy;
 

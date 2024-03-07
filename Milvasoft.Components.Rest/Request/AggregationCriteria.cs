@@ -217,12 +217,14 @@ public class AggregationCriteria
         }
         else
         {
+#pragma warning disable EF1001 // Internal EF Core API usage.
             if (query.Provider.GetType().IsAssignableTo(typeof(EnumerableQuery)))
                 _queryProviderType = QueryProviderType.List;
             else if (query.Provider.GetType().IsAssignableTo(typeof(EntityQueryProvider)))
                 _queryProviderType = QueryProviderType.Enumerable;
             else
                 _queryProviderType = QueryProviderType.List;
+#pragma warning restore EF1001 // Internal EF Core API usage.
         }
 
         return prop;

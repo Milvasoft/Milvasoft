@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Milvasoft.Attributes.Annotations;
-using Milvasoft.Core.EntityBases.Abstract;
+using Milvasoft.Core.EntityBases.Abstract.MultiLanguage;
 using Milvasoft.Core.EntityBases.MultiTenancy;
 using Milvasoft.Core.Exceptions;
 using Milvasoft.Core.Utils.Constants;
@@ -317,11 +317,11 @@ public static class ModelBuilderExtensions
 
     /// <summary>
     /// Allows to all entities associated with deletions to be Included to the entity(s) to be included in the process.
-    /// Entities must be contains "Langs" navigation property for include process. (e.g. ProductLangs)
+    /// Entities must be contains "Translations" navigation property for include process. (e.g. Poco.Translations)
     /// </summary>
     /// <param name="source"></param>
     /// <param name="context"></param>
-    public static IQueryable<TEntity> IncludeLanguages<TEntity>(this IQueryable<TEntity> source, DbContext context) where TEntity : class
+    public static IQueryable<TEntity> IncludeTranslations<TEntity>(this IQueryable<TEntity> source, DbContext context) where TEntity : class
     {
         var navigations = context.Model.FindEntityType(typeof(TEntity))
                                        .GetDerivedTypesInclusive()
@@ -329,7 +329,7 @@ public static class ModelBuilderExtensions
                                        .Distinct();
 
         foreach (var property in navigations)
-            if (property.Name == nameof(IHasMultiLanguage<TEntity>.Languages))
+            if (property.Name == EntityPropertyNames.Translations)
                 source = source.Include(property.Name);
 
         return source;
@@ -337,29 +337,29 @@ public static class ModelBuilderExtensions
 
     /// <summary>
     /// Allows to all entities associated with deletions to be Included to the entity(s) to be included in the process.
-    /// Entities must be contains "Langs" navigation property for include process. (e.g. ProductLangs)
+    /// Entities must be contains "Translations" navigation property for include process. (e.g. Poco.Translations)
     /// </summary>
     /// <param name="source"></param>
-    public static IQueryable<TEntity> IncludeLanguages<TEntity, TLangEntity>(this IQueryable<TEntity> source) where TEntity : class, IHasMultiLanguage<TLangEntity> where TLangEntity : class
-        => source.Include(nameof(IHasMultiLanguage<TEntity>.Languages));
+    public static IQueryable<TEntity> IncludeTranslations<TEntity, TLangEntity>(this IQueryable<TEntity> source) where TEntity : class, IHasTranslation<TLangEntity> where TLangEntity : class
+        => source.Include(EntityPropertyNames.Translations);
 
     /// <summary>
-    /// Language entities relationships.
+    /// Translation entities relationships.
     /// </summary>
     /// <remarks>
     /// You can use this method with <see cref="UsePrecision(ModelBuilder, int, int)"/> method. 
     /// </remarks>
     /// <param name="modelBuilder"></param>
-    public static ModelBuilder UseEntityLanguageRelations(this ModelBuilder modelBuilder)
+    public static ModelBuilder UseTranslationEntityRelations(this ModelBuilder modelBuilder)
     {
-        var languageEntities = modelBuilder.Model.GetEntityTypes().Where(e => e.ClrType.IsAssignableTo(typeof(IHasMultiLanguage)));
+        var languageEntities = modelBuilder.Model.GetEntityTypes().Where(e => e.ClrType.IsAssignableTo(typeof(IHasTranslation)));
 
         foreach (var entityType in languageEntities)
         {
             modelBuilder.Entity(entityType.ClrType)
-                        .HasMany("Languages")
-                        .WithOne("Entity")
-                        .HasForeignKey($"EntityId");
+                        .HasMany(EntityPropertyNames.Translations)
+                        .WithOne(EntityPropertyNames.Entity)
+                        .HasForeignKey(EntityPropertyNames.EntityId);
         }
 
         return modelBuilder;

@@ -1,4 +1,6 @@
-﻿using Milvasoft.Core.EntityBases.Concrete;
+﻿using Milvasoft.Core.EntityBases.Abstract.MultiLanguage;
+using Milvasoft.Core.EntityBases.Concrete.MultiLanguage;
+using Milvasoft.Core.Utils.Constants;
 using System.Linq.Expressions;
 using System.Reflection;
 
@@ -11,7 +13,6 @@ public static class LanguageExtensions
 {
     private const string _sourceParameterName = "src";
     private const string _parameterName = "i";
-    private static readonly string _languageIdPropName = nameof(MultiLanguageEntity<int, object, object, object>.LanguageId);
     private static readonly MethodInfo _firstOrDefaultMethodInfo = typeof(Enumerable).GetMethods(BindingFlags.Static | BindingFlags.Public)
                                                                                      .Where(mi => mi.Name == nameof(Enumerable.FirstOrDefault) && mi.GetParameters().Length == 2)
                                                                                      .Last();
@@ -21,14 +22,18 @@ public static class LanguageExtensions
     /// </summary>
     /// <typeparam name="TEntity">The type of the entity.</typeparam>
     /// <typeparam name="TDto">The type of the DTO.</typeparam>
-    /// <typeparam name="TLanguageEntity">The type of the language entity.</typeparam>
+    /// <typeparam name="TTranslationEntity">The type of the translation entity.</typeparam>
+    /// <typeparam name="TEntityKey">The type of the entity key.</typeparam>
+    /// <typeparam name="TLanguageKey">The type of the language key.</typeparam>
     /// <param name="defaultLanguageId">The default language ID.</param>
     /// <param name="currentLanguageId">The current language ID.</param>
     /// <param name="propertyExpression">The expression representing the property to retrieve the value from.</param>
     /// <returns>An expression that retrieves the language-specific value of the property for the given entity.</returns>
-    public static Expression<Func<TEntity, string>> CreateLanguageExpression<TEntity, TDto, TLanguageEntity>(object defaultLanguageId,
-                                                                                                             object currentLanguageId,
-                                                                                                             Expression<Func<TDto, string>> propertyExpression)
+    public static Expression<Func<TEntity, string>> CreateTranslationMapExpression<TEntity, TDto, TTranslationEntity, TEntityKey, TLanguageKey>(TLanguageKey defaultLanguageId,
+                                                                                                                                                TLanguageKey currentLanguageId,
+                                                                                                                                                Expression<Func<TDto, string>> propertyExpression)
+        where TEntity : class, IHasTranslation<TTranslationEntity>
+        where TTranslationEntity : class, ITranslationEntity<TEntity, TEntityKey, TLanguageKey>
     {
         // Create constants for the current language ID and the default language ID
         var languageIdConstant = Expression.Constant(currentLanguageId);
@@ -40,26 +45,26 @@ public static class LanguageExtensions
         // Create an expression to check if the current language ID is not equal to the default language ID
         var languageIdNotEqualExpression = Expression.NotEqual(languageIdConstant, defaultLanguageIdConstant);
 
-        // Get the "Languages" property of the source entity
-        var languagesProperty = Expression.Property(srcParameter, nameof(HasMultiLanguageEntity<int, object>.Languages));
+        // Get the "Translations" property of the source entity
+        var translationsProperty = Expression.Property(srcParameter, nameof(HasTranslationEntity<int, object>.Translations));
 
-        var languageEntityType = typeof(TLanguageEntity);
+        var translationEntityType = typeof(TTranslationEntity);
 
         // Create a parameter for the language entity
-        var parameter = Expression.Parameter(languageEntityType, _parameterName);
+        var parameter = Expression.Parameter(translationEntityType, _parameterName);
 
         // Get the "LanguageId" property of the language entity
-        var languageIdProperty = Expression.Property(parameter, _languageIdPropName);
+        var languageIdProperty = Expression.Property(parameter, EntityPropertyNames.LanguageId);
 
         // Get the "FirstOrDefault" method of the Enumerable class with the appropriate generic type
-        var genericFirstOrDefaultMethod = _firstOrDefaultMethodInfo.MakeGenericMethod(languageEntityType);
+        var genericFirstOrDefaultMethod = _firstOrDefaultMethodInfo.MakeGenericMethod(translationEntityType);
 
         // Create an expression to check if the language ID of the language entity is equal to the current language ID
         var languageIdEqualExpression = Expression.Equal(languageIdProperty, languageIdConstant);
-        var lambda = Expression.Lambda<Func<TLanguageEntity, bool>>(languageIdEqualExpression, parameter);
+        var lambda = Expression.Lambda<Func<TTranslationEntity, bool>>(languageIdEqualExpression, parameter);
 
-        // Call the "FirstOrDefault" method on the "Languages" property with the lambda expression
-        var call = Expression.Call(genericFirstOrDefaultMethod, languagesProperty, lambda);
+        // Call the "FirstOrDefault" method on the "Translations" property with the lambda expression
+        var call = Expression.Call(genericFirstOrDefaultMethod, translationsProperty, lambda);
 
         // Create an expression to check if the result of the "FirstOrDefault" method call is null
         var languageIdNullExpression = Expression.Equal(Expression.Constant(null), call);
@@ -72,10 +77,10 @@ public static class LanguageExtensions
 
         // Create an expression to check if the language ID of the language entity is equal to the default language ID
         languageIdEqualExpression = Expression.Equal(languageIdProperty, defaultLanguageIdConstant);
-        lambda = Expression.Lambda<Func<TLanguageEntity, bool>>(languageIdEqualExpression, parameter);
+        lambda = Expression.Lambda<Func<TTranslationEntity, bool>>(languageIdEqualExpression, parameter);
 
-        // Call the "FirstOrDefault" method on the "Languages" property with the lambda expression
-        call = Expression.Call(genericFirstOrDefaultMethod, languagesProperty, lambda);
+        // Call the "FirstOrDefault" method on the "Translations" property with the lambda expression
+        call = Expression.Call(genericFirstOrDefaultMethod, translationsProperty, lambda);
 
         // Get the property of the language entity with the same name as the property to retrieve the value from
         var languageNameDefaultExpression = Expression.Property(call, propertyName);
@@ -95,47 +100,64 @@ public static class LanguageExtensions
     }
 
     /// <summary>
-    /// Gets requested lang property value.
+    /// Creates an expression that retrieves the language-specific value of a property for a given entity based on the current language.
     /// </summary>
-    /// <param name="langs"></param>
+    /// <typeparam name="TEntity">The type of the entity.</typeparam>
+    /// <typeparam name="TDto">The type of the DTO.</typeparam>
+    /// <typeparam name="TTranslationEntity">The type of the translation entity.</typeparam>
+    /// <param name="defaultLanguageId">The default language ID.</param>
+    /// <param name="currentLanguageId">The current language ID.</param>
+    /// <param name="propertyExpression">The expression representing the property to retrieve the value from.</param>
+    /// <returns>An expression that retrieves the language-specific value of the property for the given entity.</returns>
+    public static Expression<Func<TEntity, string>> CreateTranslationMapExpression<TEntity, TDto, TTranslationEntity>(int defaultLanguageId,
+                                                                                                                      int currentLanguageId,
+                                                                                                                      Expression<Func<TDto, string>> propertyExpression)
+            where TEntity : class, IHasTranslation<TTranslationEntity>
+            where TTranslationEntity : class, ITranslationEntity<TEntity>
+        => CreateTranslationMapExpression<TEntity, TDto, TTranslationEntity, int, int>(defaultLanguageId, currentLanguageId, propertyExpression);
+
+    /// <summary>
+    /// Gets requested translation property value.
+    /// </summary>
+    /// <param name="translations"></param>
     /// <param name="propertyName"></param>
-    /// <param name="defaultLangId"></param>
-    /// <param name="requestedLangId"></param>
+    /// <param name="defaultLanguageId"></param>
+    /// <param name="currentLanguageId"></param>
     /// <returns></returns>
-    public static string GetLang<TEntity>(this IEnumerable<TEntity> langs, Expression<Func<TEntity, string>> propertyName, int defaultLangId, int requestedLangId)
+    public static string GetTranslation<TEntity>(this IEnumerable<TEntity> translations, Expression<Func<TEntity, string>> propertyName, int defaultLanguageId, int currentLanguageId)
     {
-        if (langs.IsNullOrEmpty())
+        if (translations.IsNullOrEmpty())
             return string.Empty;
 
         var propName = propertyName.GetPropertyName();
 
         TEntity requestedLang;
 
-        if (requestedLangId != defaultLangId)
-            requestedLang = GetLanguageValue(requestedLangId) ?? GetLanguageValue(defaultLangId);
+        if (currentLanguageId != defaultLanguageId)
+            requestedLang = GetLanguageValue(currentLanguageId) ?? GetLanguageValue(defaultLanguageId);
         else
-            requestedLang = GetLanguageValue(defaultLangId);
+            requestedLang = GetLanguageValue(defaultLanguageId);
 
-        requestedLang ??= langs.FirstOrDefault();
+        requestedLang ??= translations.FirstOrDefault();
 
         return requestedLang.GetType().GetProperty(propName).GetValue(requestedLang, null)?.ToString();
 
-        TEntity GetLanguageValue(int languageId) => langs.FirstOrDefault(lang => (int)lang.GetType()
-                                                                                          .GetProperty(_languageIdPropName)
+        TEntity GetLanguageValue(int languageId) => translations.FirstOrDefault(lang => (int)lang.GetType()
+                                                                                          .GetProperty(EntityPropertyNames.LanguageId)
                                                                                           .GetValue(lang) == languageId);
     }
 
     /// <summary>
-    /// Ready mapping is done. For example, it is used to map the data in the Product class to the ProductDTO class..
+    /// Ready mapping is done. For example, it is used to map the data in the Poco class to the PocoDto class..
     /// </summary>
-    /// <param name="langs"></param>
+    /// <param name="translations"></param>
     /// <returns></returns>
-    public static IEnumerable<TDTO> GetLangs<TEntity, TDTO>(this IEnumerable<TEntity> langs) where TDTO : new()
+    public static IEnumerable<TDTO> GetTranslations<TEntity, TDTO>(this IEnumerable<TEntity> translations) where TDTO : new()
     {
-        if (langs.IsNullOrEmpty())
+        if (translations.IsNullOrEmpty())
             yield break;
 
-        foreach (var lang in langs)
+        foreach (var lang in translations)
         {
             TDTO dto = new();
 
@@ -147,7 +169,7 @@ public static class LanguageExtensions
                 {
                     var entityPropValue = entityProp.GetValue(lang, null);
 
-                    if (entityProp.Name == _languageIdPropName)
+                    if (entityProp.Name == EntityPropertyNames.LanguageId)
                         dtoProp.SetValue(dto, entityPropValue, null);
                     else if (entityProp.PropertyType == typeof(string))
                         dtoProp.SetValue(dto, entityPropValue, null);

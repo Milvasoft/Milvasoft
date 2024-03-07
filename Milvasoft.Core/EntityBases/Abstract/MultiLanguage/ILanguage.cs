@@ -1,4 +1,4 @@
-﻿namespace Milvasoft.Core.EntityBases.Abstract;
+﻿namespace Milvasoft.Core.EntityBases.Abstract.MultiLanguage;
 
 /// <summary>
 /// Interface for language entity.

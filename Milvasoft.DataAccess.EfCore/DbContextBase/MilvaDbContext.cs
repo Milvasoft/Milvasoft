@@ -304,7 +304,7 @@ public abstract class MilvaDbContextBase(DbContextOptions options) : DbContext(o
     /// <returns></returns>
     public async Task<object> GetRequiredContentsDynamicallyAsync(Type type)
     {
-        var propName = $"{type.Name}Langs";
+        var propName = EntityPropertyNames.Translations;
 
         if (!type.PropertyExists(propName))
             throw new MilvaDeveloperException($"Type of {type}'s properties doesn't contain '{propName}'.");
@@ -340,7 +340,7 @@ public abstract class MilvaDbContextBase(DbContextOptions options) : DbContext(o
     /// <returns></returns>
     public async Task<List<TEntity>> GetRequiredContentsAsync<TEntity>(Expression<Func<TEntity, TEntity>> projectionExpression = null) where TEntity : class
         => await Set<TEntity>().Where(CommonHelper.CreateIsDeletedFalseExpression<TEntity>() ?? (entity => true))
-                               .IncludeLanguages(this)
+                               .IncludeTranslations(this)
                                .Select(projectionExpression ?? (entity => entity))
                                .ToListAsync()
                                .ConfigureAwait(false);
@@ -362,7 +362,7 @@ public abstract class MilvaDbContextBase(DbContextOptions options) : DbContext(o
 
         var predicate = Expression.Lambda<Func<TEntity, decimal>>(Expression.Convert(Expression.Property(parameterExpression, propName), typeof(decimal)), parameterExpression);
 
-        return await Set<TEntity>().Where(CommonHelper.CreateIsDeletedFalseExpression<TEntity>() ?? (entity => true)).IncludeLanguages(this).MaxAsync(predicate).ConfigureAwait(false);
+        return await Set<TEntity>().Where(CommonHelper.CreateIsDeletedFalseExpression<TEntity>() ?? (entity => true)).IncludeTranslations(this).MaxAsync(predicate).ConfigureAwait(false);
     }
 
     #endregion
