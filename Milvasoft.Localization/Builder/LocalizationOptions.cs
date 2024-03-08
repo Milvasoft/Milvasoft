@@ -19,7 +19,7 @@ public class LocalizationOptions : ILocalizationOptions
     public string KeyFormat { get; set; }
 
     /// <inheritdoc/>
-    public Func<string, string> KeyFormatDelegate { get; set; }
+    public Func<string, string> KeyFormatMethod { get; set; }
 
     /// <inheritdoc/>
     public bool UseInMemoryCache { get; set; } = true;

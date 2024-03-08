@@ -632,9 +632,9 @@
             Key format
             </summary>
         </member>
-        <member name="P:Milvasoft.Core.Abstractions.Localization.ILocalizationOptions.KeyFormatDelegate">
+        <member name="P:Milvasoft.Core.Abstractions.Localization.ILocalizationOptions.KeyFormatMethod">
             <summary>
-            Formatted key creator delegate.
+            Formatted key creator method.
             Default is: (string key) => string.Format(config.KeyFormat, key);
             </summary>
         </member>
@@ -1154,7 +1154,7 @@
             Iso code of language. e.g. en-US
             </summary>
         </member>
-        <member name="T:Milvasoft.Core.EntityBases.Abstract.MultiLanguage.ITranslationEntity`1">
+        <member name="T:Milvasoft.Core.EntityBases.Abstract.MultiLanguage.ITranslationEntityWithIntKey`1">
             <summary>
             Interface for language entities.
             </summary>
@@ -1178,7 +1178,13 @@
             Language of menu which is related.
             </summary>
         </member>
-        <member name="P:Milvasoft.Core.EntityBases.Abstract.MultiLanguage.ITranslationEntity`3.Entity">
+        <member name="T:Milvasoft.Core.EntityBases.Abstract.MultiLanguage.ITranslationEntity`1">
+            <summary>
+            Interface for language entities.
+            </summary>
+            <typeparam name="TEntity"></typeparam>
+        </member>
+        <member name="P:Milvasoft.Core.EntityBases.Abstract.MultiLanguage.ITranslationEntity`1.Entity">
             <summary> 
             Language of menu which is related.
             </summary>
@@ -2607,6 +2613,26 @@
             Ready mapping is done. For example, it is used to map the data in the Poco class to the PocoDto class..
             </summary>
             <param name="translations"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Core.Extensions.LanguageExtensions.GetTranslationPropertyValue(System.Object,System.String,System.Object,System.Object)">
+            <summary>
+            Get langs property in runtime.
+            </summary>
+            <param name="obj"></param>
+            <param name="requestedPropName"></param>
+            <param name="defaultLanguageId"></param>
+            <param name="currentLanguageId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Core.Extensions.LanguageExtensions.GetTranslation``1(System.Collections.Generic.IEnumerable{``0},System.String,System.Object,System.Object)">
+            <summary>
+            Gets requested translation property value.
+            </summary>
+            <param name="translations"></param>
+            <param name="propertyName"></param>
+            <param name="defaultLanguageId"></param>
+            <param name="currentLanguageId"></param>
             <returns></returns>
         </member>
         <member name="T:Milvasoft.Core.Extensions.MilvaOptionsExtensions">

@@ -1,6 +1,8 @@
 ﻿using Milvasoft.Core.EntityBases.Abstract.MultiLanguage;
 using Milvasoft.Core.EntityBases.Concrete.MultiLanguage;
+using Milvasoft.Core.Exceptions;
 using Milvasoft.Core.Utils.Constants;
+using System.Collections;
 using System.Linq.Expressions;
 using System.Reflection;
 
@@ -113,7 +115,7 @@ public static class LanguageExtensions
                                                                                                                       int currentLanguageId,
                                                                                                                       Expression<Func<TDto, string>> propertyExpression)
             where TEntity : class, IHasTranslation<TTranslationEntity>
-            where TTranslationEntity : class, ITranslationEntity<TEntity>
+            where TTranslationEntity : class, ITranslationEntityWithIntKey<TEntity>
         => CreateTranslationMapExpression<TEntity, TDto, TTranslationEntity, int, int>(defaultLanguageId, currentLanguageId, propertyExpression);
 
     /// <summary>
@@ -125,27 +127,7 @@ public static class LanguageExtensions
     /// <param name="currentLanguageId"></param>
     /// <returns></returns>
     public static string GetTranslation<TEntity>(this IEnumerable<TEntity> translations, Expression<Func<TEntity, string>> propertyName, int defaultLanguageId, int currentLanguageId)
-    {
-        if (translations.IsNullOrEmpty())
-            return string.Empty;
-
-        var propName = propertyName.GetPropertyName();
-
-        TEntity requestedLang;
-
-        if (currentLanguageId != defaultLanguageId)
-            requestedLang = GetLanguageValue(currentLanguageId) ?? GetLanguageValue(defaultLanguageId);
-        else
-            requestedLang = GetLanguageValue(defaultLanguageId);
-
-        requestedLang ??= translations.FirstOrDefault();
-
-        return requestedLang.GetType().GetProperty(propName).GetValue(requestedLang, null)?.ToString();
-
-        TEntity GetLanguageValue(int languageId) => translations.FirstOrDefault(lang => (int)lang.GetType()
-                                                                                          .GetProperty(EntityPropertyNames.LanguageId)
-                                                                                          .GetValue(lang) == languageId);
-    }
+        => GetTranslation(translations, propertyName.GetPropertyName(), defaultLanguageId, currentLanguageId);
 
     /// <summary>
     /// Ready mapping is done. For example, it is used to map the data in the Poco class to the PocoDto class..
@@ -178,5 +160,57 @@ public static class LanguageExtensions
 
             yield return dto;
         }
+    }
+
+    /// <summary>
+    /// Get langs property in runtime.
+    /// </summary>
+    /// <param name="obj"></param>
+    /// <param name="requestedPropName"></param>
+    /// <param name="defaultLanguageId"></param>
+    /// <param name="currentLanguageId"></param>
+    /// <returns></returns>
+    public static dynamic GetTranslationPropertyValue(this object obj, string requestedPropName, object defaultLanguageId, object currentLanguageId)
+    {
+        var translations = obj.GetType().GetProperty(EntityPropertyNames.Translations)?.GetValue(obj, null) as IList
+                               ?? throw new MilvaUserFriendlyException(MilvaException.InvalidParameter);
+
+        if (translations.IsNullOrEmpty())
+            return null;
+
+        var translationEntityType = translations[0].GetType();
+
+        MethodInfo getTranslationMethod = typeof(LanguageExtensions).GetMethod(nameof(GetTranslation), BindingFlags.Static | BindingFlags.NonPublic)?.MakeGenericMethod(translationEntityType);
+
+        return getTranslationMethod.Invoke(translations, new object[] { translations, requestedPropName, defaultLanguageId, currentLanguageId });
+    }
+
+    /// <summary>
+    /// Gets requested translation property value.
+    /// </summary>
+    /// <param name="translations"></param>
+    /// <param name="propertyName"></param>
+    /// <param name="defaultLanguageId"></param>
+    /// <param name="currentLanguageId"></param>
+    /// <returns></returns>
+    private static string GetTranslation<TEntity>(this IEnumerable<TEntity> translations, string propertyName, object defaultLanguageId, object currentLanguageId)
+    {
+        if (translations.IsNullOrEmpty())
+            return string.Empty;
+
+        TEntity requestedLang;
+
+        if (currentLanguageId != defaultLanguageId)
+            requestedLang = GetLanguageValue(currentLanguageId) ?? GetLanguageValue(defaultLanguageId);
+        else
+            requestedLang = GetLanguageValue(defaultLanguageId);
+
+        requestedLang ??= translations.FirstOrDefault();
+
+        return requestedLang.GetType().GetProperty(propertyName).GetValue(requestedLang, null)?.ToString();
+
+        TEntity GetLanguageValue(object languageId) => translations.FirstOrDefault(lang => lang.GetType()
+                                                                                               .GetProperty(EntityPropertyNames.LanguageId)
+                                                                                               .GetValue(lang) == languageId);
     }
 }

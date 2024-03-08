@@ -13,7 +13,7 @@ public class RedisLocalizationPostConfigureOptions
     public ConfigurationOptions ConfigurationOptions { get; }
 
     /// <summary>
-    /// Formatted key creator delegate.
+    /// Formatted key creator method.
     /// </summary>
-    public Func<string, string, string> KeyFormatDelegate { get; set; }
+    public Func<string, string, string> KeyFormatMethod { get; set; }
 }

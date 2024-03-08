@@ -10,6 +10,11 @@ namespace Milvasoft.DataAccess.EfCore.RepositoryBase.Abstract;
 public interface IMilvaDbContextBase
 {
     /// <summary>
+    /// Service provider for access DI contaniner in DbContext.
+    /// </summary>
+    public IServiceProvider ServiceProvider { get; set; }
+
+    /// <summary>
     /// Overrided the BulkSaveChanges method for soft deleting.
     /// </summary>
     /// <param name="bulkConfig"></param>

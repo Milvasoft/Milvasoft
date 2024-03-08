@@ -29,7 +29,7 @@ public class ResxLocalizationManager<TResource>(IStringLocalizer<TResource> stri
             if (string.IsNullOrEmpty(key))
                 throw new ArgumentNullException(nameof(key));
 
-            key = _localizationOptions.KeyFormatDelegate.Invoke(key);
+            key = _localizationOptions.KeyFormatMethod.Invoke(key);
 
             var value = _stringLocalizer[key];
 
@@ -50,7 +50,7 @@ public class ResxLocalizationManager<TResource>(IStringLocalizer<TResource> stri
             if (string.IsNullOrEmpty(key))
                 throw new ArgumentNullException(nameof(key));
 
-            key = _localizationOptions.KeyFormatDelegate.Invoke(key);
+            key = _localizationOptions.KeyFormatMethod.Invoke(key);
 
             var value = _stringLocalizer[key, arguments];
 

@@ -200,7 +200,7 @@ public class RedisLocalizationManager(ICacheAccessor<RedisAccessor> cacheAccesso
     private string GetSearchLocation(string key) => $"{_redisCacheServiceOptions.ConfigurationOptions.EndPoints[0]}:{key}";
 
     /// <summary>
-    /// Checks the key is null or empty, if key is valid; formats key with <see cref="RedisLocalizationOptions.KeyFormatDelegate"/> and returns it.
+    /// Checks the key is null or empty, if key is valid; formats key with <see cref="RedisLocalizationOptions.KeyFormatMethod"/> and returns it.
     /// </summary>
     /// <param name="key"></param>
     /// <returns></returns>
@@ -210,7 +210,7 @@ public class RedisLocalizationManager(ICacheAccessor<RedisAccessor> cacheAccesso
         if (string.IsNullOrEmpty(key))
             throw new ArgumentNullException(nameof(key));
 
-        key = _localizationOptions.KeyFormatDelegate.Invoke(key, CultureInfo.CurrentCulture.Name);
+        key = _localizationOptions.KeyFormatMethod.Invoke(key, CultureInfo.CurrentCulture.Name);
 
         return key;
     }

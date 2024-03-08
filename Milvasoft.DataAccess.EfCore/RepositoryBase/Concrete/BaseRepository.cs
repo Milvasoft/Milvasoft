@@ -1014,7 +1014,7 @@ public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepositor
     {
         if (CommonHelper.PropertyExists<TEntity>(propertyName))
         {
-            var currentUserName = _dataAccessConfiguration.DbContext.GetCurrentUserNameDelegate.Invoke();
+            var currentUserName = _dataAccessConfiguration.DbContext.GetCurrentUserNameMethod.Invoke(_dbContext.ServiceProvider);
 
             if (!string.IsNullOrWhiteSpace(currentUserName))
             {

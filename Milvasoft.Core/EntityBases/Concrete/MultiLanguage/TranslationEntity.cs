@@ -8,7 +8,7 @@ namespace Milvasoft.Core.EntityBases.Concrete.MultiLanguage;
 /// <summary>
 /// Base entity for all of entities.
 /// </summary>
-public abstract class TranslationEntity<TEntity> : TranslationEntity<int, TEntity, int, int>, ITranslationEntity<TEntity>
+public abstract class TranslationEntity<TEntity> : TranslationEntity<int, TEntity, int, int>, ITranslationEntityWithIntKey<TEntity>
     where TEntity : class
 {
 }

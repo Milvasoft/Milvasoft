@@ -24,7 +24,7 @@ public static class RedisLocalizationExtensions
     /// 
     /// <remarks> You must register <see cref="IRedisAccessor"/> for this type of use. </remarks>
     /// </summary>
-    /// <param name="lifetime"></param>
+    /// <param name="localizationOptions"></param>
     /// <returns></returns>
     public static LocalizationBuilder WithRedisManager(this LocalizationBuilder builder, Action<RedisLocalizationOptions> localizationOptions)
     {
@@ -43,7 +43,7 @@ public static class RedisLocalizationExtensions
             builder.Services.AddSingleton<ILocalizationMemoryCache, LocalizationMemoryCache>();
         }
 
-        config.KeyFormatDelegate ??= (string key, string cultureName) => string.Format(config.KeyFormat, cultureName, key);
+        config.KeyFormatMethod ??= (string key, string cultureName) => string.Format(config.KeyFormat, cultureName, key);
 
         if (!builder.Services.Any(s => s.ServiceType == typeof(ICacheOptions<RedisCachingOptions>)) && config.RedisOptions != null)
             builder.Services.AddMilvaCaching().WithRedisAccessor(config.RedisOptions);
@@ -59,8 +59,7 @@ public static class RedisLocalizationExtensions
     /// Registers <see cref="ResxLocalizationManager{TResource}"/> as <see cref="ILocalizationManager"/>.
     /// Adds <see cref="LocalizationOptions"/> as <see cref="IOptions{TOptions}"/>.
     /// </summary>
-    /// <param name="configurationManager"></param>
-    /// <param name="keyFormatDelegate">Post configure property.</param>
+    /// <param name="builder"></param>
     /// <returns></returns>
     public static LocalizationBuilder WithRedisManager(this LocalizationBuilder builder)
     {
@@ -81,7 +80,7 @@ public static class RedisLocalizationExtensions
             opt.RedisOptions = options.RedisOptions;
             opt.MemoryCacheEntryOptions = options.MemoryCacheEntryOptions;
             opt.UseInMemoryCache = options.UseInMemoryCache;
-            opt.KeyFormatDelegate = options.KeyFormatDelegate;
+            opt.KeyFormatMethod = options.KeyFormatMethod;
             opt.KeyFormat = options.KeyFormat;
         });
 
@@ -109,13 +108,13 @@ public static class RedisLocalizationExtensions
         builder.Services.UpdateSingletonInstance<ILocalizationOptions, RedisLocalizationOptions>(opt =>
         {
             opt.RedisOptions.ConfigurationOptions = config.ConfigurationOptions ?? opt.RedisOptions.ConfigurationOptions;
-            opt.KeyFormatDelegate = config.KeyFormatDelegate ?? opt.KeyFormatDelegate;
+            opt.KeyFormatMethod = config.KeyFormatMethod ?? opt.KeyFormatMethod;
         });
 
         builder.Services.PostConfigure<RedisLocalizationOptions>(opt =>
         {
             opt.RedisOptions.ConfigurationOptions = config.ConfigurationOptions ?? opt.RedisOptions.ConfigurationOptions;
-            opt.KeyFormatDelegate = config.KeyFormatDelegate ?? opt.KeyFormatDelegate;
+            opt.KeyFormatMethod = config.KeyFormatMethod ?? opt.KeyFormatMethod;
         });
 
         if (!builder.Services.Any(s => s.ServiceType == typeof(ICacheOptions<RedisCachingOptions>)))

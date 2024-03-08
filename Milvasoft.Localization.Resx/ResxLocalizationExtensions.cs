@@ -20,7 +20,7 @@ public static class ResxLocalizationExtensions
     /// Registers <see cref="ResxLocalizationManager{TResource}"/> as <see cref="ILocalizationManager"/>.
     /// Adds Microsoft localiztion services to service collection.
     /// </summary>
-    /// <param name="lifetime"></param>
+    /// <param name="localizationOptions"></param>
     /// <returns></returns>
     public static LocalizationBuilder WithResxManager<TResource>(this LocalizationBuilder builder, Action<ResxLocalizationOptions> localizationOptions)
     {
@@ -39,7 +39,7 @@ public static class ResxLocalizationExtensions
             builder.Services.AddSingleton<ILocalizationMemoryCache, LocalizationMemoryCache>();
         }
 
-        config.KeyFormatDelegate ??= (string key) => string.Format(config.KeyFormat, key);
+        config.KeyFormatMethod ??= (string key) => string.Format(config.KeyFormat, key);
 
         if (!builder.Services.Any(s => s.ServiceType == typeof(IStringLocalizerFactory)) && !string.IsNullOrWhiteSpace(config.ResourcesPath))
             builder.Services.AddLocalization(options => options.ResourcesPath = config?.ResourcesPath ?? options.ResourcesPath);
@@ -55,8 +55,7 @@ public static class ResxLocalizationExtensions
     /// Registers <see cref="ResxLocalizationManager{TResource}"/> as <see cref="ILocalizationManager"/>.
     /// Adds <see cref="LocalizationOptions"/> as <see cref="IOptions{TOptions}"/>.
     /// </summary>
-    /// <param name="configurationManager"></param>
-    /// <param name="keyFormatDelegate">Post configure property.</param>
+    /// <param name="builder"></param>
     /// <returns></returns>
     public static LocalizationBuilder WithResxManager<TResource>(this LocalizationBuilder builder)
     {
@@ -104,14 +103,14 @@ public static class ResxLocalizationExtensions
         {
             opt.ResourcesPath = config.ResourcesPath ?? opt.ResourcesPath;
             opt.ResourcesFolderPath = config.ResourcesFolderPath ?? opt.ResourcesFolderPath;
-            opt.KeyFormatDelegate = config.KeyFormatDelegate ?? opt.KeyFormatDelegate;
+            opt.KeyFormatMethod = config.KeyFormatMethod ?? opt.KeyFormatMethod;
         });
 
         builder.Services.PostConfigure<ResxLocalizationOptions>(opt =>
         {
             opt.ResourcesPath = config.ResourcesPath ?? opt.ResourcesPath;
             opt.ResourcesFolderPath = config.ResourcesFolderPath ?? opt.ResourcesFolderPath;
-            opt.KeyFormatDelegate = config.KeyFormatDelegate ?? opt.KeyFormatDelegate;
+            opt.KeyFormatMethod = config.KeyFormatMethod ?? opt.KeyFormatMethod;
         });
 
         if (!builder.Services.Any(s => s.ServiceType == typeof(IStringLocalizerFactory)) && !string.IsNullOrWhiteSpace(config.ResourcesPath))

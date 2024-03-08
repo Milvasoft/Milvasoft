@@ -18,7 +18,7 @@ public class ResxLocalizationPostConfigureOptions
     public string ResourcesFolderPath { get; set; }
 
     /// <summary>
-    /// Formatted key creator delegate.
+    /// Formatted key creator method.
     /// </summary>
-    public Func<string, string> KeyFormatDelegate { get; set; }
+    public Func<string, string> KeyFormatMethod { get; set; }
 }

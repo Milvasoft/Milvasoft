@@ -2,12 +2,17 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Milvasoft.Core;
+using Milvasoft.Core.EntityBases.Abstract;
+using Milvasoft.Core.EntityBases.Abstract.MultiLanguage;
 using Milvasoft.Core.Exceptions;
 using Milvasoft.Core.Extensions;
 using Milvasoft.Core.Utils.Constants;
 using Milvasoft.DataAccess.EfCore.Configuration;
 using Milvasoft.DataAccess.EfCore.RepositoryBase.Abstract;
+using Milvasoft.DataAccess.EfCore.Utils;
 using Milvasoft.DataAccess.EfCore.Utils.Enums;
+using Milvasoft.DataAccess.EfCore.Utils.LookupModels;
+using System.Collections;
 using System.Linq.Expressions;
 using System.Reflection;
 
@@ -19,6 +24,11 @@ namespace Milvasoft.DataAccess.EfCore.DbContextBase;
 /// <param name="options"></param>
 public abstract class MilvaDbContextBase(DbContextOptions options) : DbContext(options), IMilvaDbContextBase
 {
+    /// <summary>
+    /// Service provider for access DI contaniner in DbContext.
+    /// </summary>
+    public IServiceProvider ServiceProvider { get; set; }
+
     /// <summary>
     /// Milva specific db context configuration.
     /// </summary>
@@ -42,6 +52,18 @@ public abstract class MilvaDbContextBase(DbContextOptions options) : DbContext(o
     public MilvaDbContextBase(DbContextOptions options, DataAccessConfiguration dbContextConfiguration) : this(options)
     {
         SetDataAccessConfiguration(dbContextConfiguration);
+    }
+
+    /// <summary>
+    /// Initializes new instance.
+    /// </summary>
+    /// <param name="options"></param>
+    /// <param name="dbContextConfiguration"></param>
+    /// <param name="serviceProvider"></param>
+    public MilvaDbContextBase(DbContextOptions options, DataAccessConfiguration dbContextConfiguration, IServiceProvider serviceProvider) : this(options)
+    {
+        SetDataAccessConfiguration(dbContextConfiguration);
+        ServiceProvider = serviceProvider;
     }
 
     /// <summary>
@@ -280,7 +302,7 @@ public abstract class MilvaDbContextBase(DbContextOptions options) : DbContext(o
     /// <param name="propertyName"></param>
     protected internal virtual void AuditPerformerUser(EntityEntry entry, string propertyName)
     {
-        var currentUserName = _dbContextConfiguration.DbContext.GetCurrentUserNameDelegate.Invoke();
+        var currentUserName = _dbContextConfiguration.DbContext.GetCurrentUserNameMethod.Invoke(ServiceProvider);
 
         if (!string.IsNullOrWhiteSpace(currentUserName))
         {
@@ -365,6 +387,196 @@ public abstract class MilvaDbContextBase(DbContextOptions options) : DbContext(o
         return await Set<TEntity>().Where(CommonHelper.CreateIsDeletedFalseExpression<TEntity>() ?? (entity => true)).IncludeTranslations(this).MaxAsync(predicate).ConfigureAwait(false);
     }
 
+    /// <summary>
+    /// Gets the lookup data for the specified <paramref name="lookupRequest"/>.
+    /// </summary>
+    /// <param name="lookupRequest">The lookup request containing the parameters for the lookup.</param>
+    /// <returns>A list of lookup results containing the requested data.</returns>
+    public async Task<List<object>> GetLookupsAsync(LookupRequest lookupRequest)
+    {
+        if (lookupRequest?.Parameters.IsNullOrEmpty() ?? true)
+            return [];
+
+        ValidateRequestParameters(lookupRequest);
+
+        var resultList = new List<object>();
+
+        var assemblyTypes = _dbContextConfiguration.DbContext.GetEntityAssembly().GetTypes();
+
+        foreach (var parameter in lookupRequest.Parameters)
+        {
+            var entityName = parameter.EntityName;
+
+            Type entityType = assemblyTypes.FirstOrDefault(i => i.Name == entityName) ?? throw new MilvaUserFriendlyException(MilvaException.InvalidParameter);
+            Type translationEntityType = null;
+
+            List<string> mainEntityPropertyNames = null;
+            List<string> translationEntityPropNames = null;
+
+            if (!parameter.RequestedPropertyNames.IsNullOrEmpty())
+            {
+                if (entityType.IsAssignableTo(typeof(IHasTranslation)))
+                {
+                    translationEntityType = assemblyTypes.FirstOrDefault(i => i.IsAssignableTo(typeof(ITranslationEntity<>).MakeGenericType(entityType)));
+                }
+
+                // check requested property names are valid and categorize them as main entity and translation entity
+                foreach (var requestedPropName in parameter.RequestedPropertyNames)
+                {
+                    if (CommonHelper.PropertyExists(entityType, requestedPropName))
+                    {
+                        mainEntityPropertyNames ??= [];
+                        mainEntityPropertyNames.Add(requestedPropName);
+                    }
+                    else
+                    {
+                        //If the requested property name does not exist in the main entity and the entity does not have translations
+                        if (translationEntityType == null)
+                            throw new MilvaUserFriendlyException(MilvaException.InvalidParameter);
+
+                        if (CommonHelper.PropertyExists(translationEntityType, requestedPropName))
+                        {
+                            translationEntityPropNames ??= [];
+                            translationEntityPropNames.Add(requestedPropName);
+                        }
+                        else
+                            throw new MilvaUserFriendlyException(MilvaException.InvalidParameter);
+                    }
+                }
+            }
+
+            List<string> propNamesForProjection = BuildPropertyNameListForProjection(entityType, translationEntityType);
+
+            if (!mainEntityPropertyNames.IsNullOrEmpty())
+                propNamesForProjection.AddRange(mainEntityPropertyNames);
+
+            var createProjectionExpressionMethod = typeof(MilvaEfExtensions).GetMethod(nameof(MilvaEfExtensions.CreateProjectionExpression), BindingFlags.Static | BindingFlags.Public);
+
+            var projectionExpression = createProjectionExpressionMethod.MakeGenericMethod(entityType).Invoke(propNamesForProjection,
+                                                                                                             new object[]
+                                                                                                             {
+                                                                                                                 propNamesForProjection,
+                                                                                                                 translationEntityPropNames,
+                                                                                                                 translationEntityType
+                                                                                                             });
+
+            var taskResult = (Task)this.GetType()
+                                       .GetMethod(nameof(GetRequiredContentsAsync))
+                                       .MakeGenericMethod(entityType)
+                                       .Invoke(this, new object[] { projectionExpression });
+
+            await taskResult;
+
+            var resultProperty = taskResult.GetType().GetProperty("Result");
+
+            var lookupList = (IList)resultProperty.GetValue(taskResult);
+
+            var count = lookupList.Count;
+
+            SortedList<int, object> lookups = [];
+
+            if (count > 0)
+            {
+                var langPropName = EntityPropertyNames.Translations;
+
+                foreach (var lookup in lookupList)
+                {
+                    var id = (int)lookup.GetType().GetProperty(EntityPropertyNames.Id).GetValue(lookup, null);
+
+                    Dictionary<string, object> propDic = [];
+
+                    foreach (var prop in lookup.GetType().GetProperties())
+                    {
+                        if (prop.Name != EntityPropertyNames.Translations)
+                        {
+                            if (prop.Name != EntityPropertyNames.Id && (!parameter.RequestedPropertyNames?.Contains(prop.Name) ?? true))
+                                continue;
+
+                            propDic.Add(prop.Name, prop.GetValue(lookup, null) ?? GetDefaultValue(prop.PropertyType));
+                        }
+                        else
+                        {
+                            foreach (var translationPropName in translationEntityPropNames)
+                            {
+                                if ((!parameter.RequestedPropertyNames?.Contains(translationPropName) ?? true))
+                                    continue;
+
+                                propDic.Add(translationPropName, lookup.GetTranslationPropertyValue(translationPropName,
+                                                                                                    _dbContextConfiguration.DbContext.GetDefaultLanguageIdMethod.Invoke(ServiceProvider),
+                                                                                                    _dbContextConfiguration.DbContext.GetCurrentLanguageIdMethod.Invoke(ServiceProvider)));
+                            }
+                        }
+                    }
+
+                    lookups.Add(id, propDic.ToJson().ToObject<object>());
+                }
+
+                resultList.Add(new LookupResult
+                {
+                    EntityName = entityName,
+                    Data = lookups.OrderByDescending(i => i.Key).Select(k => k.Value).ToList(),
+                });
+            }
+        }
+
+        return resultList;
+
+        static object GetDefaultValue(Type t)
+        {
+            if (t.IsValueType)
+            {
+                return Activator.CreateInstance(t);
+            }
+            else if (t.Name.Contains("String"))
+            {
+                return string.Empty;
+            }
+            else
+            {
+                return null;
+            }
+        }
+    }
+
+    private List<string> BuildPropertyNameListForProjection(Type entityType, Type translationEntityType)
+    {
+        List<string> propNamesForProjection = [];
+
+        if (entityType.IsAssignableTo(typeof(IMilvaEntity)))
+            propNamesForProjection.Add(EntityPropertyNames.Id);
+
+        if (entityType.IsAssignableTo(typeof(IHasTranslation)))
+            propNamesForProjection.Add(EntityPropertyNames.Translations);
+
+        if (entityType.GetProperty(EntityPropertyNames.CreationDate) != null)
+            propNamesForProjection.Add(EntityPropertyNames.CreationDate);
+
+        return propNamesForProjection;
+    }
+
+    private void ValidateRequestParameters(LookupRequest lookupRequest)
+    {
+        foreach (var parameter in lookupRequest.Parameters)
+        {
+            if (string.IsNullOrWhiteSpace(parameter.EntityName)
+                || parameter.RequestedPropertyNames.IsNullOrEmpty()
+                || parameter.RequestedPropertyNames.Count > 5
+                || !_dbContextConfiguration.DbContext.AllowedEntityNamesForLookup.Contains(parameter.EntityName))
+                throw new MilvaUserFriendlyException(MilvaException.InvalidParameter);
+
+            HashSet<string> paramaters;
+
+            if (!parameter.RequestedPropertyNames.IsNullOrEmpty())
+            {
+                paramaters = [.. parameter.RequestedPropertyNames];
+
+                //Aynı propertyName varsa hata fırlatıldı.
+                if (paramaters.Count != parameter.RequestedPropertyNames.Count)
+                    throw new MilvaUserFriendlyException(MilvaException.InvalidParameter);
+            }
+        }
+    }
+
     #endregion
 }
 
@@ -385,6 +597,7 @@ public abstract class MilvaDbContextBase(DbContextOptions options) : DbContext(o
 /// <param name="dbContextConfiguration"></param>
 public abstract class MilvaDbContext(DbContextOptions options, DataAccessConfiguration dbContextConfiguration) : MilvaDbContextBase(options, dbContextConfiguration)
 {
+
 }
 
 /// <summary>

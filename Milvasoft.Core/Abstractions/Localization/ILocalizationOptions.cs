@@ -19,10 +19,10 @@ public interface ILocalizationOptions : IMilvaOptions
     public string KeyFormat { get; set; }
 
     /// <summary>
-    /// Formatted key creator delegate.
+    /// Formatted key creator method.
     /// Default is: (string key) => string.Format(config.KeyFormat, key);
     /// </summary>
-    public Func<string, string> KeyFormatDelegate { get; set; }
+    public Func<string, string> KeyFormatMethod { get; set; }
 
     /// <summary>
     /// LocalizationMemoryCache helps speeding up getting localized values from data stores.

@@ -44,9 +44,19 @@
             IOptions aware custom MilvaDbContext configurations.
             </summary>
         </member>
-        <member name="P:Milvasoft.DataAccess.EfCore.Configuration.DataAccessPostConfigureConfiguration.GetCurrentUserNameDelegate">
+        <member name="P:Milvasoft.DataAccess.EfCore.Configuration.DataAccessPostConfigureConfiguration.GetCurrentUserNameMethod">
             <summary>
-            Current user id getter delegate for auditing operations.
+            Current user id getter method for auditing operations.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.DataAccess.EfCore.Configuration.DataAccessPostConfigureConfiguration.GetCurrentLanguageIdMethod">
+            <summary>
+            Current language id getter method for multi language operations.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.DataAccess.EfCore.Configuration.DataAccessPostConfigureConfiguration.GetDefaultLanguageIdMethod">
+            <summary>
+            Current language id getter method for multi language operations.
             </summary>
         </member>
         <member name="T:Milvasoft.DataAccess.EfCore.Configuration.DbContextConfiguration">
@@ -64,10 +74,36 @@
             Soft delete state when delete operation. Default value is false.
             </summary>
         </member>
-        <member name="P:Milvasoft.DataAccess.EfCore.Configuration.DbContextConfiguration.GetCurrentUserNameDelegate">
+        <member name="P:Milvasoft.DataAccess.EfCore.Configuration.DbContextConfiguration.EntityAssemblyName">
             <summary>
-            Current user id getter delegate for auditing operations.
+            Entity assembly for <see cref="M:Milvasoft.DataAccess.EfCore.DbContextBase.MilvaDbContextBase.GetLookupsAsync(Milvasoft.DataAccess.EfCore.Utils.LookupModels.LookupRequest)"/> operations.
             </summary>
+        </member>
+        <member name="P:Milvasoft.DataAccess.EfCore.Configuration.DbContextConfiguration.AllowedEntityNamesForLookup">
+            <summary>
+            Allowed entity names for <see cref="M:Milvasoft.DataAccess.EfCore.DbContextBase.MilvaDbContextBase.GetLookupsAsync(Milvasoft.DataAccess.EfCore.Utils.LookupModels.LookupRequest)"/> operations.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.DataAccess.EfCore.Configuration.DbContextConfiguration.GetCurrentUserNameMethod">
+            <summary>
+            Current user id getter method for auditing operations.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.DataAccess.EfCore.Configuration.DbContextConfiguration.GetCurrentLanguageIdMethod">
+            <summary>
+            Current language id getter method for multi language operations.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.DataAccess.EfCore.Configuration.DbContextConfiguration.GetDefaultLanguageIdMethod">
+            <summary>
+            Current language id getter method for multi language operations.
+            </summary>
+        </member>
+        <member name="M:Milvasoft.DataAccess.EfCore.Configuration.DbContextConfiguration.GetEntityAssembly">
+            <summary>
+            Gets generic accessor type as <see cref="T:Milvasoft.Core.Abstractions.Cache.ICacheAccessor`1"/>
+            </summary>
+            <returns></returns>
         </member>
         <member name="T:Milvasoft.DataAccess.EfCore.Configuration.IDataAccessConfiguration">
             <summary>
@@ -121,6 +157,11 @@
             </summary>
             <param name="options"></param>
         </member>
+        <member name="P:Milvasoft.DataAccess.EfCore.DbContextBase.MilvaDbContextBase.ServiceProvider">
+            <summary>
+            Service provider for access DI contaniner in DbContext.
+            </summary>
+        </member>
         <member name="F:Milvasoft.DataAccess.EfCore.DbContextBase.MilvaDbContextBase._dbContextConfiguration">
             <summary>
             Milva specific db context configuration.
@@ -142,6 +183,14 @@
             </summary>
             <param name="options"></param>
             <param name="dbContextConfiguration"></param>
+        </member>
+        <member name="M:Milvasoft.DataAccess.EfCore.DbContextBase.MilvaDbContextBase.#ctor(Microsoft.EntityFrameworkCore.DbContextOptions,Milvasoft.DataAccess.EfCore.Configuration.DataAccessConfiguration,System.IServiceProvider)">
+            <summary>
+            Initializes new instance.
+            </summary>
+            <param name="options"></param>
+            <param name="dbContextConfiguration"></param>
+            <param name="serviceProvider"></param>
         </member>
         <member name="M:Milvasoft.DataAccess.EfCore.DbContextBase.MilvaDbContextBase.OnModelCreating(Microsoft.EntityFrameworkCore.ModelBuilder)">
             <summary>
@@ -266,6 +315,13 @@
             <typeparam name="TEntity"></typeparam>
             <param name="propName"></param>
             <returns></returns>
+        </member>
+        <member name="M:Milvasoft.DataAccess.EfCore.DbContextBase.MilvaDbContextBase.GetLookupsAsync(Milvasoft.DataAccess.EfCore.Utils.LookupModels.LookupRequest)">
+            <summary>
+            Gets the lookup data for the specified <paramref name="lookupRequest"/>.
+            </summary>
+            <param name="lookupRequest">The lookup request containing the parameters for the lookup.</param>
+            <returns>A list of lookup results containing the requested data.</returns>
         </member>
         <member name="T:Milvasoft.DataAccess.EfCore.DbContextBase.MilvaDbContext">
             <summary>
@@ -1287,6 +1343,11 @@
             Interface for base repository.
             </summary>
         </member>
+        <member name="P:Milvasoft.DataAccess.EfCore.RepositoryBase.Abstract.IMilvaDbContextBase.ServiceProvider">
+            <summary>
+            Service provider for access DI contaniner in DbContext.
+            </summary>
+        </member>
         <member name="M:Milvasoft.DataAccess.EfCore.RepositoryBase.Abstract.IMilvaDbContextBase.SaveChangesBulk(EFCore.BulkExtensions.BulkConfig,System.Threading.CancellationToken)">
             <summary>
             Overrided the BulkSaveChanges method for soft deleting.
@@ -1643,6 +1704,36 @@
             <param name="includes"></param>
             <returns></returns>
         </member>
+        <member name="T:Milvasoft.DataAccess.EfCore.Utils.LookupModels.LookupRequest">
+            <summary>
+            For request content. 
+            </summary>
+        </member>
+        <member name="P:Milvasoft.DataAccess.EfCore.Utils.LookupModels.LookupRequestParameter.EntityName">
+            <summary>
+            Requested entity name.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.DataAccess.EfCore.Utils.LookupModels.LookupRequestParameter.RequestedPropertyNames">
+            <summary>
+            Requested properties.
+            </summary>
+        </member>
+        <member name="T:Milvasoft.DataAccess.EfCore.Utils.LookupModels.LookupResult">
+            <summary>
+            For lookup requests. 
+            </summary>
+        </member>
+        <member name="P:Milvasoft.DataAccess.EfCore.Utils.LookupModels.LookupResult.EntityName">
+            <summary>
+            Lookup key. (e.g. Product)
+            </summary>
+        </member>
+        <member name="P:Milvasoft.DataAccess.EfCore.Utils.LookupModels.LookupResult.Data">
+            <summary>
+            Result list.
+            </summary>
+        </member>
         <member name="T:Milvasoft.DataAccess.EfCore.Utils.MilvaEfExtensions">
             <summary>
             Entity framework related extensions.
@@ -1755,6 +1846,16 @@
             <typeparam name="TDto"></typeparam>
             <typeparam name="TEntity"></typeparam>
             <param name="dto"></param>
+        </member>
+        <member name="M:Milvasoft.DataAccess.EfCore.Utils.MilvaEfExtensions.CreateProjectionExpression``1(System.Collections.Generic.IEnumerable{System.String},System.Collections.Generic.IEnumerable{System.String},System.Type)">
+            <summary>
+            Creates projection expression for contents service. THIS IS A AMAZING METHOD.
+            </summary>
+            <typeparam name="TEntity"></typeparam>
+            <param name="mainEntityPropertyNames"></param>
+            <param name="translationEntityPropertyNames"></param>
+            <param name="translationEntityType"></param>
+            <returns></returns>
         </member>
         <member name="T:Milvasoft.DataAccess.EfCore.Utils.SetPropertyBuilder`1">
             <summary>

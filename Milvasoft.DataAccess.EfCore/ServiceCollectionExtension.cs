@@ -78,12 +78,16 @@ public static class ServiceCollectionExtension
 
         services.UpdateSingletonInstance<IDataAccessConfiguration>(opt =>
         {
-            opt.DbContext.GetCurrentUserNameDelegate = config.GetCurrentUserNameDelegate ?? opt.DbContext.GetCurrentUserNameDelegate;
+            opt.DbContext.GetCurrentUserNameMethod = config.GetCurrentUserNameMethod ?? opt.DbContext.GetCurrentUserNameMethod;
+            opt.DbContext.GetCurrentLanguageIdMethod = config.GetCurrentLanguageIdMethod ?? opt.DbContext.GetCurrentLanguageIdMethod;
+            opt.DbContext.GetDefaultLanguageIdMethod = config.GetDefaultLanguageIdMethod ?? opt.DbContext.GetDefaultLanguageIdMethod;
         });
 
         services.PostConfigure<DataAccessConfiguration>(opt =>
         {
-            opt.DbContext.GetCurrentUserNameDelegate = config.GetCurrentUserNameDelegate ?? opt.DbContext.GetCurrentUserNameDelegate;
+            opt.DbContext.GetCurrentUserNameMethod = config.GetCurrentUserNameMethod ?? opt.DbContext.GetCurrentUserNameMethod;
+            opt.DbContext.GetCurrentLanguageIdMethod = config.GetCurrentLanguageIdMethod ?? opt.DbContext.GetCurrentLanguageIdMethod;
+            opt.DbContext.GetDefaultLanguageIdMethod = config.GetDefaultLanguageIdMethod ?? opt.DbContext.GetDefaultLanguageIdMethod;
         });
 
         return services;

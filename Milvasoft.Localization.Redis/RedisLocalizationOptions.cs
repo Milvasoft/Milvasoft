@@ -26,8 +26,8 @@ public class RedisLocalizationOptions : LocalizationOptions
     public RedisCachingOptions RedisOptions { get; set; } = new();
 
     /// <summary>
-    /// Formatted key creator delegate.
+    /// Formatted key creator method.
     /// Default is: (string key, string cultureName) => string.Format(config.KeyFormat, cultureName, key);
     /// </summary>
-    public new Func<string, string, string> KeyFormatDelegate { get; set; }
+    public new Func<string, string, string> KeyFormatMethod { get; set; }
 }
