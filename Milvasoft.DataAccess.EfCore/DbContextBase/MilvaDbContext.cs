@@ -1,6 +1,7 @@
 ﻿using EFCore.BulkExtensions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
+using Milvasoft.Components.Rest.Request;
 using Milvasoft.Core;
 using Milvasoft.Core.EntityBases.Abstract;
 using Milvasoft.Core.EntityBases.Abstract.MultiLanguage;
@@ -360,9 +361,13 @@ public abstract class MilvaDbContextBase(DbContextOptions options) : DbContext(o
     /// If this method gets soft deleted entities please override <see cref="CommonHelper.CreateIsDeletedFalseExpression{TEntity}"/> method your own condition.
     /// </summary>
     /// <returns></returns>
-    public async Task<List<TEntity>> GetRequiredContentsAsync<TEntity>(Expression<Func<TEntity, TEntity>> projectionExpression = null) where TEntity : class
+    public async Task<List<TEntity>> GetRequiredContentsAsync<TEntity>(FilterRequest filterRequest,
+                                                                       SortRequest sortRequest,
+                                                                       Expression<Func<TEntity, TEntity>> projectionExpression = null) where TEntity : class
         => await Set<TEntity>().Where(CommonHelper.CreateIsDeletedFalseExpression<TEntity>() ?? (entity => true))
                                .IncludeTranslations(this)
+                               .WithFiltering(filterRequest)
+                               .WithSorting(sortRequest)
                                .Select(projectionExpression ?? (entity => entity))
                                .ToListAsync()
                                .ConfigureAwait(false);
@@ -463,7 +468,7 @@ public abstract class MilvaDbContextBase(DbContextOptions options) : DbContext(o
             var taskResult = (Task)this.GetType()
                                        .GetMethod(nameof(GetRequiredContentsAsync))
                                        .MakeGenericMethod(entityType)
-                                       .Invoke(this, new object[] { projectionExpression });
+                                       .Invoke(this, new object[] { parameter.Filtering, parameter.Sorting, projectionExpression });
 
             await taskResult;
 
@@ -473,7 +478,7 @@ public abstract class MilvaDbContextBase(DbContextOptions options) : DbContext(o
 
             var count = lookupList.Count;
 
-            SortedList<int, object> lookups = [];
+            List<object> lookups = [];
 
             if (count > 0)
             {
@@ -508,13 +513,13 @@ public abstract class MilvaDbContextBase(DbContextOptions options) : DbContext(o
                         }
                     }
 
-                    lookups.Add(id, propDic.ToJson().ToObject<object>());
+                    lookups.Add(propDic.ToJson().ToObject<object>());
                 }
 
                 resultList.Add(new LookupResult
                 {
                     EntityName = entityName,
-                    Data = lookups.OrderByDescending(i => i.Key).Select(k => k.Value).ToList(),
+                    Data = lookups
                 });
             }
         }

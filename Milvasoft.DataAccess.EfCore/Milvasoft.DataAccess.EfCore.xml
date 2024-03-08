@@ -300,7 +300,7 @@
             <param name="type"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.DataAccess.EfCore.DbContextBase.MilvaDbContextBase.GetRequiredContentsAsync``1(System.Linq.Expressions.Expression{System.Func{``0,``0}})">
+        <member name="M:Milvasoft.DataAccess.EfCore.DbContextBase.MilvaDbContextBase.GetRequiredContentsAsync``1(Milvasoft.Components.Rest.Request.FilterRequest,Milvasoft.Components.Rest.Request.SortRequest,System.Linq.Expressions.Expression{System.Func{``0,``0}})">
             <summary>
             Gets requested contents by <typeparamref name="TEntity"/> DbSet.
             If this method gets soft deleted entities please override <see cref="M:Milvasoft.Core.CommonHelper.CreateIsDeletedFalseExpression``1"/> method your own condition.
@@ -1717,6 +1717,16 @@
         <member name="P:Milvasoft.DataAccess.EfCore.Utils.LookupModels.LookupRequestParameter.RequestedPropertyNames">
             <summary>
             Requested properties.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.DataAccess.EfCore.Utils.LookupModels.LookupRequestParameter.Filtering">
+            <summary>
+            Filter criterias.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.DataAccess.EfCore.Utils.LookupModels.LookupRequestParameter.Sorting">
+            <summary>
+            Sort criterias.
             </summary>
         </member>
         <member name="T:Milvasoft.DataAccess.EfCore.Utils.LookupModels.LookupResult">

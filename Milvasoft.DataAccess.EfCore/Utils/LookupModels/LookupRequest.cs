@@ -12,8 +12,6 @@ public class LookupRequest
 
 public class LookupRequestParameter
 {
-    public ListRequest ListRequest { get; set; }
-
     /// <summary>
     /// Requested entity name.
     /// </summary>
@@ -23,4 +21,14 @@ public class LookupRequestParameter
     /// Requested properties.
     /// </summary>
     public List<string> RequestedPropertyNames { get; set; }
+
+    /// <summary>
+    /// Filter criterias.
+    /// </summary>
+    public FilterRequest Filtering { get; set; }
+
+    /// <summary>
+    /// Sort criterias.
+    /// </summary>
+    public SortRequest Sorting { get; set; }
 }
