@@ -1,11 +1,16 @@
 ﻿using Milvasoft.Core.Extensions;
 using Milvasoft.Core.MultiLanguage.EntityBases;
 using Milvasoft.Core.MultiLanguage.EntityBases.Abstract;
+using Milvasoft.Core.MultiLanguage.EntityBases.Concrete;
+using Milvasoft.Core.MultiLanguage.Manager;
 using System.Linq.Expressions;
+using System.Reflection;
 
 namespace Milvasoft.Core.MultiLanguage;
 public static class MultiLanguageExtensions
 {
+    private const string _parameterName = "t";
+
     /// <summary>
     /// Creates projection expression for contents service. THIS IS A AMAZING METHOD.
     /// </summary>
@@ -14,38 +19,57 @@ public static class MultiLanguageExtensions
     /// <param name="translationEntityPropertyNames"></param>
     /// <param name="translationEntityType"></param>
     /// <returns></returns>
-    public static Expression<Func<TEntity, TEntity>> CreateProjectionExpression<TEntity>(IEnumerable<string> mainEntityPropertyNames,
+    public static Expression<Func<TEntity, TEntity>> CreateProjectionExpression<TEntity, TTranslationEntity>(IEnumerable<string> mainEntityPropertyNames,
                                                                                          IEnumerable<string> translationEntityPropertyNames,
-                                                                                         Type translationEntityType = null)
+                                                                                         Type translationEntityType = null,
+                                                                                         IMultiLanguageManager multiLanguageManager = null)
     {
         var sourceType = typeof(TEntity);
 
         LambdaExpression translationExpression = null;
 
-        if (!translationEntityPropertyNames.IsNullOrEmpty() && translationEntityType != null)
-        {
-            translationEntityPropertyNames = translationEntityPropertyNames.Append(MultiLanguageEntityPropertyNames.LanguageId);
-
-            var translationParameter = Expression.Parameter(translationEntityType, "t");
-
-            var translationBindings = translationEntityPropertyNames.Select(propName => Expression.Bind(translationEntityType.GetProperty(propName),
-                                                                                                        Expression.Property(translationParameter, propName)));
-
-            var translationBody = Expression.MemberInit(Expression.New(translationEntityType), translationBindings);
-
-            translationExpression = Expression.Lambda(translationBody, translationParameter);
-        }
-
         var parameter = Expression.Parameter(sourceType, "c");
 
         MethodCallExpression selectExpressionForTranslations = null;
 
-        if (translationExpression != null)
+        if (!translationEntityPropertyNames.IsNullOrEmpty() && translationEntityType != null)
         {
+            translationEntityPropertyNames = translationEntityPropertyNames.Append(MultiLanguageEntityPropertyNames.LanguageId);
+
+            var translationParameter = Expression.Parameter(translationEntityType, _parameterName);
+
+            var translationBindings = translationEntityPropertyNames.Select(propName => Expression.Bind(translationEntityType.GetProperty(propName),
+                                                                                                        Expression.Property(translationParameter, propName)));
+
+            // Get the "LanguageId" property of the language entity
+            var languageIdProperty = Expression.Property(translationParameter, MultiLanguageEntityPropertyNames.LanguageId);
+
+            // Create constants for the current language ID and the default language ID
+            var currentLanguageIdConstant = Expression.Constant(multiLanguageManager.GetCurrentLanguageId());
+            var defaultLanguageIdConstant = Expression.Constant(multiLanguageManager.GetDefaultLanguageId());
+
+            // Create an expression to check if the language ID of the language entity is equal to the current language ID
+            var currentlanguageIdEqualExpression = Expression.Equal(languageIdProperty, currentLanguageIdConstant);
+            var defualtlanguageIdEqualExpression = Expression.Equal(languageIdProperty, defaultLanguageIdConstant);
+
+            var wherePredicate = Expression.Lambda<Func<TTranslationEntity, bool>>(Expression.Or(currentlanguageIdEqualExpression, defualtlanguageIdEqualExpression), translationParameter);
+
+            // Call the "Where" method on the "Translations" property with the lambda expression
+            var whereExpression = Expression.Call(typeof(Enumerable),
+                                                  nameof(Enumerable.Where),
+                                                  new Type[] { translationEntityType },
+                                                  Expression.PropertyOrField(parameter, MultiLanguageEntityPropertyNames.Translations),
+                                                  wherePredicate);
+
+            var translationBody = Expression.MemberInit(Expression.New(translationEntityType), translationBindings);
+
+            translationExpression = Expression.Lambda(translationBody, translationParameter);
+
+            // Call the "Select" method on the "Where()" chain with the translationExpression
             selectExpressionForTranslations = Expression.Call(typeof(Enumerable),
                                                               nameof(Enumerable.Select),
                                                               new Type[] { translationEntityType, translationEntityType },
-                                                              Expression.PropertyOrField(parameter, MultiLanguageEntityPropertyNames.Translations),
+                                                              whereExpression,
                                                               translationExpression);
         }
 

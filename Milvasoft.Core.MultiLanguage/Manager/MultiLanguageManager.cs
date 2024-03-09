@@ -76,7 +76,7 @@ public abstract class MultiLanguageManager : IMultiLanguageManager
         var languageIdNotEqualExpression = Expression.NotEqual(currentLanguageIdConstant, defaultLanguageIdConstant);
 
         // Get the "Translations" property of the source entity
-        var translationsProperty = Expression.Property(srcParameter, nameof(HasTranslationEntity<int, object>.Translations));
+        var translationsProperty = Expression.Property(srcParameter, nameof(MultiLanguageEntityPropertyNames.Translations));
 
         var translationEntityType = typeof(TTranslationEntity);
 

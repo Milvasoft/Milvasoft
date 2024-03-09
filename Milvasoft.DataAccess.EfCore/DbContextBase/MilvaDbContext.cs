@@ -463,12 +463,13 @@ public abstract class MilvaDbContextBase(DbContextOptions options) : DbContext(o
             if (!mainEntityPropertyNames.IsNullOrEmpty())
                 propNamesForProjection.AddRange(mainEntityPropertyNames);
 
-            var projectionExpression = _createProjectionExpressionMethod.MakeGenericMethod(entityType).Invoke(null,
+            var projectionExpression = _createProjectionExpressionMethod.MakeGenericMethod(entityType, translationEntityType).Invoke(null,
                                                                                                               new object[]
                                                                                                               {
                                                                                                                   propNamesForProjection,
                                                                                                                   translationEntityPropNames,
-                                                                                                                  translationEntityType
+                                                                                                                  translationEntityType,
+                                                                                                                  multiLanguageManager
                                                                                                               });
 
             var taskResult = (Task)this.GetType()
