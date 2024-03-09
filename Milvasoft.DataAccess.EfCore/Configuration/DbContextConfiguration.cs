@@ -10,8 +10,6 @@ namespace Milvasoft.DataAccess.EfCore.Configuration;
 /// </summary>
 public class DbContextConfiguration
 {
-    private static Assembly _entityAssembly = null;
-
     /// <summary>
     /// If it is true converts all saved DateTimes to UTC. Default value is false.
     /// </summary>
@@ -23,33 +21,12 @@ public class DbContextConfiguration
     public SoftDeletionState DefaultSoftDeletionState { get; set; } = SoftDeletionState.Passive;
 
     /// <summary>
-    /// Entity assembly for <see cref="MilvaDbContextBase.GetLookupsAsync(Utils.LookupModels.LookupRequest)"/> operations.
-    /// </summary>
-    public string EntityAssemblyName { get; set; }
-
-    /// <summary>
-    /// Allowed entity names for <see cref="MilvaDbContextBase.GetLookupsAsync(Utils.LookupModels.LookupRequest)"/> operations.
-    /// </summary>
-    public List<string> AllowedEntityNamesForLookup { get; set; } = [];
-
-    /// <summary>
     /// Current user id getter method for auditing operations.
     /// </summary>
     public Func<IServiceProvider, string> GetCurrentUserNameMethod { get; set; }
 
     /// <summary>
-    /// Current language id getter method for multi language operations.
+    /// Dynamic data fetch configuration.
     /// </summary>
-    public Func<IServiceProvider, object> GetCurrentLanguageIdMethod { get; set; }
-
-    /// <summary>
-    /// Current language id getter method for multi language operations.
-    /// </summary>
-    public Func<IServiceProvider, object> GetDefaultLanguageIdMethod { get; set; }
-
-    /// <summary>
-    /// Gets generic accessor type as <see cref="ICacheAccessor{TAccessor}"/>
-    /// </summary>
-    /// <returns></returns>
-    public Assembly GetEntityAssembly() => _entityAssembly ??= Assembly.Load(EntityAssemblyName);
+    public DynamicFetchConfiguration DynamicFetch { get; set; } = new();
 }

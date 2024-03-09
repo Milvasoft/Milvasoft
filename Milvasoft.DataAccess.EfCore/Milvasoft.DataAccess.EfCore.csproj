@@ -12,6 +12,7 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\Milvasoft.Components.Rest\Milvasoft.Components.Rest.csproj" />
+		<ProjectReference Include="..\Milvasoft.Core.MultiLanguage\Milvasoft.Core.MultiLanguage.csproj" />
 		<ProjectReference Include="..\Milvasoft.Core\Milvasoft.Core.csproj" />
 		<ProjectReference Include="..\Milvasoft.Cryptography\Milvasoft.Cryptography.csproj" />
 			</ItemGroup>

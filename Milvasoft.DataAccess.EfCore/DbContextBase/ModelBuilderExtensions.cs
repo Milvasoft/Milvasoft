@@ -1,9 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Milvasoft.Attributes.Annotations;
-using Milvasoft.Core.EntityBases.Abstract.MultiLanguage;
 using Milvasoft.Core.EntityBases.MultiTenancy;
 using Milvasoft.Core.Exceptions;
+using Milvasoft.Core.MultiLanguage.EntityBases;
+using Milvasoft.Core.MultiLanguage.EntityBases.Abstract;
 using Milvasoft.Core.Utils.Constants;
 using Milvasoft.Cryptography.Abstract;
 using Milvasoft.DataAccess.EfCore.Utils.Converters;
@@ -329,7 +330,7 @@ public static class ModelBuilderExtensions
                                        .Distinct();
 
         foreach (var property in navigations)
-            if (property.Name == EntityPropertyNames.Translations)
+            if (property.Name == MultiLanguageEntityPropertyNames.Translations)
                 source = source.Include(property.Name);
 
         return source;
@@ -341,7 +342,7 @@ public static class ModelBuilderExtensions
     /// </summary>
     /// <param name="source"></param>
     public static IQueryable<TEntity> IncludeTranslations<TEntity, TLangEntity>(this IQueryable<TEntity> source) where TEntity : class, IHasTranslation<TLangEntity> where TLangEntity : class
-        => source.Include(EntityPropertyNames.Translations);
+        => source.Include(MultiLanguageEntityPropertyNames.Translations);
 
     /// <summary>
     /// Translation entities relationships.
@@ -357,9 +358,9 @@ public static class ModelBuilderExtensions
         foreach (var entityType in languageEntities)
         {
             modelBuilder.Entity(entityType.ClrType)
-                        .HasMany(EntityPropertyNames.Translations)
-                        .WithOne(EntityPropertyNames.Entity)
-                        .HasForeignKey(EntityPropertyNames.EntityId);
+                        .HasMany(MultiLanguageEntityPropertyNames.Translations)
+                        .WithOne(MultiLanguageEntityPropertyNames.Entity)
+                        .HasForeignKey(MultiLanguageEntityPropertyNames.EntityId);
         }
 
         return modelBuilder;

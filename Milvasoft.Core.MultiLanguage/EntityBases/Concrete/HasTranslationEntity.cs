@@ -1,9 +1,10 @@
 ﻿using Milvasoft.Core.EntityBases.Abstract;
-using Milvasoft.Core.EntityBases.Abstract.MultiLanguage;
+using Milvasoft.Core.EntityBases.Concrete;
+using Milvasoft.Core.MultiLanguage.EntityBases.Abstract;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Milvasoft.Core.EntityBases.Concrete.MultiLanguage;
+namespace Milvasoft.Core.MultiLanguage.EntityBases.Concrete;
 
 /// <summary>
 /// Base entity for all of entities.

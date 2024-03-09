@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Milvasoft.Core.EntityBases.Abstract.MultiLanguage;
+namespace Milvasoft.Core.MultiLanguage.EntityBases.Abstract;
 
 /// <summary>
 /// Dummy interface for type findings.

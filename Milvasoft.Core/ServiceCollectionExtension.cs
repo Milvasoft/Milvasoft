@@ -12,5 +12,5 @@ public static class ServiceCollectionExtension
     /// </summary>
     /// <param name="services"></param>
     /// <returns></returns>
-    public static IServiceCollection AddMilvaLazy(this IServiceCollection services) => services.AddTransient(typeof(Lazy<>), typeof(MilvaLazy<>));
+    public static IServiceCollection AddMilvaLazy(this IServiceCollection services) => services.AddTransient(typeof(Lazy<>), typeof(MilvaLazy<>));  
 }

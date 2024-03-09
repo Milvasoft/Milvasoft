@@ -74,34 +74,39 @@
             Soft delete state when delete operation. Default value is false.
             </summary>
         </member>
-        <member name="P:Milvasoft.DataAccess.EfCore.Configuration.DbContextConfiguration.EntityAssemblyName">
-            <summary>
-            Entity assembly for <see cref="M:Milvasoft.DataAccess.EfCore.DbContextBase.MilvaDbContextBase.GetLookupsAsync(Milvasoft.DataAccess.EfCore.Utils.LookupModels.LookupRequest)"/> operations.
-            </summary>
-        </member>
-        <member name="P:Milvasoft.DataAccess.EfCore.Configuration.DbContextConfiguration.AllowedEntityNamesForLookup">
-            <summary>
-            Allowed entity names for <see cref="M:Milvasoft.DataAccess.EfCore.DbContextBase.MilvaDbContextBase.GetLookupsAsync(Milvasoft.DataAccess.EfCore.Utils.LookupModels.LookupRequest)"/> operations.
-            </summary>
-        </member>
         <member name="P:Milvasoft.DataAccess.EfCore.Configuration.DbContextConfiguration.GetCurrentUserNameMethod">
             <summary>
             Current user id getter method for auditing operations.
             </summary>
         </member>
-        <member name="P:Milvasoft.DataAccess.EfCore.Configuration.DbContextConfiguration.GetCurrentLanguageIdMethod">
+        <member name="P:Milvasoft.DataAccess.EfCore.Configuration.DbContextConfiguration.DynamicFetch">
             <summary>
-            Current language id getter method for multi language operations.
+            Dynamic data fetch configuration.
             </summary>
         </member>
-        <member name="P:Milvasoft.DataAccess.EfCore.Configuration.DbContextConfiguration.GetDefaultLanguageIdMethod">
+        <member name="T:Milvasoft.DataAccess.EfCore.Configuration.DynamicFetchConfiguration">
             <summary>
-            Current language id getter method for multi language operations.
+            IOptions aware custom MilvaDbContext configurations.
             </summary>
         </member>
-        <member name="M:Milvasoft.DataAccess.EfCore.Configuration.DbContextConfiguration.GetEntityAssembly">
+        <member name="P:Milvasoft.DataAccess.EfCore.Configuration.DynamicFetchConfiguration.EntityAssemblyName">
             <summary>
-            Gets generic accessor type as <see cref="T:Milvasoft.Core.Abstractions.Cache.ICacheAccessor`1"/>
+            Entity assembly for <see cref="M:Milvasoft.DataAccess.EfCore.DbContextBase.MilvaDbContextBase.GetLookupsAsync(Milvasoft.DataAccess.EfCore.Utils.LookupModels.LookupRequest)"/> operations.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.DataAccess.EfCore.Configuration.DynamicFetchConfiguration.AllowedEntityNamesForLookup">
+            <summary>
+            Allowed entity names for <see cref="M:Milvasoft.DataAccess.EfCore.DbContextBase.MilvaDbContextBase.GetLookupsAsync(Milvasoft.DataAccess.EfCore.Utils.LookupModels.LookupRequest)"/> operations.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.DataAccess.EfCore.Configuration.DynamicFetchConfiguration.MaxAllowedPropertyCountForLookup">
+            <summary>
+            Allowed entity count for dynamic fetch. Default value is 5.
+            </summary>
+        </member>
+        <member name="M:Milvasoft.DataAccess.EfCore.Configuration.DynamicFetchConfiguration.GetEntityAssembly">
+            <summary>
+            Gets assembly for entity operations.    
             </summary>
             <returns></returns>
         </member>
@@ -1856,16 +1861,6 @@
             <typeparam name="TDto"></typeparam>
             <typeparam name="TEntity"></typeparam>
             <param name="dto"></param>
-        </member>
-        <member name="M:Milvasoft.DataAccess.EfCore.Utils.MilvaEfExtensions.CreateProjectionExpression``1(System.Collections.Generic.IEnumerable{System.String},System.Collections.Generic.IEnumerable{System.String},System.Type)">
-            <summary>
-            Creates projection expression for contents service. THIS IS A AMAZING METHOD.
-            </summary>
-            <typeparam name="TEntity"></typeparam>
-            <param name="mainEntityPropertyNames"></param>
-            <param name="translationEntityPropertyNames"></param>
-            <param name="translationEntityType"></param>
-            <returns></returns>
         </member>
         <member name="T:Milvasoft.DataAccess.EfCore.Utils.SetPropertyBuilder`1">
             <summary>

@@ -6,6 +6,7 @@ using Milvasoft.Core;
 using Milvasoft.Core.EntityBases.Abstract;
 using Milvasoft.Core.Exceptions;
 using Milvasoft.Core.Extensions;
+using Milvasoft.Core.MultiLanguage.EntityBases;
 using Milvasoft.Core.Utils.Constants;
 using Milvasoft.DataAccess.EfCore.Configuration;
 using Milvasoft.DataAccess.EfCore.RepositoryBase.Abstract;

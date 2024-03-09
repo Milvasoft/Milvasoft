@@ -70,7 +70,7 @@ public static class ServiceCollectionExtension
             throw new MilvaDeveloperException("Please provide post configure options.");
 
         if (!services.Any(s => s.ServiceType == typeof(IConfigureOptions<DataAccessConfiguration>)))
-            throw new MilvaDeveloperException("Please configure options with WithOptions() builder method before post configuring.");
+            throw new MilvaDeveloperException("Please configure options with ConfigureMilvaDataAccess() method before post configuring.");
 
         var config = new DataAccessPostConfigureConfiguration();
 
@@ -79,15 +79,11 @@ public static class ServiceCollectionExtension
         services.UpdateSingletonInstance<IDataAccessConfiguration>(opt =>
         {
             opt.DbContext.GetCurrentUserNameMethod = config.GetCurrentUserNameMethod ?? opt.DbContext.GetCurrentUserNameMethod;
-            opt.DbContext.GetCurrentLanguageIdMethod = config.GetCurrentLanguageIdMethod ?? opt.DbContext.GetCurrentLanguageIdMethod;
-            opt.DbContext.GetDefaultLanguageIdMethod = config.GetDefaultLanguageIdMethod ?? opt.DbContext.GetDefaultLanguageIdMethod;
         });
 
         services.PostConfigure<DataAccessConfiguration>(opt =>
         {
             opt.DbContext.GetCurrentUserNameMethod = config.GetCurrentUserNameMethod ?? opt.DbContext.GetCurrentUserNameMethod;
-            opt.DbContext.GetCurrentLanguageIdMethod = config.GetCurrentLanguageIdMethod ?? opt.DbContext.GetCurrentLanguageIdMethod;
-            opt.DbContext.GetDefaultLanguageIdMethod = config.GetDefaultLanguageIdMethod ?? opt.DbContext.GetDefaultLanguageIdMethod;
         });
 
         return services;

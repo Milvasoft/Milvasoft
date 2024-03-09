@@ -1,14 +1,15 @@
 ﻿using Milvasoft.Core.EntityBases.Abstract;
-using Milvasoft.Core.EntityBases.Abstract.MultiLanguage;
+using Milvasoft.Core.EntityBases.Concrete;
+using Milvasoft.Core.MultiLanguage.EntityBases.Abstract;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Milvasoft.Core.EntityBases.Concrete.MultiLanguage;
+namespace Milvasoft.Core.MultiLanguage.EntityBases.Concrete;
 
 /// <summary>
 /// Base entity for all of entities.
 /// </summary>
-public abstract class TranslationEntity<TEntity> : TranslationEntity<int, TEntity, int, int>, ITranslationEntityWithIntKey<TEntity>
+public abstract class TranslationEntity<TEntity> : TranslationEntity<int, TEntity, int>, ITranslationEntityWithIntKey<TEntity>
     where TEntity : class
 {
 }
@@ -16,7 +17,7 @@ public abstract class TranslationEntity<TEntity> : TranslationEntity<int, TEntit
 /// <summary>
 /// Base entity for all of entities.
 /// </summary>
-public abstract class TranslationEntity<TKey, TEntity, TEntityKey, TLanguageKey> : EntityBase, ITranslationEntity<TEntity, TEntityKey, TLanguageKey>, IBaseEntity<TKey>
+public abstract class TranslationEntity<TKey, TEntity, TEntityKey> : EntityBase, ITranslationEntity<TEntity, TEntityKey>, IBaseEntity<TKey>
     where TKey : struct, IEquatable<TKey>
     where TEntity : class
 {
@@ -35,7 +36,7 @@ public abstract class TranslationEntity<TKey, TEntity, TEntityKey, TLanguageKey>
     /// <summary> 
     /// Language of menu which is related.
     /// </summary>
-    public TLanguageKey LanguageId { get; set; }
+    public int LanguageId { get; set; }
 
     /// <summary> 
     /// Language of menu which is related.
