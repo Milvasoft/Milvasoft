@@ -73,7 +73,7 @@ public class FilterRequest
             else
             {
                 var value = ((JsonElement)filter.Value).Deserialize(propertyType);
-                var value2 = ((JsonElement)filter.Value).Deserialize(propertyType);
+                var value2 = ((JsonElement)filter.OtherValue).Deserialize(propertyType);
 
                 expression.By(filter.FilterBy, operation, value, value2, Connector.And);
             }
