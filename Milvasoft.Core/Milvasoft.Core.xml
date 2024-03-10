@@ -984,6 +984,21 @@
             <param name="input"></param>
             <returns></returns>
         </member>
+        <member name="M:Milvasoft.Core.CommonHelper.Deserialize(System.Text.Json.JsonElement,System.Type)">
+            <summary>
+            Deserializes json element to <paramref name="type"/>. 
+            </summary>
+            <param name="element"></param>
+            <param name="type"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Core.CommonHelper.IsEnumerableType(System.Type)">
+            <summary>
+            Determines wheter the <paramref name="type"/> is enumerable or not.
+            </summary>
+            <param name="type"></param>
+            <returns></returns>
+        </member>
         <member name="T:Milvasoft.Core.EntityBases.Abstract.Auditing.IHasCreator">
             <summary>
             Determines entity has creator.

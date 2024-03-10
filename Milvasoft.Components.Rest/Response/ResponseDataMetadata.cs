@@ -44,6 +44,11 @@ public class ResponseDataMetadata : IHasMetadata
     public bool Filterable { get; set; }
 
     /// <summary>
+    /// Filter format used to filter requests. You must send this value to the FilterRequest.FilterBy value in filter requests.
+    /// </summary>
+    public string FilterFormat { get; set; }
+
+    /// <summary>
     /// Default value if column or property data is null.
     /// </summary>
     public object DefaultValue { get; set; } = default;

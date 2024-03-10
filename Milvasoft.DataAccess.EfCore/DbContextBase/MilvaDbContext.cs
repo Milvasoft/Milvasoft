@@ -472,10 +472,17 @@ public abstract class MilvaDbContextBase(DbContextOptions options) : DbContext(o
                                                                                                                   multiLanguageManager
                                                                                                               });
 
+            parameter.UpdateFilterByForTranslationPropertyNames(translationEntityPropNames);
+
             var taskResult = (Task)this.GetType()
                                        .GetMethod(nameof(GetRequiredContentsAsync))
                                        .MakeGenericMethod(entityType)
-                                       .Invoke(this, new object[] { parameter.Filtering, parameter.Sorting, projectionExpression });
+                                       .Invoke(this, new object[]
+                                       {
+                                           parameter.Filtering,
+                                           parameter.Sorting,
+                                           projectionExpression
+                                       });
 
             await taskResult;
 

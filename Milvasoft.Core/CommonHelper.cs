@@ -7,6 +7,7 @@ using Milvasoft.Core.Exceptions;
 using Milvasoft.Core.Extensions;
 using Milvasoft.Core.Utils.Constants;
 using Milvasoft.Core.Utils.JsonConverters;
+using System.Collections;
 using System.ComponentModel;
 using System.Linq.Expressions;
 using System.Reflection;
@@ -22,6 +23,8 @@ namespace Milvasoft.Core;
 /// </summary>
 public static class CommonHelper
 {
+    private static readonly MethodInfo _deserializeMethod = typeof(JsonSerializer).GetMethod(nameof(JsonSerializer.Deserialize), [typeof(JsonElement), typeof(JsonSerializerOptions)]);
+
     /// <summary>
     /// Checks if there is a property named <paramref name="propertyName"/> in the properties of <b>typeof(<typeparamref name="T"/>)</b>. 
     /// </summary>
@@ -556,4 +559,26 @@ public static class CommonHelper
         // Return the hexadecimal string.
         return sBuilder.ToString();
     }
+
+    /// <summary>
+    /// Deserializes json element to <paramref name="type"/>. 
+    /// </summary>
+    /// <param name="element"></param>
+    /// <param name="type"></param>
+    /// <returns></returns>
+    public static object Deserialize(this JsonElement element, Type type)
+    {
+        var genericMethod = _deserializeMethod.MakeGenericMethod(type);
+
+        var value = genericMethod.Invoke(null, [element, null]);
+
+        return value;
+    }
+
+    /// <summary>
+    /// Determines wheter the <paramref name="type"/> is enumerable or not.
+    /// </summary>
+    /// <param name="type"></param>
+    /// <returns></returns>
+    public static bool IsEnumerableType(this Type type) => (type.GetInterface(nameof(IEnumerable)) != null);
 }

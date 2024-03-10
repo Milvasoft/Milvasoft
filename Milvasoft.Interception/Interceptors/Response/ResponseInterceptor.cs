@@ -132,6 +132,7 @@ public class ResponseInterceptor(IServiceProvider serviceProvider, IResponseInte
             metadata.Display = !TryGetAttribute(prop, out BrowsableAttribute browsableAttribute) || browsableAttribute.Browsable;
             metadata.Mask = mask;
             metadata.Filterable = !TryGetAttribute(prop, out FilterableAttribute filterableAttribute) || filterableAttribute.Filterable;
+            metadata.FilterFormat = filterableAttribute?.FilterFormat ?? prop.Name;
             metadata.Pinned = TryGetAttribute(prop, out PinnedAttribute pinnedAttribute) && pinnedAttribute.Pinned;
             metadata.DecimalPrecision = TryGetAttribute(prop, out DecimalPrecisionAttribute decimalPrecisionAttribute) ? decimalPrecisionAttribute.DecimalPrecision : null;
             metadata.TooltipFormat = TryGetAttribute(prop, out TooltipFormatAttribute cellTooltipFormatAttribute) ? cellTooltipFormatAttribute.Format : null;
