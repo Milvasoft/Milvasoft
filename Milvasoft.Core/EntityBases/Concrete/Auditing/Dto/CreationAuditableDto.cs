@@ -1,12 +1,12 @@
 ﻿using Milvasoft.Core.EntityBases.Abstract;
 
-namespace Milvasoft.Core.EntityBases.Concrete.Auditing;
+namespace Milvasoft.Core.EntityBases.Concrete.Auditing.Dto;
 
 /// <summary>
 /// Determines entity's creation is auditable.
 /// </summary>
 /// <typeparam name="TKey">Type of the user</typeparam>
-public abstract class CreationAuditableEntity<TKey> : BaseEntity<TKey>, ICreationAuditable<TKey>
+public abstract class CreationAuditableDto<TKey> : BaseDto<TKey>, ICreationAuditable<TKey>
     where TKey : struct, IEquatable<TKey>
 {
     /// <summary>
@@ -24,7 +24,7 @@ public abstract class CreationAuditableEntity<TKey> : BaseEntity<TKey>, ICreatio
 /// Determines entity's creation is auditable without user.
 /// </summary>
 /// <typeparam name="TKey">Type of the user</typeparam>
-public abstract class CreationAuditableEntityWithoutUser<TKey> : EntityBase<TKey>, ICreationAuditableWithoutUser<TKey>
+public abstract class CreationAuditableDtoWithoutUser<TKey> : DtoBase<TKey>, ICreationAuditableWithoutUser<TKey>
 {
     /// <summary>
     /// Creation date of entity.

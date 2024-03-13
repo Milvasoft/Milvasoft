@@ -1186,6 +1186,97 @@
             Creation date of entity.
             </summary>
         </member>
+        <member name="T:Milvasoft.Core.EntityBases.Concrete.Auditing.Dto.AuditableDto`1">
+            <summary>
+            Determines entity's is auditable with modifier and modification date.
+            </summary>
+            <typeparam name="TKey">Type of the user</typeparam>
+        </member>
+        <member name="P:Milvasoft.Core.EntityBases.Concrete.Auditing.Dto.AuditableDto`1.LastModificationDate">
+            <summary>
+            Last modification date of entity.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Core.EntityBases.Concrete.Auditing.Dto.AuditableDto`1.LastModifierUserName">
+            <summary>
+            Modifier of entity.
+            </summary>
+        </member>
+        <member name="T:Milvasoft.Core.EntityBases.Concrete.Auditing.Dto.AuditableDtoWithoutUser`1">
+            <summary>
+            Determines entity's is auditable with modifier and modification date.
+            </summary>
+            <typeparam name="TKey">Type of the user</typeparam>
+        </member>
+        <member name="P:Milvasoft.Core.EntityBases.Concrete.Auditing.Dto.AuditableDtoWithoutUser`1.LastModificationDate">
+            <summary>
+            Last modification date of entity.
+            </summary>
+        </member>
+        <member name="T:Milvasoft.Core.EntityBases.Concrete.Auditing.Dto.CreationAuditableDto`1">
+            <summary>
+            Determines entity's creation is auditable.
+            </summary>
+            <typeparam name="TKey">Type of the user</typeparam>
+        </member>
+        <member name="P:Milvasoft.Core.EntityBases.Concrete.Auditing.Dto.CreationAuditableDto`1.CreationDate">
+            <summary>
+            Creation date of entity.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Core.EntityBases.Concrete.Auditing.Dto.CreationAuditableDto`1.CreatorUserName">
+            <summary>
+            Creator of entity.
+            </summary>
+        </member>
+        <member name="T:Milvasoft.Core.EntityBases.Concrete.Auditing.Dto.CreationAuditableDtoWithoutUser`1">
+            <summary>
+            Determines entity's creation is auditable without user.
+            </summary>
+            <typeparam name="TKey">Type of the user</typeparam>
+        </member>
+        <member name="P:Milvasoft.Core.EntityBases.Concrete.Auditing.Dto.CreationAuditableDtoWithoutUser`1.CreationDate">
+            <summary>
+            Creation date of entity.
+            </summary>
+        </member>
+        <member name="T:Milvasoft.Core.EntityBases.Concrete.Auditing.Dto.FullAuditableDto`1">
+            <summary>
+            Determines entity is fully auditable soft deletable entity.
+            </summary>
+            <typeparam name="TKey">Type of the user</typeparam>
+        </member>
+        <member name="P:Milvasoft.Core.EntityBases.Concrete.Auditing.Dto.FullAuditableDto`1.DeletionDate">
+            <summary>
+            Deletion date of entity.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Core.EntityBases.Concrete.Auditing.Dto.FullAuditableDto`1.DeleterUserName">
+            <summary>
+            Deleter of entity.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Core.EntityBases.Concrete.Auditing.Dto.FullAuditableDto`1.IsDeleted">
+            <summary>
+            Gets or sets a value indicating whether IsDeleted.
+            </summary>
+        </member>
+        <member name="T:Milvasoft.Core.EntityBases.Concrete.Auditing.Dto.FullAuditableDtoWithoutUser`1">
+            <summary>
+            Determines entity is fully auditable without user.
+            </summary>
+            <typeparam name="TKey">Type of the user</typeparam>
+        </member>
+        <member name="P:Milvasoft.Core.EntityBases.Concrete.Auditing.Dto.FullAuditableDtoWithoutUser`1.DeletionDate">
+            <summary>
+            Deletion date of entity.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Core.EntityBases.Concrete.Auditing.Dto.FullAuditableDtoWithoutUser`1.IsDeleted">
+            <summary>
+            Gets or sets a value indicating whether IsDeleted.
+            </summary>
+        </member>
         <member name="T:Milvasoft.Core.EntityBases.Concrete.Auditing.FullAuditableEntity`1">
             <summary>
             Determines entity is fully auditable soft deletable entity.
@@ -1225,39 +1316,39 @@
         </member>
         <member name="T:Milvasoft.Core.EntityBases.Concrete.BaseDto`1">
             <summary>
-            Base entity for all of entities.
+            Base dto for all of dtos.
             </summary>
         </member>
         <member name="P:Milvasoft.Core.EntityBases.Concrete.BaseDto`1.Id">
             <summary>
-            Unique identifier for this entity.
+            Unique identifier for this dto.
             </summary>
         </member>
         <member name="M:Milvasoft.Core.EntityBases.Concrete.BaseDto`1.ToString">
             <summary>
-            Returns this instance of "<see cref="T:System.Type"/>.Name <see cref="T:Milvasoft.Core.EntityBases.Concrete.BaseEntity`1"/>.Id" as string.
+            Returns this instance of "<see cref="T:System.Type"/>.Name <see cref="T:Milvasoft.Core.EntityBases.Concrete.BaseDto`1"/>.Id" as string.
             </summary>
             <returns></returns>
         </member>
         <member name="T:Milvasoft.Core.EntityBases.Concrete.DtoBase`1">
             <summary>
-            Base entity for all of entities.
+            Base dto for all of dtos.
             </summary>
         </member>
         <member name="P:Milvasoft.Core.EntityBases.Concrete.DtoBase`1.Id">
             <summary>
-            Unique identifier for this entity.
+            Unique identifier for this dto.
             </summary>
         </member>
         <member name="M:Milvasoft.Core.EntityBases.Concrete.DtoBase`1.ToString">
             <summary>
-            Returns this instance of "<see cref="T:System.Type"/>.Name <see cref="T:Milvasoft.Core.EntityBases.Concrete.BaseEntity`1"/>.Id" as string.
+            Returns this instance of "<see cref="T:System.Type"/>.Name <see cref="T:Milvasoft.Core.EntityBases.Concrete.DtoBase`1"/>.Id" as string.
             </summary>
             <returns></returns>
         </member>
         <member name="T:Milvasoft.Core.EntityBases.Concrete.DtoBase">
             <summary>
-            Base entity for all of entities.
+            Base dto for all of dtos.
             </summary>
         </member>
         <member name="M:Milvasoft.Core.EntityBases.Concrete.DtoBase.#ctor">

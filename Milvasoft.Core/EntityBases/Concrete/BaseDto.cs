@@ -6,45 +6,41 @@ using System.Reflection;
 namespace Milvasoft.Core.EntityBases.Concrete;
 
 /// <summary>
-/// Base entity for all of entities.
+/// Base dto for all of dtos.
 /// </summary>
 public abstract class BaseDto<TKey> : DtoBase, IBaseEntity<TKey> where TKey : struct, IEquatable<TKey>
 {
     /// <summary>
-    /// Unique identifier for this entity.
+    /// Unique identifier for this dto.
     /// </summary>
-    [Key]
-    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public virtual TKey Id { get; set; }
 
     /// <summary>
-    /// Returns this instance of "<see cref="Type"/>.Name <see cref="BaseEntity{TKey}"/>.Id" as string.
+    /// Returns this instance of "<see cref="Type"/>.Name <see cref="BaseDto{TKey}"/>.Id" as string.
     /// </summary>
     /// <returns></returns>
     public override string ToString() => $"[{GetType().Name} {Id}]";
 }
 
 /// <summary>
-/// Base entity for all of entities.
+/// Base dto for all of dtos.
 /// </summary>
 public abstract class DtoBase<TKey> : DtoBase, IEntityBase<TKey>
 {
     /// <summary>
-    /// Unique identifier for this entity.
+    /// Unique identifier for this dto.
     /// </summary>
-    [Key]
-    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public virtual TKey Id { get; set; }
 
     /// <summary>
-    /// Returns this instance of "<see cref="Type"/>.Name <see cref="BaseEntity{TKey}"/>.Id" as string.
+    /// Returns this instance of "<see cref="Type"/>.Name <see cref="DtoBase{TKey}"/>.Id" as string.
     /// </summary>
     /// <returns></returns>
     public override string ToString() => $"[{GetType().Name} {Id}]";
 }
 
 /// <summary>
-/// Base entity for all of entities.
+/// Base dto for all of dtos.
 /// </summary>
 public abstract class DtoBase
 {

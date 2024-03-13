@@ -11,7 +11,7 @@ public interface ICreationAuditable<TKey> : IBaseEntity<TKey>, IHasCreator where
     /// <summary>
     /// Creation date of entity.
     /// </summary>
-    public DateTime CreationDate { get; set; }
+    public DateTime? CreationDate { get; set; }
 }
 
 /// <summary>
@@ -23,5 +23,5 @@ public interface ICreationAuditableWithoutUser<TKey> : IEntityBase<TKey>
     /// <summary>
     /// Creation date of entity.
     /// </summary>
-    public DateTime CreationDate { get; set; }
+    public DateTime? CreationDate { get; set; }
 }

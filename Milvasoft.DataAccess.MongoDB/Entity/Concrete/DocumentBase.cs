@@ -12,7 +12,7 @@ namespace Milvasoft.DataAccess.MongoDB.Entity.Concrete;
 public abstract class DocumentBase : IDocumentBase
 {
     private static readonly bool _developmentEnv = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development";
-    private DateTime _creationDate;
+    private DateTime? _creationDate;
 
     /// <summary>
     /// Unique key of entity.
@@ -29,7 +29,7 @@ public abstract class DocumentBase : IDocumentBase
     /// <summary>
     /// Creation date of entity.
     /// </summary>
-    public virtual DateTime CreationDate
+    public virtual DateTime? CreationDate
     {
         get => _developmentEnv ? _creationDate : Id.CreationTime;
         set
