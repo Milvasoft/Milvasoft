@@ -1,0 +1,54 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net8.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>disable</Nullable>
+		<PackageIcon>milvalogo.png</PackageIcon>
+		<GenerateDocumentationFile>true</GenerateDocumentationFile>
+		<IsPackable>true</IsPackable>
+		<DocumentationFile>..\Milvasoft.DataAccess.EfCore\Milvasoft.DataAccess.EfCore.xml</DocumentationFile>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\..\Components\Milvasoft.Components.Rest\Milvasoft.Components.Rest.csproj" />
+		<ProjectReference Include="..\..\Core\Milvasoft.Core.MultiLanguage\Milvasoft.Core.MultiLanguage.csproj" />
+		<ProjectReference Include="..\..\Cryptography\Milvasoft.Cryptography\Milvasoft.Cryptography.csproj" />
+			</ItemGroup>
+
+	<ItemGroup>
+		<None Update="Milvasoft.DataAccess.EfCore.xml">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="Resources\milvalogo.png">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Include="Resources\milvalogo.png">
+			<Pack>True</Pack>
+			<PackagePath></PackagePath>
+		</None>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <PackageReference Include="EFCore.BulkExtensions" Version="8.0.2" />
+	  <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.2" />
+	  <PackageReference Include="MongoDB.Bson" Version="2.24.0" />
+	</ItemGroup>
+
+	<PropertyGroup>
+
+		<PackageId>Milvasoft.DataAccess.EfCore</PackageId>
+		<RepositoryUrl>https://github.com/Milvasoft/Milvasoft/tree/master/Milvasoft.Helpers</RepositoryUrl>
+		<RepositoryType>git</RepositoryType>
+		<PackageProjectUrl>https://github.com/Milvasoft/Milvasoft/tree/master/Milvasoft.Helpers</PackageProjectUrl>
+		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+		<Authors>Milvasoft Corporation</Authors>
+		<Product>Milvasoft.DataAccess.EfCore</Product>
+		<Description>Ef Core helpers. </Description>
+		<PackageTags>efcore,ef,dbcontext,pooling,auditing,sql,optimisation,performance</PackageTags>
+		<Copyright>Milvasoft Yazılım Bilişim Araştırma Geliştirme Danışmanlık Sanayi ve Ticaret Ltd.Şti.</Copyright>
+		<Version>8.0.0</Version>
+		<PackageIcon>milvalogo.png</PackageIcon>
+
+	</PropertyGroup>
+</Project>

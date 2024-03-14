@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.32112.339
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Milvasoft.Helpers", "Milvasoft.Helpers\Milvasoft.Helpers.csproj", "{49A1B0F8-BAC8-433A-A5B8-737E28A5AFA6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Milvasoft.Helpers", "src\Milvasoft.Helpers\Milvasoft.Helpers.csproj", "{49A1B0F8-BAC8-433A-A5B8-737E28A5AFA6}"
 	ProjectSection(ProjectDependencies) = postProject
 		{01550FD0-ECE6-4115-9F4F-896A45D63309} = {01550FD0-ECE6-4115-9F4F-896A45D63309}
 		{05965A25-0E62-4AF5-B2EA-C523DC61B9A2} = {05965A25-0E62-4AF5-B2EA-C523DC61B9A2}
@@ -14,47 +14,47 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Milvasoft.Helpers", "Milvas
 		{B89E4D68-C979-49F2-8F70-82B2212B300B} = {B89E4D68-C979-49F2-8F70-82B2212B300B}
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Milvasoft.Core", "Milvasoft.Core\Milvasoft.Core.csproj", "{518CFB64-0A25-4A0E-B211-37FD4D954B06}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Milvasoft.Core", "src\Core\Milvasoft.Core\Milvasoft.Core.csproj", "{518CFB64-0A25-4A0E-B211-37FD4D954B06}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Milvasoft.Attributes", "Milvasoft.Attributes\Milvasoft.Attributes.csproj", "{C05F57B0-324F-4CB0-AF94-CBDCA42664B2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Milvasoft.Attributes", "src\Components\Milvasoft.Attributes\Milvasoft.Attributes.csproj", "{C05F57B0-324F-4CB0-AF94-CBDCA42664B2}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Milvasoft.DataAccess.EfCore", "Milvasoft.DataAccess.EfCore\Milvasoft.DataAccess.EfCore.csproj", "{A0E4179E-9430-475C-B3B5-9AC92A98937C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Milvasoft.DataAccess.EfCore", "src\DataAccess\Milvasoft.DataAccess.EfCore\Milvasoft.DataAccess.EfCore.csproj", "{A0E4179E-9430-475C-B3B5-9AC92A98937C}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Milvasoft.FileOperations", "Milvasoft.FileOperations\Milvasoft.FileOperations.csproj", "{0AF4223B-E356-4513-BC22-726BDDD7EB5B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Milvasoft.FileOperations", "src\FileOperations\Milvasoft.FileOperations\Milvasoft.FileOperations.csproj", "{0AF4223B-E356-4513-BC22-726BDDD7EB5B}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Milvasoft.DataAccess.MongoDB", "Milvasoft.DataAccess.MongoDB\Milvasoft.DataAccess.MongoDB.csproj", "{1DEB3F78-6597-438F-BA1C-FBB8541411D9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Milvasoft.DataAccess.MongoDB", "src\DataAccess\Milvasoft.DataAccess.MongoDB\Milvasoft.DataAccess.MongoDB.csproj", "{1DEB3F78-6597-438F-BA1C-FBB8541411D9}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Milvasoft.Caching.Redis", "Milvasoft.Caching.Redis\Milvasoft.Caching.Redis.csproj", "{121E1097-84B3-4368-A9B3-053A8A7FC925}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Milvasoft.Caching.Redis", "src\Caching\Milvasoft.Caching.Redis\Milvasoft.Caching.Redis.csproj", "{121E1097-84B3-4368-A9B3-053A8A7FC925}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Milvasoft.JobScheduling", "Milvasoft.JobScheduling\Milvasoft.JobScheduling.csproj", "{02E16D19-889E-45CD-A83B-648C922E15F1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Milvasoft.JobScheduling", "src\Scheduling\Milvasoft.JobScheduling\Milvasoft.JobScheduling.csproj", "{02E16D19-889E-45CD-A83B-648C922E15F1}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Milvasoft.MultiTenancy", "Milvasoft.MultiTenancy\Milvasoft.MultiTenancy.csproj", "{61B0487A-793E-4206-8D5F-11772F480EFB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Milvasoft.MultiTenancy", "src\MultiTenancy\Milvasoft.MultiTenancy\Milvasoft.MultiTenancy.csproj", "{61B0487A-793E-4206-8D5F-11772F480EFB}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Milvasoft.Identity", "Milvasoft.Identity\Milvasoft.Identity.csproj", "{E6F13F18-9B46-4F5D-9BB8-45991B40B198}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Milvasoft.Identity", "src\Identity\Milvasoft.Identity\Milvasoft.Identity.csproj", "{E6F13F18-9B46-4F5D-9BB8-45991B40B198}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Milvasoft.Middlewares", "Milvasoft.Middlewares\Milvasoft.Middlewares.csproj", "{5473C000-4230-4E31-A7BC-CD1DCC21908C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Milvasoft.Middlewares", "src\Middlewares\Milvasoft.Middlewares\Milvasoft.Middlewares.csproj", "{5473C000-4230-4E31-A7BC-CD1DCC21908C}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Milvasoft.Localization", "Milvasoft.Localization\Milvasoft.Localization.csproj", "{01550FD0-ECE6-4115-9F4F-896A45D63309}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Milvasoft.Localization", "src\Localization\Milvasoft.Localization\Milvasoft.Localization.csproj", "{01550FD0-ECE6-4115-9F4F-896A45D63309}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Localization", "Localization", "{4DDD7543-7217-418C-899E-525D0D3C0E59}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Milvasoft.Localization.Redis", "Milvasoft.Localization.Redis\Milvasoft.Localization.Redis.csproj", "{60BF9EEC-6824-4FEC-9E73-9884941DEA55}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Milvasoft.Localization.Redis", "src\Localization\Milvasoft.Localization.Redis\Milvasoft.Localization.Redis.csproj", "{60BF9EEC-6824-4FEC-9E73-9884941DEA55}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Milvasoft.Localization.Resx", "Milvasoft.Localization.Resx\Milvasoft.Localization.Resx.csproj", "{3ADC85B1-AA00-4FB2-A2B7-94DC629A8471}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Milvasoft.Localization.Resx", "src\Localization\Milvasoft.Localization.Resx\Milvasoft.Localization.Resx.csproj", "{3ADC85B1-AA00-4FB2-A2B7-94DC629A8471}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Milvasoft.Types", "Milvasoft.Types\Milvasoft.Types.csproj", "{B89E4D68-C979-49F2-8F70-82B2212B300B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Milvasoft.Types", "src\Components\Milvasoft.Types\Milvasoft.Types.csproj", "{B89E4D68-C979-49F2-8F70-82B2212B300B}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Milvasoft.Interception", "Milvasoft.Interception\Milvasoft.Interception.csproj", "{5D42AB35-DC86-41AE-9781-1D0A957FCDDC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Milvasoft.Interception", "src\Interception\Milvasoft.Interception\Milvasoft.Interception.csproj", "{5D42AB35-DC86-41AE-9781-1D0A957FCDDC}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Milvasoft.Components.Rest", "Milvasoft.Components.Rest\Milvasoft.Components.Rest.csproj", "{05965A25-0E62-4AF5-B2EA-C523DC61B9A2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Milvasoft.Components.Rest", "src\Components\Milvasoft.Components.Rest\Milvasoft.Components.Rest.csproj", "{05965A25-0E62-4AF5-B2EA-C523DC61B9A2}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Components", "Components", "{59BDBA81-3527-48FB-A8D0-7891FBC7BE25}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Milvasoft.Attributes.Annotations", "Milvasoft.Attributes.Annotations\Milvasoft.Attributes.Annotations.csproj", "{79E7B6B8-F369-4BB0-A0E3-0381947B0C01}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Milvasoft.Attributes.Annotations", "src\Components\Milvasoft.Attributes.Annotations\Milvasoft.Attributes.Annotations.csproj", "{79E7B6B8-F369-4BB0-A0E3-0381947B0C01}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "MultiTenancy", "MultiTenancy", "{73CE7BDC-7EB2-45FA-8795-0F0EBFCCE743}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Milvasoft.MultiTenancy.Stores.Redis", "Milvasoft.MultiTenancy.Stores.Redis\Milvasoft.MultiTenancy.Stores.Redis.csproj", "{A8BE4CE3-7B3B-46C9-93F7-170753C0E9BA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Milvasoft.MultiTenancy.Stores.Redis", "src\MultiTenancy\Milvasoft.MultiTenancy.Stores.Redis\Milvasoft.MultiTenancy.Stores.Redis.csproj", "{A8BE4CE3-7B3B-46C9-93F7-170753C0E9BA}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Caching", "Caching", "{F1D54767-41EF-4A1B-8773-3301B7C3004E}"
 EndProject
@@ -64,7 +64,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "FileOperations", "FileOpera
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Cryptography", "Cryptography", "{2EB7157B-86A3-45CF-ACB5-283492A3CC0B}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Milvasoft.Cryptography", "Milvasoft.Cryptography\Milvasoft.Cryptography.csproj", "{206DE9AC-C46B-4FDB-9B84-EC6F28EF8CCF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Milvasoft.Cryptography", "src\Cryptography\Milvasoft.Cryptography\Milvasoft.Cryptography.csproj", "{206DE9AC-C46B-4FDB-9B84-EC6F28EF8CCF}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Scheduling", "Scheduling", "{5C696A18-4C22-442B-9BC1-BA37A7A5E160}"
 EndProject
@@ -76,23 +76,31 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Notification", "Notificatio
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Middlewares", "Middlewares", "{12AD99CD-39E4-4F21-AD09-1218A06E248F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Milvasoft.Notification.Push.Expo", "Milvasoft.Notification.Push.Expo\Milvasoft.Notification.Push.Expo.csproj", "{3F07E713-2317-4F92-8CEF-DFA5CA3EB140}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Milvasoft.Notification.Push.Expo", "src\Notification\Milvasoft.Notification.Push.Expo\Milvasoft.Notification.Push.Expo.csproj", "{3F07E713-2317-4F92-8CEF-DFA5CA3EB140}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Milvasoft.Notification.Mail.Smtp", "Milvasoft.Notification.Mail.Smtp\Milvasoft.Notification.Mail.Smtp.csproj", "{246AE772-7E7B-4146-A92B-DECE3F0B8C1F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Milvasoft.Notification.Mail.Smtp", "src\Notification\Milvasoft.Notification.Mail.Smtp\Milvasoft.Notification.Mail.Smtp.csproj", "{246AE772-7E7B-4146-A92B-DECE3F0B8C1F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Milvasoft.Components.Swagger", "Milvasoft.Components.Swagger\Milvasoft.Components.Swagger.csproj", "{1FBA9A6E-946D-4B31-880B-455EAB1EDB3D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Milvasoft.Components.Swagger", "src\Components\Milvasoft.Components.Swagger\Milvasoft.Components.Swagger.csproj", "{1FBA9A6E-946D-4B31-880B-455EAB1EDB3D}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Milvasoft.Caching", "Milvasoft.Caching\Milvasoft.Caching.csproj", "{32CFCC48-0DBD-4DD5-821A-6EA968F45DBC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Milvasoft.Caching", "src\Caching\Milvasoft.Caching\Milvasoft.Caching.csproj", "{32CFCC48-0DBD-4DD5-821A-6EA968F45DBC}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Milvasoft.Caching.InMemory", "Milvasoft.Caching.InMemory\Milvasoft.Caching.InMemory.csproj", "{3D9BFD9C-03F9-46DF-9E3B-859843643638}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Milvasoft.Caching.InMemory", "src\Caching\Milvasoft.Caching.InMemory\Milvasoft.Caching.InMemory.csproj", "{3D9BFD9C-03F9-46DF-9E3B-859843643638}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Milvasoft.Components.CQRS", "Milvasoft.Components.CQRS\Milvasoft.Components.CQRS.csproj", "{E590BBAF-ACEA-4D9B-86DB-9B05DF722BD5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Milvasoft.Components.CQRS", "src\Components\Milvasoft.Components.CQRS\Milvasoft.Components.CQRS.csproj", "{E590BBAF-ACEA-4D9B-86DB-9B05DF722BD5}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Milvasoft.Interception.Ef", "Milvasoft.Interception.Ef\Milvasoft.Interception.Ef.csproj", "{C46CC8C9-36C7-4D09-BE57-0286A3556E9C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Milvasoft.Interception.Ef", "src\Interception\Milvasoft.Interception.Ef\Milvasoft.Interception.Ef.csproj", "{C46CC8C9-36C7-4D09-BE57-0286A3556E9C}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{D4F092BF-05C3-4226-A4D3-69DC8C50DF0C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Milvasoft.Core.MultiLanguage", "Milvasoft.Core.MultiLanguage\Milvasoft.Core.MultiLanguage.csproj", "{EB70547D-0579-4ACF-926F-540AC859C94B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Milvasoft.Core.MultiLanguage", "src\Core\Milvasoft.Core.MultiLanguage\Milvasoft.Core.MultiLanguage.csproj", "{EB70547D-0579-4ACF-926F-540AC859C94B}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Milvasoft.UnitTests", "test\Milvasoft.UnitTests\Milvasoft.UnitTests\Milvasoft.UnitTests.csproj", "{049B01D4-0A1C-4EDF-A91A-F8102F35C63B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{FE2610F1-D96D-4DDD-B5ED-5A9E16F15A2C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UnitTests", "UnitTests", "{8594B68E-4A97-4734-AB2E-008E7FD5BD0A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{8B360599-5603-49A7-A3C6-9E3B74CEF57D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -212,11 +220,16 @@ Global
 		{EB70547D-0579-4ACF-926F-540AC859C94B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EB70547D-0579-4ACF-926F-540AC859C94B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EB70547D-0579-4ACF-926F-540AC859C94B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{049B01D4-0A1C-4EDF-A91A-F8102F35C63B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{049B01D4-0A1C-4EDF-A91A-F8102F35C63B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{049B01D4-0A1C-4EDF-A91A-F8102F35C63B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{049B01D4-0A1C-4EDF-A91A-F8102F35C63B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
+		{49A1B0F8-BAC8-433A-A5B8-737E28A5AFA6} = {8B360599-5603-49A7-A3C6-9E3B74CEF57D}
 		{518CFB64-0A25-4A0E-B211-37FD4D954B06} = {D4F092BF-05C3-4226-A4D3-69DC8C50DF0C}
 		{C05F57B0-324F-4CB0-AF94-CBDCA42664B2} = {59BDBA81-3527-48FB-A8D0-7891FBC7BE25}
 		{A0E4179E-9430-475C-B3B5-9AC92A98937C} = {8AF40CF9-A591-4406-8770-AB5166FF472E}
@@ -228,14 +241,26 @@ Global
 		{E6F13F18-9B46-4F5D-9BB8-45991B40B198} = {72B8D679-6443-4087-9844-723F4A185103}
 		{5473C000-4230-4E31-A7BC-CD1DCC21908C} = {12AD99CD-39E4-4F21-AD09-1218A06E248F}
 		{01550FD0-ECE6-4115-9F4F-896A45D63309} = {4DDD7543-7217-418C-899E-525D0D3C0E59}
+		{4DDD7543-7217-418C-899E-525D0D3C0E59} = {8B360599-5603-49A7-A3C6-9E3B74CEF57D}
 		{60BF9EEC-6824-4FEC-9E73-9884941DEA55} = {4DDD7543-7217-418C-899E-525D0D3C0E59}
 		{3ADC85B1-AA00-4FB2-A2B7-94DC629A8471} = {4DDD7543-7217-418C-899E-525D0D3C0E59}
 		{B89E4D68-C979-49F2-8F70-82B2212B300B} = {59BDBA81-3527-48FB-A8D0-7891FBC7BE25}
 		{5D42AB35-DC86-41AE-9781-1D0A957FCDDC} = {B437D973-622B-4D7E-9419-55F72FD2A27E}
 		{05965A25-0E62-4AF5-B2EA-C523DC61B9A2} = {59BDBA81-3527-48FB-A8D0-7891FBC7BE25}
+		{59BDBA81-3527-48FB-A8D0-7891FBC7BE25} = {8B360599-5603-49A7-A3C6-9E3B74CEF57D}
 		{79E7B6B8-F369-4BB0-A0E3-0381947B0C01} = {59BDBA81-3527-48FB-A8D0-7891FBC7BE25}
+		{73CE7BDC-7EB2-45FA-8795-0F0EBFCCE743} = {8B360599-5603-49A7-A3C6-9E3B74CEF57D}
 		{A8BE4CE3-7B3B-46C9-93F7-170753C0E9BA} = {73CE7BDC-7EB2-45FA-8795-0F0EBFCCE743}
+		{F1D54767-41EF-4A1B-8773-3301B7C3004E} = {8B360599-5603-49A7-A3C6-9E3B74CEF57D}
+		{8AF40CF9-A591-4406-8770-AB5166FF472E} = {8B360599-5603-49A7-A3C6-9E3B74CEF57D}
+		{B9F322EB-5348-4FF0-AC74-381C6470C54F} = {8B360599-5603-49A7-A3C6-9E3B74CEF57D}
+		{2EB7157B-86A3-45CF-ACB5-283492A3CC0B} = {8B360599-5603-49A7-A3C6-9E3B74CEF57D}
 		{206DE9AC-C46B-4FDB-9B84-EC6F28EF8CCF} = {2EB7157B-86A3-45CF-ACB5-283492A3CC0B}
+		{5C696A18-4C22-442B-9BC1-BA37A7A5E160} = {8B360599-5603-49A7-A3C6-9E3B74CEF57D}
+		{72B8D679-6443-4087-9844-723F4A185103} = {8B360599-5603-49A7-A3C6-9E3B74CEF57D}
+		{B437D973-622B-4D7E-9419-55F72FD2A27E} = {8B360599-5603-49A7-A3C6-9E3B74CEF57D}
+		{613FE08E-4562-4551-BE8D-4C622D6D1E1A} = {8B360599-5603-49A7-A3C6-9E3B74CEF57D}
+		{12AD99CD-39E4-4F21-AD09-1218A06E248F} = {8B360599-5603-49A7-A3C6-9E3B74CEF57D}
 		{3F07E713-2317-4F92-8CEF-DFA5CA3EB140} = {613FE08E-4562-4551-BE8D-4C622D6D1E1A}
 		{246AE772-7E7B-4146-A92B-DECE3F0B8C1F} = {613FE08E-4562-4551-BE8D-4C622D6D1E1A}
 		{1FBA9A6E-946D-4B31-880B-455EAB1EDB3D} = {59BDBA81-3527-48FB-A8D0-7891FBC7BE25}
@@ -243,7 +268,10 @@ Global
 		{3D9BFD9C-03F9-46DF-9E3B-859843643638} = {F1D54767-41EF-4A1B-8773-3301B7C3004E}
 		{E590BBAF-ACEA-4D9B-86DB-9B05DF722BD5} = {59BDBA81-3527-48FB-A8D0-7891FBC7BE25}
 		{C46CC8C9-36C7-4D09-BE57-0286A3556E9C} = {B437D973-622B-4D7E-9419-55F72FD2A27E}
+		{D4F092BF-05C3-4226-A4D3-69DC8C50DF0C} = {8B360599-5603-49A7-A3C6-9E3B74CEF57D}
 		{EB70547D-0579-4ACF-926F-540AC859C94B} = {D4F092BF-05C3-4226-A4D3-69DC8C50DF0C}
+		{049B01D4-0A1C-4EDF-A91A-F8102F35C63B} = {8594B68E-4A97-4734-AB2E-008E7FD5BD0A}
+		{8594B68E-4A97-4734-AB2E-008E7FD5BD0A} = {FE2610F1-D96D-4DDD-B5ED-5A9E16F15A2C}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {E552B285-92CB-491D-8ACD-91C933292699}

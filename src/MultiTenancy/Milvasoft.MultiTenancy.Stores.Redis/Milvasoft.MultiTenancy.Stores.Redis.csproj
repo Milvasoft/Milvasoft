@@ -1,0 +1,14 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>disable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Caching\Milvasoft.Caching.Redis\Milvasoft.Caching.Redis.csproj" />
+    <ProjectReference Include="..\Milvasoft.MultiTenancy\Milvasoft.MultiTenancy.csproj" />
+  </ItemGroup>
+
+</Project>
