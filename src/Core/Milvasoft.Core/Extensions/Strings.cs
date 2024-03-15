@@ -1,4 +1,5 @@
-﻿using System.Security.Cryptography;
+﻿using System.Globalization;
+using System.Security.Cryptography;
 using System.Text;
 
 namespace Milvasoft.Core.Extensions;
@@ -12,15 +13,18 @@ public static class Strings
     /// Uppercases the first letter of the word.
     /// </summary>
     /// <param name="str"></param>
+    /// <param name="cultureInfo"></param>
     /// <returns></returns>
-    public static string ToUpperFirst(this string str)
+    public static string ToUpperFirst(this string str, CultureInfo cultureInfo = null)
     {
-        if (str.Length == 0)
+        cultureInfo ??= CultureInfo.CurrentCulture;
+
+        if (string.IsNullOrWhiteSpace(str) || str.Length == 0)
             return str;
         else if (str.Length == 1)
-            return str.First().ToString().ToUpper();
+            return char.ToUpper(str[0], cultureInfo).ToString();
         else
-            return str.First().ToString().ToUpper() + str.Substring(1);
+            return char.ToUpper(str[0], cultureInfo) + str[1..];
     }
 
     /// <summary>
@@ -28,29 +32,32 @@ public static class Strings
     /// </summary>
     /// <param name="str"></param>
     /// <returns></returns>
-    public static string ToUpperInVariantFirst(this string str)
+    public static string ToUpperInvariantFirst(this string str)
     {
-        if (str.Length == 0)
+        if (string.IsNullOrWhiteSpace(str) || str.Length == 0)
             return str;
         else if (str.Length == 1)
-            return str.First().ToString().ToUpperInvariant();
+            return char.ToUpperInvariant(str[0]).ToString();
         else
-            return str.First().ToString().ToUpperInvariant() + str.Substring(1);
+            return char.ToUpperInvariant(str[0]) + str[1..];
     }
 
     /// <summary>
     /// Lowercases the first letter of the word.
     /// </summary>
     /// <param name="str"></param>
+    /// <param name="cultureInfo"></param>
     /// <returns></returns>
-    public static string ToLowerFirst(this string str)
+    public static string ToLowerFirst(this string str, CultureInfo cultureInfo = null)
     {
-        if (str.Length == 0)
+        cultureInfo ??= CultureInfo.CurrentCulture;
+
+        if (string.IsNullOrWhiteSpace(str) || str.Length == 0)
             return str;
         else if (str.Length == 1)
-            return str.First().ToString().ToLower();
+            return char.ToLower(str[0], cultureInfo).ToString();
         else
-            return str.First().ToString().ToLower() + str.Substring(1);
+            return char.ToLower(str[0], cultureInfo) + str[1..];
     }
 
     /// <summary>
@@ -58,14 +65,14 @@ public static class Strings
     /// </summary>
     /// <param name="str"></param>
     /// <returns></returns>
-    public static string ToLowerInVariantFirst(this string str)
+    public static string ToLowerInvariantFirst(this string str)
     {
-        if (str.Length == 0)
+        if (string.IsNullOrWhiteSpace(str) || str.Length == 0)
             return str;
         else if (str.Length == 1)
-            return str.First().ToString().ToLowerInvariant();
+            return char.ToLowerInvariant(str[0]).ToString();
         else
-            return str.First().ToString().ToLowerInvariant() + str.Substring(1);
+            return char.ToLowerInvariant(str[0]) + str[1..];
     }
 
     /// <summary>
@@ -73,27 +80,48 @@ public static class Strings
     /// </summary>
     /// <param name="str"></param>
     /// <returns></returns>
-    public static byte[] GetByteArray(this string str) => Encoding.ASCII.GetBytes(str);
+    public static byte[] GetByteArray(this string str) => !string.IsNullOrEmpty(str) ? Encoding.UTF8.GetBytes(str) : null;
 
     /// <summary>
     /// Gets string from <paramref name="array"/>.
     /// </summary>
     /// <param name="array"></param>
     /// <returns></returns>
-    public static string GetString(this byte[] array) => Encoding.ASCII.GetString(array);
+    public static string GetString(this byte[] array) => !array.IsNullOrEmpty() ? Encoding.UTF8.GetString(array) : string.Empty;
 
     /// <summary>
     /// Hashes <paramref name="str"/> with <see cref="SHA256"/>
     /// </summary>
     /// <param name="str"></param>
     /// <returns> Hashed <paramref name="str"/> as byte content. </returns>
-    public static byte[] HashToByteArray(this string str) => SHA256.HashData(str.GetByteArray());
+    public static byte[] HashToByteArray(this string str)
+    {
+        var byteArray = str.GetByteArray();
+
+        return !byteArray.IsNullOrEmpty() ? SHA256.HashData(byteArray) : null;
+    }
 
     /// <summary>
-    /// Hashes <paramref name="str"/> with <see cref="SHA256"/>
+    /// Computes the SHA256 hash of the given string.
     /// </summary>
-    /// <param name="str"></param>
-    /// <returns> Hashed <paramref name="str"/> as string. </returns>
-    public static string HashToString(this string str) => SHA256.HashData(str.GetByteArray()).GetString();
+    /// <param name="str">The string to be hashed.</param>
+    /// <returns>The hashed string as a hexadecimal representation.</returns>
+    public static string Hash(this string str)
+    {
+        if (string.IsNullOrEmpty(str))
+            return string.Empty;
 
+        var rawDataBytes = str.GetByteArray();
+
+        // ComputeHash - returns byte array
+        byte[] bytes = SHA256.HashData(rawDataBytes);
+
+        // Convert byte array to a string
+        StringBuilder builder = new StringBuilder();
+
+        for (int i = 0; i < bytes.Length; i++)
+            builder.Append(bytes[i].ToString("x2"));
+
+        return builder.ToString();
+    }
 }

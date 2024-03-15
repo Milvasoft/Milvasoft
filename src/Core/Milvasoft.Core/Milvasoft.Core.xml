@@ -2287,7 +2287,7 @@
             Checks whether or not collection is null or empty. Assumes collection can be safely enumerated multiple times.
             </summary>
         </member>
-        <member name="M:Milvasoft.Core.Extensions.GenericCollection.PropertyExists``1(System.Linq.IQueryable{``0},System.String)">
+        <member name="M:Milvasoft.Core.Extensions.GenericCollection.PropertyExists``1(System.Collections.Generic.IEnumerable{``0},System.String)">
             <summary>
             Checks whether property exists.
             </summary>
@@ -2307,112 +2307,14 @@
         </member>
         <member name="M:Milvasoft.Core.Extensions.GenericCollection.OrderByPropertyDescending``1(System.Linq.IQueryable{``0},System.String)">
             <summary>
-            Order by descending <paramref name="source"/>, by <paramref name="propertyName"/>
+            Order by descending <paramref name="source"/> by <paramref name="propertyName"/>
             </summary>
             <typeparam name="T"></typeparam>
             <param name="source"></param>
             <param name="propertyName"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Core.Extensions.GenericCollection.MilvaMax``1(System.Collections.Generic.IEnumerable{``0},System.Linq.Expressions.Expression{System.Func{``0,System.Decimal}})">
-            <summary>
-            Returns the maximum value according to <paramref name="propertySelector"/> in <paramref name="source"/>.
-            </summary>
-            <typeparam name="T"></typeparam>
-            <param name="source"></param>
-            <param name="propertySelector"></param>
-            <returns> A object of type T. </returns>
-        </member>
-        <member name="M:Milvasoft.Core.Extensions.GenericCollection.MilvaMaxOrDefault``1(System.Collections.Generic.IEnumerable{``0},System.Linq.Expressions.Expression{System.Func{``0,System.Decimal}})">
-            <summary>
-            Returns the maximum value according to <paramref name="propertySelector"/> in <paramref name="source"/>.
-            </summary>
-            <typeparam name="T"></typeparam>
-            <param name="source"></param>
-            <param name="propertySelector"></param>
-            <returns>  A service object of type T or null if there is no such service. </returns>
-        </member>
-        <member name="M:Milvasoft.Core.Extensions.GenericCollection.MilvaMax``1(System.Collections.Generic.IEnumerable{``0},System.Linq.Expressions.Expression{System.Func{``0,System.Int32}})">
-            <summary>
-            Returns the maximum value according to <paramref name="propertySelector"/> in <paramref name="source"/>.
-            </summary>
-            <typeparam name="T"></typeparam>
-            <param name="source"></param>
-            <param name="propertySelector"></param>
-            <returns> A object of type T. </returns>
-        </member>
-        <member name="M:Milvasoft.Core.Extensions.GenericCollection.MilvaMaxOrDefault``1(System.Collections.Generic.IEnumerable{``0},System.Linq.Expressions.Expression{System.Func{``0,System.Int32}})">
-            <summary>
-            Returns the maximum value according to <paramref name="propertySelector"/> in <paramref name="source"/>.
-            </summary>
-            <typeparam name="T"></typeparam>
-            <param name="source"></param>
-            <param name="propertySelector"></param>
-            <returns>  A service object of type T or null if there is no such service. </returns>
-        </member>
-        <member name="M:Milvasoft.Core.Extensions.GenericCollection.MilvaMin``1(System.Collections.Generic.IEnumerable{``0},System.Linq.Expressions.Expression{System.Func{``0,System.Decimal}})">
-            <summary>
-            Returns the maximum value according to <paramref name="propertySelector"/> in <paramref name="source"/>.
-            </summary>
-            <typeparam name="T"></typeparam>
-            <param name="source"></param>
-            <param name="propertySelector"></param>
-            <returns> A object of type T. </returns>
-        </member>
-        <member name="M:Milvasoft.Core.Extensions.GenericCollection.MilvaMinOrDefault``1(System.Collections.Generic.IEnumerable{``0},System.Linq.Expressions.Expression{System.Func{``0,System.Decimal}})">
-            <summary>
-            Returns the maximum value according to <paramref name="propertySelector"/> in <paramref name="source"/>.
-            </summary>
-            <typeparam name="T"></typeparam>
-            <param name="source"></param>
-            <param name="propertySelector"></param>
-            <returns>  A service object of type T or null if there is no such service. </returns>
-        </member>
-        <member name="M:Milvasoft.Core.Extensions.GenericCollection.MilvaMin``1(System.Collections.Generic.IEnumerable{``0},System.Linq.Expressions.Expression{System.Func{``0,System.Int32}})">
-            <summary>
-            Returns the maximum value according to <paramref name="propertySelector"/> in <paramref name="source"/>.
-            </summary>
-            <typeparam name="T"></typeparam>
-            <param name="source"></param>
-            <param name="propertySelector"></param>
-            <returns> A object of type T. </returns>
-        </member>
-        <member name="M:Milvasoft.Core.Extensions.GenericCollection.MilvaMinOrDefault``1(System.Collections.Generic.IEnumerable{``0},System.Linq.Expressions.Expression{System.Func{``0,System.Int32}})">
-            <summary>
-            Returns the maximum value according to <paramref name="propertySelector"/> in <paramref name="source"/>.
-            </summary>
-            <typeparam name="T"></typeparam>
-            <param name="source"></param>
-            <param name="propertySelector"></param>
-            <returns>  A service object of type T or null if there is no such service. </returns>
-        </member>
-        <member name="M:Milvasoft.Core.Extensions.GenericCollection.GetPropertyValue``1(``0,System.Linq.Expressions.Expression{System.Func{``0,System.Decimal}})">
-            <summary>
-            Gets requested property value.
-            </summary>
-            <param name="obj"></param>
-            <param name="property"> property </param>
-            <returns></returns>
-        </member>
-        <member name="M:Milvasoft.Core.Extensions.GenericCollection.GetPropertyValue``1(``0,System.Linq.Expressions.Expression{System.Func{``0,System.Int32}})">
-            <summary>
-            Gets requested property value.
-            </summary>
-            <param name="obj"></param>
-            <param name="property"> property </param>
-            <returns></returns>
-        </member>
-        <member name="M:Milvasoft.Core.Extensions.GenericCollection.Map``2(System.Collections.Generic.IEnumerable{``0},System.Linq.Expressions.Expression{System.Func{``0,``1}})">
-            <summary>
-            Collection mapping.
-            </summary>
-            <typeparam name="TIn"></typeparam>
-            <typeparam name="TOut"></typeparam>
-            <param name="values"></param>
-            <param name="mapExpression"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Milvasoft.Core.Extensions.GenericCollection.SplitList``1(System.Collections.Generic.List{``0},System.Int32)">
+        <member name="M:Milvasoft.Core.Extensions.GenericCollection.ToBatches``1(System.Collections.Generic.List{``0},System.Int32)">
             <summary>
             Splits list into batches with specified batch size.
             </summary>
@@ -2536,28 +2438,30 @@
             String extensions.
             </summary>
         </member>
-        <member name="M:Milvasoft.Core.Extensions.Strings.ToUpperFirst(System.String)">
+        <member name="M:Milvasoft.Core.Extensions.Strings.ToUpperFirst(System.String,System.Globalization.CultureInfo)">
             <summary>
             Uppercases the first letter of the word.
             </summary>
             <param name="str"></param>
+            <param name="cultureInfo"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Core.Extensions.Strings.ToUpperInVariantFirst(System.String)">
+        <member name="M:Milvasoft.Core.Extensions.Strings.ToUpperInvariantFirst(System.String)">
             <summary>
             Uppercases the first letter of the word using the casing rules of the invariant culture.
             </summary>
             <param name="str"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Core.Extensions.Strings.ToLowerFirst(System.String)">
+        <member name="M:Milvasoft.Core.Extensions.Strings.ToLowerFirst(System.String,System.Globalization.CultureInfo)">
             <summary>
             Lowercases the first letter of the word.
             </summary>
             <param name="str"></param>
+            <param name="cultureInfo"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Core.Extensions.Strings.ToLowerInVariantFirst(System.String)">
+        <member name="M:Milvasoft.Core.Extensions.Strings.ToLowerInvariantFirst(System.String)">
             <summary>
             Lowercases the first letter of the word using the casing rules of the invariant culture.
             </summary>
@@ -2585,12 +2489,12 @@
             <param name="str"></param>
             <returns> Hashed <paramref name="str"/> as byte content. </returns>
         </member>
-        <member name="M:Milvasoft.Core.Extensions.Strings.HashToString(System.String)">
+        <member name="M:Milvasoft.Core.Extensions.Strings.Hash(System.String)">
             <summary>
-            Hashes <paramref name="str"/> with <see cref="T:System.Security.Cryptography.SHA256"/>
+            Computes the SHA256 hash of the given string.
             </summary>
-            <param name="str"></param>
-            <returns> Hashed <paramref name="str"/> as string. </returns>
+            <param name="str">The string to be hashed.</param>
+            <returns>The hashed string as a hexadecimal representation.</returns>
         </member>
         <member name="T:Milvasoft.Core.MilvaLazy`1">
             <summary>

@@ -47,7 +47,7 @@ public struct TenantId : IEquatable<TenantId>
 
             _tenancyName = tenancyName.ToLowerInvariant();
             _branchNo = branchNo;
-            _hash = $"{tenancyName}_{branchNo}".HashToString();
+            _hash = $"{tenancyName}_{branchNo}".Hash();
         }
         else
             throw new MilvaDeveloperException(_invalidTenantIdErrorMessage)
@@ -71,7 +71,7 @@ public struct TenantId : IEquatable<TenantId>
 
         _tenancyName = tenancyName.ToLowerInvariant();
         _branchNo = branchNo;
-        _hash = $"{tenancyName}_{branchNo}".HashToString();
+        _hash = $"{tenancyName}_{branchNo}".Hash();
     }
 
     /// <summary>
@@ -101,7 +101,7 @@ public struct TenantId : IEquatable<TenantId>
     /// Returns hash.
     /// </summary>
     /// <returns></returns>
-    public string GetHashString() => $"{_tenancyName}_{_branchNo}".HashToString();
+    public string GetHashString() => $"{_tenancyName}_{_branchNo}".Hash();
 
     /// <summary>
     /// Compares hashes.
