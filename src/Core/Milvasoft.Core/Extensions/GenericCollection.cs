@@ -101,22 +101,12 @@ public static class GenericCollection
     /// <summary>
     /// Updates singleton implementation instance with <paramref name="updateAction"/>.
     /// </summary>
-    /// <typeparam name="T"></typeparam>
+    /// <typeparam name="TInstance"></typeparam>
     /// <param name="services"></param>
     /// <param name="updateAction"></param>
     /// <returns></returns>
-    public static IServiceCollection UpdateSingletonInstance<T>(this IServiceCollection services, Action<T> updateAction)
-    {
-        var servicesToReplace = services.Where(service => service.ServiceType == typeof(T)).ToList();
-
-        foreach (var service in servicesToReplace)
-        {
-            if (service.ImplementationInstance != null && service.Lifetime == ServiceLifetime.Singleton)
-                updateAction.Invoke((T)service.ImplementationInstance);
-        }
-
-        return services;
-    }
+    public static IServiceCollection UpdateSingletonInstance<TInstance>(this IServiceCollection services, Action<TInstance> updateAction) where TInstance : class 
+        => services.UpdateSingletonInstance<TInstance, TInstance>(updateAction);
 
     /// <summary>
     /// Updates singleton implementation instance with <paramref name="updateAction"/>.
@@ -126,8 +116,11 @@ public static class GenericCollection
     /// <param name="services"></param>
     /// <param name="updateAction"></param>
     /// <returns></returns>
-    public static IServiceCollection UpdateSingletonInstance<TImplementation, TInstance>(this IServiceCollection services, Action<TInstance> updateAction)
+    public static IServiceCollection UpdateSingletonInstance<TImplementation, TInstance>(this IServiceCollection services, Action<TInstance> updateAction) where TInstance : class
     {
+        if (services.IsNullOrEmpty() || updateAction == null)
+            return services;
+
         var servicesToReplace = services.Where(service => service.ServiceType == typeof(TImplementation)).ToList();
 
         foreach (var service in servicesToReplace)

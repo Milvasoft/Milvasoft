@@ -2327,7 +2327,7 @@
             <summary>
             Updates singleton implementation instance with <paramref name="updateAction"/>.
             </summary>
-            <typeparam name="T"></typeparam>
+            <typeparam name="TInstance"></typeparam>
             <param name="services"></param>
             <param name="updateAction"></param>
             <returns></returns>

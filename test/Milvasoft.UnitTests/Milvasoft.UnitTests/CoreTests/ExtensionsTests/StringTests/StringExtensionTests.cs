@@ -20,7 +20,7 @@ public partial class StringExtensionTests
     [Theory]
     [InlineData("")]
     [InlineData(null)]
-    public void GetByteArray_InputStringIsNullOrEmpty_ReturnsNull(string input)
+    public void GetByteArray_InputStringIsNullOrEmpty_ShouldReturnsNull(string input)
     {
         // Arrange
 
@@ -33,7 +33,7 @@ public partial class StringExtensionTests
 
     [Theory]
     [MemberData(nameof(ValidStringByteArrayPairs))]
-    public void GetByteArray_InputStringIsValidString_ReturnsCorrectByteArray(string input, byte[] expected)
+    public void GetByteArray_InputStringIsValidString_ShouldReturnsCorrectByteArray(string input, byte[] expected)
     {
         // Arrange
 
@@ -49,7 +49,7 @@ public partial class StringExtensionTests
     #region GetString
 
     [Fact]
-    public void GetString_InputArrayIsEmpty_ReturnsEmptyString()
+    public void GetString_InputArrayIsEmpty_ShouldReturnsEmptyString()
     {
         // Arrange
         byte[] input = [];
@@ -63,7 +63,7 @@ public partial class StringExtensionTests
     }
 
     [Fact]
-    public void GetString_InputArrayIsNull_ReturnsEmptyString()
+    public void GetString_InputArrayIsNull_ShouldReturnsEmptyString()
     {
         // Arrange
         byte[] input = null;
@@ -78,7 +78,7 @@ public partial class StringExtensionTests
 
     [Theory]
     [MemberData(nameof(ValidStringByteArrayPairs))]
-    public void GetString_InputArrayIsValid_ReturnsCorrectString(string expected, byte[] input)
+    public void GetString_InputArrayIsValid_ShouldReturnsCorrectString(string expected, byte[] input)
     {
         // Arrange
 
@@ -96,7 +96,7 @@ public partial class StringExtensionTests
     [Theory]
     [InlineData("")]
     [InlineData(null)]
-    public void HashToByteArray_InputStringIsNullOrEmpty_ReturnsNull(string input)
+    public void HashToByteArray_InputStringIsNullOrEmpty_ShouldReturnsNull(string input)
     {
         // Arrange
 
@@ -109,7 +109,7 @@ public partial class StringExtensionTests
 
     [Theory]
     [MemberData(nameof(ValidStringByteArrayPairs))]
-    public void HashToByteArray_InputStringIsValidString_ReturnsCorrectByteArray(string input, byte[] inputAsByteArray)
+    public void HashToByteArray_InputStringIsValidString_ShouldReturnsCorrectByteArray(string input, byte[] inputAsByteArray)
     {
         // Arrange
         byte[] expected = SHA256.HashData(inputAsByteArray);
@@ -128,7 +128,7 @@ public partial class StringExtensionTests
     [Theory]
     [InlineData("")]
     [InlineData(null)]
-    public void Hash_InputStringIsNullOrEmpty_ReturnsEmptyString(string input)
+    public void Hash_InputStringIsNullOrEmpty_ShouldReturnsEmptyString(string input)
     {
         // Arrange
 
@@ -143,7 +143,7 @@ public partial class StringExtensionTests
     [InlineData(" ", "36a9e7f1c95b82ffb99743e0c5c4ce95d83c9a430aac59f84ef3cbfab6145068")]
     [InlineData("hello", "2cf24dba5fb0a30e26e83b2ac5b9e29e1b161e5c1fa7425e73043362938b9824")]
     [InlineData("İksir", "1f0d02a7fd55d91d18cbf6a81eca5e3c079665bce001aa66d97f959eacab1e6e")]
-    public void Hash_InputStringIsValidString_ReturnsCorrectByteArray(string input, string expected)
+    public void Hash_InputStringIsValidString_ShouldReturnsCorrectByteArray(string input, string expected)
     {
         // Arrange
 
