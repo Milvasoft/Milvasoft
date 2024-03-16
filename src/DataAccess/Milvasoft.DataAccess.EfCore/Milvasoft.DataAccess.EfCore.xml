@@ -1553,11 +1553,19 @@
             <summary>
             Defines the internal encryption converter for string values.
             </summary>
+            <remarks>
+            Creates a new <see cref="T:Milvasoft.DataAccess.EfCore.Utils.Converters.MilvaEncryptionConverter"/> instance.
+            </remarks>
+            <param name="encryptionProvider">Encryption provider</param>
+            <param name="mappingHints">Entity Framework mapping hints</param>
         </member>
         <member name="M:Milvasoft.DataAccess.EfCore.Utils.Converters.MilvaEncryptionConverter.#ctor(Milvasoft.Cryptography.Abstract.IMilvaCryptographyProvider,Microsoft.EntityFrameworkCore.Storage.ValueConversion.ConverterMappingHints)">
             <summary>
-            Creates a new <see cref="T:Milvasoft.DataAccess.EfCore.Utils.Converters.MilvaEncryptionConverter"/> instance.
+            Defines the internal encryption converter for string values.
             </summary>
+            <remarks>
+            Creates a new <see cref="T:Milvasoft.DataAccess.EfCore.Utils.Converters.MilvaEncryptionConverter"/> instance.
+            </remarks>
             <param name="encryptionProvider">Encryption provider</param>
             <param name="mappingHints">Entity Framework mapping hints</param>
         </member>
@@ -1565,22 +1573,36 @@
             <summary>
             Converts <see cref="T:MongoDB.Bson.ObjectId"/> to <see cref="T:System.String"/> or <see cref="T:System.String"/> to <see cref="T:MongoDB.Bson.ObjectId"/>.
             </summary>
+            <remarks>
+            Creates a new <see cref="T:Milvasoft.DataAccess.EfCore.Utils.Converters.MilvaObjectIdStringConverter"/> instance.
+            </remarks>
+            <param name="mappingHints">Entity Framework mapping hints</param>
         </member>
         <member name="M:Milvasoft.DataAccess.EfCore.Utils.Converters.MilvaObjectIdStringConverter.#ctor(Microsoft.EntityFrameworkCore.Storage.ValueConversion.ConverterMappingHints)">
             <summary>
-            Creates a new <see cref="T:Milvasoft.DataAccess.EfCore.Utils.Converters.MilvaObjectIdStringConverter"/> instance.
+            Converts <see cref="T:MongoDB.Bson.ObjectId"/> to <see cref="T:System.String"/> or <see cref="T:System.String"/> to <see cref="T:MongoDB.Bson.ObjectId"/>.
             </summary>
+            <remarks>
+            Creates a new <see cref="T:Milvasoft.DataAccess.EfCore.Utils.Converters.MilvaObjectIdStringConverter"/> instance.
+            </remarks>
             <param name="mappingHints">Entity Framework mapping hints</param>
         </member>
         <member name="T:Milvasoft.DataAccess.EfCore.Utils.Converters.TenantIdStringConverter">
             <summary>
             Converts <see cref="T:Milvasoft.Core.EntityBases.MultiTenancy.TenantId"/> to <see cref="T:System.String"/> or <see cref="T:System.String"/> to <see cref="T:Milvasoft.Core.EntityBases.MultiTenancy.TenantId"/>.
             </summary>
+            <remarks>
+            Creates a new <see cref="T:Milvasoft.DataAccess.EfCore.Utils.Converters.TenantIdStringConverter"/> instance.
+            </remarks>
+            <param name="mappingHints">Entity Framework mapping hints</param>
         </member>
         <member name="M:Milvasoft.DataAccess.EfCore.Utils.Converters.TenantIdStringConverter.#ctor(Microsoft.EntityFrameworkCore.Storage.ValueConversion.ConverterMappingHints)">
             <summary>
-            Creates a new <see cref="T:Milvasoft.DataAccess.EfCore.Utils.Converters.TenantIdStringConverter"/> instance.
+            Converts <see cref="T:Milvasoft.Core.EntityBases.MultiTenancy.TenantId"/> to <see cref="T:System.String"/> or <see cref="T:System.String"/> to <see cref="T:Milvasoft.Core.EntityBases.MultiTenancy.TenantId"/>.
             </summary>
+            <remarks>
+            Creates a new <see cref="T:Milvasoft.DataAccess.EfCore.Utils.Converters.TenantIdStringConverter"/> instance.
+            </remarks>
             <param name="mappingHints">Entity Framework mapping hints</param>
         </member>
         <member name="T:Milvasoft.DataAccess.EfCore.Utils.Enums.SaveChangesChoice">

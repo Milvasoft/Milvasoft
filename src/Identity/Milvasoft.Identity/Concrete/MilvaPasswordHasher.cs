@@ -36,13 +36,7 @@ public class MilvaPasswordHasher : IMilvaPasswordHasher
     /// </summary>
     /// <param name="password">The password to hash.</param>
     /// <returns>A hashed representation of the supplied <paramref name="password"/>.</returns>
-    public virtual string HashPassword(string password)
-    {
-        if (password == null)
-            throw new ArgumentNullException(nameof(password));
-
-        return Convert.ToBase64String(HashPassword(password, _rng));
-    }
+    public virtual string HashPassword(string password) => password == null ? throw new ArgumentNullException(nameof(password)) : Convert.ToBase64String(HashPassword(password, _rng));
 
     /// <summary>
     /// Returns a <see cref="bool"/> indicating the result of a password hash comparison.
@@ -53,11 +47,9 @@ public class MilvaPasswordHasher : IMilvaPasswordHasher
     /// <remarks>Implementations of this method should be time consistent.</remarks>
     public virtual bool VerifyHashedPassword(string hashedPassword, string providedPassword)
     {
-        if (hashedPassword == null)
-            throw new ArgumentNullException(nameof(hashedPassword));
+        ArgumentNullException.ThrowIfNull(hashedPassword);
 
-        if (providedPassword == null)
-            throw new ArgumentNullException(nameof(providedPassword));
+        ArgumentNullException.ThrowIfNull(providedPassword);
 
         byte[] decodedHashedPassword = Convert.FromBase64String(hashedPassword);
 

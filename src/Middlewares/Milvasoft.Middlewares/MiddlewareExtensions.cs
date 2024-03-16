@@ -15,8 +15,5 @@ public static class MiddlewareExtensions
     /// </summary>
     /// <param name="builder"></param>
     /// <returns></returns>
-    public static IApplicationBuilder UseMilvaResponseTimeCalculator(this IApplicationBuilder builder)
-    {
-        return builder.UseMiddleware<MilvaResponseTimeCalculator>();
-    }
+    public static IApplicationBuilder UseMilvaResponseTimeCalculator(this IApplicationBuilder builder) => builder.UseMiddleware<MilvaResponseTimeCalculator>();
 }

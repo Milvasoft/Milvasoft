@@ -156,8 +156,5 @@ public class LocalizationMemoryCache(IMemoryCache cache, ILocalizationOptions lo
         return false;
     }
 
-    private string CreateFormattedKey(string key)
-    {
-        return string.Format(_keyFormat, CultureInfo.CurrentCulture.Name, key);
-    }
+    private string CreateFormattedKey(string key) => string.Format(_keyFormat, CultureInfo.CurrentCulture.Name, key);
 }

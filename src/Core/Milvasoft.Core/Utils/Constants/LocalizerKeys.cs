@@ -1,11 +1,11 @@
 ﻿namespace Milvasoft.Core.Utils.Constants;
 
+#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
 /// <summary>
 /// Localizer message keys
 /// </summary>
 public static class LocalizerKeys
 {
-#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
     public const string DefaultErrorMessage = "An error occured while processing";
     public const string LocalizedEntityName = nameof(LocalizedEntityName);
     public const string Localized = nameof(Localized);
@@ -101,7 +101,5 @@ public static class LocalizerKeys
     public const string UserValidationEmailLength = nameof(UserValidationEmailLength);
 
     #endregion
-
-#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
-
 }
+#pragma warning restore CS1591 // Missing XML comment for publicly visible type or member

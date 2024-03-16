@@ -7,6 +7,7 @@ namespace Milvasoft.Attributes.ActionFilter;
 /// <summary>
 /// Throws <see cref="MilvaUserFriendlyException"/> if any error exists. Provides the attribute validation exclude opportunity.
 /// </summary>
+[AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
 public class AsyncValidationFilterAttribute : Attribute, IAsyncActionFilter
 {
     #region Properties
@@ -71,7 +72,7 @@ public class AsyncValidationFilterAttribute : Attribute, IAsyncActionFilter
 
                         foreach (var entityProp in dtoProps)
                         {
-                            if (entityProp.CustomAttributes.Count() != 0)
+                            if (entityProp.CustomAttributes.Any())
                                 if (httpContext.Items[entityProp.Name] != null)
                                     errors.Remove(httpContext.Items[entityProp.Name].ToString());
                         }
@@ -110,6 +111,6 @@ public class AsyncValidationFilterAttribute : Attribute, IAsyncActionFilter
             }
         }
 
-        return prop.IsNullOrEmpty() ? null : prop.ToList();
+        return prop.IsNullOrEmpty() ? null : [.. prop];
     }
 }

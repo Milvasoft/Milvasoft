@@ -24,14 +24,14 @@ public class ResxWriter
         _resourceFilePath = Path.Combine(resourcePath, $"{type.Name}.{culture}.resx");
 
         if (!File.Exists(_resourceFilePath))
-            CreateNewResxFile(type);
+            CreateNewResxFile();
 
         _xd = XDocument.Load(_resourceFilePath);
         _logger = logger;
         _logger?.Information($"Resource file loaded: '{_resourceFilePath}'");
     }
 
-    private bool CreateNewResxFile(Type type)
+    private bool CreateNewResxFile()
     {
         bool success;
 

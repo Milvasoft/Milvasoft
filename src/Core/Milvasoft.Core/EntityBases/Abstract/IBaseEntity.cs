@@ -32,6 +32,7 @@ public interface IEntityBase<TKey> : IMilvaEntity
 /// </summary>
 public interface IMilvaEntity
 {
+#pragma warning disable CA2011 // Avoid infinite recursion
     /// <summary>
     /// Unique identifier for this entity.
     /// </summary>
@@ -40,4 +41,5 @@ public interface IMilvaEntity
         get => Id;
         set => Id = value;
     }
+#pragma warning restore CA2011 // Avoid infinite recursion
 }

@@ -360,14 +360,14 @@ public partial class CollectionExtensionTests
 
         services.AddSingleton(singletonInstance);
 
-        Action<UpdateSingletonInstanceTestModel> action = a =>
+        static void Action(UpdateSingletonInstanceTestModel a)
         {
             a.Name = "Changed";
             a.Order = 1;
-        };
+        }
 
         var mockValidator = new Mock<Action<UpdateSingletonInstanceTestModel>>();
-        mockValidator.Setup(x => x.Invoke(singletonInstance)).Callback(action);
+        mockValidator.Setup(x => x.Invoke(singletonInstance)).Callback((Action<UpdateSingletonInstanceTestModel>)Action);
 
         // Act
         var result = services.UpdateSingletonInstance(mockValidator.Object);
@@ -454,14 +454,14 @@ public partial class CollectionExtensionTests
 
         services.AddSingleton<IUpdateSingletonInstanceTestModel>(singletonInstance);
 
-        Action<UpdateSingletonInstanceTestModel> action = a =>
+        static void Action(UpdateSingletonInstanceTestModel a)
         {
             a.Name = "Changed";
             a.Order = 1;
-        };
+        }
 
         var mockValidator = new Mock<Action<UpdateSingletonInstanceTestModel>>();
-        mockValidator.Setup(x => x.Invoke(singletonInstance)).Callback(action);
+        mockValidator.Setup(x => x.Invoke(singletonInstance)).Callback((Action<UpdateSingletonInstanceTestModel>)Action);
 
         // Act
         var result = services.UpdateSingletonInstance<IUpdateSingletonInstanceTestModel, UpdateSingletonInstanceTestModel>(mockValidator.Object);

@@ -7,26 +7,21 @@ namespace Milvasoft.MultiTenancy.Middleware;
 /// <summary>
 /// AuthenticationMiddleware.cs from framework with injection point moved
 /// </summary>
-public class TenantAuthMiddleware
+/// <remarks>
+/// Initializes new instance of <see cref="TenantAuthMiddleware"/>
+/// </remarks>
+/// <param name="next"></param>
+public class TenantAuthMiddleware(RequestDelegate next)
 {
-    private readonly RequestDelegate _next;
-
-    /// <summary>
-    /// Initializes new instance of <see cref="TenantAuthMiddleware"/>
-    /// </summary>
-    /// <param name="next"></param>
-    public TenantAuthMiddleware(RequestDelegate next)
-    {
-        _next = next ?? throw new ArgumentNullException(nameof(next));
-    }
+    private readonly RequestDelegate _next = next ?? throw new ArgumentNullException(nameof(next));
 
     /// <summary>
     /// Invokes the method or constructor reflected by this MethodInfo instance.
     /// </summary>
     /// <param name="context"></param>
-    /// <param name="Schemes"></param>
+    /// <param name="schemes"></param>
     /// <returns></returns>
-    public async Task Invoke(HttpContext context, IAuthenticationSchemeProvider Schemes)
+    public async Task Invoke(HttpContext context, IAuthenticationSchemeProvider schemes)
     {
         context.Features.Set<IAuthenticationFeature>(new AuthenticationFeature
         {
@@ -36,17 +31,13 @@ public class TenantAuthMiddleware
 
         // Give any IAuthenticationRequestHandler schemes a chance to handle the request
         var handlers = context.RequestServices.GetRequiredService<IAuthenticationHandlerProvider>();
-        foreach (var scheme in await Schemes.GetRequestHandlerSchemesAsync())
+        foreach (var scheme in await schemes.GetRequestHandlerSchemesAsync())
         {
-            var handler = await handlers.GetHandlerAsync(context, scheme.Name)
-                as IAuthenticationRequestHandler;
-            if (handler != null && await handler.HandleRequestAsync())
-            {
+            if (await handlers.GetHandlerAsync(context, scheme.Name) is IAuthenticationRequestHandler handler && await handler.HandleRequestAsync())
                 return;
-            }
         }
 
-        var defaultAuthenticate = await Schemes.GetDefaultAuthenticateSchemeAsync();
+        var defaultAuthenticate = await schemes.GetDefaultAuthenticateSchemeAsync();
         if (defaultAuthenticate != null)
         {
             var result = await context.AuthenticateAsync(defaultAuthenticate.Name);

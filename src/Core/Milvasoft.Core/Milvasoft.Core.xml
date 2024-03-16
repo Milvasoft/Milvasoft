@@ -1983,11 +1983,18 @@
             <summary>
             Test exception class.
             </summary>
+            <remarks>
+            Initializes a new instance of the <see cref="T:Milvasoft.Core.Exceptions.MilvaTestException"/> class  with a specified error message.
+            </remarks>
+            <param name="exceptionMessage"></param>
         </member>
         <member name="M:Milvasoft.Core.Exceptions.MilvaTestException.#ctor(System.String)">
             <summary>
-            Initializes a new instance of the <see cref="T:Milvasoft.Core.Exceptions.MilvaTestException"/> class  with a specified error message.
+            Test exception class.
             </summary>
+            <remarks>
+            Initializes a new instance of the <see cref="T:Milvasoft.Core.Exceptions.MilvaTestException"/> class  with a specified error message.
+            </remarks>
             <param name="exceptionMessage"></param>
         </member>
         <member name="T:Milvasoft.Core.Exceptions.MilvaUserFriendlyException">
@@ -2359,6 +2366,21 @@
             <summary>
             Location point.
             </summary>
+            <remarks>
+            Initialize new instance of <see cref="T:Milvasoft.Core.Extensions.GeoLocation.Models.GeoPoint"/> with lat and lon.
+            </remarks>
+            <param name="latitude"></param>
+            <param name="longitude"></param>
+        </member>
+        <member name="M:Milvasoft.Core.Extensions.GeoLocation.Models.GeoPoint.#ctor(System.Double,System.Double)">
+            <summary>
+            Location point.
+            </summary>
+            <remarks>
+            Initialize new instance of <see cref="T:Milvasoft.Core.Extensions.GeoLocation.Models.GeoPoint"/> with lat and lon.
+            </remarks>
+            <param name="latitude"></param>
+            <param name="longitude"></param>
         </member>
         <member name="P:Milvasoft.Core.Extensions.GeoLocation.Models.GeoPoint.Latitude">
             <summary>
@@ -2369,13 +2391,6 @@
             <summary>
             Longitude of point.
             </summary>
-        </member>
-        <member name="M:Milvasoft.Core.Extensions.GeoLocation.Models.GeoPoint.#ctor(System.Double,System.Double)">
-            <summary>
-            Initialize new instance of <see cref="T:Milvasoft.Core.Extensions.GeoLocation.Models.GeoPoint"/> with lat and lon.
-            </summary>
-            <param name="latitude"></param>
-            <param name="longitude"></param>
         </member>
         <member name="T:Milvasoft.Core.Extensions.Helpers.ExpressionParameterReplacer">
             <summary>
@@ -2400,11 +2415,19 @@
             <summary>
             Expression parameter replacer for expression builder.
             </summary>
+            <remarks>
+            Constructor of <see cref="T:Milvasoft.Core.Extensions.Helpers.ParameterReplaceVisitor"/>
+            </remarks>
+            <param name="from"></param>
+            <param name="to"></param>
         </member>
         <member name="M:Milvasoft.Core.Extensions.Helpers.ParameterReplaceVisitor.#ctor(System.Linq.Expressions.ParameterExpression,System.Linq.Expressions.ParameterExpression)">
             <summary>
-            Constructor of <see cref="T:Milvasoft.Core.Extensions.Helpers.ParameterReplaceVisitor"/>
+            Expression parameter replacer for expression builder.
             </summary>
+            <remarks>
+            Constructor of <see cref="T:Milvasoft.Core.Extensions.Helpers.ParameterReplaceVisitor"/>
+            </remarks>
             <param name="from"></param>
             <param name="to"></param>
         </member>
@@ -2501,11 +2524,19 @@
             Custom <see cref="T:System.Lazy`1"/> class.
             </summary>
             <typeparam name="T"></typeparam>
+            <remarks>
+            Constructor of <see cref="T:Milvasoft.Core.MilvaLazy`1"/>.
+            </remarks>
+            <param name="serviceProvider"></param>
         </member>
         <member name="M:Milvasoft.Core.MilvaLazy`1.#ctor(System.IServiceProvider)">
             <summary>
-            Constructor of <see cref="T:Milvasoft.Core.MilvaLazy`1"/>.
+            Custom <see cref="T:System.Lazy`1"/> class.
             </summary>
+            <typeparam name="T"></typeparam>
+            <remarks>
+            Constructor of <see cref="T:Milvasoft.Core.MilvaLazy`1"/>.
+            </remarks>
             <param name="serviceProvider"></param>
         </member>
         <member name="T:Milvasoft.Core.NetworkUtil">
@@ -2694,6 +2725,41 @@
             <param name="query"></param>
             <param name="hash"></param>
             <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Core.Request.UriRegex">
+            <remarks>
+            Pattern:<br/>
+            <code>^(ht|f)tp(s?)\\:\\/\\/[0-9a-zA-Z]([-.\\w]*[0-9a-zA-Z])*(:(0-9)*)*(\\/?)([a-zA-Z0-9\\-\\.\\?\\=\\,\\'\\/\\\\\\+&amp;%\\$#_]*)?$</code><br/>
+            Explanation:<br/>
+            <code>
+            ○ Match if at the beginning of the string.<br/>
+            ○ 1st capture group.<br/>
+                ○ Match with 2 alternative expressions.<br/>
+                    ○ Match the string "ht".<br/>
+                    ○ Match 'f'.<br/>
+            ○ Match the string "tp".<br/>
+            ○ 2nd capture group.<br/>
+                ○ Match 's' atomically, optionally.<br/>
+            ○ Match the string "://".<br/>
+            ○ Match a character in the set [0-9A-Za-z].<br/>
+            ○ Loop greedily any number of times.<br/>
+                ○ 3rd capture group.<br/>
+                    ○ Match a character in the set [-.\w] greedily any number of times.<br/>
+                    ○ Match a character in the set [0-9A-Za-z].<br/>
+            ○ Loop greedily any number of times.<br/>
+                ○ 4th capture group.<br/>
+                    ○ Match ':'.<br/>
+                    ○ Loop greedily any number of times.<br/>
+                        ○ 5th capture group.<br/>
+                            ○ Match the string "0-9".<br/>
+            ○ 6th capture group.<br/>
+                ○ Match '/' greedily, optionally.<br/>
+            ○ Optional (greedy).<br/>
+                ○ 7th capture group.<br/>
+                    ○ Match a character in the set [#-'+-9=?A-Z\\_a-z] greedily any number of times.<br/>
+            ○ Match if at the end of the string or if before an ending newline.<br/>
+            </code>
+            </remarks>
         </member>
         <member name="T:Milvasoft.Core.ServiceCollectionExtension">
             <summary>
@@ -3218,6 +3284,65 @@
             <summary>
             Total data count of all pages.
             </summary>
+        </member>
+        <member name="T:System.Text.RegularExpressions.Generated.UriRegex_0">
+            <summary>Custom <see cref="T:System.Text.RegularExpressions.Regex"/>-derived type for the UriRegex method.</summary>
+        </member>
+        <member name="F:System.Text.RegularExpressions.Generated.UriRegex_0.Instance">
+            <summary>Cached, thread-safe singleton instance.</summary>
+        </member>
+        <member name="M:System.Text.RegularExpressions.Generated.UriRegex_0.#ctor">
+            <summary>Initializes the instance.</summary>
+        </member>
+        <member name="T:System.Text.RegularExpressions.Generated.UriRegex_0.RunnerFactory">
+            <summary>Provides a factory for creating <see cref="T:System.Text.RegularExpressions.RegexRunner"/> instances to be used by methods on <see cref="T:System.Text.RegularExpressions.Regex"/>.</summary>
+        </member>
+        <member name="M:System.Text.RegularExpressions.Generated.UriRegex_0.RunnerFactory.CreateInstance">
+            <summary>Creates an instance of a <see cref="T:System.Text.RegularExpressions.RegexRunner"/> used by methods on <see cref="T:System.Text.RegularExpressions.Regex"/>.</summary>
+        </member>
+        <member name="T:System.Text.RegularExpressions.Generated.UriRegex_0.RunnerFactory.Runner">
+            <summary>Provides the runner that contains the custom logic implementing the specified regular expression.</summary>
+        </member>
+        <member name="M:System.Text.RegularExpressions.Generated.UriRegex_0.RunnerFactory.Runner.Scan(System.ReadOnlySpan{System.Char})">
+            <summary>Scan the <paramref name="inputSpan"/> starting from base.runtextstart for the next match.</summary>
+            <param name="inputSpan">The text being scanned by the regular expression.</param>
+        </member>
+        <member name="M:System.Text.RegularExpressions.Generated.UriRegex_0.RunnerFactory.Runner.TryFindNextPossibleStartingPosition(System.ReadOnlySpan{System.Char})">
+            <summary>Search <paramref name="inputSpan"/> starting from base.runtextpos for the next location a match could possibly start.</summary>
+            <param name="inputSpan">The text being scanned by the regular expression.</param>
+            <returns>true if a possible match was found; false if no more matches are possible.</returns>
+        </member>
+        <member name="M:System.Text.RegularExpressions.Generated.UriRegex_0.RunnerFactory.Runner.TryMatchAtCurrentPosition(System.ReadOnlySpan{System.Char})">
+            <summary>Determine whether <paramref name="inputSpan"/> at base.runtextpos is a match for the regular expression.</summary>
+            <param name="inputSpan">The text being scanned by the regular expression.</param>
+            <returns>true if the regular expression matches at the current position; otherwise, false.</returns>
+        </member>
+        <member name="T:System.Text.RegularExpressions.Generated.Utilities">
+            <summary>Helper methods used by generated <see cref="T:System.Text.RegularExpressions.Regex"/>-derived implementations.</summary>
+        </member>
+        <member name="F:System.Text.RegularExpressions.Generated.Utilities.s_defaultTimeout">
+            <summary>Default timeout value set in <see cref="T:System.AppContext"/>, or <see cref="F:System.Text.RegularExpressions.Regex.InfiniteMatchTimeout"/> if none was set.</summary>
+        </member>
+        <member name="F:System.Text.RegularExpressions.Generated.Utilities.s_hasTimeout">
+            <summary>Whether <see cref="F:System.Text.RegularExpressions.Generated.Utilities.s_defaultTimeout"/> is non-infinite.</summary>
+        </member>
+        <member name="M:System.Text.RegularExpressions.Generated.Utilities.StackPop(System.Int32[],System.Int32@,System.Int32@,System.Int32@)">
+            <summary>Pops 2 values from the backtracking stack.</summary>
+        </member>
+        <member name="M:System.Text.RegularExpressions.Generated.Utilities.StackPush(System.Int32[]@,System.Int32@,System.Int32)">
+            <summary>Pushes 1 value onto the backtracking stack.</summary>
+        </member>
+        <member name="M:System.Text.RegularExpressions.Generated.Utilities.StackPush(System.Int32[]@,System.Int32@,System.Int32,System.Int32)">
+            <summary>Pushes 2 values onto the backtracking stack.</summary>
+        </member>
+        <member name="M:System.Text.RegularExpressions.Generated.Utilities.StackPush(System.Int32[]@,System.Int32@,System.Int32,System.Int32,System.Int32)">
+            <summary>Pushes 3 values onto the backtracking stack.</summary>
+        </member>
+        <member name="F:System.Text.RegularExpressions.Generated.Utilities.s_asciiLettersAndDigits">
+            <summary>Supports searching for characters in or not in "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz".</summary>
+        </member>
+        <member name="F:System.Text.RegularExpressions.Generated.Utilities.s_ascii_F8F8FFA3FEFFFF97FEFFFF07">
+            <summary>Supports searching for characters in or not in "#$%&amp;'+,-./0123456789=?ABCDEFGHIJKLMNOPQRSTUVWXYZ\\_abcdefghijklmnopqrstuvwxyz".</summary>
         </member>
     </members>
 </doc>

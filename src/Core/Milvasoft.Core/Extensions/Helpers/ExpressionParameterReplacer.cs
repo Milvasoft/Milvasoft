@@ -7,7 +7,7 @@ namespace Milvasoft.Core.Extensions.Helpers;
 /// </summary>
 public class ExpressionParameterReplacer : ExpressionVisitor
 {
-    private IDictionary<ParameterExpression, ParameterExpression> ParameterReplacements { get; set; }
+    private Dictionary<ParameterExpression, ParameterExpression> ParameterReplacements { get; set; }
 
     /// <summary>
     /// Constructor of <see cref="ExpressionParameterReplacer"/>
@@ -16,7 +16,7 @@ public class ExpressionParameterReplacer : ExpressionVisitor
     /// <param name="toParameters"></param>
     public ExpressionParameterReplacer(IList<ParameterExpression> fromParameters, IList<ParameterExpression> toParameters)
     {
-        ParameterReplacements = new Dictionary<ParameterExpression, ParameterExpression>();
+        ParameterReplacements = [];
 
         for (var i = 0; i != fromParameters.Count && i != toParameters.Count; i++)
         {
@@ -43,28 +43,19 @@ public class ExpressionParameterReplacer : ExpressionVisitor
 /// <summary>
 /// Expression parameter replacer for expression builder.
 /// </summary>
-public class ParameterReplaceVisitor : ExpressionVisitor
+/// <remarks>
+/// Constructor of <see cref="ParameterReplaceVisitor"/>
+/// </remarks>
+/// <param name="from"></param>
+/// <param name="to"></param>
+public class ParameterReplaceVisitor(ParameterExpression from, ParameterExpression to) : ExpressionVisitor
 {
-    private readonly ParameterExpression from, to;
-
-    /// <summary>
-    /// Constructor of <see cref="ParameterReplaceVisitor"/>
-    /// </summary>
-    /// <param name="from"></param>
-    /// <param name="to"></param>
-    public ParameterReplaceVisitor(ParameterExpression from, ParameterExpression to)
-    {
-        this.from = from;
-        this.to = to;
-    }
+    private readonly ParameterExpression _from = from, _to = to;
 
     /// <summary>
     /// Visits the System.Linq.Expressions.ParameterExpression.
     /// </summary>
     /// <param name="node"></param>
     /// <returns></returns>
-    protected override Expression VisitParameter(ParameterExpression node)
-    {
-        return node == from ? to : base.VisitParameter(node);
-    }
+    protected override Expression VisitParameter(ParameterExpression node) => node == _from ? _to : base.VisitParameter(node);
 }

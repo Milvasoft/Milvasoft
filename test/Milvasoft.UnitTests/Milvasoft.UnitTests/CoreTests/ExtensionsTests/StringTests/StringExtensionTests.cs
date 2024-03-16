@@ -9,9 +9,11 @@ public partial class StringExtensionTests
 {
     public static IEnumerable<object[]> ValidStringByteArrayPairs()
     {
+#pragma warning disable IDE0230 // Use UTF-8 string literal
         yield return new object[] { " ", new byte[] { 32 } };
         yield return new object[] { "hello", new byte[] { 104, 101, 108, 108, 111 } };
         yield return new object[] { "İksir", new byte[] { 196, 176, 107, 115, 105, 114 } };
+#pragma warning restore IDE0230 // Use UTF-8 string literal
     }
 
     #region GetByteArray

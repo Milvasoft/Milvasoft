@@ -8,14 +8,9 @@ namespace Milvasoft.DataAccess.MongoDB.Utils.Serializers;
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
 public interface IEncryptedStringSerializer : IBsonSerializer<EncryptedString> { }
 
-public class EncryptedStringSerializer : SerializerBase<EncryptedString>, IEncryptedStringSerializer
+public class EncryptedStringSerializer(IMilvaCryptographyProvider encrypter) : SerializerBase<EncryptedString>, IEncryptedStringSerializer
 {
-    private readonly IMilvaCryptographyProvider _encrypter;
-
-    public EncryptedStringSerializer(IMilvaCryptographyProvider encrypter)
-    {
-        _encrypter = encrypter;
-    }
+    private readonly IMilvaCryptographyProvider _encrypter = encrypter;
 
     public override EncryptedString Deserialize(BsonDeserializationContext context, BsonDeserializationArgs args)
     {

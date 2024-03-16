@@ -1,22 +1,23 @@
 using System.Diagnostics;
 using System.Net;
 using System.Security.Cryptography;
+
 namespace Milvasoft.Identity.TokenProvider;
-using System;
-using System.Text;
 
 internal static class Rfc6238AuthenticationService
 {
     private static readonly DateTime _unixEpoch = new(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
     private static readonly TimeSpan _timestep = TimeSpan.FromMinutes(3);
-    private static readonly Encoding _encoding = new UTF8Encoding(false, true);
+    private static readonly UTF8Encoding _encoding = new(false, true);
     private static readonly RandomNumberGenerator _rng = RandomNumberGenerator.Create();
 
     // Generates a new 80-bit security token
     public static byte[] GenerateRandomKey()
     {
         byte[] bytes = new byte[20];
+
         _rng.GetBytes(bytes);
+
         return bytes;
     }
 
@@ -28,11 +29,14 @@ internal static class Rfc6238AuthenticationService
         // See https://tools.ietf.org/html/rfc4226
         // We can add an optional modifier
         var timestepAsBytes = BitConverter.GetBytes(IPAddress.HostToNetworkOrder((long)timestepNumber));
+
         var hash = hashAlgorithm.ComputeHash(ApplyModifier(timestepAsBytes, modifier));
 
         // Generate DT string
-        var offset = hash[hash.Length - 1] & 0xf;
+        var offset = hash[^1] & 0xf;
+
         Debug.Assert(offset + 4 < hash.Length);
+
         var binaryCode = (hash[offset] & 0x7f) << 24
                          | (hash[offset + 1] & 0xff) << 16
                          | (hash[offset + 2] & 0xff) << 8
@@ -49,9 +53,13 @@ internal static class Rfc6238AuthenticationService
         }
 
         var modifierBytes = _encoding.GetBytes(modifier);
+
         var combined = new byte[checked(input.Length + modifierBytes.Length)];
+
         Buffer.BlockCopy(input, 0, combined, 0, input.Length);
+
         Buffer.BlockCopy(modifierBytes, 0, combined, input.Length, modifierBytes.Length);
+
         return combined;
     }
 
@@ -64,38 +72,30 @@ internal static class Rfc6238AuthenticationService
 
     public static int GenerateCode(byte[] securityToken, string modifier = null)
     {
-        if (securityToken == null)
-        {
-            throw new ArgumentNullException(nameof(securityToken));
-        }
+        ArgumentNullException.ThrowIfNull(securityToken);
 
         // Allow a variance of no greater than 90 seconds in either direction
         var currentTimeStep = GetCurrentTimeStepNumber();
-        using (var hashAlgorithm = new HMACSHA1(securityToken))
-        {
-            return ComputeTotp(hashAlgorithm, currentTimeStep, modifier);
-        }
+
+        using var hashAlgorithm = new HMACSHA1(securityToken);
+
+        return ComputeTotp(hashAlgorithm, currentTimeStep, modifier);
     }
 
     public static bool ValidateCode(byte[] securityToken, int code, string modifier = null)
     {
-        if (securityToken == null)
-        {
-            throw new ArgumentNullException(nameof(securityToken));
-        }
+        ArgumentNullException.ThrowIfNull(securityToken);
 
         // Allow a variance of no greater than 90 seconds in either direction
         var currentTimeStep = GetCurrentTimeStepNumber();
-        using (var hashAlgorithm = new HMACSHA1(securityToken))
+
+        using var hashAlgorithm = new HMACSHA1(securityToken);
+        for (var i = -2; i <= 2; i++)
         {
-            for (var i = -2; i <= 2; i++)
-            {
-                var computedTotp = ComputeTotp(hashAlgorithm, (ulong)((long)currentTimeStep + i), modifier);
-                if (computedTotp == code)
-                {
-                    return true;
-                }
-            }
+            var computedTotp = ComputeTotp(hashAlgorithm, (ulong)((long)currentTimeStep + i), modifier);
+
+            if (computedTotp == code)
+                return true;
         }
 
         // No match

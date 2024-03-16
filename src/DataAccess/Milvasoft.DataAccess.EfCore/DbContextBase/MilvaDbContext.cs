@@ -345,7 +345,7 @@ public abstract class MilvaDbContextBase(DbContextOptions options) : DbContext(o
 
         whereMethod = whereMethod.MakeGenericMethod(type);
 
-        var ret = (Task)whereMethod.Invoke(dbSet, new object[] { dbSet, null });
+        var ret = (Task)whereMethod.Invoke(dbSet, [dbSet, null]);
 
         await ret.ConfigureAwait(false);
 
@@ -456,25 +456,24 @@ public abstract class MilvaDbContextBase(DbContextOptions options) : DbContext(o
                 propNamesForProjection.AddRange(mainEntityPropertyNames);
 
             var projectionExpression = _createProjectionExpressionMethod.MakeGenericMethod(entityType, translationEntityType).Invoke(null,
-                                                                                                              new object[]
-                                                                                                              {
+                                                                                                              [
                                                                                                                   propNamesForProjection,
                                                                                                                   translationEntityPropNames,
                                                                                                                   translationEntityType,
                                                                                                                   multiLanguageManager
-                                                                                                              });
+                                                                                                              ]);
 
             parameter.UpdateFilterByForTranslationPropertyNames(translationEntityPropNames);
 
             var taskResult = (Task)this.GetType()
                                        .GetMethod(nameof(GetRequiredContentsAsync))
                                        .MakeGenericMethod(entityType)
-                                       .Invoke(this, new object[]
-                                       {
+                                       .Invoke(this,
+                                       [
                                            parameter.Filtering,
                                            parameter.Sorting,
                                            projectionExpression
-                                       });
+                                       ]);
 
             await taskResult;
 

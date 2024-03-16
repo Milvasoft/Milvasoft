@@ -125,7 +125,7 @@ public static class NoSqlRelationHelper
                 {
                     var collection = mongoDatabase.GetCollection<TMapProperty>(mappedPropertyType.GetCollectionName());
 
-                    List<FilterDefinition<TMapProperty>> filterDefinitions = new();
+                    List<FilterDefinition<TMapProperty>> filterDefinitions = [];
 
                     FilterDefinition<TMapProperty> filterDefinition = filterExpression ?? Builders<TMapProperty>.Filter.Empty;
 
@@ -174,7 +174,7 @@ public static class NoSqlRelationHelper
         if (entities.IsNullOrEmpty())
             return null;
 
-        List<Tuple<TReferenceProperty, ObjectId>> toBeMappedValueReferences = new();
+        List<Tuple<TReferenceProperty, ObjectId>> toBeMappedValueReferences = [];
 
         string collectionName = "";
 
@@ -202,7 +202,7 @@ public static class NoSqlRelationHelper
         if (toBeMappedValueReferences.IsNullOrEmpty())
             return null;
 
-        List<FilterDefinition<TMapProperty>> filterDefinitions = new();
+        List<FilterDefinition<TMapProperty>> filterDefinitions = [];
 
         foreach (var refValue in toBeMappedValueReferences.Select(p => p.Item1).ToList())
             filterDefinitions.Add(Builders<TMapProperty>.Filter.Eq(p => p.Id, refValue.Id));
@@ -255,7 +255,7 @@ public static class NoSqlRelationHelper
         if (entities.IsNullOrEmpty())
             return null;
 
-        List<Tuple<List<TReferenceProperty>, ObjectId>> toBeMappedValueReferences = new();
+        List<Tuple<List<TReferenceProperty>, ObjectId>> toBeMappedValueReferences = [];
 
         string collectionName = "";
 
@@ -281,7 +281,7 @@ public static class NoSqlRelationHelper
         if (toBeMappedValueReferences.IsNullOrEmpty())
             return null;
 
-        List<FilterDefinition<TMapProperty>> filterDefinitions = new();
+        List<FilterDefinition<TMapProperty>> filterDefinitions = [];
 
         foreach (var refValue in toBeMappedValueReferences.SelectMany(p => p.Item1).Where(p => p != null))
             filterDefinitions.Add(Builders<TMapProperty>.Filter.Eq(i => i.Id, refValue.Id));
@@ -298,7 +298,7 @@ public static class NoSqlRelationHelper
         {
             var entity = entities.Where(p => p.Id == toBeMappedValueReference.Item2).FirstOrDefault();
 
-            List<TMapProperty> mappedValues = new();
+            List<TMapProperty> mappedValues = [];
 
             if (toBeMappedValueReference.Item1 != null)
                 foreach (var mongoRef in toBeMappedValueReference.Item1)
@@ -326,7 +326,7 @@ public static class NoSqlRelationHelper
         if (entities.IsNullOrEmpty())
             return null;
 
-        List<TEmbeddedProperty> embeddedProperties = new();
+        List<TEmbeddedProperty> embeddedProperties = [];
 
         foreach (var entity in entities)
         {
@@ -357,7 +357,7 @@ public static class NoSqlRelationHelper
         if (entities.IsNullOrEmpty())
             return null;
 
-        List<List<TEmbeddedProperty>> embeddedProperties = new();
+        List<List<TEmbeddedProperty>> embeddedProperties = [];
 
         foreach (var entity in entities)
         {
@@ -411,7 +411,7 @@ public static class NoSqlRelationHelper
         if (objectIds.IsNullOrEmpty())
             return null;
 
-        List<MongoDBRef> mongoDBRefs = new();
+        List<MongoDBRef> mongoDBRefs = [];
 
         foreach (var objectId in objectIds)
             mongoDBRefs.Add(new(DbName, typeof(TEntity).GetCollectionName(), objectId));

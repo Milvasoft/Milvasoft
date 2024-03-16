@@ -20,8 +20,5 @@ public class TenantOptionsCacheDictionary<TOptions, TKey> where TOptions : class
     /// </summary>
     /// <param name="tenantId"></param>
     /// <returns></returns>
-    public IOptionsMonitorCache<TOptions> Get(TKey tenantId)
-    {
-        return _tenantSpecificOptionCaches.GetOrAdd(tenantId, new OptionsCache<TOptions>());
-    }
+    public IOptionsMonitorCache<TOptions> Get(TKey tenantId) => _tenantSpecificOptionCaches.GetOrAdd(tenantId, new OptionsCache<TOptions>());
 }

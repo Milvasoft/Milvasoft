@@ -6,7 +6,7 @@ namespace Milvasoft.Core;
 /// <summary>
 /// Helper class for request processes.
 /// </summary>
-public static class Request
+public static partial class Request
 {
     #region Create Request Message
 
@@ -144,7 +144,7 @@ public static class Request
         var requestUrl = $"{protocol}://{hostName}:{port}/{pathName}{query}{hash}";
 
         // Create new Regex.
-        var regex = new Regex(@"^(ht|f)tp(s?)\:\/\/[0-9a-zA-Z]([-.\w]*[0-9a-zA-Z])*(:(0-9)*)*(\/?)([a-zA-Z0-9\-\.\?\,\'\/\\\+&%\$#_]*)?$");
+        var regex = UriRegex();
 
         // Call Match on Regex instance.
         var match = regex.Match(requestUrl);
@@ -195,7 +195,7 @@ public static class Request
         var requestUrl = $"{address}/{pathName}{query}{hash}";
 
         // Create new Regex.
-        var regex = new Regex(@"^(ht|f)tp(s?)\:\/\/[0-9a-zA-Z]([-.\w]*[0-9a-zA-Z])*(:(0-9)*)*(\/?)([a-zA-Z0-9\-\.\?\=\,\'\/\\\+&%\$#_]*)?$");
+        var regex = UriRegex();
 
         // Call Match on Regex instance.
         var match = regex.Match(requestUrl);
@@ -212,8 +212,10 @@ public static class Request
         {
             throw;
         }
-
     }
+
+    [GeneratedRegex(@"^(ht|f)tp(s?)\:\/\/[0-9a-zA-Z]([-.\w]*[0-9a-zA-Z])*(:(0-9)*)*(\/?)([a-zA-Z0-9\-\.\?\=\,\'\/\\\+&%\$#_]*)?$")]
+    private static partial Regex UriRegex();
 
     #endregion
 

@@ -143,7 +143,7 @@ public abstract class MultiLanguageManager : IMultiLanguageManager
 
         var getTranslationMethod = _getTranslationMethodInfo.MakeGenericMethod(translationEntityType);
 
-        return getTranslationMethod.Invoke(this, new object[] { translations, requestedPropName });
+        return getTranslationMethod.Invoke(this, [translations, requestedPropName]);
     }
 
     /// <summary>

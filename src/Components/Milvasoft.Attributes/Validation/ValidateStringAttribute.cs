@@ -97,8 +97,7 @@ public class ValidateStringAttribute : ValidationAttribute
     /// <returns></returns>
     protected override ValidationResult IsValid(object value, ValidationContext context)
     {
-        if (value == null)
-            value = "";
+        value ??= "";
 
         var valueType = value.GetType();
 
@@ -163,7 +162,7 @@ public class ValidateStringAttribute : ValidationAttribute
                 if (!blackList.IsNullOrEmpty())
                     foreach (var invalidString in blackList)
                         foreach (var invalidStringValue in invalidString.Values)
-                            if (stringValue.ToLowerInvariant().Contains(invalidStringValue))
+                            if (stringValue.Contains(invalidStringValue, StringComparison.InvariantCultureIgnoreCase))
                             {
                                 var milvasoftLogger = context.GetService<IMilvaLogger>();
 

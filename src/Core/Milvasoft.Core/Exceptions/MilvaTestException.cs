@@ -3,13 +3,10 @@
 /// <summary>
 /// Test exception class.
 /// </summary>
-public class MilvaTestException : Exception
+/// <remarks>
+/// Initializes a new instance of the <see cref="MilvaTestException"/> class  with a specified error message.
+/// </remarks>
+/// <param name="exceptionMessage"></param>
+public class MilvaTestException(string exceptionMessage) : Exception(exceptionMessage)
 {
-    /// <summary>
-    /// Initializes a new instance of the <see cref="MilvaTestException"/> class  with a specified error message.
-    /// </summary>
-    /// <param name="exceptionMessage"></param>
-    public MilvaTestException(string exceptionMessage) : base(exceptionMessage)
-    {
-    }
 }

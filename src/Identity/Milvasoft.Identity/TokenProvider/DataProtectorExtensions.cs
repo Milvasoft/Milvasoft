@@ -48,35 +48,33 @@ public static class DataProtectorExtensions
 
             var ms = new MemoryStream(unprotectedData);
 
-            using (var reader = ms.CreateReader())
+            using var reader = ms.CreateReader();
+            var creationTime = reader.ReadDateTimeOffset();
+            var expirationTime = creationTime + TimeSpan.FromDays(1);
+            if (expirationTime < DateTimeOffset.UtcNow)
             {
-                var creationTime = reader.ReadDateTimeOffset();
-                var expirationTime = creationTime + TimeSpan.FromDays(1);
-                if (expirationTime < DateTimeOffset.UtcNow)
-                {
-                    return false;
-                }
-
-                var userId = reader.ReadString();
-                if (userId != actualUserId.ToString())
-                {
-                    return false;
-                }
-
-                var purp = reader.ReadString();
-                if (!string.Equals(purp, purpose))
-                {
-                    return false;
-                }
-
-                var stamp = reader.ReadString();
-                if (reader.PeekChar() != -1)
-                {
-                    return false;
-                }
-
-                return stamp == "";
+                return false;
             }
+
+            var userId = reader.ReadString();
+            if (userId != actualUserId.ToString())
+            {
+                return false;
+            }
+
+            var purp = reader.ReadString();
+            if (!string.Equals(purp, purpose))
+            {
+                return false;
+            }
+
+            var stamp = reader.ReadString();
+            if (reader.PeekChar() != -1)
+            {
+                return false;
+            }
+
+            return stamp == "";
         }
         // ReSharper disable once EmptyGeneralCatchClause
         catch
@@ -93,25 +91,13 @@ public static class DataProtectorExtensions
 /// </summary>
 internal static class StreamExtensions
 {
-    internal static readonly Encoding DefaultEncoding = new UTF8Encoding(false, true);
+    internal static readonly Encoding _defaultEncoding = new UTF8Encoding(false, true);
 
-    public static BinaryReader CreateReader(this Stream stream)
-    {
-        return new BinaryReader(stream, DefaultEncoding, true);
-    }
+    public static BinaryReader CreateReader(this Stream stream) => new(stream, _defaultEncoding, true);
 
-    public static BinaryWriter CreateWriter(this Stream stream)
-    {
-        return new BinaryWriter(stream, DefaultEncoding, true);
-    }
+    public static BinaryWriter CreateWriter(this Stream stream) => new(stream, _defaultEncoding, true);
 
-    public static DateTimeOffset ReadDateTimeOffset(this BinaryReader reader)
-    {
-        return new DateTimeOffset(reader.ReadInt64(), TimeSpan.Zero);
-    }
+    public static DateTimeOffset ReadDateTimeOffset(this BinaryReader reader) => new(reader.ReadInt64(), TimeSpan.Zero);
 
-    public static void Write(this BinaryWriter writer, DateTimeOffset value)
-    {
-        writer.Write(value.UtcTicks);
-    }
+    public static void Write(this BinaryWriter writer, DateTimeOffset value) => writer.Write(value.UtcTicks);
 }

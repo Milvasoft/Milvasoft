@@ -199,7 +199,7 @@ public static class CommonHelper
         MethodInfo genericSelectorMethod = selectorMethod.MakeGenericMethod(entityType, propType);
 
         // Step 3: Call the generic method with the specified type arguments
-        var propertySelectorResult = genericSelectorMethod.Invoke(null, new object[] { propName });
+        var propertySelectorResult = genericSelectorMethod.Invoke(null, [propName]);
 
         return propertySelectorResult;
     }

@@ -9,33 +9,27 @@ namespace Milvasoft.MultiTenancy.Accessor;
 /// </summary>
 /// <typeparam name="TTenant"></typeparam>
 /// <typeparam name="TKey"></typeparam>
-public class TenantAccessor<TTenant, TKey> : ITenantAccessor<TTenant, TKey>
+/// <remarks>
+/// Creates new instance of <see cref="TenantAccessor{TTenant, TKey}"/>.
+/// </remarks>
+/// <param name="httpContextAccessor"></param>
+/// <param name="serviceProvider"></param>
+public class TenantAccessor<TTenant, TKey>(IHttpContextAccessor httpContextAccessor, IServiceProvider serviceProvider) : ITenantAccessor<TTenant, TKey>
     where TTenant : class, IMilvaTenantBase<TKey>
     where TKey : struct, IEquatable<TKey>
 {
     /// <summary>
     /// Application service provider.
     /// </summary>
-    public IServiceProvider ServiceProvider { get; }
+    public IServiceProvider ServiceProvider { get; } = serviceProvider;
 
     /// <summary>
     /// Context accessor.
     /// </summary>
-    public IHttpContextAccessor HttpContextAccessor { get; }
+    public IHttpContextAccessor HttpContextAccessor { get; } = httpContextAccessor;
 
     /// <summary>
     /// Accessed tenant from <see cref="HttpContext"/>.
     /// </summary>
     public TTenant Tenant => HttpContextAccessor.HttpContext?.GetTenant<TTenant, TKey>();
-
-    /// <summary>
-    /// Creates new instance of <see cref="TenantAccessor{TTenant, TKey}"/>.
-    /// </summary>
-    /// <param name="httpContextAccessor"></param>
-    /// <param name="serviceProvider"></param>
-    public TenantAccessor(IHttpContextAccessor httpContextAccessor, IServiceProvider serviceProvider)
-    {
-        HttpContextAccessor = httpContextAccessor;
-        ServiceProvider = serviceProvider;
-    }
 }

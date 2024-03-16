@@ -39,5 +39,4 @@ public interface ITokenManagement
     /// Gets or sets RefreshExpiration of token.
     /// </summary>
     public int RefreshExpiration { get; set; }
-
 }

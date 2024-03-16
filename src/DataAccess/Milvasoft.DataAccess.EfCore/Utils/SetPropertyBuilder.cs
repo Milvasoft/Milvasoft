@@ -35,11 +35,11 @@ public class SetPropertyBuilder<TSource>
     {
         SetPropertyCalls = SetPropertyCalls.Update(body: Expression.Call(instance: SetPropertyCalls.Body,
                                                                          methodName: nameof(SetPropertyCalls<TSource>.SetProperty),
-                                                                         typeArguments: new[] { typeof(TProperty) },
-                                                                         arguments: new Expression[] {
+                                                                         typeArguments: [typeof(TProperty)],
+                                                                         arguments: [
                                                                              propertyExpression,
                                                                              valueExpression
-                                                                         }),
+                                                                         ]),
                                                   parameters: SetPropertyCalls.Parameters);
 
         return this;

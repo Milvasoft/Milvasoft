@@ -473,11 +473,18 @@
             <summary>
             Provides localized identity error messages. All error's code is nameof(<see cref="T:Microsoft.AspNetCore.Identity.IdentityError"/>) method. (e.g. Code = "DefaultError")
             </summary>
+            <remarks>
+            Constructor for localizer dependenct injection.
+            </remarks>
+            <param name="localizer"></param>
         </member>
         <member name="M:Milvasoft.Identity.Concrete.MilvaIdentityDescriber.#ctor(Milvasoft.Core.Abstractions.Localization.IMilvaLocalizer)">
             <summary>
-            Constructor for localizer dependenct injection.
+            Provides localized identity error messages. All error's code is nameof(<see cref="T:Microsoft.AspNetCore.Identity.IdentityError"/>) method. (e.g. Code = "DefaultError")
             </summary>
+            <remarks>
+            Constructor for localizer dependenct injection.
+            </remarks>
             <param name="localizer"></param>
         </member>
         <member name="M:Milvasoft.Identity.Concrete.MilvaIdentityDescriber.DefaultError">
@@ -1000,11 +1007,18 @@
             <summary>
             Provides an abstraction for user validation.
             </summary>
+            <remarks>
+            Constructor for localizer dependenct injection.
+            </remarks>
+            <param name="localizer"></param>
         </member>
         <member name="M:Milvasoft.Identity.Concrete.MilvaUserValidation`2.#ctor(Milvasoft.Core.Abstractions.Localization.IMilvaLocalizer)">
             <summary>
-            Constructor for localizer dependenct injection.
+            Provides an abstraction for user validation.
             </summary>
+            <remarks>
+            Constructor for localizer dependenct injection.
+            </remarks>
             <param name="localizer"></param>
         </member>
         <member name="M:Milvasoft.Identity.Concrete.MilvaUserValidation`2.ValidateAsync(Microsoft.AspNetCore.Identity.UserManager{`0},`0)">

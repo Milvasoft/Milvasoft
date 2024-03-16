@@ -22,12 +22,12 @@ public struct TenantId : IEquatable<TenantId>
     /// <summary>
     /// Unique tenancy name of tenant.
     /// </summary>
-    public string TenancyName { get => _tenancyName; }
+    public readonly string TenancyName { get => _tenancyName; }
 
     /// <summary>
     /// Branch no of Tenant.
     /// </summary>
-    public int BranchNo { get => _branchNo; }
+    public readonly int BranchNo { get => _branchNo; }
 
     /// <summary>
     /// Creates new instance of <see cref="TenantId"/>.
@@ -93,20 +93,20 @@ public struct TenantId : IEquatable<TenantId>
     /// Combines Tenancy Name and BranchNo into a hash code.
     /// </summary>
     /// <returns></returns>
-    public override int GetHashCode() => HashCode.Combine(TenancyName, BranchNo);
+    public override readonly int GetHashCode() => HashCode.Combine(TenancyName, BranchNo);
 
     /// <summary>
     /// Returns hash.
     /// </summary>
     /// <returns></returns>
-    public string GetHashString() => $"{_tenancyName}_{_branchNo}".Hash();
+    public readonly string GetHashString() => $"{_tenancyName}_{_branchNo}".Hash();
 
     /// <summary>
     /// Compares hashes.
     /// </summary>
     /// <param name="other"></param>
     /// <returns> If both hash are equals returns true, othewise false. </returns>
-    public override bool Equals(object other)
+    public override readonly bool Equals(object other)
     {
         TenantId tenantId;
 
@@ -127,7 +127,7 @@ public struct TenantId : IEquatable<TenantId>
     /// </summary>
     /// <param name="other"></param>
     /// <returns> If both hash are equals returns true, othewise false. </returns>
-    public bool Equals(TenantId other)
+    public readonly bool Equals(TenantId other)
     {
         if (other._hash != GetHashString())
             return false;
@@ -140,7 +140,7 @@ public struct TenantId : IEquatable<TenantId>
     /// </summary>
     /// <param name="other"></param>
     /// <returns> If both TenancyName are equals returns true, othewise false. </returns>
-    public bool TenancyNameEquals(TenantId other)
+    public readonly bool TenancyNameEquals(TenantId other)
     {
         if (TenancyName != other.TenancyName)
             return false;
@@ -153,7 +153,7 @@ public struct TenantId : IEquatable<TenantId>
     /// </summary>
     /// <param name="other"></param>
     /// <returns> If both BranchNo are equals returns true, othewise false. </returns>
-    public bool BranchNoEquals(TenantId other)
+    public readonly bool BranchNoEquals(TenantId other)
     {
         if (BranchNo != other.BranchNo)
             return false;
@@ -165,7 +165,7 @@ public struct TenantId : IEquatable<TenantId>
     /// Returns Tenancy Name and Branch No with '_' seperator 
     /// </summary>
     /// <returns></returns>
-    public override string ToString() => $"{_tenancyName}_{_branchNo}";
+    public override readonly string ToString() => $"{_tenancyName}_{_branchNo}";
 
     /// <summary>
     /// <para>Supported formats : G , H </para>
@@ -174,7 +174,7 @@ public struct TenantId : IEquatable<TenantId>
     /// </summary>
     /// <param name="format"></param>
     /// <returns></returns>
-    public string ToString(string format)
+    public readonly string ToString(string format)
     {
         if (string.IsNullOrWhiteSpace(format))
             format = "G";

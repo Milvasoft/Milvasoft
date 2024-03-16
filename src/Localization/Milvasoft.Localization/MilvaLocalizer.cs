@@ -91,8 +91,7 @@ public class MilvaLocalizer : IMilvaLocalizer
     /// A <see cref="System.Boolean"/> indicating whether to include strings from parent cultures.
     /// </param>
     /// <returns>The strings.</returns>
-    public IEnumerable<LocalizedValue> GetAllStrings(bool includeParentCultures) =>
-        _localizationManager.GetAllStrings(includeParentCultures);
+    public IEnumerable<LocalizedValue> GetAllStrings(bool includeParentCultures) => _localizationManager.GetAllStrings(includeParentCultures);
 
     /// <summary>
     /// Gets string resource with given <paramref name="key"/> with given <paramref name="culture"/>.

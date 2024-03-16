@@ -223,7 +223,7 @@ public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : 
 
         var aggregateFacetResult = await _collection.Aggregate().Match(p => p.Id == entityId).Unwind<TEntity, TEmbedded>(unwindExpression).Facet(dataFacet).ToListAsync().ConfigureAwait(false);
 
-        return aggregateFacetResult.First().Facets.First(x => x.Name == "matchingDatas").Output<TEmbedded>().ToList();
+        return [.. aggregateFacetResult.First().Facets.First(x => x.Name == "matchingDatas").Output<TEmbedded>()];
     }
 
     #region Pagination
@@ -518,10 +518,7 @@ public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : 
     /// <param name="filterDefinition"></param>
     /// <param name="updateDefinition"></param>
     /// <returns></returns>
-    public virtual async Task UpdateAsync(FilterDefinition<TEntity> filterDefinition, UpdateDefinition<TEntity> updateDefinition)
-    {
-        await _collection.UpdateOneAsync(filterDefinition, updateDefinition).ConfigureAwait(false);
-    }
+    public virtual async Task UpdateAsync(FilterDefinition<TEntity> filterDefinition, UpdateDefinition<TEntity> updateDefinition) => await _collection.UpdateOneAsync(filterDefinition, updateDefinition).ConfigureAwait(false);
 
     /// <summary>
     /// Updates the data in multiple.
@@ -582,20 +579,14 @@ public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : 
     /// </summary>
     /// <param name="filterExpression"></param>
     /// <returns></returns>
-    public async Task DeleteRangeAsync(FilterDefinition<TEntity> filterExpression)
-    {
-        await _collection.DeleteManyAsync(filterExpression).ConfigureAwait(false);
-    }
+    public async Task DeleteRangeAsync(FilterDefinition<TEntity> filterExpression) => await _collection.DeleteManyAsync(filterExpression).ConfigureAwait(false);
 
     /// <summary>
     ///  Deletes single entity from database asynchronously..
     /// </summary>
     /// <param name="filterExpression"></param>
     /// <returns></returns>
-    public async Task DeleteAsync(Expression<Func<TEntity, bool>> filterExpression)
-    {
-        await _collection.FindOneAndDeleteAsync(filterExpression).ConfigureAwait(false);
-    }
+    public async Task DeleteAsync(Expression<Func<TEntity, bool>> filterExpression) => await _collection.FindOneAndDeleteAsync(filterExpression).ConfigureAwait(false);
 
     /// <summary>
     ///  Deletes single entity from database asynchronously..
@@ -631,9 +622,9 @@ public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : 
     protected string GetProjectionQuery<TEmbedded>(Expression<Func<TEntity, object>> unwindExpression,
                                                    List<Expression<Func<TEmbedded, object>>> projectExpressions = null)
     {
-        List<string> mappedProps = new();
+        List<string> mappedProps = [];
 
-        List<string> queries = new();
+        List<string> queries = [];
 
         var queryProp = GetUnwindType();
 
@@ -676,7 +667,7 @@ public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : 
 
         string GetUnwindType()
         {
-            List<string> unwindNesteds = new();
+            List<string> unwindNesteds = [];
 
 #pragma warning disable IDE0019 // Use pattern matching
             MemberExpression memberExpression = unwindExpression.Body as MemberExpression;
@@ -753,9 +744,7 @@ public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : 
                                                                                                                string projectQuery,
                                                                                                                FilterDefinition<TEmbedded> filterDefForTEmbedded = null)
     {
-        List<IPipelineStageDefinition> stages = new();
-
-        stages.Add(PipelineStageDefinitionBuilder.Project<TEmbedded, TEmbedded>(BsonDocument.Parse("{" + projectQuery + "}")));
+        List<IPipelineStageDefinition> stages = [PipelineStageDefinitionBuilder.Project<TEmbedded, TEmbedded>(BsonDocument.Parse("{" + projectQuery + "}"))];
 
         var filter = filterDefForTEmbedded ?? Builders<TEmbedded>.Filter.Empty;
 

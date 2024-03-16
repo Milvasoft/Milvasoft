@@ -6,15 +6,11 @@ namespace Milvasoft.DataAccess.EfCore.Utils.Converters;
 /// <summary>
 /// Defines the internal encryption converter for string values.
 /// </summary>
-public sealed class MilvaEncryptionConverter : ValueConverter<string, string>
+/// <remarks>
+/// Creates a new <see cref="MilvaEncryptionConverter"/> instance.
+/// </remarks>
+/// <param name="encryptionProvider">Encryption provider</param>
+/// <param name="mappingHints">Entity Framework mapping hints</param>
+public sealed class MilvaEncryptionConverter(IMilvaCryptographyProvider encryptionProvider, ConverterMappingHints mappingHints = null) : ValueConverter<string, string>(value => encryptionProvider.Encrypt(value), x => encryptionProvider.Decrypt(x), mappingHints)
 {
-    /// <summary>
-    /// Creates a new <see cref="MilvaEncryptionConverter"/> instance.
-    /// </summary>
-    /// <param name="encryptionProvider">Encryption provider</param>
-    /// <param name="mappingHints">Entity Framework mapping hints</param>
-    public MilvaEncryptionConverter(IMilvaCryptographyProvider encryptionProvider, ConverterMappingHints mappingHints = null)
-        : base(value => encryptionProvider.Encrypt(value), x => encryptionProvider.Decrypt(x), mappingHints)
-    {
-    }
 }

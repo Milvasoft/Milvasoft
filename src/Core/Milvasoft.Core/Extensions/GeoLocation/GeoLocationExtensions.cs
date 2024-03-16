@@ -39,8 +39,7 @@ public static class GeoLocationExtensions
         // Calculate the result
         return c * radius;
 
-        static double ToRadians(double angleIn10thofaDegree) =>
-            // Angle in 10th of a degree
-            angleIn10thofaDegree * Math.PI / 180;
+        // Angle in 10th of a degree
+        static double ToRadians(double angleIn10thofaDegree) => angleIn10thofaDegree * Math.PI / 180;
     }
 }

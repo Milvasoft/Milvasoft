@@ -285,7 +285,7 @@ public class ContextRepository<TContext>(TContext dbContext) : IContextRepositor
 
         whereMethod = whereMethod.MakeGenericMethod(type);
 
-        var ret = (Task)whereMethod.Invoke(dbSet, new object[] { dbSet, null });
+        var ret = (Task)whereMethod.Invoke(dbSet, [dbSet, null]);
         await ret.ConfigureAwait(false);
 
         var resultProperty = ret.GetType().GetProperty("Result");

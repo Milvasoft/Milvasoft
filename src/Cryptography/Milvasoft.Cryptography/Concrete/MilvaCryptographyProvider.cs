@@ -7,14 +7,20 @@ namespace Milvasoft.Cryptography.Concrete;
 /// <summary>
 /// Provides file encryption and decryption with AES Algorithm. Milvasoft Corporation is not responsible of possible data loss.
 /// </summary>
-public class MilvaCryptographyProvider : IMilvaCryptographyProvider
+/// <remarks>
+/// Creates a new <see cref="MilvaCryptographyProvider"/> instance.
+/// </remarks>
+/// <param name="key"> Must be between 128-256 bit.</param>
+/// <param name="mode"></param>
+/// <param name="padding"></param>
+public class MilvaCryptographyProvider(string key, CipherMode mode = CipherMode.CBC, PaddingMode padding = PaddingMode.PKCS7) : IMilvaCryptographyProvider
 {
 
     #region Fields
 
-    private readonly byte[] _key;
-    private readonly CipherMode _mode;
-    private readonly PaddingMode _padding;
+    private readonly byte[] _key = Encoding.UTF8.GetBytes(key);
+    private readonly CipherMode _mode = mode;
+    private readonly PaddingMode _padding = padding;
 
     #endregion
 
@@ -31,22 +37,6 @@ public class MilvaCryptographyProvider : IMilvaCryptographyProvider
     public const int InitializationVectorSize = 16;
 
     #endregion
-
-    /// <summary>
-    /// Creates a new <see cref="MilvaCryptographyProvider"/> instance.
-    /// </summary>
-    /// <param name="key"> Must be between 128-256 bit.</param>
-    /// <param name="mode"></param>
-    /// <param name="padding"></param>
-    public MilvaCryptographyProvider(string key, CipherMode mode = CipherMode.CBC, PaddingMode padding = PaddingMode.PKCS7)
-    {
-        _key = Encoding.UTF8.GetBytes(key);
-
-        //if (_key.Length != 16) throw new ArgumentOutOfRangeException("Key is not proper length. Key bit length must be 16.");
-
-        _mode = mode;
-        _padding = padding;
-    }
 
     #region Async Encryption
 

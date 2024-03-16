@@ -3,15 +3,10 @@ using System.Reflection;
 
 namespace Milvasoft.Caching.InMemory.Accessor;
 
-public class MemoryCacheAccessor : IMemoryCacheAccessor
+public class MemoryCacheAccessor(IMemoryCache cache) : IMemoryCacheAccessor
 {
-    private readonly IMemoryCache _cache;
-    private static readonly MethodInfo GenericGetMethod = typeof(MemoryCacheAccessor).GetMethods().FirstOrDefault(i => i.Name == nameof(Get) && i.IsGenericMethod);
-
-    public MemoryCacheAccessor(IMemoryCache cache)
-    {
-        _cache = cache;
-    }
+    private readonly IMemoryCache _cache = cache;
+    private static readonly MethodInfo _genericGetMethod = typeof(MemoryCacheAccessor).GetMethods().FirstOrDefault(i => i.Name == nameof(Get) && i.IsGenericMethod);
 
     public bool IsConnected() => _cache != null;
 
@@ -21,7 +16,7 @@ public class MemoryCacheAccessor : IMemoryCacheAccessor
 
     public async Task<T> GetAsync<T>(string key) where T : class => await Task.Run(() => Get<T>(key));
 
-    public async Task<object> GetAsync(string key, Type returnType) => await Task.Run(() => GenericGetMethod.MakeGenericMethod(returnType).Invoke(this, [key]));
+    public async Task<object> GetAsync(string key, Type returnType) => await Task.Run(() => _genericGetMethod.MakeGenericMethod(returnType).Invoke(this, [key]));
 
     public async Task<string> GetAsync(string key) => await Task.Run(() => Get(key));
 

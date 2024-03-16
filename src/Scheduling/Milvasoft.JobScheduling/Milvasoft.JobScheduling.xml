@@ -8,11 +8,18 @@
             <summary>
             Provides scheduled job operations.
             </summary>
+            <remarks>
+            Initializes new instances of <see cref="T:Milvasoft.JobScheduling.MilvaCronJobService"/>
+            </remarks>
+            <param name="scheduleConfig"></param>
         </member>
         <member name="M:Milvasoft.JobScheduling.MilvaCronJobService.#ctor(Milvasoft.JobScheduling.IScheduleConfig)">
             <summary>
-            Initializes new instances of <see cref="T:Milvasoft.JobScheduling.MilvaCronJobService"/>
+            Provides scheduled job operations.
             </summary>
+            <remarks>
+            Initializes new instances of <see cref="T:Milvasoft.JobScheduling.MilvaCronJobService"/>
+            </remarks>
             <param name="scheduleConfig"></param>
         </member>
         <member name="M:Milvasoft.JobScheduling.MilvaCronJobService.StartAsync(System.Threading.CancellationToken)">

@@ -10,20 +10,15 @@ namespace Milvasoft.MultiTenancy.Middleware;
 /// </summary>
 /// <typeparam name="TTenant"></typeparam>
 /// <typeparam name="TKey"></typeparam>
-public class TenantMiddleware<TTenant, TKey>
+/// <remarks>
+/// Initializes new instance of <see cref="TenantMiddleware{TTenant, TKey}"/>
+/// </remarks>
+/// <param name="next"></param>
+public class TenantMiddleware<TTenant, TKey>(RequestDelegate next)
 where TTenant : class, IMilvaTenantBase<TKey>
 where TKey : struct, IEquatable<TKey>
 {
-    private readonly RequestDelegate _next;
-
-    /// <summary>
-    /// Initializes new instance of <see cref="TenantMiddleware{TTenant, TKey}"/>
-    /// </summary>
-    /// <param name="next"></param>
-    public TenantMiddleware(RequestDelegate next)
-    {
-        _next = next;
-    }
+    private readonly RequestDelegate _next = next;
 
     /// <summary>
     /// Invokes the method or constructor reflected by this MethodInfo instance.

@@ -8,13 +8,11 @@ public class CacheInterceptor : IMilvaInterceptor
 {
     public static int InterceptionOrder { get; set; } = 0;
 
-    private IServiceProvider _serviceProvider;
-    private ICacheAccessor _cache;
-    private ICacheInterceptionOptions _cacheInterceptionOptions;
+    private readonly ICacheAccessor _cache;
+    private readonly ICacheInterceptionOptions _cacheInterceptionOptions;
 
     public CacheInterceptor(IServiceProvider serviceProvider)
     {
-        _serviceProvider = serviceProvider;
         _cacheInterceptionOptions = serviceProvider.GetService<ICacheInterceptionOptions>();
 
         if (_cacheInterceptionOptions != null && _cacheInterceptionOptions.CacheAccessorAssemblyQualifiedName != null)

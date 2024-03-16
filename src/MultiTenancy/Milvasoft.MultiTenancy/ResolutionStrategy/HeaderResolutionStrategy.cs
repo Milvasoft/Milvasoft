@@ -7,23 +7,18 @@ namespace Milvasoft.MultiTenancy.ResolutionStrategy;
 /// <summary>
 /// Resolve the header to a tenant identifier
 /// </summary>
-public class HeaderResolutionStrategy : ITenantResolutionStrategy<TenantId>
+/// <remarks>
+/// Creates new instance of <see cref="HostResolutionStrategy"/>
+/// </remarks>
+/// <param name="httpContextAccessor"></param>
+public class HeaderResolutionStrategy(IHttpContextAccessor httpContextAccessor) : ITenantResolutionStrategy<TenantId>
 {
     /// <summary>
     /// Header key.
     /// </summary>
-    public static string HeaderKey = TenancyConstants.HttpContextTenantKey;
+    public static string HeaderKey { get; set; } = TenancyConstants.HttpContextTenantKey;
 
-    private readonly IHttpContextAccessor _httpContextAccessor;
-
-    /// <summary>
-    /// Creates new instance of <see cref="HostResolutionStrategy"/>
-    /// </summary>
-    /// <param name="httpContextAccessor"></param>
-    public HeaderResolutionStrategy(IHttpContextAccessor httpContextAccessor)
-    {
-        _httpContextAccessor = httpContextAccessor;
-    }
+    private readonly IHttpContextAccessor _httpContextAccessor = httpContextAccessor;
 
     /// <summary>
     /// Get the tenant identifier from header.

@@ -5,15 +5,13 @@ namespace Milvasoft.Identity.Concrete;
 /// <summary>
 /// Provides localized identity error messages. All error's code is nameof(<see cref="IdentityError"/>) method. (e.g. Code = "DefaultError")
 /// </summary>
-public class MilvaIdentityDescriber : IdentityErrorDescriber
+/// <remarks>
+/// Constructor for localizer dependenct injection.
+/// </remarks>
+/// <param name="localizer"></param>
+public class MilvaIdentityDescriber(IMilvaLocalizer localizer) : IdentityErrorDescriber
 {
-    private readonly IMilvaLocalizer _localizer;
-
-    /// <summary>
-    /// Constructor for localizer dependenct injection.
-    /// </summary>
-    /// <param name="localizer"></param>
-    public MilvaIdentityDescriber(IMilvaLocalizer localizer) => _localizer = localizer;
+    private readonly IMilvaLocalizer _localizer = localizer;
 
     /// <summary>
     /// An unknown failure has occurred. Localizer Key : IdentityDefaultError

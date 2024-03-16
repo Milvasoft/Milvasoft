@@ -5,24 +5,22 @@ namespace Milvasoft.Identity.Concrete;
 /// <summary>
 /// Provides an abstraction for user validation.
 /// </summary>
-public class MilvaUserValidation<TUser, TKey> : IUserValidator<TUser>
+/// <remarks>
+/// Constructor for localizer dependenct injection.
+/// </remarks>
+/// <param name="localizer"></param>
+public class MilvaUserValidation<TUser, TKey>(IMilvaLocalizer localizer) : IUserValidator<TUser>
     where TUser : IdentityUser<TKey>, IEntityBase<TKey>
     where TKey : IEquatable<TKey>
 {
-    private readonly IMilvaLocalizer _localizer;
-
-    /// <summary>
-    /// Constructor for localizer dependenct injection.
-    /// </summary>
-    /// <param name="localizer"></param>
-    public MilvaUserValidation(IMilvaLocalizer localizer) => _localizer = localizer;
+    private readonly IMilvaLocalizer _localizer = localizer;
 
     /// <summary>
     /// Validates the specified user as an asynchronous operation.
     /// </summary>
     public virtual Task<IdentityResult> ValidateAsync(UserManager<TUser> manager, TUser user)
     {
-        List<IdentityError> errors = new();
+        List<IdentityError> errors = [];
 
         //Checking that the username does not start with a numeric expression
         if (int.TryParse(user.UserName[0].ToString(), out int _))
@@ -36,9 +34,9 @@ public class MilvaUserValidation<TUser, TKey> : IUserValidator<TUser>
         if (user.Email?.Length > 70)
             errors.Add(new IdentityError { Code = "EmailLength", Description = _localizer[LocalizerKeys.UserValidationEmailLength] });
 
-        if (!errors.Any())
+        if (errors.Count == 0)
             return Task.FromResult(IdentityResult.Success);
 
-        return Task.FromResult(IdentityResult.Failed(errors.ToArray()));
+        return Task.FromResult(IdentityResult.Failed([.. errors]));
     }
 }

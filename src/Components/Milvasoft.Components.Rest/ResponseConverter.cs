@@ -32,7 +32,6 @@ internal class ResponseConverter<TImplementation, TInterface> : JsonConverter<TI
     }
 }
 
-
 /// <summary>
 /// Converter factory for deserializing generic interfaces with System.Text.Json. 
 /// </summary>

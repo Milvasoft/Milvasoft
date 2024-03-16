@@ -633,17 +633,24 @@
             <summary>
             Represents entity's collection name in MongoDB.
             </summary>
+            <remarks>
+            Creates new instance of <see cref="T:Milvasoft.DataAccess.MongoDB.Utils.Attributes.BsonCollectionAttribute"/>.
+            </remarks>
+            <param name="collectionName"></param>
+        </member>
+        <member name="M:Milvasoft.DataAccess.MongoDB.Utils.Attributes.BsonCollectionAttribute.#ctor(System.String)">
+            <summary>
+            Represents entity's collection name in MongoDB.
+            </summary>
+            <remarks>
+            Creates new instance of <see cref="T:Milvasoft.DataAccess.MongoDB.Utils.Attributes.BsonCollectionAttribute"/>.
+            </remarks>
+            <param name="collectionName"></param>
         </member>
         <member name="P:Milvasoft.DataAccess.MongoDB.Utils.Attributes.BsonCollectionAttribute.CollectionName">
             <summary>
             Gets or sets collection name.
             </summary>
-        </member>
-        <member name="M:Milvasoft.DataAccess.MongoDB.Utils.Attributes.BsonCollectionAttribute.#ctor(System.String)">
-            <summary>
-            Creates new instance of <see cref="T:Milvasoft.DataAccess.MongoDB.Utils.Attributes.BsonCollectionAttribute"/>.
-            </summary>
-            <param name="collectionName"></param>
         </member>
         <member name="T:Milvasoft.DataAccess.MongoDB.Utils.NoSqlRelationHelper">
             <summary>
@@ -776,11 +783,18 @@
             <summary>
             If property type is EncryptedString, client side encryption is applied to property.
             </summary>
+            <remarks>
+            Initializes new <see cref="T:Milvasoft.DataAccess.MongoDB.Utils.Serializers.EncryptedString"/>.
+            </remarks>
+            <param name="value"></param>
         </member>
         <member name="M:Milvasoft.DataAccess.MongoDB.Utils.Serializers.EncryptedString.#ctor(System.String)">
             <summary>
-            Initializes new <see cref="T:Milvasoft.DataAccess.MongoDB.Utils.Serializers.EncryptedString"/>.
+            If property type is EncryptedString, client side encryption is applied to property.
             </summary>
+            <remarks>
+            Initializes new <see cref="T:Milvasoft.DataAccess.MongoDB.Utils.Serializers.EncryptedString"/>.
+            </remarks>
             <param name="value"></param>
         </member>
         <member name="T:Milvasoft.DataAccess.MongoDB.Utils.Serializers.TenantIdSerializer">

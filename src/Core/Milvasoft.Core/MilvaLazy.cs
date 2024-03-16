@@ -6,13 +6,10 @@ namespace Milvasoft.Core;
 /// Custom <see cref="Lazy{T}"/> class.
 /// </summary>
 /// <typeparam name="T"></typeparam>
-public class MilvaLazy<T> : Lazy<T>
+/// <remarks>
+/// Constructor of <see cref="MilvaLazy{T}"/>.
+/// </remarks>
+/// <param name="serviceProvider"></param>
+public class MilvaLazy<T>(IServiceProvider serviceProvider) : Lazy<T>(() => serviceProvider.GetRequiredService<T>())
 {
-    /// <summary>
-    /// Constructor of <see cref="MilvaLazy{T}"/>.
-    /// </summary>
-    /// <param name="serviceProvider"></param>
-    public MilvaLazy(IServiceProvider serviceProvider) : base(() => serviceProvider.GetRequiredService<T>())
-    {
-    }
 }

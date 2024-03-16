@@ -7,20 +7,15 @@ namespace Milvasoft.MultiTenancy.Stores.Redis;
 /// <summary>
 /// Cached tenant store. Sample store for <see cref="ITenantStore{TTenant, TKey}"/>
 /// </summary>
-public class CachedTenantStore<TTenant, TKey> : ITenantStore<TTenant, TKey>
+/// <remarks>
+/// Creates new instance of <see cref="CachedTenantStore{TTenant, TKey}"/>
+/// </remarks>
+/// <param name="redisCacheService"></param>
+public class CachedTenantStore<TTenant, TKey>(IRedisAccessor redisCacheService) : ITenantStore<TTenant, TKey>
     where TKey : struct, IEquatable<TKey>
     where TTenant : class, IMilvaTenantBase<TKey>, new()
 {
-    private readonly IRedisAccessor _redisCacheService;
-
-    /// <summary>
-    /// Creates new instance of <see cref="CachedTenantStore{TTenant, TKey}"/>
-    /// </summary>
-    /// <param name="redisCacheService"></param>
-    public CachedTenantStore(IRedisAccessor redisCacheService)
-    {
-        _redisCacheService = redisCacheService;
-    }
+    private readonly IRedisAccessor _redisCacheService = redisCacheService;
 
     /// <summary>
     /// Returns a tenant according to <paramref name="identifier"/>.

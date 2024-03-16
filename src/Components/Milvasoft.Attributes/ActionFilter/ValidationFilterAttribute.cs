@@ -43,27 +43,6 @@ public class ValidationFilterAttribute : ActionFilterAttribute
     /// <param name="context"></param>
     public override void OnActionExecuting(ActionExecutingContext context)
     {
-        async Task<ActionExecutingContext> RewriteResponseAsync(string message)
-        {
-            var validationResponse = new Response
-            {
-                IsSuccess = false,
-                Messages = [new ResponseMessage(((int)MilvaException.Validation).ToString(), message, Components.Rest.Enums.MessageType.Error)],
-                StatusCode = (int)MilvaStatusCodes.Status600Exception,
-            };
-
-            var json = JsonConvert.SerializeObject(validationResponse);
-
-            context.HttpContext.Response.ContentType = "application/json";
-            context.HttpContext.Items.Add(new KeyValuePair<object, object>("StatusCode", MilvaStatusCodes.Status600Exception));
-            context.HttpContext.Response.StatusCode = MilvaStatusCodes.Status200OK;
-            await context.HttpContext.Response.WriteAsync(json).ConfigureAwait(false);
-
-            context.Result = new OkResult();
-
-            return context;
-        };
-
         if (!context.ModelState.IsValid)
         {
             var httpContext = context.HttpContext;
@@ -95,7 +74,7 @@ public class ValidationFilterAttribute : ActionFilterAttribute
 
                         foreach (var entityProp in dtoProps)
                         {
-                            if (entityProp.CustomAttributes.Count() != 0)
+                            if (entityProp.CustomAttributes.Any())
                                 if (httpContext.Items[entityProp.Name] != null)
                                 {
                                     errors.Remove(httpContext.Items[entityProp.Name].ToString());
@@ -117,6 +96,27 @@ public class ValidationFilterAttribute : ActionFilterAttribute
             if (!errors.IsNullOrEmpty())
                 base.OnActionExecuting(RewriteResponseAsync(string.Join("~", errors)).Result);
         }
+
+        async Task<ActionExecutingContext> RewriteResponseAsync(string message)
+        {
+            var validationResponse = new Response
+            {
+                IsSuccess = false,
+                Messages = [new ResponseMessage(((int)MilvaException.Validation).ToString(), message, Components.Rest.Enums.MessageType.Error)],
+                StatusCode = (int)MilvaStatusCodes.Status600Exception,
+            };
+
+            var json = JsonConvert.SerializeObject(validationResponse);
+
+            context.HttpContext.Response.ContentType = "application/json";
+            context.HttpContext.Items.Add(new KeyValuePair<object, object>("StatusCode", MilvaStatusCodes.Status600Exception));
+            context.HttpContext.Response.StatusCode = MilvaStatusCodes.Status200OK;
+            await context.HttpContext.Response.WriteAsync(json).ConfigureAwait(false);
+
+            context.Result = new OkResult();
+
+            return context;
+        };
     }
 
     /// <summary>
@@ -124,7 +124,7 @@ public class ValidationFilterAttribute : ActionFilterAttribute
     /// </summary>
     /// <param name="props"></param>
     /// <returns></returns>
-    private List<string> GetProperties(string props)
+    private static List<string> GetProperties(string props)
     {
         string[] prop = null;
 
@@ -138,6 +138,6 @@ public class ValidationFilterAttribute : ActionFilterAttribute
             }
         }
 
-        return prop.IsNullOrEmpty() ? null : prop.ToList();
+        return prop.IsNullOrEmpty() ? null : [.. prop];
     }
 }

@@ -179,10 +179,7 @@ public class Response<T> : Response, IResponse<T>
     [DataMember]
     public List<ResponseDataMetadata> Metadatas { get; set; }
 
-    public (object, Type) GetResponseData()
-    {
-        return (Data, typeof(T));
-    }
+    public (object, Type) GetResponseData() => (Data, typeof(T));
 
     #region Constructors
 

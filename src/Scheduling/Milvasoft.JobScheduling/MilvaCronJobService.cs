@@ -6,21 +6,15 @@ namespace Milvasoft.JobScheduling;
 /// <summary>
 /// Provides scheduled job operations.
 /// </summary>
-public abstract class MilvaCronJobService : IHostedService, IDisposable
+/// <remarks>
+/// Initializes new instances of <see cref="MilvaCronJobService"/>
+/// </remarks>
+/// <param name="scheduleConfig"></param>
+public abstract class MilvaCronJobService(IScheduleConfig scheduleConfig) : IHostedService, IDisposable
 {
     private System.Timers.Timer _timer;
-    private readonly CronExpression _expression;
-    private readonly TimeZoneInfo _timeZoneInfo;
-
-    /// <summary>
-    /// Initializes new instances of <see cref="MilvaCronJobService"/>
-    /// </summary>
-    /// <param name="scheduleConfig"></param>
-    protected MilvaCronJobService(IScheduleConfig scheduleConfig)
-    {
-        _expression = CronExpression.Parse(scheduleConfig.CronExpression, scheduleConfig.CronFormat);
-        _timeZoneInfo = scheduleConfig.TimeZoneInfo;
-    }
+    private readonly CronExpression _expression = CronExpression.Parse(scheduleConfig.CronExpression, scheduleConfig.CronFormat);
+    private readonly TimeZoneInfo _timeZoneInfo = scheduleConfig.TimeZoneInfo;
 
     /// <summary>
     /// Starts the job.
@@ -91,5 +85,9 @@ public abstract class MilvaCronJobService : IHostedService, IDisposable
     /// <summary>
     /// Disposes the timer.
     /// </summary>
-    public virtual void Dispose() => _timer?.Dispose();
+    public virtual void Dispose()
+    {
+        _timer?.Dispose();
+        GC.SuppressFinalize(this);
+    }
 }

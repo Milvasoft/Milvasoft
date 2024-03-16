@@ -32,6 +32,23 @@
             </summary>
             <typeparam name="TTenant"></typeparam>
             <typeparam name="TKey"></typeparam>
+            <remarks>
+            Creates new instance of <see cref="T:Milvasoft.MultiTenancy.Accessor.TenantAccessor`2"/>.
+            </remarks>
+            <param name="httpContextAccessor"></param>
+            <param name="serviceProvider"></param>
+        </member>
+        <member name="M:Milvasoft.MultiTenancy.Accessor.TenantAccessor`2.#ctor(Microsoft.AspNetCore.Http.IHttpContextAccessor,System.IServiceProvider)">
+            <summary>
+            Tenant accessor for easy access.
+            </summary>
+            <typeparam name="TTenant"></typeparam>
+            <typeparam name="TKey"></typeparam>
+            <remarks>
+            Creates new instance of <see cref="T:Milvasoft.MultiTenancy.Accessor.TenantAccessor`2"/>.
+            </remarks>
+            <param name="httpContextAccessor"></param>
+            <param name="serviceProvider"></param>
         </member>
         <member name="P:Milvasoft.MultiTenancy.Accessor.TenantAccessor`2.ServiceProvider">
             <summary>
@@ -47,13 +64,6 @@
             <summary>
             Accessed tenant from <see cref="T:Microsoft.AspNetCore.Http.HttpContext"/>.
             </summary>
-        </member>
-        <member name="M:Milvasoft.MultiTenancy.Accessor.TenantAccessor`2.#ctor(Microsoft.AspNetCore.Http.IHttpContextAccessor,System.IServiceProvider)">
-            <summary>
-            Creates new instance of <see cref="T:Milvasoft.MultiTenancy.Accessor.TenantAccessor`2"/>.
-            </summary>
-            <param name="httpContextAccessor"></param>
-            <param name="serviceProvider"></param>
         </member>
         <member name="T:Milvasoft.MultiTenancy.Builder.TenantBuilder`2">
             <summary>
@@ -134,11 +144,18 @@
             <summary>
             AuthenticationMiddleware.cs from framework with injection point moved
             </summary>
+            <remarks>
+            Initializes new instance of <see cref="T:Milvasoft.MultiTenancy.Middleware.TenantAuthMiddleware"/>
+            </remarks>
+            <param name="next"></param>
         </member>
         <member name="M:Milvasoft.MultiTenancy.Middleware.TenantAuthMiddleware.#ctor(Microsoft.AspNetCore.Http.RequestDelegate)">
             <summary>
-            Initializes new instance of <see cref="T:Milvasoft.MultiTenancy.Middleware.TenantAuthMiddleware"/>
+            AuthenticationMiddleware.cs from framework with injection point moved
             </summary>
+            <remarks>
+            Initializes new instance of <see cref="T:Milvasoft.MultiTenancy.Middleware.TenantAuthMiddleware"/>
+            </remarks>
             <param name="next"></param>
         </member>
         <member name="M:Milvasoft.MultiTenancy.Middleware.TenantAuthMiddleware.Invoke(Microsoft.AspNetCore.Http.HttpContext,Microsoft.AspNetCore.Authentication.IAuthenticationSchemeProvider)">
@@ -146,7 +163,7 @@
             Invokes the method or constructor reflected by this MethodInfo instance.
             </summary>
             <param name="context"></param>
-            <param name="Schemes"></param>
+            <param name="schemes"></param>
             <returns></returns>
         </member>
         <member name="T:Milvasoft.MultiTenancy.Middleware.TenantMiddleware`2">
@@ -155,11 +172,20 @@
             </summary>
             <typeparam name="TTenant"></typeparam>
             <typeparam name="TKey"></typeparam>
+            <remarks>
+            Initializes new instance of <see cref="T:Milvasoft.MultiTenancy.Middleware.TenantMiddleware`2"/>
+            </remarks>
+            <param name="next"></param>
         </member>
         <member name="M:Milvasoft.MultiTenancy.Middleware.TenantMiddleware`2.#ctor(Microsoft.AspNetCore.Http.RequestDelegate)">
             <summary>
-            Initializes new instance of <see cref="T:Milvasoft.MultiTenancy.Middleware.TenantMiddleware`2"/>
+            If request items not contains Tenant object. Sets the tenant object into items.
             </summary>
+            <typeparam name="TTenant"></typeparam>
+            <typeparam name="TKey"></typeparam>
+            <remarks>
+            Initializes new instance of <see cref="T:Milvasoft.MultiTenancy.Middleware.TenantMiddleware`2"/>
+            </remarks>
             <param name="next"></param>
         </member>
         <member name="M:Milvasoft.MultiTenancy.Middleware.TenantMiddleware`2.Invoke(Microsoft.AspNetCore.Http.HttpContext)">
@@ -317,17 +343,24 @@
             <summary>
             Resolve the header to a tenant identifier
             </summary>
-        </member>
-        <member name="F:Milvasoft.MultiTenancy.ResolutionStrategy.HeaderResolutionStrategy.HeaderKey">
-            <summary>
-            Header key.
-            </summary>
+            <remarks>
+            Creates new instance of <see cref="T:Milvasoft.MultiTenancy.ResolutionStrategy.HostResolutionStrategy"/>
+            </remarks>
+            <param name="httpContextAccessor"></param>
         </member>
         <member name="M:Milvasoft.MultiTenancy.ResolutionStrategy.HeaderResolutionStrategy.#ctor(Microsoft.AspNetCore.Http.IHttpContextAccessor)">
             <summary>
-            Creates new instance of <see cref="T:Milvasoft.MultiTenancy.ResolutionStrategy.HostResolutionStrategy"/>
+            Resolve the header to a tenant identifier
             </summary>
+            <remarks>
+            Creates new instance of <see cref="T:Milvasoft.MultiTenancy.ResolutionStrategy.HostResolutionStrategy"/>
+            </remarks>
             <param name="httpContextAccessor"></param>
+        </member>
+        <member name="P:Milvasoft.MultiTenancy.ResolutionStrategy.HeaderResolutionStrategy.HeaderKey">
+            <summary>
+            Header key.
+            </summary>
         </member>
         <member name="M:Milvasoft.MultiTenancy.ResolutionStrategy.HeaderResolutionStrategy.GetTenantIdentifierAsync">
             <summary>
@@ -339,11 +372,18 @@
             <summary>
             Resolve the host to a tenant identifier
             </summary>
+            <remarks>
+            Creates new instance of <see cref="T:Milvasoft.MultiTenancy.ResolutionStrategy.HostResolutionStrategy"/>
+            </remarks>
+            <param name="httpContextAccessor"></param>
         </member>
         <member name="M:Milvasoft.MultiTenancy.ResolutionStrategy.HostResolutionStrategy.#ctor(Microsoft.AspNetCore.Http.IHttpContextAccessor)">
             <summary>
-            Creates new instance of <see cref="T:Milvasoft.MultiTenancy.ResolutionStrategy.HostResolutionStrategy"/>
+            Resolve the host to a tenant identifier
             </summary>
+            <remarks>
+            Creates new instance of <see cref="T:Milvasoft.MultiTenancy.ResolutionStrategy.HostResolutionStrategy"/>
+            </remarks>
             <param name="httpContextAccessor"></param>
         </member>
         <member name="M:Milvasoft.MultiTenancy.ResolutionStrategy.HostResolutionStrategy.GetTenantIdentifierAsync">
@@ -383,11 +423,21 @@
             </summary>
             <typeparam name="TTenant"></typeparam>
             <typeparam name="TKey"></typeparam>
+            <remarks>
+            Creates new instances of <see cref="T:Milvasoft.MultiTenancy.Service.TenantService`2"/>
+            </remarks>
+            <param name="tenantResolutionStrategy"></param>
+            <param name="tenantStore"></param>
         </member>
         <member name="M:Milvasoft.MultiTenancy.Service.TenantService`2.#ctor(Milvasoft.MultiTenancy.ResolutionStrategy.ITenantResolutionStrategy{`1},Milvasoft.MultiTenancy.Store.ITenantStore{`0,`1})">
             <summary>
-            Creates new instances of <see cref="T:Milvasoft.MultiTenancy.Service.TenantService`2"/>
+            Tenant access service.
             </summary>
+            <typeparam name="TTenant"></typeparam>
+            <typeparam name="TKey"></typeparam>
+            <remarks>
+            Creates new instances of <see cref="T:Milvasoft.MultiTenancy.Service.TenantService`2"/>
+            </remarks>
             <param name="tenantResolutionStrategy"></param>
             <param name="tenantStore"></param>
         </member>

@@ -35,8 +35,5 @@ public sealed class CultureSwitcher : IDisposable
     /// <summary>
     /// dispose...
     /// </summary>
-    public void Dispose()
-    {
-        SetCulture(_originalCulture);
-    }
+    public void Dispose() => SetCulture(_originalCulture);
 }

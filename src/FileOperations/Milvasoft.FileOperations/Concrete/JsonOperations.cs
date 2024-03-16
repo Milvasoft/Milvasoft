@@ -218,7 +218,7 @@ public class JsonOperations : IJsonOperations
 
         var jsonContentString = await File.ReadAllTextAsync(filePath, _encoding).ConfigureAwait(false);
 
-        string newJsonResult = GetJsonResultForUpdate(new List<T> { content }, jsonContentString, mappingProperty);
+        string newJsonResult = GetJsonResultForUpdate([content], jsonContentString, mappingProperty);
 
         await File.WriteAllTextAsync(filePath, newJsonResult).ConfigureAwait(false);
     }
@@ -276,7 +276,7 @@ public class JsonOperations : IJsonOperations
 
         var jsonContentString = await File.ReadAllTextAsync(filePath, _encoding).ConfigureAwait(false);
 
-        string newJsonResult = GetJsonResultForDelete(new List<dynamic> { mappingValue }, jsonContentString, mappingProperty);
+        string newJsonResult = GetJsonResultForDelete([mappingValue], jsonContentString, mappingProperty);
 
         await File.WriteAllTextAsync(filePath, newJsonResult).ConfigureAwait(false);
     }
@@ -452,7 +452,7 @@ public class JsonOperations : IJsonOperations
     {
         var jsonContentString = await DecryptAndReadAsync(filePath, _encryptionKey).ConfigureAwait(false);
 
-        string newJsonResult = GetJsonResultForUpdate(new List<T> { content }, jsonContentString, mappingProperty);
+        string newJsonResult = GetJsonResultForUpdate([content], jsonContentString, mappingProperty);
 
         await EncryptAndWriteAsync(filePath, newJsonResult, _encryptionKey).ConfigureAwait(false);
     }
@@ -513,7 +513,7 @@ public class JsonOperations : IJsonOperations
     {
         var jsonContentString = await DecryptAndReadAsync(filePath, _encryptionKey).ConfigureAwait(false);
 
-        string newJsonResult = GetJsonResultForDelete(new List<dynamic> { mappingValue }, jsonContentString, mappingProperty);
+        string newJsonResult = GetJsonResultForDelete([mappingValue], jsonContentString, mappingProperty);
 
         await EncryptAndWriteAsync(filePath, newJsonResult, _encryptionKey).ConfigureAwait(false);
     }
@@ -673,7 +673,7 @@ public class JsonOperations : IJsonOperations
 
         var jsonContentString = File.ReadAllText(filePath, _encoding);
 
-        string newJsonResult = GetJsonResultForUpdate(new List<T> { content }, jsonContentString, mappingProperty);
+        string newJsonResult = GetJsonResultForUpdate([content], jsonContentString, mappingProperty);
 
         File.WriteAllText(filePath, newJsonResult);
     }
@@ -731,7 +731,7 @@ public class JsonOperations : IJsonOperations
 
         var jsonContentString = File.ReadAllText(filePath, _encoding);
 
-        string newJsonResult = GetJsonResultForDelete(new List<dynamic> { mappingValue }, jsonContentString, mappingProperty);
+        string newJsonResult = GetJsonResultForDelete([mappingValue], jsonContentString, mappingProperty);
 
         File.WriteAllText(filePath, newJsonResult);
     }
@@ -907,7 +907,7 @@ public class JsonOperations : IJsonOperations
     {
         var jsonContentString = DecryptAndRead(filePath, _encryptionKey);
 
-        string newJsonResult = GetJsonResultForUpdate(new List<T> { content }, jsonContentString, mappingProperty);
+        string newJsonResult = GetJsonResultForUpdate([content], jsonContentString, mappingProperty);
 
         EncryptAndWrite(filePath, newJsonResult, _encryptionKey);
     }
@@ -968,7 +968,7 @@ public class JsonOperations : IJsonOperations
     {
         var jsonContentString = DecryptAndRead(filePath, _encryptionKey);
 
-        string newJsonResult = GetJsonResultForDelete(new List<dynamic> { mappingValue }, jsonContentString, mappingProperty);
+        string newJsonResult = GetJsonResultForDelete([mappingValue], jsonContentString, mappingProperty);
 
         EncryptAndWrite(filePath, newJsonResult, _encryptionKey);
     }
@@ -1045,7 +1045,7 @@ public class JsonOperations : IJsonOperations
     {
         var tempJsonContent = JsonConvert.DeserializeObject<List<T>>(jsonContentString, _jsonSerializerSettings);
 
-        var jsonContent = string.IsNullOrWhiteSpace(jsonContentString) ? new List<T>() : tempJsonContent;
+        var jsonContent = string.IsNullOrWhiteSpace(jsonContentString) ? [] : tempJsonContent;
 
         if (contentsHasId == true)
         {

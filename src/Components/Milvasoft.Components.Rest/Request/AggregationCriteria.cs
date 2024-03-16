@@ -71,7 +71,7 @@ public class AggregationCriteria
 
         if (_runAsync)
         {
-            var taskResult = (Task)genericAggregationMethod.Invoke(null, new object[] { query, propertySelectorResult, cancellationToken });
+            var taskResult = (Task)genericAggregationMethod.Invoke(null, [query, propertySelectorResult, cancellationToken]);
 
             await taskResult;
 
@@ -81,7 +81,7 @@ public class AggregationCriteria
         }
         else
         {
-            result = genericAggregationMethod?.Invoke(null, new object[] { query, propertySelectorResult });
+            result = genericAggregationMethod?.Invoke(null, [query, propertySelectorResult]);
         }
 
         return result;

@@ -4,7 +4,7 @@ public class PropertyExistsTestModel : IComparable
 {
     public byte Poco { get; set; }
 
-    public int CompareTo(object? obj)
+    public int CompareTo(object obj)
     {
         if (obj == null)
             return 1;

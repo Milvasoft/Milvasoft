@@ -6,19 +6,14 @@ namespace Milvasoft.Notification.Push.Expo.PushNotification;
 /// <summary>
 /// Model for expo push notification api send push notification. Max <see cref="PushTo"/> count is 100.
 /// </summary>
-public class PushTicketRequest
+/// <remarks>
+/// Initializes new instance of <see cref="PushTicketRequest"/>
+/// </remarks>
+/// <param name="notificationId"></param>
+public class PushTicketRequest(sbyte notificationId)
 {
     private string _pushData;
-    private readonly sbyte _notificationId;
-
-    /// <summary>
-    /// Initializes new instance of <see cref="PushTicketRequest"/>
-    /// </summary>
-    /// <param name="notificationId"></param>
-    public PushTicketRequest(sbyte notificationId)
-    {
-        _notificationId = notificationId;
-    }
+    private readonly sbyte _notificationId = notificationId;
 
     /// <summary>
     /// An Expo push token or an array of Expo push tokens specifying the recipient(s) of this message.

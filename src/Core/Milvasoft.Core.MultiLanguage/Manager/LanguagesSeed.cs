@@ -3,7 +3,7 @@
 namespace Milvasoft.Core.MultiLanguage.Manager;
 public static class LanguagesSeed
 {
-    public static List<ILanguage> Seed =
+    public static List<ILanguage> Seed { get; set; } =
     [
         new Language {
             Name = "Türkçe",

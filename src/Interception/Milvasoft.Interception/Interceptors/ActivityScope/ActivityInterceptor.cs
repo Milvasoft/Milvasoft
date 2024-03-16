@@ -23,5 +23,4 @@ public class ActivityInterceptor : IMilvaInterceptor
 
         activity.Dispose();
     }
-
 }

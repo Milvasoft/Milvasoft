@@ -71,14 +71,11 @@ public static class DigitTokenProvider<TUser, TKey> where TUser : MilvaUser<TKey
     /// The <see cref="Task"/> that represents the asynchronous operation, containing a constant modifier for the specified 
     /// <paramref name="user"/> and <paramref name="purpose"/>.
     /// </returns>
-    private static string GetUserModifier(Purpose purpose, TUser user)
+    private static string GetUserModifier(Purpose purpose, TUser user) => purpose switch
     {
-        return purpose switch
-        {
-            Purpose.EmailChange => $"Email:ChangeEmail:limon@limon:bugrakosen@windowslive.com",
-            Purpose.EmailConfirm => $"Totp:" + purpose + ":" + user.PhoneNumber,
-            Purpose.PasswordReset => $"PhoneNumber:" + purpose + ":" + string.Empty,
-            _ => string.Empty,
-        };
-    }
+        Purpose.EmailChange => $"Email:ChangeEmail:limon@limon:bugrakosen@windowslive.com",
+        Purpose.EmailConfirm => $"Totp:" + purpose + ":" + user.PhoneNumber,
+        Purpose.PasswordReset => $"PhoneNumber:" + purpose + ":" + string.Empty,
+        _ => string.Empty,
+    };
 }

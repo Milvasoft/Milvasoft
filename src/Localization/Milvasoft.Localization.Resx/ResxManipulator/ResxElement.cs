@@ -55,8 +55,9 @@ public class ResxElement : IEquatable<ResxElement>
     /// </summary>
     /// <param name="other"></param>
     /// <returns></returns>
-    public bool Equals(ResxElement other)
-    {
-        return Key.Equals(other.Key, StringComparison.OrdinalIgnoreCase);
-    }
+    public bool Equals(ResxElement other) => Key.Equals(other.Key, StringComparison.OrdinalIgnoreCase);
+
+    public override bool Equals(object obj) => Equals(obj as ResxElement);
+
+    public override int GetHashCode() => throw new NotImplementedException();
 }

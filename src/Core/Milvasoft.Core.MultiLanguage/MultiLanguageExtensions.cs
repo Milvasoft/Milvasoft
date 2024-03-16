@@ -54,7 +54,7 @@ public static class MultiLanguageExtensions
             // Call the "Where" method on the "Translations" property with the lambda expression
             var whereExpression = Expression.Call(typeof(Enumerable),
                                                   nameof(Enumerable.Where),
-                                                  new Type[] { translationEntityType },
+                                                  [translationEntityType],
                                                   Expression.PropertyOrField(parameter, MultiLanguageEntityPropertyNames.Translations),
                                                   wherePredicate);
 
@@ -65,7 +65,7 @@ public static class MultiLanguageExtensions
             // Call the "Select" method on the "Where()" chain with the translationExpression
             selectExpressionForTranslations = Expression.Call(typeof(Enumerable),
                                                               nameof(Enumerable.Select),
-                                                              new Type[] { translationEntityType, translationEntityType },
+                                                              [translationEntityType, translationEntityType],
                                                               whereExpression,
                                                               translationExpression);
         }

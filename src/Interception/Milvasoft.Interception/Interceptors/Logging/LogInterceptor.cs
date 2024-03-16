@@ -9,20 +9,13 @@ using System.Text.RegularExpressions;
 
 namespace Milvasoft.Interception.Interceptors.Logging;
 
-public partial class LogInterceptor : IMilvaInterceptor
+public partial class LogInterceptor(IServiceProvider serviceProvider) : IMilvaInterceptor
 {
     public static int InterceptionOrder { get; set; } = -1;
 
-    private IServiceProvider _serviceProvider;
-    private IMilvaLogger _logger;
-    private ILogInterceptionOptions _logInterceptionOptions;
-
-    public LogInterceptor(IServiceProvider serviceProvider)
-    {
-        _serviceProvider = serviceProvider;
-        _logger = serviceProvider.GetService<IMilvaLogger>();
-        _logInterceptionOptions = serviceProvider.GetService<ILogInterceptionOptions>();
-    }
+    private readonly IServiceProvider _serviceProvider = serviceProvider;
+    private readonly IMilvaLogger _logger = serviceProvider.GetService<IMilvaLogger>();
+    private readonly ILogInterceptionOptions _logInterceptionOptions = serviceProvider.GetService<ILogInterceptionOptions>();
 
     public async Task OnInvoke(Call call)
     {

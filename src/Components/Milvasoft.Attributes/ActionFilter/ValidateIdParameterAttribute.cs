@@ -38,26 +38,6 @@ public class ValidateIdParameterAttribute : ActionFilterAttribute
     /// <param name="context"></param>
     public override void OnActionExecuting(ActionExecutingContext context)
     {
-        async Task<ActionExecutingContext> RewriteResponseAsync(string errorMessage)
-        {
-            var validationResponse = new Response
-            {
-                IsSuccess = false,
-                Messages = [new ResponseMessage(((int)MilvaException.Validation).ToString(), errorMessage, Components.Rest.Enums.MessageType.Error)],
-                StatusCode = (int)MilvaStatusCodes.Status600Exception,
-            };
-
-            var json = JsonConvert.SerializeObject(validationResponse);
-            context.HttpContext.Items.Add(new KeyValuePair<object, object>("StatusCode", MilvaStatusCodes.Status600Exception));
-            context.HttpContext.Response.ContentType = "application/json";
-            context.HttpContext.Response.StatusCode = MilvaStatusCodes.Status200OK;
-            await context.HttpContext.Response.WriteAsync(json).ConfigureAwait(false);
-
-            context.Result = new OkResult();
-
-            return context;
-        };
-
         if (context.ActionArguments.Count != 0)
         {
             IMilvaLocalizer milvaLocalizer = null;
@@ -132,10 +112,29 @@ public class ValidateIdParameterAttribute : ActionFilterAttribute
                             if (guidParameter == default || guidParameter == Guid.Empty || !regexMatchResult)
                                 base.OnActionExecuting(RewriteResponseAsync(message).Result);
                         }
-
                     }
                 }
             }
+
+            async Task<ActionExecutingContext> RewriteResponseAsync(string errorMessage)
+            {
+                var validationResponse = new Response
+                {
+                    IsSuccess = false,
+                    Messages = [new ResponseMessage(((int)MilvaException.Validation).ToString(), errorMessage, Components.Rest.Enums.MessageType.Error)],
+                    StatusCode = (int)MilvaStatusCodes.Status600Exception,
+                };
+
+                var json = JsonConvert.SerializeObject(validationResponse);
+                context.HttpContext.Items.Add(new KeyValuePair<object, object>("StatusCode", MilvaStatusCodes.Status600Exception));
+                context.HttpContext.Response.ContentType = "application/json";
+                context.HttpContext.Response.StatusCode = MilvaStatusCodes.Status200OK;
+                await context.HttpContext.Response.WriteAsync(json).ConfigureAwait(false);
+
+                context.Result = new OkResult();
+
+                return context;
+            };
         }
     }
 }
