@@ -1,5 +1,4 @@
 ﻿using Milvasoft.Components.Rest.Request;
-using Milvasoft.Core.Extensions;
 using Milvasoft.Core.MultiLanguage.EntityBases;
 
 namespace Milvasoft.DataAccess.EfCore.Utils.LookupModels;

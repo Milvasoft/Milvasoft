@@ -1,6 +1,4 @@
-﻿using Milvasoft.Core.EntityBases.Abstract.Auditing;
-
-namespace Milvasoft.DataAccess.EfCore.Utils.Enums;
+﻿namespace Milvasoft.DataAccess.EfCore.Utils.Enums;
 
 /// <summary>
 /// Enumerates the states of soft deletion for database records.

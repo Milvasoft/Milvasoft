@@ -1,6 +1,4 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using Milvasoft.Core.Abstractions.Localization;
-using Milvasoft.Core.Utils.Constants;
 
 namespace Milvasoft.Identity.Concrete;
 

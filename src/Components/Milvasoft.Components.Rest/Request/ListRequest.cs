@@ -1,6 +1,4 @@
-﻿using Milvasoft.Core.Exceptions;
-
-namespace Milvasoft.Components.Rest.Request;
+﻿namespace Milvasoft.Components.Rest.Request;
 
 /// <summary>
 /// List request specs.

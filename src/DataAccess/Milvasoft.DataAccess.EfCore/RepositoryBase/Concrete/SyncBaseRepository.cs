@@ -2,13 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Milvasoft.Components.Rest.Request;
 using Milvasoft.Components.Rest.Response;
-using Milvasoft.Core.EntityBases.Abstract;
-using Milvasoft.Core.Extensions;
-using Milvasoft.Core.MultiLanguage.EntityBases;
-using Milvasoft.Core.Utils.Constants;
 using Milvasoft.DataAccess.EfCore.RepositoryBase.Abstract;
-using Milvasoft.DataAccess.EfCore.Utils;
-using Milvasoft.DataAccess.EfCore.Utils.Enums;
 using Milvasoft.DataAccess.EfCore.Utils.IncludeLibrary;
 using System.Linq.Expressions;
 
@@ -536,7 +530,8 @@ public abstract partial class BaseRepository<TEntity, TContext> where TEntity : 
     /// <param name="propertyBuilder"></param>
 
     /// <returns></returns>
-    public virtual void ExecuteUpdate(object id, SetPropertyBuilder<TEntity> propertyBuilder)        => ExecuteUpdate(i => i.Id == id, propertyBuilder);
+    public virtual void ExecuteUpdate(object id, SetPropertyBuilder<TEntity> propertyBuilder)
+        => ExecuteUpdate(i => i.Id == id, propertyBuilder);
 
     /// <summary>
     /// Deletes all records that match the condition. If <see cref="SoftDeletionState"/> is active, it updates the soft delete properties of the relevant entity. 

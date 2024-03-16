@@ -11,6 +11,10 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <Compile Include="..\..\Core\Milvasoft.Core\GlobalUsings.cs" Link="GlobalUsings.cs" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<ProjectReference Include="..\..\Components\Milvasoft.Components.Rest\Milvasoft.Components.Rest.csproj" />
 		<ProjectReference Include="..\..\Core\Milvasoft.Core.MultiLanguage\Milvasoft.Core.MultiLanguage.csproj" />
 		<ProjectReference Include="..\..\Cryptography\Milvasoft.Cryptography\Milvasoft.Cryptography.csproj" />
@@ -36,7 +40,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<Using Include="Milvasoft" />
+		<Using Include="Milvasoft.DataAccess.EfCore.Configuration" />
+		<Using Include="Milvasoft.DataAccess.EfCore.Utils" />
+		<Using Include="Milvasoft.DataAccess.EfCore.Utils.Enums" />
 	</ItemGroup>
 
 

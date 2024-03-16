@@ -1,10 +1,7 @@
-﻿using Milvasoft.Core.Extensions;
-using Milvasoft.Core.MultiLanguage.EntityBases;
+﻿using Milvasoft.Core.MultiLanguage.EntityBases;
 using Milvasoft.Core.MultiLanguage.EntityBases.Abstract;
-using Milvasoft.Core.MultiLanguage.EntityBases.Concrete;
 using Milvasoft.Core.MultiLanguage.Manager;
 using System.Linq.Expressions;
-using System.Reflection;
 
 namespace Milvasoft.Core.MultiLanguage;
 public static class MultiLanguageExtensions

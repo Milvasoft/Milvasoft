@@ -1,7 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Milvasoft.Components.Rest.Response;
-using Milvasoft.Core;
-using Milvasoft.Core.Abstractions.Cache;
 using Milvasoft.Interception.Decorator;
 
 namespace Milvasoft.Interception.Interceptors.Cache;
@@ -88,7 +86,6 @@ public class CacheInterceptor : IMilvaInterceptor
                 {
                     call.ReturnValue.GetType().GetProperty("IsCachedData").SetValue(call.ReturnValue, true);
                 }
-
             }
         }
         else

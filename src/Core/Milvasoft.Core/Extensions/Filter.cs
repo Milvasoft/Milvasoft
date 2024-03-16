@@ -201,5 +201,4 @@ public static class Filter
 
         return maxValuesObject;
     }
-
 }

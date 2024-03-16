@@ -10,6 +10,10 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <Compile Include="..\..\Core\Milvasoft.Core\GlobalUsings.cs" Link="GlobalUsings.cs" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<ProjectReference Include="..\Milvasoft.Caching\Milvasoft.Caching.csproj" />
 		<ProjectReference Include="..\..\Core\Milvasoft.Core\Milvasoft.Core.csproj" />
 		<PackageReference Include="StackExchange.Redis" Version="2.7.27" />

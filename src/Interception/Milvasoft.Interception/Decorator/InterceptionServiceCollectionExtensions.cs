@@ -2,9 +2,6 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Options;
-using Milvasoft.Core.Abstractions;
-using Milvasoft.Core.Exceptions;
-using Milvasoft.Core.Extensions;
 using Milvasoft.Interception.Builder;
 using Milvasoft.Interception.Interceptors.ActivityScope;
 using Milvasoft.Interception.Interceptors.Cache;

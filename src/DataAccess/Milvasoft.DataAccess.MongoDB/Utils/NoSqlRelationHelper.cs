@@ -1,6 +1,4 @@
-﻿using Milvasoft.Core.EntityBases.Abstract;
-using Milvasoft.Core.Extensions;
-using Milvasoft.DataAccess.MongoDB.Utils.Attributes;
+﻿using Milvasoft.DataAccess.MongoDB.Utils.Attributes;
 using MongoDB.Bson;
 using MongoDB.Driver;
 using System.Linq.Expressions;

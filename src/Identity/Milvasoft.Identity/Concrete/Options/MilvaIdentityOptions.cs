@@ -1,6 +1,4 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using Milvasoft.Core.Abstractions;
-using Milvasoft.Core.Extensions;
 
 namespace Milvasoft.Identity.Concrete.Options;
 

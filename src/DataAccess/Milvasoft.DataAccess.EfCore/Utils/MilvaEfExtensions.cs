@@ -2,11 +2,6 @@
 using Milvasoft.Components.Rest.Enums;
 using Milvasoft.Components.Rest.Request;
 using Milvasoft.Components.Rest.Response;
-using Milvasoft.Core;
-using Milvasoft.Core.EntityBases.Abstract;
-using Milvasoft.Core.Extensions;
-using Milvasoft.Core.Utils.Constants;
-using System.Linq.Expressions;
 
 namespace Milvasoft.DataAccess.EfCore.Utils;
 

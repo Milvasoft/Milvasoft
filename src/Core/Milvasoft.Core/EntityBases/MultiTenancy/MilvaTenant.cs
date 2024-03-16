@@ -1,6 +1,4 @@
-﻿using Milvasoft.Core.EntityBases.Abstract;
-
-namespace Milvasoft.Core.EntityBases.MultiTenancy;
+﻿namespace Milvasoft.Core.EntityBases.MultiTenancy;
 
 /// <summary>
 /// Represents a Tenant of the application.

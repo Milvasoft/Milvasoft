@@ -1,7 +1,4 @@
-﻿using Milvasoft.Core.Exceptions;
-using Milvasoft.Core.Utils.Constants;
-
-namespace Milvasoft.Identity.Concrete;
+﻿namespace Milvasoft.Identity.Concrete;
 
 /// <summary>
 /// Provides localized identity error messages. All error's code is nameof method. (e.g. Code = "DefaultError")

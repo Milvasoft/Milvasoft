@@ -1,9 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
-using Milvasoft.Core;
-using Milvasoft.Core.Abstractions.Localization;
-using Milvasoft.Core.Exceptions;
-using Milvasoft.Core.Utils.Constants;
 using System.ComponentModel.DataAnnotations;
 
 namespace Milvasoft.Attributes.Validation;

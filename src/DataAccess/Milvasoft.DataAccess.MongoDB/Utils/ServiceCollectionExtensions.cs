@@ -1,5 +1,4 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using Milvasoft.Core.Exceptions;
 using Milvasoft.Cryptography.Concrete;
 using Milvasoft.DataAccess.MongoDB.Utils.Serializers;
 using Milvasoft.DataAccess.MongoDB.Utils.Settings;

@@ -1,10 +1,5 @@
-﻿using Milvasoft.Core.Exceptions;
-using Milvasoft.Core.MultiLanguage.EntityBases;
-using Milvasoft.Core.MultiLanguage.EntityBases.Abstract;
-using Milvasoft.Core.MultiLanguage.EntityBases.Concrete;
-using Milvasoft.Core.Utils.Constants;
+﻿using Milvasoft.Core.MultiLanguage.EntityBases.Abstract;
 using System.Collections.Concurrent;
-using System.Globalization;
 using System.Linq.Expressions;
 
 namespace Milvasoft.Core.MultiLanguage.Manager;

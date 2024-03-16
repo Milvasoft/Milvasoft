@@ -1,6 +1,4 @@
-﻿using Milvasoft.Core.EntityBases.Abstract;
-using Milvasoft.Core.EntityBases.Concrete;
-using Milvasoft.Core.MultiLanguage.EntityBases.Abstract;
+﻿using Milvasoft.Core.MultiLanguage.EntityBases.Abstract;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 

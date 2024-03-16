@@ -1,6 +1,4 @@
-﻿using Milvasoft.Core.Abstractions;
-
-namespace Milvasoft.DataAccess.EfCore.Configuration;
+﻿namespace Milvasoft.DataAccess.EfCore.Configuration;
 
 /// <summary>
 /// IOptions aware custom MilvaDbContext configurations.

@@ -17,7 +17,7 @@ public class FilterableAttribute(bool filterable = true) : Attribute
     /// </summary>
     public string FilterFormat { get; set; }
 
-    public FilterableAttribute(string filterFormat, bool filterable = true)  : this(filterable)
+    public FilterableAttribute(string filterFormat, bool filterable = true) : this(filterable)
     {
         FilterFormat = filterFormat;
     }

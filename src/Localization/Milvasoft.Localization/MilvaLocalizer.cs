@@ -1,5 +1,4 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using Milvasoft.Core.Abstractions.Localization;
 using Milvasoft.Types.Classes;
 
 namespace Milvasoft.Localization;

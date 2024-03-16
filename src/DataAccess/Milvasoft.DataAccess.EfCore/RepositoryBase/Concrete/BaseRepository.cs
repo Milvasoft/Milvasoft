@@ -2,16 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Milvasoft.Components.Rest.Request;
 using Milvasoft.Components.Rest.Response;
-using Milvasoft.Core;
-using Milvasoft.Core.EntityBases.Abstract;
-using Milvasoft.Core.Exceptions;
-using Milvasoft.Core.Extensions;
-using Milvasoft.Core.MultiLanguage.EntityBases;
-using Milvasoft.Core.Utils.Constants;
-using Milvasoft.DataAccess.EfCore.Configuration;
 using Milvasoft.DataAccess.EfCore.RepositoryBase.Abstract;
-using Milvasoft.DataAccess.EfCore.Utils;
-using Milvasoft.DataAccess.EfCore.Utils.Enums;
 using Milvasoft.DataAccess.EfCore.Utils.IncludeLibrary;
 using System.Linq.Expressions;
 

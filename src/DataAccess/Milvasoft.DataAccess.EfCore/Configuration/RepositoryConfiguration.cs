@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Milvasoft.DataAccess.EfCore.Utils.Enums;
 using Milvasoft.Helpers.DataAccess.EfCore.Concrete;
 
 namespace Milvasoft.DataAccess.EfCore.Configuration;

@@ -2,10 +2,8 @@
 using Microsoft.EntityFrameworkCore.Metadata;
 using Milvasoft.Attributes.Annotations;
 using Milvasoft.Core.EntityBases.MultiTenancy;
-using Milvasoft.Core.Exceptions;
 using Milvasoft.Core.MultiLanguage.EntityBases;
 using Milvasoft.Core.MultiLanguage.EntityBases.Abstract;
-using Milvasoft.Core.Utils.Constants;
 using Milvasoft.Cryptography.Abstract;
 using Milvasoft.DataAccess.EfCore.Utils.Converters;
 using MongoDB.Bson;

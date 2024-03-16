@@ -1,7 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using Milvasoft.Core.Exceptions;
 using System.Security.Cryptography;
-using System.Text;
 
 namespace Milvasoft.Identity.Concrete;
 

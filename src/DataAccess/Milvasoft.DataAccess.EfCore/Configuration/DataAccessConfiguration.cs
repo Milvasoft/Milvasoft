@@ -1,6 +1,4 @@
-﻿using Milvasoft.Core.Extensions;
-
-namespace Milvasoft.DataAccess.EfCore.Configuration;
+﻿namespace Milvasoft.DataAccess.EfCore.Configuration;
 
 /// <summary>
 /// IOptions aware custom MilvaDbContext configurations.

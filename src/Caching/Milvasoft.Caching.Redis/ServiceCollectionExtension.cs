@@ -3,7 +3,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Milvasoft.Caching.Builder;
 using Milvasoft.Caching.Redis.Accessor;
 using Milvasoft.Caching.Redis.Options;
-using Milvasoft.Core.Abstractions.Cache;
 using StackExchange.Redis;
 
 namespace Milvasoft.Caching.Redis;

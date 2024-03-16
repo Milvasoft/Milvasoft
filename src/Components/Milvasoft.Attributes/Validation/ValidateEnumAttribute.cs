@@ -1,7 +1,4 @@
-﻿using Milvasoft.Core;
-using Milvasoft.Core.Abstractions.Localization;
-using Milvasoft.Core.Utils.Constants;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace Milvasoft.Attributes.Validation;
 

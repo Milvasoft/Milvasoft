@@ -41,7 +41,7 @@ public class FilterCriteria
 
         foreach (var specialChar in _specialChars)
         {
-            children = children.Replace(specialChar, ' ').Trim(); 
+            children = children.Replace(specialChar, ' ').Trim();
         }
 
         return children;

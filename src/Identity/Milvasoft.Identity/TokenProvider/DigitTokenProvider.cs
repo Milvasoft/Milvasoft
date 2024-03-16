@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Identity;
 using Milvasoft.Identity.Concrete.Entity;
 using System.Globalization;
-using System.Text;
 
 namespace Milvasoft.Identity.TokenProvider;
 

@@ -10,6 +10,10 @@
 		<DocumentationFile>..\Milvasoft.MultiTenancy\Milvasoft.MultiTenancy.xml</DocumentationFile>
 	</PropertyGroup>
 
+	<ItemGroup>
+	  <Compile Include="..\..\Core\Milvasoft.Core\GlobalUsings.cs" Link="GlobalUsings.cs" />
+	</ItemGroup>
+
 
 	<ItemGroup>
 		<ProjectReference Include="..\..\Core\Milvasoft.Core\Milvasoft.Core.csproj" />

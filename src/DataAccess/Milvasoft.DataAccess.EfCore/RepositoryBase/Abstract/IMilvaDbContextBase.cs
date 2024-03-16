@@ -1,6 +1,4 @@
 ﻿using EFCore.BulkExtensions;
-using Milvasoft.DataAccess.EfCore.Configuration;
-using Milvasoft.DataAccess.EfCore.Utils.Enums;
 
 namespace Milvasoft.DataAccess.EfCore.RepositoryBase.Abstract;
 

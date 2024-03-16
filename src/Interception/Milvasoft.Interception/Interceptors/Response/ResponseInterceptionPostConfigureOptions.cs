@@ -1,5 +1,4 @@
 ﻿using Milvasoft.Attributes.Annotations;
-using Milvasoft.Core.Abstractions.Localization;
 
 namespace Milvasoft.Interception.Interceptors.Response;
 

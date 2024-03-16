@@ -1,11 +1,4 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using Milvasoft.Core.Abstractions.Localization;
-using Milvasoft.Core.EntityBases.Abstract;
-using Milvasoft.Core.EntityBases.Abstract.Auditing;
-using Milvasoft.Core.EntityBases.Concrete;
-using Milvasoft.Core.Exceptions;
-using Milvasoft.Core.Extensions;
-using Milvasoft.Core.Utils.Constants;
 using Milvasoft.Core.Utils.JsonConverters;
 using System.Collections;
 using System.ComponentModel;
@@ -13,7 +6,6 @@ using System.Linq.Expressions;
 using System.Reflection;
 using System.Reflection.Emit;
 using System.Security.Cryptography;
-using System.Text;
 using System.Text.Json;
 
 namespace Milvasoft.Core;

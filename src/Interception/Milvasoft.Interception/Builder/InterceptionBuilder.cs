@@ -1,6 +1,5 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Milvasoft.Core.Abstractions;
 
 namespace Milvasoft.Interception.Builder;
 

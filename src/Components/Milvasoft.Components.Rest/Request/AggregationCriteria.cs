@@ -2,8 +2,6 @@
 using Microsoft.EntityFrameworkCore.Query.Internal;
 using Milvasoft.Components.Rest.Enums;
 using Milvasoft.Components.Rest.Response;
-using Milvasoft.Core;
-using Milvasoft.Core.Exceptions;
 using System.Reflection;
 
 namespace Milvasoft.Components.Rest.Request;

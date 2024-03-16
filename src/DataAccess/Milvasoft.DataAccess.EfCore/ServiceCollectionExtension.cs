@@ -1,9 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
-using Milvasoft.Core.Exceptions;
-using Milvasoft.Core.Extensions;
-using Milvasoft.DataAccess.EfCore.Configuration;
 
 namespace Milvasoft.DataAccess.EfCore;
 

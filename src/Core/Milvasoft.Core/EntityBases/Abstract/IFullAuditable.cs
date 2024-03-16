@@ -1,6 +1,4 @@
-﻿using Milvasoft.Core.EntityBases.Abstract.Auditing;
-
-namespace Milvasoft.Core.EntityBases.Abstract;
+﻿namespace Milvasoft.Core.EntityBases.Abstract;
 
 /// <summary>
 /// Determines entity is fully auditable with user information.

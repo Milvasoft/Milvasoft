@@ -1,9 +1,4 @@
-﻿using Milvasoft.Core.Abstractions.Cache;
-using Milvasoft.DataAccess.EfCore.DbContextBase;
-using Milvasoft.DataAccess.EfCore.Utils.Enums;
-using System.Reflection;
-
-namespace Milvasoft.DataAccess.EfCore.Configuration;
+﻿namespace Milvasoft.DataAccess.EfCore.Configuration;
 
 /// <summary>
 /// IOptions aware custom MilvaDbContext configurations.

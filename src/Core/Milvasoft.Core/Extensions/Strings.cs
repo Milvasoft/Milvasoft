@@ -1,6 +1,5 @@
 ﻿using System.Globalization;
 using System.Security.Cryptography;
-using System.Text;
 
 namespace Milvasoft.Core.Extensions;
 

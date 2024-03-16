@@ -1,6 +1,4 @@
-﻿using Milvasoft.Core.EntityBases.Abstract.Auditing;
-
-namespace Milvasoft.Core.EntityBases.Abstract;
+﻿namespace Milvasoft.Core.EntityBases.Abstract;
 
 /// <summary>
 /// Determines entity is auditable with modifier and modification date.

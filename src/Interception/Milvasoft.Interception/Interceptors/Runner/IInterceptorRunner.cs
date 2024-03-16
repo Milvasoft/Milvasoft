@@ -1,5 +1,4 @@
-﻿using Milvasoft.Core.Abstractions;
-using System.Linq.Expressions;
+﻿using System.Linq.Expressions;
 
 namespace Milvasoft.Interception.Interceptors.Runner;
 

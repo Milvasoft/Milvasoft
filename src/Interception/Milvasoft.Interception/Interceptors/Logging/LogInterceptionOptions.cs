@@ -1,6 +1,4 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using Milvasoft.Core.Abstractions;
-using Milvasoft.Core.Extensions;
 
 namespace Milvasoft.Interception.Interceptors.Logging;
 

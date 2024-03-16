@@ -1,6 +1,4 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using Milvasoft.Core.Abstractions.Cache;
-using Milvasoft.Core.Extensions;
 using StackExchange.Redis;
 
 namespace Milvasoft.Caching.Redis.Options;

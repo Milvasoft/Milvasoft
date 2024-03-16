@@ -1,6 +1,4 @@
-﻿using Milvasoft.Core.EntityBases.Concrete.Auditing;
-
-namespace Milvasoft.Core.EntityBases.MultiTenancy;
+﻿namespace Milvasoft.Core.EntityBases.MultiTenancy;
 
 /// <summary>
 /// Tenant base.

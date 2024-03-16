@@ -1,6 +1,4 @@
-﻿using Milvasoft.Core;
-
-namespace Milvasoft.Identity.Concrete.Entity;
+﻿namespace Milvasoft.Identity.Concrete.Entity;
 
 /// <summary>
 /// Represents a user in the identity system

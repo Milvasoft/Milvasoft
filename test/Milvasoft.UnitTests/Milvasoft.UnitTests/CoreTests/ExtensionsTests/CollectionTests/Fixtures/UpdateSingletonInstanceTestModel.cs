@@ -1,6 +1,6 @@
 ﻿namespace Milvasoft.UnitTests.CoreTests.ExtensionsTests.CollectionTests.Fixtures;
 
-public interface IUpdateSingletonInstanceTestModel 
+public interface IUpdateSingletonInstanceTestModel
 {
     public string Name { get; set; }
     public byte Order { get; set; }

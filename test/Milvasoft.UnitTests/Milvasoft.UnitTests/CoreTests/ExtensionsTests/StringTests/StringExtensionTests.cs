@@ -1,6 +1,5 @@
 ﻿using FluentAssertions;
 using Milvasoft.Core.Extensions;
-using System.Runtime.Intrinsics.Arm;
 using System.Security.Cryptography;
 using System.Text;
 

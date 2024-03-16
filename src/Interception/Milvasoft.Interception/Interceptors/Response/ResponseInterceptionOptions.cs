@@ -1,8 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Milvasoft.Attributes.Annotations;
-using Milvasoft.Core.Abstractions;
-using Milvasoft.Core.Abstractions.Localization;
-using Milvasoft.Core.Extensions;
 
 namespace Milvasoft.Interception.Interceptors.Response;
 

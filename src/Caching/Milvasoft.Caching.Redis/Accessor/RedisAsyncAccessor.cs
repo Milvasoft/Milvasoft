@@ -1,8 +1,4 @@
-﻿using Milvasoft.Core;
-using Milvasoft.Core.Abstractions;
-using Milvasoft.Core.Exceptions;
-using Milvasoft.Core.Extensions;
-using StackExchange.Redis;
+﻿using StackExchange.Redis;
 using System.Text.Json;
 
 namespace Milvasoft.Caching.Redis;

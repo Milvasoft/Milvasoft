@@ -1,5 +1,4 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using Milvasoft.Core.Exceptions;
 using System.Collections;
 using System.Linq.Expressions;
 using System.Reflection;
@@ -91,7 +90,7 @@ public static class GenericCollection
     /// <returns></returns>
     public static IEnumerable<List<T>> ToBatches<T>(this List<T> list, int batchSize = 100)
     {
-        if(list.IsNullOrEmpty())
+        if (list.IsNullOrEmpty())
             yield break;
 
         for (int i = 0; i < list.Count; i += batchSize)
@@ -105,7 +104,7 @@ public static class GenericCollection
     /// <param name="services"></param>
     /// <param name="updateAction"></param>
     /// <returns></returns>
-    public static IServiceCollection UpdateSingletonInstance<TInstance>(this IServiceCollection services, Action<TInstance> updateAction) where TInstance : class 
+    public static IServiceCollection UpdateSingletonInstance<TInstance>(this IServiceCollection services, Action<TInstance> updateAction) where TInstance : class
         => services.UpdateSingletonInstance<TInstance, TInstance>(updateAction);
 
     /// <summary>

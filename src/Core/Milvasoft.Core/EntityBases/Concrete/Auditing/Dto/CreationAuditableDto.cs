@@ -1,6 +1,4 @@
-﻿using Milvasoft.Core.EntityBases.Abstract;
-
-namespace Milvasoft.Core.EntityBases.Concrete.Auditing.Dto;
+﻿namespace Milvasoft.Core.EntityBases.Concrete.Auditing.Dto;
 
 /// <summary>
 /// Determines entity's creation is auditable.

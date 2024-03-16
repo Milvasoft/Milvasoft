@@ -1,6 +1,4 @@
-﻿using Milvasoft.Core.EntityBases.Abstract;
-
-namespace Milvasoft.Core.EntityBases.Concrete.Auditing.Dto;
+﻿namespace Milvasoft.Core.EntityBases.Concrete.Auditing.Dto;
 
 /// <summary>
 /// Determines entity is fully auditable soft deletable entity.

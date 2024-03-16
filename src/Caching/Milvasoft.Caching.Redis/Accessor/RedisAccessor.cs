@@ -1,8 +1,5 @@
 ﻿using Milvasoft.Caching.Redis.Accessor;
 using Milvasoft.Caching.Redis.Options;
-using Milvasoft.Core;
-using Milvasoft.Core.Abstractions.Cache;
-using Milvasoft.Core.Extensions;
 using StackExchange.Redis;
 using System.Net;
 using System.Text.Json;

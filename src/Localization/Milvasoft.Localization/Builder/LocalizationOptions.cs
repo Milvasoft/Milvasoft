@@ -1,7 +1,5 @@
 ﻿using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.DependencyInjection;
-using Milvasoft.Core.Abstractions.Localization;
-using Milvasoft.Core.Extensions;
 
 namespace Milvasoft.Localization.Builder;
 

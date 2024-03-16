@@ -1,9 +1,5 @@
-﻿using Milvasoft.Core.Exceptions;
-using Milvasoft.Core.Extensions;
-using Milvasoft.Core.MultiLanguage.EntityBases;
+﻿using Milvasoft.Core.MultiLanguage.EntityBases;
 using Milvasoft.Core.MultiLanguage.EntityBases.Abstract;
-using Milvasoft.Core.MultiLanguage.EntityBases.Concrete;
-using Milvasoft.Core.Utils.Constants;
 using System.Collections;
 using System.Collections.Concurrent;
 using System.Globalization;
@@ -149,7 +145,7 @@ public abstract class MultiLanguageManager : IMultiLanguageManager
 
         return getTranslationMethod.Invoke(this, new object[] { translations, requestedPropName });
     }
-    
+
     /// <summary>
     /// Gets requested translation property value.
     /// </summary>

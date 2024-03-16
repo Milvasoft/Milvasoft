@@ -1,5 +1,4 @@
-﻿using Milvasoft.Core.EntityBases.Abstract;
-using MongoDB.Bson;
+﻿using MongoDB.Bson;
 
 namespace Milvasoft.DataAccess.MongoDB.Entity.Abstract;
 
