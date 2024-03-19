@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 
-namespace Milvasoft.Core;
+namespace Milvasoft.Core.Utils;
 
 /// <summary>
 /// Custom <see cref="Lazy{T}"/> class.

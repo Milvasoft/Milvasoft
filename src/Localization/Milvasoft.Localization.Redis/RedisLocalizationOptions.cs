@@ -1,5 +1,5 @@
 ﻿using Milvasoft.Caching.Redis.Options;
-using Milvasoft.Core.Extensions;
+using Milvasoft.Core.Utils.Constants;
 using Milvasoft.Localization.Builder;
 
 namespace Milvasoft.Localization.Redis;
@@ -9,7 +9,7 @@ namespace Milvasoft.Localization.Redis;
 /// </summary>
 public class RedisLocalizationOptions : LocalizationOptions
 {
-    public new static string SectionName { get; } = $"{MilvaOptionsExtensions.ParentSectionName}:Localization:Redis";
+    public new static string SectionName { get; } = $"{MilvaConstant.ParentSectionName}:Localization:Redis";
 
     /// <summary>
     /// _ML_ : Milva Localizer

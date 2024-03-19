@@ -8,7 +8,7 @@ namespace Milvasoft.Identity.Concrete.Options;
 public class MilvaIdentityOptions : IMilvaOptions
 {
     /// <inheritdoc/>
-    public static string SectionName { get; } = $"{MilvaOptionsExtensions.ParentSectionName}:Identity";
+    public static string SectionName { get; } = $"{MilvaConstant.ParentSectionName}:Identity";
 
     /// <summary>
     /// Gets or sets the <see cref="UserOptions"/> for the identity system.

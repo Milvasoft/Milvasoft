@@ -6,7 +6,7 @@ namespace Milvasoft.Core;
 /// <summary>
 /// Helper class for request processes.
 /// </summary>
-public static partial class Request
+public static partial class HttpRequestHelper
 {
     #region Create Request Message
 

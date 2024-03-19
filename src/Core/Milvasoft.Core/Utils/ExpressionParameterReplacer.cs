@@ -1,6 +1,6 @@
 ﻿using System.Linq.Expressions;
 
-namespace Milvasoft.Core.Extensions.Helpers;
+namespace Milvasoft.Core.Utils;
 
 /// <summary>
 /// Expression parameter replacer for expression builder.

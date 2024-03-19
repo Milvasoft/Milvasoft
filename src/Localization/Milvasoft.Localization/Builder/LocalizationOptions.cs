@@ -8,7 +8,7 @@ namespace Milvasoft.Localization.Builder;
 /// </summary>
 public class LocalizationOptions : ILocalizationOptions
 {
-    public static string SectionName { get; } = $"{MilvaOptionsExtensions.ParentSectionName}:Localization";
+    public static string SectionName { get; } = $"{MilvaConstant.ParentSectionName}:Localization";
 
     /// <inheritdoc/>
     public ServiceLifetime ManagerLifetime { get; set; } = ServiceLifetime.Transient;

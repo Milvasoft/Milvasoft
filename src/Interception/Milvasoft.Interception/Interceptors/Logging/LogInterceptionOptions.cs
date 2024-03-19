@@ -4,7 +4,7 @@ namespace Milvasoft.Interception.Interceptors.Logging;
 
 public class LogInterceptionOptions : ILogInterceptionOptions
 {
-    public static string SectionName { get; } = $"{MilvaOptionsExtensions.ParentSectionName}:Interception:Log";
+    public static string SectionName { get; } = $"{MilvaConstant.ParentSectionName}:Interception:Log";
 
     public ServiceLifetime InterceptorLifetime { get; set; } = ServiceLifetime.Scoped;
 

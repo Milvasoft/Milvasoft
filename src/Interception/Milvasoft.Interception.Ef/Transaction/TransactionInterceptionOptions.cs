@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Milvasoft.Core.Abstractions;
-using Milvasoft.Core.Extensions;
+using Milvasoft.Core.Utils.Constants;
 
 namespace Milvasoft.Interception.Ef.Transaction;
 
@@ -8,7 +8,7 @@ public class TransactionInterceptionOptions : ITransactionInterceptionOptions
 {
     private static Type _dbContextType = null;
 
-    public static string SectionName { get; } = $"{MilvaOptionsExtensions.ParentSectionName}:Interception:Transaction";
+    public static string SectionName { get; } = $"{MilvaConstant.ParentSectionName}:Interception:Transaction";
 
     public ServiceLifetime InterceptorLifetime { get; set; } = ServiceLifetime.Scoped;
 

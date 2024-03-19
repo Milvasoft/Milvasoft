@@ -6,7 +6,7 @@ namespace Milvasoft.Core.Extensions;
 /// <summary>
 /// String extensions.
 /// </summary>
-public static class Strings
+public static partial class CommonHelper
 {
     /// <summary>
     /// Uppercases the first letter of the word.
@@ -123,4 +123,11 @@ public static class Strings
 
         return builder.ToString();
     }
+
+    /// <summary>
+    /// Normalize string according to invariant culture.
+    /// </summary>
+    /// <param name="value"></param>
+    /// <returns></returns>
+    public static string MilvaNormalize(this string value) => !string.IsNullOrWhiteSpace(value) ? value.ToLower().ToUpperInvariant() : null;
 }

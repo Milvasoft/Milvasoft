@@ -13,7 +13,7 @@ public class RedisCachingOptions : ICacheOptions<RedisCachingOptions>
     /// <summary>
     /// Configuration section path in configuration file.
     /// </summary>
-    public static string SectionName { get; } = $"{MilvaOptionsExtensions.ParentSectionName}:Caching:Redis";
+    public static string SectionName { get; } = $"{MilvaConstant.ParentSectionName}:Caching:Redis";
 
     /// <summary>
     /// Accessor lifetime

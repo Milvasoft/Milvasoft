@@ -5,7 +5,7 @@ namespace Milvasoft.Interception.Interceptors.Response;
 
 public class ResponseInterceptionOptions : IResponseInterceptionOptions
 {
-    public static string SectionName { get; } = $"{MilvaOptionsExtensions.ParentSectionName}:Interception:Response";
+    public static string SectionName { get; } = $"{MilvaConstant.ParentSectionName}:Interception:Response";
 
     public ServiceLifetime InterceptorLifetime { get; set; } = ServiceLifetime.Scoped;
 

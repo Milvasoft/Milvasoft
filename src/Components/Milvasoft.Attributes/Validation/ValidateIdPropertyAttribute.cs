@@ -51,7 +51,7 @@ public class ValidateIdPropertyAttribute : ValidationAttribute
 
             if (LocalizeErrorMessages)
             {
-                milvaLocalizer = context.GetMilvaLocalizer();
+                milvaLocalizer = context.GetService<IMilvaLocalizer>();
 
                 localizedRelationName = milvaLocalizer[MemberNameLocalizerKey ?? $"{LocalizerKeys.LocalizedEntityName}{context.MemberName[0..^2]}"].ToString().ToLowerInvariant();
                 errorMessage = milvaLocalizer[LocalizerKeys.ValidationIdPropertyError, localizedRelationName];

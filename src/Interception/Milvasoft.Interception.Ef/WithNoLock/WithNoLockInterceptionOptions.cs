@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Milvasoft.Core.Abstractions;
-using Milvasoft.Core.Extensions;
+using Milvasoft.Core.Utils.Constants;
 
 namespace Milvasoft.Interception.Ef.WithNoLock;
 
@@ -8,7 +8,7 @@ public class WithNoLockInterceptionOptions : IWithNoLockInterceptionOptions
 {
     private static Type _dbContextType = null;
 
-    public static string SectionName { get; } = $"{MilvaOptionsExtensions.ParentSectionName}:Interception:WithNoLock";
+    public static string SectionName { get; } = $"{MilvaConstant.ParentSectionName}:Interception:WithNoLock";
 
     public ServiceLifetime InterceptorLifetime { get; set; } = ServiceLifetime.Scoped;
 

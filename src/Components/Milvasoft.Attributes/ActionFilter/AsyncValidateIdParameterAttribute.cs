@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Milvasoft.Attributes.ActionFilter;
 
@@ -35,7 +36,7 @@ public class AsyncValidateIdParameterAttribute : Attribute, IAsyncActionFilter
             IMilvaLocalizer milvaLocalizer = null;
 
             if (LocalizeErrorMessages)
-                milvaLocalizer = context.HttpContext.RequestServices.GetMilvaLocalizer();
+                milvaLocalizer = context.HttpContext.RequestServices.GetService<IMilvaLocalizer>();
 
             var message = milvaLocalizer != null
                      ? EntityName != null

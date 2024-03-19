@@ -126,7 +126,7 @@ public class ValidateStringAttribute : ValidationAttribute
 
             if (LocalizeErrorMessages)
             {
-                milvaLocalizer = context.GetMilvaLocalizer();
+                milvaLocalizer = context.GetService<IMilvaLocalizer>();
 
                 localizedPropName = milvaLocalizer[MemberNameLocalizerKey ?? $"{LocalizerKeys.Localized}{context.MemberName}"];
             }
@@ -136,7 +136,7 @@ public class ValidateStringAttribute : ValidationAttribute
             var httpContext = context.GetService<IHttpContextAccessor>().HttpContext;
 
             // Check the lengths for legality
-            CommonHelper.EnsureLegalLengths(MaximumLength, MinimumLength, milvaLocalizer);
+            //CommonHelper.EnsureLegalLengths(MaximumLength, MinimumLength, milvaLocalizer);
 
             // Automatically pass if value is null. RequiredAttribute should be used to assert a value is not null.
             // We expect a cast exception if a non-string was passed in.

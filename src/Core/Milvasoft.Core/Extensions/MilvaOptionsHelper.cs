@@ -7,13 +7,8 @@ namespace Milvasoft.Core.Extensions;
 /// <summary>
 /// Milvasoft library components options extensions.
 /// </summary>
-public static class MilvaOptionsExtensions
+public static partial class CommonHelper
 {
-    /// <summary>
-    /// Milvasoft main configuration object name.
-    /// </summary>
-    public const string ParentSectionName = "Milvasoft";
-
     /// <summary>
     /// Adds <see cref="LocalizationOptions"/> as <see cref="Microsoft.Extensions.Options.IOptions{TOptions}"/>.
     /// </summary>

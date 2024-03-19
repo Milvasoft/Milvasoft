@@ -6,7 +6,7 @@ public class CacheInterceptionOptions : ICacheInterceptionOptions
 {
     private static Type _accessorType = null;
 
-    public static string SectionName { get; } = $"{MilvaOptionsExtensions.ParentSectionName}:Interception:Cache";
+    public static string SectionName { get; } = $"{MilvaConstant.ParentSectionName}:Interception:Cache";
     public ServiceLifetime InterceptorLifetime { get; set; } = ServiceLifetime.Scoped;
     public string CacheAccessorAssemblyQualifiedName { get; set; }
 

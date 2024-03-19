@@ -8,7 +8,7 @@ namespace Milvasoft.Core.Extensions;
 /// <summary>
 /// Generic collection helper extension methods.
 /// </summary>
-public static class GenericCollection
+public static partial class CommonHelper
 {
     private static readonly MethodInfo _orderByMethod = typeof(Queryable).GetMethods().Single(method => method.Name == "OrderBy" && method.GetParameters().Length == 2);
 
@@ -18,18 +18,6 @@ public static class GenericCollection
     /// Checks whether or not collection is null or empty. Assumes collection can be safely enumerated multiple times.
     /// </summary>
     public static bool IsNullOrEmpty(this IEnumerable @this) => @this == null || @this.GetEnumerator().MoveNext() == false;
-
-    /// <summary>
-    /// Checks whether property exists.
-    /// </summary>
-    /// <typeparam name="T"></typeparam>
-    /// <param name="_"> Source collection for code readiness. </param>
-    /// <param name="propertyName"></param>
-    /// <returns></returns>
-    public static bool PropertyExists<T>(this IEnumerable<T> _, string propertyName) => !string.IsNullOrWhiteSpace(propertyName)
-                                                                                        && typeof(T).GetProperty(propertyName, BindingFlags.IgnoreCase
-                                                                                                                                | BindingFlags.Public
-                                                                                                                                | BindingFlags.Instance) != null;
 
     /// <summary>
     /// Order <paramref name="source"/> by <paramref name="propertyName"/>
@@ -129,5 +117,45 @@ public static class GenericCollection
         }
 
         return services;
+    }
+
+    /// <summary>
+    /// <para> Filter <paramref name="contentList"/> by <paramref name="dateTopValue"/> and <paramref name="dateLowerValue"/> values. </para>
+    /// </summary>
+    /// 
+    /// <remarks>
+    /// 
+    /// <para><b>Remarks: </b></para>
+    /// 
+    /// <para> If a selection has been made between two dates, it will return those between the two dates. </para>
+    /// <para> If only the <paramref name="dateTopValue"/> value exists, it returns those larger than the <paramref name="dateLowerValue"/> value. </para>
+    /// <para> If only the <paramref name="dateLowerValue"/> value exists, it returns those smaller than the <paramref name="dateTopValue"/> value. </para>
+    /// 
+    /// </remarks>
+    ///
+    /// <typeparam name="T"></typeparam>
+    /// <param name="contentList"></param>
+    /// <param name="dateTopValue"></param>
+    /// <param name="dateLowerValue"></param>
+    /// <param name="dateProperty"></param>
+    /// <returns> Filtered <paramref name="contentList"/> </returns>
+    public static IEnumerable<T> FilterByDate<T>(this IEnumerable<T> contentList, DateTime? dateTopValue, DateTime? dateLowerValue, Expression<Func<T, DateTime?>> dateProperty)
+    {
+        var propertyName = dateProperty.GetPropertyName();
+
+        //If a selection has been made between two dates, it will return those between the two dates.
+        if (dateLowerValue.HasValue && dateTopValue.HasValue)
+            contentList = contentList.Where(i => (DateTime)i.GetType().GetProperty(propertyName).GetValue(i, null) >= dateLowerValue.Value && (DateTime)i.GetType().GetProperty(propertyName).GetValue(i, null) <= dateTopValue.Value);
+
+        // If only the DateTopValue value exists, it returns those larger than the DateLowerValue value.
+        else if (dateLowerValue.HasValue && !dateTopValue.HasValue)
+        {
+            contentList = contentList.Where(i => (DateTime)i.GetType().GetProperty(propertyName).GetValue(i, null) >= dateLowerValue.Value);
+        }
+
+        //If only the DateLowerValue value exists, it returns those smaller than the DateTopValue value.
+        else if (!dateLowerValue.HasValue && dateTopValue.HasValue)
+            contentList = contentList.Where(i => (DateTime)i.GetType().GetProperty(propertyName).GetValue(i, null) <= dateTopValue.Value);
+        return contentList;
     }
 }

@@ -8,7 +8,7 @@ public class DataAccessConfiguration : IDataAccessConfiguration
     /// <summary>
     /// Configuration section path in configuration file.
     /// </summary>
-    public static string SectionName { get; } = $"{MilvaOptionsExtensions.ParentSectionName}:DataAccess";
+    public static string SectionName { get; } = $"{MilvaConstant.ParentSectionName}:DataAccess";
 
     /// <summary>
     /// DbContext configuration.

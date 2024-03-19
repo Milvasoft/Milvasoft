@@ -27,6 +27,6 @@ public class SortRequest
     /// <typeparam name="TEntity"></typeparam>
     /// <returns></returns>
     public Expression<Func<TEntity, object>> BuildPropertySelectorExpression<TEntity>()
-        => !string.IsNullOrWhiteSpace(SortBy) ? CommonHelper.CreateOrderByKeySelector<TEntity>(SortBy) : null;
+        => !string.IsNullOrWhiteSpace(SortBy) ? CommonHelper.CreateOrderBySelectorExpression<TEntity>(SortBy) : null;
 
 }

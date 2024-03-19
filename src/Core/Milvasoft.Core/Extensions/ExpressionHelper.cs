@@ -1,4 +1,4 @@
-﻿using Milvasoft.Core.Extensions.Helpers;
+﻿using Milvasoft.Core.Utils;
 using System.Linq.Expressions;
 using System.Reflection;
 
@@ -7,7 +7,7 @@ namespace Milvasoft.Core.Extensions;
 /// <summary>
 /// Expression extensions.
 /// </summary>
-public static class Expressions
+public static partial class CommonHelper
 {
     /// <summary>
     /// Appends <paramref name="right"/> to <paramref name="left"/>.

@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.Extensions.DependencyInjection;
+using System.ComponentModel.DataAnnotations;
 
 namespace Milvasoft.Attributes.Validation;
 
@@ -83,7 +84,7 @@ public class ValidateDecimalAttribute : ValidationAttribute
 
             if (LocalizeErrorMessages)
             {
-                milvaLocalizer = context.GetMilvaLocalizer();
+                milvaLocalizer = context.GetService<IMilvaLocalizer>();
 
                 localizedPropName = milvaLocalizer[LocalizerKey ?? $"{LocalizerKeys.Localized}{context.MemberName}"];
                 errorMessage = FullMessage ? milvaLocalizer[LocalizerKey] : milvaLocalizer[LocalizerKeys.MinDecimalValueException, localizedPropName];

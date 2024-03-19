@@ -74,7 +74,7 @@ public class ValidateListCountAttribute : ValidationAttribute
 
         if (LocalizeErrorMessages)
         {
-            milvaLocalizer = context.GetMilvaLocalizer();
+            milvaLocalizer = context.GetService<IMilvaLocalizer>();
 
             localizedPropName = milvaLocalizer[LocalizerKey ?? $"{LocalizerKeys.Localized}{context.MemberName}"].ToString();
         }

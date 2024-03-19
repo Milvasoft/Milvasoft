@@ -7,7 +7,7 @@ using Moq;
 
 namespace Milvasoft.UnitTests.CoreTests.ExtensionsTests.CollectionTests;
 
-public partial class CollectionExtensionTests
+public partial class FilterExtensionTests
 {
 
     #region IsNullOrEmpty

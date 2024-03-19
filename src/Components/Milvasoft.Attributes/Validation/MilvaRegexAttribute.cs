@@ -1,3 +1,4 @@
+using Microsoft.Extensions.DependencyInjection;
 using System.ComponentModel.DataAnnotations;
 
 namespace Milvasoft.Attributes.Validation;
@@ -55,7 +56,7 @@ public class MilvaRegexAttribute : RegularExpressionAttribute
     /// <returns></returns>
     protected override ValidationResult IsValid(object value, ValidationContext context)
     {
-        var milvaLocalizer = context.GetMilvaLocalizer();
+        var milvaLocalizer = context.GetService<IMilvaLocalizer>();
 
         var localizedPropName = milvaLocalizer == null ? context.MemberName : milvaLocalizer[$"{LocalizerKeys.Localized}{MemberNameLocalizerKey ?? context.MemberName}"];
 

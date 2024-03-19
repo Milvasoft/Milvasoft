@@ -38,7 +38,7 @@ public class CacheInterceptor : IMilvaInterceptor
 
                 methodParameters?.RemoveAll(p => p is CancellationToken);
 
-                cacheKey = $"{cacheAttribute.Key}_{methodParameters?.ToJson().GetHexadecimalHash()}";
+                cacheKey = $"{cacheAttribute.Key}_{methodParameters?.ToJson().Hash()}";
 
                 var returnType = call.ReturnType.GetGenericTypeDefinition() == typeof(Task<>) ? call.ReturnType.GenericTypeArguments.FirstOrDefault() : call.ReturnType;
 

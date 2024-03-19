@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.Extensions.DependencyInjection;
 using Milvasoft.Components.Rest.Response;
 using Newtonsoft.Json;
 
@@ -43,7 +44,7 @@ public class ValidateIdParameterAttribute : ActionFilterAttribute
             IMilvaLocalizer milvaLocalizer = null;
 
             if (LocalizeErrorMessages)
-                milvaLocalizer = context.HttpContext.RequestServices.GetMilvaLocalizer();
+                milvaLocalizer = context.HttpContext.RequestServices.GetService<IMilvaLocalizer>();
 
             var message = milvaLocalizer != null
                      ? EntityName != null

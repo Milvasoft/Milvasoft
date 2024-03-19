@@ -59,9 +59,9 @@ public class ValidateStringParameterAttribute(int minimumLength, int maximumLeng
         IMilvaLocalizer milvaLocalizer = null;
 
         if (LocalizeErrorMessages)
-            milvaLocalizer = context.HttpContext.RequestServices.GetMilvaLocalizer();
+            milvaLocalizer = context.HttpContext.RequestServices.GetService<IMilvaLocalizer>();
 
-        CommonHelper.EnsureLegalLengths(MaximumLength, MinimumLength, milvaLocalizer);
+        //CommonHelper.EnsureLegalLengths(MaximumLength, MinimumLength, milvaLocalizer);
 
         if (context.ActionArguments.Count != 0)
         {

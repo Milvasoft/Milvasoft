@@ -42,7 +42,7 @@ public class JsonFileOperationsOptions : IJsonFileOperationOptions
     /// <summary>
     /// Configuration file section path.
     /// </summary>
-    public static string SectionName { get; } = $"{MilvaOptionsExtensions.ParentSectionName}:FileOperations:Json";
+    public static string SectionName { get; } = $"{MilvaConstant.ParentSectionName}:FileOperations:Json";
 
     /// <summary>
     /// Gets or sets base path. If sets combines all file paths with this.
