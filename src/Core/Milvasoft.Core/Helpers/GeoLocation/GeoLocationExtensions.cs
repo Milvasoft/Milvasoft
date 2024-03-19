@@ -1,6 +1,6 @@
-﻿using Milvasoft.Core.Extensions.GeoLocation.Models;
+﻿using Milvasoft.Core.Helpers.GeoLocation.Models;
 
-namespace Milvasoft.Core.Extensions.GeoLocation;
+namespace Milvasoft.Core.Helpers.GeoLocation;
 
 /// <summary>
 /// Extension methods for geo location.
@@ -24,14 +24,14 @@ public static class GeoLocationExtensions
         tempLon2 = ToRadians(point2.Longitude);
 
         // Haversine formula
-        double dlon = tempLon2 - tempLon1;
-        double dlat = tempLat2 - tempLat1;
+        var dlon = tempLon2 - tempLon1;
+        var dlat = tempLat2 - tempLat1;
 
-        double a = Math.Pow(Math.Sin(dlat / 2), 2) +
+        var a = Math.Pow(Math.Sin(dlat / 2), 2) +
                    Math.Cos(tempLat1) * Math.Cos(tempLat2) *
                    Math.Pow(Math.Sin(dlon / 2), 2);
 
-        double c = 2 * Math.Asin(Math.Sqrt(a));
+        var c = 2 * Math.Asin(Math.Sqrt(a));
 
         // Radius of earth in kilometers. 
         double radius = 6371;

@@ -300,7 +300,7 @@
         <member name="M:Milvasoft.DataAccess.EfCore.DbContextBase.MilvaDbContextBase.GetRequiredContentsDynamicallyAsync(System.Type)">
             <summary>
             Gets requested contents by <paramref name="type"/> DbSet.
-            If this method gets soft deleted entities please override <see cref="M:Milvasoft.Core.Extensions.CommonHelper.CreateIsDeletedFalseExpression``1"/> method your own condition.
+            If this method gets soft deleted entities please override <see cref="M:Milvasoft.Core.Helpers.CommonHelper.CreateIsDeletedFalseExpression``1"/> method your own condition.
             </summary>
             <param name="type"></param>
             <returns></returns>
@@ -308,14 +308,14 @@
         <member name="M:Milvasoft.DataAccess.EfCore.DbContextBase.MilvaDbContextBase.GetRequiredContentsAsync``1(Milvasoft.Components.Rest.Request.FilterRequest,Milvasoft.Components.Rest.Request.SortRequest,System.Linq.Expressions.Expression{System.Func{``0,``0}})">
             <summary>
             Gets requested contents by <typeparamref name="TEntity"/> DbSet.
-            If this method gets soft deleted entities please override <see cref="M:Milvasoft.Core.Extensions.CommonHelper.CreateIsDeletedFalseExpression``1"/> method your own condition.
+            If this method gets soft deleted entities please override <see cref="M:Milvasoft.Core.Helpers.CommonHelper.CreateIsDeletedFalseExpression``1"/> method your own condition.
             </summary>
             <returns></returns>
         </member>
         <member name="M:Milvasoft.DataAccess.EfCore.DbContextBase.MilvaDbContextBase.GetMaxValueFromDbAsync``1(System.String)">
             <summary>
             Gets the requested <typeparamref name="TEntity"/>'s property's(<paramref name="propName"/>) max value.
-            If this method gets soft deleted entities please override <see cref="M:Milvasoft.Core.Extensions.CommonHelper.CreateIsDeletedFalseExpression``1"/> method your own condition.
+            If this method gets soft deleted entities please override <see cref="M:Milvasoft.Core.Helpers.CommonHelper.CreateIsDeletedFalseExpression``1"/> method your own condition.
             </summary>
             <typeparam name="TEntity"></typeparam>
             <param name="propName"></param>
@@ -2382,7 +2382,7 @@
         </member>
         <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Concrete.BaseRepository`2.CreateKeyEqualityExpression(System.Object,System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
             <summary>
-            Creates Id == <paramref name="key"/> equality expression and append to <see cref="M:Milvasoft.Core.Extensions.CommonHelper.CreateIsDeletedFalseExpression``1"/>.
+            Creates Id == <paramref name="key"/> equality expression and append to <see cref="M:Milvasoft.Core.Helpers.CommonHelper.CreateIsDeletedFalseExpression``1"/>.
             </summary>
             <param name="key"></param>
             <param name="conditionExpression"></param>

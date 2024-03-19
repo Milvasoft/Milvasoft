@@ -1,6 +1,6 @@
 ﻿using System.Text.RegularExpressions;
 
-namespace Milvasoft.Core.Extensions;
+namespace Milvasoft.Core.Helpers;
 
 /// <summary>
 /// Helper class for match input string and regex.

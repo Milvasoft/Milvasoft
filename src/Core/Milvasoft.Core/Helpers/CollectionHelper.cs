@@ -3,7 +3,7 @@ using System.Collections;
 using System.Linq.Expressions;
 using System.Reflection;
 
-namespace Milvasoft.Core.Extensions;
+namespace Milvasoft.Core.Helpers;
 
 /// <summary>
 /// Generic collection helper extension methods.

@@ -1,5 +1,5 @@
 ﻿using FluentAssertions;
-using Milvasoft.Core.Extensions;
+using Milvasoft.Core.Helpers;
 using Milvasoft.UnitTests.CoreTests.ExtensionsTests.StringTests.Fixtures;
 using System.Globalization;
 

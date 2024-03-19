@@ -2,7 +2,7 @@
 using System.Linq.Expressions;
 using System.Reflection;
 
-namespace Milvasoft.Core.Extensions;
+namespace Milvasoft.Core.Helpers;
 
 /// <summary>
 /// Expression extensions.

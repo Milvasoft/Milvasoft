@@ -2,7 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Localization;
 
-namespace Milvasoft.Core.Extensions;
+namespace Milvasoft.Core.Helpers;
 
 /// <summary>
 /// Milvasoft library components options extensions.

@@ -1,6 +1,6 @@
 ﻿using System.Linq.Expressions;
 
-namespace Milvasoft.Core.Extensions;
+namespace Milvasoft.Core.Helpers;
 
 /// <summary>
 /// Helper for filtering.

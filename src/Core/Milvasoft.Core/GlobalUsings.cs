@@ -1,5 +1,4 @@
-﻿global using Milvasoft.Core;
-global using Milvasoft.Core.Abstractions;
+﻿global using Milvasoft.Core.Abstractions;
 global using Milvasoft.Core.Abstractions.Cache;
 global using Milvasoft.Core.Abstractions.Localization;
 global using Milvasoft.Core.EntityBases.Abstract;
@@ -7,7 +6,7 @@ global using Milvasoft.Core.EntityBases.Abstract.Auditing;
 global using Milvasoft.Core.EntityBases.Concrete;
 global using Milvasoft.Core.EntityBases.Concrete.Auditing;
 global using Milvasoft.Core.Exceptions;
-global using Milvasoft.Core.Extensions;
+global using Milvasoft.Core.Helpers;
 global using Milvasoft.Core.Utils.Constants;
 
 /* Unmerged change from project 'Milvasoft.Components.Rest'

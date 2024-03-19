@@ -5,7 +5,7 @@ using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Options;
 using Milvasoft.Core.Abstractions.Localization;
 using Milvasoft.Core.Exceptions;
-using Milvasoft.Core.Extensions;
+using Milvasoft.Core.Helpers;
 using Milvasoft.Localization.Builder;
 using LocalizationOptions = Milvasoft.Localization.Builder.LocalizationOptions;
 

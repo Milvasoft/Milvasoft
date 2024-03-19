@@ -1,4 +1,4 @@
-﻿using Milvasoft.Core.Extensions;
+﻿using Milvasoft.Core.Helpers;
 using System.Net;
 using System.Net.Mail;
 using System.Net.Mime;

@@ -1,4 +1,4 @@
-﻿namespace Milvasoft.Core.Extensions.GeoLocation.Models;
+﻿namespace Milvasoft.Core.Helpers.GeoLocation.Models;
 
 /// <summary>
 /// Location point.

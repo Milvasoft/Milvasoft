@@ -1,7 +1,7 @@
 ﻿using Milvasoft.Core.Utils.JsonConverters;
 using System.Text.Json;
 
-namespace Milvasoft.Core.Extensions;
+namespace Milvasoft.Core.Helpers;
 public static partial class CommonHelper
 {
     /// <summary>

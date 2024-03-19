@@ -1821,7 +1821,7 @@
             <param name="messageOrLocalizerKey"></param>
             <param name="innerException"></param>
         </member>
-        <member name="T:Milvasoft.Core.Extensions.CommonHelper">
+        <member name="T:Milvasoft.Core.Helpers.CommonHelper">
             <summary>
             Generic collection helper extension methods.
             </summary>
@@ -1841,12 +1841,12 @@
             String extensions.
             </summary>
         </member>
-        <member name="M:Milvasoft.Core.Extensions.CommonHelper.IsNullOrEmpty(System.Collections.IEnumerable)">
+        <member name="M:Milvasoft.Core.Helpers.CommonHelper.IsNullOrEmpty(System.Collections.IEnumerable)">
             <summary>
             Checks whether or not collection is null or empty. Assumes collection can be safely enumerated multiple times.
             </summary>
         </member>
-        <member name="M:Milvasoft.Core.Extensions.CommonHelper.OrderByProperty``1(System.Linq.IQueryable{``0},System.String)">
+        <member name="M:Milvasoft.Core.Helpers.CommonHelper.OrderByProperty``1(System.Linq.IQueryable{``0},System.String)">
             <summary>
             Order <paramref name="source"/> by <paramref name="propertyName"/>
             </summary>
@@ -1855,7 +1855,7 @@
             <param name="propertyName"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Core.Extensions.CommonHelper.OrderByPropertyDescending``1(System.Linq.IQueryable{``0},System.String)">
+        <member name="M:Milvasoft.Core.Helpers.CommonHelper.OrderByPropertyDescending``1(System.Linq.IQueryable{``0},System.String)">
             <summary>
             Order by descending <paramref name="source"/> by <paramref name="propertyName"/>
             </summary>
@@ -1864,7 +1864,7 @@
             <param name="propertyName"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Core.Extensions.CommonHelper.ToBatches``1(System.Collections.Generic.List{``0},System.Int32)">
+        <member name="M:Milvasoft.Core.Helpers.CommonHelper.ToBatches``1(System.Collections.Generic.List{``0},System.Int32)">
             <summary>
             Splits list into batches with specified batch size.
             </summary>
@@ -1873,7 +1873,7 @@
             <param name="batchSize"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Core.Extensions.CommonHelper.UpdateSingletonInstance``1(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.Action{``0})">
+        <member name="M:Milvasoft.Core.Helpers.CommonHelper.UpdateSingletonInstance``1(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.Action{``0})">
             <summary>
             Updates singleton implementation instance with <paramref name="updateAction"/>.
             </summary>
@@ -1882,7 +1882,7 @@
             <param name="updateAction"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Core.Extensions.CommonHelper.UpdateSingletonInstance``2(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.Action{``1})">
+        <member name="M:Milvasoft.Core.Helpers.CommonHelper.UpdateSingletonInstance``2(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.Action{``1})">
             <summary>
             Updates singleton implementation instance with <paramref name="updateAction"/>.
             </summary>
@@ -1892,7 +1892,7 @@
             <param name="updateAction"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Core.Extensions.CommonHelper.FilterByDate``1(System.Collections.Generic.IEnumerable{``0},System.Nullable{System.DateTime},System.Nullable{System.DateTime},System.Linq.Expressions.Expression{System.Func{``0,System.Nullable{System.DateTime}}})">
+        <member name="M:Milvasoft.Core.Helpers.CommonHelper.FilterByDate``1(System.Collections.Generic.IEnumerable{``0},System.Nullable{System.DateTime},System.Nullable{System.DateTime},System.Linq.Expressions.Expression{System.Func{``0,System.Nullable{System.DateTime}}})">
              <summary>
              <para> Filter <paramref name="contentList"/> by <paramref name="dateTopValue"/> and <paramref name="dateLowerValue"/> values. </para>
              </summary>
@@ -1914,13 +1914,13 @@
              <param name="dateProperty"></param>
              <returns> Filtered <paramref name="contentList"/> </returns>
         </member>
-        <member name="M:Milvasoft.Core.Extensions.CommonHelper.CreateIsDeletedFalseExpression``1">
+        <member name="M:Milvasoft.Core.Helpers.CommonHelper.CreateIsDeletedFalseExpression``1">
             <summary>
             Gets <b>entity => entity.IsDeleted == false</b> expression, if <typeparamref name="TEntity"/> is assignable from <see cref="T:Milvasoft.Core.EntityBases.Abstract.IFullAuditable`1"/>.
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Core.Extensions.CommonHelper.GetEnumDesciption``1(``0)">
+        <member name="M:Milvasoft.Core.Helpers.CommonHelper.GetEnumDesciption``1(``0)">
             <summary>
             Gets enum description.
             </summary>
@@ -1928,7 +1928,7 @@
             <param name="enumValue"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Core.Extensions.CommonHelper.AssignUpdatedProperties``2(``0,``1)">
+        <member name="M:Milvasoft.Core.Helpers.CommonHelper.AssignUpdatedProperties``2(``0,``1)">
             <summary>
             Updates entity matching properties with <paramref name="dto"/>'s not null properties.
             </summary>
@@ -1938,21 +1938,21 @@
             <param name="entity"></param>
             <returns>Updated property informations.</returns>
         </member>
-        <member name="M:Milvasoft.Core.Extensions.CommonHelper.IsEnumerableType(System.Type)">
+        <member name="M:Milvasoft.Core.Helpers.CommonHelper.IsEnumerableType(System.Type)">
             <summary>
             Determines wheter the <paramref name="type"/> is enumerable or not.
             </summary>
             <param name="type"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Core.Extensions.CommonHelper.ToGuid(System.Int32)">
+        <member name="M:Milvasoft.Core.Helpers.CommonHelper.ToGuid(System.Int32)">
             <summary>
             This method return int value to guid value.
             </summary>
             <param name="value"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Core.Extensions.CommonHelper.ToJson(System.Object,System.Text.Json.JsonSerializerOptions)">
+        <member name="M:Milvasoft.Core.Helpers.CommonHelper.ToJson(System.Object,System.Text.Json.JsonSerializerOptions)">
             <summary>
             Converts <paramref name="value"/> to <see cref="T:System.String"/>.
             </summary>
@@ -1960,7 +1960,7 @@
             <param name="jsonOptions"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Core.Extensions.CommonHelper.ToObject``1(System.String,System.Text.Json.JsonSerializerOptions)">
+        <member name="M:Milvasoft.Core.Helpers.CommonHelper.ToObject``1(System.String,System.Text.Json.JsonSerializerOptions)">
             <summary>
             Converts <paramref name="value"/> to <typeparamref name="T"/>.
             </summary>
@@ -1969,7 +1969,7 @@
             <param name="jsonOptions"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Core.Extensions.CommonHelper.ToObject(System.String,System.Type,System.Text.Json.JsonSerializerOptions)">
+        <member name="M:Milvasoft.Core.Helpers.CommonHelper.ToObject(System.String,System.Type,System.Text.Json.JsonSerializerOptions)">
             <summary>
             Converts <paramref name="value"/> to <paramref name="returnType"/>.
             </summary>
@@ -1978,7 +1978,7 @@
             <param name="jsonOptions"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Core.Extensions.CommonHelper.Deserialize(System.Text.Json.JsonElement,System.Type)">
+        <member name="M:Milvasoft.Core.Helpers.CommonHelper.Deserialize(System.Text.Json.JsonElement,System.Type)">
             <summary>
             Deserializes json element to <paramref name="type"/>. 
             </summary>
@@ -1986,7 +1986,7 @@
             <param name="type"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Core.Extensions.CommonHelper.CreateBetweenExpression``1(System.Linq.Expressions.Expression{System.Func{``0,System.Nullable{System.DateTime}}},System.Nullable{System.DateTime},System.Nullable{System.DateTime})">
+        <member name="M:Milvasoft.Core.Helpers.CommonHelper.CreateBetweenExpression``1(System.Linq.Expressions.Expression{System.Func{``0,System.Nullable{System.DateTime}}},System.Nullable{System.DateTime},System.Nullable{System.DateTime})">
             <summary>
             <para> Creates expression by <paramref name="endDate"/> and <paramref name="startDate"/> values. </para>
             </summary>
@@ -2013,7 +2013,7 @@
             
             </returns>
         </member>
-        <member name="M:Milvasoft.Core.Extensions.CommonHelper.CreateBetweenExpression``1(System.Linq.Expressions.Expression{System.Func{``0,System.DateTime}},System.Nullable{System.DateTime},System.Nullable{System.DateTime})">
+        <member name="M:Milvasoft.Core.Helpers.CommonHelper.CreateBetweenExpression``1(System.Linq.Expressions.Expression{System.Func{``0,System.DateTime}},System.Nullable{System.DateTime},System.Nullable{System.DateTime})">
             <summary>
             <para> Creates expression by <paramref name="endDate"/> and <paramref name="startDate"/> values. </para>
             </summary>
@@ -2040,7 +2040,7 @@
             
             </returns>
         </member>
-        <member name="M:Milvasoft.Core.Extensions.CommonHelper.IsBetween(System.DateTime,System.TimeSpan,System.TimeSpan,System.Boolean)">
+        <member name="M:Milvasoft.Core.Helpers.CommonHelper.IsBetween(System.DateTime,System.TimeSpan,System.TimeSpan,System.Boolean)">
             <summary>
             Compares <paramref name="date"/> for whether between <paramref name="startTime"/> and <paramref name="endTime"/>. 
             </summary>
@@ -2055,7 +2055,7 @@
             <param name="convertTimesToUtc"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Core.Extensions.CommonHelper.IsBetween(System.DateTime,System.TimeSpan,System.TimeSpan,System.TimeSpan,System.Boolean)">
+        <member name="M:Milvasoft.Core.Helpers.CommonHelper.IsBetween(System.DateTime,System.TimeSpan,System.TimeSpan,System.TimeSpan,System.Boolean)">
             <summary>
             Removes <paramref name="date"/>'s hour, second and milisecond then adds <paramref name="compareTime"/> to <paramref name="date"/> 
             and compares <paramref name="date"/> for whether between <paramref name="startTime"/> and <paramref name="endTime"/>. 
@@ -2072,7 +2072,7 @@
             <param name="convertTimesToUtc"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Core.Extensions.CommonHelper.IsBetween(System.DateTime,System.DateTime,System.DateTime)">
+        <member name="M:Milvasoft.Core.Helpers.CommonHelper.IsBetween(System.DateTime,System.DateTime,System.DateTime)">
             <summary>
             Compares <paramref name="date"/> for whether between <paramref name="startDate"/> and <paramref name="endDate"/>. 
             </summary>
@@ -2081,7 +2081,7 @@
             <param name="endDate"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Core.Extensions.CommonHelper.IsBetween(System.DateTime,System.TimeSpan,System.DateTime,System.DateTime,System.Boolean)">
+        <member name="M:Milvasoft.Core.Helpers.CommonHelper.IsBetween(System.DateTime,System.TimeSpan,System.DateTime,System.DateTime,System.Boolean)">
             <summary>
             Compares <paramref name="date"/> for whether between <paramref name="startDate"/> and <paramref name="endDate"/>. 
             </summary>
@@ -2092,14 +2092,14 @@
             <param name="convertTimeToUtc"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Core.Extensions.CommonHelper.ConvertToUtc(System.TimeSpan)">
+        <member name="M:Milvasoft.Core.Helpers.CommonHelper.ConvertToUtc(System.TimeSpan)">
             <summary>
             Converts timespan to universal time.
             </summary>
             <param name="timeSpan"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Core.Extensions.CommonHelper.Append``1(System.Linq.Expressions.Expression{System.Func{``0,System.Boolean}},System.Linq.Expressions.Expression{System.Func{``0,System.Boolean}},System.Linq.Expressions.ExpressionType)">
+        <member name="M:Milvasoft.Core.Helpers.CommonHelper.Append``1(System.Linq.Expressions.Expression{System.Func{``0,System.Boolean}},System.Linq.Expressions.Expression{System.Func{``0,System.Boolean}},System.Linq.Expressions.ExpressionType)">
             <summary>
             Appends <paramref name="right"/> to <paramref name="left"/>.
             </summary>
@@ -2109,7 +2109,7 @@
             <param name="expressionAppendType"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Core.Extensions.CommonHelper.AndAlso``1(System.Linq.Expressions.Expression{System.Func{``0,System.Boolean}},System.Linq.Expressions.Expression{System.Func{``0,System.Boolean}})">
+        <member name="M:Milvasoft.Core.Helpers.CommonHelper.AndAlso``1(System.Linq.Expressions.Expression{System.Func{``0,System.Boolean}},System.Linq.Expressions.Expression{System.Func{``0,System.Boolean}})">
             <summary>
             Creates a lambda expression that represents a conditional AND operation
             </summary>
@@ -2118,7 +2118,7 @@
             <returns>A binary expression that has the node type property equal to AndAlso, 
             and the left and right properties set to the specified values</returns>
         </member>
-        <member name="M:Milvasoft.Core.Extensions.CommonHelper.OrElse``1(System.Linq.Expressions.Expression{System.Func{``0,System.Boolean}},System.Linq.Expressions.Expression{System.Func{``0,System.Boolean}})">
+        <member name="M:Milvasoft.Core.Helpers.CommonHelper.OrElse``1(System.Linq.Expressions.Expression{System.Func{``0,System.Boolean}},System.Linq.Expressions.Expression{System.Func{``0,System.Boolean}})">
             <summary>
             Creates a lambda expression that represents a conditional OR operation
             </summary>
@@ -2127,7 +2127,7 @@
             <returns>A binary expression that has the node type property equal to OrElse, 
             and the left and right properties set to the specified values</returns>
         </member>
-        <member name="M:Milvasoft.Core.Extensions.CommonHelper.Combine``1(System.Linq.Expressions.Expression{System.Func{``0,``0}}[])">
+        <member name="M:Milvasoft.Core.Helpers.CommonHelper.Combine``1(System.Linq.Expressions.Expression{System.Func{``0,``0}}[])">
             <summary>
             Combines two expressions to one.
             </summary>
@@ -2135,7 +2135,7 @@
             <param name="selectors"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Core.Extensions.CommonHelper.Combine``1(System.Linq.Expressions.Expression{System.Func{``0,System.Object}}[])">
+        <member name="M:Milvasoft.Core.Helpers.CommonHelper.Combine``1(System.Linq.Expressions.Expression{System.Func{``0,System.Object}}[])">
             <summary>
             Combines two expressions to one.
             </summary>
@@ -2143,7 +2143,7 @@
             <param name="selectors"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Core.Extensions.CommonHelper.GetPropertyInfo``2(System.Linq.Expressions.Expression{System.Func{``0,``1}})">
+        <member name="M:Milvasoft.Core.Helpers.CommonHelper.GetPropertyInfo``2(System.Linq.Expressions.Expression{System.Func{``0,``1}})">
             <summary>
             Determines the right casting and pets property from expression with this right casting.
             </summary>
@@ -2152,7 +2152,7 @@
             <param name="expression"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Core.Extensions.CommonHelper.GetPropertyName``2(System.Linq.Expressions.Expression{System.Func{``0,``1}})">
+        <member name="M:Milvasoft.Core.Helpers.CommonHelper.GetPropertyName``2(System.Linq.Expressions.Expression{System.Func{``0,``1}})">
             <summary>
             Determines the right casting and pets property name from expression with this right casting.
             </summary>
@@ -2161,7 +2161,7 @@
             <param name="expression"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Core.Extensions.CommonHelper.ConfigureOptions``1(Milvasoft.Core.Abstractions.IMilvaBuilder,Microsoft.Extensions.Configuration.IConfigurationManager)">
+        <member name="M:Milvasoft.Core.Helpers.CommonHelper.ConfigureOptions``1(Milvasoft.Core.Abstractions.IMilvaBuilder,Microsoft.Extensions.Configuration.IConfigurationManager)">
             <summary>
             Adds <see cref="T:Microsoft.Extensions.Localization.LocalizationOptions"/> as <see cref="T:Microsoft.Extensions.Options.IOptions`1"/>.
             </summary>
@@ -2169,7 +2169,7 @@
             <param name="configurationManager"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Core.Extensions.CommonHelper.PropertyExists``1(System.Collections.Generic.IEnumerable{``0},System.String)">
+        <member name="M:Milvasoft.Core.Helpers.CommonHelper.PropertyExists``1(System.Collections.Generic.IEnumerable{``0},System.String)">
             <summary>
             Checks whether property exists.
             </summary>
@@ -2178,7 +2178,7 @@
             <param name="propertyName"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Core.Extensions.CommonHelper.ThrowIfPropertyNotExists``1(System.String)">
+        <member name="M:Milvasoft.Core.Helpers.CommonHelper.ThrowIfPropertyNotExists``1(System.String)">
             <summary>
             Checks if there is a property named <paramref name="propertyName"/> in the properties of <b>typeof(<typeparamref name="T"/>)</b>. 
             </summary>
@@ -2186,7 +2186,7 @@
             <param name="propertyName"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Core.Extensions.CommonHelper.ThrowIfPropertyNotExists(System.Object,System.String)">
+        <member name="M:Milvasoft.Core.Helpers.CommonHelper.ThrowIfPropertyNotExists(System.Object,System.String)">
             <summary>
             Checks if there is a property named <paramref name="propertyName"/> in the properties of <b><paramref name="content"/></b>. 
             </summary>
@@ -2194,7 +2194,7 @@
             <param name="propertyName"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Core.Extensions.CommonHelper.ThrowIfPropertyNotExists(System.Type,System.String)">
+        <member name="M:Milvasoft.Core.Helpers.CommonHelper.ThrowIfPropertyNotExists(System.Type,System.String)">
             <summary>
             Checks if there is a property named <paramref name="propertyName"/> in the properties of <b><paramref name="type"/></b>. 
             </summary>
@@ -2202,7 +2202,7 @@
             <param name="propertyName"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Core.Extensions.CommonHelper.PropertyExists``1(System.String)">
+        <member name="M:Milvasoft.Core.Helpers.CommonHelper.PropertyExists``1(System.String)">
             <summary>
             Checks if there is a property named <paramref name="propertyName"/> in the properties of <b>typeof(<typeparamref name="T"/>)</b>. 
             </summary>
@@ -2210,7 +2210,7 @@
             <param name="propertyName"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Core.Extensions.CommonHelper.PropertyExists(System.Object,System.String)">
+        <member name="M:Milvasoft.Core.Helpers.CommonHelper.PropertyExists(System.Object,System.String)">
             <summary>
             Checks if there is a property named <paramref name="propertyName"/> in the properties of <b><paramref name="content"/></b>. 
             </summary>
@@ -2218,7 +2218,7 @@
             <param name="propertyName"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Core.Extensions.CommonHelper.PropertyExists(System.Type,System.String)">
+        <member name="M:Milvasoft.Core.Helpers.CommonHelper.PropertyExists(System.Type,System.String)">
             <summary>
             Checks if there is a property named <paramref name="propertyName"/> in the properties of <b><paramref name="type"/></b>. 
             </summary>
@@ -2226,7 +2226,7 @@
             <param name="propertyName"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Core.Extensions.CommonHelper.GetPublicPropertyIgnoreCase(System.Type,System.String)">
+        <member name="M:Milvasoft.Core.Helpers.CommonHelper.GetPublicPropertyIgnoreCase(System.Type,System.String)">
             <summary>
             Gets property with <see cref="F:System.Reflection.BindingFlags.Public"/>, <see cref="F:System.Reflection.BindingFlags.IgnoreCase"/>, <see cref="F:System.Reflection.BindingFlags.Instance"/>
             </summary>
@@ -2234,7 +2234,7 @@
             <param name="propertyName"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Core.Extensions.CommonHelper.GetPropertyValue(System.Object,System.String)">
+        <member name="M:Milvasoft.Core.Helpers.CommonHelper.GetPropertyValue(System.Object,System.String)">
             <summary>
             Provides get nested property value. e.g. Product.Stock.Amount
             </summary>
@@ -2242,7 +2242,7 @@
             <param name="propertyName"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Core.Extensions.CommonHelper.CreateOrderBySelectorExpression``1(System.String)">
+        <member name="M:Milvasoft.Core.Helpers.CommonHelper.CreateOrderBySelectorExpression``1(System.String)">
             <summary>
             Creates order by key selector by <paramref name="orderByPropertyName"/>.
             </summary>
@@ -2253,7 +2253,7 @@
             <param name="orderByPropertyName"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Core.Extensions.CommonHelper.CreatePropertySelector``2(System.String)">
+        <member name="M:Milvasoft.Core.Helpers.CommonHelper.CreatePropertySelector``2(System.String)">
             <summary>
             Create property selector predicate.(e.g. i => i.User).
             If <typeparamref name="T"/> doesn't contains <paramref name="propertyName"/> throwns <see cref="T:Milvasoft.Core.Exceptions.MilvaDeveloperException"/>
@@ -2263,7 +2263,7 @@
             <param name="propertyName"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Core.Extensions.CommonHelper.CreatePropertySelectorFunction``2(System.String)">
+        <member name="M:Milvasoft.Core.Helpers.CommonHelper.CreatePropertySelectorFunction``2(System.String)">
             <summary>
             Create property selector predicate.(e.g. i => i.User).
             If <typeparamref name="T"/> doesn't contains <paramref name="propertyName"/> throwns <see cref="T:Milvasoft.Core.Exceptions.MilvaDeveloperException"/>
@@ -2273,7 +2273,7 @@
             <param name="propertyName"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Core.Extensions.CommonHelper.CreateRequiredPropertySelector``2(System.String)">
+        <member name="M:Milvasoft.Core.Helpers.CommonHelper.CreateRequiredPropertySelector``2(System.String)">
             <summary>
             Create property selector predicate.(e.g. i => i.User).
             If <typeparamref name="T"/> doesn't contains <paramref name="propertyName"/> returns null.
@@ -2283,7 +2283,7 @@
             <param name="propertyName"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Core.Extensions.CommonHelper.CreateRequiredPropertySelectorFuction``2(System.String)">
+        <member name="M:Milvasoft.Core.Helpers.CommonHelper.CreateRequiredPropertySelectorFuction``2(System.String)">
             <summary>
             Create property selector predicate.(e.g. i => i.User).
             If <typeparamref name="T"/> doesn't contains <paramref name="propertyName"/> returns null.
@@ -2293,9 +2293,9 @@
             <param name="propertyName"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Core.Extensions.CommonHelper.DynamicInvokeCreatePropertySelector(System.String,System.Type,System.Type,System.String)">
+        <member name="M:Milvasoft.Core.Helpers.CommonHelper.DynamicInvokeCreatePropertySelector(System.String,System.Type,System.Type,System.String)">
             <summary>
-            Dynamically gets method and invokes <see cref="T:Milvasoft.Core.Extensions.CommonHelper"/> create property selector methods.
+            Dynamically gets method and invokes <see cref="T:Milvasoft.Core.Helpers.CommonHelper"/> create property selector methods.
             </summary>
             <param name="createPropertySelectorMethodName"></param>
             <param name="entityType"></param>
@@ -2303,7 +2303,7 @@
             <param name="propName"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Core.Extensions.CommonHelper.ToUpperFirst(System.String,System.Globalization.CultureInfo)">
+        <member name="M:Milvasoft.Core.Helpers.CommonHelper.ToUpperFirst(System.String,System.Globalization.CultureInfo)">
             <summary>
             Uppercases the first letter of the word.
             </summary>
@@ -2311,14 +2311,14 @@
             <param name="cultureInfo"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Core.Extensions.CommonHelper.ToUpperInvariantFirst(System.String)">
+        <member name="M:Milvasoft.Core.Helpers.CommonHelper.ToUpperInvariantFirst(System.String)">
             <summary>
             Uppercases the first letter of the word using the casing rules of the invariant culture.
             </summary>
             <param name="str"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Core.Extensions.CommonHelper.ToLowerFirst(System.String,System.Globalization.CultureInfo)">
+        <member name="M:Milvasoft.Core.Helpers.CommonHelper.ToLowerFirst(System.String,System.Globalization.CultureInfo)">
             <summary>
             Lowercases the first letter of the word.
             </summary>
@@ -2326,54 +2326,54 @@
             <param name="cultureInfo"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Core.Extensions.CommonHelper.ToLowerInvariantFirst(System.String)">
+        <member name="M:Milvasoft.Core.Helpers.CommonHelper.ToLowerInvariantFirst(System.String)">
             <summary>
             Lowercases the first letter of the word using the casing rules of the invariant culture.
             </summary>
             <param name="str"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Core.Extensions.CommonHelper.GetByteArray(System.String)">
+        <member name="M:Milvasoft.Core.Helpers.CommonHelper.GetByteArray(System.String)">
             <summary>
             Gets <paramref name="str"/>'s bytes.
             </summary>
             <param name="str"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Core.Extensions.CommonHelper.GetString(System.Byte[])">
+        <member name="M:Milvasoft.Core.Helpers.CommonHelper.GetString(System.Byte[])">
             <summary>
             Gets string from <paramref name="array"/>.
             </summary>
             <param name="array"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Core.Extensions.CommonHelper.HashToByteArray(System.String)">
+        <member name="M:Milvasoft.Core.Helpers.CommonHelper.HashToByteArray(System.String)">
             <summary>
             Hashes <paramref name="str"/> with <see cref="T:System.Security.Cryptography.SHA256"/>
             </summary>
             <param name="str"></param>
             <returns> Hashed <paramref name="str"/> as byte content. </returns>
         </member>
-        <member name="M:Milvasoft.Core.Extensions.CommonHelper.Hash(System.String)">
+        <member name="M:Milvasoft.Core.Helpers.CommonHelper.Hash(System.String)">
             <summary>
             Computes the SHA256 hash of the given string.
             </summary>
             <param name="str">The string to be hashed.</param>
             <returns>The hashed string as a hexadecimal representation.</returns>
         </member>
-        <member name="M:Milvasoft.Core.Extensions.CommonHelper.MilvaNormalize(System.String)">
+        <member name="M:Milvasoft.Core.Helpers.CommonHelper.MilvaNormalize(System.String)">
             <summary>
             Normalize string according to invariant culture.
             </summary>
             <param name="value"></param>
             <returns></returns>
         </member>
-        <member name="T:Milvasoft.Core.Extensions.GeoLocation.GeoLocationExtensions">
+        <member name="T:Milvasoft.Core.Helpers.GeoLocation.GeoLocationExtensions">
             <summary>
             Extension methods for geo location.
             </summary>
         </member>
-        <member name="M:Milvasoft.Core.Extensions.GeoLocation.GeoLocationExtensions.CalculateDistance(Milvasoft.Core.Extensions.GeoLocation.Models.GeoPoint,Milvasoft.Core.Extensions.GeoLocation.Models.GeoPoint)">
+        <member name="M:Milvasoft.Core.Helpers.GeoLocation.GeoLocationExtensions.CalculateDistance(Milvasoft.Core.Helpers.GeoLocation.Models.GeoPoint,Milvasoft.Core.Helpers.GeoLocation.Models.GeoPoint)">
             <summary>
             Calculates the distance in km from <paramref name="point1"/> to <paramref name="point2"/>.
             </summary>
@@ -2381,42 +2381,42 @@
             <param name="point2"></param>
             <returns></returns>
         </member>
-        <member name="T:Milvasoft.Core.Extensions.GeoLocation.Models.GeoPoint">
+        <member name="T:Milvasoft.Core.Helpers.GeoLocation.Models.GeoPoint">
             <summary>
             Location point.
             </summary>
             <remarks>
-            Initialize new instance of <see cref="T:Milvasoft.Core.Extensions.GeoLocation.Models.GeoPoint"/> with lat and lon.
+            Initialize new instance of <see cref="T:Milvasoft.Core.Helpers.GeoLocation.Models.GeoPoint"/> with lat and lon.
             </remarks>
             <param name="latitude"></param>
             <param name="longitude"></param>
         </member>
-        <member name="M:Milvasoft.Core.Extensions.GeoLocation.Models.GeoPoint.#ctor(System.Double,System.Double)">
+        <member name="M:Milvasoft.Core.Helpers.GeoLocation.Models.GeoPoint.#ctor(System.Double,System.Double)">
             <summary>
             Location point.
             </summary>
             <remarks>
-            Initialize new instance of <see cref="T:Milvasoft.Core.Extensions.GeoLocation.Models.GeoPoint"/> with lat and lon.
+            Initialize new instance of <see cref="T:Milvasoft.Core.Helpers.GeoLocation.Models.GeoPoint"/> with lat and lon.
             </remarks>
             <param name="latitude"></param>
             <param name="longitude"></param>
         </member>
-        <member name="P:Milvasoft.Core.Extensions.GeoLocation.Models.GeoPoint.Latitude">
+        <member name="P:Milvasoft.Core.Helpers.GeoLocation.Models.GeoPoint.Latitude">
             <summary>
             Latitude of point.
             </summary>
         </member>
-        <member name="P:Milvasoft.Core.Extensions.GeoLocation.Models.GeoPoint.Longitude">
+        <member name="P:Milvasoft.Core.Helpers.GeoLocation.Models.GeoPoint.Longitude">
             <summary>
             Longitude of point.
             </summary>
         </member>
-        <member name="T:Milvasoft.Core.Extensions.RegexMatcher">
+        <member name="T:Milvasoft.Core.Helpers.RegexMatcher">
             <summary>
             Helper class for match input string and regex.
             </summary>
         </member>
-        <member name="M:Milvasoft.Core.Extensions.RegexMatcher.MatchRegex(System.Text.RegularExpressions.Regex,System.String)">
+        <member name="M:Milvasoft.Core.Helpers.RegexMatcher.MatchRegex(System.Text.RegularExpressions.Regex,System.String)">
             <summary>
             Checks if <paramref name="input"/> matches <paramref name="regex"/>.
             </summary>
@@ -2424,7 +2424,7 @@
             <param name="input"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Core.Extensions.RegexMatcher.MatchRegex(System.String,System.String)">
+        <member name="M:Milvasoft.Core.Helpers.RegexMatcher.MatchRegex(System.String,System.String)">
             <summary>
             Checks if <paramref name="input"/> matches <paramref name="regexString"/>.
             </summary>
@@ -2432,7 +2432,7 @@
             <param name="regexString"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Core.Extensions.RegexMatcher.GetMatchResult(System.Text.RegularExpressions.Regex,System.String)">
+        <member name="M:Milvasoft.Core.Helpers.RegexMatcher.GetMatchResult(System.Text.RegularExpressions.Regex,System.String)">
             <summary>
             Checks if <paramref name="input"/> matches <paramref name="regex"/>.
             </summary>
@@ -2440,7 +2440,7 @@
             <param name="input"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Core.Extensions.RegexMatcher.GetMatchResult(System.String,System.String)">
+        <member name="M:Milvasoft.Core.Helpers.RegexMatcher.GetMatchResult(System.String,System.String)">
             <summary>
             Checks if <paramref name="input"/> matches <paramref name="regexString"/>.
             </summary>
