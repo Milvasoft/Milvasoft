@@ -1928,6 +1928,13 @@
             <param name="enumValue"></param>
             <returns></returns>
         </member>
+        <member name="M:Milvasoft.Core.Helpers.CommonHelper.IsEnumerableType(System.Type)">
+            <summary>
+            Determines wheter the <paramref name="type"/> is enumerable or not.
+            </summary>
+            <param name="type"></param>
+            <returns></returns>
+        </member>
         <member name="M:Milvasoft.Core.Helpers.CommonHelper.AssignUpdatedProperties``2(``0,``1)">
             <summary>
             Updates entity matching properties with <paramref name="dto"/>'s not null properties.
@@ -1937,13 +1944,6 @@
             <param name="dto"></param>
             <param name="entity"></param>
             <returns>Updated property informations.</returns>
-        </member>
-        <member name="M:Milvasoft.Core.Helpers.CommonHelper.IsEnumerableType(System.Type)">
-            <summary>
-            Determines wheter the <paramref name="type"/> is enumerable or not.
-            </summary>
-            <param name="type"></param>
-            <returns></returns>
         </member>
         <member name="M:Milvasoft.Core.Helpers.CommonHelper.ToGuid(System.Int32)">
             <summary>

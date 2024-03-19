@@ -1,8 +1,7 @@
-﻿using Milvasoft.UnitTests.CoreTests.HelperTests.CollectionTests.Fixtures;
-using System.Collections;
+﻿using System.Collections;
 using System.Linq.Expressions;
 
-namespace Milvasoft.UnitTests.CoreTests.HelperTests.StringTests.Fixtures;
+namespace Milvasoft.UnitTests.CoreTests.HelperTests.CollectionTests.Fixtures;
 
 internal class DateSearchValidDataFixture : IEnumerable<object[]>
 {

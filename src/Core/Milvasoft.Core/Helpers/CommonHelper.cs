@@ -21,16 +21,14 @@ public static partial class CommonHelper
     {
         var entityType = typeof(TEntity);
 
-        if (typeof(ISoftDeletable).IsAssignableFrom(entityType))
-        {
-            var parameter = Expression.Parameter(entityType, "entity");
-
-            var filterExpression = Expression.Equal(Expression.Property(parameter, entityType.GetProperty(EntityPropertyNames.IsDeleted)), Expression.Constant(false, typeof(bool)));
-
-            return Expression.Lambda<Func<TEntity, bool>>(filterExpression, parameter);
-        }
-        else
+        if (!typeof(ISoftDeletable).IsAssignableFrom(entityType))
             return null;
+
+        var parameter = Expression.Parameter(entityType, "e");
+
+        var filterExpression = Expression.Equal(Expression.Property(parameter, entityType.GetProperty(EntityPropertyNames.IsDeleted)), Expression.Constant(false, typeof(bool)));
+
+        return Expression.Lambda<Func<TEntity, bool>>(filterExpression, parameter);
     }
 
     /// <summary>
@@ -44,20 +42,24 @@ public static partial class CommonHelper
         if (!typeof(T).IsEnum)
             return null;
 
-        var desription = enumValue.ToString();
+        var description = enumValue.ToString();
 
-        var fieldInfo = enumValue.GetType().GetField(enumValue.ToString());
+        var fieldInfo = enumValue.GetType().GetField(description);
 
-        if (fieldInfo != null)
-        {
-            var attrs = fieldInfo.GetCustomAttributes(typeof(DescriptionAttribute), true);
+        var descriptionAttribute = fieldInfo.GetCustomAttribute(typeof(DescriptionAttribute), false);
 
-            if (!attrs.IsNullOrEmpty())
-                desription = ((DescriptionAttribute)attrs.First()).Description;
-        }
+        if (descriptionAttribute != null)
+            description = ((DescriptionAttribute)descriptionAttribute).Description;
 
-        return desription;
+        return description;
     }
+
+    /// <summary>
+    /// Determines wheter the <paramref name="type"/> is enumerable or not.
+    /// </summary>
+    /// <param name="type"></param>
+    /// <returns></returns>
+    public static bool IsEnumerableType(this Type type) => type?.GetInterface(nameof(IEnumerable)) != null;
 
     /// <summary>
     /// Updates entity matching properties with <paramref name="dto"/>'s not null properties.
@@ -72,30 +74,27 @@ public static partial class CommonHelper
         if (entity == null || dto == null)
             return null;
 
-        List<PropertyInfo> updatedProps = [];
+        List<PropertyInfo> updatedProps = null;
 
         foreach (var dtoProp in dto.GetDtoProperties())
         {
             var matchingEntityProp = entity.GetEntityProperties().FirstOrDefault(i => i.Name == dtoProp.Name);
 
-            if (matchingEntityProp == null)
+            if (matchingEntityProp == null || dtoProp.Name == EntityPropertyNames.Id)
                 continue;
 
             var dtoValue = dtoProp.GetValue(dto);
 
             if (dtoValue != null)
+            {
                 matchingEntityProp.SetValue(entity, dtoValue);
 
-            updatedProps.Add(matchingEntityProp);
+                updatedProps ??= [];
+
+                updatedProps.Add(matchingEntityProp);
+            }
         }
 
         return updatedProps;
     }
-
-    /// <summary>
-    /// Determines wheter the <paramref name="type"/> is enumerable or not.
-    /// </summary>
-    /// <param name="type"></param>
-    /// <returns></returns>
-    public static bool IsEnumerableType(this Type type) => type.GetInterface(nameof(IEnumerable)) != null;
 }
