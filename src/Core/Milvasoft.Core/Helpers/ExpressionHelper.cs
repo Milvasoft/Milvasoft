@@ -131,6 +131,7 @@ public static partial class CommonHelper
         else
         {
             var op = ((UnaryExpression)expression.Body).Operand;
+
             return ((MemberExpression)op).Member;
         }
     }
@@ -151,6 +152,7 @@ public static partial class CommonHelper
         else
         {
             var op = ((UnaryExpression)expression.Body).Operand;
+
             return ((MemberExpression)op).Member.Name;
         }
     }

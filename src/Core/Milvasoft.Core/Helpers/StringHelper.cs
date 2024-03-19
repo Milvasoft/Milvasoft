@@ -129,5 +129,5 @@ public static partial class CommonHelper
     /// </summary>
     /// <param name="value"></param>
     /// <returns></returns>
-    public static string MilvaNormalize(this string value) => !string.IsNullOrWhiteSpace(value) ? value.ToLower().ToUpperInvariant() : null;
+    public static string MilvaNormalize(this string value) => !string.IsNullOrWhiteSpace(value) ? value.ToLower().ToUpperInvariant() : value;
 }

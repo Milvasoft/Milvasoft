@@ -1,12 +1,14 @@
 ﻿using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
 using Milvasoft.Core.Helpers;
-using Milvasoft.UnitTests.CoreTests.ExtensionsTests.CollectionTests.Fixtures;
+using Milvasoft.UnitTests.CoreTests.HelperTests.CollectionTests.Fixtures;
+using Milvasoft.UnitTests.CoreTests.HelperTests.StringTests.Fixtures;
 using Moq;
+using System.Linq.Expressions;
 
-namespace Milvasoft.UnitTests.CoreTests.ExtensionsTests.CollectionTests;
+namespace Milvasoft.UnitTests.CoreTests.HelperTests.CollectionTests;
 
-public partial class FilterExtensionTests
+public partial class CollectionHelperTests
 {
 
     #region IsNullOrEmpty
@@ -374,7 +376,7 @@ public partial class FilterExtensionTests
         // Assert
         mockValidator.Verify(m => m.Invoke(singletonInstance), Times.Once());
         result.Should().BeEquivalentTo(services);
-        result.Should().Contain(s => (s.ImplementationInstance as UpdateSingletonInstanceTestModel) == singletonInstance);
+        result.Should().Contain(s => s.ImplementationInstance as UpdateSingletonInstanceTestModel == singletonInstance);
         result.Should().Contain(s => (s.ImplementationInstance as UpdateSingletonInstanceTestModel).Name == "Changed");
         result.Should().Contain(s => (s.ImplementationInstance as UpdateSingletonInstanceTestModel).Order == 1);
         result.Should().NotContain(s => (s.ImplementationInstance as UpdateSingletonInstanceTestModel).Name == "Test");
@@ -468,10 +470,51 @@ public partial class FilterExtensionTests
         // Assert
         mockValidator.Verify(m => m.Invoke(singletonInstance), Times.Once());
         result.Should().BeEquivalentTo(services);
-        result.Should().Contain(s => (s.ImplementationInstance as UpdateSingletonInstanceTestModel) == singletonInstance);
+        result.Should().Contain(s => s.ImplementationInstance as UpdateSingletonInstanceTestModel == singletonInstance);
         result.Should().Contain(s => (s.ImplementationInstance as UpdateSingletonInstanceTestModel).Name == "Changed");
         result.Should().Contain(s => (s.ImplementationInstance as UpdateSingletonInstanceTestModel).Order == 1);
         result.Should().NotContain(s => (s.ImplementationInstance as UpdateSingletonInstanceTestModel).Name == "Test");
+    }
+
+    #endregion
+
+    #region ApplyDateSearch
+
+    [Theory]
+    [ClassData(typeof(DateSearchInvalidDataFixture))]
+    public void ApplyDateSearch_InvalidParameters_ReturnsInputList(List<DateSearchTestModel> input,
+                                                                   Expression<Func<DateSearchTestModel, DateTime?>> propertySelector,
+                                                                   DateTime? startDate,
+                                                                   DateTime? endDate,
+                                                                   List<DateSearchTestModel> expected)
+    {
+        // Arrange
+
+        // Act
+        var result = input.ApplyDateSearch(propertySelector, startDate, endDate);
+
+        // Assert
+        result.Should().BeEquivalentTo(expected);
+        result?.Count().Should().Be(expected?.Count);
+    }
+
+    [Theory]
+    [ClassData(typeof(DateSearchValidDataFixture))]
+    public void ApplyDateSearch_ValidParameters_ReturnsSearchAppliedList(List<DateSearchTestModel> input,
+                                                                         Expression<Func<DateSearchTestModel, DateTime?>> propertySelector,
+                                                                         DateTime? startDate,
+                                                                         DateTime? endDate,
+                                                                         List<DateSearchTestModel> expected)
+    {
+        // Arrange
+
+        // Act
+        var result = input.ApplyDateSearch(propertySelector, startDate, endDate);
+
+        // Assert
+        result.Should().BeEquivalentTo(expected);
+        result.Should().Contain(expected);
+        result?.Count().Should().Be(expected?.Count);
     }
 
     #endregion

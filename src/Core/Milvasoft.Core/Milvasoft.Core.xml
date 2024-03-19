@@ -1892,9 +1892,9 @@
             <param name="updateAction"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Core.Helpers.CommonHelper.FilterByDate``1(System.Collections.Generic.IEnumerable{``0},System.Nullable{System.DateTime},System.Nullable{System.DateTime},System.Linq.Expressions.Expression{System.Func{``0,System.Nullable{System.DateTime}}})">
+        <member name="M:Milvasoft.Core.Helpers.CommonHelper.ApplyDateSearch``1(System.Collections.Generic.IEnumerable{``0},System.Linq.Expressions.Expression{System.Func{``0,System.Nullable{System.DateTime}}},System.Nullable{System.DateTime},System.Nullable{System.DateTime})">
              <summary>
-             <para> Filter <paramref name="contentList"/> by <paramref name="dateTopValue"/> and <paramref name="dateLowerValue"/> values. </para>
+             <para> Filter <paramref name="contentList"/> by <paramref name="endDate"/> and <paramref name="startDate"/> values. </para>
              </summary>
              
              <remarks>
@@ -1902,15 +1902,15 @@
              <para><b>Remarks: </b></para>
              
              <para> If a selection has been made between two dates, it will return those between the two dates. </para>
-             <para> If only the <paramref name="dateTopValue"/> value exists, it returns those larger than the <paramref name="dateLowerValue"/> value. </para>
-             <para> If only the <paramref name="dateLowerValue"/> value exists, it returns those smaller than the <paramref name="dateTopValue"/> value. </para>
+             <para> If only the <paramref name="endDate"/> value exists, it returns those larger than the <paramref name="startDate"/> value. </para>
+             <para> If only the <paramref name="startDate"/> value exists, it returns those smaller than the <paramref name="endDate"/> value. </para>
              
              </remarks>
             
              <typeparam name="T"></typeparam>
              <param name="contentList"></param>
-             <param name="dateTopValue"></param>
-             <param name="dateLowerValue"></param>
+             <param name="endDate"></param>
+             <param name="startDate"></param>
              <param name="dateProperty"></param>
              <returns> Filtered <paramref name="contentList"/> </returns>
         </member>
@@ -1986,7 +1986,7 @@
             <param name="type"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Core.Helpers.CommonHelper.CreateBetweenExpression``1(System.Linq.Expressions.Expression{System.Func{``0,System.Nullable{System.DateTime}}},System.Nullable{System.DateTime},System.Nullable{System.DateTime})">
+        <member name="M:Milvasoft.Core.Helpers.CommonHelper.CreateDateSearchExpression``1(System.Linq.Expressions.Expression{System.Func{``0,System.Nullable{System.DateTime}}},System.Nullable{System.DateTime},System.Nullable{System.DateTime})">
             <summary>
             <para> Creates expression by <paramref name="endDate"/> and <paramref name="startDate"/> values. </para>
             </summary>
@@ -2013,7 +2013,7 @@
             
             </returns>
         </member>
-        <member name="M:Milvasoft.Core.Helpers.CommonHelper.CreateBetweenExpression``1(System.Linq.Expressions.Expression{System.Func{``0,System.DateTime}},System.Nullable{System.DateTime},System.Nullable{System.DateTime})">
+        <member name="M:Milvasoft.Core.Helpers.CommonHelper.CreateDateSearchExpression``1(System.Linq.Expressions.Expression{System.Func{``0,System.DateTime}},System.Nullable{System.DateTime},System.Nullable{System.DateTime})">
             <summary>
             <para> Creates expression by <paramref name="endDate"/> and <paramref name="startDate"/> values. </para>
             </summary>

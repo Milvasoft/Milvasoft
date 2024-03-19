@@ -1,11 +1,13 @@
 ﻿using FluentAssertions;
 using Milvasoft.Core.Helpers;
+using Milvasoft.UnitTests.CoreTests.HelperTests.StringTests.Fixtures;
+using System.Globalization;
 using System.Security.Cryptography;
 using System.Text;
 
-namespace Milvasoft.UnitTests.CoreTests.ExtensionsTests.StringTests;
+namespace Milvasoft.UnitTests.CoreTests.HelperTests.StringTests;
 
-public partial class StringExtensionTests
+public partial class StringHelperTests
 {
     public static IEnumerable<object[]> ValidStringByteArrayPairs()
     {
@@ -152,6 +154,58 @@ public partial class StringExtensionTests
         var result = input.Hash();
 
         // Assert
+        result.Should().Be(expected);
+    }
+
+    #endregion
+
+    #region MilvaNormalize
+
+    [Theory]
+    [ClassData(typeof(InvalidStringDataWithCultureCodeFixture))]
+    public void MilvaNormalize_InputStringIsInvalidWithAnyCulture_ShouldReturnsEmptyString(string input, string cultureCode, string expected)
+    {
+        //Arrange
+        CultureInfo.CurrentCulture = new CultureInfo(cultureCode);
+
+        //Act
+        var result = input.MilvaNormalize();
+
+        //Assert
+        result.Should().Be(expected);
+    }
+
+    [Theory]
+    [InlineData("tr-TR")]
+    [InlineData("en-US")]
+    public void MilvaNormalize_InputStringIsValidButContainsSpecialCharacterWithDifferentCulture_ShouldReturnsNormalizedString(string cultureCode)
+    {
+        //Arrange
+        var input = "İKsir!";
+        var expected = "IKSIR!";
+        CultureInfo.CurrentCulture = new CultureInfo(cultureCode);
+
+        //Act
+        var result = input.MilvaNormalize();
+
+        //Assert
+        result.Should().Be(expected);
+    }
+
+    [Theory]
+    [InlineData("tr-TR")]
+    [InlineData("en-US")]
+    public void MilvaNormalize_InputStringIsValidWithDifferentCulture_ShouldReturnsNormalizedString(string cultureCode)
+    {
+        //Arrange
+        var input = "İKsir";
+        var expected = "IKSIR";
+        CultureInfo.CurrentCulture = new CultureInfo(cultureCode);
+
+        //Act
+        var result = input.MilvaNormalize();
+
+        //Assert
         result.Should().Be(expected);
     }
 

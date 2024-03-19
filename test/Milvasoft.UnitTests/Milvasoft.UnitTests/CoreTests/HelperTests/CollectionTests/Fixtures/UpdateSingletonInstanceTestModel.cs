@@ -1,4 +1,4 @@
-﻿namespace Milvasoft.UnitTests.CoreTests.ExtensionsTests.CollectionTests.Fixtures;
+﻿namespace Milvasoft.UnitTests.CoreTests.HelperTests.CollectionTests.Fixtures;
 
 public interface IUpdateSingletonInstanceTestModel
 {

@@ -120,7 +120,7 @@ public static partial class CommonHelper
     }
 
     /// <summary>
-    /// <para> Filter <paramref name="contentList"/> by <paramref name="dateTopValue"/> and <paramref name="dateLowerValue"/> values. </para>
+    /// <para> Filter <paramref name="contentList"/> by <paramref name="endDate"/> and <paramref name="startDate"/> values. </para>
     /// </summary>
     /// 
     /// <remarks>
@@ -128,34 +128,36 @@ public static partial class CommonHelper
     /// <para><b>Remarks: </b></para>
     /// 
     /// <para> If a selection has been made between two dates, it will return those between the two dates. </para>
-    /// <para> If only the <paramref name="dateTopValue"/> value exists, it returns those larger than the <paramref name="dateLowerValue"/> value. </para>
-    /// <para> If only the <paramref name="dateLowerValue"/> value exists, it returns those smaller than the <paramref name="dateTopValue"/> value. </para>
+    /// <para> If only the <paramref name="endDate"/> value exists, it returns those larger than the <paramref name="startDate"/> value. </para>
+    /// <para> If only the <paramref name="startDate"/> value exists, it returns those smaller than the <paramref name="endDate"/> value. </para>
     /// 
     /// </remarks>
     ///
     /// <typeparam name="T"></typeparam>
     /// <param name="contentList"></param>
-    /// <param name="dateTopValue"></param>
-    /// <param name="dateLowerValue"></param>
+    /// <param name="endDate"></param>
+    /// <param name="startDate"></param>
     /// <param name="dateProperty"></param>
     /// <returns> Filtered <paramref name="contentList"/> </returns>
-    public static IEnumerable<T> FilterByDate<T>(this IEnumerable<T> contentList, DateTime? dateTopValue, DateTime? dateLowerValue, Expression<Func<T, DateTime?>> dateProperty)
+    public static IEnumerable<T> ApplyDateSearch<T>(this IEnumerable<T> contentList, Expression<Func<T, DateTime?>> dateProperty, DateTime? startDate, DateTime? endDate)
     {
+        if (contentList.IsNullOrEmpty() || dateProperty == null || (!startDate.HasValue && !endDate.HasValue))
+            return contentList;
+
         var propertyName = dateProperty.GetPropertyName();
 
         //If a selection has been made between two dates, it will return those between the two dates.
-        if (dateLowerValue.HasValue && dateTopValue.HasValue)
-            contentList = contentList.Where(i => (DateTime)i.GetType().GetProperty(propertyName).GetValue(i, null) >= dateLowerValue.Value && (DateTime)i.GetType().GetProperty(propertyName).GetValue(i, null) <= dateTopValue.Value);
-
+        if (startDate.HasValue && endDate.HasValue)
+            contentList = contentList.Where(i => (DateTime)i.GetType().GetProperty(propertyName).GetValue(i, null) >= startDate.Value && (DateTime)i.GetType().GetProperty(propertyName).GetValue(i, null) <= endDate.Value);
         // If only the DateTopValue value exists, it returns those larger than the DateLowerValue value.
-        else if (dateLowerValue.HasValue && !dateTopValue.HasValue)
+        else if (startDate.HasValue && !endDate.HasValue)
         {
-            contentList = contentList.Where(i => (DateTime)i.GetType().GetProperty(propertyName).GetValue(i, null) >= dateLowerValue.Value);
+            contentList = contentList.Where(i => (DateTime)i.GetType().GetProperty(propertyName).GetValue(i, null) >= startDate.Value);
         }
-
         //If only the DateLowerValue value exists, it returns those smaller than the DateTopValue value.
-        else if (!dateLowerValue.HasValue && dateTopValue.HasValue)
-            contentList = contentList.Where(i => (DateTime)i.GetType().GetProperty(propertyName).GetValue(i, null) <= dateTopValue.Value);
+        else if (!startDate.HasValue && endDate.HasValue)
+            contentList = contentList.Where(i => (DateTime)i.GetType().GetProperty(propertyName).GetValue(i, null) <= endDate.Value);
+
         return contentList;
     }
 }

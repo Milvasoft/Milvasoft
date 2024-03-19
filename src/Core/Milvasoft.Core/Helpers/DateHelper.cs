@@ -32,7 +32,7 @@ public static partial class CommonHelper
     /// <code> i => i.<paramref name="dateProperty"/> <b>biggerThanOrEqual</b> <paramref name="startDate"/> <b>AND</b> i.<paramref name="dateProperty"/> <b>lessThanOrEqual</b> <paramref name="endDate"/> </code>
     /// 
     /// </returns>
-    public static Expression<Func<T, bool>> CreateBetweenExpression<T>(Expression<Func<T, DateTime?>> dateProperty, DateTime? startDate, DateTime? endDate)
+    public static Expression<Func<T, bool>> CreateDateSearchExpression<T>(Expression<Func<T, DateTime?>> dateProperty, DateTime? startDate, DateTime? endDate)
     {
         Expression<Func<T, bool>> mainExpression = null;
 
@@ -59,15 +59,16 @@ public static partial class CommonHelper
         if (startDate.HasValue && endDate.HasValue)
             mainExpression = mainExpression.Append(predicate, ExpressionType.AndAlso);
 
-        // If only the DateTopValue value exists, it returns those larger than the DateLowerValue value.
+        // If only the endDate value exists, it returns those larger than the startDate value.
         else if (startDate.HasValue && !endDate.HasValue)
         {
             mainExpression = mainExpression.Append(greaterThanOrEqualExpression, ExpressionType.AndAlso);
         }
 
-        //If only the DateLowerValue value exists, it returns those smaller than the DateTopValue value.
+        //If only the startDate value exists, it returns those smaller than the endDate value.
         else if (!startDate.HasValue && endDate.HasValue)
             mainExpression = mainExpression.Append(lessThanOrEqualExpression, ExpressionType.AndAlso);
+
         return mainExpression;
     }
 
@@ -96,8 +97,12 @@ public static partial class CommonHelper
     /// <code> i => i.<paramref name="dateProperty"/> <b>biggerThanOrEqual</b> <paramref name="startDate"/> <b>AND</b> i.<paramref name="dateProperty"/> <b>lessThanOrEqual</b> <paramref name="endDate"/> </code>
     /// 
     /// </returns>
-    public static Expression<Func<T, bool>> CreateBetweenExpression<T>(Expression<Func<T, DateTime>> dateProperty, DateTime? startDate, DateTime? endDate)
-        => CreateBetweenExpression(dateProperty, startDate, endDate);
+    public static Expression<Func<T, bool>> CreateDateSearchExpression<T>(Expression<Func<T, DateTime>> dateProperty, DateTime? startDate, DateTime? endDate)
+    {
+        var expression = Expression.Lambda<Func<T, DateTime?>>(Expression.Convert(dateProperty, typeof(Func<T, DateTime?>)));
+
+        return CreateDateSearchExpression(expression, startDate, endDate);
+    }
 
     /// <summary>
     /// Compares <paramref name="date"/> for whether between <paramref name="startTime"/> and <paramref name="endTime"/>. 
