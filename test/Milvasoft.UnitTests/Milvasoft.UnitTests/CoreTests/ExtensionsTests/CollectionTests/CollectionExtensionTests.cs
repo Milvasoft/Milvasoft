@@ -1,6 +1,5 @@
 ﻿using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
-using Milvasoft.Core;
 using Milvasoft.Core.Helpers;
 using Milvasoft.UnitTests.CoreTests.ExtensionsTests.CollectionTests.Fixtures;
 using Moq;
