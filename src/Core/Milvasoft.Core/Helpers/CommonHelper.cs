@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using Milvasoft.Core.Utils;
+using System.Collections;
 using System.ComponentModel;
 using System.Linq.Expressions;
 using System.Reflection;
@@ -69,32 +70,47 @@ public static partial class CommonHelper
     /// <param name="dto"></param>
     /// <param name="entity"></param>
     /// <returns>Updated property informations.</returns>
-    public static List<PropertyInfo> AssignUpdatedProperties<TEntity, TDto>(this TEntity entity, TDto dto) where TDto : DtoBase where TEntity : EntityBase
+    public static List<PropertyInfo> AssignUpdatedProperties<TEntity, TDto>(this TEntity entity, TDto dto) where TEntity : class, IMilvaEntity where TDto : DtoBase
     {
         if (entity == null || dto == null)
             return null;
 
         List<PropertyInfo> updatedProps = null;
 
-        foreach (var dtoProp in dto.GetDtoProperties())
+        FindUpdatablePropertiesAndAct<TEntity, TDto>(dto, (matchingEntityProp, dtoPropertyValue) =>
         {
-            var matchingEntityProp = entity.GetEntityProperties().FirstOrDefault(i => i.Name == dtoProp.Name);
+            matchingEntityProp.SetValue(entity, dtoPropertyValue);
 
-            if (matchingEntityProp == null || dtoProp.Name == EntityPropertyNames.Id)
+            updatedProps ??= [];
+
+            updatedProps.Add(matchingEntityProp);
+        });
+
+        return updatedProps;
+    }
+
+    public static void FindUpdatablePropertiesAndAct<TEntity, TDto>(TDto dto, Action<PropertyInfo, object> action) where TEntity : class, IMilvaEntity where TDto : DtoBase
+    {
+        if (dto == null || action == null)
+            return;
+
+        var updatableProperties = dto.GetUpdatableProperties();
+
+        foreach (var dtoProp in updatableProperties)
+        {
+            var matchingEntityProp = typeof(TEntity).GetProperties().FirstOrDefault(i => i.Name == dtoProp.Name);
+
+            if (matchingEntityProp == null)
                 continue;
 
             var dtoValue = dtoProp.GetValue(dto);
 
-            if (dtoValue != null)
+            var updateProp = (IUpdateProperty)dtoValue;
+
+            if (updateProp?.IsUpdated ?? false)
             {
-                matchingEntityProp.SetValue(entity, dtoValue);
-
-                updatedProps ??= [];
-
-                updatedProps.Add(matchingEntityProp);
+                action(matchingEntityProp, updateProp.GetValue());
             }
         }
-
-        return updatedProps;
     }
 }

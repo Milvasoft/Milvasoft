@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query;
 using System.Linq.Expressions;
+using System.Reflection;
 
 namespace Milvasoft.DataAccess.EfCore.Utils;
 
@@ -10,6 +11,11 @@ namespace Milvasoft.DataAccess.EfCore.Utils;
 /// <typeparam name="TSource"></typeparam>
 public class SetPropertyBuilder<TSource>
 {
+    /// <summary>
+    /// <see cref="SetPropertyValue{TProperty}(Expression{Func{TSource, TProperty}}, TProperty)"/> method info for reflection calls.
+    /// </summary>
+    public static MethodInfo SetPropertyMethodInfo { get; } = typeof(SetPropertyBuilder<TSource>).GetMethods().FirstOrDefault(mi => mi.Name == nameof(SetPropertyValue));
+
     /// <summary>
     /// Gets <see cref="SetPropertyCalls{TSource}"/> expression. 
     /// </summary>

@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using Milvasoft.Core.Utils;
+using System.Reflection;
 
 namespace Milvasoft.Core.EntityBases.Concrete;
 
@@ -65,5 +66,13 @@ public abstract class DtoBase
     /// </summary>
     /// <returns></returns>
     public PropertyInfo[] GetDtoProperties() => _propertyInfos;
+
+    public virtual IEnumerable<PropertyInfo> GetUpdatableProperties() => GetDtoProperties().Where(prop => prop.PropertyType.IsGenericType
+                                                                                                && (prop.PropertyType
+                                                                                                       .GetGenericTypeDefinition()
+                                                                                                       .IsAssignableTo(typeof(IUpdateProperty))
+                                                                                                    || (Nullable.GetUnderlyingType(prop.PropertyType)?
+                                                                                                                .GetGenericTypeDefinition()?
+                                                                                                                .IsAssignableTo(typeof(IUpdateProperty)) ?? false)));
 #pragma warning restore CA1822 // Mark members as static
 }

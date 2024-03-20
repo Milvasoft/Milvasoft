@@ -196,7 +196,7 @@ public static class MilvaEfExtensions
     /// <typeparam name="TDto"></typeparam>
     /// <typeparam name="TEntity"></typeparam>
     /// <param name="dto"></param>
-    public static SetPropertyBuilder<TEntity> GetSetPropertyBuilderFromDto<TEntity, TDto>(this TDto dto) where TEntity : class, IMilvaEntity
+    public static SetPropertyBuilder<TEntity> GetSetPropertyBuilderFromDto<TEntity, TDto>(this TDto dto) where TEntity : class, IMilvaEntity where TDto : DtoBase
     {
         if (dto == null)
             return null;
@@ -205,29 +205,17 @@ public static class MilvaEfExtensions
 
         var entityType = typeof(TEntity);
 
-        var setPropertyMethod = typeof(SetPropertyBuilder<TEntity>).GetMethods().FirstOrDefault(mi => mi.Name == "SetPropertyValue");
-
-        foreach (var dtoProp in dto.GetType().GetProperties())
+        CommonHelper.FindUpdatablePropertiesAndAct<TEntity, TDto>(dto, (matchingEntityProp, dtoPropertyValue) =>
         {
-            var matchingEntityProp = entityType.GetProperties().FirstOrDefault(i => i.Name == dtoProp.Name);
+            var genericMethod = SetPropertyBuilder<TEntity>.SetPropertyMethodInfo.MakeGenericMethod([matchingEntityProp.PropertyType]);
 
-            if (matchingEntityProp == null)
-                continue;
+            var expression = CommonHelper.DynamicInvokeCreatePropertySelector(nameof(CommonHelper.CreatePropertySelector),
+                                                                              entityType,
+                                                                              matchingEntityProp.PropertyType,
+                                                                              matchingEntityProp.Name);
 
-            var dtoValue = dtoProp.GetValue(dto);
-
-            if (dtoValue != null)
-            {
-                var genericMethod = setPropertyMethod.MakeGenericMethod([matchingEntityProp.PropertyType]);
-
-                var expression = CommonHelper.DynamicInvokeCreatePropertySelector(nameof(CommonHelper.CreatePropertySelector),
-                                                                                  entityType,
-                                                                                  matchingEntityProp.PropertyType,
-                                                                                  matchingEntityProp.Name);
-
-                builder = (SetPropertyBuilder<TEntity>)genericMethod.Invoke(builder, [expression, dtoValue]);
-            }
-        }
+            builder = (SetPropertyBuilder<TEntity>)genericMethod.Invoke(builder, [expression, dtoPropertyValue]);
+        });
 
         return builder;
     }

@@ -2,7 +2,9 @@
 using Microsoft.EntityFrameworkCore.Query;
 using Milvasoft.Core.Helpers;
 using Milvasoft.UnitTests.CoreTests.HelperTests.CommonTests.Fixtures;
+using Moq;
 using System.Linq.Expressions;
+using System.Reflection;
 
 namespace Milvasoft.UnitTests.CoreTests.HelperTests.CommonTests;
 
@@ -148,7 +150,7 @@ public partial class CommonHelperTests
     }
 
     [Fact]
-    public void AssignUpdatedProperties_EntityAndDtoIsValid_ShouldUpdatesMatchingEntityPropertiesAndReturnsUpdatedPropertyInfos()
+    public void AssignUpdatedProperties_EntityAndDtoIsValid_ShouldUpdatesUpdatablePropertiesAndReturnsUpdatedPropertyInfos()
     {
         // Arrange
         UpdatedPropsTestEntity entity = new()
@@ -158,11 +160,13 @@ public partial class CommonHelperTests
             Price = 10M,
             Priority = 1
         };
+
         UpdatedPropsTestDto dto = new()
         {
             Id = 1,
             Priority = 2,
         };
+
         var expectedPropertyInfo = dto.GetType().GetProperty("Priority");
 
         // Act
@@ -175,6 +179,109 @@ public partial class CommonHelperTests
         entity.Name.Should().Be(entity.Name);
         entity.Price.Should().Be(entity.Price);
         entity.Id.Should().Be(entity.Id);
+    }
+
+    #endregion
+
+    #region FindUpdatablePropertiesAndAct
+
+    [Fact]
+    public void FindUpdatablePropertiesAndAct_DtoIsNull_ShouldDoNothing()
+    {
+        // Arrange
+        var mockValidatorForAction = new Mock<Action<PropertyInfo, object>>();
+
+        // Act
+        CommonHelper.FindUpdatablePropertiesAndAct<UpdatedPropsTestEntity, UpdatedPropsTestDto>(null, mockValidatorForAction.Object);
+
+        // Assert
+        mockValidatorForAction.Verify(m => m.Invoke(null, null), Times.Never());
+    }
+
+    [Fact]
+    public void FindUpdatablePropertiesAndAct_ActionIsNull_ShouldDoNothing()
+    {
+        // Arrange
+        var mockValidator = new Mock<UpdatedPropsTestDto>();
+
+        // Act
+        CommonHelper.FindUpdatablePropertiesAndAct<UpdatedPropsTestEntity, UpdatedPropsTestDto>(mockValidator.Object, null);
+
+        // Assert
+        mockValidator.Verify(m => m.GetUpdatableProperties(), Times.Never());
+    }
+
+    [Fact]
+    public void FindUpdatablePropertiesAndAct_DtoNotContainsAnyUpdatableProperties_ShouldDoNothing()
+    {
+        // Arrange
+        var mockValidatorForDto = new Mock<UpdatedPropsTestInvalidDto>();
+        var mockValidatorForAction = new Mock<Action<PropertyInfo, object>>();
+
+        // Act
+        CommonHelper.FindUpdatablePropertiesAndAct<UpdatedPropsTestEntity, UpdatedPropsTestInvalidDto>(mockValidatorForDto.Object, mockValidatorForAction.Object);
+
+        // Assert
+        mockValidatorForDto.Verify(m => m.GetUpdatableProperties(), Times.Once());
+        mockValidatorForAction.Verify(m => m.Invoke(null, null), Times.Never());
+    }
+
+    [Fact]
+    public void FindUpdatablePropertiesAndAct_DtoAndActionIsValidButUpdatedPropertyNotExistsInEntity_ShouldFindUpdatablePropertiesAndNotInvokesInputAction()
+    {
+        // Arrange
+        var mockValidatorForAction = new Mock<Action<PropertyInfo, object>>();
+        UpdatedPropsTestDto dto = new()
+        {
+            Id = 1,
+            Type = 1,
+        };
+
+        // Act
+        CommonHelper.FindUpdatablePropertiesAndAct<UpdatedPropsTestEntity, UpdatedPropsTestDto>(dto, mockValidatorForAction.Object);
+
+        // Assert
+        mockValidatorForAction.Verify(m => m.Invoke(null, null), Times.Never());
+    }
+
+    [Fact]
+    public void FindUpdatablePropertiesAndAct_DtoAndActionIsValidButPropertiesNotUpdated_ShouldFindUpdatablePropertiesAndNotInvokesInputAction()
+    {
+        // Arrange
+        var mockValidatorForDto = new Mock<UpdatedPropsTestDto>();
+        var mockValidatorForAction = new Mock<Action<PropertyInfo, object>>();
+
+        // Act
+        CommonHelper.FindUpdatablePropertiesAndAct<UpdatedPropsTestEntity, UpdatedPropsTestDto>(mockValidatorForDto.Object, mockValidatorForAction.Object);
+
+        // Assert
+        mockValidatorForDto.Verify(m => m.GetUpdatableProperties(), Times.Once());
+        mockValidatorForAction.Verify(m => m.Invoke(null, null), Times.Never());
+    }
+
+    [Fact]
+    public void FindUpdatablePropertiesAndAct_DtoAndActionIsValidAndOneUpdatedPropertyExists_ShouldFindUpdatablePropertiesAndInvokesInputAction()
+    {
+        // Arrange
+        UpdatedPropsTestDto dto = new()
+        {
+            Id = 1,
+            Name = "test",
+        };
+
+        PropertyInfo resultMatchingEntityProp = null;
+        object resultValue = null;
+
+        // Act
+        CommonHelper.FindUpdatablePropertiesAndAct<UpdatedPropsTestEntity, UpdatedPropsTestDto>(dto, (matchingEntityProp, dtoPropertyValue) =>
+        {
+            resultMatchingEntityProp = matchingEntityProp;
+            resultValue = dtoPropertyValue;
+        });
+
+        // Assert
+        resultMatchingEntityProp.Name.Should().Be("Name");
+        resultValue.Should().Be("test");
     }
 
     #endregion

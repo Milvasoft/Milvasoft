@@ -3149,6 +3149,109 @@
             Priority of order operation. Ex. first order by creation date then order by updated date.
             </summary>
         </member>
+        <member name="T:Milvasoft.Core.Utils.UpdateProperty`1">
+            <summary>
+            Represents a generic updatable property.
+            </summary>
+            <typeparam name="T">The type of the property value.</typeparam>
+        </member>
+        <member name="P:Milvasoft.Core.Utils.UpdateProperty`1.Value">
+            <summary>
+            Gets or sets the value of the property.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Core.Utils.UpdateProperty`1.IsUpdated">
+            <summary>
+            Gets or sets a value indicating whether the property has been updated.
+            </summary>
+        </member>
+        <member name="M:Milvasoft.Core.Utils.UpdateProperty`1.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Milvasoft.Core.Utils.UpdateProperty`1"/> struct.
+            </summary>
+        </member>
+        <member name="M:Milvasoft.Core.Utils.UpdateProperty`1.#ctor(`0)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Milvasoft.Core.Utils.UpdateProperty`1"/> struct with the specified value.
+            </summary>
+            <param name="value">The initial value of the property.</param>
+        </member>
+        <member name="M:Milvasoft.Core.Utils.UpdateProperty`1.GetValue">
+            <summary>
+            Gets the value of the property as an object.
+            </summary>
+            <returns>The value of the property.</returns>
+        </member>
+        <member name="M:Milvasoft.Core.Utils.UpdateProperty`1.GetHashCode">
+            <summary>
+            Combines Tenancy Name and BranchNo into a hash code.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Core.Utils.UpdateProperty`1.Equals(System.Object)">
+            <summary>
+            Compares two <see cref="T:Milvasoft.Core.Utils.UpdateProperty`1"/> objects for equality.
+            </summary>
+            <param name="other"></param>
+            <returns> If both hash are equals returns true, othewise false. </returns>
+        </member>
+        <member name="M:Milvasoft.Core.Utils.UpdateProperty`1.Equals(Milvasoft.Core.Utils.UpdateProperty{`0})">
+            <summary>
+            Compares two <see cref="T:Milvasoft.Core.Utils.UpdateProperty`1"/> objects for equality.
+            </summary>
+            <param name="other"></param>
+            <returns> If both hash are equals returns true, othewise false. </returns>
+        </member>
+        <member name="M:Milvasoft.Core.Utils.UpdateProperty`1.op_Implicit(Milvasoft.Core.Utils.UpdateProperty{`0})~`0">
+            <summary>
+            Implicitly converts an <see cref="T:Milvasoft.Core.Utils.UpdateProperty`1"/> to its underlying value.
+            </summary>
+            <param name="s">The <see cref="T:Milvasoft.Core.Utils.UpdateProperty`1"/> to convert.</param>
+        </member>
+        <member name="M:Milvasoft.Core.Utils.UpdateProperty`1.op_Implicit(`0)~Milvasoft.Core.Utils.UpdateProperty{`0}">
+            <summary>
+            Implicitly converts a value of type <typeparamref name="T"/> to an <see cref="T:Milvasoft.Core.Utils.UpdateProperty`1"/>.
+            </summary>
+            <param name="s">The value to convert.</param>
+        </member>
+        <member name="M:Milvasoft.Core.Utils.UpdateProperty`1.op_Equality(Milvasoft.Core.Utils.UpdateProperty{`0},Milvasoft.Core.Utils.UpdateProperty{`0})">
+            <summary>
+            Compares two <see cref="T:Milvasoft.Core.Utils.UpdateProperty`1"/> objects for equality.
+            </summary>
+            <param name="a">The first <see cref="T:Milvasoft.Core.Utils.UpdateProperty`1"/> to compare.</param>
+            <param name="b">The second <see cref="T:Milvasoft.Core.Utils.UpdateProperty`1"/> to compare.</param>
+            <returns>True if the two <see cref="T:Milvasoft.Core.Utils.UpdateProperty`1"/> objects are equal; otherwise, false.</returns>
+        </member>
+        <member name="M:Milvasoft.Core.Utils.UpdateProperty`1.op_Inequality(Milvasoft.Core.Utils.UpdateProperty{`0},Milvasoft.Core.Utils.UpdateProperty{`0})">
+            <summary>
+            Compares two <see cref="T:Milvasoft.Core.Utils.UpdateProperty`1"/> objects for equality.
+            </summary>
+            <param name="a">The first <see cref="T:Milvasoft.Core.Utils.UpdateProperty`1"/> to compare.</param>
+            <param name="b">The second <see cref="T:Milvasoft.Core.Utils.UpdateProperty`1"/> to compare.</param>
+            <returns>True if the two <see cref="T:Milvasoft.Core.Utils.UpdateProperty`1"/> objects are equal; otherwise, false.</returns>
+        </member>
+        <member name="M:Milvasoft.Core.Utils.UpdateProperty`1.ToString">
+            <summary>
+            Returns a string that represents the current <see cref="T:Milvasoft.Core.Utils.UpdateProperty`1"/> object.
+            </summary>
+            <returns>A string that represents the current object.</returns>
+        </member>
+        <member name="T:Milvasoft.Core.Utils.IUpdateProperty">
+            <summary>
+            Represents an updatable property.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Core.Utils.IUpdateProperty.IsUpdated">
+            <summary>
+            Gets a value indicating whether the property has been updated.
+            </summary>
+        </member>
+        <member name="M:Milvasoft.Core.Utils.IUpdateProperty.GetValue">
+            <summary>
+            Gets the value of the property as an object.
+            </summary>
+            <returns>The value of the property.</returns>
+        </member>
         <member name="T:System.Text.RegularExpressions.Generated.UriRegex_0">
             <summary>Custom <see cref="T:System.Text.RegularExpressions.Regex"/>-derived type for the UriRegex method.</summary>
         </member>

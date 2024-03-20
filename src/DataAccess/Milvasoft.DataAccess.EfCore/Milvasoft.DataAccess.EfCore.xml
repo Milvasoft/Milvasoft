@@ -1922,6 +1922,11 @@
             </summary>
             <typeparam name="TSource"></typeparam>
         </member>
+        <member name="P:Milvasoft.DataAccess.EfCore.Utils.SetPropertyBuilder`1.SetPropertyMethodInfo">
+            <summary>
+            <see cref="M:Milvasoft.DataAccess.EfCore.Utils.SetPropertyBuilder`1.SetPropertyValue``1(System.Linq.Expressions.Expression{System.Func{`0,``0}},``0)"/> method info for reflection calls.
+            </summary>
+        </member>
         <member name="P:Milvasoft.DataAccess.EfCore.Utils.SetPropertyBuilder`1.SetPropertyCalls">
             <summary>
             Gets <see cref="T:Microsoft.EntityFrameworkCore.Query.SetPropertyCalls`1"/> expression. 
