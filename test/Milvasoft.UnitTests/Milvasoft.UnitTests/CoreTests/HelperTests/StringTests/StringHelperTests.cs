@@ -23,7 +23,7 @@ public partial class StringHelperTests
     [Theory]
     [InlineData("")]
     [InlineData(null)]
-    public void GetByteArray_InputStringIsNullOrEmpty_ShouldReturnsNull(string input)
+    public void GetByteArray_InputStringIsNullOrEmpty_ShouldReturnNull(string input)
     {
         // Arrange
 
@@ -36,7 +36,7 @@ public partial class StringHelperTests
 
     [Theory]
     [MemberData(nameof(ValidStringByteArrayPairs))]
-    public void GetByteArray_InputStringIsValidString_ShouldReturnsCorrectByteArray(string input, byte[] expected)
+    public void GetByteArray_InputStringIsValidString_ShouldReturnCorrectByteArray(string input, byte[] expected)
     {
         // Arrange
 
@@ -52,7 +52,7 @@ public partial class StringHelperTests
     #region GetString
 
     [Fact]
-    public void GetString_InputArrayIsEmpty_ShouldReturnsEmptyString()
+    public void GetString_InputArrayIsEmpty_ShouldReturnEmptyString()
     {
         // Arrange
         byte[] input = [];
@@ -66,7 +66,7 @@ public partial class StringHelperTests
     }
 
     [Fact]
-    public void GetString_InputArrayIsNull_ShouldReturnsEmptyString()
+    public void GetString_InputArrayIsNull_ShouldReturnEmptyString()
     {
         // Arrange
         byte[] input = null;
@@ -81,7 +81,7 @@ public partial class StringHelperTests
 
     [Theory]
     [MemberData(nameof(ValidStringByteArrayPairs))]
-    public void GetString_InputArrayIsValid_ShouldReturnsCorrectString(string expected, byte[] input)
+    public void GetString_InputArrayIsValid_ShouldReturnCorrectString(string expected, byte[] input)
     {
         // Arrange
 
@@ -99,7 +99,7 @@ public partial class StringHelperTests
     [Theory]
     [InlineData("")]
     [InlineData(null)]
-    public void HashToByteArray_InputStringIsNullOrEmpty_ShouldReturnsNull(string input)
+    public void HashToByteArray_InputStringIsNullOrEmpty_ShouldReturnNull(string input)
     {
         // Arrange
 
@@ -112,7 +112,7 @@ public partial class StringHelperTests
 
     [Theory]
     [MemberData(nameof(ValidStringByteArrayPairs))]
-    public void HashToByteArray_InputStringIsValidString_ShouldReturnsCorrectByteArray(string input, byte[] inputAsByteArray)
+    public void HashToByteArray_InputStringIsValidString_ShouldReturnCorrectByteArray(string input, byte[] inputAsByteArray)
     {
         // Arrange
         byte[] expected = SHA256.HashData(inputAsByteArray);
@@ -131,7 +131,7 @@ public partial class StringHelperTests
     [Theory]
     [InlineData("")]
     [InlineData(null)]
-    public void Hash_InputStringIsNullOrEmpty_ShouldReturnsEmptyString(string input)
+    public void Hash_InputStringIsNullOrEmpty_ShouldReturnEmptyString(string input)
     {
         // Arrange
 
@@ -146,7 +146,7 @@ public partial class StringHelperTests
     [InlineData(" ", "36a9e7f1c95b82ffb99743e0c5c4ce95d83c9a430aac59f84ef3cbfab6145068")]
     [InlineData("hello", "2cf24dba5fb0a30e26e83b2ac5b9e29e1b161e5c1fa7425e73043362938b9824")]
     [InlineData("İksir", "1f0d02a7fd55d91d18cbf6a81eca5e3c079665bce001aa66d97f959eacab1e6e")]
-    public void Hash_InputStringIsValidString_ShouldReturnsCorrectByteArray(string input, string expected)
+    public void Hash_InputStringIsValidString_ShouldReturnCorrectByteArray(string input, string expected)
     {
         // Arrange
 
@@ -163,7 +163,7 @@ public partial class StringHelperTests
 
     [Theory]
     [ClassData(typeof(InvalidStringDataWithCultureCodeFixture))]
-    public void MilvaNormalize_InputStringIsInvalidWithAnyCulture_ShouldReturnsEmptyString(string input, string cultureCode, string expected)
+    public void MilvaNormalize_InputStringIsInvalidWithAnyCulture_ShouldReturnEmptyString(string input, string cultureCode, string expected)
     {
         //Arrange
         CultureInfo.CurrentCulture = new CultureInfo(cultureCode);
@@ -178,7 +178,7 @@ public partial class StringHelperTests
     [Theory]
     [InlineData("tr-TR")]
     [InlineData("en-US")]
-    public void MilvaNormalize_InputStringIsValidButContainsSpecialCharacterWithDifferentCulture_ShouldReturnsNormalizedString(string cultureCode)
+    public void MilvaNormalize_InputStringIsValidButContainsSpecialCharacterWithDifferentCulture_ShouldReturnNormalizedString(string cultureCode)
     {
         //Arrange
         var input = "İKsir!";
@@ -195,7 +195,7 @@ public partial class StringHelperTests
     [Theory]
     [InlineData("tr-TR")]
     [InlineData("en-US")]
-    public void MilvaNormalize_InputStringIsValidWithDifferentCulture_ShouldReturnsNormalizedString(string cultureCode)
+    public void MilvaNormalize_InputStringIsValidWithDifferentCulture_ShouldReturnNormalizedString(string cultureCode)
     {
         //Arrange
         var input = "İKsir";

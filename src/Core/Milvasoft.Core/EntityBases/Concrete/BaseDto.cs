@@ -67,6 +67,10 @@ public abstract class DtoBase
     /// <returns></returns>
     public PropertyInfo[] GetDtoProperties() => _propertyInfos;
 
+    /// <summary>
+    /// Returns a collection of PropertyInfo objects that represent properties of the DTO that implements <see cref="IUpdateProperty"/>.
+    /// </summary>
+    /// <returns>A collection of PropertyInfo objects representing the updatable properties of the DTO.</returns>
     public virtual IEnumerable<PropertyInfo> GetUpdatableProperties() => GetDtoProperties().Where(prop => prop.PropertyType.IsGenericType
                                                                                                 && (prop.PropertyType
                                                                                                        .GetGenericTypeDefinition()

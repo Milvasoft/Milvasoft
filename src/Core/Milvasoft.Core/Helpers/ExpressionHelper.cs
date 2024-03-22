@@ -1,6 +1,5 @@
 ﻿using Milvasoft.Core.Utils;
 using System.Linq.Expressions;
-using System.Reflection;
 
 namespace Milvasoft.Core.Helpers;
 
@@ -19,36 +18,34 @@ public static partial class CommonHelper
     /// <returns></returns>
     public static Expression<Func<T, bool>> Append<T>(this Expression<Func<T, bool>> left, Expression<Func<T, bool>> right, ExpressionType expressionAppendType)
     {
-        if (right != null)
-        {
-            Expression<Func<T, bool>> result = null;
-
-            switch (expressionAppendType)
-            {
-                case ExpressionType.OrElse:
-
-                    //the initial case starts off with a left expression as null. If that's the case,
-                    //then give the short-circuit operator something to trigger on for the right expression
-                    left ??= model => false;
-
-                    result = left.OrElse(right);
-
-                    break;
-                case ExpressionType.AndAlso:
-
-                    left ??= model => true;
-
-                    result = left.AndAlso(right);
-
-                    break;
-                default:
-                    break;
-            }
-
-            return result;
-        }
-        else
+        if (right == null)
             return left;
+
+        Expression<Func<T, bool>> result = null;
+
+        switch (expressionAppendType)
+        {
+            case ExpressionType.OrElse:
+
+                //the initial case starts off with a left expression as null. If that's the case,
+                //then give the short-circuit operator something to trigger on for the right expression
+                left ??= x => false;
+
+                result = left.OrElse(right);
+
+                break;
+            case ExpressionType.AndAlso:
+
+                left ??= x => true;
+
+                result = left.AndAlso(right);
+
+                break;
+            default:
+                break;
+        }
+
+        return result;
     }
 
     /// <summary>
@@ -60,6 +57,12 @@ public static partial class CommonHelper
     /// and the left and right properties set to the specified values</returns>
     public static Expression<Func<T, bool>> AndAlso<T>(this Expression<Func<T, bool>> left, Expression<Func<T, bool>> right)
     {
+        if (left == null)
+            return right;
+
+        if (right == null)
+            return left;
+
         var combined = Expression.Lambda<Func<T, bool>>(Expression.AndAlso(left.Body, new ExpressionParameterReplacer(right.Parameters, left.Parameters).Visit(right.Body)), left.Parameters);
 
         return combined;
@@ -74,66 +77,15 @@ public static partial class CommonHelper
     /// and the left and right properties set to the specified values</returns>
     public static Expression<Func<T, bool>> OrElse<T>(this Expression<Func<T, bool>> left, Expression<Func<T, bool>> right)
     {
+        if (left == null)
+            return right;
+
+        if (right == null)
+            return left;
+
         var combined = Expression.Lambda<Func<T, bool>>(Expression.OrElse(left.Body, new ExpressionParameterReplacer(right.Parameters, left.Parameters).Visit(right.Body)), left.Parameters);
 
         return combined;
-    }
-
-    /// <summary>
-    /// Combines two expressions to one.
-    /// </summary>
-    /// <typeparam name="TEntity"></typeparam>
-    /// <param name="selectors"></param>
-    /// <returns></returns>
-    public static Expression<Func<TEntity, TEntity>> Combine<TEntity>(params Expression<Func<TEntity, TEntity>>[] selectors) where TEntity : class
-    {
-        var param = Expression.Parameter(typeof(TEntity), "x");
-
-        return Expression.Lambda<Func<TEntity, TEntity>>(Expression.MemberInit(Expression.New(typeof(TEntity).GetConstructor(Type.EmptyTypes)),
-                                                         from selector in selectors
-                                                         let replace = new ParameterReplaceVisitor(selector.Parameters[0], param)
-                                                         from binding in ((MemberInitExpression)selector.Body).Bindings.OfType<MemberAssignment>()
-                                                         select Expression.Bind(binding.Member, replace.VisitAndConvert(binding.Expression, "Combine"))),
-                                                         param);
-    }
-
-    /// <summary>
-    /// Combines two expressions to one.
-    /// </summary>
-    /// <typeparam name="TEntity"></typeparam>
-    /// <param name="selectors"></param>
-    /// <returns></returns>
-    public static Expression<Func<TEntity, object>> Combine<TEntity>(params Expression<Func<TEntity, object>>[] selectors) where TEntity : class
-    {
-        var param = Expression.Parameter(typeof(TEntity), "x");
-
-        return Expression.Lambda<Func<TEntity, object>>(Expression.MemberInit(Expression.New(typeof(TEntity).GetConstructor(Type.EmptyTypes)),
-                                                        from selector in selectors
-                                                        let replace = new ParameterReplaceVisitor(selector.Parameters[0], param)
-                                                        from binding in ((MemberInitExpression)selector.Body).Bindings.OfType<MemberAssignment>()
-                                                        select Expression.Bind(binding.Member, replace.VisitAndConvert(binding.Expression, "Combine"))),
-                                                        param);
-    }
-
-    /// <summary>
-    /// Determines the right casting and pets property from expression with this right casting.
-    /// </summary>
-    /// <typeparam name="T"></typeparam>
-    /// <typeparam name="TPropertyType"></typeparam>
-    /// <param name="expression"></param>
-    /// <returns></returns>
-    public static MemberInfo GetPropertyInfo<T, TPropertyType>(this Expression<Func<T, TPropertyType>> expression)
-    {
-        if (expression.Body is MemberExpression tempExpression)
-        {
-            return tempExpression.Member;
-        }
-        else
-        {
-            var op = ((UnaryExpression)expression.Body).Operand;
-
-            return ((MemberExpression)op).Member;
-        }
     }
 
     /// <summary>
@@ -145,15 +97,25 @@ public static partial class CommonHelper
     /// <returns></returns>
     public static string GetPropertyName<T, TPropertyType>(this Expression<Func<T, TPropertyType>> expression)
     {
-        if (expression.Body is MemberExpression tempExpression)
-        {
-            return tempExpression.Member.Name;
-        }
-        else
-        {
-            var op = ((UnaryExpression)expression.Body).Operand;
+        if (expression == null)
+            return null;
 
-            return ((MemberExpression)op).Member.Name;
+        try
+        {
+            if (expression.Body is MemberExpression tempExpression)
+            {
+                return tempExpression.Member.Name;
+            }
+            else
+            {
+                var op = ((UnaryExpression)expression.Body).Operand;
+
+                return ((MemberExpression)op).Member.Name;
+            }
+        }
+        catch (InvalidCastException)
+        {
+            return null;
         }
     }
 }

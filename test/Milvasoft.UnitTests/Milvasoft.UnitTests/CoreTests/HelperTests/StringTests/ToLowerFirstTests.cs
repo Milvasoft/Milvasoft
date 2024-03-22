@@ -9,7 +9,7 @@ public partial class StringHelperTests
 {
     [Theory]
     [ClassData(typeof(InvalidStringDataWithCultureCodeFixture))]
-    public void ToLowerFirst_InputStringIsInvalidWithDifferentCultures_ShouldReturnsEmptyString(string input, string cultureCode, string expected)
+    public void ToLowerFirst_InputStringIsInvalidWithDifferentCultures_ShouldReturnEmptyString(string input, string cultureCode, string expected)
     {
         //Arrange
         CultureInfo.CurrentCulture = new CultureInfo(cultureCode);
@@ -23,7 +23,7 @@ public partial class StringHelperTests
 
     [Theory]
     [ClassData(typeof(SpecialCharacteredStringDataWithCultureCodeFixture))]
-    public void ToLowerFirst_InputStringFirstCharacterIsUnableToLowercaseWithDifferentCultures_ShouldReturnsInputString(string input, string cultureCode, string expected)
+    public void ToLowerFirst_InputStringFirstCharacterIsUnableToLowercaseWithDifferentCultures_ShouldReturnInputString(string input, string cultureCode, string expected)
     {
         //Arrange
         CultureInfo.CurrentCulture = new CultureInfo(cultureCode);
@@ -40,7 +40,7 @@ public partial class StringHelperTests
     [InlineData("İksir", "tr-TR", "iksir")]
     [InlineData("Irmak", "en-US", "irmak")]
     [InlineData("İksir", "en-US", "iksir")]
-    public void ToLowerFirst_InputStringIsValidWithDifferentCultures_ShouldReturnsFirstCharacterLowercasedInputString(string input, string cultureCode, string expected)
+    public void ToLowerFirst_InputStringIsValidWithDifferentCultures_ShouldReturnFirstCharacterLowercasedInputString(string input, string cultureCode, string expected)
     {
         //Arrange
 
@@ -53,7 +53,7 @@ public partial class StringHelperTests
 
     [Theory]
     [ClassData(typeof(InvalidStringDataWithCultureCodeFixture))]
-    public void ToLowerInvariantFirst_InputStringIsInvalidWithDifferentCultures_ShouldReturnsEmptyString(string input, string cultureCode, string expected)
+    public void ToLowerInvariantFirst_InputStringIsInvalidWithDifferentCultures_ShouldReturnEmptyString(string input, string cultureCode, string expected)
     {
         //Arrange
         CultureInfo.CurrentCulture = new CultureInfo(cultureCode);
@@ -67,7 +67,7 @@ public partial class StringHelperTests
 
     [Theory]
     [ClassData(typeof(SpecialCharacteredStringDataWithCultureCodeFixture))]
-    public void ToLowerInvariantFirst_InputStringFirstCharacterIsUnableToLowercaseWithDifferentCultures_ShouldReturnsEmptyString(string input, string cultureCode, string expected)
+    public void ToLowerInvariantFirst_InputStringFirstCharacterIsUnableToLowercaseWithDifferentCultures_ShouldReturnEmptyString(string input, string cultureCode, string expected)
     {
         //Arrange
         CultureInfo.CurrentCulture = new CultureInfo(cultureCode);
@@ -82,7 +82,7 @@ public partial class StringHelperTests
     [Theory]
     [InlineData("tr-TR")]
     [InlineData("en-US")]
-    public void ToLowerInvariantFirst_InputStringFirstCharacterIsTurkishCharacterWithDifferentCultures_ShouldReturnsFirstCharacterLowercasedInputString(string cultureCode)
+    public void ToLowerInvariantFirst_InputStringFirstCharacterIsTurkishCharacterWithDifferentCultures_ShouldReturnFirstCharacterLowercasedInputString(string cultureCode)
     {
         //Arrange
         var input = "Irmak";

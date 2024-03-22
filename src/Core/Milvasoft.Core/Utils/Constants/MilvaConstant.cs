@@ -1,5 +1,8 @@
 ﻿namespace Milvasoft.Core.Utils.Constants;
 
+/// <summary>
+/// Milvasoft library constants.
+/// </summary>
 public static class MilvaConstant
 {
     /// <summary>

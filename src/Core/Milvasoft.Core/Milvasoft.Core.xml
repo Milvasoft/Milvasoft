@@ -2004,56 +2004,29 @@
             <typeparam name="T"></typeparam>
             <param name="endDate"></param>
             <param name="startDate"></param>
-            <param name="dateProperty"></param>
+            <param name="datePropertySelector"></param>
             <returns> 
             
             Example Return when both values has value :
             
-            <code> i => i.<paramref name="dateProperty"/> <b>biggerThanOrEqual</b> <paramref name="startDate"/> <b>AND</b> i.<paramref name="dateProperty"/> <b>lessThanOrEqual</b> <paramref name="endDate"/> </code>
-            
-            </returns>
-        </member>
-        <member name="M:Milvasoft.Core.Helpers.CommonHelper.CreateDateSearchExpression``1(System.Linq.Expressions.Expression{System.Func{``0,System.DateTime}},System.Nullable{System.DateTime},System.Nullable{System.DateTime})">
-            <summary>
-            <para> Creates expression by <paramref name="endDate"/> and <paramref name="startDate"/> values. </para>
-            </summary>
-            
-            <remarks>
-            
-            <para><b>Remarks: </b></para>
-            
-            <para> If a selection has been made between two dates, it will return those between the two dates. </para>
-            <para> If only the <paramref name="endDate"/> value exists, it returns those larger than the <paramref name="startDate"/> value. </para>
-            <para> If only the <paramref name="startDate"/> value exists, it returns those smaller than the <paramref name="endDate"/> value. </para>
-            
-            </remarks>
-            
-            <typeparam name="T"></typeparam>
-            <param name="endDate"></param>
-            <param name="startDate"></param>
-            <param name="dateProperty"></param>
-            <returns> 
-            
-            Example Return when both values has value :
-            
-            <code> i => i.<paramref name="dateProperty"/> <b>biggerThanOrEqual</b> <paramref name="startDate"/> <b>AND</b> i.<paramref name="dateProperty"/> <b>lessThanOrEqual</b> <paramref name="endDate"/> </code>
+            <code> i => i.<paramref name="datePropertySelector"/> <b>biggerThanOrEqual</b> <paramref name="startDate"/> <b>AND</b> i.<paramref name="datePropertySelector"/> <b>lessThanOrEqual</b> <paramref name="endDate"/> </code>
             
             </returns>
         </member>
         <member name="M:Milvasoft.Core.Helpers.CommonHelper.IsBetween(System.DateTime,System.TimeSpan,System.TimeSpan,System.Boolean)">
             <summary>
-            Compares <paramref name="date"/> for whether between <paramref name="startTime"/> and <paramref name="endTime"/>. 
-            </summary>
+            Checks whether the given date's time is between the specified start time and end time.
             
             <remarks>
-            This is a time comparison not a date comparison.
+            If <paramref name="startTime"/> greater than equal to <paramref name="endTime"/> this means <paramref name="endTime"/> belongs to next day. The comparison will made according to this criteria.
             </remarks>
             
-            <param name="date"></param>
-            <param name="startTime"></param>
-            <param name="endTime"></param>
-            <param name="convertTimesToUtc"></param>
-            <returns></returns>
+            </summary>
+            <param name="date">The date to check.</param>
+            <param name="startTime">The start time.</param>
+            <param name="endTime">The end time.</param>
+            <param name="convertTimesToUtc">Indicates whether to convert times to UTC before comparison. Default is true.</param>
+            <returns>True if the date's is between the start time and end time, otherwise false.</returns>
         </member>
         <member name="M:Milvasoft.Core.Helpers.CommonHelper.IsBetween(System.DateTime,System.TimeSpan,System.TimeSpan,System.TimeSpan,System.Boolean)">
             <summary>
@@ -2083,18 +2056,32 @@
         </member>
         <member name="M:Milvasoft.Core.Helpers.CommonHelper.IsBetween(System.DateTime,System.TimeSpan,System.DateTime,System.DateTime,System.Boolean)">
             <summary>
-            Compares <paramref name="date"/> for whether between <paramref name="startDate"/> and <paramref name="endDate"/>. 
+            Removes <paramref name="date"/>'s hour, second and milisecond then adds <paramref name="compareTime"/> to <paramref name="date"/> 
+            and compares <paramref name="date"/> for whether between <paramref name="startDate"/> and <paramref name="endDate"/>. 
             </summary>
             <param name="date"></param>
-            <param name="time"></param>
+            <param name="compareTime"></param>
             <param name="startDate"></param>
             <param name="endDate"></param>
             <param name="convertTimeToUtc"></param>
             <returns></returns>
         </member>
+        <member name="M:Milvasoft.Core.Helpers.CommonHelper.WithTime(System.DateTime,System.TimeSpan)">
+            <summary>
+            Sets the time component of the given <paramref name="date"/> to the specified <paramref name="time"/>.
+            </summary>
+            <param name="date">The date to modify.</param>
+            <param name="time">The time to set.</param>
+            <returns>A new DateTime object with the same date as the original <paramref name="date"/> and the specified <paramref name="time"/>.</returns>
+        </member>
         <member name="M:Milvasoft.Core.Helpers.CommonHelper.ConvertToUtc(System.TimeSpan)">
             <summary>
             Converts timespan to universal time.
+            
+            <remarks>
+            Be careful when using this method. Each time you use it, it will repeat the time difference process according to the time zone you are in.
+            </remarks>
+            
             </summary>
             <param name="timeSpan"></param>
             <returns></returns>
@@ -2126,31 +2113,6 @@
             <param name="right">An expression to set the right property of the binary expression</param>
             <returns>A binary expression that has the node type property equal to OrElse, 
             and the left and right properties set to the specified values</returns>
-        </member>
-        <member name="M:Milvasoft.Core.Helpers.CommonHelper.Combine``1(System.Linq.Expressions.Expression{System.Func{``0,``0}}[])">
-            <summary>
-            Combines two expressions to one.
-            </summary>
-            <typeparam name="TEntity"></typeparam>
-            <param name="selectors"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Milvasoft.Core.Helpers.CommonHelper.Combine``1(System.Linq.Expressions.Expression{System.Func{``0,System.Object}}[])">
-            <summary>
-            Combines two expressions to one.
-            </summary>
-            <typeparam name="TEntity"></typeparam>
-            <param name="selectors"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Milvasoft.Core.Helpers.CommonHelper.GetPropertyInfo``2(System.Linq.Expressions.Expression{System.Func{``0,``1}})">
-            <summary>
-            Determines the right casting and pets property from expression with this right casting.
-            </summary>
-            <typeparam name="T"></typeparam>
-            <typeparam name="TPropertyType"></typeparam>
-            <param name="expression"></param>
-            <returns></returns>
         </member>
         <member name="M:Milvasoft.Core.Helpers.CommonHelper.GetPropertyName``2(System.Linq.Expressions.Expression{System.Func{``0,``1}})">
             <summary>

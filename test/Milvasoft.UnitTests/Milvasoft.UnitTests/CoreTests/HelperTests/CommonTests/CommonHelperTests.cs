@@ -13,7 +13,7 @@ public partial class CommonHelperTests
     #region CreateIsDeletedFalseExpression
 
     [Fact]
-    public void CreateIsDeletedFalseExpression_EntityTypeIsNotSoftDeletable_ShouldReturnsNull()
+    public void CreateIsDeletedFalseExpression_EntityTypeIsNotSoftDeletable_ShouldReturnNull()
     {
         // Arrange
 
@@ -25,7 +25,7 @@ public partial class CommonHelperTests
     }
 
     [Fact]
-    public void CreateIsDeletedFalseExpression_EntityTypeIsSoftDeletable_ShouldReturnsIsDeletedFalseExpression()
+    public void CreateIsDeletedFalseExpression_EntityTypeIsSoftDeletable_ShouldReturnIsDeletedFalseExpression()
     {
         // Arrange
         Expression<Func<SoftDeletableTestEntity, bool>> expected = e => e.IsDeleted == false;
@@ -43,7 +43,7 @@ public partial class CommonHelperTests
     #region GetEnumDesciption
 
     [Fact]
-    public void GetEnumDescription_TypeIsNotEnum_ShouldReturnsNull()
+    public void GetEnumDescription_TypeIsNotEnum_ShouldReturnNull()
     {
         // Arrange
         int input = 1;
@@ -56,7 +56,7 @@ public partial class CommonHelperTests
     }
 
     [Fact]
-    public void GetEnumDescription_TypeIsEnumButNotContainsDescriptionAttribute_ShouldReturnsEnumValueAsString()
+    public void GetEnumDescription_TypeIsEnumButNotContainsDescriptionAttribute_ShouldReturnEnumValueAsString()
     {
         // Arrange
         var input = TestEnum.Value2;
@@ -69,7 +69,7 @@ public partial class CommonHelperTests
     }
 
     [Fact]
-    public void GetEnumDescription_TypeIsEnumAndContainsDescriptionAttribute_ShouldReturnsDescriptionAttributeValue()
+    public void GetEnumDescription_TypeIsEnumAndContainsDescriptionAttribute_ShouldReturnDescriptionAttributeValue()
     {
         // Arrange
         var input = TestEnum.Value1;
@@ -92,7 +92,7 @@ public partial class CommonHelperTests
     [InlineData(typeof(List<string>), true)]
     [InlineData(typeof(IEnumerable<string>), true)]
     [InlineData(typeof(Dictionary<byte, byte>), true)]
-    public void IsEnumerableType_TypeIsNullOrValid_ShouldReturnsExpected(Type input, bool expected)
+    public void IsEnumerableType_TypeIsNullOrValid_ShouldReturnExpected(Type input, bool expected)
     {
         // Arrange
 
@@ -108,7 +108,7 @@ public partial class CommonHelperTests
     #region AssignUpdatedProperties
 
     [Fact]
-    public void AssignUpdatedProperties_EntityIsNull_ShouldReturnsNull()
+    public void AssignUpdatedProperties_EntityIsNull_ShouldReturnNull()
     {
         // Arrange
         UpdatedPropsTestEntity entity = null;
@@ -122,7 +122,7 @@ public partial class CommonHelperTests
     }
 
     [Fact]
-    public void AssignUpdatedProperties_DtoIsNull_ShouldReturnsNull()
+    public void AssignUpdatedProperties_DtoIsNull_ShouldReturnNull()
     {
         // Arrange
         UpdatedPropsTestEntity entity = new();
@@ -136,7 +136,7 @@ public partial class CommonHelperTests
     }
 
     [Fact]
-    public void AssignUpdatedProperties_EntityAndDtoIsNull_ShouldReturnsNull()
+    public void AssignUpdatedProperties_EntityAndDtoIsNull_ShouldReturnNull()
     {
         // Arrange
         UpdatedPropsTestEntity entity = null;

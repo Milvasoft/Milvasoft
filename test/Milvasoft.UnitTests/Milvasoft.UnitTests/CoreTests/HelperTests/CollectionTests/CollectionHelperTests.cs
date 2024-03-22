@@ -26,7 +26,7 @@ public partial class CollectionHelperTests
 
     [Theory]
     [MemberData(nameof(IsNullOrEmptyData))]
-    public void IsNullOrEmpty_ValidEnumerableInput_ShouldReturnsExpected(IEnumerable<byte> input, bool expected)
+    public void IsNullOrEmpty_ValidEnumerableInput_ShouldReturnExpected(IEnumerable<byte> input, bool expected)
     {
         // Arrange
 
@@ -38,7 +38,7 @@ public partial class CollectionHelperTests
     }
 
     [Fact]
-    public void IsNullOrEmpty_EmptyDictionaryInput_ShouldReturnsTrue()
+    public void IsNullOrEmpty_EmptyDictionaryInput_ShouldReturnTrue()
     {
         // Arrange
         var input = new Dictionary<string, object>();
@@ -58,7 +58,7 @@ public partial class CollectionHelperTests
     [InlineData(null, false)]
     [InlineData("", false)]
     [InlineData(" ", false)]
-    public void PropertyExists_NullOrEmptyOrWhiteSpacePropertyNameInput_ShouldReturnsFalse(string propertyName, bool expected)
+    public void PropertyExists_NullOrEmptyOrWhiteSpacePropertyNameInput_ShouldReturnFalse(string propertyName, bool expected)
     {
         // Arrange
         IQueryable<PropertyExistsTestModel> inputList = null;
@@ -74,7 +74,7 @@ public partial class CollectionHelperTests
     [InlineData("poco", true)]
     [InlineData("Poco", true)]
     [InlineData("NotExistsPropName", false)]
-    public void PropertyExists_PropertyNameInput_ShouldReturnsExpected(string propertyName, bool expected)
+    public void PropertyExists_PropertyNameInput_ShouldReturnExpected(string propertyName, bool expected)
     {
         // Arrange
         IQueryable<PropertyExistsTestModel> inputList = null;
@@ -127,7 +127,7 @@ public partial class CollectionHelperTests
 
     [Theory]
     [MemberData(nameof(InvalidSourceForOrderByPropertyMethodData))]
-    public void OrderByProperty_InvalidSourceOrPropertyNameInput_ShouldReturnsSource(IQueryable<PropertyExistsTestModel> source, string propertyName, IQueryable<PropertyExistsTestModel> expected)
+    public void OrderByProperty_InvalidSourceOrPropertyNameInput_ShouldReturnSource(IQueryable<PropertyExistsTestModel> source, string propertyName, IQueryable<PropertyExistsTestModel> expected)
     {
         // Arrange
 
@@ -140,7 +140,7 @@ public partial class CollectionHelperTests
 
     [Theory]
     [MemberData(nameof(ValidSourceForOrderByPropertyMethodData))]
-    public void OrderByProperty_ValidSourceAndPropertyNameInput_ShouldReturnsAscendingOrderedSource(IQueryable<PropertyExistsTestModel> source, string propertyName)
+    public void OrderByProperty_ValidSourceAndPropertyNameInput_ShouldReturnAscendingOrderedSource(IQueryable<PropertyExistsTestModel> source, string propertyName)
     {
         // Arrange
 
@@ -192,7 +192,7 @@ public partial class CollectionHelperTests
 
     [Theory]
     [MemberData(nameof(InvalidSourceForOrderByPropertyMethodData))]
-    public void OrderByPropertyDescending_InvalidSourceOrPropertyNameInput_ShouldReturnsSource(IQueryable<PropertyExistsTestModel> source, string propertyName, IQueryable<PropertyExistsTestModel> expected)
+    public void OrderByPropertyDescending_InvalidSourceOrPropertyNameInput_ShouldReturnSource(IQueryable<PropertyExistsTestModel> source, string propertyName, IQueryable<PropertyExistsTestModel> expected)
     {
         // Arrange
 
@@ -205,7 +205,7 @@ public partial class CollectionHelperTests
 
     [Theory]
     [MemberData(nameof(ValidSourceForOrderByPropertyMethodData))]
-    public void OrderByPropertyDescending_ValidSourceAndPropertyNameInput_ShouldReturnsDescendingOrderedSource(IQueryable<PropertyExistsTestModel> source, string propertyName)
+    public void OrderByPropertyDescending_ValidSourceAndPropertyNameInput_ShouldReturnDescendingOrderedSource(IQueryable<PropertyExistsTestModel> source, string propertyName)
     {
         // Arrange
 
@@ -247,7 +247,7 @@ public partial class CollectionHelperTests
 
     [Theory]
     [MemberData(nameof(InvalidSourceForToBatchesMethodData))]
-    public void ToBatches_InvalidSourceInput_ShouldReturnsEmptySource(List<byte> source, List<byte> expected)
+    public void ToBatches_InvalidSourceInput_ShouldReturnEmptySource(List<byte> source, List<byte> expected)
     {
         // Arrange
 
@@ -260,7 +260,7 @@ public partial class CollectionHelperTests
 
     [Theory]
     [MemberData(nameof(ValidSourceForToBatchesMethodData))]
-    public void ToBatches_ValidSourceInput_ShouldReturnsValidBatches(List<byte> source, int batchSize, int expectedBatchCount)
+    public void ToBatches_ValidSourceInput_ShouldReturnValidBatches(List<byte> source, int batchSize, int expectedBatchCount)
     {
         // Arrange
 
@@ -289,7 +289,7 @@ public partial class CollectionHelperTests
 
     [Theory]
     [MemberData(nameof(InvalidSourceForUpdateSingletonInstanceMethodData))]
-    public void UpdateSingletonInstance_WithOneGenericParameter_ServiceCollectionIsNullOrEmpty_ShouldReturnsInputServiceCollection(IServiceCollection source, IServiceCollection expected)
+    public void UpdateSingletonInstance_WithOneGenericParameter_ServiceCollectionIsNullOrEmpty_ShouldReturnInputServiceCollection(IServiceCollection source, IServiceCollection expected)
     {
         // Arrange
 
@@ -301,7 +301,7 @@ public partial class CollectionHelperTests
     }
 
     [Fact]
-    public void UpdateSingletonInstance_WithOneGenericParameter_UpdateActionIsNull_ShouldReturnsInputServiceCollection()
+    public void UpdateSingletonInstance_WithOneGenericParameter_UpdateActionIsNull_ShouldReturnInputServiceCollection()
     {
         // Arrange
         IServiceCollection services = new ServiceCollection();
@@ -383,7 +383,7 @@ public partial class CollectionHelperTests
 
     [Theory]
     [MemberData(nameof(InvalidSourceForUpdateSingletonInstanceMethodData))]
-    public void UpdateSingletonInstance_WithTwoGenericParameter_ServiceCollectionIsNullOrEmpty_ShouldReturnsInputServiceCollection(IServiceCollection source, IServiceCollection expected)
+    public void UpdateSingletonInstance_WithTwoGenericParameter_ServiceCollectionIsNullOrEmpty_ShouldReturnInputServiceCollection(IServiceCollection source, IServiceCollection expected)
     {
         // Arrange
 
@@ -395,7 +395,7 @@ public partial class CollectionHelperTests
     }
 
     [Fact]
-    public void UpdateSingletonInstance_WithTwoGenericParameter_UpdateActionIsNull_ShouldReturnsInputServiceCollection()
+    public void UpdateSingletonInstance_WithTwoGenericParameter_UpdateActionIsNull_ShouldReturnInputServiceCollection()
     {
         // Arrange
         IServiceCollection services = new ServiceCollection();

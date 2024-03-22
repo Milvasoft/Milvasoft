@@ -4,17 +4,17 @@ using Milvasoft.UnitTests.CoreTests.HelperTests.ConversionTests.Fixtures;
 using System.Reflection;
 using System.Text.Json;
 
-namespace Milvasoft.UnitTests.CoreTests.HelperTests.CommonTests;
+namespace Milvasoft.UnitTests.CoreTests.HelperTests.ConversionTests;
 
 public partial class ConversionHelperTests
 {
     #region ToGuid
 
     [Fact]
-    public void ToGuid_ValidInputWithDefaultJsonOptions_ShouldReturnsCorrectGuid()
+    public void ToGuid_ValidInputWithDefaultJsonOptions_ShouldReturnCorrectGuid()
     {
         // Arrange
-        int input = 1;
+        var input = 1;
 
         // Act
         var result = input.ToGuid();
@@ -28,20 +28,20 @@ public partial class ConversionHelperTests
     #region ToJson
 
     [Fact]
-    public void ToJson_NullObjectInputWithDefaultJsonOptions_ShouldReturnsInputString()
+    public void ToJson_NullObjectInputWithDefaultJsonOptions_ShouldReturnInputString()
     {
         // Arrange
         ToJsonTestModelFixture input = null;
 
         // Act
-        string result = input.ToJson();
+        var result = input.ToJson();
 
         // Assert
         result.Should().Be("null");
     }
 
     [Fact]
-    public void ToJson_SimpleObjectInputWithDefaultJsonOptions_ShouldReturnsCorrectJsonString()
+    public void ToJson_SimpleObjectInputWithDefaultJsonOptions_ShouldReturnCorrectJsonString()
     {
         // Arrange
         var input = new ToJsonTestModelFixture()
@@ -78,7 +78,7 @@ public partial class ConversionHelperTests
     [InlineData("")]
     [InlineData(null)]
     [InlineData(" ")]
-    public void ToObject_WithGenericParameter_NullOrEmptyOrWhitespacedStringInputWithDefaultJsonOptions_ShouldReturnsNull(string input)
+    public void ToObject_WithGenericParameter_NullOrEmptyOrWhitespacedStringInputWithDefaultJsonOptions_ShouldReturnNull(string input)
     {
         // Arrange
 
@@ -90,7 +90,7 @@ public partial class ConversionHelperTests
     }
 
     [Fact]
-    public void ToObject_WithGenericParameter_ValidJsonButPropertyNameMismatchWithDefaultJsonOptions_ShouldReturnsObjectWithDefaultProperties()
+    public void ToObject_WithGenericParameter_ValidJsonButPropertyNameMismatchWithDefaultJsonOptions_ShouldReturnObjectWithDefaultProperties()
     {
         // Arrange
         var input = "{\"InvalidProp1\":\"test\",\"InvalidProp2\":1}";
@@ -104,7 +104,7 @@ public partial class ConversionHelperTests
     }
 
     [Fact]
-    public void ToObject_WithGenericParameter_ValidJsonWithValidTypeWithDefaultJsonOptions_ShouldReturnsMappedObject()
+    public void ToObject_WithGenericParameter_ValidJsonWithValidTypeWithDefaultJsonOptions_ShouldReturnMappedObject()
     {
         // Arrange
         var input = "{\"Name\":\"test\",\"Priority\":1}";
@@ -118,7 +118,7 @@ public partial class ConversionHelperTests
     }
 
     [Fact]
-    public void ToObject_InvalidJsonWithDefaultJsonOptions_ShouldReturnsDefaultObject()
+    public void ToObject_InvalidJsonWithDefaultJsonOptions_ShouldReturnDefaultObject()
     {
         // Arrange
         var input = "\"Name\":\"test\",\"Name\":1}";
@@ -134,7 +134,7 @@ public partial class ConversionHelperTests
     [InlineData("")]
     [InlineData(null)]
     [InlineData(" ")]
-    public void ToObject_NullOrEmptyOrWhitespacedStringInputWithDefaultJsonOptions_ShouldReturnsNull(string input)
+    public void ToObject_NullOrEmptyOrWhitespacedStringInputWithDefaultJsonOptions_ShouldReturnNull(string input)
     {
         // Arrange
 
@@ -146,7 +146,7 @@ public partial class ConversionHelperTests
     }
 
     [Fact]
-    public void ToObject_ValidJsonButPropertyNameMismatchWithDefaultJsonOptions_ShouldReturnsObjectWithDefaultProperties()
+    public void ToObject_ValidJsonButPropertyNameMismatchWithDefaultJsonOptions_ShouldReturnObjectWithDefaultProperties()
     {
         // Arrange
         var input = "{\"InvalidProp1\":\"test\",\"InvalidProp2\":1}";
@@ -160,7 +160,7 @@ public partial class ConversionHelperTests
     }
 
     [Fact]
-    public void ToObject_ValidJsonWithValidTypeWithDefaultJsonOptions_ShouldReturnsMappedObject()
+    public void ToObject_ValidJsonWithValidTypeWithDefaultJsonOptions_ShouldReturnMappedObject()
     {
         // Arrange
         var input = "{\"Name\":\"test\",\"Priority\":1}";
@@ -195,7 +195,7 @@ public partial class ConversionHelperTests
     }
 
     [Fact]
-    public void Deserialize_ValidTypeInput_ShouldReturnsCorrectValue()
+    public void Deserialize_ValidTypeInput_ShouldReturnCorrectValue()
     {
         // Arrange
         var json = "{\"Name\":\"test\"}";

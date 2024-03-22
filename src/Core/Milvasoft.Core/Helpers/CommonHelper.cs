@@ -15,29 +15,35 @@ public static partial class CommonHelper
     private static readonly MethodInfo _deserializeMethod = typeof(JsonSerializer).GetMethod(nameof(JsonSerializer.Deserialize), [typeof(JsonElement), typeof(JsonSerializerOptions)]);
 
     /// <summary>
-    /// Gets <b>entity => entity.IsDeleted == false</b> expression, if <typeparamref name="TEntity"/> is assignable from <see cref="IFullAuditable{TKey}"/>.
+    /// Creates an expression that represents the condition where the IsDeleted property of an entity is false.
     /// </summary>
-    /// <returns></returns>
+    /// <typeparam name="TEntity">The type of the entity.</typeparam>
+    /// <returns>An expression representing the condition where the IsDeleted property is false.</returns>
     public static Expression<Func<TEntity, bool>> CreateIsDeletedFalseExpression<TEntity>()
     {
+        // Get the type of the entity
         var entityType = typeof(TEntity);
 
+        // Check if the entity implements the ISoftDeletable interface
         if (!typeof(ISoftDeletable).IsAssignableFrom(entityType))
             return null;
 
+        // Create a parameter expression for the entity
         var parameter = Expression.Parameter(entityType, "e");
 
+        // Create an expression that represents the condition where the IsDeleted property is false
         var filterExpression = Expression.Equal(Expression.Property(parameter, entityType.GetProperty(EntityPropertyNames.IsDeleted)), Expression.Constant(false, typeof(bool)));
 
+        // Create a lambda expression with the filter expression and the parameter
         return Expression.Lambda<Func<TEntity, bool>>(filterExpression, parameter);
     }
 
     /// <summary>
-    /// Gets enum description.
+    /// Gets the description attribute value of the specified enum value.
     /// </summary>
-    /// <typeparam name="T"></typeparam>
-    /// <param name="enumValue"></param>
-    /// <returns></returns>
+    /// <typeparam name="T">The enum type.</typeparam>
+    /// <param name="enumValue">The enum value.</param>
+    /// <returns>The description attribute value of the enum value.</returns>
     public static string GetEnumDesciption<T>(this T enumValue) where T : struct, IConvertible
     {
         if (!typeof(T).IsEnum)
@@ -63,13 +69,14 @@ public static partial class CommonHelper
     public static bool IsEnumerableType(this Type type) => type?.GetInterface(nameof(IEnumerable)) != null;
 
     /// <summary>
-    /// Updates entity matching properties with <paramref name="dto"/>'s not null properties.
+    /// Assigns the updated properties of a DTO object to the corresponding properties of an entity object.
     /// </summary>
-    /// <typeparam name="TDto"></typeparam>
-    /// <typeparam name="TEntity"></typeparam>
-    /// <param name="dto"></param>
-    /// <param name="entity"></param>
-    /// <returns>Updated property informations.</returns>
+    /// <typeparam name="TEntity">The type of the entity class that implements the <see cref="IMilvaEntity"/> interface.</typeparam>
+    /// <typeparam name="TDto">The type of the DTO class that inherits from the <see cref="DtoBase"/> class.</typeparam>
+    /// <param name="entity">The entity object to update.</param>
+    /// <param name="dto">The DTO object containing the updated property values.</param>
+    /// <returns>A list of PropertyInfo objects representing the updated properties.</returns>
+    /// <remarks> To find out how this method finds the updated properties, please see <see cref="FindUpdatablePropertiesAndAct{TEntity, TDto}(TDto, Action{PropertyInfo, object})"/>. </remarks>
     public static List<PropertyInfo> AssignUpdatedProperties<TEntity, TDto>(this TEntity entity, TDto dto) where TEntity : class, IMilvaEntity where TDto : DtoBase
     {
         if (entity == null || dto == null)
@@ -89,6 +96,19 @@ public static partial class CommonHelper
         return updatedProps;
     }
 
+    /// <summary>
+    /// Finds the updatable properties in the provided DTO object and performs the specified action on each property.
+    /// </summary>
+    /// <typeparam name="TEntity">The type of the entity class that implements the IMilvaEntity interface.</typeparam>
+    /// <typeparam name="TDto">The type of the DTO class that inherits from the DtoBase class.</typeparam>
+    /// <param name="dto">The DTO object from which to find the updatable properties.</param>
+    /// <param name="action">The action to perform on each updatable property. It takes two parameters: the PropertyInfo of the matching property in the entity class, and the value of the property in the DTO object.</param>
+    /// <remarks>
+    /// This method is used to update the entity object with the values of the updatable properties in the DTO object.
+    /// It iterates over the updatable properties in the DTO object and finds the matching property in the entity class.
+    /// If a matching property is found and the property value is an instance of <see cref="IUpdateProperty"/> and IsUpdated property is true,
+    /// the specified action is performed on the matching property in the entity object.
+    /// </remarks>
     public static void FindUpdatablePropertiesAndAct<TEntity, TDto>(TDto dto, Action<PropertyInfo, object> action) where TEntity : class, IMilvaEntity where TDto : DtoBase
     {
         if (dto == null || action == null)
