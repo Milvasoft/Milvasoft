@@ -2127,137 +2127,147 @@
         </member>
         <member name="M:Milvasoft.Core.Helpers.CommonHelper.PropertyExists``1(System.Collections.Generic.IEnumerable{``0},System.String)">
             <summary>
-            Checks whether property exists.
+            Checks whether a property with the specified name exists in the collection of properties of the specified type.
             </summary>
-            <typeparam name="T"></typeparam>
-            <param name="_"> Source collection for code readiness. </param>
-            <param name="propertyName"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Milvasoft.Core.Helpers.CommonHelper.ThrowIfPropertyNotExists``1(System.String)">
-            <summary>
-            Checks if there is a property named <paramref name="propertyName"/> in the properties of <b>typeof(<typeparamref name="T"/>)</b>. 
-            </summary>
-            <typeparam name="T"></typeparam>
-            <param name="propertyName"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Milvasoft.Core.Helpers.CommonHelper.ThrowIfPropertyNotExists(System.Object,System.String)">
-            <summary>
-            Checks if there is a property named <paramref name="propertyName"/> in the properties of <b><paramref name="content"/></b>. 
-            </summary>
-            <param name="content"></param>
-            <param name="propertyName"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Milvasoft.Core.Helpers.CommonHelper.ThrowIfPropertyNotExists(System.Type,System.String)">
-            <summary>
-            Checks if there is a property named <paramref name="propertyName"/> in the properties of <b><paramref name="type"/></b>. 
-            </summary>
-            <param name="type"></param>
-            <param name="propertyName"></param>
-            <returns></returns>
+            <typeparam name="T">The type of the source collection.</typeparam>
+            <param name="_">The source collection (not used).</param>
+            <param name="propertyName">The name of the property to check.</param>
+            <returns>True if the property exists, otherwise false.</returns>
         </member>
         <member name="M:Milvasoft.Core.Helpers.CommonHelper.PropertyExists``1(System.String)">
             <summary>
-            Checks if there is a property named <paramref name="propertyName"/> in the properties of <b>typeof(<typeparamref name="T"/>)</b>. 
+            Checks whether a property with the specified name exists in the properties of the specified type.
             </summary>
-            <typeparam name="T"></typeparam>
-            <param name="propertyName"></param>
-            <returns></returns>
+            <typeparam name="T">The type to check.</typeparam>
+            <param name="propertyName">The name of the property to check.</param>
+            <returns>True if the property exists, otherwise false.</returns>
         </member>
         <member name="M:Milvasoft.Core.Helpers.CommonHelper.PropertyExists(System.Object,System.String)">
             <summary>
-            Checks if there is a property named <paramref name="propertyName"/> in the properties of <b><paramref name="content"/></b>. 
+            Checks whether a property with the specified name exists in the properties of the specified object.
             </summary>
-            <param name="content"></param>
-            <param name="propertyName"></param>
-            <returns></returns>
+            <param name="content">The object to check.</param>
+            <param name="propertyName">The name of the property to check.</param>
+            <returns>True if the property exists, otherwise false.</returns>
         </member>
         <member name="M:Milvasoft.Core.Helpers.CommonHelper.PropertyExists(System.Type,System.String)">
             <summary>
-            Checks if there is a property named <paramref name="propertyName"/> in the properties of <b><paramref name="type"/></b>. 
+            Checks whether a property with the specified name exists in the properties of the specified type.
             </summary>
-            <param name="type"></param>
-            <param name="propertyName"></param>
-            <returns></returns>
+            <param name="type">The type to check.</param>
+            <param name="propertyName">The name of the property to check.</param>
+            <returns>True if the property exists, otherwise false.</returns>
+        </member>
+        <member name="M:Milvasoft.Core.Helpers.CommonHelper.ThrowIfPropertyNotExists``1(System.Collections.Generic.IEnumerable{``0},System.String)">
+            <summary>
+            Throws an exception if a property with the specified name does not exist in the collection of properties of the specified type.
+            </summary>
+            <typeparam name="T">The type of the source collection.</typeparam>
+            <param name="_">The source collection (not used).</param>
+            <param name="propertyName">The name of the property to check.</param>
+            <returns>The <see cref="T:System.Reflection.PropertyInfo"/> object representing the property.</returns>
+        </member>
+        <member name="M:Milvasoft.Core.Helpers.CommonHelper.ThrowIfPropertyNotExists``1(System.String)">
+            <summary>
+            Throws an exception if a property with the specified name does not exist in the properties of the specified type.
+            </summary>
+            <typeparam name="T">The type to check.</typeparam>
+            <param name="propertyName">The name of the property to check.</param>
+            <returns>The <see cref="T:System.Reflection.PropertyInfo"/> object representing the property.</returns>
+        </member>
+        <member name="M:Milvasoft.Core.Helpers.CommonHelper.ThrowIfPropertyNotExists(System.Object,System.String)">
+            <summary>
+            Throws an exception if a property with the specified name does not exist in the properties of the specified object.
+            </summary>
+            <param name="content">The object to check.</param>
+            <param name="propertyName">The name of the property to check.</param>
+            <returns>The <see cref="T:System.Reflection.PropertyInfo"/> object representing the property.</returns>
+        </member>
+        <member name="M:Milvasoft.Core.Helpers.CommonHelper.ThrowIfPropertyNotExists(System.Type,System.String)">
+            <summary>
+            Throws an exception if a property with the specified name does not exist in the properties of the specified type.
+            </summary>
+            <param name="type">The type to check.</param>
+            <param name="propertyName">The name of the property to check.</param>
+            <returns>The <see cref="T:System.Reflection.PropertyInfo"/> object representing the property.</returns>
         </member>
         <member name="M:Milvasoft.Core.Helpers.CommonHelper.GetPublicPropertyIgnoreCase(System.Type,System.String)">
             <summary>
-            Gets property with <see cref="F:System.Reflection.BindingFlags.Public"/>, <see cref="F:System.Reflection.BindingFlags.IgnoreCase"/>, <see cref="F:System.Reflection.BindingFlags.Instance"/>
+            Gets the <see cref="T:System.Reflection.PropertyInfo"/> object representing the property with the specified name in the specified type.
+            The search is case-insensitive and includes public instance properties.
             </summary>
-            <param name="type"></param>
-            <param name="propertyName"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Milvasoft.Core.Helpers.CommonHelper.GetPropertyValue(System.Object,System.String)">
-            <summary>
-            Provides get nested property value. e.g. Product.Stock.Amount
-            </summary>
-            <param name="obj"></param>
-            <param name="propertyName"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Milvasoft.Core.Helpers.CommonHelper.CreateOrderBySelectorExpression``1(System.String)">
-            <summary>
-            Creates order by key selector by <paramref name="orderByPropertyName"/>.
-            </summary>
-            
-            <exception cref="T:Milvasoft.Core.Exceptions.MilvaDeveloperException"> Throwns when type of <typeparamref name="T"/>'s properties doesn't contain '<paramref name="orderByPropertyName"/>'. </exception>
-            
-            <typeparam name="T"></typeparam>
-            <param name="orderByPropertyName"></param>
-            <returns></returns>
+            <param name="type">The type to search in.</param>
+            <param name="propertyName">The name of the property to get.</param>
+            <returns>The <see cref="T:System.Reflection.PropertyInfo"/> object representing the property, or null if the property does not exist.</returns>
         </member>
         <member name="M:Milvasoft.Core.Helpers.CommonHelper.CreatePropertySelector``2(System.String)">
             <summary>
-            Create property selector predicate.(e.g. i => i.User).
-            If <typeparamref name="T"/> doesn't contains <paramref name="propertyName"/> throwns <see cref="T:Milvasoft.Core.Exceptions.MilvaDeveloperException"/>
+            Creates a property selector expression for the specified property name.
             </summary>
-            <typeparam name="T"></typeparam>
-            <typeparam name="TPropertyType"></typeparam>
-            <param name="propertyName"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Milvasoft.Core.Helpers.CommonHelper.CreatePropertySelectorFunction``2(System.String)">
-            <summary>
-            Create property selector predicate.(e.g. i => i.User).
-            If <typeparamref name="T"/> doesn't contains <paramref name="propertyName"/> throwns <see cref="T:Milvasoft.Core.Exceptions.MilvaDeveloperException"/>
-            </summary>
-            <typeparam name="T"></typeparam>
-            <typeparam name="TPropertyType"></typeparam>
-            <param name="propertyName"></param>
-            <returns></returns>
+            <typeparam name="T">The type to create the expression for.</typeparam>
+            <typeparam name="TPropertyType">The type of the property.</typeparam>
+            <param name="propertyName">The name of the property.</param>
+            <returns>The property selector expression.</returns>
+            <exception cref="T:Milvasoft.Core.Exceptions.MilvaDeveloperException">Thrown when <typeparamref name="T"/> does not contain <paramref name="propertyName"/>.</exception>
         </member>
         <member name="M:Milvasoft.Core.Helpers.CommonHelper.CreateRequiredPropertySelector``2(System.String)">
             <summary>
-            Create property selector predicate.(e.g. i => i.User).
-            If <typeparamref name="T"/> doesn't contains <paramref name="propertyName"/> returns null.
+            Creates a required property selector expression for the specified property name.
             </summary>
-            <typeparam name="T"></typeparam>
-            <typeparam name="TPropertyType"></typeparam>
-            <param name="propertyName"></param>
-            <returns></returns>
+            <typeparam name="T">The type to create the expression for.</typeparam>
+            <typeparam name="TPropertyType">The type of the property.</typeparam>
+            <param name="propertyName">The name of the property.</param>
+            <returns>The required property selector expression.</returns>
+            <exception cref="T:Milvasoft.Core.Exceptions.MilvaDeveloperException">Thrown when <typeparamref name="T"/> does not contain <paramref name="propertyName"/>.</exception>
+        </member>
+        <member name="M:Milvasoft.Core.Helpers.CommonHelper.CreateRequiredPropertySelector``1(System.String)">
+            <summary>
+            Creates an order by key selector expression for the specified property name.
+            </summary>
+            <typeparam name="T">The type to create the expression for.</typeparam>
+            <param name="propertyName">The name of the property to order by.</param>
+            <returns>The order by key selector expression.</returns>
+            <exception cref="T:Milvasoft.Core.Exceptions.MilvaDeveloperException">Thrown when the type of <typeparamref name="T"/>'s properties does not contain '<paramref name="propertyName"/>'.</exception>
+        </member>
+        <member name="M:Milvasoft.Core.Helpers.CommonHelper.CreatePropertySelectorFunction``2(System.String)">
+            <summary>
+            Creates a property selector function for the specified property name.
+            </summary>
+            <typeparam name="T">The type to create the function for.</typeparam>
+            <typeparam name="TPropertyType">The type of the property.</typeparam>
+            <param name="propertyName">The name of the property.</param>
+            <returns>The property selector function.</returns>
+            <exception cref="T:Milvasoft.Core.Exceptions.MilvaDeveloperException">Thrown when <typeparamref name="T"/> does not contain <paramref name="propertyName"/>.</exception>
         </member>
         <member name="M:Milvasoft.Core.Helpers.CommonHelper.CreateRequiredPropertySelectorFuction``2(System.String)">
             <summary>
-            Create property selector predicate.(e.g. i => i.User).
-            If <typeparamref name="T"/> doesn't contains <paramref name="propertyName"/> returns null.
+            Creates a required property selector function for the specified property name.
             </summary>
-            <typeparam name="T"></typeparam>
-            <typeparam name="TPropertyType"></typeparam>
-            <param name="propertyName"></param>
-            <returns></returns>
+            <typeparam name="T">The type to create the function for.</typeparam>
+            <typeparam name="TPropertyType">The type of the property.</typeparam>
+            <param name="propertyName">The name of the property.</param>
+            <returns>The required property selector function.</returns>
+            <exception cref="T:Milvasoft.Core.Exceptions.MilvaDeveloperException">Thrown when <typeparamref name="T"/> does not contain <paramref name="propertyName"/>.</exception>
         </member>
         <member name="M:Milvasoft.Core.Helpers.CommonHelper.DynamicInvokeCreatePropertySelector(System.String,System.Type,System.Type,System.String)">
             <summary>
-            Dynamically gets method and invokes <see cref="T:Milvasoft.Core.Helpers.CommonHelper"/> create property selector methods.
+            Dynamically gets a method and invokes the specified create property selector method from <see cref="T:Milvasoft.Core.Helpers.CommonHelper"/>.
             </summary>
-            <param name="createPropertySelectorMethodName"></param>
-            <param name="entityType"></param>
-            <param name="propType"></param>
-            <param name="propName"></param>
-            <returns></returns>
+            <param name="createPropertySelectorMethodName">The name of the create property selector method to invoke.</param>
+            <param name="entityType">The type of the entity.</param>
+            <param name="propType">The type of the property.</param>
+            <param name="propName">The name of the property.</param>
+            <returns>The result of the create property selector method.</returns>
+        </member>
+        <member name="M:Milvasoft.Core.Helpers.CommonHelper.CreatePropertySelectorExpression``2(System.String)">
+            <summary>
+            Creates a property selector expression for the specified property name.
+            </summary>
+            <typeparam name="T">The type to create the expression for.</typeparam>
+            <typeparam name="TPropertyType">The type of the property.</typeparam>
+            <param name="propertyName">The name of the property.</param>
+            <returns>The property selector expression.</returns>
+            <exception cref="T:Milvasoft.Core.Exceptions.MilvaDeveloperException">Thrown when <typeparamref name="T"/> does not contain <paramref name="propertyName"/>.</exception>
         </member>
         <member name="M:Milvasoft.Core.Helpers.CommonHelper.ToUpperFirst(System.String,System.Globalization.CultureInfo)">
             <summary>

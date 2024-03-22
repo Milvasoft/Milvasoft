@@ -6,215 +6,204 @@ namespace Milvasoft.Core.Helpers;
 public static partial class CommonHelper
 {
     /// <summary>
-    /// Checks whether property exists.
+    /// Checks whether a property with the specified name exists in the collection of properties of the specified type.
     /// </summary>
-    /// <typeparam name="T"></typeparam>
-    /// <param name="_"> Source collection for code readiness. </param>
-    /// <param name="propertyName"></param>
-    /// <returns></returns>
-    public static bool PropertyExists<T>(this IEnumerable<T> _, string propertyName) => !string.IsNullOrWhiteSpace(propertyName)
-                                                                                        && typeof(T).GetProperty(propertyName, BindingFlags.IgnoreCase
-                                                                                                                                | BindingFlags.Public
-                                                                                                                                | BindingFlags.Instance) != null;
+    /// <typeparam name="T">The type of the source collection.</typeparam>
+    /// <param name="_">The source collection (not used).</param>
+    /// <param name="propertyName">The name of the property to check.</param>
+    /// <returns>True if the property exists, otherwise false.</returns>
+    public static bool PropertyExists<T>(this IEnumerable<T> _, string propertyName) => typeof(T).PropertyExists(propertyName);
 
     /// <summary>
-    /// Checks if there is a property named <paramref name="propertyName"/> in the properties of <b>typeof(<typeparamref name="T"/>)</b>. 
+    /// Checks whether a property with the specified name exists in the properties of the specified type.
     /// </summary>
-    /// <typeparam name="T"></typeparam>
-    /// <param name="propertyName"></param>
-    /// <returns></returns>
+    /// <typeparam name="T">The type to check.</typeparam>
+    /// <param name="propertyName">The name of the property to check.</param>
+    /// <returns>True if the property exists, otherwise false.</returns>
+    public static bool PropertyExists<T>(string propertyName) => typeof(T).PropertyExists(propertyName);
+
+    /// <summary>
+    /// Checks whether a property with the specified name exists in the properties of the specified object.
+    /// </summary>
+    /// <param name="content">The object to check.</param>
+    /// <param name="propertyName">The name of the property to check.</param>
+    /// <returns>True if the property exists, otherwise false.</returns>
+    public static bool PropertyExists(this object content, string propertyName) => content.GetType().PropertyExists(propertyName);
+
+    /// <summary>
+    /// Checks whether a property with the specified name exists in the properties of the specified type.
+    /// </summary>
+    /// <param name="type">The type to check.</param>
+    /// <param name="propertyName">The name of the property to check.</param>
+    /// <returns>True if the property exists, otherwise false.</returns>
+    public static bool PropertyExists(this Type type, string propertyName) => type.GetPublicPropertyIgnoreCase(propertyName) != null;
+
+    /// <summary>
+    /// Throws an exception if a property with the specified name does not exist in the collection of properties of the specified type.
+    /// </summary>
+    /// <typeparam name="T">The type of the source collection.</typeparam>
+    /// <param name="_">The source collection (not used).</param>
+    /// <param name="propertyName">The name of the property to check.</param>
+    /// <returns>The <see cref="PropertyInfo"/> object representing the property.</returns>
+    public static PropertyInfo ThrowIfPropertyNotExists<T>(this IEnumerable<T> _, string propertyName)
+        => typeof(T).ThrowIfPropertyNotExists(propertyName);
+
+    /// <summary>
+    /// Throws an exception if a property with the specified name does not exist in the properties of the specified type.
+    /// </summary>
+    /// <typeparam name="T">The type to check.</typeparam>
+    /// <param name="propertyName">The name of the property to check.</param>
+    /// <returns>The <see cref="PropertyInfo"/> object representing the property.</returns>
     public static PropertyInfo ThrowIfPropertyNotExists<T>(string propertyName)
         => typeof(T).ThrowIfPropertyNotExists(propertyName);
 
     /// <summary>
-    /// Checks if there is a property named <paramref name="propertyName"/> in the properties of <b><paramref name="content"/></b>. 
+    /// Throws an exception if a property with the specified name does not exist in the properties of the specified object.
     /// </summary>
-    /// <param name="content"></param>
-    /// <param name="propertyName"></param>
-    /// <returns></returns>
+    /// <param name="content">The object to check.</param>
+    /// <param name="propertyName">The name of the property to check.</param>
+    /// <returns>The <see cref="PropertyInfo"/> object representing the property.</returns>
     public static PropertyInfo ThrowIfPropertyNotExists(this object content, string propertyName)
         => content.GetType().ThrowIfPropertyNotExists(propertyName);
 
     /// <summary>
-    /// Checks if there is a property named <paramref name="propertyName"/> in the properties of <b><paramref name="type"/></b>. 
+    /// Throws an exception if a property with the specified name does not exist in the properties of the specified type.
     /// </summary>
-    /// <param name="type"></param>
-    /// <param name="propertyName"></param>
-    /// <returns></returns>
+    /// <param name="type">The type to check.</param>
+    /// <param name="propertyName">The name of the property to check.</param>
+    /// <returns>The <see cref="PropertyInfo"/> object representing the property.</returns>
     public static PropertyInfo ThrowIfPropertyNotExists(this Type type, string propertyName)
         => type.GetPublicPropertyIgnoreCase(propertyName) ?? throw new MilvaDeveloperException($"Type of {type.Name}'s properties doesn't contain '{propertyName}'.");
 
     /// <summary>
-    /// Checks if there is a property named <paramref name="propertyName"/> in the properties of <b>typeof(<typeparamref name="T"/>)</b>. 
+    /// Gets the <see cref="PropertyInfo"/> object representing the property with the specified name in the specified type.
+    /// The search is case-insensitive and includes public instance properties.
     /// </summary>
-    /// <typeparam name="T"></typeparam>
-    /// <param name="propertyName"></param>
-    /// <returns></returns>
-    public static bool PropertyExists<T>(string propertyName) => typeof(T).PropertyExists(propertyName);
-
-    /// <summary>
-    /// Checks if there is a property named <paramref name="propertyName"/> in the properties of <b><paramref name="content"/></b>. 
-    /// </summary>
-    /// <param name="content"></param>
-    /// <param name="propertyName"></param>
-    /// <returns></returns>
-    public static bool PropertyExists(this object content, string propertyName) => content.GetType().PropertyExists(propertyName);
-
-    /// <summary>
-    /// Checks if there is a property named <paramref name="propertyName"/> in the properties of <b><paramref name="type"/></b>. 
-    /// </summary>
-    /// <param name="type"></param>
-    /// <param name="propertyName"></param>
-    /// <returns></returns>
-    public static bool PropertyExists(this Type type, string propertyName) => type.GetPublicPropertyIgnoreCase(propertyName) != null;
-
-    /// <summary>
-    /// Gets property with <see cref="BindingFlags.Public"/>, <see cref="BindingFlags.IgnoreCase"/>, <see cref="BindingFlags.Instance"/>
-    /// </summary>
-    /// <param name="type"></param>
-    /// <param name="propertyName"></param>
-    /// <returns></returns>
+    /// <param name="type">The type to search in.</param>
+    /// <param name="propertyName">The name of the property to get.</param>
+    /// <returns>The <see cref="PropertyInfo"/> object representing the property, or null if the property does not exist.</returns>
     public static PropertyInfo GetPublicPropertyIgnoreCase(this Type type, string propertyName)
     {
         if (string.IsNullOrWhiteSpace(propertyName))
-            throw new MilvaDeveloperException("Please send property name correctly");
+            return null;
 
         return type.GetProperty(propertyName, BindingFlags.IgnoreCase | BindingFlags.Public | BindingFlags.Instance);
     }
 
     /// <summary>
-    /// Provides get nested property value. e.g. Product.Stock.Amount
+    /// Creates a property selector expression for the specified property name.
     /// </summary>
-    /// <param name="obj"></param>
-    /// <param name="propertyName"></param>
-    /// <returns></returns>
-    public static object GetPropertyValue(object obj, string propertyName)
-    {
-        foreach (var prop in propertyName.Split('.').Select(propName => obj.GetType().GetProperty(propName)))
-            obj = prop.GetValue(obj, null);
-
-        return obj;
-    }
-
-    /// <summary>
-    /// Creates order by key selector by <paramref name="orderByPropertyName"/>.
-    /// </summary>
-    /// 
-    /// <exception cref="MilvaDeveloperException"> Throwns when type of <typeparamref name="T"/>'s properties doesn't contain '<paramref name="orderByPropertyName"/>'. </exception>
-    /// 
-    /// <typeparam name="T"></typeparam>
-    /// <param name="orderByPropertyName"></param>
-    /// <returns></returns>
-    public static Expression<Func<T, object>> CreateOrderBySelectorExpression<T>(string orderByPropertyName)
-    {
-        var entityType = typeof(T);
-
-        entityType.ThrowIfPropertyNotExists(orderByPropertyName);
-
-        var parameterExpression = Expression.Parameter(entityType, "i");
-
-        Expression orderByProperty = Expression.Property(parameterExpression, orderByPropertyName);
-
-        return Expression.Lambda<Func<T, object>>(Expression.Convert(orderByProperty, typeof(object)), parameterExpression);
-    }
-
-    /// <summary>
-    /// Create property selector predicate.(e.g. i => i.User).
-    /// If <typeparamref name="T"/> doesn't contains <paramref name="propertyName"/> throwns <see cref="MilvaDeveloperException"/>
-    /// </summary>
-    /// <typeparam name="T"></typeparam>
-    /// <typeparam name="TPropertyType"></typeparam>
-    /// <param name="propertyName"></param>
-    /// <returns></returns>
+    /// <typeparam name="T">The type to create the expression for.</typeparam>
+    /// <typeparam name="TPropertyType">The type of the property.</typeparam>
+    /// <param name="propertyName">The name of the property.</param>
+    /// <returns>The property selector expression.</returns>
+    /// <exception cref="MilvaDeveloperException">Thrown when <typeparamref name="T"/> does not contain <paramref name="propertyName"/>.</exception>
     public static Expression<Func<T, TPropertyType>> CreatePropertySelector<T, TPropertyType>(string propertyName)
     {
-        var entityType = typeof(T);
-
         if (!PropertyExists<T>(propertyName))
             return null;
 
-        var parameter = Expression.Parameter(entityType);
-
-        return Expression.Lambda<Func<T, TPropertyType>>(Expression.Convert(Expression.Property(parameter, propertyName), typeof(TPropertyType)), parameter);
+        return CreatePropertySelectorExpression<T, TPropertyType>(propertyName);
     }
 
     /// <summary>
-    /// Create property selector predicate.(e.g. i => i.User).
-    /// If <typeparamref name="T"/> doesn't contains <paramref name="propertyName"/> throwns <see cref="MilvaDeveloperException"/>
+    /// Creates a required property selector expression for the specified property name.
     /// </summary>
-    /// <typeparam name="T"></typeparam>
-    /// <typeparam name="TPropertyType"></typeparam>
-    /// <param name="propertyName"></param>
-    /// <returns></returns>
-    public static Func<T, TPropertyType> CreatePropertySelectorFunction<T, TPropertyType>(string propertyName)
-    {
-        var entityType = typeof(T);
-
-        if (!PropertyExists<T>(propertyName))
-            return null;
-
-        var parameter = Expression.Parameter(entityType);
-
-        return Expression.Lambda<Func<T, TPropertyType>>(Expression.Convert(Expression.Property(parameter, propertyName), typeof(TPropertyType)), parameter).Compile();
-    }
-
-    /// <summary>
-    /// Create property selector predicate.(e.g. i => i.User).
-    /// If <typeparamref name="T"/> doesn't contains <paramref name="propertyName"/> returns null.
-    /// </summary>
-    /// <typeparam name="T"></typeparam>
-    /// <typeparam name="TPropertyType"></typeparam>
-    /// <param name="propertyName"></param>
-    /// <returns></returns>
+    /// <typeparam name="T">The type to create the expression for.</typeparam>
+    /// <typeparam name="TPropertyType">The type of the property.</typeparam>
+    /// <param name="propertyName">The name of the property.</param>
+    /// <returns>The required property selector expression.</returns>
+    /// <exception cref="MilvaDeveloperException">Thrown when <typeparamref name="T"/> does not contain <paramref name="propertyName"/>.</exception>
     public static Expression<Func<T, TPropertyType>> CreateRequiredPropertySelector<T, TPropertyType>(string propertyName)
     {
-        var entityType = typeof(T);
+        typeof(T).ThrowIfPropertyNotExists(propertyName);
 
-        entityType.ThrowIfPropertyNotExists(propertyName);
-
-        var parameter = Expression.Parameter(entityType);
-
-        return Expression.Lambda<Func<T, TPropertyType>>(Expression.Convert(Expression.Property(parameter, propertyName), typeof(TPropertyType)), parameter);
+        return CreatePropertySelectorExpression<T, TPropertyType>(propertyName);
     }
 
     /// <summary>
-    /// Create property selector predicate.(e.g. i => i.User).
-    /// If <typeparamref name="T"/> doesn't contains <paramref name="propertyName"/> returns null.
+    /// Creates an order by key selector expression for the specified property name.
     /// </summary>
-    /// <typeparam name="T"></typeparam>
-    /// <typeparam name="TPropertyType"></typeparam>
-    /// <param name="propertyName"></param>
-    /// <returns></returns>
+    /// <typeparam name="T">The type to create the expression for.</typeparam>
+    /// <param name="propertyName">The name of the property to order by.</param>
+    /// <returns>The order by key selector expression.</returns>
+    /// <exception cref="MilvaDeveloperException">Thrown when the type of <typeparamref name="T"/>'s properties does not contain '<paramref name="propertyName"/>'.</exception>
+    public static Expression<Func<T, object>> CreateRequiredPropertySelector<T>(string propertyName)
+    {
+        typeof(T).ThrowIfPropertyNotExists(propertyName);
+
+        return CreatePropertySelectorExpression<T, object>(propertyName);
+    }
+
+    /// <summary>
+    /// Creates a property selector function for the specified property name.
+    /// </summary>
+    /// <typeparam name="T">The type to create the function for.</typeparam>
+    /// <typeparam name="TPropertyType">The type of the property.</typeparam>
+    /// <param name="propertyName">The name of the property.</param>
+    /// <returns>The property selector function.</returns>
+    /// <exception cref="MilvaDeveloperException">Thrown when <typeparamref name="T"/> does not contain <paramref name="propertyName"/>.</exception>
+    public static Func<T, TPropertyType> CreatePropertySelectorFunction<T, TPropertyType>(string propertyName)
+        => CreatePropertySelector<T, TPropertyType>(propertyName).Compile();
+
+    /// <summary>
+    /// Creates a required property selector function for the specified property name.
+    /// </summary>
+    /// <typeparam name="T">The type to create the function for.</typeparam>
+    /// <typeparam name="TPropertyType">The type of the property.</typeparam>
+    /// <param name="propertyName">The name of the property.</param>
+    /// <returns>The required property selector function.</returns>
+    /// <exception cref="MilvaDeveloperException">Thrown when <typeparamref name="T"/> does not contain <paramref name="propertyName"/>.</exception>
     public static Func<T, TPropertyType> CreateRequiredPropertySelectorFuction<T, TPropertyType>(string propertyName)
     {
-        var entityType = typeof(T);
+        typeof(T).ThrowIfPropertyNotExists(propertyName);
 
-        entityType.ThrowIfPropertyNotExists(propertyName);
-
-        var parameter = Expression.Parameter(entityType);
-
-        return Expression.Lambda<Func<T, TPropertyType>>(Expression.Convert(Expression.Property(parameter, propertyName), typeof(TPropertyType)), parameter).Compile();
+        return CreateRequiredPropertySelector<T, TPropertyType>(propertyName).Compile();
     }
 
     /// <summary>
-    /// Dynamically gets method and invokes <see cref="CommonHelper"/> create property selector methods.
+    /// Dynamically gets a method and invokes the specified create property selector method from <see cref="CommonHelper"/>.
     /// </summary>
-    /// <param name="createPropertySelectorMethodName"></param>
-    /// <param name="entityType"></param>
-    /// <param name="propType"></param>
-    /// <param name="propName"></param>
-    /// <returns></returns>
+    /// <param name="createPropertySelectorMethodName">The name of the create property selector method to invoke.</param>
+    /// <param name="entityType">The type of the entity.</param>
+    /// <param name="propType">The type of the property.</param>
+    /// <param name="propName">The name of the property.</param>
+    /// <returns>The result of the create property selector method.</returns>
     public static object DynamicInvokeCreatePropertySelector(string createPropertySelectorMethodName, Type entityType, Type propType, string propName)
     {
-        // Step 1: Get the MethodInfo object for the generic method
-        var selectorMethod = typeof(CommonHelper).GetMethod(createPropertySelectorMethodName);
+        if (string.IsNullOrWhiteSpace(createPropertySelectorMethodName)
+            || string.IsNullOrWhiteSpace(propName)
+            || entityType == null
+            || propType == null)
+            throw new MilvaDeveloperException("Please send all dynamic invoke parameters valid!");
 
-        // Step 2: Construct the method generic with desired type of arguments
+        // Step 1: Get the MethodInfo object for the generic method
+        var selectorMethod = typeof(CommonHelper).GetMethod(createPropertySelectorMethodName, 2, [typeof(string)])
+            ?? throw new MilvaDeveloperException($"Method not found with name {createPropertySelectorMethodName}!");
+
+        // Step 2: Construct the method generic with the desired type of arguments
         MethodInfo genericSelectorMethod = selectorMethod.MakeGenericMethod(entityType, propType);
 
         // Step 3: Call the generic method with the specified type arguments
         var propertySelectorResult = genericSelectorMethod.Invoke(null, [propName]);
 
         return propertySelectorResult;
+    }
+
+    /// <summary>
+    /// Creates a property selector expression for the specified property name.
+    /// </summary>
+    /// <typeparam name="T">The type to create the expression for.</typeparam>
+    /// <typeparam name="TPropertyType">The type of the property.</typeparam>
+    /// <param name="propertyName">The name of the property.</param>
+    /// <returns>The property selector expression.</returns>
+    /// <exception cref="MilvaDeveloperException">Thrown when <typeparamref name="T"/> does not contain <paramref name="propertyName"/>.</exception>
+    private static Expression<Func<T, TPropertyType>> CreatePropertySelectorExpression<T, TPropertyType>(string propertyName)
+    {
+        var entityType = typeof(T);
+
+        var parameter = Expression.Parameter(entityType);
+
+        return Expression.Lambda<Func<T, TPropertyType>>(Expression.Convert(Expression.Property(parameter, propertyName), typeof(TPropertyType)), parameter);
     }
 }
