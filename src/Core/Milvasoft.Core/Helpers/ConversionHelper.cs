@@ -5,10 +5,10 @@ namespace Milvasoft.Core.Helpers;
 public static partial class CommonHelper
 {
     /// <summary>
-    /// This method return int value to guid value.
+    /// Converts an integer value to a GUID value.
     /// </summary>
-    /// <param name="value"></param>
-    /// <returns></returns>
+    /// <param name="value">The integer value to convert.</param>
+    /// <returns>The GUID value.</returns>
     public static Guid ToGuid(this int value)
     {
         var bytes = new byte[16];
@@ -19,39 +19,39 @@ public static partial class CommonHelper
     }
 
     /// <summary>
-    /// Converts <paramref name="value"/> to <see cref="string"/>.
+    /// Converts an object to a json string.
     /// </summary>
-    /// <param name="value"></param>
-    /// <param name="jsonOptions"></param>
-    /// <returns></returns>
+    /// <param name="value">The object to convert.</param>
+    /// <param name="jsonOptions">The json serialization options (optional).</param>
+    /// <returns>The json string representation of the object.</returns>
     public static string ToJson(this object value, JsonSerializerOptions jsonOptions = null) => JsonSerializer.Serialize(value, jsonOptions ?? MilvaJsonConverterOptions.Current);
 
     /// <summary>
-    /// Converts <paramref name="value"/> to <typeparamref name="T"/>.
+    /// Converts json string to an object of type <typeparamref name="T"/>.
     /// </summary>
-    /// <typeparam name="T"></typeparam>
-    /// <param name="value"></param>
-    /// <param name="jsonOptions"></param>
-    /// <returns></returns>
+    /// <typeparam name="T">The type of the object to convert to.</typeparam>
+    /// <param name="value">The string value to convert.</param>
+    /// <param name="jsonOptions">The json deserialization options (optional).</param>
+    /// <returns>The deserialized object of type T.</returns>
     public static T ToObject<T>(this string value, JsonSerializerOptions jsonOptions = null) where T : class
         => string.IsNullOrWhiteSpace(value) ? null : JsonSerializer.Deserialize<T>(value, jsonOptions ?? MilvaJsonConverterOptions.Current);
 
     /// <summary>
-    /// Converts <paramref name="value"/> to <paramref name="returnType"/>.
+    /// Converts a string to an object of the specified return type.
     /// </summary>
-    /// <param name="value"></param>
-    /// <param name="returnType"></param>
-    /// <param name="jsonOptions"></param>
-    /// <returns></returns>
+    /// <param name="value">The string value to convert.</param>
+    /// <param name="returnType">The return type of the object to convert to.</param>
+    /// <param name="jsonOptions">The json deserialization options (optional).</param>
+    /// <returns>The deserialized object of the specified return type.</returns>
     public static object ToObject(this string value, Type returnType, JsonSerializerOptions jsonOptions = null)
         => string.IsNullOrWhiteSpace(value) ? null : JsonSerializer.Deserialize(value, returnType, jsonOptions ?? MilvaJsonConverterOptions.Current);
 
     /// <summary>
-    /// Deserializes json element to <paramref name="type"/>. 
+    /// Deserializes a <see cref="JsonElement"/> to an object of the specified type.
     /// </summary>
-    /// <param name="element"></param>
-    /// <param name="type"></param>
-    /// <returns></returns>
+    /// <param name="element">The json element to deserialize.</param>
+    /// <param name="type">The type of the object to deserialize to.</param>
+    /// <returns>The deserialized object of the specified type.</returns>
     public static object Deserialize(this JsonElement element, Type type)
     {
         var genericMethod = _deserializeMethod.MakeGenericMethod(type);

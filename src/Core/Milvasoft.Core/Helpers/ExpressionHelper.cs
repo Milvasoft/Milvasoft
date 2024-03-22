@@ -9,13 +9,13 @@ namespace Milvasoft.Core.Helpers;
 public static partial class CommonHelper
 {
     /// <summary>
-    /// Appends <paramref name="right"/> to <paramref name="left"/>.
+    /// Appends the specified right expression to the left expression using the specified expression append type.
     /// </summary>
-    /// <typeparam name="T"></typeparam>
-    /// <param name="left"></param>
-    /// <param name="right"></param>
-    /// <param name="expressionAppendType"></param>
-    /// <returns></returns>
+    /// <typeparam name="T">The type of the parameter in the expressions.</typeparam>
+    /// <param name="left">The left expression.</param>
+    /// <param name="right">The right expression.</param>
+    /// <param name="expressionAppendType">The expression append type.</param>
+    /// <returns>The combined expression.</returns>
     public static Expression<Func<T, bool>> Append<T>(this Expression<Func<T, bool>> left, Expression<Func<T, bool>> right, ExpressionType expressionAppendType)
     {
         if (right == null)
@@ -49,12 +49,12 @@ public static partial class CommonHelper
     }
 
     /// <summary>
-    /// Creates a lambda expression that represents a conditional AND operation
+    /// Creates a lambda expression that represents a conditional AND operation.
     /// </summary>
-    /// <param name="left">An expression to set the left property of the binary expression</param>
-    /// <param name="right">An expression to set the right property of the binary expression</param>
-    /// <returns>A binary expression that has the node type property equal to AndAlso, 
-    /// and the left and right properties set to the specified values</returns>
+    /// <typeparam name="T">The type of the parameter in the expression.</typeparam>
+    /// <param name="left">The left expression.</param>
+    /// <param name="right">The right expression.</param>
+    /// <returns>The combined expression.</returns>
     public static Expression<Func<T, bool>> AndAlso<T>(this Expression<Func<T, bool>> left, Expression<Func<T, bool>> right)
     {
         if (left == null)
@@ -69,12 +69,12 @@ public static partial class CommonHelper
     }
 
     /// <summary>
-    /// Creates a lambda expression that represents a conditional OR operation
+    /// Creates a lambda expression that represents a conditional OR operation.
     /// </summary>
-    /// <param name="left">An expression to set the left property of the binary expression</param>
-    /// <param name="right">An expression to set the right property of the binary expression</param>
-    /// <returns>A binary expression that has the node type property equal to OrElse, 
-    /// and the left and right properties set to the specified values</returns>
+    /// <typeparam name="T">The type of the parameter in the expression.</typeparam>
+    /// <param name="left">The left expression.</param>
+    /// <param name="right">The right expression.</param>
+    /// <returns>The combined expression.</returns>
     public static Expression<Func<T, bool>> OrElse<T>(this Expression<Func<T, bool>> left, Expression<Func<T, bool>> right)
     {
         if (left == null)
@@ -89,12 +89,12 @@ public static partial class CommonHelper
     }
 
     /// <summary>
-    /// Determines the right casting and pets property name from expression with this right casting.
+    /// Gets the property name from the specified expression.
     /// </summary>
-    /// <typeparam name="T"></typeparam>
-    /// <typeparam name="TPropertyType"></typeparam>
-    /// <param name="expression"></param>
-    /// <returns></returns>
+    /// <typeparam name="T">The type of the parameter in the expression.</typeparam>
+    /// <typeparam name="TPropertyType">The type of the property.</typeparam>
+    /// <param name="expression">The expression.</param>
+    /// <returns>The property name.</returns>
     public static string GetPropertyName<T, TPropertyType>(this Expression<Func<T, TPropertyType>> expression)
     {
         if (expression == null)

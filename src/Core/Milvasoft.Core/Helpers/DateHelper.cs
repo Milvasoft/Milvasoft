@@ -8,30 +8,18 @@ namespace Milvasoft.Core.Helpers;
 public static partial class CommonHelper
 {
     /// <summary>
-    /// <para> Creates expression by <paramref name="endDate"/> and <paramref name="startDate"/> values. </para>
+    /// Creates an expression based on the provided <paramref name="endDate"/> and <paramref name="startDate"/> values.
     /// </summary>
-    /// 
     /// <remarks>
-    /// 
-    /// <para><b>Remarks: </b></para>
-    /// 
-    /// <para> If a selection has been made between two dates, it will return those between the two dates. </para>
-    /// <para> If only the <paramref name="endDate"/> value exists, it returns those larger than the <paramref name="startDate"/> value. </para>
-    /// <para> If only the <paramref name="startDate"/> value exists, it returns those smaller than the <paramref name="endDate"/> value. </para>
-    /// 
+    /// If both <paramref name="startDate"/> and <paramref name="endDate"/> values are provided, it returns an expression that checks if the date property specified by <paramref name="datePropertySelector"/> is greater than or equal to <paramref name="startDate"/> and less than or equal to <paramref name="endDate"/>.
+    /// If only the <paramref name="endDate"/> value is provided, it returns an expression that checks if the date property specified by <paramref name="datePropertySelector"/> is less than or equal to <paramref name="endDate"/>.
+    /// If only the <paramref name="startDate"/> value is provided, it returns an expression that checks if the date property specified by <paramref name="datePropertySelector"/> is greater than or equal to <paramref name="startDate"/>.
     /// </remarks>
-    /// 
-    /// <typeparam name="T"></typeparam>
-    /// <param name="endDate"></param>
-    /// <param name="startDate"></param>
-    /// <param name="datePropertySelector"></param>
-    /// <returns> 
-    /// 
-    /// Example Return when both values has value :
-    /// 
-    /// <code> i => i.<paramref name="datePropertySelector"/> <b>biggerThanOrEqual</b> <paramref name="startDate"/> <b>AND</b> i.<paramref name="datePropertySelector"/> <b>lessThanOrEqual</b> <paramref name="endDate"/> </code>
-    /// 
-    /// </returns>
+    /// <typeparam name="T">The type of the entity.</typeparam>
+    /// <param name="endDate">The end date value.</param>
+    /// <param name="startDate">The start date value.</param>
+    /// <param name="datePropertySelector">The selector expression for the date property.</param>
+    /// <returns>The expression representing the date search criteria.</returns>
     public static Expression<Func<T, bool>> CreateDateSearchExpression<T>(Expression<Func<T, DateTime?>> datePropertySelector, DateTime? startDate, DateTime? endDate)
     {
         if (datePropertySelector == null || (!startDate.HasValue && !endDate.HasValue))
@@ -88,18 +76,14 @@ public static partial class CommonHelper
     }
 
     /// <summary>
-    /// Checks whether the given date's time is between the specified start time and end time.
-    /// 
-    /// <remarks>
-    /// If <paramref name="startTime"/> greater than equal to <paramref name="endTime"/> this means <paramref name="endTime"/> belongs to next day. The comparison will made according to this criteria.
-    /// </remarks>
-    /// 
+    /// Checks if the given <paramref name="date"/> falls between the specified <paramref name="startTime"/> and <paramref name="endTime"/>.
     /// </summary>
     /// <param name="date">The date to check.</param>
     /// <param name="startTime">The start time.</param>
     /// <param name="endTime">The end time.</param>
     /// <param name="convertTimesToUtc">Indicates whether to convert times to UTC before comparison. Default is true.</param>
-    /// <returns>True if the date's is between the start time and end time, otherwise false.</returns>
+    /// <returns>True if the date falls between the start time and end time, otherwise false.</returns>
+
     public static bool IsBetween(this DateTime date, TimeSpan startTime, TimeSpan endTime, bool convertTimesToUtc = true)
     {
         if (convertTimesToUtc)
@@ -122,20 +106,14 @@ public static partial class CommonHelper
     }
 
     /// <summary>
-    /// Removes <paramref name="date"/>'s hour, second and milisecond then adds <paramref name="compareTime"/> to <paramref name="date"/> 
-    /// and compares <paramref name="date"/> for whether between <paramref name="startTime"/> and <paramref name="endTime"/>. 
+    /// Checks if the given <paramref name="date"/> with the specified <paramref name="compareTime"/> falls between the <paramref name="startTime"/> and <paramref name="endTime"/>.
     /// </summary>
-    /// 
-    /// <remarks>
-    /// This is a time comparison not a date comparison.
-    /// </remarks>
-    /// 
-    /// <param name="date"></param>
-    /// <param name="compareTime"></param>
-    /// <param name="startTime"></param>
-    /// <param name="endTime"></param>
-    /// <param name="convertTimesToUtc"></param>
-    /// <returns></returns>
+    /// <param name="date">The date to check.</param>
+    /// <param name="compareTime">The time to compare.</param>
+    /// <param name="startTime">The start time.</param>
+    /// <param name="endTime">The end time.</param>
+    /// <param name="convertTimesToUtc">Indicates whether to convert times to UTC before comparison. Default is true.</param>
+    /// <returns>True if the date with the compare time falls between the start time and end time, otherwise false.</returns>
     public static bool IsBetween(this DateTime date, TimeSpan compareTime, TimeSpan startTime, TimeSpan endTime, bool convertTimesToUtc = true)
     {
         if (convertTimesToUtc)
@@ -145,24 +123,23 @@ public static partial class CommonHelper
     }
 
     /// <summary>
-    /// Compares <paramref name="date"/> for whether between <paramref name="startDate"/> and <paramref name="endDate"/>. 
+    /// Checks if the given <paramref name="date"/> falls between the specified <paramref name="startDate"/> and <paramref name="endDate"/>.
     /// </summary>
-    /// <param name="date"></param>
-    /// <param name="startDate"></param>
-    /// <param name="endDate"></param>
-    /// <returns></returns>
+    /// <param name="date">The date to check.</param>
+    /// <param name="startDate">The start date.</param>
+    /// <param name="endDate">The end date.</param>
+    /// <returns>True if the date falls between the start date and end date, otherwise false.</returns>
     public static bool IsBetween(this DateTime date, DateTime startDate, DateTime endDate) => date >= startDate && date <= endDate;
 
     /// <summary>
-    /// Removes <paramref name="date"/>'s hour, second and milisecond then adds <paramref name="compareTime"/> to <paramref name="date"/> 
-    /// and compares <paramref name="date"/> for whether between <paramref name="startDate"/> and <paramref name="endDate"/>. 
+    /// Checks if the given <paramref name="date"/> with the specified <paramref name="compareTime"/> falls between the <paramref name="startDate"/> and <paramref name="endDate"/>.
     /// </summary>
-    /// <param name="date"></param>
-    /// <param name="compareTime"></param>
-    /// <param name="startDate"></param>
-    /// <param name="endDate"></param>
-    /// <param name="convertTimeToUtc"></param>
-    /// <returns></returns>
+    /// <param name="date">The date to check.</param>
+    /// <param name="compareTime">The time to compare.</param>
+    /// <param name="startDate">The start date.</param>
+    /// <param name="endDate">The end date.</param>
+    /// <param name="convertTimeToUtc">Indicates whether to convert the compare time to UTC before comparison. Default is true.</param>
+    /// <returns>True if the date with the compare time falls between the start date and end date, otherwise false.</returns>
     public static bool IsBetween(this DateTime date, TimeSpan compareTime, DateTime startDate, DateTime endDate, bool convertTimeToUtc = true)
     {
         if (convertTimeToUtc)
@@ -176,7 +153,7 @@ public static partial class CommonHelper
     /// </summary>
     /// <param name="date">The date to modify.</param>
     /// <param name="time">The time to set.</param>
-    /// <returns>A new DateTime object with the same date as the original <paramref name="date"/> and the specified <paramref name="time"/>.</returns>
+    /// <returns>A new DateTime object with the same date as the original date and the specified time.</returns>
     public static DateTime WithTime(this DateTime date, TimeSpan time) => new(date.Year,
                                                                               date.Month,
                                                                               date.Day,
@@ -187,14 +164,12 @@ public static partial class CommonHelper
                                                                               time.Microseconds);
 
     /// <summary>
-    /// Converts timespan to universal time.
-    /// 
+    /// Converts the specified <paramref name="timeSpan"/> to UTC.
+    /// </summary>
+    /// <param name="timeSpan">The time span to convert.</param>
+    /// <returns>The converted time span in UTC.</returns> 
     /// <remarks>
     /// Be careful when using this method. Each time you use it, it will repeat the time difference process according to the time zone you are in.
     /// </remarks>
-    /// 
-    /// </summary>
-    /// <param name="timeSpan"></param>
-    /// <returns></returns>
     public static TimeSpan ConvertToUtc(this TimeSpan timeSpan) => TimeSpan.FromTicks(new DateTime(timeSpan.Ticks, DateTimeKind.Unspecified).ToUniversalTime().Ticks);
 }
