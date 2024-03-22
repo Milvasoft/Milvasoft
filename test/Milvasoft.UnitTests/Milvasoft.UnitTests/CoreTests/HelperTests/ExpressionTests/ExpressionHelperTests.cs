@@ -4,7 +4,7 @@ using Milvasoft.Core.Helpers;
 using Milvasoft.UnitTests.CoreTests.HelperTests.ExpressionTests.Fixtures;
 using System.Linq.Expressions;
 
-namespace Milvasoft.UnitTests.CoreTests.HelperTests.ConversionTests;
+namespace Milvasoft.UnitTests.CoreTests.HelperTests.ExpressionTests;
 
 public class ExpressionHelperTests
 {
@@ -106,7 +106,7 @@ public class ExpressionHelperTests
 
     [Theory]
     [MemberData(nameof(InvalidExpressionsAndTypesForAndAlsoMethod))]
-    public void AndAlso_InvalidExpressions_ShouldReturnCorrectExpression(Expression<Func<int, bool>> left, Expression<Func<int, bool>> right, Expression<Func<int, bool>> expected)
+    public void AndAlso_WithInvalidExpressions_ShouldReturnCorrectExpression(Expression<Func<int, bool>> left, Expression<Func<int, bool>> right, Expression<Func<int, bool>> expected)
     {
         // Arrange
 
@@ -156,7 +156,7 @@ public class ExpressionHelperTests
 
     [Theory]
     [MemberData(nameof(InvalidExpressionsAndTypesForOrElseMethod))]
-    public void OrElse_InvalidExpressions_ShouldReturnCorrectExpression(Expression<Func<int, bool>> left, Expression<Func<int, bool>> right, Expression<Func<int, bool>> expected)
+    public void OrElse_WithInvalidExpressions_ShouldReturnCorrectExpression(Expression<Func<int, bool>> left, Expression<Func<int, bool>> right, Expression<Func<int, bool>> expected)
     {
         // Arrange
 
@@ -192,11 +192,11 @@ public class ExpressionHelperTests
     public void GetPropertyName_WithNullExpression_ShouldReturnNull()
     {
         // Arrange
-        Expression<Func<GetPropertyNameTestModelFixture, decimal>> expression = null;
+        Expression<Func<GetPropertyNameTestModelFixture, byte>> expression = null;
         string expected = null;
 
         // Act
-        string result = expression.GetPropertyName();
+        var result = expression.GetPropertyName();
 
         // Assert
         result.Should().Be(expected);
@@ -206,11 +206,11 @@ public class ExpressionHelperTests
     public void GetPropertyName_WithInvalidExpressionType_ShouldReturnNull()
     {
         // Arrange
-        Expression<Func<GetPropertyNameTestModelFixture, bool>> expression = p => p.Price > 10;
+        Expression<Func<GetPropertyNameTestModelFixture, bool>> expression = p => p.Priority > 10;
         string expected = null;
 
         // Act
-        string result = expression.GetPropertyName();
+        var result = expression.GetPropertyName();
 
         // Assert
         result.Should().Be(expected);
@@ -220,11 +220,11 @@ public class ExpressionHelperTests
     public void GetPropertyName_WithValidExpression_ShouldReturnCorrectPropertyName()
     {
         // Arrange
-        Expression<Func<GetPropertyNameTestModelFixture, decimal>> expression = p => p.Price;
-        string expected = "Price";
+        Expression<Func<GetPropertyNameTestModelFixture, byte>> expression = p => p.Priority;
+        var expected = nameof(GetPropertyNameTestModelFixture.Priority);
 
         // Act
-        string result = expression.GetPropertyName();
+        var result = expression.GetPropertyName();
 
         // Assert
         result.Should().Be(expected);

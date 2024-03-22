@@ -2,6 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Milvasoft.Core.Helpers;
 using Milvasoft.UnitTests.CoreTests.HelperTests.CollectionTests.Fixtures;
+using Milvasoft.UnitTests.CoreTests.HelperTests.PropertyTests.Fixtures;
 using Moq;
 using System.Linq.Expressions;
 
@@ -26,7 +27,7 @@ public partial class CollectionHelperTests
 
     [Theory]
     [MemberData(nameof(IsNullOrEmptyData))]
-    public void IsNullOrEmpty_ValidEnumerableInput_ShouldReturnExpected(IEnumerable<byte> input, bool expected)
+    public void IsNullOrEmpty_WithValidEnumerableInput_ShouldReturnExpected(IEnumerable<byte> input, bool expected)
     {
         // Arrange
 
@@ -38,7 +39,7 @@ public partial class CollectionHelperTests
     }
 
     [Fact]
-    public void IsNullOrEmpty_EmptyDictionaryInput_ShouldReturnTrue()
+    public void IsNullOrEmpty_WithEmptyDictionaryInput_ShouldReturnTrue()
     {
         // Arrange
         var input = new Dictionary<string, object>();
@@ -52,42 +53,6 @@ public partial class CollectionHelperTests
 
     #endregion
 
-    #region PropertyExists
-
-    [Theory]
-    [InlineData(null, false)]
-    [InlineData("", false)]
-    [InlineData(" ", false)]
-    public void PropertyExists_NullOrEmptyOrWhiteSpacePropertyNameInput_ShouldReturnFalse(string propertyName, bool expected)
-    {
-        // Arrange
-        IQueryable<PropertyExistsTestModel> inputList = null;
-
-        // Act
-        var result = inputList.PropertyExists(propertyName);
-
-        // Assert
-        result.Should().Be(expected);
-    }
-
-    [Theory]
-    [InlineData("poco", true)]
-    [InlineData("Poco", true)]
-    [InlineData("NotExistsPropName", false)]
-    public void PropertyExists_PropertyNameInput_ShouldReturnExpected(string propertyName, bool expected)
-    {
-        // Arrange
-        IQueryable<PropertyExistsTestModel> inputList = null;
-
-        // Act
-        var result = inputList.PropertyExists(propertyName);
-
-        // Assert
-        result.Should().Be(expected);
-    }
-
-    #endregion
-
     #region OrderByProperty
 
     /// <summary>
@@ -96,8 +61,8 @@ public partial class CollectionHelperTests
     /// <returns></returns>
     public static IEnumerable<object[]> InvalidSourceForOrderByPropertyMethodData()
     {
-        var emptySource = new List<PropertyExistsTestModel>().AsQueryable();
-        var validSource = new List<PropertyExistsTestModel>() { new() { Poco = 1 } }.AsQueryable();
+        var emptySource = new List<PropertyExistsTestModelFixture>().AsQueryable();
+        var validSource = new List<PropertyExistsTestModelFixture>() { new() { Poco = 1 } }.AsQueryable();
 
         yield return new object[] { emptySource, "", emptySource };
         yield return new object[] { null, "", null };
@@ -110,7 +75,7 @@ public partial class CollectionHelperTests
     /// <returns></returns>
     public static IEnumerable<object[]> ValidSourceForOrderByPropertyMethodData()
     {
-        var validSource = new List<PropertyExistsTestModel>()
+        var validSource = new List<PropertyExistsTestModelFixture>()
         {
             new()
             {
@@ -127,7 +92,7 @@ public partial class CollectionHelperTests
 
     [Theory]
     [MemberData(nameof(InvalidSourceForOrderByPropertyMethodData))]
-    public void OrderByProperty_InvalidSourceOrPropertyNameInput_ShouldReturnSource(IQueryable<PropertyExistsTestModel> source, string propertyName, IQueryable<PropertyExistsTestModel> expected)
+    public void OrderByProperty_WithInvalidSourceOrPropertyNameInput_ShouldReturnSource(IQueryable<PropertyExistsTestModelFixture> source, string propertyName, IQueryable<PropertyExistsTestModelFixture> expected)
     {
         // Arrange
 
@@ -140,7 +105,7 @@ public partial class CollectionHelperTests
 
     [Theory]
     [MemberData(nameof(ValidSourceForOrderByPropertyMethodData))]
-    public void OrderByProperty_ValidSourceAndPropertyNameInput_ShouldReturnAscendingOrderedSource(IQueryable<PropertyExistsTestModel> source, string propertyName)
+    public void OrderByProperty_WithValidSourceAndPropertyNameInput_ShouldReturnAscendingOrderedSource(IQueryable<PropertyExistsTestModelFixture> source, string propertyName)
     {
         // Arrange
 
@@ -161,8 +126,8 @@ public partial class CollectionHelperTests
     /// <returns></returns>
     public static IEnumerable<object[]> InvalidSourceForOrderByPropertyDescendingMethodData()
     {
-        var emptySource = new List<PropertyExistsTestModel>().AsQueryable();
-        var validSource = new List<PropertyExistsTestModel>() { new() { Poco = 1 } }.AsQueryable();
+        var emptySource = new List<PropertyExistsTestModelFixture>().AsQueryable();
+        var validSource = new List<PropertyExistsTestModelFixture>() { new() { Poco = 1 } }.AsQueryable();
 
         yield return new object[] { emptySource, "", emptySource };
         yield return new object[] { null, "", null };
@@ -175,7 +140,7 @@ public partial class CollectionHelperTests
     /// <returns></returns>
     public static IEnumerable<object[]> ValidSourceForOrderByPropertyDescendingMethodData()
     {
-        var validSource = new List<PropertyExistsTestModel>()
+        var validSource = new List<PropertyExistsTestModelFixture>()
         {
             new()
             {
@@ -192,7 +157,7 @@ public partial class CollectionHelperTests
 
     [Theory]
     [MemberData(nameof(InvalidSourceForOrderByPropertyMethodData))]
-    public void OrderByPropertyDescending_InvalidSourceOrPropertyNameInput_ShouldReturnSource(IQueryable<PropertyExistsTestModel> source, string propertyName, IQueryable<PropertyExistsTestModel> expected)
+    public void OrderByPropertyDescending_WithInvalidSourceOrPropertyNameInput_ShouldReturnSource(IQueryable<PropertyExistsTestModelFixture> source, string propertyName, IQueryable<PropertyExistsTestModelFixture> expected)
     {
         // Arrange
 
@@ -205,7 +170,7 @@ public partial class CollectionHelperTests
 
     [Theory]
     [MemberData(nameof(ValidSourceForOrderByPropertyMethodData))]
-    public void OrderByPropertyDescending_ValidSourceAndPropertyNameInput_ShouldReturnDescendingOrderedSource(IQueryable<PropertyExistsTestModel> source, string propertyName)
+    public void OrderByPropertyDescending_WithValidSourceAndPropertyNameInput_ShouldReturnDescendingOrderedSource(IQueryable<PropertyExistsTestModelFixture> source, string propertyName)
     {
         // Arrange
 
@@ -247,7 +212,7 @@ public partial class CollectionHelperTests
 
     [Theory]
     [MemberData(nameof(InvalidSourceForToBatchesMethodData))]
-    public void ToBatches_InvalidSourceInput_ShouldReturnEmptySource(List<byte> source, List<byte> expected)
+    public void ToBatches_WithInvalidSourceInput_ShouldReturnEmptySource(List<byte> source, List<byte> expected)
     {
         // Arrange
 
@@ -260,7 +225,7 @@ public partial class CollectionHelperTests
 
     [Theory]
     [MemberData(nameof(ValidSourceForToBatchesMethodData))]
-    public void ToBatches_ValidSourceInput_ShouldReturnValidBatches(List<byte> source, int batchSize, int expectedBatchCount)
+    public void ToBatches_WithValidSourceInput_ShouldReturnValidBatches(List<byte> source, int batchSize, int expectedBatchCount)
     {
         // Arrange
 
@@ -289,7 +254,7 @@ public partial class CollectionHelperTests
 
     [Theory]
     [MemberData(nameof(InvalidSourceForUpdateSingletonInstanceMethodData))]
-    public void UpdateSingletonInstance_WithOneGenericParameter_ServiceCollectionIsNullOrEmpty_ShouldReturnInputServiceCollection(IServiceCollection source, IServiceCollection expected)
+    public void UpdateSingletonInstance_ForOverloadWithOneGenericParameter_WithServiceCollectionIsNullOrEmpty_ShouldReturnInputServiceCollection(IServiceCollection source, IServiceCollection expected)
     {
         // Arrange
 
@@ -301,7 +266,7 @@ public partial class CollectionHelperTests
     }
 
     [Fact]
-    public void UpdateSingletonInstance_WithOneGenericParameter_UpdateActionIsNull_ShouldReturnInputServiceCollection()
+    public void UpdateSingletonInstance_ForOverloadWithOneGenericParameter_WithUpdateActionIsNull_ShouldReturnInputServiceCollection()
     {
         // Arrange
         IServiceCollection services = new ServiceCollection();
@@ -315,7 +280,7 @@ public partial class CollectionHelperTests
     }
 
     [Fact]
-    public void UpdateSingletonInstance_WithOneGenericParameter_InstanceNotFoundInServiceCollection_ShouldDoNothingAndReturnsUnchangedServiceCollection()
+    public void UpdateSingletonInstance_ForOverloadWithOneGenericParameter_WithInstanceNotFoundInServiceCollection_ShouldDoNothingAndReturnsUnchangedServiceCollection()
     {
         // Arrange
         IServiceCollection services = new ServiceCollection();
@@ -331,7 +296,7 @@ public partial class CollectionHelperTests
     }
 
     [Fact]
-    public void UpdateSingletonInstance_WithOneGenericParameter_InstanceFoundInServiceCollectionButNotSingleton_ShouldDoNothingAndReturnsUnchangedServiceCollection()
+    public void UpdateSingletonInstance_ForOverloadWithOneGenericParameter_WithInstanceFoundInServiceCollectionButNotSingleton_ShouldDoNothingAndReturnsUnchangedServiceCollection()
     {
         // Arrange
         IServiceCollection services = new ServiceCollection();
@@ -347,7 +312,7 @@ public partial class CollectionHelperTests
     }
 
     [Fact]
-    public void UpdateSingletonInstance_WithOneGenericParameter_SingletonInstanceFoundInServiceCollection_ShouldUpdateInstanceAndReturnsUpdatedServiceCollection()
+    public void UpdateSingletonInstance_ForOverloadWithOneGenericParameter_WithSingletonInstanceFoundInServiceCollection_ShouldUpdateInstanceAndReturnsUpdatedServiceCollection()
     {
         // Arrange
         IServiceCollection services = new ServiceCollection();
@@ -383,7 +348,7 @@ public partial class CollectionHelperTests
 
     [Theory]
     [MemberData(nameof(InvalidSourceForUpdateSingletonInstanceMethodData))]
-    public void UpdateSingletonInstance_WithTwoGenericParameter_ServiceCollectionIsNullOrEmpty_ShouldReturnInputServiceCollection(IServiceCollection source, IServiceCollection expected)
+    public void UpdateSingletonInstance_ForOverloadWithTwoGenericParameter_WithServiceCollectionIsNullOrEmpty_ShouldReturnInputServiceCollection(IServiceCollection source, IServiceCollection expected)
     {
         // Arrange
 
@@ -395,7 +360,7 @@ public partial class CollectionHelperTests
     }
 
     [Fact]
-    public void UpdateSingletonInstance_WithTwoGenericParameter_UpdateActionIsNull_ShouldReturnInputServiceCollection()
+    public void UpdateSingletonInstance_ForOverloadWithTwoGenericParameter_WithUpdateActionIsNull_ShouldReturnInputServiceCollection()
     {
         // Arrange
         IServiceCollection services = new ServiceCollection();
@@ -409,7 +374,7 @@ public partial class CollectionHelperTests
     }
 
     [Fact]
-    public void UpdateSingletonInstance_WithTwoGenericParameter_InstanceNotFoundInServiceCollection_ShouldDoNothingAndReturnsUnchangedServiceCollection()
+    public void UpdateSingletonInstance_ForOverloadWithTwoGenericParameter_WithInstanceNotFoundInServiceCollection_ShouldDoNothingAndReturnsUnchangedServiceCollection()
     {
         // Arrange
         IServiceCollection services = new ServiceCollection();
@@ -425,7 +390,7 @@ public partial class CollectionHelperTests
     }
 
     [Fact]
-    public void UpdateSingletonInstance_WithTwoGenericParameter_InstanceFoundInServiceCollectionButNotSingleton_ShouldDoNothingAndReturnsUnchangedServiceCollection()
+    public void UpdateSingletonInstance_ForOverloadWithTwoGenericParameter_WithInstanceFoundInServiceCollectionButNotSingleton_ShouldDoNothingAndReturnsUnchangedServiceCollection()
     {
         // Arrange
         IServiceCollection services = new ServiceCollection();
@@ -441,7 +406,7 @@ public partial class CollectionHelperTests
     }
 
     [Fact]
-    public void UpdateSingletonInstance_WithTwoGenericParameter_SingletonInstanceFoundInServiceCollection_ShouldUpdateInstanceAndReturnsUpdatedServiceCollection()
+    public void UpdateSingletonInstance_ForOverloadWithTwoGenericParameter_WithSingletonInstanceFoundInServiceCollection_ShouldUpdateInstanceAndReturnsUpdatedServiceCollection()
     {
         // Arrange
         IServiceCollection services = new ServiceCollection();
@@ -481,11 +446,11 @@ public partial class CollectionHelperTests
 
     [Theory]
     [ClassData(typeof(DateSearchInvalidDataFixture))]
-    public void ApplyDateSearch_InvalidParameters_ReturnsInputList(List<DateSearchTestModel> input,
-                                                                   Expression<Func<DateSearchTestModel, DateTime?>> propertySelector,
-                                                                   DateTime? startDate,
-                                                                   DateTime? endDate,
-                                                                   List<DateSearchTestModel> expected)
+    public void ApplyDateSearch_WithInvalidParameters_ReturnsInputList(List<DateSearchTestModel> input,
+                                                                       Expression<Func<DateSearchTestModel, DateTime?>> propertySelector,
+                                                                       DateTime? startDate,
+                                                                       DateTime? endDate,
+                                                                       List<DateSearchTestModel> expected)
     {
         // Arrange
 
@@ -499,11 +464,11 @@ public partial class CollectionHelperTests
 
     [Theory]
     [ClassData(typeof(DateSearchValidDataFixture))]
-    public void ApplyDateSearch_ValidParameters_ReturnsSearchAppliedList(List<DateSearchTestModel> input,
-                                                                         Expression<Func<DateSearchTestModel, DateTime?>> propertySelector,
-                                                                         DateTime? startDate,
-                                                                         DateTime? endDate,
-                                                                         List<DateSearchTestModel> expected)
+    public void ApplyDateSearch_WithValidParameters_ReturnsSearchAppliedList(List<DateSearchTestModel> input,
+                                                                             Expression<Func<DateSearchTestModel, DateTime?>> propertySelector,
+                                                                             DateTime? startDate,
+                                                                             DateTime? endDate,
+                                                                             List<DateSearchTestModel> expected)
     {
         // Arrange
 

@@ -13,7 +13,7 @@ public partial class CommonHelperTests
     #region CreateIsDeletedFalseExpression
 
     [Fact]
-    public void CreateIsDeletedFalseExpression_EntityTypeIsNotSoftDeletable_ShouldReturnNull()
+    public void CreateIsDeletedFalseExpression_WithEntityTypeIsNotSoftDeletable_ShouldReturnNull()
     {
         // Arrange
 
@@ -25,7 +25,7 @@ public partial class CommonHelperTests
     }
 
     [Fact]
-    public void CreateIsDeletedFalseExpression_EntityTypeIsSoftDeletable_ShouldReturnIsDeletedFalseExpression()
+    public void CreateIsDeletedFalseExpression_WithEntityTypeIsSoftDeletable_ShouldReturnIsDeletedFalseExpression()
     {
         // Arrange
         Expression<Func<SoftDeletableTestEntity, bool>> expected = e => e.IsDeleted == false;
@@ -43,7 +43,7 @@ public partial class CommonHelperTests
     #region GetEnumDesciption
 
     [Fact]
-    public void GetEnumDescription_TypeIsNotEnum_ShouldReturnNull()
+    public void GetEnumDescription_WithTypeIsNotEnum_ShouldReturnNull()
     {
         // Arrange
         int input = 1;
@@ -56,7 +56,7 @@ public partial class CommonHelperTests
     }
 
     [Fact]
-    public void GetEnumDescription_TypeIsEnumButNotContainsDescriptionAttribute_ShouldReturnEnumValueAsString()
+    public void GetEnumDescription_WithTypeIsEnumButNotContainsDescriptionAttribute_ShouldReturnEnumValueAsString()
     {
         // Arrange
         var input = TestEnum.Value2;
@@ -69,7 +69,7 @@ public partial class CommonHelperTests
     }
 
     [Fact]
-    public void GetEnumDescription_TypeIsEnumAndContainsDescriptionAttribute_ShouldReturnDescriptionAttributeValue()
+    public void GetEnumDescription_WithTypeIsEnumAndContainsDescriptionAttribute_ShouldReturnDescriptionAttributeValue()
     {
         // Arrange
         var input = TestEnum.Value1;
@@ -92,7 +92,7 @@ public partial class CommonHelperTests
     [InlineData(typeof(List<string>), true)]
     [InlineData(typeof(IEnumerable<string>), true)]
     [InlineData(typeof(Dictionary<byte, byte>), true)]
-    public void IsEnumerableType_TypeIsNullOrValid_ShouldReturnExpected(Type input, bool expected)
+    public void IsEnumerableType_WithTypeIsNullOrValid_ShouldReturnExpected(Type input, bool expected)
     {
         // Arrange
 
@@ -108,7 +108,7 @@ public partial class CommonHelperTests
     #region AssignUpdatedProperties
 
     [Fact]
-    public void AssignUpdatedProperties_EntityIsNull_ShouldReturnNull()
+    public void AssignUpdatedProperties_WithEntityIsNull_ShouldReturnNull()
     {
         // Arrange
         UpdatedPropsTestEntity entity = null;
@@ -122,7 +122,7 @@ public partial class CommonHelperTests
     }
 
     [Fact]
-    public void AssignUpdatedProperties_DtoIsNull_ShouldReturnNull()
+    public void AssignUpdatedProperties_WithDtoIsNull_ShouldReturnNull()
     {
         // Arrange
         UpdatedPropsTestEntity entity = new();
@@ -136,7 +136,7 @@ public partial class CommonHelperTests
     }
 
     [Fact]
-    public void AssignUpdatedProperties_EntityAndDtoIsNull_ShouldReturnNull()
+    public void AssignUpdatedProperties_WithEntityAndDtoIsNull_ShouldReturnNull()
     {
         // Arrange
         UpdatedPropsTestEntity entity = null;
@@ -150,7 +150,7 @@ public partial class CommonHelperTests
     }
 
     [Fact]
-    public void AssignUpdatedProperties_EntityAndDtoIsValid_ShouldUpdatesUpdatablePropertiesAndReturnsUpdatedPropertyInfos()
+    public void AssignUpdatedProperties_WithEntityAndDtoIsValid_ShouldUpdatesUpdatablePropertiesAndReturnsUpdatedPropertyInfos()
     {
         // Arrange
         UpdatedPropsTestEntity entity = new()
@@ -186,7 +186,7 @@ public partial class CommonHelperTests
     #region FindUpdatablePropertiesAndAct
 
     [Fact]
-    public void FindUpdatablePropertiesAndAct_DtoIsNull_ShouldDoNothing()
+    public void FindUpdatablePropertiesAndAct_WithDtoIsNull_ShouldDoNothing()
     {
         // Arrange
         var mockValidatorForAction = new Mock<Action<PropertyInfo, object>>();
@@ -199,7 +199,7 @@ public partial class CommonHelperTests
     }
 
     [Fact]
-    public void FindUpdatablePropertiesAndAct_ActionIsNull_ShouldDoNothing()
+    public void FindUpdatablePropertiesAndAct_WithActionIsNull_ShouldDoNothing()
     {
         // Arrange
         var mockValidator = new Mock<UpdatedPropsTestDto>();
@@ -212,7 +212,7 @@ public partial class CommonHelperTests
     }
 
     [Fact]
-    public void FindUpdatablePropertiesAndAct_DtoNotContainsAnyUpdatableProperties_ShouldDoNothing()
+    public void FindUpdatablePropertiesAndAct_WithDtoNotContainsAnyUpdatableProperties_ShouldDoNothing()
     {
         // Arrange
         var mockValidatorForDto = new Mock<UpdatedPropsTestInvalidDto>();
@@ -227,7 +227,7 @@ public partial class CommonHelperTests
     }
 
     [Fact]
-    public void FindUpdatablePropertiesAndAct_DtoAndActionIsValidButUpdatedPropertyNotExistsInEntity_ShouldFindUpdatablePropertiesAndNotInvokesInputAction()
+    public void FindUpdatablePropertiesAndAct_WithDtoAndActionIsValidButUpdatedPropertyNotExistsInEntity_ShouldFindUpdatablePropertiesAndNotInvokesInputAction()
     {
         // Arrange
         var mockValidatorForAction = new Mock<Action<PropertyInfo, object>>();
@@ -245,7 +245,7 @@ public partial class CommonHelperTests
     }
 
     [Fact]
-    public void FindUpdatablePropertiesAndAct_DtoAndActionIsValidButPropertiesNotUpdated_ShouldFindUpdatablePropertiesAndNotInvokesInputAction()
+    public void FindUpdatablePropertiesAndAct_WithDtoAndActionIsValidButPropertiesNotUpdated_ShouldFindUpdatablePropertiesAndNotInvokesInputAction()
     {
         // Arrange
         var mockValidatorForDto = new Mock<UpdatedPropsTestDto>();
@@ -260,7 +260,7 @@ public partial class CommonHelperTests
     }
 
     [Fact]
-    public void FindUpdatablePropertiesAndAct_DtoAndActionIsValidAndOneUpdatedPropertyExists_ShouldFindUpdatablePropertiesAndInvokesInputAction()
+    public void FindUpdatablePropertiesAndAct_WithDtoAndActionIsValidAndOneUpdatedPropertyExists_ShouldFindUpdatablePropertiesAndInvokesInputAction()
     {
         // Arrange
         UpdatedPropsTestDto dto = new()

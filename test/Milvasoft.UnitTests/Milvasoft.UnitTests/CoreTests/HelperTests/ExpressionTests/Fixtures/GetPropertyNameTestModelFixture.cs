@@ -2,5 +2,5 @@
 
 public class GetPropertyNameTestModelFixture
 {
-    public decimal Price { get; set; }
+    public byte Priority { get; set; }
 }

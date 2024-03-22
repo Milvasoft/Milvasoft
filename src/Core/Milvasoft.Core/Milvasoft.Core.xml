@@ -1065,6 +1065,12 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="M:Milvasoft.Core.EntityBases.Concrete.DtoBase.GetUpdatableProperties">
+            <summary>
+            Returns a collection of PropertyInfo objects that represent properties of the DTO that implements <see cref="T:Milvasoft.Core.Utils.IUpdateProperty"/>.
+            </summary>
+            <returns>A collection of PropertyInfo objects representing the updatable properties of the DTO.</returns>
+        </member>
         <member name="T:Milvasoft.Core.EntityBases.Concrete.BaseEntity`1">
             <summary>
             Base entity for all of entities.
@@ -1843,90 +1849,88 @@
         </member>
         <member name="M:Milvasoft.Core.Helpers.CommonHelper.IsNullOrEmpty(System.Collections.IEnumerable)">
             <summary>
-            Checks whether or not collection is null or empty. Assumes collection can be safely enumerated multiple times.
+            Checks if the collection is null or empty.
             </summary>
+            <param name="this">The collection to check.</param>
+            <returns>True if the collection is null or empty, otherwise false.</returns>
         </member>
         <member name="M:Milvasoft.Core.Helpers.CommonHelper.OrderByProperty``1(System.Linq.IQueryable{``0},System.String)">
             <summary>
-            Order <paramref name="source"/> by <paramref name="propertyName"/>
+            Orders the source collection by the specified property name.
             </summary>
-            <typeparam name="T"></typeparam>
-            <param name="source"></param>
-            <param name="propertyName"></param>
-            <returns></returns>
+            <typeparam name="T">The type of the elements in the source collection.</typeparam>
+            <param name="source">The source collection to order.</param>
+            <param name="propertyName">The name of the property to order by.</param>
+            <returns>The ordered source collection.</returns>
         </member>
         <member name="M:Milvasoft.Core.Helpers.CommonHelper.OrderByPropertyDescending``1(System.Linq.IQueryable{``0},System.String)">
             <summary>
-            Order by descending <paramref name="source"/> by <paramref name="propertyName"/>
+            Orders the source collection in descending order by the specified property name.
             </summary>
-            <typeparam name="T"></typeparam>
-            <param name="source"></param>
-            <param name="propertyName"></param>
-            <returns></returns>
+            <typeparam name="T">The type of the elements in the source collection.</typeparam>
+            <param name="source">The source collection to order.</param>
+            <param name="propertyName">The name of the property to order by.</param>
+            <returns>The ordered source collection in descending order.</returns>
         </member>
         <member name="M:Milvasoft.Core.Helpers.CommonHelper.ToBatches``1(System.Collections.Generic.List{``0},System.Int32)">
             <summary>
-            Splits list into batches with specified batch size.
+            Splits the list into batches with the specified batch size.
             </summary>
-            <typeparam name="T"></typeparam>
-            <param name="list"></param>
-            <param name="batchSize"></param>
-            <returns></returns>
+            <typeparam name="T">The type of the elements in the list.</typeparam>
+            <param name="list">The list to split into batches.</param>
+            <param name="batchSize">The size of each batch.</param>
+            <returns>An enumerable of batches.</returns>
         </member>
         <member name="M:Milvasoft.Core.Helpers.CommonHelper.UpdateSingletonInstance``1(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.Action{``0})">
             <summary>
-            Updates singleton implementation instance with <paramref name="updateAction"/>.
+            Updates the singleton implementation instance with the specified update action.
             </summary>
-            <typeparam name="TInstance"></typeparam>
-            <param name="services"></param>
-            <param name="updateAction"></param>
-            <returns></returns>
+            <typeparam name="TInstance">The type of the singleton instance.</typeparam>
+            <param name="services">The service collection.</param>
+            <param name="updateAction">The update action to apply to the singleton instance.</param>
+            <returns>The updated service collection.</returns>
         </member>
         <member name="M:Milvasoft.Core.Helpers.CommonHelper.UpdateSingletonInstance``2(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.Action{``1})">
             <summary>
-            Updates singleton implementation instance with <paramref name="updateAction"/>.
+            Updates the singleton implementation instance with the specified update action.
             </summary>
-            <typeparam name="TImplementation"></typeparam>
-            <typeparam name="TInstance"></typeparam>
-            <param name="services"></param>
-            <param name="updateAction"></param>
-            <returns></returns>
+            <typeparam name="TImplementation">The type of the implementation.</typeparam>
+            <typeparam name="TInstance">The type of the singleton instance.</typeparam>
+            <param name="services">The service collection.</param>
+            <param name="updateAction">The update action to apply to the singleton instance.</param>
+            <returns>The updated service collection.</returns>
         </member>
         <member name="M:Milvasoft.Core.Helpers.CommonHelper.ApplyDateSearch``1(System.Collections.Generic.IEnumerable{``0},System.Linq.Expressions.Expression{System.Func{``0,System.Nullable{System.DateTime}}},System.Nullable{System.DateTime},System.Nullable{System.DateTime})">
-             <summary>
-             <para> Filter <paramref name="contentList"/> by <paramref name="endDate"/> and <paramref name="startDate"/> values. </para>
-             </summary>
-             
-             <remarks>
-             
-             <para><b>Remarks: </b></para>
-             
-             <para> If a selection has been made between two dates, it will return those between the two dates. </para>
-             <para> If only the <paramref name="endDate"/> value exists, it returns those larger than the <paramref name="startDate"/> value. </para>
-             <para> If only the <paramref name="startDate"/> value exists, it returns those smaller than the <paramref name="endDate"/> value. </para>
-             
-             </remarks>
+            <summary>
+            Filters the content list by the specified start and end dates.
+            </summary>
+            <typeparam name="T">The type of the elements in the content list.</typeparam>
+            <param name="contentList">The content list to filter.</param>
+            <param name="dateProperty">The expression representing the date property.</param>
+            <param name="startDate">The start date.</param>
+            <param name="endDate">The end date.</param>
+            <returns>The filtered content list.</returns>
             
-             <typeparam name="T"></typeparam>
-             <param name="contentList"></param>
-             <param name="endDate"></param>
-             <param name="startDate"></param>
-             <param name="dateProperty"></param>
-             <returns> Filtered <paramref name="contentList"/> </returns>
+            <remarks>
+            If a selection has been made between two dates, it will return those between the two dates.
+            If only the <paramref name="endDate"/> value exists, it returns those larger than the <paramref name="startDate"/> value.
+            If only the <paramref name="startDate"/> value exists, it returns those smaller than the <paramref name="endDate"/> value.
+            </remarks>
         </member>
         <member name="M:Milvasoft.Core.Helpers.CommonHelper.CreateIsDeletedFalseExpression``1">
             <summary>
-            Gets <b>entity => entity.IsDeleted == false</b> expression, if <typeparamref name="TEntity"/> is assignable from <see cref="T:Milvasoft.Core.EntityBases.Abstract.IFullAuditable`1"/>.
+            Creates an expression that represents the condition where the IsDeleted property of an entity is false.
             </summary>
-            <returns></returns>
+            <typeparam name="TEntity">The type of the entity.</typeparam>
+            <returns>An expression representing the condition where the IsDeleted property is false.</returns>
         </member>
         <member name="M:Milvasoft.Core.Helpers.CommonHelper.GetEnumDesciption``1(``0)">
             <summary>
-            Gets enum description.
+            Gets the description attribute value of the specified enum value.
             </summary>
-            <typeparam name="T"></typeparam>
-            <param name="enumValue"></param>
-            <returns></returns>
+            <typeparam name="T">The enum type.</typeparam>
+            <param name="enumValue">The enum value.</param>
+            <returns>The description attribute value of the enum value.</returns>
         </member>
         <member name="M:Milvasoft.Core.Helpers.CommonHelper.IsEnumerableType(System.Type)">
             <summary>
@@ -1937,134 +1941,126 @@
         </member>
         <member name="M:Milvasoft.Core.Helpers.CommonHelper.AssignUpdatedProperties``2(``0,``1)">
             <summary>
-            Updates entity matching properties with <paramref name="dto"/>'s not null properties.
+            Assigns the updated properties of a DTO object to the corresponding properties of an entity object.
             </summary>
-            <typeparam name="TDto"></typeparam>
-            <typeparam name="TEntity"></typeparam>
-            <param name="dto"></param>
-            <param name="entity"></param>
-            <returns>Updated property informations.</returns>
+            <typeparam name="TEntity">The type of the entity class that implements the <see cref="T:Milvasoft.Core.EntityBases.Abstract.IMilvaEntity"/> interface.</typeparam>
+            <typeparam name="TDto">The type of the DTO class that inherits from the <see cref="T:Milvasoft.Core.EntityBases.Concrete.DtoBase"/> class.</typeparam>
+            <param name="entity">The entity object to update.</param>
+            <param name="dto">The DTO object containing the updated property values.</param>
+            <returns>A list of PropertyInfo objects representing the updated properties.</returns>
+            <remarks> To find out how this method finds the updated properties, please see <see cref="M:Milvasoft.Core.Helpers.CommonHelper.FindUpdatablePropertiesAndAct``2(``1,System.Action{System.Reflection.PropertyInfo,System.Object})"/>. </remarks>
+        </member>
+        <member name="M:Milvasoft.Core.Helpers.CommonHelper.FindUpdatablePropertiesAndAct``2(``1,System.Action{System.Reflection.PropertyInfo,System.Object})">
+            <summary>
+            Finds the updatable properties in the provided DTO object and performs the specified action on each property.
+            </summary>
+            <typeparam name="TEntity">The type of the entity class that implements the IMilvaEntity interface.</typeparam>
+            <typeparam name="TDto">The type of the DTO class that inherits from the DtoBase class.</typeparam>
+            <param name="dto">The DTO object from which to find the updatable properties.</param>
+            <param name="action">The action to perform on each updatable property. It takes two parameters: the PropertyInfo of the matching property in the entity class, and the value of the property in the DTO object.</param>
+            <remarks>
+            This method is used to update the entity object with the values of the updatable properties in the DTO object.
+            It iterates over the updatable properties in the DTO object and finds the matching property in the entity class.
+            If a matching property is found and the property value is an instance of <see cref="T:Milvasoft.Core.Utils.IUpdateProperty"/> and IsUpdated property is true,
+            the specified action is performed on the matching property in the entity object.
+            </remarks>
         </member>
         <member name="M:Milvasoft.Core.Helpers.CommonHelper.ToGuid(System.Int32)">
             <summary>
-            This method return int value to guid value.
+            Converts an integer value to a GUID value.
             </summary>
-            <param name="value"></param>
-            <returns></returns>
+            <param name="value">The integer value to convert.</param>
+            <returns>The GUID value.</returns>
         </member>
         <member name="M:Milvasoft.Core.Helpers.CommonHelper.ToJson(System.Object,System.Text.Json.JsonSerializerOptions)">
             <summary>
-            Converts <paramref name="value"/> to <see cref="T:System.String"/>.
+            Converts an object to a json string.
             </summary>
-            <param name="value"></param>
-            <param name="jsonOptions"></param>
-            <returns></returns>
+            <param name="value">The object to convert.</param>
+            <param name="jsonOptions">The json serialization options (optional).</param>
+            <returns>The json string representation of the object.</returns>
         </member>
         <member name="M:Milvasoft.Core.Helpers.CommonHelper.ToObject``1(System.String,System.Text.Json.JsonSerializerOptions)">
             <summary>
-            Converts <paramref name="value"/> to <typeparamref name="T"/>.
+            Converts json string to an object of type <typeparamref name="T"/>.
             </summary>
-            <typeparam name="T"></typeparam>
-            <param name="value"></param>
-            <param name="jsonOptions"></param>
-            <returns></returns>
+            <typeparam name="T">The type of the object to convert to.</typeparam>
+            <param name="value">The string value to convert.</param>
+            <param name="jsonOptions">The json deserialization options (optional).</param>
+            <returns>The deserialized object of type T.</returns>
         </member>
         <member name="M:Milvasoft.Core.Helpers.CommonHelper.ToObject(System.String,System.Type,System.Text.Json.JsonSerializerOptions)">
             <summary>
-            Converts <paramref name="value"/> to <paramref name="returnType"/>.
+            Converts a string to an object of the specified return type.
             </summary>
-            <param name="value"></param>
-            <param name="returnType"></param>
-            <param name="jsonOptions"></param>
-            <returns></returns>
+            <param name="value">The string value to convert.</param>
+            <param name="returnType">The return type of the object to convert to.</param>
+            <param name="jsonOptions">The json deserialization options (optional).</param>
+            <returns>The deserialized object of the specified return type.</returns>
         </member>
         <member name="M:Milvasoft.Core.Helpers.CommonHelper.Deserialize(System.Text.Json.JsonElement,System.Type)">
             <summary>
-            Deserializes json element to <paramref name="type"/>. 
+            Deserializes a <see cref="T:System.Text.Json.JsonElement"/> to an object of the specified type.
             </summary>
-            <param name="element"></param>
-            <param name="type"></param>
-            <returns></returns>
+            <param name="element">The json element to deserialize.</param>
+            <param name="type">The type of the object to deserialize to.</param>
+            <returns>The deserialized object of the specified type.</returns>
         </member>
         <member name="M:Milvasoft.Core.Helpers.CommonHelper.CreateDateSearchExpression``1(System.Linq.Expressions.Expression{System.Func{``0,System.Nullable{System.DateTime}}},System.Nullable{System.DateTime},System.Nullable{System.DateTime})">
             <summary>
-            <para> Creates expression by <paramref name="endDate"/> and <paramref name="startDate"/> values. </para>
+            Creates an expression based on the provided <paramref name="endDate"/> and <paramref name="startDate"/> values.
             </summary>
-            
             <remarks>
-            
-            <para><b>Remarks: </b></para>
-            
-            <para> If a selection has been made between two dates, it will return those between the two dates. </para>
-            <para> If only the <paramref name="endDate"/> value exists, it returns those larger than the <paramref name="startDate"/> value. </para>
-            <para> If only the <paramref name="startDate"/> value exists, it returns those smaller than the <paramref name="endDate"/> value. </para>
-            
+            If both <paramref name="startDate"/> and <paramref name="endDate"/> values are provided, it returns an expression that checks if the date property specified by <paramref name="datePropertySelector"/> is greater than or equal to <paramref name="startDate"/> and less than or equal to <paramref name="endDate"/>.
+            If only the <paramref name="endDate"/> value is provided, it returns an expression that checks if the date property specified by <paramref name="datePropertySelector"/> is less than or equal to <paramref name="endDate"/>.
+            If only the <paramref name="startDate"/> value is provided, it returns an expression that checks if the date property specified by <paramref name="datePropertySelector"/> is greater than or equal to <paramref name="startDate"/>.
             </remarks>
-            
-            <typeparam name="T"></typeparam>
-            <param name="endDate"></param>
-            <param name="startDate"></param>
-            <param name="datePropertySelector"></param>
-            <returns> 
-            
-            Example Return when both values has value :
-            
-            <code> i => i.<paramref name="datePropertySelector"/> <b>biggerThanOrEqual</b> <paramref name="startDate"/> <b>AND</b> i.<paramref name="datePropertySelector"/> <b>lessThanOrEqual</b> <paramref name="endDate"/> </code>
-            
-            </returns>
+            <typeparam name="T">The type of the entity.</typeparam>
+            <param name="endDate">The end date value.</param>
+            <param name="startDate">The start date value.</param>
+            <param name="datePropertySelector">The selector expression for the date property.</param>
+            <returns>The expression representing the date search criteria.</returns>
         </member>
         <member name="M:Milvasoft.Core.Helpers.CommonHelper.IsBetween(System.DateTime,System.TimeSpan,System.TimeSpan,System.Boolean)">
             <summary>
-            Checks whether the given date's time is between the specified start time and end time.
-            
-            <remarks>
-            If <paramref name="startTime"/> greater than equal to <paramref name="endTime"/> this means <paramref name="endTime"/> belongs to next day. The comparison will made according to this criteria.
-            </remarks>
-            
+            Checks if the given <paramref name="date"/> falls between the specified <paramref name="startTime"/> and <paramref name="endTime"/>.
             </summary>
             <param name="date">The date to check.</param>
             <param name="startTime">The start time.</param>
             <param name="endTime">The end time.</param>
             <param name="convertTimesToUtc">Indicates whether to convert times to UTC before comparison. Default is true.</param>
-            <returns>True if the date's is between the start time and end time, otherwise false.</returns>
+            <returns>True if the date falls between the start time and end time, otherwise false.</returns>
         </member>
         <member name="M:Milvasoft.Core.Helpers.CommonHelper.IsBetween(System.DateTime,System.TimeSpan,System.TimeSpan,System.TimeSpan,System.Boolean)">
             <summary>
-            Removes <paramref name="date"/>'s hour, second and milisecond then adds <paramref name="compareTime"/> to <paramref name="date"/> 
-            and compares <paramref name="date"/> for whether between <paramref name="startTime"/> and <paramref name="endTime"/>. 
+            Checks if the given <paramref name="date"/> with the specified <paramref name="compareTime"/> falls between the <paramref name="startTime"/> and <paramref name="endTime"/>.
             </summary>
-            
-            <remarks>
-            This is a time comparison not a date comparison.
-            </remarks>
-            
-            <param name="date"></param>
-            <param name="compareTime"></param>
-            <param name="startTime"></param>
-            <param name="endTime"></param>
-            <param name="convertTimesToUtc"></param>
-            <returns></returns>
+            <param name="date">The date to check.</param>
+            <param name="compareTime">The time to compare.</param>
+            <param name="startTime">The start time.</param>
+            <param name="endTime">The end time.</param>
+            <param name="convertTimesToUtc">Indicates whether to convert times to UTC before comparison. Default is true.</param>
+            <returns>True if the date with the compare time falls between the start time and end time, otherwise false.</returns>
         </member>
         <member name="M:Milvasoft.Core.Helpers.CommonHelper.IsBetween(System.DateTime,System.DateTime,System.DateTime)">
             <summary>
-            Compares <paramref name="date"/> for whether between <paramref name="startDate"/> and <paramref name="endDate"/>. 
+            Checks if the given <paramref name="date"/> falls between the specified <paramref name="startDate"/> and <paramref name="endDate"/>.
             </summary>
-            <param name="date"></param>
-            <param name="startDate"></param>
-            <param name="endDate"></param>
-            <returns></returns>
+            <param name="date">The date to check.</param>
+            <param name="startDate">The start date.</param>
+            <param name="endDate">The end date.</param>
+            <returns>True if the date falls between the start date and end date, otherwise false.</returns>
         </member>
         <member name="M:Milvasoft.Core.Helpers.CommonHelper.IsBetween(System.DateTime,System.TimeSpan,System.DateTime,System.DateTime,System.Boolean)">
             <summary>
-            Removes <paramref name="date"/>'s hour, second and milisecond then adds <paramref name="compareTime"/> to <paramref name="date"/> 
-            and compares <paramref name="date"/> for whether between <paramref name="startDate"/> and <paramref name="endDate"/>. 
+            Checks if the given <paramref name="date"/> with the specified <paramref name="compareTime"/> falls between the <paramref name="startDate"/> and <paramref name="endDate"/>.
             </summary>
-            <param name="date"></param>
-            <param name="compareTime"></param>
-            <param name="startDate"></param>
-            <param name="endDate"></param>
-            <param name="convertTimeToUtc"></param>
-            <returns></returns>
+            <param name="date">The date to check.</param>
+            <param name="compareTime">The time to compare.</param>
+            <param name="startDate">The start date.</param>
+            <param name="endDate">The end date.</param>
+            <param name="convertTimeToUtc">Indicates whether to convert the compare time to UTC before comparison. Default is true.</param>
+            <returns>True if the date with the compare time falls between the start date and end date, otherwise false.</returns>
         </member>
         <member name="M:Milvasoft.Core.Helpers.CommonHelper.WithTime(System.DateTime,System.TimeSpan)">
             <summary>
@@ -2072,56 +2068,54 @@
             </summary>
             <param name="date">The date to modify.</param>
             <param name="time">The time to set.</param>
-            <returns>A new DateTime object with the same date as the original <paramref name="date"/> and the specified <paramref name="time"/>.</returns>
+            <returns>A new DateTime object with the same date as the original date and the specified time.</returns>
         </member>
         <member name="M:Milvasoft.Core.Helpers.CommonHelper.ConvertToUtc(System.TimeSpan)">
             <summary>
-            Converts timespan to universal time.
-            
+            Converts the specified <paramref name="timeSpan"/> to UTC.
+            </summary>
+            <param name="timeSpan">The time span to convert.</param>
+            <returns>The converted time span in UTC.</returns> 
             <remarks>
             Be careful when using this method. Each time you use it, it will repeat the time difference process according to the time zone you are in.
             </remarks>
-            
-            </summary>
-            <param name="timeSpan"></param>
-            <returns></returns>
         </member>
         <member name="M:Milvasoft.Core.Helpers.CommonHelper.Append``1(System.Linq.Expressions.Expression{System.Func{``0,System.Boolean}},System.Linq.Expressions.Expression{System.Func{``0,System.Boolean}},System.Linq.Expressions.ExpressionType)">
             <summary>
-            Appends <paramref name="right"/> to <paramref name="left"/>.
+            Appends the specified right expression to the left expression using the specified expression append type.
             </summary>
-            <typeparam name="T"></typeparam>
-            <param name="left"></param>
-            <param name="right"></param>
-            <param name="expressionAppendType"></param>
-            <returns></returns>
+            <typeparam name="T">The type of the parameter in the expressions.</typeparam>
+            <param name="left">The left expression.</param>
+            <param name="right">The right expression.</param>
+            <param name="expressionAppendType">The expression append type.</param>
+            <returns>The combined expression.</returns>
         </member>
         <member name="M:Milvasoft.Core.Helpers.CommonHelper.AndAlso``1(System.Linq.Expressions.Expression{System.Func{``0,System.Boolean}},System.Linq.Expressions.Expression{System.Func{``0,System.Boolean}})">
             <summary>
-            Creates a lambda expression that represents a conditional AND operation
+            Creates a lambda expression that represents a conditional AND operation.
             </summary>
-            <param name="left">An expression to set the left property of the binary expression</param>
-            <param name="right">An expression to set the right property of the binary expression</param>
-            <returns>A binary expression that has the node type property equal to AndAlso, 
-            and the left and right properties set to the specified values</returns>
+            <typeparam name="T">The type of the parameter in the expression.</typeparam>
+            <param name="left">The left expression.</param>
+            <param name="right">The right expression.</param>
+            <returns>The combined expression.</returns>
         </member>
         <member name="M:Milvasoft.Core.Helpers.CommonHelper.OrElse``1(System.Linq.Expressions.Expression{System.Func{``0,System.Boolean}},System.Linq.Expressions.Expression{System.Func{``0,System.Boolean}})">
             <summary>
-            Creates a lambda expression that represents a conditional OR operation
+            Creates a lambda expression that represents a conditional OR operation.
             </summary>
-            <param name="left">An expression to set the left property of the binary expression</param>
-            <param name="right">An expression to set the right property of the binary expression</param>
-            <returns>A binary expression that has the node type property equal to OrElse, 
-            and the left and right properties set to the specified values</returns>
+            <typeparam name="T">The type of the parameter in the expression.</typeparam>
+            <param name="left">The left expression.</param>
+            <param name="right">The right expression.</param>
+            <returns>The combined expression.</returns>
         </member>
         <member name="M:Milvasoft.Core.Helpers.CommonHelper.GetPropertyName``2(System.Linq.Expressions.Expression{System.Func{``0,``1}})">
             <summary>
-            Determines the right casting and pets property name from expression with this right casting.
+            Gets the property name from the specified expression.
             </summary>
-            <typeparam name="T"></typeparam>
-            <typeparam name="TPropertyType"></typeparam>
-            <param name="expression"></param>
-            <returns></returns>
+            <typeparam name="T">The type of the parameter in the expression.</typeparam>
+            <typeparam name="TPropertyType">The type of the property.</typeparam>
+            <param name="expression">The expression.</param>
+            <returns>The property name.</returns>
         </member>
         <member name="M:Milvasoft.Core.Helpers.CommonHelper.ConfigureOptions``1(Milvasoft.Core.Abstractions.IMilvaBuilder,Microsoft.Extensions.Configuration.IConfigurationManager)">
             <summary>
@@ -2556,6 +2550,11 @@
         <member name="T:Milvasoft.Core.Utils.Constants.LocalizerKeys">
             <summary>
             Localizer message keys
+            </summary>
+        </member>
+        <member name="T:Milvasoft.Core.Utils.Constants.MilvaConstant">
+            <summary>
+            Milvasoft library constants.
             </summary>
         </member>
         <member name="F:Milvasoft.Core.Utils.Constants.MilvaConstant.ParentSectionName">

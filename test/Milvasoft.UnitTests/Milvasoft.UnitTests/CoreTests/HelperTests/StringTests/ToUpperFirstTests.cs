@@ -9,7 +9,7 @@ public partial class StringHelperTests
 {
     [Theory]
     [ClassData(typeof(InvalidStringDataWithCultureCodeFixture))]
-    public void ToUpperFirst_InputStringIsInvalidWithAnyCulture_ShouldReturnEmptyString(string input, string cultureCode, string expected)
+    public void ToUpperFirst_WithInputStringIsInvalidWithAnyCulture_ShouldReturnEmptyString(string input, string cultureCode, string expected)
     {
         //Arrange
         CultureInfo.CurrentCulture = new CultureInfo(cultureCode);
@@ -23,7 +23,7 @@ public partial class StringHelperTests
 
     [Theory]
     [ClassData(typeof(SpecialCharacteredStringDataWithCultureCodeFixture))]
-    public void ToUpperFirst_InputStringFirstCharacterIsUnableToUppercaseWithAnyCulture_ShouldReturnInputString(string input, string cultureCode, string expected)
+    public void ToUpperFirst_WithInputStringFirstCharacterIsUnableToUppercaseWithAnyCulture_ShouldReturnInputString(string input, string cultureCode, string expected)
     {
         //Arrange
         CultureInfo.CurrentCulture = new CultureInfo(cultureCode);
@@ -40,7 +40,7 @@ public partial class StringHelperTests
     [InlineData("ırmak", "tr-TR", "Irmak")]
     [InlineData("iksir", "en-US", "Iksir")]
     [InlineData("ırmak", "en-US", "Irmak")]
-    public void ToUpperFirst_InputStringIsValidWithDifferentCultures_ShouldReturnFirstCharacterUppercasedInputString(string input, string cultureCode, string expected)
+    public void ToUpperFirst_WithInputStringIsValidWithDifferentCultures_ShouldReturnFirstCharacterUppercasedInputString(string input, string cultureCode, string expected)
     {
         //Arrange
 
@@ -53,7 +53,7 @@ public partial class StringHelperTests
 
     [Theory]
     [ClassData(typeof(InvalidStringDataWithCultureCodeFixture))]
-    public void ToUpperInvariantFirst_InputStringIsInvalidWithDifferentCultures_ShouldReturnEmptyString(string input, string cultureCode, string expected)
+    public void ToUpperInvariantFirst_WithInputStringIsInvalidWithDifferentCultures_ShouldReturnEmptyString(string input, string cultureCode, string expected)
     {
         //Arrange
         CultureInfo.CurrentCulture = new CultureInfo(cultureCode);
@@ -67,7 +67,7 @@ public partial class StringHelperTests
 
     [Theory]
     [ClassData(typeof(SpecialCharacteredStringDataWithCultureCodeFixture))]
-    public void ToUpperInvariantFirst_InputStringFirstCharacterIsUnableToUppercaseWithDifferentCultures_ShouldReturnEmptyString(string input, string cultureCode, string expected)
+    public void ToUpperInvariantFirst_WithInputStringFirstCharacterIsUnableToUppercaseWithDifferentCultures_ShouldReturnEmptyString(string input, string cultureCode, string expected)
     {
         //Arrange
         CultureInfo.CurrentCulture = new CultureInfo(cultureCode);
@@ -82,7 +82,7 @@ public partial class StringHelperTests
     [Theory]
     [InlineData("tr-TR")]
     [InlineData("en-US")]
-    public void ToUpperInvariantFirst_InputStringFirstCharacterIsTurkishCharacterWithDifferentCultures_ShouldReturnFirstCharacterUppercasedInputString(string cultureCode)
+    public void ToUpperInvariantFirst_WithInputStringFirstCharacterIsTurkishCharacterWithDifferentCultures_ShouldReturnFirstCharacterUppercasedInputString(string cultureCode)
     {
         //Arrange
         var input = "iksir";
