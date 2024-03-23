@@ -8,101 +8,43 @@ namespace Milvasoft.Core;
 /// </summary>
 public static partial class HttpRequestHelper
 {
-    #region Create Request Message
+    private static readonly string _applicationJson = $"{MimeTypeNames.ApplicationJson}-";
 
     /// <summary>
-    /// Creates HTTP request message.
+    /// Creates an HTTP request message with the specified HTTP method, URL, content, encoding, media type, version, and headers.
     /// </summary>
-    /// <param name="encoding"></param>
-    /// <param name="mediaType"> etc "json" </param>
-    /// <param name="httpMethod"></param>
-    /// <param name="url"></param>
-    /// <param name="headers"></param>
-    /// <returns> HttpRequestMessage </returns>
-    public static HttpRequestMessage CreateRequestMessage(this HttpMethod httpMethod,
-                                                          Encoding encoding,
-                                                          string mediaType,
-                                                          string url,
-                                                          params KeyValuePair<string, string>[] headers)
+    /// <param name="httpMethod">The HTTP method of the request.</param>
+    /// <param name="url">The URL of the request.</param>
+    /// <param name="content">The content of the request.</param>
+    /// <param name="encoding">The encoding to be used for the request content. Default is <see cref="Encoding.UTF8"/></param>
+    /// <param name="mediaType">The media type of the request content. Default is 'json'</param>
+    /// <param name="version">The version of the HTTP protocol to be used. Default is '1.0'</param>
+    /// <param name="headers">The headers to be added to the request.</param>
+    /// <returns>The created HttpRequestMessage object.</returns>
+    public static HttpRequestMessage BuildRequestMessage(this HttpMethod httpMethod,
+                                                         string url,
+                                                         object content = null,
+                                                         List<KeyValuePair<string, string>> headers = null,
+                                                         Encoding encoding = null,
+                                                         string mediaType = null,
+                                                         Version version = null)
     {
-        var requestMessage = new HttpRequestMessage
-        {
-            Content = new StringContent("", encoding, "application/json-" + httpMethod.ToString() + $"+{mediaType}"),
-            RequestUri = new Uri(url),
-            Method = httpMethod
-        };
+        encoding ??= Encoding.UTF8;
+        mediaType ??= MimeTypeNames.Json;
+        version ??= new Version(1, 0);
 
-        if (headers != null && headers.Length > 0)
-            for (var i = 0; i < headers.Length; i++)
-                requestMessage.Headers.Add(headers[i].Key, headers[i].Value);
-
-        return requestMessage;
-    }
-
-    /// <summary>
-    /// Creates HTTP request message.
-    /// </summary>
-    /// <param name="encoding"></param>
-    /// <param name="mediaType"> etc "json" </param>
-    /// <param name="httpMethod"></param>
-    /// <param name="url"></param>
-    /// <param name="content"></param>
-    /// <param name="headers"></param>
-    /// <returns> HttpRequestMessage </returns>
-    public static HttpRequestMessage CreateRequestMessage(this HttpMethod httpMethod,
-                                                          Encoding encoding,
-                                                          string mediaType,
-                                                          string url,
-                                                          object content,
-                                                          params KeyValuePair<string, string>[] headers)
-    {
-        var json = JsonSerializer.Serialize(content);
+        var contentString = content != null ? JsonSerializer.Serialize(content) : string.Empty;
 
         var requestMessage = new HttpRequestMessage
         {
-            Content = new StringContent(json, encoding, "application/json-" + httpMethod.ToString() + $"+{mediaType}"),
-            RequestUri = new Uri(url),
-            Method = httpMethod
-        };
-
-        if (headers != null && headers.Length > 0)
-            for (var i = 0; i < headers.Length; i++)
-                requestMessage.Headers.Add(headers[i].Key, headers[i].Value);
-
-        return requestMessage;
-    }
-
-    /// <summary>
-    /// Creates HTTP request message.
-    /// </summary>
-    /// <param name="encoding"></param>
-    /// <param name="mediaType"> etc "json" </param>
-    /// <param name="httpMethod"></param>
-    /// <param name="url"></param>
-    /// <param name="content"></param>
-    /// <param name="version"></param>
-    /// <param name="headers"></param>
-    /// <returns> HttpRequestMessage </returns>
-    public static HttpRequestMessage CreateRequestMessage(this HttpMethod httpMethod,
-                                                          Encoding encoding,
-                                                          string mediaType,
-                                                          string url,
-                                                          object content,
-                                                          Version version,
-                                                          params KeyValuePair<string, string>[] headers)
-    {
-        var json = JsonSerializer.Serialize(content);
-
-        var requestMessage = new HttpRequestMessage
-        {
-            Content = new StringContent(json, encoding, "application/json-" + httpMethod.ToString() + $"+{mediaType}"),
+            Content = new StringContent(contentString, encoding, _applicationJson + httpMethod.ToString() + $"+{mediaType}"),
             RequestUri = new Uri(url),
             Method = httpMethod,
-            Version = version ?? new Version(1, 0)
+            Version = version
         };
 
-        if (headers != null && headers.Length > 0)
-            for (var i = 0; i < headers.Length; i++)
+        if (!headers.IsNullOrEmpty())
+            for (var i = 0; i < headers.Count; i++)
                 requestMessage.Headers.Add(headers[i].Key, headers[i].Value);
 
         return requestMessage;
@@ -132,15 +74,15 @@ public static partial class HttpRequestHelper
     /// <param name="query"></param>
     /// <param name="hash"></param>
     /// <returns></returns>
-    public static string CreateRequestUrl(string protocol,
-                                          string hostName,
-                                          string port,
-                                          string pathName,
-                                          string query = "",
-                                          string hash = "")
+    public static string BuildRequestUrl(string protocol,
+                                         string hostName,
+                                         string port,
+                                         string pathName,
+                                         string query = "",
+                                         string hash = "")
     {
-        query = query == "" ? query : "?" + query;
-        hash = hash == "" ? hash : "#" + hash;
+        query = query == string.Empty ? query : "?" + query;
+        hash = hash == string.Empty ? hash : "#" + hash;
         var requestUrl = $"{protocol}://{hostName}:{port}/{pathName}{query}{hash}";
 
         // Create new Regex.
@@ -153,7 +95,7 @@ public static partial class HttpRequestHelper
         {
             // Test for Success.
             if (!match.Success)
-                throw new Exception("Invalid url");
+                throw new Exception(LocalizerKeys.InvalidUrlErrorMessage);
 
             return requestUrl;
         }
@@ -185,13 +127,13 @@ public static partial class HttpRequestHelper
     /// <param name="query"></param>
     /// <param name="hash"></param>
     /// <returns></returns>
-    public static string CreateRequestUrlFromAddress(string address,
-                                                     string pathName,
-                                                     string query = "",
-                                                     string hash = "")
+    public static string BuildRequestUrlFromAddress(string address,
+                                                    string pathName,
+                                                    string query = "",
+                                                    string hash = "")
     {
-        query = query == "" ? query : "?" + query;
-        hash = hash == "" ? hash : "#" + hash;
+        query = query == string.Empty ? query : "?" + query;
+        hash = hash == string.Empty ? hash : "#" + hash;
         var requestUrl = $"{address}/{pathName}{query}{hash}";
 
         // Create new Regex.
@@ -204,7 +146,7 @@ public static partial class HttpRequestHelper
         {
             // Test for Success.
             if (!match.Success)
-                throw new Exception("Invalid url");
+                throw new Exception(LocalizerKeys.InvalidUrlErrorMessage);
 
             return requestUrl;
         }
@@ -216,7 +158,4 @@ public static partial class HttpRequestHelper
 
     [GeneratedRegex(@"^(ht|f)tp(s?)\:\/\/[0-9a-zA-Z]([-.\w]*[0-9a-zA-Z])*(:(0-9)*)*(\/?)([a-zA-Z0-9\-\.\?\=\,\'\/\\\+&%\$#_]*)?$")]
     private static partial Regex UriRegex();
-
-    #endregion
-
 }

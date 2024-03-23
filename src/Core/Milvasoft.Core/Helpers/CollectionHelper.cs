@@ -14,7 +14,6 @@ public static partial class CommonHelper
 
     private static readonly MethodInfo _orderByDescendingMethod = typeof(Queryable).GetMethods().Single(method => method.Name == "OrderByDescending" && method.GetParameters().Length == 2);
 
-
     /// <summary>
     /// Checks if the collection is null or empty.
     /// </summary>
@@ -42,7 +41,7 @@ public static partial class CommonHelper
 
         var genericMethod = _orderByMethod.MakeGenericMethod(typeof(T), orderByProperty.Type);
 
-        var ret = genericMethod.Invoke(null, new object[] { source, lambda });
+        var ret = genericMethod.Invoke(null, [source, lambda]);
 
         return (IQueryable<T>)ret;
     }
@@ -67,7 +66,7 @@ public static partial class CommonHelper
 
         var genericMethod = _orderByDescendingMethod.MakeGenericMethod(typeof(T), orderByProperty.Type);
 
-        var ret = genericMethod.Invoke(null, new object[] { source, lambda });
+        var ret = genericMethod.Invoke(null, [source, lambda]);
 
         return (IQueryable<T>)ret;
     }

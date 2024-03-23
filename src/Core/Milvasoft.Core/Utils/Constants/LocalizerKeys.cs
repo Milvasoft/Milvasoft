@@ -9,6 +9,7 @@ public static class LocalizerKeys
     public const string DefaultErrorMessage = "An error occured while processing";
     public const string LocalizedEntityName = nameof(LocalizedEntityName);
     public const string Localized = nameof(Localized);
+    public const string InvalidUrlErrorMessage = "Invalid url! Please check url parts!";
 
     #region Response Message Keys
 

@@ -68,7 +68,7 @@ public class MilvaRegexAttribute : RegularExpressionAttribute
                 {
                     var localizedPattern = milvaLocalizer[$"{LocalizerKeys.RegexPattern}{MemberNameLocalizerKey ?? context.MemberName}"];
 
-                    if (RegexMatcher.MatchRegex(value.ToString(), milvaLocalizer[localizedPattern]))
+                    if (RegexHelper.MatchRegex(value.ToString(), milvaLocalizer[localizedPattern]))
                         return ValidationResult.Success;
                     else
                     {
@@ -89,7 +89,7 @@ public class MilvaRegexAttribute : RegularExpressionAttribute
                 {
                     var localizedPattern = milvaLocalizer[$"{LocalizerKeys.RegexPattern}{MemberNameLocalizerKey ?? context.MemberName}"];
 
-                    if (RegexMatcher.MatchRegex(value.ToString(), milvaLocalizer[localizedPattern]))
+                    if (RegexHelper.MatchRegex(value.ToString(), milvaLocalizer[localizedPattern]))
                         return ValidationResult.Success;
                     else
                     {

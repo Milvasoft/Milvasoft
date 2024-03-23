@@ -104,6 +104,9 @@ public static class MimeTypeNames
     public const string MessageImdnXml = "message/imdn+xml";
 
     ///<summary>JavaScript Object Notation JSON; Defined in RFC 4627</summary>
+    public const string Json = "json";
+
+    ///<summary>JavaScript Object Notation JSON; Defined in RFC 4627</summary>
     public const string ApplicationJson = "application/json";
 
     ///<summary>JavaScript Object Notation (JSON) Patch; Defined in RFC 6902</summary>

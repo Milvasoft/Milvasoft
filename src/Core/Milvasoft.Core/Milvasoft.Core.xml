@@ -2377,85 +2377,46 @@
             Longitude of point.
             </summary>
         </member>
-        <member name="T:Milvasoft.Core.Helpers.RegexMatcher">
+        <member name="T:Milvasoft.Core.Helpers.RegexHelper">
             <summary>
-            Helper class for match input string and regex.
+            Helper class for matching input strings with regular expressions.
             </summary>
         </member>
-        <member name="M:Milvasoft.Core.Helpers.RegexMatcher.MatchRegex(System.Text.RegularExpressions.Regex,System.String)">
+        <member name="M:Milvasoft.Core.Helpers.RegexHelper.MatchRegex(System.String,System.Text.RegularExpressions.Regex)">
             <summary>
-            Checks if <paramref name="input"/> matches <paramref name="regex"/>.
+            Checks if the <paramref name="input"/> matches the specified <paramref name="regex"/>.
             </summary>
-            <param name="regex"></param>
-            <param name="input"></param>
-            <returns></returns>
+            <param name="regex">The regular expression pattern to match.</param>
+            <param name="input">The input string to match against the regular expression.</param>
+            <returns><c>true</c> if the input matches the regex; otherwise, <c>false</c>.</returns>
         </member>
-        <member name="M:Milvasoft.Core.Helpers.RegexMatcher.MatchRegex(System.String,System.String)">
+        <member name="M:Milvasoft.Core.Helpers.RegexHelper.MatchRegex(System.String,System.String)">
             <summary>
-            Checks if <paramref name="input"/> matches <paramref name="regexString"/>.
+            Checks if the <paramref name="input"/> matches the specified <paramref name="regexString"/>.
             </summary>
-            <param name="input"></param>
-            <param name="regexString"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Milvasoft.Core.Helpers.RegexMatcher.GetMatchResult(System.Text.RegularExpressions.Regex,System.String)">
-            <summary>
-            Checks if <paramref name="input"/> matches <paramref name="regex"/>.
-            </summary>
-            <param name="regex"></param>
-            <param name="input"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Milvasoft.Core.Helpers.RegexMatcher.GetMatchResult(System.String,System.String)">
-            <summary>
-            Checks if <paramref name="input"/> matches <paramref name="regexString"/>.
-            </summary>
-            <param name="input"></param>
-            <param name="regexString"></param>
-            <returns></returns>
+            <param name="input">The input string to match against the regular expression.</param>
+            <param name="regexString">The regular expression pattern to match.</param>
+            <returns><c>true</c> if the input matches the regex; otherwise, <c>false</c>.</returns>
         </member>
         <member name="T:Milvasoft.Core.HttpRequestHelper">
             <summary>
             Helper class for request processes.
             </summary>
         </member>
-        <member name="M:Milvasoft.Core.HttpRequestHelper.CreateRequestMessage(System.Net.Http.HttpMethod,System.Text.Encoding,System.String,System.String,System.Collections.Generic.KeyValuePair{System.String,System.String}[])">
+        <member name="M:Milvasoft.Core.HttpRequestHelper.BuildRequestMessage(System.Net.Http.HttpMethod,System.String,System.Object,System.Collections.Generic.List{System.Collections.Generic.KeyValuePair{System.String,System.String}},System.Text.Encoding,System.String,System.Version)">
             <summary>
-            Creates HTTP request message.
+            Creates an HTTP request message with the specified HTTP method, URL, content, encoding, media type, version, and headers.
             </summary>
-            <param name="encoding"></param>
-            <param name="mediaType"> etc "json" </param>
-            <param name="httpMethod"></param>
-            <param name="url"></param>
-            <param name="headers"></param>
-            <returns> HttpRequestMessage </returns>
+            <param name="httpMethod">The HTTP method of the request.</param>
+            <param name="url">The URL of the request.</param>
+            <param name="content">The content of the request.</param>
+            <param name="encoding">The encoding to be used for the request content. Default is <see cref="P:System.Text.Encoding.UTF8"/></param>
+            <param name="mediaType">The media type of the request content. Default is 'json'</param>
+            <param name="version">The version of the HTTP protocol to be used. Default is '1.0'</param>
+            <param name="headers">The headers to be added to the request.</param>
+            <returns>The created HttpRequestMessage object.</returns>
         </member>
-        <member name="M:Milvasoft.Core.HttpRequestHelper.CreateRequestMessage(System.Net.Http.HttpMethod,System.Text.Encoding,System.String,System.String,System.Object,System.Collections.Generic.KeyValuePair{System.String,System.String}[])">
-            <summary>
-            Creates HTTP request message.
-            </summary>
-            <param name="encoding"></param>
-            <param name="mediaType"> etc "json" </param>
-            <param name="httpMethod"></param>
-            <param name="url"></param>
-            <param name="content"></param>
-            <param name="headers"></param>
-            <returns> HttpRequestMessage </returns>
-        </member>
-        <member name="M:Milvasoft.Core.HttpRequestHelper.CreateRequestMessage(System.Net.Http.HttpMethod,System.Text.Encoding,System.String,System.String,System.Object,System.Version,System.Collections.Generic.KeyValuePair{System.String,System.String}[])">
-            <summary>
-            Creates HTTP request message.
-            </summary>
-            <param name="encoding"></param>
-            <param name="mediaType"> etc "json" </param>
-            <param name="httpMethod"></param>
-            <param name="url"></param>
-            <param name="content"></param>
-            <param name="version"></param>
-            <param name="headers"></param>
-            <returns> HttpRequestMessage </returns>
-        </member>
-        <member name="M:Milvasoft.Core.HttpRequestHelper.CreateRequestUrl(System.String,System.String,System.String,System.String,System.String,System.String)">
+        <member name="M:Milvasoft.Core.HttpRequestHelper.BuildRequestUrl(System.String,System.String,System.String,System.String,System.String,System.String)">
             <summary>
             <b>Makes reques url from requested params.</b> <para> For more detailed information of URL Sections, please refer to the remarks section where the method is described.</para>
             </summary>
@@ -2481,7 +2442,7 @@
             <param name="hash"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Core.HttpRequestHelper.CreateRequestUrlFromAddress(System.String,System.String,System.String,System.String)">
+        <member name="M:Milvasoft.Core.HttpRequestHelper.BuildRequestUrlFromAddress(System.String,System.String,System.String,System.String)">
             <summary>
             <b>Makes reques url from requested params.</b>  <para> For more detailed information of URL Sections, please refer to the remarks section where the method is described. </para>
             </summary>
@@ -2676,6 +2637,9 @@
         </member>
         <member name="F:Milvasoft.Core.Utils.Constants.MimeTypeNames.MessageImdnXml">
             <summary>IMDN Instant Message Disposition Notification; Defined in RFC 5438</summary>
+        </member>
+        <member name="F:Milvasoft.Core.Utils.Constants.MimeTypeNames.Json">
+            <summary>JavaScript Object Notation JSON; Defined in RFC 4627</summary>
         </member>
         <member name="F:Milvasoft.Core.Utils.Constants.MimeTypeNames.ApplicationJson">
             <summary>JavaScript Object Notation JSON; Defined in RFC 4627</summary>
