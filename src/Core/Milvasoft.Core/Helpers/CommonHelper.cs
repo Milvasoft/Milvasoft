@@ -1,4 +1,4 @@
-﻿using Milvasoft.Core.Utils;
+﻿using Milvasoft.Types.Structs;
 using System.Collections;
 using System.ComponentModel;
 using System.Linq.Expressions;

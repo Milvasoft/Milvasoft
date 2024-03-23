@@ -1,4 +1,4 @@
-﻿using Milvasoft.Core.Utils;
+﻿using Milvasoft.Types.Structs;
 using System.Reflection;
 
 namespace Milvasoft.Core.EntityBases.Concrete;

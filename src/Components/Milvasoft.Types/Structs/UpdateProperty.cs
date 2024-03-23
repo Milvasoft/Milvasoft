@@ -1,4 +1,4 @@
-﻿namespace Milvasoft.Core.Utils;
+﻿namespace Milvasoft.Types.Structs;
 
 /// <summary>
 /// Represents a generic updatable property.

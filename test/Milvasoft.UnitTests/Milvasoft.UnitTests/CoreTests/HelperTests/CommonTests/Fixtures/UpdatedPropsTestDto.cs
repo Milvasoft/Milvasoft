@@ -1,5 +1,5 @@
 ﻿using Milvasoft.Core.EntityBases.Concrete;
-using Milvasoft.Core.Utils;
+using Milvasoft.Types.Structs;
 
 namespace Milvasoft.UnitTests.CoreTests.HelperTests.CommonTests.Fixtures;
 

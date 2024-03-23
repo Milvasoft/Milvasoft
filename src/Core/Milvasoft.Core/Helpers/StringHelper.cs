@@ -11,9 +11,9 @@ public static partial class CommonHelper
     /// <summary>
     /// Uppercases the first letter of the word.
     /// </summary>
-    /// <param name="str"></param>
-    /// <param name="cultureInfo"></param>
-    /// <returns></returns>
+    /// <param name="str">The input string.</param>
+    /// <param name="cultureInfo">The culture info to be used for casing rules. If null, the current culture will be used.</param>
+    /// <returns>The input string with the first letter uppercased.</returns>
     public static string ToUpperFirst(this string str, CultureInfo cultureInfo = null)
     {
         cultureInfo ??= CultureInfo.CurrentCulture;
@@ -29,8 +29,8 @@ public static partial class CommonHelper
     /// <summary>
     /// Uppercases the first letter of the word using the casing rules of the invariant culture.
     /// </summary>
-    /// <param name="str"></param>
-    /// <returns></returns>
+    /// <param name="str">The input string.</param>
+    /// <returns>The input string with the first letter uppercased using the casing rules of the invariant culture.</returns>
     public static string ToUpperInvariantFirst(this string str)
     {
         if (string.IsNullOrWhiteSpace(str) || str.Length == 0)
@@ -44,9 +44,9 @@ public static partial class CommonHelper
     /// <summary>
     /// Lowercases the first letter of the word.
     /// </summary>
-    /// <param name="str"></param>
-    /// <param name="cultureInfo"></param>
-    /// <returns></returns>
+    /// <param name="str">The input string.</param>
+    /// <param name="cultureInfo">The culture info to be used for casing rules. If null, the current culture will be used.</param>
+    /// <returns>The input string with the first letter lowercased.</returns>
     public static string ToLowerFirst(this string str, CultureInfo cultureInfo = null)
     {
         cultureInfo ??= CultureInfo.CurrentCulture;
@@ -62,8 +62,8 @@ public static partial class CommonHelper
     /// <summary>
     /// Lowercases the first letter of the word using the casing rules of the invariant culture.
     /// </summary>
-    /// <param name="str"></param>
-    /// <returns></returns>
+    /// <param name="str">The input string.</param>
+    /// <returns>The input string with the first letter lowercased using the casing rules of the invariant culture.</returns>
     public static string ToLowerInvariantFirst(this string str)
     {
         if (string.IsNullOrWhiteSpace(str) || str.Length == 0)
@@ -75,24 +75,24 @@ public static partial class CommonHelper
     }
 
     /// <summary>
-    /// Gets <paramref name="str"/>'s bytes.
+    /// Gets the byte array representation of the input string.
     /// </summary>
-    /// <param name="str"></param>
-    /// <returns></returns>
+    /// <param name="str">The input string.</param>
+    /// <returns>The byte array representation of the input string.</returns>
     public static byte[] GetByteArray(this string str) => !string.IsNullOrEmpty(str) ? Encoding.UTF8.GetBytes(str) : null;
 
     /// <summary>
-    /// Gets string from <paramref name="array"/>.
+    /// Gets the string representation of the input byte array.
     /// </summary>
-    /// <param name="array"></param>
-    /// <returns></returns>
+    /// <param name="array">The input byte array.</param>
+    /// <returns>The string representation of the input byte array.</returns>
     public static string GetString(this byte[] array) => !array.IsNullOrEmpty() ? Encoding.UTF8.GetString(array) : string.Empty;
 
     /// <summary>
-    /// Hashes <paramref name="str"/> with <see cref="SHA256"/>
+    /// Hashes the input string using the SHA256 algorithm.
     /// </summary>
-    /// <param name="str"></param>
-    /// <returns> Hashed <paramref name="str"/> as byte content. </returns>
+    /// <param name="str">The input string.</param>
+    /// <returns>The hashed string as a byte array.</returns>
     public static byte[] HashToByteArray(this string str)
     {
         var byteArray = str.GetByteArray();
@@ -125,9 +125,9 @@ public static partial class CommonHelper
     }
 
     /// <summary>
-    /// Normalize string according to invariant culture.
+    /// Normalizes the input string according to the invariant culture.
     /// </summary>
-    /// <param name="value"></param>
-    /// <returns></returns>
+    /// <param name="value">The input string.</param>
+    /// <returns>The normalized string according to the invariant culture.</returns>
     public static string MilvaNormalize(this string value) => !string.IsNullOrWhiteSpace(value) ? value.ToLower().ToUpperInvariant() : value;
 }

@@ -1067,7 +1067,7 @@
         </member>
         <member name="M:Milvasoft.Core.EntityBases.Concrete.DtoBase.GetUpdatableProperties">
             <summary>
-            Returns a collection of PropertyInfo objects that represent properties of the DTO that implements <see cref="T:Milvasoft.Core.Utils.IUpdateProperty"/>.
+            Returns a collection of PropertyInfo objects that represent properties of the DTO that implements <see cref="T:Milvasoft.Types.Structs.IUpdateProperty"/>.
             </summary>
             <returns>A collection of PropertyInfo objects representing the updatable properties of the DTO.</returns>
         </member>
@@ -1961,7 +1961,7 @@
             <remarks>
             This method is used to update the entity object with the values of the updatable properties in the DTO object.
             It iterates over the updatable properties in the DTO object and finds the matching property in the entity class.
-            If a matching property is found and the property value is an instance of <see cref="T:Milvasoft.Core.Utils.IUpdateProperty"/> and IsUpdated property is true,
+            If a matching property is found and the property value is an instance of <see cref="T:Milvasoft.Types.Structs.IUpdateProperty"/> and IsUpdated property is true,
             the specified action is performed on the matching property in the entity object.
             </remarks>
         </member>
@@ -2273,52 +2273,52 @@
             <summary>
             Uppercases the first letter of the word.
             </summary>
-            <param name="str"></param>
-            <param name="cultureInfo"></param>
-            <returns></returns>
+            <param name="str">The input string.</param>
+            <param name="cultureInfo">The culture info to be used for casing rules. If null, the current culture will be used.</param>
+            <returns>The input string with the first letter uppercased.</returns>
         </member>
         <member name="M:Milvasoft.Core.Helpers.CommonHelper.ToUpperInvariantFirst(System.String)">
             <summary>
             Uppercases the first letter of the word using the casing rules of the invariant culture.
             </summary>
-            <param name="str"></param>
-            <returns></returns>
+            <param name="str">The input string.</param>
+            <returns>The input string with the first letter uppercased using the casing rules of the invariant culture.</returns>
         </member>
         <member name="M:Milvasoft.Core.Helpers.CommonHelper.ToLowerFirst(System.String,System.Globalization.CultureInfo)">
             <summary>
             Lowercases the first letter of the word.
             </summary>
-            <param name="str"></param>
-            <param name="cultureInfo"></param>
-            <returns></returns>
+            <param name="str">The input string.</param>
+            <param name="cultureInfo">The culture info to be used for casing rules. If null, the current culture will be used.</param>
+            <returns>The input string with the first letter lowercased.</returns>
         </member>
         <member name="M:Milvasoft.Core.Helpers.CommonHelper.ToLowerInvariantFirst(System.String)">
             <summary>
             Lowercases the first letter of the word using the casing rules of the invariant culture.
             </summary>
-            <param name="str"></param>
-            <returns></returns>
+            <param name="str">The input string.</param>
+            <returns>The input string with the first letter lowercased using the casing rules of the invariant culture.</returns>
         </member>
         <member name="M:Milvasoft.Core.Helpers.CommonHelper.GetByteArray(System.String)">
             <summary>
-            Gets <paramref name="str"/>'s bytes.
+            Gets the byte array representation of the input string.
             </summary>
-            <param name="str"></param>
-            <returns></returns>
+            <param name="str">The input string.</param>
+            <returns>The byte array representation of the input string.</returns>
         </member>
         <member name="M:Milvasoft.Core.Helpers.CommonHelper.GetString(System.Byte[])">
             <summary>
-            Gets string from <paramref name="array"/>.
+            Gets the string representation of the input byte array.
             </summary>
-            <param name="array"></param>
-            <returns></returns>
+            <param name="array">The input byte array.</param>
+            <returns>The string representation of the input byte array.</returns>
         </member>
         <member name="M:Milvasoft.Core.Helpers.CommonHelper.HashToByteArray(System.String)">
             <summary>
-            Hashes <paramref name="str"/> with <see cref="T:System.Security.Cryptography.SHA256"/>
+            Hashes the input string using the SHA256 algorithm.
             </summary>
-            <param name="str"></param>
-            <returns> Hashed <paramref name="str"/> as byte content. </returns>
+            <param name="str">The input string.</param>
+            <returns>The hashed string as a byte array.</returns>
         </member>
         <member name="M:Milvasoft.Core.Helpers.CommonHelper.Hash(System.String)">
             <summary>
@@ -2329,10 +2329,10 @@
         </member>
         <member name="M:Milvasoft.Core.Helpers.CommonHelper.MilvaNormalize(System.String)">
             <summary>
-            Normalize string according to invariant culture.
+            Normalizes the input string according to the invariant culture.
             </summary>
-            <param name="value"></param>
-            <returns></returns>
+            <param name="value">The input string.</param>
+            <returns>The normalized string according to the invariant culture.</returns>
         </member>
         <member name="T:Milvasoft.Core.Helpers.GeoLocation.GeoLocationExtensions">
             <summary>
@@ -3119,109 +3119,6 @@
             <summary>
             Priority of order operation. Ex. first order by creation date then order by updated date.
             </summary>
-        </member>
-        <member name="T:Milvasoft.Core.Utils.UpdateProperty`1">
-            <summary>
-            Represents a generic updatable property.
-            </summary>
-            <typeparam name="T">The type of the property value.</typeparam>
-        </member>
-        <member name="P:Milvasoft.Core.Utils.UpdateProperty`1.Value">
-            <summary>
-            Gets or sets the value of the property.
-            </summary>
-        </member>
-        <member name="P:Milvasoft.Core.Utils.UpdateProperty`1.IsUpdated">
-            <summary>
-            Gets or sets a value indicating whether the property has been updated.
-            </summary>
-        </member>
-        <member name="M:Milvasoft.Core.Utils.UpdateProperty`1.#ctor">
-            <summary>
-            Initializes a new instance of the <see cref="T:Milvasoft.Core.Utils.UpdateProperty`1"/> struct.
-            </summary>
-        </member>
-        <member name="M:Milvasoft.Core.Utils.UpdateProperty`1.#ctor(`0)">
-            <summary>
-            Initializes a new instance of the <see cref="T:Milvasoft.Core.Utils.UpdateProperty`1"/> struct with the specified value.
-            </summary>
-            <param name="value">The initial value of the property.</param>
-        </member>
-        <member name="M:Milvasoft.Core.Utils.UpdateProperty`1.GetValue">
-            <summary>
-            Gets the value of the property as an object.
-            </summary>
-            <returns>The value of the property.</returns>
-        </member>
-        <member name="M:Milvasoft.Core.Utils.UpdateProperty`1.GetHashCode">
-            <summary>
-            Combines Tenancy Name and BranchNo into a hash code.
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:Milvasoft.Core.Utils.UpdateProperty`1.Equals(System.Object)">
-            <summary>
-            Compares two <see cref="T:Milvasoft.Core.Utils.UpdateProperty`1"/> objects for equality.
-            </summary>
-            <param name="other"></param>
-            <returns> If both hash are equals returns true, othewise false. </returns>
-        </member>
-        <member name="M:Milvasoft.Core.Utils.UpdateProperty`1.Equals(Milvasoft.Core.Utils.UpdateProperty{`0})">
-            <summary>
-            Compares two <see cref="T:Milvasoft.Core.Utils.UpdateProperty`1"/> objects for equality.
-            </summary>
-            <param name="other"></param>
-            <returns> If both hash are equals returns true, othewise false. </returns>
-        </member>
-        <member name="M:Milvasoft.Core.Utils.UpdateProperty`1.op_Implicit(Milvasoft.Core.Utils.UpdateProperty{`0})~`0">
-            <summary>
-            Implicitly converts an <see cref="T:Milvasoft.Core.Utils.UpdateProperty`1"/> to its underlying value.
-            </summary>
-            <param name="s">The <see cref="T:Milvasoft.Core.Utils.UpdateProperty`1"/> to convert.</param>
-        </member>
-        <member name="M:Milvasoft.Core.Utils.UpdateProperty`1.op_Implicit(`0)~Milvasoft.Core.Utils.UpdateProperty{`0}">
-            <summary>
-            Implicitly converts a value of type <typeparamref name="T"/> to an <see cref="T:Milvasoft.Core.Utils.UpdateProperty`1"/>.
-            </summary>
-            <param name="s">The value to convert.</param>
-        </member>
-        <member name="M:Milvasoft.Core.Utils.UpdateProperty`1.op_Equality(Milvasoft.Core.Utils.UpdateProperty{`0},Milvasoft.Core.Utils.UpdateProperty{`0})">
-            <summary>
-            Compares two <see cref="T:Milvasoft.Core.Utils.UpdateProperty`1"/> objects for equality.
-            </summary>
-            <param name="a">The first <see cref="T:Milvasoft.Core.Utils.UpdateProperty`1"/> to compare.</param>
-            <param name="b">The second <see cref="T:Milvasoft.Core.Utils.UpdateProperty`1"/> to compare.</param>
-            <returns>True if the two <see cref="T:Milvasoft.Core.Utils.UpdateProperty`1"/> objects are equal; otherwise, false.</returns>
-        </member>
-        <member name="M:Milvasoft.Core.Utils.UpdateProperty`1.op_Inequality(Milvasoft.Core.Utils.UpdateProperty{`0},Milvasoft.Core.Utils.UpdateProperty{`0})">
-            <summary>
-            Compares two <see cref="T:Milvasoft.Core.Utils.UpdateProperty`1"/> objects for equality.
-            </summary>
-            <param name="a">The first <see cref="T:Milvasoft.Core.Utils.UpdateProperty`1"/> to compare.</param>
-            <param name="b">The second <see cref="T:Milvasoft.Core.Utils.UpdateProperty`1"/> to compare.</param>
-            <returns>True if the two <see cref="T:Milvasoft.Core.Utils.UpdateProperty`1"/> objects are equal; otherwise, false.</returns>
-        </member>
-        <member name="M:Milvasoft.Core.Utils.UpdateProperty`1.ToString">
-            <summary>
-            Returns a string that represents the current <see cref="T:Milvasoft.Core.Utils.UpdateProperty`1"/> object.
-            </summary>
-            <returns>A string that represents the current object.</returns>
-        </member>
-        <member name="T:Milvasoft.Core.Utils.IUpdateProperty">
-            <summary>
-            Represents an updatable property.
-            </summary>
-        </member>
-        <member name="P:Milvasoft.Core.Utils.IUpdateProperty.IsUpdated">
-            <summary>
-            Gets a value indicating whether the property has been updated.
-            </summary>
-        </member>
-        <member name="M:Milvasoft.Core.Utils.IUpdateProperty.GetValue">
-            <summary>
-            Gets the value of the property as an object.
-            </summary>
-            <returns>The value of the property.</returns>
         </member>
         <member name="T:System.Text.RegularExpressions.Generated.UriRegex_0">
             <summary>Custom <see cref="T:System.Text.RegularExpressions.Regex"/>-derived type for the UriRegex method.</summary>
