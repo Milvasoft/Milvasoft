@@ -3,16 +3,16 @@
 namespace Milvasoft.Core.Helpers.GeoLocation;
 
 /// <summary>
-/// Extension methods for geo location.
+/// Contains extension methods for calculating distances between geographical points.
 /// </summary>
 public static class GeoLocationExtensions
 {
     /// <summary>
-    /// Calculates the distance in km from <paramref name="point1"/> to <paramref name="point2"/>.
+    /// Calculates the distance in kilometers between two geographical points.
     /// </summary>
-    /// <param name="point1"></param>
-    /// <param name="point2"></param>
-    /// <returns></returns>
+    /// <param name="point1">The first geographical point.</param>
+    /// <param name="point2">The second geographical point.</param>
+    /// <returns>The distance in kilometers between the two geographical points.</returns>
     public static double CalculateDistance(this GeoPoint point1, GeoPoint point2)
     {
         double tempLat1, tempLat2, tempLon1, tempLon2;

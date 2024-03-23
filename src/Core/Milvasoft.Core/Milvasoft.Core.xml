@@ -2336,45 +2336,45 @@
         </member>
         <member name="T:Milvasoft.Core.Helpers.GeoLocation.GeoLocationExtensions">
             <summary>
-            Extension methods for geo location.
+            Contains extension methods for calculating distances between geographical points.
             </summary>
         </member>
         <member name="M:Milvasoft.Core.Helpers.GeoLocation.GeoLocationExtensions.CalculateDistance(Milvasoft.Core.Helpers.GeoLocation.Models.GeoPoint,Milvasoft.Core.Helpers.GeoLocation.Models.GeoPoint)">
             <summary>
-            Calculates the distance in km from <paramref name="point1"/> to <paramref name="point2"/>.
+            Calculates the distance in kilometers between two geographical points.
             </summary>
-            <param name="point1"></param>
-            <param name="point2"></param>
-            <returns></returns>
+            <param name="point1">The first geographical point.</param>
+            <param name="point2">The second geographical point.</param>
+            <returns>The distance in kilometers between the two geographical points.</returns>
         </member>
         <member name="T:Milvasoft.Core.Helpers.GeoLocation.Models.GeoPoint">
             <summary>
-            Location point.
+            Represents a location point with latitude and longitude coordinates.
             </summary>
             <remarks>
-            Initialize new instance of <see cref="T:Milvasoft.Core.Helpers.GeoLocation.Models.GeoPoint"/> with lat and lon.
+            Use this class to initialize a new instance of <see cref="T:Milvasoft.Core.Helpers.GeoLocation.Models.GeoPoint"/> with latitude and longitude values.
             </remarks>
-            <param name="latitude"></param>
-            <param name="longitude"></param>
+            <param name="latitude">The latitude coordinate of the point.</param>
+            <param name="longitude">The longitude coordinate of the point.</param>
         </member>
         <member name="M:Milvasoft.Core.Helpers.GeoLocation.Models.GeoPoint.#ctor(System.Double,System.Double)">
             <summary>
-            Location point.
+            Represents a location point with latitude and longitude coordinates.
             </summary>
             <remarks>
-            Initialize new instance of <see cref="T:Milvasoft.Core.Helpers.GeoLocation.Models.GeoPoint"/> with lat and lon.
+            Use this class to initialize a new instance of <see cref="T:Milvasoft.Core.Helpers.GeoLocation.Models.GeoPoint"/> with latitude and longitude values.
             </remarks>
-            <param name="latitude"></param>
-            <param name="longitude"></param>
+            <param name="latitude">The latitude coordinate of the point.</param>
+            <param name="longitude">The longitude coordinate of the point.</param>
         </member>
         <member name="P:Milvasoft.Core.Helpers.GeoLocation.Models.GeoPoint.Latitude">
             <summary>
-            Latitude of point.
+            Gets or sets the latitude coordinate of the point.
             </summary>
         </member>
         <member name="P:Milvasoft.Core.Helpers.GeoLocation.Models.GeoPoint.Longitude">
             <summary>
-            Longitude of point.
+            Gets or sets the longitude coordinate of the point.
             </summary>
         </member>
         <member name="T:Milvasoft.Core.Helpers.RegexHelper">
@@ -2854,49 +2854,22 @@
         </member>
         <member name="T:Milvasoft.Core.Utils.ExpressionParameterReplacer">
             <summary>
-            Expression parameter replacer for expression builder.
+            Replaces the parameters in an expression for the expression builder.
             </summary>
         </member>
         <member name="M:Milvasoft.Core.Utils.ExpressionParameterReplacer.#ctor(System.Collections.Generic.IList{System.Linq.Expressions.ParameterExpression},System.Collections.Generic.IList{System.Linq.Expressions.ParameterExpression})">
             <summary>
-            Constructor of <see cref="T:Milvasoft.Core.Utils.ExpressionParameterReplacer"/>
+            Initializes a new instance of the <see cref="T:Milvasoft.Core.Utils.ExpressionParameterReplacer"/> class.
             </summary>
-            <param name="fromParameters"></param>
-            <param name="toParameters"></param>
+            <param name="fromParameters">The original parameters.</param>
+            <param name="toParameters">The replacement parameters.</param>
         </member>
         <member name="M:Milvasoft.Core.Utils.ExpressionParameterReplacer.VisitParameter(System.Linq.Expressions.ParameterExpression)">
             <summary>
             Visits the <see cref="T:System.Linq.Expressions.ParameterExpression"/>.
             </summary>
-            <param name="node"> The expression to visit. </param>
-            <returns> The modified expression, if it or any subexpression was modified; otherwise, returns the original expression.</returns>
-        </member>
-        <member name="T:Milvasoft.Core.Utils.ParameterReplaceVisitor">
-            <summary>
-            Expression parameter replacer for expression builder.
-            </summary>
-            <remarks>
-            Constructor of <see cref="T:Milvasoft.Core.Utils.ParameterReplaceVisitor"/>
-            </remarks>
-            <param name="from"></param>
-            <param name="to"></param>
-        </member>
-        <member name="M:Milvasoft.Core.Utils.ParameterReplaceVisitor.#ctor(System.Linq.Expressions.ParameterExpression,System.Linq.Expressions.ParameterExpression)">
-            <summary>
-            Expression parameter replacer for expression builder.
-            </summary>
-            <remarks>
-            Constructor of <see cref="T:Milvasoft.Core.Utils.ParameterReplaceVisitor"/>
-            </remarks>
-            <param name="from"></param>
-            <param name="to"></param>
-        </member>
-        <member name="M:Milvasoft.Core.Utils.ParameterReplaceVisitor.VisitParameter(System.Linq.Expressions.ParameterExpression)">
-            <summary>
-            Visits the System.Linq.Expressions.ParameterExpression.
-            </summary>
-            <param name="node"></param>
-            <returns></returns>
+            <param name="node">The expression to visit.</param>
+            <returns>The modified expression, if it or any subexpression was modified; otherwise, returns the original expression.</returns>
         </member>
         <member name="T:Milvasoft.Core.Utils.JsonConverters.ExceptionConverter`1">
             <summary>
@@ -3031,23 +3004,23 @@
         </member>
         <member name="T:Milvasoft.Core.Utils.MilvaLazy`1">
             <summary>
-            Custom <see cref="T:System.Lazy`1"/> class.
+            Represents a custom implementation of the <see cref="T:System.Lazy`1"/> class.
             </summary>
-            <typeparam name="T"></typeparam>
+            <typeparam name="T">The type of the lazily initialized value.</typeparam>
             <remarks>
-            Constructor of <see cref="T:Milvasoft.Core.Utils.MilvaLazy`1"/>.
+            This class provides a constructor for creating an instance of <see cref="T:Milvasoft.Core.Utils.MilvaLazy`1"/>.
             </remarks>
-            <param name="serviceProvider"></param>
+            <param name="serviceProvider">The service provider used to resolve the lazily initialized value.</param>
         </member>
         <member name="M:Milvasoft.Core.Utils.MilvaLazy`1.#ctor(System.IServiceProvider)">
             <summary>
-            Custom <see cref="T:System.Lazy`1"/> class.
+            Represents a custom implementation of the <see cref="T:System.Lazy`1"/> class.
             </summary>
-            <typeparam name="T"></typeparam>
+            <typeparam name="T">The type of the lazily initialized value.</typeparam>
             <remarks>
-            Constructor of <see cref="T:Milvasoft.Core.Utils.MilvaLazy`1"/>.
+            This class provides a constructor for creating an instance of <see cref="T:Milvasoft.Core.Utils.MilvaLazy`1"/>.
             </remarks>
-            <param name="serviceProvider"></param>
+            <param name="serviceProvider">The service provider used to resolve the lazily initialized value.</param>
         </member>
         <member name="T:Milvasoft.Core.Utils.Models.InvalidString">
             <summary>
