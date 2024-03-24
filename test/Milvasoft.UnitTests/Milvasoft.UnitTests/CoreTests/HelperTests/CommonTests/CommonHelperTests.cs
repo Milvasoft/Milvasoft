@@ -5,6 +5,7 @@ using Milvasoft.UnitTests.CoreTests.HelperTests.CommonTests.Fixtures;
 using Moq;
 using System.Linq.Expressions;
 using System.Reflection;
+using static Milvasoft.UnitTests.CoreTests.HelperTests.CommonTests.Fixtures.IsAssignableToTypeModelFixtures;
 
 namespace Milvasoft.UnitTests.CoreTests.HelperTests.CommonTests;
 
@@ -282,6 +283,150 @@ public partial class CommonHelperTests
         // Assert
         resultMatchingEntityProp.Name.Should().Be("Name");
         resultValue.Should().Be("test");
+    }
+
+    #endregion
+
+    #region CanAssignableTo
+
+
+    [Fact]
+    public void CanAssignableTo_WithNonGenericTypeAndNonInterfaceTargetType_ShouldReturnTrueIfTypeIsAssignable()
+    {
+        // Arrange
+        Type type = typeof(string);
+        Type targetType = typeof(object);
+
+        // Act
+        var result = type.CanAssignableTo(targetType);
+
+        // Assert
+        result.Should().BeTrue();
+    }
+
+    [Fact]
+    public void CanAssignableTo_WithNonGenericTypeAndNonInterfaceTargetType_ShouldReturnFalseIfTypeIsNotAssignable()
+    {
+        // Arrange
+        Type type = typeof(int);
+        Type targetType = typeof(string);
+
+        // Act
+        var result = type.CanAssignableTo(targetType);
+
+        // Assert
+        result.Should().BeFalse();
+    }
+
+    [Fact]
+    public void CanAssignableTo_WithNonGenericTypeAndInterfaceTargetType_ShouldReturnTrueIfTypeImplementsTargetInterface()
+    {
+        // Arrange
+        Type type = typeof(List<int>);
+        Type targetType = typeof(IEnumerable<int>);
+
+        // Act
+        var result = type.CanAssignableTo(targetType);
+
+        // Assert
+        result.Should().BeTrue();
+    }
+
+    [Fact]
+    public void CanAssignableTo_WithNonGenericTypeAndInterfaceTargetType_ShouldReturnFalseIfTypeDoesNotImplementTargetInterface()
+    {
+        // Arrange
+        Type type = typeof(List<int>);
+        Type targetType = typeof(IDictionary<int, string>);
+
+        // Act
+        var result = type.CanAssignableTo(targetType);
+
+        // Assert
+        result.Should().BeFalse();
+    }
+
+    [Fact]
+    public void CanAssignableTo_WithGenericTypeAndNonInterfaceTargetType_ShouldReturnTrueIfTypeIsAssignable()
+    {
+        // Arrange
+        Type type = typeof(List<int>);
+        Type targetType = typeof(List<>);
+
+        // Act
+        var result = type.CanAssignableTo(targetType);
+
+        // Assert
+        result.Should().BeTrue();
+    }
+
+    [Fact]
+    public void CanAssignableTo_WithGenericTypeAndNonInterfaceTargetType_ShouldReturnFalseIfTypeIsNotAssignable()
+    {
+        // Arrange
+        Type type = typeof(List<int>);
+        Type targetType = typeof(Dictionary<,>);
+
+        // Act
+        var result = type.CanAssignableTo(targetType);
+
+        // Assert
+        result.Should().BeFalse();
+    }
+
+    [Fact]
+    public void CanAssignableTo_WithGenericTypeAndInterfaceTargetType_ShouldReturnTrueIfTypeImplementsTargetInterface()
+    {
+        // Arrange
+        Type type = typeof(List<int>);
+        Type targetType = typeof(IEnumerable<>);
+
+        // Act
+        var result = type.CanAssignableTo(targetType);
+
+        // Assert
+        result.Should().BeTrue();
+    }
+
+    [Fact]
+    public void CanAssignableTo_WithGenericTypeAndInterfaceTargetType_ShouldReturnFalseIfTypeDoesNotImplementTargetInterface()
+    {
+        // Arrange
+        Type type = typeof(List<int>);
+        Type targetType = typeof(ICollection<>);
+
+        // Act
+        var result = type.CanAssignableTo(targetType);
+
+        // Assert
+        result.Should().BeTrue();
+    }
+
+    [Theory]
+    [InlineData(typeof(ClassImplementation), typeof(GenericClassImplementation<>), false)]
+    [InlineData(typeof(ClassImplementation), typeof(IInterface), false)]
+    [InlineData(typeof(IInterfaceImplementsIInterface), typeof(IInterface), true)]
+    [InlineData(typeof(ClassImplementationWithInterface), typeof(IInterface), true)]
+    [InlineData(typeof(GenericClassImplementationWithGenericInterface<>), typeof(IGenericInterface<>), true)]
+    [InlineData(typeof(GenericClassImplementationWithInterface<>), typeof(IInterface), true)]
+    [InlineData(typeof(ClassImplementsClassImplementation), typeof(ClassImplementation), true)]
+    [InlineData(typeof(GenericClassImplementsClassImplementation<>), typeof(ClassImplementation), true)]
+    [InlineData(typeof(GenericClassImplementsGenericClassImplementation<int>), typeof(GenericClassImplementation<>), true)]
+    [InlineData(typeof(ClassImplementsClassImplementationWithInterface), typeof(ClassImplementationWithInterface), true)]
+    [InlineData(typeof(ClassImplementsClassImplementationWithInterface), typeof(IInterface), true)]
+    [InlineData(typeof(GenericClassImplementsGenericClassImplementationWithTwoArgument<,>), typeof(GenericClassImplementation<>), true)]
+    [InlineData(typeof(GenericClassImplementsGenericClassImplementationWithTwoArgument<int, string>), typeof(GenericClassImplementation<>), true)]
+    [InlineData(typeof(GenericClassImplementsGenericClassImplementationWithTwoArgument<int, string>), typeof(GenericClassImplementation<int>), true)]
+    [InlineData(typeof(GenericClassImplementsGenericClassImplementationWithTwoArgument<int, string>), typeof(GenericClassImplementation<string>), false)]
+    public void CanAssignableTo_WithValidTypes_ShouldReturnExpected(Type type, Type targetType, bool expected)
+    {
+        // Arrange
+
+        // Act
+        var result = type.CanAssignableTo(targetType);
+
+        // Assert
+        result.Should().Be(expected);
     }
 
     #endregion

@@ -2,7 +2,7 @@
 using Milvasoft.Core.Helpers.GeoLocation;
 using Milvasoft.Core.Helpers.GeoLocation.Models;
 
-namespace Milvasoft.UnitTests.CoreTests.HelperTests.RegexTests;
+namespace Milvasoft.UnitTests.CoreTests.HelperTests.GeoLocationTests;
 
 public partial class GeoLocationExtensionsTests
 {

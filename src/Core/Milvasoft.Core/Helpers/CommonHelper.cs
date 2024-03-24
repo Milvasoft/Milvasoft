@@ -133,4 +133,79 @@ public static partial class CommonHelper
             }
         }
     }
+
+    /// <summary>
+    /// Determines whether the specified type can be assigned to the target type. 
+    /// </summary>
+    /// <param name="type">The type to check.</param>
+    /// <param name="targetType">The target type to check against.</param>
+    /// <remarks>
+    /// The <see cref="Type.IsAssignableTo(Type?)"/> method returns false in the examples like below. But <see cref="CanAssignableTo"/> returns true.
+    /// <code> typeof(SomeClass&lt;&gt;).IsAssignableTo(typeof(ISomeInterface&lt;&gt;)) </code>
+    /// <code> typeof(SomeClass&lt;int&gt;).IsAssignableTo(typeof(ISomeInterface&lt;&gt;)) </code>
+    /// </remarks>
+    /// <returns>True if the specified type can be assigned to the target type; otherwise, false.</returns>
+    public static bool CanAssignableTo(this Type type, Type targetType)
+    {
+        if (!targetType.IsGenericType || !type.IsGenericType)
+            return type.IsAssignableTo(targetType);
+
+        if (!IsTypeArgumentsCanBeAssignableToEachOther(type, targetType))
+            return false;
+
+        if (targetType.IsInterface)
+        {
+            var interfaceType = type.GetInterfaces().FirstOrDefault(i => i == targetType || (i.IsGenericType && i.GetGenericTypeDefinition() == targetType.GetGenericTypeDefinition()));
+
+            return interfaceType != null;
+        }
+        else
+        {
+            Type compareType;
+
+            if (type.BaseType == typeof(object))
+                compareType = type;
+            else
+                compareType = type.BaseType;
+
+            if (compareType.GetGenericTypeDefinition().IsAssignableTo(targetType.GetGenericTypeDefinition()))
+                return true;
+            else
+                return false;
+        }
+
+        static bool IsTypeArgumentsCanBeAssignableToEachOther(Type type, Type targetType)
+        {
+            var typeGenericArguments = type.GenericTypeArguments;
+            var targetTypeGenericArguments = targetType.GenericTypeArguments;
+
+            bool isGenericArgumentsEqual = false;
+
+            if (typeGenericArguments.Length != 0)
+            {
+                if (targetTypeGenericArguments.Length != 0)
+                {
+                    var loopCount = int.Min(typeGenericArguments.Length, targetTypeGenericArguments.Length);
+
+                    for (int i = 0; i < loopCount; i++)
+                    {
+                        isGenericArgumentsEqual = true;
+
+                        if (!typeGenericArguments[i].CanAssignableTo(targetTypeGenericArguments[i]))
+                        {
+                            isGenericArgumentsEqual = false;
+                            break;
+                        }
+                    }
+                }
+                else
+                    isGenericArgumentsEqual = true;
+            }
+            else
+                isGenericArgumentsEqual = true;
+
+
+            return isGenericArgumentsEqual;
+        }
+    }
 }

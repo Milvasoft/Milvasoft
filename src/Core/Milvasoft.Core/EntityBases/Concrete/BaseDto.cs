@@ -72,11 +72,8 @@ public abstract class DtoBase
     /// </summary>
     /// <returns>A collection of PropertyInfo objects representing the updatable properties of the DTO.</returns>
     public virtual IEnumerable<PropertyInfo> GetUpdatableProperties() => GetDtoProperties().Where(prop => prop.PropertyType.IsGenericType
-                                                                                                && (prop.PropertyType
-                                                                                                       .GetGenericTypeDefinition()
-                                                                                                       .IsAssignableTo(typeof(IUpdateProperty))
+                                                                                                && (prop.PropertyType.CanAssignableTo(typeof(IUpdateProperty))
                                                                                                     || (Nullable.GetUnderlyingType(prop.PropertyType)?
-                                                                                                                .GetGenericTypeDefinition()?
-                                                                                                                .IsAssignableTo(typeof(IUpdateProperty)) ?? false)));
+                                                                                                                .CanAssignableTo(typeof(IUpdateProperty)) ?? false)));
 #pragma warning restore CA1822 // Mark members as static
 }

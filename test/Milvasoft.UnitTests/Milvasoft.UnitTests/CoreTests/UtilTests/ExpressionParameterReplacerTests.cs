@@ -2,7 +2,7 @@
 using Milvasoft.Core.Utils;
 using System.Linq.Expressions;
 
-namespace Milvasoft.UnitTests.CoreTests.HelperTests.RegexTests;
+namespace Milvasoft.UnitTests.CoreTests.UtilTests;
 
 public partial class ExpressionParameterReplacerTests
 {

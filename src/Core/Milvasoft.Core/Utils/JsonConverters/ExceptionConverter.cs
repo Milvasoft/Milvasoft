@@ -4,40 +4,45 @@ using System.Text.Json.Serialization;
 namespace Milvasoft.Core.Utils.JsonConverters;
 
 /// <summary>
-/// System.Text.Json exception converter. Ignores <see cref="Exception.TargetSite"/> property. Only serializes <see cref="Exception.Message"/> and <see cref="Exception.StackTrace"/> properties.
+/// Converts exceptions to JSON by serializing only the <see cref="Exception.Message"/> and <see cref="Exception.StackTrace"/> properties. Ignores the <see cref="Exception.TargetSite"/> property.
 /// </summary>
-/// <typeparam name="TExceptionType"></typeparam>
+/// <typeparam name="TExceptionType">The type of exception to convert.</typeparam>
 public class ExceptionConverter<TExceptionType> : JsonConverter<TExceptionType> where TExceptionType : Exception
 {
     /// <summary>
-    /// Determnies whether <typeparamref name="TExceptionType"/> is convertible to <see cref="Exception"/> or not.
+    /// Determines whether the specified type can be converted to <see cref="Exception"/>.
     /// </summary>
-    /// <param name="typeToConvert"></param>
-    /// <returns></returns>
+    /// <param name="typeToConvert">The type to convert.</param>
+    /// <returns><c>true</c> if the specified type can be converted to <see cref="Exception"/>; otherwise, <c>false</c>.</returns>
     public override bool CanConvert(Type typeToConvert) => typeof(Exception).IsAssignableFrom(typeToConvert);
 
     /// <summary>
-    /// Deserialization operation.
+    /// Deserializes the JSON representation of an exception.
     /// </summary>
-    /// <param name="reader"></param>
-    /// <param name="typeToConvert"></param>
-    /// <param name="options"></param>
-    /// <returns></returns>
-    /// <exception cref="NotSupportedException"></exception>
-    public override TExceptionType Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options) => throw new NotSupportedException("Deserializing exceptions is not allowed");
+    /// <param name="reader">The reader to use.</param>
+    /// <param name="typeToConvert">The type to convert.</param>
+    /// <param name="options">The serializer options.</param>
+    /// <returns>The deserialized exception.</returns>
+    /// <exception cref="NotSupportedException">Thrown when deserialization is not supported.</exception>
+    public override TExceptionType Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options) => JsonSerializer.Deserialize<TExceptionType>(ref reader, options);
 
     /// <summary>
-    /// Serialization operation.
+    /// Serializes the specified exception to JSON.
     /// </summary>
-    /// <param name="writer"></param>
-    /// <param name="value"></param>
-    /// <param name="options"></param>
+    /// <param name="writer">The writer to use.</param>
+    /// <param name="value">The exception to serialize.</param>
+    /// <param name="options">The serializer options.</param>
     public override void Write(Utf8JsonWriter writer, TExceptionType value, JsonSerializerOptions options)
     {
+        if (value == null)
+        {
+            return;
+        }
+
         var serializableProperties = value.GetType()
-            .GetProperties()
-            .Select(uu => new { uu.Name, Value = uu.GetValue(value) })
-            .Where(uu => uu.Name == nameof(Exception.Message) || uu.Name == nameof(Exception.StackTrace));
+                                          .GetProperties()
+                                          .Select(uu => new { uu.Name, Value = uu.GetValue(value) })
+                                          .Where(uu => uu.Name == nameof(Exception.Message) || uu.Name == nameof(Exception.StackTrace));
 
         if (options?.DefaultIgnoreCondition == JsonIgnoreCondition.WhenWritingNull)
         {

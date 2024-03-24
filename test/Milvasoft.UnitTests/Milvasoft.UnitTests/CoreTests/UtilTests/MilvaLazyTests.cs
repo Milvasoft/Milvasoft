@@ -3,7 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Milvasoft.Core.Utils;
 using Milvasoft.UnitTests.CoreTests.UtilTests.Fixtures;
 
-namespace Milvasoft.UnitTests.CoreTests.HelperTests.RegexTests;
+namespace Milvasoft.UnitTests.CoreTests.UtilTests;
 
 public partial class MilvaLazyTests
 {

@@ -6,40 +6,45 @@ namespace Milvasoft.Core.Utils.JsonConverters;
 /// <summary>
 /// Converter for deserializing generic interfaces with System.Text.Json. 
 /// </summary>
-/// <typeparam name="TImplementation"></typeparam>
-/// <typeparam name="TInterface"></typeparam>
+/// <typeparam name="TImplementation">The implementation type.</typeparam>
+/// <typeparam name="TInterface">The interface type.</typeparam>
 public class InterfaceConverter<TImplementation, TInterface> : JsonConverter<TInterface> where TImplementation : class, TInterface
 {
     /// <summary>
-    /// Deserialization operation.
+    /// Determines whether the specified type can be converted to the interface type.
     /// </summary>
-    /// <param name="reader"></param>
-    /// <param name="typeToConvert"></param>
-    /// <param name="options"></param>
-    /// <returns></returns>
+    /// <param name="typeToConvert">The type to convert.</param>
+    /// <returns><c>true</c> if the specified type can be converted to the interface type; otherwise, <c>false</c>.</returns>
+    public override bool CanConvert(Type typeToConvert) => typeToConvert.CanAssignableTo(typeof(TInterface));
+
+    /// <summary>
+    /// Deserializes the JSON data to the specified type.
+    /// </summary>
+    /// <param name="reader">The reader used to read the JSON data.</param>
+    /// <param name="typeToConvert">The type to convert.</param>
+    /// <param name="options">The serializer options.</param>
+    /// <returns>The deserialized object.</returns>
     public override TInterface Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         => JsonSerializer.Deserialize<TImplementation>(ref reader, options);
 
     /// <summary>
-    /// Serialization operation.
+    /// Serializes the specified object to JSON.
     /// </summary>
-    /// <param name="writer"></param>
-    /// <param name="value"></param>
-    /// <param name="options"></param>
-    public override void Write(Utf8JsonWriter writer, TInterface value, JsonSerializerOptions options)
-    {
-    }
+    /// <param name="writer">The writer used to write the JSON data.</param>
+    /// <param name="value">The object to serialize.</param>
+    /// <param name="options">The serializer options.</param>
+    public override void Write(Utf8JsonWriter writer, TInterface value, JsonSerializerOptions options) => JsonSerializer.Serialize(writer, value, options);
 }
 
 /// <summary>
 /// Converter factory for deserializing generic interfaces with System.Text.Json. 
 /// </summary>
-/// <typeparam name="TImplementation"></typeparam>
-/// <typeparam name="TInterface"></typeparam>
+/// <typeparam name="TImplementation">The implementation type.</typeparam>
+/// <typeparam name="TInterface">The interface type.</typeparam>
 public class InterfaceConverterFactory<TImplementation, TInterface> : InterfaceConverterFactory
 {
     /// <summary>
-    /// Initializes new instance.
+    /// Initializes a new instance of the <see cref="InterfaceConverterFactory{TImplementation, TInterface}"/> class.
     /// </summary>
     public InterfaceConverterFactory() : base(typeof(TImplementation), typeof(TInterface))
     {
@@ -49,38 +54,33 @@ public class InterfaceConverterFactory<TImplementation, TInterface> : InterfaceC
 /// <summary>
 /// Converter factory for deserializing generic interfaces with System.Text.Json. 
 /// </summary>
-/// <param name="implementationType"></param>
-/// <param name="interfaceType"></param>
+/// <param name="implementationType">The implementation type.</param>
+/// <param name="interfaceType">The interface type.</param>
 public class InterfaceConverterFactory(Type implementationType, Type interfaceType) : JsonConverterFactory
 {
     /// <summary>
-    /// Implementation type.
+    /// Gets the implementation type.
     /// </summary>
     public Type ImplementationType { get; } = implementationType;
 
     /// <summary>
-    /// Interface type.
+    /// Gets the interface type.
     /// </summary>
     public Type InterfaceType { get; } = interfaceType;
 
     /// <summary>
-    /// Determnies whether <paramref name="typeToConvert"/> is convertible to interface type or not.
+    /// Determines whether the specified type can be converted to the interface type.
     /// </summary>
-    /// <param name="typeToConvert"></param>
-    /// <returns></returns>
-    public override bool CanConvert(Type typeToConvert)
-    {
-        var q = typeToConvert == InterfaceType || (typeToConvert.IsAssignableTo(InterfaceType) && typeToConvert.IsGenericType);
-
-        return q;
-    }
+    /// <param name="typeToConvert">The type to convert.</param>
+    /// <returns><c>true</c> if the specified type can be converted to the interface type; otherwise, <c>false</c>.</returns>
+    public override bool CanConvert(Type typeToConvert) => typeToConvert.CanAssignableTo(InterfaceType);
 
     /// <summary>
-    /// Creates json converter.
+    /// Creates a converter for the specified type.
     /// </summary>
-    /// <param name="typeToConvert"></param>
-    /// <param name="options"></param>
-    /// <returns></returns>
+    /// <param name="typeToConvert">The type to convert.</param>
+    /// <param name="options">The serializer options.</param>
+    /// <returns>A converter for the specified type.</returns>
     public override JsonConverter CreateConverter(Type typeToConvert, JsonSerializerOptions options)
     {
         Type converterType;

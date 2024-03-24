@@ -4,39 +4,46 @@ using System.Text.Json;
 namespace Milvasoft.Core.Utils.JsonConverters;
 
 /// <summary>
-/// Options that the library will use for serialization and deserialization operations.
+/// Provides options for serialization and deserialization operations used by the library.
 /// </summary>
 public static class MilvaJsonConverterOptions
 {
     /// <summary>
-    /// Current options.
+    /// Gets or sets the current <see cref="JsonSerializerOptions"/> used by the library.
     /// </summary>
-    public static JsonSerializerOptions Current { get; set; } = new JsonSerializerOptions();
+    public static JsonSerializerOptions Current { get; private set; } = JsonSerializerOptions.Default;
 
     /// <summary>
-    /// Create new <see cref="JsonSerializerOptions"/> instance from <see cref="Current"/> object.
+    /// Resets the current <see cref="JsonSerializerOptions"/> to the default options.
     /// </summary>
-    /// <returns></returns>
+    public static void ResetCurrentOptionsToDefault() => Current = JsonSerializerOptions.Default;
+
+    /// <summary>
+    /// Creates a new <see cref="JsonSerializerOptions"/> instance based on the current <see cref="Current"/> object.
+    /// </summary>
+    /// <returns>A new <see cref="JsonSerializerOptions"/> instance.</returns>
     public static JsonSerializerOptions NewOptionsObjectFromCurrent() => new(Current);
 
     /// <summary>
-    /// Configure <see cref="Current"/> options with <paramref name="options"/>.
+    /// Configures the <see cref="Current"/> options with the specified <paramref name="options"/>.
     /// </summary>
-    /// <param name="services"></param>
-    /// <param name="options"></param>
-    /// <param name="includeMilvaConverters"></param>
-    /// <returns></returns>
+    /// <param name="services">The <see cref="IServiceCollection"/> used for dependency injection.</param>
+    /// <param name="options">The <see cref="Action{JsonSerializerOptions}"/> used to configure the options.</param>
+    /// <param name="includeMilvaConverters">A boolean value indicating whether to include Milva converters.</param>
+    /// <returns>The configured <see cref="JsonSerializerOptions"/>.</returns>
     public static JsonSerializerOptions ConfigureCurrentMilvaJsonSerializerOptions(this IServiceCollection services, Action<JsonSerializerOptions> options = null, bool includeMilvaConverters = true)
     {
         ArgumentNullException.ThrowIfNull(services);
 
-        options?.Invoke(Current);
+        var newOptions = NewOptionsObjectFromCurrent();
+
+        options?.Invoke(newOptions);
 
         if (includeMilvaConverters)
-        {
-            Current.Converters.Add(new ExceptionConverter<Exception>());
-        }
+            newOptions.Converters.Add(new ExceptionConverter<Exception>());
 
-        return Current;
+        Current = newOptions;
+
+        return newOptions;
     }
 }
