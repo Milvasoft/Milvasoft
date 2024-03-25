@@ -9,7 +9,7 @@ public static class MultiLanguageExtensions
     private const string _parameterName = "t";
 
     /// <summary>
-    /// Creates projection expression for contents service. THIS IS A AMAZING METHOD.
+    /// Creates projection expression for contents service.
     /// </summary>
     /// <typeparam name="TEntity"></typeparam>
     /// <param name="mainEntityPropertyNames"></param>
