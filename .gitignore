@@ -341,3 +341,7 @@ ASALocalRun/
 healthchecksdb
 
 Milvasoft.TestApi/
+
+.sonarqube
+
+coverage.xml
