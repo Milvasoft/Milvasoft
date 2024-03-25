@@ -21,6 +21,9 @@ public class MilvaMultiLanguageBuilder(IServiceCollection services)
     /// <returns></returns>
     public MilvaMultiLanguageBuilder WithDefaultMultiLanguageManager()
     {
+        CheckMultiLanguageManagerRegistrationExistance();
+
+        MultiLanguageManager.UpdateLanguagesList(LanguagesSeed.Seed);
         _services.AddScoped<IMultiLanguageManager, MilvaMultiLanguageManager>();
 
         return this;
@@ -32,8 +35,16 @@ public class MilvaMultiLanguageBuilder(IServiceCollection services)
     /// <returns></returns>
     public MilvaMultiLanguageBuilder WithMultiLanguageManager<TMultiLanguageManager>() where TMultiLanguageManager : class, IMultiLanguageManager
     {
+        CheckMultiLanguageManagerRegistrationExistance();
+
         _services.AddScoped<IMultiLanguageManager, TMultiLanguageManager>();
 
         return this;
+    }
+
+    private void CheckMultiLanguageManagerRegistrationExistance()
+    {
+        if (_services.Any(i => i.ServiceType == typeof(IMultiLanguageManager)))
+            throw new MilvaDeveloperException("A IMultiLanguageManager manager has already been registered. Please make sure to register only one IMultiLanguageManager manager.");
     }
 }
