@@ -147,15 +147,18 @@ public static partial class CommonHelper
     /// <returns>True if the specified type can be assigned to the target type; otherwise, false.</returns>
     public static bool CanAssignableTo(this Type type, Type targetType)
     {
-        if (!targetType.IsGenericType || !type.IsGenericType)
+        if (!targetType.IsGenericType && !type.IsGenericType)
             return type.IsAssignableTo(targetType);
 
         if (!IsTypeArgumentsCanBeAssignableToEachOther(type, targetType))
             return false;
 
+        type = GetTypeAccordingToGenericDefinition(type);
+        targetType = GetTypeAccordingToGenericDefinition(targetType);
+
         if (targetType.IsInterface)
         {
-            var interfaceType = type.GetInterfaces().FirstOrDefault(i => i == targetType || (i.IsGenericType && i.GetGenericTypeDefinition() == targetType.GetGenericTypeDefinition()));
+            var interfaceType = type.GetInterfaces().FirstOrDefault(i => GetTypeAccordingToGenericDefinition(i) == targetType);
 
             return interfaceType != null;
         }
@@ -166,46 +169,35 @@ public static partial class CommonHelper
             if (type.BaseType == typeof(object))
                 compareType = type;
             else
-                compareType = type.BaseType;
+                compareType = GetTypeAccordingToGenericDefinition(type.BaseType);
 
-            if (compareType.GetGenericTypeDefinition().IsAssignableTo(targetType.GetGenericTypeDefinition()))
+            if (compareType.IsAssignableTo(targetType))
                 return true;
             else
                 return false;
         }
+
+        static Type GetTypeAccordingToGenericDefinition(Type type) => type.IsGenericType ? type.GetGenericTypeDefinition() : type;
 
         static bool IsTypeArgumentsCanBeAssignableToEachOther(Type type, Type targetType)
         {
             var typeGenericArguments = type.GenericTypeArguments;
             var targetTypeGenericArguments = targetType.GenericTypeArguments;
 
-            bool isGenericArgumentsEqual = false;
+            if (typeGenericArguments.Length == 0 || targetTypeGenericArguments.Length == 0)
+                return true;
 
-            if (typeGenericArguments.Length != 0)
+            var loopCount = int.Min(typeGenericArguments.Length, targetTypeGenericArguments.Length);
+
+            for (int i = 0; i < loopCount; i++)
             {
-                if (targetTypeGenericArguments.Length != 0)
+                if (!typeGenericArguments[i].CanAssignableTo(targetTypeGenericArguments[i]))
                 {
-                    var loopCount = int.Min(typeGenericArguments.Length, targetTypeGenericArguments.Length);
-
-                    for (int i = 0; i < loopCount; i++)
-                    {
-                        isGenericArgumentsEqual = true;
-
-                        if (!typeGenericArguments[i].CanAssignableTo(targetTypeGenericArguments[i]))
-                        {
-                            isGenericArgumentsEqual = false;
-                            break;
-                        }
-                    }
+                    return false;
                 }
-                else
-                    isGenericArgumentsEqual = true;
             }
-            else
-                isGenericArgumentsEqual = true;
 
-
-            return isGenericArgumentsEqual;
+            return true;
         }
     }
 }

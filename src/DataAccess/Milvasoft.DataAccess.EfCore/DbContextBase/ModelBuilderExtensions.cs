@@ -351,7 +351,7 @@ public static class ModelBuilderExtensions
     /// <param name="modelBuilder"></param>
     public static ModelBuilder UseTranslationEntityRelations(this ModelBuilder modelBuilder)
     {
-        var languageEntities = modelBuilder.Model.GetEntityTypes().Where(e => e.ClrType.IsAssignableTo(typeof(IHasTranslation)));
+        var languageEntities = modelBuilder.Model.GetEntityTypes().Where(e => e.ClrType.CanAssignableTo(typeof(IHasTranslation<>)));
 
         foreach (var entityType in languageEntities)
         {

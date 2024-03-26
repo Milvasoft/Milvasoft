@@ -97,7 +97,7 @@ public static class MultiLanguageExtensions
     /// <param name="translations"></param>
     /// <returns></returns>
     public static IEnumerable<TDTO> GetTranslations<TEntity, TTranslationEntity, TDTO>(this IEnumerable<TTranslationEntity> translations)
-        where TEntity : class, IHasTranslation
+        where TEntity : class, IHasTranslation<TTranslationEntity>
         where TTranslationEntity : class, ITranslationEntity<TEntity>
         where TDTO : new()
     {

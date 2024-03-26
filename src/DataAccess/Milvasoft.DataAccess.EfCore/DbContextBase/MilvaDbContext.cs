@@ -420,9 +420,9 @@ public abstract class MilvaDbContextBase(DbContextOptions options) : DbContext(o
 
             if (!parameter.RequestedPropertyNames.IsNullOrEmpty())
             {
-                if (entityType.IsAssignableTo(typeof(IHasTranslation)))
+                if (entityType.CanAssignableTo(typeof(IHasTranslation<>)))
                 {
-                    translationEntityType = assemblyTypes.FirstOrDefault(i => i.IsAssignableTo(typeof(ITranslationEntity<>).MakeGenericType(entityType)));
+                    translationEntityType = assemblyTypes.FirstOrDefault(i => i.CanAssignableTo(typeof(ITranslationEntity<>).MakeGenericType(entityType)));
                 }
 
                 // check requested property names are valid and categorize them as main entity and translation entity
@@ -567,10 +567,10 @@ public abstract class MilvaDbContextBase(DbContextOptions options) : DbContext(o
         {
             List<string> propNamesForProjection = [];
 
-            if (entityType.IsAssignableTo(typeof(IMilvaEntity)))
+            if (entityType.CanAssignableTo(typeof(IMilvaEntity)))
                 propNamesForProjection.Add(EntityPropertyNames.Id);
 
-            if (entityType.IsAssignableTo(typeof(IHasTranslation)))
+            if (entityType.CanAssignableTo(typeof(IHasTranslation<>)))
                 propNamesForProjection.Add(MultiLanguageEntityPropertyNames.Translations);
 
             return propNamesForProjection;

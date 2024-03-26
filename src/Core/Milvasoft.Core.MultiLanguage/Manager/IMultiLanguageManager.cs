@@ -36,9 +36,9 @@ public interface IMultiLanguageManager
     /// Get the value of the requested translation property.
     /// </summary>
     /// <param name="obj">The object to get the translation property value from.</param>
-    /// <param name="requestedPropName">The name of the requested translation property.</param>
+    /// <param name="propertyName">The name of the requested translation property.</param>
     /// <returns>The value of the requested translation property.</returns>
-    public dynamic GetTranslationPropertyValue(object obj, string requestedPropName);
+    public string GetTranslationPropertyValue(object obj, string propertyName);
 
     /// <summary>
     /// Gets the value of the requested translation property.

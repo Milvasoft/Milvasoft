@@ -13,21 +13,21 @@ namespace Milvasoft.Core.MultiLanguage.Manager;
 /// </summary>
 public abstract class MultiLanguageManager : IMultiLanguageManager
 {
-    private readonly IServiceProvider _serviceProvider;
+    #region Static fields for reflection
     private const string _sourceParameterName = "src";
     private const string _parameterName = "i";
     private static readonly MethodInfo _getTranslationMethodInfo = typeof(MultiLanguageManager).GetMethod(nameof(GetTranslation));
-    private static readonly MethodInfo _firstOrDefaultWithPredicateMethodInfo = typeof(Enumerable).GetMethods(BindingFlags.Static | BindingFlags.Public)
-                                                                                     .Last(mi => mi.Name == nameof(Enumerable.FirstOrDefault) && mi.GetParameters().Length == 2);
-    private static readonly MethodInfo _firstOrDefaultMethodInfo = typeof(Enumerable).GetMethods(BindingFlags.Static | BindingFlags.Public)
-                                                                                     .Last(mi => mi.Name == nameof(Enumerable.FirstOrDefault) && mi.GetParameters().Length == 1);
-    public static ConcurrentBag<ILanguage> Languages { get; protected set; } = [];
+    private static readonly MethodInfo _firstOrDefaultWithPredicateMethodInfo = typeof(Enumerable).GetMethods(BindingFlags.Static | BindingFlags.Public).Last(mi => mi.Name == nameof(Enumerable.FirstOrDefault) && mi.GetParameters().Length == 2);
+    private static readonly MethodInfo _firstOrDefaultMethodInfo = typeof(Enumerable).GetMethods(BindingFlags.Static | BindingFlags.Public).Last(mi => mi.Name == nameof(Enumerable.FirstOrDefault) && mi.GetParameters().Length == 1);
+    #endregion
+    protected readonly IServiceProvider _serviceProvider;
 
+    public static ConcurrentBag<ILanguage> Languages { get; protected set; } = [];
 
     /// <summary>
     /// Initializes a new instance of the <see cref="MultiLanguageManager"/> class.
     /// </summary>
-    public MultiLanguageManager()
+    protected MultiLanguageManager()
     {
 
     }
@@ -36,13 +36,13 @@ public abstract class MultiLanguageManager : IMultiLanguageManager
     /// Initializes a new instance of the <see cref="MultiLanguageManager"/> class with the specified service provider.
     /// </summary>
     /// <param name="serviceProvider">The service provider.</param>
-    public MultiLanguageManager(IServiceProvider serviceProvider)
+    protected MultiLanguageManager(IServiceProvider serviceProvider)
     {
         _serviceProvider = serviceProvider;
     }
 
     /// <summary>
-    /// Updates the list of languages.
+    /// Updates the list of <see cref="Languages"/> as <paramref name="languages"/>.
     /// </summary>
     /// <param name="languages">The list of languages to update.</param>
     public static void UpdateLanguagesList(List<ILanguage> languages)
@@ -50,9 +50,7 @@ public abstract class MultiLanguageManager : IMultiLanguageManager
         Languages.Clear();
 
         if (languages != null)
-        {
             Languages = [.. languages.OrderBy(l => l.Id)];
-        }
     }
 
     /// <summary>
@@ -213,27 +211,6 @@ public abstract class MultiLanguageManager : IMultiLanguageManager
     }
 
     /// <summary>
-    /// Get the value of the requested translation property.
-    /// </summary>
-    /// <param name="obj">The object to get the translation property value from.</param>
-    /// <param name="requestedPropName">The name of the requested translation property.</param>
-    /// <returns>The value of the requested translation property.</returns>
-    public virtual dynamic GetTranslationPropertyValue(object obj, string requestedPropName)
-    {
-        var translations = obj.GetType().GetProperty(MultiLanguageEntityPropertyNames.Translations)?.GetValue(obj, null) as IList
-                               ?? throw new MilvaUserFriendlyException(MilvaException.InvalidParameter);
-
-        if (translations.IsNullOrEmpty())
-            return null;
-
-        var translationEntityType = translations[0].GetType();
-
-        var getTranslationMethod = _getTranslationMethodInfo.MakeGenericMethod(translationEntityType);
-
-        return getTranslationMethod.Invoke(this, [translations, requestedPropName]);
-    }
-
-    /// <summary>
     /// Gets the value of the requested translation property.
     /// </summary>
     /// <typeparam name="TEntity">The type of the translation entity.</typeparam>
@@ -244,6 +221,29 @@ public abstract class MultiLanguageManager : IMultiLanguageManager
         => GetTranslation(translations, propertyName.GetPropertyName());
 
     /// <summary>
+    /// Get the value of the requested translation property.
+    /// </summary>
+    /// <param name="obj">The object to get the translation property value from.</param>
+    /// <param name="propertyName">The name of the requested translation property.</param>
+    /// <returns>The value of the requested translation property.</returns>
+    public virtual string GetTranslationPropertyValue(object obj, string propertyName)
+    {
+        if (obj == null || !obj.GetType().CanAssignableTo(typeof(IHasTranslation<>)))
+            return string.Empty;
+
+        var translations = obj.GetType().GetProperty(MultiLanguageEntityPropertyNames.Translations)?.GetValue(obj, null) as IList;
+
+        if (translations.IsNullOrEmpty())
+            return string.Empty;
+
+        var translationEntityType = translations?[0].GetType();
+
+        var getTranslationMethod = _getTranslationMethodInfo.MakeGenericMethod(translationEntityType);
+
+        return (string)getTranslationMethod.Invoke(this, [translations, propertyName]);
+    }
+
+    /// <summary>
     /// Gets the value of the requested translation property.
     /// </summary>
     /// <typeparam name="TEntity">The type of the translation entity.</typeparam>
@@ -252,7 +252,7 @@ public abstract class MultiLanguageManager : IMultiLanguageManager
     /// <returns>The value of the requested translation property.</returns>
     public virtual string GetTranslation<TEntity>(IEnumerable<TEntity> translations, string propertyName)
     {
-        if (translations.IsNullOrEmpty())
+        if (translations.IsNullOrEmpty() || string.IsNullOrWhiteSpace(propertyName) || !typeof(TEntity).CanAssignableTo(typeof(ITranslationEntity<>)))
             return string.Empty;
 
         TEntity requestedLang;
@@ -267,7 +267,7 @@ public abstract class MultiLanguageManager : IMultiLanguageManager
 
         requestedLang ??= translations.FirstOrDefault();
 
-        return requestedLang.GetType().GetProperty(propertyName).GetValue(requestedLang, null)?.ToString();
+        return requestedLang.GetType().GetPublicPropertyIgnoreCase(propertyName).GetValue(requestedLang, null)?.ToString();
 
         TEntity GetLanguageValue(object languageId) => translations.FirstOrDefault(translation => translation.GetType()
                                                                                                              .GetProperty(MultiLanguageEntityPropertyNames.LanguageId)

@@ -329,7 +329,7 @@ public class MultiLanguageManagerTests
     }
 
     [Fact]
-    public void CreateTranslationMapExpression_WithTranslationsIsNullAndCurrentOrDefaultAndCurrentLanguageAndDefaultLanguageIsDifferent_ShouldCorrectExpression()
+    public void CreateTranslationMapExpression_WithTranslationsIsNullAndCurrentLanguageAndDefaultLanguageIsDifferent_ShouldCorrectExpression()
     {
         // Arrange
         List<ILanguage> languages =
@@ -362,6 +362,7 @@ public class MultiLanguageManagerTests
         MultiLanguageManager.UpdateLanguagesList(languages);
         CultureInfo.CurrentCulture = new CultureInfo("tr-TR");
         var manager = new MilvaMultiLanguageManager();
+#pragma warning disable S3358 // Ternary operators should not be nested
         Expression<Func<HasTranslationEntityFixture, string>> expectedExpression = src => src.Translations != null
                                                                                                 ? (null == src.Translations.FirstOrDefault(i => i.LanguageId == 2)
                                                                                                     ? src.Translations.FirstOrDefault(i => i.LanguageId == 1) != null
@@ -371,6 +372,7 @@ public class MultiLanguageManagerTests
                                                                                                                 : null
                                                                                                     : src.Translations.FirstOrDefault(i => i.LanguageId == 2).Name)
                                                                                                 : null;
+#pragma warning restore S3358 // Ternary operators should not be nested
 
         // Act
         var resultExpression = manager.CreateTranslationMapExpression<HasTranslationEntityFixture, HasTranslationDtoFixture, TranslationEntityFixture>(e => e.Name);
@@ -432,6 +434,7 @@ public class MultiLanguageManagerTests
         MultiLanguageManager.UpdateLanguagesList(languages);
         CultureInfo.CurrentCulture = new CultureInfo("tr-TR");
         var manager = new MilvaMultiLanguageManager();
+#pragma warning disable S3358 // Ternary operators should not be nested
         Expression<Func<HasTranslationEntityFixture, string>> expectedExpression = src => src.Translations != null
                                                                                             ? null == src.Translations.FirstOrDefault(i => i.LanguageId == 2)
                                                                                                 ? src.Translations.FirstOrDefault(i => i.LanguageId == 1) != null
@@ -441,6 +444,7 @@ public class MultiLanguageManagerTests
                                                                                                             : null
                                                                                                 : src.Translations.FirstOrDefault(i => i.LanguageId == 2).Name
                                                                                              : null;
+#pragma warning restore S3358 // Ternary operators should not be nested
 
         // Act
         var resultExpression = manager.CreateTranslationMapExpression<HasTranslationEntityFixture, HasTranslationDtoFixture, TranslationEntityFixture>(e => e.Name);
@@ -453,7 +457,7 @@ public class MultiLanguageManagerTests
     }
 
     [Fact]
-    public void CreateTranslationMapExpression_WithTranslationsContainCurrentOrDefaultAndCurrentLanguageAndDefaultLanguageIsDifferent_ShouldCorrectExpression()
+    public void CreateTranslationMapExpression_WithTranslationsContainOnlyDefaultAndCurrentLanguageAndDefaultLanguageIsDifferent_ShouldCorrectExpression()
     {
         // Arrange
         List<ILanguage> languages =
@@ -488,13 +492,6 @@ public class MultiLanguageManagerTests
                         Description = "First",
                         EntityId = 1,
                         LanguageId = 1
-                    },
-                    new TranslationEntityFixture{
-                        Id = 2,
-                        Name = "İlk",
-                        Description = "İlk",
-                        EntityId = 1,
-                        LanguageId = 2
                     }
                 ]
             }
@@ -502,6 +499,7 @@ public class MultiLanguageManagerTests
         MultiLanguageManager.UpdateLanguagesList(languages);
         CultureInfo.CurrentCulture = new CultureInfo("tr-TR");
         var manager = new MilvaMultiLanguageManager();
+#pragma warning disable S3358 // Ternary operators should not be nested
         Expression<Func<HasTranslationEntityFixture, string>> expectedExpression = src => (src.Translations != null
                                                                                             ? src.Translations.FirstOrDefault(i => i.LanguageId == 2) == null
                                                                                                 ? src.Translations.FirstOrDefault(i => i.LanguageId == 1) != null
@@ -511,6 +509,7 @@ public class MultiLanguageManagerTests
                                                                                                             : null
                                                                                                 : src.Translations.FirstOrDefault(i => i.LanguageId == 2).Name
                                                                                             : null);
+#pragma warning restore S3358 // Ternary operators should not be nested
 
         // Act
         var resultExpression = manager.CreateTranslationMapExpression<HasTranslationEntityFixture, HasTranslationDtoFixture, TranslationEntityFixture>(e => e.Name);
@@ -523,7 +522,72 @@ public class MultiLanguageManagerTests
     }
 
     [Fact]
-    public void CreateTranslationMapExpression_WithTranslationsIsNullAndCurrentOrDefaultAndCurrentLanguageAndDefaultLanguageIsSame_ShouldCorrectExpression()
+    public void CreateTranslationMapExpression_WithTranslationsContainCurrentAndCurrentLanguageAndDefaultLanguageIsDifferent_ShouldCorrectExpression()
+    {
+        // Arrange
+        List<ILanguage> languages =
+        [
+            new LanguageModelFixture
+            {
+                Id = 1,
+                Code = "en-US",
+                IsDefault = true,
+                Name ="English",
+                Supported = true,
+            },
+            new LanguageModelFixture
+            {
+                Id = 2,
+                Code = "tr-TR",
+                IsDefault = false,
+                Name ="Turkish",
+                Supported = true,
+            },
+        ];
+        List<HasTranslationEntityFixture> entities =
+        [
+            new HasTranslationEntityFixture
+            {
+                Id = 1,
+                Translations =
+                [
+                    new TranslationEntityFixture{
+                        Id = 1,
+                        Name = "İlk",
+                        Description = "İlk",
+                        EntityId = 1,
+                        LanguageId = 2
+                    }
+                ]
+            }
+        ];
+        MultiLanguageManager.UpdateLanguagesList(languages);
+        CultureInfo.CurrentCulture = new CultureInfo("tr-TR");
+        var manager = new MilvaMultiLanguageManager();
+#pragma warning disable S3358 // Ternary operators should not be nested
+        Expression<Func<HasTranslationEntityFixture, string>> expectedExpression = src => (src.Translations != null
+                                                                                            ? src.Translations.FirstOrDefault(i => i.LanguageId == 2) == null
+                                                                                                ? src.Translations.FirstOrDefault(i => i.LanguageId == 1) != null
+                                                                                                        ? src.Translations.FirstOrDefault(i => i.LanguageId == 1).Name
+                                                                                                        : src.Translations.FirstOrDefault().Name != null
+                                                                                                            ? src.Translations.FirstOrDefault().Name
+                                                                                                            : null
+                                                                                                : src.Translations.FirstOrDefault(i => i.LanguageId == 2).Name
+                                                                                            : null);
+#pragma warning restore S3358 // Ternary operators should not be nested
+
+        // Act
+        var resultExpression = manager.CreateTranslationMapExpression<HasTranslationEntityFixture, HasTranslationDtoFixture, TranslationEntityFixture>(e => e.Name);
+
+        // Assert
+        var resultWithExpectedExpression = entities.AsQueryable().Select(expectedExpression).First();
+        var resultWithResultExpression = entities.AsQueryable().Select(resultExpression).First();
+
+        resultWithResultExpression.Should().Be(resultWithExpectedExpression);
+    }
+
+    [Fact]
+    public void CreateTranslationMapExpression_WithTranslationsIsNullAndCurrentLanguageAndDefaultLanguageIsSame_ShouldCorrectExpression()
     {
         // Arrange
         List<ILanguage> languages =
@@ -556,6 +620,7 @@ public class MultiLanguageManagerTests
         MultiLanguageManager.UpdateLanguagesList(languages);
         CultureInfo.CurrentCulture = new CultureInfo("en-US");
         var manager = new MilvaMultiLanguageManager();
+#pragma warning disable S3358 // Ternary operators should not be nested
         Expression<Func<HasTranslationEntityFixture, string>> expectedExpression = src => src.Translations != null
                                                                                             ? src.Translations.FirstOrDefault(i => i.LanguageId == 1) != null
                                                                                                 ? src.Translations.FirstOrDefault(i => i.LanguageId == 1).Name
@@ -563,6 +628,7 @@ public class MultiLanguageManagerTests
                                                                                                     ? src.Translations.FirstOrDefault().Name
                                                                                                     : null
                                                                                             : null;
+#pragma warning restore S3358 // Ternary operators should not be nested
 
         // Act
         var resultExpression = manager.CreateTranslationMapExpression<HasTranslationEntityFixture, HasTranslationDtoFixture, TranslationEntityFixture>(e => e.Name);
@@ -575,7 +641,7 @@ public class MultiLanguageManagerTests
     }
 
     [Fact]
-    public void CreateTranslationMapExpression_WithTranslationsNotContainCurrentOrDefaultAndCurrentLanguageAndDefaultLanguageIsSame_ShouldCorrectExpression()
+    public void CreateTranslationMapExpression_WithTranslationsNotContainCurrentAndDefaultAndCurrentLanguageAndDefaultLanguageIsSame_ShouldCorrectExpression()
     {
         // Arrange
         List<ILanguage> languages =
@@ -624,6 +690,7 @@ public class MultiLanguageManagerTests
         MultiLanguageManager.UpdateLanguagesList(languages);
         CultureInfo.CurrentCulture = new CultureInfo("en-US");
         var manager = new MilvaMultiLanguageManager();
+#pragma warning disable S3358 // Ternary operators should not be nested
         Expression<Func<HasTranslationEntityFixture, string>> expectedExpression = src => src.Translations != null
                                                                                             ? src.Translations.FirstOrDefault(i => i.LanguageId == 1) != null
                                                                                                 ? src.Translations.FirstOrDefault(i => i.LanguageId == 1).Name
@@ -631,6 +698,7 @@ public class MultiLanguageManagerTests
                                                                                                     ? src.Translations.FirstOrDefault().Name
                                                                                                     : null
                                                                                             : null;
+#pragma warning restore S3358 // Ternary operators should not be nested
 
         // Act
         var resultExpression = manager.CreateTranslationMapExpression<HasTranslationEntityFixture, HasTranslationDtoFixture, TranslationEntityFixture>(e => e.Name);
@@ -643,7 +711,7 @@ public class MultiLanguageManagerTests
     }
 
     [Fact]
-    public void CreateTranslationMapExpression_WithTranslationsContainCurrentOrDefaultAndCurrentLanguageAndDefaultLanguageIsSame_ShouldCorrectExpression()
+    public void CreateTranslationMapExpression_WithTranslationsContainOnlyDefaultAndCurrentLanguageAndDefaultLanguageIsSame_ShouldCorrectExpression()
     {
         // Arrange
         List<ILanguage> languages =
@@ -678,9 +746,65 @@ public class MultiLanguageManagerTests
                         Description = "First",
                         EntityId = 1,
                         LanguageId = 1
-                    },
+                    }
+                ]
+            }
+        ];
+        MultiLanguageManager.UpdateLanguagesList(languages);
+        CultureInfo.CurrentCulture = new CultureInfo("en-US");
+        var manager = new MilvaMultiLanguageManager();
+#pragma warning disable S3358 // Ternary operators should not be nested
+        Expression<Func<HasTranslationEntityFixture, string>> expectedExpression = src => src.Translations != null
+                                                                                            ? src.Translations.FirstOrDefault(i => i.LanguageId == 1) != null
+                                                                                                ? src.Translations.FirstOrDefault(i => i.LanguageId == 1).Name
+                                                                                                : src.Translations.FirstOrDefault().Name != null
+                                                                                                    ? src.Translations.FirstOrDefault().Name
+                                                                                                    : null
+                                                                                            : null;
+#pragma warning restore S3358 // Ternary operators should not be nested
+
+        // Act
+        var resultExpression = manager.CreateTranslationMapExpression<HasTranslationEntityFixture, HasTranslationDtoFixture, TranslationEntityFixture>(e => e.Name);
+
+        // Assert
+        var resultWithExpectedExpression = entities.AsQueryable().Select(expectedExpression).First();
+        var resultWithResultExpression = entities.AsQueryable().Select(resultExpression).First();
+
+        resultWithResultExpression.Should().Be(resultWithExpectedExpression);
+    }
+
+    [Fact]
+    public void CreateTranslationMapExpression_WithTranslationsContainCurrentAndCurrentLanguageAndDefaultLanguageIsSame_ShouldCorrectExpression()
+    {
+        // Arrange
+        List<ILanguage> languages =
+        [
+            new LanguageModelFixture
+            {
+                Id = 1,
+                Code = "en-US",
+                IsDefault = true,
+                Name ="English",
+                Supported = true,
+            },
+            new LanguageModelFixture
+            {
+                Id = 2,
+                Code = "tr-TR",
+                IsDefault = false,
+                Name ="Turkish",
+                Supported = true,
+            },
+        ];
+        List<HasTranslationEntityFixture> entities =
+        [
+            new HasTranslationEntityFixture
+            {
+                Id = 1,
+                Translations =
+                [
                     new TranslationEntityFixture{
-                        Id = 2,
+                        Id = 1,
                         Name = "İlk",
                         Description = "İlk",
                         EntityId = 1,
@@ -692,6 +816,7 @@ public class MultiLanguageManagerTests
         MultiLanguageManager.UpdateLanguagesList(languages);
         CultureInfo.CurrentCulture = new CultureInfo("en-US");
         var manager = new MilvaMultiLanguageManager();
+#pragma warning disable S3358 // Ternary operators should not be nested
         Expression<Func<HasTranslationEntityFixture, string>> expectedExpression = src => src.Translations != null
                                                                                             ? src.Translations.FirstOrDefault(i => i.LanguageId == 1) != null
                                                                                                 ? src.Translations.FirstOrDefault(i => i.LanguageId == 1).Name
@@ -699,6 +824,7 @@ public class MultiLanguageManagerTests
                                                                                                     ? src.Translations.FirstOrDefault().Name
                                                                                                     : null
                                                                                             : null;
+#pragma warning restore S3358 // Ternary operators should not be nested
 
         // Act
         var resultExpression = manager.CreateTranslationMapExpression<HasTranslationEntityFixture, HasTranslationDtoFixture, TranslationEntityFixture>(e => e.Name);
@@ -708,6 +834,797 @@ public class MultiLanguageManagerTests
         var resultWithResultExpression = entities.AsQueryable().Select(resultExpression).First();
 
         resultWithResultExpression.Should().Be(resultWithExpectedExpression);
+    }
+
+    #endregion
+
+    #region GetTranslationPropertyValue
+
+    [Fact]
+    public void GetTranslationPropertyValue_WithObjectIsNull_ShouldReturnEmptyString()
+    {
+        // Arrange
+        object obj = null;
+        var manager = new MilvaMultiLanguageManager();
+
+        // Act
+        var result = manager.GetTranslationPropertyValue(obj, nameof(TranslationEntityFixture.Name));
+
+        // Assert
+        result.Should().BeEmpty();
+    }
+
+    [Fact]
+    public void GetTranslationPropertyValue_WithObjectNotImplementsIHasTranslationsInterface_ShouldReturnEmptyString()
+    {
+        // Arrange
+        object obj = new { Translations = new List<TranslationEntityFixture>() };
+        var manager = new MilvaMultiLanguageManager();
+
+        // Act
+        var result = manager.GetTranslationPropertyValue(obj, nameof(TranslationEntityFixture.Name));
+
+        // Assert
+        result.Should().BeEmpty();
+    }
+
+    [Fact]
+    public void GetTranslationPropertyValue_WithValidObjectButTranslationsIsNull_ShouldReturnEmptyString()
+    {
+        // Arrange
+        HasTranslationEntityFixture obj = new()
+        {
+            Translations = null
+        };
+        var manager = new MilvaMultiLanguageManager();
+
+        // Act
+        var result = manager.GetTranslationPropertyValue(obj, nameof(TranslationEntityFixture.Name));
+
+        // Assert
+        result.Should().BeEmpty();
+    }
+
+    [Fact]
+    public void GetTranslationPropertyValue_WithValidObjectButTranslationsIsEmpty_ShouldReturnEmptyString()
+    {
+        // Arrange
+        HasTranslationEntityFixture obj = new()
+        {
+            Translations = new List<TranslationEntityFixture>()
+        };
+        var manager = new MilvaMultiLanguageManager();
+
+        // Act
+        var result = manager.GetTranslationPropertyValue(obj, nameof(TranslationEntityFixture.Name));
+
+        // Assert
+        result.Should().BeEmpty();
+    }
+
+    [Theory]
+    [InlineData(null)]
+    [InlineData("")]
+    [InlineData(" ")]
+    public void GetTranslationPropertyValue_WithValidObjectButPropetyNameIsNullOrEmptyOrWhiteSpace_ShouldReturnEmptyString(string propertyName)
+    {
+        // Arrange
+        var obj = new HasTranslationEntityFixture
+        {
+            Id = 1,
+            Translations =
+                [
+                    new TranslationEntityFixture{
+                        Id = 1,
+                        Name = "First",
+                        Description = "First",
+                        EntityId = 1,
+                        LanguageId = 1
+                    },
+                    new TranslationEntityFixture{
+                        Id = 2,
+                        Name = "İlk",
+                        Description = "İlk",
+                        EntityId = 1,
+                        LanguageId = 2
+                    }
+                ]
+        };
+        var manager = new MilvaMultiLanguageManager();
+
+        // Act
+        var result = manager.GetTranslationPropertyValue(obj, propertyName);
+
+        // Assert
+        result.Should().BeEmpty();
+    }
+
+    [Theory]
+    [InlineData("Name")]
+    [InlineData("name")]
+    public void GetTranslationPropertyValue_WithValidObjectAndPropertyName_ShouldReturnCorrectTranslation(string propertyName)
+    {
+        // Arrange
+        List<ILanguage> languages =
+        [
+            new LanguageModelFixture
+            {
+                Id = 1,
+                Code = "en-US",
+                IsDefault = true,
+                Name ="English",
+                Supported = true,
+            },
+            new LanguageModelFixture
+            {
+                Id = 2,
+                Code = "tr-TR",
+                IsDefault = false,
+                Name ="Turkish",
+                Supported = true,
+            },
+        ];
+        var obj = new HasTranslationEntityFixture
+        {
+            Id = 1,
+            Translations =
+                [
+                    new TranslationEntityFixture{
+                        Id = 1,
+                        Name = "First",
+                        Description = "First",
+                        EntityId = 1,
+                        LanguageId = 1
+                    },
+                    new TranslationEntityFixture{
+                        Id = 2,
+                        Name = "İlk",
+                        Description = "İlk",
+                        EntityId = 1,
+                        LanguageId = 2
+                    }
+                ]
+        };
+        MultiLanguageManager.UpdateLanguagesList(languages);
+        CultureInfo.CurrentCulture = new CultureInfo("en-US");
+        var manager = new MilvaMultiLanguageManager();
+
+        // Act
+        var result = manager.GetTranslationPropertyValue(obj, propertyName);
+
+        // Assert
+        result.Should().Be("First");
+    }
+
+    #endregion
+
+    #region GetTranslation
+
+    [Fact]
+    public void GetTranslation_WithTranslationsIsNull_ShouldReturnEmptyString()
+    {
+        // Arrange
+        List<TranslationEntityFixture> translations = null;
+        var manager = new MilvaMultiLanguageManager();
+
+        // Act
+        var result = manager.GetTranslation(translations, nameof(TranslationEntityFixture.Name));
+
+        // Assert
+        result.Should().BeEmpty();
+    }
+
+    [Fact]
+    public void GetTranslation_WithTranslationsIsEmpty_ShouldReturnEmptyString()
+    {
+        // Arrange
+        var translations = new List<TranslationEntityFixture>();
+        var manager = new MilvaMultiLanguageManager();
+
+        // Act
+        var result = manager.GetTranslation(translations, nameof(TranslationEntityFixture.Name));
+
+        // Assert
+        result.Should().BeEmpty();
+    }
+
+    [Fact]
+    public void GetTranslation_WithEntityNotImplementsITranslationEntityInterface_ShouldReturnEmptyString()
+    {
+        // Arrange
+        var translations = new List<NonTranslationEntityFixture>()
+        {
+            new()
+            {
+                 Id = 1,
+                 Name = "First",
+                 Description = "First"
+            }
+        };
+        var manager = new MilvaMultiLanguageManager();
+
+        // Act
+        var result = manager.GetTranslation(translations, nameof(NonTranslationEntityFixture.Name));
+
+        // Assert
+        result.Should().BeEmpty();
+    }
+
+    [Theory]
+    [InlineData(null)]
+    [InlineData("")]
+    [InlineData(" ")]
+    public void GetTranslation_WithValidTranslationsButPropetyNameIsNullOrEmptyOrWhiteSpace_ShouldReturnEmptyString(string propertyName)
+    {
+        // Arrange
+        var translations = new List<TranslationEntityFixture>
+        {
+            new(){
+                Id = 1,
+                Name = "First",
+                Description = "First",
+                EntityId = 1,
+                LanguageId = 1
+            },
+            new()
+            {
+                Id = 2,
+                Name = "İlk",
+                Description = "İlk",
+                EntityId = 1,
+                LanguageId = 2
+            }
+        };
+        var manager = new MilvaMultiLanguageManager();
+
+        // Act
+        var result = manager.GetTranslation(translations, propertyName);
+
+        // Assert
+        result.Should().BeEmpty();
+    }
+
+    [Theory]
+    [InlineData("Name")]
+    [InlineData("name")]
+    public void GetTranslation_WithValidTranslationsAndPropertyName_ShouldReturnCorrectTranslation(string propertyName)
+    {
+        // Arrange
+        List<ILanguage> languages =
+        [
+            new LanguageModelFixture
+            {
+                Id = 1,
+                Code = "en-US",
+                IsDefault = true,
+                Name ="English",
+                Supported = true,
+            },
+            new LanguageModelFixture
+            {
+                Id = 2,
+                Code = "tr-TR",
+                IsDefault = false,
+                Name ="Turkish",
+                Supported = true,
+            },
+        ];
+        var translations = new List<TranslationEntityFixture>
+        {
+            new(){
+                Id = 1,
+                Name = "First",
+                Description = "First",
+                EntityId = 1,
+                LanguageId = 1
+            },
+            new()
+            {
+                Id = 2,
+                Name = "İlk",
+                Description = "İlk",
+                EntityId = 1,
+                LanguageId = 2
+            }
+        };
+        MultiLanguageManager.UpdateLanguagesList(languages);
+        CultureInfo.CurrentCulture = new CultureInfo("en-US");
+        var manager = new MilvaMultiLanguageManager();
+
+        // Act
+        var result = manager.GetTranslation(translations, propertyName);
+
+        // Assert
+        result.Should().Be("First");
+    }
+
+    [Fact]
+    public void GetTranslation_WithTranslationsOnlyContainsDefaultLanguageAndCurrentAndDefaultLanguageIsDifferent_ShouldReturnCorrectTranslation()
+    {
+        // Arrange
+        List<ILanguage> languages =
+        [
+            new LanguageModelFixture
+            {
+                Id = 1,
+                Code = "en-US",
+                IsDefault = true,
+                Name ="English",
+                Supported = true,
+            },
+            new LanguageModelFixture
+            {
+                Id = 2,
+                Code = "tr-TR",
+                IsDefault = false,
+                Name ="Turkish",
+                Supported = true,
+            },
+        ];
+        var translations = new List<TranslationEntityFixture>
+        {
+            new(){
+                Id = 1,
+                Name = "First",
+                Description = "First",
+                EntityId = 1,
+                LanguageId = 1
+            }
+        };
+        MultiLanguageManager.UpdateLanguagesList(languages);
+        CultureInfo.CurrentCulture = new CultureInfo("tr-TR");
+        var manager = new MilvaMultiLanguageManager();
+
+        // Act
+        var result = manager.GetTranslation(translations, nameof(TranslationEntityFixture.Name));
+
+        // Assert
+        result.Should().Be("First");
+    }
+
+    [Fact]
+    public void GetTranslation_WithTranslationsNotContainsCurrentOrDefaultLanguageAndCurrentAndDefaultLanguageIsDifferent_ShouldReturnCorrectTranslation()
+    {
+        // Arrange
+        List<ILanguage> languages =
+        [
+            new LanguageModelFixture
+            {
+                Id = 1,
+                Code = "en-US",
+                IsDefault = true,
+                Name ="English",
+                Supported = true,
+            },
+            new LanguageModelFixture
+            {
+                Id = 2,
+                Code = "tr-TR",
+                IsDefault = false,
+                Name ="Turkish",
+                Supported = true,
+            },
+        ];
+        var translations = new List<TranslationEntityFixture>
+        {
+            new(){
+                Id = 1,
+                Name = "соответствие",
+                Description = "соответствие",
+                EntityId = 1,
+                LanguageId = 4
+            }
+        };
+        MultiLanguageManager.UpdateLanguagesList(languages);
+        CultureInfo.CurrentCulture = new CultureInfo("tr-TR");
+        var manager = new MilvaMultiLanguageManager();
+
+        // Act
+        var result = manager.GetTranslation(translations, nameof(TranslationEntityFixture.Name));
+
+        // Assert
+        result.Should().Be("соответствие");
+    }
+
+    [Fact]
+    public void GetTranslation_WithTranslationsOnlyContainsDefaultLanguageAndCurrentAndDefaultLanguageIsSame_ShouldReturnCorrectTranslation()
+    {
+        // Arrange
+        List<ILanguage> languages =
+        [
+            new LanguageModelFixture
+            {
+                Id = 1,
+                Code = "en-US",
+                IsDefault = true,
+                Name ="English",
+                Supported = true,
+            },
+            new LanguageModelFixture
+            {
+                Id = 2,
+                Code = "tr-TR",
+                IsDefault = false,
+                Name ="Turkish",
+                Supported = true,
+            },
+        ];
+        var translations = new List<TranslationEntityFixture>
+        {
+            new(){
+                Id = 1,
+                Name = "First",
+                Description = "First",
+                EntityId = 1,
+                LanguageId = 1
+            }
+        };
+        MultiLanguageManager.UpdateLanguagesList(languages);
+        CultureInfo.CurrentCulture = new CultureInfo("en-US");
+        var manager = new MilvaMultiLanguageManager();
+
+        // Act
+        var result = manager.GetTranslation(translations, nameof(TranslationEntityFixture.Name));
+
+        // Assert
+        result.Should().Be("First");
+    }
+
+    [Fact]
+    public void GetTranslation_WithTranslationsNotContainsCurrentOrDefaultLanguageAndCurrentAndDefaultLanguageIsSame_ShouldReturnCorrectTranslation()
+    {
+        // Arrange
+        List<ILanguage> languages =
+        [
+            new LanguageModelFixture
+            {
+                Id = 1,
+                Code = "en-US",
+                IsDefault = true,
+                Name ="English",
+                Supported = true,
+            },
+            new LanguageModelFixture
+            {
+                Id = 2,
+                Code = "tr-TR",
+                IsDefault = false,
+                Name ="Turkish",
+                Supported = true,
+            },
+        ];
+        var translations = new List<TranslationEntityFixture>
+        {
+            new(){
+                Id = 1,
+                Name = "соответствие",
+                Description = "соответствие",
+                EntityId = 1,
+                LanguageId = 4
+            }
+        };
+        MultiLanguageManager.UpdateLanguagesList(languages);
+        CultureInfo.CurrentCulture = new CultureInfo("en-US");
+        var manager = new MilvaMultiLanguageManager();
+
+        // Act
+        var result = manager.GetTranslation(translations, nameof(TranslationEntityFixture.Name));
+
+        // Assert
+        result.Should().Be("соответствие");
+    }
+
+    #endregion
+
+    #region GetTranslationValue
+
+    [Fact]
+    public void GetTranslationValue_WithTranslationsIsNull_ShouldReturnEmptyString()
+    {
+        // Arrange
+        List<TranslationEntityFixture> translations = null;
+        var manager = new MilvaMultiLanguageManager();
+
+        // Act
+        var result = manager.GetTranslationValue(translations, i => i.Name);
+
+        // Assert
+        result.Should().BeEmpty();
+    }
+
+    [Fact]
+    public void GetTranslationValue_WithTranslationsIsEmpty_ShouldReturnEmptyString()
+    {
+        // Arrange
+        var translations = new List<TranslationEntityFixture>();
+        var manager = new MilvaMultiLanguageManager();
+
+        // Act
+        var result = manager.GetTranslationValue(translations, i => i.Name);
+
+        // Assert
+        result.Should().BeEmpty();
+    }
+
+    [Fact]
+    public void GetTranslationValue_WithEntityNotImplementsITranslationEntityInterface_ShouldReturnEmptyString()
+    {
+        // Arrange
+        var translations = new List<NonTranslationEntityFixture>()
+        {
+            new()
+            {
+                 Id = 1,
+                 Name = "First",
+                 Description = "First"
+            }
+        };
+        var manager = new MilvaMultiLanguageManager();
+
+        // Act
+        var result = manager.GetTranslationValue(translations, i => i.Name);
+
+        // Assert
+        result.Should().BeEmpty();
+    }
+
+    [Fact]
+    public void GetTranslationValue_WithValidTranslationsButPropetyExpressionIsNull_ShouldReturnEmptyString()
+    {
+        // Arrange
+        var translations = new List<TranslationEntityFixture>
+        {
+            new(){
+                Id = 1,
+                Name = "First",
+                Description = "First",
+                EntityId = 1,
+                LanguageId = 1
+            },
+            new()
+            {
+                Id = 2,
+                Name = "İlk",
+                Description = "İlk",
+                EntityId = 1,
+                LanguageId = 2
+            }
+        };
+        var manager = new MilvaMultiLanguageManager();
+
+        // Act
+        var result = manager.GetTranslation(translations, null);
+
+        // Assert
+        result.Should().BeEmpty();
+    }
+
+    [Fact]
+    public void GetTranslationValue_WithValidTranslationsAndPropertyExpression_ShouldReturnCorrectTranslation()
+    {
+        // Arrange
+        List<ILanguage> languages =
+        [
+            new LanguageModelFixture
+            {
+                Id = 1,
+                Code = "en-US",
+                IsDefault = true,
+                Name ="English",
+                Supported = true,
+            },
+            new LanguageModelFixture
+            {
+                Id = 2,
+                Code = "tr-TR",
+                IsDefault = false,
+                Name ="Turkish",
+                Supported = true,
+            },
+        ];
+        var translations = new List<TranslationEntityFixture>
+        {
+            new(){
+                Id = 1,
+                Name = "First",
+                Description = "First",
+                EntityId = 1,
+                LanguageId = 1
+            },
+            new()
+            {
+                Id = 2,
+                Name = "İlk",
+                Description = "İlk",
+                EntityId = 1,
+                LanguageId = 2
+            }
+        };
+        MultiLanguageManager.UpdateLanguagesList(languages);
+        CultureInfo.CurrentCulture = new CultureInfo("en-US");
+        var manager = new MilvaMultiLanguageManager();
+
+        // Act
+        var result = manager.GetTranslationValue(translations, i => i.Name);
+
+        // Assert
+        result.Should().Be("First");
+    }
+
+    [Fact]
+    public void GetTranslationValue_WithTranslationsOnlyContainsDefaultLanguageAndCurrentAndDefaultLanguageIsDifferent_ShouldReturnCorrectTranslation()
+    {
+        // Arrange
+        List<ILanguage> languages =
+        [
+            new LanguageModelFixture
+            {
+                Id = 1,
+                Code = "en-US",
+                IsDefault = true,
+                Name ="English",
+                Supported = true,
+            },
+            new LanguageModelFixture
+            {
+                Id = 2,
+                Code = "tr-TR",
+                IsDefault = false,
+                Name ="Turkish",
+                Supported = true,
+            },
+        ];
+        var translations = new List<TranslationEntityFixture>
+        {
+            new(){
+                Id = 1,
+                Name = "First",
+                Description = "First",
+                EntityId = 1,
+                LanguageId = 1
+            }
+        };
+        MultiLanguageManager.UpdateLanguagesList(languages);
+        CultureInfo.CurrentCulture = new CultureInfo("tr-TR");
+        var manager = new MilvaMultiLanguageManager();
+
+        // Act
+        var result = manager.GetTranslationValue(translations, i => i.Name);
+
+        // Assert
+        result.Should().Be("First");
+    }
+
+    [Fact]
+    public void GetTranslationValue_WithTranslationsNotContainsCurrentOrDefaultLanguageAndCurrentAndDefaultLanguageIsDifferent_ShouldReturnCorrectTranslation()
+    {
+        // Arrange
+        List<ILanguage> languages =
+        [
+            new LanguageModelFixture
+            {
+                Id = 1,
+                Code = "en-US",
+                IsDefault = true,
+                Name ="English",
+                Supported = true,
+            },
+            new LanguageModelFixture
+            {
+                Id = 2,
+                Code = "tr-TR",
+                IsDefault = false,
+                Name ="Turkish",
+                Supported = true,
+            },
+        ];
+        var translations = new List<TranslationEntityFixture>
+        {
+            new(){
+                Id = 1,
+                Name = "соответствие",
+                Description = "соответствие",
+                EntityId = 1,
+                LanguageId = 4
+            }
+        };
+        MultiLanguageManager.UpdateLanguagesList(languages);
+        CultureInfo.CurrentCulture = new CultureInfo("tr-TR");
+        var manager = new MilvaMultiLanguageManager();
+
+        // Act
+        var result = manager.GetTranslationValue(translations, i => i.Name);
+
+        // Assert
+        result.Should().Be("соответствие");
+    }
+
+    [Fact]
+    public void GetTranslationValue_WithTranslationsOnlyContainsDefaultLanguageAndCurrentAndDefaultLanguageIsSame_ShouldReturnCorrectTranslation()
+    {
+        // Arrange
+        List<ILanguage> languages =
+        [
+            new LanguageModelFixture
+            {
+                Id = 1,
+                Code = "en-US",
+                IsDefault = true,
+                Name ="English",
+                Supported = true,
+            },
+            new LanguageModelFixture
+            {
+                Id = 2,
+                Code = "tr-TR",
+                IsDefault = false,
+                Name ="Turkish",
+                Supported = true,
+            },
+        ];
+        var translations = new List<TranslationEntityFixture>
+        {
+            new(){
+                Id = 1,
+                Name = "First",
+                Description = "First",
+                EntityId = 1,
+                LanguageId = 1
+            }
+        };
+        MultiLanguageManager.UpdateLanguagesList(languages);
+        CultureInfo.CurrentCulture = new CultureInfo("en-US");
+        var manager = new MilvaMultiLanguageManager();
+
+        // Act
+        var result = manager.GetTranslationValue(translations, i => i.Name);
+
+        // Assert
+        result.Should().Be("First");
+    }
+
+    [Fact]
+    public void GetTranslationValue_WithTranslationsNotContainsCurrentOrDefaultLanguageAndCurrentAndDefaultLanguageIsSame_ShouldReturnCorrectTranslation()
+    {
+        // Arrange
+        List<ILanguage> languages =
+        [
+            new LanguageModelFixture
+            {
+                Id = 1,
+                Code = "en-US",
+                IsDefault = true,
+                Name ="English",
+                Supported = true,
+            },
+            new LanguageModelFixture
+            {
+                Id = 2,
+                Code = "tr-TR",
+                IsDefault = false,
+                Name ="Turkish",
+                Supported = true,
+            },
+        ];
+        var translations = new List<TranslationEntityFixture>
+        {
+            new(){
+                Id = 1,
+                Name = "соответствие",
+                Description = "соответствие",
+                EntityId = 1,
+                LanguageId = 4
+            }
+        };
+        MultiLanguageManager.UpdateLanguagesList(languages);
+        CultureInfo.CurrentCulture = new CultureInfo("en-US");
+        var manager = new MilvaMultiLanguageManager();
+
+        // Act
+        var result = manager.GetTranslationValue(translations, i => i.Name);
+
+        // Assert
+        result.Should().Be("соответствие");
     }
 
     #endregion
