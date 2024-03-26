@@ -485,12 +485,8 @@ public abstract class MilvaDbContextBase(DbContextOptions options) : DbContext(o
 
             if (lookupList.Count > 0)
             {
-                var langPropName = MultiLanguageEntityPropertyNames.Translations;
-
                 foreach (var lookup in lookupList)
                 {
-                    var id = (int)lookup.GetType().GetProperty(EntityPropertyNames.Id).GetValue(lookup, null);
-
                     Dictionary<string, object> propDic = [];
 
                     foreach (var prop in lookup.GetType().GetProperties())
