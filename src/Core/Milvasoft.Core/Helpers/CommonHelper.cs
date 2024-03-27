@@ -162,7 +162,7 @@ public static partial class CommonHelper
         }
         else if (targetType.IsInterface)
         {
-            var interfaceType = type.GetInterfaces().FirstOrDefault(i => GetTypeAccordingToGenericDefinition(i) == targetType);
+            var interfaceType = Array.Find(type.GetInterfaces(), i => GetTypeAccordingToGenericDefinition(i) == targetType);
 
             return interfaceType != null;
         }
