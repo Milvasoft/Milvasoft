@@ -11,21 +11,13 @@ namespace Milvasoft.Core.Utils.JsonConverters;
 public class InterfaceConverter<TImplementation, TInterface> : JsonConverter<TInterface> where TImplementation : class, TInterface
 {
     /// <summary>
-    /// Determines whether the specified type can be converted to the interface type.
-    /// </summary>
-    /// <param name="typeToConvert">The type to convert.</param>
-    /// <returns><c>true</c> if the specified type can be converted to the interface type; otherwise, <c>false</c>.</returns>
-    public override bool CanConvert(Type typeToConvert) => typeToConvert.CanAssignableTo(typeof(TInterface));
-
-    /// <summary>
     /// Deserializes the JSON data to the specified type.
     /// </summary>
     /// <param name="reader">The reader used to read the JSON data.</param>
     /// <param name="typeToConvert">The type to convert.</param>
     /// <param name="options">The serializer options.</param>
     /// <returns>The deserialized object.</returns>
-    public override TInterface Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
-        => JsonSerializer.Deserialize<TImplementation>(ref reader, options);
+    public override TImplementation Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options) => JsonSerializer.Deserialize<TImplementation>(ref reader);
 
     /// <summary>
     /// Serializes the specified object to JSON.
@@ -33,7 +25,7 @@ public class InterfaceConverter<TImplementation, TInterface> : JsonConverter<TIn
     /// <param name="writer">The writer used to write the JSON data.</param>
     /// <param name="value">The object to serialize.</param>
     /// <param name="options">The serializer options.</param>
-    public override void Write(Utf8JsonWriter writer, TInterface value, JsonSerializerOptions options) => JsonSerializer.Serialize(writer, value, options);
+    public override void Write(Utf8JsonWriter writer, TInterface value, JsonSerializerOptions options) => JsonSerializer.Serialize(writer, (TImplementation)value);
 }
 
 /// <summary>
@@ -73,7 +65,7 @@ public class InterfaceConverterFactory(Type implementationType, Type interfaceTy
     /// </summary>
     /// <param name="typeToConvert">The type to convert.</param>
     /// <returns><c>true</c> if the specified type can be converted to the interface type; otherwise, <c>false</c>.</returns>
-    public override bool CanConvert(Type typeToConvert) => typeToConvert.CanAssignableTo(InterfaceType);
+    public override bool CanConvert(Type typeToConvert) => ((typeToConvert.IsGenericType && InterfaceType.IsGenericType) || (!typeToConvert.IsGenericType && !InterfaceType.IsGenericType)) && typeToConvert.CanAssignableTo(InterfaceType);
 
     /// <summary>
     /// Creates a converter for the specified type.
@@ -86,7 +78,7 @@ public class InterfaceConverterFactory(Type implementationType, Type interfaceTy
         Type converterType;
 
         if (typeToConvert.IsGenericType && ImplementationType.IsGenericType)
-            converterType = typeof(InterfaceConverter<,>).MakeGenericType(ImplementationType.MakeGenericType(typeToConvert.GenericTypeArguments[0]), InterfaceType);
+            converterType = typeof(InterfaceConverter<,>).MakeGenericType(ImplementationType.MakeGenericType(typeToConvert.GenericTypeArguments[0]), InterfaceType.MakeGenericType(typeToConvert.GenericTypeArguments[0]));
         else
             converterType = typeof(InterfaceConverter<,>).MakeGenericType(ImplementationType, InterfaceType);
 

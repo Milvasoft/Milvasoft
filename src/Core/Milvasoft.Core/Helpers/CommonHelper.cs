@@ -156,7 +156,11 @@ public static partial class CommonHelper
         type = GetTypeAccordingToGenericDefinition(type);
         targetType = GetTypeAccordingToGenericDefinition(targetType);
 
-        if (targetType.IsInterface)
+        if (type.IsInterface)
+        {
+            return type.IsAssignableTo(targetType);
+        }
+        else if (targetType.IsInterface)
         {
             var interfaceType = type.GetInterfaces().FirstOrDefault(i => GetTypeAccordingToGenericDefinition(i) == targetType);
 

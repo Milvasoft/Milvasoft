@@ -2922,13 +2922,6 @@
             <typeparam name="TImplementation">The implementation type.</typeparam>
             <typeparam name="TInterface">The interface type.</typeparam>
         </member>
-        <member name="M:Milvasoft.Core.Utils.JsonConverters.InterfaceConverter`2.CanConvert(System.Type)">
-            <summary>
-            Determines whether the specified type can be converted to the interface type.
-            </summary>
-            <param name="typeToConvert">The type to convert.</param>
-            <returns><c>true</c> if the specified type can be converted to the interface type; otherwise, <c>false</c>.</returns>
-        </member>
         <member name="M:Milvasoft.Core.Utils.JsonConverters.InterfaceConverter`2.Read(System.Text.Json.Utf8JsonReader@,System.Type,System.Text.Json.JsonSerializerOptions)">
             <summary>
             Deserializes the JSON data to the specified type.
@@ -3024,7 +3017,7 @@
             </summary>
             <param name="services">The <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/> used for dependency injection.</param>
             <param name="options">The <see cref="T:System.Action`1"/> used to configure the options.</param>
-            <param name="includeMilvaConverters">A boolean value indicating whether to include Milva converters.</param>
+            <param name="includeMilvaOptions">A boolean value indicating whether to include Milva converters.</param>
             <returns>The configured <see cref="T:System.Text.Json.JsonSerializerOptions"/>.</returns>
         </member>
         <member name="T:Milvasoft.Core.Utils.MilvaLazy`1">

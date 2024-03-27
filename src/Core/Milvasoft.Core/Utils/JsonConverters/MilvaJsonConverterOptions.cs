@@ -29,18 +29,19 @@ public static class MilvaJsonConverterOptions
     /// </summary>
     /// <param name="services">The <see cref="IServiceCollection"/> used for dependency injection.</param>
     /// <param name="options">The <see cref="Action{JsonSerializerOptions}"/> used to configure the options.</param>
-    /// <param name="includeMilvaConverters">A boolean value indicating whether to include Milva converters.</param>
+    /// <param name="includeMilvaOptions">A boolean value indicating whether to include Milva converters.</param>
     /// <returns>The configured <see cref="JsonSerializerOptions"/>.</returns>
-    public static JsonSerializerOptions ConfigureCurrentMilvaJsonSerializerOptions(this IServiceCollection services, Action<JsonSerializerOptions> options = null, bool includeMilvaConverters = true)
+    public static JsonSerializerOptions ConfigureCurrentMilvaJsonSerializerOptions(this IServiceCollection services, Action<JsonSerializerOptions> options = null, bool includeMilvaOptions = true)
     {
-        ArgumentNullException.ThrowIfNull(services);
-
         var newOptions = NewOptionsObjectFromCurrent();
 
         options?.Invoke(newOptions);
 
-        if (includeMilvaConverters)
+        if (includeMilvaOptions)
+        {
             newOptions.Converters.Add(new ExceptionConverter<Exception>());
+            newOptions.Encoder = System.Text.Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping;
+        }
 
         Current = newOptions;
 

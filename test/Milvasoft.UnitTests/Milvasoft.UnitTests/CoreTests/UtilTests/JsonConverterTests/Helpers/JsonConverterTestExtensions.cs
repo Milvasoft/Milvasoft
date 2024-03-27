@@ -16,9 +16,6 @@ public static class JsonConverterTestExtensions
 
         var reader = new Utf8JsonReader(bytes);
 
-        // advance to token
-        reader.Read();
-
         var result = converter.Read(ref reader, typeof(TResult), options);
 
         return result;

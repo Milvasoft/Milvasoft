@@ -32,7 +32,7 @@ public class MilvaJsonConverterOptionsTests
         var includeMilvaConverters = true;
 
         // Act
-        var result = services.ConfigureCurrentMilvaJsonSerializerOptions(includeMilvaConverters: includeMilvaConverters);
+        var result = services.ConfigureCurrentMilvaJsonSerializerOptions(includeMilvaOptions: includeMilvaConverters);
 
         // Assert
         result.Should().BeSameAs(MilvaJsonConverterOptions.Current);
@@ -48,7 +48,7 @@ public class MilvaJsonConverterOptionsTests
         MilvaJsonConverterOptions.ResetCurrentOptionsToDefault();
 
         // Act
-        var result = services.ConfigureCurrentMilvaJsonSerializerOptions(includeMilvaConverters: includeMilvaConverters);
+        var result = services.ConfigureCurrentMilvaJsonSerializerOptions(includeMilvaOptions: includeMilvaConverters);
 
         // Assert
         result.Should().BeSameAs(MilvaJsonConverterOptions.Current);

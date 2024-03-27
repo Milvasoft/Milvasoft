@@ -24,7 +24,7 @@ public class ExceptionConverter<TExceptionType> : JsonConverter<TExceptionType> 
     /// <param name="options">The serializer options.</param>
     /// <returns>The deserialized exception.</returns>
     /// <exception cref="NotSupportedException">Thrown when deserialization is not supported.</exception>
-    public override TExceptionType Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options) => JsonSerializer.Deserialize<TExceptionType>(ref reader, options);
+    public override TExceptionType Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options) => JsonSerializer.Deserialize<TExceptionType>(ref reader);
 
     /// <summary>
     /// Serializes the specified exception to JSON.
@@ -42,7 +42,7 @@ public class ExceptionConverter<TExceptionType> : JsonConverter<TExceptionType> 
         var serializableProperties = value.GetType()
                                           .GetProperties()
                                           .Select(uu => new { uu.Name, Value = uu.GetValue(value) })
-                                          .Where(uu => uu.Name == nameof(Exception.Message) || uu.Name == nameof(Exception.StackTrace));
+                                          .Where(uu => uu.Name == nameof(Exception.Message) || uu.Name == nameof(Exception.StackTrace) || uu.Name == nameof(Exception.InnerException));
 
         if (options?.DefaultIgnoreCondition == JsonIgnoreCondition.WhenWritingNull)
         {
@@ -59,7 +59,7 @@ public class ExceptionConverter<TExceptionType> : JsonConverter<TExceptionType> 
 
         foreach (var prop in propList)
         {
-            if (prop.Name == nameof(Exception.StackTrace))
+            if (prop.Name == nameof(Exception.InnerException))
             {
                 writer.WritePropertyName(prop.Name);
                 JsonSerializer.Serialize(writer, prop.Value, options);
@@ -67,7 +67,7 @@ public class ExceptionConverter<TExceptionType> : JsonConverter<TExceptionType> 
             else
             {
                 writer.WritePropertyName(prop.Name);
-                JsonSerializer.Serialize(writer, prop.Value, options);
+                writer.WriteStringValue((string)prop.Value);
             }
         }
 

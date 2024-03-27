@@ -61,7 +61,7 @@ public class ExceptionConverterTests
         var result = _converter.Write(exception);
 
         // Assert
-        result.Should().Be("{\"Message\":\"Test Exception\",\"StackTrace\":null}");
+        result.Should().Be("{\"Message\":\"Test Exception\",\"InnerException\":null,\"StackTrace\":null}");
     }
 
     [Fact]

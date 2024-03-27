@@ -41,7 +41,7 @@ public partial class LogInterceptor(IServiceProvider serviceProvider) : IMilvaIn
             bool responseDataFetchedFromCache = false;
             var cacheAttribute = call.GetInterceptorAttribute<CacheAttribute>();
 
-            if (call.ReturnValue != null && call.ReturnValue is IResponse response)
+            if (call.ReturnValue is IResponse response)
             {
                 if (cacheAttribute != null)
                     responseDataFetchedFromCache = (bool)call.ReturnValue.GetType().GetProperty("IsCachedData").GetValue(call.ReturnValue);

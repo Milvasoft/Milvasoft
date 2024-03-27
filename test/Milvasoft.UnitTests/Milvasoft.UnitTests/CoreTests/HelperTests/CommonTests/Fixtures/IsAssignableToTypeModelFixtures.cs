@@ -7,6 +7,7 @@ public class IsAssignableToTypeModelFixtures
     public interface IInterface { }
     public interface IInterfaceImplementsIInterface : IInterface { }
     public interface IGenericInterface<T> { }
+    public interface IGenericInterfaceImplementsInterface<T> : IInterface { }
 
     public class ClassImplementationWithInterface : IInterface { }
     public class GenericClassImplementationWithGenericInterface<T> : IGenericInterface<T> { }

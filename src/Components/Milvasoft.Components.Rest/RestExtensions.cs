@@ -8,8 +8,8 @@ public static class RestExtensions
 {
     public static JsonSerializerOptions AddResponseConverters(this JsonSerializerOptions options)
     {
-        options.Converters.Add(new InterfaceConverterFactory<Response.Response, IResponse>());
         options.Converters.Add(new InterfaceConverterFactory(typeof(Response<>), typeof(IResponse<>)));
+        options.Converters.Add(new InterfaceConverterFactory<Response.Response, IResponse>());
 
         return options;
     }

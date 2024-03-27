@@ -8,21 +8,66 @@ namespace Milvasoft.UnitTests.CoreTests.UtilTests.JsonConverterTests;
 public class InterfaceConverterTests
 {
     private readonly InterfaceConverter<ClassImplementsInterfaceFixture, IInterfaceFixture> _converter = new();
+    private readonly InterfaceConverter<GenericClassImplementsGenericInterfaceFixture<ClassFixture>, IGenericInterfaceFixture<ClassFixture>> _genericConverter = new();
 
-    [Fact]
-    public void CanConvert_WithValidTypes_ShouldReturnsTrue()
+    [Theory]
+    [InlineData(typeof(ClassImplementsInterfaceFixture))]
+    [InlineData(typeof(ClassFixture))]
+    public void CanConvert_WithConcreteType_ShouldReturnsFalse(Type typeToConvert)
     {
         // Arrange
 
         // Act
-        var result = _converter.CanConvert(typeof(ClassImplementsInterfaceFixture));
+        var result = _converter.CanConvert(typeToConvert);
 
         // Assert
-        result.Should().BeTrue();
+        result.Should().BeFalse();
+    }
+
+    [Theory]
+    [InlineData(typeof(IInterfaceFixture), true)]
+    [InlineData(typeof(IInterfaceNotImplementedFixture), false)]
+    public void CanConvert_WithInterfaceType_ShouldReturnsExpected(Type typeToConvert, bool expected)
+    {
+        // Arrange
+
+        // Act
+        var result = _converter.CanConvert(typeToConvert);
+
+        // Assert
+        result.Should().Be(expected);
+    }
+
+    [Theory]
+    [InlineData(typeof(GenericClassImplementsGenericInterfaceFixture<>))]
+    [InlineData(typeof(GenericClassImplementsGenericInterfaceFixture<ClassFixture>))]
+    public void CanConvert_WithGenericConverterConcreteType_ShouldReturnsFalse(Type typeToConvert)
+    {
+        // Arrange
+
+        // Act
+        var result = _genericConverter.CanConvert(typeToConvert);
+
+        // Assert
+        result.Should().BeFalse();
+    }
+
+    [Theory]
+    [InlineData(typeof(IGenericInterfaceFixture<>), false)]
+    [InlineData(typeof(IGenericInterfaceFixture<ClassFixture>), true)]
+    public void CanConvert_WithGenericConverterInterfaceType_ShouldReturnsExpected(Type typeToConvert, bool expected)
+    {
+        // Arrange
+
+        // Act
+        var result = _genericConverter.CanConvert(typeToConvert);
+
+        // Assert
+        result.Should().Be(expected);
     }
 
     [Fact]
-    public void CanConvert_WithInvalidTypes_ShouldReturnsFalse()
+    public void CanConvert_WithObjectType_ShouldReturnsFalse()
     {
         // Arrange
 
@@ -47,7 +92,7 @@ public class InterfaceConverterTests
     }
 
     [Fact]
-    public void Write_WithValidInput_ShouldReturnsEmtpyString()
+    public void Write_WithValidInput_ShouldReturnsCorrectResult()
     {
         // Arrange
         IInterfaceFixture input = new ClassImplementsInterfaceFixture
@@ -87,6 +132,20 @@ public class InterfaceConverterTests
 
         // Assert
         result.Should().BeOfType<ClassImplementsInterfaceFixture>();
+        result.Name.Should().Be("John");
+    }
+
+    [Fact]
+    public void Read_WithValidGenericInput_ShouldReturnsCorrectResult()
+    {
+        // Arrange
+        var input = "{\"Name\":\"John\",\"Class\":{\"Priority\": 1}}";
+
+        // Act
+        IGenericInterfaceFixture<ClassFixture> result = _genericConverter.Read(input);
+
+        // Assert
+        result.Should().BeOfType<GenericClassImplementsGenericInterfaceFixture<ClassFixture>>();
         result.Name.Should().Be("John");
     }
 }
