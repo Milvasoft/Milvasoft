@@ -31,14 +31,15 @@ public class ResxWriter
         _logger?.Information($"Resource file loaded: '{_resourceFilePath}'");
     }
 
-    private bool CreateNewResxFile()
+    private void CreateNewResxFile()
     {
-        bool success;
-
         try
         {
             // Create a copy of the template resx resource
             var resxTemplate = System.Reflection.Assembly.GetExecutingAssembly().GetManifestResourceStream("Milvasoft.Localization.Resx.ResxManipulator.Templates.ResxTemplate.xml");
+
+            if (resxTemplate == null)
+                return;
 
             _logger?.Information($"ResxTemplate: {resxTemplate == null}");
 
@@ -46,15 +47,11 @@ public class ResxWriter
                 resxTemplate.CopyTo(file);
 
             _logger?.Information($"Resx file created: '{_resourceFilePath}'");
-
-            success = true;
         }
         catch (Exception e)
         {
             throw new FileLoadException($"Can't create resource file. {e.Message}");
         }
-
-        return success;
     }
 
     /// <summary>
@@ -123,7 +120,7 @@ public class ResxWriter
         {
             try
             {
-                _xd.Root.Elements("data").FirstOrDefault(x => x == elmnt).ReplaceWith(element.ToXElement());
+                _xd?.Root?.Elements("data")?.FirstOrDefault(x => x == elmnt)?.ReplaceWith(element.ToXElement());
                 await SaveAsync();
                 tsk.SetResult(true);
             }
@@ -157,7 +154,7 @@ public class ResxWriter
 
         try
         {
-            _xd.Root.Elements("data").FirstOrDefault(x => x == elmnt).Remove();
+            _xd?.Root?.Elements("data")?.FirstOrDefault(x => x == elmnt)?.Remove();
             await SaveAsync();
             tsk.SetResult(true);
         }

@@ -417,7 +417,7 @@ public class PropertyHelperTests
         Expression<Func<PropertyExistsTestModelFixture, object>> expected = i => (object)i.Poco;
 
         // Act
-        var result = CommonHelper.CreatePropertySelector<PropertyExistsTestModelFixture, object>(propertyName);
+        var result = CommonHelper.CreateRequiredPropertySelector<PropertyExistsTestModelFixture, object>(propertyName);
 
         // Assert
         var equality = ExpressionEqualityComparer.Instance.Equals(expected, result);
@@ -493,7 +493,7 @@ public class PropertyHelperTests
         // Arrange
 
         // Act
-        var result = CommonHelper.CreatePropertySelector<PropertyExistsTestModelFixture, object>(propertyName);
+        var result = CommonHelper.CreatePropertySelectorFunction<PropertyExistsTestModelFixture, object>(propertyName);
 
         // Assert
         result.Should().BeNull();

@@ -103,7 +103,7 @@ public static class RedisLocalizationExtensions
 
         var config = new RedisLocalizationPostConfigureOptions();
 
-        postConfigureAction?.Invoke(config);
+        postConfigureAction.Invoke(config);
 
         builder.Services.UpdateSingletonInstance<ILocalizationOptions, RedisLocalizationOptions>(opt =>
         {

@@ -14,7 +14,9 @@ public class CacheInterceptionOptions : ICacheInterceptionOptions
     /// Gets generic accessor type as <see cref="ICacheAccessor{TAccessor}"/>
     /// </summary>
     /// <returns></returns>
+#pragma warning disable S2696 // Instance members should not write to "static" fields
     public Type GetAccessorType() => _accessorType ??= typeof(ICacheAccessor<>).MakeGenericType([Type.GetType(CacheAccessorAssemblyQualifiedName)]);
+#pragma warning restore S2696 // Instance members should not write to "static" fields
 }
 
 public interface ICacheInterceptionOptions : IMilvaOptions

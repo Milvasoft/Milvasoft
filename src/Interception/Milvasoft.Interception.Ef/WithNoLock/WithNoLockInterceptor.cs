@@ -42,16 +42,9 @@ public partial class WithNoLockInterceptor(IServiceProvider serviceProvider) : I
             {
                 using var transactionScope = new TransactionScope(TransactionScopeOption.Required, _transactionOptions, TransactionScopeAsyncFlowOption.Enabled);
 
-                try
-                {
-                    await call.NextAsync();
+                await call.NextAsync();
 
-                    transactionScope?.Complete();
-                }
-                catch (Exception)
-                {
-                    throw;
-                }
+                transactionScope.Complete();
             });
         }
         else

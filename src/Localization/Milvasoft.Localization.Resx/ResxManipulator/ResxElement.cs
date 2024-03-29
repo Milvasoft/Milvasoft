@@ -5,7 +5,7 @@ namespace Milvasoft.Localization.Resx.ResxManipulator;
 /// <summary>
 /// Model for exporting DB entities to Resx file
 /// </summary>
-public class ResxElement : IEquatable<ResxElement>
+public sealed class ResxElement : IEquatable<ResxElement>
 {
     /// <summary>
     /// Initialize a new instance of ResxElement

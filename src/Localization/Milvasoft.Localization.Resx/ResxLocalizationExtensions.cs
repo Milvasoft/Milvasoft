@@ -97,7 +97,7 @@ public static class ResxLocalizationExtensions
 
         var config = new ResxLocalizationPostConfigureOptions();
 
-        postConfigureAction?.Invoke(config);
+        postConfigureAction.Invoke(config);
 
         builder.Services.UpdateSingletonInstance<ILocalizationOptions, ResxLocalizationOptions>(opt =>
         {

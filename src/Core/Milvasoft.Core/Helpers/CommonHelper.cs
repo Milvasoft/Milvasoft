@@ -147,6 +147,9 @@ public static partial class CommonHelper
     /// <returns>True if the specified type can be assigned to the target type; otherwise, false.</returns>
     public static bool CanAssignableTo(this Type type, Type targetType)
     {
+        if (type == null || targetType == null)
+            return false;
+
         if (!targetType.IsGenericType && !type.IsGenericType)
             return type.IsAssignableTo(targetType);
 

@@ -20,11 +20,11 @@ public class ResponseInterceptor(IServiceProvider serviceProvider, IResponseInte
     {
         await call.NextAsync();
 
-        var returnValueType = call?.ReturnValue?.GetType();
+        var returnValueType = call.ReturnValue?.GetType();
 
-        if (returnValueType.IsAssignableTo(typeof(IResponse)))
+        if (returnValueType.CanAssignableTo(typeof(IResponse)))
         {
-            if (returnValueType.IsAssignableTo(typeof(IHasMetadata)))
+            if (returnValueType.CanAssignableTo(typeof(IHasMetadata)))
             {
                 var hasMetadataResponse = call.ReturnValue as IHasMetadata;
 

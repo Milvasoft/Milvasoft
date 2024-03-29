@@ -9,21 +9,8 @@ public partial class StringHelperTests
 {
     [Theory]
     [ClassData(typeof(InvalidStringDataWithCultureCodeFixture))]
-    public void ToLowerFirst_WithInputStringIsInvalidWithDifferentCultures_ShouldReturnEmptyString(string input, string cultureCode, string expected)
-    {
-        //Arrange
-        CultureInfo.CurrentCulture = new CultureInfo(cultureCode);
-
-        //Act
-        var result = input.ToLowerFirst();
-
-        //Assert
-        result.Should().Be(expected);
-    }
-
-    [Theory]
     [ClassData(typeof(SpecialCharacteredStringDataWithCultureCodeFixture))]
-    public void ToLowerFirst_WithInputStringFirstCharacterIsUnableToLowercaseWithDifferentCultures_ShouldReturnInputString(string input, string cultureCode, string expected)
+    public void ToLowerFirst_WithInputStringIsInvalidWithDifferentCultures_ShouldReturnEmptyString(string input, string cultureCode, string expected)
     {
         //Arrange
         CultureInfo.CurrentCulture = new CultureInfo(cultureCode);
@@ -53,21 +40,8 @@ public partial class StringHelperTests
 
     [Theory]
     [ClassData(typeof(InvalidStringDataWithCultureCodeFixture))]
-    public void ToLowerInvariantFirst_WithInputStringIsInvalidWithDifferentCultures_ShouldReturnEmptyString(string input, string cultureCode, string expected)
-    {
-        //Arrange
-        CultureInfo.CurrentCulture = new CultureInfo(cultureCode);
-
-        //Act
-        string result = input.ToLowerInvariantFirst();
-
-        //Assert
-        result.Should().Be(expected);
-    }
-
-    [Theory]
     [ClassData(typeof(SpecialCharacteredStringDataWithCultureCodeFixture))]
-    public void ToLowerInvariantFirst_WithInputStringFirstCharacterIsUnableToLowercaseWithDifferentCultures_ShouldReturnEmptyString(string input, string cultureCode, string expected)
+    public void ToLowerInvariantFirst_WithInputStringIsInvalidWithDifferentCultures_ShouldReturnEmptyString(string input, string cultureCode, string expected)
     {
         //Arrange
         CultureInfo.CurrentCulture = new CultureInfo(cultureCode);

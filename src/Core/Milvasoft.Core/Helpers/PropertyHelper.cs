@@ -145,7 +145,7 @@ public static partial class CommonHelper
     /// <returns>The property selector function.</returns>
     /// <exception cref="MilvaDeveloperException">Thrown when <typeparamref name="T"/> does not contain <paramref name="propertyName"/>.</exception>
     public static Func<T, TPropertyType> CreatePropertySelectorFunction<T, TPropertyType>(string propertyName)
-        => CreatePropertySelector<T, TPropertyType>(propertyName).Compile();
+        => CreatePropertySelector<T, TPropertyType>(propertyName)?.Compile();
 
     /// <summary>
     /// Creates a required property selector function for the specified property name.

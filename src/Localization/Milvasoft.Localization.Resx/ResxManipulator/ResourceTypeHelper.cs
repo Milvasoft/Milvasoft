@@ -17,7 +17,7 @@ namespace Milvasoft.Localization.Resx.ResxManipulator;
 /// such type has no class inside the resources folder, so we have to reconstruct the
 /// type full name to fulfill above format.
 /// </summary>
-public class ResourceTypeHelper
+public static class ResourceTypeHelper
 {
     /// <summary>
     /// Create the compiled reource name from type and location

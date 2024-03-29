@@ -14,7 +14,9 @@ public class TransactionInterceptionOptions : ITransactionInterceptionOptions
 
     public string DbContextAssemblyQualifiedName { get; set; }
 
+#pragma warning disable S2696 // Instance members should not write to "static" fields
     public Type GetDbContextType() => _dbContextType ??= Type.GetType(DbContextAssemblyQualifiedName);
+#pragma warning restore S2696 // Instance members should not write to "static" fields
 }
 
 public interface ITransactionInterceptionOptions : IMilvaOptions

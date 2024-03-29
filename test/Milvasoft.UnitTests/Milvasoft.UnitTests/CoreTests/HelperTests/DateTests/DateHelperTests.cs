@@ -236,6 +236,7 @@ public partial class DateHelperTests
     /// date , start date , end date  , expected result
     /// </summary>
     /// <returns></returns>
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Major Code Smell", "S6562:Always set the \"DateTimeKind\" when creating new \"DateTime\" instances", Justification = "<Pending>")]
     public static IEnumerable<object[]> DatesForIsBetweenMethod()
     {
         var date = new DateTime(2024, 01, 01, 11, 00, 00);
@@ -326,6 +327,7 @@ public partial class DateHelperTests
     #endregion
 
     [Fact]
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Major Code Smell", "S6562:Always set the \"DateTimeKind\" when creating new \"DateTime\" instances", Justification = "<Pending>")]
     public void WithTime_WithInputTimeAndDateIsValid_ShouldReturnDateWithInputTime()
     {
         // Arrange
@@ -361,7 +363,7 @@ public partial class DateHelperTests
     public void ConvertToUtc_WithInputIsUtcTime_ShouldReturnTimeAsConvertedToUtc()
     {
         // Arrange
-        var utcDate = TimeZoneInfo.ConvertTimeToUtc(new DateTime(2024, 01, 01, 10, 00, 00));
+        var utcDate = TimeZoneInfo.ConvertTimeToUtc(new DateTime(2024, 01, 01, 10, 00, 00, DateTimeKind.Unspecified));
         var time = new TimeSpan(utcDate.Ticks);
         var expected = new TimeSpan(utcDate.AddHours(-3).Ticks);
 

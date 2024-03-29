@@ -53,21 +53,8 @@ public partial class StringHelperTests
 
     [Theory]
     [ClassData(typeof(InvalidStringDataWithCultureCodeFixture))]
-    public void ToUpperInvariantFirst_WithInputStringIsInvalidWithDifferentCultures_ShouldReturnEmptyString(string input, string cultureCode, string expected)
-    {
-        //Arrange
-        CultureInfo.CurrentCulture = new CultureInfo(cultureCode);
-
-        //Act
-        var result = input.ToUpperInvariantFirst();
-
-        //Assert
-        result.Should().Be(expected);
-    }
-
-    [Theory]
     [ClassData(typeof(SpecialCharacteredStringDataWithCultureCodeFixture))]
-    public void ToUpperInvariantFirst_WithInputStringFirstCharacterIsUnableToUppercaseWithDifferentCultures_ShouldReturnEmptyString(string input, string cultureCode, string expected)
+    public void ToUpperInvariantFirst_WithInputStringIsInvalidWithDifferentCultures_ShouldReturnEmptyString(string input, string cultureCode, string expected)
     {
         //Arrange
         CultureInfo.CurrentCulture = new CultureInfo(cultureCode);

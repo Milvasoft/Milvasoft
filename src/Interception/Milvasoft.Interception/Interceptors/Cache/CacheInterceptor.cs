@@ -27,7 +27,7 @@ public class CacheInterceptor : IMilvaInterceptor
     {
         if (_cache != null)
         {
-            object cachedValue = default;
+            object cachedValue = null;
             string cacheKey = null;
 
             var cacheAttribute = call.GetInterceptorAttribute<CacheAttribute>();
@@ -46,7 +46,7 @@ public class CacheInterceptor : IMilvaInterceptor
 
                 if (value != null)
                 {
-                    if (returnType.IsAssignableTo(typeof(IResponse)))
+                    if (returnType.CanAssignableTo(typeof(IResponse)))
                     {
                         value.GetType().GetProperty("IsCachedData").SetValue(value, true);
                     }

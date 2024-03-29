@@ -33,13 +33,13 @@ public static class InterceptionServiceCollectionExtensions
     {
         ArgumentNullException.ThrowIfNull(assembly);
 
-        var types = assembly.FindDecorableTypes();
-
         var builder = new InterceptionBuilder(services, configurationManager);
 
-        var externalTypes = builder.Services.Where(i => i?.ImplementationType?.GetInterfaces()?.Any(i => i == typeof(IInterceptable)) ?? false)?.Select(i => i.ServiceType);
+        var externalTypes = builder.Services?.Where(i => Array.Exists(i.ImplementationType.GetInterfaces(), t => t == typeof(IInterceptable))).Select(i => i.ServiceType);
 
-        types = (types?.Concat(externalTypes) ?? externalTypes)?.Distinct()?.ToList();
+        var types = assembly.FindDecorableTypes();
+
+        types = (types?.Concat(externalTypes) ?? externalTypes).Distinct().ToList();
 
         builder.Services.AddScoped<IInterceptorRunner, InterceptorRunner>();
         builder.Intercept(typeof(IInterceptorRunner));
@@ -168,7 +168,7 @@ public static class InterceptionServiceCollectionExtensions
 
         var config = new LogInterceptionPostConfigureOptions();
 
-        postConfigureAction?.Invoke(config);
+        postConfigureAction.Invoke(config);
 
         builder.Services.UpdateSingletonInstance<ILogInterceptionOptions>(opt =>
         {
@@ -250,7 +250,7 @@ public static class InterceptionServiceCollectionExtensions
 
         var config = new ResponseInterceptionPostConfigureOptions();
 
-        postConfigureAction?.Invoke(config);
+        postConfigureAction.Invoke(config);
 
         builder.Services.UpdateSingletonInstance<IResponseInterceptionOptions>(opt =>
         {
@@ -346,7 +346,7 @@ public static class InterceptionServiceCollectionExtensions
 
         var config = new InterceptionPostConfigureOptions();
 
-        postConfigureAction?.Invoke(config);
+        postConfigureAction.Invoke(config);
 
         builder.PostConfigureLogInterceptionOptions(opt =>
         {

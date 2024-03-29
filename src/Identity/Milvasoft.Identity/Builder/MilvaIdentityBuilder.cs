@@ -53,7 +53,7 @@ public class MilvaIdentityBuilder<TUser, TKey> where TUser : MilvaUser<TKey> whe
 
         var config = new MilvaIdentityOptions();
 
-        identityOptions?.Invoke(config);
+        identityOptions.Invoke(config);
 
         _services.AddSingleton(config);
 
@@ -104,7 +104,7 @@ public class MilvaIdentityBuilder<TUser, TKey> where TUser : MilvaUser<TKey> whe
 
         var config = new MilvaIdentityPostConfigureOptions();
 
-        setupAction?.Invoke(config);
+        setupAction.Invoke(config);
 
         _services.UpdateSingletonInstance<MilvaIdentityOptions>(opt =>
         {

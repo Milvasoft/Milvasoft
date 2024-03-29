@@ -29,30 +29,29 @@ public partial class TransactionInterceptor(IServiceProvider serviceProvider) : 
         else
             context = _serviceProvider.GetService(_transactionInterceptionOptions.GetDbContextType()) as DbContext;
 
-        if (context != null)
-        {
-            var executionStrategy = context.Database.CreateExecutionStrategy();
-
-            await executionStrategy.ExecuteAsync(async () =>
-            {
-                using var transaction = await context.Database.BeginTransactionAsync().ConfigureAwait(false);
-
-                try
-                {
-                    await call.NextAsync();
-
-                    if (transaction != null)
-                        await transaction.CommitAsync().ConfigureAwait(false);
-                }
-                catch (Exception)
-                {
-                    if (transaction != null)
-                        await transaction.RollbackAsync().ConfigureAwait(false);
-                    throw;
-                }
-            });
-        }
-        else
+        if (context == null)
             await call.NextAsync();
+
+        var executionStrategy = context.Database.CreateExecutionStrategy();
+
+        await executionStrategy.ExecuteAsync(async () =>
+        {
+            using var transaction = await context.Database.BeginTransactionAsync().ConfigureAwait(false);
+
+            try
+            {
+                await call.NextAsync();
+
+                if (transaction != null)
+                    await transaction.CommitAsync().ConfigureAwait(false);
+            }
+            catch (Exception)
+            {
+                if (transaction != null)
+                    await transaction.RollbackAsync().ConfigureAwait(false);
+
+                throw;
+            }
+        });
     }
 }
