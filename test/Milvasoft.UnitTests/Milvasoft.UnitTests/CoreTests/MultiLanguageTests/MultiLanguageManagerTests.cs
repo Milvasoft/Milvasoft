@@ -817,7 +817,7 @@ public class MultiLanguageManagerTests
         CultureInfo.CurrentCulture = new CultureInfo("en-US");
         var manager = new MilvaMultiLanguageManager();
 #pragma warning disable S3358 // Ternary operators should not be nested
-        Expression<Func<HasTranslationEntityFixture, string>> expectedExpression = src => src.Translations != null
+        Expression<Func<HasTranslationEntityFixture, string>> expectedExpression = src => src.Translations != null || src.Translations.Any()
                                                                                             ? src.Translations.FirstOrDefault(i => i.LanguageId == 1) != null
                                                                                                 ? src.Translations.FirstOrDefault(i => i.LanguageId == 1).Name
                                                                                                 : src.Translations.FirstOrDefault().Name != null

@@ -450,7 +450,7 @@ public abstract class MilvaDbContextBase(DbContextOptions options) : DbContext(o
                 }
             }
 
-            List<string> propNamesForProjection = BuildPropertyNameListForProjection(entityType, translationEntityType);
+            List<string> propNamesForProjection = BuildPropertyNameListForProjection(entityType);
 
             if (!mainEntityPropertyNames.IsNullOrEmpty())
                 propNamesForProjection.AddRange(mainEntityPropertyNames);
@@ -459,7 +459,6 @@ public abstract class MilvaDbContextBase(DbContextOptions options) : DbContext(o
                                                                                                                                      [
                                                                                                                                          propNamesForProjection,
                                                                                                                                          translationEntityPropNames,
-                                                                                                                                         translationEntityType,
                                                                                                                                          multiLanguageManager
                                                                                                                                      ]);
 
@@ -563,7 +562,7 @@ public abstract class MilvaDbContextBase(DbContextOptions options) : DbContext(o
             }
         }
 
-        List<string> BuildPropertyNameListForProjection(Type entityType, Type translationEntityType)
+        List<string> BuildPropertyNameListForProjection(Type entityType)
         {
             List<string> propNamesForProjection = [];
 
