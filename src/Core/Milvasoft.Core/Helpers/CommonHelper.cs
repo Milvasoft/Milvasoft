@@ -80,7 +80,7 @@ public static partial class CommonHelper
     public static List<PropertyInfo> AssignUpdatedProperties<TEntity, TDto>(this TEntity entity, TDto dto) where TEntity : class, IMilvaEntity where TDto : DtoBase
     {
         if (entity == null || dto == null)
-            return null;
+            return [];
 
         List<PropertyInfo> updatedProps = null;
 

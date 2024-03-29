@@ -59,14 +59,14 @@ public struct UpdateProperty<T> : IUpdateProperty, IEquatable<UpdateProperty<T>>
     /// <summary>
     /// Compares two <see cref="UpdateProperty{T}"/> objects for equality.
     /// </summary>
-    /// <param name="other"></param>
+    /// <param name="obj"></param>
     /// <returns> If both hash are equals returns true, othewise false. </returns>
-    public override readonly bool Equals(object other)
+    public override readonly bool Equals(object obj)
     {
         UpdateProperty<T> otherUpdateProp;
 
         // Check that other is a UpdateProperty<T> first
-        if (other == null || other is not UpdateProperty<T> prop)
+        if (obj is not UpdateProperty<T> prop)
             return false;
         else
             otherUpdateProp = prop;

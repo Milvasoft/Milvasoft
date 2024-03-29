@@ -6,7 +6,7 @@ namespace Milvasoft.UnitTests.CoreTests.UtilTests.JsonConverterTests.Helpers;
 
 public static class JsonConverterTestExtensions
 {
-    public static TResult? Read<TResult>(this JsonConverter<TResult> converter,
+    public static TResult Read<TResult>(this JsonConverter<TResult> converter,
                                          string token,
                                          JsonSerializerOptions options = null)
     {
@@ -21,7 +21,7 @@ public static class JsonConverterTestExtensions
         return result;
     }
 
-    public static (bool IsSuccessful, TResult? Result) TryRead<TResult>(this JsonConverter<TResult> converter,
+    public static (bool IsSuccessful, TResult Result) TryRead<TResult>(this JsonConverter<TResult> converter,
                                                                         string token,
                                                                         JsonSerializerOptions options = null)
     {

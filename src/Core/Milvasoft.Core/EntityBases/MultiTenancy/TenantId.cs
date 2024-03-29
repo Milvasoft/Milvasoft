@@ -104,14 +104,14 @@ public struct TenantId : IEquatable<TenantId>
     /// <summary>
     /// Compares hashes.
     /// </summary>
-    /// <param name="other"></param>
+    /// <param name="obj"></param>
     /// <returns> If both hash are equals returns true, othewise false. </returns>
-    public override readonly bool Equals(object other)
+    public override readonly bool Equals(object obj)
     {
         TenantId tenantId;
 
         // Check that o is a TenantId first
-        if (other == null || other is not TenantId id)
+        if (obj == null || obj is not TenantId id)
             return false;
         else
             tenantId = id;

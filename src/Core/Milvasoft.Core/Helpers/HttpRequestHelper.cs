@@ -95,7 +95,7 @@ public static partial class HttpRequestHelper
         {
             // Test for Success.
             if (!match.Success)
-                throw new Exception(LocalizerKeys.InvalidUrlErrorMessage);
+                throw new MilvaDeveloperException(LocalizerKeys.InvalidUrlErrorMessage);
 
             return requestUrl;
         }
@@ -146,7 +146,7 @@ public static partial class HttpRequestHelper
         {
             // Test for Success.
             if (!match.Success)
-                throw new Exception(LocalizerKeys.InvalidUrlErrorMessage);
+                throw new MilvaDeveloperException(LocalizerKeys.InvalidUrlErrorMessage);
 
             return requestUrl;
         }

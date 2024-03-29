@@ -109,7 +109,7 @@ public partial class CommonHelperTests
     #region AssignUpdatedProperties
 
     [Fact]
-    public void AssignUpdatedProperties_WithEntityIsNull_ShouldReturnNull()
+    public void AssignUpdatedProperties_WithEntityIsNull_ShouldReturnEmptyList()
     {
         // Arrange
         UpdatedPropsTestEntity entity = null;
@@ -119,11 +119,11 @@ public partial class CommonHelperTests
         var result = entity.AssignUpdatedProperties(dto);
 
         // Assert
-        result.Should().BeNull();
+        result.Should().BeEmpty();
     }
 
     [Fact]
-    public void AssignUpdatedProperties_WithDtoIsNull_ShouldReturnNull()
+    public void AssignUpdatedProperties_WithDtoIsNull_ShouldReturnNullEmptyList()
     {
         // Arrange
         UpdatedPropsTestEntity entity = new();
@@ -133,11 +133,11 @@ public partial class CommonHelperTests
         var result = entity.AssignUpdatedProperties(dto);
 
         // Assert
-        result.Should().BeNull();
+        result.Should().BeEmpty();
     }
 
     [Fact]
-    public void AssignUpdatedProperties_WithEntityAndDtoIsNull_ShouldReturnNull()
+    public void AssignUpdatedProperties_WithEntityAndDtoIsNull_ShouldReturnEmptyList()
     {
         // Arrange
         UpdatedPropsTestEntity entity = null;
@@ -147,7 +147,7 @@ public partial class CommonHelperTests
         var result = entity.AssignUpdatedProperties(dto);
 
         // Assert
-        result.Should().BeNull();
+        result.Should().BeEmpty();
     }
 
     [Fact]
@@ -288,7 +288,6 @@ public partial class CommonHelperTests
     #endregion
 
     #region CanAssignableTo
-
 
     [Fact]
     public void CanAssignableTo_WithNonGenericTypeAndNonInterfaceTargetType_ShouldReturnTrueIfTypeIsAssignable()

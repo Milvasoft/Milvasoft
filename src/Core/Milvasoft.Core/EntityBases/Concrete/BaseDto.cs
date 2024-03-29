@@ -42,38 +42,20 @@ public abstract class DtoBase<TKey> : DtoBase, IEntityBase<TKey>
 /// </summary>
 public abstract class DtoBase
 {
-    private static Type _dtoType;
-    private static PropertyInfo[] _propertyInfos;
-
     /// <summary>
     /// Initializes new instance.
     /// </summary>
-    public DtoBase()
+    protected DtoBase()
     {
-        _dtoType = GetType();
-        _propertyInfos = _dtoType.GetProperties(BindingFlags.Public | BindingFlags.Instance);
     }
-
-    /// <summary>
-    /// Gets dto type.
-    /// </summary>
-    /// <returns></returns>
-#pragma warning disable CA1822 // Mark members as static
-    public Type GetDtoType() => _dtoType;
-
-    /// <summary>
-    /// Get dto type properties.
-    /// </summary>
-    /// <returns></returns>
-    public PropertyInfo[] GetDtoProperties() => _propertyInfos;
 
     /// <summary>
     /// Returns a collection of PropertyInfo objects that represent properties of the DTO that implements <see cref="IUpdateProperty"/>.
     /// </summary>
     /// <returns>A collection of PropertyInfo objects representing the updatable properties of the DTO.</returns>
-    public virtual IEnumerable<PropertyInfo> GetUpdatableProperties() => GetDtoProperties().Where(prop => prop.PropertyType.IsGenericType
-                                                                                                && (prop.PropertyType.CanAssignableTo(typeof(IUpdateProperty))
-                                                                                                    || (Nullable.GetUnderlyingType(prop.PropertyType)?
-                                                                                                                .CanAssignableTo(typeof(IUpdateProperty)) ?? false)));
-#pragma warning restore CA1822 // Mark members as static
+    public virtual IEnumerable<PropertyInfo> GetUpdatableProperties() => GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance)
+                                                                                  .Where(prop => prop.PropertyType.IsGenericType
+                                                                                                 && (prop.PropertyType.CanAssignableTo(typeof(IUpdateProperty))
+                                                                                                     || (Nullable.GetUnderlyingType(prop.PropertyType)?
+                                                                                                                 .CanAssignableTo(typeof(IUpdateProperty)) ?? false)));
 }

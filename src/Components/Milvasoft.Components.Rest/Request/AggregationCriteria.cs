@@ -16,25 +16,23 @@ public class AggregationCriteria
     private Type _entityType;
     private Type _propType;
     private bool _runAsync;
-    private string _aggregateBy;
-    private AggregationType _type;
 
     /// <summary>
     /// Aggregation column name.
     /// </summary>
     /// <example>{columnName}</example>
-    public virtual string AggregateBy { get => _aggregateBy; set => _aggregateBy = value; }
+    public virtual string AggregateBy { get; set; }
 
     /// <summary>
     /// Aggregation type.
     /// </summary>
     /// <example>{columnName}</example>
-    public virtual AggregationType Type { get => _type; set => _type = value; }
+    public virtual AggregationType Type { get; set; }
 
     public virtual async Task<AggregationResult> ApplyAggregationAsync<TEntity>(IQueryable<TEntity> query, bool runAsync = true, CancellationToken cancellationToken = default)
     {
-        if (string.IsNullOrEmpty(_aggregateBy))
-            return new AggregationResult(_aggregateBy, _type, null);
+        if (string.IsNullOrEmpty(AggregateBy))
+            return new AggregationResult(AggregateBy, Type, null);
 
         var prop = InitializeFields(query, runAsync);
 
@@ -46,17 +44,17 @@ public class AggregationCriteria
             _ => CommonHelper.DynamicInvokeCreatePropertySelector(nameof(CommonHelper.CreateRequiredPropertySelector), _entityType, _propType, prop.Name),
         };
 
-        if (_type == AggregationType.Count)
+        if (Type == AggregationType.Count)
         {
             var count = runAsync ? await query.CountAsync(cancellationToken).ConfigureAwait(false) : query.Count();
 
-            return new AggregationResult(prop.Name, _type, count);
+            return new AggregationResult(prop.Name, Type, count);
         }
         else
         {
             var res = await GenericInvokeAggregationMethodAsync(query, propertySelector, cancellationToken);
 
-            return new AggregationResult(prop.Name, _type, res);
+            return new AggregationResult(prop.Name, Type, res);
         }
     }
 
@@ -75,13 +73,13 @@ public class AggregationCriteria
 
             await taskResult;
 
-            var resultProperty = taskResult.GetType().GetProperty("Result");
+            var resultProperty = taskResult.GetType().GetProperty(nameof(Task<TEntity>.Result));
 
             result = resultProperty.GetValue(taskResult);
         }
         else
         {
-            result = genericAggregationMethod?.Invoke(null, [query, propertySelectorResult]);
+            result = genericAggregationMethod.Invoke(null, [query, propertySelectorResult]);
         }
 
         return result;
@@ -89,37 +87,19 @@ public class AggregationCriteria
 
     private MethodInfo MakeGenericMethod()
     {
-        MethodInfo aggregationMethod = null;
-
-        var methodName = GetMethodName(_type, _runAsync);
+        var methodName = GetMethodName(Type, _runAsync);
 
         var relatedMethods = _aggregationMethods[_queryProviderType].Where(mi => mi.Name == methodName);
 
-        foreach (var method in relatedMethods)
-        {
-            var methodParameters = method.GetParameters().Select(i => i.ParameterType);
-
-            if (IsMethodParametersContainsDesiredType(methodParameters))
-            {
-                aggregationMethod = method;
-                break;
-            }
-        }
-
-        if (aggregationMethod == null)
-            throw new MilvaDeveloperException("Unkown query provider.");
+        MethodInfo aggregationMethod = relatedMethods.FirstOrDefault(method => IsMethodParametersContainsDesiredType(method.GetParameters().Select(i => i.ParameterType)))
+                                            ?? throw new MilvaDeveloperException("Unkown query provider.");
 
         if (!aggregationMethod.IsGenericMethod)
             return aggregationMethod;
 
-        MethodInfo genericAggregationMethod;
-
-        if (aggregationMethod.GetGenericArguments().Length == 1)
-        {
-            genericAggregationMethod = aggregationMethod.MakeGenericMethod(_entityType);
-        }
-        else
-            genericAggregationMethod = aggregationMethod.MakeGenericMethod(_entityType, _propType);
+        MethodInfo genericAggregationMethod = aggregationMethod.GetGenericArguments().Length == 1
+                                                ? aggregationMethod.MakeGenericMethod(_entityType)
+                                                : aggregationMethod.MakeGenericMethod(_entityType, _propType);
 
         return genericAggregationMethod;
 
@@ -128,18 +108,11 @@ public class AggregationCriteria
             var genericTypes = types.Where(i => i.ContainsGenericParameters);
 
             //If method parameter's all generic parameters is generic type
-            if (genericTypes.Count() > 1 && genericTypes.All(t => t.GenericTypeArguments.All(g => g.IsGenericType)))
+            if (genericTypes.Count() > 1 && genericTypes.All(t => Array.TrueForAll(t.GenericTypeArguments, g => g.IsGenericType)))
                 return true;
 
-            foreach (var type in types)
-            {
-                if (type.IsGenericType)
-                    if (IsMethodParametersContainsDesiredType(type.GetGenericArguments()))
-                        return true;
-
-                if (type == _propType || type == _entityType)
-                    return true;
-            }
+            if (types.Any(type => type.IsGenericType && IsMethodParametersContainsDesiredType(type.GetGenericArguments()) || (type == _propType || type == _entityType)))
+                return true;
 
             return false;
         }
@@ -202,28 +175,25 @@ public class AggregationCriteria
         _runAsync = runAsync;
         _entityType = typeof(TEntity);
 
-        var prop = _entityType.ThrowIfPropertyNotExists(_aggregateBy);
+        var prop = _entityType.ThrowIfPropertyNotExists(AggregateBy);
 
-        _propType = prop.PropertyType;
+        _propType = IsNonNullableValueType(_propType) ? typeof(Nullable<>).MakeGenericType(_propType) : prop.PropertyType;
 
-        if (IsNonNullableValueType(_propType))
-            _propType = typeof(Nullable<>).MakeGenericType(_propType);
-
+#pragma warning disable EF1001 // Internal EF Core API usage.
         if (runAsync)
         {
             _queryProviderType = QueryProviderType.AsyncQueryable;
         }
         else
         {
-#pragma warning disable EF1001 // Internal EF Core API usage.
             if (query.Provider.GetType().IsAssignableTo(typeof(EnumerableQuery)))
                 _queryProviderType = QueryProviderType.List;
             else if (query.Provider.GetType().IsAssignableTo(typeof(EntityQueryProvider)))
                 _queryProviderType = QueryProviderType.Enumerable;
             else
                 _queryProviderType = QueryProviderType.List;
-#pragma warning restore EF1001 // Internal EF Core API usage.
         }
+#pragma warning restore EF1001 // Internal EF Core API usage.
 
         return prop;
     }

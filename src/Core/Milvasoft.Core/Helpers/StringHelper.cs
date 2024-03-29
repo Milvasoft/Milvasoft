@@ -79,7 +79,7 @@ public static partial class CommonHelper
     /// </summary>
     /// <param name="str">The input string.</param>
     /// <returns>The byte array representation of the input string.</returns>
-    public static byte[] GetByteArray(this string str) => !string.IsNullOrEmpty(str) ? Encoding.UTF8.GetBytes(str) : null;
+    public static byte[] GetByteArray(this string str) => !string.IsNullOrEmpty(str) ? Encoding.UTF8.GetBytes(str) : [];
 
     /// <summary>
     /// Gets the string representation of the input byte array.
@@ -97,7 +97,7 @@ public static partial class CommonHelper
     {
         var byteArray = str.GetByteArray();
 
-        return !byteArray.IsNullOrEmpty() ? SHA256.HashData(byteArray) : null;
+        return !byteArray.IsNullOrEmpty() ? SHA256.HashData(byteArray) : [];
     }
 
     /// <summary>

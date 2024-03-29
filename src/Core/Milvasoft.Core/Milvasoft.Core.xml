@@ -1053,18 +1053,6 @@
             Initializes new instance.
             </summary>
         </member>
-        <member name="M:Milvasoft.Core.EntityBases.Concrete.DtoBase.GetDtoType">
-            <summary>
-            Gets dto type.
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:Milvasoft.Core.EntityBases.Concrete.DtoBase.GetDtoProperties">
-            <summary>
-            Get dto type properties.
-            </summary>
-            <returns></returns>
-        </member>
         <member name="M:Milvasoft.Core.EntityBases.Concrete.DtoBase.GetUpdatableProperties">
             <summary>
             Returns a collection of PropertyInfo objects that represent properties of the DTO that implements <see cref="T:Milvasoft.Types.Structs.IUpdateProperty"/>.
@@ -1112,18 +1100,6 @@
             <summary>
             Initializes new instance.
             </summary>
-        </member>
-        <member name="M:Milvasoft.Core.EntityBases.Concrete.EntityBase.GetEntityType">
-            <summary>
-            Gets entity type.
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:Milvasoft.Core.EntityBases.Concrete.EntityBase.GetEntityProperties">
-            <summary>
-            Gets entity's type properties from static collection.
-            </summary>
-            <returns></returns>
         </member>
         <member name="T:Milvasoft.Core.EntityBases.MultiTenancy.IMilvaTenantBase`1">
             <summary>
@@ -1185,39 +1161,37 @@
             If as tenant is not active, no user of this tenant can use the application.
             </summary>
         </member>
-        <member name="T:Milvasoft.Core.EntityBases.MultiTenancy.MilvaTenant`2">
+        <member name="T:Milvasoft.Core.EntityBases.MultiTenancy.MilvaTenant">
             <summary>
             Represents a Tenant of the application.
             </summary>
-            <typeparam name="TUser"></typeparam>
-            <typeparam name="TUserKey"></typeparam>
         </member>
-        <member name="P:Milvasoft.Core.EntityBases.MultiTenancy.MilvaTenant`2.Id">
+        <member name="P:Milvasoft.Core.EntityBases.MultiTenancy.MilvaTenant.Id">
             <summary>
             Id of tenant.
             </summary>
         </member>
-        <member name="P:Milvasoft.Core.EntityBases.MultiTenancy.MilvaTenant`2.TenancyName">
+        <member name="P:Milvasoft.Core.EntityBases.MultiTenancy.MilvaTenant.TenancyName">
             <summary>
             Tenancy name of tenant.
             </summary>
         </member>
-        <member name="P:Milvasoft.Core.EntityBases.MultiTenancy.MilvaTenant`2.BranchNo">
+        <member name="P:Milvasoft.Core.EntityBases.MultiTenancy.MilvaTenant.BranchNo">
             <summary>
             Display name of the Tenant.
             </summary>
         </member>
-        <member name="P:Milvasoft.Core.EntityBases.MultiTenancy.MilvaTenant`2.SubscriptionExpireDate">
+        <member name="P:Milvasoft.Core.EntityBases.MultiTenancy.MilvaTenant.SubscriptionExpireDate">
             <summary>
             Represents Tenant's subscription expire date.
             </summary>
         </member>
-        <member name="M:Milvasoft.Core.EntityBases.MultiTenancy.MilvaTenant`2.#ctor">
+        <member name="M:Milvasoft.Core.EntityBases.MultiTenancy.MilvaTenant.#ctor">
             <summary>
             Creates a new tenant.
             </summary>
         </member>
-        <member name="M:Milvasoft.Core.EntityBases.MultiTenancy.MilvaTenant`2.#ctor(System.String,System.Int32)">
+        <member name="M:Milvasoft.Core.EntityBases.MultiTenancy.MilvaTenant.#ctor(System.String,System.Int32)">
             <summary>
             Creates a new tenant.
             </summary>
@@ -1279,7 +1253,7 @@
             <summary>
             Compares hashes.
             </summary>
-            <param name="other"></param>
+            <param name="obj"></param>
             <returns> If both hash are equals returns true, othewise false. </returns>
         </member>
         <member name="M:Milvasoft.Core.EntityBases.MultiTenancy.TenantId.Equals(Milvasoft.Core.EntityBases.MultiTenancy.TenantId)">

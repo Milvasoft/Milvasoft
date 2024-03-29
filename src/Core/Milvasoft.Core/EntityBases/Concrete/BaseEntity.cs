@@ -1,6 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Reflection;
 
 namespace Milvasoft.Core.EntityBases.Concrete;
 
@@ -48,30 +47,11 @@ public abstract class EntityBase<TKey> : EntityBase, IEntityBase<TKey>
 /// </summary>
 public abstract class EntityBase
 {
-    private static Type _entityType;
-    private static PropertyInfo[] _propertyInfos;
-
     /// <summary>
     /// Initializes new instance.
     /// </summary>
-    public EntityBase()
+    protected EntityBase()
     {
-        _entityType = GetType();
-        _propertyInfos = _entityType.GetProperties(BindingFlags.Public | BindingFlags.Instance);
     }
-
-#pragma warning disable CA1822 // Mark members as static
-    /// <summary>
-    /// Gets entity type.
-    /// </summary>
-    /// <returns></returns>
-    public Type GetEntityType() => _entityType;
-
-    /// <summary>
-    /// Gets entity's type properties from static collection.
-    /// </summary>
-    /// <returns></returns>
-    public PropertyInfo[] GetEntityProperties() => _propertyInfos;
-#pragma warning restore CA1822 // Mark members as static
 }
 

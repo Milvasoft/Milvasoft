@@ -44,10 +44,6 @@ public class ListResponse<T> : Response<List<T>>
         Messages = [new() { Message = message }];
     }
 
-    public ListResponse(List<T> data) : base(data)
-    {
-    }
-
     public ListResponse(List<T> data, string message) : base(data, message)
     {
     }

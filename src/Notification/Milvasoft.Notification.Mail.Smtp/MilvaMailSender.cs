@@ -126,13 +126,13 @@ public class MilvaMailSender(string from, NetworkCredential networkCredential, i
                                          string attachmentName,
                                          bool isBodyHtml = false)
     {
-        var base64 = base64String.Split(";base64,")?[1];
+        var base64 = base64String?.Split(";base64,")[1];
 
         var regex = @"[^:]\w+\/[\w-+\d.]+(?=;|,)";
 
         var ct = new Regex(regex).Match(base64).Captures?.FirstOrDefault()?.Value;
 
-        var splittedContentType = ct.Split('/');
+        var splittedContentType = ct?.Split('/');
 
         var fileExtension = splittedContentType?[1];
 

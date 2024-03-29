@@ -154,14 +154,11 @@ public static partial class CommonHelper
     /// <param name="date">The date to modify.</param>
     /// <param name="time">The time to set.</param>
     /// <returns>A new DateTime object with the same date as the original date and the specified time.</returns>
-    public static DateTime WithTime(this DateTime date, TimeSpan time) => new(date.Year,
-                                                                              date.Month,
-                                                                              date.Day,
-                                                                              time.Hours,
-                                                                              time.Minutes,
-                                                                              time.Seconds,
-                                                                              time.Milliseconds,
-                                                                              time.Microseconds);
+#pragma warning disable S6562 // Always set the "DateTimeKind" when creating new "DateTime" instances
+    public static DateTime WithTime(this DateTime date, TimeSpan time) => new(date.Year, date.Month, date.Day,
+                                                                              time.Hours, time.Minutes, time.Seconds,
+                                                                              time.Milliseconds, time.Microseconds);
+#pragma warning restore S6562 // Always set the "DateTimeKind" when creating new "DateTime" instances
 
     /// <summary>
     /// Converts the specified <paramref name="timeSpan"/> to UTC.

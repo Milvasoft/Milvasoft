@@ -56,7 +56,6 @@ public class LocalizedValue
     public LocalizedValue(string key, string value, bool resourceFound, string searchedLocation)
     {
         ArgumentNullException.ThrowIfNull(key);
-        //ArgumentNullException.ThrowIfNull(value);
 
         Key = key;
         Value = value;

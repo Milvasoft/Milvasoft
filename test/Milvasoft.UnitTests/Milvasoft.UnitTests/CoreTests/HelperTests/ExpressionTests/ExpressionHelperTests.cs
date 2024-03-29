@@ -142,17 +142,7 @@ public class ExpressionHelperTests
     /// left expression , right expression , expected result
     /// </summary>
     /// <returns></returns>
-    public static IEnumerable<object[]> InvalidExpressionsAndTypesForOrElseMethod()
-    {
-        Expression<Func<int, bool>> nullLeft = null;
-        Expression<Func<int, bool>> nullRight = null;
-        Expression<Func<int, bool>> left = x => x > 5;
-        Expression<Func<int, bool>> right = x => x < 10;
-
-        yield return new object[] { nullLeft, nullRight, nullRight };
-        yield return new object[] { left, nullRight, left };
-        yield return new object[] { nullLeft, right, right };
-    }
+    public static IEnumerable<object[]> InvalidExpressionsAndTypesForOrElseMethod() => InvalidExpressionsAndTypesForAndAlsoMethod();
 
     [Theory]
     [MemberData(nameof(InvalidExpressionsAndTypesForOrElseMethod))]

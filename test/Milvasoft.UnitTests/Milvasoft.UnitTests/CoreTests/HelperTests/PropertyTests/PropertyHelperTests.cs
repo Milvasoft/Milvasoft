@@ -315,7 +315,24 @@ public class PropertyHelperTests
     {
         // Arrange
         var type = typeof(PropertyExistsTestModelFixture);
-        var expected = type.GetProperty(propertyName, BindingFlags.IgnoreCase | BindingFlags.Public | BindingFlags.Instance);
+        var expected = type.GetProperty(propertyName, BindingFlags.IgnoreCase | BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly);
+
+        // Act
+        var result = type.GetPublicPropertyIgnoreCase(propertyName);
+
+        // Assert
+        result.Should().BeSameAs(expected);
+    }
+
+    [Theory]
+    [InlineData("poco")]
+    [InlineData("Poco")]
+    public void GetPublicPropertyIgnoreCase_WithHideInheritedMemberInput_ShouldReturnCorrectPropertyInfo(string propertyName)
+    {
+        // Arrange
+        var type = typeof(HideInheritedMemberModelFixture);
+        var expected = type.GetProperty(propertyName, BindingFlags.IgnoreCase | BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly)
+                        ?? type.GetProperty(propertyName, BindingFlags.IgnoreCase | BindingFlags.Public | BindingFlags.Instance);
 
         // Act
         var result = type.GetPublicPropertyIgnoreCase(propertyName);

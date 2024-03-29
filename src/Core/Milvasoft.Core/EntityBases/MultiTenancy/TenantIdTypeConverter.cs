@@ -16,10 +16,8 @@ public sealed class TenantIdTypeConverter : StringConverter
     /// <returns></returns>
     public override bool CanConvertFrom(ITypeDescriptorContext context, Type sourceType)
     {
-        if (sourceType == typeof(string) || sourceType == typeof(string))
-        {
+        if (sourceType == typeof(string))
             return true;
-        }
 
         return base.CanConvertFrom(context, sourceType);
     }
@@ -33,10 +31,8 @@ public sealed class TenantIdTypeConverter : StringConverter
     /// <returns></returns>
     public override object ConvertFrom(ITypeDescriptorContext context, CultureInfo culture, object value)
     {
-        if (value != null && (value is string || value is string))
-        {
-            return TenantId.Parse((string)value);
-        }
+        if (value is string stringValue)
+            return TenantId.Parse(stringValue);
 
         return base.ConvertFrom(context, culture, value);
     }
@@ -50,9 +46,7 @@ public sealed class TenantIdTypeConverter : StringConverter
     public override bool CanConvertTo(ITypeDescriptorContext context, Type destinationType)
     {
         if (destinationType == typeof(string))
-        {
             return true;
-        }
 
         return base.CanConvertTo(context, destinationType);
     }

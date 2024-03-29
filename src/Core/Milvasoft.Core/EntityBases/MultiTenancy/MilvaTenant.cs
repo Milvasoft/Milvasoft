@@ -3,11 +3,7 @@
 /// <summary>
 /// Represents a Tenant of the application.
 /// </summary>
-/// <typeparam name="TUser"></typeparam>
-/// <typeparam name="TUserKey"></typeparam>
-public abstract class MilvaTenant<TUser, TUserKey> : MilvaBaseTenant<TenantId>, IFullAuditable<TenantId>
-where TUser : class, IBaseEntity<TUserKey>
-where TUserKey : struct, IEquatable<TUserKey>
+public abstract class MilvaTenant : MilvaBaseTenant<TenantId>, IFullAuditable<TenantId>
 {
     private readonly string _tenancyName;
     private readonly int _branchNo;

@@ -2,6 +2,8 @@
 
 public class IsAssignableToTypeModelFixtures
 {
+#pragma warning disable S2094 // Classes should not be empty
+#pragma warning disable S2326 // Unused type parameters should be removed
     public class ClassImplementation { }
     public class GenericClassImplementation<T> { }
     public interface IInterface { }
@@ -17,4 +19,6 @@ public class IsAssignableToTypeModelFixtures
     public class GenericClassImplementsGenericClassImplementation<T> : GenericClassImplementation<T> { }
     public class ClassImplementsClassImplementationWithInterface : ClassImplementationWithInterface { }
     public class GenericClassImplementsGenericClassImplementationWithTwoArgument<T, T2> : GenericClassImplementation<T> { }
+#pragma warning restore S2326 // Unused type parameters should be removed
+#pragma warning restore S2094 // Classes should not be empty
 }

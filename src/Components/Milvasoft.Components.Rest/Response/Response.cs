@@ -58,8 +58,8 @@ public class Response : IResponse
     /// <exception cref="Exception"></exception>
     public void ThrowExceptionIfFail()
     {
-        if (IsSuccess == false)
-            throw new Exception(ToString());
+        if (!IsSuccess)
+            throw new MilvaDeveloperException(ToString());
     }
 
     public string MessagesToString(string delimiter = ";") => string.Join(delimiter, Messages.Select(m => $"{m.Key}: {m.Message}"));

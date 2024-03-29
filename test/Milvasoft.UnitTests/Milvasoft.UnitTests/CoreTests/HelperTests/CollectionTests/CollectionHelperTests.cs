@@ -121,20 +121,6 @@ public partial class CollectionHelperTests
     #region OrderByPropertyDescending
 
     /// <summary>
-    /// source , property name , expected result
-    /// </summary>
-    /// <returns></returns>
-    public static IEnumerable<object[]> InvalidSourceForOrderByPropertyDescendingMethodData()
-    {
-        var emptySource = new List<PropertyExistsTestModelFixture>().AsQueryable();
-        var validSource = new List<PropertyExistsTestModelFixture>() { new() { Poco = 1 } }.AsQueryable();
-
-        yield return new object[] { emptySource, "", emptySource };
-        yield return new object[] { null, "", null };
-        yield return new object[] { validSource, "NotExistsPropName", validSource };
-    }
-
-    /// <summary>
     /// source , property name
     /// </summary>
     /// <returns></returns>

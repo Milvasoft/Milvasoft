@@ -23,7 +23,7 @@ public partial class StringHelperTests
     [Theory]
     [InlineData("")]
     [InlineData(null)]
-    public void GetByteArray_WithInputStringIsNullOrEmpty_ShouldReturnNull(string input)
+    public void GetByteArray_WithInputStringIsNullOrEmpty_ShouldReturnEmpty(string input)
     {
         // Arrange
 
@@ -31,7 +31,7 @@ public partial class StringHelperTests
         var result = input.GetByteArray();
 
         // Assert
-        result.Should().BeNull();
+        result.Should().BeEmpty();
     }
 
     [Theory]
@@ -99,7 +99,7 @@ public partial class StringHelperTests
     [Theory]
     [InlineData("")]
     [InlineData(null)]
-    public void HashToByteArray_WithInputStringIsNullOrEmpty_ShouldReturnNull(string input)
+    public void HashToByteArray_WithInputStringIsNullOrEmpty_ShouldReturnEmpty(string input)
     {
         // Arrange
 
@@ -107,7 +107,7 @@ public partial class StringHelperTests
         var result = input.HashToByteArray();
 
         // Assert
-        result.Should().BeNull();
+        result.Should().BeEmpty();
     }
 
     [Theory]

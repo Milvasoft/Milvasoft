@@ -14,7 +14,7 @@ public abstract class MilvaBaseException : Exception
     /// Gets or sets object of exception.
     /// Default value is null.
     /// </summary>
-    public object[] ExceptionObject { get; set; } = null;
+    public object[] ExceptionObject { get; set; } = [];
 
     /// <summary>
     /// Variable for exception middleware.
@@ -25,13 +25,13 @@ public abstract class MilvaBaseException : Exception
     /// <summary>
     /// Initializes a new instance of the <see cref="MilvaBaseException"/> class with a specified error message.
     /// </summary>
-    public MilvaBaseException() { }
+    protected MilvaBaseException() { }
 
     /// <summary>
     /// Initializes a new instance of the <see cref="MilvaBaseException"/> class  with a specified error message.
     /// </summary>
     /// <param name="messageOrLocalizerKey"></param>
-    public MilvaBaseException(string messageOrLocalizerKey) : base(messageOrLocalizerKey)
+    protected MilvaBaseException(string messageOrLocalizerKey) : base(messageOrLocalizerKey)
         => ExceptionCode = ExceptionCode != 0 ? ExceptionCode : (int)MilvaException.Base;
 
     /// <summary>
@@ -39,7 +39,7 @@ public abstract class MilvaBaseException : Exception
     /// </summary>
     /// <param name="messageOrLocalizerKey"></param>
     /// <param name="exceptionObjects"></param>
-    public MilvaBaseException(string messageOrLocalizerKey, params object[] exceptionObjects) : base(messageOrLocalizerKey)
+    protected MilvaBaseException(string messageOrLocalizerKey, params object[] exceptionObjects) : base(messageOrLocalizerKey)
     {
         ExceptionObject = exceptionObjects;
         ExceptionCode = ExceptionCode != 0 ? ExceptionCode : (int)MilvaException.Base;
@@ -50,6 +50,6 @@ public abstract class MilvaBaseException : Exception
     /// </summary>
     /// <param name="messageOrLocalizerKey"></param>
     /// <param name="innerException"></param>
-    public MilvaBaseException(string messageOrLocalizerKey, Exception innerException) : base(messageOrLocalizerKey, innerException)
+    protected MilvaBaseException(string messageOrLocalizerKey, Exception innerException) : base(messageOrLocalizerKey, innerException)
         => ExceptionCode = ExceptionCode != 0 ? ExceptionCode : (int)MilvaException.Base;
 }

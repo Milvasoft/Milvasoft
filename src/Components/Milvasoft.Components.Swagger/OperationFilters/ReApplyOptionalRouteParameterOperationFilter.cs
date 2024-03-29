@@ -21,7 +21,7 @@ public class ReApplyOptionalRouteParameterOperationFilter : IOperationFilter
     {
         var httpMethodAttributes = context.MethodInfo.GetCustomAttributes(true).OfType<HttpMethodAttribute>();
 
-        var httpMethodWithOptional = httpMethodAttributes?.FirstOrDefault(m => m.Template?.Contains('?') ?? false);
+        var httpMethodWithOptional = httpMethodAttributes.FirstOrDefault(m => m.Template?.Contains('?') ?? false);
 
         if (httpMethodWithOptional == null)
             return;
@@ -41,7 +41,6 @@ public class ReApplyOptionalRouteParameterOperationFilter : IOperationFilter
                 parameter.AllowEmptyValue = true;
                 parameter.Description = "Must check \"Send empty value\" or Swagger passes a comma for empty values otherwise";
                 parameter.Required = false;
-                //parameter.Schema.Default = new OpenApiString(string.Empty);
                 parameter.Schema.Nullable = true;
             }
         }
