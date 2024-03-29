@@ -456,12 +456,12 @@ public abstract class MilvaDbContextBase(DbContextOptions options) : DbContext(o
                 propNamesForProjection.AddRange(mainEntityPropertyNames);
 
             var projectionExpression = _createProjectionExpressionMethod.MakeGenericMethod(entityType, translationEntityType).Invoke(null,
-                                                                                                              [
-                                                                                                                  propNamesForProjection,
-                                                                                                                  translationEntityPropNames,
-                                                                                                                  translationEntityType,
-                                                                                                                  multiLanguageManager
-                                                                                                              ]);
+                                                                                                                                     [
+                                                                                                                                         propNamesForProjection,
+                                                                                                                                         translationEntityPropNames,
+                                                                                                                                         translationEntityType,
+                                                                                                                                         multiLanguageManager
+                                                                                                                                     ]);
 
             parameter.UpdateFilterByForTranslationPropertyNames(translationEntityPropNames);
 

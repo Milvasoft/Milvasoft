@@ -5,19 +5,19 @@ namespace Milvasoft.Interception.Interceptors.Cache;
 public class CacheAttribute : DecorateAttribute
 {
     /// <summary>
+    /// Determines whether <see cref="CacheInterceptor"/> process action once.
+    /// </summary>
+    public bool IsProcessedOnce { get; set; }
+
+    /// <summary>
     /// Cache key.
     /// </summary>
-    public string Key = null;
+    public string Key { get; set; } = null;
 
     /// <summary>
     /// Timeout as ms.
     /// </summary>
-    public int? Timeout = null;
-
-    /// <summary>
-    /// Determines whether <see cref="CacheInterceptor"/> process action once.
-    /// </summary>
-    public bool IsProcessedOnce { get; set; }
+    public int? Timeout { get; set; } = null;
 
     public CacheAttribute(string key) : base(typeof(CacheInterceptor))
     {

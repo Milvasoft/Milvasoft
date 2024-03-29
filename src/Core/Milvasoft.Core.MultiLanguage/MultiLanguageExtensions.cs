@@ -17,9 +17,11 @@ public static class MultiLanguageExtensions
     /// <param name="translationEntityType"></param>
     /// <returns></returns>
     public static Expression<Func<TEntity, TEntity>> CreateProjectionExpression<TEntity, TTranslationEntity>(IEnumerable<string> mainEntityPropertyNames,
-                                                                                         IEnumerable<string> translationEntityPropertyNames,
-                                                                                         Type translationEntityType = null,
-                                                                                         IMultiLanguageManager multiLanguageManager = null)
+                                                                                                             IEnumerable<string> translationEntityPropertyNames,
+                                                                                                             Type translationEntityType = null,
+                                                                                                             IMultiLanguageManager multiLanguageManager = null)
+         where TEntity : class, IHasTranslation<TTranslationEntity>
+         where TTranslationEntity : class, ITranslationEntity<TEntity>
     {
         var sourceType = typeof(TEntity);
 
@@ -80,7 +82,7 @@ public static class MultiLanguageExtensions
 
             var sourceProperty = sourceType.GetProperty(item);
 
-            if (sourceProperty.PropertyType != mapExpression.Type)
+            if (sourceProperty.PropertyType != mapExpression?.Type)
                 bindings.Add(Expression.Bind(sourceProperty, Expression.Convert(mapExpression, sourceProperty.PropertyType)));
             else
                 bindings.Add(Expression.Bind(sourceProperty, mapExpression));
