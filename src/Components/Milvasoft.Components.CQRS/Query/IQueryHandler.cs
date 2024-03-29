@@ -7,7 +7,7 @@ namespace Milvasoft.Components.CQRS.Query;
 /// Abstraction for <see cref="Response"/> typed query handler.
 /// </summary>
 /// <typeparam name="TQuery"></typeparam>
-public interface IQueryHandler<in TQuery> : IRequestHandler<TQuery, IResponse> where TQuery : IQuery
+public interface IQueryHandler<in TQuery> : IRequestHandler<TQuery, Response> where TQuery : IQuery
 {
 }
 
@@ -16,6 +16,6 @@ public interface IQueryHandler<in TQuery> : IRequestHandler<TQuery, IResponse> w
 /// </summary>
 /// <typeparam name="TQuery">The command type.</typeparam>
 /// <typeparam name="T">The command response type.</typeparam>
-public interface IQueryHandler<in TQuery, T> : IRequestHandler<TQuery, IResponse<T>> where TQuery : IQuery<T>
+public interface IQueryHandler<in TQuery, T> : IRequestHandler<TQuery, Response<T>> where TQuery : IQuery<T>
 {
 }

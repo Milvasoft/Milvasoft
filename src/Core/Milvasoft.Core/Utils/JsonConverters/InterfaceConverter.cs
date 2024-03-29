@@ -65,7 +65,8 @@ public class InterfaceConverterFactory(Type implementationType, Type interfaceTy
     /// </summary>
     /// <param name="typeToConvert">The type to convert.</param>
     /// <returns><c>true</c> if the specified type can be converted to the interface type; otherwise, <c>false</c>.</returns>
-    public override bool CanConvert(Type typeToConvert) => ((typeToConvert.IsGenericType && InterfaceType.IsGenericType) || (!typeToConvert.IsGenericType && !InterfaceType.IsGenericType)) && typeToConvert.CanAssignableTo(InterfaceType);
+    public override bool CanConvert(Type typeToConvert) => ((typeToConvert.IsGenericType && InterfaceType.IsGenericType) || (!typeToConvert.IsGenericType && !InterfaceType.IsGenericType))
+                                                           && typeToConvert.CanAssignableTo(InterfaceType);
 
     /// <summary>
     /// Creates a converter for the specified type.
@@ -78,7 +79,10 @@ public class InterfaceConverterFactory(Type implementationType, Type interfaceTy
         Type converterType;
 
         if (typeToConvert.IsGenericType && ImplementationType.IsGenericType)
-            converterType = typeof(InterfaceConverter<,>).MakeGenericType(ImplementationType.MakeGenericType(typeToConvert.GenericTypeArguments[0]), InterfaceType.MakeGenericType(typeToConvert.GenericTypeArguments[0]));
+        {
+            converterType = typeof(InterfaceConverter<,>).MakeGenericType(ImplementationType.MakeGenericType(typeToConvert.GenericTypeArguments[0]),
+                                                                          InterfaceType.MakeGenericType(typeToConvert.GenericTypeArguments[0]));
+        }
         else
             converterType = typeof(InterfaceConverter<,>).MakeGenericType(ImplementationType, InterfaceType);
 

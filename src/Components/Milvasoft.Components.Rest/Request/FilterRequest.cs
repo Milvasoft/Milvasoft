@@ -53,7 +53,7 @@ public class FilterRequest
             var propertyType = CheckPropertyAndGetType<TEntity>(filter);
 
             if (!IsFilterTypeSupported(propertyType, filter))
-                throw new Exception($"{filter.FilterType} is not supported for {propertyType.Name}.");
+                throw new MilvaDeveloperException($"{filter.FilterType} is not supported for {propertyType.Name}.");
 
             (IOperation operation, int valueCount) = GetOperationAndValueCount(filter.FilterType);
 

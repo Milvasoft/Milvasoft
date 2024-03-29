@@ -6,7 +6,7 @@ namespace Milvasoft.Components.CQRS.Command;
 /// <summary>
 /// Abstraction for <see cref="Response"/> typed requests.
 /// </summary>
-public interface ICommand : IRequest<IResponse>
+public interface ICommand : IRequest<Response>
 {
 }
 
@@ -14,6 +14,6 @@ public interface ICommand : IRequest<IResponse>
 /// Abstraction for <see cref="Response{T}"/> typed requests.
 /// </summary>
 /// <typeparam name="T"></typeparam>
-public interface ICommand<T> : IRequest<IResponse<T>>
+public interface ICommand<T> : IRequest<Response<T>>
 {
 }

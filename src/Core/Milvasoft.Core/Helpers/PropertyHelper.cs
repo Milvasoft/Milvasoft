@@ -87,7 +87,8 @@ public static partial class CommonHelper
         if (string.IsNullOrWhiteSpace(propertyName))
             return null;
 
-        return type.GetProperty(propertyName, BindingFlags.IgnoreCase | BindingFlags.Public | BindingFlags.Instance);
+        return type.GetProperty(propertyName, BindingFlags.IgnoreCase | BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly)
+                ?? type.GetProperty(propertyName, BindingFlags.IgnoreCase | BindingFlags.Public | BindingFlags.Instance);
     }
 
     /// <summary>

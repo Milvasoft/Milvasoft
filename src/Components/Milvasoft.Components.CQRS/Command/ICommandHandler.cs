@@ -7,7 +7,7 @@ namespace Milvasoft.Components.CQRS.Command;
 /// Abstraction for <see cref="Response"/> typed request handler.
 /// </summary>
 /// <typeparam name="TCommand"></typeparam>
-public interface ICommandHandler<in TCommand> : IRequestHandler<TCommand, IResponse> where TCommand : ICommand
+public interface ICommandHandler<in TCommand> : IRequestHandler<TCommand, Response> where TCommand : ICommand
 {
 }
 
@@ -16,6 +16,6 @@ public interface ICommandHandler<in TCommand> : IRequestHandler<TCommand, IRespo
 /// </summary>
 /// <typeparam name="TCommand">The command type.</typeparam>
 /// <typeparam name="T">The command response type.</typeparam>
-public interface ICommandHandler<in TCommand, T> : IRequestHandler<TCommand, IResponse<T>> where TCommand : ICommand<T>
+public interface ICommandHandler<in TCommand, T> : IRequestHandler<TCommand, Response<T>> where TCommand : ICommand<T>
 {
 }

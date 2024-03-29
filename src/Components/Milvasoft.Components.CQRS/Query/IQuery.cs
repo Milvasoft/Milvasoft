@@ -6,7 +6,7 @@ namespace Milvasoft.Components.CQRS.Query;
 /// <summary>
 /// Abstraction for <see cref="Response"/> typed requests.
 /// </summary>
-public interface IQuery : IRequest<IResponse>
+public interface IQuery : IRequest<Response>
 {
 }
 
@@ -14,6 +14,6 @@ public interface IQuery : IRequest<IResponse>
 /// Abstraction for <see cref="Response{T}"/> typed requests.
 /// </summary>
 /// <typeparam name="T"></typeparam>
-public interface IQuery<T> : IRequest<IResponse<T>>
+public interface IQuery<T> : IRequest<Response<T>>
 {
 }
