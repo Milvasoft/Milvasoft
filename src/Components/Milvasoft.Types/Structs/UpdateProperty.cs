@@ -14,7 +14,7 @@ public struct UpdateProperty<T> : IUpdateProperty, IEquatable<UpdateProperty<T>>
     /// </summary>
     public T Value
     {
-        get => _value;
+        readonly get => _value;
         set
         {
             _value = value;
@@ -25,7 +25,7 @@ public struct UpdateProperty<T> : IUpdateProperty, IEquatable<UpdateProperty<T>>
     /// <summary>
     /// Gets or sets a value indicating whether the property has been updated.
     /// </summary>
-    public bool IsUpdated { get => _isUpdated; set => _isUpdated = value; }
+    public bool IsUpdated { readonly get => _isUpdated; set => _isUpdated = value; }
 
     /// <summary>
     /// Initializes a new instance of the <see cref="UpdateProperty{T}"/> struct.
@@ -54,6 +54,7 @@ public struct UpdateProperty<T> : IUpdateProperty, IEquatable<UpdateProperty<T>>
     /// Combines Tenancy Name and BranchNo into a hash code.
     /// </summary>
     /// <returns></returns>
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Minor Bug", "S2328:\"GetHashCode\" should not reference mutable fields", Justification = "<Pending>")]
     public override readonly int GetHashCode() => HashCode.Combine(_value, _isUpdated);
 
     /// <summary>

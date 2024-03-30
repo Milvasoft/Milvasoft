@@ -687,16 +687,6 @@ public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepositor
         => await ExecuteUpdateAsync(i => i.Id == id, propertyBuilder, cancellationToken).ConfigureAwait(false);
 
     /// <summary>
-    /// Deletes all records that match the condition. If <see cref="SoftDeletionState"/> is active, it updates the soft delete properties of the relevant entity. 
-    /// Note that this will not work with navigation properties.
-    /// </summary>
-    /// <param name="id"></param>
-    /// <param name="cancellationToken"></param>
-    /// <returns></returns>
-    public virtual async Task ExecuteDeleteAsync(object id, CancellationToken cancellationToken = default)
-        => await ExecuteDeleteAsync(i => i.Id == id, cancellationToken: cancellationToken);
-
-    /// <summary>
     /// Runs execute update with given <paramref name="predicate"/>. Adds performer and perform time to to be updated properties.
     /// </summary>
     /// <param name="predicate"></param>
@@ -713,6 +703,16 @@ public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepositor
 
         await _dbSet.Where(predicate).ExecuteUpdateAsync(propertyBuilder.SetPropertyCalls, cancellationToken: cancellationToken);
     }
+
+    /// <summary>
+    /// Deletes all records that match the condition. If <see cref="SoftDeletionState"/> is active, it updates the soft delete properties of the relevant entity. 
+    /// Note that this will not work with navigation properties.
+    /// </summary>
+    /// <param name="id"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    public virtual async Task ExecuteDeleteAsync(object id, CancellationToken cancellationToken = default)
+        => await ExecuteDeleteAsync(i => i.Id == id, cancellationToken: cancellationToken);
 
     /// <summary>
     /// Deletes all records that given <paramref name="predicate"/>. If <see cref="SoftDeletionState"/> is active, it updates the soft delete properties of the relevant entity. 

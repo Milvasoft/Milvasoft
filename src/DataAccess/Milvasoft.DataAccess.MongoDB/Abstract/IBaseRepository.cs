@@ -266,15 +266,15 @@ public interface IBaseRepository<TEntity> where TEntity : class, IAuditable<Obje
     ///  Deletes single entity from database asynchronously..
     /// </summary>
     /// <param name="id"></param>
-    /// <returns></returns>
-    Task DeleteAsync(ObjectId id);
+    /// <returns> The deleted document if one was deleted. </returns>
+    Task<TEntity> DeleteAndReturnDeletedAsync(ObjectId id);
 
     /// <summary>
     ///  Deletes single entity from database asynchronously..
     /// </summary>
     /// <param name="id"></param>
-    /// <returns> The deleted document if one was deleted. </returns>
-    Task<TEntity> DeleteAndReturnDeletedAsync(ObjectId id);
+    /// <returns></returns>
+    Task DeleteAsync(ObjectId id);
 
     /// <summary>
     ///  Deletes single entity from database asynchronously..

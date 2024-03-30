@@ -6,13 +6,17 @@ namespace Milvasoft.Caching.InMemory.Accessor;
 public class MemoryCacheAccessor(IMemoryCache cache) : IMemoryCacheAccessor
 {
     private readonly IMemoryCache _cache = cache;
-    private static readonly MethodInfo _genericGetMethod = typeof(MemoryCacheAccessor).GetMethods().FirstOrDefault(i => i.Name == nameof(Get) && i.IsGenericMethod);
+    private static readonly MethodInfo _genericGetMethod = Array.Find(typeof(MemoryCacheAccessor).GetMethods(), i => i.Name == nameof(Get) && i.IsGenericMethod);
 
     public bool IsConnected() => _cache != null;
 
     public T Get<T>(string key) where T : class => _cache?.Get<T>(key);
 
     public string Get(string key) => _cache?.Get<string>(key);
+
+    public IEnumerable<T> Get<T>(IEnumerable<string> keys) => throw new NotImplementedException();
+
+    public Task<IEnumerable<T>> GetAsync<T>(IEnumerable<string> keys) => throw new NotImplementedException();
 
     public async Task<T> GetAsync<T>(string key) where T : class => await Task.Run(() => Get<T>(key));
 
@@ -57,6 +61,8 @@ public class MemoryCacheAccessor(IMemoryCache cache) : IMemoryCacheAccessor
 
     public async Task<bool> RemoveAsync(string key) => await Task.Run(() => Remove(key));
 
+    public Task<long> RemoveAsync(IEnumerable<string> keys) => throw new NotImplementedException();
+
     public bool Set(string key, string value) => _cache.Set(key, value) != null;
 
     public bool Set<T>(string key, T value) where T : class => _cache.Set(key, value) != null;
@@ -66,10 +72,4 @@ public class MemoryCacheAccessor(IMemoryCache cache) : IMemoryCacheAccessor
     public async Task<bool> SetAsync(string key, object value) => await Task.Run(() => Set(key, value));
 
     public async Task<bool> SetAsync(string key, object value, TimeSpan? expiration) => await Task.Run(() => Set(key, value, expiration));
-
-    public Task<long> RemoveAsync(IEnumerable<string> keys) => throw new NotImplementedException();
-
-    public IEnumerable<T> Get<T>(IEnumerable<string> keys) => throw new NotImplementedException();
-
-    public Task<IEnumerable<T>> GetAsync<T>(IEnumerable<string> keys) => throw new NotImplementedException();
 }

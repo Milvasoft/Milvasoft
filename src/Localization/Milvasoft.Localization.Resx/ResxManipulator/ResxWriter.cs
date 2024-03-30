@@ -110,13 +110,13 @@ public class ResxWriter
         }
 
         // If a similar element is existing and overwrite = false
-        if (elmnt != null && overWriteExistingKeys == false)
+        if (elmnt != null && !overWriteExistingKeys)
         {
             tsk.SetResult(false);
         }
 
         // If a similar element is existing and overwrite = true
-        if (elmnt != null && overWriteExistingKeys == true)
+        if (elmnt != null && overWriteExistingKeys)
         {
             try
             {

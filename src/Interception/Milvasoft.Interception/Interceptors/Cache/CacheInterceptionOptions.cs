@@ -15,7 +15,7 @@ public class CacheInterceptionOptions : ICacheInterceptionOptions
     /// </summary>
     /// <returns></returns>
 #pragma warning disable S2696 // Instance members should not write to "static" fields
-    public Type GetAccessorType() => _accessorType ??= typeof(ICacheAccessor<>).MakeGenericType([Type.GetType(CacheAccessorAssemblyQualifiedName)]);
+    public Type GetAccessorType() => _accessorType ??= typeof(ICacheAccessor<>).MakeGenericType(Type.GetType(CacheAccessorAssemblyQualifiedName));
 #pragma warning restore S2696 // Instance members should not write to "static" fields
 }
 

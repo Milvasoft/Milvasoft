@@ -11,7 +11,7 @@ namespace Milvasoft.MultiTenancy.Options;
 /// </remarks>
 /// <param name="factory"></param>
 /// <param name="cache"></param>
-public class TenantOptions<TOptions>(IOptionsFactory<TOptions> factory, IOptionsMonitorCache<TOptions> cache) : IOptions<TOptions>, IOptionsSnapshot<TOptions>
+public class TenantOptions<TOptions>(IOptionsFactory<TOptions> factory, IOptionsMonitorCache<TOptions> cache) : IOptionsSnapshot<TOptions>
     where TOptions : class, new()
 {
     private readonly IOptionsFactory<TOptions> _factory = factory;

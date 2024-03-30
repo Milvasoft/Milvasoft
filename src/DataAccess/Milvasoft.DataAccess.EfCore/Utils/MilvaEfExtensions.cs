@@ -25,34 +25,6 @@ public static class MilvaEfExtensions
         => query.WithFiltering(listRequest.Filtering);
 
     /// <summary>
-    /// Applies sorting options to the IQueryable data source.
-    /// </summary>
-    /// <typeparam name="TEntity">The type of entity in the IQueryable.</typeparam>
-    /// <param name="query">The source IQueryable data.</param>
-    /// <param name="listRequest">The list request containing sort options.</param>
-    /// <returns>An IQueryable object with applied sorting.</returns>
-    /// <remarks>
-    /// This method applies sorting options to the provided IQueryable data source based on the given <paramref name="listRequest"/> object.
-    /// If the <paramref name="listRequest"/> is null, the original IQueryable data is returned without any modifications.
-    /// </remarks>
-    public static IQueryable<TEntity> WithSorting<TEntity>(this IQueryable<TEntity> query, ListRequest listRequest) where TEntity : class
-        => query.WithSorting(listRequest.Sorting);
-
-    /// <summary>
-    /// Applies sorting options to the IQueryable data source.
-    /// </summary>
-    /// <typeparam name="TEntity">The type of entity in the IQueryable.</typeparam>
-    /// <param name="query">The source IQueryable data.</param>
-    /// <param name="listRequest">The list request containing sort options.</param>
-    /// <returns>An IQueryable object with applied sorting.</returns>
-    /// <remarks>
-    /// This method applies sorting options to the provided IQueryable data source based on the given <paramref name="listRequest"/> object.
-    /// If the <paramref name="listRequest"/> is null, the original IQueryable data is returned without any modifications.
-    /// </remarks>
-    public static IQueryable<TEntity> WithFilteringAndSorting<TEntity>(this IQueryable<TEntity> query, ListRequest listRequest) where TEntity : class
-        => query.WithFiltering(listRequest.Filtering).WithSorting(listRequest.Sorting);
-
-    /// <summary>
     /// Applies filtering options to the IQueryable data source.
     /// </summary>
     /// <typeparam name="TEntity">The type of entity in the IQueryable.</typeparam>
@@ -69,6 +41,20 @@ public static class MilvaEfExtensions
 
         return expression != null ? query.Where(expression) : query;
     }
+
+    /// <summary>
+    /// Applies sorting options to the IQueryable data source.
+    /// </summary>
+    /// <typeparam name="TEntity">The type of entity in the IQueryable.</typeparam>
+    /// <param name="query">The source IQueryable data.</param>
+    /// <param name="listRequest">The list request containing sort options.</param>
+    /// <returns>An IQueryable object with applied sorting.</returns>
+    /// <remarks>
+    /// This method applies sorting options to the provided IQueryable data source based on the given <paramref name="listRequest"/> object.
+    /// If the <paramref name="listRequest"/> is null, the original IQueryable data is returned without any modifications.
+    /// </remarks>
+    public static IQueryable<TEntity> WithSorting<TEntity>(this IQueryable<TEntity> query, ListRequest listRequest) where TEntity : class
+        => query.WithSorting(listRequest.Sorting);
 
     /// <summary>
     /// Applies sorting options to the IQueryable data source.
@@ -94,6 +80,20 @@ public static class MilvaEfExtensions
                 _ => query,
             };
     }
+
+    /// <summary>
+    /// Applies sorting options to the IQueryable data source.
+    /// </summary>
+    /// <typeparam name="TEntity">The type of entity in the IQueryable.</typeparam>
+    /// <param name="query">The source IQueryable data.</param>
+    /// <param name="listRequest">The list request containing sort options.</param>
+    /// <returns>An IQueryable object with applied sorting.</returns>
+    /// <remarks>
+    /// This method applies sorting options to the provided IQueryable data source based on the given <paramref name="listRequest"/> object.
+    /// If the <paramref name="listRequest"/> is null, the original IQueryable data is returned without any modifications.
+    /// </remarks>
+    public static IQueryable<TEntity> WithFilteringAndSorting<TEntity>(this IQueryable<TEntity> query, ListRequest listRequest) where TEntity : class
+        => query.WithFiltering(listRequest.Filtering).WithSorting(listRequest.Sorting);
 
     /// <summary>
     /// Retrieves a paginated list result asynchronously from the provided IQueryable data source based on the specified list request parameters.
@@ -207,7 +207,7 @@ public static class MilvaEfExtensions
 
         CommonHelper.FindUpdatablePropertiesAndAct<TEntity, TDto>(dto, (matchingEntityProp, dtoPropertyValue) =>
         {
-            var genericMethod = SetPropertyBuilder<TEntity>.SetPropertyMethodInfo.MakeGenericMethod([matchingEntityProp.PropertyType]);
+            var genericMethod = SetPropertyBuilder<TEntity>.SetPropertyMethodInfo.MakeGenericMethod(matchingEntityProp.PropertyType);
 
             var expression = CommonHelper.DynamicInvokeCreatePropertySelector(nameof(CommonHelper.CreatePropertySelector),
                                                                               entityType,

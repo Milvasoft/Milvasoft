@@ -7,8 +7,5 @@
 [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field, AllowMultiple = false)]
 public class PinnedAttribute(bool pinned = true) : Attribute
 {
-    /// <summary>
-    /// Gets or sets pinned.
-    /// </summary>
-    public bool Pinned = pinned;
+    public bool Pinned { get; set; } = pinned;
 }

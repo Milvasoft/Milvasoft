@@ -1,5 +1,4 @@
 ﻿using Milvasoft.Core.MultiLanguage.EntityBases.Abstract;
-using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Milvasoft.Core.MultiLanguage.EntityBases.Concrete;
@@ -16,17 +15,10 @@ public abstract class TranslationEntity<TEntity> : TranslationEntity<int, TEntit
 /// Base entity for all of entities.
 /// </summary>
 [System.Diagnostics.CodeAnalysis.SuppressMessage("Major Code Smell", "S2436:Types and methods should not have too many generic parameters", Justification = "<Pending>")]
-public abstract class TranslationEntity<TKey, TEntity, TEntityKey> : EntityBase, ITranslationEntity<TEntity, TEntityKey>, IBaseEntity<TKey>
+public abstract class TranslationEntity<TKey, TEntity, TEntityKey> : EntityBase<TKey>, ITranslationEntity<TEntity, TEntityKey>, IBaseEntity<TKey>
     where TKey : struct, IEquatable<TKey>
     where TEntity : class
 {
-    /// <summary>
-    /// Unique identifier for this entity.
-    /// </summary>
-    [Key]
-    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-    public virtual TKey Id { get; set; }
-
     /// <summary> 
     /// Language of menu id which is related.
     /// </summary>

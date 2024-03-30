@@ -5,7 +5,7 @@ namespace Milvasoft.Identity.Abstract;
 /// <summary>
 /// Login result DTO for DI.
 /// </summary>
-public interface ILoginResultDTO<TToken> where TToken : IToken
+public interface ILoginResultDto<TToken> where TToken : IToken
 {
     /// <summary>
     /// Error messages of result.

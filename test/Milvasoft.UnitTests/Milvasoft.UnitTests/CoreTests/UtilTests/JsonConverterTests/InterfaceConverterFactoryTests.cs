@@ -29,7 +29,6 @@ public class InterfaceConverterFactoryTests
         // Arrange
         var implementationType = typeof(GenericClassImplementsGenericInterfaceFixture<>);
         var interfaceType = typeof(IGenericInterfaceFixture<>);
-        var q = implementationType.IsAssignableTo(interfaceType);
         var converterFactory = new InterfaceConverterFactory(implementationType, interfaceType);
         var typeToConvert = typeof(GenericClassImplementsGenericInterfaceFixture<ClassFixture>);
 

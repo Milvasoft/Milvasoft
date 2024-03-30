@@ -826,21 +826,21 @@
             <param name="cancellationToken"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.DataAccess.EfCore.RepositoryBase.Abstract.IBaseRepository`2.ExecuteDeleteAsync(System.Object,System.Threading.CancellationToken)">
-            <summary>
-            Deletes all records that match the condition. If <see cref="T:Milvasoft.DataAccess.EfCore.Utils.Enums.SoftDeletionState"/> is active, it updates the soft delete properties of the relevant entity. 
-            Note that this will not work with navigation properties.
-            </summary>
-            <param name="id"></param>
-            <param name="cancellationToken"></param>
-            <returns></returns>
-        </member>
         <member name="M:Milvasoft.DataAccess.EfCore.RepositoryBase.Abstract.IBaseRepository`2.ExecuteUpdateAsync(System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},Milvasoft.DataAccess.EfCore.Utils.SetPropertyBuilder{`0},System.Threading.CancellationToken)">
             <summary>
             Runs execute update with given <paramref name="predicate"/>. Adds performer and perform time to to be updated properties.
             </summary>
             <param name="predicate"></param>
             <param name="propertyBuilder"></param>
+            <param name="cancellationToken"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.DataAccess.EfCore.RepositoryBase.Abstract.IBaseRepository`2.ExecuteDeleteAsync(System.Object,System.Threading.CancellationToken)">
+            <summary>
+            Deletes all records that match the condition. If <see cref="T:Milvasoft.DataAccess.EfCore.Utils.Enums.SoftDeletionState"/> is active, it updates the soft delete properties of the relevant entity. 
+            Note that this will not work with navigation properties.
+            </summary>
+            <param name="id"></param>
             <param name="cancellationToken"></param>
             <returns></returns>
         </member>
@@ -1175,20 +1175,20 @@
             <param name="propertyBuilder"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.DataAccess.EfCore.RepositoryBase.Abstract.IBaseRepository`2.ExecuteDelete(System.Object)">
-            <summary>
-            Deletes all records that match the condition. If <see cref="T:Milvasoft.DataAccess.EfCore.Utils.Enums.SoftDeletionState"/> is active, it updates the soft delete properties of the relevant entity. 
-            Note that this will not work with navigation properties.
-            </summary>
-            <param name="id"></param> 
-            <returns></returns>
-        </member>
         <member name="M:Milvasoft.DataAccess.EfCore.RepositoryBase.Abstract.IBaseRepository`2.ExecuteUpdate(System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},Milvasoft.DataAccess.EfCore.Utils.SetPropertyBuilder{`0})">
             <summary>
             Runs execute update with given <paramref name="predicate"/>. Adds performer and perform time to to be updated properties.
             </summary>
             <param name="predicate"></param>
             <param name="propertyBuilder"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.DataAccess.EfCore.RepositoryBase.Abstract.IBaseRepository`2.ExecuteDelete(System.Object)">
+            <summary>
+            Deletes all records that match the condition. If <see cref="T:Milvasoft.DataAccess.EfCore.Utils.Enums.SoftDeletionState"/> is active, it updates the soft delete properties of the relevant entity. 
+            Note that this will not work with navigation properties.
+            </summary>
+            <param name="id"></param> 
             <returns></returns>
         </member>
         <member name="M:Milvasoft.DataAccess.EfCore.RepositoryBase.Abstract.IBaseRepository`2.ExecuteDelete(System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
@@ -1821,32 +1821,6 @@
             If the <paramref name="listRequest"/> is null, the original IQueryable data is returned without any modifications.
             </remarks>
         </member>
-        <member name="M:Milvasoft.DataAccess.EfCore.Utils.MilvaEfExtensions.WithSorting``1(System.Linq.IQueryable{``0},Milvasoft.Components.Rest.Request.ListRequest)">
-            <summary>
-            Applies sorting options to the IQueryable data source.
-            </summary>
-            <typeparam name="TEntity">The type of entity in the IQueryable.</typeparam>
-            <param name="query">The source IQueryable data.</param>
-            <param name="listRequest">The list request containing sort options.</param>
-            <returns>An IQueryable object with applied sorting.</returns>
-            <remarks>
-            This method applies sorting options to the provided IQueryable data source based on the given <paramref name="listRequest"/> object.
-            If the <paramref name="listRequest"/> is null, the original IQueryable data is returned without any modifications.
-            </remarks>
-        </member>
-        <member name="M:Milvasoft.DataAccess.EfCore.Utils.MilvaEfExtensions.WithFilteringAndSorting``1(System.Linq.IQueryable{``0},Milvasoft.Components.Rest.Request.ListRequest)">
-            <summary>
-            Applies sorting options to the IQueryable data source.
-            </summary>
-            <typeparam name="TEntity">The type of entity in the IQueryable.</typeparam>
-            <param name="query">The source IQueryable data.</param>
-            <param name="listRequest">The list request containing sort options.</param>
-            <returns>An IQueryable object with applied sorting.</returns>
-            <remarks>
-            This method applies sorting options to the provided IQueryable data source based on the given <paramref name="listRequest"/> object.
-            If the <paramref name="listRequest"/> is null, the original IQueryable data is returned without any modifications.
-            </remarks>
-        </member>
         <member name="M:Milvasoft.DataAccess.EfCore.Utils.MilvaEfExtensions.WithFiltering``1(System.Linq.IQueryable{``0},Milvasoft.Components.Rest.Request.FilterRequest)">
             <summary>
             Applies filtering options to the IQueryable data source.
@@ -1860,6 +1834,19 @@
             If the <paramref name="filteringRequest"/> is null, the original IQueryable data is returned without any modifications.
             </remarks>
         </member>
+        <member name="M:Milvasoft.DataAccess.EfCore.Utils.MilvaEfExtensions.WithSorting``1(System.Linq.IQueryable{``0},Milvasoft.Components.Rest.Request.ListRequest)">
+            <summary>
+            Applies sorting options to the IQueryable data source.
+            </summary>
+            <typeparam name="TEntity">The type of entity in the IQueryable.</typeparam>
+            <param name="query">The source IQueryable data.</param>
+            <param name="listRequest">The list request containing sort options.</param>
+            <returns>An IQueryable object with applied sorting.</returns>
+            <remarks>
+            This method applies sorting options to the provided IQueryable data source based on the given <paramref name="listRequest"/> object.
+            If the <paramref name="listRequest"/> is null, the original IQueryable data is returned without any modifications.
+            </remarks>
+        </member>
         <member name="M:Milvasoft.DataAccess.EfCore.Utils.MilvaEfExtensions.WithSorting``1(System.Linq.IQueryable{``0},Milvasoft.Components.Rest.Request.SortRequest)">
             <summary>
             Applies sorting options to the IQueryable data source.
@@ -1871,6 +1858,19 @@
             <remarks>
             This method applies sorting options to the provided IQueryable data source based on the given <paramref name="sortingRequest"/> object.
             If the <paramref name="sortingRequest"/> is null, the original IQueryable data is returned without any modifications.
+            </remarks>
+        </member>
+        <member name="M:Milvasoft.DataAccess.EfCore.Utils.MilvaEfExtensions.WithFilteringAndSorting``1(System.Linq.IQueryable{``0},Milvasoft.Components.Rest.Request.ListRequest)">
+            <summary>
+            Applies sorting options to the IQueryable data source.
+            </summary>
+            <typeparam name="TEntity">The type of entity in the IQueryable.</typeparam>
+            <param name="query">The source IQueryable data.</param>
+            <param name="listRequest">The list request containing sort options.</param>
+            <returns>An IQueryable object with applied sorting.</returns>
+            <remarks>
+            This method applies sorting options to the provided IQueryable data source based on the given <paramref name="listRequest"/> object.
+            If the <paramref name="listRequest"/> is null, the original IQueryable data is returned without any modifications.
             </remarks>
         </member>
         <member name="M:Milvasoft.DataAccess.EfCore.Utils.MilvaEfExtensions.ToListResponseAsync``1(System.Linq.IQueryable{``0},Milvasoft.Components.Rest.Request.ListRequest,System.Threading.CancellationToken)">
@@ -2304,21 +2304,21 @@
             <param name="cancellationToken"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Concrete.BaseRepository`2.ExecuteDeleteAsync(System.Object,System.Threading.CancellationToken)">
-            <summary>
-            Deletes all records that match the condition. If <see cref="T:Milvasoft.DataAccess.EfCore.Utils.Enums.SoftDeletionState"/> is active, it updates the soft delete properties of the relevant entity. 
-            Note that this will not work with navigation properties.
-            </summary>
-            <param name="id"></param>
-            <param name="cancellationToken"></param>
-            <returns></returns>
-        </member>
         <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Concrete.BaseRepository`2.ExecuteUpdateAsync(System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},Milvasoft.DataAccess.EfCore.Utils.SetPropertyBuilder{`0},System.Threading.CancellationToken)">
             <summary>
             Runs execute update with given <paramref name="predicate"/>. Adds performer and perform time to to be updated properties.
             </summary>
             <param name="predicate"></param>
             <param name="propertyBuilder"></param>
+            <param name="cancellationToken"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Concrete.BaseRepository`2.ExecuteDeleteAsync(System.Object,System.Threading.CancellationToken)">
+            <summary>
+            Deletes all records that match the condition. If <see cref="T:Milvasoft.DataAccess.EfCore.Utils.Enums.SoftDeletionState"/> is active, it updates the soft delete properties of the relevant entity. 
+            Note that this will not work with navigation properties.
+            </summary>
+            <param name="id"></param>
             <param name="cancellationToken"></param>
             <returns></returns>
         </member>
@@ -2728,20 +2728,20 @@
             <param name="propertyBuilder"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Concrete.BaseRepository`2.ExecuteDelete(System.Object)">
-            <summary>
-            Deletes all records that match the condition. If <see cref="T:Milvasoft.DataAccess.EfCore.Utils.Enums.SoftDeletionState"/> is active, it updates the soft delete properties of the relevant entity. 
-            Note that this will not work with navigation properties.
-            </summary>
-            <param name="id"></param> 
-            <returns></returns>
-        </member>
         <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Concrete.BaseRepository`2.ExecuteUpdate(System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},Milvasoft.DataAccess.EfCore.Utils.SetPropertyBuilder{`0})">
             <summary>
             Runs execute update with given <paramref name="predicate"/>. Adds performer and perform time to to be updated properties.
             </summary>
             <param name="predicate"></param>
             <param name="propertyBuilder"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Concrete.BaseRepository`2.ExecuteDelete(System.Object)">
+            <summary>
+            Deletes all records that match the condition. If <see cref="T:Milvasoft.DataAccess.EfCore.Utils.Enums.SoftDeletionState"/> is active, it updates the soft delete properties of the relevant entity. 
+            Note that this will not work with navigation properties.
+            </summary>
+            <param name="id"></param> 
             <returns></returns>
         </member>
         <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Concrete.BaseRepository`2.ExecuteDelete(System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">

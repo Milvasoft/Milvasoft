@@ -1,7 +1,6 @@
 ﻿using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
 using Milvasoft.Core.Utils.JsonConverters;
-using System.Text.Json;
 
 namespace Milvasoft.UnitTests.CoreTests.UtilTests.JsonConverterTests;
 
@@ -12,7 +11,6 @@ public class MilvaJsonConverterOptionsTests
     {
         // Arrange
         var services = new ServiceCollection();
-        var options = new JsonSerializerOptions();
         var includeMilvaConverters = true;
 
         // Act

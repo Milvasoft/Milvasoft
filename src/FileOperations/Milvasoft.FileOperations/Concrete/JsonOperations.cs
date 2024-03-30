@@ -1047,7 +1047,7 @@ public class JsonOperations : IJsonOperations
 
         var jsonContent = string.IsNullOrWhiteSpace(jsonContentString) ? [] : tempJsonContent;
 
-        if (contentsHasId == true)
+        if (contentsHasId)
         {
             int? lastId;
 
@@ -1076,9 +1076,9 @@ public class JsonOperations : IJsonOperations
     {
         var tempJsonContent = JsonConvert.DeserializeObject<List<T>>(jsonContentString, _jsonSerializerSettings);
 
-        var jsonContent = string.IsNullOrWhiteSpace(jsonContentString) ? throw new MilvaDeveloperException("No Records for Update") : tempJsonContent;
+        var jsonContents = string.IsNullOrWhiteSpace(jsonContentString) ? throw new MilvaDeveloperException("No Records for Update") : tempJsonContent;
 
-        var lastContent = jsonContent.Last();
+        var lastContent = jsonContents.LastOrDefault();
 
         var mappingPropertyName = mappingProperty.GetPropertyName();
 
@@ -1088,14 +1088,14 @@ public class JsonOperations : IJsonOperations
         var upToDateContents = new List<T>();
         foreach (var content in contents)
         {
-            var matchedContent = jsonContent.Find(c => c.GetType().GetProperty(mappingPropertyName).GetValue(c)
+            var matchedContent = jsonContents.Find(c => c.GetType().GetProperty(mappingPropertyName).GetValue(c)
                                                             .Equals(content.GetType().GetProperty(mappingPropertyName).GetValue(content)));
 
             if (matchedContent != null)
             {
-                int index = jsonContent.IndexOf(matchedContent);
+                int index = jsonContents.IndexOf(matchedContent);
                 if (index != -1)
-                    jsonContent[index] = content;
+                    jsonContents[index] = content;
 
                 upToDateContents.Add(matchedContent);
             }
@@ -1104,7 +1104,7 @@ public class JsonOperations : IJsonOperations
         if (upToDateContents.Count == 0)
             throw new MilvaDeveloperException("Requested content for update not found!");
 
-        return JsonConvert.SerializeObject(jsonContent, Formatting.Indented);
+        return JsonConvert.SerializeObject(jsonContents, Formatting.Indented);
     }
 
     private string GetJsonResultForDelete<T>(List<dynamic> mappingValues, string jsonContentString, Expression<Func<T, dynamic>> mappingProperty)
@@ -1113,7 +1113,7 @@ public class JsonOperations : IJsonOperations
 
         var jsonContent = string.IsNullOrWhiteSpace(jsonContentString) ? throw new MilvaDeveloperException("No Records for Delete") : tempJsonContent;
 
-        var lastContent = jsonContent.Last();
+        var lastContent = jsonContent.LastOrDefault();
 
         var mappingPropertyName = mappingProperty.GetPropertyName();
 

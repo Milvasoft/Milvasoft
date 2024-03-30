@@ -186,17 +186,17 @@
             Caching accessor service lifetime.
             </summary>
         </member>
-        <member name="T:Milvasoft.Core.Abstractions.IFileDTO">
+        <member name="T:Milvasoft.Core.Abstractions.IFileDto">
             <summary>
             Abstraction for multiple file upload process.
             </summary>
         </member>
-        <member name="P:Milvasoft.Core.Abstractions.IFileDTO.FileName">
+        <member name="P:Milvasoft.Core.Abstractions.IFileDto.FileName">
             <summary>
             Name of file.
             </summary>
         </member>
-        <member name="P:Milvasoft.Core.Abstractions.IFileDTO.File">
+        <member name="P:Milvasoft.Core.Abstractions.IFileDto.File">
             <summary>
             File.
             </summary>
@@ -2633,12 +2633,6 @@
         </member>
         <member name="F:Milvasoft.Core.Utils.Constants.MimeTypeNames.ApplicationJsonPatch">
             <summary>JavaScript Object Notation (JSON) Patch; Defined in RFC 6902</summary>
-        </member>
-        <member name="F:Milvasoft.Core.Utils.Constants.MimeTypeNames.TextJavascript">
-            <summary>JavaScript - Defined in and obsoleted by RFC 4329 in order to discourage its usage in favor of application/javascript. 
-            However,text/javascript is allowed in HTML 4 and 5 and, unlike application/javascript, has cross-browser support. 
-            The "type" attribute of the script tag in HTML5 is optional and there is no need to use it at all since all browsers have always assumed the correct
-            default (even in HTML 4 where it was required by the specification).</summary>
         </member>
         <member name="F:Milvasoft.Core.Utils.Constants.MimeTypeNames.ImagePjpeg">
             <summary>JPEG JFIF image; Associated with Internet Explorer; Listed in ms775147(v=vs.85) - Progressive JPEG, initiated before global browser support for progressive 

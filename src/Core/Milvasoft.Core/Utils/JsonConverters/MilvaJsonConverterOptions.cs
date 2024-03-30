@@ -31,6 +31,7 @@ public static class MilvaJsonConverterOptions
     /// <param name="options">The <see cref="Action{JsonSerializerOptions}"/> used to configure the options.</param>
     /// <param name="includeMilvaOptions">A boolean value indicating whether to include Milva converters.</param>
     /// <returns>The configured <see cref="JsonSerializerOptions"/>.</returns>
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0060:Remove unused parameter", Justification = "<Pending>")]
     public static JsonSerializerOptions ConfigureCurrentMilvaJsonSerializerOptions(this IServiceCollection services, Action<JsonSerializerOptions> options = null, bool includeMilvaOptions = true)
     {
         var newOptions = NewOptionsObjectFromCurrent();

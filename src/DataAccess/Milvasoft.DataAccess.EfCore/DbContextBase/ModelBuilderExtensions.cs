@@ -157,15 +157,17 @@ public static class ModelBuilderExtensions
     /// <param name="modelBuilder"></param>
     public static ModelBuilder UseTurkishCollation(this ModelBuilder modelBuilder)
     {
-        var entitiesHasDecimalProperty = modelBuilder.Model.GetEntityTypes().Where(e => e.ClrType.GetProperties().Any(p => p.PropertyType.IsAssignableFrom(typeof(string))));
+        var entityClrTypesIsString = modelBuilder.Model.GetEntityTypes()
+                                                       .Where(e => Array.Exists(e.ClrType.GetProperties(), p => p.PropertyType.IsAssignableFrom(typeof(string))))
+                                                       .Select(e => e.ClrType);
 
-        foreach (var entityType in entitiesHasDecimalProperty)
+        foreach (var clrType in entityClrTypesIsString)
         {
-            var properties = entityType.ClrType.GetProperties().Where(p => p.PropertyType.IsAssignableFrom(typeof(string))
-                                                                            && !p.CustomAttributes.Any(cA => cA.AttributeType.IsEquivalentTo(typeof(NotMappedAttribute))));
+            var properties = clrType.GetProperties().Where(p => p.PropertyType.IsAssignableFrom(typeof(string))
+                                                                && !p.CustomAttributes.Any(cA => cA.AttributeType.IsEquivalentTo(typeof(NotMappedAttribute))));
 
             foreach (var prop in properties)
-                modelBuilder.Entity(entityType.ClrType).Property(prop.Name).UseCollation("tr-TR-x-icu");
+                modelBuilder.Entity(clrType).Property(prop.Name).UseCollation("tr-TR-x-icu");
         }
 
         return modelBuilder;
@@ -254,16 +256,18 @@ public static class ModelBuilderExtensions
     /// <param name="scale"></param>
     public static ModelBuilder UsePrecision(this ModelBuilder modelBuilder, int precision = 18, int scale = 10)
     {
-        var entitiesHasDecimalProperty = modelBuilder.Model.GetEntityTypes().Where(e => e.ClrType.GetProperties().Any(p => p.PropertyType.IsAssignableFrom(typeof(decimal))));
+        var entityClrTypesHasDecimalProperty = modelBuilder.Model.GetEntityTypes()
+                                                         .Where(e => Array.Exists(e.ClrType.GetProperties(), p => p.PropertyType.IsAssignableFrom(typeof(decimal))))
+                                                         .Select(e => e.ClrType);
 
-        foreach (var entityType in entitiesHasDecimalProperty)
+        foreach (var clrType in entityClrTypesHasDecimalProperty)
         {
-            var properties = entityType.ClrType.GetProperties().Where(p => p.PropertyType.IsAssignableFrom(typeof(decimal))
+            var properties = clrType.GetProperties().Where(p => p.PropertyType.IsAssignableFrom(typeof(decimal))
                                                                       && (!p.CustomAttributes?.Any(cA => (cA.AttributeType?.IsEquivalentTo(typeof(NotMappedAttribute)) ?? false)
                                                                                                       || (cA.AttributeType?.IsEquivalentTo(typeof(DecimalPrecisionAttribute)) ?? false)) ?? true));
 
             foreach (var prop in properties)
-                modelBuilder.Entity(entityType.ClrType).Property(prop.Name).HasPrecision(precision, scale);
+                modelBuilder.Entity(clrType).Property(prop.Name).HasPrecision(precision, scale);
         }
 
         return modelBuilder;
@@ -327,9 +331,8 @@ public static class ModelBuilderExtensions
                                        .SelectMany(type => type.GetNavigations())
                                        .Distinct();
 
-        foreach (var property in navigations)
-            if (property.Name == MultiLanguageEntityPropertyNames.Translations)
-                source = source.Include(property.Name);
+        foreach (var property in navigations.Where(property => property.Name == MultiLanguageEntityPropertyNames.Translations))
+            source = source.Include(property.Name);
 
         return source;
     }

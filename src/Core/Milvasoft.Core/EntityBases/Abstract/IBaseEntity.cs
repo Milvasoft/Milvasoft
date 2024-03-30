@@ -32,14 +32,14 @@ public interface IEntityBase<TKey> : IMilvaEntity
 /// </summary>
 public interface IMilvaEntity
 {
-#pragma warning disable CA2011 // Avoid infinite recursion
     /// <summary>
     /// Unique identifier for this entity.
     /// </summary>
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Blocker Bug", "S2190:Loops and recursions should not be infinite", Justification = "<Pending>")]
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Reliability", "CA2011:Avoid infinite recursion", Justification = "<Pending>")]
     public virtual object Id
     {
         get => Id;
         set => Id = value;
     }
-#pragma warning restore CA2011 // Avoid infinite recursion
 }

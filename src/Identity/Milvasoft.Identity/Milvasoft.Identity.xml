@@ -4,42 +4,42 @@
         <name>Milvasoft.Identity</name>
     </assembly>
     <members>
-        <member name="T:Milvasoft.Identity.Abstract.ILoginDTO">
+        <member name="T:Milvasoft.Identity.Abstract.ILoginDto">
             <summary>
             Login and sign up processes are happens with this dto.
             </summary>
         </member>
-        <member name="P:Milvasoft.Identity.Abstract.ILoginDTO.UserName">
+        <member name="P:Milvasoft.Identity.Abstract.ILoginDto.UserName">
             <summary>
             UserName of user.
             </summary>
         </member>
-        <member name="P:Milvasoft.Identity.Abstract.ILoginDTO.Email">
+        <member name="P:Milvasoft.Identity.Abstract.ILoginDto.Email">
             <summary>
             Email of user.
             </summary>
         </member>
-        <member name="P:Milvasoft.Identity.Abstract.ILoginDTO.Password">
+        <member name="P:Milvasoft.Identity.Abstract.ILoginDto.Password">
             <summary>
             Password of user.
             </summary>
         </member>
-        <member name="P:Milvasoft.Identity.Abstract.ILoginDTO.Persistent">
+        <member name="P:Milvasoft.Identity.Abstract.ILoginDto.Persistent">
             <summary>
             Remember me option.
             </summary>
         </member>
-        <member name="T:Milvasoft.Identity.Abstract.ILoginResultDTO`1">
+        <member name="T:Milvasoft.Identity.Abstract.ILoginResultDto`1">
             <summary>
             Login result DTO for DI.
             </summary>
         </member>
-        <member name="P:Milvasoft.Identity.Abstract.ILoginResultDTO`1.ErrorMessages">
+        <member name="P:Milvasoft.Identity.Abstract.ILoginResultDto`1.ErrorMessages">
             <summary>
             Error messages of result.
             </summary>
         </member>
-        <member name="P:Milvasoft.Identity.Abstract.ILoginResultDTO`1.Token">
+        <member name="P:Milvasoft.Identity.Abstract.ILoginResultDto`1.Token">
             <summary>
             If result is success sets the token.
             </summary>
@@ -181,27 +181,27 @@
             is valid, otherwise false.
             </returns>
         </member>
-        <member name="T:Milvasoft.Identity.Abstract.ISignUpDTO">
+        <member name="T:Milvasoft.Identity.Abstract.ISignupDto">
             <summary>
             Login and sign up processes are happens with this dto.
             </summary>
         </member>
-        <member name="P:Milvasoft.Identity.Abstract.ISignUpDTO.UserName">
+        <member name="P:Milvasoft.Identity.Abstract.ISignupDto.UserName">
             <summary>
             UserName of user.
             </summary>
         </member>
-        <member name="P:Milvasoft.Identity.Abstract.ISignUpDTO.Email">
+        <member name="P:Milvasoft.Identity.Abstract.ISignupDto.Email">
             <summary>
             Email of user.
             </summary>
         </member>
-        <member name="P:Milvasoft.Identity.Abstract.ISignUpDTO.Password">
+        <member name="P:Milvasoft.Identity.Abstract.ISignupDto.Password">
             <summary>
             Password of user.
             </summary>
         </member>
-        <member name="P:Milvasoft.Identity.Abstract.ISignUpDTO.PhoneNumber">
+        <member name="P:Milvasoft.Identity.Abstract.ISignupDto.PhoneNumber">
             <summary>
             Password of user.
             </summary>
@@ -321,11 +321,6 @@
         <member name="T:Milvasoft.Identity.Concrete.Entity.MilvaUser`1">
             <summary>
             Represents a user in the identity system
-            </summary>
-        </member>
-        <member name="P:Milvasoft.Identity.Concrete.Entity.MilvaUser`1.Id">
-            <summary>
-            Gets or sets the primary key for this user.
             </summary>
         </member>
         <member name="P:Milvasoft.Identity.Concrete.Entity.MilvaUser`1.UserName">

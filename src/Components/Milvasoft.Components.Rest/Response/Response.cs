@@ -160,15 +160,7 @@ public class Response : IResponse
 
 public class Response<T> : Response, IResponse<T>
 {
-    private T _data;
-
-    public T Data
-    {
-        get => _data; set
-        {
-            _data = value;
-        }
-    }
+    public T Data { get; set; }
 
     /// <summary>
     /// Specifies the response data is cached or not.

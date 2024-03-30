@@ -8,8 +8,5 @@
 [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field, AllowMultiple = false)]
 public class DisplayFormatAttribute(string format) : Attribute
 {
-    /// <summary>
-    /// Cell display format. Example "{{Amount}} {{Currency}}"
-    /// </summary>
-    public string Format = format;
+    public string Format { get; set; } = format;
 }

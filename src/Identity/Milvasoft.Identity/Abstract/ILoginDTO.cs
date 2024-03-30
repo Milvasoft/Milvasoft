@@ -3,7 +3,7 @@
 /// <summary>
 /// Login and sign up processes are happens with this dto.
 /// </summary>
-public interface ILoginDTO
+public interface ILoginDto
 {
     /// <summary>
     /// UserName of user.

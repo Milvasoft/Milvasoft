@@ -534,15 +534,6 @@ public abstract partial class BaseRepository<TEntity, TContext> where TEntity : 
         => ExecuteUpdate(i => i.Id == id, propertyBuilder);
 
     /// <summary>
-    /// Deletes all records that match the condition. If <see cref="SoftDeletionState"/> is active, it updates the soft delete properties of the relevant entity. 
-    /// Note that this will not work with navigation properties.
-    /// </summary>
-    /// <param name="id"></param> 
-    /// <returns></returns>
-    public virtual void ExecuteDelete(object id)
-        => ExecuteDelete(i => i.Id == id);
-
-    /// <summary>
     /// Runs execute update with given <paramref name="predicate"/>. Adds performer and perform time to to be updated properties.
     /// </summary>
     /// <param name="predicate"></param>
@@ -558,6 +549,15 @@ public abstract partial class BaseRepository<TEntity, TContext> where TEntity : 
 
         _dbSet.Where(predicate).ExecuteUpdate(propertyBuilder.SetPropertyCalls);
     }
+
+    /// <summary>
+    /// Deletes all records that match the condition. If <see cref="SoftDeletionState"/> is active, it updates the soft delete properties of the relevant entity. 
+    /// Note that this will not work with navigation properties.
+    /// </summary>
+    /// <param name="id"></param> 
+    /// <returns></returns>
+    public virtual void ExecuteDelete(object id)
+        => ExecuteDelete(i => i.Id == id);
 
     /// <summary>
     /// Deletes all records that given <paramref name="predicate"/>. If <see cref="SoftDeletionState"/> is active, it updates the soft delete properties of the relevant entity. 

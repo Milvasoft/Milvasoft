@@ -118,7 +118,7 @@ public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : 
         var aggregateFacetResult = await _collection.Aggregate().Match(filter).Facet(countFacet).ToListAsync().ConfigureAwait(false);
 
 #pragma warning disable CA1826 // Do not use Enumerable methods on indexable collections
-        var count = aggregateFacetResult.First().Facets.First(x => x.Name == "totalDataCount").Output<AggregateCountResult>()?.FirstOrDefault()?.Count ?? 0;
+        var count = aggregateFacetResult[0].Facets.First(x => x.Name == "totalDataCount").Output<AggregateCountResult>()?.FirstOrDefault()?.Count ?? 0;
 #pragma warning restore CA1826 // Do not use Enumerable methods on indexable collections
 
         return (int)count;
@@ -223,7 +223,7 @@ public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : 
 
         var aggregateFacetResult = await _collection.Aggregate().Match(p => p.Id == entityId).Unwind<TEntity, TEmbedded>(unwindExpression).Facet(dataFacet).ToListAsync().ConfigureAwait(false);
 
-        return [.. aggregateFacetResult.First().Facets.First(x => x.Name == "matchingDatas").Output<TEmbedded>()];
+        return [.. aggregateFacetResult[0].Facets.First(x => x.Name == "matchingDatas").Output<TEmbedded>()];
     }
 
     #region Pagination
@@ -273,12 +273,12 @@ public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : 
         var aggregateFacetResults = await _collection.Aggregate().Match(filter).Facet(countFacat, dataFacet).ToListAsync().ConfigureAwait(false);
 
 #pragma warning disable CA1826 // Do not use Enumerable methods on indexable collections
-        var count = aggregateFacetResults.First().Facets.First(x => x.Name == "count").Output<AggregateCountResult>()?.FirstOrDefault()?.Count ?? 0;
+        var count = aggregateFacetResults[0].Facets.First(x => x.Name == "count").Output<AggregateCountResult>()?.FirstOrDefault()?.Count ?? 0;
 #pragma warning restore CA1826 // Do not use Enumerable methods on indexable collections
 
         var totalPages = (int)Math.Ceiling((double)count / requestedItemCount);
 
-        var data = aggregateFacetResults.First().Facets.First(x => x.Name == "data").Output<TEntity>().ToList();
+        var data = aggregateFacetResults[0].Facets.First(x => x.Name == "data").Output<TEntity>().ToList();
 
         return (data, totalPages, (int)count);
     }
@@ -331,7 +331,7 @@ public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : 
 
         var totalPages = (int)Math.Ceiling((double)count / requestedItemCount);
 
-        var data = aggregateFacetResult.First().Facets.First(x => x.Name == facetName).Output<TEmbedded>().ToList();
+        var data = aggregateFacetResult[0].Facets.First(x => x.Name == facetName).Output<TEmbedded>().ToList();
 
         return (data, totalPages, count);
     }
@@ -383,7 +383,7 @@ public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : 
 
         var totalPages = (int)Math.Ceiling((double)count / requestedItemCount);
 
-        var data = aggregateFacetResult.First().Facets.First(x => x.Name == facetName).Output<TEmbedded>().ToList();
+        var data = aggregateFacetResult[0].Facets.First(x => x.Name == facetName).Output<TEmbedded>().ToList();
 
         return (data, totalPages, count);
     }
@@ -433,7 +433,7 @@ public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : 
 
         var totalPages = (int)Math.Ceiling((double)count / requestedItemCount);
 
-        var data = aggregateFacetResult.First().Facets.First(x => x.Name == facetName).Output<TEmbedded>().ToList();
+        var data = aggregateFacetResult[0].Facets.First(x => x.Name == facetName).Output<TEmbedded>().ToList();
 
         return (data, totalPages, count);
     }

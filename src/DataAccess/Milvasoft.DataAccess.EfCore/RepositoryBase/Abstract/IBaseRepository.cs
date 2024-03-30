@@ -440,15 +440,6 @@ public interface IBaseRepository<TEntity, TContext> where TEntity : IMilvaEntity
     Task ExecuteUpdateAsync(object id, SetPropertyBuilder<TEntity> propertyBuilder, CancellationToken cancellationToken = default);
 
     /// <summary>
-    /// Deletes all records that match the condition. If <see cref="SoftDeletionState"/> is active, it updates the soft delete properties of the relevant entity. 
-    /// Note that this will not work with navigation properties.
-    /// </summary>
-    /// <param name="id"></param>
-    /// <param name="cancellationToken"></param>
-    /// <returns></returns>
-    Task ExecuteDeleteAsync(object id, CancellationToken cancellationToken = default);
-
-    /// <summary>
     /// Runs execute update with given <paramref name="predicate"/>. Adds performer and perform time to to be updated properties.
     /// </summary>
     /// <param name="predicate"></param>
@@ -456,6 +447,15 @@ public interface IBaseRepository<TEntity, TContext> where TEntity : IMilvaEntity
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
     Task ExecuteUpdateAsync(Expression<Func<TEntity, bool>> predicate, SetPropertyBuilder<TEntity> propertyBuilder, CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Deletes all records that match the condition. If <see cref="SoftDeletionState"/> is active, it updates the soft delete properties of the relevant entity. 
+    /// Note that this will not work with navigation properties.
+    /// </summary>
+    /// <param name="id"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    Task ExecuteDeleteAsync(object id, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Deletes all records that given <paramref name="predicate"/>. If <see cref="SoftDeletionState"/> is active, it updates the soft delete properties of the relevant entity. 
@@ -872,20 +872,20 @@ public interface IBaseRepository<TEntity, TContext> where TEntity : IMilvaEntity
     void ExecuteUpdate(object id, SetPropertyBuilder<TEntity> propertyBuilder);
 
     /// <summary>
-    /// Deletes all records that match the condition. If <see cref="SoftDeletionState"/> is active, it updates the soft delete properties of the relevant entity. 
-    /// Note that this will not work with navigation properties.
-    /// </summary>
-    /// <param name="id"></param> 
-    /// <returns></returns>
-    void ExecuteDelete(object id);
-
-    /// <summary>
     /// Runs execute update with given <paramref name="predicate"/>. Adds performer and perform time to to be updated properties.
     /// </summary>
     /// <param name="predicate"></param>
     /// <param name="propertyBuilder"></param>
     /// <returns></returns>
     void ExecuteUpdate(Expression<Func<TEntity, bool>> predicate, SetPropertyBuilder<TEntity> propertyBuilder);
+
+    /// <summary>
+    /// Deletes all records that match the condition. If <see cref="SoftDeletionState"/> is active, it updates the soft delete properties of the relevant entity. 
+    /// Note that this will not work with navigation properties.
+    /// </summary>
+    /// <param name="id"></param> 
+    /// <returns></returns>
+    void ExecuteDelete(object id);
 
     /// <summary>
     /// Deletes all records that given <paramref name="predicate"/>. If <see cref="SoftDeletionState"/> is active, it updates the soft delete properties of the relevant entity. 

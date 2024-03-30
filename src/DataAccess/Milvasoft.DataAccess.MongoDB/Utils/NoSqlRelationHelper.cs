@@ -45,37 +45,31 @@ public static class NoSqlRelationHelper
 
         var entityType = entity.GetType();
 
-        foreach (var item in entityType.GetProperties())
+        foreach (var item in entityType.GetProperties().Where(item => item.PropertyType.IsAssignableFrom(typeof(TReferenceProperty))))
         {
-            if (item.PropertyType.IsAssignableFrom(typeof(TReferenceProperty)))
+            var referenceValue = (TReferenceProperty)item.GetValue(entity);
+            if (referenceValue == null)
+                break;
+            var collectionName = mappedPropertyType.GetCollectionName();
+            if (referenceValue.CollectionName == collectionName)
             {
-                var referenceValue = (TReferenceProperty)item.GetValue(entity);
+                var collection = mongoDatabase.GetCollection<TMapProperty>(collectionName);
 
-                if (referenceValue == null)
-                    break;
+                var collectionFilter = Builders<TMapProperty>.Filter.Eq(p => p.Id, referenceValue.Id);
 
-                var collectionName = mappedPropertyType.GetCollectionName();
+                var filter = filterExpression ?? Builders<TMapProperty>.Filter.Empty;
 
-                if (referenceValue.CollectionName == collectionName)
-                {
-                    var collection = mongoDatabase.GetCollection<TMapProperty>(collectionName);
+                var andOperation = Builders<TMapProperty>.Filter.And(collectionFilter, filter);
 
-                    var collectionFilter = Builders<TMapProperty>.Filter.Eq(p => p.Id, referenceValue.Id);
+                var projectDefinition = Builders<TMapProperty>.Projection.Expression(projectExpression ?? (entity => entity));
 
-                    var filter = filterExpression ?? Builders<TMapProperty>.Filter.Empty;
+                var findOptions = new FindOptions<TMapProperty> { Projection = projectDefinition };
 
-                    var andOperation = Builders<TMapProperty>.Filter.And(collectionFilter, filter);
+                var toBeMappedValue = await (await collection.FindAsync(andOperation, findOptions)).FirstOrDefaultAsync().ConfigureAwait(false);
 
-                    var projectDefinition = Builders<TMapProperty>.Projection.Expression(projectExpression ?? (entity => entity));
+                entityType.GetProperty(toBeMappedPropertySelector.GetPropertyName()).SetValue(entity, toBeMappedValue);
 
-                    var findOptions = new FindOptions<TMapProperty> { Projection = projectDefinition };
-
-                    var toBeMappedValue = await (await collection.FindAsync(andOperation, findOptions)).FirstOrDefaultAsync().ConfigureAwait(false);
-
-                    entityType.GetProperty(toBeMappedPropertySelector.GetPropertyName()).SetValue(entity, toBeMappedValue);
-
-                    break;
-                }
+                break;
             }
         }
     }
@@ -108,40 +102,34 @@ public static class NoSqlRelationHelper
 
         var mappedPropertyType = typeof(TMapProperty);
 
-        foreach (var item in entity.GetType().GetProperties())
+        foreach (var item in entity.GetType().GetProperties().Where(item => item.PropertyType.IsAssignableFrom(typeof(List<TReferenceProperty>))))
         {
-            if (item.PropertyType.IsAssignableFrom(typeof(List<TReferenceProperty>)))
+            var referenceValues = (List<TReferenceProperty>)item.GetValue(entity);
+            if (referenceValues.IsNullOrEmpty())
+                break;
+            var collectionName = mappedPropertyType.GetCollectionName();
+            if (referenceValues.FirstOrDefault()?.CollectionName == collectionName)
             {
-                var referenceValues = (List<TReferenceProperty>)item.GetValue(entity);
+                var collection = mongoDatabase.GetCollection<TMapProperty>(collectionName);
 
-                if (referenceValues.IsNullOrEmpty())
-                    break;
+                List<FilterDefinition<TMapProperty>> filterDefinitions = [];
 
-                var collectionName = mappedPropertyType.GetCollectionName();
+                FilterDefinition<TMapProperty> filterDefinition = filterExpression ?? Builders<TMapProperty>.Filter.Empty;
 
-                if (referenceValues.FirstOrDefault()?.CollectionName == collectionName)
-                {
-                    var collection = mongoDatabase.GetCollection<TMapProperty>(collectionName);
+                foreach (var refValue in referenceValues)
+                    filterDefinitions.Add(Builders<TMapProperty>.Filter.Eq(p => p.Id, refValue.Id));
 
-                    List<FilterDefinition<TMapProperty>> filterDefinitions = [];
+                var orOperations = Builders<TMapProperty>.Filter.Or(filterDefinitions);
 
-                    FilterDefinition<TMapProperty> filterDefinition = filterExpression ?? Builders<TMapProperty>.Filter.Empty;
+                var andOperation = Builders<TMapProperty>.Filter.And(orOperations, filterDefinition);
 
-                    foreach (var refValue in referenceValues)
-                        filterDefinitions.Add(Builders<TMapProperty>.Filter.Eq(p => p.Id, refValue.Id));
+                var projectDefinition = Builders<TMapProperty>.Projection.Expression(projectExpression ?? (entity => entity));
 
-                    var orOperations = Builders<TMapProperty>.Filter.Or(filterDefinitions);
+                var toBeMappedValues = await collection.Find(andOperation).Project(projectDefinition).ToListAsync().ConfigureAwait(false);
 
-                    var andOperation = Builders<TMapProperty>.Filter.And(orOperations, filterDefinition);
+                entity.GetType().GetProperty(toBeMappedPropertySelector.GetPropertyName()).SetValue(entity, toBeMappedValues);
 
-                    var projectDefinition = Builders<TMapProperty>.Projection.Expression(projectExpression ?? (entity => entity));
-
-                    var toBeMappedValues = await collection.Find(andOperation).Project(projectDefinition).ToListAsync().ConfigureAwait(false);
-
-                    entity.GetType().GetProperty(toBeMappedPropertySelector.GetPropertyName()).SetValue(entity, toBeMappedValues);
-
-                    break;
-                }
+                break;
             }
         }
     }
@@ -381,14 +369,14 @@ public static class NoSqlRelationHelper
         if (totalObjectIdLenth <= valueConverted.Length)
             return new ObjectId("");
 
-        string objectId = "";
+        var objectIdStringBuilder = new StringBuilder();
 
         for (int i = 0; i < totalObjectIdLenth - valueConverted.Length; i++)
         {
-            objectId += "0";
+            objectIdStringBuilder.Append('0');
         }
 
-        return new ObjectId(objectId + valueConverted);
+        return new ObjectId(objectIdStringBuilder.ToString() + valueConverted);
     }
 
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Major Code Smell", "S2436:Types and methods should not have too many generic parameters", Justification = "<Pending>")]

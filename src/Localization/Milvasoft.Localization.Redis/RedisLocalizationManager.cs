@@ -87,39 +87,12 @@ public class RedisLocalizationManager(ICacheAccessor<RedisAccessor> cacheAccesso
     /// </summary>
     /// <param name="key"></param>
     /// <param name="value"></param>
-    public void Set(string key, string value)
-    {
-        var formattedKey = CheckAndFormatKey(key);
-
-        _cacheAccessor.Set(formattedKey, value);
-    }
-
-    /// <summary>
-    /// Sets the given <paramref name="value"/> with given <paramref name="key"/>.
-    /// </summary>
-    /// <param name="key"></param>
-    /// <param name="value"></param>
     /// <returns></returns>
     public async Task SetAsync(string key, string value)
     {
         var formattedKey = CheckAndFormatKey(key);
 
         await _cacheAccessor.SetAsync(formattedKey, value);
-    }
-
-    /// <summary>
-    /// Sets the given <paramref name="value"/> with given <paramref name="key"/> in given <paramref name="culture"/>.
-    /// </summary>
-    /// <param name="key"></param>
-    /// <param name="value"></param>
-    /// <param name="culture"></param>
-    public void Set(string key, string value, string culture)
-    {
-        var cultureSwitcher = new CultureSwitcher(culture);
-
-        Set(key, value);
-
-        cultureSwitcher.Dispose();
     }
 
     /// <summary>
@@ -139,14 +112,30 @@ public class RedisLocalizationManager(ICacheAccessor<RedisAccessor> cacheAccesso
     }
 
     /// <summary>
-    /// Removes value from resource with given <paramref name="key"/>.
+    /// Sets the given <paramref name="value"/> with given <paramref name="key"/>.
     /// </summary>
     /// <param name="key"></param>
-    public void Remove(string key)
+    /// <param name="value"></param>
+    public void Set(string key, string value)
     {
         var formattedKey = CheckAndFormatKey(key);
 
-        _cacheAccessor.Remove(formattedKey);
+        _cacheAccessor.Set(formattedKey, value);
+    }
+
+    /// <summary>
+    /// Sets the given <paramref name="value"/> with given <paramref name="key"/> in given <paramref name="culture"/>.
+    /// </summary>
+    /// <param name="key"></param>
+    /// <param name="value"></param>
+    /// <param name="culture"></param>
+    public void Set(string key, string value, string culture)
+    {
+        var cultureSwitcher = new CultureSwitcher(culture);
+
+        Set(key, value);
+
+        cultureSwitcher.Dispose();
     }
 
     /// <summary>
@@ -166,13 +155,25 @@ public class RedisLocalizationManager(ICacheAccessor<RedisAccessor> cacheAccesso
     /// </summary>
     /// <param name="key"></param>
     /// <param name="culture"></param>
-    public void Remove(string key, string culture)
+    /// <returns></returns>
+    public async Task RemoveAsync(string key, string culture)
     {
         var cultureSwitcher = new CultureSwitcher(culture);
 
-        Remove(key);
+        await RemoveAsync(key);
 
         cultureSwitcher.Dispose();
+    }
+
+    /// <summary>
+    /// Removes value from resource with given <paramref name="key"/>.
+    /// </summary>
+    /// <param name="key"></param>
+    public void Remove(string key)
+    {
+        var formattedKey = CheckAndFormatKey(key);
+
+        _cacheAccessor.Remove(formattedKey);
     }
 
     /// <summary>
@@ -180,12 +181,11 @@ public class RedisLocalizationManager(ICacheAccessor<RedisAccessor> cacheAccesso
     /// </summary>
     /// <param name="key"></param>
     /// <param name="culture"></param>
-    /// <returns></returns>
-    public async Task RemoveAsync(string key, string culture)
+    public void Remove(string key, string culture)
     {
         var cultureSwitcher = new CultureSwitcher(culture);
 
-        await RemoveAsync(key);
+        Remove(key);
 
         cultureSwitcher.Dispose();
     }

@@ -327,12 +327,6 @@ public abstract class MilvaDbContextBase(DbContextOptions options) : DbContext(o
         if (!type.PropertyExists(propName))
             throw new MilvaDeveloperException($"Type of {type}'s properties doesn't contain '{propName}'.");
 
-        ParameterExpression paramterExpression = Expression.Parameter(type, "i");
-
-        Expression orderByProperty = Expression.Property(paramterExpression, propName);
-
-        var predicate = Expression.Lambda<Func<object, object>>(Expression.Convert(Expression.Property(paramterExpression, propName), typeof(object)), paramterExpression);
-
         var dbSet = GetType().GetMethod("Set").MakeGenericMethod(type).Invoke(this, null);
 
         var whereMethods = typeof(EntityFrameworkQueryableExtensions).GetMethods(BindingFlags.Static | BindingFlags.Public)
@@ -410,7 +404,7 @@ public abstract class MilvaDbContextBase(DbContextOptions options) : DbContext(o
         {
             var entityName = parameter.EntityName;
 
-            Type entityType = assemblyTypes.FirstOrDefault(i => i.Name == entityName) ?? throw new MilvaUserFriendlyException(MilvaException.InvalidParameter);
+            Type entityType = Array.Find(assemblyTypes, i => i.Name == entityName) ?? throw new MilvaUserFriendlyException(MilvaException.InvalidParameter);
             Type translationEntityType = null;
 
             List<string> mainEntityPropertyNames = null;
@@ -420,7 +414,7 @@ public abstract class MilvaDbContextBase(DbContextOptions options) : DbContext(o
             {
                 if (entityType.CanAssignableTo(typeof(IHasTranslation<>)))
                 {
-                    translationEntityType = assemblyTypes.FirstOrDefault(i => i.CanAssignableTo(typeof(ITranslationEntity<>).MakeGenericType(entityType)));
+                    translationEntityType = Array.Find(assemblyTypes, i => i.CanAssignableTo(typeof(ITranslationEntity<>).MakeGenericType(entityType)));
                 }
 
                 // check requested property names are valid and categorize them as main entity and translation entity

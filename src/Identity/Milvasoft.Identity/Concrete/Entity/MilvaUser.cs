@@ -3,19 +3,15 @@
 /// <summary>
 /// Represents a user in the identity system
 /// </summary>
-public class MilvaUser<TKey> where TKey : IEquatable<TKey>
+public class MilvaUser<TKey> : EntityBase<TKey> where TKey : IEquatable<TKey>
 {
     private string _userName;
     private string _email;
 
     /// <summary>
-    /// Gets or sets the primary key for this user.
-    /// </summary>
-    public virtual TKey Id { get; set; }
-
-    /// <summary>
     /// Gets or sets the user name for this user.
     /// </summary>
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Minor Code Smell", "S2292:Trivial properties should be auto-implemented", Justification = "<Pending>")]
     public virtual string UserName { get => _userName; set => _userName = value; }
 
     /// <summary>
@@ -27,6 +23,7 @@ public class MilvaUser<TKey> where TKey : IEquatable<TKey>
     /// <summary>
     /// Gets or sets the email address for this user.
     /// </summary>
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Minor Code Smell", "S2292:Trivial properties should be auto-implemented", Justification = "<Pending>")]
     public virtual string Email { get => _email; set => _email = value; }
 
     /// <summary>

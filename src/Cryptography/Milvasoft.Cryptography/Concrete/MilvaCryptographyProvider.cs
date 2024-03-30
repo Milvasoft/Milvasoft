@@ -115,20 +115,6 @@ public class MilvaCryptographyProvider(string key, CipherMode mode = CipherMode.
     }
 
     /// <summary>
-    /// Decrypt file in <paramref name="filePath"/> with AES Algorithm and key.
-    /// !!! Milvasoft Corporation is not responsible of possible data loss.
-    /// </summary>
-    /// <param name="filePath"></param>
-    public async Task DecryptFileAsync(string filePath)
-    {
-        var inputValue = await File.ReadAllTextAsync(filePath).ConfigureAwait(false);
-
-        var decryptedContent = await DecryptAsync(inputValue).ConfigureAwait(false);
-
-        await File.WriteAllTextAsync(filePath, decryptedContent, Encoding.UTF8).ConfigureAwait(false);
-    }
-
-    /// <summary>
     /// Encrypt file in <paramref name="filePath"/> with AES Algorithm and key.
     /// !!! Milvasoft Corporation is not responsible of possible data loss.
     /// </summary>
@@ -141,6 +127,20 @@ public class MilvaCryptographyProvider(string key, CipherMode mode = CipherMode.
         var encryptedContent = await EncryptAsync(inputValue).ConfigureAwait(false);
 
         await File.WriteAllTextAsync(filePath, encryptedContent, encoding).ConfigureAwait(false);
+    }
+
+    /// <summary>
+    /// Decrypt file in <paramref name="filePath"/> with AES Algorithm and key.
+    /// !!! Milvasoft Corporation is not responsible of possible data loss.
+    /// </summary>
+    /// <param name="filePath"></param>
+    public async Task DecryptFileAsync(string filePath)
+    {
+        var inputValue = await File.ReadAllTextAsync(filePath).ConfigureAwait(false);
+
+        var decryptedContent = await DecryptAsync(inputValue).ConfigureAwait(false);
+
+        await File.WriteAllTextAsync(filePath, decryptedContent, Encoding.UTF8).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -237,20 +237,6 @@ public class MilvaCryptographyProvider(string key, CipherMode mode = CipherMode.
     }
 
     /// <summary>
-    /// Decrypt file in <paramref name="filePath"/> with AES Algorithm and key.
-    /// !!! Milvasoft Corporation is not responsible of possible data loss.
-    /// </summary>
-    /// <param name="filePath"></param>
-    public void DecryptFile(string filePath)
-    {
-        var inputValue = File.ReadAllText(filePath);
-
-        var decryptedContent = Decrypt(inputValue);
-
-        File.WriteAllText(filePath, decryptedContent, Encoding.UTF8);
-    }
-
-    /// <summary>
     /// Encrypt file in <paramref name="filePath"/> with AES Algorithm and key.
     /// !!! Milvasoft Corporation is not responsible of possible data loss.
     /// </summary>
@@ -263,6 +249,20 @@ public class MilvaCryptographyProvider(string key, CipherMode mode = CipherMode.
         var encryptedContent = Encrypt(inputValue);
 
         File.WriteAllText(filePath, encryptedContent, encoding);
+    }
+
+    /// <summary>
+    /// Decrypt file in <paramref name="filePath"/> with AES Algorithm and key.
+    /// !!! Milvasoft Corporation is not responsible of possible data loss.
+    /// </summary>
+    /// <param name="filePath"></param>
+    public void DecryptFile(string filePath)
+    {
+        var inputValue = File.ReadAllText(filePath);
+
+        var decryptedContent = Decrypt(inputValue);
+
+        File.WriteAllText(filePath, decryptedContent, Encoding.UTF8);
     }
 
     /// <summary>

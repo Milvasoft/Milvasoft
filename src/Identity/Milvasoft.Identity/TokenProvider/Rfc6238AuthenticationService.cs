@@ -6,7 +6,7 @@ namespace Milvasoft.Identity.TokenProvider;
 
 internal static class Rfc6238AuthenticationService
 {
-    private static readonly DateTime _unixEpoch = new(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+    private static readonly DateTime _unixEpoch = DateTime.UnixEpoch;
     private static readonly TimeSpan _timestep = TimeSpan.FromMinutes(3);
     private static readonly UTF8Encoding _encoding = new(false, true);
     private static readonly RandomNumberGenerator _rng = RandomNumberGenerator.Create();

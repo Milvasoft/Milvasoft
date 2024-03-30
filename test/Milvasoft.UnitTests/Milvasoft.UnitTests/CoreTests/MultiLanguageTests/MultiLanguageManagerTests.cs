@@ -424,17 +424,7 @@ public class MultiLanguageManagerTests
         MultiLanguageManager.UpdateLanguagesList(languages);
         CultureInfo.CurrentCulture = new CultureInfo("tr-TR");
         var manager = new MilvaMultiLanguageManager();
-#pragma warning disable S3358 // Ternary operators should not be nested
-        Expression<Func<HasTranslationEntityFixture, string>> expectedExpression = src => src.Translations != null
-                                                                                            ? null == src.Translations.FirstOrDefault(i => i.LanguageId == 2)
-                                                                                                ? src.Translations.FirstOrDefault(i => i.LanguageId == 1) != null
-                                                                                                        ? src.Translations.FirstOrDefault(i => i.LanguageId == 1).Name
-                                                                                                        : src.Translations.FirstOrDefault().Name != null
-                                                                                                            ? src.Translations.FirstOrDefault().Name
-                                                                                                            : null
-                                                                                                : src.Translations.FirstOrDefault(i => i.LanguageId == 2).Name
-                                                                                             : null;
-#pragma warning restore S3358 // Ternary operators should not be nested
+        Expression<Func<HasTranslationEntityFixture, string>> expectedExpression = src => src.Translations == null ? null : src.Translations.FirstOrDefault(i => i.LanguageId == 2 || i.LanguageId == 1 || i.LanguageId == i.LanguageId).Name;
 
         // Act
         var resultExpression = manager.CreateTranslationMapExpression<HasTranslationEntityFixture, HasTranslationDtoFixture, TranslationEntityFixture>(e => e.Name);
@@ -489,17 +479,7 @@ public class MultiLanguageManagerTests
         MultiLanguageManager.UpdateLanguagesList(languages);
         CultureInfo.CurrentCulture = new CultureInfo("tr-TR");
         var manager = new MilvaMultiLanguageManager();
-#pragma warning disable S3358 // Ternary operators should not be nested
-        Expression<Func<HasTranslationEntityFixture, string>> expectedExpression = src => (src.Translations != null
-                                                                                            ? src.Translations.FirstOrDefault(i => i.LanguageId == 2) == null
-                                                                                                ? src.Translations.FirstOrDefault(i => i.LanguageId == 1) != null
-                                                                                                        ? src.Translations.FirstOrDefault(i => i.LanguageId == 1).Name
-                                                                                                        : src.Translations.FirstOrDefault().Name != null
-                                                                                                            ? src.Translations.FirstOrDefault().Name
-                                                                                                            : null
-                                                                                                : src.Translations.FirstOrDefault(i => i.LanguageId == 2).Name
-                                                                                            : null);
-#pragma warning restore S3358 // Ternary operators should not be nested
+        Expression<Func<HasTranslationEntityFixture, string>> expectedExpression = src => src.Translations == null ? null : src.Translations.FirstOrDefault(i => i.LanguageId == 2 || i.LanguageId == 1 || i.LanguageId == i.LanguageId).Name;
 
         // Act
         var resultExpression = manager.CreateTranslationMapExpression<HasTranslationEntityFixture, HasTranslationDtoFixture, TranslationEntityFixture>(e => e.Name);
@@ -554,17 +534,7 @@ public class MultiLanguageManagerTests
         MultiLanguageManager.UpdateLanguagesList(languages);
         CultureInfo.CurrentCulture = new CultureInfo("tr-TR");
         var manager = new MilvaMultiLanguageManager();
-#pragma warning disable S3358 // Ternary operators should not be nested
-        Expression<Func<HasTranslationEntityFixture, string>> expectedExpression = src => (src.Translations != null
-                                                                                            ? src.Translations.FirstOrDefault(i => i.LanguageId == 2) == null
-                                                                                                ? src.Translations.FirstOrDefault(i => i.LanguageId == 1) != null
-                                                                                                        ? src.Translations.FirstOrDefault(i => i.LanguageId == 1).Name
-                                                                                                        : src.Translations.FirstOrDefault().Name != null
-                                                                                                            ? src.Translations.FirstOrDefault().Name
-                                                                                                            : null
-                                                                                                : src.Translations.FirstOrDefault(i => i.LanguageId == 2).Name
-                                                                                            : null);
-#pragma warning restore S3358 // Ternary operators should not be nested
+        Expression<Func<HasTranslationEntityFixture, string>> expectedExpression = src => src.Translations == null ? null : src.Translations.FirstOrDefault(i => i.LanguageId == 2 || i.LanguageId == 1 || i.LanguageId == i.LanguageId).Name;
 
         // Act
         var resultExpression = manager.CreateTranslationMapExpression<HasTranslationEntityFixture, HasTranslationDtoFixture, TranslationEntityFixture>(e => e.Name);
@@ -610,15 +580,7 @@ public class MultiLanguageManagerTests
         MultiLanguageManager.UpdateLanguagesList(languages);
         CultureInfo.CurrentCulture = new CultureInfo("en-US");
         var manager = new MilvaMultiLanguageManager();
-#pragma warning disable S3358 // Ternary operators should not be nested
-        Expression<Func<HasTranslationEntityFixture, string>> expectedExpression = src => src.Translations != null
-                                                                                            ? src.Translations.FirstOrDefault(i => i.LanguageId == 1) != null
-                                                                                                ? src.Translations.FirstOrDefault(i => i.LanguageId == 1).Name
-                                                                                                : src.Translations.FirstOrDefault().Name != null
-                                                                                                    ? src.Translations.FirstOrDefault().Name
-                                                                                                    : null
-                                                                                            : null;
-#pragma warning restore S3358 // Ternary operators should not be nested
+        Expression<Func<HasTranslationEntityFixture, string>> expectedExpression = src => src.Translations == null ? null : src.Translations.FirstOrDefault(i => i.LanguageId == 2 || i.LanguageId == 1 || i.LanguageId == i.LanguageId).Name;
 
         // Act
         var resultExpression = manager.CreateTranslationMapExpression<HasTranslationEntityFixture, HasTranslationDtoFixture, TranslationEntityFixture>(e => e.Name);
@@ -680,15 +642,7 @@ public class MultiLanguageManagerTests
         MultiLanguageManager.UpdateLanguagesList(languages);
         CultureInfo.CurrentCulture = new CultureInfo("en-US");
         var manager = new MilvaMultiLanguageManager();
-#pragma warning disable S3358 // Ternary operators should not be nested
-        Expression<Func<HasTranslationEntityFixture, string>> expectedExpression = src => src.Translations != null
-                                                                                            ? src.Translations.FirstOrDefault(i => i.LanguageId == 1) != null
-                                                                                                ? src.Translations.FirstOrDefault(i => i.LanguageId == 1).Name
-                                                                                                : src.Translations.FirstOrDefault().Name != null
-                                                                                                    ? src.Translations.FirstOrDefault().Name
-                                                                                                    : null
-                                                                                            : null;
-#pragma warning restore S3358 // Ternary operators should not be nested
+        Expression<Func<HasTranslationEntityFixture, string>> expectedExpression = src => src.Translations == null ? null : src.Translations.FirstOrDefault(i => i.LanguageId == 2 || i.LanguageId == 1 || i.LanguageId == i.LanguageId).Name;
 
         // Act
         var resultExpression = manager.CreateTranslationMapExpression<HasTranslationEntityFixture, HasTranslationDtoFixture, TranslationEntityFixture>(e => e.Name);
@@ -743,15 +697,7 @@ public class MultiLanguageManagerTests
         MultiLanguageManager.UpdateLanguagesList(languages);
         CultureInfo.CurrentCulture = new CultureInfo("en-US");
         var manager = new MilvaMultiLanguageManager();
-#pragma warning disable S3358 // Ternary operators should not be nested
-        Expression<Func<HasTranslationEntityFixture, string>> expectedExpression = src => src.Translations != null
-                                                                                            ? src.Translations.FirstOrDefault(i => i.LanguageId == 1) != null
-                                                                                                ? src.Translations.FirstOrDefault(i => i.LanguageId == 1).Name
-                                                                                                : src.Translations.FirstOrDefault().Name != null
-                                                                                                    ? src.Translations.FirstOrDefault().Name
-                                                                                                    : null
-                                                                                            : null;
-#pragma warning restore S3358 // Ternary operators should not be nested
+        Expression<Func<HasTranslationEntityFixture, string>> expectedExpression = src => src.Translations == null ? null : src.Translations.FirstOrDefault(i => i.LanguageId == 2 || i.LanguageId == 1 || i.LanguageId == i.LanguageId).Name;
 
         // Act
         var resultExpression = manager.CreateTranslationMapExpression<HasTranslationEntityFixture, HasTranslationDtoFixture, TranslationEntityFixture>(e => e.Name);
@@ -806,15 +752,7 @@ public class MultiLanguageManagerTests
         MultiLanguageManager.UpdateLanguagesList(languages);
         CultureInfo.CurrentCulture = new CultureInfo("en-US");
         var manager = new MilvaMultiLanguageManager();
-#pragma warning disable S3358 // Ternary operators should not be nested
-        Expression<Func<HasTranslationEntityFixture, string>> expectedExpression = src => src.Translations != null || src.Translations.Any()
-                                                                                            ? src.Translations.FirstOrDefault(i => i.LanguageId == 1) != null
-                                                                                                ? src.Translations.FirstOrDefault(i => i.LanguageId == 1).Name
-                                                                                                : src.Translations.FirstOrDefault().Name != null
-                                                                                                    ? src.Translations.FirstOrDefault().Name
-                                                                                                    : null
-                                                                                            : null;
-#pragma warning restore S3358 // Ternary operators should not be nested
+        Expression<Func<HasTranslationEntityFixture, string>> expectedExpression = src => src.Translations == null ? null : src.Translations.FirstOrDefault(i => i.LanguageId == 2 || i.LanguageId == 1 || i.LanguageId == i.LanguageId).Name;
 
         // Act
         var resultExpression = manager.CreateTranslationMapExpression<HasTranslationEntityFixture, HasTranslationDtoFixture, TranslationEntityFixture>(e => e.Name);

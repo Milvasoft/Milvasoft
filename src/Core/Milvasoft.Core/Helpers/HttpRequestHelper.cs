@@ -91,18 +91,11 @@ public static partial class HttpRequestHelper
         // Call Match on Regex instance.
         var match = regex.Match(requestUrl);
 
-        try
-        {
-            // Test for Success.
-            if (!match.Success)
-                throw new MilvaDeveloperException(LocalizerKeys.InvalidUrlErrorMessage);
+        // Test for Success.
+        if (!match.Success)
+            throw new MilvaDeveloperException(LocalizerKeys.InvalidUrlErrorMessage);
 
-            return requestUrl;
-        }
-        catch (Exception)
-        {
-            throw;
-        }
+        return requestUrl;
     }
 
     /// <summary>
@@ -142,18 +135,11 @@ public static partial class HttpRequestHelper
         // Call Match on Regex instance.
         var match = regex.Match(requestUrl);
 
-        try
-        {
-            // Test for Success.
-            if (!match.Success)
-                throw new MilvaDeveloperException(LocalizerKeys.InvalidUrlErrorMessage);
+        // Test for Success.
+        if (!match.Success)
+            throw new MilvaDeveloperException(LocalizerKeys.InvalidUrlErrorMessage);
 
-            return requestUrl;
-        }
-        catch (Exception)
-        {
-            throw;
-        }
+        return requestUrl;
     }
 
     [GeneratedRegex(@"^(ht|f)tp(s?)\:\/\/[0-9a-zA-Z]([-.\w]*[0-9a-zA-Z])*(:(0-9)*)*(\/?)([a-zA-Z0-9\-\.\?\=\,\'\/\\\+&%\$#_]*)?$")]

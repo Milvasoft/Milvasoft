@@ -1124,7 +1124,6 @@
         </member>
         <member name="M:Milvasoft.FileOperations.Concrete.FormFileOperations.Combine(System.String[])">
             <summary>
-            Basically a Path.Combine for URLs. Ensures exactly one '/' separates each segment,and exactly on '&amp;' separates each query parameter.
             URL-encodes illegal characters but not reserved characters.
             </summary>
             <param name="parts">URL parts to combine.</param>

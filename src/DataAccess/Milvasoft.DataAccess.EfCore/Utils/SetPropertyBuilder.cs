@@ -14,7 +14,7 @@ public class SetPropertyBuilder<TSource>
     /// <summary>
     /// <see cref="SetPropertyValue{TProperty}(Expression{Func{TSource, TProperty}}, TProperty)"/> method info for reflection calls.
     /// </summary>
-    public static MethodInfo SetPropertyMethodInfo { get; } = typeof(SetPropertyBuilder<TSource>).GetMethods().FirstOrDefault(mi => mi.Name == nameof(SetPropertyValue));
+    public static MethodInfo SetPropertyMethodInfo { get; } = Array.Find(typeof(SetPropertyBuilder<TSource>).GetMethods(), mi => mi.Name == nameof(SetPropertyValue));
 
     /// <summary>
     /// Gets <see cref="SetPropertyCalls{TSource}"/> expression. 
@@ -42,10 +42,8 @@ public class SetPropertyBuilder<TSource>
         SetPropertyCalls = SetPropertyCalls.Update(body: Expression.Call(instance: SetPropertyCalls.Body,
                                                                          methodName: nameof(SetPropertyCalls<TSource>.SetProperty),
                                                                          typeArguments: [typeof(TProperty)],
-                                                                         arguments: [
-                                                                             propertyExpression,
-                                                                             valueExpression
-                                                                         ]),
+                                                                         propertyExpression,
+                                                                         valueExpression),
                                                   parameters: SetPropertyCalls.Parameters);
 
         return this;

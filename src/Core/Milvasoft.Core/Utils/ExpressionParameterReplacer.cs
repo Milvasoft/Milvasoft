@@ -16,7 +16,7 @@ public class ExpressionParameterReplacer : ExpressionVisitor
     /// <param name="toParameters">The replacement parameters.</param>
     public ExpressionParameterReplacer(IList<ParameterExpression> fromParameters, IList<ParameterExpression> toParameters)
     {
-        ParameterReplacements = new Dictionary<ParameterExpression, ParameterExpression>();
+        ParameterReplacements = [];
 
         for (var i = 0; i != fromParameters.Count && i != toParameters.Count; i++)
         {

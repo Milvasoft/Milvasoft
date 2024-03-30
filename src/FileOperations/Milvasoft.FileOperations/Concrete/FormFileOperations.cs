@@ -127,7 +127,7 @@ public static partial class FormFileOperations
             return [];
 
         //Gets file extension.
-        var fileExtension = Path.GetExtension(files.First().FileName);
+        var fileExtension = Path.GetExtension(files[0].FileName);
 
         //Gets the class name. E.g. If class is ProductDTO then sets the value of this variable as "Product".
         var folderNameOfClass = folderNameCreator.Invoke(entity.GetType());
@@ -302,7 +302,7 @@ public static partial class FormFileOperations
                                                                                                       string basePath,
                                                                                                       FilesFolderNameCreator folderNameCreator,
                                                                                                       string propertyName)
-    where TFileDTO : class, IFileDTO
+    where TFileDTO : class, IFileDto
     where TFileEntity : class, IFileEntity, new()
     {
         if (fileDTOList.IsNullOrEmpty())
@@ -501,9 +501,8 @@ public static partial class FormFileOperations
     public static void RemoveFilesByPath(List<string> filePaths)
     {
         if (!filePaths.IsNullOrEmpty())
-            foreach (var filePath in filePaths)
-                if (File.Exists(filePath))
-                    File.Delete(filePath);
+            foreach (var filePath in filePaths.Where(File.Exists))
+                File.Delete(filePath);
     }
 
     /// <summary>
@@ -701,15 +700,14 @@ public static partial class FormFileOperations
     }.ToLookup(i => i.Key, i => i.Value).Where(i => i.Key == fileType).Select(i => i.First()).ToList();
 
     /// <summary>
-    /// Basically a Path.Combine for URLs. Ensures exactly one '/' separates each segment,and exactly on '&amp;' separates each query parameter.
-    ///	URL-encodes illegal characters but not reserved characters.
+    /// URL-encodes illegal characters but not reserved characters.
     /// </summary>
     /// <param name="parts">URL parts to combine.</param>
     private static string Combine(params string[] parts)
     {
         ArgumentNullException.ThrowIfNull(parts);
 
-        string result = "";
+        var resultBuilder = new StringBuilder();
         bool inQuery = false, inFragment = false;
 
         static string CombineEnsureSingleSeparator(string a, string b, char separator)
@@ -726,16 +724,16 @@ public static partial class FormFileOperations
             if (string.IsNullOrWhiteSpace(part))
                 continue;
 
-            if (result.EndsWith('?') || part.StartsWith('?'))
-                result = CombineEnsureSingleSeparator(result, part, '?');
-            else if (result.EndsWith('#') || part.StartsWith('#'))
-                result = CombineEnsureSingleSeparator(result, part, '#');
+            if (resultBuilder.ToString().EndsWith('?') || part.StartsWith('?'))
+                resultBuilder.Append(CombineEnsureSingleSeparator(resultBuilder.ToString(), part, '?'));
+            else if (resultBuilder.ToString().EndsWith('#') || part.StartsWith('#'))
+                resultBuilder.Append(CombineEnsureSingleSeparator(resultBuilder.ToString(), part, '#'));
             else if (inFragment)
-                result += part;
+                resultBuilder.Append(part);
             else if (inQuery)
-                result = CombineEnsureSingleSeparator(result, part, '&');
+                resultBuilder.Append(CombineEnsureSingleSeparator(resultBuilder.ToString(), part, '&'));
             else
-                result = CombineEnsureSingleSeparator(result, part, '/');
+                resultBuilder.Append(CombineEnsureSingleSeparator(resultBuilder.ToString(), part, '/'));
 
             if (part.Contains('#'))
             {
@@ -748,7 +746,7 @@ public static partial class FormFileOperations
             }
         }
 
-        return EncodeIllegalCharacters(result);
+        return EncodeIllegalCharacters(resultBuilder.ToString());
     }
 
     /// <summary>

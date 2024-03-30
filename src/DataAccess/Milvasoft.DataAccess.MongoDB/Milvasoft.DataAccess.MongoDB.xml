@@ -232,19 +232,19 @@
             <param name="filterExpression"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.DataAccess.MongoDB.Abstract.IBaseRepository`1.DeleteAsync(MongoDB.Bson.ObjectId)">
-            <summary>
-             Deletes single entity from database asynchronously..
-            </summary>
-            <param name="id"></param>
-            <returns></returns>
-        </member>
         <member name="M:Milvasoft.DataAccess.MongoDB.Abstract.IBaseRepository`1.DeleteAndReturnDeletedAsync(MongoDB.Bson.ObjectId)">
             <summary>
              Deletes single entity from database asynchronously..
             </summary>
             <param name="id"></param>
             <returns> The deleted document if one was deleted. </returns>
+        </member>
+        <member name="M:Milvasoft.DataAccess.MongoDB.Abstract.IBaseRepository`1.DeleteAsync(MongoDB.Bson.ObjectId)">
+            <summary>
+             Deletes single entity from database asynchronously..
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
         </member>
         <member name="M:Milvasoft.DataAccess.MongoDB.Abstract.IBaseRepository`1.DeleteAsync(System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
             <summary>
@@ -628,6 +628,12 @@
             <summary>
             Creation date of entity.
             </summary>
+        </member>
+        <member name="M:Milvasoft.DataAccess.MongoDB.Entity.Concrete.DocumentBase.GetId">
+            <summary>
+            Gets the Id property value of entity.
+            </summary>
+            <returns></returns>
         </member>
         <member name="T:Milvasoft.DataAccess.MongoDB.Utils.Attributes.BsonCollectionAttribute">
             <summary>

@@ -20,6 +20,15 @@ public class DecimalPrecisionAttribute : Attribute
 
     public DecimalPrecision DecimalPrecision { get; set; }
 
+    public DecimalPrecisionAttribute()
+    {
+        DecimalPrecision = new()
+        {
+            Scale = Scale,
+            Precision = Precision,
+        };
+    }
+
     public DecimalPrecisionAttribute(byte scale)
     {
         Scale = scale;

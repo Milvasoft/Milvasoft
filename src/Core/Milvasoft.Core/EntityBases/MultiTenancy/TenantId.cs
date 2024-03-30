@@ -111,7 +111,7 @@ public struct TenantId : IEquatable<TenantId>
         TenantId tenantId;
 
         // Check that o is a TenantId first
-        if (obj == null || obj is not TenantId id)
+        if (obj is not TenantId id)
             return false;
         else
             tenantId = id;

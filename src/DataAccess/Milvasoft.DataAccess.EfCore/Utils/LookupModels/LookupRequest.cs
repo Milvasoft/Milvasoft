@@ -52,8 +52,12 @@ public class LookupRequestParameter
         if (criterias.IsNullOrEmpty() || translationPropertyNames.IsNullOrEmpty())
             return;
 
-        foreach (var criteria in criterias)
+        for (var i = 0; i < criterias.Count; i++)
+        {
+            var criteria = criterias[i];
+
             if (translationPropertyNames.Contains(criteria.FilterBy))
                 criteria.FilterBy = criteria.GetFilterByAsListFormat(MultiLanguageEntityPropertyNames.Translations);
+        }
     }
 }

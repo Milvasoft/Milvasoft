@@ -57,7 +57,7 @@ public class MultiLanguageExtensionsTest
         IEnumerable<string> translationEntityPropNames = [nameof(TranslationEntityFixture.Name)];
         Expression<Func<HasTranslationEntityFixture, HasTranslationEntityFixture>> expected = c => new HasTranslationEntityFixture
         {
-            Translations = c.Translations == null ? null : c.Translations.Select(t => new TranslationEntityFixture { Name = t.Name, LanguageId = t.LanguageId })
+            Translations = c.Translations == null ? null : c.Translations.Select(t => new TranslationEntityFixture { Name = t.Name, LanguageId = t.LanguageId }).ToList()
         };
 
         // Act
@@ -103,7 +103,7 @@ public class MultiLanguageExtensionsTest
                                                             {
                                                                 Name = t.Name,
                                                                 LanguageId = t.LanguageId
-                                                            })
+                                                            }).ToList()
         };
 
         // Act
@@ -150,7 +150,7 @@ public class MultiLanguageExtensionsTest
                                                              {
                                                                  Name = t.Name,
                                                                  LanguageId = t.LanguageId
-                                                             }))
+                                                             })).ToList()
         };
 
         // Act
@@ -206,7 +206,7 @@ public class MultiLanguageExtensionsTest
                                                             {
                                                                 Name = t.Name,
                                                                 LanguageId = t.LanguageId
-                                                            })
+                                                            }).ToList()
         };
         var expected = entities.AsQueryable().Select(expectedExpression).ToList();
 
@@ -280,7 +280,7 @@ public class MultiLanguageExtensionsTest
                                                             {
                                                                 Name = t.Name,
                                                                 LanguageId = t.LanguageId
-                                                            })
+                                                            }).ToList()
         };
         var expected = entities.AsQueryable().Select(expectedExpression).ToList();
 
@@ -348,7 +348,7 @@ public class MultiLanguageExtensionsTest
                                                             {
                                                                 Name = t.Name,
                                                                 LanguageId = t.LanguageId
-                                                            })
+                                                            }).ToList()
         };
         var expected = entities.AsQueryable().Select(expectedExpression).ToList();
 
@@ -423,7 +423,7 @@ public class MultiLanguageExtensionsTest
                                                             {
                                                                 Name = t.Name,
                                                                 LanguageId = t.LanguageId
-                                                            })
+                                                            }).ToList()
         };
         var expected = entities.AsQueryable().Select(expectedExpression).ToList();
 

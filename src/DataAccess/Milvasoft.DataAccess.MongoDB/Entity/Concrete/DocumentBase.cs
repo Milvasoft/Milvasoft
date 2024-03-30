@@ -38,4 +38,10 @@ public abstract class DocumentBase : IDocumentBase
                 _creationDate = value;
         }
     }
+
+    /// <summary>
+    /// Gets the Id property value of entity.
+    /// </summary>
+    /// <returns></returns>
+    public object GetId() => Id;
 }
