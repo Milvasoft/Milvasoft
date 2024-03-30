@@ -446,13 +446,13 @@ public static partial class FormFileOperations
     /// <returns></returns>
     public static IFormFile ConvertToFormFile(string dataUriBase64)
     {
-        var base64String = dataUriBase64.Split(";base64,")?[1];
+        var base64String = dataUriBase64?.Split(";base64,")[1];
 
         var regex = @"[^:]\w+\/[\w-+\d.]+(?=;|,)";
 
         var contentType = GetExtension(base64String, regex);
 
-        var splittedContentType = contentType.Split('/');
+        var splittedContentType = contentType?.Split('/');
 
         var fileType = splittedContentType?[0];
 
@@ -514,7 +514,7 @@ public static partial class FormFileOperations
     {
         DirectoryInfo directory = new(folderPath);
 
-        var files = directory?.EnumerateFiles();
+        var files = directory.EnumerateFiles();
 
         if (!files.IsNullOrEmpty())
             foreach (FileInfo file in files)
@@ -530,13 +530,12 @@ public static partial class FormFileOperations
     {
         DirectoryInfo directory = new(folderPath);
 
-        var files = directory?.EnumerateFiles();
+        var files = directory.EnumerateFiles();
 
         if (!files.IsNullOrEmpty())
             foreach (FileInfo file in files)
-                if (!fileNames.IsNullOrEmpty())
-                    if (fileNames.Contains(file.Name))
-                        file.Delete();
+                if (!fileNames.IsNullOrEmpty() && fileNames.Contains(file.Name))
+                    file.Delete();
     }
 
     /// <summary>
@@ -547,7 +546,7 @@ public static partial class FormFileOperations
     {
         DirectoryInfo directory = new(folderPath);
 
-        var directories = directory?.EnumerateDirectories();
+        var directories = directory.EnumerateDirectories();
 
         if (!directories.IsNullOrEmpty())
             foreach (DirectoryInfo dir in directories)
@@ -562,13 +561,13 @@ public static partial class FormFileOperations
     public static void RemoveDirectoriesInFolder(string folderPath, List<string> directoryNames)
     {
         DirectoryInfo directory = new(folderPath);
-        var directories = directory?.EnumerateDirectories();
+
+        var directories = directory.EnumerateDirectories();
 
         if (!directories.IsNullOrEmpty())
             foreach (DirectoryInfo dir in directory.EnumerateDirectories())
-                if (!directoryNames.IsNullOrEmpty())
-                    if (directoryNames.Contains(dir.Name))
-                        dir.Delete(true);
+                if (!directoryNames.IsNullOrEmpty() && directoryNames.Contains(dir.Name))
+                    dir.Delete(true);
     }
 
     /// <summary>
@@ -579,14 +578,11 @@ public static partial class FormFileOperations
     {
         DirectoryInfo directory = new(folderPath);
 
-        if (directory != null)
-        {
-            foreach (FileInfo file in directory.EnumerateFiles())
-                file.Delete();
+        foreach (FileInfo file in directory.EnumerateFiles())
+            file.Delete();
 
-            foreach (DirectoryInfo dir in directory.EnumerateDirectories())
-                dir.Delete(true);
-        }
+        foreach (DirectoryInfo dir in directory.EnumerateDirectories())
+            dir.Delete(true);
     }
 
     /// <summary>

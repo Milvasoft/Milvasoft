@@ -108,8 +108,6 @@ public static class NoSqlRelationHelper
 
         var mappedPropertyType = typeof(TMapProperty);
 
-        var entityType = entity.GetType();
-
         foreach (var item in entity.GetType().GetProperties())
         {
             if (item.PropertyType.IsAssignableFrom(typeof(List<TReferenceProperty>)))
@@ -121,9 +119,9 @@ public static class NoSqlRelationHelper
 
                 var collectionName = mappedPropertyType.GetCollectionName();
 
-                if (referenceValues.FirstOrDefault().CollectionName == mappedPropertyType.GetCollectionName())
+                if (referenceValues.FirstOrDefault()?.CollectionName == collectionName)
                 {
-                    var collection = mongoDatabase.GetCollection<TMapProperty>(mappedPropertyType.GetCollectionName());
+                    var collection = mongoDatabase.GetCollection<TMapProperty>(collectionName);
 
                     List<FilterDefinition<TMapProperty>> filterDefinitions = [];
 
@@ -171,33 +169,7 @@ public static class NoSqlRelationHelper
     where TMapProperty : IAuditable<ObjectId>
     where TReferenceProperty : MongoDBRef
     {
-        if (entities.IsNullOrEmpty())
-            return null;
-
-        List<Tuple<TReferenceProperty, ObjectId>> toBeMappedValueReferences = [];
-
-        string collectionName = "";
-
-        foreach (var entity in entities)
-            foreach (var entityProp in entity.GetType().GetProperties())
-                if (entityProp.PropertyType.IsAssignableFrom(typeof(TReferenceProperty)))
-                {
-                    var referenceValue = (TReferenceProperty)entityProp.GetValue(entity);
-
-                    if (referenceValue == null)
-                        break;
-
-                    if (referenceValue.CollectionName == typeof(TMapProperty).GetCollectionName())
-                    {
-                        collectionName = referenceValue.CollectionName;
-
-                        //toBeMappedValueReferences.Add(referenceValue, entity.Id);
-
-                        toBeMappedValueReferences.Add(Tuple.Create(referenceValue, entity.Id));
-
-                        break;
-                    }
-                }
+        var toBeMappedValueReferences = FindValueReferencesToBeMapped<TEntity, TReferenceProperty, TMapProperty, TReferenceProperty>(entities, out string collectionName);
 
         if (toBeMappedValueReferences.IsNullOrEmpty())
             return null;
@@ -221,9 +193,9 @@ public static class NoSqlRelationHelper
 
         foreach (var tobeMappedValueReference in toBeMappedValueReferences)
         {
-            var entity = entities.Where(p => p.Id == tobeMappedValueReference.Item2).FirstOrDefault();
+            var entity = entities.Find(p => p.Id == tobeMappedValueReference.Item2);
 
-            var toBeMappedValue = toBeMappedValues.Where(p => p.Id == tobeMappedValueReference.Item1.Id.AsObjectId).FirstOrDefault();
+            var toBeMappedValue = toBeMappedValues.Find(p => p.Id == tobeMappedValueReference.Item1.Id.AsObjectId);
 
             entity.GetType().GetProperty(toBeMappedPropertySelector.GetPropertyName()).SetValue(entity, toBeMappedValue);
         }
@@ -252,31 +224,7 @@ public static class NoSqlRelationHelper
     where TMapProperty : IAuditable<ObjectId>
     where TReferenceProperty : MongoDBRef
     {
-        if (entities.IsNullOrEmpty())
-            return null;
-
-        List<Tuple<List<TReferenceProperty>, ObjectId>> toBeMappedValueReferences = [];
-
-        string collectionName = "";
-
-        foreach (var entity in entities)
-            foreach (var entityProp in entity.GetType().GetProperties())
-                if (entityProp.PropertyType.IsAssignableFrom(typeof(List<TReferenceProperty>)))
-                {
-                    var referenceValues = (List<TReferenceProperty>)entityProp.GetValue(entity);
-
-                    if (referenceValues.IsNullOrEmpty())
-                        break;
-
-                    if (referenceValues.FirstOrDefault().CollectionName == typeof(TMapProperty).GetCollectionName())
-                    {
-                        collectionName = referenceValues.FirstOrDefault().CollectionName;
-
-                        toBeMappedValueReferences.Add(Tuple.Create(referenceValues, entity.Id));
-
-                        break;
-                    }
-                }
+        var toBeMappedValueReferences = FindValueReferencesToBeMapped<TEntity, TReferenceProperty, TMapProperty, List<TReferenceProperty>>(entities, out string collectionName);
 
         if (toBeMappedValueReferences.IsNullOrEmpty())
             return null;
@@ -296,13 +244,13 @@ public static class NoSqlRelationHelper
 
         foreach (var toBeMappedValueReference in toBeMappedValueReferences)
         {
-            var entity = entities.Where(p => p.Id == toBeMappedValueReference.Item2).FirstOrDefault();
+            var entity = entities.Find(p => p.Id == toBeMappedValueReference.Item2);
 
             List<TMapProperty> mappedValues = [];
 
             if (toBeMappedValueReference.Item1 != null)
                 foreach (var mongoRef in toBeMappedValueReference.Item1)
-                    mappedValues.Add(toBeMappedValues.Where(i => i.Id == mongoRef.Id.AsObjectId).FirstOrDefault());
+                    mappedValues.Add(toBeMappedValues.Find(i => i.Id == mongoRef.Id.AsObjectId));
 
             entity.GetType().GetProperty(toBeMappedPropertySelector.GetPropertyName()).SetValue(entity, mappedValues);
 
@@ -324,7 +272,7 @@ public static class NoSqlRelationHelper
                                                                                        Expression<Func<TEntity, TEmbeddedProperty>> embeddedPropertySelector)
     {
         if (entities.IsNullOrEmpty())
-            return null;
+            return [];
 
         List<TEmbeddedProperty> embeddedProperties = [];
 
@@ -332,7 +280,7 @@ public static class NoSqlRelationHelper
         {
             var embeddedProperty = (TEmbeddedProperty)entities.GetType()
                                                               .GetGenericArguments()
-                                                              .FirstOrDefault()
+                                                              .FirstOrDefault()?
                                                               .GetProperty(embeddedPropertySelector.GetPropertyName())
                                                               .GetValue(entity);
 
@@ -340,7 +288,7 @@ public static class NoSqlRelationHelper
                 embeddedProperties.Add(embeddedProperty);
         }
 
-        return embeddedProperties.IsNullOrEmpty() ? null : embeddedProperties;
+        return embeddedProperties;
     }
 
     /// <summary>
@@ -355,7 +303,7 @@ public static class NoSqlRelationHelper
                                                                                        Expression<Func<TEntity, List<TEmbeddedProperty>>> embeddedPropertySelector)
     {
         if (entities.IsNullOrEmpty())
-            return null;
+            return [];
 
         List<List<TEmbeddedProperty>> embeddedProperties = [];
 
@@ -363,7 +311,7 @@ public static class NoSqlRelationHelper
         {
             var embeddedProperty = (List<TEmbeddedProperty>)entities.GetType()
                                                                     .GetGenericArguments()
-                                                                    .FirstOrDefault()
+                                                                    .FirstOrDefault()?
                                                                     .GetProperty(embeddedPropertySelector.GetPropertyName())
                                                                     .GetValue(entity);
 
@@ -371,7 +319,7 @@ public static class NoSqlRelationHelper
                 embeddedProperties.Add(embeddedProperty);
         }
 
-        return embeddedProperties.IsNullOrEmpty() ? null : embeddedProperties.SelectMany(p => p).ToList();
+        return embeddedProperties.SelectMany(p => p).ToList();
     }
 
     /// <summary>
@@ -409,7 +357,7 @@ public static class NoSqlRelationHelper
     public static List<MongoDBRef> GetMongoDBRef<TEntity>(this List<ObjectId> objectIds)
     {
         if (objectIds.IsNullOrEmpty())
-            return null;
+            return [];
 
         List<MongoDBRef> mongoDBRefs = [];
 
@@ -441,5 +389,54 @@ public static class NoSqlRelationHelper
         }
 
         return new ObjectId(objectId + valueConverted);
+    }
+
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Major Code Smell", "S2436:Types and methods should not have too many generic parameters", Justification = "<Pending>")]
+    private static List<Tuple<TReturn, ObjectId>> FindValueReferencesToBeMapped<TEntity, TReferenceProperty, TMapProperty, TReturn>(List<TEntity> entities, out string collectionName)
+         where TEntity : IAuditable<ObjectId>
+         where TMapProperty : IAuditable<ObjectId>
+         where TReferenceProperty : MongoDBRef
+    {
+        collectionName = string.Empty;
+        List<Tuple<TReturn, ObjectId>> toBeMappedValueReferences = null;
+
+        if (entities.IsNullOrEmpty())
+            return toBeMappedValueReferences;
+
+        var mapPropertyCollectionName = typeof(TMapProperty).GetCollectionName();
+
+        foreach (var entity in entities)
+        {
+            var referenceValuesCollection = entity.GetType()
+                                                  .GetProperties()
+                                                  .Where(e => e.PropertyType.IsAssignableFrom(typeof(TReturn))
+                                                              && (TReturn)e.GetValue(entity) != null)
+                                                  .Select(e => (TReturn)e.GetValue(entity));
+
+            var referenceValue = referenceValuesCollection.FirstOrDefault(rv => GetCollectionName(rv) == mapPropertyCollectionName);
+
+            if (referenceValue != null)
+            {
+                collectionName = GetCollectionName(referenceValue);
+
+                toBeMappedValueReferences ??= [];
+
+                toBeMappedValueReferences.Add(Tuple.Create(referenceValue, entity.Id));
+            }
+        }
+
+        return toBeMappedValueReferences;
+
+        static string GetCollectionName(TReturn referenceValue)
+        {
+            if (referenceValue is List<TReferenceProperty> listReference)
+            {
+                return listReference.FirstOrDefault()?.CollectionName;
+            }
+            else if (referenceValue is TReferenceProperty reference)
+                return reference.CollectionName;
+            else
+                return string.Empty;
+        }
     }
 }

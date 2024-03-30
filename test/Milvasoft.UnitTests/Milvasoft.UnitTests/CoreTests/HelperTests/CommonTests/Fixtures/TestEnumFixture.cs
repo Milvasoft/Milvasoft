@@ -2,7 +2,7 @@
 
 namespace Milvasoft.UnitTests.CoreTests.HelperTests.CommonTests.Fixtures;
 
-internal enum TestEnum
+internal enum TestEnumFixture
 {
     [Description("This is Value1")]
     Value1,

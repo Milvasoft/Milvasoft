@@ -12,9 +12,10 @@ namespace Milvasoft.JobScheduling;
 /// <param name="scheduleConfig"></param>
 public abstract class MilvaCronJobService(IScheduleConfig scheduleConfig) : IHostedService, IDisposable
 {
+    private bool _disposedValue;
     private System.Timers.Timer _timer;
-    private readonly CronExpression _expression = CronExpression.Parse(scheduleConfig.CronExpression, scheduleConfig.CronFormat);
-    private readonly TimeZoneInfo _timeZoneInfo = scheduleConfig.TimeZoneInfo;
+    private CronExpression _expression = CronExpression.Parse(scheduleConfig.CronExpression, scheduleConfig.CronFormat);
+    private TimeZoneInfo _timeZoneInfo = scheduleConfig.TimeZoneInfo;
 
     /// <summary>
     /// Starts the job.
@@ -85,9 +86,32 @@ public abstract class MilvaCronJobService(IScheduleConfig scheduleConfig) : IHos
     /// <summary>
     /// Disposes the timer.
     /// </summary>
-    public virtual void Dispose()
+    public void Dispose()
     {
-        _timer?.Dispose();
+        Dispose(true);
         GC.SuppressFinalize(this);
     }
+
+    /// <summary>
+    /// Disposes the timer.
+    /// </summary>
+    protected virtual void Dispose(bool disposing)
+    {
+        if (!_disposedValue)
+        {
+            if (disposing)
+            {
+                _timer.Dispose();
+            }
+
+            _expression = null;
+            _timeZoneInfo = null;
+            _disposedValue = true;
+        }
+    }
+
+    /// <summary>
+    /// Disposes the timer.
+    /// </summary>
+    ~MilvaCronJobService() => Dispose(false);
 }

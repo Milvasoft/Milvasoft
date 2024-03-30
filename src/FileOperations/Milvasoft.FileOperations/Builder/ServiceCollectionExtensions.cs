@@ -84,7 +84,7 @@ public static class ServiceCollectionExtensions
 
         var config = new JsonFileOperationsPostConfigureOptions();
 
-        postConfigureAction?.Invoke(config);
+        postConfigureAction.Invoke(config);
 
         builder.Services.UpdateSingletonInstance<IJsonFileOperationOptions>(opt =>
         {

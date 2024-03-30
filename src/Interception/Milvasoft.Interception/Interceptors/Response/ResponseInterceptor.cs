@@ -68,7 +68,7 @@ public class ResponseInterceptor(IServiceProvider serviceProvider, IResponseInte
 
         var properties = resultDataType.GetProperties();
 
-        if (properties == null || properties.Length == 0)
+        if (properties.IsNullOrEmpty())
             return;
 
         foreach (var prop in properties)

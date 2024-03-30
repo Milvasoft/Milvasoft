@@ -12,6 +12,7 @@ internal static class TypeExtensions
     /// </summary>
     /// <param name="type"></param>
     /// <returns></returns>
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Major Code Smell", "S3011:Reflection should not be used to increase accessibility of classes, methods, or fields", Justification = "<Pending>")]
     internal static IEnumerable<MethodInfo> GetDecoratableMethods(this Type type)
         => type.GetMethods(BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public)
                .Where(x => !x.IsSpecialName);

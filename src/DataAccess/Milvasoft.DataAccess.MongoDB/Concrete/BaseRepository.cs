@@ -129,13 +129,13 @@ public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : 
     /// </summary>
     /// <typeparam name="TEmbedded"></typeparam>
     /// <param name="unwindExpression"></param>
-    /// <param name="filterExpression"></param>
+    /// <param name="filterDefinition"></param>
     /// <returns></returns>
-    public async Task<int> GetEmbeddedDocumentCountAsync<TEmbedded>(Expression<Func<TEntity, object>> unwindExpression, FilterDefinition<TEmbedded> filterExpression = null)
+    public async Task<int> GetEmbeddedDocumentCountAsync<TEmbedded>(Expression<Func<TEntity, object>> unwindExpression, FilterDefinition<TEmbedded> filterDefinition = null)
     {
         var project = GetProjectionQuery<TEmbedded>(unwindExpression);
 
-        return await GetTotalDataCount(unwindExpression, project, null, filterExpression).ConfigureAwait(false);
+        return await GetTotalDataCount(unwindExpression, project, null, filterDefinition).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -622,65 +622,32 @@ public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : 
     protected string GetProjectionQuery<TEmbedded>(Expression<Func<TEntity, object>> unwindExpression,
                                                    List<Expression<Func<TEmbedded, object>>> projectExpressions = null)
     {
-        List<string> mappedProps = [];
-
         List<string> queries = [];
 
+        var propertyNames = projectExpressions.IsNullOrEmpty() ? typeof(TEmbedded).GetProperties().Select(p => p.Name).ToList() : projectExpressions.Select(e => e.GetPropertyName()).ToList();
+        propertyNames.Remove(EntityPropertyNames.Id);
         var queryProp = GetUnwindType();
-
-        if (projectExpressions.IsNullOrEmpty())
-        {
-            var embeddedType = typeof(TEmbedded);
-
-            foreach (var prop in embeddedType.GetProperties())
-            {
-                if (prop.Name == "Id")
-                    continue;
-
-                mappedProps.Add(prop.Name);
-            }
-        }
-        else
-        {
-            foreach (var expression in projectExpressions)
-            {
-                var propName = expression.GetPropertyName();
-
-                if (propName == "Id")
-                    continue;
-
-                mappedProps.Add(expression.GetPropertyName());
-            }
-        }
-
-        foreach (var prop in mappedProps)
-        {
-            queries.Add($"{prop}:'{queryProp}.{prop}'");
-        }
-
         queries.Add($"_id:'{queryProp}._id'");
-        //queries.Add("_id:0");
+
+        foreach (var propName in propertyNames)
+            queries.Add(ConvertToQueryParameter(propName));
 
         return string.Join(',', queries);
 
         #region Local Functions
 
+        string ConvertToQueryParameter(string propName) => $"{propName}:'{GetUnwindType()}.{propName}'";
+
         string GetUnwindType()
         {
             List<string> unwindNesteds = [];
 
-#pragma warning disable IDE0019 // Use pattern matching
-            MemberExpression memberExpression = unwindExpression.Body as MemberExpression;
-#pragma warning restore IDE0019 // Use pattern matching
-
             do
             {
-                if (memberExpression == null)
+                if (unwindExpression.Body is not MemberExpression memberExpression)
                     break;
 
                 unwindNesteds.Add(memberExpression.Member.Name);
-
-                memberExpression = memberExpression.Expression as MemberExpression;
 
             } while (true);
 

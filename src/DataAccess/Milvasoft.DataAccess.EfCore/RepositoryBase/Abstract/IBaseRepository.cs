@@ -12,6 +12,7 @@ namespace Milvasoft.DataAccess.EfCore.RepositoryBase.Abstract;
 /// </summary>
 /// <typeparam name="TEntity"></typeparam>
 /// <typeparam name="TContext"></typeparam>
+[System.Diagnostics.CodeAnalysis.SuppressMessage("Major Code Smell", "S2326:Unused type parameters should be removed", Justification = "<Pending>")]
 public interface IBaseRepository<TEntity, TContext> where TEntity : IMilvaEntity where TContext : DbContext
 {
     #region Configuration Change

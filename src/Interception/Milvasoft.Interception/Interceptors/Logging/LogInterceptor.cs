@@ -80,56 +80,18 @@ public partial class LogInterceptor(IServiceProvider serviceProvider) : IMilvaIn
                },
             } : [];
 
-            var logAttribute = call.GetInterceptorAttribute<LogAttribute>();
+            ConfigurePropertyDictionaryWithLogRunner(logObjectPropDic, call);
 
-            //If call hasn't LogAttribute this means call has LogRunnerAttribute. So, get required values from expression.
-            if (logAttribute == null && _logInterceptionOptions.LogDefaultParameters)
-            {
-                var expression = call.Arguments[0];
+            ConfigurePropertyDictionaryWithUserDefinedExtraProperties(logObjectPropDic);
 
-                var body = (MethodCallExpression)expression.GetType().GetProperty("Body").GetValue(expression);
-
-                var values = new List<object>();
-
-                foreach (var argument in body.Arguments)
-                    values.Add(argument.GetType().GetProperty("Value").GetValue(argument));
-
-                var argumentValues = values;
-
-                argumentValues?.RemoveAll(p => p is CancellationToken);
-
-                var methodName = body.Method.Name;
-
-                logObjectPropDic["MethodName"] = methodName;
-                logObjectPropDic["MethodParams"] = argumentValues;
-            }
-
-            //If you want to log the values coming from the project where the library is used.
-            var extraPropsObject = _logInterceptionOptions.ExtraLoggingPropertiesSelector?.Invoke(_serviceProvider);
-
-            if (extraPropsObject != null)
-            {
-                var extraProps = extraPropsObject.GetType().GetProperties();
-
-                foreach (var extraProp in extraProps)
-                {
-                    logObjectPropDic.Add(extraProp.Name, extraProp.GetValue(extraPropsObject, null));
-                }
-            }
+            var logObjectAsJson = ConvertPropertyDictionaryToJson(logObjectPropDic);
 
             if (_logInterceptionOptions.AsyncLogging)
             {
-                var logObjectAsJson = logObjectPropDic.ToJson();
-
-                logObjectAsJson = SlashRegex1().Replace(logObjectAsJson, " ");
-                logObjectAsJson = SlashRegex2().Replace(logObjectAsJson, " ");
-
-                logObjectAsJson = logObjectAsJson.Replace("\\\\\\\\", "\\\\");
-
                 await _logger.LogAsync(logObjectAsJson);
             }
             else
-                _logger.Log(logObjectPropDic.ToJson());
+                _logger.Log(logObjectAsJson);
 
             //If metadata removing requested, add removed metadata to call.returnValue again
             if (metadatas != null)
@@ -143,6 +105,72 @@ public partial class LogInterceptor(IServiceProvider serviceProvider) : IMilvaIn
         {
             throw exception;
         }
+    }
+
+    /// <summary>
+    /// If user wants to log the values coming from the project where the library is used.
+    /// </summary>
+    /// <param name="logObjectPropDic"></param>
+    private void ConfigurePropertyDictionaryWithUserDefinedExtraProperties(Dictionary<string, object> logObjectPropDic)
+    {
+        //If you want to log the values coming from the project where the library is used.
+        var extraPropsObject = _logInterceptionOptions.ExtraLoggingPropertiesSelector?.Invoke(_serviceProvider);
+
+        if (extraPropsObject != null)
+        {
+            var extraProps = extraPropsObject.GetType().GetProperties();
+
+            foreach (var extraProp in extraProps)
+                logObjectPropDic.Add(extraProp.Name, extraProp.GetValue(extraPropsObject, null));
+        }
+    }
+
+    /// <summary>
+    /// If <paramref name="call"/> hasn't <see cref="LogAttribute"/> this means call has <see cref="LogRunnerAttribute"/>. 
+    /// So, get required values from InterceptorRunner.InterceptWithLogAsync.expression parameter.
+    /// </summary>
+    /// <param name="logObjectPropDic"></param>
+    /// <param name="call"></param>
+    private void ConfigurePropertyDictionaryWithLogRunner(Dictionary<string, object> logObjectPropDic, Call call)
+    {
+        var logAttribute = call.GetInterceptorAttribute<LogAttribute>();
+
+        //If call hasn't LogAttribute this means call has LogRunnerAttribute. So, get required values from expression.
+        if (logAttribute == null && _logInterceptionOptions.LogDefaultParameters)
+        {
+            var expression = call.Arguments[0];
+
+            var body = (MethodCallExpression)expression.GetType().GetProperty("Body").GetValue(expression);
+
+            var values = new List<object>();
+
+            foreach (var argument in body.Arguments)
+                values.Add(argument.GetType().GetProperty("Value").GetValue(argument));
+
+            var argumentValues = values.RemoveAll(p => p is CancellationToken);
+
+            var methodName = body.Method.Name;
+
+            logObjectPropDic["MethodName"] = methodName;
+            logObjectPropDic["MethodParams"] = argumentValues;
+        }
+    }
+
+    /// <summary>
+    /// Converts property dictionary with json. Removes extra trailing slashes.
+    /// </summary>
+    /// <param name="logObjectPropDic"></param>
+    /// <returns></returns>
+    private static string ConvertPropertyDictionaryToJson(Dictionary<string, object> logObjectPropDic)
+    {
+        var logObjectAsJson = logObjectPropDic.ToJson();
+
+        logObjectAsJson = SlashRegex1().Replace(logObjectAsJson, " ");
+        logObjectAsJson = SlashRegex2().Replace(logObjectAsJson, " ");
+
+        logObjectAsJson = logObjectAsJson.Replace("\\\\\\\\", "\\\\");
+
+        return logObjectAsJson;
     }
 
     [GeneratedRegex("([\\\\])([a-z])(\\d+)")]

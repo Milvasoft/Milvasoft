@@ -4,5 +4,5 @@ namespace Milvasoft.Interception.Interceptors.Runner;
 
 public interface IInterceptorRunner : IInterceptable
 {
-    Task<TResult> InterceptWithLogAsync<T, TResult>(Expression<Func<Task<TResult>>> function);
+    Task<TResult> InterceptWithLogAsync<T, TResult>(Expression<Func<Task<TResult>>> expression);
 }

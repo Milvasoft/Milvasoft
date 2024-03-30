@@ -101,7 +101,7 @@ public partial class RedisAccessor : IRedisAccessor
     public IEnumerable<T> Get<T>(IEnumerable<string> keys)
     {
         if (keys.IsNullOrEmpty())
-            return null;
+            return [];
 
         keys.ToList().RemoveAll(i => string.IsNullOrWhiteSpace(i));
 
@@ -110,7 +110,7 @@ public partial class RedisAccessor : IRedisAccessor
         var values = _database.StringGet(redisKeys);
 
         if (values.IsNullOrEmpty())
-            return null;
+            return [];
 
         var stringValues = values.ToStringArray();
 
@@ -132,7 +132,7 @@ public partial class RedisAccessor : IRedisAccessor
     public RedisValue[] Get(IEnumerable<string> keys)
     {
         if (keys.IsNullOrEmpty())
-            return null;
+            return [];
 
         keys.ToList().RemoveAll(i => string.IsNullOrWhiteSpace(i));
 
@@ -141,7 +141,7 @@ public partial class RedisAccessor : IRedisAccessor
         var values = _database.StringGet(redisKeys);
 
         if (values.IsNullOrEmpty())
-            return null;
+            return [];
 
         return values;
     }

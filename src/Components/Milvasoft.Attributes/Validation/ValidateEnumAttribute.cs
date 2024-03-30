@@ -55,9 +55,9 @@ public class ValidateEnumAttribute : ValidationAttribute
     /// </summary>
     /// 
     /// <param name="value"></param>
-    /// <param name="context"></param>
+    /// <param name="validationContext"></param>
     /// <returns></returns>
-    protected override ValidationResult IsValid(object value, ValidationContext context)
+    protected override ValidationResult IsValid(object value, ValidationContext validationContext)
     {
         if (value != null)
         {
@@ -67,13 +67,13 @@ public class ValidateEnumAttribute : ValidationAttribute
 
             if (LocalizeErrorMessages)
             {
-                milvaLocalizer = context.GetService<IMilvaLocalizer>();
+                milvaLocalizer = validationContext.GetService<IMilvaLocalizer>();
 
-                localizedPropName = milvaLocalizer[LocalizerKey ?? $"{LocalizerKeys.Localized}{context.MemberName}"];
+                localizedPropName = milvaLocalizer[LocalizerKey ?? $"{LocalizerKeys.Localized}{validationContext.MemberName}"];
                 errorMessage = FullMessage ? milvaLocalizer[LocalizerKey] : milvaLocalizer[LocalizerKeys.PleaseSelectAValid, localizedPropName];
             }
             else
-                errorMessage = $"{LocalizerKeys.PleaseEnterAValid} {context.MemberName}.";
+                errorMessage = $"{LocalizerKeys.PleaseEnterAValid} {validationContext.MemberName}.";
 
             var valueType = _enumType ?? value.GetType();
 

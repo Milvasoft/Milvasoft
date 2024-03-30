@@ -26,6 +26,7 @@ public partial class CommonHelperTests
     }
 
     [Fact]
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Minor Code Smell", "S1125:Boolean literals should not be redundant", Justification = "<Pending>")]
     public void CreateIsDeletedFalseExpression_WithEntityTypeIsSoftDeletable_ShouldReturnIsDeletedFalseExpression()
     {
         // Arrange
@@ -60,20 +61,20 @@ public partial class CommonHelperTests
     public void GetEnumDescription_WithTypeIsEnumButNotContainsDescriptionAttribute_ShouldReturnEnumValueAsString()
     {
         // Arrange
-        var input = TestEnum.Value2;
+        var input = TestEnumFixture.Value2;
 
         // Act
         var result = input.GetEnumDesciption();
 
         // Assert
-        result.Should().Be(TestEnum.Value2.ToString());
+        result.Should().Be(TestEnumFixture.Value2.ToString());
     }
 
     [Fact]
     public void GetEnumDescription_WithTypeIsEnumAndContainsDescriptionAttribute_ShouldReturnDescriptionAttributeValue()
     {
         // Arrange
-        var input = TestEnum.Value1;
+        var input = TestEnumFixture.Value1;
 
         // Act
         var result = input.GetEnumDesciption();
@@ -168,13 +169,11 @@ public partial class CommonHelperTests
             Priority = 2,
         };
 
-        var expectedPropertyInfo = dto.GetType().GetProperty("Priority");
-
         // Act
         var result = entity.AssignUpdatedProperties(dto);
 
         // Assert
-        result.Should().Contain(i => i.Name == "Priority");
+        result.Should().Contain(i => i.Name == nameof(UpdatedPropsTestEntity.Priority));
         result.Should().HaveCount(1);
         entity.Priority.Should().Be(dto.Priority);
         entity.Name.Should().Be(entity.Name);

@@ -55,6 +55,16 @@
             Disposes the timer.
             </summary>
         </member>
+        <member name="M:Milvasoft.JobScheduling.MilvaCronJobService.Dispose(System.Boolean)">
+            <summary>
+            Disposes the timer.
+            </summary>
+        </member>
+        <member name="M:Milvasoft.JobScheduling.MilvaCronJobService.Finalize">
+            <summary>
+            Disposes the timer.
+            </summary>
+        </member>
         <member name="T:Milvasoft.JobScheduling.IScheduleConfig">
             <summary>
             Schedule config for scheduling jobs.

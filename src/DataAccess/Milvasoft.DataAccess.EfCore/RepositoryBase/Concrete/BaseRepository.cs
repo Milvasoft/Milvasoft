@@ -32,9 +32,9 @@ public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepositor
     #region Private Properties
 
     private readonly IDataAccessConfiguration _dataAccessConfiguration;
-    private static readonly AsyncLocal<bool> _resetSoftDeletedFetchState = new();
-    private static readonly AsyncLocal<bool> _softDeletedFetching = new();
-    private static readonly AsyncLocal<bool> _saveChangesAfterEveryOperation = new();
+    private bool _resetSoftDeletedFetchState;
+    private bool _softDeletedFetching;
+    private bool _saveChangesAfterEveryOperation;
 
     #endregion
 
@@ -42,15 +42,15 @@ public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepositor
     /// Initializes new instance of <see cref="BaseRepository{TEntity, TContext}"/>
     /// </summary>
     /// <param name="dbContext"></param>
-    public BaseRepository(TContext dbContext)
+    protected BaseRepository(TContext dbContext)
     {
         _dbContext = dbContext;
         _dbSet = dbContext.Set<TEntity>();
 
         _dataAccessConfiguration = dbContext.GetDataAccessConfiguration();
-        _softDeletedFetching.Value = _dataAccessConfiguration.Repository.DefaultSoftDeletedFetchState;
-        _resetSoftDeletedFetchState.Value = _dataAccessConfiguration.Repository.ResetSoftDeletedFetchStateToDefault;
-        _saveChangesAfterEveryOperation.Value = _dataAccessConfiguration.Repository.DefaultSaveChangesChoice == SaveChangesChoice.AfterEveryOperation;
+        _softDeletedFetching = _dataAccessConfiguration.Repository.DefaultSoftDeletedFetchState;
+        _resetSoftDeletedFetchState = _dataAccessConfiguration.Repository.ResetSoftDeletedFetchStateToDefault;
+        _saveChangesAfterEveryOperation = _dataAccessConfiguration.Repository.DefaultSaveChangesChoice == SaveChangesChoice.AfterEveryOperation;
     }
 
     #region Configuration Change
@@ -59,22 +59,22 @@ public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepositor
     /// Determines whether save changes method called after every repository method.
     /// </summary>
     /// <param name="choice"></param>
-    public void ChangeSaveChangesChoice(SaveChangesChoice choice) => _saveChangesAfterEveryOperation.Value = choice == SaveChangesChoice.AfterEveryOperation;
+    public void ChangeSaveChangesChoice(SaveChangesChoice choice) => _saveChangesAfterEveryOperation = choice == SaveChangesChoice.AfterEveryOperation;
 
     /// <summary>
     /// Resets SaveChanges choice to default.
     /// </summary>
-    public void ResetSaveChangesChoiceToDefault() => _saveChangesAfterEveryOperation.Value = _dataAccessConfiguration.Repository.DefaultSaveChangesChoice == SaveChangesChoice.AfterEveryOperation;
+    public void ResetSaveChangesChoiceToDefault() => _saveChangesAfterEveryOperation = _dataAccessConfiguration.Repository.DefaultSaveChangesChoice == SaveChangesChoice.AfterEveryOperation;
 
     /// <summary>
     /// Determines whether soft deleted entities in the database are fetched from the database.
     /// </summary>
-    public void FetchSoftDeletedEntitiesInNextProcess(bool state = false) => _softDeletedFetching.Value = state;
+    public void FetchSoftDeletedEntitiesInNextProcess(bool state = false) => _softDeletedFetching = state;
 
     /// <summary>
     /// Resets soft deleted entity fetch style to default.
     /// </summary>
-    public void ResetSoftDeletedEntityFetchState() => _resetSoftDeletedFetchState.Value = _dataAccessConfiguration.Repository.DefaultSoftDeletedFetchState;
+    public void ResetSoftDeletedEntityFetchState() => _resetSoftDeletedFetchState = _dataAccessConfiguration.Repository.DefaultSoftDeletedFetchState;
 
     #endregion
 
@@ -839,13 +839,13 @@ public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepositor
 
     private async Task SaveChangesAsync(CancellationToken cancellationToken = default)
     {
-        if (_saveChangesAfterEveryOperation.Value)
+        if (_saveChangesAfterEveryOperation)
             await _dbContext.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
     }
 
     private async Task SaveChangesBulkAsync(BulkConfig bulkConfig = null, CancellationToken cancellationToken = default)
     {
-        if (_saveChangesAfterEveryOperation.Value)
+        if (_saveChangesAfterEveryOperation)
             await _dbContext.SaveChangesBulkAsync(bulkConfig, cancellationToken).ConfigureAwait(false);
     }
 
@@ -934,7 +934,7 @@ public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepositor
         Expression<Func<TResult, bool>> mainExpression;
 
         //Step in when _softDeletedFetching is false
-        if (!_softDeletedFetching.Value)
+        if (!_softDeletedFetching)
         {
             var softDeleteExpression = CommonHelper.CreateIsDeletedFalseExpression<TResult>();
 
@@ -944,8 +944,8 @@ public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepositor
         {
             mainExpression = conditionExpression;
 
-            if (_resetSoftDeletedFetchState.Value)
-                _softDeletedFetching.Value = _dataAccessConfiguration.Repository.DefaultSoftDeletedFetchState;
+            if (_resetSoftDeletedFetchState)
+                _softDeletedFetching = _dataAccessConfiguration.Repository.DefaultSoftDeletedFetchState;
         }
 
         return mainExpression;

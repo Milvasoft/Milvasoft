@@ -98,33 +98,7 @@ public sealed class Call
 
                 if (_invocation.ReturnValue is Task task && MethodImplementation.IsAsync())
                 {
-                    if (!task.IsCompleted)
-                    {
-                        // Async methods are executed within interception.
-                        // Non-async method returned task is treated as a result 
-                        // and is not executed within interception.
-                        await task.ConfigureAwait(false);
-                    }
-
-                    if (task.IsFaulted && task.Exception != null)
-                    {
-                        task.Exception.Rethrow();
-                    }
-
-                    // Runtime might return Task<T> derived type here.
-                    // Discussed in dotnet/runtime#26312 and microsoft/vs-streamjsonrpc#116.
-                    if (task.GetType().GetTypeInfo().TryGetGenericTaskType(out var genericTaskType))
-                    {
-                        if (genericTaskType.IsTaskWithVoidTaskResult())
-                        {
-                            return;
-                        }
-
-                        var resultProperty = genericTaskType.GetDeclaredProperty("Result")
-                            ?? throw new InvalidOperationException($"Object of type '{genericTaskType}' was expected to contain a property 'Result'.");
-
-                        ReturnValue = resultProperty.GetValue(task);
-                    }
+                    await SetReturnValueAsAsync(task).ConfigureAwait(false);
                 }
                 else
                 {
@@ -154,5 +128,36 @@ public sealed class Call
         decorateAttribute ??= MethodImplementation.DeclaringType.GetCustomAttribute<T>();
 
         return decorateAttribute;
+    }
+
+    private async Task SetReturnValueAsAsync(Task task)
+    {
+        if (!task.IsCompleted)
+        {
+            // Async methods are executed within interception.
+            // Non-async method returned task is treated as a result 
+            // and is not executed within interception.
+            await task.ConfigureAwait(false);
+        }
+
+        if (task.IsFaulted && task.Exception != null)
+        {
+            task.Exception.Rethrow();
+        }
+
+        // Runtime might return Task<T> derived type here.
+        // Discussed in dotnet/runtime#26312 and microsoft/vs-streamjsonrpc#116.
+        if (task.GetType().GetTypeInfo().TryGetGenericTaskType(out var genericTaskType))
+        {
+            if (genericTaskType.IsTaskWithVoidTaskResult())
+            {
+                return;
+            }
+
+            var resultProperty = genericTaskType.GetDeclaredProperty("Result")
+                ?? throw new InvalidOperationException($"Object of type '{genericTaskType}' was expected to contain a property 'Result'.");
+
+            ReturnValue = resultProperty.GetValue(task);
+        }
     }
 }

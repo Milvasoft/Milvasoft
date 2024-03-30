@@ -177,7 +177,7 @@ public class AggregationCriteria
 
         var prop = _entityType.ThrowIfPropertyNotExists(AggregateBy);
 
-        _propType = IsNonNullableValueType(_propType) ? typeof(Nullable<>).MakeGenericType(_propType) : prop.PropertyType;
+        _propType = IsNonNullableValueType(prop.PropertyType) ? typeof(Nullable<>).MakeGenericType(prop.PropertyType) : prop.PropertyType;
 
 #pragma warning disable EF1001 // Internal EF Core API usage.
         if (runAsync)

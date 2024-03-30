@@ -675,13 +675,13 @@ public abstract partial class BaseRepository<TEntity, TContext> where TEntity : 
 
     private void SaveChanges()
     {
-        if (_saveChangesAfterEveryOperation.Value)
+        if (_saveChangesAfterEveryOperation)
             _dbContext.SaveChanges();
     }
 
     private void SaveChangesBulk(BulkConfig bulkConfig = null)
     {
-        if (_saveChangesAfterEveryOperation.Value)
+        if (_saveChangesAfterEveryOperation)
             _dbContext.SaveChangesBulk(bulkConfig);
     }
 }

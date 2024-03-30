@@ -14,6 +14,7 @@ public class ExpressionHelperTests
     /// left expression , right expression , expression append type , expected result
     /// </summary>
     /// <returns></returns>
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Minor Code Smell", "S1125:Boolean literals should not be redundant", Justification = "<Pending>")]
     public static IEnumerable<object[]> InvalidExpressionsAndTypesForAppendMethod()
     {
         Expression<Func<int, bool>> nullLeft = null;

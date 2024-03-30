@@ -15,7 +15,7 @@ public class CacheAttribute : DecorateAttribute
     public string Key { get; set; } = null;
 
     /// <summary>
-    /// Timeout as ms.
+    /// Timeout as second.
     /// </summary>
     public int? Timeout { get; set; } = null;
 

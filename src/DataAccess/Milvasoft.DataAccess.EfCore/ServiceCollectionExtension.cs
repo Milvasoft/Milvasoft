@@ -71,7 +71,7 @@ public static class ServiceCollectionExtension
 
         var config = new DataAccessPostConfigureConfiguration();
 
-        postConfigureAction?.Invoke(config);
+        postConfigureAction.Invoke(config);
 
         services.UpdateSingletonInstance<IDataAccessConfiguration>(opt =>
         {

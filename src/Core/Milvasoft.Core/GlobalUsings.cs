@@ -9,6 +9,7 @@ global using Milvasoft.Core.Exceptions;
 global using Milvasoft.Core.Helpers;
 global using Milvasoft.Core.Utils.Constants;
 
+#pragma warning disable S125 // Sections of code should not be commented out
 /* Unmerged change from project 'Milvasoft.Components.Rest'
 Added:
 global using System;
@@ -117,3 +118,4 @@ global using System.Text;
 global using System.Threading.Tasks;
 */
 global using System.Text;
+#pragma warning restore S125 // Sections of code should not be commented out

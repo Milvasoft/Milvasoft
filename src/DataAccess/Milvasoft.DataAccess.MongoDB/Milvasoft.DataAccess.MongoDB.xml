@@ -218,11 +218,11 @@
             <summary>
             Updates the data in multiple.
             
-            <para> You can only update one property in multiple. See <paramref name="fieldDefinition"/> </para>
+            <para> You can only update one property in multiple. See <paramref name="fieldDefinitions"/> </para>
             
             </summary>
-            <param name="entities"></param>
-            <param name="fieldDefinition"></param>
+            <param name="documents"></param>
+            <param name="fieldDefinitions"></param>
             <returns></returns>
         </member>
         <member name="M:Milvasoft.DataAccess.MongoDB.Abstract.IBaseRepository`1.DeleteRangeAsync(MongoDB.Driver.FilterDefinition{`0})">
@@ -324,7 +324,7 @@
             </summary>
             <typeparam name="TEmbedded"></typeparam>
             <param name="unwindExpression"></param>
-            <param name="filterExpression"></param>
+            <param name="filterDefinition"></param>
             <returns></returns>
         </member>
         <member name="M:Milvasoft.DataAccess.MongoDB.Concrete.BaseRepository`1.GetByIdAsync(MongoDB.Bson.ObjectId,System.Linq.Expressions.Expression{System.Func{`0,`0}})">

@@ -247,13 +247,13 @@ public interface IBaseRepository<TEntity> where TEntity : class, IAuditable<Obje
     /// <summary>
     /// Updates the data in multiple.
     /// 
-    /// <para> You can only update one property in multiple. See <paramref name="fieldDefinition"/> </para>
+    /// <para> You can only update one property in multiple. See <paramref name="fieldDefinitions"/> </para>
     /// 
     /// </summary>
-    /// <param name="entities"></param>
-    /// <param name="fieldDefinition"></param>
+    /// <param name="documents"></param>
+    /// <param name="fieldDefinitions"></param>
     /// <returns></returns>
-    Task UpdateRangeAsync(List<TEntity> entities, params Expression<Func<TEntity, object>>[] fieldDefinition);
+    Task UpdateRangeAsync(List<TEntity> documents, params Expression<Func<TEntity, object>>[] fieldDefinitions);
 
     /// <summary>
     ///  Deletes multiple entity from database asynchronously. 

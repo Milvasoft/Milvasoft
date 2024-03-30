@@ -44,9 +44,10 @@ public class LookupRequestParameter
     /// </summary>
     /// <param name="translationPropertyNames">The list of translation property names.</param>
     /// <returns>The updated filter criteria.</returns>
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Major Bug", "S2259:Null pointers should not be dereferenced", Justification = "<Pending>")]
     public void UpdateFilterByForTranslationPropertyNames(List<string> translationPropertyNames)
     {
-        var criterias = this?.Filtering?.Criterias;
+        var criterias = Filtering?.Criterias;
 
         if (criterias.IsNullOrEmpty() || translationPropertyNames.IsNullOrEmpty())
             return;
@@ -54,7 +55,5 @@ public class LookupRequestParameter
         foreach (var criteria in criterias)
             if (translationPropertyNames.Contains(criteria.FilterBy))
                 criteria.FilterBy = criteria.GetFilterByAsListFormat(MultiLanguageEntityPropertyNames.Translations);
-
-        return;
     }
 }

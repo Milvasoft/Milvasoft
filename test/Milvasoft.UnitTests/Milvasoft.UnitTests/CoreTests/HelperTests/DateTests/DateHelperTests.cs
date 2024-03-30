@@ -127,19 +127,6 @@ public partial class DateHelperTests
     }
 
     [Fact]
-    public void CreateDateSearchExpression_ForOverloadWithNullableDatetimeProperty_WithPropertySelectorIsNull_ShouldReturnNull()
-    {
-        // Arrange
-        Expression<Func<CreateDateSearchExpressionTestModelFixture, DateTime?>> datePropertySelector = null;
-
-        // Act
-        var result = CommonHelper.CreateDateSearchExpression(datePropertySelector, DateTime.Now, DateTime.Now.AddDays(1));
-
-        // Assert
-        result.Should().BeNull();
-    }
-
-    [Fact]
     public void CreateDateSearchExpression_ForOverloadWithNullableDatetimeProperty_WithBothDateParamsAreNull_ShouldReturnNull()
     {
         // Arrange

@@ -48,7 +48,7 @@ public abstract class MilvaDbContextBase(DbContextOptions options) : DbContext(o
     /// </summary>
     /// <param name="options"></param>
     /// <param name="dbContextConfiguration"></param>
-    public MilvaDbContextBase(DbContextOptions options, DataAccessConfiguration dbContextConfiguration) : this(options)
+    protected MilvaDbContextBase(DbContextOptions options, DataAccessConfiguration dbContextConfiguration) : this(options)
     {
         SetDataAccessConfiguration(dbContextConfiguration);
     }
@@ -59,7 +59,7 @@ public abstract class MilvaDbContextBase(DbContextOptions options) : DbContext(o
     /// <param name="options"></param>
     /// <param name="dbContextConfiguration"></param>
     /// <param name="serviceProvider"></param>
-    public MilvaDbContextBase(DbContextOptions options, DataAccessConfiguration dbContextConfiguration, IServiceProvider serviceProvider) : this(options)
+    protected MilvaDbContextBase(DbContextOptions options, DataAccessConfiguration dbContextConfiguration, IServiceProvider serviceProvider) : this(options)
     {
         SetDataAccessConfiguration(dbContextConfiguration);
         ServiceProvider = serviceProvider;
@@ -242,7 +242,7 @@ public abstract class MilvaDbContextBase(DbContextOptions options) : DbContext(o
         //If navigation entry included apply soft delete.
         foreach (var navigationEntry in entry.Navigations)
         {
-            if (navigationEntry is CollectionEntry collectionEntry && collectionEntry?.CurrentValue != null)
+            if (navigationEntry is CollectionEntry collectionEntry && collectionEntry.CurrentValue != null)
             {
                 foreach (var dependentEntry in collectionEntry.CurrentValue)
                     AuditDeletion(Entry(dependentEntry));
@@ -303,13 +303,10 @@ public abstract class MilvaDbContextBase(DbContextOptions options) : DbContext(o
     {
         var currentUserName = _dbContextConfiguration.DbContext.GetCurrentUserNameMethod.Invoke(ServiceProvider);
 
-        if (!string.IsNullOrWhiteSpace(currentUserName))
+        if (!string.IsNullOrWhiteSpace(currentUserName) && entry.Metadata.GetProperties().Any(prop => prop.Name == propertyName))
         {
-            if (entry.Metadata.GetProperties().Any(prop => prop.Name == propertyName))
-            {
-                entry.Property(propertyName).CurrentValue = currentUserName;
-                entry.Property(propertyName).IsModified = true;
-            }
+            entry.Property(propertyName).CurrentValue = currentUserName;
+            entry.Property(propertyName).IsModified = true;
         }
     }
 
@@ -341,9 +338,10 @@ public abstract class MilvaDbContextBase(DbContextOptions options) : DbContext(o
         var whereMethods = typeof(EntityFrameworkQueryableExtensions).GetMethods(BindingFlags.Static | BindingFlags.Public)
                                                                      .Where(mi => mi.Name == "ToListAsync");
 
-        MethodInfo whereMethod = whereMethods.FirstOrDefault();
+        MethodInfo whereMethod = whereMethods.FirstOrDefault()?.MakeGenericMethod(type);
 
-        whereMethod = whereMethod.MakeGenericMethod(type);
+        if (whereMethod == null)
+            return null;
 
         var ret = (Task)whereMethod.Invoke(dbSet, [dbSet, null]);
 

@@ -25,68 +25,45 @@ public class CacheInterceptor : IMilvaInterceptor
 
     public async Task OnInvoke(Call call)
     {
-        if (_cache != null)
+        //If cache provider is null nothing do nothing, just proceed to next
+        if (_cache == null)
         {
-            object cachedValue = null;
-            string cacheKey = null;
-
-            var cacheAttribute = call.GetInterceptorAttribute<CacheAttribute>();
-
-            if (cacheAttribute?.Key != null)
-            {
-                var methodParameters = call.Arguments?.ToList();
-
-                methodParameters?.RemoveAll(p => p is CancellationToken);
-
-                cacheKey = $"{cacheAttribute.Key}_{methodParameters?.ToJson().Hash()}";
-
-                var returnType = call.ReturnType.GetGenericTypeDefinition() == typeof(Task<>) ? call.ReturnType.GenericTypeArguments.FirstOrDefault() : call.ReturnType;
-
-                var value = await _cache.GetAsync(cacheKey, returnType);
-
-                if (value != null)
-                {
-                    if (returnType.CanAssignableTo(typeof(IResponse)))
-                    {
-                        value.GetType().GetProperty("IsCachedData").SetValue(value, true);
-                    }
-
-                    cachedValue = value;
-                    call.ReturnValue = cachedValue;
-                    call.ProceedToOriginalInvocation = false;
-
-                    await call.NextAsync();
-
-                    return;
-                }
-            }
-
             await call.NextAsync();
-
-            if (cachedValue == null)
-            {
-                if (cacheAttribute.Timeout.HasValue)
-                {
-                    TimeSpan timespan = TimeSpan.FromSeconds(cacheAttribute.Timeout.Value);
-
-                    await _cache.SetAsync(cacheKey, call.ReturnValue, timespan);
-                }
-                else
-                {
-                    await _cache.SetAsync(cacheKey, call.ReturnValue);
-                }
-
-                cacheAttribute.IsProcessedOnce = true;
-            }
-            else
-            {
-                if (call.ReturnValue?.GetType() == typeof(IResponse<>))
-                {
-                    call.ReturnValue.GetType().GetProperty("IsCachedData").SetValue(call.ReturnValue, true);
-                }
-            }
+            return;
         }
-        else
+
+        var cacheAttribute = call.GetInterceptorAttribute<CacheAttribute>();
+
+        string cacheKey = string.IsNullOrWhiteSpace(cacheAttribute.Key) ? call.Method.Name : cacheAttribute.Key;
+
+        var methodParameters = call.Arguments?.ToList().RemoveAll(p => p is CancellationToken);
+
+        cacheKey = $"{cacheKey}_{methodParameters?.ToJson().Hash()}";
+
+        var returnType = call.ReturnType.GetGenericTypeDefinition() == typeof(Task<>) ? call.ReturnType.GenericTypeArguments.FirstOrDefault() : call.ReturnType;
+
+        var cachedValue = await _cache.GetAsync(cacheKey, returnType);
+
+        //If cached value is not null make assignments and proceed next
+        if (cachedValue != null)
+        {
+            if (returnType.CanAssignableTo(typeof(IResponse)))
+                cachedValue.GetType().GetProperty("IsCachedData").SetValue(cachedValue, true);
+
+            call.ReturnValue = cachedValue;
+            call.ProceedToOriginalInvocation = false;
+
             await call.NextAsync();
+            return;
+        }
+
+        await call.NextAsync();
+
+        //If cached value is not null this block will not run
+        TimeSpan? expirationSecond = cacheAttribute.Timeout.HasValue ? TimeSpan.FromSeconds(cacheAttribute.Timeout.Value) : null;
+
+        await _cache.SetAsync(cacheKey, call.ReturnValue, expirationSecond);
+
+        cacheAttribute.IsProcessedOnce = true;
     }
 }

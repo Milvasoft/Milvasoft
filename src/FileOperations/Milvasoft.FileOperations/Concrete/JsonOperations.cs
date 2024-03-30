@@ -1076,14 +1076,14 @@ public class JsonOperations : IJsonOperations
     {
         var tempJsonContent = JsonConvert.DeserializeObject<List<T>>(jsonContentString, _jsonSerializerSettings);
 
-        var jsonContent = string.IsNullOrWhiteSpace(jsonContentString) ? throw new Exception("No Records for Update") : tempJsonContent;
+        var jsonContent = string.IsNullOrWhiteSpace(jsonContentString) ? throw new MilvaDeveloperException("No Records for Update") : tempJsonContent;
 
         var lastContent = jsonContent.Last();
 
         var mappingPropertyName = mappingProperty.GetPropertyName();
 
         if (lastContent.GetType().GetProperty(mappingPropertyName) == null)
-            throw new Exception($"This content type not have {mappingPropertyName} property");
+            throw new MilvaDeveloperException($"This content type not have {mappingPropertyName} property");
 
         var upToDateContents = new List<T>();
         foreach (var content in contents)
@@ -1102,7 +1102,7 @@ public class JsonOperations : IJsonOperations
         }
 
         if (upToDateContents.Count == 0)
-            throw new Exception("Requested content for update not found!");
+            throw new MilvaDeveloperException("Requested content for update not found!");
 
         return JsonConvert.SerializeObject(jsonContent, Formatting.Indented);
     }
@@ -1111,14 +1111,14 @@ public class JsonOperations : IJsonOperations
     {
         var tempJsonContent = JsonConvert.DeserializeObject<List<T>>(jsonContentString, _jsonSerializerSettings);
 
-        var jsonContent = string.IsNullOrWhiteSpace(jsonContentString) ? throw new Exception("No Records for Delete") : tempJsonContent;
+        var jsonContent = string.IsNullOrWhiteSpace(jsonContentString) ? throw new MilvaDeveloperException("No Records for Delete") : tempJsonContent;
 
         var lastContent = jsonContent.Last();
 
         var mappingPropertyName = mappingProperty.GetPropertyName();
 
         if (lastContent.GetType().GetProperty(mappingPropertyName) == null)
-            throw new Exception($"This content type not have {mappingPropertyName} property ");
+            throw new MilvaDeveloperException($"This content type not have {mappingPropertyName} property ");
 
         var willRemovedContents = new List<T>();
 
@@ -1131,7 +1131,7 @@ public class JsonOperations : IJsonOperations
         }
 
         if (willRemovedContents.Count == 0)
-            throw new Exception("Requested content for delete not found!");
+            throw new MilvaDeveloperException("Requested content for delete not found!");
 
         foreach (var willRemovedContent in willRemovedContents)
             jsonContent.Remove(willRemovedContent);
@@ -1160,7 +1160,6 @@ public class JsonOperations : IJsonOperations
     private static string DecryptAndRead(string filePath, string key)
     {
         var plainContent = File.ReadAllBytes(filePath);
-        //byte[] plainContent = Encoding.ASCII.GetBytes(content);
 
         using var algorithm = Aes.Create();
 
@@ -1198,7 +1197,6 @@ public class JsonOperations : IJsonOperations
 
     private static void EncryptAndWrite(string filePath, string content, string key)
     {
-        //var plainContent = await File.ReadAllBytesAsync(filePath).ConfigureAwait(false);
         byte[] plainContent = Encoding.ASCII.GetBytes(content);
 
         using var algorithm = Aes.Create();
@@ -1218,15 +1216,7 @@ public class JsonOperations : IJsonOperations
         using var cryptoStream = new CryptoStream(memStream, algorithm.CreateEncryptor(), CryptoStreamMode.Write);
 
         cryptoStream.Write(plainContent, 0, plainContent.Length);
-
-        try
-        {
-            cryptoStream.FlushFinalBlock();
-        }
-        catch (CryptographicException)
-        {
-            throw;
-        }
+        cryptoStream.FlushFinalBlock();
 
         File.WriteAllBytes(filePath, memStream.ToArray());
     }

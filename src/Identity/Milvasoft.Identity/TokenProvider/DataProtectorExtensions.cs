@@ -22,10 +22,8 @@ public static class DataProtectorExtensions
         {
             writer.Write(DateTimeOffset.UtcNow);
             writer.Write(userId.ToString());
-            writer.Write(purpose ?? "");
-            string stamp = null;
-
-            writer.Write(stamp ?? "");
+            writer.Write(purpose ?? string.Empty);
+            writer.Write(string.Empty);
         }
 
         var protectedBytes = protector.CreateProtector(purpose).Protect(ms.ToArray());

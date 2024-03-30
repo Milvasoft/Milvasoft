@@ -281,14 +281,17 @@ public class ContextRepository<TContext>(TContext dbContext) : IContextRepositor
             .GetMethods(BindingFlags.Static | BindingFlags.Public)
             .Where(mi => mi.Name == "ToListAsync");
 
-        var whereMethod = whereMethods.FirstOrDefault();
+        var whereMethod = whereMethods.FirstOrDefault()?.MakeGenericMethod(type);
 
-        whereMethod = whereMethod.MakeGenericMethod(type);
+        var ret = (Task)whereMethod?.Invoke(dbSet, [dbSet, null]);
 
-        var ret = (Task)whereMethod.Invoke(dbSet, [dbSet, null]);
+        if (ret == null)
+            return null;
+
         await ret.ConfigureAwait(false);
 
         var resultProperty = ret.GetType().GetProperty("Result");
+
         return resultProperty.GetValue(ret);
     }
 

@@ -35,7 +35,7 @@ public static class InterceptionServiceCollectionExtensions
 
         var builder = new InterceptionBuilder(services, configurationManager);
 
-        var externalTypes = builder.Services?.Where(i => Array.Exists(i.ImplementationType.GetInterfaces(), t => t == typeof(IInterceptable))).Select(i => i.ServiceType);
+        var externalTypes = builder.Services?.Where(i => i.ImplementationType?.GetInterfaces() != null && Array.Exists(i.ImplementationType.GetInterfaces(), t => t == typeof(IInterceptable))).Select(i => i.ServiceType);
 
         var types = assembly.FindDecorableTypes();
 

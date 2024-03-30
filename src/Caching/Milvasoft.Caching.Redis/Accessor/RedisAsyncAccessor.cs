@@ -133,11 +133,12 @@ public partial class RedisAccessor
     /// <param name="expiration"></param>
     /// <returns></returns>
     public async Task<bool> SetAsync(string key, object value, TimeSpan? expiration)
-        => await _database.StringSetAsync(key, value.ToJson(), expiration.HasValue
-                                                               ? _useUtcForDateTimes
-                                                                    ? expiration.Value.ConvertToUtc()
-                                                                    : expiration
-                                                               : expiration).ConfigureAwait(false);
+    {
+        if (expiration.HasValue)
+            return await _database.StringSetAsync(key, value.ToJson(), _useUtcForDateTimes ? expiration.Value.ConvertToUtc() : expiration).ConfigureAwait(false);
+        else
+            return await _database.StringSetAsync(key, value.ToJson()).ConfigureAwait(false);
+    }
 
     /// <summary>
     /// Sets <paramref name="values"/>.
@@ -282,7 +283,7 @@ public partial class RedisAccessor
             _client = await ConnectionMultiplexer.ConnectAsync(_options).ConfigureAwait(false);
             _database = _client.GetDatabase();
         }
-        else if (_client != null && !_client.IsConnected)
+        else if (!_client.IsConnected)
         {
             await _client.CloseAsync().ConfigureAwait(false);
             _client = await ConnectionMultiplexer.ConnectAsync(_options).ConfigureAwait(false);

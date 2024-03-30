@@ -1,5 +1,4 @@
-﻿using Milvasoft.Attributes.Validation;
-using Milvasoft.Identity.Abstract;
+﻿using Milvasoft.Identity.Abstract;
 
 namespace Milvasoft.Identity.Concrete;
 
@@ -11,7 +10,6 @@ public record MilvaToken : IToken
     /// <summary>
     /// If result is success sets the token.
     /// </summary>
-    [ValidateString(5000)]
     public string AccessToken { get; set; }
 
     /// <summary>
@@ -22,6 +20,5 @@ public record MilvaToken : IToken
     /// <summary>
     /// Refresh token.
     /// </summary>
-    [ValidateString(5000)]
     public string RefreshToken { get; set; }
 }

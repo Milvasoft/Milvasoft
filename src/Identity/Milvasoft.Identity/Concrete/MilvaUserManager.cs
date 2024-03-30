@@ -3,7 +3,7 @@ using Milvasoft.Identity.Abstract;
 using Milvasoft.Identity.Concrete.Entity;
 using Milvasoft.Identity.Concrete.Options;
 using Milvasoft.Identity.TokenProvider;
-using System.ComponentModel.DataAnnotations;
+using System.Text.RegularExpressions;
 
 namespace Milvasoft.Identity.Concrete;
 
@@ -16,14 +16,13 @@ namespace Milvasoft.Identity.Concrete;
 /// <param name="dataProtector"></param>
 /// <param name="options"></param>
 /// <param name="passwordHasher"></param>
-public class MilvaUserManager<TUser, TKey>(Lazy<IDataProtectionProvider> dataProtector,
-                        MilvaIdentityOptions options,
-                        Lazy<IMilvaPasswordHasher> passwordHasher) : IMilvaUserManager<TUser, TKey> where TUser : MilvaUser<TKey> where TKey : IEquatable<TKey>
+public partial class MilvaUserManager<TUser, TKey>(Lazy<IDataProtectionProvider> dataProtector,
+                                                   MilvaIdentityOptions options,
+                                                   Lazy<IMilvaPasswordHasher> passwordHasher) : IMilvaUserManager<TUser, TKey> where TUser : MilvaUser<TKey> where TKey : IEquatable<TKey>
 {
     private readonly Lazy<IDataProtectionProvider> _dataProtector = dataProtector;
     private readonly Lazy<IMilvaPasswordHasher> _passwordHasher = passwordHasher;
     private readonly MilvaIdentityOptions _options = options;
-    private static readonly EmailAddressAttribute _emailAddressAttribute = new();
 
     /// <summary>
     /// Validates user, sets password hash, set normalized columns.
@@ -184,24 +183,24 @@ public class MilvaUserManager<TUser, TKey>(Lazy<IDataProtectionProvider> dataPro
     {
         ArgumentNullException.ThrowIfNull(password);
 
-        var options = _options.Password;
+        var passwordOptions = _options.Password;
 
-        if (string.IsNullOrWhiteSpace(password) || password.Length < options.RequiredLength)
+        if (string.IsNullOrWhiteSpace(password) || password.Length < passwordOptions.RequiredLength)
             MilvaIdentityExceptionThrower.ThrowPasswordTooShort();
 
-        if (options.RequireNonAlphanumeric && password.All(IsLetterOrDigit))
+        if (passwordOptions.RequireNonAlphanumeric && password.All(IsLetterOrDigit))
             MilvaIdentityExceptionThrower.ThrowPasswordRequiresNonAlphanumeric();
 
-        if (options.RequireDigit && !password.Any(IsDigit))
+        if (passwordOptions.RequireDigit && !password.Any(IsDigit))
             MilvaIdentityExceptionThrower.ThrowPasswordRequiresDigit();
 
-        if (options.RequireLowercase && !password.Any(IsLower))
+        if (passwordOptions.RequireLowercase && !password.Any(IsLower))
             MilvaIdentityExceptionThrower.ThrowPasswordRequiresLower();
 
-        if (options.RequireUppercase && !password.Any(IsUpper))
+        if (passwordOptions.RequireUppercase && !password.Any(IsUpper))
             MilvaIdentityExceptionThrower.ThrowPasswordRequiresUpper();
 
-        if (options.RequiredUniqueChars >= 1 && password.Distinct().Count() < options.RequiredUniqueChars)
+        if (passwordOptions.RequiredUniqueChars >= 1 && password.Distinct().Count() < passwordOptions.RequiredUniqueChars)
             MilvaIdentityExceptionThrower.ThrowPasswordRequiresUniqueChars();
     }
 
@@ -227,9 +226,8 @@ public class MilvaUserManager<TUser, TKey>(Lazy<IDataProtectionProvider> dataPro
         if (string.IsNullOrWhiteSpace(email))
             MilvaIdentityExceptionThrower.ThrowInvalidEmail();
 
-        if (!_emailAddressAttribute.IsValid(email))
+        if (!EmailRegex().IsMatch(email))
             MilvaIdentityExceptionThrower.ThrowInvalidEmail();
-
     }
 
     /// <summary>
@@ -292,4 +290,7 @@ public class MilvaUserManager<TUser, TKey>(Lazy<IDataProtectionProvider> dataPro
         Purpose.PasswordReset => $"Totp:" + purpose + ":" + user.Id,
         _ => string.Empty,
     };
+
+    [GeneratedRegex("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$")]
+    private static partial Regex EmailRegex();
 }
