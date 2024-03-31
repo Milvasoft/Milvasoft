@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Options;
@@ -286,6 +287,9 @@ public static class InterceptionServiceCollectionExtensions
 
         builder.Services.AddSingleton<ICacheInterceptionOptions>(config);
 
+        if (config.IncludeRequestHeadersWhenCaching && !builder.Services.Any(s => s.ServiceType == typeof(IHttpContextAccessor)))
+            builder.Services.AddHttpContextAccessor();
+
         return builder;
     }
 
@@ -310,6 +314,37 @@ public static class InterceptionServiceCollectionExtensions
         {
             opt.InterceptorLifetime = options.InterceptorLifetime;
             opt.CacheAccessorAssemblyQualifiedName = options.CacheAccessorAssemblyQualifiedName;
+        });
+
+        return builder;
+    }
+
+    /// <summary>
+    /// Adds required services to service collection for configuring milva specific context features.
+    /// </summary>
+    /// <param name="builder"></param>
+    /// <param name="postConfigureAction"></param>
+    /// <returns></returns>
+    public static InterceptionBuilder PostConfigureCacheInterceptionOptions(this InterceptionBuilder builder, Action<CacheInterceptionPostConfigureOptions> postConfigureAction)
+    {
+        if (postConfigureAction == null)
+            throw new MilvaDeveloperException("Please provide post configure options.");
+
+        if (!builder.Services.Any(s => s.ServiceType == typeof(IConfigureOptions<CacheInterceptionOptions>)))
+            throw new MilvaDeveloperException("Please configure options with WithOptions() builder method before post configuring.");
+
+        var config = new CacheInterceptionPostConfigureOptions();
+
+        postConfigureAction.Invoke(config);
+
+        builder.Services.UpdateSingletonInstance<ICacheInterceptionOptions>(opt =>
+        {
+            opt.CacheKeyConfigurator = config.CacheKeyConfigurator ?? opt.CacheKeyConfigurator;
+        });
+
+        builder.Services.PostConfigure<CacheInterceptionOptions>(opt =>
+        {
+            opt.CacheKeyConfigurator = config.CacheKeyConfigurator ?? opt.CacheKeyConfigurator;
         });
 
         return builder;

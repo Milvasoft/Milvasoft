@@ -6,6 +6,8 @@ using System.Linq.Expressions;
 
 namespace Milvasoft.UnitTests.CoreTests.MultiLanguageTests;
 
+[System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1860:Avoid using 'Enumerable.Any()' extension method", Justification = "<Pending>")]
+[System.Diagnostics.CodeAnalysis.SuppressMessage("Minor Code Smell", "S1125:Boolean literals should not be redundant", Justification = "<Pending>")]
 public class MultiLanguageExtensionsTest
 {
     #region CreateProjectionExpression
@@ -54,7 +56,7 @@ public class MultiLanguageExtensionsTest
         IEnumerable<string> translationEntityPropNames = [nameof(TranslationEntityFixture.Name)];
         Expression<Func<HasTranslationEntityFixture, HasTranslationEntityFixture>> expected = c => new HasTranslationEntityFixture
         {
-            Translations = (ICollection<TranslationEntityFixture>)(c.Translations == null ? null : c.Translations
+            Translations = (ICollection<TranslationEntityFixture>)(c.Translations.Any() == false ? null : c.Translations
                                                                                                     .Select(t => new TranslationEntityFixture
                                                                                                     {
                                                                                                         Name = t.Name,
@@ -78,7 +80,7 @@ public class MultiLanguageExtensionsTest
         Expression<Func<HasTranslationEntityFixture, HasTranslationEntityFixture>> expected = c => new HasTranslationEntityFixture
         {
             Priority = c.Priority,
-            Translations = (ICollection<TranslationEntityFixture>)(c.Translations == null ? null : c.Translations
+            Translations = (ICollection<TranslationEntityFixture>)(c.Translations.Any() == false ? null : c.Translations
                                                                                                     .Select(t => new TranslationEntityFixture
                                                                                                     {
                                                                                                         Name = t.Name,
@@ -94,7 +96,7 @@ public class MultiLanguageExtensionsTest
     }
 
     [Fact]
-    public void CreateTranslationMapExpression_WithReturnedExpressionUsedWithNullTranslations_ShouldCorrectExpression()
+    public void CreateTranslationMapExpression_WithReturnedExpressionUsedWithEmptyTranslations_ShouldCorrectExpression()
     {
         // Arrange
         List<HasTranslationEntityFixture> entities =
@@ -103,7 +105,7 @@ public class MultiLanguageExtensionsTest
             {
                 Id = 1,
                 Priority = 1,
-                Translations = null
+                Translations = []
             }
         ];
         IEnumerable<string> mainEntityPropNames = [nameof(HasTranslationEntityFixture.Priority)];

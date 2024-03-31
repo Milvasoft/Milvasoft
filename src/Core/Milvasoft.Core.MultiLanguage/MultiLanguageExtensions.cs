@@ -1,12 +1,18 @@
 ﻿using Milvasoft.Core.MultiLanguage.EntityBases;
 using Milvasoft.Core.MultiLanguage.EntityBases.Abstract;
 using System.Linq.Expressions;
+using System.Reflection;
 
 namespace Milvasoft.Core.MultiLanguage;
 public static class MultiLanguageExtensions
 {
     private const string _sourceParameterName = "c";
-    private const string _translationsParameterName = "t";
+    private const string _translationParameterName = "t";
+    private static readonly MethodInfo _anyWithPredicateMethodInfo = typeof(Enumerable).GetMethods(BindingFlags.Static | BindingFlags.Public)
+                                                                                                  .Last(mi => mi.Name == nameof(Enumerable.Any)
+                                                                                                              && mi.GetParameters().Length == 2);
+    private static readonly MethodInfo _anyMethodInfo = typeof(Enumerable).GetMethods(BindingFlags.Static | BindingFlags.Public)
+                                                                                     .Last(mi => mi.Name == nameof(Enumerable.Any) && mi.GetParameters().Length == 1);
 
     /// <summary>
     /// Creates projection expression with requested properties for <see cref="IHasTranslation{TTranslationEntity}"/>.
@@ -33,7 +39,7 @@ public static class MultiLanguageExtensions
         {
             translationEntityPropertyNames = translationEntityPropertyNames.Append(MultiLanguageEntityPropertyNames.LanguageId);
 
-            var translationParameter = Expression.Parameter(translationEntityType, _translationsParameterName);
+            var translationParameter = Expression.Parameter(translationEntityType, _translationParameterName);
 
             var translationBindings = translationEntityPropertyNames.Select(propName => Expression.Bind(translationEntityType.GetProperty(propName),
                                                                                                         Expression.Property(translationParameter, propName)));
@@ -55,8 +61,8 @@ public static class MultiLanguageExtensions
                                                               [translationEntityType],
                                                               selectExpressionForTranslations);
 
-            expressionForTranslations = CreateTranslationsNullCheckExpression<TTranslationEntity, List<TTranslationEntity>>(translationsPropertyExpression,
-                                                                                                                                   selectExpressionForTranslations);
+            expressionForTranslations = CreateTranslationsAnyCheckExpression<TTranslationEntity, List<TTranslationEntity>>(translationsPropertyExpression,
+                                                                                                                            selectExpressionForTranslations);
 
             if (!mainEntityPropertyNameTempList.Exists(i => i == MultiLanguageEntityPropertyNames.Translations))
                 mainEntityPropertyNameTempList.Add(MultiLanguageEntityPropertyNames.Translations);
@@ -129,15 +135,54 @@ public static class MultiLanguageExtensions
     /// <param name="translationsPropertyExpression">The member expression representing the translations property.</param>
     /// <param name="expression">The expression to be returned if the translations property is not null.</param>
     /// <returns>The conditional expression to check if the translations property is null. Sample result; x => x.Translations == null ? null : <paramref name="expression"/></returns>
-    internal static ConditionalExpression CreateTranslationsNullCheckExpression<TTranslationEntity, TReturn>(MemberExpression translationsPropertyExpression, Expression expression)
+    internal static ConditionalExpression CreateTranslationsAnyCheckExpression<TTranslationEntity, TReturn>(MemberExpression translationsPropertyExpression, Expression expression)
     {
-        // src.Translations == null
-        var translationsPropertyIsNullExpression = Expression.Equal(translationsPropertyExpression, Expression.Constant(null, typeof(ICollection<TTranslationEntity>)));
+        // src.Translations.Any()
+        var anyExpression = CreateTranslationsAnyExpression<TTranslationEntity>(translationsPropertyExpression, null);
 
-        var translationNullCheckExpression = Expression.Condition(translationsPropertyIsNullExpression,
+        // src.Translations.Any() == false
+        var translationsPropertyAnyExpression = Expression.Equal(anyExpression, Expression.Constant(false));
+
+        var translationNullCheckExpression = Expression.Condition(translationsPropertyAnyExpression,
                                                                   Expression.Constant(null, typeof(TReturn)),
                                                                   expression);
 
         return translationNullCheckExpression;
+    }
+
+    //src.Translations.Any(i => (i.LanguageId == languageId))
+    internal static MethodCallExpression CreateTranslationsAnyExpression<TTranslationEntity>(MemberExpression translationsPropertyExpression, int? languageId = null)
+    {
+        if (languageId.HasValue)
+        {
+            // Create a parameter for the language entity => i
+            var translationEntityParameter = Expression.Parameter(typeof(TTranslationEntity), _translationParameterName);
+
+            // i.LanguageId
+            var languageIdProperty = Expression.Property(translationEntityParameter, MultiLanguageEntityPropertyNames.LanguageId);
+
+            // Get the "Any" method of the Enumerable class with the appropriate generic type
+            var genericAnyWithPredicateMethod = _anyWithPredicateMethodInfo.MakeGenericMethod(typeof(TTranslationEntity));
+
+            // Create constants for the current language ID and the default language ID
+            var languageIdConstant = Expression.Constant(languageId);
+
+            // i.LanguageId == currentLanguageIdConstant
+            var languageIdEqualityExpression = Expression.Equal(languageIdProperty, languageIdConstant);
+
+            // i => i.LanguageId == currentLanguageIdConstant
+            var languageIdEqualityLambdaExpression = Expression.Lambda<Func<TTranslationEntity, bool>>(languageIdEqualityExpression, translationEntityParameter);
+
+            // src.Translations.Any(i => (i.LanguageId == currentLanguageIdConstant))
+            return Expression.Call(genericAnyWithPredicateMethod, translationsPropertyExpression, languageIdEqualityLambdaExpression);
+        }
+        else
+        {
+            // Get the "Any" method of the Enumerable class with the appropriate generic type
+            var genericAnyWithPredicateMethod = _anyMethodInfo.MakeGenericMethod(typeof(TTranslationEntity));
+
+            // src.Translations.Any()
+            return Expression.Call(genericAnyWithPredicateMethod, translationsPropertyExpression);
+        }
     }
 }

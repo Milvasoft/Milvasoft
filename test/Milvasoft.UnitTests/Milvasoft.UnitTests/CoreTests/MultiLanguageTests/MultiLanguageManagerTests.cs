@@ -7,6 +7,8 @@ using System.Linq.Expressions;
 
 namespace Milvasoft.UnitTests.CoreTests.MultiLanguageTests;
 
+[System.Diagnostics.CodeAnalysis.SuppressMessage("Major Code Smell", "S3358:Ternary operators should not be nested", Justification = "<Pending>")]
+[System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1860:Avoid using 'Enumerable.Any()' extension method", Justification = "<Pending>")]
 public class MultiLanguageManagerTests
 {
     #region UpdateLanguagesList
@@ -329,7 +331,7 @@ public class MultiLanguageManagerTests
     }
 
     [Fact]
-    public void CreateTranslationMapExpression_WithTranslationsIsNullAndCurrentOrDefaultAndCurrentLanguageAndDefaultLanguageIsDifferent_ShouldCorrectExpression()
+    public void CreateTranslationMapExpression_WithTranslationsIsEmptyAndCurrentOrDefaultAndCurrentLanguageAndDefaultLanguageIsDifferent_ShouldCorrectExpression()
     {
         // Arrange
         List<ILanguage> languages =
@@ -356,17 +358,17 @@ public class MultiLanguageManagerTests
             new HasTranslationEntityFixture
             {
                 Id = 1,
-                Translations = null
+                Translations = []
             }
         ];
         MultiLanguageManager.UpdateLanguagesList(languages);
         CultureInfo.CurrentCulture = new CultureInfo("tr-TR");
         var manager = new MilvaMultiLanguageManager();
-        Expression<Func<HasTranslationEntityFixture, string>> expectedExpression = src => src.Translations != null
-                                                                                                ? (null == src.Translations.FirstOrDefault(i => i.LanguageId == 2)
-                                                                                                    ? src.Translations.FirstOrDefault(i => i.LanguageId == 1) != null
+        Expression<Func<HasTranslationEntityFixture, string>> expectedExpression = src => src.Translations.Any()
+                                                                                                ? (!src.Translations.Any(i => i.LanguageId == 2)
+                                                                                                    ? src.Translations.Any(i => i.LanguageId == 1)
                                                                                                             ? src.Translations.FirstOrDefault(i => i.LanguageId == 1).Name
-                                                                                                            : src.Translations.FirstOrDefault().Name != null
+                                                                                                            : src.Translations.Any()
                                                                                                                 ? src.Translations.FirstOrDefault().Name
                                                                                                                 : null
                                                                                                     : src.Translations.FirstOrDefault(i => i.LanguageId == 2).Name)
@@ -432,11 +434,11 @@ public class MultiLanguageManagerTests
         MultiLanguageManager.UpdateLanguagesList(languages);
         CultureInfo.CurrentCulture = new CultureInfo("tr-TR");
         var manager = new MilvaMultiLanguageManager();
-        Expression<Func<HasTranslationEntityFixture, string>> expectedExpression = src => src.Translations != null
-                                                                                            ? null == src.Translations.FirstOrDefault(i => i.LanguageId == 2)
-                                                                                                ? src.Translations.FirstOrDefault(i => i.LanguageId == 1) != null
+        Expression<Func<HasTranslationEntityFixture, string>> expectedExpression = src => src.Translations.Any()
+                                                                                            ? !src.Translations.Any(i => i.LanguageId == 2)
+                                                                                                ? src.Translations.Any(i => i.LanguageId == 1)
                                                                                                         ? src.Translations.FirstOrDefault(i => i.LanguageId == 1).Name
-                                                                                                        : src.Translations.FirstOrDefault().Name != null
+                                                                                                        : src.Translations.Any()
                                                                                                             ? src.Translations.FirstOrDefault().Name
                                                                                                             : null
                                                                                                 : src.Translations.FirstOrDefault(i => i.LanguageId == 2).Name
@@ -502,11 +504,11 @@ public class MultiLanguageManagerTests
         MultiLanguageManager.UpdateLanguagesList(languages);
         CultureInfo.CurrentCulture = new CultureInfo("tr-TR");
         var manager = new MilvaMultiLanguageManager();
-        Expression<Func<HasTranslationEntityFixture, string>> expectedExpression = src => (src.Translations != null
-                                                                                            ? src.Translations.FirstOrDefault(i => i.LanguageId == 2) == null
-                                                                                                ? src.Translations.FirstOrDefault(i => i.LanguageId == 1) != null
+        Expression<Func<HasTranslationEntityFixture, string>> expectedExpression = src => (src.Translations.Any()
+                                                                                            ? !src.Translations.Any(i => i.LanguageId == 2)
+                                                                                                ? src.Translations.Any(i => i.LanguageId == 1)
                                                                                                         ? src.Translations.FirstOrDefault(i => i.LanguageId == 1).Name
-                                                                                                        : src.Translations.FirstOrDefault().Name != null
+                                                                                                        : src.Translations.Any()
                                                                                                             ? src.Translations.FirstOrDefault().Name
                                                                                                             : null
                                                                                                 : src.Translations.FirstOrDefault(i => i.LanguageId == 2).Name
@@ -523,7 +525,7 @@ public class MultiLanguageManagerTests
     }
 
     [Fact]
-    public void CreateTranslationMapExpression_WithTranslationsIsNullAndCurrentOrDefaultAndCurrentLanguageAndDefaultLanguageIsSame_ShouldCorrectExpression()
+    public void CreateTranslationMapExpression_WithTranslationsIsEmptyAndCurrentOrDefaultAndCurrentLanguageAndDefaultLanguageIsSame_ShouldCorrectExpression()
     {
         // Arrange
         List<ILanguage> languages =
@@ -550,16 +552,16 @@ public class MultiLanguageManagerTests
             new HasTranslationEntityFixture
             {
                 Id = 1,
-                Translations = null
+                Translations = []
             }
         ];
         MultiLanguageManager.UpdateLanguagesList(languages);
         CultureInfo.CurrentCulture = new CultureInfo("en-US");
         var manager = new MilvaMultiLanguageManager();
-        Expression<Func<HasTranslationEntityFixture, string>> expectedExpression = src => src.Translations != null
-                                                                                            ? src.Translations.FirstOrDefault(i => i.LanguageId == 1) != null
+        Expression<Func<HasTranslationEntityFixture, string>> expectedExpression = src => src.Translations.Any()
+                                                                                            ? src.Translations.Any(i => i.LanguageId == 1)
                                                                                                 ? src.Translations.FirstOrDefault(i => i.LanguageId == 1).Name
-                                                                                                : src.Translations.FirstOrDefault().Name != null
+                                                                                                : src.Translations.Any()
                                                                                                     ? src.Translations.FirstOrDefault().Name
                                                                                                     : null
                                                                                             : null;
@@ -624,10 +626,10 @@ public class MultiLanguageManagerTests
         MultiLanguageManager.UpdateLanguagesList(languages);
         CultureInfo.CurrentCulture = new CultureInfo("en-US");
         var manager = new MilvaMultiLanguageManager();
-        Expression<Func<HasTranslationEntityFixture, string>> expectedExpression = src => src.Translations != null
-                                                                                            ? src.Translations.FirstOrDefault(i => i.LanguageId == 1) != null
+        Expression<Func<HasTranslationEntityFixture, string>> expectedExpression = src => src.Translations.Any()
+                                                                                            ? src.Translations.Any(i => i.LanguageId == 1)
                                                                                                 ? src.Translations.FirstOrDefault(i => i.LanguageId == 1).Name
-                                                                                                : src.Translations.FirstOrDefault().Name != null
+                                                                                                : src.Translations.Any()
                                                                                                     ? src.Translations.FirstOrDefault().Name
                                                                                                     : null
                                                                                             : null;
@@ -692,10 +694,10 @@ public class MultiLanguageManagerTests
         MultiLanguageManager.UpdateLanguagesList(languages);
         CultureInfo.CurrentCulture = new CultureInfo("en-US");
         var manager = new MilvaMultiLanguageManager();
-        Expression<Func<HasTranslationEntityFixture, string>> expectedExpression = src => src.Translations != null
-                                                                                            ? src.Translations.FirstOrDefault(i => i.LanguageId == 1) != null
+        Expression<Func<HasTranslationEntityFixture, string>> expectedExpression = src => src.Translations.Any()
+                                                                                            ? src.Translations.Any(i => i.LanguageId == 1)
                                                                                                 ? src.Translations.FirstOrDefault(i => i.LanguageId == 1).Name
-                                                                                                : src.Translations.FirstOrDefault().Name != null
+                                                                                                : src.Translations.Any()
                                                                                                     ? src.Translations.FirstOrDefault().Name
                                                                                                     : null
                                                                                             : null;
