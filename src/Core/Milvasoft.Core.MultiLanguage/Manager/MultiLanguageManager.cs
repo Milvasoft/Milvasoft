@@ -16,8 +16,12 @@ public abstract class MultiLanguageManager : IMultiLanguageManager
     #region Static fields for reflection
     private const string _sourceParameterName = "src";
     private const string _parameterName = "i";
-    private static readonly MethodInfo _getTranslationMethodInfo = typeof(MultiLanguageManager).GetMethod(nameof(GetTranslation));
-    private static readonly MethodInfo _firstOrDefaultWithPredicateMethodInfo = typeof(Enumerable).GetMethods(BindingFlags.Static | BindingFlags.Public).Last(mi => mi.Name == nameof(Enumerable.FirstOrDefault) && mi.GetParameters().Length == 2);
+    private static readonly MethodInfo _getTranslationMethodInfo = typeof(MultiLanguageManager).GetGenericMethod(nameof(GetTranslation), 1, typeof(IEnumerable<>), typeof(string));
+    private static readonly MethodInfo _firstOrDefaultWithPredicateMethodInfo = typeof(Enumerable).GetMethods(BindingFlags.Static | BindingFlags.Public)
+                                                                                                  .Last(mi => mi.Name == nameof(Enumerable.FirstOrDefault)
+                                                                                                              && mi.GetParameters().Length == 2);
+    private static readonly MethodInfo _firstOrDefaultMethodInfo = typeof(Enumerable).GetMethods(BindingFlags.Static | BindingFlags.Public)
+                                                                                     .Last(mi => mi.Name == nameof(Enumerable.FirstOrDefault) && mi.GetParameters().Length == 1);
     #endregion
     protected readonly IServiceProvider _serviceProvider;
 
@@ -93,86 +97,159 @@ public abstract class MultiLanguageManager : IMultiLanguageManager
         where TEntity : class, IHasTranslation<TTranslationEntity>
         where TTranslationEntity : class, ITranslationEntity<TEntity>
     {
+
         if (propertyExpression == null)
             return null;
+
+        Expression<Func<TEntity, string>> resultLambdaExpression;
 
         // Create a parameter for the source entity => src
         var entityParameter = Expression.Parameter(typeof(TEntity), _sourceParameterName);
 
         // Get the "Translations" property of the source entity => src.Translations
         var translationsPropertyExpression = Expression.Property(entityParameter, nameof(MultiLanguageEntityPropertyNames.Translations));
-
-        // src.Translations.FirstOrDefault(i => (i.LanguageId == currentLanguageIdConstant))
-        var translationsFirstOrDefaultEqualityExpression = CreateTranslationsFirstOrDefaultEqualityExpression();
-
+        var currentLanguageId = GetCurrentLanguageId();
+        var defaultLanguageId = GetDefaultLanguageId();
         var propertyName = propertyExpression.GetPropertyName();
 
-        // src.Translations.FirstOrDefault(i => (i.LanguageId == currentLanguageIdConstant) ||(i.LanguageId == defaultLanguageIdConstant) ||(i.LanguageId == i.LanguageId)).PropertyName
-        var propertyOfTranslationsFirstOrDefaultEqualityExpression = Expression.Property(translationsFirstOrDefaultEqualityExpression,
-                                                                                         propertyName);
+        // src.Translations.FirstOrDefault(i => (i.LanguageId == currentLanguageIdConstant))
+        var translationsFirstOrDefaultWithCurrentLanguageIdEqualityExpression = CreateTranslationsFirstOrDefaultWithLanguageEqualityExpression(currentLanguageId);
 
-        var resultExpression = MultiLanguageExtensions.CreateTranslationsNullCheckExpression<TTranslationEntity, string>(translationsPropertyExpression,
-                                                                                                                         propertyOfTranslationsFirstOrDefaultEqualityExpression);
+        // src.Translations.FirstOrDefault(i => (i.LanguageId == currentLanguageIdConstant)).PropertyName
+        var propertyOfTranslationsFirstOrDefaultWithCurrentLanguageIdEqualityExpression = Expression.Property(translationsFirstOrDefaultWithCurrentLanguageIdEqualityExpression, propertyName);
 
-        // Create a lambda expression that represents the final expression to retrieve the language-specific value of the property
-        Expression<Func<TEntity, string>> resultLambdaExpression = Expression.Lambda<Func<TEntity, string>>(resultExpression, entityParameter);
+        if (currentLanguageId != defaultLanguageId)
+        {
+            // src.Translations.FirstOrDefault(i => (i.LanguageId == currentLanguageIdConstant)) == null
+            var translationsFirstOrDefaultWithCurrentLanguageIdEqualityIsNullExpression = Expression.Equal(translationsFirstOrDefaultWithCurrentLanguageIdEqualityExpression, Expression.Constant(null));
+
+            // Create a conditional expression to determine the final language-specific value of the property
+            var translationsFirstOrDefaultWithCurrentLanguageIdNullCheckExpression = Expression.Condition(translationsFirstOrDefaultWithCurrentLanguageIdEqualityIsNullExpression,
+                                                                                                          CreateTranslationsFirstOrDefaultWithDefaultLanguageWithNullCheckExpression(),
+                                                                                                          propertyOfTranslationsFirstOrDefaultWithCurrentLanguageIdEqualityExpression);
+
+            var resultExpression = MultiLanguageExtensions.CreateTranslationsNullCheckExpression<TTranslationEntity, string>(translationsPropertyExpression, translationsFirstOrDefaultWithCurrentLanguageIdNullCheckExpression);
+
+            // Create a lambda expression that represents the final expression to retrieve the language-specific value of the property
+            resultLambdaExpression = Expression.Lambda<Func<TEntity, string>>(resultExpression, entityParameter);
+        }
+        else
+        {
+            var translationsFirstOrDefaultWithDefaultLanguageWithNullCheckExpression = CreateTranslationsFirstOrDefaultWithDefaultLanguageWithNullCheckExpression();
+
+            var resultExpression = MultiLanguageExtensions.CreateTranslationsNullCheckExpression<TTranslationEntity, string>(translationsPropertyExpression, translationsFirstOrDefaultWithDefaultLanguageWithNullCheckExpression);
+
+            // Create a lambda expression that represents the final expression to retrieve the language-specific value of the property
+            resultLambdaExpression = Expression.Lambda<Func<TEntity, string>>(resultExpression, entityParameter);
+        }
 
         // Return the lambda expression
         return resultLambdaExpression;
 
-        MethodCallExpression CreateTranslationsFirstOrDefaultEqualityExpression()
+        ConditionalExpression CreateTranslationsFirstOrDefaultWithDefaultLanguageWithNullCheckExpression()
         {
+            // src.Translations.FirstOrDefault(i => (i.LanguageId == defaultLanguageIdConstant))
+            var translationsFirstOrDefaultWithDefaultLanguageIdEqualityExpression = CreateTranslationsFirstOrDefaultWithLanguageEqualityExpression(defaultLanguageId);
+
+            // src.Translations.FirstOrDefault(i => (i.LanguageId == defaultLanguageIdConstant)).PropertyName
+            var propertyOfTranslationsFirstOrDefaultWithDefaultLanguageIdEqualityExpression = Expression.Property(translationsFirstOrDefaultWithDefaultLanguageIdEqualityExpression, propertyName);
+
+            // src.Translations.FirstOrDefault(i => i.LanguageId == defaultLanguageIdConstant) != null
+            var translationsFirstOrDefaultWithDefaultLanguageIdEqualityIsNotNullExpression = Expression.NotEqual(translationsFirstOrDefaultWithDefaultLanguageIdEqualityExpression, Expression.Constant(null));
+
+            // Get the "FirstOrDefault" method of the Enumerable class with the appropriate generic type
+            var genericFirstOrDefaultMethod = _firstOrDefaultMethodInfo.MakeGenericMethod(typeof(TTranslationEntity));
+
+            // src.Translations.FirstOrDefault()
+            var translationsFirstOrDefaultExpression = Expression.Call(genericFirstOrDefaultMethod, translationsPropertyExpression); // src.Translations.FirstOrDefault()
+
+            // src.Translations.FirstOrDefault().PropertyName
+            var propertyOfTranslationsFirstOrDefaultExpression = Expression.Property(translationsFirstOrDefaultExpression, propertyName); //src.Translations.FirstOrDefault().PropertyName
+
+            var translationsFirstOrDefaultWithDefaultLanguageWithNullCheckExpression = Expression.Condition(translationsFirstOrDefaultWithDefaultLanguageIdEqualityIsNotNullExpression,
+                                                                                                            propertyOfTranslationsFirstOrDefaultWithDefaultLanguageIdEqualityExpression,
+                                                                                                            Expression.Condition(Expression.NotEqual(propertyOfTranslationsFirstOrDefaultExpression, Expression.Constant(null)),
+                                                                                                                                 propertyOfTranslationsFirstOrDefaultExpression,
+                                                                                                                                 Expression.Constant(null, typeof(string))));
+
+            return translationsFirstOrDefaultWithDefaultLanguageWithNullCheckExpression;
+        }
+
+        MethodCallExpression CreateTranslationsFirstOrDefaultWithLanguageEqualityExpression(int languageId)
+        {
+            // Create constants for the current language ID and the default language ID
+            var languageIdConstant = Expression.Constant(languageId);
+
             // Create a parameter for the language entity => i
             var translationEntityParameter = Expression.Parameter(typeof(TTranslationEntity), _parameterName);
 
             // i.LanguageId
             var languageIdProperty = Expression.Property(translationEntityParameter, MultiLanguageEntityPropertyNames.LanguageId);
 
-            var currentLanguageIdConstant = Expression.Constant(GetCurrentLanguageId());
-
-            var defaultLanguageIdConstant = Expression.Constant(GetDefaultLanguageId());
-
-            var currentlanguageIdEqualExpression = Expression.Equal(languageIdProperty, currentLanguageIdConstant);
-
-            var defualtlanguageIdEqualExpression = Expression.Equal(languageIdProperty, defaultLanguageIdConstant);
-
-            var languageIdEqualsLanguageIdExpression = Expression.Equal(languageIdProperty, languageIdProperty);
-
-            // Create an expression to check if the language ID of the language entity is equal to the current language ID or default language ID or get first
-            var equalityExpression = Expression.OrElse(Expression.OrElse(currentlanguageIdEqualExpression, defualtlanguageIdEqualExpression), languageIdEqualsLanguageIdExpression);
-
             // Get the "FirstOrDefault" method of the Enumerable class with the appropriate generic type
             var genericFirstOrDefaultWithPredicateMethod = _firstOrDefaultWithPredicateMethodInfo.MakeGenericMethod(typeof(TTranslationEntity));
 
-            // i => i.LanguageId == currentLanguageId || i.LanguageId == defaultLanguageId || i.LanguageId == i.LanguageId
-            var languageIdEqualityLambdaExpression = Expression.Lambda<Func<TTranslationEntity, bool>>(equalityExpression, translationEntityParameter);
+            // i.LanguageId == currentLanguageIdConstant
+            var languageIdEqualityExpression = Expression.Equal(languageIdProperty, languageIdConstant);
 
-            // src.Translations.FirstOrDefault(i => i.LanguageId == currentLanguageId || i.LanguageId == defaultLanguageId || i.LanguageId == i.LanguageId)
-            var translationsFirstOrDefaultEqualityExpression = Expression.Call(genericFirstOrDefaultWithPredicateMethod,
-                                                                               translationsPropertyExpression,
-                                                                               languageIdEqualityLambdaExpression);
+            // i => i.LanguageId == currentLanguageIdConstant
+            var languageIdEqualityLambdaExpression = Expression.Lambda<Func<TTranslationEntity, bool>>(languageIdEqualityExpression, translationEntityParameter);
 
-            return translationsFirstOrDefaultEqualityExpression;
+            // src.Translations.FirstOrDefault(i => (i.LanguageId == currentLanguageIdConstant))
+            var translationsFirstOrDefaultWithLanguageIdEqualityExpression = Expression.Call(genericFirstOrDefaultWithPredicateMethod, translationsPropertyExpression, languageIdEqualityLambdaExpression);
+
+            return translationsFirstOrDefaultWithLanguageIdEqualityExpression;
         }
     }
 
     /// <summary>
     /// Gets the value of the requested translation property.
     /// </summary>
-    /// <typeparam name="TEntity">The type of the translation entity.</typeparam>
+    /// <typeparam name="TTRanslationEntity">The type of the translation entity.</typeparam>
     /// <param name="translations">The list of translations.</param>
     /// <param name="propertyName">The name of the requested translation property.</param>
     /// <returns>The value of the requested translation property.</returns>
-    public virtual string GetTranslationValue<TEntity>(IEnumerable<TEntity> translations, Expression<Func<TEntity, string>> propertyName)
+    public virtual string GetTranslation<TTRanslationEntity>(IEnumerable<TTRanslationEntity> translations, string propertyName)
+    {
+        if (translations.IsNullOrEmpty() || string.IsNullOrWhiteSpace(propertyName) || !typeof(TTRanslationEntity).CanAssignableTo(typeof(ITranslationEntity<>)))
+            return string.Empty;
+
+        TTRanslationEntity requestedLang;
+
+        var currentLanguageId = GetCurrentLanguageId();
+        var defaultLanguageId = GetDefaultLanguageId();
+
+        if (currentLanguageId != defaultLanguageId)
+            requestedLang = GetLanguageValue(currentLanguageId) ?? GetLanguageValue(defaultLanguageId);
+        else
+            requestedLang = GetLanguageValue(defaultLanguageId);
+
+        requestedLang ??= translations.FirstOrDefault();
+
+        return requestedLang.GetType().GetPublicPropertyIgnoreCase(propertyName).GetValue(requestedLang, null)?.ToString();
+
+        TTRanslationEntity GetLanguageValue(int languageId) => translations.FirstOrDefault(t => (int)t.GetType()
+                                                                                                      .GetProperty(MultiLanguageEntityPropertyNames.LanguageId)
+                                                                                                      .GetValue(t) == languageId);
+    }
+
+    /// <summary>
+    /// Gets the value of the requested translation property.
+    /// </summary>
+    /// <typeparam name="TTranslationEntity">The type of the translation entity.</typeparam>
+    /// <param name="translations">The list of translations.</param>
+    /// <param name="propertyName">The name of the requested translation property.</param>
+    /// <returns>The value of the requested translation property.</returns>
+    public virtual string GetTranslation<TTranslationEntity>(IEnumerable<TTranslationEntity> translations, Expression<Func<TTranslationEntity, string>> propertyName)
         => GetTranslation(translations, propertyName.GetPropertyName());
 
     /// <summary>
     /// Get the value of the requested translation property.
     /// </summary>
-    /// <param name="obj">The object to get the translation property value from.</param>
+    /// <param name="obj">The object which implements <see cref="IHasTranslation{TTranslationEntity}"/> to get the translation property value from.</param>
     /// <param name="propertyName">The name of the requested translation property.</param>
     /// <returns>The value of the requested translation property.</returns>
-    public virtual string GetTranslationPropertyValue(object obj, string propertyName)
+    public virtual string GetTranslation(object obj, string propertyName)
     {
         if (obj == null || !obj.GetType().CanAssignableTo(typeof(IHasTranslation<>)))
             return string.Empty;
@@ -187,37 +264,6 @@ public abstract class MultiLanguageManager : IMultiLanguageManager
         var getTranslationMethod = _getTranslationMethodInfo.MakeGenericMethod(translationEntityType);
 
         return (string)getTranslationMethod.Invoke(this, [translations, propertyName]);
-    }
-
-    /// <summary>
-    /// Gets the value of the requested translation property.
-    /// </summary>
-    /// <typeparam name="TEntity">The type of the translation entity.</typeparam>
-    /// <param name="translations">The list of translations.</param>
-    /// <param name="propertyName">The name of the requested translation property.</param>
-    /// <returns>The value of the requested translation property.</returns>
-    public virtual string GetTranslation<TEntity>(IEnumerable<TEntity> translations, string propertyName)
-    {
-        if (translations.IsNullOrEmpty() || string.IsNullOrWhiteSpace(propertyName) || !typeof(TEntity).CanAssignableTo(typeof(ITranslationEntity<>)))
-            return string.Empty;
-
-        TEntity requestedLang;
-
-        var currentLanguageId = GetCurrentLanguageId();
-        var defaultLanguageId = GetDefaultLanguageId();
-
-        if (currentLanguageId != defaultLanguageId)
-            requestedLang = GetLanguageValue(currentLanguageId) ?? GetLanguageValue(defaultLanguageId);
-        else
-            requestedLang = GetLanguageValue(defaultLanguageId);
-
-        requestedLang ??= translations.FirstOrDefault();
-
-        return requestedLang.GetType().GetPublicPropertyIgnoreCase(propertyName).GetValue(requestedLang, null)?.ToString();
-
-        TEntity GetLanguageValue(object languageId) => translations.FirstOrDefault(translation => translation.GetType()
-                                                                                                             .GetProperty(MultiLanguageEntityPropertyNames.LanguageId)
-                                                                                                             .GetValue(translation) == languageId);
     }
 }
 

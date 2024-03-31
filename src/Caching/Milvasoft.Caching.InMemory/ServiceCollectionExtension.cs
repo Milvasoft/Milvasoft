@@ -43,10 +43,12 @@ public static class ServiceCollectionExtension
                     cacheBuilder.Services.AddSingleton<ICacheOptions<InMemoryCacheOptions>>(cachingOptions);
 
                 cacheBuilder.Services.Add(ServiceDescriptor.Describe(typeof(ICacheAccessor<MemoryCacheAccessor>), typeof(MemoryCacheAccessor), cachingOptions.AccessorLifetime));
+                cacheBuilder.Services.Add(ServiceDescriptor.Describe(typeof(IMemoryCacheAccessor), typeof(MemoryCacheAccessor), cachingOptions.AccessorLifetime));
             }
             else
             {
                 cacheBuilder.Services.Add(ServiceDescriptor.Describe(typeof(ICacheAccessor<MemoryCacheAccessor>), typeof(MemoryCacheAccessor), ServiceLifetime.Singleton));
+                cacheBuilder.Services.Add(ServiceDescriptor.Describe(typeof(IMemoryCacheAccessor), typeof(MemoryCacheAccessor), ServiceLifetime.Singleton));
             }
         }
 

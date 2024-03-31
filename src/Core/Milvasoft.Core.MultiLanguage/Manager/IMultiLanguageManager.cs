@@ -33,21 +33,13 @@ public interface IMultiLanguageManager
         where TTranslationEntity : class, ITranslationEntity<TEntity>;
 
     /// <summary>
-    /// Get the value of the requested translation property.
-    /// </summary>
-    /// <param name="obj">The object to get the translation property value from.</param>
-    /// <param name="propertyName">The name of the requested translation property.</param>
-    /// <returns>The value of the requested translation property.</returns>
-    public string GetTranslationPropertyValue(object obj, string propertyName);
-
-    /// <summary>
     /// Gets the value of the requested translation property.
     /// </summary>
     /// <typeparam name="TEntity">The type of the translation entity.</typeparam>
     /// <param name="translations">The list of translations.</param>
     /// <param name="propertyName">The name of the requested translation property.</param>
     /// <returns>The value of the requested translation property.</returns>
-    public string GetTranslationValue<TEntity>(IEnumerable<TEntity> translations, Expression<Func<TEntity, string>> propertyName);
+    public string GetTranslation<TEntity>(IEnumerable<TEntity> translations, Expression<Func<TEntity, string>> propertyName);
 
     /// <summary>
     /// Gets the value of the requested translation property.
@@ -57,4 +49,12 @@ public interface IMultiLanguageManager
     /// <param name="propertyName">The name of the requested translation property.</param>
     /// <returns>The value of the requested translation property.</returns>
     public string GetTranslation<TEntity>(IEnumerable<TEntity> translations, string propertyName);
+
+    /// <summary>
+    /// Get the value of the requested translation property.
+    /// </summary>
+    /// <param name="obj">The object to get the translation property value from.</param>
+    /// <param name="propertyName">The name of the requested translation property.</param>
+    /// <returns>The value of the requested translation property.</returns>
+    public string GetTranslation(object obj, string propertyName);
 }

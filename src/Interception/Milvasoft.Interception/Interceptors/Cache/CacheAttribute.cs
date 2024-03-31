@@ -15,9 +15,9 @@ public class CacheAttribute : DecorateAttribute
     public string Key { get; set; } = null;
 
     /// <summary>
-    /// Timeout as second.
+    /// Timeout as second. Default is 300
     /// </summary>
-    public int? Timeout { get; set; } = null;
+    public int? Timeout { get; set; } = 300;
 
     public CacheAttribute(string key) : base(typeof(CacheInterceptor))
     {

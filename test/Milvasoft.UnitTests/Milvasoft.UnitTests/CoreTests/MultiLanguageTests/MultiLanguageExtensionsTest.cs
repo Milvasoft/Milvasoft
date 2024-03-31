@@ -1,10 +1,7 @@
 ﻿using FluentAssertions;
 using Microsoft.EntityFrameworkCore.Query;
 using Milvasoft.Core.MultiLanguage;
-using Milvasoft.Core.MultiLanguage.EntityBases.Abstract;
-using Milvasoft.Core.MultiLanguage.Manager;
 using Milvasoft.UnitTests.CoreTests.MultiLanguageTests.Fixtures;
-using System.Globalization;
 using System.Linq.Expressions;
 
 namespace Milvasoft.UnitTests.CoreTests.MultiLanguageTests;
@@ -22,7 +19,7 @@ public class MultiLanguageExtensionsTest
         Expression<Func<HasTranslationEntityFixture, HasTranslationEntityFixture>> expected = c => c;
 
         // Act
-        var result = MultiLanguageExtensions.CreateProjectionExpression<HasTranslationEntityFixture, TranslationEntityFixture>(mainEntityPropNames, translationEntityPropNames, null);
+        var result = MultiLanguageExtensions.CreateProjectionExpression<HasTranslationEntityFixture, TranslationEntityFixture>(mainEntityPropNames, translationEntityPropNames);
 
         // Assert
         var equality = ExpressionEqualityComparer.Instance.Equals(expected, result);
@@ -41,7 +38,7 @@ public class MultiLanguageExtensionsTest
         };
 
         // Act
-        var result = MultiLanguageExtensions.CreateProjectionExpression<HasTranslationEntityFixture, TranslationEntityFixture>(mainEntityPropNames, translationEntityPropNames, null);
+        var result = MultiLanguageExtensions.CreateProjectionExpression<HasTranslationEntityFixture, TranslationEntityFixture>(mainEntityPropNames, translationEntityPropNames);
 
         // Assert
         var equality = ExpressionEqualityComparer.Instance.Equals(expected, result);
@@ -50,111 +47,47 @@ public class MultiLanguageExtensionsTest
     }
 
     [Fact]
-    public void CreateProjectionExpression_WithMainEntityPropertyNamesNullAndTranslationEntityPropertyNamesIsValidAndMultiLanguageManagerIsNull_ShouldReturnCorrectExpression()
+    public void CreateProjectionExpression_WithMainEntityPropertyNamesNullAndTranslationEntityPropertyNamesIsValid_ShouldReturnCorrectExpression()
     {
         // Arrange
         IEnumerable<string> mainEntityPropNames = null;
         IEnumerable<string> translationEntityPropNames = [nameof(TranslationEntityFixture.Name)];
         Expression<Func<HasTranslationEntityFixture, HasTranslationEntityFixture>> expected = c => new HasTranslationEntityFixture
         {
-            Translations = c.Translations == null ? null : c.Translations.Select(t => new TranslationEntityFixture { Name = t.Name, LanguageId = t.LanguageId }).ToList()
+            Translations = (ICollection<TranslationEntityFixture>)(c.Translations == null ? null : c.Translations
+                                                                                                    .Select(t => new TranslationEntityFixture
+                                                                                                    {
+                                                                                                        Name = t.Name,
+                                                                                                        LanguageId = t.LanguageId
+                                                                                                    }).ToList())
         };
 
         // Act
-        var result = MultiLanguageExtensions.CreateProjectionExpression<HasTranslationEntityFixture, TranslationEntityFixture>(mainEntityPropNames, translationEntityPropNames, null);
+        var result = MultiLanguageExtensions.CreateProjectionExpression<HasTranslationEntityFixture, TranslationEntityFixture>(mainEntityPropNames, translationEntityPropNames);
 
         // Assert
         result.ToString().Should().Be(expected.ToString());
     }
 
     [Fact]
-    public void CreateProjectionExpression_WithMainEntityPropertyNamesNullAndTranslationEntityPropertyNamesIsValidAndMultiLanguageManagerIsValid_ShouldReturnCorrectExpression()
+    public void CreateProjectionExpression_WithMainEntityAndTranslationEntityPropertyNames_ShouldReturnCorrectExpression()
     {
         // Arrange
-        List<ILanguage> languages =
-        [
-            new LanguageModelFixture
-                    {
-                        Id = 1,
-                        Code = "en-US",
-                        IsDefault = true,
-                        Name ="English",
-                        Supported = true,
-                    },
-            new LanguageModelFixture
-            {
-                Id = 2,
-                Code = "tr-TR",
-                IsDefault = false,
-                Name ="Turkish",
-                Supported = true,
-            },
-        ];
-        MultiLanguageManager.UpdateLanguagesList(languages);
-        CultureInfo.CurrentCulture = new CultureInfo("tr-TR");
-        var manager = new MilvaMultiLanguageManager();
-        IEnumerable<string> mainEntityPropNames = null;
-        IEnumerable<string> translationEntityPropNames = [nameof(TranslationEntityFixture.Name)];
-        Expression<Func<HasTranslationEntityFixture, HasTranslationEntityFixture>> expected = c => new HasTranslationEntityFixture
-        {
-            Translations = c.Translations == null ? null : c.Translations
-                                                            .Where(t => t.LanguageId == 2 || t.LanguageId == 1 || t.LanguageId == t.LanguageId)
-                                                            .Select(t => new TranslationEntityFixture
-                                                            {
-                                                                Name = t.Name,
-                                                                LanguageId = t.LanguageId
-                                                            }).ToList()
-        };
-
-        // Act
-        var result = MultiLanguageExtensions.CreateProjectionExpression<HasTranslationEntityFixture, TranslationEntityFixture>(mainEntityPropNames, translationEntityPropNames, manager);
-
-        // Assert
-        result.ToString().Should().Be(expected.ToString());
-    }
-
-    [Fact]
-    public void CreateProjectionExpression_WithMainEntityAndTranslationEntityPropertyNamesAndMultiLanguageManagerIsValid_ShouldReturnCorrectExpression()
-    {
-        // Arrange
-        List<ILanguage> languages =
-        [
-            new LanguageModelFixture
-                    {
-                        Id = 1,
-                        Code = "en-US",
-                        IsDefault = true,
-                        Name ="English",
-                        Supported = true,
-                    },
-            new LanguageModelFixture
-            {
-                Id = 2,
-                Code = "tr-TR",
-                IsDefault = false,
-                Name ="Turkish",
-                Supported = true,
-            },
-        ];
-        MultiLanguageManager.UpdateLanguagesList(languages);
-        CultureInfo.CurrentCulture = new CultureInfo("tr-TR");
-        var manager = new MilvaMultiLanguageManager();
         IEnumerable<string> mainEntityPropNames = [nameof(HasTranslationEntityFixture.Priority)];
         IEnumerable<string> translationEntityPropNames = [nameof(TranslationEntityFixture.Name)];
         Expression<Func<HasTranslationEntityFixture, HasTranslationEntityFixture>> expected = c => new HasTranslationEntityFixture
         {
             Priority = c.Priority,
-            Translations = (c.Translations == null ? null : c.Translations
-                                                             .Where(t => t.LanguageId == 2 || t.LanguageId == 1 || t.LanguageId == t.LanguageId)
-                                                             .Select(t => new TranslationEntityFixture
-                                                             {
-                                                                 Name = t.Name,
-                                                                 LanguageId = t.LanguageId
-                                                             })).ToList()
+            Translations = (ICollection<TranslationEntityFixture>)(c.Translations == null ? null : c.Translations
+                                                                                                    .Select(t => new TranslationEntityFixture
+                                                                                                    {
+                                                                                                        Name = t.Name,
+                                                                                                        LanguageId = t.LanguageId
+                                                                                                    }).ToList())
         };
 
         // Act
-        var result = MultiLanguageExtensions.CreateProjectionExpression<HasTranslationEntityFixture, TranslationEntityFixture>(mainEntityPropNames, translationEntityPropNames, manager);
+        var result = MultiLanguageExtensions.CreateProjectionExpression<HasTranslationEntityFixture, TranslationEntityFixture>(mainEntityPropNames, translationEntityPropNames);
 
         // Assert
         result.ToString().Should().Be(expected.ToString());
@@ -164,25 +97,6 @@ public class MultiLanguageExtensionsTest
     public void CreateTranslationMapExpression_WithReturnedExpressionUsedWithNullTranslations_ShouldCorrectExpression()
     {
         // Arrange
-        List<ILanguage> languages =
-        [
-            new LanguageModelFixture
-            {
-                Id = 1,
-                Code = "en-US",
-                IsDefault = true,
-                Name ="English",
-                Supported = true,
-            },
-            new LanguageModelFixture
-            {
-                Id = 2,
-                Code = "tr-TR",
-                IsDefault = false,
-                Name ="Turkish",
-                Supported = true,
-            },
-        ];
         List<HasTranslationEntityFixture> entities =
         [
             new HasTranslationEntityFixture
@@ -192,16 +106,12 @@ public class MultiLanguageExtensionsTest
                 Translations = null
             }
         ];
-        MultiLanguageManager.UpdateLanguagesList(languages);
-        CultureInfo.CurrentCulture = new CultureInfo("tr-TR");
-        var manager = new MilvaMultiLanguageManager();
         IEnumerable<string> mainEntityPropNames = [nameof(HasTranslationEntityFixture.Priority)];
         IEnumerable<string> translationEntityPropNames = [nameof(TranslationEntityFixture.Name)];
         Expression<Func<HasTranslationEntityFixture, HasTranslationEntityFixture>> expectedExpression = c => new HasTranslationEntityFixture
         {
             Priority = c.Priority,
             Translations = c.Translations == null ? null : c.Translations
-                                                            .Where(t => t.LanguageId == 2 || t.LanguageId == 1 || t.LanguageId == t.LanguageId)
                                                             .Select(t => new TranslationEntityFixture
                                                             {
                                                                 Name = t.Name,
@@ -211,7 +121,7 @@ public class MultiLanguageExtensionsTest
         var expected = entities.AsQueryable().Select(expectedExpression).ToList();
 
         // Act
-        var resultExpression = MultiLanguageExtensions.CreateProjectionExpression<HasTranslationEntityFixture, TranslationEntityFixture>(mainEntityPropNames, translationEntityPropNames, manager);
+        var resultExpression = MultiLanguageExtensions.CreateProjectionExpression<HasTranslationEntityFixture, TranslationEntityFixture>(mainEntityPropNames, translationEntityPropNames);
         var result = entities.AsQueryable().Select(resultExpression).ToList();
 
         // Assert
@@ -219,28 +129,9 @@ public class MultiLanguageExtensionsTest
     }
 
     [Fact]
-    public void CreateTranslationMapExpression_WithReturnedExpressionUsedWithTranslationsNotContainsCurrentOrDefaultLanguage_ShouldCorrectExpression()
+    public void CreateTranslationMapExpression_WithReturnedExpressionUsedWithTranslationsIsValid_ShouldCorrectExpression()
     {
         // Arrange
-        List<ILanguage> languages =
-        [
-            new LanguageModelFixture
-            {
-                Id = 1,
-                Code = "en-US",
-                IsDefault = true,
-                Name ="English",
-                Supported = true,
-            },
-            new LanguageModelFixture
-            {
-                Id = 2,
-                Code = "tr-TR",
-                IsDefault = false,
-                Name ="Turkish",
-                Supported = true,
-            },
-        ];
         List<HasTranslationEntityFixture> entities =
         [
             new HasTranslationEntityFixture
@@ -266,16 +157,12 @@ public class MultiLanguageExtensionsTest
                 ]
             }
         ];
-        MultiLanguageManager.UpdateLanguagesList(languages);
-        CultureInfo.CurrentCulture = new CultureInfo("tr-TR");
-        var manager = new MilvaMultiLanguageManager();
         IEnumerable<string> mainEntityPropNames = [nameof(HasTranslationEntityFixture.Priority)];
         IEnumerable<string> translationEntityPropNames = [nameof(TranslationEntityFixture.Name)];
         Expression<Func<HasTranslationEntityFixture, HasTranslationEntityFixture>> expectedExpression = c => new HasTranslationEntityFixture
         {
             Priority = c.Priority,
             Translations = c.Translations == null ? null : c.Translations
-                                                            .Where(t => t.LanguageId == 2 || t.LanguageId == 1 || t.LanguageId == t.LanguageId)
                                                             .Select(t => new TranslationEntityFixture
                                                             {
                                                                 Name = t.Name,
@@ -285,155 +172,12 @@ public class MultiLanguageExtensionsTest
         var expected = entities.AsQueryable().Select(expectedExpression).ToList();
 
         // Act
-        var resultExpression = MultiLanguageExtensions.CreateProjectionExpression<HasTranslationEntityFixture, TranslationEntityFixture>(mainEntityPropNames, translationEntityPropNames, manager);
+        var resultExpression = MultiLanguageExtensions.CreateProjectionExpression<HasTranslationEntityFixture, TranslationEntityFixture>(mainEntityPropNames, translationEntityPropNames);
         var result = entities.AsQueryable().Select(resultExpression).ToList();
 
         // Assert
         result[0].Priority.Should().Be(expected[0].Priority);
         result[0].Translations.Should().HaveCount(2);
-    }
-
-    [Fact]
-    public void CreateTranslationMapExpression_WithReturnedExpressionUsedWithTranslationsContainsOnlyDefaultLanguage_ShouldCorrectExpression()
-    {
-        // Arrange
-        List<ILanguage> languages =
-        [
-            new LanguageModelFixture
-            {
-                Id = 1,
-                Code = "en-US",
-                IsDefault = true,
-                Name ="English",
-                Supported = true,
-            },
-            new LanguageModelFixture
-            {
-                Id = 2,
-                Code = "tr-TR",
-                IsDefault = false,
-                Name ="Turkish",
-                Supported = true,
-            },
-        ];
-        List<HasTranslationEntityFixture> entities =
-        [
-            new HasTranslationEntityFixture
-            {
-                Id = 1,
-                Priority = 1,
-                Translations =
-                [
-                    new TranslationEntityFixture{
-                        Id = 1,
-                        Name = "First",
-                        Description = "First",
-                        EntityId = 1,
-                        LanguageId = 1
-                    }
-                ]
-            }
-        ];
-        MultiLanguageManager.UpdateLanguagesList(languages);
-        CultureInfo.CurrentCulture = new CultureInfo("tr-TR");
-        var manager = new MilvaMultiLanguageManager();
-        IEnumerable<string> mainEntityPropNames = [nameof(HasTranslationEntityFixture.Priority)];
-        IEnumerable<string> translationEntityPropNames = [nameof(TranslationEntityFixture.Name)];
-        Expression<Func<HasTranslationEntityFixture, HasTranslationEntityFixture>> expectedExpression = c => new HasTranslationEntityFixture
-        {
-            Priority = c.Priority,
-            Translations = c.Translations == null ? null : c.Translations
-                                                            .Where(t => t.LanguageId == 2 || t.LanguageId == 1 || t.LanguageId == t.LanguageId)
-                                                            .Select(t => new TranslationEntityFixture
-                                                            {
-                                                                Name = t.Name,
-                                                                LanguageId = t.LanguageId
-                                                            }).ToList()
-        };
-        var expected = entities.AsQueryable().Select(expectedExpression).ToList();
-
-        // Act
-        var resultExpression = MultiLanguageExtensions.CreateProjectionExpression<HasTranslationEntityFixture, TranslationEntityFixture>(mainEntityPropNames, translationEntityPropNames, manager);
-        var result = entities.AsQueryable().Select(resultExpression).ToList();
-
-        // Assert
-        result[0].Priority.Should().Be(expected[0].Priority);
-        result[0].Translations.First().Name.Should().Be(expected[0].Translations.First().Name);
-    }
-
-    [Fact]
-    public void CreateTranslationMapExpression_WithReturnedExpressionUsedWithTranslationsContainsCurrentLanguage_ShouldCorrectExpression()
-    {
-        // Arrange
-        List<ILanguage> languages =
-        [
-            new LanguageModelFixture
-            {
-                Id = 1,
-                Code = "en-US",
-                IsDefault = true,
-                Name ="English",
-                Supported = true,
-            },
-            new LanguageModelFixture
-            {
-                Id = 2,
-                Code = "tr-TR",
-                IsDefault = false,
-                Name ="Turkish",
-                Supported = true,
-            },
-        ];
-        List<HasTranslationEntityFixture> entities =
-        [
-            new HasTranslationEntityFixture
-            {
-                Id = 1,
-                Priority = 1,
-                Translations =
-                [
-                    new TranslationEntityFixture{
-                        Id = 1,
-                        Name = "First",
-                        Description = "First",
-                        EntityId = 1,
-                        LanguageId = 1
-                    },
-                    new TranslationEntityFixture{
-                        Id = 2,
-                        Name = "İlk",
-                        Description = "İlk",
-                        EntityId = 1,
-                        LanguageId = 2
-                    }
-                ]
-            }
-        ];
-        MultiLanguageManager.UpdateLanguagesList(languages);
-        CultureInfo.CurrentCulture = new CultureInfo("tr-TR");
-        var manager = new MilvaMultiLanguageManager();
-        IEnumerable<string> mainEntityPropNames = [nameof(HasTranslationEntityFixture.Priority)];
-        IEnumerable<string> translationEntityPropNames = [nameof(TranslationEntityFixture.Name)];
-        Expression<Func<HasTranslationEntityFixture, HasTranslationEntityFixture>> expectedExpression = c => new HasTranslationEntityFixture
-        {
-            Priority = c.Priority,
-            Translations = c.Translations == null ? null : c.Translations
-                                                            .Where(t => t.LanguageId == 2 || t.LanguageId == 1 || t.LanguageId == t.LanguageId)
-                                                            .Select(t => new TranslationEntityFixture
-                                                            {
-                                                                Name = t.Name,
-                                                                LanguageId = t.LanguageId
-                                                            }).ToList()
-        };
-        var expected = entities.AsQueryable().Select(expectedExpression).ToList();
-
-        // Act
-        var resultExpression = MultiLanguageExtensions.CreateProjectionExpression<HasTranslationEntityFixture, TranslationEntityFixture>(mainEntityPropNames, translationEntityPropNames, manager);
-        var result = entities.AsQueryable().Select(resultExpression).ToList();
-
-        // Assert
-        result[0].Priority.Should().Be(expected[0].Priority);
-        result[0].Translations.First().Name.Should().Be(expected[0].Translations.First().Name);
     }
 
     #endregion

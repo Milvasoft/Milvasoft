@@ -34,6 +34,7 @@ public static class ServiceCollectionExtension
                 cacheBuilder.Services.AddSingleton<ICacheOptions<RedisCachingOptions>>(cachingOptions);
 
             cacheBuilder.Services.Add(ServiceDescriptor.Describe(typeof(ICacheAccessor<RedisAccessor>), typeof(RedisAccessor), cachingOptions.AccessorLifetime));
+            cacheBuilder.Services.Add(ServiceDescriptor.Describe(typeof(IRedisAccessor), typeof(RedisAccessor), cachingOptions.AccessorLifetime));
         }
 
         return cacheBuilder;

@@ -329,7 +329,7 @@ public class MultiLanguageManagerTests
     }
 
     [Fact]
-    public void CreateTranslationMapExpression_WithTranslationsIsNullAndCurrentLanguageAndDefaultLanguageIsDifferent_ShouldCorrectExpression()
+    public void CreateTranslationMapExpression_WithTranslationsIsNullAndCurrentOrDefaultAndCurrentLanguageAndDefaultLanguageIsDifferent_ShouldCorrectExpression()
     {
         // Arrange
         List<ILanguage> languages =
@@ -362,7 +362,15 @@ public class MultiLanguageManagerTests
         MultiLanguageManager.UpdateLanguagesList(languages);
         CultureInfo.CurrentCulture = new CultureInfo("tr-TR");
         var manager = new MilvaMultiLanguageManager();
-        Expression<Func<HasTranslationEntityFixture, string>> expectedExpression = src => src.Translations == null ? null : src.Translations.FirstOrDefault(i => i.LanguageId == 2 || i.LanguageId == 1 || i.LanguageId == i.LanguageId).Name;
+        Expression<Func<HasTranslationEntityFixture, string>> expectedExpression = src => src.Translations != null
+                                                                                                ? (null == src.Translations.FirstOrDefault(i => i.LanguageId == 2)
+                                                                                                    ? src.Translations.FirstOrDefault(i => i.LanguageId == 1) != null
+                                                                                                            ? src.Translations.FirstOrDefault(i => i.LanguageId == 1).Name
+                                                                                                            : src.Translations.FirstOrDefault().Name != null
+                                                                                                                ? src.Translations.FirstOrDefault().Name
+                                                                                                                : null
+                                                                                                    : src.Translations.FirstOrDefault(i => i.LanguageId == 2).Name)
+                                                                                                : null;
 
         // Act
         var resultExpression = manager.CreateTranslationMapExpression<HasTranslationEntityFixture, HasTranslationDtoFixture, TranslationEntityFixture>(e => e.Name);
@@ -424,7 +432,15 @@ public class MultiLanguageManagerTests
         MultiLanguageManager.UpdateLanguagesList(languages);
         CultureInfo.CurrentCulture = new CultureInfo("tr-TR");
         var manager = new MilvaMultiLanguageManager();
-        Expression<Func<HasTranslationEntityFixture, string>> expectedExpression = src => src.Translations == null ? null : src.Translations.FirstOrDefault(i => i.LanguageId == 2 || i.LanguageId == 1 || i.LanguageId == i.LanguageId).Name;
+        Expression<Func<HasTranslationEntityFixture, string>> expectedExpression = src => src.Translations != null
+                                                                                            ? null == src.Translations.FirstOrDefault(i => i.LanguageId == 2)
+                                                                                                ? src.Translations.FirstOrDefault(i => i.LanguageId == 1) != null
+                                                                                                        ? src.Translations.FirstOrDefault(i => i.LanguageId == 1).Name
+                                                                                                        : src.Translations.FirstOrDefault().Name != null
+                                                                                                            ? src.Translations.FirstOrDefault().Name
+                                                                                                            : null
+                                                                                                : src.Translations.FirstOrDefault(i => i.LanguageId == 2).Name
+                                                                                             : null;
 
         // Act
         var resultExpression = manager.CreateTranslationMapExpression<HasTranslationEntityFixture, HasTranslationDtoFixture, TranslationEntityFixture>(e => e.Name);
@@ -437,7 +453,7 @@ public class MultiLanguageManagerTests
     }
 
     [Fact]
-    public void CreateTranslationMapExpression_WithTranslationsContainOnlyDefaultAndCurrentLanguageAndDefaultLanguageIsDifferent_ShouldCorrectExpression()
+    public void CreateTranslationMapExpression_WithTranslationsContainCurrentOrDefaultAndCurrentLanguageAndDefaultLanguageIsDifferent_ShouldCorrectExpression()
     {
         // Arrange
         List<ILanguage> languages =
@@ -472,57 +488,9 @@ public class MultiLanguageManagerTests
                         Description = "First",
                         EntityId = 1,
                         LanguageId = 1
-                    }
-                ]
-            }
-        ];
-        MultiLanguageManager.UpdateLanguagesList(languages);
-        CultureInfo.CurrentCulture = new CultureInfo("tr-TR");
-        var manager = new MilvaMultiLanguageManager();
-        Expression<Func<HasTranslationEntityFixture, string>> expectedExpression = src => src.Translations == null ? null : src.Translations.FirstOrDefault(i => i.LanguageId == 2 || i.LanguageId == 1 || i.LanguageId == i.LanguageId).Name;
-
-        // Act
-        var resultExpression = manager.CreateTranslationMapExpression<HasTranslationEntityFixture, HasTranslationDtoFixture, TranslationEntityFixture>(e => e.Name);
-
-        // Assert
-        var resultWithExpectedExpression = entities.AsQueryable().Select(expectedExpression).First();
-        var resultWithResultExpression = entities.AsQueryable().Select(resultExpression).First();
-
-        resultWithResultExpression.Should().Be(resultWithExpectedExpression);
-    }
-
-    [Fact]
-    public void CreateTranslationMapExpression_WithTranslationsContainCurrentAndCurrentLanguageAndDefaultLanguageIsDifferent_ShouldCorrectExpression()
-    {
-        // Arrange
-        List<ILanguage> languages =
-        [
-            new LanguageModelFixture
-            {
-                Id = 1,
-                Code = "en-US",
-                IsDefault = true,
-                Name ="English",
-                Supported = true,
-            },
-            new LanguageModelFixture
-            {
-                Id = 2,
-                Code = "tr-TR",
-                IsDefault = false,
-                Name ="Turkish",
-                Supported = true,
-            },
-        ];
-        List<HasTranslationEntityFixture> entities =
-        [
-            new HasTranslationEntityFixture
-            {
-                Id = 1,
-                Translations =
-                [
+                    },
                     new TranslationEntityFixture{
-                        Id = 1,
+                        Id = 2,
                         Name = "İlk",
                         Description = "İlk",
                         EntityId = 1,
@@ -534,7 +502,15 @@ public class MultiLanguageManagerTests
         MultiLanguageManager.UpdateLanguagesList(languages);
         CultureInfo.CurrentCulture = new CultureInfo("tr-TR");
         var manager = new MilvaMultiLanguageManager();
-        Expression<Func<HasTranslationEntityFixture, string>> expectedExpression = src => src.Translations == null ? null : src.Translations.FirstOrDefault(i => i.LanguageId == 2 || i.LanguageId == 1 || i.LanguageId == i.LanguageId).Name;
+        Expression<Func<HasTranslationEntityFixture, string>> expectedExpression = src => (src.Translations != null
+                                                                                            ? src.Translations.FirstOrDefault(i => i.LanguageId == 2) == null
+                                                                                                ? src.Translations.FirstOrDefault(i => i.LanguageId == 1) != null
+                                                                                                        ? src.Translations.FirstOrDefault(i => i.LanguageId == 1).Name
+                                                                                                        : src.Translations.FirstOrDefault().Name != null
+                                                                                                            ? src.Translations.FirstOrDefault().Name
+                                                                                                            : null
+                                                                                                : src.Translations.FirstOrDefault(i => i.LanguageId == 2).Name
+                                                                                            : null);
 
         // Act
         var resultExpression = manager.CreateTranslationMapExpression<HasTranslationEntityFixture, HasTranslationDtoFixture, TranslationEntityFixture>(e => e.Name);
@@ -547,7 +523,7 @@ public class MultiLanguageManagerTests
     }
 
     [Fact]
-    public void CreateTranslationMapExpression_WithTranslationsIsNullAndCurrentLanguageAndDefaultLanguageIsSame_ShouldCorrectExpression()
+    public void CreateTranslationMapExpression_WithTranslationsIsNullAndCurrentOrDefaultAndCurrentLanguageAndDefaultLanguageIsSame_ShouldCorrectExpression()
     {
         // Arrange
         List<ILanguage> languages =
@@ -580,7 +556,13 @@ public class MultiLanguageManagerTests
         MultiLanguageManager.UpdateLanguagesList(languages);
         CultureInfo.CurrentCulture = new CultureInfo("en-US");
         var manager = new MilvaMultiLanguageManager();
-        Expression<Func<HasTranslationEntityFixture, string>> expectedExpression = src => src.Translations == null ? null : src.Translations.FirstOrDefault(i => i.LanguageId == 2 || i.LanguageId == 1 || i.LanguageId == i.LanguageId).Name;
+        Expression<Func<HasTranslationEntityFixture, string>> expectedExpression = src => src.Translations != null
+                                                                                            ? src.Translations.FirstOrDefault(i => i.LanguageId == 1) != null
+                                                                                                ? src.Translations.FirstOrDefault(i => i.LanguageId == 1).Name
+                                                                                                : src.Translations.FirstOrDefault().Name != null
+                                                                                                    ? src.Translations.FirstOrDefault().Name
+                                                                                                    : null
+                                                                                            : null;
 
         // Act
         var resultExpression = manager.CreateTranslationMapExpression<HasTranslationEntityFixture, HasTranslationDtoFixture, TranslationEntityFixture>(e => e.Name);
@@ -593,7 +575,7 @@ public class MultiLanguageManagerTests
     }
 
     [Fact]
-    public void CreateTranslationMapExpression_WithTranslationsNotContainCurrentAndDefaultAndCurrentLanguageAndDefaultLanguageIsSame_ShouldCorrectExpression()
+    public void CreateTranslationMapExpression_WithTranslationsNotContainCurrentOrDefaultAndCurrentLanguageAndDefaultLanguageIsSame_ShouldCorrectExpression()
     {
         // Arrange
         List<ILanguage> languages =
@@ -642,7 +624,13 @@ public class MultiLanguageManagerTests
         MultiLanguageManager.UpdateLanguagesList(languages);
         CultureInfo.CurrentCulture = new CultureInfo("en-US");
         var manager = new MilvaMultiLanguageManager();
-        Expression<Func<HasTranslationEntityFixture, string>> expectedExpression = src => src.Translations == null ? null : src.Translations.FirstOrDefault(i => i.LanguageId == 2 || i.LanguageId == 1 || i.LanguageId == i.LanguageId).Name;
+        Expression<Func<HasTranslationEntityFixture, string>> expectedExpression = src => src.Translations != null
+                                                                                            ? src.Translations.FirstOrDefault(i => i.LanguageId == 1) != null
+                                                                                                ? src.Translations.FirstOrDefault(i => i.LanguageId == 1).Name
+                                                                                                : src.Translations.FirstOrDefault().Name != null
+                                                                                                    ? src.Translations.FirstOrDefault().Name
+                                                                                                    : null
+                                                                                            : null;
 
         // Act
         var resultExpression = manager.CreateTranslationMapExpression<HasTranslationEntityFixture, HasTranslationDtoFixture, TranslationEntityFixture>(e => e.Name);
@@ -655,7 +643,7 @@ public class MultiLanguageManagerTests
     }
 
     [Fact]
-    public void CreateTranslationMapExpression_WithTranslationsContainOnlyDefaultAndCurrentLanguageAndDefaultLanguageIsSame_ShouldCorrectExpression()
+    public void CreateTranslationMapExpression_WithTranslationsContainCurrentOrDefaultAndCurrentLanguageAndDefaultLanguageIsSame_ShouldCorrectExpression()
     {
         // Arrange
         List<ILanguage> languages =
@@ -690,57 +678,9 @@ public class MultiLanguageManagerTests
                         Description = "First",
                         EntityId = 1,
                         LanguageId = 1
-                    }
-                ]
-            }
-        ];
-        MultiLanguageManager.UpdateLanguagesList(languages);
-        CultureInfo.CurrentCulture = new CultureInfo("en-US");
-        var manager = new MilvaMultiLanguageManager();
-        Expression<Func<HasTranslationEntityFixture, string>> expectedExpression = src => src.Translations == null ? null : src.Translations.FirstOrDefault(i => i.LanguageId == 2 || i.LanguageId == 1 || i.LanguageId == i.LanguageId).Name;
-
-        // Act
-        var resultExpression = manager.CreateTranslationMapExpression<HasTranslationEntityFixture, HasTranslationDtoFixture, TranslationEntityFixture>(e => e.Name);
-
-        // Assert
-        var resultWithExpectedExpression = entities.AsQueryable().Select(expectedExpression).First();
-        var resultWithResultExpression = entities.AsQueryable().Select(resultExpression).First();
-
-        resultWithResultExpression.Should().Be(resultWithExpectedExpression);
-    }
-
-    [Fact]
-    public void CreateTranslationMapExpression_WithTranslationsContainCurrentAndCurrentLanguageAndDefaultLanguageIsSame_ShouldCorrectExpression()
-    {
-        // Arrange
-        List<ILanguage> languages =
-        [
-            new LanguageModelFixture
-            {
-                Id = 1,
-                Code = "en-US",
-                IsDefault = true,
-                Name ="English",
-                Supported = true,
-            },
-            new LanguageModelFixture
-            {
-                Id = 2,
-                Code = "tr-TR",
-                IsDefault = false,
-                Name ="Turkish",
-                Supported = true,
-            },
-        ];
-        List<HasTranslationEntityFixture> entities =
-        [
-            new HasTranslationEntityFixture
-            {
-                Id = 1,
-                Translations =
-                [
+                    },
                     new TranslationEntityFixture{
-                        Id = 1,
+                        Id = 2,
                         Name = "İlk",
                         Description = "İlk",
                         EntityId = 1,
@@ -752,7 +692,13 @@ public class MultiLanguageManagerTests
         MultiLanguageManager.UpdateLanguagesList(languages);
         CultureInfo.CurrentCulture = new CultureInfo("en-US");
         var manager = new MilvaMultiLanguageManager();
-        Expression<Func<HasTranslationEntityFixture, string>> expectedExpression = src => src.Translations == null ? null : src.Translations.FirstOrDefault(i => i.LanguageId == 2 || i.LanguageId == 1 || i.LanguageId == i.LanguageId).Name;
+        Expression<Func<HasTranslationEntityFixture, string>> expectedExpression = src => src.Translations != null
+                                                                                            ? src.Translations.FirstOrDefault(i => i.LanguageId == 1) != null
+                                                                                                ? src.Translations.FirstOrDefault(i => i.LanguageId == 1).Name
+                                                                                                : src.Translations.FirstOrDefault().Name != null
+                                                                                                    ? src.Translations.FirstOrDefault().Name
+                                                                                                    : null
+                                                                                            : null;
 
         // Act
         var resultExpression = manager.CreateTranslationMapExpression<HasTranslationEntityFixture, HasTranslationDtoFixture, TranslationEntityFixture>(e => e.Name);
@@ -776,7 +722,7 @@ public class MultiLanguageManagerTests
         var manager = new MilvaMultiLanguageManager();
 
         // Act
-        var result = manager.GetTranslationPropertyValue(obj, nameof(TranslationEntityFixture.Name));
+        var result = manager.GetTranslation(obj, nameof(TranslationEntityFixture.Name));
 
         // Assert
         result.Should().BeEmpty();
@@ -790,7 +736,7 @@ public class MultiLanguageManagerTests
         var manager = new MilvaMultiLanguageManager();
 
         // Act
-        var result = manager.GetTranslationPropertyValue(obj, nameof(TranslationEntityFixture.Name));
+        var result = manager.GetTranslation(obj, nameof(TranslationEntityFixture.Name));
 
         // Assert
         result.Should().BeEmpty();
@@ -807,7 +753,7 @@ public class MultiLanguageManagerTests
         var manager = new MilvaMultiLanguageManager();
 
         // Act
-        var result = manager.GetTranslationPropertyValue(obj, nameof(TranslationEntityFixture.Name));
+        var result = manager.GetTranslation(obj, nameof(TranslationEntityFixture.Name));
 
         // Assert
         result.Should().BeEmpty();
@@ -824,7 +770,7 @@ public class MultiLanguageManagerTests
         var manager = new MilvaMultiLanguageManager();
 
         // Act
-        var result = manager.GetTranslationPropertyValue(obj, nameof(TranslationEntityFixture.Name));
+        var result = manager.GetTranslation(obj, nameof(TranslationEntityFixture.Name));
 
         // Assert
         result.Should().BeEmpty();
@@ -861,7 +807,7 @@ public class MultiLanguageManagerTests
         var manager = new MilvaMultiLanguageManager();
 
         // Act
-        var result = manager.GetTranslationPropertyValue(obj, propertyName);
+        var result = manager.GetTranslation(obj, propertyName);
 
         // Assert
         result.Should().BeEmpty();
@@ -918,7 +864,7 @@ public class MultiLanguageManagerTests
         var manager = new MilvaMultiLanguageManager();
 
         // Act
-        var result = manager.GetTranslationPropertyValue(obj, propertyName);
+        var result = manager.GetTranslation(obj, propertyName);
 
         // Assert
         result.Should().Be("First");
@@ -1254,7 +1200,7 @@ public class MultiLanguageManagerTests
         var manager = new MilvaMultiLanguageManager();
 
         // Act
-        var result = manager.GetTranslationValue(translations, i => i.Name);
+        var result = manager.GetTranslation(translations, i => i.Name);
 
         // Assert
         result.Should().BeEmpty();
@@ -1268,7 +1214,7 @@ public class MultiLanguageManagerTests
         var manager = new MilvaMultiLanguageManager();
 
         // Act
-        var result = manager.GetTranslationValue(translations, i => i.Name);
+        var result = manager.GetTranslation(translations, i => i.Name);
 
         // Assert
         result.Should().BeEmpty();
@@ -1290,7 +1236,7 @@ public class MultiLanguageManagerTests
         var manager = new MilvaMultiLanguageManager();
 
         // Act
-        var result = manager.GetTranslationValue(translations, i => i.Name);
+        var result = manager.GetTranslation(translations, i => i.Name);
 
         // Assert
         result.Should().BeEmpty();
@@ -1321,7 +1267,7 @@ public class MultiLanguageManagerTests
         var manager = new MilvaMultiLanguageManager();
 
         // Act
-        var result = manager.GetTranslation(translations, null);
+        var result = manager.GetTranslation(translations, (string)null);
 
         // Assert
         result.Should().BeEmpty();
@@ -1373,7 +1319,7 @@ public class MultiLanguageManagerTests
         var manager = new MilvaMultiLanguageManager();
 
         // Act
-        var result = manager.GetTranslationValue(translations, i => i.Name);
+        var result = manager.GetTranslation(translations, i => i.Name);
 
         // Assert
         result.Should().Be("First");
@@ -1417,7 +1363,7 @@ public class MultiLanguageManagerTests
         var manager = new MilvaMultiLanguageManager();
 
         // Act
-        var result = manager.GetTranslationValue(translations, i => i.Name);
+        var result = manager.GetTranslation(translations, i => i.Name);
 
         // Assert
         result.Should().Be("First");
@@ -1461,7 +1407,7 @@ public class MultiLanguageManagerTests
         var manager = new MilvaMultiLanguageManager();
 
         // Act
-        var result = manager.GetTranslationValue(translations, i => i.Name);
+        var result = manager.GetTranslation(translations, i => i.Name);
 
         // Assert
         result.Should().Be("соответствие");
@@ -1505,7 +1451,7 @@ public class MultiLanguageManagerTests
         var manager = new MilvaMultiLanguageManager();
 
         // Act
-        var result = manager.GetTranslationValue(translations, i => i.Name);
+        var result = manager.GetTranslation(translations, i => i.Name);
 
         // Assert
         result.Should().Be("First");
@@ -1549,7 +1495,7 @@ public class MultiLanguageManagerTests
         var manager = new MilvaMultiLanguageManager();
 
         // Act
-        var result = manager.GetTranslationValue(translations, i => i.Name);
+        var result = manager.GetTranslation(translations, i => i.Name);
 
         // Assert
         result.Should().Be("соответствие");

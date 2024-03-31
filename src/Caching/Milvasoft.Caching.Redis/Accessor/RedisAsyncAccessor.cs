@@ -290,4 +290,17 @@ public partial class RedisAccessor
             _database = _client.GetDatabase();
         }
     }
+
+    /// <summary>
+    /// Removes current database.
+    /// </summary>
+    /// <returns></returns>
+    public async Task PurgeAsync()
+    {
+        _options.AllowAdmin = true;
+
+        await _client.GetServer(_options.EndPoints[0]).FlushDatabaseAsync(_database.Database);
+
+        _options.AllowAdmin = false;
+    }
 }

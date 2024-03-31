@@ -1,6 +1,5 @@
 ﻿using Milvasoft.Core.MultiLanguage.EntityBases;
 using Milvasoft.Core.MultiLanguage.EntityBases.Abstract;
-using Milvasoft.Core.MultiLanguage.Manager;
 using System.Linq.Expressions;
 
 namespace Milvasoft.Core.MultiLanguage;
@@ -10,16 +9,15 @@ public static class MultiLanguageExtensions
     private const string _translationsParameterName = "t";
 
     /// <summary>
-    /// Creates projection expression for contents service.
+    /// Creates projection expression with requested properties for <see cref="IHasTranslation{TTranslationEntity}"/>.
     /// </summary>
     /// <typeparam name="TEntity"></typeparam>
     /// <param name="mainEntityPropertyNames"></param>
     /// <param name="translationEntityPropertyNames"></param>
     /// <param name="translationEntityType"></param>
-    /// <returns></returns>
+    /// <returns>Sample; e => new HasTranslationEntity { Id = e.Id, Translations = e.Translations.Select(t=> new TranslationEntity { Name = t.Name } ).ToList() } </returns>
     public static Expression<Func<TEntity, TEntity>> CreateProjectionExpression<TEntity, TTranslationEntity>(IEnumerable<string> mainEntityPropertyNames,
-                                                                                                             IEnumerable<string> translationEntityPropertyNames,
-                                                                                                             IMultiLanguageManager multiLanguageManager = null)
+                                                                                                             IEnumerable<string> translationEntityPropertyNames)
          where TEntity : class, IHasTranslation<TTranslationEntity>
          where TTranslationEntity : class, ITranslationEntity<TEntity>
     {
@@ -46,53 +44,19 @@ public static class MultiLanguageExtensions
 
             var translationsPropertyExpression = Expression.PropertyOrField(parameter, MultiLanguageEntityPropertyNames.Translations);
 
-            if (multiLanguageManager != null)
-            {
-                // Get the "LanguageId" property of the language entity
-                var languageIdProperty = Expression.Property(translationParameter, MultiLanguageEntityPropertyNames.LanguageId);
+            var selectExpressionForTranslations = Expression.Call(typeof(Enumerable),
+                                                                  nameof(Enumerable.Select),
+                                                                  [translationEntityType, translationEntityType],
+                                                                  Expression.PropertyOrField(parameter, MultiLanguageEntityPropertyNames.Translations),
+                                                                  translationExpression);
 
-                // Create constants for the current language ID and the default language ID
-                var currentLanguageIdConstant = Expression.Constant(multiLanguageManager.GetCurrentLanguageId());
-                var defaultLanguageIdConstant = Expression.Constant(multiLanguageManager.GetDefaultLanguageId());
+            selectExpressionForTranslations = Expression.Call(typeof(Enumerable),
+                                                              nameof(Enumerable.ToList),
+                                                              [translationEntityType],
+                                                              selectExpressionForTranslations);
 
-                // Create an expression to check if the language ID of the language entity is equal to the current language ID
-                var currentlanguageIdEqualExpression = Expression.Equal(languageIdProperty, currentLanguageIdConstant);
-                var defualtlanguageIdEqualExpression = Expression.Equal(languageIdProperty, defaultLanguageIdConstant);
-                var trueExpression = Expression.Equal(languageIdProperty, languageIdProperty);
-
-                var equalityExpression = Expression.OrElse(Expression.OrElse(currentlanguageIdEqualExpression, defualtlanguageIdEqualExpression), trueExpression);
-
-                var wherePredicate = Expression.Lambda<Func<TTranslationEntity, bool>>(equalityExpression, translationParameter);
-
-                // Call the "Where" method on the "Translations" property with the lambda expression
-                var whereExpression = Expression.Call(typeof(Enumerable),
-                                                      nameof(Enumerable.Where),
-                                                      [translationEntityType],
-                                                      Expression.PropertyOrField(parameter, MultiLanguageEntityPropertyNames.Translations),
-                                                      wherePredicate);
-
-                // Call the "Select" method on the "Where()" chain with the translationExpression
-                var whereAndSelectExpressionForTranslations = Expression.Call(typeof(Enumerable),
-                                                                              nameof(Enumerable.Select),
-                                                                              [translationEntityType, translationEntityType],
-                                                                              whereExpression,
-                                                                              translationExpression);
-
-                expressionForTranslations = CreateTranslationsNullCheckExpression<TTranslationEntity, IEnumerable<TTranslationEntity>>(translationsPropertyExpression,
-                                                                                                                                       whereAndSelectExpressionForTranslations);
-            }
-            else
-            {
-                var selectExpressionForTranslations = Expression.Call(typeof(Enumerable),
-                                                                              nameof(Enumerable.Select),
-                                                                              [translationEntityType, translationEntityType],
-                                                                              Expression.PropertyOrField(parameter, MultiLanguageEntityPropertyNames.Translations),
-                                                                              translationExpression);
-
-                expressionForTranslations = CreateTranslationsNullCheckExpression<TTranslationEntity, IEnumerable<TTranslationEntity>>(translationsPropertyExpression,
-                                                                                                                                       selectExpressionForTranslations);
-
-            }
+            expressionForTranslations = CreateTranslationsNullCheckExpression<TTranslationEntity, List<TTranslationEntity>>(translationsPropertyExpression,
+                                                                                                                                   selectExpressionForTranslations);
 
             if (!mainEntityPropertyNameTempList.Exists(i => i == MultiLanguageEntityPropertyNames.Translations))
                 mainEntityPropertyNameTempList.Add(MultiLanguageEntityPropertyNames.Translations);
@@ -168,7 +132,7 @@ public static class MultiLanguageExtensions
     internal static ConditionalExpression CreateTranslationsNullCheckExpression<TTranslationEntity, TReturn>(MemberExpression translationsPropertyExpression, Expression expression)
     {
         // src.Translations == null
-        var translationsPropertyIsNullExpression = Expression.Equal(translationsPropertyExpression, Expression.Constant(null, typeof(IEnumerable<TTranslationEntity>)));
+        var translationsPropertyIsNullExpression = Expression.Equal(translationsPropertyExpression, Expression.Constant(null, typeof(ICollection<TTranslationEntity>)));
 
         var translationNullCheckExpression = Expression.Condition(translationsPropertyIsNullExpression,
                                                                   Expression.Constant(null, typeof(TReturn)),

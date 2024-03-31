@@ -93,6 +93,12 @@ public interface IRedisAccessor : ICacheAccessor<RedisAccessor>
     /// <returns></returns>
     ValueTask CheckClientAndConnectIfNotAsync();
 
+    /// <summary>
+    /// Removes current database.
+    /// </summary>
+    /// <returns></returns>
+    Task PurgeAsync();
+
     #endregion
 
     #region Sync
@@ -116,6 +122,12 @@ public interface IRedisAccessor : ICacheAccessor<RedisAccessor>
     /// </summary>
     /// <returns></returns>
     public RedisValue[] Get(IEnumerable<string> keys);
+
+    /// <summary>
+    /// Removes current database.
+    /// </summary>
+    /// <returns></returns>
+    void Purge();
 
     #endregion
 }

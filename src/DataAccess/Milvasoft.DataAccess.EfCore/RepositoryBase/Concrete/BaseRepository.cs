@@ -956,7 +956,7 @@ public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepositor
     /// </summary>
     /// <param name="tracking"></param>
     /// <returns></returns>
-    protected static QueryTrackingBehavior GetQueryTrackingBehavior(bool tracking) => tracking ? QueryTrackingBehavior.TrackAll : QueryTrackingBehavior.NoTracking;
+    protected static QueryTrackingBehavior GetQueryTrackingBehavior(bool tracking) => tracking ? QueryTrackingBehavior.TrackAll : QueryTrackingBehavior.NoTrackingWithIdentityResolution;
 
     #region Auditing
 

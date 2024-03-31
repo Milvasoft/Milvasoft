@@ -199,5 +199,18 @@ public partial class RedisAccessor : IRedisAccessor
     /// <returns></returns>
     public bool KeyExpire(string key, DateTime? expiration) => _database.KeyExpire(key, expiration);
 
+    /// <summary>
+    /// Removes current database.
+    /// </summary>
+    /// <returns></returns>
+    public void Purge()
+    {
+        _options.AllowAdmin = true;
+
+        _client.GetServer(_options.EndPoints[0]).FlushDatabase(_database.Database);
+
+        _options.AllowAdmin = false;
+    }
+
     #endregion
 }

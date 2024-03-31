@@ -1952,6 +1952,16 @@
             </remarks>
             <returns>True if the specified type can be assigned to the target type; otherwise, false.</returns>
         </member>
+        <member name="M:Milvasoft.Core.Helpers.CommonHelper.GetGenericMethod(System.Type,System.String,System.Int32,System.Type[])">
+            <summary>
+            Gets generic method info.
+            </summary>
+            <param name="type"></param>
+            <param name="methodName"></param>
+            <param name="genericParameterCount"></param>
+            <param name="parameterTypes"></param>
+            <returns></returns>
+        </member>
         <member name="M:Milvasoft.Core.Helpers.CommonHelper.ToGuid(System.Int32)">
             <summary>
             Converts an integer value to a GUID value.

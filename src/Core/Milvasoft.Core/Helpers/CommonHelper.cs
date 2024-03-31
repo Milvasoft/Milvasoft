@@ -207,4 +207,39 @@ public static partial class CommonHelper
             return true;
         }
     }
+
+    /// <summary>
+    /// Gets generic method info.
+    /// </summary>
+    /// <param name="type"></param>
+    /// <param name="methodName"></param>
+    /// <param name="genericParameterCount"></param>
+    /// <param name="parameterTypes"></param>
+    /// <returns></returns>
+    public static MethodInfo GetGenericMethod(this Type type, string methodName, int genericParameterCount, params Type[] parameterTypes)
+    {
+        var methodInfo = Array.Find(type.GetMethods(), m => m.Name == methodName
+                                                            && m.IsGenericMethodDefinition
+                                                            && m.GetGenericArguments().Length == genericParameterCount
+                                                            && ParameterTypesMatch(m, parameterTypes));
+
+        return methodInfo;
+
+        static bool ParameterTypesMatch(MethodInfo method, Type[] types)
+        {
+            var methodParameters = method.GetParameters().ToList();
+            methodParameters.RemoveAll(i => i.ParameterType.IsGenericMethodParameter);
+
+            if (methodParameters.Count != types.Length)
+                return false;
+
+            for (int i = 0; i < methodParameters.Count; i++)
+            {
+                if (!methodParameters[i].ParameterType.IsGenericMethodParameter && !methodParameters[i].ParameterType.CanAssignableTo(types[i]))
+                    return false;
+            }
+
+            return true;
+        }
+    }
 }

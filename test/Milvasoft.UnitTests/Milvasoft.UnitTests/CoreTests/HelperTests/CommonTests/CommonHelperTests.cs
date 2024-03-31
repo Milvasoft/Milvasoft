@@ -1,6 +1,7 @@
 ﻿using FluentAssertions;
 using Microsoft.EntityFrameworkCore.Query;
 using Milvasoft.Core.Helpers;
+using Milvasoft.Core.MultiLanguage.Manager;
 using Milvasoft.UnitTests.CoreTests.HelperTests.CommonTests.Fixtures;
 using Moq;
 using System.Linq.Expressions;
@@ -429,6 +430,66 @@ public partial class CommonHelperTests
 
         // Assert
         result.Should().Be(expected);
+    }
+
+    #endregion
+
+    #region GetGenericMethod
+
+    [Fact]
+    public void GetGenericMethod_WithClassNotContainsGenericMethod_ShouldReturnNull()
+    {
+        // Arrange
+        var type = typeof(CommonHelperTests);
+
+        // Act
+        var result = type.GetGenericMethod(nameof(GetGenericMethod_WithClassNotContainsGenericMethod_ShouldReturnNull), 1);
+
+        // Assert
+        result.Should().BeNull();
+    }
+
+    [Fact]
+    public void GetGenericMethod_WithClassContainsGenericMethodButParametersMismatch_ShouldReturnNull()
+    {
+        // Arrange
+        var type = typeof(CommonHelper);
+
+        // Act
+        var result = type.GetGenericMethod(nameof(CommonHelper.GetEnumDesciption), 2, typeof(string));
+
+        // Assert
+        result.Should().BeNull();
+    }
+
+    [Fact]
+    public void GetGenericMethod_WithClassContainsGenericMethodAndParametersAreGenericType_ShouldReturnCorrectMethodInfo()
+    {
+        // Arrange
+        var type = typeof(CommonHelper);
+
+        // Act
+        var result = type.GetGenericMethod(nameof(CommonHelper.GetEnumDesciption), 1);
+
+        // Assert
+        result.Name.Should().Be(nameof(CommonHelper.GetEnumDesciption));
+        result.GetParameters().Should().HaveCount(1);
+        result.IsGenericMethod.Should().BeTrue();
+    }
+
+    [Fact]
+    public void GetGenericMethod_WithClassContainsGenericMethodAndParametersAreValid_ShouldReturnCorrectMethodInfo()
+    {
+        // Arrange
+        var type = typeof(MultiLanguageManager);
+
+        // Act
+        var result = type.GetGenericMethod(nameof(MultiLanguageManager.GetTranslation), 1, typeof(IEnumerable<>), typeof(string));
+
+        // Assert
+        result.Name.Should().Be(nameof(MultiLanguageManager.GetTranslation));
+        result.GetParameters().Should().HaveCount(2);
+        result.IsGenericMethod.Should().BeTrue();
     }
 
     #endregion

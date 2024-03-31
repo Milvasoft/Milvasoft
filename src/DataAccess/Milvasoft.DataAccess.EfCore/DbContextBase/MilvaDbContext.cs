@@ -450,8 +450,7 @@ public abstract class MilvaDbContextBase(DbContextOptions options) : DbContext(o
             var projectionExpression = _createProjectionExpressionMethod.MakeGenericMethod(entityType, translationEntityType).Invoke(null,
                                                                                                                                      [
                                                                                                                                          propNamesForProjection,
-                                                                                                                                         translationEntityPropNames,
-                                                                                                                                         multiLanguageManager
+                                                                                                                                         translationEntityPropNames
                                                                                                                                      ]);
 
             parameter.UpdateFilterByForTranslationPropertyNames(translationEntityPropNames);
@@ -497,7 +496,7 @@ public abstract class MilvaDbContextBase(DbContextOptions options) : DbContext(o
                                     if ((!parameter.RequestedPropertyNames?.Contains(translationPropName) ?? true))
                                         continue;
 
-                                    propDic.Add(translationPropName, multiLanguageManager.GetTranslationPropertyValue(lookup, translationPropName));
+                                    propDic.Add(translationPropName, multiLanguageManager.GetTranslation(lookup, translationPropName));
                                 }
                         }
                     }
