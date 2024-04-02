@@ -493,4 +493,24 @@ public partial class CommonHelperTests
     }
 
     #endregion
+
+    #region IsNonNullableValueType
+
+    [Theory]
+    [InlineData(null, false)]
+    [InlineData(typeof(string), false)]
+    [InlineData(typeof(int), true)]
+    [InlineData(typeof(int?), false)]
+    public void IsNonNullableValueType_WithTypeInput_ShouldReturnCorrectResult(Type input, bool expected)
+    {
+        // Arrange
+
+        // Act
+        var result = input.IsNonNullableValueType();
+
+        // Assert
+        result.Should().Be(expected);
+    }
+
+    #endregion
 }

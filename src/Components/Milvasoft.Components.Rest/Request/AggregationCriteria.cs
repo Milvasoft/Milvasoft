@@ -31,15 +31,15 @@ public class AggregationCriteria
 
     public virtual async Task<AggregationResult> ApplyAggregationAsync<TEntity>(IQueryable<TEntity> query, bool runAsync = true, CancellationToken cancellationToken = default)
     {
-        if (string.IsNullOrEmpty(AggregateBy))
+        if (string.IsNullOrWhiteSpace(AggregateBy) || query == null)
             return new AggregationResult(AggregateBy, Type, null);
 
         var prop = InitializeFields(query, runAsync);
 
         var propertySelector = _queryProviderType switch
         {
-            QueryProviderType.List => CommonHelper.DynamicInvokeCreatePropertySelector(nameof(CommonHelper.CreateRequiredPropertySelector), _entityType, _propType, prop.Name),
-            QueryProviderType.Enumerable => CommonHelper.DynamicInvokeCreatePropertySelector(nameof(CommonHelper.CreateRequiredPropertySelectorFuction), _entityType, _propType, prop.Name),
+            QueryProviderType.List => CommonHelper.DynamicInvokeCreatePropertySelector(nameof(CommonHelper.CreateRequiredPropertySelectorFuction), _entityType, _propType, prop.Name),
+            QueryProviderType.Enumerable => CommonHelper.DynamicInvokeCreatePropertySelector(nameof(CommonHelper.CreateRequiredPropertySelector), _entityType, _propType, prop.Name),
             QueryProviderType.AsyncQueryable => CommonHelper.DynamicInvokeCreatePropertySelector(nameof(CommonHelper.CreateRequiredPropertySelector), _entityType, _propType, prop.Name),
             _ => CommonHelper.DynamicInvokeCreatePropertySelector(nameof(CommonHelper.CreateRequiredPropertySelector), _entityType, _propType, prop.Name),
         };
@@ -92,7 +92,7 @@ public class AggregationCriteria
         var relatedMethods = _aggregationMethods[_queryProviderType].Where(mi => mi.Name == methodName);
 
         MethodInfo aggregationMethod = relatedMethods.FirstOrDefault(method => IsMethodParametersContainsDesiredType(method.GetParameters().Select(i => i.ParameterType)))
-                                            ?? throw new MilvaDeveloperException("Unkown query provider.");
+                                            ?? throw new MilvaDeveloperException("Aggregation by property type not supported with this aggregation method.");
 
         if (!aggregationMethod.IsGenericMethod)
             return aggregationMethod;
@@ -122,8 +122,8 @@ public class AggregationCriteria
     {
         AggregationType.Avg => runAsync ? nameof(EntityFrameworkQueryableExtensions.AverageAsync) : nameof(Queryable.Average),
         AggregationType.Sum => runAsync ? nameof(EntityFrameworkQueryableExtensions.SumAsync) : nameof(Queryable.Sum),
-        AggregationType.Min => runAsync ? nameof(EntityFrameworkQueryableExtensions.MinAsync) : nameof(Queryable.MinBy),
-        AggregationType.Max => runAsync ? nameof(EntityFrameworkQueryableExtensions.MaxAsync) : nameof(Queryable.MaxBy),
+        AggregationType.Min => runAsync ? nameof(EntityFrameworkQueryableExtensions.MinAsync) : nameof(Queryable.Min),
+        AggregationType.Max => runAsync ? nameof(EntityFrameworkQueryableExtensions.MaxAsync) : nameof(Queryable.Max),
         AggregationType.Count => runAsync ? nameof(EntityFrameworkQueryableExtensions.CountAsync) : nameof(Queryable.Count),
         _ => string.Empty,
     };
@@ -144,7 +144,7 @@ public class AggregationCriteria
             var asyncMethodName = GetMethodName(aggregationType, runAsync: true);
 
             //Add collection methods
-            var relatedMethods = typeof(Queryable).GetMethods()
+            var relatedMethods = typeof(Enumerable).GetMethods()
                                                   .Where(mi => mi.Name == syncMethodName
                                                                          && mi.IsGenericMethodDefinition
                                                                          && mi.GetParameters().Length == 2);
@@ -152,7 +152,7 @@ public class AggregationCriteria
             methodInfos[QueryProviderType.List].AddRange(relatedMethods);
 
             //Add entity framework sync methods
-            relatedMethods = typeof(Enumerable).GetMethods(BindingFlags.Static | BindingFlags.Public)
+            relatedMethods = typeof(Queryable).GetMethods(BindingFlags.Static | BindingFlags.Public)
                                                .Where(mi => mi.Name == syncMethodName
                                                             && mi.GetParameters().Length == 2);
 
@@ -177,11 +177,14 @@ public class AggregationCriteria
 
         var prop = _entityType.ThrowIfPropertyNotExists(AggregateBy);
 
-        _propType = IsNonNullableValueType(prop.PropertyType) ? typeof(Nullable<>).MakeGenericType(prop.PropertyType) : prop.PropertyType;
+        _propType = prop.PropertyType.IsNonNullableValueType() ? typeof(Nullable<>).MakeGenericType(prop.PropertyType) : prop.PropertyType;
 
 #pragma warning disable EF1001 // Internal EF Core API usage.
         if (runAsync)
         {
+            if (query.Provider.GetType().IsAssignableTo(typeof(EnumerableQuery)))
+                throw new MilvaDeveloperException("Query provider type is 'EnumerableQuery' cannot run asyncrhonosly!");
+
             _queryProviderType = QueryProviderType.AsyncQueryable;
         }
         else
@@ -197,8 +200,6 @@ public class AggregationCriteria
 
         return prop;
     }
-
-    private static bool IsNonNullableValueType(Type type) => type.IsValueType && Nullable.GetUnderlyingType(type) == null;
 
     private enum QueryProviderType
     {

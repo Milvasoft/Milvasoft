@@ -242,4 +242,12 @@ public static partial class CommonHelper
             return true;
         }
     }
+
+    /// <summary>
+    /// Determines whether the specified type is a non-nullable value type.
+    /// </summary>
+    /// <param name="type">The type to check.</param>
+    /// <returns>True if the specified type is a non-nullable value type; otherwise, false.</returns>
+
+    public static bool IsNonNullableValueType(this Type type) => type != null && type.IsValueType && Nullable.GetUnderlyingType(type) == null;
 }

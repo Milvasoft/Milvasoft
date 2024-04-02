@@ -1962,6 +1962,13 @@
             <param name="parameterTypes"></param>
             <returns></returns>
         </member>
+        <member name="M:Milvasoft.Core.Helpers.CommonHelper.IsNonNullableValueType(System.Type)">
+            <summary>
+            Determines whether the specified type is a non-nullable value type.
+            </summary>
+            <param name="type">The type to check.</param>
+            <returns>True if the specified type is a non-nullable value type; otherwise, false.</returns>
+        </member>
         <member name="M:Milvasoft.Core.Helpers.CommonHelper.ToGuid(System.Int32)">
             <summary>
             Converts an integer value to a GUID value.

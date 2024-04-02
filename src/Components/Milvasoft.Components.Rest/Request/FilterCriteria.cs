@@ -29,14 +29,17 @@ public class FilterCriteria
     /// </summary>
     public FilterType FilterType { get; set; }
 
-    public bool FilterByContainsSpecialChars() => FilterBy.Any(_specialChars.Contains);
+    public bool FilterByContainsSpecialChars() => FilterBy?.Any(_specialChars.Contains) ?? false;
 
-    public string GetUntilSpecialCharFromFilterBy() => FilterBy[..FilterBy.IndexOfAny([.. _specialChars])];
+    public string GetUntilSpecialCharFromFilterBy() => FilterByContainsSpecialChars() ? FilterBy?[..FilterBy.IndexOfAny([.. _specialChars])] : FilterBy;
 
-    public string GetAfterSpecialCharFromFilterBy() => FilterBy[FilterBy.IndexOfAny([.. _specialChars])..];
+    public string GetAfterSpecialCharFromFilterBy() => FilterByContainsSpecialChars() ? FilterBy?[FilterBy.IndexOfAny([.. _specialChars])..] : FilterBy;
 
     public string GetChildrenPropertyNameFromFilterBy()
     {
+        if (string.IsNullOrWhiteSpace(FilterBy))
+            return FilterBy;
+
         var children = GetAfterSpecialCharFromFilterBy();
 
         foreach (var specialChar in _specialChars)
