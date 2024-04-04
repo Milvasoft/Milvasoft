@@ -33,7 +33,7 @@ public class ExceptionConverterTests
     }
 
     [Fact]
-    public void Write_WithNullException_ShouldReturnsEmtpyString()
+    public void Write_WithNullException_ShouldReturnsEmptyString()
     {
         // Arrange
         var exception = new Exception("Test Exception");

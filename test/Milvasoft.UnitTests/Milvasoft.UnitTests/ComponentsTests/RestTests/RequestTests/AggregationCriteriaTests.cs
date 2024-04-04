@@ -205,7 +205,7 @@ public class AggregationCriteriaTests
 
     [Theory]
     [MemberData(nameof(InvalidListSourceForApplyAggregationAsyncMethodData))]
-    public async Task ApplyAggregationAsync_WithListQueryProviderSourceAndSyncRunAndUnsupportedAggregateByPropetyTypeWithAggregationMethod_ShouldThrowException(IQueryable<RestTestEntityFixture> query, AggregationCriteria criteria)
+    public async Task ApplyAggregationAsync_WithListQueryProviderSourceAndSyncRunAndUnsupportedAggregateByPropertyTypeWithAggregationMethod_ShouldThrowException(IQueryable<RestTestEntityFixture> query, AggregationCriteria criteria)
     {
         // Arrange
 
@@ -458,7 +458,7 @@ public class AggregationCriteriaTests
 
     [Theory]
     [MemberData(nameof(InvalidEfQuerySourceForApplyAggregationAsyncMethodData))]
-    public async Task ApplyAggregationAsync_WithEfQueryProviderSourceAndAsyncRunAndUnsupportedAggregateByPropetyTypeWithAggregationMethod_ShouldThrowException(List<RestTestEntityFixture> entities, AggregationCriteria criteria)
+    public async Task ApplyAggregationAsync_WithEfQueryProviderSourceAndAsyncRunAndUnsupportedAggregateByPropertyTypeWithAggregationMethod_ShouldThrowException(List<RestTestEntityFixture> entities, AggregationCriteria criteria)
     {
         // Arrange
         using var dbContextFixture = new DbContextMock(nameof(AggregationCriteria)).GetDbContextFixture();
@@ -542,7 +542,7 @@ public class AggregationCriteriaTests
 
     [Theory]
     [MemberData(nameof(InvalidEfQuerySourceForApplyAggregationAsyncMethodData))]
-    public async Task ApplyAggregationAsync_WithEfQueryProviderSourceAndSyncRunAndUnsupportedAggregateByPropetyTypeWithAggregationMethod_ShouldThrowException(List<RestTestEntityFixture> entities, AggregationCriteria criteria)
+    public async Task ApplyAggregationAsync_WithEfQueryProviderSourceAndSyncRunAndUnsupportedAggregateByPropertyTypeWithAggregationMethod_ShouldThrowException(List<RestTestEntityFixture> entities, AggregationCriteria criteria)
     {
         // Arrange
         using var dbContextFixture = new DbContextMock(nameof(AggregationCriteria)).GetDbContextFixture();

@@ -10,12 +10,12 @@ public class AggregationRequestTests
     #region With List Query Provider Source
 
     [Fact]
-    public async Task ApplyAggregationAsync_WithListQueryProviderSourceAndSyncRunAndACriteriasAreNull_ShouldReturnNull()
+    public async Task ApplyAggregationAsync_WithListQueryProviderSourceAndSyncRunAndACriteriaAreNull_ShouldReturnNull()
     {
         // Arrange
         var request = new AggregationRequest
         {
-            Criterias = null
+            Criteria = null
         };
 
         IQueryable<RestTestEntityFixture> validQueryable = new List<RestTestEntityFixture>
@@ -36,12 +36,12 @@ public class AggregationRequestTests
     }
 
     [Fact]
-    public async Task ApplyAggregationAsync_WithListQueryProviderSourceAndSyncRunAndACriteriasAreEmpty_ShouldReturnNull()
+    public async Task ApplyAggregationAsync_WithListQueryProviderSourceAndSyncRunAndACriteriaAreEmpty_ShouldReturnNull()
     {
         // Arrange
         var request = new AggregationRequest
         {
-            Criterias = []
+            Criteria = []
         };
 
         IQueryable<RestTestEntityFixture> validQueryable = new List<RestTestEntityFixture>
@@ -66,12 +66,12 @@ public class AggregationRequestTests
     #region With Ef Query Provider Source
 
     [Fact]
-    public async Task ApplyAggregationAsync_WithEfQueryProviderSourceAndAsyncRunAndACriteriasAreNull_ShouldReturnNull()
+    public async Task ApplyAggregationAsync_WithEfQueryProviderSourceAndAsyncRunAndACriteriaAreNull_ShouldReturnNull()
     {
         // Arrange
         var request = new AggregationRequest
         {
-            Criterias = null
+            Criteria = null
         };
         var dbContextMock = new DbContextMock(nameof(AggregationRequest)).GetDbContextFixture();
         dbContextMock.TestEntities = null;
@@ -85,12 +85,12 @@ public class AggregationRequestTests
     }
 
     [Fact]
-    public async Task ApplyAggregationAsync_WithEfQueryProviderSourceAndAsyncRunAndACriteriasAreEmpty_ShouldReturnNull()
+    public async Task ApplyAggregationAsync_WithEfQueryProviderSourceAndAsyncRunAndACriteriaAreEmpty_ShouldReturnNull()
     {
         // Arrange
         var request = new AggregationRequest
         {
-            Criterias = []
+            Criteria = []
         };
         var dbContextMock = new DbContextMock(nameof(AggregationRequest)).GetDbContextFixture();
         dbContextMock.TestEntities = null;
