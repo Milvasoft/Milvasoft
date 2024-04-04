@@ -7,6 +7,11 @@ namespace Milvasoft.Components.Rest;
 
 public static partial class RestExtensions
 {
+    /// <summary>
+    /// Adds response converters to the <see cref="JsonSerializerOptions"/>.
+    /// </summary>
+    /// <param name="options">The <see cref="JsonSerializerOptions"/> to add the converters to.</param>
+    /// <returns>The updated <see cref="JsonSerializerOptions"/> with added response converters.</returns>
     public static JsonSerializerOptions AddResponseConverters(this JsonSerializerOptions options)
     {
         if (options == null)
@@ -15,8 +20,7 @@ public static partial class RestExtensions
         options.Converters.Add(new InterfaceConverterFactory<Response.Response, IResponse>());
 
         return options;
-    }
-
+    }
     #region Success
 
     /// <summary>

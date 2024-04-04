@@ -22,10 +22,10 @@ public class SortRequest
     public virtual SortType Type { get; set; }
 
     /// <summary>
-    /// Builds property selector by <see cref="SortBy"/>
+    /// Builds an expression that selects the property to sort by based on the specified <see cref="SortBy"/> value.
     /// </summary>
-    /// <typeparam name="TEntity"></typeparam>
-    /// <returns></returns>
+    /// <typeparam name="TEntity">The type of the entity.</typeparam>
+    /// <returns>An expression that selects the property to order by.</returns>
     public Expression<Func<TEntity, object>> BuildPropertySelectorExpression<TEntity>()
         => !string.IsNullOrWhiteSpace(SortBy) ? CommonHelper.CreateRequiredPropertySelector<TEntity>(SortBy) : null;
 

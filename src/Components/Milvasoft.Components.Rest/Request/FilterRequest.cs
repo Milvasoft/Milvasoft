@@ -42,11 +42,11 @@ public class FilterRequest
     public virtual List<FilterCriteria> Criterias { get; set; }
 
     /// <summary>
-    /// Builds filter expression according to <see cref="Criterias"/>
+    /// Builds a filter expression based on the specified filter criteria.
     /// </summary>
-    /// <typeparam name="TEntity"></typeparam>
-    /// <returns></returns>
-    /// <exception cref="Exception"></exception>
+    /// <typeparam name="TEntity">The type of entity to filter.</typeparam>
+    /// <returns>The filter expression.</returns>
+    /// <exception cref="Exception">Thrown when the <typeparamref name="TEntity"/> does not contain the value sent in the FilterBy property of one of the criteria.</exception>
     public virtual Expression<Func<TEntity, bool>> BuildFilterExpression<TEntity>() where TEntity : class
     {
         if (Criterias.IsNullOrEmpty())
@@ -85,6 +85,13 @@ public class FilterRequest
         return expression;
     }
 
+    /// <summary>
+    /// Gets the value with the correct type for the given property.
+    /// </summary>
+    /// <typeparam name="TEntity"></typeparam>
+    /// <param name="value"></param>
+    /// <param name="propertyName"></param>
+    /// <returns></returns>
     private static object GetValueWithCorrectType<TEntity>(object value, string propertyName)
     {
         var propertyType = typeof(TEntity).GetPublicPropertyIgnoreCase(propertyName).PropertyType;
@@ -104,6 +111,12 @@ public class FilterRequest
         return value;
     }
 
+    /// <summary>
+    /// Checks the property and gets its type for the given filter criteria.
+    /// </summary>
+    /// <typeparam name="TEntity"></typeparam>
+    /// <param name="filter"></param>
+    /// <returns></returns>
     private static Type CheckPropertyAndGetType<TEntity>(FilterCriteria filter)
     {
         string propertyName = filter.FilterBy;
@@ -142,6 +155,12 @@ public class FilterRequest
         return propertyType;
     }
 
+    /// <summary>
+    /// Checks if the filter type is supported for the given property type.
+    /// </summary>
+    /// <param name="propertyType"></param>
+    /// <param name="filter"></param>
+    /// <returns></returns>
     private static bool IsFilterTypeSupported(Type propertyType, FilterCriteria filter)
     {
         var typeGroup = TypeGroup.Default;
@@ -154,6 +173,11 @@ public class FilterRequest
         return _supportedFilterTypes[typeGroup].Any(ft => ft == filter.Type);
     }
 
+    /// <summary>
+    /// Gets the operation and value count for the given filter type.
+    /// </summary>
+    /// <param name="filterType"></param>
+    /// <returns></returns>
     private static (IOperation operation, int valueCount) GetOperationAndValueCount(FilterType filterType) => filterType switch
     {
         FilterType.Between => (new Between(), 2),

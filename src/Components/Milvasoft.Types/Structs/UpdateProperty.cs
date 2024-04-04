@@ -4,6 +4,7 @@
 /// Represents a generic updatable property.
 /// </summary>
 /// <typeparam name="T">The type of the property value.</typeparam>
+[System.Diagnostics.CodeAnalysis.SuppressMessage("Minor Bug", "S2328:\"GetHashCode\" should not reference mutable fields", Justification = "<Pending>")]
 public struct UpdateProperty<T> : IUpdateProperty, IEquatable<UpdateProperty<T>>
 {
     private T _value;
@@ -54,7 +55,6 @@ public struct UpdateProperty<T> : IUpdateProperty, IEquatable<UpdateProperty<T>>
     /// Combines Tenancy Name and BranchNo into a hash code.
     /// </summary>
     /// <returns></returns>
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Minor Bug", "S2328:\"GetHashCode\" should not reference mutable fields", Justification = "<Pending>")]
     public override readonly int GetHashCode() => HashCode.Combine(_value, _isUpdated);
 
     /// <summary>

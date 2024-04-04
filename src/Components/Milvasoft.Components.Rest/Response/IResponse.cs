@@ -33,7 +33,6 @@ public interface IResponse
     /// <param name="delimiter">The delimiter to use for separating messages (default is ';').</param>
     /// <returns>A string representation of the response messages.</returns>
     string MessagesToString(string delimiter = ";");
-
 }
 
 /// <summary>
@@ -53,6 +52,9 @@ public interface IResponse<T> : IResponse, IHasMetadata
     bool IsCachedData { get; set; }
 }
 
+/// <summary>
+/// Represents an interface for a response that contains metadata about the response data.
+/// </summary>
 public interface IHasMetadata
 {
     /// <summary>

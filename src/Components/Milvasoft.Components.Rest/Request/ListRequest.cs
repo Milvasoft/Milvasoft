@@ -33,25 +33,31 @@ public record ListRequest : IListRequest
     public AggregationRequest Aggregation { get; set; }
 
     /// <summary>
-    /// Checks pagination paramete  rs are reasonable.
+    /// Calculates the total number of pages based on the requested page number and row count, and compares it with the estimated count of pages.
     /// </summary>
-    /// <param name="totalDataCount"></param>
-    /// <returns></returns>
+    /// <param name="totalDataCount">The total number of data items.</param>
+    /// <returns>The estimated count of pages.</returns>
     public int CalculatePageCountAndCompareWithRequested(int? totalDataCount)
     {
+        // Check if the page number or row count is null
         if (PageNumber == null || RowCount == null)
             return 0;
 
+        // Check if the page number is less than or equal to 0
         if (PageNumber.HasValue && PageNumber <= 0)
             throw new MilvaUserFriendlyException(MilvaException.WrongRequestedPageNumber);
 
+        // Check if the row count is less than or equal to 0
         if (RowCount.HasValue && RowCount <= 0)
             throw new MilvaUserFriendlyException(MilvaException.WrongRequestedItemCount);
 
+        // Calculate the actual page count
         var actualPageCount = Convert.ToDouble(totalDataCount) / Convert.ToDouble(RowCount);
 
+        // Estimate the count of pages
         var estimatedCountOfPages = Convert.ToInt32(Math.Ceiling(actualPageCount));
 
+        // Check if the estimated count of pages is not 0 and the requested page number is greater than the estimated count of pages
         if (estimatedCountOfPages != 0 && PageNumber > estimatedCountOfPages)
             throw new MilvaUserFriendlyException(MilvaException.WrongPaginationParams, estimatedCountOfPages);
 

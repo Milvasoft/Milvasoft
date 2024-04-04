@@ -8,16 +8,18 @@ namespace Milvasoft.Components.Rest.Request;
 public class AggregationRequest
 {
     /// <summary>
-    /// Filter details
+    /// Filter details.
     /// </summary>
     public virtual List<AggregationCriteria> Criterias { get; set; }
 
     /// <summary>
-    /// If <see cref="SortBy"/> property is not null or empty apply sorting with <see cref="SortBy"/> and <see cref="Type"/>.
+    /// Applies aggregation to the specified query.
     /// </summary>
-    /// <typeparam name="TEntity"></typeparam>
-    /// <param name="query"></param>
-    /// <returns></returns>
+    /// <typeparam name="TEntity">The type of the entity.</typeparam>
+    /// <param name="query">The query to apply aggregation to.</param>
+    /// <param name="runAsync">Indicates whether to run the aggregation asynchronously.</param>
+    /// <param name="cancellationToken">The cancellation token.</param>
+    /// <returns>A list of aggregation results.</returns>
     public virtual async Task<List<AggregationResult>> ApplyAggregationAsync<TEntity>(IQueryable<TEntity> query, bool runAsync = true, CancellationToken cancellationToken = default)
     {
         if (Criterias.IsNullOrEmpty())
