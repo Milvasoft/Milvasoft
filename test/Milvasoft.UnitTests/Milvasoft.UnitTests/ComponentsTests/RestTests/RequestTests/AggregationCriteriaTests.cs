@@ -239,7 +239,7 @@ public class AggregationCriteriaTests
         Func<Task<AggregationResult>> act = async () => await criteria.ApplyAggregationAsync(query, true);
 
         // Assert
-        await act.Should().ThrowAsync<MilvaDeveloperException>().WithMessage("Query provider type is 'EnumerableQuery' cannot run asyncrhonosly!");
+        await act.Should().ThrowAsync<MilvaDeveloperException>().WithMessage("Query provider type is 'EnumerableQuery' cannot run asynchronously!");
     }
 
     #endregion
