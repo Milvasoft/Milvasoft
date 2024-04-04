@@ -87,7 +87,7 @@ public class Response : IResponse
 
     public static Response Success(string message, MessageType messageType)
     {
-        var response = new Response(message)
+        var response = new Response
         {
             IsSuccess = true,
             StatusCode = (int)HttpStatusCode.OK,

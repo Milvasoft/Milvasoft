@@ -1,22 +1,20 @@
 ﻿using Milvasoft.Components.Rest.Enums;
 using Milvasoft.Components.Rest.Response;
+using Milvasoft.Core.Utils.JsonConverters;
+using System.Text.Json;
 
 namespace Milvasoft.Components.Rest;
+
 public static partial class RestExtensions
 {
-    public static bool TryConvertToResponse(object obj, out IResponse response)
+    public static JsonSerializerOptions AddResponseConverters(this JsonSerializerOptions options)
     {
-        try
-        {
-            response = (IResponse)obj;
-        }
-        catch
-        {
-            response = null;
-            return false;
-        }
+        if (options == null)
+            return null;
 
-        return true;
+        options.Converters.Add(new InterfaceConverterFactory<Response.Response, IResponse>());
+
+        return options;
     }
 
     #region Success
@@ -98,5 +96,4 @@ public static partial class RestExtensions
     public static Response<T> ToErrorResponse<T>(this T data, ResponseMessage responseMessage) => Response<T>.Error(data, responseMessage);
 
     #endregion
-
 }

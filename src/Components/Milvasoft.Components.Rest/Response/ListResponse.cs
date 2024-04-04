@@ -160,6 +160,12 @@ public class ListResponse<T> : Response<List<T>>
 
     #region Error
 
+    public static ListResponse<T> Error() => new(LocalizerKeys.Failed)
+    {
+        IsSuccess = false,
+        StatusCode = (int)HttpStatusCode.BadRequest,
+    };
+
     public static ListResponse<T> Error(List<T> data) => new(data)
     {
         IsSuccess = false,
@@ -219,5 +225,4 @@ public class ListResponse<T> : Response<List<T>>
 
     #endregion
 #pragma warning restore CS0108 // Member hides inherited member; missing new keyword
-
 }
