@@ -24,11 +24,17 @@ public class FilterRequest
 
     private static readonly Dictionary<TypeGroup, HashSet<FilterType>> _supportedFilterTypes = new()
     {
+        { TypeGroup.Default, new HashSet<FilterType>  { FilterType.EqualTo , FilterType.NotEqualTo } },
         { TypeGroup.Text, new HashSet<FilterType> { FilterType.Contains, FilterType.DoesNotContain, FilterType.EndsWith, FilterType.EqualTo, FilterType.IsEmpty, FilterType.IsNotEmpty, FilterType.IsNotNull, FilterType.IsNotNullNorWhiteSpace, FilterType.IsNull, FilterType.IsNullOrWhiteSpace, FilterType.NotEqualTo, FilterType.StartsWith, } },
-        { TypeGroup.Number, new HashSet<FilterType> { FilterType.Between,FilterType.EqualTo, FilterType.Between,FilterType.GreaterThan, FilterType.GreaterThanOrEqualTo, FilterType.LessThan,FilterType.LessThanOrEqualTo, FilterType.NotEqualTo } },
+        { TypeGroup.Number, new HashSet<FilterType> { FilterType.Between, FilterType.EqualTo, FilterType.Between,FilterType.GreaterThan, FilterType.GreaterThanOrEqualTo, FilterType.LessThan,FilterType.LessThanOrEqualTo, FilterType.NotEqualTo } },
         { TypeGroup.Boolean, new HashSet<FilterType>  { FilterType.EqualTo , FilterType.NotEqualTo } },
-        { TypeGroup.Date, new HashSet<FilterType> { FilterType.Between,FilterType.EqualTo, FilterType.GreaterThan, FilterType.GreaterThanOrEqualTo, FilterType.LessThan, FilterType.LessThanOrEqualTo, FilterType.NotEqualTo } }
+        { TypeGroup.Date, new HashSet<FilterType> { FilterType.Between, FilterType.EqualTo, FilterType.GreaterThan, FilterType.GreaterThanOrEqualTo, FilterType.LessThan, FilterType.LessThanOrEqualTo, FilterType.NotEqualTo } }
     };
+
+    /// <summary>
+    /// Specifies the type of merging for the filter criterias.
+    /// </summary>
+    public virtual Connector MergeType { get; set; } = Connector.And;
 
     /// <summary>
     /// Filter details.
@@ -52,31 +58,50 @@ public class FilterRequest
         {
             var propertyType = CheckPropertyAndGetType<TEntity>(filter);
 
-            if (!IsFilterTypeSupported(propertyType, filter))
-                throw new MilvaDeveloperException($"{filter.FilterType} is not supported for {propertyType.Name}.");
+            if (propertyType == null || !IsFilterTypeSupported(propertyType, filter))
+                continue;
 
-            (IOperation operation, int valueCount) = GetOperationAndValueCount(filter.FilterType);
+            (IOperation operation, int valueCount) = GetOperationAndValueCount(filter.Type);
 
             if (valueCount == 0)
             {
-                expression.By(filter.FilterBy, operation, Connector.And);
+                expression.By(filter.FilterBy, operation, MergeType);
             }
             else if (valueCount == 1)
             {
-                var value = ((JsonElement)filter.Value).Deserialize(propertyType);
+                var value = GetValueWithCorrectType<TEntity>(filter.Value, filter.FilterBy);
 
-                expression.By(filter.FilterBy, operation, value, Connector.And);
+                expression.By(filter.FilterBy, operation, value, MergeType);
             }
             else
             {
-                var value = ((JsonElement)filter.Value).Deserialize(propertyType);
-                var value2 = ((JsonElement)filter.OtherValue).Deserialize(propertyType);
+                var value = GetValueWithCorrectType<TEntity>(filter.Value, filter.FilterBy);
+                var otherValue = GetValueWithCorrectType<TEntity>(filter.OtherValue, filter.FilterBy);
 
-                expression.By(filter.FilterBy, operation, value, value2, Connector.And);
+                expression.By(filter.FilterBy, operation, value, otherValue, MergeType);
             }
         }
 
         return expression;
+    }
+
+    private static object GetValueWithCorrectType<TEntity>(object value, string propertyName)
+    {
+        var propertyType = typeof(TEntity).GetPublicPropertyIgnoreCase(propertyName).PropertyType;
+
+        if (value == null)
+        {
+            if (propertyType.IsNonNullableValueType())
+                throw new MilvaDeveloperException("Please provide filter values!");
+
+            if (propertyType == typeof(string))
+                value = string.Empty;
+        }
+
+        if (value is JsonElement jsonElementOfValue)
+            value = jsonElementOfValue.Deserialize(propertyType);
+
+        return value;
     }
 
     private static Type CheckPropertyAndGetType<TEntity>(FilterCriteria filter)
@@ -86,7 +111,10 @@ public class FilterRequest
         if (filter.FilterByContainsSpecialChars())
             propertyName = filter.GetUntilSpecialCharFromFilterBy();
 
-        var property = typeof(TEntity).ThrowIfPropertyNotExists(propertyName);
+        var property = typeof(TEntity).GetPublicPropertyIgnoreCase(propertyName);
+
+        if (property == null)
+            return null;
 
         var propertyType = property.PropertyType;
 
@@ -95,7 +123,7 @@ public class FilterRequest
         if (underlyingNullableType != null)
             propertyType = underlyingNullableType;
 
-        if (propertyType.IsArray || propertyType.IsEnumerableType())
+        if (propertyType != typeof(string) && (propertyType.IsArray || propertyType.IsEnumerableType()))
         {
             if (propertyType.IsGenericType)
             {
@@ -118,12 +146,12 @@ public class FilterRequest
     {
         var typeGroup = TypeGroup.Default;
 
-        if (_typeGroups.Any(i => i.Value.Any(v => v.Name == propertyType.Name)))
-        {
-            typeGroup = _typeGroups.FirstOrDefault(i => i.Value.Any(v => v.Name == propertyType.Name)).Key;
-        }
+        var tempType = propertyType;
 
-        return _supportedFilterTypes[typeGroup].Any(ft => ft == filter.FilterType);
+        if (_typeGroups.Any(i => i.Value.Any(v => v.Name == tempType.Name)))
+            typeGroup = _typeGroups.FirstOrDefault(i => i.Value.Any(v => v.Name == tempType.Name)).Key;
+
+        return _supportedFilterTypes[typeGroup].Any(ft => ft == filter.Type);
     }
 
     private static (IOperation operation, int valueCount) GetOperationAndValueCount(FilterType filterType) => filterType switch

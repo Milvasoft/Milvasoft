@@ -4,6 +4,7 @@ using Milvasoft.Components.Rest.Request;
 using Milvasoft.Components.Rest.Response;
 using Milvasoft.Core.Exceptions;
 using Milvasoft.UnitTests.ComponentsTests.RestTests.Fixture;
+using Milvasoft.UnitTests.TestHelpers;
 
 namespace Milvasoft.UnitTests.ComponentsTests.RestTests.RequestTests;
 
@@ -279,31 +280,27 @@ public class AggregationCriteriaTests
             },
         };
 
-        var dbContextMock = new DbContextMock().GetDbContextFixture();
-        dbContextMock.TestEntities.AddRange(entities);
-        dbContextMock.SaveChanges();
-
         yield return new object[]
         {
-            dbContextMock,
+            entities,
             new AggregationCriteria { AggregateBy = nameof(RestTestEntityFixture.Name), Type = AggregationType.Avg}
         };
 
         yield return new object[]
         {
-            dbContextMock,
+            entities,
             new AggregationCriteria { AggregateBy = nameof(RestTestEntityFixture.Name), Type = AggregationType.Sum}
         };
 
         yield return new object[]
         {
-            dbContextMock,
+            entities,
             new AggregationCriteria { AggregateBy = nameof(RestTestEntityFixture.Number), Type = AggregationType.Avg}
         };
 
         yield return new object[]
         {
-            dbContextMock,
+            entities,
             new AggregationCriteria { AggregateBy = nameof(RestTestEntityFixture.Number), Type = AggregationType.Sum}
         };
     }
@@ -320,80 +317,88 @@ public class AggregationCriteriaTests
                 Name = "John",
                 Count = 1,
                 Price = 10M,
-                Number = RestTestEnumFixture.Two
+                Number = RestTestEnumFixture.Two,
+                InsertDate = DateTime.Now,
+                IsActive = true,
+                UpdateDate = DateTime.Now,
             },
             new() {
                 Id = 2,
                 Name = "Elise",
                 Count = 10,
                 Price = 15.5M,
-                Number = RestTestEnumFixture.One
+                Number = RestTestEnumFixture.One,
+                InsertDate = DateTime.Now,
+                IsActive = true,
+                UpdateDate = DateTime.Now,
             },
             new() {
                 Id = 3,
                 Name = "Jack",
                 Count = 90,
                 Price = 0.50M,
-                Number = RestTestEnumFixture.Zero
+                Number = RestTestEnumFixture.Zero,
+                InsertDate = DateTime.Now,
+                IsActive = true,
+                UpdateDate = DateTime.Now,
             },
             new() {
                 Id = 4,
                 Name = "Mary",
                 Count = 101,
                 Price = 4M,
-                Number = RestTestEnumFixture.One
+                Number = RestTestEnumFixture.One,
+                InsertDate = DateTime.Now,
+                IsActive = true,
+                UpdateDate = DateTime.Now,
             },
         };
 
-        var dbContextMock = new DbContextMock().GetDbContextFixture();
-        dbContextMock.TestEntities.AddRange(entities);
-        dbContextMock.SaveChanges();
-
         yield return new object[]
         {
-            dbContextMock,
+            entities,
             new AggregationCriteria { AggregateBy = nameof(RestTestEntityFixture.Name), Type = AggregationType.Count},
             new AggregationResult {   AggregatedBy = nameof(RestTestEntityFixture.Name) , Type = AggregationType.Count, Result = 4 }
         };
         yield return new object[]
         {
-            dbContextMock,
+            entities,
             new AggregationCriteria { AggregateBy = nameof(RestTestEntityFixture.Price), Type = AggregationType.Count},
             new AggregationResult {   AggregatedBy = nameof(RestTestEntityFixture.Price) , Type = AggregationType.Count, Result = 4 }
         };
         yield return new object[]
         {
-            dbContextMock,
+            entities,
             new AggregationCriteria { AggregateBy = nameof(RestTestEntityFixture.Price), Type = AggregationType.Avg},
             new AggregationResult {   AggregatedBy = nameof(RestTestEntityFixture.Price) , Type = AggregationType.Avg, Result = 7.5 }
         };
         yield return new object[]
         {
-            dbContextMock,
+            entities,
             new AggregationCriteria { AggregateBy = nameof(RestTestEntityFixture.Price), Type = AggregationType.Sum},
             new AggregationResult {   AggregatedBy = nameof(RestTestEntityFixture.Price) , Type = AggregationType.Sum, Result = 30M }
         };
         yield return new object[]
         {
-            dbContextMock,
+            entities,
             new AggregationCriteria { AggregateBy = nameof(RestTestEntityFixture.Count), Type = AggregationType.Min},
             new AggregationResult {   AggregatedBy = nameof(RestTestEntityFixture.Count) , Type = AggregationType.Min, Result = 1 }
         };
         yield return new object[]
         {
-            dbContextMock,
+            entities,
             new AggregationCriteria { AggregateBy = nameof(RestTestEntityFixture.Price), Type = AggregationType.Max},
             new AggregationResult {   AggregatedBy = nameof(RestTestEntityFixture.Price) , Type = AggregationType.Max, Result =   15.5M }
         };
         yield return new object[]
         {
-            dbContextMock,
+            entities,
             new AggregationCriteria { AggregateBy = nameof(RestTestEntityFixture.Name), Type = AggregationType.Min},
             new AggregationResult {   AggregatedBy = nameof(RestTestEntityFixture.Name) , Type = AggregationType.Min, Result =  "Elise" }
         };
         yield return new object[]
         {
-            dbContextMock,
+            entities,
             new AggregationCriteria { AggregateBy = nameof(RestTestEntityFixture.Number), Type = AggregationType.Min},
             new AggregationResult {   AggregatedBy = nameof(RestTestEntityFixture.Number) , Type = AggregationType.Min, Result = RestTestEnumFixture.Zero }
         };
@@ -420,12 +425,12 @@ public class AggregationCriteriaTests
                 Number = RestTestEnumFixture.Two
             }
         };
-        var dbContextMock = new DbContextMock().GetDbContextFixture();
-        dbContextMock.TestEntities.AddRange(entities);
-        dbContextMock.SaveChanges();
+        using var dbContextFixture = new DbContextMock(nameof(AggregationCriteria)).GetDbContextFixture();
+        await dbContextFixture.TestEntities.AddRangeAsync(entities);
+        await dbContextFixture.SaveChangesAsync();
 
         // Act
-        var result = await criteria.ApplyAggregationAsync(dbContextMock.TestEntities, true);
+        var result = await criteria.ApplyAggregationAsync(dbContextFixture.TestEntities, true);
 
         // Assert
         result.Result.Should().BeNull();
@@ -440,12 +445,12 @@ public class AggregationCriteriaTests
             AggregateBy = nameof(RestTestEntityFixture.Name),
             Type = AggregationType.Avg
         };
-        var dbContextMock = new DbContextMock().GetDbContextFixture();
-        dbContextMock.TestEntities = null;
-        await dbContextMock.SaveChangesAsync();
+        using var dbContextFixture = new DbContextMock(nameof(AggregationCriteria)).GetDbContextFixture();
+        dbContextFixture.TestEntities = null;
+        await dbContextFixture.SaveChangesAsync();
 
         // Act
-        var result = await criteria.ApplyAggregationAsync(dbContextMock.TestEntities, true);
+        var result = await criteria.ApplyAggregationAsync(dbContextFixture.TestEntities, true);
 
         // Assert
         result.Result.Should().BeNull();
@@ -453,12 +458,15 @@ public class AggregationCriteriaTests
 
     [Theory]
     [MemberData(nameof(InvalidEfQuerySourceForApplyAggregationAsyncMethodData))]
-    public async Task ApplyAggregationAsync_WithEfQueryProviderSourceAndAsyncRunAndUnsupportedAggregateByPropetyTypeWithAggregationMethod_ShouldThrowException(RestDbContextFixture dbContextMock, AggregationCriteria criteria)
+    public async Task ApplyAggregationAsync_WithEfQueryProviderSourceAndAsyncRunAndUnsupportedAggregateByPropetyTypeWithAggregationMethod_ShouldThrowException(List<RestTestEntityFixture> entities, AggregationCriteria criteria)
     {
         // Arrange
+        using var dbContextFixture = new DbContextMock(nameof(AggregationCriteria)).GetDbContextFixture();
+        await dbContextFixture.TestEntities.AddRangeAsync(entities);
+        await dbContextFixture.SaveChangesAsync();
 
         // Act
-        Func<Task<AggregationResult>> act = async () => await criteria.ApplyAggregationAsync(dbContextMock.TestEntities, true);
+        Func<Task<AggregationResult>> act = async () => await criteria.ApplyAggregationAsync(dbContextFixture.TestEntities, true);
 
         // Assert
         await act.Should().ThrowAsync<MilvaDeveloperException>();
@@ -466,12 +474,15 @@ public class AggregationCriteriaTests
 
     [Theory]
     [MemberData(nameof(ValidEfQuerySourceForApplyAggregationAsyncMethodData))]
-    public async Task ApplyAggregationAsync_WithEfQueryProviderSourceAndAsyncRunAndValidParameters_ShouldReturnExpectedResult(RestDbContextFixture dbContextMock, AggregationCriteria criteria, AggregationResult expectedResult)
+    public async Task ApplyAggregationAsync_WithEfQueryProviderSourceAndAsyncRunAndValidParameters_ShouldReturnExpectedResult(List<RestTestEntityFixture> entities, AggregationCriteria criteria, AggregationResult expectedResult)
     {
         // Arrange
+        using var dbContextFixture = new DbContextMock(nameof(AggregationCriteria)).GetDbContextFixture();
+        await dbContextFixture.TestEntities.AddRangeAsync(entities);
+        await dbContextFixture.SaveChangesAsync();
 
         // Act
-        var result = await criteria.ApplyAggregationAsync(dbContextMock.TestEntities, true);
+        var result = await criteria.ApplyAggregationAsync(dbContextFixture.TestEntities, true);
 
         // Assert
         result.Should().BeEquivalentTo(expectedResult, options => options.RespectingRuntimeTypes());
@@ -498,12 +509,12 @@ public class AggregationCriteriaTests
                 Number = RestTestEnumFixture.Two
             }
         };
-        var dbContextMock = new DbContextMock().GetDbContextFixture();
-        dbContextMock.TestEntities.AddRange(entities);
-        dbContextMock.SaveChanges();
+        using var dbContextFixture = new DbContextMock(nameof(AggregationCriteria)).GetDbContextFixture();
+        await dbContextFixture.TestEntities.AddRangeAsync(entities);
+        await dbContextFixture.SaveChangesAsync();
 
         // Act
-        var result = await criteria.ApplyAggregationAsync(dbContextMock.TestEntities, false);
+        var result = await criteria.ApplyAggregationAsync(dbContextFixture.TestEntities, false);
 
         // Assert
         result.Result.Should().BeNull();
@@ -518,12 +529,12 @@ public class AggregationCriteriaTests
             AggregateBy = nameof(RestTestEntityFixture.Name),
             Type = AggregationType.Avg
         };
-        var dbContextMock = new DbContextMock().GetDbContextFixture();
-        dbContextMock.TestEntities = null;
-        await dbContextMock.SaveChangesAsync();
+        using var dbContextFixture = new DbContextMock(nameof(AggregationCriteria)).GetDbContextFixture();
+        dbContextFixture.TestEntities = null;
+        await dbContextFixture.SaveChangesAsync();
 
         // Act
-        var result = await criteria.ApplyAggregationAsync(dbContextMock.TestEntities, false);
+        var result = await criteria.ApplyAggregationAsync(dbContextFixture.TestEntities, false);
 
         // Assert
         result.Result.Should().BeNull();
@@ -531,12 +542,15 @@ public class AggregationCriteriaTests
 
     [Theory]
     [MemberData(nameof(InvalidEfQuerySourceForApplyAggregationAsyncMethodData))]
-    public async Task ApplyAggregationAsync_WithEfQueryProviderSourceAndSyncRunAndUnsupportedAggregateByPropetyTypeWithAggregationMethod_ShouldThrowException(RestDbContextFixture dbContextMock, AggregationCriteria criteria)
+    public async Task ApplyAggregationAsync_WithEfQueryProviderSourceAndSyncRunAndUnsupportedAggregateByPropetyTypeWithAggregationMethod_ShouldThrowException(List<RestTestEntityFixture> entities, AggregationCriteria criteria)
     {
         // Arrange
+        using var dbContextFixture = new DbContextMock(nameof(AggregationCriteria)).GetDbContextFixture();
+        await dbContextFixture.TestEntities.AddRangeAsync(entities);
+        await dbContextFixture.SaveChangesAsync();
 
         // Act
-        Func<Task<AggregationResult>> act = async () => await criteria.ApplyAggregationAsync(dbContextMock.TestEntities, false);
+        Func<Task<AggregationResult>> act = async () => await criteria.ApplyAggregationAsync(dbContextFixture.TestEntities, false);
 
         // Assert
         await act.Should().ThrowAsync<MilvaDeveloperException>();
@@ -544,9 +558,12 @@ public class AggregationCriteriaTests
 
     [Theory]
     [MemberData(nameof(ValidEfQuerySourceForApplyAggregationAsyncMethodData))]
-    public async Task ApplyAggregationAsync_WithEfQueryProviderSourceAndSyncRunAndValidParameters_ShouldReturnExpectedResult(RestDbContextFixture dbContextMock, AggregationCriteria criteria, AggregationResult expectedResult)
+    public async Task ApplyAggregationAsync_WithEfQueryProviderSourceAndSyncRunAndValidParameters_ShouldReturnExpectedResult(List<RestTestEntityFixture> entities, AggregationCriteria criteria, AggregationResult expectedResult)
     {
         // Arrange
+        using var dbContextMock = new DbContextMock(nameof(AggregationCriteria)).GetDbContextFixture();
+        await dbContextMock.TestEntities.AddRangeAsync(entities);
+        await dbContextMock.SaveChangesAsync();
 
         // Act
         var result = await criteria.ApplyAggregationAsync(dbContextMock.TestEntities, false);

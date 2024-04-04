@@ -1,6 +1,7 @@
 ﻿using FluentAssertions;
 using Milvasoft.Components.Rest.Request;
 using Milvasoft.UnitTests.ComponentsTests.RestTests.Fixture;
+using Milvasoft.UnitTests.TestHelpers;
 
 namespace Milvasoft.UnitTests.ComponentsTests.RestTests.RequestTests;
 
@@ -72,7 +73,7 @@ public class AggregationRequestTests
         {
             Criterias = null
         };
-        var dbContextMock = new DbContextMock().GetDbContextFixture();
+        var dbContextMock = new DbContextMock(nameof(AggregationRequest)).GetDbContextFixture();
         dbContextMock.TestEntities = null;
         await dbContextMock.SaveChangesAsync();
 
@@ -91,7 +92,7 @@ public class AggregationRequestTests
         {
             Criterias = []
         };
-        var dbContextMock = new DbContextMock().GetDbContextFixture();
+        var dbContextMock = new DbContextMock(nameof(AggregationRequest)).GetDbContextFixture();
         dbContextMock.TestEntities = null;
         await dbContextMock.SaveChangesAsync();
 

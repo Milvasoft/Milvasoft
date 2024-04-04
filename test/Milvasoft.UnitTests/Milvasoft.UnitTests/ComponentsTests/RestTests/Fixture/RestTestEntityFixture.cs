@@ -10,4 +10,7 @@ public class RestTestEntityFixture
     public decimal Price { get; set; }
     public int Count { get; set; }
     public RestTestEnumFixture Number { get; set; }
+    public bool? IsActive { get; set; }
+    public DateTime InsertDate { get; set; }
+    public DateTime? UpdateDate { get; set; }
 }

@@ -27,7 +27,7 @@ public class FilterCriteria
     /// <summary>
     /// Gets or sets the type of filter operation to apply.
     /// </summary>
-    public FilterType FilterType { get; set; }
+    public FilterType Type { get; set; }
 
     public bool FilterByContainsSpecialChars() => FilterBy?.Any(_specialChars.Contains) ?? false;
 
