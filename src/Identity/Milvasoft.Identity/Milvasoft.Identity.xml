@@ -427,18 +427,19 @@
             <param name="seperator"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Identity.Concrete.IdentityHelpers.ThrowErrorMessagesIfNotSuccess(Microsoft.AspNetCore.Identity.IdentityResult)">
-            <summary>
-            If <paramref name="result"/> is not succeeded throwns <see cref="T:Milvasoft.Core.Exceptions.MilvaUserFriendlyException"/>.
-            </summary>
-            <param name="result"></param>
-        </member>
         <member name="M:Milvasoft.Identity.Concrete.IdentityHelpers.ThrowErrorMessagesIfNotSuccess(Microsoft.AspNetCore.Identity.IdentityResult,System.Char)">
             <summary>
             If <paramref name="result"/> is not succeeded throwns <see cref="T:Milvasoft.Core.Exceptions.MilvaUserFriendlyException"/>.
             </summary>
             <param name="result"></param>
             <param name="seperator"></param>
+        </member>
+        <member name="M:Milvasoft.Identity.Concrete.IdentityHelpers.GenerateRandomPassword(Microsoft.AspNetCore.Identity.PasswordOptions)">
+            <summary>
+            Generates random password according to <paramref name="passwordOptions"/>.
+            </summary>
+            <param name="passwordOptions"></param>
+            <returns></returns>
         </member>
         <member name="M:Milvasoft.Identity.Concrete.IdentityHelpers.GenerateRandomPassword(System.Int32,System.Boolean,System.Boolean,System.Boolean,System.Boolean)">
             <summary>
@@ -449,13 +450,6 @@
             <param name="digit"></param>
             <param name="lowercase"></param>
             <param name="uppercase"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Milvasoft.Identity.Concrete.IdentityHelpers.GenerateRandomPassword(Microsoft.AspNetCore.Identity.PasswordOptions)">
-            <summary>
-            Generates random password according to <paramref name="passwordOptions"/>.
-            </summary>
-            <param name="passwordOptions"></param>
             <returns></returns>
         </member>
         <member name="M:Milvasoft.Identity.Concrete.IdentityHelpers.CreateRefreshToken">

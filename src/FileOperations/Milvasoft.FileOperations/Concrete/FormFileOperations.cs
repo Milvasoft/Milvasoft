@@ -211,69 +211,7 @@ public static partial class FormFileOperations
                                                                          string basePath,
                                                                          FilesFolderNameCreator folderNameCreator,
                                                                          string propertyName)
-    {
-        if (files.IsNullOrEmpty())
-            return [];
-
-        //Gets file extension.
-        var fileExtension = Path.GetExtension(files[0].FileName);
-
-        //Gets the class name. E.g. If class is ProductDTO then sets the value of this variable as "Product".
-        var folderNameOfClass = folderNameCreator.Invoke(entity.GetType());
-
-        //We combined the name of this class (folderNameOfClass) with the path of the basePath folder. So we created the path of the folder belonging to this class.
-        var folderPathOfClass = Path.Combine(basePath, folderNameOfClass);
-
-        //Since each data belonging to this class (folderNameOfClass) will have a separate folder, we received the Id of the data sent.
-        var folderNameOfItem = CommonHelper.PropertyExists<TEntity>(propertyName)
-                                ? entity.GetType().GetProperty(propertyName).GetValue(entity, null).ToString()
-                                : throw new MilvaDeveloperException("PropertyNotExists");
-
-        //We created the path to the folder of this Id (folderNameOfItem).
-        var folderPathOfItem = Path.Combine(folderPathOfClass, folderNameOfItem);
-
-        try
-        {
-            //If there is no such folder in this path (folderPathOfClass), we created it.
-            if (!Directory.Exists(folderPathOfClass))
-                Directory.CreateDirectory(folderPathOfClass);
-
-            //If there is no such folder in this path (folderPathOfItem), we created it.
-            if (!Directory.Exists(folderPathOfItem))
-                Directory.CreateDirectory(folderPathOfItem);
-
-            DirectoryInfo directory = new(folderPathOfItem);
-
-            var directoryFiles = directory.GetFiles();
-
-            int markerNo = directoryFiles.IsNullOrEmpty()
-                            ? 1
-                            : directoryFiles.Max(fileInDir => Convert.ToInt32(Path.GetFileNameWithoutExtension(fileInDir.FullName).Split('_')[1])) + 1;
-
-            var folderPaths = new List<string>();
-
-            foreach (var item in files)
-            {
-                var fileNameWithExtension = $"{folderNameOfItem}_{markerNo}{fileExtension}";
-                var filePathOfItem = Path.Combine(folderPathOfItem, fileNameWithExtension);
-                using (var fileStream = new FileStream(filePathOfItem, FileMode.Create))
-                {
-                    await item.CopyToAsync(fileStream).ConfigureAwait(false);
-                }
-
-                folderPaths.Add(filePathOfItem);
-                markerNo++;
-            }
-
-            return folderPaths;
-        }
-        catch (Exception)
-        {
-            Directory.Delete(folderPathOfClass);
-            Directory.Delete(folderPathOfItem);
-            throw;
-        }
-    }
+        => await SaveFilesToPathAsync(files.ToList(), entity, basePath, folderNameCreator, propertyName);
 
     /// <summary>
     /// Saves uploaded IFormFile files to physical file path. If file list is null or empty returns empty <see cref="List{String}"/> 

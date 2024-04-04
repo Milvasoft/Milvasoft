@@ -806,24 +806,7 @@ public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : 
     protected virtual void ConvertDateTimePropertiesToUtc(IEnumerable<TEntity> documents)
     {
         foreach (var document in documents)
-        {
-            foreach (var prop in document.GetType().GetProperties())
-            {
-                if (prop.PropertyType == typeof(DateTime))
-                {
-                    var propValue = (DateTime)prop.GetValue(document);
-
-                    prop.SetValue(document, propValue.ToUniversalTime());
-                }
-                else if (prop.PropertyType == typeof(DateTime?))
-                {
-                    var propValue = (DateTime?)prop.GetValue(document);
-
-                    if (propValue.HasValue)
-                        prop.SetValue(document, propValue.Value.ToUniversalTime());
-                }
-            }
-        }
+            ConvertDateTimePropertiesToUtc(document);
     }
 
     #endregion
