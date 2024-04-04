@@ -77,7 +77,7 @@ internal static class Rfc6238AuthenticationService
         // Allow a variance of no greater than 90 seconds in either direction
         var currentTimeStep = GetCurrentTimeStepNumber();
 
-        using var hashAlgorithm = new HMACSHA1(securityToken);
+        using var hashAlgorithm = new HMACSHA512(securityToken);
 
         return ComputeTotp(hashAlgorithm, currentTimeStep, modifier);
     }
@@ -89,7 +89,8 @@ internal static class Rfc6238AuthenticationService
         // Allow a variance of no greater than 90 seconds in either direction
         var currentTimeStep = GetCurrentTimeStepNumber();
 
-        using var hashAlgorithm = new HMACSHA1(securityToken);
+        using var hashAlgorithm = new HMACSHA512(securityToken);
+
         for (var i = -2; i <= 2; i++)
         {
             var computedTotp = ComputeTotp(hashAlgorithm, (ulong)((long)currentTimeStep + i), modifier);

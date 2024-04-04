@@ -628,7 +628,7 @@ public static partial class FormFileOperations
     /// <param name="input"></param>
     /// <param name="regexString"></param>
     /// <returns></returns>
-    private static string GetExtension(string input, string regexString) => new Regex(regexString).Match(input).Captures?.FirstOrDefault()?.Value;
+    private static string GetExtension(string input, string regexString) => new Regex(regexString, RegexOptions.NonBacktracking, TimeSpan.FromMilliseconds(100)).Match(input).Captures?.FirstOrDefault()?.Value;
 
     /// <summary>
     /// File types to be accepted.

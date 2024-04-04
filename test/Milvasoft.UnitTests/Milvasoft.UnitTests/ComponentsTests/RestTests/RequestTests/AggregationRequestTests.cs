@@ -15,7 +15,7 @@ public class AggregationRequestTests
         // Arrange
         var request = new AggregationRequest
         {
-            Criteria = null
+            Criterias = null
         };
 
         IQueryable<RestTestEntityFixture> validQueryable = new List<RestTestEntityFixture>
@@ -41,7 +41,7 @@ public class AggregationRequestTests
         // Arrange
         var request = new AggregationRequest
         {
-            Criteria = []
+            Criterias = []
         };
 
         IQueryable<RestTestEntityFixture> validQueryable = new List<RestTestEntityFixture>
@@ -71,7 +71,7 @@ public class AggregationRequestTests
         // Arrange
         var request = new AggregationRequest
         {
-            Criteria = null
+            Criterias = null
         };
         var dbContextMock = new DbContextMock(nameof(AggregationRequest)).GetDbContextFixture();
         dbContextMock.TestEntities = null;
@@ -90,7 +90,7 @@ public class AggregationRequestTests
         // Arrange
         var request = new AggregationRequest
         {
-            Criteria = []
+            Criterias = []
         };
         var dbContextMock = new DbContextMock(nameof(AggregationRequest)).GetDbContextFixture();
         dbContextMock.TestEntities = null;

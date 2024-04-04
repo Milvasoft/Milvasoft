@@ -21,6 +21,8 @@ public static class RegexHelper
     /// <param name="input">The input string to match against the regular expression.</param>
     /// <param name="regexString">The regular expression pattern to match.</param>
     /// <returns><c>true</c> if the input matches the regex; otherwise, <c>false</c>.</returns>
-    public static bool MatchRegex(this string input, string regexString) => !string.IsNullOrWhiteSpace(input) && regexString != null && new Regex(regexString).Match(input).Success;
+    public static bool MatchRegex(this string input, string regexString) => !string.IsNullOrWhiteSpace(input)
+                                                                            && regexString != null
+                                                                            && new Regex(regexString, RegexOptions.NonBacktracking, TimeSpan.FromMilliseconds(100)).Match(input).Success;
 
 }

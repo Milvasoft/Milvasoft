@@ -28,7 +28,7 @@ public class ReApplyOptionalRouteParameterOperationFilter : IOperationFilter
 
         string regex = $"{{(?<{_captureName}>\\w+)\\?}}";
 
-        var matches = Regex.Matches(httpMethodWithOptional.Template, regex);
+        var matches = Regex.Matches(httpMethodWithOptional.Template, regex, RegexOptions.NonBacktracking, TimeSpan.FromMilliseconds(100));
 
         foreach (Match match in matches.Cast<Match>())
         {

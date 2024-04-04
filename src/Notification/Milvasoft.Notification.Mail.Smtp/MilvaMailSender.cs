@@ -130,7 +130,7 @@ public class MilvaMailSender(string from, NetworkCredential networkCredential, i
 
         var regex = @"[^:]\w+\/[\w-+\d.]+(?=;|,)";
 
-        var ct = new Regex(regex).Match(base64).Captures?.FirstOrDefault()?.Value;
+        var ct = new Regex(regex, RegexOptions.NonBacktracking, TimeSpan.FromMilliseconds(100)).Match(base64).Captures?.FirstOrDefault()?.Value;
 
         var splittedContentType = ct?.Split('/');
 
