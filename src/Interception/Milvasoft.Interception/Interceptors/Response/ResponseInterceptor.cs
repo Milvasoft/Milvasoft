@@ -11,10 +11,10 @@ namespace Milvasoft.Interception.Interceptors.Response;
 
 public class ResponseInterceptor(IServiceProvider serviceProvider, IResponseInterceptionOptions interceptionOptions) : IMilvaInterceptor
 {
-    public static int InterceptionOrder { get; set; } = int.MaxValue;
-
     private readonly IServiceProvider _serviceProvider = serviceProvider;
     private readonly IResponseInterceptionOptions _interceptionOptions = interceptionOptions;
+
+    public int InterceptionOrder { get; set; } = int.MaxValue;
 
     public async Task OnInvoke(Call call)
     {

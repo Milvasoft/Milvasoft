@@ -85,7 +85,7 @@ public sealed class Decorator
         var decoratorTypesMap = MethodDecoratorMap.Get(targetObject.GetType());
 
         var decoratorsMap = decoratorTypesMap.ToDictionary(typeMapItem => typeMapItem.Key,
-                                                           typeMapItem => typeMapItem.Value.Select(type => GetDecorator(type)).ToArray());
+                                                           typeMapItem => typeMapItem.Value.Select(type => GetDecorator(type)).OrderBy(i => i.InterceptionOrder).ToArray());
 
         return new DecoratorInterceptor(new ReadOnlyDictionary<MethodInfo, IMilvaInterceptor[]>(decoratorsMap));
 

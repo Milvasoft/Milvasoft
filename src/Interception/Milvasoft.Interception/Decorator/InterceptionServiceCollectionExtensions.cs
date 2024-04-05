@@ -34,13 +34,31 @@ public static class InterceptionServiceCollectionExtensions
     {
         ArgumentNullException.ThrowIfNull(assembly);
 
+        var types = assembly.FindDecorableTypes().ToList();
+
+        return services.AddMilvaInterception(types: types, configurationManager);
+    }
+
+    /// <summary>
+    /// Decorates service collection with intercaptable service methods. 
+    /// Use this method after all registrations. Because it can be decorates <see cref="IInterceptable"/> services from service collection.
+    /// 
+    /// <para> You can decorate the service collection with <see cref="Intercept{T}(IServiceCollection)"/> overload. </para>
+    /// 
+    /// <para><paramref name="assembly"/> is assembly containing classes that contain the methods to be intercepted </para>
+    /// </summary>
+    /// <param name="services"> Service collection to be decorated. </param>
+    /// <param name="assembly"> An assembly containing classes that contain the methods to be intercepted. </param>
+    /// <returns></returns>
+    public static InterceptionBuilder AddMilvaInterception(this IServiceCollection services, List<Type> types, IConfigurationManager configurationManager = null)
+    {
+        ArgumentNullException.ThrowIfNull(types);
+
         var builder = new InterceptionBuilder(services, configurationManager);
 
         var externalTypes = builder.Services?.Where(i => i.ImplementationType?.GetInterfaces() != null && Array.Exists(i.ImplementationType.GetInterfaces(), t => t == typeof(IInterceptable))).Select(i => i.ServiceType);
 
-        var types = assembly.FindDecorableTypes();
-
-        types = (types?.Concat(externalTypes) ?? externalTypes).Distinct().ToList();
+        types = types.Concat(externalTypes).Distinct().ToList();
 
         builder.Services.AddScoped<IInterceptorRunner, InterceptorRunner>();
         builder.Intercept(typeof(IInterceptorRunner));
@@ -68,6 +86,13 @@ public static class InterceptionServiceCollectionExtensions
     /// Decorates the specified service type descriptor inside <see cref="IServiceCollection"/>.
     /// </summary>
     /// <typeparam name="T">Service type to be decorated</typeparam>
+    public static InterceptionBuilder Intercept<T>(this InterceptionBuilder builder, ServiceLifetime serviceLifetime = ServiceLifetime.Scoped)
+        => builder.Intercept(typeof(T), serviceLifetime);
+
+    /// <summary>
+    /// Decorates the specified service type descriptor inside <see cref="IServiceCollection"/>.
+    /// </summary>
+    /// <typeparam name="T">Service type to be decorated</typeparam>
     public static InterceptionBuilder Intercept(this InterceptionBuilder builder, Type type, ServiceLifetime serviceLifetime = ServiceLifetime.Scoped)
     {
         switch (serviceLifetime)
@@ -89,9 +114,7 @@ public static class InterceptionServiceCollectionExtensions
         var descriptors = builder.Services.Where(x => x.ServiceType == type).ToArray();
 
         if (descriptors.Length == 0)
-        {
             throw new ArgumentException($"Cannot find the service of type '{type}' to decorate. Add '{type}' to service collection before trying to decorate it.");
-        }
 
         foreach (var descriptor in descriptors)
         {

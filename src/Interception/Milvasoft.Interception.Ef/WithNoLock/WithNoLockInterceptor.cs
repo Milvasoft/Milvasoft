@@ -7,7 +7,7 @@ namespace Milvasoft.Interception.Ef.WithNoLock;
 
 public partial class WithNoLockInterceptor(IServiceProvider serviceProvider) : IMilvaInterceptor
 {
-    public static int InterceptionOrder { get; set; } = -997;
+    public int InterceptionOrder { get; set; } = -997;
 
     private readonly IServiceProvider _serviceProvider = serviceProvider;
     private readonly IWithNoLockInterceptionOptions _withNoLockInterceptionOptions = serviceProvider.GetService<IWithNoLockInterceptionOptions>();

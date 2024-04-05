@@ -6,7 +6,7 @@ namespace Milvasoft.Interception.Ef.Transaction;
 
 public partial class TransactionInterceptor(IServiceProvider serviceProvider) : IMilvaInterceptor
 {
-    public static int InterceptionOrder { get; set; } = -998;
+    public int InterceptionOrder { get; set; } = -998;
 
     private readonly IServiceProvider _serviceProvider = serviceProvider;
     private readonly ITransactionInterceptionOptions _transactionInterceptionOptions = serviceProvider.GetService<ITransactionInterceptionOptions>();

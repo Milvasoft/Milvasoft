@@ -11,11 +11,11 @@ namespace Milvasoft.Interception.Interceptors.Logging;
 
 public partial class LogInterceptor(IServiceProvider serviceProvider) : IMilvaInterceptor
 {
-    public static int InterceptionOrder { get; set; } = -1;
-
     private readonly IServiceProvider _serviceProvider = serviceProvider;
     private readonly IMilvaLogger _logger = serviceProvider.GetService<IMilvaLogger>();
     private readonly ILogInterceptionOptions _logInterceptionOptions = serviceProvider.GetService<ILogInterceptionOptions>();
+
+    public int InterceptionOrder { get; set; } = -1;
 
     public async Task OnInvoke(Call call)
     {

@@ -8,14 +8,12 @@ public interface IMilvaInterceptor
     /// <summary>
     /// It determines the operating order between the interceptors. The lower value runs first.
     /// </summary>
-    public static int InterceptionOrder { get; set; }
+    public int InterceptionOrder { get; set; }
 
     /// <summary>
     /// <para>Additional logic to be executed when a decorated method is intercepted.</para>
-    /// <para>Use 'await call.Next()' to continue execution.</para>
+    /// <para>Use 'await call.NextAsync()' to continue execution.</para>
     /// </summary>
     /// <param name="call">Representation of the intercepted method call.</param>
     Task OnInvoke(Call call);
-
-    public int GetInterceptionOrder() => InterceptionOrder;
 }

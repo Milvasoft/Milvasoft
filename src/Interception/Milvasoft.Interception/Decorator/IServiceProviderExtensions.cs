@@ -2,7 +2,7 @@
 
 namespace Milvasoft.Interception.Decorator;
 
-internal static class IServiceProviderExtensions
+public static class IServiceProviderExtensions
 {
     /// <summary>
     /// Gets instance of <paramref name="descriptor"/>.
@@ -10,7 +10,7 @@ internal static class IServiceProviderExtensions
     /// <param name="provider"></param>
     /// <param name="descriptor"></param>
     /// <returns></returns>
-    internal static object GetInstance(this IServiceProvider provider, ServiceDescriptor descriptor)
+    public static object GetInstance(this IServiceProvider provider, ServiceDescriptor descriptor)
     {
         if (descriptor.ImplementationInstance != null)
             return descriptor.ImplementationInstance;

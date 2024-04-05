@@ -11,7 +11,7 @@ public class CacheInterceptor : IMilvaInterceptor
     private readonly ICacheInterceptionOptions _interceptionOptions;
     private readonly IServiceProvider _serviceProvider;
 
-    public static int InterceptionOrder { get; set; } = 0;
+    public int InterceptionOrder { get; set; } = 0;
 
     public CacheInterceptor(IServiceProvider serviceProvider)
     {
