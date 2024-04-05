@@ -98,7 +98,6 @@ public class AttributeLocationTests
     public class TestDecorator : IMilvaInterceptor
     {
         public int InterceptionOrder { get; set; } = 0;
-
         public int CallCountBefore { get; set; }
         public int CallCountAfter { get; set; }
 
@@ -113,7 +112,6 @@ public class AttributeLocationTests
     public class AnotherTestDecorator : IMilvaInterceptor
     {
         public int InterceptionOrder { get; set; } = 0;
-
         public int CallCountBefore { get; set; }
         public int CallCountAfter { get; set; }
 
@@ -157,7 +155,7 @@ public class AttributeLocationTests
         public void NotDecoratedMethod() { }
     }
 
-    private IServiceProvider GetServices()
+    private static ServiceProvider GetServices()
     {
         var builder = new InterceptionBuilder(new ServiceCollection());
 

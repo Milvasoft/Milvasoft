@@ -79,9 +79,11 @@ public class UnwrapTests
         public T SomeMethod<T>(T argument) => argument;
     }
 
+#pragma warning disable S2094 // Classes should not be empty
     public class SomeNotDecoratedClass { }
+#pragma warning restore S2094 // Classes should not be empty
 
-    private IServiceProvider GetServices()
+    private static ServiceProvider GetServices()
     {
         var builder = new InterceptionBuilder(new ServiceCollection());
 

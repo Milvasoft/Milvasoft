@@ -8,14 +8,9 @@ using Xunit.Abstractions;
 
 namespace Milvasoft.UnitTests.InteceptionTests.DecoratorTests;
 
-public class PerformanceTests
+public class PerformanceTests(ITestOutputHelper output)
 {
-    public ITestOutputHelper Output { get; }
-
-    public PerformanceTests(ITestOutputHelper output)
-    {
-        Output = output;
-    }
+    public ITestOutputHelper Output { get; } = output;
 
     /// <summary>
     /// .Net Framework 4.6.1 seems to be a bit slower and needs ~600ms, while .Net Core fits in ~200 ms.
@@ -78,7 +73,7 @@ public class PerformanceTests
         public void Method() { }
     }
 
-    private IServiceProvider GetServices()
+    private static ServiceProvider GetServices()
     {
         var builder = new InterceptionBuilder(new ServiceCollection());
 

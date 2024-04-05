@@ -98,7 +98,23 @@ public class CallTests
         decorator.ExceptionThrown.Should().NotBeNull();
     }
 
+    [Fact]
+    public void NotRunningMethod_WithDecorator_ShouldNotThrowException()
+    {
+        // Arrange
+        var services = GetServices();
+        var decorator = services.GetService<NotProceedDecorator>();
+        var someService = services.GetService<SomeClass2>();
+
+        // Act
+        someService.NotRunningMethod();
+
+        // Assert
+        decorator.Call.ReturnValue.Should().Be(2);
+    }
+
     #region Setup
+
     public class TestDecorator : IMilvaInterceptor
     {
         public int InterceptionOrder { get; set; } = 1;
@@ -107,6 +123,29 @@ public class CallTests
 
         public async Task OnInvoke(Call call)
         {
+            Call = call;
+            try
+            {
+                await call.NextAsync();
+            }
+            catch (Exception ex)
+            {
+                ExceptionThrown = ex;
+                throw;
+            }
+        }
+    }
+
+    public class NotProceedDecorator : IMilvaInterceptor
+    {
+        public int InterceptionOrder { get; set; } = 1;
+        public Call Call { get; set; }
+        public Exception ExceptionThrown { get; set; }
+
+        public async Task OnInvoke(Call call)
+        {
+            call.ReturnValue = 2;
+            call.ProceedToOriginalInvocation = false;
             Call = call;
             try
             {
@@ -131,38 +170,49 @@ public class CallTests
         public T GenericMethod<T>(T arg) => arg;
 
         [Decorate(typeof(TestDecorator))]
-        virtual public void Method() { }
+        public virtual void Method() { }
     }
 
     public class SomeClassThrowingAsyncException : IInterceptable
     {
+#pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
         [Decorate(typeof(TestDecorator))]
-        virtual public async Task MethodAsyncWithException()
-        {
-            throw new Exception();
-        }
+        public virtual async Task MethodAsyncWithException() => throw new Exception();
+#pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
     }
 
     public class SomeClassThrowingException : IInterceptable
     {
         [Decorate(typeof(TestDecorator))]
-        virtual public Task MethodWithException()
-        {
-            throw new Exception();
-        }
+        public virtual Task MethodWithException() => throw new Exception();
     }
 
-    private IServiceProvider GetServices()
+    public class SomeClass2 : IInterceptable
+    {
+        [Decorate(typeof(NotProceedDecorator))]
+        public virtual int NotRunningMethod() => throw new Exception();
+    }
+
+    private static ServiceProvider GetServices()
     {
         var builder = new InterceptionBuilder(new ServiceCollection());
 
         builder.Services.AddScoped<TestDecorator>();
+        builder.Services.AddScoped<NotProceedDecorator>();
         builder.Services.AddTransient<ISomeInterface, SomeClass>();
         builder.Services.AddTransient<SomeClassThrowingAsyncException>();
         builder.Services.AddTransient<SomeClassThrowingException>();
         builder.Services.AddTransient<SomeClass>();
+        builder.Services.AddTransient<SomeClass2>();
 
-        builder.Services.AddMilvaInterception([typeof(ISomeInterface), typeof(SomeClass), typeof(SomeClassThrowingAsyncException), typeof(SomeClassThrowingException)]);
+        builder.Services.AddMilvaInterception(
+        [
+            typeof(ISomeInterface),
+            typeof(SomeClass),
+            typeof(SomeClassThrowingAsyncException),
+            typeof(SomeClassThrowingException),
+            typeof(SomeClass2)
+        ]);
 
         var serviceProvider = builder.Services.BuildServiceProvider();
 

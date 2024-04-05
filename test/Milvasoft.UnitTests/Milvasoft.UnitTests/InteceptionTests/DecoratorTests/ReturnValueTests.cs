@@ -139,25 +139,30 @@ public class ReturnValueTests
     public class SomeClass
     {
         [Decorate(typeof(TestDecorator))]
-        virtual public int IntReturnMethod(int expected) => expected;
+        public virtual int IntReturnMethod(int expected) => expected;
 
         [Decorate(typeof(TestDecorator))]
-        virtual public string StringReturnMethod(string expected) => expected;
+        public virtual string StringReturnMethod(string expected) => expected;
 
         [Decorate(typeof(TestDecorator))]
-        virtual public Task TaskReturnMethod() => Task.Delay(100);
+        public virtual Task TaskReturnMethod() => Task.Delay(100);
 
         [Decorate(typeof(TestDecorator))]
-        virtual public T GenericReturnMethod<T>(T expected) => expected;
+        public virtual T GenericReturnMethod<T>(T expected) => expected;
 
         [Decorate(typeof(TestDecorator))]
-        virtual public async Task<T> GenericAsyncReturnMethod<T>(T expected) { await Task.Delay(20); return expected; }
+        public virtual async Task<T> GenericAsyncReturnMethod<T>(T expected)
+        {
+            await Task.Delay(20);
+            return expected;
+        }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Critical Bug", "S4586:Non-async \"Task/Task<T>\" methods should not return null", Justification = "<Pending>")]
         [Decorate(typeof(TestDecorator))]
-        virtual public Task NullTaskMethod() => null;
+        public virtual Task NullTaskMethod() => null;
     }
 
-    private IServiceProvider GetServices()
+    private static ServiceProvider GetServices()
     {
         var builder = new InterceptionBuilder(new ServiceCollection());
 

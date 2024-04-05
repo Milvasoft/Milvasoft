@@ -74,10 +74,10 @@ public class RegistrationTests
     public class SomeClass : ISomeInterface
     {
         [Decorate(typeof(TestDecorator))]
-        virtual public void Method() { }
+        public virtual void Method() { }
     }
 
-    private IServiceProvider GetTypeServices()
+    private static ServiceProvider GetTypeServices()
     {
         var builder = new InterceptionBuilder(new ServiceCollection());
 
@@ -92,7 +92,7 @@ public class RegistrationTests
         return serviceProvider;
     }
 
-    private IServiceProvider GetInstanceServices()
+    private static ServiceProvider GetInstanceServices()
     {
         var builder = new InterceptionBuilder(new ServiceCollection());
 
@@ -109,7 +109,7 @@ public class RegistrationTests
         return serviceProvider;
     }
 
-    private IServiceProvider GetFactoryServices()
+    private static ServiceProvider GetFactoryServices()
     {
         var builder = new InterceptionBuilder(new ServiceCollection());
 

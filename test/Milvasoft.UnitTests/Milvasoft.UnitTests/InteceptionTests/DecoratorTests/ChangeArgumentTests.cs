@@ -41,10 +41,10 @@ public class ChangeArgumentTests
     public class SomeClass : IInterceptable
     {
         [Decorate(typeof(TestDecorator))]
-        virtual public int Method(int value) => value;
+        public virtual int Method(int value) => value;
     }
 
-    private IServiceProvider GetServices()
+    private static ServiceProvider GetServices()
     {
         var builder = new InterceptionBuilder(new ServiceCollection());
 

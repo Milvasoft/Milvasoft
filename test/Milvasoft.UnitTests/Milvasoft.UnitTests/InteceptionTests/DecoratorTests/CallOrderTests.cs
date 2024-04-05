@@ -8,7 +8,6 @@ namespace Milvasoft.UnitTests.InteceptionTests.DecoratorTests;
 
 public class CallOrderTests
 {
-    // These tests will be useful if 'Order' property is added to DecorateAttribute.
     [Fact]
     public void Method_WithAscendingDecorators_ShouldCallInAscendingOrder()
     {
@@ -45,7 +44,6 @@ public class CallOrderTests
     public class Decorator1 : IMilvaInterceptor
     {
         public int InterceptionOrder { get; set; } = 1;
-
         public DateTime CallTime { get; set; }
 
         public async Task OnInvoke(Call call)
@@ -58,7 +56,6 @@ public class CallOrderTests
     public class Decorator2 : IMilvaInterceptor
     {
         public int InterceptionOrder { get; set; } = 2;
-
         public DateTime CallTime { get; set; }
 
         public async Task OnInvoke(Call call)
@@ -79,7 +76,7 @@ public class CallOrderTests
         public virtual void DescendingMethod() { }
     }
 
-    private IServiceProvider GetServices()
+    private static ServiceProvider GetServices()
     {
         var builder = new InterceptionBuilder(new ServiceCollection());
 

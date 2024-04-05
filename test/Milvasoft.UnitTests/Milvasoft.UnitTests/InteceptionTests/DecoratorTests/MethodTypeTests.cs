@@ -72,7 +72,6 @@ public class MethodTypeTests
         decorator.CallCountAfter.Should().Be(1);
     }
 
-
     [Fact]
     public async Task AsyncMethod_WithoutAwaits_ShouldCallDecoratorOnce()
     {
@@ -180,45 +179,43 @@ public class MethodTypeTests
         Getter Getter { get; }
 
         Task AsyncDependencyMethod();
+
         Task AsyncMethod(bool shouldAwait);
+
         Task AsyncMethod();
+
         Task<int> AsyncMethodWithResult(bool shouldAwait);
+
         Task<int> AsyncMethodWithResult();
+
         T GenericMethod<T>();
+
         void Method();
+
         [Decorate(typeof(TestDecorator))]
         Task<List<int>> TaskYieldMethod();
     }
 
-    public class SomeClass : ISomeInterface
+    public class SomeClass(MethodTypeTests.Getter getter) : ISomeInterface
     {
-        public Getter Getter { get; }
+        public Getter Getter { get; } = getter;
         public int SomeState { get; set; }
 
-        public SomeClass(Getter getter)
+        [Decorate(typeof(TestDecorator))]
+        public virtual void Method() { }
+
+        [Decorate(typeof(TestDecorator))]
+        public virtual T GenericMethod<T>() => default;
+
+        [Decorate(typeof(TestDecorator))]
+        public virtual async Task AsyncMethod()
         {
-            Getter = getter;
+            await Task.Delay(20);
+            await Task.Yield();
         }
 
         [Decorate(typeof(TestDecorator))]
-        virtual public void Method() { }
-        [Decorate(typeof(TestDecorator))]
-        virtual public async Task AsyncMethod()
-        {
-            await Task.Delay(20);
-            await Task.Yield();
-        }
-        [Decorate(typeof(TestDecorator))]
-        virtual public async Task<int> AsyncMethodWithResult()
-        {
-            await Task.Delay(20);
-            await Task.Yield();
-            return 0;
-        }
-        [Decorate(typeof(TestDecorator))]
-        virtual public T GenericMethod<T>() => default;
-        [Decorate(typeof(TestDecorator))]
-        virtual public async Task AsyncMethod(bool shouldAwait)
+        public virtual async Task AsyncMethod(bool shouldAwait)
         {
             if (shouldAwait)
             {
@@ -226,8 +223,17 @@ public class MethodTypeTests
                 await Task.Yield();
             }
         }
+
         [Decorate(typeof(TestDecorator))]
-        virtual public async Task<int> AsyncMethodWithResult(bool shouldAwait)
+        public virtual async Task<int> AsyncMethodWithResult()
+        {
+            await Task.Delay(20);
+            await Task.Yield();
+            return 0;
+        }
+
+        [Decorate(typeof(TestDecorator))]
+        public virtual async Task<int> AsyncMethodWithResult(bool shouldAwait)
         {
             if (shouldAwait)
             {
@@ -237,26 +243,35 @@ public class MethodTypeTests
 
             return 0;
         }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Major Code Smell", "S1121:Assignments should not be made from within sub-expressions", Justification = "<Pending>")]
         [Decorate(typeof(TestDecorator))]
-        virtual public async Task AsyncDependencyMethod()
+        public virtual async Task AsyncDependencyMethod()
         {
             List<int> list;
+
             while ((list = await Getter.Get()).Count > 0)
             {
                 await Task.Delay(30);
                 await Task.Yield();
+
                 list.Add(1);
             }
         }
+
         [Decorate(typeof(TestDecorator))]
-        virtual public async Task<List<int>> TaskYieldMethod()
+        public virtual async Task<List<int>> TaskYieldMethod()
         {
             var list = new List<int>();
+
             SomeState = 1;
             await Task.Yield();
+
             list.Add(SomeState + SomeState);
             SomeState = 2;
+
             await Task.Yield();
+
             list.Add(SomeState + SomeState);
             SomeState = 3;
 
@@ -271,7 +286,7 @@ public class MethodTypeTests
         private int? _counter;
 
         [Decorate(typeof(TestDecorator))]
-        virtual public async Task<List<int>> Get()
+        public virtual async Task<List<int>> Get()
         {
             await Task.Delay(20);
             await Task.Yield();
@@ -281,11 +296,11 @@ public class MethodTypeTests
                 _counter = Random.Next(1, 5);
             }
 
-            return _counter-- > 0 ? [Random.Next(0, 10)] : new List<int>();
+            return _counter-- > 0 ? [Random.Next(0, 10)] : [];
         }
     }
 
-    private IServiceProvider GetServices()
+    private static ServiceProvider GetServices()
     {
         var builder = new InterceptionBuilder(new ServiceCollection());
 

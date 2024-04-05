@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using FluentAssertions;
+using Microsoft.Extensions.DependencyInjection;
 using Milvasoft.Core.Abstractions;
 using Milvasoft.Interception.Builder;
 using Milvasoft.Interception.Decorator;
@@ -8,7 +9,7 @@ namespace Milvasoft.UnitTests.InteceptionTests.DecoratorTests;
 public class DependencyLifeTimeTests
 {
     [Fact]
-    public void I_can_decorate_with_decorator_that_has_scoped_dependency()
+    public void AddMilvaInterception_CanDecorate_WithDecoratorThatHasScopedDependency()
     {
         // Arrange
         var builder = new InterceptionBuilder(new ServiceCollection());
@@ -21,23 +22,23 @@ public class DependencyLifeTimeTests
 
         var serviceProvider = builder.Services.BuildServiceProvider();
 
-        // Act & Assert
-        serviceProvider.GetRequiredService<ISomeInterface>();
+        // Act
+        var service = serviceProvider.GetService<ISomeInterface>();
+
+        // Assert
+        service.Should().NotBeNull();
     }
 
     #region Setup
-    public class Dependency { }
 
-    public class TestDecoratorWithDependency : IMilvaInterceptor
+#pragma warning disable S2094 // Classes should not be empty
+    public class Dependency { }
+#pragma warning restore S2094 // Classes should not be empty
+
+    public class TestDecoratorWithDependency(Dependency dependency) : IMilvaInterceptor
     {
         public int InterceptionOrder { get; set; } = 1;
-
-        public Dependency Dependency { get; }
-
-        public TestDecoratorWithDependency(Dependency dependency)
-        {
-            Dependency = dependency;
-        }
+        public Dependency Dependency { get; } = dependency;
 
         public Task OnInvoke(Call call) => Task.CompletedTask;
     }
@@ -52,5 +53,6 @@ public class DependencyLifeTimeTests
         [Decorate(typeof(TestDecoratorWithDependency))]
         public void SomeMethod() { }
     }
+
     #endregion
 }

@@ -66,7 +66,7 @@ public class DynamicTypeTests
     public class SomeClass : ISomeInterface
     {
         [Decorate(typeof(TestDecorator))]
-        public async Task SomeMethod() { await Task.Yield(); }
+        public async Task SomeMethod() => await Task.Yield();
 
         [Decorate(typeof(TestDecorator))]
         public async Task<int> SomeMethodWithParameterAndResult(int argument)
@@ -75,7 +75,7 @@ public class DynamicTypeTests
             return argument;
         }
     }
-    private IServiceProvider GetServices()
+    private static ServiceProvider GetServices()
     {
         var builder = new InterceptionBuilder(new ServiceCollection());
 

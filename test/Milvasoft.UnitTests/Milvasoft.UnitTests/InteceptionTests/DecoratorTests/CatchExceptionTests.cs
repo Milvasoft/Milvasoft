@@ -4,7 +4,6 @@ using Milvasoft.Core.Abstractions;
 using Milvasoft.Interception.Builder;
 using Milvasoft.Interception.Decorator;
 
-
 namespace Milvasoft.UnitTests.InteceptionTests.DecoratorTests;
 
 public class CatchExceptionTests
@@ -61,10 +60,10 @@ public class CatchExceptionTests
     public class SomeClass : IInterceptable
     {
         [Decorate(typeof(TestDecorator))]
-        virtual public void ThrowingMethod() => throw new Exception();
+        public virtual void ThrowingMethod() => throw new Exception();
 
         [Decorate(typeof(TestDecorator))]
-        virtual public async Task ThrowingMethodAsync()
+        public virtual async Task ThrowingMethodAsync()
         {
             await Task.Delay(100);
 
@@ -72,7 +71,7 @@ public class CatchExceptionTests
         }
     }
 
-    private IServiceProvider GetServices()
+    private static ServiceProvider GetServices()
     {
         var builder = new InterceptionBuilder(new ServiceCollection());
 

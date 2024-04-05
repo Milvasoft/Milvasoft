@@ -27,6 +27,7 @@ public class SingleDecoratorInstanceTests
     public class TestDecorator : IMilvaInterceptor
     {
         public int InterceptionOrder { get; set; } = 1;
+
         public async Task OnInvoke(Call call)
         {
             await call.NextAsync();
@@ -49,7 +50,7 @@ public class SingleDecoratorInstanceTests
         public IMilvaInterceptor Method2() => default;
     }
 
-    private IServiceProvider GetServices()
+    private static ServiceProvider GetServices()
     {
         var builder = new InterceptionBuilder(new ServiceCollection());
 

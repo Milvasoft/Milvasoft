@@ -73,10 +73,10 @@ public class ChangeReturnValueTests
     public class SomeClass : IInterceptable
     {
         [Decorate(typeof(TestDecorator))]
-        virtual public int SyncMethod() => default;
+        public virtual int SyncMethod() => default;
 
         [Decorate(typeof(TestDecorator))]
-        virtual public async Task<int> AsyncMethod()
+        public virtual async Task<int> AsyncMethod()
         {
             await Task.Delay(100);
 
@@ -84,10 +84,10 @@ public class ChangeReturnValueTests
         }
 
         [Decorate(typeof(TestDecorator))]
-        virtual public T GenericMethod<T>() => default;
+        public virtual T GenericMethod<T>() => default;
     }
 
-    private IServiceProvider GetServices()
+    private static ServiceProvider GetServices()
     {
         var builder = new InterceptionBuilder(new ServiceCollection());
 

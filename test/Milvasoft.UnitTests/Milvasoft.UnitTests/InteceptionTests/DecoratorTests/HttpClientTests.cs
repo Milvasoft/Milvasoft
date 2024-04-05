@@ -39,14 +39,9 @@ public class HttpClientTests
         Task<HttpResponseMessage> Post();
     }
 
-    public class TypedHttpClient : ITypedHttpClient
+    public class TypedHttpClient(HttpClient httpClient) : ITypedHttpClient
     {
-        public TypedHttpClient(HttpClient httpClient)
-        {
-            HttpClient = httpClient;
-        }
-
-        public HttpClient HttpClient { get; }
+        public HttpClient HttpClient { get; } = httpClient;
 
         [Decorate(typeof(TestDecorator))]
         public async Task<HttpResponseMessage> Post() => await HttpClient.GetAsync("windows");

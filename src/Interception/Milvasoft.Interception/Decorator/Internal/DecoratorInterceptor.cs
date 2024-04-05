@@ -74,8 +74,8 @@ internal class DecoratorInterceptor(ReadOnlyDictionary<MethodInfo, IMilvaInterce
     private bool TryGetMethodDecorators(IInvocation invocation, out IMilvaInterceptor[] decorators)
     {
         var targetMethod = invocation.MethodInvocationTarget.IsGenericMethod
-            ? invocation.MethodInvocationTarget.GetGenericMethodDefinition()
-            : invocation.MethodInvocationTarget;
+                                ? invocation.MethodInvocationTarget.GetGenericMethodDefinition()
+                                : invocation.MethodInvocationTarget;
 
         return MethodDecoratorMap.TryGetValue(targetMethod, out decorators) && decorators != null && decorators.Length != 0;
     }

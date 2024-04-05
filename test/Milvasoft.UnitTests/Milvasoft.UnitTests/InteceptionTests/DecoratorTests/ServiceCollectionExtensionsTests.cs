@@ -26,14 +26,16 @@ public class ServiceCollectionExtensionsTests
     public class Test : IInterceptable
     {
         [Decorate(typeof(TestDecorator))]
-        public virtual int Method() { return 0; }
+        public virtual int Method() => 0;
     }
 
+#pragma warning disable S2094 // Classes should not be empty
     public class TestChild : Test { }
 
     public class NonDecorated1 { }
 
     public class NonDecorated2 { }
+#pragma warning restore S2094 // Classes should not be empty
 
     #endregion
 

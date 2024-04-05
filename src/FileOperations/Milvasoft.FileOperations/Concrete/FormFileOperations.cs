@@ -211,7 +211,7 @@ public static partial class FormFileOperations
                                                                          string basePath,
                                                                          FilesFolderNameCreator folderNameCreator,
                                                                          string propertyName)
-        => await SaveFilesToPathAsync(files.ToList(), entity, basePath, folderNameCreator, propertyName);
+        => await SaveFilesToPathAsync([.. files], entity, basePath, folderNameCreator, propertyName);
 
     /// <summary>
     /// Saves uploaded IFormFile files to physical file path. If file list is null or empty returns empty <see cref="List{String}"/> 

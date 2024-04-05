@@ -6,6 +6,7 @@ using Milvasoft.Interception.Decorator;
 
 namespace Milvasoft.UnitTests.InteceptionTests.DecoratorTests;
 
+[System.Diagnostics.CodeAnalysis.SuppressMessage("Major Code Smell", "S108:Nested blocks of code should not be left empty", Justification = "<Pending>")]
 public class CallMethodMultipleTimesTests
 {
     [Fact]
@@ -28,6 +29,7 @@ public class CallMethodMultipleTimesTests
     public class TestDecorator : IMilvaInterceptor
     {
         public int InterceptionOrder { get; set; } = int.MaxValue;
+
         public async Task OnInvoke(Call call)
         {
             try
@@ -72,7 +74,7 @@ public class CallMethodMultipleTimesTests
         }
     }
 
-    private IServiceProvider GetServices()
+    private static ServiceProvider GetServices()
     {
         var builder = new InterceptionBuilder(new ServiceCollection());
 

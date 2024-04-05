@@ -43,47 +43,47 @@ public class DependencyInjectionTests
     }
 
     #region Setup
-    public class SomeDependency { }
 
-    public class TestDecoratorWithDependencies : IMilvaInterceptor
+#pragma warning disable S2094 // Classes should not be empty
+    public class SomeDependency { }
+#pragma warning restore S2094 // Classes should not be empty
+
+    public class TestDecoratorWithDependencies(DependencyInjectionTests.SomeDependency someDependency) : IMilvaInterceptor
     {
         public int InterceptionOrder { get; set; } = 1;
-
-        public SomeDependency SomeDependency { get; }
-
+        public SomeDependency SomeDependency { get; } = someDependency;
         public int CallCount { get; set; }
 
-        public TestDecoratorWithDependencies(SomeDependency someDependency) { SomeDependency = someDependency; }
+        public async Task OnInvoke(Call call)
+        {
+            CallCount++;
 
-        public async Task OnInvoke(Call call) { CallCount++; await call.NextAsync(); }
+            await call.NextAsync();
+        }
     }
 
     public class SomeClass : IInterceptable
     {
         [Decorate(typeof(TestDecoratorWithDependencies))]
-        virtual public void Method() { }
+        public virtual void Method() { }
     }
 
     public interface ISomeClassWithDependencies : IInterceptable
     {
         SomeDependency SomeDependency { get; }
+
         void Method();
     }
 
-    public class SomeClassWithDependencies : ISomeClassWithDependencies
+    public class SomeClassWithDependencies(DependencyInjectionTests.SomeDependency someDependency) : ISomeClassWithDependencies
     {
-        public SomeClassWithDependencies(SomeDependency someDependency)
-        {
-            SomeDependency = someDependency;
-        }
-
-        public SomeDependency SomeDependency { get; }
+        public SomeDependency SomeDependency { get; } = someDependency;
 
         [Decorate(typeof(TestDecoratorWithDependencies))]
-        virtual public void Method() { }
+        public virtual void Method() { }
     }
 
-    private IServiceProvider GetServices()
+    private static ServiceProvider GetServices()
     {
         var builder = new InterceptionBuilder(new ServiceCollection());
 

@@ -6,6 +6,7 @@ using Milvasoft.Interception.Decorator;
 
 namespace Milvasoft.UnitTests.InteceptionTests.DecoratorTests;
 
+[System.Diagnostics.CodeAnalysis.SuppressMessage("Major Code Smell", "S4144:Methods should not have identical implementations", Justification = "<Pending>")]
 public class ExceptionTests
 {
     [Fact]
@@ -168,16 +169,14 @@ public class ExceptionTests
     public class TestDecorator : IMilvaInterceptor
     {
         public int InterceptionOrder { get; set; } = 1;
-        public async Task OnInvoke(Call call)
-        {
-            await call.NextAsync();
-        }
+        public async Task OnInvoke(Call call) => await call.NextAsync();
     }
 
     public class ThrowingDecorator : IMilvaInterceptor
     {
         public int InterceptionOrder { get; set; } = 1;
-        public async Task OnInvoke(Call call) => throw new ExpectedException();
+
+        public Task OnInvoke(Call call) => throw new ExpectedException();
     }
 
     public class ExpectedException : Exception { }
@@ -237,7 +236,7 @@ public class ExceptionTests
         public virtual async Task<int> MethodDecoratedToThrowAsyncResult() => await Task.FromResult(0);
     }
 
-    private IServiceProvider GetServices()
+    private static ServiceProvider GetServices()
     {
         var builder = new InterceptionBuilder(new ServiceCollection());
 
