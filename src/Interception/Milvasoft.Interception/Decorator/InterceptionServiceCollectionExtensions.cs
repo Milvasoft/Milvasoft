@@ -3,6 +3,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Options;
+using Milvasoft.Core.Utils.JsonConverters;
 using Milvasoft.Interception.Builder;
 using Milvasoft.Interception.Interceptors.ActivityScope;
 using Milvasoft.Interception.Interceptors.Cache;
@@ -175,6 +176,8 @@ public static class InterceptionServiceCollectionExtensions
             builder.Services.Add(ServiceDescriptor.Describe(typeof(LogInterceptor), typeof(LogInterceptor), config.InterceptorLifetime));
 
         builder.Services.AddSingleton<ILogInterceptionOptions>(config);
+
+        builder.Services.ConfigureCurrentMilvaJsonSerializerOptions();
 
         return builder;
     }

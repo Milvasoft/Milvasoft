@@ -42,7 +42,7 @@ public class LogInterceptorTests
         // Act & Assert
         sut.Invoking(x =>
         {
-            var result = x.Method();
+            var result = x.MethodThrowsException();
 
             var logExistsWithActivityId = TestLogger.Logs.TryGetValue(result, out var logEntity);
 

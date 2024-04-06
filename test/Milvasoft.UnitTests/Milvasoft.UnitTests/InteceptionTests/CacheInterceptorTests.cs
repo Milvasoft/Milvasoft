@@ -146,7 +146,7 @@ public class CacheInterceptorTests
         builder.Services.AddMilvaCaching()
                         .WithAccessor<TestCacheAccessor, InMemoryCacheOptions>(new InMemoryCacheOptions
                         {
-                            AccessorLifetime = ServiceLifetime.Transient,
+                            AccessorLifetime = ServiceLifetime.Scoped,
                         });
 
         builder.Services.AddMilvaInterception([typeof(ISomeInterface)])

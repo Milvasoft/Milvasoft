@@ -52,7 +52,7 @@ public class MilvaInterceptorCombinatonTests
 
         logEntity.IsSuccess.Should().BeFalse();
         logEntity.CacheInfo.Should().Contain("true");
-        logEntity.CacheInfo.Should().Contain("Metadatas :null");
+        logEntity.MethodResult.Should().Contain("\"Metadatas\":null");
 
         sut.CallCount.Should().Be(1);
         secondCallResult.IsCachedData.Should().BeTrue();
