@@ -12,4 +12,20 @@ public class InterceptorRunner : IInterceptorRunner
 
         return result;
     }
+
+    [LogRunner]
+    public virtual async Task InterceptWithLogAsync<T>(Expression<Func<Task>> expression)
+        => await expression.Compile().Invoke().ConfigureAwait(false);
+
+    [LogRunner]
+    public virtual TResult InterceptWithLog<T, TResult>(Expression<Func<TResult>> expression)
+    {
+        var result = expression.Compile().Invoke();
+
+        return result;
+    }
+
+    [LogRunner]
+    public virtual void InterceptWithLog<T>(Expression<Action> expression)
+        => expression.Compile().Invoke();
 }
