@@ -18,7 +18,7 @@ public class CacheInterceptor : IMilvaInterceptor
         _serviceProvider = serviceProvider;
         _interceptionOptions = serviceProvider.GetService<ICacheInterceptionOptions>();
 
-        if (_interceptionOptions != null && _interceptionOptions.CacheAccessorAssemblyQualifiedName != null)
+        if (_interceptionOptions != null && _interceptionOptions.CacheAccessorType != null)
         {
             var accessorType = _interceptionOptions.GetAccessorType();
 
@@ -37,7 +37,9 @@ public class CacheInterceptor : IMilvaInterceptor
 
         string cacheKey = BuildCacheKey(call, _serviceProvider, _interceptionOptions);
 
-        var returnType = call.ReturnType.GetGenericTypeDefinition() == typeof(Task<>) ? call.ReturnType.GenericTypeArguments.FirstOrDefault() : call.ReturnType;
+        var returnType = call.ReturnType.IsGenericType && call.ReturnType.GetGenericTypeDefinition() == typeof(Task<>)
+                                ? call.ReturnType.GenericTypeArguments.FirstOrDefault()
+                                : call.ReturnType;
 
         var cachedValue = await _cache.GetAsync(cacheKey, returnType);
 

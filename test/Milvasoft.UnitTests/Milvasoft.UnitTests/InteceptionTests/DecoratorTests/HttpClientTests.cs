@@ -11,7 +11,7 @@ namespace Milvasoft.UnitTests.InteceptionTests.DecoratorTests;
 public class HttpClientTests
 {
     [Fact]
-    public async Task I_can_decorate_typed_http_client_that_was_registered_with_interface_and_implementation_type()
+    public async Task Intercept_CanDecorateTypedHttpClientThatWasRegisteredWithInterfaceAndImplementationType()
     {
         // Arrange
         var builder = new InterceptionBuilder(new ServiceCollection());

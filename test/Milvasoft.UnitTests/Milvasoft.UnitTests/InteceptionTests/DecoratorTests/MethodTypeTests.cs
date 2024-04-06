@@ -196,7 +196,7 @@ public class MethodTypeTests
         Task<List<int>> TaskYieldMethod();
     }
 
-    public class SomeClass(MethodTypeTests.Getter getter) : ISomeInterface
+    public class SomeClass(Getter getter) : ISomeInterface
     {
         public Getter Getter { get; } = getter;
         public int SomeState { get; set; }

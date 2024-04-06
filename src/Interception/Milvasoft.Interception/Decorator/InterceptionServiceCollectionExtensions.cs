@@ -363,11 +363,13 @@ public static class InterceptionServiceCollectionExtensions
         builder.Services.UpdateSingletonInstance<ICacheInterceptionOptions>(opt =>
         {
             opt.CacheKeyConfigurator = config.CacheKeyConfigurator ?? opt.CacheKeyConfigurator;
+            opt.CacheAccessorAssemblyQualifiedName = config.CacheAccessorType?.AssemblyQualifiedName ?? opt.CacheAccessorAssemblyQualifiedName;
         });
 
         builder.Services.PostConfigure<CacheInterceptionOptions>(opt =>
         {
             opt.CacheKeyConfigurator = config.CacheKeyConfigurator ?? opt.CacheKeyConfigurator;
+            opt.CacheAccessorAssemblyQualifiedName = config.CacheAccessorType?.AssemblyQualifiedName ?? opt.CacheAccessorAssemblyQualifiedName;
         });
 
         return builder;

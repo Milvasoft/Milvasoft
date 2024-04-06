@@ -7,4 +7,6 @@ public class CacheInterceptionPostConfigureOptions
     /// In cases where HttpRequestHeaders may cause differences in the requests made, the value returned by this delegate is appended to the cache key.
     /// </summary>
     public Func<IServiceProvider, string> CacheKeyConfigurator { get; set; }
+
+    public Type CacheAccessorType { get; set; }
 }

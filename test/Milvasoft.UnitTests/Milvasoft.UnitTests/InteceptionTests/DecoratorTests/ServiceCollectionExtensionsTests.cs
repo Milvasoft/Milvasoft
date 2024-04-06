@@ -8,37 +8,6 @@ namespace Milvasoft.UnitTests.InteceptionTests.DecoratorTests;
 
 public class ServiceCollectionExtensionsTests
 {
-    #region Setup
-    public class TestDecorator : IMilvaInterceptor
-    {
-        public int InterceptionOrder { get; set; } = 1;
-        public int CalledCount { get; private set; }
-        public bool Called => CalledCount != 0;
-
-        public Task OnInvoke(Call call)
-        {
-            CalledCount++;
-            call.ReturnValue = CalledCount;
-            return Task.CompletedTask;
-        }
-    }
-
-    public class Test : IInterceptable
-    {
-        [Decorate(typeof(TestDecorator))]
-        public virtual int Method() => 0;
-    }
-
-#pragma warning disable S2094 // Classes should not be empty
-    public class TestChild : Test { }
-
-    public class NonDecorated1 { }
-
-    public class NonDecorated2 { }
-#pragma warning restore S2094 // Classes should not be empty
-
-    #endregion
-
     [Fact]
     public void Decorate_WithSingleServiceTypeInstance_ShouldDecorateInstance()
     {
@@ -107,4 +76,36 @@ public class ServiceCollectionExtensionsTests
         // Act & Assert
         builder.Invoking(x => x.Intercept(typeof(Test))).Should().Throw<ArgumentException>("because there is no service to decorate in service collection.");
     }
+
+    #region Setup
+
+    public class TestDecorator : IMilvaInterceptor
+    {
+        public int InterceptionOrder { get; set; } = 1;
+        public int CalledCount { get; private set; }
+        public bool Called => CalledCount != 0;
+
+        public Task OnInvoke(Call call)
+        {
+            CalledCount++;
+            call.ReturnValue = CalledCount;
+            return Task.CompletedTask;
+        }
+    }
+
+    public class Test : IInterceptable
+    {
+        [Decorate(typeof(TestDecorator))]
+        public virtual int Method() => 0;
+    }
+
+#pragma warning disable S2094 // Classes should not be empty
+    public class TestChild : Test { }
+
+    public class NonDecorated1 { }
+
+    public class NonDecorated2 { }
+#pragma warning restore S2094 // Classes should not be empty
+
+    #endregion
 }
