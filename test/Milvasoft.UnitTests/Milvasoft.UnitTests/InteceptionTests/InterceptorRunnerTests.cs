@@ -1,69 +1,89 @@
 ﻿using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
 using Milvasoft.Core.Abstractions;
-using Milvasoft.Core.Exceptions;
 using Milvasoft.Interception.Builder;
 using Milvasoft.Interception.Decorator;
 using Milvasoft.Interception.Interceptors.ActivityScope;
 using Milvasoft.Interception.Interceptors.Logging;
+using Milvasoft.Interception.Interceptors.Runner;
 using System.Text.Json;
 
 namespace Milvasoft.UnitTests.InteceptionTests;
 
-public class LogInterceptorTests
+public class InterceptorRunnerTests
 {
     [Fact]
     public void Method_WithActivityAndLogInterceptor_ShouldLogCorrectly()
     {
         // Arrange
         var services = GetServices();
-        var sut = services.GetService<SomeClass>();
+        var sut = services.GetService<ISomeInterface>();
 
         // Act & Assert
         sut.Invoking(x =>
         {
             var result = x.Method();
 
-            var logExistsWithActivityId = TestLogger.Logs.TryGetValue(result, out var logEntity);
+            var logs = TestLogger.Logs.Where(i => i.Value.TransactionId == result);
 
-            logExistsWithActivityId.Should().BeTrue();
-            logEntity.ExtraProp.Should().Be("Extra prop");
+            logs.Should().HaveCount(2);
+            logs.Should().AllSatisfy(i => i.Value.IsSuccess.Should().BeTrue());
+            logs.FirstOrDefault(i => i.Value.MethodName == "MethodShouldRunWithRunner").Should().NotBeNull();
 
         }).Should().NotThrow();
     }
 
     [Fact]
-    public void MethodThrowsException_WithActivityAndLogInterceptor_ShouldLogCorrectly()
+    public void AnotherMethod_WithLogInterceptor_ShouldLogCorrectly()
     {
         // Arrange
         var services = GetServices();
-        var sut = services.GetService<SomeClass>();
+        var sut = services.GetService<ISomeInterface>();
 
         // Act & Assert
         sut.Invoking(x =>
         {
-            var result = x.Method();
+            _ = x.AnotherMethod();
 
-            var logExistsWithActivityId = TestLogger.Logs.TryGetValue(result, out var logEntity);
+            TestLogger.Logs.Should().HaveCount(2);
+            var transactionIdEquality = TestLogger.Logs.First().Value.TransactionId == TestLogger.Logs.Last().Value.TransactionId;
+            transactionIdEquality.Should().BeFalse();
 
-            logExistsWithActivityId.Should().BeTrue();
-            logEntity.ExtraProp.Should().Be("Extra prop");
-            logEntity.Exception.Should().NotBeNull();
-
-        }).Should().Throw<MilvaDeveloperException>();
+        }).Should().NotThrow();
     }
 
     #region Setup
 
-    public class SomeClass : IInterceptable
+    public interface ISomeInterface : IInterceptable
     {
-        [ActivityStarter("LogActivity")]
-        [Log]
-        public virtual string Method() => ActivityHelper.TraceId;
+        string Method();
+        string AnotherMethod();
+        string MethodShouldRunWithRunner(int x);
+    }
 
-        [ActivityStarter("LogActivity")]
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Major Code Smell", "S4144:Methods should not have identical implementations", Justification = "<Pending>")]
+    public class SomeClass(IInterceptorRunner interceptorRunner) : ISomeInterface
+    {
+        private readonly IInterceptorRunner _interceptorRunner = interceptorRunner;
+
+        [ActivityStarter]
         [Log]
-        public virtual string MethodThrowsException() => throw new MilvaDeveloperException();
+        public virtual string Method()
+        {
+            _interceptorRunner.InterceptWithLog(() => MethodShouldRunWithRunner(3));
+
+            return ActivityHelper.TraceId;
+        }
+
+        [Log]
+        public virtual string AnotherMethod()
+        {
+            _interceptorRunner.InterceptWithLog(() => MethodShouldRunWithRunner(3));
+
+            return ActivityHelper.TraceId;
+        }
+
+        public virtual string MethodShouldRunWithRunner(int x) => $"Runner result with parameter {x}";
     }
 
     public class TestLogEntity
@@ -84,13 +104,13 @@ public class LogInterceptorTests
 
     public class TestLogger : IMilvaLogger
     {
-        public static Dictionary<string, TestLogEntity> Logs { get; set; } = [];
+        public static Dictionary<int, TestLogEntity> Logs { get; set; } = [];
 
         public void Log(string logEntry)
         {
             var logObject = JsonSerializer.Deserialize<TestLogEntity>(logEntry);
 
-            Logs.Add(logObject.TransactionId, logObject);
+            Logs.Add(Logs.Count + 1, logObject);
         }
 
         public Task LogAsync(string logEntry) => throw new NotImplementedException();
@@ -119,14 +139,13 @@ public class LogInterceptorTests
         var builder = new InterceptionBuilder(new ServiceCollection());
 
         builder.Services.AddSingleton<IMilvaLogger, TestLogger>();
-        builder.Services.AddTransient<SomeClass>();
+        builder.Services.AddScoped<ISomeInterface, SomeClass>();
 
-        builder.Services.AddMilvaInterception([typeof(SomeClass)])
+        builder.Services.AddMilvaInterception([typeof(ISomeInterface)])
                         .WithActivityInterceptor()
                         .WithLogInterceptor(opt =>
                         {
                             opt.AsyncLogging = false;
-                            opt.ExtraLoggingPropertiesSelector = (sp) => new { ExtraProp = "Extra prop" };
                         });
 
         var serviceProvider = builder.Services.BuildServiceProvider();

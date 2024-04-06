@@ -43,7 +43,7 @@ public class CacheInterceptorTests
     }
 
     [Fact]
-    public void Method_WithCacheInterceptorAndCachedDataTypeIsIResponse_ShouldCacheCorrectlyAndMethodCalledOnceAndResponseCachedFlagIsTrue()
+    public void MethodReturnTypeIsIResponse_WithCacheInterceptor_ShouldCacheCorrectlyAndMethodCalledOnceAndResponseCachedFlagIsTrue()
     {
         // Arrange
         var services = GetServices();
@@ -154,8 +154,7 @@ public class CacheInterceptorTests
                         {
                             opt.IncludeRequestHeadersWhenCaching = false;
                             opt.CacheAccessorType = typeof(TestCacheAccessor);
-                        })
-                        .WithResponseInterceptor();
+                        });
 
         var serviceProvider = builder.Services.BuildServiceProvider();
 

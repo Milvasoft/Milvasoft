@@ -28,7 +28,7 @@ public class ResponseInterceptionOptions : IResponseInterceptionOptions
     /// Function parameter contains not allowed roles.
     /// </remarks>
     /// </summary>
-    public Func<HideByRoleAttribute, bool> HideByRoleFunc { get; set; }
+    public Func<IServiceProvider, HideByRoleAttribute, bool> HideByRoleFunc { get; set; }
 
     /// <summary>
     /// It allows the values to be logged to be sent to the library, other than the values that the Interceptor logs by default.
@@ -59,7 +59,7 @@ public interface IResponseInterceptionOptions : IMilvaOptions
     /// Function parameter contains not allowed roles.
     /// </remarks>
     /// </summary>
-    public Func<HideByRoleAttribute, bool> HideByRoleFunc { get; set; }
+    public Func<IServiceProvider, HideByRoleAttribute, bool> HideByRoleFunc { get; set; }
 
     /// <summary>
     /// It determines with which key pattern the data will be received from the ImilvaLocalizer in the Interceptor. 

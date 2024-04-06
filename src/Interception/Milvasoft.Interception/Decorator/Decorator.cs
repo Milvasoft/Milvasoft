@@ -43,8 +43,8 @@ public sealed class Decorator
     /// <typeparam name="TImplementation">Class for a decorated object to decorate.</typeparam>
     /// <param name="targetObject">Object to be decorated.</param>
     /// <returns>A dynamic proxy with <see cref="IMilvaInterceptor"/> instances as interceptors.</returns>
-    public TInterface For<TInterface, TImplementation>(TImplementation targetObject) where TImplementation : TInterface
-        => (TInterface)For(typeof(TInterface), targetObject);
+    public TInterface For<TInterface, TImplementation>(TImplementation targetObject, IServiceProvider serviceProvider) where TImplementation : TInterface
+        => (TInterface)For(typeof(TInterface), targetObject, serviceProvider);
 
     /// <summary>
     /// Creates a decorated instance for the given object.
@@ -52,8 +52,8 @@ public sealed class Decorator
     /// <typeparam name="TImplementation">Class for a decorated object to decorate.</typeparam>
     /// <param name="targetObject">Object to be decorated.</param>
     /// <returns>A dynamic proxy with <see cref="IMilvaInterceptor"/> instances as interceptors.</returns>
-    public TImplementation For<TImplementation>(TImplementation targetObject)
-        => (TImplementation)For(typeof(TImplementation), targetObject);
+    public TImplementation For<TImplementation>(TImplementation targetObject, IServiceProvider serviceProvider)
+        => (TImplementation)For(typeof(TImplementation), targetObject, serviceProvider);
 
     /// <summary>
     /// Creates a decorated instance for the given object.
@@ -61,11 +61,11 @@ public sealed class Decorator
     /// <param name="type">Type of the target object.</param>
     /// <param name="targetObject">Object to be decorated.</param>
     /// <returns>A dynamic proxy with <see cref="IMilvaInterceptor"/> instances as interceptors.</returns>
-    public object For(Type type, object targetObject)
+    public object For(Type type, object targetObject, IServiceProvider serviceProvider)
     {
         ArgumentNullException.ThrowIfNull(targetObject);
 
-        var interceptor = BuildDecoratorInterceptor(targetObject);
+        var interceptor = BuildDecoratorInterceptor(targetObject, serviceProvider);
 
         var proxy = type.IsInterface
                          ? _proxyGenerator.CreateInterfaceProxyWithTargetInterface(type, targetObject, interceptor)
@@ -80,9 +80,9 @@ public sealed class Decorator
     /// <typeparam name="TImplementation"></typeparam>
     /// <param name="targetObject"></param>
     /// <returns></returns>
-    private DecoratorInterceptor BuildDecoratorInterceptor<TImplementation>(TImplementation targetObject)
+    private DecoratorInterceptor BuildDecoratorInterceptor<TImplementation>(TImplementation targetObject, IServiceProvider serviceProvider)
     {
-        var decoratorTypesMap = MethodDecoratorMap.Get(targetObject.GetType());
+        var decoratorTypesMap = MethodDecoratorMap.Get(targetObject.GetType(), serviceProvider);
 
         var decoratorsMap = decoratorTypesMap.ToDictionary(typeMapItem => typeMapItem.Key,
                                                            typeMapItem => typeMapItem.Value.Select(type => GetDecorator(type)).OrderBy(i => i.InterceptionOrder).ToArray());

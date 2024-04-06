@@ -19,6 +19,12 @@ public partial class LogInterceptor(IServiceProvider serviceProvider) : IMilvaIn
 
     public async Task OnInvoke(Call call)
     {
+        if (_logger == null)
+        {
+            await call.NextAsync();
+            return;
+        }
+
         var stopwatch = new Stopwatch();
         Exception exception = null;
 
@@ -27,7 +33,6 @@ public partial class LogInterceptor(IServiceProvider serviceProvider) : IMilvaIn
             stopwatch.Start();
 
             await call.NextAsync();
-
         }
         catch (Exception ex)
         {
@@ -64,11 +69,6 @@ public partial class LogInterceptor(IServiceProvider serviceProvider) : IMilvaIn
             var logObjectPropDic = _logInterceptionOptions.LogDefaultParameters ? new Dictionary<string, object>()
             {
                { "TransactionId", ActivityHelper.TraceId },
-               { "Namespace", call.Method.DeclaringType.Namespace },
-               { "ClassName", call.Method.DeclaringType.Name },
-               { "MethodName", call.Method.Name },
-               { "MethodParams", methodParameters?.ToJson() },
-               { "MethodResult", call.ReturnValue?.ToJson() },
                { "ElapsedMs", stopwatch.ElapsedMilliseconds },
                { "UtcLogTime" , DateTime.UtcNow },
                { "IsSuccess" , isSuccessResponse },
@@ -80,7 +80,7 @@ public partial class LogInterceptor(IServiceProvider serviceProvider) : IMilvaIn
                },
             } : [];
 
-            ConfigurePropertyDictionaryWithLogRunner(logObjectPropDic, call);
+            ConfigurePropertyDictionaryWithMethodPropeties(logObjectPropDic, call);
 
             ConfigurePropertyDictionaryWithUserDefinedExtraProperties(logObjectPropDic);
 
@@ -131,29 +131,47 @@ public partial class LogInterceptor(IServiceProvider serviceProvider) : IMilvaIn
     /// </summary>
     /// <param name="logObjectPropDic"></param>
     /// <param name="call"></param>
-    private void ConfigurePropertyDictionaryWithLogRunner(Dictionary<string, object> logObjectPropDic, Call call)
+    private void ConfigurePropertyDictionaryWithMethodPropeties(Dictionary<string, object> logObjectPropDic, Call call)
     {
+        if (!_logInterceptionOptions.LogDefaultParameters)
+            return;
+
         var logAttribute = call.GetInterceptorAttribute<LogAttribute>();
 
         //If call hasn't LogAttribute this means call has LogRunnerAttribute. So, get required values from expression.
-        if (logAttribute == null && _logInterceptionOptions.LogDefaultParameters)
+        if (logAttribute == null)
         {
             var expression = call.Arguments[0];
 
             var body = (MethodCallExpression)expression.GetType().GetProperty("Body").GetValue(expression);
 
-            var values = new List<object>();
+            var argumentValues = new List<object>();
 
             foreach (var argument in body.Arguments)
-                values.Add(argument.GetType().GetProperty("Value").GetValue(argument));
+                argumentValues.Add(argument.GetType().GetProperty("Value").GetValue(argument));
 
-            var argumentValues = values.RemoveAll(p => p is CancellationToken);
+            argumentValues.RemoveAll(p => p is CancellationToken);
 
             var methodName = body.Method.Name;
 
-            logObjectPropDic["MethodName"] = methodName;
-            logObjectPropDic["MethodParams"] = argumentValues;
+            logObjectPropDic.Add("Namespace", body.Method.DeclaringType.Namespace);
+            logObjectPropDic.Add("ClassName", body.Method.DeclaringType.Name);
+            logObjectPropDic.Add("MethodName", methodName);
+            logObjectPropDic.Add("MethodParams", argumentValues.ToJson());
         }
+        else
+        {
+            var methodParameters = call.Arguments?.ToList();
+
+            methodParameters?.RemoveAll(p => p is CancellationToken);
+
+            logObjectPropDic.Add("Namespace", call.Method.DeclaringType.Namespace);
+            logObjectPropDic.Add("ClassName", call.Method.DeclaringType.Name);
+            logObjectPropDic.Add("MethodName", call.Method.Name);
+            logObjectPropDic.Add("MethodParams", methodParameters?.ToJson());
+        }
+
+        logObjectPropDic.Add("MethodResult", call.ReturnValue?.ToJson());
     }
 
     /// <summary>

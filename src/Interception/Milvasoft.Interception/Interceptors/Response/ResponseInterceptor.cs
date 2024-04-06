@@ -20,11 +20,9 @@ public class ResponseInterceptor(IServiceProvider serviceProvider, IResponseInte
     {
         await call.NextAsync();
 
-        var returnValueType = call.ReturnValue?.GetType();
-
-        if (returnValueType.CanAssignableTo(typeof(IResponse)))
+        if (call.ReturnType.CanAssignableTo(typeof(IResponse)))
         {
-            if (returnValueType.CanAssignableTo(typeof(IHasMetadata)))
+            if (call.ReturnType.CanAssignableTo(typeof(IHasMetadata)))
             {
                 var hasMetadataResponse = call.ReturnValue as IHasMetadata;
 
@@ -33,18 +31,13 @@ public class ResponseInterceptor(IServiceProvider serviceProvider, IResponseInte
                 //Gets result data and generic type
                 var (responseData, resultDataType) = hasMetadataResponse.GetResponseData();
 
-                if (!resultDataType.IsClass && resultDataType.Namespace.Contains(nameof(System)))
-                    return;
-
                 CreateMetadata(hasMetadataResponse, resultDataType, responseData);
             }
 
             var response = call.ReturnValue as IResponse;
 
             if (_interceptionOptions.TranslateResultMessages && !response.Messages.IsNullOrEmpty())
-            {
                 TranslateResultMessages(response);
-            }
         }
     }
 
@@ -117,17 +110,17 @@ public class ResponseInterceptor(IServiceProvider serviceProvider, IResponseInte
             bool removePropMetadataFromResponse = false;
             bool mask = false;
 
-            if (TryGetAttribute(prop, out HideByRoleAttribute hideByRoleAttribute) && hideByRoleAttribute.Roles.Length != 0 && (_interceptionOptions.HideByRoleFunc?.Invoke(hideByRoleAttribute) ?? false))
+            if (TryGetAttribute(prop, out HideByRoleAttribute hideByRoleAttribute) && hideByRoleAttribute.Roles.Length != 0 && (_interceptionOptions.HideByRoleFunc?.Invoke(_serviceProvider, hideByRoleAttribute) ?? false))
                 removePropMetadataFromResponse = true;
 
-            if (TryGetAttribute(prop, out MaskByRoleAttribute maskByRoleAttribute) && maskByRoleAttribute.Roles.Length != 0 && (_interceptionOptions.HideByRoleFunc?.Invoke(hideByRoleAttribute) ?? false))
+            if (TryGetAttribute(prop, out MaskByRoleAttribute maskByRoleAttribute) && maskByRoleAttribute.Roles.Length != 0 && (_interceptionOptions.HideByRoleFunc?.Invoke(_serviceProvider, hideByRoleAttribute) ?? false))
                 mask = true;
 
             if (TryGetAttribute(prop, out MaskAttribute _))
                 mask = true;
 
             //Fill metadata object
-            metadata.Display = !TryGetAttribute(prop, out BrowsableAttribute browsableAttribute) || browsableAttribute.Browsable;
+            metadata.Display = !removePropMetadataFromResponse && (!TryGetAttribute(prop, out BrowsableAttribute browsableAttribute) || browsableAttribute.Browsable);
             metadata.Mask = mask;
             metadata.Filterable = !TryGetAttribute(prop, out FilterableAttribute filterableAttribute) || filterableAttribute.Filterable;
             metadata.FilterFormat = filterableAttribute?.FilterFormat ?? prop.Name;

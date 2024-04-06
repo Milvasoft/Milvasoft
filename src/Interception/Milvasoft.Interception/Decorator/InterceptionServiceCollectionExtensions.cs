@@ -60,8 +60,7 @@ public static class InterceptionServiceCollectionExtensions
 
         types = types.Concat(externalTypes).Distinct().ToList();
 
-        builder.Services.AddScoped<IInterceptorRunner, InterceptorRunner>();
-        builder.Intercept(typeof(IInterceptorRunner));
+        builder.WithDefaultInterceptorRunner();
 
         foreach (var type in types)
             builder.Intercept(type);
@@ -75,8 +74,7 @@ public static class InterceptionServiceCollectionExtensions
     /// <typeparam name="T">Service type to be decorated</typeparam>
     public static InterceptionBuilder WithInterceptor<T>(this InterceptionBuilder builder) where T : class
     {
-        builder.Services.AddScoped<IInterceptorRunner, InterceptorRunner>();
-        builder.Intercept(typeof(IInterceptorRunner));
+        builder.WithDefaultInterceptorRunner();
         builder.Intercept(typeof(T));
 
         return builder;
@@ -126,6 +124,40 @@ public static class InterceptionServiceCollectionExtensions
 
         return builder;
     }
+
+    #region InterceptorRunner
+
+    /// <summary>
+    /// Decorates the specified service type descriptor inside <see cref="IServiceCollection"/> with a <see cref="InterceptorRunner"/>.
+    /// </summary>
+    /// <typeparam name="TInterceptorRunner">The type of the custom interceptor runner.</typeparam>
+    /// <param name="builder">The interception builder.</param>
+    /// <returns>The interception builder.</returns>
+    public static InterceptionBuilder WithDefaultInterceptorRunner(this InterceptionBuilder builder)
+    {
+        builder.Services.AddScoped<IInterceptorRunner, InterceptorRunner>();
+        builder.Intercept(typeof(IInterceptorRunner));
+
+        return builder;
+    }
+
+    /// <summary>
+    /// Decorates the specified service type descriptor inside <see cref="IServiceCollection"/> with a custom interceptor runner.
+    /// </summary>
+    /// <typeparam name="TInterceptorRunner">The type of the custom interceptor runner.</typeparam>
+    /// <param name="builder">The interception builder.</param>
+    /// <returns>The interception builder.</returns>
+    public static InterceptionBuilder WithInterceptorRunner<TInterceptorRunner>(this InterceptionBuilder builder) where TInterceptorRunner : class, IInterceptorRunner
+    {
+        builder.Services.RemoveAll(typeof(IInterceptorRunner));
+
+        builder.Services.AddScoped<IInterceptorRunner, TInterceptorRunner>();
+        builder.Intercept(typeof(IInterceptorRunner));
+
+        return builder;
+    }
+
+    #endregion
 
     #region Log
 
@@ -435,7 +467,7 @@ public static class InterceptionServiceCollectionExtensions
 
             var decorator = serviceProvider.GetRequiredService<Decorator>();
 
-            return decorator.For(serviceDescriptor.ServiceType, implementation);
+            return decorator.For(serviceDescriptor.ServiceType, implementation, serviceProvider);
         }
 
         return ServiceDescriptor.Describe(serviceType: serviceDescriptor.ServiceType,

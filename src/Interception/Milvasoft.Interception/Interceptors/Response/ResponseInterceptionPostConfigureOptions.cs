@@ -13,7 +13,7 @@ public class ResponseInterceptionPostConfigureOptions
     /// Function parameter contains not allowed roles.
     /// </remarks>
     /// </summary>
-    public Func<HideByRoleAttribute, bool> HideByRoleFunc { get; set; }
+    public Func<IServiceProvider, HideByRoleAttribute, bool> HideByRoleFunc { get; set; }
 
     /// <summary>
     /// It allows the values to be logged to be sent to the library, other than the values that the Interceptor logs by default.

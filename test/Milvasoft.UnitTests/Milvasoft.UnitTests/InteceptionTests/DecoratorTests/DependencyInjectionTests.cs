@@ -48,7 +48,7 @@ public class DependencyInjectionTests
     public class SomeDependency { }
 #pragma warning restore S2094 // Classes should not be empty
 
-    public class TestDecoratorWithDependencies(DependencyInjectionTests.SomeDependency someDependency) : IMilvaInterceptor
+    public class TestDecoratorWithDependencies(SomeDependency someDependency) : IMilvaInterceptor
     {
         public int InterceptionOrder { get; set; } = 1;
         public SomeDependency SomeDependency { get; } = someDependency;
@@ -75,7 +75,7 @@ public class DependencyInjectionTests
         void Method();
     }
 
-    public class SomeClassWithDependencies(DependencyInjectionTests.SomeDependency someDependency) : ISomeClassWithDependencies
+    public class SomeClassWithDependencies(SomeDependency someDependency) : ISomeClassWithDependencies
     {
         public SomeDependency SomeDependency { get; } = someDependency;
 

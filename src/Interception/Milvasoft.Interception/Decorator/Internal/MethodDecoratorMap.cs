@@ -1,4 +1,5 @@
-﻿using Milvasoft.Components.Rest.Response;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Milvasoft.Components.Rest.Response;
 using Milvasoft.Interception.Interceptors.Response;
 using System.Collections.Concurrent;
 using System.Collections.ObjectModel;
@@ -13,14 +14,14 @@ internal static class MethodDecoratorMap
 {
     private readonly static ConcurrentDictionary<Type, ReadOnlyDictionary<MethodInfo, Type[]>> _map = [];
 
-    public static ReadOnlyDictionary<MethodInfo, Type[]> Get(Type decoratedType) => _map.GetOrAdd(decoratedType, Factory);
+    public static ReadOnlyDictionary<MethodInfo, Type[]> Get(Type decoratedType, IServiceProvider serviceProvider) => _map.GetOrAdd(decoratedType, Factory(decoratedType, serviceProvider));
 
     /// <summary>
     /// Finds the decorable methods of the class of the given type. Then, it maps which decorators will intercept these methods.
     /// </summary>
     /// <param name="decoratedType"></param>
     /// <returns></returns>
-    private static ReadOnlyDictionary<MethodInfo, Type[]> Factory(Type decoratedType)
+    private static ReadOnlyDictionary<MethodInfo, Type[]> Factory(Type decoratedType, IServiceProvider serviceProvider)
     {
         var map = new Dictionary<MethodInfo, Type[]>();
 
@@ -42,15 +43,15 @@ internal static class MethodDecoratorMap
 
             var decorators = decoratorAttributes.Select(attribute => attribute.DecoratorType).Distinct().ToList();
 
-            var isMilvaResponseTyped = method.ReturnType.IsAssignableTo(typeof(IResponse));
+            var isMilvaResponseTyped = method.ReturnType.CanAssignableTo(typeof(IResponse));
 
-            if (method.ReturnType.GetTypeInfo().IsGenericType && method.ReturnType.GetTypeInfo().GetGenericTypeDefinition() == typeof(Task<>))
+            if (!isMilvaResponseTyped && method.ReturnType.GetTypeInfo().IsGenericType && method.ReturnType.GetTypeInfo().GetGenericTypeDefinition() == typeof(Task<>))
             {
                 var typeOfTask = method.ReturnType.GetGenericArguments()[0];
                 isMilvaResponseTyped = typeOfTask.IsAssignableTo(typeof(IResponse));
             }
 
-            if (isMilvaResponseTyped)
+            if (isMilvaResponseTyped && serviceProvider.GetService<ResponseInterceptor>() != null)
                 decorators.Add(typeof(ResponseInterceptor));
 
             map.Add(method, [.. decorators]);
