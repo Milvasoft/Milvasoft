@@ -744,7 +744,7 @@
         </member>
         <member name="T:Milvasoft.FileOperations.Builder.FileOperationsBuilder">
             <summary>
-            Configure caching services.
+            Configure file operations services.
             </summary>
             <remarks>
             Creates new instance of <see cref="T:Milvasoft.FileOperations.Builder.FileOperationsBuilder"/>.
@@ -754,7 +754,7 @@
         </member>
         <member name="M:Milvasoft.FileOperations.Builder.FileOperationsBuilder.#ctor(Microsoft.Extensions.DependencyInjection.IServiceCollection,Microsoft.Extensions.Configuration.IConfigurationManager)">
             <summary>
-            Configure caching services.
+            Configure file operations services.
             </summary>
             <remarks>
             Creates new instance of <see cref="T:Milvasoft.FileOperations.Builder.FileOperationsBuilder"/>.
@@ -859,7 +859,7 @@
         </member>
         <member name="T:Milvasoft.FileOperations.Builder.ServiceCollectionExtensions">
             <summary>
-            Provides registration of caching services.
+            Provides registration of file operations services.
             </summary>
         </member>
         <member name="M:Milvasoft.FileOperations.Builder.ServiceCollectionExtensions.AddFileOperations(Microsoft.Extensions.DependencyInjection.IServiceCollection,Microsoft.Extensions.Configuration.IConfigurationManager)">

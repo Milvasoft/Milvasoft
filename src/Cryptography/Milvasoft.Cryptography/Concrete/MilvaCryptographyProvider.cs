@@ -24,20 +24,6 @@ public class MilvaCryptographyProvider(IMilvaCryptographyOptions milvaCryptograp
 
     #endregion
 
-    #region Properties
-
-    /// <summary>
-    /// AES block size constant.
-    /// </summary>
-    public const int AesBlockSize = 128;
-
-    /// <summary>
-    /// Initialization vector size constant.(IV)
-    /// </summary>
-    public const int InitializationVectorSize = 16;
-
-    #endregion
-
     #region Async Encryption
 
     /// <summary>
@@ -82,7 +68,7 @@ public class MilvaCryptographyProvider(IMilvaCryptographyOptions milvaCryptograp
 
         using (var memoryStream = new MemoryStream(inputValue))
         {
-            var initializationVector = new byte[InitializationVectorSize];
+            var initializationVector = new byte[16];
 
             await memoryStream.ReadAsync(initializationVector.AsMemory(0, initializationVector.Length)).ConfigureAwait(false);
 
@@ -204,7 +190,7 @@ public class MilvaCryptographyProvider(IMilvaCryptographyOptions milvaCryptograp
 
         using (var memoryStream = new MemoryStream(inputValue))
         {
-            var initializationVector = new byte[InitializationVectorSize];
+            var initializationVector = new byte[16];
 
             memoryStream.Read(initializationVector, 0, initializationVector.Length);
 
@@ -290,7 +276,7 @@ public class MilvaCryptographyProvider(IMilvaCryptographyOptions milvaCryptograp
     {
         var provider = Aes.Create();
 
-        provider.BlockSize = AesBlockSize;
+        provider.BlockSize = 128;
         provider.Mode = _mode;
         provider.Padding = _padding;
         provider.Key = _key;
