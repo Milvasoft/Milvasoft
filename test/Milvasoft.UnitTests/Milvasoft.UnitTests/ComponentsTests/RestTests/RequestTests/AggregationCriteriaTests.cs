@@ -425,7 +425,7 @@ public class AggregationCriteriaTests
                 Number = RestTestEnumFixture.Two
             }
         };
-        using var dbContextFixture = new DbContextMock(nameof(AggregationCriteria)).GetDbContextFixture();
+        using var dbContextFixture = new DbContextMock<RestDbContextFixture>(nameof(AggregationCriteria)).GetDbContextFixture();
         await dbContextFixture.TestEntities.AddRangeAsync(entities);
         await dbContextFixture.SaveChangesAsync();
 
@@ -445,7 +445,7 @@ public class AggregationCriteriaTests
             AggregateBy = nameof(RestTestEntityFixture.Name),
             Type = AggregationType.Avg
         };
-        using var dbContextFixture = new DbContextMock(nameof(AggregationCriteria)).GetDbContextFixture();
+        using var dbContextFixture = new DbContextMock<RestDbContextFixture>(nameof(AggregationCriteria)).GetDbContextFixture();
         dbContextFixture.TestEntities = null;
         await dbContextFixture.SaveChangesAsync();
 
@@ -461,7 +461,7 @@ public class AggregationCriteriaTests
     public async Task ApplyAggregationAsync_WithEfQueryProviderSourceAndAsyncRunAndUnsupportedAggregateByPropertyTypeWithAggregationMethod_ShouldThrowException(List<RestTestEntityFixture> entities, AggregationCriteria criteria)
     {
         // Arrange
-        using var dbContextFixture = new DbContextMock(nameof(AggregationCriteria)).GetDbContextFixture();
+        using var dbContextFixture = new DbContextMock<RestDbContextFixture>(nameof(AggregationCriteria)).GetDbContextFixture();
         await dbContextFixture.TestEntities.AddRangeAsync(entities);
         await dbContextFixture.SaveChangesAsync();
 
@@ -477,7 +477,7 @@ public class AggregationCriteriaTests
     public async Task ApplyAggregationAsync_WithEfQueryProviderSourceAndAsyncRunAndValidParameters_ShouldReturnExpectedResult(List<RestTestEntityFixture> entities, AggregationCriteria criteria, AggregationResult expectedResult)
     {
         // Arrange
-        using var dbContextFixture = new DbContextMock(nameof(AggregationCriteria)).GetDbContextFixture();
+        using var dbContextFixture = new DbContextMock<RestDbContextFixture>(nameof(AggregationCriteria)).GetDbContextFixture();
         await dbContextFixture.TestEntities.AddRangeAsync(entities);
         await dbContextFixture.SaveChangesAsync();
 
@@ -509,7 +509,7 @@ public class AggregationCriteriaTests
                 Number = RestTestEnumFixture.Two
             }
         };
-        using var dbContextFixture = new DbContextMock(nameof(AggregationCriteria)).GetDbContextFixture();
+        using var dbContextFixture = new DbContextMock<RestDbContextFixture>(nameof(AggregationCriteria)).GetDbContextFixture();
         await dbContextFixture.TestEntities.AddRangeAsync(entities);
         await dbContextFixture.SaveChangesAsync();
 
@@ -529,7 +529,7 @@ public class AggregationCriteriaTests
             AggregateBy = nameof(RestTestEntityFixture.Name),
             Type = AggregationType.Avg
         };
-        using var dbContextFixture = new DbContextMock(nameof(AggregationCriteria)).GetDbContextFixture();
+        using var dbContextFixture = new DbContextMock<RestDbContextFixture>(nameof(AggregationCriteria)).GetDbContextFixture();
         dbContextFixture.TestEntities = null;
         await dbContextFixture.SaveChangesAsync();
 
@@ -545,7 +545,7 @@ public class AggregationCriteriaTests
     public async Task ApplyAggregationAsync_WithEfQueryProviderSourceAndSyncRunAndUnsupportedAggregateByPropertyTypeWithAggregationMethod_ShouldThrowException(List<RestTestEntityFixture> entities, AggregationCriteria criteria)
     {
         // Arrange
-        using var dbContextFixture = new DbContextMock(nameof(AggregationCriteria)).GetDbContextFixture();
+        using var dbContextFixture = new DbContextMock<RestDbContextFixture>(nameof(AggregationCriteria)).GetDbContextFixture();
         await dbContextFixture.TestEntities.AddRangeAsync(entities);
         await dbContextFixture.SaveChangesAsync();
 
@@ -561,7 +561,7 @@ public class AggregationCriteriaTests
     public async Task ApplyAggregationAsync_WithEfQueryProviderSourceAndSyncRunAndValidParameters_ShouldReturnExpectedResult(List<RestTestEntityFixture> entities, AggregationCriteria criteria, AggregationResult expectedResult)
     {
         // Arrange
-        using var dbContextMock = new DbContextMock(nameof(AggregationCriteria)).GetDbContextFixture();
+        using var dbContextMock = new DbContextMock<RestDbContextFixture>(nameof(AggregationCriteria)).GetDbContextFixture();
         await dbContextMock.TestEntities.AddRangeAsync(entities);
         await dbContextMock.SaveChangesAsync();
 

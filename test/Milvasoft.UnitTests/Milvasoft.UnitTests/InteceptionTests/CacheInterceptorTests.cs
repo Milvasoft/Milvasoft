@@ -152,6 +152,7 @@ public class CacheInterceptorTests
         builder.Services.AddMilvaInterception([typeof(ISomeInterface)])
                         .WithCacheInterceptor(opt =>
                         {
+                            opt.InterceptorLifetime = ServiceLifetime.Scoped;
                             opt.IncludeRequestHeadersWhenCaching = false;
                             opt.CacheAccessorType = typeof(TestCacheAccessor);
                         });

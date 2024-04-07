@@ -73,7 +73,7 @@ public class AggregationRequestTests
         {
             Criterias = null
         };
-        var dbContextMock = new DbContextMock(nameof(AggregationRequest)).GetDbContextFixture();
+        var dbContextMock = new DbContextMock<RestDbContextFixture>(nameof(AggregationRequest)).GetDbContextFixture();
         dbContextMock.TestEntities = null;
         await dbContextMock.SaveChangesAsync();
 
@@ -92,7 +92,7 @@ public class AggregationRequestTests
         {
             Criterias = []
         };
-        var dbContextMock = new DbContextMock(nameof(AggregationRequest)).GetDbContextFixture();
+        var dbContextMock = new DbContextMock<RestDbContextFixture>(nameof(AggregationRequest)).GetDbContextFixture();
         dbContextMock.TestEntities = null;
         await dbContextMock.SaveChangesAsync();
 

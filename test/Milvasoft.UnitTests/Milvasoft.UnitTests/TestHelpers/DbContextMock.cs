@@ -1,26 +1,25 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Milvasoft.UnitTests.ComponentsTests.RestTests.Fixture;
 
 namespace Milvasoft.UnitTests.TestHelpers;
 
-public class DbContextMock
+public class DbContextMock<TContext> where TContext : DbContext
 {
-    private readonly RestDbContextFixture _testDbContext;
+    private readonly TContext _testDbContext;
 
     public DbContextMock(string dbName)
     {
-        var builder = new DbContextOptionsBuilder<RestDbContextFixture>();
+        var builder = new DbContextOptionsBuilder<TContext>();
 
         builder.UseInMemoryDatabase(databaseName: $"{dbName}TestDbInMemory_{Guid.NewGuid}_{DateTime.Now.Nanosecond}");
 
         var dbContextOptions = builder.Options;
 
-        _testDbContext = new RestDbContextFixture(dbContextOptions);
+        _testDbContext = (TContext)Activator.CreateInstance(typeof(TContext), dbContextOptions);
 
         // Delete existing db before creating a new one
         _testDbContext.Database.EnsureDeleted();
         _testDbContext.Database.EnsureCreated();
     }
 
-    public RestDbContextFixture GetDbContextFixture() => _testDbContext;
+    public TContext GetDbContextFixture() => _testDbContext;
 }

@@ -351,7 +351,7 @@ public class FilterRequestTests
     public async Task BuildFilterExpression_ForEfSource_WithValidFilterTypeAndFilterBy_ShouldReturnCorrectExpression(IQueryable<RestTestEntityFixture> source, FilterRequest filterRequest, List<int> expectedIdList)
     {
         // Arrange
-        using var dbContextFixture = new DbContextMock(nameof(FilterRequest)).GetDbContextFixture();
+        using var dbContextFixture = new DbContextMock<RestDbContextFixture>(nameof(FilterRequest)).GetDbContextFixture();
         await dbContextFixture.TestEntities.AddRangeAsync(source);
         await dbContextFixture.SaveChangesAsync();
 
