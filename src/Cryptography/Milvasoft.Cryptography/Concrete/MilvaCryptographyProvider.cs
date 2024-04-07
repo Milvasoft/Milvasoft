@@ -1,11 +1,12 @@
 ﻿using Milvasoft.Cryptography.Abstract;
+using Milvasoft.Cryptography.Builder;
 using System.Security.Cryptography;
 using System.Text;
 
 namespace Milvasoft.Cryptography.Concrete;
 
 /// <summary>
-/// Provides file encryption and decryption with AES Algorithm. Milvasoft Corporation is not responsible of possible data loss.
+/// Provides file encryption and decryption with AES Algorithm. Milvasoft Corporation or contributors of this project is not responsible of possible data loss.
 /// </summary>
 /// <remarks>
 /// Creates a new <see cref="MilvaCryptographyProvider"/> instance.
@@ -13,14 +14,13 @@ namespace Milvasoft.Cryptography.Concrete;
 /// <param name="key"> Must be between 128-256 bit.</param>
 /// <param name="mode"></param>
 /// <param name="padding"></param>
-public class MilvaCryptographyProvider(string key, CipherMode mode = CipherMode.CBC, PaddingMode padding = PaddingMode.PKCS7) : IMilvaCryptographyProvider
+public class MilvaCryptographyProvider(IMilvaCryptographyOptions milvaCryptographyOptions) : IMilvaCryptographyProvider
 {
-
     #region Fields
 
-    private readonly byte[] _key = Encoding.UTF8.GetBytes(key);
-    private readonly CipherMode _mode = mode;
-    private readonly PaddingMode _padding = padding;
+    private readonly byte[] _key = Encoding.UTF8.GetBytes(milvaCryptographyOptions.Key);
+    private readonly CipherMode _mode = milvaCryptographyOptions.Cipher;
+    private readonly PaddingMode _padding = milvaCryptographyOptions.Padding;
 
     #endregion
 
@@ -42,7 +42,7 @@ public class MilvaCryptographyProvider(string key, CipherMode mode = CipherMode.
 
     /// <summary>
     /// Encrypt <paramref name="value"/> with AES Algorithm and key.
-    /// !!! Milvasoft Corporation is not responsible of possible data loss.
+    /// !!! Milvasoft Corporation or contributors of this project is not responsible of possible data loss.
     /// </summary>
     /// <param name="value"></param>
     public async Task<string> EncryptAsync(string value)
@@ -71,7 +71,7 @@ public class MilvaCryptographyProvider(string key, CipherMode mode = CipherMode.
 
     /// <summary>
     /// Decrypt <paramref name="value"/> with AES Algorithm and key.
-    /// !!! Milvasoft Corporation is not responsible of possible data loss.
+    /// !!! Milvasoft Corporation or contributors of this project is not responsible of possible data loss.
     /// </summary>
     /// <param name="value"></param>
     public async Task<string> DecryptAsync(string value)
@@ -102,7 +102,7 @@ public class MilvaCryptographyProvider(string key, CipherMode mode = CipherMode.
 
     /// <summary>
     /// Encrypt file in <paramref name="filePath"/> with AES Algorithm and key.
-    /// !!! Milvasoft Corporation is not responsible of possible data loss.
+    /// !!! Milvasoft Corporation or contributors of this project is not responsible of possible data loss.
     /// </summary>
     /// <param name="filePath"></param>
     public async Task EncryptFileAsync(string filePath)
@@ -116,7 +116,7 @@ public class MilvaCryptographyProvider(string key, CipherMode mode = CipherMode.
 
     /// <summary>
     /// Encrypt file in <paramref name="filePath"/> with AES Algorithm and key.
-    /// !!! Milvasoft Corporation is not responsible of possible data loss.
+    /// !!! Milvasoft Corporation or contributors of this project is not responsible of possible data loss.
     /// </summary>
     /// <param name="filePath"></param>
     /// <param name="encoding"> e.g. <see cref="Encoding.UTF8"/></param>
@@ -131,7 +131,7 @@ public class MilvaCryptographyProvider(string key, CipherMode mode = CipherMode.
 
     /// <summary>
     /// Decrypt file in <paramref name="filePath"/> with AES Algorithm and key.
-    /// !!! Milvasoft Corporation is not responsible of possible data loss.
+    /// !!! Milvasoft Corporation or contributors of this project is not responsible of possible data loss.
     /// </summary>
     /// <param name="filePath"></param>
     public async Task DecryptFileAsync(string filePath)
@@ -145,7 +145,7 @@ public class MilvaCryptographyProvider(string key, CipherMode mode = CipherMode.
 
     /// <summary>
     /// Decrypt file in <paramref name="filePath"/> with AES Algorithm and key.
-    /// !!! Milvasoft Corporation is not responsible of possible data loss.
+    /// !!! Milvasoft Corporation or contributors of this project is not responsible of possible data loss.
     /// </summary>
     /// <param name="filePath"></param>
     /// <param name="encoding"> e.g. <see cref="Encoding.UTF8"/></param>
@@ -164,7 +164,7 @@ public class MilvaCryptographyProvider(string key, CipherMode mode = CipherMode.
 
     /// <summary>
     /// Encrypt <paramref name="value"/> with AES Algorithm and key.
-    /// !!! Milvasoft Corporation is not responsible of possible data loss.
+    /// !!! Milvasoft Corporation or contributors of this project is not responsible of possible data loss.
     /// </summary>
     /// <param name="value"></param>
     public string Encrypt(string value)
@@ -193,7 +193,7 @@ public class MilvaCryptographyProvider(string key, CipherMode mode = CipherMode.
 
     /// <summary>
     /// Decrypt <paramref name="value"/> with AES Algorithm and key.
-    /// !!! Milvasoft Corporation is not responsible of possible data loss.
+    /// !!! Milvasoft Corporation or contributors of this project is not responsible of possible data loss.
     /// </summary>
     /// <param name="value"></param>
     public string Decrypt(string value)
@@ -224,7 +224,7 @@ public class MilvaCryptographyProvider(string key, CipherMode mode = CipherMode.
 
     /// <summary>
     /// Encrypt file in <paramref name="filePath"/> with AES Algorithm and key.
-    /// !!! Milvasoft Corporation is not responsible of possible data loss.
+    /// !!! Milvasoft Corporation or contributors of this project is not responsible of possible data loss.
     /// </summary>
     /// <param name="filePath"></param>
     public void EncryptFile(string filePath)
@@ -238,7 +238,7 @@ public class MilvaCryptographyProvider(string key, CipherMode mode = CipherMode.
 
     /// <summary>
     /// Encrypt file in <paramref name="filePath"/> with AES Algorithm and key.
-    /// !!! Milvasoft Corporation is not responsible of possible data loss.
+    /// !!! Milvasoft Corporation or contributors of this project is not responsible of possible data loss.
     /// </summary>
     /// <param name="filePath"></param>
     /// <param name="encoding"> e.g. <see cref="Encoding.UTF8"/></param>
@@ -253,7 +253,7 @@ public class MilvaCryptographyProvider(string key, CipherMode mode = CipherMode.
 
     /// <summary>
     /// Decrypt file in <paramref name="filePath"/> with AES Algorithm and key.
-    /// !!! Milvasoft Corporation is not responsible of possible data loss.
+    /// !!! Milvasoft Corporation or contributors of this project is not responsible of possible data loss.
     /// </summary>
     /// <param name="filePath"></param>
     public void DecryptFile(string filePath)
@@ -267,7 +267,7 @@ public class MilvaCryptographyProvider(string key, CipherMode mode = CipherMode.
 
     /// <summary>
     /// Decrypt file in <paramref name="filePath"/> with AES Algorithm and key.
-    /// !!! Milvasoft Corporation is not responsible of possible data loss.
+    /// !!! Milvasoft Corporation or contributors of this project is not responsible of possible data loss.
     /// </summary>
     /// <param name="filePath"></param>
     /// <param name="encoding"> e.g. <see cref="Encoding.UTF8"/></param>

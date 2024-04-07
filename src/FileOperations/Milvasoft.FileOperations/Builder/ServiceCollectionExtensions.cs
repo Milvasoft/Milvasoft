@@ -7,7 +7,7 @@ using Milvasoft.FileOperations.Concrete;
 namespace Milvasoft.FileOperations.Builder;
 
 /// <summary>
-/// Provides registration of caching services.
+/// Provides registration of file operations services.
 /// </summary>
 public static class ServiceCollectionExtensions
 {

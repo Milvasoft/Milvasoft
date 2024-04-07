@@ -4,14 +4,14 @@ using Microsoft.Extensions.DependencyInjection;
 namespace Milvasoft.FileOperations.Builder;
 
 /// <summary>
-/// Configure file operations services.
+/// Configure cryptography services.
 /// </summary>
 /// <remarks>
-/// Creates new instance of <see cref="FileOperationsBuilder"/>.
+/// Creates new instance of <see cref="MilvaCryptographyBuilder"/>.
 /// </remarks>
 /// <param name="services"></param>
 /// <param name="configurationManager"></param>
-public sealed class FileOperationsBuilder(IServiceCollection services, IConfigurationManager configurationManager = null)
+public sealed class MilvaCryptographyBuilder(IServiceCollection services, IConfigurationManager configurationManager = null)
 {
     /// <summary>
     /// Service collection.
