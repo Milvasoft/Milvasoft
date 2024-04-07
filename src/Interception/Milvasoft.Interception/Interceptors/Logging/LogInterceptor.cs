@@ -1,5 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using Milvasoft.Components.Rest.Response;
+using Milvasoft.Components.Rest.MilvaResponse;
 using Milvasoft.Interception.Decorator;
 using Milvasoft.Interception.Interceptors.ActivityScope;
 using Milvasoft.Interception.Interceptors.Cache;
@@ -9,6 +9,11 @@ using System.Text.RegularExpressions;
 
 namespace Milvasoft.Interception.Interceptors.Logging;
 
+/// <summary>
+/// The LogInterceptor is an interceptor that allows the logging of method attributes, such as return values, parameters, and other properties, using the IMilvaLogger. 
+/// It intercepts methods that are marked with the LogAttribute and logs the relevant information using the provided logger.
+/// </summary>
+/// <param name="serviceProvider"></param>
 public partial class LogInterceptor(IServiceProvider serviceProvider) : IMilvaInterceptor
 {
     private readonly IServiceProvider _serviceProvider = serviceProvider;
@@ -126,19 +131,19 @@ public partial class LogInterceptor(IServiceProvider serviceProvider) : IMilvaIn
     }
 
     /// <summary>
-    /// If <paramref name="call"/> hasn't <see cref="LogAttribute"/> this means call has <see cref="LogRunnerAttribute"/>. 
-    /// So, get required values from InterceptorRunner.InterceptWithLogAsync.expression parameter.
+    /// Configures the property dictionary with method specific properties.
     /// </summary>
-    /// <param name="logObjectPropDic"></param>
-    /// <param name="call"></param>
+    /// <param name="logObjectPropDic">The property dictionary to be configured.</param>
+    /// <param name="call">The call object containing the method information.</param>
     private void ConfigurePropertyDictionaryWithMethodPropeties(Dictionary<string, object> logObjectPropDic, Call call)
     {
+        // Check if default parameters logging is enabled
         if (!_logInterceptionOptions.LogDefaultParameters)
             return;
 
         var logAttribute = call.GetInterceptorAttribute<LogAttribute>();
 
-        //If call hasn't LogAttribute this means call has LogRunnerAttribute. So, get required values from expression.
+        // If the call does not have a LogAttribute, it means it has a LogRunnerAttribute. So, get the required values from the expression.
         if (logAttribute == null)
         {
             var expression = call.Arguments[0];

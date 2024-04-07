@@ -1,10 +1,14 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
-using Milvasoft.Components.Rest.Response;
+using Milvasoft.Components.Rest.MilvaResponse;
 using Milvasoft.Interception.Decorator;
 
 namespace Milvasoft.Interception.Interceptors.Cache;
 
+/// <summary>
+/// It ensures that the return value of the method marked with the <see cref="CacheAttribute"/> is cached with <see cref="ICacheAccessor"/> after the first call,
+/// and that the method returns from the cache during the specified timeout period when called with the same parameters.
+/// </summary>
 public class CacheInterceptor : IMilvaInterceptor
 {
     private readonly ICacheAccessor _cache;
@@ -28,7 +32,7 @@ public class CacheInterceptor : IMilvaInterceptor
 
     public async Task OnInvoke(Call call)
     {
-        //If cache provider is null nothing do nothing, just proceed to next
+        //If cache provider is null do nothing, just proceed to next invocation
         if (_cache == null)
         {
             await call.NextAsync();

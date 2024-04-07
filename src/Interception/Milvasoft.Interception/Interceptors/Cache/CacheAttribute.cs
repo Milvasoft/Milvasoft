@@ -2,6 +2,9 @@
 
 namespace Milvasoft.Interception.Interceptors.Cache;
 
+/// <summary>
+/// Indicates that the return values of methods marked with this attribute will be cached using <see cref="ICacheAccessor"/>.
+/// </summary>
 public class CacheAttribute : DecorateAttribute
 {
     /// <summary>

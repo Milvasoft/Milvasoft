@@ -1,7 +1,7 @@
 ﻿using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
 using Milvasoft.Attributes.Annotations;
-using Milvasoft.Components.Rest.Response;
+using Milvasoft.Components.Rest.MilvaResponse;
 using Milvasoft.Core.Abstractions;
 using Milvasoft.Core.Abstractions.Localization;
 using Milvasoft.Core.Utils.Constants;

@@ -1,5 +1,5 @@
 ﻿using Milvasoft.Components.Rest.Enums;
-using Milvasoft.Components.Rest.Response;
+using Milvasoft.Components.Rest.MilvaResponse;
 using Milvasoft.Core.Utils.JsonConverters;
 using System.Text.Json;
 
@@ -17,7 +17,7 @@ public static partial class RestExtensions
         if (options == null)
             return null;
 
-        options.Converters.Add(new InterfaceConverterFactory<Response.Response, IResponse>());
+        options.Converters.Add(new InterfaceConverterFactory<Response, IResponse>());
 
         return options;
     }

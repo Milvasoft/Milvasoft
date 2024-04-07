@@ -1,5 +1,5 @@
 ﻿using MediatR;
-using Milvasoft.Components.Rest.Response;
+using Milvasoft.Components.Rest.MilvaResponse;
 
 namespace Milvasoft.Components.CQRS.Query;
 

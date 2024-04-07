@@ -2,6 +2,9 @@
 
 namespace Milvasoft.Interception.Interceptors.ActivityScope;
 
+/// <summary>
+/// Helper class for retrieving information about the current activity.
+/// </summary>
 public static class ActivityHelper
 {
     public static string Id => Activity.Current?.Id ?? "No Activity";

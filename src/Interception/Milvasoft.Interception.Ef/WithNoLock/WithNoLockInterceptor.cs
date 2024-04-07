@@ -5,6 +5,9 @@ using System.Transactions;
 
 namespace Milvasoft.Interception.Ef.WithNoLock;
 
+/// <summary>
+/// Interceptor that adds "WITH(NOLOCK)" hint to select queries made in methods marked with <see cref="WithNoLockAttribute"/>.
+/// </summary>
 public partial class WithNoLockInterceptor(IServiceProvider serviceProvider) : IMilvaInterceptor
 {
     public int InterceptionOrder { get; set; } = -997;

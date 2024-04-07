@@ -10,7 +10,6 @@ using Milvasoft.Interception.Interceptors.Cache;
 using Milvasoft.Interception.Interceptors.Logging;
 using Milvasoft.Interception.Interceptors.Response;
 using Milvasoft.Interception.Interceptors.Runner;
-using Milvasoft.Interception.Utils;
 using System.Reflection;
 
 namespace Milvasoft.Interception.Decorator;
@@ -212,7 +211,7 @@ public static class InterceptionServiceCollectionExtensions
     }
 
     /// <summary>
-    /// Adds required services to service collection for configuring milva specific context features.
+    /// If options are made from the configuration file, configures options that cannot be made from the configuration file.
     /// </summary>
     /// <param name="builder"></param>
     /// <param name="postConfigureAction"></param>
@@ -294,7 +293,7 @@ public static class InterceptionServiceCollectionExtensions
     }
 
     /// <summary>
-    /// Adds required services to service collection for configuring milva specific context features.
+    /// If options are made from the configuration file, configures options that cannot be made from the configuration file.
     /// </summary>
     /// <param name="builder"></param>
     /// <param name="postConfigureAction"></param>
@@ -372,13 +371,15 @@ public static class InterceptionServiceCollectionExtensions
         {
             opt.InterceptorLifetime = options.InterceptorLifetime;
             opt.CacheAccessorAssemblyQualifiedName = options.CacheAccessorAssemblyQualifiedName;
+            opt.CacheAccessorType = options.CacheAccessorType;
+            opt.CacheKeyConfigurator = options.CacheKeyConfigurator;
         });
 
         return builder;
     }
 
     /// <summary>
-    /// Adds required services to service collection for configuring milva specific context features.
+    /// If options are made from the configuration file, configures options that cannot be made from the configuration file.
     /// </summary>
     /// <param name="builder"></param>
     /// <param name="postConfigureAction"></param>
@@ -429,7 +430,7 @@ public static class InterceptionServiceCollectionExtensions
     #endregion
 
     /// <summary>
-    /// Adds required services to service collection for configuring milva specific context features.
+    /// If options are made from the configuration file, configures options that cannot be made from the configuration file.
     /// </summary>
     /// <param name="builder"></param>
     /// <param name="postConfigureAction"></param>
@@ -452,6 +453,12 @@ public static class InterceptionServiceCollectionExtensions
         {
             opt.HideByRoleFunc = config.Response.HideByRoleFunc;
             opt.ApplyLocalizationFunc = config.Response.ApplyLocalizationFunc;
+        });
+
+        builder.PostConfigureCacheInterceptionOptions(opt =>
+        {
+            opt.CacheAccessorType = config.Cache.CacheAccessorType;
+            opt.CacheKeyConfigurator = config.Cache.CacheKeyConfigurator;
         });
 
         return builder;

@@ -4,16 +4,15 @@ using Microsoft.Extensions.DependencyInjection;
 namespace Milvasoft.Interception.Builder;
 
 /// <summary>
-/// Configure caching services.
+/// Represents a builder for configuring interception services.
 /// </summary>
 /// <remarks>
-/// Creates new instance of <see cref="CacheBuilder"/>.
+/// This class creates a new instance of the <see cref="InterceptionBuilder"/> and provides methods for configuring interception services.
 /// </remarks>
-/// <param name="services"></param>
-/// <param name="configurationManager"></param>
+/// <param name="services">The <see cref="IServiceCollection"/> to add the interception services to.</param>
+/// <param name="configurationManager">The optional <see cref="IConfigurationManager"/> to be used for configuration.</param>
 public sealed class InterceptionBuilder(IServiceCollection services, IConfigurationManager configurationManager = null) : IMilvaBuilder
 {
     public IServiceCollection Services { get; } = services;
     public IConfigurationManager ConfigurationManager { get; } = configurationManager;
-
 }

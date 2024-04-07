@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace Milvasoft.Components.Rest.Response;
+namespace Milvasoft.Components.Rest.MilvaResponse;
 
 /// <summary>
 /// Represents a response interface containing properties and methods to handle response data and messages.

@@ -2,7 +2,7 @@
 using System.Net;
 using System.Runtime.Serialization;
 
-namespace Milvasoft.Components.Rest.Response;
+namespace Milvasoft.Components.Rest.MilvaResponse;
 
 /// <summary>
 /// Listed or paginated response.

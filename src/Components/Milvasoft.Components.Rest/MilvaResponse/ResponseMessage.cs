@@ -1,7 +1,7 @@
 ﻿using Milvasoft.Components.Rest.Enums;
 using System.Runtime.Serialization;
 
-namespace Milvasoft.Components.Rest.Response;
+namespace Milvasoft.Components.Rest.MilvaResponse;
 
 /// <summary>
 /// Represents a message returned as part of a response.

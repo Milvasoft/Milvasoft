@@ -1,5 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using Milvasoft.Components.Rest.Response;
+using Milvasoft.Components.Rest.MilvaResponse;
 using Milvasoft.Interception.Interceptors.Response;
 using System.Collections.Concurrent;
 using System.Collections.ObjectModel;

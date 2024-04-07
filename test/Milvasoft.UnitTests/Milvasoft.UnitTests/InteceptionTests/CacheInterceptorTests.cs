@@ -2,7 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Milvasoft.Caching.Builder;
 using Milvasoft.Caching.InMemory.Options;
-using Milvasoft.Components.Rest.Response;
+using Milvasoft.Components.Rest.MilvaResponse;
 using Milvasoft.Core.Abstractions;
 using Milvasoft.Core.Abstractions.Cache;
 using Milvasoft.Interception.Builder;

@@ -2,15 +2,21 @@
 
 namespace Milvasoft.Interception.Interceptors.Cache;
 
+/// <summary>
+/// Represents the options for cache interception.
+/// </summary>
+[System.Diagnostics.CodeAnalysis.SuppressMessage("Critical Code Smell", "S2696:Instance members should not write to \"static\" fields", Justification = "This value will be assigned only at application startup and acts as a singleton. Therefore, there is no harm in this use.")]
 public class CacheInterceptionOptions : ICacheInterceptionOptions
 {
-#pragma warning disable S2696 // Instance members should not write to "static" fields
     private static Type _accessorType = null;
     private string _cacheAccessorAssemblyQualifiedName;
 
     public static string SectionName { get; } = $"{MilvaConstant.ParentSectionName}:Interception:Cache";
+
     public ServiceLifetime InterceptorLifetime { get; set; } = ServiceLifetime.Scoped;
+
     public bool IncludeRequestHeadersWhenCaching { get; set; } = true;
+
     public string CacheAccessorAssemblyQualifiedName
     {
         get => _cacheAccessorAssemblyQualifiedName;
@@ -20,27 +26,48 @@ public class CacheInterceptionOptions : ICacheInterceptionOptions
             _accessorType = Type.GetType(_cacheAccessorAssemblyQualifiedName);
         }
     }
-    public Type CacheAccessorType { get => _accessorType; set => _accessorType = typeof(ICacheAccessor<>).MakeGenericType(value); }
+
+    public Type CacheAccessorType
+    {
+        get => _accessorType;
+        set
+        {
+            _accessorType = typeof(ICacheAccessor<>).MakeGenericType(value);
+            _cacheAccessorAssemblyQualifiedName = value.AssemblyQualifiedName;
+        }
+    }
+
+    public Func<IServiceProvider, string> CacheKeyConfigurator { get; set; }
+
+    public Type GetAccessorType() => _accessorType ??= typeof(ICacheAccessor<>).MakeGenericType(Type.GetType(_cacheAccessorAssemblyQualifiedName));
+}
+
+/// <summary>
+/// Represents the options for cache interception.
+/// </summary>
+public interface ICacheInterceptionOptions : IMilvaOptions
+{
+    /// <summary>
+    /// Cache interceptor lifetime.
+    /// </summary>
+    public ServiceLifetime InterceptorLifetime { get; set; }
 
     /// <summary>
     /// When a return value is to be cached, a cache key is created with the method name and the values of the method request parameters. 
     /// In cases where HttpRequestHeaders may cause differences in the requests made, the value returned by this delegate is appended to the cache key.
+    /// If this value is true request headers will included to creation of cache key.
     /// </summary>
-    public Func<IServiceProvider, string> CacheKeyConfigurator { get; set; }
+    public bool IncludeRequestHeadersWhenCaching { get; set; }
 
     /// <summary>
-    /// Gets generic accessor type as <see cref="ICacheAccessor{TAccessor}"/>
+    /// Cache accessor assembly qualified name for configuring options from configuration file.
+    /// For example 'Milvasoft.Caching.Redis.RedisAccessor, Milvasoft.Caching.Redis, Version=8.0.0.0, Culture=neutral, PublicKeyToken=null'
     /// </summary>
-    /// <returns></returns>
-    public Type GetAccessorType() => _accessorType ??= typeof(ICacheAccessor<>).MakeGenericType(Type.GetType(CacheAccessorAssemblyQualifiedName));
-#pragma warning restore S2696 // Instance members should not write to "static" fields
-}
-
-public interface ICacheInterceptionOptions : IMilvaOptions
-{
-    public ServiceLifetime InterceptorLifetime { get; set; }
-    public bool IncludeRequestHeadersWhenCaching { get; set; }
     public string CacheAccessorAssemblyQualifiedName { get; set; }
+
+    /// <summary>
+    /// Cache accessor type. For example typeof(RedisAccessor)
+    /// </summary>
     public Type CacheAccessorType { get; set; }
 
     /// <summary>
@@ -49,5 +76,9 @@ public interface ICacheInterceptionOptions : IMilvaOptions
     /// </summary>
     public Func<IServiceProvider, string> CacheKeyConfigurator { get; set; }
 
+    /// <summary>
+    /// Gets the generic accessor type as <see cref="ICacheAccessor{TAccessor}"/>.
+    /// </summary>
+    /// <returns>The generic accessor type.</returns>
     public Type GetAccessorType();
 }

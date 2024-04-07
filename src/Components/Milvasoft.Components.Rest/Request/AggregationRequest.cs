@@ -1,4 +1,4 @@
-﻿using Milvasoft.Components.Rest.Response;
+﻿using Milvasoft.Components.Rest.MilvaResponse;
 
 namespace Milvasoft.Components.Rest.Request;
 

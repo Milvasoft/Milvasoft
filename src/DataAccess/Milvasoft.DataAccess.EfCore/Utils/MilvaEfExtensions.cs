@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Milvasoft.Components.Rest.Enums;
+using Milvasoft.Components.Rest.MilvaResponse;
 using Milvasoft.Components.Rest.Request;
-using Milvasoft.Components.Rest.Response;
 
 namespace Milvasoft.DataAccess.EfCore.Utils;
 

@@ -3,7 +3,7 @@ using System.Net;
 using System.Runtime.Serialization;
 using System.Text.Json.Serialization;
 
-namespace Milvasoft.Components.Rest.Response;
+namespace Milvasoft.Components.Rest.MilvaResponse;
 
 [DataContract]
 public class Response : IResponse

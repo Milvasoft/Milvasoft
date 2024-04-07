@@ -1,6 +1,6 @@
 ﻿using Milvasoft.Components.Rest.Enums;
 
-namespace Milvasoft.Components.Rest.Response;
+namespace Milvasoft.Components.Rest.MilvaResponse;
 
 /// <summary>
 /// Represents the result of an aggregation operation.

@@ -2,6 +2,9 @@
 
 namespace Milvasoft.Interception.Interceptors.ActivityScope;
 
+/// <summary>
+/// Ensures that the activit accessed within the method marked with this attribute remains the same.
+/// </summary>
 public class ActivityStarterAttribute : DecorateAttribute
 {
     public string Name { get; private set; }

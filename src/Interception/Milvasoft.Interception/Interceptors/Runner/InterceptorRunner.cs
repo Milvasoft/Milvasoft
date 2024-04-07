@@ -3,6 +3,11 @@ using System.Linq.Expressions;
 
 namespace Milvasoft.Interception.Interceptors.Runner;
 
+/// <summary>
+/// When using methods contained in external dlls, it is not possible to mark these methods with attribute.
+/// This abstraction allows milva interceptors to intercept these methods.
+/// You can write your own runner with implement <see cref="IInterceptorRunner"/> interface.
+/// </summary>
 public class InterceptorRunner : IInterceptorRunner
 {
     [LogRunner]

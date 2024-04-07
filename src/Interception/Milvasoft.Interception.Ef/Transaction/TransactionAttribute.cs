@@ -2,7 +2,11 @@
 
 namespace Milvasoft.Interception.Ef.Transaction;
 
+/// <summary>
+/// This attribute indicates that a db transaction will be initiated for the method it is applied to.
+/// </summary>
 public class TransactionAttribute(bool getDbContextFromServiceProvider = true) : DecorateAttribute(typeof(TransactionInterceptor))
+
 {
     /// <summary>
     /// If this value is true, the DbContext instance is fetched from the service collection.

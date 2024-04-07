@@ -1,7 +1,7 @@
 ﻿using FluentAssertions;
 using Milvasoft.Components.Rest.Enums;
+using Milvasoft.Components.Rest.MilvaResponse;
 using Milvasoft.Components.Rest.Request;
-using Milvasoft.Components.Rest.Response;
 using Milvasoft.Core.Exceptions;
 using Milvasoft.UnitTests.ComponentsTests.RestTests.Fixture;
 using Milvasoft.UnitTests.TestHelpers;

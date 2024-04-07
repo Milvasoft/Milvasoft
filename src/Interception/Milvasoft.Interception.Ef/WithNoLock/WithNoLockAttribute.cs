@@ -2,6 +2,9 @@
 
 namespace Milvasoft.Interception.Ef.WithNoLock;
 
+/// <summary>
+/// This attribute ensures that the "with(nolock)" expression is added to the select queries made within the methods marked with this attribute.
+/// </summary>
 public class WithNoLockAttribute(bool getDbContextFromServiceProvider = true) : DecorateAttribute(typeof(WithNoLockInterceptor))
 {
     /// <summary>

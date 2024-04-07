@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Milvasoft.Attributes.Annotations;
-using Milvasoft.Components.Rest.Response;
+using Milvasoft.Components.Rest.MilvaResponse;
 using Milvasoft.Interception.Decorator;
 using Milvasoft.Types.Classes;
 using System.Collections;
@@ -9,6 +9,9 @@ using System.Reflection;
 
 namespace Milvasoft.Interception.Interceptors.Response;
 
+/// <summary>
+/// Allows modification of the return values of methods that can be assigned to the <see cref="IResponse"/>.
+/// </summary>
 public class ResponseInterceptor(IServiceProvider serviceProvider, IResponseInterceptionOptions interceptionOptions) : IMilvaInterceptor
 {
     private readonly IServiceProvider _serviceProvider = serviceProvider;

@@ -1,7 +1,7 @@
 ﻿using FluentAssertions;
 using Milvasoft.Components.Rest;
 using Milvasoft.Components.Rest.Enums;
-using Milvasoft.Components.Rest.Response;
+using Milvasoft.Components.Rest.MilvaResponse;
 using System.Net;
 using System.Text.Json;
 

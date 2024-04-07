@@ -11,6 +11,11 @@ public class ActivityInterceptor : IMilvaInterceptor
     /// <inheritdoc/>
     public int InterceptionOrder { get; set; } = int.MinValue;
 
+    /// <summary>
+    /// Starts a new activity.
+    /// </summary>
+    /// <param name="call"></param>
+    /// <returns></returns>
     public async Task OnInvoke(Call call)
     {
         var activityAttribute = call.GetInterceptorAttribute<ActivityStarterAttribute>();

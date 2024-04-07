@@ -1,6 +1,6 @@
 ﻿using FluentAssertions;
 using Milvasoft.Components.Rest.Enums;
-using Milvasoft.Components.Rest.Response;
+using Milvasoft.Components.Rest.MilvaResponse;
 using System.Net;
 
 namespace Milvasoft.UnitTests.ComponentsTests.RestTests.ResponseTests;
