@@ -1,4 +1,5 @@
-﻿using Milvasoft.Cryptography.Builder;
+﻿using Fody;
+using Milvasoft.Cryptography.Builder;
 using Milvasoft.Cryptography.Concrete;
 using Milvasoft.FileOperations.Abstract;
 using Milvasoft.FileOperations.Builder;
@@ -61,6 +62,7 @@ namespace Milvasoft.FileOperations.Concrete;
 /// 
 /// </code>
 /// </summary>
+[ConfigureAwait(false)]
 public class JsonOperations : IJsonOperations
 {
     private readonly string _basePath;
@@ -134,7 +136,7 @@ public class JsonOperations : IJsonOperations
     {
         filePath = GetFilePath(filePath);
 
-        var jsonContent = await File.ReadAllTextAsync(filePath, _encoding).ConfigureAwait(false);
+        var jsonContent = await File.ReadAllTextAsync(filePath, _encoding);
 
         return JsonConvert.DeserializeObject<T>(jsonContent, _jsonSerializerSettings);
     }
@@ -159,11 +161,11 @@ public class JsonOperations : IJsonOperations
     {
         filePath = GetFilePath(filePath);
 
-        var jsonContentString = await File.ReadAllTextAsync(filePath, _encoding).ConfigureAwait(false);
+        var jsonContentString = await File.ReadAllTextAsync(filePath, _encoding);
 
         string newJsonResult = GetJsonResultForAdd(new List<T> { content }, jsonContentString, contentsHasId);
 
-        await File.WriteAllTextAsync(filePath, newJsonResult).ConfigureAwait(false);
+        await File.WriteAllTextAsync(filePath, newJsonResult);
     }
 
     /// <summary>
@@ -185,11 +187,11 @@ public class JsonOperations : IJsonOperations
     {
         filePath = GetFilePath(filePath);
 
-        var jsonContentString = await File.ReadAllTextAsync(filePath, _encoding).ConfigureAwait(false);
+        var jsonContentString = await File.ReadAllTextAsync(filePath, _encoding);
 
         string newJsonResult = GetJsonResultForAdd(contents, jsonContentString, contentsHasId);
 
-        await File.WriteAllTextAsync(filePath, newJsonResult).ConfigureAwait(false);
+        await File.WriteAllTextAsync(filePath, newJsonResult);
     }
 
     /// <summary>
@@ -217,11 +219,11 @@ public class JsonOperations : IJsonOperations
     {
         filePath = GetFilePath(filePath);
 
-        var jsonContentString = await File.ReadAllTextAsync(filePath, _encoding).ConfigureAwait(false);
+        var jsonContentString = await File.ReadAllTextAsync(filePath, _encoding);
 
         string newJsonResult = GetJsonResultForUpdate([content], jsonContentString, mappingProperty);
 
-        await File.WriteAllTextAsync(filePath, newJsonResult).ConfigureAwait(false);
+        await File.WriteAllTextAsync(filePath, newJsonResult);
     }
 
     /// <summary>
@@ -249,11 +251,11 @@ public class JsonOperations : IJsonOperations
     {
         filePath = GetFilePath(filePath);
 
-        var jsonContentString = await File.ReadAllTextAsync(filePath, _encoding).ConfigureAwait(false);
+        var jsonContentString = await File.ReadAllTextAsync(filePath, _encoding);
 
         string newJsonResult = GetJsonResultForUpdate(contents, jsonContentString, mappingProperty);
 
-        await File.WriteAllTextAsync(filePath, newJsonResult).ConfigureAwait(false);
+        await File.WriteAllTextAsync(filePath, newJsonResult);
     }
 
     /// <summary>
@@ -275,11 +277,11 @@ public class JsonOperations : IJsonOperations
     {
         filePath = GetFilePath(filePath);
 
-        var jsonContentString = await File.ReadAllTextAsync(filePath, _encoding).ConfigureAwait(false);
+        var jsonContentString = await File.ReadAllTextAsync(filePath, _encoding);
 
         string newJsonResult = GetJsonResultForDelete([mappingValue], jsonContentString, mappingProperty);
 
-        await File.WriteAllTextAsync(filePath, newJsonResult).ConfigureAwait(false);
+        await File.WriteAllTextAsync(filePath, newJsonResult);
     }
 
     /// <summary>
@@ -300,11 +302,11 @@ public class JsonOperations : IJsonOperations
     {
         filePath = GetFilePath(filePath);
 
-        var jsonContentString = await File.ReadAllTextAsync(filePath, _encoding).ConfigureAwait(false);
+        var jsonContentString = await File.ReadAllTextAsync(filePath, _encoding);
 
         string newJsonResult = GetJsonResultForDelete(mappingValues, jsonContentString, mappingProperty);
 
-        await File.WriteAllTextAsync(filePath, newJsonResult).ConfigureAwait(false);
+        await File.WriteAllTextAsync(filePath, newJsonResult);
     }
 
     /// <summary>
@@ -323,7 +325,7 @@ public class JsonOperations : IJsonOperations
     {
         string newJsonResult = JsonConvert.SerializeObject(content, Formatting.Indented, _jsonSerializerSettings);
 
-        await File.WriteAllTextAsync(GetFilePath(filePath), newJsonResult).ConfigureAwait(false);
+        await File.WriteAllTextAsync(GetFilePath(filePath), newJsonResult);
     }
 
     /// <summary>
@@ -336,7 +338,7 @@ public class JsonOperations : IJsonOperations
     /// </remarks>
     /// <param name="filePath"> Path to json file to get data from. </param>
     /// <returns></returns>
-    public async Task ClearJSONFileAsync(string filePath) => await File.WriteAllTextAsync(GetFilePath(filePath), "").ConfigureAwait(false);
+    public async Task ClearJSONFileAsync(string filePath) => await File.WriteAllTextAsync(GetFilePath(filePath), "");
 
     #region With Encryption 
 
@@ -359,7 +361,7 @@ public class JsonOperations : IJsonOperations
     /// <returns> A content list of type <typeparamref name="T"/>. </returns>
     public async Task<T> GetCryptedContentAsync<T>(string filePath)
     {
-        var jsonContent = await DecryptAndReadAsync(GetFilePath(filePath), _encryptionKey).ConfigureAwait(false);
+        var jsonContent = await DecryptAndReadAsync(GetFilePath(filePath), _encryptionKey);
 
         return JsonConvert.DeserializeObject<T>(jsonContent, _jsonSerializerSettings);
     }
@@ -387,11 +389,11 @@ public class JsonOperations : IJsonOperations
     /// <returns></returns>
     public async Task AddCryptedContentAsync<T>(T content, string filePath, bool contentsHasId)
     {
-        var jsonContentString = await DecryptAndReadAsync(filePath, _encryptionKey).ConfigureAwait(false);
+        var jsonContentString = await DecryptAndReadAsync(filePath, _encryptionKey);
 
         string newJsonResult = GetJsonResultForAdd(new List<T> { content }, jsonContentString, contentsHasId);
 
-        await EncryptAndWriteAsync(filePath, newJsonResult, _encryptionKey).ConfigureAwait(false);
+        await EncryptAndWriteAsync(filePath, newJsonResult, _encryptionKey);
     }
 
     /// <summary>
@@ -417,11 +419,11 @@ public class JsonOperations : IJsonOperations
     /// <returns></returns>
     public async Task AddCryptedContentsAsync<T>(List<T> contents, string filePath, bool contentsHasId)
     {
-        var jsonContentString = await DecryptAndReadAsync(filePath, _encryptionKey).ConfigureAwait(false);
+        var jsonContentString = await DecryptAndReadAsync(filePath, _encryptionKey);
 
         string newJsonResult = GetJsonResultForAdd(contents, jsonContentString, contentsHasId);
 
-        await EncryptAndWriteAsync(filePath, newJsonResult, _encryptionKey).ConfigureAwait(false);
+        await EncryptAndWriteAsync(filePath, newJsonResult, _encryptionKey);
     }
 
     /// <summary>
@@ -451,11 +453,11 @@ public class JsonOperations : IJsonOperations
     /// <returns></returns>
     public async Task UpdateCryptedContentAsync<T>(T content, string filePath, Expression<Func<T, dynamic>> mappingProperty)
     {
-        var jsonContentString = await DecryptAndReadAsync(filePath, _encryptionKey).ConfigureAwait(false);
+        var jsonContentString = await DecryptAndReadAsync(filePath, _encryptionKey);
 
         string newJsonResult = GetJsonResultForUpdate([content], jsonContentString, mappingProperty);
 
-        await EncryptAndWriteAsync(filePath, newJsonResult, _encryptionKey).ConfigureAwait(false);
+        await EncryptAndWriteAsync(filePath, newJsonResult, _encryptionKey);
     }
 
     /// <summary>
@@ -483,11 +485,11 @@ public class JsonOperations : IJsonOperations
     /// <returns></returns>
     public async Task UpdateCryptedContentsAsync<T>(List<T> contents, string filePath, Expression<Func<T, dynamic>> mappingProperty)
     {
-        var jsonContentString = await DecryptAndReadAsync(filePath, _encryptionKey).ConfigureAwait(false);
+        var jsonContentString = await DecryptAndReadAsync(filePath, _encryptionKey);
 
         string newJsonResult = GetJsonResultForUpdate(contents, jsonContentString, mappingProperty);
 
-        await EncryptAndWriteAsync(filePath, newJsonResult, _encryptionKey).ConfigureAwait(false);
+        await EncryptAndWriteAsync(filePath, newJsonResult, _encryptionKey);
     }
 
     /// <summary>
@@ -512,11 +514,11 @@ public class JsonOperations : IJsonOperations
     /// <returns> Completed <see cref="Task"/> </returns>
     public async Task DeleteCryptedContentAsync<T>(dynamic mappingValue, string filePath, Expression<Func<T, dynamic>> mappingProperty)
     {
-        var jsonContentString = await DecryptAndReadAsync(filePath, _encryptionKey).ConfigureAwait(false);
+        var jsonContentString = await DecryptAndReadAsync(filePath, _encryptionKey);
 
         string newJsonResult = GetJsonResultForDelete([mappingValue], jsonContentString, mappingProperty);
 
-        await EncryptAndWriteAsync(filePath, newJsonResult, _encryptionKey).ConfigureAwait(false);
+        await EncryptAndWriteAsync(filePath, newJsonResult, _encryptionKey);
     }
 
     /// <summary>
@@ -540,11 +542,11 @@ public class JsonOperations : IJsonOperations
     /// <returns> Completed <see cref="Task"/> </returns>
     public async Task DeleteCryptedContentAsync<T>(List<dynamic> mappingValues, string filePath, Expression<Func<T, dynamic>> mappingProperty)
     {
-        var jsonContentString = await DecryptAndReadAsync(filePath, _encryptionKey).ConfigureAwait(false);
+        var jsonContentString = await DecryptAndReadAsync(filePath, _encryptionKey);
 
         string newJsonResult = GetJsonResultForDelete(mappingValues, jsonContentString, mappingProperty);
 
-        await EncryptAndWriteAsync(filePath, newJsonResult, _encryptionKey).ConfigureAwait(false);
+        await EncryptAndWriteAsync(filePath, newJsonResult, _encryptionKey);
     }
 
     /// <summary>
@@ -564,7 +566,7 @@ public class JsonOperations : IJsonOperations
     {
         string newJsonResult = JsonConvert.SerializeObject(content, Formatting.Indented, _jsonSerializerSettings);
 
-        await EncryptAndWriteAsync(filePath, newJsonResult, _encryptionKey).ConfigureAwait(false);
+        await EncryptAndWriteAsync(filePath, newJsonResult, _encryptionKey);
     }
 
     #endregion
@@ -1144,7 +1146,7 @@ public class JsonOperations : IJsonOperations
     {
         var encryptionProvider = new MilvaCryptographyProvider(new MilvaCryptographyOptions { Key = key });
 
-        var inputValue = await File.ReadAllTextAsync(filePath).ConfigureAwait(false);
+        var inputValue = await File.ReadAllTextAsync(filePath);
 
         return encryptionProvider.Decrypt(inputValue);
     }
@@ -1155,7 +1157,7 @@ public class JsonOperations : IJsonOperations
 
         var encryptedContent = encryptionProvider.Encrypt(content);
 
-        await File.WriteAllTextAsync(filePath, encryptedContent, Encoding.UTF8).ConfigureAwait(false);
+        await File.WriteAllTextAsync(filePath, encryptedContent, Encoding.UTF8);
     }
 
     private static string DecryptAndRead(string filePath, string key)

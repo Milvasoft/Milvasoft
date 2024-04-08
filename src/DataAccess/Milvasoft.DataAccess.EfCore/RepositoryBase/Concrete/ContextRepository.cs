@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Fody;
+using Microsoft.EntityFrameworkCore;
 using Milvasoft.DataAccess.EfCore.RepositoryBase.Abstract;
 using System.Linq.Expressions;
 using System.Reflection;
@@ -12,6 +13,7 @@ namespace Milvasoft.DataAccess.EfCore.RepositoryBase.Concrete;
 /// Constructor of ContextRepository for inject context.
 /// </remarks>
 /// <param name="dbContext"></param>
+[ConfigureAwait(false)]
 public class ContextRepository<TContext>(TContext dbContext) : IContextRepository<TContext> where TContext : DbContext
 {
     /// <summary>
@@ -36,7 +38,7 @@ public class ContextRepository<TContext>(TContext dbContext) : IContextRepositor
     /// </summary>
     /// <param name="query"></param>
     /// <returns></returns>
-    public virtual async Task ExecuteQueryAsync(string query) => await _dbContext.Database.ExecuteSqlRawAsync(query).ConfigureAwait(false);
+    public virtual async Task ExecuteQueryAsync(string query) => await _dbContext.Database.ExecuteSqlRawAsync(query);
 
     /// <summary>
     /// Applies transaction process to requested function.
@@ -52,23 +54,23 @@ public class ContextRepository<TContext>(TContext dbContext) : IContextRepositor
 
             await executionStrategy.ExecuteAsync(async () =>
             {
-                using var transaction = await _dbContext.Database.BeginTransactionAsync().ConfigureAwait(false);
+                using var transaction = await _dbContext.Database.BeginTransactionAsync();
 
                 try
                 {
-                    await function().ConfigureAwait(false);
+                    await function();
 
-                    await transaction.CommitAsync().ConfigureAwait(false);
+                    await transaction.CommitAsync();
                 }
                 catch (Exception)
                 {
-                    await transaction.RollbackAsync().ConfigureAwait(false);
+                    await transaction.RollbackAsync();
                     throw;
                 }
             });
         }
         else
-            await function().ConfigureAwait(false);
+            await function();
     }
 
     /// <summary>
@@ -86,25 +88,25 @@ public class ContextRepository<TContext>(TContext dbContext) : IContextRepositor
 
             return await executionStrategy.ExecuteAsync(async () =>
             {
-                using var transaction = await _dbContext.Database.BeginTransactionAsync().ConfigureAwait(false);
+                using var transaction = await _dbContext.Database.BeginTransactionAsync();
 
                 try
                 {
-                    var result = await function().ConfigureAwait(false);
+                    var result = await function();
 
-                    await transaction.CommitAsync().ConfigureAwait(false);
+                    await transaction.CommitAsync();
 
                     return result;
                 }
                 catch (Exception)
                 {
-                    await transaction.RollbackAsync().ConfigureAwait(false);
+                    await transaction.RollbackAsync();
                     throw;
                 }
             });
         }
         else
-            return await function().ConfigureAwait(false);
+            return await function();
     }
 
     /// <summary>
@@ -122,22 +124,22 @@ public class ContextRepository<TContext>(TContext dbContext) : IContextRepositor
 
             await executionStrategy.ExecuteAsync(async () =>
             {
-                var transaction = await _dbContext.Database.BeginTransactionAsync().ConfigureAwait(false);
+                var transaction = await _dbContext.Database.BeginTransactionAsync();
                 try
                 {
-                    await function().ConfigureAwait(false);
-                    await transaction.CommitAsync().ConfigureAwait(false);
+                    await function();
+                    await transaction.CommitAsync();
                 }
                 catch (Exception)
                 {
-                    await transaction.RollbackAsync().ConfigureAwait(false);
-                    await rollbackFunction().ConfigureAwait(false);
+                    await transaction.RollbackAsync();
+                    await rollbackFunction();
                     throw;
                 }
             });
         }
         else
-            await function().ConfigureAwait(false);
+            await function();
     }
 
     /// <summary>
@@ -156,24 +158,24 @@ public class ContextRepository<TContext>(TContext dbContext) : IContextRepositor
 
             return await executionStrategy.ExecuteAsync(async () =>
             {
-                var transaction = await _dbContext.Database.BeginTransactionAsync().ConfigureAwait(false);
+                var transaction = await _dbContext.Database.BeginTransactionAsync();
                 try
                 {
-                    var result = await function().ConfigureAwait(false);
-                    await transaction.CommitAsync().ConfigureAwait(false);
+                    var result = await function();
+                    await transaction.CommitAsync();
 
                     return result;
                 }
                 catch (Exception)
                 {
-                    await transaction.RollbackAsync().ConfigureAwait(false);
-                    await rollbackFunction().ConfigureAwait(false);
+                    await transaction.RollbackAsync();
+                    await rollbackFunction();
                     throw;
                 }
             });
         }
         else
-            return await function().ConfigureAwait(false);
+            return await function();
     }
 
     /// <summary>
@@ -191,22 +193,22 @@ public class ContextRepository<TContext>(TContext dbContext) : IContextRepositor
 
             await executionStrategy.ExecuteAsync(async () =>
             {
-                var transaction = await _dbContext.Database.BeginTransactionAsync().ConfigureAwait(false);
+                var transaction = await _dbContext.Database.BeginTransactionAsync();
                 try
                 {
-                    await function().ConfigureAwait(false);
-                    await transaction.CommitAsync().ConfigureAwait(false);
+                    await function();
+                    await transaction.CommitAsync();
                 }
                 catch (Exception)
                 {
-                    await transaction.RollbackAsync().ConfigureAwait(false);
+                    await transaction.RollbackAsync();
                     rollbackFunction();
                     throw;
                 }
             });
         }
         else
-            await function().ConfigureAwait(false);
+            await function();
     }
 
     /// <summary>
@@ -225,24 +227,24 @@ public class ContextRepository<TContext>(TContext dbContext) : IContextRepositor
 
             return await executionStrategy.ExecuteAsync(async () =>
             {
-                var transaction = await _dbContext.Database.BeginTransactionAsync().ConfigureAwait(false);
+                var transaction = await _dbContext.Database.BeginTransactionAsync();
                 try
                 {
-                    var result = await function().ConfigureAwait(false);
-                    await transaction.CommitAsync().ConfigureAwait(false);
+                    var result = await function();
+                    await transaction.CommitAsync();
 
                     return result;
                 }
                 catch (Exception)
                 {
-                    await transaction.RollbackAsync().ConfigureAwait(false);
+                    await transaction.RollbackAsync();
                     rollbackFunction();
                     throw;
                 }
             });
         }
         else
-            return await function().ConfigureAwait(false);
+            return await function();
     }
 
     /// <summary>
@@ -266,7 +268,7 @@ public class ContextRepository<TContext>(TContext dbContext) : IContextRepositor
     /// </summary>
     /// <typeparam name="TEntity"></typeparam>
     /// <returns></returns>
-    public async Task<List<TEntity>> GetRequiredContents<TEntity>() where TEntity : class => await _dbContext.Set<TEntity>().ToListAsync().ConfigureAwait(false);
+    public async Task<List<TEntity>> GetRequiredContents<TEntity>() where TEntity : class => await _dbContext.Set<TEntity>().ToListAsync();
 
     /// <summary>
     /// Gets requested contents by <paramref name="type"/> DbSet.
@@ -288,7 +290,7 @@ public class ContextRepository<TContext>(TContext dbContext) : IContextRepositor
         if (ret == null)
             return null;
 
-        await ret.ConfigureAwait(false);
+        await ret;
 
         var resultProperty = ret.GetType().GetProperty("Result");
 
@@ -313,7 +315,7 @@ public class ContextRepository<TContext>(TContext dbContext) : IContextRepositor
     {
         var mainCondition = CreateKeyEqualityExpression<TEntity, TKey>(id);
 
-        return await _dbContext.Set<TEntity>().SingleOrDefaultAsync(mainCondition).ConfigureAwait(false) != null;
+        return await _dbContext.Set<TEntity>().SingleOrDefaultAsync(mainCondition) != null;
     }
 
     private static Expression<Func<TEntity, bool>> CreateKeyEqualityExpression<TEntity, TKey>(TKey key, Expression<Func<TEntity, bool>> conditionExpression = null)

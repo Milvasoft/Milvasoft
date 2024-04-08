@@ -1,4 +1,5 @@
-﻿using System.Net.Http.Headers;
+﻿using Fody;
+using System.Net.Http.Headers;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
@@ -7,6 +8,7 @@ namespace Milvasoft.Notification.Push.Expo.PushNotification;
 /// <summary>
 /// Expo client for push api requests.
 /// </summary>
+[ConfigureAwait(false)]
 public class ExpoClient : IDisposable
 {
     #region Environemt Configuration

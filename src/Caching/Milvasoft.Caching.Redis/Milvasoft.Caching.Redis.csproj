@@ -9,6 +9,15 @@
 		<IsPackable>true</IsPackable>
 	</PropertyGroup>
 
+
+	<ItemGroup>
+		<PackageReference Include="ConfigureAwait.Fody" Version="3.3.2" />
+		<PackageReference Include="Fody" Version="6.8.0">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+	</ItemGroup>
+
 	<ItemGroup>
 	  <Compile Include="..\..\Core\Milvasoft.Core\GlobalUsings.cs" Link="GlobalUsings.cs" />
 	</ItemGroup>

@@ -1,4 +1,5 @@
 ﻿using Castle.DynamicProxy;
+using Fody;
 using Milvasoft.Interception.Decorator.Internal;
 using System.Reflection;
 
@@ -7,6 +8,7 @@ namespace Milvasoft.Interception.Decorator;
 /// <summary>
 /// Contains intercepted method information.
 /// </summary>
+[ConfigureAwait(false)]
 public sealed class Call
 {
     #region Props

@@ -1,4 +1,5 @@
-﻿using Milvasoft.Core.Utils.Models;
+﻿using Fody;
+using Milvasoft.Core.Utils.Models;
 using Milvasoft.DataAccess.MongoDB.Abstract;
 using Milvasoft.DataAccess.MongoDB.Utils;
 using Milvasoft.DataAccess.MongoDB.Utils.Settings;
@@ -12,6 +13,7 @@ namespace Milvasoft.DataAccess.MongoDB.Concrete;
 /// Base repository for concrete repositories. All repositories must be have this methods.
 /// </summary>
 /// <typeparam name="TEntity"></typeparam>
+[ConfigureAwait(false)]
 public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : class, IAuditable<ObjectId>
 {
     /// <summary>
@@ -63,7 +65,7 @@ public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : 
 
         var findOptions = new FindOptions<TEntity> { Projection = projectDefinition };
 
-        return await (await _collection.FindAsync(filter, findOptions).ConfigureAwait(false)).ToListAsync().ConfigureAwait(false);
+        return await (await _collection.FindAsync(filter, findOptions)).ToListAsync();
     }
 
     /// <summary>
@@ -80,7 +82,7 @@ public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : 
 
         var findOptions = new FindOptions<TEntity> { Projection = projectDefinition };
 
-        return await (await _collection.FindAsync(filter, findOptions).ConfigureAwait(false)).ToListAsync().ConfigureAwait(false);
+        return await (await _collection.FindAsync(filter, findOptions)).ToListAsync();
     }
 
     /// <summary>
@@ -115,7 +117,7 @@ public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : 
                 PipelineStageDefinitionBuilder.Count<TEntity>()
             }));
 
-        var aggregateFacetResult = await _collection.Aggregate().Match(filter).Facet(countFacet).ToListAsync().ConfigureAwait(false);
+        var aggregateFacetResult = await _collection.Aggregate().Match(filter).Facet(countFacet).ToListAsync();
 
 #pragma warning disable CA1826 // Do not use Enumerable methods on indexable collections
         var count = aggregateFacetResult[0].Facets.First(x => x.Name == "totalDataCount").Output<AggregateCountResult>()?.FirstOrDefault()?.Count ?? 0;
@@ -135,7 +137,7 @@ public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : 
     {
         var project = GetProjectionQuery<TEmbedded>(unwindExpression);
 
-        return await GetTotalDataCount(unwindExpression, project, null, filterDefinition).ConfigureAwait(false);
+        return await GetTotalDataCount(unwindExpression, project, null, filterDefinition);
     }
 
     /// <summary>
@@ -152,7 +154,7 @@ public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : 
 
         var findOptions = new FindOptions<TEntity> { Projection = projectDefinitions };
 
-        return await (await _collection.FindAsync(filter, findOptions).ConfigureAwait(false)).SingleOrDefaultAsync().ConfigureAwait(false);
+        return await (await _collection.FindAsync(filter, findOptions)).SingleOrDefaultAsync();
     }
 
     /// <summary>
@@ -169,7 +171,7 @@ public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : 
 
         var findOptions = new FindOptions<TEntity> { Projection = projectDefinitions };
 
-        return await (await _collection.FindAsync(filterDefinition, findOptions).ConfigureAwait(false)).FirstOrDefaultAsync().ConfigureAwait(false);
+        return await (await _collection.FindAsync(filterDefinition, findOptions)).FirstOrDefaultAsync();
     }
 
     /// <summary>
@@ -186,7 +188,7 @@ public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : 
 
         var findOptions = new FindOptions<TEntity> { Projection = projectDefinitions };
 
-        return await (await _collection.FindAsync(filterDefinition, findOptions).ConfigureAwait(false)).FirstOrDefaultAsync().ConfigureAwait(false);
+        return await (await _collection.FindAsync(filterDefinition, findOptions)).FirstOrDefaultAsync();
     }
 
     /// <summary>
@@ -221,7 +223,7 @@ public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : 
                     PipelineStageDefinitionBuilder.Match(filter)
             }));
 
-        var aggregateFacetResult = await _collection.Aggregate().Match(p => p.Id == entityId).Unwind<TEntity, TEmbedded>(unwindExpression).Facet(dataFacet).ToListAsync().ConfigureAwait(false);
+        var aggregateFacetResult = await _collection.Aggregate().Match(p => p.Id == entityId).Unwind<TEntity, TEmbedded>(unwindExpression).Facet(dataFacet).ToListAsync();
 
         return [.. aggregateFacetResult[0].Facets.First(x => x.Name == "matchingDatas").Output<TEmbedded>()];
     }
@@ -270,7 +272,7 @@ public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : 
 
         dataFacet = AggregateFacet.Create("data", PipelineDefinition<TEntity, TEntity>.Create(stages));
 
-        var aggregateFacetResults = await _collection.Aggregate().Match(filter).Facet(countFacat, dataFacet).ToListAsync().ConfigureAwait(false);
+        var aggregateFacetResults = await _collection.Aggregate().Match(filter).Facet(countFacat, dataFacet).ToListAsync();
 
 #pragma warning disable CA1826 // Do not use Enumerable methods on indexable collections
         var count = aggregateFacetResults[0].Facets.First(x => x.Name == "count").Output<AggregateCountResult>()?.FirstOrDefault()?.Count ?? 0;
@@ -322,12 +324,12 @@ public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : 
 
         var filterDefForTentity = Builders<TEntity>.Filter.Where(p => p.Id == entityId);
 
-        var aggregateFacetResult = await _collection.Aggregate().Match(filterDefForTentity).Unwind<TEntity, TEmbedded>(unwindExpression).Facet(dataFacet).ToListAsync().ConfigureAwait(false);
+        var aggregateFacetResult = await _collection.Aggregate().Match(filterDefForTentity).Unwind<TEntity, TEmbedded>(unwindExpression).Facet(dataFacet).ToListAsync();
 
         var count = await GetTotalDataCount(unwindExpression,
                                             projectQuery,
                                             filterDefForTentity,
-                                            filterDefinitionForEmbedded).ConfigureAwait(false);
+                                            filterDefinitionForEmbedded);
 
         var totalPages = (int)Math.Ceiling((double)count / requestedItemCount);
 
@@ -374,12 +376,12 @@ public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : 
                                                                             projectQuery,
                                                                             filterDefinitionForEmbedded);
 
-        var aggregateFacetResult = await _collection.Aggregate().Match(whereExpression).Unwind<TEntity, TEmbedded>(unwindExpression).Facet(dataFacet).ToListAsync().ConfigureAwait(false);
+        var aggregateFacetResult = await _collection.Aggregate().Match(whereExpression).Unwind<TEntity, TEmbedded>(unwindExpression).Facet(dataFacet).ToListAsync();
 
         var count = await GetTotalDataCount(unwindExpression,
                                             projectQuery,
                                             whereExpression,
-                                            filterDefinitionForEmbedded).ConfigureAwait(false);
+                                            filterDefinitionForEmbedded);
 
         var totalPages = (int)Math.Ceiling((double)count / requestedItemCount);
 
@@ -424,12 +426,12 @@ public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : 
                                                                             projectQuery,
                                                                             filterDefinitionForEmbedded);
 
-        var aggregateFacetResult = await _collection.Aggregate().Match(filterDefinition ?? Builders<TEntity>.Filter.Empty).Unwind<TEntity, TEmbedded>(unwindExpression).Facet(dataFacet).ToListAsync().ConfigureAwait(false);
+        var aggregateFacetResult = await _collection.Aggregate().Match(filterDefinition ?? Builders<TEntity>.Filter.Empty).Unwind<TEntity, TEmbedded>(unwindExpression).Facet(dataFacet).ToListAsync();
 
         var count = await GetTotalDataCount(unwindExpression,
                                             projectQuery,
                                             filterDefinition,
-                                            filterDefinitionForEmbedded).ConfigureAwait(false);
+                                            filterDefinitionForEmbedded);
 
         var totalPages = (int)Math.Ceiling((double)count / requestedItemCount);
 
@@ -454,7 +456,7 @@ public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : 
         if (_useUtcForDateTimes)
             ConvertDateTimePropertiesToUtc(document);
 
-        await _collection.InsertOneAsync(document, options).ConfigureAwait(false);
+        await _collection.InsertOneAsync(document, options);
     }
 
     /// <summary>
@@ -469,7 +471,7 @@ public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : 
         if (_useUtcForDateTimes)
             ConvertDateTimePropertiesToUtc(documents);
 
-        await _collection.InsertManyAsync(documents, options).ConfigureAwait(false);
+        await _collection.InsertManyAsync(documents, options);
     }
 
     /// <summary>
@@ -486,7 +488,7 @@ public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : 
         if (_useUtcForDateTimes)
             ConvertDateTimePropertiesToUtc(document);
 
-        await _collection.FindOneAndReplaceAsync(filter, document).ConfigureAwait(false);
+        await _collection.FindOneAndReplaceAsync(filter, document);
     }
 
     /// <summary>
@@ -504,7 +506,7 @@ public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : 
         if (_useUtcForDateTimes)
             ConvertDateTimePropertiesToUtc(document);
 
-        await _collection.UpdateOneAsync(filter, updateDefinition).ConfigureAwait(false);
+        await _collection.UpdateOneAsync(filter, updateDefinition);
     }
 
     /// <summary>
@@ -518,7 +520,7 @@ public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : 
     /// <param name="filterDefinition"></param>
     /// <param name="updateDefinition"></param>
     /// <returns></returns>
-    public virtual async Task UpdateAsync(FilterDefinition<TEntity> filterDefinition, UpdateDefinition<TEntity> updateDefinition) => await _collection.UpdateOneAsync(filterDefinition, updateDefinition).ConfigureAwait(false);
+    public virtual async Task UpdateAsync(FilterDefinition<TEntity> filterDefinition, UpdateDefinition<TEntity> updateDefinition) => await _collection.UpdateOneAsync(filterDefinition, updateDefinition);
 
     /// <summary>
     /// Updates the data in multiple.
@@ -571,7 +573,7 @@ public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : 
             listWrites.Add(new UpdateOneModel<TEntity>(filterDef, updateDefForLastModificationDate));
         }
 
-        await _collection.BulkWriteAsync(listWrites).ConfigureAwait(false);
+        await _collection.BulkWriteAsync(listWrites);
     }
 
     /// <summary>
@@ -579,14 +581,14 @@ public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : 
     /// </summary>
     /// <param name="filterExpression"></param>
     /// <returns></returns>
-    public async Task DeleteRangeAsync(FilterDefinition<TEntity> filterExpression) => await _collection.DeleteManyAsync(filterExpression).ConfigureAwait(false);
+    public async Task DeleteRangeAsync(FilterDefinition<TEntity> filterExpression) => await _collection.DeleteManyAsync(filterExpression);
 
     /// <summary>
     ///  Deletes single entity from database asynchronously..
     /// </summary>
     /// <param name="filterExpression"></param>
     /// <returns></returns>
-    public async Task DeleteAsync(Expression<Func<TEntity, bool>> filterExpression) => await _collection.FindOneAndDeleteAsync(filterExpression).ConfigureAwait(false);
+    public async Task DeleteAsync(Expression<Func<TEntity, bool>> filterExpression) => await _collection.FindOneAndDeleteAsync(filterExpression);
 
     /// <summary>
     ///  Deletes single entity from database asynchronously..
@@ -596,7 +598,7 @@ public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : 
     public async Task DeleteAsync(ObjectId id)
     {
         var filter = Builders<TEntity>.Filter.Eq(doc => doc.Id, id);
-        await _collection.FindOneAndDeleteAsync(filter).ConfigureAwait(false);
+        await _collection.FindOneAndDeleteAsync(filter);
     }
 
     /// <summary>
@@ -607,7 +609,7 @@ public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : 
     public async Task<TEntity> DeleteAndReturnDeletedAsync(ObjectId id)
     {
         var filter = Builders<TEntity>.Filter.Eq(doc => doc.Id, id);
-        return await _collection.FindOneAndDeleteAsync(filter).ConfigureAwait(false);
+        return await _collection.FindOneAndDeleteAsync(filter);
     }
 
     #region Helper Methods
@@ -690,7 +692,7 @@ public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : 
                                                       .Unwind<TEntity, TEmbedded>(unwindExpression)
                                                       .Facet(dataFacetr)
                                                       .Project(new BsonDocument(countPropName, new BsonDocument("$size", $"${queryBaseName}")))
-                                                      .FirstOrDefaultAsync().ConfigureAwait(false);
+                                                      .FirstOrDefaultAsync();
 
         return countQuery.GetValue(countPropName).ToInt32();
     }

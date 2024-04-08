@@ -8,6 +8,8 @@ namespace Milvasoft.Core.Utils.JsonConverters;
 /// </summary>
 public static class MilvaJsonConverterOptions
 {
+    private static readonly object _statObjLocker = new();
+
     /// <summary>
     /// Gets or sets the current <see cref="JsonSerializerOptions"/> used by the library.
     /// </summary>
@@ -16,7 +18,13 @@ public static class MilvaJsonConverterOptions
     /// <summary>
     /// Resets the current <see cref="JsonSerializerOptions"/> to the default options.
     /// </summary>
-    public static void ResetCurrentOptionsToDefault() => Current = JsonSerializerOptions.Default;
+    public static void ResetCurrentOptionsToDefault()
+    {
+        lock (_statObjLocker)
+        {
+            Current = JsonSerializerOptions.Default;
+        }
+    }
 
     /// <summary>
     /// Creates a new <see cref="JsonSerializerOptions"/> instance based on the current <see cref="Current"/> object.
@@ -44,7 +52,10 @@ public static class MilvaJsonConverterOptions
             newOptions.Encoder = System.Text.Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping;
         }
 
-        Current = newOptions;
+        lock (_statObjLocker)
+        {
+            Current = newOptions;
+        }
 
         return newOptions;
     }

@@ -1,8 +1,10 @@
-﻿using Microsoft.Extensions.Caching.Memory;
+﻿using Fody;
+using Microsoft.Extensions.Caching.Memory;
 using System.Reflection;
 
 namespace Milvasoft.Caching.InMemory.Accessor;
 
+[ConfigureAwait(false)]
 public class MemoryCacheAccessor(IMemoryCache cache) : IMemoryCacheAccessor
 {
     private readonly IMemoryCache _cache = cache;

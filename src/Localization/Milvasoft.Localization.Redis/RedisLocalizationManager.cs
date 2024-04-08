@@ -1,4 +1,5 @@
-﻿using Milvasoft.Caching.Redis;
+﻿using Fody;
+using Milvasoft.Caching.Redis;
 using Milvasoft.Caching.Redis.Options;
 using Milvasoft.Core.Abstractions.Cache;
 using Milvasoft.Core.Abstractions.Localization;
@@ -13,6 +14,7 @@ namespace Milvasoft.Localization.Redis;
 /// <param name="cacheAccessor"></param>
 /// <param name="redisCacheServiceOptions"></param>
 /// <param name="localizationOptions"></param>
+[ConfigureAwait(false)]
 public class RedisLocalizationManager(ICacheAccessor<RedisAccessor> cacheAccessor, ICacheOptions<RedisCachingOptions> redisCacheServiceOptions, ILocalizationOptions localizationOptions) : ILocalizationManager
 {
     private readonly RedisAccessor _cacheAccessor = (RedisAccessor)cacheAccessor;

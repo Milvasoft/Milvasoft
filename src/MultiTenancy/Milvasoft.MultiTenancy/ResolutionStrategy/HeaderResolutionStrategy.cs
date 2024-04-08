@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Fody;
+using Microsoft.AspNetCore.Http;
 using Milvasoft.Core.EntityBases.MultiTenancy;
 using Milvasoft.MultiTenancy.Utils;
 
@@ -11,6 +12,7 @@ namespace Milvasoft.MultiTenancy.ResolutionStrategy;
 /// Creates new instance of <see cref="HostResolutionStrategy"/>
 /// </remarks>
 /// <param name="httpContextAccessor"></param>
+[ConfigureAwait(false)]
 public class HeaderResolutionStrategy(IHttpContextAccessor httpContextAccessor) : ITenantResolutionStrategy<TenantId>
 {
     /// <summary>

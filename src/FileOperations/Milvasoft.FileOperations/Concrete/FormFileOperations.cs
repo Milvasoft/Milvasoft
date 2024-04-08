@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Fody;
+using Microsoft.AspNetCore.Http;
 using Milvasoft.FileOperations.Enums;
 using System.Text.RegularExpressions;
 
@@ -7,6 +8,7 @@ namespace Milvasoft.FileOperations.Concrete;
 /// <summary>
 /// <see cref="IFormFile"/> operations for .NET Core.
 /// </summary>
+[ConfigureAwait(false)]
 public static partial class FormFileOperations
 {
     #region Public Properties
@@ -85,7 +87,7 @@ public static partial class FormFileOperations
             var filePathOfItem = Path.Combine(folderPathOfItem, fileNameWithExtension);
             using (var fileStream = new FileStream(filePathOfItem, FileMode.Create))
             {
-                await file.CopyToAsync(fileStream).ConfigureAwait(false);
+                await file.CopyToAsync(fileStream);
             }
 
             return filePathOfItem;
@@ -169,7 +171,7 @@ public static partial class FormFileOperations
                 var filePathOfItem = Path.Combine(folderPathOfItem, fileNameWithExtension);
                 using (var fileStream = new FileStream(filePathOfItem, FileMode.Create))
                 {
-                    await item.CopyToAsync(fileStream).ConfigureAwait(false);
+                    await item.CopyToAsync(fileStream);
                 }
 
                 folderPaths.Add(filePathOfItem);
@@ -258,7 +260,7 @@ public static partial class FormFileOperations
             if (file.Length <= 0)
                 continue;
 
-            var path = await file.SaveFileToPathAsync(entity, basePath, folderNameCreator, propertyName).ConfigureAwait(false);
+            var path = await file.SaveFileToPathAsync(entity, basePath, folderNameCreator, propertyName);
 
             if (!string.IsNullOrWhiteSpace(path))
                 fileEntities.Add(new TFileEntity
@@ -363,7 +365,7 @@ public static partial class FormFileOperations
 
         using (var stream = new FileStream(path, FileMode.Open))
         {
-            await stream.CopyToAsync(memory).ConfigureAwait(false);
+            await stream.CopyToAsync(memory);
         }
 
         memory.Position = 0;

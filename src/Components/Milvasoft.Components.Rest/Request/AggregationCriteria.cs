@@ -63,7 +63,7 @@ public class AggregationCriteria
         }
         else
         {
-            var res = await GenericInvokeAggregationMethodAsync(query, propertySelector, cancellationToken);
+            var res = await GenericInvokeAggregationMethodAsync(query, propertySelector, cancellationToken).ConfigureAwait(false);
             return new AggregationResult(prop.Name, Type, res);
         }
     }

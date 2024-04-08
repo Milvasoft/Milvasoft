@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authentication;
+﻿using Fody;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -11,6 +12,7 @@ namespace Milvasoft.MultiTenancy.Middleware;
 /// Initializes new instance of <see cref="TenantAuthMiddleware"/>
 /// </remarks>
 /// <param name="next"></param>
+[ConfigureAwait(false)]
 public class TenantAuthMiddleware(RequestDelegate next)
 {
     private readonly RequestDelegate _next = next ?? throw new ArgumentNullException(nameof(next));
