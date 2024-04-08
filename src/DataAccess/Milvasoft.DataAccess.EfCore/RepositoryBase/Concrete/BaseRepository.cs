@@ -27,14 +27,25 @@ public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepositor
     /// </summary>
     protected readonly DbSet<TEntity> _dbSet;
 
-    #endregion
+    /// <summary>
+    /// Data access configuration.
+    /// </summary>
+    protected readonly IDataAccessConfiguration _dataAccessConfiguration;
 
-    #region Private Properties
+    /// <summary>
+    /// It updates the state that determines whether soft delete fetch state reset occurs after any fetch operation.
+    /// </summary>
+    protected bool _resetSoftDeletedFetchState;
 
-    private readonly IDataAccessConfiguration _dataAccessConfiguration;
-    private bool _resetSoftDeletedFetchState;
-    private bool _softDeletedFetching;
-    private bool _saveChangesAfterEveryOperation;
+    /// <summary>
+    /// Determines whether soft deleted entities in the database are fetched from the database.
+    /// </summary>
+    protected bool _softDeletedFetching;
+
+    /// <summary>
+    /// Determines whether save changes method called after every repository method.
+    /// </summary>
+    protected bool _saveChangesAfterEveryOperation;
 
     #endregion
 
@@ -49,7 +60,7 @@ public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepositor
 
         _dataAccessConfiguration = dbContext.GetDataAccessConfiguration();
         _softDeletedFetching = _dataAccessConfiguration.Repository.DefaultSoftDeletedFetchState;
-        _resetSoftDeletedFetchState = _dataAccessConfiguration.Repository.ResetSoftDeletedFetchStateToDefault;
+        _resetSoftDeletedFetchState = _dataAccessConfiguration.Repository.ResetSoftDeletedFetchStateAfterEveryOperation;
         _saveChangesAfterEveryOperation = _dataAccessConfiguration.Repository.DefaultSaveChangesChoice == SaveChangesChoice.AfterEveryOperation;
     }
 
@@ -69,7 +80,14 @@ public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepositor
     /// <summary>
     /// Determines whether soft deleted entities in the database are fetched from the database.
     /// </summary>
-    public void FetchSoftDeletedEntitiesInNextProcess(bool state = false) => _softDeletedFetching = state;
+    /// <param name="state">Soft delete fetching state.</param>
+    public void FetchSoftDeletedEntities(bool state = false) => _softDeletedFetching = state;
+
+    /// <summary>
+    /// It updates the state that determines whether soft delete fetch state reset to default occurs after any fetch operation.
+    /// </summary>
+    /// <param name="state">Soft delete fetching reset state.</param>
+    public void SoftDeleteFetchStateResetAfterOperation(bool state = false) => _resetSoftDeletedFetchState = state;
 
     /// <summary>
     /// Resets soft deleted entity fetch style to default.

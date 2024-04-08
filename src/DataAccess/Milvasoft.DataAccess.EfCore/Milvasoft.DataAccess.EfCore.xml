@@ -74,6 +74,11 @@
             Soft delete state when delete operation. Default value is false.
             </summary>
         </member>
+        <member name="P:Milvasoft.DataAccess.EfCore.Configuration.DbContextConfiguration.ResetSoftDeleteStateAfterEveryOperation">
+            <summary>
+            Soft delete state reset after every operation. Default value is true.
+            </summary>
+        </member>
         <member name="P:Milvasoft.DataAccess.EfCore.Configuration.DbContextConfiguration.GetCurrentUserNameMethod">
             <summary>
             Current user id getter method for auditing operations.
@@ -145,9 +150,9 @@
             Soft delete state. Default value is false.
             </summary>
         </member>
-        <member name="P:Milvasoft.DataAccess.EfCore.Configuration.RepositoryConfiguration.ResetSoftDeletedFetchStateToDefault">
+        <member name="P:Milvasoft.DataAccess.EfCore.Configuration.RepositoryConfiguration.ResetSoftDeletedFetchStateAfterEveryOperation">
             <summary>
-            Soft delete state. Default value is false.
+            Soft delete state reset after every operation. Default value is true.
             </summary>
         </member>
         <member name="T:Milvasoft.DataAccess.EfCore.DbContextBase.MilvaDbContextBase">
@@ -180,6 +185,11 @@
         <member name="F:Milvasoft.DataAccess.EfCore.DbContextBase.MilvaDbContextBase._useUtcForDateTimes">
             <summary>
             Default prop for datetime configuration.
+            </summary>
+        </member>
+        <member name="F:Milvasoft.DataAccess.EfCore.DbContextBase.MilvaDbContextBase._resetSoftDeleteStateAfterEveryOperation">
+            <summary>
+            It updates the state that determines whether soft delete state reset to default occurs after any operation.
             </summary>
         </member>
         <member name="M:Milvasoft.DataAccess.EfCore.DbContextBase.MilvaDbContextBase.#ctor(Microsoft.EntityFrameworkCore.DbContextOptions,Milvasoft.DataAccess.EfCore.Configuration.DataAccessConfiguration)">
@@ -229,6 +239,12 @@
             <summary>
             Sets soft deletion state to default state in <see cref="T:Milvasoft.DataAccess.EfCore.Configuration.DataAccessConfiguration"/>.
             </summary>
+        </member>
+        <member name="M:Milvasoft.DataAccess.EfCore.DbContextBase.MilvaDbContextBase.SoftDeleteStateResetAfterOperation(System.Boolean)">
+            <summary>
+            It updates the state that determines whether soft delete state reset to default occurs after any operation.
+            </summary>
+            <param name="state">Soft delete reset state.</param>
         </member>
         <member name="M:Milvasoft.DataAccess.EfCore.DbContextBase.MilvaDbContextBase.GetCurrentSoftDeletionState">
             <summary>
@@ -283,19 +299,21 @@
             </summary>
             <param name="entry"></param>
         </member>
-        <member name="M:Milvasoft.DataAccess.EfCore.DbContextBase.MilvaDbContextBase.AuditDate(Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry,System.String)">
+        <member name="M:Milvasoft.DataAccess.EfCore.DbContextBase.MilvaDbContextBase.AuditDate(Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry,System.String,System.Boolean)">
             <summary>
             Entity auditing by date. 
             </summary>
             <param name="entry"></param>
             <param name="propertyName"></param>
+            <param name="audit"></param>
         </member>
-        <member name="M:Milvasoft.DataAccess.EfCore.DbContextBase.MilvaDbContextBase.AuditPerformerUser(Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry,System.String)">
+        <member name="M:Milvasoft.DataAccess.EfCore.DbContextBase.MilvaDbContextBase.AuditPerformerUser(Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry,System.String,System.Boolean)">
             <summary>
             Entity auditing by performer user.
             </summary>
             <param name="entry"></param>
             <param name="propertyName"></param>
+            <param name="audit"></param>
         </member>
         <member name="M:Milvasoft.DataAccess.EfCore.DbContextBase.MilvaDbContextBase.GetRequiredContentsDynamicallyAsync(System.Type)">
             <summary>
@@ -519,10 +537,17 @@
             Resets SaveChanges choice to default.
             </summary>
         </member>
-        <member name="M:Milvasoft.DataAccess.EfCore.RepositoryBase.Abstract.IBaseRepository`2.FetchSoftDeletedEntitiesInNextProcess(System.Boolean)">
+        <member name="M:Milvasoft.DataAccess.EfCore.RepositoryBase.Abstract.IBaseRepository`2.FetchSoftDeletedEntities(System.Boolean)">
             <summary>
             Determines whether soft deleted entities in the database are fetched from the database.
             </summary>
+            <param name="state">Soft delete fetching state.</param>
+        </member>
+        <member name="M:Milvasoft.DataAccess.EfCore.RepositoryBase.Abstract.IBaseRepository`2.SoftDeleteFetchStateResetAfterOperation(System.Boolean)">
+            <summary>
+            It updates the state that determines whether soft delete fetch state reset to default occurs after any fetch operation.
+            </summary>
+            <param name="state">Soft delete fetching reset state.</param>
         </member>
         <member name="M:Milvasoft.DataAccess.EfCore.RepositoryBase.Abstract.IBaseRepository`2.ResetSoftDeletedEntityFetchState">
             <summary>
@@ -1970,6 +1995,26 @@
             DebSet object.
             </summary>
         </member>
+        <member name="F:Milvasoft.Helpers.DataAccess.EfCore.Concrete.BaseRepository`2._dataAccessConfiguration">
+            <summary>
+            Data access configuration.
+            </summary>
+        </member>
+        <member name="F:Milvasoft.Helpers.DataAccess.EfCore.Concrete.BaseRepository`2._resetSoftDeletedFetchState">
+            <summary>
+            It updates the state that determines whether soft delete fetch state reset occurs after any fetch operation.
+            </summary>
+        </member>
+        <member name="F:Milvasoft.Helpers.DataAccess.EfCore.Concrete.BaseRepository`2._softDeletedFetching">
+            <summary>
+            Determines whether soft deleted entities in the database are fetched from the database.
+            </summary>
+        </member>
+        <member name="F:Milvasoft.Helpers.DataAccess.EfCore.Concrete.BaseRepository`2._saveChangesAfterEveryOperation">
+            <summary>
+            Determines whether save changes method called after every repository method.
+            </summary>
+        </member>
         <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Concrete.BaseRepository`2.#ctor(`1)">
             <summary>
             Initializes new instance of <see cref="T:Milvasoft.Helpers.DataAccess.EfCore.Concrete.BaseRepository`2"/>
@@ -1987,10 +2032,17 @@
             Resets SaveChanges choice to default.
             </summary>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Concrete.BaseRepository`2.FetchSoftDeletedEntitiesInNextProcess(System.Boolean)">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Concrete.BaseRepository`2.FetchSoftDeletedEntities(System.Boolean)">
             <summary>
             Determines whether soft deleted entities in the database are fetched from the database.
             </summary>
+            <param name="state">Soft delete fetching state.</param>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Concrete.BaseRepository`2.SoftDeleteFetchStateResetAfterOperation(System.Boolean)">
+            <summary>
+            It updates the state that determines whether soft delete fetch state reset to default occurs after any fetch operation.
+            </summary>
+            <param name="state">Soft delete fetching reset state.</param>
         </member>
         <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Concrete.BaseRepository`2.ResetSoftDeletedEntityFetchState">
             <summary>

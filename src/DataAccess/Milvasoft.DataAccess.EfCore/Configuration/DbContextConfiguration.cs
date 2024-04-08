@@ -16,6 +16,11 @@ public class DbContextConfiguration
     public SoftDeletionState DefaultSoftDeletionState { get; set; } = SoftDeletionState.Passive;
 
     /// <summary>
+    /// Soft delete state reset after every operation. Default value is true.
+    /// </summary>
+    public bool ResetSoftDeleteStateAfterEveryOperation { get; set; } = true;
+
+    /// <summary>
     /// Current user id getter method for auditing operations.
     /// </summary>
     public Func<IServiceProvider, string> GetCurrentUserNameMethod { get; set; }

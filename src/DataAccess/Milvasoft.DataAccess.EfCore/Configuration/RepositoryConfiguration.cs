@@ -19,7 +19,7 @@ public class RepositoryConfiguration
     public bool DefaultSoftDeletedFetchState { get; set; } = false;
 
     /// <summary>
-    /// Soft delete state. Default value is false.
+    /// Soft delete state reset after every operation. Default value is true.
     /// </summary>
-    public bool ResetSoftDeletedFetchStateToDefault { get; set; } = true;
+    public bool ResetSoftDeletedFetchStateAfterEveryOperation { get; set; } = true;
 }

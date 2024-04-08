@@ -44,6 +44,11 @@ public abstract class MilvaDbContextBase(DbContextOptions options) : DbContext(o
     protected bool _useUtcForDateTimes = false;
 
     /// <summary>
+    /// It updates the state that determines whether soft delete state reset to default occurs after any operation.
+    /// </summary>
+    protected bool _resetSoftDeleteStateAfterEveryOperation = true;
+
+    /// <summary>
     /// Initializes new instance.
     /// </summary>
     /// <param name="options"></param>
@@ -89,6 +94,7 @@ public abstract class MilvaDbContextBase(DbContextOptions options) : DbContext(o
     {
         _dbContextConfiguration = dbContextConfiguration;
         _currentSoftDeleteState = dbContextConfiguration.DbContext.DefaultSoftDeletionState;
+        _resetSoftDeleteStateAfterEveryOperation = dbContextConfiguration.DbContext.ResetSoftDeleteStateAfterEveryOperation;
         _useUtcForDateTimes = dbContextConfiguration.DbContext.UseUtcForDateTimes;
     }
 
@@ -112,6 +118,12 @@ public abstract class MilvaDbContextBase(DbContextOptions options) : DbContext(o
     /// Sets soft deletion state to default state in <see cref="DataAccessConfiguration"/>.
     /// </summary>
     public void SetSoftDeleteStateToDefault() => _currentSoftDeleteState = _dbContextConfiguration.DbContext.DefaultSoftDeletionState;
+
+    /// <summary>
+    /// It updates the state that determines whether soft delete state reset to default occurs after any operation.
+    /// </summary>
+    /// <param name="state">Soft delete reset state.</param>
+    public void SoftDeleteStateResetAfterOperation(bool state = true) => _resetSoftDeleteStateAfterEveryOperation = state;
 
     /// <summary>
     /// Gets current soft deletion state.
@@ -188,20 +200,16 @@ public abstract class MilvaDbContextBase(DbContextOptions options) : DbContext(o
             {
                 case EntityState.Added:
 
-                    if (_dbContextConfiguration.Auditing.AuditCreationDate)
-                        AuditDate(entry, EntityPropertyNames.CreationDate);
+                    AuditDate(entry, EntityPropertyNames.CreationDate, _dbContextConfiguration.Auditing.AuditCreationDate);
 
-                    if (_dbContextConfiguration.Auditing.AuditCreator)
-                        AuditPerformerUser(entry, EntityPropertyNames.CreatorUserName);
+                    AuditPerformerUser(entry, EntityPropertyNames.CreatorUserName, _dbContextConfiguration.Auditing.AuditCreator);
 
                     break;
                 case EntityState.Modified:
 
-                    if (_dbContextConfiguration.Auditing.AuditModificationDate)
-                        AuditDate(entry, EntityPropertyNames.LastModificationDate);
+                    AuditDate(entry, EntityPropertyNames.LastModificationDate, _dbContextConfiguration.Auditing.AuditModificationDate);
 
-                    if (_dbContextConfiguration.Auditing.AuditModifier)
-                        AuditPerformerUser(entry, EntityPropertyNames.LastModifierUserName);
+                    AuditPerformerUser(entry, EntityPropertyNames.LastModifierUserName, _dbContextConfiguration.Auditing.AuditModifier);
 
                     break;
                 case EntityState.Deleted:
@@ -218,7 +226,8 @@ public abstract class MilvaDbContextBase(DbContextOptions options) : DbContext(o
             }
         }
 
-        _currentSoftDeleteState = _dbContextConfiguration.DbContext.DefaultSoftDeletionState;
+        if (_resetSoftDeleteStateAfterEveryOperation)
+            _currentSoftDeleteState = _dbContextConfiguration.DbContext.DefaultSoftDeletionState;
     }
 
     /// <summary>
@@ -269,15 +278,9 @@ public abstract class MilvaDbContextBase(DbContextOptions options) : DbContext(o
         entry.Property(EntityPropertyNames.IsDeleted).CurrentValue = true;
         entry.Property(EntityPropertyNames.IsDeleted).IsModified = true;
 
-        if (_dbContextConfiguration.Auditing.AuditDeletionDate)
-        {
-            //Change "DeletionDate" property value.
-            entry.Property(EntityPropertyNames.DeletionDate).CurrentValue = DateTime.Now;
-            entry.Property(EntityPropertyNames.DeletionDate).IsModified = true;
-        }
+        AuditDate(entry, EntityPropertyNames.DeletionDate, _dbContextConfiguration.Auditing.AuditDeletionDate);
 
-        if (_dbContextConfiguration.Auditing.AuditDeleter)
-            AuditPerformerUser(entry, EntityPropertyNames.DeleterUserName);
+        AuditPerformerUser(entry, EntityPropertyNames.DeleterUserName, _dbContextConfiguration.Auditing.AuditDeleter);
     }
 
     /// <summary>
@@ -285,8 +288,12 @@ public abstract class MilvaDbContextBase(DbContextOptions options) : DbContext(o
     /// </summary>
     /// <param name="entry"></param>
     /// <param name="propertyName"></param>
-    protected internal virtual void AuditDate(EntityEntry entry, string propertyName)
+    /// <param name="audit"></param>
+    protected internal virtual void AuditDate(EntityEntry entry, string propertyName, bool audit)
     {
+        if (!audit)
+            return;
+
         if (entry.Metadata.GetProperties().Any(prop => prop.Name == propertyName))
         {
             entry.Property(propertyName).CurrentValue = DateTime.Now;
@@ -299,8 +306,12 @@ public abstract class MilvaDbContextBase(DbContextOptions options) : DbContext(o
     /// </summary>
     /// <param name="entry"></param>
     /// <param name="propertyName"></param>
-    protected internal virtual void AuditPerformerUser(EntityEntry entry, string propertyName)
+    /// <param name="audit"></param>
+    protected internal virtual void AuditPerformerUser(EntityEntry entry, string propertyName, bool audit)
     {
+        if (!audit)
+            return;
+
         var currentUserName = _dbContextConfiguration.DbContext.GetCurrentUserNameMethod.Invoke(ServiceProvider);
 
         if (!string.IsNullOrWhiteSpace(currentUserName) && entry.Metadata.GetProperties().Any(prop => prop.Name == propertyName))

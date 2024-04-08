@@ -31,7 +31,14 @@ public interface IBaseRepository<TEntity, TContext> where TEntity : IMilvaEntity
     /// <summary>
     /// Determines whether soft deleted entities in the database are fetched from the database.
     /// </summary>
-    public void FetchSoftDeletedEntitiesInNextProcess(bool state = false);
+    /// <param name="state">Soft delete fetching state.</param>
+    public void FetchSoftDeletedEntities(bool state = false);
+
+    /// <summary>
+    /// It updates the state that determines whether soft delete fetch state reset to default occurs after any fetch operation.
+    /// </summary>
+    /// <param name="state">Soft delete fetching reset state.</param>
+    public void SoftDeleteFetchStateResetAfterOperation(bool state = false);
 
     /// <summary>
     /// Resets soft deleted entity fetch style to default.
