@@ -69,20 +69,21 @@ public class FilterRequest
             }
             else if (valueCount == 1)
             {
-                var value = GetValueWithCorrectType<TEntity>(filter.Value, filter.FilterBy);
+                var value = GetValueWithCorrectType<TEntity>(filter, filter.Value, propertyType, filter.FilterBy);
 
                 expression.By(filter.FilterBy, operation, value, MergeType);
             }
             else
             {
-                var value = GetValueWithCorrectType<TEntity>(filter.Value, filter.FilterBy);
-                var otherValue = GetValueWithCorrectType<TEntity>(filter.OtherValue, filter.FilterBy);
+                var value = GetValueWithCorrectType<TEntity>(filter, filter.Value, propertyType, filter.FilterBy);
+                var otherValue = GetValueWithCorrectType<TEntity>(filter, filter.OtherValue, propertyType, filter.FilterBy);
 
                 expression.By(filter.FilterBy, operation, value, otherValue, MergeType);
             }
         }
 
         return expression;
+
     }
 
     /// <summary>
@@ -92,21 +93,21 @@ public class FilterRequest
     /// <param name="value"></param>
     /// <param name="propertyName"></param>
     /// <returns></returns>
-    private static object GetValueWithCorrectType<TEntity>(object value, string propertyName)
+    private static object GetValueWithCorrectType<TEntity>(FilterCriteria filter, object value, Type propertyUnderlyingType, string propertyName)
     {
-        var propertyType = typeof(TEntity).GetPublicPropertyIgnoreCase(propertyName).PropertyType;
+        var propType = filter.FilterByContainsSpecialChars() ? propertyUnderlyingType : typeof(TEntity).GetPublicPropertyIgnoreCase(propertyName).PropertyType;
 
         if (value == null)
         {
-            if (propertyType.IsNonNullableValueType())
+            if (propType.IsNonNullableValueType())
                 throw new MilvaDeveloperException("Please provide filter values!");
 
-            if (propertyType == typeof(string))
+            if (propType == typeof(string))
                 value = string.Empty;
         }
 
         if (value is JsonElement jsonElementOfValue)
-            value = jsonElementOfValue.Deserialize(propertyType);
+            value = jsonElementOfValue.Deserialize(propType);
 
         return value;
     }
