@@ -16,7 +16,15 @@
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.0" />
   </ItemGroup>
 
-  <ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="ConfigureAwait.Fody" Version="3.3.2" />
+		<PackageReference Include="Fody" Version="6.8.0">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+	</ItemGroup>
+
+	<ItemGroup>
     <ProjectReference Include="..\..\Components\Milvasoft.Components.Rest\Milvasoft.Components.Rest.csproj" />
   </ItemGroup>
 

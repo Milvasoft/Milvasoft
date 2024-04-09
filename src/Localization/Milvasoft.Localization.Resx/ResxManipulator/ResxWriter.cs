@@ -1,4 +1,5 @@
-﻿using Milvasoft.Core.Abstractions;
+﻿using Fody;
+using Milvasoft.Core.Abstractions;
 using System.Xml.Linq;
 
 namespace Milvasoft.Localization.Resx.ResxManipulator;
@@ -6,6 +7,7 @@ namespace Milvasoft.Localization.Resx.ResxManipulator;
 /// <summary>
 /// Create and write to resx resource files
 /// </summary>
+[ConfigureAwait(false)]
 public class ResxWriter
 {
     private readonly XDocument _xd;

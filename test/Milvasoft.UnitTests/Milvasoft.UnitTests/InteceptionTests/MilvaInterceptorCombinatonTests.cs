@@ -169,7 +169,7 @@ public class MilvaInterceptorCombinatonTests
         builder.Services.AddMilvaCaching()
                         .WithAccessor<TestCacheAccessor, InMemoryCacheOptions>(new InMemoryCacheOptions
                         {
-                            AccessorLifetime = ServiceLifetime.Transient,
+                            AccessorLifetime = ServiceLifetime.Singleton,
                         });
 
         builder.Services.AddMilvaInterception([typeof(ISomeInterface)])

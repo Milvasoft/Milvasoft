@@ -5,6 +5,7 @@ using Milvasoft.Caching.InMemory.Options;
 using Milvasoft.Components.Rest.MilvaResponse;
 using Milvasoft.Core.Abstractions;
 using Milvasoft.Core.Abstractions.Cache;
+using Milvasoft.Core.Utils.JsonConverters;
 using Milvasoft.Interception.Builder;
 using Milvasoft.Interception.Decorator;
 using Milvasoft.Interception.Interceptors.Cache;
@@ -142,6 +143,8 @@ public class CacheInterceptorTests
         var builder = new InterceptionBuilder(new ServiceCollection());
 
         builder.Services.AddScoped<ISomeInterface, SomeClass>();
+
+        builder.Services.ConfigureCurrentMilvaJsonSerializerOptions();
 
         builder.Services.AddMilvaCaching()
                         .WithAccessor<TestCacheAccessor, InMemoryCacheOptions>(new InMemoryCacheOptions

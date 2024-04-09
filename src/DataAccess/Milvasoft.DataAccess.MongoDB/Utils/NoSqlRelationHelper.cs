@@ -1,4 +1,5 @@
-﻿using Milvasoft.DataAccess.MongoDB.Utils.Attributes;
+﻿using Fody;
+using Milvasoft.DataAccess.MongoDB.Utils.Attributes;
 using MongoDB.Bson;
 using MongoDB.Driver;
 using System.Linq.Expressions;
@@ -8,6 +9,7 @@ namespace Milvasoft.DataAccess.MongoDB.Utils;
 /// <summary>
 /// Extension methods for relational operations. Like "include approach" in RDBMS.
 /// </summary>
+[ConfigureAwait(false)]
 public static class NoSqlRelationHelper
 {
     /// <summary>
@@ -65,7 +67,7 @@ public static class NoSqlRelationHelper
 
                 var findOptions = new FindOptions<TMapProperty> { Projection = projectDefinition };
 
-                var toBeMappedValue = await (await collection.FindAsync(andOperation, findOptions)).FirstOrDefaultAsync().ConfigureAwait(false);
+                var toBeMappedValue = await (await collection.FindAsync(andOperation, findOptions)).FirstOrDefaultAsync();
 
                 entityType.GetProperty(toBeMappedPropertySelector.GetPropertyName()).SetValue(entity, toBeMappedValue);
 
@@ -125,7 +127,7 @@ public static class NoSqlRelationHelper
 
                 var projectDefinition = Builders<TMapProperty>.Projection.Expression(projectExpression ?? (entity => entity));
 
-                var toBeMappedValues = await collection.Find(andOperation).Project(projectDefinition).ToListAsync().ConfigureAwait(false);
+                var toBeMappedValues = await collection.Find(andOperation).Project(projectDefinition).ToListAsync();
 
                 entity.GetType().GetProperty(toBeMappedPropertySelector.GetPropertyName()).SetValue(entity, toBeMappedValues);
 
@@ -177,7 +179,7 @@ public static class NoSqlRelationHelper
 
         var projectionDefinition = Builders<TMapProperty>.Projection.Expression(projectExpression ?? (entity => entity));
 
-        var toBeMappedValues = await collection.Find(totalFilterDefinition).Project(projectionDefinition).ToListAsync().ConfigureAwait(false);
+        var toBeMappedValues = await collection.Find(totalFilterDefinition).Project(projectionDefinition).ToListAsync();
 
         foreach (var tobeMappedValueReference in toBeMappedValueReferences)
         {
@@ -226,7 +228,7 @@ public static class NoSqlRelationHelper
 
         var projectDefinition = Builders<TMapProperty>.Projection.Expression(projectExpression ?? (entity => entity));
 
-        var toBeMappedValues = await collection.Find(Builders<TMapProperty>.Filter.Or(filterDefinitions)).Project(projectDefinition).ToListAsync().ConfigureAwait(false);
+        var toBeMappedValues = await collection.Find(Builders<TMapProperty>.Filter.Or(filterDefinitions)).Project(projectDefinition).ToListAsync();
 
         int i = 0;
 

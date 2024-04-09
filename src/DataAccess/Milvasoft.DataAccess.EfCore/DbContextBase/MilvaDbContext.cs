@@ -1,4 +1,5 @@
 ﻿using EFCore.BulkExtensions;
+using Fody;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.Extensions.DependencyInjection;
@@ -19,6 +20,7 @@ namespace Milvasoft.DataAccess.EfCore.DbContextBase;
 /// Handles all database operations with new features like soft deletion.
 /// </summary>
 /// <param name="options"></param>
+[ConfigureAwait(false)]
 public abstract class MilvaDbContextBase(DbContextOptions options) : DbContext(options), IMilvaDbContextBase
 {
     private static readonly MethodInfo _createProjectionExpressionMethod = typeof(MultiLanguageExtensions).GetMethod(nameof(MultiLanguageExtensions.CreateProjectionExpression));
@@ -350,7 +352,7 @@ public abstract class MilvaDbContextBase(DbContextOptions options) : DbContext(o
 
         var ret = (Task)whereMethod.Invoke(dbSet, [dbSet, null]);
 
-        await ret.ConfigureAwait(false);
+        await ret;
 
         var resultProperty = ret.GetType().GetProperty("Result");
 
@@ -371,7 +373,7 @@ public abstract class MilvaDbContextBase(DbContextOptions options) : DbContext(o
                                .WithSorting(sortRequest)
                                .Select(projectionExpression ?? (entity => entity))
                                .ToListAsync()
-                               .ConfigureAwait(false);
+                               ;
 
     /// <summary>
     /// Gets the requested <typeparamref name="TEntity"/>'s property's(<paramref name="propName"/>) max value.
@@ -390,7 +392,7 @@ public abstract class MilvaDbContextBase(DbContextOptions options) : DbContext(o
 
         var predicate = Expression.Lambda<Func<TEntity, decimal>>(Expression.Convert(Expression.Property(parameterExpression, propName), typeof(decimal)), parameterExpression);
 
-        return await Set<TEntity>().Where(CommonHelper.CreateIsDeletedFalseExpression<TEntity>() ?? (entity => true)).IncludeTranslations(this).MaxAsync(predicate).ConfigureAwait(false);
+        return await Set<TEntity>().Where(CommonHelper.CreateIsDeletedFalseExpression<TEntity>() ?? (entity => true)).IncludeTranslations(this).MaxAsync(predicate);
     }
 
     /// <summary>

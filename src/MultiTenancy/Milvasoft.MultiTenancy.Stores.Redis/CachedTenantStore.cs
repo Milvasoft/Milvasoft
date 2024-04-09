@@ -1,4 +1,5 @@
-﻿using Milvasoft.Caching.Redis.Accessor;
+﻿using Fody;
+using Milvasoft.Caching.Redis.Accessor;
 using Milvasoft.Core.EntityBases.MultiTenancy;
 using Milvasoft.MultiTenancy.Store;
 
@@ -11,6 +12,7 @@ namespace Milvasoft.MultiTenancy.Stores.Redis;
 /// Creates new instance of <see cref="CachedTenantStore{TTenant, TKey}"/>
 /// </remarks>
 /// <param name="redisCacheService"></param>
+[ConfigureAwait(false)]
 public class CachedTenantStore<TTenant, TKey>(IRedisAccessor redisCacheService) : ITenantStore<TTenant, TKey>
     where TKey : struct, IEquatable<TKey>
     where TTenant : class, IMilvaTenantBase<TKey>, new()
