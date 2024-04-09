@@ -4,12 +4,13 @@ using Milvasoft.Components.Rest.MilvaResponse;
 using Milvasoft.Components.Rest.Request;
 using Milvasoft.DataAccess.EfCore.RepositoryBase.Abstract;
 using Milvasoft.DataAccess.EfCore.Utils.IncludeLibrary;
+using Milvasoft.Types.Structs;
 using System.Linq.Expressions;
 
 namespace Milvasoft.Helpers.DataAccess.EfCore.Concrete;
 
 /// <summary>
-///  Base repository for concrete repositories. All Ops!yon repositories must be have this methods.
+/// Base repository for concrete repositories. All Ops!yon repositories must be have this methods.
 /// </summary>
 /// <typeparam name="TEntity"></typeparam>
 /// <typeparam name="TContext"></typeparam>
@@ -694,11 +695,14 @@ public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepositor
     /// <returns></returns>
     public virtual async Task ExecuteUpdateAsync(Expression<Func<TEntity, bool>> predicate, SetPropertyBuilder<TEntity> propertyBuilder, CancellationToken cancellationToken = default)
     {
-        if (_dataAccessConfiguration.Auditing.AuditModificationDate)
-            AddPerformTimePropertyCall(propertyBuilder, EntityPropertyNames.LastModificationDate);
+        if (!propertyBuilder.AuditCallsAdded)
+        {
+            if (_dataAccessConfiguration.Auditing.AuditModificationDate)
+                AddPerformTimePropertyCall(propertyBuilder, EntityPropertyNames.LastModificationDate);
 
-        if (_dataAccessConfiguration.Auditing.AuditModifier)
-            AddPerformerUserPropertyCall(propertyBuilder, EntityPropertyNames.LastModifierUserName);
+            if (_dataAccessConfiguration.Auditing.AuditModifier)
+                AddPerformerUserPropertyCall(propertyBuilder, EntityPropertyNames.LastModifierUserName);
+        }
 
         await _dbSet.Where(predicate).ExecuteUpdateAsync(propertyBuilder.SetPropertyCalls, cancellationToken: cancellationToken);
     }
@@ -833,6 +837,28 @@ public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepositor
     #endregion
 
     #endregion
+
+    /// <summary>
+    /// Gets <see cref="SetPropertyBuilder{TSource}"/> for entity's matching properties with <paramref name="dto"/>'s updatable properties.
+    /// </summary>
+    /// <typeparam name="TDto"></typeparam>
+    /// <param name="dto"></param>
+    /// <remarks>
+    /// 
+    /// This method is used to update the entity object with the values of the updatable properties in the DTO object.
+    /// It iterates over the updatable properties in the DTO object and finds the matching property in the entity class.
+    /// If a matching property is found and the property value is an instance of <see cref="IUpdateProperty"/> and IsUpdated property is true,
+    /// the specified action is performed on the matching property in the entity object.
+    /// 
+    /// <para></para>
+    /// 
+    /// If entity implements <see cref="IHasModificationDate"/>, <see cref="EntityPropertyNames.LastModificationDate"/> property call will be added automatically.
+    /// If entity implements <see cref="IHasModifier"/>, <see cref="EntityPropertyNames.LastModifierUserName"/> property call will be added automatically.
+    /// If utc conversion requested in <see cref="DbContextConfiguration.UseUtcForDateTimes"/>, <see cref="DateTime"/> typed property call will be added after converted to utc.
+    /// 
+    /// </remarks>
+    public SetPropertyBuilder<TEntity> GetSetPropertyBuilderFromDto<TDto>(TDto dto) where TDto : DtoBase
+        => _dbContext.GetSetPropertyBuilderFromDto<TEntity, TDto>(dto);
 
     #region Private Helper Methods
 
@@ -970,9 +996,9 @@ public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepositor
 
         if (CommonHelper.PropertyExists<TEntity>(EntityPropertyNames.IsDeleted))
         {
-            var performerUserNameExpression = CommonHelper.CreatePropertySelector<TEntity, bool>(EntityPropertyNames.IsDeleted);
+            var isDeletedPropertyExpression = CommonHelper.CreatePropertySelector<TEntity, bool>(EntityPropertyNames.IsDeleted);
 
-            propertyBuilder.SetPropertyValue(performerUserNameExpression, true);
+            propertyBuilder.SetPropertyValue(isDeletedPropertyExpression, true);
         }
 
         if (_dataAccessConfiguration.Auditing.AuditDeleter)
@@ -988,11 +1014,11 @@ public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepositor
     {
         if (CommonHelper.PropertyExists<TEntity>(propertyName))
         {
-            var performerUserNameExpression = CommonHelper.CreatePropertySelector<TEntity, DateTime>(propertyName);
+            var performTimePropertyExpression = CommonHelper.CreatePropertySelector<TEntity, DateTime>(propertyName);
 
             var now = _dataAccessConfiguration.DbContext.UseUtcForDateTimes ? DateTime.UtcNow : DateTime.Now;
 
-            propertyBuilder.SetPropertyValue(performerUserNameExpression, now);
+            propertyBuilder.SetPropertyValue(performTimePropertyExpression, now);
         }
     }
 
@@ -1009,9 +1035,9 @@ public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepositor
 
             if (!string.IsNullOrWhiteSpace(currentUserName))
             {
-                var performerUserNameExpression = CommonHelper.CreatePropertySelector<TEntity, string>(propertyName);
+                var performerUserNamePropertyExpression = CommonHelper.CreatePropertySelector<TEntity, string>(propertyName);
 
-                propertyBuilder.SetPropertyValue(performerUserNameExpression, currentUserName);
+                propertyBuilder.SetPropertyValue(performerUserNamePropertyExpression, currentUserName);
             }
         }
     }

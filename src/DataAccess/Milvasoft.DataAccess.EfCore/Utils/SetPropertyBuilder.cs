@@ -11,6 +11,8 @@ namespace Milvasoft.DataAccess.EfCore.Utils;
 /// <typeparam name="TSource"></typeparam>
 public class SetPropertyBuilder<TSource>
 {
+    internal bool AuditCallsAdded { get; set; }
+
     /// <summary>
     /// <see cref="SetPropertyValue{TProperty}(Expression{Func{TSource, TProperty}}, TProperty)"/> method info for reflection calls.
     /// </summary>
@@ -44,7 +46,7 @@ public class SetPropertyBuilder<TSource>
                                                                          typeArguments: [typeof(TProperty)],
                                                                          propertyExpression,
                                                                          valueExpression),
-                                                  parameters: SetPropertyCalls.Parameters);
+                                                   parameters: SetPropertyCalls.Parameters);
 
         return this;
     }

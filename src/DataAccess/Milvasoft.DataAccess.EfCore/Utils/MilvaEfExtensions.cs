@@ -2,6 +2,9 @@
 using Milvasoft.Components.Rest.Enums;
 using Milvasoft.Components.Rest.MilvaResponse;
 using Milvasoft.Components.Rest.Request;
+using Milvasoft.Core.MultiLanguage.EntityBases;
+using Milvasoft.Core.MultiLanguage.EntityBases.Abstract;
+using Milvasoft.Types.Structs;
 
 namespace Milvasoft.DataAccess.EfCore.Utils;
 
@@ -191,12 +194,19 @@ public static class MilvaEfExtensions
     }
 
     /// <summary>
-    /// Gets <see cref="SetPropertyBuilder{TSource}"/> for entity's matching properties with <paramref name="dto"/>'s not null properties.
+    /// Gets <see cref="SetPropertyBuilder{TSource}"/> for entity's matching properties with <paramref name="dto"/>'s updatable properties.
     /// </summary>
     /// <typeparam name="TDto"></typeparam>
     /// <typeparam name="TEntity"></typeparam>
     /// <param name="dto"></param>
-    public static SetPropertyBuilder<TEntity> GetSetPropertyBuilderFromDto<TEntity, TDto>(this TDto dto) where TEntity : class, IMilvaEntity where TDto : DtoBase
+    /// <param name="useUtcForDateTimes">Converts <see cref="DateTime"/> typed properties to utc.</param>
+    /// <remarks>
+    /// This method is used to update the entity object with the values of the updatable properties in the DTO object.
+    /// It iterates over the updatable properties in the DTO object and finds the matching property in the entity class.
+    /// If a matching property is found and the property value is an instance of <see cref="IUpdateProperty"/> and IsUpdated property is true,
+    /// the specified action is performed on the matching property in the entity object.
+    /// </remarks>
+    public static SetPropertyBuilder<TEntity> GetSetPropertyBuilderFromDto<TEntity, TDto>(this TDto dto, bool useUtcForDateTimes = false) where TEntity : class, IMilvaEntity where TDto : DtoBase
     {
         if (dto == null)
             return null;
@@ -214,9 +224,61 @@ public static class MilvaEfExtensions
                                                                               matchingEntityProp.PropertyType,
                                                                               matchingEntityProp.Name);
 
+            var propType = dtoPropertyValue?.GetType();
+
+            // If property is datetime and utc conversion requested in configuration, convert date prop to utc
+            if (useUtcForDateTimes && dtoPropertyValue != null && propType.CanAssignableTo(typeof(DateTime)))
+                dtoPropertyValue = ((DateTime)dtoPropertyValue).ToUniversalTime();
+
             builder = (SetPropertyBuilder<TEntity>)genericMethod.Invoke(builder, [expression, dtoPropertyValue]);
         });
 
         return builder;
     }
+
+    /// <summary>
+    /// Allows to all entities associated with deletions to be Included to the entity(s) to be included in the process.
+    /// </summary>
+    /// <param name="source"></param>
+    /// <param name="context"></param>
+    public static IQueryable<T> IncludeAll<T>(this IQueryable<T> source, DbContext context)
+        where T : class
+    {
+        var navigations = context.Model.FindEntityType(typeof(T))
+                                       .GetDerivedTypesInclusive()
+                                       .SelectMany(type => type.GetNavigations())
+                                       .Distinct();
+
+        foreach (var property in navigations)
+            source = source.Include(property.Name);
+
+        return source;
+    }
+
+    /// <summary>
+    /// Allows to all entities associated with deletions to be Included to the entity(s) to be included in the process.
+    /// Entities must be contains "Translations" navigation property for include process. (e.g. Poco.Translations)
+    /// </summary>
+    /// <param name="source"></param>
+    /// <param name="context"></param>
+    public static IQueryable<TEntity> IncludeTranslations<TEntity>(this IQueryable<TEntity> source, DbContext context) where TEntity : class
+    {
+        var navigations = context.Model.FindEntityType(typeof(TEntity))
+                                       .GetDerivedTypesInclusive()
+                                       .SelectMany(type => type.GetNavigations())
+                                       .Distinct();
+
+        foreach (var property in navigations.Where(property => property.Name == MultiLanguageEntityPropertyNames.Translations))
+            source = source.Include(property.Name);
+
+        return source;
+    }
+
+    /// <summary>
+    /// Allows to all entities associated with deletions to be Included to the entity(s) to be included in the process.
+    /// Entities must be contains "Translations" navigation property for include process. (e.g. Poco.Translations)
+    /// </summary>
+    /// <param name="source"></param>
+    public static IQueryable<TEntity> IncludeTranslations<TEntity, TLangEntity>(this IQueryable<TEntity> source) where TEntity : class, IHasTranslation<TLangEntity> where TLangEntity : class
+        => source.Include(MultiLanguageEntityPropertyNames.Translations);
 }

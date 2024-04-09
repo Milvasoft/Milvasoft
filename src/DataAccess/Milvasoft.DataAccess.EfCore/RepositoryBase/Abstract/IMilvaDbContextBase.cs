@@ -44,4 +44,12 @@ public interface IMilvaDbContextBase
     /// </summary>
     /// <returns></returns>
     SoftDeletionState GetCurrentSoftDeletionState();
+
+    /// <summary>
+    /// Gets <see cref="SetPropertyBuilder{TSource}"/> for entity's matching properties with <paramref name="dto"/>'s not null properties.
+    /// </summary>
+    /// <typeparam name="TDto"></typeparam>
+    /// <typeparam name="TEntity"></typeparam>
+    /// <param name="dto"></param>
+    SetPropertyBuilder<TEntity> GetSetPropertyBuilderFromDto<TEntity, TDto>(TDto dto) where TEntity : class, IMilvaEntity where TDto : DtoBase;
 }

@@ -300,52 +300,6 @@ public static class ModelBuilderExtensions
     }
 
     /// <summary>
-    /// Allows to all entities associated with deletions to be Included to the entity(s) to be included in the process.
-    /// </summary>
-    /// <param name="source"></param>
-    /// <param name="context"></param>
-    public static IQueryable<T> IncludeAll<T>(this IQueryable<T> source, DbContext context)
-        where T : class
-    {
-        var navigations = context.Model.FindEntityType(typeof(T))
-                                       .GetDerivedTypesInclusive()
-                                       .SelectMany(type => type.GetNavigations())
-                                       .Distinct();
-
-        foreach (var property in navigations)
-            source = source.Include(property.Name);
-
-        return source;
-    }
-
-    /// <summary>
-    /// Allows to all entities associated with deletions to be Included to the entity(s) to be included in the process.
-    /// Entities must be contains "Translations" navigation property for include process. (e.g. Poco.Translations)
-    /// </summary>
-    /// <param name="source"></param>
-    /// <param name="context"></param>
-    public static IQueryable<TEntity> IncludeTranslations<TEntity>(this IQueryable<TEntity> source, DbContext context) where TEntity : class
-    {
-        var navigations = context.Model.FindEntityType(typeof(TEntity))
-                                       .GetDerivedTypesInclusive()
-                                       .SelectMany(type => type.GetNavigations())
-                                       .Distinct();
-
-        foreach (var property in navigations.Where(property => property.Name == MultiLanguageEntityPropertyNames.Translations))
-            source = source.Include(property.Name);
-
-        return source;
-    }
-
-    /// <summary>
-    /// Allows to all entities associated with deletions to be Included to the entity(s) to be included in the process.
-    /// Entities must be contains "Translations" navigation property for include process. (e.g. Poco.Translations)
-    /// </summary>
-    /// <param name="source"></param>
-    public static IQueryable<TEntity> IncludeTranslations<TEntity, TLangEntity>(this IQueryable<TEntity> source) where TEntity : class, IHasTranslation<TLangEntity> where TLangEntity : class
-        => source.Include(MultiLanguageEntityPropertyNames.Translations);
-
-    /// <summary>
     /// Translation entities relationships.
     /// </summary>
     /// <remarks>

@@ -716,6 +716,16 @@
             Deleter of entity.
             </summary>er
         </member>
+        <member name="T:Milvasoft.Core.EntityBases.Abstract.Auditing.IHasModificationDate">
+            <summary>
+            Determines entity has last modification date.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Core.EntityBases.Abstract.Auditing.IHasModificationDate.LastModificationDate">
+            <summary>
+            Last modification date of entity.
+            </summary>
+        </member>
         <member name="T:Milvasoft.Core.EntityBases.Abstract.Auditing.IHasModifier">
             <summary>
             Determines entity has modifier.
@@ -747,21 +757,11 @@
             </summary>
             <typeparam name="TKey"></typeparam>
         </member>
-        <member name="P:Milvasoft.Core.EntityBases.Abstract.IAuditable`1.LastModificationDate">
-            <summary>
-            Last modification date of entity.
-            </summary>
-        </member>
         <member name="T:Milvasoft.Core.EntityBases.Abstract.IAuditableWithoutUser`1">
             <summary>
             Determines entity is auditable without modifier.
             </summary>
             <typeparam name="TKey"></typeparam>
-        </member>
-        <member name="P:Milvasoft.Core.EntityBases.Abstract.IAuditableWithoutUser`1.LastModificationDate">
-            <summary>
-            Last modification date of entity.
-            </summary>
         </member>
         <member name="T:Milvasoft.Core.EntityBases.Abstract.IBaseEntity`1">
             <summary>

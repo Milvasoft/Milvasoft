@@ -4,22 +4,14 @@
 /// Determines entity is auditable with modifier and modification date.
 /// </summary>
 /// <typeparam name="TKey"></typeparam>
-public interface IAuditable<TKey> : ICreationAuditable<TKey>, IHasModifier where TKey : struct, IEquatable<TKey>
+public interface IAuditable<TKey> : ICreationAuditable<TKey>, IHasModificationDate, IHasModifier where TKey : struct, IEquatable<TKey>
 {
-    /// <summary>
-    /// Last modification date of entity.
-    /// </summary>
-    DateTime? LastModificationDate { get; set; }
 }
 
 /// <summary>
 /// Determines entity is auditable without modifier.
 /// </summary>
 /// <typeparam name="TKey"></typeparam>
-public interface IAuditableWithoutUser<TKey> : ICreationAuditableWithoutUser<TKey>
+public interface IAuditableWithoutUser<TKey> : IHasModificationDate, ICreationAuditableWithoutUser<TKey>
 {
-    /// <summary>
-    /// Last modification date of entity.
-    /// </summary>
-    DateTime? LastModificationDate { get; set; }
 }

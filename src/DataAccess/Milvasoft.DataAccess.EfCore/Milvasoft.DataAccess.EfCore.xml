@@ -346,6 +346,28 @@
             <param name="lookupRequest">The lookup request containing the parameters for the lookup.</param>
             <returns>A list of lookup results containing the requested data.</returns>
         </member>
+        <member name="M:Milvasoft.DataAccess.EfCore.DbContextBase.MilvaDbContextBase.GetSetPropertyBuilderFromDto``2(``1)">
+            <summary>
+            Gets <see cref="T:Milvasoft.DataAccess.EfCore.Utils.SetPropertyBuilder`1"/> for entity's matching properties with <paramref name="dto"/>'s updatable properties.
+            </summary>
+            <typeparam name="TDto"></typeparam>
+            <typeparam name="TEntity"></typeparam>
+            <param name="dto"></param>
+            <remarks>
+            
+            This method is used to update the entity object with the values of the updatable properties in the DTO object.
+            It iterates over the updatable properties in the DTO object and finds the matching property in the entity class.
+            If a matching property is found and the property value is an instance of <see cref="!:IUpdateProperty"/> and IsUpdated property is true,
+            the specified action is performed on the matching property in the entity object.
+            
+            <para></para>
+            
+            If entity implements <see cref="T:Milvasoft.Core.EntityBases.Abstract.Auditing.IHasModificationDate"/>, <see cref="F:Milvasoft.Core.Utils.Constants.EntityPropertyNames.LastModificationDate"/> property call will be added automatically.
+            If entity implements <see cref="T:Milvasoft.Core.EntityBases.Abstract.Auditing.IHasModifier"/>, <see cref="F:Milvasoft.Core.Utils.Constants.EntityPropertyNames.LastModifierUserName"/> property call will be added automatically.
+            If utc conversion requested in <see cref="P:Milvasoft.DataAccess.EfCore.Configuration.DbContextConfiguration.UseUtcForDateTimes"/>, <see cref="T:System.DateTime"/> typed property call will be added after converted to utc.
+            
+            </remarks>
+        </member>
         <member name="T:Milvasoft.DataAccess.EfCore.DbContextBase.MilvaDbContext">
             <summary>
             Handles all database operations. Inherits <see cref="T:Milvasoft.DataAccess.EfCore.DbContextBase.MilvaDbContextBase"/>
@@ -487,28 +509,6 @@
             You can use this method with <see cref="M:Milvasoft.DataAccess.EfCore.DbContextBase.ModelBuilderExtensions.UsePrecision(Microsoft.EntityFrameworkCore.ModelBuilder,System.Int32,System.Int32)"/> method. 
             </remarks>
             <param name="modelBuilder"></param>
-        </member>
-        <member name="M:Milvasoft.DataAccess.EfCore.DbContextBase.ModelBuilderExtensions.IncludeAll``1(System.Linq.IQueryable{``0},Microsoft.EntityFrameworkCore.DbContext)">
-            <summary>
-            Allows to all entities associated with deletions to be Included to the entity(s) to be included in the process.
-            </summary>
-            <param name="source"></param>
-            <param name="context"></param>
-        </member>
-        <member name="M:Milvasoft.DataAccess.EfCore.DbContextBase.ModelBuilderExtensions.IncludeTranslations``1(System.Linq.IQueryable{``0},Microsoft.EntityFrameworkCore.DbContext)">
-            <summary>
-            Allows to all entities associated with deletions to be Included to the entity(s) to be included in the process.
-            Entities must be contains "Translations" navigation property for include process. (e.g. Poco.Translations)
-            </summary>
-            <param name="source"></param>
-            <param name="context"></param>
-        </member>
-        <member name="M:Milvasoft.DataAccess.EfCore.DbContextBase.ModelBuilderExtensions.IncludeTranslations``2(System.Linq.IQueryable{``0})">
-            <summary>
-            Allows to all entities associated with deletions to be Included to the entity(s) to be included in the process.
-            Entities must be contains "Translations" navigation property for include process. (e.g. Poco.Translations)
-            </summary>
-            <param name="source"></param>
         </member>
         <member name="M:Milvasoft.DataAccess.EfCore.DbContextBase.ModelBuilderExtensions.UseTranslationEntityRelations(Microsoft.EntityFrameworkCore.ModelBuilder)">
             <summary>
@@ -844,7 +844,7 @@
         <member name="M:Milvasoft.DataAccess.EfCore.RepositoryBase.Abstract.IBaseRepository`2.ExecuteUpdateAsync(System.Object,Milvasoft.DataAccess.EfCore.Utils.SetPropertyBuilder{`0},System.Threading.CancellationToken)">
             <summary>
             Runs execute update. Adds performer and perform time to to be updated properties.
-            You can detect non null properties and create <see cref="T:Milvasoft.DataAccess.EfCore.Utils.SetPropertyBuilder`1"/> with <see cref="M:Milvasoft.DataAccess.EfCore.Utils.MilvaEfExtensions.GetSetPropertyBuilderFromDto``2(``1)"/> method.
+            You can detect non null properties and create <see cref="T:Milvasoft.DataAccess.EfCore.Utils.SetPropertyBuilder`1"/> with <see cref="M:Milvasoft.DataAccess.EfCore.Utils.MilvaEfExtensions.GetSetPropertyBuilderFromDto``2(``1,System.Boolean)"/> method.
             </summary>
             <param name="id"></param>
             <param name="propertyBuilder"></param>
@@ -1194,7 +1194,7 @@
         <member name="M:Milvasoft.DataAccess.EfCore.RepositoryBase.Abstract.IBaseRepository`2.ExecuteUpdate(System.Object,Milvasoft.DataAccess.EfCore.Utils.SetPropertyBuilder{`0})">
             <summary>
             Runs execute update. Adds performer and perform time to to be updated properties.
-            You can detect non null properties and create <see cref="T:Milvasoft.DataAccess.EfCore.Utils.SetPropertyBuilder`1"/> with <see cref="M:Milvasoft.DataAccess.EfCore.Utils.MilvaEfExtensions.GetSetPropertyBuilderFromDto``2(``1)"/> method.
+            You can detect non null properties and create <see cref="T:Milvasoft.DataAccess.EfCore.Utils.SetPropertyBuilder`1"/> with <see cref="M:Milvasoft.DataAccess.EfCore.Utils.MilvaEfExtensions.GetSetPropertyBuilderFromDto``2(``1,System.Boolean)"/> method.
             </summary>
             <param name="id"></param>
             <param name="propertyBuilder"></param>
@@ -1271,6 +1271,27 @@
             <param name="entities"></param>
             <param name="bulkConfig"></param> 
             <returns></returns>
+        </member>
+        <member name="M:Milvasoft.DataAccess.EfCore.RepositoryBase.Abstract.IBaseRepository`2.GetSetPropertyBuilderFromDto``1(``0)">
+            <summary>
+            Gets <see cref="T:Milvasoft.DataAccess.EfCore.Utils.SetPropertyBuilder`1"/> for entity's matching properties with <paramref name="dto"/>'s updatable properties.
+            </summary>
+            <typeparam name="TDto"></typeparam>
+            <param name="dto"></param>
+            <remarks>
+            
+            This method is used to update the entity object with the values of the updatable properties in the DTO object.
+            It iterates over the updatable properties in the DTO object and finds the matching property in the entity class.
+            If a matching property is found and the property value is an instance of <see cref="T:Milvasoft.Types.Structs.IUpdateProperty"/> and IsUpdated property is true,
+            the specified action is performed on the matching property in the entity object.
+            
+            <para></para>
+            
+            If entity implements <see cref="T:Milvasoft.Core.EntityBases.Abstract.Auditing.IHasModificationDate"/>, <see cref="F:Milvasoft.Core.Utils.Constants.EntityPropertyNames.LastModificationDate"/> property call will be added automatically.
+            If entity implements <see cref="T:Milvasoft.Core.EntityBases.Abstract.Auditing.IHasModifier"/>, <see cref="F:Milvasoft.Core.Utils.Constants.EntityPropertyNames.LastModifierUserName"/> property call will be added automatically.
+            If utc conversion requested in <see cref="P:Milvasoft.DataAccess.EfCore.Configuration.DbContextConfiguration.UseUtcForDateTimes"/>, <see cref="T:System.DateTime"/> typed property call will be added after converted to utc.
+            
+            </remarks>
         </member>
         <member name="T:Milvasoft.DataAccess.EfCore.RepositoryBase.Abstract.IContextRepository`1">
             <summary>
@@ -1410,6 +1431,14 @@
             Gets current soft deletion state.
             </summary>
             <returns></returns>
+        </member>
+        <member name="M:Milvasoft.DataAccess.EfCore.RepositoryBase.Abstract.IMilvaDbContextBase.GetSetPropertyBuilderFromDto``2(``1)">
+            <summary>
+            Gets <see cref="T:Milvasoft.DataAccess.EfCore.Utils.SetPropertyBuilder`1"/> for entity's matching properties with <paramref name="dto"/>'s not null properties.
+            </summary>
+            <typeparam name="TDto"></typeparam>
+            <typeparam name="TEntity"></typeparam>
+            <param name="dto"></param>
         </member>
         <member name="T:Milvasoft.DataAccess.EfCore.RepositoryBase.Concrete.ContextRepository`1">
             <summary>
@@ -1933,13 +1962,42 @@
             If no pagination parameters are specified, the method returns the entire result set without pagination.
             </remarks>
         </member>
-        <member name="M:Milvasoft.DataAccess.EfCore.Utils.MilvaEfExtensions.GetSetPropertyBuilderFromDto``2(``1)">
+        <member name="M:Milvasoft.DataAccess.EfCore.Utils.MilvaEfExtensions.GetSetPropertyBuilderFromDto``2(``1,System.Boolean)">
             <summary>
-            Gets <see cref="T:Milvasoft.DataAccess.EfCore.Utils.SetPropertyBuilder`1"/> for entity's matching properties with <paramref name="dto"/>'s not null properties.
+            Gets <see cref="T:Milvasoft.DataAccess.EfCore.Utils.SetPropertyBuilder`1"/> for entity's matching properties with <paramref name="dto"/>'s updatable properties.
             </summary>
             <typeparam name="TDto"></typeparam>
             <typeparam name="TEntity"></typeparam>
             <param name="dto"></param>
+            <param name="useUtcForDateTimes">Converts <see cref="T:System.DateTime"/> typed properties to utc.</param>
+            <remarks>
+            This method is used to update the entity object with the values of the updatable properties in the DTO object.
+            It iterates over the updatable properties in the DTO object and finds the matching property in the entity class.
+            If a matching property is found and the property value is an instance of <see cref="T:Milvasoft.Types.Structs.IUpdateProperty"/> and IsUpdated property is true,
+            the specified action is performed on the matching property in the entity object.
+            </remarks>
+        </member>
+        <member name="M:Milvasoft.DataAccess.EfCore.Utils.MilvaEfExtensions.IncludeAll``1(System.Linq.IQueryable{``0},Microsoft.EntityFrameworkCore.DbContext)">
+            <summary>
+            Allows to all entities associated with deletions to be Included to the entity(s) to be included in the process.
+            </summary>
+            <param name="source"></param>
+            <param name="context"></param>
+        </member>
+        <member name="M:Milvasoft.DataAccess.EfCore.Utils.MilvaEfExtensions.IncludeTranslations``1(System.Linq.IQueryable{``0},Microsoft.EntityFrameworkCore.DbContext)">
+            <summary>
+            Allows to all entities associated with deletions to be Included to the entity(s) to be included in the process.
+            Entities must be contains "Translations" navigation property for include process. (e.g. Poco.Translations)
+            </summary>
+            <param name="source"></param>
+            <param name="context"></param>
+        </member>
+        <member name="M:Milvasoft.DataAccess.EfCore.Utils.MilvaEfExtensions.IncludeTranslations``2(System.Linq.IQueryable{``0})">
+            <summary>
+            Allows to all entities associated with deletions to be Included to the entity(s) to be included in the process.
+            Entities must be contains "Translations" navigation property for include process. (e.g. Poco.Translations)
+            </summary>
+            <param name="source"></param>
         </member>
         <member name="T:Milvasoft.DataAccess.EfCore.Utils.SetPropertyBuilder`1">
             <summary>
@@ -1977,7 +2035,7 @@
         </member>
         <member name="T:Milvasoft.Helpers.DataAccess.EfCore.Concrete.BaseRepository`2">
             <summary>
-             Base repository for concrete repositories. All Ops!yon repositories must be have this methods.
+            Base repository for concrete repositories. All Ops!yon repositories must be have this methods.
             </summary>
             <typeparam name="TEntity"></typeparam>
             <typeparam name="TContext"></typeparam>
@@ -2349,7 +2407,7 @@
         <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Concrete.BaseRepository`2.ExecuteUpdateAsync(System.Object,Milvasoft.DataAccess.EfCore.Utils.SetPropertyBuilder{`0},System.Threading.CancellationToken)">
             <summary>
             Runs execute update. Adds performer and perform time to to be updated properties.
-            You can detect non null properties and create <see cref="T:Milvasoft.DataAccess.EfCore.Utils.SetPropertyBuilder`1"/> with <see cref="M:Milvasoft.DataAccess.EfCore.Utils.MilvaEfExtensions.GetSetPropertyBuilderFromDto``2(``1)"/> method.
+            You can detect non null properties and create <see cref="T:Milvasoft.DataAccess.EfCore.Utils.SetPropertyBuilder`1"/> with <see cref="M:Milvasoft.DataAccess.EfCore.Utils.MilvaEfExtensions.GetSetPropertyBuilderFromDto``2(``1,System.Boolean)"/> method.
             </summary>
             <param name="id"></param>
             <param name="propertyBuilder"></param>
@@ -2436,6 +2494,27 @@
             <param name="bulkConfig"></param>
             <param name="cancellationToken"></param>
             <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Concrete.BaseRepository`2.GetSetPropertyBuilderFromDto``1(``0)">
+            <summary>
+            Gets <see cref="T:Milvasoft.DataAccess.EfCore.Utils.SetPropertyBuilder`1"/> for entity's matching properties with <paramref name="dto"/>'s updatable properties.
+            </summary>
+            <typeparam name="TDto"></typeparam>
+            <param name="dto"></param>
+            <remarks>
+            
+            This method is used to update the entity object with the values of the updatable properties in the DTO object.
+            It iterates over the updatable properties in the DTO object and finds the matching property in the entity class.
+            If a matching property is found and the property value is an instance of <see cref="T:Milvasoft.Types.Structs.IUpdateProperty"/> and IsUpdated property is true,
+            the specified action is performed on the matching property in the entity object.
+            
+            <para></para>
+            
+            If entity implements <see cref="T:Milvasoft.Core.EntityBases.Abstract.Auditing.IHasModificationDate"/>, <see cref="F:Milvasoft.Core.Utils.Constants.EntityPropertyNames.LastModificationDate"/> property call will be added automatically.
+            If entity implements <see cref="T:Milvasoft.Core.EntityBases.Abstract.Auditing.IHasModifier"/>, <see cref="F:Milvasoft.Core.Utils.Constants.EntityPropertyNames.LastModifierUserName"/> property call will be added automatically.
+            If utc conversion requested in <see cref="P:Milvasoft.DataAccess.EfCore.Configuration.DbContextConfiguration.UseUtcForDateTimes"/>, <see cref="T:System.DateTime"/> typed property call will be added after converted to utc.
+            
+            </remarks>
         </member>
         <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Concrete.BaseRepository`2.CreateKeyEqualityExpression(System.Object,System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
             <summary>
@@ -2774,7 +2853,7 @@
         <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Concrete.BaseRepository`2.ExecuteUpdate(System.Object,Milvasoft.DataAccess.EfCore.Utils.SetPropertyBuilder{`0})">
             <summary>
             Runs execute update. Adds performer and perform time to to be updated properties.
-            You can detect non null properties and create <see cref="T:Milvasoft.DataAccess.EfCore.Utils.SetPropertyBuilder`1"/> with <see cref="M:Milvasoft.DataAccess.EfCore.Utils.MilvaEfExtensions.GetSetPropertyBuilderFromDto``2(``1)"/> method.
+            You can detect non null properties and create <see cref="T:Milvasoft.DataAccess.EfCore.Utils.SetPropertyBuilder`1"/> with <see cref="M:Milvasoft.DataAccess.EfCore.Utils.MilvaEfExtensions.GetSetPropertyBuilderFromDto``2(``1,System.Boolean)"/> method.
             </summary>
             <param name="id"></param>
             <param name="propertyBuilder"></param>

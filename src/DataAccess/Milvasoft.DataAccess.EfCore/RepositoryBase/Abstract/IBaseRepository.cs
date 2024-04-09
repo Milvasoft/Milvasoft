@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Milvasoft.Components.Rest.MilvaResponse;
 using Milvasoft.Components.Rest.Request;
 using Milvasoft.DataAccess.EfCore.Utils.IncludeLibrary;
+using Milvasoft.Types.Structs;
 using System.Linq.Expressions;
 
 namespace Milvasoft.DataAccess.EfCore.RepositoryBase.Abstract;
@@ -955,4 +956,25 @@ public interface IBaseRepository<TEntity, TContext> where TEntity : IMilvaEntity
     #endregion
 
     #endregion
+
+    /// <summary>
+    /// Gets <see cref="SetPropertyBuilder{TSource}"/> for entity's matching properties with <paramref name="dto"/>'s updatable properties.
+    /// </summary>
+    /// <typeparam name="TDto"></typeparam>
+    /// <param name="dto"></param>
+    /// <remarks>
+    /// 
+    /// This method is used to update the entity object with the values of the updatable properties in the DTO object.
+    /// It iterates over the updatable properties in the DTO object and finds the matching property in the entity class.
+    /// If a matching property is found and the property value is an instance of <see cref="IUpdateProperty"/> and IsUpdated property is true,
+    /// the specified action is performed on the matching property in the entity object.
+    /// 
+    /// <para></para>
+    /// 
+    /// If entity implements <see cref="IHasModificationDate"/>, <see cref="EntityPropertyNames.LastModificationDate"/> property call will be added automatically.
+    /// If entity implements <see cref="IHasModifier"/>, <see cref="EntityPropertyNames.LastModifierUserName"/> property call will be added automatically.
+    /// If utc conversion requested in <see cref="DbContextConfiguration.UseUtcForDateTimes"/>, <see cref="DateTime"/> typed property call will be added after converted to utc.
+    /// 
+    /// </remarks>
+    public SetPropertyBuilder<TEntity> GetSetPropertyBuilderFromDto<TDto>(TDto dto) where TDto : DtoBase;
 }

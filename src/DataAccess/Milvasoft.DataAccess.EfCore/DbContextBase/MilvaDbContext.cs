@@ -296,7 +296,7 @@ public abstract class MilvaDbContextBase(DbContextOptions options) : DbContext(o
 
         if (entry.Metadata.GetProperties().Any(prop => prop.Name == propertyName))
         {
-            entry.Property(propertyName).CurrentValue = DateTime.Now;
+            entry.Property(propertyName).CurrentValue = GetNow();
             entry.Property(propertyName).IsModified = true;
         }
     }
@@ -579,6 +579,64 @@ public abstract class MilvaDbContextBase(DbContextOptions options) : DbContext(o
     }
 
     #endregion
+
+    /// <summary>
+    /// Gets <see cref="SetPropertyBuilder{TSource}"/> for entity's matching properties with <paramref name="dto"/>'s updatable properties.
+    /// </summary>
+    /// <typeparam name="TDto"></typeparam>
+    /// <typeparam name="TEntity"></typeparam>
+    /// <param name="dto"></param>
+    /// <remarks>
+    /// 
+    /// This method is used to update the entity object with the values of the updatable properties in the DTO object.
+    /// It iterates over the updatable properties in the DTO object and finds the matching property in the entity class.
+    /// If a matching property is found and the property value is an instance of <see cref="IUpdateProperty"/> and IsUpdated property is true,
+    /// the specified action is performed on the matching property in the entity object.
+    /// 
+    /// <para></para>
+    /// 
+    /// If entity implements <see cref="IHasModificationDate"/>, <see cref="EntityPropertyNames.LastModificationDate"/> property call will be added automatically.
+    /// If entity implements <see cref="IHasModifier"/>, <see cref="EntityPropertyNames.LastModifierUserName"/> property call will be added automatically.
+    /// If utc conversion requested in <see cref="DbContextConfiguration.UseUtcForDateTimes"/>, <see cref="DateTime"/> typed property call will be added after converted to utc.
+    /// 
+    /// </remarks>
+    public SetPropertyBuilder<TEntity> GetSetPropertyBuilderFromDto<TEntity, TDto>(TDto dto) where TEntity : class, IMilvaEntity where TDto : DtoBase
+    {
+        var builder = dto.GetSetPropertyBuilderFromDto<TEntity, TDto>();
+
+        builder = SetAuditProperties(builder);
+
+        return builder;
+
+        SetPropertyBuilder<TEntity> SetAuditProperties(SetPropertyBuilder<TEntity> builder)
+        {
+            if (typeof(TEntity).CanAssignableTo(typeof(IHasModificationDate)) && _dbContextConfiguration.Auditing.AuditModificationDate)
+            {
+                var lastModificationDateSelector = CommonHelper.CreatePropertySelector<TEntity, DateTime>(EntityPropertyNames.LastModificationDate);
+
+                builder.AuditCallsAdded = true;
+                builder = builder.SetPropertyValue(lastModificationDateSelector, GetNow());
+            }
+
+            if (typeof(TEntity).CanAssignableTo(typeof(IHasModifier)) && _dbContextConfiguration.Auditing.AuditModifier)
+            {
+                var currentUserName = _dbContextConfiguration.DbContext.GetCurrentUserNameMethod.Invoke(ServiceProvider);
+
+                if (!string.IsNullOrWhiteSpace(currentUserName))
+                {
+                    var lastModifierUsernameSelector = CommonHelper.CreatePropertySelector<TEntity, string>(EntityPropertyNames.LastModifierUserName);
+
+                    builder.AuditCallsAdded = true;
+                    builder = builder.SetPropertyValue(lastModifierUsernameSelector, currentUserName);
+                }
+            }
+
+            return builder;
+        }
+    }
+
+    private DateTime GetNow() => _useUtcForDateTimes ? DateTime.UtcNow : DateTime.Now;
+
 }
 
 /// <summary>
