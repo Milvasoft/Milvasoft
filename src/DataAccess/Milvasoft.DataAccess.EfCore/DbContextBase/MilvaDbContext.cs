@@ -1,5 +1,4 @@
 ﻿using EFCore.BulkExtensions;
-using Fody;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.Extensions.DependencyInjection;
@@ -20,7 +19,6 @@ namespace Milvasoft.DataAccess.EfCore.DbContextBase;
 /// Handles all database operations with new features like soft deletion.
 /// </summary>
 /// <param name="options"></param>
-[ConfigureAwait(false)]
 public abstract class MilvaDbContextBase(DbContextOptions options) : DbContext(options), IMilvaDbContextBase
 {
     private static readonly MethodInfo _createProjectionExpressionMethod = typeof(MultiLanguageExtensions).GetMethod(nameof(MultiLanguageExtensions.CreateProjectionExpression));

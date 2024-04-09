@@ -1,5 +1,4 @@
-﻿using Fody;
-using Milvasoft.Interception.Decorator;
+﻿using Milvasoft.Interception.Decorator;
 using System.Diagnostics;
 
 namespace Milvasoft.Interception.Interceptors.ActivityScope;
@@ -7,7 +6,6 @@ namespace Milvasoft.Interception.Interceptors.ActivityScope;
 /// <summary>
 /// Starts an activity to associate interrelated calls made from different methods. Details of this activity can be accessed using the <see cref="ActivityHelper"/> class.
 /// </summary>
-[ConfigureAwait(false)]
 public class ActivityInterceptor : IMilvaInterceptor
 {
     /// <inheritdoc/>

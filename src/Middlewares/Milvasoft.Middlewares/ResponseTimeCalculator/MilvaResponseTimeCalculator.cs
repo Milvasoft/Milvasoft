@@ -37,7 +37,6 @@ public class MilvaResponseTimeCalculator(RequestDelegate next)
 
         context.Response.OnStarting(() =>
         {
-
             // Stop the timer information and calculate the time   
             watch.Stop();
 

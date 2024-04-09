@@ -1,5 +1,4 @@
-﻿using Fody;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Milvasoft.FileOperations.Enums;
 using System.Text.RegularExpressions;
 
@@ -8,7 +7,6 @@ namespace Milvasoft.FileOperations.Concrete;
 /// <summary>
 /// <see cref="IFormFile"/> operations for .NET Core.
 /// </summary>
-[ConfigureAwait(false)]
 public static partial class FormFileOperations
 {
     #region Public Properties

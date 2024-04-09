@@ -1,5 +1,4 @@
-﻿using Fody;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Milvasoft.Attributes.Annotations;
 using Milvasoft.Components.Rest.MilvaResponse;
 using Milvasoft.Interception.Decorator;
@@ -13,7 +12,6 @@ namespace Milvasoft.Interception.Interceptors.Response;
 /// <summary>
 /// Allows modification of the return values of methods that can be assigned to the <see cref="IResponse"/>.
 /// </summary>
-[ConfigureAwait(false)]
 public class ResponseInterceptor(IServiceProvider serviceProvider, IResponseInterceptionOptions interceptionOptions) : IMilvaInterceptor
 {
     private readonly IServiceProvider _serviceProvider = serviceProvider;

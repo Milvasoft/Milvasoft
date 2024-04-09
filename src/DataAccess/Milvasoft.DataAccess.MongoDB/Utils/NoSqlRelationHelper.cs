@@ -1,5 +1,4 @@
-﻿using Fody;
-using Milvasoft.DataAccess.MongoDB.Utils.Attributes;
+﻿using Milvasoft.DataAccess.MongoDB.Utils.Attributes;
 using MongoDB.Bson;
 using MongoDB.Driver;
 using System.Linq.Expressions;
@@ -9,7 +8,6 @@ namespace Milvasoft.DataAccess.MongoDB.Utils;
 /// <summary>
 /// Extension methods for relational operations. Like "include approach" in RDBMS.
 /// </summary>
-[ConfigureAwait(false)]
 public static class NoSqlRelationHelper
 {
     /// <summary>

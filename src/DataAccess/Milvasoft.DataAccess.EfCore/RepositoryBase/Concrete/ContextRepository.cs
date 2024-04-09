@@ -1,5 +1,4 @@
-﻿using Fody;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Milvasoft.DataAccess.EfCore.RepositoryBase.Abstract;
 using System.Linq.Expressions;
 using System.Reflection;
@@ -13,7 +12,6 @@ namespace Milvasoft.DataAccess.EfCore.RepositoryBase.Concrete;
 /// Constructor of ContextRepository for inject context.
 /// </remarks>
 /// <param name="dbContext"></param>
-[ConfigureAwait(false)]
 public class ContextRepository<TContext>(TContext dbContext) : IContextRepository<TContext> where TContext : DbContext
 {
     /// <summary>

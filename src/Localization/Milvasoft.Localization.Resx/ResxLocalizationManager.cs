@@ -1,5 +1,4 @@
-﻿using Fody;
-using Microsoft.Extensions.Localization;
+﻿using Microsoft.Extensions.Localization;
 using Milvasoft.Core.Abstractions.Localization;
 using Milvasoft.Localization.Resx.ResxManipulator;
 using Milvasoft.Types.Classes;
@@ -13,7 +12,6 @@ namespace Milvasoft.Localization.Resx;
 /// <typeparam name="TResource"></typeparam>
 /// <param name="stringLocalizer"></param>
 /// <param name="localizationOptions"></param>
-[ConfigureAwait(false)]
 public class ResxLocalizationManager<TResource>(IStringLocalizer<TResource> stringLocalizer, ILocalizationOptions localizationOptions) : ILocalizationManager
 {
     private readonly IStringLocalizer<TResource> _stringLocalizer = stringLocalizer;

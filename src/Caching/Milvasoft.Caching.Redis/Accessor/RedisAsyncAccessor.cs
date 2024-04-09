@@ -1,5 +1,4 @@
-﻿using Fody;
-using StackExchange.Redis;
+﻿using StackExchange.Redis;
 using System.Text.Json;
 
 namespace Milvasoft.Caching.Redis;
@@ -7,7 +6,6 @@ namespace Milvasoft.Caching.Redis;
 /// <summary>
 /// Provides redis cache operations. Redis connection multiplexer must be singleton.
 /// </summary>
-[ConfigureAwait(false)]
 public partial class RedisAccessor
 {
     /// <summary>

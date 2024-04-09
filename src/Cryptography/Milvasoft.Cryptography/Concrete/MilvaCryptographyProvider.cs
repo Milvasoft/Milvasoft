@@ -1,5 +1,4 @@
-﻿using Fody;
-using Milvasoft.Cryptography.Abstract;
+﻿using Milvasoft.Cryptography.Abstract;
 using Milvasoft.Cryptography.Builder;
 using System.Security.Cryptography;
 using System.Text;
@@ -15,7 +14,6 @@ namespace Milvasoft.Cryptography.Concrete;
 /// <param name="key"> Must be between 128-256 bit.</param>
 /// <param name="mode"></param>
 /// <param name="padding"></param>
-[ConfigureAwait(false)]
 public class MilvaCryptographyProvider(IMilvaCryptographyOptions milvaCryptographyOptions) : IMilvaCryptographyProvider
 {
     #region Fields

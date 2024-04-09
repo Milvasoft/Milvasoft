@@ -1,5 +1,4 @@
-﻿using Fody;
-using Milvasoft.Cryptography.Builder;
+﻿using Milvasoft.Cryptography.Builder;
 using Milvasoft.Cryptography.Concrete;
 using Milvasoft.FileOperations.Abstract;
 using Milvasoft.FileOperations.Builder;
@@ -62,7 +61,6 @@ namespace Milvasoft.FileOperations.Concrete;
 /// 
 /// </code>
 /// </summary>
-[ConfigureAwait(false)]
 public class JsonOperations : IJsonOperations
 {
     private readonly string _basePath;

@@ -1,5 +1,4 @@
-﻿using Fody;
-using Milvasoft.Core.Utils.Models;
+﻿using Milvasoft.Core.Utils.Models;
 using Milvasoft.DataAccess.MongoDB.Abstract;
 using Milvasoft.DataAccess.MongoDB.Utils;
 using Milvasoft.DataAccess.MongoDB.Utils.Settings;
@@ -13,7 +12,6 @@ namespace Milvasoft.DataAccess.MongoDB.Concrete;
 /// Base repository for concrete repositories. All repositories must be have this methods.
 /// </summary>
 /// <typeparam name="TEntity"></typeparam>
-[ConfigureAwait(false)]
 public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : class, IAuditable<ObjectId>
 {
     /// <summary>
