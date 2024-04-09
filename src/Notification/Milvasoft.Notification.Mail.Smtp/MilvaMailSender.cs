@@ -1,5 +1,4 @@
-﻿using Fody;
-using Milvasoft.Core.Helpers;
+﻿using Milvasoft.Core.Helpers;
 using System.Net;
 using System.Net.Mail;
 using System.Net.Mime;
@@ -18,7 +17,6 @@ namespace Milvasoft.Notification.Mail.Smtp;
 /// <param name="smtpPort"></param>
 /// <param name="smtpHost"></param>
 /// <param name="enableSsl"></param>
-[ConfigureAwait(false)]
 public class MilvaMailSender(string from, NetworkCredential networkCredential, int smtpPort, string smtpHost, bool enableSsl) : IMilvaMailSender
 {
     /// <summary>

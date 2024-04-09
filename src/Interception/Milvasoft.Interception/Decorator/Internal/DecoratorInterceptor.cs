@@ -1,11 +1,9 @@
 ﻿using Castle.DynamicProxy;
-using Fody;
 using System.Collections.ObjectModel;
 using System.Reflection;
 
 namespace Milvasoft.Interception.Decorator.Internal;
 
-[ConfigureAwait(false)]
 internal class DecoratorInterceptor(ReadOnlyDictionary<MethodInfo, IMilvaInterceptor[]> methodDecoratorMap) : IAsyncInterceptor
 {
     public ReadOnlyDictionary<MethodInfo, IMilvaInterceptor[]> MethodDecoratorMap { get; } = methodDecoratorMap;

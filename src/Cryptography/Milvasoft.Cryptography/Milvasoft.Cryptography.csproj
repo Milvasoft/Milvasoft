@@ -9,14 +9,6 @@
 	<ItemGroup>
 		<FrameworkReference Include="Microsoft.AspNetCore.App" />
 	</ItemGroup>
-
-	<ItemGroup>
-		<PackageReference Include="ConfigureAwait.Fody" Version="3.3.2" />
-		<PackageReference Include="Fody" Version="6.8.0">
-			<PrivateAssets>all</PrivateAssets>
-			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-		</PackageReference>
-	</ItemGroup>
 	
   <ItemGroup>
     <None Update="Resources\milvalogo.png">

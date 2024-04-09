@@ -1,5 +1,4 @@
-﻿using Fody;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Milvasoft.Interception.Decorator;
 
@@ -8,7 +7,6 @@ namespace Milvasoft.Interception.Ef.Transaction;
 /// <summary>
 /// Interceptor that starts a database transaction for methods marked with <see cref="TransactionAttribute"/>.
 /// </summary>
-[ConfigureAwait(false)]
 public partial class TransactionInterceptor(IServiceProvider serviceProvider) : IMilvaInterceptor
 {
     public int InterceptionOrder { get; set; } = -998;

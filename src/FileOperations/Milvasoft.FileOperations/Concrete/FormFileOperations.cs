@@ -1,5 +1,4 @@
-﻿using Fody;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Milvasoft.FileOperations.Enums;
 using System.Text.RegularExpressions;
 
@@ -8,7 +7,6 @@ namespace Milvasoft.FileOperations.Concrete;
 /// <summary>
 /// <see cref="IFormFile"/> operations for .NET Core.
 /// </summary>
-[ConfigureAwait(false)]
 public static partial class FormFileOperations
 {
     #region Public Properties
@@ -87,7 +85,7 @@ public static partial class FormFileOperations
             var filePathOfItem = Path.Combine(folderPathOfItem, fileNameWithExtension);
             using (var fileStream = new FileStream(filePathOfItem, FileMode.Create))
             {
-                await file.CopyToAsync(fileStream);
+                await file.CopyToAsync(fileStream).ConfigureAwait(false);
             }
 
             return filePathOfItem;
@@ -171,7 +169,7 @@ public static partial class FormFileOperations
                 var filePathOfItem = Path.Combine(folderPathOfItem, fileNameWithExtension);
                 using (var fileStream = new FileStream(filePathOfItem, FileMode.Create))
                 {
-                    await item.CopyToAsync(fileStream);
+                    await item.CopyToAsync(fileStream).ConfigureAwait(false);
                 }
 
                 folderPaths.Add(filePathOfItem);
@@ -260,7 +258,7 @@ public static partial class FormFileOperations
             if (file.Length <= 0)
                 continue;
 
-            var path = await file.SaveFileToPathAsync(entity, basePath, folderNameCreator, propertyName);
+            var path = await file.SaveFileToPathAsync(entity, basePath, folderNameCreator, propertyName).ConfigureAwait(false);
 
             if (!string.IsNullOrWhiteSpace(path))
                 fileEntities.Add(new TFileEntity
@@ -365,7 +363,7 @@ public static partial class FormFileOperations
 
         using (var stream = new FileStream(path, FileMode.Open))
         {
-            await stream.CopyToAsync(memory);
+            await stream.CopyToAsync(memory).ConfigureAwait(false);
         }
 
         memory.Position = 0;

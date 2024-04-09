@@ -1,5 +1,4 @@
-﻿using Fody;
-using Milvasoft.Core.EntityBases.MultiTenancy;
+﻿using Milvasoft.Core.EntityBases.MultiTenancy;
 using Milvasoft.MultiTenancy.ResolutionStrategy;
 using Milvasoft.MultiTenancy.Store;
 
@@ -15,7 +14,6 @@ namespace Milvasoft.MultiTenancy.Service;
 /// </remarks>
 /// <param name="tenantResolutionStrategy"></param>
 /// <param name="tenantStore"></param>
-[ConfigureAwait(false)]
 public class TenantService<TTenant, TKey>(ITenantResolutionStrategy<TKey> tenantResolutionStrategy, ITenantStore<TTenant, TKey> tenantStore) : ITenantService<TTenant, TKey>
 where TTenant : class, IMilvaTenantBase<TKey>
 where TKey : struct, IEquatable<TKey>

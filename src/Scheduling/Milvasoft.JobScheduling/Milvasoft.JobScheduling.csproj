@@ -10,15 +10,6 @@
 		<DocumentationFile>..\Milvasoft.JobScheduling\Milvasoft.JobScheduling.xml</DocumentationFile>
 	</PropertyGroup>
 
-
-	<ItemGroup>
-		<PackageReference Include="ConfigureAwait.Fody" Version="3.3.2" />
-		<PackageReference Include="Fody" Version="6.8.0">
-			<PrivateAssets>all</PrivateAssets>
-			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-		</PackageReference>
-	</ItemGroup>
-	
 	<ItemGroup>
 		<PackageReference Include="Cronos" Version="0.8.4" />
 		<PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="8.0.0" />

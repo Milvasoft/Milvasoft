@@ -1,5 +1,4 @@
-﻿using Fody;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Milvasoft.Components.Rest.MilvaResponse;
 using Milvasoft.Interception.Decorator;
 using Milvasoft.Interception.Interceptors.ActivityScope;
@@ -15,7 +14,6 @@ namespace Milvasoft.Interception.Interceptors.Logging;
 /// It intercepts methods that are marked with the LogAttribute and logs the relevant information using the provided logger.
 /// </summary>
 /// <param name="serviceProvider"></param>
-[ConfigureAwait(false)]
 public partial class LogInterceptor(IServiceProvider serviceProvider) : IMilvaInterceptor
 {
     private readonly IServiceProvider _serviceProvider = serviceProvider;

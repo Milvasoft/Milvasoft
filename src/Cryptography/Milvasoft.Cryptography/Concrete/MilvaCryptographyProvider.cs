@@ -1,5 +1,4 @@
-﻿using Fody;
-using Milvasoft.Cryptography.Abstract;
+﻿using Milvasoft.Cryptography.Abstract;
 using Milvasoft.Cryptography.Builder;
 using System.Security.Cryptography;
 using System.Text;
@@ -15,7 +14,6 @@ namespace Milvasoft.Cryptography.Concrete;
 /// <param name="key"> Must be between 128-256 bit.</param>
 /// <param name="mode"></param>
 /// <param name="padding"></param>
-[ConfigureAwait(false)]
 public class MilvaCryptographyProvider(IMilvaCryptographyOptions milvaCryptographyOptions) : IMilvaCryptographyProvider
 {
     #region Fields
@@ -49,9 +47,9 @@ public class MilvaCryptographyProvider(IMilvaCryptographyOptions milvaCryptograp
 
         using (var cryptoStream = new CryptoStream(memoryStream, encryptor, CryptoStreamMode.Write))
         {
-            await memoryStream.WriteAsync(initializationVector.AsMemory(0, initializationVector.Length));
-            await cryptoStream.WriteAsync(inputValue.AsMemory(0, inputValue.Length));
-            await cryptoStream.FlushFinalBlockAsync();
+            await memoryStream.WriteAsync(initializationVector.AsMemory(0, initializationVector.Length)).ConfigureAwait(false);
+            await cryptoStream.WriteAsync(inputValue.AsMemory(0, inputValue.Length)).ConfigureAwait(false);
+            await cryptoStream.FlushFinalBlockAsync().ConfigureAwait(false);
         }
 
         return Convert.ToBase64String(memoryStream.ToArray());
@@ -72,7 +70,7 @@ public class MilvaCryptographyProvider(IMilvaCryptographyOptions milvaCryptograp
         {
             var initializationVector = new byte[16];
 
-            await memoryStream.ReadAsync(initializationVector.AsMemory(0, initializationVector.Length));
+            await memoryStream.ReadAsync(initializationVector.AsMemory(0, initializationVector.Length)).ConfigureAwait(false);
 
             using var aesProvider = CreateCryptographyProvider();
 
@@ -82,7 +80,7 @@ public class MilvaCryptographyProvider(IMilvaCryptographyOptions milvaCryptograp
 
             using var reader = new StreamReader(cryptoStream);
 
-            outputValue = (await reader.ReadToEndAsync()).Trim('\0');
+            outputValue = (await reader.ReadToEndAsync().ConfigureAwait(false)).Trim('\0');
         }
 
         return outputValue;
@@ -95,11 +93,11 @@ public class MilvaCryptographyProvider(IMilvaCryptographyOptions milvaCryptograp
     /// <param name="filePath"></param>
     public async Task EncryptFileAsync(string filePath)
     {
-        var inputValue = await File.ReadAllTextAsync(filePath);
+        var inputValue = await File.ReadAllTextAsync(filePath).ConfigureAwait(false);
 
-        var encryptedContent = await EncryptAsync(inputValue);
+        var encryptedContent = await EncryptAsync(inputValue).ConfigureAwait(false);
 
-        await File.WriteAllTextAsync(filePath, encryptedContent, Encoding.UTF8);
+        await File.WriteAllTextAsync(filePath, encryptedContent, Encoding.UTF8).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -110,11 +108,11 @@ public class MilvaCryptographyProvider(IMilvaCryptographyOptions milvaCryptograp
     /// <param name="encoding"> e.g. <see cref="Encoding.UTF8"/></param>
     public async Task EncryptFileAsync(string filePath, Encoding encoding)
     {
-        var inputValue = await File.ReadAllTextAsync(filePath);
+        var inputValue = await File.ReadAllTextAsync(filePath).ConfigureAwait(false);
 
-        var encryptedContent = await EncryptAsync(inputValue);
+        var encryptedContent = await EncryptAsync(inputValue).ConfigureAwait(false);
 
-        await File.WriteAllTextAsync(filePath, encryptedContent, encoding);
+        await File.WriteAllTextAsync(filePath, encryptedContent, encoding).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -124,11 +122,11 @@ public class MilvaCryptographyProvider(IMilvaCryptographyOptions milvaCryptograp
     /// <param name="filePath"></param>
     public async Task DecryptFileAsync(string filePath)
     {
-        var inputValue = await File.ReadAllTextAsync(filePath);
+        var inputValue = await File.ReadAllTextAsync(filePath).ConfigureAwait(false);
 
-        var decryptedContent = await DecryptAsync(inputValue);
+        var decryptedContent = await DecryptAsync(inputValue).ConfigureAwait(false);
 
-        await File.WriteAllTextAsync(filePath, decryptedContent, Encoding.UTF8);
+        await File.WriteAllTextAsync(filePath, decryptedContent, Encoding.UTF8).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -139,11 +137,11 @@ public class MilvaCryptographyProvider(IMilvaCryptographyOptions milvaCryptograp
     /// <param name="encoding"> e.g. <see cref="Encoding.UTF8"/></param>
     public async Task DecryptFileAsync(string filePath, Encoding encoding)
     {
-        var inputValue = await File.ReadAllTextAsync(filePath);
+        var inputValue = await File.ReadAllTextAsync(filePath).ConfigureAwait(false);
 
-        var decryptedContent = await DecryptAsync(inputValue);
+        var decryptedContent = await DecryptAsync(inputValue).ConfigureAwait(false);
 
-        await File.WriteAllTextAsync(filePath, decryptedContent, encoding);
+        await File.WriteAllTextAsync(filePath, decryptedContent, encoding).ConfigureAwait(false);
     }
 
     #endregion

@@ -1,5 +1,4 @@
-﻿using Fody;
-using StackExchange.Redis;
+﻿using StackExchange.Redis;
 using System.Text.Json;
 
 namespace Milvasoft.Caching.Redis;
@@ -7,7 +6,6 @@ namespace Milvasoft.Caching.Redis;
 /// <summary>
 /// Provides redis cache operations. Redis connection multiplexer must be singleton.
 /// </summary>
-[ConfigureAwait(false)]
 public partial class RedisAccessor
 {
     /// <summary>
@@ -17,7 +15,7 @@ public partial class RedisAccessor
     public async ValueTask<bool> ConnectAsync()
     {
         if (!IsConnected())
-            _client = await ConnectionMultiplexer.ConnectAsync(_options);
+            _client = await ConnectionMultiplexer.ConnectAsync(_options).ConfigureAwait(false);
         return IsConnected();
     }
 
@@ -32,7 +30,7 @@ public partial class RedisAccessor
     {
         if (_client != null && IsConnected())
         {
-            await _client.CloseAsync();
+            await _client.CloseAsync().ConfigureAwait(false);
         }
         else if (_client != null && !IsConnected())
         {
@@ -64,7 +62,7 @@ public partial class RedisAccessor
     /// <param name="key"></param>
     /// <returns></returns>
     public async Task<string> GetAsync(string key)
-        => await _database.StringGetAsync(key);
+        => await _database.StringGetAsync(key).ConfigureAwait(false);
 
     /// <summary>
     /// Gets <paramref name="keys"/> values.
@@ -79,7 +77,7 @@ public partial class RedisAccessor
 
         var redisKeys = Array.ConvertAll(keys.ToArray(), item => (RedisKey)item);
 
-        var values = await _database.StringGetAsync(redisKeys);
+        var values = await _database.StringGetAsync(redisKeys).ConfigureAwait(false);
 
         if (values.IsNullOrEmpty())
             return null;
@@ -110,7 +108,7 @@ public partial class RedisAccessor
 
         var redisKeys = Array.ConvertAll(keys.ToArray(), item => (RedisKey)item);
 
-        var values = await _database.StringGetAsync(redisKeys);
+        var values = await _database.StringGetAsync(redisKeys).ConfigureAwait(false);
 
         if (values.IsNullOrEmpty())
             return null;
@@ -125,7 +123,7 @@ public partial class RedisAccessor
     /// <param name="value"></param>
     /// <returns></returns>
     public async Task<bool> SetAsync(string key, object value)
-        => await _database.StringSetAsync(key, value.ToJson());
+        => await _database.StringSetAsync(key, value.ToJson()).ConfigureAwait(false);
 
     /// <summary>
     /// Sets <paramref name="value"/> to <paramref name="key"/> with <paramref name="expiration"/>.
@@ -137,9 +135,9 @@ public partial class RedisAccessor
     public async Task<bool> SetAsync(string key, object value, TimeSpan? expiration)
     {
         if (expiration.HasValue)
-            return await _database.StringSetAsync(key, value.ToJson(), _useUtcForDateTimes ? expiration.Value.ConvertToUtc() : expiration);
+            return await _database.StringSetAsync(key, value.ToJson(), _useUtcForDateTimes ? expiration.Value.ConvertToUtc() : expiration).ConfigureAwait(false);
         else
-            return await _database.StringSetAsync(key, value.ToJson());
+            return await _database.StringSetAsync(key, value.ToJson()).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -148,28 +146,28 @@ public partial class RedisAccessor
     /// <param name="values"></param>
     /// <returns></returns>
     public async Task<bool> SetAsync(KeyValuePair<RedisKey, RedisValue>[] values)
-        => await _database.StringSetAsync(values);
+        => await _database.StringSetAsync(values).ConfigureAwait(false);
 
     /// <summary>
     /// Removes <paramref name="key"/> and value.
     /// </summary>
     /// <param name="key"></param>
     public async Task<bool> RemoveAsync(string key)
-        => await _database.KeyDeleteAsync(key);
+        => await _database.KeyDeleteAsync(key).ConfigureAwait(false);
 
     /// <summary>
     /// Removes <paramref name="keys"/> and value.
     /// </summary>
     /// <param name="keys"></param>
     public async Task<long> RemoveAsync(IEnumerable<string> keys)
-        => await _database.KeyDeleteAsync(keys: keys.Select(i => new RedisKey(i)).ToArray());
+        => await _database.KeyDeleteAsync(keys: keys.Select(i => new RedisKey(i)).ToArray()).ConfigureAwait(false);
 
     /// <summary>
     /// Checks if there is a <paramref name="key"/> in database. 
     /// </summary>
     /// <param name="key"></param>
     public async Task<bool> KeyExistsAsync(string key)
-        => await _database.KeyExistsAsync(key);
+        => await _database.KeyExistsAsync(key).ConfigureAwait(false);
 
     /// <summary>
     /// Sets timeout on <paramref name="key"/>.
@@ -178,7 +176,7 @@ public partial class RedisAccessor
     /// <param name="expiration"></param>
     /// <returns></returns>
     public async Task<bool> KeyExpireAsync(string key, TimeSpan expiration)
-        => await _database.KeyExpireAsync(key, _useUtcForDateTimes ? expiration.ConvertToUtc() : expiration);
+        => await _database.KeyExpireAsync(key, _useUtcForDateTimes ? expiration.ConvertToUtc() : expiration).ConfigureAwait(false);
 
     /// <summary>
     /// Sets timeout on <paramref name="key"/>.
@@ -187,7 +185,7 @@ public partial class RedisAccessor
     /// <param name="expiration"></param>
     /// <returns></returns>
     public async Task<bool> KeyExpireAsync(string key, DateTime? expiration)
-        => await _database.KeyExpireAsync(key, expiration);
+        => await _database.KeyExpireAsync(key, expiration).ConfigureAwait(false);
 
     /// <summary>
     /// Flushs default database.
@@ -197,14 +195,14 @@ public partial class RedisAccessor
     {
         _options.AllowAdmin = true;
 
-        await DisconnectAsync();
+        await DisconnectAsync().ConfigureAwait(false);
 
-        var client = await ConnectionMultiplexer.ConnectAsync(_options);
+        var client = await ConnectionMultiplexer.ConnectAsync(_options).ConfigureAwait(false);
 
         try
         {
             if (client?.IsConnected ?? false)
-                await client.GetServer(client.GetEndPoints().FirstOrDefault()).FlushDatabaseAsync();
+                await client.GetServer(client.GetEndPoints().FirstOrDefault()).FlushDatabaseAsync().ConfigureAwait(false);
 
             _options.AllowAdmin = false;
         }
@@ -227,11 +225,11 @@ public partial class RedisAccessor
     {
         try
         {
-            await CheckClientAndConnectIfNotAsync();
+            await CheckClientAndConnectIfNotAsync().ConfigureAwait(false);
 
             if (IsConnected())
             {
-                await action();
+                await action().ConfigureAwait(false);
             }
             else
                 throw new MilvaUserFriendlyException(userFriendlyMessageLocalizerKey);
@@ -257,11 +255,11 @@ public partial class RedisAccessor
     {
         try
         {
-            await CheckClientAndConnectIfNotAsync();
+            await CheckClientAndConnectIfNotAsync().ConfigureAwait(false);
 
             if (IsConnected())
             {
-                return await action();
+                return await action().ConfigureAwait(false);
             }
             else
                 throw new MilvaUserFriendlyException(userFriendlyMessageLocalizerKey);
@@ -282,13 +280,13 @@ public partial class RedisAccessor
     {
         if (_client == null)
         {
-            _client = await ConnectionMultiplexer.ConnectAsync(_options);
+            _client = await ConnectionMultiplexer.ConnectAsync(_options).ConfigureAwait(false);
             _database = _client.GetDatabase();
         }
         else if (!_client.IsConnected)
         {
-            await _client.CloseAsync();
-            _client = await ConnectionMultiplexer.ConnectAsync(_options);
+            await _client.CloseAsync().ConfigureAwait(false);
+            _client = await ConnectionMultiplexer.ConnectAsync(_options).ConfigureAwait(false);
             _database = _client.GetDatabase();
         }
     }

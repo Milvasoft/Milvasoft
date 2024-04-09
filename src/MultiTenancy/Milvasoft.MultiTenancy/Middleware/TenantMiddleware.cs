@@ -1,5 +1,4 @@
-﻿using Fody;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Milvasoft.Core.EntityBases.MultiTenancy;
 using Milvasoft.MultiTenancy.Service;
 using Milvasoft.MultiTenancy.Utils;
@@ -15,7 +14,6 @@ namespace Milvasoft.MultiTenancy.Middleware;
 /// Initializes new instance of <see cref="TenantMiddleware{TTenant, TKey}"/>
 /// </remarks>
 /// <param name="next"></param>
-[ConfigureAwait(false)]
 public class TenantMiddleware<TTenant, TKey>(RequestDelegate next)
 where TTenant : class, IMilvaTenantBase<TKey>
 where TKey : struct, IEquatable<TKey>

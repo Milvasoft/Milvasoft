@@ -1,5 +1,4 @@
 ﻿using Cronos;
-using Fody;
 using Microsoft.Extensions.Hosting;
 
 namespace Milvasoft.JobScheduling;
@@ -11,7 +10,6 @@ namespace Milvasoft.JobScheduling;
 /// Initializes new instances of <see cref="MilvaCronJobService"/>
 /// </remarks>
 /// <param name="scheduleConfig"></param>
-[ConfigureAwait(false)]
 public abstract class MilvaCronJobService(IScheduleConfig scheduleConfig) : IHostedService, IDisposable
 {
     private bool _disposedValue;

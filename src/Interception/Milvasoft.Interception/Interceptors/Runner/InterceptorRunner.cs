@@ -1,5 +1,4 @@
-﻿using Fody;
-using Milvasoft.Interception.Interceptors.Logging;
+﻿using Milvasoft.Interception.Interceptors.Logging;
 using System.Linq.Expressions;
 
 namespace Milvasoft.Interception.Interceptors.Runner;
@@ -9,7 +8,6 @@ namespace Milvasoft.Interception.Interceptors.Runner;
 /// This abstraction allows milva interceptors to intercept these methods.
 /// You can write your own runner with implement <see cref="IInterceptorRunner"/> interface.
 /// </summary>
-[ConfigureAwait(false)]
 public class InterceptorRunner : IInterceptorRunner
 {
     [LogRunner]

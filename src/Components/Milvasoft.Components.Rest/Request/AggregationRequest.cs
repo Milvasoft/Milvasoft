@@ -29,7 +29,7 @@ public class AggregationRequest
 
         foreach (var criteria in Criterias)
         {
-            var res = await criteria.ApplyAggregationAsync(query, runAsync, cancellationToken).ConfigureAwait(false);
+            var res = await criteria.ApplyAggregationAsync(query, runAsync, cancellationToken);
 
             result.Add(res);
         }
