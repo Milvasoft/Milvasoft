@@ -107,6 +107,11 @@ public class FilterRequestTests
                 IsActive = true,
                 InsertDate = DateTime.Now,
                 UpdateDate = DateTime.Now.AddDays(1),
+                Children = new()
+                {
+                    Name = "Jack"
+                },
+                Childrens = []
             },
             new() {
                 Id = 2,
@@ -117,6 +122,21 @@ public class FilterRequestTests
                 IsActive = false,
                 InsertDate = DateTime.Now.AddDays(4),
                 UpdateDate = DateTime.Now.AddDays(3),
+                Children = new()
+                {
+                    Name = "John"
+                },
+                Childrens =
+                [
+                    new()
+                    {
+                        Name = "John"
+                    },
+                    new()
+                    {
+                        Name = "Jack"
+                    }
+                ]
             },
             new() {
                 Id = 3,
@@ -126,7 +146,8 @@ public class FilterRequestTests
                 Number = RestTestEnumFixture.Zero,
                 IsActive = false,
                 InsertDate = DateTime.Now,
-                UpdateDate = null
+                UpdateDate = null,
+                Childrens = []
             },
             new() {
                 Id = 4,
@@ -136,7 +157,15 @@ public class FilterRequestTests
                 Number = RestTestEnumFixture.One,
                 IsActive = true,
                 InsertDate = DateTime.Now,
-                UpdateDate = null
+                UpdateDate = null,
+                Childrens =
+                [
+                    new()
+                    {
+
+                        Name = "Elise"
+                    }
+                ]
             },
             new() {
                 Id = 5,
@@ -146,10 +175,12 @@ public class FilterRequestTests
                 Number = RestTestEnumFixture.Zero,
                 IsActive = null,
                 InsertDate = DateTime.Now.AddMonths(-5),
-                UpdateDate = null
+                UpdateDate = null,
+                Childrens = []
             },
         }.AsQueryable();
 
+        //1
         yield return new object[]
         {
             validQueryable,
@@ -157,6 +188,7 @@ public class FilterRequestTests
             new List<int> { 5 }
         };
 
+        //2
         yield return new object[]
         {
             validQueryable,
@@ -164,6 +196,7 @@ public class FilterRequestTests
             new List<int> { 1, 3 }
         };
 
+        //3
         yield return new object[]
         {
             validQueryable,
@@ -171,6 +204,7 @@ public class FilterRequestTests
             new List<int> { 1, 3 }
         };
 
+        //4
         yield return new object[]
         {
             validQueryable,
@@ -178,6 +212,7 @@ public class FilterRequestTests
             new List<int> { 4 }
         };
 
+        //5
         yield return new object[]
         {
             validQueryable,
@@ -185,6 +220,7 @@ public class FilterRequestTests
             new List<int> { 3, 4, 5 }
         };
 
+        //6
         yield return new object[]
         {
             validQueryable,
@@ -192,6 +228,7 @@ public class FilterRequestTests
             new List<int> { 3 }
         };
 
+        //7
         yield return new object[]
         {
             validQueryable,
@@ -199,6 +236,7 @@ public class FilterRequestTests
             new List<int> { 1 , 4 }
         };
 
+        //8
         yield return new object[]
         {
             validQueryable,
@@ -206,6 +244,7 @@ public class FilterRequestTests
             new List<int> { 2, 3 }
         };
 
+        //9
         yield return new object[]
         {
             validQueryable,
@@ -213,6 +252,7 @@ public class FilterRequestTests
             new List<int> { 1, 3, 4 }
         };
 
+        //10
         yield return new object[]
         {
             validQueryable,
@@ -220,6 +260,7 @@ public class FilterRequestTests
             new List<int> { 1 }
         };
 
+        //11
         yield return new object[]
         {
             validQueryable,
@@ -227,6 +268,7 @@ public class FilterRequestTests
             new List<int> { 3 , 4 , 5}
         };
 
+        //12
         yield return new object[]
         {
             validQueryable,
@@ -234,6 +276,7 @@ public class FilterRequestTests
             new List<int> { 5 }
         };
 
+        //13
         yield return new object[]
         {
             validQueryable,
@@ -241,13 +284,31 @@ public class FilterRequestTests
             new List<int> { 5 }
         };
 
+        //14
         yield return new object[]
         {
             validQueryable,
-            new FilterRequest{  Criterias = [ new FilterCriteria{ FilterBy = nameof(RestTestEntityFixture.Number), Type = FilterType.GreaterThanOrEqualTo, Value = RestTestEnumFixture.One }]},
-            new List<int> { 1, 2, 3, 4, 5 }
+            new FilterRequest{  Criterias = [ new FilterCriteria{ FilterBy = nameof(RestTestEntityFixture.Number), Type = FilterType.EqualTo, Value = RestTestEnumFixture.Two }]},
+            new List<int> { 1 }
         };
 
+        //15
+        yield return new object[]
+        {
+            validQueryable,
+            new FilterRequest{  Criterias = [ new FilterCriteria{ FilterBy = $"{nameof(RestTestEntityFixture.Children)}.Name", Type = FilterType.EqualTo, Value = "Jack" }]},
+            new List<int> { 1 }
+        };
+
+        //16
+        yield return new object[]
+        {
+            validQueryable,
+            new FilterRequest{  Criterias = [ new FilterCriteria{ FilterBy = $"{nameof(RestTestEntityFixture.Childrens)}[Name]", Type = FilterType.EqualTo, Value = "John" }]},
+            new List<int> { 2 }
+        };
+
+        //17
         yield return new object[]
         {
             validQueryable,
@@ -273,6 +334,7 @@ public class FilterRequestTests
             new List<int> { 4 }
         };
 
+        //18
         yield return new object[]
         {
             validQueryable,
