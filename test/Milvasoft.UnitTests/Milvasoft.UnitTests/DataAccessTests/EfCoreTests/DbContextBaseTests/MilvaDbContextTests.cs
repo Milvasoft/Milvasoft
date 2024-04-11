@@ -296,7 +296,6 @@ public class MilvaDbContextTests
         var services = GetServices(dataAccessConfiguration);
         var dbContext = services.GetService<SomeMilvaDbContextFixture>();
         ResetDatabase(dbContext);
-        var now = DateTime.Now;
         var entities = new List<SomeBaseEntityFixture>
         {
              new() {
