@@ -49,22 +49,12 @@
             Current user id getter method for auditing operations.
             </summary>
         </member>
-        <member name="P:Milvasoft.DataAccess.EfCore.Configuration.DataAccessPostConfigureConfiguration.GetCurrentLanguageIdMethod">
-            <summary>
-            Current language id getter method for multi language operations.
-            </summary>
-        </member>
-        <member name="P:Milvasoft.DataAccess.EfCore.Configuration.DataAccessPostConfigureConfiguration.GetDefaultLanguageIdMethod">
-            <summary>
-            Current language id getter method for multi language operations.
-            </summary>
-        </member>
         <member name="T:Milvasoft.DataAccess.EfCore.Configuration.DbContextConfiguration">
             <summary>
             IOptions aware custom MilvaDbContext configurations.
             </summary>
         </member>
-        <member name="P:Milvasoft.DataAccess.EfCore.Configuration.DbContextConfiguration.UseUtcForDateTimes">
+        <member name="P:Milvasoft.DataAccess.EfCore.Configuration.DbContextConfiguration.UseUtcForDateTime">
             <summary>
             If it is true converts all saved DateTimes to UTC. Default value is false.
             </summary>
@@ -96,12 +86,12 @@
         </member>
         <member name="P:Milvasoft.DataAccess.EfCore.Configuration.DynamicFetchConfiguration.EntityAssemblyName">
             <summary>
-            Entity assembly for <see cref="M:Milvasoft.DataAccess.EfCore.DbContextBase.MilvaDbContextBase.GetLookupsAsync(Milvasoft.DataAccess.EfCore.Utils.LookupModels.LookupRequest)"/> operations.
+            Entity assembly for <see cref="M:Milvasoft.DataAccess.EfCore.DbContextBase.MilvaDbContext.GetLookupsAsync(Milvasoft.DataAccess.EfCore.Utils.LookupModels.LookupRequest)"/> operations.
             </summary>
         </member>
         <member name="P:Milvasoft.DataAccess.EfCore.Configuration.DynamicFetchConfiguration.AllowedEntityNamesForLookup">
             <summary>
-            Allowed entity names for <see cref="M:Milvasoft.DataAccess.EfCore.DbContextBase.MilvaDbContextBase.GetLookupsAsync(Milvasoft.DataAccess.EfCore.Utils.LookupModels.LookupRequest)"/> operations.
+            Allowed entity names for <see cref="M:Milvasoft.DataAccess.EfCore.DbContextBase.MilvaDbContext.GetLookupsAsync(Milvasoft.DataAccess.EfCore.Utils.LookupModels.LookupRequest)"/> operations.
             </summary>
         </member>
         <member name="P:Milvasoft.DataAccess.EfCore.Configuration.DynamicFetchConfiguration.MaxAllowedPropertyCountForLookup">
@@ -155,51 +145,51 @@
             Soft delete state reset after every operation. Default value is true.
             </summary>
         </member>
-        <member name="T:Milvasoft.DataAccess.EfCore.DbContextBase.MilvaDbContextBase">
+        <member name="T:Milvasoft.DataAccess.EfCore.DbContextBase.MilvaDbContext">
             <summary>
             Handles all database operations with new features like soft deletion.
             </summary>
             <param name="options"></param>
         </member>
-        <member name="M:Milvasoft.DataAccess.EfCore.DbContextBase.MilvaDbContextBase.#ctor(Microsoft.EntityFrameworkCore.DbContextOptions)">
+        <member name="M:Milvasoft.DataAccess.EfCore.DbContextBase.MilvaDbContext.#ctor(Microsoft.EntityFrameworkCore.DbContextOptions)">
             <summary>
             Handles all database operations with new features like soft deletion.
             </summary>
             <param name="options"></param>
         </member>
-        <member name="P:Milvasoft.DataAccess.EfCore.DbContextBase.MilvaDbContextBase.ServiceProvider">
+        <member name="P:Milvasoft.DataAccess.EfCore.DbContextBase.MilvaDbContext.ServiceProvider">
             <summary>
             Service provider for access DI contaniner in DbContext.
             </summary>
         </member>
-        <member name="F:Milvasoft.DataAccess.EfCore.DbContextBase.MilvaDbContextBase._dbContextConfiguration">
+        <member name="F:Milvasoft.DataAccess.EfCore.DbContextBase.MilvaDbContext._dbContextConfiguration">
             <summary>
             Milva specific db context configuration.
             </summary>
         </member>
-        <member name="F:Milvasoft.DataAccess.EfCore.DbContextBase.MilvaDbContextBase._currentSoftDeleteState">
+        <member name="F:Milvasoft.DataAccess.EfCore.DbContextBase.MilvaDbContext._currentSoftDeleteState">
             <summary>
             Default prop for soft delete.
             </summary>
         </member>
-        <member name="F:Milvasoft.DataAccess.EfCore.DbContextBase.MilvaDbContextBase._useUtcForDateTimes">
+        <member name="F:Milvasoft.DataAccess.EfCore.DbContextBase.MilvaDbContext._useUtcForDateTimes">
             <summary>
             Default prop for datetime configuration.
             </summary>
         </member>
-        <member name="F:Milvasoft.DataAccess.EfCore.DbContextBase.MilvaDbContextBase._resetSoftDeleteStateAfterEveryOperation">
+        <member name="F:Milvasoft.DataAccess.EfCore.DbContextBase.MilvaDbContext._resetSoftDeleteStateAfterEveryOperation">
             <summary>
             It updates the state that determines whether soft delete state reset to default occurs after any operation.
             </summary>
         </member>
-        <member name="M:Milvasoft.DataAccess.EfCore.DbContextBase.MilvaDbContextBase.#ctor(Microsoft.EntityFrameworkCore.DbContextOptions,Milvasoft.DataAccess.EfCore.Configuration.DataAccessConfiguration)">
+        <member name="M:Milvasoft.DataAccess.EfCore.DbContextBase.MilvaDbContext.#ctor(Microsoft.EntityFrameworkCore.DbContextOptions,Milvasoft.DataAccess.EfCore.Configuration.IDataAccessConfiguration)">
             <summary>
             Initializes new instance.
             </summary>
             <param name="options"></param>
             <param name="dbContextConfiguration"></param>
         </member>
-        <member name="M:Milvasoft.DataAccess.EfCore.DbContextBase.MilvaDbContextBase.#ctor(Microsoft.EntityFrameworkCore.DbContextOptions,Milvasoft.DataAccess.EfCore.Configuration.DataAccessConfiguration,System.IServiceProvider)">
+        <member name="M:Milvasoft.DataAccess.EfCore.DbContextBase.MilvaDbContext.#ctor(Microsoft.EntityFrameworkCore.DbContextOptions,Milvasoft.DataAccess.EfCore.Configuration.IDataAccessConfiguration,System.IServiceProvider)">
             <summary>
             Initializes new instance.
             </summary>
@@ -207,65 +197,60 @@
             <param name="dbContextConfiguration"></param>
             <param name="serviceProvider"></param>
         </member>
-        <member name="M:Milvasoft.DataAccess.EfCore.DbContextBase.MilvaDbContextBase.OnModelCreating(Microsoft.EntityFrameworkCore.ModelBuilder)">
+        <member name="M:Milvasoft.DataAccess.EfCore.DbContextBase.MilvaDbContext.OnModelCreating(Microsoft.EntityFrameworkCore.ModelBuilder)">
             <summary>
             Overrided the OnModelCreating for custom configurations to database.
             </summary>
             <param name="modelBuilder"></param>
         </member>
-        <member name="M:Milvasoft.DataAccess.EfCore.DbContextBase.MilvaDbContextBase.SetDataAccessConfiguration(Milvasoft.DataAccess.EfCore.Configuration.IDataAccessConfiguration)">
+        <member name="M:Milvasoft.DataAccess.EfCore.DbContextBase.MilvaDbContext.SetDataAccessConfiguration(Milvasoft.DataAccess.EfCore.Configuration.IDataAccessConfiguration)">
             <summary>
             Sets milva db context specific configuration.
             </summary>
             <param name="dbContextConfiguration"></param>
         </member>
-        <member name="M:Milvasoft.DataAccess.EfCore.DbContextBase.MilvaDbContextBase.GetDataAccessConfiguration">
+        <member name="M:Milvasoft.DataAccess.EfCore.DbContextBase.MilvaDbContext.GetDataAccessConfiguration">
             <summary>
             Gets milva db context configuration object.
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.DataAccess.EfCore.DbContextBase.MilvaDbContextBase.IgnoreSoftDeleteForNextProcess">
-            <summary>
-            Ignores soft delete for next process.
-            </summary>
-        </member>
-        <member name="M:Milvasoft.DataAccess.EfCore.DbContextBase.MilvaDbContextBase.ActivateSoftDelete">
+        <member name="M:Milvasoft.DataAccess.EfCore.DbContextBase.MilvaDbContext.ChangeSoftDeletionState(Milvasoft.DataAccess.EfCore.Utils.Enums.SoftDeletionState)">
             <summary>
             Activate soft delete.
             </summary>
         </member>
-        <member name="M:Milvasoft.DataAccess.EfCore.DbContextBase.MilvaDbContextBase.SetSoftDeleteStateToDefault">
+        <member name="M:Milvasoft.DataAccess.EfCore.DbContextBase.MilvaDbContext.SetSoftDeletionStateToDefault">
             <summary>
             Sets soft deletion state to default state in <see cref="T:Milvasoft.DataAccess.EfCore.Configuration.DataAccessConfiguration"/>.
             </summary>
         </member>
-        <member name="M:Milvasoft.DataAccess.EfCore.DbContextBase.MilvaDbContextBase.SoftDeleteStateResetAfterOperation(System.Boolean)">
+        <member name="M:Milvasoft.DataAccess.EfCore.DbContextBase.MilvaDbContext.SoftDeletionStateResetAfterOperation(System.Boolean)">
             <summary>
             It updates the state that determines whether soft delete state reset to default occurs after any operation.
             </summary>
             <param name="state">Soft delete reset state.</param>
         </member>
-        <member name="M:Milvasoft.DataAccess.EfCore.DbContextBase.MilvaDbContextBase.GetCurrentSoftDeletionState">
+        <member name="M:Milvasoft.DataAccess.EfCore.DbContextBase.MilvaDbContext.GetCurrentSoftDeletionState">
             <summary>
             Gets current soft deletion state.
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.DataAccess.EfCore.DbContextBase.MilvaDbContextBase.SaveChanges">
+        <member name="M:Milvasoft.DataAccess.EfCore.DbContextBase.MilvaDbContext.SaveChanges">
             <summary>
             Overrided the SaveChanges method for soft deleting.
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.DataAccess.EfCore.DbContextBase.MilvaDbContextBase.SaveChangesAsync(System.Threading.CancellationToken)">
+        <member name="M:Milvasoft.DataAccess.EfCore.DbContextBase.MilvaDbContext.SaveChangesAsync(System.Threading.CancellationToken)">
             <summary>
             Overrided the SaveChangesAsync method for soft deleting.
             </summary>
             <param name="cancellationToken"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.DataAccess.EfCore.DbContextBase.MilvaDbContextBase.SaveChangesBulk(EFCore.BulkExtensions.BulkConfig,System.Threading.CancellationToken)">
+        <member name="M:Milvasoft.DataAccess.EfCore.DbContextBase.MilvaDbContext.SaveChangesBulk(EFCore.BulkExtensions.BulkConfig,System.Threading.CancellationToken)">
             <summary>
             Overrided the BulkSaveChanges method for soft deleting.
             </summary>
@@ -273,7 +258,7 @@
             <param name="cancellationToken"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.DataAccess.EfCore.DbContextBase.MilvaDbContextBase.SaveChangesBulkAsync(EFCore.BulkExtensions.BulkConfig,System.Threading.CancellationToken)">
+        <member name="M:Milvasoft.DataAccess.EfCore.DbContextBase.MilvaDbContext.SaveChangesBulkAsync(EFCore.BulkExtensions.BulkConfig,System.Threading.CancellationToken)">
             <summary>
             Overrided the BulkSaveChangesAsync method for soft deleting.
             </summary>
@@ -281,25 +266,25 @@
             <param name="cancellationToken"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.DataAccess.EfCore.DbContextBase.MilvaDbContextBase.AuditEntites">
+        <member name="M:Milvasoft.DataAccess.EfCore.DbContextBase.MilvaDbContext.AuditEntites">
             <summary>
             Provides auditing entities by AuditConfiguration.
             If deletion process happens then sets the IgnoreSoftDelete variable to true at the end of process.
             </summary>
         </member>
-        <member name="M:Milvasoft.DataAccess.EfCore.DbContextBase.MilvaDbContextBase.SoftDelete(Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry)">
+        <member name="M:Milvasoft.DataAccess.EfCore.DbContextBase.MilvaDbContext.SoftDelete(Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry)">
             <summary>
             Soft delete operation.
             </summary>
             <param name="entry"></param>
         </member>
-        <member name="M:Milvasoft.DataAccess.EfCore.DbContextBase.MilvaDbContextBase.AuditDeletion(Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry)">
+        <member name="M:Milvasoft.DataAccess.EfCore.DbContextBase.MilvaDbContext.AuditDeletion(Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry)">
             <summary>
             Entity auditing for delete. 
             </summary>
             <param name="entry"></param>
         </member>
-        <member name="M:Milvasoft.DataAccess.EfCore.DbContextBase.MilvaDbContextBase.AuditDate(Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry,System.String,System.Boolean)">
+        <member name="M:Milvasoft.DataAccess.EfCore.DbContextBase.MilvaDbContext.AuditDate(Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry,System.String,System.Boolean)">
             <summary>
             Entity auditing by date. 
             </summary>
@@ -307,7 +292,7 @@
             <param name="propertyName"></param>
             <param name="audit"></param>
         </member>
-        <member name="M:Milvasoft.DataAccess.EfCore.DbContextBase.MilvaDbContextBase.AuditPerformerUser(Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry,System.String,System.Boolean)">
+        <member name="M:Milvasoft.DataAccess.EfCore.DbContextBase.MilvaDbContext.AuditPerformerUser(Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry,System.String,System.Boolean)">
             <summary>
             Entity auditing by performer user.
             </summary>
@@ -315,38 +300,21 @@
             <param name="propertyName"></param>
             <param name="audit"></param>
         </member>
-        <member name="M:Milvasoft.DataAccess.EfCore.DbContextBase.MilvaDbContextBase.GetRequiredContentsDynamicallyAsync(System.Type)">
-            <summary>
-            Gets requested contents by <paramref name="type"/> DbSet.
-            If this method gets soft deleted entities please override <see cref="M:Milvasoft.Core.Helpers.CommonHelper.CreateIsDeletedFalseExpression``1"/> method your own condition.
-            </summary>
-            <param name="type"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Milvasoft.DataAccess.EfCore.DbContextBase.MilvaDbContextBase.GetRequiredContentsAsync``1(Milvasoft.Components.Rest.Request.FilterRequest,Milvasoft.Components.Rest.Request.SortRequest,System.Linq.Expressions.Expression{System.Func{``0,``0}})">
+        <member name="M:Milvasoft.DataAccess.EfCore.DbContextBase.MilvaDbContext.GetContentsAsync``1(Milvasoft.Components.Rest.Request.FilterRequest,Milvasoft.Components.Rest.Request.SortRequest,System.Linq.Expressions.Expression{System.Func{``0,``0}})">
             <summary>
             Gets requested contents by <typeparamref name="TEntity"/> DbSet.
             If this method gets soft deleted entities please override <see cref="M:Milvasoft.Core.Helpers.CommonHelper.CreateIsDeletedFalseExpression``1"/> method your own condition.
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.DataAccess.EfCore.DbContextBase.MilvaDbContextBase.GetMaxValueFromDbAsync``1(System.String)">
-            <summary>
-            Gets the requested <typeparamref name="TEntity"/>'s property's(<paramref name="propName"/>) max value.
-            If this method gets soft deleted entities please override <see cref="M:Milvasoft.Core.Helpers.CommonHelper.CreateIsDeletedFalseExpression``1"/> method your own condition.
-            </summary>
-            <typeparam name="TEntity"></typeparam>
-            <param name="propName"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Milvasoft.DataAccess.EfCore.DbContextBase.MilvaDbContextBase.GetLookupsAsync(Milvasoft.DataAccess.EfCore.Utils.LookupModels.LookupRequest)">
+        <member name="M:Milvasoft.DataAccess.EfCore.DbContextBase.MilvaDbContext.GetLookupsAsync(Milvasoft.DataAccess.EfCore.Utils.LookupModels.LookupRequest)">
             <summary>
             Gets the lookup data for the specified <paramref name="lookupRequest"/>.
             </summary>
             <param name="lookupRequest">The lookup request containing the parameters for the lookup.</param>
             <returns>A list of lookup results containing the requested data.</returns>
         </member>
-        <member name="M:Milvasoft.DataAccess.EfCore.DbContextBase.MilvaDbContextBase.GetSetPropertyBuilderFromDto``2(``1)">
+        <member name="M:Milvasoft.DataAccess.EfCore.DbContextBase.MilvaDbContext.GetSetPropertyBuilderFromDto``2(``1)">
             <summary>
             Gets <see cref="T:Milvasoft.DataAccess.EfCore.Utils.SetPropertyBuilder`1"/> for entity's matching properties with <paramref name="dto"/>'s updatable properties.
             </summary>
@@ -364,47 +332,13 @@
             
             If entity implements <see cref="T:Milvasoft.Core.EntityBases.Abstract.Auditing.IHasModificationDate"/>, <see cref="F:Milvasoft.Core.Utils.Constants.EntityPropertyNames.LastModificationDate"/> property call will be added automatically.
             If entity implements <see cref="T:Milvasoft.Core.EntityBases.Abstract.Auditing.IHasModifier"/>, <see cref="F:Milvasoft.Core.Utils.Constants.EntityPropertyNames.LastModifierUserName"/> property call will be added automatically.
-            If utc conversion requested in <see cref="P:Milvasoft.DataAccess.EfCore.Configuration.DbContextConfiguration.UseUtcForDateTimes"/>, <see cref="T:System.DateTime"/> typed property call will be added after converted to utc.
+            If utc conversion requested in <see cref="P:Milvasoft.DataAccess.EfCore.Configuration.DbContextConfiguration.UseUtcForDateTime"/>, <see cref="T:System.DateTime"/> typed property call will be added after converted to utc.
             
             </remarks>
-        </member>
-        <member name="T:Milvasoft.DataAccess.EfCore.DbContextBase.MilvaDbContext">
-            <summary>
-            Handles all database operations. Inherits <see cref="T:Milvasoft.DataAccess.EfCore.DbContextBase.MilvaDbContextBase"/>
-            </summary>
-            
-            <remarks>
-            <para> You must register <see cref="T:Milvasoft.DataAccess.EfCore.Configuration.IDataAccessConfiguration"/> in your application startup. </para>
-            <para> If <see cref="T:Milvasoft.DataAccess.EfCore.Configuration.IDataAccessConfiguration"/>'s AuditDeleter, AuditModifier or AuditCreator is true
-                   and HttpMethod is POST,PUT or DELETE it will gets performer user in constructor from database.
-                   This can affect performance little bit. But you want audit every record easily you must use this :( </para>
-            </remarks>
-            <remarks>
-            Initializes new instance.
-            </remarks>
-            <param name="options"></param>
-            <param name="dbContextConfiguration"></param>
-        </member>
-        <member name="M:Milvasoft.DataAccess.EfCore.DbContextBase.MilvaDbContext.#ctor(Microsoft.EntityFrameworkCore.DbContextOptions,Milvasoft.DataAccess.EfCore.Configuration.DataAccessConfiguration)">
-            <summary>
-            Handles all database operations. Inherits <see cref="T:Milvasoft.DataAccess.EfCore.DbContextBase.MilvaDbContextBase"/>
-            </summary>
-            
-            <remarks>
-            <para> You must register <see cref="T:Milvasoft.DataAccess.EfCore.Configuration.IDataAccessConfiguration"/> in your application startup. </para>
-            <para> If <see cref="T:Milvasoft.DataAccess.EfCore.Configuration.IDataAccessConfiguration"/>'s AuditDeleter, AuditModifier or AuditCreator is true
-                   and HttpMethod is POST,PUT or DELETE it will gets performer user in constructor from database.
-                   This can affect performance little bit. But you want audit every record easily you must use this :( </para>
-            </remarks>
-            <remarks>
-            Initializes new instance.
-            </remarks>
-            <param name="options"></param>
-            <param name="dbContextConfiguration"></param>
         </member>
         <member name="T:Milvasoft.DataAccess.EfCore.DbContextBase.MilvaPooledDbContext">
             <summary>
-            Handles all database operations. Inherits <see cref="T:Milvasoft.DataAccess.EfCore.DbContextBase.MilvaDbContextBase"/>
+            Handles all database operations. Inherits <see cref="T:Milvasoft.DataAccess.EfCore.DbContextBase.MilvaDbContext"/>
             </summary>
             
             <remarks>
@@ -416,7 +350,7 @@
         </member>
         <member name="M:Milvasoft.DataAccess.EfCore.DbContextBase.MilvaPooledDbContext.#ctor(Microsoft.EntityFrameworkCore.DbContextOptions)">
             <summary>
-            Handles all database operations. Inherits <see cref="T:Milvasoft.DataAccess.EfCore.DbContextBase.MilvaDbContextBase"/>
+            Handles all database operations. Inherits <see cref="T:Milvasoft.DataAccess.EfCore.DbContextBase.MilvaDbContext"/>
             </summary>
             
             <remarks>
@@ -1289,7 +1223,7 @@
             
             If entity implements <see cref="T:Milvasoft.Core.EntityBases.Abstract.Auditing.IHasModificationDate"/>, <see cref="F:Milvasoft.Core.Utils.Constants.EntityPropertyNames.LastModificationDate"/> property call will be added automatically.
             If entity implements <see cref="T:Milvasoft.Core.EntityBases.Abstract.Auditing.IHasModifier"/>, <see cref="F:Milvasoft.Core.Utils.Constants.EntityPropertyNames.LastModifierUserName"/> property call will be added automatically.
-            If utc conversion requested in <see cref="P:Milvasoft.DataAccess.EfCore.Configuration.DbContextConfiguration.UseUtcForDateTimes"/>, <see cref="T:System.DateTime"/> typed property call will be added after converted to utc.
+            If utc conversion requested in <see cref="P:Milvasoft.DataAccess.EfCore.Configuration.DbContextConfiguration.UseUtcForDateTime"/>, <see cref="T:System.DateTime"/> typed property call will be added after converted to utc.
             
             </remarks>
         </member>
@@ -2512,7 +2446,7 @@
             
             If entity implements <see cref="T:Milvasoft.Core.EntityBases.Abstract.Auditing.IHasModificationDate"/>, <see cref="F:Milvasoft.Core.Utils.Constants.EntityPropertyNames.LastModificationDate"/> property call will be added automatically.
             If entity implements <see cref="T:Milvasoft.Core.EntityBases.Abstract.Auditing.IHasModifier"/>, <see cref="F:Milvasoft.Core.Utils.Constants.EntityPropertyNames.LastModifierUserName"/> property call will be added automatically.
-            If utc conversion requested in <see cref="P:Milvasoft.DataAccess.EfCore.Configuration.DbContextConfiguration.UseUtcForDateTimes"/>, <see cref="T:System.DateTime"/> typed property call will be added after converted to utc.
+            If utc conversion requested in <see cref="P:Milvasoft.DataAccess.EfCore.Configuration.DbContextConfiguration.UseUtcForDateTime"/>, <see cref="T:System.DateTime"/> typed property call will be added after converted to utc.
             
             </remarks>
         </member>

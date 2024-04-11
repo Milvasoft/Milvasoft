@@ -24,7 +24,7 @@ public sealed class CacheBuilder(IServiceCollection services, IConfigurationMana
         where TCacheOptions : class, ICacheOptions<TCacheOptions>
     {
         Services.AddSingleton<ICacheOptions<TCacheOptions>>(options);
-        Services.AddScoped<ICacheAccessor<TAccessor>, TAccessor>();
+        Services.Add(ServiceDescriptor.Describe(typeof(ICacheAccessor<TAccessor>), typeof(TAccessor), options.AccessorLifetime));
 
         return this;
     }

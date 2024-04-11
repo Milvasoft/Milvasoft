@@ -973,7 +973,7 @@ public interface IBaseRepository<TEntity, TContext> where TEntity : IMilvaEntity
     /// 
     /// If entity implements <see cref="IHasModificationDate"/>, <see cref="EntityPropertyNames.LastModificationDate"/> property call will be added automatically.
     /// If entity implements <see cref="IHasModifier"/>, <see cref="EntityPropertyNames.LastModifierUserName"/> property call will be added automatically.
-    /// If utc conversion requested in <see cref="DbContextConfiguration.UseUtcForDateTimes"/>, <see cref="DateTime"/> typed property call will be added after converted to utc.
+    /// If utc conversion requested in <see cref="DbContextConfiguration.UseUtcForDateTime"/>, <see cref="DateTime"/> typed property call will be added after converted to utc.
     /// 
     /// </remarks>
     public SetPropertyBuilder<TEntity> GetSetPropertyBuilderFromDto<TDto>(TDto dto) where TDto : DtoBase;

@@ -304,6 +304,7 @@ public class AggregationCriteriaTests
             new AggregationCriteria { AggregateBy = nameof(RestTestEntityFixture.Number), Type = AggregationType.Sum}
         };
     }
+
     /// <summary>
     /// source , aggregation criteria, expected aggregation result
     /// </summary>

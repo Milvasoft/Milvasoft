@@ -9,6 +9,7 @@ using Milvasoft.Core.MultiLanguage.EntityBases.Abstract;
 using Milvasoft.Core.MultiLanguage.Manager;
 using Milvasoft.DataAccess.EfCore.RepositoryBase.Abstract;
 using Milvasoft.DataAccess.EfCore.Utils.LookupModels;
+using Milvasoft.Types.Structs;
 using System.Collections;
 using System.Linq.Expressions;
 using System.Reflection;
@@ -19,7 +20,7 @@ namespace Milvasoft.DataAccess.EfCore.DbContextBase;
 /// Handles all database operations with new features like soft deletion.
 /// </summary>
 /// <param name="options"></param>
-public abstract class MilvaDbContextBase(DbContextOptions options) : DbContext(options), IMilvaDbContextBase
+public abstract class MilvaDbContext(DbContextOptions options) : DbContext(options), IMilvaDbContextBase
 {
     private static readonly MethodInfo _createProjectionExpressionMethod = typeof(MultiLanguageExtensions).GetMethod(nameof(MultiLanguageExtensions.CreateProjectionExpression));
 
@@ -53,7 +54,7 @@ public abstract class MilvaDbContextBase(DbContextOptions options) : DbContext(o
     /// </summary>
     /// <param name="options"></param>
     /// <param name="dbContextConfiguration"></param>
-    protected MilvaDbContextBase(DbContextOptions options, DataAccessConfiguration dbContextConfiguration) : this(options)
+    protected MilvaDbContext(DbContextOptions options, IDataAccessConfiguration dbContextConfiguration) : this(options)
     {
         SetDataAccessConfiguration(dbContextConfiguration);
     }
@@ -64,7 +65,7 @@ public abstract class MilvaDbContextBase(DbContextOptions options) : DbContext(o
     /// <param name="options"></param>
     /// <param name="dbContextConfiguration"></param>
     /// <param name="serviceProvider"></param>
-    protected MilvaDbContextBase(DbContextOptions options, DataAccessConfiguration dbContextConfiguration, IServiceProvider serviceProvider) : this(options)
+    protected MilvaDbContext(DbContextOptions options, IDataAccessConfiguration dbContextConfiguration, IServiceProvider serviceProvider) : this(options)
     {
         SetDataAccessConfiguration(dbContextConfiguration);
         ServiceProvider = serviceProvider;
@@ -95,7 +96,7 @@ public abstract class MilvaDbContextBase(DbContextOptions options) : DbContext(o
         _dbContextConfiguration = dbContextConfiguration;
         _currentSoftDeleteState = dbContextConfiguration.DbContext.DefaultSoftDeletionState;
         _resetSoftDeleteStateAfterEveryOperation = dbContextConfiguration.DbContext.ResetSoftDeleteStateAfterEveryOperation;
-        _useUtcForDateTimes = dbContextConfiguration.DbContext.UseUtcForDateTimes;
+        _useUtcForDateTimes = dbContextConfiguration.DbContext.UseUtcForDateTime;
     }
 
     /// <summary>
@@ -105,25 +106,20 @@ public abstract class MilvaDbContextBase(DbContextOptions options) : DbContext(o
     public IDataAccessConfiguration GetDataAccessConfiguration() => _dbContextConfiguration;
 
     /// <summary>
-    /// Ignores soft delete for next process.
-    /// </summary>
-    public void IgnoreSoftDeleteForNextProcess() => _currentSoftDeleteState = SoftDeletionState.Passive;
-
-    /// <summary>
     /// Activate soft delete.
     /// </summary>
-    public void ActivateSoftDelete() => _currentSoftDeleteState = SoftDeletionState.Active;
+    public void ChangeSoftDeletionState(SoftDeletionState state) => _currentSoftDeleteState = state;
 
     /// <summary>
     /// Sets soft deletion state to default state in <see cref="DataAccessConfiguration"/>.
     /// </summary>
-    public void SetSoftDeleteStateToDefault() => _currentSoftDeleteState = _dbContextConfiguration.DbContext.DefaultSoftDeletionState;
+    public void SetSoftDeletionStateToDefault() => _currentSoftDeleteState = _dbContextConfiguration.DbContext.DefaultSoftDeletionState;
 
     /// <summary>
     /// It updates the state that determines whether soft delete state reset to default occurs after any operation.
     /// </summary>
     /// <param name="state">Soft delete reset state.</param>
-    public void SoftDeleteStateResetAfterOperation(bool state = true) => _resetSoftDeleteStateAfterEveryOperation = state;
+    public void SoftDeletionStateResetAfterOperation(bool state = true) => _resetSoftDeleteStateAfterEveryOperation = state;
 
     /// <summary>
     /// Gets current soft deletion state.
@@ -312,7 +308,7 @@ public abstract class MilvaDbContextBase(DbContextOptions options) : DbContext(o
         if (!audit)
             return;
 
-        var currentUserName = _dbContextConfiguration.DbContext.GetCurrentUserNameMethod.Invoke(ServiceProvider);
+        var currentUserName = _dbContextConfiguration.DbContext.GetCurrentUserNameMethod?.Invoke(ServiceProvider);
 
         if (!string.IsNullOrWhiteSpace(currentUserName) && entry.Metadata.GetProperties().Any(prop => prop.Name == propertyName))
         {
@@ -326,43 +322,11 @@ public abstract class MilvaDbContextBase(DbContextOptions options) : DbContext(o
     #region Dynamic Fetch
 
     /// <summary>
-    /// Gets requested contents by <paramref name="type"/> DbSet.
-    /// If this method gets soft deleted entities please override <see cref="CommonHelper.CreateIsDeletedFalseExpression{TEntity}"/> method your own condition.
-    /// </summary>
-    /// <param name="type"></param>
-    /// <returns></returns>
-    public async Task<object> GetRequiredContentsDynamicallyAsync(Type type)
-    {
-        var propName = MultiLanguageEntityPropertyNames.Translations;
-
-        if (!type.PropertyExists(propName))
-            throw new MilvaDeveloperException($"Type of {type}'s properties doesn't contain '{propName}'.");
-
-        var dbSet = GetType().GetMethod("Set").MakeGenericMethod(type).Invoke(this, null);
-
-        var whereMethods = typeof(EntityFrameworkQueryableExtensions).GetMethods(BindingFlags.Static | BindingFlags.Public)
-                                                                     .Where(mi => mi.Name == "ToListAsync");
-
-        MethodInfo whereMethod = whereMethods.FirstOrDefault()?.MakeGenericMethod(type);
-
-        if (whereMethod == null)
-            return null;
-
-        var ret = (Task)whereMethod.Invoke(dbSet, [dbSet, null]);
-
-        await ret;
-
-        var resultProperty = ret.GetType().GetProperty("Result");
-
-        return resultProperty.GetValue(ret);
-    }
-
-    /// <summary>
     /// Gets requested contents by <typeparamref name="TEntity"/> DbSet.
     /// If this method gets soft deleted entities please override <see cref="CommonHelper.CreateIsDeletedFalseExpression{TEntity}"/> method your own condition.
     /// </summary>
     /// <returns></returns>
-    public async Task<List<TEntity>> GetRequiredContentsAsync<TEntity>(FilterRequest filterRequest,
+    public async Task<List<TEntity>> GetContentsAsync<TEntity>(FilterRequest filterRequest,
                                                                        SortRequest sortRequest,
                                                                        Expression<Func<TEntity, TEntity>> projectionExpression = null) where TEntity : class
         => await Set<TEntity>().Where(CommonHelper.CreateIsDeletedFalseExpression<TEntity>() ?? (entity => true))
@@ -370,28 +334,7 @@ public abstract class MilvaDbContextBase(DbContextOptions options) : DbContext(o
                                .WithFiltering(filterRequest)
                                .WithSorting(sortRequest)
                                .Select(projectionExpression ?? (entity => entity))
-                               .ToListAsync()
-                               ;
-
-    /// <summary>
-    /// Gets the requested <typeparamref name="TEntity"/>'s property's(<paramref name="propName"/>) max value.
-    /// If this method gets soft deleted entities please override <see cref="CommonHelper.CreateIsDeletedFalseExpression{TEntity}"/> method your own condition.
-    /// </summary>
-    /// <typeparam name="TEntity"></typeparam>
-    /// <param name="propName"></param>
-    /// <returns></returns>
-    public async Task<decimal> GetMaxValueFromDbAsync<TEntity>(string propName) where TEntity : class
-    {
-        var entityType = typeof(TEntity);
-
-        entityType.ThrowIfPropertyNotExists(propName);
-
-        ParameterExpression parameterExpression = Expression.Parameter(entityType, "i");
-
-        var predicate = Expression.Lambda<Func<TEntity, decimal>>(Expression.Convert(Expression.Property(parameterExpression, propName), typeof(decimal)), parameterExpression);
-
-        return await Set<TEntity>().Where(CommonHelper.CreateIsDeletedFalseExpression<TEntity>() ?? (entity => true)).IncludeTranslations(this).MaxAsync(predicate);
-    }
+                               .ToListAsync();
 
     /// <summary>
     /// Gets the lookup data for the specified <paramref name="lookupRequest"/>.
@@ -409,7 +352,7 @@ public abstract class MilvaDbContextBase(DbContextOptions options) : DbContext(o
 
         var assemblyTypes = _dbContextConfiguration.DbContext.DynamicFetch.GetEntityAssembly().GetTypes();
 
-        var multiLanguageManager = ServiceProvider.GetService<IMultiLanguageManager>();
+        var multiLanguageManager = ServiceProvider?.GetService<IMultiLanguageManager>();
 
         foreach (var parameter in lookupRequest.Parameters)
         {
@@ -458,16 +401,16 @@ public abstract class MilvaDbContextBase(DbContextOptions options) : DbContext(o
             if (!mainEntityPropertyNames.IsNullOrEmpty())
                 propNamesForProjection.AddRange(mainEntityPropertyNames);
 
-            var projectionExpression = _createProjectionExpressionMethod.MakeGenericMethod(entityType, translationEntityType).Invoke(null,
-                                                                                                                                     [
-                                                                                                                                         propNamesForProjection,
-                                                                                                                                         translationEntityPropNames
-                                                                                                                                     ]);
+            var projectionExpression = _createProjectionExpressionMethod.MakeGenericMethod(entityType, translationEntityType ?? entityType).Invoke(null,
+                                                                                                                                                   [
+                                                                                                                                                       propNamesForProjection,
+                                                                                                                                                       translationEntityPropNames
+                                                                                                                                                   ]);
 
             parameter.UpdateFilterByForTranslationPropertyNames(translationEntityPropNames);
 
             var taskResult = (Task)this.GetType()
-                                       .GetMethod(nameof(GetRequiredContentsAsync))
+                                       .GetMethod(nameof(GetContentsAsync))
                                        .MakeGenericMethod(entityType)
                                        .Invoke(this,
                                        [
@@ -551,16 +494,11 @@ public abstract class MilvaDbContextBase(DbContextOptions options) : DbContext(o
                     || !_dbContextConfiguration.DbContext.DynamicFetch.AllowedEntityNamesForLookup.Contains(parameter.EntityName))
                     throw new MilvaUserFriendlyException(MilvaException.InvalidParameter);
 
-                HashSet<string> paramaters;
+                HashSet<string> paramaters = [.. parameter.RequestedPropertyNames];
 
-                if (!parameter.RequestedPropertyNames.IsNullOrEmpty())
-                {
-                    paramaters = [.. parameter.RequestedPropertyNames];
-
-                    //Aynı propertyName varsa hata fırlatıldı.
-                    if (paramaters.Count != parameter.RequestedPropertyNames.Count)
-                        throw new MilvaUserFriendlyException(MilvaException.InvalidParameter);
-                }
+                // Check for same property name.
+                if (paramaters.Count != parameter.RequestedPropertyNames.Count)
+                    throw new MilvaUserFriendlyException(MilvaException.InvalidParameter);
             }
         }
 
@@ -597,7 +535,7 @@ public abstract class MilvaDbContextBase(DbContextOptions options) : DbContext(o
     /// 
     /// If entity implements <see cref="IHasModificationDate"/>, <see cref="EntityPropertyNames.LastModificationDate"/> property call will be added automatically.
     /// If entity implements <see cref="IHasModifier"/>, <see cref="EntityPropertyNames.LastModifierUserName"/> property call will be added automatically.
-    /// If utc conversion requested in <see cref="DbContextConfiguration.UseUtcForDateTimes"/>, <see cref="DateTime"/> typed property call will be added after converted to utc.
+    /// If utc conversion requested in <see cref="DbContextConfiguration.UseUtcForDateTime"/>, <see cref="DateTime"/> typed property call will be added after converted to utc.
     /// 
     /// </remarks>
     public SetPropertyBuilder<TEntity> GetSetPropertyBuilderFromDto<TEntity, TDto>(TDto dto) where TEntity : class, IMilvaEntity where TDto : DtoBase
@@ -635,12 +573,12 @@ public abstract class MilvaDbContextBase(DbContextOptions options) : DbContext(o
         }
     }
 
-    private DateTime GetNow() => _useUtcForDateTimes ? DateTime.UtcNow : DateTime.Now;
+    private static DateTime GetNow() => DateTime.Now;
 
 }
 
 /// <summary>
-/// Handles all database operations. Inherits <see cref="MilvaDbContextBase"/>
+/// Handles all database operations. Inherits <see cref="MilvaDbContext"/>
 /// </summary>
 /// 
 /// <remarks>
@@ -649,26 +587,6 @@ public abstract class MilvaDbContextBase(DbContextOptions options) : DbContext(o
 ///        and HttpMethod is POST,PUT or DELETE it will gets performer user in constructor from database.
 ///        This can affect performance little bit. But you want audit every record easily you must use this :( </para>
 /// </remarks>
-/// <remarks>
-/// Initializes new instance.
-/// </remarks>
-/// <param name="options"></param>
-/// <param name="dbContextConfiguration"></param>
-public abstract class MilvaDbContext(DbContextOptions options, DataAccessConfiguration dbContextConfiguration) : MilvaDbContextBase(options, dbContextConfiguration)
-{
-
-}
-
-/// <summary>
-/// Handles all database operations. Inherits <see cref="MilvaDbContextBase"/>
-/// </summary>
-/// 
-/// <remarks>
-/// <para> You must register <see cref="IDataAccessConfiguration"/> in your application startup. </para>
-/// <para> If <see cref="IDataAccessConfiguration"/>'s AuditDeleter, AuditModifier or AuditCreator is true
-///        and HttpMethod is POST,PUT or DELETE it will gets performer user in constructor from database.
-///        This can affect performance little bit. But you want audit every record easily you must use this :( </para>
-/// </remarks>
-public abstract class MilvaPooledDbContext(DbContextOptions options) : MilvaDbContextBase(options)
+public abstract class MilvaPooledDbContext(DbContextOptions options) : MilvaDbContext(options)
 {
 }

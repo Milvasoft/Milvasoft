@@ -189,7 +189,6 @@ public class ResponseInterceptorTests
         var builder = new InterceptionBuilder(new ServiceCollection());
 
         builder.Services.AddScoped<ISomeInterface, SomeClass>();
-
         builder.Services.AddScoped<IMilvaLocalizer, TestLocalizer>();
 
         builder.Services.AddMilvaInterception([typeof(ISomeInterface)])

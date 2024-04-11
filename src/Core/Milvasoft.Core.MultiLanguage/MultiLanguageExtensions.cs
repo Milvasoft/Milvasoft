@@ -24,11 +24,8 @@ public static class MultiLanguageExtensions
     /// <returns>Sample; e => new HasTranslationEntity { Id = e.Id, Translations = e.Translations.Select(t=> new TranslationEntity { Name = t.Name } ).ToList() } </returns>
     public static Expression<Func<TEntity, TEntity>> CreateProjectionExpression<TEntity, TTranslationEntity>(IEnumerable<string> mainEntityPropertyNames,
                                                                                                              IEnumerable<string> translationEntityPropertyNames)
-         where TEntity : class, IHasTranslation<TTranslationEntity>
-         where TTranslationEntity : class, ITranslationEntity<TEntity>
     {
         var sourceType = typeof(TEntity);
-        var translationEntityType = typeof(TTranslationEntity);
         var parameter = Expression.Parameter(sourceType, _sourceParameterName);
         LambdaExpression translationExpression = null;
         ConditionalExpression expressionForTranslations = null;
@@ -37,6 +34,7 @@ public static class MultiLanguageExtensions
 
         if (!translationEntityPropertyNames.IsNullOrEmpty())
         {
+            var translationEntityType = typeof(TTranslationEntity);
             translationEntityPropertyNames = translationEntityPropertyNames.Append(MultiLanguageEntityPropertyNames.LanguageId);
 
             var translationParameter = Expression.Parameter(translationEntityType, _translationParameterName);

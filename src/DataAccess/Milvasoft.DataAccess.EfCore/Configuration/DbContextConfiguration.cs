@@ -8,7 +8,7 @@ public class DbContextConfiguration
     /// <summary>
     /// If it is true converts all saved DateTimes to UTC. Default value is false.
     /// </summary>
-    public bool UseUtcForDateTimes { get; set; } = false;
+    public bool UseUtcForDateTime { get; set; } = false;
 
     /// <summary>
     /// Soft delete state when delete operation. Default value is false.

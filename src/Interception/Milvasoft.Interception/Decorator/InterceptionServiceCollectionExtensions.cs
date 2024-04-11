@@ -52,6 +52,8 @@ public static class InterceptionServiceCollectionExtensions
     /// <returns></returns>
     public static InterceptionBuilder AddMilvaInterception(this IServiceCollection services, List<Type> types, IConfigurationManager configurationManager = null)
     {
+        services.ConfigureCurrentMilvaJsonSerializerOptions();
+
         ArgumentNullException.ThrowIfNull(types);
 
         var builder = new InterceptionBuilder(services, configurationManager);
@@ -175,8 +177,6 @@ public static class InterceptionServiceCollectionExtensions
             builder.Services.Add(ServiceDescriptor.Describe(typeof(LogInterceptor), typeof(LogInterceptor), config.InterceptorLifetime));
 
         builder.Services.AddSingleton<ILogInterceptionOptions>(config);
-
-        builder.Services.ConfigureCurrentMilvaJsonSerializerOptions();
 
         return builder;
     }

@@ -12,12 +12,12 @@ public class DynamicFetchConfiguration
     private static Assembly _entityAssembly = null;
 
     /// <summary>
-    /// Entity assembly for <see cref="MilvaDbContextBase.GetLookupsAsync(LookupRequest)"/> operations.
+    /// Entity assembly for <see cref="MilvaDbContext.GetLookupsAsync(LookupRequest)"/> operations.
     /// </summary>
     public string EntityAssemblyName { get; set; }
 
     /// <summary>
-    /// Allowed entity names for <see cref="MilvaDbContextBase.GetLookupsAsync(LookupRequest)"/> operations.
+    /// Allowed entity names for <see cref="MilvaDbContext.GetLookupsAsync(LookupRequest)"/> operations.
     /// </summary>
     public List<string> AllowedEntityNamesForLookup { get; set; } = [];
 
