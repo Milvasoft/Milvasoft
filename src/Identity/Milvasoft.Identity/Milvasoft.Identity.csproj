@@ -15,7 +15,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Microsoft.AspNetCore.DataProtection" Version="8.0.2" />
+		<PackageReference Include="Microsoft.AspNetCore.DataProtection" Version="8.0.4" />
 		<ProjectReference Include="..\..\Components\Milvasoft.Attributes\Milvasoft.Attributes.csproj" />
 	</ItemGroup>
 
