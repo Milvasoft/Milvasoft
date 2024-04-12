@@ -7,6 +7,7 @@ using System.Text;
 
 namespace Milvasoft.UnitTests.CoreTests.HelperTests.StringTests;
 
+[System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "xUnit1042:The member referenced by the MemberData attribute returns untyped data rows", Justification = "<Pending>")]
 public partial class StringHelperTests
 {
     public static IEnumerable<object[]> ValidStringByteArrayPairs()

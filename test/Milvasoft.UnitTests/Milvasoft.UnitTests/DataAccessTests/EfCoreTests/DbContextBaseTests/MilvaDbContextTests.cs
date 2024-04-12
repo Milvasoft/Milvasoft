@@ -12,6 +12,7 @@ using Milvasoft.UnitTests.DataAccessTests.EfCoreTests.Fixtures;
 
 namespace Milvasoft.UnitTests.DataAccessTests.EfCoreTests.DbContextBaseTests;
 
+[System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "xUnit1042:The member referenced by the MemberData attribute returns untyped data rows", Justification = "<Pending>")]
 public class MilvaDbContextTests
 {
     #region Auditing

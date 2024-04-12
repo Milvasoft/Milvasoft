@@ -11,6 +11,7 @@ using System.Linq.Expressions;
 
 namespace Milvasoft.UnitTests.ComponentsTests.RestTests.RequestTests;
 
+[System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "xUnit1042:The member referenced by the MemberData attribute returns untyped data rows", Justification = "<Pending>")]
 public class FilterRequestTests
 {
     #region Mock Data

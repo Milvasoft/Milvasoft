@@ -5,6 +5,7 @@ using System.Linq.Expressions;
 
 namespace Milvasoft.UnitTests.CoreTests.HelperTests.DateTests;
 
+[System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "xUnit1042:The member referenced by the MemberData attribute returns untyped data rows", Justification = "<Pending>")]
 public partial class DateHelperTests
 {
     #region CreateDateSearchExpression
