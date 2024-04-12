@@ -132,10 +132,13 @@ public class MilvaEfExtensionsTests
     }
 
     [Theory]
-    [ClassData(typeof(ValidEfSourceForBuildFilterExpressionMethodData))]
-    public async Task WithFiltering_ForEfSource_WithValidFilterRequest_ShouldReturnCorrectResult(RestDbContextFixture dbContextFixture, FilterRequest filterRequest, List<int> expectedIdList)
+    [ClassData(typeof(ValidListSourceForBuildFilterExpressionMethodData))]
+    public async Task WithFiltering_ForEfSource_WithValidFilterRequest_ShouldReturnCorrectResult(IQueryable<RestTestEntityFixture> source, FilterRequest filterRequest, List<int> expectedIdList)
     {
         // Arrange
+        using var dbContextFixture = new DbContextMock<RestDbContextFixture>(nameof(MilvaEfExtensions)).GetDbContextFixture();
+        await dbContextFixture.TestEntities.AddRangeAsync(source);
+        await dbContextFixture.SaveChangesAsync();
 
         // Act
         var result = await dbContextFixture.TestEntities.WithFiltering(filterRequest).ToListAsync();
@@ -162,10 +165,13 @@ public class MilvaEfExtensionsTests
     }
 
     [Theory]
-    [ClassData(typeof(ValidEfSourceForBuildFilterExpressionMethodData))]
-    public async Task WithFiltering_ForListRequestOverload_ForEfSource_WithValidListRequest_ShouldReturnCorrectResult(RestDbContextFixture dbContextFixture, FilterRequest filterRequest, List<int> expectedIdList)
+    [ClassData(typeof(ValidListSourceForBuildFilterExpressionMethodData))]
+    public async Task WithFiltering_ForListRequestOverload_ForEfSource_WithValidListRequest_ShouldReturnCorrectResult(IQueryable<RestTestEntityFixture> source, FilterRequest filterRequest, List<int> expectedIdList)
     {
         // Arrange
+        using var dbContextFixture = new DbContextMock<RestDbContextFixture>(nameof(MilvaEfExtensions)).GetDbContextFixture();
+        await dbContextFixture.TestEntities.AddRangeAsync(source);
+        await dbContextFixture.SaveChangesAsync();
         var listRequest = new ListRequest
         {
             Filtering = filterRequest

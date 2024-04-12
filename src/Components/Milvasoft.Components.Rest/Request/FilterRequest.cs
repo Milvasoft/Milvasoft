@@ -1,5 +1,6 @@
 ﻿using ExpressionBuilder.Common;
 using ExpressionBuilder.Generics;
+using ExpressionBuilder.Helpers;
 using ExpressionBuilder.Interfaces;
 using ExpressionBuilder.Operations;
 using Milvasoft.Components.Rest.Enums;
@@ -13,15 +14,6 @@ namespace Milvasoft.Components.Rest.Request;
 /// </summary>
 public class FilterRequest
 {
-    private static readonly Dictionary<TypeGroup, HashSet<Type>> _typeGroups = new()
-    {
-        { TypeGroup.Text, new HashSet<Type> { typeof(string), typeof(char)} },
-        { TypeGroup.Number, new HashSet<Type> { typeof(int), typeof(uint), typeof(byte), typeof(sbyte), typeof(short), typeof(ushort), typeof(long), typeof(ulong), typeof(Single), typeof(double), typeof(decimal) } },
-        { TypeGroup.Boolean, new HashSet<Type> { typeof(bool) } },
-        { TypeGroup.Date, new HashSet<Type> { typeof(DateTime) } },
-        { TypeGroup.Nullable, new HashSet<Type> { typeof(Nullable<>), typeof(string) } }
-    };
-
     private static readonly Dictionary<TypeGroup, HashSet<FilterType>> _supportedFilterTypes = new()
     {
         { TypeGroup.Default, new HashSet<FilterType>  { FilterType.EqualTo , FilterType.NotEqualTo } },
@@ -61,13 +53,13 @@ public class FilterRequest
             if (propertyType == null || !IsFilterTypeSupported(propertyType, filter))
                 continue;
 
-            (IOperation operation, int valueCount) = GetOperationAndValueCount(filter.Type);
+            IOperation operation = GetOperationByFilterType(filter.Type);
 
-            if (valueCount == 0)
+            if (operation.NumberOfValues == 0)
             {
                 expression.By(filter.FilterBy, operation, MergeType);
             }
-            else if (valueCount == 1)
+            else if (operation.NumberOfValues == 1)
             {
                 var value = GetValueWithCorrectType<TEntity>(filter, filter.Value, propertyType, filter.FilterBy);
 
@@ -166,10 +158,8 @@ public class FilterRequest
     {
         var typeGroup = TypeGroup.Default;
 
-        var tempType = propertyType;
-
-        if (_typeGroups.Any(i => i.Value.Any(v => v.Name == tempType.Name)))
-            typeGroup = _typeGroups.FirstOrDefault(i => i.Value.Any(v => v.Name == tempType.Name)).Key;
+        if (OperationHelper.TypeGroups.Any(i => i.Value.Any(v => v.Name == propertyType.Name)))
+            typeGroup = OperationHelper.TypeGroups.FirstOrDefault(i => i.Value.Any(v => v.Name == propertyType.Name)).Key;
 
         return _supportedFilterTypes[typeGroup].Any(ft => ft == filter.Type);
     }
@@ -179,27 +169,27 @@ public class FilterRequest
     /// </summary>
     /// <param name="filterType"></param>
     /// <returns></returns>
-    private static (IOperation operation, int valueCount) GetOperationAndValueCount(FilterType filterType) => filterType switch
+    private static IOperation GetOperationByFilterType(FilterType filterType) => filterType switch
     {
-        FilterType.Between => (new Between(), 2),
-        FilterType.Contains => (new Contains(), 1),
-        FilterType.DoesNotContain => (new DoesNotContain(), 1),
-        FilterType.StartsWith => (new StartsWith(), 1),
-        FilterType.EndsWith => (new EndsWith(), 1),
-        FilterType.EqualTo => (new EqualTo(), 1),
-        FilterType.NotEqualTo => (new NotEqualTo(), 1),
-        FilterType.GreaterThan => (new GreaterThan(), 1),
-        FilterType.GreaterThanOrEqualTo => (new GreaterThanOrEqualTo(), 1),
-        FilterType.LessThan => (new LessThan(), 1),
-        FilterType.LessThanOrEqualTo => (new LessThanOrEqualTo(), 1),
-        FilterType.IsEmpty => (new IsEmpty(), 0),
-        FilterType.IsNotEmpty => (new IsNotEmpty(), 0),
-        FilterType.IsNull => (new IsNull(), 0),
-        FilterType.IsNotNull => (new IsNotNull(), 0),
-        FilterType.IsNullOrWhiteSpace => (new IsNullOrWhiteSpace(), 0),
-        FilterType.IsNotNullNorWhiteSpace => (new IsNotNullNorWhiteSpace(), 0),
-        FilterType.In => (new In(), 1),
-        FilterType.NotIn => (new NotIn(), 1),
-        _ => (new EqualTo(), 1),
+        FilterType.Between => new Between(),
+        FilterType.Contains => new Contains(),
+        FilterType.DoesNotContain => new DoesNotContain(),
+        FilterType.StartsWith => new StartsWith(),
+        FilterType.EndsWith => new EndsWith(),
+        FilterType.EqualTo => new EqualTo(),
+        FilterType.NotEqualTo => new NotEqualTo(),
+        FilterType.GreaterThan => new GreaterThan(),
+        FilterType.GreaterThanOrEqualTo => new GreaterThanOrEqualTo(),
+        FilterType.LessThan => new LessThan(),
+        FilterType.LessThanOrEqualTo => new LessThanOrEqualTo(),
+        FilterType.IsEmpty => new IsEmpty(),
+        FilterType.IsNotEmpty => new IsNotEmpty(),
+        FilterType.IsNull => new IsNull(),
+        FilterType.IsNotNull => new IsNotNull(),
+        FilterType.IsNullOrWhiteSpace => new IsNullOrWhiteSpace(),
+        FilterType.IsNotNullNorWhiteSpace => new IsNotNullNorWhiteSpace(),
+        FilterType.In => new In(),
+        FilterType.NotIn => new NotIn(),
+        _ => new EqualTo(),
     };
 }

@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore.Query;
 using Milvasoft.Components.Rest.Request;
 using Milvasoft.Core.Exceptions;
 using Milvasoft.UnitTests.ComponentsTests.RestTests.Fixture;
+using Milvasoft.UnitTests.TestHelpers;
 using System.Linq.Expressions;
 
 namespace Milvasoft.UnitTests.ComponentsTests.RestTests.RequestTests;
@@ -56,10 +57,13 @@ public class FilterRequestTests
     }
 
     [Theory]
-    [ClassData(typeof(ValidEfSourceForBuildFilterExpressionMethodData))]
-    public async Task BuildFilterExpression_ForEfSource_WithValidFilterTypeAndFilterBy_ShouldReturnCorrectExpression(RestDbContextFixture dbContextFixture, FilterRequest filterRequest, List<int> expectedIdList)
+    [ClassData(typeof(ValidListSourceForBuildFilterExpressionMethodData))]
+    public async Task BuildFilterExpression_ForEfSource_WithValidFilterTypeAndFilterBy_ShouldReturnCorrectExpression(IQueryable<RestTestEntityFixture> source, FilterRequest filterRequest, List<int> expectedIdList)
     {
         // Arrange
+        using var dbContextFixture = new DbContextMock<RestDbContextFixture>(nameof(FilterRequest)).GetDbContextFixture();
+        await dbContextFixture.TestEntities.AddRangeAsync(source);
+        await dbContextFixture.SaveChangesAsync();
 
         // Act
         var resultExpression = filterRequest.BuildFilterExpression<RestTestEntityFixture>();

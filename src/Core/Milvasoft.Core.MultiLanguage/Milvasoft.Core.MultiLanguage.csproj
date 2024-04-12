@@ -14,4 +14,10 @@
     <ProjectReference Include="..\Milvasoft.Core\Milvasoft.Core.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="Resources\milvalogo.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>
