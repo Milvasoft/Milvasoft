@@ -314,7 +314,7 @@
             <param name="lookupRequest">The lookup request containing the parameters for the lookup.</param>
             <returns>A list of lookup results containing the requested data.</returns>
         </member>
-        <member name="M:Milvasoft.DataAccess.EfCore.DbContextBase.MilvaDbContext.GetSetPropertyBuilderFromDto``2(``1)">
+        <member name="M:Milvasoft.DataAccess.EfCore.DbContextBase.MilvaDbContext.GetUpdatablePropertiesBuilder``2(``1)">
             <summary>
             Gets <see cref="T:Milvasoft.DataAccess.EfCore.Utils.SetPropertyBuilder`1"/> for entity's matching properties with <paramref name="dto"/>'s updatable properties.
             </summary>
@@ -778,7 +778,7 @@
         <member name="M:Milvasoft.DataAccess.EfCore.RepositoryBase.Abstract.IBaseRepository`2.ExecuteUpdateAsync(System.Object,Milvasoft.DataAccess.EfCore.Utils.SetPropertyBuilder{`0},System.Threading.CancellationToken)">
             <summary>
             Runs execute update. Adds performer and perform time to to be updated properties.
-            You can detect non null properties and create <see cref="T:Milvasoft.DataAccess.EfCore.Utils.SetPropertyBuilder`1"/> with <see cref="M:Milvasoft.DataAccess.EfCore.Utils.MilvaEfExtensions.GetSetPropertyBuilderFromDto``2(``1,System.Boolean)"/> method.
+            You can detect non null properties and create <see cref="T:Milvasoft.DataAccess.EfCore.Utils.SetPropertyBuilder`1"/> with <see cref="M:Milvasoft.DataAccess.EfCore.Utils.MilvaEfExtensions.GetUpdatablePropertiesBuilder``2(``1,System.Boolean)"/> method.
             </summary>
             <param name="id"></param>
             <param name="propertyBuilder"></param>
@@ -1128,7 +1128,7 @@
         <member name="M:Milvasoft.DataAccess.EfCore.RepositoryBase.Abstract.IBaseRepository`2.ExecuteUpdate(System.Object,Milvasoft.DataAccess.EfCore.Utils.SetPropertyBuilder{`0})">
             <summary>
             Runs execute update. Adds performer and perform time to to be updated properties.
-            You can detect non null properties and create <see cref="T:Milvasoft.DataAccess.EfCore.Utils.SetPropertyBuilder`1"/> with <see cref="M:Milvasoft.DataAccess.EfCore.Utils.MilvaEfExtensions.GetSetPropertyBuilderFromDto``2(``1,System.Boolean)"/> method.
+            You can detect non null properties and create <see cref="T:Milvasoft.DataAccess.EfCore.Utils.SetPropertyBuilder`1"/> with <see cref="M:Milvasoft.DataAccess.EfCore.Utils.MilvaEfExtensions.GetUpdatablePropertiesBuilder``2(``1,System.Boolean)"/> method.
             </summary>
             <param name="id"></param>
             <param name="propertyBuilder"></param>
@@ -1206,7 +1206,7 @@
             <param name="bulkConfig"></param> 
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.DataAccess.EfCore.RepositoryBase.Abstract.IBaseRepository`2.GetSetPropertyBuilderFromDto``1(``0)">
+        <member name="M:Milvasoft.DataAccess.EfCore.RepositoryBase.Abstract.IBaseRepository`2.GetUpdatablePropertiesBuilder``1(``0)">
             <summary>
             Gets <see cref="T:Milvasoft.DataAccess.EfCore.Utils.SetPropertyBuilder`1"/> for entity's matching properties with <paramref name="dto"/>'s updatable properties.
             </summary>
@@ -1366,7 +1366,7 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.DataAccess.EfCore.RepositoryBase.Abstract.IMilvaDbContextBase.GetSetPropertyBuilderFromDto``2(``1)">
+        <member name="M:Milvasoft.DataAccess.EfCore.RepositoryBase.Abstract.IMilvaDbContextBase.GetUpdatablePropertiesBuilder``2(``1)">
             <summary>
             Gets <see cref="T:Milvasoft.DataAccess.EfCore.Utils.SetPropertyBuilder`1"/> for entity's matching properties with <paramref name="dto"/>'s not null properties.
             </summary>
@@ -1896,7 +1896,7 @@
             If no pagination parameters are specified, the method returns the entire result set without pagination.
             </remarks>
         </member>
-        <member name="M:Milvasoft.DataAccess.EfCore.Utils.MilvaEfExtensions.GetSetPropertyBuilderFromDto``2(``1,System.Boolean)">
+        <member name="M:Milvasoft.DataAccess.EfCore.Utils.MilvaEfExtensions.GetUpdatablePropertiesBuilder``2(``1,System.Boolean)">
             <summary>
             Gets <see cref="T:Milvasoft.DataAccess.EfCore.Utils.SetPropertyBuilder`1"/> for entity's matching properties with <paramref name="dto"/>'s updatable properties.
             </summary>
@@ -1939,7 +1939,7 @@
             </summary>
             <typeparam name="TSource"></typeparam>
         </member>
-        <member name="P:Milvasoft.DataAccess.EfCore.Utils.SetPropertyBuilder`1.SetPropertyMethodInfo">
+        <member name="P:Milvasoft.DataAccess.EfCore.Utils.SetPropertyBuilder`1.SetPropertyValueMethodInfo">
             <summary>
             <see cref="M:Milvasoft.DataAccess.EfCore.Utils.SetPropertyBuilder`1.SetPropertyValue``1(System.Linq.Expressions.Expression{System.Func{`0,``0}},``0)"/> method info for reflection calls.
             </summary>
@@ -2341,7 +2341,7 @@
         <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Concrete.BaseRepository`2.ExecuteUpdateAsync(System.Object,Milvasoft.DataAccess.EfCore.Utils.SetPropertyBuilder{`0},System.Threading.CancellationToken)">
             <summary>
             Runs execute update. Adds performer and perform time to to be updated properties.
-            You can detect non null properties and create <see cref="T:Milvasoft.DataAccess.EfCore.Utils.SetPropertyBuilder`1"/> with <see cref="M:Milvasoft.DataAccess.EfCore.Utils.MilvaEfExtensions.GetSetPropertyBuilderFromDto``2(``1,System.Boolean)"/> method.
+            You can detect non null properties and create <see cref="T:Milvasoft.DataAccess.EfCore.Utils.SetPropertyBuilder`1"/> with <see cref="M:Milvasoft.DataAccess.EfCore.Utils.MilvaEfExtensions.GetUpdatablePropertiesBuilder``2(``1,System.Boolean)"/> method.
             </summary>
             <param name="id"></param>
             <param name="propertyBuilder"></param>
@@ -2429,7 +2429,7 @@
             <param name="cancellationToken"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Concrete.BaseRepository`2.GetSetPropertyBuilderFromDto``1(``0)">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Concrete.BaseRepository`2.GetUpdatablePropertiesBuilder``1(``0)">
             <summary>
             Gets <see cref="T:Milvasoft.DataAccess.EfCore.Utils.SetPropertyBuilder`1"/> for entity's matching properties with <paramref name="dto"/>'s updatable properties.
             </summary>
@@ -2787,7 +2787,7 @@
         <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Concrete.BaseRepository`2.ExecuteUpdate(System.Object,Milvasoft.DataAccess.EfCore.Utils.SetPropertyBuilder{`0})">
             <summary>
             Runs execute update. Adds performer and perform time to to be updated properties.
-            You can detect non null properties and create <see cref="T:Milvasoft.DataAccess.EfCore.Utils.SetPropertyBuilder`1"/> with <see cref="M:Milvasoft.DataAccess.EfCore.Utils.MilvaEfExtensions.GetSetPropertyBuilderFromDto``2(``1,System.Boolean)"/> method.
+            You can detect non null properties and create <see cref="T:Milvasoft.DataAccess.EfCore.Utils.SetPropertyBuilder`1"/> with <see cref="M:Milvasoft.DataAccess.EfCore.Utils.MilvaEfExtensions.GetUpdatablePropertiesBuilder``2(``1,System.Boolean)"/> method.
             </summary>
             <param name="id"></param>
             <param name="propertyBuilder"></param>

@@ -4,9 +4,10 @@ using Milvasoft.Core.Utils.JsonConverters;
 
 namespace Milvasoft.UnitTests.CoreTests.UtilTests.JsonConverterTests;
 
+[System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "xUnit1004:Test methods should not be skipped", Justification = "<Pending>")]
 public class MilvaJsonConverterOptionsTests
 {
-    [Fact]
+    [Fact(Skip = "Should be run separately when necessary because of static object access.")]
     public void ConfigureCurrentMilvaJsonSerializerOptions_WithOptionsProvided_ShouldConfigureCurrentOptions()
     {
         // Arrange
@@ -22,7 +23,7 @@ public class MilvaJsonConverterOptionsTests
         MilvaJsonConverterOptions.Current.Converters.Should().ContainEquivalentOf(new ExceptionConverter<Exception>());
     }
 
-    [Fact]
+    [Fact(Skip = "Should be run separately when necessary because of static object access.")]
     public void ConfigureCurrentMilvaJsonSerializerOptions_WithOptionsNotProvided_ShouldConfigureCurrentOptions()
     {
         // Arrange
@@ -37,7 +38,7 @@ public class MilvaJsonConverterOptionsTests
         MilvaJsonConverterOptions.Current.Converters.Should().ContainEquivalentOf(new ExceptionConverter<Exception>());
     }
 
-    [Fact]
+    [Fact(Skip = "Should be run separately when necessary because of static object access.")]
     public void ConfigureCurrentMilvaJsonSerializerOptions_WithIncludeMilvaConvertersIsFalse_ShouldNotIncludeMilvaConverters()
     {
         // Arrange

@@ -538,9 +538,9 @@ public abstract class MilvaDbContext(DbContextOptions options) : DbContext(optio
     /// If utc conversion requested in <see cref="DbContextConfiguration.UseUtcForDateTime"/>, <see cref="DateTime"/> typed property call will be added after converted to utc.
     /// 
     /// </remarks>
-    public SetPropertyBuilder<TEntity> GetSetPropertyBuilderFromDto<TEntity, TDto>(TDto dto) where TEntity : class, IMilvaEntity where TDto : DtoBase
+    public SetPropertyBuilder<TEntity> GetUpdatablePropertiesBuilder<TEntity, TDto>(TDto dto) where TEntity : class, IMilvaEntity where TDto : DtoBase
     {
-        var builder = dto.GetSetPropertyBuilderFromDto<TEntity, TDto>();
+        var builder = dto.GetUpdatablePropertiesBuilder<TEntity, TDto>();
 
         builder = SetAuditProperties(builder);
 

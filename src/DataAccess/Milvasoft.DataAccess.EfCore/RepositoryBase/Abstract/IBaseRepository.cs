@@ -439,7 +439,7 @@ public interface IBaseRepository<TEntity, TContext> where TEntity : IMilvaEntity
 
     /// <summary>
     /// Runs execute update. Adds performer and perform time to to be updated properties.
-    /// You can detect non null properties and create <see cref="SetPropertyBuilder{TSource}"/> with <see cref="MilvaEfExtensions.GetSetPropertyBuilderFromDto"/> method.
+    /// You can detect non null properties and create <see cref="SetPropertyBuilder{TSource}"/> with <see cref="MilvaEfExtensions.GetUpdatablePropertiesBuilder"/> method.
     /// </summary>
     /// <param name="id"></param>
     /// <param name="propertyBuilder"></param>
@@ -871,7 +871,7 @@ public interface IBaseRepository<TEntity, TContext> where TEntity : IMilvaEntity
 
     /// <summary>
     /// Runs execute update. Adds performer and perform time to to be updated properties.
-    /// You can detect non null properties and create <see cref="SetPropertyBuilder{TSource}"/> with <see cref="MilvaEfExtensions.GetSetPropertyBuilderFromDto"/> method.
+    /// You can detect non null properties and create <see cref="SetPropertyBuilder{TSource}"/> with <see cref="MilvaEfExtensions.GetUpdatablePropertiesBuilder"/> method.
     /// </summary>
     /// <param name="id"></param>
     /// <param name="propertyBuilder"></param>
@@ -976,5 +976,5 @@ public interface IBaseRepository<TEntity, TContext> where TEntity : IMilvaEntity
     /// If utc conversion requested in <see cref="DbContextConfiguration.UseUtcForDateTime"/>, <see cref="DateTime"/> typed property call will be added after converted to utc.
     /// 
     /// </remarks>
-    public SetPropertyBuilder<TEntity> GetSetPropertyBuilderFromDto<TDto>(TDto dto) where TDto : DtoBase;
+    public SetPropertyBuilder<TEntity> GetUpdatablePropertiesBuilder<TDto>(TDto dto) where TDto : DtoBase;
 }

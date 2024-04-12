@@ -677,7 +677,7 @@ public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepositor
 
     /// <summary>
     /// Runs execute update. Adds performer and perform time to to be updated properties.
-    /// You can detect non null properties and create <see cref="SetPropertyBuilder{TSource}"/> with <see cref="MilvaEfExtensions.GetSetPropertyBuilderFromDto"/> method.
+    /// You can detect non null properties and create <see cref="SetPropertyBuilder{TSource}"/> with <see cref="MilvaEfExtensions.GetUpdatablePropertiesBuilder"/> method.
     /// </summary>
     /// <param name="id"></param>
     /// <param name="propertyBuilder"></param>
@@ -857,8 +857,8 @@ public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepositor
     /// If utc conversion requested in <see cref="DbContextConfiguration.UseUtcForDateTime"/>, <see cref="DateTime"/> typed property call will be added after converted to utc.
     /// 
     /// </remarks>
-    public SetPropertyBuilder<TEntity> GetSetPropertyBuilderFromDto<TDto>(TDto dto) where TDto : DtoBase
-        => _dbContext.GetSetPropertyBuilderFromDto<TEntity, TDto>(dto);
+    public SetPropertyBuilder<TEntity> GetUpdatablePropertiesBuilder<TDto>(TDto dto) where TDto : DtoBase
+        => _dbContext.GetUpdatablePropertiesBuilder<TEntity, TDto>(dto);
 
     #region Private Helper Methods
 

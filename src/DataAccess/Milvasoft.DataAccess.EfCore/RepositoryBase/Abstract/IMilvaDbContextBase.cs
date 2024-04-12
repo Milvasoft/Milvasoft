@@ -51,5 +51,5 @@ public interface IMilvaDbContextBase
     /// <typeparam name="TDto"></typeparam>
     /// <typeparam name="TEntity"></typeparam>
     /// <param name="dto"></param>
-    SetPropertyBuilder<TEntity> GetSetPropertyBuilderFromDto<TEntity, TDto>(TDto dto) where TEntity : class, IMilvaEntity where TDto : DtoBase;
+    SetPropertyBuilder<TEntity> GetUpdatablePropertiesBuilder<TEntity, TDto>(TDto dto) where TEntity : class, IMilvaEntity where TDto : DtoBase;
 }

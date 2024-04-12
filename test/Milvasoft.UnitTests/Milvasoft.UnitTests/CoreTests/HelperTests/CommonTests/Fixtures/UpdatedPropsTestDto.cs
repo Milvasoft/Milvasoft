@@ -8,6 +8,7 @@ public class UpdatedPropsTestDto : BaseDto<int>
     public UpdateProperty<string>? Name { get; set; }
     public UpdateProperty<decimal>? Price { get; set; }
     public UpdateProperty<int>? Priority { get; set; }
+    public UpdateProperty<DateTime>? UpdateDate { get; set; }
     public UpdateProperty<byte>? Type { get; set; }
 }
 

@@ -1,8 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Milvasoft.Core.EntityBases.Abstract;
+using System.ComponentModel.DataAnnotations;
 
 namespace Milvasoft.UnitTests.ComponentsTests.RestTests.Fixture;
 
-public class RestTestEntityFixture
+public class RestTestEntityFixture : IMilvaEntity
 {
     [Key]
     public int Id { get; set; }

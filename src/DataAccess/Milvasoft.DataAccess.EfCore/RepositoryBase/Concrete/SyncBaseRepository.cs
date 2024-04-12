@@ -524,7 +524,7 @@ public abstract partial class BaseRepository<TEntity, TContext> where TEntity : 
 
     /// <summary>
     /// Runs execute update. Adds performer and perform time to to be updated properties.
-    /// You can detect non null properties and create <see cref="SetPropertyBuilder{TSource}"/> with <see cref="MilvaEfExtensions.GetSetPropertyBuilderFromDto"/> method.
+    /// You can detect non null properties and create <see cref="SetPropertyBuilder{TSource}"/> with <see cref="MilvaEfExtensions.GetUpdatablePropertiesBuilder"/> method.
     /// </summary>
     /// <param name="id"></param>
     /// <param name="propertyBuilder"></param>

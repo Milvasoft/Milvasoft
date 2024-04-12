@@ -25,7 +25,7 @@ public static class MilvaEfExtensions
     /// If the <paramref name="listRequest"/> is null, the original IQueryable data is returned without any modifications.
     /// </remarks>
     public static IQueryable<TEntity> WithFiltering<TEntity>(this IQueryable<TEntity> query, ListRequest listRequest) where TEntity : class
-        => query.WithFiltering(listRequest.Filtering);
+        => query.WithFiltering(listRequest?.Filtering);
 
     /// <summary>
     /// Applies filtering options to the IQueryable data source.
@@ -42,7 +42,7 @@ public static class MilvaEfExtensions
     {
         var expression = filteringRequest?.BuildFilterExpression<TEntity>();
 
-        return expression != null ? query.Where(expression) : query;
+        return expression != null ? query?.Where(expression) : query;
     }
 
     /// <summary>
@@ -57,7 +57,7 @@ public static class MilvaEfExtensions
     /// If the <paramref name="listRequest"/> is null, the original IQueryable data is returned without any modifications.
     /// </remarks>
     public static IQueryable<TEntity> WithSorting<TEntity>(this IQueryable<TEntity> query, ListRequest listRequest) where TEntity : class
-        => query.WithSorting(listRequest.Sorting);
+        => query.WithSorting(listRequest?.Sorting);
 
     /// <summary>
     /// Applies sorting options to the IQueryable data source.
@@ -78,8 +78,8 @@ public static class MilvaEfExtensions
             ? query
             : sortingRequest.Type switch
             {
-                SortType.Asc => query.OrderBy(propExpression),
-                SortType.Desc => query.OrderByDescending(propExpression),
+                SortType.Asc => query?.OrderBy(propExpression),
+                SortType.Desc => query?.OrderByDescending(propExpression),
                 _ => query,
             };
     }
@@ -96,7 +96,7 @@ public static class MilvaEfExtensions
     /// If the <paramref name="listRequest"/> is null, the original IQueryable data is returned without any modifications.
     /// </remarks>
     public static IQueryable<TEntity> WithFilteringAndSorting<TEntity>(this IQueryable<TEntity> query, ListRequest listRequest) where TEntity : class
-        => query.WithFiltering(listRequest.Filtering).WithSorting(listRequest.Sorting);
+        => query.WithFiltering(listRequest?.Filtering).WithSorting(listRequest?.Sorting);
 
     /// <summary>
     /// Retrieves a paginated list result asynchronously from the provided IQueryable data source based on the specified list request parameters.
@@ -130,7 +130,7 @@ public static class MilvaEfExtensions
 
         if (listRequest.PageNumber.HasValue && listRequest.RowCount.HasValue)
         {
-            totalDataCount = query.Count();
+            totalDataCount = await query.CountAsync(cancellationToken);
             totalPageCount = listRequest.CalculatePageCountAndCompareWithRequested(totalDataCount);
 
             query = query.Skip((listRequest.PageNumber.Value - 1) * listRequest.RowCount.Value)
@@ -181,7 +181,7 @@ public static class MilvaEfExtensions
             totalPageCount = listRequest.CalculatePageCountAndCompareWithRequested(totalDataCount);
 
             query = query.Skip((listRequest.PageNumber.Value - 1) * listRequest.RowCount.Value)
-                          .Take(listRequest.RowCount.Value);
+                         .Take(listRequest.RowCount.Value);
         }
 
         var list = query.ToList();
@@ -206,7 +206,7 @@ public static class MilvaEfExtensions
     /// If a matching property is found and the property value is an instance of <see cref="IUpdateProperty"/> and IsUpdated property is true,
     /// the specified action is performed on the matching property in the entity object.
     /// </remarks>
-    public static SetPropertyBuilder<TEntity> GetSetPropertyBuilderFromDto<TEntity, TDto>(this TDto dto, bool useUtcForDateTimes = false) where TEntity : class, IMilvaEntity where TDto : DtoBase
+    public static SetPropertyBuilder<TEntity> GetUpdatablePropertiesBuilder<TEntity, TDto>(this TDto dto, bool useUtcForDateTimes = false) where TEntity : class, IMilvaEntity where TDto : DtoBase
     {
         if (dto == null)
             return null;
@@ -217,7 +217,7 @@ public static class MilvaEfExtensions
 
         CommonHelper.FindUpdatablePropertiesAndAct<TEntity, TDto>(dto, (matchingEntityProp, dtoPropertyValue) =>
         {
-            var genericMethod = SetPropertyBuilder<TEntity>.SetPropertyMethodInfo.MakeGenericMethod(matchingEntityProp.PropertyType);
+            var genericMethod = SetPropertyBuilder<TEntity>.SetPropertyValueMethodInfo.MakeGenericMethod(matchingEntityProp.PropertyType);
 
             var expression = CommonHelper.DynamicInvokeCreatePropertySelector(nameof(CommonHelper.CreatePropertySelector),
                                                                               entityType,
