@@ -13,7 +13,7 @@ namespace Milvasoft.Core.MultiLanguage.Builder;
 /// <param name="configurationManager"></param>
 public class MilvaMultiLanguageBuilder(IServiceCollection services)
 {
-    private readonly IServiceCollection _services = services;
+    public IServiceCollection Services { get; } = services;
 
     /// <summary>
     /// Adds and configures the identity system for the specified User and Role types.
@@ -24,7 +24,7 @@ public class MilvaMultiLanguageBuilder(IServiceCollection services)
         CheckMultiLanguageManagerRegistrationExistance();
 
         MultiLanguageManager.UpdateLanguagesList(LanguagesSeed.Seed);
-        _services.AddScoped<IMultiLanguageManager, MilvaMultiLanguageManager>();
+        Services.AddScoped<IMultiLanguageManager, MilvaMultiLanguageManager>();
 
         return this;
     }
@@ -37,14 +37,14 @@ public class MilvaMultiLanguageBuilder(IServiceCollection services)
     {
         CheckMultiLanguageManagerRegistrationExistance();
 
-        _services.AddScoped<IMultiLanguageManager, TMultiLanguageManager>();
+        Services.AddScoped<IMultiLanguageManager, TMultiLanguageManager>();
 
         return this;
     }
 
     private void CheckMultiLanguageManagerRegistrationExistance()
     {
-        if (_services.Any(i => i.ServiceType == typeof(IMultiLanguageManager)))
+        if (Services.Any(i => i.ServiceType == typeof(IMultiLanguageManager)))
             throw new MilvaDeveloperException("A IMultiLanguageManager manager has already been registered. Please make sure to register only one IMultiLanguageManager manager.");
     }
 }

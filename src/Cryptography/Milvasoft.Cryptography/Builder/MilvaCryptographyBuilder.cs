@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Milvasoft.FileOperations.Builder;
+namespace Milvasoft.Cryptography.Builder;
 
 /// <summary>
 /// Configure cryptography services.
