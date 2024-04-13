@@ -8,6 +8,7 @@ using Xunit.Abstractions;
 
 namespace Milvasoft.UnitTests.InteceptionTests.DecoratorTests;
 
+[Trait("Interception Unit Tests", "Unit tests for Milvasoft.Interception project.")]
 public class PerformanceTests(ITestOutputHelper output)
 {
     public ITestOutputHelper Output { get; } = output;

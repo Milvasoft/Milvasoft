@@ -4,6 +4,7 @@ using System.Linq.Expressions;
 
 namespace Milvasoft.UnitTests.CoreTests.UtilTests;
 
+[Trait("Core Unit Tests", "Milvasoft.Core project unit tests.")]
 public partial class ExpressionParameterReplacerTests
 {
     [Fact]

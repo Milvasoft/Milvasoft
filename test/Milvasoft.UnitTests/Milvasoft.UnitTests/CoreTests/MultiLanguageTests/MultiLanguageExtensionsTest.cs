@@ -8,6 +8,7 @@ namespace Milvasoft.UnitTests.CoreTests.MultiLanguageTests;
 
 [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1860:Avoid using 'Enumerable.Any()' extension method", Justification = "<Pending>")]
 [System.Diagnostics.CodeAnalysis.SuppressMessage("Minor Code Smell", "S1125:Boolean literals should not be redundant", Justification = "<Pending>")]
+[Trait("Core Unit Tests", "Milvasoft.Core project unit tests.")]
 public class MultiLanguageExtensionsTest
 {
     #region CreateProjectionExpression

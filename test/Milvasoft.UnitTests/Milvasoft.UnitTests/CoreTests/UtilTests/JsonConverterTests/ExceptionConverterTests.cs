@@ -4,6 +4,7 @@ using Milvasoft.UnitTests.CoreTests.UtilTests.JsonConverterTests.Helpers;
 
 namespace Milvasoft.UnitTests.CoreTests.UtilTests.JsonConverterTests;
 
+[Trait("Core Unit Tests", "Milvasoft.Core project unit tests.")]
 public class ExceptionConverterTests
 {
     private readonly ExceptionConverter<Exception> _converter = new();

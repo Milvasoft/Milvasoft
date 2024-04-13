@@ -5,6 +5,7 @@ using System.Globalization;
 
 namespace Milvasoft.UnitTests.CoreTests.HelperTests.StringTests;
 
+[Trait("Core Unit Tests", "Milvasoft.Core project unit tests.")]
 public partial class StringHelperTests
 {
     [Theory]

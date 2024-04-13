@@ -5,6 +5,7 @@ using System.Text;
 
 namespace Milvasoft.UnitTests.CoreTests.HelperTests.HttpRequestTests;
 
+[Trait("Core Unit Tests", "Milvasoft.Core project unit tests.")]
 public partial class HttpRequestHelperTests
 {
     #region BuildRequestMessage

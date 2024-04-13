@@ -10,6 +10,7 @@ using static Milvasoft.UnitTests.CoreTests.HelperTests.CommonTests.Fixtures.IsAs
 
 namespace Milvasoft.UnitTests.CoreTests.HelperTests.CommonTests;
 
+[Trait("Core Unit Tests", "Milvasoft.Core project unit tests.")]
 public partial class CommonHelperTests
 {
     #region CreateIsDeletedFalseExpression

@@ -4,6 +4,7 @@ using System.Text.RegularExpressions;
 
 namespace Milvasoft.UnitTests.CoreTests.HelperTests.RegexTests;
 
+[Trait("Core Unit Tests", "Milvasoft.Core project unit tests.")]
 public partial class RegexHelperTests
 {
     #region MatchRegex

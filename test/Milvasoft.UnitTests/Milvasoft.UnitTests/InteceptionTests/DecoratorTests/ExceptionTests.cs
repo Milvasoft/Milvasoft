@@ -7,6 +7,7 @@ using Milvasoft.Interception.Decorator;
 namespace Milvasoft.UnitTests.InteceptionTests.DecoratorTests;
 
 [System.Diagnostics.CodeAnalysis.SuppressMessage("Major Code Smell", "S4144:Methods should not have identical implementations", Justification = "<Pending>")]
+[Trait("Interception Unit Tests", "Unit tests for Milvasoft.Interception project.")]
 public class ExceptionTests
 {
     [Fact]

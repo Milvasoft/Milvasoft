@@ -9,6 +9,7 @@ using System.Reflection;
 namespace Milvasoft.UnitTests.CoreTests.HelperTests.PropertyTests;
 
 [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "xUnit1042:The member referenced by the MemberData attribute returns untyped data rows", Justification = "<Pending>")]
+[Trait("Core Unit Tests", "Milvasoft.Core project unit tests.")]
 public class PropertyHelperTests
 {
     #region PropertyExists

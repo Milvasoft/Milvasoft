@@ -11,6 +11,7 @@ namespace Milvasoft.UnitTests.ComponentsTests.RestTests.RequestTests;
 [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "xUnit1026:Theory methods should use all of their parameters", Justification = "<Pending>")]
 [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "xUnit1042:The member referenced by the MemberData attribute returns untyped data rows", Justification = "<Pending>")]
 [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0060:Remove unused parameter", Justification = "<Pending>")]
+[Trait("Rest Components Unit Tests", "Milvasoft.Components.Rest project unit tests.")]
 public class AggregationCriteriaTests
 {
     #region With List Query Provider Source

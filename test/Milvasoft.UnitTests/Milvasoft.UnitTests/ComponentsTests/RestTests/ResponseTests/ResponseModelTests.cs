@@ -5,6 +5,7 @@ using System.Net;
 
 namespace Milvasoft.UnitTests.ComponentsTests.RestTests.ResponseTests;
 
+[Trait("Rest Components Unit Tests", "Milvasoft.Components.Rest project unit tests.")]
 public class ResponseModelTests
 {
     #region Success

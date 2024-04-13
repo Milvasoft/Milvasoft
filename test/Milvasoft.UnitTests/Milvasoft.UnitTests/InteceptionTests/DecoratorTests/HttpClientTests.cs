@@ -8,6 +8,7 @@ using System.Net;
 
 namespace Milvasoft.UnitTests.InteceptionTests.DecoratorTests;
 
+[Trait("Interception Unit Tests", "Unit tests for Milvasoft.Interception project.")]
 public class HttpClientTests
 {
     [Fact]

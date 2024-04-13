@@ -5,6 +5,7 @@ using Milvasoft.UnitTests.TestHelpers;
 
 namespace Milvasoft.UnitTests.ComponentsTests.RestTests.RequestTests;
 
+[Trait("Rest Components Unit Tests", "Milvasoft.Components.Rest project unit tests.")]
 public class AggregationRequestTests
 {
     #region With List Query Provider Source

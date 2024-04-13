@@ -5,6 +5,7 @@ using Milvasoft.UnitTests.CoreTests.UtilTests.Fixtures;
 
 namespace Milvasoft.UnitTests.CoreTests.UtilTests;
 
+[Trait("Core Unit Tests", "Milvasoft.Core project unit tests.")]
 public partial class MilvaLazyTests
 {
     [Fact]

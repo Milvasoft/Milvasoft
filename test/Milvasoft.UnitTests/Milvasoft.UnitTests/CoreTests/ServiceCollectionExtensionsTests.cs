@@ -7,6 +7,7 @@ using Milvasoft.Core.MultiLanguage.Manager;
 
 namespace Milvasoft.UnitTests.CoreTests;
 
+[Trait("Core Unit Tests", "Milvasoft.Core project unit tests.")]
 public class ServiceCollectionExtensionsTests
 {
     [Fact]

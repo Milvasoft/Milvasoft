@@ -6,6 +6,7 @@ using System.Text.Json;
 
 namespace Milvasoft.UnitTests.CoreTests.HelperTests.ConversionTests;
 
+[Trait("Core Unit Tests", "Milvasoft.Core project unit tests.")]
 public partial class ConversionHelperTests
 {
     #region ToGuid

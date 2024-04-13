@@ -5,6 +5,7 @@ using System.Text.Json;
 
 namespace Milvasoft.UnitTests.CoreTests.UtilTests.JsonConverterTests;
 
+[Trait("Core Unit Tests", "Milvasoft.Core project unit tests.")]
 public class InterfaceConverterFactoryTests
 {
     [Fact]

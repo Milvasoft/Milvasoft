@@ -5,6 +5,7 @@ using Milvasoft.UnitTests.CoreTests.UtilTests.JsonConverterTests.Helpers;
 
 namespace Milvasoft.UnitTests.CoreTests.UtilTests.JsonConverterTests;
 
+[Trait("Core Unit Tests", "Milvasoft.Core project unit tests.")]
 public class InterfaceConverterTests
 {
     private readonly InterfaceConverter<ClassImplementsInterfaceFixture, IInterfaceFixture> _converter = new();

@@ -4,6 +4,7 @@ using Milvasoft.Core.Helpers.GeoLocation.Models;
 
 namespace Milvasoft.UnitTests.CoreTests.HelperTests.GeoLocationTests;
 
+[Trait("Core Unit Tests", "Milvasoft.Core project unit tests.")]
 public partial class GeoLocationExtensionsTests
 {
     [Fact]

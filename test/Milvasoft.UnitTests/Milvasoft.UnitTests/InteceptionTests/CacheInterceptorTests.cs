@@ -12,6 +12,7 @@ using Milvasoft.UnitTests.InteceptionTests.Fixtures;
 
 namespace Milvasoft.UnitTests.InteceptionTests;
 
+[Trait("Interceptors Unit Tests", "Unit tests for Milvasoft.Interception project interceptors.")]
 public class CacheInterceptorTests
 {
     [Fact]

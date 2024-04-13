@@ -7,6 +7,7 @@ using System.Text.Json;
 
 namespace Milvasoft.UnitTests.ComponentsTests.RestTests;
 
+[Trait("Rest Components Unit Tests", "Milvasoft.Components.Rest project unit tests.")]
 public class RestExtensionsTests
 {
     #region AddResponseConverters

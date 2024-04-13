@@ -5,6 +5,7 @@ using System.Security.Cryptography;
 
 namespace Milvasoft.UnitTests.CryptographyTests;
 
+[Trait("Cryptography Unit Tests", "Milvasoft.Cryptography project unit tests.")]
 public class MilvaCryptographyTests
 {
     #region Encrypt & Decrypt Async

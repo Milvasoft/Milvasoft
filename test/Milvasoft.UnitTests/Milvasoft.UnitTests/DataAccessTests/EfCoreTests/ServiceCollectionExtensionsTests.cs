@@ -5,6 +5,7 @@ using Milvasoft.DataAccess.EfCore.Configuration;
 
 namespace Milvasoft.UnitTests.DataAccessTests.EfCoreTests;
 
+[Trait("EF Core Data Access Unit Tests", "Unit tests for Milvasoft.DataAccess.EfCore unit testable parts.")]
 public class ServiceCollectionExtensionsTests
 {
     [Fact]

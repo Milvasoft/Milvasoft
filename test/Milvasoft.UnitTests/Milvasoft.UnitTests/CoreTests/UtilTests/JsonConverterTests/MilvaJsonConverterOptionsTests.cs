@@ -5,6 +5,7 @@ using Milvasoft.Core.Utils.JsonConverters;
 namespace Milvasoft.UnitTests.CoreTests.UtilTests.JsonConverterTests;
 
 [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "xUnit1004:Test methods should not be skipped", Justification = "<Pending>")]
+[Trait("Core Unit Tests", "Milvasoft.Core project unit tests.")]
 public class MilvaJsonConverterOptionsTests
 {
     [Fact(Skip = "Should be run separately when necessary because of static object access.")]

@@ -7,6 +7,7 @@ using Milvasoft.Interception.Decorator;
 
 namespace Milvasoft.UnitTests.InteceptionTests.DecoratorTests;
 
+[Trait("Interception Unit Tests", "Unit tests for Milvasoft.Interception project.")]
 public class ChangeArgumentTests
 {
     [Theory, AutoData]

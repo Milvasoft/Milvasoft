@@ -4,6 +4,7 @@ using Milvasoft.Core.Exceptions;
 
 namespace Milvasoft.UnitTests.ComponentsTests.RestTests.RequestTests;
 
+[Trait("Rest Components Unit Tests", "Milvasoft.Components.Rest project unit tests.")]
 public class ListRequestTests
 {
     #region CalculatePageCountAndCompareWithRequested

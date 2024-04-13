@@ -4,6 +4,7 @@ using Milvasoft.Types.Structs;
 namespace Milvasoft.UnitTests.ComponentsTests.TypesTests;
 
 [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0017:Simplify object initialization", Justification = "<Pending>")]
+[Trait("Types Components Unit Tests", "Milvasoft.Components.Types project unit tests.")]
 public class UpdatePropertyTests
 {
     [Fact]

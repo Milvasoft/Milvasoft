@@ -4,6 +4,7 @@ using Milvasoft.Components.Rest.Request;
 namespace Milvasoft.UnitTests.ComponentsTests.RestTests.RequestTests;
 
 [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "xUnit1042:The member referenced by the MemberData attribute returns untyped data rows", Justification = "<Pending>")]
+[Trait("Rest Components Unit Tests", "Milvasoft.Components.Rest project unit tests.")]
 public class FilterCriteriaTests
 {
     /// <summary>

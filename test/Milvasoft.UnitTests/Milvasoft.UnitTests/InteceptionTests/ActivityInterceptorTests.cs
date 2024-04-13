@@ -7,6 +7,7 @@ using Milvasoft.Interception.Interceptors.ActivityScope;
 
 namespace Milvasoft.UnitTests.InteceptionTests;
 
+[Trait("Interceptors Unit Tests", "Unit tests for Milvasoft.Interception project interceptors.")]
 public class ActivityInterceptorTests
 {
     [Fact]

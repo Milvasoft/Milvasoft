@@ -6,6 +6,7 @@ using System.Linq.Expressions;
 
 namespace Milvasoft.UnitTests.DataAccessTests.EfCoreTests;
 
+[Trait("EF Core Data Access Unit Tests", "Unit tests for Milvasoft.DataAccess.EfCore unit testable parts.")]
 public class SetPropertyBuilderTests
 {
     #region SetProperty

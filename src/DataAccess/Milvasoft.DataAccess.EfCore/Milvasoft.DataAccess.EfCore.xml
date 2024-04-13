@@ -217,7 +217,7 @@
         </member>
         <member name="M:Milvasoft.DataAccess.EfCore.DbContextBase.MilvaDbContext.ChangeSoftDeletionState(Milvasoft.DataAccess.EfCore.Utils.Enums.SoftDeletionState)">
             <summary>
-            Activate soft delete.
+            Changes soft deletion state.
             </summary>
         </member>
         <member name="M:Milvasoft.DataAccess.EfCore.DbContextBase.MilvaDbContext.SetSoftDeletionStateToDefault">
@@ -1232,22 +1232,10 @@
             Helper repository for general DbContext(<typeparamref name="TContext"/>) operations.
             </summary>
         </member>
-        <member name="M:Milvasoft.DataAccess.EfCore.RepositoryBase.Abstract.IContextRepository`1.IgnoreSoftDeleteForNextProcess">
+        <member name="M:Milvasoft.DataAccess.EfCore.RepositoryBase.Abstract.IContextRepository`1.ChangeSoftDeletionState(Milvasoft.DataAccess.EfCore.Utils.Enums.SoftDeletionState)">
             <summary>
-            Ignores soft delete for next process. Runs correctly, if <typeparamref name="TContext"/> inherit from MilvaDbContext.
+            Changes soft deletion state.
             </summary>
-        </member>
-        <member name="M:Milvasoft.DataAccess.EfCore.RepositoryBase.Abstract.IContextRepository`1.ActivateSoftDelete">
-            <summary>
-            Activate soft delete. Runs correctly, if <typeparamref name="TContext"/> inherit from MilvaDbContext.
-            </summary>
-        </member>
-        <member name="M:Milvasoft.DataAccess.EfCore.RepositoryBase.Abstract.IContextRepository`1.ExecuteQueryAsync(System.String)">
-            <summary>
-            Executes sql query to database asynchronously.(e.g. trigger, event)
-            </summary>
-            <param name="query"></param>
-            <returns></returns>
         </member>
         <member name="M:Milvasoft.DataAccess.EfCore.RepositoryBase.Abstract.IContextRepository`1.ApplyTransactionAsync(System.Func{System.Threading.Tasks.Task},System.Boolean)">
             <summary>
@@ -1304,25 +1292,6 @@
             <param name="startTransaction"> When nested conditional transactions are desired, a transaction cannot be started for the transaction it contains. </param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.DataAccess.EfCore.RepositoryBase.Abstract.IContextRepository`1.InitializeUpdating``2(``0)">
-            <summary>
-            User update process.
-            </summary>
-        </member>
-        <member name="M:Milvasoft.DataAccess.EfCore.RepositoryBase.Abstract.IContextRepository`1.GetDbSet``1">
-            <summary>
-            Gets requested DbSet by <typeparamref name="TEntity"/>.
-            </summary>
-            <typeparam name="TEntity"></typeparam>
-            <returns></returns>
-        </member>
-        <member name="M:Milvasoft.DataAccess.EfCore.RepositoryBase.Abstract.IContextRepository`1.ExistsAsync``2(``1)">
-            <summary>
-            Returns whether or not the entity that satisfies this condition exists. 
-            </summary>
-            <param name="id"></param>
-            <returns></returns>
-        </member>
         <member name="T:Milvasoft.DataAccess.EfCore.RepositoryBase.Abstract.IMilvaDbContextBase">
             <summary>
             Interface for base repository.
@@ -1349,16 +1318,27 @@
             <param name="cancellationToken"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.DataAccess.EfCore.RepositoryBase.Abstract.IMilvaDbContextBase.SetDataAccessConfiguration(Milvasoft.DataAccess.EfCore.Configuration.IDataAccessConfiguration)">
-            <summary>
-            Sets milva db context specific configuration.
-            </summary>
-            <param name="dbContextConfiguration"></param>
-        </member>
         <member name="M:Milvasoft.DataAccess.EfCore.RepositoryBase.Abstract.IMilvaDbContextBase.GetDataAccessConfiguration">
             <summary>
-            Gets milva db context specific configuration.
+            Gets milva db context configuration object.
             </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.DataAccess.EfCore.RepositoryBase.Abstract.IMilvaDbContextBase.ChangeSoftDeletionState(Milvasoft.DataAccess.EfCore.Utils.Enums.SoftDeletionState)">
+            <summary>
+            Changes soft deletion state.
+            </summary>
+        </member>
+        <member name="M:Milvasoft.DataAccess.EfCore.RepositoryBase.Abstract.IMilvaDbContextBase.SetSoftDeletionStateToDefault">
+            <summary>
+            Sets soft deletion state to default state in <see cref="T:Milvasoft.DataAccess.EfCore.Configuration.DataAccessConfiguration"/>.
+            </summary>
+        </member>
+        <member name="M:Milvasoft.DataAccess.EfCore.RepositoryBase.Abstract.IMilvaDbContextBase.SoftDeletionStateResetAfterOperation(System.Boolean)">
+            <summary>
+            It updates the state that determines whether soft delete state reset to default occurs after any operation.
+            </summary>
+            <param name="state">Soft delete reset state.</param>
         </member>
         <member name="M:Milvasoft.DataAccess.EfCore.RepositoryBase.Abstract.IMilvaDbContextBase.GetCurrentSoftDeletionState">
             <summary>
@@ -1397,22 +1377,10 @@
             DbContext object.
             </summary>
         </member>
-        <member name="M:Milvasoft.DataAccess.EfCore.RepositoryBase.Concrete.ContextRepository`1.IgnoreSoftDeleteForNextProcess">
+        <member name="M:Milvasoft.DataAccess.EfCore.RepositoryBase.Concrete.ContextRepository`1.ChangeSoftDeletionState(Milvasoft.DataAccess.EfCore.Utils.Enums.SoftDeletionState)">
             <summary>
-            Ignores soft delete for next process for current <see cref="T:Microsoft.EntityFrameworkCore.DbContext"/> instance. Runs correctly, if <typeparamref name="TContext"/> inherit from MilvaDbContext.
+            Changes soft deletion state.
             </summary>
-        </member>
-        <member name="M:Milvasoft.DataAccess.EfCore.RepositoryBase.Concrete.ContextRepository`1.ActivateSoftDelete">
-            <summary>
-            Activate soft delete for current <see cref="T:Microsoft.EntityFrameworkCore.DbContext"/> instance. Runs correctly, if <typeparamref name="TContext"/> inherit from MilvaDbContext.
-            </summary>
-        </member>
-        <member name="M:Milvasoft.DataAccess.EfCore.RepositoryBase.Concrete.ContextRepository`1.ExecuteQueryAsync(System.String)">
-            <summary>
-            Executes sql query to database asynchronously.(e.g. trigger, event).
-            </summary>
-            <param name="query"></param>
-            <returns></returns>
         </member>
         <member name="M:Milvasoft.DataAccess.EfCore.RepositoryBase.Concrete.ContextRepository`1.ApplyTransactionAsync(System.Func{System.Threading.Tasks.Task},System.Boolean)">
             <summary>
@@ -1469,43 +1437,11 @@
             <param name="startTransaction"> When nested conditional transactions are desired, a transaction cannot be started for the transaction it contains. </param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.DataAccess.EfCore.RepositoryBase.Concrete.ContextRepository`1.InitializeUpdating``2(``0)">
-            <summary>
-            User update process.
-            </summary>
-        </member>
-        <member name="M:Milvasoft.DataAccess.EfCore.RepositoryBase.Concrete.ContextRepository`1.GetRequiredContents``1">
-            <summary>
-            Gets requested contents by <typeparamref name="TEntity"/> DbSet.
-            </summary>
-            <typeparam name="TEntity"></typeparam>
-            <returns></returns>
-        </member>
-        <member name="M:Milvasoft.DataAccess.EfCore.RepositoryBase.Concrete.ContextRepository`1.GetRequiredContents(System.Type)">
-            <summary>
-            Gets requested contents by <paramref name="type"/> DbSet.
-            </summary>
-            <param name="type"></param>
-            <returns></returns>
-        </member>
         <member name="M:Milvasoft.DataAccess.EfCore.RepositoryBase.Concrete.ContextRepository`1.GetDbSet``1">
             <summary>
             Gets requested DbSet by <typeparamref name="TEntity"/>.
             </summary>
             <typeparam name="TEntity"></typeparam>
-            <returns></returns>
-        </member>
-        <member name="M:Milvasoft.DataAccess.EfCore.RepositoryBase.Concrete.ContextRepository`1.ExistsAsync``2(``1)">
-            <summary>
-            Returns whether or not the entity that satisfies this condition exists. 
-            </summary>
-            <param name="id"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Milvasoft.DataAccess.EfCore.RepositoryBase.Concrete.ContextRepository`1.CreateIsDeletedFalseExpression``1">
-            <summary>
-            Gets <b>entity => entity.IsDeleted == false</b> expression, if <typeparamref name="TEntity"/> is assignable from <see cref="T:Milvasoft.Core.EntityBases.Concrete.Auditing.FullAuditableEntity`1"/>.
-            </summary>
             <returns></returns>
         </member>
         <member name="T:Milvasoft.DataAccess.EfCore.ServiceCollectionExtension">

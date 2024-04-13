@@ -15,6 +15,7 @@ using System.Net;
 namespace Milvasoft.UnitTests.DataAccessTests.EfCoreTests;
 
 [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "xUnit1042:The member referenced by the MemberData attribute returns untyped data rows", Justification = "<Pending>")]
+[Trait("EF Core Data Access Unit Tests", "Unit tests for Milvasoft.DataAccess.EfCore unit testable parts.")]
 public class MilvaEfExtensionsTests
 {
     #region WithFiltering
