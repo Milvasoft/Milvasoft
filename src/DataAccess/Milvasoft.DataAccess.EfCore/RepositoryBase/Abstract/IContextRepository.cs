@@ -6,24 +6,12 @@ namespace Milvasoft.DataAccess.EfCore.RepositoryBase.Abstract;
 /// Helper repository for general DbContext(<typeparamref name="TContext"/>) operations.
 /// </summary>
 [System.Diagnostics.CodeAnalysis.SuppressMessage("Major Code Smell", "S2326:Unused type parameters should be removed", Justification = "<Pending>")]
-public interface IContextRepository<TContext> where TContext : DbContext
+public interface IContextRepository<TContext> where TContext : DbContext, IMilvaDbContextBase
 {
     /// <summary>
-    /// Ignores soft delete for next process. Runs correctly, if <typeparamref name="TContext"/> inherit from MilvaDbContext.
+    /// Changes soft deletion state.
     /// </summary>
-    void IgnoreSoftDeleteForNextProcess();
-
-    /// <summary>
-    /// Activate soft delete. Runs correctly, if <typeparamref name="TContext"/> inherit from MilvaDbContext.
-    /// </summary>
-    void ActivateSoftDelete();
-
-    /// <summary>
-    /// Executes sql query to database asynchronously.(e.g. trigger, event)
-    /// </summary>
-    /// <param name="query"></param>
-    /// <returns></returns>
-    Task ExecuteQueryAsync(string query);
+    void ChangeSoftDeletionState(SoftDeletionState state);
 
     /// <summary>
     /// Applies transaction process to requested function.
@@ -79,24 +67,4 @@ public interface IContextRepository<TContext> where TContext : DbContext
     /// <param name="startTransaction"> When nested conditional transactions are desired, a transaction cannot be started for the transaction it contains. </param>
     /// <returns></returns>
     Task<TResult> ApplyTransactionAsync<TResult>(Func<Task<TResult>> function, Func<Task> rollbackFunction, bool startTransaction = true);
-
-    /// <summary>
-    /// User update process.
-    /// </summary>
-    void InitializeUpdating<TEntity, TKey>(TEntity entity) where TEntity : class, IBaseEntity<TKey>
-                                                           where TKey : struct, IEquatable<TKey>;
-
-    /// <summary>
-    /// Gets requested DbSet by <typeparamref name="TEntity"/>.
-    /// </summary>
-    /// <typeparam name="TEntity"></typeparam>
-    /// <returns></returns>
-    DbSet<TEntity> GetDbSet<TEntity>() where TEntity : class;
-
-    /// <summary>
-    /// Returns whether or not the entity that satisfies this condition exists. 
-    /// </summary>
-    /// <param name="id"></param>
-    /// <returns></returns>
-    Task<bool> ExistsAsync<TEntity, TKey>(TKey id) where TEntity : class, IBaseEntity<TKey> where TKey : struct, IEquatable<TKey>;
 }

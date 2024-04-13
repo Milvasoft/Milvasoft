@@ -106,7 +106,7 @@ public abstract class MilvaDbContext(DbContextOptions options) : DbContext(optio
     public IDataAccessConfiguration GetDataAccessConfiguration() => _dbContextConfiguration;
 
     /// <summary>
-    /// Activate soft delete.
+    /// Changes soft deletion state.
     /// </summary>
     public void ChangeSoftDeletionState(SoftDeletionState state) => _currentSoftDeleteState = state;
 

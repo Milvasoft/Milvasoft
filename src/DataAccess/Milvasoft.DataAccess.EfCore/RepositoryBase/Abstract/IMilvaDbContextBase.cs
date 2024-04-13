@@ -29,15 +29,26 @@ public interface IMilvaDbContextBase
     Task SaveChangesBulkAsync(BulkConfig bulkConfig = null, CancellationToken cancellationToken = new CancellationToken());
 
     /// <summary>
-    /// Sets milva db context specific configuration.
+    /// Gets milva db context configuration object.
     /// </summary>
-    /// <param name="dbContextConfiguration"></param>
-    public void SetDataAccessConfiguration(IDataAccessConfiguration dbContextConfiguration);
+    /// <returns></returns>
+    IDataAccessConfiguration GetDataAccessConfiguration();
 
     /// <summary>
-    /// Gets milva db context specific configuration.
+    /// Changes soft deletion state.
     /// </summary>
-    public IDataAccessConfiguration GetDataAccessConfiguration();
+    void ChangeSoftDeletionState(SoftDeletionState state);
+
+    /// <summary>
+    /// Sets soft deletion state to default state in <see cref="DataAccessConfiguration"/>.
+    /// </summary>
+    void SetSoftDeletionStateToDefault();
+
+    /// <summary>
+    /// It updates the state that determines whether soft delete state reset to default occurs after any operation.
+    /// </summary>
+    /// <param name="state">Soft delete reset state.</param>
+    void SoftDeletionStateResetAfterOperation(bool state = true);
 
     /// <summary>
     /// Gets current soft deletion state.
