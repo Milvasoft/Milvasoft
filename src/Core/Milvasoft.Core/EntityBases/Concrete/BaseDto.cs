@@ -18,6 +18,11 @@ public abstract class BaseDto<TKey> : DtoBase, IBaseEntity<TKey> where TKey : st
     /// </summary>
     /// <returns></returns>
     public override string ToString() => $"[{GetType().Name} {Id}]";
+
+    /// <summary>
+    /// Gets the value of Id property.
+    /// </summary>
+    /// <returns></returns>
     public override object GetUniqueIdentifier() => Id;
 }
 
@@ -36,6 +41,11 @@ public abstract class DtoBase<TKey> : DtoBase, IEntityBase<TKey>
     /// </summary>
     /// <returns></returns>
     public override string ToString() => $"[{GetType().Name} {Id}]";
+
+    /// <summary>
+    /// Gets the value of Id property.
+    /// </summary>
+    /// <returns></returns>
     public override object GetUniqueIdentifier() => Id;
 }
 
@@ -51,6 +61,10 @@ public abstract class DtoBase
     {
     }
 
+    /// <summary>
+    /// Gets the value of Id property.
+    /// </summary>
+    /// <returns></returns>
     public abstract object GetUniqueIdentifier();
 
     /// <summary>

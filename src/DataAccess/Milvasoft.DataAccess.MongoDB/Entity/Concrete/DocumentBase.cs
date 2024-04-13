@@ -40,9 +40,8 @@ public abstract class DocumentBase : IDocumentBase
     }
 
     /// <summary>
-    /// Gets the Id property value of entity.
+    /// Gets the value of Id property.
     /// </summary>
     /// <returns></returns>
-    public object GetId() => Id;
     public object GetUniqueIdentifier() => Id;
 }

@@ -795,6 +795,12 @@
             Unique identifier for this entity. Do not use this property when access Id. This is a representation for sql translations etc.
             </summary>
         </member>
+        <member name="M:Milvasoft.Core.EntityBases.Abstract.IMilvaEntity.GetUniqueIdentifier">
+            <summary>
+            Gets the value of Id property.
+            </summary>
+            <returns></returns>
+        </member>
         <member name="T:Milvasoft.Core.EntityBases.Abstract.ICreationAuditable`1">
             <summary>
             Determines entity's creation is auditable with user information.
@@ -1027,6 +1033,12 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="M:Milvasoft.Core.EntityBases.Concrete.BaseDto`1.GetUniqueIdentifier">
+            <summary>
+            Gets the value of Id property.
+            </summary>
+            <returns></returns>
+        </member>
         <member name="T:Milvasoft.Core.EntityBases.Concrete.DtoBase`1">
             <summary>
             Base dto for all of dtos.
@@ -1043,6 +1055,12 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="M:Milvasoft.Core.EntityBases.Concrete.DtoBase`1.GetUniqueIdentifier">
+            <summary>
+            Gets the value of Id property.
+            </summary>
+            <returns></returns>
+        </member>
         <member name="T:Milvasoft.Core.EntityBases.Concrete.DtoBase">
             <summary>
             Base dto for all of dtos.
@@ -1052,6 +1070,12 @@
             <summary>
             Initializes new instance.
             </summary>
+        </member>
+        <member name="M:Milvasoft.Core.EntityBases.Concrete.DtoBase.GetUniqueIdentifier">
+            <summary>
+            Gets the value of Id property.
+            </summary>
+            <returns></returns>
         </member>
         <member name="M:Milvasoft.Core.EntityBases.Concrete.DtoBase.GetUpdatableProperties">
             <summary>
@@ -1075,6 +1099,12 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="M:Milvasoft.Core.EntityBases.Concrete.BaseEntity`1.GetUniqueIdentifier">
+            <summary>
+            Gets the value of Id property.
+            </summary>
+            <returns></returns>
+        </member>
         <member name="T:Milvasoft.Core.EntityBases.Concrete.EntityBase`1">
             <summary>
             Base entity for all of entities.
@@ -1091,6 +1121,12 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="M:Milvasoft.Core.EntityBases.Concrete.EntityBase`1.GetUniqueIdentifier">
+            <summary>
+            Gets the value of Id property.
+            </summary>
+            <returns></returns>
+        </member>
         <member name="T:Milvasoft.Core.EntityBases.Concrete.EntityBase">
             <summary>
             Base entity for all of entities.
@@ -1100,6 +1136,12 @@
             <summary>
             Initializes new instance.
             </summary>
+        </member>
+        <member name="M:Milvasoft.Core.EntityBases.Concrete.EntityBase.GetUniqueIdentifier">
+            <summary>
+            Gets the value of Id property.
+            </summary>
+            <returns></returns>
         </member>
         <member name="T:Milvasoft.Core.EntityBases.MultiTenancy.IMilvaTenantBase`1">
             <summary>

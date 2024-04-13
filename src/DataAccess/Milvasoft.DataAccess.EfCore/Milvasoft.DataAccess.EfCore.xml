@@ -2220,7 +2220,6 @@
             Detach entity if found in local store.
             </summary>
             <param name="entity"></param>
-            <param name="isUpdate"></param>
         </member>
         <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Concrete.BaseRepository`2.InternalSaveChangesAsync(System.Threading.CancellationToken)">
             <summary>
@@ -2454,7 +2453,7 @@
             Specific properties updates.
             </summary>
             <param name="entity"></param>
-            <param name="projectionProperties"></param>
+            <param name="propertySelectors"></param>
             <returns></returns>
         </member>
         <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Concrete.BaseRepository`2.Update(System.Collections.Generic.IEnumerable{`0},System.Linq.Expressions.Expression{System.Func{`0,System.Object}}[])">
@@ -2462,7 +2461,7 @@
             Specific properties updates.
             </summary>
             <param name="entities"></param>
-            <param name="projectionProperties"></param>
+            <param name="propertySelectors"></param>
             <returns></returns>
         </member>
         <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Concrete.BaseRepository`2.Update(System.Collections.Generic.IEnumerable{`0})">

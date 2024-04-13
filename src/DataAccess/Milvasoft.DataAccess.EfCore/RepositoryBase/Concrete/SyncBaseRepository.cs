@@ -283,13 +283,13 @@ public abstract partial class BaseRepository<TEntity, TContext> where TEntity : 
     /// Specific properties updates.
     /// </summary>
     /// <param name="entity"></param>
-    /// <param name="projectionProperties"></param>
+    /// <param name="propertySelectors"></param>
     /// <returns></returns>
-    public virtual void Update(TEntity entity, params Expression<Func<TEntity, object>>[] projectionProperties)
+    public virtual void Update(TEntity entity, params Expression<Func<TEntity, object>>[] propertySelectors)
     {
         var dbEntry = _dbContext.Entry(entity);
 
-        foreach (var includeProperty in projectionProperties)
+        foreach (var includeProperty in propertySelectors)
             dbEntry.Property(includeProperty).IsModified = true;
 
         SaveChanges();
@@ -299,9 +299,9 @@ public abstract partial class BaseRepository<TEntity, TContext> where TEntity : 
     /// Specific properties updates.
     /// </summary>
     /// <param name="entities"></param>
-    /// <param name="projectionProperties"></param>
+    /// <param name="propertySelectors"></param>
     /// <returns></returns>
-    public virtual void Update(IEnumerable<TEntity> entities, params Expression<Func<TEntity, object>>[] projectionProperties)
+    public virtual void Update(IEnumerable<TEntity> entities, params Expression<Func<TEntity, object>>[] propertySelectors)
     {
         if (entities.IsNullOrEmpty())
             return;
@@ -310,7 +310,7 @@ public abstract partial class BaseRepository<TEntity, TContext> where TEntity : 
         {
             var dbEntry = _dbContext.Entry(entity);
 
-            foreach (var includeProperty in projectionProperties)
+            foreach (var includeProperty in propertySelectors)
                 dbEntry.Property(includeProperty).IsModified = true;
         }
 

@@ -173,7 +173,6 @@ public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepositor
                        .Select(projection)
                        .SingleOrDefaultAsync(conditionAfterProjection ?? (entity => true), cancellationToken);
 
-
     #endregion
 
     #region Async GetById
@@ -770,7 +769,6 @@ public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepositor
     /// Detach entity if found in local store.
     /// </summary>
     /// <param name="entity"></param>
-    /// <param name="isUpdate"></param>
     protected void DetachFromLocalIfExists(TEntity entity)
     {
         var localEntity = _dbContext.Set<TEntity>().Local.FirstOrDefault(u => u.GetUniqueIdentifier().Equals(entity.GetUniqueIdentifier()));

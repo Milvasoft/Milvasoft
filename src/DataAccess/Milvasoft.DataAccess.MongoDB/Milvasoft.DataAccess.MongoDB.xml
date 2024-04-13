@@ -629,9 +629,9 @@
             Creation date of entity.
             </summary>
         </member>
-        <member name="M:Milvasoft.DataAccess.MongoDB.Entity.Concrete.DocumentBase.GetId">
+        <member name="M:Milvasoft.DataAccess.MongoDB.Entity.Concrete.DocumentBase.GetUniqueIdentifier">
             <summary>
-            Gets the Id property value of entity.
+            Gets the value of Id property.
             </summary>
             <returns></returns>
         </member>

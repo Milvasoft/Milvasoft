@@ -43,5 +43,9 @@ public interface IMilvaEntity
         set => Id = value;
     }
 
+    /// <summary>
+    /// Gets the value of Id property.
+    /// </summary>
+    /// <returns></returns>
     public abstract object GetUniqueIdentifier();
 }

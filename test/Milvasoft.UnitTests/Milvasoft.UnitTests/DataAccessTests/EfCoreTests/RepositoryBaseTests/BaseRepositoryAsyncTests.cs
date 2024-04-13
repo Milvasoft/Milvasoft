@@ -1371,6 +1371,7 @@ public class BaseRepositoryAsyncTests
 
         // Act 
         var allEntities = await dbContext.FullAuditableEntities.ToListAsync();
+        await entityRepository.UpdateAsync(entities, default, projections);
 
         // Assert
         allEntities[0].LastModificationDate.Should().BeNull();
