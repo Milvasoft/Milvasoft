@@ -3,7 +3,6 @@ using Microsoft.EntityFrameworkCore;
 using Milvasoft.Components.Rest.MilvaResponse;
 using Milvasoft.Components.Rest.Request;
 using Milvasoft.DataAccess.EfCore.RepositoryBase.Abstract;
-using Milvasoft.DataAccess.EfCore.Utils.IncludeLibrary;
 using System.Linq.Expressions;
 
 namespace Milvasoft.Helpers.DataAccess.EfCore.Concrete;
@@ -47,23 +46,6 @@ public abstract partial class BaseRepository<TEntity, TContext> where TEntity : 
                  .Select(projectionExpression ?? (entity => entity))
                  .FirstOrDefault(CreateConditionExpression(conditionExpression) ?? (entity => true));
 
-    /// <summary>
-    ///  Returns first entity or default value which IsDeleted condition is true with includes from database asynchronously. If the condition is requested, it also provides that condition. 
-    /// </summary>
-    /// <param name="includes"></param>
-    /// <param name="projectionExpression"></param>
-    /// <param name="tracking"></param>
-    /// <param name="conditionExpression"></param>
-    /// <returns></returns>
-    public virtual TEntity GetFirstOrDefault(Func<IIncludable<TEntity>, IIncludable> includes,
-                                             Expression<Func<TEntity, TEntity>> projectionExpression = null,
-                                             Expression<Func<TEntity, bool>> conditionExpression = null,
-                                             bool tracking = false)
-        => _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
-                 .IncludeMultiple(includes)
-                 .Select(projectionExpression ?? (entity => entity))
-                 .FirstOrDefault(CreateConditionExpression(conditionExpression) ?? (entity => true));
-
     #endregion
 
     #region Sync SingleOrDefault
@@ -94,23 +76,6 @@ public abstract partial class BaseRepository<TEntity, TContext> where TEntity : 
                                               Expression<Func<TEntity, bool>> conditionExpression = null,
                                               bool tracking = false)
         => _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
-                 .Select(projectionExpression ?? (entity => entity))
-                 .SingleOrDefault(CreateConditionExpression(conditionExpression) ?? (entity => true));
-
-    /// <summary>
-    ///  Returns single entity or default value which IsDeleted condition is true with includes from database asynchronously. If the condition is requested, it also provides that condition.
-    /// </summary>
-    /// <param name="includes"></param>
-    /// <param name="conditionExpression"></param>
-    /// <param name="projectionExpression"></param>
-    /// <param name="tracking"></param>
-    /// <returns></returns>
-    public virtual TEntity GetSingleOrDefault(Func<IIncludable<TEntity>, IIncludable> includes,
-                                              Expression<Func<TEntity, TEntity>> projectionExpression = null,
-                                              Expression<Func<TEntity, bool>> conditionExpression = null,
-                                              bool tracking = false)
-        => _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
-                 .IncludeMultiple(includes)
                  .Select(projectionExpression ?? (entity => entity))
                  .SingleOrDefault(CreateConditionExpression(conditionExpression) ?? (entity => true));
 
@@ -155,29 +120,6 @@ public abstract partial class BaseRepository<TEntity, TContext> where TEntity : 
         var mainCondition = CreateKeyEqualityExpression(id, conditionExpression);
 
         return _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
-                     .Select(projectionExpression ?? (entity => entity))
-                     .SingleOrDefault(mainCondition);
-    }
-
-    /// <summary>
-    ///  Returns one entity which IsDeleted condition is true by entity Id with includes from database asynchronously. If the condition is requested, it also provides that condition. 
-    /// </summary>
-    /// <param name="id"></param>
-    /// <param name="includes"></param>
-    /// <param name="conditionExpression"></param>
-    /// <param name="projectionExpression"></param>
-    /// <param name="tracking"></param>
-    /// <returns> The entity found or null. </returns>
-    public virtual TEntity GetById(object id,
-                                   Func<IIncludable<TEntity>, IIncludable> includes,
-                                   Expression<Func<TEntity, bool>> conditionExpression = null,
-                                   Expression<Func<TEntity, TEntity>> projectionExpression = null,
-                                   bool tracking = false)
-    {
-        var mainCondition = CreateKeyEqualityExpression(id, conditionExpression);
-
-        return _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
-                     .IncludeMultiple(includes)
                      .Select(projectionExpression ?? (entity => entity))
                      .SingleOrDefault(mainCondition);
     }
@@ -252,43 +194,6 @@ public abstract partial class BaseRepository<TEntity, TContext> where TEntity : 
                  .Select(projectionExpression ?? (entity => entity))
                  .ToList();
 
-    /// <summary>
-    ///  Returns all entities which IsDeleted condition is true with specified includes from database asynchronously. If the condition is requested, it also provides that condition.
-    /// </summary>
-    /// <param name="includes"></param>
-    /// <param name="projectionExpression"></param>
-    /// <param name="tracking"></param>
-    /// <param name="conditionExpression"></param>
-    /// <returns></returns>
-    public virtual IEnumerable<TEntity> GetAll(Func<IIncludable<TEntity>, IIncludable> includes,
-                                               Expression<Func<TEntity, bool>> conditionExpression = null,
-                                               Expression<Func<TEntity, TEntity>> projectionExpression = null,
-                                               bool tracking = false)
-        => _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
-                 .Where(CreateConditionExpression(conditionExpression) ?? (entity => true))
-                 .IncludeMultiple(includes)
-                 .Select(projectionExpression ?? (entity => entity))
-                 .ToList();
-
-    /// <summary>
-    /// Returns all entities which IsDeleted condition is true with specified includes from database asynchronously. If the condition is requested, it also provides that condition.
-    /// </summary>
-    /// <typeparam name="TResult"></typeparam>
-    /// <param name="includes"></param>
-    /// <param name="projectionExpression"></param>
-    /// <param name="conditionExpression"></param>
-    /// <param name="tracking"></param>
-    /// <returns></returns>
-    public virtual IEnumerable<TResult> GetAll<TResult>(Func<IIncludable<TEntity>, IIncludable> includes,
-                                                        Expression<Func<TEntity, TResult>> projectionExpression,
-                                                        Expression<Func<TEntity, bool>> conditionExpression = null,
-                                                        bool tracking = false)
-        => _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
-                 .Where(CreateConditionExpression(conditionExpression) ?? (entity => true))
-                 .IncludeMultiple(includes)
-                 .Select(projectionExpression)
-                 .ToList();
-
     #endregion
 
     #region Sync GetSome
@@ -326,27 +231,6 @@ public abstract partial class BaseRepository<TEntity, TContext> where TEntity : 
         => _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
                  .Where(CreateConditionExpression(conditionExpression) ?? (entity => true))
                  .Take(count)
-                 .Select(projectionExpression ?? (entity => entity))
-                 .ToList();
-
-    /// <summary>
-    ///  Returns all entities which IsDeleted condition is true with specified includes from database asynchronously. If the condition is requested, it also provides that condition.
-    /// </summary>
-    /// <param name="count"></param>
-    /// <param name="includes"></param>
-    /// <param name="projectionExpression"></param>
-    /// <param name="tracking"></param>
-    /// <param name="conditionExpression"></param>
-    /// <returns></returns>
-    public virtual IEnumerable<TEntity> GetSome(int count,
-                                                Func<IIncludable<TEntity>, IIncludable> includes,
-                                                Expression<Func<TEntity, TEntity>> projectionExpression = null,
-                                                Expression<Func<TEntity, bool>> conditionExpression = null,
-                                                bool tracking = false)
-        => _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
-                 .Where(CreateConditionExpression(conditionExpression) ?? (entity => true))
-                 .Take(count)
-                 .IncludeMultiple(includes)
                  .Select(projectionExpression ?? (entity => entity))
                  .ToList();
 

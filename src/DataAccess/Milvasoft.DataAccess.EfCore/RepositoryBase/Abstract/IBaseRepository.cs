@@ -2,7 +2,6 @@
 using Microsoft.EntityFrameworkCore;
 using Milvasoft.Components.Rest.MilvaResponse;
 using Milvasoft.Components.Rest.Request;
-using Milvasoft.DataAccess.EfCore.Utils.IncludeLibrary;
 using Milvasoft.Types.Structs;
 using System.Linq.Expressions;
 
@@ -470,19 +469,6 @@ public interface IBaseRepository<TEntity, TContext> where TEntity : class, IMilv
                               Expression<Func<TEntity, bool>> conditionExpression = null,
                               bool tracking = false);
 
-    /// <summary>
-    ///  Returns first entity or default value which IsDeleted condition is true with includes from database asynchronously. If the condition is requested, it also provides that condition. 
-    /// </summary>
-    /// <param name="includes"></param>
-    /// <param name="projectionExpression"></param>
-    /// <param name="tracking"></param>
-    /// <param name="conditionExpression"></param>
-    /// <returns></returns>
-    TEntity GetFirstOrDefault(Func<IIncludable<TEntity>, IIncludable> includes,
-                              Expression<Func<TEntity, TEntity>> projectionExpression = null,
-                              Expression<Func<TEntity, bool>> conditionExpression = null,
-                              bool tracking = false);
-
     #endregion
 
     #region Sync SingleOrDefault
@@ -506,19 +492,6 @@ public interface IBaseRepository<TEntity, TContext> where TEntity : class, IMilv
     /// <param name="conditionExpression"></param>
     /// <returns></returns>
     TEntity GetSingleOrDefault(Expression<Func<TEntity, TEntity>> projectionExpression = null,
-                               Expression<Func<TEntity, bool>> conditionExpression = null,
-                               bool tracking = false);
-
-    /// <summary>
-    ///  Returns single entity or default value which IsDeleted condition is true with includes from database asynchronously. If the condition is requested, it also provides that condition.
-    /// </summary>
-    /// <param name="includes"></param>
-    /// <param name="conditionExpression"></param>
-    /// <param name="projectionExpression"></param>
-    /// <param name="tracking"></param>
-    /// <returns></returns>
-    TEntity GetSingleOrDefault(Func<IIncludable<TEntity>, IIncludable> includes,
-                               Expression<Func<TEntity, TEntity>> projectionExpression = null,
                                Expression<Func<TEntity, bool>> conditionExpression = null,
                                bool tracking = false);
 
@@ -550,21 +523,6 @@ public interface IBaseRepository<TEntity, TContext> where TEntity : class, IMilv
     TEntity GetById(object id,
                     Expression<Func<TEntity, TEntity>> projectionExpression = null,
                     Expression<Func<TEntity, bool>> conditionExpression = null,
-                    bool tracking = false);
-
-    /// <summary>
-    ///  Returns one entity which IsDeleted condition is true by entity Id with includes from database asynchronously. If the condition is requested, it also provides that condition. 
-    /// </summary>
-    /// <param name="id"></param>
-    /// <param name="includes"></param>
-    /// <param name="conditionExpression"></param>
-    /// <param name="projectionExpression"></param>
-    /// <param name="tracking"></param>
-    /// <returns> The entity found or null. </returns>
-    TEntity GetById(object id,
-                    Func<IIncludable<TEntity>, IIncludable> includes,
-                    Expression<Func<TEntity, bool>> conditionExpression = null,
-                    Expression<Func<TEntity, TEntity>> projectionExpression = null,
                     bool tracking = false);
 
     #endregion
@@ -621,33 +579,6 @@ public interface IBaseRepository<TEntity, TContext> where TEntity : class, IMilv
                                 Expression<Func<TEntity, bool>> conditionExpression = null,
                                 bool tracking = false);
 
-    /// <summary>
-    ///  Returns all entities which IsDeleted condition is true with specified includes from database asynchronously. If the condition is requested, it also provides that condition.
-    /// </summary>
-    /// <param name="includes"></param>
-    /// <param name="projectionExpression"></param>
-    /// <param name="tracking"></param>
-    /// <param name="conditionExpression"></param>
-    /// <returns></returns>
-    IEnumerable<TEntity> GetAll(Func<IIncludable<TEntity>, IIncludable> includes,
-                                Expression<Func<TEntity, bool>> conditionExpression = null,
-                                Expression<Func<TEntity, TEntity>> projectionExpression = null,
-                                bool tracking = false);
-
-    /// <summary>
-    /// Returns all entities which IsDeleted condition is true with specified includes from database asynchronously. If the condition is requested, it also provides that condition.
-    /// </summary>
-    /// <typeparam name="TResult"></typeparam>
-    /// <param name="includes"></param>
-    /// <param name="projectionExpression"></param>
-    /// <param name="conditionExpression"></param>
-    /// <param name="tracking"></param>
-    /// <returns></returns>
-    IEnumerable<TResult> GetAll<TResult>(Func<IIncludable<TEntity>, IIncludable> includes,
-                                         Expression<Func<TEntity, TResult>> projectionExpression,
-                                         Expression<Func<TEntity, bool>> conditionExpression = null,
-                                         bool tracking = false);
-
     #endregion
 
     #region Sync GetSome
@@ -674,21 +605,6 @@ public interface IBaseRepository<TEntity, TContext> where TEntity : class, IMilv
     /// <param name="conditionExpression"></param>
     /// <returns></returns>
     IEnumerable<TEntity> GetSome(int count,
-                                 Expression<Func<TEntity, TEntity>> projectionExpression = null,
-                                 Expression<Func<TEntity, bool>> conditionExpression = null,
-                                 bool tracking = false);
-
-    /// <summary>
-    ///  Returns all entities which IsDeleted condition is true with specified includes from database asynchronously. If the condition is requested, it also provides that condition.
-    /// </summary>
-    /// <param name="count"></param>
-    /// <param name="includes"></param>
-    /// <param name="projectionExpression"></param>
-    /// <param name="tracking"></param>
-    /// <param name="conditionExpression"></param>
-    /// <returns></returns>
-    IEnumerable<TEntity> GetSome(int count,
-                                 Func<IIncludable<TEntity>, IIncludable> includes,
                                  Expression<Func<TEntity, TEntity>> projectionExpression = null,
                                  Expression<Func<TEntity, bool>> conditionExpression = null,
                                  bool tracking = false);
