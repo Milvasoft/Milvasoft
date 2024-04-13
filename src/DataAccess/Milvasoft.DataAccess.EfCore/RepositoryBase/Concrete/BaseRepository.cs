@@ -387,55 +387,10 @@ public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepositor
     /// <returns></returns>
     public virtual async Task UpdateAsync(TEntity entity, CancellationToken cancellationToken = default)
     {
+        ArgumentNullException.ThrowIfNull(entity);
+
         DetachFromLocalIfExists(entity);
         _dbSet.Update(entity);
-
-        await InternalSaveChangesAsync(cancellationToken);
-    }
-
-    /// <summary>
-    /// Specific properties updates.
-    /// </summary>
-    /// <param name="entity"></param>
-    /// <param name="cancellationToken"></param>
-    /// <param name="projectionProperties"></param>
-    /// <returns></returns>
-    public virtual async Task UpdateAsync(TEntity entity,
-                                          CancellationToken cancellationToken = default,
-                                          params Expression<Func<TEntity, object>>[] projectionProperties)
-    {
-        DetachFromLocalIfExists(entity);
-
-        var entry = _dbSet.Entry(entity);
-
-        foreach (var includeProperty in projectionProperties)
-            entry.Property(includeProperty).IsModified = true;
-
-        await InternalSaveChangesAsync(cancellationToken);
-    }
-
-    /// <summary>
-    /// Specific properties updates.
-    /// </summary>
-    /// <param name="entities"></param>
-    /// <param name="cancellationToken"></param>
-    /// <param name="projectionProperties"></param>
-    /// <returns></returns>
-    public virtual async Task UpdateAsync(IEnumerable<TEntity> entities,
-                                          CancellationToken cancellationToken = default,
-                                          params Expression<Func<TEntity, object>>[] projectionProperties)
-    {
-        if (entities.IsNullOrEmpty())
-            return;
-
-        foreach (var entity in entities)
-        {
-            DetachFromLocalIfExists(entity);
-            var entry = _dbSet.Entry(entity);
-
-            foreach (var includeProperty in projectionProperties)
-                entry.Property(includeProperty).IsModified = true;
-        }
 
         await InternalSaveChangesAsync(cancellationToken);
     }
@@ -461,6 +416,58 @@ public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepositor
     }
 
     /// <summary>
+    /// Specific properties updates.
+    /// </summary>
+    /// <param name="entity"></param>
+    /// <param name="cancellationToken"></param>
+    /// <param name="propertySelectors"></param>
+    /// <returns></returns>
+    public virtual async Task UpdateAsync(TEntity entity,
+                                          CancellationToken cancellationToken = default,
+                                          params Expression<Func<TEntity, object>>[] propertySelectors)
+    {
+        ArgumentNullException.ThrowIfNull(entity);
+
+        if (propertySelectors.IsNullOrEmpty())
+            return;
+
+        DetachFromLocalIfExists(entity);
+
+        var entry = _dbSet.Entry(entity);
+
+        foreach (var includeProperty in propertySelectors)
+            entry.Property(includeProperty).IsModified = true;
+
+        await InternalSaveChangesAsync(cancellationToken);
+    }
+
+    /// <summary>
+    /// Specific properties updates.
+    /// </summary>
+    /// <param name="entities"></param>
+    /// <param name="cancellationToken"></param>
+    /// <param name="propertySelectors"></param>
+    /// <returns></returns>
+    public virtual async Task UpdateAsync(IEnumerable<TEntity> entities,
+                                          CancellationToken cancellationToken = default,
+                                          params Expression<Func<TEntity, object>>[] propertySelectors)
+    {
+        if (entities.IsNullOrEmpty() || propertySelectors.IsNullOrEmpty())
+            return;
+
+        foreach (var entity in entities)
+        {
+            DetachFromLocalIfExists(entity);
+            var entry = _dbSet.Entry(entity);
+
+            foreach (var includeProperty in propertySelectors)
+                entry.Property(includeProperty).IsModified = true;
+        }
+
+        await InternalSaveChangesAsync(cancellationToken);
+    }
+
+    /// <summary>
     ///  Deletes single entity from database asynchronously.
     /// </summary>
     /// <param name="entity"></param>
@@ -468,6 +475,8 @@ public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepositor
     /// <returns></returns>
     public virtual async Task DeleteAsync(TEntity entity, CancellationToken cancellationToken = default)
     {
+        ArgumentNullException.ThrowIfNull(entity);
+
         DetachFromLocalIfExists(entity);
         _dbSet.Remove(entity);
 

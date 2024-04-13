@@ -275,22 +275,22 @@ public interface IBaseRepository<TEntity, TContext> where TEntity : class, IMilv
     /// </summary>
     /// <param name="entity"></param>
     /// <param name="cancellationToken"></param>
-    /// <param name="projectionProperties"></param>
+    /// <param name="propertySelectors"></param>
     /// <returns></returns>
     Task UpdateAsync(TEntity entity,
                      CancellationToken cancellationToken = default,
-                     params Expression<Func<TEntity, object>>[] projectionProperties);
+                     params Expression<Func<TEntity, object>>[] propertySelectors);
 
     /// <summary>
     /// Specific properties updates.
     /// </summary>
     /// <param name="entities"></param>
     /// <param name="cancellationToken"></param>
-    /// <param name="projectionProperties"></param>
+    /// <param name="propertySelectors"></param>
     /// <returns></returns>
     Task UpdateAsync(IEnumerable<TEntity> entities,
                      CancellationToken cancellationToken = default,
-                     params Expression<Func<TEntity, object>>[] projectionProperties);
+                     params Expression<Func<TEntity, object>>[] propertySelectors);
 
     /// <summary>
     ///  Updates multiple entities in database asynchronously.
@@ -638,17 +638,17 @@ public interface IBaseRepository<TEntity, TContext> where TEntity : class, IMilv
     /// Specific properties updates.
     /// </summary>
     /// <param name="entity"></param>
-    /// <param name="projectionProperties"></param>
+    /// <param name="propertySelectors"></param>
     /// <returns></returns>
-    void Update(TEntity entity, params Expression<Func<TEntity, object>>[] projectionProperties);
+    void Update(TEntity entity, params Expression<Func<TEntity, object>>[] propertySelectors);
 
     /// <summary>
     /// Specific properties updates.
     /// </summary>
     /// <param name="entities"></param>
-    /// <param name="projectionProperties"></param>
+    /// <param name="propertySelectors"></param>
     /// <returns></returns>
-    void Update(IEnumerable<TEntity> entities, params Expression<Func<TEntity, object>>[] projectionProperties);
+    void Update(IEnumerable<TEntity> entities, params Expression<Func<TEntity, object>>[] propertySelectors);
 
     /// <summary>
     ///  Updates multiple entities in database asynchronously.

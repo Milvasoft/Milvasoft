@@ -9,6 +9,7 @@ using Milvasoft.DataAccess.EfCore.RepositoryBase.Abstract;
 using Milvasoft.DataAccess.EfCore.Utils.Enums;
 using Milvasoft.Helpers.DataAccess.EfCore.Concrete;
 using Milvasoft.UnitTests.DataAccessTests.EfCoreTests.Fixtures;
+using System.Linq.Expressions;
 
 namespace Milvasoft.UnitTests.DataAccessTests.EfCoreTests.RepositoryBaseTests;
 
@@ -994,6 +995,726 @@ public class BaseRepositoryAsyncTests
         result.Should().NotBeNull();
         result.Should().HaveCount(1);
         result[0].SomeStringProp.Should().BeNull();
+    }
+
+    #endregion
+
+    #region AddAsync
+
+    [Fact]
+    public async Task AddAsync_WithNullEntity_ShouldThrowException()
+    {
+        // Arrange
+        var configuration = new DataAccessConfiguration();
+        var services = GetServices(configuration);
+        var dbContext = services.GetService<SomeMilvaDbContextFixture>();
+        var entityRepository = services.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
+        await ResetDatabaseAsync(dbContext);
+
+        SomeFullAuditableEntityFixture entity = null;
+
+        // Act 
+        Func<Task> act = async () => await entityRepository.AddAsync(entity);
+
+        // Assert
+        await act.Should().ThrowAsync<ArgumentNullException>();
+    }
+
+    [Fact]
+    public async Task AddAsync_WithValidEntity_ShouldAddCorrectly()
+    {
+        // Arrange
+        var configuration = new DataAccessConfiguration();
+        var services = GetServices(configuration);
+        var dbContext = services.GetService<SomeMilvaDbContextFixture>();
+        var entityRepository = services.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
+        await ResetDatabaseAsync(dbContext);
+
+        var entity = new SomeFullAuditableEntityFixture()
+        {
+            Id = 1,
+            SomeDateProp = DateTime.Now.AddYears(1),
+            SomeDecimalProp = 10M,
+            SomeStringProp = "somestring1"
+        };
+
+        // Act 
+        await entityRepository.AddAsync(entity);
+        var addedEntity = await entityRepository.GetByIdAsync(1);
+
+        // Assert
+        addedEntity.Should().NotBeNull();
+        addedEntity.CreationDate.Should().NotBeNull();
+    }
+
+    #endregion
+
+    #region AddRangeAsync
+
+    [Fact]
+    public async Task AddRangeAsync_WithNullEntityList_ShouldDoNothing()
+    {
+        // Arrange
+        var configuration = new DataAccessConfiguration();
+        var services = GetServices(configuration);
+        var dbContext = services.GetService<SomeMilvaDbContextFixture>();
+        var entityRepository = services.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
+        await ResetDatabaseAsync(dbContext);
+
+        List<SomeFullAuditableEntityFixture> entities = null;
+
+        // Act 
+        await entityRepository.AddRangeAsync(entities);
+        var count = await dbContext.FullAuditableEntities.CountAsync();
+
+        // Assert
+        count.Should().Be(0);
+    }
+
+    [Fact]
+    public async Task AddRangeAsync_WithValidEntity_ShouldAddCorrectly()
+    {
+        // Arrange
+        var configuration = new DataAccessConfiguration();
+        var services = GetServices(configuration);
+        var dbContext = services.GetService<SomeMilvaDbContextFixture>();
+        var entityRepository = services.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
+        await ResetDatabaseAsync(dbContext);
+
+        var entities = new List<SomeFullAuditableEntityFixture>
+        {
+            new() {
+                Id = 1,
+                SomeDateProp = DateTime.Now.AddYears(1),
+                SomeDecimalProp = 10M,
+                SomeStringProp = "somestring1"
+            },
+            new() {
+                Id = 2,
+                SomeDateProp = DateTime.Now.AddYears(2),
+                SomeDecimalProp = 20M,
+                SomeStringProp = "somestring2"
+            }
+        };
+
+        // Act 
+        await entityRepository.AddRangeAsync(entities);
+        var count = await dbContext.FullAuditableEntities.CountAsync();
+        var addedEntity = await entityRepository.GetByIdAsync(1);
+
+        // Assert
+        count.Should().Be(2);
+        addedEntity.Should().NotBeNull();
+        addedEntity.CreationDate.Should().NotBeNull();
+    }
+
+    #endregion
+
+    #region UpdateAsync
+
+    [Fact]
+    public async Task UpdateAsync_ForSingleEntity_WithNullEntity_ShouldThrowException()
+    {
+        // Arrange
+        var configuration = new DataAccessConfiguration();
+        var services = GetServices(configuration);
+        var dbContext = services.GetService<SomeMilvaDbContextFixture>();
+        var entityRepository = services.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
+        await ResetDatabaseAndSeedAsync(dbContext);
+
+        SomeFullAuditableEntityFixture entity = null;
+
+        // Act 
+        Func<Task> act = async () => await entityRepository.UpdateAsync(entity);
+
+        // Assert
+        await act.Should().ThrowAsync<ArgumentNullException>();
+    }
+
+    [Fact]
+    public async Task UpdateAsync_ForSingleEntity_WithNotExistsEntity_ShouldThrowException()
+    {
+        // Arrange
+        var configuration = new DataAccessConfiguration();
+        var services = GetServices(configuration);
+        var dbContext = services.GetService<SomeMilvaDbContextFixture>();
+        var entityRepository = services.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
+        await ResetDatabaseAndSeedAsync(dbContext);
+
+        var entity = new SomeFullAuditableEntityFixture()
+        {
+            Id = 7,
+            SomeDateProp = DateTime.Now.AddYears(1),
+            SomeDecimalProp = 10M,
+            SomeStringProp = "somestring1"
+        };
+
+        // Act 
+        Func<Task> act = async () => await entityRepository.UpdateAsync(entity);
+
+        // Assert
+        await act.Should().ThrowAsync<DbUpdateConcurrencyException>();
+    }
+
+    [Fact]
+    public async Task UpdateAsync_ForSingleEntity_WithValidEntity_ShouldUpdateCorrectly()
+    {
+        // Arrange
+        var configuration = new DataAccessConfiguration();
+        var services = GetServices(configuration);
+        var dbContext = services.GetService<SomeMilvaDbContextFixture>();
+        var entityRepository = services.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
+        await ResetDatabaseAndSeedAsync(dbContext);
+
+        var entity = await entityRepository.GetByIdAsync(1);
+
+        // Act 
+        entity.SomeStringProp = "stringpropupdated";
+        await entityRepository.UpdateAsync(entity);
+
+        // Assert
+        var entityAfterUpdate = await entityRepository.GetByIdAsync(1);
+        entityAfterUpdate.SomeStringProp.Should().Be("stringpropupdated");
+    }
+
+    [Fact]
+    public async Task UpdateAsync_ForEntityList_WithNullEntityList_ShouldDoNothing()
+    {
+        // Arrange
+        var configuration = new DataAccessConfiguration();
+        var services = GetServices(configuration);
+        var dbContext = services.GetService<SomeMilvaDbContextFixture>();
+        var entityRepository = services.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
+        await ResetDatabaseAndSeedAsync(dbContext);
+
+        List<SomeFullAuditableEntityFixture> entities = null;
+
+        // Act 
+        await entityRepository.UpdateAsync(entities);
+        var allEntities = await dbContext.FullAuditableEntities.ToListAsync();
+
+        // Assert
+        allEntities[0].LastModificationDate.Should().BeNull();
+        allEntities[1].LastModificationDate.Should().BeNull();
+        allEntities[2].LastModificationDate.Should().BeNull();
+        allEntities[3].LastModificationDate.Should().BeNull();
+    }
+
+    [Fact]
+    public async Task UpdateAsync_ForEntityList_WithNotExistsEntities_ShouldThrowException()
+    {
+        // Arrange
+        var configuration = new DataAccessConfiguration();
+        var services = GetServices(configuration);
+        var dbContext = services.GetService<SomeMilvaDbContextFixture>();
+        var entityRepository = services.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
+        await ResetDatabaseAndSeedAsync(dbContext);
+
+        List<SomeFullAuditableEntityFixture> entities =
+        [
+            new SomeFullAuditableEntityFixture()
+            {
+                Id = 7,
+                SomeDateProp = DateTime.Now.AddYears(1),
+                SomeDecimalProp = 10M,
+                SomeStringProp = "somestring1"
+            },
+            new SomeFullAuditableEntityFixture()
+            {
+                Id = 8,
+                SomeDateProp = DateTime.Now.AddYears(1),
+                SomeDecimalProp = 10M,
+                SomeStringProp = "somestring1"
+            }
+        ];
+
+        // Act 
+        Func<Task> act = async () => await entityRepository.UpdateAsync(entities);
+
+        // Assert
+        await act.Should().ThrowAsync<DbUpdateConcurrencyException>();
+    }
+
+    [Fact]
+    public async Task UpdateAsync_ForEntityList_WithValidEntity_ShouldUpdateCorrectly()
+    {
+        // Arrange
+        var configuration = new DataAccessConfiguration();
+        var services = GetServices(configuration);
+        var dbContext = services.GetService<SomeMilvaDbContextFixture>();
+        var entityRepository = services.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
+        await ResetDatabaseAndSeedAsync(dbContext);
+
+        var entities = await entityRepository.GetAllAsync(i => i.Id == 1 || i.Id == 2);
+
+        // Act 
+        entities[0].SomeStringProp = "stringpropupdated";
+        entities[1].SomeStringProp = "stringpropupdated";
+        await entityRepository.UpdateAsync(entities);
+
+        // Assert
+        var entitiesAfterUpdate = await entityRepository.GetAllAsync(i => i.Id == 1 || i.Id == 2);
+        entitiesAfterUpdate[0].SomeStringProp.Should().Be("stringpropupdated");
+        entitiesAfterUpdate[1].SomeStringProp.Should().Be("stringpropupdated");
+    }
+
+    [Fact]
+    public async Task UpdateAsync_ForSingleEntityAndProjectionPropertiesOverload_WithNullEntity_ShouldThrowException()
+    {
+        // Arrange
+        var configuration = new DataAccessConfiguration();
+        var services = GetServices(configuration);
+        var dbContext = services.GetService<SomeMilvaDbContextFixture>();
+        var entityRepository = services.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
+        await ResetDatabaseAndSeedAsync(dbContext);
+
+        SomeFullAuditableEntityFixture entity = null;
+        Expression<Func<SomeFullAuditableEntityFixture, object>> projection = i => i.SomeStringProp;
+        Expression<Func<SomeFullAuditableEntityFixture, object>>[] projections = [projection];
+
+        // Act 
+        Func<Task> act = async () => await entityRepository.UpdateAsync(entity, default, projections);
+
+        // Assert
+        await act.Should().ThrowAsync<ArgumentNullException>();
+    }
+
+    [Fact]
+    public async Task UpdateAsync_ForSingleEntityAndProjectionPropertiesOverload_WithNotExistsEntity_ShouldThrowException()
+    {
+        // Arrange
+        var configuration = new DataAccessConfiguration();
+        var services = GetServices(configuration);
+        var dbContext = services.GetService<SomeMilvaDbContextFixture>();
+        var entityRepository = services.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
+        await ResetDatabaseAndSeedAsync(dbContext);
+
+        var entity = new SomeFullAuditableEntityFixture()
+        {
+            Id = 7,
+            SomeDateProp = DateTime.Now.AddYears(1),
+            SomeDecimalProp = 10M,
+            SomeStringProp = "somestring1"
+        };
+        Expression<Func<SomeFullAuditableEntityFixture, object>> projection = i => i.SomeStringProp;
+        Expression<Func<SomeFullAuditableEntityFixture, object>>[] projections = [projection];
+
+        // Act 
+        Func<Task> act = async () => await entityRepository.UpdateAsync(entity, default, projections);
+
+        // Assert
+        await act.Should().ThrowAsync<DbUpdateConcurrencyException>();
+    }
+
+    [Fact]
+    public async Task UpdateAsync_ForSingleEntityAndProjectionPropertiesOverload_WithValidEntityButPropertySelectorsIsNull_ShouldDoNothing()
+    {
+        // Arrange
+        var configuration = new DataAccessConfiguration();
+        var services = GetServices(configuration);
+        var dbContext = services.GetService<SomeMilvaDbContextFixture>();
+        var entityRepository = services.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
+        await ResetDatabaseAndSeedAsync(dbContext);
+
+        var entity = await entityRepository.GetByIdAsync(1);
+        Expression<Func<SomeFullAuditableEntityFixture, object>>[] projections = null;
+
+        // Act 
+        entity.SomeStringProp = "stringpropupdated";
+        entity.SomeDecimalProp = 20M;
+        await entityRepository.UpdateAsync(entity, default, projections);
+
+        // Assert
+        var entityAfterUpdate = await entityRepository.GetByIdAsync(1);
+        entityAfterUpdate.SomeStringProp.Should().Be("somestring1");
+        entityAfterUpdate.SomeDecimalProp.Should().Be(10);
+    }
+
+    [Fact]
+    public async Task UpdateAsync_ForSingleEntityAndProjectionPropertiesOverload_WithValidEntity_ShouldUpdateCorrectly()
+    {
+        // Arrange
+        var configuration = new DataAccessConfiguration();
+        var services = GetServices(configuration);
+        var dbContext = services.GetService<SomeMilvaDbContextFixture>();
+        var entityRepository = services.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
+        await ResetDatabaseAndSeedAsync(dbContext);
+
+        var entity = await entityRepository.GetByIdAsync(1);
+        Expression<Func<SomeFullAuditableEntityFixture, object>> projection = i => i.SomeStringProp;
+        Expression<Func<SomeFullAuditableEntityFixture, object>>[] projections = [projection];
+
+        // Act 
+        entity.SomeStringProp = "stringpropupdated";
+        entity.SomeDecimalProp = 20M;
+        await entityRepository.UpdateAsync(entity, default, projections);
+
+        // Assert
+        var entityAfterUpdate = await entityRepository.GetByIdAsync(1);
+        entityAfterUpdate.SomeStringProp.Should().Be("stringpropupdated");
+        entityAfterUpdate.SomeDecimalProp.Should().Be(10);
+    }
+
+    [Fact]
+    public async Task UpdateAsync_ForEntityListAndProjectionPropertiesOverload_WithNullEntities_ShouldThrowException()
+    {
+        // Arrange
+        var configuration = new DataAccessConfiguration();
+        var services = GetServices(configuration);
+        var dbContext = services.GetService<SomeMilvaDbContextFixture>();
+        var entityRepository = services.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
+        await ResetDatabaseAndSeedAsync(dbContext);
+
+        List<SomeFullAuditableEntityFixture> entities = null;
+        Expression<Func<SomeFullAuditableEntityFixture, object>> projection = i => i.SomeStringProp;
+        Expression<Func<SomeFullAuditableEntityFixture, object>>[] projections = [projection];
+
+        // Act 
+        var allEntities = await dbContext.FullAuditableEntities.ToListAsync();
+
+        // Assert
+        allEntities[0].LastModificationDate.Should().BeNull();
+        allEntities[1].LastModificationDate.Should().BeNull();
+        allEntities[2].LastModificationDate.Should().BeNull();
+        allEntities[3].LastModificationDate.Should().BeNull();
+    }
+
+    [Fact]
+    public async Task UpdateAsync_ForEntityListAndProjectionPropertiesOverload_WithNotExistsEntities_ShouldThrowException()
+    {
+        // Arrange
+        var configuration = new DataAccessConfiguration();
+        var services = GetServices(configuration);
+        var dbContext = services.GetService<SomeMilvaDbContextFixture>();
+        var entityRepository = services.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
+        await ResetDatabaseAndSeedAsync(dbContext);
+
+        List<SomeFullAuditableEntityFixture> entities =
+        [
+            new SomeFullAuditableEntityFixture()
+                    {
+                        Id = 7,
+                        SomeDateProp = DateTime.Now.AddYears(1),
+                        SomeDecimalProp = 10M,
+                        SomeStringProp = "somestring1"
+                    },
+                    new SomeFullAuditableEntityFixture()
+                    {
+                        Id = 8,
+                        SomeDateProp = DateTime.Now.AddYears(1),
+                        SomeDecimalProp = 10M,
+                        SomeStringProp = "somestring1"
+                    }
+        ];
+        Expression<Func<SomeFullAuditableEntityFixture, object>> projection = i => i.SomeStringProp;
+        Expression<Func<SomeFullAuditableEntityFixture, object>>[] projections = [projection];
+
+        // Act 
+        Func<Task> act = async () => await entityRepository.UpdateAsync(entities, default, projections);
+
+        // Assert
+        await act.Should().ThrowAsync<DbUpdateConcurrencyException>();
+    }
+
+    [Fact]
+    public async Task UpdateAsync_ForEntityListAndProjectionPropertiesOverload_WithValidEntitiesButPropertySelectorsIsNull_ShouldDoNothing()
+    {
+        // Arrange
+        var configuration = new DataAccessConfiguration();
+        var services = GetServices(configuration);
+        var dbContext = services.GetService<SomeMilvaDbContextFixture>();
+        var entityRepository = services.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
+        await ResetDatabaseAndSeedAsync(dbContext);
+
+        var entities = await entityRepository.GetAllAsync(i => i.Id == 1 || i.Id == 2);
+        Expression<Func<SomeFullAuditableEntityFixture, object>>[] projections = null;
+
+        // Act 
+        entities[0].SomeStringProp = "stringpropupdated";
+        entities[0].SomeDecimalProp = 20M;
+        entities[1].SomeStringProp = "stringpropupdated";
+        entities[1].SomeDecimalProp = 20M;
+        await entityRepository.UpdateAsync(entities, default, projections);
+
+        // Assert
+        var entitiesAfterUpdate = await entityRepository.GetAllAsync(i => i.Id == 1 || i.Id == 2);
+        entitiesAfterUpdate[0].SomeStringProp.Should().Be("somestring1");
+        entitiesAfterUpdate[0].SomeDecimalProp.Should().Be(10M);
+        entitiesAfterUpdate[1].SomeStringProp.Should().Be("somestring2");
+        entitiesAfterUpdate[1].SomeDecimalProp.Should().Be(20M);
+    }
+
+    [Fact]
+    public async Task UpdateAsync_ForEntityListAndProjectionPropertiesOverload_WithValidEntities_ShouldUpdateCorrectly()
+    {
+        // Arrange
+        var configuration = new DataAccessConfiguration();
+        var services = GetServices(configuration);
+        var dbContext = services.GetService<SomeMilvaDbContextFixture>();
+        var entityRepository = services.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
+        await ResetDatabaseAndSeedAsync(dbContext);
+
+        var entities = await entityRepository.GetAllAsync(i => i.Id == 1 || i.Id == 2);
+        Expression<Func<SomeFullAuditableEntityFixture, object>> projection = i => i.SomeStringProp;
+        Expression<Func<SomeFullAuditableEntityFixture, object>>[] projections = [projection];
+
+        // Act 
+        entities[0].SomeStringProp = "stringpropupdated";
+        entities[0].SomeDecimalProp = 20M;
+        entities[1].SomeStringProp = "stringpropupdated";
+        entities[1].SomeDecimalProp = 20M;
+        await entityRepository.UpdateAsync(entities, default, projections);
+
+        // Assert
+        var entitiesAfterUpdate = await entityRepository.GetAllAsync(i => i.Id == 1 || i.Id == 2);
+        entitiesAfterUpdate[0].SomeStringProp.Should().Be("stringpropupdated");
+        entitiesAfterUpdate[0].SomeDecimalProp.Should().Be(10M);
+        entitiesAfterUpdate[1].SomeStringProp.Should().Be("stringpropupdated");
+        entitiesAfterUpdate[1].SomeDecimalProp.Should().Be(20M);
+    }
+
+    #endregion
+
+    #region DeleteAsync
+
+    [Fact]
+    public async Task DeleteAsync_ForSingleEntity_WithNullEntity_ShouldThrowException()
+    {
+        // Arrange
+        var configuration = new DataAccessConfiguration();
+        var services = GetServices(configuration);
+        var dbContext = services.GetService<SomeMilvaDbContextFixture>();
+        var entityRepository = services.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
+        await ResetDatabaseAndSeedAsync(dbContext);
+
+        SomeFullAuditableEntityFixture entity = null;
+
+        // Act 
+        Func<Task> act = async () => await entityRepository.DeleteAsync(entity);
+
+        // Assert
+        await act.Should().ThrowAsync<ArgumentNullException>();
+    }
+
+    [Fact]
+    public async Task DeleteAsync_ForSingleEntity_WithNotExistsEntity_ShouldThrowException()
+    {
+        // Arrange
+        var configuration = new DataAccessConfiguration();
+        var services = GetServices(configuration);
+        var dbContext = services.GetService<SomeMilvaDbContextFixture>();
+        var entityRepository = services.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
+        await ResetDatabaseAndSeedAsync(dbContext);
+
+        var entity = new SomeFullAuditableEntityFixture()
+        {
+            Id = 7,
+            SomeDateProp = DateTime.Now.AddYears(1),
+            SomeDecimalProp = 10M,
+            SomeStringProp = "somestring1"
+        };
+
+        // Act 
+        Func<Task> act = async () => await entityRepository.DeleteAsync(entity);
+
+        // Assert
+        await act.Should().ThrowAsync<DbUpdateConcurrencyException>();
+    }
+
+    [Fact]
+    public async Task DeleteAsync_ForSingleEntity_WithValidEntity_ShouldDeleteCorrectly()
+    {
+        // Arrange
+        var configuration = new DataAccessConfiguration();
+        var services = GetServices(configuration);
+        var dbContext = services.GetService<SomeMilvaDbContextFixture>();
+        var entityRepository = services.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
+        await ResetDatabaseAndSeedAsync(dbContext);
+
+        var entity = await entityRepository.GetByIdAsync(1);
+
+        // Act 
+        await entityRepository.DeleteAsync(entity);
+
+        // Assert
+        var entityAfterUpdate = await entityRepository.GetByIdAsync(1);
+        entityAfterUpdate.Should().BeNull();
+    }
+
+    [Fact]
+    public async Task DeleteAsync_ForEntityList_WithNullEntityList_ShouldDoNothing()
+    {
+        // Arrange
+        var configuration = new DataAccessConfiguration();
+        var services = GetServices(configuration);
+        var dbContext = services.GetService<SomeMilvaDbContextFixture>();
+        var entityRepository = services.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
+        await ResetDatabaseAndSeedAsync(dbContext);
+
+        List<SomeFullAuditableEntityFixture> entities = null;
+
+        // Act 
+        await entityRepository.DeleteAsync(entities);
+        var allEntities = await dbContext.FullAuditableEntities.ToListAsync();
+
+        // Assert
+        allEntities[0].Should().NotBeNull();
+        allEntities[1].Should().NotBeNull();
+        allEntities[2].Should().NotBeNull();
+        allEntities[3].Should().NotBeNull();
+    }
+
+    [Fact]
+    public async Task DeleteAsync_ForEntityList_WithNotExistsEntities_ShouldThrowException()
+    {
+        // Arrange
+        var configuration = new DataAccessConfiguration();
+        var services = GetServices(configuration);
+        var dbContext = services.GetService<SomeMilvaDbContextFixture>();
+        var entityRepository = services.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
+        await ResetDatabaseAndSeedAsync(dbContext);
+
+        List<SomeFullAuditableEntityFixture> entities =
+        [
+            new SomeFullAuditableEntityFixture()
+            {
+                Id = 7,
+                SomeDateProp = DateTime.Now.AddYears(1),
+                SomeDecimalProp = 10M,
+                SomeStringProp = "somestring1"
+            },
+            new SomeFullAuditableEntityFixture()
+            {
+                Id = 8,
+                SomeDateProp = DateTime.Now.AddYears(1),
+                SomeDecimalProp = 10M,
+                SomeStringProp = "somestring1"
+            }
+        ];
+
+        // Act 
+        Func<Task> act = async () => await entityRepository.DeleteAsync(entities);
+
+        // Assert
+        await act.Should().ThrowAsync<DbUpdateConcurrencyException>();
+    }
+
+    [Fact]
+    public async Task DeleteAsync_ForEntityList_WithValidEntity_ShouldDeleteCorrectly()
+    {
+        // Arrange
+        var configuration = new DataAccessConfiguration();
+        var services = GetServices(configuration);
+        var dbContext = services.GetService<SomeMilvaDbContextFixture>();
+        var entityRepository = services.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
+        await ResetDatabaseAndSeedAsync(dbContext);
+
+        var entities = await entityRepository.GetAllAsync(i => i.Id == 1 || i.Id == 2);
+
+        // Act 
+        await entityRepository.DeleteAsync(entities);
+
+        // Assert
+        var entitiesAfterUpdate = await entityRepository.GetAllAsync(i => i.Id == 1 || i.Id == 2);
+        entitiesAfterUpdate.Should().BeEmpty();
+    }
+
+    #endregion
+
+    #region ReplaceOldsWithNewsAsync
+
+    [Fact]
+    public async Task ReplaceOldsWithNewsAsync_WithValidParameters_ShouldOperateCorrectly()
+    {
+        // Arrange
+        var configuration = new DataAccessConfiguration();
+        var services = GetServices(configuration);
+        var dbContext = services.GetService<SomeMilvaDbContextFixture>();
+        var entityRepository = services.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
+        await ResetDatabaseAndSeedAsync(dbContext);
+
+        var entities = await entityRepository.GetAllAsync(i => i.Id == 1 || i.Id == 2);
+        var newEntities = entities.ToList();
+        newEntities[0].Id = 5;
+        newEntities[0].SomeStringProp = "stringpropupdated";
+        newEntities[1].Id = 6;
+        newEntities[1].SomeStringProp = "stringpropupdated";
+
+        // Act 
+        await entityRepository.ReplaceOldsWithNewsAsync(entities, newEntities);
+
+        // Assert
+        var entitiesAfterUpdate = await entityRepository.GetAllAsync(i => i.Id == 5 || i.Id == 6);
+        entitiesAfterUpdate[0].SomeStringProp.Should().Be("stringpropupdated");
+        entitiesAfterUpdate[1].SomeStringProp.Should().Be("stringpropupdated");
+    }
+
+    #endregion
+
+    #region ReplaceOldsWithNewsInSeperateDatabaseProcessAsync
+
+    [Fact]
+    public async Task ReplaceOldsWithNewsInSeperateDatabaseProcessAsync_WithValidParameters_ShouldOperateCorrectly()
+    {
+        // Arrange
+        var configuration = new DataAccessConfiguration();
+        var services = GetServices(configuration);
+        var dbContext = services.GetService<SomeMilvaDbContextFixture>();
+        var entityRepository = services.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
+        await ResetDatabaseAndSeedAsync(dbContext);
+
+        var entities = await entityRepository.GetAllAsync(i => i.Id == 1 || i.Id == 2);
+        var newEntities = entities.ToList();
+        foreach (var entity in newEntities)
+            entity.SomeStringProp = "stringpropupdated";
+
+        // Act 
+        await entityRepository.ReplaceOldsWithNewsInSeperateDatabaseProcessAsync(entities, newEntities);
+
+        // Assert
+        var entitiesAfterUpdate = await entityRepository.GetAllAsync(i => i.Id == 1 || i.Id == 2);
+        entitiesAfterUpdate[0].SomeStringProp.Should().Be("stringpropupdated");
+        entitiesAfterUpdate[1].SomeStringProp.Should().Be("stringpropupdated");
+    }
+
+    #endregion
+
+    #region RemoveAll
+
+    [Fact]
+    public async Task RemoveAll_EmptyDatabase_ShouldRemoveCorrectly()
+    {
+        // Arrange
+        var configuration = new DataAccessConfiguration();
+        var services = GetServices(configuration);
+        var dbContext = services.GetService<SomeMilvaDbContextFixture>();
+        var entityRepository = services.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
+        await ResetDatabaseAsync(dbContext);
+
+        // Act 
+        await entityRepository.RemoveAllAsync();
+
+        // Assert
+        var entitiesAfterUpdate = await entityRepository.GetAllAsync();
+        entitiesAfterUpdate.Should().BeEmpty();
+    }
+
+    [Fact]
+    public async Task RemoveAll_ShouldRemoveCorrectly()
+    {
+        // Arrange
+        var configuration = new DataAccessConfiguration();
+        var services = GetServices(configuration);
+        var dbContext = services.GetService<SomeMilvaDbContextFixture>();
+        var entityRepository = services.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
+        await ResetDatabaseAndSeedAsync(dbContext);
+
+        // Act 
+        await entityRepository.RemoveAllAsync();
+
+        // Assert
+        var entitiesAfterUpdate = await entityRepository.GetAllAsync();
+        entitiesAfterUpdate.Should().BeEmpty();
     }
 
     #endregion
