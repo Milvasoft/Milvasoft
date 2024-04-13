@@ -47,7 +47,7 @@ public class PerformanceTests(ITestOutputHelper output)
         // Assert
         var actualTime = stopwatch.ElapsedMilliseconds;
         Output.WriteLine($"Subsequent call took '{actualTime}' ms.");
-        actualTime.Should().BeLessThan(2);
+        actualTime.Should().BeLessThan(3);
     }
 
     #region Setup

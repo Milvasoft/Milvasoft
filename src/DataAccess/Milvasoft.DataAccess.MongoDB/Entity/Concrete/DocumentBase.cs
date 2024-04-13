@@ -44,4 +44,5 @@ public abstract class DocumentBase : IDocumentBase
     /// </summary>
     /// <returns></returns>
     public object GetId() => Id;
+    public object GetUniqueIdentifier() => Id;
 }

@@ -16,6 +16,8 @@ public class RestTestEntityFixture : IMilvaEntity
     public DateTime? UpdateDate { get; set; }
     public List<RestChildrenTestEntityFixture> Childrens { get; set; }
     public RestChildrenTestEntityFixture Children { get; set; }
+
+    public object GetUniqueIdentifier() => Id;
 }
 
 public class RestChildrenTestEntityFixture

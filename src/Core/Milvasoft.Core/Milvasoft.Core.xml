@@ -792,7 +792,7 @@
         </member>
         <member name="P:Milvasoft.Core.EntityBases.Abstract.IMilvaEntity.Id">
             <summary>
-            Unique identifier for this entity.
+            Unique identifier for this entity. Do not use this property when access Id. This is a representation for sql translations etc.
             </summary>
         </member>
         <member name="T:Milvasoft.Core.EntityBases.Abstract.ICreationAuditable`1">
@@ -1917,7 +1917,7 @@
             <summary>
             Assigns the updated properties of a DTO object to the corresponding properties of an entity object.
             </summary>
-            <typeparam name="TEntity">The type of the entity class that implements the <see cref="T:Milvasoft.Core.EntityBases.Abstract.IMilvaEntity"/> interface.</typeparam>
+            <typeparam name="TEntity">The type of the entity class that implements the <see cref="T:Milvasoft.Core.EntityBases.Concrete.EntityBase"/> interface.</typeparam>
             <typeparam name="TDto">The type of the DTO class that inherits from the <see cref="T:Milvasoft.Core.EntityBases.Concrete.DtoBase"/> class.</typeparam>
             <param name="entity">The entity object to update.</param>
             <param name="dto">The DTO object containing the updated property values.</param>

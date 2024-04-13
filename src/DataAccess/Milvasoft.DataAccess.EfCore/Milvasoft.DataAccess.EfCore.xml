@@ -488,85 +488,112 @@
             Resets soft deleted entity fetch style to default.
             </summary>
         </member>
-        <member name="M:Milvasoft.DataAccess.EfCore.RepositoryBase.Abstract.IBaseRepository`2.GetFirstOrDefaultAsync``1(System.Linq.Expressions.Expression{System.Func{`0,``0}},System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Boolean,System.Threading.CancellationToken)">
+        <member name="M:Milvasoft.DataAccess.EfCore.RepositoryBase.Abstract.IBaseRepository`2.ResetSoftDeletedEntityFetchResetState">
+            <summary>
+            Resets soft deleted entity fetch style to default.
+            </summary>
+        </member>
+        <member name="M:Milvasoft.DataAccess.EfCore.RepositoryBase.Abstract.IBaseRepository`2.GetFirstOrDefaultAsync(System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Boolean,System.Threading.CancellationToken)">
             <summary>
             Returns first entity or default value which IsDeleted condition is true from database asynchronously. If the condition is requested, it also provides that condition.
             </summary>
-            <param name="projectionExpression"></param>
             <param name="tracking"></param>
-            <param name="conditionExpression"></param>
+            <param name="condition"></param>
             <param name="cancellationToken"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.DataAccess.EfCore.RepositoryBase.Abstract.IBaseRepository`2.GetFirstOrDefaultAsync(System.Linq.Expressions.Expression{System.Func{`0,`0}},System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Boolean,System.Threading.CancellationToken)">
+        <member name="M:Milvasoft.DataAccess.EfCore.RepositoryBase.Abstract.IBaseRepository`2.GetFirstOrDefaultAsync``1(System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Linq.Expressions.Expression{System.Func{`0,``0}},System.Linq.Expressions.Expression{System.Func{``0,System.Boolean}},System.Boolean,System.Threading.CancellationToken)">
             <summary>
             Returns first entity or default value which IsDeleted condition is true from database asynchronously. If the condition is requested, it also provides that condition.
             </summary>
-            <param name="projectionExpression"></param>
+            <param name="condition"></param>
+            <param name="projection"></param>
+            <param name="conditionAfterProjection"></param>
             <param name="tracking"></param>
-            <param name="conditionExpression"></param>
             <param name="cancellationToken"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.DataAccess.EfCore.RepositoryBase.Abstract.IBaseRepository`2.GetFirstOrDefaultAsync(System.Func{Milvasoft.DataAccess.EfCore.Utils.IncludeLibrary.IIncludable{`0},Milvasoft.DataAccess.EfCore.Utils.IncludeLibrary.IIncludable},System.Linq.Expressions.Expression{System.Func{`0,`0}},System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Boolean,System.Threading.CancellationToken)">
+        <member name="M:Milvasoft.DataAccess.EfCore.RepositoryBase.Abstract.IBaseRepository`2.GetFirstOrDefaultAsync(System.Func{Milvasoft.DataAccess.EfCore.Utils.IncludeLibrary.IIncludable{`0},Milvasoft.DataAccess.EfCore.Utils.IncludeLibrary.IIncludable},System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Boolean,System.Threading.CancellationToken)">
             <summary>
              Returns first entity or default value which IsDeleted condition is true with includes from database asynchronously. If the condition is requested, it also provides that condition. 
             </summary>
             <param name="includes"></param>
-            <param name="projectionExpression"></param>
             <param name="tracking"></param>
-            <param name="conditionExpression"></param>
+            <param name="condition"></param>
             <param name="cancellationToken"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.DataAccess.EfCore.RepositoryBase.Abstract.IBaseRepository`2.GetSingleOrDefaultAsync``1(System.Linq.Expressions.Expression{System.Func{`0,``0}},System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Boolean,System.Threading.CancellationToken)">
+        <member name="M:Milvasoft.DataAccess.EfCore.RepositoryBase.Abstract.IBaseRepository`2.GetFirstOrDefaultAsync(System.Func{Milvasoft.DataAccess.EfCore.Utils.IncludeLibrary.IIncludable{`0},Milvasoft.DataAccess.EfCore.Utils.IncludeLibrary.IIncludable},System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Linq.Expressions.Expression{System.Func{`0,`0}},System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Boolean,System.Threading.CancellationToken)">
             <summary>
-            Returns first entity or default value which IsDeleted condition is true from database asynchronously. If the condition is requested, it also provides that condition.
-            </summary>
-            <param name="projectionExpression"></param>
-            <param name="tracking"></param>
-            <param name="conditionExpression"></param>
-            <param name="cancellationToken"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Milvasoft.DataAccess.EfCore.RepositoryBase.Abstract.IBaseRepository`2.GetSingleOrDefaultAsync(System.Linq.Expressions.Expression{System.Func{`0,`0}},System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Boolean,System.Threading.CancellationToken)">
-            <summary>
-             Returns single entity or default value which IsDeleted condition is true from database asynchronously. If the condition is requested, it also provides that condition.
-            </summary>
-            <param name="projectionExpression"></param>
-            <param name="tracking"></param>
-            <param name="conditionExpression"></param>
-            <param name="cancellationToken"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Milvasoft.DataAccess.EfCore.RepositoryBase.Abstract.IBaseRepository`2.GetSingleOrDefaultAsync(System.Func{Milvasoft.DataAccess.EfCore.Utils.IncludeLibrary.IIncludable{`0},Milvasoft.DataAccess.EfCore.Utils.IncludeLibrary.IIncludable},System.Linq.Expressions.Expression{System.Func{`0,`0}},System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Boolean,System.Threading.CancellationToken)">
-            <summary>
-             Returns single entity or default value which IsDeleted condition is true with includes from database asynchronously. If the condition is requested, it also provides that condition.
+             Returns first entity or default value which IsDeleted condition is true with includes from database asynchronously. If the condition is requested, it also provides that condition. 
             </summary>
             <param name="includes"></param>
-            <param name="conditionExpression"></param>
-            <param name="projectionExpression"></param>
+            <param name="projection"></param>
+            <param name="conditionAfterProjection"></param>
+            <param name="tracking"></param>
+            <param name="condition"></param>
+            <param name="cancellationToken"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.DataAccess.EfCore.RepositoryBase.Abstract.IBaseRepository`2.GetSingleOrDefaultAsync(System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Boolean,System.Threading.CancellationToken)">
+            <summary>
+            Returns single entity or default value which IsDeleted condition is true from database asynchronously. If the condition is requested, it also provides that condition.
+            </summary>
+            <param name="tracking"></param>
+            <param name="condition"></param>
+            <param name="cancellationToken"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.DataAccess.EfCore.RepositoryBase.Abstract.IBaseRepository`2.GetSingleOrDefaultAsync``1(System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Linq.Expressions.Expression{System.Func{`0,``0}},System.Linq.Expressions.Expression{System.Func{``0,System.Boolean}},System.Boolean,System.Threading.CancellationToken)">
+            <summary>
+            Returns single entity or default value which IsDeleted condition is true from database asynchronously. If the condition is requested, it also provides that condition.
+            </summary>
+            <param name="condition"></param>
+            <param name="projection"></param>
+            <param name="conditionAfterProjection"></param>
             <param name="tracking"></param>
             <param name="cancellationToken"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.DataAccess.EfCore.RepositoryBase.Abstract.IBaseRepository`2.GetByIdAsync``1(System.Object,System.Linq.Expressions.Expression{System.Func{`0,``0}},System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Boolean,System.Threading.CancellationToken)">
+        <member name="M:Milvasoft.DataAccess.EfCore.RepositoryBase.Abstract.IBaseRepository`2.GetSingleOrDefaultAsync(System.Func{Milvasoft.DataAccess.EfCore.Utils.IncludeLibrary.IIncludable{`0},Milvasoft.DataAccess.EfCore.Utils.IncludeLibrary.IIncludable},System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Boolean,System.Threading.CancellationToken)">
+            <summary>
+             Returns single entity or default value which IsDeleted condition is true with includes from database asynchronously. If the condition is requested, it also provides that condition. 
+            </summary>
+            <param name="includes"></param>
+            <param name="tracking"></param>
+            <param name="condition"></param>
+            <param name="cancellationToken"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.DataAccess.EfCore.RepositoryBase.Abstract.IBaseRepository`2.GetSingleOrDefaultAsync(System.Func{Milvasoft.DataAccess.EfCore.Utils.IncludeLibrary.IIncludable{`0},Milvasoft.DataAccess.EfCore.Utils.IncludeLibrary.IIncludable},System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Linq.Expressions.Expression{System.Func{`0,`0}},System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Boolean,System.Threading.CancellationToken)">
+            <summary>
+             Returns single entity or default value which IsDeleted condition is true with includes from database asynchronously. If the condition is requested, it also provides that condition. 
+            </summary>
+            <param name="includes"></param>
+            <param name="projection"></param>
+            <param name="conditionAfterProjection"></param>
+            <param name="tracking"></param>
+            <param name="condition"></param>
+            <param name="cancellationToken"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.DataAccess.EfCore.RepositoryBase.Abstract.IBaseRepository`2.GetByIdAsync(System.Object,System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Boolean,System.Threading.CancellationToken)">
             <summary>
             Returns one entity by entity Id from database asynchronously.
             </summary>
             <param name="id"></param>
             <param name="conditionExpression"></param>
-            <param name="projectionExpression"></param>
             <param name="tracking"></param>
             <param name="cancellationToken"></param>
             <returns> The entity found or null. </returns>
         </member>
-        <member name="M:Milvasoft.DataAccess.EfCore.RepositoryBase.Abstract.IBaseRepository`2.GetByIdAsync(System.Object,System.Linq.Expressions.Expression{System.Func{`0,`0}},System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Boolean,System.Threading.CancellationToken)">
+        <member name="M:Milvasoft.DataAccess.EfCore.RepositoryBase.Abstract.IBaseRepository`2.GetByIdAsync``1(System.Object,System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Linq.Expressions.Expression{System.Func{`0,``0}},System.Linq.Expressions.Expression{System.Func{``0,System.Boolean}},System.Boolean,System.Threading.CancellationToken)">
             <summary>
             Returns one entity by entity Id from database asynchronously.
             </summary>
             <param name="id"></param>
-            <param name="conditionExpression"></param>
+            <param name="condition"></param>
+            <param name="conditionAfterProjection"></param>
             <param name="projectionExpression"></param>
             <param name="tracking"></param>
             <param name="cancellationToken"></param>
@@ -584,47 +611,47 @@
             <param name="cancellationToken"></param>
             <returns> The entity found or null. </returns>
         </member>
-        <member name="M:Milvasoft.DataAccess.EfCore.RepositoryBase.Abstract.IBaseRepository`2.GetAllAsync``1(Milvasoft.Components.Rest.Request.ListRequest,System.Linq.Expressions.Expression{System.Func{`0,``0}},System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Boolean,System.Threading.CancellationToken)">
-            <summary>
-            Returns all entities which IsDeleted condition is true from database asynchronously. If the condition is requested, it also provides that condition.
-            </summary>
-            <typeparam name="TResult"></typeparam>
-            <param name="listRequest"></param>
-            <param name="conditionExpression"></param>
-            <param name="projectionExpression"></param>
-            <param name="tracking"></param>
-            <param name="cancellationToken"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Milvasoft.DataAccess.EfCore.RepositoryBase.Abstract.IBaseRepository`2.GetAllAsync``1(System.Linq.Expressions.Expression{System.Func{`0,``0}},System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Boolean,System.Threading.CancellationToken)">
-            <summary>
-            Returns all entities which IsDeleted condition is true from database asynchronously. If the condition is requested, it also provides that condition.
-            </summary>
-            <typeparam name="TResult"></typeparam>
-            <param name="conditionExpression"></param>
-            <param name="projectionExpression"></param>
-            <param name="tracking"></param>
-            <param name="cancellationToken"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Milvasoft.DataAccess.EfCore.RepositoryBase.Abstract.IBaseRepository`2.GetAllAsync(Milvasoft.Components.Rest.Request.ListRequest,System.Linq.Expressions.Expression{System.Func{`0,`0}},System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Boolean,System.Threading.CancellationToken)">
+        <member name="M:Milvasoft.DataAccess.EfCore.RepositoryBase.Abstract.IBaseRepository`2.GetAllAsync(Milvasoft.Components.Rest.Request.ListRequest,System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Boolean,System.Threading.CancellationToken)">
             <summary>
             Returns entities which IsDeleted condition is true from database asynchronously. If the condition is requested, it also provides that condition.
             </summary>
             <param name="listRequest"></param>
-            <param name="projectionExpression"></param>
             <param name="tracking"></param>
             <param name="conditionExpression"></param>
             <param name="cancellationToken"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.DataAccess.EfCore.RepositoryBase.Abstract.IBaseRepository`2.GetAllAsync(System.Linq.Expressions.Expression{System.Func{`0,`0}},System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Boolean,System.Threading.CancellationToken)">
+        <member name="M:Milvasoft.DataAccess.EfCore.RepositoryBase.Abstract.IBaseRepository`2.GetAllAsync``1(Milvasoft.Components.Rest.Request.ListRequest,System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Linq.Expressions.Expression{System.Func{`0,``0}},System.Linq.Expressions.Expression{System.Func{``0,System.Boolean}},System.Boolean,System.Threading.CancellationToken)">
             <summary>
-             Returns all entities which IsDeleted condition is true from database asynchronously. If the condition is requested, it also provides that condition.
+            Returns all entities which IsDeleted condition is true from database asynchronously. If the condition is requested, it also provides that condition.
             </summary>
-            <param name="projectionExpression"></param>
+            <typeparam name="TResult"></typeparam>
+            <param name="listRequest"></param>
+            <param name="condition"></param>
+            <param name="conditionAfterProjection"></param>
+            <param name="projection"></param>
+            <param name="tracking"></param>
+            <param name="cancellationToken"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.DataAccess.EfCore.RepositoryBase.Abstract.IBaseRepository`2.GetAllAsync(System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Boolean,System.Threading.CancellationToken)">
+            <summary>
+            Returns entities which IsDeleted condition is true from database asynchronously. If the condition is requested, it also provides that condition.
+            </summary>
             <param name="tracking"></param>
             <param name="conditionExpression"></param>
+            <param name="cancellationToken"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.DataAccess.EfCore.RepositoryBase.Abstract.IBaseRepository`2.GetAllAsync``1(System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Linq.Expressions.Expression{System.Func{`0,``0}},System.Linq.Expressions.Expression{System.Func{``0,System.Boolean}},System.Boolean,System.Threading.CancellationToken)">
+            <summary>
+            Returns all entities which IsDeleted condition is true from database asynchronously. If the condition is requested, it also provides that condition.
+            </summary>
+            <typeparam name="TResult"></typeparam>
+            <param name="condition"></param>
+            <param name="conditionAfterProjection"></param>
+            <param name="projection"></param>
+            <param name="tracking"></param>
             <param name="cancellationToken"></param>
             <returns></returns>
         </member>
@@ -651,25 +678,25 @@
             <param name="cancellationToken"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.DataAccess.EfCore.RepositoryBase.Abstract.IBaseRepository`2.GetSomeAsync``1(System.Int32,System.Linq.Expressions.Expression{System.Func{`0,``0}},System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Boolean,System.Threading.CancellationToken)">
+        <member name="M:Milvasoft.DataAccess.EfCore.RepositoryBase.Abstract.IBaseRepository`2.GetSomeAsync(System.Int32,System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Boolean,System.Threading.CancellationToken)">
             <summary>
-             Returns all entities which IsDeleted condition is true from database asynchronously. If the condition is requested, it also provides that condition.
+            Returns all entities which IsDeleted condition is true from database asynchronously. If the condition is requested, it also provides that condition.
             </summary>
             <param name="count"></param>
-            <param name="projectionExpression"></param>
             <param name="tracking"></param>
             <param name="conditionExpression"></param>
             <param name="cancellationToken"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.DataAccess.EfCore.RepositoryBase.Abstract.IBaseRepository`2.GetSomeAsync(System.Int32,System.Linq.Expressions.Expression{System.Func{`0,`0}},System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Boolean,System.Threading.CancellationToken)">
+        <member name="M:Milvasoft.DataAccess.EfCore.RepositoryBase.Abstract.IBaseRepository`2.GetSomeAsync``1(System.Int32,System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Linq.Expressions.Expression{System.Func{`0,``0}},System.Linq.Expressions.Expression{System.Func{``0,System.Boolean}},System.Boolean,System.Threading.CancellationToken)">
             <summary>
              Returns all entities which IsDeleted condition is true from database asynchronously. If the condition is requested, it also provides that condition.
             </summary>
             <param name="count"></param>
-            <param name="projectionExpression"></param>
+            <param name="condition"></param>
+            <param name="projection"></param>
             <param name="tracking"></param>
-            <param name="conditionExpression"></param>
+            <param name="conditionAfterProjection"></param>
             <param name="cancellationToken"></param>
             <returns></returns>
         </member>
@@ -1226,6 +1253,21 @@
             If utc conversion requested in <see cref="P:Milvasoft.DataAccess.EfCore.Configuration.DbContextConfiguration.UseUtcForDateTime"/>, <see cref="T:System.DateTime"/> typed property call will be added after converted to utc.
             
             </remarks>
+        </member>
+        <member name="M:Milvasoft.DataAccess.EfCore.RepositoryBase.Abstract.IBaseRepository`2.SaveChangesAsync(System.Threading.CancellationToken)">
+            <summary>
+            Saves all changes made in this context to the database.
+            </summary>
+            <param name="cancellationToken"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.DataAccess.EfCore.RepositoryBase.Abstract.IBaseRepository`2.SaveChangesBulkAsync(EFCore.BulkExtensions.BulkConfig,System.Threading.CancellationToken)">
+            <summary>
+            Saves all changes made in this context to the database.
+            </summary>
+            <param name="bulkConfig"></param>
+            <param name="cancellationToken"></param>
+            <returns></returns>
         </member>
         <member name="T:Milvasoft.DataAccess.EfCore.RepositoryBase.Abstract.IContextRepository`1">
             <summary>
@@ -1977,95 +2019,112 @@
             Resets soft deleted entity fetch style to default.
             </summary>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Concrete.BaseRepository`2.GetFirstOrDefaultAsync``1(System.Linq.Expressions.Expression{System.Func{`0,``0}},System.Linq.Expressions.Expression{System.Func{``0,System.Boolean}},System.Boolean,System.Threading.CancellationToken)">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Concrete.BaseRepository`2.ResetSoftDeletedEntityFetchResetState">
+            <summary>
+            Resets soft deleted entity fetch style to default.
+            </summary>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Concrete.BaseRepository`2.GetFirstOrDefaultAsync(System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Boolean,System.Threading.CancellationToken)">
             <summary>
             Returns first entity or default value which IsDeleted condition is true from database asynchronously. If the condition is requested, it also provides that condition.
             </summary>
-            <param name="projectionExpression"></param>
             <param name="tracking"></param>
-            <param name="conditionExpression"></param>
+            <param name="condition"></param>
             <param name="cancellationToken"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Concrete.BaseRepository`2.GetFirstOrDefaultAsync``1(System.Linq.Expressions.Expression{System.Func{`0,``0}},System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Boolean,System.Threading.CancellationToken)">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Concrete.BaseRepository`2.GetFirstOrDefaultAsync``1(System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Linq.Expressions.Expression{System.Func{`0,``0}},System.Linq.Expressions.Expression{System.Func{``0,System.Boolean}},System.Boolean,System.Threading.CancellationToken)">
             <summary>
             Returns first entity or default value which IsDeleted condition is true from database asynchronously. If the condition is requested, it also provides that condition.
             </summary>
-            <param name="projectionExpression"></param>
+            <param name="condition"></param>
+            <param name="projection"></param>
+            <param name="conditionAfterProjection"></param>
             <param name="tracking"></param>
-            <param name="conditionExpression"></param>
             <param name="cancellationToken"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Concrete.BaseRepository`2.GetFirstOrDefaultAsync(System.Linq.Expressions.Expression{System.Func{`0,`0}},System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Boolean,System.Threading.CancellationToken)">
-            <summary>
-            Returns first entity or default value which IsDeleted condition is true from database asynchronously. If the condition is requested, it also provides that condition.
-            </summary>
-            <param name="projectionExpression"></param>
-            <param name="tracking"></param>
-            <param name="conditionExpression"></param>
-            <param name="cancellationToken"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Concrete.BaseRepository`2.GetFirstOrDefaultAsync(System.Func{Milvasoft.DataAccess.EfCore.Utils.IncludeLibrary.IIncludable{`0},Milvasoft.DataAccess.EfCore.Utils.IncludeLibrary.IIncludable},System.Linq.Expressions.Expression{System.Func{`0,`0}},System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Boolean,System.Threading.CancellationToken)">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Concrete.BaseRepository`2.GetFirstOrDefaultAsync(System.Func{Milvasoft.DataAccess.EfCore.Utils.IncludeLibrary.IIncludable{`0},Milvasoft.DataAccess.EfCore.Utils.IncludeLibrary.IIncludable},System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Boolean,System.Threading.CancellationToken)">
             <summary>
              Returns first entity or default value which IsDeleted condition is true with includes from database asynchronously. If the condition is requested, it also provides that condition. 
             </summary>
             <param name="includes"></param>
-            <param name="projectionExpression"></param>
             <param name="tracking"></param>
-            <param name="conditionExpression"></param>
+            <param name="condition"></param>
             <param name="cancellationToken"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Concrete.BaseRepository`2.GetSingleOrDefaultAsync``1(System.Linq.Expressions.Expression{System.Func{`0,``0}},System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Boolean,System.Threading.CancellationToken)">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Concrete.BaseRepository`2.GetFirstOrDefaultAsync(System.Func{Milvasoft.DataAccess.EfCore.Utils.IncludeLibrary.IIncludable{`0},Milvasoft.DataAccess.EfCore.Utils.IncludeLibrary.IIncludable},System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Linq.Expressions.Expression{System.Func{`0,`0}},System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Boolean,System.Threading.CancellationToken)">
             <summary>
-            Returns first entity or default value which IsDeleted condition is true from database asynchronously. If the condition is requested, it also provides that condition.
-            </summary>
-            <param name="projectionExpression"></param>
-            <param name="tracking"></param>
-            <param name="conditionExpression"></param>
-            <param name="cancellationToken"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Concrete.BaseRepository`2.GetSingleOrDefaultAsync(System.Linq.Expressions.Expression{System.Func{`0,`0}},System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Boolean,System.Threading.CancellationToken)">
-            <summary>
-             Returns single entity or default value which IsDeleted condition is true from database asynchronously. If the condition is requested, it also provides that condition.
-            </summary>
-            <param name="projectionExpression"></param>
-            <param name="tracking"></param>
-            <param name="conditionExpression"></param>
-            <param name="cancellationToken"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Concrete.BaseRepository`2.GetSingleOrDefaultAsync(System.Func{Milvasoft.DataAccess.EfCore.Utils.IncludeLibrary.IIncludable{`0},Milvasoft.DataAccess.EfCore.Utils.IncludeLibrary.IIncludable},System.Linq.Expressions.Expression{System.Func{`0,`0}},System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Boolean,System.Threading.CancellationToken)">
-            <summary>
-             Returns single entity or default value which IsDeleted condition is true with includes from database asynchronously. If the condition is requested, it also provides that condition.
+             Returns first entity or default value which IsDeleted condition is true with includes from database asynchronously. If the condition is requested, it also provides that condition. 
             </summary>
             <param name="includes"></param>
-            <param name="conditionExpression"></param>
-            <param name="projectionExpression"></param>
+            <param name="projection"></param>
+            <param name="conditionAfterProjection"></param>
+            <param name="tracking"></param>
+            <param name="condition"></param>
+            <param name="cancellationToken"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Concrete.BaseRepository`2.GetSingleOrDefaultAsync(System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Boolean,System.Threading.CancellationToken)">
+            <summary>
+            Returns single entity or default value which IsDeleted condition is true from database asynchronously. If the condition is requested, it also provides that condition.
+            </summary>
+            <param name="tracking"></param>
+            <param name="condition"></param>
+            <param name="cancellationToken"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Concrete.BaseRepository`2.GetSingleOrDefaultAsync``1(System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Linq.Expressions.Expression{System.Func{`0,``0}},System.Linq.Expressions.Expression{System.Func{``0,System.Boolean}},System.Boolean,System.Threading.CancellationToken)">
+            <summary>
+            Returns single entity or default value which IsDeleted condition is true from database asynchronously. If the condition is requested, it also provides that condition.
+            </summary>
+            <param name="condition"></param>
+            <param name="projection"></param>
+            <param name="conditionAfterProjection"></param>
             <param name="tracking"></param>
             <param name="cancellationToken"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Concrete.BaseRepository`2.GetByIdAsync``1(System.Object,System.Linq.Expressions.Expression{System.Func{`0,``0}},System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Boolean,System.Threading.CancellationToken)">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Concrete.BaseRepository`2.GetSingleOrDefaultAsync(System.Func{Milvasoft.DataAccess.EfCore.Utils.IncludeLibrary.IIncludable{`0},Milvasoft.DataAccess.EfCore.Utils.IncludeLibrary.IIncludable},System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Boolean,System.Threading.CancellationToken)">
+            <summary>
+             Returns single entity or default value which IsDeleted condition is true with includes from database asynchronously. If the condition is requested, it also provides that condition. 
+            </summary>
+            <param name="includes"></param>
+            <param name="tracking"></param>
+            <param name="condition"></param>
+            <param name="cancellationToken"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Concrete.BaseRepository`2.GetSingleOrDefaultAsync(System.Func{Milvasoft.DataAccess.EfCore.Utils.IncludeLibrary.IIncludable{`0},Milvasoft.DataAccess.EfCore.Utils.IncludeLibrary.IIncludable},System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Linq.Expressions.Expression{System.Func{`0,`0}},System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Boolean,System.Threading.CancellationToken)">
+            <summary>
+             Returns single entity or default value which IsDeleted condition is true with includes from database asynchronously. If the condition is requested, it also provides that condition. 
+            </summary>
+            <param name="includes"></param>
+            <param name="projection"></param>
+            <param name="conditionAfterProjection"></param>
+            <param name="tracking"></param>
+            <param name="condition"></param>
+            <param name="cancellationToken"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Concrete.BaseRepository`2.GetByIdAsync(System.Object,System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Boolean,System.Threading.CancellationToken)">
             <summary>
             Returns one entity by entity Id from database asynchronously.
             </summary>
             <param name="id"></param>
             <param name="conditionExpression"></param>
-            <param name="projectionExpression"></param>
             <param name="tracking"></param>
             <param name="cancellationToken"></param>
             <returns> The entity found or null. </returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Concrete.BaseRepository`2.GetByIdAsync(System.Object,System.Linq.Expressions.Expression{System.Func{`0,`0}},System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Boolean,System.Threading.CancellationToken)">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Concrete.BaseRepository`2.GetByIdAsync``1(System.Object,System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Linq.Expressions.Expression{System.Func{`0,``0}},System.Linq.Expressions.Expression{System.Func{``0,System.Boolean}},System.Boolean,System.Threading.CancellationToken)">
             <summary>
             Returns one entity by entity Id from database asynchronously.
             </summary>
             <param name="id"></param>
-            <param name="conditionExpression"></param>
+            <param name="condition"></param>
+            <param name="conditionAfterProjection"></param>
             <param name="projectionExpression"></param>
             <param name="tracking"></param>
             <param name="cancellationToken"></param>
@@ -2083,47 +2142,47 @@
             <param name="cancellationToken"></param>
             <returns> The entity found or null. </returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Concrete.BaseRepository`2.GetAllAsync``1(Milvasoft.Components.Rest.Request.ListRequest,System.Linq.Expressions.Expression{System.Func{`0,``0}},System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Boolean,System.Threading.CancellationToken)">
-            <summary>
-            Returns all entities which IsDeleted condition is true from database asynchronously. If the condition is requested, it also provides that condition.
-            </summary>
-            <typeparam name="TResult"></typeparam>
-            <param name="listRequest"></param>
-            <param name="conditionExpression"></param>
-            <param name="projectionExpression"></param>
-            <param name="tracking"></param>
-            <param name="cancellationToken"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Concrete.BaseRepository`2.GetAllAsync``1(System.Linq.Expressions.Expression{System.Func{`0,``0}},System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Boolean,System.Threading.CancellationToken)">
-            <summary>
-            Returns all entities which IsDeleted condition is true from database asynchronously. If the condition is requested, it also provides that condition.
-            </summary>
-            <typeparam name="TResult"></typeparam>
-            <param name="conditionExpression"></param>
-            <param name="projectionExpression"></param>
-            <param name="tracking"></param>
-            <param name="cancellationToken"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Concrete.BaseRepository`2.GetAllAsync(Milvasoft.Components.Rest.Request.ListRequest,System.Linq.Expressions.Expression{System.Func{`0,`0}},System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Boolean,System.Threading.CancellationToken)">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Concrete.BaseRepository`2.GetAllAsync(Milvasoft.Components.Rest.Request.ListRequest,System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Boolean,System.Threading.CancellationToken)">
             <summary>
             Returns entities which IsDeleted condition is true from database asynchronously. If the condition is requested, it also provides that condition.
             </summary>
             <param name="listRequest"></param>
-            <param name="projectionExpression"></param>
             <param name="tracking"></param>
             <param name="conditionExpression"></param>
             <param name="cancellationToken"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Concrete.BaseRepository`2.GetAllAsync(System.Linq.Expressions.Expression{System.Func{`0,`0}},System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Boolean,System.Threading.CancellationToken)">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Concrete.BaseRepository`2.GetAllAsync``1(Milvasoft.Components.Rest.Request.ListRequest,System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Linq.Expressions.Expression{System.Func{`0,``0}},System.Linq.Expressions.Expression{System.Func{``0,System.Boolean}},System.Boolean,System.Threading.CancellationToken)">
             <summary>
-             Returns all entities which IsDeleted condition is true from database asynchronously. If the condition is requested, it also provides that condition.
+            Returns all entities which IsDeleted condition is true from database asynchronously. If the condition is requested, it also provides that condition.
             </summary>
-            <param name="projectionExpression"></param>
+            <typeparam name="TResult"></typeparam>
+            <param name="listRequest"></param>
+            <param name="condition"></param>
+            <param name="conditionAfterProjection"></param>
+            <param name="projection"></param>
+            <param name="tracking"></param>
+            <param name="cancellationToken"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Concrete.BaseRepository`2.GetAllAsync(System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Boolean,System.Threading.CancellationToken)">
+            <summary>
+            Returns entities which IsDeleted condition is true from database asynchronously. If the condition is requested, it also provides that condition.
+            </summary>
             <param name="tracking"></param>
             <param name="conditionExpression"></param>
+            <param name="cancellationToken"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Concrete.BaseRepository`2.GetAllAsync``1(System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Linq.Expressions.Expression{System.Func{`0,``0}},System.Linq.Expressions.Expression{System.Func{``0,System.Boolean}},System.Boolean,System.Threading.CancellationToken)">
+            <summary>
+            Returns all entities which IsDeleted condition is true from database asynchronously. If the condition is requested, it also provides that condition.
+            </summary>
+            <typeparam name="TResult"></typeparam>
+            <param name="condition"></param>
+            <param name="conditionAfterProjection"></param>
+            <param name="projection"></param>
+            <param name="tracking"></param>
             <param name="cancellationToken"></param>
             <returns></returns>
         </member>
@@ -2150,25 +2209,25 @@
             <param name="cancellationToken"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Concrete.BaseRepository`2.GetSomeAsync``1(System.Int32,System.Linq.Expressions.Expression{System.Func{`0,``0}},System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Boolean,System.Threading.CancellationToken)">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Concrete.BaseRepository`2.GetSomeAsync(System.Int32,System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Boolean,System.Threading.CancellationToken)">
             <summary>
-             Returns all entities which IsDeleted condition is true from database asynchronously. If the condition is requested, it also provides that condition.
+            Returns all entities which IsDeleted condition is true from database asynchronously. If the condition is requested, it also provides that condition.
             </summary>
             <param name="count"></param>
-            <param name="projectionExpression"></param>
             <param name="tracking"></param>
             <param name="conditionExpression"></param>
             <param name="cancellationToken"></param>
             <returns></returns>
         </member>
-        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Concrete.BaseRepository`2.GetSomeAsync(System.Int32,System.Linq.Expressions.Expression{System.Func{`0,`0}},System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Boolean,System.Threading.CancellationToken)">
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Concrete.BaseRepository`2.GetSomeAsync``1(System.Int32,System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Linq.Expressions.Expression{System.Func{`0,``0}},System.Linq.Expressions.Expression{System.Func{``0,System.Boolean}},System.Boolean,System.Threading.CancellationToken)">
             <summary>
              Returns all entities which IsDeleted condition is true from database asynchronously. If the condition is requested, it also provides that condition.
             </summary>
             <param name="count"></param>
-            <param name="projectionExpression"></param>
+            <param name="condition"></param>
+            <param name="projection"></param>
             <param name="tracking"></param>
-            <param name="conditionExpression"></param>
+            <param name="conditionAfterProjection"></param>
             <param name="cancellationToken"></param>
             <returns></returns>
         </member>
@@ -2385,6 +2444,43 @@
             If utc conversion requested in <see cref="P:Milvasoft.DataAccess.EfCore.Configuration.DbContextConfiguration.UseUtcForDateTime"/>, <see cref="T:System.DateTime"/> typed property call will be added after converted to utc.
             
             </remarks>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Concrete.BaseRepository`2.SaveChangesAsync(System.Threading.CancellationToken)">
+            <summary>
+            Saves all changes made in this context to the database.
+            </summary>
+            <param name="cancellationToken"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Concrete.BaseRepository`2.SaveChangesBulkAsync(EFCore.BulkExtensions.BulkConfig,System.Threading.CancellationToken)">
+            <summary>
+            Saves all changes made in this context to the database.
+            </summary>
+            <param name="bulkConfig"></param>
+            <param name="cancellationToken"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Concrete.BaseRepository`2.DetachFromLocalIfExists(`0)">
+            <summary>
+            Detach entity if found in local store.
+            </summary>
+            <param name="entity"></param>
+            <param name="isUpdate"></param>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Concrete.BaseRepository`2.InternalSaveChangesAsync(System.Threading.CancellationToken)">
+            <summary>
+            Save changes according to <see cref="F:Milvasoft.Helpers.DataAccess.EfCore.Concrete.BaseRepository`2._saveChangesAfterEveryOperation"/>.
+            </summary>
+            <param name="cancellationToken"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Concrete.BaseRepository`2.InternalSaveChangesBulkAsync(EFCore.BulkExtensions.BulkConfig,System.Threading.CancellationToken)">
+            <summary>
+            Save changes according to <see cref="F:Milvasoft.Helpers.DataAccess.EfCore.Concrete.BaseRepository`2._saveChangesAfterEveryOperation"/>.
+            </summary>
+            <param name="bulkConfig"></param>
+            <param name="cancellationToken"></param>
+            <returns></returns>
         </member>
         <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Concrete.BaseRepository`2.CreateKeyEqualityExpression(System.Object,System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
             <summary>

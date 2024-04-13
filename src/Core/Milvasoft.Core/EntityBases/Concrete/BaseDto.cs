@@ -18,6 +18,7 @@ public abstract class BaseDto<TKey> : DtoBase, IBaseEntity<TKey> where TKey : st
     /// </summary>
     /// <returns></returns>
     public override string ToString() => $"[{GetType().Name} {Id}]";
+    public override object GetUniqueIdentifier() => Id;
 }
 
 /// <summary>
@@ -35,6 +36,7 @@ public abstract class DtoBase<TKey> : DtoBase, IEntityBase<TKey>
     /// </summary>
     /// <returns></returns>
     public override string ToString() => $"[{GetType().Name} {Id}]";
+    public override object GetUniqueIdentifier() => Id;
 }
 
 /// <summary>
@@ -48,6 +50,8 @@ public abstract class DtoBase
     protected DtoBase()
     {
     }
+
+    public abstract object GetUniqueIdentifier();
 
     /// <summary>
     /// Returns a collection of PropertyInfo objects that represent properties of the DTO that implements <see cref="IUpdateProperty"/>.

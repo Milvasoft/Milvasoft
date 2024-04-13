@@ -33,7 +33,7 @@ public interface IEntityBase<TKey> : IMilvaEntity
 public interface IMilvaEntity
 {
     /// <summary>
-    /// Unique identifier for this entity.
+    /// Unique identifier for this entity. Do not use this property when access Id. This is a representation for sql translations etc.
     /// </summary>
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Blocker Bug", "S2190:Loops and recursions should not be infinite", Justification = "<Pending>")]
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Reliability", "CA2011:Avoid infinite recursion", Justification = "<Pending>")]
@@ -42,4 +42,6 @@ public interface IMilvaEntity
         get => Id;
         set => Id = value;
     }
+
+    public abstract object GetUniqueIdentifier();
 }

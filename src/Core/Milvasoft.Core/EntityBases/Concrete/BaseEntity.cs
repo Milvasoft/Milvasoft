@@ -21,6 +21,7 @@ public abstract class BaseEntity<TKey> : EntityBase, IBaseEntity<TKey> where TKe
     /// <returns></returns>
     public override string ToString() => $"[{GetType().Name} {Id}]";
 
+    public override object GetUniqueIdentifier() => Id;
 }
 
 /// <summary>
@@ -40,13 +41,17 @@ public abstract class EntityBase<TKey> : EntityBase, IEntityBase<TKey>
     /// </summary>
     /// <returns></returns>
     public override string ToString() => $"[{GetType().Name} {Id}]";
+
+    public override object GetUniqueIdentifier() => Id;
 }
 
 /// <summary>
 /// Base entity for all of entities.
 /// </summary>
-public abstract class EntityBase
+public abstract class EntityBase : IMilvaEntity
 {
+    public abstract object GetUniqueIdentifier();
+
     /// <summary>
     /// Initializes new instance.
     /// </summary>

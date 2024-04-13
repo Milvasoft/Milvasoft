@@ -8,9 +8,5 @@ public class SomeMilvaDbContextFixture(DbContextOptions<SomeMilvaDbContextFixtur
 {
     public DbSet<SomeEntityFixture> Entities { get; set; }
     public DbSet<SomeBaseEntityFixture> BaseEntities { get; set; }
-    public DbSet<SomeCreationAuditableEntityFixture> CreationAuditableEntities { get; set; }
-    public DbSet<SomeAuditableEntityFixture> AuditableEntities { get; set; }
     public DbSet<SomeFullAuditableEntityFixture> FullAuditableEntities { get; set; }
-    public DbSet<SomeHasTranslationEntityFixture> HasTranslationEntities { get; set; }
-    public DbSet<SomeTranslationEntityFixture> TranslationEntities { get; set; }
 }

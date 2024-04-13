@@ -13,6 +13,8 @@ namespace Milvasoft.Core.MultiLanguage.Manager;
 /// </summary>
 public abstract class MultiLanguageManager : IMultiLanguageManager
 {
+    private static readonly object _statObjLocker = new();
+
     #region Static fields for reflection
     private const string _sourceParameterName = "src";
     private const string _translationParameterName = "t";
@@ -50,10 +52,15 @@ public abstract class MultiLanguageManager : IMultiLanguageManager
     /// <param name="languages">The list of languages to update.</param>
     public static void UpdateLanguagesList(List<ILanguage> languages)
     {
-        Languages.Clear();
+        lock (_statObjLocker)
+        {
+            Languages.Clear();
 
-        if (languages != null)
-            Languages = [.. languages.OrderBy(l => l.Id)];
+            if (languages != null)
+            {
+                Languages = [.. languages.OrderBy(l => l.Id)];
+            }
+        }
     }
 
     /// <summary>

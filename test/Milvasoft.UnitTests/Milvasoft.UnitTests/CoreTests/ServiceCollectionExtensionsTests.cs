@@ -1,9 +1,6 @@
 ﻿using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
 using Milvasoft.Core;
-using Milvasoft.Core.Exceptions;
-using Milvasoft.Core.MultiLanguage.Builder;
-using Milvasoft.Core.MultiLanguage.Manager;
 
 namespace Milvasoft.UnitTests.CoreTests;
 
@@ -31,38 +28,6 @@ public class ServiceCollectionExtensionsTests
 
         res.Should().Be(1);
         sut.SomeDependency.IsValueCreated.Should().BeTrue();
-    }
-
-    [Fact]
-    public void AddMilvaMultiLanguage_WithDefaultMultiLanguageManager_WithMultiLanguageManagerAlreadyAdded_ShouldThrowException()
-    {
-        // Arrange
-        var services = new ServiceCollection();
-        var builder = services.AddMilvaMultiLanguage()
-                              .WithDefaultMultiLanguageManager();
-
-        // Act
-        Action act = () => builder.WithDefaultMultiLanguageManager();
-
-        // Assert
-        act.Should().Throw<MilvaDeveloperException>().WithMessage("A IMultiLanguageManager manager has already been registered. Please make sure to register only one IMultiLanguageManager manager.");
-    }
-
-    [Fact]
-    public void AddMilvaMultiLanguage_WithDefaultMultiLanguageManager_ShouldAddCorrectly()
-    {
-        // Arrange
-        var services = new ServiceCollection();
-        var builder = services.AddMilvaMultiLanguage()
-                              .WithDefaultMultiLanguageManager();
-        var serviceProvider = builder.Services.BuildServiceProvider();
-
-        // Act
-        var sut = serviceProvider.GetService<IMultiLanguageManager>();
-
-        // Assert
-        sut.Should().NotBeNull();
-        MultiLanguageManager.Languages.Should().HaveCount(15);
     }
 
     #region Setup
