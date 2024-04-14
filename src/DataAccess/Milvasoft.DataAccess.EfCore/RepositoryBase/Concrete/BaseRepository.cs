@@ -190,7 +190,7 @@ public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepositor
                                                     bool tracking = false,
                                                     CancellationToken cancellationToken = new CancellationToken())
     {
-        var mainCondition = CreateKeyEqualityExpression(id, conditionExpression);
+        var mainCondition = CreateKeyEqualityExpressionWithIsDeletedFalse(id, conditionExpression);
 
         return await _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
                            .SingleOrDefaultAsync(mainCondition, cancellationToken);
@@ -213,7 +213,7 @@ public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepositor
                                                              bool tracking = false,
                                                              CancellationToken cancellationToken = new CancellationToken())
     {
-        var mainCondition = CreateKeyEqualityExpression(id, condition);
+        var mainCondition = CreateKeyEqualityExpressionWithIsDeletedFalse(id, condition);
 
         return await _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
                            .Where(mainCondition)
@@ -781,6 +781,56 @@ public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepositor
     }
 
     /// <summary>
+    /// Creates Id == <paramref name="key"/> equality expression and append to <see cref="CommonHelper.CreateIsDeletedFalseExpression"/>.
+    /// </summary>
+    /// <param name="key"></param>
+    /// <param name="conditionExpression"></param>
+    /// <returns></returns>
+    protected Expression<Func<TEntity, bool>> CreateKeyEqualityExpressionWithIsDeletedFalse(object key, Expression<Func<TEntity, bool>> conditionExpression = null)
+    {
+        Expression<Func<TEntity, bool>> idCondition = i => i.Id.Equals(key);
+
+        var mainCondition = idCondition.Append(CreateConditionExpression(conditionExpression) ?? (entity => true), ExpressionType.AndAlso);
+
+        return mainCondition.Append(conditionExpression, ExpressionType.AndAlso);
+    }
+
+    /// <summary>
+    /// If <see cref="_softDeletedFetching"/> is false,  appends is deleted false expression to <paramref name="conditionExpression"/>.
+    /// Else does nothing to <paramref name="conditionExpression"/> but if <see cref="_resetSoftDeletedFetchState"/> is true then sets <see cref="_softDeletedFetching"/> false.
+    /// </summary>
+    /// <param name="conditionExpression"></param>
+    /// <returns></returns>
+    protected Expression<Func<TEntity, bool>> CreateConditionExpression(Expression<Func<TEntity, bool>> conditionExpression = null)
+    {
+        Expression<Func<TEntity, bool>> mainExpression;
+
+        //Step in when _softDeletedFetching is false
+        if (!_softDeletedFetching)
+        {
+            var softDeleteExpression = CommonHelper.CreateIsDeletedFalseExpression<TEntity>();
+
+            mainExpression = softDeleteExpression.Append(conditionExpression, ExpressionType.AndAlso);
+        }
+        else
+        {
+            mainExpression = conditionExpression;
+
+            if (_resetSoftDeletedFetchState)
+                _softDeletedFetching = _dataAccessConfiguration.Repository.DefaultSoftDeletedFetchState;
+        }
+
+        return mainExpression;
+    }
+
+    /// <summary>
+    /// Returns <see cref="QueryTrackingBehavior"/> according to <paramref name="tracking"/>.
+    /// </summary>
+    /// <param name="tracking"></param>
+    /// <returns></returns>
+    protected static QueryTrackingBehavior GetQueryTrackingBehavior(bool tracking) => tracking ? QueryTrackingBehavior.TrackAll : QueryTrackingBehavior.NoTrackingWithIdentityResolution;
+
+    /// <summary>
     /// Save changes according to <see cref="_saveChangesAfterEveryOperation"/>.
     /// </summary>
     /// <param name="cancellationToken"></param>
@@ -802,115 +852,6 @@ public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepositor
         if (_saveChangesAfterEveryOperation)
             await _dbContext.SaveChangesBulkAsync(bulkConfig, cancellationToken);
     }
-
-    /// <summary>
-    /// Creates Id == <paramref name="key"/> equality expression and append to <see cref="CommonHelper.CreateIsDeletedFalseExpression"/>.
-    /// </summary>
-    /// <param name="key"></param>
-    /// <param name="conditionExpression"></param>
-    /// <returns></returns>
-    protected Expression<Func<TEntity, bool>> CreateKeyEqualityExpression(object key, Expression<Func<TEntity, bool>> conditionExpression = null)
-    {
-        Expression<Func<TEntity, bool>> idCondition = i => i.Id.Equals(key);
-
-        var mainCondition = idCondition.Append(CreateConditionExpression(conditionExpression) ?? (entity => true), ExpressionType.AndAlso);
-
-        return mainCondition.Append(conditionExpression, ExpressionType.AndAlso);
-    }
-
-    /// <summary>
-    /// Creates property selector.
-    /// </summary>
-    /// <param name="entityType"></param>
-    /// <param name="propertyName"></param>
-    /// <returns></returns>
-    protected static Expression<Func<TEntity, object>> CreateObjectPredicate(Type entityType, string propertyName)
-    {
-        CommonHelper.ThrowIfPropertyNotExists(entityType, propertyName);
-
-        var parameterExpression = Expression.Parameter(entityType, "i");
-
-        Expression orderByProperty = Expression.Property(parameterExpression, propertyName);
-
-        return Expression.Lambda<Func<TEntity, object>>(Expression.Convert(orderByProperty, typeof(object)), parameterExpression);
-    }
-
-    /// <summary>
-    /// Checks pagination parameters are reasonable.
-    /// </summary>
-    /// <param name="totalDataCount"></param>
-    /// <param name="countOfRequestedRecordsInPage"></param>
-    /// <param name="requestedPageNumber"></param>
-    /// <returns></returns>
-    protected static int CalculatePageCountAndCompareWithRequested(int totalDataCount, int countOfRequestedRecordsInPage, int requestedPageNumber)
-    {
-        var actualPageCount = Convert.ToDouble(totalDataCount) / Convert.ToDouble(countOfRequestedRecordsInPage);
-
-        var estimatedCountOfPages = Convert.ToInt32(Math.Ceiling(actualPageCount));
-
-        if (estimatedCountOfPages != 0 && requestedPageNumber > estimatedCountOfPages)
-            throw new MilvaUserFriendlyException(MilvaException.WrongPaginationParams, estimatedCountOfPages);
-
-        return estimatedCountOfPages;
-    }
-
-    /// <summary>
-    /// Checks the parameters is valid.
-    /// </summary>
-    /// <param name="requestedPageNumber"></param>
-    /// <param name="countOfRequestedRecordsInPage"></param>
-    protected static void ValidatePaginationParameters(int requestedPageNumber, int countOfRequestedRecordsInPage)
-    {
-        if (requestedPageNumber <= 0)
-            throw new MilvaUserFriendlyException(MilvaException.WrongRequestedPageNumber);
-
-        if (countOfRequestedRecordsInPage <= 0)
-            throw new MilvaUserFriendlyException(MilvaException.WrongRequestedItemCount);
-    }
-
-    /// <summary>
-    /// If <see cref="_softDeletedFetching"/> is false,  appends is deleted false expression to <paramref name="conditionExpression"/>.
-    /// Else does nothing to <paramref name="conditionExpression"/> but if <see cref="_resetSoftDeletedFetchState"/> is true then sets <see cref="_softDeletedFetching"/> false.
-    /// </summary>
-    /// <param name="conditionExpression"></param>
-    /// <returns></returns>
-    protected Expression<Func<TEntity, bool>> CreateConditionExpression(Expression<Func<TEntity, bool>> conditionExpression = null)
-        => CreateConditionExpression<TEntity>(conditionExpression);
-
-    /// <summary>
-    /// If <see cref="_softDeletedFetching"/> is false,  appends is deleted false expression to <paramref name="conditionExpression"/>.
-    /// Else does nothing to <paramref name="conditionExpression"/> but if <see cref="_resetSoftDeletedFetchState"/> is true then sets <see cref="_softDeletedFetching"/> false.
-    /// </summary>
-    /// <param name="conditionExpression"></param>
-    /// <returns></returns>
-    protected Expression<Func<TResult, bool>> CreateConditionExpression<TResult>(Expression<Func<TResult, bool>> conditionExpression = null)
-    {
-        Expression<Func<TResult, bool>> mainExpression;
-
-        //Step in when _softDeletedFetching is false
-        if (!_softDeletedFetching)
-        {
-            var softDeleteExpression = CommonHelper.CreateIsDeletedFalseExpression<TResult>();
-
-            mainExpression = softDeleteExpression.Append(conditionExpression, ExpressionType.AndAlso);
-        }
-        else
-        {
-            mainExpression = conditionExpression;
-
-            if (_resetSoftDeletedFetchState)
-                _softDeletedFetching = _dataAccessConfiguration.Repository.DefaultSoftDeletedFetchState;
-        }
-
-        return mainExpression;
-    }
-
-    /// <summary>
-    /// Returns <see cref="QueryTrackingBehavior"/> according to <paramref name="tracking"/>.
-    /// </summary>
-    /// <param name="tracking"></param>
-    /// <returns></returns>
-    protected static QueryTrackingBehavior GetQueryTrackingBehavior(bool tracking) => tracking ? QueryTrackingBehavior.TrackAll : QueryTrackingBehavior.NoTrackingWithIdentityResolution;
 
     #region Auditing
 

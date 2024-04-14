@@ -96,7 +96,7 @@ public abstract partial class BaseRepository<TEntity, TContext> where TEntity : 
                                             Expression<Func<TEntity, bool>> conditionExpression = null,
                                             bool tracking = false)
     {
-        var mainCondition = CreateKeyEqualityExpression(id, conditionExpression);
+        var mainCondition = CreateKeyEqualityExpressionWithIsDeletedFalse(id, conditionExpression);
 
         return _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
                      .Where(mainCondition)
@@ -117,7 +117,7 @@ public abstract partial class BaseRepository<TEntity, TContext> where TEntity : 
                                    Expression<Func<TEntity, bool>> conditionExpression = null,
                                    bool tracking = false)
     {
-        var mainCondition = CreateKeyEqualityExpression(id, conditionExpression);
+        var mainCondition = CreateKeyEqualityExpressionWithIsDeletedFalse(id, conditionExpression);
 
         return _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
                      .Select(projectionExpression ?? (entity => entity))
