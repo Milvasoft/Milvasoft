@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Milvasoft.UnitTests.ComponentsTests.RestTests.Fixture;
 
-public class RestTestEntityFixture : IMilvaEntity
+public class RestTestEntityFixture : IAuditable<int>
 {
     [Key]
     public int Id { get; set; }
@@ -16,6 +16,10 @@ public class RestTestEntityFixture : IMilvaEntity
     public DateTime? UpdateDate { get; set; }
     public List<RestChildrenTestEntityFixture> Childrens { get; set; }
     public RestChildrenTestEntityFixture Children { get; set; }
+    public DateTime? CreationDate { get; set; }
+    public string CreatorUserName { get; set; }
+    public DateTime? LastModificationDate { get; set; }
+    public string LastModifierUserName { get; set; }
 
     public object GetUniqueIdentifier() => Id;
 }

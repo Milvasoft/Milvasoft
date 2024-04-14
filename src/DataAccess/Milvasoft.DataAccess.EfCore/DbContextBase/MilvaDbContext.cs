@@ -558,7 +558,7 @@ public abstract class MilvaDbContext(DbContextOptions options) : DbContext(optio
 
             if (typeof(TEntity).CanAssignableTo(typeof(IHasModifier)) && _dbContextConfiguration.Auditing.AuditModifier)
             {
-                var currentUserName = _dbContextConfiguration.DbContext.GetCurrentUserNameMethod.Invoke(ServiceProvider);
+                var currentUserName = _dbContextConfiguration.DbContext.InvokeGetCurrentUserMethod(ServiceProvider);
 
                 if (!string.IsNullOrWhiteSpace(currentUserName))
                 {

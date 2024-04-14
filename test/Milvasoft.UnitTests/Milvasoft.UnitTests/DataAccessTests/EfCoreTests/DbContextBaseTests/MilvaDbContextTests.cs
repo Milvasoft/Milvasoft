@@ -1,14 +1,19 @@
 ﻿using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query;
 using Microsoft.Extensions.DependencyInjection;
 using Milvasoft.Core.Abstractions;
 using Milvasoft.Core.Exceptions;
 using Milvasoft.Core.Helpers;
+using Milvasoft.Core.Utils.Constants;
 using Milvasoft.DataAccess.EfCore.Configuration;
 using Milvasoft.DataAccess.EfCore.Utils.Enums;
 using Milvasoft.DataAccess.EfCore.Utils.LookupModels;
 using Milvasoft.Interception.Interceptors.ActivityScope;
+using Milvasoft.UnitTests.ComponentsTests.RestTests.Fixture;
+using Milvasoft.UnitTests.CoreTests.HelperTests.CommonTests.Fixtures;
 using Milvasoft.UnitTests.DataAccessTests.EfCoreTests.Fixtures;
+using System.Linq.Expressions;
 
 namespace Milvasoft.UnitTests.DataAccessTests.EfCoreTests.DbContextBaseTests;
 
@@ -726,6 +731,198 @@ public class MilvaDbContextTests
 
         // Assert
         result.Should().HaveCount(1);
+    }
+
+    #endregion
+
+    #region GetUpdatablePropertiesBuilder
+
+    [Fact]
+    public void GetUpdatablePropertiesBuilder_WithInvalidDto_ShouldReturnNull()
+    {
+        // Arrange
+        var dataAccessConfiguration = new DataAccessConfiguration
+        {
+            Auditing = new AuditConfiguration
+            {
+                AuditModificationDate = false,
+                AuditModifier = false
+            }
+        };
+        var services = GetServices(dataAccessConfiguration);
+        var dbContext = services.GetService<SomeMilvaDbContextFixture>();
+        UpdatedPropsTestInvalidDto dto = new UpdatedPropsTestInvalidDto
+        {
+            Id = 1,
+            Name = "john",
+            Price = 10M
+        };
+        Expression<Func<SetPropertyCalls<RestTestEntityFixture>, SetPropertyCalls<RestTestEntityFixture>>> expectedExpression = i => i;
+
+        // Act
+        var result = dbContext.GetUpdatablePropertiesBuilder<RestTestEntityFixture, UpdatedPropsTestInvalidDto>(dto);
+
+        // Assert
+        var equality = ExpressionEqualityComparer.Instance.Equals(expectedExpression, result.SetPropertyCalls);
+
+        equality.Should().BeTrue();
+    }
+
+    [Fact]
+    public void GetUpdatablePropertiesBuilder_WithValidDtoButNull_ShouldReturnNull()
+    {
+        // Arrange
+        var dataAccessConfiguration = new DataAccessConfiguration
+        {
+            Auditing = new AuditConfiguration
+            {
+                AuditModificationDate = false,
+                AuditModifier = false
+            }
+        };
+        var services = GetServices(dataAccessConfiguration);
+        var dbContext = services.GetService<SomeMilvaDbContextFixture>();
+        UpdatedPropsTestDto dto = null;
+
+        // Act
+        var result = dbContext.GetUpdatablePropertiesBuilder<RestTestEntityFixture, UpdatedPropsTestDto>(dto);
+
+        // Assert
+        result.Should().BeNull();
+    }
+
+    [Fact]
+    public void GetUpdatablePropertiesBuilder_WithAuditModificationDateAndModifierUserFalseInDataAccessConfiguration_ShouldReturnCorrectResult()
+    {
+        // Arrange
+        var dataAccessConfiguration = new DataAccessConfiguration
+        {
+            Auditing = new AuditConfiguration
+            {
+                AuditModificationDate = false,
+                AuditModifier = false
+            }
+        };
+        var services = GetServices(dataAccessConfiguration);
+        var dbContext = services.GetService<SomeMilvaDbContextFixture>();
+        var now = DateTime.Now;
+        UpdatedPropsTestDto dto = new()
+        {
+            Id = 1,
+            Name = "john",
+            UpdateDate = now
+        };
+        Expression<Func<SetPropertyCalls<RestTestEntityFixture>, SetPropertyCalls<RestTestEntityFixture>>> notExpectedExpression = i => i;
+
+        // Act
+        var result = dbContext.GetUpdatablePropertiesBuilder<RestTestEntityFixture, UpdatedPropsTestDto>(dto);
+
+        // Assert
+        var equality = ExpressionEqualityComparer.Instance.Equals(notExpectedExpression, result.SetPropertyCalls);
+        equality.Should().BeFalse();
+        result.SetPropertyCalls.Body.ToString().Should().NotContain(EntityPropertyNames.LastModificationDate);
+        result.SetPropertyCalls.Body.ToString().Should().NotContain(EntityPropertyNames.LastModifierUserName);
+    }
+
+    [Fact]
+    public void GetUpdatablePropertiesBuilder_WithAuditModificationDateTrueInDataAccessConfiguration_ShouldReturnCorrectResult()
+    {
+        // Arrange
+        var dataAccessConfiguration = new DataAccessConfiguration
+        {
+            Auditing = new AuditConfiguration
+            {
+                AuditModificationDate = true,
+            }
+        };
+        var services = GetServices(dataAccessConfiguration);
+        var dbContext = services.GetService<SomeMilvaDbContextFixture>();
+        var now = DateTime.Now;
+        UpdatedPropsTestDto dto = new()
+        {
+            Id = 1,
+            Name = "john",
+            UpdateDate = now
+        };
+        Expression<Func<SetPropertyCalls<RestTestEntityFixture>, SetPropertyCalls<RestTestEntityFixture>>> notExpectedExpression = i => i;
+
+        // Act
+        var result = dbContext.GetUpdatablePropertiesBuilder<RestTestEntityFixture, UpdatedPropsTestDto>(dto);
+
+        // Assert
+        var equality = ExpressionEqualityComparer.Instance.Equals(notExpectedExpression, result.SetPropertyCalls);
+        equality.Should().BeFalse();
+        result.SetPropertyCalls.Body.ToString().Should().Contain(EntityPropertyNames.LastModificationDate);
+    }
+
+    [Fact]
+    public void GetUpdatablePropertiesBuilder_WithAuditModifierUserTrueButGetCurrentUsernameMethodIsNullInDataAccessConfiguration_ShouldReturnCorrectResult()
+    {
+        // Arrange
+        var dataAccessConfiguration = new DataAccessConfiguration
+        {
+            Auditing = new AuditConfiguration
+            {
+                AuditModificationDate = false,
+                AuditModifier = true
+            }
+        };
+        var services = GetServices(dataAccessConfiguration);
+        var dbContext = services.GetService<SomeMilvaDbContextFixture>();
+        var now = DateTime.Now;
+        UpdatedPropsTestDto dto = new()
+        {
+            Id = 1,
+            Name = "john",
+            UpdateDate = now
+        };
+        Expression<Func<SetPropertyCalls<RestTestEntityFixture>, SetPropertyCalls<RestTestEntityFixture>>> notExpectedExpression = i => i;
+
+        // Act
+        var result = dbContext.GetUpdatablePropertiesBuilder<RestTestEntityFixture, UpdatedPropsTestDto>(dto);
+
+        // Assert
+        var equality = ExpressionEqualityComparer.Instance.Equals(notExpectedExpression, result.SetPropertyCalls);
+        equality.Should().BeFalse();
+        result.SetPropertyCalls.Body.ToString().Should().NotContain(EntityPropertyNames.LastModificationDate);
+        result.SetPropertyCalls.Body.ToString().Should().NotContain(EntityPropertyNames.LastModifierUserName);
+    }
+
+    [Fact]
+    public void GetUpdatablePropertiesBuilder_WithAuditModifierUserTrueAndGetCurrentUsernameMethodIsNotNullInDataAccessConfiguration_ShouldReturnCorrectResult()
+    {
+        // Arrange
+        var dataAccessConfiguration = new DataAccessConfiguration
+        {
+            DbContext = new DbContextConfiguration
+            {
+                GetCurrentUserNameMethod = (sp) => "testuser"
+            },
+            Auditing = new AuditConfiguration
+            {
+                AuditModificationDate = false,
+                AuditModifier = true
+            }
+        };
+        var services = GetServices(dataAccessConfiguration);
+        var dbContext = services.GetService<SomeMilvaDbContextFixture>();
+        var now = DateTime.Now;
+        UpdatedPropsTestDto dto = new()
+        {
+            Id = 1,
+            Name = "john",
+            UpdateDate = now
+        };
+        Expression<Func<SetPropertyCalls<RestTestEntityFixture>, SetPropertyCalls<RestTestEntityFixture>>> notExpectedExpression = i => i;
+
+        // Act
+        var result = dbContext.GetUpdatablePropertiesBuilder<RestTestEntityFixture, UpdatedPropsTestDto>(dto);
+
+        // Assert
+        var equality = ExpressionEqualityComparer.Instance.Equals(notExpectedExpression, result.SetPropertyCalls);
+        equality.Should().BeFalse();
+        result.SetPropertyCalls.Body.ToString().Should().NotContain(EntityPropertyNames.LastModificationDate);
+        result.SetPropertyCalls.Body.ToString().Should().Contain(EntityPropertyNames.LastModifierUserName);
     }
 
     #endregion

@@ -79,6 +79,13 @@
             Dynamic data fetch configuration.
             </summary>
         </member>
+        <member name="M:Milvasoft.DataAccess.EfCore.Configuration.DbContextConfiguration.InvokeGetCurrentUserMethod(System.IServiceProvider)">
+            <summary>
+            Invokes <see cref="P:Milvasoft.DataAccess.EfCore.Configuration.DbContextConfiguration.GetCurrentUserNameMethod"/>.
+            </summary>
+            <param name="sp"></param>
+            <returns></returns>
+        </member>
         <member name="T:Milvasoft.DataAccess.EfCore.Configuration.DynamicFetchConfiguration">
             <summary>
             IOptions aware custom MilvaDbContext configurations.

@@ -40,6 +40,6 @@ public class ServiceCollectionExtensionsTests
 
         // Assert
         configuration.Auditing.AuditDeletionDate.Should().BeTrue();
-        configuration.DbContext.GetCurrentUserNameMethod.Invoke(serviceProvider).Should().Be("test");
+        configuration.DbContext.InvokeGetCurrentUserMethod(serviceProvider).Should().Be("test");
     }
 }

@@ -29,4 +29,11 @@ public class DbContextConfiguration
     /// Dynamic data fetch configuration.
     /// </summary>
     public DynamicFetchConfiguration DynamicFetch { get; set; } = new();
+
+    /// <summary>
+    /// Invokes <see cref="GetCurrentUserNameMethod"/>.
+    /// </summary>
+    /// <param name="sp"></param>
+    /// <returns></returns>
+    public string InvokeGetCurrentUserMethod(IServiceProvider sp) => GetCurrentUserNameMethod?.Invoke(sp) ?? null;
 }

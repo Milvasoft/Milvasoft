@@ -1038,6 +1038,12 @@ public class MilvaEfExtensionsTests
         // Assert
         var equality = ExpressionEqualityComparer.Instance.Equals(notExpectedExpression, result.SetPropertyCalls);
         equality.Should().BeFalse();
+        result.SetPropertyCalls.Body.ToString().Should().NotContain(nameof(UpdatedPropsTestDto.Price));
+        result.SetPropertyCalls.Body.ToString().Should().NotContain(nameof(UpdatedPropsTestDto.Type));
+        result.SetPropertyCalls.Body.ToString().Should().NotContain(nameof(UpdatedPropsTestDto.Priority));
+        result.SetPropertyCalls.Body.ToString().Should().NotContain(nameof(UpdatedPropsTestDto.Id));
+        result.SetPropertyCalls.Body.ToString().Should().Contain(nameof(UpdatedPropsTestDto.Name));
+        result.SetPropertyCalls.Body.ToString().Should().Contain(nameof(UpdatedPropsTestDto.UpdateDate));
     }
 
     #endregion
