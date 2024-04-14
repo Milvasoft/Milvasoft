@@ -441,198 +441,218 @@ public interface IBaseRepository<TEntity, TContext> where TEntity : class, IMilv
 
     #endregion
 
+    /// <summary>
+    /// Saves all changes made in this context to the database.
+    /// </summary>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    Task SaveChangesAsync(CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Saves all changes made in this context to the database.
+    /// </summary>
+    /// <param name="bulkConfig"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    Task SaveChangesBulkAsync(BulkConfig bulkConfig = null, CancellationToken cancellationToken = default);
+
     #endregion
 
     #region Sync Data Access
 
-    #region Sync FirstOrDefault 
+    #region FirstOrDefault 
 
     /// <summary>
-    /// Returns first entity or default value which IsDeleted condition is true from database asynchronously. If the condition is requested, it also provides that condition.
+    /// Returns first entity or default value which IsDeleted condition is true from database synchronously. If the condition is requested, it also provides that condition.
     /// </summary>
-    /// <param name="projectionExpression"></param>
     /// <param name="tracking"></param>
-    /// <param name="conditionExpression"></param>
+    /// <param name="condition"></param>
     /// <returns></returns>
-    TResult GetFirstOrDefault<TResult>(Expression<Func<TEntity, TResult>> projectionExpression,
-                                       Expression<Func<TEntity, bool>> conditionExpression = null,
+    TEntity GetFirstOrDefault(Expression<Func<TEntity, bool>> condition = null, bool tracking = false);
+
+    /// <summary>
+    /// Returns first entity or default value which IsDeleted condition is true from database synchronously. If the condition is requested, it also provides that condition.
+    /// </summary>
+    /// <param name="condition"></param>
+    /// <param name="projection"></param>
+    /// <param name="conditionAfterProjection"></param>
+    /// <param name="tracking"></param>
+    /// <returns></returns>
+    TResult GetFirstOrDefault<TResult>(Expression<Func<TEntity, bool>> condition = null,
+                                       Expression<Func<TEntity, TResult>> projection = null,
+                                       Expression<Func<TResult, bool>> conditionAfterProjection = null,
                                        bool tracking = false);
 
-    /// <summary>
-    /// Returns first entity or default value which IsDeleted condition is true from database asynchronously. If the condition is requested, it also provides that condition.
-    /// </summary>
-    /// <param name="projectionExpression"></param>
-    /// <param name="tracking"></param>
-    /// <param name="conditionExpression"></param>
-    /// <returns></returns>
-    TEntity GetFirstOrDefault(Expression<Func<TEntity, TEntity>> projectionExpression = null,
-                              Expression<Func<TEntity, bool>> conditionExpression = null,
-                              bool tracking = false);
-
     #endregion
 
-    #region Sync SingleOrDefault
+    #region SingleOrDefault
 
     /// <summary>
-    /// Returns first entity or default value which IsDeleted condition is true from database asynchronously. If the condition is requested, it also provides that condition.
+    /// Returns single entity or default value which IsDeleted condition is true from database synchronously. If the condition is requested, it also provides that condition.
     /// </summary>
-    /// <param name="projectionExpression"></param>
     /// <param name="tracking"></param>
-    /// <param name="conditionExpression"></param>
+    /// <param name="condition"></param>
     /// <returns></returns>
-    TResult GetSingleOrDefault<TResult>(Expression<Func<TEntity, TResult>> projectionExpression,
-                                        Expression<Func<TEntity, bool>> conditionExpression = null,
+    TEntity GetSingleOrDefault(Expression<Func<TEntity, bool>> condition = null, bool tracking = false);
+
+    /// <summary>
+    /// Returns single entity or default value which IsDeleted condition is true from database synchronously. If the condition is requested, it also provides that condition.
+    /// </summary>
+    /// <param name="condition"></param>
+    /// <param name="projection"></param>
+    /// <param name="conditionAfterProjection"></param>
+    /// <param name="tracking"></param>
+    /// <returns></returns>
+    TResult GetSingleOrDefault<TResult>(Expression<Func<TEntity, bool>> condition = null,
+                                        Expression<Func<TEntity, TResult>> projection = null,
+                                        Expression<Func<TResult, bool>> conditionAfterProjection = null,
                                         bool tracking = false);
 
-    /// <summary>
-    ///  Returns single entity or default value which IsDeleted condition is true from database asynchronously. If the condition is requested, it also provides that condition.
-    /// </summary>
-    /// <param name="projectionExpression"></param>
-    /// <param name="tracking"></param>
-    /// <param name="conditionExpression"></param>
-    /// <returns></returns>
-    TEntity GetSingleOrDefault(Expression<Func<TEntity, TEntity>> projectionExpression = null,
-                               Expression<Func<TEntity, bool>> conditionExpression = null,
-                               bool tracking = false);
-
     #endregion
 
-    #region Sync GetById
+    #region GetById
 
     /// <summary>
-    /// Returns one entity by entity Id from database asynchronously.
+    /// Returns one entity by entity Id from database synchronously.
     /// </summary>
     /// <param name="id"></param>
     /// <param name="conditionExpression"></param>
+    /// <param name="tracking"></param>
+    /// <returns> The entity found or null. </returns>
+    TEntity GetById(object id,
+                    Expression<Func<TEntity, bool>> conditionExpression = null,
+                    bool tracking = false);
+
+    /// <summary>
+    /// Returns one entity by entity Id from database synchronously.
+    /// </summary>
+    /// <param name="id"></param>
+    /// <param name="condition"></param>
+    /// <param name="conditionAfterProjection"></param>
     /// <param name="projectionExpression"></param>
     /// <param name="tracking"></param>
     /// <returns> The entity found or null. </returns>
     TResult GetById<TResult>(object id,
-                             Expression<Func<TEntity, TResult>> projectionExpression,
-                             Expression<Func<TEntity, bool>> conditionExpression = null,
+                             Expression<Func<TEntity, bool>> condition = null,
+                             Expression<Func<TEntity, TResult>> projectionExpression = null,
+                             Expression<Func<TResult, bool>> conditionAfterProjection = null,
                              bool tracking = false);
-
-    /// <summary>
-    /// Returns one entity by entity Id from database asynchronously.
-    /// </summary>
-    /// <param name="id"></param>
-    /// <param name="conditionExpression"></param>
-    /// <param name="projectionExpression"></param>
-    /// <param name="tracking"></param>
-    /// <returns> The entity found or null. </returns>
-    TEntity GetById(object id,
-                    Expression<Func<TEntity, TEntity>> projectionExpression = null,
-                    Expression<Func<TEntity, bool>> conditionExpression = null,
-                    bool tracking = false);
 
     #endregion
 
-    #region Sync GetAll
+    #region GetAll
 
     /// <summary>
-    /// Returns all entities which IsDeleted condition is true from database asynchronously. If the condition is requested, it also provides that condition.
-    /// </summary>
-    /// <typeparam name="TResult"></typeparam>
-    /// <param name="listRequest"></param>
-    /// <param name="conditionExpression"></param>
-    /// <param name="projectionExpression"></param>
-    /// <param name="tracking"></param>
-    /// <returns></returns>
-    ListResponse<TResult> GetAll<TResult>(ListRequest listRequest,
-                                          Expression<Func<TEntity, TResult>> projectionExpression,
-                                          Expression<Func<TEntity, bool>> conditionExpression = null,
-                                          bool tracking = false) where TResult : class;
-
-    /// <summary>
-    /// Returns all entities which IsDeleted condition is true from database asynchronously. If the condition is requested, it also provides that condition.
-    /// </summary>
-    /// <typeparam name="TResult"></typeparam>
-    /// <param name="conditionExpression"></param>
-    /// <param name="projectionExpression"></param>
-    /// <param name="tracking"></param>
-    /// <returns></returns>
-    IEnumerable<TResult> GetAll<TResult>(Expression<Func<TEntity, TResult>> projectionExpression,
-                                         Expression<Func<TEntity, bool>> conditionExpression = null,
-                                         bool tracking = false);
-
-    /// <summary>
-    /// Returns entities which IsDeleted condition is true from database asynchronously. If the condition is requested, it also provides that condition.
+    /// Returns entities which IsDeleted condition is true from database synchronously. If the condition is requested, it also provides that condition.
     /// </summary>
     /// <param name="listRequest"></param>
-    /// <param name="projectionExpression"></param>
     /// <param name="tracking"></param>
     /// <param name="conditionExpression"></param>
     /// <returns></returns>
     ListResponse<TEntity> GetAll(ListRequest listRequest,
-                                 Expression<Func<TEntity, TEntity>> projectionExpression = null,
                                  Expression<Func<TEntity, bool>> conditionExpression = null,
                                  bool tracking = false);
 
     /// <summary>
-    ///  Returns all entities which IsDeleted condition is true from database asynchronously. If the condition is requested, it also provides that condition.
+    /// Returns all entities which IsDeleted condition is true from database synchronously. If the condition is requested, it also provides that condition.
     /// </summary>
-    /// <param name="projectionExpression"></param>
+    /// <typeparam name="TResult"></typeparam>
+    /// <param name="listRequest"></param>
+    /// <param name="condition"></param>
+    /// <param name="conditionAfterProjection"></param>
+    /// <param name="projection"></param>
+    /// <param name="tracking"></param>
+    /// <returns></returns>
+    ListResponse<TResult> GetAll<TResult>(ListRequest listRequest,
+                                          Expression<Func<TEntity, bool>> condition = null,
+                                          Expression<Func<TEntity, TResult>> projection = null,
+                                          Expression<Func<TResult, bool>> conditionAfterProjection = null,
+                                          bool tracking = false) where TResult : class;
+
+    /// <summary>
+    /// Returns entities which IsDeleted condition is true from database synchronously. If the condition is requested, it also provides that condition.
+    /// </summary>
     /// <param name="tracking"></param>
     /// <param name="conditionExpression"></param>
     /// <returns></returns>
-    IEnumerable<TEntity> GetAll(Expression<Func<TEntity, TEntity>> projectionExpression = null,
-                                Expression<Func<TEntity, bool>> conditionExpression = null,
-                                bool tracking = false);
+    List<TEntity> GetAll(Expression<Func<TEntity, bool>> conditionExpression = null, bool tracking = false);
+
+    /// <summary>
+    /// Returns all entities which IsDeleted condition is true from database synchronously. If the condition is requested, it also provides that condition.
+    /// </summary>
+    /// <typeparam name="TResult"></typeparam>
+    /// <param name="condition"></param>
+    /// <param name="conditionAfterProjection"></param>
+    /// <param name="projection"></param>
+    /// <param name="tracking"></param>
+    /// <returns></returns>
+    List<TResult> GetAll<TResult>(Expression<Func<TEntity, bool>> condition = null,
+                                  Expression<Func<TEntity, TResult>> projection = null,
+                                  Expression<Func<TResult, bool>> conditionAfterProjection = null,
+                                  bool tracking = false) where TResult : class;
 
     #endregion
 
-    #region Sync GetSome
+    #region GetSome
 
     /// <summary>
-    ///  Returns all entities which IsDeleted condition is true from database asynchronously. If the condition is requested, it also provides that condition.
+    /// Returns all entities which IsDeleted condition is true from database synchronously. If the condition is requested, it also provides that condition.
     /// </summary>
     /// <param name="count"></param>
-    /// <param name="projectionExpression"></param>
     /// <param name="tracking"></param>
     /// <param name="conditionExpression"></param>
     /// <returns></returns>
-    IEnumerable<TResult> GetSome<TResult>(int count,
-                                          Expression<Func<TEntity, TResult>> projectionExpression,
-                                          Expression<Func<TEntity, bool>> conditionExpression = null,
-                                          bool tracking = false);
+    List<TEntity> GetSome(int count,
+                          Expression<Func<TEntity, bool>> conditionExpression = null,
+                          bool tracking = false);
 
     /// <summary>
-    ///  Returns all entities which IsDeleted condition is true from database asynchronously. If the condition is requested, it also provides that condition.
+    ///  Returns all entities which IsDeleted condition is true from database synchronously. If the condition is requested, it also provides that condition.
     /// </summary>
     /// <param name="count"></param>
-    /// <param name="projectionExpression"></param>
+    /// <param name="condition"></param>
+    /// <param name="projection"></param>
     /// <param name="tracking"></param>
-    /// <param name="conditionExpression"></param>
+    /// <param name="conditionAfterProjection"></param>
     /// <returns></returns>
-    IEnumerable<TEntity> GetSome(int count,
-                                 Expression<Func<TEntity, TEntity>> projectionExpression = null,
-                                 Expression<Func<TEntity, bool>> conditionExpression = null,
-                                 bool tracking = false);
+    List<TResult> GetSome<TResult>(int count,
+                                   Expression<Func<TEntity, bool>> condition = null,
+                                   Expression<Func<TEntity, TResult>> projection = null,
+                                   Expression<Func<TResult, bool>> conditionAfterProjection = null,
+                                   bool tracking = false);
 
     #endregion
 
-    #region Sync Insert/Update/Delete
+    #region Insert/Update/Delete
 
     /// <summary>
-    ///  Adds single entity to database asynchronously. 
+    ///  Adds single entity to database synchronously. 
     /// </summary>
     /// <param name="entity"></param>
     /// <returns></returns>
     void Add(TEntity entity);
 
     /// <summary>
-    ///  Adds multiple entities to database asynchronously. 
+    ///  Adds multiple entities to database synchronously. 
     /// </summary>
     /// <param name="entities"></param>
     /// <returns></returns>
     void AddRange(IEnumerable<TEntity> entities);
 
     /// <summary>
-    ///  Updates specified entity in database asynchronously.
+    /// Updates specified entity in database synchronously.
     /// </summary>
     /// <param name="entity"></param>
     /// <returns></returns>
     void Update(TEntity entity);
+
+    /// <summary>
+    /// Updates multiple entities in database synchronously.
+    /// </summary>
+    /// <param name="entities"></param>
+    /// <param name="()"></param>
+    /// <returns></returns>
+    void Update(IEnumerable<TEntity> entities);
 
     /// <summary>
     /// Specific properties updates.
@@ -651,21 +671,14 @@ public interface IBaseRepository<TEntity, TContext> where TEntity : class, IMilv
     void Update(IEnumerable<TEntity> entities, params Expression<Func<TEntity, object>>[] propertySelectors);
 
     /// <summary>
-    ///  Updates multiple entities in database asynchronously.
-    /// </summary>
-    /// <param name="entities"></param>
-    /// <returns></returns>
-    void Update(IEnumerable<TEntity> entities);
-
-    /// <summary>
-    ///  Deletes single entity from database asynchronously.
+    ///  Deletes single entity from database synchronously.
     /// </summary>
     /// <param name="entity"></param>
     /// <returns></returns>
     void Delete(TEntity entity);
 
     /// <summary>
-    ///  Deletes multiple entity from database asynchronously.
+    ///  Deletes multiple entity from database synchronously.
     /// </summary>
     /// <param name="entities"></param>
     /// <returns></returns>
@@ -693,7 +706,7 @@ public interface IBaseRepository<TEntity, TContext> where TEntity : class, IMilv
     /// <returns></returns>
     void RemoveAll();
 
-    #region Bulk Async
+    #region Bulk 
 
     /// <summary>
     /// Runs execute update. Adds performer and perform time to to be updated properties.
@@ -701,7 +714,6 @@ public interface IBaseRepository<TEntity, TContext> where TEntity : class, IMilv
     /// </summary>
     /// <param name="id"></param>
     /// <param name="propertyBuilder"></param>
-
     /// <returns></returns>
     void ExecuteUpdate(object id, SetPropertyBuilder<TEntity> propertyBuilder);
 
@@ -717,7 +729,7 @@ public interface IBaseRepository<TEntity, TContext> where TEntity : class, IMilv
     /// Deletes all records that match the condition. If <see cref="SoftDeletionState"/> is active, it updates the soft delete properties of the relevant entity. 
     /// Note that this will not work with navigation properties.
     /// </summary>
-    /// <param name="id"></param> 
+    /// <param name="id"></param>
     /// <returns></returns>
     void ExecuteDelete(object id);
 
@@ -733,7 +745,7 @@ public interface IBaseRepository<TEntity, TContext> where TEntity : class, IMilv
     /// Bulk add operation. 
     /// </summary>
     /// <param name="entities"></param>
-    /// <param name="bulkConfig"></param>  
+    /// <param name="bulkConfig"></param>
     /// <returns></returns>
     void BulkAdd(List<TEntity> entities, Action<BulkConfig> bulkConfig = null);
 
@@ -741,7 +753,7 @@ public interface IBaseRepository<TEntity, TContext> where TEntity : class, IMilv
     /// Bulk update operation. 
     /// </summary>
     /// <param name="entities"></param>
-    /// <param name="bulkConfig"></param>  
+    /// <param name="bulkConfig"></param>
     /// <returns></returns>
     void BulkUpdate(List<TEntity> entities, Action<BulkConfig> bulkConfig = null);
 
@@ -749,7 +761,7 @@ public interface IBaseRepository<TEntity, TContext> where TEntity : class, IMilv
     /// Bulk delete operation. 
     /// </summary>
     /// <param name="entities"></param>
-    /// <param name="bulkConfig"></param> 
+    /// <param name="bulkConfig"></param>
     /// <returns></returns>
     void BulkDelete(List<TEntity> entities, Action<BulkConfig> bulkConfig = null);
 
@@ -765,7 +777,7 @@ public interface IBaseRepository<TEntity, TContext> where TEntity : class, IMilv
     /// Bulk update operation. 
     /// </summary>
     /// <param name="entities"></param>
-    /// <param name="bulkConfig"></param> 
+    /// <param name="bulkConfig"></param>
     /// <returns></returns>
     void BulkUpdateWithSaveChanges(List<TEntity> entities, BulkConfig bulkConfig = null);
 
@@ -773,13 +785,26 @@ public interface IBaseRepository<TEntity, TContext> where TEntity : class, IMilv
     /// Bulk delete operation. 
     /// </summary>
     /// <param name="entities"></param>
-    /// <param name="bulkConfig"></param> 
+    /// <param name="bulkConfig"></param>
     /// <returns></returns>
     void BulkDeleteWithSaveChanges(List<TEntity> entities, BulkConfig bulkConfig = null);
 
     #endregion
 
     #endregion
+
+    /// <summary>
+    /// Saves all changes made in this context to the database.
+    /// </summary>
+    /// <returns></returns>
+    void SaveChanges();
+
+    /// <summary>
+    /// Saves all changes made in this context to the database.
+    /// </summary>
+    /// <param name="bulkConfig"></param>
+    /// <returns></returns>
+    void SaveChangesBulk(BulkConfig bulkConfig = null);
 
     #endregion
 
@@ -803,19 +828,4 @@ public interface IBaseRepository<TEntity, TContext> where TEntity : class, IMilv
     /// 
     /// </remarks>
     public SetPropertyBuilder<TEntity> GetUpdatablePropertiesBuilder<TDto>(TDto dto) where TDto : DtoBase;
-
-    /// <summary>
-    /// Saves all changes made in this context to the database.
-    /// </summary>
-    /// <param name="cancellationToken"></param>
-    /// <returns></returns>
-    Task SaveChangesAsync(CancellationToken cancellationToken = default);
-
-    /// <summary>
-    /// Saves all changes made in this context to the database.
-    /// </summary>
-    /// <param name="bulkConfig"></param>
-    /// <param name="cancellationToken"></param>
-    /// <returns></returns>
-    Task SaveChangesBulkAsync(BulkConfig bulkConfig = null, CancellationToken cancellationToken = default);
 }

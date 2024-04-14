@@ -13,233 +13,227 @@ namespace Milvasoft.Helpers.DataAccess.EfCore.Concrete;
 [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0305:Simplify collection initialization", Justification = "<Pending>")]
 public abstract partial class BaseRepository<TEntity, TContext> where TEntity : class, IMilvaEntity where TContext : DbContext, IMilvaDbContextBase
 {
-    #region Sync Data Access
+    #region Data Access
 
-    #region Sync FirstOrDefault 
+    #region FirstOrDefault 
 
     /// <summary>
-    /// Returns first entity or default value which IsDeleted condition is true from database asynchronously. If the condition is requested, it also provides that condition.
+    /// Returns first entity or default value which IsDeleted condition is true from database synchronously. If the condition is requested, it also provides that condition.
     /// </summary>
-    /// <param name="projectionExpression"></param>
     /// <param name="tracking"></param>
-    /// <param name="conditionExpression"></param>
+    /// <param name="condition"></param>
     /// <returns></returns>
-    public virtual TResult GetFirstOrDefault<TResult>(Expression<Func<TEntity, TResult>> projectionExpression,
-                                                      Expression<Func<TEntity, bool>> conditionExpression = null,
+    public virtual TEntity GetFirstOrDefault(Expression<Func<TEntity, bool>> condition = null, bool tracking = false)
+        => _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
+                       .FirstOrDefault(CreateConditionExpression(condition) ?? (entity => true));
+
+    /// <summary>
+    /// Returns first entity or default value which IsDeleted condition is true from database synchronously. If the condition is requested, it also provides that condition.
+    /// </summary>
+    /// <param name="condition"></param>
+    /// <param name="projection"></param>
+    /// <param name="conditionAfterProjection"></param>
+    /// <param name="tracking"></param>
+    /// <returns></returns>
+    public virtual TResult GetFirstOrDefault<TResult>(Expression<Func<TEntity, bool>> condition = null,
+                                                      Expression<Func<TEntity, TResult>> projection = null,
+                                                      Expression<Func<TResult, bool>> conditionAfterProjection = null,
                                                       bool tracking = false)
         => _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
-                 .Where(CreateConditionExpression(conditionExpression) ?? (entity => true))
-                 .Select(projectionExpression)
-                 .FirstOrDefault();
-
-    /// <summary>
-    /// Returns first entity or default value which IsDeleted condition is true from database asynchronously. If the condition is requested, it also provides that condition.
-    /// </summary>
-    /// <param name="projectionExpression"></param>
-    /// <param name="tracking"></param>
-    /// <param name="conditionExpression"></param>
-    /// <returns></returns>
-    public virtual TEntity GetFirstOrDefault(Expression<Func<TEntity, TEntity>> projectionExpression = null,
-                                             Expression<Func<TEntity, bool>> conditionExpression = null,
-                                             bool tracking = false)
-        => _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
-                 .Select(projectionExpression ?? (entity => entity))
-                 .FirstOrDefault(CreateConditionExpression(conditionExpression) ?? (entity => true));
+                 .Where(CreateConditionExpression(condition) ?? (entity => true))
+                 .Select(projection)
+                 .FirstOrDefault(conditionAfterProjection ?? (entity => true));
 
     #endregion
 
-    #region Sync SingleOrDefault
+    #region  SingleOrDefault
 
     /// <summary>
-    /// Returns first entity or default value which IsDeleted condition is true from database asynchronously. If the condition is requested, it also provides that condition.
+    /// Returns single entity or default value which IsDeleted condition is true from database synchronously. If the condition is requested, it also provides that condition.
     /// </summary>
-    /// <param name="projectionExpression"></param>
     /// <param name="tracking"></param>
-    /// <param name="conditionExpression"></param>
+    /// <param name="condition"></param>
     /// <returns></returns>
-    public virtual TResult GetSingleOrDefault<TResult>(Expression<Func<TEntity, TResult>> projectionExpression,
-                                                       Expression<Func<TEntity, bool>> conditionExpression = null,
+    public virtual TEntity GetSingleOrDefault(Expression<Func<TEntity, bool>> condition = null, bool tracking = false)
+        => _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
+                 .SingleOrDefault(CreateConditionExpression(condition) ?? (entity => true));
+
+    /// <summary>
+    /// Returns single entity or default value which IsDeleted condition is true from database synchronously. If the condition is requested, it also provides that condition.
+    /// </summary>
+    /// <param name="condition"></param>
+    /// <param name="projection"></param>
+    /// <param name="conditionAfterProjection"></param>
+    /// <param name="tracking"></param>
+    /// <returns></returns>
+    public virtual TResult GetSingleOrDefault<TResult>(Expression<Func<TEntity, bool>> condition = null,
+                                                       Expression<Func<TEntity, TResult>> projection = null,
+                                                       Expression<Func<TResult, bool>> conditionAfterProjection = null,
                                                        bool tracking = false)
         => _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
-                 .Where(CreateConditionExpression(conditionExpression) ?? (entity => true))
-                 .Select(projectionExpression)
-                 .SingleOrDefault();
-
-    /// <summary>
-    ///  Returns single entity or default value which IsDeleted condition is true from database asynchronously. If the condition is requested, it also provides that condition.
-    /// </summary>
-    /// <param name="projectionExpression"></param>
-    /// <param name="tracking"></param>
-    /// <param name="conditionExpression"></param>
-    /// <returns></returns>
-    public virtual TEntity GetSingleOrDefault(Expression<Func<TEntity, TEntity>> projectionExpression = null,
-                                              Expression<Func<TEntity, bool>> conditionExpression = null,
-                                              bool tracking = false)
-        => _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
-                 .Select(projectionExpression ?? (entity => entity))
-                 .SingleOrDefault(CreateConditionExpression(conditionExpression) ?? (entity => true));
+                 .Where(CreateConditionExpression(condition) ?? (entity => true))
+                 .Select(projection)
+                 .SingleOrDefault(conditionAfterProjection ?? (entity => true));
 
     #endregion
 
-    #region Sync GetById
+    #region  GetById
 
     /// <summary>
-    /// Returns one entity by entity Id from database asynchronously.
+    /// Returns one entity by entity Id from database synchronously.
     /// </summary>
     /// <param name="id"></param>
     /// <param name="conditionExpression"></param>
-    /// <param name="projectionExpression"></param>
-    /// <param name="tracking"></param>
-    /// <returns> The entity found or null. </returns>
-    public virtual TResult GetById<TResult>(object id,
-                                            Expression<Func<TEntity, TResult>> projectionExpression,
-                                            Expression<Func<TEntity, bool>> conditionExpression = null,
-                                            bool tracking = false)
-    {
-        var mainCondition = CreateKeyEqualityExpressionWithIsDeletedFalse(id, conditionExpression);
-
-        return _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
-                     .Where(mainCondition)
-                     .Select(projectionExpression)
-                     .SingleOrDefault();
-    }
-
-    /// <summary>
-    /// Returns one entity by entity Id from database asynchronously.
-    /// </summary>
-    /// <param name="id"></param>
-    /// <param name="conditionExpression"></param>
-    /// <param name="projectionExpression"></param>
     /// <param name="tracking"></param>
     /// <returns> The entity found or null. </returns>
     public virtual TEntity GetById(object id,
-                                   Expression<Func<TEntity, TEntity>> projectionExpression = null,
                                    Expression<Func<TEntity, bool>> conditionExpression = null,
                                    bool tracking = false)
     {
         var mainCondition = CreateKeyEqualityExpressionWithIsDeletedFalse(id, conditionExpression);
 
         return _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
-                     .Select(projectionExpression ?? (entity => entity))
                      .SingleOrDefault(mainCondition);
+    }
+
+    /// <summary>
+    /// Returns one entity by entity Id from database synchronously.
+    /// </summary>
+    /// <param name="id"></param>
+    /// <param name="condition"></param>
+    /// <param name="conditionAfterProjection"></param>
+    /// <param name="projectionExpression"></param>
+    /// <param name="tracking"></param>
+    /// <returns> The entity found or null. </returns>
+    public virtual TResult GetById<TResult>(object id,
+                                            Expression<Func<TEntity, bool>> condition = null,
+                                            Expression<Func<TEntity, TResult>> projectionExpression = null,
+                                            Expression<Func<TResult, bool>> conditionAfterProjection = null,
+                                            bool tracking = false)
+    {
+        var mainCondition = CreateKeyEqualityExpressionWithIsDeletedFalse(id, condition);
+
+        return _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
+                     .Where(mainCondition)
+                     .Select(projectionExpression)
+                     .SingleOrDefault(conditionAfterProjection ?? (entity => true));
     }
 
     #endregion
 
-    #region Sync GetAll
+    #region  GetAll
 
     /// <summary>
-    /// Returns all entities which IsDeleted condition is true from database asynchronously. If the condition is requested, it also provides that condition.
-    /// </summary>
-    /// <typeparam name="TResult"></typeparam>
-    /// <param name="listRequest"></param>
-    /// <param name="conditionExpression"></param>
-    /// <param name="projectionExpression"></param>
-    /// <param name="tracking"></param>
-    /// <returns></returns>
-    public virtual ListResponse<TResult> GetAll<TResult>(ListRequest listRequest,
-                                                         Expression<Func<TEntity, TResult>> projectionExpression,
-                                                         Expression<Func<TEntity, bool>> conditionExpression = null,
-                                                         bool tracking = false) where TResult : class
-        => _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
-                 .Where(CreateConditionExpression(conditionExpression) ?? (entity => true))
-                 .Select(projectionExpression)
-                 .ToListResponse(listRequest);
-
-    /// <summary>
-    /// Returns all entities which IsDeleted condition is true from database asynchronously. If the condition is requested, it also provides that condition.
-    /// </summary>
-    /// <typeparam name="TResult"></typeparam>
-    /// <param name="conditionExpression"></param>
-    /// <param name="projectionExpression"></param>
-    /// <param name="tracking"></param>
-    /// <returns></returns>
-    public virtual IEnumerable<TResult> GetAll<TResult>(Expression<Func<TEntity, TResult>> projectionExpression,
-                                                        Expression<Func<TEntity, bool>> conditionExpression = null,
-                                                        bool tracking = false)
-        => _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
-                 .Where(CreateConditionExpression(conditionExpression) ?? (entity => true))
-                 .Select(projectionExpression)
-                 .ToList();
-
-    /// <summary>
-    /// Returns entities which IsDeleted condition is true from database asynchronously. If the condition is requested, it also provides that condition.
+    /// Returns entities which IsDeleted condition is true from database synchronously. If the condition is requested, it also provides that condition.
     /// </summary>
     /// <param name="listRequest"></param>
-    /// <param name="projectionExpression"></param>
     /// <param name="tracking"></param>
     /// <param name="conditionExpression"></param>
     /// <returns></returns>
     public virtual ListResponse<TEntity> GetAll(ListRequest listRequest,
-                                                Expression<Func<TEntity, TEntity>> projectionExpression = null,
                                                 Expression<Func<TEntity, bool>> conditionExpression = null,
                                                 bool tracking = false)
         => _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
                  .Where(CreateConditionExpression(conditionExpression) ?? (entity => true))
-                 .Select(projectionExpression ?? (entity => entity))
                  .ToListResponse(listRequest);
 
     /// <summary>
-    ///  Returns all entities which IsDeleted condition is true from database asynchronously. If the condition is requested, it also provides that condition.
+    /// Returns all entities which IsDeleted condition is true from database synchronously. If the condition is requested, it also provides that condition.
     /// </summary>
-    /// <param name="projectionExpression"></param>
+    /// <typeparam name="TResult"></typeparam>
+    /// <param name="listRequest"></param>
+    /// <param name="condition"></param>
+    /// <param name="conditionAfterProjection"></param>
+    /// <param name="projection"></param>
+    /// <param name="tracking"></param>
+    /// <returns></returns>
+    public virtual ListResponse<TResult> GetAll<TResult>(ListRequest listRequest,
+                                                         Expression<Func<TEntity, bool>> condition = null,
+                                                         Expression<Func<TEntity, TResult>> projection = null,
+                                                         Expression<Func<TResult, bool>> conditionAfterProjection = null,
+                                                         bool tracking = false) where TResult : class
+        => _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
+                 .Where(CreateConditionExpression(condition) ?? (entity => true))
+                 .Select(projection)
+                 .Where(conditionAfterProjection ?? (entity => true))
+                 .ToListResponse(listRequest);
+
+    /// <summary>
+    /// Returns entities which IsDeleted condition is true from database synchronously. If the condition is requested, it also provides that condition.
+    /// </summary>
     /// <param name="tracking"></param>
     /// <param name="conditionExpression"></param>
     /// <returns></returns>
-    public virtual IEnumerable<TEntity> GetAll(Expression<Func<TEntity, TEntity>> projectionExpression = null,
-                                               Expression<Func<TEntity, bool>> conditionExpression = null,
-                                               bool tracking = false)
+    public virtual List<TEntity> GetAll(Expression<Func<TEntity, bool>> conditionExpression = null, bool tracking = false)
         => _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
                  .Where(CreateConditionExpression(conditionExpression) ?? (entity => true))
-                 .Select(projectionExpression ?? (entity => entity))
+                 .ToList();
+
+    /// <summary>
+    /// Returns all entities which IsDeleted condition is true from database synchronously. If the condition is requested, it also provides that condition.
+    /// </summary>
+    /// <typeparam name="TResult"></typeparam>
+    /// <param name="condition"></param>
+    /// <param name="conditionAfterProjection"></param>
+    /// <param name="projection"></param>
+    /// <param name="tracking"></param>
+    /// <returns></returns>
+    public virtual List<TResult> GetAll<TResult>(Expression<Func<TEntity, bool>> condition = null,
+                                                 Expression<Func<TEntity, TResult>> projection = null,
+                                                 Expression<Func<TResult, bool>> conditionAfterProjection = null,
+                                                 bool tracking = false) where TResult : class
+        => _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
+                 .Where(CreateConditionExpression(condition) ?? (entity => true))
+                 .Select(projection)
+                 .Where(conditionAfterProjection ?? (entity => true))
                  .ToList();
 
     #endregion
 
-    #region Sync GetSome
+    #region  GetSome
 
     /// <summary>
-    ///  Returns all entities which IsDeleted condition is true from database asynchronously. If the condition is requested, it also provides that condition.
+    /// Returns all entities which IsDeleted condition is true from database synchronously. If the condition is requested, it also provides that condition.
     /// </summary>
     /// <param name="count"></param>
-    /// <param name="projectionExpression"></param>
     /// <param name="tracking"></param>
     /// <param name="conditionExpression"></param>
     /// <returns></returns>
-    public virtual IEnumerable<TResult> GetSome<TResult>(int count,
-                                                         Expression<Func<TEntity, TResult>> projectionExpression,
-                                                         Expression<Func<TEntity, bool>> conditionExpression = null,
-                                                         bool tracking = false)
+    public virtual List<TEntity> GetSome(int count,
+                                         Expression<Func<TEntity, bool>> conditionExpression = null,
+                                         bool tracking = false)
         => _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
                  .Where(CreateConditionExpression(conditionExpression) ?? (entity => true))
                  .Take(count)
-                 .Select(projectionExpression)
                  .ToList();
 
     /// <summary>
-    ///  Returns all entities which IsDeleted condition is true from database asynchronously. If the condition is requested, it also provides that condition.
+    ///  Returns all entities which IsDeleted condition is true from database synchronously. If the condition is requested, it also provides that condition.
     /// </summary>
     /// <param name="count"></param>
-    /// <param name="projectionExpression"></param>
+    /// <param name="condition"></param>
+    /// <param name="projection"></param>
     /// <param name="tracking"></param>
-    /// <param name="conditionExpression"></param>
+    /// <param name="conditionAfterProjection"></param>
     /// <returns></returns>
-    public virtual IEnumerable<TEntity> GetSome(int count,
-                                                Expression<Func<TEntity, TEntity>> projectionExpression = null,
-                                                Expression<Func<TEntity, bool>> conditionExpression = null,
-                                                bool tracking = false)
+    public virtual List<TResult> GetSome<TResult>(int count,
+                                                  Expression<Func<TEntity, bool>> condition = null,
+                                                  Expression<Func<TEntity, TResult>> projection = null,
+                                                  Expression<Func<TResult, bool>> conditionAfterProjection = null,
+                                                  bool tracking = false)
         => _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
-                 .Where(CreateConditionExpression(conditionExpression) ?? (entity => true))
+                 .Where(CreateConditionExpression(condition) ?? (entity => true))
+                 .Select(projection)
+                 .Where(conditionAfterProjection ?? (entity => true))
                  .Take(count)
-                 .Select(projectionExpression ?? (entity => entity))
                  .ToList();
 
     #endregion
 
-    #region Sync Insert/Update/Delete
+    #region  Insert/Update/Delete
 
     /// <summary>
-    ///  Adds single entity to database asynchronously. 
+    ///  Adds single entity to database synchronously. 
     /// </summary>
     /// <param name="entity"></param>
     /// <returns></returns>
@@ -249,11 +243,11 @@ public abstract partial class BaseRepository<TEntity, TContext> where TEntity : 
 
         _dbSet.Add(entity);
 
-        SaveChanges();
+        InternalSaveChanges();
     }
 
     /// <summary>
-    ///  Adds multiple entities to database asynchronously. 
+    ///  Adds multiple entities to database synchronously. 
     /// </summary>
     /// <param name="entities"></param>
     /// <returns></returns>
@@ -264,19 +258,42 @@ public abstract partial class BaseRepository<TEntity, TContext> where TEntity : 
 
         _dbSet.AddRange(entities);
 
-        SaveChanges();
+        InternalSaveChanges();
     }
 
     /// <summary>
-    ///  Updates specified entity in database asynchronously.
+    /// Updates specified entity in database synchronously.
     /// </summary>
     /// <param name="entity"></param>
     /// <returns></returns>
     public virtual void Update(TEntity entity)
     {
+        ArgumentNullException.ThrowIfNull(entity);
+
+        DetachFromLocalIfExists(entity);
         _dbSet.Update(entity);
 
-        SaveChanges();
+        InternalSaveChanges();
+    }
+
+    /// <summary>
+    /// Updates multiple entities in database synchronously.
+    /// </summary>
+    /// <param name="entities"></param>
+    /// <param name="()"></param>
+    /// <returns></returns>
+    public virtual void Update(IEnumerable<TEntity> entities)
+    {
+        if (entities.IsNullOrEmpty())
+            return;
+
+        foreach (var entity in entities)
+        {
+            DetachFromLocalIfExists(entity);
+            _dbSet.Update(entity);
+        }
+
+        InternalSaveChanges();
     }
 
     /// <summary>
@@ -287,12 +304,19 @@ public abstract partial class BaseRepository<TEntity, TContext> where TEntity : 
     /// <returns></returns>
     public virtual void Update(TEntity entity, params Expression<Func<TEntity, object>>[] propertySelectors)
     {
-        var dbEntry = _dbContext.Entry(entity);
+        ArgumentNullException.ThrowIfNull(entity);
+
+        if (propertySelectors.IsNullOrEmpty())
+            return;
+
+        DetachFromLocalIfExists(entity);
+
+        var entry = _dbSet.Entry(entity);
 
         foreach (var includeProperty in propertySelectors)
-            dbEntry.Property(includeProperty).IsModified = true;
+            entry.Property(includeProperty).IsModified = true;
 
-        SaveChanges();
+        InternalSaveChanges();
     }
 
     /// <summary>
@@ -303,49 +327,38 @@ public abstract partial class BaseRepository<TEntity, TContext> where TEntity : 
     /// <returns></returns>
     public virtual void Update(IEnumerable<TEntity> entities, params Expression<Func<TEntity, object>>[] propertySelectors)
     {
-        if (entities.IsNullOrEmpty())
+        if (entities.IsNullOrEmpty() || propertySelectors.IsNullOrEmpty())
             return;
 
         foreach (var entity in entities)
         {
-            var dbEntry = _dbContext.Entry(entity);
+            DetachFromLocalIfExists(entity);
+            var entry = _dbSet.Entry(entity);
 
             foreach (var includeProperty in propertySelectors)
-                dbEntry.Property(includeProperty).IsModified = true;
+                entry.Property(includeProperty).IsModified = true;
         }
 
-        SaveChanges();
+        InternalSaveChanges();
     }
 
     /// <summary>
-    ///  Updates multiple entities in database asynchronously.
-    /// </summary>
-    /// <param name="entities"></param>
-    /// <returns></returns>
-    public virtual void Update(IEnumerable<TEntity> entities)
-    {
-        if (entities.IsNullOrEmpty())
-            return;
-
-        _dbSet.UpdateRange(entities);
-
-        SaveChanges();
-    }
-
-    /// <summary>
-    ///  Deletes single entity from database asynchronously.
+    ///  Deletes single entity from database synchronously.
     /// </summary>
     /// <param name="entity"></param>
     /// <returns></returns>
     public virtual void Delete(TEntity entity)
     {
+        ArgumentNullException.ThrowIfNull(entity);
+
+        DetachFromLocalIfExists(entity);
         _dbSet.Remove(entity);
 
-        SaveChanges();
+        InternalSaveChanges();
     }
 
     /// <summary>
-    ///  Deletes multiple entity from database asynchronously.
+    ///  Deletes multiple entity from database synchronously.
     /// </summary>
     /// <param name="entities"></param>
     /// <returns></returns>
@@ -354,9 +367,13 @@ public abstract partial class BaseRepository<TEntity, TContext> where TEntity : 
         if (entities.IsNullOrEmpty())
             return;
 
-        _dbSet.RemoveRange(entities);
+        foreach (var entity in entities)
+        {
+            DetachFromLocalIfExists(entity);
+            _dbSet.Remove(entity);
+        }
 
-        SaveChanges();
+        InternalSaveChanges();
     }
 
     /// <summary>
@@ -368,12 +385,16 @@ public abstract partial class BaseRepository<TEntity, TContext> where TEntity : 
     public virtual void ReplaceOldsWithNews(IEnumerable<TEntity> oldEntities, IEnumerable<TEntity> newEntities)
     {
         if (!oldEntities.IsNullOrEmpty())
-            _dbSet.RemoveRange(oldEntities);
+            foreach (var entity in oldEntities)
+            {
+                DetachFromLocalIfExists(entity);
+                _dbSet.Remove(entity);
+            }
 
         if (!newEntities.IsNullOrEmpty())
             _dbSet.AddRange(newEntities);
 
-        SaveChanges();
+        InternalSaveChanges();
     }
 
     /// <summary>
@@ -385,10 +406,10 @@ public abstract partial class BaseRepository<TEntity, TContext> where TEntity : 
     public virtual void ReplaceOldsWithNewsInSeperateDatabaseProcess(IEnumerable<TEntity> oldEntities, IEnumerable<TEntity> newEntities)
     {
         if (!oldEntities.IsNullOrEmpty())
-            _dbSet.RemoveRange(oldEntities);
+            Delete(oldEntities);
 
         if (!newEntities.IsNullOrEmpty())
-            _dbSet.AddRange(newEntities);
+            AddRange(newEntities);
     }
 
     /// <summary>
@@ -399,12 +420,16 @@ public abstract partial class BaseRepository<TEntity, TContext> where TEntity : 
     {
         var entities = _dbSet.AsEnumerable();
 
-        _dbSet.RemoveRange(entities);
+        foreach (var entity in entities)
+        {
+            DetachFromLocalIfExists(entity);
+            _dbSet.Remove(entity);
+        }
 
-        SaveChanges();
+        InternalSaveChanges();
     }
 
-    #region Bulk Async
+    #region Bulk 
 
     /// <summary>
     /// Runs execute update. Adds performer and perform time to to be updated properties.
@@ -412,7 +437,6 @@ public abstract partial class BaseRepository<TEntity, TContext> where TEntity : 
     /// </summary>
     /// <param name="id"></param>
     /// <param name="propertyBuilder"></param>
-
     /// <returns></returns>
     public virtual void ExecuteUpdate(object id, SetPropertyBuilder<TEntity> propertyBuilder)
         => ExecuteUpdate(i => i.Id == id, propertyBuilder);
@@ -425,11 +449,14 @@ public abstract partial class BaseRepository<TEntity, TContext> where TEntity : 
     /// <returns></returns>
     public virtual void ExecuteUpdate(Expression<Func<TEntity, bool>> predicate, SetPropertyBuilder<TEntity> propertyBuilder)
     {
-        if (_dataAccessConfiguration.Auditing.AuditModificationDate)
-            AddPerformTimePropertyCall(propertyBuilder, EntityPropertyNames.LastModificationDate);
+        if (!propertyBuilder.AuditCallsAdded)
+        {
+            if (_dataAccessConfiguration.Auditing.AuditModificationDate)
+                AddPerformTimePropertyCall(propertyBuilder, EntityPropertyNames.LastModificationDate);
 
-        if (_dataAccessConfiguration.Auditing.AuditModifier)
-            AddPerformerUserPropertyCall(propertyBuilder, EntityPropertyNames.LastModifierUserName);
+            if (_dataAccessConfiguration.Auditing.AuditModifier)
+                AddPerformerUserPropertyCall(propertyBuilder, EntityPropertyNames.LastModifierUserName);
+        }
 
         _dbSet.Where(predicate).ExecuteUpdate(propertyBuilder.SetPropertyCalls);
     }
@@ -438,7 +465,7 @@ public abstract partial class BaseRepository<TEntity, TContext> where TEntity : 
     /// Deletes all records that match the condition. If <see cref="SoftDeletionState"/> is active, it updates the soft delete properties of the relevant entity. 
     /// Note that this will not work with navigation properties.
     /// </summary>
-    /// <param name="id"></param> 
+    /// <param name="id"></param>
     /// <returns></returns>
     public virtual void ExecuteDelete(object id)
         => ExecuteDelete(i => i.Id == id);
@@ -477,7 +504,7 @@ public abstract partial class BaseRepository<TEntity, TContext> where TEntity : 
     /// Bulk add operation. 
     /// </summary>
     /// <param name="entities"></param>
-    /// <param name="bulkConfig"></param>  
+    /// <param name="bulkConfig"></param>
     /// <returns></returns>
     public virtual void BulkAdd(List<TEntity> entities, Action<BulkConfig> bulkConfig = null)
     {
@@ -489,7 +516,7 @@ public abstract partial class BaseRepository<TEntity, TContext> where TEntity : 
     /// Bulk update operation. 
     /// </summary>
     /// <param name="entities"></param>
-    /// <param name="bulkConfig"></param>  
+    /// <param name="bulkConfig"></param>
     /// <returns></returns>
     public virtual void BulkUpdate(List<TEntity> entities, Action<BulkConfig> bulkConfig = null)
     {
@@ -501,7 +528,7 @@ public abstract partial class BaseRepository<TEntity, TContext> where TEntity : 
     /// Bulk delete operation. 
     /// </summary>
     /// <param name="entities"></param>
-    /// <param name="bulkConfig"></param> 
+    /// <param name="bulkConfig"></param>
     /// <returns></returns>
     public virtual void BulkDelete(List<TEntity> entities, Action<BulkConfig> bulkConfig = null)
     {
@@ -520,35 +547,35 @@ public abstract partial class BaseRepository<TEntity, TContext> where TEntity : 
         if (!entities.IsNullOrEmpty())
             _dbSet.AddRange(entities);
 
-        SaveChangesBulk(bulkConfig);
+        InternalSaveChangesBulk(bulkConfig);
     }
 
     /// <summary>
     /// Bulk update operation. 
     /// </summary>
     /// <param name="entities"></param>
-    /// <param name="bulkConfig"></param> 
+    /// <param name="bulkConfig"></param>
     /// <returns></returns>
     public virtual void BulkUpdateWithSaveChanges(List<TEntity> entities, BulkConfig bulkConfig = null)
     {
         if (!entities.IsNullOrEmpty())
             _dbSet.UpdateRange(entities);
 
-        SaveChangesBulk(bulkConfig);
+        InternalSaveChangesBulk(bulkConfig);
     }
 
     /// <summary>
     /// Bulk delete operation. 
     /// </summary>
     /// <param name="entities"></param>
-    /// <param name="bulkConfig"></param> 
+    /// <param name="bulkConfig"></param>
     /// <returns></returns>
     public virtual void BulkDeleteWithSaveChanges(List<TEntity> entities, BulkConfig bulkConfig = null)
     {
         if (!entities.IsNullOrEmpty())
             _dbSet.RemoveRange(entities);
 
-        SaveChangesBulk(bulkConfig);
+        InternalSaveChangesBulk(bulkConfig);
     }
 
     #endregion
@@ -557,13 +584,35 @@ public abstract partial class BaseRepository<TEntity, TContext> where TEntity : 
 
     #endregion
 
-    private void SaveChanges()
+    /// <summary>
+    /// Saves all changes made in this context to the database.
+    /// </summary>
+    /// <returns></returns>
+    public void SaveChanges() => _dbContext.SaveChanges();
+
+    /// <summary>
+    /// Saves all changes made in this context to the database.
+    /// </summary>
+    /// <param name="bulkConfig"></param>
+    /// <returns></returns>
+    public void SaveChangesBulk(BulkConfig bulkConfig = null) => _dbContext.SaveChangesBulk(bulkConfig);
+
+    /// <summary>
+    /// Saves all changes made in this context to the database.
+    /// </summary>
+    /// <returns></returns>
+    protected void InternalSaveChanges()
     {
         if (_saveChangesAfterEveryOperation)
             _dbContext.SaveChanges();
     }
 
-    private void SaveChangesBulk(BulkConfig bulkConfig = null)
+    /// <summary>
+    /// Saves all changes made in this context to the database.
+    /// </summary>
+    /// <param name="bulkConfig"></param>
+    /// <returns></returns>
+    protected void InternalSaveChangesBulk(BulkConfig bulkConfig = null)
     {
         if (_saveChangesAfterEveryOperation)
             _dbContext.SaveChangesBulk(bulkConfig);
