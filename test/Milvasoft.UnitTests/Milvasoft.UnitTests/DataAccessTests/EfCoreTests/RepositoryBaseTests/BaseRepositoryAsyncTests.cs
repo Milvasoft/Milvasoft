@@ -1910,7 +1910,7 @@ public class BaseRepositoryAsyncTests
 
         services.AddDbContext<SomeMilvaDbContextFixture>(opt =>
         {
-            opt.UseInMemoryDatabase(databaseName: $"BaseRepositoryTestDbInMemory_{Guid.NewGuid}_{DateTime.Now.Nanosecond}")
+            opt.UseInMemoryDatabase(databaseName: $"BaseRepositoryAsyncTestDbInMemory_{Guid.NewGuid}_{DateTime.Now.Nanosecond}")
                .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTrackingWithIdentityResolution);
         });
 
