@@ -650,7 +650,6 @@ public interface IBaseRepository<TEntity, TContext> where TEntity : class, IMilv
     /// Updates multiple entities in database synchronously.
     /// </summary>
     /// <param name="entities"></param>
-    /// <param name="()"></param>
     /// <returns></returns>
     void Update(IEnumerable<TEntity> entities);
 

@@ -1,7 +1,7 @@
 ﻿using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace Milvasoft.Core.Utils.JsonConverters;
+namespace Milvasoft.Core.Utils.Converters;
 
 /// <summary>
 /// Converter for deserializing generic interfaces with System.Text.Json. 
@@ -65,7 +65,7 @@ public class InterfaceConverterFactory(Type implementationType, Type interfaceTy
     /// </summary>
     /// <param name="typeToConvert">The type to convert.</param>
     /// <returns><c>true</c> if the specified type can be converted to the interface type; otherwise, <c>false</c>.</returns>
-    public override bool CanConvert(Type typeToConvert) => ((typeToConvert.IsGenericType && InterfaceType.IsGenericType) || (!typeToConvert.IsGenericType && !InterfaceType.IsGenericType))
+    public override bool CanConvert(Type typeToConvert) => (typeToConvert.IsGenericType && InterfaceType.IsGenericType || !typeToConvert.IsGenericType && !InterfaceType.IsGenericType)
                                                            && typeToConvert.CanAssignableTo(InterfaceType);
 
     /// <summary>

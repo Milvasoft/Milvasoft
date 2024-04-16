@@ -2,7 +2,7 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace Milvasoft.UnitTests.CoreTests.UtilTests.JsonConverterTests.Helpers;
+namespace Milvasoft.UnitTests.CoreTests.UtilTests.ConverterTests.Helpers;
 
 public static class JsonConverterTestExtensions
 {

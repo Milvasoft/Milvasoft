@@ -280,7 +280,6 @@ public abstract partial class BaseRepository<TEntity, TContext> where TEntity : 
     /// Updates multiple entities in database synchronously.
     /// </summary>
     /// <param name="entities"></param>
-    /// <param name="()"></param>
     /// <returns></returns>
     public virtual void Update(IEnumerable<TEntity> entities)
     {

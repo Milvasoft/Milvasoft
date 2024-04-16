@@ -1,8 +1,8 @@
 ﻿using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
-using Milvasoft.Core.Utils.JsonConverters;
+using Milvasoft.Core.Utils.Converters;
 
-namespace Milvasoft.UnitTests.CoreTests.UtilTests.JsonConverterTests;
+namespace Milvasoft.UnitTests.CoreTests.UtilTests.ConverterTests;
 
 [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "xUnit1004:Test methods should not be skipped", Justification = "<Pending>")]
 [Trait("Core Unit Tests", "Milvasoft.Core project unit tests.")]

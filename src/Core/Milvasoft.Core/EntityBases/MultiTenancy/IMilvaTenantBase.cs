@@ -6,9 +6,14 @@
 public interface IMilvaTenantBase<TKey> : IBaseEntity<TKey> where TKey : struct, IEquatable<TKey>
 {
     /// <summary>
+    /// Unique identifier for this entity.
+    /// </summary>
+    public new TKey Id { get; }
+
+    /// <summary>
     /// Display name of the Tenant.
     /// </summary>
-    public string TenancyName { get; set; }
+    public string TenancyName { get; }
 
     /// <summary>
     /// Display name of the Tenant.

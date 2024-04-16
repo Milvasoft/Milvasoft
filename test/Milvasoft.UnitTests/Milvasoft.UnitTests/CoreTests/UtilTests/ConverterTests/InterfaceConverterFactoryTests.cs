@@ -1,9 +1,9 @@
 ﻿using FluentAssertions;
-using Milvasoft.Core.Utils.JsonConverters;
-using Milvasoft.UnitTests.CoreTests.UtilTests.JsonConverterTests.Fixtures;
+using Milvasoft.Core.Utils.Converters;
+using Milvasoft.UnitTests.CoreTests.UtilTests.ConverterTests.Fixtures;
 using System.Text.Json;
 
-namespace Milvasoft.UnitTests.CoreTests.UtilTests.JsonConverterTests;
+namespace Milvasoft.UnitTests.CoreTests.UtilTests.ConverterTests;
 
 [Trait("Core Unit Tests", "Milvasoft.Core project unit tests.")]
 public class InterfaceConverterFactoryTests

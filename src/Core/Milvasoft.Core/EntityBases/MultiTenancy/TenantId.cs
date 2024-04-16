@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using Milvasoft.Core.Utils.Converters;
+using System.ComponentModel;
 
 namespace Milvasoft.Core.EntityBases.MultiTenancy;
 
@@ -14,10 +15,10 @@ public struct TenantId : IEquatable<TenantId>
     /// </summary>
     public static readonly TenantId Empty = new();
 
-    private static readonly string _invalidTenantIdErrorMessage = "This string is not convertible to TenantId";
-    private readonly string _tenancyName;
+    private static readonly string _invalidTenantIdErrorMessage = "This string is not convertible to TenantId!";
+    private string _tenancyName;
     private int _branchNo;
-    private readonly string _hash;
+    private string _hash;
 
     /// <summary>
     /// Unique tenancy name of tenant.
@@ -43,9 +44,7 @@ public struct TenantId : IEquatable<TenantId>
 
             var branchNo = Convert.ToInt32(splitted[1]);
 
-            _tenancyName = tenancyName.ToLowerInvariant();
-            _branchNo = branchNo;
-            _hash = $"{tenancyName}_{branchNo}".Hash();
+            BuildTenantId(tenancyName, branchNo);
         }
         else
             throw new MilvaDeveloperException(_invalidTenantIdErrorMessage)
@@ -59,18 +58,7 @@ public struct TenantId : IEquatable<TenantId>
     /// </summary>
     /// <param name="tenancyName"></param>
     /// <param name="branchNo"></param>
-    public TenantId(string tenancyName, int branchNo)
-    {
-        if (string.IsNullOrWhiteSpace(tenancyName))
-            throw new MilvaUserFriendlyException("TenancyNameRequired", MilvaException.TenancyNameRequired);
-
-        if (branchNo <= 0)
-            throw new MilvaDeveloperException("Branch No cannot be 0 or less.");
-
-        _tenancyName = tenancyName.ToLowerInvariant();
-        _branchNo = branchNo;
-        _hash = $"{tenancyName}_{branchNo}".Hash();
-    }
+    public TenantId(string tenancyName, int branchNo) => BuildTenantId(tenancyName, branchNo);
 
     /// <summary>
     /// Generates new unique tenant id.
@@ -108,18 +96,11 @@ public struct TenantId : IEquatable<TenantId>
     /// <returns> If both hash are equals returns true, othewise false. </returns>
     public override readonly bool Equals(object obj)
     {
-        TenantId tenantId;
-
         // Check that o is a TenantId first
         if (obj is not TenantId id)
             return false;
-        else
-            tenantId = id;
 
-        if (tenantId._hash != GetHashString())
-            return false;
-
-        return true;
+        return Equals(id);
     }
 
     /// <summary>
@@ -194,17 +175,9 @@ public struct TenantId : IEquatable<TenantId>
     /// <returns></returns>
     public static TenantId Parse(string str)
     {
-        if (string.IsNullOrWhiteSpace(str))
-            throw new MilvaDeveloperException(_invalidTenantIdErrorMessage)
-            {
-                ExceptionCode = (int)MilvaException.InvalidTenantId
-            };
-
         if (TryParse(str))
         {
-            var splitted = str.Split('_');
-
-            return new TenantId(splitted[0], Convert.ToInt32(splitted[1]));
+            return new TenantId(str);
         }
         else
             throw new MilvaDeveloperException(_invalidTenantIdErrorMessage)
@@ -221,13 +194,17 @@ public struct TenantId : IEquatable<TenantId>
     /// <returns></returns>
     public static bool TryParse(string str)
     {
+        if (string.IsNullOrWhiteSpace(str))
+            return false;
+
         var splittedArray = str.Split('_');
 
-        if (splittedArray.Length < 2)
+        if (splittedArray.Length != 2)
             return false;
 
         if (string.IsNullOrWhiteSpace(splittedArray[0]) || string.IsNullOrWhiteSpace(splittedArray[1]))
             return false;
+
         try
         {
             Convert.ToInt32(splittedArray[1]);
@@ -289,13 +266,7 @@ public struct TenantId : IEquatable<TenantId>
     /// <param name="a"></param>
     /// <param name="b"></param>
     /// <returns></returns>
-    public static bool operator <(TenantId a, TenantId b)
-    {
-        if (a.BranchNo > b.BranchNo)
-            return false;
-
-        return true;
-    }
+    public static bool operator <(TenantId a, TenantId b) => a.BranchNo < b.BranchNo;
 
     /// <summary>
     /// Indicates whether the values of <paramref name="a"/>.BranchNo are bigger than <paramref name="b"/>.
@@ -303,7 +274,7 @@ public struct TenantId : IEquatable<TenantId>
     /// <param name="a"></param>
     /// <param name="b"></param>
     /// <returns></returns>
-    public static bool operator >(TenantId a, TenantId b) => !(a <= b);
+    public static bool operator >(TenantId a, TenantId b) => a.BranchNo > b.BranchNo;
 
     /// <summary>
     /// Indicates whether the values of <paramref name="a"/>.BranchNo are smaller or equal than <paramref name="b"/>.
@@ -311,13 +282,7 @@ public struct TenantId : IEquatable<TenantId>
     /// <param name="a"></param>
     /// <param name="b"></param>
     /// <returns></returns>
-    public static bool operator <=(TenantId a, TenantId b)
-    {
-        if (a.BranchNo > b.BranchNo)
-            return false;
-
-        return true;
-    }
+    public static bool operator <=(TenantId a, TenantId b) => a.BranchNo <= b.BranchNo;
 
     /// <summary>
     /// Indicates whether the values of <paramref name="a"/>.BranchNo are bigger or equal than <paramref name="b"/>.
@@ -325,7 +290,7 @@ public struct TenantId : IEquatable<TenantId>
     /// <param name="a"></param>
     /// <param name="b"></param>
     /// <returns></returns>
-    public static bool operator >=(TenantId a, TenantId b) => !(a <= b);
+    public static bool operator >=(TenantId a, TenantId b) => a.BranchNo >= b.BranchNo;
 
     /// <summary>
     /// Increases <paramref name="tenantId"/>.BranchNo.
@@ -347,5 +312,18 @@ public struct TenantId : IEquatable<TenantId>
     {
         tenantId._branchNo--;
         return tenantId;
+    }
+
+    private void BuildTenantId(string tenancyName, int branchNo)
+    {
+        if (string.IsNullOrWhiteSpace(tenancyName))
+            throw new MilvaUserFriendlyException("TenancyNameRequired", MilvaException.TenancyNameRequired);
+
+        if (branchNo <= 0)
+            throw new MilvaDeveloperException("Branch No cannot be 0 or less.");
+
+        _tenancyName = tenancyName.ToLowerInvariant();
+        _branchNo = branchNo;
+        _hash = GetHashString();
     }
 }

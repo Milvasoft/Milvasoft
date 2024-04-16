@@ -9,7 +9,7 @@ public abstract class MilvaBaseTenant<TKey> : FullAuditableEntity<TKey>, IMilvaB
     /// <summary>
     /// Tenancy name of tenant.
     /// </summary>
-    public virtual string TenancyName { get; set; }
+    public virtual string TenancyName { get; }
 
     /// <summary>
     /// Display name of the Tenant.

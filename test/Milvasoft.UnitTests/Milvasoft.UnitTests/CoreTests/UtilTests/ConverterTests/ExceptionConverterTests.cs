@@ -1,8 +1,8 @@
 ﻿using FluentAssertions;
-using Milvasoft.Core.Utils.JsonConverters;
-using Milvasoft.UnitTests.CoreTests.UtilTests.JsonConverterTests.Helpers;
+using Milvasoft.Core.Utils.Converters;
+using Milvasoft.UnitTests.CoreTests.UtilTests.ConverterTests.Helpers;
 
-namespace Milvasoft.UnitTests.CoreTests.UtilTests.JsonConverterTests;
+namespace Milvasoft.UnitTests.CoreTests.UtilTests.ConverterTests;
 
 [Trait("Core Unit Tests", "Milvasoft.Core project unit tests.")]
 public class ExceptionConverterTests
@@ -69,7 +69,7 @@ public class ExceptionConverterTests
     public void Read_WithNullInput_ShouldReturnsCorrectResult()
     {
         // Arrange
-        string input = "{}";
+        var input = "{}";
 
         // Act
         var result = _converter.Read(input);

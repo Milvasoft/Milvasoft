@@ -1,7 +1,7 @@
 ﻿using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace Milvasoft.Core.Utils.JsonConverters;
+namespace Milvasoft.Core.Utils.Converters;
 
 /// <summary>
 /// Converts exceptions to JSON by serializing only the <see cref="Exception.Message"/> and <see cref="Exception.StackTrace"/> properties. Ignores the <see cref="Exception.TargetSite"/> property.

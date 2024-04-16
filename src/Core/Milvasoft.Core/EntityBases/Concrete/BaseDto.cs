@@ -52,7 +52,7 @@ public abstract class DtoBase<TKey> : DtoBase, IEntityBase<TKey>
 /// <summary>
 /// Base dto for all of dtos.
 /// </summary>
-public abstract class DtoBase
+public abstract class DtoBase : IBaseDto
 {
     /// <summary>
     /// Initializes new instance.

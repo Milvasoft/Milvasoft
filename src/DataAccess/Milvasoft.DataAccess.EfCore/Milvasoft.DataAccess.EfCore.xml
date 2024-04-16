@@ -966,7 +966,6 @@
             Updates multiple entities in database synchronously.
             </summary>
             <param name="entities"></param>
-            <param name="()()"></param>
             <returns></returns>
         </member>
         <member name="M:Milvasoft.DataAccess.EfCore.RepositoryBase.Abstract.IBaseRepository`2.Update(`0,System.Linq.Expressions.Expression{System.Func{`0,System.Object}}[])">
@@ -2442,7 +2441,6 @@
             Updates multiple entities in database synchronously.
             </summary>
             <param name="entities"></param>
-            <param name="()()"></param>
             <returns></returns>
         </member>
         <member name="M:Milvasoft.Helpers.DataAccess.EfCore.Concrete.BaseRepository`2.Update(`0,System.Linq.Expressions.Expression{System.Func{`0,System.Object}}[])">

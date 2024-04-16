@@ -1,4 +1,4 @@
-﻿namespace Milvasoft.UnitTests.CoreTests.UtilTests.JsonConverterTests.Fixtures;
+﻿namespace Milvasoft.UnitTests.CoreTests.UtilTests.ConverterTests.Fixtures;
 
 public interface IGenericInterfaceFixture<T>
 {

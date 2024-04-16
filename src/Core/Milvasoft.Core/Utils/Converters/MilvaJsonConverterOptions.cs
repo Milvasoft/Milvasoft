@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using System.Text.Json;
 
-namespace Milvasoft.Core.Utils.JsonConverters;
+namespace Milvasoft.Core.Utils.Converters;
 
 /// <summary>
 /// Provides options for serialization and deserialization operations used by the library.

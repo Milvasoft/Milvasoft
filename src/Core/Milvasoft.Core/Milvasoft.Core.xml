@@ -763,6 +763,17 @@
             </summary>
             <typeparam name="TKey"></typeparam>
         </member>
+        <member name="T:Milvasoft.Core.EntityBases.Abstract.IBaseDto">
+            <summary>
+            Dummy interface given for constraint
+            </summary>
+        </member>
+        <member name="M:Milvasoft.Core.EntityBases.Abstract.IBaseDto.GetUpdatableProperties">
+            <summary>
+            Returns a collection of PropertyInfo objects that represent properties of the DTO that implements <see cref="T:Milvasoft.Types.Structs.IUpdateProperty"/>.
+            </summary>
+            <returns>A collection of PropertyInfo objects representing the updatable properties of the DTO.</returns>
+        </member>
         <member name="T:Milvasoft.Core.EntityBases.Abstract.IBaseEntity`1">
             <summary>
             Defines interface for base entity type. All entities in the system must implement this interface.
@@ -1148,6 +1159,11 @@
             Tenant base.
             </summary>
         </member>
+        <member name="P:Milvasoft.Core.EntityBases.MultiTenancy.IMilvaTenantBase`1.Id">
+            <summary>
+            Unique identifier for this entity.
+            </summary>
+        </member>
         <member name="P:Milvasoft.Core.EntityBases.MultiTenancy.IMilvaTenantBase`1.TenancyName">
             <summary>
             Display name of the Tenant.
@@ -1421,46 +1437,6 @@
             Decreases <paramref name="tenantId"/>.BranchNo.
             </summary>
             <param name="tenantId"></param>
-            <returns></returns>
-        </member>
-        <member name="T:Milvasoft.Core.EntityBases.MultiTenancy.TenantIdTypeConverter">
-            <summary>
-            Provides a type converter to convert string objects to and from <see cref="T:Milvasoft.Core.EntityBases.MultiTenancy.TenantId"/>.
-            </summary>
-        </member>
-        <member name="M:Milvasoft.Core.EntityBases.MultiTenancy.TenantIdTypeConverter.CanConvertFrom(System.ComponentModel.ITypeDescriptorContext,System.Type)">
-            <summary>
-            Determines <paramref name="sourceType"/> can convert from string.
-            </summary>
-            <param name="context"></param>
-            <param name="sourceType"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Milvasoft.Core.EntityBases.MultiTenancy.TenantIdTypeConverter.ConvertFrom(System.ComponentModel.ITypeDescriptorContext,System.Globalization.CultureInfo,System.Object)">
-            <summary>
-            Converts <paramref name="value"/>(<see cref="T:System.String"/>) to <see cref="T:Milvasoft.Core.EntityBases.MultiTenancy.TenantId"/>.
-            </summary>
-            <param name="context"></param>
-            <param name="culture"></param>
-            <param name="value"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Milvasoft.Core.EntityBases.MultiTenancy.TenantIdTypeConverter.CanConvertTo(System.ComponentModel.ITypeDescriptorContext,System.Type)">
-            <summary>
-            Determines <paramref name="destinationType"/> can convert to string.
-            </summary>
-            <param name="context"></param>
-            <param name="destinationType"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Milvasoft.Core.EntityBases.MultiTenancy.TenantIdTypeConverter.ConvertTo(System.ComponentModel.ITypeDescriptorContext,System.Globalization.CultureInfo,System.Object,System.Type)">
-            <summary>
-            Converts the given value object to the specified type, using the specified context and culture information.
-            </summary>
-            <param name="context"></param>
-            <param name="culture"></param>
-            <param name="value"></param>
-            <param name="destinationType"></param>
             <returns></returns>
         </member>
         <member name="T:Milvasoft.Core.Exceptions.MilvaBaseException">
@@ -2892,6 +2868,182 @@
         <member name="F:Milvasoft.Core.Utils.Constants.MimeTypeNames.ApplicationZip">
             <summary>ZIP archive files; Registered[7]</summary>
         </member>
+        <member name="T:Milvasoft.Core.Utils.Converters.ExceptionConverter`1">
+            <summary>
+            Converts exceptions to JSON by serializing only the <see cref="P:System.Exception.Message"/> and <see cref="P:System.Exception.StackTrace"/> properties. Ignores the <see cref="P:System.Exception.TargetSite"/> property.
+            </summary>
+            <typeparam name="TExceptionType">The type of exception to convert.</typeparam>
+        </member>
+        <member name="M:Milvasoft.Core.Utils.Converters.ExceptionConverter`1.CanConvert(System.Type)">
+            <summary>
+            Determines whether the specified type can be converted to <see cref="T:System.Exception"/>.
+            </summary>
+            <param name="typeToConvert">The type to convert.</param>
+            <returns><c>true</c> if the specified type can be converted to <see cref="T:System.Exception"/>; otherwise, <c>false</c>.</returns>
+        </member>
+        <member name="M:Milvasoft.Core.Utils.Converters.ExceptionConverter`1.Read(System.Text.Json.Utf8JsonReader@,System.Type,System.Text.Json.JsonSerializerOptions)">
+            <summary>
+            Deserializes the JSON representation of an exception.
+            </summary>
+            <param name="reader">The reader to use.</param>
+            <param name="typeToConvert">The type to convert.</param>
+            <param name="options">The serializer options.</param>
+            <returns>The deserialized exception.</returns>
+            <exception cref="T:System.NotSupportedException">Thrown when deserialization is not supported.</exception>
+        </member>
+        <member name="M:Milvasoft.Core.Utils.Converters.ExceptionConverter`1.Write(System.Text.Json.Utf8JsonWriter,`0,System.Text.Json.JsonSerializerOptions)">
+            <summary>
+            Serializes the specified exception to JSON.
+            </summary>
+            <param name="writer">The writer to use.</param>
+            <param name="value">The exception to serialize.</param>
+            <param name="options">The serializer options.</param>
+        </member>
+        <member name="T:Milvasoft.Core.Utils.Converters.InterfaceConverter`2">
+            <summary>
+            Converter for deserializing generic interfaces with System.Text.Json. 
+            </summary>
+            <typeparam name="TImplementation">The implementation type.</typeparam>
+            <typeparam name="TInterface">The interface type.</typeparam>
+        </member>
+        <member name="M:Milvasoft.Core.Utils.Converters.InterfaceConverter`2.Read(System.Text.Json.Utf8JsonReader@,System.Type,System.Text.Json.JsonSerializerOptions)">
+            <summary>
+            Deserializes the JSON data to the specified type.
+            </summary>
+            <param name="reader">The reader used to read the JSON data.</param>
+            <param name="typeToConvert">The type to convert.</param>
+            <param name="options">The serializer options.</param>
+            <returns>The deserialized object.</returns>
+        </member>
+        <member name="M:Milvasoft.Core.Utils.Converters.InterfaceConverter`2.Write(System.Text.Json.Utf8JsonWriter,`1,System.Text.Json.JsonSerializerOptions)">
+            <summary>
+            Serializes the specified object to JSON.
+            </summary>
+            <param name="writer">The writer used to write the JSON data.</param>
+            <param name="value">The object to serialize.</param>
+            <param name="options">The serializer options.</param>
+        </member>
+        <member name="T:Milvasoft.Core.Utils.Converters.InterfaceConverterFactory`2">
+            <summary>
+            Converter factory for deserializing generic interfaces with System.Text.Json. 
+            </summary>
+            <typeparam name="TImplementation">The implementation type.</typeparam>
+            <typeparam name="TInterface">The interface type.</typeparam>
+        </member>
+        <member name="M:Milvasoft.Core.Utils.Converters.InterfaceConverterFactory`2.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Milvasoft.Core.Utils.Converters.InterfaceConverterFactory`2"/> class.
+            </summary>
+        </member>
+        <member name="T:Milvasoft.Core.Utils.Converters.InterfaceConverterFactory">
+            <summary>
+            Converter factory for deserializing generic interfaces with System.Text.Json. 
+            </summary>
+            <param name="implementationType">The implementation type.</param>
+            <param name="interfaceType">The interface type.</param>
+        </member>
+        <member name="M:Milvasoft.Core.Utils.Converters.InterfaceConverterFactory.#ctor(System.Type,System.Type)">
+            <summary>
+            Converter factory for deserializing generic interfaces with System.Text.Json. 
+            </summary>
+            <param name="implementationType">The implementation type.</param>
+            <param name="interfaceType">The interface type.</param>
+        </member>
+        <member name="P:Milvasoft.Core.Utils.Converters.InterfaceConverterFactory.ImplementationType">
+            <summary>
+            Gets the implementation type.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Core.Utils.Converters.InterfaceConverterFactory.InterfaceType">
+            <summary>
+            Gets the interface type.
+            </summary>
+        </member>
+        <member name="M:Milvasoft.Core.Utils.Converters.InterfaceConverterFactory.CanConvert(System.Type)">
+            <summary>
+            Determines whether the specified type can be converted to the interface type.
+            </summary>
+            <param name="typeToConvert">The type to convert.</param>
+            <returns><c>true</c> if the specified type can be converted to the interface type; otherwise, <c>false</c>.</returns>
+        </member>
+        <member name="M:Milvasoft.Core.Utils.Converters.InterfaceConverterFactory.CreateConverter(System.Type,System.Text.Json.JsonSerializerOptions)">
+            <summary>
+            Creates a converter for the specified type.
+            </summary>
+            <param name="typeToConvert">The type to convert.</param>
+            <param name="options">The serializer options.</param>
+            <returns>A converter for the specified type.</returns>
+        </member>
+        <member name="T:Milvasoft.Core.Utils.Converters.MilvaJsonConverterOptions">
+            <summary>
+            Provides options for serialization and deserialization operations used by the library.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Core.Utils.Converters.MilvaJsonConverterOptions.Current">
+            <summary>
+            Gets or sets the current <see cref="T:System.Text.Json.JsonSerializerOptions"/> used by the library.
+            </summary>
+        </member>
+        <member name="M:Milvasoft.Core.Utils.Converters.MilvaJsonConverterOptions.ResetCurrentOptionsToDefault">
+            <summary>
+            Resets the current <see cref="T:System.Text.Json.JsonSerializerOptions"/> to the default options.
+            </summary>
+        </member>
+        <member name="M:Milvasoft.Core.Utils.Converters.MilvaJsonConverterOptions.NewOptionsObjectFromCurrent">
+            <summary>
+            Creates a new <see cref="T:System.Text.Json.JsonSerializerOptions"/> instance based on the current <see cref="P:Milvasoft.Core.Utils.Converters.MilvaJsonConverterOptions.Current"/> object.
+            </summary>
+            <returns>A new <see cref="T:System.Text.Json.JsonSerializerOptions"/> instance.</returns>
+        </member>
+        <member name="M:Milvasoft.Core.Utils.Converters.MilvaJsonConverterOptions.ConfigureCurrentMilvaJsonSerializerOptions(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.Action{System.Text.Json.JsonSerializerOptions},System.Boolean)">
+            <summary>
+            Configures the <see cref="P:Milvasoft.Core.Utils.Converters.MilvaJsonConverterOptions.Current"/> options with the specified <paramref name="options"/>.
+            </summary>
+            <param name="services">The <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/> used for dependency injection.</param>
+            <param name="options">The <see cref="T:System.Action`1"/> used to configure the options.</param>
+            <param name="includeMilvaOptions">A boolean value indicating whether to include Milva converters.</param>
+            <returns>The configured <see cref="T:System.Text.Json.JsonSerializerOptions"/>.</returns>
+        </member>
+        <member name="T:Milvasoft.Core.Utils.Converters.TenantIdTypeConverter">
+            <summary>
+            Provides a type converter to convert string objects to and from <see cref="T:Milvasoft.Core.EntityBases.MultiTenancy.TenantId"/>.
+            </summary>
+        </member>
+        <member name="M:Milvasoft.Core.Utils.Converters.TenantIdTypeConverter.CanConvertFrom(System.ComponentModel.ITypeDescriptorContext,System.Type)">
+            <summary>
+            Determines <paramref name="sourceType"/> can convert from string.
+            </summary>
+            <param name="context"></param>
+            <param name="sourceType"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Core.Utils.Converters.TenantIdTypeConverter.ConvertFrom(System.ComponentModel.ITypeDescriptorContext,System.Globalization.CultureInfo,System.Object)">
+            <summary>
+            Converts <paramref name="value"/>(<see cref="T:System.String"/>) to <see cref="T:Milvasoft.Core.EntityBases.MultiTenancy.TenantId"/>.
+            </summary>
+            <param name="context"></param>
+            <param name="culture"></param>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Core.Utils.Converters.TenantIdTypeConverter.CanConvertTo(System.ComponentModel.ITypeDescriptorContext,System.Type)">
+            <summary>
+            Determines <paramref name="destinationType"/> can convert to string.
+            </summary>
+            <param name="context"></param>
+            <param name="destinationType"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Milvasoft.Core.Utils.Converters.TenantIdTypeConverter.ConvertTo(System.ComponentModel.ITypeDescriptorContext,System.Globalization.CultureInfo,System.Object,System.Type)">
+            <summary>
+            Converts the given value object to the specified type, using the specified context and culture information.
+            </summary>
+            <param name="context"></param>
+            <param name="culture"></param>
+            <param name="value"></param>
+            <param name="destinationType"></param>
+            <returns></returns>
+        </member>
         <member name="T:Milvasoft.Core.Utils.ExpressionParameterReplacer">
             <summary>
             Replaces the parameters in an expression for the expression builder.
@@ -2910,142 +3062,6 @@
             </summary>
             <param name="node">The expression to visit.</param>
             <returns>The modified expression, if it or any subexpression was modified; otherwise, returns the original expression.</returns>
-        </member>
-        <member name="T:Milvasoft.Core.Utils.JsonConverters.ExceptionConverter`1">
-            <summary>
-            Converts exceptions to JSON by serializing only the <see cref="P:System.Exception.Message"/> and <see cref="P:System.Exception.StackTrace"/> properties. Ignores the <see cref="P:System.Exception.TargetSite"/> property.
-            </summary>
-            <typeparam name="TExceptionType">The type of exception to convert.</typeparam>
-        </member>
-        <member name="M:Milvasoft.Core.Utils.JsonConverters.ExceptionConverter`1.CanConvert(System.Type)">
-            <summary>
-            Determines whether the specified type can be converted to <see cref="T:System.Exception"/>.
-            </summary>
-            <param name="typeToConvert">The type to convert.</param>
-            <returns><c>true</c> if the specified type can be converted to <see cref="T:System.Exception"/>; otherwise, <c>false</c>.</returns>
-        </member>
-        <member name="M:Milvasoft.Core.Utils.JsonConverters.ExceptionConverter`1.Read(System.Text.Json.Utf8JsonReader@,System.Type,System.Text.Json.JsonSerializerOptions)">
-            <summary>
-            Deserializes the JSON representation of an exception.
-            </summary>
-            <param name="reader">The reader to use.</param>
-            <param name="typeToConvert">The type to convert.</param>
-            <param name="options">The serializer options.</param>
-            <returns>The deserialized exception.</returns>
-            <exception cref="T:System.NotSupportedException">Thrown when deserialization is not supported.</exception>
-        </member>
-        <member name="M:Milvasoft.Core.Utils.JsonConverters.ExceptionConverter`1.Write(System.Text.Json.Utf8JsonWriter,`0,System.Text.Json.JsonSerializerOptions)">
-            <summary>
-            Serializes the specified exception to JSON.
-            </summary>
-            <param name="writer">The writer to use.</param>
-            <param name="value">The exception to serialize.</param>
-            <param name="options">The serializer options.</param>
-        </member>
-        <member name="T:Milvasoft.Core.Utils.JsonConverters.InterfaceConverter`2">
-            <summary>
-            Converter for deserializing generic interfaces with System.Text.Json. 
-            </summary>
-            <typeparam name="TImplementation">The implementation type.</typeparam>
-            <typeparam name="TInterface">The interface type.</typeparam>
-        </member>
-        <member name="M:Milvasoft.Core.Utils.JsonConverters.InterfaceConverter`2.Read(System.Text.Json.Utf8JsonReader@,System.Type,System.Text.Json.JsonSerializerOptions)">
-            <summary>
-            Deserializes the JSON data to the specified type.
-            </summary>
-            <param name="reader">The reader used to read the JSON data.</param>
-            <param name="typeToConvert">The type to convert.</param>
-            <param name="options">The serializer options.</param>
-            <returns>The deserialized object.</returns>
-        </member>
-        <member name="M:Milvasoft.Core.Utils.JsonConverters.InterfaceConverter`2.Write(System.Text.Json.Utf8JsonWriter,`1,System.Text.Json.JsonSerializerOptions)">
-            <summary>
-            Serializes the specified object to JSON.
-            </summary>
-            <param name="writer">The writer used to write the JSON data.</param>
-            <param name="value">The object to serialize.</param>
-            <param name="options">The serializer options.</param>
-        </member>
-        <member name="T:Milvasoft.Core.Utils.JsonConverters.InterfaceConverterFactory`2">
-            <summary>
-            Converter factory for deserializing generic interfaces with System.Text.Json. 
-            </summary>
-            <typeparam name="TImplementation">The implementation type.</typeparam>
-            <typeparam name="TInterface">The interface type.</typeparam>
-        </member>
-        <member name="M:Milvasoft.Core.Utils.JsonConverters.InterfaceConverterFactory`2.#ctor">
-            <summary>
-            Initializes a new instance of the <see cref="T:Milvasoft.Core.Utils.JsonConverters.InterfaceConverterFactory`2"/> class.
-            </summary>
-        </member>
-        <member name="T:Milvasoft.Core.Utils.JsonConverters.InterfaceConverterFactory">
-            <summary>
-            Converter factory for deserializing generic interfaces with System.Text.Json. 
-            </summary>
-            <param name="implementationType">The implementation type.</param>
-            <param name="interfaceType">The interface type.</param>
-        </member>
-        <member name="M:Milvasoft.Core.Utils.JsonConverters.InterfaceConverterFactory.#ctor(System.Type,System.Type)">
-            <summary>
-            Converter factory for deserializing generic interfaces with System.Text.Json. 
-            </summary>
-            <param name="implementationType">The implementation type.</param>
-            <param name="interfaceType">The interface type.</param>
-        </member>
-        <member name="P:Milvasoft.Core.Utils.JsonConverters.InterfaceConverterFactory.ImplementationType">
-            <summary>
-            Gets the implementation type.
-            </summary>
-        </member>
-        <member name="P:Milvasoft.Core.Utils.JsonConverters.InterfaceConverterFactory.InterfaceType">
-            <summary>
-            Gets the interface type.
-            </summary>
-        </member>
-        <member name="M:Milvasoft.Core.Utils.JsonConverters.InterfaceConverterFactory.CanConvert(System.Type)">
-            <summary>
-            Determines whether the specified type can be converted to the interface type.
-            </summary>
-            <param name="typeToConvert">The type to convert.</param>
-            <returns><c>true</c> if the specified type can be converted to the interface type; otherwise, <c>false</c>.</returns>
-        </member>
-        <member name="M:Milvasoft.Core.Utils.JsonConverters.InterfaceConverterFactory.CreateConverter(System.Type,System.Text.Json.JsonSerializerOptions)">
-            <summary>
-            Creates a converter for the specified type.
-            </summary>
-            <param name="typeToConvert">The type to convert.</param>
-            <param name="options">The serializer options.</param>
-            <returns>A converter for the specified type.</returns>
-        </member>
-        <member name="T:Milvasoft.Core.Utils.JsonConverters.MilvaJsonConverterOptions">
-            <summary>
-            Provides options for serialization and deserialization operations used by the library.
-            </summary>
-        </member>
-        <member name="P:Milvasoft.Core.Utils.JsonConverters.MilvaJsonConverterOptions.Current">
-            <summary>
-            Gets or sets the current <see cref="T:System.Text.Json.JsonSerializerOptions"/> used by the library.
-            </summary>
-        </member>
-        <member name="M:Milvasoft.Core.Utils.JsonConverters.MilvaJsonConverterOptions.ResetCurrentOptionsToDefault">
-            <summary>
-            Resets the current <see cref="T:System.Text.Json.JsonSerializerOptions"/> to the default options.
-            </summary>
-        </member>
-        <member name="M:Milvasoft.Core.Utils.JsonConverters.MilvaJsonConverterOptions.NewOptionsObjectFromCurrent">
-            <summary>
-            Creates a new <see cref="T:System.Text.Json.JsonSerializerOptions"/> instance based on the current <see cref="P:Milvasoft.Core.Utils.JsonConverters.MilvaJsonConverterOptions.Current"/> object.
-            </summary>
-            <returns>A new <see cref="T:System.Text.Json.JsonSerializerOptions"/> instance.</returns>
-        </member>
-        <member name="M:Milvasoft.Core.Utils.JsonConverters.MilvaJsonConverterOptions.ConfigureCurrentMilvaJsonSerializerOptions(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.Action{System.Text.Json.JsonSerializerOptions},System.Boolean)">
-            <summary>
-            Configures the <see cref="P:Milvasoft.Core.Utils.JsonConverters.MilvaJsonConverterOptions.Current"/> options with the specified <paramref name="options"/>.
-            </summary>
-            <param name="services">The <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/> used for dependency injection.</param>
-            <param name="options">The <see cref="T:System.Action`1"/> used to configure the options.</param>
-            <param name="includeMilvaOptions">A boolean value indicating whether to include Milva converters.</param>
-            <returns>The configured <see cref="T:System.Text.Json.JsonSerializerOptions"/>.</returns>
         </member>
         <member name="T:Milvasoft.Core.Utils.MilvaLazy`1">
             <summary>
