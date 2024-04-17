@@ -54,6 +54,25 @@ public class LogInterceptorTests
         }).Should().Throw<MilvaDeveloperException>();
     }
 
+    [Fact]
+    public void Method_WithActivityAndLogInterceptorButLoggerIsNull_ShouldDoNothing()
+    {
+        // Arrange
+        var services = GetServicesWithoutLogger();
+        var sut = services.GetService<SomeClass>();
+
+        // Act & Assert
+        sut.Invoking(x =>
+        {
+            var result = x.Method();
+
+            var logExistsWithActivityId = TestLogger.Logs.TryGetValue(result, out var logEntity);
+
+            logExistsWithActivityId.Should().BeFalse();
+
+        }).Should().NotThrow();
+    }
+
     #region Setup
 
     public class SomeClass : IInterceptable
@@ -94,7 +113,15 @@ public class LogInterceptorTests
             Logs.Add(logObject.TransactionId, logObject);
         }
 
-        public Task LogAsync(string logEntry) => throw new NotImplementedException();
+#pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
+        public async Task LogAsync(string logEntry)
+        {
+            var logObject = JsonSerializer.Deserialize<TestLogEntity>(logEntry);
+
+            Logs.Add(logObject.TransactionId, logObject);
+        }
+#pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
+
         public void Debug(string message) => throw new NotImplementedException();
         public void Debug(Exception exception, string messageTemplate) => throw new NotImplementedException();
         public void Debug(Exception exception, string messageTemplate, params object[] propertyValues) => throw new NotImplementedException();
@@ -127,6 +154,25 @@ public class LogInterceptorTests
                         .WithLogInterceptor(opt =>
                         {
                             opt.AsyncLogging = false;
+                            opt.ExtraLoggingPropertiesSelector = (sp) => new { ExtraProp = "Extra prop" };
+                        });
+
+        var serviceProvider = builder.Services.BuildServiceProvider();
+
+        return serviceProvider;
+    }
+
+    private static ServiceProvider GetServicesWithoutLogger()
+    {
+        var builder = new InterceptionBuilder(new ServiceCollection());
+
+        builder.Services.AddTransient<SomeClass>();
+
+        builder.Services.AddMilvaInterception([typeof(SomeClass)])
+                        .WithActivityInterceptor()
+                        .WithLogInterceptor(opt =>
+                        {
+                            opt.AsyncLogging = true;
                             opt.ExtraLoggingPropertiesSelector = (sp) => new { ExtraProp = "Extra prop" };
                         });
 

@@ -206,6 +206,20 @@ public class TenantIdTests
     }
 
     [Fact]
+    public void Equals_ForObjectOverload_WithObjectIsNotTenantId_ShouldReturnFalse()
+    {
+        // Arrange
+        var tenantId = new TenantId("milvasoft_1");
+        object otherTenantId = "milvasoft_2";
+
+        // Act
+        var result = tenantId.Equals(otherTenantId);
+
+        // Assert
+        result.Should().BeFalse();
+    }
+
+    [Fact]
     public void Equals_ForObjectOverload_WithTenancyNameEqualButBranchNoDifferent_ShouldReturnFalse()
     {
         // Arrange
@@ -513,6 +527,47 @@ public class TenantIdTests
 
     #region Operator Tests
 
+    [Fact]
+    public void ImplicitOperator_ShouldReturnExpected()
+    {
+        // Arrange
+        var tenantString = "milvasoft_1";
+        var tenantId = new TenantId(tenantString);
+
+        // Act
+        string tenantIdAsString = tenantId;
+
+        // Assert
+        tenantIdAsString.Should().Be(tenantString);
+    }
+
+    [Fact]
+    public void ExplicitOperator_WithValidString_ShouldReturnExpected()
+    {
+        // Arrange
+        var tenantString = "milvasoft_1";
+        var expected = new TenantId(tenantString);
+
+        // Act
+        var tenantId = (TenantId)tenantString;
+
+        // Assert
+        tenantId.Should().Be(expected);
+    }
+
+    [Fact]
+    public void ExplicitOperator_WithInvalidString_ShouldReturnExpected()
+    {
+        // Arrange
+        var tenantString = "milvasoft_1_";
+
+        // Act
+        Action act = () => { _ = (TenantId)tenantString; };
+
+        // Assert
+        act.Should().Throw<MilvaDeveloperException>();
+    }
+
     [Theory]
     [InlineData("milvasoft", 1, true)]
     [InlineData("milvasoft", 2, false)]
@@ -581,7 +636,6 @@ public class TenantIdTests
         // Assert
         result.Should().Be(expected);
     }
-
 
     [Theory]
     [InlineData("milvasoft", 1, false)]

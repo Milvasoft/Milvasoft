@@ -1543,5 +1543,22 @@ public class MultiLanguageManagerTests
         MultiLanguageManager.Languages.Should().HaveCount(15);
     }
 
+    [Fact]
+    public void AddMilvaMultiLanguage_WithMultiLanguageManager_ShouldAddCorrectly()
+    {
+        // Arrange
+        var services = new ServiceCollection();
+        var builder = services.AddMilvaMultiLanguage()
+                              .WithMultiLanguageManager<MilvaMultiLanguageManager>();
+        var serviceProvider = builder.Services.BuildServiceProvider();
+
+        // Act
+        var sut = serviceProvider.GetService<IMultiLanguageManager>();
+
+        // Assert
+        sut.Should().NotBeNull();
+        MultiLanguageManager.Languages.Should().HaveCount(0);
+    }
+
     #endregion
 }

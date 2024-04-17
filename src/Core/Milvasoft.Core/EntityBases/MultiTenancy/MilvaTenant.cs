@@ -5,9 +5,6 @@
 /// </summary>
 public abstract class MilvaTenant : MilvaBaseTenant<TenantId>, IFullAuditable<TenantId>
 {
-    private readonly string _tenancyName;
-    private readonly int _branchNo;
-
     /// <summary>
     /// Id of tenant.
     /// </summary>
@@ -18,19 +15,11 @@ public abstract class MilvaTenant : MilvaBaseTenant<TenantId>, IFullAuditable<Te
     }
 
     /// <summary>
-    /// Tenancy name of tenant.
-    /// </summary>
-    public override string TenancyName
-    {
-        get => _tenancyName;
-    }
-
-    /// <summary>
     /// Display name of the Tenant.
     /// </summary>
     public virtual int BranchNo
     {
-        get => _branchNo;
+        get => base.Id.BranchNo;
     }
 
     /// <summary>
@@ -44,6 +33,7 @@ public abstract class MilvaTenant : MilvaBaseTenant<TenantId>, IFullAuditable<Te
     protected MilvaTenant()
     {
         Id = TenantId.NewTenantId();
+        TenancyName = Id.TenancyName;
         IsActive = true;
     }
 
@@ -55,8 +45,7 @@ public abstract class MilvaTenant : MilvaBaseTenant<TenantId>, IFullAuditable<Te
     protected MilvaTenant(string tenancyName, int branchNo)
     {
         Id = new TenantId(tenancyName, branchNo);
-        _tenancyName = tenancyName;
-        _branchNo = branchNo;
+        TenancyName = tenancyName;
         IsActive = true;
     }
 }

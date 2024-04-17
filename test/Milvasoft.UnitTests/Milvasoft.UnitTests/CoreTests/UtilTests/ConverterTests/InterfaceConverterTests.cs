@@ -1,7 +1,9 @@
 ﻿using FluentAssertions;
+using Milvasoft.Components.Rest.MilvaResponse;
 using Milvasoft.Core.Utils.Converters;
 using Milvasoft.UnitTests.CoreTests.UtilTests.ConverterTests.Fixtures;
 using Milvasoft.UnitTests.CoreTests.UtilTests.ConverterTests.Helpers;
+using System.Text.Json;
 
 namespace Milvasoft.UnitTests.CoreTests.UtilTests.ConverterTests;
 
@@ -148,5 +150,19 @@ public class InterfaceConverterTests
         // Assert
         result.Should().BeOfType<GenericClassImplementsGenericInterfaceFixture<ClassFixture>>();
         result.Name.Should().Be("John");
+    }
+
+    [Fact]
+    public void InterfaceConverterFactory_CreateConverter_WithValidGenericInput_ShouldReturnsCorrectResult()
+    {
+        // Arrange
+        var factory = new InterfaceConverterFactory(typeof(Response<>), typeof(IResponse<>));
+
+        // Act
+        var converter = factory.CreateConverter(typeof(Response<int>), JsonSerializerOptions.Default);
+
+        // Assert
+        converter.Should().NotBeNull();
+        converter.Type.Should().Be(typeof(IResponse<int>));
     }
 }

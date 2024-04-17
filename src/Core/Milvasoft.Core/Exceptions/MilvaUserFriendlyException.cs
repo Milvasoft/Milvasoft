@@ -25,7 +25,7 @@ public class MilvaUserFriendlyException : MilvaBaseException
     /// <param name="useLocalizerKey"></param>
     public MilvaUserFriendlyException(string messageOrLocalizerKey, bool useLocalizerKey) : base(messageOrLocalizerKey)
     {
-        ExceptionCode = ExceptionCode != 0 ? ExceptionCode : (int)MilvaException.Base;
+        ExceptionCode = (int)MilvaException.Base;
         UseLocalizerKey = useLocalizerKey;
     }
 
@@ -114,7 +114,7 @@ public class MilvaUserFriendlyException : MilvaBaseException
     public MilvaUserFriendlyException(string messageOrLocalizerKey, bool useLocalizerKey, params object[] exceptionObjects) : base(messageOrLocalizerKey)
     {
         ExceptionObject = exceptionObjects;
-        ExceptionCode = ExceptionCode != 0 ? ExceptionCode : (int)MilvaException.Base;
+        ExceptionCode = (int)MilvaException.Base;
         UseLocalizerKey = useLocalizerKey;
     }
 

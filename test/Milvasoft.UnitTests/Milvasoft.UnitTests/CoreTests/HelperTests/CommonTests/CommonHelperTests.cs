@@ -291,6 +291,20 @@ public partial class CommonHelperTests
     #region CanAssignableTo
 
     [Fact]
+    public void CanAssignableTo_WithNullTypeParameters_ShouldReturnFalse()
+    {
+        // Arrange
+        Type type = null;
+        Type targetType = null;
+
+        // Act
+        var result = type.CanAssignableTo(targetType);
+
+        // Assert
+        result.Should().BeFalse();
+    }
+
+    [Fact]
     public void CanAssignableTo_WithNonGenericTypeAndNonInterfaceTargetType_ShouldReturnTrueIfTypeIsAssignable()
     {
         // Arrange
@@ -458,6 +472,32 @@ public partial class CommonHelperTests
 
         // Act
         var result = type.GetGenericMethod(nameof(CommonHelper.GetEnumDesciption), 2, typeof(string));
+
+        // Assert
+        result.Should().BeNull();
+    }
+
+    [Fact]
+    public void GetGenericMethod_WithClassContainsGenericMethodButParameterCountMismatch_ShouldReturnNull()
+    {
+        // Arrange
+        var type = typeof(CommonHelper);
+
+        // Act
+        var result = type.GetGenericMethod(nameof(CommonHelper.CreateIsDeletedFalseExpression), 1, typeof(string));
+
+        // Assert
+        result.Should().BeNull();
+    }
+
+    [Fact]
+    public void GetGenericMethod_WithClassContainsGenericMethodButParameterTypesMismatch_ShouldReturnNull()
+    {
+        // Arrange
+        var type = typeof(CommonHelper);
+
+        // Act
+        var result = type.GetGenericMethod(nameof(CommonHelper.FindUpdatablePropertiesAndAct), 2, typeof(string));
 
         // Assert
         result.Should().BeNull();

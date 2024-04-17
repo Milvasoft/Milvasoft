@@ -75,6 +75,27 @@ public class CacheInterceptorTests
 
     }
 
+    [Fact]
+    public void Method_WithCacheInterceptorButNoCacheAccessor_ShouldInterceptorDoNothing()
+    {
+        // Arrange
+        var services = GetServicesWithoutCacheAccessor();
+        var sut = services.GetService<ISomeInterface>();
+        var cacheAccessor = services.GetService<ICacheAccessor<TestCacheAccessorFixture>>();
+
+        // Act & Assert
+        cacheAccessor.Should().BeNull();
+
+        // call the method
+        sut.Method();
+
+        // call the method again
+        sut.Method();
+
+        sut.CallCount.Should().Be(2);
+
+    }
+
     #region Setup
 
     public interface ISomeInterface : IInterceptable
@@ -101,13 +122,14 @@ public class CacheInterceptorTests
             return "Cached return value";
         }
 
-        [Cache("Test")]
+        [Cache("Test", 10)]
         public virtual Response<string> MethodReturnTypeIsIResponse()
         {
             CallCount++;
             return Response<string>.Success("Cached return value");
         }
     }
+
     private static ServiceProvider GetServices()
     {
         var builder = new InterceptionBuilder(new ServiceCollection());
@@ -119,6 +141,25 @@ public class CacheInterceptorTests
                         {
                             AccessorLifetime = ServiceLifetime.Scoped,
                         });
+
+        builder.Services.AddMilvaInterception([typeof(ISomeInterface)])
+                        .WithCacheInterceptor(opt =>
+                        {
+                            opt.InterceptorLifetime = ServiceLifetime.Scoped;
+                            opt.IncludeRequestHeadersWhenCaching = true;
+                            opt.CacheAccessorType = typeof(TestCacheAccessorFixture);
+                        });
+
+        var serviceProvider = builder.Services.BuildServiceProvider();
+
+        return serviceProvider;
+    }
+
+    private static ServiceProvider GetServicesWithoutCacheAccessor()
+    {
+        var builder = new InterceptionBuilder(new ServiceCollection());
+
+        builder.Services.AddScoped<ISomeInterface, SomeClass>();
 
         builder.Services.AddMilvaInterception([typeof(ISomeInterface)])
                         .WithCacheInterceptor(opt =>

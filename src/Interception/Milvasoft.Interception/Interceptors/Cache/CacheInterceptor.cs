@@ -93,16 +93,12 @@ public class CacheInterceptor : IMilvaInterceptor
     {
         var httpContextAccessor = serviceProvider.GetService<IHttpContextAccessor>();
 
-        if (httpContextAccessor != null)
+        if (httpContextAccessor?.HttpContext?.Request?.Headers != null)
         {
-            var httpContext = httpContextAccessor.HttpContext;
-
             var stringBuilder = new StringBuilder();
 
-            foreach (var header in httpContext.Request.Headers)
-            {
+            foreach (var header in httpContextAccessor.HttpContext.Request.Headers)
                 stringBuilder.Append(header.Value);
-            }
 
             return stringBuilder.ToString();
         }

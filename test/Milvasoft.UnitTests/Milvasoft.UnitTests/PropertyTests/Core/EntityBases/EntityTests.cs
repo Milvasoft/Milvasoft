@@ -1,5 +1,6 @@
 ﻿using FluentAssertions;
 using Milvasoft.Core.EntityBases.Concrete;
+using Milvasoft.Core.MultiLanguage.EntityBases.Concrete;
 using Milvasoft.UnitTests.PropertyTests.Core.EntityBases.Fixtures;
 
 namespace Milvasoft.UnitTests.PropertyTests.Core.EntityBases;
@@ -144,7 +145,7 @@ public class EntityTests
     }
 
     [Fact]
-    public void AuditEntities_PropertiesSetterGetter_ShouldReturnCorrectValue()
+    public void AuditEntities_PropertiesGetterSetter_ShouldReturnCorrectValue()
     {
         // Arrange & Act
         var now = DateTime.Now;
@@ -174,7 +175,7 @@ public class EntityTests
     }
 
     [Fact]
-    public void WithoutUserAuditEntities_PropertiesSetterGetter_ShouldReturnCorrectValue()
+    public void WithoutUserAuditEntities_PropertiesGetterSetter_ShouldReturnCorrectValue()
     {
         // Arrange & Act
         var now = DateTime.Now;
@@ -194,5 +195,96 @@ public class EntityTests
         sut.LastModificationDate.Should().Be(now);
         sut.DeletionDate.Should().Be(now);
         sut.IsDeleted.Should().BeTrue();
+    }
+
+    [Fact]
+    public void LanguageEntity_PropertiesGetterSetter_ShouldReturnCorrectValue()
+    {
+        // Arrange
+        var code = "en-US";
+        var name = "English";
+
+        // Act
+        LanguageEntity sut = new LanguageEntityFixture
+        {
+            Id = 1,
+            Code = code,
+            Name = name,
+            IsDefault = true,
+            Supported = true
+        };
+
+        // Assert
+        sut.Id.Should().Be(1);
+        sut.Code.Should().Be(code);
+        sut.Name.Should().Be(name);
+        sut.IsDefault.Should().BeTrue();
+        sut.Supported.Should().BeTrue();
+    }
+
+    [Fact]
+    public void LanguageEntity_ToString_ShouldReturnCorrectValue()
+    {
+        // Arrange
+        LanguageEntity sut = new LanguageEntityFixture
+        {
+            Id = 1
+        };
+
+        // Act
+        var result = sut.ToString();
+
+        // Assert
+        result.Should().Be($"[{sut.GetType().Name} {sut.Id}]");
+    }
+
+    [Fact]
+    public void TranslationEntity_ToString_ShouldReturnCorrectValue()
+    {
+        // Arrange
+        TranslationEntity<HasTranslationEntityFixture> sut = new TranslationEntityFixture
+        {
+            Id = 1,
+        };
+
+        // Act
+        var result = sut.ToString();
+
+        // Assert
+        result.Should().Be($"[{sut.GetType().Name} {sut.Id}]");
+    }
+
+    [Fact]
+    public void TranslationEntity_PropertiesGetterSetter_ShouldReturnCorrectValue()
+    {
+        // Arrange & Act
+        TranslationEntity<HasTranslationEntityFixture> sut = new TranslationEntityFixture
+        {
+            Id = 1,
+            Entity = new HasTranslationEntityFixture
+            {
+                Id = 2
+            }
+        };
+
+        // Assert
+        sut.Id.Should().Be(1);
+        sut.Entity.Id.Should().Be(2);
+    }
+
+    [Fact]
+    public void HasTranslationEntity_ToString_ShouldReturnCorrectValue()
+    {
+        // Arrange
+        HasTranslationEntity<TranslationEntityFixture> sut = new HasTranslationEntityFixture
+        {
+            Id = 1,
+        };
+
+        // Act
+        var result = sut.ToString();
+
+        // Assert
+        result.Should().Be($"[{sut.GetType().Name} {sut.Id}]");
     }
 }

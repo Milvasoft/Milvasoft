@@ -47,10 +47,9 @@ public class TenantTests
             SubscriptionExpireDate = now,
         };
 
-        // 
-
         // Assert
         sut.Id.Should().Be(id);
+        sut.BranchNo.Should().Be(1);
         sut.CreationDate.Should().Be(now);
         sut.CreatorUserName.Should().Be(username);
         sut.LastModificationDate.Should().Be(now);
@@ -62,5 +61,20 @@ public class TenantTests
         sut.ConnectionString.Should().Be(someString);
         sut.SubscriptionExpireDate.Should().Be(now);
         sut.TenancyName.Should().Be(tenancyName);
+        var sutAsMilvaBaseTenant = sut as MilvaBaseTenant<TenantId>;
+        sutAsMilvaBaseTenant.TenancyName.Should().Be(tenancyName);
+    }
+
+    [Fact]
+    public void MilvaTenant_Constructor_ShouldReturnCorrectValue()
+    {
+        // Arrange & Act
+        MilvaTenant sut = new MilvaTenantFixture();
+
+        // Assert
+        sut.Id.BranchNo.Should().Be(1);
+        sut.BranchNo.Should().Be(1);
+        sut.TenancyName.Should().NotBeNull();
+        sut.IsActive.Should().BeTrue();
     }
 }

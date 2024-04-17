@@ -1229,11 +1229,6 @@
             Id of tenant.
             </summary>
         </member>
-        <member name="P:Milvasoft.Core.EntityBases.MultiTenancy.MilvaTenant.TenancyName">
-            <summary>
-            Tenancy name of tenant.
-            </summary>
-        </member>
         <member name="P:Milvasoft.Core.EntityBases.MultiTenancy.MilvaTenant.BranchNo">
             <summary>
             Display name of the Tenant.
@@ -1461,11 +1456,6 @@
             Default value is true.
             </summary>
         </member>
-        <member name="M:Milvasoft.Core.Exceptions.MilvaBaseException.#ctor">
-            <summary>
-            Initializes a new instance of the <see cref="T:Milvasoft.Core.Exceptions.MilvaBaseException"/> class with a specified error message.
-            </summary>
-        </member>
         <member name="M:Milvasoft.Core.Exceptions.MilvaBaseException.#ctor(System.String)">
             <summary>
             Initializes a new instance of the <see cref="T:Milvasoft.Core.Exceptions.MilvaBaseException"/> class  with a specified error message.
@@ -1674,24 +1664,6 @@
             Defines the InvalidTenantId.
             </summary>
         </member>
-        <member name="T:Milvasoft.Core.Exceptions.MilvaTestException">
-            <summary>
-            Test exception class.
-            </summary>
-            <remarks>
-            Initializes a new instance of the <see cref="T:Milvasoft.Core.Exceptions.MilvaTestException"/> class  with a specified error message.
-            </remarks>
-            <param name="exceptionMessage"></param>
-        </member>
-        <member name="M:Milvasoft.Core.Exceptions.MilvaTestException.#ctor(System.String)">
-            <summary>
-            Test exception class.
-            </summary>
-            <remarks>
-            Initializes a new instance of the <see cref="T:Milvasoft.Core.Exceptions.MilvaTestException"/> class  with a specified error message.
-            </remarks>
-            <param name="exceptionMessage"></param>
-        </member>
         <member name="T:Milvasoft.Core.Exceptions.MilvaUserFriendlyException">
             <summary>
             The exception that is thrown when attempt to add an entity with Id the repository contains an entity with the same Id.
@@ -1796,29 +1768,6 @@
             <param name="exceptionCode"></param>
             <param name="innerException"></param>
         </member>
-        <member name="T:Milvasoft.Core.Exceptions.MilvaValidationException">
-            <summary>
-            The exception that is thrown when attempt to add an entity with Id the repository contains an entity with the same Id.
-            </summary>
-        </member>
-        <member name="M:Milvasoft.Core.Exceptions.MilvaValidationException.#ctor">
-            <summary>
-            Initializes a new instance of the <see cref="T:Milvasoft.Core.Exceptions.MilvaValidationException"/> class with a specified error message.
-            </summary>
-        </member>
-        <member name="M:Milvasoft.Core.Exceptions.MilvaValidationException.#ctor(System.String)">
-            <summary>
-            Initializes a new instance of the <see cref="T:Milvasoft.Core.Exceptions.MilvaValidationException"/> class with a specified error message.
-            </summary>
-            <param name="messageOrLocalizerKey"></param>
-        </member>
-        <member name="M:Milvasoft.Core.Exceptions.MilvaValidationException.#ctor(System.String,System.Exception)">
-            <summary>
-            Initializes a new instance of the <see cref="T:Milvasoft.Core.Exceptions.MilvaValidationException"/> class with a specified error message and a reference to the inner exception that is the cause of this exception.
-            </summary>
-            <param name="messageOrLocalizerKey"></param>
-            <param name="innerException"></param>
-        </member>
         <member name="T:Milvasoft.Core.Helpers.CommonHelper">
             <summary>
             Generic collection helper extension methods.
@@ -1831,9 +1780,6 @@
             </summary>
             <summary>
             Expression extensions.
-            </summary>
-            <summary>
-            Milvasoft library components options extensions.
             </summary>
             <summary>
             String extensions.
@@ -2138,14 +2084,6 @@
             <typeparam name="TPropertyType">The type of the property.</typeparam>
             <param name="expression">The expression.</param>
             <returns>The property name.</returns>
-        </member>
-        <member name="M:Milvasoft.Core.Helpers.CommonHelper.ConfigureOptions``1(Milvasoft.Core.Abstractions.IMilvaBuilder,Microsoft.Extensions.Configuration.IConfigurationManager)">
-            <summary>
-            Adds <see cref="T:Microsoft.Extensions.Localization.LocalizationOptions"/> as <see cref="T:Microsoft.Extensions.Options.IOptions`1"/>.
-            </summary>
-            <param name="builder"></param>
-            <param name="configurationManager"></param>
-            <returns></returns>
         </member>
         <member name="M:Milvasoft.Core.Helpers.CommonHelper.PropertyExists``1(System.Collections.Generic.IEnumerable{``0},System.String)">
             <summary>
@@ -3082,21 +3020,6 @@
             This class provides a constructor for creating an instance of <see cref="T:Milvasoft.Core.Utils.MilvaLazy`1"/>.
             </remarks>
             <param name="serviceProvider">The service provider used to resolve the lazily initialized value.</param>
-        </member>
-        <member name="T:Milvasoft.Core.Utils.Models.InvalidString">
-            <summary>
-            Invalid strings for prevent hacking or someting ;)
-            </summary>
-        </member>
-        <member name="P:Milvasoft.Core.Utils.Models.InvalidString.Name">
-            <summary>
-            Name of invalid string.
-            </summary>
-        </member>
-        <member name="P:Milvasoft.Core.Utils.Models.InvalidString.Values">
-            <summary>
-            Invalid values.
-            </summary>
         </member>
         <member name="T:Milvasoft.Core.Utils.Models.OrderByProp">
             <summary>

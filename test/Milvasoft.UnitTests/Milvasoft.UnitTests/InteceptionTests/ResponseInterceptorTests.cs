@@ -63,6 +63,25 @@ public class ResponseInterceptorTests
     }
 
     [Fact]
+    public void MethodReturnTypeIsCollectionResponseTyped_WithResponseInterceptor_ShouldModifyResponseCorrecly()
+    {
+        // Arrange
+        var services = GetServices();
+        var sut = services.GetService<ISomeInterface>();
+
+        // Act
+        var result = sut.MethodReturnTypeIsCollectionResponseTyped();
+
+        // Assert
+        result.Messages[0].Message.Should().Be($"localized_{LocalizerKeys.Successful}");
+        result.Data[0].Should().Be(1);
+        result.Metadatas.Should().NotBeEmpty();
+        result.Metadatas[0].Type.Should().Be("List.Int32");
+        result.Metadatas[0].LocalizedName.Should().Be("Data");
+        result.Metadatas[0].Display.Should().BeTrue();
+    }
+
+    [Fact]
     public void MethodReturnTypeIsComplexResponseTyped_WithResponseInterceptor_ShouldModifyResponseCorrecly()
     {
         // Arrange
@@ -100,6 +119,7 @@ public class ResponseInterceptorTests
         string MethodReturnTypeIsNotResponseTyped();
         Response MethodReturnTypeIsResponseTyped();
         Response<int> MethodReturnTypeIsValueResponseTyped();
+        Response<List<int>> MethodReturnTypeIsCollectionResponseTyped();
         Response<SomeComplexClass> MethodReturnTypeIsComplexResponseTyped();
     }
 
@@ -150,6 +170,8 @@ public class ResponseInterceptorTests
         public virtual Response MethodReturnTypeIsResponseTyped() => Response.Success();
 
         public virtual Response<int> MethodReturnTypeIsValueResponseTyped() => Response<int>.Success(1);
+
+        public virtual Response<List<int>> MethodReturnTypeIsCollectionResponseTyped() => Response<List<int>>.Success([1]);
 
         public virtual Response<SomeComplexClass> MethodReturnTypeIsComplexResponseTyped()
         {

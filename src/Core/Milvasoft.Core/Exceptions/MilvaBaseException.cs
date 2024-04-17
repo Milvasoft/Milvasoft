@@ -23,11 +23,6 @@ public abstract class MilvaBaseException : Exception
     public bool UseLocalizerKey { get; set; } = true;
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="MilvaBaseException"/> class with a specified error message.
-    /// </summary>
-    protected MilvaBaseException() { }
-
-    /// <summary>
     /// Initializes a new instance of the <see cref="MilvaBaseException"/> class  with a specified error message.
     /// </summary>
     /// <param name="messageOrLocalizerKey"></param>

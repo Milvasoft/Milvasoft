@@ -1,6 +1,7 @@
 ﻿using FluentAssertions;
 using Milvasoft.Core.Utils.Converters;
 using Milvasoft.UnitTests.CoreTests.UtilTests.ConverterTests.Helpers;
+using System.Text.Json;
 
 namespace Milvasoft.UnitTests.CoreTests.UtilTests.ConverterTests;
 
@@ -63,6 +64,26 @@ public class ExceptionConverterTests
 
         // Assert
         result.Should().Be("{\"Message\":\"Test Exception\",\"InnerException\":null,\"StackTrace\":null}");
+    }
+
+    [Fact]
+    public void Write_WithValidExceptionButNullDatasWithJsonIgnoreCondition_ShouldReturnsSerializedExceptionWithOnlySerializableNonNullPropertiesJsonString()
+    {
+        // Arrange
+        var exception = new Exception("Test Exception");
+        exception.Data["CustomData"] = null;
+        exception.HelpLink = null;
+        exception.Source = null;
+        var jsonOptions = new JsonSerializerOptions
+        {
+            DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull
+        };
+
+        // Act
+        var result = _converter.Write(exception, jsonOptions);
+
+        // Assert
+        result.Should().Be("{\"Message\":\"Test Exception\"}");
     }
 
     [Fact]

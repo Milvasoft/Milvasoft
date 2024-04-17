@@ -51,10 +51,6 @@ public class ExceptionConverter<TExceptionType> : JsonConverter<TExceptionType> 
 
         var propList = serializableProperties.ToList();
 
-        // Nothing to write
-        if (propList.Count == 0)
-            return;
-
         writer.WriteStartObject();
 
         foreach (var prop in propList)

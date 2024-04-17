@@ -41,6 +41,8 @@ public partial class StringHelperTests
     [InlineData("ırmak", "tr-TR", "Irmak")]
     [InlineData("iksir", "en-US", "Iksir")]
     [InlineData("ırmak", "en-US", "Irmak")]
+    [InlineData("i", "tr-TR", "İ")]
+    [InlineData("i", "en-US", "I")]
     public void ToUpperFirst_WithInputStringIsValidWithDifferentCultures_ShouldReturnFirstCharacterUppercasedInputString(string input, string cultureCode, string expected)
     {
         //Arrange
@@ -75,6 +77,23 @@ public partial class StringHelperTests
         //Arrange
         var input = "iksir";
         var expected = "Iksir";
+        CultureInfo.CurrentCulture = new CultureInfo(cultureCode);
+
+        //Act
+        var result = input.ToUpperInvariantFirst();
+
+        //Assert
+        result.Should().Be(expected);
+    }
+
+    [Theory]
+    [InlineData("tr-TR")]
+    [InlineData("en-US")]
+    public void ToUpperInvariantFirst_WithInputStringHasOneCharacterFirstCharacterIsTurkishCharacterWithDifferentCultures_ShouldReturnFirstCharacterUppercasedInputString(string cultureCode)
+    {
+        //Arrange
+        var input = "i";
+        var expected = "I";
         CultureInfo.CurrentCulture = new CultureInfo(cultureCode);
 
         //Act

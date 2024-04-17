@@ -28,6 +28,8 @@ public partial class StringHelperTests
     [InlineData("İksir", "tr-TR", "iksir")]
     [InlineData("Irmak", "en-US", "irmak")]
     [InlineData("İksir", "en-US", "iksir")]
+    [InlineData("I", "tr-TR", "ı")]
+    [InlineData("I", "en-US", "i")]
     public void ToLowerFirst_WithInputStringIsValidWithDifferentCultures_ShouldReturnFirstCharacterLowercasedInputString(string input, string cultureCode, string expected)
     {
         //Arrange
@@ -62,6 +64,23 @@ public partial class StringHelperTests
         //Arrange
         var input = "Irmak";
         var expected = "irmak";
+        CultureInfo.CurrentCulture = new CultureInfo(cultureCode);
+
+        //Act
+        string result = input.ToLowerInvariantFirst();
+
+        //Assert
+        result.Should().Be(expected);
+    }
+
+    [Theory]
+    [InlineData("tr-TR")]
+    [InlineData("en-US")]
+    public void ToLowerInvariantFirst_WithInputStringHasOneCharacterFirstCharacterIsTurkishCharacterWithDifferentCultures_ShouldReturnFirstCharacterLowercasedInputString(string cultureCode)
+    {
+        //Arrange
+        var input = "I";
+        var expected = "i";
         CultureInfo.CurrentCulture = new CultureInfo(cultureCode);
 
         //Act
