@@ -23,13 +23,8 @@ public class LogInterceptionOptions : ILogInterceptionOptions
 /// <summary>
 /// Represents the options for log interception.
 /// </summary>
-public interface ILogInterceptionOptions : IMilvaOptions
+public interface ILogInterceptionOptions : IInterceptionOptions
 {
-    /// <summary>
-    /// Log interceptor lifetime.
-    /// </summary>
-    public ServiceLifetime InterceptorLifetime { get; set; }
-
     /// <summary>
     /// It determines whether the values that the Milvasoft library logs with async.
     /// </summary>

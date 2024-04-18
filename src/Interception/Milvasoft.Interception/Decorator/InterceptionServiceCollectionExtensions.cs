@@ -73,13 +73,34 @@ public static class InterceptionServiceCollectionExtensions
     /// <summary>
     /// Decorates the specified service type descriptor inside <see cref="IServiceCollection"/>.
     /// </summary>
-    /// <typeparam name="T">Service type to be decorated</typeparam>
-    public static InterceptionBuilder WithInterceptor<T>(this InterceptionBuilder builder) where T : class
+    /// <typeparam name="TInterceptor">Service type to be decorated</typeparam>
+    public static InterceptionBuilder WithInterceptor<TInterceptor>(this InterceptionBuilder builder, ServiceLifetime serviceLifetime = ServiceLifetime.Scoped)
+        where TInterceptor : class, IMilvaInterceptor
     {
-        builder.WithDefaultInterceptorRunner();
-        builder.Intercept(typeof(T));
+        if (!builder.Services.Any(s => s.ServiceType == typeof(TInterceptor)))
+            builder.Services.Add(ServiceDescriptor.Describe(typeof(TInterceptor), typeof(TInterceptor), serviceLifetime));
 
         return builder;
+    }
+
+    /// <summary>
+    /// Decorates the specified service type descriptor inside <see cref="IServiceCollection"/>.
+    /// </summary>
+    /// <typeparam name="TInterceptor">Service type to be decorated</typeparam>
+    /// <typeparam name="TInterceptorOptions"></typeparam>
+    /// <typeparam name="TInterceptorOptionsInterface"></typeparam>
+    public static InterceptionBuilder WithInterceptor<TInterceptor, TInterceptorOptionsInterface, TInterceptorOptions>(this InterceptionBuilder builder, Action<TInterceptorOptionsInterface> interceptionOptions)
+        where TInterceptor : class, IMilvaInterceptor
+        where TInterceptorOptions : class, TInterceptorOptionsInterface, new()
+        where TInterceptorOptionsInterface : IInterceptionOptions
+    {
+        var config = new TInterceptorOptions();
+
+        interceptionOptions?.Invoke(config);
+
+        builder.Services.AddSingleton(typeof(TInterceptorOptionsInterface), config);
+
+        return builder.WithInterceptor<TInterceptor>(config.InterceptorLifetime);
     }
 
     /// <summary>
@@ -95,21 +116,7 @@ public static class InterceptionServiceCollectionExtensions
     /// <typeparam name="T">Service type to be decorated</typeparam>
     public static InterceptionBuilder Intercept(this InterceptionBuilder builder, Type type, ServiceLifetime serviceLifetime = ServiceLifetime.Scoped)
     {
-        switch (serviceLifetime)
-        {
-            case ServiceLifetime.Singleton:
-                builder.Services.TryAddSingleton(x => new Decorator((type) => (IMilvaInterceptor)x.GetRequiredService(type)));
-                break;
-            case ServiceLifetime.Scoped:
-                builder.Services.TryAddScoped(x => new Decorator((type) => (IMilvaInterceptor)x.GetRequiredService(type)));
-                break;
-            case ServiceLifetime.Transient:
-                builder.Services.TryAddTransient(x => new Decorator((type) => (IMilvaInterceptor)x.GetRequiredService(type)));
-                break;
-            default:
-                builder.Services.TryAddScoped(x => new Decorator((type) => (IMilvaInterceptor)x.GetRequiredService(type)));
-                break;
-        }
+        builder.Services.TryAdd(ServiceDescriptor.Describe(typeof(Decorator), x => new Decorator((type) => (IMilvaInterceptor)x.GetRequiredService(type)), serviceLifetime));
 
         var descriptors = builder.Services.Where(x => x.ServiceType == type).ToArray();
 

@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Milvasoft.Attributes.Annotations;
+using Milvasoft.Interception.Interceptors.Logging;
 
 namespace Milvasoft.Interception.Interceptors.Response;
 
@@ -24,13 +25,8 @@ public class ResponseInterceptionOptions : IResponseInterceptionOptions
 /// <summary>
 /// Represents the options for <see cref="Components.Rest.MilvaResponse.Response"/> interception.
 /// </summary>
-public interface IResponseInterceptionOptions : IMilvaOptions
+public interface IResponseInterceptionOptions : IInterceptionOptions
 {
-    /// <summary>
-    /// Response interceptor lifetime.
-    /// </summary>
-    public ServiceLifetime InterceptorLifetime { get; set; }
-
     /// <summary>
     /// If it is true <see cref="ResponseInterceptor"/> translate IResponseTyped response's result messages. Default is true.
     /// </summary>
