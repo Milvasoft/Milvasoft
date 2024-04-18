@@ -113,14 +113,7 @@ public class LogInterceptorTests
             Logs.Add(logObject.TransactionId, logObject);
         }
 
-#pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
-        public async Task LogAsync(string logEntry)
-        {
-            var logObject = JsonSerializer.Deserialize<TestLogEntity>(logEntry);
-
-            Logs.Add(logObject.TransactionId, logObject);
-        }
-#pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
+        public async Task LogAsync(string logEntry) => await Task.Run(() => Log(logEntry));
 
         public void Debug(string message) => throw new NotImplementedException();
         public void Debug(Exception exception, string messageTemplate) => throw new NotImplementedException();

@@ -11,7 +11,6 @@ public class MilvaEncryptionConverterTests
     public void MilvaEncryptionConverter_Constructor_ShouldInitializeCorrectly()
     {
         // Arrange
-        var data = "securedata";
         var options = new MilvaCryptographyOptions
         {
             Key = "A=YI=+B_LfoK%V4r"

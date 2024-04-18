@@ -34,7 +34,6 @@ public class CustomInterceptionOptionsFixture : ICustomInterceptionOptionsFixtur
 {
     public ServiceLifetime InterceptorLifetime { get; set; } = ServiceLifetime.Scoped;
     public string SomeOptions { get; set; }
-
 }
 
 public interface ICustomInterceptionOptionsFixture : IInterceptionOptions
