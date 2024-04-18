@@ -70,9 +70,9 @@
             Implements the standard Identity password hashing
             </summary>
         </member>
-        <member name="M:Milvasoft.Identity.Abstract.IMilvaUserManager`2.ConfigureForCreate(`0,System.String)">
+        <member name="M:Milvasoft.Identity.Abstract.IMilvaUserManager`2.ConfigureForCreate(`0@,System.String)">
             <summary>
-            Validates user, sets password hash, set normalized columns.
+            Sets password hash, set normalized columns.
             </summary>
             <param name="user"></param>
             <param name="password"></param>
@@ -850,9 +850,9 @@
             <param name="options"></param>
             <param name="passwordHasher"></param>
         </member>
-        <member name="M:Milvasoft.Identity.Concrete.MilvaUserManager`2.ConfigureForCreate(`0,System.String)">
+        <member name="M:Milvasoft.Identity.Concrete.MilvaUserManager`2.ConfigureForCreate(`0@,System.String)">
             <summary>
-            Validates user, sets password hash, set normalized columns.
+            Sets password hash, normalized columns etc.
             </summary>
             <param name="user"></param>
             <param name="password"></param>

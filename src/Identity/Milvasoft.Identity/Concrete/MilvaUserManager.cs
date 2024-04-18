@@ -25,16 +25,20 @@ public partial class MilvaUserManager<TUser, TKey>(Lazy<IDataProtectionProvider>
     private readonly MilvaIdentityOptions _options = options;
 
     /// <summary>
-    /// Validates user, sets password hash, set normalized columns.
+    /// Sets password hash, normalized columns etc.
     /// </summary>
     /// <param name="user"></param>
     /// <param name="password"></param>
     /// <returns></returns>
-    public TUser ConfigureForCreate(TUser user, string password)
+    public void ConfigureForCreate(ref TUser user, string password)
     {
-        ValidateUser(user, password);
+        user.PasswordHash = _passwordHasher.Value.HashPassword(password);
 
-        return user;
+        if (_options.Lockout.AllowedForNewUsers)
+            user.LockoutEnabled = true;
+
+        user.NormalizedUserName = user.UserName.MilvaNormalize();
+        user.NormalizedEmail = user.Email.MilvaNormalize();
     }
 
     /// <summary>
@@ -65,7 +69,7 @@ public partial class MilvaUserManager<TUser, TKey>(Lazy<IDataProtectionProvider>
     {
         ValidatePassword(password);
 
-        user.PasswordHash = _passwordHasher.Value.HashPassword(password);
+        SetPasswordHash(user, password);
     }
 
     /// <summary>
@@ -162,16 +166,7 @@ public partial class MilvaUserManager<TUser, TKey>(Lazy<IDataProtectionProvider>
             ValidateEmail(user.Email);
 
         if (password != null)
-        {
             ValidatePassword(password);
-            user.PasswordHash = _passwordHasher.Value.HashPassword(password);
-        }
-
-        if (_options.Lockout.AllowedForNewUsers)
-            user.LockoutEnabled = true;
-
-        user.NormalizedUserName = user.UserName.MilvaNormalize();
-        user.NormalizedEmail = user.Email.MilvaNormalize();
     }
 
     /// <summary>

@@ -803,6 +803,52 @@
             </remarks>
             <param name="value"></param>
         </member>
+        <member name="M:Milvasoft.DataAccess.MongoDB.Utils.Serializers.EncryptedString.op_Implicit(Milvasoft.DataAccess.MongoDB.Utils.Serializers.EncryptedString)~System.String">
+            <summary>
+            Provides implicit casting.
+            </summary>
+            <param name="encryptedString"></param>
+        </member>
+        <member name="M:Milvasoft.DataAccess.MongoDB.Utils.Serializers.EncryptedString.op_Explicit(System.String)~Milvasoft.DataAccess.MongoDB.Utils.Serializers.EncryptedString">
+            <summary>
+            Provides explicit casting.
+            </summary>
+            <param name="value"></param>
+        </member>
+        <member name="M:Milvasoft.DataAccess.MongoDB.Utils.Serializers.EncryptedString.IsNullOrWhiteSpace">
+            <summary>
+            Checks if the value of the EncryptedString is null or consists only of white space characters.
+            </summary>
+            <returns>True if the value is null or consists only of white space characters, otherwise false.</returns>
+        </member>
+        <member name="M:Milvasoft.DataAccess.MongoDB.Utils.Serializers.EncryptedString.ToString">
+            <inheritdoc/>
+        </member>
+        <member name="T:Milvasoft.DataAccess.MongoDB.Utils.Serializers.IEncryptedStringSerializer">
+            <summary>
+            Serializer for the EncryptedString type.
+            </summary>
+        </member>
+        <member name="T:Milvasoft.DataAccess.MongoDB.Utils.Serializers.EncryptedStringSerializer">
+            <summary>
+            Serializer implementation for the EncryptedString type.
+            </summary>
+        </member>
+        <member name="M:Milvasoft.DataAccess.MongoDB.Utils.Serializers.EncryptedStringSerializer.#ctor(Milvasoft.Cryptography.Abstract.IMilvaCryptographyProvider)">
+            <summary>
+            Serializer implementation for the EncryptedString type.
+            </summary>
+        </member>
+        <member name="M:Milvasoft.DataAccess.MongoDB.Utils.Serializers.EncryptedStringSerializer.Deserialize(MongoDB.Bson.Serialization.BsonDeserializationContext,MongoDB.Bson.Serialization.BsonDeserializationArgs)">
+            <summary>
+            Deserializes an EncryptedString from a BsonDeserializationContext.
+            </summary>
+        </member>
+        <member name="M:Milvasoft.DataAccess.MongoDB.Utils.Serializers.EncryptedStringSerializer.Serialize(MongoDB.Bson.Serialization.BsonSerializationContext,MongoDB.Bson.Serialization.BsonSerializationArgs,Milvasoft.DataAccess.MongoDB.Utils.Serializers.EncryptedString)">
+            <summary>
+            Serializes an EncryptedString to a BsonSerializationContext.
+            </summary>
+        </member>
         <member name="T:Milvasoft.DataAccess.MongoDB.Utils.Serializers.TenantIdSerializer">
             <summary>
             Serializer for <see cref="T:Milvasoft.Core.EntityBases.MultiTenancy.TenantId"/>.

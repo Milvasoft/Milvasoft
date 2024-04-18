@@ -9,12 +9,12 @@ namespace Milvasoft.Identity.Abstract;
 public interface IMilvaUserManager<TUser, TKey> where TUser : MilvaUser<TKey> where TKey : IEquatable<TKey>
 {
     /// <summary>
-    /// Validates user, sets password hash, set normalized columns.
+    /// Sets password hash, set normalized columns.
     /// </summary>
     /// <param name="user"></param>
     /// <param name="password"></param>
     /// <returns></returns>
-    TUser ConfigureForCreate(TUser user, string password);
+    void ConfigureForCreate(ref TUser user, string password);
 
     /// <summary>
     /// Check password hash.

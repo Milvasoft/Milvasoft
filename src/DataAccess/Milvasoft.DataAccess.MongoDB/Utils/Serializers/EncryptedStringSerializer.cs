@@ -5,13 +5,21 @@ using MongoDB.Bson.Serialization.Serializers;
 
 namespace Milvasoft.DataAccess.MongoDB.Utils.Serializers;
 
-#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
+/// <summary>
+/// Serializer for the EncryptedString type.
+/// </summary>
 public interface IEncryptedStringSerializer : IBsonSerializer<EncryptedString> { }
 
+/// <summary>
+/// Serializer implementation for the EncryptedString type.
+/// </summary>
 public class EncryptedStringSerializer(IMilvaCryptographyProvider encrypter) : SerializerBase<EncryptedString>, IEncryptedStringSerializer
 {
     private readonly IMilvaCryptographyProvider _encrypter = encrypter;
 
+    /// <summary>
+    /// Deserializes an EncryptedString from a BsonDeserializationContext.
+    /// </summary>
     public override EncryptedString Deserialize(BsonDeserializationContext context, BsonDeserializationArgs args)
     {
         string encryptedString = string.Empty;
@@ -28,6 +36,9 @@ public class EncryptedStringSerializer(IMilvaCryptographyProvider encrypter) : S
         return string.IsNullOrWhiteSpace(encryptedString) ? new(string.Empty) : (EncryptedString)_encrypter.Decrypt(encryptedString);
     }
 
+    /// <summary>
+    /// Serializes an EncryptedString to a BsonSerializationContext.
+    /// </summary>
     public override void Serialize(BsonSerializationContext context, BsonSerializationArgs args, EncryptedString value)
     {
         if (!value.IsNullOrWhiteSpace())
@@ -42,4 +53,3 @@ public class EncryptedStringSerializer(IMilvaCryptographyProvider encrypter) : S
         }
     }
 }
-#pragma warning restore CS1591 // Missing XML comment for publicly visible type or member
