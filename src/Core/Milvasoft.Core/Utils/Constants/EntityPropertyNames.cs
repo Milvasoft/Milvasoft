@@ -14,5 +14,9 @@ public static class EntityPropertyNames
     public const string DeletionDate = nameof(DeletionDate);
     public const string DeleterUserName = nameof(DeleterUserName);
     public const string IsDeleted = nameof(IsDeleted);
+    public const string TransactionId = nameof(TransactionId);
+    public const string UtcLogTime = nameof(UtcLogTime);
+    public const string IsSuccess = nameof(IsSuccess);
+    public const string MethodName = nameof(MethodName);
 #pragma warning restore CS1591 // Missing XML comment for publicly visible type or member
 }

@@ -422,6 +422,17 @@
             </summary>
             <param name="modelBuilder"></param>
         </member>
+        <member name="M:Milvasoft.DataAccess.EfCore.DbContextBase.ModelBuilderExtensions.UseLogEntityBaseIndexes(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <summary>
+            Adds an index for <see cref="T:Milvasoft.Core.EntityBases.Concrete.LogEntityBase`1"/> entity.
+            Added indexes;
+            <para></para> Unique <see cref="F:Milvasoft.Core.Utils.Constants.EntityPropertyNames.TransactionId"/>
+            <para></para> Descending <see cref="F:Milvasoft.Core.Utils.Constants.EntityPropertyNames.UtcLogTime"/> 
+            <para></para><see cref="F:Milvasoft.Core.Utils.Constants.EntityPropertyNames.MethodName"/>
+            <para></para><see cref="F:Milvasoft.Core.Utils.Constants.EntityPropertyNames.IsSuccess"/>
+            </summary>
+            <param name="modelBuilder"></param>
+        </member>
         <member name="M:Milvasoft.DataAccess.EfCore.DbContextBase.ModelBuilderExtensions.UseDefaultValue(Microsoft.EntityFrameworkCore.ModelBuilder)">
             <summary>
             Configures default value for update database.

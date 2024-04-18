@@ -1154,6 +1154,67 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="T:Milvasoft.Core.EntityBases.Concrete.LogEntityBase`1">
+            <summary>
+            Entity for logging parameters.
+            </summary>
+            <typeparam name="TKey"> Id property type.</typeparam>
+        </member>
+        <member name="P:Milvasoft.Core.EntityBases.Concrete.LogEntityBase`1.TransactionId">
+            <summary>
+            Gets or sets the unique id for the transaction. This id is unique within the scope of the <see cref="T:System.Diagnostics.Activity"/> if an activity interceptor is used, allowing multiple logs to have the same transaction id.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Core.EntityBases.Concrete.LogEntityBase`1.Namespace">
+            <summary>
+            Gets or sets the namespace of the class where the method is located.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Core.EntityBases.Concrete.LogEntityBase`1.ClassName">
+            <summary>
+            Gets or sets the class name where the method is located.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Core.EntityBases.Concrete.LogEntityBase`1.MethodName">
+            <summary>
+            Gets or sets the intercepted method name.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Core.EntityBases.Concrete.LogEntityBase`1.MethodParams">
+            <summary>
+            Gets or sets the intercepted method parameters as JSON (as an object array).
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Core.EntityBases.Concrete.LogEntityBase`1.MethodResult">
+            <summary>
+            Gets or sets the method result as JSON.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Core.EntityBases.Concrete.LogEntityBase`1.ElapsedMs">
+            <summary>
+            Gets or sets the time spent running the method in milliseconds.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Core.EntityBases.Concrete.LogEntityBase`1.UtcLogTime">
+            <summary>
+            Gets or sets the method run time in UTC.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Core.EntityBases.Concrete.LogEntityBase`1.CacheInfo">
+            <summary>
+            Gets or sets the information about whether the method result came from the cache interceptor or not.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Core.EntityBases.Concrete.LogEntityBase`1.Exception">
+            <summary>
+            Gets or sets the information about any exception thrown while the method is running, represented as JSON.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Core.EntityBases.Concrete.LogEntityBase`1.IsSuccess">
+            <summary>
+            Gets or sets a value indicating whether the method worked successfully or not.
+            </summary>
+        </member>
         <member name="T:Milvasoft.Core.EntityBases.MultiTenancy.IMilvaTenantBase`1">
             <summary>
             Tenant base.

@@ -36,7 +36,8 @@ public interface ILogInterceptionOptions : IMilvaOptions
     public bool AsyncLogging { get; set; }
 
     /// <summary>
-    /// It determines whether the values that the Milvasoft library logs by default will be logged. Default is true;
+    /// It determines whether the values that the Milvasoft library logs by default will be logged. Default is true; 
+    /// You can see default parameters in <see cref="LogEntityBase{TKey}"/>.
     /// </summary>
     public bool LogDefaultParameters { get; set; }
 
