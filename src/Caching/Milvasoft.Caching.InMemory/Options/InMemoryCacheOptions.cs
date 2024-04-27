@@ -6,7 +6,7 @@ using Milvasoft.Core.Utils.Constants;
 namespace Milvasoft.Caching.InMemory.Options;
 
 /// <summary>
-/// In memory cache options.
+/// In memory cache options. 
 /// </summary>
 public class InMemoryCacheOptions : ICacheOptions<InMemoryCacheOptions>
 {
