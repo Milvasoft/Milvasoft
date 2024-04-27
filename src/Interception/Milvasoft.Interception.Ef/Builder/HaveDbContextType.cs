@@ -23,11 +23,15 @@ public interface IHaveDbContextType
     public Type GetDbContextType();
 }
 
+/// <summary>
+/// Represents the options for no lock interception.
+/// </summary>
 public class HaveDbContextType : IHaveDbContextType
 {
-    protected Type _dbContextType;
-    protected string _dbContextAssemblyQualifiedName;
+    private Type _dbContextType;
+    private string _dbContextAssemblyQualifiedName;
 
+    /// <inheritdoc/>
     public string DbContextAssemblyQualifiedName
     {
         get => _dbContextAssemblyQualifiedName;
@@ -38,6 +42,7 @@ public class HaveDbContextType : IHaveDbContextType
         }
     }
 
+    /// <inheritdoc/>
     public Type DbContextType
     {
         get => _dbContextType;
@@ -48,5 +53,6 @@ public class HaveDbContextType : IHaveDbContextType
         }
     }
 
+    /// <inheritdoc/>
     public Type GetDbContextType() => _dbContextType;
 }

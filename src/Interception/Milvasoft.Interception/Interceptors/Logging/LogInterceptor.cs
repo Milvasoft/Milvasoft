@@ -20,8 +20,10 @@ public partial class LogInterceptor(IServiceProvider serviceProvider) : IMilvaIn
     private readonly IMilvaLogger _logger = serviceProvider.GetService<IMilvaLogger>();
     private readonly ILogInterceptionOptions _logInterceptionOptions = serviceProvider.GetService<ILogInterceptionOptions>();
 
+    /// <inheritdoc/>
     public int InterceptionOrder { get; set; } = -1;
 
+    /// <inheritdoc/>
     public async Task OnInvoke(Call call)
     {
         if (_logger == null)

@@ -3,6 +3,8 @@ using System.Reflection;
 
 namespace Milvasoft.Caching.InMemory.Accessor;
 
+/// <inheritdoc/>
+#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
 public class MemoryCacheAccessor(IMemoryCache cache) : IMemoryCacheAccessor
 {
     private readonly IMemoryCache _cache = cache;
@@ -73,3 +75,4 @@ public class MemoryCacheAccessor(IMemoryCache cache) : IMemoryCacheAccessor
 
     public async Task<bool> SetAsync(string key, object value, TimeSpan? expiration) => await Task.Run(() => Set(key, value, expiration));
 }
+#pragma warning restore CS1591 // Missing XML comment for publicly visible type or member

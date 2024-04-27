@@ -57,7 +57,9 @@ public sealed class ResxElement : IEquatable<ResxElement>
     /// <returns></returns>
     public bool Equals(ResxElement other) => Key.Equals(other.Key, StringComparison.OrdinalIgnoreCase);
 
+    /// <inheritdoc/>
     public override bool Equals(object obj) => Equals(obj as ResxElement);
 
+    /// <inheritdoc/>
     public override int GetHashCode() => throw new NotImplementedException();
 }

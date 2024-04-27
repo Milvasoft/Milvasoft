@@ -1,0 +1,30 @@
+name: Milvasoft.Components.Swagger Nuget Publish
+
+on:
+  push:
+    branches: [ master ]
+    paths:
+      - 'src/Components/Milvasoft.Components.Swagger/**'
+  pull_request:
+    branches: [ master ]
+    paths:
+      - 'src/Components/Milvasoft.Components.Swagger/**'
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 8.0.x
+      - name: Restore Milvasoft.Components.Swagger project dependencies
+        run: dotnet restore src/Components/Milvasoft.Components.Swagger/Milvasoft.Components.Swagger.csproj
+      - name: Build Milvasoft.Components.Swagger project
+        run: dotnet build src/Components/Milvasoft.Components.Swagger/Milvasoft.Components.Swagger.csproj --no-restore --configuration Release
+      - name: Pack Milvasoft.Components.Swagger project
+        run: dotnet pack src/Components/Milvasoft.Components.Swagger/Milvasoft.Components.Swagger.csproj --no-build --configuration Release --include-symbols -p:SymbolPackageFormat=snupkg -o .
+      - name: Publish package to NuGet
+        run: dotnet nuget push *.nupkg --api-key ${{secrets.NUGET_API_KEY}} --source "https://api.nuget.org/v3/index.json" --skip-duplicate

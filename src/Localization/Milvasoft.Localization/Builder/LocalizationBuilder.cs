@@ -14,14 +14,21 @@ namespace Milvasoft.Localization.Builder;
 /// <param name="configurationManager"></param>
 public sealed class LocalizationBuilder(IServiceCollection services, IConfigurationManager configurationManager = null) : IMilvaBuilder
 {
+    /// <summary>
+    /// Service collection.
+    /// </summary>
     public IServiceCollection Services { get; } = services;
+
+    /// <summary>
+    /// Configuration manager.
+    /// </summary>
     public IConfigurationManager ConfigurationManager { get; } = configurationManager;
 
     /// <summary>
     /// You can register your own LocalizationManager to service collection with lifetime.
     /// </summary>
     /// <typeparam name="TManager"></typeparam>
-    /// <param name="lifetime"></param>
+    /// <param name="localizationOptions"></param>
     /// <returns></returns>
     public LocalizationBuilder WithManager<TManager>(Action<ILocalizationOptions> localizationOptions = null) where TManager : class, ILocalizationManager
     {

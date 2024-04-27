@@ -17,8 +17,10 @@ public class ResponseInterceptor(IServiceProvider serviceProvider, IResponseInte
     private readonly IServiceProvider _serviceProvider = serviceProvider;
     private readonly IResponseInterceptionOptions _interceptionOptions = interceptionOptions;
 
+    /// <inheritdoc/>
     public int InterceptionOrder { get; set; } = int.MaxValue;
 
+    /// <inheritdoc/>
     public async Task OnInvoke(Call call)
     {
         await call.NextAsync();
@@ -32,7 +34,7 @@ public class ResponseInterceptor(IServiceProvider serviceProvider, IResponseInte
                 hasMetadataResponse.Metadatas = [];
 
                 //Gets result data and generic type
-                var (responseData, resultDataType) = hasMetadataResponse.GetResponseData();
+                var (responseData, resultDataType) = hasMetadataResponse.GetResponseDataTypePair();
 
                 CreateMetadata(hasMetadataResponse, resultDataType, responseData);
             }
@@ -188,7 +190,7 @@ public class ResponseInterceptor(IServiceProvider serviceProvider, IResponseInte
     /// <param name="localizationKey">Localization key which gets from <see cref="TranslateAttribute"/> </param>
     /// <param name="localizer"><see cref="IMilvaLocalizer"/> comes from ServiceProvider via DI.</param>
     /// <param name="resultDataType">Intercepted method return data type.</param>
-    /// <param name="prop">Property name to which localization will be applied.</param>
+    /// <param name="propName">Property name to which localization will be applied.</param>
     /// <returns></returns>
     public static string ApplyLocalization(string localizationKey, IMilvaLocalizer localizer, Type resultDataType, string propName)
     {

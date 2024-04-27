@@ -16,9 +16,9 @@ public class ResxWriter
     /// Create a new instance of <see cref="ResxWriter"/>
     /// </summary>
     /// <param name="type"></param>
-    /// <param name="location"></param>
     /// <param name="culture"></param>
-    /// <param name="loggerFactory"></param>
+    /// <param name="resourcePath"></param>
+    /// <param name="logger"></param>
     public ResxWriter(Type type, string culture, string resourcePath, IMilvaLogger logger)
     {
         _resourceFilePath = Path.Combine(resourcePath, $"{type.Name}.{culture}.resx");
@@ -140,7 +140,6 @@ public class ResxWriter
     /// Add an element to the resource file
     /// </summary>
     /// <param name="element"></param>
-    /// <param name="overWriteExistingKeys"></param>
     /// <returns></returns>
     public async Task<bool> RemoveAsync(ResxElement element)
     {

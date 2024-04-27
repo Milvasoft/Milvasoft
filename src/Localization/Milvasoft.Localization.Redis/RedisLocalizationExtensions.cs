@@ -24,6 +24,7 @@ public static class RedisLocalizationExtensions
     /// 
     /// <remarks> You must register <see cref="IRedisAccessor"/> for this type of use. </remarks>
     /// </summary>
+    /// <param name="builder"></param>
     /// <param name="localizationOptions"></param>
     /// <returns></returns>
     public static LocalizationBuilder WithRedisManager(this LocalizationBuilder builder, Action<RedisLocalizationOptions> localizationOptions)
@@ -56,7 +57,7 @@ public static class RedisLocalizationExtensions
     }
 
     /// <summary>
-    /// Registers <see cref="ResxLocalizationManager{TResource}"/> as <see cref="ILocalizationManager"/>.
+    /// Registers <see cref="RedisLocalizationManager"/> as <see cref="ILocalizationManager"/>.
     /// Adds <see cref="LocalizationOptions"/> as <see cref="IOptions{TOptions}"/>.
     /// </summary>
     /// <param name="builder"></param>

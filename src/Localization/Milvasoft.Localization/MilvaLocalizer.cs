@@ -9,13 +9,16 @@ namespace Milvasoft.Localization;
 /// <remarks>
 /// Creates a new <see cref="MilvaLocalizer"/>.
 /// </remarks>
-/// <param name="manager">The <see cref="ILocalizationManager"/> to use.</param>
 public class MilvaLocalizer : IMilvaLocalizer
 {
     private readonly ILocalizationManager _localizationManager;
     private readonly ILocalizationOptions _localizationOptions;
     private readonly ILocalizationMemoryCache _cache;
 
+    /// <summary>
+    /// Initializes new instance with <paramref name="serviceProvider"/>
+    /// </summary>
+    /// <param name="serviceProvider"></param>
     public MilvaLocalizer(IServiceProvider serviceProvider)
     {
         _localizationManager = serviceProvider.GetRequiredService<ILocalizationManager>();

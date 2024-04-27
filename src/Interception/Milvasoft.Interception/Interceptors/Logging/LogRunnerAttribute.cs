@@ -8,8 +8,8 @@ namespace Milvasoft.Interception.Interceptors.Logging;
 /// </summary>
 public class LogRunnerAttribute : DecorateAttribute
 {
+    /// <inheritdoc/>
     public LogRunnerAttribute() : base(typeof(LogInterceptor))
     {
-
     }
 }

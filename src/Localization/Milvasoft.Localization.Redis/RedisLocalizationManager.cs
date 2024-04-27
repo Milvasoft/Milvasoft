@@ -9,7 +9,7 @@ using System.Globalization;
 namespace Milvasoft.Localization.Redis;
 
 /// <summary>
-/// Provides localization operations with rediswith <see cref="IStringLocalizer{TResource}"/>.
+/// Provides localization operations with redis with <see cref="ICacheAccessor"/>.
 /// </summary>
 /// <param name="cacheAccessor"></param>
 /// <param name="redisCacheServiceOptions"></param>

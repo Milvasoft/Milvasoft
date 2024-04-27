@@ -1,0 +1,30 @@
+name: Milvasoft.Localization.Redis Nuget Publish
+
+on:
+  push:
+    branches: [ master ]
+    paths:
+      - 'src/Localization/Milvasoft.Localization.Redis/**'
+  pull_request:
+    branches: [ master ]
+    paths:
+      - 'src/Localization/Milvasoft.Localization.Redis/**'
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 8.0.x
+      - name: Restore Milvasoft.Localization.Redis project dependencies
+        run: dotnet restore src/Localization/Milvasoft.Localization.Redis/Milvasoft.Localization.Redis.csproj
+      - name: Build Milvasoft.Localization.Redis project
+        run: dotnet build src/Localization/Milvasoft.Localization.Redis/Milvasoft.Localization.Redis.csproj --no-restore --configuration Release
+      - name: Pack Milvasoft.Localization.Redis project
+        run: dotnet pack src/Localization/Milvasoft.Localization.Redis/Milvasoft.Localization.Redis.csproj --no-build --configuration Release --include-symbols -p:SymbolPackageFormat=snupkg -o .
+      - name: Publish package to NuGet
+        run: dotnet nuget push *.nupkg --api-key ${{secrets.NUGET_API_KEY}} --source "https://api.nuget.org/v3/index.json" --skip-duplicate

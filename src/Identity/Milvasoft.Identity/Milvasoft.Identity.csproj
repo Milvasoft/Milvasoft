@@ -4,11 +4,22 @@
 		<TargetFramework>net8.0</TargetFramework>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>disable</Nullable>
-		<PackageIcon>milvalogo.png</PackageIcon>
 		<GenerateDocumentationFile>true</GenerateDocumentationFile>
 		<IsPackable>true</IsPackable>
-		<DocumentationFile>..\Milvasoft.Identity\Milvasoft.Identity.xml</DocumentationFile>
+		<PackageIcon>.\Resources\milvalogo.png</PackageIcon>
+		<PackageReadmeFile>.\Resources\readme.md</PackageReadmeFile>
 	</PropertyGroup>
+
+	<ItemGroup>
+		<None Update="Resources\milvalogo.png">
+			<Pack>True</Pack>
+			<PackagePath></PackagePath>
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Resources\readme.md" Pack="true" PackagePath="\">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+	</ItemGroup>
 
 	<ItemGroup>
 	  <Compile Include="..\..\Core\Milvasoft.Core\GlobalUsings.cs" Link="GlobalUsings.cs" />
@@ -18,34 +29,21 @@
 		<PackageReference Include="Microsoft.AspNetCore.DataProtection" Version="8.0.4" />
 		<ProjectReference Include="..\..\Components\Milvasoft.Attributes\Milvasoft.Attributes.csproj" />
 	</ItemGroup>
-
-	<ItemGroup>
-		<None Update="Milvasoft.Identity.xml">
-			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-		</None>
-		<None Update="Resources\milvalogo.png">
-			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
-		</None>
-		<None Include="Resources\milvalogo.png">
-			<Pack>True</Pack>
-			<PackagePath></PackagePath>
-		</None>
-	</ItemGroup>
-
+	
 	<PropertyGroup>
 
 		<PackageId>Milvasoft.Identity</PackageId>
 		<RepositoryUrl>https://github.com/Milvasoft/Milvasoft/tree/master/Milvasoft.Helpers</RepositoryUrl>
 		<RepositoryType>git</RepositoryType>
 		<PackageProjectUrl>https://github.com/Milvasoft/Milvasoft/tree/master/Milvasoft.Helpers</PackageProjectUrl>
-		<GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+		<PackageIconUrl>https://raw.githubusercontent.com/Milvasoft/Milvasoft/master/src/Milvasoft.Helpers/Resources/milvalogo.png</PackageIconUrl>
+		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 		<Authors>Milvasoft Corporation</Authors>
 		<Product>Milvasoft.Identity</Product>
 		<Description>Provides account operations.</Description>
 		<PackageTags>identity,account,user,role,passwordhash</PackageTags>
 		<Copyright>Milvasoft Yazılım Bilişim Araştırma Geliştirme Danışmanlık Sanayi ve Ticaret Ltd.Şti.</Copyright>
 		<Version>8.0.1</Version>
-		<PackageIcon>milvalogo.png</PackageIcon>
 
 	</PropertyGroup>
 

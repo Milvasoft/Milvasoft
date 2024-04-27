@@ -10,8 +10,10 @@ namespace Milvasoft.Interception.Ef.WithNoLock;
 /// </summary>
 public class WithNoLockInterceptionOptions : HaveDbContextType, IWithNoLockInterceptionOptions
 {
+    /// <inheritdoc/>
     public static string SectionName { get; } = $"{MilvaConstant.ParentSectionName}:Interception:WithNoLock";
 
+    /// <inheritdoc/>
     public ServiceLifetime InterceptorLifetime { get; set; } = ServiceLifetime.Scoped;
 }
 

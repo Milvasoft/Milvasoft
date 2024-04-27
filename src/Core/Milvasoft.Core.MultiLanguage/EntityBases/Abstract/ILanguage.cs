@@ -3,7 +3,6 @@
 /// <summary>
 /// Interface for language entity.
 /// </summary>
-/// <typeparam name="TKey"></typeparam
 public interface ILanguage
 {
     /// <summary> 

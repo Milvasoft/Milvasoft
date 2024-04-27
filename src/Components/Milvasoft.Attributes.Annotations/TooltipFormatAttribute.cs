@@ -8,5 +8,8 @@
 [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field, AllowMultiple = false)]
 public class TooltipFormatAttribute(string format) : Attribute
 {
+    /// <summary>
+    /// Tooltip format.
+    /// </summary>
     public string Format { get; set; } = format;
 }

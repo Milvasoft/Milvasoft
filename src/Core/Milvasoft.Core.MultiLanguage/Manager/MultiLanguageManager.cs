@@ -25,8 +25,13 @@ public abstract class MultiLanguageManager : IMultiLanguageManager
     private static readonly MethodInfo _firstOrDefaultMethodInfo = typeof(Enumerable).GetMethods(BindingFlags.Static | BindingFlags.Public)
                                                                                      .Last(mi => mi.Name == nameof(Enumerable.FirstOrDefault) && mi.GetParameters().Length == 1);
     #endregion
+
+    /// <summary>
+    /// Service provider instance.
+    /// </summary>
     protected readonly IServiceProvider _serviceProvider;
 
+    /// <inheritdoc/>
     public static ConcurrentBag<ILanguage> Languages { get; protected set; } = [];
 
     /// <summary>

@@ -13,6 +13,9 @@ namespace Milvasoft.Interception.Builder;
 /// <param name="configurationManager">The optional <see cref="IConfigurationManager"/> to be used for configuration.</param>
 public sealed class InterceptionBuilder(IServiceCollection services, IConfigurationManager configurationManager = null) : IMilvaBuilder
 {
+    /// <inheritdoc/>
     public IServiceCollection Services { get; } = services;
+
+    /// <inheritdoc/>
     public IConfigurationManager ConfigurationManager { get; } = configurationManager;
 }

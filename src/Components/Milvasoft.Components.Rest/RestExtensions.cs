@@ -5,6 +5,9 @@ using System.Text.Json;
 
 namespace Milvasoft.Components.Rest;
 
+/// <summary>
+/// Service collection extensions for rest components.
+/// </summary>
 public static partial class RestExtensions
 {
     /// <summary>

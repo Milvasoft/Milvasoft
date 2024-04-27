@@ -11,9 +11,7 @@ namespace Milvasoft.Cryptography.Concrete;
 /// <remarks>
 /// Creates a new <see cref="MilvaCryptographyProvider"/> instance.
 /// </remarks>
-/// <param name="key"> Must be between 128-256 bit.</param>
-/// <param name="mode"></param>
-/// <param name="padding"></param>
+/// <param name="milvaCryptographyOptions"> Cryptography options.</param>
 public class MilvaCryptographyProvider(IMilvaCryptographyOptions milvaCryptographyOptions) : IMilvaCryptographyProvider
 {
     #region Fields

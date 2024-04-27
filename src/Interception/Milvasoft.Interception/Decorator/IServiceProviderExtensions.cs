@@ -2,6 +2,9 @@
 
 namespace Milvasoft.Interception.Decorator;
 
+/// <summary>
+/// Service provider extensions.
+/// </summary>
 public static class IServiceProviderExtensions
 {
     /// <summary>

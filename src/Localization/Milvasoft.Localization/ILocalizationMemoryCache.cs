@@ -11,21 +11,20 @@ public interface ILocalizationMemoryCache
     /// Add new entry to the cache
     /// </summary>
     /// <param name="key"></param>
-    /// <param name="value"></param>
     public LocalizedValue Get(string key);
 
     /// <summary>
     /// Add new entry to the cache
     /// </summary>
     /// <param name="key"></param>
-    /// <param name="value"></param>
+    /// <param name="arguments"></param>
     public LocalizedValue Get(string key, params object[] arguments);
 
     /// <summary>
     /// Add new entry to the cache
     /// </summary>
     /// <param name="key"></param>
-    /// <param name="value"></param>
+    /// <param name="culture"></param>
     public LocalizedValue Get(string key, string culture);
 
     /// <summary>
@@ -40,6 +39,7 @@ public interface ILocalizationMemoryCache
     /// </summary>
     /// <param name="key"></param>
     /// <param name="value"></param>
+    /// <param name="culture"></param>
     public void Set(string key, string value, string culture);
 
     /// <summary>
@@ -52,6 +52,7 @@ public interface ILocalizationMemoryCache
     /// Remove entry from cache
     /// </summary>
     /// <param name="key"></param>
+    /// <param name="culture"></param>
     public void Remove(string key, string culture);
 
     /// <summary>

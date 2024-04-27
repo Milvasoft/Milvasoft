@@ -3,8 +3,6 @@
 /// <summary>
 /// Contains decimal precision and scale information.
 /// </summary>
-/// <param name="precision"></param>
-/// <param name="scale"></param>
 [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field, AllowMultiple = false)]
 public class DecimalPrecisionAttribute : Attribute
 {
@@ -18,8 +16,14 @@ public class DecimalPrecisionAttribute : Attribute
     /// </summary>
     public byte Scale { get; set; } = 2;
 
+    /// <summary>
+    /// Precision of decimal.
+    /// </summary>
     public DecimalPrecision DecimalPrecision { get; set; }
 
+    /// <summary>
+    /// Initializes new instance with default values.
+    /// </summary>
     public DecimalPrecisionAttribute()
     {
         DecimalPrecision = new()
@@ -29,6 +33,10 @@ public class DecimalPrecisionAttribute : Attribute
         };
     }
 
+    /// <summary>
+    /// Initializes new instance with <paramref name="scale"/>.
+    /// </summary>
+    /// <param name="scale"></param>
     public DecimalPrecisionAttribute(byte scale)
     {
         Scale = scale;
@@ -38,6 +46,11 @@ public class DecimalPrecisionAttribute : Attribute
         };
     }
 
+    /// <summary>
+    /// Initializes new instance with <paramref name="precision"/> and <paramref name="scale"/>.
+    /// </summary>
+    /// <param name="precision"></param>
+    /// <param name="scale"></param>
     public DecimalPrecisionAttribute(byte precision, byte scale)
     {
         Precision = precision;
@@ -50,6 +63,9 @@ public class DecimalPrecisionAttribute : Attribute
     }
 }
 
+/// <summary>
+/// Precision and scale.
+/// </summary>
 public class DecimalPrecision
 {
     /// <summary>

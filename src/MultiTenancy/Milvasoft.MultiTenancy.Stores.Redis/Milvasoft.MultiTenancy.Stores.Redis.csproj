@@ -4,8 +4,23 @@
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>disable</Nullable>
+	  <GenerateDocumentationFile>true</GenerateDocumentationFile>
+	  <IsPackable>true</IsPackable>
+	  <PackageIcon>.\Resources\milvalogo.png</PackageIcon>
+	  <PackageReadmeFile>.\Resources\readme.md</PackageReadmeFile>
   </PropertyGroup>
 
+  <ItemGroup>
+	  <None Update="Resources\milvalogo.png">
+		  <Pack>True</Pack>
+		  <PackagePath></PackagePath>
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Update="Resources\readme.md" Pack="true" PackagePath="\">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+  </ItemGroup>
+	
   <ItemGroup>
     <ProjectReference Include="..\..\Caching\Milvasoft.Caching.Redis\Milvasoft.Caching.Redis.csproj" />
     <ProjectReference Include="..\Milvasoft.MultiTenancy\Milvasoft.MultiTenancy.csproj" />
@@ -18,5 +33,23 @@
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
 	</ItemGroup>
+
+
+	<PropertyGroup>
+
+		<PackageId>Milvasoft.MultiTenancy.Stores.Redis</PackageId>
+		<RepositoryUrl>https://github.com/Milvasoft/Milvasoft/tree/master/Milvasoft.Helpers</RepositoryUrl>
+		<RepositoryType>git</RepositoryType>
+		<PackageProjectUrl>https://github.com/Milvasoft/Milvasoft/tree/master/Milvasoft.Helpers</PackageProjectUrl>
+		<PackageIconUrl>https://raw.githubusercontent.com/Milvasoft/Milvasoft/master/src/Milvasoft.Helpers/Resources/milvalogo.png</PackageIconUrl>
+		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+		<Authors>Milvasoft Corporation</Authors>
+		<Product>Milvasoft.MultiTenancy.Stores.Redis</Product>
+		<Description>Add multi tenancy support to your application easily with redis store.</Description>
+		<PackageTags>multitenancy,database,ef,redis,cache,tenant</PackageTags>
+		<Copyright>Milvasoft Yazılım Bilişim Araştırma Geliştirme Danışmanlık Sanayi ve Ticaret Ltd.Şti.</Copyright>
+		<Version>8.0.0</Version>
+
+	</PropertyGroup>
 	
 </Project>

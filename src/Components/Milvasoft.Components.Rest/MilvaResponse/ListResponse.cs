@@ -4,6 +4,7 @@ using System.Runtime.Serialization;
 
 namespace Milvasoft.Components.Rest.MilvaResponse;
 
+#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
 /// <summary>
 /// Listed or paginated response.
 /// </summary>
@@ -224,5 +225,6 @@ public class ListResponse<T> : Response<List<T>>
     }
 
     #endregion
-#pragma warning restore CS0108 // Member hides inherited member; missing new keyword
 }
+#pragma warning restore CS0108 // Member hides inherited member; missing new keyword
+#pragma warning restore CS1591 // Missing XML comment for publicly visible type or member

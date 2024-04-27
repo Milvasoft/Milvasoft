@@ -10,9 +10,11 @@ namespace Milvasoft.Core.MultiLanguage.Builder;
 /// Creates new instance of <see cref="MilvaMultiLanguageBuilder"/>.
 /// </remarks>
 /// <param name="services"></param>
-/// <param name="configurationManager"></param>
 public class MilvaMultiLanguageBuilder(IServiceCollection services)
 {
+    /// <summary>
+    /// Service collection.
+    /// </summary>
     public IServiceCollection Services { get; } = services;
 
     /// <summary>

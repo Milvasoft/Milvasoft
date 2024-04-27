@@ -7,5 +7,8 @@
 [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field, AllowMultiple = false)]
 public class MaskByRoleAttribute(params string[] roles) : Attribute
 {
+    /// <summary>
+    /// Allowed roles.
+    /// </summary>
     public string[] Roles { get; set; } = roles;
 }

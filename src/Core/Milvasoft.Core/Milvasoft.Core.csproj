@@ -4,27 +4,25 @@
 		<TargetFramework>net8.0</TargetFramework>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>disable</Nullable>
-		<PackageIcon>milvalogo.png</PackageIcon>
 		<GenerateDocumentationFile>true</GenerateDocumentationFile>
 		<IsPackable>true</IsPackable>
-		<DocumentationFile>..\Milvasoft.Core\Milvasoft.Core.xml</DocumentationFile>
+		<PackageIcon>.\Resources\milvalogo.png</PackageIcon>
+		<PackageReadmeFile>.\Resources\readme.md</PackageReadmeFile>
 	</PropertyGroup>
 
 	<ItemGroup>
-		<FrameworkReference Include="Microsoft.AspNetCore.App" />
-	</ItemGroup>
-
-	<ItemGroup>
-		<None Update="Milvasoft.Core.xml">
-			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-		</None>
 		<None Update="Resources\milvalogo.png">
-			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
-		</None>
-		<None Include="Resources\milvalogo.png">
 			<Pack>True</Pack>
 			<PackagePath></PackagePath>
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
+		<None Update="Resources\readme.md" Pack="true" PackagePath="\">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+	</ItemGroup>
+	
+	<ItemGroup>
+		<FrameworkReference Include="Microsoft.AspNetCore.App" />
 	</ItemGroup>
 	
 	<ItemGroup>
@@ -37,14 +35,15 @@
 		<RepositoryUrl>https://github.com/Milvasoft/Milvasoft/tree/master/Milvasoft.Helpers</RepositoryUrl>
 		<RepositoryType>git</RepositoryType>
 		<PackageProjectUrl>https://github.com/Milvasoft/Milvasoft/tree/master/Milvasoft.Helpers</PackageProjectUrl>
+		<PackageIconUrl>https://raw.githubusercontent.com/Milvasoft/Milvasoft/master/src/Milvasoft.Helpers/Resources/milvalogo.png</PackageIconUrl>
 		<GeneratePackageOnBuild>false</GeneratePackageOnBuild>
 		<Authors>Milvasoft Corporation</Authors>
 		<Product>Milvasoft.Core</Product>
 		<Description>Core components for milvasoft libraries. </Description>
 		<PackageTags>customexception,responsemodel,geolocation,extension,entitybase</PackageTags>
 		<Copyright>Milvasoft Yazılım Bilişim Araştırma Geliştirme Danışmanlık Sanayi ve Ticaret Ltd.Şti.</Copyright>
-		<Version>8.0.0</Version>
-		<PackageIcon>milvalogo.png</PackageIcon>
+		<Version>8.0.1</Version>
+		<PlatformTarget>AnyCPU</PlatformTarget>
 
 	</PropertyGroup>
 </Project>

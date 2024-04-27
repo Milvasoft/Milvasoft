@@ -1,6 +1,11 @@
 ﻿using Milvasoft.Core.MultiLanguage.EntityBases.Abstract;
 
 namespace Milvasoft.Core.MultiLanguage.Manager;
+
+#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
+/// <summary>
+/// Default seed values for languages list.
+/// </summary>
 public static class LanguagesSeed
 {
     public static List<ILanguage> Seed { get; } =
@@ -121,3 +126,4 @@ public static class LanguagesSeed
         public bool IsDefault { get; set; }
     }
 }
+#pragma warning restore CS1591 // Missing XML comment for publicly visible type or member

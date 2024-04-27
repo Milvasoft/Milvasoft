@@ -13,12 +13,16 @@ public class MilvaCryptographyOptions : IMilvaCryptographyOptions
     /// </summary>
     public static string SectionName { get; } = $"Milvasoft:Cryptography";
 
+    /// <inheritdoc/>
     public ServiceLifetime Lifetime { get; set; }
 
+    /// <inheritdoc/>
     public string Key { get; set; }
 
+    /// <inheritdoc/>
     public CipherMode Cipher { get; set; } = CipherMode.CBC;
 
+    /// <inheritdoc/>
     public PaddingMode Padding { get; set; } = PaddingMode.PKCS7;
 }
 

@@ -4,11 +4,22 @@
 		<TargetFramework>net8.0</TargetFramework>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>disable</Nullable>
-		<PackageIcon>milvalogo.png</PackageIcon>
 		<GenerateDocumentationFile>true</GenerateDocumentationFile>
 		<IsPackable>true</IsPackable>
-		<DocumentationFile>..\Milvasoft.DataAccess.MongoDB\Milvasoft.DataAccess.MongoDB.xml</DocumentationFile>
+		<PackageIcon>.\Resources\milvalogo.png</PackageIcon>
+		<PackageReadmeFile>.\Resources\readme.md</PackageReadmeFile>
 	</PropertyGroup>
+
+	<ItemGroup>
+		<None Update="Resources\milvalogo.png">
+			<Pack>True</Pack>
+			<PackagePath></PackagePath>
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Resources\readme.md" Pack="true" PackagePath="\">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+	</ItemGroup>
 
 	<ItemGroup>
 	  <Compile Include="..\..\Core\Milvasoft.Core\GlobalUsings.cs" Link="GlobalUsings.cs" />
@@ -16,19 +27,6 @@
 
 	<ItemGroup>
 		<PackageReference Include="MongoDB.Driver" Version="2.24.0" />
-	</ItemGroup>
-
-	<ItemGroup>
-		<None Update="Milvasoft.DataAccess.MongoDB.xml">
-			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-		</None>
-		<None Update="Resources\milvalogo.png">
-			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
-		</None>
-		<None Include="Resources\milvalogo.png">
-			<Pack>True</Pack>
-			<PackagePath></PackagePath>
-		</None>
 	</ItemGroup>
 
 
@@ -51,14 +49,14 @@
 		<RepositoryUrl>https://github.com/Milvasoft/Milvasoft/tree/master/Milvasoft.Helpers</RepositoryUrl>
 		<RepositoryType>git</RepositoryType>
 		<PackageProjectUrl>https://github.com/Milvasoft/Milvasoft/tree/master/Milvasoft.Helpers</PackageProjectUrl>
+		<PackageIconUrl>https://raw.githubusercontent.com/Milvasoft/Milvasoft/master/src/Milvasoft.Helpers/Resources/milvalogo.png</PackageIconUrl>
 		<GeneratePackageOnBuild>false</GeneratePackageOnBuild>
 		<Authors>Milvasoft Corporation</Authors>
 		<Product>Milvasoft.DataAccess.MongoDB</Product>
 		<Description>MongoDB helpers. </Description>
 		<PackageTags>mongodb,mongo,auditing,nosql,optimisation,performance</PackageTags>
 		<Copyright>Milvasoft Yazılım Bilişim Araştırma Geliştirme Danışmanlık Sanayi ve Ticaret Ltd.Şti.</Copyright>
-		<Version>8.0.0</Version>
-		<PackageIcon>milvalogo.png</PackageIcon>
+		<Version>8.0.1</Version>
 
 	</PropertyGroup>
 </Project>

@@ -10,6 +10,7 @@ namespace Milvasoft.Interception.Interceptors.Runner;
 /// </summary>
 public class InterceptorRunner : IInterceptorRunner
 {
+    /// <inheritdoc/>
     [LogRunner]
     public virtual async Task<TResult> InterceptWithLogAsync<TResult>(Expression<Func<Task<TResult>>> expression)
     {
@@ -18,10 +19,12 @@ public class InterceptorRunner : IInterceptorRunner
         return result;
     }
 
+    /// <inheritdoc/>
     [LogRunner]
     public virtual async Task InterceptWithLogAsync(Expression<Func<Task>> expression)
         => await expression.Compile().Invoke().ConfigureAwait(false);
 
+    /// <inheritdoc/>
     [LogRunner]
     public virtual TResult InterceptWithLog<TResult>(Expression<Func<TResult>> expression)
     {
@@ -30,6 +33,7 @@ public class InterceptorRunner : IInterceptorRunner
         return result;
     }
 
+    /// <inheritdoc/>
     [LogRunner]
     public virtual void InterceptWithLog<T>(Expression<Action> expression)
         => expression.Compile().Invoke();

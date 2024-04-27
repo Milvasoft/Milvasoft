@@ -11,11 +11,13 @@ namespace Milvasoft.Interception.Ef.Transaction;
 [ConfigureAwait(false)]
 public partial class TransactionInterceptor(IServiceProvider serviceProvider) : IMilvaInterceptor
 {
+    /// <inheritdoc/>
     public int InterceptionOrder { get; set; } = -998;
 
     private readonly IServiceProvider _serviceProvider = serviceProvider;
     private readonly ITransactionInterceptionOptions _transactionInterceptionOptions = serviceProvider.GetService<ITransactionInterceptionOptions>();
 
+    /// <inheritdoc/>
     public async Task OnInvoke(Call call)
     {
         var transactionAttribute = call.GetInterceptorAttribute<TransactionAttribute>();

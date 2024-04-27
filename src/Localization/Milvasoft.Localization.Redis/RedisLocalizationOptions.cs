@@ -9,6 +9,7 @@ namespace Milvasoft.Localization.Redis;
 /// </summary>
 public class RedisLocalizationOptions : LocalizationOptions
 {
+    /// <inheritdoc/>
     public new static string SectionName { get; } = $"{MilvaConstant.ParentSectionName}:Localization:Redis";
 
     /// <summary>

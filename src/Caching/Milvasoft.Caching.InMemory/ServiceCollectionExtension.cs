@@ -9,7 +9,7 @@ using Milvasoft.Core.Abstractions.Cache;
 namespace Milvasoft.Caching.InMemory;
 
 /// <summary>
-/// <see cref="IServiceCollection"/> extension for adding <see cref="IRedisAccessor"/>.
+/// <see cref="IServiceCollection"/> extension for adding <see cref="IMemoryCacheAccessor"/>.
 /// </summary>
 public static class ServiceCollectionExtension
 {
@@ -60,7 +60,6 @@ public static class ServiceCollectionExtension
     /// Adds <see cref="ICacheOptions{TOptions}"/> as <see cref="Microsoft.Extensions.Options.IOptions{TOptions}"/>.
     /// </summary>
     /// <param name="builder"></param>
-    /// <param name="configurationManager"></param>
     /// <returns></returns>
     public static CacheBuilder WithInMemoryAccessor(this CacheBuilder builder)
     {

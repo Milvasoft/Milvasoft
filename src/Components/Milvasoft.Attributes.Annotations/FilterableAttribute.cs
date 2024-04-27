@@ -17,6 +17,11 @@ public class FilterableAttribute(bool filterable = true) : Attribute
     /// </summary>
     public string FilterFormat { get; set; }
 
+    /// <summary>
+    /// Marks method with <paramref name="filterFormat"/> and <paramref name="filterable"/>
+    /// </summary>
+    /// <param name="filterFormat"></param>
+    /// <param name="filterable"></param>
     public FilterableAttribute(string filterFormat, bool filterable = true) : this(filterable)
     {
         FilterFormat = filterFormat;

@@ -4,12 +4,22 @@
 		<TargetFramework>net8.0</TargetFramework>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>disable</Nullable>
-		<PackageIcon>milvalogo.png</PackageIcon>
 		<GenerateDocumentationFile>true</GenerateDocumentationFile>
 		<IsPackable>true</IsPackable>
-		<DocumentationFile>..\Milvasoft.JobScheduling\Milvasoft.JobScheduling.xml</DocumentationFile>
+		<PackageIcon>.\Resources\milvalogo.png</PackageIcon>
+		<PackageReadmeFile>.\Resources\readme.md</PackageReadmeFile>
 	</PropertyGroup>
 
+	<ItemGroup>
+		<None Update="Resources\milvalogo.png">
+			<Pack>True</Pack>
+			<PackagePath></PackagePath>
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Resources\readme.md" Pack="true" PackagePath="\">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+	</ItemGroup>
 
 	<ItemGroup>
 		<PackageReference Include="ConfigureAwait.Fody" Version="3.3.2" PrivateAssets="All" />
@@ -25,36 +35,22 @@
 	</ItemGroup>
 	
 	<ItemGroup>
-		<None Update="Milvasoft.JobScheduling.xml">
-			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-		</None>
-		<None Update="Resources\milvalogo.png">
-			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
-		</None>
-		<None Include="Resources\milvalogo.png">
-			<Pack>True</Pack>
-			<PackagePath></PackagePath>
-		</None>
-	</ItemGroup>
-	
-	<ItemGroup>
 	  <ProjectReference Include="..\..\Core\Milvasoft.Core\Milvasoft.Core.csproj" />
 	</ItemGroup>
 
 	<PropertyGroup>
 
 		<PackageId>Milvasoft.JobScheduling</PackageId>
+		<Product>Milvasoft.JobScheduling</Product>
 		<RepositoryUrl>https://github.com/Milvasoft/Milvasoft/tree/master/Milvasoft.Helpers</RepositoryUrl>
 		<RepositoryType>git</RepositoryType>
 		<PackageProjectUrl>https://github.com/Milvasoft/Milvasoft/tree/master/Milvasoft.Helpers</PackageProjectUrl>
 		<GeneratePackageOnBuild>false</GeneratePackageOnBuild>
 		<Authors>Milvasoft Corporation</Authors>
-		<Product>Milvasoft.JobScheduling</Product>
 		<Description>Provides job scheduling like cron job with hosted service.</Description>
 		<PackageTags>cron,scheduling,job,hostedservice,schedule</PackageTags>
 		<Copyright>Milvasoft Yazılım Bilişim Araştırma Geliştirme Danışmanlık Sanayi ve Ticaret Ltd.Şti.</Copyright>
 		<Version>8.0.0</Version>
-		<PackageIcon>milvalogo.png</PackageIcon>
 
 	</PropertyGroup>
 </Project>

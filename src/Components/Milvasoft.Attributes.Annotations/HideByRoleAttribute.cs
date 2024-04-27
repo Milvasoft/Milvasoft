@@ -7,5 +7,8 @@
 [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field, AllowMultiple = false)]
 public class HideByRoleAttribute(params string[] roles) : Attribute
 {
+    /// <summary>
+    /// Allowed roles.
+    /// </summary>
     public string[] Roles { get; set; } = roles;
 }

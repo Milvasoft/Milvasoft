@@ -8,5 +8,8 @@
 [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field, AllowMultiple = false)]
 public class DisplayFormatAttribute(string format) : Attribute
 {
+    /// <summary>
+    /// Display format.
+    /// </summary>
     public string Format { get; set; } = format;
 }

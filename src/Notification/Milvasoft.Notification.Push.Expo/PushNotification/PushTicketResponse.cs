@@ -2,6 +2,7 @@
 
 namespace Milvasoft.Notification.Push.Expo.PushNotification;
 
+#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
 public class PushTicketResponse
 {
     [JsonPropertyName("data")]
@@ -34,3 +35,4 @@ public class PushTicketErrors
     [JsonPropertyName("message")]
     public string ErrorMessage { get; set; }
 }
+#pragma warning restore CS1591 // Missing XML comment for publicly visible type or member

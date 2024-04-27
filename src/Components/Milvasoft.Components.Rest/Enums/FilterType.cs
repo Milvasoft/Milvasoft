@@ -5,6 +5,7 @@
 /// </summary>
 public enum FilterType
 {
+#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
     Between,
     Contains,
     DoesNotContain,
@@ -24,5 +25,6 @@ public enum FilterType
     IsNotNullNorWhiteSpace,
     In,
     NotIn
+#pragma warning restore CS1591 // Missing XML comment for publicly visible type or member
 }
 

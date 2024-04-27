@@ -4,8 +4,14 @@ using System.Linq.Expressions;
 
 namespace Milvasoft.Core.MultiLanguage.Manager;
 
+/// <summary>
+/// Represents a base class for managing multi-language functionality.
+/// </summary>
 public interface IMultiLanguageManager
 {
+    /// <summary>
+    /// Static language array.
+    /// </summary>
     public static ConcurrentBag<ILanguage> Languages { get; set; }
 
     /// <summary>

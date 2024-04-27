@@ -4,18 +4,50 @@
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>disable</Nullable>
+	  <GenerateDocumentationFile>true</GenerateDocumentationFile>
+	  <IsPackable>true</IsPackable>
+	  <PackageIcon>.\Resources\milvalogo.png</PackageIcon>
+	  <PackageReadmeFile>.\Resources\readme.md</PackageReadmeFile>
   </PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="ConfigureAwait.Fody" Version="3.3.2" PrivateAssets="All" />
-    <PackageReference Include="Fody" Version="6.8.0">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
-  </ItemGroup>
+	<ItemGroup>
+		<None Update="Resources\milvalogo.png">
+			<Pack>True</Pack>
+			<PackagePath></PackagePath>
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Resources\readme.md" Pack="true" PackagePath="\">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+	</ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\Milvasoft.Caching\Milvasoft.Caching.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="ConfigureAwait.Fody" Version="3.3.2" PrivateAssets="All" />
+		<PackageReference Include="Fody" Version="6.8.0">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\Milvasoft.Caching\Milvasoft.Caching.csproj" />
+	</ItemGroup>
+	
+	<PropertyGroup>
+
+		<PackageId>Milvasoft.Caching.InMemory</PackageId>
+		<RepositoryUrl>https://github.com/Milvasoft/Milvasoft/tree/master/Milvasoft.Helpers</RepositoryUrl>
+		<RepositoryType>git</RepositoryType>
+		<PackageProjectUrl>https://github.com/Milvasoft/Milvasoft/tree/master/Milvasoft.Helpers</PackageProjectUrl>
+		<PackageIconUrl>https://raw.githubusercontent.com/Milvasoft/Milvasoft/master/src/Milvasoft.Helpers/Resources/milvalogo.png</PackageIconUrl>
+		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+		<Authors>Milvasoft Corporation</Authors>
+		<Product>Milvasoft.Caching.InMemory</Product>
+		<Description>In memory caching operations.</Description>
+		<PackageTags>cache,caching,inmemory,memory</PackageTags>
+		<Copyright>Milvasoft Yazılım Bilişim Araştırma Geliştirme Danışmanlık Sanayi ve Ticaret Ltd.Şti.</Copyright>
+		<Version>8.0.0</Version>
+
+	</PropertyGroup>
 
 </Project>

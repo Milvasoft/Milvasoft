@@ -14,12 +14,19 @@ internal static class MethodDecoratorMap
 {
     private readonly static ConcurrentDictionary<Type, ReadOnlyDictionary<MethodInfo, Type[]>> _map = [];
 
+    /// <summary>
+    /// Gets or adds decorated type with factory.
+    /// </summary>
+    /// <param name="decoratedType"></param>
+    /// <param name="serviceProvider"></param>
+    /// <returns></returns>
     public static ReadOnlyDictionary<MethodInfo, Type[]> Get(Type decoratedType, IServiceProvider serviceProvider) => _map.GetOrAdd(decoratedType, Factory(decoratedType, serviceProvider));
 
     /// <summary>
     /// Finds the decorable methods of the class of the given type. Then, it maps which decorators will intercept these methods.
     /// </summary>
     /// <param name="decoratedType"></param>
+    /// <param name="serviceProvider"></param>
     /// <returns></returns>
     private static ReadOnlyDictionary<MethodInfo, Type[]> Factory(Type decoratedType, IServiceProvider serviceProvider)
     {

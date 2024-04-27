@@ -59,13 +59,6 @@ public abstract class EntityBase<TKey> : EntityBase, IEntityBase<TKey>
 public abstract class EntityBase : IMilvaEntity
 {
     /// <summary>
-    /// Initializes new instance.
-    /// </summary>
-    protected EntityBase()
-    {
-    }
-
-    /// <summary>
     /// Gets the value of Id property.
     /// </summary>
     /// <returns></returns>

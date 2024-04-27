@@ -1,0 +1,30 @@
+name: Milvasoft.FileOperations Nuget Publish
+
+on:
+  push:
+    branches: [ master ]
+    paths:
+      - 'src/FileOperations/Milvasoft.FileOperations/**'
+  pull_request:
+    branches: [ master ]
+    paths:
+      - 'src/FileOperationsMilvasoft.FileOperations/**'
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 8.0.x
+      - name: Restore Milvasoft.FileOperations project dependencies
+        run: dotnet restore src/FileOperationsMilvasoft.FileOperations/Milvasoft.FileOperations.csproj
+      - name: Build Milvasoft.FileOperations project
+        run: dotnet build src/FileOperationsMilvasoft.FileOperations/Milvasoft.FileOperations.csproj --no-restore --configuration Release
+      - name: Pack Milvasoft.FileOperations project
+        run: dotnet pack src/FileOperationsMilvasoft.FileOperations/Milvasoft.FileOperations.csproj --no-build --configuration Release --include-symbols -p:SymbolPackageFormat=snupkg -o .
+      - name: Publish package to NuGet
+        run: dotnet nuget push *.nupkg --api-key ${{secrets.NUGET_API_KEY}} --source "https://api.nuget.org/v3/index.json" --skip-duplicate

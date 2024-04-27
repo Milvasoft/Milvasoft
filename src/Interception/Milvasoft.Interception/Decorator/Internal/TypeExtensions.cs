@@ -8,7 +8,7 @@ internal static class TypeExtensions
     private static readonly Type _voidTaskResultType = Type.GetType("System.Threading.Tasks.VoidTaskResult", false);
 
     /// <summary>
-    /// Finds public methods that do not have <see cref="MethodInfo.IsSpecialName"/>.
+    /// Finds public methods that do not have special names.
     /// </summary>
     /// <param name="type"></param>
     /// <returns></returns>
@@ -50,7 +50,7 @@ internal static class TypeExtensions
         => method.GetCustomAttribute(typeof(AsyncStateMachineAttribute)) != null;
 
     /// <summary>
-    /// Returns <paramref name="type"/>'s return type is <see cref="System.Threading.Tasks.VoidTaskResult"/> or not.
+    /// Returns <paramref name="type"/>'s return type is <see cref="void"/> or not.
     /// </summary>
     /// <param name="type"></param>
     /// <returns></returns>
@@ -58,7 +58,7 @@ internal static class TypeExtensions
         => type.GenericTypeArguments?.Length > 0 && type.GenericTypeArguments[0] == _voidTaskResultType;
 
     /// <summary>
-    /// Returns <paramref name="type"/>'s return type is <see cref="Task{}"/> or not.
+    /// Returns <paramref name="type"/>'s return type is <see cref="Task{T}"/> or not.
     /// </summary>
     /// <param name="type"></param>
     /// <param name="genericTaskType"></param>

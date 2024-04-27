@@ -1,0 +1,30 @@
+name: Milvasoft.Attributes.Annotations Nuget Publish
+
+on:
+  push:
+    branches: [ master ]
+    paths:
+      - 'src/Components/Milvasoft.Attributes.Annotations/**'
+  pull_request:
+    branches: [ master ]
+    paths:
+      - 'src/Components/Milvasoft.Attributes.Annotations/**'
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 8.0.x
+      - name: Restore Milvasoft.Attributes.Annotations project dependencies
+        run: dotnet restore src/Components/Milvasoft.Attributes.Annotations/Milvasoft.Attributes.csproj
+      - name: Build Milvasoft.Attributes.Annotations project
+        run: dotnet build src/Components/Milvasoft.Attributes.Annotations/Milvasoft.Attributes.csproj --no-restore --configuration Release
+      - name: Pack Milvasoft.Attributes.Annotations project
+        run: dotnet pack src/Components/Milvasoft.Attributes.Annotations/Milvasoft.Attributes.csproj --no-build --configuration Release --include-symbols -p:SymbolPackageFormat=snupkg -o .
+      - name: Publish package to NuGet
+        run: dotnet nuget push *.nupkg --api-key ${{secrets.NUGET_API_KEY}} --source "https://api.nuget.org/v3/index.json" --skip-duplicate

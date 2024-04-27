@@ -8,6 +8,7 @@ namespace Milvasoft.Localization.Builder;
 /// </summary>
 public class LocalizationOptions : ILocalizationOptions
 {
+    /// <inheritdoc/>
     public static string SectionName { get; } = $"{MilvaConstant.ParentSectionName}:Localization";
 
     /// <inheritdoc/>

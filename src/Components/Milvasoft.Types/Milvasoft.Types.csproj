@@ -4,10 +4,42 @@
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>disable</Nullable>
+	  <GenerateDocumentationFile>true</GenerateDocumentationFile>
+	  <IsPackable>true</IsPackable>
+	  <PackageIcon>.\Resources\milvalogo.png</PackageIcon>
+	  <PackageReadmeFile>.\Resources\readme.md</PackageReadmeFile>
   </PropertyGroup>
+
+  <ItemGroup>
+	  <None Update="Resources\milvalogo.png">
+		  <Pack>True</Pack>
+		  <PackagePath></PackagePath>
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Update="Resources\readme.md" Pack="true" PackagePath="\">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+  </ItemGroup>
 
   <ItemGroup>
     <Folder Include="Structs\" />
   </ItemGroup>
 
+	<PropertyGroup>
+
+		<PackageId>Milvasoft.Types</PackageId>
+		<RepositoryUrl>https://github.com/Milvasoft/Milvasoft/tree/master/Milvasoft.Helpers</RepositoryUrl>
+		<RepositoryType>git</RepositoryType>
+		<PackageProjectUrl>https://github.com/Milvasoft/Milvasoft/tree/master/Milvasoft.Helpers</PackageProjectUrl>
+		<PackageIconUrl>https://raw.githubusercontent.com/Milvasoft/Milvasoft/master/src/Milvasoft.Helpers/Resources/milvalogo.png</PackageIconUrl>
+		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+		<Authors>Milvasoft Corporation</Authors>
+		<Product>Milvasoft.Types</Product>
+		<Description>Custom types.</Description>
+		<PackageTags>structs, classes, interfaces</PackageTags>
+		<Copyright>Milvasoft Yazılım Bilişim Araştırma Geliştirme Danışmanlık Sanayi ve Ticaret Ltd.Şti.</Copyright>
+		<Version>8.0.0</Version>
+
+	</PropertyGroup>
+	
 </Project>

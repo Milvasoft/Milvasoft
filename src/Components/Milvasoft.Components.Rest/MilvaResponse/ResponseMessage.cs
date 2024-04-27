@@ -27,26 +27,49 @@ public class ResponseMessage
     [DataMember]
     public MessageType Type { get; set; }
 
+    /// <summary>
+    /// Initializes new instance.
+    /// </summary>
     public ResponseMessage()
     {
 
     }
 
+    /// <summary>
+    /// Initializes new instance with <paramref name="message"/>
+    /// </summary>
+    /// <param name="message"></param>
     public ResponseMessage(string message) : this(message, MessageType.Information)
     {
 
     }
 
+    /// <summary>
+    /// Initializes new instance with <paramref name="key"/> and <paramref name="message"/>
+    /// </summary>
+    /// <param name="key"></param>
+    /// <param name="message"></param>
     public ResponseMessage(string key, string message) : this(key, message, MessageType.Information)
     {
 
     }
 
+    /// <summary>
+    /// Initializes new instance with empty key and <paramref name="message"/>
+    /// </summary>
+    /// <param name="message"></param>
+    /// <param name="messageType"></param>
     public ResponseMessage(string message, MessageType messageType) : this(string.Empty, message, messageType)
     {
 
     }
 
+    /// <summary>
+    /// Initializes new instance with <paramref name="key"/> and <paramref name="message"/>
+    /// </summary>
+    /// <param name="key"></param>
+    /// <param name="message"></param>
+    /// <param name="messageType"></param>
     public ResponseMessage(string key, string message, MessageType messageType)
     {
         Key = key;

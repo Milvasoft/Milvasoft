@@ -23,12 +23,13 @@ public static class InterceptionServiceCollectionExtensions
     /// Decorates service collection with intercaptable service methods. 
     /// Use this method after all registrations. Because it can be decorates <see cref="IInterceptable"/> services from service collection.
     /// 
-    /// <para> You can decorate the service collection with <see cref="Intercept{T}(IServiceCollection)"/> overload. </para>
+    /// <para> You can decorate the service collection with <see cref="Intercept(InterceptionBuilder, Type, ServiceLifetime)"/> overload. </para>
     /// 
     /// <para><paramref name="assembly"/> is assembly containing classes that contain the methods to be intercepted </para>
     /// </summary>
     /// <param name="services"> Service collection to be decorated. </param>
     /// <param name="assembly"> An assembly containing classes that contain the methods to be intercepted. </param>
+    /// <param name="configurationManager"></param>
     /// <returns></returns>
     public static InterceptionBuilder AddMilvaInterception(this IServiceCollection services, Assembly assembly, IConfigurationManager configurationManager = null)
     {
@@ -43,12 +44,13 @@ public static class InterceptionServiceCollectionExtensions
     /// Decorates service collection with intercaptable service methods. 
     /// Use this method after all registrations. Because it can be decorates <see cref="IInterceptable"/> services from service collection.
     /// 
-    /// <para> You can decorate the service collection with <see cref="Intercept{T}(IServiceCollection)"/> overload. </para>
+    /// <para> You can decorate the service collection with <see cref="Intercept(InterceptionBuilder, Type, ServiceLifetime)"/> overload. </para>
     /// 
-    /// <para><paramref name="assembly"/> is assembly containing classes that contain the methods to be intercepted </para>
+    /// <para><paramref name="types"/> Types that contain the methods to be intercepted </para>
     /// </summary>
     /// <param name="services"> Service collection to be decorated. </param>
-    /// <param name="assembly"> An assembly containing classes that contain the methods to be intercepted. </param>
+    /// <param name="types"> Types that contain the methods to be intercepted. </param>
+    /// <param name="configurationManager"></param>
     /// <returns></returns>
     public static InterceptionBuilder AddMilvaInterception(this IServiceCollection services, List<Type> types, IConfigurationManager configurationManager = null)
     {
@@ -113,7 +115,6 @@ public static class InterceptionServiceCollectionExtensions
     /// <summary>
     /// Decorates the specified service type descriptor inside <see cref="IServiceCollection"/>.
     /// </summary>
-    /// <typeparam name="T">Service type to be decorated</typeparam>
     public static InterceptionBuilder Intercept(this InterceptionBuilder builder, Type type, ServiceLifetime serviceLifetime = ServiceLifetime.Scoped)
     {
         builder.Services.TryAdd(ServiceDescriptor.Describe(typeof(Decorator), x => new Decorator((type) => (IMilvaInterceptor)x.GetRequiredService(type)), serviceLifetime));
@@ -139,7 +140,6 @@ public static class InterceptionServiceCollectionExtensions
     /// <summary>
     /// Decorates the specified service type descriptor inside <see cref="IServiceCollection"/> with a <see cref="InterceptorRunner"/>.
     /// </summary>
-    /// <typeparam name="TInterceptorRunner">The type of the custom interceptor runner.</typeparam>
     /// <param name="builder">The interception builder.</param>
     /// <returns>The interception builder.</returns>
     public static InterceptionBuilder WithDefaultInterceptorRunner(this InterceptionBuilder builder)
@@ -173,7 +173,6 @@ public static class InterceptionServiceCollectionExtensions
     /// <summary>
     /// Decorates the specified service type descriptor inside <see cref="IServiceCollection"/>.
     /// </summary>
-    /// <typeparam name="T">Service type to be decorated</typeparam>
     public static InterceptionBuilder WithLogInterceptor(this InterceptionBuilder builder, Action<ILogInterceptionOptions> interceptionOptions)
     {
         var config = new LogInterceptionOptions();
@@ -191,7 +190,6 @@ public static class InterceptionServiceCollectionExtensions
     /// <summary>
     /// Decorates the specified service type descriptor inside <see cref="IServiceCollection"/>.
     /// </summary>
-    /// <typeparam name="T">Service type to be decorated</typeparam>
     public static InterceptionBuilder WithLogInterceptor(this InterceptionBuilder builder)
     {
         if (builder.ConfigurationManager == null)
@@ -255,7 +253,6 @@ public static class InterceptionServiceCollectionExtensions
     /// <summary>
     /// Decorates the specified service type descriptor inside <see cref="IServiceCollection"/>.
     /// </summary>
-    /// <typeparam name="T">Service type to be decorated</typeparam>
     public static InterceptionBuilder WithResponseInterceptor(this InterceptionBuilder builder, Action<IResponseInterceptionOptions> interceptionOptions)
     {
         var config = new ResponseInterceptionOptions();
@@ -273,7 +270,6 @@ public static class InterceptionServiceCollectionExtensions
     /// <summary>
     /// Decorates the specified service type descriptor inside <see cref="IServiceCollection"/>.
     /// </summary>
-    /// <typeparam name="T">Service type to be decorated</typeparam>
     public static InterceptionBuilder WithResponseInterceptor(this InterceptionBuilder builder)
     {
         if (builder.ConfigurationManager == null)
@@ -339,7 +335,6 @@ public static class InterceptionServiceCollectionExtensions
     /// <summary>
     /// Decorates the specified service type descriptor inside <see cref="IServiceCollection"/>.
     /// </summary>
-    /// <typeparam name="T">Service type to be decorated</typeparam>
     public static InterceptionBuilder WithCacheInterceptor(this InterceptionBuilder builder, Action<ICacheInterceptionOptions> interceptionOptions)
     {
         var config = new CacheInterceptionOptions();
@@ -360,7 +355,6 @@ public static class InterceptionServiceCollectionExtensions
     /// <summary>
     /// Decorates the specified service type descriptor inside <see cref="IServiceCollection"/>.
     /// </summary>
-    /// <typeparam name="T">Service type to be decorated</typeparam>
     public static InterceptionBuilder WithCacheInterceptor(this InterceptionBuilder builder)
     {
         if (builder.ConfigurationManager == null)
@@ -425,7 +419,6 @@ public static class InterceptionServiceCollectionExtensions
     /// <summary>
     /// Decorates the specified service type descriptor inside <see cref="IServiceCollection"/>.
     /// </summary>
-    /// <typeparam name="T">Service type to be decorated</typeparam>
     public static InterceptionBuilder WithActivityInterceptor(this InterceptionBuilder builder, ServiceLifetime serviceLifetime = ServiceLifetime.Scoped)
     {
         if (!builder.Services.Any(s => s.ServiceType == typeof(ActivityInterceptor)))

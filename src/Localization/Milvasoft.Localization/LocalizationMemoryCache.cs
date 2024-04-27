@@ -26,7 +26,6 @@ public class LocalizationMemoryCache(IMemoryCache cache, ILocalizationOptions lo
     /// Add new entry to the cache
     /// </summary>
     /// <param name="key"></param>
-    /// <param name="value"></param>
     public LocalizedValue Get(string key)
     {
         if (!_localizationOptions.UseInMemoryCache)
@@ -43,7 +42,7 @@ public class LocalizationMemoryCache(IMemoryCache cache, ILocalizationOptions lo
     /// Add new entry to the cache
     /// </summary>
     /// <param name="key"></param>
-    /// <param name="value"></param>
+    /// <param name="arguments"></param>
     public LocalizedValue Get(string key, params object[] arguments)
     {
         if (!_localizationOptions.UseInMemoryCache)
@@ -65,7 +64,7 @@ public class LocalizationMemoryCache(IMemoryCache cache, ILocalizationOptions lo
     /// Add new entry to the cache
     /// </summary>
     /// <param name="key"></param>
-    /// <param name="value"></param>
+    /// <param name="culture"></param>
     public LocalizedValue Get(string key, string culture)
     {
         if (!_localizationOptions.UseInMemoryCache)
@@ -100,6 +99,7 @@ public class LocalizationMemoryCache(IMemoryCache cache, ILocalizationOptions lo
     /// </summary>
     /// <param name="key"></param>
     /// <param name="value"></param>
+    /// <param name="culture"></param>
     public void Set(string key, string value, string culture)
     {
         var cultureSwitcher = new CultureSwitcher(culture);
@@ -127,6 +127,7 @@ public class LocalizationMemoryCache(IMemoryCache cache, ILocalizationOptions lo
     /// Remove entry from cache
     /// </summary>
     /// <param name="key"></param>
+    /// <param name="culture"></param>
     public void Remove(string key, string culture)
     {
         var cultureSwitcher = new CultureSwitcher(culture);

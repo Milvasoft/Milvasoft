@@ -4,8 +4,16 @@ using Swashbuckle.AspNetCore.SwaggerGen;
 
 namespace Milvasoft.Components.Swagger.OperationFilters;
 
+/// <summary>
+/// Provides file upload in swagger ui.
+/// </summary>
 public class SwaggerFileOperationFilter : IOperationFilter
 {
+    /// <summary>
+    /// Modifies operation.
+    /// </summary>
+    /// <param name="operation"></param>
+    /// <param name="context"></param>
     public void Apply(OpenApiOperation operation, OperationFilterContext context)
     {
         var fileUploadMime = "multipart/form-data";

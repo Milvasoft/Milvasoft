@@ -12,6 +12,7 @@ public static class LocalizationServiceCollectionExtensions
     /// Add services the service collection
     /// </summary>
     /// <param name="services"></param>
+    /// <param name="configurationManager"></param>
     /// <returns></returns>
     public static LocalizationBuilder AddMilvaLocalization(this IServiceCollection services, IConfigurationManager configurationManager = null)
         => new(services, configurationManager);

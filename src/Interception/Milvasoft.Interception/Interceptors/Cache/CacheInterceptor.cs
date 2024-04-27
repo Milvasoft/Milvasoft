@@ -15,8 +15,13 @@ public class CacheInterceptor : IMilvaInterceptor
     private readonly ICacheInterceptionOptions _interceptionOptions;
     private readonly IServiceProvider _serviceProvider;
 
+    /// <inheritdoc/>
     public int InterceptionOrder { get; set; } = 0;
 
+    /// <summary>
+    /// Initializes new instance with <paramref name="serviceProvider"/>
+    /// </summary>
+    /// <param name="serviceProvider"></param>
     public CacheInterceptor(IServiceProvider serviceProvider)
     {
         _serviceProvider = serviceProvider;
@@ -30,6 +35,7 @@ public class CacheInterceptor : IMilvaInterceptor
         }
     }
 
+    /// <inheritdoc/>
     public async Task OnInvoke(Call call)
     {
         //If cache provider is null do nothing, just proceed to next invocation

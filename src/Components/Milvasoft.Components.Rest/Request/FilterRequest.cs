@@ -82,7 +82,9 @@ public class FilterRequest
     /// Gets the value with the correct type for the given property.
     /// </summary>
     /// <typeparam name="TEntity"></typeparam>
+    /// <param name="filter"></param>
     /// <param name="value"></param>
+    /// <param name="propertyUnderlyingType"></param>
     /// <param name="propertyName"></param>
     /// <returns></returns>
     private static object GetValueWithCorrectType<TEntity>(FilterCriteria filter, object value, Type propertyUnderlyingType, string propertyName)

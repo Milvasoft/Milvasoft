@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Milvasoft.Components.Rest.MilvaResponse;
 
 namespace Milvasoft.Interception.Interceptors.Logging;
 
@@ -7,16 +8,22 @@ namespace Milvasoft.Interception.Interceptors.Logging;
 /// </summary>
 public class LogInterceptionOptions : ILogInterceptionOptions
 {
+    /// <inheritdoc/>
     public static string SectionName { get; } = $"{MilvaConstant.ParentSectionName}:Interception:Log";
 
+    /// <inheritdoc/>
     public ServiceLifetime InterceptorLifetime { get; set; } = ServiceLifetime.Scoped;
 
+    /// <inheritdoc/>
     public bool AsyncLogging { get; set; } = true;
 
+    /// <inheritdoc/>
     public bool LogDefaultParameters { get; set; } = true;
 
+    /// <inheritdoc/>
     public bool ExcludeResponseMetadataFromLog { get; set; } = false;
 
+    /// <inheritdoc/>
     public Func<IServiceProvider, object> ExtraLoggingPropertiesSelector { get; set; }
 }
 
@@ -37,7 +44,7 @@ public interface ILogInterceptionOptions : IInterceptionOptions
     public bool LogDefaultParameters { get; set; }
 
     /// <summary>
-    /// If you are using the milva <see cref="IResponse"/> infrastructure and logging response objects, send this option to true if you do not want to log the <see cref="IResponse.Metadatas"/> information in the <see cref="IResponse"/> object. 
+    /// If you are using the milva <see cref="IResponse"/> infrastructure and logging response objects, send this option to true if you do not want to log the <see cref="IHasMetadata.Metadatas"/> information in the <see cref="IResponse"/> object. 
     /// </summary>
     public bool ExcludeResponseMetadataFromLog { get; set; }
 

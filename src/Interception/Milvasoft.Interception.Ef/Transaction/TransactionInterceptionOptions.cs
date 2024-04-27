@@ -10,8 +10,10 @@ namespace Milvasoft.Interception.Ef.Transaction;
 /// </summary>
 public class TransactionInterceptionOptions : HaveDbContextType, ITransactionInterceptionOptions
 {
+    /// <inheritdoc/>
     public static string SectionName { get; } = $"{MilvaConstant.ParentSectionName}:Interception:Transaction";
 
+    /// <inheritdoc/>
     public ServiceLifetime InterceptorLifetime { get; set; } = ServiceLifetime.Scoped;
 }
 

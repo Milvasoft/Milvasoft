@@ -22,11 +22,20 @@ public class CacheAttribute : DecorateAttribute
     /// </summary>
     public int? Timeout { get; set; } = 300;
 
+    /// <summary>
+    /// Initializes new instance with <paramref name="key"/>
+    /// </summary>
+    /// <param name="key"></param>
     public CacheAttribute(string key) : base(typeof(CacheInterceptor))
     {
         Key = key;
     }
 
+    /// <summary>
+    /// Initializes new instance with <paramref name="key"/> and <paramref name="timeout"/>
+    /// </summary>
+    /// <param name="key"></param>
+    /// <param name="timeout"></param>
     public CacheAttribute(string key, int timeout) : base(typeof(CacheInterceptor))
     {
         Key = key;

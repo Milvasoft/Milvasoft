@@ -12,6 +12,9 @@ namespace Milvasoft.Interception.Ef.WithNoLock;
 [ConfigureAwait(false)]
 public partial class WithNoLockInterceptor(IServiceProvider serviceProvider) : IMilvaInterceptor
 {
+    /// <summary>
+    /// Interception call order.
+    /// </summary>
     public int InterceptionOrder { get; set; } = -997;
 
     private readonly IServiceProvider _serviceProvider = serviceProvider;
@@ -21,6 +24,11 @@ public partial class WithNoLockInterceptor(IServiceProvider serviceProvider) : I
         IsolationLevel = IsolationLevel.ReadUncommitted,
     };
 
+    /// <summary>
+    /// Starts db with(nolock) operation.
+    /// </summary>
+    /// <param name="call"></param>
+    /// <returns></returns>
     public async Task OnInvoke(Call call)
     {
         var withNoLockAttribute = call.GetInterceptorAttribute<WithNoLockAttribute>();

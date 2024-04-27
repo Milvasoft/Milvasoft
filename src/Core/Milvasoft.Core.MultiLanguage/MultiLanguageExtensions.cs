@@ -4,6 +4,10 @@ using System.Linq.Expressions;
 using System.Reflection;
 
 namespace Milvasoft.Core.MultiLanguage;
+
+/// <summary>
+/// Multilingual helper extensions.
+/// </summary>
 public static class MultiLanguageExtensions
 {
     private const string _sourceParameterName = "c";
@@ -18,9 +22,9 @@ public static class MultiLanguageExtensions
     /// Creates projection expression with requested properties for <see cref="IHasTranslation{TTranslationEntity}"/>.
     /// </summary>
     /// <typeparam name="TEntity"></typeparam>
+    /// <typeparam name="TTranslationEntity"></typeparam>
     /// <param name="mainEntityPropertyNames"></param>
     /// <param name="translationEntityPropertyNames"></param>
-    /// <param name="translationEntityType"></param>
     /// <returns>Sample; e => new HasTranslationEntity { Id = e.Id, Translations = e.Translations.Select(t=> new TranslationEntity { Name = t.Name } ).ToList() } </returns>
     public static Expression<Func<TEntity, TEntity>> CreateProjectionExpression<TEntity, TTranslationEntity>(IEnumerable<string> mainEntityPropertyNames,
                                                                                                              IEnumerable<string> translationEntityPropertyNames)

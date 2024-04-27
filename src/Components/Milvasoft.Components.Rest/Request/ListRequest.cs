@@ -65,6 +65,9 @@ public record ListRequest : IListRequest
     }
 }
 
+/// <summary>
+/// List request abstraction.
+/// </summary>
 public interface IListRequest
 {
     /// <summary>

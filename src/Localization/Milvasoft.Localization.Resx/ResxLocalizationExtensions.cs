@@ -20,6 +20,7 @@ public static class ResxLocalizationExtensions
     /// Registers <see cref="ResxLocalizationManager{TResource}"/> as <see cref="ILocalizationManager"/>.
     /// Adds Microsoft localiztion services to service collection.
     /// </summary>
+    /// <param name="builder"></param>
     /// <param name="localizationOptions"></param>
     /// <returns></returns>
     public static LocalizationBuilder WithResxManager<TResource>(this LocalizationBuilder builder, Action<ResxLocalizationOptions> localizationOptions)

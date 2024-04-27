@@ -8,6 +8,10 @@ using Milvasoft.Interception.Ef.Transaction;
 using Milvasoft.Interception.Ef.WithNoLock;
 
 namespace Milvasoft.Interception.Ef;
+
+/// <summary>
+/// Service collection extensions for using ef interceptors.
+/// </summary>
 public static class ServiceCollectionExtensions
 {
     #region Transaction
@@ -15,7 +19,6 @@ public static class ServiceCollectionExtensions
     /// <summary>
     /// Decorates the specified service type descriptor inside <see cref="IServiceCollection"/>.
     /// </summary>
-    /// <typeparam name="T">Service type to be decorated</typeparam>
     public static InterceptionBuilder WithTransactionInterceptor(this InterceptionBuilder builder, Action<ITransactionInterceptionOptions> interceptionOptions)
     {
         var config = new TransactionInterceptionOptions();
@@ -33,7 +36,6 @@ public static class ServiceCollectionExtensions
     /// <summary>
     /// Decorates the specified service type descriptor inside <see cref="IServiceCollection"/>.
     /// </summary>
-    /// <typeparam name="T">Service type to be decorated</typeparam>
     public static InterceptionBuilder WithTransactionInterceptor(this InterceptionBuilder builder)
     {
         if (builder.ConfigurationManager == null)
@@ -95,7 +97,6 @@ public static class ServiceCollectionExtensions
     /// <summary>
     /// Decorates the specified service type descriptor inside <see cref="IServiceCollection"/>.
     /// </summary>
-    /// <typeparam name="T">Service type to be decorated</typeparam>
     public static InterceptionBuilder WithNoLockInterceptor(this InterceptionBuilder builder, Action<IWithNoLockInterceptionOptions> interceptionOptions)
     {
         var config = new WithNoLockInterceptionOptions();
@@ -113,7 +114,6 @@ public static class ServiceCollectionExtensions
     /// <summary>
     /// Decorates the specified service type descriptor inside <see cref="IServiceCollection"/>.
     /// </summary>
-    /// <typeparam name="T">Service type to be decorated</typeparam>
     public static InterceptionBuilder WithNoLockInterceptor(this InterceptionBuilder builder)
     {
         if (builder.ConfigurationManager == null)

@@ -12,12 +12,16 @@ public class CacheInterceptionOptions : ICacheInterceptionOptions
     private static Type _accessorType = null;
     private string _cacheAccessorAssemblyQualifiedName;
 
+    /// <inheritdoc/>
     public static string SectionName { get; } = $"{MilvaConstant.ParentSectionName}:Interception:Cache";
 
+    /// <inheritdoc/>
     public ServiceLifetime InterceptorLifetime { get; set; } = ServiceLifetime.Scoped;
 
+    /// <inheritdoc/>
     public bool IncludeRequestHeadersWhenCaching { get; set; } = true;
 
+    /// <inheritdoc/>
     public string CacheAccessorAssemblyQualifiedName
     {
         get => _cacheAccessorAssemblyQualifiedName;
@@ -28,6 +32,7 @@ public class CacheInterceptionOptions : ICacheInterceptionOptions
         }
     }
 
+    /// <inheritdoc/>
     public Type CacheAccessorType
     {
         get => _accessorType;
@@ -38,8 +43,10 @@ public class CacheInterceptionOptions : ICacheInterceptionOptions
         }
     }
 
+    /// <inheritdoc/>
     public Func<IServiceProvider, string> CacheKeyConfigurator { get; set; }
 
+    /// <inheritdoc/>
     public Type GetAccessorType() => _accessorType ??= typeof(ICacheAccessor<>).MakeGenericType(Type.GetType(_cacheAccessorAssemblyQualifiedName));
 }
 

@@ -42,6 +42,7 @@ public sealed class Decorator
     /// <typeparam name="TInterface">Interface for a decorated object to implement.</typeparam>
     /// <typeparam name="TImplementation">Class for a decorated object to decorate.</typeparam>
     /// <param name="targetObject">Object to be decorated.</param>
+    /// <param name="serviceProvider">Service provider.</param>
     /// <returns>A dynamic proxy with <see cref="IMilvaInterceptor"/> instances as interceptors.</returns>
     public TInterface For<TInterface, TImplementation>(TImplementation targetObject, IServiceProvider serviceProvider) where TImplementation : TInterface
         => (TInterface)For(typeof(TInterface), targetObject, serviceProvider);
@@ -51,6 +52,7 @@ public sealed class Decorator
     /// </summary>
     /// <typeparam name="TImplementation">Class for a decorated object to decorate.</typeparam>
     /// <param name="targetObject">Object to be decorated.</param>
+    /// <param name="serviceProvider">Service provider.</param>
     /// <returns>A dynamic proxy with <see cref="IMilvaInterceptor"/> instances as interceptors.</returns>
     public TImplementation For<TImplementation>(TImplementation targetObject, IServiceProvider serviceProvider)
         => (TImplementation)For(typeof(TImplementation), targetObject, serviceProvider);
@@ -60,6 +62,7 @@ public sealed class Decorator
     /// </summary>
     /// <param name="type">Type of the target object.</param>
     /// <param name="targetObject">Object to be decorated.</param>
+    /// <param name="serviceProvider">Service provider.</param>
     /// <returns>A dynamic proxy with <see cref="IMilvaInterceptor"/> instances as interceptors.</returns>
     public object For(Type type, object targetObject, IServiceProvider serviceProvider)
     {
@@ -79,6 +82,7 @@ public sealed class Decorator
     /// </summary>
     /// <typeparam name="TImplementation"></typeparam>
     /// <param name="targetObject"></param>
+    /// <param name="serviceProvider">Service provider.</param>
     /// <returns></returns>
     private DecoratorInterceptor BuildDecoratorInterceptor<TImplementation>(TImplementation targetObject, IServiceProvider serviceProvider)
     {

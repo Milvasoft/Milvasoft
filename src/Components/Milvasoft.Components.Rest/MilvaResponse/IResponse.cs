@@ -66,5 +66,5 @@ public interface IHasMetadata
     /// Retrieves the data and its corresponding type from the response.
     /// </summary>
     /// <returns>A tuple containing the data object and its type.</returns>
-    (object Data, Type DataType) GetResponseData();
+    (object Data, Type DataType) GetResponseDataTypePair();
 }

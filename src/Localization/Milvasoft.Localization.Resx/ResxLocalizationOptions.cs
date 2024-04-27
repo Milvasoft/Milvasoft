@@ -8,6 +8,7 @@ namespace Milvasoft.Localization.Resx;
 /// </summary>
 public class ResxLocalizationOptions : LocalizationOptions
 {
+    /// <inheritdoc/>
     public new static string SectionName { get; } = $"{MilvaConstant.ParentSectionName}:Localization:Resx";
 
     /// <summary>

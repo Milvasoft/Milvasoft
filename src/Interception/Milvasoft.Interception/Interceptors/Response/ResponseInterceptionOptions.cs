@@ -9,16 +9,22 @@ namespace Milvasoft.Interception.Interceptors.Response;
 /// </summary>
 public class ResponseInterceptionOptions : IResponseInterceptionOptions
 {
+    /// <inheritdoc/>
     public static string SectionName { get; } = $"{MilvaConstant.ParentSectionName}:Interception:Response";
 
+    /// <inheritdoc/>
     public ServiceLifetime InterceptorLifetime { get; set; } = ServiceLifetime.Scoped;
 
+    /// <inheritdoc/>
     public bool TranslateResultMessages { get; set; } = true;
 
+    /// <inheritdoc/>
     public bool TranslateMetadata { get; set; } = true;
 
+    /// <inheritdoc/>
     public Func<IServiceProvider, HideByRoleAttribute, bool> HideByRoleFunc { get; set; }
 
+    /// <inheritdoc/>
     public Func<string, IMilvaLocalizer, Type, string, string> ApplyLocalizationFunc { get; set; }
 }
 
