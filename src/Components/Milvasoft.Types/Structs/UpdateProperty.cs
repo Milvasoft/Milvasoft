@@ -1,7 +1,7 @@
 ﻿namespace Milvasoft.Types.Structs;
 
 /// <summary>
-/// Represents a generic updatable property.
+/// Represents a generic updatable property. 
 /// </summary>
 /// <typeparam name="T">The type of the property value.</typeparam>
 [System.Diagnostics.CodeAnalysis.SuppressMessage("Minor Bug", "S2328:\"GetHashCode\" should not reference mutable fields", Justification = "<Pending>")]
