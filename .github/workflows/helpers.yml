@@ -4,11 +4,11 @@ on:
   push:
     branches: [ master ]
     paths:
-      - 'Milvasoft.**'
+      - 'src/**'
   pull_request:
     branches: [ master ]
     paths:
-      - 'Milvasoft.**'
+      - 'src/**'
 
 jobs:
   build:
@@ -21,10 +21,10 @@ jobs:
         with:
           dotnet-version: 8.0.x
       - name: Restore Milvasoft.Helpers project dependencies
-        run: dotnet restore Milvasoft.Helpers/Milvasoft.Helpers.csproj
+        run: dotnet restore src/Milvasoft.Helpers/Milvasoft.Helpers.csproj
       - name: Build Milvasoft.Helpers project
-        run: dotnet build Milvasoft.Helpers/Milvasoft.Helpers.csproj --no-restore --configuration Release
+        run: dotnet build src/Milvasoft.Helpers/Milvasoft.Helpers.csproj --no-restore --configuration Release
       - name: Pack Milvasoft.Helpers project
-        run: dotnet pack Milvasoft.Helpers/Milvasoft.Helpers.csproj --no-build --configuration Release --include-symbols -p:SymbolPackageFormat=snupkg -o .
+        run: dotnet pack src/Milvasoft.Helpers/Milvasoft.Helpers.csproj --no-build --configuration Release --include-symbols -p:SymbolPackageFormat=snupkg -o .
       - name: Publish package to NuGet
         run: dotnet nuget push *.nupkg --api-key ${{secrets.NUGET_API_KEY}} --source "https://api.nuget.org/v3/index.json" --skip-duplicate
