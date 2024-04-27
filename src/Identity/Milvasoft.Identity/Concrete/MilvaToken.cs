@@ -4,7 +4,7 @@ using System.Text.Json.Serialization;
 namespace Milvasoft.Identity.Concrete;
 
 /// <summary>
-/// Token representation.
+/// Represents token.
 /// </summary>
 public record MilvaToken : IToken
 {
