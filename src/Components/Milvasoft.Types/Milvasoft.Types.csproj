@@ -20,11 +20,7 @@
 		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	  </None>
   </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Structs\" />
-  </ItemGroup>
-
+	
 	<PropertyGroup>
 
 		<PackageId>Milvasoft.Types</PackageId>
