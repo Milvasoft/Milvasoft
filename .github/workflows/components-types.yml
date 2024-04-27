@@ -1,14 +1,14 @@
-name: Milvasoft.Components.Types Nuget Publish
+name: Milvasoft.Types Nuget Publish
 
 on:
   push:
     branches: [ master ]
     paths:
-      - 'src/Components/Milvasoft.Components.Types/**'
+      - 'src/Components/Milvasoft.Types/**'
   pull_request:
     branches: [ master ]
     paths:
-      - 'src/Components/Milvasoft.Components.Types/**'
+      - 'src/Components/Milvasoft.Types/**'
 
 jobs:
   build:
@@ -20,11 +20,11 @@ jobs:
         uses: actions/setup-dotnet@v1
         with:
           dotnet-version: 8.0.x
-      - name: Restore Milvasoft.Components.Types project dependencies
-        run: dotnet restore src/Components/Milvasoft.Components.Types/Milvasoft.Components.Types.csproj
-      - name: Build Milvasoft.Components.Types project
-        run: dotnet build src/Components/Milvasoft.Components.Types/Milvasoft.Components.Types.csproj --no-restore --configuration Release
-      - name: Pack Milvasoft.Components.Types project
-        run: dotnet pack src/Components/Milvasoft.Components.Types/Milvasoft.Components.Types.csproj --no-build --configuration Release --include-symbols -p:SymbolPackageFormat=snupkg -o .
+      - name: Restore Milvasoft.Types project dependencies
+        run: dotnet restore src/Components/Milvasoft.Types/Milvasoft.Types.csproj
+      - name: Build Milvasoft.Types project
+        run: dotnet build src/Components/Milvasoft.Types/Milvasoft.Types.csproj --no-restore --configuration Release
+      - name: Pack Milvasoft.Types project
+        run: dotnet pack src/Components/Milvasoft.Types/Milvasoft.Types.csproj --no-build --configuration Release --include-symbols -p:SymbolPackageFormat=snupkg -o .
       - name: Publish package to NuGet
         run: dotnet nuget push *.nupkg --api-key ${{secrets.NUGET_API_KEY}} --source "https://api.nuget.org/v3/index.json" --skip-duplicate
