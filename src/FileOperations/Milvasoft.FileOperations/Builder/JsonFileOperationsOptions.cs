@@ -4,7 +4,7 @@ using System.Globalization;
 namespace Milvasoft.FileOperations.Builder;
 
 /// <summary>
-/// Json operations config for json file operations.
+/// Json operations config for json file operations. 
 /// </summary>
 public interface IJsonFileOperationOptions : IMilvaOptions
 {

@@ -6,7 +6,7 @@ using Milvasoft.MultiTenancy.Store;
 namespace Milvasoft.MultiTenancy.Stores.Redis;
 
 /// <summary>
-/// Cached tenant store. Sample store for <see cref="ITenantStore{TTenant, TKey}"/>
+/// Cached tenant store. Sample store for <see cref="ITenantStore{TTenant, TKey}"/>.
 /// </summary>
 /// <remarks>
 /// Creates new instance of <see cref="CachedTenantStore{TTenant, TKey}"/>

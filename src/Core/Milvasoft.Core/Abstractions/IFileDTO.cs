@@ -3,7 +3,7 @@
 namespace Milvasoft.Core.Abstractions;
 
 /// <summary>
-/// Abstraction for multiple file upload process.
+/// Abstraction for multiple file upload process. 
 /// </summary>
 public interface IFileDto
 {

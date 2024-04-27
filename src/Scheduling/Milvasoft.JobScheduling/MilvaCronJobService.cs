@@ -4,7 +4,7 @@ using Microsoft.Extensions.Hosting;
 namespace Milvasoft.JobScheduling;
 
 /// <summary>
-/// Provides scheduled job operations.
+/// Provides scheduled job operations. 
 /// </summary>
 /// <remarks>
 /// Initializes new instances of <see cref="MilvaCronJobService"/>

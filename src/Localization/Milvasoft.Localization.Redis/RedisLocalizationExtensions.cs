@@ -15,7 +15,7 @@ using Milvasoft.Localization.Builder;
 namespace Milvasoft.Localization.Redis;
 
 /// <summary>
-/// Provides registration of redis localization services.
+/// Provides registration of redis localization services. 
 /// </summary>
 public static class RedisLocalizationExtensions
 {

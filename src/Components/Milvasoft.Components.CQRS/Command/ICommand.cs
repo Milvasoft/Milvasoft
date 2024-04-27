@@ -4,7 +4,7 @@ using Milvasoft.Components.Rest.MilvaResponse;
 namespace Milvasoft.Components.CQRS.Command;
 
 /// <summary>
-/// Abstraction for <see cref="Response"/> typed requests.
+/// Abstraction for <see cref="Response"/> typed requests. 
 /// </summary>
 public interface ICommand : IRequest<Response>
 {

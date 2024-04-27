@@ -5,7 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 namespace Milvasoft.Localization.Builder;
 
 /// <summary>
-/// Configure localization services.
+/// Configure localization services. 
 /// </summary>
 /// <remarks>
 /// Creates new instance of <see cref="LocalizationBuilder"/>.

@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 namespace Milvasoft.Attributes.Validation;
 
 /// <summary>
-/// Validates value is defined in enum.
+/// Validates value is defined in enum. 
 /// </summary>
 [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field, AllowMultiple = false)]
 public class ValidateEnumAttribute : ValidationAttribute

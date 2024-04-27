@@ -3,7 +3,7 @@
 namespace Milvasoft.Types.Classes;
 
 /// <summary>
-/// A locale specific string value.
+/// A locale specific string value. 
 /// </summary>
 public class LocalizedValue
 {

@@ -1,7 +1,7 @@
 ﻿namespace Milvasoft.Identity.Abstract;
 
 /// <summary>
-/// Login and sign up processes are happens with this dto.
+/// Login and sign up processes are happens with this dto. 
 /// </summary>
 public interface ILoginDto
 {

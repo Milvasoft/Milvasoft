@@ -1,7 +1,7 @@
 ﻿namespace Milvasoft.Interception.Ef.Builder;
 
 /// <summary>
-/// Represents the options for no lock interception.
+/// Represents the options for no lock interception. 
 /// </summary>
 public interface IHaveDbContextType
 {

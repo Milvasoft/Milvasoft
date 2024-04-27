@@ -10,7 +10,7 @@ using Milvasoft.MultiTenancy.Store;
 namespace Milvasoft.MultiTenancy.Builder;
 
 /// <summary>
-/// Configure tenant services.
+/// Configure tenant services. 
 /// </summary>
 public class TenantBuilder<TTenant, TKey>
 where TTenant : class, IMilvaTenantBase<TKey>

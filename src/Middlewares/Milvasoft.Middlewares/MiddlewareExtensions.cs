@@ -4,7 +4,7 @@ using Milvasoft.Middlewares.ResponseTimeCalculator;
 namespace Milvasoft.Middlewares;
 
 /// <summary>
-/// Provides registration of milva middlewares.
+/// Provides registration of milva middlewares. 
 /// </summary>
 public static class MiddlewareExtensions
 {

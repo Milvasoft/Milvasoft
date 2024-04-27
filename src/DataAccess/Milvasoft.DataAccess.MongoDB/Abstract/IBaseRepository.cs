@@ -6,7 +6,7 @@ using System.Linq.Expressions;
 namespace Milvasoft.DataAccess.MongoDB.Abstract;
 
 /// <summary>
-/// Base repository for concrete repositories. All repositories must be have this methods.
+/// Base repository for concrete repositories. All repositories must be have this methods. 
 /// </summary>
 /// <typeparam name="TEntity"></typeparam>
 public interface IBaseRepository<TEntity> where TEntity : class, IAuditable<ObjectId>

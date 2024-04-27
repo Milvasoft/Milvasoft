@@ -4,7 +4,7 @@ using System.Net.Mime;
 namespace Milvasoft.Notification.Mail.Smtp;
 
 /// <summary>
-/// Provides send mail.
+/// Provides send mail. 
 /// </summary>
 public interface IMilvaMailSender
 {

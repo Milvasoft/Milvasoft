@@ -3,7 +3,7 @@ using System.Net;
 
 namespace Milvasoft.Caching.Redis.Accessor;
 
-/// <summary>
+/// <summary> 
 /// Provides caching operations.
 /// </summary>
 public interface IRedisAccessor : ICacheAccessor<RedisAccessor>

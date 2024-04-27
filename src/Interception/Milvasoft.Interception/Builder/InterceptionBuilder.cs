@@ -4,7 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 namespace Milvasoft.Interception.Builder;
 
 /// <summary>
-/// Represents a builder for configuring interception services.
+/// Represents a builder for configuring interception services. 
 /// </summary>
 /// <remarks>
 /// This class creates a new instance of the <see cref="InterceptionBuilder"/> and provides methods for configuring interception services.

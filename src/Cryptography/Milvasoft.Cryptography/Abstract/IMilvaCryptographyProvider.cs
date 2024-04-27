@@ -1,7 +1,7 @@
 ﻿namespace Milvasoft.Cryptography.Abstract;
 
 /// <summary>
-/// Provides file encryption and decryption with AES Algorithm. Milvasoft Corporation is not responsible of possible data loss.
+/// Provides file encryption and decryption with AES Algorithm. Milvasoft Corporation is not responsible of possible data loss. 
 /// </summary>
 public interface IMilvaCryptographyProvider
 {

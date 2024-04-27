@@ -5,7 +5,7 @@ using System.Text.Json.Serialization;
 namespace Milvasoft.Notification.Push.Expo.PushNotification;
 
 /// <summary>
-/// Expo client for push api requests.
+/// Expo client for push api requests. 
 /// </summary>
 public class ExpoClient : IDisposable
 {

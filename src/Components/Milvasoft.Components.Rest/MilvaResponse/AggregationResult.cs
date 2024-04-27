@@ -3,7 +3,7 @@
 namespace Milvasoft.Components.Rest.MilvaResponse;
 
 /// <summary>
-/// Represents the result of an aggregation operation.
+/// Represents the result of an aggregation operation. 
 /// </summary>
 public class AggregationResult
 {

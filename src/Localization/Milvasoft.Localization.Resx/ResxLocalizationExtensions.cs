@@ -12,7 +12,7 @@ using LocalizationOptions = Milvasoft.Localization.Builder.LocalizationOptions;
 namespace Milvasoft.Localization.Resx;
 
 /// <summary>
-/// Provides registration of resx localization services.
+/// Provides registration of resx localization services. 
 /// </summary>
 public static class ResxLocalizationExtensions
 {
