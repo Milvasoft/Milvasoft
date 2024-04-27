@@ -810,22 +810,42 @@
         </member>
         <member name="T:Milvasoft.Identity.Concrete.MilvaToken">
             <summary>
-            Login result DTO for DI.
+            Token representation.
             </summary>
         </member>
         <member name="P:Milvasoft.Identity.Concrete.MilvaToken.AccessToken">
             <summary>
-            If result is success sets the token.
+            Gets or sets the access token if the result is successful.
             </summary>
         </member>
         <member name="P:Milvasoft.Identity.Concrete.MilvaToken.Expiration">
             <summary>
-            Expiration data of <see cref="P:Milvasoft.Identity.Concrete.MilvaToken.AccessToken"/>.
+            Gets or sets the expiration date of the access token.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Identity.Concrete.MilvaToken.RefreshTokenExpiration">
+            <summary>
+            Gets or sets the expiration date of the refresh token.
             </summary>
         </member>
         <member name="P:Milvasoft.Identity.Concrete.MilvaToken.RefreshToken">
             <summary>
-            Refresh token.
+            Gets or sets the refresh token.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Identity.Concrete.MilvaToken.TokenType">
+            <summary>
+            Gets or sets the type of the token.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Identity.Concrete.MilvaToken.SessionState">
+            <summary>
+            Gets or sets the session state.
+            </summary>
+        </member>
+        <member name="P:Milvasoft.Identity.Concrete.MilvaToken.Scope">
+            <summary>
+            Gets or sets the scope of the token.
             </summary>
         </member>
         <member name="T:Milvasoft.Identity.Concrete.MilvaUserManager`2">
