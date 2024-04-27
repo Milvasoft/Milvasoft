@@ -21,10 +21,10 @@ jobs:
         with:
           dotnet-version: 8.0.x
       - name: Restore Milvasoft.Attributes.Annotations project dependencies
-        run: dotnet restore src/Components/Milvasoft.Attributes.Annotations/Milvasoft.Attributes.csproj
+        run: dotnet restore src/Components/Milvasoft.Attributes.Annotations/Milvasoft.Attributes.Annotations.csproj
       - name: Build Milvasoft.Attributes.Annotations project
-        run: dotnet build src/Components/Milvasoft.Attributes.Annotations/Milvasoft.Attributes.csproj --no-restore --configuration Release
+        run: dotnet build src/Components/Milvasoft.Attributes.Annotations/Milvasoft.Attributes.Annotations.csproj --no-restore --configuration Release
       - name: Pack Milvasoft.Attributes.Annotations project
-        run: dotnet pack src/Components/Milvasoft.Attributes.Annotations/Milvasoft.Attributes.csproj --no-build --configuration Release --include-symbols -p:SymbolPackageFormat=snupkg -o .
+        run: dotnet pack src/Components/Milvasoft.Attributes.Annotations/Milvasoft.Attributes.Annotations.csproj --no-build --configuration Release --include-symbols -p:SymbolPackageFormat=snupkg -o .
       - name: Publish package to NuGet
         run: dotnet nuget push *.nupkg --api-key ${{secrets.NUGET_API_KEY}} --source "https://api.nuget.org/v3/index.json" --skip-duplicate

@@ -5,7 +5,7 @@ using System.Text.RegularExpressions;
 namespace Milvasoft.FileOperations.Concrete;
 
 /// <summary>
-/// <see cref="IFormFile"/> operations for .NET Core.
+/// <see cref="IFormFile"/> operations for .NET 3.1+. 
 /// </summary>
 public static partial class FormFileOperations
 {

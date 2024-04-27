@@ -1,7 +1,7 @@
 ﻿namespace Milvasoft.Attributes.Annotations;
 
 /// <summary>
-/// Contains decimal precision and scale information. 
+/// Contains decimal precision and scale information.
 /// </summary>
 [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field, AllowMultiple = false)]
 public class DecimalPrecisionAttribute : Attribute

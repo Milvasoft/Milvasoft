@@ -21,10 +21,10 @@ jobs:
         with:
           dotnet-version: 8.0.x
       - name: Restore Milvasoft.FileOperations project dependencies
-        run: dotnet restore src/FileOperationsMilvasoft.FileOperations/Milvasoft.FileOperations.csproj
+        run: dotnet restore src/FileOperations/Milvasoft.FileOperations/Milvasoft.FileOperations.csproj
       - name: Build Milvasoft.FileOperations project
-        run: dotnet build src/FileOperationsMilvasoft.FileOperations/Milvasoft.FileOperations.csproj --no-restore --configuration Release
+        run: dotnet build src/FileOperations/Milvasoft.FileOperations/Milvasoft.FileOperations.csproj --no-restore --configuration Release
       - name: Pack Milvasoft.FileOperations project
-        run: dotnet pack src/FileOperationsMilvasoft.FileOperations/Milvasoft.FileOperations.csproj --no-build --configuration Release --include-symbols -p:SymbolPackageFormat=snupkg -o .
+        run: dotnet pack src/FileOperations/Milvasoft.FileOperations/Milvasoft.FileOperations.csproj --no-build --configuration Release --include-symbols -p:SymbolPackageFormat=snupkg -o .
       - name: Publish package to NuGet
         run: dotnet nuget push *.nupkg --api-key ${{secrets.NUGET_API_KEY}} --source "https://api.nuget.org/v3/index.json" --skip-duplicate
