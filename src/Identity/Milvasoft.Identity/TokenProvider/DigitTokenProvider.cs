@@ -15,7 +15,7 @@ public static class DigitTokenProvider<TUser, TKey> where TUser : MilvaUser<TKey
     /// Generates a token for the specified <paramref name="user"/> and <paramref name="purpose"/>.
     /// </summary>
     /// <param name="purpose">The purpose the token will be used for.</param>
-    /// <param name="user">The user a token should be generated for.</param>
+    /// <param name="user">The user a token should be generated for. </param>
     /// <returns>
     /// The <see cref="Task"/> that represents the asynchronous operation, containing the token for the specified 
     /// <paramref name="user"/> and <paramref name="purpose"/>.

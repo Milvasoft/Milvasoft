@@ -5,6 +5,7 @@ using System.Runtime.Serialization;
 namespace Milvasoft.Components.Rest.MilvaResponse;
 
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
+
 /// <summary>
 /// Listed or paginated response.
 /// </summary>
