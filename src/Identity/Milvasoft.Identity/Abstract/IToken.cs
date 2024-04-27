@@ -11,14 +11,14 @@ public interface IToken
     public string AccessToken { get; set; }
 
     /// <summary>
-    /// Gets or sets the expiration date of the access token.
+    /// Gets or sets the expiration date of the access token. (second)
     /// </summary>
-    public DateTime Expiration { get; set; }
+    public int ExpiresIn { get; set; }
 
     /// <summary>
-    /// Gets or sets the expiration date of the refresh token.
+    /// Gets or sets the expiration date of the refresh token. (second)
     /// </summary>
-    public DateTime RefreshTokenExpiration { get; set; }
+    public int RefreshTokenExpiresIn { get; set; }
 
     /// <summary>
     /// Gets or sets the refresh token.
@@ -26,7 +26,7 @@ public interface IToken
     public string RefreshToken { get; set; }
 
     /// <summary>
-    /// Gets or sets the type of the token.
+    /// Gets or sets the type of the token. etc. Bearer
     /// </summary>
     public string TokenType { get; set; }
 
