@@ -4,11 +4,11 @@ on:
   push:
     branches: [ master ]
     paths:
-      - 'Milvasoft.Identity/**'
+      - 'src/Identity/Milvasoft.Identity/**'
   pull_request:
     branches: [ master ]
     paths:
-      - 'Milvasoft.Identity/**'
+      - 'src/Identity/Milvasoft.Identity/**'
 
 jobs:
   build:
@@ -21,10 +21,10 @@ jobs:
         with:
           dotnet-version: 8.0.x
       - name: Restore Milvasoft.Identity project dependencies
-        run: dotnet restore Milvasoft.Identity/Milvasoft.Identity.csproj
+        run: dotnet restore src/Identity/Milvasoft.Identity/Milvasoft.Identity.csproj
       - name: Build Milvasoft.Identity project
-        run: dotnet build Milvasoft.Identity/Milvasoft.Identity.csproj --no-restore --configuration Release
+        run: dotnet build src/Identity/Milvasoft.Identity/Milvasoft.Identity.csproj --no-restore --configuration Release
       - name: Pack Milvasoft.Identity project
-        run: dotnet pack Milvasoft.Identity/Milvasoft.Identity.csproj --no-build --configuration Release --include-symbols -p:SymbolPackageFormat=snupkg -o .
+        run: dotnet pack src/Identity/Milvasoft.Identity/Milvasoft.Identity.csproj --no-build --configuration Release --include-symbols -p:SymbolPackageFormat=snupkg -o .
       - name: Publish package to NuGet
         run: dotnet nuget push *.nupkg --api-key ${{secrets.NUGET_API_KEY}} --source "https://api.nuget.org/v3/index.json" --skip-duplicate
