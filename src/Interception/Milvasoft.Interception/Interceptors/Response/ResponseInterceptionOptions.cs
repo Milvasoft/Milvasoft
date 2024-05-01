@@ -16,6 +16,12 @@ public class ResponseInterceptionOptions : IResponseInterceptionOptions
     public ServiceLifetime InterceptorLifetime { get; set; } = ServiceLifetime.Scoped;
 
     /// <inheritdoc/>
+    public bool ApplyMetadataRules { get; set; } = true;
+
+    /// <inheritdoc/>
+    public bool MetadataCreationEnabled { get; set; } = true;
+
+    /// <inheritdoc/>
     public bool TranslateResultMessages { get; set; } = true;
 
     /// <inheritdoc/>
@@ -33,6 +39,16 @@ public class ResponseInterceptionOptions : IResponseInterceptionOptions
 /// </summary>
 public interface IResponseInterceptionOptions : IInterceptionOptions
 {
+    /// <summary>
+    /// If it is true <see cref="ResponseInterceptor"/> apply metadata rules to response data. Default is true.
+    /// </summary>
+    public bool ApplyMetadataRules { get; set; }
+
+    /// <summary>
+    /// If it is true <see cref="ResponseInterceptor"/> create metadata for response. Default is true.
+    /// </summary>
+    public bool MetadataCreationEnabled { get; set; }
+
     /// <summary>
     /// If it is true <see cref="ResponseInterceptor"/> translate IResponseTyped response's result messages. Default is true.
     /// </summary>

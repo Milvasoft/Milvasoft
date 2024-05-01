@@ -25,6 +25,9 @@ public class ResponseInterceptor(IServiceProvider serviceProvider, IResponseInte
     {
         await call.NextAsync();
 
+        if (!_interceptionOptions.MetadataCreationEnabled && !_interceptionOptions.ApplyMetadataRules)
+            return;
+
         if (call.ReturnType.CanAssignableTo(typeof(IResponse)))
         {
             if (call.ReturnType.CanAssignableTo(typeof(IHasMetadata)))
@@ -77,6 +80,32 @@ public class ResponseInterceptor(IServiceProvider serviceProvider, IResponseInte
             if (prop == null)
                 return;
 
+            bool removePropMetadataFromResponse = false;
+            bool mask = false;
+
+            if (TryGetAttribute(prop, out HideByRoleAttribute hideByRoleAttribute) && hideByRoleAttribute.Roles.Length != 0 && (_interceptionOptions.HideByRoleFunc?.Invoke(_serviceProvider, hideByRoleAttribute) ?? false))
+                removePropMetadataFromResponse = true;
+
+            if (TryGetAttribute(prop, out MaskByRoleAttribute maskByRoleAttribute) && maskByRoleAttribute.Roles.Length != 0 && (_interceptionOptions.HideByRoleFunc?.Invoke(_serviceProvider, hideByRoleAttribute) ?? false))
+                mask = true;
+
+            if (TryGetAttribute(prop, out MaskAttribute _))
+                mask = true;
+
+            if (propObject != null && _interceptionOptions.ApplyMetadataRules)
+            {
+                if (dataTypeIsCollection)
+                {
+                    foreach (var item in propObject as IList)
+                        ApplyMetadataRulesToResponseData(item, prop, mask, removePropMetadataFromResponse);
+                }
+                else
+                    ApplyMetadataRulesToResponseData(propObject, prop, mask, removePropMetadataFromResponse);
+            }
+
+            if (!_interceptionOptions.MetadataCreationEnabled)
+                return;
+
             ResponseDataMetadata metadata = new()
             {
                 Metadatas = []
@@ -112,18 +141,6 @@ public class ResponseInterceptor(IServiceProvider serviceProvider, IResponseInte
                 return;
             }
 
-            bool removePropMetadataFromResponse = false;
-            bool mask = false;
-
-            if (TryGetAttribute(prop, out HideByRoleAttribute hideByRoleAttribute) && hideByRoleAttribute.Roles.Length != 0 && (_interceptionOptions.HideByRoleFunc?.Invoke(_serviceProvider, hideByRoleAttribute) ?? false))
-                removePropMetadataFromResponse = true;
-
-            if (TryGetAttribute(prop, out MaskByRoleAttribute maskByRoleAttribute) && maskByRoleAttribute.Roles.Length != 0 && (_interceptionOptions.HideByRoleFunc?.Invoke(_serviceProvider, hideByRoleAttribute) ?? false))
-                mask = true;
-
-            if (TryGetAttribute(prop, out MaskAttribute _))
-                mask = true;
-
             //Fill metadata object
             metadata.Display = !removePropMetadataFromResponse && (!TryGetAttribute(prop, out BrowsableAttribute browsableAttribute) || browsableAttribute.Browsable);
             metadata.Mask = mask;
@@ -136,17 +153,6 @@ public class ResponseInterceptor(IServiceProvider serviceProvider, IResponseInte
 
             if (!removePropMetadataFromResponse)
                 response.Metadatas.Add(metadata);
-
-            if (propObject != null)
-            {
-                if (dataTypeIsCollection)
-                {
-                    foreach (var item in propObject as IList)
-                        ApplyMetadataRulesToResponseData(item, prop, metadata, removePropMetadataFromResponse);
-                }
-                else
-                    ApplyMetadataRulesToResponseData(propObject, prop, metadata, removePropMetadataFromResponse);
-            }
         }
     }
 
@@ -157,7 +163,7 @@ public class ResponseInterceptor(IServiceProvider serviceProvider, IResponseInte
     /// <param name="prop"></param>
     /// <param name="metadata"></param>
     /// <param name="removeFromResponse"></param>
-    private static void ApplyMetadataRulesToResponseData(object responseObject, PropertyInfo prop, ResponseDataMetadata metadata, bool removeFromResponse)
+    private static void ApplyMetadataRulesToResponseData(object responseObject, PropertyInfo prop, bool mask, bool removeFromResponse)
     {
         if (removeFromResponse)
         {
@@ -169,7 +175,7 @@ public class ResponseInterceptor(IServiceProvider serviceProvider, IResponseInte
         }
 
         //Mask
-        if (metadata.Mask && prop.PropertyType == typeof(string))
+        if (mask && prop.PropertyType == typeof(string))
         {
             string propertyValue = (string)prop.GetValue(responseObject);
 

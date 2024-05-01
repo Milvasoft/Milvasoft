@@ -287,6 +287,8 @@ public static class InterceptionServiceCollectionExtensions
         {
             opt.InterceptorLifetime = options.InterceptorLifetime;
             opt.TranslateMetadata = options.TranslateMetadata;
+            opt.ApplyMetadataRules = options.ApplyMetadataRules;
+            opt.MetadataCreationEnabled = options.MetadataCreationEnabled;
             opt.TranslateResultMessages = options.TranslateResultMessages;
             opt.ApplyLocalizationFunc = options.ApplyLocalizationFunc;
             opt.HideByRoleFunc = options.HideByRoleFunc;
