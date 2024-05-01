@@ -14,7 +14,7 @@ namespace Milvasoft.Interception.Builder;
 public sealed class InterceptionBuilder(IServiceCollection services, IConfigurationManager configurationManager = null) : IMilvaBuilder
 {
     /// <inheritdoc/>
-    public IServiceCollection Services { get; } = services;
+    public IServiceCollection Services { get; internal set; } = services;
 
     /// <inheritdoc/>
     public IConfigurationManager ConfigurationManager { get; } = configurationManager;

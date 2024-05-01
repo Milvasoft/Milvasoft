@@ -116,23 +116,29 @@ public class InterceptorRunnerTests
 
         public Task LogAsync(string logEntry) => throw new NotImplementedException();
         public void Debug(string message) => throw new NotImplementedException();
+        public void Debug(string messageTemplate, params object[] propertyValues) => throw new NotImplementedException();
         public void Debug(Exception exception, string messageTemplate) => throw new NotImplementedException();
         public void Debug(Exception exception, string messageTemplate, params object[] propertyValues) => throw new NotImplementedException();
         public void Error(string message) => throw new NotImplementedException();
+        public void Error(string messageTemplate, params object[] propertyValues) => throw new NotImplementedException();
         public void Error(Exception exception, string messageTemplate) => throw new NotImplementedException();
         public void Error(Exception exception, string messageTemplate, params object[] propertyValues) => throw new NotImplementedException();
         public void Fatal(string message) => throw new NotImplementedException();
+        public void Fatal(string messageTemplate, params object[] propertyValues) => throw new NotImplementedException();
         public void Fatal(Exception exception, string messageTemplate) => throw new NotImplementedException();
         public void Fatal(Exception exception, string messageTemplate, params object[] propertyValues) => throw new NotImplementedException();
         public void Information(string message) => throw new NotImplementedException();
+        public void Information(string messageTemplate, params object[] propertyValues) => throw new NotImplementedException();
         public void Information(Exception exception, string messageTemplate) => throw new NotImplementedException();
         public void Information(Exception exception, string messageTemplate, params object[] propertyValues) => throw new NotImplementedException();
+        public void Verbose(string messageTemplate, params object[] propertyValues) => throw new NotImplementedException();
         public void Verbose(string message) => throw new NotImplementedException();
         public void Verbose(Exception exception, string messageTemplate) => throw new NotImplementedException();
         public void Verbose(Exception exception, string messageTemplate, params object[] propertyValues) => throw new NotImplementedException();
         public void Warning(string message) => throw new NotImplementedException();
         public void Warning(Exception exception, string messageTemplate) => throw new NotImplementedException();
         public void Warning(Exception exception, string messageTemplate, params object[] propertyValues) => throw new NotImplementedException();
+        public void Warning(string messageTemplate, params object[] propertyValues) => throw new NotImplementedException();
     }
 
     private static ServiceProvider GetServices()
