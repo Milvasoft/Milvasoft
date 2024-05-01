@@ -1,5 +1,6 @@
 ﻿using FluentAssertions;
 using Milvasoft.Core.Helpers;
+using Milvasoft.Core.Utils.Enums;
 using Milvasoft.UnitTests.CoreTests.HelperTests.StringTests.Fixtures;
 using System.Globalization;
 using System.Security.Cryptography;
@@ -209,6 +210,97 @@ public partial class StringHelperTests
 
         //Assert
         result.Should().Be(expected);
+    }
+
+    #endregion
+
+    #region Mask
+
+    [Theory]
+    [InlineData(null)]
+    [InlineData("")]
+    [InlineData(" ")]
+    public void Mask_WithInvalidString_ShouldDoNothing(string input)
+    {
+        // Arrange
+
+        // Act
+        var result = input.Mask();
+
+        // Assert
+        result.Should().Be(input);
+    }
+
+    [Fact]
+    public void Mask_WithValidString_ShouldMaskCorrectly()
+    {
+        // Arrange
+        var input = "tobemasked";
+
+        // Act
+        var result = input.Mask();
+
+        // Assert
+        result.Should().Be("tobe**sked");
+    }
+
+    [Fact]
+    public void Mask_WithValidStringAndCustomChar_ShouldMaskCorrectly()
+    {
+        // Arrange
+        var input = "tobemasked";
+
+        // Act
+        var result = input.Mask('-');
+
+        // Assert
+        result.Should().Be("tobe--sked");
+    }
+
+    [Fact]
+    public void Mask_WithValidStringAndInvalidPercentange_ShouldMaskCorrectly()
+    {
+        // Arrange
+        var input = "tobemasked";
+
+        // Act
+        var result = input.Mask(percentToApply: 0);
+
+        // Assert
+        result.Should().Be(input);
+    }
+
+    [Theory]
+    [InlineData(30, "tob***sked")]
+    [InlineData(50, "to*****ked")]
+    [InlineData(85, "t********d")]
+    [InlineData(100, "**********")]
+    public void Mask_WithValidStringCustomPercentange_ShouldMaskCorrectly(int percentToApply, string expectedResult)
+    {
+        // Arrange
+        var input = "tobemasked";
+
+        // Act
+        var result = input.Mask(percentToApply: percentToApply);
+
+        // Assert
+        result.Should().Be(expectedResult);
+    }
+
+    [Theory]
+    [InlineData(MaskOption.AtTheBeginingOfString, "---emasked")]
+    [InlineData(MaskOption.InTheMiddleOfString, "tob---sked")]
+    [InlineData(MaskOption.AtTheEndOfString, "tobemas---")]
+    public void Mask_WithValidStringAndCustomCharAndPercentangeAndOption_ShouldMaskCorrectly(MaskOption maskOption, string expectedResult)
+    {
+        // Arrange
+        var input = "tobemasked";
+
+        // Act
+        var result = input.Mask('-', 30, maskOption);
+
+        // Assert
+        result.Should().Be(expectedResult);
     }
 
     #endregion

@@ -1,4 +1,5 @@
-﻿using System.Globalization;
+﻿using Milvasoft.Core.Utils.Enums;
+using System.Globalization;
 using System.Security.Cryptography;
 
 namespace Milvasoft.Core.Helpers;
@@ -130,4 +131,43 @@ public static partial class CommonHelper
     /// <param name="value">The input string.</param>
     /// <returns>The normalized string according to the invariant culture.</returns>
     public static string MilvaNormalize(this string value) => !string.IsNullOrWhiteSpace(value) ? value.ToLower().ToUpperInvariant() : value;
+
+    /// <summary>
+    /// Masks string.
+    /// </summary>
+    /// <param name="input"></param>
+    /// <param name="maskChar"></param>
+    /// <param name="percentToApply"></param>
+    /// <param name="maskOptions"></param>
+    /// <returns></returns>
+    public static string Mask(this string input, char maskChar = '*', int percentToApply = 25, MaskOption maskOptions = MaskOption.InTheMiddleOfString)
+    {
+        if (string.IsNullOrWhiteSpace(input) || percentToApply < 1)
+            return input;
+
+        var result = input.Trim();
+
+        if (percentToApply >= 100)
+            return new string(maskChar, result.Length);
+
+        var maskLength = Math.Max((int)Math.Round(percentToApply * result.Length / 100m), 1);
+
+        var mask = new string(maskChar, maskLength);
+
+        switch (maskOptions)
+        {
+            case MaskOption.AtTheBeginingOfString:
+                result = string.Concat(mask, result.AsSpan(maskLength));
+                break;
+            case MaskOption.AtTheEndOfString:
+                result = string.Concat(result.AsSpan(0, result.Length - maskLength), mask);
+                break;
+            case MaskOption.InTheMiddleOfString:
+                var maskStart = (result.Length - maskLength) / 2;
+                result = string.Concat(result.AsSpan(0, maskStart), mask, result.AsSpan(maskStart + maskLength));
+                break;
+        }
+
+        return result;
+    }
 }

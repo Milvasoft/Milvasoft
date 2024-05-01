@@ -161,7 +161,7 @@ public class ResponseInterceptor(IServiceProvider serviceProvider, IResponseInte
     /// </summary>
     /// <param name="responseObject"></param>
     /// <param name="prop"></param>
-    /// <param name="metadata"></param>
+    /// <param name="mask"></param>
     /// <param name="removeFromResponse"></param>
     private static void ApplyMetadataRulesToResponseData(object responseObject, PropertyInfo prop, bool mask, bool removeFromResponse)
     {
@@ -181,9 +181,7 @@ public class ResponseInterceptor(IServiceProvider serviceProvider, IResponseInte
 
             if (propertyValue != null)
             {
-                int showCharCount = Convert.ToInt32(Math.Floor(propertyValue.Length * 0.25M));
-
-                propertyValue = $"{propertyValue[..showCharCount]}" + $"{new string('*', propertyValue.Length - showCharCount * 2)}" + $"{propertyValue[^showCharCount..]}";
+                propertyValue = propertyValue.Mask(percentToApply: 60);
 
                 prop.SetValue(responseObject, propertyValue);
             }
