@@ -29,6 +29,16 @@ public interface IMilvaLogger
     public void Verbose(string message);
 
     /// <summary>
+    /// Write a log event with verbose level.
+    /// </summary>
+    /// <param name="messageTemplate">Message template describing the event.</param>
+    /// <param name="propertyValues">Objects positionally formatted into the message template.</param>
+    /// <example>
+    /// Log.Verbose("Staring into space, wondering if we're {what}.", "alone");
+    /// </example>
+    public void Verbose(string messageTemplate, params object[] propertyValues);
+
+    /// <summary>
     /// Write a log event with the verbose level and associated exception.
     /// </summary>
     /// <param name="exception">Exception related to the event.</param>
@@ -57,6 +67,16 @@ public interface IMilvaLogger
     /// Log.Verbose("Staring into space, wondering if we're alone.");
     /// </example>
     public void Debug(string message);
+
+    /// <summary>
+    /// Write a log event with debug level.
+    /// </summary>
+    /// <param name="messageTemplate">Message template describing the event.</param>
+    /// <param name="propertyValues">Objects positionally formatted into the message template.</param>
+    /// <example>
+    /// Log.Verbose("Staring into {@from}, wondering where this comet came from.", space);
+    /// </example>
+    public void Debug(string messageTemplate, params object[] propertyValues);
 
     /// <summary>
     /// Write a log event with the debug level and associated exception.
@@ -89,6 +109,16 @@ public interface IMilvaLogger
     public void Information(string message);
 
     /// <summary>
+    /// Write a log event with information level.
+    /// </summary>
+    /// <param name="messageTemplate">Message template describing the event.</param>
+    /// <param name="propertyValues">Objects positionally formatted into the message template.</param>
+    /// <example>
+    /// Log.Information("Staring into {@from}, wondering where this comet came from.", space);
+    /// </example>
+    public void Information(string messageTemplate, params object[] propertyValues);
+
+    /// <summary>
     /// Write a log event with the information level and associated exception.
     /// </summary>
     /// <param name="exception">Exception related to the event.</param>
@@ -117,6 +147,16 @@ public interface IMilvaLogger
     /// Log.Verbose("Staring into space, wondering if we're alone.");
     /// </example>
     public void Warning(string message);
+
+    /// <summary>
+    /// Write a log event with warning level.
+    /// </summary>
+    /// <param name="messageTemplate">Message template describing the event.</param>
+    /// <param name="propertyValues">Objects positionally formatted into the message template.</param>
+    /// <example>
+    /// Log.Warning("Staring into {@from}, wondering where this comet came from.", space);
+    /// </example>
+    public void Warning(string messageTemplate, params object[] propertyValues);
 
     /// <summary>
     /// Write a log event with the warning level and associated exception.
@@ -149,6 +189,16 @@ public interface IMilvaLogger
     public void Error(string message);
 
     /// <summary>
+    /// Write a log event with error level.
+    /// </summary>
+    /// <param name="messageTemplate">Message template describing the event.</param>
+    /// <param name="propertyValues">Objects positionally formatted into the message template.</param>
+    /// <example>
+    /// Log.Error("Staring into {@from}, wondering where this comet came from.", space);
+    /// </example>
+    public void Error(string messageTemplate, params object[] propertyValues);
+
+    /// <summary>
     /// Write a log event with the error level and associated exception.
     /// </summary>
     /// <param name="exception">Exception related to the event.</param>
@@ -177,6 +227,16 @@ public interface IMilvaLogger
     /// Log.Verbose("Staring into space, wondering if we're alone.");
     /// </example>
     public void Fatal(string message);
+
+    /// <summary>
+    /// Write a log event with fatal level.
+    /// </summary>
+    /// <param name="messageTemplate">Message template describing the event.</param>
+    /// <param name="propertyValues">Objects positionally formatted into the message template.</param>
+    /// <example>
+    /// Log.Fatal("Staring into {@from}, wondering where this comet came from.", space);
+    /// </example>
+    public void Fatal(string messageTemplate, params object[] propertyValues);
 
     /// <summary>
     /// Write a log event with the fatal level and associated exception.
