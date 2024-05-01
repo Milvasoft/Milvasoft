@@ -43,7 +43,7 @@
 		<Description>Localization abstractions.</Description>
 		<PackageTags>localization, globalization, localizer</PackageTags>
 		<Copyright>Milvasoft Yazılım Bilişim Araştırma Geliştirme Danışmanlık Sanayi ve Ticaret Ltd.Şti.</Copyright>
-		<Version>8.1.0</Version>
+		<Version>8.1.1</Version>
 
 	</PropertyGroup>
 
