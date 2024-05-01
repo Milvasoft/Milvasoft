@@ -444,22 +444,25 @@ public static class InterceptionServiceCollectionExtensions
 
         postConfigureAction.Invoke(config);
 
-        builder.PostConfigureLogInterceptionOptions(opt =>
-        {
-            opt.ExtraLoggingPropertiesSelector = config.Log.ExtraLoggingPropertiesSelector;
-        });
+        if (IsObjectModified(config.Log))
+            builder.PostConfigureLogInterceptionOptions(opt =>
+            {
+                opt.ExtraLoggingPropertiesSelector = config.Log.ExtraLoggingPropertiesSelector;
+            });
 
-        builder.PostConfigureResponseInterceptionOptions(opt =>
-        {
-            opt.HideByRoleFunc = config.Response.HideByRoleFunc;
-            opt.ApplyLocalizationFunc = config.Response.ApplyLocalizationFunc;
-        });
+        if (IsObjectModified(config.Response))
+            builder.PostConfigureResponseInterceptionOptions(opt =>
+            {
+                opt.HideByRoleFunc = config.Response.HideByRoleFunc;
+                opt.ApplyLocalizationFunc = config.Response.ApplyLocalizationFunc;
+            });
 
-        builder.PostConfigureCacheInterceptionOptions(opt =>
-        {
-            opt.CacheAccessorType = config.Cache.CacheAccessorType;
-            opt.CacheKeyConfigurator = config.Cache.CacheKeyConfigurator;
-        });
+        if (IsObjectModified(config.Cache))
+            builder.PostConfigureCacheInterceptionOptions(opt =>
+            {
+                opt.CacheAccessorType = config.Cache.CacheAccessorType;
+                opt.CacheKeyConfigurator = config.Cache.CacheKeyConfigurator;
+            });
 
         return builder;
     }
@@ -498,4 +501,11 @@ public static class InterceptionServiceCollectionExtensions
 
         return types;
     }
+
+    /// <summary>
+    /// Determines whether object is modified or not.
+    /// </summary>
+    /// <param name="obj"></param>
+    /// <returns></returns>
+    private static bool IsObjectModified(object obj) => Array.Exists(obj.GetType().GetProperties(), i => i.GetValue(obj) != null || i.GetValue(obj) != default);
 }
