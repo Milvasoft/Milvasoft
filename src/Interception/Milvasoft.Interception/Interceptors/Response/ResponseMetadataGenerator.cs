@@ -93,7 +93,7 @@ public class ResponseMetadataGenerator(IResponseInterceptionOptions responseInte
     /// <param name="metadatas"></param>
     private void GeneratePropMetadata(CallerObjectInfo callerObjectInfo, PropertyInfo property, List<ResponseDataMetadata> metadatas)
     {
-        if (property == null)
+        if (property == null || TryGetAttribute(property, out ExcludeFromMetadataAttribute _))
             return;
 
         bool removePropMetadataFromResponse = ShouldHide(property);

@@ -10,6 +10,7 @@ using Milvasoft.Interception.Decorator;
 using Milvasoft.Interception.Interceptors.Response;
 using Milvasoft.Types.Classes;
 using System.ComponentModel;
+using System.Linq.Expressions;
 
 namespace Milvasoft.UnitTests.InteceptionTests;
 
@@ -92,6 +93,7 @@ public class ResponseMetadataGeneratorTests
         returnValue.Metadatas.Find(m => m.Name == "ComplexClass").Metadatas.Should().NotBeEmpty();
         returnValue.Metadatas.Find(m => m.Name == "ComplexClass").Metadatas.Find(m => m.Name == "DateProp").TooltipFormat.Should().Be("dddd, dd MMMM yyyy");
         returnValue.Metadatas.Find(m => m.Name == "ComplexClass").Metadatas.Find(m => m.Name == "EnumProp").Display.Should().BeTrue();
+        returnValue.Metadatas.Find(m => m.Name == "WillBeExcluded").Should().BeNull();
     }
 
     #region Setup
@@ -132,6 +134,9 @@ public class ResponseMetadataGeneratorTests
 
         [Browsable(false)]
         public AnotherComplexClass ComplexClass { get; set; }
+
+        [ExcludeFromMetadata]
+        public Expression<Func<AnotherComplexClass, bool>> WillBeExcluded { get; set; }
     }
 
     public class AnotherComplexClass
