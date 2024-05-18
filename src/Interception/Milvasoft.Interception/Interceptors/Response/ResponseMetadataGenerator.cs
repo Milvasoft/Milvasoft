@@ -104,16 +104,17 @@ public class ResponseMetadataGenerator(IResponseInterceptionOptions responseInte
         if (!_interceptionOptions.MetadataCreationEnabled || removePropMetadataFromResponse)
             return;
 
-        var metadata = new ResponseDataMetadata
-        {
-            Metadatas = []
-        };
+        metadatas ??= [];
+
+        var metadata = new ResponseDataMetadata();
 
         if (property.PropertyType.IsClass && !CallerObjectInfo.ReviewObjectType(property.PropertyType, out bool _).Namespace.Contains(nameof(System)))
         {
             object propertyValue = property.GetValue(callerObjectInfo.Object);
 
             CallerObjectInfo childCallerInfo = CallerObjectInfo.CreateCallerInformation(propertyValue, property.PropertyType);
+
+            metadata.Metadatas ??= [];
 
             GenerateMetadata(childCallerInfo, metadata.Metadatas);
         }
