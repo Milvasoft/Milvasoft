@@ -5,6 +5,7 @@ using Milvasoft.Identity.Abstract;
 using Milvasoft.Identity.Concrete;
 using Milvasoft.Identity.Concrete.Entity;
 using Milvasoft.Identity.Concrete.Options;
+using Milvasoft.Identity.TokenProvider.AuthToken;
 
 namespace Milvasoft.Identity.Builder;
 
@@ -16,6 +17,11 @@ public class MilvaIdentityBuilder<TUser, TKey> where TUser : MilvaUser<TKey> whe
     private readonly IServiceCollection _services;
     private readonly IConfigurationManager _configurationManager;
     private bool _optionsConfiguredFromConfigurationManager = false;
+
+    /// <summary>
+    /// Configured identity options.
+    /// </summary>
+    public MilvaIdentityOptions IdentityOptions { get; private set; }
 
     /// <summary>
     /// Creates new instance of <see cref="MilvaIdentityBuilder{TUser, TKey}"/>.
@@ -34,9 +40,42 @@ public class MilvaIdentityBuilder<TUser, TKey> where TUser : MilvaUser<TKey> whe
     /// Adds and configures the identity system for the specified User and Role types.
     /// </summary>
     /// <returns></returns>
+    public MilvaIdentityBuilder<TUser, TKey> WithDefaultUserManager()
+    {
+        _services.AddScoped<IMilvaUserManager<TUser, TKey>, MilvaUserManager<TUser, TKey>>();
+
+        return this;
+    }
+
+    /// <summary>
+    /// Adds and configures the identity system for the specified User and Role types.
+    /// </summary>
+    /// <returns></returns>
+    public MilvaIdentityBuilder<TUser, TKey> WithDefaultTokenManager()
+    {
+        _services.AddScoped<IMilvaTokenManager, MilvaTokenManager>();
+
+        return this;
+    }
+
+    /// <summary>
+    /// Adds and configures the identity system for the specified User and Role types.
+    /// </summary>
+    /// <returns></returns>
     public MilvaIdentityBuilder<TUser, TKey> WithUserManager<TUserManager>() where TUserManager : class, IMilvaUserManager<TUser, TKey>
     {
         _services.AddScoped<IMilvaUserManager<TUser, TKey>, TUserManager>();
+
+        return this;
+    }
+
+    /// <summary>
+    /// Adds and configures the identity system for the specified User and Role types.
+    /// </summary>
+    /// <returns></returns>
+    public MilvaIdentityBuilder<TUser, TKey> WithTokenManager<TTokenManager>() where TTokenManager : class, IMilvaTokenManager
+    {
+        _services.AddScoped<IMilvaTokenManager, TTokenManager>();
 
         return this;
     }
@@ -56,6 +95,8 @@ public class MilvaIdentityBuilder<TUser, TKey> where TUser : MilvaUser<TKey> whe
         identityOptions.Invoke(config);
 
         _services.AddSingleton(config);
+
+        IdentityOptions = config;
 
         return this;
     }
@@ -77,12 +118,20 @@ public class MilvaIdentityBuilder<TUser, TKey> where TUser : MilvaUser<TKey> whe
 
         var options = section.Get<MilvaIdentityOptions>();
 
+        options.Token.TokenValidationParameters.IssuerSigningKey = options.Token.GetSecurityKey();
+
+        _services.PostConfigure<MilvaIdentityOptions>(opt =>
+        {
+            opt.Token.TokenValidationParameters.IssuerSigningKey = options.Token.TokenValidationParameters.IssuerSigningKey;
+        });
+
         WithOptions(identityOptions: (opt) =>
         {
             opt.User = options.User;
             opt.Password = options.Password;
             opt.Lockout = options.Lockout;
             opt.SignIn = options.SignIn;
+            opt.Token = options.Token;
         });
 
         _optionsConfiguredFromConfigurationManager = true;
