@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Milvasoft.Attributes.Annotations;
-using Milvasoft.Interception.Interceptors.Logging;
+using Milvasoft.Interception.Builder;
 
 namespace Milvasoft.Interception.Interceptors.Response;
 
@@ -29,6 +29,9 @@ public class ResponseInterceptionOptions : IResponseInterceptionOptions
 
     /// <inheritdoc/>
     public Func<IServiceProvider, HideByRoleAttribute, bool> HideByRoleFunc { get; set; }
+
+    /// <inheritdoc/>
+    public Func<IServiceProvider, MaskByRoleAttribute, bool> MaskByRoleFunc { get; set; }
 
     /// <inheritdoc/>
     public Func<string, IMilvaLocalizer, Type, string, string> ApplyLocalizationFunc { get; set; }
@@ -69,6 +72,17 @@ public interface IResponseInterceptionOptions : IInterceptionOptions
     /// </remarks>
     /// </summary>
     public Func<IServiceProvider, HideByRoleAttribute, bool> HideByRoleFunc { get; set; }
+
+    /// <summary>
+    /// This property represents a function that takes an array of role names as input and determines whether masking should be performed based on role-based authorization checks.
+    /// The function evaluates these roles to decide whether the item should be hidden. 
+    /// If the item should be masked, the function returns true; otherwise, it returns false. This method can be utilized to provide dynamic access control based on user roles.
+    /// 
+    /// <remarks>
+    /// Function parameter contains not allowed roles.
+    /// </remarks>
+    /// </summary>
+    public Func<IServiceProvider, MaskByRoleAttribute, bool> MaskByRoleFunc { get; set; }
 
     /// <summary>
     /// It determines with which key pattern the data will be received from the ImilvaLocalizer in the Interceptor. 

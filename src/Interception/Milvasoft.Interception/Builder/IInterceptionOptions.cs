@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 
-namespace Milvasoft.Interception.Interceptors.Logging;
+namespace Milvasoft.Interception.Builder;
 
 /// <summary>
 /// Represents the options for log interception.

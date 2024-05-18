@@ -292,6 +292,7 @@ public static class InterceptionServiceCollectionExtensions
             opt.TranslateResultMessages = options.TranslateResultMessages;
             opt.ApplyLocalizationFunc = options.ApplyLocalizationFunc;
             opt.HideByRoleFunc = options.HideByRoleFunc;
+            opt.MaskByRoleFunc = options.MaskByRoleFunc;
         });
 
         return builder;
@@ -318,12 +319,14 @@ public static class InterceptionServiceCollectionExtensions
         builder.Services.UpdateSingletonInstance<IResponseInterceptionOptions>(opt =>
         {
             opt.HideByRoleFunc = config.HideByRoleFunc ?? opt.HideByRoleFunc;
+            opt.MaskByRoleFunc = config.MaskByRoleFunc ?? opt.MaskByRoleFunc;
             opt.ApplyLocalizationFunc = config.ApplyLocalizationFunc ?? opt.ApplyLocalizationFunc;
         });
 
         builder.Services.PostConfigure<ResponseInterceptionOptions>(opt =>
         {
             opt.HideByRoleFunc = config.HideByRoleFunc ?? opt.HideByRoleFunc;
+            opt.MaskByRoleFunc = config.MaskByRoleFunc ?? opt.MaskByRoleFunc;
             opt.ApplyLocalizationFunc = config.ApplyLocalizationFunc ?? opt.ApplyLocalizationFunc;
         });
 
@@ -455,6 +458,7 @@ public static class InterceptionServiceCollectionExtensions
         if (IsObjectModified(config.Response))
             builder.PostConfigureResponseInterceptionOptions(opt =>
             {
+                opt.MaskByRoleFunc = config.Response.MaskByRoleFunc;
                 opt.HideByRoleFunc = config.Response.HideByRoleFunc;
                 opt.ApplyLocalizationFunc = config.Response.ApplyLocalizationFunc;
             });

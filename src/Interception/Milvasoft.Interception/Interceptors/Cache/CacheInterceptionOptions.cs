@@ -1,5 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using Milvasoft.Interception.Interceptors.Logging;
+using Milvasoft.Interception.Builder;
 
 namespace Milvasoft.Interception.Interceptors.Cache;
 

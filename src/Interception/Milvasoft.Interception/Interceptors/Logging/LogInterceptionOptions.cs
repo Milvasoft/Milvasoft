@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Milvasoft.Components.Rest.MilvaResponse;
+using Milvasoft.Interception.Builder;
 
 namespace Milvasoft.Interception.Interceptors.Logging;
 

@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Milvasoft.Interception.Builder;
 using Milvasoft.Interception.Decorator;
-using Milvasoft.Interception.Interceptors.Logging;
 
 namespace Milvasoft.UnitTests.InteceptionTests.Fixtures;
 
