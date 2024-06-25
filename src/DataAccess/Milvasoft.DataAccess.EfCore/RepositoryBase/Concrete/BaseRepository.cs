@@ -9,7 +9,7 @@ using System.Linq.Expressions;
 namespace Milvasoft.Helpers.DataAccess.EfCore.Concrete;
 
 /// <summary>
-/// Base repository for concrete repositories. All Ops!yon repositories must be have this methods.
+/// Base repository for concrete repositories.
 /// </summary>
 /// <typeparam name="TEntity"></typeparam>
 /// <typeparam name="TContext"></typeparam>

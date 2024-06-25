@@ -8,7 +8,7 @@ using System.Linq.Expressions;
 namespace Milvasoft.Helpers.DataAccess.EfCore.Concrete;
 
 /// <summary>
-///  Base repository for concrete repositories. All Ops!yon repositories must be have this methods.
+///  Base repository for concrete repositories.
 /// </summary>
 [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0305:Simplify collection initialization", Justification = "<Pending>")]
 public abstract partial class BaseRepository<TEntity, TContext> where TEntity : class, IMilvaEntity where TContext : DbContext, IMilvaDbContextBase

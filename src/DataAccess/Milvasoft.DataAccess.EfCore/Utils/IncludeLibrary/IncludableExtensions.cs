@@ -5,7 +5,7 @@ using System.Linq.Expressions;
 namespace Milvasoft.DataAccess.EfCore.Utils.IncludeLibrary;
 
 /// <summary>
-/// Includable extension for Ops!yon API. For reason to use that class: We cannot use default include process which in EntityFramework. Because of mysql and context. 
+/// For reason to use that class: We cannot use default include process which in EntityFramework. Because of mysql and context. 
 /// </summary>
 public static class IncludableExtensions
 {
