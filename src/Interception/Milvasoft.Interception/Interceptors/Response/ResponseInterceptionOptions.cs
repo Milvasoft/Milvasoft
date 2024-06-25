@@ -86,7 +86,7 @@ public interface IResponseInterceptionOptions : IInterceptionOptions
 
     /// <summary>
     /// It determines with which key pattern the data will be received from the ImilvaLocalizer in the Interceptor. 
-    /// If it is not sent, localization is tried with the default pattern. The default pattern is <see cref="ResponseInterceptor.ApplyLocalization(string, IMilvaLocalizer, Type, string)"/>
+    /// If it is not sent, localization is tried with the default pattern. The default pattern is <see cref="ResponseMetadataGenerator.ApplyLocalization(string, IMilvaLocalizer, Type, string)"/>
     /// </summary>
     public Func<string, IMilvaLocalizer, Type, string, string> ApplyLocalizationFunc { get; set; }
 }

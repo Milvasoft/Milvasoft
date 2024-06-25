@@ -2,9 +2,12 @@
 
 namespace Milvasoft.Identity.TokenProvider.AuthToken;
 
+/// <summary>
+/// Represents the RSA public key.
+/// </summary>
 public class RsaPublicKey
 {
-
+#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
     [JsonPropertyName("kid")]
     public string Kid { get; set; }
 
@@ -31,4 +34,5 @@ public class RsaPublicKey
 
     [JsonPropertyName("x5t#S256")]
     public string X5tS256 { get; set; }
+#pragma warning restore CS1591 // Missing XML comment for publicly visible type or member
 }

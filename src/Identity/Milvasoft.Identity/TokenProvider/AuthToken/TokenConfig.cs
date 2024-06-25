@@ -2,6 +2,7 @@
 
 namespace Milvasoft.Identity.TokenProvider.AuthToken;
 
+#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
 public class TokenConfig
 {
     public int ExpirationMinute { get; set; }
@@ -27,3 +28,4 @@ public class TokenConfig
     internal static JsonWebKey GetRSASecurityKey(string json) => new(json);
     internal static SymmetricSecurityKey GetSymmetricSecurityKey(string key) => new(Encoding.UTF8.GetBytes(key));
 }
+#pragma warning restore CS1591 // Missing XML comment for publicly visible type or member

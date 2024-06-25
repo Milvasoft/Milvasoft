@@ -8,8 +8,6 @@ namespace Milvasoft.Interception.Interceptors.Response;
 /// <remarks>
 /// Initializes a new instance of the <see cref="ResponseMetadataGenerator"/> class.
 /// </remarks>
-/// <param name="responseInterceptionOptions">The response interception options.</param>
-/// <param name="serviceProvider">The service provider.</param>
 public interface IResponseMetadataGenerator
 {
     /// <summary>
