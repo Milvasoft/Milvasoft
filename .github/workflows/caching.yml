@@ -1,4 +1,4 @@
-name: Milvasoft.Caching.InMemory Nuget Publish
+name: Milvasoft.Caching Nuget Publish
 
 on:
   push:
@@ -20,11 +20,11 @@ jobs:
         uses: actions/setup-dotnet@v1
         with:
           dotnet-version: 8.0.x
-      - name: Restore Milvasoft.Caching.InMemory project dependencies
-        run: dotnet restore src/Caching/Milvasoft.Caching.InMemory/Milvasoft.Caching.InMemory.csproj
-      - name: Build Milvasoft.Caching.InMemory project
-        run: dotnet build src/Caching/Milvasoft.Caching.InMemory/Milvasoft.Caching.InMemory.csproj --no-restore --configuration Release
-      - name: Pack Milvasoft.Caching.InMemory project
-        run: dotnet pack src/Caching/Milvasoft.Caching.InMemory/Milvasoft.Caching.InMemory.csproj --no-build --configuration Release --include-symbols -p:SymbolPackageFormat=snupkg -o .
+      - name: Restore Milvasoft.Caching project dependencies
+        run: dotnet restore src/Caching/Milvasoft.Caching/Milvasoft.Caching.csproj
+      - name: Build Milvasoft.Caching project
+        run: dotnet build src/Caching/Milvasoft.Caching/Milvasoft.Caching.csproj --no-restore --configuration Release
+      - name: Pack Milvasoft.Caching project
+        run: dotnet pack src/Caching/Milvasoft.Caching/Milvasoft.Caching.csproj --no-build --configuration Release --include-symbols -p:SymbolPackageFormat=snupkg -o .
       - name: Publish package to NuGet
         run: dotnet nuget push *.nupkg --api-key ${{secrets.NUGET_API_KEY}} --source "https://api.nuget.org/v3/index.json" --skip-duplicate
