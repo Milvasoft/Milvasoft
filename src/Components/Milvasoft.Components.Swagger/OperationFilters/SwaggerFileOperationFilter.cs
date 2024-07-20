@@ -26,7 +26,8 @@ public class SwaggerFileOperationFilter : IOperationFilter
         operation.RequestBody.Content[fileUploadMime].Schema.Properties = fileParams.ToDictionary(k => k.Name, v => new OpenApiSchema()
         {
             Type = "string",
-            Format = "binary"
+            Format = "binary",
+            Description = "File to be upload."
         });
     }
 }

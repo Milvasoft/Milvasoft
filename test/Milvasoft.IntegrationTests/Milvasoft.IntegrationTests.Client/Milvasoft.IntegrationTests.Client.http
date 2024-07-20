@@ -1,0 +1,6 @@
+@Milvasoft.IntegrationTests.Client_HostAddress = http://localhost:5241
+
+GET {{Milvasoft.IntegrationTests.Client_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

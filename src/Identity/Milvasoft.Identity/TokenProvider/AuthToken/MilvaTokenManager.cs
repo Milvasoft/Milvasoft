@@ -84,7 +84,7 @@ public class MilvaTokenManager(MilvaIdentityOptions identityOptions, IMilvaLogge
             SigningCredentials = new SigningCredentials(_identityOptions.Token.GetSecurityKey(), _identityOptions.Token.GetSecurityAlgorithm())
         };
 
-        var token = tokenHandler.CreateToken(tokenDescriptor);//Token Üretini
+        var token = tokenHandler.CreateToken(tokenDescriptor);
 
         return tokenHandler.WriteToken(token);
     }
