@@ -5,7 +5,6 @@ using Milvasoft.Interception.Interceptors.ActivityScope;
 using Milvasoft.Interception.Interceptors.Cache;
 using System.Diagnostics;
 using System.Linq.Expressions;
-using System.Text.RegularExpressions;
 
 namespace Milvasoft.Interception.Interceptors.Logging;
 
@@ -190,17 +189,6 @@ public partial class LogInterceptor(IServiceProvider serviceProvider) : IMilvaIn
     {
         var logObjectAsJson = logObjectPropDic.ToJson();
 
-        logObjectAsJson = SlashRegex1().Replace(logObjectAsJson, " ");
-        logObjectAsJson = SlashRegex2().Replace(logObjectAsJson, " ");
-
-        logObjectAsJson = logObjectAsJson.Replace("\\\\\\\\", "\\\\");
-
         return logObjectAsJson;
     }
-
-    [GeneratedRegex("([\\\\])([a-z])(\\d+)")]
-    private static partial Regex SlashRegex1();
-
-    [GeneratedRegex("(\\s(\\\\))|(((\\\\))\\s)")]
-    private static partial Regex SlashRegex2();
 }
