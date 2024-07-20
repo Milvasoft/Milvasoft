@@ -110,13 +110,22 @@ public class ResponseMetadataGenerator(IResponseInterceptionOptions responseInte
 
         if (property.PropertyType.IsClass && !CallerObjectInfo.ReviewObjectType(property.PropertyType, out bool _).Namespace.Contains(nameof(System)))
         {
-            object propertyValue = property.GetValue(callerObjectInfo.Object);
+            if (callerObjectInfo.ActualTypeIsCollection)
+                foreach (var callerObject in callerObjectInfo.Object as IList)
+                    GenerateSubMetadata(callerObject);
+            else
+                GenerateSubMetadata(callerObjectInfo.Object);
 
-            CallerObjectInfo childCallerInfo = CallerObjectInfo.CreateCallerInformation(propertyValue, property.PropertyType);
+            void GenerateSubMetadata(object callerObject)
+            {
+                object propertyValue = property.GetValue(callerObject, null);
 
-            metadata.Metadatas ??= [];
+                CallerObjectInfo childCallerInfo = CallerObjectInfo.CreateCallerInformation(propertyValue, property.PropertyType);
 
-            GenerateMetadata(childCallerInfo, metadata.Metadatas);
+                metadata.Metadatas ??= [];
+
+                GenerateMetadata(childCallerInfo, metadata.Metadatas);
+            }
         }
 
         metadata.Name = property.Name;

@@ -10,7 +10,7 @@ namespace Milvasoft.DataAccess.EfCore.RepositoryBase.Concrete;
 /// Constructor of ContextRepository for inject context.
 /// </remarks>
 /// <param name="dbContext"></param>
-public class ContextRepository<TContext>(TContext dbContext) : IContextRepository<TContext> where TContext : DbContext, IMilvaDbContextBase
+public class ContextRepository<TContext>(TContext dbContext) : IContextRepository where TContext : DbContext, IMilvaDbContextBase
 {
     /// <summary>
     /// DbContext object.

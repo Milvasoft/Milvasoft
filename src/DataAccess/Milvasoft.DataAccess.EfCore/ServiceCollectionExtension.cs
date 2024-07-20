@@ -97,5 +97,5 @@ public static class ServiceCollectionExtension
     /// <returns></returns>
     public static IServiceCollection AddInjectedDbContext<TContext>(this IServiceCollection services) where TContext : DbContext, IMilvaDbContextBase
         => services.AddScoped<IMilvaDbContextBase, TContext>()
-                   .AddScoped<IContextRepository<TContext>, ContextRepository<TContext>>();
+                   .AddScoped<IContextRepository, ContextRepository<TContext>>();
 }
