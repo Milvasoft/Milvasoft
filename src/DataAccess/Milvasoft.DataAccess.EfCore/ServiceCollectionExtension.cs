@@ -1,6 +1,9 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
+using Milvasoft.DataAccess.EfCore.RepositoryBase.Abstract;
+using Milvasoft.DataAccess.EfCore.RepositoryBase.Concrete;
 
 namespace Milvasoft.DataAccess.EfCore;
 
@@ -85,4 +88,14 @@ public static class ServiceCollectionExtension
 
         return services;
     }
+
+    /// <summary>
+    /// Service collection extension for configuring milva specific context features.
+    /// </summary>
+    /// <typeparam name="TContext"></typeparam>
+    /// <param name="services"></param>
+    /// <returns></returns>
+    public static IServiceCollection AddInjectedDbContext<TContext>(this IServiceCollection services) where TContext : DbContext, IMilvaDbContextBase
+        => services.AddScoped<IMilvaDbContextBase, TContext>()
+                   .AddScoped<IContextRepository<TContext>, ContextRepository<TContext>>();
 }

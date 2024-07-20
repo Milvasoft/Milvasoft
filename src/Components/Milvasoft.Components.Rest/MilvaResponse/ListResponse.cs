@@ -70,7 +70,7 @@ public class ListResponse<T> : Response<List<T>>
                         int? currentPage = null,
                         int? totalPageCount = null,
                         int? totalDataCount = null) : this(isSuccess,
-                                               new List<ResponseMessage>() { new() { Message = message } },
+                                               [new() { Message = message }],
                                                data,
                                                currentPage,
                                                totalPageCount,

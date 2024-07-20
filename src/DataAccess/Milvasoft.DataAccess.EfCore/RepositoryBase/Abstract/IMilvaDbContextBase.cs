@@ -13,6 +13,11 @@ public interface IMilvaDbContextBase
     /// </summary>
     public IServiceProvider ServiceProvider { get; set; }
 
+    /// <summary>
+    /// Gets a DbSet for the specified entity type.
+    /// </summary>
+    /// <typeparam name="TEntity">The type of the entity.</typeparam>
+    /// <returns>A DbSet for the specified entity type.</returns>
     public DbSet<TEntity> Set<TEntity>() where TEntity : class;
 
     /// <summary>

@@ -17,7 +17,7 @@ namespace Customers.Api.Tests.Integration;
 [Collection(nameof(DatabaseTestCollection))]
 public class DbContextTests : IAsyncLifetime
 {
-    private SomeMilvaDbContextFixture _someMilvaDbContext;
+    private readonly SomeMilvaDbContextFixture _someMilvaDbContext;
     private readonly ITestOutputHelper _testOutputHelper;
     private WebApplicationFactory<Program> _waf;
     private Func<Task> _resetDatabase;
