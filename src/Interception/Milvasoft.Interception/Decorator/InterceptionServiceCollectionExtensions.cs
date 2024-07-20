@@ -35,7 +35,7 @@ public static class InterceptionServiceCollectionExtensions
     {
         ArgumentNullException.ThrowIfNull(assembly);
 
-        var types = assembly.FindDecorableTypes().ToList();
+        var types = assembly.FindDecorableTypes()?.ToList();
 
         return services.AddMilvaInterception(types: types, configurationManager);
     }
@@ -54,11 +54,9 @@ public static class InterceptionServiceCollectionExtensions
     /// <returns></returns>
     public static InterceptionBuilder AddMilvaInterception(this IServiceCollection services, List<Type> types, IConfigurationManager configurationManager = null)
     {
-        services.ConfigureCurrentMilvaJsonSerializerOptions();
-
-        ArgumentNullException.ThrowIfNull(types);
-
         var builder = new InterceptionBuilder(services, configurationManager);
+
+        services.ConfigureCurrentMilvaJsonSerializerOptions();
 
         var externalTypes = builder.Services?.Where(i => i.ImplementationType?.GetInterfaces() != null && Array.Exists(i.ImplementationType.GetInterfaces(), t => t == typeof(IInterceptable))).Select(i => i.ServiceType);
 

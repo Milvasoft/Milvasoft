@@ -55,7 +55,7 @@
 		<Description>Provides operations such as saving files, fetching, validating and using json files as database in the file system.</Description>
 		<PackageTags>json,jsonfile,fileoperations,database,crud</PackageTags>
 		<Copyright>Milvasoft Yazılım Bilişim Araştırma Geliştirme Danışmanlık Sanayi ve Ticaret Ltd.Şti.</Copyright>
-		<Version>8.1.8</Version>
+		<Version>8.1.9</Version>
 
 	</PropertyGroup>
 </Project>
