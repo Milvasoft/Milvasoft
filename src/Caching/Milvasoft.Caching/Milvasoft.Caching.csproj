@@ -18,4 +18,22 @@
     <ProjectReference Include="..\..\Core\Milvasoft.Core\Milvasoft.Core.csproj" />
   </ItemGroup>
 
+
+	<PropertyGroup>
+
+		<PackageId>Milvasoft.Caching</PackageId>
+		<RepositoryUrl>https://github.com/Milvasoft/Milvasoft/tree/master/Milvasoft.Helpers</RepositoryUrl>
+		<RepositoryType>git</RepositoryType>
+		<PackageProjectUrl>https://github.com/Milvasoft/Milvasoft/tree/master/Milvasoft.Helpers</PackageProjectUrl>
+		<PackageIconUrl>https://raw.githubusercontent.com/Milvasoft/Milvasoft/master/src/Milvasoft.Helpers/Resources/milvalogo.png</PackageIconUrl>
+		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+		<Authors>Milvasoft Corporation</Authors>
+		<Product>Milvasoft.Caching</Product>
+		<Description>Caching operations.</Description>
+		<PackageTags>cache,caching,inmemory,memory,redis</PackageTags>
+		<Copyright>Milvasoft Yazılım Bilişim Araştırma Geliştirme Danışmanlık Sanayi ve Ticaret Ltd.Şti.</Copyright>
+		<Version>8.1.9</Version>
+
+	</PropertyGroup>
+
 </Project>
