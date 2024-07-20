@@ -1,5 +1,4 @@
 ﻿using EFCore.BulkExtensions;
-using Microsoft.EntityFrameworkCore;
 using Milvasoft.Components.Rest.MilvaResponse;
 using Milvasoft.Components.Rest.Request;
 using Milvasoft.Types.Structs;
@@ -11,9 +10,8 @@ namespace Milvasoft.DataAccess.EfCore.RepositoryBase.Abstract;
 /// Base repository for concrete repositories. All repositories must be have this methods.
 /// </summary>
 /// <typeparam name="TEntity"></typeparam>
-/// <typeparam name="TContext"></typeparam>
 [System.Diagnostics.CodeAnalysis.SuppressMessage("Major Code Smell", "S2326:Unused type parameters should be removed", Justification = "<Pending>")]
-public interface IBaseRepository<TEntity, TContext> where TEntity : class, IMilvaEntity where TContext : DbContext
+public interface IBaseRepository<TEntity> where TEntity : class, IMilvaEntity
 {
     #region Configuration Change
 

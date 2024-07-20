@@ -1885,7 +1885,7 @@ public class BaseRepositorySyncTests
 
     #region Setup
 
-    public interface ISomeGenericRepository<TEntity> : IBaseRepository<TEntity, SomeMilvaDbContextFixture> where TEntity : class, IMilvaEntity
+    public interface ISomeGenericRepository<TEntity> : IBaseRepository<TEntity> where TEntity : class, IMilvaEntity
     {
     }
 

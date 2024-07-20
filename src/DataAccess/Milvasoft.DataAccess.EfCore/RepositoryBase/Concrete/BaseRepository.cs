@@ -13,7 +13,7 @@ namespace Milvasoft.Helpers.DataAccess.EfCore.Concrete;
 /// </summary>
 /// <typeparam name="TEntity"></typeparam>
 /// <typeparam name="TContext"></typeparam>
-public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepository<TEntity, TContext> where TEntity : class, IMilvaEntity where TContext : DbContext, IMilvaDbContextBase
+public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepository<TEntity> where TEntity : class, IMilvaEntity where TContext : DbContext, IMilvaDbContextBase
 {
     #region Protected Properties
 
