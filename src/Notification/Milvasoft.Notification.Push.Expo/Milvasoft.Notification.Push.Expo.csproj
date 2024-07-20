@@ -43,7 +43,7 @@
 		<Description>Send push notifications with Expo integration.</Description>
 		<PackageTags>notification, push notification, expo</PackageTags>
 		<Copyright>Milvasoft Yazılım Bilişim Araştırma Geliştirme Danışmanlık Sanayi ve Ticaret Ltd.Şti.</Copyright>
-		<Version>8.1.9</Version>
+		<Version>8.1.10</Version>
 
 	</PropertyGroup>
 
