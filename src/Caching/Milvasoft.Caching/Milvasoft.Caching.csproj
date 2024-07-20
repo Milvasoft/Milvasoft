@@ -18,6 +18,18 @@
     <ProjectReference Include="..\..\Core\Milvasoft.Core\Milvasoft.Core.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="Resources\milvalogo.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <Pack>True</Pack>
+    </None>
+    <None Update="Resources\readme.md">
+      <PackagePath>\</PackagePath>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <Pack>true</Pack>
+    </None>
+  </ItemGroup>
+
 
 	<PropertyGroup>
 
