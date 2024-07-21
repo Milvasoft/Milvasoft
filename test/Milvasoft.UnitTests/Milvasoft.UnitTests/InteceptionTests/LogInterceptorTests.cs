@@ -75,6 +75,17 @@ public class LogInterceptorTests
 
     #region Setup
 
+    public interface ISomeClass
+    {
+        [ActivityStarter("LogActivity")]
+        [Log]
+        public string Method();
+
+        [ActivityStarter("LogActivity")]
+        [Log]
+        public string MethodThrowsException();
+    }
+
     public class SomeClass : IInterceptable
     {
         [ActivityStarter("LogActivity")]

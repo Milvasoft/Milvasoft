@@ -171,9 +171,9 @@ public partial class LogInterceptor(IServiceProvider serviceProvider) : IMilvaIn
 
             methodParameters?.RemoveAll(p => p is CancellationToken);
 
-            logObjectPropDic.Add("Namespace", call.Method.DeclaringType.Namespace);
-            logObjectPropDic.Add("ClassName", call.Method.DeclaringType.Name);
-            logObjectPropDic.Add("MethodName", call.Method.Name);
+            logObjectPropDic.Add("Namespace", call.MethodImplementation.DeclaringType.Namespace);
+            logObjectPropDic.Add("ClassName", call.MethodImplementation.DeclaringType.Name);
+            logObjectPropDic.Add("MethodName", call.MethodImplementation.Name);
             logObjectPropDic.Add("MethodParams", methodParameters?.ToJson());
         }
 
