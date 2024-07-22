@@ -110,22 +110,7 @@ public class ResponseMetadataGenerator(IResponseInterceptionOptions responseInte
 
         if (property.PropertyType.IsClass && !CallerObjectInfo.ReviewObjectType(property.PropertyType, out bool _).Namespace.Contains(nameof(System)))
         {
-            if (callerObjectInfo.ActualTypeIsCollection)
-                foreach (var callerObject in callerObjectInfo.Object as IList)
-                    GenerateSubMetadata(callerObject);
-            else
-                GenerateSubMetadata(callerObjectInfo.Object);
-
-            void GenerateSubMetadata(object callerObject)
-            {
-                object propertyValue = property.GetValue(callerObject, null);
-
-                CallerObjectInfo childCallerInfo = CallerObjectInfo.CreateCallerInformation(propertyValue, property.PropertyType);
-
-                metadata.Metadatas ??= [];
-
-                GenerateMetadata(childCallerInfo, metadata.Metadatas);
-            }
+            GenerateChildComplexMetadata(callerObjectInfo, property, metadata);
         }
 
         metadata.Name = property.Name;
@@ -152,6 +137,32 @@ public class ResponseMetadataGenerator(IResponseInterceptionOptions responseInte
         metadata.DisplayFormat = TryGetAttribute(property, out DisplayFormatAttribute cellDisplayFormatAttribute) ? cellDisplayFormatAttribute.Format : null;
 
         metadatas.Add(metadata);
+    }
+
+    /// <summary>
+    /// Generates metadata for child and complex properties.
+    /// </summary>
+    /// <param name="callerObjectInfo"></param>
+    /// <param name="property"></param>
+    /// <param name="metadata"></param>
+    private void GenerateChildComplexMetadata(CallerObjectInfo callerObjectInfo, PropertyInfo property, ResponseDataMetadata metadata)
+    {
+        object callerObject = callerObjectInfo.Object;
+
+        if (callerObjectInfo.ActualTypeIsCollection)
+        {
+            var callerObjectsAsList = callerObjectInfo.Object as IList;
+
+            callerObject = callerObjectsAsList.Count > 0 ? callerObjectsAsList[0] : callerObjectInfo.Object;
+        }
+
+        object propertyValue = property.GetValue(callerObject, null);
+
+        CallerObjectInfo childCallerInfo = CallerObjectInfo.CreateCallerInformation(propertyValue, property.PropertyType);
+
+        metadata.Metadatas ??= [];
+
+        GenerateMetadata(childCallerInfo, metadata.Metadatas);
     }
 
     /// <summary>

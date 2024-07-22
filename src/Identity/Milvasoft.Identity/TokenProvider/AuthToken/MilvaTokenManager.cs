@@ -81,6 +81,7 @@ public class MilvaTokenManager(MilvaIdentityOptions identityOptions, IMilvaLogge
         {
             Subject = claimsIdentityList,
             Expires = expired,
+            NotBefore = DateTime.UtcNow,
             SigningCredentials = new SigningCredentials(_identityOptions.Token.GetSecurityKey(), _identityOptions.Token.GetSecurityAlgorithm())
         };
 
