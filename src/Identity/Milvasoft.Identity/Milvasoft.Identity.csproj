@@ -45,7 +45,7 @@
 		<Description>Provides account operations.</Description>
 		<PackageTags>identity,account,user,role,passwordhash</PackageTags>
 		<Copyright>Milvasoft Yazılım Bilişim Araştırma Geliştirme Danışmanlık Sanayi ve Ticaret Ltd.Şti.</Copyright>
-		<Version>8.1.15</Version>
+		<Version>8.1.16</Version>
 
 	</PropertyGroup>
 
