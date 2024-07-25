@@ -50,7 +50,7 @@
 		<Description>Lightweight data access interception for cros cutting concerns.</Description>
 		<PackageTags>interception, ef, dbinterception, aop, cross-cutting, log, cache</PackageTags>
 		<Copyright>Milvasoft Yazılım Bilişim Araştırma Geliştirme Danışmanlık Sanayi ve Ticaret Ltd.Şti.</Copyright>
-		<Version>8.1.14</Version>
+		<Version>8.1.15</Version>
 
 	</PropertyGroup>
 	

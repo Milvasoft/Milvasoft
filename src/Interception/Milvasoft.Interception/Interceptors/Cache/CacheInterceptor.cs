@@ -78,7 +78,7 @@ public class CacheInterceptor : IMilvaInterceptor
         cacheAttribute.IsProcessedOnce = true;
     }
 
-    private static string BuildCacheKey(Call call, IServiceProvider serviceProvider, ICacheInterceptionOptions interceptionOptions)
+    private string BuildCacheKey(Call call, IServiceProvider serviceProvider, ICacheInterceptionOptions interceptionOptions)
     {
         var cacheAttribute = call.GetInterceptorAttribute<CacheAttribute>();
 
@@ -95,16 +95,22 @@ public class CacheInterceptor : IMilvaInterceptor
         return cacheKey;
     }
 
-    private static string RequestHeadersForCacheKey(IServiceProvider serviceProvider)
+    private string RequestHeadersForCacheKey(IServiceProvider serviceProvider)
     {
         var httpContextAccessor = serviceProvider.GetService<IHttpContextAccessor>();
 
+        //TODO: except user based headers
         if (httpContextAccessor?.HttpContext?.Request?.Headers != null)
         {
             var stringBuilder = new StringBuilder();
 
             foreach (var header in httpContextAccessor.HttpContext.Request.Headers)
+            {
+                if (_interceptionOptions.IgnoredRequestHeaderKeys.Contains(header.Key))
+                    continue;
+
                 stringBuilder.Append(header.Value);
+            }
 
             return stringBuilder.ToString();
         }

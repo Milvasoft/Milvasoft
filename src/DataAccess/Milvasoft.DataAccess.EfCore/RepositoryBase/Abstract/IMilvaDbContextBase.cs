@@ -1,5 +1,6 @@
 ﻿using EFCore.BulkExtensions;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 
 namespace Milvasoft.DataAccess.EfCore.RepositoryBase.Abstract;
 
@@ -12,6 +13,11 @@ public interface IMilvaDbContextBase
     /// Service provider for access DI contaniner in DbContext.
     /// </summary>
     public IServiceProvider ServiceProvider { get; set; }
+
+    /// <summary>
+    /// Service provider for access DI contaniner in DbContext.
+    /// </summary>
+    public DatabaseFacade Database { get; }
 
     /// <summary>
     /// Gets a DbSet for the specified entity type.

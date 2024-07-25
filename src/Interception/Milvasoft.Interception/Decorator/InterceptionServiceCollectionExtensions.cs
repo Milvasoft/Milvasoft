@@ -377,6 +377,8 @@ public static class InterceptionServiceCollectionExtensions
             opt.CacheAccessorAssemblyQualifiedName = options.CacheAccessorAssemblyQualifiedName;
             opt.CacheAccessorType = options.CacheAccessorType;
             opt.CacheKeyConfigurator = options.CacheKeyConfigurator;
+            opt.IgnoredRequestHeaderKeys = options.IgnoredRequestHeaderKeys;
+            opt.IncludeRequestHeadersWhenCaching = options.IncludeRequestHeadersWhenCaching;
         });
 
         return builder;

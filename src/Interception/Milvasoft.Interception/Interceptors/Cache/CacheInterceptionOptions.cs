@@ -22,6 +22,9 @@ public class CacheInterceptionOptions : ICacheInterceptionOptions
     public bool IncludeRequestHeadersWhenCaching { get; set; } = true;
 
     /// <inheritdoc/>
+    public List<string> IgnoredRequestHeaderKeys { get; set; } = [];
+
+    /// <inheritdoc/>
     public string CacheAccessorAssemblyQualifiedName
     {
         get => _cacheAccessorAssemblyQualifiedName;
@@ -61,6 +64,11 @@ public interface ICacheInterceptionOptions : IInterceptionOptions
     /// If this value is true request headers will included to creation of cache key.
     /// </summary>
     public bool IncludeRequestHeadersWhenCaching { get; set; }
+
+    /// <summary>
+    /// Keys ​​of the headers to be ignored in the cache key creation process.
+    /// </summary>
+    public List<string> IgnoredRequestHeaderKeys { get; set; }
 
     /// <summary>
     /// Cache accessor assembly qualified name for configuring options from configuration file.

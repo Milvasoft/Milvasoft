@@ -149,6 +149,9 @@ public class ResponseMetadataGenerator(IResponseInterceptionOptions responseInte
     {
         object callerObject = callerObjectInfo.Object;
 
+        if (callerObject is null)
+            return;
+
         if (callerObjectInfo.ActualTypeIsCollection)
         {
             var callerObjectsAsList = callerObjectInfo.Object as IList;
