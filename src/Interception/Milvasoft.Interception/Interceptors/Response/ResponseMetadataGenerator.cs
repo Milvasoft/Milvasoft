@@ -156,10 +156,15 @@ public class ResponseMetadataGenerator(IResponseInterceptionOptions responseInte
             {
                 var callerObjectsAsList = callerObject as IList;
 
-                callerObject = callerObjectsAsList.Count > 0 ? callerObjectsAsList[0] : callerObject;
-            }
+                if (callerObjectsAsList.Count > 0)
+                {
+                    callerObject = callerObjectsAsList[0];
 
-            propertyValue = property.GetValue(callerObject, null);
+                    propertyValue = property.GetValue(callerObject, null);
+                }
+            }
+            else
+                propertyValue = property.GetValue(callerObject, null);
         }
 
         CallerObjectInfo childCallerInfo = CallerObjectInfo.CreateCallerInformation(propertyValue, property.PropertyType);

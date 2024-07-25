@@ -193,6 +193,73 @@ public class ResponseMetadataGeneratorTests
         returnValue.Metadatas.Find(m => m.Name == "WillBeExcluded").Should().BeNull();
     }
 
+    [Fact]
+    public void MethodReturnTypeIsListResponseTypedWithEmptyData_WithMetadataGenerator_ShouldModifyResponseCorrecly()
+    {
+        // Arrange
+        var services = GetServices();
+        var options = services.GetService<IResponseInterceptionOptions>();
+        var generator = new ResponseMetadataGenerator(options, services);
+        var sut = services.GetService<ISomeInterface>();
+
+        // Act
+        var returnValue = sut.MethodReturnTypeIsListResponseTypedWithEmptyData();
+        generator.GenerateMetadata(returnValue);
+
+        // Assert
+        returnValue.Messages[0].Message.Should().Be(LocalizerKeys.Successful);
+        returnValue.Data.Should().BeOfType<List<SomeComplexClass>>();
+        returnValue.Data.Should().BeEmpty();
+        returnValue.Metadatas.Should().NotBeEmpty();
+        returnValue.Metadatas.Find(m => m.Name == "IntProp").LocalizedName.Should().Be($"localized_SomeComplexClass.IntProp");
+        returnValue.Metadatas.Find(m => m.Name == "IntProp").Pinned.Should().BeTrue();
+        returnValue.Metadatas.Find(m => m.Name == "StringProp").Mask.Should().BeTrue();
+        returnValue.Metadatas.Find(m => m.Name == "StringProp").DefaultValue.Should().Be("localized_-");
+        returnValue.Metadatas.Find(m => m.Name == "BoolProp").Should().BeNull();
+        returnValue.Metadatas.Find(m => m.Name == "DecimalProp").DecimalPrecision.Precision.Should().Be(18);
+        returnValue.Metadatas.Find(m => m.Name == "DecimalProp").DecimalPrecision.Scale.Should().Be(2);
+        returnValue.Metadatas.Find(m => m.Name == "DecimalProp").DisplayFormat.Should().Be("{DecimalProp}₺");
+        returnValue.Metadatas.Find(m => m.Name == "ListProp").FilterFormat.Should().Be("ListProp[SomeProp]");
+        returnValue.Metadatas.Find(m => m.Name == "ComplexClass").Display.Should().BeFalse();
+        returnValue.Metadatas.Find(m => m.Name == "ComplexClass").Metadatas.Should().NotBeEmpty();
+        returnValue.Metadatas.Find(m => m.Name == "ComplexClass").Metadatas.Find(m => m.Name == "DateProp").TooltipFormat.Should().Be("dddd, dd MMMM yyyy");
+        returnValue.Metadatas.Find(m => m.Name == "ComplexClass").Metadatas.Find(m => m.Name == "EnumProp").Display.Should().BeTrue();
+        returnValue.Metadatas.Find(m => m.Name == "WillBeExcluded").Should().BeNull();
+    }
+
+    [Fact]
+    public void MethodReturnTypeIsListResponseTypedWithNullData_WithMetadataGenerator_ShouldModifyResponseCorrecly()
+    {
+        // Arrange
+        var services = GetServices();
+        var options = services.GetService<IResponseInterceptionOptions>();
+        var generator = new ResponseMetadataGenerator(options, services);
+        var sut = services.GetService<ISomeInterface>();
+
+        // Act
+        var returnValue = sut.MethodReturnTypeIsListResponseTypedWithNullData();
+        generator.GenerateMetadata(returnValue);
+
+        // Assert
+        returnValue.Messages[0].Message.Should().Be(LocalizerKeys.Successful);
+        returnValue.Data.Should().BeNull();
+        returnValue.Metadatas.Should().NotBeEmpty();
+        returnValue.Metadatas.Find(m => m.Name == "IntProp").LocalizedName.Should().Be($"localized_SomeComplexClass.IntProp");
+        returnValue.Metadatas.Find(m => m.Name == "IntProp").Pinned.Should().BeTrue();
+        returnValue.Metadatas.Find(m => m.Name == "StringProp").Mask.Should().BeTrue();
+        returnValue.Metadatas.Find(m => m.Name == "StringProp").DefaultValue.Should().Be("localized_-");
+        returnValue.Metadatas.Find(m => m.Name == "BoolProp").Should().BeNull();
+        returnValue.Metadatas.Find(m => m.Name == "DecimalProp").DecimalPrecision.Precision.Should().Be(18);
+        returnValue.Metadatas.Find(m => m.Name == "DecimalProp").DecimalPrecision.Scale.Should().Be(2);
+        returnValue.Metadatas.Find(m => m.Name == "DecimalProp").DisplayFormat.Should().Be("{DecimalProp}₺");
+        returnValue.Metadatas.Find(m => m.Name == "ListProp").FilterFormat.Should().Be("ListProp[SomeProp]");
+        returnValue.Metadatas.Find(m => m.Name == "ComplexClass").Display.Should().BeFalse();
+        returnValue.Metadatas.Find(m => m.Name == "ComplexClass").Metadatas.Should().NotBeEmpty();
+        returnValue.Metadatas.Find(m => m.Name == "ComplexClass").Metadatas.Find(m => m.Name == "DateProp").TooltipFormat.Should().Be("dddd, dd MMMM yyyy");
+        returnValue.Metadatas.Find(m => m.Name == "ComplexClass").Metadatas.Find(m => m.Name == "EnumProp").Display.Should().BeTrue();
+        returnValue.Metadatas.Find(m => m.Name == "WillBeExcluded").Should().BeNull();
+    }
+
     #region Setup
 
     public interface ISomeInterface
@@ -204,6 +271,8 @@ public class ResponseMetadataGeneratorTests
         Response<List<int?>> MethodNullReturnTypeIsCollectionResponseTyped();
         Response<SomeComplexClass> MethodReturnTypeIsComplexResponseTyped();
         Response<SomeComplexClass> MethodReturnTypeIsNullComplexResponseTyped();
+        ListResponse<SomeComplexClass> MethodReturnTypeIsListResponseTypedWithEmptyData();
+        ListResponse<SomeComplexClass> MethodReturnTypeIsListResponseTypedWithNullData();
     }
 
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Minor Code Smell", "S2344:Enumeration type names should not have \"Flags\" or \"Enum\" suffixes", Justification = "<Pending>")]
@@ -275,6 +344,36 @@ public class ResponseMetadataGeneratorTests
             };
 
             return Response<SomeComplexClass>.Success(data);
+        }
+        public virtual ListResponse<SomeComplexClass> MethodReturnTypeIsListResponseTypedWithEmptyData()
+        {
+            ListResponse<SomeComplexClass> data = new ListResponse<SomeComplexClass>
+            {
+                CurrentPageNumber = 1,
+                TotalDataCount = 0,
+                TotalPageCount = 0,
+                Data = new List<SomeComplexClass>(),
+                IsCachedData = false,
+                IsSuccess = true,
+                Messages = new List<ResponseMessage> { new ResponseMessage() },
+            };
+
+            return data;
+        }
+        public virtual ListResponse<SomeComplexClass> MethodReturnTypeIsListResponseTypedWithNullData()
+        {
+            ListResponse<SomeComplexClass> data = new ListResponse<SomeComplexClass>
+            {
+                CurrentPageNumber = 1,
+                TotalDataCount = 0,
+                TotalPageCount = 0,
+                Data = null,
+                IsCachedData = false,
+                IsSuccess = true,
+                Messages = new List<ResponseMessage> { new ResponseMessage() },
+            };
+
+            return data;
         }
     }
 
