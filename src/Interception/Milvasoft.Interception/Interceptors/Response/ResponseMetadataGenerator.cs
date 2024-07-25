@@ -114,7 +114,7 @@ public class ResponseMetadataGenerator(IResponseInterceptionOptions responseInte
         }
 
         metadata.Name = property.Name;
-        metadata.Type = GetPropertyFriendlyName(property);
+        metadata.Type = GetPropertyFriendlyName(property.PropertyType);
         metadata.DefaultValue = TryGetAttribute(property, out DefaultValueAttribute defaultValueAttribute) ? defaultValueAttribute.Value : null;
 
         ApplyTranslationToMetadata(metadata, callerObjectInfo.ReviewedType, property, defaultValueAttribute);
@@ -148,18 +148,19 @@ public class ResponseMetadataGenerator(IResponseInterceptionOptions responseInte
     private void GenerateChildComplexMetadata(CallerObjectInfo callerObjectInfo, PropertyInfo property, ResponseDataMetadata metadata)
     {
         object callerObject = callerObjectInfo.Object;
+        object propertyValue = null;
 
-        if (callerObject is null)
-            return;
-
-        if (callerObjectInfo.ActualTypeIsCollection)
+        if (callerObject is not null)
         {
-            var callerObjectsAsList = callerObjectInfo.Object as IList;
+            if (callerObjectInfo.ActualTypeIsCollection)
+            {
+                var callerObjectsAsList = callerObject as IList;
 
-            callerObject = callerObjectsAsList.Count > 0 ? callerObjectsAsList[0] : callerObjectInfo.Object;
+                callerObject = callerObjectsAsList.Count > 0 ? callerObjectsAsList[0] : callerObject;
+            }
+
+            propertyValue = property.GetValue(callerObject, null);
         }
-
-        object propertyValue = property.GetValue(callerObject, null);
 
         CallerObjectInfo childCallerInfo = CallerObjectInfo.CreateCallerInformation(propertyValue, property.PropertyType);
 
@@ -288,12 +289,12 @@ public class ResponseMetadataGenerator(IResponseInterceptionOptions responseInte
     /// <summary>
     /// Gets the user-friendly name of the property.
     /// </summary>
-    /// <param name="prop">The property.</param>
+    /// <param name="propertyType">The property type.</param>
     /// <returns>The user-friendly name of the property.</returns>
-    private static string GetPropertyFriendlyName(PropertyInfo prop)
-        => prop.PropertyType.IsGenericType
-            ? $"{prop.PropertyType.Name.Remove(prop.PropertyType.Name.IndexOf('`'))}.{string.Join(',', prop.PropertyType.GetGenericArguments().Select(i => i.Name))}"
-            : prop.PropertyType.Name;
+    private static string GetPropertyFriendlyName(Type propertyType)
+        => propertyType.IsGenericType
+               ? $"{propertyType.Name.Remove(propertyType.Name.IndexOf('`'))}.{string.Join(',', propertyType.GetGenericArguments().Select(GetPropertyFriendlyName))}"
+               : propertyType.Name;
 }
 
 /// <summary>

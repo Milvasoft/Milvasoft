@@ -99,7 +99,6 @@ public class CacheInterceptor : IMilvaInterceptor
     {
         var httpContextAccessor = serviceProvider.GetService<IHttpContextAccessor>();
 
-        //TODO: except user based headers
         if (httpContextAccessor?.HttpContext?.Request?.Headers != null)
         {
             var stringBuilder = new StringBuilder();
