@@ -22,7 +22,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="6.6.2" />
+    <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="6.7.0" />
   </ItemGroup>
 
 	<PropertyGroup>
@@ -38,7 +38,7 @@
 		<Description>Swagger helper components.</Description>
 		<PackageTags>swagger, filter, request, header, operation</PackageTags>
 		<Copyright>Milvasoft Yazılım Bilişim Araştırma Geliştirme Danışmanlık Sanayi ve Ticaret Ltd.Şti.</Copyright>
-		<Version>8.1.17</Version>
+		<Version>8.1.18</Version>
 
 	</PropertyGroup>
 	

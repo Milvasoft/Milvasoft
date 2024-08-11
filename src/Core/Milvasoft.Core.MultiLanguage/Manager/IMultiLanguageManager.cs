@@ -27,7 +27,7 @@ public interface IMultiLanguageManager
     public int GetCurrentLanguageId();
 
     /// <summary>
-    /// Creates an expression that retrieves the language-specific value of a property for a given entity based on the current language.
+    /// Creates an expression that retrieves the language-specific value of a property for a given entity based on the current language. You can use it on lists or navigation properties.
     /// </summary>
     /// <typeparam name="TEntity">The type of the entity.</typeparam>
     /// <typeparam name="TDto">The type of the DTO.</typeparam>

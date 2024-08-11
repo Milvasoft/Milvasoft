@@ -92,6 +92,25 @@ public class ListResponse<T> : Response<List<T>>
         TotalDataCount = totalDataCount;
     }
 
+    public ListResponse<TReturn> Convert<TReturn>(List<TReturn> data)
+    {
+        var response = new ListResponse<TReturn>
+        {
+            Data = data,
+            IsSuccess = IsSuccess,
+            Messages = Messages,
+            CurrentPageNumber = CurrentPageNumber,
+            TotalPageCount = TotalPageCount,
+            TotalDataCount = TotalDataCount,
+            AggregationResults = AggregationResults,
+            IsCachedData = IsCachedData,
+            Metadatas = Metadatas,
+            StatusCode = StatusCode
+        };
+
+        return response;
+    }
+
 #pragma warning disable CS0108 // Member hides inherited member; missing new keyword
     #region Success
 

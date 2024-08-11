@@ -324,7 +324,7 @@ public static class ModelBuilderExtensions
     }
 
     /// <summary>
-    /// Translation entities relationships.
+    /// Translation entities relationships. It is not build relationships for ColumnAttribute(TypeName='jsonb') decorated properties.
     /// </summary>
     /// <remarks>
     /// You can use this method with <see cref="UsePrecision(ModelBuilder, int, int)"/> method. 
@@ -332,10 +332,15 @@ public static class ModelBuilderExtensions
     /// <param name="modelBuilder"></param>
     public static ModelBuilder UseTranslationEntityRelations(this ModelBuilder modelBuilder)
     {
-        var languageEntities = modelBuilder.Model.GetEntityTypes().Where(e => e.ClrType.CanAssignableTo(typeof(IHasTranslation<>)));
+        var languageEntities = modelBuilder.Model.GetEntityTypes().Where(e => e.ClrType.CanAssignableTo(typeof(IHasTranslation<>))).ToList();
 
         foreach (var entityType in languageEntities)
         {
+            if (Array.Exists(entityType.ClrType.GetProperties(), p => (p.PropertyType.GetCustomAttribute<ColumnAttribute>()?.TypeName == "jsonb")))
+            {
+                continue;
+            }
+
             modelBuilder.Entity(entityType.ClrType)
                         .HasMany(MultiLanguageEntityPropertyNames.Translations)
                         .WithOne(MultiLanguageEntityPropertyNames.Entity)

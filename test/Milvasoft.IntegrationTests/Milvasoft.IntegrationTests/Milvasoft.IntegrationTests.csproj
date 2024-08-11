@@ -17,7 +17,7 @@
 		<PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="8.0.7" />
 		<PackageReference Include="Respawn" Version="6.2.1" />
 		<PackageReference Include="Testcontainers.PostgreSql" Version="3.9.0" />
-		<PackageReference Include="WireMock.Net" Version="1.5.60" />
+		<PackageReference Include="WireMock.Net" Version="1.5.62" />
 		<PackageReference Include="coverlet.collector" Version="6.0.2">
 		  <PrivateAssets>all</PrivateAssets>
 		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>

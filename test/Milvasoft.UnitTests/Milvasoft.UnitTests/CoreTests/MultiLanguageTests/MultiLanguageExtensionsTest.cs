@@ -57,12 +57,12 @@ public class MultiLanguageExtensionsTest
         IEnumerable<string> translationEntityPropNames = [nameof(TranslationEntityFixture.Name)];
         Expression<Func<HasTranslationEntityFixture, HasTranslationEntityFixture>> expected = c => new HasTranslationEntityFixture
         {
-            Translations = (ICollection<TranslationEntityFixture>)(c.Translations.Any() == false ? null : c.Translations
-                                                                                                    .Select(t => new TranslationEntityFixture
-                                                                                                    {
-                                                                                                        Name = t.Name,
-                                                                                                        LanguageId = t.LanguageId
-                                                                                                    }).ToList())
+            Translations = (c.Translations.Any() == false ? null : c.Translations
+                                                                    .Select(t => new TranslationEntityFixture
+                                                                    {
+                                                                        Name = t.Name,
+                                                                        LanguageId = t.LanguageId
+                                                                    }).ToList())
         };
 
         // Act
@@ -81,7 +81,7 @@ public class MultiLanguageExtensionsTest
         Expression<Func<HasTranslationEntityFixture, HasTranslationEntityFixture>> expected = c => new HasTranslationEntityFixture
         {
             Priority = c.Priority,
-            Translations = (ICollection<TranslationEntityFixture>)(c.Translations.Any() == false ? null : c.Translations
+            Translations = (c.Translations.Any() == false ? null : c.Translations
                                                                                                     .Select(t => new TranslationEntityFixture
                                                                                                     {
                                                                                                         Name = t.Name,

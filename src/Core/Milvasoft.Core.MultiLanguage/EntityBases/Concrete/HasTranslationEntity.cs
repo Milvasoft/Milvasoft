@@ -22,7 +22,7 @@ public abstract class HasTranslationEntity<TKey, TTranslationEntity> : EntityBas
     /// Multi language data.
     /// </summary>
     [NotMapped]
-    public virtual ICollection<TTranslationEntity> Translations { get; set; }
+    public virtual List<TTranslationEntity> Translations { get; set; }
 
     /// <summary>
     /// Returns this instance of "<see cref="Type"/>.Name <see cref="BaseEntity{TKey}"/>.Id" as string.

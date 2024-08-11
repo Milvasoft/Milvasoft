@@ -21,13 +21,19 @@ public class SwaggerFileOperationFilter : IOperationFilter
         if (operation.RequestBody == null || !operation.RequestBody.Content.Any(x => x.Key.Equals(fileUploadMime, StringComparison.InvariantCultureIgnoreCase)))
             return;
 
-        var fileParams = context.MethodInfo.GetParameters().Where(p => p.ParameterType == typeof(IFormFile));
+        var fileParams = context.MethodInfo.GetParameters().Where(p => IsContainsFileType(p.ParameterType));
 
-        operation.RequestBody.Content[fileUploadMime].Schema.Properties = fileParams.ToDictionary(k => k.Name, v => new OpenApiSchema()
+        foreach (var fileParam in fileParams)
         {
-            Type = "string",
-            Format = "binary",
-            Description = "File to be upload."
-        });
+            operation.RequestBody.Content[fileUploadMime].Schema.Properties.Add(fileParam.Name, new OpenApiSchema()
+            {
+                Type = "string",
+                Format = "binary",
+                Description = "File to be upload."
+            });
+        }
+
+        static bool IsContainsFileType(Type type)
+            => type == typeof(IFormFile) || Array.Exists(type.GetProperties(), pp => IsContainsFileType(pp.PropertyType));
     }
 }

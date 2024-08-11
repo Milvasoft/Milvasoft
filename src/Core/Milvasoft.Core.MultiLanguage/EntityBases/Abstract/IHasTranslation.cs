@@ -12,5 +12,5 @@ public interface IHasTranslation<TTranslationEntity> where TTranslationEntity : 
     /// Translation data.
     /// </summary>
     [NotMapped]
-    public ICollection<TTranslationEntity> Translations { get; set; }
+    public List<TTranslationEntity> Translations { get; set; }
 }
