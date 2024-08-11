@@ -99,6 +99,24 @@ public class ResponseMetadataGenerator(IResponseInterceptionOptions responseInte
         bool removePropMetadataFromResponse = ShouldHide(property);
         bool mask = ShouldMask(property);
 
+        //Self referencing
+        if (property.PropertyType == callerObjectInfo.ActualType)
+        {
+            var selfMetadata = new ResponseDataMetadata
+            {
+                Name = "~Self",
+                LocalizedName = "~Self",
+                Type = GetPropertyFriendlyName(property.PropertyType),
+                Filterable = false,
+            };
+
+            ApplyMetadataTags(selfMetadata, property, mask);
+
+            metadatas.Add(selfMetadata);
+
+            return;
+        }
+
         ApplyMetadataRules(callerObjectInfo.Object, callerObjectInfo.ActualTypeIsCollection, property, mask, removePropMetadataFromResponse);
 
         if (!_interceptionOptions.MetadataCreationEnabled || removePropMetadataFromResponse)
@@ -127,6 +145,13 @@ public class ResponseMetadataGenerator(IResponseInterceptionOptions responseInte
         }
 
         //Fill metadata object
+        ApplyMetadataTags(metadata, property, mask);
+
+        metadatas.Add(metadata);
+    }
+
+    private void ApplyMetadataTags(ResponseDataMetadata metadata, PropertyInfo property, bool mask)
+    {
         metadata.Display = !TryGetAttribute(property, out BrowsableAttribute browsableAttribute) || browsableAttribute.Browsable;
         metadata.Mask = mask;
         metadata.Filterable = !TryGetAttribute(property, out FilterableAttribute filterableAttribute) || filterableAttribute.Filterable;
@@ -135,8 +160,6 @@ public class ResponseMetadataGenerator(IResponseInterceptionOptions responseInte
         metadata.DecimalPrecision = TryGetAttribute(property, out DecimalPrecisionAttribute decimalPrecisionAttribute) ? decimalPrecisionAttribute.DecimalPrecision : null;
         metadata.TooltipFormat = TryGetAttribute(property, out TooltipFormatAttribute cellTooltipFormatAttribute) ? cellTooltipFormatAttribute.Format : null;
         metadata.DisplayFormat = TryGetAttribute(property, out DisplayFormatAttribute cellDisplayFormatAttribute) ? cellDisplayFormatAttribute.Format : null;
-
-        metadatas.Add(metadata);
     }
 
     /// <summary>

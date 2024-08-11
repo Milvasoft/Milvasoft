@@ -336,7 +336,7 @@ public static class ModelBuilderExtensions
 
         foreach (var entityType in languageEntities)
         {
-            if (Array.Exists(entityType.ClrType.GetProperties(), p => (p.PropertyType.GetCustomAttribute<ColumnAttribute>()?.TypeName == "jsonb")))
+            if (Array.Exists(entityType.ClrType.GetProperties(), p => (p.GetCustomAttribute<ColumnAttribute>()?.TypeName == "jsonb")))
             {
                 continue;
             }

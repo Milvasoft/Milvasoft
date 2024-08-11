@@ -51,7 +51,7 @@
 		<Description>Add multi tenancy support to your application easily.</Description>
 		<PackageTags>multitenancy,database,ef,redis,cache,tenant</PackageTags>
 		<Copyright>Milvasoft Yazılım Bilişim Araştırma Geliştirme Danışmanlık Sanayi ve Ticaret Ltd.Şti.</Copyright>
-		<Version>8.1.18</Version>
+		<Version>8.1.19</Version>
 
 	</PropertyGroup>
 </Project>
