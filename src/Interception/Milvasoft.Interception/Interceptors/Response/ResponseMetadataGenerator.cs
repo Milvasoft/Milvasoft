@@ -99,23 +99,6 @@ public class ResponseMetadataGenerator(IResponseInterceptionOptions responseInte
         bool removePropMetadataFromResponse = ShouldHide(property);
         bool mask = ShouldMask(property);
 
-        //Self referencing
-        if (property.PropertyType == callerObjectInfo.ActualType)
-        {
-            var selfMetadata = new ResponseDataMetadata
-            {
-                Name = "~Self",
-                LocalizedName = "~Self",
-                Type = GetPropertyFriendlyName(property.PropertyType),
-                Filterable = false,
-            };
-
-            ApplyMetadataTags(selfMetadata, property, mask);
-
-            metadatas.Add(selfMetadata);
-
-            return;
-        }
 
         ApplyMetadataRules(callerObjectInfo.Object, callerObjectInfo.ActualTypeIsCollection, property, mask, removePropMetadataFromResponse);
 
@@ -126,8 +109,26 @@ public class ResponseMetadataGenerator(IResponseInterceptionOptions responseInte
 
         var metadata = new ResponseDataMetadata();
 
-        if (property.PropertyType.IsClass && !CallerObjectInfo.ReviewObjectType(property.PropertyType, out bool _).Namespace.Contains(nameof(System)))
+        if (property.PropertyType.IsClass && !CallerObjectInfo.ReviewObjectType(property.PropertyType, out bool isCollectionComplex).Namespace.Contains(nameof(System)))
         {
+            //Self referencing
+            if (property.PropertyType == callerObjectInfo.ReviewedType || (property.PropertyType.IsGenericType && property.PropertyType.GetGenericArguments()[0] == callerObjectInfo.ReviewedType))
+            {
+                var selfMetadata = new ResponseDataMetadata
+                {
+                    Name = "~Self",
+                    LocalizedName = "~Self",
+                    Type = GetPropertyFriendlyName(property.PropertyType),
+                    Filterable = false,
+                };
+
+                ApplyMetadataTags(selfMetadata, property, mask);
+
+                metadatas.Add(selfMetadata);
+
+                return;
+            }
+
             GenerateChildComplexMetadata(callerObjectInfo, property, metadata);
         }
 
@@ -150,6 +151,12 @@ public class ResponseMetadataGenerator(IResponseInterceptionOptions responseInte
         metadatas.Add(metadata);
     }
 
+    /// <summary>
+    /// Apply metadata tags to <paramref name="metadata"/> object.
+    /// </summary>
+    /// <param name="metadata"></param>
+    /// <param name="property"></param>
+    /// <param name="mask"></param>
     private void ApplyMetadataTags(ResponseDataMetadata metadata, PropertyInfo property, bool mask)
     {
         metadata.Display = !TryGetAttribute(property, out BrowsableAttribute browsableAttribute) || browsableAttribute.Browsable;
@@ -322,7 +329,25 @@ public class ResponseMetadataGenerator(IResponseInterceptionOptions responseInte
     private static string GetPropertyFriendlyName(Type propertyType)
         => propertyType.IsGenericType
                ? $"{propertyType.Name.Remove(propertyType.Name.IndexOf('`'))}.{string.Join(',', propertyType.GetGenericArguments().Select(GetPropertyFriendlyName))}"
-               : propertyType.Name;
+               : $"{GetTypePrefix(propertyType)}{propertyType.Name}";
+
+    private static string GetTypePrefix(Type propertyType)
+    {
+        string prefix = string.Empty;
+
+        if (propertyType.IsGenericType)
+            return prefix;
+        else if (propertyType.IsPrimitive)
+            prefix = "System.";
+        else if (propertyType == typeof(string) || propertyType == typeof(decimal) || propertyType == typeof(DateTime))
+            prefix = "System.";
+        else if (propertyType.IsEnum)
+            prefix = "Enum.";
+        else
+            prefix = "Object.";
+
+        return prefix;
+    }
 }
 
 /// <summary>

@@ -57,7 +57,7 @@ public class ResponseInterceptorTests
         result.Messages[0].Message.Should().Be($"localized_{LocalizerKeys.Successful}");
         result.Data.Should().Be(1);
         result.Metadatas.Should().NotBeEmpty();
-        result.Metadatas[0].Type.Should().Be("Int32");
+        result.Metadatas[0].Type.Should().Be("System.Int32");
         result.Metadatas[0].LocalizedName.Should().Be("Data");
         result.Metadatas[0].Display.Should().BeTrue();
     }
@@ -76,7 +76,7 @@ public class ResponseInterceptorTests
         result.Messages[0].Message.Should().Be($"localized_{LocalizerKeys.Successful}");
         result.Data[0].Should().Be(1);
         result.Metadatas.Should().NotBeEmpty();
-        result.Metadatas[0].Type.Should().Be("List.Int32");
+        result.Metadatas[0].Type.Should().Be("List.System.Int32");
         result.Metadatas[0].LocalizedName.Should().Be("Data");
         result.Metadatas[0].Display.Should().BeTrue();
     }

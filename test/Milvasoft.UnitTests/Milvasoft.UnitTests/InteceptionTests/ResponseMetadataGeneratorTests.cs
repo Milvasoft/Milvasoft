@@ -32,7 +32,7 @@ public class ResponseMetadataGeneratorTests
         returnValue.Messages[0].Message.Should().Be(LocalizerKeys.Successful);
         returnValue.Data.Should().BeNull();
         returnValue.Metadatas.Should().NotBeEmpty();
-        returnValue.Metadatas[0].Type.Should().Be("Nullable.Int32");
+        returnValue.Metadatas[0].Type.Should().Be("Nullable.System.Int32");
         returnValue.Metadatas[0].LocalizedName.Should().Be("Data");
         returnValue.Metadatas[0].Display.Should().BeTrue();
     }
@@ -54,7 +54,7 @@ public class ResponseMetadataGeneratorTests
         returnValue.Messages[0].Message.Should().Be(LocalizerKeys.Successful);
         returnValue.Data.Should().Be(1);
         returnValue.Metadatas.Should().NotBeEmpty();
-        returnValue.Metadatas[0].Type.Should().Be("Int32");
+        returnValue.Metadatas[0].Type.Should().Be("System.Int32");
         returnValue.Metadatas[0].LocalizedName.Should().Be("Data");
         returnValue.Metadatas[0].Display.Should().BeTrue();
     }
@@ -76,7 +76,7 @@ public class ResponseMetadataGeneratorTests
         returnValue.Messages[0].Message.Should().Be(LocalizerKeys.Successful);
         returnValue.Data.Should().BeNull();
         returnValue.Metadatas.Should().NotBeEmpty();
-        returnValue.Metadatas[0].Type.Should().Be("List.Int32");
+        returnValue.Metadatas[0].Type.Should().Be("List.System.Int32");
         returnValue.Metadatas[0].LocalizedName.Should().Be("Data");
         returnValue.Metadatas[0].Display.Should().BeTrue();
     }
@@ -98,7 +98,7 @@ public class ResponseMetadataGeneratorTests
         returnValue.Messages[0].Message.Should().Be(LocalizerKeys.Successful);
         returnValue.Data[0].Should().Be(1);
         returnValue.Metadatas.Should().NotBeEmpty();
-        returnValue.Metadatas[0].Type.Should().Be("List.Int32");
+        returnValue.Metadatas[0].Type.Should().Be("List.System.Int32");
         returnValue.Metadatas[0].LocalizedName.Should().Be("Data");
         returnValue.Metadatas[0].Display.Should().BeTrue();
     }
@@ -120,7 +120,7 @@ public class ResponseMetadataGeneratorTests
         returnValue.Messages[0].Message.Should().Be(LocalizerKeys.Successful);
         returnValue.Data[0].Should().Be(null);
         returnValue.Metadatas.Should().NotBeEmpty();
-        returnValue.Metadatas[0].Type.Should().Be("List.Nullable.Int32");
+        returnValue.Metadatas[0].Type.Should().Be("List.Nullable.System.Int32");
         returnValue.Metadatas[0].LocalizedName.Should().Be("Data");
         returnValue.Metadatas[0].Display.Should().BeTrue();
     }
@@ -257,6 +257,7 @@ public class ResponseMetadataGeneratorTests
         returnValue.Metadatas.Find(m => m.Name == "ComplexClass").Metadatas.Should().NotBeEmpty();
         returnValue.Metadatas.Find(m => m.Name == "ComplexClass").Metadatas.Find(m => m.Name == "DateProp").TooltipFormat.Should().Be("dddd, dd MMMM yyyy");
         returnValue.Metadatas.Find(m => m.Name == "ComplexClass").Metadatas.Find(m => m.Name == "EnumProp").Display.Should().BeTrue();
+        returnValue.Metadatas.Where(m => m.Name == "~Self").Count().Should().Be(2);
         returnValue.Metadatas.Find(m => m.Name == "WillBeExcluded").Should().BeNull();
     }
 
@@ -304,6 +305,12 @@ public class ResponseMetadataGeneratorTests
 
         [Browsable(false)]
         public AnotherComplexClass ComplexClass { get; set; }
+
+        [Browsable(false)]
+        public SomeComplexClass SelfReferencingProp { get; set; }
+
+        [Browsable(false)]
+        public List<SomeComplexClass> SelfReferencingListProp { get; set; }
 
         [ExcludeFromMetadata]
         public Expression<Func<AnotherComplexClass, bool>> WillBeExcluded { get; set; }
