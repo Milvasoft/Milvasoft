@@ -368,7 +368,7 @@ public abstract class MilvaDbContext(DbContextOptions options) : DbContext(optio
             {
                 if (entityType.CanAssignableTo(typeof(IHasTranslation<>)))
                 {
-                    translationEntityType = Array.Find(assemblyTypes, i => i.CanAssignableTo(typeof(ITranslationEntity<>).MakeGenericType(entityType)));
+                    translationEntityType = Array.Find(assemblyTypes, i => i.IsAssignableTo(typeof(ITranslationEntity<>).MakeGenericType(entityType)));
                 }
 
                 // check requested property names are valid and categorize them as main entity and translation entity
