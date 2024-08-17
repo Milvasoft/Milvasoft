@@ -84,7 +84,9 @@ public class CacheInterceptor : IMilvaInterceptor
 
         string cacheKey = string.IsNullOrWhiteSpace(cacheAttribute.Key) ? call.Method.Name : cacheAttribute.Key;
 
-        var methodParameters = call.Arguments?.ToList().RemoveAll(p => p is CancellationToken);
+        var methodParameters = call.Arguments?.ToList();
+
+        methodParameters?.RemoveAll(p => p is CancellationToken);
 
         var requestHeaders = interceptionOptions.IncludeRequestHeadersWhenCaching ? RequestHeadersForCacheKey(serviceProvider) : string.Empty;
 
