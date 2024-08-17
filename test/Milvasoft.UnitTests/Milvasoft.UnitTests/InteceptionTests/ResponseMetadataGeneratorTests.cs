@@ -142,20 +142,20 @@ public class ResponseMetadataGeneratorTests
         returnValue.Messages[0].Message.Should().Be(LocalizerKeys.Successful);
         returnValue.Data.Should().BeNull();
         returnValue.Metadatas.Should().NotBeEmpty();
-        returnValue.Metadatas.Find(m => m.Name == "IntProp").LocalizedName.Should().Be($"localized_SomeComplexClass.IntProp");
-        returnValue.Metadatas.Find(m => m.Name == "IntProp").Pinned.Should().BeTrue();
-        returnValue.Metadatas.Find(m => m.Name == "StringProp").Mask.Should().BeTrue();
-        returnValue.Metadatas.Find(m => m.Name == "StringProp").DefaultValue.Should().Be("localized_-");
-        returnValue.Metadatas.Find(m => m.Name == "BoolProp").Should().BeNull();
-        returnValue.Metadatas.Find(m => m.Name == "DecimalProp").DecimalPrecision.Precision.Should().Be(18);
-        returnValue.Metadatas.Find(m => m.Name == "DecimalProp").DecimalPrecision.Scale.Should().Be(2);
-        returnValue.Metadatas.Find(m => m.Name == "DecimalProp").DisplayFormat.Should().Be("{DecimalProp}₺");
-        returnValue.Metadatas.Find(m => m.Name == "ListProp").FilterFormat.Should().Be("ListProp[SomeProp]");
-        returnValue.Metadatas.Find(m => m.Name == "ComplexClass").Display.Should().BeFalse();
-        returnValue.Metadatas.Find(m => m.Name == "ComplexClass").Metadatas.Should().NotBeEmpty();
-        returnValue.Metadatas.Find(m => m.Name == "ComplexClass").Metadatas.Find(m => m.Name == "DateProp").TooltipFormat.Should().Be("dddd, dd MMMM yyyy");
-        returnValue.Metadatas.Find(m => m.Name == "ComplexClass").Metadatas.Find(m => m.Name == "EnumProp").Display.Should().BeTrue();
-        returnValue.Metadatas.Find(m => m.Name == "WillBeExcluded").Should().BeNull();
+        returnValue.Metadatas.Find(m => m.Name == "intProp").LocalizedName.Should().Be($"localized_SomeComplexClass.IntProp");
+        returnValue.Metadatas.Find(m => m.Name == "intProp").Pinned.Should().BeTrue();
+        returnValue.Metadatas.Find(m => m.Name == "stringProp").Mask.Should().BeTrue();
+        returnValue.Metadatas.Find(m => m.Name == "stringProp").DefaultValue.Should().Be("localized_-");
+        returnValue.Metadatas.Find(m => m.Name == "boolProp").Should().BeNull();
+        returnValue.Metadatas.Find(m => m.Name == "decimalProp").DecimalPrecision.Precision.Should().Be(18);
+        returnValue.Metadatas.Find(m => m.Name == "decimalProp").DecimalPrecision.Scale.Should().Be(2);
+        returnValue.Metadatas.Find(m => m.Name == "decimalProp").DisplayFormat.Should().Be("{DecimalProp}₺");
+        returnValue.Metadatas.Find(m => m.Name == "listProp").FilterFormat.Should().Be("ListProp[SomeProp]");
+        returnValue.Metadatas.Find(m => m.Name == "complexClass").Display.Should().BeFalse();
+        returnValue.Metadatas.Find(m => m.Name == "complexClass").Metadatas.Should().NotBeEmpty();
+        returnValue.Metadatas.Find(m => m.Name == "complexClass").Metadatas.Find(m => m.Name == "dateProp").TooltipFormat.Should().Be("dddd, dd MMMM yyyy");
+        returnValue.Metadatas.Find(m => m.Name == "complexClass").Metadatas.Find(m => m.Name == "enumProp").Display.Should().BeTrue();
+        returnValue.Metadatas.Find(m => m.Name == "willBeExcluded").Should().BeNull();
     }
 
     [Fact]
@@ -175,22 +175,22 @@ public class ResponseMetadataGeneratorTests
         returnValue.Messages[0].Message.Should().Be(LocalizerKeys.Successful);
         returnValue.Data.Should().BeOfType<SomeComplexClass>();
         returnValue.Metadatas.Should().NotBeEmpty();
-        returnValue.Metadatas.Find(m => m.Name == "IntProp").LocalizedName.Should().Be($"localized_SomeComplexClass.IntProp");
-        returnValue.Metadatas.Find(m => m.Name == "IntProp").Pinned.Should().BeTrue();
-        returnValue.Metadatas.Find(m => m.Name == "StringProp").Mask.Should().BeTrue();
-        returnValue.Metadatas.Find(m => m.Name == "StringProp").DefaultValue.Should().Be("localized_-");
+        returnValue.Metadatas.Find(m => m.Name == "intProp").LocalizedName.Should().Be($"localized_SomeComplexClass.IntProp");
+        returnValue.Metadatas.Find(m => m.Name == "intProp").Pinned.Should().BeTrue();
+        returnValue.Metadatas.Find(m => m.Name == "stringProp").Mask.Should().BeTrue();
+        returnValue.Metadatas.Find(m => m.Name == "stringProp").DefaultValue.Should().Be("localized_-");
         returnValue.Data.StringProp.Should().Contain("*");
-        returnValue.Metadatas.Find(m => m.Name == "BoolProp").Should().BeNull();
+        returnValue.Metadatas.Find(m => m.Name == "boolProp").Should().BeNull();
         returnValue.Data.BoolProp.Should().BeFalse();
-        returnValue.Metadatas.Find(m => m.Name == "DecimalProp").DecimalPrecision.Precision.Should().Be(18);
-        returnValue.Metadatas.Find(m => m.Name == "DecimalProp").DecimalPrecision.Scale.Should().Be(2);
-        returnValue.Metadatas.Find(m => m.Name == "DecimalProp").DisplayFormat.Should().Be("{DecimalProp}₺");
-        returnValue.Metadatas.Find(m => m.Name == "ListProp").FilterFormat.Should().Be("ListProp[SomeProp]");
-        returnValue.Metadatas.Find(m => m.Name == "ComplexClass").Display.Should().BeFalse();
-        returnValue.Metadatas.Find(m => m.Name == "ComplexClass").Metadatas.Should().NotBeEmpty();
-        returnValue.Metadatas.Find(m => m.Name == "ComplexClass").Metadatas.Find(m => m.Name == "DateProp").TooltipFormat.Should().Be("dddd, dd MMMM yyyy");
-        returnValue.Metadatas.Find(m => m.Name == "ComplexClass").Metadatas.Find(m => m.Name == "EnumProp").Display.Should().BeTrue();
-        returnValue.Metadatas.Find(m => m.Name == "WillBeExcluded").Should().BeNull();
+        returnValue.Metadatas.Find(m => m.Name == "decimalProp").DecimalPrecision.Precision.Should().Be(18);
+        returnValue.Metadatas.Find(m => m.Name == "decimalProp").DecimalPrecision.Scale.Should().Be(2);
+        returnValue.Metadatas.Find(m => m.Name == "decimalProp").DisplayFormat.Should().Be("{DecimalProp}₺");
+        returnValue.Metadatas.Find(m => m.Name == "listProp").FilterFormat.Should().Be("ListProp[SomeProp]");
+        returnValue.Metadatas.Find(m => m.Name == "complexClass").Display.Should().BeFalse();
+        returnValue.Metadatas.Find(m => m.Name == "complexClass").Metadatas.Should().NotBeEmpty();
+        returnValue.Metadatas.Find(m => m.Name == "complexClass").Metadatas.Find(m => m.Name == "dateProp").TooltipFormat.Should().Be("dddd, dd MMMM yyyy");
+        returnValue.Metadatas.Find(m => m.Name == "complexClass").Metadatas.Find(m => m.Name == "enumProp").Display.Should().BeTrue();
+        returnValue.Metadatas.Find(m => m.Name == "willBeExcluded").Should().BeNull();
     }
 
     [Fact]
@@ -211,20 +211,20 @@ public class ResponseMetadataGeneratorTests
         returnValue.Data.Should().BeOfType<List<SomeComplexClass>>();
         returnValue.Data.Should().BeEmpty();
         returnValue.Metadatas.Should().NotBeEmpty();
-        returnValue.Metadatas.Find(m => m.Name == "IntProp").LocalizedName.Should().Be($"localized_SomeComplexClass.IntProp");
-        returnValue.Metadatas.Find(m => m.Name == "IntProp").Pinned.Should().BeTrue();
-        returnValue.Metadatas.Find(m => m.Name == "StringProp").Mask.Should().BeTrue();
-        returnValue.Metadatas.Find(m => m.Name == "StringProp").DefaultValue.Should().Be("localized_-");
-        returnValue.Metadatas.Find(m => m.Name == "BoolProp").Should().BeNull();
-        returnValue.Metadatas.Find(m => m.Name == "DecimalProp").DecimalPrecision.Precision.Should().Be(18);
-        returnValue.Metadatas.Find(m => m.Name == "DecimalProp").DecimalPrecision.Scale.Should().Be(2);
-        returnValue.Metadatas.Find(m => m.Name == "DecimalProp").DisplayFormat.Should().Be("{DecimalProp}₺");
-        returnValue.Metadatas.Find(m => m.Name == "ListProp").FilterFormat.Should().Be("ListProp[SomeProp]");
-        returnValue.Metadatas.Find(m => m.Name == "ComplexClass").Display.Should().BeFalse();
-        returnValue.Metadatas.Find(m => m.Name == "ComplexClass").Metadatas.Should().NotBeEmpty();
-        returnValue.Metadatas.Find(m => m.Name == "ComplexClass").Metadatas.Find(m => m.Name == "DateProp").TooltipFormat.Should().Be("dddd, dd MMMM yyyy");
-        returnValue.Metadatas.Find(m => m.Name == "ComplexClass").Metadatas.Find(m => m.Name == "EnumProp").Display.Should().BeTrue();
-        returnValue.Metadatas.Find(m => m.Name == "WillBeExcluded").Should().BeNull();
+        returnValue.Metadatas.Find(m => m.Name == "intProp").LocalizedName.Should().Be($"localized_SomeComplexClass.IntProp");
+        returnValue.Metadatas.Find(m => m.Name == "intProp").Pinned.Should().BeTrue();
+        returnValue.Metadatas.Find(m => m.Name == "stringProp").Mask.Should().BeTrue();
+        returnValue.Metadatas.Find(m => m.Name == "stringProp").DefaultValue.Should().Be("localized_-");
+        returnValue.Metadatas.Find(m => m.Name == "boolProp").Should().BeNull();
+        returnValue.Metadatas.Find(m => m.Name == "decimalProp").DecimalPrecision.Precision.Should().Be(18);
+        returnValue.Metadatas.Find(m => m.Name == "decimalProp").DecimalPrecision.Scale.Should().Be(2);
+        returnValue.Metadatas.Find(m => m.Name == "decimalProp").DisplayFormat.Should().Be("{DecimalProp}₺");
+        returnValue.Metadatas.Find(m => m.Name == "listProp").FilterFormat.Should().Be("ListProp[SomeProp]");
+        returnValue.Metadatas.Find(m => m.Name == "complexClass").Display.Should().BeFalse();
+        returnValue.Metadatas.Find(m => m.Name == "complexClass").Metadatas.Should().NotBeEmpty();
+        returnValue.Metadatas.Find(m => m.Name == "complexClass").Metadatas.Find(m => m.Name == "dateProp").TooltipFormat.Should().Be("dddd, dd MMMM yyyy");
+        returnValue.Metadatas.Find(m => m.Name == "complexClass").Metadatas.Find(m => m.Name == "enumProp").Display.Should().BeTrue();
+        returnValue.Metadatas.Find(m => m.Name == "willBeExcluded").Should().BeNull();
     }
 
     [Fact]
@@ -244,21 +244,21 @@ public class ResponseMetadataGeneratorTests
         returnValue.Messages[0].Message.Should().Be(LocalizerKeys.Successful);
         returnValue.Data.Should().BeNull();
         returnValue.Metadatas.Should().NotBeEmpty();
-        returnValue.Metadatas.Find(m => m.Name == "IntProp").LocalizedName.Should().Be($"localized_SomeComplexClass.IntProp");
-        returnValue.Metadatas.Find(m => m.Name == "IntProp").Pinned.Should().BeTrue();
-        returnValue.Metadatas.Find(m => m.Name == "StringProp").Mask.Should().BeTrue();
-        returnValue.Metadatas.Find(m => m.Name == "StringProp").DefaultValue.Should().Be("localized_-");
-        returnValue.Metadatas.Find(m => m.Name == "BoolProp").Should().BeNull();
-        returnValue.Metadatas.Find(m => m.Name == "DecimalProp").DecimalPrecision.Precision.Should().Be(18);
-        returnValue.Metadatas.Find(m => m.Name == "DecimalProp").DecimalPrecision.Scale.Should().Be(2);
-        returnValue.Metadatas.Find(m => m.Name == "DecimalProp").DisplayFormat.Should().Be("{DecimalProp}₺");
-        returnValue.Metadatas.Find(m => m.Name == "ListProp").FilterFormat.Should().Be("ListProp[SomeProp]");
-        returnValue.Metadatas.Find(m => m.Name == "ComplexClass").Display.Should().BeFalse();
-        returnValue.Metadatas.Find(m => m.Name == "ComplexClass").Metadatas.Should().NotBeEmpty();
-        returnValue.Metadatas.Find(m => m.Name == "ComplexClass").Metadatas.Find(m => m.Name == "DateProp").TooltipFormat.Should().Be("dddd, dd MMMM yyyy");
-        returnValue.Metadatas.Find(m => m.Name == "ComplexClass").Metadatas.Find(m => m.Name == "EnumProp").Display.Should().BeTrue();
+        returnValue.Metadatas.Find(m => m.Name == "intProp").LocalizedName.Should().Be($"localized_SomeComplexClass.IntProp");
+        returnValue.Metadatas.Find(m => m.Name == "intProp").Pinned.Should().BeTrue();
+        returnValue.Metadatas.Find(m => m.Name == "stringProp").Mask.Should().BeTrue();
+        returnValue.Metadatas.Find(m => m.Name == "stringProp").DefaultValue.Should().Be("localized_-");
+        returnValue.Metadatas.Find(m => m.Name == "boolProp").Should().BeNull();
+        returnValue.Metadatas.Find(m => m.Name == "decimalProp").DecimalPrecision.Precision.Should().Be(18);
+        returnValue.Metadatas.Find(m => m.Name == "decimalProp").DecimalPrecision.Scale.Should().Be(2);
+        returnValue.Metadatas.Find(m => m.Name == "decimalProp").DisplayFormat.Should().Be("{DecimalProp}₺");
+        returnValue.Metadatas.Find(m => m.Name == "listProp").FilterFormat.Should().Be("ListProp[SomeProp]");
+        returnValue.Metadatas.Find(m => m.Name == "complexClass").Display.Should().BeFalse();
+        returnValue.Metadatas.Find(m => m.Name == "complexClass").Metadatas.Should().NotBeEmpty();
+        returnValue.Metadatas.Find(m => m.Name == "complexClass").Metadatas.Find(m => m.Name == "dateProp").TooltipFormat.Should().Be("dddd, dd MMMM yyyy");
+        returnValue.Metadatas.Find(m => m.Name == "complexClass").Metadatas.Find(m => m.Name == "enumProp").Display.Should().BeTrue();
         returnValue.Metadatas.Where(m => m.Name == "~Self").Count().Should().Be(2);
-        returnValue.Metadatas.Find(m => m.Name == "WillBeExcluded").Should().BeNull();
+        returnValue.Metadatas.Find(m => m.Name == "willBeExcluded").Should().BeNull();
     }
 
     #region Setup

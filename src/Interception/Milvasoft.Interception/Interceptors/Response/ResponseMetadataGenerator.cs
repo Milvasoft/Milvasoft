@@ -132,7 +132,7 @@ public class ResponseMetadataGenerator(IResponseInterceptionOptions responseInte
             GenerateChildComplexMetadata(callerObjectInfo, property, metadata);
         }
 
-        metadata.Name = property.Name;
+        metadata.Name = property.Name.ToLowerInvariantFirst();
         metadata.Type = GetPropertyFriendlyName(property.PropertyType);
         metadata.DefaultValue = TryGetAttribute(property, out DefaultValueAttribute defaultValueAttribute) ? defaultValueAttribute.Value : null;
 
