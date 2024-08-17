@@ -99,7 +99,6 @@ public class ResponseMetadataGenerator(IResponseInterceptionOptions responseInte
         bool removePropMetadataFromResponse = ShouldHide(property);
         bool mask = ShouldMask(property);
 
-
         ApplyMetadataRules(callerObjectInfo.Object, callerObjectInfo.ActualTypeIsCollection, property, mask, removePropMetadataFromResponse);
 
         if (!_interceptionOptions.MetadataCreationEnabled || removePropMetadataFromResponse)
@@ -149,6 +148,37 @@ public class ResponseMetadataGenerator(IResponseInterceptionOptions responseInte
         ApplyMetadataTags(metadata, property, mask);
 
         metadatas.Add(metadata);
+    }
+
+    private void ApplyLinkedWith(PropertyInfo property, object callerObj, bool callerObjectTypeIsCollection)
+    {
+        var linkedWithAttribute = property.GetCustomAttribute<LinkedWithAttribute>();
+
+        if (linkedWithAttribute != null)
+        {
+            if (callerObjectTypeIsCollection)
+            {
+                var callerObjAsList = callerObj as IList;
+
+                foreach (var item in callerObjAsList)
+                    ApplyLinkedWith(property, item, false);
+
+                return;
+            }
+
+            var linkedProperty = callerObj.GetType().GetProperty(linkedWithAttribute.PropertyName);
+
+            if (linkedProperty != null)
+            {
+                var formatter = _serviceProvider.GetKeyedService<ILinkedWithFormatter>(linkedWithAttribute.ServiceCollectionKey);
+
+                var linkedPropValue = linkedProperty.GetValue(callerObj);
+
+                var formattedValue = formatter.Format(linkedPropValue);
+
+                property.SetValue(callerObj, formattedValue);
+            }
+        }
     }
 
     /// <summary>
@@ -266,10 +296,10 @@ public class ResponseMetadataGenerator(IResponseInterceptionOptions responseInte
     /// </summary>
     /// <param name="callerObj">The caller object.</param>
     /// <param name="callerObjectTypeIsCollection">Indicates whether the caller object type is a collection.</param>
-    /// <param name="prop">The property to apply metadata rules to.</param>
+    /// <param name="property">The property to apply metadata rules to.</param>
     /// <param name="mask">Indicates whether to mask the property value.</param>
     /// <param name="hide">Indicates whether to remove the property metadata from the response.</param>
-    private void ApplyMetadataRules(object callerObj, bool callerObjectTypeIsCollection, PropertyInfo prop, bool mask, bool hide)
+    private void ApplyMetadataRules(object callerObj, bool callerObjectTypeIsCollection, PropertyInfo property, bool mask, bool hide)
     {
         if (callerObj == null || !_interceptionOptions.ApplyMetadataRules)
             return;
@@ -279,30 +309,48 @@ public class ResponseMetadataGenerator(IResponseInterceptionOptions responseInte
             var callerObjAsList = callerObj as IList;
 
             foreach (var item in callerObjAsList)
-                ApplyMetadataRules(item, false, prop, mask, hide);
+                ApplyMetadataRules(item, false, property, mask, hide);
 
             return;
         }
 
         if (hide)
         {
-            object defaultValue = prop.PropertyType.IsValueType ? Activator.CreateInstance(prop.PropertyType) : null;
+            object defaultValue = property.PropertyType.IsValueType ? Activator.CreateInstance(property.PropertyType) : null;
 
-            prop.SetValue(callerObj, defaultValue);
+            property.SetValue(callerObj, defaultValue);
 
             return;
         }
 
         //Mask
-        if (mask && prop.PropertyType == typeof(string))
+        if (mask && property.PropertyType == typeof(string))
         {
-            string propertyValue = (string)prop.GetValue(callerObj);
+            string propertyValue = (string)property.GetValue(callerObj);
 
             if (propertyValue != null)
             {
                 propertyValue = propertyValue.Mask(percentToApply: 60);
 
-                prop.SetValue(callerObj, propertyValue);
+                property.SetValue(callerObj, propertyValue);
+            }
+        }
+
+        var linkedWithAttribute = property.GetCustomAttribute<LinkedWithAttribute>();
+
+        if (linkedWithAttribute != null)
+        {
+            var linkedProperty = callerObj.GetType().GetProperty(linkedWithAttribute.PropertyName);
+
+            if (linkedProperty != null)
+            {
+                var formatter = _serviceProvider.GetKeyedService<ILinkedWithFormatter>(linkedWithAttribute.ServiceCollectionKey);
+
+                var linkedPropValue = linkedProperty.GetValue(callerObj);
+
+                var formattedValue = formatter.Format(linkedPropValue);
+
+                property.SetValue(callerObj, formattedValue);
             }
         }
     }

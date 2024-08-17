@@ -50,7 +50,7 @@
 		<Description>Helpers classes for projects. Please contribute for improvements. </Description>
 		<PackageTags>multitenancy,localization, efcore, interception, tenant,tenancy,json,file,image,helper,milvasoft,extensions,filter,request,response,test</PackageTags>
 		<Copyright>Milvasoft Yazılım Bilişim Araştırma Geliştirme Danışmanlık Sanayi ve Ticaret Ltd.Şti.</Copyright>
-		<Version>8.1.23</Version>
+		<Version>8.1.24</Version>
 
 	</PropertyGroup>
 
