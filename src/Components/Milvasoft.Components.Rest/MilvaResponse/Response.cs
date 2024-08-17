@@ -8,13 +8,11 @@ namespace Milvasoft.Components.Rest.MilvaResponse;
 /// <summary>
 /// Response model. 
 /// </summary>
-[DataContract]
 public class Response : IResponse
 {
     /// <summary>
     /// Determines whether response is success or not.
     /// </summary>
-    [DataMember]
     public bool IsSuccess { get; set; } = true;
 
     /// <summary>
@@ -25,7 +23,6 @@ public class Response : IResponse
     /// <summary>
     /// Response messages.
     /// </summary>
-    [DataMember]
     public List<ResponseMessage> Messages { get; set; }
 
     /// <summary>

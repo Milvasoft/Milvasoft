@@ -1,6 +1,5 @@
 ﻿using Milvasoft.Components.Rest.Enums;
 using System.Net;
-using System.Runtime.Serialization;
 
 namespace Milvasoft.Components.Rest.MilvaResponse;
 
@@ -10,31 +9,26 @@ namespace Milvasoft.Components.Rest.MilvaResponse;
 /// Listed or paginated response.
 /// </summary>
 /// <typeparam name="T"></typeparam>
-[DataContract]
 public class ListResponse<T> : Response<List<T>>
 {
     /// <summary>
     /// Current page number.
     /// </summary>
-    [DataMember]
     public int? CurrentPageNumber { get; set; }
 
     /// <summary>
     /// Total page count.
     /// </summary>
-    [DataMember]
     public int? TotalPageCount { get; set; }
 
     /// <summary>
     /// Total data count.
     /// </summary>
-    [DataMember]
     public int? TotalDataCount { get; set; }
 
     /// <summary>
     /// Aggregation results.
     /// </summary>
-    [DataMember]
     public List<AggregationResult> AggregationResults { get; set; }
 
     public ListResponse() : base()
