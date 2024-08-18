@@ -60,7 +60,7 @@
 		<Description>Caching helpers for redis. </Description>
 		<PackageTags>caching,redis,cache,distributed</PackageTags>
 		<Copyright>Milvasoft Yazılım Bilişim Araştırma Geliştirme Danışmanlık Sanayi ve Ticaret Ltd.Şti.</Copyright>
-		<Version>8.1.24</Version>
+		<Version>8.1.25</Version>
 
 	</PropertyGroup>
 	

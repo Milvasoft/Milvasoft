@@ -22,7 +22,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.7" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.8" />
   </ItemGroup>
 
 	<ItemGroup>
@@ -50,7 +50,7 @@
 		<Description>Lightweight data access interception for cros cutting concerns.</Description>
 		<PackageTags>interception, ef, dbinterception, aop, cross-cutting, log, cache</PackageTags>
 		<Copyright>Milvasoft Yazılım Bilişim Araştırma Geliştirme Danışmanlık Sanayi ve Ticaret Ltd.Şti.</Copyright>
-		<Version>8.1.24</Version>
+		<Version>8.1.25</Version>
 
 	</PropertyGroup>
 	
