@@ -8,7 +8,7 @@ namespace Milvasoft.Components.Rest.Request;
 public class AggregationRequest
 {
     /// <summary>
-    /// Filter details.
+    /// Aggregation details.
     /// </summary>
     public virtual List<AggregationCriteria> Criterias { get; set; }
 
