@@ -150,6 +150,7 @@ public class ResponseMetadataGeneratorTests
         returnValue.Metadatas.Find(m => m.Name == "decimalProp").DecimalPrecision.Precision.Should().Be(18);
         returnValue.Metadatas.Find(m => m.Name == "decimalProp").DecimalPrecision.Scale.Should().Be(2);
         returnValue.Metadatas.Find(m => m.Name == "decimalProp").DisplayFormat.Should().Be("{DecimalProp}₺");
+        returnValue.Metadatas.Find(m => m.Name == "decimalProp").Filterable.Should().Be(true);
         returnValue.Metadatas.Find(m => m.Name == "listProp").FilterFormat.Should().Be("ListProp[SomeProp]");
         returnValue.Metadatas.Find(m => m.Name == "complexClass").Display.Should().BeFalse();
         returnValue.Metadatas.Find(m => m.Name == "complexClass").Metadatas.Should().NotBeEmpty();

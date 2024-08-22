@@ -134,15 +134,9 @@ public class ResponseMetadataGenerator(IResponseInterceptionOptions responseInte
         metadata.Name = property.Name.ToLowerInvariantFirst();
         metadata.Type = GetPropertyFriendlyName(property.PropertyType);
         metadata.DefaultValue = TryGetAttribute(property, out DefaultValueAttribute defaultValueAttribute) ? defaultValueAttribute.Value : null;
+        metadata.Info = TryGetAttribute(property, out InfoAttribute infoAttribute) ? infoAttribute.Info : null;
 
-        ApplyTranslationToMetadata(metadata, callerObjectInfo.ReviewedType, property, defaultValueAttribute);
-
-        //If no attribute specified no need to proceed.
-        if (!property.GetCustomAttributes().Any())
-        {
-            metadatas.Add(metadata);
-            return;
-        }
+        ApplyTranslationToMetadata(metadata, callerObjectInfo.ReviewedType, property, defaultValueAttribute, infoAttribute);
 
         //Fill metadata object
         ApplyMetadataTags(metadata, property, mask);
@@ -272,7 +266,12 @@ public class ResponseMetadataGenerator(IResponseInterceptionOptions responseInte
     /// <param name="callerObjectType">The type of the caller object.</param>
     /// <param name="property">The property to apply translation to.</param>
     /// <param name="defaultValueAttribute">The default value attribute.</param>
-    private void ApplyTranslationToMetadata(ResponseDataMetadata metadata, Type callerObjectType, PropertyInfo property, DefaultValueAttribute defaultValueAttribute)
+    /// <param name="infoAttribute"></param>
+    private void ApplyTranslationToMetadata(ResponseDataMetadata metadata,
+                                            Type callerObjectType,
+                                            PropertyInfo property,
+                                            DefaultValueAttribute defaultValueAttribute,
+                                            InfoAttribute infoAttribute)
     {
         var translateAttribute = _interceptionOptions.TranslateMetadata ? callerObjectType.GetCustomAttribute<TranslateAttribute>() : null;
         var localizer = translateAttribute != null ? _serviceProvider?.GetService<IMilvaLocalizer>() : null;
@@ -286,6 +285,7 @@ public class ResponseMetadataGenerator(IResponseInterceptionOptions responseInte
                                      : _interceptionOptions.ApplyLocalizationFunc.Invoke(translateAttribute.Key, localizer, callerObjectType, property.Name);
 
             metadata.DefaultValue = metadata.DefaultValue != null ? (string)localizer[(string)defaultValueAttribute.Value] : metadata.DefaultValue;
+            metadata.Info = metadata.Info != null ? (string)localizer[(string)infoAttribute.Info] : metadata.Info;
         }
 
         metadata.LocalizedName = localizedName;
@@ -346,11 +346,14 @@ public class ResponseMetadataGenerator(IResponseInterceptionOptions responseInte
             {
                 var formatter = _serviceProvider.GetKeyedService<ILinkedWithFormatter>(linkedWithAttribute.ServiceCollectionKey);
 
-                var linkedPropValue = linkedProperty.GetValue(callerObj);
+                if (formatter != null)
+                {
+                    var linkedPropValue = linkedProperty.GetValue(callerObj);
 
-                var formattedValue = formatter.Format(linkedPropValue);
+                    var formattedValue = formatter.Format(linkedPropValue);
 
-                property.SetValue(callerObj, formattedValue);
+                    property.SetValue(callerObj, formattedValue);
+                }
             }
         }
     }

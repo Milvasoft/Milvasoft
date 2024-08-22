@@ -68,6 +68,11 @@ public class ResponseDataMetadata : IHasMetadata
     /// </summary>
     public string TooltipFormat { get; set; }
 
+    /// <summary>
+    /// Column or property information.
+    /// </summary>
+    public string Info { get; set; }
+
     /// <inheritdoc/>
     [DataMember]
     public List<ResponseDataMetadata> Metadatas { get; set; }
