@@ -181,7 +181,7 @@ public class ResponseMetadataGenerator(IResponseInterceptionOptions responseInte
     /// <param name="metadata"></param>
     /// <param name="property"></param>
     /// <param name="mask"></param>
-    private void ApplyMetadataTags(ResponseDataMetadata metadata, PropertyInfo property, bool mask)
+    private static void ApplyMetadataTags(ResponseDataMetadata metadata, PropertyInfo property, bool mask)
     {
         metadata.Display = !TryGetAttribute(property, out BrowsableAttribute browsableAttribute) || browsableAttribute.Browsable;
         metadata.Mask = mask;

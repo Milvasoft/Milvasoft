@@ -89,9 +89,11 @@ public class FilterRequest
     /// <returns></returns>
     private static object GetValueWithCorrectType<TEntity>(FilterCriteria filter, object value, Type propertyUnderlyingType, string propertyName)
     {
-        var propType = filter.FilterByContainsSpecialChars() ? propertyUnderlyingType : typeof(TEntity).GetPublicPropertyIgnoreCase(propertyName).PropertyType;
+        var propType = filter.FilterByContainsSpecialChars()
+                        ? propertyUnderlyingType
+                        : typeof(TEntity).GetPublicPropertyIgnoreCase(propertyName).PropertyType;
 
-        if (value == null)
+        if (propType == null || value == null)
         {
             if (propType.IsNonNullableValueType())
                 throw new MilvaDeveloperException("Please provide filter values!");
@@ -142,6 +144,12 @@ public class FilterRequest
                 var prop = listPropType.ThrowIfPropertyNotExists(childrenPropertyName);
 
                 propertyType = prop.PropertyType;
+            }
+            else if (propertyType.IsClass)
+            {
+                var childrenPropertyName = filter.GetChildrenPropertyNameFromFilterBy();
+
+                propertyType = propertyType.GetPublicPropertyIgnoreCase(childrenPropertyName).PropertyType;
             }
             else
                 propertyType = propertyType.GetElementType();
