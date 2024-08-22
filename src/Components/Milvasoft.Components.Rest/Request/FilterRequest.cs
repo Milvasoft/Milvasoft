@@ -133,7 +133,7 @@ public class FilterRequest
         if (underlyingNullableType != null)
             propertyType = underlyingNullableType;
 
-        if (propertyType != typeof(string) && (propertyType.IsArray || propertyType.IsEnumerableType()))
+        if (propertyType != typeof(string) && (propertyType.IsArray || propertyType.IsEnumerableType() || propertyType.IsClass))
         {
             if (propertyType.IsGenericType)
             {
