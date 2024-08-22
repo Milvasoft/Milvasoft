@@ -75,9 +75,6 @@ public class ResponseMetadataGenerator(IResponseInterceptionOptions responseInte
     /// <param name="metadatas"></param>
     private void GenerateMetadata(CallerObjectInfo callerObjectInfo, List<ResponseDataMetadata> metadatas)
     {
-        if (callerObjectInfo.ReviewedType.GetCustomAttribute<ExcludeFromMetadataAttribute>() != null)
-            return;
-
         var properties = callerObjectInfo.ReviewedType.GetProperties();
 
         if (properties.IsNullOrEmpty())
@@ -85,7 +82,6 @@ public class ResponseMetadataGenerator(IResponseInterceptionOptions responseInte
 
         foreach (PropertyInfo property in properties)
             GeneratePropMetadata(callerObjectInfo, property, metadatas);
-
     }
 
     /// <summary>
@@ -96,7 +92,7 @@ public class ResponseMetadataGenerator(IResponseInterceptionOptions responseInte
     /// <param name="metadatas"></param>
     private void GeneratePropMetadata(CallerObjectInfo callerObjectInfo, PropertyInfo property, List<ResponseDataMetadata> metadatas)
     {
-        if (property == null || TryGetAttribute(property, out ExcludeFromMetadataAttribute _))
+        if (property == null)
             return;
 
         bool removePropMetadataFromResponse = ShouldHide(property);
@@ -104,7 +100,10 @@ public class ResponseMetadataGenerator(IResponseInterceptionOptions responseInte
 
         ApplyMetadataRules(callerObjectInfo.Object, callerObjectInfo.ActualTypeIsCollection, property, mask, removePropMetadataFromResponse);
 
-        if (!_interceptionOptions.MetadataCreationEnabled || removePropMetadataFromResponse)
+        if (!_interceptionOptions.MetadataCreationEnabled
+            || removePropMetadataFromResponse
+            || TryGetAttribute(property, out ExcludeFromMetadataAttribute _)
+            || callerObjectInfo.ReviewedType.GetCustomAttribute<ExcludeFromMetadataAttribute>() != null)
             return;
 
         metadatas ??= [];
