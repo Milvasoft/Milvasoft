@@ -49,6 +49,11 @@ public class ResponseDataMetadata : IHasMetadata
     public string FilterFormat { get; set; }
 
     /// <summary>
+    /// Frontend filter component type.
+    /// </summary>
+    public string FilterComponentType { get; set; } = UiInputConstant.TextInput;
+
+    /// <summary>
     /// Default value if column or property data is null.
     /// </summary>
     public object DefaultValue { get; set; } = default;

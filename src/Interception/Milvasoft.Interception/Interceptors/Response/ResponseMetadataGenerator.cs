@@ -75,6 +75,9 @@ public class ResponseMetadataGenerator(IResponseInterceptionOptions responseInte
     /// <param name="metadatas"></param>
     private void GenerateMetadata(CallerObjectInfo callerObjectInfo, List<ResponseDataMetadata> metadatas)
     {
+        if (callerObjectInfo.ReviewedType.GetCustomAttribute<ExcludeFromMetadataAttribute>() != null)
+            return;
+
         var properties = callerObjectInfo.ReviewedType.GetProperties();
 
         if (properties.IsNullOrEmpty())
@@ -187,6 +190,7 @@ public class ResponseMetadataGenerator(IResponseInterceptionOptions responseInte
         metadata.Mask = mask;
         metadata.Filterable = !TryGetAttribute(property, out FilterableAttribute filterableAttribute) || filterableAttribute.Filterable;
         metadata.FilterFormat = filterableAttribute?.FilterFormat ?? property.Name;
+        metadata.FilterComponentType = filterableAttribute?.FilterComponentType ?? UiInputConstant.TextInput;
         metadata.Pinned = TryGetAttribute(property, out PinnedAttribute pinnedAttribute) && pinnedAttribute.Pinned;
         metadata.DecimalPrecision = TryGetAttribute(property, out DecimalPrecisionAttribute decimalPrecisionAttribute) ? decimalPrecisionAttribute.DecimalPrecision : null;
         metadata.TooltipFormat = TryGetAttribute(property, out TooltipFormatAttribute cellTooltipFormatAttribute) ? cellTooltipFormatAttribute.Format : null;

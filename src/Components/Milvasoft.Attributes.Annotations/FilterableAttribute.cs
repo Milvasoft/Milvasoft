@@ -18,6 +18,11 @@ public class FilterableAttribute(bool filterable = true) : Attribute
     public string FilterFormat { get; set; }
 
     /// <summary>
+    /// Gets or sets frontend filter component type.
+    /// </summary>
+    public string FilterComponentType { get; set; }
+
+    /// <summary>
     /// Marks method with <paramref name="filterFormat"/> and <paramref name="filterable"/>
     /// </summary>
     /// <param name="filterFormat"></param>
