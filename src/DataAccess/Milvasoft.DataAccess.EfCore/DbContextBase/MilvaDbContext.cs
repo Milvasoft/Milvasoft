@@ -444,7 +444,7 @@ public abstract class MilvaDbContext(DbContextOptions options) : DbContext(optio
                         }
                         else
                         {
-                            if (multiLanguageManager != null)
+                            if (multiLanguageManager != null && translationEntityPropNames != null)
                                 foreach (var translationPropName in translationEntityPropNames)
                                 {
                                     if ((!parameter.RequestedPropertyNames?.Contains(translationPropName) ?? true))

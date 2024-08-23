@@ -272,7 +272,7 @@ public abstract class MultiLanguageManager : IMultiLanguageManager
 
         requestedLang ??= translations.FirstOrDefault();
 
-        return requestedLang.GetType().GetPublicPropertyIgnoreCase(propertyName).GetValue(requestedLang, null)?.ToString();
+        return requestedLang?.GetType().GetPublicPropertyIgnoreCase(propertyName).GetValue(requestedLang, null)?.ToString();
 
         TTRanslationEntity GetLanguageValue(int languageId) => translations.FirstOrDefault(t => (int)t.GetType()
                                                                                                       .GetProperty(MultiLanguageEntityPropertyNames.LanguageId)

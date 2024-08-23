@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
-using Milvasoft.UnitTests.DataAccessTests.EfCoreTests.Fixtures;
+using Milvasoft.IntegrationTests.Fixtures;
 using Respawn;
 using System.Data.Common;
 using Testcontainers.PostgreSql;

@@ -771,7 +771,7 @@ public class MultiLanguageManagerTests
         // Arrange
         HasTranslationEntityFixture obj = new()
         {
-            Translations = new List<TranslationEntityFixture>()
+            Translations = []
         };
         var manager = new MilvaMultiLanguageManager();
 

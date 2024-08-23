@@ -37,6 +37,7 @@ public class AggregationCriteria
     /// <param name="runAsync">Indicates whether to run the aggregation asynchronously.</param>
     /// <param name="cancellationToken">The cancellation token.</param>
     /// <returns>The aggregation result.</returns>
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Major Code Smell", "S6966:Awaitable method should be used", Justification = "<Pending>")]
     public virtual async Task<AggregationResult> ApplyAggregationAsync<TEntity>(IQueryable<TEntity> query, bool runAsync = true, CancellationToken cancellationToken = default)
     {
         // Check if the aggregation column name or the query is null or empty

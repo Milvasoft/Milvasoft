@@ -2,7 +2,7 @@
 using Milvasoft.Core.EntityBases.Concrete.Auditing;
 using System.ComponentModel.DataAnnotations;
 
-namespace Milvasoft.UnitTests.DataAccessTests.EfCoreTests.Fixtures;
+namespace Milvasoft.IntegrationTests.Fixtures;
 
 public class SomeEntityFixture
 {

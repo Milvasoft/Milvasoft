@@ -2,7 +2,7 @@
 using Milvasoft.DataAccess.EfCore.Configuration;
 using Milvasoft.DataAccess.EfCore.DbContextBase;
 
-namespace Milvasoft.UnitTests.DataAccessTests.EfCoreTests.Fixtures;
+namespace Milvasoft.IntegrationTests.Fixtures;
 
 public class SomeMilvaDbContextFixture(DbContextOptions<SomeMilvaDbContextFixture> contextOptions, IDataAccessConfiguration dataAccessConfiguration) : MilvaDbContext(contextOptions, dataAccessConfiguration)
 {

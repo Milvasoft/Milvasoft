@@ -44,11 +44,11 @@ public record ListRequest : IListRequest
             return 0;
 
         // Check if the page number is less than or equal to 0
-        if (PageNumber.HasValue && PageNumber <= 0)
+        if (PageNumber <= 0)
             throw new MilvaUserFriendlyException(MilvaException.WrongRequestedPageNumber);
 
         // Check if the row count is less than or equal to 0
-        if (RowCount.HasValue && RowCount <= 0)
+        if (RowCount <= 0)
             throw new MilvaUserFriendlyException(MilvaException.WrongRequestedItemCount);
 
         // Calculate the actual page count

@@ -1083,7 +1083,7 @@ public class JsonOperations : IJsonOperations
 
         var mappingPropertyName = mappingProperty.GetPropertyName();
 
-        if (lastContent.GetType().GetProperty(mappingPropertyName) == null)
+        if (lastContent?.GetType().GetProperty(mappingPropertyName) == null)
             throw new MilvaDeveloperException($"This content type not have {mappingPropertyName} property");
 
         var upToDateContents = new List<T>();
@@ -1118,7 +1118,7 @@ public class JsonOperations : IJsonOperations
 
         var mappingPropertyName = mappingProperty.GetPropertyName();
 
-        if (lastContent.GetType().GetProperty(mappingPropertyName) == null)
+        if (lastContent?.GetType().GetProperty(mappingPropertyName) == null)
             throw new MilvaDeveloperException($"This content type not have {mappingPropertyName} property ");
 
         var willRemovedContents = new List<T>();
@@ -1146,14 +1146,14 @@ public class JsonOperations : IJsonOperations
 
         var inputValue = await File.ReadAllTextAsync(filePath);
 
-        return encryptionProvider.Decrypt(inputValue);
+        return await encryptionProvider.DecryptAsync(inputValue);
     }
 
     private static async Task EncryptAndWriteAsync(string filePath, string content, string key)
     {
         var encryptionProvider = new MilvaCryptographyProvider(new MilvaCryptographyOptions { Key = key });
 
-        var encryptedContent = encryptionProvider.Encrypt(content);
+        var encryptedContent = await encryptionProvider.EncryptAsync(content);
 
         await File.WriteAllTextAsync(filePath, encryptedContent, Encoding.UTF8);
     }

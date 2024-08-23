@@ -15,7 +15,7 @@ public partial class ExpressionParameterReplacerTests
         var toParameter = Expression.Parameter(typeof(int), "y");
         var expression = Expression.Add(fromParameter, Expression.Constant(5));
 
-        var replacer = new ExpressionParameterReplacer(new List<ParameterExpression> { fromParameter }, new List<ParameterExpression> { toParameter });
+        var replacer = new ExpressionParameterReplacer([fromParameter], [toParameter]);
 
         // Act
         var result = replacer.Visit(expression);
@@ -32,7 +32,7 @@ public partial class ExpressionParameterReplacerTests
         var toParameter = Expression.Parameter(typeof(int), "y");
         var expression = Expression.Add(toParameter, Expression.Constant(5));
 
-        var replacer = new ExpressionParameterReplacer(new List<ParameterExpression> { fromParameter }, new List<ParameterExpression> { toParameter });
+        var replacer = new ExpressionParameterReplacer([fromParameter], [toParameter]);
 
         // Act
         var result = replacer.Visit(expression);
@@ -51,7 +51,7 @@ public partial class ExpressionParameterReplacerTests
         var toParameter2 = Expression.Parameter(typeof(int), "b");
         var expression = Expression.Add(Expression.Add(fromParameter1, fromParameter2), Expression.Constant(5));
 
-        var replacer = new ExpressionParameterReplacer(new List<ParameterExpression> { fromParameter1, fromParameter2 }, new List<ParameterExpression> { toParameter1, toParameter2 });
+        var replacer = new ExpressionParameterReplacer([fromParameter1, fromParameter2], [toParameter1, toParameter2]);
 
         // Act
         var result = replacer.Visit(expression);

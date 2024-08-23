@@ -258,7 +258,7 @@ public class ResponseMetadataGeneratorTests
         returnValue.Metadatas.Find(m => m.Name == "complexClass").Metadatas.Should().NotBeEmpty();
         returnValue.Metadatas.Find(m => m.Name == "complexClass").Metadatas.Find(m => m.Name == "dateProp").TooltipFormat.Should().Be("dddd, dd MMMM yyyy");
         returnValue.Metadatas.Find(m => m.Name == "complexClass").Metadatas.Find(m => m.Name == "enumProp").Display.Should().BeTrue();
-        returnValue.Metadatas.Where(m => m.Name == "~Self").Count().Should().Be(2);
+        returnValue.Metadatas.Count(m => m.Name == "~Self").Should().Be(2);
         returnValue.Metadatas.Find(m => m.Name == "willBeExcluded").Should().BeNull();
     }
 
@@ -360,10 +360,10 @@ public class ResponseMetadataGeneratorTests
                 CurrentPageNumber = 1,
                 TotalDataCount = 0,
                 TotalPageCount = 0,
-                Data = new List<SomeComplexClass>(),
+                Data = [],
                 IsCachedData = false,
                 IsSuccess = true,
-                Messages = new List<ResponseMessage> { new ResponseMessage() },
+                Messages = [new ResponseMessage()],
             };
 
             return data;
@@ -378,7 +378,7 @@ public class ResponseMetadataGeneratorTests
                 Data = null,
                 IsCachedData = false,
                 IsSuccess = true,
-                Messages = new List<ResponseMessage> { new ResponseMessage() },
+                Messages = [new ResponseMessage()],
             };
 
             return data;

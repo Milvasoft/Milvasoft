@@ -334,14 +334,14 @@ public static class ModelBuilderExtensions
     {
         var languageEntities = modelBuilder.Model.GetEntityTypes().Where(e => e.ClrType.CanAssignableTo(typeof(IHasTranslation<>))).ToList();
 
-        foreach (var entityType in languageEntities)
+        foreach (var entityClrType in languageEntities.Select(i => i.ClrType))
         {
-            if (Array.Exists(entityType.ClrType.GetProperties(), p => (p.GetCustomAttribute<ColumnAttribute>()?.TypeName == "jsonb")))
+            if (Array.Exists(entityClrType.GetProperties(), p => (p.GetCustomAttribute<ColumnAttribute>()?.TypeName == "jsonb")))
             {
                 continue;
             }
 
-            modelBuilder.Entity(entityType.ClrType)
+            modelBuilder.Entity(entityClrType)
                         .HasMany(MultiLanguageEntityPropertyNames.Translations)
                         .WithOne(MultiLanguageEntityPropertyNames.Entity)
                         .HasForeignKey(MultiLanguageEntityPropertyNames.EntityId);

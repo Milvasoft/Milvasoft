@@ -90,6 +90,7 @@ public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : 
     /// <param name="propertySelector"></param>
     /// <param name="projectExpression"></param>
     /// <returns></returns>
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Major Code Smell", "S6966:Awaitable method should be used", Justification = "<Pending>")]
     public async Task<TEntity> GetMaxAsync(FilterDefinition<TEntity> filterDefinition, Expression<Func<TEntity, object>> propertySelector, Expression<Func<TEntity, TEntity>> projectExpression = null)
     {
         var options = new FindOptions<TEntity, TEntity>

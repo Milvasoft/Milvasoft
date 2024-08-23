@@ -37,8 +37,6 @@ public class MilvaUserValidation<TUser, TKey>(IMilvaLocalizer localizer) : IUser
         if (errors.Count == 0)
             return Task.FromResult(IdentityResult.Success);
 
-#pragma warning disable S3878 // Arrays should not be created for params parameters
         return Task.FromResult(IdentityResult.Failed([.. errors]));
-#pragma warning restore S3878 // Arrays should not be created for params parameters
     }
 }

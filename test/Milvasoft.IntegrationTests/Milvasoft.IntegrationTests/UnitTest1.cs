@@ -7,12 +7,11 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Milvasoft.DataAccess.EfCore.Configuration;
-using Milvasoft.IntegrationTests;
+using Milvasoft.IntegrationTests.Fixtures;
 using Milvasoft.Middlewares.ResponseTimeCalculator;
-using Milvasoft.UnitTests.DataAccessTests.EfCoreTests.Fixtures;
 using Xunit.Abstractions;
 
-namespace Customers.Api.Tests.Integration;
+namespace Milvasoft.IntegrationTests;
 
 [Collection(nameof(DatabaseTestCollection))]
 public class DbContextTests : IAsyncLifetime

@@ -23,6 +23,7 @@ public partial class LogInterceptor(IServiceProvider serviceProvider) : IMilvaIn
     public int InterceptionOrder { get; set; } = -1;
 
     /// <inheritdoc/>
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Major Code Smell", "S6966:Awaitable method should be used", Justification = "<Pending>")]
     public async Task OnInvoke(Call call)
     {
         if (_logger == null)

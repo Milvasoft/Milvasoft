@@ -288,7 +288,7 @@ public class ResponseMetadataGenerator(IResponseInterceptionOptions responseInte
                                      : _interceptionOptions.ApplyLocalizationFunc.Invoke(translateAttribute.Key, localizer, callerObjectType, property.Name);
 
             metadata.DefaultValue = metadata.DefaultValue != null ? (string)localizer[(string)defaultValueAttribute.Value] : metadata.DefaultValue;
-            metadata.Info = metadata.Info != null ? (string)localizer[(string)infoAttribute.Info] : metadata.Info;
+            metadata.Info = metadata.Info != null ? (string)localizer[infoAttribute.Info] : metadata.Info;
         }
 
         metadata.LocalizedName = localizedName;
@@ -345,19 +345,13 @@ public class ResponseMetadataGenerator(IResponseInterceptionOptions responseInte
         {
             var linkedProperty = callerObj.GetType().GetProperty(linkedWithAttribute.PropertyName);
 
-            if (linkedProperty != null)
-            {
-                var formatter = _serviceProvider.GetKeyedService<ILinkedWithFormatter>(linkedWithAttribute.ServiceCollectionKey);
+            var formatter = _serviceProvider.GetKeyedService<ILinkedWithFormatter>(linkedWithAttribute.ServiceCollectionKey);
 
-                if (formatter != null)
-                {
-                    var linkedPropValue = linkedProperty.GetValue(callerObj);
+            var linkedPropValue = linkedProperty?.GetValue(callerObj);
 
-                    var formattedValue = formatter.Format(linkedPropValue);
+            var formattedValue = formatter?.Format(linkedPropValue);
 
-                    property.SetValue(callerObj, formattedValue);
-                }
-            }
+            property.SetValue(callerObj, formattedValue);
         }
     }
 
