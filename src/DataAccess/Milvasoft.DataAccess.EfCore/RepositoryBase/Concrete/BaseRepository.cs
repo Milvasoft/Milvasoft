@@ -353,13 +353,13 @@ public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepositor
     /// <param name="entity"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    public virtual async Task AddAsync(TEntity entity, CancellationToken cancellationToken = default)
+    public virtual async Task<int> AddAsync(TEntity entity, CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(entity);
 
         _dbSet.Add(entity);
 
-        await InternalSaveChangesAsync(cancellationToken);
+        return await InternalSaveChangesAsync(cancellationToken);
     }
 
     /// <summary>
@@ -368,14 +368,14 @@ public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepositor
     /// <param name="entities"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    public virtual async Task AddRangeAsync(IEnumerable<TEntity> entities, CancellationToken cancellationToken = default)
+    public virtual async Task<int> AddRangeAsync(IEnumerable<TEntity> entities, CancellationToken cancellationToken = default)
     {
         if (entities.IsNullOrEmpty())
-            return;
+            return 0;
 
         _dbSet.AddRange(entities);
 
-        await InternalSaveChangesAsync(cancellationToken);
+        return await InternalSaveChangesAsync(cancellationToken);
     }
 
     /// <summary>
@@ -384,14 +384,14 @@ public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepositor
     /// <param name="entity"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    public virtual async Task UpdateAsync(TEntity entity, CancellationToken cancellationToken = default)
+    public virtual async Task<int> UpdateAsync(TEntity entity, CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(entity);
 
         DetachFromLocalIfExists(entity);
         _dbSet.Update(entity);
 
-        await InternalSaveChangesAsync(cancellationToken);
+        return await InternalSaveChangesAsync(cancellationToken);
     }
 
     /// <summary>
@@ -400,10 +400,10 @@ public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepositor
     /// <param name="entities"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    public virtual async Task UpdateAsync(IEnumerable<TEntity> entities, CancellationToken cancellationToken = default)
+    public virtual async Task<int> UpdateAsync(IEnumerable<TEntity> entities, CancellationToken cancellationToken = default)
     {
         if (entities.IsNullOrEmpty())
-            return;
+            return 0;
 
         foreach (var entity in entities)
         {
@@ -411,7 +411,7 @@ public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepositor
             _dbSet.Update(entity);
         }
 
-        await InternalSaveChangesAsync(cancellationToken);
+        return await InternalSaveChangesAsync(cancellationToken);
     }
 
     /// <summary>
@@ -421,14 +421,14 @@ public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepositor
     /// <param name="cancellationToken"></param>
     /// <param name="propertySelectors"></param>
     /// <returns></returns>
-    public virtual async Task UpdateAsync(TEntity entity,
+    public virtual async Task<int> UpdateAsync(TEntity entity,
                                           CancellationToken cancellationToken = default,
                                           params Expression<Func<TEntity, object>>[] propertySelectors)
     {
         ArgumentNullException.ThrowIfNull(entity);
 
         if (propertySelectors.IsNullOrEmpty())
-            return;
+            return 0;
 
         DetachFromLocalIfExists(entity);
 
@@ -437,7 +437,7 @@ public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepositor
         foreach (var includeProperty in propertySelectors)
             entry.Property(includeProperty).IsModified = true;
 
-        await InternalSaveChangesAsync(cancellationToken);
+        return await InternalSaveChangesAsync(cancellationToken);
     }
 
     /// <summary>
@@ -447,12 +447,12 @@ public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepositor
     /// <param name="cancellationToken"></param>
     /// <param name="propertySelectors"></param>
     /// <returns></returns>
-    public virtual async Task UpdateAsync(IEnumerable<TEntity> entities,
+    public virtual async Task<int> UpdateAsync(IEnumerable<TEntity> entities,
                                           CancellationToken cancellationToken = default,
                                           params Expression<Func<TEntity, object>>[] propertySelectors)
     {
         if (entities.IsNullOrEmpty() || propertySelectors.IsNullOrEmpty())
-            return;
+            return 0;
 
         foreach (var entity in entities)
         {
@@ -463,7 +463,7 @@ public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepositor
                 entry.Property(includeProperty).IsModified = true;
         }
 
-        await InternalSaveChangesAsync(cancellationToken);
+        return await InternalSaveChangesAsync(cancellationToken);
     }
 
     /// <summary>
@@ -472,14 +472,14 @@ public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepositor
     /// <param name="entity"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    public virtual async Task DeleteAsync(TEntity entity, CancellationToken cancellationToken = default)
+    public virtual async Task<int> DeleteAsync(TEntity entity, CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(entity);
 
         DetachFromLocalIfExists(entity);
         _dbSet.Remove(entity);
 
-        await InternalSaveChangesAsync(cancellationToken);
+        return await InternalSaveChangesAsync(cancellationToken);
     }
 
     /// <summary>
@@ -488,10 +488,10 @@ public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepositor
     /// <param name="entities"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    public virtual async Task DeleteAsync(IEnumerable<TEntity> entities, CancellationToken cancellationToken = default)
+    public virtual async Task<int> DeleteAsync(IEnumerable<TEntity> entities, CancellationToken cancellationToken = default)
     {
         if (entities.IsNullOrEmpty())
-            return;
+            return 0;
 
         foreach (var entity in entities)
         {
@@ -499,7 +499,7 @@ public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepositor
             _dbSet.Remove(entity);
         }
 
-        await InternalSaveChangesAsync(cancellationToken);
+        return await InternalSaveChangesAsync(cancellationToken);
     }
 
     /// <summary>
@@ -509,7 +509,7 @@ public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepositor
     /// <param name="newEntities"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    public virtual async Task ReplaceOldsWithNewsAsync(IEnumerable<TEntity> oldEntities,
+    public virtual async Task<int> ReplaceOldsWithNewsAsync(IEnumerable<TEntity> oldEntities,
                                                        IEnumerable<TEntity> newEntities,
                                                        CancellationToken cancellationToken = default)
     {
@@ -523,7 +523,7 @@ public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepositor
         if (!newEntities.IsNullOrEmpty())
             _dbSet.AddRange(newEntities);
 
-        await InternalSaveChangesAsync(cancellationToken);
+        return await InternalSaveChangesAsync(cancellationToken);
     }
 
     /// <summary>
@@ -533,22 +533,26 @@ public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepositor
     /// <param name="newEntities"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    public virtual async Task ReplaceOldsWithNewsInSeperateDatabaseProcessAsync(IEnumerable<TEntity> oldEntities,
+    public virtual async Task<int> ReplaceOldsWithNewsInSeperateDatabaseProcessAsync(IEnumerable<TEntity> oldEntities,
                                                                                 IEnumerable<TEntity> newEntities,
                                                                                 CancellationToken cancellationToken = default)
     {
+        int affectedRows = 0;
+
         if (!oldEntities.IsNullOrEmpty())
-            await DeleteAsync(oldEntities, cancellationToken);
+            affectedRows += await DeleteAsync(oldEntities, cancellationToken);
 
         if (!newEntities.IsNullOrEmpty())
-            await AddRangeAsync(newEntities, cancellationToken);
+            affectedRows += await AddRangeAsync(newEntities, cancellationToken);
+
+        return affectedRows;
     }
 
     /// <summary>
     /// Removes all entities from database.
     /// </summary>
     /// <returns></returns>
-    public virtual async Task RemoveAllAsync(CancellationToken cancellationToken = default)
+    public virtual async Task<int> RemoveAllAsync(CancellationToken cancellationToken = default)
     {
         var entities = _dbSet.AsEnumerable();
 
@@ -558,7 +562,7 @@ public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepositor
             _dbSet.Remove(entity);
         }
 
-        await InternalSaveChangesAsync(cancellationToken);
+        return await InternalSaveChangesAsync(cancellationToken);
     }
 
     #region Bulk Async
@@ -571,7 +575,7 @@ public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepositor
     /// <param name="propertyBuilder"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    public virtual async Task ExecuteUpdateAsync(object id, SetPropertyBuilder<TEntity> propertyBuilder, CancellationToken cancellationToken = default)
+    public virtual async Task<int> ExecuteUpdateAsync(object id, SetPropertyBuilder<TEntity> propertyBuilder, CancellationToken cancellationToken = default)
         => await ExecuteUpdateAsync(i => i.Id == id, propertyBuilder, cancellationToken);
 
     /// <summary>
@@ -581,7 +585,7 @@ public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepositor
     /// <param name="propertyBuilder"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    public virtual async Task ExecuteUpdateAsync(Expression<Func<TEntity, bool>> predicate, SetPropertyBuilder<TEntity> propertyBuilder, CancellationToken cancellationToken = default)
+    public virtual async Task<int> ExecuteUpdateAsync(Expression<Func<TEntity, bool>> predicate, SetPropertyBuilder<TEntity> propertyBuilder, CancellationToken cancellationToken = default)
     {
         if (!propertyBuilder.AuditCallsAdded)
         {
@@ -592,7 +596,7 @@ public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepositor
                 AddPerformerUserPropertyCall(propertyBuilder, EntityPropertyNames.LastModifierUserName);
         }
 
-        await _dbSet.Where(predicate).ExecuteUpdateAsync(propertyBuilder.SetPropertyCalls, cancellationToken: cancellationToken);
+        return await _dbSet.Where(predicate).ExecuteUpdateAsync(propertyBuilder.SetPropertyCalls, cancellationToken: cancellationToken);
     }
 
     /// <summary>
@@ -600,9 +604,10 @@ public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepositor
     /// Note that this will not work with navigation properties.
     /// </summary>
     /// <param name="id"></param>
+    /// <param name="propertyBuilder"> If soft delete is active you may want to update some properties. etc. image in database</param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    public virtual async Task ExecuteDeleteAsync(object id, CancellationToken cancellationToken = default)
+    public virtual async Task<int> ExecuteDeleteAsync(object id, SetPropertyBuilder<TEntity> propertyBuilder = null, CancellationToken cancellationToken = default)
         => await ExecuteDeleteAsync(i => i.Id == id, cancellationToken: cancellationToken);
 
     /// <summary>
@@ -610,29 +615,29 @@ public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepositor
     /// Note that this will not work with navigation properties.
     /// </summary>
     /// <param name="predicate"></param>
+    /// <param name="propertyBuilder"> If soft delete is active you may want to update some properties. etc. image in database</param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    public virtual async Task ExecuteDeleteAsync(Expression<Func<TEntity, bool>> predicate, CancellationToken cancellationToken = default)
+    public virtual async Task<int> ExecuteDeleteAsync(Expression<Func<TEntity, bool>> predicate,
+                                                 SetPropertyBuilder<TEntity> propertyBuilder = null,
+                                                 CancellationToken cancellationToken = default)
     {
         switch (_dbContext.GetCurrentSoftDeletionState())
         {
             case SoftDeletionState.Active:
 
-                var propertyBuilder = new SetPropertyBuilder<TEntity>();
+                propertyBuilder ??= new SetPropertyBuilder<TEntity>();
 
                 //Soft delete
                 AddDeletionPropertyCalls(propertyBuilder);
 
-                await _dbSet.Where(predicate).ExecuteUpdateAsync(propertyBuilder.SetPropertyCalls, cancellationToken: cancellationToken);
+                return await _dbSet.Where(predicate).ExecuteUpdateAsync(propertyBuilder.SetPropertyCalls, cancellationToken: cancellationToken);
 
-                break;
             case SoftDeletionState.Passive:
 
-                await _dbSet.Where(predicate).ExecuteDeleteAsync(cancellationToken: cancellationToken);
-
-                break;
+                return await _dbSet.Where(predicate).ExecuteDeleteAsync(cancellationToken: cancellationToken);
             default:
-                break;
+                return 0;
         }
     }
 
@@ -753,7 +758,7 @@ public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepositor
     /// </summary>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    public async Task SaveChangesAsync(CancellationToken cancellationToken = default) => await _dbContext.SaveChangesAsync(cancellationToken);
+    public async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default) => await _dbContext.SaveChangesAsync(cancellationToken);
 
     /// <summary>
     /// Saves all changes made in this context to the database.
@@ -835,10 +840,12 @@ public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepositor
     /// </summary>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    protected async Task InternalSaveChangesAsync(CancellationToken cancellationToken = default)
+    protected async Task<int> InternalSaveChangesAsync(CancellationToken cancellationToken = default)
     {
         if (_saveChangesAfterEveryOperation)
-            await _dbContext.SaveChangesAsync(cancellationToken);
+            return await _dbContext.SaveChangesAsync(cancellationToken);
+
+        return 0;
     }
 
     /// <summary>

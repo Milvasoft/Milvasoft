@@ -237,13 +237,13 @@ public abstract partial class BaseRepository<TEntity, TContext> where TEntity : 
     /// </summary>
     /// <param name="entity"></param>
     /// <returns></returns>
-    public virtual void Add(TEntity entity)
+    public virtual int Add(TEntity entity)
     {
         ArgumentNullException.ThrowIfNull(entity);
 
         _dbSet.Add(entity);
 
-        InternalSaveChanges();
+        return InternalSaveChanges();
     }
 
     /// <summary>
@@ -251,14 +251,14 @@ public abstract partial class BaseRepository<TEntity, TContext> where TEntity : 
     /// </summary>
     /// <param name="entities"></param>
     /// <returns></returns>
-    public virtual void AddRange(IEnumerable<TEntity> entities)
+    public virtual int AddRange(IEnumerable<TEntity> entities)
     {
         if (entities.IsNullOrEmpty())
-            return;
+            return 0;
 
         _dbSet.AddRange(entities);
 
-        InternalSaveChanges();
+        return InternalSaveChanges();
     }
 
     /// <summary>
@@ -266,14 +266,14 @@ public abstract partial class BaseRepository<TEntity, TContext> where TEntity : 
     /// </summary>
     /// <param name="entity"></param>
     /// <returns></returns>
-    public virtual void Update(TEntity entity)
+    public virtual int Update(TEntity entity)
     {
         ArgumentNullException.ThrowIfNull(entity);
 
         DetachFromLocalIfExists(entity);
         _dbSet.Update(entity);
 
-        InternalSaveChanges();
+        return InternalSaveChanges();
     }
 
     /// <summary>
@@ -281,10 +281,10 @@ public abstract partial class BaseRepository<TEntity, TContext> where TEntity : 
     /// </summary>
     /// <param name="entities"></param>
     /// <returns></returns>
-    public virtual void Update(IEnumerable<TEntity> entities)
+    public virtual int Update(IEnumerable<TEntity> entities)
     {
         if (entities.IsNullOrEmpty())
-            return;
+            return 0;
 
         foreach (var entity in entities)
         {
@@ -292,7 +292,7 @@ public abstract partial class BaseRepository<TEntity, TContext> where TEntity : 
             _dbSet.Update(entity);
         }
 
-        InternalSaveChanges();
+        return InternalSaveChanges();
     }
 
     /// <summary>
@@ -301,12 +301,12 @@ public abstract partial class BaseRepository<TEntity, TContext> where TEntity : 
     /// <param name="entity"></param>
     /// <param name="propertySelectors"></param>
     /// <returns></returns>
-    public virtual void Update(TEntity entity, params Expression<Func<TEntity, object>>[] propertySelectors)
+    public virtual int Update(TEntity entity, params Expression<Func<TEntity, object>>[] propertySelectors)
     {
         ArgumentNullException.ThrowIfNull(entity);
 
         if (propertySelectors.IsNullOrEmpty())
-            return;
+            return 0;
 
         DetachFromLocalIfExists(entity);
 
@@ -315,7 +315,7 @@ public abstract partial class BaseRepository<TEntity, TContext> where TEntity : 
         foreach (var includeProperty in propertySelectors)
             entry.Property(includeProperty).IsModified = true;
 
-        InternalSaveChanges();
+        return InternalSaveChanges();
     }
 
     /// <summary>
@@ -324,10 +324,10 @@ public abstract partial class BaseRepository<TEntity, TContext> where TEntity : 
     /// <param name="entities"></param>
     /// <param name="propertySelectors"></param>
     /// <returns></returns>
-    public virtual void Update(IEnumerable<TEntity> entities, params Expression<Func<TEntity, object>>[] propertySelectors)
+    public virtual int Update(IEnumerable<TEntity> entities, params Expression<Func<TEntity, object>>[] propertySelectors)
     {
         if (entities.IsNullOrEmpty() || propertySelectors.IsNullOrEmpty())
-            return;
+            return 0;
 
         foreach (var entity in entities)
         {
@@ -338,7 +338,7 @@ public abstract partial class BaseRepository<TEntity, TContext> where TEntity : 
                 entry.Property(includeProperty).IsModified = true;
         }
 
-        InternalSaveChanges();
+        return InternalSaveChanges();
     }
 
     /// <summary>
@@ -346,14 +346,14 @@ public abstract partial class BaseRepository<TEntity, TContext> where TEntity : 
     /// </summary>
     /// <param name="entity"></param>
     /// <returns></returns>
-    public virtual void Delete(TEntity entity)
+    public virtual int Delete(TEntity entity)
     {
         ArgumentNullException.ThrowIfNull(entity);
 
         DetachFromLocalIfExists(entity);
         _dbSet.Remove(entity);
 
-        InternalSaveChanges();
+        return InternalSaveChanges();
     }
 
     /// <summary>
@@ -361,10 +361,10 @@ public abstract partial class BaseRepository<TEntity, TContext> where TEntity : 
     /// </summary>
     /// <param name="entities"></param>
     /// <returns></returns>
-    public virtual void Delete(IEnumerable<TEntity> entities)
+    public virtual int Delete(IEnumerable<TEntity> entities)
     {
         if (entities.IsNullOrEmpty())
-            return;
+            return 0;
 
         foreach (var entity in entities)
         {
@@ -372,7 +372,7 @@ public abstract partial class BaseRepository<TEntity, TContext> where TEntity : 
             _dbSet.Remove(entity);
         }
 
-        InternalSaveChanges();
+        return InternalSaveChanges();
     }
 
     /// <summary>
@@ -381,7 +381,7 @@ public abstract partial class BaseRepository<TEntity, TContext> where TEntity : 
     /// <param name="oldEntities"></param>
     /// <param name="newEntities"></param>
     /// <returns></returns>
-    public virtual void ReplaceOldsWithNews(IEnumerable<TEntity> oldEntities, IEnumerable<TEntity> newEntities)
+    public virtual int ReplaceOldsWithNews(IEnumerable<TEntity> oldEntities, IEnumerable<TEntity> newEntities)
     {
         if (!oldEntities.IsNullOrEmpty())
             foreach (var entity in oldEntities)
@@ -393,7 +393,7 @@ public abstract partial class BaseRepository<TEntity, TContext> where TEntity : 
         if (!newEntities.IsNullOrEmpty())
             _dbSet.AddRange(newEntities);
 
-        InternalSaveChanges();
+        return InternalSaveChanges();
     }
 
     /// <summary>
@@ -402,20 +402,24 @@ public abstract partial class BaseRepository<TEntity, TContext> where TEntity : 
     /// <param name="oldEntities"></param>
     /// <param name="newEntities"></param>
     /// <returns></returns>
-    public virtual void ReplaceOldsWithNewsInSeperateDatabaseProcess(IEnumerable<TEntity> oldEntities, IEnumerable<TEntity> newEntities)
+    public virtual int ReplaceOldsWithNewsInSeperateDatabaseProcess(IEnumerable<TEntity> oldEntities, IEnumerable<TEntity> newEntities)
     {
+        int affectedRows = 0;
+
         if (!oldEntities.IsNullOrEmpty())
-            Delete(oldEntities);
+            affectedRows += Delete(oldEntities);
 
         if (!newEntities.IsNullOrEmpty())
-            AddRange(newEntities);
+            affectedRows += AddRange(newEntities);
+
+        return affectedRows;
     }
 
     /// <summary>
     /// Removes all entities from database.
     /// </summary>
     /// <returns></returns>
-    public virtual void RemoveAll()
+    public virtual int RemoveAll()
     {
         var entities = _dbSet.AsEnumerable();
 
@@ -425,7 +429,7 @@ public abstract partial class BaseRepository<TEntity, TContext> where TEntity : 
             _dbSet.Remove(entity);
         }
 
-        InternalSaveChanges();
+        return InternalSaveChanges();
     }
 
     #region Bulk 
@@ -437,7 +441,7 @@ public abstract partial class BaseRepository<TEntity, TContext> where TEntity : 
     /// <param name="id"></param>
     /// <param name="propertyBuilder"></param>
     /// <returns></returns>
-    public virtual void ExecuteUpdate(object id, SetPropertyBuilder<TEntity> propertyBuilder)
+    public virtual int ExecuteUpdate(object id, SetPropertyBuilder<TEntity> propertyBuilder)
         => ExecuteUpdate(i => i.Id == id, propertyBuilder);
 
     /// <summary>
@@ -446,7 +450,7 @@ public abstract partial class BaseRepository<TEntity, TContext> where TEntity : 
     /// <param name="predicate"></param>
     /// <param name="propertyBuilder"></param>
     /// <returns></returns>
-    public virtual void ExecuteUpdate(Expression<Func<TEntity, bool>> predicate, SetPropertyBuilder<TEntity> propertyBuilder)
+    public virtual int ExecuteUpdate(Expression<Func<TEntity, bool>> predicate, SetPropertyBuilder<TEntity> propertyBuilder)
     {
         if (!propertyBuilder.AuditCallsAdded)
         {
@@ -457,7 +461,7 @@ public abstract partial class BaseRepository<TEntity, TContext> where TEntity : 
                 AddPerformerUserPropertyCall(propertyBuilder, EntityPropertyNames.LastModifierUserName);
         }
 
-        _dbSet.Where(predicate).ExecuteUpdate(propertyBuilder.SetPropertyCalls);
+        return _dbSet.Where(predicate).ExecuteUpdate(propertyBuilder.SetPropertyCalls);
     }
 
     /// <summary>
@@ -465,8 +469,9 @@ public abstract partial class BaseRepository<TEntity, TContext> where TEntity : 
     /// Note that this will not work with navigation properties.
     /// </summary>
     /// <param name="id"></param>
+    /// <param name="propertyBuilder"> If soft delete is active you may want to update some properties. etc. image in database</param>
     /// <returns></returns>
-    public virtual void ExecuteDelete(object id)
+    public virtual int ExecuteDelete(object id, SetPropertyBuilder<TEntity> propertyBuilder = null)
         => ExecuteDelete(i => i.Id == id);
 
     /// <summary>
@@ -474,28 +479,26 @@ public abstract partial class BaseRepository<TEntity, TContext> where TEntity : 
     /// Note that this will not work with navigation properties.
     /// </summary>
     /// <param name="predicate"></param>
+    /// <param name="propertyBuilder"> If soft delete is active you may want to update some properties. etc. image in database</param>
     /// <returns></returns>
-    public virtual void ExecuteDelete(Expression<Func<TEntity, bool>> predicate)
+    public virtual int ExecuteDelete(Expression<Func<TEntity, bool>> predicate,
+                                     SetPropertyBuilder<TEntity> propertyBuilder = null)
     {
         switch (_dbContext.GetCurrentSoftDeletionState())
         {
             case SoftDeletionState.Active:
 
-                var propertyBuilder = new SetPropertyBuilder<TEntity>();
+                propertyBuilder ??= new SetPropertyBuilder<TEntity>();
 
                 //Soft delete
                 AddDeletionPropertyCalls(propertyBuilder);
 
-                _dbSet.Where(predicate).ExecuteUpdate(propertyBuilder.SetPropertyCalls);
-
-                break;
+                return _dbSet.Where(predicate).ExecuteUpdate(propertyBuilder.SetPropertyCalls);
             case SoftDeletionState.Passive:
 
-                _dbSet.Where(predicate).ExecuteDelete();
-
-                break;
+                return _dbSet.Where(predicate).ExecuteDelete();
             default:
-                break;
+                return 0;
         }
     }
 
@@ -587,7 +590,7 @@ public abstract partial class BaseRepository<TEntity, TContext> where TEntity : 
     /// Saves all changes made in this context to the database.
     /// </summary>
     /// <returns></returns>
-    public void SaveChanges() => _dbContext.SaveChanges();
+    public int SaveChanges() => _dbContext.SaveChanges();
 
     /// <summary>
     /// Saves all changes made in this context to the database.
@@ -600,10 +603,12 @@ public abstract partial class BaseRepository<TEntity, TContext> where TEntity : 
     /// Saves all changes made in this context to the database.
     /// </summary>
     /// <returns></returns>
-    protected void InternalSaveChanges()
+    protected int InternalSaveChanges()
     {
         if (_saveChangesAfterEveryOperation)
-            _dbContext.SaveChanges();
+            return _dbContext.SaveChanges();
+
+        return 0;
     }
 
     /// <summary>

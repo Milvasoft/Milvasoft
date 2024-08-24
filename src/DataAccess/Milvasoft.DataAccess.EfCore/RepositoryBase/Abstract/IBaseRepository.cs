@@ -249,7 +249,7 @@ public interface IBaseRepository<TEntity> where TEntity : class, IMilvaEntity
     /// <param name="entity"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    Task AddAsync(TEntity entity, CancellationToken cancellationToken = default);
+    Task<int> AddAsync(TEntity entity, CancellationToken cancellationToken = default);
 
     /// <summary>
     ///  Adds multiple entities to database asynchronously. 
@@ -257,7 +257,7 @@ public interface IBaseRepository<TEntity> where TEntity : class, IMilvaEntity
     /// <param name="entities"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    Task AddRangeAsync(IEnumerable<TEntity> entities, CancellationToken cancellationToken = default);
+    Task<int> AddRangeAsync(IEnumerable<TEntity> entities, CancellationToken cancellationToken = default);
 
     /// <summary>
     ///  Updates specified entity in database asynchronously.
@@ -265,7 +265,7 @@ public interface IBaseRepository<TEntity> where TEntity : class, IMilvaEntity
     /// <param name="entity"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    Task UpdateAsync(TEntity entity, CancellationToken cancellationToken = default);
+    Task<int> UpdateAsync(TEntity entity, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Specific properties updates.
@@ -274,7 +274,7 @@ public interface IBaseRepository<TEntity> where TEntity : class, IMilvaEntity
     /// <param name="cancellationToken"></param>
     /// <param name="propertySelectors"></param>
     /// <returns></returns>
-    Task UpdateAsync(TEntity entity,
+    Task<int> UpdateAsync(TEntity entity,
                      CancellationToken cancellationToken = default,
                      params Expression<Func<TEntity, object>>[] propertySelectors);
 
@@ -285,7 +285,7 @@ public interface IBaseRepository<TEntity> where TEntity : class, IMilvaEntity
     /// <param name="cancellationToken"></param>
     /// <param name="propertySelectors"></param>
     /// <returns></returns>
-    Task UpdateAsync(IEnumerable<TEntity> entities,
+    Task<int> UpdateAsync(IEnumerable<TEntity> entities,
                      CancellationToken cancellationToken = default,
                      params Expression<Func<TEntity, object>>[] propertySelectors);
 
@@ -295,7 +295,7 @@ public interface IBaseRepository<TEntity> where TEntity : class, IMilvaEntity
     /// <param name="entities"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    Task UpdateAsync(IEnumerable<TEntity> entities, CancellationToken cancellationToken = default);
+    Task<int> UpdateAsync(IEnumerable<TEntity> entities, CancellationToken cancellationToken = default);
 
     /// <summary>
     ///  Deletes single entity from database asynchronously.
@@ -303,7 +303,7 @@ public interface IBaseRepository<TEntity> where TEntity : class, IMilvaEntity
     /// <param name="entity"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    Task DeleteAsync(TEntity entity, CancellationToken cancellationToken = default);
+    Task<int> DeleteAsync(TEntity entity, CancellationToken cancellationToken = default);
 
     /// <summary>
     ///  Deletes multiple entity from database asynchronously.
@@ -311,7 +311,7 @@ public interface IBaseRepository<TEntity> where TEntity : class, IMilvaEntity
     /// <param name="entities"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    Task DeleteAsync(IEnumerable<TEntity> entities, CancellationToken cancellationToken = default);
+    Task<int> DeleteAsync(IEnumerable<TEntity> entities, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Replaces existing entities(<paramref name="oldEntities"/>) with new entities(<paramref name="newEntities"/>).
@@ -320,7 +320,7 @@ public interface IBaseRepository<TEntity> where TEntity : class, IMilvaEntity
     /// <param name="newEntities"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    Task ReplaceOldsWithNewsAsync(IEnumerable<TEntity> oldEntities,
+    Task<int> ReplaceOldsWithNewsAsync(IEnumerable<TEntity> oldEntities,
                                   IEnumerable<TEntity> newEntities,
                                   CancellationToken cancellationToken = default);
 
@@ -331,7 +331,7 @@ public interface IBaseRepository<TEntity> where TEntity : class, IMilvaEntity
     /// <param name="newEntities"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    Task ReplaceOldsWithNewsInSeperateDatabaseProcessAsync(IEnumerable<TEntity> oldEntities,
+    Task<int> ReplaceOldsWithNewsInSeperateDatabaseProcessAsync(IEnumerable<TEntity> oldEntities,
                                                            IEnumerable<TEntity> newEntities,
                                                            CancellationToken cancellationToken = default);
 
@@ -339,7 +339,7 @@ public interface IBaseRepository<TEntity> where TEntity : class, IMilvaEntity
     /// Removes all entities from database.
     /// </summary>
     /// <returns></returns>
-    Task RemoveAllAsync(CancellationToken cancellationToken = default);
+    Task<int> RemoveAllAsync(CancellationToken cancellationToken = default);
 
     #region Bulk Async
 
@@ -351,7 +351,7 @@ public interface IBaseRepository<TEntity> where TEntity : class, IMilvaEntity
     /// <param name="propertyBuilder"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    Task ExecuteUpdateAsync(object id, SetPropertyBuilder<TEntity> propertyBuilder, CancellationToken cancellationToken = default);
+    Task<int> ExecuteUpdateAsync(object id, SetPropertyBuilder<TEntity> propertyBuilder, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Runs execute update with given <paramref name="predicate"/>. Adds performer and perform time to to be updated properties.
@@ -360,25 +360,28 @@ public interface IBaseRepository<TEntity> where TEntity : class, IMilvaEntity
     /// <param name="propertyBuilder"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    Task ExecuteUpdateAsync(Expression<Func<TEntity, bool>> predicate, SetPropertyBuilder<TEntity> propertyBuilder, CancellationToken cancellationToken = default);
+    Task<int> ExecuteUpdateAsync(Expression<Func<TEntity, bool>> predicate, SetPropertyBuilder<TEntity> propertyBuilder, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Deletes all records that match the condition. If <see cref="SoftDeletionState"/> is active, it updates the soft delete properties of the relevant entity. 
     /// Note that this will not work with navigation properties.
     /// </summary>
     /// <param name="id"></param>
+    /// <param name="propertyBuilder"> If soft delete is active you may want to update some properties. etc. image in database</param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    Task ExecuteDeleteAsync(object id, CancellationToken cancellationToken = default);
-
+    Task<int> ExecuteDeleteAsync(object id, SetPropertyBuilder<TEntity> propertyBuilder = null, CancellationToken cancellationToken = default);
     /// <summary>
     /// Deletes all records that given <paramref name="predicate"/>. If <see cref="SoftDeletionState"/> is active, it updates the soft delete properties of the relevant entity. 
     /// Note that this will not work with navigation properties.
     /// </summary>
     /// <param name="predicate"></param>
+    /// <param name="propertyBuilder"> If soft delete is active you may want to update some properties. etc. image in database</param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    Task ExecuteDeleteAsync(Expression<Func<TEntity, bool>> predicate, CancellationToken cancellationToken = default);
+    Task<int> ExecuteDeleteAsync(Expression<Func<TEntity, bool>> predicate,
+                            SetPropertyBuilder<TEntity> propertyBuilder = null,
+                            CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Bulk add operation. 
@@ -443,7 +446,7 @@ public interface IBaseRepository<TEntity> where TEntity : class, IMilvaEntity
     /// </summary>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    Task SaveChangesAsync(CancellationToken cancellationToken = default);
+    Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Saves all changes made in this context to the database.
@@ -627,28 +630,28 @@ public interface IBaseRepository<TEntity> where TEntity : class, IMilvaEntity
     /// </summary>
     /// <param name="entity"></param>
     /// <returns></returns>
-    void Add(TEntity entity);
+    int Add(TEntity entity);
 
     /// <summary>
     ///  Adds multiple entities to database synchronously. 
     /// </summary>
     /// <param name="entities"></param>
     /// <returns></returns>
-    void AddRange(IEnumerable<TEntity> entities);
+    int AddRange(IEnumerable<TEntity> entities);
 
     /// <summary>
     /// Updates specified entity in database synchronously.
     /// </summary>
     /// <param name="entity"></param>
     /// <returns></returns>
-    void Update(TEntity entity);
+    int Update(TEntity entity);
 
     /// <summary>
     /// Updates multiple entities in database synchronously.
     /// </summary>
     /// <param name="entities"></param>
     /// <returns></returns>
-    void Update(IEnumerable<TEntity> entities);
+    int Update(IEnumerable<TEntity> entities);
 
     /// <summary>
     /// Specific properties updates.
@@ -656,7 +659,7 @@ public interface IBaseRepository<TEntity> where TEntity : class, IMilvaEntity
     /// <param name="entity"></param>
     /// <param name="propertySelectors"></param>
     /// <returns></returns>
-    void Update(TEntity entity, params Expression<Func<TEntity, object>>[] propertySelectors);
+    int Update(TEntity entity, params Expression<Func<TEntity, object>>[] propertySelectors);
 
     /// <summary>
     /// Specific properties updates.
@@ -664,21 +667,21 @@ public interface IBaseRepository<TEntity> where TEntity : class, IMilvaEntity
     /// <param name="entities"></param>
     /// <param name="propertySelectors"></param>
     /// <returns></returns>
-    void Update(IEnumerable<TEntity> entities, params Expression<Func<TEntity, object>>[] propertySelectors);
+    int Update(IEnumerable<TEntity> entities, params Expression<Func<TEntity, object>>[] propertySelectors);
 
     /// <summary>
     ///  Deletes single entity from database synchronously.
     /// </summary>
     /// <param name="entity"></param>
     /// <returns></returns>
-    void Delete(TEntity entity);
+    int Delete(TEntity entity);
 
     /// <summary>
     ///  Deletes multiple entity from database synchronously.
     /// </summary>
     /// <param name="entities"></param>
     /// <returns></returns>
-    void Delete(IEnumerable<TEntity> entities);
+    int Delete(IEnumerable<TEntity> entities);
 
     /// <summary>
     /// Replaces existing entities(<paramref name="oldEntities"/>) with new entities(<paramref name="newEntities"/>).
@@ -686,7 +689,7 @@ public interface IBaseRepository<TEntity> where TEntity : class, IMilvaEntity
     /// <param name="oldEntities"></param>
     /// <param name="newEntities"></param>
     /// <returns></returns>
-    void ReplaceOldsWithNews(IEnumerable<TEntity> oldEntities, IEnumerable<TEntity> newEntities);
+    int ReplaceOldsWithNews(IEnumerable<TEntity> oldEntities, IEnumerable<TEntity> newEntities);
 
     /// <summary>
     /// Replaces existing entities(<paramref name="oldEntities"/>) with new entities(<paramref name="newEntities"/>).
@@ -694,13 +697,13 @@ public interface IBaseRepository<TEntity> where TEntity : class, IMilvaEntity
     /// <param name="oldEntities"></param>
     /// <param name="newEntities"></param>
     /// <returns></returns>
-    void ReplaceOldsWithNewsInSeperateDatabaseProcess(IEnumerable<TEntity> oldEntities, IEnumerable<TEntity> newEntities);
+    int ReplaceOldsWithNewsInSeperateDatabaseProcess(IEnumerable<TEntity> oldEntities, IEnumerable<TEntity> newEntities);
 
     /// <summary>
     /// Removes all entities from database.
     /// </summary>
     /// <returns></returns>
-    void RemoveAll();
+    int RemoveAll();
 
     #region Bulk 
 
@@ -711,7 +714,7 @@ public interface IBaseRepository<TEntity> where TEntity : class, IMilvaEntity
     /// <param name="id"></param>
     /// <param name="propertyBuilder"></param>
     /// <returns></returns>
-    void ExecuteUpdate(object id, SetPropertyBuilder<TEntity> propertyBuilder);
+    int ExecuteUpdate(object id, SetPropertyBuilder<TEntity> propertyBuilder);
 
     /// <summary>
     /// Runs execute update with given <paramref name="predicate"/>. Adds performer and perform time to to be updated properties.
@@ -719,23 +722,25 @@ public interface IBaseRepository<TEntity> where TEntity : class, IMilvaEntity
     /// <param name="predicate"></param>
     /// <param name="propertyBuilder"></param>
     /// <returns></returns>
-    void ExecuteUpdate(Expression<Func<TEntity, bool>> predicate, SetPropertyBuilder<TEntity> propertyBuilder);
+    int ExecuteUpdate(Expression<Func<TEntity, bool>> predicate, SetPropertyBuilder<TEntity> propertyBuilder);
 
     /// <summary>
     /// Deletes all records that match the condition. If <see cref="SoftDeletionState"/> is active, it updates the soft delete properties of the relevant entity. 
     /// Note that this will not work with navigation properties.
     /// </summary>
     /// <param name="id"></param>
+    /// <param name="propertyBuilder"> If soft delete is active you may want to update some properties. etc. image in database</param>
     /// <returns></returns>
-    void ExecuteDelete(object id);
+    int ExecuteDelete(object id, SetPropertyBuilder<TEntity> propertyBuilder = null);
 
     /// <summary>
     /// Deletes all records that given <paramref name="predicate"/>. If <see cref="SoftDeletionState"/> is active, it updates the soft delete properties of the relevant entity. 
     /// Note that this will not work with navigation properties.
     /// </summary>
     /// <param name="predicate"></param>
+    /// <param name="propertyBuilder"> If soft delete is active you may want to update some properties. etc. image in database</param>
     /// <returns></returns>
-    void ExecuteDelete(Expression<Func<TEntity, bool>> predicate);
+    int ExecuteDelete(Expression<Func<TEntity, bool>> predicate, SetPropertyBuilder<TEntity> propertyBuilder = null);
 
     /// <summary>
     /// Bulk add operation. 
@@ -793,7 +798,7 @@ public interface IBaseRepository<TEntity> where TEntity : class, IMilvaEntity
     /// Saves all changes made in this context to the database.
     /// </summary>
     /// <returns></returns>
-    void SaveChanges();
+    int SaveChanges();
 
     /// <summary>
     /// Saves all changes made in this context to the database.
