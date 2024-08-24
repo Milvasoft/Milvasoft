@@ -48,7 +48,7 @@
 		<Description>Localization abstractions with redis store.</Description>
 		<PackageTags>localization, globalization, localizer, redis</PackageTags>
 		<Copyright>Milvasoft Yazılım Bilişim Araştırma Geliştirme Danışmanlık Sanayi ve Ticaret Ltd.Şti.</Copyright>
-		<Version>8.1.32</Version>
+		<Version>8.1.33</Version>
 
 	</PropertyGroup>
 	
