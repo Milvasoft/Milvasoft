@@ -46,7 +46,7 @@
 		<Description>Cryptography operation.</Description>
 		<PackageTags>cryptography, encrypt, decrypt, encryption</PackageTags>
 		<Copyright>Milvasoft Yazılım Bilişim Araştırma Geliştirme Danışmanlık Sanayi ve Ticaret Ltd.Şti.</Copyright>
-		<Version>8.1.30</Version>
+		<Version>8.1.31</Version>
 
 	</PropertyGroup>
 	
