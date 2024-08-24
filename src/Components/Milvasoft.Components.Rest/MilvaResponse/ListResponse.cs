@@ -1,5 +1,6 @@
 ﻿using Milvasoft.Components.Rest.Enums;
 using System.Net;
+using System.Text.Json.Serialization;
 
 namespace Milvasoft.Components.Rest.MilvaResponse;
 
@@ -14,21 +15,25 @@ public class ListResponse<T> : Response<List<T>>
     /// <summary>
     /// Current page number.
     /// </summary>
+    [JsonPropertyOrder(4)]
     public int? CurrentPageNumber { get; set; }
 
     /// <summary>
     /// Total page count.
     /// </summary>
+    [JsonPropertyOrder(5)]
     public int? TotalPageCount { get; set; }
 
     /// <summary>
     /// Total data count.
     /// </summary>
+    [JsonPropertyOrder(6)]
     public int? TotalDataCount { get; set; }
 
     /// <summary>
     /// Aggregation results.
     /// </summary>
+    [JsonPropertyOrder(8)]
     public List<AggregationResult> AggregationResults { get; set; }
 
     public ListResponse() : base()

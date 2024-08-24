@@ -1,6 +1,5 @@
 ﻿using Milvasoft.Components.Rest.Enums;
 using System.Net;
-using System.Runtime.Serialization;
 using System.Text.Json.Serialization;
 
 namespace Milvasoft.Components.Rest.MilvaResponse;
@@ -13,16 +12,19 @@ public class Response : IResponse
     /// <summary>
     /// Determines whether response is success or not.
     /// </summary>
+    [JsonPropertyOrder(1)]
     public bool IsSuccess { get; set; } = true;
 
     /// <summary>
     /// Gets or sets a status code indicating whether the response is successful.
     /// </summary>
+    [JsonPropertyOrder(2)]
     public int StatusCode { get; set; } = 200;
 
     /// <summary>
     /// Response messages.
     /// </summary>
+    [JsonPropertyOrder(3)]
     public List<ResponseMessage> Messages { get; set; }
 
     /// <summary>
@@ -236,6 +238,7 @@ public class Response<T> : Response, IResponse<T>
     /// <summary>
     /// Response data.
     /// </summary>
+    [JsonPropertyOrder(7)]
     public T Data { get; set; }
 
     /// <summary>
@@ -247,7 +250,7 @@ public class Response<T> : Response, IResponse<T>
     /// <summary>
     /// Response data metadatas.
     /// </summary>
-    [DataMember]
+    [JsonPropertyOrder(99)]
     public List<ResponseDataMetadata> Metadatas { get; set; }
 
     /// <summary>
