@@ -679,7 +679,7 @@ public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepositor
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
     public virtual async Task<int> ExecuteDeleteAsync(object id, SetPropertyBuilder<TEntity> propertyBuilder = null, CancellationToken cancellationToken = default)
-        => await ExecuteDeleteAsync(i => i.Id == id, cancellationToken: cancellationToken);
+        => await ExecuteDeleteAsync(i => i.Id == id, propertyBuilder, cancellationToken: cancellationToken);
 
     /// <summary>
     /// Deletes all records that given <paramref name="predicate"/>. If <see cref="SoftDeletionState"/> is active, it updates the soft delete properties of the relevant entity. 
@@ -690,26 +690,21 @@ public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepositor
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
     public virtual async Task<int> ExecuteDeleteAsync(Expression<Func<TEntity, bool>> predicate,
-                                                 SetPropertyBuilder<TEntity> propertyBuilder = null,
-                                                 CancellationToken cancellationToken = default)
+                                                      SetPropertyBuilder<TEntity> propertyBuilder = null,
+                                                      CancellationToken cancellationToken = default)
     {
-        switch (_dbContext.GetCurrentSoftDeletionState())
+        // If soft deletion active and entity is soft deletable.
+        if (_dbContext.GetCurrentSoftDeletionState() == SoftDeletionState.Active && CommonHelper.PropertyExists<TEntity>(EntityPropertyNames.IsDeleted))
         {
-            case SoftDeletionState.Active:
+            propertyBuilder ??= new SetPropertyBuilder<TEntity>();
 
-                propertyBuilder ??= new SetPropertyBuilder<TEntity>();
+            //Soft delete
+            AddDeletionPropertyCalls(propertyBuilder);
 
-                //Soft delete
-                AddDeletionPropertyCalls(propertyBuilder);
-
-                return await _dbSet.Where(predicate).ExecuteUpdateAsync(propertyBuilder.SetPropertyCalls, cancellationToken: cancellationToken);
-
-            case SoftDeletionState.Passive:
-
-                return await _dbSet.Where(predicate).ExecuteDeleteAsync(cancellationToken: cancellationToken);
-            default:
-                return 0;
+            return await _dbSet.Where(predicate).ExecuteUpdateAsync(propertyBuilder.SetPropertyCalls, cancellationToken: cancellationToken);
         }
+
+        return await _dbSet.Where(predicate).ExecuteDeleteAsync(cancellationToken: cancellationToken);
     }
 
     /// <summary>
@@ -942,12 +937,9 @@ public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepositor
         if (_dataAccessConfiguration.Auditing.AuditDeletionDate)
             AddPerformTimePropertyCall(propertyBuilder, EntityPropertyNames.DeletionDate);
 
-        if (CommonHelper.PropertyExists<TEntity>(EntityPropertyNames.IsDeleted))
-        {
-            var isDeletedPropertyExpression = CommonHelper.CreatePropertySelector<TEntity, bool>(EntityPropertyNames.IsDeleted);
+        var isDeletedPropertyExpression = CommonHelper.CreatePropertySelector<TEntity, bool>(EntityPropertyNames.IsDeleted);
 
-            propertyBuilder.SetPropertyValue(isDeletedPropertyExpression, true);
-        }
+        propertyBuilder.SetPropertyValue(isDeletedPropertyExpression, true);
 
         if (_dataAccessConfiguration.Auditing.AuditDeleter)
             AddPerformerUserPropertyCall(propertyBuilder, EntityPropertyNames.DeleterUserName);

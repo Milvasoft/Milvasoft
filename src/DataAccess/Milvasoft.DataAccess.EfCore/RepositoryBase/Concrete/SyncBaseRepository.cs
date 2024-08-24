@@ -538,7 +538,7 @@ public abstract partial class BaseRepository<TEntity, TContext> where TEntity : 
     /// <param name="propertyBuilder"> If soft delete is active you may want to update some properties. etc. image in database</param>
     /// <returns></returns>
     public virtual int ExecuteDelete(object id, SetPropertyBuilder<TEntity> propertyBuilder = null)
-        => ExecuteDelete(i => i.Id == id);
+        => ExecuteDelete(i => i.Id == id, propertyBuilder);
 
     /// <summary>
     /// Deletes all records that given <paramref name="predicate"/>. If <see cref="SoftDeletionState"/> is active, it updates the soft delete properties of the relevant entity. 
@@ -550,22 +550,18 @@ public abstract partial class BaseRepository<TEntity, TContext> where TEntity : 
     public virtual int ExecuteDelete(Expression<Func<TEntity, bool>> predicate,
                                      SetPropertyBuilder<TEntity> propertyBuilder = null)
     {
-        switch (_dbContext.GetCurrentSoftDeletionState())
+        // If soft deletion active and entity is soft deletable.
+        if (_dbContext.GetCurrentSoftDeletionState() == SoftDeletionState.Active && CommonHelper.PropertyExists<TEntity>(EntityPropertyNames.IsDeleted))
         {
-            case SoftDeletionState.Active:
+            propertyBuilder ??= new SetPropertyBuilder<TEntity>();
 
-                propertyBuilder ??= new SetPropertyBuilder<TEntity>();
+            //Soft delete
+            AddDeletionPropertyCalls(propertyBuilder);
 
-                //Soft delete
-                AddDeletionPropertyCalls(propertyBuilder);
-
-                return _dbSet.Where(predicate).ExecuteUpdate(propertyBuilder.SetPropertyCalls);
-            case SoftDeletionState.Passive:
-
-                return _dbSet.Where(predicate).ExecuteDelete();
-            default:
-                return 0;
+            return _dbSet.Where(predicate).ExecuteUpdate(propertyBuilder.SetPropertyCalls);
         }
+
+        return _dbSet.Where(predicate).ExecuteDelete();
     }
 
     /// <summary>
