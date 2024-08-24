@@ -1,9 +1,12 @@
 ﻿using EFCore.BulkExtensions;
 using Microsoft.EntityFrameworkCore;
+using Milvasoft.Attributes.Annotations;
 using Milvasoft.Components.Rest.MilvaResponse;
 using Milvasoft.Components.Rest.Request;
 using Milvasoft.DataAccess.EfCore.RepositoryBase.Abstract;
+using Milvasoft.DataAccess.EfCore.Utils.IncludeLibrary;
 using Milvasoft.Types.Structs;
+using System.Collections;
 using System.Linq.Expressions;
 
 namespace Milvasoft.Helpers.DataAccess.EfCore.Concrete;
@@ -219,6 +222,74 @@ public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepositor
                            .Where(mainCondition)
                            .Select(projectionExpression)
                            .SingleOrDefaultAsync(conditionAfterProjection ?? (entity => true), cancellationToken);
+    }
+
+    #endregion
+
+    #region GetForDeleteAsync
+
+    /// <summary>
+    /// Returns one entity by entity Id from database asynchronously for delete with navigation properties.
+    /// If you don't send <paramref name="includes"/>, <see cref="CascadeOnDeleteAttribute"/> marked properties will include.
+    /// </summary>
+    /// <param name="id"></param>
+    /// <param name="includes"></param>
+    /// <param name="condition"></param>
+    /// <param name="tracking"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns> The entity found or null. </returns>
+    public virtual async Task<TEntity> GetForDeleteAsync(object id,
+                                                         Func<IIncludable<TEntity>, IIncludable> includes = null,
+                                                         Expression<Func<TEntity, bool>> condition = null,
+                                                         bool tracking = false,
+                                                         CancellationToken cancellationToken = new CancellationToken())
+    {
+        var mainCondition = CreateKeyEqualityExpressionWithIsDeletedFalse(id, condition);
+
+        if (includes is not null)
+            return await _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
+                               .Where(mainCondition)
+                               .IncludeMultiple(includes)
+                               .SingleOrDefaultAsync(cancellationToken);
+
+        var query = _dbSet.AsTracking(GetQueryTrackingBehavior(tracking)).Where(mainCondition);
+
+        return await IncludeNavigationProperties(query).SingleOrDefaultAsync(cancellationToken);
+    }
+
+    /// <summary>
+    /// Returns one entity by entity Id from database asynchronously for delete with navigation properties.
+    /// If you don't send <paramref name="includes"/>, <see cref="CascadeOnDeleteAttribute"/> marked properties will include.
+    /// </summary>
+    /// <param name="id"></param>
+    /// <param name="includes"></param>
+    /// <param name="condition"></param>
+    /// <param name="conditionAfterProjection"></param>
+    /// <param name="projectionExpression"></param>
+    /// <param name="tracking"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns> The entity found or null. </returns>
+    public virtual async Task<TResult> GetForDeleteAsync<TResult>(object id,
+                                                                  Func<IIncludable<TEntity>, IIncludable> includes = null,
+                                                                  Expression<Func<TEntity, bool>> condition = null,
+                                                                  Expression<Func<TEntity, TResult>> projectionExpression = null,
+                                                                  Expression<Func<TResult, bool>> conditionAfterProjection = null,
+                                                                  bool tracking = false,
+                                                                  CancellationToken cancellationToken = new CancellationToken())
+    {
+        var mainCondition = CreateKeyEqualityExpressionWithIsDeletedFalse(id, condition);
+
+        if (includes is not null)
+            return await _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
+                               .Where(mainCondition)
+                               .IncludeMultiple(includes)
+                               .Select(projectionExpression)
+                               .SingleOrDefaultAsync(conditionAfterProjection ?? (entity => true), cancellationToken);
+
+        var query = _dbSet.AsTracking(GetQueryTrackingBehavior(tracking)).Where(mainCondition);
+
+        return await IncludeNavigationProperties(query).Select(projectionExpression)
+                                                       .SingleOrDefaultAsync(conditionAfterProjection ?? (entity => true), cancellationToken);
     }
 
     #endregion
@@ -917,6 +988,92 @@ public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepositor
                 propertyBuilder.SetPropertyValue(performerUserNamePropertyExpression, currentUserName);
             }
         }
+    }
+
+    /// <summary>
+    /// Includes <see cref="CascadeOnDeleteAttribute"/> marked navigation properties to query.
+    /// </summary>
+    /// <param name="query"></param>
+    /// <returns></returns>
+    protected static IQueryable<TEntity> IncludeNavigationProperties(IQueryable<TEntity> query)
+    {
+        var cascadePropertyPaths = GetCascadePropertyPaths<TEntity>();
+
+        var duplications = new List<string>();
+
+        for (int i = 0; i < cascadePropertyPaths.Count; i++)
+        {
+            var cascadePropertyPath = cascadePropertyPaths[i];
+
+            if (cascadePropertyPaths.Exists(c => c != cascadePropertyPath && c.StartsWith(cascadePropertyPath)))
+                duplications.Add(cascadePropertyPath);
+        }
+
+        foreach (var cascadeProp in cascadePropertyPaths)
+        {
+            if (duplications.Contains(cascadeProp))
+                continue;
+
+            query = query.Include(cascadeProp);
+        }
+
+        return query;
+    }
+
+    /// <summary>
+    /// Gets property paths.
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="parentPath"></param>
+    /// <param name="maxDepth"></param>
+    /// <returns></returns>
+    protected static List<string> GetCascadePropertyPaths<T>(string parentPath = null, int maxDepth = 5)
+    {
+        return GetCascadePropertyPaths(typeof(T), parentPath, maxDepth);
+    }
+
+    /// <summary>
+    /// Gets property paths.
+    /// </summary>
+    /// <param name="type"></param>
+    /// <param name="parentPath"></param>
+    /// <param name="maxDepth"></param>
+    /// <param name="currentDepth"></param>
+    /// <returns></returns>
+    protected static List<string> GetCascadePropertyPaths(Type type, string parentPath = null, int maxDepth = 5, int currentDepth = 0)
+    {
+        var properties1 = type.GetProperties();
+
+        var properties = type.GetProperties()
+                             .Where(p => p.IsDefined(typeof(CascadeOnDeleteAttribute), inherit: false))
+                             .ToList();
+
+        var paths = new List<string>();
+
+        if (currentDepth > maxDepth)
+            return paths;
+
+        foreach (var property in properties)
+        {
+            var propertyType = property.PropertyType;
+
+            if (!propertyType.IsClass || propertyType == typeof(string) || propertyType == typeof(decimal))
+                continue;
+
+            var currentPath = string.IsNullOrEmpty(parentPath) ? property.Name : $"{parentPath}.{property.Name}";
+
+            paths.Add(currentPath);
+
+            // Eğer property bir sınıfsa ve string değilse, alt property'leri rekrüzyonla getir
+            if (propertyType.IsGenericType && typeof(IList).IsAssignableFrom(propertyType))
+            {
+                var genericArgumentType = propertyType.GetGenericArguments()[0];
+
+                paths.AddRange(GetCascadePropertyPaths(genericArgumentType, currentPath, maxDepth, currentDepth + 1));
+            }
+        }
+
+        return paths;
     }
 
     #endregion

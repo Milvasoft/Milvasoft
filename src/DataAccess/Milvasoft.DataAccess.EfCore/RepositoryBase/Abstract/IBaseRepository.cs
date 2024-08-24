@@ -1,6 +1,8 @@
 ﻿using EFCore.BulkExtensions;
+using Milvasoft.Attributes.Annotations;
 using Milvasoft.Components.Rest.MilvaResponse;
 using Milvasoft.Components.Rest.Request;
+using Milvasoft.DataAccess.EfCore.Utils.IncludeLibrary;
 using Milvasoft.Types.Structs;
 using System.Linq.Expressions;
 
@@ -142,6 +144,46 @@ public interface IBaseRepository<TEntity> where TEntity : class, IMilvaEntity
                                         Expression<Func<TResult, bool>> conditionAfterProjection = null,
                                         bool tracking = false,
                                         CancellationToken cancellationToken = new CancellationToken());
+
+    #endregion
+
+    #region GetForDeleteAsync
+
+    /// <summary>
+    /// Returns one entity by entity Id from database asynchronously for delete with navigation properties.
+    /// If you don't send <paramref name="includes"/>, <see cref="CascadeOnDeleteAttribute"/> marked properties will include.
+    /// </summary>
+    /// <param name="id"></param>
+    /// <param name="includes"></param>
+    /// <param name="condition"></param>
+    /// <param name="tracking"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns> The entity found or null. </returns>
+    Task<TEntity> GetForDeleteAsync(object id,
+                                    Func<IIncludable<TEntity>, IIncludable> includes = null,
+                                    Expression<Func<TEntity, bool>> condition = null,
+                                    bool tracking = false,
+                                    CancellationToken cancellationToken = new CancellationToken());
+
+    /// <summary>
+    /// Returns one entity by entity Id from database asynchronously for delete with navigation properties.
+    /// If you don't send <paramref name="includes"/>, <see cref="CascadeOnDeleteAttribute"/> marked properties will include.
+    /// </summary>
+    /// <param name="id"></param>
+    /// <param name="includes"></param>
+    /// <param name="condition"></param>
+    /// <param name="conditionAfterProjection"></param>
+    /// <param name="projectionExpression"></param>
+    /// <param name="tracking"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns> The entity found or null. </returns>
+    Task<TResult> GetForDeleteAsync<TResult>(object id,
+                                             Func<IIncludable<TEntity>, IIncludable> includes = null,
+                                             Expression<Func<TEntity, bool>> condition = null,
+                                             Expression<Func<TEntity, TResult>> projectionExpression = null,
+                                             Expression<Func<TResult, bool>> conditionAfterProjection = null,
+                                             bool tracking = false,
+                                             CancellationToken cancellationToken = new CancellationToken());
 
     #endregion
 
@@ -537,6 +579,43 @@ public interface IBaseRepository<TEntity> where TEntity : class, IMilvaEntity
                              Expression<Func<TEntity, TResult>> projectionExpression = null,
                              Expression<Func<TResult, bool>> conditionAfterProjection = null,
                              bool tracking = false);
+
+    #endregion
+
+
+    #region GetForDelete
+
+    /// <summary>
+    /// Returns one entity by entity Id from database asynchronously for delete with navigation properties.
+    /// If you don't send <paramref name="includes"/>, <see cref="CascadeOnDeleteAttribute"/> marked properties will include.
+    /// </summary>
+    /// <param name="id"></param>
+    /// <param name="includes"></param>
+    /// <param name="condition"></param>
+    /// <param name="tracking"></param>
+    /// <returns> The entity found or null. </returns>
+    TEntity GetForDelete(object id,
+                         Func<IIncludable<TEntity>, IIncludable> includes = null,
+                         Expression<Func<TEntity, bool>> condition = null,
+                         bool tracking = false);
+
+    /// <summary>
+    /// Returns one entity by entity Id from database asynchronously for delete with navigation properties.
+    /// If you don't send <paramref name="includes"/>, <see cref="CascadeOnDeleteAttribute"/> marked properties will include.
+    /// </summary>
+    /// <param name="id"></param>
+    /// <param name="includes"></param>
+    /// <param name="condition"></param>
+    /// <param name="conditionAfterProjection"></param>
+    /// <param name="projectionExpression"></param>
+    /// <param name="tracking"></param>
+    /// <returns> The entity found or null. </returns>
+    TResult GetForDelete<TResult>(object id,
+                                  Func<IIncludable<TEntity>, IIncludable> includes = null,
+                                  Expression<Func<TEntity, bool>> condition = null,
+                                  Expression<Func<TEntity, TResult>> projectionExpression = null,
+                                  Expression<Func<TResult, bool>> conditionAfterProjection = null,
+                                  bool tracking = false);
 
     #endregion
 

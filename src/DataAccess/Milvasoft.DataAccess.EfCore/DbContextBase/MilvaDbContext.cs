@@ -190,7 +190,7 @@ public abstract class MilvaDbContext(DbContextOptions options) : DbContext(optio
     /// </summary>
     protected internal virtual void AuditEntites()
     {
-        foreach (var entry in ChangeTracker.Entries())
+        foreach (var entry in ChangeTracker.Entries().ToList())
         {
             switch (entry.State)
             {
@@ -253,9 +253,7 @@ public abstract class MilvaDbContext(DbContextOptions options) : DbContext(optio
                     AuditDeletion(Entry(dependentEntry));
             }
             else if (navigationEntry?.CurrentValue != null)
-            {
                 AuditDeletion(Entry(navigationEntry.CurrentValue));
-            }
         }
     }
 
@@ -265,6 +263,8 @@ public abstract class MilvaDbContext(DbContextOptions options) : DbContext(optio
     /// <param name="entry"></param>
     protected internal virtual void AuditDeletion(EntityEntry entry)
     {
+        entry.State = EntityState.Deleted;
+
         if (!entry.Metadata.GetProperties().Any(x => x.Name == EntityPropertyNames.IsDeleted))
             return;
 

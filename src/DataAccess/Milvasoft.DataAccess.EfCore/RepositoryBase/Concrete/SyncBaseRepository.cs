@@ -1,8 +1,10 @@
 ﻿using EFCore.BulkExtensions;
 using Microsoft.EntityFrameworkCore;
+using Milvasoft.Attributes.Annotations;
 using Milvasoft.Components.Rest.MilvaResponse;
 using Milvasoft.Components.Rest.Request;
 using Milvasoft.DataAccess.EfCore.RepositoryBase.Abstract;
+using Milvasoft.DataAccess.EfCore.Utils.IncludeLibrary;
 using System.Linq.Expressions;
 
 namespace Milvasoft.Helpers.DataAccess.EfCore.Concrete;
@@ -117,6 +119,70 @@ public abstract partial class BaseRepository<TEntity, TContext> where TEntity : 
                      .Where(mainCondition)
                      .Select(projectionExpression)
                      .SingleOrDefault(conditionAfterProjection ?? (entity => true));
+    }
+
+    #endregion
+
+    #region GetForDelete
+
+    /// <summary>
+    /// Returns one entity by entity Id from database asynchronously for delete with navigation properties.
+    /// If you don't send <paramref name="includes"/>, <see cref="CascadeOnDeleteAttribute"/> marked properties will include.
+    /// </summary>
+    /// <param name="id"></param>
+    /// <param name="includes"></param>
+    /// <param name="condition"></param>
+    /// <param name="tracking"></param>
+    /// <returns> The entity found or null. </returns>
+    public virtual TEntity GetForDelete(object id,
+                                        Func<IIncludable<TEntity>, IIncludable> includes = null,
+                                        Expression<Func<TEntity, bool>> condition = null,
+                                        bool tracking = false)
+    {
+        var mainCondition = CreateKeyEqualityExpressionWithIsDeletedFalse(id, condition);
+
+        if (includes is not null)
+            return _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
+                         .Where(mainCondition)
+                         .IncludeMultiple(includes)
+                         .SingleOrDefault();
+
+        var query = _dbSet.AsTracking(GetQueryTrackingBehavior(tracking)).Where(mainCondition);
+
+        return IncludeNavigationProperties(query).SingleOrDefault();
+    }
+
+    /// <summary>
+    /// Returns one entity by entity Id from database asynchronously for delete with navigation properties.
+    /// If you don't send <paramref name="includes"/>, <see cref="CascadeOnDeleteAttribute"/> marked properties will include.
+    /// </summary>
+    /// <param name="id"></param>
+    /// <param name="includes"></param>
+    /// <param name="condition"></param>
+    /// <param name="conditionAfterProjection"></param>
+    /// <param name="projectionExpression"></param>
+    /// <param name="tracking"></param>
+    /// <returns> The entity found or null. </returns>
+    public virtual TResult GetForDelete<TResult>(object id,
+                                                 Func<IIncludable<TEntity>, IIncludable> includes = null,
+                                                 Expression<Func<TEntity, bool>> condition = null,
+                                                 Expression<Func<TEntity, TResult>> projectionExpression = null,
+                                                 Expression<Func<TResult, bool>> conditionAfterProjection = null,
+                                                 bool tracking = false)
+    {
+        var mainCondition = CreateKeyEqualityExpressionWithIsDeletedFalse(id, condition);
+
+        if (includes is not null)
+            return _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
+                         .Where(mainCondition)
+                         .IncludeMultiple(includes)
+                         .Select(projectionExpression)
+                         .SingleOrDefault(conditionAfterProjection ?? (entity => true));
+
+        var query = _dbSet.AsTracking(GetQueryTrackingBehavior(tracking)).Where(mainCondition);
+
+        return IncludeNavigationProperties(query).Select(projectionExpression)
+                                                 .SingleOrDefault(conditionAfterProjection ?? (entity => true));
     }
 
     #endregion
