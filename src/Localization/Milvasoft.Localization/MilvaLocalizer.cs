@@ -80,7 +80,12 @@ public class MilvaLocalizer : IMilvaLocalizer
                 localizedValue = _localizationManager[key];
 
                 if (_localizationOptions.UseInMemoryCache && localizedValue.ResourceFound)
+                {
                     _cache.Set(key, localizedValue.Value);
+
+                    // Assign again for formatted values etc. bla bla {0} bla bla
+                    localizedValue = _cache.Get(key, arguments);
+                }
             }
 
             return localizedValue;
