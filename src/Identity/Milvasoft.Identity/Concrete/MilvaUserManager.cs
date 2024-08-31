@@ -30,7 +30,7 @@ public partial class MilvaUserManager<TUser, TKey>(Lazy<IDataProtectionProvider>
     /// <param name="user"></param>
     /// <param name="password"></param>
     /// <returns></returns>
-    public void ConfigureForCreate(ref TUser user, string password)
+    public virtual void ConfigureForCreate(ref TUser user, string password)
     {
         user.PasswordHash = _passwordHasher.Value.HashPassword(password);
 
@@ -67,7 +67,7 @@ public partial class MilvaUserManager<TUser, TKey>(Lazy<IDataProtectionProvider>
     /// <returns></returns>
     public virtual void ValidateAndSetPasswordHash(TUser user, string password)
     {
-        ValidatePassword(password);
+        ThrowIfPasswordIsInvalid(password);
 
         SetPasswordHash(user, password);
     }
@@ -111,7 +111,23 @@ public partial class MilvaUserManager<TUser, TKey>(Lazy<IDataProtectionProvider>
     /// </summary>
     /// <param name="user">The user</param>
     /// <returns></returns>
-    public virtual void PreLoginCheck(TUser user)
+    /// <returns> Returns error message key if invalid. If valid returns null. </returns>
+    public virtual string CheckPreLogin(TUser user)
+    {
+        if (!CanSignIn(user))
+            return LocalizerKeys.NotAllowed;
+
+        if (IsLockedOut(user))
+            return LocalizerKeys.NotAllowed;
+
+        return null;
+    }
+
+    /// <summary>
+    /// User confirmed props and locked check. 
+    /// </summary>
+    /// <param name="user">The user</param>
+    public virtual void CheckPreLoginAndThrowIfInvalid(TUser user)
     {
         if (!CanSignIn(user))
             MilvaIdentityExceptionThrower.ThrowNotAllowed();
@@ -158,15 +174,82 @@ public partial class MilvaUserManager<TUser, TKey>(Lazy<IDataProtectionProvider>
     /// </summary>
     /// <param name="user"></param>
     /// <param name="password"></param>
-    public void ValidateUser(TUser user, string password = null)
+    /// <returns> Returns error message key if invalid. If valid returns null. </returns>
+    public virtual string ValidateUser(TUser user, string password = null)
     {
-        ValidateUserName(user.UserName);
+        var userNameValidaton = ValidateUserName(user.UserName);
+
+        if (userNameValidaton != null)
+            return userNameValidaton;
 
         if (_options.User.RequireUniqueEmail)
-            ValidateEmail(user.Email);
+            return ValidateEmail(user.Email);
 
         if (password != null)
-            ValidatePassword(password);
+            return ValidatePassword(password);
+
+        return null;
+    }
+
+    /// <summary>
+    /// Validates a password.
+    /// </summary>
+    /// <param name="password">The password supplied for validation</param>
+    /// <returns> Returns error message key if invalid. If valid returns null. </returns>
+    public virtual string ValidatePassword(string password)
+    {
+        ArgumentNullException.ThrowIfNull(password);
+
+        var passwordOptions = _options.Password;
+
+        if (string.IsNullOrWhiteSpace(password) || password.Length < passwordOptions.RequiredLength)
+            return LocalizerKeys.IdentityPasswordTooShort;
+
+        if (passwordOptions.RequireNonAlphanumeric && password.All(IsLetterOrDigit))
+            return LocalizerKeys.IdentityPasswordRequiresNonAlphanumeric;
+
+        if (passwordOptions.RequireDigit && !password.Any(IsDigit))
+            return LocalizerKeys.IdentityPasswordRequiresDigit;
+
+        if (passwordOptions.RequireLowercase && !password.Any(IsLower))
+            return LocalizerKeys.IdentityPasswordRequiresLower;
+
+        if (passwordOptions.RequireUppercase && !password.Any(IsUpper))
+            return LocalizerKeys.IdentityPasswordRequiresUpper;
+
+        if (passwordOptions.RequiredUniqueChars >= 1 && password.Distinct().Count() < passwordOptions.RequiredUniqueChars)
+            return LocalizerKeys.IdentityPasswordRequiresUniqueChars;
+
+        return null;
+    }
+
+    /// <summary>
+    /// Validates username.
+    /// </summary>
+    /// <param name="userName"></param>
+    /// <returns> Returns error message key if invalid. If valid returns null. </returns>
+    public virtual string ValidateUserName(string userName)
+    {
+        if (string.IsNullOrWhiteSpace(userName))
+            return LocalizerKeys.IdentityInvalidUserName;
+
+        if (!string.IsNullOrEmpty(_options.User.AllowedUserNameCharacters) && userName.Any(c => !_options.User.AllowedUserNameCharacters.Contains(c)))
+            return LocalizerKeys.IdentityInvalidUserName;
+
+        return null;
+    }
+
+    /// <summary>
+    /// Validates user.
+    /// </summary>
+    /// <param name="user"></param>
+    /// <param name="password"></param>
+    public virtual void ThrowIfUserInvalid(TUser user, string password = null)
+    {
+        var errorMessage = ValidateUser(user, password);
+
+        if (errorMessage != null)
+            throw new MilvaUserFriendlyException(errorMessage);
     }
 
     /// <summary>
@@ -174,49 +257,46 @@ public partial class MilvaUserManager<TUser, TKey>(Lazy<IDataProtectionProvider>
     /// </summary>
     /// <param name="password">The password supplied for validation</param>
     /// <returns></returns>
-    public virtual void ValidatePassword(string password)
+    public virtual void ThrowIfPasswordIsInvalid(string password)
     {
-        ArgumentNullException.ThrowIfNull(password);
+        var errorMessage = ValidatePassword(password);
 
-        var passwordOptions = _options.Password;
-
-        if (string.IsNullOrWhiteSpace(password) || password.Length < passwordOptions.RequiredLength)
-            MilvaIdentityExceptionThrower.ThrowPasswordTooShort();
-
-        if (passwordOptions.RequireNonAlphanumeric && password.All(IsLetterOrDigit))
-            MilvaIdentityExceptionThrower.ThrowPasswordRequiresNonAlphanumeric();
-
-        if (passwordOptions.RequireDigit && !password.Any(IsDigit))
-            MilvaIdentityExceptionThrower.ThrowPasswordRequiresDigit();
-
-        if (passwordOptions.RequireLowercase && !password.Any(IsLower))
-            MilvaIdentityExceptionThrower.ThrowPasswordRequiresLower();
-
-        if (passwordOptions.RequireUppercase && !password.Any(IsUpper))
-            MilvaIdentityExceptionThrower.ThrowPasswordRequiresUpper();
-
-        if (passwordOptions.RequiredUniqueChars >= 1 && password.Distinct().Count() < passwordOptions.RequiredUniqueChars)
-            MilvaIdentityExceptionThrower.ThrowPasswordRequiresUniqueChars();
+        if (errorMessage != null)
+            throw new MilvaUserFriendlyException(errorMessage);
     }
 
     /// <summary>
     /// Validates username.
     /// </summary>
     /// <param name="userName"></param>
-    public virtual void ValidateUserName(string userName)
+    public virtual void ThrowIfUserNameIsInvalid(string userName)
     {
-        if (string.IsNullOrWhiteSpace(userName))
-            MilvaIdentityExceptionThrower.ThrowInvalidUserName();
+        var errorMessage = ValidateUserName(userName);
 
-        if (!string.IsNullOrEmpty(_options.User.AllowedUserNameCharacters) && userName.Any(c => !_options.User.AllowedUserNameCharacters.Contains(c)))
-            MilvaIdentityExceptionThrower.ThrowInvalidUserName();
+        if (errorMessage != null)
+            throw new MilvaUserFriendlyException(errorMessage);
+    }
+
+    /// <summary>
+    /// Validates email and returns error message key if invalid. If valid returns null.
+    /// </summary>
+    /// <param name="email"></param>
+    public virtual string ValidateEmail(string email)
+    {
+        if (string.IsNullOrWhiteSpace(email))
+            return LocalizerKeys.InvalidEmail;
+
+        if (!EmailRegex().IsMatch(email))
+            return LocalizerKeys.IdentityInvalidUserName;
+
+        return null;
     }
 
     /// <summary>
     /// Validates email.
     /// </summary>
     /// <param name="email"></param>
-    public virtual void ValidateEmail(string email)
+    public virtual void ThrowIfEmailIsInvalid(string email)
     {
         if (string.IsNullOrWhiteSpace(email))
             MilvaIdentityExceptionThrower.ThrowInvalidEmail();
@@ -255,28 +335,28 @@ public partial class MilvaUserManager<TUser, TKey>(Lazy<IDataProtectionProvider>
     /// </summary>
     /// <param name="c">The character to check if it is a digit.</param>
     /// <returns>True if the character is a digit, otherwise false.</returns>
-    protected bool IsDigit(char c) => c >= '0' && c <= '9';
+    protected virtual bool IsDigit(char c) => c >= '0' && c <= '9';
 
     /// <summary>
     /// Returns a flag indicating whether the supplied character is a lower case ASCII letter.
     /// </summary>
     /// <param name="c">The character to check if it is a lower case ASCII letter.</param>
     /// <returns>True if the character is a lower case ASCII letter, otherwise false.</returns>
-    protected bool IsLower(char c) => c >= 'a' && c <= 'z';
+    protected virtual bool IsLower(char c) => c >= 'a' && c <= 'z';
 
     /// <summary>
     /// Returns a flag indicating whether the supplied character is an upper case ASCII letter.
     /// </summary>
     /// <param name="c">The character to check if it is an upper case ASCII letter.</param>
     /// <returns>True if the character is an upper case ASCII letter, otherwise false.</returns>
-    protected bool IsUpper(char c) => c >= 'A' && c <= 'Z';
+    protected virtual bool IsUpper(char c) => c >= 'A' && c <= 'Z';
 
     /// <summary>
     /// Returns a flag indicating whether the supplied character is an ASCII letter or digit.
     /// </summary>
     /// <param name="c">The character to check if it is an ASCII letter or digit.</param>
     /// <returns>True if the character is an ASCII letter or digit, otherwise false.</returns>
-    protected bool IsLetterOrDigit(char c) => IsUpper(c) || IsLower(c) || IsDigit(c);
+    protected virtual bool IsLetterOrDigit(char c) => IsUpper(c) || IsLower(c) || IsDigit(c);
 
     private static string GetPurpose(TUser user, Purpose purpose, string value = null) => purpose switch
     {

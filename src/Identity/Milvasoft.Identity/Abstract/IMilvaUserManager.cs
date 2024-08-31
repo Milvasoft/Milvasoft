@@ -9,7 +9,7 @@ namespace Milvasoft.Identity.Abstract;
 public interface IMilvaUserManager<TUser, TKey> where TUser : MilvaUser<TKey> where TKey : IEquatable<TKey>
 {
     /// <summary>
-    /// Sets password hash, set normalized columns.
+    /// Sets password hash, normalized columns etc.
     /// </summary>
     /// <param name="user"></param>
     /// <param name="password"></param>
@@ -53,7 +53,14 @@ public interface IMilvaUserManager<TUser, TKey> where TUser : MilvaUser<TKey> wh
     /// </summary>
     /// <param name="user">The user</param>
     /// <returns></returns>
-    void PreLoginCheck(TUser user);
+    /// <returns> Returns error message key if invalid. If valid returns null. </returns>
+    string CheckPreLogin(TUser user);
+
+    /// <summary>
+    /// User confirmed props and locked check. 
+    /// </summary>
+    /// <param name="user">The user</param>
+    void CheckPreLoginAndThrowIfInvalid(TUser user);
 
     /// <summary>
     /// User confirmed props check.
@@ -76,26 +83,54 @@ public interface IMilvaUserManager<TUser, TKey> where TUser : MilvaUser<TKey> wh
     /// </summary>
     /// <param name="user"></param>
     /// <param name="password"></param>
-    void ValidateUser(TUser user, string password = null);
+    /// <returns> Returns error message key if invalid. If valid returns null. </returns>
+    string ValidateUser(TUser user, string password = null);
+
+    /// <summary>
+    /// Validates a password.
+    /// </summary>
+    /// <param name="password">The password supplied for validation</param>
+    /// <returns> Returns error message key if invalid. If valid returns null. </returns>
+    string ValidatePassword(string password);
+
+    /// <summary>
+    /// Validates username.
+    /// </summary>
+    /// <param name="userName"></param>
+    /// <returns> Returns error message key if invalid. If valid returns null. </returns>
+    string ValidateUserName(string userName);
+
+    /// <summary>
+    /// Validates user.
+    /// </summary>
+    /// <param name="user"></param>
+    /// <param name="password"></param>
+    void ThrowIfUserInvalid(TUser user, string password = null);
 
     /// <summary>
     /// Validates a password.
     /// </summary>
     /// <param name="password">The password supplied for validation</param>
     /// <returns></returns>
-    void ValidatePassword(string password);
+    void ThrowIfPasswordIsInvalid(string password);
 
     /// <summary>
     /// Validates username.
     /// </summary>
     /// <param name="userName"></param>
-    void ValidateUserName(string userName);
+    void ThrowIfUserNameIsInvalid(string userName);
+
+    /// <summary>
+    /// Validates email and returns error message key if invalid. If valid returns null.
+    /// </summary>
+    /// <param name="email"></param>
+    string ValidateEmail(string email);
 
     /// <summary>
     /// Validates email.
     /// </summary>
     /// <param name="email"></param>
-    void ValidateEmail(string email);
+    void ThrowIfEmailIsInvalid(string email);
 
     /// <summary>
     /// Generates a token for the given <paramref name="user"/> and <paramref name="purpose"/>.
@@ -103,7 +138,10 @@ public interface IMilvaUserManager<TUser, TKey> where TUser : MilvaUser<TKey> wh
     /// <param name="purpose">The purpose the token will be for.</param>
     /// <param name="value"></param>
     /// <param name="user">The user the token will be for.</param>
-    /// <returns> </returns>
+    /// <returns>
+    /// The <see cref="Task"/> that represents result of the asynchronous operation, a token for
+    /// the given user and purpose.
+    /// </returns>
     string GenerateUserToken(TUser user, Purpose purpose, string value = null);
 
     /// <summary>
@@ -118,5 +156,4 @@ public interface IMilvaUserManager<TUser, TKey> where TUser : MilvaUser<TKey> wh
     /// is valid, otherwise false.
     /// </returns>
     bool VerifyUserToken(TUser user, Purpose purpose, string token, string value = null);
-
 }

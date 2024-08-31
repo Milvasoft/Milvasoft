@@ -57,7 +57,7 @@
 		<Description>Lightweight interception for cros cutting concerns.</Description>
 		<PackageTags>interception, aop, cross-cutting, log, cache</PackageTags>
 		<Copyright>Milvasoft Yazılım Bilişim Araştırma Geliştirme Danışmanlık Sanayi ve Ticaret Ltd.Şti.</Copyright>
-		<Version>8.1.34</Version>
+		<Version>8.1.35</Version>
 
 	</PropertyGroup>
 	
