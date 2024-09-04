@@ -168,7 +168,7 @@ public class Response : IResponse
     /// Creates error response with <see cref="LocalizerKeys.Failed"/> message.
     /// </summary>
     /// <returns></returns>
-    public static Response Error() => new(LocalizerKeys.Failed)
+    public static Response Error() => new(new ResponseMessage(LocalizerKeys.Failed, MessageType.Warning))
     {
         IsSuccess = false,
         StatusCode = (int)HttpStatusCode.BadRequest,
@@ -181,7 +181,7 @@ public class Response : IResponse
     /// <returns></returns>
     public static Response Error(string message)
     {
-        var response = new Response(message)
+        var response = new Response(new ResponseMessage(message, MessageType.Warning))
         {
             IsSuccess = false,
             StatusCode = (int)HttpStatusCode.BadRequest,
@@ -376,7 +376,7 @@ public class Response<T> : Response, IResponse<T>
     /// </summary>
     /// <param name="data"></param>
     /// <returns></returns>
-    public static Response<T> Error(T data) => new(data, LocalizerKeys.Failed)
+    public static Response<T> Error(T data) => new(data, new ResponseMessage(LocalizerKeys.Failed, MessageType.Warning))
     {
         IsSuccess = false,
         StatusCode = (int)HttpStatusCode.BadRequest,
@@ -390,7 +390,7 @@ public class Response<T> : Response, IResponse<T>
     /// <returns></returns>
     public static Response<T> Error(T data, string message)
     {
-        var response = new Response<T>(data, message)
+        var response = new Response<T>(data, new ResponseMessage(message, MessageType.Warning))
         {
             IsSuccess = false,
             StatusCode = (int)HttpStatusCode.BadRequest,

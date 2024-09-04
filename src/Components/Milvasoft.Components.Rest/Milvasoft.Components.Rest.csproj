@@ -53,7 +53,7 @@
 		<Description>Rest helper components.</Description>
 		<PackageTags>rest, api, response, request, model</PackageTags>
 		<Copyright>Milvasoft Yazılım Bilişim Araştırma Geliştirme Danışmanlık Sanayi ve Ticaret Ltd.Şti.</Copyright>
-		<Version>8.1.35</Version>
+		<Version>8.1.36</Version>
 
 	</PropertyGroup>
 
