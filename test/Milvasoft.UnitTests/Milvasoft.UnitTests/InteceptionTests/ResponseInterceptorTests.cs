@@ -169,6 +169,7 @@ public class ResponseInterceptorTests
 
         public virtual Response MethodReturnTypeIsResponseTyped() => Response.Success();
 
+        [ExcludeFromMetadata]
         public virtual Response<int> MethodReturnTypeIsValueResponseTyped() => Response<int>.Success(1);
 
         public virtual Response<List<int>> MethodReturnTypeIsCollectionResponseTyped() => Response<List<int>>.Success([1]);

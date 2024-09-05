@@ -1,6 +1,8 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Milvasoft.Attributes.Annotations;
 using Milvasoft.Components.Rest.MilvaResponse;
 using Milvasoft.Interception.Decorator;
+using System.Reflection;
 
 namespace Milvasoft.Interception.Interceptors.Response;
 
@@ -23,9 +25,11 @@ public class ResponseInterceptor(IServiceProvider serviceProvider, IResponseInte
         if (!_interceptionOptions.MetadataCreationEnabled && !_interceptionOptions.ApplyMetadataRules)
             return;
 
+        var excludeAttribute = call.Method.GetCustomAttribute<ExcludeFromMetadataAttribute>() ?? call.MethodImplementation.GetCustomAttribute<ExcludeFromMetadataAttribute>();
+
         if (call.ReturnType.CanAssignableTo(typeof(IResponse)))
         {
-            if (call.ReturnType.CanAssignableTo(typeof(IHasMetadata)))
+            if (excludeAttribute == null && call.ReturnType.CanAssignableTo(typeof(IHasMetadata)))
             {
                 var hasMetadataResponse = call.ReturnValue as IHasMetadata;
 
