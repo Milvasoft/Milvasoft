@@ -48,7 +48,7 @@
 		<Description>Smtp mail abstractions.</Description>
 		<PackageTags>mail, email, smtp</PackageTags>
 		<Copyright>Milvasoft Yazılım Bilişim Araştırma Geliştirme Danışmanlık Sanayi ve Ticaret Ltd.Şti.</Copyright>
-		<Version>8..1.37</Version>
+		<Version>8.1.37</Version>
 
 	</PropertyGroup>
 
