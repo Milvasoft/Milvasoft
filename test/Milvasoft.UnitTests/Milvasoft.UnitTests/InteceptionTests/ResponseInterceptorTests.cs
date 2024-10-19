@@ -63,6 +63,22 @@ public class ResponseInterceptorTests
     }
 
     [Fact]
+    public void MethodReturnTypeIsValueResponseTypedButExcluded_WithResponseInterceptor_ShouldModifyResponseCorrecly()
+    {
+        // Arrange
+        var services = GetServices();
+        var sut = services.GetService<ISomeInterface>();
+
+        // Act
+        var result = sut.MethodReturnTypeIsValueResponseTypedButExcluded();
+
+        // Assert
+        result.Messages[0].Message.Should().Be($"localized_{LocalizerKeys.Successful}");
+        result.Data.Should().Be(1);
+        result.Metadatas.Should().BeNull();
+    }
+
+    [Fact]
     public void MethodReturnTypeIsCollectionResponseTyped_WithResponseInterceptor_ShouldModifyResponseCorrecly()
     {
         // Arrange
@@ -119,6 +135,7 @@ public class ResponseInterceptorTests
         string MethodReturnTypeIsNotResponseTyped();
         Response MethodReturnTypeIsResponseTyped();
         Response<int> MethodReturnTypeIsValueResponseTyped();
+        Response<int> MethodReturnTypeIsValueResponseTypedButExcluded();
         Response<List<int>> MethodReturnTypeIsCollectionResponseTyped();
         Response<SomeComplexClass> MethodReturnTypeIsComplexResponseTyped();
     }
@@ -169,8 +186,10 @@ public class ResponseInterceptorTests
 
         public virtual Response MethodReturnTypeIsResponseTyped() => Response.Success();
 
-        [ExcludeFromMetadata]
         public virtual Response<int> MethodReturnTypeIsValueResponseTyped() => Response<int>.Success(1);
+
+        [ExcludeFromMetadata]
+        public virtual Response<int> MethodReturnTypeIsValueResponseTypedButExcluded() => Response<int>.Success(1);
 
         public virtual Response<List<int>> MethodReturnTypeIsCollectionResponseTyped() => Response<List<int>>.Success([1]);
 

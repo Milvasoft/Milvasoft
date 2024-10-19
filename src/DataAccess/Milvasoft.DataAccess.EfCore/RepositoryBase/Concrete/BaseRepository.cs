@@ -1019,10 +1019,7 @@ public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepositor
     /// <param name="parentPath"></param>
     /// <param name="maxDepth"></param>
     /// <returns></returns>
-    protected static List<string> GetCascadePropertyPaths<T>(string parentPath = null, int maxDepth = 5)
-    {
-        return GetCascadePropertyPaths(typeof(T), parentPath, maxDepth);
-    }
+    protected static List<string> GetCascadePropertyPaths<T>(string parentPath = null, int maxDepth = 5) => GetCascadePropertyPaths(typeof(T), parentPath, maxDepth);
 
     /// <summary>
     /// Gets property paths.
@@ -1034,8 +1031,6 @@ public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepositor
     /// <returns></returns>
     protected static List<string> GetCascadePropertyPaths(Type type, string parentPath = null, int maxDepth = 5, int currentDepth = 0)
     {
-        var properties1 = type.GetProperties();
-
         var properties = type.GetProperties()
                              .Where(p => p.IsDefined(typeof(CascadeOnDeleteAttribute), inherit: false))
                              .ToList();

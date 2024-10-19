@@ -152,7 +152,7 @@ public class RestExtensionsTests
         response.Data.Should().Be(data);
         response.Messages.Should().HaveCount(1);
         response.Messages[0].Message.Should().Be(message);
-        response.Messages[0].Type.Should().Be(MessageType.Information);
+        response.Messages[0].Type.Should().Be(MessageType.Warning);
     }
 
     [Fact]

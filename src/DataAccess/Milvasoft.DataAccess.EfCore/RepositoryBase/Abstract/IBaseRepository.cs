@@ -582,7 +582,6 @@ public interface IBaseRepository<TEntity> where TEntity : class, IMilvaEntity
 
     #endregion
 
-
     #region GetForDelete
 
     /// <summary>

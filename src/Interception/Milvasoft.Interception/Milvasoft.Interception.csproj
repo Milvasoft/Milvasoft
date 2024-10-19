@@ -28,12 +28,12 @@
   <ItemGroup>
     <PackageReference Include="Castle.Core" Version="5.1.1" />
     <PackageReference Include="Castle.Core.AsyncInterceptor" Version="2.1.0" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.1" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.2" />
   </ItemGroup>
 
 	<ItemGroup>
 		<PackageReference Include="ConfigureAwait.Fody" Version="3.3.2" PrivateAssets="All" />
-		<PackageReference Include="Fody" Version="6.8.1">
+		<PackageReference Include="Fody" Version="6.8.2">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
@@ -57,7 +57,7 @@
 		<Description>Lightweight interception for cros cutting concerns.</Description>
 		<PackageTags>interception, aop, cross-cutting, log, cache</PackageTags>
 		<Copyright>Milvasoft Yazılım Bilişim Araştırma Geliştirme Danışmanlık Sanayi ve Ticaret Ltd.Şti.</Copyright>
-		<Version>8.1.37</Version>
+		<Version>8.1.38</Version>
 
 	</PropertyGroup>
 	

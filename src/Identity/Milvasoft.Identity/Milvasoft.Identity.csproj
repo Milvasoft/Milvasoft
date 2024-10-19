@@ -26,9 +26,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Microsoft.AspNetCore.DataProtection" Version="8.0.8" />
-		<PackageReference Include="Microsoft.IdentityModel.Tokens" Version="8.0.2" />
-		<PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.0.2" />
+		<PackageReference Include="Microsoft.AspNetCore.DataProtection" Version="8.0.10" />
+		<PackageReference Include="Microsoft.IdentityModel.Tokens" Version="8.1.2" />
+		<PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.1.2" />
 		<ProjectReference Include="..\..\Components\Milvasoft.Attributes\Milvasoft.Attributes.csproj" />
 	</ItemGroup>
 	
@@ -45,7 +45,7 @@
 		<Description>Provides account operations.</Description>
 		<PackageTags>identity,account,user,role,passwordhash</PackageTags>
 		<Copyright>Milvasoft Yazılım Bilişim Araştırma Geliştirme Danışmanlık Sanayi ve Ticaret Ltd.Şti.</Copyright>
-		<Version>8.1.37</Version>
+		<Version>8.1.38</Version>
 
 	</PropertyGroup>
 

@@ -104,7 +104,7 @@ public class ResponseModelTests
         response.StatusCode.Should().Be((int)HttpStatusCode.BadRequest);
         response.Messages.Should().HaveCount(1);
         response.Messages[0].Message.Should().Be(message);
-        response.Messages[0].Type.Should().Be(MessageType.Information);
+        response.Messages[0].Type.Should().Be(MessageType.Warning);
     }
 
     [Fact]
@@ -242,7 +242,7 @@ public class ResponseModelTests
         response.Data.Should().Be(data);
         response.Messages.Should().HaveCount(1);
         response.Messages[0].Message.Should().Be(message);
-        response.Messages[0].Type.Should().Be(MessageType.Information);
+        response.Messages[0].Type.Should().Be(MessageType.Warning);
     }
 
     [Fact]

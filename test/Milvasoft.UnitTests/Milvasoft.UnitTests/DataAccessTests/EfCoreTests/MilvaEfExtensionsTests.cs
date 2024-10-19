@@ -162,7 +162,7 @@ public class MilvaEfExtensionsTests
         var result = await dbContextFixture.TestEntities.WithFiltering(listRequest).ToListAsync();
 
         // Assert
-        result.Should().HaveCount(dbContextFixture.TestEntities.Count());
+        result.Should().HaveCount(await dbContextFixture.TestEntities.CountAsync());
     }
 
     [Theory]
@@ -319,7 +319,7 @@ public class MilvaEfExtensionsTests
         var result = await dbContextFixture.TestEntities.WithSorting(listRequest).ToListAsync();
 
         // Assert
-        result.Should().HaveCount(dbContextFixture.TestEntities.Count());
+        result.Should().HaveCount(await dbContextFixture.TestEntities.CountAsync());
     }
 
     [Theory]
@@ -500,7 +500,7 @@ public class MilvaEfExtensionsTests
         var result = await dbContextMock.TestEntities.WithSorting(listRequest).ToListAsync();
 
         // Assert
-        result.Should().HaveCount(dbContextMock.TestEntities.Count());
+        result.Should().HaveCount(await dbContextMock.TestEntities.CountAsync());
     }
 
     [Fact]
