@@ -696,6 +696,139 @@ public class MilvaDbContextTests
         ((LookupResult)lookupResult).Data[0].ToJson().Should().BeEquivalentTo(expectedData.ToJson());
     }
 
+    /// <summary>
+    /// Entity property values request
+    /// </summary>
+    /// <returns></returns>
+    public static IEnumerable<object[]> InvalidRequestForGetPropertyValuesAsyncMethod()
+    {
+        yield return new object[]
+        {
+            new EntityPropertyValuesRequest { EntityName = null }
+        };
+
+        yield return new object[]
+        {
+            new EntityPropertyValuesRequest { EntityName = "" }
+        };
+
+        yield return new object[]
+        {
+            new EntityPropertyValuesRequest { EntityName = " " }
+        };
+
+        yield return new object[]
+        {
+            new EntityPropertyValuesRequest { EntityName = nameof(SomeBaseEntityFixture), PropertyName = null }
+        };
+
+        yield return new object[]
+        {
+            new EntityPropertyValuesRequest { EntityName = nameof(SomeBaseEntityFixture), PropertyName = "" }
+        };
+
+        // Restricted entity name
+        yield return new object[]
+        {
+            new EntityPropertyValuesRequest
+            {
+                EntityName = nameof(SomeEntityFixture),
+                PropertyName = nameof(SomeEntityFixture.Id)
+            }
+        };
+    }
+
+    [Theory]
+    [MemberData(nameof(InvalidRequestForGetPropertyValuesAsyncMethod))]
+    public async Task GetPropertyValuesAsync_WithInvalidRequest_ShouldThrowException(EntityPropertyValuesRequest request)
+    {
+        // Arrange
+        var dataAccessConfiguration = new DataAccessConfiguration
+        {
+            DbContext = new DbContextConfiguration
+            {
+                DefaultSoftDeletionState = SoftDeletionState.Active,
+                DynamicFetch = new DynamicFetchConfiguration
+                {
+                    AllowedEntityNamesForLookup = [nameof(SomeBaseEntityFixture)],
+                    MaxAllowedPropertyCountForLookup = 3
+                }
+            }
+        };
+
+        var services = GetServices(dataAccessConfiguration);
+        var dbContext = services.GetService<SomeMilvaDbContextFixture>();
+        ResetDatabase(dbContext);
+
+        // Act
+        Func<Task> act = async () => await dbContext.GetPropertyValuesAsync(request);
+
+        // Assert
+        await act.Should().ThrowAsync<MilvaUserFriendlyException>();
+    }
+
+    [Fact]
+    public async Task GetPropertyValuesAsync_WithValidRequest_ShouldReturnCorrectResult()
+    {
+        // Arrange
+        var dataAccessConfiguration = new DataAccessConfiguration
+        {
+            DbContext = new DbContextConfiguration
+            {
+                DefaultSoftDeletionState = SoftDeletionState.Active,
+                DynamicFetch = new DynamicFetchConfiguration
+                {
+                    EntityAssemblyName = "Milvasoft.UnitTests",
+                    AllowedEntityNamesForLookup = [nameof(SomeBaseEntityFixture)],
+                    MaxAllowedPropertyCountForLookup = 2
+                }
+            }
+        };
+
+        var services = GetServices(dataAccessConfiguration);
+        var dbContext = services.GetService<SomeMilvaDbContextFixture>();
+        ResetDatabase(dbContext);
+        var entity = new SomeBaseEntityFixture
+        {
+            Id = 1,
+            SomeStringProp = "stringprop",
+            SomeDecimalProp = 10M
+        };
+        var entity2 = new SomeBaseEntityFixture
+        {
+            Id = 2,
+            SomeStringProp = "stringprop2",
+            SomeDecimalProp = 20M
+        };
+        var entity3 = new SomeBaseEntityFixture
+        {
+            Id = 3,
+            SomeStringProp = "stringprop2",
+            SomeDecimalProp = 30M
+        };
+        await dbContext.BaseEntities.AddAsync(entity);
+        await dbContext.BaseEntities.AddAsync(entity2);
+        await dbContext.BaseEntities.AddAsync(entity3);
+        await dbContext.SaveChangesAsync();
+
+        var request = new EntityPropertyValuesRequest
+        {
+            EntityName = nameof(SomeBaseEntityFixture),
+            PropertyName = nameof(SomeBaseEntityFixture.SomeStringProp)
+        };
+        List<object> expectedData = ["stringprop", "stringprop2"];
+
+        // Act
+        var result = await dbContext.GetPropertyValuesAsync(request);
+
+        // Assert
+        result.Data.Should().HaveCount(2);
+        var lookupResult = result.Data[0];
+        lookupResult.Should().BeOfType<string>();
+        result.Data.Should().Contain("stringprop");
+        result.Data.Should().Contain("stringprop2");
+    }
+
     [Fact]
     public async Task GetRequiredContentsAsync_WithValidParameters_ShouldReturnCorrectResult()
     {

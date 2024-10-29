@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.Extensions.DependencyInjection;
+using Milvasoft.Components.Rest.MilvaResponse;
 using Milvasoft.Components.Rest.Request;
 using Milvasoft.Core.MultiLanguage;
 using Milvasoft.Core.MultiLanguage.EntityBases;
@@ -327,14 +328,91 @@ public abstract class MilvaDbContext(DbContextOptions options) : DbContext(optio
     /// </summary>
     /// <returns></returns>
     public async Task<List<TEntity>> GetContentsAsync<TEntity>(FilterRequest filterRequest,
-                                                                       SortRequest sortRequest,
-                                                                       Expression<Func<TEntity, TEntity>> projectionExpression = null) where TEntity : class
+                                                               SortRequest sortRequest,
+                                                               Expression<Func<TEntity, TEntity>> projectionExpression = null) where TEntity : class
         => await Set<TEntity>().Where(CommonHelper.CreateIsDeletedFalseExpression<TEntity>() ?? (entity => true))
                                .IncludeTranslations(this)
                                .WithFiltering(filterRequest)
                                .WithSorting(sortRequest)
                                .Select(projectionExpression ?? (entity => entity))
                                .ToListAsync();
+
+    /// <summary>
+    /// Gets 
+    /// </summary>
+    /// <typeparam name="TEntity"></typeparam>
+    /// <typeparam name="TPropertyType"></typeparam>
+    /// <param name="propertyName"></param>
+    /// <param name="filterRequest"></param>
+    /// <param name="sortRequest"></param>
+    /// <returns></returns>
+    public async Task<List<TPropertyType>> GetEntityPropertyValuesAsync<TEntity, TPropertyType>(string propertyName, FilterRequest filterRequest, SortRequest sortRequest) where TEntity : class
+    {
+        var keySelector = (Expression<Func<TEntity, TPropertyType>>)CommonHelper.DynamicInvokeCreatePropertySelector(nameof(CommonHelper.CreateRequiredPropertySelector),
+                                                                                                                     typeof(TEntity),
+                                                                                                                     typeof(TPropertyType),
+                                                                                                                     propertyName);
+
+        var result = await Set<TEntity>().AsNoTrackingWithIdentityResolution()
+                                         .Where(CommonHelper.CreateIsDeletedFalseExpression<TEntity>() ?? (entity => true))
+                                         .WithFiltering(filterRequest)
+                                         .WithSorting(sortRequest)
+                                         .GroupBy(keySelector)
+                                         .Select(x => x.Key)
+                                         .ToListAsync();
+
+        return result;
+    }
+
+    /// <summary>
+    /// Get values for some entity's property.
+    /// </summary>
+    /// <param name="request"></param>
+    /// <returns></returns>
+    public async Task<ListResponse<object>> GetPropertyValuesAsync(EntityPropertyValuesRequest request)
+    {
+        ValidateRequestParameters(request);
+
+        var assemblyTypes = _dbContextConfiguration.DbContext.DynamicFetch.GetEntityAssembly().GetTypes();
+
+        var entityName = request.EntityName;
+
+        Type entityType = Array.Find(assemblyTypes, i => i.Name == entityName) ?? throw new MilvaUserFriendlyException(MilvaException.InvalidParameter);
+
+        var propType = (entityType.GetProperty(request.PropertyName)?.PropertyType) ?? throw new MilvaUserFriendlyException(MilvaException.InvalidParameter);
+
+        var taskResult = (Task)this.GetType()
+                                   .GetMethod(nameof(GetEntityPropertyValuesAsync))
+                                   .MakeGenericMethod(entityType, propType)
+                                   .Invoke(this,
+                                   [
+                                       request.PropertyName,
+                                       request.Filtering,
+                                       request.Sorting,
+                                   ]);
+
+        await taskResult;
+
+        var resultProperty = taskResult.GetType().GetProperty("Result");
+
+        var lookupList = (IList)resultProperty.GetValue(taskResult);
+
+        List<object> lookups = [];
+
+        if (lookupList.Count > 0)
+            foreach (var lookup in lookupList)
+                lookups.Add(lookup);
+
+        return ListResponse<object>.Success(lookups);
+
+        void ValidateRequestParameters(EntityPropertyValuesRequest request)
+        {
+            if (string.IsNullOrWhiteSpace(request.EntityName) ||
+                string.IsNullOrWhiteSpace(request.PropertyName) ||
+                !_dbContextConfiguration.DbContext.DynamicFetch.AllowedEntityNamesForLookup.Contains(request.EntityName))
+                throw new MilvaUserFriendlyException(MilvaException.InvalidParameter);
+        }
+    }
 
     /// <summary>
     /// Gets the lookup data for the specified <paramref name="lookupRequest"/>.
