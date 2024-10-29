@@ -20,7 +20,7 @@ public class FilterRequest
         { TypeGroup.Text, new HashSet<FilterType> { FilterType.Contains, FilterType.DoesNotContain, FilterType.EndsWith, FilterType.EqualTo, FilterType.IsEmpty, FilterType.IsNotEmpty, FilterType.IsNotNull, FilterType.IsNotNullNorWhiteSpace, FilterType.IsNull, FilterType.IsNullOrWhiteSpace, FilterType.NotEqualTo, FilterType.StartsWith, } },
         { TypeGroup.Number, new HashSet<FilterType> { FilterType.Between, FilterType.EqualTo, FilterType.Between,FilterType.GreaterThan, FilterType.GreaterThanOrEqualTo, FilterType.LessThan,FilterType.LessThanOrEqualTo, FilterType.NotEqualTo } },
         { TypeGroup.Boolean, new HashSet<FilterType>  { FilterType.EqualTo , FilterType.NotEqualTo } },
-        { TypeGroup.Date, new HashSet<FilterType> { FilterType.Between, FilterType.EqualTo, FilterType.GreaterThan, FilterType.GreaterThanOrEqualTo, FilterType.LessThan, FilterType.LessThanOrEqualTo, FilterType.NotEqualTo } }
+        { TypeGroup.Date, new HashSet<FilterType> { FilterType.Between, FilterType.DateEqualTo, FilterType.GreaterThan, FilterType.GreaterThanOrEqualTo, FilterType.LessThan, FilterType.LessThanOrEqualTo } }
     };
 
     /// <summary>
@@ -200,6 +200,7 @@ public class FilterRequest
         FilterType.IsNotNullNorWhiteSpace => new IsNotNullNorWhiteSpace(),
         FilterType.In => new In(),
         FilterType.NotIn => new NotIn(),
+        FilterType.DateEqualTo => new DateEqualTo(),
         _ => new EqualTo(),
     };
 }

@@ -24,7 +24,8 @@ public enum FilterType
     IsNullOrWhiteSpace,
     IsNotNullNorWhiteSpace,
     In,
-    NotIn
+    NotIn,
+    DateEqualTo,
 #pragma warning restore CS1591 // Missing XML comment for publicly visible type or member
 }
 
