@@ -822,11 +822,11 @@ public class MilvaDbContextTests
         var result = await dbContext.GetPropertyValuesAsync(request);
 
         // Assert
-        result.Data.Should().HaveCount(2);
-        var lookupResult = result.Data[0];
+        result.Should().HaveCount(2);
+        var lookupResult = result[0];
         lookupResult.Should().BeOfType<string>();
-        result.Data.Should().Contain("stringprop");
-        result.Data.Should().Contain("stringprop2");
+        result.Should().Contain("stringprop");
+        result.Should().Contain("stringprop2");
     }
 
     [Fact]

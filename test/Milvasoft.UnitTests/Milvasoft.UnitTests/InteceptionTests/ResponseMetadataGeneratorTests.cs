@@ -2,6 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Milvasoft.Attributes.Annotations;
 using Milvasoft.Components.Rest.MilvaResponse;
+using Milvasoft.Components.Rest.OptionsDataFetcher.EnumValueFetcher;
 using Milvasoft.Core.Abstractions.Localization;
 using Milvasoft.Core.Utils.Constants;
 using Milvasoft.Interception.Builder;
@@ -258,6 +259,8 @@ public class ResponseMetadataGeneratorTests
         returnValue.Metadatas.Find(m => m.Name == "complexClass").Metadatas.Should().NotBeEmpty();
         returnValue.Metadatas.Find(m => m.Name == "complexClass").Metadatas.Find(m => m.Name == "dateProp").TooltipFormat.Should().Be("dddd, dd MMMM yyyy");
         returnValue.Metadatas.Find(m => m.Name == "complexClass").Metadatas.Find(m => m.Name == "enumProp").Display.Should().BeTrue();
+        returnValue.Metadatas.Find(m => m.Name == "complexClass").Metadatas.Find(m => m.Name == "enumProp").Options.Count.Should().Be(2);
+        returnValue.Metadatas.Find(m => m.Name == "complexClass").Metadatas.Find(m => m.Name == "anotherBoolProp").Options.Count.Should().Be(2);
         returnValue.Metadatas.Count(m => m.Name == "~Self").Should().Be(2);
         returnValue.Metadatas.Find(m => m.Name == "willBeExcluded").Should().BeNull();
     }
@@ -281,6 +284,7 @@ public class ResponseMetadataGeneratorTests
     public enum SomeEnum
     {
         None,
+        SomeValue,
     }
 
     [Translate]
@@ -323,7 +327,13 @@ public class ResponseMetadataGeneratorTests
         public DateTime DateProp { get; set; }
 
         [HideByRole("NotHide")]
+        [Filterable(true, FilterComponentType = UiInputConstant.SelectInput)]
+        [Options<EnumLocalizedValueFetcher>(EnumLocalizedValueFetcher.FetcherName, typeof(SomeEnum))]
         public SomeEnum EnumProp { get; set; }
+
+        [HideByRole("NotHide")]
+        [Options<BoolLocalizedValueFetcher>(BoolLocalizedValueFetcher.FetcherName, "Yes,No")]
+        public bool AnotherBoolProp { get; set; }
     }
 
     public class SomeClass : ISomeInterface
@@ -407,6 +417,8 @@ public class ResponseMetadataGeneratorTests
 
         builder.Services.AddScoped<ISomeInterface, SomeClass>();
         builder.Services.AddScoped<IMilvaLocalizer, TestLocalizer>();
+        builder.Services.AddKeyedSingleton(typeof(IOptionsDataFetcher), EnumLocalizedValueFetcher.FetcherName, typeof(EnumLocalizedValueFetcher));
+        builder.Services.AddKeyedSingleton(typeof(IOptionsDataFetcher), BoolLocalizedValueFetcher.FetcherName, typeof(BoolLocalizedValueFetcher));
 
         var config = new ResponseInterceptionOptions
         {

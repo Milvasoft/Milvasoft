@@ -2,7 +2,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.Extensions.DependencyInjection;
-using Milvasoft.Components.Rest.MilvaResponse;
 using Milvasoft.Components.Rest.Request;
 using Milvasoft.Core.MultiLanguage;
 using Milvasoft.Core.MultiLanguage.EntityBases;
@@ -369,7 +368,7 @@ public abstract class MilvaDbContext(DbContextOptions options) : DbContext(optio
     /// </summary>
     /// <param name="request"></param>
     /// <returns></returns>
-    public async Task<ListResponse<object>> GetPropertyValuesAsync(EntityPropertyValuesRequest request)
+    public async Task<List<object>> GetPropertyValuesAsync(EntityPropertyValuesRequest request)
     {
         ValidateRequestParameters(request);
 
@@ -403,7 +402,7 @@ public abstract class MilvaDbContext(DbContextOptions options) : DbContext(optio
             foreach (var lookup in lookupList)
                 lookups.Add(lookup);
 
-        return ListResponse<object>.Success(lookups);
+        return lookups;
 
         void ValidateRequestParameters(EntityPropertyValuesRequest request)
         {

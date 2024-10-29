@@ -146,44 +146,13 @@ public class ResponseMetadataGenerator(IResponseInterceptionOptions responseInte
         metadatas.Add(metadata);
     }
 
-    private void ApplyLinkedWith(PropertyInfo property, object callerObj, bool callerObjectTypeIsCollection)
-    {
-        var linkedWithAttribute = property.GetCustomAttribute<LinkedWithAttribute>();
-
-        if (linkedWithAttribute != null)
-        {
-            if (callerObjectTypeIsCollection)
-            {
-                var callerObjAsList = callerObj as IList;
-
-                foreach (var item in callerObjAsList)
-                    ApplyLinkedWith(property, item, false);
-
-                return;
-            }
-
-            var linkedProperty = callerObj.GetType().GetProperty(linkedWithAttribute.PropertyName);
-
-            if (linkedProperty != null)
-            {
-                var formatter = _serviceProvider.GetKeyedService<ILinkedWithFormatter>(linkedWithAttribute.ServiceCollectionKey);
-
-                var linkedPropValue = linkedProperty.GetValue(callerObj);
-
-                var formattedValue = formatter.Format(linkedPropValue);
-
-                property.SetValue(callerObj, formattedValue);
-            }
-        }
-    }
-
     /// <summary>
     /// Apply metadata tags to <paramref name="metadata"/> object.
     /// </summary>
     /// <param name="metadata"></param>
     /// <param name="property"></param>
     /// <param name="mask"></param>
-    private static void ApplyMetadataTags(ResponseDataMetadata metadata, PropertyInfo property, bool mask)
+    private void ApplyMetadataTags(ResponseDataMetadata metadata, PropertyInfo property, bool mask)
     {
         metadata.Display = !TryGetAttribute(property, out BrowsableAttribute browsableAttribute) || browsableAttribute.Browsable;
         metadata.Mask = mask;
@@ -194,6 +163,20 @@ public class ResponseMetadataGenerator(IResponseInterceptionOptions responseInte
         metadata.DecimalPrecision = TryGetAttribute(property, out DecimalPrecisionAttribute decimalPrecisionAttribute) ? decimalPrecisionAttribute.DecimalPrecision : null;
         metadata.TooltipFormat = TryGetAttribute(property, out TooltipFormatAttribute cellTooltipFormatAttribute) ? cellTooltipFormatAttribute.Format : null;
         metadata.DisplayFormat = TryGetAttribute(property, out DisplayFormatAttribute cellDisplayFormatAttribute) ? cellDisplayFormatAttribute.Format : null;
+
+        var optionsAttribute = property.GetCustomAttribute<OptionsAttribute>();
+
+        if (optionsAttribute != null)
+        {
+            var fetcher = _serviceProvider.GetKeyedService<IOptionsDataFetcher>(optionsAttribute.ServiceCollectionKey);
+
+            if (fetcher is not null)
+            {
+                var values = fetcher.IsAsync ? fetcher.FetchAsync(optionsAttribute.OptionalData).Result : fetcher.Fetch(optionsAttribute.OptionalData);
+
+                metadata.Options = values;
+            }
+        }
     }
 
     /// <summary>

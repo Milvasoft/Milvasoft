@@ -54,6 +54,11 @@ public class ResponseDataMetadata : IHasMetadata
     public string FilterComponentType { get; set; } = UiInputConstant.TextInput;
 
     /// <summary>
+    /// If <see cref="FilterComponentType"/> is select options can provided.
+    /// </summary>
+    public List<object> Options { get; set; }
+
+    /// <summary>
     /// Default value if column or property data is null.
     /// </summary>
     public object DefaultValue { get; set; } = default;

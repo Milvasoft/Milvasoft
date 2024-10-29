@@ -23,7 +23,8 @@ public static partial class RestExtensions
         options.Converters.Add(new InterfaceConverterFactory<Response, IResponse>());
 
         return options;
-    }
+    }
+
     #region Success
 
     /// <summary>
