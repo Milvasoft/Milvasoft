@@ -38,7 +38,7 @@
 		<Description>Swagger helper components.</Description>
 		<PackageTags>swagger, filter, request, header, operation</PackageTags>
 		<Copyright>Milvasoft Yazılım Bilişim Araştırma Geliştirme Danışmanlık Sanayi ve Ticaret Ltd.Şti.</Copyright>
-		<Version>8.1.40</Version>
+		<Version>8.1.41</Version>
 
 	</PropertyGroup>
 	
