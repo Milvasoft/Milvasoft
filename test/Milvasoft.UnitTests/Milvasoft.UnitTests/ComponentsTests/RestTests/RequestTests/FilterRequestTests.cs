@@ -1,4 +1,5 @@
-﻿using FluentAssertions;
+﻿using ExpressionBuilder.Configuration;
+using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query;
 using Milvasoft.Components.Rest.Request;
@@ -46,6 +47,8 @@ public class FilterRequestTests
     [ClassData(typeof(ValidListSourceForBuildFilterExpressionMethodData))]
     public void BuildFilterExpression_ForListSource_WithValidFilterTypeAndFilterBy_ShouldReturnCorrectExpression(IQueryable<RestTestEntityFixture> source, FilterRequest filterRequest, List<int> expectedIdList)
     {
+        Settings.UseUtcConversionInDateTypes = false;
+
         // Arrange
 
         // Act
@@ -61,6 +64,8 @@ public class FilterRequestTests
     [ClassData(typeof(ValidListSourceForBuildFilterExpressionMethodData))]
     public async Task BuildFilterExpression_ForEfSource_WithValidFilterTypeAndFilterBy_ShouldReturnCorrectExpression(IQueryable<RestTestEntityFixture> source, FilterRequest filterRequest, List<int> expectedIdList)
     {
+        Settings.UseUtcConversionInDateTypes = false;
+
         // Arrange
         using var dbContextFixture = new DbContextMock<RestDbContextFixture>(nameof(FilterRequest)).GetDbContextFixture();
         await dbContextFixture.TestEntities.AddRangeAsync(source);

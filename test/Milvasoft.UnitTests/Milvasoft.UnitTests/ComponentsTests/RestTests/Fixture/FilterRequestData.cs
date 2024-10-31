@@ -181,7 +181,7 @@ internal class ValidListSourceForBuildFilterExpressionMethodData : IEnumerable<o
         yield return new object[]
         {
             validQueryable,
-            new FilterRequest{ Criterias = [ new FilterCriteria{ FilterBy = nameof(RestTestEntityFixture.UpdateDate), Type = FilterType.EqualTo, Value = null }]},
+            new FilterRequest{ Criterias = [ new FilterCriteria{ FilterBy = nameof(RestTestEntityFixture.UpdateDate), Type = FilterType.DateEqualTo, Value = null }]},
             new List<int> { 3 , 4 , 5}
         };
 
