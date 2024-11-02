@@ -51,6 +51,11 @@ public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepositor
     /// </summary>
     protected bool _saveChangesAfterEveryOperation;
 
+    /// <summary>
+    /// internal soft delete state.
+    /// </summary>
+    private bool _tempSoftDeletedFetching;
+
     #endregion
 
     /// <summary>
@@ -877,8 +882,10 @@ public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepositor
     {
         Expression<Func<TEntity, bool>> mainExpression;
 
+        _tempSoftDeletedFetching = _softDeletedFetching;
+
         //Step in when _softDeletedFetching is false
-        if (!_softDeletedFetching)
+        if (!_tempSoftDeletedFetching)
         {
             var softDeleteExpression = CommonHelper.CreateIsDeletedFalseExpression<TEntity>();
 
@@ -1079,7 +1086,12 @@ public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepositor
     private Expression<Func<TEntity, TResult>> AppendSoftDeleteFilterToProjection<TResult>(Expression<Func<TEntity, TResult>> projection)
     {
         if (projection is null)
+        {
+            if (_resetSoftDeletedFetchState)
+                _softDeletedFetching = _dataAccessConfiguration.Repository.DefaultSoftDeletedFetchState;
+
             return null;
+        }
 
         var projectionBody = projection.Body;
 
@@ -1090,43 +1102,48 @@ public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepositor
         {
             var bindings = memberInit.Bindings.Select(binding =>
             {
-                if (binding is MemberAssignment memberAssignment)
+                //Step in when _softDeletedFetching is false
+                if (!_tempSoftDeletedFetching)
                 {
-                    var propertyType = memberAssignment.Expression.Type;
-
-                    // Check if collection
-                    if (propertyType.IsGenericType && typeof(IList).IsAssignableFrom(propertyType.GetGenericTypeDefinition()))
+                    if (binding is MemberAssignment memberAssignment)
                     {
-                        var elementType = propertyType.GetGenericArguments()[0];
+                        var propertyType = memberAssignment.Expression.Type;
 
-                        if (typeof(ISoftDeletable).IsAssignableFrom(elementType))
+                        // Check if collection
+                        if (propertyType.IsGenericType && typeof(IList).IsAssignableFrom(propertyType.GetGenericTypeDefinition()))
                         {
-                            // Remove ToList() if exists
-                            var visitor = new ToListRemoverVisitor();
-                            var modifiedExpression = visitor.Visit(memberAssignment.Expression);
+                            var elementType = propertyType.GetGenericArguments()[0];
 
-                            // Apply filter for collection
-                            var filteredExpression = AddIsDeletedFilterToCollectionProjection(modifiedExpression, elementType, propertyType);
+                            if (typeof(ISoftDeletable).IsAssignableFrom(elementType))
+                            {
+                                // Remove ToList() if exists
+                                var visitor = new ToListRemoverVisitor();
+                                var modifiedExpression = visitor.Visit(memberAssignment.Expression);
 
-                            return Expression.Bind(memberAssignment.Member, filteredExpression);
+                                // Apply filter for collection
+                                var filteredExpression = AddIsDeletedFilterToCollectionProjection(modifiedExpression, elementType, propertyType);
+
+                                return Expression.Bind(memberAssignment.Member, filteredExpression);
+                            }
                         }
-                    }
-                    else if (typeof(ISoftDeletable).IsAssignableFrom(propertyType))
-                    {
-                        // Apply navigation property for navigation property
-                        var isDeletedProperty = Expression.Property(memberAssignment.Expression, nameof(ISoftDeletable.IsDeleted));
+                        else if (typeof(ISoftDeletable).IsAssignableFrom(propertyType))
+                        {
+                            // Apply navigation property for navigation property
+                            var isDeletedProperty = Expression.Property(memberAssignment.Expression, nameof(ISoftDeletable.IsDeleted));
 
-                        var isDeletedCheck = Expression.Equal(isDeletedProperty, Expression.Constant(false));
+                            var isDeletedCheck = Expression.Equal(isDeletedProperty, Expression.Constant(false));
 
-                        var conditionalExpression = Expression.Condition(isDeletedCheck,
-                                                                         memberAssignment.Expression,
-                                                                         Expression.Default(propertyType));
+                            var conditionalExpression = Expression.Condition(isDeletedCheck,
+                                                                             memberAssignment.Expression,
+                                                                             Expression.Default(propertyType));
 
-                        return Expression.Bind(memberAssignment.Member, conditionalExpression);
+                            return Expression.Bind(memberAssignment.Member, conditionalExpression);
+                        }
                     }
                 }
 
                 return binding;
+
             }).ToList();
 
             var newMemberInit = Expression.MemberInit(memberInit.NewExpression, bindings);
@@ -1136,8 +1153,11 @@ public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepositor
 
             var newExpression = (MemberInitExpression)isDeletedVisitor.Visit(newMemberInit);
 
-            return Expression.Lambda<Func<TEntity, TResult>>(newMemberInit, parameter);
+            return Expression.Lambda<Func<TEntity, TResult>>(newExpression, parameter);
         }
+
+        if (_resetSoftDeletedFetchState)
+            _softDeletedFetching = _dataAccessConfiguration.Repository.DefaultSoftDeletedFetchState;
 
         return projection;
     }
