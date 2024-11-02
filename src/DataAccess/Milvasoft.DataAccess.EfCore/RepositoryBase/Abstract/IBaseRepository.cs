@@ -134,13 +134,13 @@ public interface IBaseRepository<TEntity> where TEntity : class, IMilvaEntity
     /// <param name="id"></param>
     /// <param name="condition"></param>
     /// <param name="conditionAfterProjection"></param>
-    /// <param name="projectionExpression"></param>
+    /// <param name="projection"></param>
     /// <param name="tracking"></param>
     /// <param name="cancellationToken"></param>
     /// <returns> The entity found or null. </returns>
     Task<TResult> GetByIdAsync<TResult>(object id,
                                         Expression<Func<TEntity, bool>> condition = null,
-                                        Expression<Func<TEntity, TResult>> projectionExpression = null,
+                                        Expression<Func<TEntity, TResult>> projection = null,
                                         Expression<Func<TResult, bool>> conditionAfterProjection = null,
                                         bool tracking = false,
                                         CancellationToken cancellationToken = new CancellationToken());
@@ -173,14 +173,14 @@ public interface IBaseRepository<TEntity> where TEntity : class, IMilvaEntity
     /// <param name="includes"></param>
     /// <param name="condition"></param>
     /// <param name="conditionAfterProjection"></param>
-    /// <param name="projectionExpression"></param>
+    /// <param name="projection"></param>
     /// <param name="tracking"></param>
     /// <param name="cancellationToken"></param>
     /// <returns> The entity found or null. </returns>
     Task<TResult> GetForDeleteAsync<TResult>(object id,
                                              Func<IIncludable<TEntity>, IIncludable> includes = null,
                                              Expression<Func<TEntity, bool>> condition = null,
-                                             Expression<Func<TEntity, TResult>> projectionExpression = null,
+                                             Expression<Func<TEntity, TResult>> projection = null,
                                              Expression<Func<TResult, bool>> conditionAfterProjection = null,
                                              bool tracking = false,
                                              CancellationToken cancellationToken = new CancellationToken());
@@ -426,7 +426,7 @@ public interface IBaseRepository<TEntity> where TEntity : class, IMilvaEntity
                             CancellationToken cancellationToken = default);
 
     /// <summary>
-    /// Bulk add operation. 
+    /// Bulk add operation. This method will not save changes to the database. So soft delete and auditing operations will not be performed.
     /// </summary>
     /// <param name="entities"></param>
     /// <param name="bulkConfig"></param>
@@ -435,7 +435,7 @@ public interface IBaseRepository<TEntity> where TEntity : class, IMilvaEntity
     Task BulkAddAsync(List<TEntity> entities, Action<BulkConfig> bulkConfig = null, CancellationToken cancellationToken = default);
 
     /// <summary>
-    /// Bulk update operation. 
+    /// Bulk update operation. This method will not save changes to the database. So soft delete and auditing operations will not be performed.
     /// </summary>
     /// <param name="entities"></param>
     /// <param name="bulkConfig"></param>
@@ -444,7 +444,7 @@ public interface IBaseRepository<TEntity> where TEntity : class, IMilvaEntity
     Task BulkUpdateAsync(List<TEntity> entities, Action<BulkConfig> bulkConfig = null, CancellationToken cancellationToken = default);
 
     /// <summary>
-    /// Bulk delete operation. 
+    /// Bulk delete operation. This method will not save changes to the database. So soft delete and auditing operations will not be performed.
     /// </summary>
     /// <param name="entities"></param>
     /// <param name="bulkConfig"></param>
@@ -571,12 +571,12 @@ public interface IBaseRepository<TEntity> where TEntity : class, IMilvaEntity
     /// <param name="id"></param>
     /// <param name="condition"></param>
     /// <param name="conditionAfterProjection"></param>
-    /// <param name="projectionExpression"></param>
+    /// <param name="projection"></param>
     /// <param name="tracking"></param>
     /// <returns> The entity found or null. </returns>
     TResult GetById<TResult>(object id,
                              Expression<Func<TEntity, bool>> condition = null,
-                             Expression<Func<TEntity, TResult>> projectionExpression = null,
+                             Expression<Func<TEntity, TResult>> projection = null,
                              Expression<Func<TResult, bool>> conditionAfterProjection = null,
                              bool tracking = false);
 
@@ -606,13 +606,13 @@ public interface IBaseRepository<TEntity> where TEntity : class, IMilvaEntity
     /// <param name="includes"></param>
     /// <param name="condition"></param>
     /// <param name="conditionAfterProjection"></param>
-    /// <param name="projectionExpression"></param>
+    /// <param name="projection"></param>
     /// <param name="tracking"></param>
     /// <returns> The entity found or null. </returns>
     TResult GetForDelete<TResult>(object id,
                                   Func<IIncludable<TEntity>, IIncludable> includes = null,
                                   Expression<Func<TEntity, bool>> condition = null,
-                                  Expression<Func<TEntity, TResult>> projectionExpression = null,
+                                  Expression<Func<TEntity, TResult>> projection = null,
                                   Expression<Func<TResult, bool>> conditionAfterProjection = null,
                                   bool tracking = false);
 
@@ -821,7 +821,7 @@ public interface IBaseRepository<TEntity> where TEntity : class, IMilvaEntity
     int ExecuteDelete(Expression<Func<TEntity, bool>> predicate, SetPropertyBuilder<TEntity> propertyBuilder = null);
 
     /// <summary>
-    /// Bulk add operation. 
+    /// Bulk add operation. This method will not save changes to the database. So soft delete and auditing operations will not be performed.
     /// </summary>
     /// <param name="entities"></param>
     /// <param name="bulkConfig"></param>
@@ -829,7 +829,7 @@ public interface IBaseRepository<TEntity> where TEntity : class, IMilvaEntity
     void BulkAdd(List<TEntity> entities, Action<BulkConfig> bulkConfig = null);
 
     /// <summary>
-    /// Bulk update operation. 
+    /// Bulk update operation. This method will not save changes to the database. So soft delete and auditing operations will not be performed.
     /// </summary>
     /// <param name="entities"></param>
     /// <param name="bulkConfig"></param>
@@ -837,7 +837,7 @@ public interface IBaseRepository<TEntity> where TEntity : class, IMilvaEntity
     void BulkUpdate(List<TEntity> entities, Action<BulkConfig> bulkConfig = null);
 
     /// <summary>
-    /// Bulk delete operation. 
+    /// Bulk delete operation. This method will not save changes to the database. So soft delete and auditing operations will not be performed.
     /// </summary>
     /// <param name="entities"></param>
     /// <param name="bulkConfig"></param>

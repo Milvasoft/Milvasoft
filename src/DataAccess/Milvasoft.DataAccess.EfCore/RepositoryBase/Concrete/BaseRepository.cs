@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Milvasoft.Attributes.Annotations;
 using Milvasoft.Components.Rest.MilvaResponse;
 using Milvasoft.Components.Rest.Request;
+using Milvasoft.Core.Utils.ExpressionVisitors;
 using Milvasoft.DataAccess.EfCore.RepositoryBase.Abstract;
 using Milvasoft.DataAccess.EfCore.Utils.IncludeLibrary;
 using Milvasoft.Types.Structs;
@@ -137,7 +138,7 @@ public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepositor
                                                                        CancellationToken cancellationToken = default)
         => await _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
                        .Where(CreateConditionExpression(condition) ?? (entity => true))
-                       .Select(projection)
+                       .Select(UpdateProjectionExpression(projection))
                        .FirstOrDefaultAsync(conditionAfterProjection ?? (entity => true), cancellationToken);
 
     #endregion
@@ -173,7 +174,7 @@ public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepositor
                                                                         CancellationToken cancellationToken = default)
         => await _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
                        .Where(CreateConditionExpression(condition) ?? (entity => true))
-                       .Select(projection)
+                       .Select(UpdateProjectionExpression(projection))
                        .SingleOrDefaultAsync(conditionAfterProjection ?? (entity => true), cancellationToken);
 
     #endregion
@@ -205,13 +206,13 @@ public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepositor
     /// <param name="id"></param>
     /// <param name="condition"></param>
     /// <param name="conditionAfterProjection"></param>
-    /// <param name="projectionExpression"></param>
+    /// <param name="projection"></param>
     /// <param name="tracking"></param>
     /// <param name="cancellationToken"></param>
     /// <returns> The entity found or null. </returns>
     public virtual async Task<TResult> GetByIdAsync<TResult>(object id,
                                                              Expression<Func<TEntity, bool>> condition = null,
-                                                             Expression<Func<TEntity, TResult>> projectionExpression = null,
+                                                             Expression<Func<TEntity, TResult>> projection = null,
                                                              Expression<Func<TResult, bool>> conditionAfterProjection = null,
                                                              bool tracking = false,
                                                              CancellationToken cancellationToken = new CancellationToken())
@@ -220,7 +221,7 @@ public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepositor
 
         return await _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
                            .Where(mainCondition)
-                           .Select(projectionExpression)
+                           .Select(UpdateProjectionExpression(projection))
                            .SingleOrDefaultAsync(conditionAfterProjection ?? (entity => true), cancellationToken);
     }
 
@@ -265,14 +266,14 @@ public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepositor
     /// <param name="includes"></param>
     /// <param name="condition"></param>
     /// <param name="conditionAfterProjection"></param>
-    /// <param name="projectionExpression"></param>
+    /// <param name="projection"></param>
     /// <param name="tracking"></param>
     /// <param name="cancellationToken"></param>
     /// <returns> The entity found or null. </returns>
     public virtual async Task<TResult> GetForDeleteAsync<TResult>(object id,
                                                                   Func<IIncludable<TEntity>, IIncludable> includes = null,
                                                                   Expression<Func<TEntity, bool>> condition = null,
-                                                                  Expression<Func<TEntity, TResult>> projectionExpression = null,
+                                                                  Expression<Func<TEntity, TResult>> projection = null,
                                                                   Expression<Func<TResult, bool>> conditionAfterProjection = null,
                                                                   bool tracking = false,
                                                                   CancellationToken cancellationToken = new CancellationToken())
@@ -283,12 +284,12 @@ public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepositor
             return await _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
                                .Where(mainCondition)
                                .IncludeMultiple(includes)
-                               .Select(projectionExpression)
+                               .Select(UpdateProjectionExpression(projection))
                                .SingleOrDefaultAsync(conditionAfterProjection ?? (entity => true), cancellationToken);
 
         var query = _dbSet.AsTracking(GetQueryTrackingBehavior(tracking)).Where(mainCondition);
 
-        return await IncludeNavigationProperties(query).Select(projectionExpression)
+        return await IncludeNavigationProperties(query).Select(UpdateProjectionExpression(projection))
                                                        .SingleOrDefaultAsync(conditionAfterProjection ?? (entity => true), cancellationToken);
     }
 
@@ -331,7 +332,7 @@ public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepositor
                                                                           CancellationToken cancellationToken = default) where TResult : class
         => await _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
                        .Where(CreateConditionExpression(condition) ?? (entity => true))
-                       .Select(projection)
+                       .Select(UpdateProjectionExpression(projection))
                        .Where(conditionAfterProjection ?? (entity => true))
                        .ToListResponseAsync(listRequest, cancellationToken);
 
@@ -366,7 +367,7 @@ public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepositor
                                                                   CancellationToken cancellationToken = default) where TResult : class
         => await _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
                        .Where(CreateConditionExpression(condition) ?? (entity => true))
-                       .Select(projection)
+                       .Select(UpdateProjectionExpression(projection))
                        .Where(conditionAfterProjection ?? (entity => true))
                        .ToListAsync(cancellationToken);
 
@@ -409,7 +410,7 @@ public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepositor
                                                                    CancellationToken cancellationToken = default)
         => await _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
                        .Where(CreateConditionExpression(condition) ?? (entity => true))
-                       .Select(projection)
+                       .Select(UpdateProjectionExpression(projection))
                        .Where(conditionAfterProjection ?? (entity => true))
                        .Take(count)
                        .ToListAsync(cancellationToken);
@@ -581,8 +582,8 @@ public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepositor
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
     public virtual async Task<int> ReplaceOldsWithNewsAsync(IEnumerable<TEntity> oldEntities,
-                                                       IEnumerable<TEntity> newEntities,
-                                                       CancellationToken cancellationToken = default)
+                                                            IEnumerable<TEntity> newEntities,
+                                                            CancellationToken cancellationToken = default)
     {
         if (!oldEntities.IsNullOrEmpty())
             foreach (var entity in oldEntities)
@@ -605,8 +606,8 @@ public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepositor
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
     public virtual async Task<int> ReplaceOldsWithNewsInSeperateDatabaseProcessAsync(IEnumerable<TEntity> oldEntities,
-                                                                                IEnumerable<TEntity> newEntities,
-                                                                                CancellationToken cancellationToken = default)
+                                                                                     IEnumerable<TEntity> newEntities,
+                                                                                     CancellationToken cancellationToken = default)
     {
         int affectedRows = 0;
 
@@ -708,7 +709,7 @@ public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepositor
     }
 
     /// <summary>
-    /// Bulk add operation. 
+    /// Bulk add operation. This method will not save changes to the database. So soft delete and auditing operations will not be performed.
     /// </summary>
     /// <param name="entities"></param>
     /// <param name="bulkConfig"></param>
@@ -721,7 +722,7 @@ public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepositor
     }
 
     /// <summary>
-    /// Bulk update operation. 
+    /// Bulk update operation. This method will not save changes to the database. So soft delete and auditing operations will not be performed. 
     /// </summary>
     /// <param name="entities"></param>
     /// <param name="bulkConfig"></param>
@@ -734,7 +735,7 @@ public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepositor
     }
 
     /// <summary>
-    /// Bulk delete operation. 
+    /// Bulk delete operation. This method will not save changes to the database. So soft delete and auditing operations will not be performed.
     /// </summary>
     /// <param name="entities"></param>
     /// <param name="bulkConfig"></param>
@@ -892,6 +893,18 @@ public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepositor
         }
 
         return mainExpression;
+    }
+
+    /// <summary>
+    /// Updates projection according to soft delete.
+    /// </summary>
+    /// <param name="projectionExpression"></param>
+    /// <returns></returns>
+    protected Expression<Func<TEntity, TResult>> UpdateProjectionExpression<TResult>(Expression<Func<TEntity, TResult>> projectionExpression = null)
+    {
+        var appendedExpression = AppendSoftDeleteFilterToProjection(projectionExpression);
+
+        return appendedExpression;
     }
 
     /// <summary>
@@ -1062,6 +1075,99 @@ public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepositor
 
         return paths;
     }
+
+    private Expression<Func<TEntity, TResult>> AppendSoftDeleteFilterToProjection<TResult>(Expression<Func<TEntity, TResult>> projection)
+    {
+        if (projection is null)
+            return null;
+
+        var projectionBody = projection.Body;
+
+        var parameter = projection.Parameters[0];
+
+        // Find navigation properties and apply IsDeleted filter to applieable properties
+        if (projectionBody is MemberInitExpression memberInit)
+        {
+            var bindings = memberInit.Bindings.Select(binding =>
+            {
+                if (binding is MemberAssignment memberAssignment)
+                {
+                    var propertyType = memberAssignment.Expression.Type;
+
+                    // Check if collection
+                    if (propertyType.IsGenericType && typeof(IList).IsAssignableFrom(propertyType.GetGenericTypeDefinition()))
+                    {
+                        var elementType = propertyType.GetGenericArguments()[0];
+
+                        if (typeof(ISoftDeletable).IsAssignableFrom(elementType))
+                        {
+                            // Remove ToList() if exists
+                            var visitor = new ToListRemoverVisitor();
+                            var modifiedExpression = visitor.Visit(memberAssignment.Expression);
+
+                            // Apply filter for collection
+                            var filteredExpression = AddIsDeletedFilterToCollectionProjection(modifiedExpression, elementType, propertyType);
+
+                            return Expression.Bind(memberAssignment.Member, filteredExpression);
+                        }
+                    }
+                    else if (typeof(ISoftDeletable).IsAssignableFrom(propertyType))
+                    {
+                        // Apply navigation property for navigation property
+                        var isDeletedProperty = Expression.Property(memberAssignment.Expression, nameof(ISoftDeletable.IsDeleted));
+
+                        var isDeletedCheck = Expression.Equal(isDeletedProperty, Expression.Constant(false));
+
+                        var conditionalExpression = Expression.Condition(isDeletedCheck,
+                                                                         memberAssignment.Expression,
+                                                                         Expression.Default(propertyType));
+
+                        return Expression.Bind(memberAssignment.Member, conditionalExpression);
+                    }
+                }
+
+                return binding;
+            }).ToList();
+
+            var newMemberInit = Expression.MemberInit(memberInit.NewExpression, bindings);
+
+            // Apply the IsDeletedMappingVisitor
+            var isDeletedVisitor = new IsDeletedMappingVisitor();
+
+            var newExpression = (MemberInitExpression)isDeletedVisitor.Visit(newMemberInit);
+
+            return Expression.Lambda<Func<TEntity, TResult>>(newMemberInit, parameter);
+        }
+
+        return projection;
+    }
+
+    private MethodCallExpression AddIsDeletedFilterToCollectionProjection(Expression collectionExpression, Type elementType, Type propertyType)
+    {
+        var parameter = Expression.Parameter(elementType, _expressionParam);
+
+        var isDeletedProperty = Expression.Property(parameter, nameof(ISoftDeletable.IsDeleted));
+
+        var condition = Expression.Equal(isDeletedProperty, Expression.Constant(false));
+
+        var lambda = Expression.Lambda(condition, parameter);
+
+        var whereMethod = typeof(Enumerable).GetMethods()
+                                            .First(m => m.Name == nameof(Enumerable.Where) && m.GetParameters().Length == 2)
+                                            .MakeGenericMethod(elementType);
+
+        var filteredCollection = Expression.Call(whereMethod, collectionExpression, lambda);
+
+        if (propertyType.IsGenericType && typeof(List<>).IsAssignableFrom(propertyType.GetGenericTypeDefinition()))
+            filteredCollection = Expression.Call(typeof(Enumerable),
+                                                 nameof(Enumerable.ToList),
+                                                 [elementType],
+                                                 filteredCollection);
+
+        return filteredCollection;
+    }
+
+    private const string _expressionParam = "x";
 
     #endregion
 

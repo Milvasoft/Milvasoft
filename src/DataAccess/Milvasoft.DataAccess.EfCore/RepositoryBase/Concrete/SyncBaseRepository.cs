@@ -43,7 +43,7 @@ public abstract partial class BaseRepository<TEntity, TContext> where TEntity : 
                                                       bool tracking = false)
         => _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
                  .Where(CreateConditionExpression(condition) ?? (entity => true))
-                 .Select(projection)
+                 .Select(UpdateProjectionExpression(projection))
                  .FirstOrDefault(conditionAfterProjection ?? (entity => true));
 
     #endregion
@@ -74,7 +74,7 @@ public abstract partial class BaseRepository<TEntity, TContext> where TEntity : 
                                                        bool tracking = false)
         => _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
                  .Where(CreateConditionExpression(condition) ?? (entity => true))
-                 .Select(projection)
+                 .Select(UpdateProjectionExpression(projection))
                  .SingleOrDefault(conditionAfterProjection ?? (entity => true));
 
     #endregion
@@ -104,12 +104,12 @@ public abstract partial class BaseRepository<TEntity, TContext> where TEntity : 
     /// <param name="id"></param>
     /// <param name="condition"></param>
     /// <param name="conditionAfterProjection"></param>
-    /// <param name="projectionExpression"></param>
+    /// <param name="projection"></param>
     /// <param name="tracking"></param>
     /// <returns> The entity found or null. </returns>
     public virtual TResult GetById<TResult>(object id,
                                             Expression<Func<TEntity, bool>> condition = null,
-                                            Expression<Func<TEntity, TResult>> projectionExpression = null,
+                                            Expression<Func<TEntity, TResult>> projection = null,
                                             Expression<Func<TResult, bool>> conditionAfterProjection = null,
                                             bool tracking = false)
     {
@@ -117,7 +117,7 @@ public abstract partial class BaseRepository<TEntity, TContext> where TEntity : 
 
         return _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
                      .Where(mainCondition)
-                     .Select(projectionExpression)
+                     .Select(UpdateProjectionExpression(projection))
                      .SingleOrDefault(conditionAfterProjection ?? (entity => true));
     }
 
@@ -160,13 +160,13 @@ public abstract partial class BaseRepository<TEntity, TContext> where TEntity : 
     /// <param name="includes"></param>
     /// <param name="condition"></param>
     /// <param name="conditionAfterProjection"></param>
-    /// <param name="projectionExpression"></param>
+    /// <param name="projection"></param>
     /// <param name="tracking"></param>
     /// <returns> The entity found or null. </returns>
     public virtual TResult GetForDelete<TResult>(object id,
                                                  Func<IIncludable<TEntity>, IIncludable> includes = null,
                                                  Expression<Func<TEntity, bool>> condition = null,
-                                                 Expression<Func<TEntity, TResult>> projectionExpression = null,
+                                                 Expression<Func<TEntity, TResult>> projection = null,
                                                  Expression<Func<TResult, bool>> conditionAfterProjection = null,
                                                  bool tracking = false)
     {
@@ -176,12 +176,12 @@ public abstract partial class BaseRepository<TEntity, TContext> where TEntity : 
             return _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
                          .Where(mainCondition)
                          .IncludeMultiple(includes)
-                         .Select(projectionExpression)
+                         .Select(UpdateProjectionExpression(projection))
                          .SingleOrDefault(conditionAfterProjection ?? (entity => true));
 
         var query = _dbSet.AsTracking(GetQueryTrackingBehavior(tracking)).Where(mainCondition);
 
-        return IncludeNavigationProperties(query).Select(projectionExpression)
+        return IncludeNavigationProperties(query).Select(UpdateProjectionExpression(projection))
                                                  .SingleOrDefault(conditionAfterProjection ?? (entity => true));
     }
 
@@ -220,7 +220,7 @@ public abstract partial class BaseRepository<TEntity, TContext> where TEntity : 
                                                          bool tracking = false) where TResult : class
         => _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
                  .Where(CreateConditionExpression(condition) ?? (entity => true))
-                 .Select(projection)
+                 .Select(UpdateProjectionExpression(projection))
                  .Where(conditionAfterProjection ?? (entity => true))
                  .ToListResponse(listRequest);
 
@@ -250,7 +250,7 @@ public abstract partial class BaseRepository<TEntity, TContext> where TEntity : 
                                                  bool tracking = false) where TResult : class
         => _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
                  .Where(CreateConditionExpression(condition) ?? (entity => true))
-                 .Select(projection)
+                 .Select(UpdateProjectionExpression(projection))
                  .Where(conditionAfterProjection ?? (entity => true))
                  .ToList();
 
@@ -289,7 +289,7 @@ public abstract partial class BaseRepository<TEntity, TContext> where TEntity : 
                                                   bool tracking = false)
         => _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
                  .Where(CreateConditionExpression(condition) ?? (entity => true))
-                 .Select(projection)
+                 .Select(UpdateProjectionExpression(projection))
                  .Where(conditionAfterProjection ?? (entity => true))
                  .Take(count)
                  .ToList();
