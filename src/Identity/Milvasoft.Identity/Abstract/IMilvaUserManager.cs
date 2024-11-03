@@ -136,13 +136,14 @@ public interface IMilvaUserManager<TUser, TKey> where TUser : MilvaUser<TKey> wh
     /// Generates a token for the given <paramref name="user"/> and <paramref name="purpose"/>.
     /// </summary>
     /// <param name="purpose">The purpose the token will be for.</param>
+    /// <param name="useUtcForDateTimes"></param>
     /// <param name="value"></param>
     /// <param name="user">The user the token will be for.</param>
     /// <returns>
     /// The <see cref="Task"/> that represents result of the asynchronous operation, a token for
     /// the given user and purpose.
     /// </returns>
-    string GenerateUserToken(TUser user, Purpose purpose, string value = null);
+    string GenerateUserToken(TUser user, Purpose purpose, bool useUtcForDateTimes, string value = null);
 
     /// <summary>
     /// Returns a flag indicating whether the specified <paramref name="token"/> is valid for the given <paramref name="user"/> and <paramref name="purpose"/>.
@@ -150,10 +151,11 @@ public interface IMilvaUserManager<TUser, TKey> where TUser : MilvaUser<TKey> wh
     /// <param name="user">The user to validate the token against.</param>
     /// <param name="purpose">The purpose the token should be generated for.</param>
     /// <param name="token">The token to validate</param>
+    /// <param name="useUtcForDateTimes"></param>
     /// <param name="value"></param>
     /// <returns>
     /// True if the <paramref name="token"/>
     /// is valid, otherwise false.
     /// </returns>
-    bool VerifyUserToken(TUser user, Purpose purpose, string token, string value = null);
+    bool VerifyUserToken(TUser user, Purpose purpose, string token, bool useUtcForDateTimes, string value = null);
 }

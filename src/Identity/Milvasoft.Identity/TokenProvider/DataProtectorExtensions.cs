@@ -13,14 +13,15 @@ public static class DataProtectorExtensions
     /// <param name="protector"></param>
     /// <param name="purpose">The purpose the token will be used for.</param>
     /// <param name="userId"></param>
+    /// <param name="useUtcForDateTimes"></param>
     /// <returns></returns>
-    public static string Generate<TKey>(this IDataProtectionProvider protector, string purpose, TKey userId) where TKey : IEquatable<TKey>
+    public static string Generate<TKey>(this IDataProtectionProvider protector, string purpose, TKey userId, bool useUtcForDateTimes) where TKey : IEquatable<TKey>
     {
         var ms = new MemoryStream();
 
         using (var writer = ms.CreateWriter())
         {
-            writer.Write(DateTimeOffset.UtcNow);
+            writer.Write(CommonHelper.GetDateTimeOffsetNow(useUtcForDateTimes));
             writer.Write(userId.ToString());
             writer.Write(purpose ?? string.Empty);
             writer.Write(string.Empty);
@@ -37,8 +38,9 @@ public static class DataProtectorExtensions
     /// <param name="purpose">The purpose the token was be used for.</param>
     /// <param name="token">The token to validate.</param>
     /// <param name="actualUserId"></param>
+    /// <param name="useUtcForDateTimes"></param>
     /// <returns></returns>
-    public static bool Validate<TKey>(this IDataProtectionProvider protector, string purpose, string token, TKey actualUserId) where TKey : IEquatable<TKey>
+    public static bool Validate<TKey>(this IDataProtectionProvider protector, string purpose, string token, TKey actualUserId, bool useUtcForDateTimes) where TKey : IEquatable<TKey>
     {
         try
         {
@@ -49,7 +51,7 @@ public static class DataProtectorExtensions
             using var reader = ms.CreateReader();
             var creationTime = reader.ReadDateTimeOffset();
             var expirationTime = creationTime + TimeSpan.FromDays(1);
-            if (expirationTime < DateTimeOffset.UtcNow)
+            if (expirationTime < CommonHelper.GetDateTimeOffsetNow(useUtcForDateTimes))
             {
                 return false;
             }

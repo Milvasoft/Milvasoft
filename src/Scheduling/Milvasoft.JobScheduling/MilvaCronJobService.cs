@@ -1,5 +1,6 @@
 ﻿using Cronos;
 using Microsoft.Extensions.Hosting;
+using Milvasoft.Core.Helpers;
 
 namespace Milvasoft.JobScheduling;
 
@@ -16,6 +17,7 @@ public abstract class MilvaCronJobService(IScheduleConfig scheduleConfig) : IHos
     private System.Timers.Timer _timer;
     private CronExpression _expression = CronExpression.Parse(scheduleConfig.CronExpression, scheduleConfig.CronFormat);
     private TimeZoneInfo _timeZoneInfo = scheduleConfig.TimeZoneInfo;
+    private readonly bool _useUtcForDateTimes = scheduleConfig.UseUtcDateTimes;
 
     /// <summary>
     /// Starts the job.
@@ -31,11 +33,11 @@ public abstract class MilvaCronJobService(IScheduleConfig scheduleConfig) : IHos
     /// <returns></returns>
     protected virtual async Task ScheduleJob(CancellationToken cancellationToken)
     {
-        var next = _expression.GetNextOccurrence(DateTimeOffset.Now, _timeZoneInfo);
+        var next = _expression.GetNextOccurrence(CommonHelper.GetDateTimeOffsetNow(_useUtcForDateTimes), _timeZoneInfo);
 
         if (next.HasValue)
         {
-            var delay = next.Value - DateTimeOffset.Now;
+            var delay = next.Value - CommonHelper.GetDateTimeOffsetNow(_useUtcForDateTimes);
             if (delay.TotalMilliseconds <= 0)   // prevent non-positive values from being passed into Timer
             {
                 await ScheduleJob(cancellationToken);

@@ -8,6 +8,11 @@ namespace Milvasoft.JobScheduling;
 public interface IScheduleConfig
 {
     /// <summary>
+    /// Use UTC date times.
+    /// </summary>
+    bool UseUtcDateTimes { get; set; }
+
+    /// <summary>
     /// Cron expression of job.
     /// </summary>
     string CronExpression { get; set; }
@@ -28,6 +33,11 @@ public interface IScheduleConfig
 /// </summary>
 public class ScheduleConfig : IScheduleConfig
 {
+    /// <summary>
+    /// Use UTC date times.
+    /// </summary>
+    public bool UseUtcDateTimes { get; set; }
+
     /// <summary>
     /// Cron expression of job.
     /// </summary>

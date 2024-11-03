@@ -88,7 +88,7 @@ public partial class MilvaUserManager<TUser, TKey>(Lazy<IDataProtectionProvider>
 
                 if (user.AccessFailedCount >= _options.Lockout.MaxFailedAccessAttempts)
                 {
-                    user.LockoutEnd = DateTimeOffset.UtcNow.Add(_options.Lockout.GetLockoutMinute());
+                    user.LockoutEnd = CommonHelper.GetDateTimeOffsetNow(_options.Token.UseUtcForDateTimes).Add(_options.Lockout.GetLockoutMinute());
                     user.AccessFailedCount = 0;
 
                     return true;
@@ -166,7 +166,7 @@ public partial class MilvaUserManager<TUser, TKey>(Lazy<IDataProtectionProvider>
 
         var lockoutTime = user.LockoutEnd;
 
-        return lockoutTime >= DateTimeOffset.UtcNow;
+        return lockoutTime >= CommonHelper.GetDateTimeOffsetNow(_options.Token.UseUtcForDateTimes);
     }
 
     /// <summary>
@@ -309,13 +309,14 @@ public partial class MilvaUserManager<TUser, TKey>(Lazy<IDataProtectionProvider>
     /// Generates a token for the given <paramref name="user"/> and <paramref name="purpose"/>.
     /// </summary>
     /// <param name="purpose">The purpose the token will be for.</param>
+    /// <param name="useUtcForDateTimes"></param>
     /// <param name="value"></param>
     /// <param name="user">The user the token will be for.</param>
     /// <returns>
     /// The <see cref="Task"/> that represents result of the asynchronous operation, a token for
     /// the given user and purpose.
     /// </returns>
-    public virtual string GenerateUserToken(TUser user, Purpose purpose, string value = null) => _dataProtector.Value.Generate(GetPurpose(user, purpose, value), user.Id);
+    public virtual string GenerateUserToken(TUser user, Purpose purpose, bool useUtcForDateTimes, string value = null) => _dataProtector.Value.Generate(GetPurpose(user, purpose, value), user.Id, _options.Token.UseUtcForDateTimes);
 
     /// <summary>
     /// Returns a flag indicating whether the specified <paramref name="token"/> is valid for the given <paramref name="user"/> and <paramref name="purpose"/>.
@@ -324,11 +325,12 @@ public partial class MilvaUserManager<TUser, TKey>(Lazy<IDataProtectionProvider>
     /// <param name="purpose">The purpose the token should be generated for.</param>
     /// <param name="token">The token to validate</param>
     /// <param name="value"></param>
+    /// <param name="useUtcForDateTimes"></param>
     /// <returns>
     /// True if the <paramref name="token"/>
     /// is valid, otherwise false.
     /// </returns>
-    public virtual bool VerifyUserToken(TUser user, Purpose purpose, string token, string value = null) => _dataProtector.Value.Validate(GetPurpose(user, purpose, value), token, user.Id);
+    public virtual bool VerifyUserToken(TUser user, Purpose purpose, string token, bool useUtcForDateTimes, string value = null) => _dataProtector.Value.Validate(GetPurpose(user, purpose, value), token, user.Id, useUtcForDateTimes);
 
     /// <summary>
     /// Returns a flag indicating whether the supplied character is a digit.

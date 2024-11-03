@@ -15,6 +15,13 @@ public static partial class CommonHelper
     public static DateTime GetNow(bool useUtc) => useUtc ? DateTime.UtcNow : DateTime.Now;
 
     /// <summary>
+    /// Gets the current date and time. 
+    /// </summary>
+    /// <param name="useUtc"></param>
+    /// <returns></returns>
+    public static DateTimeOffset GetDateTimeOffsetNow(bool useUtc) => useUtc ? DateTimeOffset.UtcNow : DateTimeOffset.Now;
+
+    /// <summary>
     /// Creates an expression based on the provided <paramref name="endDate"/> and <paramref name="startDate"/> values.
     /// </summary>
     /// <remarks>
