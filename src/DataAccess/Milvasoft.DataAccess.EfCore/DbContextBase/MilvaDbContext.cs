@@ -292,7 +292,7 @@ public abstract class MilvaDbContext(DbContextOptions options) : DbContext(optio
 
         if (entry.Metadata.GetProperties().Any(prop => prop.Name == propertyName))
         {
-            entry.Property(propertyName).CurrentValue = GetNow();
+            entry.Property(propertyName).CurrentValue = CommonHelper.GetNow(_useUtcForDateTimes);
             entry.Property(propertyName).IsModified = true;
         }
     }
@@ -630,7 +630,7 @@ public abstract class MilvaDbContext(DbContextOptions options) : DbContext(optio
                 var lastModificationDateSelector = CommonHelper.CreatePropertySelector<TEntity, DateTime>(EntityPropertyNames.LastModificationDate);
 
                 builder.AuditCallsAdded = true;
-                builder = builder.SetPropertyValue(lastModificationDateSelector, GetNow());
+                builder = builder.SetPropertyValue(lastModificationDateSelector, CommonHelper.GetNow(_useUtcForDateTimes));
             }
 
             if (typeof(TEntity).CanAssignableTo(typeof(IHasModifier)) && _dbContextConfiguration.Auditing.AuditModifier)
@@ -650,8 +650,6 @@ public abstract class MilvaDbContext(DbContextOptions options) : DbContext(optio
         }
     }
 
-    private static DateTime GetNow() => DateTime.Now;
-
 }
 
 /// <summary>
@@ -666,4 +664,9 @@ public abstract class MilvaDbContext(DbContextOptions options) : DbContext(optio
 /// </remarks>
 public abstract class MilvaPooledDbContext(DbContextOptions options) : MilvaDbContext(options)
 {
+    /// <summary>
+    /// Overrided the OnModelCreating for custom configurations to database.
+    /// </summary>
+    /// <param name="modelBuilder"></param>
+    protected override void OnModelCreating(ModelBuilder modelBuilder) => base.OnModelCreating(modelBuilder);
 }

@@ -77,7 +77,7 @@ public partial class LogInterceptor(IServiceProvider serviceProvider) : IMilvaIn
             {
                { "TransactionId", ActivityHelper.TraceId },
                { "ElapsedMs", stopwatch.ElapsedMilliseconds },
-               { "UtcLogTime" , DateTime.UtcNow },
+               { "UtcLogTime" , CommonHelper.GetNow(_logInterceptionOptions.UseUtcForLogTimes) },
                { "IsSuccess" , isSuccessResponse },
                { "Exception" , exception?.ToJson() },
                { "CacheInfo" , new {

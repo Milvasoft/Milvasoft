@@ -976,7 +976,7 @@ public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepositor
         {
             var performTimePropertyExpression = CommonHelper.CreatePropertySelector<TEntity, DateTime>(propertyName);
 
-            var now = _dataAccessConfiguration.DbContext.UseUtcForDateTime ? DateTime.UtcNow : DateTime.Now;
+            var now = CommonHelper.GetNow(_dataAccessConfiguration.DbContext.UseUtcForDateTime);
 
             propertyBuilder.SetPropertyValue(performTimePropertyExpression, now);
         }

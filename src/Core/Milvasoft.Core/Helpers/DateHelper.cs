@@ -8,6 +8,13 @@ namespace Milvasoft.Core.Helpers;
 public static partial class CommonHelper
 {
     /// <summary>
+    /// Gets the current date and time. 
+    /// </summary>
+    /// <param name="useUtc"></param>
+    /// <returns></returns>
+    public static DateTime GetNow(bool useUtc) => useUtc ? DateTime.UtcNow : DateTime.Now;
+
+    /// <summary>
     /// Creates an expression based on the provided <paramref name="endDate"/> and <paramref name="startDate"/> values.
     /// </summary>
     /// <remarks>

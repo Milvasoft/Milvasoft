@@ -482,7 +482,7 @@ public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : 
     {
         var filter = Builders<TEntity>.Filter.Eq(doc => doc.Id, document.Id);
 
-        document.LastModificationDate = DateTime.Now;
+        document.LastModificationDate = CommonHelper.GetNow(_useUtcForDateTimes);
 
         if (_useUtcForDateTimes)
             ConvertDateTimePropertiesToUtc(document);
@@ -500,7 +500,7 @@ public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : 
     {
         var filter = Builders<TEntity>.Filter.Eq(doc => doc.Id, document.Id);
 
-        document.LastModificationDate = DateTime.Now;
+        document.LastModificationDate = CommonHelper.GetNow(_useUtcForDateTimes);
 
         if (_useUtcForDateTimes)
             ConvertDateTimePropertiesToUtc(document);
@@ -567,7 +567,7 @@ public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : 
                 }
             }
 
-            var updateDefForLastModificationDate = Builders<TEntity>.Update.Set(i => i.LastModificationDate, _useUtcForDateTimes ? DateTime.UtcNow : DateTime.Now);
+            var updateDefForLastModificationDate = Builders<TEntity>.Update.Set(i => i.LastModificationDate, CommonHelper.GetNow(_useUtcForDateTimes));
 
             listWrites.Add(new UpdateOneModel<TEntity>(filterDef, updateDefForLastModificationDate));
         }

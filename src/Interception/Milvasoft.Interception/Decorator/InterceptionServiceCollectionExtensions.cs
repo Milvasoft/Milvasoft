@@ -206,6 +206,7 @@ public static class InterceptionServiceCollectionExtensions
             opt.InterceptorLifetime = options.InterceptorLifetime;
             opt.ExtraLoggingPropertiesSelector = options.ExtraLoggingPropertiesSelector;
             opt.LogDefaultParameters = options.LogDefaultParameters;
+            opt.UseUtcForLogTimes = options.UseUtcForLogTimes;
             opt.ExcludeResponseMetadataFromLog = options.ExcludeResponseMetadataFromLog;
             opt.AsyncLogging = options.AsyncLogging;
         });

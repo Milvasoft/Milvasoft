@@ -72,7 +72,9 @@ public class MilvaTokenManager(MilvaIdentityOptions identityOptions, IMilvaLogge
 
         var claimsIdentityList = new ClaimsIdentity();
 
-        expired ??= DateTime.UtcNow.AddMinutes(_identityOptions.Token.ExpirationMinute);
+        var now = CommonHelper.GetNow(_identityOptions.Token.UseUtcForDateTimes);
+
+        expired ??= now.AddMinutes(_identityOptions.Token.ExpirationMinute);
 
         claimsIdentityList.AddClaim(new Claim(ClaimTypes.Expired, value: expired.ToString()));
         claimsIdentityList.AddClaims(claims);
@@ -81,7 +83,7 @@ public class MilvaTokenManager(MilvaIdentityOptions identityOptions, IMilvaLogge
         {
             Subject = claimsIdentityList,
             Expires = expired,
-            NotBefore = DateTime.UtcNow,
+            NotBefore = now,
             SigningCredentials = new SigningCredentials(_identityOptions.Token.GetSecurityKey(), _identityOptions.Token.GetSecurityAlgorithm())
         };
 

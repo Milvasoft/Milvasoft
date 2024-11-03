@@ -66,6 +66,18 @@ public static class ModelBuilderExtensions
                                 .Property<DateTime?>(property.Name)
                                 .HasConversion(v => v.HasValue ? v.Value.ToUniversalTime() : v, v => v.HasValue ? DateTime.SpecifyKind(v.Value, DateTimeKind.Utc) : v);
                 }
+                else if (property.ClrType == typeof(DateTimeOffset))
+                {
+                    modelBuilder.Entity(entityType.ClrType)
+                                .Property<DateTimeOffset>(property.Name)
+                                .HasConversion(v => v.ToUniversalTime(), v => v);
+                }
+                else if (property.ClrType == typeof(DateTimeOffset?))
+                {
+                    modelBuilder.Entity(entityType.ClrType)
+                                .Property<DateTimeOffset?>(property.Name)
+                                .HasConversion(v => v.HasValue ? v.Value.ToUniversalTime() : v, v => v);
+                }
             }
         }
 

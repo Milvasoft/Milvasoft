@@ -5,6 +5,7 @@ namespace Milvasoft.Identity.TokenProvider.AuthToken;
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
 public class TokenConfig
 {
+    public bool UseUtcForDateTimes { get; set; }
     public int ExpirationMinute { get; set; }
     public SecurityKeyType SecurityKeyType { get; set; }
     public TokenValidationParameters TokenValidationParameters { get; set; }

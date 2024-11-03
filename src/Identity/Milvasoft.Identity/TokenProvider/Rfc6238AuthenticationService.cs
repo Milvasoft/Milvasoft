@@ -11,6 +11,11 @@ internal static class Rfc6238AuthenticationService
     private static readonly UTF8Encoding _encoding = new(false, true);
     private static readonly RandomNumberGenerator _rng = RandomNumberGenerator.Create();
 
+    /// <summary>
+    /// Use UTC for date times. Default is false.
+    /// </summary>
+    public static bool UseUtcForDateTimes { get; set; } = false;
+
     // Generates a new 80-bit security token
     public static byte[] GenerateRandomKey()
     {
@@ -66,7 +71,8 @@ internal static class Rfc6238AuthenticationService
     // More info: https://tools.ietf.org/html/rfc6238#section-4
     private static ulong GetCurrentTimeStepNumber()
     {
-        var delta = DateTime.UtcNow - _unixEpoch;
+        var delta = CommonHelper.GetNow(UseUtcForDateTimes) - _unixEpoch;
+
         return (ulong)(delta.Ticks / _timestep.Ticks);
     }
 

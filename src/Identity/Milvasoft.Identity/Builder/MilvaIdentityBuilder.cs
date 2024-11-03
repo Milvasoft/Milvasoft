@@ -5,6 +5,7 @@ using Milvasoft.Identity.Abstract;
 using Milvasoft.Identity.Concrete;
 using Milvasoft.Identity.Concrete.Entity;
 using Milvasoft.Identity.Concrete.Options;
+using Milvasoft.Identity.TokenProvider;
 using Milvasoft.Identity.TokenProvider.AuthToken;
 
 namespace Milvasoft.Identity.Builder;
@@ -95,6 +96,8 @@ public class MilvaIdentityBuilder<TUser, TKey> where TUser : MilvaUser<TKey> whe
         identityOptions.Invoke(config);
 
         _services.AddSingleton(config);
+
+        Rfc6238AuthenticationService.UseUtcForDateTimes = config.Token.UseUtcForDateTimes;
 
         IdentityOptions = config;
 
