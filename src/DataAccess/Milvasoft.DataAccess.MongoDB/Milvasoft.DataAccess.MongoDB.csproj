@@ -56,7 +56,7 @@
 		<Description>MongoDB helpers. </Description>
 		<PackageTags>mongodb,mongo,auditing,nosql,optimisation,performance</PackageTags>
 		<Copyright>Milvasoft Yazılım Bilişim Araştırma Geliştirme Danışmanlık Sanayi ve Ticaret Ltd.Şti.</Copyright>
-		<Version>8.2.3</Version>
+		<Version>8.2.4</Version>
 
 	</PropertyGroup>
 </Project>

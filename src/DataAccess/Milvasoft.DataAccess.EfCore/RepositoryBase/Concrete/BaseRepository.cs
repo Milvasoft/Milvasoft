@@ -894,10 +894,10 @@ public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepositor
         else
         {
             mainExpression = conditionExpression;
-
-            if (_resetSoftDeletedFetchState)
-                _softDeletedFetching = _dataAccessConfiguration.Repository.DefaultSoftDeletedFetchState;
         }
+
+        if (_resetSoftDeletedFetchState)
+            _softDeletedFetching = _dataAccessConfiguration.Repository.DefaultSoftDeletedFetchState;
 
         return mainExpression;
     }
@@ -909,9 +909,23 @@ public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepositor
     /// <returns></returns>
     protected Expression<Func<TEntity, TResult>> UpdateProjectionExpression<TResult>(Expression<Func<TEntity, TResult>> projectionExpression = null)
     {
-        var appendedExpression = AppendSoftDeleteFilterToProjection(projectionExpression);
+        Expression<Func<TEntity, TResult>> mainExpression;
 
-        return appendedExpression;
+        if (!_tempSoftDeletedFetching)
+        {
+            var appendedExpression = AppendSoftDeleteFilterToProjection(projectionExpression);
+
+            mainExpression = appendedExpression;
+        }
+        else
+        {
+            mainExpression = projectionExpression;
+        }
+
+        if (_resetSoftDeletedFetchState)
+            _softDeletedFetching = _dataAccessConfiguration.Repository.DefaultSoftDeletedFetchState;
+
+        return mainExpression;
     }
 
     /// <summary>
@@ -1085,109 +1099,15 @@ public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepositor
 
     private Expression<Func<TEntity, TResult>> AppendSoftDeleteFilterToProjection<TResult>(Expression<Func<TEntity, TResult>> projection)
     {
+
         if (projection is null)
-        {
-            if (_resetSoftDeletedFetchState)
-                _softDeletedFetching = _dataAccessConfiguration.Repository.DefaultSoftDeletedFetchState;
-
             return null;
-        }
 
-        var projectionBody = projection.Body;
+        var visitor = new SoftDeleteFilterVisitor();
+        var newBody = visitor.Visit(projection.Body);
 
-        var parameter = projection.Parameters[0];
-
-        // Find navigation properties and apply IsDeleted filter to applieable properties
-        if (projectionBody is MemberInitExpression memberInit)
-        {
-            var bindings = memberInit.Bindings.Select(binding =>
-            {
-                //Step in when _softDeletedFetching is false
-                if (!_tempSoftDeletedFetching)
-                {
-                    if (binding is MemberAssignment memberAssignment)
-                    {
-                        var propertyType = memberAssignment.Expression.Type;
-
-                        // Check if collection
-                        if (propertyType.IsGenericType && typeof(IList).IsAssignableFrom(propertyType.GetGenericTypeDefinition()))
-                        {
-                            var elementType = propertyType.GetGenericArguments()[0];
-
-                            if (typeof(ISoftDeletable).IsAssignableFrom(elementType))
-                            {
-                                // Remove ToList() if exists
-                                var visitor = new ToListRemoverVisitor();
-                                var modifiedExpression = visitor.Visit(memberAssignment.Expression);
-
-                                // Apply filter for collection
-                                var filteredExpression = AddIsDeletedFilterToCollectionProjection(modifiedExpression, elementType, propertyType);
-
-                                return Expression.Bind(memberAssignment.Member, filteredExpression);
-                            }
-                        }
-                        else if (typeof(ISoftDeletable).IsAssignableFrom(propertyType))
-                        {
-                            // Apply navigation property for navigation property
-                            var isDeletedProperty = Expression.Property(memberAssignment.Expression, nameof(ISoftDeletable.IsDeleted));
-
-                            var isDeletedCheck = Expression.Equal(isDeletedProperty, Expression.Constant(false));
-
-                            var conditionalExpression = Expression.Condition(isDeletedCheck,
-                                                                             memberAssignment.Expression,
-                                                                             Expression.Default(propertyType));
-
-                            return Expression.Bind(memberAssignment.Member, conditionalExpression);
-                        }
-                    }
-                }
-
-                return binding;
-
-            }).ToList();
-
-            var newMemberInit = Expression.MemberInit(memberInit.NewExpression, bindings);
-
-            // Apply the IsDeletedMappingVisitor
-            var isDeletedVisitor = new IsDeletedMappingVisitor();
-
-            var newExpression = (MemberInitExpression)isDeletedVisitor.Visit(newMemberInit);
-
-            return Expression.Lambda<Func<TEntity, TResult>>(newExpression, parameter);
-        }
-
-        if (_resetSoftDeletedFetchState)
-            _softDeletedFetching = _dataAccessConfiguration.Repository.DefaultSoftDeletedFetchState;
-
-        return projection;
+        return Expression.Lambda<Func<TEntity, TResult>>(newBody, projection.Parameters);
     }
-
-    private MethodCallExpression AddIsDeletedFilterToCollectionProjection(Expression collectionExpression, Type elementType, Type propertyType)
-    {
-        var parameter = Expression.Parameter(elementType, _expressionParam);
-
-        var isDeletedProperty = Expression.Property(parameter, nameof(ISoftDeletable.IsDeleted));
-
-        var condition = Expression.Equal(isDeletedProperty, Expression.Constant(false));
-
-        var lambda = Expression.Lambda(condition, parameter);
-
-        var whereMethod = typeof(Enumerable).GetMethods()
-                                            .First(m => m.Name == nameof(Enumerable.Where) && m.GetParameters().Length == 2)
-                                            .MakeGenericMethod(elementType);
-
-        var filteredCollection = Expression.Call(whereMethod, collectionExpression, lambda);
-
-        if (propertyType.IsGenericType && typeof(List<>).IsAssignableFrom(propertyType.GetGenericTypeDefinition()))
-            filteredCollection = Expression.Call(typeof(Enumerable),
-                                                 nameof(Enumerable.ToList),
-                                                 [elementType],
-                                                 filteredCollection);
-
-        return filteredCollection;
-    }
-
-    private const string _expressionParam = "x";
 
     #endregion
 
