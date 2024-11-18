@@ -8,7 +8,7 @@ namespace Milvasoft.DataAccess.MongoDB.Utils.Serializers;
 /// <summary>
 /// Serializer for the EncryptedString type.
 /// </summary>
-public interface IEncryptedStringSerializer : IBsonSerializer<EncryptedString> { }
+public interface IEncryptedStringSerializer : IBsonSerializer<EncryptedString>;
 
 /// <summary>
 /// Serializer implementation for the EncryptedString type.

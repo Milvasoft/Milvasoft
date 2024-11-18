@@ -8,7 +8,7 @@ namespace Milvasoft.Core.Utils.Converters;
 /// </summary>
 public static class MilvaJsonConverterOptions
 {
-    private static readonly object _statObjLocker = new();
+    private static readonly Lock _statObjLocker = new();
 
     /// <summary>
     /// Gets or sets the current <see cref="JsonSerializerOptions"/> used by the library.

@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFramework>net8.0</TargetFramework>
+		<TargetFramework>net9.0</TargetFramework>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>disable</Nullable>
 		<GenerateDocumentationFile>true</GenerateDocumentationFile>
@@ -55,7 +55,7 @@
 		<Description>Custom validation attributes. </Description>
 		<PackageTags>attribute,validation,actionfilter,filter</PackageTags>
 		<Copyright>Milvasoft Yazılım Bilişim Araştırma Geliştirme Danışmanlık Sanayi ve Ticaret Ltd.Şti.</Copyright>
-		<Version>8.2.4</Version>
+		<Version>9.0.0</Version>
 
 	</PropertyGroup>
 	

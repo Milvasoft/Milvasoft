@@ -1,9 +1,8 @@
-﻿using EFCore.BulkExtensions;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Milvasoft.Attributes.Annotations;
 using Milvasoft.Components.Rest.MilvaResponse;
 using Milvasoft.Components.Rest.Request;
-using Milvasoft.DataAccess.EfCore.RepositoryBase.Abstract;
+using Milvasoft.DataAccess.EfCore;
 using Milvasoft.DataAccess.EfCore.Utils.IncludeLibrary;
 using System.Linq.Expressions;
 
@@ -564,84 +563,6 @@ public abstract partial class BaseRepository<TEntity, TContext> where TEntity : 
         return _dbSet.Where(predicate).ExecuteDelete();
     }
 
-    /// <summary>
-    /// Bulk add operation. 
-    /// </summary>
-    /// <param name="entities"></param>
-    /// <param name="bulkConfig"></param>
-    /// <returns></returns>
-    public virtual void BulkAdd(List<TEntity> entities, Action<BulkConfig> bulkConfig = null)
-    {
-        if (!entities.IsNullOrEmpty())
-            _dbContext.BulkInsert(entities, bulkConfig);
-    }
-
-    /// <summary>
-    /// Bulk update operation. 
-    /// </summary>
-    /// <param name="entities"></param>
-    /// <param name="bulkConfig"></param>
-    /// <returns></returns>
-    public virtual void BulkUpdate(List<TEntity> entities, Action<BulkConfig> bulkConfig = null)
-    {
-        if (!entities.IsNullOrEmpty())
-            _dbContext.BulkUpdate(entities, bulkConfig);
-    }
-
-    /// <summary>
-    /// Bulk delete operation. 
-    /// </summary>
-    /// <param name="entities"></param>
-    /// <param name="bulkConfig"></param>
-    /// <returns></returns>
-    public virtual void BulkDelete(List<TEntity> entities, Action<BulkConfig> bulkConfig = null)
-    {
-        if (!entities.IsNullOrEmpty())
-            _dbContext.BulkDelete(entities, bulkConfig);
-    }
-
-    /// <summary>
-    /// Bulk add operation. 
-    /// </summary>
-    /// <param name="entities"></param>
-    /// <param name="bulkConfig"></param>
-    /// <returns></returns>
-    public virtual void BulkAddWithSaveChanges(List<TEntity> entities, BulkConfig bulkConfig = null)
-    {
-        if (!entities.IsNullOrEmpty())
-            _dbSet.AddRange(entities);
-
-        InternalSaveChangesBulk(bulkConfig);
-    }
-
-    /// <summary>
-    /// Bulk update operation. 
-    /// </summary>
-    /// <param name="entities"></param>
-    /// <param name="bulkConfig"></param>
-    /// <returns></returns>
-    public virtual void BulkUpdateWithSaveChanges(List<TEntity> entities, BulkConfig bulkConfig = null)
-    {
-        if (!entities.IsNullOrEmpty())
-            _dbSet.UpdateRange(entities);
-
-        InternalSaveChangesBulk(bulkConfig);
-    }
-
-    /// <summary>
-    /// Bulk delete operation. 
-    /// </summary>
-    /// <param name="entities"></param>
-    /// <param name="bulkConfig"></param>
-    /// <returns></returns>
-    public virtual void BulkDeleteWithSaveChanges(List<TEntity> entities, BulkConfig bulkConfig = null)
-    {
-        if (!entities.IsNullOrEmpty())
-            _dbSet.RemoveRange(entities);
-
-        InternalSaveChangesBulk(bulkConfig);
-    }
-
     #endregion
 
     #endregion
@@ -657,13 +578,6 @@ public abstract partial class BaseRepository<TEntity, TContext> where TEntity : 
     /// <summary>
     /// Saves all changes made in this context to the database.
     /// </summary>
-    /// <param name="bulkConfig"></param>
-    /// <returns></returns>
-    public void SaveChangesBulk(BulkConfig bulkConfig = null) => _dbContext.SaveChangesBulk(bulkConfig);
-
-    /// <summary>
-    /// Saves all changes made in this context to the database.
-    /// </summary>
     /// <returns></returns>
     protected int InternalSaveChanges()
     {
@@ -671,16 +585,5 @@ public abstract partial class BaseRepository<TEntity, TContext> where TEntity : 
             return _dbContext.SaveChanges();
 
         return 0;
-    }
-
-    /// <summary>
-    /// Saves all changes made in this context to the database.
-    /// </summary>
-    /// <param name="bulkConfig"></param>
-    /// <returns></returns>
-    protected void InternalSaveChangesBulk(BulkConfig bulkConfig = null)
-    {
-        if (_saveChangesAfterEveryOperation)
-            _dbContext.SaveChangesBulk(bulkConfig);
     }
 }

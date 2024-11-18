@@ -280,7 +280,6 @@ public class ResponseMetadataGeneratorTests
         ListResponse<SomeComplexClass> MethodReturnTypeIsListResponseTypedWithNullData();
     }
 
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Minor Code Smell", "S2344:Enumeration type names should not have \"Flags\" or \"Enum\" suffixes", Justification = "<Pending>")]
     public enum SomeEnum
     {
         None,
@@ -417,8 +416,8 @@ public class ResponseMetadataGeneratorTests
 
         builder.Services.AddScoped<ISomeInterface, SomeClass>();
         builder.Services.AddScoped<IMilvaLocalizer, TestLocalizer>();
-        builder.Services.AddKeyedSingleton(typeof(IOptionsDataFetcher), EnumLocalizedValueFetcher.FetcherName, typeof(EnumLocalizedValueFetcher));
-        builder.Services.AddKeyedSingleton(typeof(IOptionsDataFetcher), BoolLocalizedValueFetcher.FetcherName, typeof(BoolLocalizedValueFetcher));
+        builder.Services.AddKeyedSingleton<IOptionsDataFetcher, EnumLocalizedValueFetcher>(EnumLocalizedValueFetcher.FetcherName);
+        builder.Services.AddKeyedSingleton<IOptionsDataFetcher, BoolLocalizedValueFetcher>(BoolLocalizedValueFetcher.FetcherName);
 
         var config = new ResponseInterceptionOptions
         {

@@ -53,7 +53,7 @@ public static partial class CommonHelper
 
         var fieldInfo = enumValue.GetType().GetField(description);
 
-        var descriptionAttribute = fieldInfo.GetCustomAttribute(typeof(DescriptionAttribute), false);
+        var descriptionAttribute = fieldInfo.GetCustomAttribute<DescriptionAttribute>(false);
 
         if (descriptionAttribute != null)
             description = ((DescriptionAttribute)descriptionAttribute).Description;
@@ -184,12 +184,10 @@ public static partial class CommonHelper
                 return false;
         }
 
-#pragma warning disable S3358 // Ternary operators should not be nested
         static Type GetTypeAccordingToGenericDefinition(Type type) => type.IsGenericType ? type.GetGenericTypeDefinition() == typeof(Task<>)
                                                                                              ? type.GenericTypeArguments.FirstOrDefault()
                                                                                              : type.GetGenericTypeDefinition()
                                                                                          : type;
-#pragma warning restore S3358 // Ternary operators should not be nested
 
         static bool IsTypeArgumentsCanBeAssignableToEachOther(Type type, Type targetType)
         {

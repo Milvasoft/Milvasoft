@@ -14,10 +14,10 @@ using Xunit.Abstractions;
 namespace Milvasoft.IntegrationTests;
 
 [Collection(nameof(DatabaseTestCollection))]
-public class DbContextTests : IAsyncLifetime
+public class DbContextTests(ITestOutputHelper testOutputHelper) : IAsyncLifetime
 {
     private readonly SomeMilvaDbContextFixture _someMilvaDbContext;
-    private readonly ITestOutputHelper _testOutputHelper;
+    private readonly ITestOutputHelper _testOutputHelper = testOutputHelper;
     private WebApplicationFactory<Program> _waf;
     private Func<Task> _resetDatabase;
 
@@ -27,11 +27,6 @@ public class DbContextTests : IAsyncLifetime
             .RuleFor(x => x.SomeDateProp, f => f.Person.DateOfBirth.Date)
             .UseSeed(1000);
 
-    public DbContextTests(ITestOutputHelper testOutputHelper)
-    {
-        _testOutputHelper = testOutputHelper;
-    }
-
     [Fact]
     public async Task Create_ShouldCreateCustomer_WhenDetailsAreValid()
     {
@@ -39,7 +34,7 @@ public class DbContextTests : IAsyncLifetime
         await _resetDatabase();
         var entity = _entityGenerator.Generate();
 
-        var request = _someMilvaDbContext.FullAuditableEntities.AddRangeAsync(entity);
+        _ = _someMilvaDbContext.FullAuditableEntities.AddRangeAsync(entity);
         await _someMilvaDbContext.SaveChangesAsync();
 
         // Act
@@ -89,8 +84,5 @@ public class DbContextTests : IAsyncLifetime
         });
     }
 
-    public async Task DisposeAsync()
-    {
-        await _resetDatabase();
-    }
+    public async Task DisposeAsync() => await _resetDatabase();
 }

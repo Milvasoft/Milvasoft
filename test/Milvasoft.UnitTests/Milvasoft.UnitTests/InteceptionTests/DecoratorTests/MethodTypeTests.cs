@@ -245,7 +245,6 @@ public class MethodTypeTests
             return 0;
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Major Code Smell", "S1121:Assignments should not be made from within sub-expressions", Justification = "<Pending>")]
         [Decorate(typeof(TestDecorator))]
         public virtual async Task AsyncDependencyMethod()
         {

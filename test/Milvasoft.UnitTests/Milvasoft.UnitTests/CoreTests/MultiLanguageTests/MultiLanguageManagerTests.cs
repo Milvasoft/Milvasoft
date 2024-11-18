@@ -10,8 +10,6 @@ using System.Linq.Expressions;
 
 namespace Milvasoft.UnitTests.CoreTests.MultiLanguageTests;
 
-[System.Diagnostics.CodeAnalysis.SuppressMessage("Major Code Smell", "S3358:Ternary operators should not be nested", Justification = "<Pending>")]
-[System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1860:Avoid using 'Enumerable.Any()' extension method", Justification = "<Pending>")]
 [Trait("Core Unit Tests", "Milvasoft.Core project unit tests.")]
 public class MultiLanguageManagerTests
 {

@@ -100,13 +100,11 @@ public class ServiceCollectionExtensionsTests
         public virtual int Method() => 0;
     }
 
-#pragma warning disable S2094 // Classes should not be empty
-    public class TestChild : Test { }
+    public class TestChild : Test;
 
-    public class NonDecorated1 { }
+    public class NonDecorated1;
 
-    public class NonDecorated2 { }
-#pragma warning restore S2094 // Classes should not be empty
+    public class NonDecorated2;
 
     #endregion
 }

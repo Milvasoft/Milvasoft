@@ -32,9 +32,7 @@ public class DependencyLifeTimeTests
 
     #region Setup
 
-#pragma warning disable S2094 // Classes should not be empty
-    public class Dependency { }
-#pragma warning restore S2094 // Classes should not be empty
+    public class Dependency;
 
     public class TestDecoratorWithDependency(Dependency dependency) : IMilvaInterceptor
     {

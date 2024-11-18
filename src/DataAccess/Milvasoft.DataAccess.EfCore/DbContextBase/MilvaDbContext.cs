@@ -1,5 +1,4 @@
-﻿using EFCore.BulkExtensions;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.Extensions.DependencyInjection;
 using Milvasoft.Components.Rest.Request;
@@ -7,7 +6,6 @@ using Milvasoft.Core.MultiLanguage;
 using Milvasoft.Core.MultiLanguage.EntityBases;
 using Milvasoft.Core.MultiLanguage.EntityBases.Abstract;
 using Milvasoft.Core.MultiLanguage.Manager;
-using Milvasoft.DataAccess.EfCore.RepositoryBase.Abstract;
 using Milvasoft.DataAccess.EfCore.Utils.LookupModels;
 using Milvasoft.Types.Structs;
 using System.Collections;
@@ -152,32 +150,6 @@ public abstract class MilvaDbContext(DbContextOptions options) : DbContext(optio
         AuditEntites();
 
         return await base.SaveChangesAsync(cancellationToken);
-    }
-
-    /// <summary>
-    /// Overrided the BulkSaveChanges method for soft deleting.
-    /// </summary>
-    /// <param name="bulkConfig"></param>
-    /// <param name="cancellationToken"></param>
-    /// <returns></returns>
-    public virtual void SaveChangesBulk(BulkConfig bulkConfig = null, CancellationToken cancellationToken = new CancellationToken())
-    {
-        AuditEntites();
-
-        this.BulkSaveChanges(bulkConfig);
-    }
-
-    /// <summary>
-    /// Overrided the BulkSaveChangesAsync method for soft deleting.
-    /// </summary>
-    /// <param name="bulkConfig"></param>
-    /// <param name="cancellationToken"></param>
-    /// <returns></returns>
-    public virtual async Task SaveChangesBulkAsync(BulkConfig bulkConfig = null, CancellationToken cancellationToken = new CancellationToken())
-    {
-        AuditEntites();
-
-        await this.BulkSaveChangesAsync(bulkConfig, cancellationToken: cancellationToken);
     }
 
     #endregion
@@ -649,24 +621,4 @@ public abstract class MilvaDbContext(DbContextOptions options) : DbContext(optio
             return builder;
         }
     }
-
-}
-
-/// <summary>
-/// Handles all database operations. Inherits <see cref="MilvaDbContext"/>
-/// </summary>
-/// 
-/// <remarks>
-/// <para> You must register <see cref="IDataAccessConfiguration"/> in your application startup. </para>
-/// <para> If <see cref="IDataAccessConfiguration"/>'s AuditDeleter, AuditModifier or AuditCreator is true
-///        and HttpMethod is POST,PUT or DELETE it will gets performer user in constructor from database.
-///        This can affect performance little bit. But you want audit every record easily you must use this :( </para>
-/// </remarks>
-public abstract class MilvaPooledDbContext(DbContextOptions options) : MilvaDbContext(options)
-{
-    /// <summary>
-    /// Overrided the OnModelCreating for custom configurations to database.
-    /// </summary>
-    /// <param name="modelBuilder"></param>
-    protected override void OnModelCreating(ModelBuilder modelBuilder) => base.OnModelCreating(modelBuilder);
 }

@@ -2,23 +2,19 @@
 
 public class IsAssignableToTypeModelFixtures
 {
-#pragma warning disable S2094 // Classes should not be empty
-#pragma warning disable S2326 // Unused type parameters should be removed
-    public class ClassImplementation { }
-    public class GenericClassImplementation<T> { }
-    public interface IInterface { }
-    public interface IInterfaceImplementsIInterface : IInterface { }
-    public interface IGenericInterface<T> { }
-    public interface IGenericInterfaceImplementsInterface<T> : IInterface { }
+    public class ClassImplementation;
+    public class GenericClassImplementation<T>;
+    public interface IInterface;
+    public interface IInterfaceImplementsIInterface : IInterface;
+    public interface IGenericInterface<T>;
+    public interface IGenericInterfaceImplementsInterface<T> : IInterface;
 
-    public class ClassImplementationWithInterface : IInterface { }
-    public class GenericClassImplementationWithGenericInterface<T> : IGenericInterface<T> { }
-    public class GenericClassImplementationWithInterface<T> : IInterface { }
-    public class ClassImplementsClassImplementation : ClassImplementation { }
-    public class GenericClassImplementsClassImplementation<T> : ClassImplementation { }
-    public class GenericClassImplementsGenericClassImplementation<T> : GenericClassImplementation<T> { }
-    public class ClassImplementsClassImplementationWithInterface : ClassImplementationWithInterface { }
-    public class GenericClassImplementsGenericClassImplementationWithTwoArgument<T, T2> : GenericClassImplementation<T> { }
-#pragma warning restore S2326 // Unused type parameters should be removed
-#pragma warning restore S2094 // Classes should not be empty
+    public class ClassImplementationWithInterface : IInterface;
+    public class GenericClassImplementationWithGenericInterface<T> : IGenericInterface<T>;
+    public class GenericClassImplementationWithInterface<T> : IInterface;
+    public class ClassImplementsClassImplementation : ClassImplementation;
+    public class GenericClassImplementsClassImplementation<T> : ClassImplementation;
+    public class GenericClassImplementsGenericClassImplementation<T> : GenericClassImplementation<T>;
+    public class ClassImplementsClassImplementationWithInterface : ClassImplementationWithInterface;
+    public class GenericClassImplementsGenericClassImplementationWithTwoArgument<T, T2> : GenericClassImplementation<T>;
 }

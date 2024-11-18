@@ -19,7 +19,7 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v1
         with:
-          dotnet-version: 8.0.x
+          dotnet-version: 9.0.x
       - name: Restore Milvasoft.Notification.Mail.Smtp project dependencies
         run: dotnet restore src/Notification/Milvasoft.Notification.Mail.Smtp/Milvasoft.Notification.Mail.Smtp.csproj
       - name: Build Milvasoft.Notification.Mail.Smtp project

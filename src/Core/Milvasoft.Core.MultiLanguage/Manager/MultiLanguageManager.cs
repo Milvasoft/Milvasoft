@@ -13,7 +13,7 @@ namespace Milvasoft.Core.MultiLanguage.Manager;
 /// </summary>
 public abstract class MultiLanguageManager : IMultiLanguageManager
 {
-    private static readonly object _statObjLocker = new();
+    private static readonly Lock _statObjLocker = new();
 
     #region Static fields for reflection
     private const string _sourceParameterName = "src";

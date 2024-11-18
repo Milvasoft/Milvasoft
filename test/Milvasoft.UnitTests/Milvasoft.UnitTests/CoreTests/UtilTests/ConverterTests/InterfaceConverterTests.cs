@@ -163,6 +163,6 @@ public class InterfaceConverterTests
 
         // Assert
         converter.Should().NotBeNull();
-        converter.Type.Should().Be(typeof(IResponse<int>));
+        converter.Type.Should().Be<IResponse<int>>();
     }
 }

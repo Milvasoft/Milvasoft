@@ -45,7 +45,7 @@ public sealed class Decorator
     /// <param name="serviceProvider">Service provider.</param>
     /// <returns>A dynamic proxy with <see cref="IMilvaInterceptor"/> instances as interceptors.</returns>
     public TInterface For<TInterface, TImplementation>(TImplementation targetObject, IServiceProvider serviceProvider) where TImplementation : TInterface
-        => (TInterface)For(typeof(TInterface), targetObject, serviceProvider);
+        => For<TInterface>(targetObject, serviceProvider);
 
     /// <summary>
     /// Creates a decorated instance for the given object.

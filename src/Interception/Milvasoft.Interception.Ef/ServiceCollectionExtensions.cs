@@ -47,7 +47,7 @@ public static class ServiceCollectionExtensions
                         .Bind(section)
                         .ValidateDataAnnotations();
 
-        var options = (ITransactionInterceptionOptions)section.Get<TransactionInterceptionOptions>();
+        var options = section.Get<TransactionInterceptionOptions>();
 
         builder.WithTransactionInterceptor(interceptionOptions: (opt) =>
         {
@@ -125,7 +125,7 @@ public static class ServiceCollectionExtensions
                         .Bind(section)
                         .ValidateDataAnnotations();
 
-        var options = (IWithNoLockInterceptionOptions)section.Get<WithNoLockInterceptionOptions>();
+        var options = section.Get<WithNoLockInterceptionOptions>();
 
         builder.WithNoLockInterceptor(interceptionOptions: (opt) =>
         {

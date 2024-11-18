@@ -15,7 +15,6 @@ namespace Milvasoft.MultiTenancy.Options;
 /// Initializes new instance of <see cref="TenantOptionsCache{TOptions, TTenant, TKey}"/>
 /// </remarks>
 /// <param name="tenantAccessor"></param>
-[System.Diagnostics.CodeAnalysis.SuppressMessage("Major Code Smell", "S2436:Types and methods should not have too many generic parameters", Justification = "<Pending>")]
 public class TenantOptionsCache<TOptions, TTenant, TKey>(ITenantAccessor<TTenant, TKey> tenantAccessor) : IOptionsMonitorCache<TOptions>
     where TOptions : class
     where TTenant : class, IMilvaTenantBase<TKey>

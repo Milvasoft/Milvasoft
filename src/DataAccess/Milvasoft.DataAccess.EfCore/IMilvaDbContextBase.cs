@@ -1,8 +1,7 @@
-﻿using EFCore.BulkExtensions;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 
-namespace Milvasoft.DataAccess.EfCore.RepositoryBase.Abstract;
+namespace Milvasoft.DataAccess.EfCore;
 
 /// <summary>
 /// Interface for base repository.
@@ -53,22 +52,6 @@ public interface IMilvaDbContextBase
     /// <param name="cancellationToken">A CancellationToken to observe while waiting for the task to complete.</param>
     /// <returns>A task that represents the asynchronous save operation. The task result contains the number of state entries written to the database.</returns>
     public Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = default);
-
-    /// <summary>
-    /// Overrided the BulkSaveChanges method for soft deleting.
-    /// </summary>
-    /// <param name="bulkConfig"></param>
-    /// <param name="cancellationToken"></param>
-    /// <returns></returns>
-    void SaveChangesBulk(BulkConfig bulkConfig = null, CancellationToken cancellationToken = new CancellationToken());
-
-    /// <summary>
-    /// Overrided the BulkSaveChangesAsync method for soft deleting.
-    /// </summary>
-    /// <param name="bulkConfig"></param>
-    /// <param name="cancellationToken"></param>
-    /// <returns></returns>
-    Task SaveChangesBulkAsync(BulkConfig bulkConfig = null, CancellationToken cancellationToken = new CancellationToken());
 
     /// <summary>
     /// Gets milva db context configuration object.

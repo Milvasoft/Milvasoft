@@ -1,9 +1,9 @@
-﻿using EFCore.BulkExtensions;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Milvasoft.Attributes.Annotations;
 using Milvasoft.Components.Rest.MilvaResponse;
 using Milvasoft.Components.Rest.Request;
 using Milvasoft.Core.Utils.ExpressionVisitors;
+using Milvasoft.DataAccess.EfCore;
 using Milvasoft.DataAccess.EfCore.RepositoryBase.Abstract;
 using Milvasoft.DataAccess.EfCore.Utils.IncludeLibrary;
 using Milvasoft.Types.Structs;
@@ -712,91 +712,6 @@ public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepositor
 
         return await _dbSet.Where(predicate).ExecuteDeleteAsync(cancellationToken: cancellationToken);
     }
-
-    /// <summary>
-    /// Bulk add operation. This method will not save changes to the database. So soft delete and auditing operations will not be performed.
-    /// </summary>
-    /// <param name="entities"></param>
-    /// <param name="bulkConfig"></param>
-    /// <param name="cancellationToken"></param>
-    /// <returns></returns>
-    public virtual async Task BulkAddAsync(List<TEntity> entities, Action<BulkConfig> bulkConfig = null, CancellationToken cancellationToken = default)
-    {
-        if (!entities.IsNullOrEmpty())
-            await _dbContext.BulkInsertAsync(entities, bulkConfig, cancellationToken: cancellationToken);
-    }
-
-    /// <summary>
-    /// Bulk update operation. This method will not save changes to the database. So soft delete and auditing operations will not be performed. 
-    /// </summary>
-    /// <param name="entities"></param>
-    /// <param name="bulkConfig"></param>
-    /// <param name="cancellationToken"></param>
-    /// <returns></returns>
-    public virtual async Task BulkUpdateAsync(List<TEntity> entities, Action<BulkConfig> bulkConfig = null, CancellationToken cancellationToken = default)
-    {
-        if (!entities.IsNullOrEmpty())
-            await _dbContext.BulkUpdateAsync(entities, bulkConfig, cancellationToken: cancellationToken);
-    }
-
-    /// <summary>
-    /// Bulk delete operation. This method will not save changes to the database. So soft delete and auditing operations will not be performed.
-    /// </summary>
-    /// <param name="entities"></param>
-    /// <param name="bulkConfig"></param>
-    /// <param name="cancellationToken"></param>
-    /// <returns></returns>
-    public virtual async Task BulkDeleteAsync(List<TEntity> entities, Action<BulkConfig> bulkConfig = null, CancellationToken cancellationToken = default)
-    {
-        if (!entities.IsNullOrEmpty())
-            await _dbContext.BulkDeleteAsync(entities, bulkConfig, cancellationToken: cancellationToken);
-    }
-
-    /// <summary>
-    /// Bulk add operation. 
-    /// </summary>
-    /// <param name="entities"></param>
-    /// <param name="bulkConfig"></param>
-    /// <param name="cancellationToken"></param>
-    /// <returns></returns>
-    public virtual async Task BulkAddWithSaveChangesAsync(List<TEntity> entities, BulkConfig bulkConfig = null, CancellationToken cancellationToken = default)
-    {
-        if (!entities.IsNullOrEmpty())
-            _dbSet.AddRange(entities);
-
-        await InternalSaveChangesBulkAsync(bulkConfig, cancellationToken);
-    }
-
-    /// <summary>
-    /// Bulk update operation. 
-    /// </summary>
-    /// <param name="entities"></param>
-    /// <param name="bulkConfig"></param>
-    /// <param name="cancellationToken"></param>
-    /// <returns></returns>
-    public virtual async Task BulkUpdateWithSaveChangesAsync(List<TEntity> entities, BulkConfig bulkConfig = null, CancellationToken cancellationToken = default)
-    {
-        if (!entities.IsNullOrEmpty())
-            _dbSet.UpdateRange(entities);
-
-        await InternalSaveChangesBulkAsync(bulkConfig, cancellationToken);
-    }
-
-    /// <summary>
-    /// Bulk delete operation. 
-    /// </summary>
-    /// <param name="entities"></param>
-    /// <param name="bulkConfig"></param>
-    /// <param name="cancellationToken"></param>
-    /// <returns></returns>
-    public virtual async Task BulkDeleteWithSaveChangesAsync(List<TEntity> entities, BulkConfig bulkConfig = null, CancellationToken cancellationToken = default)
-    {
-        if (!entities.IsNullOrEmpty())
-            _dbSet.RemoveRange(entities);
-
-        await InternalSaveChangesBulkAsync(bulkConfig, cancellationToken);
-    }
-
     #endregion
 
     #endregion
@@ -831,14 +746,6 @@ public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepositor
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
     public async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default) => await _dbContext.SaveChangesAsync(cancellationToken);
-
-    /// <summary>
-    /// Saves all changes made in this context to the database.
-    /// </summary>
-    /// <param name="bulkConfig"></param>
-    /// <param name="cancellationToken"></param>
-    /// <returns></returns>
-    public async Task SaveChangesBulkAsync(BulkConfig bulkConfig = null, CancellationToken cancellationToken = default) => await _dbContext.SaveChangesBulkAsync(bulkConfig, cancellationToken);
 
     #region Private Helper Methods
 
@@ -946,18 +853,6 @@ public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepositor
             return await _dbContext.SaveChangesAsync(cancellationToken);
 
         return 0;
-    }
-
-    /// <summary>
-    /// Save changes according to <see cref="_saveChangesAfterEveryOperation"/>.
-    /// </summary>
-    /// <param name="bulkConfig"></param>
-    /// <param name="cancellationToken"></param>
-    /// <returns></returns>
-    protected async Task InternalSaveChangesBulkAsync(BulkConfig bulkConfig = null, CancellationToken cancellationToken = default)
-    {
-        if (_saveChangesAfterEveryOperation)
-            await _dbContext.SaveChangesBulkAsync(bulkConfig, cancellationToken);
     }
 
     #region Auditing
@@ -1097,7 +992,7 @@ public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepositor
         return paths;
     }
 
-    private Expression<Func<TEntity, TResult>> AppendSoftDeleteFilterToProjection<TResult>(Expression<Func<TEntity, TResult>> projection)
+    private static Expression<Func<TEntity, TResult>> AppendSoftDeleteFilterToProjection<TResult>(Expression<Func<TEntity, TResult>> projection)
     {
 
         if (projection is null)

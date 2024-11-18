@@ -1,12 +1,11 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Query;
+﻿using Microsoft.EntityFrameworkCore.Query;
 using System.Linq.Expressions;
 using System.Reflection;
 
 namespace Milvasoft.DataAccess.EfCore.Utils;
 
 /// <summary>
-/// <see cref="SetPropertyCalls{TSource}"/> expression builder for <see cref="RelationalQueryableExtensions.ExecuteUpdate"/>
+/// <see cref="SetPropertyCalls{TSource}"/> expression builder for ExecuteUpdate
 /// </summary>
 /// <typeparam name="TSource"></typeparam>
 public class SetPropertyBuilder<TSource>

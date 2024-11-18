@@ -35,7 +35,7 @@ public static partial class CommonHelper
 
         var parameter = Expression.Parameter(typeof(T));
 
-        Expression orderByProperty = Expression.Property(parameter, propertyName);
+        MemberExpression orderByProperty = Expression.Property(parameter, propertyName);
 
         var lambda = Expression.Lambda(orderByProperty, parameter);
 
@@ -60,7 +60,7 @@ public static partial class CommonHelper
 
         var parameterExpression = Expression.Parameter(typeof(T));
 
-        Expression orderByProperty = Expression.Property(parameterExpression, propertyName);
+        MemberExpression orderByProperty = Expression.Property(parameterExpression, propertyName);
 
         var lambda = Expression.Lambda(orderByProperty, parameterExpression);
 

@@ -62,7 +62,6 @@ public class InterceptorRunnerTests
         string MethodShouldRunWithRunner(int x);
     }
 
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Major Code Smell", "S4144:Methods should not have identical implementations", Justification = "<Pending>")]
     public class SomeClass(IInterceptorRunner interceptorRunner) : ISomeInterface
     {
         private readonly IInterceptorRunner _interceptorRunner = interceptorRunner;

@@ -156,7 +156,7 @@ public static class InterceptionServiceCollectionExtensions
     /// <returns>The interception builder.</returns>
     public static InterceptionBuilder WithInterceptorRunner<TInterceptorRunner>(this InterceptionBuilder builder) where TInterceptorRunner : class, IInterceptorRunner
     {
-        builder.Services.RemoveAll(typeof(IInterceptorRunner));
+        builder.Services.RemoveAll<IInterceptorRunner>();
 
         builder.Services.AddScoped<IInterceptorRunner, TInterceptorRunner>();
         builder.Intercept(typeof(IInterceptorRunner));
@@ -199,7 +199,7 @@ public static class InterceptionServiceCollectionExtensions
                         .Bind(section)
                         .ValidateDataAnnotations();
 
-        var options = (ILogInterceptionOptions)section.Get<LogInterceptionOptions>();
+        var options = section.Get<LogInterceptionOptions>();
 
         builder.WithLogInterceptor(interceptionOptions: (opt) =>
         {

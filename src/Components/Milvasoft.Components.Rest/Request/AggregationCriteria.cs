@@ -37,7 +37,6 @@ public class AggregationCriteria
     /// <param name="runAsync">Indicates whether to run the aggregation asynchronously.</param>
     /// <param name="cancellationToken">The cancellation token.</param>
     /// <returns>The aggregation result.</returns>
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Major Code Smell", "S6966:Awaitable method should be used", Justification = "<Pending>")]
     public virtual async Task<AggregationResult> ApplyAggregationAsync<TEntity>(IQueryable<TEntity> query, bool runAsync = true, CancellationToken cancellationToken = default)
     {
         // Check if the aggregation column name or the query is null or empty
@@ -225,7 +224,6 @@ public class AggregationCriteria
         _propType = prop.PropertyType.IsNonNullableValueType() ? typeof(Nullable<>).MakeGenericType(prop.PropertyType) : prop.PropertyType;
 
         // Determine the query provider type based on whether it should run asynchronously or not
-#pragma warning disable EF1001 // Internal EF Core API usage.
         if (runAsync)
         {
             if (query.Provider.GetType().IsAssignableTo(typeof(EnumerableQuery)))
@@ -242,7 +240,6 @@ public class AggregationCriteria
             else
                 _queryProviderType = QueryProviderType.List;
         }
-#pragma warning restore EF1001 // Internal EF Core API usage.
 
         return prop;
     }

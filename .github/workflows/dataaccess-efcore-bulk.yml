@@ -1,0 +1,30 @@
+name: Milvasoft.DataAccess.EfCore.Bulk Nuget Publish
+
+on:
+  push:
+    branches: [ master ]
+    paths:
+      - 'src/DataAccess/Milvasoft.DataAccess.EfCore.Bulk/**'
+  pull_request:
+    branches: [ master ]
+    paths:
+      - 'src/DataAccess/Milvasoft.DataAccess.EfCore.Bulk/**'
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 9.0.x
+      - name: Restore Milvasoft.DataAccess.EfCore.Bulk project dependencies
+        run: dotnet restore src/DataAccess/Milvasoft.DataAccess.EfCore.Bulk/Milvasoft.DataAccess.EfCore.Bulk.csproj
+      - name: Build Milvasoft.DataAccess.EfCore project
+        run: dotnet build src/DataAccess/Milvasoft.DataAccess.EfCore.Bulk/Milvasoft.DataAccess.EfCore.Bulk.csproj --no-restore --configuration Release
+      - name: Pack Milvasoft.DataAccess.EfCore project
+        run: dotnet pack src/DataAccess/Milvasoft.DataAccess.EfCore.Bulk/Milvasoft.DataAccess.EfCore.Bulk.csproj --no-build --configuration Release --include-symbols -p:SymbolPackageFormat=snupkg -o .
+      - name: Publish package to NuGet
+        run: dotnet nuget push *.nupkg --api-key ${{secrets.NUGET_API_KEY}} --source "https://api.nuget.org/v3/index.json" --skip-duplicate

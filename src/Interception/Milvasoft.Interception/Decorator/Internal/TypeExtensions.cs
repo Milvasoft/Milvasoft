@@ -12,7 +12,6 @@ internal static class TypeExtensions
     /// </summary>
     /// <param name="type"></param>
     /// <returns></returns>
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Major Code Smell", "S3011:Reflection should not be used to increase accessibility of classes, methods, or fields", Justification = "<Pending>")]
     internal static IEnumerable<MethodInfo> GetDecoratableMethods(this Type type)
         => type.GetMethods(BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public)
                .Where(x => !x.IsSpecialName);
@@ -47,7 +46,7 @@ internal static class TypeExtensions
     /// <param name="method"></param>
     /// <returns></returns>
     internal static bool IsAsync(this MethodInfo method)
-        => method.GetCustomAttribute(typeof(AsyncStateMachineAttribute)) != null;
+        => method.GetCustomAttribute<AsyncStateMachineAttribute>() != null;
 
     /// <summary>
     /// Returns <paramref name="type"/>'s return type is <see cref="void"/> or not.

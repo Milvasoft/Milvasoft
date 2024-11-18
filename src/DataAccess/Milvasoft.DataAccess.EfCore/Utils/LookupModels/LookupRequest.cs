@@ -44,7 +44,6 @@ public class LookupRequestParameter
     /// </summary>
     /// <param name="translationPropertyNames">The list of translation property names.</param>
     /// <returns>The updated filter criteria.</returns>
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Major Bug", "S2259:Null pointers should not be dereferenced", Justification = "<Pending>")]
     public void UpdateFilterByForTranslationPropertyNames(List<string> translationPropertyNames)
     {
         var criterias = Filtering?.Criterias;

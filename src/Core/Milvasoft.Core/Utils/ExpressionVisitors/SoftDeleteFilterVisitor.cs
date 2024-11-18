@@ -7,7 +7,7 @@ namespace Milvasoft.Core.Utils.ExpressionVisitors;
 /// </summary>
 public class SoftDeleteFilterVisitor : ExpressionVisitor
 {
-    private readonly HashSet<Expression> _processedNodes = new HashSet<Expression>();
+    private readonly HashSet<Expression> _processedNodes = [];
     private const string _expressionParam = "x";
 
     /// <inheritdoc/>

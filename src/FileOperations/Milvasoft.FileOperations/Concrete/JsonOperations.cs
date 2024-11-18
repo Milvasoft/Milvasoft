@@ -161,7 +161,7 @@ public class JsonOperations : IJsonOperations
 
         var jsonContentString = await File.ReadAllTextAsync(filePath, _encoding);
 
-        string newJsonResult = GetJsonResultForAdd(new List<T> { content }, jsonContentString, contentsHasId);
+        string newJsonResult = GetJsonResultForAdd([content], jsonContentString, contentsHasId);
 
         await File.WriteAllTextAsync(filePath, newJsonResult);
     }
@@ -389,7 +389,7 @@ public class JsonOperations : IJsonOperations
     {
         var jsonContentString = await DecryptAndReadAsync(filePath, _encryptionKey);
 
-        string newJsonResult = GetJsonResultForAdd(new List<T> { content }, jsonContentString, contentsHasId);
+        string newJsonResult = GetJsonResultForAdd([content], jsonContentString, contentsHasId);
 
         await EncryptAndWriteAsync(filePath, newJsonResult, _encryptionKey);
     }
@@ -616,7 +616,7 @@ public class JsonOperations : IJsonOperations
 
         var jsonContentString = File.ReadAllText(filePath, _encoding);
 
-        string newJsonResult = GetJsonResultForAdd(new List<T> { content }, jsonContentString, contentsHasId);
+        string newJsonResult = GetJsonResultForAdd([content], jsonContentString, contentsHasId);
 
         File.WriteAllText(filePath, newJsonResult);
     }
@@ -844,7 +844,7 @@ public class JsonOperations : IJsonOperations
     {
         var jsonContentString = DecryptAndRead(filePath, _encryptionKey);
 
-        string newJsonResult = GetJsonResultForAdd(new List<T> { content }, jsonContentString, contentsHasId);
+        string newJsonResult = GetJsonResultForAdd([content], jsonContentString, contentsHasId);
 
         EncryptAndWrite(filePath, newJsonResult, _encryptionKey);
     }

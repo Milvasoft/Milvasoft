@@ -62,24 +62,18 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>, IAsyn
         });
     }
 
-    protected override void ConfigureWebHost(IWebHostBuilder builder)
-    {
-        builder.ConfigureTestServices(services =>
-        {
-            services.RemoveAll<DbContextOptions<SomeMilvaDbContextFixture>>();
-            services.RemoveAll<SomeMilvaDbContextFixture>();
+    protected override void ConfigureWebHost(IWebHostBuilder builder) => builder.ConfigureTestServices(services =>
+                                                                              {
+                                                                                  services.RemoveAll<DbContextOptions<SomeMilvaDbContextFixture>>();
+                                                                                  services.RemoveAll<SomeMilvaDbContextFixture>();
 
-            services.AddDbContext<SomeMilvaDbContextFixture>(options =>
-            {
-                options.UseNpgsql(_dbContainer.GetConnectionString());
-            });
-        });
-    }
+                                                                                  services.AddDbContext<SomeMilvaDbContextFixture>(options =>
+                                                                                  {
+                                                                                      options.UseNpgsql(_dbContainer.GetConnectionString());
+                                                                                  });
+                                                                              });
 
-    public async Task ResetDatabase()
-    {
-        await _respawner.ResetAsync(_connection);
-    }
+    public async Task ResetDatabase() => await _respawner.ResetAsync(_connection);
 
     public new async Task DisposeAsync()
     {
@@ -87,8 +81,5 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>, IAsyn
         await _dbContainer.DisposeAsync();
     }
 
-    public string GetConnectionString()
-    {
-        return _dbContainer.GetConnectionString();
-    }
+    public string GetConnectionString() => _dbContainer.GetConnectionString();
 }

@@ -11,25 +11,21 @@ public class MilvaUser<TKey> : EntityBase<TKey> where TKey : IEquatable<TKey>
     /// <summary>
     /// Gets or sets the user name for this user.
     /// </summary>
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Minor Code Smell", "S2292:Trivial properties should be auto-implemented", Justification = "<Pending>")]
     public virtual string UserName { get => _userName; set => _userName = value; }
 
     /// <summary>
     /// Gets or sets the normalized user name for this user.
     /// </summary>
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Blocker Code Smell", "S3237:\"value\" contextual keyword should be used", Justification = "<Pending>")]
     public virtual string NormalizedUserName { get => _userName.MilvaNormalize(); set => _userName.MilvaNormalize(); }
 
     /// <summary>
     /// Gets or sets the email address for this user.
     /// </summary>
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Minor Code Smell", "S2292:Trivial properties should be auto-implemented", Justification = "<Pending>")]
     public virtual string Email { get => _email; set => _email = value; }
 
     /// <summary>
     /// Gets or sets the normalized email address for this user.
     /// </summary>
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Blocker Code Smell", "S3237:\"value\" contextual keyword should be used", Justification = "<Pending>")]
     public virtual string NormalizedEmail { get => _email.MilvaNormalize(); set => _email.MilvaNormalize(); }
 
     /// <summary>

@@ -225,7 +225,6 @@ public partial class DateHelperTests
     /// date , start date , end date  , expected result
     /// </summary>
     /// <returns></returns>
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Major Code Smell", "S6562:Always set the \"DateTimeKind\" when creating new \"DateTime\" instances", Justification = "<Pending>")]
     public static IEnumerable<object[]> DatesForIsBetweenMethod()
     {
         var date = new DateTime(2024, 01, 01, 11, 00, 00);

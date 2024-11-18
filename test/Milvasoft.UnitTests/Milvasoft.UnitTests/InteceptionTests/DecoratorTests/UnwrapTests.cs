@@ -21,7 +21,7 @@ public class UnwrapTests
         var actual = sut.UnwrapDecorated();
 
         // Assert
-        actual.GetType().Should().Be(typeof(SomeDecoratedClass));
+        actual.GetType().Should().Be<SomeDecoratedClass>();
     }
 
     [Fact]
@@ -80,9 +80,7 @@ public class UnwrapTests
         public T SomeMethod<T>(T argument) => argument;
     }
 
-#pragma warning disable S2094 // Classes should not be empty
-    public class SomeNotDecoratedClass { }
-#pragma warning restore S2094 // Classes should not be empty
+    public class SomeNotDecoratedClass;
 
     private static ServiceProvider GetServices()
     {

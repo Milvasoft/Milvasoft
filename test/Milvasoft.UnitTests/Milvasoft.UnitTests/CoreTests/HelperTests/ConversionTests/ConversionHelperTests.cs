@@ -125,7 +125,7 @@ public partial class ConversionHelperTests
         var input = "\"Name\":\"test\",\"Name\":1}";
 
         // Act
-        Action act = () => input.ToObject(typeof(ToJsonTestModelFixture));
+        Action act = () => input.ToObject<ToJsonTestModelFixture>();
 
         // Assert
         act.Should().Throw<JsonException>();
@@ -140,7 +140,7 @@ public partial class ConversionHelperTests
         // Arrange
 
         // Act
-        var result = input.ToObject(typeof(ToJsonTestModelFixture));
+        var result = input.ToObject<ToJsonTestModelFixture>();
 
         // Assert
         result.Should().BeNull();
@@ -153,7 +153,7 @@ public partial class ConversionHelperTests
         var input = "{\"InvalidProp1\":\"test\",\"InvalidProp2\":1}";
 
         // Act
-        var result = (ToJsonTestModelFixture)input.ToObject(typeof(ToJsonTestModelFixture));
+        var result = input.ToObject<ToJsonTestModelFixture>();
 
         // Assert
         result.Name.Should().BeNull();
@@ -167,7 +167,7 @@ public partial class ConversionHelperTests
         var input = "{\"Name\":\"test\",\"Priority\":1}";
 
         // Act
-        var result = (ToJsonTestModelFixture)input.ToObject(typeof(ToJsonTestModelFixture));
+        var result = input.ToObject<ToJsonTestModelFixture>();
 
         // Assert
         result.Name.Should().Be("test");
@@ -209,7 +209,7 @@ public partial class ConversionHelperTests
         var result = valueKindObject.Deserialize(typeof(string));
 
         // Assert
-        result.GetType().Should().Be(typeof(string));
+        result.GetType().Should().Be<string>();
         result.Should().Be("test");
     }
 

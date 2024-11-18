@@ -158,7 +158,6 @@ public class ReturnValueTests
             return expected;
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Critical Bug", "S4586:Non-async \"Task/Task<T>\" methods should not return null", Justification = "<Pending>")]
         [Decorate(typeof(TestDecorator))]
         public virtual Task NullTaskMethod() => null;
     }
