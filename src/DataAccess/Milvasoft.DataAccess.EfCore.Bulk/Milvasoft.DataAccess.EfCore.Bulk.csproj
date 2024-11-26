@@ -53,7 +53,7 @@
 		<Description>Entity Framework Core Bulk helpers. </Description>
 		<PackageTags>efcore,bulk,ef,dbcontext,pooling,auditing,sql,optimisation,performance</PackageTags>
 		<Copyright>Milvasoft Yazılım Bilişim Araştırma Geliştirme Danışmanlık Sanayi ve Ticaret Ltd.Şti.</Copyright>
-		<Version>9.0.1</Version>
+		<Version>9.0.2</Version>
 
 	</PropertyGroup>
 
