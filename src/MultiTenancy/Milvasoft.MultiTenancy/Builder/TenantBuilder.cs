@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Milvasoft.Core.EntityBases.MultiTenancy;
 using Milvasoft.MultiTenancy.Accessor;
 using Milvasoft.MultiTenancy.ResolutionStrategy;
@@ -39,7 +37,7 @@ where TKey : struct, IEquatable<TKey>
     public TenantBuilder<TTenant, TKey> WithResolutionStrategy<TResolutionStrategy>(ServiceLifetime lifetime = ServiceLifetime.Transient)
         where TResolutionStrategy : class, ITenantResolutionStrategy<TKey>
     {
-        _services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+        _services.AddHttpContextAccessor();
         _services.Add(ServiceDescriptor.Describe(typeof(ITenantResolutionStrategy<TKey>), typeof(TResolutionStrategy), lifetime));
         return this;
     }

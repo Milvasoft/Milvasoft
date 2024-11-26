@@ -110,6 +110,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Milvasoft.IntegrationTests.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Milvasoft.DataAccess.EfCore.Bulk", "src\DataAccess\Milvasoft.DataAccess.EfCore.Bulk\Milvasoft.DataAccess.EfCore.Bulk.csproj", "{DA2DB65B-CD9F-4305-B525-049D59608572}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Milvasoft.MultiTenancy.EfCore", "src\MultiTenancy\Milvasoft.MultiTenancy.EfCore\Milvasoft.MultiTenancy.EfCore.csproj", "{C34DE816-F40D-4D74-B719-A6DEFCDDE642}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -244,6 +246,10 @@ Global
 		{DA2DB65B-CD9F-4305-B525-049D59608572}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DA2DB65B-CD9F-4305-B525-049D59608572}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DA2DB65B-CD9F-4305-B525-049D59608572}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C34DE816-F40D-4D74-B719-A6DEFCDDE642}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C34DE816-F40D-4D74-B719-A6DEFCDDE642}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C34DE816-F40D-4D74-B719-A6DEFCDDE642}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C34DE816-F40D-4D74-B719-A6DEFCDDE642}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -296,6 +302,7 @@ Global
 		{9F01CC9F-2AF7-4343-8FA7-404F302957F7} = {FE2610F1-D96D-4DDD-B5ED-5A9E16F15A2C}
 		{1513993A-3CA4-4978-98F6-E0DDC643B298} = {9F01CC9F-2AF7-4343-8FA7-404F302957F7}
 		{DA2DB65B-CD9F-4305-B525-049D59608572} = {8AF40CF9-A591-4406-8770-AB5166FF472E}
+		{C34DE816-F40D-4D74-B719-A6DEFCDDE642} = {73CE7BDC-7EB2-45FA-8795-0F0EBFCCE743}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {E552B285-92CB-491D-8ACD-91C933292699}

@@ -87,6 +87,22 @@ public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepositor
     public void ResetSaveChangesChoiceToDefault() => _saveChangesAfterEveryOperation = _dataAccessConfiguration.Repository.DefaultSaveChangesChoice == SaveChangesChoice.AfterEveryOperation;
 
     /// <summary>
+    /// Changes soft deletion state.
+    /// </summary>
+    public void ChangeSoftDeletionState(SoftDeletionState state) => _dbContext.ChangeSoftDeletionState(state);
+
+    /// <summary>
+    /// Sets soft deletion state to default state in <see cref="DataAccessConfiguration"/>.
+    /// </summary>
+    public void SetSoftDeletionStateToDefault() => _dbContext.SetSoftDeletionStateToDefault();
+
+    /// <summary>
+    /// It updates the state that determines whether soft delete state reset to default occurs after any operation.
+    /// </summary>
+    /// <param name="state">Soft delete reset state.</param>
+    public void SoftDeletionStateResetAfterOperation(bool state = true) => _dbContext.SoftDeletionStateResetAfterOperation(state);
+
+    /// <summary>
     /// Determines whether soft deleted entities in the database are fetched from the database.
     /// </summary>
     /// <param name="state">Soft delete fetching state.</param>
@@ -197,7 +213,7 @@ public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepositor
     public virtual async Task<TEntity> GetByIdAsync(object id,
                                                     Expression<Func<TEntity, bool>> conditionExpression = null,
                                                     bool tracking = false,
-                                                    CancellationToken cancellationToken = new CancellationToken())
+                                                    CancellationToken cancellationToken = default)
     {
         var mainCondition = CreateKeyEqualityExpressionWithIsDeletedFalse(id, conditionExpression);
 
@@ -220,7 +236,7 @@ public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepositor
                                                              Expression<Func<TEntity, TResult>> projection = null,
                                                              Expression<Func<TResult, bool>> conditionAfterProjection = null,
                                                              bool tracking = false,
-                                                             CancellationToken cancellationToken = new CancellationToken())
+                                                             CancellationToken cancellationToken = default)
     {
         var mainCondition = CreateKeyEqualityExpressionWithIsDeletedFalse(id, condition);
 
@@ -248,7 +264,7 @@ public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepositor
                                                          Func<IIncludable<TEntity>, IIncludable> includes = null,
                                                          Expression<Func<TEntity, bool>> condition = null,
                                                          bool tracking = false,
-                                                         CancellationToken cancellationToken = new CancellationToken())
+                                                         CancellationToken cancellationToken = default)
     {
         var mainCondition = CreateKeyEqualityExpressionWithIsDeletedFalse(id, condition);
 
@@ -281,7 +297,7 @@ public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepositor
                                                                   Expression<Func<TEntity, TResult>> projection = null,
                                                                   Expression<Func<TResult, bool>> conditionAfterProjection = null,
                                                                   bool tracking = false,
-                                                                  CancellationToken cancellationToken = new CancellationToken())
+                                                                  CancellationToken cancellationToken = default)
     {
         var mainCondition = CreateKeyEqualityExpressionWithIsDeletedFalse(id, condition);
 
@@ -296,6 +312,63 @@ public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepositor
 
         return await IncludeNavigationProperties(query).Select(UpdateProjectionExpression(projection))
                                                        .SingleOrDefaultAsync(conditionAfterProjection ?? (entity => true), cancellationToken);
+    }
+
+    /// <summary>
+    /// Returns entities from database asynchronously for delete with navigation properties.
+    /// If you don't send <paramref name="includes"/>, <see cref="CascadeOnDeleteAttribute"/> marked properties will include.
+    /// </summary>
+    /// <param name="includes"></param>
+    /// <param name="condition"></param>
+    /// <param name="tracking"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns> The entity found or null. </returns>
+    public virtual async Task<List<TEntity>> GetForDeleteAsync(Func<IIncludable<TEntity>, IIncludable> includes = null,
+                                                         Expression<Func<TEntity, bool>> condition = null,
+                                                         bool tracking = false,
+                                                         CancellationToken cancellationToken = default)
+    {
+        if (includes is not null)
+            return await _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
+                               .Where(CreateConditionExpression(condition) ?? (entity => true))
+                               .IncludeMultiple(includes)
+                               .ToListAsync(cancellationToken);
+
+        var query = _dbSet.AsTracking(GetQueryTrackingBehavior(tracking)).Where(CreateConditionExpression(condition) ?? (entity => true));
+
+        return await IncludeNavigationProperties(query).ToListAsync(cancellationToken);
+    }
+
+    /// <summary>
+    /// Returns entities from database asynchronously for delete with navigation properties.
+    /// If you don't send <paramref name="includes"/>, <see cref="CascadeOnDeleteAttribute"/> marked properties will include.
+    /// </summary>
+    /// <param name="includes"></param>
+    /// <param name="condition"></param>
+    /// <param name="conditionAfterProjection"></param>
+    /// <param name="projection"></param>
+    /// <param name="tracking"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns> The entity found or null. </returns>
+    public virtual async Task<List<TResult>> GetForDeleteAsync<TResult>(Func<IIncludable<TEntity>, IIncludable> includes = null,
+                                                                        Expression<Func<TEntity, bool>> condition = null,
+                                                                        Expression<Func<TEntity, TResult>> projection = null,
+                                                                        Expression<Func<TResult, bool>> conditionAfterProjection = null,
+                                                                        bool tracking = false,
+                                                                        CancellationToken cancellationToken = default)
+    {
+        if (includes is not null)
+            return await _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
+                               .Where(CreateConditionExpression(condition) ?? (entity => true))
+                               .IncludeMultiple(includes)
+                               .Select(UpdateProjectionExpression(projection))
+                               .ToListAsync(cancellationToken);
+
+        var query = _dbSet.AsTracking(GetQueryTrackingBehavior(tracking)).Where(CreateConditionExpression(condition) ?? (entity => true));
+
+        return await IncludeNavigationProperties(query).Select(UpdateProjectionExpression(projection))
+                                                       .Where(CreateConditionExpression(conditionAfterProjection) ?? (entity => true))
+                                                       .ToListAsync(cancellationToken);
     }
 
     #endregion
@@ -712,6 +785,7 @@ public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepositor
 
         return await _dbSet.Where(predicate).ExecuteDeleteAsync(cancellationToken: cancellationToken);
     }
+
     #endregion
 
     #endregion
@@ -785,16 +859,16 @@ public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepositor
     /// </summary>
     /// <param name="conditionExpression"></param>
     /// <returns></returns>
-    protected Expression<Func<TEntity, bool>> CreateConditionExpression(Expression<Func<TEntity, bool>> conditionExpression = null)
+    protected Expression<Func<T, bool>> CreateConditionExpression<T>(Expression<Func<T, bool>> conditionExpression = null)
     {
-        Expression<Func<TEntity, bool>> mainExpression;
+        Expression<Func<T, bool>> mainExpression;
 
         _tempSoftDeletedFetching = _softDeletedFetching;
 
         //Step in when _softDeletedFetching is false
         if (!_tempSoftDeletedFetching)
         {
-            var softDeleteExpression = CommonHelper.CreateIsDeletedFalseExpression<TEntity>();
+            var softDeleteExpression = CommonHelper.CreateIsDeletedFalseExpression<T>();
 
             mainExpression = softDeleteExpression.Append(conditionExpression, ExpressionType.AndAlso);
         }

@@ -18,4 +18,10 @@ public class HostResolutionStrategy(IHttpContextAccessor httpContextAccessor) : 
     /// </summary>
     /// <returns></returns>
     public async Task<string> GetTenantIdentifierAsync() => await Task.FromResult(_httpContextAccessor.HttpContext.Request.Host.Host);
+
+    /// <summary>
+    /// Get the tenant identifier from host.
+    /// </summary>
+    /// <returns></returns>
+    public string GetTenantIdentifier() => _httpContextAccessor.HttpContext.Request.Host.Host;
 }

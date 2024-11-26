@@ -11,4 +11,10 @@ public interface ITenantResolutionStrategy<TKey> where TKey : IEquatable<TKey>
     /// </summary>
     /// <returns></returns>
     Task<TKey> GetTenantIdentifierAsync();
+
+    /// <summary>
+    /// Get the tenant identifier
+    /// </summary>
+    /// <returns></returns>
+    TKey GetTenantIdentifier();
 }

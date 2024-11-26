@@ -22,6 +22,7 @@ public static class HttpContextExtensions
     {
         if (!context.Items.ContainsKey(TenancyConstants.HttpContextTenantKey))
             return null;
+
         return context.Items[TenancyConstants.HttpContextTenantKey] as TTenant;
     }
 }

@@ -18,5 +18,6 @@ public static class EntityPropertyNames
     public const string UtcLogTime = nameof(UtcLogTime);
     public const string IsSuccess = nameof(IsSuccess);
     public const string MethodName = nameof(MethodName);
+    public const string TenantId = nameof(TenantId);
 #pragma warning restore CS1591 // Missing XML comment for publicly visible type or member
 }

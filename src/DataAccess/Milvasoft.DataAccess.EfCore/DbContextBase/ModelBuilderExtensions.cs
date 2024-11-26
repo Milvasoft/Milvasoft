@@ -189,7 +189,7 @@ public static class ModelBuilderExtensions
     /// Adds an index for each indelible entity for IsDeleted property.
     /// </summary>
     /// <param name="modelBuilder"></param>
-    public static ModelBuilder UseIndexToIndelibleEntities(this ModelBuilder modelBuilder)
+    public static ModelBuilder UseIndexToSoftDeletableEntities(this ModelBuilder modelBuilder)
     {
         var indelibleEntites = modelBuilder.Model.GetEntityTypes().Where(entityType => entityType.FindProperty(EntityPropertyNames.IsDeleted) != null);
 
@@ -279,6 +279,40 @@ public static class ModelBuilderExtensions
             var dynamicLambda = Expression.Lambda(filterExpression, parameter);
 
             entityType.SetQueryFilter(dynamicLambda);
+        }
+
+        return modelBuilder;
+    }
+
+    /// <summary>
+    /// Enable the query filter for single database multi tenancy scenarios.
+    /// </summary>
+    /// <param name="modelBuilder"></param>
+    /// <param name="tenantId"></param>
+    public static ModelBuilder UseTenantIdQueryFilter(this ModelBuilder modelBuilder, TenantId tenantId)
+    {
+        // Get entities that have the tenant id property
+        var tenantEntities = modelBuilder.Model.GetEntityTypes().Where(entityType => entityType.FindProperty(EntityPropertyNames.TenantId) != null);
+
+        foreach (var entityType in tenantEntities)
+        {
+            var parameter = Expression.Parameter(entityType.ClrType, "entity");
+
+            // Find the property that matches the tenant ID property name
+            var property = entityType.FindProperty(EntityPropertyNames.TenantId);
+
+            if (property?.PropertyInfo == null)
+                continue;
+
+            // Create the expression: entity.TenantId == tenantId
+            var propertyAccess = Expression.Property(parameter, property.PropertyInfo);
+            var tenantIdValue = Expression.Constant(tenantId, property.ClrType);
+            var filterExpression = Expression.Equal(propertyAccess, tenantIdValue);
+
+            // Build the lambda expression: entity => entity.TenantId == tenantId
+            var lambda = Expression.Lambda(filterExpression, parameter);
+
+            entityType.SetQueryFilter(lambda);
         }
 
         return modelBuilder;

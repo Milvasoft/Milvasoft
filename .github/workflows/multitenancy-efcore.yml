@@ -1,0 +1,30 @@
+name: Milvasoft.MultiTenancy.EfCore Nuget Publish
+
+on:
+  push:
+    branches: [ master ]
+    paths:
+      - 'src/MultiTenancy/Milvasoft.MultiTenancy.EfCore/**'
+  pull_request:
+    branches: [ master ]
+    paths:
+      - 'src/MultiTenancy/Milvasoft.MultiTenancy.EfCore/**'
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 9.0.x
+      - name: Restore Milvasoft.MultiTenancy.EfCore project dependencies
+        run: dotnet restore src/MultiTenancy/Milvasoft.MultiTenancy.EfCore/Milvasoft.MultiTenancy.EfCore.csproj
+      - name: Build Milvasoft.MultiTenancy.EfCore project
+        run: dotnet build src/MultiTenancy/Milvasoft.MultiTenancy.EfCore/Milvasoft.MultiTenancy.EfCore.csproj --no-restore --configuration Release
+      - name: Pack Milvasoft.MultiTenancy.EfCore project
+        run: dotnet pack src/MultiTenancy/Milvasoft.MultiTenancy.EfCore/Milvasoft.MultiTenancy.EfCore.csproj --no-build --configuration Release --include-symbols -p:SymbolPackageFormat=snupkg -o .
+      - name: Publish package to NuGet
+        run: dotnet nuget push *.nupkg --api-key ${{secrets.NUGET_API_KEY}} --source "https://api.nuget.org/v3/index.json" --skip-duplicate

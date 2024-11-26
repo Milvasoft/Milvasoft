@@ -4,16 +4,12 @@
 /// Defines interface for base entity type. All entities in the system must implement this interface.
 /// </summary>
 /// <typeparam name="TKey"></typeparam>
-public interface IBaseEntity<TKey> : IEntityBase<TKey> where TKey : struct, IEquatable<TKey>
-{
-}
+public interface IBaseEntity<TKey> : IEntityBase<TKey> where TKey : struct, IEquatable<TKey>;
 
 /// <summary>
 /// Defines interface for base entity type. All entities in the system must implement this interface.
 /// </summary>
-public interface IBaseEntity : IEntityBase<string>
-{
-}
+public interface IBaseEntity : IEntityBase<string>;
 
 /// <summary>
 /// Defines interface for base entity type. All entities in the system must implement this interface.

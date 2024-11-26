@@ -184,6 +184,59 @@ public abstract partial class BaseRepository<TEntity, TContext> where TEntity : 
                                                  .SingleOrDefault(conditionAfterProjection ?? (entity => true));
     }
 
+    /// <summary>
+    /// Returns entities from database asynchronously for delete with navigation properties.
+    /// If you don't send <paramref name="includes"/>, <see cref="CascadeOnDeleteAttribute"/> marked properties will include.
+    /// </summary>
+    /// <param name="includes"></param>
+    /// <param name="condition"></param>
+    /// <param name="tracking"></param>
+    /// <returns> The entity found or null. </returns>
+    public virtual List<TEntity> GetForDelete(Func<IIncludable<TEntity>, IIncludable> includes = null,
+                                              Expression<Func<TEntity, bool>> condition = null,
+                                              bool tracking = false)
+    {
+        if (includes is not null)
+            return _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
+                         .Where(CreateConditionExpression(condition) ?? (entity => true))
+                         .IncludeMultiple(includes)
+                         .ToList();
+
+        var query = _dbSet.AsTracking(GetQueryTrackingBehavior(tracking)).Where(CreateConditionExpression(condition) ?? (entity => true));
+
+        return IncludeNavigationProperties(query).ToList();
+    }
+
+    /// <summary>
+    /// Returns entities from database asynchronously for delete with navigation properties.
+    /// If you don't send <paramref name="includes"/>, <see cref="CascadeOnDeleteAttribute"/> marked properties will include.
+    /// </summary>
+    /// <param name="includes"></param>
+    /// <param name="condition"></param>
+    /// <param name="conditionAfterProjection"></param>
+    /// <param name="projection"></param>
+    /// <param name="tracking"></param>
+    /// <returns> The entity found or null. </returns>
+    public virtual List<TResult> GetForDelete<TResult>(Func<IIncludable<TEntity>, IIncludable> includes = null,
+                                                       Expression<Func<TEntity, bool>> condition = null,
+                                                       Expression<Func<TEntity, TResult>> projection = null,
+                                                       Expression<Func<TResult, bool>> conditionAfterProjection = null,
+                                                       bool tracking = false)
+    {
+        if (includes is not null)
+            return _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
+                         .Where(CreateConditionExpression(condition) ?? (entity => true))
+                         .IncludeMultiple(includes)
+                         .Select(UpdateProjectionExpression(projection))
+                         .ToList();
+
+        var query = _dbSet.AsTracking(GetQueryTrackingBehavior(tracking)).Where(CreateConditionExpression(condition) ?? (entity => true));
+
+        return IncludeNavigationProperties(query).Select(UpdateProjectionExpression(projection))
+                                                 .Where(CreateConditionExpression(conditionAfterProjection) ?? (entity => true))
+                                                 .ToList();
+    }
+
     #endregion
 
     #region  GetAll
