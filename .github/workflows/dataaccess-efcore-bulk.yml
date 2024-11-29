@@ -5,10 +5,12 @@ on:
     branches: [ master ]
     paths:
       - 'src/DataAccess/Milvasoft.DataAccess.EfCore.Bulk/**'
+      - 'Directory.Build.props'
   pull_request:
     branches: [ master ]
     paths:
       - 'src/DataAccess/Milvasoft.DataAccess.EfCore.Bulk/**'
+      - 'Directory.Build.props'
 
 jobs:
   build:

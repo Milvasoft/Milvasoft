@@ -5,10 +5,12 @@ on:
     branches: [ master ]
     paths:
       - 'src/Core/Milvasoft.Core/**'
+      - 'Directory.Build.props'
   pull_request:
     branches: [ master ]
     paths:
       - 'src/Core/Milvasoft.Core/**'
+      - 'Directory.Build.props'
 
 jobs:
   build:
