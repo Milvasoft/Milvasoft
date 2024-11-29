@@ -1,30 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-	<PropertyGroup>
-		<TargetFramework>net9.0</TargetFramework>
-		<ImplicitUsings>enable</ImplicitUsings>
-		<Nullable>disable</Nullable>
-		<GenerateDocumentationFile>true</GenerateDocumentationFile>
-		<IsPackable>true</IsPackable>
-		<PackageIcon>.\Resources\milvalogo.png</PackageIcon>
-		<PackageReadmeFile>.\Resources\readme.md</PackageReadmeFile>
-	</PropertyGroup>
-
 	<ItemGroup>
-		<None Update="Resources\milvalogo.png">
-			<Pack>True</Pack>
-			<PackagePath></PackagePath>
-			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
-		</None>
-		<None Update="Resources\readme.md" Pack="true" PackagePath="\">
-			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
-		</None>
-	</ItemGroup>
-
-	<ItemGroup>
-	  <Compile Remove="Design\**" />
-	  <EmbeddedResource Remove="Design\**" />
-	  <None Remove="Design\**" />
+	  <None Remove="F:\MilvasoftHelper\Milvasoft\resources\milvalogo.png" />
+	  <None Remove="F:\MilvasoftHelper\Milvasoft\resources\readme.md" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -35,27 +13,13 @@
 		<ProjectReference Include="..\Milvasoft.Components.Rest\Milvasoft.Components.Rest.csproj" />
 	</ItemGroup>
 
-	<ItemGroup>
-	  <None Update="Resources\milvalogo.png">
-	    <Pack>True</Pack>
-	    <PackagePath></PackagePath>
-	  </None>
-	</ItemGroup>
 
 	<PropertyGroup>
 
-		<PackageId>Milvasoft.Attributes</PackageId>
-		<RepositoryUrl>https://github.com/Milvasoft/Milvasoft/tree/master/Milvasoft.Helpers</RepositoryUrl>
-		<RepositoryType>git</RepositoryType>
-		<PackageProjectUrl>https://github.com/Milvasoft/Milvasoft/tree/master/Milvasoft.Helpers</PackageProjectUrl>
-		<PackageIconUrl>https://raw.githubusercontent.com/Milvasoft/Milvasoft/master/src/Milvasoft.Helpers/Resources/milvalogo.png</PackageIconUrl>
-		<GeneratePackageOnBuild>false</GeneratePackageOnBuild>
-		<Authors>Milvasoft Corporation</Authors>
+		<PackageId>Milvasoft.Attributes</PackageId>		
 		<Product>Milvasoft.Attributes</Product>
 		<Description>Custom validation attributes. </Description>
 		<PackageTags>attribute,validation,actionfilter,filter</PackageTags>
-		<Copyright>Milvasoft Yazılım Bilişim Araştırma Geliştirme Danışmanlık Sanayi ve Ticaret Ltd.Şti.</Copyright>
-		<Version>9.0.2</Version>
 
 	</PropertyGroup>
 	

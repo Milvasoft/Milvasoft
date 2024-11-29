@@ -10,9 +10,17 @@ namespace Milvasoft.Caching.Builder;
 /// Creates new instance of <see cref="CacheBuilder"/>.
 /// </remarks>
 /// <param name="services"></param>
+/// <param name="configurationManager"></param>
 public sealed class CacheBuilder(IServiceCollection services, IConfigurationManager configurationManager = null)
 {
+    /// <summary>
+    /// Services collection.
+    /// </summary>
     public IServiceCollection Services { get; } = services;
+
+    /// <summary>
+    /// Configuration manager.
+    /// </summary>
     public IConfigurationManager ConfigurationManager { get; } = configurationManager;
 
     /// <summary>

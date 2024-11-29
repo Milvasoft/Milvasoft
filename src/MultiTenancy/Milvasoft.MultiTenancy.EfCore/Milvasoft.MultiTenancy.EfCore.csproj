@@ -1,31 +1,21 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>net9.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>disable</Nullable>
-  </PropertyGroup>
+  <ItemGroup>
+    <None Remove="F:\MilvasoftHelper\Milvasoft\resources\milvalogo.png" />
+    <None Remove="F:\MilvasoftHelper\Milvasoft\resources\readme.md" />
+  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\DataAccess\Milvasoft.DataAccess.EfCore.Bulk\Milvasoft.DataAccess.EfCore.Bulk.csproj" />
     <ProjectReference Include="..\Milvasoft.MultiTenancy\Milvasoft.MultiTenancy.csproj" />
   </ItemGroup>
 
-
 	<PropertyGroup>
 
 		<PackageId>Milvasoft.MultiTenancy.EfCore</PackageId>
-		<RepositoryUrl>https://github.com/Milvasoft/Milvasoft/tree/master/Milvasoft.Helpers</RepositoryUrl>
-		<RepositoryType>git</RepositoryType>
-		<PackageProjectUrl>https://github.com/Milvasoft/Milvasoft/tree/master/Milvasoft.Helpers</PackageProjectUrl>
-		<PackageIconUrl>https://raw.githubusercontent.com/Milvasoft/Milvasoft/master/src/Milvasoft.Helpers/Resources/milvalogo.png</PackageIconUrl>
-		<GeneratePackageOnBuild>false</GeneratePackageOnBuild>
-		<Authors>Milvasoft Corporation</Authors>
 		<Product>Milvasoft.MultiTenancy.EfCore</Product>
 		<Description>Add multi tenancy support to your application easily.</Description>
 		<PackageTags>multitenancy,database,ef,redis,cache,tenant</PackageTags>
-		<Copyright>Milvasoft Yazılım Bilişim Araştırma Geliştirme Danışmanlık Sanayi ve Ticaret Ltd.Şti.</Copyright>
-		<Version>9.0.2</Version>
 
 	</PropertyGroup>
 </Project>

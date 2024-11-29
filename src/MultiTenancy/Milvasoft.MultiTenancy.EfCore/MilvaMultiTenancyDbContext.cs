@@ -13,6 +13,9 @@ namespace Milvasoft.MultiTenancy.EfCore;
 /// <param name="options"></param>
 public class MilvaMultiTenancyDbContext(DbContextOptions options) : MilvaBulkDbContext(options)
 {
+    /// <summary>
+    /// Tenant resolution strategy.
+    /// </summary>
     public ITenantResolutionStrategy<TenantId> TenantResolutionStrategy { get; set; }
 
     /// <summary>

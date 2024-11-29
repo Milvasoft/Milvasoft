@@ -4,10 +4,15 @@
 		<TargetFramework>net9.0</TargetFramework>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>disable</Nullable>
-
 		<IsPackable>false</IsPackable>
 		<IsTestProject>true</IsTestProject>
+		<GenerateDocumentationFile>false</GenerateDocumentationFile>
 	</PropertyGroup>
+
+	<ItemGroup>
+	  <None Remove="F:\MilvasoftHelper\Milvasoft\resources\milvalogo.png" />
+	  <None Remove="F:\MilvasoftHelper\Milvasoft\resources\readme.md" />
+	</ItemGroup>
 
 	<ItemGroup>
 		<PackageReference Include="Azure.Identity" Version="1.13.1" />

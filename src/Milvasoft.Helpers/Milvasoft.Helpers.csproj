@@ -1,29 +1,15 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-	<PropertyGroup>
-		<TargetFramework>net9.0</TargetFramework>
-		<GenerateDocumentationFile>true</GenerateDocumentationFile>
-		<IsPackable>true</IsPackable>
-		<PackageIcon>.\Resources\milvalogo.png</PackageIcon>
-		<PackageReadmeFile>.\Resources\readme.md</PackageReadmeFile>
-	</PropertyGroup>
+	<ItemGroup>
+	  <None Remove="F:\MilvasoftHelper\Milvasoft\resources\milvalogo.png" />
+	  <None Remove="F:\MilvasoftHelper\Milvasoft\resources\readme.md" />
+	</ItemGroup>
 
 	<ItemGroup>
 	  <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="9.0.0" />
 	  <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite.Core" Version="9.0.0" />
 	  <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.0.1" />
 	  <PackageReference Include="System.Text.Json" Version="9.0.0" />
-	</ItemGroup>
-
-	<ItemGroup>
-		<None Update="Resources\milvalogo.png">
-			<Pack>True</Pack>
-			<PackagePath></PackagePath>
-			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
-		</None>
-		<None Update="Resources\readme.md" Pack="true" PackagePath="\">
-			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
-		</None>
 	</ItemGroup>
 
 	<ItemGroup>
@@ -48,17 +34,9 @@
 	<PropertyGroup>
 
 		<PackageId>Milvasoft.Helpers</PackageId>
-		<RepositoryUrl>https://github.com/Milvasoft/Milvasoft/tree/master/Milvasoft.Helpers</RepositoryUrl>
-		<RepositoryType>git</RepositoryType>
-		<PackageProjectUrl>https://github.com/Milvasoft/Milvasoft/tree/master/Milvasoft.Helpers</PackageProjectUrl>
-		<PackageIconUrl>https://raw.githubusercontent.com/Milvasoft/Milvasoft/master/src/Milvasoft.Helpers/Resources/milvalogo.png</PackageIconUrl>
-		<GeneratePackageOnBuild>false</GeneratePackageOnBuild>
-		<Authors>Milvasoft Corporation</Authors>
 		<Product>Milvasoft.Helpers</Product>
 		<Description>Helpers classes for projects. Please contribute for improvements. </Description>
 		<PackageTags>multitenancy,localization, efcore, interception, tenant,tenancy,json,file,image,helper,milvasoft,extensions,filter,request,response,test</PackageTags>
-		<Copyright>Milvasoft Yazılım Bilişim Araştırma Geliştirme Danışmanlık Sanayi ve Ticaret Ltd.Şti.</Copyright>
-		<Version>9.0.2</Version>
 
 	</PropertyGroup>
 

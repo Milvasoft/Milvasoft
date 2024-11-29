@@ -1,10 +1,9 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>net9.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>disable</Nullable>
-  </PropertyGroup>
+  <ItemGroup>
+    <None Remove="F:\MilvasoftHelper\Milvasoft\resources\milvalogo.png" />
+    <None Remove="F:\MilvasoftHelper\Milvasoft\resources\readme.md" />
+  </ItemGroup>
 
   <ItemGroup>
     <Compile Include="..\..\Core\Milvasoft.Core\GlobalUsings.cs" Link="GlobalUsings.cs" />
@@ -18,34 +17,14 @@
     <ProjectReference Include="..\..\Core\Milvasoft.Core\Milvasoft.Core.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <None Update="Resources\milvalogo.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <Pack>True</Pack>
-    </None>
-    <None Update="Resources\readme.md">
-      <PackagePath>\</PackagePath>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <Pack>true</Pack>
-    </None>
-  </ItemGroup>
-
 
 	<PropertyGroup>
 
-		<PackageId>Milvasoft.Caching</PackageId>
-		<RepositoryUrl>https://github.com/Milvasoft/Milvasoft/tree/master/Milvasoft.Helpers</RepositoryUrl>
-		<RepositoryType>git</RepositoryType>
-		<PackageProjectUrl>https://github.com/Milvasoft/Milvasoft/tree/master/Milvasoft.Helpers</PackageProjectUrl>
-		<PackageIconUrl>https://raw.githubusercontent.com/Milvasoft/Milvasoft/master/src/Milvasoft.Helpers/Resources/milvalogo.png</PackageIconUrl>
-		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
-		<Authors>Milvasoft Corporation</Authors>
+		<PackageId>Milvasoft.Caching</PackageId>	
 		<Product>Milvasoft.Caching</Product>
 		<Description>Caching operations.</Description>
 		<PackageTags>cache,caching,inmemory,memory,redis</PackageTags>
-		<Copyright>Milvasoft Yazılım Bilişim Araştırma Geliştirme Danışmanlık Sanayi ve Ticaret Ltd.Şti.</Copyright>
-		<Version>9.0.2</Version>
-
+		
 	</PropertyGroup>
 
 </Project>

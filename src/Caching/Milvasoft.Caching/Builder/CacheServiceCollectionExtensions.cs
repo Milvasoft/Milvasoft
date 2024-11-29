@@ -12,6 +12,7 @@ public static class CacheServiceCollectionExtensions
     /// Add services the service collection
     /// </summary>
     /// <param name="services"></param>
+    /// <param name="configurationManager"></param>
     /// <returns></returns>
     public static CacheBuilder AddMilvaCaching(this IServiceCollection services, IConfigurationManager configurationManager = null)
         => new(services, configurationManager);

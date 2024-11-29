@@ -1,24 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-	<PropertyGroup>
-		<TargetFramework>net9.0</TargetFramework>
-		<ImplicitUsings>enable</ImplicitUsings>
-		<Nullable>disable</Nullable>
-		<GenerateDocumentationFile>true</GenerateDocumentationFile>
-		<IsPackable>true</IsPackable>
-		<PackageIcon>.\Resources\milvalogo.png</PackageIcon>
-		<PackageReadmeFile>.\Resources\readme.md</PackageReadmeFile>
-	</PropertyGroup>
-
 	<ItemGroup>
-		<None Update="Resources\milvalogo.png">
-			<Pack>True</Pack>
-			<PackagePath></PackagePath>
-			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
-		</None>
-		<None Update="Resources\readme.md" Pack="true" PackagePath="\">
-			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
-		</None>
+	  <None Remove="F:\MilvasoftHelper\Milvasoft\resources\milvalogo.png" />
+	  <None Remove="F:\MilvasoftHelper\Milvasoft\resources\readme.md" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -28,17 +12,9 @@
 	<PropertyGroup>
 
 		<PackageId>Milvasoft.Middlewares</PackageId>
-		<RepositoryUrl>https://github.com/Milvasoft/Milvasoft/tree/master/Milvasoft.Helpers</RepositoryUrl>
-		<RepositoryType>git</RepositoryType>
-		<PackageProjectUrl>https://github.com/Milvasoft/Milvasoft/tree/master/Milvasoft.Helpers</PackageProjectUrl>
-		<PackageIconUrl>https://raw.githubusercontent.com/Milvasoft/Milvasoft/master/src/Milvasoft.Helpers/Resources/milvalogo.png</PackageIconUrl>
-		<GeneratePackageOnBuild>false</GeneratePackageOnBuild>
-		<Authors>Milvasoft Corporation</Authors>
 		<Product>Milvasoft.Middlewares</Product>
 		<Description>Custom middlewares.</Description>
 		<PackageTags>middleware, response time calculation</PackageTags>
-		<Copyright>Milvasoft Yazılım Bilişim Araştırma Geliştirme Danışmanlık Sanayi ve Ticaret Ltd.Şti.</Copyright>
-		<Version>9.0.2</Version>
 
 	</PropertyGroup>
 	

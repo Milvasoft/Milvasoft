@@ -1,0 +1,28 @@
+<Project>
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>disable</Nullable>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <IsPackable>true</IsPackable>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+	  
+    <PackageVersion>9.0.3</PackageVersion>
+    <Authors>Milvasoft Corporation</Authors>
+    <Copyright>Milvasoft Yazılım Bilişim Araştırma Geliştirme Danışmanlık Sanayi ve Ticaret Ltd.Şti.</Copyright>
+    <RepositoryUrl>https://github.com/Milvasoft/Milvasoft/tree/master/Milvasoft.Helpers</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageProjectUrl>https://github.com/Milvasoft/Milvasoft/tree/master/Milvasoft.Helpers</PackageProjectUrl>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    
+    <PackageIcon>resources\milvalogo.png</PackageIcon>
+    <PackageReadmeFile>resources\readme.md</PackageReadmeFile>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="$(MSBuildThisFileDirectory)resources\milvalogo.png" Pack="True" PackagePath="" CopyToOutputDirectory="Always" />
+    <None Include="$(MSBuildThisFileDirectory)resources\readme.md" Pack="true" PackagePath="\" CopyToOutputDirectory="Always" />
+  </ItemGroup>
+	
+</Project>
