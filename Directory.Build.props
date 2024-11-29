@@ -15,14 +15,14 @@
     <PackageProjectUrl>https://github.com/Milvasoft/Milvasoft/tree/master/Milvasoft.Helpers</PackageProjectUrl>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     
-    <PackageIcon>resources\milvalogo.png</PackageIcon>
-    <PackageReadmeFile>resources\readme.md</PackageReadmeFile>
+    <PackageIcon>milvalogo.png</PackageIcon>
+    <PackageReadmeFile>packagereadme.md</PackageReadmeFile>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
   </PropertyGroup>
 
-  <ItemGroup>
-    <None Include="$(MSBuildThisFileDirectory)resources\milvalogo.png" Pack="True" PackagePath="" CopyToOutputDirectory="Always" />
-    <None Include="$(MSBuildThisFileDirectory)resources\readme.md" Pack="true" PackagePath="\" CopyToOutputDirectory="Always" />
-  </ItemGroup>
+	<ItemGroup>
+		<None Include="$(MSBuildThisFileDirectory)/milvalogo.png" Pack="true" PackagePath="/"/>
+		<None Include="$(MSBuildThisFileDirectory)/packagereadme.md" Pack="true" PackagePath="/"/>
+	</ItemGroup>
 	
 </Project>
