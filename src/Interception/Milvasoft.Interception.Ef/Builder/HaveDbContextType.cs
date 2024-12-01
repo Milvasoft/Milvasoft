@@ -37,8 +37,11 @@ public class HaveDbContextType : IHaveDbContextType
         get => _dbContextAssemblyQualifiedName;
         set
         {
-            _dbContextAssemblyQualifiedName = value;
-            _dbContextType = Type.GetType(_dbContextAssemblyQualifiedName);
+            if (value is not null)
+            {
+                _dbContextAssemblyQualifiedName = value;
+                _dbContextType = Type.GetType(_dbContextAssemblyQualifiedName);
+            }
         }
     }
 
@@ -48,8 +51,11 @@ public class HaveDbContextType : IHaveDbContextType
         get => _dbContextType;
         set
         {
-            _dbContextType = value;
-            _dbContextAssemblyQualifiedName = value.AssemblyQualifiedName;
+            if (value is not null)
+            {
+                _dbContextType = value;
+                _dbContextAssemblyQualifiedName = value.AssemblyQualifiedName;
+            }
         }
     }
 

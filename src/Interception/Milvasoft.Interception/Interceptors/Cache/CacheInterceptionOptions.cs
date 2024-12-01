@@ -29,8 +29,11 @@ public class CacheInterceptionOptions : ICacheInterceptionOptions
         get => _cacheAccessorAssemblyQualifiedName;
         set
         {
-            _cacheAccessorAssemblyQualifiedName = value;
-            _accessorType = Type.GetType(_cacheAccessorAssemblyQualifiedName);
+            if (value is not null)
+            {
+                _cacheAccessorAssemblyQualifiedName = value;
+                _accessorType = Type.GetType(_cacheAccessorAssemblyQualifiedName);
+            }
         }
     }
 
@@ -40,8 +43,11 @@ public class CacheInterceptionOptions : ICacheInterceptionOptions
         get => _accessorType;
         set
         {
-            _accessorType = typeof(ICacheAccessor<>).MakeGenericType(value);
-            _cacheAccessorAssemblyQualifiedName = value.AssemblyQualifiedName;
+            if (value is not null)
+            {
+                _accessorType = typeof(ICacheAccessor<>).MakeGenericType(value);
+                _cacheAccessorAssemblyQualifiedName = value.AssemblyQualifiedName;
+            }
         }
     }
 
