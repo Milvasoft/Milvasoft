@@ -138,8 +138,7 @@ public class SoftDeleteFilterVisitor : ExpressionVisitor
 
             foreach (var iface in interfaces)
             {
-                if (iface.IsGenericType &&
-                    iface.GetGenericTypeDefinition() == typeof(IEnumerable<>))
+                if (iface.IsGenericType && iface.GetGenericTypeDefinition() == typeof(IEnumerable<>))
                 {
                     var candidateType = iface.GetGenericArguments()[0];
 

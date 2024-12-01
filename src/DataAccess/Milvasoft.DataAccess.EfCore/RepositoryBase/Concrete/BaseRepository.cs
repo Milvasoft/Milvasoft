@@ -811,7 +811,7 @@ public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepositor
     /// If utc conversion requested in <see cref="DbContextConfiguration.UseUtcForDateTime"/>, <see cref="DateTime"/> typed property call will be added after converted to utc.
     /// 
     /// </remarks>
-    public SetPropertyBuilder<TEntity> GetUpdatablePropertiesBuilder<TDto>(TDto dto) where TDto : DtoBase
+    public virtual SetPropertyBuilder<TEntity> GetUpdatablePropertiesBuilder<TDto>(TDto dto) where TDto : DtoBase
         => _dbContext.GetUpdatablePropertiesBuilder<TEntity, TDto>(dto);
 
     /// <summary>
@@ -819,7 +819,7 @@ public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepositor
     /// </summary>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    public async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default) => await _dbContext.SaveChangesAsync(cancellationToken);
+    public virtual async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default) => await _dbContext.SaveChangesAsync(cancellationToken);
 
     #region Private Helper Methods
 
@@ -827,7 +827,7 @@ public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepositor
     /// Detach entity if found in local store.
     /// </summary>
     /// <param name="entity"></param>
-    protected void DetachFromLocalIfExists(TEntity entity)
+    protected virtual void DetachFromLocalIfExists(TEntity entity)
     {
         var localEntity = _dbContext.Set<TEntity>().Local.FirstOrDefault(u => u.GetUniqueIdentifier().Equals(entity.GetUniqueIdentifier()));
 
@@ -844,7 +844,7 @@ public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepositor
     /// <param name="key"></param>
     /// <param name="conditionExpression"></param>
     /// <returns></returns>
-    protected Expression<Func<TEntity, bool>> CreateKeyEqualityExpressionWithIsDeletedFalse(object key, Expression<Func<TEntity, bool>> conditionExpression = null)
+    protected virtual Expression<Func<TEntity, bool>> CreateKeyEqualityExpressionWithIsDeletedFalse(object key, Expression<Func<TEntity, bool>> conditionExpression = null)
     {
         Expression<Func<TEntity, bool>> idCondition = i => i.Id.Equals(key);
 
@@ -859,7 +859,7 @@ public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepositor
     /// </summary>
     /// <param name="conditionExpression"></param>
     /// <returns></returns>
-    protected Expression<Func<T, bool>> CreateConditionExpression<T>(Expression<Func<T, bool>> conditionExpression = null)
+    protected virtual Expression<Func<T, bool>> CreateConditionExpression<T>(Expression<Func<T, bool>> conditionExpression = null)
     {
         Expression<Func<T, bool>> mainExpression;
 
@@ -888,7 +888,7 @@ public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepositor
     /// </summary>
     /// <param name="projectionExpression"></param>
     /// <returns></returns>
-    protected Expression<Func<TEntity, TResult>> UpdateProjectionExpression<TResult>(Expression<Func<TEntity, TResult>> projectionExpression = null)
+    protected virtual Expression<Func<TEntity, TResult>> UpdateProjectionExpression<TResult>(Expression<Func<TEntity, TResult>> projectionExpression = null)
     {
         Expression<Func<TEntity, TResult>> mainExpression;
 
@@ -921,7 +921,7 @@ public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepositor
     /// </summary>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    protected async Task<int> InternalSaveChangesAsync(CancellationToken cancellationToken = default)
+    protected virtual async Task<int> InternalSaveChangesAsync(CancellationToken cancellationToken = default)
     {
         if (_saveChangesAfterEveryOperation)
             return await _dbContext.SaveChangesAsync(cancellationToken);
@@ -1068,11 +1068,11 @@ public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepositor
 
     private static Expression<Func<TEntity, TResult>> AppendSoftDeleteFilterToProjection<TResult>(Expression<Func<TEntity, TResult>> projection)
     {
-
         if (projection is null)
             return null;
 
         var visitor = new SoftDeleteFilterVisitor();
+
         var newBody = visitor.Visit(projection.Body);
 
         return Expression.Lambda<Func<TEntity, TResult>>(newBody, projection.Parameters);
