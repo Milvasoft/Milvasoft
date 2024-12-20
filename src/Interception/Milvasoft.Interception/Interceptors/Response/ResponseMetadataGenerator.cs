@@ -143,7 +143,8 @@ public class ResponseMetadataGenerator(IResponseInterceptionOptions responseInte
         //Fill metadata object
         ApplyMetadataTags(metadata, property, mask);
 
-        metadatas.Add(metadata);
+        if (!metadatas.Any(m => m.Name == metadata.Name && m.Type == metadata.Type))
+            metadatas.Add(metadata);
     }
 
     /// <summary>
@@ -198,9 +199,20 @@ public class ResponseMetadataGenerator(IResponseInterceptionOptions responseInte
 
                 if (callerObjectsAsList.Count > 0)
                 {
-                    callerObject = callerObjectsAsList[0];
+                    foreach (var item in callerObjectsAsList)
+                    {
+                        callerObject = item;
 
-                    propertyValue = property.GetValue(callerObject, null);
+                        propertyValue = property.GetValue(callerObject, null);
+
+                        CallerObjectInfo childCallerInfo1 = CallerObjectInfo.CreateCallerInformation(propertyValue, property.PropertyType);
+
+                        metadata.Metadatas ??= [];
+
+                        GenerateMetadata(childCallerInfo1, metadata.Metadatas);
+                    }
+
+                    return;
                 }
             }
             else
