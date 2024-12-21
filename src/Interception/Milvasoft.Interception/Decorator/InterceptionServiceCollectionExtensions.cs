@@ -292,6 +292,7 @@ public static class InterceptionServiceCollectionExtensions
             opt.ApplyLocalizationFunc = options.ApplyLocalizationFunc;
             opt.HideByRoleFunc = options.HideByRoleFunc;
             opt.MaskByRoleFunc = options.MaskByRoleFunc;
+            opt.GenerateMetadataFunc = options.GenerateMetadataFunc;
         });
 
         return builder;
@@ -320,6 +321,7 @@ public static class InterceptionServiceCollectionExtensions
             opt.HideByRoleFunc = config.HideByRoleFunc ?? opt.HideByRoleFunc;
             opt.MaskByRoleFunc = config.MaskByRoleFunc ?? opt.MaskByRoleFunc;
             opt.ApplyLocalizationFunc = config.ApplyLocalizationFunc ?? opt.ApplyLocalizationFunc;
+            opt.GenerateMetadataFunc = config.GenerateMetadataFunc ?? opt.GenerateMetadataFunc;
         });
 
         builder.Services.PostConfigure<ResponseInterceptionOptions>(opt =>
@@ -327,6 +329,7 @@ public static class InterceptionServiceCollectionExtensions
             opt.HideByRoleFunc = config.HideByRoleFunc ?? opt.HideByRoleFunc;
             opt.MaskByRoleFunc = config.MaskByRoleFunc ?? opt.MaskByRoleFunc;
             opt.ApplyLocalizationFunc = config.ApplyLocalizationFunc ?? opt.ApplyLocalizationFunc;
+            opt.GenerateMetadataFunc = config.GenerateMetadataFunc ?? opt.GenerateMetadataFunc;
         });
 
         return builder;
@@ -462,6 +465,7 @@ public static class InterceptionServiceCollectionExtensions
                 opt.MaskByRoleFunc = config.Response.MaskByRoleFunc;
                 opt.HideByRoleFunc = config.Response.HideByRoleFunc;
                 opt.ApplyLocalizationFunc = config.Response.ApplyLocalizationFunc;
+                opt.GenerateMetadataFunc = config.Response.GenerateMetadataFunc;
             });
 
         if (IsObjectModified(config.Cache))

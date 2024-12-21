@@ -35,6 +35,9 @@ public class ResponseInterceptionOptions : IResponseInterceptionOptions
 
     /// <inheritdoc/>
     public Func<string, IMilvaLocalizer, Type, string, string> ApplyLocalizationFunc { get; set; }
+
+    /// <inheritdoc/>
+    public Func<IServiceProvider, bool> GenerateMetadataFunc { get; set; }
 }
 
 /// <summary>
@@ -89,4 +92,9 @@ public interface IResponseInterceptionOptions : IInterceptionOptions
     /// If it is not sent, localization is tried with the default pattern. The default pattern is <see cref="ResponseMetadataGenerator.ApplyLocalization(string, IMilvaLocalizer, Type, string)"/>
     /// </summary>
     public Func<string, IMilvaLocalizer, Type, string, string> ApplyLocalizationFunc { get; set; }
+
+    /// <summary>
+    /// Function that determines whether metadata generation will be done on a per-request basis.
+    /// </summary>
+    public Func<IServiceProvider, bool> GenerateMetadataFunc { get; set; }
 }

@@ -75,7 +75,7 @@ public class ResponseMetadataGenerator(IResponseInterceptionOptions responseInte
     /// <param name="metadatas"></param>
     private void GenerateMetadata(CallerObjectInfo callerObjectInfo, List<ResponseDataMetadata> metadatas)
     {
-        var properties = callerObjectInfo.ReviewedType.GetProperties();
+        var properties = callerObjectInfo.ReviewedType.GetProperties().Where(p => p.GetCustomAttribute<ExcludeFromMetadataAttribute>() == null);
 
         if (properties.IsNullOrEmpty())
             return;
@@ -101,6 +101,7 @@ public class ResponseMetadataGenerator(IResponseInterceptionOptions responseInte
         ApplyMetadataRules(callerObjectInfo.Object, callerObjectInfo.ActualTypeIsCollection, property, mask, removePropMetadataFromResponse);
 
         if (!_interceptionOptions.MetadataCreationEnabled
+            || (!_interceptionOptions.GenerateMetadataFunc?.Invoke(_serviceProvider) ?? false)
             || removePropMetadataFromResponse
             || TryGetAttribute(property, out ExcludeFromMetadataAttribute _)
             || callerObjectInfo.ReviewedType.GetCustomAttribute<ExcludeFromMetadataAttribute>() != null)

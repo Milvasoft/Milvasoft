@@ -33,4 +33,9 @@ public class ResponseInterceptionPostConfigureOptions
     /// It allows the values to be logged to be sent to the library, other than the values that the Interceptor logs by default.
     /// </summary>
     public Func<string, IMilvaLocalizer, Type, string, string> ApplyLocalizationFunc { get; set; }
+
+    /// <summary>
+    /// Function that determines whether metadata generation will be done on a per-request basis.
+    /// </summary>
+    public Func<IServiceProvider, bool> GenerateMetadataFunc { get; set; }
 }
