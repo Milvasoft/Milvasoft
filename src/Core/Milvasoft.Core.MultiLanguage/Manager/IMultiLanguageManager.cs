@@ -1,5 +1,4 @@
 ﻿using Milvasoft.Core.MultiLanguage.EntityBases.Abstract;
-using System.Collections.Concurrent;
 using System.Linq.Expressions;
 
 namespace Milvasoft.Core.MultiLanguage.Manager;
@@ -10,9 +9,10 @@ namespace Milvasoft.Core.MultiLanguage.Manager;
 public interface IMultiLanguageManager
 {
     /// <summary>
-    /// Static language array.
+    /// Gets languages list.
     /// </summary>
-    public static ConcurrentBag<ILanguage> Languages { get; set; }
+    /// <returns>Static languages list.</returns>
+    public List<ILanguage> GetLanguages();
 
     /// <summary>
     /// Gets the ID of the default language.

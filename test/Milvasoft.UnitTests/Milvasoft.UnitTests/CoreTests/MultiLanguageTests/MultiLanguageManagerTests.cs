@@ -295,6 +295,58 @@ public class MultiLanguageManagerTests
 
     #endregion
 
+    #region GetLanguages
+
+    [Fact]
+    public void GetLanguages_WithLanguagesListIsEmpty_ShouldReturnZero()
+    {
+        // Arrange
+        MultiLanguageManager.Languages.Clear();
+        var manager = new MilvaMultiLanguageManager();
+
+        // Act
+        var result = manager.GetLanguages();
+
+        // Assert
+        result.Count.Should().Be(0);
+    }
+
+    [Fact]
+    public void GetLanguages_WithLanguagesListNotEmpty_ShouldReturnCorrectCount()
+    {
+        // Arrange
+        List<ILanguage> languages =
+        [
+            new LanguageModelFixture
+            {
+                Id = 1,
+                Code = "en-US",
+                IsDefault = false,
+                Name ="English",
+                Supported = true,
+            },
+            new LanguageModelFixture
+            {
+                Id = 2,
+                Code = "tr-TR",
+                IsDefault = false,
+                Name ="Turkish",
+                Supported = true,
+            },
+        ];
+        MultiLanguageManager.UpdateLanguagesList(languages);
+        CultureInfo.CurrentCulture = new CultureInfo("nl-NL");
+        var manager = new MilvaMultiLanguageManager();
+
+        // Act
+        var result = manager.GetLanguages();
+
+        // Assert
+        result.Count.Should().Be(2);
+    }
+
+    #endregion
+
     #region CreateTranslationMapExpression
 
     [Fact]

@@ -69,6 +69,12 @@ public abstract class MultiLanguageManager : IMultiLanguageManager
     }
 
     /// <summary>
+    /// Gets the list of languages.
+    /// </summary>
+    /// <returns></returns>
+    public virtual List<ILanguage> GetLanguages() => [.. Languages];
+
+    /// <summary>
     /// Gets the ID of the default language.
     /// </summary>
     /// <returns>The ID of the default language.</returns>
