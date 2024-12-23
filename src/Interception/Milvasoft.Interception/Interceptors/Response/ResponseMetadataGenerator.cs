@@ -20,6 +20,7 @@ public class ResponseMetadataGenerator(IResponseInterceptionOptions responseInte
 {
     private readonly IResponseInterceptionOptions _interceptionOptions = responseInterceptionOptions;
     private readonly IServiceProvider _serviceProvider = serviceProvider;
+    private readonly bool _generateMetadataFuncResult = (!responseInterceptionOptions.GenerateMetadataFunc?.Invoke(serviceProvider) ?? false);
 
     /// <summary>
     /// Applies localization to the specified property.
@@ -396,7 +397,7 @@ public class ResponseMetadataGenerator(IResponseInterceptionOptions responseInte
     private bool ShouldCreateMetadata(CallerObjectInfo callerObjectInfo, PropertyInfo property, bool removePropMetadataFromResponse)
     {
         if (!_interceptionOptions.MetadataCreationEnabled
-            || (!_interceptionOptions.GenerateMetadataFunc?.Invoke(_serviceProvider) ?? false)
+            || _generateMetadataFuncResult
             || removePropMetadataFromResponse
             || TryGetAttribute(property, out ExcludeFromMetadataAttribute _)
             || callerObjectInfo.ReviewedType.GetCustomAttribute<ExcludeFromMetadataAttribute>() != null)
