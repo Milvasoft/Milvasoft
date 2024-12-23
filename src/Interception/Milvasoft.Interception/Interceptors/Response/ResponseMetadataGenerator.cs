@@ -107,19 +107,22 @@ public class ResponseMetadataGenerator(IResponseInterceptionOptions responseInte
         if (IsCustomComplextType(callerObjectInfo, property))
         {
             //Self referencing
-            if (shouldCreateMetadata && IsSelfReferencing(callerObjectInfo, property))
+            if (IsSelfReferencing(callerObjectInfo, property))
             {
-                var selfMetadata = new ResponseDataMetadata
+                if (shouldCreateMetadata)
                 {
-                    Name = "~Self",
-                    LocalizedName = "~Self",
-                    Type = GetPropertyFriendlyName(property.PropertyType),
-                    Filterable = false,
-                };
+                    var selfMetadata = new ResponseDataMetadata
+                    {
+                        Name = "~Self",
+                        LocalizedName = "~Self",
+                        Type = GetPropertyFriendlyName(property.PropertyType),
+                        Filterable = false,
+                    };
 
-                ApplyMetadataTags(selfMetadata, property, mask);
+                    ApplyMetadataTags(selfMetadata, property, mask);
 
-                CheckAndAddMetadata(metadatas, selfMetadata);
+                    CheckAndAddMetadata(metadatas, selfMetadata);
+                }
 
                 return;
             }
