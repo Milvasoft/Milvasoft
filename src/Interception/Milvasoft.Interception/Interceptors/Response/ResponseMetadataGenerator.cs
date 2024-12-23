@@ -98,23 +98,16 @@ public class ResponseMetadataGenerator(IResponseInterceptionOptions responseInte
         bool removePropMetadataFromResponse = ShouldHide(property);
         bool mask = ShouldMask(property);
 
-        ApplyMetadataRules(callerObjectInfo.Object, callerObjectInfo.ActualTypeIsCollection, property, mask, removePropMetadataFromResponse);
-
-        if (!_interceptionOptions.MetadataCreationEnabled
-            || (!_interceptionOptions.GenerateMetadataFunc?.Invoke(_serviceProvider) ?? false)
-            || removePropMetadataFromResponse
-            || TryGetAttribute(property, out ExcludeFromMetadataAttribute _)
-            || callerObjectInfo.ReviewedType.GetCustomAttribute<ExcludeFromMetadataAttribute>() != null)
-            return;
-
         metadatas ??= [];
 
         var metadata = new ResponseDataMetadata();
 
-        if (property.PropertyType.IsClass && !CallerObjectInfo.ReviewObjectType(property.PropertyType, out bool isCollectionComplex).Namespace.Contains(nameof(System)))
+        var shouldCreateMetadata = ShouldCreateMetadata(callerObjectInfo, property, removePropMetadataFromResponse);
+
+        if (IsCustomComplextType(callerObjectInfo, property))
         {
             //Self referencing
-            if (property.PropertyType == callerObjectInfo.ReviewedType || (property.PropertyType.IsGenericType && property.PropertyType.GetGenericArguments()[0] == callerObjectInfo.ReviewedType))
+            if (shouldCreateMetadata && IsSelfReferencing(callerObjectInfo, property))
             {
                 var selfMetadata = new ResponseDataMetadata
                 {
@@ -126,13 +119,18 @@ public class ResponseMetadataGenerator(IResponseInterceptionOptions responseInte
 
                 ApplyMetadataTags(selfMetadata, property, mask);
 
-                metadatas.Add(selfMetadata);
+                CheckAndAddMetadata(metadatas, selfMetadata);
 
                 return;
             }
 
             GenerateChildComplexMetadata(callerObjectInfo, property, metadata);
         }
+
+        ApplyMetadataRules(callerObjectInfo.Object, callerObjectInfo.ActualTypeIsCollection, property, mask, removePropMetadataFromResponse);
+
+        if (!shouldCreateMetadata)
+            return;
 
         metadata.Name = property.Name.ToLowerInvariantFirst();
         metadata.Type = GetPropertyFriendlyName(property.PropertyType);
@@ -144,8 +142,7 @@ public class ResponseMetadataGenerator(IResponseInterceptionOptions responseInte
         //Fill metadata object
         ApplyMetadataTags(metadata, property, mask);
 
-        if (!metadatas.Any(m => m.Name == metadata.Name && m.Type == metadata.Type))
-            metadatas.Add(metadata);
+        CheckAndAddMetadata(metadatas, metadata);
     }
 
     /// <summary>
@@ -392,6 +389,30 @@ public class ResponseMetadataGenerator(IResponseInterceptionOptions responseInte
 
         return prefix;
     }
+
+    private bool ShouldCreateMetadata(CallerObjectInfo callerObjectInfo, PropertyInfo property, bool removePropMetadataFromResponse)
+    {
+        if (!_interceptionOptions.MetadataCreationEnabled
+            || (!_interceptionOptions.GenerateMetadataFunc?.Invoke(_serviceProvider) ?? false)
+            || removePropMetadataFromResponse
+            || TryGetAttribute(property, out ExcludeFromMetadataAttribute _)
+            || callerObjectInfo.ReviewedType.GetCustomAttribute<ExcludeFromMetadataAttribute>() != null)
+            return false;
+
+        return true;
+    }
+
+    private static void CheckAndAddMetadata(List<ResponseDataMetadata> metadatas, ResponseDataMetadata metadata)
+    {
+        if (!metadatas.Any(m => m.Name == metadata.Name && m.Type == metadata.Type))
+            metadatas.Add(metadata);
+    }
+
+    private static bool IsSelfReferencing(CallerObjectInfo callerObjectInfo, PropertyInfo property)
+        => property.PropertyType == callerObjectInfo.ReviewedType
+                || (property.PropertyType.IsGenericType && property.PropertyType.GetGenericArguments()[0] == callerObjectInfo.ReviewedType);
+    private static bool IsCustomComplextType(CallerObjectInfo callerObjectInfo, PropertyInfo property)
+        => property.PropertyType.IsClass && !CallerObjectInfo.ReviewObjectType(property.PropertyType, out bool isCollectionComplex).Namespace.Contains(nameof(System));
 }
 
 /// <summary>
