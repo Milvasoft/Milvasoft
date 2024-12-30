@@ -35,18 +35,12 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>, IAsyn
         }
     }
 
-    public async Task CreateRespawner()
+    public async Task CreateRespawner() => _respawner ??= await Respawner.CreateAsync(_connection, new RespawnerOptions
     {
-        if (_respawner == null)
-        {
-            _respawner = await Respawner.CreateAsync(_connection, new RespawnerOptions
-            {
-                DbAdapter = DbAdapter.Postgres,
-                SchemasToInclude = ["public"],
-                TablesToIgnore = ["__EFMigrationsHistory"]
-            });
-        }
-    }
+        DbAdapter = DbAdapter.Postgres,
+        SchemasToInclude = ["public"],
+        TablesToIgnore = ["__EFMigrationsHistory"]
+    });
 
     public async Task ResetDatabase()
     {

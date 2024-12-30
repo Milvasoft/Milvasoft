@@ -117,8 +117,8 @@ internal class ValidListSourceForBuildFilterExpressionMethodData : IEnumerable<o
         yield return new object[]
         {
             validQueryable,
-            new FilterRequest{ Criterias = [ new FilterCriteria{ FilterBy = nameof(RestTestEntityFixture.Name), Type = FilterType.Contains, Value = "j"}]},
-            new List<int> { 1, 3 }
+            new FilterRequest{ Criterias = [ new FilterCriteria{ FilterBy = nameof(RestTestEntityFixture.Name), Type = FilterType.Contains, Value = "y"}]},
+            new List<int> { 4 }
         };
 
         //4
@@ -274,7 +274,7 @@ internal class ValidListSourceForBuildFilterExpressionMethodData : IEnumerable<o
                 ],
                 MergeType = Connector.Or
             },
-            new List<int> { 1,2,3,4 }
+            new List<int> { 2,4 }
         };
     }
 

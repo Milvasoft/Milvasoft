@@ -105,7 +105,7 @@ public class ResponseMetadataGenerator(IResponseInterceptionOptions responseInte
 
         var shouldCreateMetadata = ShouldCreateMetadata(callerObjectInfo, property, removePropMetadataFromResponse);
 
-        if (IsCustomComplextType(callerObjectInfo, property))
+        if (IsCustomComplextType(property))
         {
             //Self referencing
             if (IsSelfReferencing(callerObjectInfo, property))
@@ -415,7 +415,7 @@ public class ResponseMetadataGenerator(IResponseInterceptionOptions responseInte
     private static bool IsSelfReferencing(CallerObjectInfo callerObjectInfo, PropertyInfo property)
         => property.PropertyType == callerObjectInfo.ReviewedType
                 || (property.PropertyType.IsGenericType && property.PropertyType.GetGenericArguments()[0] == callerObjectInfo.ReviewedType);
-    private static bool IsCustomComplextType(CallerObjectInfo callerObjectInfo, PropertyInfo property)
+    private static bool IsCustomComplextType(PropertyInfo property)
         => property.PropertyType.IsClass && !CallerObjectInfo.ReviewObjectType(property.PropertyType, out bool isCollectionComplex).Namespace.Contains(nameof(System));
 }
 
