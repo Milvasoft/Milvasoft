@@ -1,15 +1,7 @@
-using DotNet.Testcontainers.Builders;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
+﻿using DotNet.Testcontainers.Containers;
 using Microsoft.AspNetCore.Mvc.Testing;
-using Microsoft.AspNetCore.TestHost;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
-using Microsoft.Extensions.Hosting;
-using Milvasoft.IntegrationTests.Fixtures;
+using Npgsql;
 using Respawn;
-using System.Data.Common;
 using Testcontainers.PostgreSql;
 
 namespace Milvasoft.IntegrationTests;
@@ -21,59 +13,48 @@ public class DatabaseTestCollection : ICollectionFixture<CustomWebApplicationFac
 
 public class CustomWebApplicationFactory : WebApplicationFactory<Program>, IAsyncLifetime
 {
-    private Func<IApplicationBuilder, IApplicationBuilder> _appBuilderAction = (app) => app;
-    private readonly PostgreSqlContainer _dbContainer = new PostgreSqlBuilder().WithImage("postgres:latest")
-                                                                               .WithDatabase("db")
-                                                                               .WithUsername("postgres")
-                                                                               .WithPassword("postgres")
-                                                                               .WithWaitStrategy(Wait.ForUnixContainer().UntilCommandIsCompleted("pg_isready"))
-                                                                               .WithCleanUp(true)
-                                                                               .WithPortBinding(5343, 5342)
-                                                                               .Build();
-
     private Respawner _respawner;
-    private DbConnection _connection;
-    public SomeMilvaDbContextFixture Db { get; private set; } = null!;
-
-    public void SetAppBuilderAction(Func<IApplicationBuilder, IApplicationBuilder> appBuilderAction) => _appBuilderAction = appBuilderAction;
-
-    protected override IHostBuilder CreateHostBuilder()
-        => Host.CreateDefaultBuilder()
-               .ConfigureWebHostDefaults(webBuilder =>
-               {
-                   webBuilder.Configure(app =>
-                   {
-                       _appBuilderAction.Invoke(app);
-                   });
-               });
+    private NpgsqlConnection _connection;
+    private readonly PostgreSqlContainer _dbContainer = new PostgreSqlBuilder().WithImage("postgres:latest")
+                                                                               .WithDatabase("testDb")
+                                                                               .WithUsername("root")
+                                                                               .WithPassword("postgres")
+                                                                               .WithCleanUp(true)
+                                                                               .WithPortBinding(5344, 5342)
+                                                                               .Build();
 
     public async Task InitializeAsync()
     {
-        await _dbContainer.StartAsync();
-
-        Db = Services.CreateScope().ServiceProvider.GetRequiredService<SomeMilvaDbContextFixture>();
-        _connection = Db.Database.GetDbConnection();
-        await _connection.OpenAsync();
-
-        _respawner = await Respawner.CreateAsync(_dbContainer.GetConnectionString(), new RespawnerOptions
+        if (_dbContainer.State != TestcontainersStates.Running)
         {
-            DbAdapter = DbAdapter.Postgres,
-            SchemasToInclude = ["public"]
-        });
+            await _dbContainer.StartAsync();
+
+            _connection = new NpgsqlConnection($"{_dbContainer.GetConnectionString()};Timeout=30;");
+
+            await _connection.OpenAsync();
+        }
     }
 
-    protected override void ConfigureWebHost(IWebHostBuilder builder) => builder.ConfigureTestServices(services =>
-                                                                              {
-                                                                                  services.RemoveAll<DbContextOptions<SomeMilvaDbContextFixture>>();
-                                                                                  services.RemoveAll<SomeMilvaDbContextFixture>();
+    public async Task CreateRespawner()
+    {
+        if (_respawner == null)
+        {
+            _respawner = await Respawner.CreateAsync(_connection, new RespawnerOptions
+            {
+                DbAdapter = DbAdapter.Postgres,
+                SchemasToInclude = ["public"],
+                TablesToIgnore = ["__EFMigrationsHistory"]
+            });
+        }
+    }
 
-                                                                                  services.AddDbContext<SomeMilvaDbContextFixture>(options =>
-                                                                                  {
-                                                                                      options.UseNpgsql(_dbContainer.GetConnectionString());
-                                                                                  });
-                                                                              });
-
-    public async Task ResetDatabase() => await _respawner.ResetAsync(_connection);
+    public async Task ResetDatabase()
+    {
+        if (_respawner != null)
+        {
+            await _respawner.ResetAsync(_connection);
+        }
+    }
 
     public new async Task DisposeAsync()
     {

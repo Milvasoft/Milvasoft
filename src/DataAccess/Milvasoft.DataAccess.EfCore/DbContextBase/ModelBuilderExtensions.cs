@@ -186,6 +186,29 @@ public static class ModelBuilderExtensions
     }
 
     /// <summary>
+    /// Uses <paramref name="collation"/> for string properties.
+    /// </summary>
+    /// <param name="modelBuilder"></param>
+    /// <param name="collation"></param>
+    public static ModelBuilder UseCollationOnStringProperties(this ModelBuilder modelBuilder, string collation)
+    {
+        var entityClrTypesIsString = modelBuilder.Model.GetEntityTypes()
+                                                       .Where(e => Array.Exists(e.ClrType.GetProperties(), p => p.PropertyType.IsAssignableFrom(typeof(string))))
+                                                       .Select(e => e.ClrType);
+
+        foreach (var clrType in entityClrTypesIsString)
+        {
+            var properties = clrType.GetProperties().Where(p => p.PropertyType.IsAssignableFrom(typeof(string))
+                                                                && !p.CustomAttributes.Any(cA => cA.AttributeType.IsEquivalentTo(typeof(NotMappedAttribute))));
+
+            foreach (var prop in properties)
+                modelBuilder.Entity(clrType).Property(prop.Name).UseCollation(collation);
+        }
+
+        return modelBuilder;
+    }
+
+    /// <summary>
     /// Adds an index for each indelible entity for IsDeleted property.
     /// </summary>
     /// <param name="modelBuilder"></param>

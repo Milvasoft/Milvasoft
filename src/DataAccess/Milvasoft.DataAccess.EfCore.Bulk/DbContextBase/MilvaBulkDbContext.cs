@@ -1,5 +1,6 @@
 ﻿using EFCore.BulkExtensions;
 using Microsoft.EntityFrameworkCore;
+using Milvasoft.DataAccess.EfCore.Configuration;
 using Milvasoft.DataAccess.EfCore.DbContextBase;
 
 namespace Milvasoft.DataAccess.EfCore.Bulk.DbContextBase;
@@ -10,6 +11,28 @@ namespace Milvasoft.DataAccess.EfCore.Bulk.DbContextBase;
 /// <param name="options"></param>
 public abstract class MilvaBulkDbContext(DbContextOptions options) : MilvaDbContext(options), IMilvaBulkDbContextBase
 {
+    /// <summary>
+    /// Initializes new instance.
+    /// </summary>
+    /// <param name="options"></param>
+    /// <param name="dbContextConfiguration"></param>
+    protected MilvaBulkDbContext(DbContextOptions options, IDataAccessConfiguration dbContextConfiguration) : this(options)
+    {
+        SetDataAccessConfiguration(dbContextConfiguration);
+    }
+
+    /// <summary>
+    /// Initializes new instance.
+    /// </summary>
+    /// <param name="options"></param>
+    /// <param name="dbContextConfiguration"></param>
+    /// <param name="serviceProvider"></param>
+    protected MilvaBulkDbContext(DbContextOptions options, IDataAccessConfiguration dbContextConfiguration, IServiceProvider serviceProvider) : this(options)
+    {
+        SetDataAccessConfiguration(dbContextConfiguration);
+        ServiceProvider = serviceProvider;
+    }
+
     #region SaveChanges Overrides
 
     /// <summary>
