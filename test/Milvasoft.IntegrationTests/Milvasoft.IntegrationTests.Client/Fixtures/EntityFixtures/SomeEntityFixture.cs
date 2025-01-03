@@ -2,7 +2,7 @@
 using Milvasoft.Core.EntityBases.Concrete.Auditing;
 using System.ComponentModel.DataAnnotations;
 
-namespace Milvasoft.IntegrationTests.Client.Fixtures;
+namespace Milvasoft.IntegrationTests.Client.Fixtures.EntityFixtures;
 
 public class SomeEntityFixture
 {
@@ -31,6 +31,6 @@ public class SomeBaseEntityFixture : BaseEntity<int>
 public class SomeFullAuditableEntityFixture : FullAuditableEntity<int>
 {
     public string SomeStringProp { get; set; }
-    public DateTime SomeDateProp { get; set; }
+    public DateTimeOffset SomeDateProp { get; set; }
     public decimal SomeDecimalProp { get; set; }
 }

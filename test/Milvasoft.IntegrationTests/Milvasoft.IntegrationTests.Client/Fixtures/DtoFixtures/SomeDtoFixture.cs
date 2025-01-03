@@ -1,7 +1,7 @@
 ﻿using Milvasoft.Core.EntityBases.Concrete;
 using Milvasoft.Types.Structs;
 
-namespace Milvasoft.IntegrationTests.Client.Fixtures;
+namespace Milvasoft.IntegrationTests.Client.Fixtures.DtoFixtures;
 
 public class DtoFixture : BaseDto<int>
 {

@@ -3,7 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Milvasoft.IntegrationTests.Client.Fixtures;
+using Milvasoft.IntegrationTests.Client.Fixtures.Persistence;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
@@ -22,7 +22,7 @@ namespace Milvasoft.IntegrationTests.Client.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("Milvasoft.IntegrationTests.Client.Fixtures.SomeBaseEntityFixture", b =>
+            modelBuilder.Entity("Milvasoft.IntegrationTests.Client.Fixtures.EntityFixtures.SomeBaseEntityFixture", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -34,11 +34,9 @@ namespace Milvasoft.IntegrationTests.Client.Migrations
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("CreatorUserName")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("DeleterUserName")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<DateTime?>("DeletionDate")
@@ -51,7 +49,6 @@ namespace Milvasoft.IntegrationTests.Client.Migrations
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("LastModifierUserName")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<DateTime>("SomeDateProp")
@@ -61,7 +58,6 @@ namespace Milvasoft.IntegrationTests.Client.Migrations
                         .HasColumnType("numeric");
 
                     b.Property<string>("SomeStringProp")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.HasKey("Id");
@@ -69,7 +65,7 @@ namespace Milvasoft.IntegrationTests.Client.Migrations
                     b.ToTable("BaseEntities");
                 });
 
-            modelBuilder.Entity("Milvasoft.IntegrationTests.Client.Fixtures.SomeEntityFixture", b =>
+            modelBuilder.Entity("Milvasoft.IntegrationTests.Client.Fixtures.EntityFixtures.SomeEntityFixture", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -84,7 +80,6 @@ namespace Milvasoft.IntegrationTests.Client.Migrations
                         .HasColumnType("numeric");
 
                     b.Property<string>("SomeStringProp")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.HasKey("Id");
@@ -92,7 +87,7 @@ namespace Milvasoft.IntegrationTests.Client.Migrations
                     b.ToTable("Entities");
                 });
 
-            modelBuilder.Entity("Milvasoft.IntegrationTests.Client.Fixtures.SomeFullAuditableEntityFixture", b =>
+            modelBuilder.Entity("Milvasoft.IntegrationTests.Client.Fixtures.EntityFixtures.SomeFullAuditableEntityFixture", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -121,14 +116,13 @@ namespace Milvasoft.IntegrationTests.Client.Migrations
                     b.Property<string>("LastModifierUserName")
                         .HasColumnType("text");
 
-                    b.Property<DateTime>("SomeDateProp")
+                    b.Property<DateTimeOffset>("SomeDateProp")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<decimal>("SomeDecimalProp")
                         .HasColumnType("numeric");
 
                     b.Property<string>("SomeStringProp")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.HasKey("Id");

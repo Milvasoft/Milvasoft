@@ -1,16 +1,13 @@
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection.Extensions;
 using Milvasoft.DataAccess.EfCore;
-using Milvasoft.IntegrationTests.Client.Fixtures;
+using Milvasoft.IntegrationTests.Client.Fixtures.Persistence;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Add services to the container.
 var services = builder.Services;
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnectionString");
-
-services.RemoveAll<DbContextOptions<MilvaBulkDbContextFixture>>();
-services.RemoveAll<MilvaBulkDbContextFixture>();
 
 services.ConfigureMilvaDataAccess(opt =>
 {
@@ -21,8 +18,6 @@ services.AddDbContext<MilvaBulkDbContextFixture>(options =>
 {
     options.UseNpgsql(connectionString);
 });
-
-// Add services to the container.
 
 var app = builder.Build();
 

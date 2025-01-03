@@ -6,11 +6,6 @@ using Testcontainers.PostgreSql;
 
 namespace Milvasoft.IntegrationTests;
 
-[CollectionDefinition(nameof(DatabaseTestCollection))]
-public class DatabaseTestCollection : ICollectionFixture<CustomWebApplicationFactory>
-{
-}
-
 public class CustomWebApplicationFactory : WebApplicationFactory<Program>, IAsyncLifetime
 {
     private Respawner _respawner;
@@ -20,7 +15,6 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>, IAsyn
                                                                                .WithUsername("root")
                                                                                .WithPassword("postgres")
                                                                                .WithCleanUp(true)
-                                                                               .WithPortBinding(5344, 5342)
                                                                                .Build();
 
     public async Task InitializeAsync()
@@ -45,9 +39,7 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>, IAsyn
     public async Task ResetDatabase()
     {
         if (_respawner != null)
-        {
             await _respawner.ResetAsync(_connection);
-        }
     }
 
     public new async Task DisposeAsync()
