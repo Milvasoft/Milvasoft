@@ -3,9 +3,9 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Milvasoft.IntegrationTests.DataAccessTests.EfCoreTests;
+namespace Milvasoft.IntegrationTests.DataAccessTests;
 
-public abstract class IntegrationTestBase(CustomWebApplicationFactory factory) : IAsyncLifetime
+public abstract class DataAccessIntegrationTestBase(CustomWebApplicationFactory factory) : IAsyncLifetime
 {
     protected readonly CustomWebApplicationFactory _factory = factory;
     protected IServiceProvider _serviceProvider;
@@ -33,5 +33,8 @@ public abstract class IntegrationTestBase(CustomWebApplicationFactory factory) :
         await _factory.CreateRespawner();
     }
 
-    public virtual async Task DisposeAsync() => await _factory.ResetDatabase();
+    public virtual async Task DisposeAsync()
+    {
+        await _factory.ResetDatabase();
+    }
 }

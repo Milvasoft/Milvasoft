@@ -27,8 +27,4 @@
     <ProjectReference Include="..\..\..\src\Milvasoft.Helpers\Milvasoft.Helpers.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Migrations\" />
-  </ItemGroup>
-
 </Project>

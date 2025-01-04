@@ -1,4 +1,4 @@
-﻿namespace Milvasoft.IntegrationTests.DataAccessTests.EfCoreTests;
+﻿namespace Milvasoft.IntegrationTests.DataAccessTests;
 
 [CollectionDefinition(nameof(UtcTrueDatabaseTestCollection))]
 public class UtcTrueDatabaseTestCollection : ICollectionFixture<CustomWebApplicationFactory>

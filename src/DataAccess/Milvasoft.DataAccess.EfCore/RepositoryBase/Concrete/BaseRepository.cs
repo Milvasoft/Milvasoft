@@ -572,8 +572,8 @@ public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepositor
     /// <param name="propertySelectors"></param>
     /// <returns></returns>
     public virtual async Task<int> UpdateAsync(TEntity entity,
-                                          CancellationToken cancellationToken = default,
-                                          params Expression<Func<TEntity, object>>[] propertySelectors)
+                                               CancellationToken cancellationToken = default,
+                                               params Expression<Func<TEntity, object>>[] propertySelectors)
     {
         ArgumentNullException.ThrowIfNull(entity);
 
@@ -598,8 +598,8 @@ public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepositor
     /// <param name="propertySelectors"></param>
     /// <returns></returns>
     public virtual async Task<int> UpdateAsync(IEnumerable<TEntity> entities,
-                                          CancellationToken cancellationToken = default,
-                                          params Expression<Func<TEntity, object>>[] propertySelectors)
+                                               CancellationToken cancellationToken = default,
+                                               params Expression<Func<TEntity, object>>[] propertySelectors)
     {
         if (entities.IsNullOrEmpty() || propertySelectors.IsNullOrEmpty())
             return 0;
