@@ -94,7 +94,7 @@ public abstract partial class BaseRepository<TEntity, TContext> where TEntity : 
         var mainCondition = CreateKeyEqualityExpressionWithIsDeletedFalse(id, conditionExpression);
 
         return _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
-                     .SingleOrDefault(mainCondition);
+                     .FirstOrDefault(mainCondition);
     }
 
     /// <summary>
@@ -117,7 +117,7 @@ public abstract partial class BaseRepository<TEntity, TContext> where TEntity : 
         return _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
                      .Where(mainCondition)
                      .Select(UpdateProjectionExpression(projection))
-                     .SingleOrDefault(conditionAfterProjection ?? (entity => true));
+                     .FirstOrDefault(conditionAfterProjection ?? (entity => true));
     }
 
     #endregion
@@ -144,11 +144,11 @@ public abstract partial class BaseRepository<TEntity, TContext> where TEntity : 
             return _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
                          .Where(mainCondition)
                          .IncludeMultiple(includes)
-                         .SingleOrDefault();
+                         .FirstOrDefault();
 
         var query = _dbSet.AsTracking(GetQueryTrackingBehavior(tracking)).Where(mainCondition);
 
-        return IncludeNavigationProperties(query).SingleOrDefault();
+        return IncludeNavigationProperties(query).FirstOrDefault();
     }
 
     /// <summary>
@@ -176,12 +176,12 @@ public abstract partial class BaseRepository<TEntity, TContext> where TEntity : 
                          .Where(mainCondition)
                          .IncludeMultiple(includes)
                          .Select(UpdateProjectionExpression(projection))
-                         .SingleOrDefault(conditionAfterProjection ?? (entity => true));
+                         .FirstOrDefault(conditionAfterProjection ?? (entity => true));
 
         var query = _dbSet.AsTracking(GetQueryTrackingBehavior(tracking)).Where(mainCondition);
 
         return IncludeNavigationProperties(query).Select(UpdateProjectionExpression(projection))
-                                                 .SingleOrDefault(conditionAfterProjection ?? (entity => true));
+                                                 .FirstOrDefault(conditionAfterProjection ?? (entity => true));
     }
 
     /// <summary>

@@ -2,7 +2,9 @@
 using Microsoft.EntityFrameworkCore;
 using Milvasoft.Core.EntityBases.Abstract;
 using Milvasoft.Core.Helpers;
+using Milvasoft.Core.Utils.Constants;
 using Milvasoft.DataAccess.EfCore.Bulk;
+using Milvasoft.DataAccess.EfCore.Utils.Enums;
 
 namespace Milvasoft.Helpers.DataAccess.EfCore.Concrete;
 
@@ -22,7 +24,15 @@ public abstract partial class BulkBaseRepository<TEntity, TContext> where TEntit
     public virtual void BulkAdd(List<TEntity> entities, Action<BulkConfig> bulkConfig = null)
     {
         if (!entities.IsNullOrEmpty())
+        {
+            if (_dataAccessConfiguration.Auditing.AuditModificationDate)
+                SetPerformTimeValues(entities, EntityPropertyNames.CreationDate);
+
+            if (_dataAccessConfiguration.Auditing.AuditModifier)
+                SetPerformerUserValues(entities, EntityPropertyNames.CreatorUserName);
+
             _dbContext.BulkInsert(entities, bulkConfig);
+        }
     }
 
     /// <summary>
@@ -34,7 +44,15 @@ public abstract partial class BulkBaseRepository<TEntity, TContext> where TEntit
     public virtual void BulkUpdate(List<TEntity> entities, Action<BulkConfig> bulkConfig = null)
     {
         if (!entities.IsNullOrEmpty())
+        {
+            if (_dataAccessConfiguration.Auditing.AuditModificationDate)
+                SetPerformTimeValues(entities, EntityPropertyNames.LastModificationDate);
+
+            if (_dataAccessConfiguration.Auditing.AuditModifier)
+                SetPerformerUserValues(entities, EntityPropertyNames.LastModifierUserName);
+
             _dbContext.BulkUpdate(entities, bulkConfig);
+        }
     }
 
     /// <summary>
@@ -46,7 +64,19 @@ public abstract partial class BulkBaseRepository<TEntity, TContext> where TEntit
     public virtual void BulkDelete(List<TEntity> entities, Action<BulkConfig> bulkConfig = null)
     {
         if (!entities.IsNullOrEmpty())
+        {
+            // If soft deletion active and entity is soft deletable.
+            if (_dbContext.GetCurrentSoftDeletionState() == SoftDeletionState.Active && CommonHelper.PropertyExists<TEntity>(EntityPropertyNames.IsDeleted))
+            {
+                //Soft delete
+                SetDeletionValues(entities);
+
+                BulkUpdate(entities, bulkConfig);
+                return;
+            }
+
             _dbContext.BulkDelete(entities, bulkConfig);
+        }
     }
 
     /// <summary>

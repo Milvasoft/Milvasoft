@@ -15,8 +15,8 @@ internal class ValidListSourceForBuildFilterExpressionMethodData : IEnumerable<o
     /// <returns></returns>
     public IEnumerator<object[]> GetEnumerator()
     {
-        List<RestTestEntityFixture> validList = new List<RestTestEntityFixture>
-        {
+        List<RestTestEntityFixture> validList =
+        [
             new() {
                 Id = 1,
                 Name = "John",
@@ -67,7 +67,7 @@ internal class ValidListSourceForBuildFilterExpressionMethodData : IEnumerable<o
                 InsertDate = DateTime.UtcNow.AddMonths(-5),
                 UpdateDate = null
             },
-        };
+        ];
 
         //1
         yield return new object[]

@@ -1,4 +1,5 @@
-﻿using Milvasoft.Core.EntityBases.Concrete;
+﻿using Milvasoft.Attributes.Annotations;
+using Milvasoft.Core.EntityBases.Concrete;
 using Milvasoft.Core.EntityBases.Concrete.Auditing;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -49,6 +50,8 @@ public class SomeFullAuditableEntityFixture : FullAuditableEntity<int>
     public DateTime SomeDateProp { get; set; }
     public DateTimeOffset SomeDateTimeOffsetProp { get; set; }
     public decimal SomeDecimalProp { get; set; }
+
+    [CascadeOnDelete]
     public virtual List<SomeManyToOneFullAuditableEntityFixture> ManyToOneEntities { get; set; }
 }
 

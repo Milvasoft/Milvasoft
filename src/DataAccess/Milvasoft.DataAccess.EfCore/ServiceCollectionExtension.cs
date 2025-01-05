@@ -18,7 +18,7 @@ public static class ServiceCollectionExtension
     /// <param name="services"></param>
     /// <param name="dataAccessConfiguration"></param>
     /// <returns></returns>
-    public static IServiceCollection ConfigureMilvaDataAccess(this IServiceCollection services, Action<DataAccessConfiguration> dataAccessConfiguration)
+    public static IServiceCollection ConfigureMilvaDataAccess(this IServiceCollection services, Action<DataAccessConfiguration> dataAccessConfiguration = null)
     {
         var config = new DataAccessConfiguration();
 

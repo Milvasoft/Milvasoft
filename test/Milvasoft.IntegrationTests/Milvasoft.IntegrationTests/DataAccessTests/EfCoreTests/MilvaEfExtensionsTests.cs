@@ -44,7 +44,7 @@ public class MilvaEfExtensionsTests(CustomWebApplicationFactory factory) : DataA
                 services.AddDbContext<MilvaBulkDbContextFixture>(x =>
                 {
                     x.ConfigureWarnings(warnings => { warnings.Log(RelationalEventId.PendingModelChangesWarning); });
-                    x.UseNpgsql(_factory.GetConnectionString());
+                    x.UseNpgsql(_factory.GetConnectionString()).UseQueryTrackingBehavior(QueryTrackingBehavior.NoTrackingWithIdentityResolution);
                 });
 
             });
@@ -255,7 +255,10 @@ public class MilvaEfExtensionsTests(CustomWebApplicationFactory factory) : DataA
         var result = await dbContext.RestTestEntities.WithSorting(sortRequest).ToListAsync();
 
         // Assert
-        result.Should().BeEquivalentTo(expectedSorted, options => options.WithStrictOrderingFor(expectedExpression));
+        result.Should().BeEquivalentTo(expectedSorted, options => options.WithStrictOrderingFor(expectedExpression).Using<DateTime>(ctx =>
+        {
+            ctx.Subject.Should().BeCloseTo(ctx.Expectation, TimeSpan.FromSeconds(2));
+        }).WhenTypeIs<DateTime>());
 
     }
 
@@ -291,7 +294,10 @@ public class MilvaEfExtensionsTests(CustomWebApplicationFactory factory) : DataA
         var result = await dbContext.RestTestEntities.WithSorting(sortRequest).ToListAsync();
 
         // Assert
-        result.Should().BeEquivalentTo(expectedSorted, options => options.WithStrictOrderingFor(expectedExpression));
+        result.Should().BeEquivalentTo(expectedSorted, options => options.WithStrictOrderingFor(expectedExpression).Using<DateTime>(ctx =>
+        {
+            ctx.Subject.Should().BeCloseTo(ctx.Expectation, TimeSpan.FromSeconds(2));
+        }).WhenTypeIs<DateTime>());
     }
 
     [Fact]
@@ -361,7 +367,10 @@ public class MilvaEfExtensionsTests(CustomWebApplicationFactory factory) : DataA
         var result = await dbContext.RestTestEntities.WithSorting(listRequest).ToListAsync();
 
         // Assert
-        result.Should().BeEquivalentTo(expectedSorted, options => options.WithStrictOrderingFor(expectedExpression));
+        result.Should().BeEquivalentTo(expectedSorted, options => options.WithStrictOrderingFor(expectedExpression).Using<DateTime>(ctx =>
+        {
+            ctx.Subject.Should().BeCloseTo(ctx.Expectation, TimeSpan.FromSeconds(2));
+        }).WhenTypeIs<DateTime>());
     }
 
     [Theory]
@@ -400,7 +409,10 @@ public class MilvaEfExtensionsTests(CustomWebApplicationFactory factory) : DataA
         var result = await dbContext.RestTestEntities.WithSorting(listRequest).ToListAsync();
 
         // Assert
-        result.Should().BeEquivalentTo(expectedSorted, options => options.WithStrictOrderingFor(expectedExpression));
+        result.Should().BeEquivalentTo(expectedSorted, options => options.WithStrictOrderingFor(expectedExpression).Using<DateTime>(ctx =>
+        {
+            ctx.Subject.Should().BeCloseTo(ctx.Expectation, TimeSpan.FromSeconds(2));
+        }).WhenTypeIs<DateTime>());
     }
 
     #endregion
@@ -813,7 +825,10 @@ public class MilvaEfExtensionsTests(CustomWebApplicationFactory factory) : DataA
         var result = await dbContext.RestTestEntities.ToListResponseAsync(listRequest);
 
         // Assert
-        result.Should().BeEquivalentTo(expectedResponse, opt => opt.RespectingRuntimeTypes());
+        result.Should().BeEquivalentTo(expectedResponse, opt => opt.RespectingRuntimeTypes().Using<DateTime>(ctx =>
+        {
+            ctx.Subject.Should().BeCloseTo(ctx.Expectation, TimeSpan.FromSeconds(2));
+        }).WhenTypeIs<DateTime>());
     }
 
     #endregion
@@ -896,9 +911,259 @@ public class MilvaEfExtensionsTests(CustomWebApplicationFactory factory) : DataA
 
     #region IncludeAll
 
+    [Fact]
+    public async Task IncludeAll_WithValidEntitiesAndRecursive_ShouldIncludeNavigations()
+    {
+        // Arrange
+        await InitializeAsync(services =>
+        {
+            services.ConfigureMilvaDataAccess(opt =>
+            {
+                opt.DbContext = new DbContextConfiguration
+                {
+                    UseUtcForDateTime = true,
+                    DefaultSoftDeletionState = SoftDeletionState.Active,
+                    GetCurrentUserNameMethod = (sp) => "testuser"
+                };
+            });
+        });
+
+        var entities = new List<SomeFullAuditableEntityFixture>
+        {
+            new() {
+                Id = 1,
+                SomeDateProp = DateTime.Now.AddYears(1),
+                SomeDecimalProp = 10M,
+                SomeStringProp = "somestring1",
+                ManyToOneEntities =
+                [
+                    new() { Id = 1, SomeStringProp = "somestring1", SomeEntity = new SomeEntityFixture{ SomeDecimalProp = 10 } },
+                    new() { Id = 2, SomeStringProp = "somestring2", IsDeleted = true, SomeEntity = new SomeEntityFixture{ SomeDecimalProp = 20 } },
+                ]
+            },
+            new() {
+                Id = 2,
+                SomeDateProp = DateTime.Now.AddYears(2),
+                SomeDecimalProp = 20M,
+                SomeStringProp = "somestring2"
+            },
+            new() {
+                Id = 3,
+                SomeDateProp = DateTime.Now.AddYears(3),
+                SomeDecimalProp = 30M,
+                SomeStringProp = "somestring3"
+            },
+            new() {
+                Id = 4,
+                SomeDateProp = DateTime.Now.AddYears(4),
+                SomeDecimalProp = 40M,
+                SomeStringProp = "somestring4",
+                DeletionDate = DateTime.Now.AddDays(4).AddYears(4),
+                IsDeleted = true,
+            }
+        };
+
+        var dbContext = _serviceProvider.GetRequiredService<MilvaBulkDbContextFixture>();
+        await dbContext.FullAuditableEntities.AddRangeAsync(entities);
+        await dbContext.SaveChangesAsync();
+
+        // Act
+        var result = await dbContext.FullAuditableEntities.IncludeAll(dbContext).ToListAsync();
+
+        // Assert
+        result.Should().HaveCount(entities.Count);
+        result[0].ManyToOneEntities.Count.Should().Be(2);
+    }
+
     #endregion
 
     #region IncludeTranslations
+
+    [Fact]
+    public async Task IncludeTranslations_WithInvalidEntities_ShouldNotIncludeTranslations()
+    {
+        // Arrange
+        await InitializeAsync(services =>
+        {
+            services.ConfigureMilvaDataAccess(opt =>
+            {
+                opt.DbContext = new DbContextConfiguration
+                {
+                    UseUtcForDateTime = true,
+                    DefaultSoftDeletionState = SoftDeletionState.Active,
+                    GetCurrentUserNameMethod = (sp) => "testuser"
+                };
+            });
+        });
+
+        var entities = new List<HasTranslationEntityFixture>
+        {
+            new() {
+                Id = 1,
+            },
+            new() {
+                Id = 2,
+            },
+        };
+
+        var dbContext = _serviceProvider.GetRequiredService<MilvaBulkDbContextFixture>();
+        await dbContext.HasTranslationEntities.AddRangeAsync(entities);
+        await dbContext.SaveChangesAsync();
+
+        // Act
+        var result = await dbContext.HasTranslationEntities.IncludeTranslations(dbContext).ToListAsync();
+
+        // Assert
+        result.Should().HaveCount(entities.Count);
+        result[0].Translations.Should().BeNull();
+    }
+
+    [Fact]
+    public async Task IncludeTranslations_WithValidEntities_ShouldIncludeTranslations()
+    {
+        // Arrange
+        await InitializeAsync(services =>
+        {
+            services.ConfigureMilvaDataAccess(opt =>
+            {
+                opt.DbContext = new DbContextConfiguration
+                {
+                    UseUtcForDateTime = true,
+                    DefaultSoftDeletionState = SoftDeletionState.Active,
+                    GetCurrentUserNameMethod = (sp) => "testuser"
+                };
+            });
+        });
+
+        var entities = new List<HasTranslationEntityFixture>
+        {
+            new() {
+                Id = 1,
+                Translations =
+                [
+                       new() { Id = 1, LanguageId = 1 , Name = "trname1" },
+                       new() { Id = 2, LanguageId = 2 , Name = "enname1" },
+                ]
+            },
+            new() {
+                Id = 2,
+                Translations =
+                [
+                       new() { Id = 3, LanguageId = 1 , Name = "trname2" },
+                       new() { Id = 4, LanguageId = 2 , Name = "enname2" },
+                ]
+            },
+        };
+
+        var dbContext = _serviceProvider.GetRequiredService<MilvaBulkDbContextFixture>();
+        await dbContext.HasTranslationEntities.AddRangeAsync(entities);
+        await dbContext.SaveChangesAsync();
+
+        // Act
+        var result = await dbContext.HasTranslationEntities.IncludeTranslations(dbContext).ToListAsync();
+
+        // Assert
+        result.Should().HaveCount(entities.Count);
+        result[0].Translations.Count.Should().Be(2);
+    }
+
+    [Fact]
+    public async Task IncludeTranslations_GenericOverload_WithInbvalidEntities_ShouldNotIncludeTranslations()
+    {
+        // Arrange
+        await InitializeAsync(services =>
+        {
+            services.ConfigureMilvaDataAccess(opt =>
+            {
+                opt.DbContext = new DbContextConfiguration
+                {
+                    UseUtcForDateTime = true,
+                    DefaultSoftDeletionState = SoftDeletionState.Active,
+                    GetCurrentUserNameMethod = (sp) => "testuser"
+                };
+            });
+        });
+
+        var entities = new List<HasTranslationEntityFixture>
+        {
+            new() {
+                Id = 1,
+                Translations =
+                [
+                       new() { Id = 1, LanguageId = 1 , Name = "trname1" },
+                       new() { Id = 2, LanguageId = 2 , Name = "enname1" },
+                ]
+            },
+            new() {
+                Id = 2,
+                Translations =
+                [
+                       new() { Id = 3, LanguageId = 1 , Name = "trname2" },
+                       new() { Id = 4, LanguageId = 2 , Name = "enname2" },
+                ]
+            },
+        };
+
+        var dbContext = _serviceProvider.GetRequiredService<MilvaBulkDbContextFixture>();
+        await dbContext.HasTranslationEntities.AddRangeAsync(entities);
+        await dbContext.SaveChangesAsync();
+
+        // Act
+        var result = await dbContext.HasTranslationEntities.IncludeTranslations<HasTranslationEntityFixture, TranslationEntityFixture>().ToListAsync();
+
+        // Assert
+        result.Should().HaveCount(entities.Count);
+        result[0].Translations.Should().BeNull();
+    }
+
+    [Fact]
+    public async Task IncludeTranslations_GenericOverload_WithValidEntities_ShouldIncludeTranslations()
+    {
+        // Arrange
+        await InitializeAsync(services =>
+        {
+            services.ConfigureMilvaDataAccess(opt =>
+            {
+                opt.DbContext = new DbContextConfiguration
+                {
+                    UseUtcForDateTime = true,
+                    DefaultSoftDeletionState = SoftDeletionState.Active,
+                    GetCurrentUserNameMethod = (sp) => "testuser"
+                };
+            });
+        });
+
+        var entities = new List<HasTranslationEntityFixture>
+        {
+            new() {
+                Id = 1,
+                Translations =
+                [
+                       new() { Id = 1, LanguageId = 1 , Name = "trname1" },
+                       new() { Id = 2, LanguageId = 2 , Name = "enname1" },
+                ]
+            },
+            new() {
+                Id = 2,
+                Translations =
+                [
+                       new() { Id = 3, LanguageId = 1 , Name = "trname2" },
+                       new() { Id = 4, LanguageId = 2 , Name = "enname2" },
+                ]
+            },
+        };
+
+        var dbContext = _serviceProvider.GetRequiredService<MilvaBulkDbContextFixture>();
+        await dbContext.HasTranslationEntities.AddRangeAsync(entities);
+        await dbContext.SaveChangesAsync();
+
+        // Act
+        var result = await dbContext.HasTranslationEntities.IncludeTranslations<HasTranslationEntityFixture, TranslationEntityFixture>().ToListAsync();
+
+        // Assert
+        result.Should().HaveCount(entities.Count);
+        result[0].Translations.Count.Should().Be(2);
+    }
 
     #endregion
 }

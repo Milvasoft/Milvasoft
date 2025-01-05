@@ -218,7 +218,7 @@ public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepositor
         var mainCondition = CreateKeyEqualityExpressionWithIsDeletedFalse(id, conditionExpression);
 
         return await _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
-                           .SingleOrDefaultAsync(mainCondition, cancellationToken);
+                           .FirstOrDefaultAsync(mainCondition, cancellationToken);
     }
 
     /// <summary>
@@ -243,7 +243,7 @@ public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepositor
         return await _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
                            .Where(mainCondition)
                            .Select(UpdateProjectionExpression(projection))
-                           .SingleOrDefaultAsync(conditionAfterProjection ?? (entity => true), cancellationToken);
+                           .FirstOrDefaultAsync(conditionAfterProjection ?? (entity => true), cancellationToken);
     }
 
     #endregion
@@ -272,11 +272,11 @@ public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepositor
             return await _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
                                .Where(mainCondition)
                                .IncludeMultiple(includes)
-                               .SingleOrDefaultAsync(cancellationToken);
+                               .FirstOrDefaultAsync(cancellationToken);
 
         var query = _dbSet.AsTracking(GetQueryTrackingBehavior(tracking)).Where(mainCondition);
 
-        return await IncludeNavigationProperties(query).SingleOrDefaultAsync(cancellationToken);
+        return await IncludeNavigationProperties(query).FirstOrDefaultAsync(cancellationToken);
     }
 
     /// <summary>
@@ -306,12 +306,12 @@ public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepositor
                                .Where(mainCondition)
                                .IncludeMultiple(includes)
                                .Select(UpdateProjectionExpression(projection))
-                               .SingleOrDefaultAsync(conditionAfterProjection ?? (entity => true), cancellationToken);
+                               .FirstOrDefaultAsync(conditionAfterProjection ?? (entity => true), cancellationToken);
 
         var query = _dbSet.AsTracking(GetQueryTrackingBehavior(tracking)).Where(mainCondition);
 
         return await IncludeNavigationProperties(query).Select(UpdateProjectionExpression(projection))
-                                                       .SingleOrDefaultAsync(conditionAfterProjection ?? (entity => true), cancellationToken);
+                                                       .FirstOrDefaultAsync(conditionAfterProjection ?? (entity => true), cancellationToken);
     }
 
     /// <summary>

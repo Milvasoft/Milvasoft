@@ -51,5 +51,5 @@ public class ScheduleConfig : IScheduleConfig
     /// <summary>
     /// If seconds requested in cron expression send this property.
     /// </summary>
-    public CronFormat CronFormat { get; set; } = Cronos.CronFormat.IncludeSeconds;
+    public CronFormat CronFormat { get; set; } = CronFormat.IncludeSeconds;
 }
