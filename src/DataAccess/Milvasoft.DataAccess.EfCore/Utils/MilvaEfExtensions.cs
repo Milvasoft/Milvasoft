@@ -3,7 +3,6 @@ using Milvasoft.Components.Rest.Enums;
 using Milvasoft.Components.Rest.MilvaResponse;
 using Milvasoft.Components.Rest.Request;
 using Milvasoft.Core.MultiLanguage.EntityBases;
-using Milvasoft.Core.MultiLanguage.EntityBases.Abstract;
 using Milvasoft.Types.Structs;
 
 namespace Milvasoft.DataAccess.EfCore.Utils;
@@ -239,20 +238,14 @@ public static class MilvaEfExtensions
     /// <summary>
     /// Allows to all entities associated with deletions to be Included to the entity(s) to be included in the process.
     /// </summary>
-    /// <param name="source"></param>
+    /// <param name="query"></param>
     /// <param name="context"></param>
-    public static IQueryable<T> IncludeAll<T>(this IQueryable<T> source, DbContext context)
-        where T : class
+    /// <param name="maxDepth"></param>
+    public static IQueryable<T> IncludeAll<T>(this IQueryable<T> query, DbContext context, int maxDepth = 2) where T : class
     {
-        var navigations = context.Model.FindEntityType(typeof(T))
-                                       .GetDerivedTypesInclusive()
-                                       .SelectMany(type => type.GetNavigations())
-                                       .Distinct();
+        var visited = new HashSet<string>();
 
-        foreach (var property in navigations)
-            source = source.Include(property.Name);
-
-        return source;
+        return IncludeNavigationProperties(query, context, typeof(T), visited, maxDepth);
     }
 
     /// <summary>
@@ -274,11 +267,54 @@ public static class MilvaEfExtensions
         return source;
     }
 
-    /// <summary>
-    /// Allows to all entities associated with deletions to be Included to the entity(s) to be included in the process.
-    /// Entities must be contains "Translations" navigation property for include process. (e.g. Poco.Translations)
-    /// </summary>
-    /// <param name="source"></param>
-    public static IQueryable<TEntity> IncludeTranslations<TEntity, TLangEntity>(this IQueryable<TEntity> source) where TEntity : class, IHasTranslation<TLangEntity> where TLangEntity : class
-        => source.Include(MultiLanguageEntityPropertyNames.Translations);
+    private static IQueryable<T> IncludeNavigationProperties<T>(IQueryable<T> query,
+                                                                DbContext context,
+                                                                Type entityType,
+                                                                HashSet<string> visitedPaths,
+                                                                int maxDepth,
+                                                                string basePath = "",
+                                                                int currentDepth = 0) where T : class
+    {
+        // Exit if max depth is reached
+        if (currentDepth >= maxDepth)
+            return query;
+
+        // Get entity metadata
+        var entityTypeMetadata = context.Model.FindEntityType(entityType);
+
+        if (entityTypeMetadata == null)
+            return query;
+
+        // Get navigation properties
+        var navigationProperties = entityTypeMetadata.GetNavigations();
+
+        foreach (var navigation in navigationProperties)
+        {
+            // Build full path
+            var navigationPath = string.IsNullOrEmpty(basePath)
+                                        ? navigation.Name
+                                        : $"{basePath}.{navigation.Name}";
+
+            // Skip if already visited (circular reference prevention)
+            if (visitedPaths.Contains(navigationPath))
+                continue;
+
+            // Mark as visited
+            visitedPaths.Add(navigationPath);
+
+            // Include the navigation
+            query = query.Include(navigationPath);
+
+            // Recursively include nested navigations
+            query = IncludeNavigationProperties(query,
+                                                context,
+                                                navigation.TargetEntityType.ClrType,
+                                                visitedPaths,
+                                                maxDepth,
+                                                navigationPath,
+                                                currentDepth + 1);
+        }
+
+        return query;
+    }
 }

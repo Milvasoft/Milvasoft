@@ -28,6 +28,7 @@ public partial class CommonHelperTests
     }
 
     [Fact]
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Minor Code Smell", "S1125:Boolean literals should not be redundant", Justification = "Expression equality")]
     public void CreateIsDeletedFalseExpression_WithEntityTypeIsSoftDeletable_ShouldReturnIsDeletedFalseExpression()
     {
         // Arrange

@@ -461,6 +461,8 @@ namespace Milvasoft.IntegrationTests.Client.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("EntityId");
+
                     b.ToTable("TranslationEntities");
                 });
 
@@ -535,9 +537,25 @@ namespace Milvasoft.IntegrationTests.Client.Migrations
                     b.Navigation("Entity");
                 });
 
+            modelBuilder.Entity("Milvasoft.IntegrationTests.Client.Fixtures.EntityFixtures.TranslationEntityFixture", b =>
+                {
+                    b.HasOne("Milvasoft.IntegrationTests.Client.Fixtures.EntityFixtures.HasTranslationEntityFixture", "Entity")
+                        .WithMany("Translations")
+                        .HasForeignKey("EntityId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Entity");
+                });
+
             modelBuilder.Entity("Milvasoft.IntegrationTests.Client.Fixtures.EntityFixtures.AnotherFullAuditableEntityFixture", b =>
                 {
                     b.Navigation("ManyToOneEntities");
+                });
+
+            modelBuilder.Entity("Milvasoft.IntegrationTests.Client.Fixtures.EntityFixtures.HasTranslationEntityFixture", b =>
+                {
+                    b.Navigation("Translations");
                 });
 
             modelBuilder.Entity("Milvasoft.IntegrationTests.Client.Fixtures.EntityFixtures.RestTestEntityFixture", b =>

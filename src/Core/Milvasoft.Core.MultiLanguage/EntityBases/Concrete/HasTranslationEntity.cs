@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace Milvasoft.Core.MultiLanguage.EntityBases.Concrete;
 
 /// <summary>
-/// Base entity for all of entities.
+/// Translation base entity.
 /// </summary>
 public abstract class HasTranslationEntity<TTranslationEntity> : HasTranslationEntity<int, TTranslationEntity>
         where TTranslationEntity : class
@@ -12,7 +12,7 @@ public abstract class HasTranslationEntity<TTranslationEntity> : HasTranslationE
 }
 
 /// <summary>
-/// Base entity for all of entities.
+/// Translation base entity.
 /// </summary>
 public abstract class HasTranslationEntity<TKey, TTranslationEntity> : EntityBase<TKey>, IHasTranslation<TTranslationEntity>, IBaseEntity<TKey>
         where TKey : struct, IEquatable<TKey>

@@ -56,7 +56,7 @@ public static partial class CommonHelper
         var descriptionAttribute = fieldInfo.GetCustomAttribute<DescriptionAttribute>(false);
 
         if (descriptionAttribute != null)
-            description = ((DescriptionAttribute)descriptionAttribute).Description;
+            description = descriptionAttribute.Description;
 
         return description;
     }

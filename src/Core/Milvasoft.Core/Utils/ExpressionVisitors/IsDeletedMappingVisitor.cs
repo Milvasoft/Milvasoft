@@ -61,28 +61,26 @@ public class IsDeletedMappingVisitor : ExpressionVisitor
     private Expression FindSourceExpression(MemberInitExpression node)
     {
         // Try to find a source expression from the member assignments
-        foreach (var binding in node.Bindings.OfType<MemberAssignment>())
+        foreach (var bindingExpression in node.Bindings.OfType<MemberAssignment>().Select(i => i.Expression))
         {
-            var expr = binding.Expression;
-
-            if (expr is MemberExpression memberExpr)
+            if (bindingExpression is MemberExpression memberExpr)
             {
                 // For expressions like u.SomeNavigation.Id, return u.SomeNavigation
                 return memberExpr.Expression;
             }
-            else if (expr is MethodCallExpression methodCallExpr)
+            else if (bindingExpression is MethodCallExpression methodCallExpr)
             {
                 // For method calls, we might get the source from the first argument
                 return methodCallExpr.Arguments.FirstOrDefault();
             }
-            else if (expr is ConditionalExpression conditionalExpr)
+            else if (bindingExpression is ConditionalExpression conditionalExpr)
             {
                 // For conditional expressions, check the true branch
                 var source = FindSourceExpressionFromConditional(conditionalExpr);
                 if (source != null)
                     return source;
             }
-            else if (expr is MemberInitExpression initExpr)
+            else if (bindingExpression is MemberInitExpression initExpr)
             {
                 // Recursively find the source expression
                 var source = FindSourceExpression(initExpr);
