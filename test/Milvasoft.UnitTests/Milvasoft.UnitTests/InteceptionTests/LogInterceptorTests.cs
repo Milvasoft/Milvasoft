@@ -66,7 +66,7 @@ public class LogInterceptorTests
         {
             var result = x.Method();
 
-            var logExistsWithActivityId = TestLogger.Logs.TryGetValue(result, out var logEntity);
+            var logExistsWithActivityId = TestLogger.Logs.TryGetValue(result, out var _);
 
             logExistsWithActivityId.Should().BeFalse();
 

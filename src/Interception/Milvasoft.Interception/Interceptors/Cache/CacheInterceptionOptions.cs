@@ -6,6 +6,7 @@ namespace Milvasoft.Interception.Interceptors.Cache;
 /// <summary>
 /// Represents the options for cache interception.
 /// </summary>
+[System.Diagnostics.CodeAnalysis.SuppressMessage("Critical Code Smell", "S2696:Instance members should not write to \"static\" fields", Justification = "<Pending>")]
 public class CacheInterceptionOptions : ICacheInterceptionOptions
 {
     private static Type _accessorType = null;

@@ -97,7 +97,9 @@ public partial class LogInterceptor(IServiceProvider serviceProvider) : IMilvaIn
                 await _logger.LogAsync(logObjectAsJson);
             }
             else
+#pragma warning disable S6966 // Awaitable method should be used
                 _logger.Log(logObjectAsJson);
+#pragma warning restore S6966 // Awaitable method should be used
 
             //If metadata removing requested, add removed metadata to call.returnValue again
             if (metadatas != null)

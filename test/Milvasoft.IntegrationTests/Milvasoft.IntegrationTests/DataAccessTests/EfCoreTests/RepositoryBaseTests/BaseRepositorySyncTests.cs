@@ -23,6 +23,7 @@ namespace Milvasoft.IntegrationTests.DataAccessTests.EfCoreTests.RepositoryBaseT
 
 [Collection(nameof(UtcTrueDatabaseTestCollection))]
 [Trait("RepositoryBase Sync Integration Tests", "Integration tests for Milvasoft.DataAccess.EfCore integration tests.")]
+[System.Diagnostics.CodeAnalysis.SuppressMessage("Major Code Smell", "S6966:Awaitable method should be used", Justification = "<Pending>")]
 public class BaseRepositorySyncTests(CustomWebApplicationFactory factory) : DataAccessIntegrationTestBase(factory)
 {
     public override async Task InitializeAsync(Action<IServiceCollection> configureServices = null, Action<IApplicationBuilder> configureApp = null)
@@ -161,9 +162,9 @@ public class BaseRepositorySyncTests(CustomWebApplicationFactory factory) : Data
 
         // Assert
         getAllData.Should().HaveCount(3);
-        getAllData.FirstOrDefault(i => i.Id == 1).ManyToOneEntities.Count.Should().Be(1);
+        getAllData.Find(i => i.Id == 1).ManyToOneEntities.Count.Should().Be(1);
         getSomeData.Should().HaveCount(3);
-        getSomeData.FirstOrDefault(i => i.Id == 1).ManyToOneEntities.Count.Should().Be(1);
+        getSomeData.Find(i => i.Id == 1).ManyToOneEntities.Count.Should().Be(1);
         firstData.Should().NotBeNull();
         firstData.ManyToOneEntities.Count.Should().Be(1);
         singleData.Should().NotBeNull();
@@ -240,9 +241,9 @@ public class BaseRepositorySyncTests(CustomWebApplicationFactory factory) : Data
 
         // Assert
         getAllData.Should().HaveCount(4);
-        getAllData.FirstOrDefault(i => i.Id == 1).ManyToOneEntities.Count.Should().Be(2);
+        getAllData.Find(i => i.Id == 1).ManyToOneEntities.Count.Should().Be(2);
         getSomeData.Should().HaveCount(4);
-        getSomeData.FirstOrDefault(i => i.Id == 1).ManyToOneEntities.Count.Should().Be(2);
+        getSomeData.Find(i => i.Id == 1).ManyToOneEntities.Count.Should().Be(2);
         firstData.Should().NotBeNull();
         firstData.ManyToOneEntities.Count.Should().Be(2);
         singleData.Should().NotBeNull();
@@ -1603,7 +1604,6 @@ public class BaseRepositorySyncTests(CustomWebApplicationFactory factory) : Data
                 x.UseNpgsql(_factory.GetConnectionString()).UseQueryTrackingBehavior(queryTrackingBehavior);
             });
         });
-        var dbContext = _serviceProvider.GetService<MilvaBulkDbContextFixture>();
         var entityRepository = _serviceProvider.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
 
         SomeFullAuditableEntityFixture entity = null;
@@ -1632,7 +1632,6 @@ public class BaseRepositorySyncTests(CustomWebApplicationFactory factory) : Data
                 x.UseNpgsql(_factory.GetConnectionString()).UseQueryTrackingBehavior(queryTrackingBehavior);
             });
         });
-        var dbContext = _serviceProvider.GetService<MilvaBulkDbContextFixture>();
         var entityRepository = _serviceProvider.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
 
         var entity = new SomeFullAuditableEntityFixture()
@@ -2566,7 +2565,6 @@ public class BaseRepositorySyncTests(CustomWebApplicationFactory factory) : Data
                 x.UseNpgsql(_factory.GetConnectionString()).UseQueryTrackingBehavior(queryTrackingBehavior);
             });
         });
-        var dbContext = _serviceProvider.GetService<MilvaBulkDbContextFixture>();
         var entityRepository = _serviceProvider.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
 
         // Act 

@@ -156,9 +156,9 @@ public class BaseRepositoryAsyncTests(CustomWebApplicationFactory factory) : Dat
 
         // Assert
         getAllData.Should().HaveCount(3);
-        getAllData.FirstOrDefault(i => i.Id == 1).ManyToOneEntities.Count.Should().Be(1);
+        getAllData.Find(i => i.Id == 1).ManyToOneEntities.Count.Should().Be(1);
         getSomeData.Should().HaveCount(3);
-        getSomeData.FirstOrDefault(i => i.Id == 1).ManyToOneEntities.Count.Should().Be(1);
+        getSomeData.Find(i => i.Id == 1).ManyToOneEntities.Count.Should().Be(1);
         firstData.Should().NotBeNull();
         firstData.ManyToOneEntities.Count.Should().Be(1);
         singleData.Should().NotBeNull();
@@ -279,9 +279,9 @@ public class BaseRepositoryAsyncTests(CustomWebApplicationFactory factory) : Dat
 
         // Assert
         getAllData.Should().HaveCount(4);
-        getAllData.FirstOrDefault(i => i.Id == 1).ManyToOneEntities.Count.Should().Be(2);
+        getAllData.Find(i => i.Id == 1).ManyToOneEntities.Count.Should().Be(2);
         getSomeData.Should().HaveCount(4);
-        getSomeData.FirstOrDefault(i => i.Id == 1).ManyToOneEntities.Count.Should().Be(2);
+        getSomeData.Find(i => i.Id == 1).ManyToOneEntities.Count.Should().Be(2);
         firstData.Should().NotBeNull();
         firstData.ManyToOneEntities.Count.Should().Be(2);
         singleData.Should().NotBeNull();
@@ -1694,7 +1694,6 @@ public class BaseRepositoryAsyncTests(CustomWebApplicationFactory factory) : Dat
                         });
         });
 
-        var dbContext = _serviceProvider.GetService<MilvaBulkDbContextFixture>();
         var entityRepository = _serviceProvider.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
 
         SomeFullAuditableEntityFixture entity = null;
@@ -1724,7 +1723,6 @@ public class BaseRepositoryAsyncTests(CustomWebApplicationFactory factory) : Dat
                         });
         });
 
-        var dbContext = _serviceProvider.GetService<MilvaBulkDbContextFixture>();
         var entityRepository = _serviceProvider.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
 
         var entity = new SomeFullAuditableEntityFixture()
@@ -2683,7 +2681,6 @@ public class BaseRepositoryAsyncTests(CustomWebApplicationFactory factory) : Dat
                         });
         });
 
-        var dbContext = _serviceProvider.GetService<MilvaBulkDbContextFixture>();
         var entityRepository = _serviceProvider.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
 
         // Act 

@@ -23,9 +23,10 @@ public partial class BoolLocalizedValueFetcher(IServiceProvider serviceProvider)
     /// <param name="optionalData">Optional data format should be <see cref="string"/>. Sample : "Yes,No" . 
     /// The left side is the value of the true state, and the right side is the value of the false state.</param>
     /// <returns></returns>
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Major Code Smell", "S1168:Empty arrays and collections should be returned instead of null", Justification = "<Pending>")]
     public List<object> Fetch(object optionalData = null)
     {
-        if (optionalData is null || optionalData is not string || !OptionalDataRegex().IsMatch(optionalData as string))
+        if (optionalData is not string || !OptionalDataRegex().IsMatch(optionalData as string))
             return null;
 
         var localizer = _serviceProvider.GetService<IMilvaLocalizer>();

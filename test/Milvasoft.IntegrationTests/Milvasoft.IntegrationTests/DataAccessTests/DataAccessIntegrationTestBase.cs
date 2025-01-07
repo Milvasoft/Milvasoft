@@ -33,8 +33,5 @@ public abstract class DataAccessIntegrationTestBase(CustomWebApplicationFactory 
         await _factory.CreateRespawner();
     }
 
-    public virtual async Task DisposeAsync()
-    {
-        await _factory.ResetDatabase();
-    }
+    public virtual async Task DisposeAsync() => await _factory.ResetDatabase();
 }

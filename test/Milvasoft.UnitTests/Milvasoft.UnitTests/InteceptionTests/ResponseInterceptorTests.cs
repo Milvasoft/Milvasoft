@@ -140,7 +140,7 @@ public class ResponseInterceptorTests
         Response<SomeComplexClass> MethodReturnTypeIsComplexResponseTyped();
     }
 
-    public enum SomeEnum
+    public enum SomeEnumFixture
     {
         None,
     }
@@ -176,7 +176,7 @@ public class ResponseInterceptorTests
         public DateTime DateProp { get; set; }
 
         [HideByRole("NotHide")]
-        public SomeEnum EnumProp { get; set; }
+        public SomeEnumFixture EnumProp { get; set; }
     }
 
     public class SomeClass : ISomeInterface
@@ -203,7 +203,7 @@ public class ResponseInterceptorTests
                 ComplexClass = new AnotherComplexClass
                 {
                     DateProp = DateTime.Now,
-                    EnumProp = SomeEnum.None
+                    EnumProp = SomeEnumFixture.None
                 },
                 ListProp = []
             };

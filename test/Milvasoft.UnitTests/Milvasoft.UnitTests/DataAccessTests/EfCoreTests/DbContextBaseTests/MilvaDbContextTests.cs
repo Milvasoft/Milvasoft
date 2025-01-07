@@ -816,7 +816,6 @@ public class MilvaDbContextTests
             EntityName = nameof(SomeBaseEntityFixture),
             PropertyName = nameof(SomeBaseEntityFixture.SomeStringProp)
         };
-        List<object> expectedData = ["stringprop", "stringprop2"];
 
         // Act
         var result = await dbContext.GetPropertyValuesAsync(request);

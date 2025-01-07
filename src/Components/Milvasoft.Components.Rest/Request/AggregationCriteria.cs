@@ -58,7 +58,9 @@ public class AggregationCriteria
         // Apply the aggregation based on the aggregation type
         if (Type == AggregationType.Count)
         {
+#pragma warning disable S6966 // Awaitable method should be used
             var count = runAsync ? await query.CountAsync(cancellationToken).ConfigureAwait(false) : query.Count();
+#pragma warning restore S6966 // Awaitable method should be used
             return new AggregationResult(prop.Name, Type, count);
         }
         else

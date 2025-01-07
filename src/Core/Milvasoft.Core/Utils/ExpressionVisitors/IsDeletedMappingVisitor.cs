@@ -100,13 +100,9 @@ public class IsDeletedMappingVisitor : ExpressionVisitor
             return FindSourceExpression(trueInit);
         }
         // Alternatively, check the test part
-        else if (conditionalExpr.Test is BinaryExpression binaryExpr)
+        else if (conditionalExpr.Test is BinaryExpression binaryExpr && binaryExpr.Left is MemberExpression memberExpr)
         {
-            // For conditions like u.SomeId != null, get u.SomeId
-            if (binaryExpr.Left is MemberExpression memberExpr)
-            {
-                return memberExpr.Expression;
-            }
+            return memberExpr.Expression;
         }
 
         return null;

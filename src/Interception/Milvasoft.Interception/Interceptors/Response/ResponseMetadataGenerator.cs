@@ -408,7 +408,7 @@ public class ResponseMetadataGenerator(IResponseInterceptionOptions responseInte
 
     private static void CheckAndAddMetadata(List<ResponseDataMetadata> metadatas, ResponseDataMetadata metadata)
     {
-        if (!metadatas.Any(m => m.Name == metadata.Name && m.Type == metadata.Type))
+        if (!metadatas.Exists(m => m.Name == metadata.Name && m.Type == metadata.Type))
             metadatas.Add(metadata);
     }
 
@@ -416,7 +416,7 @@ public class ResponseMetadataGenerator(IResponseInterceptionOptions responseInte
         => property.PropertyType == callerObjectInfo.ReviewedType
                 || (property.PropertyType.IsGenericType && property.PropertyType.GetGenericArguments()[0] == callerObjectInfo.ReviewedType);
     private static bool IsCustomComplextType(PropertyInfo property)
-        => property.PropertyType.IsClass && !CallerObjectInfo.ReviewObjectType(property.PropertyType, out bool isCollectionComplex).Namespace.Contains(nameof(System));
+        => property.PropertyType.IsClass && !CallerObjectInfo.ReviewObjectType(property.PropertyType, out bool _).Namespace.Contains(nameof(System));
 }
 
 /// <summary>

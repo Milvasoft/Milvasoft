@@ -6,6 +6,7 @@ namespace Milvasoft.Core.Abstractions.Cache;
 /// Makes IOptions cache aware.
 /// </summary>
 /// <typeparam name="TCacheOptions"></typeparam>
+[System.Diagnostics.CodeAnalysis.SuppressMessage("Major Code Smell", "S2326:Unused type parameters should be removed", Justification = "<Pending>")]
 public interface ICacheOptions<TCacheOptions> : IMilvaOptions where TCacheOptions : class
 {
     /// <summary>

@@ -280,7 +280,7 @@ public class ResponseMetadataGeneratorTests
         ListResponse<SomeComplexClass> MethodReturnTypeIsListResponseTypedWithNullData();
     }
 
-    public enum SomeEnum
+    public enum SomeEnumFixture
     {
         None,
         SomeValue,
@@ -327,8 +327,8 @@ public class ResponseMetadataGeneratorTests
 
         [HideByRole("NotHide")]
         [Filterable(true, FilterComponentType = UiInputConstant.SelectInput)]
-        [Options<EnumLocalizedValueFetcher>(EnumLocalizedValueFetcher.FetcherName, typeof(SomeEnum))]
-        public SomeEnum EnumProp { get; set; }
+        [Options<EnumLocalizedValueFetcher>(EnumLocalizedValueFetcher.FetcherName, typeof(SomeEnumFixture))]
+        public SomeEnumFixture EnumProp { get; set; }
 
         [HideByRole("NotHide")]
         [Options<BoolLocalizedValueFetcher>(BoolLocalizedValueFetcher.FetcherName, "Yes,No")]
@@ -355,7 +355,7 @@ public class ResponseMetadataGeneratorTests
                 ComplexClass = new AnotherComplexClass
                 {
                     DateProp = DateTime.Now,
-                    EnumProp = SomeEnum.None
+                    EnumProp = SomeEnumFixture.None
                 },
                 ListProp = []
             };

@@ -21,9 +21,10 @@ public class EnumLocalizedValueFetcher(IServiceProvider serviceProvider) : IOpti
     /// </summary>
     /// <param name="optionalData">Optional data format should be enum <see cref="Type"/>.</param>
     /// <returns></returns>
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Major Code Smell", "S1168:Empty arrays and collections should be returned instead of null", Justification = "<Pending>")]
     public List<object> Fetch(object optionalData = null)
     {
-        if (optionalData is null || optionalData is not Type)
+        if (optionalData is not Type)
             return null;
 
         Type enumType = optionalData as Type;

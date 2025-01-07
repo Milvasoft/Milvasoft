@@ -11,6 +11,7 @@ public interface IIncludable;
 /// Supports queryable Include/ThenInclude chaining operators.
 /// </summary>
 /// <typeparam name="TEntity"></typeparam>
+[System.Diagnostics.CodeAnalysis.SuppressMessage("Major Code Smell", "S2326:Unused type parameters should be removed", Justification = "<Pending>")]
 public interface IIncludable<out TEntity> : IIncludable;
 
 /// <summary>
@@ -18,6 +19,7 @@ public interface IIncludable<out TEntity> : IIncludable;
 /// </summary>
 /// <typeparam name="TEntity"></typeparam>
 /// <typeparam name="TProperty"></typeparam>
+[System.Diagnostics.CodeAnalysis.SuppressMessage("Major Code Smell", "S2326:Unused type parameters should be removed", Justification = "<Pending>")]
 public interface IIncludable<out TEntity, out TProperty> : IIncludable<TEntity>;
 
 /// <summary>

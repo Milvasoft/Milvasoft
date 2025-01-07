@@ -379,6 +379,7 @@ public static class NoSqlRelationHelper
         return new ObjectId(objectIdStringBuilder.ToString() + valueConverted);
     }
 
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Major Code Smell", "S2436:Types and methods should not have too many generic parameters", Justification = "<Pending>")]
     private static List<Tuple<TReturn, ObjectId>> FindValueReferencesToBeMapped<TEntity, TReferenceProperty, TMapProperty, TReturn>(List<TEntity> entities, out string collectionName)
          where TEntity : IAuditable<ObjectId>
          where TMapProperty : IAuditable<ObjectId>

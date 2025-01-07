@@ -22,6 +22,7 @@ using System.Linq.Expressions;
 namespace Milvasoft.IntegrationTests.DataAccessTests.EfCoreTests;
 
 [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "xUnit1042:The member referenced by the MemberData attribute returns untyped data rows", Justification = "<Pending>")]
+[System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0079:Remove unnecessary suppression", Justification = "<Pending>")]
 [Collection(nameof(UtcTrueDatabaseTestCollection))]
 [Trait("MilvaDbContext Integration Tests", "Integration tests for Milvasoft.DataAccess.EfCore integration tests.")]
 public class DbContextTests(CustomWebApplicationFactory factory) : DataAccessIntegrationTestBase(factory)
@@ -579,7 +580,6 @@ public class DbContextTests(CustomWebApplicationFactory factory) : DataAccessInt
 
         var dbContext = _serviceProvider.GetRequiredService<MilvaBulkDbContextFixture>();
 
-        var now = DateTime.UtcNow;
         var entity = new SomeEntityFixture
         {
             Id = 1,
@@ -633,7 +633,6 @@ public class DbContextTests(CustomWebApplicationFactory factory) : DataAccessInt
 
         var dbContext = _serviceProvider.GetRequiredService<MilvaBulkDbContextFixture>();
 
-        var now = DateTime.UtcNow;
         var entity = new SomeEntityFixture
         {
             Id = 1,
@@ -1173,7 +1172,6 @@ public class DbContextTests(CustomWebApplicationFactory factory) : DataAccessInt
             EntityName = nameof(SomeFullAuditableEntityFixture),
             PropertyName = nameof(SomeFullAuditableEntityFixture.SomeStringProp)
         };
-        List<object> expectedData = ["stringprop", "stringprop2"];
 
         // Act
         var result = await dbContext.GetPropertyValuesAsync(request);
@@ -1311,8 +1309,6 @@ public class DbContextTests(CustomWebApplicationFactory factory) : DataAccessInt
         // Act & Assert
         await dbContext.FullAuditableEntities.AddRangeAsync(entities);
         await dbContext.SaveChangesAsync();
-
-        List<object> expectedData = ["stringprop", "stringprop2"];
 
         // Act
         var result = await dbContext.GetEntityPropertyValuesAsync<SomeFullAuditableEntityFixture, string>(nameof(SomeFullAuditableEntityFixture.SomeStringProp), null, null);
