@@ -1,16 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
-using Microsoft.Extensions.DependencyInjection;
 using Milvasoft.Components.Rest.Request;
-using Milvasoft.Core.MultiLanguage;
-using Milvasoft.Core.MultiLanguage.EntityBases;
-using Milvasoft.Core.MultiLanguage.EntityBases.Abstract;
-using Milvasoft.Core.MultiLanguage.Manager;
 using Milvasoft.DataAccess.EfCore.Utils.LookupModels;
 using Milvasoft.Types.Structs;
 using System.Collections;
 using System.Linq.Expressions;
-using System.Reflection;
 
 namespace Milvasoft.DataAccess.EfCore.DbContextBase;
 
@@ -20,8 +14,6 @@ namespace Milvasoft.DataAccess.EfCore.DbContextBase;
 /// <param name="options"></param>
 public abstract class MilvaDbContext(DbContextOptions options) : DbContext(options), IMilvaDbContextBase
 {
-    private static readonly MethodInfo _createProjectionExpressionMethod = typeof(MultiLanguageExtensions).GetMethod(nameof(MultiLanguageExtensions.CreateProjectionExpression));
-
     /// <summary>
     /// Service provider for access DI contaniner in DbContext.
     /// </summary>
@@ -391,179 +383,7 @@ public abstract class MilvaDbContext(DbContextOptions options) : DbContext(optio
     /// <param name="lookupRequest">The lookup request containing the parameters for the lookup.</param>
     /// <returns>A list of lookup results containing the requested data.</returns>
     public async Task<List<object>> GetLookupsAsync(LookupRequest lookupRequest)
-    {
-        if (lookupRequest?.Parameters.IsNullOrEmpty() ?? true)
-            return [];
-
-        ValidateRequestParameters(lookupRequest);
-
-        var resultList = new List<object>();
-
-        var assemblyTypes = _dbContextConfiguration.DbContext.DynamicFetch.GetEntityAssembly().GetTypes();
-
-        var multiLanguageManager = ServiceProvider?.GetService<IMultiLanguageManager>();
-
-        foreach (var parameter in lookupRequest.Parameters)
-        {
-            var entityName = parameter.EntityName;
-
-            Type entityType = Array.Find(assemblyTypes, i => i.Name == entityName) ?? throw new MilvaUserFriendlyException(MilvaException.InvalidParameter);
-            Type translationEntityType = null;
-
-            List<string> mainEntityPropertyNames = null;
-            List<string> translationEntityPropNames = null;
-
-            if (!parameter.RequestedPropertyNames.IsNullOrEmpty())
-            {
-                if (entityType.CanAssignableTo(typeof(IHasTranslation<>)))
-                {
-                    translationEntityType = Array.Find(assemblyTypes, i => i.IsAssignableTo(typeof(ITranslationEntity<>).MakeGenericType(entityType)));
-                }
-
-                // check requested property names are valid and categorize them as main entity and translation entity
-                foreach (var requestedPropName in parameter.RequestedPropertyNames)
-                {
-                    if (CommonHelper.PropertyExists(entityType, requestedPropName))
-                    {
-                        mainEntityPropertyNames ??= [];
-                        mainEntityPropertyNames.Add(requestedPropName);
-                    }
-                    else
-                    {
-                        //If the requested property name does not exist in the main entity and the entity does not have translations
-                        if (translationEntityType == null)
-                            throw new MilvaUserFriendlyException(MilvaException.InvalidParameter);
-
-                        if (CommonHelper.PropertyExists(translationEntityType, requestedPropName))
-                        {
-                            translationEntityPropNames ??= [];
-                            translationEntityPropNames.Add(requestedPropName);
-                        }
-                        else
-                            throw new MilvaUserFriendlyException(MilvaException.InvalidParameter);
-                    }
-                }
-            }
-
-            List<string> propNamesForProjection = BuildPropertyNameListForProjection(entityType);
-
-            if (!mainEntityPropertyNames.IsNullOrEmpty())
-                propNamesForProjection.AddRange(mainEntityPropertyNames);
-
-            var projectionExpression = _createProjectionExpressionMethod.MakeGenericMethod(entityType, translationEntityType ?? entityType).Invoke(null,
-                                                                                                                                                   [
-                                                                                                                                                       propNamesForProjection,
-                                                                                                                                                       translationEntityPropNames
-                                                                                                                                                   ]);
-
-            parameter.UpdateFilterByForTranslationPropertyNames(translationEntityPropNames);
-
-            var taskResult = (Task)this.GetType()
-                                       .GetMethod(nameof(GetContentsAsync))
-                                       .MakeGenericMethod(entityType)
-                                       .Invoke(this,
-                                       [
-                                           parameter.Filtering,
-                                           parameter.Sorting,
-                                           projectionExpression
-                                       ]);
-
-            await taskResult;
-
-            var resultProperty = taskResult.GetType().GetProperty("Result");
-
-            var lookupList = (IList)resultProperty.GetValue(taskResult);
-
-            List<object> lookups = [];
-
-            if (lookupList.Count > 0)
-            {
-                foreach (var lookup in lookupList)
-                {
-                    Dictionary<string, object> propDic = [];
-
-                    foreach (var prop in lookup.GetType().GetProperties())
-                    {
-                        if (prop.Name != MultiLanguageEntityPropertyNames.Translations)
-                        {
-                            if (prop.Name != EntityPropertyNames.Id && (!parameter.RequestedPropertyNames?.Contains(prop.Name) ?? true))
-                                continue;
-
-                            propDic.Add(prop.Name, prop.GetValue(lookup, null) ?? GetDefaultValue(prop.PropertyType));
-                        }
-                        else
-                        {
-                            if (multiLanguageManager != null && translationEntityPropNames != null)
-                                foreach (var translationPropName in translationEntityPropNames)
-                                {
-                                    if ((!parameter.RequestedPropertyNames?.Contains(translationPropName) ?? true))
-                                        continue;
-
-                                    propDic.Add(translationPropName, multiLanguageManager.GetTranslation(lookup, translationPropName));
-                                }
-                        }
-                    }
-
-                    lookups.Add(propDic.ToJson().ToObject<object>());
-                }
-
-                resultList.Add(new LookupResult
-                {
-                    EntityName = entityName,
-                    Data = lookups
-                });
-            }
-        }
-
-        return resultList;
-
-        static object GetDefaultValue(Type t)
-        {
-            if (t.IsValueType)
-            {
-                return Activator.CreateInstance(t);
-            }
-            else if (t.Name.Contains("String"))
-            {
-                return string.Empty;
-            }
-            else
-            {
-                return null;
-            }
-        }
-
-        void ValidateRequestParameters(LookupRequest lookupRequest)
-        {
-            foreach (var parameter in lookupRequest.Parameters)
-            {
-                if (string.IsNullOrWhiteSpace(parameter.EntityName)
-                    || parameter.RequestedPropertyNames.IsNullOrEmpty()
-                    || parameter.RequestedPropertyNames.Count > _dbContextConfiguration.DbContext.DynamicFetch.MaxAllowedPropertyCountForLookup
-                    || !_dbContextConfiguration.DbContext.DynamicFetch.AllowedEntityNamesForLookup.Contains(parameter.EntityName))
-                    throw new MilvaUserFriendlyException(MilvaException.InvalidParameter);
-
-                HashSet<string> paramaters = [.. parameter.RequestedPropertyNames];
-
-                // Check for same property name.
-                if (paramaters.Count != parameter.RequestedPropertyNames.Count)
-                    throw new MilvaUserFriendlyException(MilvaException.InvalidParameter);
-            }
-        }
-
-        List<string> BuildPropertyNameListForProjection(Type entityType)
-        {
-            List<string> propNamesForProjection = [];
-
-            if (entityType.CanAssignableTo(typeof(IMilvaEntity)))
-                propNamesForProjection.Add(EntityPropertyNames.Id);
-
-            if (entityType.CanAssignableTo(typeof(IHasTranslation<>)))
-                propNamesForProjection.Add(MultiLanguageEntityPropertyNames.Translations);
-
-            return propNamesForProjection;
-        }
-    }
+        => await new LookupManager(this, _dbContextConfiguration).GetLookupsAsync(lookupRequest);
 
     #endregion
 

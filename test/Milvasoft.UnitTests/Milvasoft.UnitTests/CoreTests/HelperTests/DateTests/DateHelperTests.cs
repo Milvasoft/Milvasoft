@@ -227,7 +227,7 @@ public partial class DateHelperTests
     /// <returns></returns>
     public static IEnumerable<object[]> DatesForIsBetweenMethod()
     {
-        var date = new DateTime(2024, 01, 01, 11, 00, 00);
+        var date = new DateTime(2024, 01, 01, 11, 00, 00, kind: DateTimeKind.Unspecified);
         var date2 = date.AddDays(-1);
         var date3 = date.AddDays(1);
         var date4 = date.AddDays(2);

@@ -26,6 +26,7 @@ public class CallMethodMultipleTimesTests
     }
 
     #region Setup
+
     public class TestDecorator : IMilvaInterceptor
     {
         public int InterceptionOrder { get; set; } = int.MaxValue;
@@ -44,6 +45,7 @@ public class CallMethodMultipleTimesTests
                 }
                 catch (Exception)
                 {
+                    // Do nothing
                 }
             }
         }

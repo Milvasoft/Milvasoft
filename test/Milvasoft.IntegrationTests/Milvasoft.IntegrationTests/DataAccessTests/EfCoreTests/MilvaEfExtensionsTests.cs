@@ -14,7 +14,6 @@ using Milvasoft.Components.Rest.Request;
 using Milvasoft.Core.Utils.Constants;
 using Milvasoft.DataAccess.EfCore;
 using Milvasoft.DataAccess.EfCore.Configuration;
-using Milvasoft.DataAccess.EfCore.DbContextBase;
 using Milvasoft.DataAccess.EfCore.Utils;
 using Milvasoft.DataAccess.EfCore.Utils.Enums;
 using Milvasoft.IntegrationTests.Client.Fixtures.EntityFixtures;
@@ -868,7 +867,7 @@ public class MilvaEfExtensionsTests(CustomWebApplicationFactory factory) : DataA
         await dbContext.SaveChangesAsync();
 
         // Act
-        var result = await dbContext.RestTestEntities.ToListResponseAsync(listRequest);
+        var result = dbContext.RestTestEntities.ToListResponse(listRequest);
 
         // Assert
         result.IsSuccess.Should().BeTrue();
@@ -1229,11 +1228,6 @@ public class MilvaEfExtensionsTests(CustomWebApplicationFactory factory) : DataA
         // Assert
         result.Should().HaveCount(entities.Count);
         result[0].Translations.Count.Should().Be(2);
-    }
-
-    public class TranslationRelationsModelCustomizer : IModelCustomizer
-    {
-        public void Customize(ModelBuilder modelBuilder, DbContext context) => modelBuilder.UseTranslationEntityRelations();
     }
 
     #endregion

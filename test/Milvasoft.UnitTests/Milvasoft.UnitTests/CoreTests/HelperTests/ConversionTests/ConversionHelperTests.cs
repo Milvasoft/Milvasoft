@@ -66,7 +66,7 @@ public partial class ConversionHelperTests
     public void ToObject_ForOverloadWithGenericParameter_WithInvalidJsonWithDefaultJsonOptions_ShouldThrowsException()
     {
         // Arrange
-        var input = "\"Name\":\"test\",\"Name\":1}";
+        var input = "\"Name\":\"test\",\"Name\":2}";
 
         // Act
         Action act = () => input.ToObject<ToJsonTestModelFixture>();
@@ -122,10 +122,10 @@ public partial class ConversionHelperTests
     public void ToObject_WithInvalidJsonWithDefaultJsonOptions_ShouldReturnDefaultObject()
     {
         // Arrange
-        var input = "\"Name\":\"test\",\"Name\":1}";
+        var input = "\"Name\":\"test\",\"Name\":2}";
 
         // Act
-        Action act = () => input.ToObject<ToJsonTestModelFixture>();
+        Action act = () => input.ToObject(typeof(ToJsonTestModelFixture));
 
         // Assert
         act.Should().Throw<JsonException>();
@@ -137,10 +137,8 @@ public partial class ConversionHelperTests
     [InlineData(" ")]
     public void ToObject_WithNullOrEmptyOrWhitespacedStringInputWithDefaultJsonOptions_ShouldReturnNull(string input)
     {
-        // Arrange
-
-        // Act
-        var result = input.ToObject<ToJsonTestModelFixture>();
+        // Act & Arrange
+        var result = input.ToObject(typeof(ToJsonTestModelFixture));
 
         // Assert
         result.Should().BeNull();
@@ -153,7 +151,7 @@ public partial class ConversionHelperTests
         var input = "{\"InvalidProp1\":\"test\",\"InvalidProp2\":1}";
 
         // Act
-        var result = input.ToObject<ToJsonTestModelFixture>();
+        var result = (ToJsonTestModelFixture)input.ToObject(typeof(ToJsonTestModelFixture));
 
         // Assert
         result.Name.Should().BeNull();
@@ -167,7 +165,7 @@ public partial class ConversionHelperTests
         var input = "{\"Name\":\"test\",\"Priority\":1}";
 
         // Act
-        var result = input.ToObject<ToJsonTestModelFixture>();
+        var result = (ToJsonTestModelFixture)input.ToObject(typeof(ToJsonTestModelFixture));
 
         // Assert
         result.Name.Should().Be("test");

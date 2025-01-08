@@ -1,6 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 using Milvasoft.DataAccess.EfCore.Bulk.DbContextBase;
 using Milvasoft.DataAccess.EfCore.Configuration;
+using Milvasoft.DataAccess.EfCore.DbContextBase;
 using Milvasoft.IntegrationTests.Client.Fixtures.EntityFixtures;
 
 namespace Milvasoft.IntegrationTests.Client.Fixtures.Persistence;
@@ -19,4 +21,9 @@ public class MilvaBulkDbContextFixture(DbContextOptions<MilvaBulkDbContextFixtur
     public DbSet<TranslationEntityFixture> TranslationEntities { get; set; }
     public DbSet<RestTestEntityFixture> RestTestEntities { get; set; }
     public DbSet<RestChildrenTestEntityFixture> RestChildrenTestEntities { get; set; }
+}
+
+public class TranslationRelationsModelCustomizer : IModelCustomizer
+{
+    public void Customize(ModelBuilder modelBuilder, DbContext context) => modelBuilder.UseTranslationEntityRelations();
 }

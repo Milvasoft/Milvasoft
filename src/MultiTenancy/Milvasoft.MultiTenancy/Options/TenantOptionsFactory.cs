@@ -17,11 +17,10 @@ namespace Milvasoft.MultiTenancy.Options;
 /// <param name="postConfigures"></param>
 /// <param name="tenantConfig"></param>
 /// <param name="tenantAccessor"></param>
-[System.Diagnostics.CodeAnalysis.SuppressMessage("Major Code Smell", "S2436:Types and methods should not have too many generic parameters", Justification = "<Pending>")]
 internal class TenantOptionsFactory<TOptions, TTenant, TKey>(IEnumerable<IConfigureOptions<TOptions>> setups,
-                            IEnumerable<IPostConfigureOptions<TOptions>> postConfigures,
-                            Action<TOptions, TTenant> tenantConfig,
-                            ITenantAccessor<TTenant, TKey> tenantAccessor) : IOptionsFactory<TOptions>
+                                    IEnumerable<IPostConfigureOptions<TOptions>> postConfigures,
+                                    Action<TOptions, TTenant> tenantConfig,
+                                    ITenantAccessor<TTenant, TKey> tenantAccessor) : IOptionsFactory<TOptions>
     where TOptions : class, new()
     where TTenant : class, IMilvaTenantBase<TKey>
     where TKey : struct, IEquatable<TKey>

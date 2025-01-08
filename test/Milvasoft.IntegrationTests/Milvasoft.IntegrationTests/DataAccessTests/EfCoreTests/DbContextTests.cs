@@ -4,11 +4,13 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Query;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Milvasoft.Core.Exceptions;
 using Milvasoft.Core.Helpers;
+using Milvasoft.Core.MultiLanguage.Builder;
 using Milvasoft.Core.Utils.Constants;
 using Milvasoft.DataAccess.EfCore;
 using Milvasoft.DataAccess.EfCore.Configuration;
@@ -17,6 +19,7 @@ using Milvasoft.DataAccess.EfCore.Utils.LookupModels;
 using Milvasoft.IntegrationTests.Client.Fixtures.DtoFixtures;
 using Milvasoft.IntegrationTests.Client.Fixtures.EntityFixtures;
 using Milvasoft.IntegrationTests.Client.Fixtures.Persistence;
+using Milvasoft.Localization;
 using System.Linq.Expressions;
 
 namespace Milvasoft.IntegrationTests.DataAccessTests.EfCoreTests;
@@ -37,13 +40,13 @@ public class DbContextTests(CustomWebApplicationFactory factory) : DataAccessInt
                 services.RemoveAll<DbContextOptions<MilvaBulkDbContextFixture>>();
                 services.RemoveAll<MilvaBulkDbContextFixture>();
 
-                configureServices?.Invoke(services);
-
                 services.AddDbContext<MilvaBulkDbContextFixture>(x =>
                 {
                     x.ConfigureWarnings(warnings => { warnings.Log(RelationalEventId.PendingModelChangesWarning); });
                     x.UseNpgsql(_factory.GetConnectionString());
                 });
+
+                configureServices?.Invoke(services);
 
             });
 
@@ -1040,6 +1043,99 @@ public class DbContextTests(CustomWebApplicationFactory factory) : DataAccessInt
         ((LookupResult)lookupResult).Data[0].ToJson().Should().BeEquivalentTo(expectedData.ToJson());
     }
 
+    [Fact]
+    public async Task GetLookupsAsync_WithValidLookupRequestAndHasTranslations_ShouldReturnCorrectResult()
+    {
+        // Arrange
+        await InitializeAsync(services =>
+        {
+            services.ConfigureMilvaDataAccess(opt =>
+            {
+                opt.DbContext = new DbContextConfiguration
+                {
+                    UseUtcForDateTime = true,
+                    DefaultSoftDeletionState = SoftDeletionState.Active,
+                    DynamicFetch = new DynamicFetchConfiguration
+                    {
+                        EntityAssemblyName = "Milvasoft.IntegrationTests.Client",
+                        AllowedEntityNamesForLookup = [nameof(HasTranslationEntityFixture)],
+                        MaxAllowedPropertyCountForLookup = 2
+                    }
+                };
+            });
+
+            services.RemoveAll<DbContextOptions<MilvaBulkDbContextFixture>>();
+            services.RemoveAll<MilvaBulkDbContextFixture>();
+
+            services.AddDbContext<MilvaBulkDbContextFixture>(x =>
+            {
+                x.ConfigureWarnings(warnings => { warnings.Log(RelationalEventId.PendingModelChangesWarning); });
+                x.UseNpgsql(_factory.GetConnectionString())
+                 .ReplaceService<IModelCustomizer, TranslationRelationsModelCustomizer>();
+            });
+
+            services.AddMilvaMultiLanguage().WithDefaultMultiLanguageManager();
+        });
+
+        var dbContext = _serviceProvider.GetRequiredService<MilvaBulkDbContextFixture>();
+
+        var entity = new HasTranslationEntityFixture
+        {
+            Id = 1,
+            Priority = 1,
+            Translations =
+            [
+                new()
+                {
+                    Id = 1,
+                    LanguageId = 1,
+                    Name = "türkçe",
+                    EntityId = 1,
+                },
+                new()
+                {
+                    Id = 2,
+                    LanguageId = 2,
+                    Name = "English",
+                    EntityId = 1,
+                }
+            ]
+        };
+        await dbContext.HasTranslationEntities.AddAsync(entity);
+        await dbContext.SaveChangesAsync();
+
+        var lookupRequest = new LookupRequest
+        {
+            Parameters =
+            [
+                new()
+                {
+                    EntityName = nameof(HasTranslationEntityFixture),
+                    RequestedPropertyNames = [nameof(HasTranslationEntityFixture.Priority), "Name"],
+                }
+            ]
+        };
+        object expectedData = new
+        {
+            Priority = 1,
+            Name = "türkçe",
+            Id = 1,
+        };
+
+        using var _ = new CultureSwitcher("tr-TR");
+
+        // Act
+        var result = await dbContext.GetLookupsAsync(lookupRequest);
+
+        // Assert
+        result.Should().HaveCount(1);
+        var lookupResult = result[0];
+        lookupResult.Should().BeOfType<LookupResult>();
+        ((LookupResult)lookupResult).EntityName.Should().Be(nameof(HasTranslationEntityFixture));
+        ((LookupResult)lookupResult).Data.Should().HaveCount(1);
+        ((LookupResult)lookupResult).Data[0].ToJson().Should().BeEquivalentTo(expectedData.ToJson());
+    }
+
     /// <summary>
     /// Entity property values request
     /// </summary>
@@ -1105,7 +1201,6 @@ public class DbContextTests(CustomWebApplicationFactory factory) : DataAccessInt
         });
 
         var dbContext = _serviceProvider.GetRequiredService<MilvaBulkDbContextFixture>();
-
 
         // Act
         Func<Task> act = async () => await dbContext.GetPropertyValuesAsync(request);

@@ -167,10 +167,12 @@ public static partial class CommonHelper
     /// </summary>
     /// <param name="date">The date to modify.</param>
     /// <param name="time">The time to set.</param>
+    /// <param name="kind"></param>
     /// <returns>A new DateTime object with the same date as the original date and the specified time.</returns>
-    public static DateTime WithTime(this DateTime date, TimeSpan time) => new(date.Year, date.Month, date.Day,
-                                                                              time.Hours, time.Minutes, time.Seconds,
-                                                                              time.Milliseconds, time.Microseconds);
+    public static DateTime WithTime(this DateTime date, TimeSpan time, DateTimeKind kind = DateTimeKind.Unspecified)
+        => new(date.Year, date.Month, date.Day,
+               time.Hours, time.Minutes, time.Seconds,
+               time.Milliseconds, time.Microseconds, kind: kind);
 
     /// <summary>
     /// Converts the specified <paramref name="timeSpan"/> to UTC.

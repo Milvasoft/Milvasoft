@@ -248,14 +248,15 @@ public class MethodTypeTests
         [Decorate(typeof(TestDecorator))]
         public virtual async Task AsyncDependencyMethod()
         {
-            List<int> list;
+            List<int> list = await Getter.Get();
 
-            while ((list = await Getter.Get()).Count > 0)
+            while (list.Count > 0)
             {
                 await Task.Delay(30);
                 await Task.Yield();
 
                 list.Add(1);
+                list = await Getter.Get();
             }
         }
 
