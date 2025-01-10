@@ -350,14 +350,16 @@ public static class ModelBuilderExtensions
     public static ModelBuilder UsePrecision(this ModelBuilder modelBuilder, int precision = 18, int scale = 10)
     {
         var entityClrTypesHasDecimalProperty = modelBuilder.Model.GetEntityTypes()
-                                                         .Where(e => Array.Exists(e.ClrType.GetProperties(), p => p.PropertyType.IsAssignableFrom(typeof(decimal))))
+                                                         .Where(e => Array.Exists(e.ClrType.GetProperties(),
+                                                                                  p => p.PropertyType.IsAssignableFrom(typeof(decimal))
+                                                                                     || p.PropertyType.CanAssignableTo(typeof(decimal?))))
                                                          .Select(e => e.ClrType);
 
         foreach (var clrType in entityClrTypesHasDecimalProperty)
         {
-            var properties = clrType.GetProperties().Where(p => p.PropertyType.IsAssignableFrom(typeof(decimal))
-                                                                      && (!p.CustomAttributes?.Any(cA => (cA.AttributeType?.IsEquivalentTo(typeof(NotMappedAttribute)) ?? false)
-                                                                                                      || (cA.AttributeType?.IsEquivalentTo(typeof(DecimalPrecisionAttribute)) ?? false)) ?? true));
+            var properties = clrType.GetProperties().Where(p => (p.PropertyType.IsAssignableFrom(typeof(decimal)) || p.PropertyType.CanAssignableTo(typeof(decimal?)))
+                                                                      && (!p.CustomAttributes?.Any(ca => (ca.AttributeType?.IsEquivalentTo(typeof(NotMappedAttribute)) ?? false)
+                                                                                                      || (ca.AttributeType?.IsEquivalentTo(typeof(DecimalPrecisionAttribute)) ?? false)) ?? true));
 
             foreach (var prop in properties)
                 modelBuilder.Entity(clrType).Property(prop.Name).HasPrecision(precision, scale);

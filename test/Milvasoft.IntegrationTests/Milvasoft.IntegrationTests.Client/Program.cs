@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 using Milvasoft.DataAccess.EfCore;
 using Milvasoft.IntegrationTests.Client.Fixtures.Persistence;
 
@@ -16,7 +17,7 @@ services.ConfigureMilvaDataAccess(opt =>
 
 services.AddDbContext<MilvaBulkDbContextFixture>(options =>
 {
-    options.UseNpgsql(connectionString);
+    options.UseNpgsql(connectionString).ReplaceService<IModelCustomizer, UseDefaultValueModelCustomizer>();
 });
 
 var app = builder.Build();

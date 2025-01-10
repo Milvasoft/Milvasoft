@@ -108,6 +108,51 @@ public partial class InitialCreate : Migration
             });
 
         migrationBuilder.CreateTable(
+            name: "ModelBuilderTestEntities",
+            columns: table => new
+            {
+                Id = table.Column<int>(type: "integer", nullable: false)
+                    .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                TenantId = table.Column<string>(type: "text", nullable: true),
+                SomeEncryptedStringProp = table.Column<string>(type: "text", nullable: true),
+                SomeEncryptedStringWithAttributeProp = table.Column<string>(type: "text", nullable: true),
+                SomeNullableDateTimeOffsetProp = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
+                SomeDateTimeOffsetProp = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
+                SomeNullableDateProp = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                SomeDateProp = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                SomeIntProp = table.Column<int>(type: "integer", nullable: false, defaultValue: 1),
+                SomeDecimalProp = table.Column<decimal>(type: "numeric", nullable: true),
+                CreationDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                CreatorUserName = table.Column<string>(type: "text", nullable: true),
+                LastModificationDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                LastModifierUserName = table.Column<string>(type: "text", nullable: true),
+                DeletionDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                DeleterUserName = table.Column<string>(type: "text", nullable: true),
+                IsDeleted = table.Column<bool>(type: "boolean", nullable: false)
+            },
+            constraints: table =>
+            {
+                table.PrimaryKey("PK_ModelBuilderTestEntities", x => x.Id);
+            });
+
+        migrationBuilder.CreateTable(
+            name: "ModelBuilderTestKeylessEntities",
+            columns: table => new
+            {
+                SomeEncryptedStringProp = table.Column<string>(type: "text", nullable: true),
+                SomeEncryptedStringWithAttributeProp = table.Column<string>(type: "text", nullable: true),
+                SomeNullableDateTimeOffsetProp = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
+                SomeDateTimeOffsetProp = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
+                SomeNullableDateProp = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                SomeDateProp = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                SomeIntProp = table.Column<int>(type: "integer", nullable: false),
+                SomeDecimalProp = table.Column<decimal>(type: "numeric", nullable: true)
+            },
+            constraints: table =>
+            {
+            });
+
+        migrationBuilder.CreateTable(
             name: "RestTestEntities",
             columns: table => new
             {
@@ -156,6 +201,45 @@ public partial class InitialCreate : Migration
                     column: x => x.SomeEntityId,
                     principalTable: "SomeCircularReferenceEntities",
                     principalColumn: "Id");
+            });
+
+        migrationBuilder.CreateTable(
+            name: "SomeLogEntities",
+            columns: table => new
+            {
+                Id = table.Column<int>(type: "integer", nullable: false)
+                    .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                TransactionId = table.Column<string>(type: "text", nullable: true),
+                Namespace = table.Column<string>(type: "text", nullable: true),
+                ClassName = table.Column<string>(type: "text", nullable: true),
+                MethodName = table.Column<string>(type: "text", nullable: true),
+                MethodParams = table.Column<string>(type: "text", nullable: true),
+                MethodResult = table.Column<string>(type: "text", nullable: true),
+                ElapsedMs = table.Column<int>(type: "integer", nullable: false),
+                UtcLogTime = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                CacheInfo = table.Column<string>(type: "text", nullable: true),
+                Exception = table.Column<string>(type: "text", nullable: true),
+                IsSuccess = table.Column<bool>(type: "boolean", nullable: false)
+            },
+            constraints: table =>
+            {
+                table.PrimaryKey("PK_SomeLogEntities", x => x.Id);
+            });
+
+        migrationBuilder.CreateTable(
+            name: "TranslationEntities",
+            columns: table => new
+            {
+                Id = table.Column<int>(type: "integer", nullable: false)
+                    .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                Name = table.Column<string>(type: "text", nullable: true),
+                Description = table.Column<string>(type: "text", nullable: true),
+                EntityId = table.Column<int>(type: "integer", nullable: false),
+                LanguageId = table.Column<int>(type: "integer", nullable: false)
+            },
+            constraints: table =>
+            {
+                table.PrimaryKey("PK_TranslationEntities", x => x.Id);
             });
 
         migrationBuilder.CreateTable(
@@ -256,28 +340,6 @@ public partial class InitialCreate : Migration
             });
 
         migrationBuilder.CreateTable(
-            name: "TranslationEntities",
-            columns: table => new
-            {
-                Id = table.Column<int>(type: "integer", nullable: false)
-                    .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                Name = table.Column<string>(type: "text", nullable: true),
-                Description = table.Column<string>(type: "text", nullable: true),
-                EntityId = table.Column<int>(type: "integer", nullable: false),
-                LanguageId = table.Column<int>(type: "integer", nullable: false)
-            },
-            constraints: table =>
-            {
-                table.PrimaryKey("PK_TranslationEntities", x => x.Id);
-                table.ForeignKey(
-                    name: "FK_TranslationEntities_HasTranslationEntities_EntityId",
-                    column: x => x.EntityId,
-                    principalTable: "HasTranslationEntities",
-                    principalColumn: "Id",
-                    onDelete: ReferentialAction.Cascade);
-            });
-
-        migrationBuilder.CreateTable(
             name: "RestChildrenTestEntities",
             columns: table => new
             {
@@ -335,11 +397,6 @@ public partial class InitialCreate : Migration
             name: "IX_SomeManyToOneEntities_SomeFullAuditableEntityId",
             table: "SomeManyToOneEntities",
             column: "SomeFullAuditableEntityId");
-
-        migrationBuilder.CreateIndex(
-            name: "IX_TranslationEntities_EntityId",
-            table: "TranslationEntities",
-            column: "EntityId");
     }
 
     /// <inheritdoc />
@@ -349,6 +406,15 @@ public partial class InitialCreate : Migration
             name: "BaseEntities");
 
         migrationBuilder.DropTable(
+            name: "HasTranslationEntities");
+
+        migrationBuilder.DropTable(
+            name: "ModelBuilderTestEntities");
+
+        migrationBuilder.DropTable(
+            name: "ModelBuilderTestKeylessEntities");
+
+        migrationBuilder.DropTable(
             name: "RelatedEntities");
 
         migrationBuilder.DropTable(
@@ -356,6 +422,9 @@ public partial class InitialCreate : Migration
 
         migrationBuilder.DropTable(
             name: "SomeCircularReferenceEntities");
+
+        migrationBuilder.DropTable(
+            name: "SomeLogEntities");
 
         migrationBuilder.DropTable(
             name: "SomeManyToManyEntities");
@@ -377,8 +446,5 @@ public partial class InitialCreate : Migration
 
         migrationBuilder.DropTable(
             name: "FullAuditableEntities");
-
-        migrationBuilder.DropTable(
-            name: "HasTranslationEntities");
     }
 }

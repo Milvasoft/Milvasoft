@@ -26,9 +26,9 @@ using System.Net;
 namespace Milvasoft.IntegrationTests.DataAccessTests.EfCoreTests;
 
 [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "xUnit1042:The member referenced by the MemberData attribute returns untyped data rows", Justification = "<Pending>")]
+[System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0079:Remove unnecessary suppression", Justification = "<Pending>")]
 [Collection(nameof(UtcTrueDatabaseTestCollection))]
 [Trait("MilvaEfExtensions Integration Tests", "Integration tests for Milvasoft.DataAccess.EfCore integration tests.")]
-[System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0079:Remove unnecessary suppression", Justification = "<Pending>")]
 public class MilvaEfExtensionsTests(CustomWebApplicationFactory factory) : DataAccessIntegrationTestBase(factory)
 {
     public override async Task InitializeAsync(Action<IServiceCollection> configureServices = null, Action<IApplicationBuilder> configureApp = null)

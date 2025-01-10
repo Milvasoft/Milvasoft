@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Milvasoft.IntegrationTests.Client.Migrations
 {
     [DbContext(typeof(MilvaBulkDbContextFixture))]
-    [Migration("20250107140914_InitialCreate")]
+    [Migration("20250110183519_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -313,6 +313,52 @@ namespace Milvasoft.IntegrationTests.Client.Migrations
                     b.ToTable("FullAuditableEntities");
                 });
 
+            modelBuilder.Entity("Milvasoft.IntegrationTests.Client.Fixtures.EntityFixtures.SomeLogEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("CacheInfo")
+                        .HasColumnType("text");
+
+                    b.Property<string>("ClassName")
+                        .HasColumnType("text");
+
+                    b.Property<int>("ElapsedMs")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Exception")
+                        .HasColumnType("text");
+
+                    b.Property<bool>("IsSuccess")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("MethodName")
+                        .HasColumnType("text");
+
+                    b.Property<string>("MethodParams")
+                        .HasColumnType("text");
+
+                    b.Property<string>("MethodResult")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Namespace")
+                        .HasColumnType("text");
+
+                    b.Property<string>("TransactionId")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("UtcLogTime")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("SomeLogEntities");
+                });
+
             modelBuilder.Entity("Milvasoft.IntegrationTests.Client.Fixtures.EntityFixtures.SomeManyToManyEntityFixture", b =>
                 {
                     b.Property<int>("Id")
@@ -415,6 +461,98 @@ namespace Milvasoft.IntegrationTests.Client.Migrations
                     b.ToTable("SomeManyToOneEntities");
                 });
 
+            modelBuilder.Entity("Milvasoft.IntegrationTests.Client.Fixtures.EntityFixtures.SomeModelBuilderTestEntityFixture", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime?>("CreationDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("CreatorUserName")
+                        .HasColumnType("text");
+
+                    b.Property<string>("DeleterUserName")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime?>("DeletionDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean");
+
+                    b.Property<DateTime?>("LastModificationDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("LastModifierUserName")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("SomeDateProp")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTimeOffset>("SomeDateTimeOffsetProp")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<decimal?>("SomeDecimalProp")
+                        .HasColumnType("numeric");
+
+                    b.Property<string>("SomeEncryptedStringProp")
+                        .HasColumnType("text");
+
+                    b.Property<string>("SomeEncryptedStringWithAttributeProp")
+                        .HasColumnType("text");
+
+                    b.Property<int>("SomeIntProp")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasDefaultValue(1);
+
+                    b.Property<DateTime?>("SomeNullableDateProp")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTimeOffset?>("SomeNullableDateTimeOffsetProp")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("TenantId")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ModelBuilderTestEntities");
+                });
+
+            modelBuilder.Entity("Milvasoft.IntegrationTests.Client.Fixtures.EntityFixtures.SomeModelBuilderTestKeylessEntityFixture", b =>
+                {
+                    b.Property<DateTime>("SomeDateProp")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTimeOffset>("SomeDateTimeOffsetProp")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<decimal?>("SomeDecimalProp")
+                        .HasColumnType("numeric");
+
+                    b.Property<string>("SomeEncryptedStringProp")
+                        .HasColumnType("text");
+
+                    b.Property<string>("SomeEncryptedStringWithAttributeProp")
+                        .HasColumnType("text");
+
+                    b.Property<int>("SomeIntProp")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime?>("SomeNullableDateProp")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTimeOffset?>("SomeNullableDateTimeOffsetProp")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.ToTable("ModelBuilderTestKeylessEntities");
+                });
+
             modelBuilder.Entity("Milvasoft.IntegrationTests.Client.Fixtures.EntityFixtures.SomeRelatedEntityFixture", b =>
                 {
                     b.Property<int>("Id")
@@ -463,8 +601,6 @@ namespace Milvasoft.IntegrationTests.Client.Migrations
                         .HasColumnType("text");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("EntityId");
 
                     b.ToTable("TranslationEntities");
                 });
@@ -540,25 +676,9 @@ namespace Milvasoft.IntegrationTests.Client.Migrations
                     b.Navigation("Entity");
                 });
 
-            modelBuilder.Entity("Milvasoft.IntegrationTests.Client.Fixtures.EntityFixtures.TranslationEntityFixture", b =>
-                {
-                    b.HasOne("Milvasoft.IntegrationTests.Client.Fixtures.EntityFixtures.HasTranslationEntityFixture", "Entity")
-                        .WithMany("Translations")
-                        .HasForeignKey("EntityId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Entity");
-                });
-
             modelBuilder.Entity("Milvasoft.IntegrationTests.Client.Fixtures.EntityFixtures.AnotherFullAuditableEntityFixture", b =>
                 {
                     b.Navigation("ManyToOneEntities");
-                });
-
-            modelBuilder.Entity("Milvasoft.IntegrationTests.Client.Fixtures.EntityFixtures.HasTranslationEntityFixture", b =>
-                {
-                    b.Navigation("Translations");
                 });
 
             modelBuilder.Entity("Milvasoft.IntegrationTests.Client.Fixtures.EntityFixtures.RestTestEntityFixture", b =>
