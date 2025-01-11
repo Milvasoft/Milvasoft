@@ -177,10 +177,6 @@ public abstract class MilvaDbContext(DbContextOptions options) : DbContext(optio
                     SoftDelete(entry);
 
                     break;
-                case EntityState.Detached:
-                    break;
-                case EntityState.Unchanged:
-                    break;
                 default:
                     break;
             }

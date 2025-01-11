@@ -56,6 +56,8 @@ public class SomeFullAuditableEntityFixture : FullAuditableEntity<int>
 
     [CascadeOnDelete]
     public virtual List<SomeManyToOneFullAuditableEntityFixture> ManyToOneEntities { get; set; }
+
+    public virtual AnotherFullAuditableEntityFixture RelatedFullAuditableEntity { get; set; }
 }
 
 public class AnotherFullAuditableEntityFixture : FullAuditableEntity<int>
@@ -64,6 +66,10 @@ public class AnotherFullAuditableEntityFixture : FullAuditableEntity<int>
     public DateTime SomeDateProp { get; set; }
     public DateTimeOffset SomeDateTimeOffsetProp { get; set; }
     public decimal SomeDecimalProp { get; set; }
+
+    [ForeignKey(nameof(FullAuditableEntity))]
+    public int? FullAuditableEntityId { get; set; }
+    public virtual SomeFullAuditableEntityFixture FullAuditableEntity { get; set; }
     public virtual List<SomeManyToOneFullAuditableEntityFixture> ManyToOneEntities { get; set; }
 }
 

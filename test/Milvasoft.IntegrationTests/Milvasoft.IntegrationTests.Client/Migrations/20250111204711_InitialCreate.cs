@@ -12,29 +12,6 @@ public partial class InitialCreate : Migration
     protected override void Up(MigrationBuilder migrationBuilder)
     {
         migrationBuilder.CreateTable(
-            name: "AnotherFullAuditableEntities",
-            columns: table => new
-            {
-                Id = table.Column<int>(type: "integer", nullable: false)
-                    .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                SomeStringProp = table.Column<string>(type: "text", nullable: true),
-                SomeDateProp = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                SomeDateTimeOffsetProp = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
-                SomeDecimalProp = table.Column<decimal>(type: "numeric", nullable: false),
-                CreationDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
-                CreatorUserName = table.Column<string>(type: "text", nullable: true),
-                LastModificationDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
-                LastModifierUserName = table.Column<string>(type: "text", nullable: true),
-                DeletionDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
-                DeleterUserName = table.Column<string>(type: "text", nullable: true),
-                IsDeleted = table.Column<bool>(type: "boolean", nullable: false)
-            },
-            constraints: table =>
-            {
-                table.PrimaryKey("PK_AnotherFullAuditableEntities", x => x.Id);
-            });
-
-        migrationBuilder.CreateTable(
             name: "BaseEntities",
             columns: table => new
             {
@@ -265,6 +242,54 @@ public partial class InitialCreate : Migration
             });
 
         migrationBuilder.CreateTable(
+            name: "AnotherFullAuditableEntities",
+            columns: table => new
+            {
+                Id = table.Column<int>(type: "integer", nullable: false)
+                    .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                SomeStringProp = table.Column<string>(type: "text", nullable: true),
+                SomeDateProp = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                SomeDateTimeOffsetProp = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
+                SomeDecimalProp = table.Column<decimal>(type: "numeric", nullable: false),
+                FullAuditableEntityId = table.Column<int>(type: "integer", nullable: true),
+                CreationDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                CreatorUserName = table.Column<string>(type: "text", nullable: true),
+                LastModificationDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                LastModifierUserName = table.Column<string>(type: "text", nullable: true),
+                DeletionDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                DeleterUserName = table.Column<string>(type: "text", nullable: true),
+                IsDeleted = table.Column<bool>(type: "boolean", nullable: false)
+            },
+            constraints: table =>
+            {
+                table.PrimaryKey("PK_AnotherFullAuditableEntities", x => x.Id);
+                table.ForeignKey(
+                    name: "FK_AnotherFullAuditableEntities_FullAuditableEntities_FullAudi~",
+                    column: x => x.FullAuditableEntityId,
+                    principalTable: "FullAuditableEntities",
+                    principalColumn: "Id");
+            });
+
+        migrationBuilder.CreateTable(
+            name: "RestChildrenTestEntities",
+            columns: table => new
+            {
+                Id = table.Column<int>(type: "integer", nullable: false)
+                    .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                Name = table.Column<string>(type: "text", nullable: true),
+                ParentId = table.Column<int>(type: "integer", nullable: true)
+            },
+            constraints: table =>
+            {
+                table.PrimaryKey("PK_RestChildrenTestEntities", x => x.Id);
+                table.ForeignKey(
+                    name: "FK_RestChildrenTestEntities_RestTestEntities_ParentId",
+                    column: x => x.ParentId,
+                    principalTable: "RestTestEntities",
+                    principalColumn: "Id");
+            });
+
+        migrationBuilder.CreateTable(
             name: "SomeManyToManyEntities",
             columns: table => new
             {
@@ -339,24 +364,11 @@ public partial class InitialCreate : Migration
                     onDelete: ReferentialAction.Cascade);
             });
 
-        migrationBuilder.CreateTable(
-            name: "RestChildrenTestEntities",
-            columns: table => new
-            {
-                Id = table.Column<int>(type: "integer", nullable: false)
-                    .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                Name = table.Column<string>(type: "text", nullable: true),
-                ParentId = table.Column<int>(type: "integer", nullable: true)
-            },
-            constraints: table =>
-            {
-                table.PrimaryKey("PK_RestChildrenTestEntities", x => x.Id);
-                table.ForeignKey(
-                    name: "FK_RestChildrenTestEntities_RestTestEntities_ParentId",
-                    column: x => x.ParentId,
-                    principalTable: "RestTestEntities",
-                    principalColumn: "Id");
-            });
+        migrationBuilder.CreateIndex(
+            name: "IX_AnotherFullAuditableEntities_FullAuditableEntityId",
+            table: "AnotherFullAuditableEntities",
+            column: "FullAuditableEntityId",
+            unique: true);
 
         migrationBuilder.CreateIndex(
             name: "IX_RelatedEntities_EntityId",

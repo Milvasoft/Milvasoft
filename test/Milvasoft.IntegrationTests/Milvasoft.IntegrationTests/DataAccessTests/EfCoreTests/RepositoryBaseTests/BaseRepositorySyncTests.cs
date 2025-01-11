@@ -14,6 +14,7 @@ using Milvasoft.DataAccess.EfCore;
 using Milvasoft.DataAccess.EfCore.Configuration;
 using Milvasoft.DataAccess.EfCore.RepositoryBase.Abstract;
 using Milvasoft.DataAccess.EfCore.Utils.Enums;
+using Milvasoft.DataAccess.EfCore.Utils.IncludeLibrary;
 using Milvasoft.Helpers.DataAccess.EfCore.Concrete;
 using Milvasoft.IntegrationTests.Client.Fixtures.EntityFixtures;
 using Milvasoft.IntegrationTests.Client.Fixtures.Persistence;
@@ -1123,6 +1124,360 @@ public class BaseRepositorySyncTests(CustomWebApplicationFactory factory) : Data
 
         // Assert
         result.Should().BeNull();
+    }
+
+    #endregion
+
+    #region GetForDelete
+
+    [Theory]
+    [InlineData(QueryTrackingBehavior.NoTrackingWithIdentityResolution)]
+    [InlineData(QueryTrackingBehavior.NoTracking)]
+    [InlineData(QueryTrackingBehavior.TrackAll)]
+    public async Task GetForDelete_IdOverload_WithoutParameters_ShouldReturnCorrectResult(QueryTrackingBehavior queryTrackingBehavior)
+    {
+        // Arrange
+        await InitializeAsync(services =>
+        {
+            services.ConfigureMilvaDataAccess();
+
+            services.AddDbContext<MilvaBulkDbContextFixture>(x =>
+            {
+                x.ConfigureWarnings(warnings => { warnings.Log(RelationalEventId.PendingModelChangesWarning); });
+                x.UseNpgsql(_factory.GetConnectionString()).UseQueryTrackingBehavior(queryTrackingBehavior);
+            });
+        });
+
+        var dbContext = _serviceProvider.GetService<MilvaBulkDbContextFixture>();
+        var entityRepository = _serviceProvider.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
+        await SeedAsync(dbContext);
+
+        // Act 
+        var result = entityRepository.GetForDelete(1);
+
+        // Assert
+        result.Should().NotBeNull();
+        result.ManyToOneEntities.Should().NotBeEmpty();
+        result.ManyToOneEntities[0].SomeEntity.Should().BeNull();
+        result.Id.Should().Be(1);
+        result.SomeStringProp.Should().Be("somestring1");
+    }
+
+    [Theory]
+    [InlineData(QueryTrackingBehavior.NoTrackingWithIdentityResolution)]
+    [InlineData(QueryTrackingBehavior.NoTracking)]
+    [InlineData(QueryTrackingBehavior.TrackAll)]
+    public async Task GetForDelete_IdOverload_WithCondition_ShouldReturnCorrectResult(QueryTrackingBehavior queryTrackingBehavior)
+    {
+        // Arrange
+        await InitializeAsync(services =>
+        {
+            services.ConfigureMilvaDataAccess();
+
+            services.AddDbContext<MilvaBulkDbContextFixture>(x =>
+            {
+                x.ConfigureWarnings(warnings => { warnings.Log(RelationalEventId.PendingModelChangesWarning); });
+                x.UseNpgsql(_factory.GetConnectionString()).UseQueryTrackingBehavior(queryTrackingBehavior);
+            });
+        });
+
+        var dbContext = _serviceProvider.GetService<MilvaBulkDbContextFixture>();
+        var entityRepository = _serviceProvider.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
+        await SeedAsync(dbContext);
+
+        // Act 
+        var result = entityRepository.GetForDelete(1, condition: i => i.SomeDecimalProp > 20M);
+
+        // Assert
+        result.Should().BeNull();
+    }
+
+    [Theory]
+    [InlineData(QueryTrackingBehavior.NoTrackingWithIdentityResolution)]
+    [InlineData(QueryTrackingBehavior.NoTracking)]
+    [InlineData(QueryTrackingBehavior.TrackAll)]
+    public async Task GetForDelete_IdOverload_WithInclude_ShouldReturnCorrectResult(QueryTrackingBehavior queryTrackingBehavior)
+    {
+        // Arrange
+        await InitializeAsync(services =>
+        {
+            services.ConfigureMilvaDataAccess();
+
+            services.AddDbContext<MilvaBulkDbContextFixture>(x =>
+            {
+                x.ConfigureWarnings(warnings => { warnings.Log(RelationalEventId.PendingModelChangesWarning); });
+                x.UseNpgsql(_factory.GetConnectionString()).UseQueryTrackingBehavior(queryTrackingBehavior);
+            });
+        });
+
+        var dbContext = _serviceProvider.GetService<MilvaBulkDbContextFixture>();
+        var entityRepository = _serviceProvider.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
+        await SeedAsync(dbContext);
+
+        // Act 
+        var result = entityRepository.GetForDelete(1, includes: i => i.Include(m => m.ManyToOneEntities));
+
+        // Assert
+        result.Should().NotBeNull();
+        result.ManyToOneEntities.Should().NotBeEmpty();
+        result.ManyToOneEntities[0].SomeEntity.Should().BeNull();
+        result.Id.Should().Be(1);
+        result.SomeStringProp.Should().Be("somestring1");
+    }
+
+    [Theory]
+    [InlineData(QueryTrackingBehavior.NoTrackingWithIdentityResolution)]
+    [InlineData(QueryTrackingBehavior.NoTracking)]
+    [InlineData(QueryTrackingBehavior.TrackAll)]
+    public async Task GetForDelete_IdOverload_WithConditionAndProjectionAndConditionAfterProjection_ShouldReturnCorrectResult(QueryTrackingBehavior queryTrackingBehavior)
+    {
+        // Arrange
+        await InitializeAsync(services =>
+        {
+            services.ConfigureMilvaDataAccess();
+
+            services.AddDbContext<MilvaBulkDbContextFixture>(x =>
+            {
+                x.ConfigureWarnings(warnings => { warnings.Log(RelationalEventId.PendingModelChangesWarning); });
+                x.UseNpgsql(_factory.GetConnectionString()).UseQueryTrackingBehavior(queryTrackingBehavior);
+            });
+        });
+
+        var dbContext = _serviceProvider.GetService<MilvaBulkDbContextFixture>();
+        var entityRepository = _serviceProvider.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
+        await SeedAsync(dbContext);
+
+        // Act 
+        var result = entityRepository.GetForDelete(1, condition: i => i.SomeDecimalProp >= 10M, projection: i => new SomeFullAuditableEntityFixture
+        {
+            Id = i.Id,
+            SomeDecimalProp = i.SomeDecimalProp,
+            ManyToOneEntities = i.ManyToOneEntities,
+            CreationDate = i.CreationDate,
+        }, conditionAfterProjection: i => i.SomeDecimalProp > 9M);
+
+        // Assert
+        result.Should().NotBeNull();
+        result.ManyToOneEntities.Should().NotBeEmpty();
+        result.ManyToOneEntities[0].SomeEntity.Should().BeNull();
+        result.Id.Should().Be(1);
+        result.SomeDecimalProp.Should().Be(10M);
+        result.SomeStringProp.Should().BeNull();
+    }
+
+    [Theory]
+    [InlineData(QueryTrackingBehavior.NoTrackingWithIdentityResolution)]
+    [InlineData(QueryTrackingBehavior.NoTracking)]
+    [InlineData(QueryTrackingBehavior.TrackAll)]
+    public async Task GetForDeleteAsync_IdOverload_WithConditionAndProjectionAndConditionAfterProjectionAndWithInclude_ShouldReturnCorrectResult(QueryTrackingBehavior queryTrackingBehavior)
+    {
+        // Arrange
+        await InitializeAsync(services =>
+        {
+            services.ConfigureMilvaDataAccess();
+
+            services.AddDbContext<MilvaBulkDbContextFixture>(x =>
+            {
+                x.ConfigureWarnings(warnings => { warnings.Log(RelationalEventId.PendingModelChangesWarning); });
+                x.UseNpgsql(_factory.GetConnectionString()).UseQueryTrackingBehavior(queryTrackingBehavior);
+            });
+        });
+
+        var dbContext = _serviceProvider.GetService<MilvaBulkDbContextFixture>();
+        var entityRepository = _serviceProvider.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
+        await SeedAsync(dbContext);
+
+        // Act 
+        var result = entityRepository.GetForDelete(1, condition: i => i.SomeDecimalProp >= 10M, projection: i => new SomeFullAuditableEntityFixture
+        {
+            Id = i.Id,
+            SomeDecimalProp = i.SomeDecimalProp,
+            ManyToOneEntities = i.ManyToOneEntities,
+            CreationDate = i.CreationDate,
+        }, conditionAfterProjection: i => i.SomeDecimalProp > 9M, includes: i => i.Include(m => m.ManyToOneEntities));
+
+        // Assert
+        result.Should().NotBeNull();
+        result.ManyToOneEntities.Should().NotBeEmpty();
+        result.ManyToOneEntities[0].SomeEntity.Should().BeNull();
+        result.Id.Should().Be(1);
+        result.SomeDecimalProp.Should().Be(10M);
+        result.SomeStringProp.Should().BeNull();
+    }
+
+    [Theory]
+    [InlineData(QueryTrackingBehavior.NoTrackingWithIdentityResolution)]
+    [InlineData(QueryTrackingBehavior.NoTracking)]
+    [InlineData(QueryTrackingBehavior.TrackAll)]
+    public async Task GetForDelete_WithoutParameters_ShouldReturnCorrectResult(QueryTrackingBehavior queryTrackingBehavior)
+    {
+        // Arrange
+        await InitializeAsync(services =>
+        {
+            services.ConfigureMilvaDataAccess();
+
+            services.AddDbContext<MilvaBulkDbContextFixture>(x =>
+            {
+                x.ConfigureWarnings(warnings => { warnings.Log(RelationalEventId.PendingModelChangesWarning); });
+                x.UseNpgsql(_factory.GetConnectionString()).UseQueryTrackingBehavior(queryTrackingBehavior);
+            });
+        });
+
+        var dbContext = _serviceProvider.GetService<MilvaBulkDbContextFixture>();
+        var entityRepository = _serviceProvider.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
+        await SeedAsync(dbContext);
+
+        // Act 
+        var result = entityRepository.GetForDelete(condition: i => i.Id == 1);
+
+        // Assert
+        result[0].Should().NotBeNull();
+        result[0].ManyToOneEntities.Should().NotBeEmpty();
+        result[0].ManyToOneEntities[0].SomeEntity.Should().BeNull();
+        result[0].Id.Should().Be(1);
+        result[0].SomeStringProp.Should().Be("somestring1");
+    }
+
+    [Theory]
+    [InlineData(QueryTrackingBehavior.NoTrackingWithIdentityResolution)]
+    [InlineData(QueryTrackingBehavior.NoTracking)]
+    [InlineData(QueryTrackingBehavior.TrackAll)]
+    public async Task GetForDelete_WithCondition_ShouldReturnCorrectResult(QueryTrackingBehavior queryTrackingBehavior)
+    {
+        // Arrange
+        await InitializeAsync(services =>
+        {
+            services.ConfigureMilvaDataAccess();
+
+            services.AddDbContext<MilvaBulkDbContextFixture>(x =>
+            {
+                x.ConfigureWarnings(warnings => { warnings.Log(RelationalEventId.PendingModelChangesWarning); });
+                x.UseNpgsql(_factory.GetConnectionString()).UseQueryTrackingBehavior(queryTrackingBehavior);
+            });
+        });
+
+        var dbContext = _serviceProvider.GetService<MilvaBulkDbContextFixture>();
+        var entityRepository = _serviceProvider.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
+        await SeedAsync(dbContext);
+
+        // Act 
+        var result = entityRepository.GetForDelete(condition: i => i.Id == 1 && i.SomeDecimalProp > 20M);
+
+        // Assert
+        result.Should().BeEmpty();
+    }
+
+    [Theory]
+    [InlineData(QueryTrackingBehavior.NoTrackingWithIdentityResolution)]
+    [InlineData(QueryTrackingBehavior.NoTracking)]
+    [InlineData(QueryTrackingBehavior.TrackAll)]
+    public async Task GetForDelete_WithInclude_ShouldReturnCorrectResult(QueryTrackingBehavior queryTrackingBehavior)
+    {
+        // Arrange
+        await InitializeAsync(services =>
+        {
+            services.ConfigureMilvaDataAccess();
+
+            services.AddDbContext<MilvaBulkDbContextFixture>(x =>
+            {
+                x.ConfigureWarnings(warnings => { warnings.Log(RelationalEventId.PendingModelChangesWarning); });
+                x.UseNpgsql(_factory.GetConnectionString()).UseQueryTrackingBehavior(queryTrackingBehavior);
+            });
+        });
+
+        var dbContext = _serviceProvider.GetService<MilvaBulkDbContextFixture>();
+        var entityRepository = _serviceProvider.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
+        await SeedAsync(dbContext);
+
+        // Act 
+        var result = entityRepository.GetForDelete(condition: i => i.Id == 1, includes: i => i.Include(m => m.ManyToOneEntities));
+
+        // Assert
+        result[0].Should().NotBeNull();
+        result[0].ManyToOneEntities.Should().NotBeEmpty();
+        result[0].ManyToOneEntities[0].SomeEntity.Should().BeNull();
+        result[0].Id.Should().Be(1);
+        result[0].SomeStringProp.Should().Be("somestring1");
+    }
+
+    [Theory]
+    [InlineData(QueryTrackingBehavior.NoTrackingWithIdentityResolution)]
+    [InlineData(QueryTrackingBehavior.NoTracking)]
+    [InlineData(QueryTrackingBehavior.TrackAll)]
+    public async Task GetForDelete_WithConditionAndProjectionAndConditionAfterProjection_ShouldReturnCorrectResult(QueryTrackingBehavior queryTrackingBehavior)
+    {
+        // Arrange
+        await InitializeAsync(services =>
+        {
+            services.ConfigureMilvaDataAccess();
+
+            services.AddDbContext<MilvaBulkDbContextFixture>(x =>
+            {
+                x.ConfigureWarnings(warnings => { warnings.Log(RelationalEventId.PendingModelChangesWarning); });
+                x.UseNpgsql(_factory.GetConnectionString()).UseQueryTrackingBehavior(queryTrackingBehavior);
+            });
+        });
+
+        var dbContext = _serviceProvider.GetService<MilvaBulkDbContextFixture>();
+        var entityRepository = _serviceProvider.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
+        await SeedAsync(dbContext);
+
+        // Act 
+        var result = entityRepository.GetForDelete(condition: i => i.Id == 1 && i.SomeDecimalProp >= 10M, projection: i => new SomeFullAuditableEntityFixture
+        {
+            Id = i.Id,
+            SomeDecimalProp = i.SomeDecimalProp,
+            ManyToOneEntities = i.ManyToOneEntities,
+            CreationDate = i.CreationDate,
+        }, conditionAfterProjection: i => i.SomeDecimalProp > 9M);
+
+        // Assert
+        result[0].Should().NotBeNull();
+        result[0].ManyToOneEntities.Should().NotBeEmpty();
+        result[0].ManyToOneEntities[0].SomeEntity.Should().BeNull();
+        result[0].Id.Should().Be(1);
+        result[0].SomeDecimalProp.Should().Be(10M);
+        result[0].SomeStringProp.Should().BeNull();
+    }
+
+    [Theory]
+    [InlineData(QueryTrackingBehavior.NoTrackingWithIdentityResolution)]
+    [InlineData(QueryTrackingBehavior.NoTracking)]
+    [InlineData(QueryTrackingBehavior.TrackAll)]
+    public async Task GetForDeleteAsync_WithConditionAndProjectionAndConditionAfterProjectionAndWithInclude_ShouldReturnCorrectResult(QueryTrackingBehavior queryTrackingBehavior)
+    {
+        // Arrange
+        await InitializeAsync(services =>
+        {
+            services.ConfigureMilvaDataAccess();
+
+            services.AddDbContext<MilvaBulkDbContextFixture>(x =>
+            {
+                x.ConfigureWarnings(warnings => { warnings.Log(RelationalEventId.PendingModelChangesWarning); });
+                x.UseNpgsql(_factory.GetConnectionString()).UseQueryTrackingBehavior(queryTrackingBehavior);
+            });
+        });
+
+        var dbContext = _serviceProvider.GetService<MilvaBulkDbContextFixture>();
+        var entityRepository = _serviceProvider.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
+        await SeedAsync(dbContext);
+
+        // Act 
+        var result = entityRepository.GetForDelete(condition: i => i.Id == 1 && i.SomeDecimalProp >= 10M, projection: i => new SomeFullAuditableEntityFixture
+        {
+            Id = i.Id,
+            SomeDecimalProp = i.SomeDecimalProp,
+            ManyToOneEntities = i.ManyToOneEntities,
+            CreationDate = i.CreationDate,
+        }, conditionAfterProjection: i => i.SomeDecimalProp > 9M, includes: i => i.Include(m => m.ManyToOneEntities));
+
+        // Assert
+        result[0].Should().NotBeNull();
+        result[0].ManyToOneEntities.Should().NotBeEmpty();
+        result[0].ManyToOneEntities[0].SomeEntity.Should().BeNull();
+        result[0].Id.Should().Be(1);
+        result[0].SomeDecimalProp.Should().Be(10M);
+        result[0].SomeStringProp.Should().BeNull();
     }
 
     #endregion

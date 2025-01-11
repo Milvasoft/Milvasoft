@@ -11,6 +11,7 @@ using Milvasoft.Core.Helpers;
 using Milvasoft.DataAccess.EfCore;
 using Milvasoft.DataAccess.EfCore.Bulk.RepositoryBase.Abstract;
 using Milvasoft.DataAccess.EfCore.Configuration;
+using Milvasoft.DataAccess.EfCore.Utils;
 using Milvasoft.Helpers.DataAccess.EfCore.Concrete;
 using Milvasoft.IntegrationTests.Client.Fixtures.EntityFixtures;
 using Milvasoft.IntegrationTests.Client.Fixtures.Persistence;
@@ -68,7 +69,6 @@ public class BulkBaseRepositorySyncTests(CustomWebApplicationFactory factory) : 
     public async Task BulkAdd_WithNullEntityList_ShouldDoNothing(QueryTrackingBehavior queryTrackingBehavior)
     {
         // Arrange
-
         await InitializeAsync(services =>
         {
             services.ConfigureMilvaDataAccess();
@@ -100,10 +100,25 @@ public class BulkBaseRepositorySyncTests(CustomWebApplicationFactory factory) : 
     public async Task BulkAdd_WithValidEntity_ShouldAddCorrectly(QueryTrackingBehavior queryTrackingBehavior)
     {
         // Arrange
-
         await InitializeAsync(services =>
         {
-            services.ConfigureMilvaDataAccess();
+            services.ConfigureMilvaDataAccess(opt =>
+            {
+                opt.DbContext = new DbContextConfiguration
+                {
+                    GetCurrentUserNameMethod = (sp) => "testuser"
+                };
+
+                opt.Auditing = new AuditConfiguration
+                {
+                    AuditCreationDate = true,
+                    AuditCreator = true,
+                    AuditModificationDate = true,
+                    AuditModifier = true,
+                    AuditDeleter = true,
+                    AuditDeletionDate = true
+                };
+            });
 
             services.AddDbContext<MilvaBulkDbContextFixture>(x =>
             {
@@ -140,6 +155,7 @@ public class BulkBaseRepositorySyncTests(CustomWebApplicationFactory factory) : 
         count.Should().Be(2);
         addedEntity.Should().NotBeNull();
         addedEntity.CreationDate.Should().NotBeNull();
+        addedEntity.CreatorUserName.Should().Be("testuser");
     }
 
     [Theory]
@@ -149,7 +165,6 @@ public class BulkBaseRepositorySyncTests(CustomWebApplicationFactory factory) : 
     public async Task BulkAddWithSaveChanges_WithNullEntityList_ShouldDoNothing(QueryTrackingBehavior queryTrackingBehavior)
     {
         // Arrange
-
         await InitializeAsync(services =>
         {
             services.ConfigureMilvaDataAccess();
@@ -181,7 +196,6 @@ public class BulkBaseRepositorySyncTests(CustomWebApplicationFactory factory) : 
     public async Task BulkAddWithSaveChanges_WithValidEntity_ShouldAddCorrectly(QueryTrackingBehavior queryTrackingBehavior)
     {
         // Arrange
-
         await InitializeAsync(services =>
         {
             services.ConfigureMilvaDataAccess();
@@ -214,6 +228,114 @@ public class BulkBaseRepositorySyncTests(CustomWebApplicationFactory factory) : 
 
         // Act 
         entityRepository.BulkAddWithSaveChanges(entities);
+        var count = await dbContext.FullAuditableEntities.CountAsync();
+        var addedEntity = await entityRepository.GetByIdAsync(1);
+
+        // Assert
+        count.Should().Be(2);
+        addedEntity.Should().NotBeNull();
+        addedEntity.CreationDate.Should().NotBeNull();
+    }
+
+    [Theory]
+    [InlineData(QueryTrackingBehavior.NoTrackingWithIdentityResolution)]
+    [InlineData(QueryTrackingBehavior.NoTracking)]
+    [InlineData(QueryTrackingBehavior.TrackAll)]
+    public async Task BulkAddWithSaveChanges_WithValidEntityAndSaveChangesManuallyAndNoSaveChangesCall_ShouldDoNothing(QueryTrackingBehavior queryTrackingBehavior)
+    {
+        // Arrange
+
+        await InitializeAsync(services =>
+        {
+            services.ConfigureMilvaDataAccess(opt =>
+            {
+                opt.Repository = new RepositoryConfiguration
+                {
+                    DefaultSaveChangesChoice = DataAccess.EfCore.Utils.Enums.SaveChangesChoice.Manual
+                };
+            });
+
+            services.AddDbContext<MilvaBulkDbContextFixture>(x =>
+            {
+                x.ConfigureWarnings(warnings => { warnings.Log(RelationalEventId.PendingModelChangesWarning); });
+                x.UseNpgsql(_factory.GetConnectionString()).UseQueryTrackingBehavior(queryTrackingBehavior);
+            });
+        });
+
+        var dbContext = _serviceProvider.GetService<MilvaBulkDbContextFixture>();
+        var entityRepository = _serviceProvider.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
+
+        var entities = new List<SomeFullAuditableEntityFixture>
+        {
+            new() {
+                Id = 1,
+                SomeDateProp = DateTime.Now.AddYears(1),
+                SomeDecimalProp = 10M,
+                SomeStringProp = "somestring1"
+            },
+            new() {
+                Id = 2,
+                SomeDateProp = DateTime.Now.AddYears(2),
+                SomeDecimalProp = 20M,
+                SomeStringProp = "somestring2"
+            }
+        };
+
+        // Act 
+        entityRepository.BulkAddWithSaveChanges(entities);
+        var count = await dbContext.FullAuditableEntities.CountAsync();
+
+        // Assert
+        count.Should().Be(0);
+    }
+
+    [Theory]
+    [InlineData(QueryTrackingBehavior.NoTrackingWithIdentityResolution)]
+    [InlineData(QueryTrackingBehavior.NoTracking)]
+    [InlineData(QueryTrackingBehavior.TrackAll)]
+    public async Task BulkAddWithSaveChanges_WithValidEntityAndSaveChangesManuallyAndSaveChangesCall_ShouldAddCorrectly(QueryTrackingBehavior queryTrackingBehavior)
+    {
+        // Arrange
+
+        await InitializeAsync(services =>
+        {
+            services.ConfigureMilvaDataAccess(opt =>
+            {
+                opt.Repository = new RepositoryConfiguration
+                {
+                    DefaultSaveChangesChoice = DataAccess.EfCore.Utils.Enums.SaveChangesChoice.Manual
+                };
+            });
+
+            services.AddDbContext<MilvaBulkDbContextFixture>(x =>
+            {
+                x.ConfigureWarnings(warnings => { warnings.Log(RelationalEventId.PendingModelChangesWarning); });
+                x.UseNpgsql(_factory.GetConnectionString()).UseQueryTrackingBehavior(queryTrackingBehavior);
+            });
+        });
+
+        var dbContext = _serviceProvider.GetService<MilvaBulkDbContextFixture>();
+        var entityRepository = _serviceProvider.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
+
+        var entities = new List<SomeFullAuditableEntityFixture>
+        {
+            new() {
+                Id = 1,
+                SomeDateProp = DateTime.Now.AddYears(1),
+                SomeDecimalProp = 10M,
+                SomeStringProp = "somestring1"
+            },
+            new() {
+                Id = 2,
+                SomeDateProp = DateTime.Now.AddYears(2),
+                SomeDecimalProp = 20M,
+                SomeStringProp = "somestring2"
+            }
+        };
+
+        // Act 
+        entityRepository.BulkAddWithSaveChanges(entities);
+        entityRepository.SaveChangesBulk();
         var count = await dbContext.FullAuditableEntities.CountAsync();
         var addedEntity = await entityRepository.GetByIdAsync(1);
 
@@ -266,12 +388,28 @@ public class BulkBaseRepositorySyncTests(CustomWebApplicationFactory factory) : 
     [InlineData(QueryTrackingBehavior.NoTrackingWithIdentityResolution)]
     [InlineData(QueryTrackingBehavior.NoTracking)]
     [InlineData(QueryTrackingBehavior.TrackAll)]
-    public async Task BulkUpdat_ForEntityList_WithValidEntity_ShouldUpdateCorrectly(QueryTrackingBehavior queryTrackingBehavior)
+    public async Task BulkUpdate_ForEntityList_WithValidEntity_ShouldUpdateCorrectly(QueryTrackingBehavior queryTrackingBehavior)
     {
         // Arrange
         await InitializeAsync(services =>
         {
-            services.ConfigureMilvaDataAccess();
+            services.ConfigureMilvaDataAccess(opt =>
+            {
+                opt.DbContext = new DbContextConfiguration
+                {
+                    GetCurrentUserNameMethod = (sp) => "testuser"
+                };
+
+                opt.Auditing = new AuditConfiguration
+                {
+                    AuditCreationDate = true,
+                    AuditCreator = true,
+                    AuditModificationDate = true,
+                    AuditModifier = true,
+                    AuditDeleter = true,
+                    AuditDeletionDate = true
+                };
+            });
 
             services.AddDbContext<MilvaBulkDbContextFixture>(x =>
             {
@@ -296,6 +434,7 @@ public class BulkBaseRepositorySyncTests(CustomWebApplicationFactory factory) : 
         entitiesAfterUpdate[0].SomeStringProp.Should().Be("stringpropupdated");
         entitiesAfterUpdate[1].SomeStringProp.Should().Be("stringpropupdated");
         entitiesAfterUpdate[0].LastModificationDate.Should().NotBeNull();
+        entitiesAfterUpdate[0].LastModifierUserName.Should().Be("testuser");
         entitiesAfterUpdate[1].LastModificationDate.Should().NotBeNull();
     }
 
@@ -452,7 +591,24 @@ public class BulkBaseRepositorySyncTests(CustomWebApplicationFactory factory) : 
         // Arrange
         await InitializeAsync(services =>
         {
-            services.ConfigureMilvaDataAccess(opt => opt.DbContext.DefaultSoftDeletionState = DataAccess.EfCore.Utils.Enums.SoftDeletionState.Active);
+            services.ConfigureMilvaDataAccess(opt =>
+            {
+                opt.DbContext = new DbContextConfiguration
+                {
+                    GetCurrentUserNameMethod = (sp) => "testuser",
+                    DefaultSoftDeletionState = DataAccess.EfCore.Utils.Enums.SoftDeletionState.Active
+                };
+
+                opt.Auditing = new AuditConfiguration
+                {
+                    AuditCreationDate = true,
+                    AuditCreator = true,
+                    AuditModificationDate = true,
+                    AuditModifier = true,
+                    AuditDeleter = true,
+                    AuditDeletionDate = true
+                };
+            });
 
             services.AddDbContext<MilvaBulkDbContextFixture>(x =>
             {
@@ -475,6 +631,7 @@ public class BulkBaseRepositorySyncTests(CustomWebApplicationFactory factory) : 
         var entitiesAfterUpdate = await entityRepository.GetAllAsync(i => i.Id == 1 || i.Id == 2);
         entitiesAfterUpdate.Should().NotBeEmpty();
         entitiesAfterUpdate[0].DeletionDate.Should().NotBeNull();
+        entitiesAfterUpdate[0].DeleterUserName.Should().Be("testuser");
         entitiesAfterUpdate[1].DeletionDate.Should().NotBeNull();
         entitiesAfterUpdate[0].IsDeleted.Should().Be(true);
         entitiesAfterUpdate[1].IsDeleted.Should().Be(true);
@@ -583,6 +740,360 @@ public class BulkBaseRepositorySyncTests(CustomWebApplicationFactory factory) : 
         entitiesAfterUpdate[1].DeletionDate.Should().NotBeNull();
         entitiesAfterUpdate[0].IsDeleted.Should().Be(true);
         entitiesAfterUpdate[1].IsDeleted.Should().Be(true);
+    }
+
+    #endregion
+
+    #region ExecuteUpdateAsync
+
+    [Theory]
+    [InlineData(QueryTrackingBehavior.NoTrackingWithIdentityResolution)]
+    [InlineData(QueryTrackingBehavior.NoTracking)]
+    [InlineData(QueryTrackingBehavior.TrackAll)]
+    public async Task ExecuteUpdateAsync_IdOverload_ForEntityList_WithNullEntityList_ShouldDoNothing(QueryTrackingBehavior queryTrackingBehavior)
+    {
+        // Arrange
+        await InitializeAsync(services =>
+        {
+            services.ConfigureMilvaDataAccess();
+
+            services.AddDbContext<MilvaBulkDbContextFixture>(x =>
+            {
+                x.ConfigureWarnings(warnings => { warnings.Log(RelationalEventId.PendingModelChangesWarning); });
+                x.UseNpgsql(_factory.GetConnectionString()).UseQueryTrackingBehavior(queryTrackingBehavior);
+            });
+        });
+
+        var dbContext = _serviceProvider.GetService<MilvaBulkDbContextFixture>();
+        var entityRepository = _serviceProvider.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
+        await SeedAsync(dbContext);
+
+        var propBuilder = new SetPropertyBuilder<SomeFullAuditableEntityFixture>();
+        propBuilder.SetPropertyValue(i => i.SomeStringProp, "stringpropupdated");
+
+        // Act 
+        entityRepository.ExecuteUpdate(id: 5, propBuilder);
+        var allEntities = await dbContext.FullAuditableEntities.ToListAsync();
+
+        // Assert
+        allEntities[0].LastModificationDate.Should().BeNull();
+        allEntities[1].LastModificationDate.Should().BeNull();
+        allEntities[2].LastModificationDate.Should().BeNull();
+        allEntities[3].LastModificationDate.Should().BeNull();
+    }
+
+    [Theory]
+    [InlineData(QueryTrackingBehavior.NoTrackingWithIdentityResolution)]
+    [InlineData(QueryTrackingBehavior.NoTracking)]
+    [InlineData(QueryTrackingBehavior.TrackAll)]
+    public async Task ExecuteUpdateAsyncIdOverload_ForEntityList_WithValidEntity_ShouldUpdateCorrectly(QueryTrackingBehavior queryTrackingBehavior)
+    {
+        // Arrange
+        await InitializeAsync(services =>
+        {
+            services.ConfigureMilvaDataAccess(opt =>
+            {
+                opt.DbContext = new DbContextConfiguration
+                {
+                    GetCurrentUserNameMethod = (sp) => "testuser"
+                };
+
+                opt.Auditing = new AuditConfiguration
+                {
+                    AuditCreationDate = true,
+                    AuditCreator = true,
+                    AuditModificationDate = true,
+                    AuditModifier = true,
+                    AuditDeleter = true,
+                    AuditDeletionDate = true
+                };
+            });
+
+            services.AddDbContext<MilvaBulkDbContextFixture>(x =>
+            {
+                x.ConfigureWarnings(warnings => { warnings.Log(RelationalEventId.PendingModelChangesWarning); });
+                x.UseNpgsql(_factory.GetConnectionString()).UseQueryTrackingBehavior(queryTrackingBehavior);
+            });
+        });
+
+        var dbContext = _serviceProvider.GetService<MilvaBulkDbContextFixture>();
+        var entityRepository = _serviceProvider.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
+        await SeedAsync(dbContext);
+        var propBuilder = new SetPropertyBuilder<SomeFullAuditableEntityFixture>();
+        propBuilder.SetPropertyValue(i => i.SomeStringProp, "stringpropupdated");
+
+        // Act 
+        entityRepository.ExecuteUpdate(1, propBuilder);
+
+        // Assert
+        var entityAfterUpdate = await entityRepository.GetByIdAsync(1);
+        entityAfterUpdate.SomeStringProp.Should().Be("stringpropupdated");
+        entityAfterUpdate.SomeDecimalProp.Should().Be(10M);
+        entityAfterUpdate.LastModificationDate.Should().NotBeNull();
+        entityAfterUpdate.LastModifierUserName.Should().Be("testuser");
+    }
+
+    [Theory]
+    [InlineData(QueryTrackingBehavior.NoTrackingWithIdentityResolution)]
+    [InlineData(QueryTrackingBehavior.NoTracking)]
+    [InlineData(QueryTrackingBehavior.TrackAll)]
+    public async Task ExecuteUpdateAsync_ForEntityList_WithValidEntity_ShouldUpdateCorrectly(QueryTrackingBehavior queryTrackingBehavior)
+    {
+        // Arrange
+        await InitializeAsync(services =>
+        {
+            services.ConfigureMilvaDataAccess(opt =>
+            {
+                opt.DbContext = new DbContextConfiguration
+                {
+                    GetCurrentUserNameMethod = (sp) => "testuser"
+                };
+
+                opt.Auditing = new AuditConfiguration
+                {
+                    AuditCreationDate = true,
+                    AuditCreator = true,
+                    AuditModificationDate = true,
+                    AuditModifier = true,
+                    AuditDeleter = true,
+                    AuditDeletionDate = true
+                };
+            });
+
+            services.AddDbContext<MilvaBulkDbContextFixture>(x =>
+            {
+                x.ConfigureWarnings(warnings => { warnings.Log(RelationalEventId.PendingModelChangesWarning); });
+                x.UseNpgsql(_factory.GetConnectionString()).UseQueryTrackingBehavior(queryTrackingBehavior);
+            });
+        });
+
+        var dbContext = _serviceProvider.GetService<MilvaBulkDbContextFixture>();
+        var entityRepository = _serviceProvider.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
+        await SeedAsync(dbContext);
+        var propBuilder = new SetPropertyBuilder<SomeFullAuditableEntityFixture>();
+        propBuilder.SetPropertyValue(i => i.SomeStringProp, "stringpropupdated");
+
+        // Act 
+        entityRepository.ExecuteUpdate(i => i.Id == 1 || i.Id == 2, propBuilder);
+
+        // Assert
+        var entitiesAfterUpdate = await entityRepository.GetAllAsync(i => i.Id == 1 || i.Id == 2);
+        entitiesAfterUpdate[0].SomeStringProp.Should().Be("stringpropupdated");
+        entitiesAfterUpdate[0].SomeDecimalProp.Should().Be(10M);
+        entitiesAfterUpdate[1].SomeStringProp.Should().Be("stringpropupdated");
+        entitiesAfterUpdate[1].SomeDecimalProp.Should().Be(20M);
+        entitiesAfterUpdate[0].LastModificationDate.Should().NotBeNull();
+        entitiesAfterUpdate[1].LastModificationDate.Should().NotBeNull();
+        entitiesAfterUpdate[0].LastModifierUserName.Should().Be("testuser");
+        entitiesAfterUpdate[1].LastModifierUserName.Should().Be("testuser");
+    }
+
+    #endregion
+
+    #region ExecuteDeleteAsync
+
+    [Theory]
+    [InlineData(QueryTrackingBehavior.NoTrackingWithIdentityResolution)]
+    [InlineData(QueryTrackingBehavior.NoTracking)]
+    [InlineData(QueryTrackingBehavior.TrackAll)]
+    public async Task ExecuteDeleteAsync_IdOverload_ForEntityList_WithNullEntityList_ShouldDoNothing(QueryTrackingBehavior queryTrackingBehavior)
+    {
+        // Arrange
+        await InitializeAsync(services =>
+        {
+            services.ConfigureMilvaDataAccess();
+
+            services.AddDbContext<MilvaBulkDbContextFixture>(x =>
+            {
+                x.ConfigureWarnings(warnings => { warnings.Log(RelationalEventId.PendingModelChangesWarning); });
+                x.UseNpgsql(_factory.GetConnectionString()).UseQueryTrackingBehavior(queryTrackingBehavior);
+            });
+        });
+
+        var dbContext = _serviceProvider.GetService<MilvaBulkDbContextFixture>();
+        var entityRepository = _serviceProvider.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
+        await SeedAsync(dbContext);
+
+        // Act 
+        entityRepository.ExecuteDelete(5);
+        var allEntities = await dbContext.FullAuditableEntities.ToListAsync();
+
+        // Assert
+        allEntities[0].Should().NotBeNull();
+        allEntities[1].Should().NotBeNull();
+        allEntities[2].Should().NotBeNull();
+        allEntities[3].Should().NotBeNull();
+    }
+
+    [Theory]
+    [InlineData(QueryTrackingBehavior.NoTrackingWithIdentityResolution)]
+    [InlineData(QueryTrackingBehavior.NoTracking)]
+    [InlineData(QueryTrackingBehavior.TrackAll)]
+    public async Task ExecuteDeleteAsync_IdOverload_ForEntityList_WithValidEntityAndSoftDeletePassive_ShouldDeleteCorrectly(QueryTrackingBehavior queryTrackingBehavior)
+    {
+        // Arrange
+        await InitializeAsync(services =>
+        {
+            services.ConfigureMilvaDataAccess(opt => opt.DbContext.DefaultSoftDeletionState = DataAccess.EfCore.Utils.Enums.SoftDeletionState.Passive);
+
+            services.AddDbContext<MilvaBulkDbContextFixture>(x =>
+            {
+                x.ConfigureWarnings(warnings => { warnings.Log(RelationalEventId.PendingModelChangesWarning); });
+                x.UseNpgsql(_factory.GetConnectionString()).UseQueryTrackingBehavior(queryTrackingBehavior);
+            });
+        });
+
+        var dbContext = _serviceProvider.GetService<MilvaBulkDbContextFixture>();
+        var entityRepository = _serviceProvider.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
+        await SeedAsync(dbContext);
+
+        // Act 
+        entityRepository.ExecuteDelete(1);
+
+        // Assert
+        entityRepository.FetchSoftDeletedEntities(true);
+        var entitiesAfterDelete = await entityRepository.GetByIdAsync(1);
+        entitiesAfterDelete.Should().BeNull();
+    }
+
+    [Theory]
+    [InlineData(QueryTrackingBehavior.NoTrackingWithIdentityResolution)]
+    [InlineData(QueryTrackingBehavior.NoTracking)]
+    [InlineData(QueryTrackingBehavior.TrackAll)]
+    public async Task ExecuteDeleteAsync_IdOverload_ForEntityList_WithValidEntityAndSoftDeleteActive_ShouldDeleteCorrectly(QueryTrackingBehavior queryTrackingBehavior)
+    {
+        // Arrange
+        await InitializeAsync(services =>
+        {
+            services.ConfigureMilvaDataAccess(opt =>
+            {
+                opt.DbContext = new DbContextConfiguration
+                {
+                    GetCurrentUserNameMethod = (sp) => "testuser",
+                    DefaultSoftDeletionState = DataAccess.EfCore.Utils.Enums.SoftDeletionState.Active
+                };
+
+                opt.Auditing = new AuditConfiguration
+                {
+                    AuditCreationDate = true,
+                    AuditCreator = true,
+                    AuditModificationDate = true,
+                    AuditModifier = true,
+                    AuditDeleter = true,
+                    AuditDeletionDate = true
+                };
+            });
+
+            services.AddDbContext<MilvaBulkDbContextFixture>(x =>
+            {
+                x.ConfigureWarnings(warnings => { warnings.Log(RelationalEventId.PendingModelChangesWarning); });
+                x.UseNpgsql(_factory.GetConnectionString()).UseQueryTrackingBehavior(queryTrackingBehavior);
+            });
+        });
+
+        var dbContext = _serviceProvider.GetService<MilvaBulkDbContextFixture>();
+        var entityRepository = _serviceProvider.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
+        await SeedAsync(dbContext);
+
+        // Act 
+        entityRepository.ExecuteDelete(1);
+
+        // Assert
+        entityRepository.FetchSoftDeletedEntities(true);
+        var entityAfterDelete = await entityRepository.GetByIdAsync(1);
+        entityAfterDelete.Should().NotBeNull();
+        entityAfterDelete.DeletionDate.Should().NotBeNull();
+        entityAfterDelete.DeleterUserName.Should().Be("testuser");
+        entityAfterDelete.IsDeleted.Should().Be(true);
+    }
+
+    [Theory]
+    [InlineData(QueryTrackingBehavior.NoTrackingWithIdentityResolution)]
+    [InlineData(QueryTrackingBehavior.NoTracking)]
+    [InlineData(QueryTrackingBehavior.TrackAll)]
+    public async Task ExecuteDeleteAsync_ForEntityList_WithValidEntityAndSoftDeletePassive_ShouldDeleteCorrectly(QueryTrackingBehavior queryTrackingBehavior)
+    {
+        // Arrange
+        await InitializeAsync(services =>
+        {
+            services.ConfigureMilvaDataAccess(opt => opt.DbContext.DefaultSoftDeletionState = DataAccess.EfCore.Utils.Enums.SoftDeletionState.Passive);
+
+            services.AddDbContext<MilvaBulkDbContextFixture>(x =>
+            {
+                x.ConfigureWarnings(warnings => { warnings.Log(RelationalEventId.PendingModelChangesWarning); });
+                x.UseNpgsql(_factory.GetConnectionString()).UseQueryTrackingBehavior(queryTrackingBehavior);
+            });
+        });
+
+        var dbContext = _serviceProvider.GetService<MilvaBulkDbContextFixture>();
+        var entityRepository = _serviceProvider.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
+        await SeedAsync(dbContext);
+
+        // Act 
+        entityRepository.ExecuteDelete(i => i.Id == 1 || i.Id == 2);
+
+        // Assert
+        entityRepository.FetchSoftDeletedEntities(true);
+        var entitiesAfterDelete = await entityRepository.GetAllAsync(i => i.Id == 1 || i.Id == 2);
+        entitiesAfterDelete.Should().BeEmpty();
+    }
+
+    [Theory]
+    [InlineData(QueryTrackingBehavior.NoTrackingWithIdentityResolution)]
+    [InlineData(QueryTrackingBehavior.NoTracking)]
+    [InlineData(QueryTrackingBehavior.TrackAll)]
+    public async Task ExecuteDeleteAsync_ForEntityList_WithValidEntityAndSoftDeleteActive_ShouldDeleteCorrectly(QueryTrackingBehavior queryTrackingBehavior)
+    {
+        // Arrange
+        await InitializeAsync(services =>
+        {
+            services.ConfigureMilvaDataAccess(opt =>
+            {
+                opt.DbContext = new DbContextConfiguration
+                {
+                    GetCurrentUserNameMethod = (sp) => "testuser",
+                    DefaultSoftDeletionState = DataAccess.EfCore.Utils.Enums.SoftDeletionState.Active
+                };
+
+                opt.Auditing = new AuditConfiguration
+                {
+                    AuditCreationDate = true,
+                    AuditCreator = true,
+                    AuditModificationDate = true,
+                    AuditModifier = true,
+                    AuditDeleter = true,
+                    AuditDeletionDate = true
+                };
+            });
+
+            services.AddDbContext<MilvaBulkDbContextFixture>(x =>
+            {
+                x.ConfigureWarnings(warnings => { warnings.Log(RelationalEventId.PendingModelChangesWarning); });
+                x.UseNpgsql(_factory.GetConnectionString()).UseQueryTrackingBehavior(queryTrackingBehavior);
+            });
+        });
+
+        var dbContext = _serviceProvider.GetService<MilvaBulkDbContextFixture>();
+        var entityRepository = _serviceProvider.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
+        await SeedAsync(dbContext);
+
+        var propBuilder = new SetPropertyBuilder<SomeFullAuditableEntityFixture>();
+        propBuilder.SetPropertyValue(i => i.SomeStringProp, "stringpropupdated");
+
+        // Act 
+        entityRepository.ExecuteDelete(i => i.Id == 1 || i.Id == 2, propBuilder);
+
+        // Assert
+        entityRepository.FetchSoftDeletedEntities(true);
+        var entitiesAfterDelete = await entityRepository.GetAllAsync(i => i.Id == 1 || i.Id == 2);
+        entitiesAfterDelete.Should().NotBeEmpty();
+        entitiesAfterDelete[0].SomeStringProp.Should().Be("stringpropupdated");
+        entitiesAfterDelete[1].SomeStringProp.Should().Be("stringpropupdated");
+        entitiesAfterDelete[0].DeletionDate.Should().NotBeNull();
+        entitiesAfterDelete[0].DeleterUserName.Should().Be("testuser");
+        entitiesAfterDelete[1].DeletionDate.Should().NotBeNull();
+        entitiesAfterDelete[0].IsDeleted.Should().Be(true);
+        entitiesAfterDelete[1].IsDeleted.Should().Be(true);
     }
 
     #endregion

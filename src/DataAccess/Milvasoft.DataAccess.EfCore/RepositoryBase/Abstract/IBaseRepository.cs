@@ -43,6 +43,12 @@ public interface IBaseRepository<TEntity> where TEntity : class, IMilvaEntity
     public void SoftDeletionStateResetAfterOperation(bool state = true);
 
     /// <summary>
+    /// Gets current soft deletion state.
+    /// </summary>
+    /// <returns></returns>
+    public SoftDeletionState GetCurrentSoftDeletionState();
+
+    /// <summary>
     /// Determines whether soft deleted entities in the database are fetched from the database.
     /// </summary>
     /// <param name="state">Soft delete fetching state.</param>
@@ -460,6 +466,7 @@ public interface IBaseRepository<TEntity> where TEntity : class, IMilvaEntity
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
     Task<int> ExecuteDeleteAsync(object id, SetPropertyBuilder<TEntity> propertyBuilder = null, CancellationToken cancellationToken = default);
+
     /// <summary>
     /// Deletes all records that given <paramref name="predicate"/>. If <see cref="SoftDeletionState"/> is active, it updates the soft delete properties of the relevant entity. 
     /// Note that this will not work with navigation properties.
@@ -469,8 +476,8 @@ public interface IBaseRepository<TEntity> where TEntity : class, IMilvaEntity
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
     Task<int> ExecuteDeleteAsync(Expression<Func<TEntity, bool>> predicate,
-                            SetPropertyBuilder<TEntity> propertyBuilder = null,
-                            CancellationToken cancellationToken = default);
+                                 SetPropertyBuilder<TEntity> propertyBuilder = null,
+                                 CancellationToken cancellationToken = default);
 
     #endregion
 

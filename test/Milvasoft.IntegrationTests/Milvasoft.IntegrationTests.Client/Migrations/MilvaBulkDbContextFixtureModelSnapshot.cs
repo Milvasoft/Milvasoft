@@ -42,6 +42,9 @@ namespace Milvasoft.IntegrationTests.Client.Migrations
                     b.Property<DateTime?>("DeletionDate")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<int?>("FullAuditableEntityId")
+                        .HasColumnType("integer");
+
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("boolean");
 
@@ -64,6 +67,9 @@ namespace Milvasoft.IntegrationTests.Client.Migrations
                         .HasColumnType("text");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("FullAuditableEntityId")
+                        .IsUnique();
 
                     b.ToTable("AnotherFullAuditableEntities");
                 });
@@ -602,6 +608,15 @@ namespace Milvasoft.IntegrationTests.Client.Migrations
                     b.ToTable("TranslationEntities");
                 });
 
+            modelBuilder.Entity("Milvasoft.IntegrationTests.Client.Fixtures.EntityFixtures.AnotherFullAuditableEntityFixture", b =>
+                {
+                    b.HasOne("Milvasoft.IntegrationTests.Client.Fixtures.EntityFixtures.SomeFullAuditableEntityFixture", "FullAuditableEntity")
+                        .WithOne("RelatedFullAuditableEntity")
+                        .HasForeignKey("Milvasoft.IntegrationTests.Client.Fixtures.EntityFixtures.AnotherFullAuditableEntityFixture", "FullAuditableEntityId");
+
+                    b.Navigation("FullAuditableEntity");
+                });
+
             modelBuilder.Entity("Milvasoft.IntegrationTests.Client.Fixtures.EntityFixtures.RestChildrenTestEntityFixture", b =>
                 {
                     b.HasOne("Milvasoft.IntegrationTests.Client.Fixtures.EntityFixtures.RestTestEntityFixture", "Parent")
@@ -693,6 +708,8 @@ namespace Milvasoft.IntegrationTests.Client.Migrations
             modelBuilder.Entity("Milvasoft.IntegrationTests.Client.Fixtures.EntityFixtures.SomeFullAuditableEntityFixture", b =>
                 {
                     b.Navigation("ManyToOneEntities");
+
+                    b.Navigation("RelatedFullAuditableEntity");
                 });
 #pragma warning restore 612, 618
         }

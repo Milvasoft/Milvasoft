@@ -5,7 +5,15 @@ using Milvasoft.UnitTests.ComponentsTests.RestTests.Fixture;
 
 namespace Milvasoft.UnitTests.DataAccessTests.EfCoreTests.Fixtures;
 
-public class SomeMilvaDbContextFixture(DbContextOptions<SomeMilvaDbContextFixture> contextOptions, IDataAccessConfiguration dataAccessConfiguration) : MilvaDbContext(contextOptions, dataAccessConfiguration)
+public class SomeMilvaDbContextFixture(DbContextOptions<SomeMilvaDbContextFixture> contextOptions, IDataAccessConfiguration dataAccessConfiguration, IServiceProvider serviceProvider) : MilvaDbContext(contextOptions, dataAccessConfiguration, serviceProvider)
+{
+    public DbSet<RestTestEntityFixture> RestTestEntities { get; set; }
+    public DbSet<SomeEntityFixture> Entities { get; set; }
+    public DbSet<SomeBaseEntityFixture> BaseEntities { get; set; }
+    public DbSet<SomeFullAuditableEntityFixture> FullAuditableEntities { get; set; }
+}
+
+public class AnotherMilvaDbContextFixture(DbContextOptions<AnotherMilvaDbContextFixture> contextOptions, IDataAccessConfiguration dataAccessConfiguration) : MilvaDbContext(contextOptions, dataAccessConfiguration)
 {
     public DbSet<RestTestEntityFixture> RestTestEntities { get; set; }
     public DbSet<SomeEntityFixture> Entities { get; set; }

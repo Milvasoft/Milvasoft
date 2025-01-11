@@ -21,6 +21,64 @@ namespace Milvasoft.UnitTests.DataAccessTests.EfCoreTests.DbContextBaseTests;
 [Trait("EF Core Data Access Unit Tests", "Unit tests for Milvasoft.DataAccess.EfCore unit testable parts.")]
 public class MilvaDbContextTests
 {
+    [Fact]
+    public async Task Constructor_WithThreeParams_ShouldCreateCorrectly()
+    {
+        // Arrange
+        var dataAccessConfiguration = new DataAccessConfiguration();
+
+        var services = GetServices(dataAccessConfiguration);
+
+        var dbContextOptions = new DbContextOptionsBuilder<SomeMilvaDbContextFixture>()
+            .UseInMemoryDatabase(databaseName: $"MilvaDbContextTestDbInMemory_{Guid.NewGuid}_{DateTime.Now.Nanosecond}")
+            .Options;
+
+        using var dbContext = new SomeMilvaDbContextFixture(dbContextOptions, dataAccessConfiguration, services);
+        var entity = new SomeBaseEntityFixture
+        {
+            Id = 1,
+            SomeStringProp = "stringprop"
+        };
+
+        // Act & Assert
+        await dbContext.BaseEntities.AddAsync(entity);
+        await dbContext.SaveChangesAsync();
+        var entityInDb = await dbContext.BaseEntities.FirstOrDefaultAsync();
+        entityInDb.Should().NotBeNull();
+        entityInDb.Id.Should().Be(1);
+        entityInDb.CreationDate.Should().NotBeNull();
+        entityInDb.CreatorUserName.Should().BeNull();
+    }
+
+    [Fact]
+    public async Task Constructor_WithTwoParams_ShouldCreateCorrectly()
+    {
+        // Arrange
+        var dataAccessConfiguration = new DataAccessConfiguration();
+
+        var services = GetServices(dataAccessConfiguration);
+
+        var dbContextOptions = new DbContextOptionsBuilder<AnotherMilvaDbContextFixture>()
+            .UseInMemoryDatabase(databaseName: $"MilvaDbContextTestDbInMemory_{Guid.NewGuid}_{DateTime.Now.Nanosecond}")
+            .Options;
+
+        using var dbContext = new AnotherMilvaDbContextFixture(dbContextOptions, dataAccessConfiguration);
+        var entity = new SomeBaseEntityFixture
+        {
+            Id = 1,
+            SomeStringProp = "stringprop"
+        };
+
+        // Act & Assert
+        await dbContext.BaseEntities.AddAsync(entity);
+        await dbContext.SaveChangesAsync();
+        var entityInDb = await dbContext.BaseEntities.FirstOrDefaultAsync();
+        entityInDb.Should().NotBeNull();
+        entityInDb.Id.Should().Be(1);
+        entityInDb.CreationDate.Should().NotBeNull();
+        entityInDb.CreatorUserName.Should().BeNull();
+    }
+
     #region Auditing
 
     [Fact]

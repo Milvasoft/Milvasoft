@@ -566,6 +566,38 @@ public class DbContextTests(CustomWebApplicationFactory factory) : DataAccessInt
     }
 
     [Fact]
+    public async Task SetSoftDeletionStateToDefault_ShouldUpdateCorrectly()
+    {
+        // Arrange
+        await InitializeAsync(services =>
+        {
+            services.ConfigureMilvaDataAccess(opt =>
+            {
+                opt.DbContext = new DbContextConfiguration
+                {
+                    UseUtcForDateTime = true,
+                    DefaultSoftDeletionState = SoftDeletionState.Active,
+                    ResetSoftDeleteStateAfterEveryOperation = false
+                };
+            });
+        });
+
+        var dbContext = _serviceProvider.GetRequiredService<MilvaBulkDbContextFixture>();
+
+        // Act & Assert
+        var currentSoftDeleteState = dbContext.GetCurrentSoftDeletionState();
+        currentSoftDeleteState.Should().Be(SoftDeletionState.Active);
+
+        dbContext.ChangeSoftDeletionState(SoftDeletionState.Passive);
+        currentSoftDeleteState = dbContext.GetCurrentSoftDeletionState();
+        currentSoftDeleteState.Should().Be(SoftDeletionState.Passive);
+
+        dbContext.SetSoftDeletionStateToDefault();
+        currentSoftDeleteState = dbContext.GetCurrentSoftDeletionState();
+        currentSoftDeleteState.Should().Be(SoftDeletionState.Active);
+    }
+
+    [Fact]
     public async Task SoftDeletion_WithSoftDeletionIsActiveAndEntityAndRelatedEntityIsNotSoftDeletableAndTrackingActive_ShouldDeleteRelatedEntity()
     {
         // Arrange
@@ -675,8 +707,11 @@ public class DbContextTests(CustomWebApplicationFactory factory) : DataAccessInt
         relatedEntityInDb.Should().BeNull();
     }
 
-    [Fact]
-    public async Task SoftDeletion_WithSoftDeletionIsActiveAndBothSideSoftDeletableAndAsNoTrackingAndNotIncludedRelatedEntityAndIncludedRelatedEntity_ShouldDoNothingOnRelatedEntity()
+    [Theory]
+    [InlineData(QueryTrackingBehavior.NoTrackingWithIdentityResolution, false)]
+    [InlineData(QueryTrackingBehavior.NoTracking, false)]
+    [InlineData(QueryTrackingBehavior.TrackAll, true)]
+    public async Task SoftDeletion_WithSoftDeletionIsActiveAndBothSideSoftDeletableAndAsNoTrackingAndNotIncludedRelatedEntities_ShouldDoNothingOnRelatedEntities(QueryTrackingBehavior queryTrackingBehavior, bool expectedRelatedIsDeleted)
     {
         // Arrange
         await InitializeAsync(services =>
@@ -696,7 +731,7 @@ public class DbContextTests(CustomWebApplicationFactory factory) : DataAccessInt
             services.AddDbContext<MilvaBulkDbContextFixture>(x =>
             {
                 x.ConfigureWarnings(warnings => { warnings.Log(RelationalEventId.PendingModelChangesWarning); });
-                x.UseNpgsql(_factory.GetConnectionString()).UseQueryTrackingBehavior(QueryTrackingBehavior.NoTrackingWithIdentityResolution);
+                x.UseNpgsql(_factory.GetConnectionString()).UseQueryTrackingBehavior(queryTrackingBehavior);
             });
         });
 
@@ -745,12 +780,14 @@ public class DbContextTests(CustomWebApplicationFactory factory) : DataAccessInt
         entityInDb.IsDeleted.Should().BeTrue();
         entityInDb.DeletionDate.Should().BeCloseTo(now, TimeSpan.FromSeconds(5));
         relatedEntityInDb.Should().NotBeNull();
-        relatedEntityInDb.IsDeleted.Should().BeFalse();
-        relatedEntityInDb.DeletionDate.Should().BeNull();
+        relatedEntityInDb.IsDeleted.Should().Be(expectedRelatedIsDeleted);
     }
 
-    [Fact]
-    public async Task SoftDeletion_WithSoftDeletionIsActiveAndEntityIsSoftDeletableAndAsNoTrackingAndIncludedRelatedEntity_ShouldSoftDeleteRelatedEntity()
+    [Theory]
+    [InlineData(QueryTrackingBehavior.NoTrackingWithIdentityResolution, false)]
+    [InlineData(QueryTrackingBehavior.NoTracking, false)]
+    [InlineData(QueryTrackingBehavior.TrackAll, true)]
+    public async Task SoftDeletion_WithSoftDeletionIsActiveAndBothSideSoftDeletableAndAsNoTrackingAndNotIncludedRelatedEntity_ShouldDoNothingOnRelatedEntity(QueryTrackingBehavior queryTrackingBehavior, bool expectedRelatedIsDeleted)
     {
         // Arrange
         await InitializeAsync(services =>
@@ -770,7 +807,79 @@ public class DbContextTests(CustomWebApplicationFactory factory) : DataAccessInt
             services.AddDbContext<MilvaBulkDbContextFixture>(x =>
             {
                 x.ConfigureWarnings(warnings => { warnings.Log(RelationalEventId.PendingModelChangesWarning); });
-                x.UseNpgsql(_factory.GetConnectionString()).UseQueryTrackingBehavior(QueryTrackingBehavior.NoTrackingWithIdentityResolution);
+                x.UseNpgsql(_factory.GetConnectionString()).UseQueryTrackingBehavior(queryTrackingBehavior);
+            });
+        });
+
+        var dbContext = _serviceProvider.GetRequiredService<MilvaBulkDbContextFixture>();
+
+        var now = DateTime.UtcNow;
+        var entity = new SomeFullAuditableEntityFixture
+        {
+            Id = 1,
+            SomeStringProp = "stringprop",
+            RelatedFullAuditableEntity = new AnotherFullAuditableEntityFixture
+            {
+                Id = 1,
+                SomeStringProp = "relatedstringprop",
+                SomeDateProp = DateTime.UtcNow,
+            }
+        };
+
+        // Act & Assert
+        await dbContext.FullAuditableEntities.AddAsync(entity);
+        await dbContext.SaveChangesAsync();
+        dbContext.Entry(entity).State = EntityState.Detached;
+        dbContext.Entry(entity.RelatedFullAuditableEntity).State = EntityState.Detached;
+
+        var entityInDb = await dbContext.FullAuditableEntities.FirstOrDefaultAsync();
+
+        var relatedEntityInDb = await dbContext.AnotherFullAuditableEntities.FirstOrDefaultAsync();
+        dbContext.Entry(relatedEntityInDb).State = EntityState.Detached;
+        entityInDb.Should().NotBeNull();
+        entityInDb.Id.Should().Be(1);
+        relatedEntityInDb.Should().NotBeNull();
+        relatedEntityInDb.Id.Should().Be(1);
+
+        dbContext.FullAuditableEntities.Remove(entityInDb);
+        await dbContext.SaveChangesAsync();
+        var dataCount = await dbContext.FullAuditableEntities.CountAsync();
+        dataCount.Should().Be(1);
+
+        entityInDb = await dbContext.FullAuditableEntities.FirstOrDefaultAsync();
+        relatedEntityInDb = await dbContext.AnotherFullAuditableEntities.FirstOrDefaultAsync();
+        entityInDb.Should().NotBeNull();
+        entityInDb.IsDeleted.Should().BeTrue();
+        entityInDb.DeletionDate.Should().BeCloseTo(now, TimeSpan.FromSeconds(5));
+        relatedEntityInDb.Should().NotBeNull();
+        relatedEntityInDb.IsDeleted.Should().Be(expectedRelatedIsDeleted);
+    }
+
+    [Theory]
+    [InlineData(QueryTrackingBehavior.NoTrackingWithIdentityResolution)]
+    [InlineData(QueryTrackingBehavior.NoTracking)]
+    [InlineData(QueryTrackingBehavior.TrackAll)]
+    public async Task SoftDeletion_WithSoftDeletionIsActiveAndEntityIsSoftDeletableAndAsNoTrackingAndIncludedRelatedEntities_ShouldSoftDeleteRelatedEntities(QueryTrackingBehavior queryTrackingBehavior)
+    {
+        // Arrange
+        await InitializeAsync(services =>
+        {
+            services.ConfigureMilvaDataAccess(opt =>
+            {
+                opt.DbContext = new DbContextConfiguration
+                {
+                    UseUtcForDateTime = true,
+                    DefaultSoftDeletionState = SoftDeletionState.Active,
+                };
+            });
+
+            services.RemoveAll<DbContextOptions<MilvaBulkDbContextFixture>>();
+            services.RemoveAll<MilvaBulkDbContextFixture>();
+
+            services.AddDbContext<MilvaBulkDbContextFixture>(x =>
+            {
+                x.ConfigureWarnings(warnings => { warnings.Log(RelationalEventId.PendingModelChangesWarning); });
+                x.UseNpgsql(_factory.GetConnectionString()).UseQueryTrackingBehavior(queryTrackingBehavior);
             });
         });
 
@@ -819,6 +928,81 @@ public class DbContextTests(CustomWebApplicationFactory factory) : DataAccessInt
 
         entityInDb = await dbContext.FullAuditableEntities.FirstOrDefaultAsync();
         relatedEntityInDb = await dbContext.SomeManyToOneEntities.FirstOrDefaultAsync();
+        entityInDb.Should().NotBeNull();
+        entityInDb.IsDeleted.Should().BeTrue();
+        entityInDb.DeletionDate.Should().BeCloseTo(now, TimeSpan.FromSeconds(5));
+        relatedEntityInDb.Should().NotBeNull();
+        relatedEntityInDb.IsDeleted.Should().BeTrue();
+        relatedEntityInDb.DeletionDate.Should().BeCloseTo(now, TimeSpan.FromSeconds(5));
+    }
+
+    [Theory]
+    [InlineData(QueryTrackingBehavior.NoTrackingWithIdentityResolution)]
+    [InlineData(QueryTrackingBehavior.NoTracking)]
+    [InlineData(QueryTrackingBehavior.TrackAll)]
+    public async Task SoftDeletion_WithSoftDeletionIsActiveAndEntityIsSoftDeletableAndAsNoTrackingAndIncludedRelatedEntity_ShouldSoftDeleteRelatedEntity(QueryTrackingBehavior queryTrackingBehavior)
+    {
+        // Arrange
+        await InitializeAsync(services =>
+        {
+            services.ConfigureMilvaDataAccess(opt =>
+            {
+                opt.DbContext = new DbContextConfiguration
+                {
+                    UseUtcForDateTime = true,
+                    DefaultSoftDeletionState = SoftDeletionState.Active,
+                };
+            });
+
+            services.RemoveAll<DbContextOptions<MilvaBulkDbContextFixture>>();
+            services.RemoveAll<MilvaBulkDbContextFixture>();
+
+            services.AddDbContext<MilvaBulkDbContextFixture>(x =>
+            {
+                x.ConfigureWarnings(warnings => { warnings.Log(RelationalEventId.PendingModelChangesWarning); });
+                x.UseNpgsql(_factory.GetConnectionString()).UseQueryTrackingBehavior(queryTrackingBehavior);
+            });
+        });
+
+        var dbContext = _serviceProvider.GetRequiredService<MilvaBulkDbContextFixture>();
+
+        var now = DateTime.UtcNow;
+        var entity = new SomeFullAuditableEntityFixture
+        {
+            Id = 1,
+            SomeStringProp = "stringprop",
+            RelatedFullAuditableEntity = new AnotherFullAuditableEntityFixture
+            {
+                Id = 1,
+                SomeStringProp = "relatedstringprop",
+                SomeDateProp = DateTime.UtcNow,
+            }
+        };
+
+        // Act & Assert
+        await dbContext.FullAuditableEntities.AddAsync(entity);
+        await dbContext.SaveChangesAsync();
+        dbContext.Entry(entity).State = EntityState.Detached;
+
+        var entityInDb = await dbContext.FullAuditableEntities.Select(i => new SomeFullAuditableEntityFixture
+        {
+            Id = i.Id,
+            ManyToOneEntities = i.ManyToOneEntities
+        }).FirstOrDefaultAsync();
+
+        var relatedEntityInDb = await dbContext.AnotherFullAuditableEntities.FirstOrDefaultAsync();
+        entityInDb.Should().NotBeNull();
+        entityInDb.Id.Should().Be(1);
+        relatedEntityInDb.Should().NotBeNull();
+        relatedEntityInDb.Id.Should().Be(1);
+
+        dbContext.FullAuditableEntities.Remove(entityInDb);
+        await dbContext.SaveChangesAsync();
+        var dataCount = await dbContext.FullAuditableEntities.CountAsync();
+        dataCount.Should().Be(1);
+
+        entityInDb = await dbContext.FullAuditableEntities.FirstOrDefaultAsync();
+        relatedEntityInDb = await dbContext.AnotherFullAuditableEntities.FirstOrDefaultAsync();
         entityInDb.Should().NotBeNull();
         entityInDb.IsDeleted.Should().BeTrue();
         entityInDb.DeletionDate.Should().BeCloseTo(now, TimeSpan.FromSeconds(5));

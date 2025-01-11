@@ -103,6 +103,12 @@ public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepositor
     public void SoftDeletionStateResetAfterOperation(bool state = true) => _dbContext.SoftDeletionStateResetAfterOperation(state);
 
     /// <summary>
+    /// Gets current soft deletion state.
+    /// </summary>
+    /// <returns></returns>
+    public SoftDeletionState GetCurrentSoftDeletionState() => _dbContext.GetCurrentSoftDeletionState();
+
+    /// <summary>
     /// Determines whether soft deleted entities in the database are fetched from the database.
     /// </summary>
     /// <param name="state">Soft delete fetching state.</param>
