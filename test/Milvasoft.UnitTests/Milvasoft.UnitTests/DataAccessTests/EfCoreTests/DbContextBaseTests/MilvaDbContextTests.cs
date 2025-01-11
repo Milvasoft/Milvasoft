@@ -56,8 +56,6 @@ public class MilvaDbContextTests
         // Arrange
         var dataAccessConfiguration = new DataAccessConfiguration();
 
-        var services = GetServices(dataAccessConfiguration);
-
         var dbContextOptions = new DbContextOptionsBuilder<AnotherMilvaDbContextFixture>()
             .UseInMemoryDatabase(databaseName: $"MilvaDbContextTestDbInMemory_{Guid.NewGuid}_{DateTime.Now.Nanosecond}")
             .Options;
