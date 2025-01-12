@@ -17,7 +17,7 @@ public static class DataProtectorExtensions
     /// <returns></returns>
     public static string Generate<TKey>(this IDataProtectionProvider protector, string purpose, TKey userId, bool useUtcForDateTimes) where TKey : IEquatable<TKey>
     {
-        var ms = new MemoryStream();
+        using var ms = new MemoryStream();
 
         using (var writer = ms.CreateWriter())
         {
@@ -46,7 +46,7 @@ public static class DataProtectorExtensions
         {
             var unprotectedData = protector.CreateProtector(purpose).Unprotect(Convert.FromBase64String(token));
 
-            var ms = new MemoryStream(unprotectedData);
+            using var ms = new MemoryStream(unprotectedData);
 
             using var reader = ms.CreateReader();
             var creationTime = reader.ReadDateTimeOffset();

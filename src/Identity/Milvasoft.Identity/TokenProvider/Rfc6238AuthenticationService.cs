@@ -6,7 +6,6 @@ namespace Milvasoft.Identity.TokenProvider;
 
 internal static class Rfc6238AuthenticationService
 {
-    private static readonly DateTime _unixEpoch = DateTime.UnixEpoch;
     private static readonly TimeSpan _timestep = TimeSpan.FromMinutes(3);
     private static readonly UTF8Encoding _encoding = new(false, true);
     private static readonly RandomNumberGenerator _rng = RandomNumberGenerator.Create();
@@ -71,7 +70,7 @@ internal static class Rfc6238AuthenticationService
     // More info: https://tools.ietf.org/html/rfc6238#section-4
     private static ulong GetCurrentTimeStepNumber()
     {
-        var delta = CommonHelper.GetNow(UseUtcForDateTimes) - _unixEpoch;
+        var delta = CommonHelper.GetNow(UseUtcForDateTimes) - DateTime.UnixEpoch;
 
         return (ulong)(delta.Ticks / _timestep.Ticks);
     }

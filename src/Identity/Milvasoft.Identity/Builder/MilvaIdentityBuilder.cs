@@ -95,6 +95,8 @@ public class MilvaIdentityBuilder<TUser, TKey> where TUser : MilvaUser<TKey> whe
 
         identityOptions.Invoke(config);
 
+        config.Token.TokenValidationParameters.IssuerSigningKey = config.Token.GetSecurityKey();
+
         _services.AddSingleton(config);
 
         Rfc6238AuthenticationService.UseUtcForDateTimes = config.Token.UseUtcForDateTimes;

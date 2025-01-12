@@ -11,6 +11,8 @@ namespace Milvasoft.Identity.TokenProvider;
 /// <typeparam name="TKey">The type user's key.</typeparam>
 public static class DigitTokenProvider<TUser, TKey> where TUser : MilvaUser<TKey> where TKey : IEquatable<TKey>
 {
+    private const string _totp = "Totp";
+
     /// <summary>
     /// Generates a token for the specified <paramref name="user"/> and <paramref name="purpose"/>.
     /// </summary>
@@ -55,7 +57,7 @@ public static class DigitTokenProvider<TUser, TKey> where TUser : MilvaUser<TKey
         if (!int.TryParse(token, out int code))
             return false;
 
-        var securityToken = Encoding.Unicode.GetBytes(Guid.NewGuid().ToString());
+        var securityToken = Encoding.Unicode.GetBytes(user.Id.ToString());
 
         var modifier = GetUserModifier(purpose, user);
 
@@ -73,9 +75,9 @@ public static class DigitTokenProvider<TUser, TKey> where TUser : MilvaUser<TKey
     /// </returns>
     private static string GetUserModifier(Purpose purpose, TUser user) => purpose switch
     {
-        Purpose.EmailChange => $"Email:ChangeEmail:limon@limon:bugrakosen@windowslive.com",
-        Purpose.EmailConfirm => $"Totp:" + purpose + ":" + user.PhoneNumber,
-        Purpose.PasswordReset => $"PhoneNumber:" + purpose + ":" + string.Empty,
+        Purpose.EmailChange => string.Join(':', nameof(MilvaUser<int>.Email), purpose, user.Email),
+        Purpose.EmailConfirm => string.Join(':', _totp, purpose, user.PhoneNumber),
+        Purpose.PasswordReset => string.Join(':', nameof(MilvaUser<int>.PhoneNumber), purpose),
         _ => string.Empty,
     };
 }

@@ -51,7 +51,16 @@ public class MilvaPasswordHasher : IMilvaPasswordHasher
 
         ArgumentNullException.ThrowIfNull(providedPassword);
 
-        byte[] decodedHashedPassword = Convert.FromBase64String(hashedPassword);
+        byte[] decodedHashedPassword;
+
+        try
+        {
+            decodedHashedPassword = Convert.FromBase64String(hashedPassword);
+        }
+        catch (Exception)
+        {
+            return false;
+        }
 
         // read the format marker from the hashed password
         if (decodedHashedPassword.Length == 0)

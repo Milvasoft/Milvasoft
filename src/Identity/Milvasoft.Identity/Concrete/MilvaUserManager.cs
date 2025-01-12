@@ -287,7 +287,7 @@ public partial class MilvaUserManager<TUser, TKey>(Lazy<IDataProtectionProvider>
             return LocalizerKeys.InvalidEmail;
 
         if (!EmailRegex().IsMatch(email))
-            return LocalizerKeys.IdentityInvalidUserName;
+            return LocalizerKeys.IdentityInvalidEmail;
 
         return null;
     }

@@ -47,26 +47,26 @@ public class MilvaTokenManager(MilvaIdentityOptions identityOptions, IMilvaLogge
     /// Returns claims if token is valid.
     /// </summary>
     /// <param name="token"></param>
-    /// <param name="issuers"></param>
+    /// <param name="issuer"></param>
     /// <returns></returns>
-    public ClaimsPrincipal GetClaimsPrincipalIfValid(string token, params string[] issuers)
+    public ClaimsPrincipal GetClaimsPrincipalIfValid(string token, string issuer)
     {
-        OverrideValidIssuers(issuers);
+        OverrideValidIssuer(issuer);
 
         return GetClaimsPrincipalIfValid(token);
     }
 
     /// <summary>
-    /// Overrides token valid issuers configuration in milva identity options.
+    /// Overrides token valid issuer configuration in milva identity options.
     /// </summary>
-    /// <param name="issuers"></param>
-    public void OverrideValidIssuers(params string[] issuers) => _identityOptions.Token.TokenValidationParameters.ValidIssuers = issuers;
+    /// <param name="issuer"></param>
+    public void OverrideValidIssuer(string issuer) => _identityOptions.Token.TokenValidationParameters.ValidIssuer = issuer;
 
     /// <summary>
     /// Generates token with expired claim.
     /// If expired parameter is null, default expired time is 10 minutes.
     /// </summary>
-    public string GenerateToken(DateTime? expired = null, params Claim[] claims)
+    public string GenerateToken(DateTime? expired = null, string issuer = null, params Claim[] claims)
     {
         var tokenHandler = new JwtSecurityTokenHandler();
 
@@ -84,6 +84,8 @@ public class MilvaTokenManager(MilvaIdentityOptions identityOptions, IMilvaLogge
             Subject = claimsIdentityList,
             Expires = expired,
             NotBefore = now,
+            Audience = _identityOptions.Token.TokenValidationParameters.ValidAudience,
+            Issuer = issuer ?? _identityOptions.Token.TokenValidationParameters.ValidIssuer,
             SigningCredentials = new SigningCredentials(_identityOptions.Token.GetSecurityKey(), _identityOptions.Token.GetSecurityAlgorithm())
         };
 

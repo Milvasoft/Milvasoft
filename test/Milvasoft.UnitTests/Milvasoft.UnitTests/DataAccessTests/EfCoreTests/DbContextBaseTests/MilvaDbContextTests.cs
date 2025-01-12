@@ -30,7 +30,7 @@ public class MilvaDbContextTests
         var services = GetServices(dataAccessConfiguration);
 
         var dbContextOptions = new DbContextOptionsBuilder<SomeMilvaDbContextFixture>()
-            .UseInMemoryDatabase(databaseName: $"MilvaDbContextTestDbInMemory_{Guid.NewGuid}_{DateTime.Now.Nanosecond}")
+            .UseInMemoryDatabase(databaseName: $"MilvaDbContextTestDbInMemoryWithThreeParams_{Guid.NewGuid}_{DateTime.Now.Nanosecond}")
             .Options;
 
         using var dbContext = new SomeMilvaDbContextFixture(dbContextOptions, dataAccessConfiguration, services);
@@ -57,7 +57,7 @@ public class MilvaDbContextTests
         var dataAccessConfiguration = new DataAccessConfiguration();
 
         var dbContextOptions = new DbContextOptionsBuilder<AnotherMilvaDbContextFixture>()
-            .UseInMemoryDatabase(databaseName: $"MilvaDbContextTestDbInMemory_{Guid.NewGuid}_{DateTime.Now.Nanosecond}")
+            .UseInMemoryDatabase(databaseName: $"MilvaDbContextTestDbInMemoryWithTwoParams_{Guid.NewGuid}_{DateTime.Now.Nanosecond}")
             .Options;
 
         using var dbContext = new AnotherMilvaDbContextFixture(dbContextOptions, dataAccessConfiguration);

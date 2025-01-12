@@ -12,14 +12,14 @@ public class TokenConfig
     public string SymmetricPublicKey { get; set; }
     public RsaPublicKey RsaPublicKey { get; set; }
 
-    internal SecurityKey GetSecurityKey() => SecurityKeyType switch
+    public SecurityKey GetSecurityKey() => SecurityKeyType switch
     {
         SecurityKeyType.Symmetric => GetSymmetricSecurityKey(SymmetricPublicKey),
         SecurityKeyType.Rsa => GetRSASecurityKey(RsaPublicKey.ToJson()),
         _ => null
     };
 
-    internal string GetSecurityAlgorithm() => SecurityKeyType switch
+    public string GetSecurityAlgorithm() => SecurityKeyType switch
     {
         SecurityKeyType.Symmetric => SecurityAlgorithms.HmacSha256Signature,
         SecurityKeyType.Rsa => SecurityAlgorithms.RsaSha256Signature,
