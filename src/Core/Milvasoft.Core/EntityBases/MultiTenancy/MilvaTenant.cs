@@ -3,7 +3,6 @@
 /// <summary>
 /// Represents a Tenant of the application.
 /// </summary>
-[System.Diagnostics.CodeAnalysis.SuppressMessage("Major Code Smell", "S110:Inheritance tree of classes should not be too deep", Justification = "<Pending>")]
 public abstract class MilvaTenant : MilvaBaseTenant<TenantId>, IFullAuditable<TenantId>
 {
     /// <summary>

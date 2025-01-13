@@ -14,7 +14,6 @@ public abstract class TranslationEntity<TEntity> : TranslationEntity<int, TEntit
 /// <summary>
 /// Base entity for all of entities.
 /// </summary>
-[System.Diagnostics.CodeAnalysis.SuppressMessage("Major Code Smell", "S2436:Types and methods should not have too many generic parameters", Justification = "<Pending>")]
 public abstract class TranslationEntity<TKey, TEntity, TEntityKey> : EntityBase<TKey>, ITranslationEntity<TEntity, TEntityKey>, IBaseEntity<TKey>
     where TKey : struct, IEquatable<TKey>
     where TEntity : class
