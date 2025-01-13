@@ -198,8 +198,6 @@ public partial class MilvaUserManager<TUser, TKey>(Lazy<IDataProtectionProvider>
     /// <returns> Returns error message key if invalid. If valid returns null. </returns>
     public virtual string ValidatePassword(string password)
     {
-        ArgumentNullException.ThrowIfNull(password);
-
         var passwordOptions = _options.Password;
 
         if (string.IsNullOrWhiteSpace(password) || password.Length < passwordOptions.RequiredLength)
