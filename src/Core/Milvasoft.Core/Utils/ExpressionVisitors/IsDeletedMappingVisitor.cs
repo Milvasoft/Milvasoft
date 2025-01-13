@@ -51,8 +51,16 @@ public class IsDeletedMappingVisitor : ExpressionVisitor
         {
             // Create the IsDeleted property binding
             var isDeletedProperty = node.Type.GetProperty(nameof(ISoftDeletable.IsDeleted));
-            var isDeletedExpression = Expression.Property(sourceExpression, isDeletedProperty);
-            return Expression.Bind(isDeletedProperty, isDeletedExpression);
+            try
+            {
+                var isDeletedExpression = Expression.Property(sourceExpression, isDeletedProperty);
+
+                return Expression.Bind(isDeletedProperty, isDeletedExpression);
+            }
+            catch (Exception)
+            {
+                return null;
+            }
         }
 
         return null;

@@ -1,6 +1,7 @@
 ﻿using FluentAssertions;
 using Microsoft.IdentityModel.Tokens;
 using Milvasoft.Core.Helpers;
+using Milvasoft.Identity.Concrete;
 using Milvasoft.Identity.Concrete.Entity;
 using Milvasoft.Identity.TokenProvider.AuthToken;
 using System.Text;
@@ -196,6 +197,46 @@ public class IdentityModelTests
 
     #endregion
 
+    #region MilvaToken
+
+    [Fact]
+    public void MilvaToken_ShouldSetAndGetPropertiesCorrectly()
+    {
+        // Arrange
+        var accessToken = "access-token-example";
+        var expiresIn = 3600;
+        var refreshTokenExpiresIn = 7200;
+        var refreshToken = "refresh-token-example";
+        var tokenType = "Bearer";
+        var sessionState = "session-state-example";
+        var scope = "scope-example";
+
+        // Act
+        var token = new MilvaToken
+        {
+            AccessToken = accessToken,
+            ExpiresIn = expiresIn,
+            RefreshTokenExpiresIn = refreshTokenExpiresIn,
+            RefreshToken = refreshToken,
+            TokenType = tokenType,
+            SessionState = sessionState,
+            Scope = scope
+        };
+
+        // Assert
+        token.AccessToken.Should().Be(accessToken);
+        token.ExpiresIn.Should().Be(expiresIn);
+        token.RefreshTokenExpiresIn.Should().Be(refreshTokenExpiresIn);
+        token.RefreshToken.Should().Be(refreshToken);
+        token.TokenType.Should().Be(tokenType);
+        token.SessionState.Should().Be(sessionState);
+        token.Scope.Should().Be(scope);
+    }
+
+    #endregion
+
+    #region  RsaPublicKey
+
     [Fact]
     public void RsaPublicKey_ShouldSetAndGetProperties()
     {
@@ -233,4 +274,6 @@ public class IdentityModelTests
         rsaPublicKey.X5t.Should().Be(x5t);
         rsaPublicKey.X5tS256.Should().Be(x5tS256);
     }
+
+    #endregion
 }

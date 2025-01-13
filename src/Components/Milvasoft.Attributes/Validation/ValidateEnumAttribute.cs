@@ -69,8 +69,13 @@ public class ValidateEnumAttribute : ValidationAttribute
             {
                 milvaLocalizer = validationContext.GetService<IMilvaLocalizer>();
 
-                localizedPropName = milvaLocalizer[LocalizerKey ?? $"{LocalizerKeys.Localized}{validationContext.MemberName}"];
-                errorMessage = FullMessage ? milvaLocalizer[LocalizerKey] : milvaLocalizer[LocalizerKeys.PleaseSelectAValid, localizedPropName];
+                if (milvaLocalizer != null)
+                {
+                    localizedPropName = milvaLocalizer[LocalizerKey ?? $"{LocalizerKeys.Localized}{validationContext.MemberName}"];
+                    errorMessage = FullMessage ? milvaLocalizer[LocalizerKey] : milvaLocalizer[LocalizerKeys.PleaseSelectAValid, localizedPropName];
+                }
+                else
+                    errorMessage = $"{LocalizerKeys.PleaseEnterAValid} {validationContext.MemberName}.";
             }
             else
                 errorMessage = $"{LocalizerKeys.PleaseEnterAValid} {validationContext.MemberName}.";
