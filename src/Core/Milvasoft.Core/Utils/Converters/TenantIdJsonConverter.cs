@@ -20,9 +20,15 @@ public class TenantIdJsonConverter : JsonConverter<TenantId>
             {
                 return new TenantId(tenantIdString);
             }
+            else
+                return TenantId.Empty;
+        }
+        else if (reader.TokenType == JsonTokenType.Null)
+        {
+            return TenantId.Empty;
         }
 
-        throw new JsonException($"Invalid value for {nameof(TenantId)}.");
+        throw new MilvaDeveloperException($"Invalid value for {nameof(TenantId)}.");
     }
 
     /// <inheritdoc/>

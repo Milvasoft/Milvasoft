@@ -705,7 +705,7 @@ public class TenantIdTests
     #endregion
 
     [Fact]
-    public void TenantId_Serialization_ShouldSerializeCorrectly()
+    public void Serialization_WithValidValue_ShouldSerializeCorrectly()
     {
         // Arrange
         var someObject = new TenantIdSerializationTestModel { Id = 1, Name = "MilvaSoft", TenantId = new TenantId("milvasoft_1") };
@@ -718,8 +718,42 @@ public class TenantIdTests
         serializedObject.Should().Be(expectedJson);
     }
 
+    [Theory]
+    [InlineData("null")]
+    [InlineData(""" " " """)]
+    [InlineData(""" "" """)]
+    [InlineData(""" "invalid" """)]
+    public void Deserialize_WithNullValue_ShouldDeserializeCorrectly(string tenantString)
+    {
+        // Arrange
+        var jsonValue = """"{"Id":1,"Name":"MilvaSoft","TenantId":~}"""";
+        jsonValue = jsonValue.Replace("~", tenantString);
+
+        var expectedObject = new TenantIdSerializationTestModel { Id = 1, Name = "MilvaSoft", TenantId = TenantId.Empty };
+
+        // Act
+        var deserializedObject = JsonSerializer.Deserialize<TenantIdSerializationTestModel>(jsonValue);
+
+        // Assert
+        deserializedObject.TenantId.ToString().Should().Be("_0");
+    }
+
     [Fact]
-    public void TenantId_Deserialize_ShouldDeserializeCorrectly()
+    public void Deserialize_WithInvalidValue_ShouldDeserializeCorrectly()
+    {
+        // Arrange
+        var jsonValue = """"{"Id":1,"Name":"MilvaSoft","TenantId":"milva"}"""";
+        var expectedObject = new TenantIdSerializationTestModel { Id = 1, Name = "MilvaSoft", TenantId = TenantId.Empty };
+
+        // Act
+        var deserializedObject = JsonSerializer.Deserialize<TenantIdSerializationTestModel>(jsonValue);
+
+        // Assert
+        deserializedObject.TenantId.ToString().Should().Be("_0");
+    }
+
+    [Fact]
+    public void Deserialize_WithValidValue_ShouldDeserializeCorrectly()
     {
         // Arrange
         var jsonValue = """"{"Id":1,"Name":"MilvaSoft","TenantId":"milvasoft_1"}"""";
