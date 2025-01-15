@@ -2,6 +2,7 @@
 using Milvasoft.Core.EntityBases.MultiTenancy;
 using Milvasoft.Core.Exceptions;
 using Milvasoft.Core.Helpers;
+using System.Text.Json;
 
 namespace Milvasoft.UnitTests.CoreTests;
 
@@ -702,4 +703,39 @@ public class TenantIdTests
     }
 
     #endregion
+
+    [Fact]
+    public void TenantId_Serialization_ShouldSerializeCorrectly()
+    {
+        // Arrange
+        var someObject = new TenantIdSerializationTestModel { Id = 1, Name = "MilvaSoft", TenantId = new TenantId("milvasoft_1") };
+        var expectedJson = """"{"Id":1,"Name":"MilvaSoft","TenantId":"milvasoft_1"}"""";
+
+        // Act
+        var serializedObject = JsonSerializer.Serialize(someObject);
+
+        // Assert
+        serializedObject.Should().Be(expectedJson);
+    }
+
+    [Fact]
+    public void TenantId_Deserialize_ShouldDeserializeCorrectly()
+    {
+        // Arrange
+        var jsonValue = """"{"Id":1,"Name":"MilvaSoft","TenantId":"milvasoft_1"}"""";
+        var expectedObject = new TenantIdSerializationTestModel { Id = 1, Name = "MilvaSoft", TenantId = new TenantId("milvasoft_1") };
+
+        // Act
+        var deserializedObject = JsonSerializer.Deserialize<TenantIdSerializationTestModel>(jsonValue);
+
+        // Assert
+        deserializedObject.Should().BeEquivalentTo(expectedObject);
+    }
+
+    private class TenantIdSerializationTestModel
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public TenantId TenantId { get; set; }
+    }
 }

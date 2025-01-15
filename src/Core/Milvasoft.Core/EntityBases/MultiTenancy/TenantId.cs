@@ -1,5 +1,6 @@
 ﻿using Milvasoft.Core.Utils.Converters;
 using System.ComponentModel;
+using System.Text.Json.Serialization;
 
 namespace Milvasoft.Core.EntityBases.MultiTenancy;
 
@@ -7,6 +8,7 @@ namespace Milvasoft.Core.EntityBases.MultiTenancy;
 /// Fully unique tenant id.
 /// </summary>
 [TypeConverter(typeof(TenantIdTypeConverter))]
+[JsonConverter(typeof(TenantIdJsonConverter))]
 [Serializable]
 public struct TenantId : IEquatable<TenantId>
 {
