@@ -583,6 +583,55 @@ namespace Milvasoft.IntegrationTests.Client.Migrations
                     b.ToTable("RelatedEntities");
                 });
 
+            modelBuilder.Entity("Milvasoft.IntegrationTests.Client.Fixtures.EntityFixtures.SomeTenantEntity", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("text");
+
+                    b.Property<string>("ConnectionString")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime?>("CreationDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("CreatorUserName")
+                        .HasColumnType("text");
+
+                    b.Property<string>("DeleterUserName")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime?>("DeletionDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("boolean");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean");
+
+                    b.Property<DateTime?>("LastModificationDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("LastModifierUserName")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("text");
+
+                    b.Property<string>("SomeStringProp")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("SubscriptionExpireDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("TenancyName")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("SomeTenantEntities");
+                });
+
             modelBuilder.Entity("Milvasoft.IntegrationTests.Client.Fixtures.EntityFixtures.TranslationEntityFixture", b =>
                 {
                     b.Property<int>("Id")

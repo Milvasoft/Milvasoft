@@ -79,7 +79,7 @@ public static class MultiLanguageExtensions
         {
             var mapExpression = (Expression)(item == MultiLanguageEntityPropertyNames.Translations
                                                     ? expressionForTranslations
-                                                    : Expression.Property(parameter, item));
+                                                    : Expression.PropertyOrField(parameter, item));
 
             var sourceProperty = sourceType.GetProperty(item);
 

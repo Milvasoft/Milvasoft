@@ -25,6 +25,7 @@ public class MilvaBulkDbContextFixture(DbContextOptions<MilvaBulkDbContextFixtur
     public DbSet<SomeModelBuilderTestEntityFixture> ModelBuilderTestEntities { get; set; }
     public DbSet<SomeModelBuilderTestKeylessEntityFixture> ModelBuilderTestKeylessEntities { get; set; }
     public DbSet<SomeLogEntity> SomeLogEntities { get; set; }
+    public DbSet<SomeTenantEntity> SomeTenantEntities { get; set; }
 }
 
 public class TranslationRelationsModelCustomizer : IModelCustomizer

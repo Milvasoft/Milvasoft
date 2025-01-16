@@ -31,6 +31,7 @@ internal class LookupManager(MilvaDbContext dbContext, IDataAccessConfiguration 
     {
         if (lookupRequest?.Parameters.IsNullOrEmpty() ?? true)
             return [];
+
         ValidateRequestParameters(lookupRequest);
 
         var resultList = new List<object>();

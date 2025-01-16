@@ -150,3 +150,17 @@ public class SomeModelBuilderTestKeylessEntityFixture
 public class SomeLogEntity : LogEntityBase<int>
 {
 }
+
+public class SomeTenantEntity : MilvaTenant
+{
+    public string SomeStringProp { get; set; }
+
+    public SomeTenantEntity() : base()
+    {
+
+    }
+
+    public SomeTenantEntity(string tenancyName, int branchNo) : base(tenancyName, branchNo)
+    {
+    }
+}

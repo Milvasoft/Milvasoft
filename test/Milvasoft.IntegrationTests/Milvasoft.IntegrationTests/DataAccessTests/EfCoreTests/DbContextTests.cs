@@ -1320,6 +1320,62 @@ public class DbContextTests(CustomWebApplicationFactory factory) : DataAccessInt
         ((LookupResult)lookupResult).Data[0].ToJson().Should().BeEquivalentTo(expectedData.ToJson());
     }
 
+    [Fact]
+    public async Task GetLookupsAsync_WithValidLookupRequestAndMilvaTenant_ShouldReturnCorrectResult()
+    {
+        // Arrange
+        await InitializeAsync(services =>
+        {
+            services.ConfigureMilvaDataAccess(opt =>
+            {
+                opt.DbContext = new DbContextConfiguration
+                {
+                    UseUtcForDateTime = true,
+                    DefaultSoftDeletionState = SoftDeletionState.Active,
+                    DynamicFetch = new DynamicFetchConfiguration
+                    {
+                        EntityAssemblyName = "Milvasoft.IntegrationTests.Client",
+                        AllowedEntityNamesForLookup = [nameof(SomeTenantEntity)],
+                        MaxAllowedPropertyCountForLookup = 2
+                    }
+                };
+            });
+        });
+
+        var dbContext = _serviceProvider.GetRequiredService<MilvaBulkDbContextFixture>();
+
+        var entity = new SomeTenantEntity("milvasoft", 1)
+        {
+            SomeStringProp = "stringprop",
+        };
+        await dbContext.SomeTenantEntities.AddAsync(entity);
+        await dbContext.SaveChangesAsync();
+
+        var lookupRequest = new LookupRequest
+        {
+            Parameters =
+            [
+                new()
+                {
+                    EntityName = nameof(SomeTenantEntity),
+                    RequestedPropertyNames = [nameof(SomeTenantEntity.SomeStringProp)],
+                }
+            ]
+        };
+        object expectedData = new { SomeStringProp = "stringprop", Id = "milvasoft_1" };
+
+        // Act
+        var result = await dbContext.GetLookupsAsync(lookupRequest);
+
+        // Assert
+        result.Should().HaveCount(1);
+        var lookupResult = result[0];
+        lookupResult.Should().BeOfType<LookupResult>();
+        ((LookupResult)lookupResult).EntityName.Should().Be(nameof(SomeTenantEntity));
+        ((LookupResult)lookupResult).Data.Should().HaveCount(1);
+        ((LookupResult)lookupResult).Data[0].ToJson().Should().BeEquivalentTo(expectedData.ToJson());
+    }
+
     /// <summary>
     /// Entity property values request
     /// </summary>

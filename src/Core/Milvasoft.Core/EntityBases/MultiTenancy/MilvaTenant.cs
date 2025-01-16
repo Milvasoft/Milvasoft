@@ -8,10 +8,10 @@ public abstract class MilvaTenant : MilvaBaseTenant<TenantId>, IFullAuditable<Te
     /// <summary>
     /// Id of tenant.
     /// </summary>
-    public new TenantId Id
+    public override TenantId Id
     {
         get => base.Id;
-        private set => base.Id = value;
+        set => base.Id = value;
     }
 
     /// <summary>

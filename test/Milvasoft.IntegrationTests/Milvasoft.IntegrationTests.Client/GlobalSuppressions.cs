@@ -6,3 +6,4 @@
 using System.Diagnostics.CodeAnalysis;
 
 [assembly: SuppressMessage("Major Code Smell", "S1118:Utility classes should not have public constructors", Justification = "<Pending>")]
+[assembly: SuppressMessage("Major Code Smell", "S110:Inheritance tree of classes should not be too deep", Justification = "<Pending>", Scope = "type", Target = "~T:Milvasoft.IntegrationTests.Client.Fixtures.EntityFixtures.SomeTenantEntity")]
