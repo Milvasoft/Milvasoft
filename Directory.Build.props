@@ -9,7 +9,7 @@
     <IsPackable>true</IsPackable>
     <PlatformTarget>AnyCPU</PlatformTarget>
 	  
-    <PackageVersion>9.0.15</PackageVersion>
+    <PackageVersion>9.0.16</PackageVersion>
     <Authors>Milvasoft Corporation</Authors>
     <Copyright>Milvasoft Yazılım Bilişim Araştırma Geliştirme Danışmanlık Sanayi ve Ticaret Ltd.Şti.</Copyright>
     <RepositoryUrl>https://github.com/Milvasoft/Milvasoft/tree/master/Milvasoft.Helpers</RepositoryUrl>

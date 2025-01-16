@@ -285,9 +285,11 @@ public static class MilvaEfExtensions
 
         var updatableProperties = dto.GetUpdatableProperties();
 
+        updatableProperties = updatableProperties.Where(p => p.GetCustomAttribute<UpdatableIgnoreAttribute>() == null);
+
         foreach (var dtoProp in updatableProperties)
         {
-            var matchingEntityProp = Array.Find(typeof(TEntity).GetProperties(), i => i.Name == dtoProp.Name && i.GetCustomAttribute<UpdatableIgnoreAttribute>() == null);
+            var matchingEntityProp = Array.Find(typeof(TEntity).GetProperties(), i => i.Name == dtoProp.Name);
 
             if (matchingEntityProp == null)
                 continue;
