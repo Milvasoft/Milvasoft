@@ -1,4 +1,5 @@
-﻿using Milvasoft.Core.EntityBases.Concrete;
+﻿using Milvasoft.Attributes.Annotations;
+using Milvasoft.Core.EntityBases.Concrete;
 using Milvasoft.Types.Structs;
 
 namespace Milvasoft.UnitTests.CoreTests.HelperTests.CommonTests.Fixtures;
@@ -10,6 +11,9 @@ public class UpdatedPropsTestDto : BaseDto<int>
     public UpdateProperty<int>? Priority { get; set; }
     public UpdateProperty<DateTime>? UpdateDate { get; set; }
     public UpdateProperty<byte>? Type { get; set; }
+
+    [UpdatableIgnore]
+    public UpdateProperty<byte> IgnoredProperty { get; set; }
 }
 
 public class UpdatedPropsTestInvalidDto : BaseDto<int>

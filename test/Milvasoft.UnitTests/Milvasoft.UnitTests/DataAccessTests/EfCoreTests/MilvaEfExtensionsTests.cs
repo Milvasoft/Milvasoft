@@ -9,8 +9,10 @@ using Milvasoft.DataAccess.EfCore.Utils;
 using Milvasoft.UnitTests.ComponentsTests.RestTests.Fixture;
 using Milvasoft.UnitTests.CoreTests.HelperTests.CommonTests.Fixtures;
 using Milvasoft.UnitTests.TestHelpers;
+using Moq;
 using System.Linq.Expressions;
 using System.Net;
+using System.Reflection;
 
 namespace Milvasoft.UnitTests.DataAccessTests.EfCoreTests;
 
@@ -1044,6 +1046,185 @@ public class MilvaEfExtensionsTests
         result.SetPropertyCalls.Body.ToString().Should().NotContain(nameof(UpdatedPropsTestDto.Id));
         result.SetPropertyCalls.Body.ToString().Should().Contain(nameof(UpdatedPropsTestDto.Name));
         result.SetPropertyCalls.Body.ToString().Should().Contain(nameof(UpdatedPropsTestDto.UpdateDate));
+    }
+
+    #endregion
+
+    #region AssignUpdatedProperties
+
+    [Fact]
+    public void AssignUpdatedProperties_WithEntityIsNull_ShouldReturnEmptyList()
+    {
+        // Arrange
+        UpdatedPropsTestEntity entity = null;
+        UpdatedPropsTestDto dto = new();
+
+        // Act
+        var result = entity.AssignUpdatedProperties(dto);
+
+        // Assert
+        result.Should().BeEmpty();
+    }
+
+    [Fact]
+    public void AssignUpdatedProperties_WithDtoIsNull_ShouldReturnNullEmptyList()
+    {
+        // Arrange
+        UpdatedPropsTestEntity entity = new();
+        UpdatedPropsTestDto dto = null;
+
+        // Act
+        var result = entity.AssignUpdatedProperties(dto);
+
+        // Assert
+        result.Should().BeEmpty();
+    }
+
+    [Fact]
+    public void AssignUpdatedProperties_WithEntityAndDtoIsNull_ShouldReturnEmptyList()
+    {
+        // Arrange
+        UpdatedPropsTestEntity entity = null;
+        UpdatedPropsTestDto dto = null;
+
+        // Act
+        var result = entity.AssignUpdatedProperties(dto);
+
+        // Assert
+        result.Should().BeEmpty();
+    }
+
+    [Fact]
+    public void AssignUpdatedProperties_WithEntityAndDtoIsValid_ShouldUpdatesUpdatablePropertiesAndReturnsUpdatedPropertyInfos()
+    {
+        // Arrange
+        UpdatedPropsTestEntity entity = new()
+        {
+            Id = 1,
+            Name = "test",
+            Price = 10M,
+            Priority = 1
+        };
+
+        UpdatedPropsTestDto dto = new()
+        {
+            Id = 1,
+            Priority = 2,
+        };
+
+        // Act
+        var result = entity.AssignUpdatedProperties(dto);
+
+        // Assert
+        result.Should().Contain(i => i.Name == nameof(UpdatedPropsTestEntity.Priority));
+        result.Should().HaveCount(1);
+        entity.Priority.Should().Be(dto.Priority);
+        entity.Name.Should().Be(entity.Name);
+        entity.Price.Should().Be(entity.Price);
+        entity.Id.Should().Be(entity.Id);
+    }
+
+    #endregion
+
+    #region FindUpdatablePropertiesAndAct
+
+    [Fact]
+    public void FindUpdatablePropertiesAndAct_WithDtoIsNull_ShouldDoNothing()
+    {
+        // Arrange
+        var mockValidatorForAction = new Mock<Action<PropertyInfo, object>>();
+
+        // Act
+        MilvaEfExtensions.FindUpdatablePropertiesAndAct<UpdatedPropsTestEntity, UpdatedPropsTestDto>(null, mockValidatorForAction.Object);
+
+        // Assert
+        mockValidatorForAction.Verify(m => m.Invoke(null, null), Times.Never());
+    }
+
+    [Fact]
+    public void FindUpdatablePropertiesAndAct_WithActionIsNull_ShouldDoNothing()
+    {
+        // Arrange
+        var mockValidator = new Mock<UpdatedPropsTestDto>();
+
+        // Act
+        MilvaEfExtensions.FindUpdatablePropertiesAndAct<UpdatedPropsTestEntity, UpdatedPropsTestDto>(mockValidator.Object, null);
+
+        // Assert
+        mockValidator.Verify(m => m.GetUpdatableProperties(), Times.Never());
+    }
+
+    [Fact]
+    public void FindUpdatablePropertiesAndAct_WithDtoNotContainsAnyUpdatableProperties_ShouldDoNothing()
+    {
+        // Arrange
+        var mockValidatorForDto = new Mock<UpdatedPropsTestInvalidDto>();
+        var mockValidatorForAction = new Mock<Action<PropertyInfo, object>>();
+
+        // Act
+        MilvaEfExtensions.FindUpdatablePropertiesAndAct<UpdatedPropsTestEntity, UpdatedPropsTestInvalidDto>(mockValidatorForDto.Object, mockValidatorForAction.Object);
+
+        // Assert
+        mockValidatorForDto.Verify(m => m.GetUpdatableProperties(), Times.Once());
+        mockValidatorForAction.Verify(m => m.Invoke(null, null), Times.Never());
+    }
+
+    [Fact]
+    public void FindUpdatablePropertiesAndAct_WithDtoAndActionIsValidButUpdatedPropertyNotExistsInEntity_ShouldFindUpdatablePropertiesAndNotInvokesInputAction()
+    {
+        // Arrange
+        var mockValidatorForAction = new Mock<Action<PropertyInfo, object>>();
+        UpdatedPropsTestDto dto = new()
+        {
+            Id = 1,
+            Type = 1,
+        };
+
+        // Act
+        MilvaEfExtensions.FindUpdatablePropertiesAndAct<UpdatedPropsTestEntity, UpdatedPropsTestDto>(dto, mockValidatorForAction.Object);
+
+        // Assert
+        mockValidatorForAction.Verify(m => m.Invoke(null, null), Times.Never());
+    }
+
+    [Fact]
+    public void FindUpdatablePropertiesAndAct_WithDtoAndActionIsValidButPropertiesNotUpdated_ShouldFindUpdatablePropertiesAndNotInvokesInputAction()
+    {
+        // Arrange
+        var mockValidatorForDto = new Mock<UpdatedPropsTestDto>();
+        var mockValidatorForAction = new Mock<Action<PropertyInfo, object>>();
+
+        // Act
+        MilvaEfExtensions.FindUpdatablePropertiesAndAct<UpdatedPropsTestEntity, UpdatedPropsTestDto>(mockValidatorForDto.Object, mockValidatorForAction.Object);
+
+        // Assert
+        mockValidatorForDto.Verify(m => m.GetUpdatableProperties(), Times.Once());
+        mockValidatorForAction.Verify(m => m.Invoke(null, null), Times.Never());
+    }
+
+    [Fact]
+    public void FindUpdatablePropertiesAndAct_WithDtoAndActionIsValidAndOneUpdatedPropertyExists_ShouldFindUpdatablePropertiesAndInvokesInputAction()
+    {
+        // Arrange
+        UpdatedPropsTestDto dto = new()
+        {
+            Id = 1,
+            IgnoredProperty = 1
+        };
+
+        PropertyInfo resultMatchingEntityProp = null;
+        object resultValue = null;
+
+        // Act
+        MilvaEfExtensions.FindUpdatablePropertiesAndAct<UpdatedPropsTestEntity, UpdatedPropsTestDto>(dto, (matchingEntityProp, dtoPropertyValue) =>
+        {
+            resultMatchingEntityProp = matchingEntityProp;
+            resultValue = dtoPropertyValue;
+        });
+
+        // Assert
+        resultMatchingEntityProp.Should().BeNull();
+        resultValue.Should().BeNull();
     }
 
     #endregion

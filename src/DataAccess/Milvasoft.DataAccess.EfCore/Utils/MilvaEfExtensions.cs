@@ -1,9 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Milvasoft.Attributes.Annotations;
 using Milvasoft.Components.Rest.Enums;
 using Milvasoft.Components.Rest.MilvaResponse;
 using Milvasoft.Components.Rest.Request;
 using Milvasoft.Core.MultiLanguage.EntityBases;
 using Milvasoft.Types.Structs;
+using System.Reflection;
 
 namespace Milvasoft.DataAccess.EfCore.Utils;
 
@@ -214,7 +216,7 @@ public static class MilvaEfExtensions
 
         var entityType = typeof(TEntity);
 
-        CommonHelper.FindUpdatablePropertiesAndAct<TEntity, TDto>(dto, (matchingEntityProp, dtoPropertyValue) =>
+        FindUpdatablePropertiesAndAct<TEntity, TDto>(dto, (matchingEntityProp, dtoPropertyValue) =>
         {
             var genericMethod = SetPropertyBuilder<TEntity>.SetPropertyValueMethodInfo.MakeGenericMethod(matchingEntityProp.PropertyType);
 
@@ -233,6 +235,72 @@ public static class MilvaEfExtensions
         });
 
         return builder;
+    }
+
+    /// <summary>
+    /// Assigns the updated properties of a DTO object to the corresponding properties of an entity object.
+    /// </summary>
+    /// <typeparam name="TEntity">The type of the entity class that implements the <see cref="EntityBase"/> interface.</typeparam>
+    /// <typeparam name="TDto">The type of the DTO class that inherits from the <see cref="DtoBase"/> class.</typeparam>
+    /// <param name="entity">The entity object to update.</param>
+    /// <param name="dto">The DTO object containing the updated property values.</param>
+    /// <returns>A list of PropertyInfo objects representing the updated properties.</returns>
+    /// <remarks> To find out how this method finds the updated properties, please see <see cref="FindUpdatablePropertiesAndAct{TEntity, TDto}(TDto, Action{PropertyInfo, object})"/>. </remarks>
+    public static List<PropertyInfo> AssignUpdatedProperties<TEntity, TDto>(this TEntity entity, TDto dto) where TEntity : IMilvaEntity where TDto : DtoBase
+    {
+        if (entity == null || dto == null)
+            return [];
+
+        List<PropertyInfo> updatedProps = null;
+
+        FindUpdatablePropertiesAndAct<TEntity, TDto>(dto, (matchingEntityProp, dtoPropertyValue) =>
+        {
+            matchingEntityProp.SetValue(entity, dtoPropertyValue);
+
+            updatedProps ??= [];
+
+            updatedProps.Add(matchingEntityProp);
+        });
+
+        return updatedProps;
+    }
+
+    /// <summary>
+    /// Finds the updatable properties in the provided DTO object and performs the specified action on each property.
+    /// </summary>
+    /// <typeparam name="TEntity">The type of the entity class that implements the IMilvaEntity interface.</typeparam>
+    /// <typeparam name="TDto">The type of the DTO class that inherits from the DtoBase class.</typeparam>
+    /// <param name="dto">The DTO object from which to find the updatable properties.</param>
+    /// <param name="action">The action to perform on each updatable property. It takes two parameters: the PropertyInfo of the matching property in the entity class, and the value of the property in the DTO object.</param>
+    /// <remarks>
+    /// This method is used to update the entity object with the values of the updatable properties in the DTO object.
+    /// It iterates over the updatable properties in the DTO object and finds the matching property in the entity class.
+    /// If a matching property is found and the property value is an instance of <see cref="IUpdateProperty"/> and IsUpdated property is true,
+    /// the specified action is performed on the matching property in the entity object.
+    /// </remarks>
+    public static void FindUpdatablePropertiesAndAct<TEntity, TDto>(TDto dto, Action<PropertyInfo, object> action) where TEntity : IMilvaEntity where TDto : DtoBase
+    {
+        if (dto == null || action == null)
+            return;
+
+        var updatableProperties = dto.GetUpdatableProperties();
+
+        foreach (var dtoProp in updatableProperties)
+        {
+            var matchingEntityProp = Array.Find(typeof(TEntity).GetProperties(), i => i.Name == dtoProp.Name && i.GetCustomAttribute<UpdatableIgnoreAttribute>() == null);
+
+            if (matchingEntityProp == null)
+                continue;
+
+            var dtoValue = dtoProp.GetValue(dto);
+
+            var updateProp = (IUpdateProperty)dtoValue;
+
+            if (updateProp?.IsUpdated ?? false)
+            {
+                action(matchingEntityProp, updateProp.GetValue());
+            }
+        }
     }
 
     /// <summary>
