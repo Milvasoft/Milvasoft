@@ -39,6 +39,11 @@ public class ResponseDataMetadata : IHasMetadata
     public bool Mask { get; set; }
 
     /// <summary>
+    /// Determines whether the column will be aggregated on the frontend.
+    /// </summary>
+    public bool Aggregatable { get; set; }
+
+    /// <summary>
     /// Determines whether the column will be filtered and ordered on the frontend.
     /// </summary>
     public bool Filterable { get; set; }

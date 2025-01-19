@@ -160,6 +160,7 @@ public class ResponseMetadataGenerator(IResponseInterceptionOptions responseInte
         metadata.Display = !TryGetAttribute(property, out BrowsableAttribute browsableAttribute) || browsableAttribute.Browsable;
         metadata.Mask = mask;
         metadata.Filterable = !TryGetAttribute(property, out FilterableAttribute filterableAttribute) || filterableAttribute.Filterable;
+        metadata.Aggregatable = TryGetAttribute(property, out AggregatableAttribute aggregatableAttribute) && aggregatableAttribute.Aggregatable;
         metadata.FilterFormat = filterableAttribute?.FilterFormat ?? property.Name;
         metadata.FilterComponentType = filterableAttribute?.FilterComponentType ?? UiInputConstant.TextInput;
         metadata.Pinned = TryGetAttribute(property, out PinnedAttribute pinnedAttribute) && pinnedAttribute.Pinned;
