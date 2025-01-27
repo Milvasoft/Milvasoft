@@ -164,3 +164,21 @@ public class SomeTenantEntity : MilvaTenant
     {
     }
 }
+
+public class SomeMultiTenantTestEntityFixture : FullAuditableEntityWithTenantId<int>
+{
+    public string SomeEncryptedStringProp { get; set; }
+
+    [Encrypted]
+    public string SomeEncryptedStringWithAttributeProp { get; set; }
+    public DateTimeOffset? SomeNullableDateTimeOffsetProp { get; set; }
+    public DateTimeOffset SomeDateTimeOffsetProp { get; set; }
+    public DateTime? SomeNullableDateProp { get; set; }
+    public DateTime SomeDateProp { get; set; }
+
+    [DefaultValue(1)]
+    public int SomeIntProp { get; set; }
+
+    [DecimalPrecision]
+    public decimal? SomeDecimalProp { get; set; }
+}

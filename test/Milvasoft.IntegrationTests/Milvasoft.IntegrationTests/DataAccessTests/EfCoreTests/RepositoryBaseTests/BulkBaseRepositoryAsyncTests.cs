@@ -7,14 +7,19 @@ using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Milvasoft.Core.EntityBases.Abstract;
+using Milvasoft.Core.EntityBases.MultiTenancy;
 using Milvasoft.Core.Helpers;
 using Milvasoft.DataAccess.EfCore;
 using Milvasoft.DataAccess.EfCore.Bulk.RepositoryBase.Abstract;
 using Milvasoft.DataAccess.EfCore.Configuration;
 using Milvasoft.DataAccess.EfCore.Utils;
 using Milvasoft.Helpers.DataAccess.EfCore.Concrete;
+using Milvasoft.IntegrationTests.Client.Fixtures;
 using Milvasoft.IntegrationTests.Client.Fixtures.EntityFixtures;
 using Milvasoft.IntegrationTests.Client.Fixtures.Persistence;
+using Milvasoft.MultiTenancy.EfCore;
+using Milvasoft.MultiTenancy.EfCore.RepositoryBase.Concrete;
+using Milvasoft.MultiTenancy.Extensions;
 
 namespace Milvasoft.IntegrationTests.DataAccessTests.EfCoreTests.RepositoryBaseTests;
 
@@ -157,6 +162,68 @@ public class BulkBaseRepositoryAsyncTests(CustomWebApplicationFactory factory) :
         addedEntity.Should().NotBeNull();
         addedEntity.CreationDate.Should().NotBeNull();
         addedEntity.CreatorUserName.Should().Be("testuser");
+    }
+
+    [Theory]
+    [InlineData(QueryTrackingBehavior.NoTrackingWithIdentityResolution)]
+    [InlineData(QueryTrackingBehavior.NoTracking)]
+    [InlineData(QueryTrackingBehavior.TrackAll)]
+    public async Task BulkAddAsync_WithMultiTenantDbContextAndValidEntity_ShouldAddCorrectly(QueryTrackingBehavior queryTrackingBehavior)
+    {
+        // Arrange
+        await InitializeAsync(services =>
+        {
+            services.AddMultiTenancy<SomeTenantEntity, TenantId>()
+                     .WithResolutionStrategy<TestTenantIdResolutionStrategy>()
+                     .WithStore<TestTenantStore<SomeTenantEntity, TenantId>>();
+
+            services.ConfigureMilvaDataAccess(opt =>
+            {
+                opt.Repository = new RepositoryConfiguration
+                {
+                    DefaultSaveChangesChoice = DataAccess.EfCore.Utils.Enums.SaveChangesChoice.Manual
+                };
+            });
+
+            services.AddDbContextFactory<MultiTenantDbContextFixture>(x =>
+            {
+                x.ConfigureWarnings(warnings => { warnings.Log(RelationalEventId.PendingModelChangesWarning); });
+                x.UseNpgsql(_factory.GetConnectionString()).UseQueryTrackingBehavior(queryTrackingBehavior);
+            });
+
+            services.AddScoped<MilvaMultiTenancyDbContextFactory<MultiTenantDbContextFixture>>();
+            services.AddScoped(sp => sp.GetRequiredService<MilvaMultiTenancyDbContextFactory<MultiTenantDbContextFixture>>().CreateDbContext());
+            services.AddScoped(typeof(ISomeMultiTenantGenericRepository<>), typeof(SomeMultiTenantGenericRepository<>));
+        });
+
+        var dbContext = _serviceProvider.GetService<MultiTenantDbContextFixture>();
+        var entityRepository = _serviceProvider.GetService<ISomeMultiTenantGenericRepository<SomeMultiTenantTestEntityFixture>>();
+
+        var entities = new List<SomeMultiTenantTestEntityFixture>
+        {
+            new() {
+                Id = 1,
+                SomeDateProp = DateTime.Now.AddYears(1),
+                SomeDecimalProp = 10M,
+            },
+            new() {
+                Id = 2,
+                SomeDateProp = DateTime.Now.AddYears(2),
+                SomeDecimalProp = 20M,
+            }
+        };
+
+        // Act 
+        await entityRepository.BulkAddAsync(entities);
+        var count = await dbContext.Entities.CountAsync();
+        var addedEntity = await entityRepository.GetByIdAsync(1);
+
+        // Assert
+        count.Should().Be(2);
+        addedEntity.Should().NotBeNull();
+        addedEntity.CreationDate.Should().NotBeNull();
+        addedEntity.CreatorUserName.Should().Be("testuser");
+        addedEntity.TenantId = new TenantId("test_1");
     }
 
     [Theory]
@@ -1108,6 +1175,15 @@ public class BulkBaseRepositoryAsyncTests(CustomWebApplicationFactory factory) :
     }
 
     public class SomeGenericRepository<TEntity>(MilvaBulkDbContextFixture dbContext) : BulkBaseRepository<TEntity, MilvaBulkDbContextFixture>(dbContext), ISomeGenericRepository<TEntity>
+         where TEntity : class, IMilvaEntity
+    {
+    }
+
+    public interface ISomeMultiTenantGenericRepository<TEntity> : IBulkBaseRepository<TEntity> where TEntity : class, IMilvaEntity
+    {
+    }
+
+    public class SomeMultiTenantGenericRepository<TEntity>(MultiTenantDbContextFixture dbContext) : MultiTenantBaseRepository<TEntity, MultiTenantDbContextFixture>(dbContext), ISomeMultiTenantGenericRepository<TEntity>
          where TEntity : class, IMilvaEntity
     {
     }

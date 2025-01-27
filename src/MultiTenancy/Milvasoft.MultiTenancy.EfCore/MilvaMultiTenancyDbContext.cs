@@ -8,10 +8,21 @@ using Milvasoft.MultiTenancy.ResolutionStrategy;
 namespace Milvasoft.MultiTenancy.EfCore;
 
 /// <summary>
+/// Defines the tenant id type.
+/// </summary>
+public interface IMultiTenantDbContext
+{
+    /// <summary>
+    /// Tenant resolution strategy.
+    /// </summary>
+    ITenantResolutionStrategy<TenantId> TenantResolutionStrategy { get; set; }
+}
+
+/// <summary>
 /// Db context base for single database multi tenancy scenarios.
 /// </summary>
 /// <param name="options"></param>
-public class MilvaMultiTenancyDbContext(DbContextOptions options) : MilvaBulkDbContext(options)
+public class MilvaMultiTenancyDbContext(DbContextOptions options) : MilvaBulkDbContext(options), IMultiTenantDbContext
 {
     /// <summary>
     /// Tenant resolution strategy.
