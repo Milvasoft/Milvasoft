@@ -24,7 +24,8 @@ public class MilvaMultiTenancyDbContext(DbContextOptions options) : MilvaBulkDbC
     /// <param name="modelBuilder"></param>
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.UseTenantIdQueryFilter(TenantResolutionStrategy.GetTenantIdentifier());
+        if (TenantResolutionStrategy != null)
+            modelBuilder.UseTenantIdQueryFilter(TenantResolutionStrategy.GetTenantIdentifier());
 
         base.OnModelCreating(modelBuilder);
     }

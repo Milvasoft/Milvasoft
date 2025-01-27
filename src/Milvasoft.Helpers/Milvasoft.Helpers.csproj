@@ -24,11 +24,12 @@
 	  <ProjectReference Include="..\FileOperations\Milvasoft.FileOperations\Milvasoft.FileOperations.csproj" />
 	  <ProjectReference Include="..\Identity\Milvasoft.Identity\Milvasoft.Identity.csproj" />
 	  <ProjectReference Include="..\Interception\Milvasoft.Interception.Ef\Milvasoft.Interception.Ef.csproj" />
+	  <ProjectReference Include="..\MultiTenancy\Milvasoft.MultiTenancy.EfCore\Milvasoft.MultiTenancy.EfCore.csproj" />
+	  <ProjectReference Include="..\MultiTenancy\Milvasoft.MultiTenancy.Stores.Redis\Milvasoft.MultiTenancy.Stores.Redis.csproj" />
 	  <ProjectReference Include="..\Scheduling\Milvasoft.JobScheduling\Milvasoft.JobScheduling.csproj" />
 	  <ProjectReference Include="..\Localization\Milvasoft.Localization.Redis\Milvasoft.Localization.Redis.csproj" />
 	  <ProjectReference Include="..\Localization\Milvasoft.Localization.Resx\Milvasoft.Localization.Resx.csproj" />
 	  <ProjectReference Include="..\Middlewares\Milvasoft.Middlewares\Milvasoft.Middlewares.csproj" />
-	  <ProjectReference Include="..\MultiTenancy\Milvasoft.MultiTenancy\Milvasoft.MultiTenancy.csproj" />
 	</ItemGroup>
 
 	<PropertyGroup>
