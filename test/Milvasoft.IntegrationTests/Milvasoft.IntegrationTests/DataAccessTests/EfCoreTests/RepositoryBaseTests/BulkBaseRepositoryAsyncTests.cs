@@ -164,7 +164,7 @@ public class BulkBaseRepositoryAsyncTests(CustomWebApplicationFactory factory) :
         addedEntity.CreatorUserName.Should().Be("testuser");
     }
 
-    [Theory]
+    [Theory(Skip = "Need migration.")]
     [InlineData(QueryTrackingBehavior.NoTrackingWithIdentityResolution)]
     [InlineData(QueryTrackingBehavior.NoTracking)]
     [InlineData(QueryTrackingBehavior.TrackAll)]

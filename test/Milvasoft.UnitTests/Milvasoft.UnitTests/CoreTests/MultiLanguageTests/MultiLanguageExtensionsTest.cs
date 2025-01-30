@@ -20,7 +20,7 @@ public class MultiLanguageExtensionsTest
         Expression<Func<HasTranslationEntityFixture, HasTranslationEntityFixture>> expected = c => c;
 
         // Act
-        var result = MultiLanguageExtensions.CreateProjectionExpression<HasTranslationEntityFixture, TranslationEntityFixture>(mainEntityPropNames, translationEntityPropNames);
+        var result = MultiLanguageExtensions.CreateProjectionExpression<HasTranslationEntityFixture, TranslationEntityFixture>(mainEntityPropNames, translationEntityPropNames, false);
 
         // Assert
         var equality = ExpressionEqualityComparer.Instance.Equals(expected, result);
@@ -39,7 +39,7 @@ public class MultiLanguageExtensionsTest
         };
 
         // Act
-        var result = MultiLanguageExtensions.CreateProjectionExpression<HasTranslationEntityFixture, TranslationEntityFixture>(mainEntityPropNames, translationEntityPropNames);
+        var result = MultiLanguageExtensions.CreateProjectionExpression<HasTranslationEntityFixture, TranslationEntityFixture>(mainEntityPropNames, translationEntityPropNames, false);
 
         // Assert
         var equality = ExpressionEqualityComparer.Instance.Equals(expected, result);
@@ -64,7 +64,7 @@ public class MultiLanguageExtensionsTest
         };
 
         // Act
-        var result = MultiLanguageExtensions.CreateProjectionExpression<HasTranslationEntityFixture, TranslationEntityFixture>(mainEntityPropNames, translationEntityPropNames);
+        var result = MultiLanguageExtensions.CreateProjectionExpression<HasTranslationEntityFixture, TranslationEntityFixture>(mainEntityPropNames, translationEntityPropNames, false);
 
         // Assert
         result.ToString().Should().Be(expected.ToString());
@@ -80,15 +80,15 @@ public class MultiLanguageExtensionsTest
         {
             Priority = c.Priority,
             Translations = (c.Translations.Any() == false ? null : c.Translations
-                                                                                                    .Select(t => new TranslationEntityFixture
-                                                                                                    {
-                                                                                                        Name = t.Name,
-                                                                                                        LanguageId = t.LanguageId
-                                                                                                    }).ToList())
+                                                                    .Select(t => new TranslationEntityFixture
+                                                                    {
+                                                                        Name = t.Name,
+                                                                        LanguageId = t.LanguageId
+                                                                    }).ToList())
         };
 
         // Act
-        var result = MultiLanguageExtensions.CreateProjectionExpression<HasTranslationEntityFixture, TranslationEntityFixture>(mainEntityPropNames, translationEntityPropNames);
+        var result = MultiLanguageExtensions.CreateProjectionExpression<HasTranslationEntityFixture, TranslationEntityFixture>(mainEntityPropNames, translationEntityPropNames, false);
 
         // Assert
         result.ToString().Should().Be(expected.ToString());
@@ -122,7 +122,7 @@ public class MultiLanguageExtensionsTest
         var expected = entities.AsQueryable().Select(expectedExpression).ToList();
 
         // Act
-        var resultExpression = MultiLanguageExtensions.CreateProjectionExpression<HasTranslationEntityFixture, TranslationEntityFixture>(mainEntityPropNames, translationEntityPropNames);
+        var resultExpression = MultiLanguageExtensions.CreateProjectionExpression<HasTranslationEntityFixture, TranslationEntityFixture>(mainEntityPropNames, translationEntityPropNames, false);
         var result = entities.AsQueryable().Select(resultExpression).ToList();
 
         // Assert
@@ -173,7 +173,7 @@ public class MultiLanguageExtensionsTest
         var expected = entities.AsQueryable().Select(expectedExpression).ToList();
 
         // Act
-        var resultExpression = MultiLanguageExtensions.CreateProjectionExpression<HasTranslationEntityFixture, TranslationEntityFixture>(mainEntityPropNames, translationEntityPropNames);
+        var resultExpression = MultiLanguageExtensions.CreateProjectionExpression<HasTranslationEntityFixture, TranslationEntityFixture>(mainEntityPropNames, translationEntityPropNames, false);
         var result = entities.AsQueryable().Select(resultExpression).ToList();
 
         // Assert
