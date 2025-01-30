@@ -27,7 +27,8 @@ public static class MultiLanguageExtensions
     /// <param name="translationEntityPropertyNames"></param>
     /// <returns>Sample; e => new HasTranslationEntity { Id = e.Id, Translations = e.Translations.Select(t=> new TranslationEntity { Name = t.Name } ).ToList() } </returns>
     public static Expression<Func<TEntity, TEntity>> CreateProjectionExpression<TEntity, TTranslationEntity>(IEnumerable<string> mainEntityPropertyNames,
-                                                                                                             IEnumerable<string> translationEntityPropertyNames)
+                                                                                                             IEnumerable<string> translationEntityPropertyNames,
+                                                                                                             bool hasJsonTranslations)
     {
         var sourceType = typeof(TEntity);
         var parameter = Expression.Parameter(sourceType, _sourceParameterName);
@@ -77,7 +78,7 @@ public static class MultiLanguageExtensions
 
         foreach (var item in mainEntityPropertyNameTempList)
         {
-            var mapExpression = (Expression)(item == MultiLanguageEntityPropertyNames.Translations
+            var mapExpression = (Expression)((item == MultiLanguageEntityPropertyNames.Translations && !hasJsonTranslations)
                                                     ? expressionForTranslations
                                                     : Expression.PropertyOrField(parameter, item));
 

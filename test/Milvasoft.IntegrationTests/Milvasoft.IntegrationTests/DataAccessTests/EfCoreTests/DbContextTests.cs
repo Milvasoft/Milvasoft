@@ -20,6 +20,7 @@ using Milvasoft.IntegrationTests.Client.Fixtures.DtoFixtures;
 using Milvasoft.IntegrationTests.Client.Fixtures.EntityFixtures;
 using Milvasoft.IntegrationTests.Client.Fixtures.Persistence;
 using Milvasoft.Localization;
+using Npgsql;
 using System.Linq.Expressions;
 
 namespace Milvasoft.IntegrationTests.DataAccessTests.EfCoreTests;
@@ -1316,6 +1317,101 @@ public class DbContextTests(CustomWebApplicationFactory factory) : DataAccessInt
         var lookupResult = result[0];
         lookupResult.Should().BeOfType<LookupResult>();
         ((LookupResult)lookupResult).EntityName.Should().Be(nameof(HasTranslationEntityFixture));
+        ((LookupResult)lookupResult).Data.Should().HaveCount(1);
+        ((LookupResult)lookupResult).Data[0].ToJson().Should().BeEquivalentTo(expectedData.ToJson());
+    }
+
+    [Fact]
+    public async Task GetLookupsAsync_WithValidLookupRequestAndHasJsonTranslations_ShouldReturnCorrectResult()
+    {
+        // Arrange
+        await InitializeAsync(services =>
+        {
+            services.ConfigureMilvaDataAccess(opt =>
+            {
+                opt.DbContext = new DbContextConfiguration
+                {
+                    UseUtcForDateTime = true,
+                    DefaultSoftDeletionState = SoftDeletionState.Active,
+                    DynamicFetch = new DynamicFetchConfiguration
+                    {
+                        EntityAssemblyName = "Milvasoft.IntegrationTests.Client",
+                        AllowedEntityNamesForLookup = [nameof(HasJsonTranslationEntityFixture)],
+                        MaxAllowedPropertyCountForLookup = 2
+                    }
+                };
+            });
+
+            services.RemoveAll<DbContextOptions<MilvaBulkDbContextFixture>>();
+            services.RemoveAll<MilvaBulkDbContextFixture>();
+
+            var dataSource = new NpgsqlDataSourceBuilder(_factory.GetConnectionString()).EnableDynamicJson().Build();
+
+            services.AddDbContext<MilvaBulkDbContextFixture>(x =>
+            {
+                x.ConfigureWarnings(warnings => { warnings.Log(RelationalEventId.PendingModelChangesWarning); });
+                x.UseNpgsql(dataSource)
+                 .ReplaceService<IModelCustomizer, TranslationRelationsModelCustomizer>();
+            });
+
+            services.AddMilvaMultiLanguage().WithDefaultMultiLanguageManager();
+        });
+
+        var dbContext = _serviceProvider.GetRequiredService<MilvaBulkDbContextFixture>();
+
+        var entity = new HasJsonTranslationEntityFixture
+        {
+            Id = 1,
+            Priority = 1,
+            Translations =
+            [
+                new()
+                {
+                    Id = 1,
+                    LanguageId = 1,
+                    Name = "türkçe",
+                    EntityId = 1,
+                },
+                new()
+                {
+                    Id = 2,
+                    LanguageId = 2,
+                    Name = "English",
+                    EntityId = 1,
+                }
+            ]
+        };
+        await dbContext.HasJsonTranslationEntities.AddAsync(entity);
+        await dbContext.SaveChangesAsync();
+
+        var lookupRequest = new LookupRequest
+        {
+            Parameters =
+            [
+                new()
+                {
+                    EntityName = nameof(HasJsonTranslationEntityFixture),
+                    RequestedPropertyNames = [nameof(HasJsonTranslationEntityFixture.Priority), "Name"],
+                }
+            ]
+        };
+        object expectedData = new
+        {
+            Priority = 1,
+            Name = "türkçe",
+            Id = 1,
+        };
+
+        using var _ = new CultureSwitcher("tr-TR");
+
+        // Act
+        var result = await dbContext.GetLookupsAsync(lookupRequest);
+
+        // Assert
+        result.Should().HaveCount(1);
+        var lookupResult = result[0];
+        lookupResult.Should().BeOfType<LookupResult>();
+        ((LookupResult)lookupResult).EntityName.Should().Be(nameof(HasJsonTranslationEntityFixture));
         ((LookupResult)lookupResult).Data.Should().HaveCount(1);
         ((LookupResult)lookupResult).Data[0].ToJson().Should().BeEquivalentTo(expectedData.ToJson());
     }

@@ -6,6 +6,7 @@ using Milvasoft.Core.MultiLanguage.Manager;
 using Milvasoft.DataAccess.EfCore.DbContextBase;
 using Milvasoft.DataAccess.EfCore.Utils.LookupModels;
 using System.Collections;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Reflection;
 
 namespace Milvasoft.DataAccess.EfCore.Utils;
@@ -21,10 +22,15 @@ internal class LookupManager(MilvaDbContext dbContext, IDataAccessConfiguration 
         public string EntityName { get; set; }
         public Type EntityType { get; set; }
         public Type TranslationEntityType { get; set; }
-        public List<string> MainEntityPropertyNames { get; set; }
-        public List<string> TranslationEntityPropertyNames { get; set; }
+        public PropertyNames PropertyNames { get; set; }
         public List<string> PropertyNamesForProjection { get; set; }
         public LookupRequestParameter RequestParameter { get; set; }
+    }
+    internal class PropertyNames
+    {
+        public List<string> MainEntityPropertyNames { get; set; }
+        public List<string> TranslationEntityPropertyNames { get; set; }
+        public List<string> TranslationWithJsonEntityPropertyNames { get; set; }
     }
 
     public async Task<List<object>> GetLookupsAsync(LookupRequest lookupRequest)
@@ -44,7 +50,7 @@ internal class LookupManager(MilvaDbContext dbContext, IDataAccessConfiguration 
 
             var projectionExpression = CreateProjectionExpression(context);
 
-            parameter.UpdateFilterByForTranslationPropertyNames(context.TranslationEntityPropertyNames);
+            parameter.UpdateFilterByForTranslationPropertyNames(context.PropertyNames.TranslationEntityPropertyNames);
 
             var lookupList = await FetchLookupDataAsync(context, projectionExpression);
 
@@ -64,16 +70,15 @@ internal class LookupManager(MilvaDbContext dbContext, IDataAccessConfiguration 
         var entityType = GetEntityType(parameter.EntityName, assemblyTypes);
         var translationEntityType = GetTranslationEntityType(entityType, assemblyTypes);
 
-        var (mainEntityPropertyNames, translationEntityPropNames) = CategorizeRequestedProperties(parameter, entityType, translationEntityType);
+        var propertyNames = CategorizeRequestedProperties(parameter, entityType, translationEntityType);
 
         return new LookupContext
         {
             EntityName = parameter.EntityName,
             EntityType = entityType,
             TranslationEntityType = translationEntityType,
-            MainEntityPropertyNames = mainEntityPropertyNames,
-            TranslationEntityPropertyNames = translationEntityPropNames,
-            PropertyNamesForProjection = BuildPropertyNameListForProjection(entityType, mainEntityPropertyNames),
+            PropertyNames = propertyNames,
+            PropertyNamesForProjection = BuildPropertyNameListForProjection(entityType, propertyNames.MainEntityPropertyNames),
             RequestParameter = parameter
         };
     }
@@ -86,20 +91,37 @@ internal class LookupManager(MilvaDbContext dbContext, IDataAccessConfiguration 
             ? Array.Find(assemblyTypes, i => i.IsAssignableTo(typeof(ITranslationEntity<>).MakeGenericType(entityType)))
             : null;
 
-    private static (List<string> mainEntityPropertyNames, List<string> translationEntityPropNames) CategorizeRequestedProperties(LookupRequestParameter parameter, Type entityType, Type translationEntityType)
+    private static PropertyNames CategorizeRequestedProperties(LookupRequestParameter parameter, Type entityType, Type translationEntityType)
     {
         var mainEntityPropertyNames = new List<string>();
         var translationEntityPropNames = new List<string>();
+        var translationEntityWithJsonPropNames = new List<string>();
+
+        bool isTranslationsEntityJson = false;
+
+        if (translationEntityType != null)
+        {
+            var translationsProp = entityType.GetProperty(MultiLanguageEntityPropertyNames.Translations);
+            var columnAttribute = translationsProp.GetCustomAttribute<ColumnAttribute>();
+
+            isTranslationsEntityJson = columnAttribute != null && columnAttribute.TypeName == "jsonb";
+        }
 
         foreach (var requestedPropName in parameter.RequestedPropertyNames)
         {
-            if (CommonHelper.PropertyExists(entityType, requestedPropName))
+            var prop = CommonHelper.GetPublicPropertyIgnoreCase(entityType, requestedPropName);
+
+            if (prop != null)
             {
                 mainEntityPropertyNames.Add(requestedPropName);
             }
             else if (translationEntityType != null && CommonHelper.PropertyExists(translationEntityType, requestedPropName))
             {
-                translationEntityPropNames.Add(requestedPropName);
+                if (isTranslationsEntityJson)
+                    translationEntityWithJsonPropNames.Add(requestedPropName);
+                else
+
+                    translationEntityPropNames.Add(requestedPropName);
             }
             else
             {
@@ -107,13 +129,18 @@ internal class LookupManager(MilvaDbContext dbContext, IDataAccessConfiguration 
             }
         }
 
-        return (mainEntityPropertyNames, translationEntityPropNames);
+        return new PropertyNames
+        {
+            MainEntityPropertyNames = mainEntityPropertyNames,
+            TranslationEntityPropertyNames = translationEntityPropNames,
+            TranslationWithJsonEntityPropertyNames = translationEntityWithJsonPropNames
+        };
     }
 
     private static object CreateProjectionExpression(LookupContext context)
         => _createProjectionExpressionMethod
             .MakeGenericMethod(context.EntityType, context.TranslationEntityType ?? context.EntityType)
-            .Invoke(null, [context.PropertyNamesForProjection, context.TranslationEntityPropertyNames]);
+            .Invoke(null, [context.PropertyNamesForProjection, context.PropertyNames.TranslationEntityPropertyNames, !context.PropertyNames.TranslationWithJsonEntityPropertyNames.IsNullOrEmpty()]);
 
     private async Task<IList> FetchLookupDataAsync(LookupContext context, object projectionExpression)
     {
@@ -159,9 +186,9 @@ internal class LookupManager(MilvaDbContext dbContext, IDataAccessConfiguration 
         }
         else
         {
-            if (multiLanguageManager != null && context.TranslationEntityPropertyNames != null)
+            if (multiLanguageManager != null && context.PropertyNames.TranslationEntityPropertyNames != null)
             {
-                foreach (var translationPropName in context.TranslationEntityPropertyNames)
+                foreach (var translationPropName in context.PropertyNames.TranslationEntityPropertyNames.Concat(context.PropertyNames.TranslationWithJsonEntityPropertyNames))
                 {
                     if ((!context.RequestParameter.RequestedPropertyNames?.Contains(translationPropName) ?? true))
                         continue;

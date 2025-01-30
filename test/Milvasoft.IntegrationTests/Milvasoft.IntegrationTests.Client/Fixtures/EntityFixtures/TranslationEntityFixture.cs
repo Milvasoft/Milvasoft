@@ -7,3 +7,9 @@ public class TranslationEntityFixture : TranslationEntity<HasTranslationEntityFi
     public string Name { get; set; }
     public string Description { get; set; }
 }
+
+public class JsonTranslationEntityFixture : TranslationEntity<HasJsonTranslationEntityFixture>
+{
+    public string Name { get; set; }
+    public string Description { get; set; }
+}
