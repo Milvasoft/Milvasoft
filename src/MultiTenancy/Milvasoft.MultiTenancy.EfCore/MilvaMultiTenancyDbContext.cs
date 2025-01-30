@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Milvasoft.Core.EntityBases.MultiTenancy;
 using Milvasoft.Core.Utils.Constants;
+using Milvasoft.DataAccess.EfCore.Bulk;
 using Milvasoft.DataAccess.EfCore.Bulk.DbContextBase;
 using Milvasoft.DataAccess.EfCore.DbContextBase;
 using Milvasoft.MultiTenancy.ResolutionStrategy;
@@ -10,7 +11,7 @@ namespace Milvasoft.MultiTenancy.EfCore;
 /// <summary>
 /// Defines the tenant id type.
 /// </summary>
-public interface IMultiTenantDbContext
+public interface IMultiTenantDbContext : IMilvaBulkDbContextBase
 {
     /// <summary>
     /// Tenant resolution strategy.
