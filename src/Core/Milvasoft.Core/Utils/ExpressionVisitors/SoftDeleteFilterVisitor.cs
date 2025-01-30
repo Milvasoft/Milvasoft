@@ -1,4 +1,4 @@
-using System.Linq.Expressions;
+﻿using System.Linq.Expressions;
 
 namespace Milvasoft.Core.Utils.ExpressionVisitors;
 
@@ -82,10 +82,16 @@ public class SoftDeleteFilterVisitor : ExpressionVisitor
         var isDeletedProperty = Expression.Property(expression, nameof(ISoftDeletable.IsDeleted));
         var isDeletedCheck = Expression.Equal(isDeletedProperty, Expression.Constant(false));
 
-        var conditionalExpression = Expression.Condition(
-            isDeletedCheck,
-            expression,
-            Expression.Default(propertyType));
+        Expression defaultValue = Expression.Default(propertyType);
+
+        if (propertyType.IsValueType && Nullable.GetUnderlyingType(propertyType) == null)
+        {
+            defaultValue = Expression.Convert(Expression.Default(propertyType), typeof(Nullable<>).MakeGenericType(propertyType));
+        }
+
+        var conditionalExpression = Expression.Condition(isDeletedCheck,
+                                                         expression,
+                                                         defaultValue);
 
         _processedNodes.Add(expression);
         return conditionalExpression;
