@@ -58,21 +58,20 @@ public class MilvaMultiTenancyDbContext(DbContextOptions options) : MilvaBulkDbC
 
     private void HasTenantIdQueryFilter(ModelBuilder modelBuilder)
     {
-        var tenantEntities = modelBuilder.Model.GetEntityTypes().Where(entityType => typeof(IHasTenantId).IsAssignableFrom(entityType.ClrType));
+        var tenantEntities = modelBuilder.Model.GetEntityTypes().Where(entityType => typeof(IHasTenantId).IsAssignableFrom(entityType.ClrType)).Select(e => e.ClrType);
 
-        foreach (var entityType in tenantEntities)
+        foreach (var clrType in tenantEntities)
         {
-            var clrType = entityType.ClrType;
             var parameter = Expression.Parameter(clrType, "entity");
 
             // Find the property that matches the tenant ID property name
-            var property = entityType.FindProperty(EntityPropertyNames.TenantId);
+            var property = clrType.GetProperty(EntityPropertyNames.TenantId);
 
-            if (property?.PropertyInfo == null)
+            if (property == null)
                 continue;
 
             // Create the expression: entity.TenantId == CurrentTenantId
-            var propertyAccess = Expression.Property(parameter, property.PropertyInfo);
+            var propertyAccess = Expression.Property(parameter, property);
             var tenantIdValue = Expression.Property(Expression.Constant(this), nameof(CurrentTenantId));
             var filterExpression = Expression.Equal(propertyAccess, tenantIdValue);
 
