@@ -315,7 +315,7 @@ public static class ModelBuilderExtensions
     public static ModelBuilder UseTenantIdQueryFilter(this ModelBuilder modelBuilder, TenantId tenantId)
     {
         // Get entities that have the tenant id property
-        var tenantEntities = modelBuilder.Model.GetEntityTypes().Where(entityType => entityType.FindProperty(EntityPropertyNames.TenantId) != null);
+        var tenantEntities = modelBuilder.Model.GetEntityTypes().Where(entityType => entityType.ClrType.IsAssignableTo(typeof(IHasTenantId)));
 
         foreach (var entityType in tenantEntities)
         {
