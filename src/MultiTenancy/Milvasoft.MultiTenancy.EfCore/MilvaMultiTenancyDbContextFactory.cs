@@ -24,7 +24,8 @@ public class MilvaMultiTenancyDbContextFactory<TContext>(IDbContextFactory<TCont
     {
         var context = pooledFactory.CreateDbContext();
 
-        context.TenantResolutionStrategy = serviceProvider.GetService<ITenantResolutionStrategy<TenantId>>();
+        var tenantResolutionStrategy = serviceProvider.GetService<ITenantResolutionStrategy<TenantId>>();
+        context.CurrentTenantId = tenantResolutionStrategy.GetTenantIdentifier();
         context.ServiceProvider = serviceProvider;
         context.SetDataAccessConfiguration(dataAccessConfiguration);
 

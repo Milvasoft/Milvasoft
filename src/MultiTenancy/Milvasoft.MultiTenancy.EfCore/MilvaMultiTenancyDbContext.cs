@@ -3,8 +3,7 @@ using Milvasoft.Core.EntityBases.MultiTenancy;
 using Milvasoft.Core.Utils.Constants;
 using Milvasoft.DataAccess.EfCore.Bulk;
 using Milvasoft.DataAccess.EfCore.Bulk.DbContextBase;
-using Milvasoft.DataAccess.EfCore.DbContextBase;
-using Milvasoft.MultiTenancy.ResolutionStrategy;
+using System.Linq.Expressions;
 
 namespace Milvasoft.MultiTenancy.EfCore;
 
@@ -14,9 +13,9 @@ namespace Milvasoft.MultiTenancy.EfCore;
 public interface IMultiTenantDbContext : IMilvaBulkDbContextBase
 {
     /// <summary>
-    /// Tenant resolution strategy.
+    /// Current tenant id.  
     /// </summary>
-    ITenantResolutionStrategy<TenantId> TenantResolutionStrategy { get; set; }
+    public TenantId CurrentTenantId { get; set; }
 }
 
 /// <summary>
@@ -26,9 +25,9 @@ public interface IMultiTenantDbContext : IMilvaBulkDbContextBase
 public class MilvaMultiTenancyDbContext(DbContextOptions options) : MilvaBulkDbContext(options), IMultiTenantDbContext
 {
     /// <summary>
-    /// Tenant resolution strategy.
+    /// Current tenant id.  
     /// </summary>
-    public ITenantResolutionStrategy<TenantId> TenantResolutionStrategy { get; set; }
+    public TenantId CurrentTenantId { get; set; }
 
     /// <summary>
     /// Adds global query filter for tenant id.
@@ -36,8 +35,7 @@ public class MilvaMultiTenancyDbContext(DbContextOptions options) : MilvaBulkDbC
     /// <param name="modelBuilder"></param>
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        if (TenantResolutionStrategy != null)
-            modelBuilder.UseTenantIdQueryFilter(TenantResolutionStrategy.GetTenantIdentifier());
+        HasTenantIdQueryFilter(modelBuilder);
 
         base.OnModelCreating(modelBuilder);
     }
@@ -52,9 +50,35 @@ public class MilvaMultiTenancyDbContext(DbContextOptions options) : MilvaBulkDbC
         foreach (var entry in ChangeTracker.Entries().Where(e => e.Metadata.ClrType.IsAssignableTo(typeof(IHasTenantId))))
         {
             if (entry.State == EntityState.Added)
-                entry.Property(EntityPropertyNames.TenantId).CurrentValue = TenantResolutionStrategy.GetTenantIdentifier();
+                entry.Property(EntityPropertyNames.TenantId).CurrentValue = CurrentTenantId;
         }
 
         return base.SaveChangesAsync(cancellationToken);
+    }
+
+    private void HasTenantIdQueryFilter(ModelBuilder modelBuilder)
+    {
+        var tenantEntities = modelBuilder.Model.GetEntityTypes().Where(entityType => typeof(IHasTenantId).IsAssignableFrom(entityType.ClrType));
+
+        foreach (var entityType in tenantEntities)
+        {
+            var clrType = entityType.ClrType;
+            var parameter = Expression.Parameter(clrType, "entity");
+
+            // Find the property that matches the tenant ID property name
+            var property = entityType.FindProperty(EntityPropertyNames.TenantId);
+
+            if (property?.PropertyInfo == null)
+                continue;
+
+            // Create the expression: entity.TenantId == CurrentTenantId
+            var propertyAccess = Expression.Property(parameter, property.PropertyInfo);
+            var tenantIdValue = Expression.Property(Expression.Constant(this), nameof(CurrentTenantId));
+            var filterExpression = Expression.Equal(propertyAccess, tenantIdValue);
+
+            var lambda = Expression.Lambda(filterExpression, parameter);
+
+            modelBuilder.Entity(clrType).HasQueryFilter(lambda);
+        }
     }
 }

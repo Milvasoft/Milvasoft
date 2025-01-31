@@ -729,8 +729,6 @@ public class TenantIdTests
         var jsonValue = """"{"Id":1,"Name":"MilvaSoft","TenantId":~}"""";
         jsonValue = jsonValue.Replace("~", tenantString);
 
-        var expectedObject = new TenantIdSerializationTestModel { Id = 1, Name = "MilvaSoft", TenantId = TenantId.Empty };
-
         // Act
         var deserializedObject = JsonSerializer.Deserialize<TenantIdSerializationTestModel>(jsonValue);
 
@@ -743,7 +741,6 @@ public class TenantIdTests
     {
         // Arrange
         var jsonValue = """"{"Id":1,"Name":"MilvaSoft","TenantId":"milva"}"""";
-        var expectedObject = new TenantIdSerializationTestModel { Id = 1, Name = "MilvaSoft", TenantId = TenantId.Empty };
 
         // Act
         var deserializedObject = JsonSerializer.Deserialize<TenantIdSerializationTestModel>(jsonValue);

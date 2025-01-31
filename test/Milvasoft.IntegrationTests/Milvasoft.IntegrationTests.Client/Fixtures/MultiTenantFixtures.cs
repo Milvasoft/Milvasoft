@@ -24,14 +24,14 @@ public class TestTenantIdResolutionStrategy : ITenantResolutionStrategy<TenantId
     /// Get the tenant identifier from header.
     /// </summary>
     /// <returns></returns>
-    public TenantId GetTenantIdentifier() => new TenantId("test_1");
+    public TenantId GetTenantIdentifier() => new("test_1");
 }
 
 public class TestTenantStore<TTenant, TKey> : ITenantStore<TTenant, TKey>
     where TKey : struct, IEquatable<TKey>
     where TTenant : class, IMilvaTenantBase<TKey>, new()
 {
-    private static ConcurrentBag<TTenant> _tenants = new();
+    private static readonly ConcurrentBag<TTenant> _tenants = [];
 
     /// <summary>
     /// Returns a tenant according to <paramref name="identifier"/>.
@@ -46,7 +46,7 @@ public class TestTenantStore<TTenant, TKey> : ITenantStore<TTenant, TKey>
     /// <param name="identifier"></param>
     /// <param name="tenant"></param>
     /// <returns></returns>
-    public async Task<bool> SetTenantAsync(TKey identifier, TTenant tenant)
+    public async Task<bool> SetTenantAsync(TTenant tenant)
     {
         _tenants.Add(tenant);
 

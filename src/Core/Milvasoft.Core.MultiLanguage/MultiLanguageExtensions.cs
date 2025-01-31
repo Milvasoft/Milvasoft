@@ -25,6 +25,7 @@ public static class MultiLanguageExtensions
     /// <typeparam name="TTranslationEntity"></typeparam>
     /// <param name="mainEntityPropertyNames"></param>
     /// <param name="translationEntityPropertyNames"></param>
+    /// <param name="hasJsonTranslations"></param>
     /// <returns>Sample; e => new HasTranslationEntity { Id = e.Id, Translations = e.Translations.Select(t=> new TranslationEntity { Name = t.Name } ).ToList() } </returns>
     public static Expression<Func<TEntity, TEntity>> CreateProjectionExpression<TEntity, TTranslationEntity>(IEnumerable<string> mainEntityPropertyNames,
                                                                                                              IEnumerable<string> translationEntityPropertyNames,

@@ -53,7 +53,7 @@ public abstract partial class MultiTenantBaseRepository<TEntity, TContext>(TCont
         {
             var tenantIdProp = typeof(TEntity).GetPublicPropertyIgnoreCase(nameof(TenantId));
 
-            var currentTenantId = _dbContext.TenantResolutionStrategy.GetTenantIdentifier();
+            var currentTenantId = _dbContext.CurrentTenantId;
 
             foreach (var entity in entities)
                 tenantIdProp.SetValue(entity, currentTenantId);
