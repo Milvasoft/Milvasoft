@@ -157,36 +157,49 @@ public static class MultiLanguageExtensions
     //src.Translations.Any(i => (i.LanguageId == languageId))
     internal static MethodCallExpression CreateTranslationsAnyExpression<TTranslationEntity>(MemberExpression translationsPropertyExpression, int? languageId = null)
     {
+        // Create a parameter for the translation entity => i
+        var translationEntityParameter = Expression.Parameter(typeof(TTranslationEntity), _translationParameterName);
+
+        Expression predicateExpression = null;
+
         if (languageId.HasValue)
         {
-            // Create a parameter for the language entity => i
-            var translationEntityParameter = Expression.Parameter(typeof(TTranslationEntity), _translationParameterName);
-
             // i.LanguageId
             var languageIdProperty = Expression.Property(translationEntityParameter, MultiLanguageEntityPropertyNames.LanguageId);
 
-            // Get the "Any" method of the Enumerable class with the appropriate generic type
+            // languageId sabiti
+            var languageIdConstant = Expression.Constant(languageId.Value);
+
+            // i.LanguageId == languageIdConstant
+            predicateExpression = Expression.Equal(languageIdProperty, languageIdConstant);
+        }
+
+        // If TTranslations is soft deletable, add a check for IsDeleted == false
+        if (typeof(ISoftDeletable).IsAssignableFrom(typeof(TTranslationEntity)))
+        {
+            var isDeletedProperty = Expression.Property(translationEntityParameter, nameof(ISoftDeletable.IsDeleted));
+            var isDeletedFalseExpression = Expression.Equal(isDeletedProperty, Expression.Constant(false));
+
+            // Eğer predicateExpression zaten varsa, bunu AndAlso ile birleştir
+            predicateExpression = predicateExpression != null
+                ? Expression.AndAlso(predicateExpression, isDeletedFalseExpression)
+                : isDeletedFalseExpression;
+        }
+
+        if (predicateExpression != null)
+        {
+            // i => i.(conditions)
+            var lambda = Expression.Lambda<Func<TTranslationEntity, bool>>(predicateExpression, translationEntityParameter);
+
+            // src.Translations.Any(i => i.(conditions))
             var genericAnyWithPredicateMethod = _anyWithPredicateMethodInfo.MakeGenericMethod(typeof(TTranslationEntity));
-
-            // Create constants for the current language ID and the default language ID
-            var languageIdConstant = Expression.Constant(languageId);
-
-            // i.LanguageId == currentLanguageIdConstant
-            var languageIdEqualityExpression = Expression.Equal(languageIdProperty, languageIdConstant);
-
-            // i => i.LanguageId == currentLanguageIdConstant
-            var languageIdEqualityLambdaExpression = Expression.Lambda<Func<TTranslationEntity, bool>>(languageIdEqualityExpression, translationEntityParameter);
-
-            // src.Translations.Any(i => (i.LanguageId == currentLanguageIdConstant))
-            return Expression.Call(genericAnyWithPredicateMethod, translationsPropertyExpression, languageIdEqualityLambdaExpression);
+            return Expression.Call(genericAnyWithPredicateMethod, translationsPropertyExpression, lambda);
         }
         else
         {
-            // Get the "Any" method of the Enumerable class with the appropriate generic type
-            var genericAnyWithPredicateMethod = _anyMethodInfo.MakeGenericMethod(typeof(TTranslationEntity));
-
             // src.Translations.Any()
-            return Expression.Call(genericAnyWithPredicateMethod, translationsPropertyExpression);
+            var genericAnyMethod = _anyMethodInfo.MakeGenericMethod(typeof(TTranslationEntity));
+            return Expression.Call(genericAnyMethod, translationsPropertyExpression);
         }
     }
 }

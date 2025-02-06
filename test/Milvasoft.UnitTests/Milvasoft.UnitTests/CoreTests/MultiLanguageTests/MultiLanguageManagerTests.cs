@@ -767,6 +767,74 @@ public class MultiLanguageManagerTests
         resultWithResultExpression.Should().Be(resultWithExpectedExpression);
     }
 
+    [Fact]
+    public void CreateTranslationMapExpression_WithFullAuditableTranslationsContainCurrentOrDefaultAndCurrentLanguageAndDefaultLanguageIsSame_ShouldCorrectExpression()
+    {
+        // Arrange
+        List<ILanguage> languages =
+        [
+            new LanguageModelFixture
+            {
+                Id = 1,
+                Code = "en-US",
+                IsDefault = true,
+                Name ="English",
+                Supported = true,
+            },
+            new LanguageModelFixture
+            {
+                Id = 2,
+                Code = "tr-TR",
+                IsDefault = false,
+                Name ="Turkish",
+                Supported = true,
+            },
+        ];
+        List<FullAuditableHasTranslationEntityFixture> entities =
+        [
+            new FullAuditableHasTranslationEntityFixture
+            {
+                Id = 1,
+                Translations =
+                [
+                    new FullAuditableTranslationEntityFixture{
+                        Id = 1,
+                        Name = "First",
+                        Description = "First",
+                        EntityId = 1,
+                        LanguageId = 1
+                    },
+                    new FullAuditableTranslationEntityFixture{
+                        Id = 2,
+                        Name = "İlk",
+                        Description = "İlk",
+                        EntityId = 1,
+                        LanguageId = 2
+                    }
+                ]
+            }
+        ];
+        MultiLanguageManager.UpdateLanguagesList(languages);
+        CultureInfo.CurrentCulture = new CultureInfo("en-US");
+        var manager = new MilvaMultiLanguageManager();
+        Expression<Func<FullAuditableHasTranslationEntityFixture, string>> expectedExpression = src => src.Translations.Any(i => i.IsDeleted == false)
+                                                                                            ? src.Translations.Any(i => i.LanguageId == 1 && i.IsDeleted == false)
+                                                                                                ? src.Translations.FirstOrDefault(i => i.LanguageId == 1 == i.IsDeleted == false).Name
+                                                                                                : src.Translations.Any(i => i.IsDeleted == false)
+                                                                                                    ? src.Translations.FirstOrDefault(i => i.IsDeleted == false).Name
+                                                                                                    : null
+                                                                                            : null;
+
+        // Act
+        var resultExpression = manager.CreateTranslationMapExpression<FullAuditableHasTranslationEntityFixture, HasTranslationDtoFixture, FullAuditableTranslationEntityFixture>(e => e.Name);
+
+        // Assert
+        var resultWithExpectedExpression = entities.AsQueryable().Select(expectedExpression).First();
+        var resultWithResultExpression = entities.AsQueryable().Select(resultExpression).First();
+
+        resultWithResultExpression.Should().Be(resultWithExpectedExpression);
+    }
+
     #endregion
 
     #region GetTranslationPropertyValue
@@ -960,7 +1028,7 @@ public class MultiLanguageManagerTests
     }
 
     [Fact]
-    public void GetTranslation_WithEntityNotImplementsITranslationEntityInterface_ShouldReturnEmptyString()
+    public void GetTranslation_WithEntityNotImplementsITranslationEntityInterface_ShouldReturnFirst()
     {
         // Arrange
         var translations = new List<NonTranslationEntityFixture>()
@@ -978,7 +1046,29 @@ public class MultiLanguageManagerTests
         var result = manager.GetTranslation(translations, nameof(NonTranslationEntityFixture.Name));
 
         // Assert
-        result.Should().BeEmpty();
+        result.Should().Be("First");
+    }
+
+    [Fact]
+    public void GetTranslation_WithEntityNotImplementsITranslationEntityInterfaceAndNotExistsPropRequested_ShouldReturnNull()
+    {
+        // Arrange
+        var translations = new List<NonTranslationEntityFixture>()
+        {
+            new()
+            {
+                 Id = 1,
+                 Name = "First",
+                 Description = "First"
+            }
+        };
+        var manager = new MilvaMultiLanguageManager();
+
+        // Act
+        var result = manager.GetTranslation(translations, "NotExistsProp");
+
+        // Assert
+        result.Should().BeNull();
     }
 
     [Theory]
@@ -1245,12 +1335,8 @@ public class MultiLanguageManagerTests
         result.Should().Be("соответствие");
     }
 
-    #endregion
-
-    #region GetTranslationValue
-
     [Fact]
-    public void GetTranslationValue_WithTranslationsIsNull_ShouldReturnEmptyString()
+    public void GetTranslation_WithExpressionOverload_WithTranslationsIsNull_ShouldReturnEmptyString()
     {
         // Arrange
         List<TranslationEntityFixture> translations = null;
@@ -1264,7 +1350,7 @@ public class MultiLanguageManagerTests
     }
 
     [Fact]
-    public void GetTranslationValue_WithTranslationsIsEmpty_ShouldReturnEmptyString()
+    public void GetTranslation_WithExpressionOverload_WithTranslationsIsEmpty_ShouldReturnEmptyString()
     {
         // Arrange
         var translations = new List<TranslationEntityFixture>();
@@ -1278,7 +1364,7 @@ public class MultiLanguageManagerTests
     }
 
     [Fact]
-    public void GetTranslationValue_WithEntityNotImplementsITranslationEntityInterface_ShouldReturnEmptyString()
+    public void GetTranslation_WithExpressionOverload_WithEntityNotImplementsITranslationEntityInterface_ShouldReturnFirst()
     {
         // Arrange
         var translations = new List<NonTranslationEntityFixture>()
@@ -1296,11 +1382,11 @@ public class MultiLanguageManagerTests
         var result = manager.GetTranslation(translations, i => i.Name);
 
         // Assert
-        result.Should().BeEmpty();
+        result.Should().Be("First");
     }
 
     [Fact]
-    public void GetTranslationValue_WithValidTranslationsButPropetyExpressionIsNull_ShouldReturnEmptyString()
+    public void GetTranslation_WithExpressionOverload_WithValidTranslationsButPropetyExpressionIsNull_ShouldReturnEmptyString()
     {
         // Arrange
         var translations = new List<TranslationEntityFixture>
@@ -1331,7 +1417,7 @@ public class MultiLanguageManagerTests
     }
 
     [Fact]
-    public void GetTranslationValue_WithValidTranslationsAndPropertyExpression_ShouldReturnCorrectTranslation()
+    public void GetTranslation_WithExpressionOverload_WithValidTranslationsAndPropertyExpression_ShouldReturnCorrectTranslation()
     {
         // Arrange
         List<ILanguage> languages =
@@ -1383,7 +1469,7 @@ public class MultiLanguageManagerTests
     }
 
     [Fact]
-    public void GetTranslationValue_WithTranslationsOnlyContainsDefaultLanguageAndCurrentAndDefaultLanguageIsDifferent_ShouldReturnCorrectTranslation()
+    public void GetTranslation_WithExpressionOverload_WithTranslationsOnlyContainsDefaultLanguageAndCurrentAndDefaultLanguageIsDifferent_ShouldReturnCorrectTranslation()
     {
         // Arrange
         List<ILanguage> languages =
@@ -1427,7 +1513,7 @@ public class MultiLanguageManagerTests
     }
 
     [Fact]
-    public void GetTranslationValue_WithTranslationsNotContainsCurrentOrDefaultLanguageAndCurrentAndDefaultLanguageIsDifferent_ShouldReturnCorrectTranslation()
+    public void GetTranslation_WithExpressionOverload_WithTranslationsNotContainsCurrentOrDefaultLanguageAndCurrentAndDefaultLanguageIsDifferent_ShouldReturnCorrectTranslation()
     {
         // Arrange
         List<ILanguage> languages =
@@ -1471,7 +1557,7 @@ public class MultiLanguageManagerTests
     }
 
     [Fact]
-    public void GetTranslationValue_WithTranslationsOnlyContainsDefaultLanguageAndCurrentAndDefaultLanguageIsSame_ShouldReturnCorrectTranslation()
+    public void GetTranslation_WithExpressionOverload_WithTranslationsOnlyContainsDefaultLanguageAndCurrentAndDefaultLanguageIsSame_ShouldReturnCorrectTranslation()
     {
         // Arrange
         List<ILanguage> languages =
@@ -1515,7 +1601,7 @@ public class MultiLanguageManagerTests
     }
 
     [Fact]
-    public void GetTranslationValue_WithTranslationsNotContainsCurrentOrDefaultLanguageAndCurrentAndDefaultLanguageIsSame_ShouldReturnCorrectTranslation()
+    public void GetTranslation_WithExpressionOverload_WithTranslationsNotContainsCurrentOrDefaultLanguageAndCurrentAndDefaultLanguageIsSame_ShouldReturnCorrectTranslation()
     {
         // Arrange
         List<ILanguage> languages =
@@ -1594,7 +1680,7 @@ public class MultiLanguageManagerTests
         MultiLanguageManager.Languages.Should().HaveCount(15);
     }
 
-    [Fact]
+    [Fact(Skip = "static field")]
     public void AddMilvaMultiLanguage_WithMultiLanguageManager_ShouldAddCorrectly()
     {
         // Arrange

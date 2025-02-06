@@ -257,16 +257,16 @@ public abstract class MultiLanguageManager : IMultiLanguageManager
     /// <summary>
     /// Gets the value of the requested translation property.
     /// </summary>
-    /// <typeparam name="TTRanslationEntity">The type of the translation entity.</typeparam>
+    /// <typeparam name="TTranslationEntity">The type of the translation entity.</typeparam>
     /// <param name="translations">The list of translations.</param>
     /// <param name="propertyName">The name of the requested translation property.</param>
     /// <returns>The value of the requested translation property.</returns>
-    public virtual string GetTranslation<TTRanslationEntity>(IEnumerable<TTRanslationEntity> translations, string propertyName)
+    public virtual string GetTranslation<TTranslationEntity>(IEnumerable<TTranslationEntity> translations, string propertyName)
     {
-        if (translations.IsNullOrEmpty() || string.IsNullOrWhiteSpace(propertyName) || !typeof(TTRanslationEntity).CanAssignableTo(typeof(ITranslationEntity<>)))
+        if (translations.IsNullOrEmpty() || string.IsNullOrWhiteSpace(propertyName))
             return string.Empty;
 
-        TTRanslationEntity requestedLang;
+        TTranslationEntity requestedLang;
 
         var currentLanguageId = GetCurrentLanguageId();
         var defaultLanguageId = GetDefaultLanguageId();
@@ -278,11 +278,11 @@ public abstract class MultiLanguageManager : IMultiLanguageManager
 
         requestedLang ??= translations.FirstOrDefault();
 
-        return requestedLang?.GetType().GetPublicPropertyIgnoreCase(propertyName).GetValue(requestedLang, null)?.ToString();
+        return requestedLang?.GetType().GetPublicPropertyIgnoreCase(propertyName)?.GetValue(requestedLang, null)?.ToString();
 
-        TTRanslationEntity GetLanguageValue(int languageId) => translations.FirstOrDefault(t => (int)t.GetType()
-                                                                                                      .GetProperty(MultiLanguageEntityPropertyNames.LanguageId)
-                                                                                                      .GetValue(t) == languageId);
+        TTranslationEntity GetLanguageValue(int languageId) => translations.FirstOrDefault(t => (int)(t.GetType()
+                                                                                                       .GetProperty(MultiLanguageEntityPropertyNames.LanguageId)?
+                                                                                                       .GetValue(t) ?? 0) == languageId);
     }
 
     /// <summary>
