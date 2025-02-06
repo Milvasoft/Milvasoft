@@ -172,10 +172,13 @@ public abstract class MultiLanguageManager : IMultiLanguageManager
         {
             var translationEntityPropertyNames = new List<string> { MultiLanguageEntityPropertyNames.LanguageId, MultiLanguageEntityPropertyNames.EntityId, propertyName };
 
+            if (typeof(ISoftDeletable).IsAssignableFrom(typeof(TTranslationEntity)))
+                translationEntityPropertyNames.Add(EntityPropertyNames.IsDeleted);
+
             var translationEntityParameter = Expression.Parameter(typeof(TTranslationEntity), _translationParameterName);
 
             var translationBindings = translationEntityPropertyNames.Select(propName => Expression.Bind(typeof(TTranslationEntity).GetProperty(propName),
-                                                                                                        Expression.Property(translationEntityParameter, propName)));
+                                                                                               Expression.Property(translationEntityParameter, propName)));
 
             var translationBody = Expression.MemberInit(Expression.New(typeof(TTranslationEntity)), translationBindings);
 
@@ -210,7 +213,7 @@ public abstract class MultiLanguageManager : IMultiLanguageManager
                                                                  Expression.Constant(true));
 
             // src.Translations.Select(i => new ProductTranslation() {LanguageId = i.LanguageId, EntityId = i.EntityId, Name = i.Name}).FirstOrDefault()
-            var translationsFirstOrDefaultExpression = Expression.Call(_firstOrDefaultMethodInfo.MakeGenericMethod(typeof(TTranslationEntity)), projectionExpression);
+            var translationsFirstOrDefaultExpression = CreateFirstOrDefaultWithIsDeletedExpression(projectionExpression);
 
             // src.Translations.Select(i => new ProductTranslation() {LanguageId = i.LanguageId, EntityId = i.EntityId, Name = i.Name}).FirstOrDefault().PropertyName
             var propertyOfTranslationsFirstOrDefaultExpression = Expression.Property(translationsFirstOrDefaultExpression, propertyName);
@@ -224,10 +227,45 @@ public abstract class MultiLanguageManager : IMultiLanguageManager
             return translationsFirstOrDefaultWithDefaultLanguageWithNullCheckExpression;
         }
 
+        // .FirstOrDefault(i=>i.IsDeleted == false)
+        MethodCallExpression CreateFirstOrDefaultWithIsDeletedExpression(MethodCallExpression projectionExpression)
+        {
+            // Create a parameter for the language entity => i
+            var translationEntityParameter = Expression.Parameter(typeof(TTranslationEntity), _translationParameterName);
+
+            Expression predicateExpression = null;
+
+            // If TTranslations is soft deletable, add a check for IsDeleted == false
+            if (typeof(ISoftDeletable).IsAssignableFrom(typeof(TTranslationEntity)))
+            {
+                var isDeletedProperty = Expression.Property(translationEntityParameter, nameof(ISoftDeletable.IsDeleted));
+                var isDeletedFalseExpression = Expression.Equal(isDeletedProperty, Expression.Constant(false));
+
+                // (i.LanguageId == languageId) && (i.IsDeleted == false)
+                predicateExpression = isDeletedFalseExpression;
+
+                // i => (i.LanguageId == languageId) && (i.IsDeleted == false)
+                var predicateLambdaExpression = Expression.Lambda<Func<TTranslationEntity, bool>>(predicateExpression, translationEntityParameter);
+
+                // Get the "FirstOrDefault" method of the Enumerable class with the appropriate generic type
+                var genericFirstOrDefaultWithPredicateMethod = _firstOrDefaultWithPredicateMethodInfo.MakeGenericMethod(typeof(TTranslationEntity));
+
+                // src.Translations.Select(i => new ProductTranslation() {LanguageId = i.LanguageId, EntityId = i.EntityId, Name = i.Name})
+                //    .FirstOrDefault(i => (i.LanguageId == languageId) && (i.IsDeleted == false))
+                var firstOrDefaultWithIsDeletedFalseEqualityExpression = Expression.Call(genericFirstOrDefaultWithPredicateMethod,
+                                                                                                 projectionExpression,
+                                                                                                 predicateLambdaExpression);
+
+                return firstOrDefaultWithIsDeletedFalseEqualityExpression;
+            }
+            else
+                return Expression.Call(_firstOrDefaultMethodInfo.MakeGenericMethod(typeof(TTranslationEntity)), projectionExpression);
+        }
+
         // src.Translations.Select(i => new ProductTranslation() {LanguageId = i.LanguageId, EntityId = i.EntityId, Name = i.Name}).FirstOrDefault(i => (i.LanguageId == languageId))
         MethodCallExpression CreateTranslationsFirstOrDefaultWithLanguageEqualityExpression(int languageId)
         {
-            // Create constants for the current language ID and the default language ID
+            // Create constants for the current language ID
             var languageIdConstant = Expression.Constant(languageId);
 
             // Create a parameter for the language entity => i
@@ -236,19 +274,32 @@ public abstract class MultiLanguageManager : IMultiLanguageManager
             // i.LanguageId
             var languageIdProperty = Expression.Property(translationEntityParameter, MultiLanguageEntityPropertyNames.LanguageId);
 
+            // i.LanguageId == languageId
+            var languageIdEqualityExpression = Expression.Equal(languageIdProperty, languageIdConstant);
+
+            Expression predicateExpression = languageIdEqualityExpression;
+
+            // If TTranslations is soft deletable, add a check for IsDeleted == false
+            if (typeof(ISoftDeletable).IsAssignableFrom(typeof(TTranslationEntity)))
+            {
+                var isDeletedProperty = Expression.Property(translationEntityParameter, nameof(ISoftDeletable.IsDeleted));
+                var isDeletedFalseExpression = Expression.Equal(isDeletedProperty, Expression.Constant(false));
+
+                // (i.LanguageId == languageId) && (i.IsDeleted == false)
+                predicateExpression = Expression.AndAlso(predicateExpression, isDeletedFalseExpression);
+            }
+
+            // i => (i.LanguageId == languageId) && (i.IsDeleted == false)
+            var predicateLambdaExpression = Expression.Lambda<Func<TTranslationEntity, bool>>(predicateExpression, translationEntityParameter);
+
             // Get the "FirstOrDefault" method of the Enumerable class with the appropriate generic type
             var genericFirstOrDefaultWithPredicateMethod = _firstOrDefaultWithPredicateMethodInfo.MakeGenericMethod(typeof(TTranslationEntity));
 
-            // i.LanguageId == currentLanguageIdConstant
-            var languageIdEqualityExpression = Expression.Equal(languageIdProperty, languageIdConstant);
-
-            // i => i.LanguageId == currentLanguageIdConstant
-            var languageIdEqualityLambdaExpression = Expression.Lambda<Func<TTranslationEntity, bool>>(languageIdEqualityExpression, translationEntityParameter);
-
-            // src.Translations.Select(i => new ProductTranslation() {LanguageId = i.LanguageId, EntityId = i.EntityId, Name = i.Name}).FirstOrDefault(i => (i.LanguageId == languageId))
+            // src.Translations.Select(i => new ProductTranslation() {LanguageId = i.LanguageId, EntityId = i.EntityId, Name = i.Name})
+            //    .FirstOrDefault(i => (i.LanguageId == languageId) && (i.IsDeleted == false))
             var translationsFirstOrDefaultWithLanguageIdEqualityExpression = Expression.Call(genericFirstOrDefaultWithPredicateMethod,
                                                                                              projectionExpression,
-                                                                                             languageIdEqualityLambdaExpression);
+                                                                                             predicateLambdaExpression);
 
             return translationsFirstOrDefaultWithLanguageIdEqualityExpression;
         }

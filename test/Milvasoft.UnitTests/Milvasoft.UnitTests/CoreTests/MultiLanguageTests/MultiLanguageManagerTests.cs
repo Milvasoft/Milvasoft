@@ -802,14 +802,30 @@ public class MultiLanguageManagerTests
                         Name = "First",
                         Description = "First",
                         EntityId = 1,
-                        LanguageId = 1
+                        LanguageId = 1,
+                        IsDeleted = true,
                     },
                     new FullAuditableTranslationEntityFixture{
                         Id = 2,
                         Name = "İlk",
                         Description = "İlk",
                         EntityId = 1,
-                        LanguageId = 2
+                        LanguageId = 2,
+                        IsDeleted = true,
+                    },
+                    new FullAuditableTranslationEntityFixture{
+                        Id = 3,
+                        Name = "First1",
+                        Description = "First1",
+                        EntityId = 1,
+                        LanguageId = 1
+                    },
+                    new FullAuditableTranslationEntityFixture{
+                        Id = 4,
+                        Name = "İlk1",
+                        Description = "İlk1",
+                        EntityId = 1,
+                        LanguageId = 2,
                     }
                 ]
             }
@@ -819,7 +835,7 @@ public class MultiLanguageManagerTests
         var manager = new MilvaMultiLanguageManager();
         Expression<Func<FullAuditableHasTranslationEntityFixture, string>> expectedExpression = src => src.Translations.Any(i => i.IsDeleted == false)
                                                                                             ? src.Translations.Any(i => i.LanguageId == 1 && i.IsDeleted == false)
-                                                                                                ? src.Translations.FirstOrDefault(i => i.LanguageId == 1 == i.IsDeleted == false).Name
+                                                                                                ? src.Translations.FirstOrDefault(i => i.LanguageId == 1 && i.IsDeleted == false).Name
                                                                                                 : src.Translations.Any(i => i.IsDeleted == false)
                                                                                                     ? src.Translations.FirstOrDefault(i => i.IsDeleted == false).Name
                                                                                                     : null

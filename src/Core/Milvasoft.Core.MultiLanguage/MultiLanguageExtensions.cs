@@ -141,7 +141,7 @@ public static class MultiLanguageExtensions
     /// <returns>The conditional expression to check if the translations property is null. Sample result; x => x.Translations == null ? null : <paramref name="expression"/></returns>
     internal static ConditionalExpression CreateTranslationsAnyCheckExpression<TTranslationEntity, TReturn>(MemberExpression translationsPropertyExpression, Expression expression)
     {
-        // src.Translations.Any()
+        // src.Translations.Any(conditions)
         var anyExpression = CreateTranslationsAnyExpression<TTranslationEntity>(translationsPropertyExpression, null);
 
         // src.Translations.Any() == false
@@ -180,7 +180,7 @@ public static class MultiLanguageExtensions
             var isDeletedProperty = Expression.Property(translationEntityParameter, nameof(ISoftDeletable.IsDeleted));
             var isDeletedFalseExpression = Expression.Equal(isDeletedProperty, Expression.Constant(false));
 
-            // Eğer predicateExpression zaten varsa, bunu AndAlso ile birleştir
+            // Combine with and also
             predicateExpression = predicateExpression != null
                 ? Expression.AndAlso(predicateExpression, isDeletedFalseExpression)
                 : isDeletedFalseExpression;
