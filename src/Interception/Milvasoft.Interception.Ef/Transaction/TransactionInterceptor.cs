@@ -43,7 +43,7 @@ public partial class TransactionInterceptor(IServiceProvider serviceProvider) : 
 
         await executionStrategy.ExecuteAsync(async () =>
         {
-            using var transaction = await context.Database.BeginTransactionAsync().ConfigureAwait(false);
+            using var transaction = context.Database.CurrentTransaction ?? await context.Database.BeginTransactionAsync().ConfigureAwait(false);
 
             try
             {
