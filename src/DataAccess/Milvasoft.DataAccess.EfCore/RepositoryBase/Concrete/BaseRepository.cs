@@ -898,6 +898,8 @@ public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepositor
     {
         Expression<Func<TEntity, TResult>> mainExpression;
 
+        projectionExpression = AppendTenantIdMappingProjection(projectionExpression);
+
         if (!_tempSoftDeletedFetching)
         {
             var appendedExpression = AppendSoftDeleteFilterToProjection(projectionExpression);
@@ -1082,6 +1084,19 @@ public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepositor
         var newBody = visitor.Visit(projection.Body);
 
         return Expression.Lambda<Func<TEntity, TResult>>(newBody, projection.Parameters);
+    }
+
+    private static Expression<Func<TEntity, TResult>> AppendTenantIdMappingProjection<TResult>(Expression<Func<TEntity, TResult>> projection)
+    {
+        if (projection is null)
+            return null;
+
+        if (projection.Parameters.FirstOrDefault() == null)
+            return projection;
+
+        var visitor = new TenantIdMappingVisitor(projection.Parameters[0]);
+
+        return (Expression<Func<TEntity, TResult>>)visitor.Visit(projection);
     }
 
     #endregion

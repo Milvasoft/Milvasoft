@@ -2155,6 +2155,79 @@ public class BaseRepositoryAsyncTests(CustomWebApplicationFactory factory) : Dat
     [InlineData(QueryTrackingBehavior.NoTrackingWithIdentityResolution)]
     [InlineData(QueryTrackingBehavior.NoTracking)]
     [InlineData(QueryTrackingBehavior.TrackAll)]
+    public async Task GetAllAsync_WithHasTenantIdEntityListRequestAndConditionAndProjection_ShouldReturnCorrectResult(QueryTrackingBehavior queryTrackingBehavior)
+    {
+        // Arrange
+        await InitializeAsync(services =>
+        {
+            services.ConfigureMilvaDataAccess();
+
+            services.AddDbContext<MilvaBulkDbContextFixture>(x =>
+                        {
+                            x.ConfigureWarnings(warnings => { warnings.Log(RelationalEventId.PendingModelChangesWarning); });
+                            x.UseNpgsql(_factory.GetConnectionString()).UseQueryTrackingBehavior(queryTrackingBehavior);
+                        });
+        });
+
+        var dbContext = _serviceProvider.GetService<MilvaBulkDbContextFixture>();
+        var entityRepository = _serviceProvider.GetService<ISomeGenericRepository<SomeMultiTenantTestEntityFixture>>();
+        var entities = new List<SomeMultiTenantTestEntityFixture>
+        {
+            new() {
+                Id = 1,
+                SomeDateProp = DateTime.Now.AddYears(1),
+                SomeDecimalProp = 10M,
+                TenantId = new Core.EntityBases.MultiTenancy.TenantId("milva_1")
+            },
+            new() {
+                Id = 2,
+                SomeDateProp = DateTime.Now.AddYears(2),
+                SomeDecimalProp = 20M,
+                TenantId = new Core.EntityBases.MultiTenancy.TenantId("milva_1")
+            },
+            new() {
+                Id = 3,
+                SomeDateProp = DateTime.Now.AddYears(3),
+                SomeDecimalProp = 30M,
+                TenantId = new Core.EntityBases.MultiTenancy.TenantId("milva_1")
+            },
+            new() {
+                Id = 4,
+                SomeDateProp = DateTime.Now.AddYears(4),
+                SomeDecimalProp = 40M,
+                DeletionDate = DateTime.Now.AddDays(4).AddYears(4),
+                TenantId = new Core.EntityBases.MultiTenancy.TenantId("milva_1"),
+                IsDeleted = true,
+            }
+        };
+
+        await dbContext.SomeMultiTenantEntities.AddRangeAsync(entities);
+        await dbContext.SaveChangesAsync();
+        var listRequest = new ListRequest
+        {
+            PageNumber = 1,
+            RowCount = 2,
+        };
+
+        // Act 
+        var result = await entityRepository.GetAllAsync(listRequest, i => i.SomeDecimalProp > 10M, i => new SomeMultiTenantTestEntityFixture
+        {
+            Id = i.Id,
+            SomeDecimalProp = i.SomeDecimalProp,
+            CreationDate = i.CreationDate,
+        });
+
+        // Assert
+        result.Should().NotBeNull();
+        result.Data.Should().HaveCount(2);
+        result.Data[0].TenantId.Should().Be(new Core.EntityBases.MultiTenancy.TenantId("milva_1"));
+        result.Data[1].TenantId.Should().Be(new Core.EntityBases.MultiTenancy.TenantId("milva_1"));
+    }
+
+    [Theory]
+    [InlineData(QueryTrackingBehavior.NoTrackingWithIdentityResolution)]
+    [InlineData(QueryTrackingBehavior.NoTracking)]
+    [InlineData(QueryTrackingBehavior.TrackAll)]
     public async Task GetAllAsync_WithListRequestAndConditionAndProjectionAndConditionAfterProjection_ShouldReturnCorrectResult(QueryTrackingBehavior queryTrackingBehavior)
     {
         // Arrange

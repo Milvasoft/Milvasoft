@@ -26,6 +26,7 @@ public class MilvaBulkDbContextFixture(DbContextOptions<MilvaBulkDbContextFixtur
     public DbSet<SomeModelBuilderTestKeylessEntityFixture> ModelBuilderTestKeylessEntities { get; set; }
     public DbSet<SomeLogEntity> SomeLogEntities { get; set; }
     public DbSet<SomeTenantEntity> SomeTenantEntities { get; set; }
+    public DbSet<SomeMultiTenantTestEntityFixture> SomeMultiTenantEntities { get; set; }
     public DbSet<HasJsonTranslationEntityFixture> HasJsonTranslationEntities { get; set; }
 }
 
