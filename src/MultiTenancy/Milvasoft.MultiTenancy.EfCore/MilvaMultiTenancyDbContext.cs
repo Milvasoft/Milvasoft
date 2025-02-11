@@ -49,7 +49,7 @@ public class MilvaMultiTenancyDbContext(DbContextOptions options) : MilvaBulkDbC
     {
         foreach (var entry in ChangeTracker.Entries().Where(e => e.Metadata.ClrType.IsAssignableTo(typeof(IHasTenantId))))
         {
-            if (entry.State == EntityState.Added)
+            if (entry.State == EntityState.Added || entry.State == EntityState.Modified)
                 entry.Property(EntityPropertyNames.TenantId).CurrentValue = CurrentTenantId;
         }
 
