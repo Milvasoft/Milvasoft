@@ -1,5 +1,6 @@
 ﻿using Fody;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.DependencyInjection;
 using Milvasoft.Interception.Decorator;
 
@@ -43,19 +44,38 @@ public partial class TransactionInterceptor(IServiceProvider serviceProvider) : 
 
         await executionStrategy.ExecuteAsync(async () =>
         {
-            using var transaction = context.Database.CurrentTransaction ?? await context.Database.BeginTransactionAsync().ConfigureAwait(false);
+            // In nested uses, transactions are shared. In such cases, it determines which transaction will be completed after the commit process is completed.
+            bool isTransactionStarter = false;
+
+            IDbContextTransaction transaction = null;
+
+            if (context.Database.CurrentTransaction == null)
+            {
+                transaction = await context.Database.BeginTransactionAsync().ConfigureAwait(false);
+                isTransactionStarter = true;
+            }
+            else
+            {
+                transaction = context.Database.CurrentTransaction;
+            }
 
             try
             {
                 await call.NextAsync();
 
-                if (transaction != null)
+                if (transaction != null && isTransactionStarter)
+                {
                     await transaction.CommitAsync().ConfigureAwait(false);
+                    await transaction.DisposeAsync();
+                }
             }
             catch (Exception)
             {
                 if (transaction != null)
+                {
                     await transaction.RollbackAsync().ConfigureAwait(false);
+                    await transaction.DisposeAsync();
+                }
 
                 throw;
             }
