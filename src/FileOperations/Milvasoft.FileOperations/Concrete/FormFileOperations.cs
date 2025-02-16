@@ -603,7 +603,7 @@ public static partial class FormFileOperations
     /// </summary>
     /// <param name="fileType"></param>
     /// <returns></returns>
-    private static List<string> GetDefaultFileExtensions(FileType fileType) => new Dictionary<FileType, string>
+    private static List<string> GetDefaultFileExtensions(FileType fileType) => [.. new Dictionary<FileType, string>
     {
        {FileType.Image, ".ai"},                {FileType.Video, ".3g2"},             {FileType.Audio, ".aif"},                       {FileType.EMail, ".email"},
        {FileType.Image, ".bmp"},               {FileType.Video, ".3gp"},             {FileType.Audio, ".cda"},                       {FileType.EMail, ".eml"},
@@ -635,7 +635,7 @@ public static partial class FormFileOperations
        {FileType.Document, ".ppt"},
        {FileType.Document, ".pptx"},
 
-    }.ToLookup(i => i.Key, i => i.Value).Where(i => i.Key == fileType).Select(i => i.First()).ToList();
+    }.ToLookup(i => i.Key, i => i.Value).Where(i => i.Key == fileType).Select(i => i.First())];
 
     /// <summary>
     /// URL-encodes illegal characters but not reserved characters.

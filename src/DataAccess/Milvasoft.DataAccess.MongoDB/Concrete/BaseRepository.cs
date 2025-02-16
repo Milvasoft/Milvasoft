@@ -624,7 +624,7 @@ public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : 
     {
         List<string> queries = [];
 
-        var propertyNames = projectExpressions.IsNullOrEmpty() ? typeof(TEmbedded).GetProperties().Select(p => p.Name).ToList() : projectExpressions.Select(e => e.GetPropertyName()).ToList();
+        var propertyNames = projectExpressions.IsNullOrEmpty() ? typeof(TEmbedded).GetProperties().Select(p => p.Name).ToList() : [.. projectExpressions.Select(e => e.GetPropertyName())];
         propertyNames.Remove(EntityPropertyNames.Id);
         var queryProp = GetUnwindType();
         queries.Add($"_id:'{queryProp}._id'");

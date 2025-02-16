@@ -374,7 +374,7 @@ public class ResponseMetadataGenerator(IResponseInterceptionOptions responseInte
     /// <returns>The user-friendly name of the property.</returns>
     private static string GetPropertyFriendlyName(Type propertyType)
         => propertyType.IsGenericType
-               ? $"{propertyType.Name.Remove(propertyType.Name.IndexOf('`'))}.{string.Join(',', propertyType.GetGenericArguments().Select(GetPropertyFriendlyName))}"
+               ? $"{propertyType.Name[..propertyType.Name.IndexOf('`')]}.{string.Join(',', propertyType.GetGenericArguments().Select(GetPropertyFriendlyName))}"
                : $"{GetTypePrefix(propertyType)}{propertyType.Name}";
 
     private static string GetTypePrefix(Type propertyType)

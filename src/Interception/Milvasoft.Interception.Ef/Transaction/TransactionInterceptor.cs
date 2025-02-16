@@ -21,21 +21,7 @@ public partial class TransactionInterceptor(IServiceProvider serviceProvider) : 
     /// <inheritdoc/>
     public async Task OnInvoke(Call call)
     {
-        var transactionAttribute = call.GetInterceptorAttribute<TransactionAttribute>();
-
-        DbContext context = null;
-
-        if (!transactionAttribute.GetDbContextFromServiceProvider)
-        {
-            if (call.MethodImplementation.DeclaringType.IsAssignableFrom(typeof(ICanRetrieveDbContext)))
-            {
-                var canRetrieveDbContext = call.MethodImplementation.DeclaringType as ICanRetrieveDbContext;
-
-                context = canRetrieveDbContext.GetDbContext(_transactionInterceptionOptions.GetDbContextType());
-            }
-        }
-        else
-            context = _serviceProvider.GetService(_transactionInterceptionOptions.GetDbContextType()) as DbContext;
+        DbContext context = GetDbContext(call);
 
         if (context == null)
             await call.NextAsync();
@@ -71,7 +57,7 @@ public partial class TransactionInterceptor(IServiceProvider serviceProvider) : 
             }
             catch (Exception)
             {
-                if (transaction != null)
+                if (transaction != null && isTransactionStarter)
                 {
                     await transaction.RollbackAsync().ConfigureAwait(false);
                     await transaction.DisposeAsync();
@@ -80,5 +66,24 @@ public partial class TransactionInterceptor(IServiceProvider serviceProvider) : 
                 throw;
             }
         });
+    }
+
+    private DbContext GetDbContext(Call call)
+    {
+        var transactionAttribute = call.GetInterceptorAttribute<TransactionAttribute>();
+
+        if (!transactionAttribute.GetDbContextFromServiceProvider)
+        {
+            if (call.MethodImplementation.DeclaringType.IsAssignableFrom(typeof(ICanRetrieveDbContext)))
+            {
+                var canRetrieveDbContext = call.MethodImplementation.DeclaringType as ICanRetrieveDbContext;
+
+                return canRetrieveDbContext.GetDbContext(_transactionInterceptionOptions.GetDbContextType());
+            }
+        }
+        else
+            return _serviceProvider.GetService(_transactionInterceptionOptions.GetDbContextType()) as DbContext;
+
+        return null;
     }
 }

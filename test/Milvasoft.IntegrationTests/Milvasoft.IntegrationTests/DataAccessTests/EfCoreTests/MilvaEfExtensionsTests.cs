@@ -739,7 +739,7 @@ public class MilvaEfExtensionsTests(CustomWebApplicationFactory factory) : DataA
         //6 - aggregation, filtering, sorting and pagination requested
         var response6Data = validList.ToList();
         response6Data.RemoveAll(i => i.Name == null);
-        response6Data = response6Data.OrderByDescending(i => i.Id).Skip(0).Take(2).ToList();
+        response6Data = [.. response6Data.OrderByDescending(i => i.Id).Skip(0).Take(2)];
         var response6 = ListResponse<RestTestEntityFixture>.Success([.. response6Data], LocalizerKeys.Successful, 1, 2, 4);
         response6.AggregationResults =
         [

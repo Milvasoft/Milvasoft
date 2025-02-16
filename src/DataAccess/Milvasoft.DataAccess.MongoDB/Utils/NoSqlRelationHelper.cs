@@ -307,7 +307,7 @@ public static class NoSqlRelationHelper
                 embeddedProperties.Add(embeddedProperty);
         }
 
-        return embeddedProperties.SelectMany(p => p).ToList();
+        return [.. embeddedProperties.SelectMany(p => p)];
     }
 
     /// <summary>

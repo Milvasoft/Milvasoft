@@ -60,7 +60,7 @@ public static class InterceptionServiceCollectionExtensions
 
         var externalTypes = builder.Services?.Where(i => i.ImplementationType?.GetInterfaces() != null && Array.Exists(i.ImplementationType.GetInterfaces(), t => t == typeof(IInterceptable))).Select(i => i.ServiceType);
 
-        types = types.Concat(externalTypes).Distinct().ToList();
+        types = [.. types.Concat(externalTypes).Distinct()];
 
         builder.WithDefaultInterceptorRunner();
 

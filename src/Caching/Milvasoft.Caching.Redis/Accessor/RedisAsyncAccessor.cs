@@ -160,7 +160,7 @@ public partial class RedisAccessor
     /// </summary>
     /// <param name="keys"></param>
     public async Task<long> RemoveAsync(IEnumerable<string> keys)
-        => await _database.KeyDeleteAsync(keys: keys.Select(i => new RedisKey(i)).ToArray());
+        => await _database.KeyDeleteAsync(keys: [.. keys.Select(i => new RedisKey(i))]);
 
     /// <summary>
     /// Checks if there is a <paramref name="key"/> in database. 
