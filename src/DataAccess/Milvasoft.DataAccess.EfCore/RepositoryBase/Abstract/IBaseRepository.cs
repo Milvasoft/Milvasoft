@@ -80,11 +80,13 @@ public interface IBaseRepository<TEntity> where TEntity : class, IMilvaEntity
     /// Returns first entity or default value which IsDeleted condition is true from database asynchronously. If the condition is requested, it also provides that condition.
     /// </summary>
     /// <param name="tracking"></param>
+    /// <param name="splitQuery"></param>
     /// <param name="condition"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
     Task<TEntity> GetFirstOrDefaultAsync(Expression<Func<TEntity, bool>> condition = null,
                                          bool tracking = false,
+                                         bool splitQuery = false,
                                          CancellationToken cancellationToken = default);
 
     /// <summary>
@@ -94,12 +96,14 @@ public interface IBaseRepository<TEntity> where TEntity : class, IMilvaEntity
     /// <param name="projection"></param>
     /// <param name="conditionAfterProjection"></param>
     /// <param name="tracking"></param>
+    /// <param name="splitQuery"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
     Task<TResult> GetFirstOrDefaultAsync<TResult>(Expression<Func<TEntity, bool>> condition = null,
                                                   Expression<Func<TEntity, TResult>> projection = null,
                                                   Expression<Func<TResult, bool>> conditionAfterProjection = null,
                                                   bool tracking = false,
+                                                  bool splitQuery = false,
                                                   CancellationToken cancellationToken = default);
 
     #endregion
@@ -110,11 +114,13 @@ public interface IBaseRepository<TEntity> where TEntity : class, IMilvaEntity
     /// Returns single entity or default value which IsDeleted condition is true from database asynchronously. If the condition is requested, it also provides that condition.
     /// </summary>
     /// <param name="tracking"></param>
+    /// <param name="splitQuery"></param>
     /// <param name="condition"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
     Task<TEntity> GetSingleOrDefaultAsync(Expression<Func<TEntity, bool>> condition = null,
                                           bool tracking = false,
+                                          bool splitQuery = false,
                                           CancellationToken cancellationToken = default);
 
     /// <summary>
@@ -124,12 +130,14 @@ public interface IBaseRepository<TEntity> where TEntity : class, IMilvaEntity
     /// <param name="projection"></param>
     /// <param name="conditionAfterProjection"></param>
     /// <param name="tracking"></param>
+    /// <param name="splitQuery"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
     Task<TResult> GetSingleOrDefaultAsync<TResult>(Expression<Func<TEntity, bool>> condition = null,
                                                    Expression<Func<TEntity, TResult>> projection = null,
                                                    Expression<Func<TResult, bool>> conditionAfterProjection = null,
                                                    bool tracking = false,
+                                                   bool splitQuery = false,
                                                    CancellationToken cancellationToken = default);
 
     #endregion
@@ -142,11 +150,13 @@ public interface IBaseRepository<TEntity> where TEntity : class, IMilvaEntity
     /// <param name="id"></param>
     /// <param name="conditionExpression"></param>
     /// <param name="tracking"></param>
+    /// <param name="splitQuery"></param>
     /// <param name="cancellationToken"></param>
     /// <returns> The entity found or null. </returns>
     Task<TEntity> GetByIdAsync(object id,
                                Expression<Func<TEntity, bool>> conditionExpression = null,
                                bool tracking = false,
+                               bool splitQuery = false,
                                CancellationToken cancellationToken = new CancellationToken());
 
     /// <summary>
@@ -157,6 +167,7 @@ public interface IBaseRepository<TEntity> where TEntity : class, IMilvaEntity
     /// <param name="conditionAfterProjection"></param>
     /// <param name="projection"></param>
     /// <param name="tracking"></param>
+    /// <param name="splitQuery"></param>
     /// <param name="cancellationToken"></param>
     /// <returns> The entity found or null. </returns>
     Task<TResult> GetByIdAsync<TResult>(object id,
@@ -164,6 +175,7 @@ public interface IBaseRepository<TEntity> where TEntity : class, IMilvaEntity
                                         Expression<Func<TEntity, TResult>> projection = null,
                                         Expression<Func<TResult, bool>> conditionAfterProjection = null,
                                         bool tracking = false,
+                                        bool splitQuery = false,
                                         CancellationToken cancellationToken = new CancellationToken());
 
     #endregion
@@ -178,12 +190,14 @@ public interface IBaseRepository<TEntity> where TEntity : class, IMilvaEntity
     /// <param name="includes"></param>
     /// <param name="condition"></param>
     /// <param name="tracking"></param>
+    /// <param name="splitQuery"></param>
     /// <param name="cancellationToken"></param>
     /// <returns> The entity found or null. </returns>
     Task<TEntity> GetForDeleteAsync(object id,
                                     Func<IIncludable<TEntity>, IIncludable> includes = null,
                                     Expression<Func<TEntity, bool>> condition = null,
                                     bool tracking = false,
+                                    bool splitQuery = false,
                                     CancellationToken cancellationToken = new CancellationToken());
 
     /// <summary>
@@ -196,6 +210,7 @@ public interface IBaseRepository<TEntity> where TEntity : class, IMilvaEntity
     /// <param name="conditionAfterProjection"></param>
     /// <param name="projection"></param>
     /// <param name="tracking"></param>
+    /// <param name="splitQuery"></param>
     /// <param name="cancellationToken"></param>
     /// <returns> The entity found or null. </returns>
     Task<TResult> GetForDeleteAsync<TResult>(object id,
@@ -204,6 +219,7 @@ public interface IBaseRepository<TEntity> where TEntity : class, IMilvaEntity
                                              Expression<Func<TEntity, TResult>> projection = null,
                                              Expression<Func<TResult, bool>> conditionAfterProjection = null,
                                              bool tracking = false,
+                                             bool splitQuery = false,
                                              CancellationToken cancellationToken = new CancellationToken());
 
     /// <summary>
@@ -213,11 +229,13 @@ public interface IBaseRepository<TEntity> where TEntity : class, IMilvaEntity
     /// <param name="includes"></param>
     /// <param name="condition"></param>
     /// <param name="tracking"></param>
+    /// <param name="splitQuery"></param>
     /// <param name="cancellationToken"></param>
     /// <returns> The entity found or null. </returns>
     Task<List<TEntity>> GetForDeleteAsync(Func<IIncludable<TEntity>, IIncludable> includes = null,
                                           Expression<Func<TEntity, bool>> condition = null,
                                           bool tracking = false,
+                                          bool splitQuery = false,
                                           CancellationToken cancellationToken = default);
 
     /// <summary>
@@ -229,6 +247,7 @@ public interface IBaseRepository<TEntity> where TEntity : class, IMilvaEntity
     /// <param name="conditionAfterProjection"></param>
     /// <param name="projection"></param>
     /// <param name="tracking"></param>
+    /// <param name="splitQuery"></param>
     /// <param name="cancellationToken"></param>
     /// <returns> The entity found or null. </returns>
     Task<List<TResult>> GetForDeleteAsync<TResult>(Func<IIncludable<TEntity>, IIncludable> includes = null,
@@ -236,6 +255,7 @@ public interface IBaseRepository<TEntity> where TEntity : class, IMilvaEntity
                                                    Expression<Func<TEntity, TResult>> projection = null,
                                                    Expression<Func<TResult, bool>> conditionAfterProjection = null,
                                                    bool tracking = false,
+                                                   bool splitQuery = false,
                                                    CancellationToken cancellationToken = default);
 
     #endregion
@@ -247,12 +267,14 @@ public interface IBaseRepository<TEntity> where TEntity : class, IMilvaEntity
     /// </summary>
     /// <param name="listRequest"></param>
     /// <param name="tracking"></param>
+    /// <param name="splitQuery"></param>
     /// <param name="conditionExpression"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
     Task<ListResponse<TEntity>> GetAllAsync(ListRequest listRequest,
                                             Expression<Func<TEntity, bool>> conditionExpression = null,
                                             bool tracking = false,
+                                            bool splitQuery = false,
                                             CancellationToken cancellationToken = default);
 
     /// <summary>
@@ -264,6 +286,7 @@ public interface IBaseRepository<TEntity> where TEntity : class, IMilvaEntity
     /// <param name="conditionAfterProjection"></param>
     /// <param name="projection"></param>
     /// <param name="tracking"></param>
+    /// <param name="splitQuery"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
     Task<ListResponse<TResult>> GetAllAsync<TResult>(ListRequest listRequest,
@@ -271,17 +294,20 @@ public interface IBaseRepository<TEntity> where TEntity : class, IMilvaEntity
                                                      Expression<Func<TEntity, TResult>> projection = null,
                                                      Expression<Func<TResult, bool>> conditionAfterProjection = null,
                                                      bool tracking = false,
+                                                     bool splitQuery = false,
                                                      CancellationToken cancellationToken = default) where TResult : class;
 
     /// <summary>
     /// Returns entities which IsDeleted condition is true from database asynchronously. If the condition is requested, it also provides that condition.
     /// </summary>
     /// <param name="tracking"></param>
+    /// <param name="splitQuery"></param>
     /// <param name="conditionExpression"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
     Task<List<TEntity>> GetAllAsync(Expression<Func<TEntity, bool>> conditionExpression = null,
                                     bool tracking = false,
+                                    bool splitQuery = false,
                                     CancellationToken cancellationToken = default);
 
     /// <summary>
@@ -292,12 +318,14 @@ public interface IBaseRepository<TEntity> where TEntity : class, IMilvaEntity
     /// <param name="conditionAfterProjection"></param>
     /// <param name="projection"></param>
     /// <param name="tracking"></param>
+    /// <param name="splitQuery"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
     Task<List<TResult>> GetAllAsync<TResult>(Expression<Func<TEntity, bool>> condition = null,
                                              Expression<Func<TEntity, TResult>> projection = null,
                                              Expression<Func<TResult, bool>> conditionAfterProjection = null,
                                              bool tracking = false,
+                                             bool splitQuery = false,
                                              CancellationToken cancellationToken = default) where TResult : class;
 
     #endregion
@@ -309,12 +337,14 @@ public interface IBaseRepository<TEntity> where TEntity : class, IMilvaEntity
     /// </summary>
     /// <param name="count"></param>
     /// <param name="tracking"></param>
+    /// <param name="splitQuery"></param>
     /// <param name="conditionExpression"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
     Task<List<TEntity>> GetSomeAsync(int count,
                                      Expression<Func<TEntity, bool>> conditionExpression = null,
                                      bool tracking = false,
+                                     bool splitQuery = false,
                                      CancellationToken cancellationToken = default);
 
     /// <summary>
@@ -324,6 +354,7 @@ public interface IBaseRepository<TEntity> where TEntity : class, IMilvaEntity
     /// <param name="condition"></param>
     /// <param name="projection"></param>
     /// <param name="tracking"></param>
+    /// <param name="splitQuery"></param>
     /// <param name="conditionAfterProjection"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
@@ -332,6 +363,7 @@ public interface IBaseRepository<TEntity> where TEntity : class, IMilvaEntity
                                               Expression<Func<TEntity, TResult>> projection = null,
                                               Expression<Func<TResult, bool>> conditionAfterProjection = null,
                                               bool tracking = false,
+                                              bool splitQuery = false,
                                               CancellationToken cancellationToken = default);
 
     #endregion
@@ -500,9 +532,10 @@ public interface IBaseRepository<TEntity> where TEntity : class, IMilvaEntity
     /// Returns first entity or default value which IsDeleted condition is true from database synchronously. If the condition is requested, it also provides that condition.
     /// </summary>
     /// <param name="tracking"></param>
+    /// <param name="splitQuery"></param>
     /// <param name="condition"></param>
     /// <returns></returns>
-    TEntity GetFirstOrDefault(Expression<Func<TEntity, bool>> condition = null, bool tracking = false);
+    TEntity GetFirstOrDefault(Expression<Func<TEntity, bool>> condition = null, bool tracking = false, bool splitQuery = false);
 
     /// <summary>
     /// Returns first entity or default value which IsDeleted condition is true from database synchronously. If the condition is requested, it also provides that condition.
@@ -511,11 +544,13 @@ public interface IBaseRepository<TEntity> where TEntity : class, IMilvaEntity
     /// <param name="projection"></param>
     /// <param name="conditionAfterProjection"></param>
     /// <param name="tracking"></param>
+    /// <param name="splitQuery"></param>
     /// <returns></returns>
     TResult GetFirstOrDefault<TResult>(Expression<Func<TEntity, bool>> condition = null,
                                        Expression<Func<TEntity, TResult>> projection = null,
                                        Expression<Func<TResult, bool>> conditionAfterProjection = null,
-                                       bool tracking = false);
+                                       bool tracking = false,
+                                       bool splitQuery = false);
 
     #endregion
 
@@ -525,9 +560,10 @@ public interface IBaseRepository<TEntity> where TEntity : class, IMilvaEntity
     /// Returns single entity or default value which IsDeleted condition is true from database synchronously. If the condition is requested, it also provides that condition.
     /// </summary>
     /// <param name="tracking"></param>
+    /// <param name="splitQuery"></param>
     /// <param name="condition"></param>
     /// <returns></returns>
-    TEntity GetSingleOrDefault(Expression<Func<TEntity, bool>> condition = null, bool tracking = false);
+    TEntity GetSingleOrDefault(Expression<Func<TEntity, bool>> condition = null, bool tracking = false, bool splitQuery = false);
 
     /// <summary>
     /// Returns single entity or default value which IsDeleted condition is true from database synchronously. If the condition is requested, it also provides that condition.
@@ -536,11 +572,13 @@ public interface IBaseRepository<TEntity> where TEntity : class, IMilvaEntity
     /// <param name="projection"></param>
     /// <param name="conditionAfterProjection"></param>
     /// <param name="tracking"></param>
+    /// <param name="splitQuery"></param>
     /// <returns></returns>
     TResult GetSingleOrDefault<TResult>(Expression<Func<TEntity, bool>> condition = null,
                                         Expression<Func<TEntity, TResult>> projection = null,
                                         Expression<Func<TResult, bool>> conditionAfterProjection = null,
-                                        bool tracking = false);
+                                        bool tracking = false,
+                                        bool splitQuery = false);
 
     #endregion
 
@@ -552,10 +590,12 @@ public interface IBaseRepository<TEntity> where TEntity : class, IMilvaEntity
     /// <param name="id"></param>
     /// <param name="conditionExpression"></param>
     /// <param name="tracking"></param>
+    /// <param name="splitQuery"></param>
     /// <returns> The entity found or null. </returns>
     TEntity GetById(object id,
                     Expression<Func<TEntity, bool>> conditionExpression = null,
-                    bool tracking = false);
+                    bool tracking = false,
+                    bool splitQuery = false);
 
     /// <summary>
     /// Returns one entity by entity Id from database synchronously.
@@ -565,12 +605,14 @@ public interface IBaseRepository<TEntity> where TEntity : class, IMilvaEntity
     /// <param name="conditionAfterProjection"></param>
     /// <param name="projection"></param>
     /// <param name="tracking"></param>
+    /// <param name="splitQuery"></param>
     /// <returns> The entity found or null. </returns>
     TResult GetById<TResult>(object id,
                              Expression<Func<TEntity, bool>> condition = null,
                              Expression<Func<TEntity, TResult>> projection = null,
                              Expression<Func<TResult, bool>> conditionAfterProjection = null,
-                             bool tracking = false);
+                             bool tracking = false,
+                             bool splitQuery = false);
 
     #endregion
 
@@ -584,11 +626,13 @@ public interface IBaseRepository<TEntity> where TEntity : class, IMilvaEntity
     /// <param name="includes"></param>
     /// <param name="condition"></param>
     /// <param name="tracking"></param>
+    /// <param name="splitQuery"></param>
     /// <returns> The entity found or null. </returns>
     TEntity GetForDelete(object id,
                          Func<IIncludable<TEntity>, IIncludable> includes = null,
                          Expression<Func<TEntity, bool>> condition = null,
-                         bool tracking = false);
+                         bool tracking = false,
+                         bool splitQuery = false);
 
     /// <summary>
     /// Returns one entity by entity Id from database asynchronously for delete with navigation properties.
@@ -600,13 +644,15 @@ public interface IBaseRepository<TEntity> where TEntity : class, IMilvaEntity
     /// <param name="conditionAfterProjection"></param>
     /// <param name="projection"></param>
     /// <param name="tracking"></param>
+    /// <param name="splitQuery"></param>
     /// <returns> The entity found or null. </returns>
     TResult GetForDelete<TResult>(object id,
                                   Func<IIncludable<TEntity>, IIncludable> includes = null,
                                   Expression<Func<TEntity, bool>> condition = null,
                                   Expression<Func<TEntity, TResult>> projection = null,
                                   Expression<Func<TResult, bool>> conditionAfterProjection = null,
-                                  bool tracking = false);
+                                  bool tracking = false,
+                                  bool splitQuery = false);
 
     /// <summary>
     /// Returns entities from database asynchronously for delete with navigation properties.
@@ -615,10 +661,12 @@ public interface IBaseRepository<TEntity> where TEntity : class, IMilvaEntity
     /// <param name="includes"></param>
     /// <param name="condition"></param>
     /// <param name="tracking"></param>
+    /// <param name="splitQuery"></param>
     /// <returns> The entity found or null. </returns>
     List<TEntity> GetForDelete(Func<IIncludable<TEntity>, IIncludable> includes = null,
                                Expression<Func<TEntity, bool>> condition = null,
-                               bool tracking = false);
+                               bool tracking = false,
+                               bool splitQuery = false);
 
     /// <summary>
     /// Returns entities from database asynchronously for delete with navigation properties.
@@ -629,12 +677,14 @@ public interface IBaseRepository<TEntity> where TEntity : class, IMilvaEntity
     /// <param name="conditionAfterProjection"></param>
     /// <param name="projection"></param>
     /// <param name="tracking"></param>
+    /// <param name="splitQuery"></param>
     /// <returns> The entity found or null. </returns>
     List<TResult> GetForDelete<TResult>(Func<IIncludable<TEntity>, IIncludable> includes = null,
                                         Expression<Func<TEntity, bool>> condition = null,
                                         Expression<Func<TEntity, TResult>> projection = null,
                                         Expression<Func<TResult, bool>> conditionAfterProjection = null,
-                                        bool tracking = false);
+                                        bool tracking = false,
+                                        bool splitQuery = false);
 
     #endregion
 
@@ -645,11 +695,13 @@ public interface IBaseRepository<TEntity> where TEntity : class, IMilvaEntity
     /// </summary>
     /// <param name="listRequest"></param>
     /// <param name="tracking"></param>
+    /// <param name="splitQuery"></param>
     /// <param name="conditionExpression"></param>
     /// <returns></returns>
     ListResponse<TEntity> GetAll(ListRequest listRequest,
                                  Expression<Func<TEntity, bool>> conditionExpression = null,
-                                 bool tracking = false);
+                                 bool tracking = false,
+                                 bool splitQuery = false);
 
     /// <summary>
     /// Returns all entities which IsDeleted condition is true from database synchronously. If the condition is requested, it also provides that condition.
@@ -660,20 +712,23 @@ public interface IBaseRepository<TEntity> where TEntity : class, IMilvaEntity
     /// <param name="conditionAfterProjection"></param>
     /// <param name="projection"></param>
     /// <param name="tracking"></param>
+    /// <param name="splitQuery"></param>
     /// <returns></returns>
     ListResponse<TResult> GetAll<TResult>(ListRequest listRequest,
                                           Expression<Func<TEntity, bool>> condition = null,
                                           Expression<Func<TEntity, TResult>> projection = null,
                                           Expression<Func<TResult, bool>> conditionAfterProjection = null,
-                                          bool tracking = false) where TResult : class;
+                                          bool tracking = false,
+                                          bool splitQuery = false) where TResult : class;
 
     /// <summary>
     /// Returns entities which IsDeleted condition is true from database synchronously. If the condition is requested, it also provides that condition.
     /// </summary>
     /// <param name="tracking"></param>
+    /// <param name="splitQuery"></param>
     /// <param name="conditionExpression"></param>
     /// <returns></returns>
-    List<TEntity> GetAll(Expression<Func<TEntity, bool>> conditionExpression = null, bool tracking = false);
+    List<TEntity> GetAll(Expression<Func<TEntity, bool>> conditionExpression = null, bool tracking = false, bool splitQuery = false);
 
     /// <summary>
     /// Returns all entities which IsDeleted condition is true from database synchronously. If the condition is requested, it also provides that condition.
@@ -683,11 +738,13 @@ public interface IBaseRepository<TEntity> where TEntity : class, IMilvaEntity
     /// <param name="conditionAfterProjection"></param>
     /// <param name="projection"></param>
     /// <param name="tracking"></param>
+    /// <param name="splitQuery"></param>
     /// <returns></returns>
     List<TResult> GetAll<TResult>(Expression<Func<TEntity, bool>> condition = null,
                                   Expression<Func<TEntity, TResult>> projection = null,
                                   Expression<Func<TResult, bool>> conditionAfterProjection = null,
-                                  bool tracking = false) where TResult : class;
+                                  bool tracking = false,
+                                  bool splitQuery = false) where TResult : class;
 
     #endregion
 
@@ -698,11 +755,13 @@ public interface IBaseRepository<TEntity> where TEntity : class, IMilvaEntity
     /// </summary>
     /// <param name="count"></param>
     /// <param name="tracking"></param>
+    /// <param name="splitQuery"></param>
     /// <param name="conditionExpression"></param>
     /// <returns></returns>
     List<TEntity> GetSome(int count,
                           Expression<Func<TEntity, bool>> conditionExpression = null,
-                          bool tracking = false);
+                          bool tracking = false,
+                          bool splitQuery = false);
 
     /// <summary>
     ///  Returns all entities which IsDeleted condition is true from database synchronously. If the condition is requested, it also provides that condition.
@@ -711,13 +770,15 @@ public interface IBaseRepository<TEntity> where TEntity : class, IMilvaEntity
     /// <param name="condition"></param>
     /// <param name="projection"></param>
     /// <param name="tracking"></param>
+    /// <param name="splitQuery"></param>
     /// <param name="conditionAfterProjection"></param>
     /// <returns></returns>
     List<TResult> GetSome<TResult>(int count,
                                    Expression<Func<TEntity, bool>> condition = null,
                                    Expression<Func<TEntity, TResult>> projection = null,
                                    Expression<Func<TResult, bool>> conditionAfterProjection = null,
-                                   bool tracking = false);
+                                   bool tracking = false,
+                                   bool splitQuery = false);
 
     #endregion
 

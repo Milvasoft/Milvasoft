@@ -140,14 +140,15 @@ public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepositor
     /// Returns first entity or default value which IsDeleted condition is true from database asynchronously. If the condition is requested, it also provides that condition.
     /// </summary>
     /// <param name="tracking"></param>
+    /// <param name="splitQuery"></param>
     /// <param name="condition"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
     public virtual async Task<TEntity> GetFirstOrDefaultAsync(Expression<Func<TEntity, bool>> condition = null,
                                                               bool tracking = false,
+                                                              bool splitQuery = false,
                                                               CancellationToken cancellationToken = default)
-        => await _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
-                       .FirstOrDefaultAsync(CreateConditionExpression(condition) ?? (entity => true), cancellationToken);
+        => await QueryWithOptions(tracking, splitQuery).FirstOrDefaultAsync(CreateConditionExpression(condition) ?? (entity => true), cancellationToken);
 
     /// <summary>
     /// Returns first entity or default value which IsDeleted condition is true from database asynchronously. If the condition is requested, it also provides that condition.
@@ -156,14 +157,16 @@ public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepositor
     /// <param name="projection"></param>
     /// <param name="conditionAfterProjection"></param>
     /// <param name="tracking"></param>
+    /// <param name="splitQuery"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
     public virtual async Task<TResult> GetFirstOrDefaultAsync<TResult>(Expression<Func<TEntity, bool>> condition = null,
                                                                        Expression<Func<TEntity, TResult>> projection = null,
                                                                        Expression<Func<TResult, bool>> conditionAfterProjection = null,
                                                                        bool tracking = false,
+                                                                       bool splitQuery = false,
                                                                        CancellationToken cancellationToken = default)
-        => await _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
+        => await QueryWithOptions(tracking, splitQuery)
                        .Where(CreateConditionExpression(condition) ?? (entity => true))
                        .Select(UpdateProjectionExpression(projection))
                        .FirstOrDefaultAsync(conditionAfterProjection ?? (entity => true), cancellationToken);
@@ -175,14 +178,16 @@ public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepositor
     /// <summary>
     /// Returns single entity or default value which IsDeleted condition is true from database asynchronously. If the condition is requested, it also provides that condition.
     /// </summary>
-    /// <param name="tracking"></param>
     /// <param name="condition"></param>
+    /// <param name="tracking"></param>
+    /// <param name="splitQuery"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
     public virtual async Task<TEntity> GetSingleOrDefaultAsync(Expression<Func<TEntity, bool>> condition = null,
                                                                bool tracking = false,
+                                                               bool splitQuery = false,
                                                                CancellationToken cancellationToken = default)
-        => await _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
+        => await QueryWithOptions(tracking, splitQuery)
                        .SingleOrDefaultAsync(CreateConditionExpression(condition) ?? (entity => true), cancellationToken);
 
     /// <summary>
@@ -192,12 +197,14 @@ public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepositor
     /// <param name="projection"></param>
     /// <param name="conditionAfterProjection"></param>
     /// <param name="tracking"></param>
+    /// <param name="splitQuery"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
     public virtual async Task<TResult> GetSingleOrDefaultAsync<TResult>(Expression<Func<TEntity, bool>> condition = null,
                                                                         Expression<Func<TEntity, TResult>> projection = null,
                                                                         Expression<Func<TResult, bool>> conditionAfterProjection = null,
                                                                         bool tracking = false,
+                                                                        bool splitQuery = false,
                                                                         CancellationToken cancellationToken = default)
         => await _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
                        .Where(CreateConditionExpression(condition) ?? (entity => true))
@@ -214,17 +221,18 @@ public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepositor
     /// <param name="id"></param>
     /// <param name="conditionExpression"></param>
     /// <param name="tracking"></param>
+    /// <param name="splitQuery"></param>
     /// <param name="cancellationToken"></param>
     /// <returns> The entity found or null. </returns>
     public virtual async Task<TEntity> GetByIdAsync(object id,
                                                     Expression<Func<TEntity, bool>> conditionExpression = null,
                                                     bool tracking = false,
+                                                    bool splitQuery = false,
                                                     CancellationToken cancellationToken = default)
     {
         var mainCondition = CreateKeyEqualityExpressionWithIsDeletedFalse(id, conditionExpression);
 
-        return await _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
-                           .FirstOrDefaultAsync(mainCondition, cancellationToken);
+        return await QueryWithOptions(tracking, splitQuery).FirstOrDefaultAsync(mainCondition, cancellationToken);
     }
 
     /// <summary>
@@ -235,6 +243,7 @@ public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepositor
     /// <param name="conditionAfterProjection"></param>
     /// <param name="projection"></param>
     /// <param name="tracking"></param>
+    /// <param name="splitQuery"></param>
     /// <param name="cancellationToken"></param>
     /// <returns> The entity found or null. </returns>
     public virtual async Task<TResult> GetByIdAsync<TResult>(object id,
@@ -242,11 +251,12 @@ public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepositor
                                                              Expression<Func<TEntity, TResult>> projection = null,
                                                              Expression<Func<TResult, bool>> conditionAfterProjection = null,
                                                              bool tracking = false,
+                                                             bool splitQuery = false,
                                                              CancellationToken cancellationToken = default)
     {
         var mainCondition = CreateKeyEqualityExpressionWithIsDeletedFalse(id, condition);
 
-        return await _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
+        return await QueryWithOptions(tracking, splitQuery)
                            .Where(mainCondition)
                            .Select(UpdateProjectionExpression(projection))
                            .FirstOrDefaultAsync(conditionAfterProjection ?? (entity => true), cancellationToken);
@@ -264,18 +274,20 @@ public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepositor
     /// <param name="includes"></param>
     /// <param name="condition"></param>
     /// <param name="tracking"></param>
+    /// <param name="splitQuery"></param>
     /// <param name="cancellationToken"></param>
     /// <returns> The entity found or null. </returns>
     public virtual async Task<TEntity> GetForDeleteAsync(object id,
                                                          Func<IIncludable<TEntity>, IIncludable> includes = null,
                                                          Expression<Func<TEntity, bool>> condition = null,
                                                          bool tracking = false,
+                                                         bool splitQuery = false,
                                                          CancellationToken cancellationToken = default)
     {
         var mainCondition = CreateKeyEqualityExpressionWithIsDeletedFalse(id, condition);
 
         if (includes is not null)
-            return await _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
+            return await QueryWithOptions(tracking, splitQuery)
                                .Where(mainCondition)
                                .IncludeMultiple(includes)
                                .FirstOrDefaultAsync(cancellationToken);
@@ -295,6 +307,7 @@ public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepositor
     /// <param name="conditionAfterProjection"></param>
     /// <param name="projection"></param>
     /// <param name="tracking"></param>
+    /// <param name="splitQuery"></param>
     /// <param name="cancellationToken"></param>
     /// <returns> The entity found or null. </returns>
     public virtual async Task<TResult> GetForDeleteAsync<TResult>(object id,
@@ -303,18 +316,19 @@ public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepositor
                                                                   Expression<Func<TEntity, TResult>> projection = null,
                                                                   Expression<Func<TResult, bool>> conditionAfterProjection = null,
                                                                   bool tracking = false,
+                                                                  bool splitQuery = false,
                                                                   CancellationToken cancellationToken = default)
     {
         var mainCondition = CreateKeyEqualityExpressionWithIsDeletedFalse(id, condition);
 
         if (includes is not null)
-            return await _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
+            return await QueryWithOptions(tracking, splitQuery)
                                .Where(mainCondition)
                                .IncludeMultiple(includes)
                                .Select(UpdateProjectionExpression(projection))
                                .FirstOrDefaultAsync(conditionAfterProjection ?? (entity => true), cancellationToken);
 
-        var query = _dbSet.AsTracking(GetQueryTrackingBehavior(tracking)).Where(mainCondition);
+        var query = QueryWithOptions(tracking, splitQuery).Where(mainCondition);
 
         return await IncludeNavigationProperties(query).Select(UpdateProjectionExpression(projection))
                                                        .FirstOrDefaultAsync(conditionAfterProjection ?? (entity => true), cancellationToken);
@@ -327,20 +341,22 @@ public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepositor
     /// <param name="includes"></param>
     /// <param name="condition"></param>
     /// <param name="tracking"></param>
+    /// <param name="splitQuery"></param>
     /// <param name="cancellationToken"></param>
     /// <returns> The entity found or null. </returns>
     public virtual async Task<List<TEntity>> GetForDeleteAsync(Func<IIncludable<TEntity>, IIncludable> includes = null,
-                                                         Expression<Func<TEntity, bool>> condition = null,
-                                                         bool tracking = false,
-                                                         CancellationToken cancellationToken = default)
+                                                               Expression<Func<TEntity, bool>> condition = null,
+                                                               bool tracking = false,
+                                                               bool splitQuery = false,
+                                                               CancellationToken cancellationToken = default)
     {
         if (includes is not null)
-            return await _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
+            return await QueryWithOptions(tracking, splitQuery)
                                .Where(CreateConditionExpression(condition) ?? (entity => true))
                                .IncludeMultiple(includes)
                                .ToListAsync(cancellationToken);
 
-        var query = _dbSet.AsTracking(GetQueryTrackingBehavior(tracking)).Where(CreateConditionExpression(condition) ?? (entity => true));
+        var query = QueryWithOptions(tracking, splitQuery).Where(CreateConditionExpression(condition) ?? (entity => true));
 
         return await IncludeNavigationProperties(query).ToListAsync(cancellationToken);
     }
@@ -354,6 +370,7 @@ public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepositor
     /// <param name="conditionAfterProjection"></param>
     /// <param name="projection"></param>
     /// <param name="tracking"></param>
+    /// <param name="splitQuery"></param>
     /// <param name="cancellationToken"></param>
     /// <returns> The entity found or null. </returns>
     public virtual async Task<List<TResult>> GetForDeleteAsync<TResult>(Func<IIncludable<TEntity>, IIncludable> includes = null,
@@ -361,16 +378,17 @@ public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepositor
                                                                         Expression<Func<TEntity, TResult>> projection = null,
                                                                         Expression<Func<TResult, bool>> conditionAfterProjection = null,
                                                                         bool tracking = false,
+                                                                        bool splitQuery = false,
                                                                         CancellationToken cancellationToken = default)
     {
         if (includes is not null)
-            return await _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
+            return await QueryWithOptions(tracking, splitQuery)
                                .Where(CreateConditionExpression(condition) ?? (entity => true))
                                .IncludeMultiple(includes)
                                .Select(UpdateProjectionExpression(projection))
                                .ToListAsync(cancellationToken);
 
-        var query = _dbSet.AsTracking(GetQueryTrackingBehavior(tracking)).Where(CreateConditionExpression(condition) ?? (entity => true));
+        var query = QueryWithOptions(tracking, splitQuery).Where(CreateConditionExpression(condition) ?? (entity => true));
 
         return await IncludeNavigationProperties(query).Select(UpdateProjectionExpression(projection))
                                                        .Where(CreateConditionExpression(conditionAfterProjection) ?? (entity => true))
@@ -386,14 +404,16 @@ public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepositor
     /// </summary>
     /// <param name="listRequest"></param>
     /// <param name="tracking"></param>
+    /// <param name="splitQuery"></param>
     /// <param name="conditionExpression"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
     public virtual async Task<ListResponse<TEntity>> GetAllAsync(ListRequest listRequest,
                                                                  Expression<Func<TEntity, bool>> conditionExpression = null,
                                                                  bool tracking = false,
+                                                                 bool splitQuery = false,
                                                                  CancellationToken cancellationToken = default)
-        => await _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
+        => await QueryWithOptions(tracking, splitQuery)
                        .Where(CreateConditionExpression(conditionExpression) ?? (entity => true))
                        .ToListResponseAsync(listRequest, cancellationToken);
 
@@ -406,6 +426,7 @@ public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepositor
     /// <param name="conditionAfterProjection"></param>
     /// <param name="projection"></param>
     /// <param name="tracking"></param>
+    /// <param name="splitQuery"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
     public virtual async Task<ListResponse<TResult>> GetAllAsync<TResult>(ListRequest listRequest,
@@ -413,8 +434,9 @@ public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepositor
                                                                           Expression<Func<TEntity, TResult>> projection = null,
                                                                           Expression<Func<TResult, bool>> conditionAfterProjection = null,
                                                                           bool tracking = false,
+                                                                          bool splitQuery = false,
                                                                           CancellationToken cancellationToken = default) where TResult : class
-        => await _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
+        => await QueryWithOptions(tracking, splitQuery)
                        .Where(CreateConditionExpression(condition) ?? (entity => true))
                        .Select(UpdateProjectionExpression(projection))
                        .Where(conditionAfterProjection ?? (entity => true))
@@ -424,13 +446,15 @@ public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepositor
     /// Returns entities which IsDeleted condition is true from database asynchronously. If the condition is requested, it also provides that condition.
     /// </summary>
     /// <param name="tracking"></param>
+    /// <param name="splitQuery"></param>
     /// <param name="conditionExpression"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
     public virtual async Task<List<TEntity>> GetAllAsync(Expression<Func<TEntity, bool>> conditionExpression = null,
                                                          bool tracking = false,
+                                                         bool splitQuery = false,
                                                          CancellationToken cancellationToken = default)
-        => await _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
+        => await QueryWithOptions(tracking, splitQuery)
                        .Where(CreateConditionExpression(conditionExpression) ?? (entity => true))
                        .ToListAsync(cancellationToken);
 
@@ -442,14 +466,16 @@ public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepositor
     /// <param name="conditionAfterProjection"></param>
     /// <param name="projection"></param>
     /// <param name="tracking"></param>
+    /// <param name="splitQuery"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
     public virtual async Task<List<TResult>> GetAllAsync<TResult>(Expression<Func<TEntity, bool>> condition = null,
                                                                   Expression<Func<TEntity, TResult>> projection = null,
                                                                   Expression<Func<TResult, bool>> conditionAfterProjection = null,
                                                                   bool tracking = false,
+                                                                  bool splitQuery = false,
                                                                   CancellationToken cancellationToken = default) where TResult : class
-        => await _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
+        => await QueryWithOptions(tracking, splitQuery)
                        .Where(CreateConditionExpression(condition) ?? (entity => true))
                        .Select(UpdateProjectionExpression(projection))
                        .Where(conditionAfterProjection ?? (entity => true))
@@ -464,14 +490,16 @@ public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepositor
     /// </summary>
     /// <param name="count"></param>
     /// <param name="tracking"></param>
+    /// <param name="splitQuery"></param>
     /// <param name="conditionExpression"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
     public virtual async Task<List<TEntity>> GetSomeAsync(int count,
                                                           Expression<Func<TEntity, bool>> conditionExpression = null,
                                                           bool tracking = false,
+                                                          bool splitQuery = false,
                                                           CancellationToken cancellationToken = default)
-        => await _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
+        => await QueryWithOptions(tracking, splitQuery)
                        .Where(CreateConditionExpression(conditionExpression) ?? (entity => true))
                        .Take(count)
                        .ToListAsync(cancellationToken);
@@ -483,6 +511,7 @@ public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepositor
     /// <param name="condition"></param>
     /// <param name="projection"></param>
     /// <param name="tracking"></param>
+    /// <param name="splitQuery"></param>
     /// <param name="conditionAfterProjection"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
@@ -491,8 +520,9 @@ public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepositor
                                                                    Expression<Func<TEntity, TResult>> projection = null,
                                                                    Expression<Func<TResult, bool>> conditionAfterProjection = null,
                                                                    bool tracking = false,
+                                                                   bool splitQuery = false,
                                                                    CancellationToken cancellationToken = default)
-        => await _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
+        => await QueryWithOptions(tracking, splitQuery)
                        .Where(CreateConditionExpression(condition) ?? (entity => true))
                        .Select(UpdateProjectionExpression(projection))
                        .Where(conditionAfterProjection ?? (entity => true))
@@ -1072,6 +1102,24 @@ public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepositor
         }
 
         return paths;
+    }
+
+    /// <summary>
+    /// Applies query options liek tracking, split query etc.
+    /// </summary>
+    /// <param name="tracking"></param>
+    /// <param name="shouldSplitQuery"></param>
+    /// <returns></returns>
+    protected virtual IQueryable<TEntity> QueryWithOptions(bool tracking = false, bool shouldSplitQuery = false)
+    {
+        IQueryable<TEntity> query = _dbSet.AsTracking(GetQueryTrackingBehavior(tracking));
+
+        if (shouldSplitQuery)
+        {
+            query = query.AsSplitQuery();
+        }
+
+        return query;
     }
 
     private static Expression<Func<TEntity, TResult>> AppendSoftDeleteFilterToProjection<TResult>(Expression<Func<TEntity, TResult>> projection)

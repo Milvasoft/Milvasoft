@@ -22,11 +22,11 @@ public abstract partial class BaseRepository<TEntity, TContext> where TEntity : 
     /// Returns first entity or default value which IsDeleted condition is true from database synchronously. If the condition is requested, it also provides that condition.
     /// </summary>
     /// <param name="tracking"></param>
+    /// <param name="splitQuery"></param>
     /// <param name="condition"></param>
     /// <returns></returns>
-    public virtual TEntity GetFirstOrDefault(Expression<Func<TEntity, bool>> condition = null, bool tracking = false)
-        => _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
-                       .FirstOrDefault(CreateConditionExpression(condition) ?? (entity => true));
+    public virtual TEntity GetFirstOrDefault(Expression<Func<TEntity, bool>> condition = null, bool tracking = false, bool splitQuery = false)
+        => QueryWithOptions(tracking, splitQuery).FirstOrDefault(CreateConditionExpression(condition) ?? (entity => true));
 
     /// <summary>
     /// Returns first entity or default value which IsDeleted condition is true from database synchronously. If the condition is requested, it also provides that condition.
@@ -35,12 +35,14 @@ public abstract partial class BaseRepository<TEntity, TContext> where TEntity : 
     /// <param name="projection"></param>
     /// <param name="conditionAfterProjection"></param>
     /// <param name="tracking"></param>
+    /// <param name="splitQuery"></param>
     /// <returns></returns>
     public virtual TResult GetFirstOrDefault<TResult>(Expression<Func<TEntity, bool>> condition = null,
                                                       Expression<Func<TEntity, TResult>> projection = null,
                                                       Expression<Func<TResult, bool>> conditionAfterProjection = null,
-                                                      bool tracking = false)
-        => _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
+                                                      bool tracking = false,
+                                                      bool splitQuery = false)
+        => QueryWithOptions(tracking, splitQuery)
                  .Where(CreateConditionExpression(condition) ?? (entity => true))
                  .Select(UpdateProjectionExpression(projection))
                  .FirstOrDefault(conditionAfterProjection ?? (entity => true));
@@ -53,10 +55,11 @@ public abstract partial class BaseRepository<TEntity, TContext> where TEntity : 
     /// Returns single entity or default value which IsDeleted condition is true from database synchronously. If the condition is requested, it also provides that condition.
     /// </summary>
     /// <param name="tracking"></param>
+    /// <param name="splitQuery"></param>
     /// <param name="condition"></param>
     /// <returns></returns>
-    public virtual TEntity GetSingleOrDefault(Expression<Func<TEntity, bool>> condition = null, bool tracking = false)
-        => _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
+    public virtual TEntity GetSingleOrDefault(Expression<Func<TEntity, bool>> condition = null, bool tracking = false, bool splitQuery = false)
+        => QueryWithOptions(tracking, splitQuery)
                  .SingleOrDefault(CreateConditionExpression(condition) ?? (entity => true));
 
     /// <summary>
@@ -66,12 +69,14 @@ public abstract partial class BaseRepository<TEntity, TContext> where TEntity : 
     /// <param name="projection"></param>
     /// <param name="conditionAfterProjection"></param>
     /// <param name="tracking"></param>
+    /// <param name="splitQuery"></param>
     /// <returns></returns>
     public virtual TResult GetSingleOrDefault<TResult>(Expression<Func<TEntity, bool>> condition = null,
                                                        Expression<Func<TEntity, TResult>> projection = null,
                                                        Expression<Func<TResult, bool>> conditionAfterProjection = null,
-                                                       bool tracking = false)
-        => _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
+                                                       bool tracking = false,
+                                                       bool splitQuery = false)
+        => QueryWithOptions(tracking, splitQuery)
                  .Where(CreateConditionExpression(condition) ?? (entity => true))
                  .Select(UpdateProjectionExpression(projection))
                  .SingleOrDefault(conditionAfterProjection ?? (entity => true));
@@ -86,15 +91,16 @@ public abstract partial class BaseRepository<TEntity, TContext> where TEntity : 
     /// <param name="id"></param>
     /// <param name="conditionExpression"></param>
     /// <param name="tracking"></param>
+    /// <param name="splitQuery"></param>
     /// <returns> The entity found or null. </returns>
     public virtual TEntity GetById(object id,
                                    Expression<Func<TEntity, bool>> conditionExpression = null,
-                                   bool tracking = false)
+                                   bool tracking = false,
+                                   bool splitQuery = false)
     {
         var mainCondition = CreateKeyEqualityExpressionWithIsDeletedFalse(id, conditionExpression);
 
-        return _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
-                     .FirstOrDefault(mainCondition);
+        return QueryWithOptions(tracking, splitQuery).FirstOrDefault(mainCondition);
     }
 
     /// <summary>
@@ -105,16 +111,18 @@ public abstract partial class BaseRepository<TEntity, TContext> where TEntity : 
     /// <param name="conditionAfterProjection"></param>
     /// <param name="projection"></param>
     /// <param name="tracking"></param>
+    /// <param name="splitQuery"></param>
     /// <returns> The entity found or null. </returns>
     public virtual TResult GetById<TResult>(object id,
                                             Expression<Func<TEntity, bool>> condition = null,
                                             Expression<Func<TEntity, TResult>> projection = null,
                                             Expression<Func<TResult, bool>> conditionAfterProjection = null,
-                                            bool tracking = false)
+                                            bool tracking = false,
+                                            bool splitQuery = false)
     {
         var mainCondition = CreateKeyEqualityExpressionWithIsDeletedFalse(id, condition);
 
-        return _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
+        return QueryWithOptions(tracking, splitQuery)
                      .Where(mainCondition)
                      .Select(UpdateProjectionExpression(projection))
                      .FirstOrDefault(conditionAfterProjection ?? (entity => true));
@@ -132,21 +140,23 @@ public abstract partial class BaseRepository<TEntity, TContext> where TEntity : 
     /// <param name="includes"></param>
     /// <param name="condition"></param>
     /// <param name="tracking"></param>
+    /// <param name="splitQuery"></param>
     /// <returns> The entity found or null. </returns>
     public virtual TEntity GetForDelete(object id,
                                         Func<IIncludable<TEntity>, IIncludable> includes = null,
                                         Expression<Func<TEntity, bool>> condition = null,
-                                        bool tracking = false)
+                                        bool tracking = false,
+                                        bool splitQuery = false)
     {
         var mainCondition = CreateKeyEqualityExpressionWithIsDeletedFalse(id, condition);
 
         if (includes is not null)
-            return _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
+            return QueryWithOptions(tracking, splitQuery)
                          .Where(mainCondition)
                          .IncludeMultiple(includes)
                          .FirstOrDefault();
 
-        var query = _dbSet.AsTracking(GetQueryTrackingBehavior(tracking)).Where(mainCondition);
+        var query = QueryWithOptions(tracking, splitQuery).Where(mainCondition);
 
         return IncludeNavigationProperties(query).FirstOrDefault();
     }
@@ -161,24 +171,26 @@ public abstract partial class BaseRepository<TEntity, TContext> where TEntity : 
     /// <param name="conditionAfterProjection"></param>
     /// <param name="projection"></param>
     /// <param name="tracking"></param>
+    /// <param name="splitQuery"></param>
     /// <returns> The entity found or null. </returns>
     public virtual TResult GetForDelete<TResult>(object id,
                                                  Func<IIncludable<TEntity>, IIncludable> includes = null,
                                                  Expression<Func<TEntity, bool>> condition = null,
                                                  Expression<Func<TEntity, TResult>> projection = null,
                                                  Expression<Func<TResult, bool>> conditionAfterProjection = null,
-                                                 bool tracking = false)
+                                                 bool tracking = false,
+                                                 bool splitQuery = false)
     {
         var mainCondition = CreateKeyEqualityExpressionWithIsDeletedFalse(id, condition);
 
         if (includes is not null)
-            return _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
+            return QueryWithOptions(tracking, splitQuery)
                          .Where(mainCondition)
                          .IncludeMultiple(includes)
                          .Select(UpdateProjectionExpression(projection))
                          .FirstOrDefault(conditionAfterProjection ?? (entity => true));
 
-        var query = _dbSet.AsTracking(GetQueryTrackingBehavior(tracking)).Where(mainCondition);
+        var query = QueryWithOptions(tracking, splitQuery).Where(mainCondition);
 
         return IncludeNavigationProperties(query).Select(UpdateProjectionExpression(projection))
                                                  .FirstOrDefault(conditionAfterProjection ?? (entity => true));
@@ -191,18 +203,20 @@ public abstract partial class BaseRepository<TEntity, TContext> where TEntity : 
     /// <param name="includes"></param>
     /// <param name="condition"></param>
     /// <param name="tracking"></param>
+    /// <param name="splitQuery"></param>
     /// <returns> The entity found or null. </returns>
     public virtual List<TEntity> GetForDelete(Func<IIncludable<TEntity>, IIncludable> includes = null,
                                               Expression<Func<TEntity, bool>> condition = null,
-                                              bool tracking = false)
+                                              bool tracking = false,
+                                              bool splitQuery = false)
     {
         if (includes is not null)
-            return _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
+            return QueryWithOptions(tracking, splitQuery)
                          .Where(CreateConditionExpression(condition) ?? (entity => true))
                          .IncludeMultiple(includes)
                          .ToList();
 
-        var query = _dbSet.AsTracking(GetQueryTrackingBehavior(tracking)).Where(CreateConditionExpression(condition) ?? (entity => true));
+        var query = QueryWithOptions(tracking, splitQuery).Where(CreateConditionExpression(condition) ?? (entity => true));
 
         return IncludeNavigationProperties(query).ToList();
     }
@@ -216,21 +230,23 @@ public abstract partial class BaseRepository<TEntity, TContext> where TEntity : 
     /// <param name="conditionAfterProjection"></param>
     /// <param name="projection"></param>
     /// <param name="tracking"></param>
+    /// <param name="splitQuery"></param>
     /// <returns> The entity found or null. </returns>
     public virtual List<TResult> GetForDelete<TResult>(Func<IIncludable<TEntity>, IIncludable> includes = null,
                                                        Expression<Func<TEntity, bool>> condition = null,
                                                        Expression<Func<TEntity, TResult>> projection = null,
                                                        Expression<Func<TResult, bool>> conditionAfterProjection = null,
-                                                       bool tracking = false)
+                                                       bool tracking = false,
+                                                       bool splitQuery = false)
     {
         if (includes is not null)
-            return _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
+            return QueryWithOptions(tracking, splitQuery)
                          .Where(CreateConditionExpression(condition) ?? (entity => true))
                          .IncludeMultiple(includes)
                          .Select(UpdateProjectionExpression(projection))
                          .ToList();
 
-        var query = _dbSet.AsTracking(GetQueryTrackingBehavior(tracking)).Where(CreateConditionExpression(condition) ?? (entity => true));
+        var query = QueryWithOptions(tracking, splitQuery).Where(CreateConditionExpression(condition) ?? (entity => true));
 
         return IncludeNavigationProperties(query).Select(UpdateProjectionExpression(projection))
                                                  .Where(CreateConditionExpression(conditionAfterProjection) ?? (entity => true))
@@ -246,12 +262,14 @@ public abstract partial class BaseRepository<TEntity, TContext> where TEntity : 
     /// </summary>
     /// <param name="listRequest"></param>
     /// <param name="tracking"></param>
+    /// <param name="splitQuery"></param>
     /// <param name="conditionExpression"></param>
     /// <returns></returns>
     public virtual ListResponse<TEntity> GetAll(ListRequest listRequest,
                                                 Expression<Func<TEntity, bool>> conditionExpression = null,
-                                                bool tracking = false)
-        => _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
+                                                bool tracking = false,
+                                                bool splitQuery = false)
+        => QueryWithOptions(tracking, splitQuery)
                  .Where(CreateConditionExpression(conditionExpression) ?? (entity => true))
                  .ToListResponse(listRequest);
 
@@ -264,13 +282,15 @@ public abstract partial class BaseRepository<TEntity, TContext> where TEntity : 
     /// <param name="conditionAfterProjection"></param>
     /// <param name="projection"></param>
     /// <param name="tracking"></param>
+    /// <param name="splitQuery"></param>
     /// <returns></returns>
     public virtual ListResponse<TResult> GetAll<TResult>(ListRequest listRequest,
                                                          Expression<Func<TEntity, bool>> condition = null,
                                                          Expression<Func<TEntity, TResult>> projection = null,
                                                          Expression<Func<TResult, bool>> conditionAfterProjection = null,
-                                                         bool tracking = false) where TResult : class
-        => _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
+                                                         bool tracking = false,
+                                                         bool splitQuery = false) where TResult : class
+        => QueryWithOptions(tracking, splitQuery)
                  .Where(CreateConditionExpression(condition) ?? (entity => true))
                  .Select(UpdateProjectionExpression(projection))
                  .Where(conditionAfterProjection ?? (entity => true))
@@ -280,10 +300,11 @@ public abstract partial class BaseRepository<TEntity, TContext> where TEntity : 
     /// Returns entities which IsDeleted condition is true from database synchronously. If the condition is requested, it also provides that condition.
     /// </summary>
     /// <param name="tracking"></param>
+    /// <param name="splitQuery"></param>
     /// <param name="conditionExpression"></param>
     /// <returns></returns>
-    public virtual List<TEntity> GetAll(Expression<Func<TEntity, bool>> conditionExpression = null, bool tracking = false)
-        => _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
+    public virtual List<TEntity> GetAll(Expression<Func<TEntity, bool>> conditionExpression = null, bool tracking = false, bool splitQuery = false)
+        => QueryWithOptions(tracking, splitQuery)
                  .Where(CreateConditionExpression(conditionExpression) ?? (entity => true))
                  .ToList();
 
@@ -295,12 +316,14 @@ public abstract partial class BaseRepository<TEntity, TContext> where TEntity : 
     /// <param name="conditionAfterProjection"></param>
     /// <param name="projection"></param>
     /// <param name="tracking"></param>
+    /// <param name="splitQuery"></param>
     /// <returns></returns>
     public virtual List<TResult> GetAll<TResult>(Expression<Func<TEntity, bool>> condition = null,
                                                  Expression<Func<TEntity, TResult>> projection = null,
                                                  Expression<Func<TResult, bool>> conditionAfterProjection = null,
-                                                 bool tracking = false) where TResult : class
-        => _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
+                                                 bool tracking = false,
+                                                 bool splitQuery = false) where TResult : class
+        => QueryWithOptions(tracking, splitQuery)
                  .Where(CreateConditionExpression(condition) ?? (entity => true))
                  .Select(UpdateProjectionExpression(projection))
                  .Where(conditionAfterProjection ?? (entity => true))
@@ -315,12 +338,14 @@ public abstract partial class BaseRepository<TEntity, TContext> where TEntity : 
     /// </summary>
     /// <param name="count"></param>
     /// <param name="tracking"></param>
+    /// <param name="splitQuery"></param>
     /// <param name="conditionExpression"></param>
     /// <returns></returns>
     public virtual List<TEntity> GetSome(int count,
                                          Expression<Func<TEntity, bool>> conditionExpression = null,
-                                         bool tracking = false)
-        => _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
+                                         bool tracking = false,
+                                         bool splitQuery = false)
+        => QueryWithOptions(tracking, splitQuery)
                  .Where(CreateConditionExpression(conditionExpression) ?? (entity => true))
                  .Take(count)
                  .ToList();
@@ -332,14 +357,16 @@ public abstract partial class BaseRepository<TEntity, TContext> where TEntity : 
     /// <param name="condition"></param>
     /// <param name="projection"></param>
     /// <param name="tracking"></param>
+    /// <param name="splitQuery"></param>
     /// <param name="conditionAfterProjection"></param>
     /// <returns></returns>
     public virtual List<TResult> GetSome<TResult>(int count,
                                                   Expression<Func<TEntity, bool>> condition = null,
                                                   Expression<Func<TEntity, TResult>> projection = null,
                                                   Expression<Func<TResult, bool>> conditionAfterProjection = null,
-                                                  bool tracking = false)
-        => _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
+                                                  bool tracking = false,
+                                                  bool splitQuery = false)
+        => QueryWithOptions(tracking, splitQuery)
                  .Where(CreateConditionExpression(condition) ?? (entity => true))
                  .Select(UpdateProjectionExpression(projection))
                  .Where(conditionAfterProjection ?? (entity => true))
