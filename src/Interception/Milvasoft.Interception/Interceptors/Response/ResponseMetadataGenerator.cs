@@ -200,10 +200,13 @@ public class ResponseMetadataGenerator(IResponseInterceptionOptions responseInte
             {
                 var callerObjectsAsList = callerObject as IList;
 
-                if (callerObjectsAsList.Count > 0)
+                if (!callerObjectsAsList.IsNullOrEmpty())
                 {
                     foreach (var item in callerObjectsAsList)
                     {
+                        if (item is null)
+                            continue;
+
                         callerObject = item;
 
                         propertyValue = property.GetValue(callerObject, null);
@@ -224,9 +227,11 @@ public class ResponseMetadataGenerator(IResponseInterceptionOptions responseInte
 
         CallerObjectInfo childCallerInfo = CallerObjectInfo.CreateCallerInformation(propertyValue, property.PropertyType);
 
-        metadata.Metadatas ??= [];
-
-        GenerateMetadata(childCallerInfo, metadata.Metadatas);
+        if (childCallerInfo is not null)
+        {
+            metadata.Metadatas ??= [];
+            GenerateMetadata(childCallerInfo, metadata.Metadatas);
+        }
     }
 
     /// <summary>

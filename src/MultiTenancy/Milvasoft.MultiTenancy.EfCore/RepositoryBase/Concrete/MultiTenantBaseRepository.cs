@@ -55,7 +55,7 @@ public abstract partial class MultiTenantBaseRepository<TEntity, TContext>(TCont
 
             var currentTenantId = _dbContext.CurrentTenantId;
 
-            foreach (var entity in entities)
+            foreach (var entity in entities.Where(e => e != null))
                 tenantIdProp.SetValue(entity, currentTenantId);
         }
     }
