@@ -1,5 +1,5 @@
-﻿using StackExchange.Redis;
-using System.Text.Json;
+﻿using Newtonsoft.Json;
+using StackExchange.Redis;
 
 namespace Milvasoft.Caching.Redis;
 
@@ -45,7 +45,7 @@ public partial class RedisAccessor
     /// <param name="key"></param>
     /// <returns></returns>
     public async Task<T> GetAsync<T>(string key) where T : class
-        => ((string)await _database.StringGetAsync(key).ConfigureAwait(false)).ToObject<T>();
+        => ToObject<T>((string)await _database.StringGetAsync(key).ConfigureAwait(false));
 
     /// <summary>
     /// Gets <paramref name="key"/>'s value.
@@ -54,7 +54,7 @@ public partial class RedisAccessor
     /// <param name="returnType"></param>
     /// <returns></returns>
     public async Task<object> GetAsync(string key, Type returnType)
-        => ((string)await _database.StringGetAsync(key).ConfigureAwait(false)).ToObject(returnType);
+        => ToObject((string)await _database.StringGetAsync(key).ConfigureAwait(false), returnType);
 
     /// <summary>
     /// Gets <paramref name="key"/>'s value.
@@ -89,7 +89,7 @@ public partial class RedisAccessor
         foreach (var item in stringValues)
         {
             if (!string.IsNullOrWhiteSpace(item))
-                redisValues.Add(JsonSerializer.Deserialize<T>(item));
+                redisValues.Add(JsonConvert.DeserializeObject<T>(item));
         }
 
         return redisValues;
@@ -123,7 +123,7 @@ public partial class RedisAccessor
     /// <param name="value"></param>
     /// <returns></returns>
     public async Task<bool> SetAsync(string key, object value)
-        => await _database.StringSetAsync(key, value.ToJson());
+        => await _database.StringSetAsync(key, ToJson(value));
 
     /// <summary>
     /// Sets <paramref name="value"/> to <paramref name="key"/> with <paramref name="expiration"/>.
@@ -135,9 +135,9 @@ public partial class RedisAccessor
     public async Task<bool> SetAsync(string key, object value, TimeSpan? expiration)
     {
         if (expiration.HasValue)
-            return await _database.StringSetAsync(key, value.ToJson(), _useUtcForDateTimes ? expiration.Value.ConvertToUtc() : expiration);
+            return await _database.StringSetAsync(key, ToJson(value), _useUtcForDateTimes ? expiration.Value.ConvertToUtc() : expiration);
         else
-            return await _database.StringSetAsync(key, value.ToJson());
+            return await _database.StringSetAsync(key, ToJson(value));
     }
 
     /// <summary>
@@ -303,4 +303,31 @@ public partial class RedisAccessor
 
         _options.AllowAdmin = false;
     }
+
+    /// <summary>
+    /// Converts an object to a json string.
+    /// </summary>
+    /// <param name="value"></param>
+    /// <returns></returns>
+    private static string ToJson(object value) => JsonConvert.SerializeObject(value);
+
+    /// <summary>
+    /// Converts json string to an object of type <typeparamref name="T"/>.
+    /// </summary>
+    /// <typeparam name="T">The type of the object to convert to.</typeparam>
+    /// <param name="value">The string value to convert.</param>
+    /// <param name="jsonOptions">The json deserialization options (optional).</param>
+    /// <returns>The deserialized object of type T.</returns>
+    public static T ToObject<T>(string value, JsonSerializerSettings jsonOptions = null) where T : class
+        => string.IsNullOrWhiteSpace(value) ? null : JsonConvert.DeserializeObject<T>(value, jsonOptions);
+
+    /// <summary>
+    /// Converts a string to an object of the specified return type.
+    /// </summary>
+    /// <param name="value">The string value to convert.</param>
+    /// <param name="returnType">The return type of the object to convert to.</param>
+    /// <param name="jsonOptions">The json deserialization options (optional).</param>
+    /// <returns>The deserialized object of the specified return type.</returns>
+    public static object ToObject(string value, Type returnType, JsonSerializerSettings jsonOptions = null)
+        => string.IsNullOrWhiteSpace(value) ? null : JsonConvert.DeserializeObject(value, returnType, jsonOptions);
 }

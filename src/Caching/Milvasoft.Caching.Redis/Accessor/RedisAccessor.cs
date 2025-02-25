@@ -1,8 +1,8 @@
 ﻿using Milvasoft.Caching.Redis.Accessor;
 using Milvasoft.Caching.Redis.Options;
+using Newtonsoft.Json;
 using StackExchange.Redis;
 using System.Net;
-using System.Text.Json;
 
 namespace Milvasoft.Caching.Redis;
 
@@ -85,7 +85,7 @@ public partial class RedisAccessor : IRedisAccessor
     /// <typeparam name="T"></typeparam>
     /// <param name="key"></param>
     /// <returns></returns>
-    public T Get<T>(string key) where T : class => ((string)_database.StringGet(key)).ToObject<T>();
+    public T Get<T>(string key) where T : class => ToObject<T>((string)_database.StringGet(key));
 
     /// <summary>
     /// Gets <paramref name="key"/>'s value.
@@ -119,7 +119,7 @@ public partial class RedisAccessor : IRedisAccessor
         foreach (var item in stringValues)
         {
             if (!string.IsNullOrWhiteSpace(item))
-                redisValues.Add(JsonSerializer.Deserialize<T>(item));
+                redisValues.Add(JsonConvert.DeserializeObject<T>(item));
         }
 
         return redisValues;
@@ -160,7 +160,7 @@ public partial class RedisAccessor : IRedisAccessor
     /// <typeparam name="T"></typeparam>
     /// <param name="key"></param>
     /// <param name="value"></param>
-    public bool Set<T>(string key, T value) where T : class => _database.StringSet(key, value.ToJson());
+    public bool Set<T>(string key, T value) where T : class => _database.StringSet(key, ToJson(value));
 
     /// <summary>
     /// Sets <paramref name="value"/> to <paramref name="key"/> with <paramref name="expiration"/>.
@@ -169,7 +169,7 @@ public partial class RedisAccessor : IRedisAccessor
     /// <param name="value"></param>
     /// <param name="expiration"></param>
     /// <returns></returns>
-    public bool Set(string key, object value, TimeSpan? expiration) => _database.StringSet(key, value.ToJson(), _useUtcForDateTimes ? expiration.Value.ConvertToUtc() : expiration);
+    public bool Set(string key, object value, TimeSpan? expiration) => _database.StringSet(key, ToJson(value), _useUtcForDateTimes ? expiration.Value.ConvertToUtc() : expiration);
 
     /// <summary>
     /// Removes <paramref name="key"/> and value.

@@ -4,7 +4,7 @@ using System.Net;
 namespace Milvasoft.Caching.Redis.Accessor;
 
 /// <summary> 
-/// Provides caching operations.
+/// Provides caching operations. It uses Newtonsoft.Json for serialization and deserialization.
 /// </summary>
 public interface IRedisAccessor : ICacheAccessor<RedisAccessor>
 {
