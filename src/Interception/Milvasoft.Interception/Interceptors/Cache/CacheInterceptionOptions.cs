@@ -19,10 +19,7 @@ public class CacheInterceptionOptions : ICacheInterceptionOptions
     public ServiceLifetime InterceptorLifetime { get; set; } = ServiceLifetime.Scoped;
 
     /// <inheritdoc/>
-    public bool IncludeRequestHeadersWhenCaching { get; set; } = true;
-
-    /// <inheritdoc/>
-    public List<string> IgnoredRequestHeaderKeys { get; set; } = [];
+    public HashSet<string> IncludedRequestHeaderKeys { get; set; } = [];
 
     /// <inheritdoc/>
     public string CacheAccessorAssemblyQualifiedName
@@ -65,16 +62,12 @@ public class CacheInterceptionOptions : ICacheInterceptionOptions
 public interface ICacheInterceptionOptions : IInterceptionOptions
 {
     /// <summary>
+    /// Keys ​​of the headers to be included in the cache key creation process. If this property is null or empty; request headers will not included.
+    /// 
     /// When a return value is to be cached, a cache key is created with the method name and the values of the method request parameters. 
     /// In cases where HttpRequestHeaders may cause differences in the requests made, the value returned by this delegate is appended to the cache key.
-    /// If this value is true request headers will included to creation of cache key.
     /// </summary>
-    public bool IncludeRequestHeadersWhenCaching { get; set; }
-
-    /// <summary>
-    /// Keys ​​of the headers to be ignored in the cache key creation process.
-    /// </summary>
-    public List<string> IgnoredRequestHeaderKeys { get; set; }
+    public HashSet<string> IncludedRequestHeaderKeys { get; set; }
 
     /// <summary>
     /// Cache accessor assembly qualified name for configuring options from configuration file.

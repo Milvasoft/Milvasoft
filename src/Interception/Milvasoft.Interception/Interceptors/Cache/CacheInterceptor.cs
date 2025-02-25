@@ -88,7 +88,7 @@ public class CacheInterceptor : IMilvaInterceptor
 
         methodParameters?.RemoveAll(p => p is CancellationToken);
 
-        var requestHeaders = interceptionOptions.IncludeRequestHeadersWhenCaching ? RequestHeadersForCacheKey(serviceProvider) : string.Empty;
+        var requestHeaders = RequestHeadersForCacheKey(serviceProvider);
 
         var customKeyArguments = interceptionOptions.CacheKeyConfigurator != null ? interceptionOptions.CacheKeyConfigurator.Invoke(serviceProvider) : string.Empty;
 
@@ -99,19 +99,17 @@ public class CacheInterceptor : IMilvaInterceptor
 
     private string RequestHeadersForCacheKey(IServiceProvider serviceProvider)
     {
+        if (_interceptionOptions.IncludedRequestHeaderKeys.IsNullOrEmpty())
+            return string.Empty;
+
         var httpContextAccessor = serviceProvider.GetService<IHttpContextAccessor>();
 
         if (httpContextAccessor?.HttpContext?.Request?.Headers != null)
         {
             var stringBuilder = new StringBuilder();
 
-            foreach (var header in httpContextAccessor.HttpContext.Request.Headers)
-            {
-                if (_interceptionOptions.IgnoredRequestHeaderKeys.Contains(header.Key))
-                    continue;
-
+            foreach (var header in httpContextAccessor.HttpContext.Request.Headers.Where(h => _interceptionOptions.IncludedRequestHeaderKeys.Contains(h.Key)))
                 stringBuilder.Append(header.Value);
-            }
 
             return stringBuilder.ToString();
         }

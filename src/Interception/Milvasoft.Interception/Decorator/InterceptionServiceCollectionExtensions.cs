@@ -353,7 +353,7 @@ public static class InterceptionServiceCollectionExtensions
 
         builder.Services.AddSingleton<ICacheInterceptionOptions>(config);
 
-        if (config.IncludeRequestHeadersWhenCaching && !builder.Services.Any(s => s.ServiceType == typeof(IHttpContextAccessor)))
+        if (!config.IncludedRequestHeaderKeys.IsNullOrEmpty() && !builder.Services.Any(s => s.ServiceType == typeof(IHttpContextAccessor)))
             builder.Services.AddHttpContextAccessor();
 
         return builder;
@@ -381,8 +381,7 @@ public static class InterceptionServiceCollectionExtensions
             opt.CacheAccessorAssemblyQualifiedName = options.CacheAccessorAssemblyQualifiedName;
             opt.CacheAccessorType = options.CacheAccessorType;
             opt.CacheKeyConfigurator = options.CacheKeyConfigurator;
-            opt.IgnoredRequestHeaderKeys = options.IgnoredRequestHeaderKeys;
-            opt.IncludeRequestHeadersWhenCaching = options.IncludeRequestHeadersWhenCaching;
+            opt.IncludedRequestHeaderKeys = options.IncludedRequestHeaderKeys;
         });
 
         return builder;

@@ -161,7 +161,7 @@ public class MilvaInterceptorCombinatonTests
                         .WithCacheInterceptor(opt =>
                         {
                             opt.InterceptorLifetime = ServiceLifetime.Singleton;
-                            opt.IncludeRequestHeadersWhenCaching = false;
+                            opt.IncludedRequestHeaderKeys = [];
                             opt.CacheAccessorType = typeof(TestCacheAccessorFixture);
                         })
                         .WithResponseInterceptor();

@@ -146,7 +146,7 @@ public class CacheInterceptorTests
                         .WithCacheInterceptor(opt =>
                         {
                             opt.InterceptorLifetime = ServiceLifetime.Scoped;
-                            opt.IncludeRequestHeadersWhenCaching = true;
+                            opt.IncludedRequestHeaderKeys = ["Authorization"];
                             opt.CacheAccessorType = typeof(TestCacheAccessorFixture);
                         });
 
@@ -165,7 +165,7 @@ public class CacheInterceptorTests
                         .WithCacheInterceptor(opt =>
                         {
                             opt.InterceptorLifetime = ServiceLifetime.Scoped;
-                            opt.IncludeRequestHeadersWhenCaching = false;
+                            opt.IncludedRequestHeaderKeys = ["Authorization"];
                             opt.CacheAccessorType = typeof(TestCacheAccessorFixture);
                         });
 
