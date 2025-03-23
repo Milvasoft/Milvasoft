@@ -44,6 +44,8 @@ public class FilterRequest
         if (Criterias.IsNullOrEmpty())
             return null;
 
+        Criterias = [.. Criterias.Where(f => !string.IsNullOrWhiteSpace(f.FilterBy)).DistinctBy(f => new { f.FilterBy, f.Type, f.Value })];
+
         var expression = new Filter<TEntity>();
 
         foreach (var filter in Criterias)

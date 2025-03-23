@@ -18,18 +18,18 @@
 		<PackageReference Include="Azure.Identity" Version="1.13.2" />
 		<PackageReference Include="Bogus" Version="35.6.2" />
 		<PackageReference Include="FluentAssertions" Version="[7.0.0]" />
-		<PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="9.0.2" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="9.0.2" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="9.0.2" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite.Core" Version="9.0.2" />
-		<PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.0.3" />
+		<PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="9.0.3" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="9.0.3" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="9.0.3" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite.Core" Version="9.0.3" />
+		<PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.0.4" />
 		<PackageReference Include="Respawn" Version="6.2.1" />
-		<PackageReference Include="System.Drawing.Common" Version="9.0.2" />
-		<PackageReference Include="System.Formats.Asn1" Version="9.0.2" />
-		<PackageReference Include="System.Text.Json" Version="9.0.2" />
+		<PackageReference Include="System.Drawing.Common" Version="9.0.3" />
+		<PackageReference Include="System.Formats.Asn1" Version="9.0.3" />
+		<PackageReference Include="System.Text.Json" Version="9.0.3" />
 		<PackageReference Include="System.Text.RegularExpressions" Version="4.3.1" />
 		<PackageReference Include="Testcontainers.PostgreSql" Version="4.3.0" />
-		<PackageReference Include="WireMock.Net" Version="1.7.3" />
+		<PackageReference Include="WireMock.Net" Version="1.7.4" />
 		<PackageReference Include="coverlet.collector" Version="6.0.4">
 		  <PrivateAssets>all</PrivateAssets>
 		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>

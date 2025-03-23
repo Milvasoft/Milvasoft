@@ -18,18 +18,18 @@
 
 	<ItemGroup>
 		<PackageReference Include="ConfigureAwait.Fody" Version="3.3.2" PrivateAssets="All" />
-		<PackageReference Include="Fody" Version="6.9.1">
+		<PackageReference Include="Fody" Version="6.9.2">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
 	</ItemGroup>
 
 	<ItemGroup>
-	  <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="9.0.2" />
-	  <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite.Core" Version="9.0.2" />
+	  <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="9.0.3" />
+	  <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite.Core" Version="9.0.3" />
 	  <PackageReference Include="MongoDB.Bson" Version="3.2.1" />
-	  <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.0.3" />
-	  <PackageReference Include="System.Text.Json" Version="9.0.2" />
+	  <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.0.4" />
+	  <PackageReference Include="System.Text.Json" Version="9.0.3" />
 	</ItemGroup>
 
 	<ItemGroup>

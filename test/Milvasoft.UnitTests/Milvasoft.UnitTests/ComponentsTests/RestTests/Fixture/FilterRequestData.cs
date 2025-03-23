@@ -244,6 +244,12 @@ internal class ValidListSourceForBuildFilterExpressionMethodData : IEnumerable<o
                         FilterBy = nameof(RestTestEntityFixture.Count),
                         Type = FilterType.LessThanOrEqualTo,
                         Value = 900
+                    },
+                    new FilterCriteria
+                    {
+                        FilterBy = nameof(RestTestEntityFixture.Count),
+                        Type = FilterType.LessThanOrEqualTo,
+                        Value = 900
                     }
                 ],
                 MergeType = Connector.And

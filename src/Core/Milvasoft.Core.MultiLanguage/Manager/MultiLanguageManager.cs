@@ -24,6 +24,7 @@ public abstract class MultiLanguageManager : IMultiLanguageManager
                                                                                                               && mi.GetParameters().Length == 2);
     private static readonly MethodInfo _firstOrDefaultMethodInfo = typeof(Enumerable).GetMethods(BindingFlags.Static | BindingFlags.Public)
                                                                                      .Last(mi => mi.Name == nameof(Enumerable.FirstOrDefault) && mi.GetParameters().Length == 1);
+    private static readonly MethodInfo _enumerableCastMethod = typeof(Enumerable).GetMethod(nameof(Enumerable.Cast));
     #endregion
 
     /// <summary>
@@ -317,6 +318,8 @@ public abstract class MultiLanguageManager : IMultiLanguageManager
         if (translations.IsNullOrEmpty() || string.IsNullOrWhiteSpace(propertyName))
             return string.Empty;
 
+        translations = translations.Where(t => t != null);
+
         TTranslationEntity requestedLang;
 
         var currentLanguageId = GetCurrentLanguageId();
@@ -354,19 +357,31 @@ public abstract class MultiLanguageManager : IMultiLanguageManager
     /// <returns>The value of the requested translation property.</returns>
     public virtual string GetTranslation(object obj, string propertyName)
     {
-        if (obj == null || !obj.GetType().CanAssignableTo(typeof(IHasTranslation<>)))
+        if (obj is null || !obj.GetType().CanAssignableTo(typeof(IHasTranslation<>)))
             return string.Empty;
 
-        var translations = obj.GetType().GetProperty(MultiLanguageEntityPropertyNames.Translations)?.GetValue(obj, null) as IList;
+        var translationsProperty = obj.GetType().GetProperty(MultiLanguageEntityPropertyNames.Translations);
+        var translations = translationsProperty?.GetValue(obj) as IList;
 
         if (translations.IsNullOrEmpty())
             return string.Empty;
 
-        var translationEntityType = translations?[0].GetType();
+        // For null item remove. OfTypes remove null items automatically.
+        var translationList = translations.OfType<object>();
+
+        if (translations.IsNullOrEmpty())
+            return string.Empty;
+
+        var translationEntityType = translationList.First().GetType();
+
+        // Cast to IEnumerable<translationEntityType>
+        var castMethod = _enumerableCastMethod.MakeGenericMethod(translationEntityType);
+
+        var typedEnumerable = castMethod.Invoke(null, [translationList]);
 
         var getTranslationMethod = _getTranslationMethodInfo.MakeGenericMethod(translationEntityType);
 
-        return (string)getTranslationMethod.Invoke(this, [translations, propertyName]);
+        return (string)getTranslationMethod.Invoke(this, [typedEnumerable, propertyName]);
     }
 }
 
