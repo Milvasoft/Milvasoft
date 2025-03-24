@@ -420,4 +420,78 @@ public static class ModelBuilderExtensions
 
         return modelBuilder;
     }
+
+    /// <summary>
+    /// Adds new composite index of entities that implement <see cref="WithTenantIdIndexAttribute"/>.
+    /// </summary>
+    /// <param name="modelBuilder"></param>
+    /// <returns></returns>
+    public static ModelBuilder UseWithTenantIdEntityCompositeIndexes(this ModelBuilder modelBuilder)
+    {
+        var entitiesWithTenantId = modelBuilder.Model.GetEntityTypes().Where(entityType => entityType.ClrType.CanAssignableTo(typeof(IHasTenantId)));
+
+        foreach (var entityType in entitiesWithTenantId)
+        {
+            var tenantIdProperty = entityType.ClrType.GetProperties().FirstOrDefault(p => p.Name == EntityPropertyNames.TenantId);
+
+            if (tenantIdProperty == null)
+                continue;
+
+            var properties = entityType.GetProperties().Where(p => p.PropertyInfo.GetCustomAttribute<WithTenantIdIndexAttribute>() != null).ToList();
+
+            var mutableEntity = modelBuilder.Entity(entityType.ClrType);
+
+            foreach (var prop in properties)
+            {
+                var newProps = new List<PropertyInfo>
+                {
+                    tenantIdProperty,
+                    prop.PropertyInfo
+                };
+
+                mutableEntity.HasIndex([.. newProps.Select(p => p.Name)]);
+            }
+        }
+
+        return modelBuilder;
+    }
+
+    /// <summary>
+    /// Adds TenantId to the existing indexes of entities that implement <see cref="IHasTenantId"/>.
+    /// </summary>
+    /// <param name="modelBuilder"></param>
+    /// <returns></returns>
+    public static ModelBuilder ConvertHasTenantIdEntityIndexesToCompositeIndexes(this ModelBuilder modelBuilder)
+    {
+        var entitiesWithTenantId = modelBuilder.Model.GetEntityTypes().Where(entityType => entityType.ClrType.CanAssignableTo(typeof(IHasTenantId)));
+
+        foreach (var entityType in entitiesWithTenantId)
+        {
+            var tenantIdProperty = entityType.ClrType.GetProperties().First(p => p.Name == EntityPropertyNames.TenantId);
+
+            if (tenantIdProperty == null)
+                continue;
+
+            var mutableEntity = modelBuilder.Entity(entityType.ClrType);
+
+            foreach (var index in entityType.GetIndexes().ToList())
+            {
+                var props = index.Properties;
+
+                // If the index already contains TenantId, skip it.
+                if (props.Any(p => p.Name == EntityPropertyNames.TenantId))
+                    continue;
+
+                entityType.RemoveIndex(index);
+
+                var newProps = props.Select(p => p.PropertyInfo).ToList();
+
+                newProps.Add(tenantIdProperty);
+
+                mutableEntity.HasIndex([.. newProps.Select(p => p.Name)]);
+            }
+        }
+
+        return modelBuilder;
+    }
 }

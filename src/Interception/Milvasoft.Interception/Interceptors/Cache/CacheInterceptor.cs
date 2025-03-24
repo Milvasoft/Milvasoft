@@ -108,7 +108,7 @@ public class CacheInterceptor : IMilvaInterceptor
         {
             var stringBuilder = new StringBuilder();
 
-            foreach (var header in httpContextAccessor.HttpContext.Request.Headers.Where(h => _interceptionOptions.IncludedRequestHeaderKeys.Contains(h.Key)))
+            foreach (var header in httpContextAccessor.HttpContext.Request.Headers.Where(h => _interceptionOptions.IncludedRequestHeaderKeys.Any(ih => ih.Equals(h.Key, StringComparison.OrdinalIgnoreCase))))
                 stringBuilder.Append(header.Value);
 
             return stringBuilder.ToString();
