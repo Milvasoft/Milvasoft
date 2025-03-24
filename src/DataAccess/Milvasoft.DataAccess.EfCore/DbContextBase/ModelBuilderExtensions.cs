@@ -426,7 +426,7 @@ public static class ModelBuilderExtensions
     /// </summary>
     /// <param name="modelBuilder"></param>
     /// <returns></returns>
-    public static ModelBuilder UseWithTenantIdEntityCompositeIndexes(this ModelBuilder modelBuilder)
+    public static ModelBuilder UseWithTenantIdCompositeIndexes(this ModelBuilder modelBuilder)
     {
         var entitiesWithTenantId = modelBuilder.Model.GetEntityTypes().Where(entityType => entityType.ClrType.CanAssignableTo(typeof(IHasTenantId)));
 
@@ -457,11 +457,33 @@ public static class ModelBuilderExtensions
     }
 
     /// <summary>
+    /// Adds new composite index of entities that implement <see cref="WithTenantIdIndexAttribute"/>.
+    /// </summary>
+    /// <param name="modelBuilder"></param>
+    /// <returns></returns>
+    public static ModelBuilder UseTenantIdIndexes(this ModelBuilder modelBuilder)
+    {
+        var entitiesWithTenantId = modelBuilder.Model.GetEntityTypes().Where(entityType => entityType.ClrType.CanAssignableTo(typeof(IHasTenantId)));
+
+        foreach (var (entityType, tenantIdProperty) in from entityType in entitiesWithTenantId
+                                                       let tenantIdProperty = entityType.ClrType.GetProperties().FirstOrDefault(p => p.Name == EntityPropertyNames.TenantId)
+                                                       select (entityType, tenantIdProperty))
+        {
+            if (tenantIdProperty == null)
+                continue;
+            var mutableEntity = modelBuilder.Entity(entityType.ClrType);
+            mutableEntity.HasIndex(tenantIdProperty.Name);
+        }
+
+        return modelBuilder;
+    }
+
+    /// <summary>
     /// Adds TenantId to the existing indexes of entities that implement <see cref="IHasTenantId"/>.
     /// </summary>
     /// <param name="modelBuilder"></param>
     /// <returns></returns>
-    public static ModelBuilder ConvertHasTenantIdEntityIndexesToCompositeIndexes(this ModelBuilder modelBuilder)
+    public static ModelBuilder ConvertHasTenantIdIndexesToCompositeIndexes(this ModelBuilder modelBuilder)
     {
         var entitiesWithTenantId = modelBuilder.Model.GetEntityTypes().Where(entityType => entityType.ClrType.CanAssignableTo(typeof(IHasTenantId)));
 
