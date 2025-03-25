@@ -119,4 +119,9 @@ public class ExpoClient : IDisposable
         Dispose(disposing: true);
         GC.SuppressFinalize(this);
     }
+
+    /// <summary>
+    /// Disposes the timer.
+    /// </summary>
+    ~ExpoClient() => Dispose(false);
 }

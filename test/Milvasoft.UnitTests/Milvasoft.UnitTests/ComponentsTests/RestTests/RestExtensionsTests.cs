@@ -1,8 +1,8 @@
 ﻿using FluentAssertions;
+using Microsoft.AspNetCore.Http;
 using Milvasoft.Components.Rest;
 using Milvasoft.Components.Rest.Enums;
 using Milvasoft.Components.Rest.MilvaResponse;
-using System.Net;
 using System.Text.Json;
 
 namespace Milvasoft.UnitTests.ComponentsTests.RestTests;
@@ -53,7 +53,7 @@ public class RestExtensionsTests
 
         // Assert
         response.IsSuccess.Should().BeTrue();
-        response.StatusCode.Should().Be((int)HttpStatusCode.OK);
+        response.StatusCode.Should().Be(StatusCodes.Status200OK);
         response.Data.Should().Be(data);
         response.Messages.Should().HaveCount(1);
     }
@@ -70,7 +70,7 @@ public class RestExtensionsTests
 
         // Assert
         response.IsSuccess.Should().BeTrue();
-        response.StatusCode.Should().Be((int)HttpStatusCode.OK);
+        response.StatusCode.Should().Be(StatusCodes.Status200OK);
         response.Data.Should().Be(data);
         response.Messages.Should().HaveCount(1);
         response.Messages.Should().Contain(i => i.Message == message);
@@ -90,7 +90,7 @@ public class RestExtensionsTests
 
         // Assert
         response.IsSuccess.Should().BeTrue();
-        response.StatusCode.Should().Be((int)HttpStatusCode.OK);
+        response.StatusCode.Should().Be(StatusCodes.Status200OK);
         response.Data.Should().Be(data);
         response.Messages.Should().HaveCount(1);
         response.Messages.Should().Contain(i => i.Message == message);
@@ -109,7 +109,7 @@ public class RestExtensionsTests
 
         // Assert
         response.IsSuccess.Should().BeTrue();
-        response.StatusCode.Should().Be((int)HttpStatusCode.OK);
+        response.StatusCode.Should().Be(StatusCodes.Status200OK);
         response.Data.Should().Be(data);
         response.Messages.Should().HaveCount(1);
         response.Messages[0].Message.Should().Be(responseMessage.Message);
@@ -131,7 +131,7 @@ public class RestExtensionsTests
 
         // Assert
         response.IsSuccess.Should().BeFalse();
-        response.StatusCode.Should().Be((int)HttpStatusCode.BadRequest);
+        response.StatusCode.Should().Be(StatusCodes.Status400BadRequest);
         response.Data.Should().Be(data);
         response.Messages.Should().HaveCount(1);
     }
@@ -148,7 +148,7 @@ public class RestExtensionsTests
 
         // Assert
         response.IsSuccess.Should().BeFalse();
-        response.StatusCode.Should().Be((int)HttpStatusCode.BadRequest);
+        response.StatusCode.Should().Be(StatusCodes.Status400BadRequest);
         response.Data.Should().Be(data);
         response.Messages.Should().HaveCount(1);
         response.Messages[0].Message.Should().Be(message);
@@ -168,7 +168,7 @@ public class RestExtensionsTests
 
         // Assert
         response.IsSuccess.Should().BeFalse();
-        response.StatusCode.Should().Be((int)HttpStatusCode.BadRequest);
+        response.StatusCode.Should().Be(StatusCodes.Status400BadRequest);
         response.Data.Should().Be(data);
         response.Messages.Should().HaveCount(1);
         response.Messages[0].Message.Should().Be(message);
@@ -187,7 +187,7 @@ public class RestExtensionsTests
 
         // Assert
         response.IsSuccess.Should().BeFalse();
-        response.StatusCode.Should().Be((int)HttpStatusCode.BadRequest);
+        response.StatusCode.Should().Be(StatusCodes.Status400BadRequest);
         response.Data.Should().Be(data);
         response.Messages.Should().HaveCount(1);
         response.Messages[0].Message.Should().Be(responseMessage.Message);

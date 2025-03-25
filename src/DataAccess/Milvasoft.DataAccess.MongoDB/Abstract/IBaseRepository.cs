@@ -70,7 +70,7 @@ public interface IBaseRepository<TEntity> where TEntity : class, IAuditable<Obje
     /// Returns entity count.
     /// </summary>
     /// <returns></returns>
-    Task<int> GetCountAsync(Expression<Func<TEntity, bool>> filterExpression = null);
+    Task<long> GetCountAsync(Expression<Func<TEntity, bool>> filterExpression = null);
 
     /// <summary>
     /// Returns embedded document count.
@@ -79,7 +79,7 @@ public interface IBaseRepository<TEntity> where TEntity : class, IAuditable<Obje
     /// <param name="unwindExpression"></param>
     /// <param name="filterDefinition"></param>
     /// <returns></returns>
-    Task<int> GetEmbeddedDocumentCountAsync<TEmbedded>(Expression<Func<TEntity, object>> unwindExpression, FilterDefinition<TEmbedded> filterDefinition = null);
+    Task<long> GetEmbeddedDocumentCountAsync<TEmbedded>(Expression<Func<TEntity, object>> unwindExpression, FilterDefinition<TEmbedded> filterDefinition = null);
 
     /// <summary>
     /// Returns the nested list in the entity according to <paramref name="entityId"/>.
@@ -120,7 +120,7 @@ public interface IBaseRepository<TEntity> where TEntity : class, IAuditable<Obje
     /// <param name="filterDefinition"></param>
     /// <param name="projectExpression"></param>
     /// <returns></returns>
-    Task<(List<TEntity> entities, int pageCount, int totalDataCount)> GetAsPaginatedAsync(int pageIndex,
+    Task<(List<TEntity> entities, int pageCount, long totalDataCount)> GetAsPaginatedAsync(int pageIndex,
                                                                                           int requestedItemCount,
                                                                                           List<OrderByProp> orderByProps,
                                                                                           FilterDefinition<TEntity> filterDefinition = null,
@@ -145,7 +145,7 @@ public interface IBaseRepository<TEntity> where TEntity : class, IAuditable<Obje
     /// <param name="projectExpression"></param>
     /// <param name="filterDefinitionForEmbedded"></param>
     /// <returns></returns>
-    Task<(List<TEmbedded> entities, int pageCount, int totalDataCount)> GetNestedPropertyAsPaginatedAsync<TEmbedded>(ObjectId entityId,
+    Task<(List<TEmbedded> entities, int pageCount, long totalDataCount)> GetNestedPropertyAsPaginatedAsync<TEmbedded>(ObjectId entityId,
                                                                                                                      int pageIndex,
                                                                                                                      int requestedItemCount,
                                                                                                                      List<OrderByProp> orderByProps,
@@ -171,7 +171,7 @@ public interface IBaseRepository<TEntity> where TEntity : class, IAuditable<Obje
     /// <param name="projectExpression"></param>
     /// <param name="filterDefinitionForEmbedded"></param>
     /// <returns></returns>
-    Task<(List<TEmbedded> entities, int pageCount, int totalDataCount)> GetNestedPropertyAsPaginatedAsync<TEmbedded>(List<ObjectId> entityIds,
+    Task<(List<TEmbedded> entities, int pageCount, long totalDataCount)> GetNestedPropertyAsPaginatedAsync<TEmbedded>(List<ObjectId> entityIds,
                                                                                                                      int pageIndex,
                                                                                                                      int requestedItemCount,
                                                                                                                      List<OrderByProp> orderByProps,
@@ -197,7 +197,7 @@ public interface IBaseRepository<TEntity> where TEntity : class, IAuditable<Obje
     /// <param name="projectExpression"></param>
     /// <param name="filterDefinitionForEmbedded"></param>
     /// <returns></returns>
-    Task<(List<TEmbedded> entities, int pageCount, int totalDataCount)> GetNestedPropertyAsPaginatedAsync<TEmbedded>(int pageIndex,
+    Task<(List<TEmbedded> entities, int pageCount, long totalDataCount)> GetNestedPropertyAsPaginatedAsync<TEmbedded>(int pageIndex,
                                                                                                                      int requestedItemCount,
                                                                                                                      List<OrderByProp> orderByProps,
                                                                                                                      Expression<Func<TEntity, object>> unwindExpression,

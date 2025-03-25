@@ -81,8 +81,8 @@ public static partial class HttpRequestHelper
                                          string query = "",
                                          string hash = "")
     {
-        query = query == string.Empty ? query : "?" + query;
-        hash = hash == string.Empty ? hash : "#" + hash;
+        query = string.IsNullOrEmpty(query) ? query : string.Concat("?", query);
+        hash = string.IsNullOrEmpty(hash) ? hash : string.Concat("#", hash);
         var requestUrl = $"{protocol}://{hostName}:{port}/{pathName}{query}{hash}";
 
         // Create new Regex.
@@ -125,8 +125,8 @@ public static partial class HttpRequestHelper
                                                     string query = "",
                                                     string hash = "")
     {
-        query = query == string.Empty ? query : "?" + query;
-        hash = hash == string.Empty ? hash : "#" + hash;
+        query = string.IsNullOrEmpty(query) ? query : string.Concat("?", query);
+        hash = string.IsNullOrEmpty(hash) ? hash : string.Concat("#", hash);
         var requestUrl = $"{address}/{pathName}{query}{hash}";
 
         // Create new Regex.

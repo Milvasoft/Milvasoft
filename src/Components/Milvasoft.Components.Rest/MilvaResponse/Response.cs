@@ -1,5 +1,5 @@
-﻿using Milvasoft.Components.Rest.Enums;
-using System.Net;
+﻿using Microsoft.AspNetCore.Http;
+using Milvasoft.Components.Rest.Enums;
 using System.Text.Json.Serialization;
 
 namespace Milvasoft.Components.Rest.MilvaResponse;
@@ -106,7 +106,7 @@ public class Response : IResponse
     public static Response Success() => new(LocalizerKeys.Successful)
     {
         IsSuccess = true,
-        StatusCode = (int)HttpStatusCode.OK,
+        StatusCode = StatusCodes.Status200OK,
     };
 
     /// <summary>
@@ -119,7 +119,7 @@ public class Response : IResponse
         var response = new Response(message)
         {
             IsSuccess = true,
-            StatusCode = (int)HttpStatusCode.OK,
+            StatusCode = StatusCodes.Status200OK,
         };
 
         return response;
@@ -136,7 +136,7 @@ public class Response : IResponse
         var response = new Response
         {
             IsSuccess = true,
-            StatusCode = (int)HttpStatusCode.OK,
+            StatusCode = StatusCodes.Status200OK,
         };
 
         response.AddMessage(message, messageType);
@@ -154,7 +154,7 @@ public class Response : IResponse
         var response = new Response(responseMessage)
         {
             IsSuccess = true,
-            StatusCode = (int)HttpStatusCode.OK,
+            StatusCode = StatusCodes.Status200OK,
         };
 
         return response;
@@ -171,7 +171,7 @@ public class Response : IResponse
     public static Response Error() => new(new ResponseMessage(LocalizerKeys.Failed, MessageType.Warning))
     {
         IsSuccess = false,
-        StatusCode = (int)HttpStatusCode.BadRequest,
+        StatusCode = StatusCodes.Status400BadRequest,
     };
 
     /// <summary>
@@ -184,7 +184,7 @@ public class Response : IResponse
         var response = new Response(new ResponseMessage(message, MessageType.Warning))
         {
             IsSuccess = false,
-            StatusCode = (int)HttpStatusCode.BadRequest,
+            StatusCode = StatusCodes.Status400BadRequest,
         };
 
         return response;
@@ -201,7 +201,7 @@ public class Response : IResponse
         var response = new Response
         {
             IsSuccess = false,
-            StatusCode = (int)HttpStatusCode.BadRequest,
+            StatusCode = StatusCodes.Status400BadRequest,
         };
 
         response.AddMessage(message, messageType);
@@ -219,7 +219,7 @@ public class Response : IResponse
         var response = new Response(responseMessage)
         {
             IsSuccess = false,
-            StatusCode = (int)HttpStatusCode.BadRequest,
+            StatusCode = StatusCodes.Status400BadRequest,
         };
 
         return response;
@@ -310,7 +310,7 @@ public class Response<T> : Response, IResponse<T>
     public static Response<T> Success(T data) => new(data, LocalizerKeys.Successful)
     {
         IsSuccess = true,
-        StatusCode = (int)HttpStatusCode.OK,
+        StatusCode = StatusCodes.Status200OK,
     };
 
     /// <summary>
@@ -324,7 +324,7 @@ public class Response<T> : Response, IResponse<T>
         var response = new Response<T>(data, message)
         {
             IsSuccess = true,
-            StatusCode = (int)HttpStatusCode.OK,
+            StatusCode = StatusCodes.Status200OK,
         };
 
         return response;
@@ -342,7 +342,7 @@ public class Response<T> : Response, IResponse<T>
         var response = new Response<T>(data)
         {
             IsSuccess = true,
-            StatusCode = (int)HttpStatusCode.OK,
+            StatusCode = StatusCodes.Status200OK,
         };
 
         response.AddMessage(message, messageType);
@@ -361,7 +361,7 @@ public class Response<T> : Response, IResponse<T>
         var response = new Response<T>(data, responseMessage)
         {
             IsSuccess = true,
-            StatusCode = (int)HttpStatusCode.OK,
+            StatusCode = StatusCodes.Status200OK,
         };
 
         return response;
@@ -379,7 +379,7 @@ public class Response<T> : Response, IResponse<T>
     public static Response<T> Error(T data) => new(data, new ResponseMessage(LocalizerKeys.Failed, MessageType.Warning))
     {
         IsSuccess = false,
-        StatusCode = (int)HttpStatusCode.BadRequest,
+        StatusCode = StatusCodes.Status400BadRequest,
     };
 
     /// <summary>
@@ -393,7 +393,7 @@ public class Response<T> : Response, IResponse<T>
         var response = new Response<T>(data, new ResponseMessage(message, MessageType.Warning))
         {
             IsSuccess = false,
-            StatusCode = (int)HttpStatusCode.BadRequest,
+            StatusCode = StatusCodes.Status400BadRequest,
         };
 
         return response;
@@ -411,7 +411,7 @@ public class Response<T> : Response, IResponse<T>
         var response = new Response<T>(data)
         {
             IsSuccess = false,
-            StatusCode = (int)HttpStatusCode.BadRequest,
+            StatusCode = StatusCodes.Status400BadRequest,
         };
 
         response.AddMessage(message, messageType);
@@ -430,7 +430,7 @@ public class Response<T> : Response, IResponse<T>
         var response = new Response<T>(data, responseMessage)
         {
             IsSuccess = false,
-            StatusCode = (int)HttpStatusCode.BadRequest,
+            StatusCode = StatusCodes.Status400BadRequest,
         };
 
         return response;

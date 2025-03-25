@@ -1,6 +1,8 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Options;
+using Microsoft.IO;
 using Milvasoft.FileOperations.Abstract;
 using Milvasoft.FileOperations.Concrete;
 
@@ -34,6 +36,8 @@ public static class ServiceCollectionExtensions
         jsonOptions?.Invoke(config);
 
         builder.Services.AddSingleton<IJsonFileOperationOptions>(config);
+
+        builder.Services.TryAddSingleton(new RecyclableMemoryStreamManager());
 
         builder.Services.Add(ServiceDescriptor.Describe(typeof(IJsonOperations), typeof(JsonOperations), config.Lifetime));
 

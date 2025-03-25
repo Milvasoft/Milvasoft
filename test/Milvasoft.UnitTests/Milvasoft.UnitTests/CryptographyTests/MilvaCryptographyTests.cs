@@ -19,7 +19,7 @@ public class MilvaCryptographyTests
         {
             Key = "bc3voatyGOwvN/yfoX32pPfNJhLnVTBQEG9PIzKQ7I88l+qc7Tf4Z0wUqkVCUy5K"
         };
-        var provider = new MilvaCryptographyProvider(options);
+        var provider = new MilvaCryptographyProvider(options, new Microsoft.IO.RecyclableMemoryStreamManager());
 
         // Act
         Func<Task<string>> act = async () => await provider.EncryptAsync(data);
@@ -37,7 +37,7 @@ public class MilvaCryptographyTests
         {
             Key = "A=YI=+B_LfoK%V4r"
         };
-        var provider = new MilvaCryptographyProvider(options);
+        var provider = new MilvaCryptographyProvider(options, new Microsoft.IO.RecyclableMemoryStreamManager());
 
         // Act
         var encryptedData = await provider.EncryptAsync(data);
@@ -62,7 +62,7 @@ public class MilvaCryptographyTests
         {
             Key = "bc3voatyGOwvN/yfoX32pPfNJhLnVTBQEG9PIzKQ7I88l+qc7Tf4Z0wUqkVCUy5K"
         };
-        var provider = new MilvaCryptographyProvider(options);
+        var provider = new MilvaCryptographyProvider(options, new Microsoft.IO.RecyclableMemoryStreamManager());
 
         // Act
         Func<string> act = () => provider.Encrypt(data);
@@ -80,7 +80,7 @@ public class MilvaCryptographyTests
         {
             Key = "8RvJjg-oye5NhwqK"
         };
-        var provider = new MilvaCryptographyProvider(options);
+        var provider = new MilvaCryptographyProvider(options, new Microsoft.IO.RecyclableMemoryStreamManager());
 
         // Act
         var encryptedData = provider.Encrypt(data);

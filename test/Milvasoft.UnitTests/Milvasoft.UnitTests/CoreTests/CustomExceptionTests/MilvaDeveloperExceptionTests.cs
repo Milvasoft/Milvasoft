@@ -1,5 +1,6 @@
 ﻿using FluentAssertions;
 using Milvasoft.Core.Exceptions;
+using Milvasoft.Core.Utils.Constants;
 
 namespace Milvasoft.UnitTests.CoreTests.CustomExceptionTests;
 
@@ -14,7 +15,7 @@ public class MilvaDeveloperExceptionTests
 
         // Assert
         ex.Message.Should().Be($"{MilvaException.Base}Exception");
-        ex.ExceptionCode.Should().Be((int)MilvaException.Base);
+        ex.ExceptionCode.Should().Be(MilvaCodes.Exception0Base);
     }
 
     [Fact]
@@ -26,7 +27,7 @@ public class MilvaDeveloperExceptionTests
 
         // Assert
         ex.Message.Should().Be(message);
-        ex.ExceptionCode.Should().Be((int)MilvaException.Base);
+        ex.ExceptionCode.Should().Be(MilvaCodes.Exception0Base);
     }
 
     [Fact]
@@ -40,7 +41,7 @@ public class MilvaDeveloperExceptionTests
 
         // Assert
         ex.Message.Should().Be(message);
-        ex.ExceptionCode.Should().Be((int)MilvaException.Base);
+        ex.ExceptionCode.Should().Be(MilvaCodes.Exception0Base);
         ex.InnerException.Should().Be(innerEx);
     }
 }

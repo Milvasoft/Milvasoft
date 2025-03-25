@@ -15,7 +15,7 @@ public class MilvaEncryptionConverterTests
         {
             Key = "A=YI=+B_LfoK%V4r"
         };
-        var provider = new MilvaCryptographyProvider(options);
+        var provider = new MilvaCryptographyProvider(options, new Microsoft.IO.RecyclableMemoryStreamManager());
 
         // Act
         var converter = new MilvaEncryptionConverter(provider);

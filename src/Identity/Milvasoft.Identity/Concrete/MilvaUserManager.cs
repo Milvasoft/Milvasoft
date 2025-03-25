@@ -361,8 +361,8 @@ public partial class MilvaUserManager<TUser, TKey>(Lazy<IDataProtectionProvider>
     private static string GetPurpose(TUser user, Purpose purpose, string value = null) => purpose switch
     {
         Purpose.EmailChange => $"Email:ChangeEmail:{value}:{user.Email}",
-        Purpose.EmailConfirm => $"Email:" + purpose + ":" + user.Email,
-        Purpose.PasswordReset => $"Totp:" + purpose + ":" + user.Id,
+        Purpose.EmailConfirm => $"Email:{purpose}:{user.Email}",
+        Purpose.PasswordReset => $"Totp:{purpose}{user.Id}",
         _ => string.Empty,
     };
 

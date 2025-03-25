@@ -67,7 +67,7 @@ public class FilterRequestTests
         Settings.UseUtcConversionInDateTypes = false;
 
         // Arrange
-        using var dbContextFixture = new DbContextMock<RestDbContextFixture>(nameof(FilterRequest)).GetDbContextFixture();
+        await using var dbContextFixture = new DbContextMock<RestDbContextFixture>(nameof(FilterRequest)).GetDbContextFixture();
         await dbContextFixture.TestEntities.AddRangeAsync(source);
         await dbContextFixture.SaveChangesAsync();
 

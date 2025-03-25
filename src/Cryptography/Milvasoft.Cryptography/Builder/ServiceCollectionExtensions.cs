@@ -1,5 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.IO;
 using Milvasoft.Cryptography.Abstract;
 using Milvasoft.Cryptography.Concrete;
 
@@ -32,6 +34,8 @@ public static class ServiceCollectionExtensions
         options?.Invoke(config);
 
         builder.Services.AddSingleton<IMilvaCryptographyOptions>(config);
+
+        builder.Services.TryAddSingleton(new RecyclableMemoryStreamManager());
 
         builder.Services.Add(ServiceDescriptor.Describe(typeof(IMilvaCryptographyProvider), typeof(MilvaCryptographyProvider), config.Lifetime));
 

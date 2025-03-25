@@ -86,7 +86,7 @@ public class SortRequestTests
     public async Task BuildPropertySelectorExpression_ForEfSource_WithAscendingSortRequest_ShouldReturnCorrectExpression(IQueryable<RestTestEntityFixture> source, SortRequest sortRequest, Expression<Func<RestTestEntityFixture, object>> expectedExpression)
     {
         // Arrange
-        using var dbContextMock = new DbContextMock<RestDbContextFixture>(nameof(SortRequest)).GetDbContextFixture();
+        await using var dbContextMock = new DbContextMock<RestDbContextFixture>(nameof(SortRequest)).GetDbContextFixture();
         await dbContextMock.TestEntities.AddRangeAsync(source);
         await dbContextMock.SaveChangesAsync();
 
@@ -105,7 +105,7 @@ public class SortRequestTests
     public async Task BuildPropertySelectorExpression_ForEfSource_WithDescendingSortRequest_ShouldReturnCorrectExpression(IQueryable<RestTestEntityFixture> source, SortRequest sortRequest, Expression<Func<RestTestEntityFixture, object>> expectedExpression)
     {
         // Arrange
-        using var dbContextMock = new DbContextMock<RestDbContextFixture>(nameof(SortRequest)).GetDbContextFixture();
+        await using var dbContextMock = new DbContextMock<RestDbContextFixture>(nameof(SortRequest)).GetDbContextFixture();
         await dbContextMock.TestEntities.AddRangeAsync(source);
         await dbContextMock.SaveChangesAsync();
 

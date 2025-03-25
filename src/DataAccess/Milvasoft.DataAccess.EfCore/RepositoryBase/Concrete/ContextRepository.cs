@@ -36,7 +36,7 @@ public class ContextRepository<TContext>(TContext dbContext) : IContextRepositor
 
             await executionStrategy.ExecuteAsync(async () =>
             {
-                using var transaction = await _dbContext.Database.BeginTransactionAsync();
+                await using var transaction = await _dbContext.Database.BeginTransactionAsync();
 
                 try
                 {
@@ -70,7 +70,7 @@ public class ContextRepository<TContext>(TContext dbContext) : IContextRepositor
 
             return executionStrategy.ExecuteAsync(async () =>
             {
-                using var transaction = await _dbContext.Database.BeginTransactionAsync();
+                await using var transaction = await _dbContext.Database.BeginTransactionAsync();
 
                 try
                 {

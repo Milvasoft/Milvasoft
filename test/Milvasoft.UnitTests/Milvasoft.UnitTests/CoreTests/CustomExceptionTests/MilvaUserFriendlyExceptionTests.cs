@@ -1,5 +1,6 @@
 ﻿using FluentAssertions;
 using Milvasoft.Core.Exceptions;
+using Milvasoft.Core.Utils.Constants;
 
 namespace Milvasoft.UnitTests.CoreTests.CustomExceptionTests;
 
@@ -14,7 +15,7 @@ public class MilvaUserFriendlyExceptionTests
 
         // Assert
         ex.Message.Should().Be($"{MilvaException.Base}Exception");
-        ex.ExceptionCode.Should().Be((int)MilvaException.Base);
+        ex.ExceptionCode.Should().Be(MilvaCodes.Exception0Base);
     }
 
     [Fact]
@@ -26,7 +27,7 @@ public class MilvaUserFriendlyExceptionTests
 
         // Assert
         ex.Message.Should().Be(message);
-        ex.ExceptionCode.Should().Be((int)MilvaException.Base);
+        ex.ExceptionCode.Should().Be(MilvaCodes.Exception0Base);
     }
 
     [Fact]
@@ -38,7 +39,7 @@ public class MilvaUserFriendlyExceptionTests
 
         // Assert
         ex.Message.Should().Be(message);
-        ex.ExceptionCode.Should().Be((int)MilvaException.Base);
+        ex.ExceptionCode.Should().Be(MilvaCodes.Exception0Base);
         ex.UseLocalizerKey.Should().BeFalse();
     }
 
@@ -51,7 +52,7 @@ public class MilvaUserFriendlyExceptionTests
 
         // Assert
         ex.Message.Should().Be(message);
-        ex.ExceptionCode.Should().Be((int)MilvaException.AnotherLoginExists);
+        ex.ExceptionCode.Should().Be(MilvaCodes.Exception18AnotherLoginExists);
         ex.UseLocalizerKey.Should().BeTrue();
     }
 
@@ -65,7 +66,7 @@ public class MilvaUserFriendlyExceptionTests
 
         // Assert
         ex.Message.Should().Be(message);
-        ex.ExceptionCode.Should().Be((int)MilvaException.AnotherLoginExists);
+        ex.ExceptionCode.Should().Be(MilvaCodes.Exception18AnotherLoginExists);
         ex.UseLocalizerKey.Should().BeTrue();
         ex.ExceptionObject[0].Should().Be(exObject);
     }
@@ -80,7 +81,7 @@ public class MilvaUserFriendlyExceptionTests
 
         // Assert
         ex.Message.Should().Be(message);
-        ex.ExceptionCode.Should().Be((int)MilvaException.AnotherLoginExists);
+        ex.ExceptionCode.Should().Be(MilvaCodes.Exception18AnotherLoginExists);
         ex.UseLocalizerKey.Should().BeTrue();
         ex.ExceptionObject[0].Should().Be(exObject);
     }
@@ -94,7 +95,7 @@ public class MilvaUserFriendlyExceptionTests
 
         // Assert
         ex.Message.Should().Be(message);
-        ex.ExceptionCode.Should().Be((int)MilvaException.AnotherLoginExists);
+        ex.ExceptionCode.Should().Be(MilvaCodes.Exception18AnotherLoginExists);
         ex.UseLocalizerKey.Should().BeTrue();
     }
 
@@ -107,7 +108,7 @@ public class MilvaUserFriendlyExceptionTests
 
         // Assert
         ex.Message.Should().Be(message);
-        ex.ExceptionCode.Should().Be((int)MilvaException.AnotherLoginExists);
+        ex.ExceptionCode.Should().Be(MilvaCodes.Exception18AnotherLoginExists);
         ex.UseLocalizerKey.Should().BeTrue();
     }
 
@@ -119,7 +120,7 @@ public class MilvaUserFriendlyExceptionTests
 
         // Assert
         ex.Message.Should().Be($"{MilvaException.AnotherLoginExists}Exception");
-        ex.ExceptionCode.Should().Be((int)MilvaException.AnotherLoginExists);
+        ex.ExceptionCode.Should().Be(MilvaCodes.Exception18AnotherLoginExists);
         ex.UseLocalizerKey.Should().BeTrue();
     }
 
@@ -132,7 +133,7 @@ public class MilvaUserFriendlyExceptionTests
 
         // Assert
         ex.Message.Should().Be($"{MilvaException.AnotherLoginExists}Exception");
-        ex.ExceptionCode.Should().Be((int)MilvaException.AnotherLoginExists);
+        ex.ExceptionCode.Should().Be(MilvaCodes.Exception18AnotherLoginExists);
         ex.UseLocalizerKey.Should().BeTrue();
         ex.ExceptionObject[0].Should().Be(exObject);
     }
@@ -147,7 +148,7 @@ public class MilvaUserFriendlyExceptionTests
 
         // Assert
         ex.Message.Should().Be(message);
-        ex.ExceptionCode.Should().Be((int)MilvaException.Base);
+        ex.ExceptionCode.Should().Be(MilvaCodes.Exception0Base);
         ex.UseLocalizerKey.Should().BeTrue();
         ex.ExceptionObject[0].Should().Be(exObject);
     }
@@ -162,7 +163,7 @@ public class MilvaUserFriendlyExceptionTests
 
         // Assert
         ex.Message.Should().Be(message);
-        ex.ExceptionCode.Should().Be((int)MilvaException.Base);
+        ex.ExceptionCode.Should().Be(MilvaCodes.Exception0Base);
         ex.UseLocalizerKey.Should().BeFalse();
         ex.ExceptionObject[0].Should().Be(exObject);
     }
@@ -178,7 +179,7 @@ public class MilvaUserFriendlyExceptionTests
 
         // Assert
         ex.Message.Should().Be(message);
-        ex.ExceptionCode.Should().Be((int)MilvaException.Base);
+        ex.ExceptionCode.Should().Be(MilvaCodes.Exception0Base);
         ex.InnerException.Should().Be(innerEx);
     }
 
@@ -193,7 +194,7 @@ public class MilvaUserFriendlyExceptionTests
 
         // Assert
         ex.Message.Should().Be(message);
-        ex.ExceptionCode.Should().Be((int)MilvaException.AnotherLoginExists);
+        ex.ExceptionCode.Should().Be(MilvaCodes.Exception18AnotherLoginExists);
         ex.InnerException.Should().Be(innerEx);
     }
 }

@@ -51,7 +51,7 @@ public struct TenantId : IEquatable<TenantId>
         else
             throw new MilvaDeveloperException(_invalidTenantIdErrorMessage)
             {
-                ExceptionCode = (int)MilvaException.InvalidTenantId
+                ExceptionCode = MilvaCodes.Exception31InvalidTenantId
             };
     }
 
@@ -184,7 +184,7 @@ public struct TenantId : IEquatable<TenantId>
         else
             throw new MilvaDeveloperException(_invalidTenantIdErrorMessage)
             {
-                ExceptionCode = (int)MilvaException.InvalidTenantId
+                ExceptionCode = MilvaCodes.Exception31InvalidTenantId
             };
     }
 
@@ -234,7 +234,7 @@ public struct TenantId : IEquatable<TenantId>
         if (!TryParse(tenantId))
             throw new MilvaDeveloperException(_invalidTenantIdErrorMessage)
             {
-                ExceptionCode = (int)MilvaException.InvalidTenantId
+                ExceptionCode = MilvaCodes.Exception31InvalidTenantId
             };
 
         return Parse(tenantId);

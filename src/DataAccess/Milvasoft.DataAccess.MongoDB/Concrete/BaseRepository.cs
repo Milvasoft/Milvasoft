@@ -106,7 +106,7 @@ public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : 
     /// Returns entity count.
     /// </summary>
     /// <returns></returns>
-    public async Task<int> GetCountAsync(Expression<Func<TEntity, bool>> filterExpression = null)
+    public async Task<long> GetCountAsync(Expression<Func<TEntity, bool>> filterExpression = null)
     {
         var filter = filterExpression ?? Builders<TEntity>.Filter.Empty;
 
@@ -121,7 +121,7 @@ public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : 
         var count = aggregateFacetResult[0].Facets.First(x => x.Name == "totalDataCount").Output<AggregateCountResult>()?.FirstOrDefault()?.Count ?? 0;
 #pragma warning restore CA1826 // Do not use Enumerable methods on indexable collections
 
-        return (int)count;
+        return count;
     }
 
     /// <summary>
@@ -131,7 +131,7 @@ public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : 
     /// <param name="unwindExpression"></param>
     /// <param name="filterDefinition"></param>
     /// <returns></returns>
-    public Task<int> GetEmbeddedDocumentCountAsync<TEmbedded>(Expression<Func<TEntity, object>> unwindExpression, FilterDefinition<TEmbedded> filterDefinition = null)
+    public Task<long> GetEmbeddedDocumentCountAsync<TEmbedded>(Expression<Func<TEntity, object>> unwindExpression, FilterDefinition<TEmbedded> filterDefinition = null)
     {
         var project = GetProjectionQuery<TEmbedded>(unwindExpression);
 
@@ -243,7 +243,7 @@ public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : 
     /// <param name="filterDefinition"></param>
     /// <param name="projectExpression"></param>
     /// <returns></returns>
-    public async Task<(List<TEntity> entities, int pageCount, int totalDataCount)> GetAsPaginatedAsync(int pageIndex,
+    public async Task<(List<TEntity> entities, int pageCount, long totalDataCount)> GetAsPaginatedAsync(int pageIndex,
                                                                                                        int requestedItemCount,
                                                                                                        List<OrderByProp> orderByProps,
                                                                                                        FilterDefinition<TEntity> filterDefinition = null,
@@ -280,7 +280,7 @@ public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : 
 
         var data = aggregateFacetResults[0].Facets.First(x => x.Name == "data").Output<TEntity>().ToList();
 
-        return (data, totalPages, (int)count);
+        return (data, totalPages, count);
     }
 
     /// <summary>
@@ -302,7 +302,7 @@ public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : 
     /// <param name="projectExpression"></param>
     /// <param name="filterDefinitionForEmbedded"></param>
     /// <returns></returns>
-    public async Task<(List<TEmbedded> entities, int pageCount, int totalDataCount)> GetNestedPropertyAsPaginatedAsync<TEmbedded>(ObjectId entityId,
+    public async Task<(List<TEmbedded> entities, int pageCount, long totalDataCount)> GetNestedPropertyAsPaginatedAsync<TEmbedded>(ObjectId entityId,
                                                                                                                                   int pageIndex,
                                                                                                                                   int requestedItemCount,
                                                                                                                                   List<OrderByProp> orderByProps,
@@ -354,7 +354,7 @@ public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : 
     /// <param name="projectExpression"></param>
     /// <param name="filterDefinitionForEmbedded"></param>
     /// <returns></returns>
-    public async Task<(List<TEmbedded> entities, int pageCount, int totalDataCount)> GetNestedPropertyAsPaginatedAsync<TEmbedded>(List<ObjectId> entityIds,
+    public async Task<(List<TEmbedded> entities, int pageCount, long totalDataCount)> GetNestedPropertyAsPaginatedAsync<TEmbedded>(List<ObjectId> entityIds,
                                                                                                                                   int pageIndex,
                                                                                                                                   int requestedItemCount,
                                                                                                                                   List<OrderByProp> orderByProps,
@@ -406,7 +406,7 @@ public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : 
     /// <param name="projectExpression"></param>
     /// <param name="filterDefinitionForEmbedded"></param>
     /// <returns></returns>
-    public async Task<(List<TEmbedded> entities, int pageCount, int totalDataCount)> GetNestedPropertyAsPaginatedAsync<TEmbedded>(int pageIndex,
+    public async Task<(List<TEmbedded> entities, int pageCount, long totalDataCount)> GetNestedPropertyAsPaginatedAsync<TEmbedded>(int pageIndex,
                                                                                                                                   int requestedItemCount,
                                                                                                                                   List<OrderByProp> orderByProps,
                                                                                                                                   Expression<Func<TEntity, object>> unwindExpression,
@@ -668,7 +668,7 @@ public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : 
     /// <param name="filterExpression"></param>
     /// <param name="filterDefForTEmbedded"></param>
     /// <returns></returns>
-    protected async Task<int> GetTotalDataCount<TEmbedded>(Expression<Func<TEntity, object>> unwindExpression,
+    protected async Task<long> GetTotalDataCount<TEmbedded>(Expression<Func<TEntity, object>> unwindExpression,
                                                            string projectQuery,
                                                            FilterDefinition<TEntity> filterExpression = null,
                                                            FilterDefinition<TEmbedded> filterDefForTEmbedded = null)
@@ -692,7 +692,7 @@ public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : 
                                                       .Project(new BsonDocument(countPropName, new BsonDocument("$size", $"${queryBaseName}")))
                                                       .FirstOrDefaultAsync();
 
-        return countQuery.GetValue(countPropName).ToInt32();
+        return countQuery.GetValue(countPropName).ToInt64();
     }
 
     /// <summary>

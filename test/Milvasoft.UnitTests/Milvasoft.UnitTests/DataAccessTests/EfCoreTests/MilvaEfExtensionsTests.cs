@@ -1,4 +1,5 @@
 ﻿using FluentAssertions;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query;
 using Milvasoft.Components.Rest.Enums;
@@ -11,7 +12,6 @@ using Milvasoft.UnitTests.CoreTests.HelperTests.CommonTests.Fixtures;
 using Milvasoft.UnitTests.TestHelpers;
 using Moq;
 using System.Linq.Expressions;
-using System.Net;
 using System.Reflection;
 
 namespace Milvasoft.UnitTests.DataAccessTests.EfCoreTests;
@@ -879,7 +879,7 @@ public class MilvaEfExtensionsTests
 
         // Assert
         result.IsSuccess.Should().BeTrue();
-        result.StatusCode.Should().Be((int)HttpStatusCode.OK);
+        result.StatusCode.Should().Be(StatusCodes.Status200OK);
         result.Messages.Should().HaveCount(1);
         result.Messages[0].Message.Should().Be(LocalizerKeys.Successful);
     }
@@ -923,7 +923,7 @@ public class MilvaEfExtensionsTests
 
         // Assert
         result.IsSuccess.Should().BeTrue();
-        result.StatusCode.Should().Be((int)HttpStatusCode.OK);
+        result.StatusCode.Should().Be(StatusCodes.Status200OK);
         result.Messages.Should().HaveCount(1);
         result.Messages[0].Message.Should().Be(LocalizerKeys.Successful);
     }
@@ -962,7 +962,7 @@ public class MilvaEfExtensionsTests
 
         // Assert
         result.IsSuccess.Should().BeTrue();
-        result.StatusCode.Should().Be((int)HttpStatusCode.OK);
+        result.StatusCode.Should().Be(StatusCodes.Status200OK);
         result.Messages.Should().HaveCount(1);
         result.Messages[0].Message.Should().Be(LocalizerKeys.Successful);
     }

@@ -27,7 +27,7 @@ public abstract class MilvaBaseException : Exception
     /// </summary>
     /// <param name="messageOrLocalizerKey"></param>
     protected MilvaBaseException(string messageOrLocalizerKey) : base(messageOrLocalizerKey)
-        => ExceptionCode = ExceptionCode != 0 ? ExceptionCode : (int)MilvaException.Base;
+        => ExceptionCode = ExceptionCode != 0 ? ExceptionCode : MilvaCodes.Exception0Base;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="MilvaBaseException"/> class  with a specified error message.
@@ -37,7 +37,7 @@ public abstract class MilvaBaseException : Exception
     protected MilvaBaseException(string messageOrLocalizerKey, params object[] exceptionObjects) : base(messageOrLocalizerKey)
     {
         ExceptionObject = exceptionObjects;
-        ExceptionCode = ExceptionCode != 0 ? ExceptionCode : (int)MilvaException.Base;
+        ExceptionCode = ExceptionCode != 0 ? ExceptionCode : MilvaCodes.Exception0Base;
     }
 
     /// <summary>
@@ -46,5 +46,5 @@ public abstract class MilvaBaseException : Exception
     /// <param name="messageOrLocalizerKey"></param>
     /// <param name="innerException"></param>
     protected MilvaBaseException(string messageOrLocalizerKey, Exception innerException) : base(messageOrLocalizerKey, innerException)
-        => ExceptionCode = ExceptionCode != 0 ? ExceptionCode : (int)MilvaException.Base;
+        => ExceptionCode = ExceptionCode != 0 ? ExceptionCode : MilvaCodes.Exception0Base;
 }

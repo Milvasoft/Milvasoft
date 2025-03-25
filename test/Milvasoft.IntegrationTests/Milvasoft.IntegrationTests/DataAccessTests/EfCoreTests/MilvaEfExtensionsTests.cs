@@ -2,6 +2,7 @@
 using FluentAssertions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
@@ -21,7 +22,6 @@ using Milvasoft.IntegrationTests.Client.Fixtures.EnumFixtures;
 using Milvasoft.IntegrationTests.Client.Fixtures.Persistence;
 using Milvasoft.IntegrationTests.DataAccessTests.Fixtures;
 using System.Linq.Expressions;
-using System.Net;
 
 namespace Milvasoft.IntegrationTests.DataAccessTests.EfCoreTests;
 
@@ -795,7 +795,7 @@ public class MilvaEfExtensionsTests(CustomWebApplicationFactory factory) : DataA
 
         // Assert
         result.IsSuccess.Should().BeTrue();
-        result.StatusCode.Should().Be((int)HttpStatusCode.OK);
+        result.StatusCode.Should().Be(StatusCodes.Status200OK);
         result.Messages.Should().HaveCount(1);
         result.Messages[0].Message.Should().Be(LocalizerKeys.Successful);
     }
@@ -871,7 +871,7 @@ public class MilvaEfExtensionsTests(CustomWebApplicationFactory factory) : DataA
 
         // Assert
         result.IsSuccess.Should().BeTrue();
-        result.StatusCode.Should().Be((int)HttpStatusCode.OK);
+        result.StatusCode.Should().Be(StatusCodes.Status200OK);
         result.Messages.Should().HaveCount(1);
         result.Messages[0].Message.Should().Be(LocalizerKeys.Successful);
     }

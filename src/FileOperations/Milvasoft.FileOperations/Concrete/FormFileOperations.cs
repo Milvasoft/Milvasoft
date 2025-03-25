@@ -359,7 +359,7 @@ public static partial class FormFileOperations
         if (string.IsNullOrWhiteSpace(path))
             return null;
 
-        var memory = new MemoryStream();
+        await using var memory = new MemoryStream();
 
         using (var stream = new FileStream(path, FileMode.Open))
         {

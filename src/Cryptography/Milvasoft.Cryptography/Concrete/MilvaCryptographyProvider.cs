@@ -1,4 +1,5 @@
-﻿using Milvasoft.Cryptography.Abstract;
+﻿using Microsoft.IO;
+using Milvasoft.Cryptography.Abstract;
 using Milvasoft.Cryptography.Builder;
 using System.Security.Cryptography;
 using System.Text;
@@ -12,13 +13,15 @@ namespace Milvasoft.Cryptography.Concrete;
 /// Creates a new <see cref="MilvaCryptographyProvider"/> instance.
 /// </remarks>
 /// <param name="milvaCryptographyOptions"> Cryptography options.</param>
-public class MilvaCryptographyProvider(IMilvaCryptographyOptions milvaCryptographyOptions) : IMilvaCryptographyProvider
+/// <param name="recyclableMemoryStreamManager"></param>
+public class MilvaCryptographyProvider(IMilvaCryptographyOptions milvaCryptographyOptions, RecyclableMemoryStreamManager recyclableMemoryStreamManager) : IMilvaCryptographyProvider
 {
     #region Fields
 
     private readonly byte[] _key = Encoding.UTF8.GetBytes(milvaCryptographyOptions.Key);
     private readonly CipherMode _mode = milvaCryptographyOptions.Cipher;
     private readonly PaddingMode _padding = milvaCryptographyOptions.Padding;
+    private readonly RecyclableMemoryStreamManager _recyclableMemoryStreamManager = recyclableMemoryStreamManager;
 
     #endregion
 
@@ -41,16 +44,19 @@ public class MilvaCryptographyProvider(IMilvaCryptographyOptions milvaCryptograp
 
         using ICryptoTransform encryptor = aesProvider.CreateEncryptor(_key, initializationVector);
 
-        using var memoryStream = new MemoryStream();
+        var memoryStream = _recyclableMemoryStreamManager.GetStream();
 
-        using (var cryptoStream = new CryptoStream(memoryStream, encryptor, CryptoStreamMode.Write))
+        await memoryStream.WriteAsync(initializationVector.AsMemory(0, initializationVector.Length));
+
+        using (var cryptoStream = new CryptoStream(memoryStream, encryptor, CryptoStreamMode.Write, leaveOpen: true))
         {
-            await memoryStream.WriteAsync(initializationVector.AsMemory(0, initializationVector.Length));
             await cryptoStream.WriteAsync(inputValue.AsMemory(0, inputValue.Length));
             await cryptoStream.FlushFinalBlockAsync();
         }
 
-        return Convert.ToBase64String(memoryStream.ToArray());
+        var encryptedBytes = memoryStream.ToArray();
+
+        return Convert.ToBase64String(encryptedBytes);
     }
 
     /// <summary>
@@ -163,16 +169,19 @@ public class MilvaCryptographyProvider(IMilvaCryptographyOptions milvaCryptograp
 
         using ICryptoTransform encryptor = aesProvider.CreateEncryptor(_key, initializationVector);
 
-        using var memoryStream = new MemoryStream();
+        var memoryStream = _recyclableMemoryStreamManager.GetStream();
 
-        using (var cryptoStream = new CryptoStream(memoryStream, encryptor, CryptoStreamMode.Write))
+        memoryStream.Write(initializationVector, 0, initializationVector.Length);
+
+        using (var cryptoStream = new CryptoStream(memoryStream, encryptor, CryptoStreamMode.Write, leaveOpen: true))
         {
-            memoryStream.Write(initializationVector, 0, initializationVector.Length);
             cryptoStream.Write(inputValue, 0, inputValue.Length);
             cryptoStream.FlushFinalBlock();
         }
 
-        return Convert.ToBase64String(memoryStream.ToArray());
+        var encryptedBytes = memoryStream.ToArray();
+
+        return Convert.ToBase64String(encryptedBytes);
     }
 
     /// <summary>

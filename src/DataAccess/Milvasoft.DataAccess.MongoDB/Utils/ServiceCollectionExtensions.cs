@@ -51,7 +51,7 @@ public static class ServiceCollectionExtensions
 
         if (!string.IsNullOrWhiteSpace(config.EncryptionKey))
         {
-            var encryptionProvider = new MilvaCryptographyProvider(new MilvaCryptographyOptions { Key = config.EncryptionKey });
+            var encryptionProvider = new MilvaCryptographyProvider(new MilvaCryptographyOptions { Key = config.EncryptionKey }, new Microsoft.IO.RecyclableMemoryStreamManager());
 
             var serializer = new EncryptedStringSerializer(encryptionProvider);
 

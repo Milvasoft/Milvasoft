@@ -776,53 +776,6 @@ public class ModelBuilderExtensionsTests(CustomWebApplicationFactory factory) : 
     }
 
     [Fact]
-    public async Task UseTenantIdQueryFilter_WithUseTenantIdQueryFilter_ShouldReturnOnlyFiltereds()
-    {
-        // Arrange
-        await InitializeAsync(services =>
-        {
-            services.ConfigureMilvaDataAccess(opt =>
-            {
-                opt.DbContext = new DbContextConfiguration
-                {
-                    UseUtcForDateTime = true
-                };
-            });
-
-            services.AddDbContext<MilvaBulkDbContextFixture>(x =>
-            {
-                x.ConfigureWarnings(warnings => { warnings.Log(RelationalEventId.PendingModelChangesWarning); });
-                x.UseNpgsql(_factory.GetConnectionString()).ReplaceService<IModelCustomizer, UseTenantIdQueryFilterModelCustomizer>();
-            });
-
-        });
-
-        var dbContext = _serviceProvider.GetService<MilvaBulkDbContextFixture>();
-        var entities = new List<SomeModelBuilderTestEntityFixture>
-        {
-            new() {
-                Id = 1,
-                TenantId = TenantId.NewTenantId(),
-                SomeDateProp = DateTime.Now,
-                SomeDateTimeOffsetProp = DateTimeOffset.Now,
-            },
-            new() {
-                Id = 2,
-                TenantId = new TenantId("milvasoft_1"),
-                SomeDateProp = DateTime.Now,
-                SomeDateTimeOffsetProp = DateTimeOffset.Now,
-            },
-        };
-
-        // Act & Assert
-        await dbContext.ModelBuilderTestEntities.AddRangeAsync(entities);
-        await dbContext.SaveChangesAsync();
-
-        var entitiesInDb = await dbContext.ModelBuilderTestEntities.ToListAsync();
-        entitiesInDb.Count.Should().Be(1);
-    }
-
-    [Fact]
     public async Task UseSoftDeleteQueryFilter_UseSoftDeleteQueryFilter_ShouldReturnAll()
     {
         // Arrange

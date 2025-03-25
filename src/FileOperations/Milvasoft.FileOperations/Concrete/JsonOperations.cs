@@ -1,4 +1,5 @@
-﻿using Milvasoft.Cryptography.Builder;
+﻿using Microsoft.IO;
+using Milvasoft.Cryptography.Builder;
 using Milvasoft.Cryptography.Concrete;
 using Milvasoft.FileOperations.Abstract;
 using Milvasoft.FileOperations.Builder;
@@ -67,25 +68,27 @@ public class JsonOperations : IJsonOperations
     private string _encryptionKey;
     private Encoding _encoding;
     private readonly JsonSerializerSettings _jsonSerializerSettings;
+    private readonly RecyclableMemoryStreamManager _recyclableMemoryStreamManager;
 
     #region Consructors
 
     /// <summary>
     /// Initializes new instance of <see cref="JsonOperations"/>.
     /// </summary>
-    public JsonOperations()
+    public JsonOperations(RecyclableMemoryStreamManager recyclableMemoryStreamManager)
     {
         _encoding = Encoding.UTF8;
         _jsonSerializerSettings = new JsonSerializerSettings
         {
             Culture = new CultureInfo("en-US")
         };
+        _recyclableMemoryStreamManager = recyclableMemoryStreamManager;
     }
 
     /// <summary>
     /// Initializes new instance of <see cref="JsonOperations"/> with <see cref="IJsonFileOperationOptions"/>.
     /// </summary>
-    public JsonOperations(IJsonFileOperationOptions jsonOperationsConfig)
+    public JsonOperations(IJsonFileOperationOptions jsonOperationsConfig, RecyclableMemoryStreamManager recyclableMemoryStreamManager)
     {
         _basePath = jsonOperationsConfig.BasePath;
         _encryptionKey = jsonOperationsConfig.EncryptionKey;
@@ -94,6 +97,7 @@ public class JsonOperations : IJsonOperations
         {
             Culture = jsonOperationsConfig.CultureInfo
         };
+        _recyclableMemoryStreamManager = recyclableMemoryStreamManager;
     }
 
     #endregion
@@ -1140,27 +1144,32 @@ public class JsonOperations : IJsonOperations
         return JsonConvert.SerializeObject(jsonContent, Formatting.Indented);
     }
 
-    private static async Task<string> DecryptAndReadAsync(string filePath, string key)
+    private async Task<string> DecryptAndReadAsync(string filePath, string key)
     {
-        var encryptionProvider = new MilvaCryptographyProvider(new MilvaCryptographyOptions { Key = key });
+        var encryptionProvider = new MilvaCryptographyProvider(new MilvaCryptographyOptions { Key = key }, _recyclableMemoryStreamManager);
 
         var inputValue = await File.ReadAllTextAsync(filePath);
 
         return await encryptionProvider.DecryptAsync(inputValue);
     }
 
-    private static async Task EncryptAndWriteAsync(string filePath, string content, string key)
+    private async Task EncryptAndWriteAsync(string filePath, string content, string key)
     {
-        var encryptionProvider = new MilvaCryptographyProvider(new MilvaCryptographyOptions { Key = key });
+        var encryptionProvider = new MilvaCryptographyProvider(new MilvaCryptographyOptions { Key = key }, _recyclableMemoryStreamManager);
 
         var encryptedContent = await encryptionProvider.EncryptAsync(content);
 
         await File.WriteAllTextAsync(filePath, encryptedContent, Encoding.UTF8);
     }
 
-    private static string DecryptAndRead(string filePath, string key)
+    private string DecryptAndRead(string filePath, string key)
     {
-        var plainContent = File.ReadAllBytes(filePath);
+        using var fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read);
+        var memoryStream = _recyclableMemoryStreamManager.GetStream();
+
+        fileStream.CopyTo(memoryStream);
+
+        var plainContent = memoryStream.ToArray();
 
         using var algorithm = Aes.Create();
 
@@ -1191,7 +1200,8 @@ public class JsonOperations : IJsonOperations
 
         using var streamReader = new StreamReader(memStream);
 
-        memStream.Position = 0;
+        if (memStream.CanSeek)
+            memStream.Seek(0, SeekOrigin.Begin);
 
         return streamReader.ReadToEnd();
     }

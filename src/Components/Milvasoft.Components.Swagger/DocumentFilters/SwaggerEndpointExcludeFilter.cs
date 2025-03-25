@@ -22,10 +22,10 @@ public class SwaggerEndpointExcludeFilter : IDocumentFilter
         {
             var actionDescriptor = (ControllerActionDescriptor)contextApiDescription.ActionDescriptor;
 
-            if (actionDescriptor.ControllerTypeInfo.GetCustomAttributes<SwaggerExcludeAttribute>().Any()
-                || actionDescriptor.MethodInfo.GetCustomAttributes<SwaggerExcludeAttribute>().Any())
+            if (actionDescriptor.ControllerTypeInfo.GetCustomAttributes<SwaggerExcludeAttribute>().Any() || actionDescriptor.MethodInfo.GetCustomAttributes<SwaggerExcludeAttribute>().Any())
             {
-                var key = "/" + contextApiDescription.RelativePath.TrimEnd('/');
+                var key = string.Concat("/", contextApiDescription.RelativePath);
+
                 swaggerDoc.Paths.Remove(key);
             }
         }

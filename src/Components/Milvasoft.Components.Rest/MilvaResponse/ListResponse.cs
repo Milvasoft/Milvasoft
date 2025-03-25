@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Milvasoft.Components.Rest.Enums;
-using System.Net;
 using System.Text.Json.Serialization;
 
 namespace Milvasoft.Components.Rest.MilvaResponse;
@@ -117,7 +116,7 @@ public class ListResponse<T> : Response<List<T>>
     public static ListResponse<T> Success() => new(LocalizerKeys.Successful)
     {
         IsSuccess = true,
-        StatusCode = (int)HttpStatusCode.OK,
+        StatusCode = StatusCodes.Status200OK,
     };
 
     public static ListResponse<T> Success(List<T> data) => new(data, LocalizerKeys.Successful)
@@ -131,7 +130,7 @@ public class ListResponse<T> : Response<List<T>>
         var response = new ListResponse<T>(data, message)
         {
             IsSuccess = true,
-            StatusCode = (int)HttpStatusCode.OK,
+            StatusCode = StatusCodes.Status200OK,
         };
 
         return response;
@@ -140,14 +139,14 @@ public class ListResponse<T> : Response<List<T>>
     public static ListResponse<T> Success(List<T> data, int? currentPage, int? totalPageCount, int? totalDataCount) => new(data, currentPage, totalPageCount, totalDataCount)
     {
         IsSuccess = true,
-        StatusCode = (int)HttpStatusCode.OK,
+        StatusCode = StatusCodes.Status200OK,
     };
 
     public static ListResponse<T> Success(List<T> data, string message, int? currentPage, int? totalPageCount, int? totalDataCount)
     {
         var response = new ListResponse<T>(true, message, data, currentPage, totalPageCount, totalDataCount)
         {
-            StatusCode = (int)HttpStatusCode.OK,
+            StatusCode = StatusCodes.Status200OK,
         };
 
         return response;
@@ -158,7 +157,7 @@ public class ListResponse<T> : Response<List<T>>
         var response = new ListResponse<T>(data)
         {
             IsSuccess = true,
-            StatusCode = (int)HttpStatusCode.OK,
+            StatusCode = StatusCodes.Status200OK,
         };
 
         response.AddMessage(message, messageType);
@@ -171,7 +170,7 @@ public class ListResponse<T> : Response<List<T>>
         var response = new ListResponse<T>(data, responseMessage)
         {
             IsSuccess = true,
-            StatusCode = (int)HttpStatusCode.OK,
+            StatusCode = StatusCodes.Status200OK,
         };
 
         return response;
@@ -184,13 +183,13 @@ public class ListResponse<T> : Response<List<T>>
     public static ListResponse<T> Error() => new(LocalizerKeys.Failed)
     {
         IsSuccess = false,
-        StatusCode = (int)HttpStatusCode.BadRequest,
+        StatusCode = StatusCodes.Status400BadRequest,
     };
 
     public static ListResponse<T> Error(List<T> data) => new(data)
     {
         IsSuccess = false,
-        StatusCode = (int)HttpStatusCode.BadRequest,
+        StatusCode = StatusCodes.Status400BadRequest,
     };
 
     public static ListResponse<T> Error(List<T> data, string message)
@@ -198,7 +197,7 @@ public class ListResponse<T> : Response<List<T>>
         var response = new ListResponse<T>(data, message)
         {
             IsSuccess = false,
-            StatusCode = (int)HttpStatusCode.BadRequest,
+            StatusCode = StatusCodes.Status400BadRequest,
         };
 
         return response;
@@ -207,14 +206,14 @@ public class ListResponse<T> : Response<List<T>>
     public static ListResponse<T> Error(List<T> data, int? currentPage, int? totalPageCount, int? totalDataCount) => new(data, currentPage, totalPageCount, totalDataCount)
     {
         IsSuccess = false,
-        StatusCode = (int)HttpStatusCode.BadRequest,
+        StatusCode = StatusCodes.Status400BadRequest,
     };
 
     public static ListResponse<T> Error(List<T> data, string message, int? currentPage, int? totalPageCount, int? totalDataCount)
     {
         var response = new ListResponse<T>(false, message, data, currentPage, totalPageCount, totalDataCount)
         {
-            StatusCode = (int)HttpStatusCode.BadRequest,
+            StatusCode = StatusCodes.Status400BadRequest,
         };
 
         return response;
@@ -225,7 +224,7 @@ public class ListResponse<T> : Response<List<T>>
         var response = new ListResponse<T>(data)
         {
             IsSuccess = false,
-            StatusCode = (int)HttpStatusCode.BadRequest,
+            StatusCode = StatusCodes.Status400BadRequest,
         };
 
         response.AddMessage(message, messageType);
@@ -238,7 +237,7 @@ public class ListResponse<T> : Response<List<T>>
         var response = new ListResponse<T>(data, responseMessage)
         {
             IsSuccess = false,
-            StatusCode = (int)HttpStatusCode.BadRequest,
+            StatusCode = StatusCodes.Status400BadRequest,
         };
 
         return response;
