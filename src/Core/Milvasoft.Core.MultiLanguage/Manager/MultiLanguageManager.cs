@@ -171,7 +171,7 @@ public abstract class MultiLanguageManager : IMultiLanguageManager
 
         MethodCallExpression BuildSelectExpression()
         {
-            var translationEntityPropertyNames = new List<string> { MultiLanguageEntityPropertyNames.LanguageId, MultiLanguageEntityPropertyNames.EntityId, propertyName };
+            var translationEntityPropertyNames = new List<string>(capacity: 4) { MultiLanguageEntityPropertyNames.LanguageId, MultiLanguageEntityPropertyNames.EntityId, propertyName };
 
             if (typeof(ISoftDeletable).IsAssignableFrom(typeof(TTranslationEntity)))
                 translationEntityPropertyNames.Add(EntityPropertyNames.IsDeleted);

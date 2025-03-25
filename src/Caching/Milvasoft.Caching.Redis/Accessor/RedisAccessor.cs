@@ -115,7 +115,6 @@ public partial class RedisAccessor : IRedisAccessor
         if (values.Length == 0 || Array.TrueForAll(values, v => !v.HasValue))
             return [];
 
-        // Sonuçları deserialize edelim
         var redisValues = new List<T>(values.Length);
 
         foreach (var value in values)

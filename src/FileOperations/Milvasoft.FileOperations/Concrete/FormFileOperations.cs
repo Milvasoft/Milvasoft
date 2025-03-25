@@ -161,7 +161,7 @@ public static partial class FormFileOperations
                             ? 1
                             : directoryFiles.Max(fileInDir => Convert.ToInt32(Path.GetFileNameWithoutExtension(fileInDir.FullName).Split('_')[1])) + 1;
 
-            var folderPaths = new List<string>();
+            var folderPaths = new List<string>(files.Count);
 
             foreach (var item in files)
             {

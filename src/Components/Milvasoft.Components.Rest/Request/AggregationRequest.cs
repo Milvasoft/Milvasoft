@@ -27,7 +27,7 @@ public class AggregationRequest
 
         Criterias = [.. Criterias.Where(f => !string.IsNullOrWhiteSpace(f.AggregateBy)).DistinctBy(f => new { f.AggregateBy, f.Type })];
 
-        var result = new List<AggregationResult>();
+        var result = new List<AggregationResult>(Criterias.Count);
 
         foreach (var criteria in Criterias)
         {

@@ -32,7 +32,7 @@ public partial class BoolLocalizedValueFetcher(IServiceProvider serviceProvider)
 
         var resourceKeys = ((string)optionalData).Split(',');
 
-        var enumLookups = new List<object>
+        var enumLookups = new List<object>(capacity: 2)
         {
             new OptionLookupModel { Value = true, Name = localizer != null ? localizer[resourceKeys[0]] : "true" },
             new OptionLookupModel { Value = false, Name = localizer != null ? localizer[resourceKeys[1]] : "false" },

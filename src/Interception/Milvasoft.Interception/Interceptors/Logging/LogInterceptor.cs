@@ -151,7 +151,7 @@ public partial class LogInterceptor(IServiceProvider serviceProvider) : IMilvaIn
 
             var body = (MethodCallExpression)expression.GetType().GetProperty("Body").GetValue(expression);
 
-            var argumentValues = new List<object>();
+            var argumentValues = new List<object>(body.Arguments.Count);
 
             foreach (var argument in body.Arguments)
                 argumentValues.Add(argument.GetType().GetProperty("Value").GetValue(argument));

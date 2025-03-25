@@ -1,4 +1,5 @@
-﻿using Milvasoft.Components.Rest.Enums;
+﻿using Microsoft.AspNetCore.Http;
+using Milvasoft.Components.Rest.Enums;
 using System.Net;
 using System.Text.Json.Serialization;
 
@@ -122,7 +123,7 @@ public class ListResponse<T> : Response<List<T>>
     public static ListResponse<T> Success(List<T> data) => new(data, LocalizerKeys.Successful)
     {
         IsSuccess = true,
-        StatusCode = (int)HttpStatusCode.OK,
+        StatusCode = StatusCodes.Status200OK,
     };
 
     public static ListResponse<T> Success(List<T> data, string message)

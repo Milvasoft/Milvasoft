@@ -32,7 +32,7 @@ public class EnumLocalizedValueFetcher(IServiceProvider serviceProvider) : IOpti
 
         var enumUnderlyingType = Enum.GetUnderlyingType(enumType);
 
-        var enumLookups = new List<object>();
+        var enumLookups = new List<object>(enumValues.Length);
 
         var localizer = _serviceProvider.GetService<IMilvaLocalizer>();
 

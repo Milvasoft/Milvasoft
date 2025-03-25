@@ -75,7 +75,7 @@ public static class MultiLanguageExtensions
         if (mainEntityPropertyNameTempList.IsNullOrEmpty())
             return i => i;
 
-        var bindings = new List<MemberAssignment>();
+        var bindings = new List<MemberAssignment>(capacity: mainEntityPropertyNameTempList.Count);
 
         foreach (var item in mainEntityPropertyNameTempList)
         {

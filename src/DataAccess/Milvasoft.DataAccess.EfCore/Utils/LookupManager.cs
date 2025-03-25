@@ -40,7 +40,7 @@ internal class LookupManager(MilvaDbContext dbContext, IDataAccessConfiguration 
 
         ValidateRequestParameters(lookupRequest);
 
-        var resultList = new List<object>();
+        var resultList = new List<object>(lookupRequest.Parameters.Count);
         var assemblyTypes = _dataAccessConfiguration.DbContext.DynamicFetch.GetEntityAssembly().GetTypes();
         var multiLanguageManager = _dbContext.ServiceProvider?.GetService<IMultiLanguageManager>();
 
@@ -158,7 +158,7 @@ internal class LookupManager(MilvaDbContext dbContext, IDataAccessConfiguration 
 
     private static List<object> ProcessLookupResults(IList lookupList, LookupContext context, IMultiLanguageManager multiLanguageManager)
     {
-        var lookups = new List<object>();
+        var lookups = new List<object>(lookupList.Count);
 
         foreach (var lookup in lookupList)
         {

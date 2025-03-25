@@ -441,7 +441,7 @@ public static class ModelBuilderExtensions
 
             foreach (var prop in properties)
             {
-                var newProps = new List<PropertyInfo>
+                var newProps = new List<PropertyInfo>(capacity: 2)
                 {
                     tenantIdProperty,
                     prop.PropertyInfo
