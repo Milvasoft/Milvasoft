@@ -670,7 +670,7 @@ public class MilvaDbContextTests
 
     [Theory]
     [MemberData(nameof(InvalidLookupRequestForGetLookupsAsyncMethod))]
-    public async Task GetLookupsAsync_WithInvalidLookupRequest_ShouldThrowException(LookupRequest lookupRequest)
+    public Task GetLookupsAsync_WithInvalidLookupRequest_ShouldThrowException(LookupRequest lookupRequest)
     {
         // Arrange
         var dataAccessConfiguration = new DataAccessConfiguration
@@ -694,7 +694,7 @@ public class MilvaDbContextTests
         Func<Task> act = async () => await dbContext.GetLookupsAsync(lookupRequest);
 
         // Assert
-        await act.Should().ThrowAsync<MilvaUserFriendlyException>();
+        return act.Should().ThrowAsync<MilvaUserFriendlyException>();
     }
 
     [Fact]
@@ -796,7 +796,7 @@ public class MilvaDbContextTests
 
     [Theory]
     [MemberData(nameof(InvalidRequestForGetPropertyValuesAsyncMethod))]
-    public async Task GetPropertyValuesAsync_WithInvalidRequest_ShouldThrowException(EntityPropertyValuesRequest request)
+    public Task GetPropertyValuesAsync_WithInvalidRequest_ShouldThrowException(EntityPropertyValuesRequest request)
     {
         // Arrange
         var dataAccessConfiguration = new DataAccessConfiguration
@@ -820,7 +820,7 @@ public class MilvaDbContextTests
         Func<Task> act = async () => await dbContext.GetPropertyValuesAsync(request);
 
         // Assert
-        await act.Should().ThrowAsync<MilvaUserFriendlyException>();
+        return act.Should().ThrowAsync<MilvaUserFriendlyException>();
     }
 
     [Fact]

@@ -20,15 +20,15 @@ public class MemoryCacheAccessor(IMemoryCache cache) : IMemoryCacheAccessor
 
     public Task<IEnumerable<T>> GetAsync<T>(IEnumerable<string> keys) => throw new NotImplementedException();
 
-    public async Task<T> GetAsync<T>(string key) where T : class => await Task.Run(() => Get<T>(key));
+    public Task<T> GetAsync<T>(string key) where T : class => Task.Run(() => Get<T>(key));
 
-    public async Task<object> GetAsync(string key, Type returnType) => await Task.Run(() => _genericGetMethod.MakeGenericMethod(returnType).Invoke(this, [key]));
+    public Task<object> GetAsync(string key, Type returnType) => Task.Run(() => _genericGetMethod.MakeGenericMethod(returnType).Invoke(this, [key]));
 
-    public async Task<string> GetAsync(string key) => await Task.Run(() => Get(key));
+    public Task<string> GetAsync(string key) => Task.Run(() => Get(key));
 
     public bool KeyExists(string key) => _cache.TryGetValue(key, out _);
 
-    public async Task<bool> KeyExistsAsync(string key) => await Task.Run(() => KeyExists(key));
+    public Task<bool> KeyExistsAsync(string key) => Task.Run(() => KeyExists(key));
 
     public bool KeyExpire(string key, TimeSpan expiration)
     {
@@ -50,9 +50,9 @@ public class MemoryCacheAccessor(IMemoryCache cache) : IMemoryCacheAccessor
         return false;
     }
 
-    public async Task<bool> KeyExpireAsync(string key, TimeSpan expiration) => await Task.Run(() => KeyExpire(key, expiration));
+    public Task<bool> KeyExpireAsync(string key, TimeSpan expiration) => Task.Run(() => KeyExpire(key, expiration));
 
-    public async Task<bool> KeyExpireAsync(string key, DateTime? expiration) => await Task.Run(() => KeyExpire(key, expiration));
+    public Task<bool> KeyExpireAsync(string key, DateTime? expiration) => Task.Run(() => KeyExpire(key, expiration));
 
     public bool Remove(string key)
     {
@@ -61,7 +61,7 @@ public class MemoryCacheAccessor(IMemoryCache cache) : IMemoryCacheAccessor
         return true;
     }
 
-    public async Task<bool> RemoveAsync(string key) => await Task.Run(() => Remove(key));
+    public Task<bool> RemoveAsync(string key) => Task.Run(() => Remove(key));
 
     public Task<long> RemoveAsync(IEnumerable<string> keys) => throw new NotImplementedException();
 
@@ -71,8 +71,8 @@ public class MemoryCacheAccessor(IMemoryCache cache) : IMemoryCacheAccessor
 
     public bool Set(string key, object value, TimeSpan? expiration) => (expiration.HasValue ? _cache.Set(key, value, expiration.Value) : Set(key, value)) != null;
 
-    public async Task<bool> SetAsync(string key, object value) => await Task.Run(() => Set(key, value));
+    public Task<bool> SetAsync(string key, object value) => Task.Run(() => Set(key, value));
 
-    public async Task<bool> SetAsync(string key, object value, TimeSpan? expiration) => await Task.Run(() => Set(key, value, expiration));
+    public Task<bool> SetAsync(string key, object value, TimeSpan? expiration) => Task.Run(() => Set(key, value, expiration));
 }
 #pragma warning restore CS1591 // Missing XML comment for publicly visible type or member

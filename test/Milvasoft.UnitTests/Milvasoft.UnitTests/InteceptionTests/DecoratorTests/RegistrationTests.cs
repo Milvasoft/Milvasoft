@@ -60,10 +60,10 @@ public class RegistrationTests
         public int InterceptionOrder { get; set; } = 1;
         public int CallCount { get; set; }
 
-        public async Task OnInvoke(Call call)
+        public Task OnInvoke(Call call)
         {
             CallCount++;
-            await call.NextAsync();
+            return call.NextAsync();
         }
     }
 

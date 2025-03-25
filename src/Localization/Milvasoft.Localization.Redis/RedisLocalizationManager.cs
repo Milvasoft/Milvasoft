@@ -90,11 +90,11 @@ public class RedisLocalizationManager(ICacheAccessor<RedisAccessor> cacheAccesso
     /// <param name="key"></param>
     /// <param name="value"></param>
     /// <returns></returns>
-    public async Task SetAsync(string key, string value)
+    public Task SetAsync(string key, string value)
     {
         var formattedKey = CheckAndFormatKey(key);
 
-        await _cacheAccessor.SetAsync(formattedKey, value);
+        return _cacheAccessor.SetAsync(formattedKey, value);
     }
 
     /// <summary>
@@ -145,11 +145,11 @@ public class RedisLocalizationManager(ICacheAccessor<RedisAccessor> cacheAccesso
     /// </summary>
     /// <param name="key"></param>
     /// <returns></returns>
-    public async Task RemoveAsync(string key)
+    public Task RemoveAsync(string key)
     {
         var formattedKey = CheckAndFormatKey(key);
 
-        await _cacheAccessor.RemoveAsync(formattedKey);
+        return _cacheAccessor.RemoveAsync(formattedKey);
     }
 
     /// <summary>

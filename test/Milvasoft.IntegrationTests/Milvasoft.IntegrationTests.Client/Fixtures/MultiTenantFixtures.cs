@@ -18,7 +18,7 @@ public class TestTenantIdResolutionStrategy : ITenantResolutionStrategy<TenantId
     /// Get the tenant identifier from header.
     /// </summary>
     /// <returns></returns>
-    public async Task<TenantId> GetTenantIdentifierAsync() => await Task.FromResult(GetTenantIdentifier()).ConfigureAwait(false);
+    public Task<TenantId> GetTenantIdentifierAsync() => Task.FromResult(GetTenantIdentifier());
 
     /// <summary>
     /// Get the tenant identifier from header.
@@ -38,7 +38,7 @@ public class TestTenantStore<TTenant, TKey> : ITenantStore<TTenant, TKey>
     /// </summary>
     /// <param name="identifier"></param>
     /// <returns></returns>
-    public async Task<TTenant> GetTenantAsync(TKey identifier) => await Task.FromResult(_tenants.FirstOrDefault(i => i.Id.Equals(identifier)));
+    public Task<TTenant> GetTenantAsync(TKey identifier) => Task.FromResult(_tenants.FirstOrDefault(i => i.Id.Equals(identifier)));
 
     /// <summary>
     /// Sets a tenant with a given identifier.
@@ -46,10 +46,10 @@ public class TestTenantStore<TTenant, TKey> : ITenantStore<TTenant, TKey>
     /// <param name="identifier"></param>
     /// <param name="tenant"></param>
     /// <returns></returns>
-    public async Task<bool> SetTenantAsync(TTenant tenant)
+    public Task<bool> SetTenantAsync(TTenant tenant)
     {
         _tenants.Add(tenant);
 
-        return await Task.FromResult(true);
+        return Task.FromResult(true);
     }
 }

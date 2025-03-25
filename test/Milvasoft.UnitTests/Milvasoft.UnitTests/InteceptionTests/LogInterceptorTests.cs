@@ -124,7 +124,7 @@ public class LogInterceptorTests
             Logs.Add(logObject.TransactionId, logObject);
         }
 
-        public async Task LogAsync(string logEntry) => await Task.Run(() => Log(logEntry));
+        public Task LogAsync(string logEntry) => Task.Run(() => Log(logEntry));
 
         public void Debug(string message) => throw new NotImplementedException();
         public void Debug(Exception exception, string messageTemplate) => throw new NotImplementedException();

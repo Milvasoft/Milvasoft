@@ -94,12 +94,12 @@ public abstract partial class BulkBaseRepository<TEntity, TContext>(TContext dbC
     /// <param name="bulkConfig"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    public virtual async Task BulkAddWithSaveChangesAsync(List<TEntity> entities, BulkConfig bulkConfig = null, CancellationToken cancellationToken = default)
+    public virtual Task BulkAddWithSaveChangesAsync(List<TEntity> entities, BulkConfig bulkConfig = null, CancellationToken cancellationToken = default)
     {
         if (!entities.IsNullOrEmpty())
             _dbSet.AddRange(entities);
 
-        await InternalSaveChangesBulkAsync(bulkConfig, cancellationToken);
+        return InternalSaveChangesBulkAsync(bulkConfig, cancellationToken);
     }
 
     /// <summary>
@@ -109,12 +109,12 @@ public abstract partial class BulkBaseRepository<TEntity, TContext>(TContext dbC
     /// <param name="bulkConfig"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    public virtual async Task BulkUpdateWithSaveChangesAsync(List<TEntity> entities, BulkConfig bulkConfig = null, CancellationToken cancellationToken = default)
+    public virtual Task BulkUpdateWithSaveChangesAsync(List<TEntity> entities, BulkConfig bulkConfig = null, CancellationToken cancellationToken = default)
     {
         if (!entities.IsNullOrEmpty())
             _dbSet.UpdateRange(entities);
 
-        await InternalSaveChangesBulkAsync(bulkConfig, cancellationToken);
+        return InternalSaveChangesBulkAsync(bulkConfig, cancellationToken);
     }
 
     /// <summary>
@@ -124,12 +124,12 @@ public abstract partial class BulkBaseRepository<TEntity, TContext>(TContext dbC
     /// <param name="bulkConfig"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    public virtual async Task BulkDeleteWithSaveChangesAsync(List<TEntity> entities, BulkConfig bulkConfig = null, CancellationToken cancellationToken = default)
+    public virtual Task BulkDeleteWithSaveChangesAsync(List<TEntity> entities, BulkConfig bulkConfig = null, CancellationToken cancellationToken = default)
     {
         if (!entities.IsNullOrEmpty())
             _dbSet.RemoveRange(entities);
 
-        await InternalSaveChangesBulkAsync(bulkConfig, cancellationToken);
+        return InternalSaveChangesBulkAsync(bulkConfig, cancellationToken);
     }
 
     #endregion
@@ -140,7 +140,7 @@ public abstract partial class BulkBaseRepository<TEntity, TContext>(TContext dbC
     /// <param name="bulkConfig"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    public async Task SaveChangesBulkAsync(BulkConfig bulkConfig = null, CancellationToken cancellationToken = default) => await _dbContext.SaveChangesBulkAsync(bulkConfig, cancellationToken);
+    public Task SaveChangesBulkAsync(BulkConfig bulkConfig = null, CancellationToken cancellationToken = default) => _dbContext.SaveChangesBulkAsync(bulkConfig, cancellationToken);
 
     /// <summary>
     /// Save changes according to save changes choise.

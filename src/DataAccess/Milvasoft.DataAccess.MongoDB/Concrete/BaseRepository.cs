@@ -131,11 +131,11 @@ public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : 
     /// <param name="unwindExpression"></param>
     /// <param name="filterDefinition"></param>
     /// <returns></returns>
-    public async Task<int> GetEmbeddedDocumentCountAsync<TEmbedded>(Expression<Func<TEntity, object>> unwindExpression, FilterDefinition<TEmbedded> filterDefinition = null)
+    public Task<int> GetEmbeddedDocumentCountAsync<TEmbedded>(Expression<Func<TEntity, object>> unwindExpression, FilterDefinition<TEmbedded> filterDefinition = null)
     {
         var project = GetProjectionQuery<TEmbedded>(unwindExpression);
 
-        return await GetTotalDataCount(unwindExpression, project, null, filterDefinition);
+        return GetTotalDataCount(unwindExpression, project, null, filterDefinition);
     }
 
     /// <summary>
@@ -447,14 +447,14 @@ public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : 
     /// </summary>
     /// <param name="document"></param>
     /// <returns></returns>
-    public virtual async Task AddAsync(TEntity document)
+    public virtual Task AddAsync(TEntity document)
     {
         var options = new InsertOneOptions { BypassDocumentValidation = false };
 
         if (_useUtcForDateTimes)
             ConvertDateTimePropertiesToUtc(document);
 
-        await _collection.InsertOneAsync(document, options);
+        return _collection.InsertOneAsync(document, options);
     }
 
     /// <summary>
@@ -462,14 +462,14 @@ public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : 
     /// </summary>
     /// <param name="documents"></param>
     /// <returns></returns>
-    public virtual async Task AddRangeAsync(IEnumerable<TEntity> documents)
+    public virtual Task AddRangeAsync(IEnumerable<TEntity> documents)
     {
         var options = new InsertManyOptions { BypassDocumentValidation = false };
 
         if (_useUtcForDateTimes)
             ConvertDateTimePropertiesToUtc(documents);
 
-        await _collection.InsertManyAsync(documents, options);
+        return _collection.InsertManyAsync(documents, options);
     }
 
     /// <summary>
@@ -477,7 +477,7 @@ public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : 
     /// </summary>
     /// <param name="document"></param>
     /// <returns></returns>
-    public virtual async Task UpdateAsync(TEntity document)
+    public virtual Task UpdateAsync(TEntity document)
     {
         var filter = Builders<TEntity>.Filter.Eq(doc => doc.Id, document.Id);
 
@@ -486,7 +486,7 @@ public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : 
         if (_useUtcForDateTimes)
             ConvertDateTimePropertiesToUtc(document);
 
-        await _collection.FindOneAndReplaceAsync(filter, document);
+        return _collection.FindOneAndReplaceAsync(filter, document);
     }
 
     /// <summary>
@@ -495,7 +495,7 @@ public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : 
     /// <param name="document"></param>
     /// <param name="updateDefinition"></param>
     /// <returns></returns>
-    public virtual async Task UpdateAsync(TEntity document, UpdateDefinition<TEntity> updateDefinition)
+    public virtual Task UpdateAsync(TEntity document, UpdateDefinition<TEntity> updateDefinition)
     {
         var filter = Builders<TEntity>.Filter.Eq(doc => doc.Id, document.Id);
 
@@ -504,7 +504,7 @@ public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : 
         if (_useUtcForDateTimes)
             ConvertDateTimePropertiesToUtc(document);
 
-        await _collection.UpdateOneAsync(filter, updateDefinition);
+        return _collection.UpdateOneAsync(filter, updateDefinition);
     }
 
     /// <summary>
@@ -518,7 +518,7 @@ public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : 
     /// <param name="filterDefinition"></param>
     /// <param name="updateDefinition"></param>
     /// <returns></returns>
-    public virtual async Task UpdateAsync(FilterDefinition<TEntity> filterDefinition, UpdateDefinition<TEntity> updateDefinition) => await _collection.UpdateOneAsync(filterDefinition, updateDefinition);
+    public virtual Task UpdateAsync(FilterDefinition<TEntity> filterDefinition, UpdateDefinition<TEntity> updateDefinition) => _collection.UpdateOneAsync(filterDefinition, updateDefinition);
 
     /// <summary>
     /// Updates the data in multiple.
@@ -529,7 +529,7 @@ public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : 
     /// <param name="documents"></param>
     /// <param name="fieldDefinitions"></param>
     /// <returns></returns>
-    public async Task UpdateRangeAsync(List<TEntity> documents, params Expression<Func<TEntity, object>>[] fieldDefinitions)
+    public Task UpdateRangeAsync(List<TEntity> documents, params Expression<Func<TEntity, object>>[] fieldDefinitions)
     {
         var listWrites = new List<WriteModel<TEntity>>();
 
@@ -571,7 +571,7 @@ public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : 
             listWrites.Add(new UpdateOneModel<TEntity>(filterDef, updateDefForLastModificationDate));
         }
 
-        await _collection.BulkWriteAsync(listWrites);
+        return _collection.BulkWriteAsync(listWrites);
     }
 
     /// <summary>
@@ -579,24 +579,24 @@ public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : 
     /// </summary>
     /// <param name="filterExpression"></param>
     /// <returns></returns>
-    public async Task DeleteRangeAsync(FilterDefinition<TEntity> filterExpression) => await _collection.DeleteManyAsync(filterExpression);
+    public Task DeleteRangeAsync(FilterDefinition<TEntity> filterExpression) => _collection.DeleteManyAsync(filterExpression);
 
     /// <summary>
     ///  Deletes single entity from database asynchronously..
     /// </summary>
     /// <param name="filterExpression"></param>
     /// <returns></returns>
-    public async Task DeleteAsync(Expression<Func<TEntity, bool>> filterExpression) => await _collection.FindOneAndDeleteAsync(filterExpression);
+    public Task DeleteAsync(Expression<Func<TEntity, bool>> filterExpression) => _collection.FindOneAndDeleteAsync(filterExpression);
 
     /// <summary>
     ///  Deletes single entity from database asynchronously..
     /// </summary>
     /// <param name="id"></param>
     /// <returns></returns>
-    public async Task DeleteAsync(ObjectId id)
+    public Task DeleteAsync(ObjectId id)
     {
         var filter = Builders<TEntity>.Filter.Eq(doc => doc.Id, id);
-        await _collection.FindOneAndDeleteAsync(filter);
+        return _collection.FindOneAndDeleteAsync(filter);
     }
 
     /// <summary>
@@ -604,10 +604,10 @@ public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : 
     /// </summary>
     /// <param name="id"></param>
     /// <returns> The deleted document if one was deleted. </returns>
-    public async Task<TEntity> DeleteAndReturnDeletedAsync(ObjectId id)
+    public Task<TEntity> DeleteAndReturnDeletedAsync(ObjectId id)
     {
         var filter = Builders<TEntity>.Filter.Eq(doc => doc.Id, id);
-        return await _collection.FindOneAndDeleteAsync(filter);
+        return _collection.FindOneAndDeleteAsync(filter);
     }
 
     #region Helper Methods

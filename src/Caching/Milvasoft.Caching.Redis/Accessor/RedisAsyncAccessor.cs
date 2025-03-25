@@ -71,25 +71,39 @@ public partial class RedisAccessor
     public async Task<IEnumerable<T>> GetAsync<T>(IEnumerable<string> keys)
     {
         if (keys.IsNullOrEmpty())
-            return null;
+            return [];
 
-        keys.ToList().RemoveAll(i => string.IsNullOrWhiteSpace(i));
+        var filteredKeys = keys.Where(k => !string.IsNullOrWhiteSpace(k)).Distinct().ToArray();
 
-        var redisKeys = Array.ConvertAll(keys.ToArray(), item => (RedisKey)item);
+        if (filteredKeys.Length == 0)
+            return [];
+
+        var redisKeys = Array.ConvertAll(filteredKeys, item => (RedisKey)item);
 
         var values = await _database.StringGetAsync(redisKeys);
 
-        if (values.IsNullOrEmpty())
-            return null;
+        if (values.Length == 0 || Array.TrueForAll(values, v => !v.HasValue))
+            return [];
 
-        var stringValues = values.ToStringArray();
+        // Sonuçları deserialize edelim
+        var redisValues = new List<T>(values.Length);
 
-        List<T> redisValues = [];
-
-        foreach (var item in stringValues)
+        foreach (var value in values)
         {
-            if (!string.IsNullOrWhiteSpace(item))
-                redisValues.Add(JsonConvert.DeserializeObject<T>(item));
+            if (!value.HasValue)
+                continue;
+
+            try
+            {
+                var deserialized = JsonConvert.DeserializeObject<T>(value!);
+
+                if (deserialized is not null)
+                    redisValues.Add(deserialized);
+            }
+            catch
+            {
+                // Handle deserialization error.
+            }
         }
 
         return redisValues;
@@ -104,9 +118,12 @@ public partial class RedisAccessor
         if (keys.IsNullOrEmpty())
             return null;
 
-        keys.ToList().RemoveAll(i => string.IsNullOrWhiteSpace(i));
+        var filteredKeys = keys.Where(k => !string.IsNullOrWhiteSpace(k)).Distinct().ToArray();
 
-        var redisKeys = Array.ConvertAll(keys.ToArray(), item => (RedisKey)item);
+        if (filteredKeys.Length == 0)
+            return [];
+
+        var redisKeys = Array.ConvertAll(filteredKeys, item => (RedisKey)item);
 
         var values = await _database.StringGetAsync(redisKeys);
 
@@ -122,8 +139,8 @@ public partial class RedisAccessor
     /// <param name="key"></param>
     /// <param name="value"></param>
     /// <returns></returns>
-    public async Task<bool> SetAsync(string key, object value)
-        => await _database.StringSetAsync(key, ToJson(value));
+    public Task<bool> SetAsync(string key, object value)
+        => _database.StringSetAsync(key, ToJson(value));
 
     /// <summary>
     /// Sets <paramref name="value"/> to <paramref name="key"/> with <paramref name="expiration"/>.
@@ -132,12 +149,12 @@ public partial class RedisAccessor
     /// <param name="value"></param>
     /// <param name="expiration"></param>
     /// <returns></returns>
-    public async Task<bool> SetAsync(string key, object value, TimeSpan? expiration)
+    public Task<bool> SetAsync(string key, object value, TimeSpan? expiration)
     {
         if (expiration.HasValue)
-            return await _database.StringSetAsync(key, ToJson(value), _useUtcForDateTimes ? expiration.Value.ConvertToUtc() : expiration);
+            return _database.StringSetAsync(key, ToJson(value), _useUtcForDateTimes ? expiration.Value.ConvertToUtc() : expiration);
         else
-            return await _database.StringSetAsync(key, ToJson(value));
+            return _database.StringSetAsync(key, ToJson(value));
     }
 
     /// <summary>
@@ -145,29 +162,29 @@ public partial class RedisAccessor
     /// </summary>
     /// <param name="values"></param>
     /// <returns></returns>
-    public async Task<bool> SetAsync(KeyValuePair<RedisKey, RedisValue>[] values)
-        => await _database.StringSetAsync(values);
+    public Task<bool> SetAsync(KeyValuePair<RedisKey, RedisValue>[] values)
+        => _database.StringSetAsync(values);
 
     /// <summary>
     /// Removes <paramref name="key"/> and value.
     /// </summary>
     /// <param name="key"></param>
-    public async Task<bool> RemoveAsync(string key)
-        => await _database.KeyDeleteAsync(key);
+    public Task<bool> RemoveAsync(string key)
+        => _database.KeyDeleteAsync(key);
 
     /// <summary>
     /// Removes <paramref name="keys"/> and value.
     /// </summary>
     /// <param name="keys"></param>
-    public async Task<long> RemoveAsync(IEnumerable<string> keys)
-        => await _database.KeyDeleteAsync(keys: [.. keys.Select(i => new RedisKey(i))]);
+    public Task<long> RemoveAsync(IEnumerable<string> keys)
+        => _database.KeyDeleteAsync(keys: [.. keys.Select(i => new RedisKey(i))]);
 
     /// <summary>
     /// Checks if there is a <paramref name="key"/> in database. 
     /// </summary>
     /// <param name="key"></param>
-    public async Task<bool> KeyExistsAsync(string key)
-        => await _database.KeyExistsAsync(key);
+    public Task<bool> KeyExistsAsync(string key)
+        => _database.KeyExistsAsync(key);
 
     /// <summary>
     /// Sets timeout on <paramref name="key"/>.
@@ -175,8 +192,8 @@ public partial class RedisAccessor
     /// <param name="key"></param>
     /// <param name="expiration"></param>
     /// <returns></returns>
-    public async Task<bool> KeyExpireAsync(string key, TimeSpan expiration)
-        => await _database.KeyExpireAsync(key, _useUtcForDateTimes ? expiration.ConvertToUtc() : expiration);
+    public Task<bool> KeyExpireAsync(string key, TimeSpan expiration)
+        => _database.KeyExpireAsync(key, _useUtcForDateTimes ? expiration.ConvertToUtc() : expiration);
 
     /// <summary>
     /// Sets timeout on <paramref name="key"/>.
@@ -184,8 +201,8 @@ public partial class RedisAccessor
     /// <param name="key"></param>
     /// <param name="expiration"></param>
     /// <returns></returns>
-    public async Task<bool> KeyExpireAsync(string key, DateTime? expiration)
-        => await _database.KeyExpireAsync(key, expiration);
+    public Task<bool> KeyExpireAsync(string key, DateTime? expiration)
+        => _database.KeyExpireAsync(key, expiration);
 
     /// <summary>
     /// Flushs default database.

@@ -11,9 +11,9 @@ public abstract class DataAccessIntegrationTestBase(CustomWebApplicationFactory 
     protected IServiceProvider _serviceProvider;
     protected IServiceScope _serviceScope;
 
-    public virtual async Task InitializeAsync() => await Task.CompletedTask;
+    public virtual Task InitializeAsync() => Task.CompletedTask;
 
-    public virtual async Task InitializeAsync(Action<IServiceCollection> configureServices = null, Action<IApplicationBuilder> configureApp = null)
+    public virtual Task InitializeAsync(Action<IServiceCollection> configureServices = null, Action<IApplicationBuilder> configureApp = null)
     {
         var waf = _factory.WithWebHostBuilder(builder =>
         {
@@ -30,8 +30,8 @@ public abstract class DataAccessIntegrationTestBase(CustomWebApplicationFactory 
 
         _serviceProvider = waf.Services.CreateScope().ServiceProvider;
 
-        await _factory.CreateRespawner();
+        return _factory.CreateRespawner();
     }
 
-    public virtual async Task DisposeAsync() => await _factory.ResetDatabase();
+    public virtual Task DisposeAsync() => _factory.ResetDatabase();
 }

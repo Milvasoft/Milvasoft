@@ -59,7 +59,9 @@ public class AggregationCriteria
         if (Type == AggregationType.Count)
         {
 #pragma warning disable S6966 // Awaitable method should be used
+#pragma warning disable AsyncFixer02 // Long-running or blocking operations inside an async method
             var count = runAsync ? await query.CountAsync(cancellationToken).ConfigureAwait(false) : query.Count();
+#pragma warning restore AsyncFixer02 // Long-running or blocking operations inside an async method
 #pragma warning restore S6966 // Awaitable method should be used
             return new AggregationResult(prop.Name, Type, count);
         }
@@ -92,10 +94,8 @@ public class AggregationCriteria
         // Invoke the generic aggregation method based on whether it should run asynchronously or not
         if (_runAsync)
         {
-            var taskResult = (Task)genericAggregationMethod.Invoke(null, [query, propertySelectorResult, cancellationToken]);
-            await taskResult;
-            var resultProperty = taskResult.GetType().GetProperty(nameof(Task<TEntity>.Result));
-            result = resultProperty.GetValue(taskResult);
+            dynamic taskResult = genericAggregationMethod.Invoke(null, [query, propertySelectorResult, cancellationToken]);
+            result = await taskResult;
         }
         else
         {

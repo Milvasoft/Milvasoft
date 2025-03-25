@@ -53,11 +53,11 @@ public abstract class MilvaBulkDbContext(DbContextOptions options) : MilvaDbCont
     /// <param name="bulkConfig"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    public virtual async Task SaveChangesBulkAsync(BulkConfig bulkConfig = null, CancellationToken cancellationToken = new CancellationToken())
+    public virtual Task SaveChangesBulkAsync(BulkConfig bulkConfig = null, CancellationToken cancellationToken = new CancellationToken())
     {
         AuditEntites();
 
-        await this.BulkSaveChangesAsync(bulkConfig, cancellationToken: cancellationToken);
+        return this.BulkSaveChangesAsync(bulkConfig, cancellationToken: cancellationToken);
     }
 
     #endregion

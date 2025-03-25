@@ -137,11 +137,11 @@ public abstract class MilvaDbContext(DbContextOptions options) : DbContext(optio
     /// </summary>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
+    public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
     {
         AuditEntites();
 
-        return await base.SaveChangesAsync(cancellationToken);
+        return base.SaveChangesAsync(cancellationToken);
     }
 
     #endregion
@@ -286,10 +286,10 @@ public abstract class MilvaDbContext(DbContextOptions options) : DbContext(optio
     /// If this method gets soft deleted entities please override <see cref="CommonHelper.CreateIsDeletedFalseExpression{TEntity}"/> method your own condition.
     /// </summary>
     /// <returns></returns>
-    public async Task<List<TEntity>> GetContentsAsync<TEntity>(FilterRequest filterRequest,
+    public Task<List<TEntity>> GetContentsAsync<TEntity>(FilterRequest filterRequest,
                                                                SortRequest sortRequest,
                                                                Expression<Func<TEntity, TEntity>> projectionExpression = null) where TEntity : class
-        => await Set<TEntity>().Where(CommonHelper.CreateIsDeletedFalseExpression<TEntity>() ?? (entity => true))
+        => Set<TEntity>().Where(CommonHelper.CreateIsDeletedFalseExpression<TEntity>() ?? (entity => true))
                                .IncludeTranslations(this)
                                .WithFiltering(filterRequest)
                                .WithSorting(sortRequest)
@@ -340,7 +340,7 @@ public abstract class MilvaDbContext(DbContextOptions options) : DbContext(optio
 
         var propType = (entityType.GetProperty(request.PropertyName)?.PropertyType) ?? throw new MilvaUserFriendlyException(MilvaException.InvalidParameter);
 
-        var taskResult = (Task)this.GetType()
+        dynamic taskResult = this.GetType()
                                    .GetMethod(nameof(GetEntityPropertyValuesAsync))
                                    .MakeGenericMethod(entityType, propType)
                                    .Invoke(this,
@@ -350,11 +350,7 @@ public abstract class MilvaDbContext(DbContextOptions options) : DbContext(optio
                                        request.Sorting,
                                    ]);
 
-        await taskResult;
-
-        var resultProperty = taskResult.GetType().GetProperty("Result");
-
-        var lookupList = (IList)resultProperty.GetValue(taskResult);
+        var lookupList = (IList)await taskResult;
 
         List<object> lookups = [];
 
@@ -378,8 +374,8 @@ public abstract class MilvaDbContext(DbContextOptions options) : DbContext(optio
     /// </summary>
     /// <param name="lookupRequest">The lookup request containing the parameters for the lookup.</param>
     /// <returns>A list of lookup results containing the requested data.</returns>
-    public async Task<List<object>> GetLookupsAsync(LookupRequest lookupRequest)
-        => await new LookupManager(this, _dbContextConfiguration).GetLookupsAsync(lookupRequest);
+    public Task<List<object>> GetLookupsAsync(LookupRequest lookupRequest)
+        => new LookupManager(this, _dbContextConfiguration).GetLookupsAsync(lookupRequest);
 
     #endregion
 

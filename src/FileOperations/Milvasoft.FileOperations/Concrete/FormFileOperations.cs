@@ -206,12 +206,12 @@ public static partial class FormFileOperations
     /// <param name="folderNameCreator"></param>
     /// <param name="propertyName"></param>
     /// <returns> Completed Task </returns>
-    public static async Task<List<string>> SaveFilesToPathAsync<TEntity>(this IFormFileCollection files,
+    public static Task<List<string>> SaveFilesToPathAsync<TEntity>(this IFormFileCollection files,
                                                                          TEntity entity,
                                                                          string basePath,
                                                                          FilesFolderNameCreator folderNameCreator,
                                                                          string propertyName)
-        => await SaveFilesToPathAsync([.. files], entity, basePath, folderNameCreator, propertyName);
+        => SaveFilesToPathAsync([.. files], entity, basePath, folderNameCreator, propertyName);
 
     /// <summary>
     /// Saves uploaded IFormFile files to physical file path. If file list is null or empty returns empty <see cref="List{String}"/> 

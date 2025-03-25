@@ -31,7 +31,7 @@ namespace Milvasoft.IntegrationTests.DataAccessTests.EfCoreTests;
 [Trait("MilvaEfExtensions Integration Tests", "Integration tests for Milvasoft.DataAccess.EfCore integration tests.")]
 public class MilvaEfExtensionsTests(CustomWebApplicationFactory factory) : DataAccessIntegrationTestBase(factory)
 {
-    public override async Task InitializeAsync(Action<IServiceCollection> configureServices = null, Action<IApplicationBuilder> configureApp = null)
+    public override Task InitializeAsync(Action<IServiceCollection> configureServices = null, Action<IApplicationBuilder> configureApp = null)
     {
         var waf = _factory.WithWebHostBuilder(builder =>
         {
@@ -58,7 +58,7 @@ public class MilvaEfExtensionsTests(CustomWebApplicationFactory factory) : DataA
 
         _serviceProvider = waf.Services.CreateScope().ServiceProvider;
 
-        await _factory.CreateRespawner();
+        return _factory.CreateRespawner();
     }
 
     #region WithFiltering

@@ -32,10 +32,10 @@ public class ChangeArgumentTests
         public int InterceptionOrder { get; set; } = 1;
         public int ExpectedArgumentValue { get; set; }
 
-        public async Task OnInvoke(Call call)
+        public Task OnInvoke(Call call)
         {
             call.Arguments[0] = ExpectedArgumentValue;
-            await call.NextAsync();
+            return call.NextAsync();
         }
     }
 

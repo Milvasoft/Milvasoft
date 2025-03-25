@@ -53,11 +53,11 @@ public class DependencyInjectionTests
         public SomeDependency SomeDependency { get; } = someDependency;
         public int CallCount { get; set; }
 
-        public async Task OnInvoke(Call call)
+        public Task OnInvoke(Call call)
         {
             CallCount++;
 
-            await call.NextAsync();
+            return call.NextAsync();
         }
     }
 

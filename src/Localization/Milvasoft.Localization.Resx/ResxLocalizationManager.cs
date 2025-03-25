@@ -80,13 +80,13 @@ public class ResxLocalizationManager<TResource>(IStringLocalizer<TResource> stri
     /// <param name="key"></param>
     /// <param name="value"></param>
     /// <returns></returns>
-    public async Task SetAsync(string key, string value)
+    public Task SetAsync(string key, string value)
     {
         ThrowIfKeyIsInvalid(key);
 
         var resxWriter = new ResxWriter(typeof(TResource), CultureInfo.CurrentCulture.Name, _localizationOptions.ResourcesFolderPath, null);
 
-        await resxWriter.AddAsync(new ResxElement
+        return resxWriter.AddAsync(new ResxElement
         {
             Key = key,
             Value = value
@@ -141,13 +141,13 @@ public class ResxLocalizationManager<TResource>(IStringLocalizer<TResource> stri
     /// </summary>
     /// <param name="key"></param>
     /// <returns></returns>
-    public async Task RemoveAsync(string key)
+    public Task RemoveAsync(string key)
     {
         ThrowIfKeyIsInvalid(key);
 
         var resxWriter = new ResxWriter(typeof(TResource), CultureInfo.CurrentCulture.Name, _localizationOptions.ResourcesFolderPath, null);
 
-        await resxWriter.RemoveAsync(new ResxElement
+        return resxWriter.RemoveAsync(new ResxElement
         {
             Key = key
         });

@@ -56,10 +56,10 @@ public class CallMethodMultipleTimesTests
         public int InterceptionOrder { get; set; } = int.MaxValue;
         public int CallCount { get; set; }
 
-        public async Task OnInvoke(Call call)
+        public Task OnInvoke(Call call)
         {
             CallCount++;
-            await call.NextAsync();
+            return call.NextAsync();
         }
     }
 

@@ -21,8 +21,8 @@ public class InterceptorRunner : IInterceptorRunner
 
     /// <inheritdoc/>
     [LogRunner]
-    public virtual async Task InterceptWithLogAsync(Expression<Func<Task>> expression)
-        => await expression.Compile().Invoke().ConfigureAwait(false);
+    public virtual Task InterceptWithLogAsync(Expression<Func<Task>> expression)
+        => expression.Compile().Invoke();
 
     /// <inheritdoc/>
     [LogRunner]

@@ -47,10 +47,10 @@ public class CallOrderTests
         public int InterceptionOrder { get; set; } = 1;
         public DateTime CallTime { get; set; }
 
-        public async Task OnInvoke(Call call)
+        public Task OnInvoke(Call call)
         {
             CallTime = DateTime.UtcNow;
-            await call.NextAsync();
+            return call.NextAsync();
         }
     }
 
@@ -59,10 +59,10 @@ public class CallOrderTests
         public int InterceptionOrder { get; set; } = 2;
         public DateTime CallTime { get; set; }
 
-        public async Task OnInvoke(Call call)
+        public Task OnInvoke(Call call)
         {
             CallTime = DateTime.UtcNow;
-            await call.NextAsync();
+            return call.NextAsync();
         }
     }
 

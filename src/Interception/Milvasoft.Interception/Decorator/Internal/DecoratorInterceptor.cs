@@ -80,11 +80,11 @@ internal class DecoratorInterceptor(ReadOnlyDictionary<MethodInfo, IMilvaInterce
         return MethodDecoratorMap.TryGetValue(targetMethod, out decorators) && decorators != null && decorators.Length != 0;
     }
 
-    private static async Task WrapInvocationInTask(IInvocation invocation, IMilvaInterceptor[] decorators)
+    private static Task WrapInvocationInTask(IInvocation invocation, IMilvaInterceptor[] decorators)
     {
         var call = new Call(invocation, decorators);
 
-        await GetFirstRunningInterceptor(decorators).OnInvoke(call).ConfigureAwait(false);
+        return GetFirstRunningInterceptor(decorators).OnInvoke(call);
     }
 
     private static async Task<TResult> WrapInvocationInTaskWithResult<TResult>(IInvocation invocation, IMilvaInterceptor[] decorators)

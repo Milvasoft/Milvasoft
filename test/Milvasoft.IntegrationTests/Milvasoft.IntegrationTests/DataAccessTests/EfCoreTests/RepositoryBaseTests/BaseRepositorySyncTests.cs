@@ -25,9 +25,10 @@ namespace Milvasoft.IntegrationTests.DataAccessTests.EfCoreTests.RepositoryBaseT
 [Collection(nameof(UtcTrueDatabaseTestCollection))]
 [Trait("RepositoryBase Sync Integration Tests", "Integration tests for Milvasoft.DataAccess.EfCore integration tests.")]
 [System.Diagnostics.CodeAnalysis.SuppressMessage("Major Code Smell", "S6966:Awaitable method should be used", Justification = "<Pending>")]
+#pragma warning disable AsyncFixer02 // Long-running or blocking operations inside an async method
 public class BaseRepositorySyncTests(CustomWebApplicationFactory factory) : DataAccessIntegrationTestBase(factory)
 {
-    public override async Task InitializeAsync(Action<IServiceCollection> configureServices = null, Action<IApplicationBuilder> configureApp = null)
+    public override Task InitializeAsync(Action<IServiceCollection> configureServices = null, Action<IApplicationBuilder> configureApp = null)
     {
         var waf = _factory.WithWebHostBuilder(builder =>
         {
@@ -61,7 +62,7 @@ public class BaseRepositorySyncTests(CustomWebApplicationFactory factory) : Data
 
         _serviceProvider = waf.Services.CreateScope().ServiceProvider;
 
-        await _factory.CreateRespawner();
+        return _factory.CreateRespawner();
     }
 
     #region Configuration Based Tests
@@ -3015,3 +3016,4 @@ public class BaseRepositorySyncTests(CustomWebApplicationFactory factory) : Data
 
     #endregion
 }
+#pragma warning restore AsyncFixer02 // Long-running or blocking operations inside an async method

@@ -319,11 +319,11 @@ public class JsonOperations : IJsonOperations
     /// <param name="content"> Content to be added or updated. </param>
     /// <param name="filePath"> Path to json file to get data from. </param>
     /// <returns></returns>
-    public async Task ReplaceOldContentWithNewAsync<T>(T content, string filePath)
+    public Task ReplaceOldContentWithNewAsync<T>(T content, string filePath)
     {
         string newJsonResult = JsonConvert.SerializeObject(content, Formatting.Indented, _jsonSerializerSettings);
 
-        await File.WriteAllTextAsync(GetFilePath(filePath), newJsonResult);
+        return File.WriteAllTextAsync(GetFilePath(filePath), newJsonResult);
     }
 
     /// <summary>
@@ -336,7 +336,7 @@ public class JsonOperations : IJsonOperations
     /// </remarks>
     /// <param name="filePath"> Path to json file to get data from. </param>
     /// <returns></returns>
-    public async Task ClearJSONFileAsync(string filePath) => await File.WriteAllTextAsync(GetFilePath(filePath), "");
+    public Task ClearJSONFileAsync(string filePath) => File.WriteAllTextAsync(GetFilePath(filePath), "");
 
     #region With Encryption 
 
@@ -560,11 +560,11 @@ public class JsonOperations : IJsonOperations
     /// <param name="content"> Content to be added or updated. </param>
     /// <param name="filePath"> Path to json file to get data from. </param>   
     /// <returns> Completed <see cref="Task"/> </returns>
-    public async Task ReplaceCryptedOldContentWithNewAsync<T>(T content, string filePath)
+    public Task ReplaceCryptedOldContentWithNewAsync<T>(T content, string filePath)
     {
         string newJsonResult = JsonConvert.SerializeObject(content, Formatting.Indented, _jsonSerializerSettings);
 
-        await EncryptAndWriteAsync(filePath, newJsonResult, _encryptionKey);
+        return EncryptAndWriteAsync(filePath, newJsonResult, _encryptionKey);
     }
 
     #endregion

@@ -169,7 +169,7 @@ public class ExceptionTests
     public class TestDecorator : IMilvaInterceptor
     {
         public int InterceptionOrder { get; set; } = 1;
-        public async Task OnInvoke(Call call) => await call.NextAsync();
+        public Task OnInvoke(Call call) => call.NextAsync();
     }
 
     public class ThrowingDecorator : IMilvaInterceptor
@@ -233,7 +233,7 @@ public class ExceptionTests
         public virtual async Task MethodDecoratedToThrowAsync() => await Task.Yield();
 
         [Decorate(typeof(ThrowingDecorator))]
-        public virtual async Task<int> MethodDecoratedToThrowAsyncResult() => await Task.FromResult(0);
+        public virtual Task<int> MethodDecoratedToThrowAsyncResult() => Task.FromResult(0);
     }
 
     private static ServiceProvider GetServices()

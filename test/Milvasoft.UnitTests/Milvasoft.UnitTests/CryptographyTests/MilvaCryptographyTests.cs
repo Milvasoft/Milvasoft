@@ -11,7 +11,7 @@ public class MilvaCryptographyTests
     #region Encrypt & Decrypt Async
 
     [Fact]
-    public async Task MilvaCryptographyProviderAsync_WithIncorrectKeySize_ShouldThrowException()
+    public Task MilvaCryptographyProviderAsync_WithIncorrectKeySize_ShouldThrowException()
     {
         // Arrange
         var data = "securedata";
@@ -25,7 +25,7 @@ public class MilvaCryptographyTests
         Func<Task<string>> act = async () => await provider.EncryptAsync(data);
 
         // Assert
-        await act.Should().ThrowAsync<CryptographicException>();
+        return act.Should().ThrowAsync<CryptographicException>();
     }
 
     [Fact]

@@ -53,10 +53,10 @@ public class MilvaMailSender(string from, NetworkCredential networkCredential, i
     /// <param name="subject"></param>
     /// <param name="body"></param>
     /// <param name="isBodyHtml"></param>
-    public async Task MilvaSendMailAsync(string to,
+    public Task MilvaSendMailAsync(string to,
                                          string subject,
                                          string body,
-                                         bool isBodyHtml = false) => await SendMailAsync(to, subject, body, isBodyHtml).ConfigureAwait(false);
+                                         bool isBodyHtml = false) => SendMailAsync(to, subject, body, isBodyHtml);
 
     #region Send With Attachment
 
@@ -69,12 +69,12 @@ public class MilvaMailSender(string from, NetworkCredential networkCredential, i
     /// <param name="filePath"></param>
     /// <param name="contentType"></param>
     /// <param name="isBodyHtml"></param>
-    public async Task MilvaSendMailAsync(string to,
+    public Task MilvaSendMailAsync(string to,
                                          string subject,
                                          string body,
                                          string filePath,
                                          ContentType contentType,
-                                         bool isBodyHtml = false) => await SendMailWithFileAsync(to, subject, body, isBodyHtml, filePath, contentType).ConfigureAwait(false);
+                                         bool isBodyHtml = false) => SendMailWithFileAsync(to, subject, body, isBodyHtml, filePath, contentType);
 
     /// <summary>
     /// Provides send mail with attachment.

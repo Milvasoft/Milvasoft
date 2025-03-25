@@ -206,7 +206,7 @@ public class AggregationCriteriaTests
 
     [Theory]
     [MemberData(nameof(InvalidListSourceForApplyAggregationAsyncMethodData))]
-    public async Task ApplyAggregationAsync_WithListQueryProviderSourceAndSyncRunAndUnsupportedAggregateByPropertyTypeWithAggregationMethod_ShouldThrowException(IQueryable<RestTestEntityFixture> query, AggregationCriteria criteria)
+    public Task ApplyAggregationAsync_WithListQueryProviderSourceAndSyncRunAndUnsupportedAggregateByPropertyTypeWithAggregationMethod_ShouldThrowException(IQueryable<RestTestEntityFixture> query, AggregationCriteria criteria)
     {
         // Arrange
 
@@ -214,7 +214,7 @@ public class AggregationCriteriaTests
         Func<Task<AggregationResult>> act = async () => await criteria.ApplyAggregationAsync(query, false);
 
         // Assert
-        await act.Should().ThrowAsync<MilvaDeveloperException>();
+        return act.Should().ThrowAsync<MilvaDeveloperException>();
     }
 
     [Theory]
@@ -233,7 +233,7 @@ public class AggregationCriteriaTests
     [Theory]
     [MemberData(nameof(ValidListSourceForApplyAggregationAsyncMethodData))]
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "xUnit1026:Theory methods should use all of their parameters", Justification = "<Pending>")]
-    public async Task ApplyAggregationAsync_WithListQueryProviderSourceAndAsyncRunAndValidParameters_ShouldReturnExpectedResult(IQueryable<RestTestEntityFixture> query, AggregationCriteria criteria, AggregationResult expectedResult)
+    public Task ApplyAggregationAsync_WithListQueryProviderSourceAndAsyncRunAndValidParameters_ShouldReturnExpectedResult(IQueryable<RestTestEntityFixture> query, AggregationCriteria criteria, AggregationResult expectedResult)
     {
         // Arrange
 
@@ -241,7 +241,7 @@ public class AggregationCriteriaTests
         Func<Task<AggregationResult>> act = async () => await criteria.ApplyAggregationAsync(query, true);
 
         // Assert
-        await act.Should().ThrowAsync<MilvaDeveloperException>().WithMessage("Query provider type is 'EnumerableQuery' cannot run asynchronously!");
+        return act.Should().ThrowAsync<MilvaDeveloperException>().WithMessage("Query provider type is 'EnumerableQuery' cannot run asynchronously!");
     }
 
     #endregion

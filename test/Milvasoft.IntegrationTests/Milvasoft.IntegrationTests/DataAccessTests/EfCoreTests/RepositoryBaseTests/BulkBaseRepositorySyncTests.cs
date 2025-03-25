@@ -23,7 +23,7 @@ namespace Milvasoft.IntegrationTests.DataAccessTests.EfCoreTests.RepositoryBaseT
 [System.Diagnostics.CodeAnalysis.SuppressMessage("Major Code Smell", "S6966:Awaitable method should be used", Justification = "<Pending>")]
 public class BulkBaseRepositorySyncTests(CustomWebApplicationFactory factory) : DataAccessIntegrationTestBase(factory)
 {
-    public override async Task InitializeAsync(Action<IServiceCollection> configureServices = null, Action<IApplicationBuilder> configureApp = null)
+    public override Task InitializeAsync(Action<IServiceCollection> configureServices = null, Action<IApplicationBuilder> configureApp = null)
     {
         var waf = _factory.WithWebHostBuilder(builder =>
         {
@@ -57,7 +57,7 @@ public class BulkBaseRepositorySyncTests(CustomWebApplicationFactory factory) : 
 
         _serviceProvider = waf.Services.CreateScope().ServiceProvider;
 
-        await _factory.CreateRespawner();
+        return _factory.CreateRespawner();
     }
 
     #region BulkAdd

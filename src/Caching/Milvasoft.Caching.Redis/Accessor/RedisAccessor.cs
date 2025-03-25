@@ -103,23 +103,37 @@ public partial class RedisAccessor : IRedisAccessor
         if (keys.IsNullOrEmpty())
             return [];
 
-        keys.ToList().RemoveAll(i => string.IsNullOrWhiteSpace(i));
+        var filteredKeys = keys.Where(k => !string.IsNullOrWhiteSpace(k)).Distinct().ToArray();
 
-        var redisKeys = Array.ConvertAll(keys.ToArray(), item => (RedisKey)item);
+        if (filteredKeys.Length == 0)
+            return [];
+
+        var redisKeys = Array.ConvertAll(filteredKeys, item => (RedisKey)item);
 
         var values = _database.StringGet(redisKeys);
 
-        if (values.IsNullOrEmpty())
+        if (values.Length == 0 || Array.TrueForAll(values, v => !v.HasValue))
             return [];
 
-        var stringValues = values.ToStringArray();
+        // Sonuçları deserialize edelim
+        var redisValues = new List<T>(values.Length);
 
-        List<T> redisValues = [];
-
-        foreach (var item in stringValues)
+        foreach (var value in values)
         {
-            if (!string.IsNullOrWhiteSpace(item))
-                redisValues.Add(JsonConvert.DeserializeObject<T>(item));
+            if (!value.HasValue)
+                continue;
+
+            try
+            {
+                var deserialized = JsonConvert.DeserializeObject<T>(value!);
+
+                if (deserialized is not null)
+                    redisValues.Add(deserialized);
+            }
+            catch
+            {
+                // Handle deserialization error.
+            }
         }
 
         return redisValues;
@@ -134,9 +148,12 @@ public partial class RedisAccessor : IRedisAccessor
         if (keys.IsNullOrEmpty())
             return [];
 
-        keys.ToList().RemoveAll(i => string.IsNullOrWhiteSpace(i));
+        var filteredKeys = keys.Where(k => !string.IsNullOrWhiteSpace(k)).Distinct().ToArray();
 
-        var redisKeys = Array.ConvertAll(keys.ToArray(), item => (RedisKey)item);
+        if (filteredKeys.Length == 0)
+            return [];
+
+        var redisKeys = Array.ConvertAll(filteredKeys, item => (RedisKey)item);
 
         var values = _database.StringGet(redisKeys);
 

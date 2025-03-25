@@ -24,7 +24,7 @@ public abstract class MilvaCronJobService(IScheduleConfig scheduleConfig) : IHos
     /// </summary>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    public virtual async Task StartAsync(CancellationToken cancellationToken) => await ScheduleJob(cancellationToken);
+    public virtual Task StartAsync(CancellationToken cancellationToken) => ScheduleJob(cancellationToken);
 
     /// <summary>
     /// Schedules the job.
@@ -38,6 +38,7 @@ public abstract class MilvaCronJobService(IScheduleConfig scheduleConfig) : IHos
         if (next.HasValue)
         {
             var delay = next.Value - CommonHelper.GetDateTimeOffsetNow(_useUtcForDateTimes);
+
             if (delay.TotalMilliseconds <= 0)   // prevent non-positive values from being passed into Timer
             {
                 await ScheduleJob(cancellationToken);
@@ -45,19 +46,28 @@ public abstract class MilvaCronJobService(IScheduleConfig scheduleConfig) : IHos
 
             _timer = new System.Timers.Timer(delay.TotalMilliseconds);
 
-            _timer.Elapsed += async (sender, args) =>
+            _timer.Elapsed += (sender, args) =>
             {
-                _timer.Dispose();  // reset and dispose timer
+                _timer.Dispose();
                 _timer = null;
 
                 if (!cancellationToken.IsCancellationRequested)
                 {
-                    await ExecuteAsync(cancellationToken);
-                }
+                    _ = Task.Run(async () =>
+                    {
+                        try
+                        {
+                            await ExecuteAsync(cancellationToken);
 
-                if (!cancellationToken.IsCancellationRequested)
-                {
-                    await ScheduleJob(cancellationToken);    // reschedule next
+                            if (!cancellationToken.IsCancellationRequested)
+                                await ScheduleJob(cancellationToken);
+                        }
+                        catch (Exception ex)
+                        {
+                            // Exception'ı burada yakalayabilirsin
+                            Console.WriteLine("Timer job execution failed. {0}", ex.Message);
+                        }
+                    });
                 }
             };
 
@@ -72,17 +82,17 @@ public abstract class MilvaCronJobService(IScheduleConfig scheduleConfig) : IHos
     /// </summary>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    public virtual async Task ExecuteAsync(CancellationToken cancellationToken) => await Task.Delay(5000, cancellationToken);
+    public virtual Task ExecuteAsync(CancellationToken cancellationToken) => Task.Delay(5000, cancellationToken);
 
     /// <summary>
     /// Stops the job.
     /// </summary>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    public virtual async Task StopAsync(CancellationToken cancellationToken)
+    public virtual Task StopAsync(CancellationToken cancellationToken)
     {
         _timer?.Stop();
-        await Task.CompletedTask;
+        return Task.CompletedTask;
     }
 
     /// <summary>

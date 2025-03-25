@@ -27,5 +27,9 @@
 		<None Include="$(MSBuildThisFileDirectory)/milvalogo.png" Pack="true" PackagePath="/"/>
 		<None Include="$(MSBuildThisFileDirectory)/packagereadme.md" Pack="true" PackagePath="/"/>
 	</ItemGroup>
-	
+
+	<ItemGroup>
+		<PackageReference Include="AsyncFixer" Version="1.6.0" PrivateAssets="all" />
+	</ItemGroup>
+
 </Project>
