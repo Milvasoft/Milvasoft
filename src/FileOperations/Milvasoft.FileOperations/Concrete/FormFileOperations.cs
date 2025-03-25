@@ -229,13 +229,13 @@ public static partial class FormFileOperations
     /// <typeparam name="TEntity"></typeparam>
     /// <typeparam name="TFileDTO"></typeparam>
     /// <typeparam name="TFileEntity"></typeparam>
-    /// <param name="fileDTOList"> Uploaded file in entity. </param>
+    /// <param name="fileDtoList"> Uploaded file in entity. </param>
     /// <param name="entity"></param>
     /// <param name="basePath"></param>
     /// <param name="folderNameCreator"></param>
     /// <param name="propertyName"></param>
     /// <returns> Completed Task </returns>
-    public static async Task<List<TFileEntity>> SaveFilesToPathAsync<TEntity, TFileDTO, TFileEntity>(this List<TFileDTO> fileDTOList,
+    public static async Task<List<TFileEntity>> SaveFilesToPathAsync<TEntity, TFileDTO, TFileEntity>(this List<TFileDTO> fileDtoList,
                                                                                                       TEntity entity,
                                                                                                       string basePath,
                                                                                                       FilesFolderNameCreator folderNameCreator,
@@ -243,17 +243,17 @@ public static partial class FormFileOperations
     where TFileDTO : class, IFileDto
     where TFileEntity : class, IFileEntity, new()
     {
-        if (fileDTOList.IsNullOrEmpty())
+        if (fileDtoList.IsNullOrEmpty())
             return [];
 
         var fileEntities = new List<TFileEntity>();
 
-        foreach (var fileDTO in fileDTOList)
+        foreach (var fileDto in fileDtoList)
         {
-            if (fileDTO == null)
+            if (fileDto == null)
                 continue;
 
-            var file = fileDTO.File;
+            var file = fileDto.File;
 
             if (file.Length <= 0)
                 continue;
@@ -263,7 +263,7 @@ public static partial class FormFileOperations
             if (!string.IsNullOrWhiteSpace(path))
                 fileEntities.Add(new TFileEntity
                 {
-                    FileName = fileDTO.FileName,
+                    FileName = fileDto.FileName,
                     FilePath = path
                 });
         }

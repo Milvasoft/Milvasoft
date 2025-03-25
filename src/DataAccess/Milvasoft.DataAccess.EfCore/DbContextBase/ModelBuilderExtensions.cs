@@ -403,14 +403,12 @@ public static class ModelBuilderExtensions
     /// <param name="modelBuilder"></param>
     public static ModelBuilder UseTranslationEntityRelations(this ModelBuilder modelBuilder)
     {
-        var languageEntities = modelBuilder.Model.GetEntityTypes().Where(e => e.ClrType.CanAssignableTo(typeof(IHasTranslation<>))).ToList();
+        var languageEntities = modelBuilder.Model.GetEntityTypes().Where(e => e.ClrType.CanAssignableTo(typeof(IHasTranslation<>)));
 
         foreach (var entityClrType in languageEntities.Select(i => i.ClrType))
         {
             if (Array.Exists(entityClrType.GetProperties(), p => (p.GetCustomAttribute<ColumnAttribute>()?.TypeName == "jsonb") && p.Name == MultiLanguageEntityPropertyNames.Translations))
-            {
                 continue;
-            }
 
             modelBuilder.Entity(entityClrType)
                         .HasMany(MultiLanguageEntityPropertyNames.Translations)
@@ -437,7 +435,7 @@ public static class ModelBuilderExtensions
             if (tenantIdProperty == null)
                 continue;
 
-            var properties = entityType.GetProperties().Where(p => p.PropertyInfo.GetCustomAttribute<WithTenantIdIndexAttribute>() != null).ToList();
+            var properties = entityType.GetProperties().Where(p => p.PropertyInfo.GetCustomAttribute<WithTenantIdIndexAttribute>() != null);
 
             var mutableEntity = modelBuilder.Entity(entityType.ClrType);
 

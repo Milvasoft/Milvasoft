@@ -68,9 +68,7 @@ public partial class LogInterceptor(IServiceProvider serviceProvider) : IMilvaIn
                 res.Metadatas = null;
             }
 
-            var methodParameters = call.Arguments?.ToList();
-
-            methodParameters?.RemoveAll(p => p is CancellationToken);
+            var methodParameters = call.Arguments?.Where(p => p is not CancellationToken);
 
             var logObjectPropDic = _logInterceptionOptions.LogDefaultParameters ? new Dictionary<string, object>()
             {
@@ -169,9 +167,7 @@ public partial class LogInterceptor(IServiceProvider serviceProvider) : IMilvaIn
         }
         else
         {
-            var methodParameters = call.Arguments?.ToList();
-
-            methodParameters?.RemoveAll(p => p is CancellationToken);
+            var methodParameters = call.Arguments?.Where(p => p is not CancellationToken);
 
             logObjectPropDic.Add("Namespace", call.MethodImplementation.DeclaringType.Namespace);
             logObjectPropDic.Add("ClassName", call.MethodImplementation.DeclaringType.Name);

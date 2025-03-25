@@ -52,7 +52,7 @@ public class SoftDeleteFilterVisitor : ExpressionVisitor
     /// <inheritdoc/>
     protected override Expression VisitMethodCall(MethodCallExpression node)
     {
-        var arguments = node.Arguments.Select(Visit).ToList();
+        var arguments = node.Arguments.Select(Visit).ToArray();
 
         var obj = Visit(node.Object);
 

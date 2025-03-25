@@ -1072,9 +1072,7 @@ public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepositor
     /// <returns></returns>
     protected static List<string> GetCascadePropertyPaths(Type type, string parentPath = null, int maxDepth = 5, int currentDepth = 0)
     {
-        var properties = type.GetProperties()
-                             .Where(p => p.IsDefined(typeof(CascadeOnDeleteAttribute), inherit: false))
-                             .ToList();
+        var properties = type.GetProperties().Where(p => p.IsDefined(typeof(CascadeOnDeleteAttribute), inherit: false));
 
         var paths = new List<string>();
 

@@ -164,6 +164,7 @@ public static partial class CommonHelper
         static bool ParameterTypesMatch(MethodInfo method, Type[] types)
         {
             var methodParameters = method.GetParameters().ToList();
+
             methodParameters.RemoveAll(i => i.ParameterType.IsGenericMethodParameter);
 
             if (methodParameters.Count != types.Length)
