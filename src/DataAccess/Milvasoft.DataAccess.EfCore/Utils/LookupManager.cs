@@ -6,7 +6,9 @@ using Milvasoft.Core.MultiLanguage.Manager;
 using Milvasoft.DataAccess.EfCore.DbContextBase;
 using Milvasoft.DataAccess.EfCore.Utils.LookupModels;
 using System.Collections;
+using System.Collections.Concurrent;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq.Expressions;
 using System.Reflection;
 
 namespace Milvasoft.DataAccess.EfCore.Utils;
@@ -16,6 +18,9 @@ internal class LookupManager(MilvaDbContext dbContext, IDataAccessConfiguration 
     private readonly IDataAccessConfiguration _dataAccessConfiguration = dataAccessConfiguration;
     private static readonly MethodInfo _createProjectionExpressionMethod = typeof(MultiLanguageExtensions).GetMethod(nameof(MultiLanguageExtensions.CreateProjectionExpression));
     private const string _taskResultPropertyName = "Result";
+    private static readonly ConcurrentDictionary<Type, Func<object>> _typeFactoryCache = new();
+    private static readonly ConcurrentDictionary<Type, Func<MilvaDbContext, object, object, object, Task>> _getContentsMethodCache = new();
+
 
     internal class LookupContext
     {
@@ -144,10 +149,7 @@ internal class LookupManager(MilvaDbContext dbContext, IDataAccessConfiguration 
 
     private async Task<IList> FetchLookupDataAsync(LookupContext context, object projectionExpression)
     {
-        var taskResult = (Task)typeof(MilvaDbContext)
-                                   .GetMethod(nameof(MilvaDbContext.GetContentsAsync))
-                                   .MakeGenericMethod(context.EntityType)
-                                   .Invoke(_dbContext, [context.RequestParameter.Filtering, context.RequestParameter.Sorting, projectionExpression]);
+        var taskResult = CallGetContentsAsync(context.EntityType, context.RequestParameter.Filtering, context.RequestParameter.Sorting, projectionExpression);
 
         await taskResult;
 
@@ -202,9 +204,17 @@ internal class LookupManager(MilvaDbContext dbContext, IDataAccessConfiguration 
     private static object GetDefaultValue(Type type)
     {
         if (type.IsValueType)
-            return Activator.CreateInstance(type);
-        else if (type.Name.Contains(nameof(String)))
+        {
+            return _typeFactoryCache.GetOrAdd(type, t =>
+            {
+                var ctor = Expression.New(t);
+                var lambda = Expression.Lambda<Func<object>>(ctor);
+                return lambda.Compile();
+            })();
+        }
+        else if (type == typeof(string))
             return string.Empty;
+
         return null;
     }
 
@@ -237,5 +247,32 @@ internal class LookupManager(MilvaDbContext dbContext, IDataAccessConfiguration 
             propNamesForProjection.AddRange(mainEntityPropertyNames);
 
         return propNamesForProjection;
+    }
+
+    private Task CallGetContentsAsync(Type entityType, object filtering, object sorting, object projection)
+    {
+        var func = _getContentsMethodCache.GetOrAdd(entityType, type =>
+        {
+            // Get method
+            var method = typeof(MilvaDbContext).GetMethod(nameof(MilvaDbContext.GetContentsAsync))!.MakeGenericMethod(type);
+
+            // Parameters: context, filtering, sorting, projection
+            var contextParam = Expression.Parameter(typeof(MilvaDbContext));
+            var filteringParam = Expression.Parameter(typeof(object));
+            var sortingParam = Expression.Parameter(typeof(object));
+            var projectionParam = Expression.Parameter(typeof(object));
+
+            var call = Expression.Call(contextParam,
+                                       method,
+                                       Expression.Convert(filteringParam, method.GetParameters()[0].ParameterType),
+                                       Expression.Convert(sortingParam, method.GetParameters()[1].ParameterType),
+                                       Expression.Convert(projectionParam, method.GetParameters()[2].ParameterType));
+
+            var lambda = Expression.Lambda<Func<MilvaDbContext, object, object, object, Task>>(call, contextParam, filteringParam, sortingParam, projectionParam);
+
+            return lambda.Compile();
+        });
+
+        return func(_dbContext, filtering, sorting, projection);
     }
 }

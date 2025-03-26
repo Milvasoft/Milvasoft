@@ -289,7 +289,7 @@ public static class MilvaEfExtensions
 
         foreach (var dtoProp in updatableProperties)
         {
-            var matchingEntityProp = Array.Find(typeof(TEntity).GetProperties(), i => i.Name == dtoProp.Name);
+            var matchingEntityProp = typeof(TEntity).GetPublicPropertyIgnoreCase(dtoProp.Name);
 
             if (matchingEntityProp == null)
                 continue;

@@ -210,7 +210,14 @@ public abstract class MilvaDbContext(DbContextOptions options) : DbContext(optio
             if (navigationEntry is CollectionEntry collectionEntry && collectionEntry.CurrentValue != null)
             {
                 foreach (var dependentEntry in collectionEntry.CurrentValue)
-                    AuditDeletion(Entry(dependentEntry));
+                {
+                    if (dependentEntry is not null)
+                    {
+                        var depEntry = ChangeTracker.Entries().FirstOrDefault(e => e.Entity == dependentEntry) ?? Entry(dependentEntry);
+
+                        AuditDeletion(depEntry);
+                    }
+                }
             }
             else if (navigationEntry?.CurrentValue != null)
                 AuditDeletion(Entry(navigationEntry.CurrentValue));
@@ -225,7 +232,7 @@ public abstract class MilvaDbContext(DbContextOptions options) : DbContext(optio
     {
         entry.State = EntityState.Deleted;
 
-        if (!entry.Metadata.GetProperties().Any(x => x.Name == EntityPropertyNames.IsDeleted))
+        if (!entry.HasProperty(EntityPropertyNames.IsDeleted))
             return;
 
         entry.State = EntityState.Modified;
@@ -250,7 +257,7 @@ public abstract class MilvaDbContext(DbContextOptions options) : DbContext(optio
         if (!audit)
             return;
 
-        if (entry.Metadata.GetProperties().Any(prop => prop.Name == propertyName))
+        if (entry.HasProperty(propertyName))
         {
             entry.Property(propertyName).CurrentValue = CommonHelper.GetNow(_useUtcForDateTimes);
             entry.Property(propertyName).IsModified = true;
@@ -270,7 +277,7 @@ public abstract class MilvaDbContext(DbContextOptions options) : DbContext(optio
 
         var currentUserName = _dbContextConfiguration.DbContext.GetCurrentUserNameMethod?.Invoke(ServiceProvider);
 
-        if (!string.IsNullOrWhiteSpace(currentUserName) && entry.Metadata.GetProperties().Any(prop => prop.Name == propertyName))
+        if (!string.IsNullOrWhiteSpace(currentUserName) && entry.HasProperty(propertyName))
         {
             entry.Property(propertyName).CurrentValue = currentUserName;
             entry.Property(propertyName).IsModified = true;
@@ -289,7 +296,7 @@ public abstract class MilvaDbContext(DbContextOptions options) : DbContext(optio
     public Task<List<TEntity>> GetContentsAsync<TEntity>(FilterRequest filterRequest,
                                                                SortRequest sortRequest,
                                                                Expression<Func<TEntity, TEntity>> projectionExpression = null) where TEntity : class
-        => Set<TEntity>().Where(CommonHelper.CreateIsDeletedFalseExpression<TEntity>() ?? (entity => true))
+        => Set<TEntity>().Where(MilvaDbContextCache.GetIsDeletedFilter<TEntity>())
                                .IncludeTranslations(this)
                                .WithFiltering(filterRequest)
                                .WithSorting(sortRequest)
@@ -355,8 +362,7 @@ public abstract class MilvaDbContext(DbContextOptions options) : DbContext(optio
         List<object> lookups = [];
 
         if (lookupList.Count > 0)
-            foreach (var lookup in lookupList)
-                lookups.Add(lookup);
+            lookups.AddRange(lookupList.Cast<object>());
 
         return lookups;
 
@@ -403,34 +409,32 @@ public abstract class MilvaDbContext(DbContextOptions options) : DbContext(optio
     {
         var builder = dto.GetUpdatablePropertiesBuilder<TEntity, TDto>();
 
-        builder = SetAuditProperties(builder);
+        SetAuditProperties(this, builder);
 
         return builder;
 
-        SetPropertyBuilder<TEntity> SetAuditProperties(SetPropertyBuilder<TEntity> builder)
+        static void SetAuditProperties(MilvaDbContext @this, SetPropertyBuilder<TEntity> builder)
         {
-            if (typeof(TEntity).CanAssignableTo(typeof(IHasModificationDate)) && _dbContextConfiguration.Auditing.AuditModificationDate)
+            if (typeof(TEntity).CanAssignableTo(typeof(IHasModificationDate)) && @this._dbContextConfiguration.Auditing.AuditModificationDate)
             {
                 var lastModificationDateSelector = CommonHelper.CreatePropertySelector<TEntity, DateTime>(EntityPropertyNames.LastModificationDate);
 
                 builder.AuditCallsAdded = true;
-                builder = builder.SetPropertyValue(lastModificationDateSelector, CommonHelper.GetNow(_useUtcForDateTimes));
+                builder = builder.SetPropertyValue(lastModificationDateSelector, CommonHelper.GetNow(@this._useUtcForDateTimes));
             }
 
-            if (typeof(TEntity).CanAssignableTo(typeof(IHasModifier)) && _dbContextConfiguration.Auditing.AuditModifier)
+            if (typeof(TEntity).CanAssignableTo(typeof(IHasModifier)) && @this._dbContextConfiguration.Auditing.AuditModifier)
             {
-                var currentUserName = _dbContextConfiguration.DbContext.InvokeGetCurrentUserMethod(ServiceProvider);
+                var currentUserName = @this._dbContextConfiguration.DbContext.InvokeGetCurrentUserMethod(@this.ServiceProvider);
 
                 if (!string.IsNullOrWhiteSpace(currentUserName))
                 {
                     var lastModifierUsernameSelector = CommonHelper.CreatePropertySelector<TEntity, string>(EntityPropertyNames.LastModifierUserName);
 
                     builder.AuditCallsAdded = true;
-                    builder = builder.SetPropertyValue(lastModifierUsernameSelector, currentUserName);
+                    builder.SetPropertyValue(lastModifierUsernameSelector, currentUserName);
                 }
             }
-
-            return builder;
         }
     }
 }

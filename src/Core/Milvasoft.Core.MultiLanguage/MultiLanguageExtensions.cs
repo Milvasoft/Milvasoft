@@ -1,5 +1,6 @@
 ﻿using Milvasoft.Core.MultiLanguage.EntityBases;
 using Milvasoft.Core.MultiLanguage.EntityBases.Abstract;
+using System.Collections.Concurrent;
 using System.Linq.Expressions;
 using System.Reflection;
 
@@ -17,6 +18,8 @@ public static class MultiLanguageExtensions
                                                                                                               && mi.GetParameters().Length == 2);
     private static readonly MethodInfo _anyMethodInfo = typeof(Enumerable).GetMethods(BindingFlags.Static | BindingFlags.Public)
                                                                                      .Last(mi => mi.Name == nameof(Enumerable.Any) && mi.GetParameters().Length == 1);
+    private static readonly ConcurrentDictionary<Type, MethodInfo> _anyWithPredicateCache = new();
+    private static readonly ConcurrentDictionary<Type, MethodInfo> _anyCache = new();
 
     /// <summary>
     /// Creates projection expression with requested properties for <see cref="IHasTranslation{TTranslationEntity}"/>.
@@ -192,13 +195,15 @@ public static class MultiLanguageExtensions
             var lambda = Expression.Lambda<Func<TTranslationEntity, bool>>(predicateExpression, translationEntityParameter);
 
             // src.Translations.Any(i => i.(conditions))
-            var genericAnyWithPredicateMethod = _anyWithPredicateMethodInfo.MakeGenericMethod(typeof(TTranslationEntity));
+            var genericAnyWithPredicateMethod = _anyWithPredicateCache.GetOrAdd(typeof(TTranslationEntity), t => _anyWithPredicateMethodInfo.MakeGenericMethod(t));
+
             return Expression.Call(genericAnyWithPredicateMethod, translationsPropertyExpression, lambda);
         }
         else
         {
             // src.Translations.Any()
-            var genericAnyMethod = _anyMethodInfo.MakeGenericMethod(typeof(TTranslationEntity));
+            var genericAnyMethod = _anyCache.GetOrAdd(typeof(TTranslationEntity), t => _anyMethodInfo.MakeGenericMethod(t));
+
             return Expression.Call(genericAnyMethod, translationsPropertyExpression);
         }
     }

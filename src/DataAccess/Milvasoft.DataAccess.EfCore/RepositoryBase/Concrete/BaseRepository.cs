@@ -865,13 +865,14 @@ public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepositor
     /// <param name="entity"></param>
     protected virtual void DetachFromLocalIfExists(TEntity entity)
     {
-        var localEntity = _dbContext.Set<TEntity>().Local.FirstOrDefault(u => u.GetUniqueIdentifier().Equals(entity.GetUniqueIdentifier()));
+        var keyValue = entity.GetUniqueIdentifier();
 
-        if (localEntity != null)
-        {
-            var entry = _dbContext.Entry(localEntity);
+        var entry = _dbContext.ChangeTracker
+                              .Entries<TEntity>()
+                              .FirstOrDefault(e => e.Entity.GetUniqueIdentifier().Equals(keyValue));
+
+        if (entry is not null)
             entry.State = EntityState.Detached;
-        }
     }
 
     /// <summary>

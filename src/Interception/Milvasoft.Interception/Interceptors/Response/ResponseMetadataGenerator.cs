@@ -3,7 +3,9 @@ using Milvasoft.Attributes.Annotations;
 using Milvasoft.Components.Rest.MilvaResponse;
 using Milvasoft.Types.Classes;
 using System.Collections;
+using System.Collections.Concurrent;
 using System.ComponentModel;
+using System.Linq.Expressions;
 using System.Reflection;
 
 namespace Milvasoft.Interception.Interceptors.Response;
@@ -21,6 +23,7 @@ public class ResponseMetadataGenerator(IResponseInterceptionOptions responseInte
     private readonly IResponseInterceptionOptions _interceptionOptions = responseInterceptionOptions;
     private readonly IServiceProvider _serviceProvider = serviceProvider;
     private readonly bool _generateMetadataFuncResult = (!responseInterceptionOptions.GenerateMetadataFunc?.Invoke(serviceProvider) ?? false);
+    private static readonly ConcurrentDictionary<Type, Func<object>> _defaultValueFactoryCache = new();
 
     /// <summary>
     /// Applies localization to the specified property.
@@ -322,7 +325,7 @@ public class ResponseMetadataGenerator(IResponseInterceptionOptions responseInte
 
         if (hide)
         {
-            object defaultValue = property.PropertyType.IsValueType ? Activator.CreateInstance(property.PropertyType) : null;
+            object defaultValue = GetDefaultValue(property.PropertyType);
 
             property.SetValue(callerObj, defaultValue);
 
@@ -423,6 +426,20 @@ public class ResponseMetadataGenerator(IResponseInterceptionOptions responseInte
                 || (property.PropertyType.IsGenericType && property.PropertyType.GetGenericArguments()[0] == callerObjectInfo.ReviewedType);
     private static bool IsCustomComplextType(PropertyInfo property)
         => property.PropertyType.IsClass && !CallerObjectInfo.ReviewObjectType(property.PropertyType, out bool _).Namespace.Contains(nameof(System));
+
+    private static object GetDefaultValue(Type type)
+    {
+        if (!type.IsValueType)
+            return null;
+
+        return _defaultValueFactoryCache.GetOrAdd(type, t =>
+        {
+            // Default(T) → object
+            var body = Expression.Convert(Expression.Default(t), typeof(object));
+            var lambda = Expression.Lambda<Func<object>>(body);
+            return lambda.Compile();
+        })();
+    }
 }
 
 /// <summary>
@@ -434,14 +451,17 @@ public class CallerObjectInfo
     /// Gets or sets the object.
     /// </summary>
     public object Object { get; set; }
+
     /// <summary>
     /// Gets or sets the actual type.
     /// </summary>
     public Type ActualType { get; set; }
+
     /// <summary>
     /// Gets or sets the reviewed type.
     /// </summary>
     public Type ReviewedType { get; set; }
+
     /// <summary>
     /// Gets or sets a value indicating whether the actual type is a collection.
     /// </summary>

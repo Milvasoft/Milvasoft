@@ -1,4 +1,6 @@
-﻿using System.Text.Json;
+﻿using System.Collections.Concurrent;
+using System.Linq.Expressions;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace Milvasoft.Core.Utils.Converters;
@@ -50,6 +52,8 @@ public class InterfaceConverterFactory<TImplementation, TInterface> : InterfaceC
 /// <param name="interfaceType">The interface type.</param>
 public class InterfaceConverterFactory(Type implementationType, Type interfaceType) : JsonConverterFactory
 {
+    private static readonly ConcurrentDictionary<Type, Func<JsonConverter>> _converterCache = new();
+
     /// <summary>
     /// Gets the implementation type.
     /// </summary>
@@ -80,12 +84,25 @@ public class InterfaceConverterFactory(Type implementationType, Type interfaceTy
 
         if (typeToConvert.IsGenericType && ImplementationType.IsGenericType)
         {
-            converterType = typeof(InterfaceConverter<,>).MakeGenericType(ImplementationType.MakeGenericType(typeToConvert.GenericTypeArguments[0]),
-                                                                          InterfaceType.MakeGenericType(typeToConvert.GenericTypeArguments[0]));
+            converterType = typeof(InterfaceConverter<,>).MakeGenericType(
+                ImplementationType.MakeGenericType(typeToConvert.GenericTypeArguments),
+                InterfaceType.MakeGenericType(typeToConvert.GenericTypeArguments)
+            );
         }
         else
+        {
             converterType = typeof(InterfaceConverter<,>).MakeGenericType(ImplementationType, InterfaceType);
+        }
 
-        return Activator.CreateInstance(converterType) as JsonConverter;
+        return _converterCache.GetOrAdd(converterType, CreateFactory)();
+    }
+
+    private static Func<JsonConverter> CreateFactory(Type type)
+    {
+        var ctor = Expression.New(type);
+
+        var lambda = Expression.Lambda<Func<JsonConverter>>(ctor);
+
+        return lambda.Compile();
     }
 }

@@ -25,6 +25,11 @@ public abstract class MultiLanguageManager : IMultiLanguageManager
     private static readonly MethodInfo _firstOrDefaultMethodInfo = typeof(Enumerable).GetMethods(BindingFlags.Static | BindingFlags.Public)
                                                                                      .Last(mi => mi.Name == nameof(Enumerable.FirstOrDefault) && mi.GetParameters().Length == 1);
     private static readonly MethodInfo _enumerableCastMethod = typeof(Enumerable).GetMethod(nameof(Enumerable.Cast));
+    private static readonly ConcurrentDictionary<Type, MethodInfo> _getTranslationCache = new();
+    private static readonly ConcurrentDictionary<Type, MethodInfo> _firstOrDefaultWithPredicateCache = new();
+    private static readonly ConcurrentDictionary<Type, MethodInfo> _firstOrDefaultCache = new();
+    private static readonly ConcurrentDictionary<Type, MethodInfo> _enumerableCastCache = new();
+    private static readonly ConcurrentDictionary<(Type type, string propName), Func<object, object>> _propertyGetterCache = new();
     #endregion
 
     /// <summary>
@@ -260,7 +265,7 @@ public abstract class MultiLanguageManager : IMultiLanguageManager
                 return firstOrDefaultWithIsDeletedFalseEqualityExpression;
             }
             else
-                return Expression.Call(_firstOrDefaultMethodInfo.MakeGenericMethod(typeof(TTranslationEntity)), projectionExpression);
+                return Expression.Call(_firstOrDefaultCache.GetOrAdd(typeof(TTranslationEntity), t => _firstOrDefaultMethodInfo.MakeGenericMethod(t)), projectionExpression);
         }
 
         // src.Translations.Select(i => new ProductTranslation() {LanguageId = i.LanguageId, EntityId = i.EntityId, Name = i.Name}).FirstOrDefault(i => (i.LanguageId == languageId))
@@ -294,7 +299,7 @@ public abstract class MultiLanguageManager : IMultiLanguageManager
             var predicateLambdaExpression = Expression.Lambda<Func<TTranslationEntity, bool>>(predicateExpression, translationEntityParameter);
 
             // Get the "FirstOrDefault" method of the Enumerable class with the appropriate generic type
-            var genericFirstOrDefaultWithPredicateMethod = _firstOrDefaultWithPredicateMethodInfo.MakeGenericMethod(typeof(TTranslationEntity));
+            var genericFirstOrDefaultWithPredicateMethod = _firstOrDefaultWithPredicateCache.GetOrAdd(typeof(TTranslationEntity), t => _firstOrDefaultWithPredicateMethodInfo.MakeGenericMethod(t));
 
             // src.Translations.Select(i => new ProductTranslation() {LanguageId = i.LanguageId, EntityId = i.EntityId, Name = i.Name})
             //    .FirstOrDefault(i => (i.LanguageId == languageId) && (i.IsDeleted == false))
@@ -334,9 +339,7 @@ public abstract class MultiLanguageManager : IMultiLanguageManager
 
         return requestedLang?.GetType().GetPublicPropertyIgnoreCase(propertyName)?.GetValue(requestedLang, null)?.ToString();
 
-        TTranslationEntity GetLanguageValue(int languageId) => translations.FirstOrDefault(t => (int)(t.GetType()
-                                                                                                       .GetProperty(MultiLanguageEntityPropertyNames.LanguageId)?
-                                                                                                       .GetValue(t) ?? 0) == languageId);
+        TTranslationEntity GetLanguageValue(int languageId) => translations.FirstOrDefault(t => (int)(GetPropertyValue(t, MultiLanguageEntityPropertyNames.LanguageId) ?? 0) == languageId);
     }
 
     /// <summary>
@@ -375,13 +378,38 @@ public abstract class MultiLanguageManager : IMultiLanguageManager
         var translationEntityType = translationList.First().GetType();
 
         // Cast to IEnumerable<translationEntityType>
-        var castMethod = _enumerableCastMethod.MakeGenericMethod(translationEntityType);
+        var castMethod = _enumerableCastCache.GetOrAdd(translationEntityType, t => _enumerableCastMethod.MakeGenericMethod(t));
 
         var typedEnumerable = castMethod.Invoke(null, [translationList]);
 
-        var getTranslationMethod = _getTranslationMethodInfo.MakeGenericMethod(translationEntityType);
+        var getTranslationMethod = _getTranslationCache.GetOrAdd(translationEntityType, t => _getTranslationMethodInfo.MakeGenericMethod(t));
 
         return (string)getTranslationMethod.Invoke(this, [typedEnumerable, propertyName]);
+    }
+
+    private static object GetPropertyValue(object obj, string propName)
+    {
+        if (obj == null || string.IsNullOrWhiteSpace(propName))
+            return null;
+
+        var key = (obj.GetType(), propName);
+
+        var getter = _propertyGetterCache.GetOrAdd(key, k =>
+        {
+            var property = k.type.GetProperty(k.propName, BindingFlags.IgnoreCase | BindingFlags.Public | BindingFlags.Instance);
+
+            if (property == null)
+                return _ => null;
+
+            var param = Expression.Parameter(typeof(object), "obj");
+            var cast = Expression.Convert(param, k.type);
+            var prop = Expression.Property(cast, property);
+            var convert = Expression.Convert(prop, typeof(object));
+            var lambda = Expression.Lambda<Func<object, object>>(convert, param);
+            return lambda.Compile();
+        });
+
+        return getter(obj);
     }
 }
 
