@@ -430,7 +430,7 @@ public static class ModelBuilderExtensions
 
         foreach (var entityType in entitiesWithTenantId)
         {
-            var tenantIdProperty = entityType.ClrType.GetProperties().FirstOrDefault(p => p.Name == EntityPropertyNames.TenantId);
+            var tenantIdProperty = Array.Find(entityType.ClrType.GetProperties(), p => p.Name == EntityPropertyNames.TenantId);
 
             if (tenantIdProperty == null)
                 continue;
@@ -464,7 +464,7 @@ public static class ModelBuilderExtensions
         var entitiesWithTenantId = modelBuilder.Model.GetEntityTypes().Where(entityType => entityType.ClrType.CanAssignableTo(typeof(IHasTenantId)));
 
         foreach (var (entityType, tenantIdProperty) in from entityType in entitiesWithTenantId
-                                                       let tenantIdProperty = entityType.ClrType.GetProperties().FirstOrDefault(p => p.Name == EntityPropertyNames.TenantId)
+                                                       let tenantIdProperty = Array.Find(entityType.ClrType.GetProperties(), p => p.Name == EntityPropertyNames.TenantId)
                                                        select (entityType, tenantIdProperty))
         {
             if (tenantIdProperty == null)

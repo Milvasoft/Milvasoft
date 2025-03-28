@@ -40,9 +40,7 @@ public abstract class MilvaCronJobService(IScheduleConfig scheduleConfig) : IHos
             var delay = next.Value - CommonHelper.GetDateTimeOffsetNow(_useUtcForDateTimes);
 
             if (delay.TotalMilliseconds <= 0)   // prevent non-positive values from being passed into Timer
-            {
                 await ScheduleJob(cancellationToken);
-            }
 
             _timer = new System.Timers.Timer(delay.TotalMilliseconds);
 

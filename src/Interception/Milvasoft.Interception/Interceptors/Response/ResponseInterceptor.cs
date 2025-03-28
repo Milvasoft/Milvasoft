@@ -29,9 +29,10 @@ public class ResponseInterceptor(IServiceProvider serviceProvider, IResponseInte
 
         if (call.ReturnType.CanAssignableTo(typeof(IResponse)))
         {
-            if (excludeAttribute == null && call.ReturnType.CanAssignableTo(typeof(IHasMetadata)))
+            if (excludeAttribute is null && call.ReturnType.CanAssignableTo(typeof(IHasMetadata)))
             {
-                var hasMetadataResponse = call.ReturnValue as IHasMetadata;
+                if (call.ReturnValue is not IHasMetadata hasMetadataResponse)
+                    return;
 
                 var metadataGenerator = new ResponseMetadataGenerator(_serviceProvider);
 

@@ -128,6 +128,53 @@ public class ResponseInterceptorTests
         result.Metadatas.Find(m => m.Name == "complexClass").Metadatas.Find(m => m.Name == "enumProp").Display.Should().BeTrue();
     }
 
+    [Fact]
+    public void MethodReturnValueIsNull_WithResponseInterceptor_ShouldModifyResponseCorrecly()
+    {
+        // Arrange
+        var services = GetServices();
+        var sut = services.GetService<ISomeInterface>();
+
+        // Act
+        var result = sut.MethodReturnValueIsNull();
+
+        // Assert
+        result.Messages[0].Message.Should().Be($"localized_{LocalizerKeys.Successful}");
+        result.Data.Should().BeNull();
+        result.Metadatas.Should().NotBeEmpty();
+        result.Metadatas.Find(m => m.Name == "intProp").LocalizedName.Should().Be($"localized_SomeComplexClass.IntProp");
+        result.Metadatas.Find(m => m.Name == "intProp").Pinned.Should().BeTrue();
+        result.Metadatas.Find(m => m.Name == "stringProp").Mask.Should().BeTrue();
+        result.Metadatas.Find(m => m.Name == "stringProp").DefaultValue.Should().Be("localized_-");
+        result.Metadatas.Find(m => m.Name == "boolProp").Should().BeNull();
+        result.Metadatas.Find(m => m.Name == "decimalProp").DecimalPrecision.Precision.Should().Be(18);
+        result.Metadatas.Find(m => m.Name == "decimalProp").DecimalPrecision.Scale.Should().Be(2);
+        result.Metadatas.Find(m => m.Name == "decimalProp").DisplayFormat.Should().Be("{DecimalProp}₺");
+        result.Metadatas.Find(m => m.Name == "listProp").FilterFormat.Should().Be("ListProp[SomeProp]");
+        result.Metadatas.Find(m => m.Name == "complexClass").Display.Should().BeFalse();
+        result.Metadatas.Find(m => m.Name == "complexClass").Metadatas.Should().NotBeEmpty();
+        result.Metadatas.Find(m => m.Name == "complexClass").Metadatas.Find(m => m.Name == "dateProp").TooltipFormat.Should().Be("dddd, dd MMMM yyyy");
+        result.Metadatas.Find(m => m.Name == "complexClass").Metadatas.Find(m => m.Name == "enumProp").Display.Should().BeTrue();
+    }
+
+    [Fact]
+    public async Task MethodIsButNotAwaitedAsync_WithResponseInterceptor_ShouldModifyResponseCorrecly()
+    {
+        // Arrange
+        var services = GetServices();
+        var sut = services.GetService<ISomeInterface>();
+
+        // Act
+#pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
+#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+        Func<Task> act = async () => sut.MethodIsButNotAwaitedAsync();
+#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+#pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
+
+        // Assert
+        await act.Should().NotThrowAsync();
+    }
+
     #region Setup
 
     public interface ISomeInterface : IInterceptable
@@ -138,6 +185,8 @@ public class ResponseInterceptorTests
         Response<int> MethodReturnTypeIsValueResponseTypedButExcluded();
         Response<List<int>> MethodReturnTypeIsCollectionResponseTyped();
         Response<SomeComplexClass> MethodReturnTypeIsComplexResponseTyped();
+        Response<SomeComplexClass> MethodReturnValueIsNull();
+        Task<Response<SomeComplexClass>> MethodIsButNotAwaitedAsync();
     }
 
     public enum SomeEnumFixture
@@ -209,6 +258,15 @@ public class ResponseInterceptorTests
             };
 
             return Response<SomeComplexClass>.Success(data);
+        }
+
+        public virtual Response<SomeComplexClass> MethodReturnValueIsNull() => Response<SomeComplexClass>.Success(null);
+
+        public virtual Task<Response<SomeComplexClass>> MethodIsButNotAwaitedAsync()
+        {
+            Task.Delay(1000);
+
+            return Task.FromResult(Response<SomeComplexClass>.Success(null));
         }
     }
 

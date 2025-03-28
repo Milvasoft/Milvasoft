@@ -68,8 +68,6 @@ public partial class LogInterceptor(IServiceProvider serviceProvider) : IMilvaIn
                 res.Metadatas = null;
             }
 
-            var methodParameters = call.Arguments?.Where(p => p is not CancellationToken);
-
             var logObjectPropDic = _logInterceptionOptions.LogDefaultParameters ? new Dictionary<string, object>()
             {
                { "TransactionId", ActivityHelper.TraceId },
