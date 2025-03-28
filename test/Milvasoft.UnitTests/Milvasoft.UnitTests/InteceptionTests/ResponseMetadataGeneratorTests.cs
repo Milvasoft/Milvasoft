@@ -21,8 +21,7 @@ public class ResponseMetadataGeneratorTests
     {
         // Arrange
         var services = GetServices();
-        var options = services.GetService<IResponseInterceptionOptions>();
-        var generator = new ResponseMetadataGenerator(options, services);
+        var generator = new ResponseMetadataGenerator(services);
         var sut = services.GetService<ISomeInterface>();
 
         // Act
@@ -43,8 +42,7 @@ public class ResponseMetadataGeneratorTests
     {
         // Arrange
         var services = GetServices();
-        var options = services.GetService<IResponseInterceptionOptions>();
-        var generator = new ResponseMetadataGenerator(options, services);
+        var generator = new ResponseMetadataGenerator(services);
         var sut = services.GetService<ISomeInterface>();
 
         // Act
@@ -65,8 +63,7 @@ public class ResponseMetadataGeneratorTests
     {
         // Arrange
         var services = GetServices();
-        var options = services.GetService<IResponseInterceptionOptions>();
-        var generator = new ResponseMetadataGenerator(options, services);
+        var generator = new ResponseMetadataGenerator(services);
         var sut = services.GetService<ISomeInterface>();
 
         // Act
@@ -87,8 +84,7 @@ public class ResponseMetadataGeneratorTests
     {
         // Arrange
         var services = GetServices();
-        var options = services.GetService<IResponseInterceptionOptions>();
-        var generator = new ResponseMetadataGenerator(options, services);
+        var generator = new ResponseMetadataGenerator(services);
         var sut = services.GetService<ISomeInterface>();
 
         // Act
@@ -109,8 +105,7 @@ public class ResponseMetadataGeneratorTests
     {
         // Arrange
         var services = GetServices();
-        var options = services.GetService<IResponseInterceptionOptions>();
-        var generator = new ResponseMetadataGenerator(options, services);
+        var generator = new ResponseMetadataGenerator(services);
         var sut = services.GetService<ISomeInterface>();
 
         // Act
@@ -131,8 +126,7 @@ public class ResponseMetadataGeneratorTests
     {
         // Arrange
         var services = GetServices();
-        var options = services.GetService<IResponseInterceptionOptions>();
-        var generator = new ResponseMetadataGenerator(options, services);
+        var generator = new ResponseMetadataGenerator(services);
         var sut = services.GetService<ISomeInterface>();
 
         // Act
@@ -165,8 +159,7 @@ public class ResponseMetadataGeneratorTests
     {
         // Arrange
         var services = GetServices();
-        var options = services.GetService<IResponseInterceptionOptions>();
-        var generator = new ResponseMetadataGenerator(options, services);
+        var generator = new ResponseMetadataGenerator(services);
         var sut = services.GetService<ISomeInterface>();
 
         // Act
@@ -200,8 +193,7 @@ public class ResponseMetadataGeneratorTests
     {
         // Arrange
         var services = GetServices();
-        var options = services.GetService<IResponseInterceptionOptions>();
-        var generator = new ResponseMetadataGenerator(options, services);
+        var generator = new ResponseMetadataGenerator(services);
         var sut = services.GetService<ISomeInterface>();
 
         // Act
@@ -234,8 +226,7 @@ public class ResponseMetadataGeneratorTests
     {
         // Arrange
         var services = GetServices();
-        var options = services.GetService<IResponseInterceptionOptions>();
-        var generator = new ResponseMetadataGenerator(options, services);
+        var generator = new ResponseMetadataGenerator(services);
         var sut = services.GetService<ISomeInterface>();
 
         // Act

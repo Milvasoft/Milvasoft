@@ -33,7 +33,7 @@ public class ResponseInterceptor(IServiceProvider serviceProvider, IResponseInte
             {
                 var hasMetadataResponse = call.ReturnValue as IHasMetadata;
 
-                var metadataGenerator = new ResponseMetadataGenerator(_interceptionOptions, _serviceProvider);
+                var metadataGenerator = new ResponseMetadataGenerator(_serviceProvider);
 
                 metadataGenerator.GenerateMetadata(hasMetadataResponse);
             }

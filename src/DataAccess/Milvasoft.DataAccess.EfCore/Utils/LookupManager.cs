@@ -21,7 +21,6 @@ internal class LookupManager(MilvaDbContext dbContext, IDataAccessConfiguration 
     private static readonly ConcurrentDictionary<Type, Func<object>> _typeFactoryCache = new();
     private static readonly ConcurrentDictionary<Type, Func<MilvaDbContext, object, object, object, Task>> _getContentsMethodCache = new();
 
-
     internal class LookupContext
     {
         public string EntityName { get; set; }

@@ -16,13 +16,12 @@ namespace Milvasoft.Interception.Interceptors.Response;
 /// <remarks>
 /// Initializes a new instance of the <see cref="ResponseMetadataGenerator"/> class.
 /// </remarks>
-/// <param name="responseInterceptionOptions">The response interception options.</param>
 /// <param name="serviceProvider">The service provider.</param>
-public class ResponseMetadataGenerator(IResponseInterceptionOptions responseInterceptionOptions, IServiceProvider serviceProvider) : IResponseMetadataGenerator
+public class ResponseMetadataGenerator(IServiceProvider serviceProvider) : IResponseMetadataGenerator
 {
-    private readonly IResponseInterceptionOptions _interceptionOptions = responseInterceptionOptions;
     private readonly IServiceProvider _serviceProvider = serviceProvider;
-    private readonly bool _generateMetadataFuncResult = (!responseInterceptionOptions.GenerateMetadataFunc?.Invoke(serviceProvider) ?? false);
+    private readonly IResponseInterceptionOptions _interceptionOptions = serviceProvider.GetService<IResponseInterceptionOptions>();
+    private readonly bool _generateMetadataFuncResult = (!serviceProvider.GetService<IResponseInterceptionOptions>()?.GenerateMetadataFunc?.Invoke(serviceProvider) ?? false);
     private static readonly ConcurrentDictionary<Type, Func<object>> _defaultValueFactoryCache = new();
 
     /// <summary>
