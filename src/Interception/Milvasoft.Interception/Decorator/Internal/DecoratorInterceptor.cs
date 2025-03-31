@@ -112,7 +112,18 @@ internal class DecoratorInterceptor(ReadOnlyDictionary<MethodInfo, IMilvaInterce
             targetInvocationException.Rethrow();
         }
 
-        return (TResult)call.ReturnValue;
+        if (call.ReturnValue is TResult result)
+        {
+            return result;
+        }
+        else if (call.ReturnValue is Task<TResult> resultTask)
+        {
+            return await resultTask.ConfigureAwait(false);
+        }
+        else
+        {
+            throw new InvalidOperationException($"Expected {typeof(TResult)} or Task<{typeof(TResult)}> but got {call.ReturnValue?.GetType().Name ?? "null"}.");
+        }
     }
 
     private static IMilvaInterceptor GetFirstRunningInterceptor(IMilvaInterceptor[] decorators) => decorators.MinBy(decorator => decorator.InterceptionOrder);
