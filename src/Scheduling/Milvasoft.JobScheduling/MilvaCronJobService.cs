@@ -11,68 +11,33 @@ namespace Milvasoft.JobScheduling;
 /// Initializes new instances of <see cref="MilvaCronJobService"/>
 /// </remarks>
 /// <param name="scheduleConfig"></param>
-public abstract class MilvaCronJobService(IScheduleConfig scheduleConfig) : IHostedService, IDisposable
+public abstract class MilvaCronJobService(IScheduleConfig scheduleConfig) : IHostedService
 {
-    private bool _disposedValue;
-    private System.Timers.Timer _timer;
-    private CronExpression _expression = CronExpression.Parse(scheduleConfig.CronExpression, scheduleConfig.CronFormat);
-    private TimeZoneInfo _timeZoneInfo = scheduleConfig.TimeZoneInfo;
-    private readonly bool _useUtcForDateTimes = scheduleConfig.UseUtcDateTimes;
+    private Task _executingTask;
+    private CancellationTokenSource _cts;
+    private readonly IScheduleConfig _scheduleConfig = scheduleConfig;
+    private readonly CronExpression _expression = CronExpression.Parse(scheduleConfig.CronExpression, scheduleConfig.CronFormat);
 
-    /// <summary>
-    /// Starts the job.
-    /// </summary>
-    /// <param name="cancellationToken"></param>
-    /// <returns></returns>
-    public virtual Task StartAsync(CancellationToken cancellationToken) => ScheduleJob(cancellationToken);
-
-    /// <summary>
-    /// Schedules the job.
-    /// </summary>
-    /// <param name="cancellationToken"></param>
-    /// <returns></returns>
-    protected virtual async Task ScheduleJob(CancellationToken cancellationToken)
+    /// <inheritdoc/>
+    public Task StartAsync(CancellationToken cancellationToken)
     {
-        var next = _expression.GetNextOccurrence(CommonHelper.GetDateTimeOffsetNow(_useUtcForDateTimes), _timeZoneInfo);
+        _cts = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
 
-        if (next.HasValue)
-        {
-            var delay = next.Value - CommonHelper.GetDateTimeOffsetNow(_useUtcForDateTimes);
+        _executingTask = ScheduleAndRunAsync(_cts.Token);
 
-            if (delay.TotalMilliseconds <= 0)   // prevent non-positive values from being passed into Timer
-                await ScheduleJob(cancellationToken);
+        return Task.CompletedTask;
+    }
 
-            _timer = new System.Timers.Timer(delay.TotalMilliseconds);
+    /// <inheritdoc/>
+    public Task StopAsync(CancellationToken cancellationToken)
+    {
+        if (_executingTask == null)
+            return Task.CompletedTask;
 
-            _timer.Elapsed += (sender, args) =>
-            {
-                _timer.Dispose();
-                _timer = null;
+        _cts.Cancel();
+        _cts.Dispose();
 
-                if (!cancellationToken.IsCancellationRequested)
-                {
-                    _ = Task.Run(async () =>
-                    {
-                        try
-                        {
-                            await ExecuteAsync(cancellationToken);
-
-                            if (!cancellationToken.IsCancellationRequested)
-                                await ScheduleJob(cancellationToken);
-                        }
-                        catch (Exception ex)
-                        {
-                            // Exception'ı burada yakalayabilirsin
-                            Console.WriteLine("Timer job execution failed. {0}", ex.Message);
-                        }
-                    });
-                }
-            };
-
-            _timer.Start();
-        }
-
-        await Task.CompletedTask;
+        return Task.WhenAny(_executingTask, Task.Delay(Timeout.Infinite, cancellationToken));
     }
 
     /// <summary>
@@ -80,48 +45,52 @@ public abstract class MilvaCronJobService(IScheduleConfig scheduleConfig) : IHos
     /// </summary>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    public virtual Task ExecuteAsync(CancellationToken cancellationToken) => Task.Delay(5000, cancellationToken);
+    public abstract Task ExecuteAsync(CancellationToken cancellationToken);
 
     /// <summary>
-    /// Stops the job.
+    /// Schedules and runs the job.
     /// </summary>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    public virtual Task StopAsync(CancellationToken cancellationToken)
+    protected virtual async Task ScheduleAndRunAsync(CancellationToken cancellationToken)
     {
-        _timer?.Stop();
-        return Task.CompletedTask;
-    }
-
-    /// <summary>
-    /// Disposes the timer.
-    /// </summary>
-    public void Dispose()
-    {
-        Dispose(true);
-        GC.SuppressFinalize(this);
-    }
-
-    /// <summary>
-    /// Disposes the timer.
-    /// </summary>
-    protected virtual void Dispose(bool disposing)
-    {
-        if (!_disposedValue)
+        while (!cancellationToken.IsCancellationRequested)
         {
-            if (disposing)
+            var now = CommonHelper.GetDateTimeOffsetNow(_scheduleConfig.UseUtcDateTimes);
+            var next = _expression.GetNextOccurrence(now, _scheduleConfig.TimeZoneInfo);
+
+            if (!next.HasValue)
             {
-                _timer.Dispose();
+                // Retry later
+                await Task.Delay(TimeSpan.FromMinutes(5), cancellationToken);
+                continue;
             }
 
-            _expression = null;
-            _timeZoneInfo = null;
-            _disposedValue = true;
+            var delay = next.Value - now;
+
+            while (delay > TimeSpan.FromHours(1) && !cancellationToken.IsCancellationRequested)
+            {
+                await Task.Delay(TimeSpan.FromHours(1), cancellationToken);
+
+                now = CommonHelper.GetDateTimeOffsetNow(_scheduleConfig.UseUtcDateTimes);
+
+                delay = next.Value - now;
+            }
+
+            if (delay > TimeSpan.Zero)
+                await Task.Delay(delay, cancellationToken);
+
+            if (!cancellationToken.IsCancellationRequested)
+            {
+                try
+                {
+                    await ExecuteAsync(cancellationToken);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"{_scheduleConfig.Name} failed! Message: {ex.Message}");
+                }
+            }
         }
     }
-
-    /// <summary>
-    /// Disposes the timer.
-    /// </summary>
-    ~MilvaCronJobService() => Dispose(false);
 }
