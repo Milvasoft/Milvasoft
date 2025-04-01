@@ -29,15 +29,24 @@ public abstract class MilvaCronJobService(IScheduleConfig scheduleConfig) : IHos
     }
 
     /// <inheritdoc/>
-    public Task StopAsync(CancellationToken cancellationToken)
+    public async Task StopAsync(CancellationToken cancellationToken)
     {
         if (_executingTask == null)
-            return Task.CompletedTask;
+            return;
 
-        _cts.Cancel();
-        _cts.Dispose();
+        if (_cts.Token.IsCancellationRequested)
+            return;
 
-        return Task.WhenAny(_executingTask, Task.Delay(Timeout.Infinite, cancellationToken));
+        try
+        {
+            await _cts.CancelAsync();
+
+            await Task.WhenAny(_executingTask, Task.Delay(-1, cancellationToken));
+        }
+        finally
+        {
+            _cts.Dispose();
+        }
     }
 
     /// <summary>
