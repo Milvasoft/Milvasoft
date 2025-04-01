@@ -77,36 +77,50 @@ public static class IdentityHelpers
     /// <returns></returns>
     public static string GenerateRandomPassword(int length = 8, bool nonAlphanumeric = true, bool digit = true, bool lowercase = true, bool uppercase = true)
     {
-        StringBuilder password = new();
+        const string digits = "0123456789";
+        const string lowers = "abcdefghijklmnopqrstuvwxyz";
+        const string uppers = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        const string symbols = "!@#$%^&*()_+-=[]{}|:;,.<>?";
 
+        List<char> characterPool = [];
+
+        if (digit)
+            characterPool.AddRange(digits);
+
+        if (lowercase)
+            characterPool.AddRange(lowers);
+
+        if (uppercase)
+            characterPool.AddRange(uppers);
+
+        if (nonAlphanumeric)
+            characterPool.AddRange(symbols);
+
+        if (characterPool.Count == 0)
+            throw new ArgumentException("At least one character type must be enabled.");
+
+        StringBuilder password = new();
         Random random = new();
+
+        // Ensure at least one of each required type
+        if (digit)
+            password.Append(digits[random.Next(digits.Length)]);
+
+        if (lowercase)
+            password.Append(lowers[random.Next(lowers.Length)]);
+
+        if (uppercase)
+            password.Append(uppers[random.Next(uppers.Length)]);
+
+        if (nonAlphanumeric)
+            password.Append(symbols[random.Next(symbols.Length)]);
 
         while (password.Length < length)
         {
-            char c = (char)random.Next(32, 126);
-
-            password.Append(c);
-
-            if (char.IsDigit(c))
-                digit = false;
-            else if (char.IsLower(c))
-                lowercase = false;
-            else if (char.IsUpper(c))
-                uppercase = false;
-            else if (!char.IsLetterOrDigit(c))
-                nonAlphanumeric = false;
+            password.Append(characterPool[random.Next(characterPool.Count)]);
         }
 
-        if (nonAlphanumeric)
-            password.Append((char)random.Next(33, 48));
-        if (digit)
-            password.Append((char)random.Next(48, 58));
-        if (lowercase)
-            password.Append((char)random.Next(97, 123));
-        if (uppercase)
-            password.Append((char)random.Next(65, 91));
-
-        return password.ToString();
+        return new string([.. password.ToString().OrderBy(_ => random.Next())]);
     }
 
     /// <summary>
