@@ -209,81 +209,6 @@ public static class ModelBuilderExtensions
     }
 
     /// <summary>
-    /// Adds an index for each indelible entity for IsDeleted property.
-    /// </summary>
-    /// <param name="modelBuilder"></param>
-    public static ModelBuilder UseIndexToSoftDeletableEntities(this ModelBuilder modelBuilder)
-    {
-        var indelibleEntites = modelBuilder.Model.GetEntityTypes().Where(entityType => entityType.FindProperty(EntityPropertyNames.IsDeleted) != null);
-
-        foreach (var entityType in indelibleEntites)
-            modelBuilder.Entity(entityType.ClrType).HasIndex(EntityPropertyNames.IsDeleted);
-
-        return modelBuilder;
-    }
-
-    /// <summary>
-    /// Adds an index for each creation auditable entity for CreationDate property.
-    /// </summary>
-    /// <param name="modelBuilder"></param>
-    public static ModelBuilder UseIndexToCreationAuditableEntities(this ModelBuilder modelBuilder)
-    {
-        var indelibleEntites = modelBuilder.Model.GetEntityTypes().Where(entityType => entityType.FindProperty(EntityPropertyNames.CreationDate) != null);
-
-        foreach (var entityType in indelibleEntites)
-            modelBuilder.Entity(entityType.ClrType).HasIndex(EntityPropertyNames.CreationDate);
-
-        return modelBuilder;
-    }
-
-    /// <summary>
-    /// Adds an index for <see cref="LogEntityBase{TKey}"/> entity.
-    /// Added indexes;
-    /// <para></para> Unique <see cref="EntityPropertyNames.TransactionId"/>
-    /// <para></para> Descending <see cref="EntityPropertyNames.UtcLogTime"/> 
-    /// <para></para><see cref="EntityPropertyNames.MethodName"/>
-    /// <para></para><see cref="EntityPropertyNames.IsSuccess"/>
-    /// </summary>
-    /// <param name="modelBuilder"></param>
-    public static ModelBuilder UseLogEntityBaseIndexes(this ModelBuilder modelBuilder)
-    {
-        var logEntityBaseEntities = modelBuilder.Model.GetEntityTypes().Where(entityType => entityType.ClrType.CanAssignableTo(typeof(LogEntityBase<>)));
-
-        foreach (var entityType in logEntityBaseEntities.Select(e => e.ClrType))
-        {
-            modelBuilder.Entity(entityType).HasIndex(EntityPropertyNames.TransactionId);
-            modelBuilder.Entity(entityType).HasIndex(EntityPropertyNames.UtcLogTime).IsDescending(true);
-            modelBuilder.Entity(entityType).HasIndex(EntityPropertyNames.MethodName);
-            modelBuilder.Entity(entityType).HasIndex(EntityPropertyNames.IsSuccess);
-        }
-
-        return modelBuilder;
-    }
-
-    /// <summary>
-    /// Configures default value for update database.
-    /// </summary>
-    /// <param name="modelBuilder"></param>
-    public static ModelBuilder UseDefaultValue(this ModelBuilder modelBuilder)
-    {
-        foreach (var entityType in modelBuilder.Model.GetEntityTypes())
-            foreach (var property in entityType.GetProperties())
-            {
-                var memberInfo = property.PropertyInfo ?? (MemberInfo)property.FieldInfo;
-
-                if (memberInfo == null)
-                    continue;
-
-                if (Attribute.GetCustomAttribute(memberInfo, typeof(DefaultValueAttribute)) is not DefaultValueAttribute defaultValue)
-                    continue;
-
-                modelBuilder.Entity(entityType.ClrType).Property(property.Name).HasDefaultValue(defaultValue.Value);
-            }
-
-        return modelBuilder;
-    }
-
-    /// <summary>
     /// Enable the query filter for indelible entities.
     /// </summary>
     /// <param name="modelBuilder"></param>
@@ -420,6 +345,94 @@ public static class ModelBuilderExtensions
     }
 
     /// <summary>
+    /// Configures default value for update database.
+    /// </summary>
+    /// <param name="modelBuilder"></param>
+    public static ModelBuilder UseDefaultValue(this ModelBuilder modelBuilder)
+    {
+        foreach (var entityType in modelBuilder.Model.GetEntityTypes())
+            foreach (var property in entityType.GetProperties())
+            {
+                var memberInfo = property.PropertyInfo ?? (MemberInfo)property.FieldInfo;
+
+                if (memberInfo == null)
+                    continue;
+
+                if (Attribute.GetCustomAttribute(memberInfo, typeof(DefaultValueAttribute)) is not DefaultValueAttribute defaultValue)
+                    continue;
+
+                modelBuilder.Entity(entityType.ClrType).Property(property.Name).HasDefaultValue(defaultValue.Value);
+            }
+
+        return modelBuilder;
+    }
+
+    /// <summary>
+    /// Adds an index for each indelible entity for IsDeleted property.
+    /// </summary>
+    /// <param name="modelBuilder"></param>
+    public static ModelBuilder UseIndexToSoftDeletableEntities(this ModelBuilder modelBuilder)
+    {
+        var indelibleEntites = modelBuilder.Model.GetEntityTypes().Where(entityType => entityType.FindProperty(EntityPropertyNames.IsDeleted) != null);
+
+        foreach (var entityType in indelibleEntites)
+            modelBuilder.Entity(entityType.ClrType).HasIndex(EntityPropertyNames.IsDeleted);
+
+        return modelBuilder;
+    }
+
+    /// <summary>
+    /// Adds an index for each creation auditable entity for CreationDate property.
+    /// </summary>
+    /// <param name="modelBuilder"></param>
+    /// <param name="createCompositeWithIsDeleted"> If the entity has IsDeleted property, creates index as composite with IsDeleted and TenantId </param>
+    public static ModelBuilder UseIndexToCreationAuditableEntities(this ModelBuilder modelBuilder, bool createCompositeWithIsDeleted = true)
+    {
+        var hasCreationDateEntities = modelBuilder.Model.GetEntityTypes().Where(entityType => entityType.FindProperty(EntityPropertyNames.CreationDate) != null);
+
+        foreach (var entityType in hasCreationDateEntities)
+        {
+            if (entityType.ClrType.GetCustomAttribute<DontIndexCreationDateAttribute>() is null &&
+                entityType.FindProperty(EntityPropertyNames.CreationDate)?.ClrType.GetCustomAttribute<DontIndexCreationDateAttribute>() is null)
+            {
+
+                if (createCompositeWithIsDeleted && entityType.FindProperty(EntityPropertyNames.IsDeleted) is not null)
+                {
+                    modelBuilder.Entity(entityType.ClrType).HasIndex(EntityPropertyNames.CreationDate, EntityPropertyNames.IsDeleted);
+                }
+                else
+                    modelBuilder.Entity(entityType.ClrType).HasIndex(EntityPropertyNames.CreationDate);
+            }
+        }
+
+        return modelBuilder;
+    }
+
+    /// <summary>
+    /// Adds an index for <see cref="LogEntityBase{TKey}"/> entity.
+    /// Added indexes;
+    /// <para></para> Unique <see cref="EntityPropertyNames.TransactionId"/>
+    /// <para></para> Descending <see cref="EntityPropertyNames.UtcLogTime"/> 
+    /// <para></para><see cref="EntityPropertyNames.MethodName"/>
+    /// <para></para><see cref="EntityPropertyNames.IsSuccess"/>
+    /// </summary>
+    /// <param name="modelBuilder"></param>
+    public static ModelBuilder UseLogEntityBaseIndexes(this ModelBuilder modelBuilder)
+    {
+        var logEntityBaseEntities = modelBuilder.Model.GetEntityTypes().Where(entityType => entityType.ClrType.CanAssignableTo(typeof(LogEntityBase<>)));
+
+        foreach (var entityType in logEntityBaseEntities.Select(e => e.ClrType))
+        {
+            modelBuilder.Entity(entityType).HasIndex(EntityPropertyNames.TransactionId);
+            modelBuilder.Entity(entityType).HasIndex(EntityPropertyNames.UtcLogTime).IsDescending(true);
+            modelBuilder.Entity(entityType).HasIndex(EntityPropertyNames.MethodName);
+            modelBuilder.Entity(entityType).HasIndex(EntityPropertyNames.IsSuccess);
+        }
+
+        return modelBuilder;
+    }
+
+    /// <summary>
     /// Adds new composite index of entities that implement <see cref="WithTenantIdIndexAttribute"/>.
     /// </summary>
     /// <param name="modelBuilder"></param>
@@ -458,8 +471,9 @@ public static class ModelBuilderExtensions
     /// Adds new composite index of entities that implement <see cref="WithTenantIdIndexAttribute"/>.
     /// </summary>
     /// <param name="modelBuilder"></param>
+    /// <param name="createCompositeWithIsDeleted"> If the entity has IsDeleted property, creates index as composite with IsDeleted and TenantId </param>
     /// <returns></returns>
-    public static ModelBuilder UseTenantIdIndexes(this ModelBuilder modelBuilder)
+    public static ModelBuilder UseTenantIdIndexes(this ModelBuilder modelBuilder, bool createCompositeWithIsDeleted = true)
     {
         var entitiesWithTenantId = modelBuilder.Model.GetEntityTypes().Where(entityType => entityType.ClrType.CanAssignableTo(typeof(IHasTenantId)));
 
@@ -469,8 +483,15 @@ public static class ModelBuilderExtensions
         {
             if (tenantIdProperty == null)
                 continue;
+
             var mutableEntity = modelBuilder.Entity(entityType.ClrType);
-            mutableEntity.HasIndex(tenantIdProperty.Name);
+
+            if (createCompositeWithIsDeleted && entityType.FindProperty(EntityPropertyNames.IsDeleted) is not null)
+            {
+                mutableEntity.HasIndex(EntityPropertyNames.IsDeleted, tenantIdProperty.Name);
+            }
+            else
+                mutableEntity.HasIndex(tenantIdProperty.Name);
         }
 
         return modelBuilder;
