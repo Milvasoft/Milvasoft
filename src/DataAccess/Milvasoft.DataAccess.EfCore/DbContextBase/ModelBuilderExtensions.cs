@@ -448,7 +448,7 @@ public static class ModelBuilderExtensions
             if (tenantIdProperty == null)
                 continue;
 
-            var properties = entityType.GetProperties().Where(p => p.PropertyInfo.GetCustomAttribute<WithTenantIdIndexAttribute>() != null);
+            var properties = entityType.GetProperties().Where(p => p.PropertyInfo.GetCustomAttribute<WithTenantIdIndexAttribute>() != null).ToArray();
 
             var mutableEntity = modelBuilder.Entity(entityType.ClrType);
 
