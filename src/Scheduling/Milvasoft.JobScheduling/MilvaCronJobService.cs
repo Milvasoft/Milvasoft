@@ -31,21 +31,30 @@ public abstract class MilvaCronJobService(IScheduleConfig scheduleConfig) : IHos
     /// <inheritdoc/>
     public async Task StopAsync(CancellationToken cancellationToken)
     {
-        if (_executingTask == null)
-            return;
-
-        if (_cts.Token.IsCancellationRequested)
+        if (_executingTask == null || _cts == null || _cts.IsCancellationRequested)
             return;
 
         try
         {
-            await _cts.CancelAsync();
+            if (!_cts.IsCancellationRequested)
+                await _cts.CancelAsync();
 
             await Task.WhenAny(_executingTask, Task.Delay(-1, cancellationToken));
         }
+        catch (ObjectDisposedException)
+        {
+            // Already disposed, ignore
+        }
         finally
         {
-            _cts.Dispose();
+            try
+            {
+                _cts.Dispose();
+            }
+            catch (ObjectDisposedException)
+            {
+                // Already disposed, ignore
+            }
         }
     }
 

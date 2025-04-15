@@ -120,6 +120,10 @@ internal class DecoratorInterceptor(ReadOnlyDictionary<MethodInfo, IMilvaInterce
         {
             return await resultTask.ConfigureAwait(false);
         }
+        else if (call.ReturnValue is null)
+        {
+            return (TResult)call.ReturnValue;
+        }
         else
         {
             throw new InvalidOperationException($"Expected {typeof(TResult)} or Task<{typeof(TResult)}> but got {call.ReturnValue?.GetType().Name ?? "null"}.");

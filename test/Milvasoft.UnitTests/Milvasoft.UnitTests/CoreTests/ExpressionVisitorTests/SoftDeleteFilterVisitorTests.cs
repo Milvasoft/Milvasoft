@@ -11,7 +11,13 @@ public class SoftDeleteFilterVisitorTests
     public class SoftDeleteTestEntity : FullAuditableEntity<int>
     {
         public string Name { get; set; }
-        public List<SoftDeleteTestEntity> Children { get; set; }
+        public List<SoftDeleteTestEntity> Childrens { get; set; }
+        public List<AnotherSoftDeleteTestEntity> OtherChildrens { get; set; }
+    }
+
+    public class AnotherSoftDeleteTestEntity : FullAuditableEntity<int>
+    {
+        public string Name { get; set; }
     }
 
     [Fact]
@@ -21,7 +27,7 @@ public class SoftDeleteFilterVisitorTests
         var memberInit = Expression.MemberInit(
             Expression.New(typeof(SoftDeleteTestEntity)),
             Expression.Bind(
-                typeof(SoftDeleteTestEntity).GetProperty(nameof(SoftDeleteTestEntity.Children)),
+                typeof(SoftDeleteTestEntity).GetProperty(nameof(SoftDeleteTestEntity.Childrens)),
                 Expression.Constant(new List<SoftDeleteTestEntity>
                 {
                     new() { IsDeleted = true },
@@ -91,8 +97,8 @@ public class SoftDeleteFilterVisitorTests
         // Arrange
         var collection = new List<SoftDeleteTestEntity>
         {
-            new() { IsDeleted = true, Name = "Deleted" },
-            new() { IsDeleted = false, Name = "NotDeleted" }
+            new() { IsDeleted = true, Name = "Deleted", Childrens = [ new() { Name = "ChildrenDeleted" , IsDeleted = true}], OtherChildrens = [new(){Name = "OtherChildren", IsDeleted = true}] },
+            new() { IsDeleted = false, Name = "NotDeleted", Childrens = [ new() { Name = "ChildrenDeleted" , IsDeleted = false}], OtherChildrens = [new(){Name = "OtherChildren", IsDeleted = false}]}
         };
         var collectionExpression = Expression.Constant(collection);
 
@@ -103,5 +109,27 @@ public class SoftDeleteFilterVisitorTests
 
         // Assert
         result.Should().NotBeNull();
+    }
+
+    [Fact]
+    public void ProcessCollectionExpression_ShouldConvertExpression_WhenTypeDoesNotMatchElementType()
+    {
+        // Arrange
+        var collection = new List<SoftDeleteTestEntity>
+        {
+            new() { IsDeleted = true, Name = "Deleted", Childrens = [ new() { Name = "ChildrenDeleted" , IsDeleted = true}], OtherChildrens = [new(){Name = "OtherChildren", IsDeleted = true}] },
+            new() { IsDeleted = false, Name = "NotDeleted", Childrens = [ new() { Name = "ChildrenDeleted" , IsDeleted = false}], OtherChildrens = [new(){Name = "OtherChildren", IsDeleted = false}]}
+        };
+        var collectionExpression = Expression.Constant(collection);
+
+        var visitor = new SoftDeleteFilterVisitor();
+
+        // Act
+        var processedCollection = typeof(SoftDeleteFilterVisitor)
+            .GetMethod("ProcessCollectionExpression", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)
+            .Invoke(visitor, [collectionExpression, typeof(SoftDeleteTestEntity)]);
+
+        // Assert
+        processedCollection.Should().NotBeNull();
     }
 }

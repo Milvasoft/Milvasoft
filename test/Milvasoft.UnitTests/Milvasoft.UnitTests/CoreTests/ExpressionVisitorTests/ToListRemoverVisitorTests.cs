@@ -23,7 +23,7 @@ public class ToListRemoverVisitorTests
             new() { IsDeleted = true }
         };
 
-        Expression<Func<IEnumerable<SoftDeleteTestEntity>>> expression = () => sourceData.Where(x => !x.IsDeleted).ToList();
+        Expression<Func<IEnumerable<SoftDeleteTestEntity>>> expression = () => sourceData.ToList();
 
         var visitor = new ToListRemoverVisitor();
 
@@ -63,7 +63,7 @@ public class ToListRemoverVisitorTests
             new() { IsDeleted = true }
         };
 
-        Expression<Func<IEnumerable<SoftDeleteTestEntity>>> expression = () => sourceData.Where(x => !x.IsDeleted).OrderBy(x => x.IsDeleted).ToList();
+        Expression<Func<IEnumerable<SoftDeleteTestEntity>>> expression = () => sourceData.OrderBy(x => x.IsDeleted).ToList();
 
         var visitor = new ToListRemoverVisitor();
 
@@ -86,7 +86,7 @@ public class ToListRemoverVisitorTests
             new() { IsDeleted = true }
         };
 
-        Expression<Func<IEnumerable<SoftDeleteTestEntity>>> expression = () => sourceData.Where(x => !x.IsDeleted).ToList().ToList();
+        Expression<Func<IEnumerable<SoftDeleteTestEntity>>> expression = () => sourceData.ToList().ToList();
 
         var visitor = new ToListRemoverVisitor();
 
@@ -118,5 +118,25 @@ public class ToListRemoverVisitorTests
         // Assert
         modifiedExpression.Should().NotBeNull();
         modifiedExpression.Should().Be(expression.Body);
+    }
+
+    [Fact]
+    public void VisitMethodCall_ShouldRemoveToList_WhenSourceTypeIsCompatible()
+    {
+        // Arrange
+        var visitor = new ToListRemoverVisitor();
+
+        var data = new List<SoftDeleteTestEntity> { new() { IsDeleted = false } };
+        Expression<Func<List<SoftDeleteTestEntity>>> expression = () =>
+            data.Where(x => !x.IsDeleted).ToList();
+
+        var methodCall = expression.Body as MethodCallExpression;
+
+        // Act
+        var result = visitor.Visit(methodCall);
+
+        // Assert
+        result.Should().NotBeNull();
+        result.Should().NotBeOfType<MethodCallExpression>(); // ToList kaldırıldı
     }
 }
