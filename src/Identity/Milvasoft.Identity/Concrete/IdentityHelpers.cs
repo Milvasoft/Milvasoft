@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Milvasoft.Identity.Concrete.Options;
 using System.Security.Cryptography;
 
 namespace Milvasoft.Identity.Concrete;
@@ -60,40 +61,34 @@ public static class IdentityHelpers
     /// </summary>
     /// <param name="passwordOptions"></param>
     /// <returns></returns>
-    public static string GenerateRandomPassword(this PasswordOptions passwordOptions) => GenerateRandomPassword(passwordOptions.RequiredLength,
-                                                                                                                passwordOptions.RequireNonAlphanumeric,
-                                                                                                                passwordOptions.RequireDigit,
-                                                                                                                passwordOptions.RequireLowercase,
-                                                                                                                passwordOptions.RequireUppercase);
+    public static string GenerateRandomPassword(this PasswordOptions passwordOptions) => GenerateRandomPassword(new MilvaRandomPaswordGenerationOption(passwordOptions));
 
     /// <summary>
     /// Generates random password.
     /// </summary>
-    /// <param name="length"></param>
-    /// <param name="nonAlphanumeric"></param>
-    /// <param name="digit"></param>
-    /// <param name="lowercase"></param>
-    /// <param name="uppercase"></param>
+    /// <param name="randomGenerationOptions"></param>
     /// <returns></returns>
-    public static string GenerateRandomPassword(int length = 8, bool nonAlphanumeric = true, bool digit = true, bool lowercase = true, bool uppercase = true)
+    public static string GenerateRandomPassword(MilvaRandomPaswordGenerationOption randomGenerationOptions = null)
     {
-        const string digits = "0123456789";
-        const string lowers = "abcdefghijklmnopqrstuvwxyz";
-        const string uppers = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-        const string symbols = "!@#$%^&*()_+-=[]{}|:;,.<>?";
+        randomGenerationOptions ??= new();
+
+        string digits = randomGenerationOptions.AllowedDigits;
+        string lowers = randomGenerationOptions.AllowedLowerChars;
+        string uppers = randomGenerationOptions.AllowedUpperChars;
+        string symbols = randomGenerationOptions.AllowedSymbols;
 
         List<char> characterPool = [];
 
-        if (digit)
+        if (randomGenerationOptions.Digit)
             characterPool.AddRange(digits);
 
-        if (lowercase)
+        if (randomGenerationOptions.Lowercase)
             characterPool.AddRange(lowers);
 
-        if (uppercase)
+        if (randomGenerationOptions.Uppercase)
             characterPool.AddRange(uppers);
 
-        if (nonAlphanumeric)
+        if (randomGenerationOptions.NonAlphanumeric)
             characterPool.AddRange(symbols);
 
         if (characterPool.Count == 0)
@@ -103,22 +98,20 @@ public static class IdentityHelpers
         Random random = new();
 
         // Ensure at least one of each required type
-        if (digit)
+        if (randomGenerationOptions.Digit)
             password.Append(digits[random.Next(digits.Length)]);
 
-        if (lowercase)
+        if (randomGenerationOptions.Lowercase)
             password.Append(lowers[random.Next(lowers.Length)]);
 
-        if (uppercase)
+        if (randomGenerationOptions.Uppercase)
             password.Append(uppers[random.Next(uppers.Length)]);
 
-        if (nonAlphanumeric)
+        if (randomGenerationOptions.NonAlphanumeric)
             password.Append(symbols[random.Next(symbols.Length)]);
 
-        while (password.Length < length)
-        {
+        while (password.Length < randomGenerationOptions.Length)
             password.Append(characterPool[random.Next(characterPool.Count)]);
-        }
 
         return new string([.. password.ToString().OrderBy(_ => random.Next())]);
     }

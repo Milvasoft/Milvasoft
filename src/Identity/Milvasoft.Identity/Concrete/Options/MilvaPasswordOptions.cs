@@ -61,4 +61,9 @@ public class MilvaPasswordOptions
     /// This defaults to true.
     /// </remarks>
     public bool RequireDigit { get; set; } = true;
+
+    /// <summary>
+    /// Gets or sets a random password generation options.
+    /// </summary>
+    public MilvaRandomPaswordGenerationOption RandomGenerationOptions { get; set; } = new();
 }

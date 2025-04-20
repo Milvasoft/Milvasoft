@@ -257,7 +257,7 @@ public abstract class MilvaDbContext(DbContextOptions options) : DbContext(optio
         if (!audit)
             return;
 
-        if (entry.HasProperty(propertyName))
+        if (entry.HasProperty(propertyName) && entry.Property(propertyName).CurrentValue == null)
         {
             entry.Property(propertyName).CurrentValue = CommonHelper.GetNow(_useUtcForDateTimes);
             entry.Property(propertyName).IsModified = true;
