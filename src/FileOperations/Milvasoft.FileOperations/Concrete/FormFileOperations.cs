@@ -207,10 +207,10 @@ public static partial class FormFileOperations
     /// <param name="propertyName"></param>
     /// <returns> Completed Task </returns>
     public static Task<List<string>> SaveFilesToPathAsync<TEntity>(this IFormFileCollection files,
-                                                                         TEntity entity,
-                                                                         string basePath,
-                                                                         FilesFolderNameCreator folderNameCreator,
-                                                                         string propertyName)
+                                                                   TEntity entity,
+                                                                   string basePath,
+                                                                   FilesFolderNameCreator folderNameCreator,
+                                                                   string propertyName)
         => SaveFilesToPathAsync([.. files], entity, basePath, folderNameCreator, propertyName);
 
     /// <summary>
@@ -388,7 +388,7 @@ public static partial class FormFileOperations
 
         var regex = @"[^:]\w+\/[\w-+\d.]+(?=;|,)";
 
-        var contentType = GetExtension(base64String, regex);
+        var contentType = GetExtension(dataUriBase64, regex);
 
         var splittedContentType = contentType?.Split('/');
 
@@ -398,7 +398,7 @@ public static partial class FormFileOperations
 
         var array = Convert.FromBase64String(base64String);
 
-        using var memoryStream = new MemoryStream(array)
+        var memoryStream = new MemoryStream(array)
         {
             Position = 0
         };
@@ -408,6 +408,20 @@ public static partial class FormFileOperations
             Headers = new HeaderDictionary(),
             ContentType = contentType
         };
+    }
+
+    /// <summary>
+    /// Converts form file to byte array.
+    /// </summary>
+    /// <param name="formFile"></param>
+    /// <returns></returns>
+    public static async Task<byte[]> ConvertFormFileToByteArrayAsync(IFormFile formFile)
+    {
+        using var memoryStream = new MemoryStream();
+
+        await formFile.CopyToAsync(memoryStream);
+
+        return memoryStream.ToArray();
     }
 
     #region File & Folder Remove Operations
@@ -566,7 +580,7 @@ public static partial class FormFileOperations
     /// <param name="input"></param>
     /// <param name="regexString"></param>
     /// <returns></returns>
-    private static string GetExtension(string input, string regexString) => new Regex(regexString, RegexOptions.NonBacktracking, TimeSpan.FromMilliseconds(100)).Match(input).Captures?.FirstOrDefault()?.Value;
+    private static string GetExtension(string input, string regexString) => new Regex(regexString, RegexOptions.None, TimeSpan.FromSeconds(60)).Match(input).Captures?.FirstOrDefault()?.Value;
 
     /// <summary>
     /// File types to be accepted.
