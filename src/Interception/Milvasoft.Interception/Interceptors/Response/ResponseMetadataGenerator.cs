@@ -23,6 +23,7 @@ public class ResponseMetadataGenerator(IServiceProvider serviceProvider) : IResp
     private readonly IResponseInterceptionOptions _interceptionOptions = serviceProvider.GetService<IResponseInterceptionOptions>();
     private readonly bool _generateMetadataFuncResult = (!serviceProvider.GetService<IResponseInterceptionOptions>()?.GenerateMetadataFunc?.Invoke(serviceProvider) ?? false);
     private static readonly ConcurrentDictionary<Type, Func<object>> _defaultValueFactoryCache = new();
+    private const int _maxDepth = 3;
 
     /// <summary>
     /// Applies localization to the specified property.
@@ -64,11 +65,11 @@ public class ResponseMetadataGenerator(IServiceProvider serviceProvider) : IResp
         {
             object actualObject = hasMetadataObject;
 
-            GeneratePropMetadata(callerObjectInfo, actualObject.GetType().GetProperty("Data"), hasMetadataObject.Metadatas);
+            GeneratePropMetadata(callerObjectInfo, actualObject.GetType().GetProperty("Data"), hasMetadataObject.Metadatas, currentDepth: 0);
             return;
         }
 
-        GenerateMetadata(callerObjectInfo, hasMetadataObject.Metadatas);
+        GenerateMetadata(callerObjectInfo, hasMetadataObject.Metadatas, currentDepth: 0);
     }
 
     /// <summary>
@@ -76,15 +77,18 @@ public class ResponseMetadataGenerator(IServiceProvider serviceProvider) : IResp
     /// </summary>
     /// <param name="callerObjectInfo"></param>
     /// <param name="metadatas"></param>
-    private void GenerateMetadata(CallerObjectInfo callerObjectInfo, List<ResponseDataMetadata> metadatas = null)
+    private void GenerateMetadata(CallerObjectInfo callerObjectInfo, List<ResponseDataMetadata> metadatas = null, int currentDepth = 0)
     {
+        if (currentDepth > _maxDepth)
+            return;
+
         var properties = callerObjectInfo.ReviewedType.GetProperties().Where(p => p.GetCustomAttribute<ExcludeFromMetadataAttribute>() == null);
 
         if (properties.IsNullOrEmpty())
             return;
 
         foreach (PropertyInfo property in properties)
-            GeneratePropMetadata(callerObjectInfo, property, metadatas);
+            GeneratePropMetadata(callerObjectInfo, property, metadatas, currentDepth + 1);
     }
 
     /// <summary>
@@ -93,7 +97,7 @@ public class ResponseMetadataGenerator(IServiceProvider serviceProvider) : IResp
     /// <param name="callerObjectInfo"></param>
     /// <param name="property"></param>
     /// <param name="metadatas"></param>
-    private void GeneratePropMetadata(CallerObjectInfo callerObjectInfo, PropertyInfo property, List<ResponseDataMetadata> metadatas)
+    private void GeneratePropMetadata(CallerObjectInfo callerObjectInfo, PropertyInfo property, List<ResponseDataMetadata> metadatas, int currentDepth)
     {
         if (property == null)
             return;
@@ -130,7 +134,7 @@ public class ResponseMetadataGenerator(IServiceProvider serviceProvider) : IResp
                 return;
             }
 
-            GenerateChildComplexMetadata(callerObjectInfo, property, metadata);
+            GenerateChildComplexMetadata(callerObjectInfo, property, metadata, currentDepth);
         }
 
         ApplyMetadataRules(callerObjectInfo.Object, callerObjectInfo.ActualTypeIsCollection, property, mask, removePropMetadataFromResponse);
@@ -191,8 +195,11 @@ public class ResponseMetadataGenerator(IServiceProvider serviceProvider) : IResp
     /// <param name="callerObjectInfo"></param>
     /// <param name="property"></param>
     /// <param name="metadata"></param>
-    private void GenerateChildComplexMetadata(CallerObjectInfo callerObjectInfo, PropertyInfo property, ResponseDataMetadata metadata)
+    private void GenerateChildComplexMetadata(CallerObjectInfo callerObjectInfo, PropertyInfo property, ResponseDataMetadata metadata, int currentDepth)
     {
+        if (currentDepth > _maxDepth)
+            return;
+
         object callerObject = callerObjectInfo.Object;
         object propertyValue = null;
 
@@ -217,7 +224,7 @@ public class ResponseMetadataGenerator(IServiceProvider serviceProvider) : IResp
 
                         metadata.Metadatas ??= [];
 
-                        GenerateMetadata(childCallerInfo1, metadata.Metadatas);
+                        GenerateMetadata(childCallerInfo1, metadata.Metadatas, currentDepth + 1);
                     }
 
                     return;
@@ -232,7 +239,7 @@ public class ResponseMetadataGenerator(IServiceProvider serviceProvider) : IResp
         if (childCallerInfo is not null)
         {
             metadata.Metadatas ??= [];
-            GenerateMetadata(childCallerInfo, metadata.Metadatas);
+            GenerateMetadata(childCallerInfo, metadata.Metadatas, currentDepth + 1);
         }
     }
 
@@ -307,9 +314,9 @@ public class ResponseMetadataGenerator(IServiceProvider serviceProvider) : IResp
     /// <param name="property">The property to apply metadata rules to.</param>
     /// <param name="mask">Indicates whether to mask the property value.</param>
     /// <param name="hide">Indicates whether to remove the property metadata from the response.</param>
-    private void ApplyMetadataRules(object callerObj, bool callerObjectTypeIsCollection, PropertyInfo property, bool mask, bool hide)
+    private void ApplyMetadataRules(object callerObj, bool callerObjectTypeIsCollection, PropertyInfo property, bool mask, bool hide, int currentDepth = 0)
     {
-        if (callerObj == null || !_interceptionOptions.ApplyMetadataRules)
+        if (currentDepth > _maxDepth || callerObj == null || !_interceptionOptions.ApplyMetadataRules)
             return;
 
         if (callerObjectTypeIsCollection)
@@ -317,7 +324,7 @@ public class ResponseMetadataGenerator(IServiceProvider serviceProvider) : IResp
             var callerObjAsList = callerObj as IList;
 
             foreach (var item in callerObjAsList)
-                ApplyMetadataRules(item, false, property, mask, hide);
+                ApplyMetadataRules(item, false, property, mask, hide, currentDepth);
 
             return;
         }
@@ -357,6 +364,27 @@ public class ResponseMetadataGenerator(IServiceProvider serviceProvider) : IResp
             var formattedValue = formatter?.Format(linkedPropValue);
 
             property.SetValue(callerObj, formattedValue);
+        }
+
+        // Alt property'ler için de aynı işlemleri uygula (recursive)
+        if (IsCustomComplextType(property))
+        {
+            var nestedObj = property.GetValue(callerObj);
+
+            if (nestedObj != null)
+            {
+                Type nestedType = CallerObjectInfo.ReviewObjectType(property.PropertyType, out bool isCollection);
+
+                var nestedProperties = nestedType.GetProperties().Where(p => p.CanRead && p.CanWrite && p.GetCustomAttribute<ExcludeFromMetadataAttribute>() == null);
+
+                foreach (var nestedProp in nestedProperties)
+                {
+                    bool nestedMask = ShouldMask(nestedProp);
+                    bool nestedHide = ShouldHide(nestedProp);
+
+                    ApplyMetadataRules(nestedObj, isCollection, nestedProp, nestedMask, nestedHide, currentDepth + 1);
+                }
+            }
         }
     }
 
