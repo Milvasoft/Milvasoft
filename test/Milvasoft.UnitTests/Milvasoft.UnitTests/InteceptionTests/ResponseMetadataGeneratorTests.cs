@@ -309,12 +309,32 @@ public class ResponseMetadataGeneratorTests
         [Browsable(false)]
         public List<SomeComplexClass> SelfReferencingListProp { get; set; }
 
+        [Browsable(false)]
+        public RecursiveClass RecursiveProp { get; set; } = new();
+
         [ExcludeFromMetadata]
         public Expression<Func<AnotherComplexClass, bool>> WillBeExcluded { get; set; }
     }
 
     public class AnotherComplexClass
     {
+        [TooltipFormat("dddd, dd MMMM yyyy")]
+        public DateTime DateProp { get; set; }
+
+        [HideByRole("NotHide")]
+        [Filterable(true, FilterComponentType = UiInputConstant.SelectInput)]
+        [Options<EnumLocalizedValueFetcher>(EnumLocalizedValueFetcher.FetcherName, typeof(SomeEnumFixture))]
+        public SomeEnumFixture EnumProp { get; set; }
+
+        [HideByRole("NotHide")]
+        [Options<BoolLocalizedValueFetcher>(BoolLocalizedValueFetcher.FetcherName, "Yes,No")]
+        public bool AnotherBoolProp { get; set; }
+    }
+
+    public class RecursiveClass
+    {
+        public SomeComplexClass SomeComplexClass { get; set; } = new();
+
         [TooltipFormat("dddd, dd MMMM yyyy")]
         public DateTime DateProp { get; set; }
 

@@ -219,6 +219,9 @@ public class ResponseInterceptorTests
 
         [Browsable(false)]
         public AnotherComplexClass ComplexClass { get; set; }
+
+        [Browsable(false)]
+        public RecursiveClass RecursiveProp { get; set; } = new();
     }
 
     public class AnotherComplexClass
@@ -228,6 +231,10 @@ public class ResponseInterceptorTests
 
         [HideByRole("NotHide")]
         public SomeEnumFixture EnumProp { get; set; }
+    }
+    public class RecursiveClass
+    {
+        public SomeComplexClass SomeComplexClass { get; set; } = new();
     }
 
     public class SomeClass : ISomeInterface

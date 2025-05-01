@@ -60,15 +60,17 @@ public class ResponseMetadataGenerator(IServiceProvider serviceProvider) : IResp
 
         var callerObjectInfo = CallerObjectInfo.CreateCallerInformation(responseData, resultDataType);
 
+        HashSet<Type> visitedTypes = null;
+
         if (callerObjectInfo.ReviewedType.Namespace.Contains(nameof(System)))
         {
             object actualObject = hasMetadataObject;
 
-            GeneratePropMetadata(callerObjectInfo, actualObject.GetType().GetProperty("Data"), hasMetadataObject.Metadatas);
+            GeneratePropMetadata(callerObjectInfo, actualObject.GetType().GetProperty("Data"), hasMetadataObject.Metadatas, visitedTypes);
             return;
         }
 
-        GenerateMetadata(callerObjectInfo, hasMetadataObject.Metadatas);
+        GenerateMetadata(callerObjectInfo, hasMetadataObject.Metadatas, visitedTypes);
     }
 
     /// <summary>
@@ -76,15 +78,24 @@ public class ResponseMetadataGenerator(IServiceProvider serviceProvider) : IResp
     /// </summary>
     /// <param name="callerObjectInfo"></param>
     /// <param name="metadatas"></param>
-    private void GenerateMetadata(CallerObjectInfo callerObjectInfo, List<ResponseDataMetadata> metadatas)
+    /// <param name="visitedTypes"></param>
+    private void GenerateMetadata(CallerObjectInfo callerObjectInfo, List<ResponseDataMetadata> metadatas, HashSet<Type> visitedTypes = null)
     {
+        visitedTypes ??= [];
+
+        // Recursive call prevention
+        if (visitedTypes.Contains(callerObjectInfo.ReviewedType))
+            return;
+
+        visitedTypes.Add(callerObjectInfo.ReviewedType);
+
         var properties = callerObjectInfo.ReviewedType.GetProperties().Where(p => p.GetCustomAttribute<ExcludeFromMetadataAttribute>() == null);
 
         if (properties.IsNullOrEmpty())
             return;
 
         foreach (PropertyInfo property in properties)
-            GeneratePropMetadata(callerObjectInfo, property, metadatas);
+            GeneratePropMetadata(callerObjectInfo, property, metadatas, visitedTypes);
     }
 
     /// <summary>
@@ -93,7 +104,8 @@ public class ResponseMetadataGenerator(IServiceProvider serviceProvider) : IResp
     /// <param name="callerObjectInfo"></param>
     /// <param name="property"></param>
     /// <param name="metadatas"></param>
-    private void GeneratePropMetadata(CallerObjectInfo callerObjectInfo, PropertyInfo property, List<ResponseDataMetadata> metadatas)
+    /// <param name="visitedTypes"></param>
+    private void GeneratePropMetadata(CallerObjectInfo callerObjectInfo, PropertyInfo property, List<ResponseDataMetadata> metadatas, HashSet<Type> visitedTypes)
     {
         if (property == null)
             return;
@@ -130,7 +142,7 @@ public class ResponseMetadataGenerator(IServiceProvider serviceProvider) : IResp
                 return;
             }
 
-            GenerateChildComplexMetadata(callerObjectInfo, property, metadata);
+            GenerateChildComplexMetadata(callerObjectInfo, property, metadata, visitedTypes);
         }
 
         ApplyMetadataRules(callerObjectInfo.Object, callerObjectInfo.ActualTypeIsCollection, property, mask, removePropMetadataFromResponse);
@@ -191,7 +203,8 @@ public class ResponseMetadataGenerator(IServiceProvider serviceProvider) : IResp
     /// <param name="callerObjectInfo"></param>
     /// <param name="property"></param>
     /// <param name="metadata"></param>
-    private void GenerateChildComplexMetadata(CallerObjectInfo callerObjectInfo, PropertyInfo property, ResponseDataMetadata metadata)
+    /// <param name="visitedTypes"></param>
+    private void GenerateChildComplexMetadata(CallerObjectInfo callerObjectInfo, PropertyInfo property, ResponseDataMetadata metadata, HashSet<Type> visitedTypes)
     {
         object callerObject = callerObjectInfo.Object;
         object propertyValue = null;
@@ -217,7 +230,7 @@ public class ResponseMetadataGenerator(IServiceProvider serviceProvider) : IResp
 
                         metadata.Metadatas ??= [];
 
-                        GenerateMetadata(childCallerInfo1, metadata.Metadatas);
+                        GenerateMetadata(childCallerInfo1, metadata.Metadatas, visitedTypes);
                     }
 
                     return;
@@ -232,7 +245,7 @@ public class ResponseMetadataGenerator(IServiceProvider serviceProvider) : IResp
         if (childCallerInfo is not null)
         {
             metadata.Metadatas ??= [];
-            GenerateMetadata(childCallerInfo, metadata.Metadatas);
+            GenerateMetadata(childCallerInfo, metadata.Metadatas, visitedTypes);
         }
     }
 
