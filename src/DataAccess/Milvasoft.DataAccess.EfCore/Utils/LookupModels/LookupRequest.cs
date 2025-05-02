@@ -1,5 +1,6 @@
 ﻿using Milvasoft.Components.Rest.Request;
 using Milvasoft.Core.MultiLanguage.EntityBases;
+using System.Text.Json.Serialization;
 
 namespace Milvasoft.DataAccess.EfCore.Utils.LookupModels;
 
@@ -40,6 +41,12 @@ public class LookupRequestParameter
     public SortRequest Sorting { get; set; }
 
     /// <summary>
+    /// Sort criterias.
+    /// </summary>
+    [JsonIgnore]
+    public bool FetchSoftDeletedEntities { get; private set; } = false;
+
+    /// <summary>
     /// Updates the filter criteria for translation property names.
     /// </summary>
     /// <param name="translationPropertyNames">The list of translation property names.</param>
@@ -59,4 +66,10 @@ public class LookupRequestParameter
                 criteria.FilterBy = criteria.GetFilterByAsListFormat(MultiLanguageEntityPropertyNames.Translations);
         }
     }
+
+    /// <summary>
+    /// Changes the state of the fetch soft deletion.
+    /// </summary>
+    /// <returns></returns>
+    public void ChangeFetchSoftDeletedEntitiesState(bool fetchSoftDeletedEntities) => FetchSoftDeletedEntities = fetchSoftDeletedEntities;
 }

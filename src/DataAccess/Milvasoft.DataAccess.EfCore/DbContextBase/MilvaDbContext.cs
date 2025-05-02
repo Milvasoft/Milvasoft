@@ -294,9 +294,10 @@ public abstract class MilvaDbContext(DbContextOptions options) : DbContext(optio
     /// </summary>
     /// <returns></returns>
     public Task<List<TEntity>> GetContentsAsync<TEntity>(FilterRequest filterRequest,
-                                                               SortRequest sortRequest,
-                                                               Expression<Func<TEntity, TEntity>> projectionExpression = null) where TEntity : class
-        => Set<TEntity>().Where(MilvaDbContextCache.GetIsDeletedFilter<TEntity>())
+                                                         SortRequest sortRequest,
+                                                         Expression<Func<TEntity, TEntity>> projectionExpression = null,
+                                                         bool fetchSoftDeletedEntities = false) where TEntity : class
+        => Set<TEntity>().Where(fetchSoftDeletedEntities ? e => true : MilvaDbContextCache.GetIsDeletedFilter<TEntity>())
                                .IncludeTranslations(this)
                                .WithFiltering(filterRequest)
                                .WithSorting(sortRequest)

@@ -156,7 +156,7 @@ public abstract class MultiLanguageManager : IMultiLanguageManager
                                                                                                           CreateTranslationsFirstOrDefaultWithDefaultLanguageWithNullCheckExpression(),
                                                                                                           propertyOfTranslationsFirstOrDefaultWithCurrentLanguageIdEqualityExpression);
 
-            var resultExpression = MultiLanguageExtensions.CreateTranslationsAnyCheckExpression<TTranslationEntity, string>(translationsPropertyExpression, translationsFirstOrDefaultWithCurrentLanguageIdNullCheckExpression);
+            var resultExpression = MultiLanguageExtensions.CreateTranslationsAnyCheckExpression<TTranslationEntity, string>(translationsPropertyExpression, translationsFirstOrDefaultWithCurrentLanguageIdNullCheckExpression, false);
 
             // Create a lambda expression that represents the final expression to retrieve the language-specific value of the property
             resultLambdaExpression = Expression.Lambda<Func<TEntity, string>>(resultExpression, entityParameter);
@@ -165,7 +165,7 @@ public abstract class MultiLanguageManager : IMultiLanguageManager
         {
             var translationsFirstOrDefaultWithDefaultLanguageWithNullCheckExpression = CreateTranslationsFirstOrDefaultWithDefaultLanguageWithNullCheckExpression();
 
-            var resultExpression = MultiLanguageExtensions.CreateTranslationsAnyCheckExpression<TTranslationEntity, string>(translationsPropertyExpression, translationsFirstOrDefaultWithDefaultLanguageWithNullCheckExpression);
+            var resultExpression = MultiLanguageExtensions.CreateTranslationsAnyCheckExpression<TTranslationEntity, string>(translationsPropertyExpression, translationsFirstOrDefaultWithDefaultLanguageWithNullCheckExpression, false);
 
             // Create a lambda expression that represents the final expression to retrieve the language-specific value of the property
             resultLambdaExpression = Expression.Lambda<Func<TEntity, string>>(resultExpression, entityParameter);

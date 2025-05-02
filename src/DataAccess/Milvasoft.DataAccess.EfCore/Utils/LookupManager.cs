@@ -19,7 +19,7 @@ internal class LookupManager(MilvaDbContext dbContext, IDataAccessConfiguration 
     private static readonly MethodInfo _createProjectionExpressionMethod = typeof(MultiLanguageExtensions).GetMethod(nameof(MultiLanguageExtensions.CreateProjectionExpression));
     private const string _taskResultPropertyName = "Result";
     private static readonly ConcurrentDictionary<Type, Func<object>> _typeFactoryCache = new();
-    private static readonly ConcurrentDictionary<Type, Func<MilvaDbContext, object, object, object, Task>> _getContentsMethodCache = new();
+    private static readonly ConcurrentDictionary<Type, Func<MilvaDbContext, object, object, object, bool, Task>> _getContentsMethodCache = new();
 
     internal class LookupContext
     {
@@ -102,6 +102,7 @@ internal class LookupManager(MilvaDbContext dbContext, IDataAccessConfiguration 
         var translationEntityWithJsonPropNames = new List<string>();
 
         bool isTranslationsEntityJson = false;
+        bool isTranslationsEntitySoftDeletable = false;
 
         if (translationEntityType != null)
         {
@@ -109,6 +110,11 @@ internal class LookupManager(MilvaDbContext dbContext, IDataAccessConfiguration 
             var columnAttribute = translationsProp.GetCustomAttribute<ColumnAttribute>();
 
             isTranslationsEntityJson = columnAttribute != null && columnAttribute.TypeName == "jsonb";
+
+            var type = translationsProp.PropertyType.GetGenericArguments()[0];
+
+            if (!parameter.FetchSoftDeletedEntities && type.CanAssignableTo(typeof(ISoftDeletable)))
+                isTranslationsEntitySoftDeletable = true;
         }
 
         foreach (var requestedPropName in parameter.RequestedPropertyNames)
@@ -124,8 +130,10 @@ internal class LookupManager(MilvaDbContext dbContext, IDataAccessConfiguration 
                 if (isTranslationsEntityJson)
                     translationEntityWithJsonPropNames.Add(requestedPropName);
                 else
-
                     translationEntityPropNames.Add(requestedPropName);
+
+                if (isTranslationsEntitySoftDeletable)
+                    translationEntityPropNames.Add(EntityPropertyNames.IsDeleted);
             }
             else
             {
@@ -144,11 +152,17 @@ internal class LookupManager(MilvaDbContext dbContext, IDataAccessConfiguration 
     private static object CreateProjectionExpression(LookupContext context)
         => _createProjectionExpressionMethod
             .MakeGenericMethod(context.EntityType, context.TranslationEntityType ?? context.EntityType)
-            .Invoke(null, [context.PropertyNamesForProjection, context.PropertyNames.TranslationEntityPropertyNames, !context.PropertyNames.TranslationWithJsonEntityPropertyNames.IsNullOrEmpty()]);
+            .Invoke(null,
+            [
+                context.PropertyNamesForProjection,
+                context.PropertyNames.TranslationEntityPropertyNames,
+                !context.PropertyNames.TranslationWithJsonEntityPropertyNames.IsNullOrEmpty(),
+                context.RequestParameter.FetchSoftDeletedEntities
+            ]);
 
     private async Task<IList> FetchLookupDataAsync(LookupContext context, object projectionExpression)
     {
-        var taskResult = CallGetContentsAsync(context.EntityType, context.RequestParameter.Filtering, context.RequestParameter.Sorting, projectionExpression);
+        var taskResult = CallGetContentsAsync(context.EntityType, context.RequestParameter.Filtering, context.RequestParameter.Sorting, projectionExpression, context.RequestParameter.FetchSoftDeletedEntities);
 
         await taskResult;
 
@@ -248,7 +262,7 @@ internal class LookupManager(MilvaDbContext dbContext, IDataAccessConfiguration 
         return propNamesForProjection;
     }
 
-    private Task CallGetContentsAsync(Type entityType, object filtering, object sorting, object projection)
+    private Task CallGetContentsAsync(Type entityType, object filtering, object sorting, object projection, bool fetchSoftDeletedEntities)
     {
         var func = _getContentsMethodCache.GetOrAdd(entityType, type =>
         {
@@ -260,18 +274,20 @@ internal class LookupManager(MilvaDbContext dbContext, IDataAccessConfiguration 
             var filteringParam = Expression.Parameter(typeof(object));
             var sortingParam = Expression.Parameter(typeof(object));
             var projectionParam = Expression.Parameter(typeof(object));
+            var fetchSoftDeletedParam = Expression.Parameter(typeof(bool));
 
             var call = Expression.Call(contextParam,
                                        method,
                                        Expression.Convert(filteringParam, method.GetParameters()[0].ParameterType),
                                        Expression.Convert(sortingParam, method.GetParameters()[1].ParameterType),
-                                       Expression.Convert(projectionParam, method.GetParameters()[2].ParameterType));
+                                       Expression.Convert(projectionParam, method.GetParameters()[2].ParameterType),
+                                       fetchSoftDeletedParam);
 
-            var lambda = Expression.Lambda<Func<MilvaDbContext, object, object, object, Task>>(call, contextParam, filteringParam, sortingParam, projectionParam);
+            var lambda = Expression.Lambda<Func<MilvaDbContext, object, object, object, bool, Task>>(call, contextParam, filteringParam, sortingParam, projectionParam, fetchSoftDeletedParam);
 
             return lambda.Compile();
         });
 
-        return func(_dbContext, filtering, sorting, projection);
+        return func(_dbContext, filtering, sorting, projection, fetchSoftDeletedEntities);
     }
 }

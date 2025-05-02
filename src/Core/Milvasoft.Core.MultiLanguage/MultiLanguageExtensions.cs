@@ -18,8 +18,10 @@ public static class MultiLanguageExtensions
                                                                                                               && mi.GetParameters().Length == 2);
     private static readonly MethodInfo _anyMethodInfo = typeof(Enumerable).GetMethods(BindingFlags.Static | BindingFlags.Public)
                                                                                      .Last(mi => mi.Name == nameof(Enumerable.Any) && mi.GetParameters().Length == 1);
+    private static readonly MethodInfo _whereMethodInfo = typeof(Enumerable).GetMethods(BindingFlags.Static | BindingFlags.Public).First(m => m.Name == nameof(Enumerable.Where) && m.GetParameters().Length == 2);
     private static readonly ConcurrentDictionary<Type, MethodInfo> _anyWithPredicateCache = new();
     private static readonly ConcurrentDictionary<Type, MethodInfo> _anyCache = new();
+    private static readonly ConcurrentDictionary<Type, MethodInfo> _whereCache = new();
 
     /// <summary>
     /// Creates projection expression with requested properties for <see cref="IHasTranslation{TTranslationEntity}"/>.
@@ -29,10 +31,12 @@ public static class MultiLanguageExtensions
     /// <param name="mainEntityPropertyNames"></param>
     /// <param name="translationEntityPropertyNames"></param>
     /// <param name="hasJsonTranslations"></param>
+    /// <param name="fetchSoftDeletedEntities"></param>
     /// <returns>Sample; e => new HasTranslationEntity { Id = e.Id, Translations = e.Translations.Select(t=> new TranslationEntity { Name = t.Name } ).ToList() } </returns>
     public static Expression<Func<TEntity, TEntity>> CreateProjectionExpression<TEntity, TTranslationEntity>(IEnumerable<string> mainEntityPropertyNames,
                                                                                                              IEnumerable<string> translationEntityPropertyNames,
-                                                                                                             bool hasJsonTranslations)
+                                                                                                             bool hasJsonTranslations,
+                                                                                                             bool fetchSoftDeletedEntities = false)
     {
         var sourceType = typeof(TEntity);
         var parameter = Expression.Parameter(sourceType, _sourceParameterName);
@@ -63,13 +67,28 @@ public static class MultiLanguageExtensions
                                                                   Expression.PropertyOrField(parameter, MultiLanguageEntityPropertyNames.Translations),
                                                                   translationExpression);
 
+            if (!fetchSoftDeletedEntities && translationEntityPropertyNames.Contains(EntityPropertyNames.IsDeleted))
+            {
+                // x => !x.IsDeleted
+                var xParam = Expression.Parameter(translationEntityType, "x");
+                var isDeletedProp = Expression.PropertyOrField(xParam, EntityPropertyNames.IsDeleted);
+                var notDeleted = Expression.Equal(isDeletedProp, Expression.Constant(false));
+                var lambda = Expression.Lambda(notDeleted, xParam); // Expression<Func<TTranslation, bool>>
+
+                // Enumerable.Where<TTranslation>(e.Translations, x => !x.IsDeleted)
+                var whereMethod = _whereCache.GetOrAdd(typeof(TTranslationEntity), t => _whereMethodInfo.MakeGenericMethod(translationEntityType));
+
+                selectExpressionForTranslations = Expression.Call(whereMethod, selectExpressionForTranslations, lambda);
+            }
+
             selectExpressionForTranslations = Expression.Call(typeof(Enumerable),
                                                               nameof(Enumerable.ToList),
                                                               [translationEntityType],
                                                               selectExpressionForTranslations);
 
             expressionForTranslations = CreateTranslationsAnyCheckExpression<TTranslationEntity, List<TTranslationEntity>>(translationsPropertyExpression,
-                                                                                                                            selectExpressionForTranslations);
+                                                                                                                           selectExpressionForTranslations,
+                                                                                                                           fetchSoftDeletedEntities);
 
             if (!mainEntityPropertyNameTempList.Exists(i => i == MultiLanguageEntityPropertyNames.Translations))
                 mainEntityPropertyNameTempList.Add(MultiLanguageEntityPropertyNames.Translations);
@@ -141,8 +160,10 @@ public static class MultiLanguageExtensions
     /// <typeparam name="TReturn">The return type of the expression.</typeparam>
     /// <param name="translationsPropertyExpression">The member expression representing the translations property.</param>
     /// <param name="expression">The expression to be returned if the translations property is not null.</param>
+    /// <param name="fetchSoftDeletedEntities"></param>
     /// <returns>The conditional expression to check if the translations property is null. Sample result; x => x.Translations == null ? null : <paramref name="expression"/></returns>
-    internal static ConditionalExpression CreateTranslationsAnyCheckExpression<TTranslationEntity, TReturn>(MemberExpression translationsPropertyExpression, Expression expression)
+    internal static ConditionalExpression CreateTranslationsAnyCheckExpression<TTranslationEntity, TReturn>(MemberExpression translationsPropertyExpression, Expression expression,
+                                                                                                            bool fetchSoftDeletedEntities)
     {
         // src.Translations.Any(conditions)
         var anyExpression = CreateTranslationsAnyExpression<TTranslationEntity>(translationsPropertyExpression, null);
@@ -151,7 +172,7 @@ public static class MultiLanguageExtensions
         var translationsPropertyAnyExpression = Expression.Equal(anyExpression, Expression.Constant(false));
 
         var translationNullCheckExpression = Expression.Condition(translationsPropertyAnyExpression,
-                                                                  Expression.Constant(null, typeof(TReturn)),
+                                                                  fetchSoftDeletedEntities ? expression : Expression.Constant(null, typeof(TReturn)),
                                                                   expression);
 
         return translationNullCheckExpression;
