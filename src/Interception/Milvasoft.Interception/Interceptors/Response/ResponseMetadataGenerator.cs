@@ -77,6 +77,7 @@ public class ResponseMetadataGenerator(IServiceProvider serviceProvider) : IResp
     /// </summary>
     /// <param name="callerObjectInfo"></param>
     /// <param name="metadatas"></param>
+    /// <param name="currentDepth"></param>
     private void GenerateMetadata(CallerObjectInfo callerObjectInfo, List<ResponseDataMetadata> metadatas = null, int currentDepth = 0)
     {
         if (currentDepth > _maxDepth)
@@ -97,6 +98,7 @@ public class ResponseMetadataGenerator(IServiceProvider serviceProvider) : IResp
     /// <param name="callerObjectInfo"></param>
     /// <param name="property"></param>
     /// <param name="metadatas"></param>
+    /// <param name="currentDepth"></param>
     private void GeneratePropMetadata(CallerObjectInfo callerObjectInfo, PropertyInfo property, List<ResponseDataMetadata> metadatas, int currentDepth)
     {
         if (property == null)
@@ -195,6 +197,7 @@ public class ResponseMetadataGenerator(IServiceProvider serviceProvider) : IResp
     /// <param name="callerObjectInfo"></param>
     /// <param name="property"></param>
     /// <param name="metadata"></param>
+    /// <param name="currentDepth"></param>
     private void GenerateChildComplexMetadata(CallerObjectInfo callerObjectInfo, PropertyInfo property, ResponseDataMetadata metadata, int currentDepth)
     {
         if (currentDepth > _maxDepth)
@@ -314,6 +317,7 @@ public class ResponseMetadataGenerator(IServiceProvider serviceProvider) : IResp
     /// <param name="property">The property to apply metadata rules to.</param>
     /// <param name="mask">Indicates whether to mask the property value.</param>
     /// <param name="hide">Indicates whether to remove the property metadata from the response.</param>
+    /// <param name="currentDepth"></param>
     private void ApplyMetadataRules(object callerObj, bool callerObjectTypeIsCollection, PropertyInfo property, bool mask, bool hide, int currentDepth = 0)
     {
         if (currentDepth > _maxDepth || callerObj == null || !_interceptionOptions.ApplyMetadataRules)
