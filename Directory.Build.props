@@ -9,12 +9,12 @@
     <IsPackable>true</IsPackable>
     <PlatformTarget>AnyCPU</PlatformTarget>
 	  
-    <PackageVersion>9.1.7</PackageVersion>
+    <PackageVersion>9.1.8</PackageVersion>
     <Authors>Milvasoft Corporation</Authors>
     <Copyright>Milvasoft Yazılım Bilişim Araştırma Geliştirme Danışmanlık Sanayi ve Ticaret Ltd.Şti.</Copyright>
-    <RepositoryUrl>https://github.com/Milvasoft/Milvasoft/tree/master/Milvasoft.Helpers</RepositoryUrl>
+    <RepositoryUrl>https://github.com/Milvasoft/Milvasoft</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
-    <PackageProjectUrl>https://github.com/Milvasoft/Milvasoft/tree/master/Milvasoft.Helpers</PackageProjectUrl>
+    <PackageProjectUrl>https://github.com/Milvasoft/Milvasoft</PackageProjectUrl>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     
     <PackageIcon>milvalogo.png</PackageIcon>
