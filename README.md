@@ -2,7 +2,10 @@
   
  <div align="center"> 
   
-[![license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/Milvasoft/Milvasoft/blob/master/LICENSE)  [![NuGet](https://img.shields.io/nuget/v/Milvasoft.Helpers)](https://www.nuget.org/packages/Milvasoft.Helpers/)   [![NuGet](https://img.shields.io/nuget/dt/Milvasoft.Helpers)](https://www.nuget.org/packages/Milvasoft.Helpers/) 
+[![license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/Milvasoft/Milvasoft/blob/master/LICENSE) 
+[![NuGet](https://img.shields.io/nuget/v/Milvasoft.Helpers)](https://www.nuget.org/packages/Milvasoft.Helpers/)   
+[![NuGet](https://img.shields.io/nuget/dt/Milvasoft.Helpers)](https://www.nuget.org/packages/Milvasoft.Helpers/) 
+![Stars](https://img.shields.io/github/stars/Milvasoft/Milvasoft?style=social)
 
 </div>
 
