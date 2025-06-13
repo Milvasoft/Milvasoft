@@ -1,23 +1,21 @@
-<h2 align="center">Milvasoft.Helpers</h2>
+Milvasoft.Helpers
   
- <div align="center"> 
+
   
 [![license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/Milvasoft/Milvasoft/blob/master/LICENSE) 
 [![NuGet](https://img.shields.io/nuget/v/Milvasoft.Helpers)](https://www.nuget.org/packages/Milvasoft.Helpers/)   
 [![NuGet](https://img.shields.io/nuget/dt/Milvasoft.Helpers)](https://www.nuget.org/packages/Milvasoft.Helpers/) 
 ![Stars](https://img.shields.io/github/stars/Milvasoft/Milvasoft?style=social)
 
-</div>
 
-<h3 align="center">Milvasoft library helps you to create your .Net projects in the simplest way. </h3>
-<h4 align="center">It is not a framework. It is a library that brings together many components and provides ease of use for some concepts.</h4>
-<h4 align="center">Only supports .Net 9 for now! For .Net 8 versions see versions 8.x.x (no longer supported). </h4>
 
-<br>
+Milvasoft library helps you to create your .Net projects in the simplest way.
+It is not a framework. It is a library that brings together many components and provides ease of use for some concepts.
+Only supports .Net 9 for now! For .Net 8 versions see versions 8.x.x (no longer supported).
+
 
 ![milva-bird](https://user-images.githubusercontent.com/13048645/141461853-dbacad32-2150-4276-a848-45b81f2eeeb2.jpg)
 
-<br>
 
 # Docs
 
@@ -38,7 +36,7 @@
 - SMTP Mail Send
 - Multi Tenancy
 - Unit & Integration Testing
-- [And so much more things...](https://github.com/Milvasoft/Milvasoft/tree/master/Milvasoft.Helpers)
+- [And so much more things...](https://github.com/Milvasoft/Milvasoft/tree/master/src)
 
 The library provides abstractions and structures for the concepts listed above. In general, it takes help from third-party libraries while doing this.
 
