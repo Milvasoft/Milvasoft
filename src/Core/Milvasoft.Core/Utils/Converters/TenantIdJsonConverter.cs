@@ -28,7 +28,7 @@ public class TenantIdJsonConverter : JsonConverter<TenantId>
             return TenantId.Empty;
         }
 
-        throw new MilvaDeveloperException($"Invalid value for {nameof(TenantId)}.");
+        return TenantId.Empty; // Default to empty tenant id if the token type is not string or null.
     }
 
     /// <inheritdoc/>
