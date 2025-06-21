@@ -19,5 +19,22 @@
 	<ItemGroup>
 	  <ProjectReference Include="..\Milvasoft.Storage\Milvasoft.Storage.csproj" />
 	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="ConfigureAwait.Fody" Version="3.3.2" PrivateAssets="All" />
+		<PackageReference Include="Fody" Version="6.9.2">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+	</ItemGroup>
+
+	<PropertyGroup>
+
+		<PackageId>Milvasoft.Storage.S3</PackageId>
+		<Product>Milvasoft.Storage.S3</Product>
+		<Description>Provides operations such as saving and uploading files, fetching, validating and uploading files to different providers like AWS S3, Azure Blob Storage and local file system.</Description>
+		<PackageTags>s3,abs,aws,azure,file system,upload,download,serve,file</PackageTags>
+
+	</PropertyGroup>
 	
 </Project>

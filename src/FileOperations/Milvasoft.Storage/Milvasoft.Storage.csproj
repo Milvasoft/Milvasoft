@@ -18,4 +18,13 @@
     <ProjectReference Include="..\..\Core\Milvasoft.Core\Milvasoft.Core.csproj" />
   </ItemGroup>
 
+	<PropertyGroup>
+
+		<PackageId>Milvasoft.Storage</PackageId>
+		<Product>Milvasoft.Storage</Product>
+		<Description>Provides operations such as saving and uploading files, fetching, validating and uploading files to different providers like AWS S3, Azure Blob Storage and local file system.</Description>
+		<PackageTags>s3,abs,aws,azure,file system,upload,download,serve,file</PackageTags>
+
+	</PropertyGroup>
+	
 </Project>
