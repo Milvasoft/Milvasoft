@@ -1,4 +1,4 @@
-﻿namespace Milvasoft.FileOperations.Enums;
+﻿namespace Milvasoft.Storage.Models;
 
 /// <summary>
 ///  File types.

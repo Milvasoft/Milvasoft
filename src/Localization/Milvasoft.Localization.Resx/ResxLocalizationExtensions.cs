@@ -40,7 +40,7 @@ public static class ResxLocalizationExtensions
             builder.Services.AddSingleton<ILocalizationMemoryCache, LocalizationMemoryCache>();
         }
 
-        config.KeyFormatMethod ??= (string key) => string.Format(config.KeyFormat, key);
+        config.KeyFormatMethod ??= key => string.Format(config.KeyFormat, key);
 
         if (!builder.Services.Any(s => s.ServiceType == typeof(IStringLocalizerFactory)) && !string.IsNullOrWhiteSpace(config.ResourcesPath))
             builder.Services.AddLocalization(options => options.ResourcesPath = config?.ResourcesPath ?? options.ResourcesPath);

@@ -44,7 +44,7 @@ public static class RedisLocalizationExtensions
             builder.Services.AddSingleton<ILocalizationMemoryCache, LocalizationMemoryCache>();
         }
 
-        config.KeyFormatMethod ??= (string key, string cultureName) => string.Format(config.KeyFormat, cultureName, key);
+        config.KeyFormatMethod ??= (key, cultureName) => string.Format(config.KeyFormat, cultureName, key);
 
         if (!builder.Services.Any(s => s.ServiceType == typeof(ICacheOptions<RedisCachingOptions>)) && config.RedisOptions != null)
             builder.Services.AddMilvaCaching().WithRedisAccessor(config.RedisOptions);

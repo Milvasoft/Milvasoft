@@ -13,6 +13,10 @@ public static class LocalizerKeys
     public const string Failed = nameof(Failed);
     public const string PleaseSelectAValid = nameof(PleaseSelectAValid);
     public const string PleaseEnterAValid = "Please enter a valid";
+    public const string FileNotFound = nameof(FileNotFound);
+    public const string FileShouldBeUploaded = nameof(FileShouldBeUploaded);
+    public const string UnsupportedMediaType = nameof(UnsupportedMediaType);
+    public const string UploadFailed = nameof(UploadFailed);
 
     #region Identity
 

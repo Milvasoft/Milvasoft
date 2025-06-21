@@ -1,0 +1,32 @@
+name: Milvasoft.Storage.S3 Nuget Publish
+
+on:
+  push:
+    branches: [ master ]
+    paths:
+      - 'src/FileOperations/**'
+      - '**/Directory.Build.props'
+  pull_request:
+    branches: [ master ]
+    paths:
+      - 'src/FileOperations/Milvasoft.Storage.S3/**'
+      - '**/Directory.Build.props'
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 9.0.x
+      - name: Restore Milvasoft.Storage.S3 project dependencies
+        run: dotnet restore src/FileOperations/Milvasoft.Storage.S3/Milvasoft.Storage.S3.csproj
+      - name: Build Milvasoft.Storage.S3 project
+        run: dotnet build src/FileOperations/Milvasoft.Storage.S3/Milvasoft.Storage.S3.csproj --no-restore --configuration Release
+      - name: Pack Milvasoft.Storage.S3 project
+        run: dotnet pack src/FileOperations/Milvasoft.Storage.S3/Milvasoft.Storage.S3.csproj --no-build --configuration Release --include-symbols -p:SymbolPackageFormat=snupkg -o .
+      - name: Publish package to NuGet
+        run: dotnet nuget push *.nupkg --api-key ${{secrets.NUGET_API_KEY}} --source "https://api.nuget.org/v3/index.json" --skip-duplicate

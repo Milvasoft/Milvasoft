@@ -9,7 +9,7 @@ on:
   pull_request:
     branches: [ master ]
     paths:
-      - 'src/FileOperationsMilvasoft.FileOperations/**'
+      - 'src/FileOperations/Milvasoft.FileOperations/**'
       - '**/Directory.Build.props'
 
 jobs:

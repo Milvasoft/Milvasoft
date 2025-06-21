@@ -6,10 +6,10 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="9.0.5" />
-	  <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite.Core" Version="9.0.5" />
+	  <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="9.0.6" />
+	  <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite.Core" Version="9.0.6" />
 	  <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.0.4" />
-	  <PackageReference Include="System.Text.Json" Version="9.0.5" />
+	  <PackageReference Include="System.Text.Json" Version="9.0.6" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -22,6 +22,8 @@
 	  <ProjectReference Include="..\DataAccess\Milvasoft.DataAccess.EfCore\Milvasoft.DataAccess.EfCore.csproj" />
 	  <ProjectReference Include="..\DataAccess\Milvasoft.DataAccess.MongoDB\Milvasoft.DataAccess.MongoDB.csproj" />
 	  <ProjectReference Include="..\FileOperations\Milvasoft.FileOperations\Milvasoft.FileOperations.csproj" />
+	  <ProjectReference Include="..\FileOperations\Milvasoft.Storage.Abs\Milvasoft.Storage.Abs.csproj" />
+	  <ProjectReference Include="..\FileOperations\Milvasoft.Storage.S3\Milvasoft.Storage.S3.csproj" />
 	  <ProjectReference Include="..\Identity\Milvasoft.Identity\Milvasoft.Identity.csproj" />
 	  <ProjectReference Include="..\Interception\Milvasoft.Interception.Ef\Milvasoft.Interception.Ef.csproj" />
 	  <ProjectReference Include="..\MultiTenancy\Milvasoft.MultiTenancy.EfCore\Milvasoft.MultiTenancy.EfCore.csproj" />

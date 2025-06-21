@@ -1,0 +1,19 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>disable</Nullable>
+  </PropertyGroup>
+
+	<ItemGroup>
+
+		<PackageReference Include="Azure.Storage.Blobs" Version="12.24.1" />
+
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\Milvasoft.Storage\Milvasoft.Storage.csproj" />
+	</ItemGroup>
+	
+</Project>
