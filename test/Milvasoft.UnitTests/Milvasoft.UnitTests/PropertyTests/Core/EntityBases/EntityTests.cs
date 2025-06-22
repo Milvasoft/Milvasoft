@@ -1,11 +1,7 @@
 ﻿using FluentAssertions;
-using Milvasoft.Core.EntityBases.Abstract;
 using Milvasoft.Core.EntityBases.Concrete;
 using Milvasoft.Core.MultiLanguage.EntityBases.Concrete;
-using Milvasoft.Storage.Models;
-using Milvasoft.Storage.S3;
 using Milvasoft.UnitTests.PropertyTests.Core.EntityBases.Fixtures;
-using System.Linq.Expressions;
 
 namespace Milvasoft.UnitTests.PropertyTests.Core.EntityBases;
 
@@ -13,18 +9,6 @@ namespace Milvasoft.UnitTests.PropertyTests.Core.EntityBases;
 [Trait("Property Getter Setters Unit Tests", "Library's models property getter setter unit tests.")]
 public class EntityTests
 {
-    public string CreateFile<TEntity>(IS3Provider s3Provider,
-                                           TEntity entity,
-                                           Expression<Func<TEntity, FileInformation>> filePropertySelector,
-                                           string folderName,
-                                           FileType fileType) where TEntity : IMilvaEntity
-    {
-
-        var q = entity.Id;
-
-        return "signedUrl";
-    }
-
     [Fact]
     public void EntityBase_GetUniqueIdentifier_ShouldReturnCorrectValue()
     {

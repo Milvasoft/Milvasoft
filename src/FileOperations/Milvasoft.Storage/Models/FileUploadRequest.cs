@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Milvasoft.Core.Utils.Constants;
 using System.Text.Json.Serialization;
 using System.Text.RegularExpressions;
 
@@ -13,9 +14,14 @@ public record FileUploadRequest
     private const string _base64Flag = ";base64,";
 
     /// <summary>
-    /// If this value is null it means image changed. If not, sometimes only Order or AltText property is changed, so this property is used to determine if the image itself has changed.
+    /// Id of file.
     /// </summary>
-    public Guid? Id { get; set; }
+    public string Id { get; set; }
+
+    /// <summary>
+    /// Determines whether the file has been updated or not.
+    /// </summary>
+    public bool FileChanged { get; set; }
 
     /// <summary>
     /// File url.
@@ -70,7 +76,7 @@ public record FileUploadRequest
         allowedFileExtensions = allowedFileExtensions.ConvertAll(e => e.ToLowerInvariant());
 
         if (string.IsNullOrWhiteSpace(FileExtension) || !allowedFileExtensions.Contains(FileExtension))
-            return FileOperationResult.Failure("InvalidFileExtension");
+            return FileOperationResult.Failure(LocalizerKeys.InvalidFileExtension);
 
         return FileOperationResult.Success();
     }

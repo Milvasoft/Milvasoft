@@ -17,6 +17,7 @@ public static class LocalizerKeys
     public const string FileShouldBeUploaded = nameof(FileShouldBeUploaded);
     public const string UnsupportedMediaType = nameof(UnsupportedMediaType);
     public const string UploadFailed = nameof(UploadFailed);
+    public const string InvalidFileExtension = nameof(InvalidFileExtension);
 
     #region Identity
 

@@ -5,7 +5,7 @@ namespace Milvasoft.Storage.Models;
 /// <summary>
 /// File information model.
 /// </summary>
-public class FileInformation : BaseEntity<Guid>
+public class FileInformation : EntityBase<string>
 {
     /// <summary>
     /// File url.
@@ -42,8 +42,8 @@ public class FileInformation : BaseEntity<Guid>
     /// </summary>
     public FileInformation()
     {
-        if (Id == Guid.Empty)
-            Id = Guid.NewGuid();
+        if (string.IsNullOrWhiteSpace(Id))
+            Id = Guid.NewGuid().ToString();
     }
 
     /// <summary>
@@ -52,6 +52,7 @@ public class FileInformation : BaseEntity<Guid>
     /// <param name="fileUploadRequest"></param>
     public FileInformation(FileUploadRequest fileUploadRequest) : this()
     {
+        Id = fileUploadRequest.Id;
         AltText = fileUploadRequest.AltText;
         FileName = fileUploadRequest.FileName;
         Order = fileUploadRequest.Order;
